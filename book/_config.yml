@@ -1,0 +1,69 @@
+---
+# ECE 444 course website — Jupyter Book.
+# Structure ported from the USAFA ECE 215 book template
+# (https://github.com/usafa-ece/ece215-book), pared down for ECE 444.
+
+title: ECE 444 — Antennas and Wave Propagation
+author: N. Rogers
+copyright: "2026"
+logo: DFEC-logo.png
+
+# No notebooks in the initial migration; keep the setting future-proof.
+execute:
+  execute_notebooks: "auto"
+
+parse:
+  myst_enable_extensions:
+    - dollarmath
+    - amsmath
+    - colon_fence
+
+# Nothing to launch (no Binder / Thebe / notebooks); reintroduce if a lesson
+# ever ships a runnable notebook.
+
+latex:
+  latex_documents:
+    targetname: book.tex
+
+repository:
+  url: https://github.com/livethisdream/ECE444
+  path_to_book: book
+  branch: main
+
+html:
+  favicon: favicon.ico
+  use_issues_button: true
+  use_repository_button: true
+
+sphinx:
+  config:
+    # Reveal.js decks live under book/extras/slides/ and must survive the
+    # Sphinx build with their /slides/ URL prefix intact. html_extra_path
+    # copies the *contents* of listed dirs into the build root, so wrapping
+    # them in extras/ preserves the prefix as extras/slides/... -> slides/...
+    html_extra_path: ["extras"]
+
+    # MathJax config lifted verbatim from ece215-book/book/_config.yml:
+    # tex-chtml-full bundles boldsymbol; the config keeps bare \(...\)
+    # rendering inside raw HTML blocks (needed if we ever mix HTML in a
+    # lesson body).
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js
+    mathjax3_config:
+      tex:
+        inlineMath: [["\\(", "\\)"]]
+        displayMath: [["\\[", "\\]"]]
+        processEscapes: true
+      options:
+        processHtmlClass: "tex2jax_process|mathjax_process|math|output_area"
+
+    # Show the full global TOC in the left sidebar on every page.
+    html_sidebars:
+      "**":
+        - navbar-logo.html
+        - icon-links.html
+        - search-button-field.html
+        - globaltoc.html
+
+    html_theme: sphinx_book_theme
+    html_theme_options:
+      show_navbar_depth: 1

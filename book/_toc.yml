@@ -1,0 +1,27 @@
+# Table of contents for ECE 444.
+# Hand-maintained. One `part:` per module — each module gets its own landing
+# page (moduleXX/index.md) followed by its lessons. New modules land as
+# additional `part:` blocks.
+
+format: jb-book
+root: intro
+
+parts:
+  - caption: Course Information
+    chapters:
+      - file: syllabus
+      - file: materials
+
+  - caption: Module 1 — Antenna Fundamentals
+    chapters:
+      - file: module01/index
+        title: Module 1 overview
+      - file: module01/L01-course-intro/index
+        title: "L1 — Course Introduction"
+      - file: module01/L02-antenna-properties/index
+        title: "L2 — Basic Properties and Terminology"
+        sections:
+          - file: module01/L02-antenna-properties/practice
+            title: Practice
+          - file: module01/L02-antenna-properties/practice-solutions
+            title: Practice Solutions
