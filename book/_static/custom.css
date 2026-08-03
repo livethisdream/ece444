@@ -61,16 +61,6 @@ body, .bd-article {
   font-size: clamp(28px, 4vw, 40px);
   line-height: 1.15;
 }
-.bd-article h1::after {
-  content: '';
-  display: block;
-  width: 2.5em;
-  height: 4px;
-  background-color: #0067b9;
-  border-radius: 2px;
-  margin-top: 0.4em;
-  margin-bottom: 0.5em;
-}
 
 .bd-article h2 {
   color: #004a85;
@@ -88,6 +78,17 @@ body, .bd-article {
   padding-left: 0.65em;
   font-size: 18px;
   line-height: 1.25;
+}
+
+.bd-article h4 {
+  color: #3b4651;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.3;
+  margin-top: 1.2em;
+  margin-bottom: 0.4em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 /* Inline code styling (consumes JetBrains Mono, navy on --tps-bg) */
@@ -832,6 +833,104 @@ audio.lesson-demo {
 }
 
 /* ============================================================
+   Grade scale (syllabus.md)
+   ----------------------------------------------------------
+   A on the left, F on the right, tinted with a green→red
+   gradient at low opacity so it reads as one system with the
+   rest of the tables (which have a solid navy header row).
+   Overrides the theme's default table styling.
+   ============================================================ */
+.bd-article table.grade-scale {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.25em 0;
+  font-size: 0.95em;
+  table-layout: fixed;
+}
+.bd-article table.grade-scale th,
+.bd-article table.grade-scale td {
+  text-align: center;
+  padding: 0.55em 0.5em;
+  border: 1px solid #cddce9;
+  font-variant-numeric: tabular-nums;
+}
+.bd-article table.grade-scale thead tr {
+  background-color: transparent;
+}
+.bd-article table.grade-scale thead th {
+  font-weight: 700;
+  color: #15202b;
+  background-color: transparent;
+  border: 1px solid #cddce9;
+}
+.bd-article table.grade-scale tbody tr {
+  background-color: transparent;
+}
+.bd-article table.grade-scale tbody tr:nth-child(even) {
+  background-color: transparent;
+}
+/* Column tint: green → yellow → red at 12% opacity, applied to
+   both the header cell and the body cell in each column. */
+.bd-article table.grade-scale th:nth-child(1),
+.bd-article table.grade-scale td:nth-child(1)  { background-color: rgba(29, 122, 77, 0.20); }
+.bd-article table.grade-scale th:nth-child(2),
+.bd-article table.grade-scale td:nth-child(2)  { background-color: rgba(72, 148, 74, 0.18); }
+.bd-article table.grade-scale th:nth-child(3),
+.bd-article table.grade-scale td:nth-child(3)  { background-color: rgba(122, 172, 71, 0.16); }
+.bd-article table.grade-scale th:nth-child(4),
+.bd-article table.grade-scale td:nth-child(4)  { background-color: rgba(168, 189, 65, 0.15); }
+.bd-article table.grade-scale th:nth-child(5),
+.bd-article table.grade-scale td:nth-child(5)  { background-color: rgba(210, 203, 58, 0.15); }
+.bd-article table.grade-scale th:nth-child(6),
+.bd-article table.grade-scale td:nth-child(6)  { background-color: rgba(232, 191, 60, 0.16); }
+.bd-article table.grade-scale th:nth-child(7),
+.bd-article table.grade-scale td:nth-child(7)  { background-color: rgba(232, 158, 60, 0.17); }
+.bd-article table.grade-scale th:nth-child(8),
+.bd-article table.grade-scale td:nth-child(8)  { background-color: rgba(224, 121, 55, 0.18); }
+.bd-article table.grade-scale th:nth-child(9),
+.bd-article table.grade-scale td:nth-child(9)  { background-color: rgba(212, 79, 51, 0.20); }
+.bd-article table.grade-scale th:nth-child(10),
+.bd-article table.grade-scale td:nth-child(10) { background-color: rgba(190, 45, 45, 0.22); }
+/* Suppress the theme's hover/inset-blue rule on this table. */
+.bd-article table.grade-scale tbody tr:hover {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/* ============================================================
+   Learning-objective list (moduleNN/index.md)
+   ----------------------------------------------------------
+   Author each module's LOs as a plain ordered list wrapped in
+   a `.lo-list` container with a `--module` CSS variable set to
+   the module number. The CSS then renders each item as
+   "<module>.<n> — <text>" (e.g. 1.1, 1.2, ...) so numbering
+   stays in sync with the list order and scales to future
+   modules without hand-editing every prefix.
+   ============================================================ */
+.bd-article ol.lo-list {
+  counter-reset: lo;
+  list-style: none;
+  padding-left: 1.5em;
+  margin: 1em 0 0.5em;
+}
+.bd-article ol.lo-list > li {
+  counter-increment: lo;
+  padding-left: 2.2em;
+  position: relative;
+  margin-bottom: 0.5em;
+  line-height: 1.5;
+}
+.bd-article ol.lo-list > li::before {
+  content: var(--module) "." counter(lo);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: 700;
+  color: #004a85;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
    Per-module dashboard (moduleNN/index.md)
    ============================================================ */
 .bd-article .module-meta {
@@ -948,6 +1047,54 @@ audio.lesson-demo {
 .bd-article .module-nav a:hover { color: #004a85; }
 .bd-article .module-nav .module-nav-prev { margin-right: auto; }
 .bd-article .module-nav .module-nav-next { margin-left:  auto; text-align: right; }
+
+/* ============================================================
+   Slides admonition (lesson pages) — compact pill strip
+   ============================================================ */
+.admonition.slides,
+div.admonition.slides {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 0 1.25em !important;
+}
+.admonition.slides > .admonition-title,
+div.admonition.slides > p.admonition-title {
+  display: none !important;
+}
+.admonition.slides > p,
+div.admonition.slides > p {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.admonition.slides a,
+div.admonition.slides a {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: rgba(0, 103, 185, 0.12);
+  border: 1px solid rgba(0, 103, 185, 0.30);
+  color: #0067b9 !important;
+  border-radius: 1em;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-decoration: none !important;
+  white-space: nowrap;
+  line-height: 1.4;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.admonition.slides a:hover,
+div.admonition.slides a:hover {
+  background: rgba(0, 103, 185, 0.22);
+  border-color: rgba(0, 103, 185, 0.55);
+  color: #004a85 !important;
+}
 
 /* ============================================================
    Sidebar TOC — sphinx-book-theme globaltoc look, ported from ECE 215.

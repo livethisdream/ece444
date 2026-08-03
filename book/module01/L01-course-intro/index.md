@@ -1,29 +1,31 @@
-# L1 — Course Introduction
+# L1 - Course Introduction
 
 
 :::{admonition} Slides
-:class: tip
-<a href="../../slides/L01-course-intro.html">View slides →</a> ·
-<a href="../../slides/L01-course-intro.html?print-pdf">print PDF</a> ·
-<a href="../../slides/L01-course-intro.md">raw markdown</a>
+:class: slides
+<a href="../../slides/L01-course-intro.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L01-course-intro.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L01-course-intro.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Outcomes
 
 By the end of this lesson, you will be able to:
 
-- State in plain language what an antenna is and what it does in a radio system.
-- Explain why antennas matter to operators and engineers in the Air Force mission set (comms, radar, EW, SATCOM, GPS).
-- Identify the five modules of ECE 444 and how they build toward the final capstone.
-- Recognize several real antennas by sight and connect their geometry to the job they do.
+<ol class="lo-list" style="--module: '1'">
+  <li>State in plain language what an antenna is and what it does in a radio system.</li>
+  <li>Explain why antennas matter to operators and engineers in the Air Force mission set (comms, radar, EW, SATCOM, GPS).</li>
+  <li>Identify the five modules of ECE 444 and how they build toward the final capstone.</li>
+  <li>Recognize several real antennas by sight and connect their geometry to the job they do.</li>
+</ol>
 
-## Welcome & introductions
+## Welcome & Introductions
 
 _Instructor and student introductions — background, career interests, prior exposure to RF or radar._
 
-## About your instructor
+## About Your Instructor
 
-**Lt Col Neil Rogers, USAF (Ret.)** — BS from TU; MSEE and PhD from AFIT.
+**Lt Col Neil Rogers, USAF (Ret)** — BS from TU; MSEE and PhD from AFIT.
 Currently the **Erdle Chair** at USAFA and a **Field Applications Engineer** at **Analog Devices**.
 
 ![Duty stations across the career](img/Duty_stations.png)
@@ -47,7 +49,7 @@ _Directed the Academy Center for UAS Research (ACUASR) at USAFA through 2025._
 ![USAFA retirement](img/usafa-retirement.jpg)
 _Retirement from active duty — cadets sent me off with "No More Blues."_
 
-Today my day job with **Analog Devices** puts me shoulder-to-shoulder with the team designing the **ADALM-PHASER** you'll use in Module 3.
+My day job with **Analog Devices** puts me shoulder-to-shoulder with the team designing the **ADALM-PHASER** you'll use in Module 3, and customers designing advanced Comms and RADAR systems based on its technology.
 
 ![Analog Devices booth](img/nr-adi.jpg)
 _Field Applications Engineer at Analog Devices — the folks who make the ADALM-PHASER._
@@ -107,13 +109,13 @@ Five modules, forty-one lessons, culminating in an integrated beamforming + rada
 
 See the [syllabus](../../syllabus.md) for the full schedule and both project descriptions.
 
-## Show & tell — real antennas + SDR
+## Show & tell - real antennas + SDR
 
 _Bring in a set of physical antennas (dipole, monopole, patch, horn, Yagi, small array) and demonstrate reception with an SDR (RTL-SDR / HackRF / Phaser) tuned to a live signal. Discuss what students see on the spectrum as antennas are swapped._
 
 _Hardware checklist:_ `_TBD_`
 
-## Demo — acoustic beam pattern
+## Demo - acoustic beam pattern
 
 _Live demonstration of a small speaker array driven by a multi-channel audio interface, showing how phasing multiple sources produces a directional acoustic beam. Serves as an audible, tangible analog for the phased-array behavior we'll formalize in Module 3._
 

@@ -14,7 +14,7 @@ Fall 2026 · Dr. Neil Rogers
 
 <div class="title-right">
 
-![USAFA](https://livethisdream.github.io/assets/ece444/img/USAFA-logo.png)
+![USAFA](./img/01-course-intro/USAFA-logo.png)
 
 </div>
 
@@ -44,7 +44,7 @@ Instructor bio; ask each student for name, background, one thing they hope to le
 
 ## Where I've been
 
-![Duty stations](https://livethisdream.github.io/assets/ece444/img/01-course-intro/Duty_stations.png)
+![Duty stations](./img/01-course-intro/Duty_stations.png)
 
 <small>DF/USAFA · AFRL Directed Energy · NASIC · AFIT ×2 · AFLCMC</small>
 
@@ -53,12 +53,12 @@ Instructor bio; ask each student for name, background, one thing they hope to le
 ## Antennas, radar, and high-power RF
 
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.4em;align-items:center;">
-  <img src="https://livethisdream.github.io/assets/ece444/img/01-course-intro/nr-ots.jpg" alt="OTS" style="max-height:180px;object-fit:cover;">
-  <img src="https://livethisdream.github.io/assets/ece444/img/01-course-intro/ads2.jpg" alt="Active Denial System 2" style="max-height:180px;object-fit:cover;">
-  <img src="https://livethisdream.github.io/assets/ece444/img/01-course-intro/ig-team.JPG" alt="379th AEW" style="max-height:180px;object-fit:cover;">
-  <img src="https://livethisdream.github.io/assets/ece444/img/01-course-intro/E8C.jpg" alt="E-8C Joint STARS" style="max-height:180px;object-fit:cover;">
-  <img src="https://livethisdream.github.io/assets/ece444/img/01-course-intro/Rogers_UAS_Lab.jpg" alt="ACUASR UAS Lab" style="max-height:180px;object-fit:cover;">
-  <img src="https://livethisdream.github.io/assets/ece444/img/01-course-intro/usafa-retirement.jpg" alt="Retirement" style="max-height:180px;object-fit:cover;">
+  <img src="./img/01-course-intro/nr-ots.jpg" alt="OTS" style="max-height:180px;object-fit:cover;">
+  <img src="./img/01-course-intro/ads2.jpg" alt="Active Denial System 2" style="max-height:180px;object-fit:cover;">
+  <img src="./img/01-course-intro/ig-team.JPG" alt="379th AEW" style="max-height:180px;object-fit:cover;">
+  <img src="./img/01-course-intro/E8C.jpg" alt="E-8C Joint STARS" style="max-height:180px;object-fit:cover;">
+  <img src="./img/01-course-intro/Rogers_UAS_Lab.jpg" alt="ACUASR UAS Lab" style="max-height:180px;object-fit:cover;">
+  <img src="./img/01-course-intro/usafa-retirement.jpg" alt="Retirement" style="max-height:180px;object-fit:cover;">
 </div>
 
 <small>OTS · ADS2 · 379th AEW · E-8C · ACUASR · retirement</small>
@@ -73,7 +73,7 @@ Directed the Academy Center for UAS Research (ACUASR) at USAFA through 2025.
 ## Now — Analog Devices
 
 <p style="text-align:center;">
-<img src="https://livethisdream.github.io/assets/ece444/img/01-course-intro/nr-adi.jpg" alt="Analog Devices">
+<img src="./img/01-course-intro/nr-adi.jpg" alt="Analog Devices">
 </p>
 
 **Field Applications Engineer** with the team behind the
@@ -84,13 +84,13 @@ Directed the Academy Center for UAS Research (ACUASR) at USAFA through 2025.
 ## Off the clock
 
 <div style="display:grid;grid-template-columns:auto 1fr;gap:0.6em 1em;align-items:center;max-width:720px;margin:0 auto;">
-  <img src="https://livethisdream.github.io/assets/ece444/img/01-course-intro/fam_newhouse.jpg" alt="Family" style="height:130px;width:220px;object-fit:cover;">
+  <img src="./img/01-course-intro/fam_newhouse.jpg" alt="Family" style="height:130px;width:220px;object-fit:cover;">
   <div style="font-size:0.75em;">Family — four kids (11 · 13 · 15 · 17)</div>
 
-  <img src="https://livethisdream.github.io/assets/ece444/img/01-course-intro/CF_dying.png" alt="CrossFit" style="height:130px;width:220px;object-fit:cover;">
+  <img src="./img/01-course-intro/CF_dying.png" alt="CrossFit" style="height:130px;width:220px;object-fit:cover;">
   <div style="font-size:0.75em;">CrossFit</div>
 
-  <img src="https://livethisdream.github.io/assets/ece444/img/01-course-intro/trace_guitar.jpg" alt="Guitar" style="height:130px;width:220px;object-fit:cover;">
+  <img src="./img/01-course-intro/trace_guitar.jpg" alt="Guitar" style="height:130px;width:220px;object-fit:cover;">
   <div style="font-size:0.75em;">Guitar with the band at <strong>Trace</strong> church</div>
 </div>
 
@@ -127,7 +127,7 @@ Antennas do not create energy — they shape where the energy goes.
 
 ## Every wireless system has one
 
-![RF link block diagram: RF Source → Amp → Transmission Line → TX Antenna → Channel → RX Antenna → LNA → Radio](https://livethisdream.github.io/assets/ece444/img/01-course-intro/rf-link-block-diagram.svg)
+![RF link block diagram: RF Source → Amp → Transmission Line → TX Antenna → Channel → RX Antenna → LNA → Radio](./img/01-course-intro/rf-link-block-diagram.svg)
 
 <div class="callout">
 If the antenna is wrong, nothing downstream can fix it.
@@ -242,15 +242,17 @@ until we get to Module 3 with the Phaser.
 
 ## For next time
 
+<!-- TODO: source syllabus-qr.png and place at book/module01/L01-course-intro/img/syllabus-qr.png
 <figure class="qr qr-right">
-  <img src="https://livethisdream.github.io/assets/ece444/img/syllabus-qr.png" alt="QR to syllabus">
+  <img src="./img/01-course-intro/syllabus-qr.png" alt="QR to syllabus">
   <figcaption>Syllabus</figcaption>
 </figure>
+-->
 
 Reference:
 
-- Sections 1-1 through 1-11.7 in [Milligan — *Modern Antenna Design*](https://livethisdream.github.io/assets/ece444/materials/Antenna-design-Milligan.pdf)
-- Sections 3.1 through 3.9 in [Rohde &amp; Schwarz — *Antenna Basics*](https://livethisdream.github.io/assets/ece444/materials/Antenna_Basics_8GE01_1e_Rohde-Schwarz.pdf)
+- Sections 1-1 through 1-11.7 in [Milligan — *Modern Antenna Design*](../_static/materials/Antenna-design-Milligan.pdf)
+- Sections 3.1 through 3.9 in [Rohde &amp; Schwarz — *Antenna Basics*](../_static/materials/Antenna_Basics_8GE01_1e_Rohde-Schwarz.pdf)
 
 <div class="callout">
 

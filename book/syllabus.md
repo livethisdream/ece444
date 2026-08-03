@@ -41,8 +41,8 @@ By the end of this course, you will be able to:
 ## Learning objectives
 
 The course is organized around specific, testable learning objectives (LOs).
-Each LO is assessed at least once. Mastery of every LO earns an "A" on the
-mastery-based portion of the grade.
+Each LO is assessed at least once. LOs are assessed as **Mastered** or
+**Not Yet Mastered** through module assessments.
 
 ### Module 1 — Foundations
 
@@ -104,34 +104,55 @@ mastery-based portion of the grade.
 
 ## Grading
 
-Grades in this course are based on **mastery** of learning objectives, not
-single-attempt performance. Three components make up your final grade:
+Grades in this course combine mastery-based assessment with engagement and
+project-based evaluation. Four components make up your final grade:
 
-| Component | Weight |
-| :- | :-: |
-| Engagement | 25% |
-| Midterm project | 35% |
-| Final project | 40% |
+| Component | Weight | Evaluation method |
+| :- | :-: | :- |
+| Learning Objective (LO) mastery | 30% | Percent of course LOs mastered, multiplied by 30% |
+| Engagement | 10% | Participation, preparation, practice, EI, and course engagement |
+| Midterm Project — Antenna Pattern Measurement | 30% | Mastered / Not Yet Mastered, with resubmission opportunity |
+| Final Project — Combined Beamforming + Radar | 30% | Traditional rubric-based sliding-scale assessment |
 
-### Mastery-based assessment
+### LO mastery assessment
 
-The Midterm and Final Projects are assessed against the learning objectives on
-a **binary scale**:
+Each learning objective is assessed as **Mastered** or **Not Yet Mastered**
+through module assessments. The LO Mastery portion of the final grade is
+calculated as:
 
-- **1** — you have mastered the objective.
-- **0** — you have not *yet* mastered the objective.
+```text
+LO Mastery contribution = (LOs mastered / total course LOs) × 30%
+```
 
-You may **revise your work** based on the detailed feedback provided, unless no
-effort is evident (the assessment is blank, incomplete, or significantly late).
-In those cases, a retake may be earned by giving a **5-minute technical
-presentation** during class on a relevant, pre-approved topic.
+For example, if a cadet masters 30 of 33 course LOs, the LO Mastery
+contribution is:
+
+```text
+(30 / 33) × 30% = 27.3%
+```
+
+### Midterm project mastery assessment
+
+The Midterm Project is assessed as **Mastered** or **Not Yet Mastered**.
+You may **revise and resubmit** the Midterm Project after instructor feedback,
+unless no meaningful effort is evident (the assessment is blank, incomplete,
+or significantly late). In those cases, a retake may be earned by giving a
+**5-minute technical presentation** during class on a relevant, pre-approved
+topic.
 
 The bar is simple: I want you to *learn this material*, and I would rather you
 learn it late than not at all.
 
+### Final project assessment
+
+The Final Project is graded using a **traditional rubric-based sliding scale**.
+This is intentional: the final capstone evaluates system integration, technical
+execution, engineering trade-offs, demonstration quality, radar/beamforming
+performance, and technical communication across a range of performance levels.
+
 ### Engagement credits (EC)
 
-Engagement is worth **25% of your final grade** and rewards active participation
+Engagement is worth **10% of your final grade** and rewards active participation
 in the course rather than single-attempt performance on graded work. You may
 earn engagement points in the following ways:
 
@@ -142,7 +163,7 @@ earn engagement points in the following ways:
   specific questions or a concept you want to work through.
 - **Lab prep and lab writeup engagement.** Coming to lab prepared with a
   pre-lab plan, and turning in a thoughtful writeup, both count.
-- **Research paper (up to 5 EC).** You may complete a research paper on a
+- **Research paper.** You may complete a research paper on a
   relevant, pre-approved topic — an antenna, array, or radar technology, a
   measurement technique, or a mission application. Must be in **IEEE format**,
   contain at least **3 scholarly references**, and adhere to the submission
@@ -150,20 +171,31 @@ earn engagement points in the following ways:
 - **Course improvement contributions.** Spotted a bug in a lab writeup, an
   unclear slide, a broken link on the course site? Tell me and it counts.
 
-Engagement is capped at 25%; extra credit does not roll over.
+Engagement is capped at 10%; extra credit does not roll over.
 
 ### Grade scale
 
-| F | D | C− | C | C+ | B− | B | B+ | A− | A |
-| :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| ≤ 60% | 70% | 73% | 77% | 80% | 83% | 87% | 90% | 93% | 100% |
+<table class="grade-scale">
+  <thead>
+    <tr>
+      <th>A</th><th>A−</th><th>B+</th><th>B</th><th>B−</th>
+      <th>C+</th><th>C</th><th>C−</th><th>D</th><th>F</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>100%</td><td>93%</td><td>90%</td><td>87%</td><td>83%</td>
+      <td>80%</td><td>77%</td><td>73%</td><td>70%</td><td>≤ 60%</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Projects
 
 Two graded projects anchor the course:
 
-- **Midterm Project — Antenna Pattern Measurement.** Introduced at Lesson 11, due at Lesson 20. Students design and execute a pattern-measurement campaign on an antenna under test, reduce the data, and report gain, beamwidth, sidelobe level, and polarization behavior against expectations.
-- **Final Project — Combined Beamforming + Radar.** Track a moving target while suppressing a static jammer using the ADALM-PHASER. Runs across Lessons 39–41 (Module 5).
+- **Midterm Project — Antenna Pattern Measurement.** Introduced at Lesson 11, due at Lesson 20. Students design and execute a pattern-measurement campaign on an antenna under test, reduce the data, and report gain, beamwidth, sidelobe level, and polarization behavior against expectations. Assessed as **Mastered / Not Yet Mastered** with resubmission opportunity.
+- **Final Project — Combined Beamforming + Radar.** Track a moving target while suppressing a static jammer using the ADALM-PHASER. Runs across Lessons 39–41 (Module 5). Graded using a **traditional rubric-based sliding scale**.
 
 ## Course policies
 

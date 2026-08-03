@@ -1,28 +1,25 @@
-# L2 — Basic Properties and Terminology
+# L2 - Basic Properties and Terminology
 
 
 :::{admonition} Slides
-:class: tip
-<a href="../../slides/L02-antenna-properties.html">View slides →</a> ·
-<a href="../../slides/L02-antenna-properties.html?print-pdf">print PDF</a> ·
-<a href="../../slides/L02-antenna-properties.md">raw markdown</a>
+:class: slides
+<a href="../../slides/L02-antenna-properties.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L02-antenna-properties.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L02-antenna-properties.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
 ## Learning outcomes
 
 By the end of this lesson, you will be able to:
 
-- Trace the physics chain from **Maxwell's equations → telegrapher's
-  equations → the wave equation → the plane-wave solution**, and identify
-  the **time and space** dependencies in each.
-- Recognize why the far-field of an antenna is a plane-wave-like
-  transverse E/H pair falling off as $1/r$.
-- Define and compute the headline antenna parameters: **radiation
-  intensity, directivity, gain, effective area, beamwidth, boresight,
-  main / side / back lobes.**
-- Read a radiation pattern and pull out HPBW, FNBW, and sidelobe level.
+<ol class="lo-list" style="--module: '2'">
+  <li>Trace the physics chain from Maxwell's equations → telegrapher's equations → the wave equation → the plane-wave solution, and identify the time and space dependencies in each.</li>
+  <li>Recognize why the far-field of an antenna is a plane-wave-like transverse E-H pair falling off as 1/r.</li>
+  <li>Define and compute the headline antenna parameters: radiation intensity, directivity, gain, effective area, beamwidth, boresight, main / side / back lobes.</li>
+  <li>Read a radiation pattern and pull out HPBW, FNBW, and sidelobe level.</li>
+</ol>
 
-## Part 1 — From Maxwell to a wave
+## Part 1: From Maxwell to a wave
 
 Every antenna analysis in this course starts from Maxwell's equations.
 Antennas are a boundary-condition problem: currents on the antenna set
@@ -129,7 +126,21 @@ $1/r$ (equivalently $1/r^{2}$ in power) is why the antenna's
 directional properties even *matter* — they set how much power lands
 on your receiver in a given direction.
 
-## Part 2 — The parameters that describe what a wave does
+### Interactive — visualize the plane wave
+
+<iframe src="https://emanim.szialab.org/index.html"
+        width="100%" height="700"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="EM wave animation (Szialab)">
+</iframe>
+
+<p><small>
+Interactive EM wave animation by Szilárd Szabó (Szialab).
+<a href="https://emanim.szialab.org/index.html" target="_blank" rel="noopener">Open in a new tab →</a>
+</small></p>
+
+## Part 2: Wave Parameters
 
 With the wave equation in hand, we can define the working vocabulary
 for the rest of Module 1.
@@ -181,9 +192,9 @@ $$
 Gain is directivity with losses folded in:
 
 $$
-G(\theta, \phi) = e_{\text{rad}}\, D(\theta, \phi),
+G(\theta, \phi) = \eta_{\text{rad}}\, D(\theta, \phi),
 \qquad
-e_{\text{rad}} = \frac{P_{\text{rad}}}{P_{\text{in}}}
+\eta_{\text{rad}} = \frac{P_{\text{rad}}}{P_{\text{in}}}
 \in [0, 1].
 $$
 
@@ -193,6 +204,19 @@ out separately as **realized gain** $G_{\text{re}} = (1 - |\Gamma|^{2})\, G$.
 
 When your instrument or datasheet reports "gain in dBi," it is
 almost always the realized gain in the peak direction.
+
+#### Interactive — compare gain patterns
+
+Toggle antenna types on/off to compare their **E-plane** gain patterns
+against an isotropic reference. Slide the dish diameter to watch the
+parabolic beam narrow (and its peak gain climb).
+
+<iframe src="../../viz/polar-gain.html"
+        width="100%" height="620"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Polar gain patterns">
+</iframe>
 
 ### Effective area (aperture)
 
@@ -237,6 +261,33 @@ Read on a radiation pattern:
 
 Beamwidth and sidelobe level are the two knobs you'll trade against
 each other in every array-tapering problem in Module 3.
+
+#### Interactive — read features off a pattern
+
+The plot below shows the **rectilinear** ($\theta$ vs. dB) view of the
+same aperture pattern we used for the horn and dish in the polar plot.
+Slide **D/λ** to change the aperture size; the HPBW, FNBW, and SLL
+markers move with it.
+
+<iframe src="../../viz/pattern-features.html"
+        width="100%" height="720"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Rectilinear pattern features">
+</iframe>
+
+## Summary
+
+| Quantity          | Intuition                           |
+| ----------------- | ----------------------------------- |
+| Radiation pattern | In what direction energy goes       |
+| Gain              | How concentrated the energy is      |
+| Directivity       | Gain without losses                 |
+| Polarization      | Orientation of E-field              |
+| Bandwidth         | Range of useful frequencies         |
+| Efficiency        | How much power is actually radiated |
+| Impedance         | How easily power enters antenna     |
+
 
 ## Where this shows up next
 

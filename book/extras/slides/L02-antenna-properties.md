@@ -246,6 +246,22 @@ Datasheet "gain, dBi" is almost always realized gain at boresight.
 
 ---
 
+## Gain, side by side
+
+<p style="text-align:center;">
+<img src="./img/02-antenna-properties/gain-pattern-polar.png"
+     alt="Polar gain plots comparing isotropic, dipole, horn, and parabolic dish"
+     style="max-height:520px;">
+</p>
+
+<small>Isotropic (dashed) · λ/2 dipole · Std-gain horn · Parabolic dish (D/λ = 10)</small>
+
+Note:
+Interactive on the site — pull up the L2 lesson page, slide D/λ to watch
+the dish beam narrow and its peak gain climb.
+
+---
+
 ## Effective area
 
 How much of an incident wave a receive antenna captures:
@@ -281,6 +297,23 @@ $$
 Note:
 Draw a polar pattern on the chalkboard, label all six on it.
 This is the picture students need to be able to draw from memory.
+
+---
+
+## Features on a rectilinear plot
+
+<p style="text-align:center;">
+<img src="./img/02-antenna-properties/rectilinear.png"
+     alt="Rectilinear radiation pattern with HPBW, FNBW, and sidelobe level annotated"
+     style="max-height:520px;">
+</p>
+
+<small>Sinc² aperture, D/λ = 6. HPBW at −3 dB · FNBW at first nulls · SLL at first sidelobe peak.</small>
+
+Note:
+Interactive on the site — students can drag D/λ and watch beamwidth
+narrow while sidelobes multiply. Point them there for the tradeoffs slide
+that follows.
 
 ---
 
