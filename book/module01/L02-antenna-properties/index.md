@@ -47,16 +47,16 @@ $\mathbf{H}$. Time and space are locked together — you cannot change
 one without changing the other. That coupling is the entire story of
 propagation.
 
-### Guided version — the telegrapher's equations
+### The Telegrapher's Equations
 
 On a two-conductor transmission line, integrating Maxwell over the
 cross-section collapses the fields onto voltage $v(z,t)$ and current
 $i(z,t)$:
 
 $$
-\frac{\partial v}{\partial z} = -L\, \frac{\partial i}{\partial t}
+\frac{\partial v}{\partial z} = -L \frac{\partial i}{\partial t}
 \qquad
-\frac{\partial i}{\partial z} = -C\, \frac{\partial v}{\partial t}
+\frac{\partial i}{\partial z} = -C \frac{\partial v}{\partial t}
 $$
 
 Same structure as the curl pair: a spatial derivative on one side, a
@@ -65,7 +65,7 @@ and both $v$ and $i$ satisfy the 1-D wave equation
 
 $$
 \frac{\partial^2 v}{\partial z^2}
-= L C\, \frac{\partial^2 v}{\partial t^2}.
+= L C \frac{\partial^2 v}{\partial t^2}.
 $$
 
 The propagation speed drops out: $u = 1 / \sqrt{L C}$. On an air-filled
@@ -78,7 +78,7 @@ gives
 
 $$
 \nabla^{2} \mathbf{E}
-- \mu \varepsilon\, \frac{\partial^{2} \mathbf{E}}{\partial t^{2}} = 0
+- \mu \varepsilon \frac{\partial^{2} \mathbf{E}}{\partial t^{2}} = 0
 \qquad\text{with speed}\qquad
 c = \frac{1}{\sqrt{\mu \varepsilon}}.
 $$
@@ -91,7 +91,7 @@ whose solutions the rest of the course lives in.
 The canonical solution, propagating in $+\hat{z}$:
 
 $$
-\mathbf{E}(z, t) = \hat{x}\, E_{0}\, \cos(\omega t - k z)
+\mathbf{E}(z, t) = \hat{x} E_{0} \cos(\omega t - k z)
 $$
 
 - $\omega = 2 \pi f$ is the **time frequency** — how fast the field
@@ -140,7 +140,7 @@ Interactive EM wave animation by Szilárd Szabó (Szialab).
 <a href="https://emanim.szialab.org/index.html" target="_blank" rel="noopener">Open in a new tab →</a>
 </small></p>
 
-## Part 2: Wave Parameters
+## Part 2: Antenna Parameters
 
 With the wave equation in hand, we can define the working vocabulary
 for the rest of Module 1.
@@ -151,7 +151,7 @@ Power radiated per unit solid angle, in a given direction:
 
 $$
 U(\theta, \phi)
-= r^{2}\, S_{\text{rad}}(r, \theta, \phi)
+= r^{2} S_{\text{rad}}(r, \theta, \phi)
 \qquad [\text{W/sr}]
 $$
 
@@ -161,7 +161,7 @@ the $1/r^{2}$ in $S_{\text{rad}}$, so $U$ depends only on direction,
 not distance. Total radiated power is
 
 $$
-P_{\text{rad}} = \oint U(\theta, \phi)\, d\Omega.
+P_{\text{rad}} = \oint U(\theta, \phi) d\Omega.
 $$
 
 ### Directivity
@@ -172,7 +172,7 @@ to an isotropic radiator:
 $$
 D(\theta, \phi)
 = \frac{U(\theta, \phi)}{U_{\text{iso}}}
-= \frac{4 \pi\, U(\theta, \phi)}{P_{\text{rad}}}.
+= \frac{4 \pi U(\theta, \phi)}{P_{\text{rad}}}.
 $$
 
 $D$ is dimensionless (or in dBi when converted to decibels).
@@ -182,9 +182,9 @@ A useful rule of thumb: for a pencil beam with half-power beamwidths
 $\theta_{1}$ and $\theta_{2}$ (in radians),
 
 $$
-D \approx \frac{4 \pi}{\theta_{1}\, \theta_{2}}
+D \approx \frac{4 \pi}{\theta_{1} \theta_{2}}
 \quad\text{or, in degrees}\quad
-D \approx \frac{41{,}253}{\theta_{1}^{\circ}\, \theta_{2}^{\circ}}.
+D \approx \frac{41{,}253}{\theta_{1}^{\circ} \theta_{2}^{\circ}}.
 $$
 
 ### Gain and radiation efficiency
@@ -192,7 +192,7 @@ $$
 Gain is directivity with losses folded in:
 
 $$
-G(\theta, \phi) = \eta_{\text{rad}}\, D(\theta, \phi),
+G(\theta, \phi) = \eta_{\text{rad}} D(\theta, \phi),
 \qquad
 \eta_{\text{rad}} = \frac{P_{\text{rad}}}{P_{\text{in}}}
 \in [0, 1].
@@ -200,10 +200,30 @@ $$
 
 Efficiency accounts for ohmic and dielectric losses in the antenna
 structure. Mismatch loss at the antenna terminals is usually broken
-out separately as **realized gain** $G_{\text{re}} = (1 - |\Gamma|^{2})\, G$.
+out separately as **realized gain** $G_{\text{re}} = (1 - |\Gamma|^{2}) G$.
 
-When your instrument or datasheet reports "gain in dBi," it is
-almost always the realized gain in the peak direction.
+When your instrument or datasheet reports gain in dBi, it is almost always the realized gain in the peak direction.
+
+### $\Gamma$, VSWR, and Power Reflected
+
+Recall:
+
+$\Gamma = \frac{V^-}{V^+} \longrightarrow$ reflection coefficient
+
+and
+
+$\text{VSWR} = \frac{V_{\text{max}}}{V_{\text{min}}} = \frac{ 1 + \vert \Gamma \vert }{1 - \vert\Gamma\vert}$
+
+$\vert\Gamma\vert^2 =$ Reflected Power and $1-\vert\Gamma\vert^2$ = Transmitted Power 
+
+### Quick Reference $\Gamma$ vs VSWR vs Power
+
+| VSWR  | $\vert\Gamma\vert$ | Reflected $\vert\Gamma\vert^{2}$ | Transmitted $1 - \vert\Gamma\vert^{2}$ |
+| :---: | :---:              | :---:                            | :---:                                   |
+| 1.0:1 | 0.00               | 0%                               | 100% — Perfect                          |
+| 1.5:1 | 0.20               | 4%                               | 96% — Good                              |
+| 2.0:1 | 0.33               | 11.1%                            | 88.9% — Acceptable                      |
+| 3.0:1 | 0.50               | 25%                              | 75% — Poor                              |
 
 #### Interactive — compare gain patterns
 
@@ -229,7 +249,7 @@ $$
 Reciprocity ties $A_{e}$ to $G$ through a universal relation:
 
 $$
-A_{e} = \frac{\lambda^{2}}{4 \pi}\, G.
+A_{e} = \frac{\lambda^{2}}{4 \pi} G.
 $$
 
 Two consequences you'll use over and over:

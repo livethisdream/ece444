@@ -91,7 +91,7 @@ In dBi: $D_{\text{dBi}} = 10 \log_{10}(9170) \approx \boxed{39.6\ \text{dBi}}$.
 
 **(b)** Apply efficiency, then mismatch:
 
-- $G = e_{\text{rad}}\, D = 0.88 \times 9170 \approx 8070$; in dBi
+- $G = \eta_{\text{rad}}\, D = 0.88 \times 9170 \approx 8070$; in dBi
   $G \approx 39.1\ \text{dBi}$.
 - Mismatch loss: $1 - |\Gamma|^{2} = 1 - 0.0625 = 0.9375$.
 - $G_{\text{re}} = 0.9375 \times 8070 \approx 7560$; in dBi

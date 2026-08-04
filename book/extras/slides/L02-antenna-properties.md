@@ -47,13 +47,13 @@ Every field in this course depends on <strong>both</strong> time and space.
 
 ## Part 1
 
-### From Maxwell to a wave
+### From Maxwell to Waves
 
 <small>Refresher. If any of this is unfamiliar, come see me — the rest of the course rests on it.</small>
 
 ---
 
-## Maxwell's equations (source-free)
+## Maxwell's equations (source-free region)
 
 $$
 \nabla \cdot \mathbf{E} = 0
@@ -62,11 +62,11 @@ $$
 $$
 
 $$
-\nabla \times \mathbf{E} = -\mu\, \frac{\partial \mathbf{H}}{\partial t}
+\nabla \times \mathbf{E} = -\mu \frac{\partial \mathbf{H}}{\partial t}
 $$
 
 $$
-\nabla \times \mathbf{H} = \varepsilon\, \frac{\partial \mathbf{E}}{\partial t}
+\nabla \times \mathbf{H} = \varepsilon \frac{\partial \mathbf{E}}{\partial t}
 $$
 
 <div class="callout">
@@ -80,16 +80,16 @@ time and space derivatives live.
 
 ---
 
-## Guided version — the telegrapher's equations
+## The Telegrapher's Equations
 
 On a two-conductor line, voltage $v(z, t)$ and current $i(z, t)$:
 
 $$
-\frac{\partial v}{\partial z} = -L\, \frac{\partial i}{\partial t}
+\frac{\partial v}{\partial z} = -L \frac{\partial i}{\partial t}
 $$
 
 $$
-\frac{\partial i}{\partial z} = -C\, \frac{\partial v}{\partial t}
+\frac{\partial i}{\partial z} = -C \frac{\partial v}{\partial t}
 $$
 
 Same structure as the curl pair: **space on the left, time on the right.**
@@ -102,16 +102,16 @@ z and substitute the second? You get the 1-D wave equation for v.
 
 ## Both give you the wave equation
 
-Free space, source-free:
+Free space, source-free region:
 
 $$
-\nabla^{2} \mathbf{E} - \mu \varepsilon\, \frac{\partial^{2} \mathbf{E}}{\partial t^{2}} = 0
+\nabla^{2} \mathbf{E} - \mu \varepsilon \frac{\partial^{2} \mathbf{E}}{\partial t^{2}} = 0
 $$
 
 Transmission line:
 
 $$
-\frac{\partial^{2} v}{\partial z^{2}} - L C\, \frac{\partial^{2} v}{\partial t^{2}} = 0
+\frac{\partial^{2} v}{\partial z^{2}} - L C \frac{\partial^{2} v}{\partial t^{2}} = 0
 $$
 
 Second derivative in space, second derivative in time, tied by a speed.
@@ -122,7 +122,7 @@ $c = 1 / \sqrt{\mu \varepsilon}$, $\quad u = 1 / \sqrt{L C}$
 
 ---
 
-## A plane-wave solution
+## The Plane Wave Solution
 
 Traveling in $+\hat{z}$, linearly polarized along $\hat{x}$:
 
@@ -159,7 +159,7 @@ $$
 Far from any antenna, the radiated field looks **locally like a plane
 wave**: transverse E and H, ratio $\eta_{0}$, amplitude falling as $1/r$.
 
-<small>We'll derive that $1/r$ from the radiation integrals in L6.</small>
+<small>We'll derive the 1/r factor from the radiation integrals soon!</small>
 
 ---
 
@@ -184,7 +184,7 @@ We bring time back to deal with bandwidth, dispersion, or pulses (RADAR!)
 
 ## Part 2
 
-### Wave Parameters
+### Antenna Parameters
 
 ---
 
@@ -227,11 +227,11 @@ $$
 ## Gain and efficiency
 
 $$
-G(\theta, \phi) = e_{\text{rad}} D(\theta, \phi)
+G(\theta, \phi) = \eta_{\text{rad}} D(\theta, \phi)
 $$
 
 $$
-e_{\text{rad}} = \frac{P_{\text{rad}}}{P_{\text{in}}} \in [0, 1]
+\eta_{\text{rad}} = \frac{P_{\text{rad}}}{P_{\text{in}}} \in [0, 1]
 $$
 
 With mismatch — **realized gain**:
@@ -243,6 +243,41 @@ $$
 <div class="callout">
 Datasheet "gain, dBi" is almost always realized gain at boresight.
 </div>
+
+---
+
+## $\Gamma$, VSWR, and Power Reflected
+
+$$
+\Gamma = \frac{V^-}{V^+} \longrightarrow \text{reflection coefficient}
+$$
+
+$$
+\text{VSWR} = \frac{V_{\text{max}}}{V_{\text{min}}} = \frac{1 + |\Gamma|}{1 - |\Gamma|}
+$$
+
+$$
+|\Gamma|^{2} = \text{Reflected power}
+\qquad
+1 - |\Gamma|^{2} = \text{Transmitted power}
+$$
+
+---
+
+## Quick Reference — Γ vs VSWR vs Power
+
+<p style="text-align:center;">
+<img src="./img/02-antenna-properties/vswr_vs_gamma.png"
+     alt="VSWR vs reflection coefficient chart"
+     style="max-height:340px; margin-bottom: 0.5em;">
+</p>
+
+| VSWR  | $\vert\Gamma\vert$ | Reflected | Transmitted |
+|:-----:|:------------------:|:---------:|:-----------:|
+| 1.0:1 | 0.00 | 0% | 100% — Perfect |
+| 1.5:1 | 0.20 | 4% | 96% — Good |
+| 2.0:1 | 0.33 | 11.1% | 88.9% — Acceptable |
+| 3.0:1 | 0.50 | 25% | 75% — Poor |
 
 ---
 
