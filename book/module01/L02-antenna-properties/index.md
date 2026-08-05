@@ -142,8 +142,7 @@ Interactive EM wave animation by Szilárd Szabó (Szialab).
 
 ## Part 2: Antenna Parameters
 
-With the wave equation in hand, we can define the working vocabulary
-for the rest of Module 1.
+With the wave equation in hand, we can define the working vocabulary for the rest of Module 1.
 
 ### Radiation intensity
 

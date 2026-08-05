@@ -25,3 +25,10 @@ parts:
             title: Practice
           - file: module01/L02-antenna-properties/practice-solutions
             title: Practice Solutions
+      - file: module01/L03-polarization-bandwidth/index
+        title: "L3 — Polarization and Bandwidth"
+        sections:
+          - file: module01/L03-polarization-bandwidth/practice
+            title: Practice
+          - file: module01/L03-polarization-bandwidth/practice-solutions
+            title: Practice Solutions

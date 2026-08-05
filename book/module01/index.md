@@ -28,4 +28,9 @@
     <h4>Basic Properties and Terminology</h4>
     <p>From Maxwell's equations to the plane wave; radiation intensity, directivity, gain, effective area, and pattern parameters. Objective 1.2.</p>
   </a>
+  <a class="mt-card mt-lesson" href="L03-polarization-bandwidth/index.html">
+    <span class="mt-kind">Lesson 3</span>
+    <h4>Polarization and Bandwidth</h4>
+    <p>Linear, circular, and elliptical polarization; axial ratio and polarization loss; impedance / pattern / polarization bandwidth; Chu-Harrington. Objective 1.3.</p>
+  </a>
 </div>
