@@ -1,0 +1,93 @@
+\documentclass{exam}
+
+% shared packages + macros (found via TEXINPUTS: ...\latex-tools\tex\latex)
+\input{myPackages_gr}
+\input{myShortcuts}
+\input{exam_config}
+
+\newif\ifkey
+\newif\ifA               % version A vs B (exam variants)
+\newif\ifprintselected   % \ansbox uses this: answers-only vs full solutions
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET THESE (overridable from the command line with \def\...In)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% version A by default
+\Atrue
+
+% answers-only mode (\printselectedtrue) vs full worked solutions
+\ifdefined\isansonly
+	\ifnum\isansonly=1 \printselectedtrue \else \printselectedfalse \fi
+\else
+	\printselectedfalse
+\fi
+
+% Module number -> selects the content file ECE444_Assessment_M<NN>.tex
+\ifdefined\moduleNumIn
+	\def\moduleNum{\moduleNumIn}
+\else
+	\def\moduleNum{01}
+\fi
+
+% Key or blank exam?  Default builds the KEY.
+\ifdefined\iskey
+	\ifnum\iskey=1 \keytrue \else \keyfalse \fi
+\else
+	\keytrue
+%	\keyfalse
+\fi
+
+% Term string in the running header
+\ifdefined\thisTermIn
+	\def\thisterm{\thisTermIn}
+\else
+	\def\thisterm{Fall 2026}
+\fi
+
+\def\thisclass{ECE444}
+
+% Off-campus builds don't have the USAFA figures tree; keep figures local.
+\graphicspath{{./figures/}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% circuitikz config
+\ctikzset{voltage/distance from node=0.75}
+
+%% exam class customization
+\CorrectChoiceEmphasis{\color{red}}
+\SolutionEmphasis{\color{red}}
+\renewcommand{\thepartno}{\alph{partno}}
+\renewcommand{\partlabel}{(\thepartno)}
+\renewcommand{\thesubpart}{\arabic{subpart}}
+\renewcommand{\subpartlabel}{(\thesubpart)}
+\renewcommand{\thechoice}{\alph{choice}}
+\renewcommand{\choicelabel}{(\thechoice)}
+\renewcommand{\choiceshook}{%
+	\setlength{\leftmargin}{18pt}%
+	\setlength{\itemsep}{4pt}%
+}
+\renewcommand{\subpartshook}{\setlength{\itemsep}{6pt}}
+
+% print the answers only when this is the key
+\ifkey \printanswers \else \noprintanswers \fi
+
+% header / footer
+\ifkey
+	\firstpageheader{\thisclass\hspace{1pt} -- \thisterm}{Module \#\moduleNum\hspace{1pt} Assessment \hspace{1pt} \color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm}{Module \#\moduleNum\hspace{1pt} Assessment \hspace{1pt} \color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+\else
+	\firstpageheader{\thisclass\hspace{1pt} -- \thisterm}{Module \#\moduleNum\hspace{1pt} Assessment \hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm}{Module \#\moduleNum\hspace{1pt} Assessment \hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+\fi
+\firstpagefooter{}{}{}
+\runningfooter{}{}{}
+\runningheadrule
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Assessment content goes here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{./\thisclass_Assessment_M\moduleNum}
+
+\end{document}

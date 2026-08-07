@@ -1,0 +1,14 @@
+# LaTeX build artifacts (regenerate with build_assessment.sh / build_practice.sh)
+*.aux
+*.log
+*.out
+*.gf
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.pre
+
+# Generated PDFs — reproducible from the .tex sources + build scripts.
+# (Remove this line if you want the built KEY/blank PDFs tracked in git.)
+*.pdf

@@ -1,0 +1,77 @@
+\documentclass{exam}
+
+% shared packages + macros (found via TEXINPUTS: ...\latex-tools\tex\latex)
+\input{myPackages_gr}
+\input{myShortcuts}
+\input{exam_config}
+
+\newif\ifkey
+\newif\ifA
+\newif\ifprintselected
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET THESE (overridable from the command line with \def\...In)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lesson number -> selects the content file ECE444_Practice_L<NN>.tex
+\ifdefined\lessonNumIn
+	\def\lessonNum{\lessonNumIn}
+\else
+	\def\lessonNum{03}
+\fi
+
+% Solutions (key) or blank student copy?  Default builds SOLUTIONS.
+\ifdefined\iskey
+	\ifnum\iskey=1 \keytrue \else \keyfalse \fi
+\else
+	\keytrue
+\fi
+
+\ifdefined\thisTermIn
+	\def\thisterm{\thisTermIn}
+\else
+	\def\thisterm{Fall 2026}
+\fi
+
+\def\thisclass{ECE444}
+\Atrue
+
+% answers-only mode vs full worked solutions
+\ifdefined\isansonly
+	\ifnum\isansonly=1 \printselectedtrue \else \printselectedfalse \fi
+\else
+	\printselectedfalse
+\fi
+
+\graphicspath{{./figures/}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ctikzset{voltage/distance from node=0.75}
+
+\CorrectChoiceEmphasis{\color{red}}
+\SolutionEmphasis{\color{red}}
+\renewcommand{\thepartno}{\alph{partno}}
+\renewcommand{\partlabel}{(\thepartno)}
+\renewcommand{\thesubpart}{\arabic{subpart}}
+\renewcommand{\subpartlabel}{(\thesubpart)}
+\renewcommand{\thechoice}{\alph{choice}}
+\renewcommand{\choicelabel}{(\thechoice)}
+\renewcommand{\subpartshook}{\setlength{\itemsep}{6pt}}
+
+\ifkey \printanswers \else \noprintanswers \fi
+
+\ifkey
+	\firstpageheader{\thisclass\hspace{1pt} -- \thisterm}{L\lessonNum\hspace{1pt} Practice \hspace{1pt} \color{red}{ SOLUTIONS}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm}{L\lessonNum\hspace{1pt} Practice \hspace{1pt} \color{red}{ SOLUTIONS}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+\else
+	\firstpageheader{\thisclass\hspace{1pt} -- \thisterm}{L\lessonNum\hspace{1pt} Practice}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm}{L\lessonNum\hspace{1pt} Practice}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+\fi
+\firstpagefooter{}{}{}
+\runningfooter{}{}{}
+\runningheadrule
+
+\begin{document}
+
+\input{./\thisclass_Practice_L\lessonNum}
+
+\end{document}

@@ -1,0 +1,190 @@
+\documentclass{exam}
+
+% packages and shortcuts
+\input{myPackages_gr}
+\input{myShortcuts}
+
+%% exam class customization
+\input{exam_config}
+
+\newif\ifA
+\newif\ifkey 
+\newif\ifprintselected 
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Ch Num
+\ifdefined\chNumIn
+	\def\chNum{\chNumIn}
+\else
+	\def\chNum{07}
+\fi 
+
+% is this A or not?
+\ifdefined\isA
+	\ifnum\isA=1
+		\Atrue
+	\else 
+		\Afalse
+	\fi
+\else
+	%% Pick one manually
+      \Atrue		% if this is version A 
+%	\Afalse		% if this is version B
+\fi
+
+\ifdefined\dotOneIn
+	\def\dotone{\dotOneIn}
+\else
+	\def\dotone{0}
+\fi
+
+\ifnum\dotone=1
+	\def\mygraphicspath{C:/Users/neil.rogers.1/OneDrive - afacademy.af.edu/LaTeX/figures}
+\else
+	\def\mygraphicspath{C:/Users/neil.rogers/OneDrive - afacademy.af.edu/LaTeX/figures}
+\fi
+
+\graphicspath{\mygraphicspath}
+
+% is this the key or not?
+\ifdefined\iskey
+	\ifnum\iskey=1
+		\keytrue
+	\else
+		\keyfalse
+	\fi
+\else
+	%% Pick one manually
+%	\keyfalse % if this is NOT the key
+	\keytrue     % if this IS the key
+\fi
+
+%\def\isansonly{1}
+% this is  for only printing answers, without the entire solution
+\ifdefined\isansonly
+	\ifnum\isansonly=1
+		\printselectedtrue
+	\else	
+		\printselectedfalse
+	\fi
+\else
+%	\printselectedtrue
+	\printselectedfalse
+\fi
+
+% set up the header and footer - change for every term
+\ifdefined\thisTermIn
+	\def\thisterm{\thisTermIn}
+\else
+	\def\thisterm{Spring 2025}
+\fi 
+%
+
+\def\thisclass{ECE343}
+
+
+%\def\subNum{a}
+
+%% LO Num
+%\ifdefined\loNumIn
+%	\def\loNum{\loNumIn}
+%\else
+%	\def\loNum{12}
+%\fi 
+
+% Chapter names
+%\ifnum\chNum=02
+%	\def\chName{Fields}
+%\fi
+%\ifnum\chNum=03
+\ifthenelse{\equal{\chNum}{03a}}
+	{\def\assName{TxLines}}
+	{}
+\ifthenelse{\equal{\chNum}{03b}}
+	{\def\assName{SmithCharts}}
+	{}
+%\fi
+%\ifnum\chNum=04
+%	\def\chName{VectorAnalysis}
+%\fi
+\ifnum\chNum=05
+	\def\assName{Electrostatics}
+\fi
+%\ifnum\chNum=06
+%	\def\chName{CurrentDensity}
+%\fi
+\ifnum\chNum=07
+	\def\assName{Magnetostatics}
+\fi
+%\ifnum\chNum=08
+%	\def\chName{DynamicFields}
+%\fi
+%\ifnum\chNum=09
+%	\def\chName{PlaneWaves}
+%\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% END SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% circuitikz config
+\ctikzset{voltage/distance from node=0.75}
+
+%% exam class customization
+\CorrectChoiceEmphasis{\color{red}}
+\SolutionEmphasis{\color{red}}
+%\addpoints
+%\bracketedpoints
+%\pointpoints{pt}{pts}
+%\pointformat{\bfseries\boldmath[\thepoints]}
+%\qformat{\textbf{\thequestion) \thequestiontitle}\hfill}
+\renewcommand{\thepartno}{\alph{partno}}
+\renewcommand{\partlabel}{(\thepartno)}
+\renewcommand{\thesubpart}{\arabic{subpart}}
+\renewcommand{\subpartlabel}{(\thesubpart)}
+\renewcommand{\thechoice}{\alph{choice}}
+\renewcommand{\choicelabel}{(\thechoice)}
+\renewcommand{\choiceshook}{%
+	\setlength{\leftmargin}{18pt}%
+	\setlength{\itemsep}{4pt}%
+}
+\renewcommand{\subpartshook}{\setlength{\itemsep}{6pt}}
+
+% print the answers if this is the key
+\ifkey
+	\printanswers % if this IS the key
+\else
+	\noprintanswers  %if this is NOT the key
+\fi
+
+
+% print the header and footer
+% need to print key on top if this is the key
+\ifkey
+	\firstpageheader{\thisclass\hspace{1pt} -- \thisterm }{Ch \#\chNum\hspace{1pt} Assessment \hspace{1pt} \color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{Ch \#\chNum\hspace{1pt} Assessment \hspace{1pt} \color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\else
+	\firstpageheader{\thisclass \hspace{1pt} -- \thisterm }{Ch \#\chNum\hspace{1pt} Assessment \hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Ch \#\chNum\hspace{1pt} Assessment \hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\fi
+
+\runningheadrule
+
+
+\begin{document}
+	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Assessment content goes here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{./\thisclass_Assessment_Ch\chNum_\assName}
+
+
+\end{document}
