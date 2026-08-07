@@ -127,4 +127,33 @@ resistive loading) to synthesize more bandwidth at a gain penalty?
 
 ---
 
+## Problem 7 — Mismatch that kills the amplifier
+
+A power amplifier (PA) feeds a transmit antenna. The PA delivers a
+forward power of **$P_{\text{fwd}} = +40\ \text{dBm}$** toward the
+antenna. A protection/detector **diode** sits at the PA output; it
+fails catastrophically if it must dissipate more than
+**$P_{\max} = +30\ \text{dBm}$**. When the antenna is mismatched, the
+reflected wave travels back down the feed and is absorbed at the PA
+output stage — model **all** of the reflected power as landing on the
+diode.
+
+**(a)** Convert $P_{\text{fwd}}$ and $P_{\max}$ to watts.
+
+**(b)** In terms of the reflection-coefficient magnitude $|\Gamma|$ at
+the antenna, how much power is reflected back toward the PA?
+
+**(c)** Find the largest $|\Gamma|$ the system can tolerate before the
+diode is destroyed.
+
+**(d)** Convert that $|\Gamma|_{\max}$ to a **VSWR** limit and a
+**return-loss** limit. State the one-line rule you would put on the
+datasheet ("keep VSWR below ___ / return loss above ___ dB").
+
+**(e)** In one sentence: real transmitters put a **circulator or
+isolator** between the PA and the antenna. How does that change the
+picture you just computed?
+
+---
+
 **Documentation:**

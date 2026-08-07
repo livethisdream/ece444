@@ -14,7 +14,7 @@ Fall 2026 · Dr. Neil Rogers
 
 <div class="title-right">
 
-![USAFA](https://livethisdream.github.io/assets/ece444/img/USAFA-logo.png)
+![USAFA](./img/01-course-intro/USAFA-logo.png)
 
 </div>
 
@@ -113,7 +113,7 @@ $$
 \text{AR} = \frac{|E_{\text{maj}}|}{|E_{\text{min}}|} \ge 1
 $$
 
-$\text{AR}_{\text{dB}} = 20 \log_{10}(\text{AR})$
+$\text{AR}\_{\text{dB}} = 20 \log_{10}(\text{AR})$
 
 - $\text{AR} = 1$ (0 dB) → pure **circular**
 - $\text{AR} = \infty$ ($\infty$ dB) → pure **linear**
@@ -128,7 +128,7 @@ polarization loss to any linear receiver at 3 dB regardless of alignment.
 ## Polarization loss factor
 
 $$
-\text{PLF} = |\hat{\rho}_{\text{w}} \cdot \hat{\rho}_{\text{a}}^{*}|^{2}
+\text{PLF} = |\hat{\rho}\_{\text{w}} \cdot \hat{\rho}\_{\text{a}}^{*}|^{2}
 $$
 
 Fraction of incident power an antenna captures given a polarization mismatch.
@@ -277,7 +277,7 @@ Every real design is picking two of {gain, size, bandwidth} and letting the thir
 ## Next Time
 
 <figure class="qr qr-right">
-  <img src="https://livethisdream.github.io/assets/ece444/img/syllabus-qr.png" alt="QR to syllabus">
+  <img src="./img/syllabus-qr.png" alt="QR to syllabus">
   <figcaption>Syllabus</figcaption>
 </figure>
 

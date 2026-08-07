@@ -14,7 +14,7 @@ Fall 2026 · Dr. Neil Rogers
 
 <div class="title-right">
 
-![USAFA](https://livethisdream.github.io/assets/ece444/img/USAFA-logo.png)
+![USAFA](./img/01-course-intro/USAFA-logo.png)
 
 </div>
 
@@ -132,13 +132,15 @@ $$
 
 - $\omega = 2 \pi f \longrightarrow$  **time** frequency
 - $k = 2 \pi / \lambda \longrightarrow$ **space** frequency (wave number)
-- $\omega / k = c \longrightarrow$ **crest speed**
+- $\omega / k = c \longrightarrow$ **crest speed/phase velocity**
 
 <div class="callout">
 Freeze <em>t</em> $\longrightarrow$ you see a wave in space. 
 
 Freeze <em>z</em> $\longrightarrow$ you see a wave in time.
 </div>
+
+<p class="viz-cue">↗ Interactive on the lesson page</p>
 
 Note:
 Draw the two snapshots on the chalkboard. This is the intuition slide.
@@ -188,6 +190,30 @@ We bring time back to deal with bandwidth, dispersion, or pulses (RADAR!)
 
 ---
 
+## The Poynting vector
+
+Power flow per unit area:
+
+$$
+\mathbf{S} = \mathbf{E} \times \mathbf{H}\ \ [\text{W/m}^{2}],
+\qquad
+\langle S \rangle = \frac{|\mathbf{E}|^{2}}{2 \eta_{0}}
+$$
+
+<p style="text-align:center;">
+<img src="../viz/img/poynting-triad.svg"
+     alt="E, H, S orthogonal triad"
+     style="max-height:300px;">
+</p>
+
+<small>$\mathbf{E}\perp\mathbf{H}\perp\mathbf{S}$ · along propagation · falls as $1/r^{2}$. This $\langle S\rangle$ is the $S_{\text{rad}}$ below.</small>
+
+Note:
+S = E × H is where the power lives. Time-average gives |E|²/2η₀. This is
+the quantity radiation intensity is built from — motivate the next slide.
+
+---
+
 ## Radiation intensity
 
 Power radiated per unit solid angle:
@@ -202,6 +228,16 @@ The $r^{2}$ cancels the $1/r^{2}$ in Poynting — $U$ depends **only on directio
 $$
 P_{\text{rad}} = \oint U(\theta, \phi) d\Omega
 $$
+
+<p style="text-align:center;">
+<img src="../viz/img/solid-angle.jpg"
+     alt="solid-angle cone subtending dOmega on a sphere"
+     style="max-height:220px;">
+</p>
+
+<small>Solid angle $\Omega = 2\pi(1-\cos\alpha)$ sr · whole sphere $= 4\pi$ sr.</small>
+
+<p class="viz-cue">↗ Interactive on the lesson page</p>
 
 ---
 
@@ -244,6 +280,8 @@ $$
 Datasheet "gain, dBi" is almost always realized gain at boresight.
 </div>
 
+<p class="viz-cue">↗ Interactive on the lesson page</p>
+
 ---
 
 ## $\Gamma$, VSWR, and Power Reflected
@@ -266,18 +304,24 @@ $$
 
 ## Quick Reference — Γ vs VSWR vs Power
 
-<p style="text-align:center;">
+<div style="display:flex; align-items:center; justify-content:center; gap:1.4em; flex-wrap:wrap;">
 <img src="./img/02-antenna-properties/vswr_vs_gamma.png"
      alt="VSWR vs reflection coefficient chart"
-     style="max-height:340px; margin-bottom: 0.5em;">
-</p>
+     style="max-height:340px; flex:0 0 auto;">
+<table style="flex:0 0 auto; width:max-content; font-size:0.74em;">
+<thead>
+<tr><th>VSWR</th><th>$\vert\Gamma\vert$</th><th>Reflected</th><th>Transmitted</th></tr>
+</thead>
+<tbody>
+<tr><td>1.0:1</td><td>0.00</td><td>0%</td><td>100% — Perfect</td></tr>
+<tr><td>1.5:1</td><td>0.20</td><td>4%</td><td>96% — Good</td></tr>
+<tr><td>2.0:1</td><td>0.33</td><td>11.1%</td><td>88.9% — Acceptable</td></tr>
+<tr><td>3.0:1</td><td>0.50</td><td>25%</td><td>75% — Poor</td></tr>
+</tbody>
+</table>
+</div>
 
-| VSWR  | $\vert\Gamma\vert$ | Reflected | Transmitted |
-|:-----:|:------------------:|:---------:|:-----------:|
-| 1.0:1 | 0.00 | 0% | 100% — Perfect |
-| 1.5:1 | 0.20 | 4% | 96% — Good |
-| 2.0:1 | 0.33 | 11.1% | 88.9% — Acceptable |
-| 3.0:1 | 0.50 | 25% | 75% — Poor |
+<p class="viz-cue">↗ Interactive on the lesson page</p>
 
 ---
 
@@ -291,28 +335,94 @@ $$
 
 <small>Isotropic (dashed) · λ/2 dipole · Std-gain horn · Parabolic dish (D/λ = 10)</small>
 
+<p class="viz-cue">↗ Interactive on the lesson page</p>
+
 Note:
 Interactive on the site — pull up the L2 lesson page, slide D/λ to watch
 the dish beam narrow and its peak gain climb.
 
 ---
 
-## Effective area
+## Effective area — the capture
 
-How much of an incident wave a receive antenna captures:
-
-$$
-A_{e} = \frac{P_{\text{rx}}}{S_{\text{inc}}}
-$$
-
-Reciprocity ties $A_{e}$ to $G$:
+Turn the antenna around to **receive**. A wave of density $S_{\text{inc}}$ arrives; the antenna hands $P_{\text{rx}}$ to its load. The ratio has units of **area**:
 
 $$
-\boxed{A_{e} = \frac{\lambda^{2}}{4 \pi} G}
+\boxed{A_{e} \equiv \frac{P_{\text{rx}}}{S_{\text{inc}}}}
+\qquad P_{\text{rx}} = S_{\text{inc}}\, A_{e}
 $$
 
-- Same physical antenna at higher $f$ → smaller $A_{e}$.
-- Pairs with Friis / radar equation in Module 4.
+<p style="text-align:center;">
+<img src="../viz/img/effective-area-capture.svg" alt="aperture capturing effective area" style="max-height:260px;">
+</p>
+
+<small>How big a slice of the passing wavefront the antenna "catches." So — what sets its size?</small>
+
+Note:
+This is the definition. The next three slides derive the value of A_e.
+
+---
+
+## The antenna as a receiver
+
+The incident field induces an open-circuit voltage; the antenna acts as a source with its **radiation resistance** $R_r$. A conjugate-**matched** load draws the most power:
+
+$$
+V_{\text{oc}} = E\,\ell_{e}
+\qquad
+P_{\text{rx}} = \frac{V_{\text{oc}}^{2}}{8 R_{r}}
+$$
+
+<p style="text-align:center;">
+<img src="../viz/img/recv-circuit.svg" alt="receiving antenna Thevenin equivalent" style="max-height:240px;">
+</p>
+
+Note:
+ℓ_e = effective length, R_r = radiation resistance. Max power transfer gives
+the /8R_r (the ½ from time-averaging a sinusoid turns the usual 4 into 8).
+
+---
+
+## Pin the constant: a short dipole
+
+Use the simplest antenna. Plug in $\ell_e = \ell$, $R_r = 80\pi^{2}(\ell/\lambda)^{2}$, $S = E^{2}/2\eta_{0}$ — the $\ell$'s cancel:
+
+$$
+A_{e} = \frac{P_{\text{rx}}}{S}
+= \frac{\eta_{0}\,\ell_{e}^{2}}{4 R_{r}}
+= \frac{3\lambda^{2}}{8\pi}
+= 1.5\cdot\frac{\lambda^{2}}{4\pi}
+$$
+
+<p style="text-align:center;">
+<img src="../viz/img/short-dipole-field.svg" alt="short dipole in an incident wave" style="max-height:220px;">
+</p>
+
+Note:
+η0 = 120π. Work the algebra on the board — ℓ² cancels, leaving a pure λ²
+times a number. Keep students' eyes on that number.
+
+---
+
+## Read off the universal law
+
+That **1.5 is the short dipole's directivity** $D$. With losses folded in ($G=\eta_{\text{rad}}D$):
+
+$$
+A_{e} = D\,\frac{\lambda^{2}}{4\pi}
+\;\;\Longrightarrow\;\;
+\boxed{A_{e} = \frac{\lambda^{2}}{4\pi}\, G}
+$$
+
+**Reciprocity** makes the ratio $A_e/G$ the *same* for every antenna — so it holds universally. For real apertures, $A_{e} = \varepsilon_{\text{ap}} A_{\text{phys}}$.
+
+<div class="callout">
+Fixed dish → $A_e$ fixed, gain $\propto f^{2}$.  Fixed gain → $A_e \propto \lambda^{2}$.
+</div>
+
+Note:
+We proved it for one antenna; reciprocity generalizes it to all. Pairs with
+Friis / the radar range equation in Module 4.
 
 ---
 
@@ -345,6 +455,8 @@ This is the picture students need to be able to draw from memory.
 
 <small>Sinc² aperture, D/λ = 6. HPBW at −3 dB · FNBW at first nulls · SLL at first sidelobe peak.</small>
 
+<p class="viz-cue">↗ Interactive on the lesson page</p>
+
 Note:
 Interactive on the site — students can drag D/λ and watch beamwidth
 narrow while sidelobes multiply. Point them there for the tradeoffs slide
@@ -367,7 +479,7 @@ We'll formalize this in **Module 3** with amplitude tapering
 ## Next Time
 
 <figure class="qr qr-right">
-  <img src="https://livethisdream.github.io/assets/ece444/img/syllabus-qr.png" alt="QR to syllabus">
+  <img src="./img/syllabus-qr.png" alt="QR to syllabus">
   <figcaption>Syllabus</figcaption>
 </figure>
 

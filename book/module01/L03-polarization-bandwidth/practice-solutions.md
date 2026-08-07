@@ -204,4 +204,52 @@ never for free.
 
 ---
 
+## Problem 7 — Mismatch that kills the amplifier
+
+**(a)** Using $P[\text{W}] = 10^{(P[\text{dBm}] - 30)/10}$:
+
+$$
+P_{\text{fwd}} = 10^{(40 - 30)/10} = 10^{1} = 10\ \text{W}, \qquad
+P_{\max} = 10^{(30 - 30)/10} = 10^{0} = 1\ \text{W}.
+$$
+
+**(b)** A fraction $|\Gamma|^{2}$ of the forward power is reflected:
+
+$$
+P_{\text{ref}} = |\Gamma|^{2}\, P_{\text{fwd}}.
+$$
+
+**(c)** The diode fails when $P_{\text{ref}} = P_{\max}$, so
+
+$$
+|\Gamma|_{\max} = \sqrt{\frac{P_{\max}}{P_{\text{fwd}}}}
+              = \sqrt{\frac{1}{10}} = \sqrt{0.1} \approx \boxed{0.316}.
+$$
+
+**(d)** VSWR from $|\Gamma|_{\max}$:
+
+$$
+\text{VSWR}_{\max} = \frac{1 + |\Gamma|_{\max}}{1 - |\Gamma|_{\max}}
+                  = \frac{1.316}{0.684} \approx \boxed{1.93}.
+$$
+
+Return loss:
+
+$$
+\text{RL}_{\min} = -20 \log_{10}|\Gamma|_{\max}
+                = -10 \log_{10}(0.1) = \boxed{10\ \text{dB}}.
+$$
+
+Datasheet rule: **keep VSWR ≤ 1.9 (return loss ≥ 10 dB)** at the PA
+output, or the diode cooks. Equivalently: the reflected power must stay
+at least 10 dB below the forward power.
+
+**(e)** A **circulator or isolator** routes the reflected wave into a
+matched dump-port load instead of back into the PA, so the diode no
+longer sees the reflected power — the antenna can then run at much
+higher VSWR without destroying the output stage (paid for by the
+isolator's insertion loss, size, cost, and finite bandwidth).
+
+---
+
 **Documentation:**

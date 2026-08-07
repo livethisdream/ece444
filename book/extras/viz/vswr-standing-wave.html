@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VSWR — the standing wave</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root {
+    --navy: #004a85;
+    --mid:  #0067b9;
+    --edge: #cddce9;
+    --edge2:#b9d2e5;
+    --bg:   #f5f9fc;
+    --ink:  #15202b;
+    --ink3: #5b6573;
+    --tot:  #0067b9;   /* instantaneous total */
+    --env:  #004a85;   /* envelope */
+    --fwd:  #1d7a4d;   /* forward wave */
+    --ref:  #b3213a;   /* reflected wave */
+    --node: #8a5a00;   /* node / min markers */
+  }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--ink); background: #fff;
+  }
+  .app { display: flex; flex-direction: column; gap: 12px; padding: 16px; }
+  canvas {
+    display: block; width: 100%; height: auto;
+    background: #fff; border: 1px solid var(--edge); border-radius: 6px;
+  }
+  .panel {
+    font-size: 13.5px; line-height: 1.4;
+    display: grid;
+    grid-template-columns: minmax(210px, 1fr) minmax(210px, 1fr) minmax(190px, 1fr);
+    gap: 12px; align-items: start;
+  }
+  @media (max-width: 720px) { .panel { grid-template-columns: 1fr; } }
+  .panel h2 {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--navy); margin: 0 0 8px;
+  }
+  .block {
+    padding: 8px 10px; background: var(--bg);
+    border: 1px solid var(--edge); border-radius: 4px;
+  }
+  .block label.cap {
+    display: block; font-size: 11.5px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--ink3); font-weight: 700; margin-bottom: 4px;
+  }
+  .block .val { font-size: 13px; font-weight: 600; color: var(--navy);
+                font-variant-numeric: tabular-nums; }
+  .block input[type=range] { width: 100%; margin: 4px 0 0; }
+  .btns { display: flex; gap: 8px; margin-top: 10px; }
+  .btns button {
+    flex: 1 1 auto; font: 600 12.5px/1 Inter, sans-serif; padding: 8px 10px;
+    border: 1px solid var(--edge2); border-radius: 4px; background: #fff;
+    color: var(--navy); cursor: pointer;
+  }
+  .btns button:hover { background: var(--bg); }
+  .btns button.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .readout dl { display: grid; grid-template-columns: auto 1fr; gap: 5px 10px; margin: 0; }
+  .readout dt { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+                font-weight: 700; color: var(--ink3); align-self: center; }
+  .readout dd { margin: 0; font-size: 14px; font-weight: 700; color: var(--navy);
+                font-variant-numeric: tabular-nums; }
+  .toggles { display: flex; flex-direction: column; gap: 4px; }
+  .toggles label { display: flex; align-items: center; gap: 6px; padding: 3px 4px;
+                   font-size: 12.5px; cursor: pointer; user-select: none; }
+  .toggles .swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .toggles .rating { margin-top: 6px; font-size: 12px; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" aria-label="Standing wave on a transmission line"></canvas>
+
+  <div class="panel">
+    <div class="block">
+      <h2>Load mismatch</h2>
+      <label class="cap">\(\lvert\Gamma\rvert\) = <span class="val" id="gam-val">0.50</span></label>
+      <input type="range" id="gamma" min="0" max="1" step="0.01" value="0.5">
+      <div class="btns">
+        <button id="play">▶ Animate</button>
+      </div>
+      <div class="toggles" style="margin-top:10px;">
+        <label><input type="checkbox" id="show-comp">
+          <span class="swatch" style="background:var(--fwd)"></span>
+          <span class="swatch" style="background:var(--ref); margin-left:-4px;"></span>
+          forward + reflected waves</label>
+      </div>
+    </div>
+
+    <div class="readout">
+      <h2>Standing-wave numbers</h2>
+      <dl>
+        <dt>VSWR</dt>          <dd id="r-vswr">—</dd>
+        <dt>\(\lvert\Gamma\rvert\)</dt>           <dd id="r-gam">—</dd>
+        <dt>Return loss</dt>   <dd id="r-rl">—</dd>
+        <dt>Reflected \(\lvert\Gamma\rvert^2\)</dt><dd id="r-refl">—</dd>
+        <dt>Transmitted</dt>   <dd id="r-trans">—</dd>
+      </dl>
+      <div class="toggles"><div class="rating" id="rating">—</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+// ---- labels: MathJax for math, sans UI font for words/units ----
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const mtext=(ctx,tex,x,y,h,color,align)=>MJ.draw(ctx,tex,x,y,h,color,align);
+function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+function mixLabel(ctx,chunks,x,yc,h,color,align,bold){
+  const fpx=h-1, f=(bold?'700 ':'')+fpx+'px '+SANS;
+  let tot=0;
+  for(const c of chunks){ if(c.m) tot+=MJ.width(c.m,color,h); else { ctx.font=f; tot+=ctx.measureText(c.s).width; } }
+  let cx = align==='right'? x-tot : (align==='center'? x-tot/2 : x);
+  for(const c of chunks){
+    if(c.m){ MJ.draw(ctx,c.m,cx,yc,h,color,'left'); cx+=MJ.width(c.m,color,h); }
+    else { stext(ctx,c.s,cx,yc,fpx,color,'left',bold); ctx.font=f; cx+=ctx.measureText(c.s).width; }
+  }
+}
+
+// V(d,φ) = cos(φ − βd) + Γ cos(φ + βd),  V+ = 1, β d = 2π·d  (d in wavelengths).
+// Load sits at d = 0 (an antinode for a real, positive Γ).
+const DMAX = 2.0;        // show two wavelengths of line
+const AMP  = 2.2;        // vertical half-range (1+|Γ| ≤ 2)
+
+const state = { gamma: 0.5, phi: 0.0, playing: false };
+
+const Vtot = (d, phi, G) =>
+  Math.cos(phi - 2*Math.PI*d) + G*Math.cos(phi + 2*Math.PI*d);
+const Vfwd = (d, phi)       => Math.cos(phi - 2*Math.PI*d);
+const Vref = (d, phi, G)    => G*Math.cos(phi + 2*Math.PI*d);
+// Envelope (max over φ): sqrt[(1+G)²cos²βd + (1−G)²sin²βd]
+const Venv = (d, G) => {
+  const c = Math.cos(2*Math.PI*d), s = Math.sin(2*Math.PI*d);
+  return Math.sqrt((1+G)*(1+G)*c*c + (1-G)*(1-G)*s*s);
+};
+
+// ---- controls ----
+const gammaEl = document.getElementById('gamma');
+const gamVal  = document.getElementById('gam-val');
+const playBtn = document.getElementById('play');
+const compEl  = document.getElementById('show-comp');
+
+gammaEl.addEventListener('input', () => {
+  state.gamma = parseFloat(gammaEl.value);
+  gamVal.textContent = state.gamma.toFixed(2);
+  draw();
+});
+compEl.addEventListener('change', draw);
+playBtn.addEventListener('click', () => {
+  state.playing = !state.playing;
+  playBtn.textContent = state.playing ? '❚❚ Pause' : '▶ Animate';
+  playBtn.classList.toggle('active', state.playing);
+  if (state.playing) { lastTs = null; requestAnimationFrame(tick); }
+});
+
+let lastTs = null;
+function tick(ts) {
+  if (!state.playing) return;
+  if (lastTs === null) lastTs = ts;
+  const dt = Math.min(0.05, (ts - lastTs) / 1000);
+  lastTs = ts;
+  state.phi = (state.phi + dt * 2.2) % (2*Math.PI);   // ~0.35 Hz breathing
+  draw();
+  requestAnimationFrame(tick);
+}
+
+// ---- canvas ----
+const canvas = document.getElementById('plot');
+const ctx = canvas.getContext('2d');
+
+function fit() {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const w = Math.max(360, rect.width);
+  const h = Math.max(300, Math.min(w * 0.44, 460));
+  canvas.width = w*dpr; canvas.height = h*dpr;
+  canvas.style.height = `${h}px`;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  draw();
+}
+window.addEventListener('resize', fit);
+
+function draw() {
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.width/dpr, h = canvas.height/dpr;
+  ctx.clearRect(0,0,w,h);
+
+  const mL = 52, mR = 18, mT = 22, mB = 42;
+  const pW = w-mL-mR, pH = h-mT-mB;
+  const y0 = mT + pH/2;
+  const G = state.gamma;
+  const xFor = d => mL + (d/DMAX)*pW;
+  const yFor = v => y0 - (v/AMP)*(pH/2);
+
+  // grid
+  ctx.strokeStyle = '#eef3f8'; ctx.lineWidth = 1;
+  for (let v=-2; v<=2; v+=0.5) { ctx.beginPath(); ctx.moveTo(mL,yFor(v)); ctx.lineTo(mL+pW,yFor(v)); ctx.stroke(); }
+  for (let d=0; d<=DMAX+1e-9; d+=0.25) { ctx.beginPath(); ctx.moveTo(xFor(d),mT); ctx.lineTo(xFor(d),mT+pH); ctx.stroke(); }
+  ctx.strokeStyle = '#cddce9'; ctx.strokeRect(mL,mT,pW,pH);
+  ctx.strokeStyle = '#9fb6cc'; ctx.beginPath(); ctx.moveTo(mL,y0); ctx.lineTo(mL+pW,y0); ctx.stroke();
+
+  // ---- envelope band (region the instantaneous wave sweeps) ----
+  const step = 0.004;
+  ctx.fillStyle = 'rgba(0,74,133,0.08)';
+  ctx.beginPath();
+  for (let d=0; d<=DMAX+1e-9; d+=step) { const x=xFor(d), y=yFor(Venv(d,G)); (d===0)?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+  for (let d=DMAX; d>=0; d-=step)      { const x=xFor(d), y=yFor(-Venv(d,G)); ctx.lineTo(x,y); }
+  ctx.closePath(); ctx.fill();
+
+  // envelope outline (upper + lower)
+  ctx.strokeStyle = cssVar('--env'); ctx.lineWidth = 1.75; ctx.setLineDash([6,3]);
+  for (const sgn of [1,-1]) {
+    ctx.beginPath();
+    for (let d=0; d<=DMAX+1e-9; d+=step) { const x=xFor(d), y=yFor(sgn*Venv(d,G)); (d===0)?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // Vmax / Vmin reference lines
+  const Vmax = 1+G, Vmin = 1-G;
+  ctx.setLineDash([2,3]); ctx.lineWidth = 1;
+  ctx.strokeStyle = cssVar('--env');
+  ctx.beginPath(); ctx.moveTo(mL,yFor(Vmax)); ctx.lineTo(mL+pW,yFor(Vmax)); ctx.stroke();
+  mixLabel(ctx,[{m:'V_{\\max}'},{s:' = '+Vmax.toFixed(2)}],mL+6,yFor(Vmax)-8,12,cssVar('--env'),'left',false);
+  ctx.strokeStyle = cssVar('--node');
+  ctx.beginPath(); ctx.moveTo(mL,yFor(Vmin)); ctx.lineTo(mL+pW,yFor(Vmin)); ctx.stroke();
+  if (Vmin > 0.06) mixLabel(ctx,[{m:'V_{\\min}'},{s:' = '+Vmin.toFixed(2)}],mL+6,yFor(Vmin)-8,12,cssVar('--node'),'left',false);
+  ctx.setLineDash([]);
+
+  // node markers (minima) at d = 0.25 + 0.5n
+  ctx.fillStyle = cssVar('--node');
+  for (let d=0.25; d<=DMAX+1e-9; d+=0.5) {
+    ctx.beginPath(); ctx.arc(xFor(d), y0, 3, 0, 2*Math.PI); ctx.fill();
+  }
+
+  // ---- optional forward / reflected components ----
+  if (compEl.checked) {
+    ctx.lineWidth = 1.5;
+    for (const [fn, col] of [[Vfwd, cssVar('--fwd')], [(d,p)=>Vref(d,p,G), cssVar('--ref')]]) {
+      ctx.strokeStyle = col; ctx.globalAlpha = 0.55; ctx.beginPath();
+      for (let px=0; px<=pW; px++) { const d=(px/pW)*DMAX; const y=yFor(fn(d,state.phi)); (px===0)?ctx.moveTo(mL+px,y):ctx.lineTo(mL+px,y); }
+      ctx.stroke(); ctx.globalAlpha = 1;
+    }
+  }
+
+  // ---- instantaneous total wave ----
+  ctx.strokeStyle = cssVar('--tot'); ctx.lineWidth = 2.75; ctx.beginPath();
+  for (let px=0; px<=pW; px++) { const d=(px/pW)*DMAX; const y=yFor(Vtot(d,state.phi,G)); (px===0)?ctx.moveTo(mL+px,y):ctx.lineTo(mL+px,y); }
+  ctx.stroke();
+
+  // load marker at d=0
+  mixLabel(ctx,[{s:'load '},{m:'(d=0)'}],xFor(0)+4,mT+9.5,12,cssVar('--navy'),'left',true);
+
+  // axes labels + ticks
+  ctx.fillStyle = '#5b6573'; ctx.font = '10px Inter, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  for (let d=0; d<=DMAX+1e-9; d+=0.5) ctx.fillText(d.toFixed(2), xFor(d), y0+4);
+  mixLabel(ctx,[{s:'distance from load '},{m:'d/\\lambda'}],mL+pW,h-12,13,'#3b4651','right',false);
+  ctx.save(); ctx.translate(14, mT+pH/2); ctx.rotate(-Math.PI/2);
+  mixLabel(ctx,[{s:'voltage '},{m:'(V^{+}=1)'}],0,0,13,'#3b4651','center',false);
+  ctx.restore();
+
+  updateReadout(G);
+}
+
+function updateReadout(G) {
+  const vswr = (G >= 0.999) ? Infinity : (1+G)/(1-G);
+  const rl   = (G <= 1e-4) ? Infinity : -20*Math.log10(G);
+  document.getElementById('r-vswr').textContent  = (vswr===Infinity) ? '∞ : 1' : `${vswr.toFixed(2)} : 1`;
+  document.getElementById('r-gam').textContent   = G.toFixed(2);
+  document.getElementById('r-rl').textContent    = (rl===Infinity) ? '∞ dB' : `${rl.toFixed(1)} dB`;
+  document.getElementById('r-refl').textContent  = `${(G*G*100).toFixed(1)} %`;
+  document.getElementById('r-trans').textContent = `${((1-G*G)*100).toFixed(1)} %`;
+
+  const rate = document.getElementById('rating');
+  let txt, col;
+  if (vswr <= 1.05)      { txt = 'Essentially perfect'; col = '#1d7a4d'; }
+  else if (vswr <= 1.5)  { txt = 'Good';                col = '#1d7a4d'; }
+  else if (vswr <= 2.0)  { txt = 'Acceptable';          col = '#8a5a00'; }
+  else if (vswr <= 3.0)  { txt = 'Poor';                col = '#b3213a'; }
+  else                   { txt = 'Bad match';           col = '#b3213a'; }
+  rate.textContent = `→ ${txt}`;
+  rate.style.color = col;
+}
+
+fit();
+
+MJ.setRedraw(()=>draw());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>draw()); draw(); });
+</script>
+</body>
+</html>

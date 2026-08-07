@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Radiation pattern features</title>
+<script src="mjlabel.js"></script>
 <style>
   :root {
     --navy: #004a85;
@@ -44,11 +45,11 @@
     font-size: 13.5px;
     line-height: 1.4;
     display: grid;
-    grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr) minmax(220px, 1fr);
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 12px;
     align-items: start;
   }
-  @media (max-width: 720px) {
+  @media (max-width: 380px) {
     .panel { grid-template-columns: 1fr; }
   }
   .panel h2 {
@@ -128,8 +129,8 @@
   <div class="panel">
     <div class="slider-block">
       <h2>Aperture size</h2>
-      <label>D / λ = <span class="val" id="d-lambda-val">6</span></label>
-      <input type="range" id="d-lambda" min="2" max="20" step="0.5" value="6">
+      <label>\(D/\lambda\) = <span class="val" id="d-lambda-val">3</span></label>
+      <input type="range" id="d-lambda" min="2" max="20" step="0.5" value="3">
     </div>
 
     <div class="readout">
@@ -161,8 +162,23 @@
 <script>
 'use strict';
 
+// ---- labels: MathJax for math, sans UI font for words/units ----
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const mtext=(ctx,tex,x,y,h,color,align)=>MJ.draw(ctx,tex,x,y,h,color,align);
+function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+function mixLabel(ctx,chunks,x,yc,h,color,align,bold){
+  const fpx=h-1, f=(bold?'700 ':'')+fpx+'px '+SANS;
+  let tot=0;
+  for(const c of chunks){ if(c.m) tot+=MJ.width(c.m,color,h); else { ctx.font=f; tot+=ctx.measureText(c.s).width; } }
+  let cx = align==='right'? x-tot : (align==='center'? x-tot/2 : x);
+  for(const c of chunks){
+    if(c.m){ MJ.draw(ctx,c.m,cx,yc,h,color,'left'); cx+=MJ.width(c.m,color,h); }
+    else { stext(ctx,c.s,cx,yc,fpx,color,'left',bold); ctx.font=f; cx+=ctx.measureText(c.s).width; }
+  }
+}
+
 const state = {
-  dLambda: 6,
+  dLambda: 3,
   scaleDb: 40,       // vertical range: 0 down to -scaleDb
   show: { hpbw: true, fnbw: true, sll: true, labels: true }
 };
@@ -236,7 +252,7 @@ function resizeCanvas() {
   const rect = canvas.getBoundingClientRect();
   const dpr  = window.devicePixelRatio || 1;
   const w = Math.max(360, rect.width);
-  const h = Math.max(320, Math.min(w * 0.42, 480));
+  const h = Math.max(380, Math.min(w * 0.48, 560));
   canvas.width  = w * dpr;
   canvas.height = h * dpr;
   canvas.style.height = `${h}px`;
@@ -251,8 +267,8 @@ function draw() {
   const h   = canvas.height / dpr;
   ctx.clearRect(0, 0, w, h);
 
-  // margins
-  const mL = 54, mR = 20, mT = 26, mB = 46;
+  // margins — mT is large to reserve a top annotation lane for the brackets
+  const mL = 54, mR = 22, mT = 74, mB = 46;
   const plotW = w - mL - mR;
   const plotH = h - mT - mB;
 
@@ -301,134 +317,125 @@ function draw() {
   }
 
   // Axis titles
-  ctx.textAlign = 'center';
-  ctx.font = '600 12px Inter, sans-serif';
-  ctx.fillStyle = '#3b4651';
-  ctx.fillText('θ (angle from boresight)', mL + plotW / 2, mT + plotH + 24);
+  mixLabel(ctx, [{m:'\\theta'},{s:' (angle from boresight)'}], mL + plotW / 2, mT + plotH + 24, 13, '#3b4651', 'center', false);
   ctx.save();
   ctx.translate(16, mT + plotH / 2);
   ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = '600 12px Inter, sans-serif';
+  ctx.fillStyle = '#3b4651';
   ctx.fillText('Normalized gain (dB)', 0, 0);
   ctx.restore();
 
   // ---- features ----
   const f = extractFeatures(state.dLambda);
+  const C = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+  const cMain = C('--main'), cHp = C('--hpbw'), cFn = C('--fnbw'), cSll = C('--sll');
+  const topY = mT + plotH;
 
-  // Boresight vertical (always shown)
-  ctx.strokeStyle = 'var(--main)';
-  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--main').trim();
+  // Boresight vertical (always shown), thin so it doesn't dominate
+  ctx.strokeStyle = cMain;
   ctx.setLineDash([]);
-  ctx.lineWidth = 1.5;
+  ctx.lineWidth = 1.25;
   ctx.beginPath();
   ctx.moveTo(xFor(0), mT);
-  ctx.lineTo(xFor(0), mT + plotH);
+  ctx.lineTo(xFor(0), topY);
   ctx.stroke();
 
-  if (state.show.labels) {
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--main').trim();
-    ctx.font = '600 11px Inter, sans-serif';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.fillText('Boresight (θ = 0°)', xFor(0) + 4, mT + 2);
-  }
-
-  // HPBW markers
-  if (state.show.hpbw) {
-    const col = getComputedStyle(document.documentElement).getPropertyValue('--hpbw').trim();
-    ctx.strokeStyle = col;
-    ctx.setLineDash([5, 3]);
-    ctx.lineWidth = 1.5;
-    // vertical dashed at ±hpbwHalf
-    for (const s of [-1, 1]) {
-      ctx.beginPath();
-      ctx.moveTo(xFor(s * f.hpbwHalf), mT);
-      ctx.lineTo(xFor(s * f.hpbwHalf), yFor(-3));
-      ctx.stroke();
-    }
-    // horizontal at -3 dB across the HPBW
-    ctx.beginPath();
-    ctx.moveTo(xFor(-f.hpbwHalf), yFor(-3));
-    ctx.lineTo(xFor( f.hpbwHalf), yFor(-3));
-    ctx.stroke();
+  // Horizontal dimension bracket (arrowheads + end ticks + centered label),
+  // used in the reserved top lane so the beamwidths never crowd the curve.
+  function dimBracket(y, xa, xb, color, label) {
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 1.4;
     ctx.setLineDash([]);
-
-    // labels
-    ctx.fillStyle = col;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
-    ctx.font = '600 11px Inter, sans-serif';
-    ctx.fillText(`HPBW = ${f.hpbw.toFixed(1)}°`, xFor(0), yFor(-3) - 4);
-    // -3 dB tick label on left
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    ctx.font = '600 10px Inter, sans-serif';
-    ctx.fillText('−3 dB', xFor(f.hpbwHalf) + 6, yFor(-3));
+    ctx.beginPath(); ctx.moveTo(xa, y); ctx.lineTo(xb, y); ctx.stroke();
+    const hd = 4.5;
+    for (const [x, dir] of [[xa, -1], [xb, 1]]) {   // outward arrowheads
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x - dir * hd, y - hd * 0.85);
+      ctx.lineTo(x - dir * hd, y + hd * 0.85);
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.beginPath();
+    ctx.moveTo(xa, y - 4); ctx.lineTo(xa, y + 4);
+    ctx.moveTo(xb, y - 4); ctx.lineTo(xb, y + 4); ctx.stroke();
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.font = '700 11.5px Inter, sans-serif';
+    ctx.fillText(label, (xa + xb) / 2, y - 5);
   }
 
-  // FNBW markers
+  // FNBW — outer bracket, higher lane, drop-lines to the nulls
   if (state.show.fnbw && f.firstNullDeg < 89) {
-    const col = getComputedStyle(document.documentElement).getPropertyValue('--fnbw').trim();
-    ctx.strokeStyle = col;
-    ctx.setLineDash([2, 4]);
-    ctx.lineWidth = 1.5;
-    for (const s of [-1, 1]) {
-      ctx.beginPath();
-      ctx.moveTo(xFor(s * f.firstNullDeg), mT);
-      ctx.lineTo(xFor(s * f.firstNullDeg), mT + plotH);
-      ctx.stroke();
-    }
+    const xa = xFor(-f.firstNullDeg), xb = xFor(f.firstNullDeg);
+    ctx.strokeStyle = cFn; ctx.setLineDash([2, 4]); ctx.lineWidth = 1.2;
+    for (const x of [xa, xb]) { ctx.beginPath(); ctx.moveTo(x, mT - 34); ctx.lineTo(x, topY); ctx.stroke(); }
     ctx.setLineDash([]);
-    // label near top
-    ctx.fillStyle = col;
-    ctx.textAlign = 'center';
-    ctx.font = '600 10.5px Inter, sans-serif';
-    ctx.textBaseline = 'top';
-    ctx.fillText(`FNBW = ${f.fnbw.toFixed(1)}°`, xFor(0), mT + 18);
+    dimBracket(mT - 34, xa, xb, cFn, 'FNBW');
   }
 
-  // Sidelobe level marker
-  if (state.show.sll && f.sllTheta !== null) {
-    const col = getComputedStyle(document.documentElement).getPropertyValue('--sll').trim();
-    ctx.strokeStyle = col;
-    ctx.setLineDash([3, 3]);
-    ctx.lineWidth = 1.5;
-    // horizontal line at sllDb across full plot
-    ctx.beginPath();
-    ctx.moveTo(mL,         yFor(f.sllDb));
-    ctx.lineTo(mL + plotW, yFor(f.sllDb));
+  // HPBW — inner bracket, lower lane, plus the −3 dB level across the main lobe
+  if (state.show.hpbw) {
+    const xa = xFor(-f.hpbwHalf), xb = xFor(f.hpbwHalf);
+    ctx.strokeStyle = cHp; ctx.setLineDash([5, 3]); ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(xa, yFor(-3)); ctx.lineTo(xb, yFor(-3)); ctx.stroke();  // −3 dB segment
+    ctx.beginPath();                                                                    // drop-lines
+    for (const x of [xa, xb]) { ctx.moveTo(x, mT - 14); ctx.lineTo(x, yFor(-3)); }
     ctx.stroke();
     ctx.setLineDash([]);
-    // small marker at (sllTheta, sllDb)
-    ctx.fillStyle = col;
-    ctx.beginPath();
-    ctx.arc(xFor(f.sllTheta), yFor(f.sllDb), 3.5, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(xFor(-f.sllTheta), yFor(f.sllDb), 3.5, 0, 2 * Math.PI);
-    ctx.fill();
-    // label
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'bottom';
-    ctx.font = '600 11px Inter, sans-serif';
-    ctx.fillText(`SLL = ${f.sllDb.toFixed(1)} dB`, mL + plotW - 4, yFor(f.sllDb) - 3);
+    dimBracket(mT - 14, xa, xb, cHp, 'HPBW');
+    // −3 dB tag off to the left, at that level, in open space
+    ctx.fillStyle = cHp; ctx.font = '600 10.5px Inter, sans-serif';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText('−3 dB', xFor(-28), yFor(-3));
   }
 
-  // Lobe labels
+  // SLL — dashed level line + peak dots + short tag at the open right end
+  if (state.show.sll && f.sllTheta !== null) {
+    ctx.strokeStyle = cSll; ctx.setLineDash([3, 3]); ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(mL, yFor(f.sllDb)); ctx.lineTo(mL + plotW, yFor(f.sllDb)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = cSll;
+    for (const s of [-1, 1]) { ctx.beginPath(); ctx.arc(xFor(s * f.sllTheta), yFor(f.sllDb), 3.5, 0, 2 * Math.PI); ctx.fill(); }
+    ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+    ctx.font = '700 11px Inter, sans-serif';
+    ctx.fillText('SLL', mL + plotW - 4, yFor(f.sllDb) - 4);
+  }
+
+  // Descriptive labels — each parked in an open region, with a leader where needed
   if (state.show.labels) {
-    const col = getComputedStyle(document.documentElement).getPropertyValue('--main').trim();
-    ctx.fillStyle = col;
-    ctx.font = '600 11.5px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
-    // Main lobe label above 0 dB peak
-    ctx.fillText('Main lobe', xFor(0), yFor(0) - 4);
-    // Sidelobe label near the sidelobe peak (+θ side)
+    ctx.fillStyle = cMain;
+
+    // Main lobe — top of the lane, centered over the peak
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.font = '700 11.5px Inter, sans-serif';
+    ctx.fillText('Main lobe', xFor(0), mT - 54);
+
+    // boresight — rotated, riding the empty center column below the peak
+    ctx.save();
+    ctx.translate(xFor(0) - 4, mT + plotH * 0.72);
+    ctx.rotate(-Math.PI / 2);
+    mixLabel(ctx, [{s:'boresight ('},{m:'\\theta = 0^\\circ'},{s:')'}], 0, -5, 11, cMain, 'center', false);
+    ctx.restore();
+
+    // Sidelobe — short leader from the first +θ sidelobe peak to open space above-right
     if (f.sllTheta !== null && f.sllDb > -state.scaleDb + 3) {
-      ctx.fillText('Sidelobe', xFor(f.sllTheta), yFor(f.sllDb) - 12);
+      const px = xFor(f.sllTheta), py = yFor(f.sllDb);
+      const lx = xFor(f.sllTheta + 15), ly = yFor(f.sllDb + 7);
+      ctx.strokeStyle = cMain; ctx.lineWidth = 1; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(px, py - 4); ctx.lineTo(lx - 2, ly + 2); ctx.stroke();
+      ctx.fillStyle = cMain; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+      ctx.font = '700 11.5px Inter, sans-serif';
+      ctx.fillText('Sidelobe', lx, ly);
     }
-    // Back lobe label
+
+    // Back lobe — anchored at the left −180° lobe, left-aligned so it can't clip
     if (f.backDb > -state.scaleDb + 3) {
-      ctx.fillText('Back lobe', xFor(f.backTheta), yFor(f.backDb) - 8);
+      const px = xFor(-180), py = yFor(f.backDb);
+      ctx.strokeStyle = cMain; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(px + 3, py - 4); ctx.lineTo(px + 3, py); ctx.stroke();
+      ctx.fillStyle = cMain; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+      ctx.font = '700 11.5px Inter, sans-serif';
+      ctx.fillText('Back lobe', px + 6, py - 6);
     }
   }
 
@@ -455,6 +462,9 @@ function draw() {
 }
 
 resizeCanvas();
+
+MJ.setRedraw(()=>draw());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>draw()); draw(); });
 </script>
 </body>
 </html>

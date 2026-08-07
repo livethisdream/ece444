@@ -298,6 +298,23 @@ body.reveal-viewport:has(.title-slide.present)::after { display: none; }
 }
 .reveal .qr.qr-right img { width: 130px; height: 130px; max-height: 130px; }
 
+/* Corner cue: this slide has a live interactive on the L2 lesson page. */
+.reveal .viz-cue {
+  position: absolute;
+  right: 20px;
+  bottom: 16px;
+  margin: 0;
+  font-size: 0.4em;
+  font-weight: 600;
+  color: var(--slide-rule);
+  background: rgba(0, 48, 135, 0.06);
+  border: 1px solid rgba(0, 48, 135, 0.30);
+  border-radius: 999px;
+  padding: 0.28em 0.85em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
 /* Handwriting-style annotation — for margin notes in USAFA red. */
 .reveal .ink {
   font-family: "Caveat", "Comic Sans MS", "Bradley Hand", cursive;

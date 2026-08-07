@@ -62,6 +62,24 @@
         el.style.opacity = '1';
         clearTimeout(el._t);
         el._t = setTimeout(function () { el.style.opacity = '0'; }, 900);
+      },
+      // Download chalkboard/notes annotations as JSON. The plugin's built-in
+      // download() always names the file "chalkboard.json"; we name it after
+      // the deck (derived from the page filename) plus today's date so
+      // annotations from different lectures don't overwrite each other.
+      downloadAnnotations: function () {
+        var data = RevealChalkboard.getData();
+        var slug = (window.location.pathname.split('/').pop() || 'slides')
+                     .replace(/\.html?$/i, '') || 'slides';
+        var d = new Date();
+        var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+        var stamp = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+        var a = document.createElement('a');
+        a.download = slug + '-annotations-' + stamp + '.json';
+        a.href = window.URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
       }
     };
 
@@ -90,7 +108,10 @@
              action: "window.courseSlides.bumpWidth('chalk', 2);" },
           { icon: '<i class="fa fa-minus-square"></i>',
              title: 'Thinner chalk',
-             action: "window.courseSlides.bumpWidth('chalk', -2);" }
+             action: "window.courseSlides.bumpWidth('chalk', -2);" },
+          { icon: '<i class="fa fa-download"></i>',
+             title: 'Download annotations',
+             action: 'window.courseSlides.downloadAnnotations();' }
         ]
       },
       chalkboard: {
