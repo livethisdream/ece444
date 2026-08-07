@@ -1,0 +1,293 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L2 practice set (Basic Properties and Terminology), ported from the Jupyter
+% Book practice.md / practice-solutions.md into the exam class for Gradescope.
+% Blank copy: \begin{solution}[h] reserves h of work space. SOLUTIONS copy
+% (\iskey=1) prints the red worked solutions.
+
+\fullwidth{\textbf{Learning Objective 1.2: } I can define and calculate
+fundamental antenna properties: gain, directivity, effective aperture,
+beamwidth, and sidelobe level.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Wave equation sanity check.} The 1-D wave equation from a
+lossless transmission line is
+\eq{ \frac{\partial^{2} v}{\partial z^{2}} = LC\, \frac{\partial^{2} v}{\partial t^{2}}. }
+\begin{parts}
+
+	\part Show by direct substitution that $v(z,t) = f(z - ut)$ is a solution for
+	any twice-differentiable $f$, and find $u$ in terms of $L$ and $C$.
+		\begin{solution}[1.5in]
+		Let $\xi = z - ut$. By the chain rule $\dfrac{\partial^{2} v}{\partial z^{2}} = f^{\prime\prime}(\xi)$
+		and $\dfrac{\partial^{2} v}{\partial t^{2}} = u^{2} f^{\prime\prime}(\xi)$. Substituting,
+		\eq{ f^{\prime\prime}(\xi) = LC\,u^{2} f^{\prime\prime}(\xi) \;\Longrightarrow\; u = \dfrac{1}{\sqrt{LC}}. }
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part For a coaxial cable with $L = 250\ \text{nH/m}$ and $C = 100\ \text{pF/m}$,
+		compute the propagation speed $u$ and the velocity factor $u/c$.
+		\begin{solution}[1.3in]
+		\eq{ LC &= (2.5\times10^{-7})(1.0\times10^{-10}) = 2.5\times10^{-17}\ \text{s}^{2}/\text{m}^{2} \\
+			u &= \dfrac{1}{\sqrt{LC}} = 2.0\times10^{8}\ \text{m/s}, \quad \dfrac{u}{c} = \dfrac{2.0}{3.0} \approx 0.67 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$u$ = \ansbox[1.3in]{$2.0\times10^{8}\ \text{m/s}$}
+
+		\vspace{4pt}
+		$u/c$ = \ansbox[1.3in]{$\approx 0.67$}
+	\end{minipage}
+
+	\part In one sentence, explain what a ``velocity factor of 0.66'' (typical of
+	RG-58 coax) means physically.
+		\begin{solution}[0.9in]
+		Signals travel at about 66\% of the speed of light in vacuum --- the dielectric
+		between the conductors slows the wave, so the guided wavelength on the line is
+		$0.66\times$ the free-space wavelength at the same frequency.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Time and space frequencies.} A plane wave in free space is
+$\vec{E}(z,t) = \xhat\, E_{0}\cosp{\omega t - kz}$.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part For a signal at $f = 2.40\ghz$ (Wi-Fi channel 6), compute $\omega$,
+		$\lambda$, and $k$.
+		\begin{solution}[1.5in]
+		\eq{ \omega &= 2\pi f \approx 1.51\times10^{10}\ \text{rad/s} \\
+			\lambda &= \dfrac{c}{f} = \dfrac{3.00\times10^{8}}{2.40\times10^{9}} = 0.125\m \\
+			k &= \dfrac{2\pi}{\lambda} \approx 50.3\ \text{rad/m} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\omega$ = \ansbox[1.3in]{$1.51\times10^{10}$}
+
+		\vspace{4pt}
+		$\lambda$ = \ansbox[1.3in]{$0.125\m$}
+
+		\vspace{4pt}
+		$k$ = \ansbox[1.3in]{$\approx 50.3$ rad/m}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part How far does the wave crest travel in \textbf{one nanosecond}? Express
+		your answer in wavelengths.
+		\begin{solution}[1in]
+		\eq{ c\,\Delta t = (3.00\times10^{8})(10^{-9}) = 0.30\m = \dfrac{0.30}{0.125} = 2.4\,\lambda }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		\ansbox[1.3in]{$2.4\,\lambda$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part At a fixed point in space, how many full oscillations does the field
+		complete in \textbf{one nanosecond}?
+		\begin{solution}[0.9in]
+		\eq{ f\,\Delta t = (2.40\times10^{9})(10^{-9}) = 2.4\ \text{cycles} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		\ansbox[1.3in]{$2.4$ cycles}
+	\end{minipage}
+
+	\part Sketch (by hand) $\vec{E}$ vs.\ $z$ at $t=0$ over a range of two
+	wavelengths, then $\vec{E}$ vs.\ $t$ at $z=0$ over a range of two periods.
+	Label the axes.
+		\begin{solution}[2in]
+		Two identical cosines: one vs.\ $z$ with period $\lambda = 12.5$ cm, one vs.\
+		$t$ with period $T = 1/f \approx 417$ ps. The answers to (b) and (c) are the
+		\emph{same number} --- that is $\omega/k = c$ in disguise: cycles per meter of
+		travel equals cycles per second of elapsed time, related by the speed of light.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Directivity from beamwidths.} A ground-based tracking antenna
+has half-power beamwidths $\theta_{1} = 2.5\mydeg$ in azimuth and
+$\theta_{2} = 1.8\mydeg$ in elevation.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Estimate the directivity in dBi using the pencil-beam approximation
+		$D \approx 41{,}253/(\theta_{1}^{\circ}\,\theta_{2}^{\circ})$.
+		\begin{solution}[1.2in]
+		\eq{ D &\approx \dfrac{41{,}253}{(2.5)(1.8)} = \dfrac{41{,}253}{4.5} \approx 9170 \\
+			D_\mathrm{dBi} &= 10\,\mylog{9170} \approx 39.6\dbi }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$D$ = \ansbox[1.3in]{$\approx 39.6\dbi$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The antenna is measured to have radiation efficiency $88\%$ and impedance
+		mismatch $\left|\Gamma\right| = 0.25$. What is the realized gain at boresight, in dBi?
+		\begin{solution}[1.6in]
+		\eq{ G &= \eta_\mathrm{rad}\,D = 0.88(9170) \approx 8070 \;\to\; 39.1\dbi \\
+			1 - \left|\Gamma\right|^{2} &= 1 - 0.0625 = 0.9375 \\
+			G_\mathrm{re} &= 0.9375(8070) \approx 7560 \;\to\; 38.8\dbi }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G_\mathrm{re}$ = \ansbox[1.3in]{$\approx 38.8\dbi$}
+	\end{minipage}
+
+	\part In one sentence, explain the difference between $D$, $G$, and
+	$G_\mathrm{re}$ for this antenna.
+		\begin{solution}[1.1in]
+		$D$ is purely geometric (pattern shape only); $G$ folds in the ohmic and
+		dielectric losses inside the antenna; $G_\mathrm{re}$ additionally subtracts the
+		impedance-mismatch loss at the terminals --- it is what you would actually measure
+		with a source connected through a transmission line.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Effective area.}
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A parabolic dish for a satellite ground terminal has $G = 47\dbi$ at
+		$f = 12\ghz$. Compute the effective area $A_{e} = G\lambda^{2}/(4\pi)$.
+		\begin{solution}[1.5in]
+		\eq{ \lambda &= \dfrac{c}{f} = 0.0250\m, \quad G = 10^{4.7} \approx 50{,}120 \\
+			A_{e} &= \dfrac{G\lambda^{2}}{4\pi} = \dfrac{50{,}120\,(6.25\times10^{-4})}{4\pi} \approx 2.49\ \text{m}^{2} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$A_{e}$ = \ansbox[1.3in]{$\approx 2.49\ \text{m}^{2}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The dish is physically $2.4\m$ in diameter. What is its aperture
+		efficiency $\eta_\mathrm{ap} = A_{e}/A_\mathrm{phys}$? Is that reasonable?
+		\begin{solution}[1.4in]
+		\eq{ A_\mathrm{phys} &= \pi(1.2)^{2} \approx 4.52\ \text{m}^{2} \\
+			\eta_\mathrm{ap} &= \dfrac{2.49}{4.52} \approx 0.55 }
+		Realistic --- real dishes fall in $\eta_\mathrm{ap} \approx 0.5$--$0.7$ once
+		illumination taper, spillover, feed/strut blockage, and surface roughness are counted.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\eta_\mathrm{ap}$ = \ansbox[1.3in]{$\approx 0.55$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Keeping the same physical dish but re-illuminating it efficiently at
+		$f = 30\ghz$ (Ka-band), what gain (dBi) would you expect if $\eta_\mathrm{ap}$
+		is unchanged?
+		\begin{solution}[1.4in]
+		$A_{e}$ fixed $\Rightarrow G = 4\pi A_{e}/\lambda^{2} \propto f^{2}$. From 12 to
+		30 GHz is $2.5\times$ in $f$, i.e.\ $6.25\times$ in gain $= 10\,\mylog{6.25} \approx 8.0\db$.
+		\eq{ G_{30} \approx 47 + 8 = 55\dbi }
+		(Optimistic: higher $f$ exposes surface roughness that erodes $\eta_\mathrm{ap}$.)
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G_{30}$ = \ansbox[1.3in]{$\approx 55\dbi$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Reading a pattern.} The polar plot handed out in class (or the
+one embedded in the lesson deck) shows the E-plane cut of a horn antenna. From
+the plot, estimate each quantity and record your reading. \emph{Answers are
+reading-dependent; the tolerances below are the grading rubric.}
+\begin{parts}
+	\part Boresight direction (degrees off nose).
+		\begin{solution}[0.5in] Graded within $\pm2\mydeg$ of the true peak. \end{solution}
+	\part Half-power beamwidth (HPBW).
+		\begin{solution}[0.5in] Graded within $\pm10\%$ of the plotted value. \end{solution}
+	\part First-null beamwidth (FNBW), or state if no null is visible in range.
+		\begin{solution}[0.5in] Within $\pm10\%$; ``no null visible'' is legitimate if the cut is monotonic to the plot edge. \end{solution}
+	\part Peak sidelobe level (SLL), in dB below the main lobe.
+		\begin{solution}[0.5in] Within $\pm2\db$ of the plotted peak sidelobe. \end{solution}
+	\part Front-to-back ratio (F/B), in dB.
+		\begin{solution}[0.6in] Within $\pm2\db$. The habit being built is reading pattern plots \emph{consistently} --- every later lesson reuses these same measurements. \end{solution}
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Friis link with gain and effective area.} A UHF ground station
+at $f = 400\mhz$ transmits $P_{t} = 20\watts$ into an antenna with
+$G_{t} = 8\dbi$. A cubesat at $r = 800\text{ km}$ carries a receive antenna with
+$G_{r} = 3\dbi$ and is on boresight for both antennas. Take $\lambda = c/f = 0.75\m$.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the on-axis power density $S_\mathrm{inc}$ at the cubesat.
+		\begin{solution}[1.5in]
+		$G_{t} = 8\dbi \to 6.31$.
+		\eq{ S_\mathrm{inc} &= \dfrac{P_{t} G_{t}}{4\pi r^{2}} = \dfrac{20(6.31)}{4\pi(8.0\times10^{5})^{2}} \\
+			&\approx 1.57\times10^{-11}\ \text{W/m}^{2} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$S_\mathrm{inc}$ = \ansbox[1.3in]{$1.57\times10^{-11}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the cubesat receive antenna's effective area $A_{e,r}$.
+		\begin{solution}[1.2in]
+		$G_{r} = 3\dbi \to 2.00$.
+		\eq{ A_{e,r} = \dfrac{G_{r}\lambda^{2}}{4\pi} = \dfrac{2.00(0.5625)}{4\pi} \approx 0.0895\ \text{m}^{2} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$A_{e,r}$ = \ansbox[1.3in]{$\approx 0.0895\ \text{m}^{2}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the received power $P_{r} = S_\mathrm{inc}\,A_{e,r}$ and express
+		the result in dBm.
+		\begin{solution}[1.3in]
+		\eq{ P_{r} &= (1.57\times10^{-11})(0.0895) \approx 1.40\times10^{-12}\watts \\
+			P_{r,\mathrm{dBm}} &= 10\,\mylog{\dfrac{1.40\times10^{-12}}{10^{-3}}} \approx -88.5\dbm }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$P_{r}$ = \ansbox[1.3in]{$\approx -88.5\dbm$}
+	\end{minipage}
+
+	\part Verify your answer by computing $P_{r}$ directly from the Friis equation
+	$P_{r} = P_{t}\,G_{t}\,G_{r}\lp \dfrac{\lambda}{4\pi r} \rp^{2}$.
+		\begin{solution}[1.6in]
+		\eq{ \lp \dfrac{\lambda}{4\pi r} \rp^{2} &= \lp \dfrac{0.75}{4\pi(8.0\times10^{5})} \rp^{2} \approx 5.56\times10^{-15} \\
+			P_{r} &= 20(6.31)(2.00)(5.56\times10^{-15}) \approx 1.40\times10^{-12}\watts \;\checkmark }
+		Same answer --- Friis is just $S_\mathrm{inc}\times A_{e,r}$ with $A_{e,r}$
+		written out in terms of $G_{r}$ and $\lambda$. Same physics.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}
