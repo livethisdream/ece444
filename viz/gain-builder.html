@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gain builder — directivity, efficiency, mismatch</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root {
+    --navy: #004a85;
+    --mid:  #0067b9;
+    --edge: #cddce9;
+    --edge2:#b9d2e5;
+    --bg:   #f5f9fc;
+    --ink:  #15202b;
+    --ink3: #5b6573;
+    --dir:  #004a85;   /* directivity bar */
+    --gain: #0067b9;   /* gain bar */
+    --real: #4aa3df;   /* realized gain bar */
+    --eff:  #8a5a00;   /* efficiency loss */
+    --mis:  #b3213a;   /* mismatch loss */
+  }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--ink); background: #fff;
+  }
+  .app { display: flex; flex-direction: column; gap: 12px; padding: 16px; }
+  canvas {
+    display: block; width: 100%; height: auto;
+    background: #fff; border: 1px solid var(--edge); border-radius: 6px;
+  }
+  .panel {
+    font-size: 13.5px; line-height: 1.4;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px; align-items: start;
+  }
+  @media (max-width: 380px) { .panel { grid-template-columns: 1fr; } }
+  .panel h2 {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--navy); margin: 0 0 8px;
+  }
+  .block { padding: 8px 10px; background: var(--bg); border: 1px solid var(--edge); border-radius: 4px; }
+  .block label { display: block; font-size: 11.5px; text-transform: uppercase;
+                 letter-spacing: 0.06em; color: var(--ink3); font-weight: 700; margin: 10px 0 4px; }
+  .block label:first-of-type { margin-top: 0; }
+  .block .val { font-size: 13px; font-weight: 600; color: var(--navy); font-variant-numeric: tabular-nums; }
+  .block input[type=range] { width: 100%; margin: 4px 0 0; }
+  .readout dl { display: grid; grid-template-columns: auto 1fr; gap: 5px 10px; margin: 0; }
+  .readout dt { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+                font-weight: 700; color: var(--ink3); align-self: center; }
+  .readout dd { margin: 0; font-size: 13.5px; font-weight: 700; color: var(--navy);
+                font-variant-numeric: tabular-nums; }
+  .readout dd.loss { color: var(--eff); }
+  .readout dd.loss2 { color: var(--mis); }
+  .note { font-size: 11.5px; color: var(--ink3); line-height: 1.45; }
+  .eq { font-size: 13px; color: var(--navy); font-weight: 600; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" aria-label="Gain budget bars"></canvas>
+
+  <div class="panel">
+    <div class="block">
+      <h2>Inputs</h2>
+      <label>Directivity \(D\) = <span class="val" id="d-val">15.0</span> dBi</label>
+      <input type="range" id="dir" min="0" max="30" step="0.5" value="15">
+      <label>Radiation efficiency \(\eta_{\text{rad}}\) = <span class="val" id="eta-val">70</span> %</label>
+      <input type="range" id="eta" min="5" max="100" step="1" value="70">
+      <label>Mismatch \(\lvert\Gamma\rvert\) = <span class="val" id="gam-val">0.30</span></label>
+      <input type="range" id="gam" min="0" max="0.9" step="0.01" value="0.3">
+    </div>
+
+    <div class="readout">
+      <h2>Gain budget</h2>
+      <dl>
+        <dt>Directivity</dt>     <dd id="r-dir">—</dd>
+        <dt>− efficiency loss</dt><dd class="loss" id="r-eff">—</dd>
+        <dt>= Gain \(G\)</dt>        <dd id="r-gain">—</dd>
+        <dt>− mismatch loss</dt> <dd class="loss2" id="r-mis">—</dd>
+        <dt>= Realized gain</dt> <dd id="r-real">—</dd>
+      </dl>
+    </div>
+
+    <div class="readout">
+      <h2>Relationships</h2>
+      <div class="eq">\(G = \eta_{\text{rad}}\cdot D\)</div>
+      <div class="eq">\(G_{\text{re}} = (1-\lvert\Gamma\rvert^2)\cdot G\)</div>
+      <div class="note">VSWR <span id="r-vswr">—</span> · reflected <span id="r-refl">—</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+// ---- labels: MathJax for math, sans UI font for words/units ----
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const mtext=(ctx,tex,x,y,h,color,align)=>MJ.draw(ctx,tex,x,y,h,color,align);
+function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+function mixLabel(ctx,chunks,x,yc,h,color,align,bold){
+  const fpx=h-1, f=(bold?'700 ':'')+fpx+'px '+SANS;
+  let tot=0;
+  for(const c of chunks){ if(c.m) tot+=MJ.width(c.m,color,h); else { ctx.font=f; tot+=ctx.measureText(c.s).width; } }
+  let cx = align==='right'? x-tot : (align==='center'? x-tot/2 : x);
+  for(const c of chunks){
+    if(c.m){ MJ.draw(ctx,c.m,cx,yc,h,color,'left'); cx+=MJ.width(c.m,color,h); }
+    else { stext(ctx,c.s,cx,yc,fpx,color,'left',bold); ctx.font=f; cx+=ctx.measureText(c.s).width; }
+  }
+}
+
+const state = { D: 15.0, eta: 0.70, gam: 0.30 };
+const DMAX = 30;
+
+function derived() {
+  const D = state.D;                       // dBi
+  const effLoss = -10 * Math.log10(state.eta);        // positive dB
+  const G = D - effLoss;                    // dBi
+  const misLoss = -10 * Math.log10(1 - state.gam * state.gam); // positive dB
+  const Gre = G - misLoss;                  // dBi
+  const vswr = (state.gam >= 0.999) ? Infinity : (1 + state.gam) / (1 - state.gam);
+  return { D, effLoss, G, misLoss, Gre, vswr };
+}
+
+// controls
+const dirEl = document.getElementById('dir');
+const etaEl = document.getElementById('eta');
+const gamEl = document.getElementById('gam');
+const dVal = document.getElementById('d-val');
+const etaVal = document.getElementById('eta-val');
+const gamVal = document.getElementById('gam-val');
+
+dirEl.addEventListener('input', () => { state.D = parseFloat(dirEl.value); dVal.textContent = state.D.toFixed(1); draw(); });
+etaEl.addEventListener('input', () => { state.eta = parseFloat(etaEl.value) / 100; etaVal.textContent = etaEl.value; draw(); });
+gamEl.addEventListener('input', () => { state.gam = parseFloat(gamEl.value); gamVal.textContent = state.gam.toFixed(2); draw(); });
+
+const canvas = document.getElementById('plot');
+const ctx = canvas.getContext('2d');
+
+function fit() {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const w = Math.max(360, rect.width);
+  const h = Math.max(200, Math.min(w * 0.28, 260));
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  canvas.style.height = `${h}px`;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+window.addEventListener('resize', fit);
+
+function draw() {
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.width / dpr, h = canvas.height / dpr;
+  ctx.clearRect(0, 0, w, h);
+  const d = derived();
+
+  const mL = 128, mR = 24, mT = 30, mB = 40;
+  const pW = w - mL - mR, pH = h - mT - mB;
+  const xFor = v => mL + (Math.max(0, Math.min(v, DMAX)) / DMAX) * pW;
+
+  // grid + axis ticks (dBi)
+  ctx.strokeStyle = '#eef3f8'; ctx.lineWidth = 1;
+  ctx.fillStyle = '#5b6573'; ctx.font = '10px Inter, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  for (let v = 0; v <= DMAX; v += 5) {
+    ctx.beginPath(); ctx.moveTo(xFor(v), mT); ctx.lineTo(xFor(v), mT + pH); ctx.stroke();
+    ctx.fillText(v.toFixed(0), xFor(v), mT + pH + 6);
+  }
+  ctx.fillStyle = '#3b4651'; ctx.font = '600 12px Inter, sans-serif';
+  ctx.fillText('dBi', mL + pW / 2, mT + pH + 22);
+
+  // three bars
+  const rows = [
+    { y: mT + 8,             val: d.D,   col: cssVar('--dir'),  chunks: [{s:'Directivity '},{m:'D'}] },
+    { y: mT + pH / 2 - 15,   val: d.G,   col: cssVar('--gain'), chunks: [{s:'Gain '},{m:'G=\\eta\\cdot D'}] },
+    { y: mT + pH - 38,       val: d.Gre, col: cssVar('--real'), chunks: [{s:'Realized gain'}] },
+  ];
+  const barH = 30;
+
+  // guide lines at bar-end x positions (D and G) to show where losses bite
+  ctx.setLineDash([4, 3]); ctx.lineWidth = 1.2;
+  ctx.strokeStyle = cssVar('--eff');
+  ctx.beginPath(); ctx.moveTo(xFor(d.D), rows[0].y); ctx.lineTo(xFor(d.D), rows[1].y + barH); ctx.stroke();
+  ctx.strokeStyle = cssVar('--mis');
+  ctx.beginPath(); ctx.moveTo(xFor(d.G), rows[1].y); ctx.lineTo(xFor(d.G), rows[2].y + barH); ctx.stroke();
+  ctx.setLineDash([]);
+
+  for (const r of rows) {
+    // bar
+    ctx.fillStyle = r.col;
+    const x0 = xFor(0), x1 = xFor(r.val);
+    ctx.fillRect(x0, r.y, Math.max(0, x1 - x0), barH);
+    // row label (left)
+    mixLabel(ctx, r.chunks, mL - 10, r.y + barH / 2, 13, '#3b4651', 'right', true);
+    // value at bar end
+    ctx.fillStyle = '#fff'; ctx.font = '700 12.5px Inter, sans-serif';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    const txt = `${r.val.toFixed(1)} dBi`;
+    if (x1 - x0 > 62) ctx.fillText(txt, x1 - 8, r.y + barH / 2);
+    else { ctx.fillStyle = r.col; ctx.textAlign = 'left'; ctx.fillText(txt, x1 + 6, r.y + barH / 2); }
+  }
+
+  // loss double-arrows in the empty tails
+  function lossArrow(y, xa, xb, color, chunks) {
+    if (xb - xa < 2) return;
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 1.5; ctx.setLineDash([]);
+    const yc = y;
+    ctx.beginPath(); ctx.moveTo(xa, yc); ctx.lineTo(xb, yc); ctx.stroke();
+    const hd = 4.5;
+    for (const [x, dir] of [[xa, -1], [xb, 1]]) {
+      ctx.beginPath(); ctx.moveTo(x, yc);
+      ctx.lineTo(x - dir * hd, yc - hd * 0.85); ctx.lineTo(x - dir * hd, yc + hd * 0.85);
+      ctx.closePath(); ctx.fill();
+    }
+    mixLabel(ctx, chunks, (xa + xb) / 2, yc - 10, 12, color, 'center', true);
+  }
+  // efficiency loss: on the Gain row's tail, from x(G) to x(D)
+  lossArrow(rows[1].y - 4, xFor(d.G), xFor(d.D), cssVar('--eff'),
+            [{s:'− '+d.effLoss.toFixed(1)+' dB '},{m:'(\\eta = '+(state.eta * 100).toFixed(0)+'\\%)'}]);
+  // mismatch loss: on the Realized row's tail, from x(Gre) to x(G)
+  lossArrow(rows[2].y - 4, xFor(d.Gre), xFor(d.G), cssVar('--mis'),
+            [{s:'− '+d.misLoss.toFixed(1)+' dB '},{m:'(\\lvert\\Gamma\\rvert = '+state.gam.toFixed(2)+')'}]);
+
+  updateReadout(d);
+}
+
+function updateReadout(d) {
+  document.getElementById('r-dir').textContent  = `${d.D.toFixed(1)} dBi`;
+  document.getElementById('r-eff').textContent  = `− ${d.effLoss.toFixed(1)} dB`;
+  document.getElementById('r-gain').textContent = `${d.G.toFixed(1)} dBi`;
+  document.getElementById('r-mis').textContent  = `− ${d.misLoss.toFixed(1)} dB`;
+  document.getElementById('r-real').textContent = `${d.Gre.toFixed(1)} dBi`;
+  document.getElementById('r-vswr').textContent = (d.vswr === Infinity) ? '∞:1' : `${d.vswr.toFixed(2)}:1`;
+  document.getElementById('r-refl').textContent = `${(state.gam * state.gam * 100).toFixed(1)}%`;
+}
+
+fit();
+
+MJ.setRedraw(()=>draw());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>draw()); draw(); });
+</script>
+</body>
+</html>

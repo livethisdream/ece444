@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polarization playground</title>
+<style>
+  :root {
+    --navy: #004a85;
+    --mid:  #0067b9;
+    --edge: #cddce9;
+    --edge2:#b9d2e5;
+    --bg:   #f5f9fc;
+    --ink:  #15202b;
+    --ink3: #5b6573;
+    --ex:   #0067b9;
+    --ey:   #b3213a;
+    --tip:  #1d7a4d;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background: #fff;
+  }
+  .app {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 16px;
+    padding: 16px;
+    align-items: start;
+  }
+  @media (max-width: 720px) {
+    .app { grid-template-columns: 1fr; }
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #fff;
+    border: 1px solid var(--edge);
+    border-radius: 6px;
+  }
+  .panel {
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .panel h2 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--navy);
+    margin: 0 0 8px;
+  }
+  .presets {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .presets button {
+    font: inherit;
+    font-size: 12px;
+    padding: 6px 8px;
+    border: 1px solid var(--edge2);
+    background: #fff;
+    color: var(--navy);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease;
+  }
+  .presets button:hover {
+    background: var(--bg);
+    border-color: var(--mid);
+  }
+  .presets button.active {
+    background: var(--mid);
+    color: #fff;
+    border-color: var(--mid);
+  }
+  .slider {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .slider label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink3);
+    min-width: 32px;
+  }
+  .slider input[type="range"] {
+    width: 100%;
+  }
+  .slider .val {
+    font-family: 'JetBrains Mono', Menlo, monospace;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--navy);
+    min-width: 44px;
+    text-align: right;
+  }
+  .readout {
+    margin-top: 14px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid var(--edge);
+    border-radius: 6px;
+  }
+  .readout .type {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .readout .stats {
+    font-size: 12px;
+    color: var(--ink3);
+    font-variant-numeric: tabular-nums;
+  }
+  .readout .stats span {
+    color: var(--navy);
+    font-weight: 600;
+  }
+  .legend {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--ink3);
+    margin-top: 8px;
+  }
+  .legend .swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div>
+    <canvas id="c" width="640" height="480" aria-label="Polarization ellipse trace"></canvas>
+    <div class="legend">
+      <span><span class="swatch" style="background:var(--ex)"></span>E<sub>x</sub></span>
+      <span><span class="swatch" style="background:var(--ey)"></span>E<sub>y</sub></span>
+      <span><span class="swatch" style="background:var(--tip)"></span>E-vector tip</span>
+    </div>
+  </div>
+  <div class="panel">
+    <h2>Presets</h2>
+    <div class="presets" id="presets">
+      <button data-preset="linx">Linear (x)</button>
+      <button data-preset="liny">Linear (y)</button>
+      <button data-preset="lin45">Linear 45°</button>
+      <button data-preset="lin135">Linear 135°</button>
+      <button data-preset="rhcp">RHCP</button>
+      <button data-preset="lhcp">LHCP</button>
+      <button data-preset="ell1">Elliptical (RH)</button>
+      <button data-preset="ell2">Elliptical (LH)</button>
+    </div>
+    <h2>Controls</h2>
+    <div class="slider">
+      <label>E<sub>x</sub></label>
+      <input id="ex" type="range" min="0" max="1" step="0.01" value="1">
+      <span class="val" id="ex-v">1.00</span>
+    </div>
+    <div class="slider">
+      <label>E<sub>y</sub></label>
+      <input id="ey" type="range" min="0" max="1" step="0.01" value="0">
+      <span class="val" id="ey-v">0.00</span>
+    </div>
+    <div class="slider">
+      <label>δ</label>
+      <input id="d" type="range" min="-180" max="180" step="1" value="0">
+      <span class="val" id="d-v">0°</span>
+    </div>
+    <div class="readout">
+      <div class="type" id="type-out">Linear (x)</div>
+      <div class="stats" id="stats-out">AR = ∞ dB · τ = 0°</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const cvs = document.getElementById('c');
+  const ctx = cvs.getContext('2d');
+
+  const ex = document.getElementById('ex');
+  const ey = document.getElementById('ey');
+  const d  = document.getElementById('d');
+  const exV = document.getElementById('ex-v');
+  const eyV = document.getElementById('ey-v');
+  const dV  = document.getElementById('d-v');
+  const typeOut = document.getElementById('type-out');
+  const statsOut = document.getElementById('stats-out');
+  const presetsWrap = document.getElementById('presets');
+
+  const PRESETS = {
+    linx:  { ex: 1.0, ey: 0.0, d:    0 },
+    liny:  { ex: 0.0, ey: 1.0, d:    0 },
+    lin45: { ex: 0.7, ey: 0.7, d:    0 },
+    lin135:{ ex: 0.7, ey: 0.7, d:  180 },
+    rhcp:  { ex: 1.0, ey: 1.0, d:  -90 },
+    lhcp:  { ex: 1.0, ey: 1.0, d:   90 },
+    ell1:  { ex: 1.0, ey: 0.5, d:  -90 },
+    ell2:  { ex: 0.5, ey: 1.0, d:   90 },
+  };
+
+  function applyPreset(name) {
+    const p = PRESETS[name];
+    if (!p) return;
+    ex.value = p.ex; ey.value = p.ey; d.value = p.d;
+    markActive(name);
+    draw();
+  }
+
+  function markActive(name) {
+    presetsWrap.querySelectorAll('button').forEach(b => {
+      b.classList.toggle('active', b.dataset.preset === name);
+    });
+  }
+
+  presetsWrap.addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (btn) applyPreset(btn.dataset.preset);
+  });
+
+  [ex, ey, d].forEach(el => el.addEventListener('input', () => {
+    presetsWrap.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    draw();
+  }));
+
+  // Match a preset if the current sliders happen to equal one.
+  function detectPreset() {
+    const a = +ex.value, b = +ey.value, phi = +d.value;
+    for (const [k, p] of Object.entries(PRESETS)) {
+      if (Math.abs(a - p.ex) < 0.02 &&
+          Math.abs(b - p.ey) < 0.02 &&
+          Math.abs(((phi - p.d + 540) % 360) - 180) < 2) return k;
+    }
+    return null;
+  }
+
+  // Classify polarization state from (Ex, Ey, δ).
+  // Returns { label, AR_dB, tiltDeg } — AR_dB = Infinity for pure linear.
+  function classify(Ex, Ey, deltaDeg) {
+    const eps = 1e-4;
+    if (Ex < eps && Ey < eps) return { label: 'Zero', AR_dB: 0, tiltDeg: 0 };
+
+    const dRad = deltaDeg * Math.PI / 180;
+    const sinD = Math.sin(dRad);
+
+    // Special linear cases: sin(δ) ≈ 0 (in-phase or 180°) always give linear.
+    if (Math.abs(sinD) < 1e-3) {
+      const tilt = Math.atan2(Ey * (Math.abs(deltaDeg) < 90 ? 1 : -1), Ex) * 180 / Math.PI;
+      return { label: 'Linear', AR_dB: Infinity, tiltDeg: tilt };
+    }
+
+    // Compute major/minor axis of the general ellipse.
+    // Stokes-parameter-style derivation.
+    const s0 = Ex*Ex + Ey*Ey;
+    const s1 = Ex*Ex - Ey*Ey;
+    const s2 = 2 * Ex * Ey * Math.cos(dRad);
+    const s3 = 2 * Ex * Ey * Math.sin(dRad);
+
+    const p = Math.sqrt(s1*s1 + s2*s2 + s3*s3);       // = s0 for fully-polarized
+    const A = Math.sqrt((s0 + Math.sqrt(s1*s1 + s2*s2)) / 2);  // major axis half-amp
+    const B = Math.sqrt((s0 - Math.sqrt(s1*s1 + s2*s2)) / 2);  // minor axis half-amp
+    const AR = B < 1e-6 ? Infinity : A / B;
+    const tiltDeg = 0.5 * Math.atan2(s2, s1) * 180 / Math.PI;
+
+    // Handedness: sign of s3 (IEEE convention, wave into +z).
+    // s3 > 0 → LH; s3 < 0 → RH (for wave time-convention cos(ωt - kz)).
+    const isRH = s3 < 0;
+
+    let label;
+    if (AR < 1.05) {
+      label = isRH ? 'RHCP' : 'LHCP';
+    } else if (AR > 20) {
+      label = 'Linear';
+    } else {
+      label = isRH ? 'Elliptical (RH)' : 'Elliptical (LH)';
+    }
+    return { label, AR_dB: 20 * Math.log10(AR), tiltDeg };
+  }
+
+  function draw() {
+    const Ex = +ex.value, Ey = +ey.value, deltaDeg = +d.value;
+    exV.textContent = Ex.toFixed(2);
+    eyV.textContent = Ey.toFixed(2);
+    dV.textContent  = deltaDeg + '°';
+
+    const p = detectPreset();
+    if (p) markActive(p);
+
+    const cls = classify(Ex, Ey, deltaDeg);
+    typeOut.textContent = cls.label;
+    const arStr = cls.AR_dB === Infinity
+      ? 'AR = ∞ dB'
+      : `AR = ${cls.AR_dB.toFixed(1)} dB`;
+    const tiltStr = cls.label === 'Linear'
+      ? `τ = ${cls.tiltDeg.toFixed(0)}°`
+      : `τ = ${cls.tiltDeg.toFixed(0)}° (major axis)`;
+    statsOut.textContent = `${arStr} · ${tiltStr}`;
+
+    // Layout: top-half = 2D trace, bottom-half = two time waveforms.
+    const W = cvs.width, H = cvs.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.imageSmoothingEnabled = true;
+
+    // Top region (square-ish ellipse plot).
+    const traceH = H * 0.60;
+    const cx = W / 2, cy = traceH / 2;
+    const R = Math.min(W, traceH) * 0.42;
+
+    // Ellipse plot background & axes.
+    ctx.strokeStyle = '#e6ecf2';
+    ctx.lineWidth = 1;
+    for (let i = -1; i <= 1; i += 0.5) {
+      if (i === 0) continue;
+      ctx.beginPath();
+      ctx.moveTo(cx - R, cy + i * R * 0.9);
+      ctx.lineTo(cx + R, cy + i * R * 0.9);
+      ctx.moveTo(cx + i * R * 0.9, cy - R);
+      ctx.lineTo(cx + i * R * 0.9, cy + R);
+      ctx.stroke();
+    }
+    // x/y axes
+    ctx.strokeStyle = '#9aa4b0';
+    ctx.beginPath();
+    ctx.moveTo(cx - R - 6, cy); ctx.lineTo(cx + R + 6, cy);
+    ctx.moveTo(cx, cy - R - 6); ctx.lineTo(cx, cy + R + 6);
+    ctx.stroke();
+    ctx.fillStyle = '#5b6573';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('x', cx + R + 8, cy + 4);
+    ctx.textAlign = 'center';
+    ctx.fillText('y', cx, cy - R - 10);
+
+    // Trace: (Ex cos(ωt), Ey cos(ωt + δ)) as t sweeps.
+    ctx.strokeStyle = 'var(--tip)';
+    ctx.strokeStyle = '#1d7a4d';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    const N = 240;
+    for (let i = 0; i <= N; i++) {
+      const t = i / N * 2 * Math.PI;
+      const x = Ex * Math.cos(t);
+      const y = Ey * Math.cos(t + deltaDeg * Math.PI / 180);
+      // y-axis positive upward on screen
+      const px = cx + x * R * 0.9;
+      const py = cy - y * R * 0.9;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Animated tip marker
+    const t = (performance.now() / 1500) % (2 * Math.PI);
+    const xTip = Ex * Math.cos(t);
+    const yTip = Ey * Math.cos(t + deltaDeg * Math.PI / 180);
+    const pxT = cx + xTip * R * 0.9;
+    const pyT = cy - yTip * R * 0.9;
+    // Arrow from origin to tip
+    ctx.strokeStyle = '#1d7a4d';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy); ctx.lineTo(pxT, pyT); ctx.stroke();
+    ctx.fillStyle = '#1d7a4d';
+    ctx.beginPath();
+    ctx.arc(pxT, pyT, 5, 0, 2 * Math.PI); ctx.fill();
+
+    // Bottom region: two time waveforms.
+    const wY0 = traceH + 8;
+    const wH  = H - wY0 - 8;
+    const wMid = wY0 + wH / 2;
+    const wAmp = wH * 0.42;
+
+    // background
+    ctx.fillStyle = '#f7fafd';
+    ctx.fillRect(8, wY0, W - 16, wH);
+    ctx.strokeStyle = '#e6ecf2';
+    ctx.strokeRect(8, wY0, W - 16, wH);
+
+    // zero line
+    ctx.strokeStyle = '#c5cdd7';
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(8, wMid); ctx.lineTo(W - 8, wMid); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Ex(t) trace
+    ctx.strokeStyle = '#0067b9';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    const Nt = 200;
+    for (let i = 0; i <= Nt; i++) {
+      const tt = i / Nt * 4 * Math.PI;
+      const v = Ex * Math.cos(tt);
+      const px = 16 + (W - 32) * (i / Nt);
+      const py = wMid - v * wAmp;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Ey(t) trace
+    ctx.strokeStyle = '#b3213a';
+    ctx.beginPath();
+    for (let i = 0; i <= Nt; i++) {
+      const tt = i / Nt * 4 * Math.PI;
+      const v = Ey * Math.cos(tt + deltaDeg * Math.PI / 180);
+      const px = 16 + (W - 32) * (i / Nt);
+      const py = wMid - v * wAmp;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Moving cursor showing current time on the traces
+    const curFrac = (t / (2 * Math.PI)) * 0.5 + 0.0;  // one full trace shows 2 periods
+    const cxCursor = 16 + (W - 32) * curFrac;
+    ctx.strokeStyle = '#1d7a4d';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(cxCursor, wY0 + 4); ctx.lineTo(cxCursor, wY0 + wH - 4); ctx.stroke();
+
+    // Labels
+    ctx.fillStyle = '#0067b9';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('E_x(t)', 14, wY0 + 14);
+    ctx.fillStyle = '#b3213a';
+    ctx.fillText('E_y(t)', 14, wY0 + 28);
+    ctx.fillStyle = '#5b6573';
+    ctx.textAlign = 'right';
+    ctx.fillText('time →', W - 14, wY0 + wH - 6);
+  }
+
+  function tick() { draw(); requestAnimationFrame(tick); }
+
+  // Kick off with linear-x preset.
+  applyPreset('linx');
+  tick();
+})();
+</script>
+</body>
+</html>

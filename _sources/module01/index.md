@@ -1,0 +1,51 @@
+# Module 1 — Antenna Fundamentals
+
+<p class="module-meta"><span class="m-module">Module 01</span><span class="m-time">Lessons 1–6</span></p>
+
+<p class="module-synopsis">Ground the physics. We start with what an antenna is and why it matters, then trace the chain from Maxwell's equations to the plane wave, define the headline antenna parameters (gain, directivity, effective area, beamwidth), and end with the trade-offs every array design has to make. By the end, you can read a radiation pattern and predict how a real antenna will behave in a link.</p>
+
+## Learning Objectives
+
+<ol class="lo-list" style="--module: '1'">
+  <li>I can define what an antenna is, articulate the reciprocity principle, and describe the role of an antenna in a wireless system.</li>
+  <li>I can define and calculate fundamental antenna properties: gain, directivity, effective aperture, beamwidth, and sidelobe level.</li>
+  <li>I can determine the polarization of an antenna and describe the bandwidth characteristics of common antenna types.</li>
+  <li>I can calculate input impedance, feed considerations, and the role of baluns in an antenna feed system.</li>
+  <li>I can identify and distinguish the reactive near-field, radiating near-field, and far-field regions and calculate the boundaries for a given antenna.</li>
+  <li>I can set up and interpret the radiation integrals to derive the far-field pattern of a current distribution.</li>
+</ol>
+
+## Module Lessons
+
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L01-course-intro/index.html">
+    <span class="mt-kind">Lesson 1</span>
+    <h4>Course Introduction</h4>
+    <p>What an antenna is, why antennas matter to the Air Force mission, and how ECE 444 is organized. Objective 1.1.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L02-antenna-properties/index.html">
+    <span class="mt-kind">Lesson 2</span>
+    <h4>Basic Properties and Terminology</h4>
+    <p>From Maxwell's equations to the plane wave; radiation intensity, directivity, gain, effective area, and pattern parameters. Objective 1.2.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L03-polarization-bandwidth/index.html">
+    <span class="mt-kind">Lesson 3</span>
+    <h4>Polarization and Bandwidth</h4>
+    <p>Linear, circular, and elliptical polarization; axial ratio and polarization loss; impedance / pattern / polarization bandwidth; Chu-Harrington. Objective 1.3.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L04-impedance-feeding-baluns/index.html">
+    <span class="mt-kind">Lesson 4</span>
+    <h4>Impedance, Feeding, and Baluns</h4>
+    <p>Input impedance, feed-point matching, and the role of baluns in an antenna feed system. Objective 1.4.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L05-field-regions/index.html">
+    <span class="mt-kind">Lesson 5</span>
+    <h4>Field Regions</h4>
+    <p>Reactive near-field, radiating near-field, and far-field — boundaries and why they matter. Objective 1.5.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L06-radiation-integrals/index.html">
+    <span class="mt-kind">Lesson 6</span>
+    <h4>Radiation Integrals</h4>
+    <p>Setting up the radiation integrals to get the far-field pattern from a current distribution. Objective 1.6.</p>
+  </a>
+</div>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polar gain patterns</title>
+<style>
+  :root {
+    --navy: #004a85;
+    --mid:  #0067b9;
+    --edge: #cddce9;
+    --edge2:#b9d2e5;
+    --bg:   #f5f9fc;
+    --ink:  #15202b;
+    --ink3: #5b6573;
+    --iso:  #6c757d;
+    --dip:  #0067b9;
+    --pat:  #1d7a4d;
+    --horn: #8a5a00;
+    --dish: #b3213a;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background: #fff;
+  }
+  .app {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 16px;
+    padding: 16px;
+    align-items: start;
+  }
+  @media (max-width: 720px) {
+    .app { grid-template-columns: 1fr; }
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #fff;
+    border: 1px solid var(--edge);
+    border-radius: 6px;
+  }
+  .panel {
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .panel h2 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--navy);
+    margin: 0 0 8px;
+  }
+  .panel .antennas {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .panel label.ant {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background: var(--bg);
+    border: 1px solid var(--edge);
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .panel label.ant:hover {
+    background: #f0f5fa;
+    border-color: var(--edge2);
+  }
+  .panel label.ant input {
+    margin: 0;
+  }
+  .swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .name {
+    flex: 1;
+    font-weight: 600;
+  }
+  .gain {
+    font-size: 11.5px;
+    color: var(--ink3);
+    font-variant-numeric: tabular-nums;
+  }
+  .slider-block {
+    margin-top: 8px;
+    padding: 8px 10px;
+    background: var(--bg);
+    border: 1px solid var(--edge);
+    border-radius: 4px;
+  }
+  .slider-block label {
+    display: block;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink3);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .slider-block .val {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    font-variant-numeric: tabular-nums;
+  }
+  .slider-block input[type=range] {
+    width: 100%;
+    margin: 4px 0 0;
+  }
+  .scale-block {
+    margin-top: 16px;
+    padding: 8px 10px;
+    background: var(--bg);
+    border: 1px solid var(--edge);
+    border-radius: 4px;
+  }
+  .scale-block label {
+    display: block;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink3);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .scale-block select {
+    width: 100%;
+    font-size: 13px;
+    padding: 3px 6px;
+  }
+  .hint {
+    margin-top: 12px;
+    font-size: 11.5px;
+    color: var(--ink3);
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" width="720" height="720" aria-label="Polar gain plot"></canvas>
+  <div class="panel">
+    <h2>Antennas</h2>
+    <div class="antennas" id="antennas"></div>
+
+    <h2>Dish diameter</h2>
+    <div class="slider-block">
+      <label>D / λ = <span class="val" id="d-lambda-val">10</span></label>
+      <input type="range" id="d-lambda" min="2" max="40" step="0.5" value="10">
+    </div>
+
+    <h2>Scale</h2>
+    <div class="scale-block">
+      <label>Radial range</label>
+      <select id="scale">
+        <option value="30">0 to 30 dBi</option>
+        <option value="40" selected>−10 to 30 dBi</option>
+        <option value="50">−20 to 30 dBi</option>
+        <option value="60">−30 to 30 dBi</option>
+      </select>
+    </div>
+
+    <div class="hint">
+      2D E-plane cut (θ from 0° at top to ±180°). Curves are normalized to
+      each antenna's own peak, then shifted by peak gain in dBi — so
+      relative sidelobe and beamwidth features are preserved and antennas
+      with more peak gain sit farther out.
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// -------- Antenna models ------------------------------------------------
+// Each returns |G(θ)| in *linear* (not dB), with the model's own peak
+// gain (linear) baked in.  θ = 0 is boresight (top of the plot).
+
+const ANTENNAS = [
+  {
+    key: 'iso',
+    name: 'Isotropic',
+    peakDbi: 0,
+    color: getComputedStyle(document.documentElement).getPropertyValue('--iso').trim(),
+    dashed: true,
+    pattern: () => 1  // constant unity in all directions
+  },
+  {
+    key: 'dip',
+    name: 'λ/2 dipole',
+    peakDbi: 2.15,
+    color: getComputedStyle(document.documentElement).getPropertyValue('--dip').trim(),
+    pattern: (theta) => {
+      // Standard half-wave dipole pattern.  θ measured from the dipole axis.
+      // Here we treat θ = 0 as broadside (peak), so remap.
+      const t = Math.PI / 2 - theta;  // remap so peak is at θ=0
+      const s = Math.sin(t);
+      if (Math.abs(s) < 1e-6) return 0;
+      const num = Math.cos((Math.PI / 2) * Math.cos(t));
+      const F = num / s;             // normalized amplitude pattern
+      const G_lin = 1.64 * F * F;    // 1.64 = 2.15 dBi
+      return G_lin;
+    }
+  },
+  {
+    key: 'pat',
+    name: 'Rect. patch',
+    peakDbi: 7,
+    color: getComputedStyle(document.documentElement).getPropertyValue('--pat').trim(),
+    pattern: (theta) => {
+      // Simple broadside cos^n taper; ~7 dBi peak.
+      // Only radiates into the forward hemisphere.
+      const t = Math.abs(theta);
+      if (t > Math.PI / 2) return 1e-6;
+      const peakLin = Math.pow(10, 7 / 10);  // 7 dBi -> linear
+      return peakLin * Math.pow(Math.cos(t), 2);
+    }
+  },
+  {
+    key: 'horn',
+    name: 'Std-gain horn',
+    peakDbi: 15,
+    color: getComputedStyle(document.documentElement).getPropertyValue('--horn').trim(),
+    pattern: (theta) => {
+      // sinc^2 aperture pattern for a ~5λ aperture.
+      const D_over_lambda = 5;
+      const u = Math.PI * D_over_lambda * Math.sin(theta);
+      const F = (Math.abs(u) < 1e-6) ? 1 : Math.sin(u) / u;
+      const peakLin = Math.pow(10, 15 / 10);  // 15 dBi
+      const shape = F * F;
+      // Only forward hemisphere for a horn.
+      if (Math.abs(theta) > Math.PI / 2) return peakLin * 1e-4;
+      return peakLin * shape;
+    }
+  },
+  {
+    key: 'dish',
+    name: 'Parabolic dish',
+    peakDbi: null,   // computed from D/λ
+    color: getComputedStyle(document.documentElement).getPropertyValue('--dish').trim(),
+    pattern: (theta, params) => {
+      // sinc^2 aperture pattern with aperture efficiency 0.55.
+      const D = params.dLambda;
+      const eta_ap = 0.55;
+      const peakLin = eta_ap * Math.pow(Math.PI * D, 2);
+      const u = Math.PI * D * Math.sin(theta);
+      const F = (Math.abs(u) < 1e-6) ? 1 : Math.sin(u) / u;
+      const shape = F * F;
+      if (Math.abs(theta) > Math.PI / 2) return peakLin * 1e-4;
+      return peakLin * shape;
+    },
+    peakLinFromParams: (params) => {
+      const D = params.dLambda;
+      const eta_ap = 0.55;
+      return eta_ap * Math.pow(Math.PI * D, 2);
+    }
+  },
+];
+
+// -------- State ---------------------------------------------------------
+const state = {
+  active: new Set(['iso', 'dip', 'horn']),
+  dLambda: 10,
+  scaleDb: 40,   // total dB span; outer ring is fixed at +30 dBi
+};
+
+const OUTER_DBI = 30;   // outer ring always represents +30 dBi
+
+// -------- Build antenna toggle list ------------------------------------
+const antennasDiv = document.getElementById('antennas');
+for (const a of ANTENNAS) {
+  const label = document.createElement('label');
+  label.className = 'ant';
+
+  const cb = document.createElement('input');
+  cb.type = 'checkbox';
+  cb.dataset.key = a.key;
+  cb.checked = state.active.has(a.key);
+  cb.addEventListener('change', () => {
+    if (cb.checked) state.active.add(a.key);
+    else state.active.delete(a.key);
+    draw();
+  });
+
+  const sw = document.createElement('span');
+  sw.className = 'swatch';
+  sw.style.background = a.color;
+  if (a.dashed) sw.style.background = `repeating-linear-gradient(90deg, ${a.color} 0 3px, transparent 3px 6px)`;
+
+  const name = document.createElement('span');
+  name.className = 'name';
+  name.textContent = a.name;
+
+  const gain = document.createElement('span');
+  gain.className = 'gain';
+  gain.dataset.key = a.key;
+  gain.textContent = gainLabel(a);
+
+  label.append(cb, sw, name, gain);
+  antennasDiv.append(label);
+}
+
+function gainLabel(a) {
+  if (a.peakDbi !== null) return `${a.peakDbi.toFixed(1)} dBi`;
+  if (a.peakLinFromParams) {
+    const lin = a.peakLinFromParams({ dLambda: state.dLambda });
+    return `${(10 * Math.log10(lin)).toFixed(1)} dBi`;
+  }
+  return '';
+}
+
+function refreshGainLabels() {
+  document.querySelectorAll('.gain').forEach(el => {
+    const a = ANTENNAS.find(x => x.key === el.dataset.key);
+    if (a) el.textContent = gainLabel(a);
+  });
+}
+
+// -------- Controls -----------------------------------------------------
+const dLambdaSlider = document.getElementById('d-lambda');
+const dLambdaVal    = document.getElementById('d-lambda-val');
+dLambdaSlider.addEventListener('input', () => {
+  state.dLambda = parseFloat(dLambdaSlider.value);
+  dLambdaVal.textContent = state.dLambda;
+  refreshGainLabels();
+  draw();
+});
+
+const scaleSelect = document.getElementById('scale');
+scaleSelect.addEventListener('change', () => {
+  state.scaleDb = parseFloat(scaleSelect.value);
+  draw();
+});
+
+// -------- Drawing ------------------------------------------------------
+const canvas = document.getElementById('plot');
+const ctx    = canvas.getContext('2d');
+
+function resizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  const dpr  = window.devicePixelRatio || 1;
+  const size = Math.max(320, Math.min(rect.width, 720));
+  canvas.width  = size * dpr;
+  canvas.height = size * dpr;
+  canvas.style.height = `${size}px`;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+
+window.addEventListener('resize', resizeCanvas);
+
+function draw() {
+  const w = canvas.width  / (window.devicePixelRatio || 1);
+  const h = canvas.height / (window.devicePixelRatio || 1);
+  const cx = w / 2;
+  const cy = h / 2 + 8;
+  const R  = Math.min(w, h) / 2 - 40;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // ---- polar grid --------------------------------------------------------
+  ctx.strokeStyle = '#cddce9';
+  ctx.lineWidth   = 1;
+  ctx.fillStyle   = '#5b6573';
+  ctx.font        = '11px Inter, sans-serif';
+  ctx.textAlign   = 'center';
+  ctx.textBaseline= 'middle';
+
+  const rings = 4;   // rings at scale/4 intervals
+  for (let i = 1; i <= rings; i++) {
+    const r = (R * i) / rings;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+    ctx.stroke();
+    // Ring label: outer ring (i=rings) is OUTER_DBI; each step in is scaleDb/rings dB lower.
+    const dbLabel = OUTER_DBI - state.scaleDb * (1 - i / rings);
+    const labelText = (i === rings) ? `${dbLabel.toFixed(0)} dBi` : `${dbLabel.toFixed(0)}`;
+    ctx.fillText(labelText, cx + 4, cy - r + 4);
+  }
+
+  // angular spokes every 30°
+  ctx.strokeStyle = '#e6eef6';
+  for (let deg = 0; deg < 360; deg += 30) {
+    const rad = deg * Math.PI / 180 - Math.PI / 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + R * Math.cos(rad), cy + R * Math.sin(rad));
+    ctx.stroke();
+  }
+  // 0/90/180/270 labels
+  ctx.fillStyle = '#3b4651';
+  ctx.font      = 'bold 12px Inter, sans-serif';
+  ctx.fillText('0°',   cx,        cy - R - 14);
+  ctx.fillText('180°', cx,        cy + R + 14);
+  ctx.fillText('90°',  cx + R + 20, cy);
+  ctx.fillText('−90°', cx - R - 20, cy);
+
+  // ---- gain curves --------------------------------------------------------
+  const N = 720;
+  const params = { dLambda: state.dLambda };
+
+  for (const a of ANTENNAS) {
+    if (!state.active.has(a.key)) continue;
+
+    ctx.strokeStyle = a.color;
+    ctx.lineWidth   = 2;
+    ctx.setLineDash(a.dashed ? [4, 4] : []);
+    ctx.beginPath();
+    let started = false;
+
+    for (let i = 0; i <= N; i++) {
+      const phi     = (i / N) * 2 * Math.PI;   // 0 to 2π
+      // Map plot angle phi (measured clockwise from top) to physics theta
+      // theta = 0 at top (boresight)
+      const theta = phi <= Math.PI ? phi : phi - 2 * Math.PI;
+      let G_lin;
+      if (a.key === 'dish') G_lin = a.pattern(theta, params);
+      else                  G_lin = a.pattern(theta);
+
+      // absolute dB relative to isotropic (dBi)
+      const eps  = 1e-12;
+      const G_dB = 10 * Math.log10(Math.max(G_lin, eps));
+
+      // Map dBi to radius.  Outer ring = OUTER_DBI, inner (r=0) = OUTER_DBI − scaleDb.
+      const floorDb = OUTER_DBI - state.scaleDb;
+      const clipped = Math.min(Math.max(G_dB, floorDb), OUTER_DBI);
+      const r = R * (clipped - floorDb) / state.scaleDb;
+
+      const alpha = phi - Math.PI / 2;
+      const x = cx + r * Math.cos(alpha);
+      const y = cy + r * Math.sin(alpha);
+
+      if (!started) { ctx.moveTo(x, y); started = true; }
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+}
+
+resizeCanvas();
+</script>
+</body>
+</html>

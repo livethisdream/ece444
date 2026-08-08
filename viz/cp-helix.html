@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Circular polarization — 3D helix</title>
+<style>
+  :root {
+    --navy: #004a85;
+    --mid:  #0067b9;
+    --edge: #cddce9;
+    --edge2:#b9d2e5;
+    --bg:   #f5f9fc;
+    --ink:  #15202b;
+    --ink3: #5b6573;
+    --rh:   #0067b9;
+    --lh:   #b3213a;
+    --tip:  #1d7a4d;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background: #fff;
+  }
+  .app {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 16px;
+    padding: 16px;
+    align-items: start;
+  }
+  @media (max-width: 720px) {
+    .app { grid-template-columns: 1fr; }
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #fff;
+    border: 1px solid var(--edge);
+    border-radius: 6px;
+  }
+  .panel {
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .panel h2 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--navy);
+    margin: 0 0 8px;
+  }
+  .senseRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .senseRow button {
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px;
+    border: 1px solid var(--edge2);
+    background: #fff;
+    color: var(--navy);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .senseRow button:hover { background: var(--bg); border-color: var(--mid); }
+  .senseRow button.active {
+    background: var(--mid);
+    color: #fff;
+    border-color: var(--mid);
+  }
+  .slider {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .slider label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink3);
+    min-width: 62px;
+  }
+  .slider input[type="range"] { width: 100%; }
+  .slider .val {
+    font-family: 'JetBrains Mono', Menlo, monospace;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--navy);
+    min-width: 40px;
+    text-align: right;
+  }
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--ink3);
+    margin-bottom: 10px;
+  }
+  .toggle input { margin: 0; }
+  .caption {
+    font-size: 12px;
+    color: var(--ink3);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="c" width="640" height="440"
+          aria-label="Circular polarization corkscrew propagating along z"></canvas>
+  <div class="panel">
+    <h2>Sense</h2>
+    <div class="senseRow" id="senseRow">
+      <button data-sense="rh" class="active">RHCP</button>
+      <button data-sense="lh">LHCP</button>
+    </div>
+    <h2>Controls</h2>
+    <div class="slider">
+      <label>Rotate</label>
+      <input id="tilt" type="range" min="0" max="60" step="1" value="22">
+      <span class="val" id="tilt-v">22°</span>
+    </div>
+    <div class="slider">
+      <label>Speed</label>
+      <input id="speed" type="range" min="0" max="2" step="0.05" value="1">
+      <span class="val" id="speed-v">1.0×</span>
+    </div>
+    <div class="toggle">
+      <input id="showComp" type="checkbox" checked>
+      <label for="showComp">Show x/y components</label>
+    </div>
+    <div class="toggle">
+      <input id="pause" type="checkbox">
+      <label for="pause">Pause</label>
+    </div>
+    <div class="caption">
+      Wave propagates in <b>+z</b>. Tip of the E-vector traces a helix.<br>
+      Point your right thumb along +z: fingers curl RHCP.
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const cvs = document.getElementById('c');
+  const ctx = cvs.getContext('2d');
+
+  const senseRow = document.getElementById('senseRow');
+  const tiltEl   = document.getElementById('tilt');
+  const speedEl  = document.getElementById('speed');
+  const showComp = document.getElementById('showComp');
+  const pauseEl  = document.getElementById('pause');
+  const tiltV    = document.getElementById('tilt-v');
+  const speedV   = document.getElementById('speed-v');
+
+  let sense = 'rh';  // 'rh' or 'lh'
+  let phase = 0;     // running time phase
+  let lastT = performance.now();
+
+  senseRow.addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    sense = btn.dataset.sense;
+    senseRow.querySelectorAll('button').forEach(b =>
+      b.classList.toggle('active', b.dataset.sense === sense));
+  });
+
+  [tiltEl, speedEl].forEach(el => el.addEventListener('input', () => {
+    tiltV.textContent  = tiltEl.value + '°';
+    speedV.textContent = (+speedEl.value).toFixed(1) + '×';
+  }));
+
+  // Isometric-ish projection.  x_screen = x - z * cos(iso), y_screen = y - z * sin(iso).
+  function project(x, y, z, params) {
+    const {cx, cy, sx, sy, sz, isoCos, isoSin} = params;
+    const px = cx + x * sx + z * sz * isoCos;
+    const py = cy - y * sy + z * sz * isoSin;
+    return [px, py];
+  }
+
+  function draw() {
+    const W = cvs.width, H = cvs.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const tiltDeg = +tiltEl.value;
+    const isoRad = tiltDeg * Math.PI / 180;
+
+    // z-axis runs left-to-right, tilted down.
+    const params = {
+      cx: 110,               // origin near left edge
+      cy: H / 2,
+      sx: 46,                // x scale (perp axis 1)
+      sy: 46,                // y scale (perp axis 2)
+      sz: 44,                // z scale (into scene)
+      isoCos: Math.cos(isoRad * 0.6),
+      isoSin: -Math.sin(isoRad),
+    };
+
+    // Frame: z-axis line + tick marks.
+    ctx.strokeStyle = '#c5cdd7';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 3]);
+    const [pz0x, pz0y] = project(0, 0, 0, params);
+    const [pz1x, pz1y] = project(0, 0, 10, params);
+    ctx.beginPath(); ctx.moveTo(pz0x, pz0y); ctx.lineTo(pz1x, pz1y); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // z-axis arrow head
+    ctx.strokeStyle = '#5b6573';
+    ctx.fillStyle = '#5b6573';
+    ctx.beginPath();
+    const dx = pz1x - pz0x, dy = pz1y - pz0y;
+    const L = Math.hypot(dx, dy);
+    const ux = dx / L, uy = dy / L;
+    const perpx = -uy, perpy = ux;
+    ctx.moveTo(pz1x, pz1y);
+    ctx.lineTo(pz1x - 10 * ux + 5 * perpx, pz1y - 10 * uy + 5 * perpy);
+    ctx.lineTo(pz1x - 10 * ux - 5 * perpx, pz1y - 10 * uy - 5 * perpy);
+    ctx.closePath();
+    ctx.fill();
+    ctx.font = '12px Inter, sans-serif';
+    ctx.fillStyle = '#5b6573';
+    ctx.fillText('+z (propagation)', pz1x + 6, pz1y + 4);
+
+    // x and y reference axes at origin.
+    ctx.strokeStyle = '#9aa4b0';
+    ctx.lineWidth = 1;
+    const [px0, py0] = project(0, 0, 0, params);
+    const [pxu, pyu] = project(1.5, 0, 0, params);
+    const [px2, py2] = project(0, 1.5, 0, params);
+    ctx.beginPath(); ctx.moveTo(px0, py0); ctx.lineTo(pxu, pyu); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px0, py0); ctx.lineTo(px2, py2); ctx.stroke();
+    ctx.font = '11px Inter, sans-serif';
+    ctx.fillStyle = '#5b6573';
+    ctx.fillText('x', pxu + 4, pyu + 4);
+    ctx.fillText('y', px2 - 4, py2 - 6);
+
+    // Advance phase unless paused.
+    const now = performance.now();
+    const dt = (now - lastT) / 1000;
+    lastT = now;
+    if (!pauseEl.checked) {
+      phase += dt * 2.5 * +speedEl.value;
+    }
+
+    // Helix path
+    const senseSign = (sense === 'rh') ? -1 : +1;
+    const zMax = 10, N = 260;
+
+    // Faint helix outline (all-of-space snapshot).
+    ctx.strokeStyle = (sense === 'rh') ? 'rgba(0,103,185,0.35)' : 'rgba(179,33,58,0.35)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let i = 0; i <= N; i++) {
+      const z = (i / N) * zMax;
+      const ang = senseSign * (z * Math.PI * 0.9) - phase;
+      const x = Math.cos(ang);
+      const y = Math.sin(ang);
+      const [px, py] = project(x, y, z, params);
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Component "shadow" traces on the walls of the cube: x-vs-z at y=-1, y-vs-z at x=-1.
+    if (showComp.checked) {
+      // x-component on the y=-1.2 wall (bottom)
+      ctx.strokeStyle = 'rgba(0,103,185,0.55)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      for (let i = 0; i <= N; i++) {
+        const z = (i / N) * zMax;
+        const ang = senseSign * (z * Math.PI * 0.9) - phase;
+        const x = Math.cos(ang);
+        const [px, py] = project(x, -1.2, z, params);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // y-component on the x=-1.2 wall (back)
+      ctx.strokeStyle = 'rgba(179,33,58,0.55)';
+      ctx.beginPath();
+      for (let i = 0; i <= N; i++) {
+        const z = (i / N) * zMax;
+        const ang = senseSign * (z * Math.PI * 0.9) - phase;
+        const y = Math.sin(ang);
+        const [px, py] = project(-1.2, y, z, params);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    }
+
+    // Arrows at 5 z-positions showing the current E-vector.
+    ctx.lineWidth = 2.5;
+    const arrowN = 12;
+    for (let k = 0; k <= arrowN; k++) {
+      const z = (k / arrowN) * zMax;
+      const ang = senseSign * (z * Math.PI * 0.9) - phase;
+      const x = Math.cos(ang);
+      const y = Math.sin(ang);
+      const [px, py] = project(0, 0, z, params);
+      const [qx, qy] = project(x, y, z, params);
+      const strong = (k === Math.floor(arrowN / 2));
+      ctx.strokeStyle = strong ? '#1d7a4d' :
+                        (sense === 'rh' ? '#0067b9' : '#b3213a');
+      ctx.beginPath();
+      ctx.moveTo(px, py); ctx.lineTo(qx, qy); ctx.stroke();
+      ctx.fillStyle = ctx.strokeStyle;
+      ctx.beginPath();
+      ctx.arc(qx, qy, strong ? 4 : 2.5, 0, 2 * Math.PI); ctx.fill();
+    }
+
+    // Legend on the top-right of the canvas.
+    ctx.font = '12px Inter, sans-serif';
+    ctx.fillStyle = '#3b4651';
+    ctx.textAlign = 'left';
+    ctx.fillText(sense === 'rh' ? 'RHCP  (right hand)' : 'LHCP  (left hand)', W - 170, 22);
+    ctx.fillStyle = '#5b6573';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.fillText('Ex(t,z) — blue shadow', W - 170, 40);
+    ctx.fillText('Ey(t,z) — red shadow',  W - 170, 55);
+  }
+
+  function tick() { draw(); requestAnimationFrame(tick); }
+  tick();
+})();
+</script>
+</body>
+</html>

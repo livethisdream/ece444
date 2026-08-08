@@ -1,0 +1,1127 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>L2 - Basic Properties and Terminology &#8212; ECE 444 — Antennas and Wave Propagation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/sbt-sidebar-shim.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'module01/L02-antenna-properties/index';</script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="L2 practice problems" href="practice.html" />
+    <link rel="prev" title="L1 - Course Introduction" href="../L01-course-intro/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/DFEC-logo.png" class="logo__image only-light" alt="ECE 444 — Antennas and Wave Propagation - Home"/>
+    <script>document.write(`<img src="../../_static/DFEC-logo.png" class="logo__image only-dark" alt="ECE 444 — Antennas and Wave Propagation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item">
+<h3><a href="../../intro.html">Table of Contents</a></h3>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Antenna Fundamentals</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L2 — Basic Properties and Terminology</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="practice.html">Practice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="practice-solutions.html">Practice Solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+</div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/module01/L02-antenna-properties/index.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>L2 - Basic Properties and Terminology</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-outcomes">Learning outcomes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-from-maxwell-to-a-wave">Part 1: From Maxwell to a wave</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maxwell-s-equations-source-free-linear-media">Maxwell’s equations (source-free, linear media)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-telegrapher-s-equations">The Telegrapher’s Equations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-3-d-wave-equation">The 3-D wave equation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-plane-wave-solution">A plane-wave solution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#impedance-of-free-space-and-the-far-field-structure">Impedance of free space and the far-field structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-freeze-time-freeze-space">Interactive — freeze time, freeze space</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-a-fuller-3-d-view">Interactive — a fuller 3-D view</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-antenna-parameters">Part 2: Antenna Parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-poynting-vector">The Poynting vector</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#radiation-intensity">Radiation intensity</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-solid-angle-in-3-d">Interactive — solid angle in 3-D</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#directivity">Directivity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gain-and-radiation-efficiency">Gain and radiation efficiency</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-build-the-gain">Interactive — build the gain</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gamma-vswr-and-power-reflected"><span class="math notranslate nohighlight">\(\Gamma\)</span>, VSWR, and Power Reflected</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-reference-gamma-vs-vswr-vs-power">Quick Reference <span class="math notranslate nohighlight">\(\Gamma\)</span> vs VSWR vs Power</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-the-standing-wave-behind-vswr">Interactive — the standing wave behind VSWR</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#effective-area-aperture">Effective area (aperture)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-compare-gain-patterns">Interactive — compare gain patterns</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#beamwidth-boresight-and-lobes">Beamwidth, boresight, and lobes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-read-features-off-a-pattern">Interactive — read features off a pattern</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-this-shows-up-next">Where this shows up next</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practice">Practice</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-for-l3">Preparing for L3</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="l2-basic-properties-and-terminology">
+<h1>L2 - Basic Properties and Terminology<a class="headerlink" href="#l2-basic-properties-and-terminology" title="Permalink to this heading">#</a></h1>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L02-antenna-properties.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L02-antenna-properties.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L02-antenna-properties.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+<section id="learning-outcomes">
+<h2>Learning outcomes<a class="headerlink" href="#learning-outcomes" title="Permalink to this heading">#</a></h2>
+<p>By the end of this lesson, you will be able to:</p>
+<ol class="lo-list" style="--module: '2'">
+  <li>Trace the physics chain from Maxwell's equations → telegrapher's equations → the wave equation → the plane-wave solution, and identify the time and space dependencies in each.</li>
+  <li>Recognize why the far-field of an antenna is a plane-wave-like transverse E-H pair falling off as 1/r.</li>
+  <li>Define and compute the headline antenna parameters: radiation intensity, directivity, gain, effective area, beamwidth, boresight, main / side / back lobes.</li>
+  <li>Read a radiation pattern and pull out HPBW, FNBW, and sidelobe level.</li>
+</ol>
+</section>
+<section id="part-1-from-maxwell-to-a-wave">
+<h2>Part 1: From Maxwell to a wave<a class="headerlink" href="#part-1-from-maxwell-to-a-wave" title="Permalink to this heading">#</a></h2>
+<p>Every antenna analysis in this course starts from Maxwell’s equations.
+Antennas are a boundary-condition problem: currents on the antenna set
+tangential fields, those fields must match a solution that radiates
+outward. To see <em>why</em> they radiate, we walk the chain once.</p>
+<section id="maxwell-s-equations-source-free-linear-media">
+<h3>Maxwell’s equations (source-free, linear media)<a class="headerlink" href="#maxwell-s-equations-source-free-linear-media" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\nabla \cdot \mathbf{E} = 0
+\qquad
+\nabla \cdot \mathbf{H} = 0
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\nabla \times \mathbf{E} = -\mu \frac{\partial \mathbf{H}}{\partial t}
+\qquad
+\nabla \times \mathbf{H} = \varepsilon \frac{\partial \mathbf{E}}{\partial t}
+\]</div>
+<p>The two curl equations are the ones that make waves. A <strong>changing
+<span class="math notranslate nohighlight">\(\mathbf{H}\)</span> in time</strong> creates a spatial curl in <span class="math notranslate nohighlight">\(\mathbf{E}\)</span>, and a
+<strong>changing <span class="math notranslate nohighlight">\(\mathbf{E}\)</span> in time</strong> creates a spatial curl in
+<span class="math notranslate nohighlight">\(\mathbf{H}\)</span>. Time and space are locked together — you cannot change
+one without changing the other. That coupling is the entire story of
+propagation.</p>
+</section>
+<section id="the-telegrapher-s-equations">
+<h3>The Telegrapher’s Equations<a class="headerlink" href="#the-telegrapher-s-equations" title="Permalink to this heading">#</a></h3>
+<p>On a two-conductor transmission line, integrating Maxwell over the
+cross-section collapses the fields onto voltage <span class="math notranslate nohighlight">\(v(z,t)\)</span> and current
+<span class="math notranslate nohighlight">\(i(z,t)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial v}{\partial z} = -L \frac{\partial i}{\partial t}
+\qquad
+\frac{\partial i}{\partial z} = -C \frac{\partial v}{\partial t}
+\]</div>
+<p>Same structure as the curl pair: a spatial derivative on one side, a
+time derivative on the other. Differentiate one, substitute the other,
+and both <span class="math notranslate nohighlight">\(v\)</span> and <span class="math notranslate nohighlight">\(i\)</span> satisfy the 1-D wave equation</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial^2 v}{\partial z^2}
+= L C \frac{\partial^2 v}{\partial t^2}.
+\]</div>
+<p>The propagation speed drops out: <span class="math notranslate nohighlight">\(u = 1 / \sqrt{L C}\)</span>. On an air-filled
+line this is essentially <span class="math notranslate nohighlight">\(c\)</span>.</p>
+</section>
+<section id="the-3-d-wave-equation">
+<h3>The 3-D wave equation<a class="headerlink" href="#the-3-d-wave-equation" title="Permalink to this heading">#</a></h3>
+<p>In free space, the same “curl-of-curl” trick applied to Maxwell
+gives</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla^{2} \mathbf{E}
+- \mu \varepsilon \frac{\partial^{2} \mathbf{E}}{\partial t^{2}} = 0
+\qquad\text{with speed}\qquad
+c = \frac{1}{\sqrt{\mu \varepsilon}}.
+\]</div>
+<p>The exact same equation applies to <span class="math notranslate nohighlight">\(\mathbf{H}\)</span>. This is the equation
+whose solutions the rest of the course lives in.</p>
+</section>
+<section id="a-plane-wave-solution">
+<h3>A plane-wave solution<a class="headerlink" href="#a-plane-wave-solution" title="Permalink to this heading">#</a></h3>
+<p>The canonical solution, propagating in <span class="math notranslate nohighlight">\(+\hat{z}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{E}(z, t) = \hat{x} E_{0} \cos(\omega t - k z)
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\omega = 2 \pi f\)</span> is the <strong>time frequency</strong> — how fast the field
+oscillates at a fixed point.</p></li>
+<li><p><span class="math notranslate nohighlight">\(k = 2 \pi / \lambda\)</span> is the <strong>spatial frequency</strong> (wave number) —
+how fast the field oscillates at a fixed instant in time.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\omega / k = c\)</span> ties them together: the wave crest moves through
+space at <span class="math notranslate nohighlight">\(c\)</span>.</p></li>
+</ul>
+<div class="key-concept admonition">
+<p class="admonition-title">Key Point</p>
+<p>Every field in this course is a function of
+both <strong>time</strong> and <strong>space</strong>. When we suppress the <span class="math notranslate nohighlight">\(e^{j \omega t}\)</span>
+factor and work with phasors, we’re not throwing time away — we’re
+agreeing to carry it silently so we can focus on the spatial
+structure. The moment we hit a bandwidth, dispersion, or pulsed-radar
+problem, the time dependence comes back and matters.</p>
+</div>
+</section>
+<section id="impedance-of-free-space-and-the-far-field-structure">
+<h3>Impedance of free space and the far-field structure<a class="headerlink" href="#impedance-of-free-space-and-the-far-field-structure" title="Permalink to this heading">#</a></h3>
+<p>Plugging the plane-wave <span class="math notranslate nohighlight">\(\mathbf{E}\)</span> back into Faraday’s law forces
+<span class="math notranslate nohighlight">\(\mathbf{H}\)</span> to be transverse, perpendicular to <span class="math notranslate nohighlight">\(\mathbf{E}\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[
+\eta_{0} = \frac{|\mathbf{E}|}{|\mathbf{H}|}
+= \sqrt{\frac{\mu_{0}}{\varepsilon_{0}}}
+\approx 377\ \Omega.
+\]</div>
+<p>Far from an antenna, the radiated field looks locally like a plane
+wave — transverse E and H, ratio <span class="math notranslate nohighlight">\(\eta_{0}\)</span> — with a <span class="math notranslate nohighlight">\(1/r\)</span> amplitude
+fall-off that we’ll derive from the radiation integrals in L6. That
+<span class="math notranslate nohighlight">\(1/r\)</span> (equivalently <span class="math notranslate nohighlight">\(1/r^{2}\)</span> in power) is why the antenna’s
+directional properties even <em>matter</em> — they set how much power lands
+on your receiver in a given direction.</p>
+</section>
+<section id="interactive-freeze-time-freeze-space">
+<h3>Interactive — freeze time, freeze space<a class="headerlink" href="#interactive-freeze-time-freeze-space" title="Permalink to this heading">#</a></h3>
+<p>The same wave is a ripple in <strong>space</strong> (freeze the clock → wavelength
+<span class="math notranslate nohighlight">\(\lambda\)</span>) and a ripple in <strong>time</strong> (stand at one point → period <span class="math notranslate nohighlight">\(T\)</span>),
+tied together by the crest speed/phase velocity <span class="math notranslate nohighlight">\(c = \lambda f = \omega / k\)</span>. Drag the
+sliders, or press play to watch a crest travel.</p>
+<iframe src="../../viz/plane-wave-freeze.html"
+        width="100%" height="470"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Plane wave — freeze time / freeze space">
+</iframe>
+</section>
+<section id="interactive-a-fuller-3-d-view">
+<h3>Interactive — a fuller 3-D view<a class="headerlink" href="#interactive-a-fuller-3-d-view" title="Permalink to this heading">#</a></h3>
+<iframe src="https://emanim.szialab.org/index.html"
+        width="100%" height="700"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="EM wave animation (Szialab)">
+</iframe>
+<p><small>
+Interactive EM wave animation by Szilárd Szabó (Szialab).
+<a href="https://emanim.szialab.org/index.html" target="_blank" rel="noopener">Open in a new tab →</a>
+</small></p>
+</section>
+</section>
+<section id="part-2-antenna-parameters">
+<h2>Part 2: Antenna Parameters<a class="headerlink" href="#part-2-antenna-parameters" title="Permalink to this heading">#</a></h2>
+<p>With the wave equation in hand, we can define the working vocabulary for the rest of Module 1.</p>
+<section id="the-poynting-vector">
+<h3>The Poynting vector<a class="headerlink" href="#the-poynting-vector" title="Permalink to this heading">#</a></h3>
+<p>Before we can say how <em>much</em> power an antenna sends in a given direction,
+we need the quantity that measures power flow itself. The <strong>Poynting
+vector</strong> is</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{S} = \mathbf{E} \times \mathbf{H}
+\qquad [\text{W/m}^{2}],
+\]</div>
+<p>the instantaneous power per unit area carried by the field, pointing in
+the direction of propagation. For a time-harmonic field we almost always
+want the <strong>time-average</strong>,</p>
+<div class="math notranslate nohighlight">
+\[
+\langle \mathbf{S} \rangle
+= \tfrac{1}{2}\,\operatorname{Re}\!\left\lbrace \mathbf{E} \times \mathbf{H}^{*} \right\rbrace,
+\]</div>
+<p>and in the far field — where <span class="math notranslate nohighlight">\(\mathbf{E}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{H}\)</span> are transverse
+and locally plane-wave-like with <span class="math notranslate nohighlight">\(|\mathbf{E}| / |\mathbf{H}| = \eta_{0}\)</span>
+— its magnitude collapses to</p>
+<div class="math notranslate nohighlight">
+\[
+S_{\text{rad}} = \frac{|\mathbf{E}|^{2}}{2 \eta_{0}}.
+\]</div>
+<p>Because the far-field amplitude falls as <span class="math notranslate nohighlight">\(1/r\)</span>, this power density falls
+as <span class="math notranslate nohighlight">\(1/r^{2}\)</span> — the inverse-square law. This <span class="math notranslate nohighlight">\(S_{\text{rad}}\)</span> is exactly
+the quantity that appears in the radiation-intensity definition next.</p>
+<p style="text-align:center;">
+<img src="../../viz/img/poynting-triad.svg"
+     alt="Orthogonal E, H, and Poynting vector S of a plane wave"
+     style="max-width:100%; width:640px;">
+</p>
+</section>
+<section id="radiation-intensity">
+<h3>Radiation intensity<a class="headerlink" href="#radiation-intensity" title="Permalink to this heading">#</a></h3>
+<p>Power radiated per unit solid angle, in a given direction:</p>
+<div class="math notranslate nohighlight">
+\[
+U(\theta, \phi)
+= r^{2} S_{\text{rad}}(r, \theta, \phi)
+\qquad [\text{W/sr}]
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(S_{\text{rad}} = |\mathbf{E}|^{2} / (2 \eta_{0})\)</span> is the
+time-average Poynting magnitude in the far field. The <span class="math notranslate nohighlight">\(r^{2}\)</span> cancels
+the <span class="math notranslate nohighlight">\(1/r^{2}\)</span> in <span class="math notranslate nohighlight">\(S_{\text{rad}}\)</span>, so <span class="math notranslate nohighlight">\(U\)</span> depends only on direction,
+not distance. Total radiated power is</p>
+<div class="math notranslate nohighlight">
+\[
+P_{\text{rad}} = \oint U(\theta, \phi) d\Omega.
+\]</div>
+<p>A <strong>solid angle</strong> <span class="math notranslate nohighlight">\(\Omega\)</span> (in steradians) is the 3-D analogue of a planar
+angle: the area a cone cuts out of a unit sphere. A cone pointed in some
+direction subtends a solid angle <span class="math notranslate nohighlight">\(d\Omega\)</span> and intercepts a patch of area
+<span class="math notranslate nohighlight">\(r^{2}\,d\Omega\)</span> on a sphere of radius <span class="math notranslate nohighlight">\(r\)</span>; the whole sphere is <span class="math notranslate nohighlight">\(4\pi\)</span> sr.
+Radiation intensity is the power flowing through that cone per unit solid
+angle — which is why it is a property of <em>direction alone</em>.</p>
+<section id="interactive-solid-angle-in-3-d">
+<h4>Interactive — solid angle in 3-D<a class="headerlink" href="#interactive-solid-angle-in-3-d" title="Permalink to this heading">#</a></h4>
+<p>Drag to rotate the sphere; slide the cone half-angle <span class="math notranslate nohighlight">\(\alpha\)</span> to watch the
+solid angle <span class="math notranslate nohighlight">\(\Omega = 2\pi(1 - \cos\alpha)\)</span> and the patch it carves out
+grow.</p>
+<iframe src="../../viz/solid-angle.html"
+        width="100%" height="620"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Solid angle in 3-D">
+</iframe>
+</section>
+</section>
+<section id="directivity">
+<h3>Directivity<a class="headerlink" href="#directivity" title="Permalink to this heading">#</a></h3>
+<p>How well the antenna concentrates power in a given direction relative
+to an isotropic radiator:</p>
+<div class="math notranslate nohighlight">
+\[
+D(\theta, \phi)
+= \frac{U(\theta, \phi)}{U_{\text{iso}}}
+= \frac{4 \pi U(\theta, \phi)}{P_{\text{rad}}}.
+\]</div>
+<p><span class="math notranslate nohighlight">\(D\)</span> is dimensionless (or in dBi when converted to decibels).
+“<strong>Directivity</strong>” — no losses, purely geometric.</p>
+<p>A useful rule of thumb: for a pencil beam with half-power beamwidths
+<span class="math notranslate nohighlight">\(\theta_{1}\)</span> and <span class="math notranslate nohighlight">\(\theta_{2}\)</span> (in radians),</p>
+<div class="math notranslate nohighlight">
+\[
+D \approx \frac{4 \pi}{\theta_{1} \theta_{2}}
+\quad\text{or, in degrees}\quad
+D \approx \frac{41{,}253}{\theta_{1}^{\circ} \theta_{2}^{\circ}}.
+\]</div>
+</section>
+<section id="gain-and-radiation-efficiency">
+<h3>Gain and radiation efficiency<a class="headerlink" href="#gain-and-radiation-efficiency" title="Permalink to this heading">#</a></h3>
+<p>Gain is directivity with losses folded in:</p>
+<div class="math notranslate nohighlight">
+\[
+G(\theta, \phi) = \eta_{\text{rad}} D(\theta, \phi),
+\qquad
+\eta_{\text{rad}} = \frac{P_{\text{rad}}}{P_{\text{in}}}
+\in [0, 1].
+\]</div>
+<p>Efficiency accounts for ohmic and dielectric losses in the antenna
+structure. Mismatch loss at the antenna terminals is usually broken
+out separately as <strong>realized gain</strong> <span class="math notranslate nohighlight">\(G_{\text{re}} = (1 - |\Gamma|^{2}) G\)</span>.</p>
+<p>When your instrument or datasheet reports gain in dBi, it is almost always the realized gain in the peak direction.</p>
+<section id="interactive-build-the-gain">
+<h4>Interactive — build the gain<a class="headerlink" href="#interactive-build-the-gain" title="Permalink to this heading">#</a></h4>
+<p>Start from a directivity, then watch radiation efficiency and mismatch each
+carve a few dB away. The bars trace <strong>directivity → gain
+<span class="math notranslate nohighlight">\(G = \eta_{\text{rad}} D\)</span> → realized gain</strong> in dBi.</p>
+<iframe src="../../viz/gain-builder.html"
+        width="100%" height="500"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Gain builder">
+</iframe>
+</section>
+</section>
+<section id="gamma-vswr-and-power-reflected">
+<h3><span class="math notranslate nohighlight">\(\Gamma\)</span>, VSWR, and Power Reflected<a class="headerlink" href="#gamma-vswr-and-power-reflected" title="Permalink to this heading">#</a></h3>
+<p>Recall:</p>
+<p><span class="math notranslate nohighlight">\(\Gamma = \frac{V^-}{V^+} \longrightarrow\)</span> reflection coefficient</p>
+<p>and</p>
+<p><span class="math notranslate nohighlight">\(\text{VSWR} = \frac{V_{\text{max}}}{V_{\text{min}}} = \frac{ 1 + \vert \Gamma \vert }{1 - \vert\Gamma\vert}\)</span></p>
+<p><span class="math notranslate nohighlight">\(\vert\Gamma\vert^2 =\)</span> Reflected Power and <span class="math notranslate nohighlight">\(1-\vert\Gamma\vert^2\)</span> = Transmitted Power</p>
+</section>
+<section id="quick-reference-gamma-vs-vswr-vs-power">
+<h3>Quick Reference <span class="math notranslate nohighlight">\(\Gamma\)</span> vs VSWR vs Power<a class="headerlink" href="#quick-reference-gamma-vs-vswr-vs-power" title="Permalink to this heading">#</a></h3>
+<div style="display:flex; align-items:center; justify-content:center; gap:0.8em; flex-wrap:wrap; margin:0.5em 0;">
+<img src="../../viz/img/vswr_vs_gamma.png"
+     alt="VSWR vs reflection coefficient chart"
+     style="width:270px; max-width:100%; flex:0 0 auto;">
+<table style="flex:0 0 auto; width:max-content !important; display:table !important; font-size:0.76em;">
+<thead>
+<tr><th>VSWR</th><th>|Γ|</th><th>Reflected |Γ|²</th><th>Transmitted 1−|Γ|²</th></tr>
+</thead>
+<tbody>
+<tr><td>1.0:1</td><td>0.00</td><td>0%</td><td>100% — Perfect</td></tr>
+<tr><td>1.5:1</td><td>0.20</td><td>4%</td><td>96% — Good</td></tr>
+<tr><td>2.0:1</td><td>0.33</td><td>11.1%</td><td>88.9% — Acceptable</td></tr>
+<tr><td>3.0:1</td><td>0.50</td><td>25%</td><td>75% — Poor</td></tr>
+</tbody>
+</table>
+</div>
+<section id="interactive-the-standing-wave-behind-vswr">
+<h4>Interactive — the standing wave behind VSWR<a class="headerlink" href="#interactive-the-standing-wave-behind-vswr" title="Permalink to this heading">#</a></h4>
+<p>A mismatch sends part of the wave back; the forward and reflected waves add
+to a <strong>standing wave</strong>. Slide <span class="math notranslate nohighlight">\(|\Gamma|\)</span> and press play — the envelope’s
+maxima and minima set the VSWR, and the nulls stay pinned in place.</p>
+<iframe src="../../viz/vswr-standing-wave.html"
+        width="100%" height="560"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="VSWR standing wave">
+</iframe>
+</section>
+</section>
+<section id="effective-area-aperture">
+<h3>Effective area (aperture)<a class="headerlink" href="#effective-area-aperture" title="Permalink to this heading">#</a></h3>
+<p>Flip the antenna around to <em>receive</em>. A passing wave carries power density
+<span class="math notranslate nohighlight">\(S_{\text{inc}}\)</span> (W/m²); the antenna delivers some power <span class="math notranslate nohighlight">\(P_{\text{rx}}\)</span> to
+its load. The ratio has units of area and is the <strong>effective area</strong>
+(effective aperture):</p>
+<div class="math notranslate nohighlight">
+\[
+A_{e}(\theta, \phi) = \frac{P_{\text{rx}}}{S_{\text{inc}}}
+\qquad\Longrightarrow\qquad
+P_{\text{rx}} = S_{\text{inc}}\, A_{e}.
+\]</div>
+<p style="text-align:center;">
+<img src="../../viz/img/effective-area-capture.svg"
+     alt="A receiving aperture capturing effective area from an incident wavefront"
+     style="max-width:100%; width:640px;">
+</p>
+<p>So how big is that capture area — and where does the famous <span class="math notranslate nohighlight">\(\lambda^{2}/4\pi\)</span>
+come from? We can derive it.</p>
+<p><strong>1 · The antenna is a receiving circuit.</strong> An incident field <span class="math notranslate nohighlight">\(E\)</span> aligned
+with the antenna induces an open-circuit voltage <span class="math notranslate nohighlight">\(V_{\text{oc}} = E\,\ell_e\)</span>,
+where <span class="math notranslate nohighlight">\(\ell_e\)</span> is the antenna’s <em>effective length</em>. The antenna then behaves
+like a Thévenin source with internal <strong>radiation resistance</strong> <span class="math notranslate nohighlight">\(R_r\)</span>; a
+conjugate-<strong>matched</strong> load <span class="math notranslate nohighlight">\(R_L = R_r\)</span> draws the maximum available power:</p>
+<div class="math notranslate nohighlight">
+\[
+P_{\text{rx}} = \frac{V_{\text{oc}}^{2}}{8 R_r}
+= \frac{(E\,\ell_e)^{2}}{8 R_r}.
+\]</div>
+<p style="text-align:center;">
+<img src="../../viz/img/recv-circuit.svg"
+     alt="Receiving antenna modeled as a Thevenin source feeding a matched load"
+     style="max-width:100%; width:700px;">
+</p>
+<p><small>The <span class="math notranslate nohighlight">\(8\)</span> (not <span class="math notranslate nohighlight">\(4\)</span>) is the time-average of a sinusoid: for a peak
+amplitude <span class="math notranslate nohighlight">\(V_{\text{oc}}\)</span> across <span class="math notranslate nohighlight">\(R_L = R_r\)</span>, the average power is
+<span class="math notranslate nohighlight">\(\tfrac{1}{2}\,(V_{\text{oc}}/2)^{2}/R_r\)</span>.</small></p>
+<p><strong>2 · Do it for the simplest antenna — a short dipole.</strong> Its effective
+length is just its physical length, <span class="math notranslate nohighlight">\(\ell_e = \ell\)</span>, and its radiation
+resistance is <span class="math notranslate nohighlight">\(R_r = 80\pi^{2}(\ell/\lambda)^{2}\)</span>. The incident power density
+is <span class="math notranslate nohighlight">\(S = E^{2}/2\eta_{0}\)</span> with <span class="math notranslate nohighlight">\(\eta_0 = 120\pi\ \Omega\)</span>. Divide, and watch the
+<span class="math notranslate nohighlight">\(\ell\)</span>’s cancel:</p>
+<div class="math notranslate nohighlight">
+\[
+A_{e} = \frac{P_{\text{rx}}}{S}
+= \frac{\eta_{0}\,\ell_e^{2}}{4 R_r}
+= \frac{120\pi\,\ell^{2}}{4\cdot 80\pi^{2}(\ell/\lambda)^{2}}
+= \frac{3\lambda^{2}}{8\pi}
+= 1.5\cdot\frac{\lambda^{2}}{4\pi}.
+\]</div>
+<p style="text-align:center;">
+<img src="../../viz/img/short-dipole-field.svg"
+     alt="Short dipole aligned with the incident E field, inducing an open-circuit voltage"
+     style="max-width:100%; width:600px;">
+</p>
+<p><strong>3 · Recognize the number.</strong> That <span class="math notranslate nohighlight">\(1.5\)</span> is exactly the short dipole’s
+<strong>directivity</strong> <span class="math notranslate nohighlight">\(D\)</span>. So <span class="math notranslate nohighlight">\(A_e = D\,\lambda^{2}/4\pi\)</span>; folding in ohmic losses
+(<span class="math notranslate nohighlight">\(G = \eta_{\text{rad}}D\)</span>),</p>
+<div class="math notranslate nohighlight">
+\[
+\boxed{A_{e} = \frac{\lambda^{2}}{4 \pi}\, G.}
+\]</div>
+<p><strong>4 · It’s universal.</strong> We computed only one antenna — but <strong>reciprocity</strong>
+guarantees the ratio <span class="math notranslate nohighlight">\(A_e/G\)</span> is the <em>same</em> constant for <em>every</em> antenna, from
+a short dipole to a giant dish. (Equivalently, a thermodynamic argument — an
+antenna in a blackbody cavity must absorb and re-radiate equally in each
+direction — pins down the same constant.) So the boxed relation is truly
+universal.</p>
+<p><strong>Physical vs. effective aperture.</strong> An antenna with a real opening of area
+<span class="math notranslate nohighlight">\(A_{\text{phys}}\)</span> (a horn, a dish) never uses all of it perfectly —
+illumination taper, spillover, and feed blockage waste some. The <strong>aperture
+efficiency</strong> <span class="math notranslate nohighlight">\(\varepsilon_{\text{ap}}\)</span> (typically 0.5–0.7 for a dish)
+captures this:</p>
+<div class="math notranslate nohighlight">
+\[
+A_{e} = \varepsilon_{\text{ap}}\, A_{\text{phys}}.
+\]</div>
+<p><strong>Worked example.</strong> A 1.2 m dish has
+<span class="math notranslate nohighlight">\(A_{\text{phys}} = \pi(0.6)^{2} = 1.13\ \text{m}^{2}\)</span>; with
+<span class="math notranslate nohighlight">\(\varepsilon_{\text{ap}} = 0.6\)</span> that is <span class="math notranslate nohighlight">\(A_{e} = 0.68\ \text{m}^{2}\)</span>. At
+10 GHz (<span class="math notranslate nohighlight">\(\lambda = 3\ \text{cm}\)</span>) the gain is
+<span class="math notranslate nohighlight">\(G = 4\pi A_{e} / \lambda^{2} \approx 9500\)</span>, or <strong>39.8 dBi</strong>. A wave of
+density <span class="math notranslate nohighlight">\(S_{\text{inc}} = 1\ \mu\text{W/m}^{2}\)</span> then delivers
+<span class="math notranslate nohighlight">\(P_{\text{rx}} = S_{\text{inc}} A_{e} \approx 0.68\ \mu\text{W}\)</span>.</p>
+<p><strong>A subtlety worth pinning down.</strong> People often say “effective area shrinks
+with frequency,” but that is only true if you hold <em>gain</em> fixed — then
+<span class="math notranslate nohighlight">\(A_{e} = (\lambda^{2}/4\pi)\,G\)</span> falls as <span class="math notranslate nohighlight">\(\lambda^{2}\)</span>. For a <strong>fixed
+physical dish</strong>, <span class="math notranslate nohighlight">\(A_{e} = \varepsilon_{\text{ap}} A_{\text{phys}}\)</span> is set by
+the metal and does <em>not</em> change with frequency; instead the <strong>gain climbs
+as <span class="math notranslate nohighlight">\(f^{2}\)</span></strong>, because the same aperture spans many more wavelengths. Both
+statements are the same universal relation read in opposite directions.</p>
+<p>Combining <span class="math notranslate nohighlight">\(A_{e}\)</span> on the receive end with <span class="math notranslate nohighlight">\(G\)</span> on the transmit end gives the
+<strong>Friis transmission equation</strong>, the backbone of the link budget and radar
+range equation in Module 4.</p>
+<section id="interactive-compare-gain-patterns">
+<h4>Interactive — compare gain patterns<a class="headerlink" href="#interactive-compare-gain-patterns" title="Permalink to this heading">#</a></h4>
+<p>Toggle antenna types on/off to compare their <strong>E-plane</strong> gain patterns
+against an isotropic reference. Slide the dish diameter to watch the
+parabolic beam narrow and its peak gain climb — a direct look at how a
+larger <span class="math notranslate nohighlight">\(A_{\text{phys}} / \lambda^{2}\)</span> buys gain.</p>
+<iframe src="../../viz/polar-gain.html"
+        width="100%" height="620"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Polar gain patterns">
+</iframe>
+</section>
+</section>
+<section id="beamwidth-boresight-and-lobes">
+<h3>Beamwidth, boresight, and lobes<a class="headerlink" href="#beamwidth-boresight-and-lobes" title="Permalink to this heading">#</a></h3>
+<p>Read on a radiation pattern:</p>
+<ul class="simple">
+<li><p><strong>Boresight</strong> — the direction of peak radiation. Antennas are
+usually aimed along boresight.</p></li>
+<li><p><strong>Half-power beamwidth (HPBW)</strong> — angular width where the pattern
+drops by 3 dB (to <span class="math notranslate nohighlight">\(1/2\)</span> in power).</p></li>
+<li><p><strong>First-null beamwidth (FNBW)</strong> — angular width between the first
+nulls on either side of the main lobe. Roughly <span class="math notranslate nohighlight">\(2\times\)</span> HPBW for
+most simple patterns.</p></li>
+<li><p><strong>Main lobe</strong> — the lobe containing boresight.</p></li>
+<li><p><strong>Sidelobes</strong> — every other lobe. Reported by <strong>sidelobe level
+(SLL)</strong> in dB below the main lobe peak.</p></li>
+<li><p><strong>Back lobe</strong> — the lobe centered at <span class="math notranslate nohighlight">\(180^{\circ}\)</span> from boresight.
+The <strong>front-to-back ratio (F/B)</strong> is main-lobe peak divided by
+back-lobe peak.</p></li>
+</ul>
+<p>Beamwidth and sidelobe level are the two knobs you’ll trade against
+each other in every array-tapering problem in Module 3.</p>
+<section id="interactive-read-features-off-a-pattern">
+<h4>Interactive — read features off a pattern<a class="headerlink" href="#interactive-read-features-off-a-pattern" title="Permalink to this heading">#</a></h4>
+<p>The plot below shows the <strong>rectilinear</strong> (<span class="math notranslate nohighlight">\(\theta\)</span> vs. dB) view of the
+same aperture pattern we used for the horn and dish in the polar plot.
+Slide <strong>D/λ</strong> to change the aperture size; the HPBW, FNBW, and SLL
+markers move with it.</p>
+<iframe src="../../viz/pattern-features.html"
+        width="100%" height="660"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Rectilinear pattern features">
+</iframe>
+</section>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Quantity</p></th>
+<th class="head"><p>Intuition</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Radiation pattern</p></td>
+<td><p>In what direction energy goes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Gain</p></td>
+<td><p>How concentrated the energy is</p></td>
+</tr>
+<tr class="row-even"><td><p>Directivity</p></td>
+<td><p>Gain without losses</p></td>
+</tr>
+<tr class="row-odd"><td><p>Polarization</p></td>
+<td><p>Orientation of E-field</p></td>
+</tr>
+<tr class="row-even"><td><p>Bandwidth</p></td>
+<td><p>Range of useful frequencies</p></td>
+</tr>
+<tr class="row-odd"><td><p>Efficiency</p></td>
+<td><p>How much power is actually radiated</p></td>
+</tr>
+<tr class="row-even"><td><p>Impedance</p></td>
+<td><p>How easily power enters antenna</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="where-this-shows-up-next">
+<h2>Where this shows up next<a class="headerlink" href="#where-this-shows-up-next" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>L3 (Polarization and Bandwidth)</strong> — the direction of <span class="math notranslate nohighlight">\(\mathbf{E}\)</span>
+and how the parameters we just defined change with frequency.</p></li>
+<li><p><strong>L4 (Impedance, Feeding, and Baluns)</strong> — the transmission-line
+side of the antenna terminals: matching, <span class="math notranslate nohighlight">\(S_{11}\)</span>, VSWR.</p></li>
+<li><p><strong>L5 (Field Regions)</strong> — where the plane-wave approximation is
+valid and where it isn’t, and what that means for measurement.</p></li>
+<li><p><strong>L6 (Radiation Integrals)</strong> — deriving the <span class="math notranslate nohighlight">\(1/r\)</span> far field from an
+arbitrary current distribution.</p></li>
+</ul>
+</section>
+<section id="practice">
+<h2>Practice<a class="headerlink" href="#practice" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="practice.html"><span class="doc std std-doc">Problems</span></a></p></li>
+<li><p><a class="reference internal" href="practice-solutions.html"><span class="doc std std-doc">Solutions</span></a></p></li>
+</ul>
+</section>
+<section id="preparing-for-l3">
+<h2>Preparing for L3<a class="headerlink" href="#preparing-for-l3" title="Permalink to this heading">#</a></h2>
+<p>Read the assigned sections on <strong>polarization and bandwidth</strong> before
+class. Come ready to explain what “vertical polarization” means in
+terms of the plane-wave solution we wrote today.</p>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module01/L02-antenna-properties"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../L01-course-intro/index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">L1 - Course Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="practice.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">L2 practice problems</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-outcomes">Learning outcomes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-from-maxwell-to-a-wave">Part 1: From Maxwell to a wave</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#maxwell-s-equations-source-free-linear-media">Maxwell’s equations (source-free, linear media)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-telegrapher-s-equations">The Telegrapher’s Equations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-3-d-wave-equation">The 3-D wave equation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-plane-wave-solution">A plane-wave solution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#impedance-of-free-space-and-the-far-field-structure">Impedance of free space and the far-field structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-freeze-time-freeze-space">Interactive — freeze time, freeze space</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-a-fuller-3-d-view">Interactive — a fuller 3-D view</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-antenna-parameters">Part 2: Antenna Parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-poynting-vector">The Poynting vector</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#radiation-intensity">Radiation intensity</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-solid-angle-in-3-d">Interactive — solid angle in 3-D</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#directivity">Directivity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gain-and-radiation-efficiency">Gain and radiation efficiency</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-build-the-gain">Interactive — build the gain</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gamma-vswr-and-power-reflected"><span class="math notranslate nohighlight">\(\Gamma\)</span>, VSWR, and Power Reflected</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-reference-gamma-vs-vswr-vs-power">Quick Reference <span class="math notranslate nohighlight">\(\Gamma\)</span> vs VSWR vs Power</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-the-standing-wave-behind-vswr">Interactive — the standing wave behind VSWR</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#effective-area-aperture">Effective area (aperture)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-compare-gain-patterns">Interactive — compare gain patterns</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#beamwidth-boresight-and-lobes">Beamwidth, boresight, and lobes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-read-features-off-a-pattern">Interactive — read features off a pattern</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-this-shows-up-next">Where this shows up next</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practice">Practice</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-for-l3">Preparing for L3</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By N. Rogers
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
