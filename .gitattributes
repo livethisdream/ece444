@@ -1,0 +1,23 @@
+# Settle line-ending handling across the shared Windows + WSL working tree.
+#
+# `text=auto` stores LF in the repository and normalizes on comparison, so a
+# CRLF working tree (produced by a Windows checkout with core.autocrlf=true)
+# no longer shows spurious "modified" diffs when git is run from WSL. No file
+# content is rewritten by adding this file.
+* text=auto
+
+# Shell scripts must stay LF so they run under bash/WSL regardless of platform.
+*.sh text eol=lf
+
+# Binary assets — never apply end-of-line conversion.
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.eot   binary
