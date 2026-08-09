@@ -33,6 +33,11 @@ parts:
             title: Practice Solutions
       - file: module01/L04-impedance-feeding-baluns/index
         title: "L4 — Impedance, Feeding, and Baluns"
+        sections:
+          - file: module01/L04-impedance-feeding-baluns/practice
+            title: Practice
+          - file: module01/L04-impedance-feeding-baluns/practice-solutions
+            title: Practice Solutions
       - file: module01/L05-field-regions/index
         title: "L5 — Field Regions"
       - file: module01/L06-radiation-integrals/index

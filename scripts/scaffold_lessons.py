@@ -114,7 +114,7 @@ LESSONS = [
     (1, 1, "L01-course-intro", "Course Introduction", ["1.1"], "What an antenna is, why antennas matter to the Air Force mission, and how ECE 444 is organized.", False),
     (1, 2, "L02-antenna-properties", "Basic Properties and Terminology", ["1.2"], "From Maxwell's equations to the plane wave; radiation intensity, directivity, gain, effective area, and pattern parameters.", True),
     (1, 3, "L03-polarization-bandwidth", "Polarization and Bandwidth", ["1.3"], "Linear, circular, and elliptical polarization; axial ratio and polarization loss; impedance / pattern / polarization bandwidth; Chu-Harrington.", True),
-    (1, 4, "L04-impedance-feeding-baluns", "Impedance, Feeding, and Baluns", ["1.4"], "Input impedance, feed-point matching, and the role of baluns in an antenna feed system.", False),
+    (1, 4, "L04-impedance-feeding-baluns", "Impedance, Feeding, and Baluns", ["1.4"], "Input impedance, feed-point matching, and the role of baluns in an antenna feed system.", True),
     (1, 5, "L05-field-regions", "Field Regions", ["1.5"], "Reactive near-field, radiating near-field, and far-field — boundaries and why they matter.", False),
     (1, 6, "L06-radiation-integrals", "Radiation Integrals", ["1.6"], "Setting up the radiation integrals to get the far-field pattern from a current distribution.", False),
 

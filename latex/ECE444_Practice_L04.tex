@@ -1,0 +1,224 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L4 practice set (Impedance, Feeding, Baluns), ported from the Jupyter Book
+% practice.md / practice-solutions.md into the exam class for Gradescope.
+
+\fullwidth{\textbf{Learning Objective 1.4: } I can calculate input impedance,
+feed considerations, and the role of baluns in an antenna feed system.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Radiation resistance and efficiency.} A short dipole has length
+$\ell = 0.08\lambda$. Its conductors contribute a loss resistance of
+$R_\mathrm{loss} = 1.5\ohms$.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the radiation resistance $R_\mathrm{rad} = 80\pi^{2}(\ell/\lambda)^{2}$.
+		\begin{solution}[1in]
+		\eq{ R_\mathrm{rad} = 80\pi^{2}(0.08)^{2} = 789.6 \times 0.0064 \approx 5.05\ohms }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$R_\mathrm{rad}$ = \ansbox[1.3in]{$\approx 5.05\ohms$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the radiation efficiency $\eta_\mathrm{rad}$.
+		\begin{solution}[1in]
+		\eq{ \eta_\mathrm{rad} = \dfrac{R_\mathrm{rad}}{R_\mathrm{rad}+R_\mathrm{loss}} = \dfrac{5.05}{6.55} \approx 0.77 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\eta_\mathrm{rad}$ = \ansbox[1.3in]{$\approx 0.77$ (77\%)}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The short dipole's directivity is $D = 1.5$ (1.76 dBi). Find the gain in dBi.
+		\begin{solution}[1in]
+		\eq{ G_\mathrm{dBi} = 1.76 + 10\,\mylog{0.77} = 1.76 - 1.13 \approx 0.6\dbi }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G$ = \ansbox[1.3in]{$\approx 0.6\dbi$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Feeding a half-wave dipole with 50\,$\Omega$ coax.}
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A dipole trimmed to resonance presents $\myz{in} = 70 + j0\ohms$. Find
+		$\Gamma$, VSWR, return loss, and mismatch loss on a $50\ohms$ line.
+		\begin{solution}[1.8in]
+		\eq{
+			\Gamma &= \dfrac{70-50}{70+50} = 0.167, \qquad \text{VSWR} = \dfrac{1.167}{0.833} \approx 1.40 \\
+			\text{RL} &= -20\,\mylog{0.167} \approx 15.6\db, \quad L_\mathrm{mm} = -10\,\mylog{1-0.167^{2}} \approx 0.12\db
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		VSWR = \ansbox[1.3in]{$\approx 1.40$}
+
+		\vspace{4pt}
+		RL = \ansbox[1.3in]{$\approx 15.6\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part An \emph{untrimmed} half-wave dipole presents $\myz{in} = 73 + j42.5\ohms$.
+		Find $\left| \Gamma \right|$ and VSWR on the same line.
+		\begin{solution}[1.7in]
+		\eq{
+			\left| \Gamma \right| &= \dfrac{\sqrt{23^{2} + 42.5^{2}}}{\sqrt{123^{2} + 42.5^{2}}} = \dfrac{48.3}{130.1} \approx 0.371 \\
+			\text{VSWR} &= \dfrac{1.371}{0.629} \approx 2.18
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\left| \Gamma \right|$ = \ansbox[1.3in]{$\approx 0.371$}
+
+		\vspace{4pt}
+		VSWR = \ansbox[1.3in]{$\approx 2.18$}
+	\end{minipage}
+
+	\part Compare (a) and (b): in one sentence, what did trimming to resonance buy
+	you, and why?
+		\begin{solution}[1in]
+		Trimming killed the $+j42.5\ohms$ reactance, dropping VSWR from $\approx 2.2$ to
+		$1.4$ --- the reactance, not the resistance, was doing most of the damage.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Quarter-wave transformer.} A resonant antenna presents a real
+input impedance $R_L = 36\ohms$. You want to match it to a $50\ohms$ feed line
+with a quarter-wave transformer.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part What characteristic impedance $Z_1$ must the $\lambda/4$ section have?
+		\begin{solution}[1in]
+		\eq{ Z_1 = \sqrt{Z_0 R_L} = \sqrt{(50)(36)} = \sqrt{1800} \approx 42.4\ohms }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$Z_1$ = \ansbox[1.3in]{$\approx 42.4\ohms$}
+	\end{minipage}
+
+	\part What is $\Gamma$ at the design frequency?
+		\begin{solution}[0.8in]
+		The transformer makes $Z_1^{2}/R_L = 1800/36 = 50\ohms = Z_0$, so $\Gamma = 0$.
+		\end{solution}
+
+	\part In one sentence, what happens to the match off the design frequency, and why?
+		\begin{solution}[1in]
+		The section is $\lambda/4$ only at the design frequency; off frequency its
+		electrical length is no longer $90\mydeg$, the transformation $Z_1^{2}/R_L$ no
+		longer holds, and $\left| \Gamma \right|$ climbs --- the match is narrowband.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{VSWR, reflection, and the impedance behind it.} An antenna
+measures VSWR $= 1.5$ on a $50\ohms$ line.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find $\left| \Gamma \right|$.
+		\begin{solution}[0.8in]
+		\eq{ \left| \Gamma \right| = \dfrac{1.5-1}{1.5+1} = \dfrac{0.5}{2.5} = 0.20 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\left| \Gamma \right|$ = \ansbox[1.3in]{$0.20$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the return loss in dB.
+		\begin{solution}[0.8in]
+		\eq{ \text{RL} = -20\,\mylog{0.20} \approx 14\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		RL = \ansbox[1.3in]{$\approx 14\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the mismatch loss in dB.
+		\begin{solution}[0.8in]
+		\eq{ L_\mathrm{mm} = -10\,\mylog{1-0.20^{2}} = -10\,\mylog{0.96} \approx 0.18\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$L_\mathrm{mm}$ = \ansbox[1.3in]{$\approx 0.18\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Assuming a purely resistive antenna, what two real $\myz{in}$ are consistent
+		with this VSWR?
+		\begin{solution}[1.2in]
+		\eq{ \myz{in} = 50 \cdot \dfrac{1.2}{0.8} = 75\ohms \quad\text{or}\quad 50 \cdot \dfrac{0.8}{1.2} = 33.3\ohms }
+		VSWR alone does not say which side of $Z_0$ you are on.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\myz{in}$ = \ansbox[1.3in]{$75$ or $33.3\ohms$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Baluns.}
+\begin{parts}
+	\part In one or two sentences, explain why feeding a dipole \emph{directly} with
+	coax (no balun) distorts the pattern.
+		\begin{solution}[1.1in]
+		Coax is unbalanced, so the two arms present unequal impedances to it. The
+		imbalance drives a common-mode current on the \emph{outside} of the shield; that
+		shield current radiates, so the feed line becomes part of the antenna and skews
+		the pattern.
+		\end{solution}
+
+	\part You must feed a folded dipole ($\myz{in} \approx 292\ohms$) with $75\ohms$
+	coax. Which balun would you choose, and what does it do?
+		\begin{solution}[1.1in]
+		A \textbf{4:1 (half-wave) balun}: it balances the feed \emph{and} transforms
+		impedance 4:1, taking $292\ohms$ down to $\approx 73\ohms$ --- a good match to
+		$75\ohms$ coax.
+		\end{solution}
+
+	\part You feed a straight resonant dipole ($\approx 70\ohms$) with $50\ohms$ coax.
+	Which balun would you choose, and why is it a \emph{different} choice than (b)?
+		\begin{solution}[1.2in]
+		A \textbf{1:1 current (choke) balun}. The $70\ohms$ dipole already matches
+		$50\ohms$ well (VSWR $\approx 1.4$), so no impedance transformation is wanted ---
+		you only need to choke off the shield current. A 4:1 balun here would ruin the
+		match.
+		\end{solution}
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

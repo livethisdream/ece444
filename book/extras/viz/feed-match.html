@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feed-line match explorer</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root {
+    --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --bg:#f5f9fc;
+    --ink:#15202b; --ink3:#5b6573; --load:#8a5a00; --match:#0067b9; --sll:#b3213a;
+  }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:grid; grid-template-columns: minmax(300px, 1fr) minmax(240px, 340px); gap:14px; padding:16px; align-items:start; }
+  @media (max-width:640px){ .app { grid-template-columns:1fr; } }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .panel { display:flex; flex-direction:column; gap:12px; font-size:13.5px; }
+  .block { padding:10px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:4px; }
+  .block h2 { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--navy); margin:0 0 8px; }
+  label.sl { display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink3); font-weight:700; margin:10px 0 4px; }
+  label.sl:first-of-type { margin-top:0; }
+  .val { font-size:13px; font-weight:600; color:var(--navy); font-variant-numeric:tabular-nums; }
+  input[type=range]{ width:100%; margin:4px 0 0; }
+  .row { display:flex; align-items:center; gap:8px; margin-top:6px; font-size:12.5px; }
+  .readout dl { display:grid; grid-template-columns:auto 1fr; gap:6px 10px; margin:0; }
+  .readout dt { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; color:var(--ink3); align-self:center; }
+  .readout dd { margin:0; font-size:14px; font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; }
+  select { font:inherit; padding:2px 4px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" aria-label="Reflection-coefficient plane"></canvas>
+
+  <div class="panel">
+    <div class="block">
+      <h2>Antenna impedance</h2>
+      <label class="sl">Resistance \(R\) = <span class="val" id="r-val">70</span> &Omega;</label>
+      <input type="range" id="r" min="1" max="200" step="1" value="70">
+      <label class="sl">Reactance \(X\) = <span class="val" id="x-val">0</span> &Omega;</label>
+      <input type="range" id="x" min="-150" max="150" step="1" value="0">
+      <div class="row">
+        <span>Feed line \(Z_0\):</span>
+        <select id="z0"><option value="50" selected>50 &Omega;</option><option value="75">75 &Omega;</option></select>
+      </div>
+      <div class="row">
+        <label><input type="checkbox" id="qw"> &lambda;/4 transformer, \(Z_1=\sqrt{Z_0 R}\)</label>
+      </div>
+    </div>
+
+    <div class="block readout">
+      <h2>What the source sees</h2>
+      <dl>
+        <dt>\(Z_\text{in}\)</dt> <dd id="r-z">—</dd>
+        <dt>\(\lvert\Gamma\rvert\)</dt> <dd id="r-gam">—</dd>
+        <dt>VSWR</dt>          <dd id="r-vswr">—</dd>
+        <dt>Return loss</dt>   <dd id="r-rl">—</dd>
+        <dt>Mismatch loss</dt> <dd id="r-ml">—</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+
+const cv=document.getElementById('plot'), ctx=cv.getContext('2d');
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const state={ R:70, X:0, Z0:50, qw:false };
+
+// complex helpers
+const cdiv=(a,b,c,d)=>{ const den=c*c+d*d; return [ (a*c+b*d)/den, (b*c-a*d)/den ]; }; // (a+jb)/(c+jd)
+function gammaOf(R,X,Z0){ // Gamma = (Z - Z0)/(Z + Z0)
+  return cdiv(R-Z0, X, R+Z0, X);
+}
+function derived(){
+  let R=state.R, X=state.X;
+  if(state.qw){ // quarter-wave line Z1=sqrt(Z0 R): Zin' = Z1^2 / Z = Z0*R/(R+jX)
+    const Z1sq=state.Z0*state.R;
+    const t=cdiv(Z1sq,0,R,X); R=t[0]; X=t[1];
+  }
+  const g=gammaOf(R,X,state.Z0);
+  const gm=Math.hypot(g[0],g[1]);
+  const vswr = gm>=0.999 ? Infinity : (1+gm)/(1-gm);
+  const rl = gm<=1e-6 ? Infinity : -20*Math.log10(gm);
+  const ml = -10*Math.log10(Math.max(1e-9,1-gm*gm));
+  return { Rin:R, Xin:X, g, gm, vswr, rl, ml };
+}
+
+// controls
+const rEl=document.getElementById('r'), xEl=document.getElementById('x'),
+      z0El=document.getElementById('z0'), qwEl=document.getElementById('qw'),
+      rv=document.getElementById('r-val'), xv=document.getElementById('x-val');
+rEl.addEventListener('input',()=>{ state.R=+rEl.value; rv.textContent=state.R; draw(); });
+xEl.addEventListener('input',()=>{ state.X=+xEl.value; xv.textContent=state.X; draw(); });
+z0El.addEventListener('change',()=>{ state.Z0=+z0El.value; draw(); });
+qwEl.addEventListener('change',()=>{ state.qw=qwEl.checked; draw(); });
+
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const w=Math.max(300, cv.getBoundingClientRect().width);
+  const h=Math.max(300, Math.min(w, 460));
+  cv.width=w*dpr; cv.height=h*dpr; cv.style.height=h+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0); draw();
+}
+window.addEventListener('resize', fit);
+
+function draw(){
+  const dpr=window.devicePixelRatio||1;
+  const w=cv.width/dpr, h=cv.height/dpr;
+  ctx.clearRect(0,0,w,h);
+  const d=derived();
+
+  // plot geometry: Gamma-plane, unit circle centered
+  const cx=w/2, cy=h/2, Rp=Math.min(w,h)/2 - 34;
+  const gx=gr=>cx+gr*Rp, gy=gi=>cy-gi*Rp;
+
+  // outer unit circle (|Gamma|=1, total reflection)
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(cx,cy,Rp,0,2*Math.PI); ctx.stroke();
+  // faint |Gamma| rings
+  ctx.strokeStyle='#eef3f8'; ctx.lineWidth=1;
+  for(const gm of [0.25,0.5,0.75]){ ctx.beginPath(); ctx.arc(cx,cy,gm*Rp,0,2*Math.PI); ctx.stroke(); }
+  // axes
+  ctx.strokeStyle='#dfe8f1'; ctx.beginPath();
+  ctx.moveTo(cx-Rp,cy); ctx.lineTo(cx+Rp,cy); ctx.moveTo(cx,cy-Rp); ctx.lineTo(cx,cy+Rp); ctx.stroke();
+
+  // VSWR=2 reference circle (|Gamma|=1/3)
+  ctx.strokeStyle=cssv('--sll'); ctx.setLineDash([3,3]); ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.arc(cx,cy,Rp/3,0,2*Math.PI); ctx.stroke(); ctx.setLineDash([]);
+
+  // matched center
+  ctx.fillStyle=cssv('--ink3'); ctx.beginPath(); ctx.arc(cx,cy,2.5,0,2*Math.PI); ctx.fill();
+
+  // VSWR circle through the operating point
+  if(isFinite(d.gm)&&d.gm>1e-4){
+    ctx.strokeStyle=cssv('--match'); ctx.lineWidth=1; ctx.globalAlpha=0.5;
+    ctx.beginPath(); ctx.arc(cx,cy,d.gm*Rp,0,2*Math.PI); ctx.stroke(); ctx.globalAlpha=1;
+  }
+  // operating point
+  const px=gx(d.g[0]), py=gy(d.g[1]);
+  ctx.strokeStyle=cssv('--match'); ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(px,py); ctx.stroke();
+  ctx.fillStyle=cssv('--match'); ctx.beginPath(); ctx.arc(px,py,5,0,2*Math.PI); ctx.fill();
+
+  // labels (sans words; math via MathJax)
+  stext(ctx,'total reflection', cx, cy-Rp-16, 11, cssv('--ink3'),'center',false);
+  stext(ctx,'matched', cx+6, cy+13, 10.5, cssv('--ink3'),'left',false);
+  MJ.draw(ctx,'\\mathrm{Re}\\,\\Gamma', cx+Rp-2, cy-11, 12, cssv('--ink3'),'right');
+  MJ.draw(ctx,'\\mathrm{Im}\\,\\Gamma', cx+11, cy-Rp+2, 12, cssv('--ink3'),'left');
+  MJ.draw(ctx,'\\mathrm{VSWR}=2', cx, cy+Rp/3+13, 11, cssv('--sll'),'center');
+
+  updateReadout(d);
+}
+
+function fmt(z){ const s=z.Xin>=0?'+':'−'; return `${z.Rin.toFixed(0)} ${s} j${Math.abs(z.Xin).toFixed(0)} Ω`; }
+function updateReadout(d){
+  document.getElementById('r-z').textContent   = fmt(d);
+  document.getElementById('r-gam').textContent = d.gm.toFixed(3);
+  document.getElementById('r-vswr').textContent= (d.vswr===Infinity)?'∞:1':`${d.vswr.toFixed(2)}:1`;
+  document.getElementById('r-rl').textContent  = (d.rl===Infinity)?'∞ dB':`${d.rl.toFixed(1)} dB`;
+  document.getElementById('r-ml').textContent  = `${d.ml.toFixed(2)} dB`;
+}
+
+fit();
+MJ.setRedraw(()=>draw());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>draw()); draw(); });
+</script>
+</body>
+</html>
