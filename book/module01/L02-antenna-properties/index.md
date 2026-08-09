@@ -233,7 +233,7 @@ solid angle $\Omega = 2\pi(1 - \cos\alpha)$ and the patch it carves out
 grow.
 
 <iframe src="../../viz/solid-angle.html"
-        width="100%" height="620"
+        width="100%" height="490"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Solid angle in 3-D">

@@ -23,13 +23,21 @@
   html, body { margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif;
                color: var(--ink); background: #fff; }
   .app { display: flex; flex-direction: column; gap: 12px; padding: 16px; }
+  .controls { display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+              padding: 8px 12px; background: var(--bg); border: 1px solid var(--edge); border-radius: 6px; }
+  .controls .ctl { white-space: nowrap; font-size: 12.5px; color: var(--ink3); font-weight: 700;
+                   text-transform: uppercase; letter-spacing: 0.05em; }
+  .controls .ctl .val { color: var(--navy); }
+  .controls input[type=range] { flex: 1 1 200px; min-width: 160px; }
+  .controls button { font: 600 12px/1 Inter, sans-serif; padding: 7px 10px; border: 1px solid var(--edge2);
+                     border-radius: 4px; background: #fff; color: var(--navy); cursor: pointer; }
+  .controls button:hover { background: #eef4f9; }
+  .controls .note { color: var(--ink3); font-size: 11.5px; }
   canvas { display: block; width: 100%; height: auto; background: #fff;
            border: 1px solid var(--edge); border-radius: 6px; cursor: grab; touch-action: none; }
   canvas:active { cursor: grabbing; }
-  .panel { font-size: 13.5px; line-height: 1.4; display: grid;
-           grid-template-columns: minmax(210px,1fr) minmax(210px,1fr) minmax(200px,1.1fr);
-           gap: 12px; align-items: start; }
-  @media (max-width: 720px) { .panel { grid-template-columns: 1fr; } }
+  .panel { font-size: 13.5px; line-height: 1.4; display: flex;
+           flex-direction: column; gap: 12px; }
   .panel h2 { font-size: 12px; font-weight: 700; text-transform: uppercase;
               letter-spacing: 0.08em; color: var(--navy); margin: 0 0 8px; }
   .block { padding: 8px 10px; background: var(--bg); border: 1px solid var(--edge); border-radius: 4px; }
@@ -46,35 +54,33 @@
   .readout dd { margin:0; font-size:13.5px; font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; }
   .note { font-size:11.5px; color:var(--ink3); line-height:1.45; }
   .eq { font-size:13px; color:var(--navy); font-weight:600; margin:2px 0 6px; }
+  .stage { position: relative; }
+  .overlay { position: absolute; top: 12px; right: 12px;
+             display: flex; flex-direction: column; gap: 6px; width: 164px; pointer-events: none; }
+  .overlay .pill { display: flex; justify-content: center; align-items: center; gap: 5px;
+                   padding: 4px 12px; background: rgba(0,103,185,0.12);
+                   border: 1px solid rgba(0,103,185,0.30); color: #0067b9;
+                   border-radius: 1em; font-size: 12px; font-weight: 600;
+                   white-space: nowrap; font-variant-numeric: tabular-nums; line-height: 1.4; }
+  .overlay .pill b { color: #004a85; font-weight: 700; }
 </style>
 </head>
 <body>
 <div class="app">
-  <canvas id="scene" aria-label="Sphere with solid-angle cone"></canvas>
-
-  <div class="panel">
-    <div class="block">
-      <h2>Cone</h2>
-      <label>Half-angle \(\alpha\) = <span class="val" id="a-val">20</span>°</label>
-      <input type="range" id="alpha" min="3" max="60" step="1" value="20">
-      <div class="btns"><button id="reset">Reset view</button></div>
-      <div class="note" style="margin-top:8px;">Drag to rotate.</div>
+  <div class="stage">
+    <canvas id="scene" aria-label="Sphere with solid-angle cone"></canvas>
+    <div class="overlay">
+      <span class="pill">\(\Omega\) = <b id="r-omega">—</b></span>
+      <span class="pill">\(\Omega/4\pi\) = <b id="r-frac">—</b></span>
+      <span class="pill">patch area = <b id="r-area">—</b></span>
     </div>
+  </div>
 
-    <div class="readout">
-      <h2>Solid angle</h2>
-      <dl>
-        <dt>Half-angle \(\alpha\)</dt>  <dd id="r-a">—</dd>
-        <dt>\(\Omega = 2\pi(1-\cos\alpha)\)</dt><dd id="r-omega">—</dd>
-        <dt>Patch area</dt>    <dd id="r-area">—</dd>
-        <dt>\(\Omega/4\pi\)</dt>        <dd id="r-frac">—</dd>
-      </dl>
-    </div>
-
-    <div class="readout">
-      <h2>Radiation intensity</h2>
-      <div class="eq">\(U(\theta,\phi) = dP/d\Omega\) [W/sr]</div>
-    </div>
+  <div class="controls">
+    <span class="ctl">Half-angle \(\alpha\) = <span class="val" id="a-val">20</span>°</span>
+    <input type="range" id="alpha" min="3" max="60" step="1" value="20">
+    <button id="reset">Reset view</button>
+    <span class="note">Drag to rotate.</span>
   </div>
 </div>
 
@@ -135,7 +141,7 @@ function fit() {
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
   const w = Math.max(360, rect.width);
-  const h = Math.max(340, Math.min(w * 0.62, 520));
+  const h = Math.max(330, Math.min(w * 0.5, 390));
   canvas.width = w * dpr; canvas.height = h * dpr;
   canvas.style.height = `${h}px`;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -176,7 +182,11 @@ function draw() {
   const dpr = window.devicePixelRatio || 1;
   const w = canvas.width / dpr, h = canvas.height / dpr;
   ctx.clearRect(0, 0, w, h);
-  CX = w / 2; CY = h / 2 + 6; S = Math.min(w, h) * 0.34;
+  // Keep the sphere clear of the top-right stats pills (pill column + insets ≈ 186px).
+  const pillBand = 186;
+  S = Math.min(w - pillBand, h) * 0.34;
+  CY = h / 2 + 6;
+  CX = Math.min(w / 2, w - pillBand - S);
 
   // ---- sphere wireframe (latitudes + longitudes) ----
   const NLAT = 9, NLONG = 12, SEG = 60;
@@ -262,7 +272,6 @@ function draw() {
 function updateReadout() {
   const a = state.alpha;
   const omega = 2 * Math.PI * (1 - Math.cos(a));
-  document.getElementById('r-a').textContent = `${(a * 180 / Math.PI).toFixed(0)}°`;
   document.getElementById('r-omega').textContent = `${omega.toFixed(3)} sr`;
   document.getElementById('r-area').textContent = `${omega.toFixed(3)} r²`;
   document.getElementById('r-frac').textContent = `${(omega / (4 * Math.PI) * 100).toFixed(1)}%`;
