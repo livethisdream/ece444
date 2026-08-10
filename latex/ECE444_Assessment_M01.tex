@@ -55,7 +55,7 @@ $90\%$, operating at $6\ghz$.
 	\begin{minipage}[t]{0.62\linewidth}
 		\part Find the gain in dBi.
 		\begin{solution}[1.1in]
-		\eq{ G_{\text{dBi}} = 25\db + 10\,\mylog{0.9} = 25 - 0.46 \approx 24.5\dbi }
+		\eq{ G_{\text{dBi}} = 25\db + 10\mylog{0.9} = 25 - 0.46 \approx 24.5\dbi }
 		\end{solution}
 	\end{minipage}%
 	\begin{minipage}[t]{0.33\linewidth}
@@ -99,7 +99,7 @@ $90\%$, operating at $6\ghz$.
 		the directivity and compare with the spec.
 		\begin{solution}[1.5in]
 		\eq{ D \approx \dfrac{41253}{\theta_{\text{HP}}^{2}} = \dfrac{41253}{(11)^{2}}
-		     \approx 341 \;\longrightarrow\; 10\,\mylog{341} \approx 25.3\dbi }
+		     \approx 341 \longrightarrow 10\mylog{341} \approx 25.3\dbi }
 		Consistent with the $25\dbi$ spec.
 		\end{solution}
 	\end{minipage}%
@@ -118,7 +118,7 @@ $90\%$, operating at $6\ghz$.
 \fullwidth{\textbf{Learning Objective 1.3: } I can determine the polarization of an antenna and describe the bandwidth characteristics of common antenna types.}
 
 \question A wave propagating in $+\zhat$ is
-$\vec{E} = \xhat\, 4\cosp{\omega t - kz} + \yhat\, 4\cosp{\omega t - kz - 90\mydeg}$.
+$\vec{E} = \xhat 4\cosp{\omega t - kz} + \yhat 4\cosp{\omega t - kz - 90\mydeg}$.
 The receiving antenna is specified as VSWR $\le 2$ over $2.40$--$2.50\ghz$.
 
 \begin{parts}
@@ -167,7 +167,7 @@ The receiving antenna is specified as VSWR $\le 2$ over $2.40$--$2.50\ghz$.
 		\begin{solution}[1.4in]
 		\eq{
 			\left| \Gamma \right| &= \dfrac{2 - 1}{2 + 1} = \dfrac{1}{3} \approx 0.333 \\
-			\text{RL} &= -20\,\mylog{\tfrac{1}{3}} \approx 9.5\db
+			\text{RL} &= -20\mylog{\tfrac{1}{3}} \approx 9.5\db
 		}
 		\end{solution}
 	\end{minipage}%
@@ -347,16 +347,16 @@ Model \emph{all} of the reflected power as landing on the diode.
 
 \question A thin, $z$-directed current filament carries a \emph{uniform} current $I_0$
 over $-L/2 \le z^{\prime} \le L/2$. Its far-field pattern factor is the radiation integral
-$N(\theta) = \displaystyle\int I_0\, e^{+j k z^{\prime} \cosp{\theta}}\, dz^{\prime}$.
+$N(\theta) = \displaystyle\int I_0 e^{+j k z^{\prime} \cosp{\theta}} dz^{\prime}$.
 
 \begin{parts}
 
 	\part Evaluate the integral $N(\theta)$ in closed form.
 		\begin{solution}[1.8in]
 		\eq{
-			N(\theta) &= I_0 \int_{-L/2}^{L/2} e^{+j k z^{\prime} \cosp{\theta}}\, dz^{\prime}
-			         = I_0\, \dfrac{2\sinp{\tfrac{kL}{2}\cosp{\theta}}}{k\cosp{\theta}} \\
-			         &= I_0 L \; \dfrac{\sinp{\tfrac{kL}{2}\cosp{\theta}}}
+			N(\theta) &= I_0 \int_{-L/2}^{L/2} e^{+j k z^{\prime} \cosp{\theta}} dz^{\prime}
+			         = I_0 \dfrac{2\sinp{\tfrac{kL}{2}\cosp{\theta}}}{k\cosp{\theta}} \\
+			         &= I_0 L  \dfrac{\sinp{\tfrac{kL}{2}\cosp{\theta}}}
 			                          {\tfrac{kL}{2}\cosp{\theta}}
 		}
 		\end{solution}

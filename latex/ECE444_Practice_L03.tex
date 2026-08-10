@@ -17,15 +17,15 @@ is required (write \textbf{None} if you did not collaborate).}
 $+\zhat$, identify the polarization (linear, RHCP, LHCP, or elliptical) and ---
 where linear --- the tilt angle relative to $\xhat$.
 \begin{parts}
-	\part $\vec{E} = \xhat\, 3\cosp{\omega t - kz}$
+	\part $\vec{E} = \xhat 3\cosp{\omega t - kz}$
 		\begin{solution}[0.4in] Only an $\xhat$ component --- \textbf{linear along $\xhat$} ($0\mydeg$). \end{solution}
-	\part $\vec{E} = \xhat\, 2\cosp{\omega t - kz} + \yhat\, 2\cosp{\omega t - kz}$
+	\part $\vec{E} = \xhat 2\cosp{\omega t - kz} + \yhat 2\cosp{\omega t - kz}$
 		\begin{solution}[0.4in] Equal amplitudes, in phase --- \textbf{linear, tilted $+45\mydeg$}. \end{solution}
-	\part $\vec{E} = \xhat\, 5\cosp{\omega t - kz} + \yhat\, 5\cosp{\omega t - kz - 90\mydeg}$
+	\part $\vec{E} = \xhat 5\cosp{\omega t - kz} + \yhat 5\cosp{\omega t - kz - 90\mydeg}$
 		\begin{solution}[0.5in] Equal amplitudes, $\delta = -90\mydeg$, $+\zhat$ propagation --- \textbf{RHCP}. \end{solution}
-	\part $\vec{E} = \xhat\, 5\cosp{\omega t - kz} + \yhat\, 5\cosp{\omega t - kz + 90\mydeg}$
+	\part $\vec{E} = \xhat 5\cosp{\omega t - kz} + \yhat 5\cosp{\omega t - kz + 90\mydeg}$
 		\begin{solution}[0.4in] $\delta = +90\mydeg$ --- \textbf{LHCP}. \end{solution}
-	\part $\vec{E} = \xhat\, 3\cosp{\omega t - kz} + \yhat\, 1\cosp{\omega t - kz - 90\mydeg}$
+	\part $\vec{E} = \xhat 3\cosp{\omega t - kz} + \yhat 1\cosp{\omega t - kz - 90\mydeg}$
 		\begin{solution}[0.6in] Unequal amplitudes, $\delta = -90\mydeg$ --- \textbf{right-hand elliptical}, $\text{AR} = 3$ ($\approx 9.5\db$). \end{solution}
 \end{parts}
 
@@ -34,18 +34,18 @@ where linear --- the tilt angle relative to $\xhat$.
 \question \textbf{Axial ratio.} A satellite downlink antenna is spec'd circularly
 polarized with $\text{AR} \le 3\db$ across its operating band.
 \begin{parts}
-	\part Convert the $3\db$ axial ratio to a linear ratio (major\,/\,minor axis).
+	\part Convert the $3\db$ axial ratio to a linear ratio (major/minor axis).
 		\begin{solution}[0.9in] $\text{AR} = 10^{3/20} \approx 1.41$ (i.e.\ $\sqrt{2}$). \end{solution}
 	\part Write the two orthogonal linear components (up to a common scale) with the
 	appropriate $90\mydeg$ phase, assuming the ellipse major axis is along $\xhat$.
 		\begin{solution}[1.1in]
-		\eq{ E_x(t) = 1 \cdot \cosp{\omega t}, \qquad E_y(t) = 0.707\,\cosp{\omega t \pm 90\mydeg} }
+		\eq{ E_x(t) = 1 \cdot \cosp{\omega t}, \qquad E_y(t) = 0.707\cosp{\omega t \pm 90\mydeg} }
 		Sign of the phase sets the RHCP vs LHCP sense.
 		\end{solution}
 	\part An $\xhat$ receiver picks off $E_x$; a $\yhat$ receiver picks off $E_y$.
 	Compute the ratio of received \emph{power} in dB. Should it match part (a)?
 		\begin{solution}[1.2in]
-		\eq{ \dfrac{P_x}{P_y} = \lp \dfrac{1.0}{0.707} \rp^{2} = 2.0 \;\longrightarrow\; 10\,\mylog{2.0} \approx 3.0\db }
+		\eq{ \dfrac{P_x}{P_y} = \lp \dfrac{1.0}{0.707} \rp^{2} = 2.0 \longrightarrow 10\mylog{2.0} \approx 3.0\db }
 		Yes --- the axial ratio in dB equals the received-power difference between the two aligned linear receivers.
 		\end{solution}
 \end{parts}
@@ -61,7 +61,7 @@ polarized with $\text{AR} \le 3\db$ across its operating band.
 		\begin{solution}[0.7in] Still $-3\db$ --- linear-to-CP does not depend on sense. \end{solution}
 	\part Two linear whip antennas: radio A vertical, radio B tilted $30\mydeg$ from
 	vertical. Compute the PLF.
-		\begin{solution}[0.8in] $\text{PLF} = \cos^{2}(30\mydeg) = (0.866)^{2} \approx 0.75 \;\longrightarrow\; 10\,\mylog{0.75} \approx -1.2\db$. \end{solution}
+		\begin{solution}[0.8in] $\text{PLF} = \cos^{2}(30\mydeg) = (0.866)^{2} \approx 0.75 \longrightarrow 10\mylog{0.75} \approx -1.2\db$. \end{solution}
 	\part In one sentence, explain why aircraft-to-ground links almost always specify
 	circular polarization on at least one end.
 		\begin{solution}[0.9in] Airframe attitude (roll/pitch/yaw) sweeps a linear aircraft antenna through every tilt relative to the ground station; making one end CP caps the worst-case polarization loss at $3\db$ regardless of attitude. \end{solution}
@@ -77,7 +77,7 @@ polarized with $\text{AR} \le 3\db$ across its operating band.
 	\part What is the fractional bandwidth (FBW) in percent?
 		\begin{solution}[0.9in] \eq{ f_c = 2.425\ghz, \qquad \text{FBW} = \dfrac{250}{2425} \approx 10.3\% } \end{solution}
 	\part Convert VSWR $= 2$ to $\left| \Gamma \right|$ and to return loss in dB.
-		\begin{solution}[1in] \eq{ \left| \Gamma \right| = \dfrac{2-1}{2+1} = \dfrac{1}{3} \approx 0.333, \qquad \text{RL} = -20\,\mylog{0.333} \approx 9.5\db } \end{solution}
+		\begin{solution}[1in] \eq{ \left| \Gamma \right| = \dfrac{2-1}{2+1} = \dfrac{1}{3} \approx 0.333, \qquad \text{RL} = -20\mylog{0.333} \approx 9.5\db } \end{solution}
 	\part Narrowband, broadband, or ultra-wideband? Likely family --- patch, horn, or
 	log-periodic?
 		\begin{solution}[0.9in] FBW $\approx 10\%$ is \textbf{broadband}: a standard-gain horn or a well-designed half-wave dipole. A patch would need matching tricks; a log-periodic is overkill. \end{solution}
@@ -137,7 +137,7 @@ power as landing on the diode.
 	diode is destroyed.
 		\begin{solution}[0.9in] \eq{ \left| \Gamma \right|_{\max} = \sqrt{\dfrac{\myp{max}}{\myp{fwd}}} = \sqrt{0.1} \approx 0.316 } \end{solution}
 	\part Convert to a VSWR limit and a return-loss limit, and state the datasheet rule.
-		\begin{solution}[1.3in] \eq{ \text{VSWR}_{\max} = \dfrac{1.316}{0.684} \approx 1.93, \qquad \text{RL}_{\min} = -10\,\mylog{0.1} = 10\db } Rule: keep VSWR $\le 1.9$ (return loss $\ge 10\db$); reflected power must stay $\ge 10\db$ below forward. \end{solution}
+		\begin{solution}[1.3in] \eq{ \text{VSWR}_{\max} = \dfrac{1.316}{0.684} \approx 1.93, \qquad \text{RL}_{\min} = -10\mylog{0.1} = 10\db } Rule: keep VSWR $\le 1.9$ (return loss $\ge 10\db$); reflected power must stay $\ge 10\db$ below forward. \end{solution}
 	\part In one sentence: how does a circulator or isolator between the PA and antenna
 	change this picture?
 		\begin{solution}[1in] It routes the reflected wave into a matched dump-port load instead of back into the PA, so the diode no longer sees it --- the antenna can then run at much higher VSWR (paid for by insertion loss, size, and bandwidth). \end{solution}
