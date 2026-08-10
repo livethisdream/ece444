@@ -20,10 +20,11 @@
     --axis: #004a85;
     --pow:  #b3213a;
   }
-  html, body { margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  html, body { margin: 0; padding: 0; height: 100%; font-family: 'Inter', system-ui, -apple-system, sans-serif;
                color: var(--ink); background: #fff; }
-  .app { display: flex; flex-direction: column; gap: 12px; padding: 16px; }
-  .controls { display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  .app { display: flex; flex-direction: column; gap: 10px; padding: 12px;
+         height: 100vh; box-sizing: border-box; overflow: hidden; }
+  .controls { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; flex: 0 0 auto;
               padding: 8px 12px; background: var(--bg); border: 1px solid var(--edge); border-radius: 6px; }
   .controls .ctl { white-space: nowrap; font-size: 12.5px; color: var(--ink3); font-weight: 700;
                    text-transform: uppercase; letter-spacing: 0.05em; }
@@ -33,7 +34,7 @@
                      border-radius: 4px; background: #fff; color: var(--navy); cursor: pointer; }
   .controls button:hover { background: #eef4f9; }
   .controls .note { color: var(--ink3); font-size: 11.5px; }
-  canvas { display: block; width: 100%; height: auto; background: #fff;
+  canvas { display: block; width: 100%; height: 100%; box-sizing: border-box; background: #fff;
            border: 1px solid var(--edge); border-radius: 6px; cursor: grab; touch-action: none; }
   canvas:active { cursor: grabbing; }
   .panel { font-size: 13.5px; line-height: 1.4; display: flex;
@@ -54,7 +55,7 @@
   .readout dd { margin:0; font-size:13.5px; font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; }
   .note { font-size:11.5px; color:var(--ink3); line-height:1.45; }
   .eq { font-size:13px; color:var(--navy); font-weight:600; margin:2px 0 6px; }
-  .stage { position: relative; }
+  .stage { position: relative; flex: 1 1 auto; min-height: 0; }
   .overlay { position: absolute; top: 12px; right: 12px;
              display: flex; flex-direction: column; gap: 6px; width: 164px; pointer-events: none; }
   .overlay .pill { display: flex; justify-content: center; align-items: center; gap: 5px;
@@ -140,14 +141,16 @@ canvas.addEventListener('pointercancel', () => { dragging = false; });
 function fit() {
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
-  const w = Math.max(360, rect.width);
-  const h = Math.max(330, Math.min(w * 0.5, 390));
+  // Canvas height is driven by the flex layout (fills the space left after the
+  // controls), so read the rendered box rather than deriving height from width.
+  const w = Math.max(300, rect.width);
+  const h = Math.max(220, rect.height);
   canvas.width = w * dpr; canvas.height = h * dpr;
-  canvas.style.height = `${h}px`;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   draw();
 }
 window.addEventListener('resize', fit);
+if (window.ResizeObserver) new ResizeObserver(fit).observe(document.querySelector('.stage'));
 
 let CX, CY, S;
 function toScreen(p) { const r = rot(p); return [CX + S * r[0], CY - S * r[1], r[2]]; }
@@ -280,7 +283,7 @@ function updateReadout() {
 fit();
 
 MJ.setRedraw(()=>draw());
-MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>draw()); draw(); });
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>fit()); fit(); });
 </script>
 </body>
 </html>
