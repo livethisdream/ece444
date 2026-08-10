@@ -12,6 +12,13 @@ logo: DFEC-logo.png
 execute:
   execute_notebooks: "auto"
 
+# Practice sets are served as committed PDFs under extras/practice/ (linked from
+# each lesson's Practice section), not as HTML pages. The source .md are kept on
+# disk but excluded from the build so they don't render or appear in the nav.
+exclude_patterns:
+  - "**/practice.md"
+  - "**/practice-solutions.md"
+
 parse:
   myst_enable_extensions:
     - dollarmath

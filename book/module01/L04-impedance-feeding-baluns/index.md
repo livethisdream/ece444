@@ -252,6 +252,11 @@ much power even makes it onto the antenna; and the **balun** makes sure it is th
 antenna radiating and not your feed line.
 :::
 
+## Practice
+
+- <a href="../../practice/ECE444_L04_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a href="../../practice/ECE444_L04_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+
 ## Where this is going
 
 You can now read an antenna's terminals as a circuit: split $Z_\text{in}$ into

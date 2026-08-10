@@ -265,8 +265,8 @@ near its resonance.
 
 ## Practice
 
-- [Problems](practice.md)
-- [Solutions](practice-solutions.md)
+- <a href="../../practice/ECE444_L03_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a href="../../practice/ECE444_L03_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 
 ## Preparing for L4
 

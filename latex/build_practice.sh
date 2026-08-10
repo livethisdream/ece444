@@ -22,4 +22,12 @@ build() {                       # build <iskey:0|1> <suffix>
 
 build 1 SOLUTIONS
 build 0 blank
+
+# Publish the PDFs to the site. book/extras/ is copied to the built site root
+# (html_extra_path), and the CI only runs jupyter-book (never LaTeX), so the
+# committed PDF under extras/practice/ IS what the site serves.
+DEST="../book/extras/practice"
+mkdir -p "$DEST"
+cp -f "ECE444_L${LES}_Practice_SOLUTIONS.pdf" "ECE444_L${LES}_Practice_blank.pdf" "$DEST/"
+echo "published -> $DEST/ECE444_L${LES}_Practice_{blank,SOLUTIONS}.pdf"
 echo "done."

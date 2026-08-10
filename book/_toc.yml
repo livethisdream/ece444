@@ -19,25 +19,10 @@ parts:
         title: "L1 — Course Introduction"
       - file: module01/L02-antenna-properties/index
         title: "L2 — Basic Properties and Terminology"
-        sections:
-          - file: module01/L02-antenna-properties/practice
-            title: Practice
-          - file: module01/L02-antenna-properties/practice-solutions
-            title: Practice Solutions
       - file: module01/L03-polarization-bandwidth/index
         title: "L3 — Polarization and Bandwidth"
-        sections:
-          - file: module01/L03-polarization-bandwidth/practice
-            title: Practice
-          - file: module01/L03-polarization-bandwidth/practice-solutions
-            title: Practice Solutions
       - file: module01/L04-impedance-feeding-baluns/index
         title: "L4 — Impedance, Feeding, and Baluns"
-        sections:
-          - file: module01/L04-impedance-feeding-baluns/practice
-            title: Practice
-          - file: module01/L04-impedance-feeding-baluns/practice-solutions
-            title: Practice Solutions
       - file: module01/L05-field-regions/index
         title: "L5 — Field Regions"
       - file: module01/L06-radiation-integrals/index
