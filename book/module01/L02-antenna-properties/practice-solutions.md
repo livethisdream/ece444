@@ -149,19 +149,23 @@ optimistic upper bound, not a guarantee.
 
 ---
 
-## Problem 5 — Reading a pattern
+## Problem 5 — Reading a real pattern
 
-Answers depend on the specific polar plot handed out. Grade rubric:
+Every student picks a different antenna, so grade the **method**, not a
+specific number:
 
-- **Boresight** — within $\pm 2^{\circ}$ of the true peak
-- **HPBW** — within $\pm 10\%$ of the plotted value
-- **FNBW** — within $\pm 10\%$; "no null visible" is a legitimate answer
-  if the pattern is monotonic to the plot edge
-- **SLL** — within $\pm 2\ \text{dB}$ of the plotted peak sidelobe
-- **F/B** — within $\pm 2\ \text{dB}$
+- **Valid source** — a real published pattern (datasheet, app note, or
+  paper), cited, with a dB-labeled axis. Reject unlabeled or cartoon plots.
+- **Boresight** — marked at the true peak of the main lobe
+- **HPBW** — read at the −3 dB points, measured consistently on both sides
+- **FNBW** — read at the first nulls; "no null visible" is legitimate if
+  the plotted cut is monotonic to the edge
+- **SLL** — the highest sidelobe peak, in dB below the main lobe
+- **F/B** — main lobe minus the level at $180^{\circ}$; "no distinct back
+  lobe" is acceptable with justification
 
 The habit we're building here is **reading pattern plots consistently**
-— every subsequent lesson uses these same measurements.
+— every subsequent lesson uses these same measurements on real hardware.
 
 ---
 

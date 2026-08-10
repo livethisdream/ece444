@@ -1,23 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360" font-family="Inter,system-ui,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" font-family="Inter,system-ui,sans-serif">
 <defs>
-<marker id="aB2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0067b9"/></marker>
-<marker id="aN2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
+<marker id="eaB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0067b9"/></marker>
+<marker id="eaN" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
 </defs>
-<rect width="760" height="360" fill="#ffffff"/>
-<text x="60" y="40" fill="#0067b9" font-size="14" font-weight="700">incident wave</text>
-<text x="60" y="320" fill="#5b6573" font-size="12">power density S (W/m²)</text>
-<line x1="60" y1="105.12" x2="60" y2="270.88" stroke="#0067b9" stroke-width="2" opacity="0.55"/><line x1="94" y1="105.12" x2="94" y2="270.88" stroke="#0067b9" stroke-width="2" opacity="0.55"/><line x1="128" y1="105.12" x2="128" y2="270.88" stroke="#0067b9" stroke-width="2" opacity="0.55"/><line x1="162" y1="105.12" x2="162" y2="270.88" stroke="#0067b9" stroke-width="2" opacity="0.55"/><line x1="66" y1="129.12" x2="150" y2="129.12" stroke="#0067b9" stroke-width="1.6" marker-end="url(#aB2)"/><line x1="66" y1="188" x2="150" y2="188" stroke="#0067b9" stroke-width="1.6" marker-end="url(#aB2)"/><line x1="66" y1="246.88" x2="150" y2="246.88" stroke="#0067b9" stroke-width="1.6" marker-end="url(#aB2)"/><rect x="150" y="111.12" width="210" height="153.76" fill="#0067b9" opacity="0.12"/><path d="M360 111.12 L250 188 L360 264.88" fill="none" stroke="#004a85" stroke-width="1.4" stroke-dasharray="5 3"/><path d="M360 64 Q 430 188 360 312" fill="none" stroke="#004a85" stroke-width="3"/><line x1="452" y1="64" x2="452" y2="312" stroke="#5b6573" stroke-width="1.4"/>
-<line x1="447" y1="64" x2="457" y2="64" stroke="#5b6573" stroke-width="1.4"/>
-<line x1="447" y1="312" x2="457" y2="312" stroke="#5b6573" stroke-width="1.4"/>
-<text x="462" y="184" fill="#5b6573" font-size="13" font-weight="700">D</text>
-<text x="462" y="201" fill="#5b6573" font-size="11">A_phys</text><line x1="142" y1="111.12" x2="142" y2="264.88" stroke="#b3213a" stroke-width="1.6"/>
-<line x1="137" y1="111.12" x2="147" y2="111.12" stroke="#b3213a" stroke-width="1.6"/>
-<line x1="137" y1="264.88" x2="147" y2="264.88" stroke="#b3213a" stroke-width="1.6"/>
-<text x="96" y="193" fill="#b3213a" font-size="14" font-weight="700">Aₑ</text><rect x="192" y="172" width="46" height="32" rx="4" fill="#fff" stroke="#004a85" stroke-width="1.6"/>
-<text x="215" y="193" fill="#004a85" font-size="12" font-weight="700" text-anchor="middle">P_rx</text>
-<line x1="250" y1="188" x2="238" y2="188" stroke="#004a85" stroke-width="1.6" marker-end="url(#aN2)"/>
-<text x="386" y="40" fill="#15202b" font-size="16" font-weight="700">P_rx = S · Aₑ</text>
-<text x="386" y="64" fill="#5b6573" font-size="14">Aₑ = ε_ap · A_phys   (ε_ap ≈ 0.5–0.7 for a dish)</text>
-<text x="386" y="340" fill="#5b6573" font-size="12.5">The antenna captures a patch of the wavefront</text>
-<text x="386" y="356" fill="#5b6573" font-size="12.5">of area Aₑ and delivers that power as P_rx.</text>
+<rect width="640" height="300" fill="#ffffff"/>
+<text x="44" y="52" fill="#0067b9" font-size="14" font-weight="700">incident wave — S (W/m²)</text>
+<g stroke="#0067b9" stroke-width="2" opacity="0.42">
+<line x1="50" y1="80" x2="50" y2="230"/><line x1="88" y1="80" x2="88" y2="230"/><line x1="126" y1="80" x2="126" y2="230"/>
+</g>
+<g stroke="#0067b9" stroke-width="1.8" marker-end="url(#eaB)">
+<line x1="136" y1="100" x2="248" y2="100"/><line x1="136" y1="155" x2="248" y2="155"/><line x1="136" y1="210" x2="248" y2="210"/>
+</g>
+<rect x="250" y="94" width="26" height="122" fill="#b3213a" opacity="0.14" stroke="#b3213a" stroke-width="2"/>
+<text x="263" y="242" fill="#b3213a" font-size="17" font-weight="700" text-anchor="middle">A<tspan dy="4" font-size="12">e</tspan></text>
+<line x1="276" y1="155" x2="370" y2="155" stroke="#004a85" stroke-width="2.6" marker-end="url(#eaN)"/>
+<rect x="370" y="131" width="58" height="48" rx="5" fill="#ffffff" stroke="#004a85" stroke-width="1.8"/>
+<text x="399" y="152" fill="#004a85" font-size="15" font-weight="700" text-anchor="middle">P<tspan dy="4" font-size="10">rx</tspan></text>
+<text x="399" y="170" fill="#5b6573" font-size="11" text-anchor="middle">to load</text>
+<text x="470" y="150" fill="#15202b" font-size="22" font-weight="700">P</text>
+<text x="488" y="156" fill="#15202b" font-size="14" font-weight="700">rx</text>
+<text x="510" y="150" fill="#15202b" font-size="22" font-weight="700">= S·A</text>
+<text x="571" y="156" fill="#15202b" font-size="14" font-weight="700">e</text>
+<text x="470" y="178" fill="#5b6573" font-size="13">the slice of the wavefront</text>
+<text x="470" y="196" fill="#5b6573" font-size="13">the antenna captures</text>
 </svg>

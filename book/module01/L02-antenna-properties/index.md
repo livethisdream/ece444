@@ -417,16 +417,16 @@ universal.
 **Physical vs. effective aperture.** An antenna with a real opening of area
 $A_{\text{phys}}$ (a horn, a dish) never uses all of it perfectly —
 illumination taper, spillover, and feed blockage waste some. The **aperture
-efficiency** $\varepsilon_{\text{ap}}$ (typically 0.5–0.7 for a dish)
+efficiency** $\eta_{\text{ap}}$ (typically 0.5–0.7 for a dish)
 captures this:
 
 $$
-A_{e} = \varepsilon_{\text{ap}}\, A_{\text{phys}}.
+A_{e} = \eta_{\text{ap}}\, A_{\text{phys}}.
 $$
 
 **Worked example.** A 1.2 m dish has
 $A_{\text{phys}} = \pi(0.6)^{2} = 1.13\ \text{m}^{2}$; with
-$\varepsilon_{\text{ap}} = 0.6$ that is $A_{e} = 0.68\ \text{m}^{2}$. At
+$\eta_{\text{ap}} = 0.6$ that is $A_{e} = 0.68\ \text{m}^{2}$. At
 10 GHz ($\lambda = 3\ \text{cm}$) the gain is
 $G = 4\pi A_{e} / \lambda^{2} \approx 9500$, or **39.8 dBi**. A wave of
 density $S_{\text{inc}} = 1\ \mu\text{W/m}^{2}$ then delivers
@@ -435,7 +435,7 @@ $P_{\text{rx}} = S_{\text{inc}} A_{e} \approx 0.68\ \mu\text{W}$.
 **A subtlety worth pinning down.** People often say "effective area shrinks
 with frequency," but that is only true if you hold *gain* fixed — then
 $A_{e} = (\lambda^{2}/4\pi)\,G$ falls as $\lambda^{2}$. For a **fixed
-physical dish**, $A_{e} = \varepsilon_{\text{ap}} A_{\text{phys}}$ is set by
+physical dish**, $A_{e} = \eta_{\text{ap}} A_{\text{phys}}$ is set by
 the metal and does *not* change with frequency; instead the **gain climbs
 as $f^{2}$**, because the same aperture spans many more wavelengths. Both
 statements are the same universal relation read in opposite directions.

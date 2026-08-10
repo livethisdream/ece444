@@ -127,12 +127,15 @@ $c = 1 / \sqrt{\mu \varepsilon}$, $\quad u = 1 / \sqrt{L C}$
 Traveling in $+\hat{z}$, linearly polarized along $\hat{x}$:
 
 $$
-\mathbf{E}(z, t) = \hat{x} E_{0} \cos(\omega t - k z)
+\mathbf{E}(z, t) = \hat{x}\, E_{0} \cos(\omega t - k z)
+\qquad
+\mathbf{H}(z, t) = \hat{y}\, \frac{E_{0}}{\eta_{0}} \cos(\omega t - k z)
 $$
 
 - $\omega = 2 \pi f \longrightarrow$  **time** frequency
 - $k = 2 \pi / \lambda \longrightarrow$ **space** frequency (wave number)
 - $\omega / k = c \longrightarrow$ **crest speed/phase velocity**
+- $\mathbf{H} \perp \mathbf{E}$, in phase, with $|\mathbf{E}| / |\mathbf{H}| = \eta_{0} \approx 377\ \Omega$
 
 <div class="callout">
 Freeze <em>t</em> $\longrightarrow$ you see a wave in space. 
@@ -277,7 +280,7 @@ G_{\text{re}} = (1 - |\Gamma|^{2}) G
 $$
 
 <div class="callout">
-Datasheet "gain, dBi" is almost always realized gain at boresight.
+Datasheet gain (dBi) is almost always realized gain at boresight.
 </div>
 
 <p class="viz-cue">↗ Interactive on the lesson page</p>
@@ -374,7 +377,7 @@ P_{\text{rx}} = \frac{V_{\text{oc}}^{2}}{8 R_{r}}
 $$
 
 <p style="text-align:center;">
-<img src="../viz/img/recv-circuit.svg" alt="receiving antenna Thevenin equivalent" style="max-height:240px;">
+<img src="../viz/img/recv-circuit.svg" alt="receiving antenna Thevenin equivalent" style="max-height:360px;">
 </p>
 
 Note:
@@ -383,7 +386,7 @@ the /8R_r (the ½ from time-averaging a sinusoid turns the usual 4 into 8).
 
 ---
 
-## Pin the constant: a short dipole
+## Example: A Short Dipole
 
 Use the simplest antenna. Plug in $\ell_e = \ell$, $R_r = 80\pi^{2}(\ell/\lambda)^{2}$, $S = E^{2}/2\eta_{0}$ — the $\ell$'s cancel:
 
@@ -404,7 +407,7 @@ times a number. Keep students' eyes on that number.
 
 ---
 
-## Read off the universal law
+## Extend to the General Case
 
 That **1.5 is the short dipole's directivity** $D$. With losses folded in ($G=\eta_{\text{rad}}D$):
 
@@ -414,10 +417,12 @@ A_{e} = D\,\frac{\lambda^{2}}{4\pi}
 \boxed{A_{e} = \frac{\lambda^{2}}{4\pi}\, G}
 $$
 
-**Reciprocity** makes the ratio $A_e/G$ the *same* for every antenna — so it holds universally. For real apertures, $A_{e} = \varepsilon_{\text{ap}} A_{\text{phys}}$.
+**Reciprocity** makes the ratio $A_e/G$ the *same* for every antenna — so it holds universally. For real apertures, $A_{e} = \eta_{\text{ap}} A_{\text{phys}}$.
 
 <div class="callout">
-Fixed dish → $A_e$ fixed, gain $\propto f^{2}$.  Fixed gain → $A_e \propto \lambda^{2}$.
+Fixed dish → $A_e$ fixed, gain $\propto f^{2}$.
+
+Fixed gain → $A_e \propto \lambda^{2}$.
 </div>
 
 Note:

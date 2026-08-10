@@ -89,10 +89,17 @@ would you expect, assuming aperture efficiency does not change?
 
 ---
 
-## Problem 5 — Reading a pattern
+## Problem 5 — Reading a real pattern
 
-The polar plot below (see the deck) shows the E-plane cut of a
-horn antenna. From the plot, estimate:
+**Find your own antenna.** Track down a published radiation-pattern plot
+for a real antenna — a manufacturer datasheet, an application note, or a
+journal figure. A polar or rectilinear gain cut both work, as long as the
+axis is labeled in dB. (Horns, patch antennas, Yagis, and reflector dishes
+all have easy-to-find patterns.) **Print it or sketch it, and mark each
+feature directly on the plot.** Hand in the annotated pattern along with
+your readings below.
+
+From *your* plot, identify and annotate:
 
 **(a)** Boresight direction (in degrees off nose)
 
@@ -105,8 +112,9 @@ inside the plotted range
 
 **(e)** Front-to-back ratio (F/B) in dB
 
-<small>Use whatever polar plot the instructor hands out in class, or
-the one embedded in the lesson deck.</small>
+<small>Cite the source (manufacturer + part number, or the paper). If your
+pattern genuinely lacks a feature — some cuts show no distinct back lobe —
+say so and explain why.</small>
 
 ---
 
