@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Near-field term crossover</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --rad:#0067b9; --ind:#3f7d34; --elec:#8a5a00; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:12px; padding:16px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 320px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:120px; }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
+          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
+          border:1px solid rgba(0,0,0,0.12); }
+  .pill b { font-weight:700; }
+  .pill.rad  { background:rgba(0,103,185,0.12);  color:#0067b9; border-color:rgba(0,103,185,0.30); }
+  .pill.ind  { background:rgba(63,125,52,0.12);  color:#3f7d34; border-color:rgba(63,125,52,0.30); }
+  .pill.elec { background:rgba(138,90,0,0.12);   color:#8a5a00; border-color:rgba(138,90,0,0.30); }
+  .pill.dom  { background:#eef4fa; color:var(--navy); border-color:var(--edge2); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" aria-label="Log-log plot of the three dipole field terms versus kr"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Distance \(kr = r/(\lambda/2\pi)\)</label>
+      <input type="range" id="kr" min="-1" max="1" step="0.005" value="0">
+      <span class="val" id="kr-val">1.00</span>
+    </div>
+  </div>
+
+  <div class="pills">
+    <span class="pill rad">radiation \(\;1/r\) = <b id="p-rad">—</b></span>
+    <span class="pill ind">induction \(\;1/r^2\) = <b id="p-ind">—</b></span>
+    <span class="pill elec">electrostatic \(\;1/r^3\) = <b id="p-elec">—</b></span>
+    <span class="pill dom">dominant: <b id="p-dom">—</b></span>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+
+const cv=document.getElementById('plot'), ctx=cv.getContext('2d');
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const state={ kr:1.0 };
+
+// plot window (log10 units)
+const XL=-1, XR=1;   // kr from 0.1 to 10
+const YB=-3, YT=3;   // magnitude from 1e-3 to 1e3
+const l10=Math.log10;
+
+const krEl=document.getElementById('kr'), krV=document.getElementById('kr-val');
+krEl.addEventListener('input',()=>{ state.kr=Math.pow(10,+krEl.value); krV.textContent=state.kr.toFixed(state.kr<1?3:2); draw(); });
+
+function fmtMag(v){
+  if(v>=100) return v.toFixed(0);
+  if(v>=10)  return v.toFixed(1);
+  if(v>=1)   return v.toFixed(2);
+  if(v>=0.01)return v.toFixed(3);
+  return v.toExponential(1);
+}
+
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const w=Math.max(360, cv.getBoundingClientRect().width);
+  const h=Math.max(260, Math.min(w*0.62, 360));
+  cv.width=w*dpr; cv.height=h*dpr; cv.style.height=h+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0); draw();
+}
+window.addEventListener('resize', fit);
+
+function draw(){
+  const dpr=window.devicePixelRatio||1;
+  const w=cv.width/dpr, h=cv.height/dpr;
+  ctx.clearRect(0,0,w,h);
+
+  const mL=54, mR=118, mT=18, mB=52;
+  const plotW=w-mL-mR, plotH=h-mT-mB;
+  const xp=lx=>mL + (lx-XL)/(XR-XL)*plotW;      // log10(kr) -> px
+  const yp=ly=>mT + (YT-ly)/(YT-YB)*plotH;      // log10(mag) -> px
+  const x0=xp(0);                                // kr = 1 line
+
+  // region shading: left = reactive (stored), right = radiating
+  ctx.fillStyle='rgba(138,90,0,0.06)';  ctx.fillRect(mL, mT, x0-mL, plotH);
+  ctx.fillStyle='rgba(0,103,185,0.05)'; ctx.fillRect(x0, mT, mL+plotW-x0, plotH);
+
+  // grid: y decades
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let e=YB;e<=YT;e++){ const y=yp(e);
+    ctx.beginPath(); ctx.moveTo(mL,y); ctx.lineTo(mL+plotW,y); ctx.stroke();
+    stext(ctx,'10'+(e<0?'⁻':'')+supers(Math.abs(e)), mL-8, y, 10, cssv('--ink3'),'right',false);
+  }
+  // grid: x decades (kr = 0.1, 1, 10)
+  for(let e=XL;e<=XR;e++){ const x=xp(e);
+    ctx.strokeStyle=cssv('--edge2'); ctx.beginPath(); ctx.moveTo(x,mT); ctx.lineTo(x,mT+plotH); ctx.stroke();
+    stext(ctx, (Math.pow(10,e)).toString(), x, mT+plotH+14, 10.5, cssv('--ink3'),'center',false);
+  }
+  // frame
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1; ctx.strokeRect(mL,mT,plotW,plotH);
+
+  // region captions
+  stext(ctx,'reactive near field', (mL+x0)/2, mT+12, 11, cssv('--elec'),'center',true);
+  stext(ctx,'stored energy', (mL+x0)/2, mT+26, 10, cssv('--ink3'),'center',false);
+  stext(ctx,'radiating → far field', (x0+mL+plotW)/2, mT+12, 11, cssv('--rad'),'center',true);
+  stext(ctx,'genuine power flow', (x0+mL+plotW)/2, mT+26, 10, cssv('--ink3'),'center',false);
+
+  // the three straight lines: log10(mag) = -slope * log10(kr)
+  const lines=[
+    {slope:1, color:cssv('--rad'),  key:'rad'},
+    {slope:2, color:cssv('--ind'),  key:'ind'},
+    {slope:3, color:cssv('--elec'), key:'elec'},
+  ];
+  lines.forEach(L=>{
+    ctx.strokeStyle=L.color; ctx.lineWidth=2.4;
+    ctx.beginPath(); ctx.moveTo(xp(XL), yp(-L.slope*XL)); ctx.lineTo(xp(XR), yp(-L.slope*XR)); ctx.stroke();
+  });
+
+  // kr = 1 crossover marker
+  ctx.strokeStyle=cssv('--navy'); ctx.lineWidth=1.6; ctx.setLineDash([5,3]);
+  ctx.beginPath(); ctx.moveTo(x0,mT); ctx.lineTo(x0,mT+plotH); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle=cssv('--navy'); ctx.beginPath(); ctx.arc(x0, yp(0), 3.4, 0, 7); ctx.fill();
+
+  // draggable observation marker
+  const lx=l10(state.kr), x=xp(lx);
+  ctx.strokeStyle='rgba(21,32,43,0.55)'; ctx.lineWidth=1.4; ctx.setLineDash([2,3]);
+  ctx.beginPath(); ctx.moveTo(x,mT); ctx.lineTo(x,mT+plotH); ctx.stroke(); ctx.setLineDash([]);
+  lines.forEach(L=>{
+    const ly=-L.slope*lx, y=yp(Math.max(YB,Math.min(YT,ly)));
+    ctx.fillStyle=L.color; ctx.beginPath(); ctx.arc(x,y,4,0,7); ctx.fill();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=1.2; ctx.stroke();
+  });
+
+  // right-hand curve labels (TeX), placed at right edge heights
+  const rx=mL+plotW+10;
+  MJ.draw(ctx, '1/r',   rx, yp(-1*XR), 13, cssv('--rad'),  'left');
+  MJ.draw(ctx, '1/r^2', rx, yp(-2*XR), 13, cssv('--ind'),  'left');
+  MJ.draw(ctx, '1/r^3', rx, yp(-3*XR), 13, cssv('--elec'), 'left');
+
+  // axis titles
+  MJ.draw(ctx, 'kr=1\\;\\Rightarrow\\; r=\\lambda/2\\pi', x0, mT+plotH+38, 12, cssv('--navy'), 'center');
+  ctx.save();
+  ctx.translate(14, mT+plotH/2); ctx.rotate(-Math.PI/2);
+  stext(ctx, 'relative field strength', 0, 0, 11, cssv('--ink3'),'center',false);
+  ctx.restore();
+
+  // readouts
+  const rad=1/state.kr, ind=1/state.kr**2, elec=1/state.kr**3;
+  document.getElementById('p-rad').textContent=fmtMag(rad);
+  document.getElementById('p-ind').textContent=fmtMag(ind);
+  document.getElementById('p-elec').textContent=fmtMag(elec);
+  let dom = state.kr>1 ? 'radiation (1/r)' : (state.kr<1 ? 'stored (1/r³)' : 'all equal');
+  document.getElementById('p-dom').textContent=dom;
+}
+
+// tiny superscript helper for 10^n y labels
+function supers(n){ const m={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+  return String(n).split('').map(c=>m[c]||c).join(''); }
+
+fit();
+MJ.setRedraw(()=>draw());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>draw()); draw(); });
+</script>
+</body>
+</html>
