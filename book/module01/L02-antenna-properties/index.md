@@ -440,9 +440,57 @@ the metal and does *not* change with frequency; instead the **gain climbs
 as $f^{2}$**, because the same aperture spans many more wavelengths. Both
 statements are the same universal relation read in opposite directions.
 
-Combining $A_{e}$ on the receive end with $G$ on the transmit end gives the
-**Friis transmission equation**, the backbone of the link budget and radar
-range equation in Module 4.
+### The Friis transmission equation
+
+Effective area is what a receiver *catches*; gain is what a transmitter
+*concentrates*. Put one at each end of a link and you can predict the received
+power directly. A transmitter feeds $P_t$ into an antenna of gain $G_t$, so at
+range $R$ the power density on boresight is the isotropic value $P_t/4\pi R^{2}$
+boosted by $G_t$:
+
+$$
+S_{\text{inc}} = \frac{P_t\,G_t}{4\pi R^{2}}.
+$$
+
+The receive antenna, with effective area $A_e = G_r \lambda^{2}/4\pi$, collects
+$P_r = S_{\text{inc}}\,A_e$. Combining the two:
+
+$$
+\boxed{\,P_r = P_t\,G_t\,G_r \left( \frac{\lambda}{4 \pi R} \right)^{2}\,}
+$$
+
+— the **Friis transmission equation**, the backbone of every link budget.
+
+Three things to read off it:
+
+- **$P_t G_t$ is the EIRP** (effective isotropic radiated power): the whole
+  transmit side collapses to one number — the power an isotropic radiator *would*
+  need to match this antenna on boresight.
+- **The $(\lambda / 4\pi R)^{2}$ factor is the free-space path loss.** In dB,
+  $\text{FSPL} = 20 \log_{10}\!\left( \dfrac{4 \pi R}{\lambda} \right)$ — it climbs
+  with both frequency and range, and it is by far the largest term in most links.
+- **Everything is multiplicative**, so in decibels the link budget is just
+  addition: $P_r\,[\text{dBm}] = P_t + G_t + G_r - \text{FSPL}$.
+
+**Example.** A ground station transmits $P_t = 10\ \text{W}$ (40 dBm) at
+$2.4\ \text{GHz}$ ($\lambda = 0.125\ \text{m}$) through a $G_t = 20\ \text{dBi}$
+antenna to a satellite $R = 600\ \text{km}$ away with a $G_r = 6\ \text{dBi}$
+antenna:
+
+$$
+\text{FSPL} = 20 \log_{10}\!\left( \frac{4\pi (6\times10^{5})}{0.125} \right)
+\approx 156\ \text{dB},
+$$
+
+$$
+P_r \approx 40 + 20 + 6 - 156 = -90\ \text{dBm}
+$$
+
+— about a picowatt, and a perfectly ordinary receive level.
+
+Friis is the **one-way** link. Send the wave out to a target, let it scatter, and
+collect the echo, and you apply Friis *twice* with the target's radar cross
+section in between — that is the **radar range equation**, built in Module 4.
 
 #### Interactive — compare gain patterns
 
