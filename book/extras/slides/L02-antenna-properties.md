@@ -431,6 +431,24 @@ Friis / the radar range equation in Module 4.
 
 ---
 
+## Physical vs. effective aperture
+
+<p style="text-align:center;">
+<img src="../viz/img/effective-aperture.svg"
+     alt="Physical aperture versus effective aperture, with A_e = eta_ap A_phys and a dish, horn, and dipole comparison"
+     style="max-width:100%; max-height:520px;">
+</p>
+
+<small>A real aperture never captures its full physical area: $A_e = \eta_{\text{ap}} A_{\text{phys}}$. A dish loses to taper and spillover ($A_e < A_{\text{phys}}$); a small dipole's $A_e$ dwarfs its wire.</small>
+
+Note:
+The effective aperture is the equivalent capture area. Aperture efficiency
+folds in taper, spillover, and blockage. Contrast the three antenna types on
+the right — a dipole is electrically large in capture despite being physically
+tiny.
+
+---
+
 ## Reading a radiation pattern
 
 <div class="slide-box">

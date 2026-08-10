@@ -424,6 +424,8 @@ $$
 A_{e} = \eta_{\text{ap}}\, A_{\text{phys}}.
 $$
 
+<img src="../../viz/img/effective-aperture.svg" alt="Physical aperture versus effective aperture: A_e = eta_ap times A_phys, with a dish, horn, and small-dipole comparison" style="max-width: 100%; width: 780px; display: block; margin: 1.2em auto;">
+
 **Worked example.** A 1.2 m dish has
 $A_{\text{phys}} = \pi(0.6)^{2} = 1.13\ \text{m}^{2}$; with
 $\eta_{\text{ap}} = 0.6$ that is $A_{e} = 0.68\ \text{m}^{2}$. At
