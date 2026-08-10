@@ -127,9 +127,9 @@ $c = 1 / \sqrt{\mu \varepsilon}$, $\quad u = 1 / \sqrt{L C}$
 Traveling in $+\hat{z}$, linearly polarized along $\hat{x}$:
 
 $$
-\mathbf{E}(z, t) = \hat{x}\, E_{0} \cos(\omega t - k z)
+\mathbf{E}(z, t) = \hat{x} E_{0} \cos(\omega t - k z)
 \qquad
-\mathbf{H}(z, t) = \hat{y}\, \frac{E_{0}}{\eta_{0}} \cos(\omega t - k z)
+\mathbf{H}(z, t) = \hat{y} \frac{E_{0}}{\eta_{0}} \cos(\omega t - k z)
 $$
 
 - $\omega = 2 \pi f \longrightarrow$  **time** frequency
@@ -352,7 +352,7 @@ Turn the antenna around to **receive**. A wave of density $S_{\text{inc}}$ arriv
 
 $$
 \boxed{A_{e} \equiv \frac{P_{\text{rx}}}{S_{\text{inc}}}}
-\qquad P_{\text{rx}} = S_{\text{inc}}\, A_{e}
+\qquad P_{\text{rx}} = S_{\text{inc}} A_{e}
 $$
 
 <p style="text-align:center;">
@@ -371,7 +371,7 @@ This is the definition. The next three slides derive the value of A_e.
 The incident field induces an open-circuit voltage; the antenna acts as a source with its **radiation resistance** $R_r$. A conjugate-**matched** load draws the most power:
 
 $$
-V_{\text{oc}} = E\,\ell_{e}
+V_{\text{oc}} = E\ell_{e}
 \qquad
 P_{\text{rx}} = \frac{V_{\text{oc}}^{2}}{8 R_{r}}
 $$
@@ -392,7 +392,7 @@ Use the simplest antenna. Plug in $\ell_e = \ell$, $R_r = 80\pi^{2}(\ell/\lambda
 
 $$
 A_{e} = \frac{P_{\text{rx}}}{S}
-= \frac{\eta_{0}\,\ell_{e}^{2}}{4 R_{r}}
+= \frac{\eta_{0}\ell_{e}^{2}}{4 R_{r}}
 = \frac{3\lambda^{2}}{8\pi}
 = 1.5\cdot\frac{\lambda^{2}}{4\pi}
 $$
@@ -412,9 +412,9 @@ times a number. Keep students' eyes on that number.
 That **1.5 is the short dipole's directivity** $D$. With losses folded in ($G=\eta_{\text{rad}}D$):
 
 $$
-A_{e} = D\,\frac{\lambda^{2}}{4\pi}
-\;\;\Longrightarrow\;\;
-\boxed{A_{e} = \frac{\lambda^{2}}{4\pi}\, G}
+A_{e} = D\frac{\lambda^{2}}{4\pi}
+\Longrightarrow
+\boxed{A_{e} = \frac{\lambda^{2}}{4\pi} G}
 $$
 
 **Reciprocity** makes the ratio $A_e/G$ the *same* for every antenna — so it holds universally. For real apertures, $A_{e} = \eta_{\text{ap}} A_{\text{phys}}$.

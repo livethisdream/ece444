@@ -66,7 +66,7 @@ radiated away, or lost as heat.
 - **$R_\text{loss}$** — real ohmic/dielectric loss. Becomes heat.
 
 <div class="callout">
-This split <em>is</em> the radiation efficiency from L2: &nbsp; $\eta_\text{rad}=\dfrac{R_\text{rad}}{R_\text{rad}+R_\text{loss}}$, &nbsp; $G=\eta_\text{rad}\,D$.
+This split <em>is</em> the radiation efficiency from L2: &nbsp; $\eta_\text{rad}=\dfrac{R_\text{rad}}{R_\text{rad}+R_\text{loss}}$, &nbsp; $G=\eta_\text{rad}D$.
 </div>
 
 ---
@@ -77,7 +77,7 @@ Short dipole ($\ell \ll \lambda$):
 
 $$ R_\text{rad} = 80\pi^2\left(\frac{\ell}{\lambda}\right)^2 $$
 
-- $\ell = 0.05\lambda \;\Rightarrow\; R_\text{rad} \approx 2\ \Omega$
+- $\ell = 0.05\lambda \Rightarrow R_\text{rad} \approx 2\ \Omega$
 - A fraction of an ohm of conductor loss now wrecks the efficiency
 
 Make it $\lambda/2$ long and the picture changes completely.
@@ -91,11 +91,11 @@ The (ℓ/λ)² dependence is the whole story of small-antenna inefficiency.
 
 At exactly $\ell = \lambda/2$:
 
-$$ Z_\text{in} \approx 73 + j\,42.5\ \Omega $$
+$$ Z_\text{in} \approx 73 + j42.5\ \Omega $$
 
 Trim to $\approx 0.48\lambda$ — reactance cancels, **resonant**:
 
-$$ Z_\text{in} \approx 70 + j\,0\ \Omega $$
+$$ Z_\text{in} \approx 70 + j0\ \Omega $$
 
 Naturally close to standard feed-line impedances — that's why it's the workhorse.
 
@@ -136,7 +136,7 @@ survive — recall the diode problem.
 
 A $\lambda/4$ line of impedance $Z_1$ transforms a **real** load $R_L$:
 
-$$ Z_\text{in} = \frac{Z_1^2}{R_L} \qquad\Rightarrow\qquad Z_1 = \sqrt{Z_0\,R_L} $$
+$$ Z_\text{in} = \frac{Z_1^2}{R_L} \qquad\Rightarrow\qquad Z_1 = \sqrt{Z_0R_L} $$
 
 **Match a $70\ \Omega$ dipole to $50\ \Omega$:**
 

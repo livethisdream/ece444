@@ -42,7 +42,7 @@ amplitude, $E_{\text{maj}} = 1$ and $E_{\text{min}} = 1/1.41
 
 $$
 E_{x}(t) = 1 \cdot \cos(\omega t), \qquad
-E_{y}(t) = 0.707\, \cos(\omega t \pm 90^{\circ}).
+E_{y}(t) = 0.707 \cos(\omega t \pm 90^{\circ}).
 $$
 
 Sign of the 90° phase determines RHCP vs LHCP sense.
@@ -216,7 +216,7 @@ $$
 **(b)** A fraction $|\Gamma|^{2}$ of the forward power is reflected:
 
 $$
-P_{\text{ref}} = |\Gamma|^{2}\, P_{\text{fwd}}.
+P_{\text{ref}} = |\Gamma|^{2} P_{\text{fwd}}.
 $$
 
 **(c)** The diode fails when $P_{\text{ref}} = P_{\max}$, so

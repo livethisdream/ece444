@@ -194,8 +194,8 @@ wider band than it holds CP — its polarization BW is narrower.
 ## Impedance bandwidth — what "VSWR ≤ 2" means
 
 $$
-\text{VSWR} = 2 \;\Longleftrightarrow\; |\Gamma| = 1/3
-\;\Longleftrightarrow\; \text{RL} = 9.5\ \text{dB}
+\text{VSWR} = 2 \Longleftrightarrow |\Gamma| = 1/3
+\Longleftrightarrow \text{RL} = 9.5\ \text{dB}
 $$
 
 Reflected power: $|\Gamma|^{2} = 11\%$. Transmitted: $89\%$.

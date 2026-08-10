@@ -15,16 +15,16 @@ $$
 $$
 
 $$
-\frac{\partial v}{\partial t} = -u\, f'(\xi),
+\frac{\partial v}{\partial t} = -u f'(\xi),
 \quad
-\frac{\partial^{2} v}{\partial t^{2}} = u^{2}\, f''(\xi)
+\frac{\partial^{2} v}{\partial t^{2}} = u^{2} f''(\xi)
 $$
 
-Substituting into $\partial^{2} v / \partial z^{2} = L C\,
+Substituting into $\partial^{2} v / \partial z^{2} = L C
 \partial^{2} v / \partial t^{2}$:
 
 $$
-f''(\xi) = L C\, u^{2}\, f''(\xi)
+f''(\xi) = L C u^{2} f''(\xi)
 \quad\Longrightarrow\quad
 u = \frac{1}{\sqrt{L C}}.
 $$
@@ -60,11 +60,11 @@ $$
 k = \frac{2 \pi}{\lambda} \approx \boxed{50.3\ \text{rad/m}}.
 $$
 
-**(b)** In 1 ns the crest moves $c\, \Delta t = (3.00 \times 10^{8})(10^{-9})
+**(b)** In 1 ns the crest moves $c \Delta t = (3.00 \times 10^{8})(10^{-9})
 = 0.30\ \text{m}$. In wavelengths:
 $0.30 / 0.125 = \boxed{2.4\ \lambda}$.
 
-**(c)** At a fixed $z$, oscillations in 1 ns: $f\, \Delta t
+**(c)** At a fixed $z$, oscillations in 1 ns: $f \Delta t
 = (2.40 \times 10^{9})(10^{-9}) = \boxed{2.4\ \text{cycles}}$.
 
 **(d)** Two identical cosines — one plotted vs. $z$ (period
@@ -91,7 +91,7 @@ In dBi: $D_{\text{dBi}} = 10 \log_{10}(9170) \approx \boxed{39.6\ \text{dBi}}$.
 
 **(b)** Apply efficiency, then mismatch:
 
-- $G = \eta_{\text{rad}}\, D = 0.88 \times 9170 \approx 8070$; in dBi
+- $G = \eta_{\text{rad}} D = 0.88 \times 9170 \approx 8070$; in dBi
   $G \approx 39.1\ \text{dBi}$.
 - Mismatch loss: $1 - |\Gamma|^{2} = 1 - 0.0625 = 0.9375$.
 - $G_{\text{re}} = 0.9375 \times 8070 \approx 7560$; in dBi
@@ -180,7 +180,7 @@ $\lambda = c/f = 0.75\ \text{m}$, $\lambda^{2} = 0.5625\ \text{m}^{2}$.
 **(a)** On-axis power density from the transmitter:
 
 $$
-S_{\text{inc}} = \frac{P_{t}\, G_{t}}{4 \pi r^{2}}
+S_{\text{inc}} = \frac{P_{t} G_{t}}{4 \pi r^{2}}
 = \frac{20 \times 6.31}{4 \pi (8.0 \times 10^{5})^{2}}
 $$
 
@@ -200,7 +200,7 @@ $$
 **(c)** Received power:
 
 $$
-P_{r} = S_{\text{inc}}\, A_{e,r}
+P_{r} = S_{\text{inc}} A_{e,r}
 = (1.57 \times 10^{-11})(0.0895)
 \approx 1.40 \times 10^{-12}\ \text{W}.
 $$
@@ -219,13 +219,13 @@ $$
 $$
 
 $$
-P_{r} = P_{t}\, G_{t}\, G_{r}\, \left( \frac{\lambda}{4 \pi r} \right)^{2}
+P_{r} = P_{t} G_{t} G_{r} \left( \frac{\lambda}{4 \pi r} \right)^{2}
 = 20 \times 6.31 \times 2.00 \times 5.56 \times 10^{-15}
 $$
 
 $$
 \approx 1.40 \times 10^{-12}\ \text{W}
-\;\checkmark
+\checkmark
 $$
 
 Same answer. Two lessons here:

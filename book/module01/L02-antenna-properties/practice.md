@@ -16,7 +16,7 @@ The 1-D wave equation from a lossless transmission line is
 
 $$
 \frac{\partial^{2} v}{\partial z^{2}}
-= L C\, \frac{\partial^{2} v}{\partial t^{2}}.
+= L C \frac{\partial^{2} v}{\partial t^{2}}.
 $$
 
 **(a)** Show by direct substitution that $v(z, t) = f(z - u t)$ is a solution
@@ -36,7 +36,7 @@ of RG-58 coax) means physically.
 A plane wave in free space is written as
 
 $$
-\mathbf{E}(z, t) = \hat{x}\, E_{0}\, \cos(\omega t - k z).
+\mathbf{E}(z, t) = \hat{x} E_{0} \cos(\omega t - k z).
 $$
 
 **(a)** For a signal at $f = 2.40\ \text{GHz}$ (Wi-Fi channel 6), compute
@@ -62,7 +62,7 @@ in elevation.
 
 **(a)** Estimate the directivity in dBi using the pencil-beam
 approximation
-$D \approx 41{,}253 / (\theta_{1}^{\circ}\, \theta_{2}^{\circ})$.
+$D \approx 41{,}253 / (\theta_{1}^{\circ} \theta_{2}^{\circ})$.
 
 **(b)** The antenna is measured to have a **radiation efficiency of 88%**
 and an **impedance mismatch of $|\Gamma| = 0.25$**. What is the
@@ -130,14 +130,14 @@ cubesat.
 
 **(b)** Compute the cubesat receive antenna's effective area $A_{e,r}$.
 
-**(c)** Compute the received power $P_{r} = S_{\text{inc}}\, A_{e,r}$
+**(c)** Compute the received power $P_{r} = S_{\text{inc}} A_{e,r}$
 and express the result in dBm.
 
 **(d)** Verify your answer by computing $P_{r}$ directly from the Friis
 equation
 
 $$
-P_{r} = P_{t}\, G_{t}\, G_{r}\, \left( \frac{\lambda}{4 \pi r} \right)^{2}.
+P_{r} = P_{t} G_{t} G_{r} \left( \frac{\lambda}{4 \pi r} \right)^{2}.
 $$
 
 ---

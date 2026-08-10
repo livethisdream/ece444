@@ -63,7 +63,7 @@ The ratio of the two is exactly the **radiation efficiency** from Lesson 2:
 
 $$
 \eta_\text{rad} = \frac{R_\text{rad}}{R_\text{rad} + R_\text{loss}},
-\qquad G = \eta_\text{rad}\, D.
+\qquad G = \eta_\text{rad} D.
 $$
 
 ### Radiation resistance of a short dipole
@@ -85,14 +85,14 @@ Make the antenna a half-wavelength long and the picture changes completely.
 At exactly $\ell = \lambda/2$ the dipole presents about
 
 $$
-Z_\text{in} \approx 73 + j\,42.5\ \Omega.
+Z_\text{in} \approx 73 + j42.5\ \Omega.
 $$
 
 The reactance is inductive. Trim the arms slightly — to roughly $0.48\lambda$ —
 and the reactance cancels: the antenna is **resonant**, with
 
 $$
-Z_\text{in} \approx 70 + j\,0\ \Omega.
+Z_\text{in} \approx 70 + j0\ \Omega.
 $$
 
 That near-$70\ \Omega$, near-real impedance is why the half-wave dipole is the
@@ -177,7 +177,7 @@ $$
 To match $R_L$ to a feed line $Z_0$, pick
 
 $$
-Z_1 = \sqrt{Z_0\, R_L}.
+Z_1 = \sqrt{Z_0 R_L}.
 $$
 
 **Example.** Match a resonant $70\ \Omega$ dipole to $50\ \Omega$ coax:

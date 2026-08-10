@@ -179,7 +179,7 @@ want the **time-average**,
 
 $$
 \langle \mathbf{S} \rangle
-= \tfrac{1}{2}\,\operatorname{Re}\!\left\lbrace \mathbf{E} \times \mathbf{H}^{*} \right\rbrace,
+= \tfrac{1}{2}\operatorname{Re}\!\left\lbrace \mathbf{E} \times \mathbf{H}^{*} \right\rbrace,
 $$
 
 and in the far field — where $\mathbf{E}$ and $\mathbf{H}$ are transverse
@@ -222,7 +222,7 @@ $$
 A **solid angle** $\Omega$ (in steradians) is the 3-D analogue of a planar
 angle: the area a cone cuts out of a unit sphere. A cone pointed in some
 direction subtends a solid angle $d\Omega$ and intercepts a patch of area
-$r^{2}\,d\Omega$ on a sphere of radius $r$; the whole sphere is $4\pi$ sr.
+$r^{2}d\Omega$ on a sphere of radius $r$; the whole sphere is $4\pi$ sr.
 Radiation intensity is the power flowing through that cone per unit solid
 angle — which is why it is a property of *direction alone*.
 
@@ -346,7 +346,7 @@ its load. The ratio has units of area and is the **effective area**
 $$
 A_{e}(\theta, \phi) = \frac{P_{\text{rx}}}{S_{\text{inc}}}
 \qquad\Longrightarrow\qquad
-P_{\text{rx}} = S_{\text{inc}}\, A_{e}.
+P_{\text{rx}} = S_{\text{inc}} A_{e}.
 $$
 
 <p style="text-align:center;">
@@ -359,14 +359,14 @@ So how big is that capture area — and where does the famous $\lambda^{2}/4\pi$
 come from? We can derive it.
 
 **1 · The antenna is a receiving circuit.** An incident field $E$ aligned
-with the antenna induces an open-circuit voltage $V_{\text{oc}} = E\,\ell_e$,
+with the antenna induces an open-circuit voltage $V_{\text{oc}} = E\ell_e$,
 where $\ell_e$ is the antenna's *effective length*. The antenna then behaves
 like a Thévenin source with internal **radiation resistance** $R_r$; a
 conjugate-**matched** load $R_L = R_r$ draws the maximum available power:
 
 $$
 P_{\text{rx}} = \frac{V_{\text{oc}}^{2}}{8 R_r}
-= \frac{(E\,\ell_e)^{2}}{8 R_r}.
+= \frac{(E\ell_e)^{2}}{8 R_r}.
 $$
 
 <p style="text-align:center;">
@@ -377,7 +377,7 @@ $$
 
 <small>The $8$ (not $4$) is the time-average of a sinusoid: for a peak
 amplitude $V_{\text{oc}}$ across $R_L = R_r$, the average power is
-$\tfrac{1}{2}\,(V_{\text{oc}}/2)^{2}/R_r$.</small>
+$\tfrac{1}{2}(V_{\text{oc}}/2)^{2}/R_r$.</small>
 
 **2 · Do it for the simplest antenna — a short dipole.** Its effective
 length is just its physical length, $\ell_e = \ell$, and its radiation
@@ -387,8 +387,8 @@ $\ell$'s cancel:
 
 $$
 A_{e} = \frac{P_{\text{rx}}}{S}
-= \frac{\eta_{0}\,\ell_e^{2}}{4 R_r}
-= \frac{120\pi\,\ell^{2}}{4\cdot 80\pi^{2}(\ell/\lambda)^{2}}
+= \frac{\eta_{0}\ell_e^{2}}{4 R_r}
+= \frac{120\pi\ell^{2}}{4\cdot 80\pi^{2}(\ell/\lambda)^{2}}
 = \frac{3\lambda^{2}}{8\pi}
 = 1.5\cdot\frac{\lambda^{2}}{4\pi}.
 $$
@@ -400,11 +400,11 @@ $$
 </p>
 
 **3 · Recognize the number.** That $1.5$ is exactly the short dipole's
-**directivity** $D$. So $A_e = D\,\lambda^{2}/4\pi$; folding in ohmic losses
+**directivity** $D$. So $A_e = D\lambda^{2}/4\pi$; folding in ohmic losses
 ($G = \eta_{\text{rad}}D$),
 
 $$
-\boxed{A_{e} = \frac{\lambda^{2}}{4 \pi}\, G.}
+\boxed{A_{e} = \frac{\lambda^{2}}{4 \pi} G.}
 $$
 
 **4 · It's universal.** We computed only one antenna — but **reciprocity**
@@ -421,7 +421,7 @@ efficiency** $\eta_{\text{ap}}$ (typically 0.5–0.7 for a dish)
 captures this:
 
 $$
-A_{e} = \eta_{\text{ap}}\, A_{\text{phys}}.
+A_{e} = \eta_{\text{ap}} A_{\text{phys}}.
 $$
 
 <img src="../../viz/img/effective-aperture.svg" alt="Physical aperture versus effective aperture: A_e = eta_ap times A_phys, with a dish, horn, and small-dipole comparison" style="max-width: 100%; width: 780px; display: block; margin: 1.2em auto;">
@@ -436,7 +436,7 @@ $P_{\text{rx}} = S_{\text{inc}} A_{e} \approx 0.68\ \mu\text{W}$.
 
 **A subtlety worth pinning down.** People often say "effective area shrinks
 with frequency," but that is only true if you hold *gain* fixed — then
-$A_{e} = (\lambda^{2}/4\pi)\,G$ falls as $\lambda^{2}$. For a **fixed
+$A_{e} = (\lambda^{2}/4\pi)G$ falls as $\lambda^{2}$. For a **fixed
 physical dish**, $A_{e} = \eta_{\text{ap}} A_{\text{phys}}$ is set by
 the metal and does *not* change with frequency; instead the **gain climbs
 as $f^{2}$**, because the same aperture spans many more wavelengths. Both
@@ -451,14 +451,14 @@ range $R$ the power density on boresight is the isotropic value $P_t/4\pi R^{2}$
 boosted by $G_t$:
 
 $$
-S_{\text{inc}} = \frac{P_t\,G_t}{4\pi R^{2}}.
+S_{\text{inc}} = \frac{P_tG_t}{4\pi R^{2}}.
 $$
 
 The receive antenna, with effective area $A_e = G_r \lambda^{2}/4\pi$, collects
-$P_r = S_{\text{inc}}\,A_e$. Combining the two:
+$P_r = S_{\text{inc}}A_e$. Combining the two:
 
 $$
-\boxed{\,P_r = P_t\,G_t\,G_r \left( \frac{\lambda}{4 \pi R} \right)^{2}\,}
+\boxed{P_r = P_tG_tG_r \left( \frac{\lambda}{4 \pi R} \right)^{2}}
 $$
 
 — the **Friis transmission equation**, the backbone of every link budget.
@@ -472,7 +472,7 @@ Three things to read off it:
   $\text{FSPL} = 20 \log_{10}\!\left( \dfrac{4 \pi R}{\lambda} \right)$ — it climbs
   with both frequency and range, and it is by far the largest term in most links.
 - **Everything is multiplicative**, so in decibels the link budget is just
-  addition: $P_r\,[\text{dBm}] = P_t + G_t + G_r - \text{FSPL}$.
+  addition: $P_r[\text{dBm}] = P_t + G_t + G_r - \text{FSPL}$.
 
 **Example.** A ground station transmits $P_t = 10\ \text{W}$ (40 dBm) at
 $2.4\ \text{GHz}$ ($\lambda = 0.125\ \text{m}$) through a $G_t = 20\ \text{dBi}$

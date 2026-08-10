@@ -17,19 +17,19 @@ For each plane wave propagating in $+\hat{z}$, identify the
 polarization (linear, RHCP, LHCP, or elliptical) and — where linear —
 the tilt angle relative to $\hat{x}$.
 
-**(a)** $\mathbf{E} = \hat{x}\, 3 \cos(\omega t - k z)$
+**(a)** $\mathbf{E} = \hat{x} 3 \cos(\omega t - k z)$
 
-**(b)** $\mathbf{E} = \hat{x}\, 2 \cos(\omega t - k z)
-                    + \hat{y}\, 2 \cos(\omega t - k z)$
+**(b)** $\mathbf{E} = \hat{x} 2 \cos(\omega t - k z)
+                    + \hat{y} 2 \cos(\omega t - k z)$
 
-**(c)** $\mathbf{E} = \hat{x}\, 5 \cos(\omega t - k z)
-                    + \hat{y}\, 5 \cos(\omega t - k z - 90^{\circ})$
+**(c)** $\mathbf{E} = \hat{x} 5 \cos(\omega t - k z)
+                    + \hat{y} 5 \cos(\omega t - k z - 90^{\circ})$
 
-**(d)** $\mathbf{E} = \hat{x}\, 5 \cos(\omega t - k z)
-                    + \hat{y}\, 5 \cos(\omega t - k z + 90^{\circ})$
+**(d)** $\mathbf{E} = \hat{x} 5 \cos(\omega t - k z)
+                    + \hat{y} 5 \cos(\omega t - k z + 90^{\circ})$
 
-**(e)** $\mathbf{E} = \hat{x}\, 3 \cos(\omega t - k z)
-                    + \hat{y}\, 1 \cos(\omega t - k z - 90^{\circ})$
+**(e)** $\mathbf{E} = \hat{x} 3 \cos(\omega t - k z)
+                    + \hat{y} 1 \cos(\omega t - k z - 90^{\circ})$
 
 ---
 

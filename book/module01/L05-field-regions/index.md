@@ -67,24 +67,24 @@ is 15 dBi" means *in the far field*.
 
 The three regions are not a convention someone imposed — they fall straight out
 of the exact fields of the simplest possible antenna. Take an **infinitesimal
-dipole**: a current element $I\,dl$ pointing along $\hat{\mathbf z}$, short enough
+dipole**: a current element $Idl$ pointing along $\hat{\mathbf z}$, short enough
 ($dl \ll \lambda$) that the current is uniform along it. Solving Maxwell's
 equations for this element gives the fields in closed form (spherical
 coordinates, phasor convention with the $e^{-jkr}$ carried along as in Lesson 2,
 and $k = 2\pi/\lambda$):
 
 $$
-E_r = \frac{\eta_0\,I\,dl\,\cos\theta}{2\pi r^2}
+E_r = \frac{\eta_0Idl\cos\theta}{2\pi r^2}
       \left(1 + \frac{1}{jkr}\right)e^{-jkr}
 $$
 
 $$
-E_\theta = \frac{j k\,\eta_0\,I\,dl\,\sin\theta}{4\pi r}
+E_\theta = \frac{j k\eta_0Idl\sin\theta}{4\pi r}
       \left(1 + \frac{1}{jkr} - \frac{1}{(kr)^2}\right)e^{-jkr}
 $$
 
 $$
-H_\phi = \frac{j k\,I\,dl\,\sin\theta}{4\pi r}
+H_\phi = \frac{j kIdl\sin\theta}{4\pi r}
       \left(1 + \frac{1}{jkr}\right)e^{-jkr}
 $$
 
@@ -97,12 +97,12 @@ $E_\theta$ and the bracket holds three terms whose relative sizes are set entire
 by $kr$. Multiplying through, the actual field is a sum of three pieces:
 
 $$
-E_\theta \;\propto\;
+E_\theta \propto
 \underbrace{\frac{1}{r}}_{\text{radiation}}
-\;+\;
-\underbrace{\frac{1}{k\,r^{2}}}_{\text{induction}}
-\;+\;
-\underbrace{\frac{1}{k^{2}\,r^{3}}}_{\text{electrostatic}}
++
+\underbrace{\frac{1}{kr^{2}}}_{\text{induction}}
++
+\underbrace{\frac{1}{k^{2}r^{3}}}_{\text{electrostatic}}
 $$
 
 Those are the three regions, hiding inside one equation:
@@ -119,7 +119,7 @@ inside the bracket) and the induction term (size $\propto 1/kr$) are equal when
 $$
 kr = 1
 \qquad\Longrightarrow\qquad
-r = \frac{1}{k} = \frac{\lambda}{2\pi} \approx 0.16\,\lambda .
+r = \frac{1}{k} = \frac{\lambda}{2\pi} \approx 0.16\lambda .
 $$
 
 Inside $\lambda/2\pi$ the stored ($1/r^2$, $1/r^3$) terms take over and blow up as
@@ -135,12 +135,12 @@ $\tfrac12 E_\theta H_\phi^{*}$ and, remarkably, the cross-terms collapse to just
 two:
 
 $$
-\tfrac12\,E_\theta H_\phi^{*} =
-\underbrace{\tfrac12\,\eta_0\!\left(\tfrac{k\,I\,dl\,\sin\theta}{4\pi}\right)^{2}
-\frac{1}{r^{2}}}_{\text{real — radiated power}\,\propto\,1/r^{2}}
-\;-\; j\,
-\underbrace{\tfrac12\,\eta_0\!\left(\tfrac{k\,I\,dl\,\sin\theta}{4\pi}\right)^{2}
-\frac{1}{k^{3}r^{5}}}_{\text{imaginary — stored power}\,\propto\,1/r^{5}}
+\tfrac12E_\theta H_\phi^{*} =
+\underbrace{\tfrac12\eta_0\!\left(\tfrac{kIdl\sin\theta}{4\pi}\right)^{2}
+\frac{1}{r^{2}}}_{\text{real — radiated power}\propto1/r^{2}}
+- j
+\underbrace{\tfrac12\eta_0\!\left(\tfrac{kIdl\sin\theta}{4\pi}\right)^{2}
+\frac{1}{k^{3}r^{5}}}_{\text{imaginary — stored power}\propto1/r^{5}}
 $$
 
 Two things to read off this:
