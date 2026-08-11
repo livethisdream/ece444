@@ -184,6 +184,19 @@ h1, h2, h3 { font-family: 'Outfit', system-ui, sans-serif; }
 .modern-input.compact-input::-webkit-outer-spin-button,
 .modern-input.compact-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
+.modern-select {
+  padding: 0.4rem 0.5rem;
+  background: var(--ctrl-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+}
+.modern-select:focus { border-color: var(--primary); }
+
 /* Sliders */
 .slider-group .slider-header {
   display: flex;
@@ -380,6 +393,7 @@ h1, h2, h3 { font-family: 'Outfit', system-ui, sans-serif; }
 .capture-field { display: flex; flex-direction: column; gap: 0.2rem; }
 .capture-field label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 .capture-field input { width: 90px; }
+.capture-field select { min-width: 165px; }
 .capture-spacer { flex: 1 1 auto; }
 .capture-count { font-size: 0.8rem; color: var(--text-muted); font-family: var(--mono); align-self: center; }
 

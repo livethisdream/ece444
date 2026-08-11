@@ -139,18 +139,32 @@
           <div class="tab-panel" id="tab-pattern">
             <div class="capture-bar">
               <div class="capture-field">
-                <label>Rx angle (&deg;)</label>
+                <label>Angle (&deg;)</label>
                 <input type="number" id="capture-angle" class="modern-input" value="0" step="5">
               </div>
-              <button class="btn btn-primary btn-small" id="btn-capture">Record point</button>
+              <div class="capture-field">
+                <label>Step (&deg;)</label>
+                <input type="number" id="capture-step" class="modern-input" value="15" step="5">
+              </div>
+              <button class="btn btn-primary btn-small" id="btn-capture">Record</button>
+              <button class="btn btn-outline btn-small" id="btn-undo">Undo</button>
               <button class="btn btn-outline btn-small" id="btn-clear-pattern">Clear</button>
+              <div class="capture-field">
+                <label>Reference</label>
+                <select id="ref-overlay" class="modern-select">
+                  <option value="none" selected>None</option>
+                  <option value="cos2">cos&sup2;&theta; (polarization)</option>
+                  <option value="dipole">Half-wave dipole</option>
+                  <option value="iso">Isotropic (0 dB)</option>
+                </select>
+              </div>
               <div class="capture-spacer"></div>
               <span class="capture-count" id="pattern-count">0 points</span>
             </div>
-            <p class="hint" style="margin-bottom:0.5rem;">Set the Rx antenna to an angle,
-              type it above, and Record. The dashed curve is the ideal
-              cos<sup>2</sup>(&theta;) polarization loss. Mark a co-pol reference first
-              so points read in dB below co-pol.</p>
+            <p class="hint" style="margin-bottom:0.5rem;">Point the Rx antenna at the angle
+              shown, hit <strong>Record</strong>, then rotate to the next angle &mdash; the
+              angle auto-advances by the step. The pattern is normalized to its peak (0 dB).
+              Pick a <strong>Reference</strong> to overlay an ideal shape for comparison.</p>
             <div class="chart-fill"><div id="chart-pattern"></div></div>
           </div>
 

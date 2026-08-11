@@ -19,6 +19,7 @@ const state = {
   refSet: false,
   powers: [],                   // rolling dBFS history
   pattern: [],                  // [{angle, rel_db, abs_dbfs}]
+  captureStack: [],             // angles in capture order, for Undo
   refDbfs: null,
   pending: [],                  // FIFO command-response resolvers
 };
@@ -235,26 +236,60 @@ function updatePowerChart() {
     { displayModeBar: false, responsive: true });
 }
 
-function patternTraces(c) {
-  // Theory: cos^2(theta) in dB.
-  const th = [];
-  const r = [];
+// Optional reference curve, normalized to a 0 dB peak. Returns null for "none".
+function refCurve(kind) {
+  if (kind === "none") return null;
+  const th = [], r = [];
   for (let a = -180; a <= 180; a += 2) {
-    th.push(a);
-    const db = 20 * Math.log10(Math.abs(Math.cos(a * Math.PI / 180)) + 1e-6);
-    r.push(Math.max(db, FLOOR_DB));
+    let db;
+    if (kind === "iso") {
+      db = 0;                                          // isotropic: flat 0 dB
+    } else if (kind === "cos2") {
+      db = 20 * Math.log10(Math.abs(Math.cos(a * Math.PI / 180)) + 1e-6);
+    } else if (kind === "dipole") {
+      const t = a * Math.PI / 180, s = Math.sin(t);    // half-wave dipole, peak 0 dB broadside
+      const F = Math.abs(s) < 1e-3 ? 0 : Math.abs(Math.cos(Math.PI / 2 * Math.cos(t)) / s);
+      db = 20 * Math.log10(F + 1e-6);
+    } else db = 0;
+    th.push(a); r.push(Math.max(db, FLOOR_DB));
   }
+  return { th, r };
+}
+
+const REF_LABELS = { cos2: "cos²θ", dipole: "½λ dipole", iso: "isotropic" };
+
+function patternTraces(c) {
+  const traces = [];
+
+  // Reference overlay (a deliberate choice; None by default)
+  const kind = ($("ref-overlay") && $("ref-overlay").value) || "none";
+  const ref = refCurve(kind);
+  if (ref) {
+    traces.push({
+      type: "scatterpolar", mode: "lines", theta: ref.th, r: ref.r,
+      line: { color: c.theory, width: 1.5, dash: "dash" },
+      name: REF_LABELS[kind] || "reference",
+    });
+  }
+
+  // Measured pattern, normalized to its own peak (0 dB at the main lobe)
   const pts = state.pattern.slice().sort((p, q) => p.angle - q.angle);
-  const pa = pts.map((p) => p.angle);
-  const pr = pts.map((p) => Math.max(p.rel_db, FLOOR_DB));
-  // close the measured loop if it spans a full turn
-  return [
-    { type: "scatterpolar", mode: "lines", theta: th, r,
-      line: { color: c.theory, width: 1.5, dash: "dash" }, name: "cos&sup2; theory" },
-    { type: "scatterpolar", mode: "lines+markers", theta: pa, r: pr,
+  if (pts.length) {
+    const peak = Math.max(...pts.map((p) => p.abs_dbfs));
+    let pa = pts.map((p) => p.angle);
+    let pr = pts.map((p) => Math.max(p.abs_dbfs - peak, FLOOR_DB));
+    // close the loop for a (near) full-circle sweep
+    if (pa.length > 2 && (pa[pa.length - 1] - pa[0]) >= 300) {
+      pa = pa.concat(pa[0] + 360);
+      pr = pr.concat(pr[0]);
+    }
+    traces.push({
+      type: "scatterpolar", mode: "lines+markers", theta: pa, r: pr,
       line: { color: c.accent, width: 2 }, marker: { color: c.accent, size: 7 },
-      name: "measured" },
-  ];
+      name: "measured (norm.)",
+    });
+  }
+  return traces;
 }
 
 function patternLayout(c) {
@@ -429,12 +464,27 @@ function bindEvents() {
     $("capture-angle").value = v;   // convenience: capture at the simulated angle
   });
 
-  // Pattern capture
+  // Pattern capture: record, auto-advance the angle by the step, undo, clear
   $("btn-capture").addEventListener("click", async () => {
     const angle = parseFloat($("capture-angle").value);
+    if (Number.isNaN(angle)) return;
     const res = await send("capture_point", { angle });
     if (res && res.status === "ok") {
       state.pattern = res.pattern;
+      state.captureStack.push(angle);
+      const step = parseFloat($("capture-step").value) || 0;
+      $("capture-angle").value = Math.round((angle + step) * 100) / 100;  // advance
+      updatePatternChart();
+      updatePatternCount();
+    }
+  });
+  $("btn-undo").addEventListener("click", async () => {
+    if (!state.captureStack.length) return;
+    const angle = state.captureStack.pop();
+    const res = await send("delete_point", { angle });
+    if (res && res.status === "ok") {
+      state.pattern = res.pattern || [];
+      $("capture-angle").value = angle;   // step back to the removed angle
       updatePatternChart();
       updatePatternCount();
     }
@@ -443,10 +493,12 @@ function bindEvents() {
     const res = await send("clear_pattern");
     if (res && res.status === "ok") {
       state.pattern = res.pattern || [];
+      state.captureStack = [];
       updatePatternChart();
       updatePatternCount();
     }
   });
+  $("ref-overlay").addEventListener("change", updatePatternChart);
 
   // Theme
   $("btn-theme").addEventListener("click", toggleTheme);

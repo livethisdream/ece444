@@ -286,6 +286,10 @@ class PlutoLink:
         print(f"[link] Captured {angle_deg:.0f} deg -> {rel:+.2f} dB (rel co-pol)")
         return point
 
+    def delete_point(self, angle_deg):
+        """Remove a captured point at the given angle (used by Undo)."""
+        self.pattern = [p for p in self.pattern if abs(p["angle"] - angle_deg) > 1e-6]
+
     def clear_pattern(self):
         self.pattern = []
 
@@ -455,6 +459,10 @@ class LinkServer:
             if point is None:
                 return {"status": "error", "message": "Not connected"}
             return {"status": "ok", "point": point, "pattern": self.link.pattern}
+
+        if cmd == "delete_point":
+            self.link.delete_point(data.get("angle", 0))
+            return {"status": "ok", "pattern": self.link.pattern}
 
         if cmd == "clear_pattern":
             self.link.clear_pattern()
