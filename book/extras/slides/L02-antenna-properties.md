@@ -203,13 +203,9 @@ $$
 \langle S \rangle = \frac{|\mathbf{E}|^{2}}{2 \eta_{0}}
 $$
 
-<p style="text-align:center;">
-<img src="../viz/img/poynting-triad.svg"
-     alt="E, H, S orthogonal triad"
-     style="max-height:300px;">
-</p>
+<div class="fig" data-inline-svg="./fig/poynting.svg" style="max-width:1160px; margin:0 auto;"></div>
 
-<small>$\mathbf{E}\perp\mathbf{H}\perp\mathbf{S}$ · along propagation · falls as $1/r^{2}$. This $\langle S\rangle$ is the $S_{\text{rad}}$ below.</small>
+<p class="fig-note">$\mathbf{E}\perp\mathbf{H}\perp\mathbf{S}$ · along propagation · falls as $1/r^{2}$.</p>
 
 Note:
 S = E × H is where the power lives. Time-average gives |E|²/2η₀. This is
@@ -219,28 +215,31 @@ the quantity radiation intensity is built from — motivate the next slide.
 
 ## Radiation intensity
 
-Power radiated per unit solid angle:
-
+<div class="two-col"><div class="col-text">
+<p>Power radiated per unit solid angle:</p>
 $$
 U(\theta, \phi) = r^{2} S_{\text{rad}}(r, \theta, \phi)
 \quad [\text{W/sr}]
 $$
-
-The $r^{2}$ cancels the $1/r^{2}$ in Poynting — $U$ depends **only on direction**.
-
+<p>The $r^{2}$ cancels the $1/r^{2}$ in Poynting — $U$ depends <strong>only on direction</strong>.</p>
 $$
 P_{\text{rad}} = \oint U(\theta, \phi) d\Omega
 $$
-
-<p style="text-align:center;">
-<img src="../viz/img/solid-angle.jpg"
-     alt="solid-angle cone subtending dOmega on a sphere"
-     style="max-height:220px;">
-</p>
-
-<small>Solid angle $\Omega = 2\pi(1-\cos\alpha)$ sr · whole sphere $= 4\pi$ sr.</small>
-
+$$
+\Omega = \frac{A}{r^{2}}
+\qquad
+A = r^{2} \Rightarrow 1\ \text{sr}
+$$
+$$
+\Omega = 2\pi(1 - \cos\alpha)\ \text{sr}
+$$
+$$
+\Omega_{\text{sphere}} = 4\pi\ \text{sr}
+$$
 <p class="viz-cue">↗ Interactive on the lesson page</p>
+</div><div class="col-fig">
+<div data-inline-svg="./fig/solid-angle.svg"></div>
+</div></div>
 
 ---
 
@@ -308,9 +307,7 @@ $$
 ## Quick Reference — Γ vs VSWR vs Power
 
 <div style="display:flex; align-items:center; justify-content:center; gap:1.4em; flex-wrap:wrap;">
-<img src="./img/02-antenna-properties/vswr_vs_gamma.png"
-     alt="VSWR vs reflection coefficient chart"
-     style="max-height:340px; flex:0 0 auto;">
+<div data-inline-svg="./fig/vswr.svg" style="flex:0 0 auto; width:390px;"></div>
 <table style="flex:0 0 auto; width:max-content; font-size:0.74em;">
 <thead>
 <tr><th>VSWR</th><th>$\vert\Gamma\vert$</th><th>Reflected</th><th>Transmitted</th></tr>
@@ -328,15 +325,9 @@ $$
 
 ---
 
-## Gain, side by side
+## Gain Comparison
 
-<p style="text-align:center;">
-<img src="./img/02-antenna-properties/gain-pattern-polar.png"
-     alt="Polar gain plots comparing isotropic, dipole, horn, and parabolic dish"
-     style="max-height:520px;">
-</p>
-
-<small>Isotropic (dashed) · λ/2 dipole · Std-gain horn · Parabolic dish (D/λ = 10)</small>
+<div class="fig" data-inline-svg="./fig/gain-pattern-polar.svg" style="max-width:470px; margin:0 auto;"></div>
 
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
@@ -346,20 +337,40 @@ the dish beam narrow and its peak gain climb.
 
 ---
 
-## Effective area — the capture
+## Reciprocity: Trading Places
 
-Turn the antenna around to **receive**. A wave of density $S_{\text{inc}}$ arrives; the antenna hands $P_{\text{rx}}$ to its load. The ratio has units of **area**:
+<div class="two-col fig-wide"><div class="col-text">
+<p>An antenna's <strong>transmit</strong> and <strong>receive</strong> behavior are the <em>same</em>:</p>
+<ul><li>Same <strong>pattern</strong> — it radiates best where it hears best</li>
+<li>Same <strong>gain / directivity</strong>, <strong>impedance</strong>, <strong>polarization</strong></li></ul>
+<p>Rooted in the symmetry of Maxwell's equations (<strong>Lorentz reciprocity</strong>).</p>
+<p>Measure in whichever mode is handy — <strong>gain</strong> (Tx) and <strong>effective area</strong> (Rx) are locked together, as we'll see next.</p>
+</div><div class="col-fig">
+<div data-inline-svg="./fig/reciprocity.svg"></div>
+</div></div>
 
+Note:
+Holds for linear, passive, isotropic media — ordinary antennas in air. Breaks
+only in non-reciprocal media (biased ferrite, magnetized plasma), the guts of a
+circulator/isolator. This is the hinge between the Tx story (gain) and the Rx
+story (effective area) on the next few slides.
+
+---
+
+## Effective Aperture
+
+<div class="two-col fig-xwide"><div class="col-text">
+<p>Turn the antenna to <strong>receive</strong>: received power per incident wave density — an <strong>area</strong>:</p>
 $$
 \boxed{A_{e} \equiv \frac{P_{\text{rx}}}{S_{\text{inc}}}}
-\qquad P_{\text{rx}} = S_{\text{inc}} A_{e}
 $$
-
-<p style="text-align:center;">
-<img src="../viz/img/effective-area-capture.svg" alt="aperture capturing effective area" style="max-height:260px;">
-</p>
-
-<small>How big a slice of the passing wavefront the antenna "catches." So — what sets its size?</small>
+<p>A real aperture captures a fraction $\eta_{\text{ap}} \in [0,1]$ of its physical area:</p>
+$$
+A_{e} = \eta_{\text{ap}} A_{\text{phys}}
+$$
+</div><div class="col-fig">
+<div data-inline-svg="./fig/effective-aperture.svg"></div>
+</div></div>
 
 Note:
 This is the definition. The next three slides derive the value of A_e.
@@ -368,17 +379,16 @@ This is the definition. The next three slides derive the value of A_e.
 
 ## The antenna as a receiver
 
-The incident field induces an open-circuit voltage; the antenna acts as a source with its **radiation resistance** $R_r$. A conjugate-**matched** load draws the most power:
-
+<div class="two-col fig-wide"><div class="col-text">
+<p>The incident field induces an open-circuit voltage; the antenna acts as a source with its <strong>radiation resistance</strong> $R_r$. A conjugate-<strong>matched</strong> load draws the most power:</p>
 $$
 V_{\text{oc}} = E\ell_{e}
 \qquad
 P_{\text{rx}} = \frac{V_{\text{oc}}^{2}}{8 R_{r}}
 $$
-
-<p style="text-align:center;">
-<img src="../viz/img/recv-circuit.svg" alt="receiving antenna Thevenin equivalent" style="max-height:360px;">
-</p>
+</div><div class="col-fig">
+<div data-inline-svg="./fig/recv-circuit.svg"></div>
+</div></div>
 
 Note:
 ℓ_e = effective length, R_r = radiation resistance. Max power transfer gives
@@ -388,18 +398,38 @@ the /8R_r (the ½ from time-averaging a sinusoid turns the usual 4 into 8).
 
 ## Example: A Short Dipole
 
-Use the simplest antenna. Plug in $\ell_e = \ell$, $R_r = 80\pi^{2}(\ell/\lambda)^{2}$, $S = E^{2}/2\eta_{0}$ — the $\ell$'s cancel:
-
+<div class="two-col"><div class="col-text">
+<p>Use the simplest antenna. Plug in $\ell_e = \ell$, $R_r = 80\pi^{2}(\ell/\lambda)^{2}$, $S = E^{2}/2\eta_{0}$ — the $\ell$'s cancel:</p>
 $$
 A_{e} = \frac{P_{\text{rx}}}{S}
 = \frac{\eta_{0}\ell_{e}^{2}}{4 R_{r}}
 = \frac{3\lambda^{2}}{8\pi}
 = 1.5\cdot\frac{\lambda^{2}}{4\pi}
 $$
-
-<p style="text-align:center;">
-<img src="../viz/img/short-dipole-field.svg" alt="short dipole in an incident wave" style="max-height:220px;">
-</p>
+</div><div class="col-fig">
+<svg viewBox="0 0 440 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A short dipole aligned with the incident wave's E-field">
+<defs>
+<marker id="sdR" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>
+<marker id="sdG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker>
+</defs>
+<line x1="52" y1="70" x2="52" y2="232" stroke="#b01e24" stroke-width="2.4" marker-start="url(#sdR)" marker-end="url(#sdR)"/>
+<line x1="96" y1="70" x2="96" y2="232" stroke="#b01e24" stroke-width="2.4" marker-start="url(#sdR)" marker-end="url(#sdR)"/>
+<line x1="140" y1="70" x2="140" y2="232" stroke="#b01e24" stroke-width="2.4" marker-start="url(#sdR)" marker-end="url(#sdR)"/>
+<line x1="184" y1="70" x2="184" y2="232" stroke="#b01e24" stroke-width="2.4" marker-start="url(#sdR)" marker-end="url(#sdR)"/>
+<text x="118" y="52" fill="#b01e24" font-size="19" font-weight="700" text-anchor="middle">E</text>
+<line x1="44" y1="270" x2="214" y2="270" stroke="#5a5a5a" stroke-width="1.6" marker-end="url(#sdG)"/>
+<text x="50" y="262" fill="#5a5a5a" font-size="13">incident wave</text>
+<line x1="322" y1="74" x2="322" y2="142" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
+<line x1="322" y1="160" x2="322" y2="228" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
+<circle cx="322" cy="142" r="3.6" fill="#004a85"/>
+<circle cx="322" cy="160" r="3.6" fill="#004a85"/>
+<line x1="358" y1="74" x2="358" y2="228" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="353" y1="74" x2="363" y2="74" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="353" y1="228" x2="363" y2="228" stroke="#5a5a5a" stroke-width="1.2"/>
+<text x="370" y="157" fill="#004a85" font-size="17" font-weight="700">ℓ</text>
+<text x="322" y="252" fill="#5a5a5a" font-size="13" text-anchor="middle">dipole ∥ E</text>
+</svg>
+</div></div>
 
 Note:
 η0 = 120π. Work the algebra on the board — ℓ² cancels, leaving a pure λ²
@@ -431,24 +461,6 @@ Friis / the radar range equation in Module 4.
 
 ---
 
-## Physical vs. effective aperture
-
-<p style="text-align:center;">
-<img src="../viz/img/effective-aperture.svg"
-     alt="Physical aperture versus effective aperture, with A_e = eta_ap A_phys and a dish, horn, and dipole comparison"
-     style="max-width:100%; max-height:520px;">
-</p>
-
-<small>A real aperture never captures its full physical area: $A_e = \eta_{\text{ap}} A_{\text{phys}}$. A dish loses to taper and spillover ($A_e < A_{\text{phys}}$); a small dipole's $A_e$ dwarfs its wire.</small>
-
-Note:
-The effective aperture is the equivalent capture area. Aperture efficiency
-folds in taper, spillover, and blockage. Contrast the three antenna types on
-the right — a dipole is electrically large in capture despite being physically
-tiny.
-
----
-
 ## Reading a radiation pattern
 
 <div class="slide-box">
@@ -470,11 +482,7 @@ This is the picture students need to be able to draw from memory.
 
 ## Features on a rectilinear plot
 
-<p style="text-align:center;">
-<img src="./img/02-antenna-properties/rectilinear.png"
-     alt="Rectilinear radiation pattern with HPBW, FNBW, and sidelobe level annotated"
-     style="max-height:520px;">
-</p>
+<div class="fig" data-inline-svg="./fig/rectilinear.svg" style="max-width:900px; margin:0 auto;"></div>
 
 <small>Sinc² aperture, D/λ = 6. HPBW at −3 dB · FNBW at first nulls · SLL at first sidelobe peak.</small>
 
@@ -489,7 +497,9 @@ that follows.
 
 ## Tradeoffs
 
-**Narrower beam** ↔ **higher sidelobes** — pick your poison.
+<div class="callout">
+<strong>Narrower beam</strong> ↔ <strong>higher sidelobes</strong> — there's no free lunch.
+</div>
 
 - Uniform aperture: narrowest main lobe, worst sidelobes
 - Tapered aperture: broader main lobe, deeper sidelobe suppression
