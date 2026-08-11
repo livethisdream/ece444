@@ -1,0 +1,26 @@
+[project]
+name = "antenna-link"
+version = "0.1.0"
+description = "Single-Pluto Tx/Rx antenna pattern & polarization demo for ECE 444"
+readme = "README.md"
+requires-python = ">=3.11"
+
+# Base deps run the browser UI and the --sim mode with no SDR attached.
+dependencies = [
+    "numpy>=1.26.0",
+    "websockets>=12.0",
+]
+
+[project.optional-dependencies]
+# Talking to a real ADALM-PLUTO. Needs libiio installed on the system too.
+hardware = [
+    "pyadi-iio>=0.0.20",
+    "pylibiio>=0.25",
+]
+
+[tool.uv]
+# Platform-specific environments (see /setup-dual-venv):
+#   WSL/Linux -> .venv-linux, Windows -> .venv-win
+# Select with UV_PROJECT_ENVIRONMENT, e.g.
+#   UV_PROJECT_ENVIRONMENT=.venv-win  uv sync
+package = false

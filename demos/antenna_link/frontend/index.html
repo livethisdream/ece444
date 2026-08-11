@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antenna Demo</title>
+  <!-- Follow the OS light/dark preference before first paint (no flash). -->
+  <script>
+    (function () {
+      try {
+        var light = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        document.documentElement.setAttribute('data-theme', light ? 'light' : 'dark');
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <!-- Plotly vendored locally so the demo works with no internet. -->
+  <script src="./vendor/plotly.min.js"></script>
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <main class="dashboard">
+
+      <!-- ---------------- Controls (left) ---------------- -->
+      <aside class="controls-panel glass-panel">
+        <div class="panel-header-row">
+          <h2 class="panel-title">Settings</h2>
+        </div>
+
+        <div class="accordion">
+
+          <!-- Device -->
+          <div class="accordion-item active">
+            <button class="accordion-header">Device <span>&#9660;</span></button>
+            <div class="accordion-body">
+              <div class="control-group" id="grp-device">
+                <label>Pluto IP address</label>
+                <input type="text" id="pluto-host" class="modern-input full" value="192.168.2.1" placeholder="ip:192.168.2.1">
+                <div class="btn-row mt-1" style="align-items:center;">
+                  <button class="btn btn-outline" id="btn-connect" style="flex:1;">Connect</button>
+                  <button class="btn btn-outline" id="btn-start-sim" style="flex:1;">Start Sim</button>
+                  <span class="info-tip" tabindex="0" data-tip="No Pluto? Start Sim runs synthetic power so you can rehearse the demo offline.">i</span>
+                </div>
+              </div>
+              <div class="feedback" id="conn-info" style="display:none;"><span id="conn-msg"></span></div>
+            </div>
+          </div>
+
+          <!-- Configuration -->
+          <div class="accordion-item active">
+            <button class="accordion-header">Configuration <span>&#9660;</span></button>
+            <div class="accordion-body">
+              <div class="control-group inline-group">
+                <label>Center freq (GHz)</label>
+                <input type="number" id="center-freq" class="modern-input compact-input" value="2.400" step="0.001" min="0.3" max="6">
+              </div>
+              <div class="control-group slider-group">
+                <div class="slider-header">
+                  <label>Rx gain (dB)<span class="info-tip" tabindex="0" data-tip="Tune Tx/Rx gain so the co-pol level sits near -15 dBFS - strong, but not clipping.">i</span></label>
+                  <input type="number" class="slider-value-input" id="val-rx-gain" value="30" min="0" max="73">
+                </div>
+                <input type="range" id="rx-gain" class="modern-slider" min="0" max="73" value="30">
+              </div>
+              <hr class="divider">
+              <div class="control-group slider-group">
+                <div class="slider-header">
+                  <label>Tx gain (dB)</label>
+                  <input type="number" class="slider-value-input" id="val-tx-gain" value="-20" min="-89" max="0">
+                </div>
+                <input type="range" id="tx-gain" class="modern-slider" min="-89" max="0" value="-20">
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulation (only meaningful in --sim) -->
+          <div class="accordion-item" id="sim-section" style="display:none;">
+            <button class="accordion-header">Simulation <span>&#9660;</span></button>
+            <div class="accordion-body">
+              <div class="control-group slider-group">
+                <div class="slider-header">
+                  <label>Rx antenna angle (&deg;)</label>
+                  <input type="number" class="slider-value-input" id="val-sim-angle" value="0" min="-180" max="180">
+                </div>
+                <input type="range" id="sim-angle" class="modern-slider" min="-180" max="180" value="0">
+              </div>
+              <p class="hint">No hardware: synthetic power follows
+                cos<sup>2</sup>(angle). Drag this to mimic rotating the Rx antenna.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="sidebar-footer">
+          <button class="btn btn-outline btn-small theme-toggle-btn" id="btn-theme">
+            <span id="theme-icon">&#9790;</span><span id="theme-label">Dark mode</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- ---------------- Plots (right) ---------------- -->
+      <section class="graph-panel glass-panel">
+        <div class="header-with-tabs">
+          <div class="header-left">
+            <span class="app-wordmark">ECE&nbsp;444 <strong>Antenna Demo</strong></span>
+            <div class="tab-list">
+              <button class="tab-btn active" data-target="tab-power">Live Power</button>
+              <button class="tab-btn" data-target="tab-pattern">Pattern</button>
+            </div>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-outline hold-btn" id="btn-ref" disabled
+                    title="Click to mark the co-pol reference (0 dB). Hold 3 s to clear it.">
+              <span class="hold-fill"></span>
+              <span class="hold-label" id="ref-label">Mark Ref</span>
+            </button>
+            <button class="btn btn-primary" id="btn-stream">Start</button>
+          </div>
+        </div>
+
+        <div class="plots-stack">
+
+          <!-- Live Power -->
+          <div class="tab-panel active" id="tab-power">
+            <div class="power-readout">
+              <div class="readout-card" id="card-power">
+                <span class="readout-label">Received power</span>
+                <span><span class="readout-value big" id="rd-power">--</span><span class="readout-unit"> dBFS</span></span>
+              </div>
+              <div class="readout-card">
+                <span class="readout-label">Relative to co-pol</span>
+                <span><span class="readout-value rel" id="rd-rel">--</span><span class="readout-unit"> dB</span></span>
+              </div>
+            </div>
+            <div class="chart-fill"><div id="chart-power"></div></div>
+          </div>
+
+          <!-- Pattern -->
+          <div class="tab-panel" id="tab-pattern">
+            <div class="capture-bar">
+              <div class="capture-field">
+                <label>Rx angle (&deg;)</label>
+                <input type="number" id="capture-angle" class="modern-input" value="0" step="5">
+              </div>
+              <button class="btn btn-primary btn-small" id="btn-capture">Record point</button>
+              <button class="btn btn-outline btn-small" id="btn-clear-pattern">Clear</button>
+              <div class="capture-spacer"></div>
+              <span class="capture-count" id="pattern-count">0 points</span>
+            </div>
+            <p class="hint" style="margin-bottom:0.5rem;">Set the Rx antenna to an angle,
+              type it above, and Record. The dashed curve is the ideal
+              cos<sup>2</sup>(&theta;) polarization loss. Mark a co-pol reference first
+              so points read in dB below co-pol.</p>
+            <div class="chart-fill"><div id="chart-pattern"></div></div>
+          </div>
+
+        </div>
+
+        <div class="chart-footer">
+          <div class="footer-spacer"></div>
+          <div class="status-indicator">
+            <div class="dot" id="conn-dot"></div>
+            <span id="conn-text">Disconnected</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="./src/main.js"></script>
+</body>
+</html>
