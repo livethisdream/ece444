@@ -7,14 +7,12 @@
 <a href="../../slides/L05-field-regions.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '5'">
-  <li>Distinguish the reactive near-field, radiating near-field, and far-field regions by what the fields are actually doing in each.</li>
-  <li>Calculate the boundaries between the three regions for a given antenna size and wavelength.</li>
-  <li>Explain the phase-error criterion behind the far-field distance, and why an antenna must be measured in its far field.</li>
+<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '5'">
+  <li>I can distinguish the reactive near-field, radiating near-field, and far-field regions by what the fields are actually doing in each.</li>
+  <li>I can calculate the boundaries between the three regions for a given antenna size and wavelength.</li>
+  <li>I can explain the phase-error criterion behind the far-field distance, and why an antenna must be measured in its far field.</li>
 </ol>
 
 Lesson 4 looked *into* the antenna terminals. Now we step back *out* into the

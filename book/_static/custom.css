@@ -930,6 +930,18 @@ audio.lesson-demo {
   font-variant-numeric: tabular-nums;
 }
 
+/* Lesson-level sub-objectives. Add the `lo-sublist` modifier and set
+   --module to the module number and --lo to the module objective this
+   lesson rolls up to. The prefix then renders as
+   "<module>.<objective>.<n>" (e.g. 1.2.1) so every lesson objective
+   ties back to the module objective it supports. */
+.bd-article ol.lo-list.lo-sublist > li {
+  padding-left: 2.9em;
+}
+.bd-article ol.lo-list.lo-sublist > li::before {
+  content: var(--module) "." var(--lo) "." counter(lo);
+}
+
 /* ============================================================
    Per-module dashboard (moduleNN/index.md)
    ============================================================ */

@@ -7,15 +7,13 @@
 <a href="../../slides/L04-impedance-feeding-baluns.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '4'">
-  <li>Decompose an antenna's input impedance into radiation resistance, loss resistance, and reactance, and connect the radiation resistance to the power actually radiated.</li>
-  <li>Compute the reflection coefficient and VSWR a feed line sees at the antenna terminals, and the resulting mismatch (return) loss.</li>
-  <li>Design a quarter-wave transformer — and read an L-match — to match a load to a feed line.</li>
-  <li>Explain why a balun is required to feed a balanced antenna from unbalanced coax, and identify the common balun types and what each one does.</li>
+<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '4'">
+  <li>I can decompose an antenna's input impedance into radiation resistance, loss resistance, and reactance, and connect the radiation resistance to the power actually radiated.</li>
+  <li>I can compute the reflection coefficient and VSWR a feed line sees at the antenna terminals, and the resulting mismatch (return) loss.</li>
+  <li>I can design a quarter-wave transformer — and read an L-match — to match a load to a feed line.</li>
+  <li>I can explain why a balun is required to feed a balanced antenna from unbalanced coax, and identify the common balun types and what each one does.</li>
 </ol>
 
 So far we have treated an antenna by *what it radiates* — pattern, directivity,

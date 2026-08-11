@@ -8,15 +8,13 @@
 <a href="../../slides/L01-course-intro.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning Outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '1'">
-  <li>State in plain language what an antenna is and what it does in a radio system.</li>
-  <li>Explain why antennas matter to operators and engineers in the Air Force mission set (comms, radar, EW, SATCOM, GPS).</li>
-  <li>Identify the five modules of ECE 444 and how they build toward the final capstone.</li>
-  <li>Recognize several real antennas by sight and connect their geometry to the job they do.</li>
+<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '1'">
+  <li>I can state in plain language what an antenna is and what it does in a radio system.</li>
+  <li>I can explain why antennas matter across the Air Force mission set (comms, radar, EW, SATCOM, GPS).</li>
+  <li>I can identify the five modules of ECE 444 and how they build toward the final capstone.</li>
+  <li>I can recognize several real antennas by sight and connect their geometry to the job they do.</li>
 </ol>
 
 ## Welcome & Introductions

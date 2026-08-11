@@ -7,16 +7,14 @@
 <a href="../../slides/L03-polarization-bandwidth.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '3'">
-  <li>Identify the polarization state of a plane wave (linear, circular, elliptical) from the amplitude and phase of its two orthogonal components.</li>
-  <li>Compute the axial ratio of an elliptically polarized wave and know what a "3 dB axial ratio" spec means for a circularly polarized antenna.</li>
-  <li>Compute the polarization loss factor (PLF) between a transmit and receive antenna with mismatched polarizations.</li>
-  <li>Define the impedance, pattern, and polarization bandwidths of an antenna and compute fractional bandwidth from the endpoint frequencies.</li>
-  <li>Match common antenna families (patch, dipole, horn, log-periodic, spiral, Vivaldi) to their typical bandwidth range.</li>
+<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '3'">
+  <li>I can identify the polarization state of a plane wave (linear, circular, elliptical) from the amplitude and phase of its two orthogonal components.</li>
+  <li>I can compute the axial ratio of an elliptically polarized wave and explain what a "3 dB axial ratio" spec means for a circularly polarized antenna.</li>
+  <li>I can compute the polarization loss factor (PLF) between a transmit and receive antenna with mismatched polarizations.</li>
+  <li>I can define the impedance, pattern, and polarization bandwidths of an antenna and compute fractional bandwidth from the endpoint frequencies.</li>
+  <li>I can match common antenna families (patch, dipole, horn, log-periodic, spiral, Vivaldi) to their typical bandwidth range.</li>
 </ol>
 
 ## Part 1: Polarization

@@ -8,15 +8,14 @@
 <a href="../../slides/L02-antenna-properties.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '2'">
-  <li>Trace the physics chain from Maxwell's equations → telegrapher's equations → the wave equation → the plane-wave solution, and identify the time and space dependencies in each.</li>
-  <li>Recognize why the far-field of an antenna is a plane-wave-like transverse E-H pair falling off as 1/r.</li>
-  <li>Define and compute the headline antenna parameters: radiation intensity, directivity, gain, effective area, beamwidth, boresight, main / side / back lobes.</li>
-  <li>Read a radiation pattern and pull out HPBW, FNBW, and sidelobe level.</li>
+<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '2'">
+  <li>I can trace the physics chain from Maxwell's equations → telegrapher's equations → the wave equation → the plane-wave solution, and identify the time and space dependencies in each.</li>
+  <li>I can explain why the far field of an antenna is a plane-wave-like transverse E-H pair falling off as 1/r.</li>
+  <li>I can define and compute the headline antenna parameters: radiation intensity, directivity, gain, effective area, beamwidth, boresight, main / side / back lobes.</li>
+  <li>I can read a radiation pattern and pull out HPBW, FNBW, and sidelobe level.</li>
+  <li>I can state the reciprocity principle and explain why an antenna's pattern, gain, and impedance are the same whether it transmits or receives.</li>
 </ol>
 
 ## Part 1: From Maxwell to a wave
@@ -335,6 +334,39 @@ maxima and minima set the VSWR, and the nulls stay pinned in place.
         loading="lazy"
         title="VSWR standing wave">
 </iframe>
+
+### Reciprocity — the same antenna, both ways
+
+Everything so far described an antenna **transmitting**: it takes power from a
+source and shapes it into a pattern. But the same piece of metal also
+**receives**, and you might worry it behaves differently in the two roles.
+It does not.
+
+**Reciprocity principle.** For any antenna made of ordinary (linear, passive,
+isotropic) materials, its receiving behavior is identical to its transmitting
+behavior. The **pattern**, the **directivity and gain**, the **input
+impedance**, and the **polarization** are the same function of angle whether
+the antenna is launching a wave or catching one. An antenna that radiates best
+toward the horizon is also most *sensitive* to signals arriving from the
+horizon.
+
+This is not an accident of any particular geometry — it follows from the
+symmetry of Maxwell's equations themselves (the **Lorentz reciprocity
+theorem**). Swap the source and the observation point in a reciprocal medium
+and the fields trade places unchanged.
+
+**Why we care.** Two payoffs. First, you can characterize an antenna in
+whichever mode is convenient — a measurement range almost always puts the
+antenna under test in *receive* — and the numbers carry straight over to
+transmit. Second, it ties the two sides of the antenna together: the transmit
+quantity **gain** and the receive quantity **effective area**, which we define
+next, are not independent. Reciprocity locks them to a single universal ratio.
+
+**The one exception.** Reciprocity fails when the medium itself is
+*non-reciprocal* — a magnetically biased ferrite, or a magnetized plasma like
+the ionosphere. That is exactly what makes a **circulator** or **isolator**
+work: pass energy one way, block the other. Antennas radiating into air are
+reciprocal, so we use it freely.
 
 ### Effective area (aperture)
 

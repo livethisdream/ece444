@@ -7,11 +7,9 @@
 <a href="../../slides/L06-radiation-integrals.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '6'">
+<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '6'">
   <li>I can set up and interpret the radiation integrals to derive the far-field pattern of a current distribution.</li>
 </ol>
 
