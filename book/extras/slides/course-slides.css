@@ -301,8 +301,8 @@ body.reveal-viewport:has(.title-slide.present)::after { display: none; }
 /* Corner cue: this slide has a live interactive on the L2 lesson page. */
 .reveal .viz-cue {
   position: absolute;
-  right: 20px;
-  bottom: 16px;
+  right: 90px;      /* top-right, tucked left of the corner logo so they clear */
+  top: 18px;
   margin: 0;
   font-size: 0.4em;
   font-weight: 600;
@@ -339,3 +339,181 @@ body.reveal-viewport:has(.title-slide.present)::after { display: none; }
   body.reveal-viewport::before,
   body.reveal-viewport::after { display: none; }
 }
+
+/* =====================================================================
+   Chalkboard / annotation toolbar — ported from USAFA-ECE/ece-495-ew's
+   dfec-reveal.css (interface only), recolored to the USAFA palette. The
+   markup is injected by deck-tools.js; behavior lives there too.
+   ===================================================================== */
+:root {
+  --deck-navy: var(--usafa-blue-dark);
+  --deck-blue: var(--usafa-blue);
+  --deck-rule: rgba(0, 48, 135, 0.25);
+  --deck-soft: rgba(0, 103, 185, 0.08);
+}
+
+/* Slide-number + progress bar to match the deck. */
+.reveal .progress { color: var(--usafa-blue); height: 3px; }
+
+/* ---- toolbar (bottom-left) + nav (bottom-right) ---- */
+.deck-tools, .deck-nav {
+  position: fixed; bottom: 10px; z-index: 40;
+  display: flex; align-items: center; gap: 6px;
+}
+.deck-tools { left: 12px; }
+.deck-nav   { right: 12px; }
+.deck-tools button, .deck-nav button {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 30px; padding: 0;
+  background: #fff; color: var(--deck-navy);
+  border: 1px solid var(--deck-rule); border-radius: 6px;
+  cursor: pointer; transition: background .12s, border-color .12s;
+  font: inherit;
+}
+.deck-tools button:hover, .deck-nav button:hover {
+  background: var(--deck-soft); border-color: var(--deck-blue);
+}
+.deck-tools button.on { background: var(--deck-navy); border-color: var(--deck-navy); color: #fff; }
+.deck-tools button svg, .deck-nav button svg { width: 17px; height: 17px; display: block; }
+.deck-tools .sep { width: 1px; height: 20px; background: var(--deck-rule); margin: 0 3px; }
+
+/* Nav arrows are the primary touch target now that swipe is off — size them
+   up so they're comfortable to tap on a tablet or phone. */
+.deck-nav button { width: 46px; height: 42px; }
+.deck-nav button svg { width: 22px; height: 22px; }
+
+/* ---- toolbar swatches (visible only while inking) ---- */
+.deck-tools .swatches { display: none; align-items: center; gap: 6px; margin: 0 2px; }
+.deck-tools.ink-on .swatches { display: inline-flex; }
+.deck-tools .swatch {
+  width: 22px; height: 22px; padding: 0;
+  border: 2px solid #fff; border-radius: 50%;
+  outline: 1px solid var(--deck-rule);
+  cursor: pointer;
+}
+.deck-tools .swatch.on { outline: 2px solid var(--deck-navy); }
+.deck-tools .swatch-eraser {
+  background: #fff; color: var(--deck-navy); border-radius: 6px;
+  width: 26px; height: 26px; display: inline-flex;
+  align-items: center; justify-content: center;
+}
+.deck-tools .swatch-eraser svg { width: 15px; height: 15px; }
+
+/* Board prev/next appear only in board mode. */
+.deck-tools .boardnav { display: none; }
+.deck-tools.board-on .boardnav {
+  display: inline-flex; width: 26px; height: 26px;
+  align-items: center; justify-content: center;
+  background: #fff; color: var(--deck-navy);
+  border: 1px solid var(--deck-rule); border-radius: 6px;
+  cursor: pointer; padding: 0;
+}
+.deck-tools .boardnav svg { width: 15px; height: 15px; }
+
+/* Our swatches replace the plugin's half-offscreen palette, and the board
+   prev/next buttons replace its edge handle (whose font-awesome chevrons were
+   never loaded — it rendered as an empty tab). */
+div.palette, div.boardhandle { display: none !important; }
+
+/* ---------------------------------------------------------------------
+   BUG FIX — the .overlay collision.
+   reveal 5 styles `.reveal > .overlay` as its frosted modal (dark wash +
+   backdrop-filter: blur(6px)); the chalkboard plugin reuses that class name
+   for its two full-screen canvas containers, so without this every slide sits
+   under a permanent 6px blur. Re-asserted inline in deck-tools.js on ready in
+   case a plugin update rebuilds the containers after this sheet parses.
+   --------------------------------------------------------------------- */
+.reveal > #notescanvas.overlay,
+.reveal > #chalkboard.overlay {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* We only use 2D transitions, so drop the 3D compositing reveal sets up for
+   convex/concave/zoom. A preserve-3d layer rasterizes once then GPU-scales,
+   softening text at any scale != 1 (i.e. when zoomed); flat lets the browser
+   re-rasterize at the true scale. */
+.reveal .slides,
+.reveal .slides section { transform-style: flat !important; }
+
+/* ---- chrome strip ----
+   Reserve a 56px band at the viewport bottom for the toolbar/nav by shrinking
+   .reveal, so reveal lays slides out ABOVE the band and no slide content can
+   ever sit under the controls. The print view keeps the full page. */
+html:not(.reveal-print):not(.print-pdf) .reveal { height: calc(100% - 56px) !important; }
+html:not(.reveal-print):not(.print-pdf) .reveal .slide-number { bottom: 8px; }
+
+/* Toolbar/nav are screen chrome — never print them. */
+@media print { .deck-tools, .deck-nav { display: none !important; } }
+.print-pdf .deck-tools, .print-pdf .deck-nav,
+.reveal-print .deck-tools, .reveal-print .deck-nav { display: none !important; }
+
+/* ---- print-view banner (screen only; never printed) ---- */
+.print-banner {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: var(--deck-navy); color: #fff;
+  font: 600 15px/1.4 "Source Sans Pro", "Segoe UI", sans-serif;
+  padding: 10px 16px; text-align: center;
+}
+.print-banner button {
+  margin-left: 12px; padding: 4px 14px; border: 1px solid rgba(255,255,255,.5);
+  border-radius: 6px; background: transparent; color: #fff; font: inherit; cursor: pointer;
+}
+.print-banner button:hover { background: rgba(255,255,255,.12); }
+@media print { .print-banner { display: none !important; } }
+
+/* =====================================================================
+   Two-column figure slide — text/equations left, a large figure right.
+   Use when a slide is text + one diagram: stacking the diagram under a
+   display equation starves it (it only gets the leftover height), which
+   reads tiny on a projector. A column of its own lets the figure fill the
+   slide height. Markup:
+
+     ## Heading
+     <div class="two-col"><div class="col-text">
+     …HTML prose + $$math$$…
+     </div><div class="col-fig">
+     <img …><small>caption</small>
+     </div></div>
+
+   Two rules, both load-bearing:
+   - Prose in .col-text must be HTML (<p>/<strong>/<em>), not markdown —
+     reveal's markdown plugin passes a raw-HTML block through UNPARSED, so
+     **bold** would render literally. Inline $…$ and display $$…$$ still
+     typeset (MathJax runs on the DOM afterward).
+   - No BLANK LINES between the opening and closing <div> — a blank line
+     terminates the HTML block, and marked resumes markdown parsing, which
+     strands the rest of the tags. Keep the whole block contiguous.
+   --------------------------------------------------------------------- */
+.reveal .two-col {
+  display: grid;
+  grid-template-columns: 1fr minmax(340px, 46%);
+  gap: 1.4em;
+  align-items: center;
+  width: 100%;
+}
+.reveal .two-col .col-text { min-width: 0; }   /* let long equations use the width */
+.reveal .two-col .col-text > :first-child { margin-top: 0; }
+.reveal .two-col .col-fig { min-width: 0; margin: 0; text-align: center; }
+/* width:100% (not just max-width) so a small-intrinsic SVG scales UP to fill
+   the column — max-* alone only shrinks. height:auto keeps aspect; max-height
+   clamps the tall/square ones so they can't outgrow the slide. Covers both
+   <img> figures and inline <svg> diagrams. */
+.reveal .two-col .col-fig img,
+.reveal .two-col .col-fig svg { width: 100%; height: auto; max-height: 600px; }
+
+/* Figure caption at body size (not <small>) — a diagram note that reads from
+   the back of the room. */
+.reveal .fig-note { text-align: center; color: var(--slide-muted); margin: 0.45em 0 0; }
+/* Inline-injected diagram files (see deck-tools.js inlineSVGs). */
+.reveal [data-inline-svg] { display: block; margin: 0 auto; }
+.reveal [data-inline-svg] > svg { width: 100%; height: auto; display: block; }
+/* Inline SVG diagrams inherit the deck font (that's the whole point of
+   inlining them) and never take the <img> card treatment. */
+.reveal .slides svg text { font-family: inherit; }
+.reveal .two-col .col-fig small,
+.reveal .two-col .col-fig figcaption { display: block; margin-top: 0.5em; }
+/* Figure-heavy variant — give the diagram the larger share. */
+.reveal .two-col.fig-wide { grid-template-columns: 1fr minmax(420px, 56%); }
+/* Figure-dominant — for dense diagrams that need to render large/legible. */
+.reveal .two-col.fig-xwide { grid-template-columns: 1fr minmax(500px, 66%); }
