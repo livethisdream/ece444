@@ -13,7 +13,7 @@
 <ol class="lo-list lo-sublist" style="--module: '1'; --lo: '2'">
   <li>I can trace the physics chain from Maxwell's equations → telegrapher's equations → the wave equation → the plane-wave solution, and identify the time and space dependencies in each.</li>
   <li>I can explain why the far field of an antenna is a plane-wave-like transverse E-H pair falling off as 1/r.</li>
-  <li>I can define and compute the headline antenna parameters: radiation intensity, directivity, gain, effective area, beamwidth, boresight, main / side / back lobes.</li>
+  <li>I can define and compute the headline antenna parameters: radiation intensity, directivity, gain, effective aperture, beamwidth, boresight, main / side / back lobes.</li>
   <li>I can read a radiation pattern and pull out HPBW, FNBW, and sidelobe level.</li>
   <li>I can state the reciprocity principle and explain why an antenna's pattern, gain, and impedance are the same whether it transmits or receives.</li>
 </ol>
@@ -95,7 +95,7 @@ $$
 
 - $\omega = 2 \pi f$ is the **time frequency** — how fast the field
   oscillates at a fixed point.
-- $k = 2 \pi / \lambda$ is the **spatial frequency** (wave number) —
+- $k = 2 \pi / \lambda$ is the **space frequency** (wave number) —
   how fast the field oscillates at a fixed instant in time.
 - $\omega / k = c$ ties them together: the wave crest moves through
   space at $c$.
@@ -261,7 +261,7 @@ D \approx \frac{4 \pi}{\theta_{1} \theta_{2}}
 D \approx \frac{41{,}253}{\theta_{1}^{\circ} \theta_{2}^{\circ}}.
 $$
 
-### Gain and radiation efficiency
+### Gain and efficiency
 
 Gain is directivity with losses folded in:
 
@@ -359,7 +359,7 @@ and the fields trade places unchanged.
 whichever mode is convenient — a measurement range almost always puts the
 antenna under test in *receive* — and the numbers carry straight over to
 transmit. Second, it ties the two sides of the antenna together: the transmit
-quantity **gain** and the receive quantity **effective area**, which we define
+quantity **gain** and the receive quantity **effective aperture**, which we define
 next, are not independent. Reciprocity locks them to a single universal ratio.
 
 **The one exception.** Reciprocity fails when the medium itself is
@@ -368,12 +368,12 @@ the ionosphere. That is exactly what makes a **circulator** or **isolator**
 work: pass energy one way, block the other. Antennas radiating into air are
 reciprocal, so we use it freely.
 
-### Effective area (aperture)
+### Effective aperture
 
 Flip the antenna around to *receive*. A passing wave carries power density
 $S_{\text{inc}}$ (W/m²); the antenna delivers some power $P_{\text{rx}}$ to
-its load. The ratio has units of area and is the **effective area**
-(effective aperture):
+its load. The ratio has units of area and is the **effective aperture**
+(also called the effective area):
 
 $$
 A_{e}(\theta, \phi) = \frac{P_{\text{rx}}}{S_{\text{inc}}}
@@ -383,7 +383,7 @@ $$
 
 <p style="text-align:center;">
 <img src="../../viz/img/effective-area-capture.svg"
-     alt="A receiving aperture capturing effective area from an incident wavefront"
+     alt="A receiving aperture capturing effective aperture from an incident wavefront"
      style="max-width:100%; width:640px;">
 </p>
 
@@ -466,7 +466,7 @@ $G = 4\pi A_{e} / \lambda^{2} \approx 9500$, or **39.8 dBi**. A wave of
 density $S_{\text{inc}} = 1\ \mu\text{W/m}^{2}$ then delivers
 $P_{\text{rx}} = S_{\text{inc}} A_{e} \approx 0.68\ \mu\text{W}$.
 
-**A subtlety worth pinning down.** People often say "effective area shrinks
+**A subtlety worth pinning down.** People often say "effective aperture shrinks
 with frequency," but that is only true if you hold *gain* fixed — then
 $A_{e} = (\lambda^{2}/4\pi)G$ falls as $\lambda^{2}$. For a **fixed
 physical dish**, $A_{e} = \eta_{\text{ap}} A_{\text{phys}}$ is set by
@@ -486,7 +486,7 @@ $$
 S_{\text{inc}} = \frac{P_tG_t}{4\pi R^{2}}.
 $$
 
-The receive antenna, with effective area $A_e = G_r \lambda^{2}/4\pi$, collects
+The receive antenna, with effective aperture $A_e = G_r \lambda^{2}/4\pi$, collects
 $P_r = S_{\text{inc}}A_e$. Combining the two:
 
 $$

@@ -1,4 +1,4 @@
-# Module 1 — Antenna Fundamentals
+# Module 1 — Foundations of Electromagnetics and Antennas
 
 <p class="module-meta"><span class="m-module">Module 01</span><span class="m-time">Lessons 1–6</span></p>
 

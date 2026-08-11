@@ -20,7 +20,7 @@ Fall 2026 · Dr. Neil Rogers
 
 ---
 
-## Learning outcomes
+## Learning Objectives
 
 By the end of this lesson, you will be able to:
 

@@ -52,7 +52,7 @@ My day job with **Analog Devices** puts me shoulder-to-shoulder with the team de
 ![Analog Devices booth](img/nr-adi.jpg)
 _Field Applications Engineer at Analog Devices — the folks who make the ADALM-PHASER._
 
-## Outside the lab
+## Off the clock
 
 ![Family in the new house](img/fam_newhouse.jpg)
 _Four kids (ages 11, 13, 15, 17). We just moved into a new house — fixing it up is a running hobby._
@@ -71,7 +71,7 @@ _Playing guitar with the band at Trace, my church._
 
 ## What is an antenna?
 
-An antenna is the **transducer between a guided electromagnetic wave** (a signal traveling on a cable or waveguide) **and a freely propagating wave** (a signal traveling through space). Every wireless system on Earth has at least one on each end of the link.
+An antenna is the **transducer between a guided wave** (a signal traveling on a cable or waveguide) **and a radiating wave** (a signal traveling freely through space). Every wireless system on Earth has at least one on each end of the link.
 
 Two ideas we'll keep coming back to:
 
@@ -103,7 +103,7 @@ Five modules, forty-one lessons, culminating in an integrated beamforming + rada
 | 2 | Antenna Types, Simulation, and Measurement |
 | 3 | Arrays and ADALM-PHASER Beamforming |
 | 4 | Radar Fundamentals and FMCW |
-| 5 | Final Capstone Project |
+| 5 | Capstone Project |
 
 See the [syllabus](../../syllabus.md) for the full schedule and both project descriptions.
 
@@ -121,4 +121,4 @@ See the [acoustic antenna simulator concept](../../materials.md) for the build p
 
 ## Preparing for L2
 
-Read the assigned sections on **field regions** before the next class — we'll formalize the boundary between the reactive near field, radiating near field, and far field, and connect these regions to how (and where) antennas are actually measured.
+Read the assigned sections on **basic antenna properties** before the next class — we'll trace the physics chain from Maxwell's equations to the plane wave, then define the headline parameters: radiation intensity, directivity, gain, effective aperture, and beamwidth.

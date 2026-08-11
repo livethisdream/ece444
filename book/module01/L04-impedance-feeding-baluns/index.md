@@ -11,7 +11,7 @@
 
 <ol class="lo-list lo-sublist" style="--module: '1'; --lo: '4'">
   <li>I can decompose an antenna's input impedance into radiation resistance, loss resistance, and reactance, and connect the radiation resistance to the power actually radiated.</li>
-  <li>I can compute the reflection coefficient and VSWR a feed line sees at the antenna terminals, and the resulting mismatch (return) loss.</li>
+  <li>I can compute the reflection coefficient and VSWR a feed line sees at the antenna terminals, and the resulting mismatch loss.</li>
   <li>I can design a quarter-wave transformer — and read an L-match — to match a load to a feed line.</li>
   <li>I can explain why a balun is required to feed a balanced antenna from unbalanced coax, and identify the common balun types and what each one does.</li>
 </ol>
@@ -101,7 +101,7 @@ impedances.
 
 The sign of $X_\text{in}$ tells you where you are relative to resonance:
 
-| Condition | Reactance | Behavior |
+| Condition | $X_\text{in}$ | Behavior |
 | :-- | :-: | :-- |
 | Electrically short ($\ell < \ell_\text{res}$) | $X_\text{in} < 0$ | **capacitive** |
 | Resonant ($\ell = \ell_\text{res}$) | $X_\text{in} = 0$ | pure resistance |
@@ -131,7 +131,7 @@ $$
 This is the same $\Gamma$ / VSWR pair from Lessons 2 and 3 — now tied directly to
 the antenna's impedance. The fraction of incident power that bounces back is
 $|\Gamma|^2$, so the power actually accepted by the antenna is reduced by the
-**mismatch (return) loss**
+**mismatch loss**
 
 $$
 L_\text{mismatch} = -10 \log_{10}\!\left( 1 - |\Gamma|^2 \right)\ \text{dB}.
@@ -229,7 +229,7 @@ The fix is a **balun** (**bal**anced-to-**un**balanced), inserted at the feed
 point. Its job is to force equal-and-opposite currents on the two arms and to
 present a high impedance to common-mode current on the shield. Common types:
 
-| Balun | What it does | Typical use |
+| Balun | Purpose | Use |
 | :-- | :-- | :-- |
 | **Choke / current balun** (ferrite beads, coiled coax, sleeve/"bazooka") | Adds a high common-mode impedance in series with the shield outside, choking off feed-line current | The default 1:1 dipole feed |
 | **Voltage balun** (transformer) | Forces balanced *voltages* across the load | Where a symmetric voltage drive is needed |

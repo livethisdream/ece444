@@ -147,11 +147,11 @@ If the antenna is wrong, nothing downstream can fix it.
 
 ## Course roadmap
 
-1. Foundations of EM and antennas
+1. Foundations of Electromagnetics and Antennas
 2. Antenna types, simulation, measurement
 3. Arrays and ADALM-PHASER beamforming
 4. Radar fundamentals and FMCW
-5. Capstone — beamforming + radar
+5. Capstone Project — beamforming + radar
 
 <small>41 lessons, ~15 labs, 2 projects.</small>
 
@@ -165,7 +165,7 @@ If the antenna is wrong, nothing downstream can fix it.
   <div class="mod-top"><span class="mod-num">2</span><span class="mod-title">Antenna Types &amp; Measurement</span></div>
   <div class="mod-top"><span class="mod-num">3</span><span class="mod-title">Arrays &amp; Beamforming</span></div>
   <div class="mod-top"><span class="mod-num">4</span><span class="mod-title">Radar &amp; FMCW</span></div>
-  <div class="mod-top"><span class="mod-num">5</span><span class="mod-title">Capstone</span></div>
+  <div class="mod-top"><span class="mod-num">5</span><span class="mod-title">Capstone Project</span></div>
 
   <!-- Row 2: lesson range -->
   <div class="mod-lessons">L1 – L6</div>

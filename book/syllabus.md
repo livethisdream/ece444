@@ -93,7 +93,7 @@ Each LO is assessed at least once. LOs are assessed as **Mastered** or
 | 4.6 | I can implement moving target indication (MTI) processing to distinguish moving targets from clutter. |
 | 4.7 | I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance. |
 
-### Module 5 — Capstone
+### Module 5 — Capstone Project
 
 | LO | Description |
 | :-: | :- |
@@ -331,7 +331,7 @@ Labs are marked **LAB**.
 37. CFAR Processing Theory
 38. CFAR Processing Lab **(LAB)**
 
-### Module 5 — Final Capstone Project
+### Module 5 — Capstone Project
 
 **Scenario:** Track a moving target while suppressing a static jammer.
 

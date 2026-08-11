@@ -11,7 +11,7 @@ parts:
       - file: syllabus
       - file: materials
 
-  - caption: Module 1 — Antenna Fundamentals
+  - caption: Module 1 — Foundations of Electromagnetics and Antennas
     chapters:
       - file: module01/index
         title: Module 1 overview
@@ -107,7 +107,7 @@ parts:
       - file: module04/L38-cfar-lab/index
         title: "L38 — CFAR Processing Lab"
 
-  - caption: Module 5 — Capstone
+  - caption: Module 5 — Capstone Project
     chapters:
       - file: module05/index
         title: Module 5 overview

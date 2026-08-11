@@ -155,14 +155,14 @@ fixed — cubesats tumble, handhelds rotate, aircraft bank.
 
 ## Part 2: Bandwidth
 
-### What "bandwidth" means depends on what you're measuring
+### An antenna has multiple bandwidths
 
 An antenna has multiple bandwidths, one for each parameter you care
 about:
 
 - **Impedance bandwidth** — range of frequencies over which the
   antenna is well matched to its feed (usually VSWR ≤ 2, i.e.
-  $|\Gamma| \le 1/3$, or return loss ≥ 9.5 dB). This is the most
+  $|\Gamma| \le 1/3$, or return loss (RL) ≥ 9.5 dB). This is the most
   common definition and the one meant by an unqualified "bandwidth."
 - **Pattern bandwidth** — range where the radiation pattern (gain,
   beamwidth, sidelobe level) stays within spec.
@@ -173,7 +173,7 @@ The three don't have to coincide. A patch antenna can be matched over
 a wider band than it produces good CP, so its polarization bandwidth
 is narrower than its impedance bandwidth.
 
-### Fractional bandwidth
+### Fractional and ratio bandwidth
 
 Report bandwidth as a *fraction* of the center frequency, not just Hz:
 
@@ -184,7 +184,7 @@ $$
 
 100 MHz means very different things at 500 MHz and at 50 GHz.
 
-For wideband antennas the more useful figure is the **ratio bandwidth**:
+For wideband antennas the more useful figure is the **ratio bandwidth** (RBW):
 
 $$
 \text{RBW} = \frac{f_{H}}{f_{L}}.
@@ -201,7 +201,7 @@ Rough categories:
 
 ### Bandwidth is limited by size
 
-There is no free lunch. The **Chu-Harrington limit** ties minimum
+There is no free lunch. The **Chu-Harrington bound** ties minimum
 antenna Q to the smallest sphere that encloses the antenna:
 
 $$
@@ -221,13 +221,13 @@ already close to $\lambda/2$ and can afford tens of percent bandwidth.
 | Antenna | Typical FBW | Typical use |
 | :--- | :---: | :--- |
 | Patch (single element) | 1 – 5% | GPS, cell handsets, tags |
-| Half-wave dipole | 8 – 15% | Broadcast, generic |
+| Dipole (λ/2) | 8 – 15% | Broadcast, generic |
 | Slot antenna | 5 – 10% | Aircraft skins |
 | Horn (standard gain) | 30 – 50% | Test ranges, feeds |
-| Log-periodic | 10 : 1 ratio BW | Broadband probing |
-| Spiral / helix | 10 : 1+ | Electronic warfare, DF |
-| Vivaldi / TSA | 10 : 1+ | UWB radar, phased arrays |
-| Biconical | 3 : 1+ | EMC testing |
+| Log-periodic | 10:1 RBW | Broadband probing |
+| Spiral | 10:1+ | Electronic warfare, DF |
+| Vivaldi / TSA | 10:1+ | UWB radar, phased arrays |
+| Biconical | 3:1+ | EMC testing |
 
 The rule of thumb: **resonant antennas are narrowband, traveling-wave
 and self-scaling antennas are wideband.** A log-periodic looks the

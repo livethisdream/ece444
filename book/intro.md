@@ -20,7 +20,7 @@
 <section class="block-grid" aria-label="Course modules">
   <a class="block-card" href="module01/index.html">
     <span class="num">01</span>
-    <h3>Foundations of Electromagnetics &amp; Antennas</h3>
+    <h3>Foundations of Electromagnetics and Antennas</h3>
     <p>From Maxwell's equations to the parameters that describe any radiator: gain, directivity, polarization, beamwidth.</p>
     <footer>Lessons 1–6</footer>
   </a>
@@ -44,7 +44,7 @@
   </a>
   <a class="block-card" href="module05/index.html">
     <span class="num">05</span>
-    <h3>Capstone</h3>
+    <h3>Capstone Project</h3>
     <p>Track a moving target while nulling a static jammer — then defend your design in a technical briefing.</p>
     <footer>Lessons 39–41</footer>
   </a>
@@ -55,7 +55,7 @@
     <p class="d-eyebrow">Individual deliverable</p>
     <h3>Final Project</h3>
     <p class="d-weight"><span class="d-w-num">40%</span> of course grade</p>
-    <p class="d-due">Capstone: moving target, static jammer, technical briefing</p>
+    <p class="d-due">Capstone Project: moving target, static jammer, technical briefing</p>
     <a class="d-link" href="syllabus.html#grading">How mastery grading works →</a>
   </div>
   <div class="deliverable-card">
