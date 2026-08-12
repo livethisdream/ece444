@@ -189,6 +189,29 @@ measures VSWR $= 1.5$ on a $50\ohms$ line.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Mismatch that kills the amplifier.} A power amplifier (PA)
+delivers a forward power of $\myp{fwd} = +40\dbm$ toward a transmit antenna. A
+shunt protection diode at the PA output fails catastrophically if it must
+dissipate more than $\myp{max} = +30\dbm$. Model \emph{all} of the reflected
+power as landing on the diode.
+\begin{parts}
+	\part Convert $\myp{fwd}$ and $\myp{max}$ to watts.
+		\begin{solution}[0.9in] \eq{ \myp{fwd} = 10^{(40-30)/10}\watts = 10\watts, \qquad \myp{max} = 10^{0}\watts = 1\watts } \end{solution}
+	\part In terms of $\left| \Gamma \right|$ at the antenna, how much power is reflected
+	back toward the PA?
+		\begin{solution}[0.6in] $\myp{ref} = \left| \Gamma \right|^{2} \myp{fwd}$. \end{solution}
+	\part Find the largest $\left| \Gamma \right|$ the system can tolerate before the
+	diode is destroyed.
+		\begin{solution}[0.9in] \eq{ \left| \Gamma \right|_{\max} = \sqrt{\dfrac{\myp{max}}{\myp{fwd}}} = \sqrt{0.1} \approx 0.316 } \end{solution}
+	\part Convert to a VSWR limit and a return-loss limit, and state the datasheet rule.
+		\begin{solution}[1.3in] \eq{ \text{VSWR}_{\max} = \dfrac{1.316}{0.684} \approx 1.93, \qquad \text{RL}_{\min} = -10\mylog{0.1} = 10\db } Rule: keep VSWR $\le 1.9$ (return loss $\ge 10\db$); reflected power must stay $\ge 10\db$ below forward. \end{solution}
+	\part In one sentence: how does a circulator or isolator between the PA and antenna
+	change this picture?
+		\begin{solution}[1in] It routes the reflected wave into a matched dump-port load instead of back into the PA, so the diode no longer sees it --- the antenna can then run at much higher VSWR (paid for by insertion loss, size, and bandwidth). \end{solution}
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Baluns.}
 \begin{parts}
 	\part In one or two sentences, explain why feeding a dipole \emph{directly} with

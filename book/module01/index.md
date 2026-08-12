@@ -8,7 +8,7 @@
 
 <ol class="lo-list" style="--module: '1'">
   <li>I can explain what an antenna is, describe its role in a wireless system, and recognize common antenna types by sight.</li>
-  <li>I can define and calculate fundamental antenna properties — gain, directivity, effective aperture, beamwidth, and sidelobe level — and apply the reciprocity principle that links an antenna's transmit and receive behavior.</li>
+  <li>I can define and calculate fundamental antenna properties — gain, directivity, effective aperture, beamwidth, and sidelobe level — apply the reciprocity principle that links an antenna's transmit and receive behavior, and use the Friis transmission equation to predict received power in a link.</li>
   <li>I can determine the polarization of an antenna and describe the bandwidth characteristics of common antenna types.</li>
   <li>I can calculate input impedance, feed considerations, and the role of baluns in an antenna feed system.</li>
   <li>I can identify and distinguish the reactive near-field, radiating near-field, and far-field regions and calculate the boundaries for a given antenna.</li>

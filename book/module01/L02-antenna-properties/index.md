@@ -16,6 +16,7 @@
   <li>I can define and compute the headline antenna parameters: radiation intensity, directivity, gain, effective aperture, beamwidth, boresight, main / side / back lobes.</li>
   <li>I can read a radiation pattern and pull out HPBW, FNBW, and sidelobe level.</li>
   <li>I can state the reciprocity principle and explain why an antenna's pattern, gain, and impedance are the same whether it transmits or receives.</li>
+  <li>I can apply the Friis transmission equation — with EIRP and free-space path loss — to predict the received power in a link.</li>
 </ol>
 
 ## Part 1: From Maxwell to a wave
