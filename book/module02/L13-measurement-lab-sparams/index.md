@@ -7,11 +7,9 @@
 <a href="../../slides/L13-measurement-lab-sparams.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '13'">
+<ol class="lo-list" style="--module: '2'; counter-reset: lo 5;">
   <li>I can measure the impedance and S-parameters of an antenna using a vector network analyzer and interpret the results.</li>
 </ol>
 

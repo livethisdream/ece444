@@ -7,11 +7,9 @@
 <a href="../../slides/L41-radar-integration.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '41'">
+<ol class="lo-list" style="--module: '5'; counter-reset: lo 1;">
   <li>I can integrate FMCW radar processing with a phased-array front-end to track a moving target.</li>
   <li>I can suppress a static jammer using null steering while maintaining detection of a moving target.</li>
   <li>I can present system performance results and defend engineering trade-offs in a technical briefing.</li>

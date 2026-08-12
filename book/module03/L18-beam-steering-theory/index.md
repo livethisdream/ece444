@@ -7,11 +7,9 @@
 <a href="../../slides/L18-beam-steering-theory.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '18'">
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 3;">
   <li>I can calculate the phase weights required to steer a beam to a given angle and predict the resulting array pattern.</li>
 </ol>
 

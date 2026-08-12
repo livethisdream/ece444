@@ -7,11 +7,9 @@
 <a href="../../slides/L21-array-factor-lab.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '21'">
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 1;">
   <li>I can derive the array factor for an arbitrary linear array and apply pattern multiplication.</li>
 </ol>
 

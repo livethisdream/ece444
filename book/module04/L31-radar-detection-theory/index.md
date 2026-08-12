@@ -7,11 +7,9 @@
 <a href="../../slides/L31-radar-detection-theory.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '31'">
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 2;">
   <li>I can apply radar detection theory (PD, FAR, dwell time) to determine detection performance under noise.</li>
 </ol>
 

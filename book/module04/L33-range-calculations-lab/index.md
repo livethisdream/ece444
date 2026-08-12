@@ -7,11 +7,9 @@
 <a href="../../slides/L33-range-calculations-lab.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '33'">
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 1;">
   <li>I can calculate range resolution, unambiguous range, and Doppler shift for a given radar waveform.</li>
 </ol>
 

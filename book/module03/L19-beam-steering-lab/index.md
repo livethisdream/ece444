@@ -7,11 +7,9 @@
 <a href="../../slides/L19-beam-steering-lab.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '19'">
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 4;">
   <li>I can implement beam steering on the ADALM-PHASER and verify the steered pattern against theory.</li>
 </ol>
 

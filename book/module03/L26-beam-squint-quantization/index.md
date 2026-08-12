@@ -7,11 +7,9 @@
 <a href="../../slides/L26-beam-squint-quantization.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '26'">
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 7;">
   <li>I can identify beam squint and quantization effects in a phased array and describe their impact on system performance.</li>
 </ol>
 

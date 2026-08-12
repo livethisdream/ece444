@@ -7,11 +7,9 @@
 <a href="../../slides/L10-patch-slot-horn.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '10'">
+<ol class="lo-list" style="--module: '2'; counter-reset: lo 2;">
   <li>I can describe the radiation mechanism, pattern, and typical use cases for patch, slot, and horn antennas.</li>
 </ol>
 

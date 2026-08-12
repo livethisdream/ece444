@@ -7,11 +7,9 @@
 <a href="../../slides/L08-dipole-simulation-lab.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '8'">
+<ol class="lo-list" style="--module: '2'; counter-reset: lo 1;">
   <li>I can simulate a dipole antenna using an EM simulation tool and interpret the results against analytical predictions.</li>
 </ol>
 

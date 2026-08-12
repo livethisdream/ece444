@@ -7,11 +7,9 @@
 <a href="../../slides/L17-phased-array-hardware.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '17'">
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 2;">
   <li>I can identify the hardware architecture of the ADALM-PHASER and control it via SDR software.</li>
 </ol>
 

@@ -7,11 +7,9 @@
 <a href="../../slides/L22-antenna-pattern-theory.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '22'">
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 5;">
   <li>I can distinguish between array factor and true antenna pattern and account for element pattern effects.</li>
 </ol>
 

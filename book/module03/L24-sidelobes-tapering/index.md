@@ -7,11 +7,9 @@
 <a href="../../slides/L24-sidelobes-tapering.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '24'">
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 6;">
   <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
 </ol>
 

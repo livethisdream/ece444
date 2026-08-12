@@ -7,11 +7,9 @@
 <a href="../../slides/L07-simple-resonant-antennas.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '7'">
+<ol class="lo-list" style="--module: '2'; counter-reset: lo 0;">
   <li>I can describe the radiation behavior of simple resonant antennas (isotropic radiator, half-wave dipole, monopole, loop) and calculate their gain and impedance.</li>
 </ol>
 

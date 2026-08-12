@@ -7,11 +7,9 @@
 <a href="../../slides/L12-pattern-measurement-theory.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '12'">
+<ol class="lo-list" style="--module: '2'; counter-reset: lo 4;">
   <li>I can explain the theory behind antenna pattern measurement, including anechoic chambers, near-field to far-field transformations, and standard gain horns.</li>
 </ol>
 

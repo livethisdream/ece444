@@ -7,11 +7,9 @@
 <a href="../../slides/L39-final-project-kickoff.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '39'">
+<ol class="lo-list" style="--module: '5'; counter-reset: lo 0;">
   <li>I can integrate beam-steering and null-steering weights to optimize array performance against a specified scenario.</li>
 </ol>
 

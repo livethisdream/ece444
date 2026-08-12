@@ -7,11 +7,9 @@
 <a href="../../slides/L15-aperture-distributions.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '15'">
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 0;">
   <li>I can describe aperture distributions and calculate aperture efficiency for a given illumination.</li>
 </ol>
 

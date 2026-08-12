@@ -7,11 +7,9 @@
 <a href="../../slides/L37-cfar-theory.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '37'">
+<ol class="lo-list" style="--module: '4'; counter-reset: lo 6;">
   <li>I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance.</li>
 </ol>
 

@@ -7,11 +7,9 @@
 <a href="../../slides/L27-null-steering-theory.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '27'">
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 8;">
   <li>I can calculate null-steering weights and implement pattern nulls on the ADALM-PHASER.</li>
 </ol>
 

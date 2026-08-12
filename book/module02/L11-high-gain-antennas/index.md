@@ -7,11 +7,9 @@
 <a href="../../slides/L11-high-gain-antennas.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
-## Learning outcomes
+## Learning Objectives
 
-By the end of this lesson, you will be able to:
-
-<ol class="lo-list" style="--module: '11'">
+<ol class="lo-list" style="--module: '2'; counter-reset: lo 3;">
   <li>I can describe how reflectors, Yagi-Uda antennas, and arrays achieve high gain, and select an appropriate high-gain antenna for a given application.</li>
 </ol>
 
