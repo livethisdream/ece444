@@ -336,6 +336,55 @@ maxima and minima set the VSWR, and the nulls stay pinned in place.
         title="VSWR standing wave">
 </iframe>
 
+### Comparing gain patterns
+
+Toggle antenna types on/off to compare their **E-plane** gain patterns
+against an isotropic reference. Slide the dish diameter to watch the
+parabolic beam narrow and its peak gain climb — a direct look at how a
+larger $A_{\text{phys}} / \lambda^{2}$ buys gain.
+
+<iframe src="../../viz/polar-gain.html"
+        width="100%" height="620"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Polar gain patterns">
+</iframe>
+
+### Beamwidth, boresight, and lobes
+
+Read on a radiation pattern:
+
+- **Boresight** — the direction of peak radiation. Antennas are
+  usually aimed along boresight.
+- **Half-power beamwidth (HPBW)** — angular width where the pattern
+  drops by 3 dB (to $1/2$ in power).
+- **First-null beamwidth (FNBW)** — angular width between the first
+  nulls on either side of the main lobe. Roughly $2\times$ HPBW for
+  most simple patterns.
+- **Main lobe** — the lobe containing boresight.
+- **Sidelobes** — every other lobe. Reported by **sidelobe level
+  (SLL)** in dB below the main lobe peak.
+- **Back lobe** — the lobe centered at $180^{\circ}$ from boresight.
+  The **front-to-back ratio (F/B)** is main-lobe peak divided by
+  back-lobe peak.
+
+Beamwidth and sidelobe level are the two knobs you'll trade against
+each other in every array-tapering problem in Module 3.
+
+#### Interactive — read features off a pattern
+
+The plot below shows the **rectilinear** ($\theta$ vs. dB) view of the
+same aperture pattern we used for the horn and dish in the polar plot.
+Slide **D/λ** to change the aperture size; the HPBW, FNBW, and SLL
+markers move with it.
+
+<iframe src="../../viz/pattern-features.html"
+        width="100%" height="660"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Rectilinear pattern features">
+</iframe>
+
 ### Reciprocity — the same antenna, both ways
 
 Everything so far described an antenna **transmitting**: it takes power from a
@@ -526,55 +575,6 @@ $$
 Friis is the **one-way** link. Send the wave out to a target, let it scatter, and
 collect the echo, and you apply Friis *twice* with the target's radar cross
 section in between — that is the **radar range equation**, built in Module 4.
-
-#### Interactive — compare gain patterns
-
-Toggle antenna types on/off to compare their **E-plane** gain patterns
-against an isotropic reference. Slide the dish diameter to watch the
-parabolic beam narrow and its peak gain climb — a direct look at how a
-larger $A_{\text{phys}} / \lambda^{2}$ buys gain.
-
-<iframe src="../../viz/polar-gain.html"
-        width="100%" height="620"
-        style="border: 1px solid #cddce9; border-radius: 6px;"
-        loading="lazy"
-        title="Polar gain patterns">
-</iframe>
-
-### Beamwidth, boresight, and lobes
-
-Read on a radiation pattern:
-
-- **Boresight** — the direction of peak radiation. Antennas are
-  usually aimed along boresight.
-- **Half-power beamwidth (HPBW)** — angular width where the pattern
-  drops by 3 dB (to $1/2$ in power).
-- **First-null beamwidth (FNBW)** — angular width between the first
-  nulls on either side of the main lobe. Roughly $2\times$ HPBW for
-  most simple patterns.
-- **Main lobe** — the lobe containing boresight.
-- **Sidelobes** — every other lobe. Reported by **sidelobe level
-  (SLL)** in dB below the main lobe peak.
-- **Back lobe** — the lobe centered at $180^{\circ}$ from boresight.
-  The **front-to-back ratio (F/B)** is main-lobe peak divided by
-  back-lobe peak.
-
-Beamwidth and sidelobe level are the two knobs you'll trade against
-each other in every array-tapering problem in Module 3.
-
-#### Interactive — read features off a pattern
-
-The plot below shows the **rectilinear** ($\theta$ vs. dB) view of the
-same aperture pattern we used for the horn and dish in the polar plot.
-Slide **D/λ** to change the aperture size; the HPBW, FNBW, and SLL
-markers move with it.
-
-<iframe src="../../viz/pattern-features.html"
-        width="100%" height="660"
-        style="border: 1px solid #cddce9; border-radius: 6px;"
-        loading="lazy"
-        title="Rectilinear pattern features">
-</iframe>
 
 ## Summary
 

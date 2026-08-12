@@ -337,6 +337,54 @@ the dish beam narrow and its peak gain climb.
 
 ---
 
+## Reading a radiation pattern
+
+<div class="slide-box">
+
+- **Boresight** — direction of peak radiation
+- **HPBW** — 3 dB (half-power) beamwidth
+- **FNBW** — first-null beamwidth
+- **Main lobe** — contains boresight
+- **Sidelobes** — everything else; reported as **SLL** in dB
+- **Back lobe** — at $180^{\circ}$ from boresight; **F/B** ratio
+
+</div>
+
+Note:
+Draw a polar pattern on the chalkboard, label all six on it.
+This is the picture students need to be able to draw from memory.
+
+---
+
+## Features on a rectilinear plot
+
+<div class="fig" data-inline-svg="./fig/rectilinear.svg" style="max-width:900px; margin:0 auto;"></div>
+
+<small>Sinc² aperture, D/λ = 6. HPBW at −3 dB · FNBW at first nulls · SLL at first sidelobe peak.</small>
+
+<p class="viz-cue">↗ Interactive on the lesson page</p>
+
+Note:
+Interactive on the site — students can drag D/λ and watch beamwidth
+narrow while sidelobes multiply. Point them there for the tradeoffs slide
+that follows.
+
+---
+
+## Tradeoffs
+
+<div class="callout">
+<strong>Narrower beam</strong> ↔ <strong>higher sidelobes</strong> — there's no free lunch.
+</div>
+
+- Uniform aperture: narrowest main lobe, worst sidelobes
+- Tapered aperture: broader main lobe, deeper sidelobe suppression
+
+We'll formalize this in **Module 3** with amplitude tapering
+(uniform, cosine, Chebyshev, Taylor).
+
+---
+
 ## Reciprocity: Trading Places
 
 <div class="two-col fig-wide"><div class="col-text">
@@ -458,54 +506,6 @@ Fixed gain → $A_e \propto \lambda^{2}$.
 Note:
 We proved it for one antenna; reciprocity generalizes it to all. Pairs with
 Friis / the radar range equation in Module 4.
-
----
-
-## Reading a radiation pattern
-
-<div class="slide-box">
-
-- **Boresight** — direction of peak radiation
-- **HPBW** — 3 dB (half-power) beamwidth
-- **FNBW** — first-null beamwidth
-- **Main lobe** — contains boresight
-- **Sidelobes** — everything else; reported as **SLL** in dB
-- **Back lobe** — at $180^{\circ}$ from boresight; **F/B** ratio
-
-</div>
-
-Note:
-Draw a polar pattern on the chalkboard, label all six on it.
-This is the picture students need to be able to draw from memory.
-
----
-
-## Features on a rectilinear plot
-
-<div class="fig" data-inline-svg="./fig/rectilinear.svg" style="max-width:900px; margin:0 auto;"></div>
-
-<small>Sinc² aperture, D/λ = 6. HPBW at −3 dB · FNBW at first nulls · SLL at first sidelobe peak.</small>
-
-<p class="viz-cue">↗ Interactive on the lesson page</p>
-
-Note:
-Interactive on the site — students can drag D/λ and watch beamwidth
-narrow while sidelobes multiply. Point them there for the tradeoffs slide
-that follows.
-
----
-
-## Tradeoffs
-
-<div class="callout">
-<strong>Narrower beam</strong> ↔ <strong>higher sidelobes</strong> — there's no free lunch.
-</div>
-
-- Uniform aperture: narrowest main lobe, worst sidelobes
-- Tapered aperture: broader main lobe, deeper sidelobe suppression
-
-We'll formalize this in **Module 3** with amplitude tapering
-(uniform, cosine, Chebyshev, Taylor).
 
 ---
 
