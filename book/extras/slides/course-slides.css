@@ -89,7 +89,9 @@ body.reveal-viewport::after {
   right: 22px;
   width: 54px;
   height: 54px;
-  background: url("/assets/ece444/img/USAFA-logo.png") no-repeat center / contain;
+  /* Relative to THIS stylesheet, not the site root — decks are standalone and
+     the old absolute /assets/ece444/… Jekyll path 404s everywhere. */
+  background: url("./img/01-course-intro/USAFA-logo.png") no-repeat center / contain;
   opacity: 0.9;
 }
 
