@@ -75,8 +75,8 @@ A receive antenna only picks up the component of $\mathbf{E}$ **aligned with its
 
 $$
 \mathbf{E}(z, t)
-= \hat{x} E_{x} \cos(\omega t - k z)
-+ \hat{y} E_{y} \cos(\omega t - k z + \delta)
+= \hat{x} E_{x} \cos(\omega t - k z) +
+\hat{y} E_{y} \cos(\omega t - k z + \delta)
 $$
 
 Three knobs: $E_{x}$, $E_{y}$, and relative phase $\delta$.
