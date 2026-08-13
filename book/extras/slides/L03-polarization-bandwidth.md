@@ -59,13 +59,11 @@ Polarization and bandwidth are the two most misquoted specs on a datasheet.
 
 Fix a point in space. Watch $\mathbf{E}(t)$ trace a curve over one period.
 
+<div class="fig" data-inline-svg="./fig/pol-states.svg" style="max-width:570px; margin:0 auto;"></div>
+
 <div class="callout">
 That curve <strong>is</strong> the polarization.
 </div>
-
-- **Line** → linear polarization
-- **Circle** → circular polarization
-- **Ellipse** → elliptical (the general case)
 
 A receive antenna only picks up the component of $\mathbf{E}$ **aligned with its own polarization**. Everything else is discarded.
 
@@ -73,17 +71,21 @@ A receive antenna only picks up the component of $\mathbf{E}$ **aligned with its
 
 ## Building any polarization from two linear components
 
+<div class="two-col"><div class="col-text">
 $$
 \mathbf{E}(z, t)
 = \hat{x} E_{x} \cos(\omega t - k z) +
 \hat{y} E_{y} \cos(\omega t - k z + \delta)
 $$
-
-Three knobs: $E_{x}$, $E_{y}$, and relative phase $\delta$.
-
-- $\delta = 0$, equal amplitudes → **linear** at 45°
-- $\delta = \pm 90^{\circ}$, equal amplitudes → **circular**
-- Everything else → **elliptical**
+<p>Three knobs: $E_{x}$, $E_{y}$, and relative phase $\delta$.</p>
+<ul>
+<li>$\delta = 0$, equal amplitudes → <strong>linear</strong> at 45°</li>
+<li>$\delta = \pm 90^{\circ}$, equal amplitudes → <strong>circular</strong></li>
+<li>Everything else → <strong>elliptical</strong></li>
+</ul>
+</div><div class="col-fig">
+<div data-inline-svg="./fig/pol-construction.svg" style="max-width:330px; margin:0 auto;"></div>
+</div></div>
 
 Note:
 Draw the three cases on the chalkboard. Two orthogonal linear
@@ -93,10 +95,15 @@ components + a phase difference → *any* polarization state.
 
 ## Right or left hand?
 
-**IEEE convention** — point your right thumb along the direction of propagation.
-
-- Fingers curl the way E rotates → **right-hand** polarization
-- Otherwise → **left-hand** polarization
+<div class="two-col"><div class="col-text">
+<p><strong>IEEE convention</strong> — point your right thumb along the direction of propagation.</p>
+<ul>
+<li>Fingers curl the way E rotates → <strong>right-hand</strong> polarization</li>
+<li>Otherwise → <strong>left-hand</strong> polarization</li>
+</ul>
+</div><div class="col-fig">
+<div data-inline-svg="./fig/handedness.svg"></div>
+</div></div>
 
 <div class="callout">
 Two identical CP antennas of <em>opposite sense</em> receive zero from each other.
@@ -107,17 +114,20 @@ Sense mismatch is a real design bug.
 
 ## Axial ratio
 
-For the general ellipse:
-
+<div class="two-col"><div class="col-text">
+<p>For the general ellipse:</p>
 $$
 \text{AR} = \frac{|E_{\text{maj}}|}{|E_{\text{min}}|} \ge 1
 $$
-
-$\text{AR}\_{\text{dB}} = 20 \log_{10}(\text{AR})$
-
-- $\text{AR} = 1$ (0 dB) → pure **circular**
-- $\text{AR} = \infty$ ($\infty$ dB) → pure **linear**
-- Real CP antennas: **AR ≤ 3 dB** across the band
+<p>$\text{AR}_{\text{dB}} = 20 \log_{10}(\text{AR})$</p>
+<ul>
+<li>$\text{AR} = 1$ (0 dB) → pure <strong>circular</strong></li>
+<li>$\text{AR} = \infty$ ($\infty$ dB) → pure <strong>linear</strong></li>
+<li>Real CP antennas: <strong>AR ≤ 3 dB</strong> across the band</li>
+</ul>
+</div><div class="col-fig">
+<div data-inline-svg="./fig/axial-ratio.svg" style="max-width:330px; margin:0 auto;"></div>
+</div></div>
 
 Note:
 "3 dB axial ratio" is the industry-standard CP spec. It caps
@@ -127,11 +137,15 @@ polarization loss to any linear receiver at 3 dB regardless of alignment.
 
 ## Polarization loss factor
 
+<div class="two-col"><div class="col-text">
 $$
-\text{PLF} = |\hat{\rho}\_{\text{w}} \cdot \hat{\rho}\_{\text{a}}^{*}|^{2}
+\text{PLF} = |\hat{\rho}_{\text{w}} \cdot \hat{\rho}_{\text{a}}^{*}|^{2}
 $$
-
-Fraction of incident power an antenna captures given a polarization mismatch.
+<p>Fraction of incident power an antenna captures given a polarization mismatch.</p>
+</div><div class="col-fig">
+<div data-inline-svg="./fig/plf-cos2.svg" style="max-width:87%; margin:0 auto;"></div>
+<small>Two linear antennas, tilted by $\theta$.</small>
+</div></div>
 
 <div class="callout">
 Unit vectors are <em>complex</em> when either wave is not purely linear —
@@ -193,17 +207,19 @@ wider band than it holds CP — its polarization BW is narrower.
 
 ## Impedance bandwidth — what "VSWR ≤ 2" means
 
+<div class="two-col"><div class="col-text">
 $$
 \text{VSWR} = 2 \Longleftrightarrow |\Gamma| = 1/3
 \Longleftrightarrow \text{RL} = 9.5\ \text{dB}
 $$
-
-Reflected power: $|\Gamma|^{2} = 11\%$. Transmitted: $89\%$.
-
+<p>Reflected power: $|\Gamma|^{2} = 11\%$. Transmitted: $89\%$.</p>
 <div class="callout">
 "VSWR ≤ 2:1" is the industry-standard bar. Some radar specs push to
 1.5:1 or lower; some consumer parts relax to 3:1.
 </div>
+</div><div class="col-fig">
+<div data-inline-svg="./fig/vswr.svg" style="max-width:95%; margin:0 auto;"></div>
+</div></div>
 
 ---
 
@@ -227,19 +243,20 @@ Rough categories:
 
 ## Bandwidth is limited by size
 
-**Chu-Harrington bound** — for an antenna in a sphere of radius $a$:
-
+<div class="two-col fig-wide"><div class="col-text">
+<p><strong>Chu-Harrington bound</strong> — for an antenna in a sphere of radius $a$:</p>
 $$
 Q \gtrsim \frac{1}{(k a)^{3}} + \frac{1}{k a},
 \qquad
 \text{BW} \approx \frac{1}{Q}
 $$
-
 <div class="callout">
 Small antennas (small $ka$) → high Q → narrow BW. There is no free lunch.
 </div>
-
-You can beat it with **loss** (resistive loading) but only by trading gain.
+<p>You can beat it with <strong>loss</strong> (resistive loading) but only by trading gain.</p>
+</div><div class="col-fig">
+<div data-inline-svg="./fig/chu-q-vs-ka.svg" style="max-width:95%; margin:0 auto;"></div>
+</div></div>
 
 Note:
 Intuition: cramming a resonator into a small volume forces a high

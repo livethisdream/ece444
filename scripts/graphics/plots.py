@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Generate the L02 deck data-plots as inline SVG.
+"""Generate the Module 1 deck data-plots as inline SVG.
 
-Three plots that were committed only as foreign-font PNGs:
+L02:
   - gain-pattern-polar : normalized patterns, isotropic/dipole/horn/dish
   - rectilinear        : uniform line-source sinc^2, HPBW/FNBW/SLL annotated
-  - vswr               : VSWR vs reflection-coefficient magnitude
+  - vswr               : VSWR vs reflection-coefficient magnitude (reused by L03)
+
+L03:
+  - plf-cos2           : polarization loss factor vs tilt, two linear antennas
+  - chu-q-vs-ka        : Chu-Harrington minimum Q vs electrical size
 
 Exported as SVG with live <text> (svg.fonttype='none'), then font-family is
 rewritten to 'inherit' so the injected figure picks up the deck's Source Sans
@@ -12,7 +16,8 @@ Pro. Transparent background, USAFA palette, no baked formulas (axis labels /
 legends / pattern annotations only).
 
     python scripts/graphics/plots.py
-    -> writes book/extras/slides/fig/{gain-pattern-polar,rectilinear,vswr}.svg
+    -> writes book/extras/slides/fig/{gain-pattern-polar,rectilinear,vswr,
+                                      plf-cos2,chu-q-vs-ka}.svg
 
 These are illustrative patterns with representative parameters, not measured data.
 """
@@ -143,9 +148,105 @@ def vswr() -> None:
     finalize(fig, "vswr")
 
 
+def plf_cos2() -> None:
+    """PLF between two linear antennas tilted by theta — the continuous curve
+    behind the L03 cheat-sheet table's linear-linear row."""
+    th = np.linspace(0, 90, 600)
+    plf = np.cos(np.deg2rad(th)) ** 2
+
+    fig, ax = plt.subplots(figsize=(5.8, 3.8))
+    ax.plot(th, plf, color=NAVY, lw=2.6)
+    ax.set_xlim(0, 90); ax.set_ylim(0, 1.08)
+    ax.set_xlabel("Tilt between the two antennas  θ  (deg)")
+    ax.set_ylabel("PLF")
+    ax.set_xticks(range(0, 91, 15))
+    ax.grid(color=RULE, linewidth=0.8)
+    for sp in ("top", "right"):
+        ax.spines[sp].set_visible(False)
+
+    # the three rows of the cheat sheet, marked on the curve
+    for t, lab, col, xy in ((0.0, "0 dB", GREEN, (7, 0.85)),
+                            (45.0, "−3 dB", RED, (52, 0.64)),
+                            (90.0, "−∞ dB", GREY, (58, 0.17))):
+        v = float(np.cos(np.deg2rad(t)) ** 2)
+        ax.plot(t, v, "o", color=col, ms=7, zorder=5)
+        ax.annotate(lab, xy=(t, v), xytext=xy, color=col, fontsize=12.5, fontweight="bold",
+                    arrowprops=dict(arrowstyle="->", color=col, lw=1.2))
+    ax.plot([45, 45], [0, 0.5], color=RULE, lw=1.0, ls=(0, (3, 3)), zorder=1)
+    ax.plot([0, 45], [0.5, 0.5], color=RULE, lw=1.0, ls=(0, (3, 3)), zorder=1)
+
+    # inset: the tilt angle being plotted, as two linear elements
+    ins = ax.inset_axes((0.60, 0.56, 0.36, 0.42))
+    tilt = np.deg2rad(38.0)
+    ins.plot([-1, 1], [0, 0], color=BLUE, lw=3.2, solid_capstyle="round")
+    ins.plot([-np.cos(tilt), np.cos(tilt)], [-np.sin(tilt), np.sin(tilt)],
+             color=RED, lw=3.2, solid_capstyle="round")
+    a = np.linspace(0, tilt, 60)
+    ins.plot(0.45 * np.cos(a), 0.45 * np.sin(a), color=GREY, lw=1.4)
+    ins.text(0.62 * np.cos(tilt / 2), 0.62 * np.sin(tilt / 2), "θ",
+             color=GREY, fontsize=13, fontweight="bold", ha="center", va="center")
+    ins.set_xlim(-1.25, 1.25); ins.set_ylim(-1.05, 1.05)
+    ins.set_aspect("equal"); ins.set_xticks([]); ins.set_yticks([])
+    ins.patch.set_alpha(0)
+    for sp in ins.spines.values():
+        sp.set_visible(False)
+
+    finalize(fig, "plf-cos2")
+
+
+def chu_q_vs_ka() -> None:
+    """Chu-Harrington lower bound on Q vs electrical size, with the bandwidth
+    it implies on the right-hand axis. Bound only — a real antenna sits above."""
+    ka = np.logspace(np.log10(0.15), np.log10(3.0), 800)
+    Q = 1 / ka ** 3 + 1 / ka
+
+    fig, ax = plt.subplots(figsize=(5.9, 3.9))
+    ax.axvspan(0.15, 1.0, color=RULE, alpha=0.35, lw=0, zorder=0)
+    ax.loglog(ka, Q, color=NAVY, lw=2.8, zorder=3)
+    ax.set_xlim(0.15, 3.0); ax.set_ylim(0.3, 400)
+    ax.set_xlabel("Electrical size  ka")
+    ax.set_ylabel("Minimum Q")
+    ax.grid(color=RULE, linewidth=0.8, which="major")
+    for sp in ("top",):
+        ax.spines[sp].set_visible(False)
+    ax.set_xticks([0.2, 0.3, 0.5, 1.0, 2.0, 3.0])
+    ax.set_xticklabels(["0.2", "0.3", "0.5", "1", "2", "3"])
+
+    ax.axvline(1.0, color=GREY, lw=1.4, ls=(0, (4, 3)), zorder=2)
+    ax.text(0.98, 250, "ka = 1", color=GREY, fontsize=12, fontweight="bold",
+            ha="right", va="center")
+    ax.text(0.165, 0.45, "electrically small", color=GREY, fontsize=12,
+            fontweight="bold", ha="left", va="bottom")
+
+    ax.plot(1.0, 2.0, "o", color=ORANGE, ms=7, zorder=5)
+
+    # what the Q actually costs you, on the same picture
+    sec = ax.secondary_yaxis("right", functions=(lambda q: 1 / q, lambda b: 1 / b))
+    sec.set_ylabel("Approx. fractional bandwidth")
+
+    # inset: the enclosing sphere that sets ka
+    ins = ax.inset_axes((0.56, 0.58, 0.38, 0.40))
+    t = np.linspace(0, 2 * np.pi, 200)
+    ins.plot(np.cos(t), np.sin(t), color=GREY, lw=1.5, ls=(0, (4, 3)))
+    zx = np.linspace(-0.45, 0.45, 200)
+    ins.plot(zx, 0.42 * np.sin(2 * np.pi * zx / 0.30), color=NAVY, lw=2.4)
+    ins.annotate("", xy=(np.cos(np.pi / 4), np.sin(np.pi / 4)), xytext=(0, 0),
+                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.6))
+    ins.text(0.30, 0.62, "a", color=RED, fontsize=13, fontweight="bold",
+             ha="right", va="center")
+    ins.set_xlim(-1.15, 1.15); ins.set_ylim(-1.15, 1.15)
+    ins.set_aspect("equal"); ins.set_xticks([]); ins.set_yticks([])
+    ins.patch.set_alpha(0)
+    for sp in ins.spines.values():
+        sp.set_visible(False)
+
+    finalize(fig, "chu-q-vs-ka")
+
+
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     gain_polar(); rectilinear(); vswr()
+    plf_cos2(); chu_q_vs_ka()
     return 0
 
 
