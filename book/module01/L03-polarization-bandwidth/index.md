@@ -194,7 +194,7 @@ Rough categories:
 
 - **Narrowband** — FBW $\lesssim 1\%$. Resonant antennas: patches,
   small loops, dielectric resonator antennas.
-- **Broadband** — FBW $10 – 40\%$. Dipoles, horns, most practical
+- **Broadband** — FBW $10\%$–$40\%$. Dipoles, horns, most practical
   designs.
 - **Ultra-wideband (UWB)** — RBW $\ge 2{:}1$ (equivalently FBW $\ge 67\%$
   by FCC definition). Log-periodic, spiral, Vivaldi/TSA, biconical.

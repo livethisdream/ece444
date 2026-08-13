@@ -52,7 +52,7 @@ $$ Z_\text{in} = R_\text{in} + jX_\text{in}, \qquad R_\text{in} = R_\text{rad} +
 
 Drive it with current $I_0$:
 
-$$ P_\text{in} = \tfrac{1}{2}|I_0|^2 R_\text{in} = \underbrace{\tfrac{1}{2}|I_0|^2 R_\text{rad}}_{P_\text{rad}} + \underbrace{\tfrac{1}{2}|I_0|^2 R_\text{loss}}_{P_\text{loss}} $$
+$$ P_\text{in} = \tfrac{1}{2}|I_0|^2 R_\text{in} = \underbrace{\tfrac{1}{2}|I_0|^2 R_\text{rad}}\_{P_\text{rad}} + \underbrace{\tfrac{1}{2}|I_0|^2 R_\text{loss}}\_{P_\text{loss}} $$
 
 Note:
 Radiation resistance and loss resistance carry the two fates of the input power:
