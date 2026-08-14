@@ -80,7 +80,8 @@ $$
 <p>Three knobs: $E_{x}$, $E_{y}$, and relative phase $\delta$.</p>
 <ul>
 <li>$\delta = 0$, equal amplitudes → <strong>linear</strong> at 45°</li>
-<li>$\delta = \pm 90^{\circ}$, equal amplitudes → <strong>circular</strong></li>
+<li>$\delta = -90^{\circ}$, equal amplitudes → <strong>right-hand</strong> circular</li>
+<li>$\delta = +90^{\circ}$, equal amplitudes → <strong>left-hand</strong> circular</li>
 <li>Everything else → <strong>elliptical</strong></li>
 </ul>
 </div><div class="col-fig">
@@ -135,6 +136,33 @@ polarization loss to any linear receiver at 3 dB regardless of alignment.
 
 ---
 
+## Example — name that polarization
+
+$$
+\mathbf{E} = \hat{x} 3\cos(\omega t - kz) + \hat{y} \cos(\omega t - kz - 90^{\circ})
+$$
+
+Read off the three numbers: $E_{x} = 3$, $E_{y} = 1$, $\delta = -90^{\circ}$.
+
+- $\delta = -90^{\circ}$ → **right-hand**
+- $E_{x} \ne E_{y}$ → **elliptical**, axes on $\hat{x}$ / $\hat{y}$
+
+$$
+\text{AR} = \frac{3}{1} = 3 \quad \rightarrow \quad \text{AR}\_{\text{dB}} = 20 \log_{10} 3 \approx 9.5 \text{ dB}
+$$
+
+<div class="callout">
+Right-hand elliptical — and it misses an AR ≤ 3 dB spec badly. At 9.5 dB this is far closer to linear than to circular.
+</div>
+
+Note:
+Work it in the order they should use on an exam: phase sign first
+(handedness), then the amplitudes (shape), then the ratio (how close to
+circular). The polarization playground on the lesson page animates this
+exact case — drop Ey to 1 and set the phase to -90.
+
+---
+
 ## Polarization loss factor
 
 <div class="two-col"><div class="col-text">
@@ -169,6 +197,41 @@ Two linear antennas tilted by $\theta$: $\text{PLF} = \cos^{2}\theta$.
 Note:
 Memorize this table. Every polarization problem on a homework or an
 exam reduces to it plus the $\cos^{2}\theta$ rule for linear-linear.
+
+---
+
+## Example — how much power do you lose?
+
+**(a)** GPS satellite transmits RHCP, your receiver is a linear whip:
+
+$$
+\text{PLF} = |\hat{\rho}\_{\text{w}} \cdot \hat{\rho}\_{\text{a}}^{*}|^{2} = 0.5 \quad \rightarrow \quad -3 \text{ dB}
+$$
+
+Half the power is gone no matter how you turn the whip — the price of rotation immunity.
+
+**(b)** Both ends linear: base dipole vertical, handheld tilted $30^{\circ}$:
+
+$$
+\text{PLF} = \cos^{2}(30^{\circ}) = 0.75 \quad \rightarrow \quad -1.25 \text{ dB}
+$$
+
+<div class="callout">
+Tilt that handheld all the way to horizontal and $\cos^{2}(90^{\circ}) = 0$ — in theory the link dies.
+</div>
+
+<p class="viz-cue">▶ Live demo — antenna link</p>
+
+Note:
+DEMO HERE — run demos/antenna_link on a Pluto and rotate the receive
+antenna while the class watches received power track cos^2(theta). That is
+part (b) live, and it is the reason the backend forces manual gain: AGC
+would quietly claw the loss back and kill the point. Use --sim if there is
+no hardware in the room.
+
+Ask why (b) never actually reaches zero on the screen: multipath scatters
+energy back into the orthogonal polarization, so a real null bottoms out
+around -20 dB.
 
 ---
 
@@ -233,8 +296,8 @@ $$
 
 Rough categories:
 
-- **Narrowband**: FBW ≲ 1% (patches, small loops)
-- **Broadband**: FBW 10 – 40% (dipoles, horns)
+- **Narrowband**: FBW ≲ 5% (patches, small loops)
+- **Broadband**: FBW 5 – 50% (dipoles, slots, horns)
 - **UWB**: RBW ≥ 2:1, i.e. FBW ≥ 67% (log-periodic, spiral, Vivaldi)
 
 100 MHz means different things at 500 MHz and 50 GHz — **always report as a fraction.**
@@ -264,19 +327,46 @@ stored-energy-to-radiated-power ratio. That's exactly Q.
 
 ---
 
-## Bandwidth by antenna family
+## Resonant vs traveling-wave
 
-| Antenna | Typical FBW | Notes |
+What the current does when it reaches the **end** of the structure sets the bandwidth.
+
+- **Resonant** — current reflects off the end → **standing wave**. Only works where the length fits (≈ λ/2). One resonance → **one narrow band**.
+- **Traveling-wave** — current radiates away, or dies in a **termination**, before it can return. No standing wave, no sharp resonance → **wide**.
+- **Self-scaling** — structure is a scaled copy of itself; a different section is "active" at each frequency → **very wide**.
+
+| Resonant | Traveling-wave | Self-scaling |
+| :--- | :--- | :--- |
+| patch, dipole, slot | Vivaldi, helix, terminated long wire | log-periodic, spiral |
+
+Note:
+Watch the word "resonant" — in L4 it comes back meaning the frequency
+where X_in = 0. Same idea seen from the terminals: a resonant structure
+is one you operate at that frequency, which is why it is narrowband.
+
+If they ask about the termination: yes, the power dumped in that
+resistor is wasted, so a terminated traveling-wave antenna trades
+efficiency for bandwidth. Same trade as the resistive loading on the
+Chu-Harrington slide.
+
+---
+
+## Bandwidth by Antenna Type
+
+| Antenna | Typical FBW | Application |
 | :--- | :---: | :--- |
 | Patch | 1 – 5% | GPS, tags — resonant |
+| Slot | 5 – 10% | Aircraft skins |
 | Dipole (λ/2) | 8 – 15% | Broadcast, generic |
 | Horn | 30 – 50% | Test ranges |
 | Log-periodic | 10:1 RBW | Broadband probing |
 | Spiral | 10:1+ RBW | EW, DF |
 | Vivaldi / TSA | 10:1+ RBW | UWB radar, arrays |
+| Biconical | 3:1+ RBW | EMC testing |
 
 <div class="callout">
-Resonant → narrow. Traveling-wave and self-scaling → wide.
+Resonant → narrow.<br>
+Traveling-wave and self-scaling → wide.
 </div>
 
 ---
