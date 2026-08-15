@@ -138,7 +138,7 @@ The unit vectors are complex when either wave is not purely linear —
 that dot product hides the phase relationship between $E_{x}$ and
 $E_{y}$.
 
-Four cases you should know cold:
+Five cases you should know cold:
 
 | Wave | Antenna | PLF | PLF (dB) |
 | :--- | :--- | :---: | :---: |
@@ -147,6 +147,10 @@ Four cases you should know cold:
 | Linear (any) | RHCP or LHCP | 0.5 | $-3$ dB |
 | RHCP | RHCP | 1 | 0 dB |
 | RHCP | LHCP | 0 | $-\infty$ dB — sense mismatch |
+
+Every row here assumes *perfect* circular polarization. Real "CP"
+hardware is specified at AR ≤ 3 dB, which moves several of these numbers
+substantially; the last section of this lesson prices the difference.
 
 For two linear antennas tilted by angle $\theta$ relative to each
 other, $\text{PLF} = \cos^{2}\theta$ — this is why aligning your
@@ -336,6 +340,141 @@ the table is an instance of it — a patch has one resonant length and
 only works near it, while a log-periodic looks the same electrical size
 at every frequency in its band.
 
+## Reading a datasheet: the two most misquoted specs
+
+This lesson opened with a claim — that polarization and bandwidth are the
+two most misquoted specs on an antenna datasheet. Here is the evidence.
+None of what follows is a lie on the vendor's part. Each is a defensible
+reading of a real measurement, which is precisely why these survive all
+the way to a design review.
+
+### Misquote 1 — whose right hand?
+
+The handedness convention introduced above is the **IEEE** one: point
+your right thumb along the direction of propagation. There is a second
+convention in wide use.
+
+| Convention | Observer faces | Used by |
+| :--- | :--- | :--- |
+| **IEEE** | *Along* propagation — the wave travels away from you | Antenna engineering, radar, this course |
+| **Optics / physics** | *Toward* the source — the wave comes at you | Optics, remote sensing, some older European sources |
+
+The two label the *same physical wave* with *opposite* handedness. A part
+sold as "RHCP" under the optics convention is IEEE **LHCP**. Order its
+mate on the strength of the label and you have designed in a sense
+mismatch — which, per the PLF table above, is the one polarization error
+that takes the whole link rather than a few dB of it.
+
+There is no clever fix, only a procedural one: on any CP datasheet,
+confirm which way the observer is facing before you commit to the other
+end of the link.
+
+### Misquote 2 — "circularly polarized" at what axial ratio?
+
+The PLF table above is the idealized one — it assumes perfect circular
+polarization, AR = 0 dB. Real hardware is sold as "circular" at
+AR ≤ 3 dB, and parts marketed as circular at 6 dB are not hard to find.
+It is worth knowing exactly what that costs.
+
+Work in the basis of the ellipse's own major and minor axes. An antenna
+with axial ratio $A$ (linear, $\ge 1$) has polarization unit vector
+
+$$
+\hat{\rho}_{\text{a}}
+= \frac{A \hat{u}_{\text{maj}} + j \hat{u}_{\text{min}}}{\sqrt{A^{2}+1}},
+$$
+
+and a linearly polarized wave arriving at angle $\theta$ from the major
+axis is $\hat{\rho}_{\text{w}} = \cos\theta \hat{u}_{\text{maj}} +
+\sin\theta \hat{u}_{\text{min}}$. Then
+
+$$
+\text{PLF}(\theta)
+= |\hat{\rho}_{\text{w}} \cdot \hat{\rho}_{\text{a}}^{*}|^{2}
+= \frac{A^{2}\cos^{2}\theta + \sin^{2}\theta}{A^{2}+1}.
+$$
+
+This single expression contains three rows of the earlier table. Set
+$A = 1$ (perfect CP) and it collapses to $1/2$ for *every* $\theta$ — the
+fixed $-3$ dB, independent of orientation. Let $A \to \infty$ (perfectly
+linear) and it becomes $\cos^{2}\theta$, the two-linear-antennas rule.
+
+In between, the captured power swings with orientation between
+
+$$
+p_{\max} = \frac{A^{2}}{A^{2}+1}
+\qquad\text{and}\qquad
+p_{\min} = \frac{1}{A^{2}+1},
+$$
+
+the powers in the major and minor axes respectively — note that
+$p_{\max} + p_{\min} = 1$, as it must be. Their ratio is what matters:
+
+$$
+\frac{p_{\max}}{p_{\min}} = A^{2}
+\qquad\Longrightarrow\qquad
+10\log_{10}\left(\frac{p_{\max}}{p_{\min}}\right)
+= 20\log_{10} A
+= \text{AR}_{\text{dB}}.
+$$
+
+```{admonition} Key Point
+:class: tip
+The peak-to-null swing in received power, expressed in dB, **equals the
+axial ratio in dB**. A "3 dB CP" antenna does not cost a flat 3 dB
+against a linear antenna — it costs between 1.8 and 4.8 dB depending on
+an orientation you usually do not control.
+```
+
+The same treatment prices the *other* idealization. Two antennas of equal
+axial ratio, opposite sense, major axes aligned, gives
+$\hat{\rho}_{\text{b}} = (A \hat{u}_{\text{maj}} - j \hat{u}_{\text{min}})/\sqrt{A^{2}+1}$
+and therefore
+
+$$
+\text{PLF}_{\text{cross}}
+= \left| \frac{A^{2} - 1}{A^{2} + 1} \right|^{2}.
+$$
+
+At $A = 1$ this is zero — the $-\infty$ dB in the ideal table. At a real
+3 dB axial ratio it is $-9.6$ dB. Collecting the numbers:
+
+| Actual AR | Loss to a linear antenna | Worst-case opposite-sense rejection |
+| :---: | :---: | :---: |
+| 0 dB (ideal CP) | $-3.0$ dB, flat | $-\infty$ |
+| 3 dB (the industry bar) | $-1.8$ to $-4.8$ dB | $-9.6$ dB |
+| 6 dB (still sold as "circular") | $-1.0$ to $-7.0$ dB | $-4.5$ dB |
+
+The lesson: the "infinite" cross-polarization rejection of opposite-sense
+CP is worth about 10 dB in practice, and at 6 dB axial ratio it is worth
+4.5 dB — essentially no isolation at all. Budget accordingly.
+
+### Misquote 3 — "4% bandwidth" of what?
+
+Recall that an antenna has impedance, pattern, and polarization
+bandwidths, and that they need not coincide. A single quoted bandwidth
+figure is nearly always the **impedance** bandwidth — generally the
+**widest** of the three, and so the most flattering.
+
+Two further qualifications usually go unstated:
+
+- **Threshold.** "Impedance bandwidth" means nothing until the VSWR bar
+  is given. The same antenna is wider at VSWR ≤ 3 than at ≤ 1.5.
+- **Scan angle.** Axial ratio is typically specified **at boresight
+  only**. It degrades off-axis, so a patch holding AR ≤ 3 dB on boresight
+  may be well outside it at $\pm 45^{\circ}$ — exactly where a wide-beam
+  GPS or telemetry antenna is expected to work.
+
+The usable band is the **intersection** of all three bandwidths, over the
+scan angles you actually operate at. A CP patch matched over 4% may hold
+AR ≤ 3 dB over barely 1% of it, and only near boresight.
+
+```{admonition} How to read the spec properly
+:class: note
+"Bandwidth" is underspecified until you have said *which* bandwidth, *at
+what threshold*, and *over what scan angle*. Ask all three.
+```
+
 ## Summary
 
 | Concept | Take-away |
@@ -345,6 +484,10 @@ at every frequency in its band.
 | PLF (co-pol) | 0 dB |
 | PLF (cross-pol linear) | $-\infty$ dB |
 | PLF (linear ↔ CP) | $-3$ dB |
+| PLF, general | $(A^{2}\cos^{2}\theta + \sin^{2}\theta)/(A^{2}+1)$ |
+| Real "3 dB CP" vs linear | $-1.8$ to $-4.8$ dB, not a flat $-3$ dB |
+| Cross-pol rejection, AR = 3 dB | $\approx -9.6$ dB, not $-\infty$ |
+| Handedness | IEEE and optics conventions are opposite — check |
 | Impedance BW | Range with VSWR ≤ 2 (usually) |
 | Fractional BW | $(f_{H} - f_{L}) / f_{c}$ |
 | Chu-Harrington | Smaller antennas → narrower BW |

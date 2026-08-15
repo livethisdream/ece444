@@ -109,6 +109,7 @@ components + a phase difference → *any* polarization state.
 <div class="callout">
 Two identical CP antennas of <em>opposite sense</em> receive zero from each other.
 Sense mismatch is a real design bug.
+<em>(Ideal CP — we price the real number at the end of the hour.)</em>
 </div>
 
 ---
@@ -377,6 +378,115 @@ Traveling-wave and self-scaling → wide.
 - **Small** antennas (IoT, wearables) pay in **BW** by Chu-Harrington.
 
 Every real design is picking two of {gain, size, bandwidth} and letting the third suffer.
+
+---
+
+## Back to the datasheet
+
+I opened with a claim: polarization and bandwidth are the **two most misquoted specs**. Here is the evidence.
+
+- **Polarization** — the *sense* depends on whose convention, and "circular" gets sold at 3 – 6 dB axial ratio
+- **Bandwidth** — the number quoted is almost always the *widest* of three different bandwidths
+
+<div class="callout">
+None of these are lies. Each is a defensible reading of a real measurement —
+which is exactly why they survive to the design review.
+</div>
+
+Note:
+This is the payoff for the callout on the "Today's plan" slide — I promised
+it at the top of the hour, so cash it out here. The goal is that they leave
+able to *interrogate* a datasheet, not just read one.
+
+---
+
+## "RHCP" — according to whom?
+
+- **IEEE convention** — observer looks **along** the direction of propagation (wave travels away from you)
+- **Optics / physics convention** — observer looks **toward** the source (wave comes at you)
+
+Same physical wave. **Opposite name.**
+
+<div class="callout">
+An optics-convention "RHCP" part is IEEE <strong>LHCP</strong>. Order its mate and you have
+built a sense mismatch — the one polarization error that costs you the entire link.
+</div>
+
+Note:
+This is not a hypothetical. Optics-trained vendors and some older European
+sources use the receiver-looking-back convention. The fix is procedural:
+on any CP datasheet, confirm the convention *before* you order the other end.
+Ask which way the observer is facing.
+
+---
+
+## "Circularly polarized" — at what axial ratio?
+
+A nominally CP antenna of axial ratio $A$ (linear, $\ge 1$) meets a **linear** antenna. Sweep the linear antenna's orientation; captured power runs between
+
+$$
+p_{\max} = \frac{A^{2}}{A^{2}+1}
+\qquad
+p_{\min} = \frac{1}{A^{2}+1}
+$$
+
+These are the powers in the major and minor axes, so $p_{\max} + p_{\min} = 1$, and their ratio is
+
+$$
+\frac{p_{\max}}{p_{\min}} = A^{2}
+\quad\Longrightarrow\quad
+10\log_{10}\left(\frac{p_{\max}}{p_{\min}}\right) = 20\log_{10} A = \text{AR}\_{\text{dB}}
+$$
+
+<div class="callout">
+The peak-to-null swing in received power, in dB, <strong>equals the axial ratio in dB.</strong>
+</div>
+
+Note:
+Exact, not a rule of thumb. It is the same fact as the practice problem where
+two orthogonal linear receivers differ by the axial ratio — this is just the
+swept-orientation version of it. Worth putting on the board.
+
+---
+
+## What 3 dB of axial ratio actually costs
+
+| Actual AR | Loss to a linear antenna | Worst-case opposite-sense rejection |
+| :---: | :---: | :---: |
+| 0 dB (ideal CP) | −3.0 dB, flat | $-\infty$ |
+| **3 dB** (the industry bar) | −1.8 to −4.8 dB | **−9.6 dB** |
+| 6 dB ("still circular") | −1.0 to −7.0 dB | **−4.5 dB** |
+
+Rejection worst case (major axes aligned) is $\left[\dfrac{A^{2}-1}{A^{2}+1}\right]^{2}$.
+
+<div class="callout">
+Earlier I said opposite-sense CP antennas receive <em>zero</em> from each other.
+At 3 dB axial ratio that rejection is only about <strong>10 dB</strong>.
+</div>
+
+Note:
+Land the callback deliberately — they wrote down "zero" an hour ago. The
+idealization was fine for teaching the concept and useless for budgeting a
+link. At 6 dB AR the cross-pol rejection is 4.5 dB, which is essentially
+no isolation at all.
+
+---
+
+## "4% bandwidth" — of what?
+
+- The quoted number is nearly always **impedance** BW (VSWR ≤ 2) — the **widest** of the three
+- **Pattern** BW and **axial-ratio** BW are narrower, and usually go unquoted
+- Axial ratio is typically specified **at boresight only**, and degrades off-axis
+
+<div class="callout">
+The usable band is the <strong>intersection</strong>, not the headline.
+A CP patch matched over 4% may hold AR ≤ 3 dB over barely 1% — and only near boresight.
+</div>
+
+Note:
+Tie back to the "multiple bandwidths" slide. The point is not that vendors
+are dishonest; it is that "bandwidth" is underspecified until you say
+*which* bandwidth, *at what threshold*, and *over what scan angle*.
 
 ---
 
