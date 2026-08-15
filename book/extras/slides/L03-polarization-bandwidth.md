@@ -362,7 +362,6 @@ Chu-Harrington slide.
 | Log-periodic | 10:1 RBW | Broadband probing |
 | Spiral | 10:1+ RBW | EW, DF |
 | Vivaldi / TSA | 10:1+ RBW | UWB radar, arrays |
-| Biconical | 3:1+ RBW | EMC testing |
 
 <div class="callout">
 Resonant → narrow.<br>
