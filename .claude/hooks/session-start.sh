@@ -17,6 +17,15 @@ if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
   exit 0
 fi
 
+# Async: the session starts immediately and this runs behind it. Chosen because
+# a cold container spends a few minutes on the ~1.5 GB TeX install, and that cost
+# lands on every parallel session in a multi-lesson fan-out. The race it opens is
+# benign for how this repo is actually worked: lesson authoring happens first and
+# LaTeX is not touched until the practice set at the end, by which time this is
+# long finished. If a session ever does need pdflatex in its first minute, just
+# wait for it — or drop this line to go back to synchronous.
+echo '{"async": true, "asyncTimeout": 600000}'
+
 SUDO=""
 [ "$(id -u)" -ne 0 ] && SUDO="sudo"
 
