@@ -1,0 +1,318 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L6 practice set (Radiation Integrals), authored directly in the exam class for
+% Gradescope. Blank copy: \begin{solution}[h] reserves h of work space.
+% SOLUTIONS copy (\iskey=1) prints the red worked solutions.
+
+\fullwidth{\textbf{Learning Objective 1.6: } I can set up and interpret the
+radiation integrals to derive the far-field pattern of a current distribution.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Setting up the integral.} Answer each in one or two sentences
+(or one equation).
+\begin{parts}
+
+	\part Why do we solve for the magnetic vector potential $\vec{A}$ instead of
+	attacking $\vec{E}$ directly? What property of $\vec{B}$ guarantees $\vec{A}$ exists?
+		\begin{solution}[1.3in]
+		$\vec{E}$ and $\vec{H}$ are coupled and the source enters through a curl.
+		$\vec{A}$ absorbs the source into a single equation
+		($\nabla^{2}\vec{A} + k^{2}\vec{A} = -\mu\vec{J}$) whose solution is already
+		known. It exists because $\nabla \cdot \vec{B} = 0$ always, and a
+		divergence-free field is always the curl of something.
+		\end{solution}
+
+	\part The far field uses \emph{two different} approximations to
+	$R = |\vec{r} - \vec{r}^{\prime}|$. Write both and state where each is used.
+		\begin{solution}[1.2in]
+		Amplitude: $1/R \approx 1/r$ (a fractional error of order $r^{\prime}/r$).
+		Phase: $R \approx r - \hat{r} \cdot \vec{r}^{\prime}$, because
+		$k \hat{r} \cdot \vec{r}^{\prime}$ is several radians and controls whether
+		contributions add or cancel.
+		\end{solution}
+
+	\part Write the far-field vector potential in the form (spherical wave)
+	$\times$ (radiation vector), and say what each factor depends on.
+		\begin{solution}[1.4in]
+		\eq{ \vec{A} = \dfrac{\mu e^{-jkr}}{4\pi r}\vec{N}(\theta,\phi),
+		     \qquad
+		     \vec{N} = \int_{V^{\prime}} \vec{J}(\vec{r}^{\prime})
+		               e^{+jk\hat{r}\cdot\vec{r}^{\prime}} dV^{\prime} }
+		$e^{-jkr}/r$ depends only on \emph{distance} and is the same for every
+		antenna; $\vec{N}$ depends only on \emph{direction} and carries everything
+		that makes this antenna different.
+		\end{solution}
+
+	\part A $\zhat$-directed current gives $N_\theta = -N_z \sinp{\theta}$. Where does
+	that $\sinp{\theta}$ come from, and what does it predict about radiation along
+	the wire axis?
+		\begin{solution}[1.2in]
+		It is the \emph{projection} of a $\zhat$-directed current onto
+		$\hat{\theta}$ --- not part of the integral. At $\theta = 0\mydeg$ the
+		projection vanishes, so a wire antenna radiates nothing off its own ends.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The term we throw away.} A reflector antenna has largest
+dimension $D = 0.8\m$ and operates at $6\ghz$. The quadratic term dropped from
+the expansion of $R$ leaves a worst-case phase error
+$\Delta\phi = \pi D^{2} / (4 \lambda r)$.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find $\lambda$.
+		\begin{solution}[0.8in]
+		\eq{ \lambda = \dfrac{c}{f} = \dfrac{3\times10^{8}}{6\times10^{9}} = 0.05\m }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\lambda$ = \ansbox[1.3in]{$0.05\m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A test range puts the source at $r = 20\m$. Find $\Delta\phi$ in degrees.
+		\begin{solution}[1.1in]
+		\eq{ \Delta\phi = \dfrac{\pi (0.8)^{2}}{4(0.05)(20)}
+		     = \dfrac{2.011}{4} = 0.503\text{ rad} \approx 28.8\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta\phi$ = \ansbox[1.3in]{$\approx 28.8\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the smallest $r$ for which $\Delta\phi \le 22.5\mydeg$ ($\pi/8$).
+		Compare it to $2D^{2}/\lambda$.
+		\begin{solution}[1.2in]
+		\eq{ \dfrac{\pi D^{2}}{4\lambda r} \le \dfrac{\pi}{8}
+		     \quad\longrightarrow\quad
+		     r \ge \dfrac{2D^{2}}{\lambda} = \dfrac{2(0.8)^{2}}{0.05} = 25.6\m }
+		They are the \emph{same} criterion --- the far-field distance is exactly the
+		distance at which the parallel-ray approximation becomes honest.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$r_{\min}$ = \ansbox[1.3in]{$25.6\m$}
+	\end{minipage}
+
+	\part The range in part (b) is too short. Is the measured \emph{pattern} wrong
+	because the amplitude approximation failed, the phase approximation failed, or both?
+		\begin{solution}[1in]
+		The \textbf{phase} approximation. The $1/R \approx 1/r$ amplitude
+		approximation is still excellent at $20\m$; it is the leftover
+		$28.8\mydeg$ of quadratic phase across the aperture that distorts the
+		pattern (fills nulls, raises sidelobes).
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Uniform line source.} A $\zhat$-directed filament carries a
+uniform current $I_0$ over $-L/2 \le z^{\prime} \le L/2$, with $L = 3\lambda$.
+Recall the space factor $S(\theta) = |\sinp{u}/u|$ with
+$u = \tfrac{kL}{2}\cosp{\theta}$.
+\begin{parts}
+
+	\part Evaluate the radiation integral to show where $S(\theta)$ comes from.
+		\begin{solution}[1.6in]
+		\eq{ N_z(\theta) &= I_0 \int_{-L/2}^{L/2} e^{+jkz^{\prime}\cosp{\theta}} dz^{\prime}
+		                  = I_0 \dfrac{2\sinp{\tfrac{kL}{2}\cosp{\theta}}}{k\cosp{\theta}} \\
+		                 &= I_0 L \dfrac{\sinp{u}}{u},
+		                  \qquad u = \tfrac{kL}{2}\cosp{\theta} }
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the angles of the first nulls.
+		\begin{solution}[1.1in]
+		First null at $u = \pi$, i.e.\ $\cosp{\theta} = \lambda/L = 1/3$:
+		\eq{ \theta = 70.5\mydeg \quad\text{and}\quad 109.5\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{null}}$ = \ansbox[1.3in]{$70.5\mydeg,\ 109.5\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Estimate the half-power beamwidth with $0.886\lambda/L$, then check it
+		against the exact half-power condition $u = 1.392$.
+		\begin{solution}[1.4in]
+		Rule of thumb: $0.886/3 = 0.295\text{ rad} \approx 16.9\mydeg$.
+		Exact: $\cosp{\theta} = 1.392/(3\pi) = 0.1477 \rightarrow \theta = 81.5\mydeg$,
+		so $\text{HPBW} = 2(90\mydeg - 81.5\mydeg) = 17.0\mydeg$. The rule of thumb is
+		good to $0.1\mydeg$ here.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		HPBW = \ansbox[1.3in]{$\approx 17\mydeg$}
+	\end{minipage}
+
+	\part The design is changed to $L = 6\lambda$. What happens to the beamwidth,
+	and what happens to the first sidelobe level? Justify both from the Fourier
+	relationship.
+		\begin{solution}[1.3in]
+		Beamwidth \textbf{halves} to $\approx 8.5\mydeg$ --- stretching the current
+		distribution squeezes its transform. The first sidelobe \textbf{does not
+		move}: it stays at $-13.3\db$, because it is set by the \emph{shape} (the
+		abrupt edges of a uniform distribution), not the length. Beamwidth is bought
+		with size; sidelobes are bought with taper.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Steering with a phase slope.} A uniform line source of length
+$L = 4\lambda$ is fed with a progressive phase so that the pattern peak moves off
+broadside to $\theta_0 = 60\mydeg$. The excitation is
+$I(z^{\prime}) = I_0 e^{-jkz^{\prime}\cosp{\theta_0}}$.
+\begin{parts}
+
+	\part Show from the radiation integral that the peak lands at $\theta_0$.
+		\begin{solution}[1.4in]
+		\eq{ N_z(\theta) = I_0\int e^{+jkz^{\prime}\lp\cosp{\theta} - \cosp{\theta_0}\rp} dz^{\prime} }
+		The integrand is in phase across the whole aperture --- and the sum therefore
+		maximum --- when $\cosp{\theta} = \cosp{\theta_0}$, i.e.\ $\theta = \theta_0$.
+		A linear phase across the source shifts the transform; it does not reshape it.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the total phase difference (in degrees) between the two ends of
+		the aperture.
+		\begin{solution}[1.1in]
+		\eq{ \Delta\phi = kL\cosp{\theta_0} = 2\pi (4)(0.5) = 4\pi\text{ rad} = 720\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta\phi$ = \ansbox[1.3in]{$720\mydeg$ ($4\pi$)}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The steered beamwidth is approximately
+		$0.886\lambda / (L\sinp{\theta_0})$. Evaluate it and compare with the
+		broadside value.
+		\begin{solution}[1.3in]
+		Broadside: $0.886/4 = 0.2215\text{ rad} = 12.7\mydeg$.
+		Steered: $12.7\mydeg / \sinp{60\mydeg} = 14.7\mydeg$. The beam \emph{broadens}
+		because the aperture looks shorter when viewed from $60\mydeg$ --- its
+		projected length is $L\sinp{\theta_0}$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		HPBW = \ansbox[1.3in]{$\approx 14.7\mydeg$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The half-wave dipole.} The sinusoidal current
+$I(z^{\prime}) = I_0 \sinp{k\lp\tfrac{L}{2} - |z^{\prime}|\rp}$ with $L = \lambda/2$
+produces the far-field pattern
+\eq{ |F(\theta)| = \left| \dfrac{\cosp{\tfrac{\pi}{2}\cosp{\theta}}}{\sinp{\theta}} \right| }
+\begin{parts}
+
+	\part Evaluate $|F|$ at $\theta = 90\mydeg$ and at $\theta = 0\mydeg$, and
+	interpret each.
+		\begin{solution}[1.3in]
+		At $\theta = 90\mydeg$: $\cosp{\theta} = 0$, so
+		$|F| = \cosp{0}/1 = 1$ --- maximum, broadside to the wire.
+		At $\theta = 0\mydeg$: numerator $\cosp{\pi/2} = 0$ and denominator
+		$\rightarrow 0$; the limit is $0$ --- a genuine null off the ends of the wire.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Evaluate $|F|$ at $\theta = 45\mydeg$, in dB relative to the peak.
+		\begin{solution}[1.3in]
+		\eq{ |F| &= \dfrac{\cosp{\tfrac{\pi}{2}(0.7071)}}{0.7071}
+		          = \dfrac{\cosp{63.6\mydeg}}{0.7071} \\
+		         &= \dfrac{0.4440}{0.7071} = 0.628 \\
+		         &\rightarrow 20\mylog{0.628} \approx -4.0\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$|F(45\mydeg)|$ = \ansbox[1.3in]{$0.628$ ($-4.0\db$)}
+	\end{minipage}
+
+	\part An infinitesimal dipole has $|F| = \sinp{\theta}$, which at $45\mydeg$ is
+	$0.707$ ($-3.0\db$). The half-wave dipole is $1\db$ further down at the same
+	angle. Explain physically why the half-wave pattern is \emph{sharper}, in terms
+	of the current distribution.
+		\begin{solution}[1.4in]
+		The half-wave dipole's current is \emph{tapered} --- peaked at the feed and
+		zero at the tips --- so the radiating current is concentrated near the middle
+		of a structure that is a half wavelength long, rather than spread uniformly
+		over a vanishingly short one. A longer effective distribution has a narrower
+		transform, so the beam is narrower: $\text{HPBW} = 78.1\mydeg$ versus
+		$90\mydeg$, and $D = 1.64$ ($2.15\dbi$) versus $1.5$ ($1.76\dbi$).
+		\end{solution}
+
+	\part The radiation integral is exact once $\vec{J}$ is known. State what makes
+	$\vec{J}$ hard to know, and name the numerical method that solves for it.
+		\begin{solution}[1.1in]
+		The current is set by the fields, which are set by the current --- a
+		self-consistent (boundary-value) problem. The \textbf{method of moments}
+		discretizes the structure, enforces the boundary condition on each segment,
+		and solves a linear system for the segment currents; it then runs this same
+		radiation integral to get the pattern. (This is what NEC does.)
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Reading the Fourier relationship.} Four aperture distributions
+of the \emph{same} length $L$ produce first sidelobes of $-13.3\db$, $-23\db$,
+$-26.5\db$, and $-31.5\db$.
+\begin{parts}
+
+	\part Match each level to its distribution: uniform, cosine taper,
+	cosine-squared taper, triangular.
+		\begin{solution}[1.3in]
+		\eq{ \text{uniform} &\rightarrow -13.3\db, \qquad
+		     \text{cosine} \rightarrow -23\db \\
+		     \text{triangular} &\rightarrow -26.5\db, \qquad
+		     \text{cosine-squared} \rightarrow -31.5\db }
+		The smoother the distribution goes to zero at the edges, the less
+		high-space-frequency content it has, and the lower the sidelobes.
+		\end{solution}
+
+	\part All four have the same $L$. Rank their half-power beamwidths and explain
+	the trade.
+		\begin{solution}[1.3in]
+		Uniform is \emph{narrowest}, then cosine, then triangular, then
+		cosine-squared (widest). Tapering throws away the outer part of the aperture,
+		so the effective length shrinks and the beam broadens. \textbf{Sidelobe level
+		is bought with beamwidth} --- the central trade of aperture design (L15, L24).
+		\end{solution}
+
+	\part Your requirement is a $2\mydeg$ beam with sidelobes below $-25\db$. Which
+	knob sets which requirement?
+		\begin{solution}[1.2in]
+		\textbf{Length} sets the beamwidth ($\theta_{\text{HP}} \approx 0.886\lambda/L$,
+		so $L$ of order $25\lambda$), and the \textbf{taper shape} sets the sidelobe
+		level (a triangular or cosine-squared illumination). Then iterate: the taper
+		broadens the beam, so the aperture must grow a little to hold $2\mydeg$.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}
