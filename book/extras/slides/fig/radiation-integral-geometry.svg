@@ -25,7 +25,7 @@
 <circle cx="100" cy="155" r="3.6" fill="#15202b"/>
 <text x="88" y="152" text-anchor="end" font-size="14" fill="#15202b">O</text>
 <line x1="100" y1="155" x2="150" y2="175" stroke="#3f7d34" stroke-width="2.4" marker-end="url(#rgGrn)"/>
-<text x="124" y="198" text-anchor="middle" font-size="15" font-weight="700" fill="#3f7d34">r&#8242;</text>
+<text x="157" y="194" font-size="15" font-weight="700" fill="#3f7d34">r&#8242;</text>
 <circle cx="150" cy="175" r="3.8" fill="#3f7d34"/>
 
 <circle cx="600" cy="68" r="4.2" fill="#004a85"/>
@@ -50,10 +50,10 @@
 <text x="612" y="238" font-size="13" fill="#5a5a5a">to P</text>
 <text x="612" y="290" font-size="13" fill="#5a5a5a">to P</text>
 
-<path d="M160.1 377.9 L168 379.3 L166.6 371.4" fill="none" stroke="#5a5a5a" stroke-width="1.1"/>
+<path d="M167.6 368.5 L169.2 377.4 L160.2 378.9" fill="none" stroke="#5a5a5a" stroke-width="1.1"/>
 
 <line x1="150" y1="320" x2="205" y2="362" stroke="#3f7d34" stroke-width="2.4" marker-end="url(#rgGrn)"/>
-<text x="167" y="342" text-anchor="middle" font-size="15" font-weight="700" fill="#3f7d34">r&#8242;</text>
+<text x="186" y="336" font-size="15" font-weight="700" fill="#3f7d34">r&#8242;</text>
 <circle cx="150" cy="320" r="3.6" fill="#15202b"/>
 <text x="139" y="316" text-anchor="end" font-size="14" fill="#15202b">O</text>
 <circle cx="205" cy="362" r="3.8" fill="#3f7d34"/>

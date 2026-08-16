@@ -11,7 +11,7 @@
 
 <ol class="lo-list lo-sublist" style="--module: '1'; --lo: '6'">
   <li>I can explain why the radiated field is found through the magnetic vector potential rather than by solving for E directly, and state the three-step recipe from current to far field.</li>
-  <li>I can apply the far-field approximations to the exact integral — one for amplitude, a different one for phase — and show that the leftover phase error is exactly the $2D^2/\lambda$ criterion from Lesson 5.</li>
+  <li>I can apply the far-field approximations to the exact integral — one for amplitude, a different one for phase — and show that the leftover phase error is exactly the far-field distance criterion from Lesson 5.</li>
   <li>I can set up and evaluate the radiation integral for a given current distribution, and turn the resulting radiation vector into the far-field pattern.</li>
   <li>I can recognize the current distribution and the far-field pattern as a Fourier transform pair, and predict how a change in the current changes the pattern.</li>
 </ol>
