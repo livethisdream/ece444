@@ -508,6 +508,11 @@ of that transform.
 | $N_\theta,\ N_\phi$ | transverse components | the only parts that radiate; $E_\theta = -j\omega\mu e^{-jkr}N_\theta/4\pi r$ |
 | $U(\theta,\phi)$ | radiation intensity | $\dfrac{\eta k^2}{32\pi^2}\left(\vert N_\theta\vert^2 + \vert N_\phi\vert^2\right)$ — feeds $D$ and $G$ from Lesson 2 |
 
+## Practice
+
+- <a href="../../practice/ECE444_L06_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a href="../../practice/ECE444_L06_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+
 ## Where this is going
 
 Module 1 is complete. You can describe an antenna's pattern and gain (L2), its
