@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dipole explorer: how length shapes current, pattern and impedance</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
+  select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
+          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
+          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
+  .pill b { font-weight:700; }
+  .pill.hp  { background:rgba(63,125,52,0.12); color:var(--grn);   border-color:rgba(63,125,52,0.30); }
+  .pill.rx  { background:rgba(138,90,0,0.12);  color:var(--amber); border-color:rgba(138,90,0,0.30); }
+  .pill.res { background:rgba(176,30,36,0.10); color:var(--red);   border-color:rgba(176,30,36,0.28); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="wire" aria-label="Standing-wave current amplitude along a center-fed dipole"></canvas>
+  <canvas id="pat" aria-label="Directivity pattern of the dipole, as a polar cut in decibels above isotropic and as a plot against angle from the wire axis"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Total length \(L/\lambda\)</label>
+      <input type="range" id="len" min="0.05" max="1.5" step="0.01" value="0.5">
+      <span class="val" id="len-val">0.50</span>
+    </div>
+    <div class="ctl">
+      <label>Wire</label>
+      <select id="rad">
+        <option value="0.0005">thin (radius = 0.0005&#955;)</option>
+        <option value="0.002" selected>ordinary (radius = 0.002&#955;)</option>
+        <option value="0.008">fat (radius = 0.008&#955;)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="pills">
+    <span class="pill hp">HPBW = <b id="p-hp">&#8212;</b></span>
+    <span class="pill">directivity = <b id="p-d">&#8212;</b></span>
+    <span class="pill">\(R\) at current max = <b id="p-r">&#8212;</b></span>
+    <span class="pill rx">\(X\) at current max = <b id="p-x">&#8212;</b></span>
+    <span class="pill res">resonant at <b id="p-res">&#8212;</b></span>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const ETA=376.730313668, GAMMA=0.5772156649015329;
+const DBTOP=6, DBFLOOR=-20;                        // absolute dBi window, both plots
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const cvW=document.getElementById('wire'), ctxW=cvW.getContext('2d');
+const cvP=document.getElementById('pat'),  ctxP=cvP.getContext('2d');
+
+const state={ L:0.50, a:0.002 };
+
+/* ============================ the physics ============================
+   Sinusoidal current on a center-fed wire of total length L (wavelengths):
+       I(z) = Im sin(k(L/2 - |z|))
+   Its far field is the radiation integral of that current (Lesson 6):
+       |F(th)| = |cos(pi L cos th) - cos(pi L)| / sin th
+   Directivity comes from integrating |F|^2 over the sphere; R and X at the
+   current maximum come from the induced-EMF result, which needs the sine
+   and cosine integrals. Nothing here is sketched. */
+
+function Si(x){                                   // power series, plenty for x < 20
+  let t=x, s=x;
+  for(let n=1;n<70;n++){
+    t*= -x*x/((2*n)*(2*n+1));
+    s+= t/(2*n+1);
+    if(Math.abs(t)<1e-18*Math.abs(s)) break;
+  }
+  return s;
+}
+function Ci(x){
+  let t=1, s=0;
+  for(let n=1;n<70;n++){
+    t*= -x*x/((2*n-1)*(2*n));
+    s+= t/(2*n);
+    if(Math.abs(t)<1e-18*(Math.abs(s)+1)) break;
+  }
+  return GAMMA+Math.log(x)+s;
+}
+
+// R and X referred to the current maximum, for total length Ll and radius aa
+// (both in wavelengths). Sanity anchors: Ll=0.5 -> 73.1 + j42.5 ohms.
+function impedance(Ll,aa){
+  const k=2*Math.PI, kl=k*Ll;
+  const S1=Si(kl), C1=Ci(kl), S2=Si(2*kl), C2=Ci(2*kl), C3=Ci(2*k*aa*aa/Ll);
+  const R=(ETA/(2*Math.PI))*(GAMMA+Math.log(kl)-C1
+        +0.5*Math.sin(kl)*(S2-2*S1)
+        +0.5*Math.cos(kl)*(GAMMA+Math.log(kl/2)+C2-2*C1));
+  const X=(ETA/(4*Math.PI))*(2*S1+Math.cos(kl)*(2*S1-S2)-Math.sin(kl)*(2*C1-C2-C3));
+  return {R:R, X:X};
+}
+
+// shortest length below half a wavelength at which X crosses zero
+function resonantLength(aa){
+  let lo=0.30, hi=0.50;
+  if(impedance(lo,aa).X>0 || impedance(hi,aa).X<0) return null;
+  for(let i=0;i<60;i++){
+    const m=0.5*(lo+hi);
+    if(impedance(m,aa).X<0) lo=m; else hi=m;
+  }
+  return 0.5*(lo+hi);
+}
+
+function Fmag(th,Ll){
+  const s=Math.sin(th);
+  if(Math.abs(s)<1e-9) return 0;
+  return Math.abs((Math.cos(Math.PI*Ll*Math.cos(th))-Math.cos(Math.PI*Ll))/s);
+}
+
+/* one sweep per redraw, reused by both panels and the readouts */
+let SW=null;
+function sweep(){
+  const M=1441, U=new Float64Array(M), th=new Float64Array(M);
+  let umax=0, ipk=0;
+  for(let i=0;i<M;i++){
+    th[i]=i/(M-1)*Math.PI;
+    const f=Fmag(th[i],state.L); U[i]=f*f;
+    if(U[i]>umax){ umax=U[i]; ipk=i; }
+  }
+  // P = integral |F|^2 sin(th) dth  (trapezoid), D = 2 Umax / P
+  const dt=Math.PI/(M-1);
+  let P=0;
+  for(let i=0;i<M-1;i++) P+=0.5*(U[i]*Math.sin(th[i])+U[i+1]*Math.sin(th[i+1]))*dt;
+  const D=2*umax/P;
+
+  // absolute pattern in dBi: 10 log10( D * U/Umax )
+  const dbi=new Float64Array(M);
+  for(let i=0;i<M;i++) dbi[i]=10*Math.log10(Math.max(D*U[i]/umax,1e-9));
+
+  // HPBW: walk out from the peak to the half-power points
+  const half=umax/2;
+  function cross(dir){
+    for(let i=ipk;i>=0&&i<M;i+=dir){
+      if(U[i]<=half){
+        const j=i-dir, f=(U[j]-half)/(U[j]-U[i]);
+        return th[j]+dir*f*dt;
+      }
+    }
+    return null;
+  }
+  const lo=cross(-1), hi=cross(1);
+  const hp=(lo===null||hi===null)?null:(hi-lo)*180/Math.PI;
+  SW={M:M, th:th, dbi:dbi, D:D, ipk:ipk, hp:hp, lo:lo, hi:hi,
+      pk:th[ipk]*180/Math.PI};
+}
+
+/* ========================= the wire and its current ========================= */
+function drawWire(){
+  const dpr=window.devicePixelRatio||1, w=cvW.width/dpr, h=cvW.height/dpr;
+  const ctx=ctxW; ctx.clearRect(0,0,w,h);
+  const cx=w*0.42, mT=24, mB=22, half=(h-mT-mB)/2, cy=mT+half;
+
+  stext(ctx,'current standing wave on the wire', 14, 14, 11.5, cssv('--navy'),'left',true);
+
+  const span=half*(state.L/1.5);   // 1.5 wavelengths fills the panel
+
+  // I(z) = sin(k(L/2 - |z|)), drawn sideways off the wire
+  const AMP=w*0.24, NP=400;
+  const Iof=t=>Math.sin(2*Math.PI*state.L*(0.5-Math.abs(t)));   // t = z/L in [-0.5,0.5]
+  ctx.beginPath(); ctx.moveTo(cx,cy-span);
+  for(let i=0;i<=NP;i++){ const t=i/NP-0.5; ctx.lineTo(cx+AMP*Iof(t), cy-span+2*span*(i/NP)); }
+  ctx.lineTo(cx,cy+span); ctx.closePath();
+  ctx.fillStyle='rgba(0,103,185,0.16)'; ctx.fill();
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.4;
+  ctx.beginPath();
+  for(let i=0;i<=NP;i++){ const t=i/NP-0.5; const x=cx+AMP*Iof(t), y=cy-span+2*span*(i/NP); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+  ctx.stroke();
+
+  // the wire itself, on top of its own current so it stays visible
+  ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=3.4; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(cx,cy-span); ctx.lineTo(cx,cy+span); ctx.stroke();
+  ctx.lineCap='butt';
+
+  // the zero line, so a phase reversal is visible as a crossing
+  ctx.strokeStyle=cssv('--edge2'); ctx.lineWidth=1; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(cx,cy-half-2); ctx.lineTo(cx,cy+half+2); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // feed point
+  ctx.fillStyle=cssv('--red');
+  ctx.beginPath(); ctx.arc(cx,cy,4.2,0,7); ctx.fill();
+  stext(ctx,'feed', cx-10, cy, 11, cssv('--red'),'right',true);
+
+  // current maximum: |I| peaks where k(L/2-|z|) is nearest 90 degrees
+  let tm=0, best=-1;
+  for(let i=0;i<=NP;i++){ const t=i/NP-0.5, v=Math.abs(Iof(t)); if(v>best){best=v; tm=t;} }
+  const ym=cy-span+2*span*(tm+0.5), xm=cx+AMP*Iof(tm);
+  ctx.strokeStyle=cssv('--grn'); ctx.lineWidth=1.6; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(cx,ym); ctx.lineTo(xm,ym); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle=cssv('--grn'); ctx.beginPath(); ctx.arc(xm,ym,4,0,7); ctx.fill();
+  stext(ctx,'current maximum', xm+9, ym, 11, cssv('--grn'),'left',true);
+
+  // the phase-reversal count is what turns into extra lobes
+  let rev=0;
+  for(let i=1;i<=NP;i++){ const a=Iof(i/NP-0.5-1/NP), b=Iof(i/NP-0.5); if(a*b<0) rev++; }
+  const rx=14;
+  stext(ctx,'length = '+state.L.toFixed(2)+' wavelengths', rx, h-34, 11.5, cssv('--ink3'),'left',false);
+  stext(ctx, rev===0 ? 'the whole wire is in phase'
+                     : rev+(rev===1?' phase reversal':' phase reversals')+' along the wire',
+        rx, h-16, 11.5, rev===0?cssv('--ink3'):cssv('--amber'),'left', rev>0);
+  MJ.draw(ctx,'z', cx, mT-12, 12, cssv('--ink3'),'center');
+}
+
+/* ============================ the pattern panel ============================ */
+function drawPat(){
+  const dpr=window.devicePixelRatio||1, w=cvP.width/dpr, h=cvP.height/dpr;
+  const ctx=ctxP; ctx.clearRect(0,0,w,h);
+  const split=Math.round(w*0.42);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(split,10); ctx.lineTo(split,h-10); ctx.stroke();
+  drawPolar(0,0,split,h);
+  drawRect(split,0,w-split,h);
+}
+
+const radOf=(db,R)=>R*Math.max(0,(Math.max(db,DBFLOOR)-DBFLOOR)/(DBTOP-DBFLOOR));
+
+function drawPolar(x0,y0,w,h){
+  const ctx=ctxP;
+  const cx=x0+w*0.52, cy=y0+h*0.52, R=Math.min(w*0.40,h*0.40);
+  stext(ctx,'polar cut, decibels over isotropic', x0+12, y0+14, 11.5, cssv('--navy'),'left',true);
+
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let d=DBFLOOR+5; d<=DBTOP-5; d+=5){ ctx.beginPath(); ctx.arc(cx,cy,radOf(d,R),0,7); ctx.stroke(); }
+  ctx.strokeStyle=cssv('--edge2');
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,7); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx,cy-R-9); ctx.lineTo(cx,cy+R+9); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx-R-9,cy); ctx.lineTo(cx+R+9,cy); ctx.stroke();
+
+  // the isotropic reference: a perfect circle at 0 dBi
+  ctx.strokeStyle=cssv('--red'); ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.arc(cx,cy,radOf(0,R),0,7); ctx.stroke(); ctx.setLineDash([]);
+  stext(ctx,'isotropic, 0 dBi', cx, cy+radOf(0,R)+11, 10.5, cssv('--red'),'center',true);
+
+  // the wire, along z
+  ctx.strokeStyle='rgba(91,101,115,0.55)'; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(cx,cy-R*0.30); ctx.lineTo(cx,cy+R*0.30); ctx.stroke();
+  MJ.draw(ctx,'z', cx, cy-R-19, 12, cssv('--ink3'),'center');
+  stext(ctx,'0°',   cx+8,    cy-R-6, 10, cssv('--ink3'),'left',false);
+  stext(ctx,'90°',  cx+R+11, cy-8,   10, cssv('--ink3'),'left',false);
+  stext(ctx,'180°', cx+8,    cy+R+8, 10, cssv('--ink3'),'left',false);
+
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.3;
+  for(const side of [1,-1]){
+    ctx.beginPath();
+    let started=false;
+    for(let i=0;i<SW.M;i++){
+      const r=radOf(SW.dbi[i],R), t=SW.th[i];
+      const x=cx+side*r*Math.sin(t), y=cy-r*Math.cos(t);
+      started?ctx.lineTo(x,y):(ctx.moveTo(x,y),started=true);
+    }
+    ctx.stroke();
+  }
+  stext(ctx, DBFLOOR+' dBi at the center', x0+12, y0+h-12, 10, cssv('--ink3'),'left',false);
+}
+
+function drawRect(x0,y0,w,h){
+  const ctx=ctxP;
+  const mL=x0+46, mR=16, mT=y0+26, mB=34;
+  const pw=w-(mL-x0)-mR, ph=h-(mT-y0)-mB;
+  const xp=d=>mL+d/180*pw, yp=v=>mT+ph*(DBTOP-v)/(DBTOP-DBFLOOR);
+
+  stext(ctx,'gain against angle from the wire', mL, y0+14, 11.5, cssv('--navy'),'left',true);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let d=DBTOP-1; d>=DBFLOOR; d-=5){ const y=yp(d);
+    ctx.beginPath(); ctx.moveTo(mL,y); ctx.lineTo(mL+pw,y); ctx.stroke();
+    stext(ctx,(d>0?'+':'')+d, mL-8, y, 10.5, cssv('--ink3'),'right',false); }
+  for(let d=0;d<=180;d+=30){ const x=xp(d);
+    ctx.strokeStyle=cssv('--edge2'); ctx.beginPath(); ctx.moveTo(x,mT); ctx.lineTo(x,mT+ph); ctx.stroke();
+    stext(ctx,d+'°', x, mT+ph+13, 10.5, cssv('--ink3'),'center',false); }
+  ctx.strokeStyle=cssv('--edge'); ctx.strokeRect(mL,mT,pw,ph);
+
+  // isotropic reference line
+  ctx.strokeStyle='rgba(176,30,36,0.75)'; ctx.lineWidth=1.4; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(mL,yp(0)); ctx.lineTo(mL+pw,yp(0)); ctx.stroke(); ctx.setLineDash([]);
+  stext(ctx,'isotropic', mL+6, yp(0)-9, 10.5, cssv('--red'),'left',true);
+
+  // half-power band
+  if(SW.lo!==null&&SW.hi!==null){
+    const xa=xp(SW.lo*180/Math.PI), xb=xp(SW.hi*180/Math.PI);
+    ctx.fillStyle='rgba(63,125,52,0.12)'; ctx.fillRect(xa,mT,xb-xa,ph);
+    ctx.strokeStyle='rgba(63,125,52,0.65)'; ctx.lineWidth=1.3; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(mL,yp(10*Math.log10(SW.D)-3)); ctx.lineTo(mL+pw,yp(10*Math.log10(SW.D)-3)); ctx.stroke();
+    ctx.setLineDash([]);
+    stext(ctx,'HPBW', (xa+xb)/2, mT+ph-12, 11, cssv('--grn'),'center',true);
+  }
+
+  ctx.save(); ctx.beginPath(); ctx.rect(mL,mT,pw,ph); ctx.clip();
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.3; ctx.beginPath();
+  for(let i=0;i<SW.M;i++){
+    const x=xp(SW.th[i]*180/Math.PI), y=yp(Math.max(SW.dbi[i],DBFLOOR-1));
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+  }
+  ctx.stroke(); ctx.restore();
+
+  MJ.draw(ctx,'\\theta', mL+pw/2, mT+ph+28, 12, cssv('--ink3'),'center');
+  ctx.save(); ctx.translate(x0+14, mT+ph/2); ctx.rotate(-Math.PI/2);
+  stext(ctx,'dBi', 0, 0, 11, cssv('--ink3'),'center',false); ctx.restore();
+}
+
+/* ================================ readouts ================================ */
+function readouts(){
+  const z=impedance(state.L,state.a);
+  const res=resonantLength(state.a);
+  document.getElementById('p-hp').textContent = SW.hp===null?'—':SW.hp.toFixed(1)+'°';
+  document.getElementById('p-d' ).textContent = (10*Math.log10(SW.D)).toFixed(2)+' dBi';
+  document.getElementById('p-r' ).textContent = z.R.toFixed(1)+' Ω';
+  document.getElementById('p-x' ).textContent = (z.X>=0?'+':'−')+Math.abs(z.X).toFixed(1)+' Ω';
+  document.getElementById('p-res').textContent = res===null?'—':res.toFixed(3)+' λ';
+}
+
+function drawAll(){ sweep(); drawWire(); drawPat(); readouts(); }
+
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const w=Math.max(380, cvW.getBoundingClientRect().width);
+  const h1=Math.max(170, Math.min(w*0.26, 220));
+  const h2=Math.max(250, Math.min(w*0.40, 320));
+  cvW.width=w*dpr; cvW.height=h1*dpr; cvW.style.height=h1+'px';
+  cvP.width=w*dpr; cvP.height=h2*dpr; cvP.style.height=h2+'px';
+  ctxW.setTransform(dpr,0,0,dpr,0,0); ctxP.setTransform(dpr,0,0,dpr,0,0);
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+const lenEl=document.getElementById('len'), radEl=document.getElementById('rad');
+lenEl.addEventListener('input',()=>{
+  state.L=+lenEl.value;
+  document.getElementById('len-val').textContent=state.L.toFixed(2);
+  drawAll();
+});
+radEl.addEventListener('change',()=>{ state.a=+radEl.value; drawAll(); });
+
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>
