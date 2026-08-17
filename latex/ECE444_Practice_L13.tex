@@ -1,0 +1,390 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L13 practice set (Measurement Lab 1 - Impedance and S-parameters). Every
+% problem is solvable from given data: no VNA required.
+
+\fullwidth{\textbf{Learning Objective 2.6: } I can measure the impedance and S-parameters
+of an antenna using a vector network analyzer and interpret the results.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Four names for one number.} A one-port measurement gets reported
+four different ways depending on which menu you open. Reference impedance is
+$Z_0 = 50$~\ohms throughout.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part An antenna reads $|S_{11}| = -14\db$ at its design frequency.
+		Find $|\Gamma|$, the VSWR, and the percentage of incident power reflected.
+		\begin{solution}[1.2in]
+		\eq{
+			|\Gamma| &= 10^{-14/20} = 0.199 \\
+			\text{VSWR} &= \frac{1+0.199}{1-0.199} = \frac{1.199}{0.801} = 1.50 \\
+			\frac{P_{refl}}{P_{inc}} &= |\Gamma|^2 = 0.0398 \rightarrow 4.0\%
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$|\Gamma|$ = \ansbox[1.1in]{$0.199$} \\[8pt]
+		VSWR = \ansbox[1.1in]{$1.50$} \\[8pt]
+		$P_{refl}$ = \ansbox[1.1in]{$4.0\%$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A second antenna shows VSWR $= 2.0$ at the same frequency.
+		What is its $|S_{11}|$ in dB?
+		\begin{solution}[1.0in]
+		\eq{
+			|\Gamma| &= \frac{\text{VSWR}-1}{\text{VSWR}+1} = \frac{1}{3} = 0.333 \\
+			|S_{11}| &= 20\ \mylog{0.333} = -9.5\db
+		}
+		It misses the $-10\db$ specification, but only just.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$|S_{11}|$ = \ansbox[1.3in]{$-9.5\db$}
+	\end{minipage}
+
+	\part Why is $-10\db$ the conventional acceptance level for an antenna match?
+	Answer in terms of power, in one or two sentences.
+		\begin{solution}[0.9in]
+		At $-10\db$, $|\Gamma|^2 = 0.10$: exactly $10\%$ of the delivered power comes
+		back and $90\%$ goes into the antenna. Below that level the reflected power is
+		a small correction to the link budget, so making the match better buys very
+		little, while making it worse costs quickly.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Lesson 7 predicted $Z_{in} = 73 + j42.5$~\ohms for an ideal half-wave
+		dipole. Compute $|\Gamma|$, $|S_{11}|$ in dB, and the VSWR. Does the textbook
+		dipole meet the $-10\db$ specification, and what one change fixes it?
+		\begin{solution}[1.5in]
+		\eq{
+			\Gamma &= \frac{23 + j42.5}{123 + j42.5} \\
+			|\Gamma| &= \frac{48.3}{130.1} = 0.371 \\
+			|S_{11}| &= 20\ \mylog{0.371} = -8.6\db \\
+			\text{VSWR} &= \frac{1.371}{0.629} = 2.18
+		}
+		It \textbf{fails}. The fix is to shorten the element to about $0.47$--$0.48\lambda$
+		so the reactance goes to zero and $R_{in}$ falls to roughly $70$~\ohms:
+		\eq{
+			|\Gamma| = \frac{20}{120} = 0.167 \rightarrow -15.6\db, \qquad \text{VSWR} = 1.40
+		}
+		The $42.5$~\ohms of reactance is the entire difference between a marginal
+		antenna and a good one.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$|S_{11}|$ = \ansbox[1.3in]{$-8.6\db$} \\[8pt]
+		VSWR = \ansbox[1.3in]{$2.18$} \\[8pt]
+		Passes? \ansbox[1.3in]{no}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{From a marker readout to an impedance.} A calibrated VNA marker
+sitting at $1.575\ \ghz$ on a small GPS-band element reads
+$S_{11} = 0.33\ \angle 155\mydeg$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Write $\Gamma$ in rectangular form and find the input impedance $Z_{in}$.
+		\begin{solution}[1.6in]
+		\eq{
+			\Gamma &= 0.33\lp \cos 155\mydeg + j \sin 155\mydeg \rp = -0.299 + j0.140 \\
+			Z_{in} &= Z_0\ \frac{1+\Gamma}{1-\Gamma}
+			     = 50\ \frac{0.701 + j0.140}{1.299 - j0.140}
+		}
+		Multiplying numerator and denominator by the conjugate of the denominator,
+		\eq{
+			Z_{in} &= 50\ \frac{0.891 + j0.279}{1.707} \\
+			       &= 50 \lp 0.522 + j0.163 \rp \\
+			       &= 26.1 + j8.2\ \ohms
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$Z_{in}$ = \ansbox[1.5in]{$26.1 + j8.2$~\ohms}
+	\end{minipage}
+
+	\part The reactance came out positive. Is the element electrically long or short
+	at $1.575\ \ghz$, is its resonance above or below that frequency, and which way
+	would you trim it?
+		\begin{solution}[1.0in]
+		Positive reactance is inductive, which is what a wire antenna looks like when
+		it is \textbf{electrically long}. Its resonance ($X = 0$) therefore lies
+		\textbf{below} $1.575\ \ghz$. To move the resonance up onto the design
+		frequency you trim the element \textbf{shorter}.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find $|S_{11}|$ in dB and the VSWR. Does this element meet the
+		$-10\db$ specification as measured?
+		\begin{solution}[1.1in]
+		\eq{
+			|S_{11}| &= 20\ \mylog{0.33} = -9.6\db \\
+			\text{VSWR} &= \frac{1.33}{0.67} = 1.99
+		}
+		No -- it misses the specification by $0.4\db$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$|S_{11}|$ = \ansbox[1.3in]{$-9.6\db$} \\[8pt]
+		VSWR = \ansbox[1.3in]{$1.99$}
+	\end{minipage}
+
+	\part Suppose you trim the element perfectly, so at $1.575\ \ghz$ the reactance
+	is zero and the resistance stays near $26$~\ohms. Will the match pass then?
+	Compute it, and state what the result tells you about relying on trimming alone.
+		\begin{solution}[1.4in]
+		\eq{
+			\Gamma = \frac{26-50}{26+50} = -0.316 \quad\rightarrow\quad
+			|S_{11}| = -10.0\db, \qquad \text{VSWR} = 1.92
+		}
+		It lands \emph{exactly} on the specification with no margin at all. Trimming
+		only removes reactance; it cannot move the resistance. An element whose
+		radiation resistance sits far from $50$~\ohms needs a matching network or a
+		different feed arrangement, not a shorter piece of wire.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Bandwidth off a sweep.} A calibrated, load-verified sweep of a
+wire dipole produced the following magnitudes.
+
+\begin{center}
+\begin{tabular}{l|cccccccccc}
+$f$ (MHz)      & 850 & 870 & 880 & 890 & 900 & 905 & 910 & 920 & 930 & 950 \\ \hline
+$|S_{11}|$ (dB) & $-3.8$ & $-6.5$ & $-8.8$ & $-12.4$ & $-17.7$ & $-19.4$ & $-17.8$ & $-12.5$ & $-9.0$ & $-5.2$
+\end{tabular}
+\end{center}
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Identify the resonant frequency and say how you know.
+		\begin{solution}[0.9in]
+		The deepest point of the sweep is $-19.4\db$ at $905\ \mhz$, and the trace is
+		symmetric about it. That is the resonance: the reactance passes through zero
+		there, so the reflection is smallest.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$f_0$ = \ansbox[1.2in]{$905\ \mhz$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Interpolate the two $-10\db$ crossings and report the impedance
+		bandwidth both in MHz and as a percentage.
+		\begin{solution}[1.5in]
+		Lower crossing, between $880\ \mhz$ ($-8.8\db$) and $890\ \mhz$ ($-12.4\db$):
+		\eq{
+			f_1 = 880 + 10\ \frac{10-8.8}{12.4-8.8} = 883\ \mhz
+		}
+		Upper crossing, between $920\ \mhz$ ($-12.5\db$) and $930\ \mhz$ ($-9.0\db$):
+		\eq{
+			f_2 = 920 + 10\ \frac{12.5-10}{12.5-9.0} = 927\ \mhz
+		}
+		\eq{
+			\text{BW} = 927 - 883 = 44\ \mhz, \qquad
+			\frac{44}{905} = 4.8\%
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		BW = \ansbox[1.2in]{$44\ \mhz$} \\[8pt]
+		Fractional = \ansbox[1.2in]{$4.8\%$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part At resonance the Smith-chart marker sits on the real axis, to the
+		\emph{right} of centre. Find $Z_{in}$ at resonance.
+		\begin{solution}[1.2in]
+		On the real axis $\Gamma$ is purely real, and right of centre means it is
+		positive, so $R_{in} > 50$~\ohms:
+		\eq{
+			|\Gamma| &= 10^{-19.4/20} = 0.107 \\
+			Z_{in} &= 50\ \frac{1+0.107}{1-0.107} = 50 \lp 1.240 \rp = 62\ \ohms
+		}
+		Without the Smith chart you could not choose between $62$~\ohms and
+		$40$~\ohms: the magnitude alone does not carry the sign.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$Z_{in}$ = \ansbox[1.4in]{$62 + j0$~\ohms}
+	\end{minipage}
+
+	\part A thin wire dipole typically shows $3$--$10\%$ impedance bandwidth. Does
+	this element fit the rule of thumb, and what physical change would widen it?
+		\begin{solution}[1.0in]
+		Yes: $4.8\%$ sits in the lower half of the usual $3$--$10\%$ range, which is
+		what a thin conductor gives. Bandwidth widens when the antenna's $Q$ drops, so
+		use a fatter conductor -- a thicker rod, a sleeve, a cage of wires, or a
+		biconical element -- which lowers the stored-to-radiated energy ratio.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Calibration and the reference plane.} A classmate calibrates
+short--open--load at the end of the test cable, then screws a $10\ \text{cm}$ RG-58
+pigtail ($v_f = 0.66$) between that connector and the antenna before sweeping.
+
+\begin{parts}
+
+	\part Name the three error terms a one-port SOL calibration removes, one
+	sentence each, and explain why exactly three standards are required.
+		\begin{solution}[1.5in]
+		\textbf{Directivity}: the coupler that should sample only the returning wave
+		leaks some of the outgoing wave into the same receiver, so the VNA sees a
+		reflection even from a perfect load. \textbf{Source match}: the test port is
+		not exactly $50$~\ohms, so energy returned by the antenna is partly
+		re-reflected back at it. \textbf{Tracking}: the reference and test receiver
+		paths have different gain and phase, and both drift with frequency. Three
+		unknowns require three independent known loads, which is exactly what short
+		($\Gamma = -1$), open ($\Gamma = +1$), and load ($\Gamma = 0$) provide.
+		\end{solution}
+
+	\part Describe what the extra pigtail does to the measured $|S_{11}|$ magnitude
+	and, separately, to the measured impedance. Why is this combination dangerous?
+		\begin{solution}[1.3in]
+		A short low-loss pigtail changes the \emph{magnitude} hardly at all, so the
+		dB plot still looks correct and the resonant frequency still reads correctly.
+		It adds round-trip \emph{phase}, which rotates the entire trace around the
+		Smith chart, so the impedance readout is wrong -- possibly wildly wrong,
+		including the sign of the reactance. That is dangerous precisely because the
+		plot that students trust is the one that still looks fine.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part At $915\ \mhz$, find the guided wavelength in the pigtail, its length
+		in wavelengths, and the round-trip phase shift $2\beta\ell$ it adds.
+		\begin{solution}[1.4in]
+		\eq{
+			\lambda_g &= \frac{c\ v_f}{f} = \frac{\lp 3\times10^8 \rp \lp 0.66 \rp}{915\times10^6}
+			 = 0.216\ \m = 21.6\ \text{cm} \\
+			\frac{\ell}{\lambda_g} &= \frac{10}{21.6} = 0.462 \\
+			2\beta\ell &= 2 \lp 360\mydeg \rp \lp 0.462 \rp = 333\mydeg
+		}
+		Nearly a full rotation of the chart.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\lambda_g$ = \ansbox[1.2in]{$21.6\ \text{cm}$} \\[8pt]
+		$2\beta\ell$ = \ansbox[1.2in]{$333\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part At what frequency is this pigtail exactly a half guided wavelength
+		long? Why does that frequency matter to your classmate?
+		\begin{solution}[1.3in]
+		\eq{
+			\lambda_g &= 2\ell = 0.20\ \m \\
+			f &= \frac{c\ v_f}{\lambda_g} = \frac{\lp 3\times10^8 \rp \lp 0.66 \rp}{0.20} \\
+			  &= 990\ \mhz
+		}
+		A half-wavelength line repeats its load impedance, so at $990\ \mhz$ (and
+		multiples of it) the un-de-embedded reading happens to be correct. At every
+		other frequency it is rotated. Getting the right answer at one frequency is
+		luck, not calibration -- fix it with port extension or by calibrating at the
+		antenna connector.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$f$ = \ansbox[1.2in]{$990\ \mhz$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{What the VNA cannot see.} The instrument reports one complex
+number per frequency. This problem is about the questions that number cannot answer.
+
+\begin{parts}
+
+	\part You solder a $50$~\ohms chip resistor across the connector and sweep it.
+	Predict $|S_{11}|$, the VSWR, and the radiated power. What does the result prove
+	about what $S_{11}$ measures?
+		\begin{solution}[1.2in]
+		$\Gamma = 0$, so $|S_{11}|$ drops to the noise floor of the instrument and the
+		VSWR reads $1.00$ at every frequency: a perfect match. It radiates
+		\textbf{nothing} -- all of the delivered power becomes heat. $S_{11}$ therefore
+		measures \textbf{mismatch only}. It cannot separate power that left as
+		radiation from power that died as loss, so it can never confirm efficiency.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Antenna A measures $-25\db$ with $2.0\dbi$ of gain; antenna B measures
+		$-9\db$ with $5.0\dbi$. Find the mismatch loss of each and decide which one
+		puts more power into its main beam.
+		\begin{solution}[1.6in]
+		\eq{
+			|\Gamma_A| &= 10^{-25/20} = 0.056, \qquad |\Gamma_A|^2 = 0.0032 \\
+			L_A &= -10\ \mylog{1 - 0.0032} = 0.01\db \\
+			|\Gamma_B| &= 10^{-9/20} = 0.355, \qquad |\Gamma_B|^2 = 0.126 \\
+			L_B &= -10\ \mylog{1 - 0.126} = 0.58\db
+		}
+		Realized gains are $2.0 - 0.01 = 2.0\dbi$ and $5.0 - 0.58 = 4.4\dbi$.
+		\textbf{Antenna B wins by about $2.4\db$}, despite the far uglier $S_{11}$.
+		Mismatch loss is small until $|S_{11}|$ gets much worse than $-10\db$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$L_A$ = \ansbox[1.2in]{$0.01\db$} \\[8pt]
+		$L_B$ = \ansbox[1.2in]{$0.58\db$} \\[8pt]
+		Better: \ansbox[1.2in]{B}
+	\end{minipage}
+
+	\part During the lab you bring a hand within a few centimetres of the element
+	and the dip moves. State which way the resonant frequency shifts, what happens
+	to the depth of the dip, and why neither effect is instrument error.
+		\begin{solution}[1.2in]
+		The resonance shifts \textbf{down} and the dip usually gets \textbf{shallower
+		and broader}. Tissue is a lossy dielectric: placed in the reactive near field
+		it adds capacitive loading, which lowers $f_0$, and it adds loss, which lowers
+		the antenna's $Q$. The input impedance genuinely changed, so the VNA is
+		reporting the truth -- the hand became part of the antenna.
+		\end{solution}
+
+	\part Your antenna measures $-30\db$ at the design frequency, yet the link will
+	not close. Name two things a VNA cannot see that would explain this, and say how
+	you would check one of them.
+		\begin{solution}[1.3in]
+		(1) \textbf{Efficiency}: a lossy structure -- corroded joints, a resistive
+		loading element, wet material in the near field -- absorbs the power it
+		accepts, and looks beautifully matched while doing it. (2) \textbf{Pattern or
+		polarization}: the beam may point somewhere other than the far end of the
+		link, or be cross-polarized to it. Check the first with a gain comparison
+		against a standard-gain antenna on the range (Lesson 14): if the measured gain
+		falls well short of the directivity you predicted, the missing decibels are
+		loss.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}
