@@ -197,11 +197,62 @@ At exactly half a wavelength, the input impedance of a thin dipole is
 
 $$Z_{in} \approx 73 + j42.5\ \Omega.$$
 
-Read the two parts separately. The $73\ \Omega$ resistance is **radiation
-resistance** — it represents power that leaves and never comes back, which is
-the whole point of the antenna. The $+j42.5\ \Omega$ is inductive reactance,
-and it represents energy sloshing back and forth in the reactive near field
-that Lesson 5 introduced. It does no useful work and it wrecks your match.
+### Where the 73 ohms comes from
+
+That number is not a measured curiosity — it falls out of the pattern you
+already have. **Radiation resistance** is defined by asking what resistor,
+carrying the same current, would dissipate the power the antenna radiates:
+
+$$P_\text{rad} = \frac{1}{2}\vert I_m \vert^2 R_r$$
+
+So compute $P_\text{rad}$ and you have $R_r$. Start from Part 3's pattern. The
+radiation intensity of the half-wave dipole is
+
+$$U(\theta) = \frac{\eta \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right]^2$$
+
+and the radiated power is that intensity integrated over the whole sphere.
+Nothing depends on $\phi$, so the azimuth integral simply contributes $2\pi$:
+
+$$P_\text{rad} = \int_0^{2\pi}\int_0^\pi U(\theta) \sin\theta\ d\theta\ d\phi = \frac{\eta \vert I_m \vert^2}{4\pi}\int_0^\pi \frac{\cos^2\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta$$
+
+Here the derivation stops being algebra. **That integral has no elementary
+antiderivative.** You cannot write the answer in terms of sines, logs, and
+powers — this is the point where a *number* enters instead of a formula. The
+integral is a standard tabulated function, the **cosine integral**
+$C_{in}(x) = \int_0^x \frac{1 - \cos u}{u}\ du$, and the value you need is
+
+$$\int_0^\pi \frac{\cos^2\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta = \frac{1}{2}C_{in}(2\pi) = 1.2188$$
+
+Equate the two expressions for $P_\text{rad}$; the $\vert I_m \vert^2$ cancels
+and the antenna's current level drops out, as it must:
+
+$$R_r = \frac{\eta}{4\pi}C_{in}(2\pi) = 29.98 \times 2.4376 = 73.1\ \Omega$$
+
+The $\eta/4\pi$ is just $30\ \Omega$ to slide-rule accuracy, so the whole result
+is worth remembering as **30 times 2.4376**.
+
+Two things about that result, both of them places students go wrong.
+
+**First, $R_r$ here is referred to the current maximum**, because $I_m$ is the
+current-maximum amplitude in the assumed sinusoidal distribution. For
+$L = \lambda/2$ — and *only* because of where the current maximum sits — that
+point is the feed point itself, so the radiation resistance and the input
+resistance are the same $73\ \Omega$. Change the length and the two part
+company immediately, which is exactly what the widget's "at current max"
+labelling was warning you about.
+
+**Second, this gets you the resistance and nothing else.** A far-field power
+integral can only ever produce the real part: it accounts for power that
+leaves. The $+j42.5\ \Omega$ describes energy stored in the near field and
+returned each cycle, which never appears in the far-field integral at all.
+Extracting it requires the **induced-EMF method**, which integrates the field
+the antenna produces against its own current along the wire. That is a
+near-field calculation, and we take its result on faith here.
+
+So read the two parts separately. The $73\ \Omega$ is power leaving and never
+coming back — the whole point of the antenna. The $+j42.5\ \Omega$ is the
+reactive near field of Lesson 5, sloshing energy back and forth, doing no
+useful work, and wrecking your match.
 
 **Resonance** means $X_{in} = 0$. At exactly $\lambda/2$ we are $42.5\ \Omega$
 away from it, and the fix is to make the wire slightly *shorter*.

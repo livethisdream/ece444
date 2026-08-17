@@ -185,6 +185,44 @@ Point back to L5's reactive near-field region. That stored energy is exactly the
 
 ---
 
+## Where the 73 ohms comes from
+
+Radiation resistance is whatever resistor would burn the power the antenna radiates:
+
+$$P_\text{rad} = \frac{1}{2}\vert I_m \vert^2 R_r$$
+
+Take Part 3's pattern, square it, and add it up over the sphere. Nothing depends on $\phi$, so azimuth just hands you a $2\pi$:
+
+$$P_\text{rad} = \frac{\eta \vert I_m \vert^2}{4\pi}\int_0^\pi \frac{\cos^2\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta$$
+
+<div class="callout">
+That integral has <strong>no elementary antiderivative</strong>. This is where a <em>number</em> enters the lesson instead of a formula.
+</div>
+
+Note:
+Nothing new is assumed here — it is the same pattern from Part 3, squared and summed over the sphere. The current amplitude will cancel, so it never needed a value. The integral is the cosine integral Cin: the integral of one minus cos u, over u, from zero to x. Look it up or evaluate it numerically.
+
+---
+
+## And out falls 73 ohms
+
+$$\int_0^\pi \frac{\cos^2\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta = \frac{1}{2}C_{in}(2\pi) = 1.2188$$
+
+| Quantity | Work | Result |
+| :-- | :-- | :-- |
+| $C_{in}(2\pi)$ | twice the integral | $2.4376$ |
+| $\eta/4\pi$ | $377/4\pi$ | $29.98 \approx 30$ |
+| $R_r$ | $\left(\eta/4\pi\right) C_{in}(2\pi)$ | $\mathbf{73.1\ \Omega}$ |
+
+<div class="callout">
+Referred to the <strong>current maximum</strong> — which at $\lambda/2$ <em>is</em> the feed. And it is the <strong>resistance only</strong>: the $+j42.5\ \Omega$ needs the induced-EMF method.
+</div>
+
+Note:
+Thirty times two point four is seventy-two, so a head check catches a slipped factor. Then the two warnings. First: R sub r came out referred to the current maximum, because I sub m is the current-maximum amplitude. At half a wavelength the current maximum sits at the feed, so radiation resistance and input resistance are the same number — that coincidence is the only reason this lands on the input impedance. Second: a far-field power integral accounts for power that leaves, so it can never produce stored near-field energy. The forty-two point five ohms of reactance requires the induced-EMF method, a near-field calculation, and we take it on faith.
+
+---
+
 ## Trim it short
 
 <div class="fig" data-inline-svg="./fig/L07-dipole-resonance.svg" style="max-width:660px; margin:0 auto;"></div>
