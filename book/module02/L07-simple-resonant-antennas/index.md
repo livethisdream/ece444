@@ -172,12 +172,22 @@ $N_\theta = -N_z \sin\theta$. That kills one power of $\sin\theta$:
 
 $$N_\theta(\theta) \propto \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta}$$
 
-Divide by the maximum to normalize, and you have the pattern of a center-fed
-dipole of **any** length:
+That is the pattern of a center-fed dipole of **any** length, up to a constant:
 
-$$\vert F(\theta) \vert = \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta}$$
+$$\vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta} \right\vert$$
 
-Set $L = \lambda/2$, so that $kL/2 = \pi/2$ and the second cosine vanishes:
+Both the proportionality and the magnitude bars are load-bearing. The bars
+matter because for wires longer than $\lambda$ the bracket changes sign — that
+sign flip is how sidelobes end up radiating out of phase with the main lobe.
+The proportionality matters because **normalizing means dividing by the peak of
+that expression**, and the peak is not always 1. For $L \le \lambda$ it sits at
+broadside, $\theta = 90^\circ$, where the expression evaluates to
+$1 - \cos\dfrac{kL}{2}$; for longer wires the peak walks off broadside
+entirely, which is the story at the end of this lesson.
+
+Set $L = \lambda/2$, so that $kL/2 = \pi/2$ and the second cosine vanishes. The
+broadside peak is then $1 - 0 = 1$, so this one is already normalized and can
+be written with an equals sign:
 
 $$\vert F(\theta) \vert = \frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}$$
 
@@ -508,7 +518,7 @@ of disagreement — quantifying that disagreement is what the next lesson is for
 | EIRP | Transmitter and antenna as one number, $P_t G_t$ | $\text{dBi} = \text{dBd} + 2.15$ |
 | Assumed current | Standing wave from the unfolded open-circuited line | $I_m \sin[k(L/2 - \vert z\vert)]$ |
 | Short dipole | Constant current, limiting case | $\vert F\vert = \sin\theta$, $1.76\ \text{dBi}$ |
-| Dipole pattern, any length | One radiation integral, every length | $\left[\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}\right]/\sin\theta$ |
+| Dipole pattern, any length | One radiation integral, every length; normalize by the peak | $\vert F\vert \propto \left\vert\left[\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}\right]/\sin\theta\right\vert$ |
 | Half-wave dipole pattern | The general result at $kL/2 = \pi/2$ | $\theta_\text{HP} = 78^\circ$ |
 | Half-wave directivity | From integrating the pattern over the sphere | $D = 1.64 = 2.15\ \text{dBi}$ |
 | Special functions | Tabulated, like $\text{erf}$ — do not integrate them | $C_{in}(2\pi) = 2.4376$, $Si(2\pi) = 1.4182$ |

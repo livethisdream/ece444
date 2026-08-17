@@ -166,9 +166,11 @@ Do not grind the algebra on the board unless asked. The point is that the integr
 
 A $z$-directed current radiates only a $\theta$ component. L6's projection costs one power of $\sin\theta$:
 
-$$N_\theta = -N_z \sin\theta \quad \Longrightarrow \quad \vert F(\theta) \vert = \frac{\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}}{\sin\theta}$$
+$$N_\theta = -N_z \sin\theta \quad \Longrightarrow \quad \vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}}{\sin\theta} \right\vert$$
 
-At $L = \lambda/2$, $kL/2 = \pi/2$ and the second cosine vanishes:
+Bars, because the bracket flips sign past $L = \lambda$. Proportional, because normalizing divides by the peak — at broadside that is $1 - \cos\frac{kL}{2}$, which is **1** at $\lambda/2$ but **2** at $1\lambda$.
+
+At $L = \lambda/2$ the second cosine vanishes and the peak is exactly 1, so this one is already normalized:
 
 $$\vert F(\theta) \vert = \frac{\cos\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}$$
 
