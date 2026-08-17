@@ -274,8 +274,11 @@ Rules:
 - House macros (available; use these, not raw equivalents):
   `\eq{...}` display math (align-style, `&` and `\\` allowed);
   `\sinp{x} \cosp{x} \tanp{x}` = sin(x) etc. with parens; `\lp \rp` = big
-  parens; `\mydeg` = degree; units `\m \cm \mm \km \ghz \mhz \khz \hz \db
-  \dbi \dbm \dbsm \ohms \watts \mwatts \volts \amps`; `\mylog{x}` = log10;
+  parens; `\mydeg` = degree; units `\m \km \ghz \mhz \khz \hz \db
+  \dbi \dbm \dbsm \ohms \watts \mwatts \volts \amps` (NOTE: `\cm`/`\mm` do
+  NOT exist — write `\text{cm}`/`\text{mm}`; `\db`/`\dbi`/`\ohms` carry a
+  trailing space, so write `62\ \ohms` and avoid a period directly after);
+  `\mylog{x}` = log10;
   `\zhat \xhat \yhat \rhat \thetahat \phihat`; `\vec{}` for vectors;
   `\clight` if needed. Subscripts/superscripts: plain LaTeX. Primes:
   `\vec{r}^{\prime}`, `z^{\prime}`.
