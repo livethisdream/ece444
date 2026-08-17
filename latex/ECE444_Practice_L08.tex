@@ -1,0 +1,335 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L8 practice set (Dipole Simulation Lab) -- segmentation arithmetic, sim-vs-theory
+% reconciliation, convergence interpretation, the average-gain energy audit, and
+% why a method-of-moments code must solve for the current before it can radiate.
+
+\fullwidth{\textbf{Learning Objective 2.2: } I can simulate a dipole antenna using an
+EM simulation tool and interpret the results against analytical predictions.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Segmentation arithmetic.} You are about to model a straight
+center-fed dipole at $f = 2.45 \ghz$ in NEC. The wire is 0.8 mm in diameter,
+so the radius is $a = 0.4\ \text{mm}$. Before touching the keyboard, size the
+model on paper.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the free-space wavelength and the physical length of a
+		half-wave dipole at this frequency.
+		\begin{solution}[1.1in]
+		\eq{ \lambda &= \frac{c}{f} = \frac{3\ee{8}\ \text{m/s}}{2.45\ee{9}\ \hz} = 0.1224\ \m = 122.4\ \text{mm} \\
+		     \frac{\lambda}{2} &= 61.2\ \text{mm} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\lambda$ = \ansbox[1.3in]{$122.4\ \text{mm}$} \\[10pt]
+		$\lambda/2$ = \ansbox[1.3in]{$61.2\ \text{mm}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part You choose $N = 15$ segments. Find the segment length $\Delta$ and
+		show that it satisfies both NEC bounds: $\Delta < \lambda/20$ and
+		$\Delta > 8a$.
+		\begin{solution}[1.4in]
+		\eq{ \Delta &= \frac{61.2\ \text{mm}}{15} = 4.08\ \text{mm} = 0.033\ \lambda }
+		Upper bound: $\lambda/20 = 6.12\ \text{mm}$, and $4.08 < 6.12$, so the
+		segment is short enough that phase barely changes across it.
+		Lower bound: $8a = 8(0.4) = 3.2\ \text{mm}$, and $4.08 > 3.2$, so the
+		thin-wire kernel is still valid. Both bounds pass, and 15 segments over a
+		half wavelength sits inside the 10--20 rule of thumb.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta$ = \ansbox[1.3in]{$4.08\ \text{mm}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part What is the largest \emph{odd} segment count this wire will tolerate
+		before it violates the $\Delta > 8a$ rule?
+		\begin{solution}[1.2in]
+		\eq{ \Delta_{min} &= 8a = 3.2\ \text{mm} \\
+		     N_{max} &= \frac{61.2\ \text{mm}}{3.2\ \text{mm}} = 19.1 \rightarrow N = 19 }
+		This is a fat wire: the refinement ceiling sits barely above the
+		segmentation you already chose. If a convergence study demanded 41
+		segments, this model could not supply them --- the answer would be to use
+		the extended thin-wire kernel or a thinner wire, not more segments.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$N_{max}$ = \ansbox[1.3in]{$19$}
+	\end{minipage}
+
+	\part In one or two sentences, explain why the segment count must be odd.
+		\begin{solution}[0.9in]
+		The voltage source is applied to a single segment, and that segment is the
+		antenna's feed point. An odd count puts one segment exactly at the center
+		of the wire, so the feed is symmetric. With an even count the center falls
+		on a junction between two segments and the source must be placed on one
+		side of center, which breaks the symmetry of the model and shifts the
+		reported input impedance.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Predict, then account for the difference.} You model the
+2.45 GHz dipole of Question 1 at \emph{exactly} $\lambda/2 = 61.2\ \text{mm}$,
+with 15 segments and a 1 V source on the center segment. NEC returns
+$Z_{in} = 86.9 + j46.2 \ohms$ and a peak gain of 2.17 dBi.
+
+\begin{parts}
+
+	\part State the four predictions Lesson 7 makes for a half-wave dipole:
+	input impedance at exactly $\lambda/2$, resonant length, input resistance at
+	resonance, and directivity in dBi.
+		\begin{solution}[1.0in]
+		From the sinusoidal-current analysis: $Z_{in} \approx 73 + j42.5 \ohms$ at
+		exactly $\lambda/2$; the antenna is resonant slightly short, at about
+		$0.47$ to $0.48\ \lambda$; the input resistance there is about $70 \ohms$;
+		and the directivity is $D = 1.64$, or $2.15\ \text{dBi}$, with a half-power
+		beamwidth of $78\mydeg$.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the percent difference between the simulated and predicted
+		values of $R_{in}$ and of $X_{in}$.
+		\begin{solution}[1.3in]
+		\eq{ \frac{86.9 - 73}{73} &= 0.190 \rightarrow 19.0\% \\
+		     \frac{46.2 - 42.5}{42.5} &= 0.087 \rightarrow 8.7\% }
+		The reactance is close; the resistance is not. Note also that the
+		simulated gain, 2.17 dBi against a predicted 2.15 dBi, is off by
+		1\% --- the pattern quantities agree even though the impedance does not.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$R_{in}$ error = \ansbox[1.2in]{$19.0\%$} \\[10pt]
+		$X_{in}$ error = \ansbox[1.2in]{$8.7\%$}
+	\end{minipage}
+
+	\part In two or three sentences, account for the resistance difference. Be
+	specific about the mechanism --- ``simulation error'' earns nothing.
+		\begin{solution}[1.3in]
+		The value $73 + j42.5 \ohms$ is the impedance of an assumed sinusoidal
+		current, and a sinusoid resonates when the wire is about $0.486\ \lambda$
+		long. A real wire has finite radius, stores energy in the near field
+		around that radius, and resonates shorter --- near $0.47\ \lambda$. A wire
+		cut to exactly $\lambda/2$ is therefore already about 5\% long: it is
+		inductive, and its resistance has already climbed well up the steep part
+		of the $R_{in}$ versus length curve. The two numbers describe two
+		different antennas, not one antenna and one error.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Trimming brings this wire to resonance at $0.473\ \lambda$. Find the
+		resonant length in millimetres and the percent shortening from
+		$\lambda/2$.
+		\begin{solution}[1.2in]
+		\eq{ L_{res} &= 0.473(122.4\ \text{mm}) = 57.9\ \text{mm} \\
+		     \text{shortening} &= \frac{61.2 - 57.9}{61.2} = 0.054 \rightarrow 5.4\% }
+		Roughly a 5\% trim, which is the standard rule of thumb for bringing a
+		dipole to resonance.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$L_{res}$ = \ansbox[1.2in]{$57.9\ \text{mm}$} \\[10pt]
+		trim = \ansbox[1.2in]{$5.4\%$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Reading a convergence study.} A classmate models a dipole of
+length exactly $0.5\ \lambda$ with wire radius $a = 0.001\ \lambda$ and re-runs it
+at five segment counts:
+
+\begin{center}
+\begin{tabular}{c c c}
+\hline
+\textbf{Segments $N$} & \textbf{$R_{in}$ ($\Omega$)} & \textbf{$X_{in}$ ($\Omega$)} \\
+\hline
+5  & 79.9 & $+35.9$ \\
+11 & 81.9 & $+43.9$ \\
+21 & 83.4 & $+45.6$ \\
+41 & 84.5 & $+46.5$ \\
+81 & 85.4 & $+47.2$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the percent change in $R_{in}$ from each row to the next.
+		\begin{solution}[1.2in]
+		\eq{ 5 \rightarrow 11: \quad \frac{81.9-79.9}{79.9} &= 2.5\% \\
+		     11 \rightarrow 21: \quad \frac{83.4-81.9}{81.9} &= 1.8\% \\
+		     21 \rightarrow 41: \quad \frac{84.5-83.4}{83.4} &= 1.3\% \\
+		     41 \rightarrow 81: \quad \frac{85.4-84.5}{84.5} &= 1.1\% }
+		The steps shrink, but slowly: $R_{in}$ is still creeping up by about a
+		percent per doubling.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		last step = \ansbox[1.2in]{$1.1\%$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the largest segment count the $\Delta > 8a$ rule permits for
+		this wire. Which rows of the table violate it?
+		\begin{solution}[1.1in]
+		\eq{ \Delta &= \frac{0.5\ \lambda}{N} > 8a = 0.008\ \lambda \\
+		     N &< \frac{0.5}{0.008} = 62.5 \rightarrow N_{max} = 61 }
+		The $N = 81$ row breaks the rule --- its segments are only about five
+		radii long --- so it sits outside the range where the standard thin-wire
+		kernel is trustworthy and should not be used as evidence of anything.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$N_{max}$ = \ansbox[1.2in]{$61$}
+	\end{minipage}
+
+	\part Which segment count would you defend for this model, and why? Your
+	answer must reference both the convergence trend and the kernel limit.
+		\begin{solution}[1.2in]
+		41 segments. Each further refinement moves $R_{in}$ by only about one
+		percent, well below what you could measure on the bench, and
+		$\Delta = 0.0122\ \lambda$ clears the $0.008\ \lambda$ floor with room to
+		spare for a shorter trimmed wire. Going to 81 buys a percent of drift at
+		the cost of leaving the kernel's valid range.
+		\end{solution}
+
+	\part Explain in one or two sentences why gain converges at a lower segment
+	count than input impedance does.
+		\begin{solution}[0.9in]
+		Gain is an integral over the entire current, so errors in individual
+		segments partly cancel and the total settles quickly. Input impedance is
+		read from one segment --- the one carrying the source --- so it inherits
+		the full local error of the feed model, which itself changes every time
+		the segment length changes.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The average-gain audit.} After a full-sphere pattern run of a
+lossless dipole in free space, NEC reports an average power gain of 1.15.
+
+\begin{parts}
+
+	\part What does an average power gain of exactly 1.000 tell you about a
+	lossless free-space model, and why is that a test rather than a result?
+		\begin{solution}[1.1in]
+		Average power gain is the gain averaged over the whole sphere, which is
+		the total radiated power divided by the total input power. For a lossless
+		antenna in free space, every watt delivered to the terminals must leave as
+		radiation, so the average must be 1.000. It is a test because you already
+		know the answer: any deviation is not physics, it is a defect in the
+		model, and it is the cheapest error check available.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Express the reported 1.15 in decibels, and state whether you would
+		accept the run.
+		\begin{solution}[1.2in]
+		\eq{ 10\ \mylog{1.15} &= 0.61 \db }
+		Reject it. The model claims to radiate 15\% more power than it was fed,
+		which is impossible; a healthy run lands inside roughly $\pm 5\%$, or
+		about $\pm 0.2\ \text{dB}$. Nothing else in this output file --- impedance,
+		gain, pattern --- can be trusted until the cause is found.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		avg gain = \ansbox[1.1in]{$0.61 \db$}
+	\end{minipage}
+
+	\part Give two plausible causes of an average gain this far from 1.000, and
+	the specific check that would confirm each.
+		\begin{solution}[1.3in]
+		First, a segmentation violation: segments shorter than about eight wire
+		radii break the thin-wire kernel and corrupt the currents. Check it by
+		computing $\Delta$ and $8a$ by hand, and re-run with fewer segments or a
+		thinner wire. Second, a geometry or excitation error --- wires that do not
+		actually connect, a duplicated wire, or a source placed on a segment that
+		is not at the feed. Check it by plotting the geometry and the segment
+		numbering, and confirming the source tag and segment index against the
+		wire card. A third common cause is requesting the average over less than a
+		full sphere, which makes the number meaningless rather than wrong.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Why the current comes first.} A classmate claims that NEC
+``computes the radiation pattern directly from the geometry.''
+
+\begin{parts}
+
+	\part In two or three sentences, explain why a method-of-moments code must
+	solve for the current distribution before it can produce a pattern. Refer to
+	the radiation integral.
+		\begin{solution}[1.3in]
+		The far field is the radiation integral of the current over the antenna:
+		the geometry alone tells you where the current can flow, not how much
+		flows where or with what phase. The method of moments exists precisely to
+		supply that missing current --- it discretizes the wire, enforces
+		$E_{tan} = 0$ on the conductor, and solves a linear system for the segment
+		currents. Only then does it evaluate the same radiation integral you would
+		evaluate by hand, so the geometry sets up the problem and the current
+		answers it.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The solver drives the center segment with $1\ \text{V}$ and reports a
+		feed current of $8.90 - j4.80\ \text{mA}$. Find $Z_{in}$, then the magnitude
+		of the reflection coefficient and the VSWR referred to $50 \ohms$.
+		\begin{solution}[1.6in]
+		\eq{ Z_{in} &= \frac{V}{I} = \frac{1}{\lp 8.90 - j4.80 \rp \ee{-3}} \\
+		     &= \frac{\lp 8.90 + j4.80 \rp \ee{-3}}{1.0225 \ee{-4}} = 87.0 + j46.9 \ohms \\
+		     \Gamma &= \frac{Z_{in} - 50}{Z_{in} + 50} = \frac{37.0 + j46.9}{137.0 + j46.9} \\
+		     \vert \Gamma \vert &= \frac{59.7}{144.8} = 0.412 \\
+		     \text{VSWR} &= \frac{1 + 0.412}{1 - 0.412} = 2.40 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$Z_{in}$ = \ansbox[1.4in]{$87.0 + j46.9 \ohms$} \\[10pt]
+		$\vert \Gamma \vert$ = \ansbox[1.2in]{$0.412$} \\[10pt]
+		VSWR = \ansbox[1.2in]{$2.40$}
+	\end{minipage}
+
+	\part You need this antenna matched to $50 \ohms$. Would you trim the wire to
+	resonance or add a matching network? Give the trade-off in one or two
+	sentences.
+		\begin{solution}[1.1in]
+		Trim first. Trimming costs nothing, removes the $+j46.9 \ohms$ entirely,
+		and leaves about $72 \ohms$ real, which is already a VSWR near 1.4 on a
+		$50 \ohms$ line --- acceptable for most links. A matching network would
+		bring the residual mismatch closer to unity but adds parts, loss, and a
+		bandwidth restriction, so it is worth doing only when the remaining
+		mismatch actually costs you something in the link budget.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

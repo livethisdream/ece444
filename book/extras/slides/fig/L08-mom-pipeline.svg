@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 340" role="img" aria-label="Four stages of a method-of-moments solve: cut the wire into segments, build the interaction matrix, solve for the segment currents, integrate the current into a pattern">
+<defs>
+<marker id="mpA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker>
+</defs>
+
+<!-- ============ 1. segments ============ -->
+<text x="90" y="30" text-anchor="middle" fill="#004a85" font-size="15" font-weight="700">1 &#183; Cut the wire up</text>
+<line x1="90" y1="70" x2="90" y2="250" stroke="#004a85" stroke-width="5" stroke-linecap="round"/>
+<g stroke="#fafaf7" stroke-width="2.5">
+  <line x1="80" y1="90" x2="100" y2="90"/><line x1="80" y1="110" x2="100" y2="110"/>
+  <line x1="80" y1="130" x2="100" y2="130"/><line x1="80" y1="150" x2="100" y2="150"/>
+  <line x1="80" y1="170" x2="100" y2="170"/><line x1="80" y1="190" x2="100" y2="190"/>
+  <line x1="80" y1="210" x2="100" y2="210"/><line x1="80" y1="230" x2="100" y2="230"/>
+</g>
+<circle cx="90" cy="160" r="6.5" fill="#b01e24"/>
+<text x="112" y="164" fill="#b01e24" font-size="13" font-weight="700">source</text>
+<text x="90" y="278" text-anchor="middle" fill="#1a1a1a" font-size="13">one unknown current</text>
+<text x="90" y="295" text-anchor="middle" fill="#1a1a1a" font-size="13">per segment</text>
+
+<line x1="160" y1="160" x2="196" y2="160" stroke="#5a5a5a" stroke-width="1.8" marker-end="url(#mpA)"/>
+
+<!-- ============ 2. matrix ============ -->
+<text x="278" y="30" text-anchor="middle" fill="#004a85" font-size="15" font-weight="700">2 &#183; Field of each on each</text>
+<g>
+  <rect x="212" y="76" width="132" height="132" fill="rgba(0,103,185,0.06)" stroke="#004a85" stroke-width="1.8"/>
+  <g stroke="#004a85" stroke-width="0.7" opacity="0.45">
+    <line x1="234" y1="76" x2="234" y2="208"/><line x1="256" y1="76" x2="256" y2="208"/>
+    <line x1="278" y1="76" x2="278" y2="208"/><line x1="300" y1="76" x2="300" y2="208"/>
+    <line x1="322" y1="76" x2="322" y2="208"/>
+    <line x1="212" y1="98" x2="344" y2="98"/><line x1="212" y1="120" x2="344" y2="120"/>
+    <line x1="212" y1="142" x2="344" y2="142"/><line x1="212" y1="164" x2="344" y2="164"/>
+    <line x1="212" y1="186" x2="344" y2="186"/>
+  </g>
+  <g fill="#004a85" opacity="0.55">
+    <rect x="212" y="76" width="22" height="22"/><rect x="234" y="98" width="22" height="22"/>
+    <rect x="256" y="120" width="22" height="22"/><rect x="278" y="142" width="22" height="22"/>
+    <rect x="300" y="164" width="22" height="22"/><rect x="322" y="186" width="22" height="22"/>
+  </g>
+</g>
+<text x="278" y="228" text-anchor="middle" fill="#5a5a5a" font-size="12.5">strongest on the diagonal &#8212; a segment feels itself most</text>
+<text x="278" y="278" text-anchor="middle" fill="#1a1a1a" font-size="13">every row says: total field</text>
+<text x="278" y="295" text-anchor="middle" fill="#1a1a1a" font-size="13">along this segment is zero</text>
+
+<line x1="366" y1="160" x2="402" y2="160" stroke="#5a5a5a" stroke-width="1.8" marker-end="url(#mpA)"/>
+
+<!-- ============ 3. solved current ============ -->
+<text x="500" y="30" text-anchor="middle" fill="#004a85" font-size="15" font-weight="700">3 &#183; Solve for the currents</text>
+<line x1="452" y1="70" x2="452" y2="250" stroke="#004a85" stroke-width="3" stroke-linecap="round"/>
+<circle cx="452" cy="160" r="5" fill="#b01e24"/>
+<path d="M452 250 C 505 235, 540 200, 545 160 C 540 120, 505 85, 452 70" fill="rgba(0,103,185,0.12)" stroke="#0067b9" stroke-width="2.4"/>
+<g fill="#004a85">
+  <circle cx="470" cy="232" r="3"/><circle cx="500" cy="211" r="3"/><circle cx="522" cy="189" r="3"/>
+  <circle cx="534" cy="160" r="3"/><circle cx="522" cy="131" r="3"/><circle cx="500" cy="109" r="3"/>
+  <circle cx="470" cy="88" r="3"/>
+</g>
+<text x="556" y="206" fill="#1a1a1a" font-size="13">numbers,</text>
+<text x="556" y="223" fill="#1a1a1a" font-size="13">not a guess</text>
+<text x="500" y="278" text-anchor="middle" fill="#1a1a1a" font-size="13">no sinusoid assumed</text>
+<text x="500" y="295" text-anchor="middle" fill="#1a1a1a" font-size="13">anywhere</text>
+
+<line x1="600" y1="160" x2="636" y2="160" stroke="#5a5a5a" stroke-width="1.8" marker-end="url(#mpA)"/>
+
+<!-- ============ 4. pattern ============ -->
+<text x="706" y="30" text-anchor="middle" fill="#004a85" font-size="15" font-weight="700">4 &#183; Integrate it</text>
+<line x1="706" y1="70" x2="706" y2="250" stroke="#004a85" stroke-width="2" stroke-dasharray="4 3"/>
+<ellipse cx="672" cy="160" rx="34" ry="48" fill="rgba(176,30,36,0.10)" stroke="#b01e24" stroke-width="2.2"/>
+<ellipse cx="740" cy="160" rx="34" ry="48" fill="rgba(176,30,36,0.10)" stroke="#b01e24" stroke-width="2.2"/>
+<circle cx="706" cy="160" r="4" fill="#b01e24"/>
+<text x="706" y="278" text-anchor="middle" fill="#1a1a1a" font-size="13">the same radiation</text>
+<text x="706" y="295" text-anchor="middle" fill="#1a1a1a" font-size="13">integral you did by hand</text>
+
+<line x1="30" y1="318" x2="760" y2="318" stroke="#004a85" stroke-width="1" opacity="0.25"/>
+<text x="395" y="336" text-anchor="middle" fill="#004a85" font-size="14" font-weight="700">Only step 3 is new. The physics on either side of it is yours already.</text>
+</svg>
