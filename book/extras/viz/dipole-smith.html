@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dipole on the Smith chart: how length moves the match</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
+  select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
+          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
+          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
+  .pill b { font-weight:700; }
+  .pill.vs { background:rgba(138,90,0,0.12); color:var(--amber); border-color:rgba(138,90,0,0.30); }
+  .pill.rs { background:rgba(63,125,52,0.12); color:var(--grn);  border-color:rgba(63,125,52,0.30); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="sm" aria-label="Smith chart showing the input impedance of a dipole as its length changes, with constant standing-wave-ratio circles"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Total length \(L/\lambda\)</label>
+      <input type="range" id="len" min="0.30" max="0.70" step="0.005" value="0.5">
+      <span class="val" id="len-val">0.500</span>
+    </div>
+    <div class="ctl">
+      <label>Normalize to</label>
+      <select id="z0">
+        <option value="50" selected>50 &#937; line</option>
+        <option value="75">75 &#937; line</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="pills">
+    <span class="pill">\(Z_{in}\) = <b id="p-z">&#8212;</b></span>
+    <span class="pill">\(\Gamma\) = <b id="p-g">&#8212;</b></span>
+    <span class="pill vs">VSWR = <b id="p-v">&#8212;</b></span>
+    <span class="pill rs">resonant at <b id="p-res">&#8212;</b></span>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const ETA=376.730313668, GAMMA=0.5772156649015329;
+const AWIRE=0.002;                       // wire radius in wavelengths -- matches dipole-explorer
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const cv=document.getElementById('sm'), ctx=cv.getContext('2d');
+const state={ L:0.5, Z0:50 };
+
+/* ===================== impedance: the SAME model as dipole-explorer =====================
+   Induced-EMF result for a thin center-fed dipole, referred to the current maximum, then
+   referred to the terminals by the sinusoidal-current transformation 1/sin^2(kL/2).
+   Anchor: L = 0.5 lambda gives 73.1 + j42.5 ohms, independent of wire radius. */
+function Si(x){
+  let t=x, s=x;
+  for(let n=1;n<70;n++){ t*= -x*x/((2*n)*(2*n+1)); s+= t/(2*n+1);
+    if(Math.abs(t)<1e-18*Math.abs(s)) break; }
+  return s;
+}
+function Ci(x){
+  let t=1, s=0;
+  for(let n=1;n<70;n++){ t*= -x*x/((2*n-1)*(2*n)); s+= t/(2*n);
+    if(Math.abs(t)<1e-18*(Math.abs(s)+1)) break; }
+  return GAMMA+Math.log(x)+s;
+}
+function zCurrentMax(Ll){
+  const k=2*Math.PI, kl=k*Ll;
+  const S1=Si(kl), C1=Ci(kl), S2=Si(2*kl), C2=Ci(2*kl), C3=Ci(2*k*AWIRE*AWIRE/Ll);
+  const R=(ETA/(2*Math.PI))*(GAMMA+Math.log(kl)-C1
+        +0.5*Math.sin(kl)*(S2-2*S1)
+        +0.5*Math.cos(kl)*(GAMMA+Math.log(kl/2)+C2-2*C1));
+  const X=(ETA/(4*Math.PI))*(2*S1+Math.cos(kl)*(2*S1-S2)-Math.sin(kl)*(2*C1-C2-C3));
+  return {R:R, X:X};
+}
+function zIn(Ll){
+  const z=zCurrentMax(Ll), s=Math.sin(Math.PI*Ll), f=1/(s*s);
+  return {R:z.R*f, X:z.X*f};
+}
+function resonantLength(){
+  let lo=0.30, hi=0.50;
+  if(zIn(lo).X>0 || zIn(hi).X<0) return null;
+  for(let i=0;i<60;i++){ const m=0.5*(lo+hi); if(zIn(m).X<0) lo=m; else hi=m; }
+  return 0.5*(lo+hi);
+}
+// reflection coefficient against the selected line impedance
+function refl(Ll){
+  const z=zIn(Ll), R=z.R, X=z.X, Z0=state.Z0;
+  const dr=R-Z0, di=X, nr=R+Z0, ni=X;
+  const den=nr*nr+ni*ni;
+  return { re:(dr*nr+di*ni)/den, im:(di*nr-dr*ni)/den, R:R, X:X };
+}
+
+/* ================================ the Smith chart ================================ */
+let CX=0, CY=0, RR=0;
+const px=g=>CX+g*RR, py=g=>CY-g*RR;
+
+function arcClipped(cx,cy,r,style,lw){
+  // draw a circle, clipped to the unit circle of the chart
+  ctx.save();
+  ctx.beginPath(); ctx.arc(CX,CY,RR,0,7); ctx.clip();
+  ctx.strokeStyle=style; ctx.lineWidth=lw;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,7); ctx.stroke();
+  ctx.restore();
+}
+
+function drawChart(){
+  const grid=cssv('--edge'), grid2=cssv('--edge2');
+
+  // constant-resistance circles: center r/(1+r), radius 1/(1+r)
+  for(const r of [0.2,0.5,1,2,5]){
+    const c=r/(1+r), rad=1/(1+r);
+    arcClipped(px(c),CY,rad*RR, r===1?grid2:grid, r===1?1.4:1);
+  }
+  // constant-reactance arcs: center (1, 1/x), radius |1/x|
+  for(const x of [0.2,0.5,1,2,5]){
+    for(const sgn of [1,-1]){
+      const cy=py(sgn/x), rad=RR/x;
+      arcClipped(px(1),cy,rad, Math.abs(x)===1?grid2:grid, Math.abs(x)===1?1.4:1);
+    }
+  }
+  // rim and real axis
+  ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.arc(CX,CY,RR,0,7); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(px(-1),CY); ctx.lineTo(px(1),CY); ctx.stroke();
+
+  // resistance labels along the real axis
+  for(const r of [0.2,0.5,2,5]){
+    const g=(r-1)/(r+1);
+    ctx.fillStyle=cssv('--ink3');
+    ctx.beginPath(); ctx.arc(px(g),CY,1.8,0,7); ctx.fill();
+    stext(ctx, (r*state.Z0).toFixed(0), px(g), CY+13, 9.5, cssv('--ink3'),'center',false);
+  }
+  stext(ctx,'ohms', px(1)-4, CY+13, 9.5, cssv('--ink3'),'right',false);
+  stext(ctx,'short',  px(-1)+4, CY-11, 10, cssv('--ink3'),'left',false);
+  stext(ctx,'open',   px(1)-4,  CY-11, 10, cssv('--ink3'),'right',false);
+  stext(ctx,'inductive  +jX', CX, py(1)-14, 10.5, cssv('--ink3'),'center',true);
+  stext(ctx,'capacitive  −jX', CX, py(-1)+14, 10.5, cssv('--ink3'),'center',true);
+  // the matched point -- a neutral cross, so the green dot stays unambiguously "resonant"
+  ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1.6;
+  ctx.beginPath(); ctx.moveTo(CX-5,CY); ctx.lineTo(CX+5,CY);
+  ctx.moveTo(CX,CY-5); ctx.lineTo(CX,CY+5); ctx.stroke();
+  stext(ctx,'matched', CX, CY-13, 10, cssv('--ink3'),'center',true);
+}
+
+function drawVswrCircles(){
+  ctx.setLineDash([5,4]);
+  for(const S of [2,3]){
+    const g=(S-1)/(S+1);
+    ctx.strokeStyle='rgba(138,90,0,0.62)'; ctx.lineWidth=1.4;
+    ctx.beginPath(); ctx.arc(CX,CY,g*RR,0,7); ctx.stroke();
+    stext(ctx, S+':1', CX-g*RR*0.707-5, CY-g*RR*0.707-5, 10.5, cssv('--amber'),'right',true);
+  }
+  ctx.setLineDash([]);
+}
+
+function drawLocus(){
+  const lo=+lenEl.min, hi=+lenEl.max;
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.4;
+  ctx.beginPath();
+  for(let i=0;i<=400;i++){
+    const L=lo+(hi-lo)*i/400, g=refl(L);
+    const x=px(g.re), y=py(g.im);
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+  }
+  ctx.stroke();
+
+  // end labels so the direction of travel is readable
+  for(const [gg,lab] of [[refl(lo),lo.toFixed(2)+'λ'],[refl(hi),hi.toFixed(2)+'λ']]){
+    const m=Math.hypot(gg.re,gg.im)||1, ux=gg.re/m, uy=gg.im/m;
+    stext(ctx, lab, px(gg.re)+ux*16, py(gg.im)-uy*16, 10, cssv('--ink3'),
+          ux<0?'right':'left', false);
+  }
+
+  // the two landmarks
+  const res=resonantLength();
+  if(res!==null){
+    const g=refl(res);
+    ctx.fillStyle=cssv('--grn');
+    ctx.beginPath(); ctx.arc(px(g.re),py(g.im),4.6,0,7); ctx.fill();
+  }
+  const gh=refl(0.5);
+  ctx.fillStyle=cssv('--red');
+  ctx.beginPath(); ctx.arc(px(gh.re),py(gh.im),4.6,0,7); ctx.fill();
+  stext(ctx,'exactly λ/2', px(gh.re)+9, py(gh.im)-11, 10.5, cssv('--red'),'left',true);
+
+  // the live cursor
+  const g=refl(state.L);
+  ctx.strokeStyle=cssv('--navy'); ctx.lineWidth=2.2; ctx.fillStyle='#fff';
+  ctx.beginPath(); ctx.arc(px(g.re),py(g.im),6.4,0,7); ctx.fill(); ctx.stroke();
+}
+
+function drawLegend(x0,y0){
+  const rows=[['locus as the wire grows', cssv('--mid')],
+              ['exactly half a wavelength', cssv('--red')],
+              ['resonant length', cssv('--grn')],
+              ['constant VSWR', cssv('--amber')]];
+  stext(ctx,'reading the chart', x0, y0, 11.5, cssv('--navy'),'left',true);
+  rows.forEach((r,i)=>{
+    const y=y0+20+i*17;
+    ctx.strokeStyle=r[1]; ctx.lineWidth=2.6;
+    ctx.beginPath(); ctx.moveTo(x0,y); ctx.lineTo(x0+16,y); ctx.stroke();
+    stext(ctx,r[0], x0+22, y, 11, cssv('--ink3'),'left',false);
+  });
+  const y=y0+20+rows.length*17+8;
+  stext(ctx,'normalized to '+state.Z0+' ohms', x0, y, 11, cssv('--ink3'),'left',false);
+  stext(ctx,'wire radius 0.002 wavelengths', x0, y+16, 11, cssv('--ink3'),'left',false);
+}
+
+function drawAll(){
+  const dpr=window.devicePixelRatio||1, w=cv.width/dpr, h=cv.height/dpr;
+  ctx.clearRect(0,0,w,h);
+  RR=Math.min(w*0.315, h*0.455);
+  CX=18+RR; CY=h/2;
+  drawChart(); drawVswrCircles(); drawLocus();
+  drawLegend(CX+RR+30, 26);
+  MJ.draw(ctx,'\\Gamma', CX+RR+30, h-28, 13, cssv('--ink3'),'left');
+  stext(ctx,'plane', CX+RR+46, h-28, 11, cssv('--ink3'),'left',false);
+  readouts();
+}
+
+function readouts(){
+  const g=refl(state.L);
+  const mag=Math.hypot(g.re,g.im), ang=Math.atan2(g.im,g.re)*180/Math.PI;
+  const v=mag>=0.999?Infinity:(1+mag)/(1-mag);
+  const res=resonantLength();
+  document.getElementById('p-z').textContent =
+      g.R.toFixed(1)+(g.X>=0?' + j':' − j')+Math.abs(g.X).toFixed(1)+' Ω';
+  document.getElementById('p-g').textContent = mag.toFixed(3)+' ∠ '+ang.toFixed(0)+'°';
+  document.getElementById('p-v').textContent = isFinite(v)?v.toFixed(2):'∞';
+  document.getElementById('p-res').textContent = res===null?'—':res.toFixed(3)+' λ';
+}
+
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const w=Math.max(380, cv.getBoundingClientRect().width);
+  const h=Math.max(320, Math.min(w*0.60, 470));
+  cv.width=w*dpr; cv.height=h*dpr; cv.style.height=h+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+const lenEl=document.getElementById('len'), z0El=document.getElementById('z0');
+lenEl.addEventListener('input',()=>{
+  state.L=+lenEl.value;
+  document.getElementById('len-val').textContent=state.L.toFixed(3);
+  drawAll();
+});
+z0El.addEventListener('change',()=>{ state.Z0=+z0El.value; drawAll(); });
+
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>

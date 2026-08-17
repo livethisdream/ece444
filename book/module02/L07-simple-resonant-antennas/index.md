@@ -28,7 +28,7 @@ gain, and what a network analyzer will read at its terminals.
 ## Part 1: The antenna that cannot exist
 
 An **isotropic radiator** radiates equally in every direction. Wrap a sphere
-around it and every square metre of that sphere receives the same power
+around it and every square meter of that sphere receives the same power
 density. Its radiation intensity is simply the radiated power spread over the
 whole sphere,
 
@@ -92,32 +92,105 @@ wire a tenth of a wavelength long. $2\ \Omega$ against a $50\ \Omega$ line is a
 hopeless match, and that, not the pattern, is why nobody feeds a short dipole
 directly.
 
-Make the wire longer and the current can no longer be treated as constant. A
-center-fed wire behaves like an open-circuited transmission line that has been
-unfolded, so the current is a **standing wave** that must vanish at the open
-ends:
+Make the wire longer and the current can no longer be treated as constant. So
+before we can use Lesson 6's machinery, we need a current to feed it.
+
+### Where the standing wave comes from
+
+Start with a two-wire transmission line, open-circuited at the far end. You
+already know its current: on an open-circuited line the current must be **zero
+at the open end**, and the standing wave grows sinusoidally as you walk back
+from it. Measuring a distance $s$ back from the open end,
+
+$$I(s) = I_m \sin(ks).$$
+
+Now take the last stretch of that line and **fold the two conductors apart**
+until they lie in a straight line, one arm up and one arm down. You have built
+a center-fed dipole, and the standing wave came with it.
+
+Each arm still ends in an open tip. A point at height $z$ on the upper arm sits
+a distance $s = L/2 - z$ back from its tip, so $I(z) = I_m \sin[k(L/2 - z)]$.
+The lower arm is the mirror image, so replacing $z$ by $\vert z \vert$ covers
+both:
 
 $$I(z) = I_m \sin\left[k\left(\frac{L}{2} - \vert z \vert\right)\right]$$
+
+Check it against the boundary conditions, which is the only reason we believe
+it:
+
+- At the tips, $z = \pm L/2$, the sine argument is zero, so $I = 0$. **Current
+  vanishes at both open ends** — charge has nowhere further to go.
+- At the feed, $I(0) = I_m \sin(kL/2)$. For $L = \lambda/2$ that is
+  $I_m \sin(\pi/2) = I_m$: the current *maximum* lands exactly at the feed. For
+  $L = \lambda$ it is $I_m \sin(\pi) = 0$: a current *null* at the feed. Hold on
+  to that contrast — it decides everything about impedance in Part 4.
+
+:::{admonition} Key Point
+:class: key-concept
+This current is **assumed**, not solved for. It is justified by the
+transmission-line analogy, and it is confirmed to be very close to the truth by
+measurement and by numerical solvers — but it is not a solution of Maxwell's
+equations for a dipole, and for thick or non-resonant wires it is visibly
+wrong. Everything downstream in this lesson inherits that assumption. Lesson 8
+is where you find out how much it costs.
+:::
 
 <img src="../../viz/img/L07-dipole-currents.svg"
      alt="Standing-wave current on center-fed wires of four different lengths"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
-Feed that current to the radiation integral from Lesson 6. The integral over
-$z$ closes in elementary functions, and the normalized pattern of a center-fed
-dipole of total length $L$ is
+## Part 3: Pattern, beamwidth, and directivity
 
-$$\vert F(\theta) \vert = \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta}.$$
+You have a current. Lesson 6 gives you the rest, and this is the one antenna in
+the course where we run that machine end to end.
+
+### Using the radiation integral
+
+Lesson 6's radiation vector is
+$\mathbf{N} = \int \mathbf{J}\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'$.
+For a thin wire lying on $z$, the volume integral collapses to a line integral,
+the current is $z$-directed, and $\hat{\mathbf r}\cdot\mathbf{r}' = z'\cos\theta$:
+
+$$N_z(\theta) = \int_{-L/2}^{L/2} I(z')\ e^{+jkz'\cos\theta}\ dz'$$
+
+The current is an **even** function of $z'$. Pair each $z'$ with $-z'$ and the
+two exponentials combine into a cosine, which folds the integral onto the upper
+arm and throws away the imaginary part:
+
+$$N_z(\theta) = 2 I_m \int_0^{L/2} \sin\left[k\left(\frac{L}{2} - z'\right)\right]\cos(kz'\cos\theta)\ dz'$$
+
+Now it is a first-year integral. The product-to-sum identity
+$\sin A \cos B = \tfrac{1}{2}\left[\sin(A+B) + \sin(A-B)\right]$ turns the
+integrand into two plain sines, both of which integrate on sight. Collecting
+the result:
+
+$$N_z(\theta) = \frac{2 I_m}{k}\ \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin^2\theta}$$
+
+One step left. Lesson 6 showed that a $z$-directed current radiates only a
+$\theta$ component in the far field, obtained by projection:
+$N_\theta = -N_z \sin\theta$. That kills one power of $\sin\theta$:
+
+$$N_\theta(\theta) \propto \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta}$$
+
+Divide by the maximum to normalize, and you have the pattern of a center-fed
+dipole of **any** length:
+
+$$\vert F(\theta) \vert = \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta}$$
 
 Set $L = \lambda/2$, so that $kL/2 = \pi/2$ and the second cosine vanishes:
 
-$$\vert F(\theta) \vert = \frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}.$$
+$$\vert F(\theta) \vert = \frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}$$
 
 That is the **half-wave dipole** pattern. The $\sin\theta$ in the denominator
 looks like trouble at $\theta = 0$, but the numerator vanishes there too and
 the ratio goes quietly to zero. The nulls are still straight off the wire ends.
 
-## Part 3: Pattern, beamwidth, and directivity
+```{note}
+Notice what you actually bought. That general formula is not a half-wave
+result — it holds for *any* $L$, and the multi-lobe patterns you will meet at
+the end of this lesson come from the same expression with a different number in
+it. One integral, every length. That is what the radiation integral is for.
+```
 
 The half-wave pattern is a doughnut again, only slightly slimmer than the short
 dipole's.
@@ -193,15 +266,15 @@ which is precisely why short antennas are so hard to feed.
 
 ## Part 4: Impedance and resonance
 
-At exactly half a wavelength, the input impedance of a thin dipole is
+The pattern was the easy half. What the transmitter actually feels is the
+**input impedance**, and for a thin half-wave dipole both parts of it can be
+computed — the resistance from the pattern you just derived, the reactance from
+one standard result we will name but not re-derive.
 
-$$Z_{in} \approx 73 + j42.5\ \Omega.$$
+### The resistance, from the pattern
 
-### Where the 73 ohms comes from
-
-That number is not a measured curiosity — it falls out of the pattern you
-already have. **Radiation resistance** is defined by asking what resistor,
-carrying the same current, would dissipate the power the antenna radiates:
+**Radiation resistance** is defined by asking what resistor, carrying the same
+current, would dissipate the power the antenna radiates:
 
 $$P_\text{rad} = \frac{1}{2}\vert I_m \vert^2 R_r$$
 
@@ -217,9 +290,17 @@ $$P_\text{rad} = \int_0^{2\pi}\int_0^\pi U(\theta) \sin\theta\ d\theta\ d\phi = 
 
 Here the derivation stops being algebra. **That integral has no elementary
 antiderivative.** You cannot write the answer in terms of sines, logs, and
-powers — this is the point where a *number* enters instead of a formula. The
-integral is a standard tabulated function, the **cosine integral**
-$C_{in}(x) = \int_0^x \frac{1 - \cos u}{u}\ du$, and the value you need is
+powers — this is the point where a *number* enters instead of a formula.
+
+That is not a failure, and it is not unusual. It is the same situation as
+$\text{erf}$ in probability: the integral is important enough that somebody
+tabulated it, gave it a name, and moved on. Antenna work leans on three such
+**special functions**, and you will meet all of them again:
+
+$$C_{in}(x) = \int_0^x \frac{1 - \cos u}{u}\ du \qquad Si(x) = \int_0^x \frac{\sin u}{u}\ du \qquad Ci(x) = -\int_x^\infty \frac{\cos u}{u}\ du$$
+
+Look them up, or let a calculator evaluate them; do not try to integrate them.
+The value this problem needs is
 
 $$\int_0^\pi \frac{\cos^2\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta = \frac{1}{2}C_{in}(2\pi) = 1.2188$$
 
@@ -231,28 +312,55 @@ $$R_r = \frac{\eta}{4\pi}C_{in}(2\pi) = 29.98 \times 2.4376 = 73.1\ \Omega$$
 The $\eta/4\pi$ is just $30\ \Omega$ to slide-rule accuracy, so the whole result
 is worth remembering as **30 times 2.4376**.
 
-Two things about that result, both of them places students go wrong.
+### The reactance, and why 42.5 is a clean number
 
-**First, $R_r$ here is referred to the current maximum**, because $I_m$ is the
-current-maximum amplitude in the assumed sinusoidal distribution. For
-$L = \lambda/2$ — and *only* because of where the current maximum sits — that
-point is the feed point itself, so the radiation resistance and the input
-resistance are the same $73\ \Omega$. Change the length and the two part
-company immediately, which is exactly what the widget's "at current max"
-labelling was warning you about.
+A far-field power integral can only ever produce the real part — it accounts
+for power that *leaves*. The reactance describes energy stored in the near
+field and handed back every cycle, which never crosses the far-field sphere at
+all, so no amount of pattern integration will produce it.
 
-**Second, this gets you the resistance and nothing else.** A far-field power
-integral can only ever produce the real part: it accounts for power that
-leaves. The $+j42.5\ \Omega$ describes energy stored in the near field and
-returned each cycle, which never appears in the far-field integral at all.
-Extracting it requires the **induced-EMF method**, which integrates the field
-the antenna produces against its own current along the wire. That is a
-near-field calculation, and we take its result on faith here.
+Getting it requires the **induced-EMF method**: integrate the field the antenna
+produces back against its own current, along the wire. That is a near-field
+calculation, we are not going to do it here, and its general answer is an
+unpleasant expression involving $Si$, $Ci$, and the wire radius $a$. But at
+exactly $L = \lambda/2$ something very tidy happens. Every radius-dependent
+term in that expression carries a factor of $\sin(kL)$, and at $kL = \pi$,
+
+$$\sin(kL) = \sin\pi = 0.$$
+
+The wire radius drops straight out, and what survives is a single special
+function:
+
+$$X = \frac{\eta}{4\pi}Si(2\pi) = 29.98 \times 1.4182 = 42.5\ \Omega$$
+
+:::{admonition} Key Point
+:class: key-concept
+**The reactance of a dipole is radius-independent only at exactly
+$\lambda/2$.** That is why $42.5\ \Omega$ can be quoted as a clean number at
+all, while at every other length the reactance depends on how fat the wire is —
+which is exactly why the three curves in the figure below separate everywhere
+except where they cross at $\lambda/2$.
+:::
+
+Put the two halves side by side and the whole impedance is one line, built from
+two tabulated numbers:
+
+$$Z_{in} = \frac{\eta}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 29.98\left(2.4376 + j1.4182\right) = 73.1 + j42.5\ \Omega$$
 
 So read the two parts separately. The $73\ \Omega$ is power leaving and never
 coming back — the whole point of the antenna. The $+j42.5\ \Omega$ is the
 reactive near field of Lesson 5, sloshing energy back and forth, doing no
 useful work, and wrecking your match.
+
+```{note}
+Two honesty notes before we spend this number. $R_r$ came out referred to the
+**current maximum**, because $I_m$ is the current-maximum amplitude; it equals
+the *input* resistance here only because at $\lambda/2$ the maximum happens to
+sit at the feed. And the induced-EMF result inherits the assumed sinusoidal
+current from Part 2 — the impedance is the quantity most sensitive to that
+assumption, and closing that gap against a real solver is precisely what
+Lesson 8 is for.
+```
 
 **Resonance** means $X_{in} = 0$. At exactly $\lambda/2$ we are $42.5\ \Omega$
 away from it, and the fix is to make the wire slightly *shorter*.
@@ -272,7 +380,7 @@ Why shorter? Because the wire is electrically longer than it is physically.
   resonates near $0.480\lambda$ while a fat tubular element can drop to
   $0.46\lambda$.
 
-Both effects slow the wave travelling on the wire relative to free space, and a
+Both effects slow the wave traveling on the wire relative to free space, and a
 slower wave needs less physical length to fit the same electrical half
 wavelength. For ordinary wire the answer lands in the range
 $0.47\lambda$ to $0.48\lambda$, and the resistance drops with the length, to
@@ -302,6 +410,43 @@ Read that table as a decision. Trimming the antenna to resonance improves the
 $50\ \Omega$ match more than switching to a $75\ \Omega$ cable does. **Kill the reactance
 first; worry about the resistance second.**
 
+### Reading it off a Smith chart
+
+Those four rows are the same information a **Smith chart** shows at a glance,
+and you will be reading charts for the rest of the course — every VNA in the
+lab draws one. The chart is just the complex reflection coefficient plane with
+a grid of constant-resistance circles and constant-reactance arcs painted on
+it: the center is a perfect match, the rim is total reflection, the top half is
+inductive and the bottom half capacitive.
+
+Sweep the length slider below and watch the dipole trace a path across the
+chart. Three things are worth pinning down. **Find the $\lambda/2$ marker** and
+confirm it reads $73 + j42.5\ \Omega$ sitting in the inductive half, outside the
+2:1 circle. **Then trim** — walk the slider down until the locus crosses the
+horizontal axis, which is the resonant length, and watch the VSWR pill drop as
+you cross inside the 2:1 circle. **Then flip the normalization to
+$75\ \Omega$**: the antenna does not change, the impedance readout does not
+change, but the whole grid re-scales underneath it and the same antenna lands
+closer to the center. That last point is the one students find surprising, and
+it is worth sitting with: a match is a statement about a *pair*, not about an
+antenna.
+
+<iframe src="../../viz/dipole-smith.html"
+        width="100%" height="597"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Smith chart showing how a dipole's input impedance moves as its length changes, with constant-VSWR circles">
+</iframe>
+
+```{note}
+The resonance marker in that chart sits near $63\ \Omega$, not the $70\ \Omega$
+the design rule quotes. That is the assumed-sinusoidal-current model showing
+its limits again, exactly as flagged above — the model puts resonance in the
+right *place* and gets the reactance slope right, but it runs a few ohms low on
+the resistance. Trust the chart for the shape of the behavior and the design
+rule for the number.
+```
+
 One last practical matter before you connect anything. A dipole is a
 **balanced** structure and coax is **unbalanced**. Wire them together directly
 and current flows on the outside of the shield, the feedline joins the
@@ -311,7 +456,7 @@ Every dipole in this course gets one.
 
 ## Part 5: Cutting a real dipole
 
-:::{admonition} Worked example — a 2 metre dipole for 146 MHz
+:::{admonition} Worked example — a 2 meter dipole for 146 MHz
 :class: tip
 **Design a resonant half-wave dipole for 146 MHz and predict what the analyzer
 will show.**
@@ -325,7 +470,7 @@ $$\lambda = \frac{c}{f} = \frac{3 \times 10^8}{146 \times 10^6} = 2.055\ \text{m
 $$L = 0.475\lambda = 0.475 \times 2.055 = 0.976\ \text{m}$$
 
 Cross-check with the field-manual form: $143/146 = 0.980\ \text{m}$. The two
-agree to within a centimetre, which is about the precision the rule deserves.
+agree to within a centimeter, which is about the precision the rule deserves.
 
 *Cut list.* Two arms of $L/2 = 48.8\ \text{cm}$, fed at the center, with a
 balun.
@@ -359,15 +504,18 @@ of disagreement — quantifying that disagreement is what the next lesson is for
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| isotropic radiator | equal radiation in all directions; impossible, but the reference for everything | $D = 1$, $0\ \text{dBi}$ |
-| EIRP | $P_t G_t$; transmitter and antenna as one number | $\text{dBi} = \text{dBd} + 2.15$ |
-| short dipole | constant current, limiting case | $\vert F\vert = \sin\theta$, $1.76\ \text{dBi}$ |
-| half-wave dipole pattern | $\vert F\vert = \cos\left(\frac{\pi}{2}\cos\theta\right)/\sin\theta$ | $\theta_\text{HP} = 78^\circ$ |
-| half-wave directivity | from integrating the pattern | $D = 1.64 = 2.15\ \text{dBi}$ |
-| half-wave impedance | at exactly $\lambda/2$, inductive | $73 + j42.5\ \Omega$ |
-| resonance | $X_{in} = 0$, reached by trimming | $0.47\lambda$ to $0.48\lambda$, $\approx 70\ \Omega$ |
-| the 5% rule | resonant length from frequency | $143/f_\text{MHz}$ metres |
-| longer dipoles | phase reversals build lobes | peak $\approx 5.2\ \text{dBi}$ near $1.25\lambda$ |
+| Isotropic radiator | Equal radiation in all directions; impossible, but the reference for everything | $D = 1$, $0\ \text{dBi}$ |
+| EIRP | Transmitter and antenna as one number, $P_t G_t$ | $\text{dBi} = \text{dBd} + 2.15$ |
+| Assumed current | Standing wave from the unfolded open-circuited line | $I_m \sin[k(L/2 - \vert z\vert)]$ |
+| Short dipole | Constant current, limiting case | $\vert F\vert = \sin\theta$, $1.76\ \text{dBi}$ |
+| Dipole pattern, any length | One radiation integral, every length | $\left[\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}\right]/\sin\theta$ |
+| Half-wave dipole pattern | The general result at $kL/2 = \pi/2$ | $\theta_\text{HP} = 78^\circ$ |
+| Half-wave directivity | From integrating the pattern over the sphere | $D = 1.64 = 2.15\ \text{dBi}$ |
+| Special functions | Tabulated, like $\text{erf}$ — do not integrate them | $C_{in}(2\pi) = 2.4376$, $Si(2\pi) = 1.4182$ |
+| Half-wave impedance | Resistance from the far field, reactance from induced EMF | $\frac{\eta}{4\pi}\left[C_{in}(2\pi) + jSi(2\pi)\right] = 73 + j42.5\ \Omega$ |
+| Resonance | $X_{in} = 0$, reached by trimming | $0.47\lambda$ to $0.48\lambda$, $\approx 70\ \Omega$ |
+| The 5% rule | Resonant length from frequency | $143/f_\text{MHz}$ meters |
+| Longer dipoles | Phase reversals build lobes | Peak $\approx 5.2\ \text{dBi}$ near $1.25\lambda$ |
 
 ## Practice
 

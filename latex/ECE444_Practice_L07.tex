@@ -321,12 +321,12 @@ answered in words and with rules of thumb, not with long derivations.
 		charge accumulate past where the metal stops, so the standing wave behaves as though
 		the wire extended further than it physically does. \textbf{Wire thickness}: a fatter
 		element has more end capacitance and a lower characteristic impedance, shortening it
-		further. Both mechanisms slow the wave travelling on the wire relative to free space,
+		further. Both mechanisms slow the wave traveling on the wire relative to free space,
 		and a slower wave needs less physical length to make up an electrical half wavelength.
 		Practical resonance therefore lands near $0.47\lambda$ to $0.48\lambda$.
 		\end{solution}
 
-	\part A dipole built from thick aluminium tubing is measured to resonate at
+	\part A dipole built from thick aluminum tubing is measured to resonate at
 	$0.46\lambda$, shorter than the $0.475\lambda$ rule of thumb predicts. Is the
 	measurement suspicious? Explain.
 		\begin{solution}[1.0in]
@@ -359,6 +359,72 @@ answered in words and with rules of thumb, not with long derivations.
 		\textbf{Consequence:} a straight wire cannot be made into a high-gain broadside
 		antenna simply by making it longer; beyond about $1.25\lambda$ you must switch to an
 		array, which is where Module 3 begins.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Using the machinery.} The radiation integral gave you a pattern
+that works for \emph{any} dipole length,
+\eq{
+\left| F(\theta) \right| \propto \frac{\cosp{\frac{kL}{2}\cos\theta} - \cosp{\frac{kL}{2}}}{\sin\theta}
+}
+and the impedance came from two tabulated special functions, $C_{in}(2\pi) = 2.4376$ and
+$Si(2\pi) = 1.4182$. Use them.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part For a \textbf{full-wave} dipole ($L = \lambda$), evaluate the pattern at
+		$\theta = 90\mydeg$ and $\theta = 60\mydeg$, then express the $60\mydeg$ value in
+		\db\ relative to the peak.
+		\begin{solution}[1.5in]
+		With $L = \lambda$, $kL/2 = \pi$, so $\cosp{kL/2} = -1$.
+		\eq{
+		\theta = 90\mydeg: \quad \left| F \right| &= \frac{\cosp{0} - (-1)}{1} = 2 \\
+		\theta = 60\mydeg: \quad \left| F \right| &= \frac{\cosp{\pi/2} - (-1)}{\sin 60\mydeg} = \frac{1}{0.8660} = 1.155 \\
+		\text{normalized} &= \frac{1.155}{2} = 0.577 \\
+		&= 20\mylog{0.577} = -4.8\db
+		}
+		The peak is still at $90\mydeg$, so a full-wave dipole is still broadside.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		peak at \ansbox[1.2in]{$90\mydeg$}
+		\\[10pt]
+		$60\mydeg$ value = \ansbox[1.2in]{$-4.8\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the reactance of a half-wave dipole from $X = \frac{\eta}{4\pi}Si(2\pi)$,
+		and state in one sentence why the wire radius does not appear in the answer.
+		\begin{solution}[1.4in]
+		\eq{
+		\frac{\eta}{4\pi} &= \frac{377}{4\pi} = 30.0\ohms \\
+		X &= 30.0 \lp 1.4182 \rp = 42.5\ohms
+		}
+		Every radius-dependent term in the induced-EMF expression is multiplied by
+		$\sinp{kL}$, and at exactly $L = \lambda/2$ we have $kL = \pi$, so
+		$\sinp{\pi} = 0$ and those terms vanish. The radius independence holds
+		\emph{only} at exactly a half wavelength.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$X$ = \ansbox[1.3in]{$42.5$\ohms}
+	\end{minipage}
+
+	\part The resistance came out of an integral of the far-field pattern over a sphere,
+	but the reactance did not and could not. Explain why in one or two sentences.
+		\begin{solution}[1.0in]
+		A far-field power integral accounts only for power that \emph{leaves} the antenna and
+		never returns, which is precisely the definition of the real part. Reactance
+		represents energy stored in the reactive near field and handed back to the source
+		every cycle; it never crosses the far-field sphere, so no amount of pattern
+		integration can reveal it. Getting it requires a near-field calculation --- the
+		induced-EMF method.
 		\end{solution}
 
 \end{parts}

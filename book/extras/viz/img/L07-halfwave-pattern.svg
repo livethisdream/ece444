@@ -3,7 +3,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-08-17T06:13:35.256983</dc:date>
+    <dc:date>2026-08-17T23:17:01.447983</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -71,7 +71,7 @@ z
      <g id="line2d_1">
       <path d="M 276.0654 152.641891 
 L 276.0654 36.577891 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="text_1">
       <text style="font-size: 9.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="276.0654" y="25.045664" transform="rotate(-0 276.0654 25.045664)">0°</text>
@@ -81,7 +81,7 @@ L 276.0654 36.577891
      <g id="line2d_2">
       <path d="M 276.0654 152.641891 
 L 334.0974 52.127518 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="text_2">
       <text style="font-size: 9.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="341.0974" y="42.470936" transform="rotate(-0 341.0974 42.470936)">30°</text>
@@ -91,7 +91,7 @@ L 334.0974 52.127518
      <g id="line2d_3">
       <path d="M 276.0654 152.641891 
 L 376.579772 94.609891 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="text_3">
       <text style="font-size: 9.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="388.704128" y="90.077664" transform="rotate(-0 388.704128 90.077664)">60°</text>
@@ -101,7 +101,7 @@ L 376.579772 94.609891
      <g id="line2d_4">
       <path d="M 276.0654 152.641891 
 L 392.1294 152.641891 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="text_4">
       <text style="font-size: 9.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="406.1294" y="155.109664" transform="rotate(-0 406.1294 155.109664)">90°</text>
@@ -111,7 +111,7 @@ L 392.1294 152.641891
      <g id="line2d_5">
       <path d="M 276.0654 152.641891 
 L 376.579772 210.673891 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="text_5">
       <text style="font-size: 9.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="388.704128" y="220.141664" transform="rotate(-0 388.704128 220.141664)">120°</text>
@@ -121,7 +121,7 @@ L 376.579772 210.673891
      <g id="line2d_6">
       <path d="M 276.0654 152.641891 
 L 334.0974 253.156263 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="text_6">
       <text style="font-size: 9.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="341.0974" y="267.748392" transform="rotate(-0 341.0974 267.748392)">150°</text>
@@ -131,7 +131,7 @@ L 334.0974 253.156263
      <g id="line2d_7">
       <path d="M 276.0654 152.641891 
 L 276.0654 268.705891 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="text_7">
       <text style="font-size: 9.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="276.0654" y="285.173664" transform="rotate(-0 276.0654 285.173664)">180°</text>
@@ -141,7 +141,7 @@ L 276.0654 268.705891
      <g id="line2d_8">
       <path d="M 276.0654 152.641891 
 L 218.0334 253.156263 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="text_8">
       <text style="font-size: 9.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="211.0334" y="267.748392" transform="rotate(-0 211.0334 267.748392)">210°</text>
@@ -151,7 +151,7 @@ L 218.0334 253.156263
      <g id="line2d_9">
       <path d="M 276.0654 152.641891 
 L 175.551028 210.673891 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="text_9">
       <text style="font-size: 9.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="163.426672" y="220.141664" transform="rotate(-0 163.426672 220.141664)">240°</text>
@@ -161,7 +161,7 @@ L 175.551028 210.673891
      <g id="line2d_10">
       <path d="M 276.0654 152.641891 
 L 160.0014 152.641891 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="text_10">
       <text style="font-size: 9.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="146.0014" y="155.109664" transform="rotate(-0 146.0014 155.109664)">270°</text>
@@ -171,7 +171,7 @@ L 160.0014 152.641891
      <g id="line2d_11">
       <path d="M 276.0654 152.641891 
 L 175.551028 94.609891 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="text_11">
       <text style="font-size: 9.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="163.426672" y="90.077664" transform="rotate(-0 163.426672 90.077664)">300°</text>
@@ -181,7 +181,7 @@ L 175.551028 94.609891
      <g id="line2d_12">
       <path d="M 276.0654 152.641891 
 L 218.0334 52.127518 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
      <g id="text_12">
       <text style="font-size: 9.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="211.0334" y="42.470936" transform="rotate(-0 211.0334 42.470936)">330°</text>
@@ -208,7 +208,7 @@ C 237.3774 147.561429 238.37814 142.530368 240.322349 137.836634
 C 242.266557 133.142899 245.116424 128.877772 248.708853 125.285343 
 C 252.301282 121.692915 256.566409 118.843048 261.260143 116.898839 
 C 265.953878 114.954631 270.984938 113.953891 276.0654 113.953891 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
     </g>
     <g id="ytick_2">
@@ -230,7 +230,7 @@ C 198.6894 142.480967 200.69088 132.418846 204.579297 123.031377
 C 208.467714 113.643908 214.167448 105.113654 221.352306 97.928796 
 C 228.537163 90.743939 237.067418 85.044205 246.454887 81.155788 
 C 255.842356 77.267371 265.904477 75.265891 276.0654 75.265891 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
     </g>
     <g id="ytick_3">
@@ -252,7 +252,7 @@ C 171.6078 138.924644 174.309798 125.340781 179.559161 112.667698
 C 184.808524 99.994615 192.503165 88.478771 202.202723 78.779213 
 C 211.902281 69.079655 223.418124 61.385015 236.091207 56.135652 
 C 248.76429 50.886289 262.348154 48.184291 276.0654 48.184291 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
     </g>
     <g id="ytick_4">
@@ -274,14 +274,14 @@ C 160.0014 137.400506 163.00362 122.307324 168.836246 108.226121
 C 174.668871 94.144917 183.218472 81.349536 193.995759 70.572249 
 C 204.773045 59.794963 217.568427 51.245362 231.64963 45.412737 
 C 245.730834 39.580111 260.824015 36.577891 276.0654 36.577891 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #c7d2e0; stroke-width: 0.8; stroke-linecap: square"/>
      </g>
     </g>
    </g>
    <g id="line2d_17">
     <path d="M 276.0654 41.220451 
 L 276.0654 264.063331 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #5a5a5a; stroke-opacity: 0.6; stroke-width: 3; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #5a5a5a; stroke-opacity: 0.6; stroke-width: 3; stroke-linecap: square"/>
    </g>
    <g id="patch_3">
     <path d="M 276.0654 36.577891 
@@ -4306,7 +4306,7 @@ L 276.0654 152.641891
 L 276.0654 152.641891 
 L 276.0654 152.641891 
 z
-" clip-path="url(#pd77d8a3c5a)" style="fill: #0067b9; opacity: 0.13"/>
+" clip-path="url(#p711f223dfc)" style="fill: #0067b9; opacity: 0.13"/>
    </g>
    <g id="patch_5">
     <path d="M 437.740939 70.191795 
@@ -4566,7 +4566,7 @@ L 275.419798 141.23732
 L 275.934632 149.670616 
 L 276.0654 152.641891 
 L 276.0654 152.641891 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke: #004a85; stroke-width: 2.6; stroke-linecap: square"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke: #004a85; stroke-width: 2.6; stroke-linecap: square"/>
    </g>
    <g id="line2d_19">
     <path d="M 276.0654 48.184291 
@@ -4709,11 +4709,11 @@ L 266.888675 48.588165
 L 271.636524 48.278222 
 L 276.0654 48.184291 
 L 276.0654 48.184291 
-" clip-path="url(#pd77d8a3c5a)" style="fill: none; stroke-dasharray: 6.4,4.8; stroke-dashoffset: 0; stroke: #1d7a4d; stroke-width: 1.6"/>
+" clip-path="url(#p711f223dfc)" style="fill: none; stroke-dasharray: 6.4,4.8; stroke-dashoffset: 0; stroke: #1d7a4d; stroke-width: 1.6"/>
    </g>
    <g id="line2d_20">
     <defs>
-     <path id="me6d3869b09" d="M 0 3.5 
+     <path id="m0e1b1a5158" d="M 0 3.5 
 C 0.928211 3.5 1.81853 3.131218 2.474874 2.474874 
 C 3.131218 1.81853 3.5 0.928211 3.5 0 
 C 3.5 -0.928211 3.131218 -1.81853 2.474874 -2.474874 
@@ -4725,29 +4725,29 @@ C -1.81853 3.131218 -0.928211 3.5 0 3.5
 z
 " style="stroke: #1d7a4d"/>
     </defs>
-    <g clip-path="url(#pd77d8a3c5a)">
-     <use xlink:href="#me6d3869b09" x="357.198289" y="86.847935" style="fill: #1d7a4d; stroke: #1d7a4d"/>
+    <g clip-path="url(#p711f223dfc)">
+     <use xlink:href="#m0e1b1a5158" x="357.198289" y="86.847935" style="fill: #1d7a4d; stroke: #1d7a4d"/>
     </g>
    </g>
    <g id="line2d_21">
-    <g clip-path="url(#pd77d8a3c5a)">
-     <use xlink:href="#me6d3869b09" x="194.932511" y="86.847935" style="fill: #1d7a4d; stroke: #1d7a4d"/>
+    <g clip-path="url(#p711f223dfc)">
+     <use xlink:href="#m0e1b1a5158" x="194.932511" y="86.847935" style="fill: #1d7a4d; stroke: #1d7a4d"/>
     </g>
    </g>
    <g id="line2d_22">
-    <g clip-path="url(#pd77d8a3c5a)">
-     <use xlink:href="#me6d3869b09" x="357.198289" y="218.435846" style="fill: #1d7a4d; stroke: #1d7a4d"/>
+    <g clip-path="url(#p711f223dfc)">
+     <use xlink:href="#m0e1b1a5158" x="357.198289" y="218.435846" style="fill: #1d7a4d; stroke: #1d7a4d"/>
     </g>
    </g>
    <g id="line2d_23">
-    <g clip-path="url(#pd77d8a3c5a)">
-     <use xlink:href="#me6d3869b09" x="194.932511" y="218.435846" style="fill: #1d7a4d; stroke: #1d7a4d"/>
+    <g clip-path="url(#p711f223dfc)">
+     <use xlink:href="#m0e1b1a5158" x="194.932511" y="218.435846" style="fill: #1d7a4d; stroke: #1d7a4d"/>
     </g>
    </g>
   </g>
  </g>
  <defs>
-  <clipPath id="pd77d8a3c5a">
+  <clipPath id="p711f223dfc">
    <path d="M 392.1294 152.641891 
 C 392.1294 137.400506 389.12718 122.307324 383.294554 108.226121 
 C 377.461929 94.144917 368.912328 81.349536 358.135041 70.572249 

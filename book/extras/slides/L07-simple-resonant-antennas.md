@@ -50,7 +50,7 @@ Item 6 is the deliverable. Everything before it is the machinery.
 
 ## The isotropic radiator
 
-An antenna that radiates **equally in every direction**. Same power density on every square metre of a sphere around it.
+An antenna that radiates **equally in every direction**. Same power density on every square meter of a sphere around it.
 
 $$U_\text{iso} = \frac{P_\text{rad}}{4\pi} \qquad D_\text{iso} = 1 \qquad 0 \text{ dBi}$$
 
@@ -112,29 +112,70 @@ This is the L6 result, recalled not re-derived. Two ohms against a fifty ohm lin
 
 ---
 
-## The half-wave dipole: the current
+## Where the current comes from
 
-<div class="fig" data-inline-svg="./fig/L07-dipole-currents.svg" style="max-width:900px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L07-dipole-currents.svg" style="max-width:700px; margin:0 auto;"></div>
 
 $$I(z) = I_m \sin\left[k\left(\frac{L}{2} - \vert z \vert\right)\right]$$
 
+- Tips $z = \pm L/2$: sine argument zero, **current vanishes**.
+- Feed: $I(0) = I_m \sin(kL/2)$ — a *maximum* at $\lambda/2$, a *null* at $1\lambda$.
+
 Note:
-Standing wave on an open-circuited transmission line, bent straight. Zero at the ends because the charge has nowhere to go.
+Build it on the board: open-circuited two-wire line, current zero at the open end, then fold the last stretch apart into two arms and the standing wave comes with it. Then say the honest thing out loud: this current is assumed, not solved for. It is a very good guess with a transmission-line pedigree, confirmed by measurement, but it is not a solution of Maxwell's equations for a dipole — and everything downstream in this lesson inherits it. L8 is where they find out what the guess costs. Flag the feed-point contrast now, maximum at half a wave versus null at a full wave, because it decides the impedance story in Part 4.
 
 ---
 
-## From current to pattern
+## Step 1: set up the radiation integral
 
-Feed that current to the radiation integral from L6 and the $z$-integral closes in elementary functions:
+L6's radiation vector, for a thin wire on $z$ where $\hat{\mathbf r}\cdot\mathbf{r}' = z'\cos\theta$:
 
-$$\vert F(\theta) \vert = \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta}$$
+$$N_z(\theta) = \int_{-L/2}^{L/2} I(z')\ e^{+jkz'\cos\theta}\ dz'$$
 
-At $L = \lambda/2$, $kL/2 = \pi/2$, the second cosine vanishes:
+The current is **even** in $z'$. Pair $z'$ with $-z'$, the two exponentials combine into a cosine, and the integral folds onto one arm:
 
-$$\vert F(\theta) \vert = \frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}$$
+$$N_z(\theta) = 2 I_m \int_0^{L/2} \sin\left[k\left(\frac{L}{2} - z'\right)\right]\cos(kz'\cos\theta)\ dz'$$
+
+**No approximation yet — just symmetry.**
 
 Note:
-Emphasize that nothing new happened here. One integral, one trig identity. The $\sin\theta$ in the denominator looks alarming but the numerator vanishes with it.
+Emphasize that folding by symmetry is free and it also kills the imaginary part. Students who grind through the full complex integral get the same answer with three times the algebra.
+
+---
+
+## Step 2: evaluate it
+
+Product-to-sum turns the integrand into two plain sines:
+
+$$\sin A \cos B = \frac{1}{2}\left[\sin(A+B) + \sin(A-B)\right]$$
+
+Both integrate on sight. Collecting terms:
+
+$$N_z(\theta) = \frac{2 I_m}{k}\ \frac{\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}}{\sin^2\theta}$$
+
+<div class="callout">
+A first-year integral. The hard part was choosing the current, not doing the calculus.
+</div>
+
+Note:
+Do not grind the algebra on the board unless asked. The point is that the integral is elementary once the current is sinusoidal — that is exactly why the sinusoidal assumption is worth making.
+
+---
+
+## Step 3: project and normalize
+
+A $z$-directed current radiates only a $\theta$ component. L6's projection costs one power of $\sin\theta$:
+
+$$N_\theta = -N_z \sin\theta \quad \Longrightarrow \quad \vert F(\theta) \vert = \frac{\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}}{\sin\theta}$$
+
+At $L = \lambda/2$, $kL/2 = \pi/2$ and the second cosine vanishes:
+
+$$\vert F(\theta) \vert = \frac{\cos\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}$$
+
+**One integral, every length — the multi-lobe patterns later come from this same formula.**
+
+Note:
+This is the payoff slide for the whole radiation-integral thread that started in L6. Assumed a current, transformed it, read the pattern. Point at the general formula and say: nothing about this was half-wave specific until the last line.
 
 ---
 
@@ -215,11 +256,30 @@ $$\int_0^\pi \frac{\cos^2\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\th
 | $R_r$ | $\left(\eta/4\pi\right) C_{in}(2\pi)$ | $\mathbf{73.1\ \Omega}$ |
 
 <div class="callout">
-Referred to the <strong>current maximum</strong> — which at $\lambda/2$ <em>is</em> the feed. And it is the <strong>resistance only</strong>: the $+j42.5\ \Omega$ needs the induced-EMF method.
+Referred to the <strong>current maximum</strong> — which at $\lambda/2$ <em>is</em> the feed. That coincidence is the only reason this lands on the input resistance.
 </div>
 
 Note:
 Thirty times two point four is seventy-two, so a head check catches a slipped factor. Then the two warnings. First: R sub r came out referred to the current maximum, because I sub m is the current-maximum amplitude. At half a wavelength the current maximum sits at the feed, so radiation resistance and input resistance are the same number — that coincidence is the only reason this lands on the input impedance. Second: a far-field power integral accounts for power that leaves, so it can never produce stored near-field energy. The forty-two point five ohms of reactance requires the induced-EMF method, a near-field calculation, and we take it on faith.
+
+---
+
+## The reactance, and why 42.5 is clean
+
+A far-field power integral only ever gives the **real** part. Stored near-field energy never crosses the sphere, so the reactance needs the **induced-EMF method**.
+
+Its general answer drags in the wire radius — except that every radius-dependent term carries a factor $\sin(kL)$, and at $kL = \pi$ that factor is **zero**:
+
+$$X = \frac{\eta}{4\pi}Si(2\pi) = 30 \times 1.4182 = 42.5\ \Omega$$
+
+$$Z_{in} = \frac{\eta}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 73.1 + j42.5\ \Omega$$
+
+<div class="callout">
+Radius-independent <strong>only at exactly $\lambda/2$</strong> — which is why 42.5 is quotable at all.
+</div>
+
+Note:
+Induced EMF means integrating the antenna's own field back against its own current — a near-field calculation, and we take its result on faith. This slide also explains the next figure before they see it: the three wire-thickness curves cross at exactly half a wavelength and separate everywhere else. That crossing is the sine of pi being zero. Note too that the reactance inherits the assumed sinusoidal current, so it is the number L8's solver will disagree with first.
 
 ---
 
@@ -253,7 +313,7 @@ $$L_\text{resonant} \approx 0.95 \times \frac{\lambda}{2} = 0.475\ \lambda$$
 
 Which, with $\lambda = c/f$, is the number every field manual prints:
 
-$$L \approx \frac{143}{f_\text{MHz}} \text{ metres} \qquad \left(\frac{468}{f_\text{MHz}} \text{ feet}\right)$$
+$$L \approx \frac{143}{f_\text{MHz}} \text{ meters} \qquad \left(\frac{468}{f_\text{MHz}} \text{ feet}\right)$$
 
 <div class="callout">
 Cut it <strong>long</strong> and trim. You can always remove wire.
@@ -279,6 +339,23 @@ At resonance the reactance is gone and the resistance settles near $70\ \Omega$:
 
 Note:
 Make them read the table as a decision: the reactance costs you more VSWR than the 50-versus-75 mismatch does.
+
+---
+
+## The same four rows, on a Smith chart
+
+<p class="viz-cue">↗ Interactive on the lesson page</p>
+
+<div class="two-col fig-wide"><div class="col-text">
+<p>Center is a perfect match, rim is total reflection, top half inductive, bottom half capacitive.</p>
+<p>The dipole traces a path as the wire grows. <strong>Exactly $\lambda/2$</strong> sits in the inductive half, outside the 2:1 circle. <strong>Trimming</strong> walks it down onto the axis and inside 2:1.</p>
+<p>Re-normalize to $75\ \Omega$ and the antenna does not move — <em>the grid does</em>.</p>
+</div><div class="col-fig">
+<div class="fig" data-inline-svg="./fig/L07-smith-dipole.svg" style="max-width:760px; margin:0 auto;"></div>
+</div></div>
+
+Note:
+Demo live: park at half a wavelength, read seventy-three plus j forty-two point five, note it is outside the two-to-one circle. Trim to resonance and watch it cross onto the real axis. Then flip to seventy-five ohms and make the point that a match is a property of a pair, not of an antenna. Every VNA in the lab draws this chart, so they need to be fluent.
 
 ---
 
@@ -358,7 +435,7 @@ At 1.5 wavelengths the main lobes are off broadside, so a single broadside HPBW 
 **Two 49 cm arms. That is the whole design.**
 
 Note:
-Have them notice the two routes agree to a centimetre. Also: 49 cm is a length you can eyeball, which is the point of a rule of thumb.
+Have them notice the two routes agree to a centimeter. Also: 49 cm is a length you can eyeball, which is the point of a rule of thumb.
 
 ---
 
@@ -375,7 +452,7 @@ Have them notice the two routes agree to a centimetre. Also: 49 cm is a length y
 **If the analyzer disagrees by more than about 10%, suspect the balun before the theory.**
 
 Note:
-$D$ here is the dipole length, 0.976 m, so $2D^2/\lambda$ is 0.93 m. Anything measured closer than a metre is not a pattern.
+$D$ here is the dipole length, 0.976 m, so $2D^2/\lambda$ is 0.93 m. Anything measured closer than a meter is not a pattern.
 
 ---
 
