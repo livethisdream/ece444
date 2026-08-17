@@ -88,7 +88,7 @@ $\vert F(\theta)\vert = \sin\theta$, a doughnut with its maximum broadside at
 $\theta = 90^\circ$ and nulls off the wire ends. Its beamwidth is $90^\circ$
 and its directivity is $D = 1.5$, or $1.76\ \text{dBi}$. Its radiation
 resistance, however, is $R_r = 80\pi^2 (L/\lambda)^2$ — about $2\ \Omega$ for a
-wire a tenth of a wavelength long. Two ohms against a fifty ohm line is a
+wire a tenth of a wavelength long. $2\ \Omega$ against a $50\ \Omega$ line is a
 hopeless match, and that, not the pattern, is why nobody feeds a short dipole
 directly.
 
@@ -248,7 +248,7 @@ from Lesson 4:
 | $75\ \Omega$ | $70 + j0$ (resonant) | 0.03 | 1.07 |
 
 Read that table as a decision. Trimming the antenna to resonance improves the
-50 ohm match more than switching to a 75 ohm cable does. **Kill the reactance
+$50\ \Omega$ match more than switching to a $75\ \Omega$ cable does. **Kill the reactance
 first; worry about the resistance second.**
 
 One last practical matter before you connect anything. A dipole is a
