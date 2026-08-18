@@ -233,7 +233,7 @@ directivity to get there.
 :::
 
 Copper is a good conductor, so radiation efficiency for a wire dipole is above
-about 98% and $G = e_{cd} D$ is within a tenth of a dB of $D$. For this antenna
+about 98% and $G = \eta_{cd} D$ is within a tenth of a dB of $D$. For this antenna
 you may quote gain and directivity interchangeably — but say which one you
 mean, because for the lossy antennas in Module 4 they part company.
 

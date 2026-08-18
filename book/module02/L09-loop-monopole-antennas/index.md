@@ -128,7 +128,7 @@ Real ground is a lossy dielectric, not a mirror. Three things go wrong, in order
 **Loss resistance.** Return current spreads out through the soil under the antenna and dissipates there. That loss appears in series with the feed as a ground resistance $R_g$, and the radiation efficiency becomes
 
 $$
-e_{cd} = \frac{R_r}{R_r + R_g + R_{\text{ohmic}}}
+\eta_{cd} = \frac{R_r}{R_r + R_g + R_{\text{ohmic}}}
 $$
 
 A monopole only has $36.5\ \Omega$ of radiation resistance to work with, so a few ohms of ground loss is a few tenths of a dB, and a badly grounded short whip — with an $R_r$ of a couple of ohms — can throw away most of its power. This is why AM broadcast stations bury a **radial system**: the FCC standard is 120 buried wires, each a quarter wavelength long, fanning out from the tower base. The radials do not radiate. They intercept the return current in copper instead of dirt.
@@ -186,7 +186,7 @@ $$
 R_{\text{ohmic}} = \frac{C}{2\pi b} R_s = 79.6 \times 1.43\ \text{m}\Omega = 0.114\ \Omega
 $$
 
-**Efficiency.** $e_{cd} = 0.0197/(0.0197 + 0.114) = 0.148$, i.e. **14.8%**, a loss of 8.3 dB. Gain $= 1.76 - 8.3 = -6.5\ \text{dBi}$.
+**Efficiency.** $\eta_{cd} = 0.0197/(0.0197 + 0.114) = 0.148$, i.e. **14.8%**, a loss of 8.3 dB. Gain $= 1.76 - 8.3 = -6.5\ \text{dBi}$.
 
 **What that means at the feed.** To deliver 100 W you need $I = \sqrt{2P/R_{\text{total}}} = 38.7\ \text{A}$ peak in that loop, of which 15 W radiates and 85 W heats the wire. Now you know why transmitting magnetic loops use fat copper tube, welded joints, and a vacuum capacitor.
 :::
@@ -220,7 +220,7 @@ Small is expensive, and it is expensive twice. Shrinking an antenna drives the r
 | $Z_{in}^{\text{mono}} = \tfrac{1}{2}Z_{in}^{\text{dipole}}$ | half the structure, half the voltage, same current | $36.5 + j21.3\ \Omega$ |
 | $D_{\text{mono}} = 2D_{\text{dipole}}$ | same beam into half the solid angle | 3.28, or 5.15 dBi |
 | Radial system / counterpoise | gives the return current a low-loss path | 120 buried radials (AM); 4 drooped radials $\approx 50\ \Omega$ |
-| $e_{cd} = R_r/(R_r + R_g + R_{\text{ohmic}})$ | ground and copper loss compete with radiation | a few ohms matters when $R_r$ is small |
+| $\eta_{cd} = R_r/(R_r + R_g + R_{\text{ohmic}})$ | ground and copper loss compete with radiation | a few ohms matters when $R_r$ is small |
 | Small loop | magnetic dipole: $\vert F\vert = \sin\theta$, $E$ in $\hat{\phi}$, null on the axis | $D = 1.5$ (1.76 dBi) |
 | $R_r = 20\pi^2 (C/\lambda)^4$ | fourth power in circumference | $0.02\ \Omega$ at $C = 0.1\lambda$ |
 | Resonant loop, $C \approx 1\lambda$ | current reverses, maximum swings onto the axis | $100\text{-}130\ \Omega$, $\approx 3.1$ dBi |

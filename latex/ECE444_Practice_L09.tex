@@ -171,7 +171,7 @@ $R_{ohmic} = \lp C/2\pi b \rp R_s$ for a single turn.
 		\begin{solution}[1.5in]
 		\eq{ R_{ohmic} &= \frac{C}{2\pi b} R_s = \frac{a}{b} R_s \\
 		               &= 100 \lp 0.98\ \text{m}\ohms \rp = 0.098\ \ohms \\
-		     e_{cd} &= \frac{R_r}{R_r + R_{ohmic}} = \frac{0.0125}{0.1105} = 0.113 \\
+		     \eta_{cd} &= \frac{R_r}{R_r + R_{ohmic}} = \frac{0.0125}{0.1105} = 0.113 \\
 		     10\mylog{0.113} &= -9.5\db \\
 		     G &= 1.76 - 9.5 = -7.7\dbi }
 		The loop's own copper burns nearly eight times what it radiates.
@@ -179,7 +179,7 @@ $R_{ohmic} = \lp C/2\pi b \rp R_s$ for a single turn.
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$e_{cd}$ = \ansbox[1.3in]{$11.3\%$}
+		$\eta_{cd}$ = \ansbox[1.3in]{$11.3\%$}
 		\\[16pt]
 		$G$ = \ansbox[1.3in]{$-7.7\dbi$}
 	\end{minipage}
@@ -229,13 +229,13 @@ $R_{ohmic} = \lp C/2\pi b \rp R_s$ for a single turn.
 		\begin{solution}[1.3in]
 		\eq{ R_r &= 20^2 \lp 0.0125 \rp = 5.00\ \ohms \\
 		     R_{ohmic} &= 20 \lp 0.098 \rp = 1.96\ \ohms \\
-		     e_{cd} &= \frac{5.00}{6.96} = 0.718 }
+		     \eta_{cd} &= \frac{5.00}{6.96} = 0.718 }
 		71.8\%, a loss of only $1.4\db$: gain $= 1.76 - 1.4 = 0.4\dbi$.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$e_{cd}$ = \ansbox[1.3in]{$71.8\%$}
+		$\eta_{cd}$ = \ansbox[1.3in]{$71.8\%$}
 	\end{minipage}
 
 	\part If turns are that effective, why is a 20-turn loop still not the antenna you would
@@ -256,7 +256,7 @@ $R_{ohmic} = \lp C/2\pi b \rp R_s$ for a single turn.
 \newpage
 
 \question \textbf{The price of being small.} Stay with the single-turn loop of radius
-$a = 0.30\ \m$ at $14.2\ \mhz$ ($e_{cd} = 0.113$). The Chu limit from Lesson 3 gives the
+$a = 0.30\ \m$ at $14.2\ \mhz$ ($\eta_{cd} = 0.113$). The Chu limit from Lesson 3 gives the
 radiation quality factor of any antenna that fits inside a sphere of radius $a$ as
 $Q \gtrsim 1/(ka)^3 + 1/(ka)$, and the fractional bandwidth is roughly $1/Q$.
 \begin{parts}
@@ -290,7 +290,7 @@ $Q \gtrsim 1/(ka)^3 + 1/(ka)$, and the fractional bandwidth is roughly $1/Q$.
 	than your Chu estimate. Why? Is that good news?
 		\begin{solution}[1.3in]
 		Loss lowers Q. The Chu number is the \emph{radiation} Q; the loaded Q is reduced
-		roughly in proportion to the efficiency, $Q_{loaded} \approx e_{cd} Q \approx
+		roughly in proportion to the efficiency, $Q_{loaded} \approx \eta_{cd} Q \approx
 		0.113(1420) \approx 160$, which widens the match to about $0.6\%$, or 90 kHz. It is
 		not good news: the extra bandwidth is bought by dissipating your power in copper. A
 		$50\ \ohms$ resistor is perfectly matched over every band on the dial and radiates

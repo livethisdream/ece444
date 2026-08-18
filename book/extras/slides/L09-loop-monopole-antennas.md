@@ -209,7 +209,7 @@ Drooping radials also lift the pattern slightly. The impedance effect is the rea
 
 <div class="fig" data-inline-svg="./fig/L09-ground-systems.svg" style="max-width:770px; margin:0 auto;"></div>
 
-Return current in dirt is loss in series with your feed: $e_{cd} = R_r/(R_r + R_g + R_{ohmic})$.
+Return current in dirt is loss in series with your feed: $\eta_{cd} = R_r/(R_r + R_g + R_{ohmic})$.
 
 Note:
 120 buried quarter-wave radials is the FCC standard for AM broadcast. The radials do not radiate — they replace lossy soil with copper for the return current.

@@ -299,7 +299,7 @@ Rules:
 | :-- | :-- | :-- |
 | $k = 2\pi/\lambda$ | wavenumber | |
 | $\eta \approx 377\ \Omega$ | free-space impedance | |
-| $D$, $G$ | directivity, gain | $G = e_{cd} D$; dBi when logarithmic |
+| $D$, $G$ | directivity, gain | $G = \eta_{cd} D$; dBi when logarithmic |
 | $U(\theta,\phi)$ | radiation intensity | W/sr |
 | $\vert F(\theta,\phi)\vert$ | normalized field pattern | |
 | $S(\theta)$ | space factor (distribution alone) | pattern = element factor × space factor |
