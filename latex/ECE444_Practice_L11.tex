@@ -15,7 +15,7 @@ is required (write \textbf{None} if you did not collaborate).}
 %============================================================ Q1
 \question \textbf{Sizing a C-band earth station.} A ground station uses a
 \textbf{3.0\ \m\ diameter} prime-focus parabolic reflector at \textbf{6.0\ \ghz}.
-Take the aperture efficiency to be $\varepsilon_{ap} = 0.65$ and
+Take the aperture efficiency to be $\eta_{ap} = 0.65$ and
 $c = 3\ee{8}\ \text{m/s}$.
 
 \begin{parts}
@@ -27,7 +27,7 @@ $c = 3\ee{8}\ \text{m/s}$.
 		An antenna is passive: it amplifies nothing. What it does is collect the
 		radiated power into a smaller solid angle, and the size of the coherent
 		radiating area --- measured in square wavelengths --- is what sets how
-		small that solid angle can be. Writing $G = \varepsilon_{ap} 4\pi A /
+		small that solid angle can be. Writing $G = \eta_{ap} 4\pi A /
 		\lambda^2$ tells the designer the only two knobs that exist: make the
 		aperture physically bigger, or use a shorter wavelength. ``Amplification''
 		suggests a third knob (more gain from the same box) that does not exist.
@@ -40,12 +40,12 @@ $c = 3\ee{8}\ \text{m/s}$.
 		\eq{
 			\lambda &= \frac{c}{f} = \frac{3\ee{8}}{6\ee{9}} = 0.050\ \m
 			\quad\Rightarrow\quad \frac{D}{\lambda} = \frac{3.0}{0.050} = 60 \\
-			G &= \varepsilon_{ap}\lp \frac{\pi D}{\lambda}\rp^{2}
+			G &= \eta_{ap}\lp \frac{\pi D}{\lambda}\rp^{2}
 			   = 0.65\,(60\pi)^{2} = 0.65\,(35531) \\
 			  &= 2.31\ee{4}
 			   \;\rightarrow\; 10\,\mylog{2.31\ee{4}} = 43.6\dbi
 		}
-		Remark: the effective aperture is $A_e = \varepsilon_{ap}A =
+		Remark: the effective aperture is $A_e = \eta_{ap}A =
 		0.65\,\pi(1.5)^2 = 4.60\ \m^2$ --- that is the number Friis uses.
 		\end{solution}
 	\end{minipage}\hfill%
@@ -137,15 +137,15 @@ surface penalty as $\text{loss (dB)} = 685.8\,(\sigma/\lambda)^2$.
 		At 6\ \ghz, $\lambda = 50\ \text{mm}$, so $\sigma/\lambda = 0.5/50 = 0.010$.
 		\eq{
 			\text{loss} &= 685.8\,(0.010)^{2} = 0.069\db \\
-			\varepsilon_{surf} &= 10^{-0.069/10} = 0.984 \\
-			\varepsilon_{ap} &= (0.712)(0.984) = 0.700
+			\eta_{surf} &= 10^{-0.069/10} = 0.984 \\
+			\eta_{ap} &= (0.712)(0.984) = 0.700
 		}
 		A half-millimetre surface is essentially free at C band.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\varepsilon_{ap}$ = \ansbox[1.3in]{$0.70$}
+		$\eta_{ap}$ = \ansbox[1.3in]{$0.70$}
 	\end{minipage}
 
 	\part Someone proposes reusing this \emph{same physical dish} at
@@ -156,8 +156,8 @@ surface penalty as $\text{loss (dB)} = 685.8\,(\sigma/\lambda)^2$.
 		At 30\ \ghz, $\lambda = 10\ \text{mm}$, so $\sigma/\lambda = 0.050$:
 		\eq{
 			\text{loss} &= 685.8\,(0.050)^{2} = 1.71\db \\
-			\varepsilon_{surf} &= 10^{-0.171} = 0.674 \\
-			\varepsilon_{ap} &= (0.712)(0.674) = 0.48
+			\eta_{surf} &= 10^{-0.171} = 0.674 \\
+			\eta_{ap} &= (0.712)(0.674) = 0.48
 		}
 		Nothing about the dish changed --- only $\lambda$ --- and the aperture
 		efficiency fell from 0.70 to 0.48. The dish still gains about
@@ -250,13 +250,13 @@ are fixed (no steering), the site is windy, and the budget is small.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Find the required effective aperture, then the diameter of a
-		parabolic dish that delivers it with $\varepsilon_{ap} = 0.60$.
+		parabolic dish that delivers it with $\eta_{ap} = 0.60$.
 		\begin{solution}[1.6in]
 		$\lambda = 3\ee{8}/5.8\ee{9} = 0.0517\ \m$ and $G = 10^{25/10} = 316$.
 		\eq{
 			A_e &= \frac{G\lambda^{2}}{4\pi}
 			     = \frac{316\,(0.0517)^{2}}{4\pi} = 0.0673\ \m^{2} \\
-			A   &= \frac{A_e}{\varepsilon_{ap}} = \frac{0.0673}{0.60}
+			A   &= \frac{A_e}{\eta_{ap}} = \frac{0.0673}{0.60}
 			     = 0.112\ \m^{2} \\
 			D   &= 2\sqrt{A/\pi} = 2\sqrt{0.0357} = 0.378\ \m
 		}
@@ -270,7 +270,7 @@ are fixed (no steering), the site is windy, and the budget is small.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part A vendor offers a flat patch array instead, with
-		$\varepsilon_{ap} = 0.75$ and elements on a $\lambda/2$ grid. How many
+		$\eta_{ap} = 0.75$ and elements on a $\lambda/2$ grid. How many
 		elements, and how big is the panel?
 		\begin{solution}[1.5in]
 		\eq{

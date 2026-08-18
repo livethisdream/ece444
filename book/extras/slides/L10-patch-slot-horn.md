@@ -287,10 +287,10 @@ The horn is the cleanest physical realization of everything L6 set up. Say that 
 
 ## Gain from area
 
-$$G = \varepsilon_{ap}\ \frac{4\pi A}{\lambda^{2}}$$
+$$G = \eta_{ap}\ \frac{4\pi A}{\lambda^{2}}$$
 
-- $A$ is the **physical** aperture; $\varepsilon_{ap}$ is what fraction of it works.
-- Horns run $\varepsilon_{ap} \approx 0.5$. Good reflectors reach $0.55$ to $0.7$.
+- $A$ is the **physical** aperture; $\eta_{ap}$ is what fraction of it works.
+- Horns run $\eta_{ap} \approx 0.5$. Good reflectors reach $0.55$ to $0.7$.
 - Gain is set by **area in square wavelengths**. Double the frequency at fixed size, gain climbs $6$ dB.
 
 <div class="callout">This is the same $A_e = G\lambda^2/4\pi$ from L2, read right to left.</div>
@@ -302,7 +302,7 @@ Half. Not 0.9. Ask why a horn throws away half its aperture and let the next two
 
 ## Worked example — an X-band horn
 
-A pyramidal horn, aperture $20 \times 15$ cm, at $10$ GHz. Take $\varepsilon_{ap} = 0.5$.
+A pyramidal horn, aperture $20 \times 15$ cm, at $10$ GHz. Take $\eta_{ap} = 0.5$.
 
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
@@ -335,9 +335,9 @@ Same 22.5-degree tolerance idea as the far-field criterion in L5. Different geom
 
 ## The optimum horn
 
-- Make the aperture bigger at fixed length: $4\pi A/\lambda^2$ rises, but $\varepsilon_{ap}$ falls. Gain peaks and then **turns over**.
+- Make the aperture bigger at fixed length: $4\pi A/\lambda^2$ rises, but $\eta_{ap}$ falls. Gain peaks and then **turns over**.
 - The **optimum horn** is that peak — the shortest horn for a given aperture whose edge phase error is still tolerable (roughly $\lambda/4$ in the E-plane, $3\lambda/8$ in the H-plane).
-- At the optimum, $\varepsilon_{ap} \approx 0.5$. That is where the number comes from.
+- At the optimum, $\eta_{ap} \approx 0.5$. That is where the number comes from.
 
 <div class="callout">Half your aperture is the <strong>rent you pay</strong> for a horn short enough to carry.</div>
 

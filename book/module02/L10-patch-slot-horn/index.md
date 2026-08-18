@@ -202,17 +202,17 @@ source: replace the opening with its equivalent surface currents and integrate.
 
 Gain then comes from area, exactly as it did in Lesson 2:
 
-$$G = \varepsilon_{ap}\ \frac{4\pi A}{\lambda^{2}}$$
+$$G = \eta_{ap}\ \frac{4\pi A}{\lambda^{2}}$$
 
-where $A$ is the physical aperture area and $\varepsilon_{ap}$ is the fraction of it that works.
+where $A$ is the physical aperture area and $\eta_{ap}$ is the fraction of it that works.
 This is $A_e = G\lambda^2/4\pi$ read right to left. Gain is **area in square wavelengths** — hold
 the horn fixed and double the frequency and the gain climbs 6 dB. Horns run
-$\varepsilon_{ap} \approx 0.5$; good reflectors reach 0.55 to 0.7.
+$\eta_{ap} \approx 0.5$; good reflectors reach 0.55 to 0.7.
 
 :::{admonition} Worked example — an X-band horn
 :class: tip
 A pyramidal horn with a $20 \times 15\ \text{cm}$ aperture at $10\ \text{GHz}$, with
-$\varepsilon_{ap} = 0.5$.
+$\eta_{ap} = 0.5$.
 
 $\lambda = 3.0\ \text{cm}$ and $A = 0.030\ \text{m}^2$, so
 
@@ -235,7 +235,7 @@ longer for the same aperture flattens the wavefront and shrinks the error. Same 
 $2D^2/\lambda$ criterion from Lesson 5, different geometry.
 
 That sets up the trade. Enlarge the aperture at a fixed flare length and $4\pi A/\lambda^2$ rises
-while $\varepsilon_{ap}$ falls. Gain climbs, flattens, and then turns over. The **optimum horn**
+while $\eta_{ap}$ falls. Gain climbs, flattens, and then turns over. The **optimum horn**
 is that peak: the shortest horn for a given aperture whose edge phase error is still tolerable,
 about $\lambda/4$ in the E-plane and $3\lambda/8$ in the H-plane. At the optimum the aperture
 efficiency lands near 0.5, which is where the 0.5 you have been using comes from. Half your
@@ -243,7 +243,7 @@ aperture is the rent you pay for a horn short enough to carry.
 
 :::{admonition} Key Point
 :class: key-concept
-Aperture buys gain; phase error spends it. $\varepsilon_{ap} \approx 0.5$ for a horn is not a
+Aperture buys gain; phase error spends it. $\eta_{ap} \approx 0.5$ for a horn is not a
 fudge factor — it is the value at a deliberate design optimum.
 :::
 
@@ -278,7 +278,7 @@ Mach 2?* Slot. *How do I get 20 dBi with a gain I can trust to a few tenths of a
 | patch bandwidth | rises with $h/\lambda_0$, falls with $\varepsilon_r$ | 1–5 %, few % typical |
 | $Z_{\text{slot}} Z_{\text{dipole}} = \eta^2/4$ | Babinet complementarity | resonant slot $\approx 485\ \Omega$ |
 | slot polarization | field runs across the cut, not along it | horizontal slot, vertical polarization |
-| $G = \varepsilon_{ap} 4\pi A/\lambda^2$ | aperture gain | horns $\varepsilon_{ap} \approx 0.5$ |
+| $G = \eta_{ap} 4\pi A/\lambda^2$ | aperture gain | horns $\eta_{ap} \approx 0.5$ |
 | optimum horn | shortest horn whose edge phase error is still tolerable | $\lambda/4$ E-plane, $3\lambda/8$ H-plane |
 | standard-gain horn | calibrated reference for gain measurement | used in L12 |
 

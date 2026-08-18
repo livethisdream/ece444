@@ -308,7 +308,7 @@ Rules:
 | $Z_{in} = R_{in} + jX_{in}$ | input impedance | resonance = $X_{in}=0$ |
 | $\Gamma$, VSWR | reflection coefficient, standing-wave ratio | ref. $50\ \Omega$ unless said |
 | $A_e$ | effective aperture | $A_e = G\lambda^2/4\pi$; "effective aperture", not "capture area" |
-| $\varepsilon_{ap}$ | aperture efficiency | |
+| $\eta_{ap}$ | aperture efficiency | |
 | $r \ge 2D^2/\lambda$ | far-field distance | $D$ = largest dimension |
 | $k_z = k\cos\theta$ | space frequency | line source on z |
 
@@ -329,8 +329,8 @@ $e^{+j\omega t}$, phasors with $e^{-jkr}$ outgoing.
   $\approx 0.886\ \lambda/L$ (line) — sidelobes set by shape, beamwidth by size.
 - Tapers (same L): cosine $-23$ dB, triangular $-26.5$ dB, cosine² $-31.5$ dB;
   taper broadens the beam.
-- Aperture antennas: $G = \varepsilon_{ap} 4\pi A/\lambda^2$; typical
-  $\varepsilon_{ap} \approx 0.5\text{-}0.7$ (horns ~0.5, good reflectors ~0.55-0.7).
+- Aperture antennas: $G = \eta_{ap} 4\pi A/\lambda^2$; typical
+  $\eta_{ap} \approx 0.5\text{-}0.7$ (horns ~0.5, good reflectors ~0.55-0.7).
 - Speed of light $3\times10^8$ m/s; "far-field criterion" $2D^2/\lambda$ with
   the $\pi/8$ (22.5°) phase-error tolerance behind it.
 - Friis (L2): $P_r = P_t G_t G_r (\lambda/4\pi R)^2$. Radar range equation is
