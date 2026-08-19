@@ -32,3 +32,6 @@ book/conf.py
 
 # Assessment sources are faculty-private; belong in faculty/<semester>/, not here
 latex/*Assessment*.tex
+
+# Subagent scratch worktrees (session-local, never committed).
+.claude/worktrees/
