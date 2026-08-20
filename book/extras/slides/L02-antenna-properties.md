@@ -38,18 +38,11 @@ Two-minute recap. Move fast — most of today is new material.
 1. Physics chain: **Maxwell → telegrapher's → wave equation → solution**
 2. What a "wave" actually looks like in time and space
 3. Parameters: **directivity, gain, effective area, beamwidth, lobes**
+4. Reciprocity, and the **Friis** link equation it makes possible
 
 <div class="callout">
 Every field in this course depends on <strong>both</strong> time and space.
 </div>
-
----
-
-## Part 1
-
-### From Maxwell to Waves
-
-<small>Refresher. If any of this is unfamiliar, come see me — the rest of the course rests on it.</small>
 
 ---
 
@@ -122,6 +115,8 @@ $c = 1 / \sqrt{\mu \varepsilon}$, $\quad u = 1 / \sqrt{L C}$
 
 ---
 
+<!-- .slide: class="viz-cue-slide" -->
+
 ## The Plane Wave Solution
 
 Traveling in $+\hat{z}$, linearly polarized along $\hat{x}$:
@@ -187,12 +182,6 @@ We bring time back to deal with bandwidth, dispersion, or pulses (RADAR!)
 
 ---
 
-## Part 2
-
-### Antenna Parameters
-
----
-
 ## The Poynting vector
 
 Power flow per unit area:
@@ -212,6 +201,8 @@ S = E × H is where the power lives. Time-average gives |E|²/2η₀. This is
 the quantity radiation intensity is built from — motivate the next slide.
 
 ---
+
+<!-- .slide: class="viz-cue-slide" -->
 
 ## Radiation intensity
 
@@ -262,6 +253,8 @@ $$
 
 ---
 
+<!-- .slide: class="viz-cue-slide" -->
+
 ## Gain and efficiency
 
 $$
@@ -296,13 +289,13 @@ $$
 \text{VSWR} = \frac{V_{\text{max}}}{V_{\text{min}}} = \frac{1 + |\Gamma|}{1 - |\Gamma|}
 $$
 
-$$
-|\Gamma|^{2} = \text{Reflected power}
-\qquad
-1 - |\Gamma|^{2} = \text{Transmitted power}
-$$
+Read them as **fractions of the incident power**:
+
+$$\frac{P_{\text{refl}}}{P_{\text{inc}}} = |\Gamma|^{2} \qquad \frac{P_{\text{trans}}}{P_{\text{inc}}} = 1 - |\Gamma|^{2}$$
 
 ---
+
+<!-- .slide: class="viz-cue-slide" -->
 
 ## Quick Reference — Γ vs VSWR vs Power
 
@@ -324,6 +317,8 @@ $$
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
 ---
+
+<!-- .slide: class="viz-cue-slide" -->
 
 ## Gain Comparison
 
@@ -355,6 +350,8 @@ Draw a polar pattern on the chalkboard, label all six on it.
 This is the picture students need to be able to draw from memory.
 
 ---
+
+<!-- .slide: class="viz-cue-slide" -->
 
 ## Features on a rectilinear plot
 
@@ -428,55 +425,25 @@ This is the definition. The next three slides derive the value of A_e.
 ## The antenna as a receiver
 
 <div class="two-col fig-wide"><div class="col-text">
-<p>The incident field induces an open-circuit voltage; the antenna acts as a source with its <strong>radiation resistance</strong> $R_r$. A conjugate-<strong>matched</strong> load draws the most power:</p>
-$$
-V_{\text{oc}} = E\ell_{e}
-\qquad
-P_{\text{rx}} = \frac{V_{\text{oc}}^{2}}{8 R_{r}}
-$$
+<p>The incident field induces an open-circuit voltage; the antenna acts as a source with its <strong>radiation resistance</strong> $R_{\text{rad}}$. A conjugate-<strong>matched</strong> load draws the most power:</p>
+$$V_{\text{oc}} = E\ell_{e} \qquad P_{\text{rx}} = \frac{V_{\text{oc}}^{2}}{8 R_{\text{rad}}}$$
 </div><div class="col-fig">
 <div data-inline-svg="./fig/L02-recv-circuit.svg"></div>
 </div></div>
 
 Note:
-ℓ_e = effective length, R_r = radiation resistance. Max power transfer gives
-the /8R_r (the ½ from time-averaging a sinusoid turns the usual 4 into 8).
+ℓ_e = effective length, R_rad = radiation resistance. Max power transfer gives
+the /8R_rad (the ½ from time-averaging a sinusoid turns the usual 4 into 8).
 
 ---
 
 ## Example: A Short Dipole
 
 <div class="two-col"><div class="col-text">
-<p>Use the simplest antenna. Plug in $\ell_e = \ell$, $R_r = 80\pi^{2}(\ell/\lambda)^{2}$, $S = E^{2}/2\eta_{0}$ — the $\ell$'s cancel:</p>
-$$
-A_{e} = \frac{P_{\text{rx}}}{S}
-= \frac{\eta_{0}\ell_{e}^{2}}{4 R_{r}}
-= \frac{3\lambda^{2}}{8\pi}
-= 1.5\cdot\frac{\lambda^{2}}{4\pi}
-$$
+<p>Use the simplest antenna. Plug in $\ell_e = \ell$, $R_{\text{rad}} = 80\pi^{2}(\ell/\lambda)^{2}$, $S = E^{2}/2\eta_{0}$ — the $\ell$'s cancel:</p>
+$$A_{e} = \frac{P_{\text{rx}}}{S} = \frac{\eta_{0}\ell_{e}^{2}}{4 R_{\text{rad}}} = \frac{3\lambda^{2}}{8\pi} = 1.5\cdot\frac{\lambda^{2}}{4\pi}$$
 </div><div class="col-fig">
-<svg viewBox="0 0 440 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A short dipole aligned with the incident wave's E-field">
-<defs>
-<marker id="sdR" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>
-<marker id="sdG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker>
-</defs>
-<line x1="52" y1="70" x2="52" y2="232" stroke="#b01e24" stroke-width="2.4" marker-start="url(#sdR)" marker-end="url(#sdR)"/>
-<line x1="96" y1="70" x2="96" y2="232" stroke="#b01e24" stroke-width="2.4" marker-start="url(#sdR)" marker-end="url(#sdR)"/>
-<line x1="140" y1="70" x2="140" y2="232" stroke="#b01e24" stroke-width="2.4" marker-start="url(#sdR)" marker-end="url(#sdR)"/>
-<line x1="184" y1="70" x2="184" y2="232" stroke="#b01e24" stroke-width="2.4" marker-start="url(#sdR)" marker-end="url(#sdR)"/>
-<text x="118" y="52" fill="#b01e24" font-size="19" font-weight="700" text-anchor="middle">E</text>
-<line x1="44" y1="270" x2="214" y2="270" stroke="#5a5a5a" stroke-width="1.6" marker-end="url(#sdG)"/>
-<text x="50" y="262" fill="#5a5a5a" font-size="13">incident wave</text>
-<line x1="322" y1="74" x2="322" y2="142" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
-<line x1="322" y1="160" x2="322" y2="228" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
-<circle cx="322" cy="142" r="3.6" fill="#004a85"/>
-<circle cx="322" cy="160" r="3.6" fill="#004a85"/>
-<line x1="358" y1="74" x2="358" y2="228" stroke="#5a5a5a" stroke-width="1.2"/>
-<line x1="353" y1="74" x2="363" y2="74" stroke="#5a5a5a" stroke-width="1.2"/>
-<line x1="353" y1="228" x2="363" y2="228" stroke="#5a5a5a" stroke-width="1.2"/>
-<text x="370" y="157" fill="#004a85" font-size="17" font-weight="700">ℓ</text>
-<text x="322" y="252" fill="#5a5a5a" font-size="13" text-anchor="middle">dipole ∥ E</text>
-</svg>
+<div data-inline-svg="./fig/L02-short-dipole-incident.svg"></div>
 </div></div>
 
 Note:
@@ -504,12 +471,98 @@ Fixed gain → $A_e \propto \lambda^{2}$.
 </div>
 
 Note:
-We proved it for one antenna; reciprocity generalizes it to all. Pairs with
-Friis / the radar range equation in Module 4.
+We proved it for one antenna; reciprocity generalizes it to all. It is also the
+hinge into Friis on the next three slides.
 
 ---
 
-## Next Time
+## Friis: assemble the link
+
+<div class="fig" data-inline-svg="./fig/L02-friis-geometry.svg" style="max-width:660px; margin:0 auto;"></div>
+
+Spread $P_t G_t$ over a sphere of radius $R$, then let the receiver's effective aperture catch its share:
+
+$$S_{\text{inc}} = \frac{P_t G_t}{4\pi R^{2}} \qquad P_r = S_{\text{inc}}\ A_e \qquad A_e = G_r \frac{\lambda^{2}}{4\pi}$$
+
+$$P_r = P_t G_t G_r \left(\frac{\lambda}{4\pi R}\right)^{2}$$
+
+Valid when: **far field at both ends** · **polarizations matched** · **loads matched** (else use realized gain) · **free space** — no ground bounce, no atmosphere, no obstruction.
+
+Note:
+Two lines, no new physics — power density from gain, captured power from
+effective aperture. Say the four validity conditions out loud; every one of them
+is a term someone adds back later in a real link budget.
+
+---
+
+## Three things to read off it
+
+- **EIRP** $= P_t G_t$ — the whole transmit side as one number: the power an isotropic radiator *would* need to match you on boresight.
+- **Free-space path loss** is the $(4\pi R/\lambda)^{2}$ factor, or $20\log_{10}(4\pi R/\lambda)$ in dB. It climbs with **both** range and frequency, and it dominates every link.
+- **Everything multiplies**, so in decibels a link budget is just addition:
+
+$$P_r\ [\text{dBm}] = P_t + G_t + G_r - \text{FSPL}$$
+
+<div class="callout">
+Antenna gain buys back <strong>tens</strong> of dB. The path takes <strong>hundreds</strong>.
+</div>
+
+Note:
+EIRP is what a spectrum authority regulates, because it is the only number that
+matters at the far end. Emphasize that FSPL is not absorption — nothing is lost,
+the power just spreads.
+
+---
+
+## Worked example: a 600 km link
+
+10 W at 2.4 GHz through a 20 dBi ground antenna, to a 6 dBi antenna on a satellite 600 km up.
+
+| Quantity | Work | Result |
+| :-- | :-- | :-- |
+| $\lambda$ | $3\times10^{8} / 2.4\times10^{9}$ | $0.125\ \text{m}$ |
+| $P_t$ | 10 W in dBm | $40\ \text{dBm}$ |
+| FSPL | $20\log_{10}(4\pi \times 6\times10^{5} / 0.125)$ | $156\ \text{dB}$ |
+| $P_r$ | $40 + 20 + 6 - 156$ | $\mathbf{-90\ \text{dBm}}$ |
+
+**About a picowatt — and a perfectly ordinary receive level.**
+
+Note:
+Have them check the exponent by hand: 4 pi R over lambda is about 6e10, and 20
+log of that is 156. Then make the point that minus 90 dBm is 20 dB above a
+typical receiver noise floor, so the link closes with margin.
+
+---
+
+## Key point
+
+<div class="callout">
+<p>Every parameter today is a <strong>ratio</strong>: directivity against isotropic, gain against input power, effective aperture against incident power density, VSWR against a perfect match.</p>
+<p><strong>Reciprocity</strong> locks the transmit ratio to the receive one — $A_e = G\lambda^2/4\pi$, for every antenna ever built.</p>
+<p>Friis is nothing more than that sentence, written down at both ends of a link.</p>
+</div>
+
+Note:
+If they leave with one sentence, make it the last one.
+
+---
+
+## Where this is going
+
+- **L3** — polarization and bandwidth: the direction of $\mathbf{E}$, and how every parameter defined today moves with frequency.
+- **L4** — the terminals behind the $\Gamma$ you just met: matching, $S_{11}$, and baluns.
+- **L5 and L6** — where the far field starts, and the radiation integral that *produces* a pattern instead of assuming one.
+- **Module 4 (L29)** — send Friis out, let a target scatter it, collect the echo. Friis applied twice is the radar range equation.
+
+**Every link budget you write from here on is the two lines you just assembled.**
+
+Note:
+Point out that nothing in Module 1 gets thrown away — L3 through L6 all refine
+parameters defined today.
+
+---
+
+## Before next lesson
 
 <figure class="qr qr-right">
   <img src="./img/syllabus-qr.png" alt="QR to syllabus">
