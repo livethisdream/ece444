@@ -1,0 +1,25 @@
+<svg viewBox="0 0 460 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three spec bands plotted against frequency: a wide impedance bandwidth, a narrower pattern bandwidth, and a narrower still axial-ratio bandwidth. Only where all three overlap is the usable band.">
+<defs>
+<marker id="bi-grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker>
+</defs>
+
+<rect x="232" y="32" width="104" height="180" fill="#1d7a4d" opacity="0.14"/>
+<line x1="232" y1="32" x2="232" y2="212" stroke="#1d7a4d" stroke-width="1.6" stroke-dasharray="6 4"/>
+<line x1="336" y1="32" x2="336" y2="212" stroke="#1d7a4d" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="284" y="23" fill="#1d7a4d" font-size="15.5" font-weight="700" text-anchor="middle">the usable band</text>
+
+<rect x="150" y="40" width="270" height="26" rx="4" fill="#0067b9" opacity="0.22"/>
+<rect x="150" y="40" width="270" height="26" rx="4" fill="none" stroke="#0067b9" stroke-width="2"/>
+<text x="120" y="59" fill="#004a85" font-size="15" font-weight="700" text-anchor="end">impedance</text>
+
+<rect x="168" y="88" width="168" height="26" rx="4" fill="#e67e22" opacity="0.22"/>
+<rect x="168" y="88" width="168" height="26" rx="4" fill="none" stroke="#e67e22" stroke-width="2"/>
+<text x="120" y="107" fill="#004a85" font-size="15" font-weight="700" text-anchor="end">pattern</text>
+
+<rect x="232" y="136" width="168" height="26" rx="4" fill="#b01e24" opacity="0.20"/>
+<rect x="232" y="136" width="168" height="26" rx="4" fill="none" stroke="#b01e24" stroke-width="2"/>
+<text x="120" y="155" fill="#004a85" font-size="15" font-weight="700" text-anchor="end">axial ratio</text>
+
+<line x1="132" y1="212" x2="450" y2="212" stroke="#5a5a5a" stroke-width="2" marker-end="url(#bi-grey)"/>
+<text x="440" y="236" fill="#5a5a5a" font-size="14.5" text-anchor="end">frequency</text>
+</svg>
