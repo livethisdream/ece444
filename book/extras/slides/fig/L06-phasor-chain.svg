@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 330" role="img" aria-label="Phasor chain for a line source: at broadside the element phasors line up and the chain runs straight; off broadside the chain curls and the sum shrinks; at the first null the chain closes on itself and the sum is zero">
+<defs>
+  <marker id="pcBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0067b9"/></marker>
+  <marker id="pcRed" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>
+</defs>
+
+<!-- ================= Broadside ================= -->
+<text x="168" y="46" text-anchor="middle" font-size="17" font-weight="700" fill="#004a85">Broadside</text>
+<line x1="48.0" y1="150.0" x2="68.0" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="68.0" y1="150.0" x2="88.0" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="88.0" y1="150.0" x2="108.0" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="108.0" y1="150.0" x2="128.0" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="128.0" y1="150.0" x2="148.0" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="148.0" y1="150.0" x2="168.0" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="168.0" y1="150.0" x2="188.0" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="188.0" y1="150.0" x2="208.0" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="208.0" y1="150.0" x2="228.0" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="228.0" y1="150.0" x2="248.0" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="248.0" y1="150.0" x2="268.0" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="268.0" y1="150.0" x2="288.0" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="48.0" y1="234.0" x2="288.0" y2="234.0" stroke="#b01e24" stroke-width="3" marker-end="url(#pcRed)"/>
+<line x1="48.0" y1="150.0" x2="48.0" y2="234.0" stroke="#c7d2e0" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="288.0" y1="150.0" x2="288.0" y2="234.0" stroke="#c7d2e0" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="168.0" y="255.0" text-anchor="middle" font-size="15" font-weight="700" fill="#b01e24">sum = full length</text>
+
+<!-- ================= Off broadside ================= -->
+<text x="500" y="46" text-anchor="middle" font-size="17" font-weight="700" fill="#004a85">Off broadside</text>
+<line x1="423.4" y1="188.3" x2="426.0" y2="168.5" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="426.0" y1="168.5" x2="433.7" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="433.7" y1="150.0" x2="445.8" y2="134.1" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="445.8" y1="134.1" x2="461.7" y2="122.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="461.7" y1="122.0" x2="480.2" y2="114.3" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="480.2" y1="114.3" x2="500.0" y2="111.7" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="500.0" y1="111.7" x2="519.8" y2="114.3" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="519.8" y1="114.3" x2="538.3" y2="122.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="538.3" y1="122.0" x2="554.2" y2="134.1" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="554.2" y1="134.1" x2="566.3" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="566.3" y1="150.0" x2="574.0" y2="168.5" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="574.0" y1="168.5" x2="576.6" y2="188.3" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="423.4" y1="234.0" x2="576.6" y2="234.0" stroke="#b01e24" stroke-width="3" marker-end="url(#pcRed)"/>
+<line x1="423.4" y1="188.3" x2="423.4" y2="234.0" stroke="#c7d2e0" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="576.6" y1="188.3" x2="576.6" y2="234.0" stroke="#c7d2e0" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="500.0" y="255.0" text-anchor="middle" font-size="15" font-weight="700" fill="#b01e24">sum is shorter</text>
+
+<!-- ================= At the first null ================= -->
+<text x="832" y="46" text-anchor="middle" font-size="17" font-weight="700" fill="#004a85">At the first null</text>
+<circle cx="832.0" cy="150.0" r="38.6" fill="none" stroke="#c7d2e0" stroke-width="1.2" stroke-dasharray="4 4"/>
+<line x1="832.0" y1="188.6" x2="812.7" y2="183.5" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="812.7" y1="183.5" x2="798.5" y2="169.3" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="798.5" y1="169.3" x2="793.4" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="793.4" y1="150.0" x2="798.5" y2="130.7" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="798.5" y1="130.7" x2="812.7" y2="116.5" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="812.7" y1="116.5" x2="832.0" y2="111.4" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="832.0" y1="111.4" x2="851.3" y2="116.5" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="851.3" y1="116.5" x2="865.5" y2="130.7" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="865.5" y1="130.7" x2="870.6" y2="150.0" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="870.6" y1="150.0" x2="865.5" y2="169.3" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="865.5" y1="169.3" x2="851.3" y2="183.5" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<line x1="851.3" y1="183.5" x2="832.0" y2="188.6" stroke="#0067b9" stroke-width="2.2" marker-end="url(#pcBlue)"/>
+<circle cx="832.0" cy="188.6" r="5" fill="#b01e24"/>
+<text x="832.0" y="255.0" text-anchor="middle" font-size="15" font-weight="700" fill="#b01e24">sum = 0</text>
+
+<text x="168" y="292" text-anchor="middle" font-size="14" fill="#5a5a5a">every element in step —</text>
+<text x="168" y="312" text-anchor="middle" font-size="14" fill="#5a5a5a">the chain runs straight</text>
+<text x="500" y="292" text-anchor="middle" font-size="14" fill="#5a5a5a">phases fan out —</text>
+<text x="500" y="312" text-anchor="middle" font-size="14" fill="#5a5a5a">the chain starts to curl</text>
+<text x="832" y="292" text-anchor="middle" font-size="14" fill="#5a5a5a">the chain closes on itself —</text>
+<text x="832" y="312" text-anchor="middle" font-size="14" fill="#5a5a5a">nothing is left to radiate</text>
+</svg>
