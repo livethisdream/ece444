@@ -26,7 +26,7 @@ because *where you stand changes what you measure.*
 
 ## Part 1: The three regions
 
-<img src="../../viz/img/field-regions.svg" alt="Concentric field regions around an antenna: reactive near-field, radiating near-field, and far-field" style="max-width: 620px; width: 100%; display: block; margin: 1em auto;">
+<img src="../../viz/img/L05-field-regions.svg" alt="Concentric field regions around an antenna: reactive near-field, radiating near-field, and far-field" style="max-width: 620px; width: 100%; display: block; margin: 1em auto;">
 
 ### Reactive near-field
 

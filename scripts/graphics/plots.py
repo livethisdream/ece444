@@ -2,13 +2,13 @@
 """Generate the Module 1 deck data-plots as inline SVG.
 
 L02:
-  - gain-pattern-polar : normalized patterns, isotropic/dipole/horn/dish
-  - rectilinear        : uniform line-source sinc^2, HPBW/FNBW/SLL annotated
-  - vswr               : VSWR vs reflection-coefficient magnitude (reused by L03)
+  - L02-gain-pattern-polar : absolute-dBi patterns, isotropic/dipole/horn/dish
+  - L02-rectilinear        : uniform line-source sinc^2, HPBW/FNBW/SLL annotated
+  - L02-vswr               : VSWR vs reflection-coefficient magnitude (reused by L03)
 
 L03:
-  - plf-cos2           : polarization loss factor vs tilt, two linear antennas
-  - chu-q-vs-ka        : Chu-Harrington minimum Q vs electrical size
+  - L03-plf-cos2           : polarization loss factor vs tilt, two linear antennas
+  - L03-chu-q-vs-ka        : Chu-Harrington minimum Q vs electrical size
 
 Exported as SVG with live <text> (svg.fonttype='none'), then font-family is
 rewritten to 'inherit' so the injected figure picks up the deck's Source Sans
@@ -16,8 +16,8 @@ Pro. Transparent background, USAFA palette, no baked formulas (axis labels /
 legends / pattern annotations only).
 
     python scripts/graphics/plots.py
-    -> writes book/extras/slides/fig/{gain-pattern-polar,rectilinear,vswr,
-                                      plf-cos2,chu-q-vs-ka}.svg
+    -> writes book/extras/slides/fig/{L02-gain-pattern-polar,L02-rectilinear,
+                                      L02-vswr,L03-plf-cos2,L03-chu-q-vs-ka}.svg
 
 These are illustrative patterns with representative parameters, not measured data.
 """
@@ -58,34 +58,54 @@ def finalize(fig, name: str) -> None:
 
 
 def gain_polar() -> None:
-    phi = np.linspace(0, 2 * np.pi, 2001)          # 0 = up (North)
-    def dB(p): return 10 * np.log10(np.clip(p, 1e-4, None))
+    """Absolute-dBi polar comparison: peak radius encodes gain, so the
+    0/2.15/16/28 dBi difference is visible on the plot, not just the legend.
+    Horn and dish carry real sidelobes (tapered- and uniform-aperture space
+    factors), since the pattern-reading slide points back at this figure."""
+    phi = np.linspace(-np.pi, np.pi, 4001)           # 0 = up (North)
+    FLOOR = -12.0                                     # radial floor, dBi
 
-    iso = np.ones_like(phi)                          # isotropic
-    # lambda/2 dipole, broadside (max) pointing up
+    def line_source_dBi(peak_dbi: float, DL: float, taper: str) -> np.ndarray:
+        # space factor of a line source of length DL (in wavelengths), main
+        # lobe up; behind +/-90 deg hold the far-out sidelobe floor.
+        u = np.sin(np.clip(phi, -np.pi / 2, np.pi / 2))
+        X = np.pi * DL * u
+        with np.errstate(divide="ignore", invalid="ignore"):
+            if taper == "uniform":                    # SLL -13.3 dB
+                F = np.sin(X) / X
+            else:                                     # triangular: SLL -26.5 dB
+                F = (np.sin(X / 2) / (X / 2)) ** 2
+        F = np.nan_to_num(F, nan=1.0)
+        db = peak_dbi + 20 * np.log10(np.clip(np.abs(F), 1e-6, None))
+        back = np.abs(phi) > np.pi / 2
+        db[back] = np.maximum(db[back], peak_dbi - 40.0)  # modest back level
+        return np.clip(db, FLOOR, None)
+
+    iso = np.zeros_like(phi)                          # isotropic: 0 dBi everywhere
+    # lambda/2 dipole, broadside (max) pointing up: D = 2.15 dBi
     s, c = np.abs(np.sin(phi)), np.abs(np.cos(phi))
     with np.errstate(divide="ignore", invalid="ignore"):
         Fd = np.cos((np.pi / 2) * s) / c
-    dip = np.nan_to_num(Fd, nan=0.0, posinf=0.0) ** 2
-    up = np.clip(np.cos(phi), 0, None)
-    horn = up ** 22                                  # ~30 deg main lobe up
-    dish = up ** 220                                 # very narrow main lobe up
+    Fd = np.nan_to_num(Fd, nan=0.0, posinf=0.0)
+    dip = np.clip(2.15 + 20 * np.log10(np.clip(np.abs(Fd), 1e-6, None)), FLOOR, None)
+    horn = line_source_dBi(16.0, 2.6, "triangular")   # tapered aperture, ~20 deg lobe
+    dish = line_source_dBi(28.0, 10.0, "uniform")     # D/lambda = 10, SLL -13.3 dB
 
-    fig = plt.figure(figsize=(4.6, 4.6))
+    fig = plt.figure(figsize=(4.9, 4.9))
     ax = fig.add_subplot(111, projection="polar")
     ax.set_theta_zero_location("N"); ax.set_theta_direction(-1)
-    ax.set_ylim(-30, 0); ax.set_yticks([-30, -20, -10, 0])
-    ax.set_yticklabels(["-30", "-20", "-10", "0 dB"], fontsize=10)
+    ax.set_ylim(FLOOR, 30); ax.set_yticks([-10, 0, 10, 20, 28])
+    ax.set_yticklabels(["-10", "0 dBi", "10", "20", "28"], fontsize=10)
     ax.set_rlabel_position(112)
     ax.set_thetagrids(range(0, 360, 30), fontsize=10)
     ax.grid(color=RULE, linewidth=0.8)
-    ax.plot(phi, dB(iso), color=GREY, lw=1.6, ls=(0, (5, 4)), label="Isotropic  0 dBi")
-    ax.plot(phi, dB(dip), color=GREEN, lw=2.0, label="λ/2 dipole  2 dBi")
-    ax.plot(phi, dB(horn), color=BLUE, lw=2.2, label="Horn  16 dBi")
-    ax.plot(phi, dB(dish), color=NAVY, lw=2.4, label="Dish (D/λ=10)  28 dBi")
+    ax.plot(phi, iso, color=GREY, lw=1.6, ls=(0, (5, 4)), label="Isotropic  0 dBi")
+    ax.plot(phi, dip, color=GREEN, lw=2.0, label="λ/2 dipole  2.15 dBi")
+    ax.plot(phi, horn, color=BLUE, lw=2.2, label="Horn  16 dBi")
+    ax.plot(phi, dish, color=NAVY, lw=2.4, label="Dish (D/λ=10)  28 dBi")
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.28), ncol=2, fontsize=11.5,
               handlelength=1.6, columnspacing=1.3)
-    finalize(fig, "gain-pattern-polar")
+    finalize(fig, "L02-gain-pattern-polar")
 
 
 def rectilinear() -> None:
@@ -124,7 +144,7 @@ def rectilinear() -> None:
     ax.annotate("SLL  −" "13 dB", xy=(sll_x, -13.3), xytext=(24, -9),
                 color=ORANGE, fontsize=12, fontweight="bold",
                 arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.2))
-    finalize(fig, "rectilinear")
+    finalize(fig, "L02-rectilinear")
 
 
 def vswr() -> None:
@@ -145,7 +165,7 @@ def vswr() -> None:
         ax.plot(gm, vm, "o", color=RED, ms=6)
         ax.annotate(lab, xy=(gm, vm), xytext=(gm + 0.02, vm + 0.5),
                     color=RED, fontsize=11.5, fontweight="bold")
-    finalize(fig, "vswr")
+    finalize(fig, "L02-vswr")
 
 
 def plf_cos2() -> None:
@@ -191,7 +211,7 @@ def plf_cos2() -> None:
     for sp in ins.spines.values():
         sp.set_visible(False)
 
-    finalize(fig, "plf-cos2")
+    finalize(fig, "L03-plf-cos2")
 
 
 def chu_q_vs_ka() -> None:
@@ -219,6 +239,10 @@ def chu_q_vs_ka() -> None:
             fontweight="bold", ha="left", va="bottom")
 
     ax.plot(1.0, 2.0, "o", color=ORANGE, ms=7, zorder=5)
+    ax.annotate("ka = 1, Q ≈ 2 —\nthe practical small-antenna knee",
+                xy=(1.0, 2.0), xytext=(1.25, 6.5), color=ORANGE,
+                fontsize=11, fontweight="bold", ha="left", va="bottom",
+                arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.2))
 
     # what the Q actually costs you, on the same picture
     sec = ax.secondary_yaxis("right", functions=(lambda q: 1 / q, lambda b: 1 / b))
@@ -240,7 +264,7 @@ def chu_q_vs_ka() -> None:
     for sp in ins.spines.values():
         sp.set_visible(False)
 
-    finalize(fig, "chu-q-vs-ka")
+    finalize(fig, "L03-chu-q-vs-ka")
 
 
 def main() -> int:

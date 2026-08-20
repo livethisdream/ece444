@@ -12,8 +12,8 @@ font-family, so injected inline (deck-tools.js) they inherit Source Sans Pro:
 No equations are baked in — those live in the slide text. Labels only.
 
     python scripts/graphics/polarization.py
-    -> writes book/extras/slides/fig/{pol-states,pol-construction,handedness,
-                                      axial-ratio}.svg
+    -> writes book/extras/slides/fig/{L03-pol-states,L03-pol-construction,L03-handedness,
+                                      L03-axial-ratio}.svg
 
 Handedness note: the figure is drawn from the *temporal* IEEE definition (how E
 rotates at a fixed point, looking along the direction of propagation), NOT the
@@ -166,7 +166,7 @@ def pol_states() -> None:
 
     f.text(sum(centers) / 3, cy + R + 74, "tip of E over one period, at a fixed point",
            GREY, 13.5)
-    f.write("pol-states",
+    f.write("L03-pol-states",
             "Three polarization states: the electric-field tip traces a line, "
             "a circle, or an ellipse over one period")
 
@@ -224,7 +224,7 @@ def pol_construction() -> None:
     f.arc_arrow(cx, cy, S + 8, 55, 125, "grey", 1.8, ccw=True)
     f.text(cx, cy + S + 52, "resultant trace", NAVY, 15, "middle", "700")
 
-    f.write("pol-construction",
+    f.write("L03-pol-construction",
             "Two orthogonal linear components with a relative phase delta combine "
             "into an elliptical resultant trace")
 
@@ -262,7 +262,7 @@ def handedness() -> None:
 
     f.text((108.0 + 326.0) / 2, cy + R + 58,
            "viewed looking along the propagation direction", GREY, 13.5)
-    f.write("handedness",
+    f.write("L03-handedness",
             "IEEE handedness: looking along the propagation direction, the E-vector of a "
             "right-hand polarized wave rotates clockwise and a left-hand wave counter-clockwise")
 
@@ -309,7 +309,7 @@ def axial_ratio() -> None:
 
     # straddling the top: leftward motion there reads unambiguously as ccw
     f.arc_arrow(cx, cy, A + 8, 55, 125, "grey", 1.8, ccw=True)
-    f.write("axial-ratio",
+    f.write("L03-axial-ratio",
             "The polarization ellipse with its major and minor axes and tilt angle tau; "
             "the axial ratio is the ratio of the two axes")
 

@@ -106,7 +106,7 @@ r-dependence is only exp(-jkr)/r, so a curl becomes multiplication by -jk r-hat.
 
 ## Far field: the rays go parallel
 
-<div class="fig" data-inline-svg="./fig/radiation-integral-geometry.svg" style="max-width:790px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L06-radiation-integral-geometry.svg" style="max-width:790px; margin:0 auto;"></div>
 
 Note:
 Top: exact — every source point has its own R. Bottom: far field — the rays to P

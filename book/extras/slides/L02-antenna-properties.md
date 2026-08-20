@@ -203,7 +203,7 @@ $$
 \langle S \rangle = \frac{|\mathbf{E}|^{2}}{2 \eta_{0}}
 $$
 
-<div class="fig" data-inline-svg="./fig/poynting.svg" style="max-width:1160px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L02-poynting.svg" style="max-width:1160px; margin:0 auto;"></div>
 
 <p class="fig-note">$\mathbf{E}\perp\mathbf{H}\perp\mathbf{S}$ · along propagation · falls as $1/r^{2}$.</p>
 
@@ -238,7 +238,7 @@ $$
 $$
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 </div><div class="col-fig">
-<div data-inline-svg="./fig/solid-angle.svg"></div>
+<div data-inline-svg="./fig/L02-solid-angle.svg"></div>
 </div></div>
 
 ---
@@ -307,8 +307,8 @@ $$
 ## Quick Reference — Γ vs VSWR vs Power
 
 <div style="display:flex; align-items:center; justify-content:center; gap:1.4em; flex-wrap:wrap;">
-<div data-inline-svg="./fig/vswr.svg" style="flex:0 0 auto; width:390px;"></div>
-<table style="flex:0 0 auto; width:max-content; font-size:0.74em;">
+<div data-inline-svg="./fig/L02-vswr.svg" style="flex:0 0 auto; width:390px;"></div>
+<table style="flex:0 0 auto; width:max-content;">
 <thead>
 <tr><th>VSWR</th><th>$\vert\Gamma\vert$</th><th>Reflected</th><th>Transmitted</th></tr>
 </thead>
@@ -327,7 +327,7 @@ $$
 
 ## Gain Comparison
 
-<div class="fig" data-inline-svg="./fig/gain-pattern-polar.svg" style="max-width:470px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L02-gain-pattern-polar.svg" style="max-width:470px; margin:0 auto;"></div>
 
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
@@ -358,7 +358,7 @@ This is the picture students need to be able to draw from memory.
 
 ## Features on a rectilinear plot
 
-<div class="fig" data-inline-svg="./fig/rectilinear.svg" style="max-width:900px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L02-rectilinear.svg" style="max-width:900px; margin:0 auto;"></div>
 
 <small>Sinc² aperture, D/λ = 6. HPBW at −3 dB · FNBW at first nulls · SLL at first sidelobe peak.</small>
 
@@ -394,7 +394,7 @@ We'll formalize this in **Module 3** with amplitude tapering
 <p>Rooted in the symmetry of Maxwell's equations (<strong>Lorentz reciprocity</strong>).</p>
 <p>Measure in whichever mode is handy — <strong>gain</strong> (Tx) and <strong>effective area</strong> (Rx) are locked together, as we'll see next.</p>
 </div><div class="col-fig">
-<div data-inline-svg="./fig/reciprocity.svg"></div>
+<div data-inline-svg="./fig/L02-reciprocity.svg"></div>
 </div></div>
 
 Note:
@@ -417,7 +417,7 @@ $$
 A_{e} = \eta_{\text{ap}} A_{\text{phys}}
 $$
 </div><div class="col-fig">
-<div data-inline-svg="./fig/effective-aperture.svg"></div>
+<div data-inline-svg="./fig/L02-effective-aperture.svg"></div>
 </div></div>
 
 Note:
@@ -435,7 +435,7 @@ V_{\text{oc}} = E\ell_{e}
 P_{\text{rx}} = \frac{V_{\text{oc}}^{2}}{8 R_{r}}
 $$
 </div><div class="col-fig">
-<div data-inline-svg="./fig/recv-circuit.svg"></div>
+<div data-inline-svg="./fig/L02-recv-circuit.svg"></div>
 </div></div>
 
 Note:

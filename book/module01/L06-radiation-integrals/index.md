@@ -108,7 +108,7 @@ awkward, because $R$ changes as you move around the source. In the far field it
 simplifies dramatically, and the way it simplifies is worth being careful about:
 **amplitude and phase get different approximations.**
 
-<img src="../../viz/img/radiation-integral-geometry.svg" alt="Exact geometry with the vector R from a source point to the field point, and the far-field limit in which the rays are parallel and only the path difference r-hat dot r-prime survives" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+<img src="../../viz/img/L06-radiation-integral-geometry.svg" alt="Exact geometry with the vector R from a source point to the field point, and the far-field limit in which the rays are parallel and only the path difference r-hat dot r-prime survives" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
 Start with the exact distance and expand it for $r' \ll r$:
 

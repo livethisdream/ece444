@@ -46,7 +46,7 @@ P_\text{in} = \tfrac{1}{2} |I_0|^2 R_\text{in}
             + \underbrace{\tfrac{1}{2} |I_0|^2 R_\text{loss}}_{P_\text{loss}}.
 $$
 
-<img src="../../viz/img/antenna-input-z.svg" alt="Antenna input impedance as a series R_rad, R_loss, jX driven by a source through a feed line" style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
+<img src="../../viz/img/L04-antenna-input-z.svg" alt="Antenna input impedance as a series R_rad, R_loss, jX driven by a source through a feed line" style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
 
 **Radiation resistance $R_\text{rad}$ is not a physical resistor.** No component in
 the antenna gets warm from it. It is the *equivalent* resistance that would
@@ -214,7 +214,7 @@ present different impedances to the coax, so the currents on the arms are no
 longer equal and opposite. The leftover **common-mode current** flows back down
 the *outside* of the shield — a third conductor the model forgot about.
 
-<img src="../../viz/img/balun-currents.svg" alt="Coax feeding a dipole: without a balun, common-mode current flows on the outside of the shield; a choke balun blocks it" style="max-width: 620px; width: 100%; display: block; margin: 1em auto;">
+<img src="../../viz/img/L04-balun-currents.svg" alt="Coax feeding a dipole: without a balun, common-mode current flows on the outside of the shield; a choke balun blocks it" style="max-width: 620px; width: 100%; display: block; margin: 1em auto;">
 
 That shield current has real consequences:
 

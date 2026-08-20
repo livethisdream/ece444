@@ -244,7 +244,7 @@ until we get to Module 3 with the Phaser.
 
 <!-- TODO: source syllabus-qr.png and place at book/module01/L01-course-intro/img/syllabus-qr.png
 <figure class="qr qr-right">
-  <img src="./img/01-course-intro/syllabus-qr.png" alt="QR to syllabus">
+  <img src="./img/syllabus-qr.png" alt="QR to syllabus">
   <figcaption>Syllabus</figcaption>
 </figure>
 -->

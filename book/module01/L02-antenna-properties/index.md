@@ -195,7 +195,7 @@ as $1/r^{2}$ — the inverse-square law. This $S_{\text{rad}}$ is exactly
 the quantity that appears in the radiation-intensity definition next.
 
 <p style="text-align:center;">
-<img src="../../viz/img/poynting-triad.svg"
+<img src="../../viz/img/L02-poynting-triad.svg"
      alt="Orthogonal E, H, and Poynting vector S of a plane wave"
      style="max-width:100%; width:640px;">
 </p>
@@ -432,7 +432,7 @@ P_{\text{rx}} = S_{\text{inc}} A_{e}.
 $$
 
 <p style="text-align:center;">
-<img src="../../viz/img/effective-area-capture.svg"
+<img src="../../viz/img/L02-effective-area-capture.svg"
      alt="A receiving aperture capturing effective aperture from an incident wavefront"
      style="max-width:100%; width:640px;">
 </p>
@@ -452,7 +452,7 @@ P_{\text{rx}} = \frac{V_{\text{oc}}^{2}}{8 R_r}
 $$
 
 <p style="text-align:center;">
-<img src="../../viz/img/recv-circuit.svg"
+<img src="../../viz/img/L02-recv-circuit.svg"
      alt="Receiving antenna modeled as a Thevenin source feeding a matched load"
      style="max-width:100%; width:700px;">
 </p>
@@ -476,7 +476,7 @@ A_{e} = \frac{P_{\text{rx}}}{S}
 $$
 
 <p style="text-align:center;">
-<img src="../../viz/img/short-dipole-field.svg"
+<img src="../../viz/img/L02-short-dipole-field.svg"
      alt="Short dipole aligned with the incident E field, inducing an open-circuit voltage"
      style="max-width:100%; width:600px;">
 </p>
@@ -506,7 +506,7 @@ $$
 A_{e} = \eta_{\text{ap}} A_{\text{phys}}.
 $$
 
-<img src="../../viz/img/effective-aperture.svg" alt="Physical aperture versus effective aperture: A_e = eta_ap times A_phys, with a dish, horn, and small-dipole comparison" style="max-width: 100%; width: 780px; display: block; margin: 1.2em auto;">
+<img src="../../viz/img/L02-effective-aperture.svg" alt="Physical aperture versus effective aperture: A_e = eta_ap times A_phys, with a dish, horn, and small-dipole comparison" style="max-width: 100%; width: 780px; display: block; margin: 1.2em auto;">
 
 **Worked example.** A 1.2 m dish has
 $A_{\text{phys}} = \pi(0.6)^{2} = 1.13\ \text{m}^{2}$; with

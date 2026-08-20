@@ -59,7 +59,7 @@ Polarization and bandwidth are the two most misquoted specs on a datasheet.
 
 Fix a point in space. Watch $\mathbf{E}(t)$ trace a curve over one period.
 
-<div class="fig" data-inline-svg="./fig/pol-states.svg" style="max-width:570px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L03-pol-states.svg" style="max-width:570px; margin:0 auto;"></div>
 
 <div class="callout">
 That curve <strong>is</strong> the polarization.
@@ -85,7 +85,7 @@ $$
 <li>Everything else → <strong>elliptical</strong></li>
 </ul>
 </div><div class="col-fig">
-<div data-inline-svg="./fig/pol-construction.svg" style="max-width:330px; margin:0 auto;"></div>
+<div data-inline-svg="./fig/L03-pol-construction.svg" style="max-width:330px; margin:0 auto;"></div>
 </div></div>
 
 Note:
@@ -103,7 +103,7 @@ components + a phase difference → *any* polarization state.
 <li>Otherwise → <strong>left-hand</strong> polarization</li>
 </ul>
 </div><div class="col-fig">
-<div data-inline-svg="./fig/handedness.svg"></div>
+<div data-inline-svg="./fig/L03-handedness.svg"></div>
 </div></div>
 
 <div class="callout">
@@ -128,7 +128,7 @@ $$
 <li>Real CP antennas: <strong>AR ≤ 3 dB</strong> across the band</li>
 </ul>
 </div><div class="col-fig">
-<div data-inline-svg="./fig/axial-ratio.svg" style="max-width:330px; margin:0 auto;"></div>
+<div data-inline-svg="./fig/L03-axial-ratio.svg" style="max-width:330px; margin:0 auto;"></div>
 </div></div>
 
 Note:
@@ -172,7 +172,7 @@ $$
 $$
 <p>Fraction of incident power an antenna captures given a polarization mismatch.</p>
 </div><div class="col-fig">
-<div data-inline-svg="./fig/plf-cos2.svg" style="max-width:87%; margin:0 auto;"></div>
+<div data-inline-svg="./fig/L03-plf-cos2.svg" style="max-width:87%; margin:0 auto;"></div>
 <small>Two linear antennas, tilted by $\theta$.</small>
 </div></div>
 
@@ -282,7 +282,7 @@ $$
 1.5:1 or lower; some consumer parts relax to 3:1.
 </div>
 </div><div class="col-fig">
-<div data-inline-svg="./fig/vswr.svg" style="max-width:95%; margin:0 auto;"></div>
+<div data-inline-svg="./fig/L02-vswr.svg" style="max-width:95%; margin:0 auto;"></div>
 </div></div>
 
 ---
@@ -319,7 +319,7 @@ Small antennas (small $ka$) → high Q → narrow BW. There is no free lunch.
 </div>
 <p>You can beat it with <strong>loss</strong> (resistive loading) but only by trading gain.</p>
 </div><div class="col-fig">
-<div data-inline-svg="./fig/chu-q-vs-ka.svg" style="max-width:95%; margin:0 auto;"></div>
+<div data-inline-svg="./fig/L03-chu-q-vs-ka.svg" style="max-width:95%; margin:0 auto;"></div>
 </div></div>
 
 Note:

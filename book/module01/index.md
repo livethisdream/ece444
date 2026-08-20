@@ -2,7 +2,7 @@
 
 <p class="module-meta"><span class="m-module">Module 01</span><span class="m-time">Lessons 1–6</span></p>
 
-<p class="module-synopsis">Ground the physics. We start with what an antenna is and why it matters, then trace the chain from Maxwell's equations to the plane wave, define the headline antenna parameters (gain, directivity, effective area, beamwidth), and end with the trade-offs every array design has to make. By the end, you can read a radiation pattern and predict how a real antenna will behave in a link.</p>
+<p class="module-synopsis">Ground the physics. We start with what an antenna is and why it matters, then trace the chain from Maxwell's equations to the plane wave, define the headline antenna parameters (gain, directivity, effective aperture, beamwidth), and end with the radiation integrals — the machinery that turns a current distribution into a far-field pattern, and that Module 3 will run backwards to design arrays. By the end, you can read a radiation pattern and predict how a real antenna will behave in a link.</p>
 
 ## Learning Objectives
 

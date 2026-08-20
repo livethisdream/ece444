@@ -14,7 +14,7 @@ polarization unchanged" wording lives on the slide. Text carries no
 font-family, so injected inline it inherits the deck's Source Sans Pro.
 
     python scripts/graphics/reciprocity.py
-    -> writes book/extras/slides/fig/reciprocity.svg
+    -> writes book/extras/slides/fig/L02-reciprocity.svg
 """
 
 from __future__ import annotations
@@ -78,7 +78,7 @@ def main() -> int:
            f'<marker id="rxar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="{RED}"/></marker>'
            f'</defs>\n' + "\n".join(body) + "\n</svg>\n")
 
-    out = Path(__file__).resolve().parents[2] / "book/extras/slides/fig/reciprocity.svg"
+    out = Path(__file__).resolve().parents[2] / "book/extras/slides/fig/L02-reciprocity.svg"
     out.write_text(svg, encoding="utf-8")
     print(f"wrote {out} (viewBox {vx:.0f} {vy:.0f} {vw:.0f} {vh:.0f})")
     return 0
