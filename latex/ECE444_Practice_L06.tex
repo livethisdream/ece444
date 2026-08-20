@@ -30,8 +30,8 @@ is required (write \textbf{None} if you did not collaborate).}
 	$R = |\vec{r} - \vec{r}^{\prime}|$. Write both and state where each is used.
 		\begin{solution}[1.2in]
 		Amplitude: $1/R \approx 1/r$ (a fractional error of order $r^{\prime}/r$).
-		Phase: $R \approx r - \hat{r} \cdot \vec{r}^{\prime}$, because
-		$k \hat{r} \cdot \vec{r}^{\prime}$ is several radians and controls whether
+		Phase: $R \approx r - \rhat \cdot \vec{r}^{\prime}$, because
+		$k \rhat \cdot \vec{r}^{\prime}$ is several radians and controls whether
 		contributions add or cancel.
 		\end{solution}
 
@@ -41,7 +41,7 @@ is required (write \textbf{None} if you did not collaborate).}
 		\eq{ \vec{A} = \dfrac{\mu e^{-jkr}}{4\pi r}\vec{N}(\theta,\phi),
 		     \qquad
 		     \vec{N} = \int_{V^{\prime}} \vec{J}(\vec{r}^{\prime})
-		               e^{+jk\hat{r}\cdot\vec{r}^{\prime}} dV^{\prime} }
+		               e^{+jk\rhat\cdot\vec{r}^{\prime}} dV^{\prime} }
 		$e^{-jkr}/r$ depends only on \emph{distance} and is the same for every
 		antenna; $\vec{N}$ depends only on \emph{direction} and carries everything
 		that makes this antenna different.
@@ -52,7 +52,7 @@ is required (write \textbf{None} if you did not collaborate).}
 	the wire axis?
 		\begin{solution}[1.2in]
 		It is the \emph{projection} of a $\zhat$-directed current onto
-		$\hat{\theta}$ --- not part of the integral. At $\theta = 0\mydeg$ the
+		$\thetahat$ --- not part of the integral. At $\theta = 0\mydeg$ the
 		projection vanishes, so a wire antenna radiates nothing off its own ends.
 		\end{solution}
 
@@ -124,13 +124,19 @@ Recall the space factor $S(\theta) = |\sinp{u}/u|$ with
 $u = \tfrac{kL}{2}\cosp{\theta}$.
 \begin{parts}
 
-	\part Evaluate the radiation integral to show where $S(\theta)$ comes from.
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Evaluate the radiation integral to show where $S(\theta)$ comes from.
 		\begin{solution}[1.6in]
-		\eq{ N_z(\theta) &= I_0 \int_{-L/2}^{L/2} e^{+jkz^{\prime}\cosp{\theta}} dz^{\prime}
-		                  = I_0 \dfrac{2\sinp{\tfrac{kL}{2}\cosp{\theta}}}{k\cosp{\theta}} \\
+		\eq{ N_z(\theta) &= I_0 \int_{-L/2}^{L/2} e^{+jkz^{\prime}\cosp{\theta}} dz^{\prime} \\
+		                 &= I_0 \dfrac{2\sinp{\tfrac{kL}{2}\cosp{\theta}}}{k\cosp{\theta}} \\
 		                 &= I_0 L \dfrac{\sinp{u}}{u},
-		                  \qquad u = \tfrac{kL}{2}\cosp{\theta} }
+		                  \quad u = \tfrac{kL}{2}\cosp{\theta} }
 		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$N_z$ = \ansbox[1.4in]{$I_0 L \sinp{u}/u$}
+	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Find the angles of the first nulls.
@@ -156,7 +162,10 @@ $u = \tfrac{kL}{2}\cosp{\theta}$.
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		HPBW = \ansbox[1.3in]{$\approx 17\mydeg$}
+		rule of thumb = \ansbox[1.2in]{$16.9\mydeg$}
+
+		\vspace{4pt}
+		exact = \ansbox[1.2in]{$17.0\mydeg$}
 	\end{minipage}
 
 	\part The design is changed to $L = 6\lambda$. What happens to the beamwidth,
@@ -180,13 +189,21 @@ broadside to $\theta_0 = 60\mydeg$. The excitation is
 $I(z^{\prime}) = I_0 e^{-jkz^{\prime}\cosp{\theta_0}}$.
 \begin{parts}
 
-	\part Show from the radiation integral that the peak lands at $\theta_0$.
-		\begin{solution}[1.4in]
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Show from the radiation integral that the peak lands at $\theta_0$, and
+		state the peak angle for this design.
+		\begin{solution}[1.5in]
 		\eq{ N_z(\theta) = I_0\int e^{+jkz^{\prime}\lp\cosp{\theta} - \cosp{\theta_0}\rp} dz^{\prime} }
 		The integrand is in phase across the whole aperture --- and the sum therefore
-		maximum --- when $\cosp{\theta} = \cosp{\theta_0}$, i.e.\ $\theta = \theta_0$.
-		A linear phase across the source shifts the transform; it does not reshape it.
+		maximum --- when $\cosp{\theta} = \cosp{\theta_0}$, i.e.\ $\theta = \theta_0
+		= 60\mydeg$. A linear phase across the source shifts the transform; it does not
+		reshape it.
 		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{peak}}$ = \ansbox[1.3in]{$\theta_0 = 60\mydeg$}
+	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Find the total phase difference (in degrees) between the two ends of
@@ -226,14 +243,23 @@ produces the far-field pattern
 \eq{ |F(\theta)| = \left| \dfrac{\cosp{\tfrac{\pi}{2}\cosp{\theta}}}{\sinp{\theta}} \right| }
 \begin{parts}
 
-	\part Evaluate $|F|$ at $\theta = 90\mydeg$ and at $\theta = 0\mydeg$, and
-	interpret each.
-		\begin{solution}[1.3in]
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Evaluate $|F|$ at $\theta = 90\mydeg$ and at $\theta = 0\mydeg$, and
+		interpret each.
+		\begin{solution}[1.4in]
 		At $\theta = 90\mydeg$: $\cosp{\theta} = 0$, so
 		$|F| = \cosp{0}/1 = 1$ --- maximum, broadside to the wire.
 		At $\theta = 0\mydeg$: numerator $\cosp{\pi/2} = 0$ and denominator
 		$\rightarrow 0$; the limit is $0$ --- a genuine null off the ends of the wire.
 		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$|F(90\mydeg)|$ = \ansbox[1.2in]{$1$ (peak)}
+
+		\vspace{4pt}
+		$|F(0\mydeg)|$ = \ansbox[1.2in]{$0$ (null)}
+	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Evaluate $|F|$ at $\theta = 45\mydeg$, in dB relative to the peak.
@@ -278,7 +304,10 @@ produces the far-field pattern
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Reading the Fourier relationship.} Four aperture distributions
 of the \emph{same} length $L$ produce first sidelobes of $-13.3\db$, $-23\db$,
-$-26.5\db$, and $-31.5\db$.
+$-26.5\db$, and $-31.5\db$. Work these parts from the \textbf{taper table in
+Lesson 6}, which pairs each distribution with its first-sidelobe level and also
+records the price: relative to uniform illumination, a taper broadens the main
+beam by roughly $1.3\times$ to $1.6\times$.
 \begin{parts}
 
 	\part Match each level to its distribution: uniform, cosine taper,
@@ -292,23 +321,45 @@ $-26.5\db$, and $-31.5\db$.
 		high-space-frequency content it has, and the lower the sidelobes.
 		\end{solution}
 
-	\part All four have the same $L$. Rank their half-power beamwidths and explain
-	the trade.
-		\begin{solution}[1.3in]
-		Uniform is \emph{narrowest}, then cosine, then triangular, then
-		cosine-squared (widest). Tapering throws away the outer part of the aperture,
-		so the effective length shrinks and the beam broadens. \textbf{Sidelobe level
-		is bought with beamwidth} --- the central trade of aperture design (L15, L24).
+	\part All four have the same $L$. Rank their half-power beamwidths, put an
+	approximate broadening factor on each, and explain the trade.
+		\begin{solution}[1.5in]
+		Uniform is \emph{narrowest} ($1.00\times$, by definition), then cosine
+		($\approx 1.34\times$), then triangular ($\approx 1.43\times$), then
+		cosine-squared (widest, $\approx 1.63\times$). The ranking is the sidelobe
+		ranking read backwards: tapering suppresses the outer part of the aperture, so
+		the \emph{effective} length shrinks and the beam broadens. Same $L$ does
+		\textbf{not} mean same beamwidth. \textbf{Sidelobe level is bought with
+		beamwidth} --- the central trade of aperture design (L15, L24).
 		\end{solution}
 
-	\part Your requirement is a $2\mydeg$ beam with sidelobes below $-25\db$. Which
-	knob sets which requirement?
-		\begin{solution}[1.2in]
-		\textbf{Length} sets the beamwidth ($\theta_{\text{HP}} \approx 0.886\lambda/L$,
-		so $L$ of order $25\lambda$), and the \textbf{taper shape} sets the sidelobe
-		level (a triangular or cosine-squared illumination). Then iterate: the taper
-		broadens the beam, so the aperture must grow a little to hold $2\mydeg$.
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Your requirement is a $2\mydeg$ beam with sidelobes below $-25\db$.
+		Which knob sets which requirement? Size the aperture, in wavelengths, both
+		before and after you apply the taper you chose.
+		\begin{solution}[2.0in]
+		\textbf{Length} sets the beamwidth, \textbf{taper shape} sets the sidelobe
+		level. Start with uniform illumination and
+		$\theta_{\text{HP}} \approx 0.886\lambda/L$:
+		\eq{
+			\theta_{\text{HP}} &= 2\mydeg = 2\lp \dfrac{\pi}{180} \rp = 0.0349 \text{ rad} \\
+			L &= \dfrac{0.886\lambda}{0.0349} \approx 25.4\lambda
+		}
+		Uniform gives only $-13.3\db$ sidelobes, so pick the cheapest taper that clears
+		$-25\db$: \textbf{triangular}, at $-26.5\db$. Its beamwidth constant is
+		$1.27\lambda/L$ ($\approx 1.43\times$ uniform), so grow the aperture by the same factor to hold $2\mydeg$:
+		\eq{ L &= \dfrac{1.27\lambda}{0.0349} \approx 1.43 \lp 25.4\lambda \rp \approx 36.4\lambda }
+		Cosine-squared would also clear the spec but costs $1.63\times$, i.e.\
+		$\approx 41\lambda$ --- more aperture than the requirement is asking you to buy.
 		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$L$ (uniform) = \ansbox[1.2in]{$25.4\lambda$}
+
+		\vspace{4pt}
+		$L$ (tapered) = \ansbox[1.2in]{$36.4\lambda$}
+	\end{minipage}
 
 \end{parts}
 

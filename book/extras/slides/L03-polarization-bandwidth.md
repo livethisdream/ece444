@@ -423,11 +423,9 @@ Ask which way the observer is facing.
 
 ## "Circularly polarized" — at what axial ratio?
 
-A nominally CP antenna of axial ratio $A$ (linear, $\ge 1$) meets a **linear** antenna. Sweep the linear antenna's orientation; captured power runs between
+A nominally CP antenna of axial ratio $A$ (linear, $\ge 1$) meets a **linear** antenna. Sweeping the linear antenna's orientation, the captured power runs between the major- and minor-axis values:
 
-$$p_{\max} = \frac{A^{2}}{A^{2}+1} \qquad p_{\min} = \frac{1}{A^{2}+1}$$
-
-These are the powers in the major and minor axes, so $p_{\max} + p_{\min} = 1$, and their ratio is
+$$p_{\max} = \frac{A^{2}}{A^{2}+1} \qquad p_{\min} = \frac{1}{A^{2}+1} \qquad (p_{\max} + p_{\min} = 1)$$
 
 $$\frac{p_{\max}}{p_{\min}} = A^{2} \quad\Longrightarrow\quad 10\log_{10}\left(\frac{p_{\max}}{p_{\min}}\right) = 20\log_{10} A = \text{AR}\_{\text{dB}}$$
 

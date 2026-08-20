@@ -1,0 +1,433 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L5 practice set (Field Regions) -- the three terms of the infinitesimal-dipole
+% field and where each wins, the two region boundaries at both size extremes
+% (a 3 m dish and an 8 cm whip), the pi/8 phase-error criterion behind the range
+% length, and why the pattern is still forming inside 2D^2/lambda.
+
+\fullwidth{\textbf{Learning Objective 1.5: } I can identify and distinguish the
+reactive near-field, radiating near-field, and far-field regions and calculate
+the boundaries for a given antenna.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Three terms in one equation.} The exact $E_\theta$ of an
+infinitesimal dipole is a sum of three pieces whose relative sizes are set
+entirely by $kr$:
+\eq{ E_\theta \propto
+     \underbrace{\dfrac{1}{r}}_{\text{radiation}} +
+     \underbrace{\dfrac{1}{kr^{2}}}_{\text{induction}} +
+     \underbrace{\dfrac{1}{k^{2}r^{3}}}_{\text{electrostatic}} }
+Throughout this question the antenna operates at $f = 915\mhz$.
+
+\begin{parts}
+
+	\part The innermost region is called \emph{reactive}. Justify that word in one
+	or two sentences, using what the complex Poynting vector does there.
+		\begin{solution}[1.2in]
+		Close in, $\vec{E}$ and $\vec{H}$ are $90\mydeg$ out of phase, so the radial
+		Poynting vector $\tfrac12 E_\theta H_\phi^{*}$ is almost purely
+		\emph{imaginary} --- and its imaginary part falls off as $1/r^{5}$, which is
+		why it overwhelms everything near the antenna. Imaginary power is not
+		transported: energy flows outward for a quarter cycle and all the way back the
+		next. That is stored energy, the same reactive power you met at the terminals
+		in Lesson 4, now living in the surrounding field.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Normalizing the radiation term to $1$, give the relative sizes of the
+		three terms at $kr = 0.1$ and at $kr = 10$, and name the dominant term in each
+		case.
+		\begin{solution}[1.6in]
+		Dividing through by the radiation term leaves powers of $1/kr$:
+		\eq{
+			\text{radiation} : \text{induction} : \text{electrostatic}
+			&= 1 : \dfrac{1}{kr} : \dfrac{1}{(kr)^{2}} \\
+			kr = 0.1: \quad &= 1 : 10 : 100 \\
+			kr = 10: \quad &= 1 : 0.1 : 0.01
+		}
+		At $kr = 0.1$ the $1/r^{3}$ electrostatic term is $100\times$ the radiation
+		term. At $kr = 10$ the $1/r$ radiation term is all that is left standing.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$kr = 0.1$: \ansbox[1.5in]{$1{:}10{:}100$, $1/r^{3}$ wins}
+
+		\vspace{4pt}
+		$kr = 10$: \ansbox[1.5in]{$1{:}0.1{:}0.01$, $1/r$ wins}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the distance at which the radiation and induction terms are equal.
+		Give it in wavelengths and in centimetres at $915\mhz$.
+		\begin{solution}[1.5in]
+		The two are equal when $1/kr = 1$:
+		\eq{
+			kr &= 1 \quad\longrightarrow\quad r = \dfrac{1}{k} = \dfrac{\lambda}{2\pi}
+				\approx 0.159\lambda \\
+			\lambda &= \dfrac{c}{f} = \dfrac{3\ee{8}}{915\ee{6}} = 0.328\m \\
+			r &= \dfrac{0.328}{2\pi} = 0.0522\m = 5.22\ \text{cm}
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$r$ = \ansbox[1.5in]{$0.159\lambda = 5.22\ \text{cm}$}
+	\end{minipage}
+
+	\part A colleague measures this antenna's gain with a probe held $2\ \text{cm}$
+	away. In two sentences, say what is wrong with the number he reports.
+		\begin{solution}[1.3in]
+		At $2\ \text{cm}$ he is well inside the $5.2\ \text{cm}$ crossover, where the
+		stored $1/r^{2}$ and $1/r^{3}$ terms dominate --- most of what the probe picks
+		up was never radiated and would have returned to the antenna anyway. Worse, the
+		probe sits in the stored field and \emph{loads} the antenna, shifting its input
+		impedance and its resonance, so the reading describes a two-body system rather
+		than the antenna. Gain is defined in the far field; there is no valid gain
+		number to be had at $2\ \text{cm}$.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{An electrically large antenna.} An X-band ground-station
+reflector has diameter $D = 3.0\m$ and operates at $f = 8\ghz$. The boundaries are
+$r_{\text{react}} = 0.62\sqrt{D^{3}/\lambda}$ and $r_{\text{ff}} = 2D^{2}/\lambda$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find $\lambda$ and the electrical size $D/\lambda$. Is this antenna
+		electrically large?
+		\begin{solution}[1.2in]
+		\eq{
+			\lambda &= \dfrac{c}{f} = \dfrac{3\ee{8}}{8\ee{9}} = 0.0375\m \\
+			\dfrac{D}{\lambda} &= \dfrac{3.0}{0.0375} = 80
+		}
+		Eighty wavelengths across --- emphatically large, so the $2D^{2}/\lambda$
+		machinery is the right tool.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\lambda$ = \ansbox[1.4in]{$0.0375\m$}
+
+		\vspace{4pt}
+		$D/\lambda$ = \ansbox[1.4in]{$80$ (large)}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute both region boundaries.
+		\begin{solution}[1.7in]
+		\eq{
+			r_{\text{react}} &= 0.62\sqrt{\dfrac{(3.0)^{3}}{0.0375}}
+				= 0.62\sqrt{720} \\
+			&= 0.62(26.83) = 16.6\m \\
+			r_{\text{ff}} &= \dfrac{2(3.0)^{2}}{0.0375} = \dfrac{18}{0.0375} = 480\m
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$r_{\text{react}}$ = \ansbox[1.4in]{$\approx 16.6\m$}
+
+		\vspace{4pt}
+		$r_{\text{ff}}$ = \ansbox[1.4in]{$480\m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The only outdoor range on base is $150\m$ long. Which region does that
+		put the source in, and what fraction of the far-field distance is it?
+		\begin{solution}[1.4in]
+		\eq{ 16.6\m < 150\m < 480\m }
+		so $150\m$ lands in the \textbf{radiating near-field} (Fresnel) region: the
+		energy is genuinely leaving the antenna, but the pattern is still a function of
+		range.
+		\eq{ \dfrac{150}{480} = 0.31 }
+		The range is at $31\%$ of the distance it needs to be.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		region = \ansbox[1.3in]{rad.\ near-field}
+
+		\vspace{4pt}
+		fraction = \ansbox[1.2in]{$0.31\ r_{\text{ff}}$}
+	\end{minipage}
+
+	\part You need this dish's sidelobe pattern and you cannot build a $480\m$
+	range. Give two ways out and state what each costs.
+		\begin{solution}[1.6in]
+		\textbf{Near-field scanning}: probe the field on a surface a few wavelengths
+		from the aperture and transform the measured near field into the far-field
+		pattern mathematically. It fits indoors and is the standard answer for large
+		apertures --- but it costs a precision positioner, careful probe correction, and
+		hours of scan time, and it is only as good as your knowledge of the probe.
+		\textbf{Compact range}: illuminate the dish with a shaped reflector that
+		collimates the source into a locally plane wave over a quiet zone, buying you a
+		flat wavefront in a $20\m$ chamber. It costs a large, expensive, precisely
+		figured reflector, and the quiet zone limits the size of what you can test.
+		(A defensible third: test at a lower frequency, since $r_{\text{ff}}$ scales as
+		$1/\lambda$ --- but then you are not measuring the antenna you ship.)
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{An electrically small antenna.} A $915\mhz$ ISM whip on a
+sensor node has largest dimension $D = 8\ \text{cm}$. Recall
+$\lambda = 0.328\m$ at this frequency.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute $D/\lambda$, $2D^{2}/\lambda$, and $0.62\sqrt{D^{3}/\lambda}$.
+		\begin{solution}[2.0in]
+		\eq{
+			\dfrac{D}{\lambda} &= \dfrac{0.08}{0.328} = 0.244 \\
+			\dfrac{2D^{2}}{\lambda} &= \dfrac{2(0.08)^{2}}{0.328}
+				= \dfrac{0.0128}{0.328} \\
+			&= 0.039\m = 3.9\ \text{cm} \\
+			0.62\sqrt{\dfrac{D^{3}}{\lambda}}
+				&= 0.62\sqrt{\dfrac{5.12\ee{-4}}{0.328}} \\
+			&= 0.62(0.0395) = 2.5\ \text{cm}
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$D/\lambda$ = \ansbox[1.4in]{$0.244$}
+
+		\vspace{4pt}
+		$2D^{2}/\lambda$ = \ansbox[1.4in]{$3.9\ \text{cm}$}
+
+		\vspace{4pt}
+		$0.62\sqrt{D^{3}/\lambda}$ = \ansbox[1.4in]{$2.5\ \text{cm}$}
+	\end{minipage}
+
+	\part Your $2D^{2}/\lambda$ came out \emph{smaller than a wavelength}. Explain in
+	two or three sentences why that number is not the far-field boundary here, and
+	say what replaces it.
+		\begin{solution}[1.5in]
+		The $0.62\sqrt{D^{3}/\lambda}$ and $2D^{2}/\lambda$ formulas are aperture
+		formulas: they assume the antenna is \emph{electrically large}
+		($D > \lambda$), so that the spread in path length across the structure is what
+		limits you. Here $D = 0.244\lambda$, so there is essentially no path-length
+		spread to worry about and $2D^{2}/\lambda = 3.9\ \text{cm}$ is a statement about
+		nothing. What limits you instead is the \textbf{reactive near field} of the
+		element itself, which extends to about $\lambda/2\pi$ --- exactly the $kr = 1$
+		crossover of Question 1. Beyond that, the radiation term is the only one left,
+		so the far field effectively begins there.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute $\lambda/2\pi$ for this antenna, and state the distance at which
+		you would actually stand to measure its pattern (use the $r \ge 5\lambda$
+		practical rule).
+		\begin{solution}[1.5in]
+		\eq{
+			\dfrac{\lambda}{2\pi} &= \dfrac{0.328}{2\pi} = 0.052\m = 5.2\ \text{cm} \\
+			r_{\text{meas}} &\ge 5\lambda = 5(0.328) = 1.64\m
+		}
+		The $5\lambda$ rule buys margin: at $\lambda/2\pi$ the radiation term has only
+		just taken over, while at $5\lambda$ the stored terms are down by a further
+		factor of $30$ in field.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\lambda/2\pi$ = \ansbox[1.4in]{$5.2\ \text{cm}$}
+
+		\vspace{4pt}
+		$r_{\text{meas}}$ = \ansbox[1.4in]{$\ge 1.64\m$}
+
+	\end{minipage}
+
+	\part You are offered a $3\m$ anechoic chamber to characterize this whip. Is it
+	long enough? Name the error source that actually limits the measurement, given
+	your answer to (c).
+		\begin{solution}[1.5in]
+		Yes --- $3\m$ is nearly $10\lambda$, comfortably past the $1.64\m$ you need,
+		and the aperture criterion never binds for an antenna this small. The binding
+		error source is no longer \emph{distance}: it is everything else in the room.
+		Chamber wall reflections, the positioner, and above all the common-mode current
+		on the feed cable --- which on an antenna only $0.24\lambda$ long can radiate
+		comparably to the whip itself --- set the accuracy floor. Choke the cable and
+		check the quiet-zone reflectivity; do not spend money on a longer chamber.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Why ranges are long: the $\pi/8$ criterion.} A source a
+distance $r$ away is farther from the \emph{edge} of an aperture of size $D$ than
+from its centre, by a path difference $\Delta \approx D^{2}/(8r)$. The agreed
+tolerance is $\Delta \le \lambda/16$. Take the lesson's reflector:
+$D = 1.2\m$ at $f = 10\ghz$, so $\lambda = 0.03\m$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part At $r = 30\m$, find the path difference $\Delta$ and the phase error it
+		produces across the aperture, in degrees.
+		\begin{solution}[1.6in]
+		\eq{
+			\Delta &= \dfrac{D^{2}}{8r} = \dfrac{(1.2)^{2}}{8(30)}
+				= \dfrac{1.44}{240} = 6.0\ \text{mm} \\
+			\Delta\phi &= 2\pi \dfrac{\Delta}{\lambda}
+				= 2\pi \lp \dfrac{0.006}{0.03} \rp = 1.257 \text{ rad} \\
+			&= 72\mydeg
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta$ = \ansbox[1.4in]{$6.0\ \text{mm}$}
+
+		\vspace{4pt}
+		$\Delta\phi$ = \ansbox[1.4in]{$72\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Impose $\Delta \le \lambda/16$ and solve for the minimum range. Show
+		that the $\pi/8$ tolerance is what produces the familiar $2D^{2}/\lambda$.
+		\begin{solution}[1.7in]
+		\eq{
+			\dfrac{D^{2}}{8r} &\le \dfrac{\lambda}{16}
+				\quad\longrightarrow\quad r \ge \dfrac{16D^{2}}{8\lambda}
+				= \dfrac{2D^{2}}{\lambda} \\
+			r_{\text{ff}} &= \dfrac{2(1.2)^{2}}{0.03} = 96\m
+		}
+		A path difference of $\lambda/16$ is a phase error of
+		$2\pi/16 = \pi/8 = 22.5\mydeg$ --- so ``far field'' and ``no more than
+		$22.5\mydeg$ of quadratic phase across the aperture'' are the same statement.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$r_{\text{ff}}$ = \ansbox[1.4in]{$96\m$}
+	\end{minipage}
+
+	\part Your chamber is the $30\m$ one from part (a) and the program will not fund
+	a $96\m$ outdoor range. State what the $72\mydeg$ of residual phase error does to
+	the measured pattern, and decide whether you would accept the $30\m$ data for a
+	\emph{gain} check, for a \emph{beamwidth} check, and for a \emph{sidelobe} check.
+		\begin{solution}[1.8in]
+		Quadratic phase across the aperture behaves like a defocus: it spoils the
+		coherent addition at the edges, so the measured main lobe broadens slightly and
+		loses a few tenths of a dB of peak, the nulls \emph{fill in}, and the near-in
+		sidelobes \emph{rise} --- the last effect being much the largest.
+		\textbf{Gain}: marginal, and it will read low; usable only with a stated
+		correction. \textbf{Beamwidth}: acceptable, since the main lobe is the least
+		sensitive feature. \textbf{Sidelobes}: reject --- at $72\mydeg$ the sidelobe
+		structure is an artifact of the range, and a $-25\db$ requirement cannot be
+		verified this way. If sidelobes are the deliverable, pay for near-field
+		scanning.
+		\end{solution}
+
+	\part Why is $22.5\mydeg$ ``good enough''? Answer in one or two sentences, saying
+	what would change if the tolerance were tightened to $\pi/16$.
+		\begin{solution}[1.3in]
+		It is a deliberate engineering compromise: at $22.5\mydeg$ the residual pattern
+		error is a few tenths of a dB in gain and a fraction of a dB in the first
+		sidelobes --- small compared with the other uncertainties on a real range --- so
+		nothing is gained by going further. Halving the tolerance to $\pi/16$ would
+		\emph{double} the required range length, because $r$ goes inversely with the
+		allowed phase error, and $96\m$ would become $192\m$ for an improvement no one
+		could measure.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Two antennas on one airframe.} A $3\ghz$ ($\lambda = 0.1\m$)
+installation carries a half-wave dipole ($D = \lambda/2 = 0.05\m$) and a $2.0\m$
+reflector, mounted $10\m$ apart.
+
+\begin{parts}
+
+	\part Inside $2D^{2}/\lambda$ the field is genuinely radiating --- energy is
+	leaving and never coming back --- and yet the \emph{pattern} still changes as you
+	walk outward. Explain why, in words.
+		\begin{solution}[1.7in]
+		The pattern is a superposition: every patch of the aperture sends a
+		contribution to your observation point, and what you measure is those
+		contributions adding with their relative phases. Close in, the patches are at
+		meaningfully \emph{different} distances from you, so those relative phases
+		depend on where you are standing --- move outward and the interference re-forms
+		into a different angular pattern. As $r$ grows the quadratic phase across the
+		aperture, $\propto D^{2}/r$, shrinks; past $2D^{2}/\lambda$ it is below
+		$22.5\mydeg$ and the rays are parallel enough that the relative phases stop
+		depending on $r$ altogether. From there the pattern is frozen and only the
+		amplitude keeps falling as $1/r$.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute $2D^{2}/\lambda$ for each antenna.
+		\begin{solution}[1.5in]
+		\eq{
+			\text{dipole:} \quad \dfrac{2(0.05)^{2}}{0.1} &= \dfrac{0.005}{0.1}
+				= 0.05\m \\
+			\text{dish:} \quad \dfrac{2(2.0)^{2}}{0.1} &= \dfrac{8}{0.1} = 80\m
+		}
+		A factor of $1600$ between two antennas sharing a frequency --- the far-field
+		distance is set by \emph{size}, not by wavelength alone.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		dipole = \ansbox[1.4in]{$0.05\m$}
+
+		\vspace{4pt}
+		dish = \ansbox[1.4in]{$80\m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part At the $10\m$ separation, which region is each antenna in with respect
+		to the other?
+		\begin{solution}[1.7in]
+		The dish sits at $10\m$ from the dipole, and $10\m \gg 0.05\m$ --- it is deep
+		in the dipole's \textbf{far field}. The dipole sits at $10\m$ from the dish,
+		well short of $80\m$. Check the inner boundary:
+		\eq{ 0.62\sqrt{\dfrac{(2.0)^{3}}{0.1}} = 0.62\sqrt{80} = 5.5\m }
+		Since $5.5\m < 10\m < 80\m$, the dipole is in the dish's \textbf{radiating
+		near-field}. The relationship is not symmetric.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		dish: \ansbox[1.4in]{dipole's far field}
+
+		\vspace{4pt}
+		dipole: \ansbox[1.4in]{dish's rad.\ near fld}
+	\end{minipage}
+
+	\part The EMC engineer wants to predict the coupling between the two with Friis.
+	Is that legitimate here? Say what you would do instead, and what it costs.
+		\begin{solution}[1.6in]
+		No. Friis assumes each antenna sees the other as a point source radiating its
+		far-field pattern --- it needs \emph{both} ends in the far field, and the dipole
+		is $8\times$ too close to the dish for that. Used anyway, Friis would quote the
+		dish's boresight gain at a range where that gain has not formed, and the answer
+		could be wrong by many dB in either direction.
+		Do it properly with a full-wave simulation of the installed geometry (method of
+		moments or FDTD over the airframe), or measure the coupling directly with a
+		network analyzer on the real structure. Both cost far more than an equation:
+		the simulation needs an accurate airframe model and hours of solve time, and the
+		measurement needs the actual aircraft.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

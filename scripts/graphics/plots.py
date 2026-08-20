@@ -229,8 +229,9 @@ def chu_q_vs_ka() -> None:
     ax.grid(color=RULE, linewidth=0.8, which="major")
     for sp in ("top",):
         ax.spines[sp].set_visible(False)
-    ax.set_xticks([0.2, 0.3, 0.5, 1.0, 2.0, 3.0])
-    ax.set_xticklabels(["0.2", "0.3", "0.5", "1", "2", "3"])
+    ax.set_xticks([0.2, 0.5, 1.0, 2.0, 3.0])
+    ax.set_xticklabels(["0.2", "0.5", "1", "2", "3"])
+    ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
 
     ax.axvline(1.0, color=GREY, lw=1.4, ls=(0, (4, 3)), zorder=2)
     ax.text(0.98, 250, "ka = 1", color=GREY, fontsize=12, fontweight="bold",
@@ -239,10 +240,11 @@ def chu_q_vs_ka() -> None:
             fontweight="bold", ha="left", va="bottom")
 
     ax.plot(1.0, 2.0, "o", color=ORANGE, ms=7, zorder=5)
-    ax.annotate("ka = 1, Q ≈ 2 —\nthe practical small-antenna knee",
-                xy=(1.0, 2.0), xytext=(1.25, 6.5), color=ORANGE,
-                fontsize=11, fontweight="bold", ha="left", va="bottom",
-                arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.2))
+    ax.annotate("ka = 1, Q ≈ 2\npractical small-antenna knee",
+                xy=(0.97, 1.95), xytext=(0.26, 0.78), color=ORANGE,
+                fontsize=10.5, fontweight="bold", ha="left", va="bottom",
+                arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.2,
+                                shrinkB=4))
 
     # what the Q actually costs you, on the same picture
     sec = ax.secondary_yaxis("right", functions=(lambda q: 1 / q, lambda b: 1 / b))
