@@ -106,18 +106,17 @@ Directed the Academy Center for UAS Research (ACUASR) at USAFA through 2025.
 
 ## What is an antenna?
 
-<div class="slide-box">
+<div class="slide-box" style="font-size:0.68em; padding:0.45em 0.9em;">
 
-An antenna is a **transducer**. It converts a **guided wave** on a
-cable or waveguide into a **radiating wave** in free space, and
-vice versa.
-
-Two ideas we'll keep coming back to:
+An antenna is a **transducer**. It converts a **guided wave** on a cable or
+waveguide into a **radiating wave** in free space, and vice versa.
 
 1. Antennas are **reciprocal** — the same antenna transmits and receives with the same pattern.
 2. Antennas do **not create energy** — they shape *where* the energy goes.
 
 </div>
+
+<div class="fig" data-inline-svg="./fig/L01-transducer.svg" style="max-width:780px; margin:0.2em auto 0;"></div>
 
 Note:
 Reciprocity: same antenna, same pattern, transmit or receive.
@@ -208,6 +207,39 @@ If the antenna is wrong, nothing downstream can fix it.
 
 ## Homework
 
+- **Practice sets are your reps.** One per lesson, keyed to that lesson's objectives. Graded on a **genuine, documented attempt** — not on correctness. That is engagement credit (10% of the grade).
+- **LO mastery is 30%.** Every objective is scored **Mastered** or **Not Yet Mastered** on the module assessments; your score is the fraction you master.
+- **The midterm project is resubmittable.** Mastered / Not Yet Mastered, revise after feedback, turn it in again.
+
+<div class="callout">
+I would rather you learn it <em>late</em> than not at all — so do the reps.
+</div>
+
+Note:
+Point them at the syllabus for the full EC menu: practice, EI, lab prep, a
+research paper, or telling me about a bug on the course site.
+
+---
+
+## Know these on sight
+
+<div class="fig" data-inline-svg="./fig/L01-antenna-gallery.svg" style="max-width:1100px; margin:0 auto;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.15em 1.6em;font-size:0.58em;max-width:1100px;margin:0.4em auto 0;text-align:left;">
+  <div><strong>dipole</strong> — a resonant wire; the reference antenna, doughnut pattern</div>
+  <div><strong>Yagi</strong> — one driven element plus parasites; cheap gain along the boom</div>
+  <div><strong>monopole</strong> — half a dipole over a ground plane; the whip on every vehicle</div>
+  <div><strong>spiral</strong> — a self-scaling curve; very wideband, circularly polarized</div>
+  <div><strong>patch</strong> — metal rectangle on a substrate; flat, conformal, printable</div>
+  <div><strong>parabolic dish</strong> — a focused aperture; the most gain per dollar</div>
+  <div><strong>horn</strong> — a flared waveguide; clean pattern, the standard gain reference</div>
+  <div></div>
+</div>
+
+Note:
+Geometry sets the job. Do not memorize numbers yet — just be able to name the
+shape when it shows up on a rooftop, a mast, or a datasheet.
+
 ---
 
 ## Show & tell
@@ -240,7 +272,27 @@ until we get to Module 3 with the Phaser.
 
 ---
 
-## For next time
+## Key point
+
+<div class="callout">
+An antenna is a <strong>transducer</strong>: it trades a guided wave for a radiated one, in either direction, with the same pattern either way. It creates no energy — it only decides <em>where</em> the energy goes. That one choice sits between every transmitter and every receiver in the Air Force, and <strong>nothing downstream can undo it</strong>.
+</div>
+
+---
+
+## Where this is going
+
+- **Module 1** builds the vocabulary: pattern and gain, polarization and bandwidth, impedance at the terminals, where the far field starts, and how to compute a pattern
+- **Modules 2–4** spend it: real antennas, then arrays that steer a beam, then radar that uses the beam
+- **Module 5** puts both together on one system — beamform *and* detect
+
+<div class="callout">
+Next lesson: the fundamental <strong>antenna properties</strong>.
+</div>
+
+---
+
+## Read before next time
 
 <!-- TODO: source syllabus-qr.png and place at book/module01/L01-course-intro/img/syllabus-qr.png
 <figure class="qr qr-right">
@@ -255,7 +307,5 @@ Reference:
 - Sections 3.1 through 3.9 in [Rohde &amp; Schwarz — *Antenna Basics*](../_static/materials/Antenna_Basics_8GE01_1e_Rohde-Schwarz.pdf)
 
 <div class="callout">
-
-Next lesson: the fundamental **antenna properties**.
-
+Scan the <strong>syllabus</strong> too — grading, EC, and the lab schedule live there.
 </div>
