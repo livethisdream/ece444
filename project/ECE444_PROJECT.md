@@ -95,6 +95,7 @@ Parallel workstream (started 2026-08-11): **deck-graphics modernization** — re
 
 # ToDo
 
+- [ ] **Act on the Module 1 review** (`review/FINDINGS.md`, branch `claude/reviewer-md-definition-ciir1w`, 2026-08-20): 3 blockers / 31 majors after adjudicating 5-lens Opus review against COURSE_SPEC.md + Module 2 as built. Blockers: L05 deck scaffold, L02 deck missing Friis, L06 Q6 graded on untaught taper numbers. Five quick wins listed in `review/SUMMARY.md`. Also: merge `COURSE_SPEC.md` (module-2 branch) to `main`, plus 9 proposed spec additions.
 - [x] **Regenerate the L03 practice PDFs** — DONE, and it was already done: `b733e5e` ("Regenerate L03 practice PDFs with the datasheet question") rebuilt them, so the ToDo above it was simply out of date. Verified 2026-08-16 by rebuilding both copies against the real macros and diffing against the committed files: 8 pages each, **0.000% of pixels differ** on every page. Nothing to commit.
 - [x] **Apply the two cdocker changes** (`sync.py` bind + Dockerfile `poppler-utils`) — DONE 2026-08-15/16: host-side `python3 sync.py` and `docker compose -f cdocker.yaml up -d --build --force-recreate` completed; `kpsewhich myShortcuts.tex` resolves and `pdftoppm` is on PATH inside the container.
 - [ ] **Confirm the `1215eea` deploy is live** by polling `livethisdream.github.io/ece444/` — not assumed. Look for the "Reading a datasheet: the two most misquoted specs" section at the end of the L03 lesson, and 27 slides on the L03 deck.
