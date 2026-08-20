@@ -1640,3 +1640,31 @@ div.admonition.note > *:not(.admonition-title) {
   padding: 0.4em 1.2em 0.6em !important;
   margin: 0 !important;
 }
+
+/* --- Dark mode: worked-example (tip) and note boxes --------
+   These blocks are defined above with hardcoded light values and
+   !important, so they need explicit dark variants or the theme's
+   light-gray body text lands on a white card. Palette matches the
+   key-concept dark treatment. */
+html[data-theme="dark"] .admonition.tip,
+html[data-theme="dark"] div.admonition.tip {
+  background-color: #1e2731 !important;
+  border-color: #2a4a6a !important;
+  border-left-color: #5aa3e5 !important;
+}
+html[data-theme="dark"] .admonition.tip > .admonition-title,
+html[data-theme="dark"] div.admonition.tip > p.admonition-title {
+  background-color: #2565a0 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .admonition.note,
+html[data-theme="dark"] div.admonition.note {
+  background-color: #232a33 !important;
+  border-color: #3a4552 !important;
+  border-left-color: #56708a !important;
+}
+html[data-theme="dark"] .admonition.note > .admonition-title,
+html[data-theme="dark"] div.admonition.note > p.admonition-title {
+  color: #82bce8 !important;
+}
