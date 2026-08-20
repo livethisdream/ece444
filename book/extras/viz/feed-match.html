@@ -72,6 +72,7 @@
     <span class="pill" id="pill-vswr">VSWR = <b id="p-vswr">—</b></span>
     <span class="pill">return loss = <b id="p-rl">—</b></span>
     <span class="pill">mismatch loss = <b id="p-ml">—</b></span>
+    <span class="pill" id="pill-z1" style="display:none">\(Z_1\) = <b id="p-z1">—</b></span>
   </div>
 </div>
 
@@ -83,7 +84,7 @@ function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(
 const cv=document.getElementById('plot'), ctx=cv.getContext('2d');
 const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 
-const state={ R:70, X:0, Z0:50, qw:false };
+const state={ R:70, X:0, Z0:50, qw:false, Z1:null, qwR:null };
 
 // complex helpers
 const cdiv=(a,b,c,d)=>{ const den=c*c+d*d; return [ (a*c+b*d)/den, (b*c-a*d)/den ]; }; // (a+jb)/(c+jd)
@@ -92,9 +93,11 @@ function gammaOf(R,X,Z0){ // Gamma = (Z - Z0)/(Z + Z0)
 }
 function derived(){
   let R=state.R, X=state.X;
-  if(state.qw){ // quarter-wave line Z1=sqrt(Z0 R): Zin' = Z1^2 / Z = Z0*R/(R+jX)
-    const Z1sq=state.Z0*state.R;
-    const t=cdiv(Z1sq,0,R,X); R=t[0]; X=t[1];
+  if(state.qw && state.Z1){
+    // The transformer is a physical line: Z1 was fixed when the toggle came
+    // on (designed for that moment's R). Moving the load afterward does NOT
+    // redesign it — Zin' = Z1^2 / (R + jX), and the match degrades.
+    const t=cdiv(state.Z1*state.Z1,0,R,X); R=t[0]; X=t[1];
   }
   const g=gammaOf(R,X,state.Z0);
   const gm=Math.hypot(g[0],g[1]);
@@ -111,7 +114,16 @@ const rEl=document.getElementById('r'), xEl=document.getElementById('x'),
 rEl.addEventListener('input',()=>{ state.R=+rEl.value; rv.textContent=state.R+' Ω'; draw(); });
 xEl.addEventListener('input',()=>{ state.X=+xEl.value; xv.textContent=state.X+' Ω'; draw(); });
 z0El.addEventListener('change',()=>{ state.Z0=+z0El.value; draw(); });
-qwEl.addEventListener('change',()=>{ state.qw=qwEl.checked; draw(); });
+qwEl.addEventListener('change',()=>{
+  state.qw=qwEl.checked;
+  if(state.qw){ // design the line for the load as it is RIGHT NOW (real part only)
+    state.qwR=state.R;
+    state.Z1=Math.sqrt(state.Z0*state.qwR);
+    document.getElementById('p-z1').textContent=state.Z1.toFixed(1)+' Ω';
+  } else { state.Z1=null; state.qwR=null; }
+  document.getElementById('pill-z1').style.display=state.qw?'':'none';
+  draw();
+});
 
 function fit(){
   const dpr=window.devicePixelRatio||1;
@@ -163,7 +175,11 @@ function draw(){
   // labels (sans words; math via MathJax)
   stext(ctx,'total reflection', cx, cy-Rp-16, 11, cssv('--ink3'),'center',false);
   stext(ctx,'matched', cx+6, cy+13, 10.5, cssv('--ink3'),'left',false);
-  if(state.qw) stext(ctx,'through the λ/4 transformer', 12, 14, 11.5, cssv('--load'),'left',true);
+  if(state.qw && state.Z1){
+    stext(ctx,'through the λ/4 transformer — Z1 = '+state.Z1.toFixed(1)+' Ω, designed for the '
+      +state.qwR+' Ω load', 12, h-30, 11.5, cssv('--load'),'left',true);
+    stext(ctx,'move the load and the match degrades; re-toggle to re-design', 12, h-14, 10.5, cssv('--ink3'),'left',false);
+  }
   MJ.draw(ctx,'\\mathrm{Re}\\,\\Gamma', cx+Rp-2, cy-11, 12, cssv('--ink3'),'right');
   MJ.draw(ctx,'\\mathrm{Im}\\,\\Gamma', cx+11, cy-Rp+2, 12, cssv('--ink3'),'left');
   MJ.draw(ctx,'\\mathrm{VSWR}=2', cx, cy+Rp/3+13, 11, cssv('--sll'),'center');
