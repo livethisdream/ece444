@@ -5,182 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Polar gain patterns</title>
 <style>
-  :root {
-    --navy: #004a85;
-    --mid:  #0067b9;
-    --edge: #cddce9;
-    --edge2:#b9d2e5;
-    --bg:   #f5f9fc;
-    --ink:  #15202b;
-    --ink3: #5b6573;
-    --iso:  #6c757d;
-    --dip:  #0067b9;
-    --pat:  #1d7a4d;
-    --horn: #8a5a00;
-    --dish: #b3213a;
-  }
-  html, body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    color: var(--ink);
-    background: #fff;
-  }
-  .app {
-    display: grid;
-    grid-template-columns: 1fr 260px;
-    gap: 16px;
-    padding: 16px;
-    align-items: start;
-  }
-  @media (max-width: 720px) {
-    .app { grid-template-columns: 1fr; }
-  }
-  canvas {
-    display: block;
-    width: 100%;
-    height: auto;
-    background: #fff;
-    border: 1px solid var(--edge);
-    border-radius: 6px;
-  }
-  .panel {
-    font-size: 13.5px;
-    line-height: 1.4;
-  }
-  .panel h2 {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--navy);
-    margin: 0 0 8px;
-  }
-  .panel .antennas {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 16px;
-  }
-  .panel label.ant {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 8px;
-    background: var(--bg);
-    border: 1px solid var(--edge);
-    border-radius: 4px;
-    cursor: pointer;
-    user-select: none;
-  }
-  .panel label.ant:hover {
-    background: #f0f5fa;
-    border-color: var(--edge2);
-  }
-  .panel label.ant input {
-    margin: 0;
-  }
-  .swatch {
-    width: 12px;
-    height: 12px;
-    border-radius: 2px;
-    flex-shrink: 0;
-  }
-  .name {
-    flex: 1;
-    font-weight: 600;
-  }
-  .gain {
-    font-size: 11.5px;
-    color: var(--ink3);
-    font-variant-numeric: tabular-nums;
-  }
-  .slider-block {
-    margin-top: 8px;
-    padding: 8px 10px;
-    background: var(--bg);
-    border: 1px solid var(--edge);
-    border-radius: 4px;
-  }
-  .slider-block label {
-    display: block;
-    font-size: 11.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--ink3);
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .slider-block .val {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--navy);
-    font-variant-numeric: tabular-nums;
-  }
-  .slider-block input[type=range] {
-    width: 100%;
-    margin: 4px 0 0;
-  }
-  .scale-block {
-    margin-top: 16px;
-    padding: 8px 10px;
-    background: var(--bg);
-    border: 1px solid var(--edge);
-    border-radius: 4px;
-  }
-  .scale-block label {
-    display: block;
-    font-size: 11.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--ink3);
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  .scale-block select {
-    width: 100%;
-    font-size: 13px;
-    padding: 3px 6px;
-  }
-  .hint {
-    margin-top: 12px;
-    font-size: 11.5px;
-    color: var(--ink3);
-    line-height: 1.4;
-  }
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --iso:#6c757d; --dip:#0067b9; --pat:#1d7a4d; --horn:#8a5a00; --dish:#b3213a; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:9px 18px; align-items:center;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl label.mixed { text-transform:none; font-size:12.5px; letter-spacing:0; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:34px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:80px; accent-color:var(--mid); }
+  select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2);
+           background:#fff; color:var(--navy); font-weight:600; }
+  .chips { grid-column:1/-1; display:grid; grid-template-columns:repeat(auto-fit,minmax(126px,1fr)); gap:8px; }
+  .chip { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; cursor:pointer;
+          font:600 12px/1.15 Inter,system-ui,sans-serif; padding:6px 8px; border:1px solid var(--edge2);
+          border-radius:6px; background:#fff; color:var(--ink3); }
+  .chip:hover { border-color:var(--mid); }
+  .chip .top { display:flex; align-items:center; gap:6px; white-space:nowrap; }
+  .chip .dot { width:10px; height:10px; border-radius:2px; flex:none; background:var(--c); opacity:0.3; }
+  .chip .g { font-size:11px; font-weight:600; color:var(--ink3); font-variant-numeric:tabular-nums; }
+  .chip[aria-pressed="true"] { color:var(--navy); background:var(--bg); border-color:var(--c); box-shadow:inset 0 0 0 1px var(--c); }
+  .chip[aria-pressed="true"] .dot { opacity:1; }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
+          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
+          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
+  .pill b { font-weight:700; }
+  .pill.dish { background:rgba(179,33,58,0.10); color:var(--dish); border-color:rgba(179,33,58,0.28); }
+  .hint { margin:0; text-align:center; font-size:11.5px; color:var(--ink3); line-height:1.45; }
 </style>
 </head>
 <body>
 <div class="app">
-  <canvas id="plot" width="720" height="720" aria-label="Polar gain plot"></canvas>
-  <div class="panel">
-    <h2>Antennas</h2>
-    <div class="antennas" id="antennas"></div>
+  <canvas id="plot" aria-label="Polar gain plot"></canvas>
 
-    <h2>Dish diameter</h2>
-    <div class="slider-block">
-      <label>D / λ = <span class="val" id="d-lambda-val">10</span></label>
+  <div class="controls">
+    <div class="chips" id="antennas"></div>
+    <div class="ctl">
+      <label class="mixed">Dish D/&#955;</label>
       <input type="range" id="d-lambda" min="2" max="40" step="0.5" value="10">
+      <span class="val" id="d-lambda-val">10</span>
     </div>
-
-    <h2>Scale</h2>
-    <div class="scale-block">
+    <div class="ctl">
       <label>Radial range</label>
       <select id="scale">
         <option value="30">0 to 30 dBi</option>
-        <option value="40" selected>−10 to 30 dBi</option>
-        <option value="50">−20 to 30 dBi</option>
-        <option value="60">−30 to 30 dBi</option>
+        <option value="40" selected>&#8722;10 to 30 dBi</option>
+        <option value="50">&#8722;20 to 30 dBi</option>
+        <option value="60">&#8722;30 to 30 dBi</option>
       </select>
     </div>
-
-    <div class="hint">
-      2D E-plane cut (θ from 0° at top to ±180°). Curves are normalized to
-      each antenna's own peak, then shifted by peak gain in dBi — so
-      relative sidelobe and beamwidth features are preserved and antennas
-      with more peak gain sit farther out.
-    </div>
   </div>
+
+  <div class="pills">
+    <span class="pill dish">dish gain = <b id="p-dish">—</b></span>
+    <span class="pill dish">dish HPBW = <b id="p-hpbw">—</b></span>
+    <span class="pill">outer ring = <b id="p-outer">—</b></span>
+    <span class="pill">centre = <b id="p-floor">—</b></span>
+    <span class="pill">curves shown = <b id="p-n">—</b></span>
+  </div>
+
+  <p class="hint">2D E-plane cut (&#952; from 0&#176; at top to &#177;180&#176;). Each curve keeps its own shape and sits at its own peak gain in dBi,
+  so beamwidths and sidelobes compare directly.</p>
 </div>
 
 <script>
@@ -279,39 +170,43 @@ const state = {
 };
 
 const OUTER_DBI = 30;   // outer ring always represents +30 dBi
+const U_HALF = 1.3915576;   // sinc^2 falls to one half at this argument
 
-// -------- Build antenna toggle list ------------------------------------
+// -------- Build antenna toggle chips ------------------------------------
 const antennasDiv = document.getElementById('antennas');
 for (const a of ANTENNAS) {
-  const label = document.createElement('label');
-  label.className = 'ant';
+  const btn = document.createElement('button');
+  btn.className = 'chip';
+  btn.type = 'button';
+  btn.dataset.key = a.key;
+  btn.style.setProperty('--c', a.color);
+  btn.setAttribute('aria-pressed', state.active.has(a.key) ? 'true' : 'false');
 
-  const cb = document.createElement('input');
-  cb.type = 'checkbox';
-  cb.dataset.key = a.key;
-  cb.checked = state.active.has(a.key);
-  cb.addEventListener('change', () => {
-    if (cb.checked) state.active.add(a.key);
-    else state.active.delete(a.key);
-    draw();
-  });
-
-  const sw = document.createElement('span');
-  sw.className = 'swatch';
-  sw.style.background = a.color;
-  if (a.dashed) sw.style.background = `repeating-linear-gradient(90deg, ${a.color} 0 3px, transparent 3px 6px)`;
+  const dot = document.createElement('span');
+  dot.className = 'dot';
+  if (a.dashed) dot.style.background = `repeating-linear-gradient(90deg, ${a.color} 0 3px, transparent 3px 6px)`;
 
   const name = document.createElement('span');
   name.className = 'name';
   name.textContent = a.name;
 
+  const top = document.createElement('span');
+  top.className = 'top';
+  top.append(dot, name);
+
   const gain = document.createElement('span');
-  gain.className = 'gain';
+  gain.className = 'g';
   gain.dataset.key = a.key;
   gain.textContent = gainLabel(a);
 
-  label.append(cb, sw, name, gain);
-  antennasDiv.append(label);
+  btn.append(top, gain);
+  btn.addEventListener('click', () => {
+    if (state.active.has(a.key)) state.active.delete(a.key);
+    else state.active.add(a.key);
+    btn.setAttribute('aria-pressed', state.active.has(a.key) ? 'true' : 'false');
+    draw();
+  });
+  antennasDiv.append(btn);
 }
 
 function gainLabel(a) {
@@ -324,7 +219,7 @@ function gainLabel(a) {
 }
 
 function refreshGainLabels() {
-  document.querySelectorAll('.gain').forEach(el => {
+  document.querySelectorAll('.chip .g').forEach(el => {
     const a = ANTENNAS.find(x => x.key === el.dataset.key);
     if (a) el.textContent = gainLabel(a);
   });
@@ -353,10 +248,11 @@ const ctx    = canvas.getContext('2d');
 function resizeCanvas() {
   const rect = canvas.getBoundingClientRect();
   const dpr  = window.devicePixelRatio || 1;
-  const size = Math.max(320, Math.min(rect.width, 720));
-  canvas.width  = size * dpr;
-  canvas.height = size * dpr;
-  canvas.style.height = `${size}px`;
+  const w = Math.max(320, rect.width);
+  const h = Math.max(300, Math.min(w * 0.62, 420));
+  canvas.width  = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.height = `${h}px`;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   draw();
 }
@@ -450,6 +346,37 @@ function draw() {
     ctx.stroke();
     ctx.setLineDash([]);
   }
+
+  // ---- legend, parked in the empty left margin of the square plot ----
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  let ly = 22;
+  for (const a of ANTENNAS) {
+    if (!state.active.has(a.key)) continue;
+    ctx.strokeStyle = a.color; ctx.lineWidth = 2.5;
+    ctx.setLineDash(a.dashed ? [4, 4] : []);
+    ctx.beginPath(); ctx.moveTo(14, ly); ctx.lineTo(34, ly); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#3b4651'; ctx.font = '700 11.5px Inter, sans-serif';
+    ctx.fillText(a.name, 40, ly);
+    ctx.fillStyle = '#5b6573'; ctx.font = '11px Inter, sans-serif';
+    ctx.fillText(gainLabel(a), 40, ly + 14);
+    ly += 34;
+  }
+
+  updatePills();
+}
+
+function updatePills() {
+  const D = state.dLambda;
+  const dishDbi = 10 * Math.log10(0.55 * Math.pow(Math.PI * D, 2));
+  // half-power point of the sinc^2 aperture pattern: sin(theta) = 1.3916 / (pi D)
+  const s = U_HALF / (Math.PI * D);
+  const hpbw = (s < 1) ? 2 * Math.asin(s) * 180 / Math.PI : 180;
+  document.getElementById('p-dish').textContent  = `${dishDbi.toFixed(1)} dBi`;
+  document.getElementById('p-hpbw').textContent  = `${hpbw.toFixed(2)}°`;
+  document.getElementById('p-outer').textContent = `${OUTER_DBI} dBi`;
+  document.getElementById('p-floor').textContent = `${(OUTER_DBI - state.scaleDb).toFixed(0)} dBi`;
+  document.getElementById('p-n').textContent     = `${state.active.size} of ${ANTENNAS.length}`;
 }
 
 resizeCanvas();
