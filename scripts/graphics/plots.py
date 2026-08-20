@@ -177,7 +177,7 @@ def plf_cos2() -> None:
     fig, ax = plt.subplots(figsize=(5.8, 3.8))
     ax.plot(th, plf, color=NAVY, lw=2.6)
     ax.set_xlim(0, 90); ax.set_ylim(0, 1.08)
-    ax.set_xlabel("Tilt between the two antennas  θ  (deg)")
+    ax.set_xlabel("Tilt between the two antennas  ψ  (deg)")
     ax.set_ylabel("PLF")
     ax.set_xticks(range(0, 91, 15))
     ax.grid(color=RULE, linewidth=0.8)
@@ -203,7 +203,7 @@ def plf_cos2() -> None:
              color=RED, lw=3.2, solid_capstyle="round")
     a = np.linspace(0, tilt, 60)
     ins.plot(0.45 * np.cos(a), 0.45 * np.sin(a), color=GREY, lw=1.4)
-    ins.text(0.62 * np.cos(tilt / 2), 0.62 * np.sin(tilt / 2), "θ",
+    ins.text(0.62 * np.cos(tilt / 2), 0.62 * np.sin(tilt / 2), "ψ",
              color=GREY, fontsize=13, fontweight="bold", ha="center", va="center")
     ins.set_xlim(-1.25, 1.25); ins.set_ylim(-1.05, 1.05)
     ins.set_aspect("equal"); ins.set_xticks([]); ins.set_yticks([])
