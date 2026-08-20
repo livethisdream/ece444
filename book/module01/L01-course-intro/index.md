@@ -109,9 +109,21 @@ See the [syllabus](../../syllabus.md) for the full schedule and both project des
 
 ## Show & tell - real antennas + SDR
 
-_Bring in a set of physical antennas (dipole, monopole, patch, horn, Yagi, small array) and demonstrate reception with an SDR (RTL-SDR / HackRF / Phaser) tuned to a live signal. Discuss what students see on the spectrum as antennas are swapped._
+Seven shapes cover most of what the Air Force flies, drives, and parks on a roof. Learn to name them on sight, and to say in one sentence why each one looks the way it does — the geometry *is* the specification.
 
-_Hardware checklist:_ `_TBD_`
+<img src="../../viz/img/L01-antenna-gallery.svg" alt="Seven common antenna types" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+
+- **Half-wave dipole** — a resonant wire, fed at the center. The reference workhorse: doughnut pattern, 2.15 dBi, and the antenna every other gain number is quietly compared against.
+- **Monopole** — half a dipole standing on a ground plane, which mirrors the missing half. Half the height for the same job, which is why it is the whip on vehicles and handhelds.
+- **Patch** — a printed resonant cavity, a metal rectangle over a grounded substrate. Flat and conformal, so it rides the skin of an aircraft or a GPS puck: GPS, telemetry, and the elements of most planar arrays.
+- **Horn** — a flared waveguide that eases a guided wave into free space. Clean, predictable pattern, so it serves as the gain standard on the range and as the feed for dishes and reflectors.
+- **Yagi** — one driven element plus a parasitic chain of reflector and directors, each re-radiating with the phase that reinforces one direction. Cheap point-to-point gain along the boom.
+- **Spiral** — a self-scaling geometry, where each frequency radiates from the part of the curve that happens to be resonant. Extremely wideband and circularly polarized, which is why it shows up on EW and wideband sensing payloads.
+- **Parabolic dish** — optics done in metal: a reflector focuses a whole aperture onto a small feed. The highest gain per dollar, and the reason SATCOM and long-range radar look the way they do.
+
+_Activity:_ pass the hardware around, then demonstrate reception with an SDR (RTL-SDR / HackRF / Phaser) tuned to a live signal. Swap antennas on the same signal and discuss what changes on the spectrum display.
+
+_Hardware checklist:_ half-wave dipole (VHF, telescoping) · monopole whip with ground plane · patch (GPS or 2.4 GHz) · pyramidal horn · VHF/UHF Yagi · spiral or log-periodic wideband element · small parabolic dish or reflector, plus an SDR with a laptop and display cable.
 
 ## Demo - acoustic beam pattern
 
@@ -119,6 +131,13 @@ _Live demonstration of a small speaker array driven by a multi-channel audio int
 
 See the [acoustic antenna simulator concept](../../materials.md) for the build plan.
 
-## Preparing for L2
+## Practice
 
-Read the assigned sections on **basic antenna properties** before the next class — we'll trace the physics chain from Maxwell's equations to the plane wave, then define the headline parameters: radiation intensity, directivity, gain, effective aperture, and beamwidth.
+- <a href="../../practice/ECE444_L01_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a href="../../practice/ECE444_L01_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+
+## Where this is going
+
+Lesson 2 turns today's plain-language description into physics. We trace the chain from Maxwell's equations to the plane wave, then define the headline parameters every datasheet quotes: radiation intensity, directivity, gain, effective aperture, and beamwidth. Read the assigned sections on **basic antenna properties** before the next class.
+
+Those parameters are the vocabulary for everything that follows. They are what you will measure in Module 2, what pattern multiplication manipulates when we build arrays in Module 3, and what the radar range equation consumes in Module 4. Get comfortable with them now and the rest of the course is bookkeeping on top of ideas you already own.
