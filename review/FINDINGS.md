@@ -1,5 +1,15 @@
 # Module 1 Review — Findings
 
+> **Disposition (2026-08-20):** executed on `main` per Neil's decisions.
+> Exceptions: F-11 rejected (no change); F-13 boxes only, nothing cut;
+> F-14/F-27/F-54 deferred to the project ToDo; F-17/F-18 done minimally as
+> directed; F-22 REVERSED — η_rad kept course-wide with `\text{}` subscripts
+> (spec updated; M2 branch needs the sweep at merge); F-24 done excluding
+> polarization-playground; F-67 skipped; F-70 moot (TikZ sources exist under
+> `scripts/circuits/`); F-82 skipped. Everything else applied. All six decks
+> render-verified offline (zero raw $$, zero overtall slides); all 12
+> practice PDFs rebuilt with real macros, zero errors/overfull.
+
 **Subject:** Module 1 (L01–L06) as of `main` @ `2d299b2` (lesson pages, decks, figures, widgets, practice sets L02/L03/L04/L06).
 **Standard:** `COURSE_SPEC.md` as the written rubric, with **Module 2 as built** (`claude/module-2-antenna-radar-jhh1mq` @ `4bec70b`) authoritative where the spec is silent. Note: the spec and finished Module 2 are **not on `main`** — they exist only on that unmerged branch.
 **Method:** Five independent single-lens reviewers (physics/math, pedagogy, consistency-vs-M2, problems/solutions, graphics/decks), each Opus in a read-only isolated worktree, capped at 25 ranked findings; a separate mechanical pass (LaTeX compile with real `latex-tools` macros, full `jupyter-book build --all`, path/orphan/grep checks). 111 raw findings were deduplicated and adjudicated to the list below; every blocker was verified at its exact location before inclusion. No lesson file was modified. The graphics lens could not read the spec file from its sandbox and calibrated against the M2 figure/widget inventory instead.

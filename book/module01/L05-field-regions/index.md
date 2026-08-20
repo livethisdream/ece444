@@ -303,7 +303,7 @@ exactly as $r$ crosses $2D^2/\lambda$, and that doubling $D$ pushes it four time
 farther out — the $D^2$ in the formula, on screen.
 
 <iframe src="../../viz/field-regions.html"
-        width="100%" height="430"
+        width="100%" height="600"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Field-region explorer">

@@ -233,7 +233,7 @@ handedness. The blue and red shadows on the back walls are the
 component sinusoids $E_{x}(z, t)$ and $E_{y}(z, t)$.
 
 <iframe src="../../viz/cp-helix.html"
-        width="100%" height="500"
+        width="100%" height="515"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Circular polarization helix">
