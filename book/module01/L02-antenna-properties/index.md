@@ -19,6 +19,17 @@
   <li>I can apply the Friis transmission equation — with EIRP and free-space path loss — to predict the received power in a link.</li>
 </ol>
 
+Lesson 1 called the antenna a **transducer**: the device that hands a guided
+wave off to free space and takes it back again. That is the right picture, but
+it is not yet a number. Today we build the vocabulary that turns the picture
+into engineering — power density, radiation intensity, directivity, gain,
+efficiency, beamwidth, and effective aperture — and we walk the physics chain
+from Maxwell's equations down to the plane wave that makes those definitions
+legal in the first place. Then we spend the vocabulary: reciprocity ties the
+transmit side to the receive side, and the Friis equation turns two antennas,
+a frequency, and a range into a received power in dBm. By the end of the lesson
+you can close a link budget on the back of an envelope.
+
 ## Part 1: From Maxwell to a wave
 
 Every antenna analysis in this course starts from Maxwell's equations.
@@ -51,7 +62,8 @@ propagation.
 
 On a two-conductor transmission line, integrating Maxwell over the
 cross-section collapses the fields onto voltage $v(z,t)$ and current
-$i(z,t)$:
+$i(z,t)$, with the geometry surviving only as a per-unit-length inductance
+$L$ [H/m] and a per-unit-length capacitance $C$ [F/m]:
 
 $$
 \frac{\partial v}{\partial z} = -L \frac{\partial i}{\partial t}
@@ -194,11 +206,9 @@ Because the far-field amplitude falls as $1/r$, this power density falls
 as $1/r^{2}$ — the inverse-square law. This $S_{\text{rad}}$ is exactly
 the quantity that appears in the radiation-intensity definition next.
 
-<p style="text-align:center;">
 <img src="../../viz/img/L02-poynting-triad.svg"
      alt="Orthogonal E, H, and Poynting vector S of a plane wave"
-     style="max-width:100%; width:640px;">
-</p>
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
 ### Radiation intensity
 
@@ -262,6 +272,12 @@ D \approx \frac{4 \pi}{\theta_{1} \theta_{2}}
 D \approx \frac{41{,}253}{\theta_{1}^{\circ} \theta_{2}^{\circ}}.
 $$
 
+That 41,253 is the **lossless geometric bound** — it assumes every watt lands
+inside the main beam. Real horns and dishes leak into sidelobes and spill past
+the reflector, so in practice you substitute a constant of 26,000 to 32,400,
+which is the same estimate docked the 1 to 2 dB that the sidelobes and
+spillover actually cost.
+
 ### Gain and efficiency
 
 Gain is directivity with losses folded in:
@@ -294,34 +310,46 @@ $G = \eta_{\text{rad}} D$ → realized gain** in dBi.
 
 ### $\Gamma$, VSWR, and Power Reflected
 
-Recall:
+Recall the transmission-line result you already own.
 
-$\Gamma = \frac{V^-}{V^+} \longrightarrow$ reflection coefficient
+```{admonition} Remember this from intro EM?
+:class: note
+A load that does not equal the line's characteristic impedance sends part of
+the incident wave back, and the reflected-to-incident voltage ratio at the load
+is the **reflection coefficient**
 
-and
+$$
+\Gamma = \frac{V^-}{V^+} = \frac{Z_L - Z_0}{Z_L + Z_0},
+\qquad
+\text{VSWR} = \frac{V_{\text{max}}}{V_{\text{min}}}
+= \frac{1 + \vert\Gamma\vert}{1 - \vert\Gamma\vert}.
+$$
 
-$\text{VSWR} = \frac{V_{\text{max}}}{V_{\text{min}}} = \frac{ 1 + \vert \Gamma \vert }{1 - \vert\Gamma\vert}$
+Same algebra, new load: in Lesson 4 the $Z_L$ in that formula becomes the
+antenna's own input impedance $Z_{\text{in}}$, which is what makes matching an
+*antenna* problem rather than a circuits problem.
+```
 
-$\vert\Gamma\vert^2 =$ Reflected Power and $1-\vert\Gamma\vert^2$ = Transmitted Power 
+Power splits as fractions of the incident power:
+
+$$
+\frac{P_{\text{refl}}}{P_{\text{inc}}} = \vert\Gamma\vert^{2},
+\qquad
+\frac{P_{\text{acc}}}{P_{\text{inc}}} = 1 - \vert\Gamma\vert^{2}.
+$$
 
 ### Quick Reference $\Gamma$ vs VSWR vs Power
 
-<div style="display:flex; align-items:center; justify-content:center; gap:0.8em; flex-wrap:wrap; margin:0.5em 0;">
-<img src="../../viz/img/vswr_vs_gamma.png"
-     alt="VSWR vs reflection coefficient chart"
-     style="width:270px; max-width:100%; flex:0 0 auto;">
-<table style="flex:0 0 auto; width:max-content !important; display:table !important; font-size:0.76em;">
-<thead>
-<tr><th>VSWR</th><th>|Γ|</th><th>Reflected |Γ|²</th><th>Transmitted 1−|Γ|²</th></tr>
-</thead>
-<tbody>
-<tr><td>1.0:1</td><td>0.00</td><td>0%</td><td>100% — Perfect</td></tr>
-<tr><td>1.5:1</td><td>0.20</td><td>4%</td><td>96% — Good</td></tr>
-<tr><td>2.0:1</td><td>0.33</td><td>11.1%</td><td>88.9% — Acceptable</td></tr>
-<tr><td>3.0:1</td><td>0.50</td><td>25%</td><td>75% — Poor</td></tr>
-</tbody>
-</table>
-</div>
+<img src="../../viz/img/L02-vswr.svg"
+     alt="VSWR plotted against the magnitude of the reflection coefficient"
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+
+| VSWR | $\vert\Gamma\vert$ | $P_{\text{refl}}/P_{\text{inc}}$ | $P_{\text{acc}}/P_{\text{inc}}$ | Verdict |
+| :-- | :-- | :-- | :-- | :-- |
+| 1.0:1 | 0.00 | 0% | 100% | perfect |
+| 1.5:1 | 0.20 | 4% | 96% | good |
+| 2.0:1 | 0.33 | 11.1% | 88.9% | acceptable |
+| 3.0:1 | 0.50 | 25% | 75% | poor |
 
 #### Interactive — the standing wave behind VSWR
 
@@ -423,7 +451,8 @@ reciprocal, so we use it freely.
 Flip the antenna around to *receive*. A passing wave carries power density
 $S_{\text{inc}}$ (W/m²); the antenna delivers some power $P_{\text{rx}}$ to
 its load. The ratio has units of area and is the **effective aperture**
-(also called the effective area):
+(you will hear "capture area" in the wild — avoid it; the course term is
+*effective aperture*):
 
 $$
 A_{e}(\theta, \phi) = \frac{P_{\text{rx}}}{S_{\text{inc}}}
@@ -431,59 +460,60 @@ A_{e}(\theta, \phi) = \frac{P_{\text{rx}}}{S_{\text{inc}}}
 P_{\text{rx}} = S_{\text{inc}} A_{e}.
 $$
 
-<p style="text-align:center;">
 <img src="../../viz/img/L02-effective-area-capture.svg"
      alt="A receiving aperture capturing effective aperture from an incident wavefront"
-     style="max-width:100%; width:640px;">
-</p>
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
-So how big is that capture area — and where does the famous $\lambda^{2}/4\pi$
-come from? We can derive it.
+So how big is that effective aperture — and where does the famous
+$\lambda^{2}/4\pi$ come from? We can derive it.
 
 **1 · The antenna is a receiving circuit.** An incident field $E$ aligned
 with the antenna induces an open-circuit voltage $V_{\text{oc}} = E\ell_e$,
 where $\ell_e$ is the antenna's *effective length*. The antenna then behaves
-like a Thévenin source with internal **radiation resistance** $R_r$; a
-conjugate-**matched** load $R_L = R_r$ draws the maximum available power:
+like a Thévenin source with internal **radiation resistance**
+$R_{\text{rad}}$; a conjugate-**matched** load $R_L = R_{\text{rad}}$ draws
+the maximum available power:
 
 $$
-P_{\text{rx}} = \frac{V_{\text{oc}}^{2}}{8 R_r}
-= \frac{(E\ell_e)^{2}}{8 R_r}.
+P_{\text{rx}} = \frac{V_{\text{oc}}^{2}}{8 R_{\text{rad}}}
+= \frac{(E\ell_e)^{2}}{8 R_{\text{rad}}}.
 $$
 
-<p style="text-align:center;">
 <img src="../../viz/img/L02-recv-circuit.svg"
      alt="Receiving antenna modeled as a Thevenin source feeding a matched load"
-     style="max-width:100%; width:700px;">
-</p>
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
-<small>The $8$ (not $4$) is the time-average of a sinusoid: for a peak
-amplitude $V_{\text{oc}}$ across $R_L = R_r$, the average power is
-$\tfrac{1}{2}(V_{\text{oc}}/2)^{2}/R_r$.</small>
+<small>Where the 8 comes from: at match the load sees $V_{\text{oc}}/2$ across
+it (that is the factor of 4), and time-averaging a sinusoid adds another 2 —
+hence 8.</small>
 
-**2 · Do it for the simplest antenna — a short dipole.** Its effective
-length is just its physical length, $\ell_e = \ell$, and its radiation
-resistance is $R_r = 80\pi^{2}(\ell/\lambda)^{2}$. The incident power density
-is $S = E^{2}/2\eta_{0}$ with $\eta_0 = 120\pi\ \Omega$. Divide, and watch the
-$\ell$'s cancel:
+**2 · Do it for the simplest antenna — an infinitesimal (Hertzian) dipole
+with uniform current.** For that idealized element the effective length is the
+physical length, $\ell_e = \ell$, and the radiation resistance is
+$R_{\text{rad}} = 80\pi^{2}(\ell/\lambda)^{2}$. (A practical center-fed short
+dipole carries a *triangular* current instead, which halves both:
+$\ell_e = \ell/2$ and $R_{\text{rad}} = 20\pi^{2}(\ell/\lambda)^{2}$ — the
+ratio below, and therefore $A_e$, comes out the same.) The incident power
+density is $S = E^{2}/2\eta_{0}$ with $\eta_0 = 120\pi\ \Omega$. Divide, and
+watch the $\ell$'s cancel:
 
 $$
 A_{e} = \frac{P_{\text{rx}}}{S}
-= \frac{\eta_{0}\ell_e^{2}}{4 R_r}
+= \frac{\eta_{0}\ell_e^{2}}{4 R_{\text{rad}}}
 = \frac{120\pi\ell^{2}}{4\cdot 80\pi^{2}(\ell/\lambda)^{2}}
 = \frac{3\lambda^{2}}{8\pi}
 = 1.5\cdot\frac{\lambda^{2}}{4\pi}.
 $$
 
-<p style="text-align:center;">
 <img src="../../viz/img/L02-short-dipole-field.svg"
      alt="Short dipole aligned with the incident E field, inducing an open-circuit voltage"
-     style="max-width:100%; width:600px;">
-</p>
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
 **3 · Recognize the number.** That $1.5$ is exactly the short dipole's
-**directivity** $D$. So $A_e = D\lambda^{2}/4\pi$; folding in ohmic losses
-($G = \eta_{\text{rad}}D$),
+**directivity** $D$ (we derive it from the radiation integral in Lesson 6 —
+borrow it here). So $A_e = D\lambda^{2}/4\pi$; folding in ohmic losses
+($G = \eta_{\text{rad}}D$), and assuming a lossless match with the reactance
+tuned out and the polarization aligned,
 
 $$
 \boxed{A_{e} = \frac{\lambda^{2}}{4 \pi} G.}
@@ -508,27 +538,52 @@ $$
 
 <img src="../../viz/img/L02-effective-aperture.svg" alt="Physical aperture versus effective aperture: A_e = eta_ap times A_phys, with a dish, horn, and small-dipole comparison" style="max-width: 100%; width: 780px; display: block; margin: 1.2em auto;">
 
-**Worked example.** A 1.2 m dish has
-$A_{\text{phys}} = \pi(0.6)^{2} = 1.13\ \text{m}^{2}$; with
+:::{admonition} Worked example — gain and captured power of a 1.2 m dish
+:class: tip
+A 1.2 m dish has $A_{\text{phys}} = \pi(0.6)^{2} = 1.13\ \text{m}^{2}$; with
 $\eta_{\text{ap}} = 0.6$ that is $A_{e} = 0.68\ \text{m}^{2}$. At
 10 GHz ($\lambda = 3\ \text{cm}$) the gain is
 $G = 4\pi A_{e} / \lambda^{2} \approx 9500$, or **39.8 dBi**. A wave of
 density $S_{\text{inc}} = 1\ \mu\text{W/m}^{2}$ then delivers
 $P_{\text{rx}} = S_{\text{inc}} A_{e} \approx 0.68\ \mu\text{W}$.
+:::
 
 **A subtlety worth pinning down.** People often say "effective aperture shrinks
 with frequency," but that is only true if you hold *gain* fixed — then
 $A_{e} = (\lambda^{2}/4\pi)G$ falls as $\lambda^{2}$. For a **fixed
 physical dish**, $A_{e} = \eta_{\text{ap}} A_{\text{phys}}$ is set by
-the metal and does *not* change with frequency; instead the **gain climbs
-as $f^{2}$**, because the same aperture spans many more wavelengths. Both
-statements are the same universal relation read in opposite directions.
+the metal and does *not* change with frequency — to first order: $\eta_{\text{ap}}$
+itself drifts with illumination taper and surface tolerance (the Ruze
+relation), which is why real dishes stop gaining at the top of their band.
+Instead the **gain climbs as $f^{2}$**, because the same aperture spans many
+more wavelengths. Both statements are the same universal relation read in
+opposite directions.
+
+The widget below lets you run that argument both ways. Start in **Physical
+dish** mode and sweep the frequency: the effective aperture sits still while
+the gain climbs about 6 dB per octave. Then switch to **Fixed gain** mode and
+sweep again — now the gain is pinned and the effective aperture collapses as
+$\lambda^{2}$. Same equation, two different things held fixed, and knowing
+which one your problem holds fixed is the whole trick.
+
+<iframe src="../../viz/effective-area.html"
+        width="100%" height="620"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Effective aperture vs gain and frequency">
+</iframe>
 
 ### The Friis transmission equation
 
 Effective area is what a receiver *catches*; gain is what a transmitter
 *concentrates*. Put one at each end of a link and you can predict the received
-power directly. A transmitter feeds $P_t$ into an antenna of gain $G_t$, so at
+power directly.
+
+<img src="../../viz/img/L02-friis-geometry.svg"
+     alt="One-way link geometry: transmitter power spreading over a sphere of radius R and the receive antenna's effective aperture catching its share"
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+
+A transmitter feeds $P_t$ into an antenna of gain $G_t$, so at
 range $R$ the power density on boresight is the isotropic value $P_t/4\pi R^{2}$
 boosted by $G_t$:
 
@@ -545,6 +600,9 @@ $$
 
 — the **Friis transmission equation**, the backbone of every link budget.
 
+- *Valid when:* far field at both ends · polarization matched · both ends
+  conjugate-matched (or use realized gain) · free space, no multipath.
+
 Three things to read off it:
 
 - **$P_t G_t$ is the EIRP** (effective isotropic radiated power): the whole
@@ -556,7 +614,9 @@ Three things to read off it:
 - **Everything is multiplicative**, so in decibels the link budget is just
   addition: $P_r[\text{dBm}] = P_t + G_t + G_r - \text{FSPL}$.
 
-**Example.** A ground station transmits $P_t = 10\ \text{W}$ (40 dBm) at
+:::{admonition} Worked example — a 2.4 GHz satellite uplink budget
+:class: tip
+A ground station transmits $P_t = 10\ \text{W}$ (40 dBm) at
 $2.4\ \text{GHz}$ ($\lambda = 0.125\ \text{m}$) through a $G_t = 20\ \text{dBi}$
 antenna to a satellite $R = 600\ \text{km}$ away with a $G_r = 6\ \text{dBi}$
 antenna:
@@ -571,6 +631,7 @@ P_r \approx 40 + 20 + 6 - 156 = -90\ \text{dBm}
 $$
 
 — about a picowatt, and a perfectly ordinary receive level.
+:::
 
 Friis is the **one-way** link. Send the wave out to a target, let it scatter, and
 collect the echo, and you apply Friis *twice* with the target's radar cross
@@ -578,35 +639,40 @@ section in between — that is the **radar range equation**, built in Module 4.
 
 ## Summary
 
-| Quantity          | Intuition                           |
-| ----------------- | ----------------------------------- |
-| Radiation pattern | In what direction energy goes       |
-| Gain              | How concentrated the energy is      |
-| Directivity       | Gain without losses                 |
-| Polarization      | Orientation of E-field              |
-| Bandwidth         | Range of useful frequencies         |
-| Efficiency        | How much power is actually radiated |
-| Impedance         | How easily power enters antenna     |
-
-
-## Where this shows up next
-
-- **L3 (Polarization and Bandwidth)** — the direction of $\mathbf{E}$
-  and how the parameters we just defined change with frequency.
-- **L4 (Impedance, Feeding, and Baluns)** — the transmission-line
-  side of the antenna terminals: matching, $S_{11}$, VSWR.
-- **L5 (Field Regions)** — where the plane-wave approximation is
-  valid and where it isn't, and what that means for measurement.
-- **L6 (Radiation Integrals)** — deriving the $1/r$ far field from an
-  arbitrary current distribution.
+| Symbol / idea | What it is | Number to remember |
+| :-- | :-- | :-- |
+| $\eta_0$ | Free-space wave impedance, $\vert\mathbf{E}\vert/\vert\mathbf{H}\vert$ in the far field | $377\ \Omega$ |
+| $S_{\text{rad}}$ | Time-average power density in the far field | $\vert\mathbf{E}\vert^{2}/2\eta_0$, falls as $1/r^{2}$ |
+| $U(\theta,\phi)$ | Radiation intensity — power per solid angle, distance-free | $U = r^{2}S_{\text{rad}}$, whole sphere $= 4\pi$ sr |
+| $D(\theta,\phi)$ | Directivity: concentration relative to isotropic, geometry only | $D = 4\pi U/P_{\text{rad}}$; pencil beam $\approx 41{,}253/\theta_1^\circ\theta_2^\circ$ (real: 26,000–32,400) |
+| $G$, $\eta_{\text{rad}}$ | Gain is directivity after ohmic loss | $G = \eta_{\text{rad}}D$, $\eta_{\text{rad}} = P_{\text{rad}}/P_{\text{in}}$ |
+| Realized gain | Gain after mismatch as well | $G_{\text{re}} = (1 - \vert\Gamma\vert^{2})G$; VSWR 2:1 costs 11% |
+| HPBW / SLL / F-B | What you read off a pattern | HPBW at $-3$ dB, FNBW $\approx 2\times$ HPBW |
+| $A_e$ | Effective aperture — the receive-side twin of gain | $A_e = \lambda^{2}G/4\pi$; $A_e = \eta_{\text{ap}}A_{\text{phys}}$, $\eta_{\text{ap}} \approx 0.5$–$0.7$ |
+| Reciprocity | Pattern, gain, and impedance are the same transmitting or receiving | Locks $A_e/G = \lambda^{2}/4\pi$ for every antenna |
+| EIRP, FSPL | The two halves of a link budget in dB | $\text{EIRP} = P_tG_t$; $\text{FSPL} = 20\log_{10}(4\pi R/\lambda)$ |
+| Friis | One-way received power | $P_r = P_tG_tG_r(\lambda/4\pi R)^{2}$; the worked link: $156\ \text{dB}$ loss, $-90\ \text{dBm}$ |
 
 ## Practice
 
 - <a href="../../practice/ECE444_L02_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
 - <a href="../../practice/ECE444_L02_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 
-## Preparing for L3
+## Where this is going
 
-Read the assigned sections on **polarization and bandwidth** before
-class. Come ready to explain what "vertical polarization" means in
-terms of the plane-wave solution we wrote today.
+The rest of Module 1 takes each term you just defined and makes it a real
+engineering quantity. Lesson 3 attaches a direction to $\mathbf{E}$ —
+polarization — and asks how every parameter here drifts with frequency, which
+is bandwidth. Lesson 4 walks into the antenna terminals: input impedance,
+$S_{11}$, and the matching networks that turn the $\Gamma$ and VSWR algebra of
+today into hardware. Lesson 5 asks where the plane-wave picture is even legal,
+which is the $2D^2/\lambda$ far-field boundary and the reason antenna ranges
+are as long as they are. Lesson 6 then goes back and *earns* the results we
+borrowed today, deriving the $1/r$ far field — and the $D = 1.5$ — from an
+arbitrary current distribution.
+
+The link budget is the payoff you will keep reusing. Every array in Module 3
+exists to raise $G_t$ or $G_r$ in that one equation, and every radar problem
+later in the course is Friis applied twice. Before the next class, read the assigned sections on
+**polarization and bandwidth**, and come ready to explain what "vertical
+polarization" means in terms of the plane-wave solution we wrote today.
