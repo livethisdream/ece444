@@ -236,7 +236,7 @@ $$P_\text{rad} = \frac{1}{2}\vert I_m \vert^2 R_r$$
 
 Take Part 3's pattern, square it, and add it up over the sphere. Nothing depends on $\phi$, so azimuth just hands you a $2\pi$:
 
-$$P_\text{rad} = \frac{\eta \vert I_m \vert^2}{4\pi}\int_0^\pi \frac{\cos^2\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta$$
+$$P_\text{rad} = \frac{\eta_0 \vert I_m \vert^2}{4\pi}\int_0^\pi \frac{\cos^2\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta$$
 
 <div class="callout">
 That integral has <strong>no elementary antiderivative</strong>. This is where a <em>number</em> enters the lesson instead of a formula.
@@ -254,8 +254,8 @@ $$\int_0^\pi \frac{\cos^2\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\th
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
 | $C_{in}(2\pi)$ | twice the integral | $2.4376$ |
-| $\eta/4\pi$ | $377/4\pi$ | $29.98 \approx 30$ |
-| $R_r$ | $\left(\eta/4\pi\right) C_{in}(2\pi)$ | $\mathbf{73.1\ \Omega}$ |
+| $\eta_0/4\pi$ | $377/4\pi$ | $29.98 \approx 30$ |
+| $R_r$ | $\left(\eta_0/4\pi\right) C_{in}(2\pi)$ | $\mathbf{73.1\ \Omega}$ |
 
 <div class="callout">
 Referred to the <strong>current maximum</strong> — which at $\lambda/2$ <em>is</em> the feed. That coincidence is the only reason this lands on the input resistance.
@@ -289,9 +289,9 @@ The physical picture: an antenna induces a voltage back along itself, hence indu
 
 The general result contains the wire radius, so **a dipole's reactance normally depends on how thick the wire is**. But every term carrying the radius is multiplied by $\sin(kL)$, and at $kL = \pi$ that factor is **zero**:
 
-$$X = \frac{\eta}{4\pi}Si(2\pi) = 30 \times 1.4182 = 42.5\ \Omega$$
+$$X = \frac{\eta_0}{4\pi}Si(2\pi) = 30 \times 1.4182 = 42.5\ \Omega$$
 
-$$Z_{in} = \frac{\eta}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 73.1 + j42.5\ \Omega$$
+$$Z_{in} = \frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 73.1 + j42.5\ \Omega$$
 
 <div class="callout">
 Radius-independent <strong>only at exactly $\lambda/2$</strong> — which is why 42.5 is quotable at all.

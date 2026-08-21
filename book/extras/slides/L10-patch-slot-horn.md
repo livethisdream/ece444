@@ -214,7 +214,7 @@ This is the antenna you can put on a Mach-2 airframe. That single sentence sells
 
 ## Babinet: what complementarity buys
 
-$$Z_{\text{slot}}\ Z_{\text{dipole}} = \frac{\eta^{2}}{4}$$
+$$Z_{\text{slot}}\ Z_{\text{dipole}} = \frac{\eta_0^{2}}{4}$$
 
 - The **pattern shape** carries over from the dipole.
 - **Impedance is inverted**: a low-impedance dipole becomes a high-impedance slot.
@@ -229,7 +229,7 @@ Emphasize "you already own". They spent L7 on the dipole; Babinet says that work
 
 ## The 485 ohm number
 
-$$\frac{\eta^{2}}{4} = \frac{(377)^2}{4} = 3.55\times10^{4}\ \Omega^2$$
+$$\frac{\eta_0^{2}}{4} = \frac{(377)^2}{4} = 3.55\times10^{4}\ \Omega^2$$
 
 | Complementary dipole | Slot impedance |
 | :-- | :-- |

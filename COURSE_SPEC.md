@@ -298,7 +298,7 @@ Rules:
 | Symbol | Meaning | Notes |
 | :-- | :-- | :-- |
 | $k = 2\pi/\lambda$ | wavenumber | |
-| $\eta \approx 377\ \Omega$ | free-space impedance | |
+| $\eta_0 \approx 377\ \Omega$ | free-space impedance | |
 | $D$, $G$ | directivity, gain | $G = \eta_{cd} D$; dBi when logarithmic |
 | $U(\theta,\phi)$ | radiation intensity | W/sr |
 | $\vert F(\theta,\phi)\vert$ | normalized field pattern | |

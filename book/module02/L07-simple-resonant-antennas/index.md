@@ -291,12 +291,12 @@ $$P_\text{rad} = \frac{1}{2}\vert I_m \vert^2 R_r$$
 So compute $P_\text{rad}$ and you have $R_r$. Start from Part 3's pattern. The
 radiation intensity of the half-wave dipole is
 
-$$U(\theta) = \frac{\eta \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right]^2$$
+$$U(\theta) = \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right]^2$$
 
 and the radiated power is that intensity integrated over the whole sphere.
 Nothing depends on $\phi$, so the azimuth integral simply contributes $2\pi$:
 
-$$P_\text{rad} = \int_0^{2\pi}\int_0^\pi U(\theta) \sin\theta\ d\theta\ d\phi = \frac{\eta \vert I_m \vert^2}{4\pi}\int_0^\pi \frac{\cos^2\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta$$
+$$P_\text{rad} = \int_0^{2\pi}\int_0^\pi U(\theta) \sin\theta\ d\theta\ d\phi = \frac{\eta_0 \vert I_m \vert^2}{4\pi}\int_0^\pi \frac{\cos^2\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta$$
 
 Here the derivation stops being algebra. **That integral has no elementary
 antiderivative.** You cannot write the answer in terms of sines, logs, and
@@ -317,9 +317,9 @@ $$\int_0^\pi \frac{\cos^2\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\t
 Equate the two expressions for $P_\text{rad}$; the $\vert I_m \vert^2$ cancels
 and the antenna's current level drops out, as it must:
 
-$$R_r = \frac{\eta}{4\pi}C_{in}(2\pi) = 29.98 \times 2.4376 = 73.1\ \Omega$$
+$$R_r = \frac{\eta_0}{4\pi}C_{in}(2\pi) = 29.98 \times 2.4376 = 73.1\ \Omega$$
 
-Since $\eta/4\pi = 29.98\ \Omega$, which is $30\ \Omega$ to better than one tenth
+Since $\eta_0/4\pi = 29.98\ \Omega$, which is $30\ \Omega$ to better than one tenth
 of a percent, the result is easy to remember as **30 times 2.4376**.
 
 ### The reactance, and why 42.5 is a clean number
@@ -343,7 +343,7 @@ $$\sin(kL) = \sin\pi = 0.$$
 The wire radius drops straight out, and what survives is a single special
 function:
 
-$$X = \frac{\eta}{4\pi}Si(2\pi) = 29.98 \times 1.4182 = 42.5\ \Omega$$
+$$X = \frac{\eta_0}{4\pi}Si(2\pi) = 29.98 \times 1.4182 = 42.5\ \Omega$$
 
 :::{admonition} Key Point
 :class: key-concept
@@ -357,7 +357,7 @@ except where they cross at $\lambda/2$.
 Put the two halves side by side and the whole impedance is one line, built from
 two tabulated numbers:
 
-$$Z_{in} = \frac{\eta}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 29.98\left(2.4376 + j1.4182\right) = 73.1 + j42.5\ \Omega$$
+$$Z_{in} = \frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 29.98\left(2.4376 + j1.4182\right) = 73.1 + j42.5\ \Omega$$
 
 So read the two parts separately. The $73\ \Omega$ is power leaving and never
 coming back — the whole point of the antenna. The $+j42.5\ \Omega$ is the
@@ -614,7 +614,7 @@ which is a far better way to learn it than a diagram.
 | Half-wave dipole pattern | The general result at $kL/2 = \pi/2$ | $\theta_\text{HP} = 78^\circ$ |
 | Half-wave directivity | From integrating the pattern over the sphere | $D = 1.64 = 2.15\ \text{dBi}$ |
 | Special functions | Tabulated, like $\text{erf}$ — do not integrate them | $C_{in}(2\pi) = 2.4376$, $Si(2\pi) = 1.4182$ |
-| Half-wave impedance | Resistance from the far field, reactance from induced EMF | $\frac{\eta}{4\pi}\left[C_{in}(2\pi) + jSi(2\pi)\right] = 73 + j42.5\ \Omega$ |
+| Half-wave impedance | Resistance from the far field, reactance from induced EMF | $\frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + jSi(2\pi)\right] = 73 + j42.5\ \Omega$ |
 | Resonance | $X_{in} = 0$, reached by trimming | $0.47\lambda$ to $0.48\lambda$, $\approx 70\ \Omega$ |
 | The 5% rule | Resonant length from frequency | $143/f_\text{MHz}$ meters |
 | Longer dipoles | Phase reversals build lobes | Peak $\approx 5.2\ \text{dBi}$ near $1.25\lambda$ |

@@ -160,11 +160,11 @@ airframes, radomes, and anything else that cannot afford a bump.
 
 Complementary structures are linked by **Babinet's principle**, which for antennas takes the form
 
-$$Z_{\text{slot}}\ Z_{\text{dipole}} = \frac{\eta^{2}}{4}$$
+$$Z_{\text{slot}}\ Z_{\text{dipole}} = \frac{\eta_0^{2}}{4}$$
 
 One relation, and every dipole result you already own transfers. Three consequences matter.
 
-**Impedance inverts.** With $\eta = 377\ \Omega$, $\eta^2/4 = 3.55\times10^{4}\ \Omega^2$. A
+**Impedance inverts.** With $\eta_0 = 377\ \Omega$, $\eta_0^2/4 = 3.55\times10^{4}\ \Omega^2$. A
 resonant dipole presents about $73\ \Omega$ real, so its complementary slot presents
 $3.55\times10^{4}/73 \approx 487\ \Omega$ — the number you will see quoted as **about
 485 ohms**. A low-impedance dipole is a high-impedance slot, and feeding one from $50\ \Omega$
@@ -276,7 +276,7 @@ Mach 2?* Slot. *How do I get 20 dBi with a gain I can trust to a few tenths of a
 | $\varepsilon_{\text{eff}}$ | permittivity the wave actually sees (part of it is in air) | between 1 and $\varepsilon_r$ |
 | two-slot model | patch radiates from the two fringing edges, in phase | broadside, 5–8 dBi |
 | patch bandwidth | rises with $h/\lambda_0$, falls with $\varepsilon_r$ | 1–5 %, few % typical |
-| $Z_{\text{slot}} Z_{\text{dipole}} = \eta^2/4$ | Babinet complementarity | resonant slot $\approx 485\ \Omega$ |
+| $Z_{\text{slot}} Z_{\text{dipole}} = \eta_0^2/4$ | Babinet complementarity | resonant slot $\approx 485\ \Omega$ |
 | slot polarization | field runs across the cut, not along it | horizontal slot, vertical polarization |
 | $G = \eta_{ap} 4\pi A/\lambda^2$ | aperture gain | horns $\eta_{ap} \approx 0.5$ |
 | optimum horn | shortest horn whose edge phase error is still tolerable | $\lambda/4$ E-plane, $3\lambda/8$ H-plane |
