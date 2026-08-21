@@ -55,8 +55,8 @@ model on paper.
 		\part What is the largest \emph{odd} segment count this wire will tolerate
 		before it violates the $\Delta > 8a$ rule?
 		\begin{solution}[1.2in]
-		\eq{ \Delta_{min} &= 8a = 3.2\ \text{mm} \\
-		     N_{max} &= \frac{61.2\ \text{mm}}{3.2\ \text{mm}} = 19.1 \rightarrow N = 19 }
+		\eq{ \Delta_{\text{min}} &= 8a = 3.2\ \text{mm} \\
+		     N_{\text{max}} &= \frac{61.2\ \text{mm}}{3.2\ \text{mm}} = 19.1 \rightarrow N = 19 }
 		This is a fat wire: the refinement ceiling sits barely above the
 		segmentation you already chose. If a convergence study demanded 41
 		segments, this model could not supply them --- the answer would be to use
@@ -65,7 +65,7 @@ model on paper.
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$N_{max}$ = \ansbox[1.3in]{$19$}
+		$N_{\text{max}}$ = \ansbox[1.3in]{$19$}
 	\end{minipage}
 
 	\part In one or two sentences, explain why the segment count must be odd.
@@ -106,9 +106,10 @@ $Z_{\text{in}} = 86.9 + j46.2 \ohms$ and a peak gain of 2.17 dBi.
 		\begin{solution}[1.3in]
 		\eq{ \frac{86.9 - 73}{73} &= 0.190 \rightarrow 19.0\% \\
 		     \frac{46.2 - 42.5}{42.5} &= 0.087 \rightarrow 8.7\% }
-		The reactance is close; the resistance is not. Note also that the
-		simulated gain, 2.17 dBi against a predicted 2.15 dBi, is off by
-		1\% --- the pattern quantities agree even though the impedance does not.
+		The reactance agrees closely, while the resistance does not. Note also
+		that the simulated gain of 2.17 dBi differs from the predicted 2.15 dBi
+		by only 1\%, so the pattern quantities agree even though the impedance
+		does not.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -117,8 +118,8 @@ $Z_{\text{in}} = 86.9 + j46.2 \ohms$ and a peak gain of 2.17 dBi.
 		$X_{\text{in}}$ error = \ansbox[1.2in]{$8.7\%$}
 	\end{minipage}
 
-	\part In two or three sentences, account for the resistance difference. Be
-	specific about the mechanism --- ``simulation error'' earns nothing.
+	\part In two or three sentences, account for the resistance difference. Name
+	the mechanism; ``simulation error'' is not an explanation.
 		\begin{solution}[1.3in]
 		The value $73 + j42.5 \ohms$ is the impedance of an assumed sinusoidal
 		current, and a sinusoid resonates when the wire is about $0.486\ \lambda$
@@ -135,7 +136,7 @@ $Z_{\text{in}} = 86.9 + j46.2 \ohms$ and a peak gain of 2.17 dBi.
 		resonant length in millimetres and the percent shortening from
 		$\lambda/2$.
 		\begin{solution}[1.2in]
-		\eq{ L_{res} &= 0.473(122.4\ \text{mm}) = 57.9\ \text{mm} \\
+		\eq{ L_{\text{res}} &= 0.473(122.4\ \text{mm}) = 57.9\ \text{mm} \\
 		     \text{shortening} &= \frac{61.2 - 57.9}{61.2} = 0.054 \rightarrow 5.4\% }
 		Roughly a 5\% trim, which is the standard rule of thumb for bringing a
 		dipole to resonance.
@@ -143,7 +144,7 @@ $Z_{\text{in}} = 86.9 + j46.2 \ohms$ and a peak gain of 2.17 dBi.
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$L_{res}$ = \ansbox[1.2in]{$57.9\ \text{mm}$} \\[10pt]
+		$L_{\text{res}}$ = \ansbox[1.2in]{$57.9\ \text{mm}$} \\[10pt]
 		trim = \ansbox[1.2in]{$5.4\%$}
 	\end{minipage}
 
@@ -192,7 +193,7 @@ at five segment counts:
 		this wire. Which rows of the table violate it?
 		\begin{solution}[1.1in]
 		\eq{ \Delta &= \frac{0.5\ \lambda}{N} > 8a = 0.008\ \lambda \\
-		     N &< \frac{0.5}{0.008} = 62.5 \rightarrow N_{max} = 61 }
+		     N &< \frac{0.5}{0.008} = 62.5 \rightarrow N_{\text{max}} = 61 }
 		The $N = 81$ row breaks the rule --- its segments are only about five
 		radii long --- so it sits outside the range where the standard thin-wire
 		kernel is trustworthy and should not be used as evidence of anything.
@@ -200,7 +201,7 @@ at five segment counts:
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$N_{max}$ = \ansbox[1.2in]{$61$}
+		$N_{\text{max}}$ = \ansbox[1.2in]{$61$}
 	\end{minipage}
 
 	\part Which segment count would you defend for this model, and why? Your
@@ -239,8 +240,8 @@ lossless dipole in free space, NEC reports an average power gain of 1.15.
 		the total radiated power divided by the total input power. For a lossless
 		antenna in free space, every watt delivered to the terminals must leave as
 		radiation, so the average must be 1.000. It is a test because you already
-		know the answer: any deviation is not physics, it is a defect in the
-		model, and it is the cheapest error check available.
+		know the answer, so any deviation is a defect in the model rather than a
+		physical result. It is also the cheapest error check available.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -290,7 +291,7 @@ lossless dipole in free space, NEC reports an average power gain of 1.15.
 		the geometry alone tells you where the current can flow, not how much
 		flows where or with what phase. The method of moments exists precisely to
 		supply that missing current --- it discretizes the wire, enforces
-		$E_{tan} = 0$ on the conductor, and solves a linear system for the segment
+		$E_{\text{tan}} = 0$ on the conductor, and solves a linear system for the segment
 		currents. Only then does it evaluate the same radiation integral you would
 		evaluate by hand, so the geometry sets up the problem and the current
 		answers it.
@@ -319,7 +320,7 @@ lossless dipole in free space, NEC reports an average power gain of 1.15.
 	resonance or add a matching network? Give the trade-off in one or two
 	sentences.
 		\begin{solution}[1.1in]
-		Trim first. Trimming costs nothing, removes the $+j46.9 \ohms$ entirely,
+		Trim the wire first. Trimming costs nothing, removes the $+j46.9 \ohms$ entirely,
 		and leaves about $72 \ohms$ real, which is already a VSWR near 1.4 on a
 		$50 \ohms$ line --- acceptable for most links. A matching network would
 		bring the residual mismatch closer to unity but adds parts, loss, and a

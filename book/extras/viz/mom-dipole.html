@@ -80,18 +80,18 @@
   </div>
 
   <div class="readouts">
-    <div class="ro"><span class="k">segment \(\Delta\)</span><span class="v" id="p-d">&#8212;</span></div>
+    <div class="ro"><span class="k">\(V_{\text{feed}}\)</span><span class="v" id="p-v">1.000 V</span></div>
+    <div class="ro"><span class="k">\(I_{\text{feed}}\)</span><span class="v" id="p-i">&#8212;</span></div>
+    <div class="ro"><span class="k">\(Z_{\text{in}} = V_{\text{feed}}/I_{\text{feed}}\)</span><span class="v" id="p-z">&#8212;</span></div>
     <div class="ro" id="ro-ratio"><span class="k">\(\Delta/a\)</span><span class="v" id="p-ra">&#8212;</span></div>
-    <div class="ro"><span class="k">\(Z_{\text{in}}\)</span><span class="v" id="p-z">&#8212;</span></div>
     <div class="ro" id="ro-drift"><span class="k">drift since \(N/2\)</span><span class="v" id="p-dr">&#8212;</span></div>
-    <div class="ro off" id="ro-ref"><span class="k">sinusoid theory</span><span class="v" id="p-ref">73 + j42.5 &#937;</span></div>
   </div>
 </div>
 
 <script>
 'use strict';
 /* ------------------------------------------------------------------ *
- * Honest method-of-moments solve for a center-fed straight dipole.
+ * Method-of-moments solve for a center-fed straight dipole.
  *
  * Electric-field integral equation in Pocklington form with the thin-wire
  * (reduced) kernel, triangle basis functions on the segment junctions,
@@ -99,7 +99,7 @@
  * same model NEC applies, with simpler basis functions. Lengths are in
  * wavelengths, so k = 2*pi and the wire radius a is a fraction of lambda.
  *
- * Validated three ways before shipping:
+ * Validated three ways:
  *   - the closed-form kernel matches a finite difference of e^{-jkR}/4*pi*R;
  *   - the same matrix evaluated on a sinusoidal trial current reproduces the
  *     induced-EMF answer 73.0 + j42.3 ohms (textbook: 73.1 + j42.5);
@@ -220,7 +220,10 @@ function mom(L, N, a) {
     if (t > 0) { ir += t * I[2 * m]; ii += t * I[2 * m + 1]; }
   }
   const den = ir * ir + ii * ii;
-  const out = { R: -ir / den, X: ii / den, I: I, D: D, NU: NU, z: m => zc(m), L: L, N: N };
+  /* The solve is driven by +1 V, so the physical feed current is -(ir + j ii)
+     and Z = 1/I_feed exactly -- the division the readouts show. */
+  const out = { R: -ir / den, X: ii / den, Ifr: -ir, Ifi: -ii,
+                I: I, D: D, NU: NU, z: m => zc(m), L: L, N: N };
   if (CACHE.size > 400) CACHE.clear();
   CACHE.set(key, out);
   return out;
@@ -228,7 +231,7 @@ function mom(L, N, a) {
 
 /* ------------------------------- state ------------------------------- */
 const LADDER = [5, 7, 9, 11, 13, 15, 19, 23, 27, 33, 41, 51, 61, 71, 81, 91, 101];
-const state = { N: 21, L: 0.50, sol: null, curve: null };
+const state = { N: 21, L: 0.50, sol: null, curve: null, drift: null, driftN: 5 };
 
 function recompute(full) {
   state.sol = mom(state.L, state.N, AWIRE);
@@ -290,8 +293,13 @@ function drawCurrent() {
   }
   ctx.strokeStyle = 'rgba(0,74,133,0.45)'; ctx.lineWidth = 4; ctx.lineCap = 'butt';
   ctx.beginPath(); ctx.moveTo(px(-half), y1 + 5); ctx.lineTo(px(half), y1 + 5); ctx.stroke();
-  ctx.strokeStyle = '#b01e24'; ctx.lineWidth = 2.5;
-  ctx.beginPath(); ctx.moveTo(px(0), y1 + 1); ctx.lineTo(px(0), y1 + 11); ctx.stroke();
+  /* the source segment, drawn as a band one segment wide so it reads as a
+     piece of the wire rather than as a tick mark */
+  ctx.strokeStyle = '#b01e24'; ctx.lineWidth = 7; ctx.lineCap = 'butt';
+  ctx.beginPath();
+  ctx.moveTo(px(-sol.D / 2), y1 + 5); ctx.lineTo(px(sol.D / 2), y1 + 5); ctx.stroke();
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(px(0), y1 - 4); ctx.lineTo(px(0), y1 + 12); ctx.stroke();
 
   /* ideal sinusoid, normalized to its own peak */
   const sinAt = z => Math.abs(Math.sin(K * (half - Math.abs(z))));
@@ -314,9 +322,10 @@ function drawCurrent() {
     const X = px(sol.z(n)), Y = py(am[n] / mmax);
     ctx.beginPath(); ctx.moveTo(X, y1); ctx.lineTo(X, Y); ctx.stroke();
   }
-  ctx.fillStyle = '#004a85';
   for (let n = 0; n < sol.NU; n++) {
-    ctx.beginPath(); ctx.arc(px(sol.z(n)), py(am[n] / mmax), dotR, 0, 2 * Math.PI); ctx.fill();
+    const feed = Math.abs(sol.z(n)) < sol.D * 0.75;   // the pair straddling the source
+    ctx.fillStyle = feed ? '#b01e24' : '#004a85';
+    ctx.beginPath(); ctx.arc(px(sol.z(n)), py(am[n] / mmax), feed ? dotR + 1.3 : dotR, 0, 2 * Math.PI); ctx.fill();
   }
 
   /* legend */
@@ -326,9 +335,13 @@ function drawCurrent() {
   ctx.strokeStyle = '#8a5a00'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
   ctx.beginPath(); ctx.moveTo(lx, ly + 17); ctx.lineTo(lx + 12, ly + 17); ctx.stroke(); ctx.setLineDash([]);
   stext(ctx, 'assumed sinusoid', lx + 18, ly + 17, 12, '#8a5a00', 'left');
-  ctx.strokeStyle = '#b01e24'; ctx.lineWidth = 2.5;
-  ctx.beginPath(); ctx.moveTo(lx + 6, ly + 29); ctx.lineTo(lx + 6, ly + 39); ctx.stroke();
-  stext(ctx, 'source segment', lx + 18, ly + 34, 12, '#b01e24', 'left');
+  ctx.strokeStyle = '#b01e24'; ctx.lineWidth = 7; ctx.lineCap = 'butt';
+  ctx.beginPath(); ctx.moveTo(lx, ly + 34); ctx.lineTo(lx + 12, ly + 34); ctx.stroke();
+  stext(ctx, 'source segment: this current sets the impedance', lx + 18, ly + 34, 12, '#b01e24', 'left');
+  /* segment length as a fraction of a wavelength: symbols first, number after,
+     so no label has to be positioned past a run of drawn text */
+  const dw = MJ.draw(ctx, '\\Delta/\\lambda', lx, ly + 51, 13, '#5b6573', 'left');
+  stext(ctx, '= ' + sol.D.toFixed(4), lx + (dw || 26) + 5, ly + 51, 12, '#5b6573', 'left');
 }
 
 function drawConv() {
@@ -370,6 +383,8 @@ function drawConv() {
       ctx.beginPath(); ctx.moveTo(x0, py(r[0])); ctx.lineTo(x1, py(r[0])); ctx.stroke();
       stext(ctx, r[1], x1 - 4, py(r[0]) - 9, 11.5, '#3f7d34', 'right', true);
     });
+    const rw = MJ.draw(ctx, 'L = 0.5\\lambda', x0 + 8, py(73) - 9, 13, '#3f7d34', 'left');
+    stext(ctx, 'sinusoid theory', x0 + 8 + (rw || 52) + 6, py(73) - 9, 11.5, '#3f7d34', 'left');
     ctx.setLineDash([]);
   }
 
@@ -389,14 +404,22 @@ function drawConv() {
   });
   ctx.strokeStyle = 'rgba(0,74,133,0.35)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
   ctx.beginPath(); ctx.moveTo(px(state.N), y0); ctx.lineTo(px(state.N), y1); ctx.stroke(); ctx.setLineDash([]);
+  /* how far the answer moved when the segment count last doubled: the plateau
+     test, stated in ohms rather than left to the eye */
+  if (state.drift != null) {
+    const side = px(state.N) > (x0 + x1) / 2 ? 'right' : 'left';
+    const dx = side === 'right' ? px(state.N) - 8 : px(state.N) + 8;
+    stext(ctx, 'moved ' + state.drift.toFixed(1) + ' \u03a9 since ' + state.driftN + ' segments',
+          dx, y1 - 12, 11.5, state.drift < 1 ? '#3f7d34' : '#5b6573', side, true);
+  }
 
   const lx = x1 - 118, ly = y0 + 8;
   ctx.strokeStyle = '#004a85'; ctx.lineWidth = 2.2;
   ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + 14, ly); ctx.stroke();
-  MJ.draw(ctx, 'R_{\text{in}}', lx + 20, ly, 14, '#004a85', 'left');
+  MJ.draw(ctx, 'R_{\\text{in}}', lx + 20, ly, 14, '#004a85', 'left');
   ctx.strokeStyle = '#8a5a00';
   ctx.beginPath(); ctx.moveTo(lx, ly + 18); ctx.lineTo(lx + 14, ly + 18); ctx.stroke();
-  MJ.draw(ctx, 'X_{\text{in}}', lx + 20, ly + 18, 14, '#8a5a00', 'left');
+  MJ.draw(ctx, 'X_{\\text{in}}', lx + 20, ly + 18, 14, '#8a5a00', 'left');
 }
 
 function fmtZ(R, X) {
@@ -404,19 +427,25 @@ function fmtZ(R, X) {
 }
 function drawAll() {
   if (!state.sol) recompute(true);
-  drawCurrent(); drawConv();
   const sol = state.sol;
-  document.getElementById('p-d').textContent = sol.D.toFixed(4) + 'λ';
+  /* the same model at half the segment count, so "has it stopped moving?" has
+     a number attached to it */
+  const hN = (state.N >= 11) ? (2 * Math.round(state.N / 4) - 1) : 5;
+  const half = mom(state.L, hN, AWIRE);
+  state.drift = Math.hypot(sol.R - half.R, sol.X - half.X);
+  state.driftN = hN;
+
+  drawCurrent(); drawConv();
+
+  document.getElementById('p-i').textContent =
+    (sol.Ifr * 1000).toFixed(2) + (sol.Ifi >= 0 ? ' + j' : ' − j') +
+    Math.abs(sol.Ifi * 1000).toFixed(2) + ' mA';
+  document.getElementById('p-z').textContent = fmtZ(sol.R, sol.X);
   const ra = sol.D / AWIRE;
   document.getElementById('p-ra').textContent = ra.toFixed(1);
   document.getElementById('ro-ratio').className = ra < 4 ? 'ro warn' : 'ro';
-  document.getElementById('p-z').textContent = fmtZ(sol.R, sol.X);
-  const half = mom(state.L, (state.N >= 11) ? (2 * Math.round(state.N / 4) - 1) : 5, AWIRE);
-  const drift = Math.hypot(sol.R - half.R, sol.X - half.X);
-  document.getElementById('p-dr').textContent = drift.toFixed(1) + ' Ω';
-  document.getElementById('ro-drift').className = drift < 1 ? 'ro ok' : 'ro';
-  const ref = document.getElementById('ro-ref');
-  ref.className = (Math.abs(state.L - 0.5) < 1e-6) ? 'ro ok' : 'ro off';
+  document.getElementById('p-dr').textContent = state.drift.toFixed(1) + ' Ω';
+  document.getElementById('ro-drift').className = state.drift < 1 ? 'ro ok' : 'ro';
 }
 
 /* ------------------------------- wiring ------------------------------- */
