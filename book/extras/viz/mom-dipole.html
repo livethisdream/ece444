@@ -18,14 +18,29 @@
   .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
   .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
   .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.warn { background:rgba(138,90,0,0.12); color:var(--amber); border-color:rgba(138,90,0,0.30); }
-  .pill.ok   { background:rgba(63,125,52,0.12); color:var(--grn);   border-color:rgba(63,125,52,0.30); }
-  .pill.off  { background:#f2f4f7; color:var(--ink3); border-color:#dfe4ea; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(5, minmax(0,1fr)); }
+  @media (max-width:700px) { .readouts { grid-template-columns:minmax(0,1fr); } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.warn { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.warn .v { color:var(--amber); }
+  .ro.ok { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.ok .v { color:var(--grn); }
+  .ro.off { background:#f2f4f7; border-color:#dfe4ea; }
+  .ro.off .v { color:var(--ink3); }
 </style>
 </head>
 <body>
@@ -46,12 +61,12 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill">\(\Delta\) = <b id="p-d">&#8212;</b></span>
-    <span class="pill" id="pill-ratio">\(\Delta/a\) = <b id="p-ra">&#8212;</b></span>
-    <span class="pill">\(Z_{in}\) = <b id="p-z">&#8212;</b></span>
-    <span class="pill" id="pill-drift">moved <b id="p-dr">&#8212;</b> since \(N/2\)</span>
-    <span class="pill off" id="pill-ref">sinusoid theory: <b id="p-ref">73 + j42.5 &#937;</b></span>
+  <div class="readouts">
+    <div class="ro"><span class="k">segment \(\Delta\)</span><span class="v" id="p-d">&#8212;</span></div>
+    <div class="ro" id="ro-ratio"><span class="k">\(\Delta/a\)</span><span class="v" id="p-ra">&#8212;</span></div>
+    <div class="ro"><span class="k">\(Z_{in}\)</span><span class="v" id="p-z">&#8212;</span></div>
+    <div class="ro" id="ro-drift"><span class="k">drift since \(N/2\)</span><span class="v" id="p-dr">&#8212;</span></div>
+    <div class="ro off" id="ro-ref"><span class="k">sinusoid theory</span><span class="v" id="p-ref">73 + j42.5 &#937;</span></div>
   </div>
 </div>
 
@@ -376,14 +391,14 @@ function drawAll() {
   document.getElementById('p-d').textContent = sol.D.toFixed(4) + 'λ';
   const ra = sol.D / AWIRE;
   document.getElementById('p-ra').textContent = ra.toFixed(1);
-  document.getElementById('pill-ratio').className = ra < 4 ? 'pill warn' : 'pill';
+  document.getElementById('ro-ratio').className = ra < 4 ? 'ro warn' : 'ro';
   document.getElementById('p-z').textContent = fmtZ(sol.R, sol.X);
   const half = mom(state.L, (state.N >= 11) ? (2 * Math.round(state.N / 4) - 1) : 5, AWIRE);
   const drift = Math.hypot(sol.R - half.R, sol.X - half.X);
   document.getElementById('p-dr').textContent = drift.toFixed(1) + ' Ω';
-  document.getElementById('pill-drift').className = drift < 1 ? 'pill ok' : 'pill';
-  const ref = document.getElementById('pill-ref');
-  ref.className = (Math.abs(state.L - 0.5) < 1e-6) ? 'pill ok' : 'pill off';
+  document.getElementById('ro-drift').className = drift < 1 ? 'ro ok' : 'ro';
+  const ref = document.getElementById('ro-ref');
+  ref.className = (Math.abs(state.L - 0.5) < 1e-6) ? 'ro ok' : 'ro off';
 }
 
 /* ------------------------------- wiring ------------------------------- */

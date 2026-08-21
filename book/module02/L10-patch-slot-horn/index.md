@@ -137,7 +137,7 @@ the bandwidth come back. The patterns underneath are the two-slot model; note th
 moves the beam off broadside, because nothing can.
 
 <iframe src="../../viz/patch-designer.html"
-        width="100%" height="892"
+        width="100%" height="923"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Rectangular patch designer: substrate versus patch size, bandwidth, and the two-slot pattern">

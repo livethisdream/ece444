@@ -19,14 +19,29 @@
   .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
   .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
   select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.pk { background:rgba(63,125,52,0.12); color:var(--grn); border-color:rgba(63,125,52,0.30); }
-  .pill.pw { background:rgba(138,90,0,0.12); color:var(--amber); border-color:rgba(138,90,0,0.30); }
-  .pill.pw.bad { background:rgba(176,30,36,0.12); color:var(--red); border-color:rgba(176,30,36,0.30); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(3, minmax(0,1fr)); }
+  @media (max-width:600px) { .readouts { grid-template-columns:minmax(0,1fr); } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.pk { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.pk .v { color:var(--grn); }
+  .ro.pw { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.pw .v { color:var(--amber); }
+  .ro.pw.bad { background:rgba(176,30,36,0.09); border-color:rgba(176,30,36,0.28); }
+  .ro.pw.bad .v { color:var(--red); }
 </style>
 </head>
 <body>
@@ -49,10 +64,10 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill pk">peak elevation = <b id="p-peak">&#8212;</b></span>
-    <span class="pill">D = <b id="p-dir">&#8212;</b></span>
-    <span class="pill pw" id="pill-pw">radiated power vs. free space = <b id="p-pw">&#8212;</b></span>
+  <div class="readouts">
+    <div class="ro pk"><span class="k">peak elevation</span><span class="v" id="p-peak">&#8212;</span></div>
+    <div class="ro"><span class="k">directivity \(D\)</span><span class="v" id="p-dir">&#8212;</span></div>
+    <div class="ro pw" id="ro-pw"><span class="k">radiated power vs. free space</span><span class="v" id="p-pw">&#8212;</span></div>
   </div>
 </div>
 
@@ -302,7 +317,7 @@ function readouts(){
   document.getElementById('p-dir').textContent=m.D.toFixed(2)+'  ('+(10*Math.log10(m.D)).toFixed(2)+' dBi)';
   const dbp=10*Math.log10(Math.max(m.prel,1e-9));
   document.getElementById('p-pw').textContent=(dbp>=0?'+':'')+dbp.toFixed(1)+' dB';
-  document.getElementById('pill-pw').classList.toggle('bad', dbp<-3);
+  document.getElementById('ro-pw').classList.toggle('bad', dbp<-3);
 }
 function drawAll(){ sweep(); drawGeo(); drawPat(); readouts(); }
 
