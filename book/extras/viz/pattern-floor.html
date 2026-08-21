@@ -11,7 +11,7 @@
           --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
@@ -200,7 +200,7 @@ function extract(db){
 
 /* ----------------------------- drawing ----------------------------- */
 function draw(){
-  const dpr=window.devicePixelRatio||1, w=cv.width/dpr, h=cv.height/dpr;
+  const dpr=window.devicePixelRatio||1, w=cv.width/(dpr*SCL), h=cv.height/(dpr*SCL);
   ctx.clearRect(0,0,w,h);
   const mL=52, mR=16, mT=26, mB=34;
   const pw=w-mL-mR, ph=h-mT-mB;
@@ -278,12 +278,32 @@ function readouts(){
 function drawAll(){ draw(); readouts(); }
 function remeasure(){ measure(); drawAll(); }
 
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=380;
+let SCL=1;
 function fit(){
   const dpr=window.devicePixelRatio||1;
-  const w=Math.max(380, cv.getBoundingClientRect().width);
+  const wCss=cvWidth(cv);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
   const hh=Math.max(250, Math.min(w*0.42, 340));
-  cv.width=w*dpr; cv.height=hh*dpr; cv.style.height=hh+'px';
-  ctx.setTransform(dpr,0,0,dpr,0,0);
+  setSize(cv,wCss,hh*SCL,dpr);
+  ctx.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();
 }
 window.addEventListener('resize', fit);

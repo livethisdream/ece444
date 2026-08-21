@@ -86,7 +86,7 @@ Nothing here is subtle: a quadratic phase across an aperture is a **defocus**, e
 Slide the range in and watch. The left panel shows the phase error across the aperture against the $22.5^\circ$ tolerance line; the right panel overlays the true far-field pattern (dashed) on what the range actually measures (solid). Notice that the nulls fill and the first sidelobe merges into a shoulder long before the main beam does anything at all — and that everything snaps clean right around $r = 2D^2/\lambda$, where the edge error reads exactly $22.5^\circ$.
 
 <iframe src="../../viz/range-phase-error.html"
-        width="100%" height="657"
+        width="100%" height="621"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Quadratic phase error from a finite range length, and the pattern it produces compared with the true far-field pattern">

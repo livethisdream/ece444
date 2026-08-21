@@ -11,7 +11,7 @@
           --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
@@ -135,12 +135,26 @@ el('sig').addEventListener('input', e => {
 const scene = el('scene'), sctx = scene.getContext('2d');
 const plot = el('plot'), pctx = plot.getContext('2d');
 
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally. And with
+   box-sizing:border-box, style.height sets the OUTER height, so hand the border
+   back or the bitmap is 2px taller than its box. */
+const DESIGN_W = 340;
 function fitOne(cv, ratio, lo, hi) {
-  const dpr = window.devicePixelRatio || 1, rect = cv.getBoundingClientRect();
-  const w = Math.max(340, rect.width);
+  const dpr = window.devicePixelRatio || 1;
+  const wCss = Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
+  // Narrower than the width this drawing was composed for, scale the whole thing
+  // down rather than clamping the bitmap, so labels shrink together and nothing
+  // collides. At or above DESIGN_W the scale is 1 and nothing changes.
+  const s = Math.min(1, wCss / DESIGN_W);
+  const w = wCss / s;
   const h = Math.max(lo, Math.min(w * ratio, hi));
-  cv.width = w * dpr; cv.height = h * dpr; cv.style.height = h + 'px';
-  cv.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+  cv.width = Math.round(wCss * dpr); cv.height = Math.round(h * s * dpr);
+  cv.style.height = (h * s) + 'px';
+  const bh = cv.offsetHeight - cv.clientHeight;
+  if (bh) cv.style.height = (h * s + bh) + 'px';
+  cv.getContext('2d').setTransform(dpr * s, 0, 0, dpr * s, 0, 0);
   return { w, h };
 }
 function fit() { drawAll(); }

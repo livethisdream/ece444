@@ -11,7 +11,7 @@
           --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
@@ -186,7 +186,7 @@ function sweep(){
 
 /* --------------------------------------------------------------- geometry */
 function drawGeo(){
-  const dpr=window.devicePixelRatio||1, w=cvG.width/dpr, h=cvG.height/dpr;
+  const dpr=window.devicePixelRatio||1, w=cvG.width/(dpr*SCL), h=cvG.height/(dpr*SCL);
   const ctx=ctxG; ctx.clearRect(0,0,w,h);
   const gy=Math.round(h*0.50), cx=Math.round(w*0.40);
   const SC=Math.min(gy-46, h-gy-46);            // px per wavelength of height
@@ -263,7 +263,7 @@ function drawGeo(){
 
 /* ---------------------------------------------------------------- pattern */
 function drawPat(){
-  const dpr=window.devicePixelRatio||1, w=cvP.width/dpr, h=cvP.height/dpr;
+  const dpr=window.devicePixelRatio||1, w=cvP.width/(dpr*SCL), h=cvP.height/(dpr*SCL);
   const ctx=ctxP; ctx.clearRect(0,0,w,h);
   const cx=w/2, cy=h-50, R=Math.min(w*0.40, h-84);
 
@@ -336,13 +336,32 @@ function readouts(){
 }
 function drawAll(){ sweep(); drawGeo(); drawPat(); readouts(); }
 
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=380;
+let SCL=1;
 function fit(){
   const dpr=window.devicePixelRatio||1;
-  const w=Math.max(380, cvG.getBoundingClientRect().width);
+  const wCss=cvWidth(cvG);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
   const h1=Math.max(180, Math.min(w*0.26, 220)), h2=Math.max(260, Math.min(w*0.42, 340));
-  cvG.width=w*dpr; cvG.height=h1*dpr; cvG.style.height=h1+'px';
-  cvP.width=w*dpr; cvP.height=h2*dpr; cvP.style.height=h2+'px';
-  ctxG.setTransform(dpr,0,0,dpr,0,0); ctxP.setTransform(dpr,0,0,dpr,0,0);
+  setSize(cvG,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
+  ctxG.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();
 }
 window.addEventListener('resize', fit);
