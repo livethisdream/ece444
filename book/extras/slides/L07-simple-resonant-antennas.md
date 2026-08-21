@@ -113,20 +113,58 @@ Build it on the board: open-circuited two-wire line, current zero at the open en
 
 ---
 
-## The pattern, straight from L6's integral
+## Step 1: set up the radiation integral
 
-L6's recipe on a thin wire along $z$: assume the current, transform it, read the pattern. The current is **even** in $z'$, so the integral folds onto one arm and then integrates on sight.
+L6's radiation vector, for a thin wire on $z$ where $\hat{\mathbf r}\cdot\mathbf{r}' = z'\cos\theta$:
+
+$$N_z(\theta) = \int_{-L/2}^{L/2} I(z')\ e^{+jkz'\cos\theta}\ dz'$$
+
+The current is **even** in $z'$. Pair $z'$ with $-z'$, the two exponentials combine into a cosine, and the integral folds onto one arm:
+
+$$N_z(\theta) = 2 I_m \int_0^{L/2} \sin\left[k\left(\frac{L}{2} - z'\right)\right]\cos(kz'\cos\theta)\ dz'$$
+
+**No approximation yet — just symmetry.**
+
+Note:
+Do this one live on the board — it is the only antenna in the course where the whole machine runs end to end, and seeing it once is what makes L6 stick. Write the radiation vector, then ask them what makes the dot product collapse to z prime cos theta. Draw the pairing of plus z prime with minus z prime and let them tell you the exponentials become a cosine. Emphasize that folding by symmetry is free and that it also kills the imaginary part — students who grind through the full complex integral get the same answer with three times the algebra.
+
+---
+
+## Step 2: evaluate it
+
+Product-to-sum turns the integrand into two plain sines:
+
+$$\sin A \cos B = \frac{1}{2}\left[\sin(A+B) + \sin(A-B)\right]$$
+
+Both integrate on sight. Collecting terms:
 
 $$N_z(\theta) = \frac{2 I_m}{k}\ \frac{\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}}{\sin^2\theta}$$
 
-Projecting a $z$-directed current onto $\theta$ costs one power of $\sin\theta$:
+<div class="callout">
+A first-year integral. The hard part was choosing the current, not doing the calculus.
+</div>
 
-$$\vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}}{\sin\theta} \right\vert \qquad \text{and at } L = \frac{\lambda}{2}, \quad \vert F(\theta) \vert = \frac{\cos\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}$$
+Note:
+Put the identity up, integrate the two sines in front of them, and evaluate at the limits — it is about four lines and worth every one of them. If the class is following easily, hand them the collecting step and let them find the two cosines themselves. The point to land: the integral is elementary once the current is sinusoidal, and that is exactly why the sinusoidal assumption is worth making.
+
+---
+
+## Step 3: project and normalize
+
+A $z$-directed current radiates only a $\theta$ component. L6's projection costs one power of $\sin\theta$:
+
+$$N_\theta = -N_z \sin\theta \quad \Longrightarrow \quad \vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}}{\sin\theta} \right\vert$$
+
+Bars, because the bracket flips sign past $L = \lambda$. Proportional, because normalizing divides by the peak — at broadside that is $1 - \cos\frac{kL}{2}$, which is **1** at $\lambda/2$ but **2** at $1\lambda$.
+
+At $L = \lambda/2$ the second cosine vanishes and the peak is exactly 1, so this one is already normalized:
+
+$$\vert F(\theta) \vert = \frac{\cos\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}$$
 
 **One integral, every length — the multi-lobe patterns later come from this same formula.**
 
 Note:
-Do not re-derive on the board; L6 did the integral and this slide spends it. If asked, the three moves are: fold by symmetry (free, and it kills the imaginary part), product-to-sum, integrate. Two warnings worth saying out loud. The bars are there because the bracket flips sign past a full wavelength. Proportional, because normalizing divides by the broadside peak, which is one at half a wavelength but two at a full wavelength — so only the half-wave case comes out already normalized. Nothing here was half-wave specific until the last line.
+Finish the derivation here, then stop and point at what is on the board. This is the payoff for the whole radiation-integral thread that started in L6: assumed a current, transformed it, projected it, read the pattern. Say the two warnings out loud as you write them — the bars because the bracket flips sign past a full wavelength, the proportionality because normalizing divides by the broadside peak and that peak is one at half a wavelength but two at a full wavelength, so only the half-wave case comes out already normalized. Then the closing line: nothing about any of this was half-wave specific until the last step.
 
 ---
 
@@ -224,17 +262,27 @@ Induced EMF means integrating the antenna's own field back against its own curre
 
 ## Trim it short
 
-<div class="two-col fig-wide"><div class="col-text">
-<p>The wire is a <strong>resonant standing-wave structure</strong>, and its ends are not electrically where they look.</p>
-<p><strong>End effect</strong> — capacitance past the tips stores charge beyond the physical end.</p>
-<p><strong>Wire thickness</strong> — a fatter element has more of it, and shortens further.</p>
-<p><strong>Resonance lands at $0.47\lambda$ to $0.48\lambda$.</strong></p>
-</div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L07-dipole-resonance.svg" style="max-width:620px; margin:0 auto;"></div>
-</div></div>
+<div class="fig" data-inline-svg="./fig/L07-dipole-resonance.svg" style="max-width:620px; margin:0 auto; display:block;"></div>
+
+These are **computed data, not a sketch**: the induced-EMF expression evaluated at hundreds of lengths, for three wire radii, and plotted.
 
 Note:
-Both effects slow the wave on the wire relative to free space, so it sees more wire than there is. Say plainly how the figure was made — sweep the length, sweep the wire radius, evaluate the induced-EMF impedance at every combination, plot the answers. Nothing here is drawn by hand. Then watch the zero crossing move left as the element gets fatter: that is the whole story of why a real dipole is never exactly half a wavelength. All three curves meet at exactly half a wavelength, which is the sine of pi being zero from the previous slide. An insulated wire shortens further still, because the dielectric slows the wave; hams call the whole thing the velocity factor.
+Say plainly how the figure was made — sweep the length, sweep the wire radius, evaluate the induced-EMF impedance at every combination, plot the answers. Nothing here is drawn by hand. Then watch the zero crossing move left as the element gets fatter: that is the whole story of why a real dipole is never exactly half a wavelength. Note also that all three curves meet at exactly half a wavelength, which is the sine of pi being zero from the previous slide. Ask them why the crossing moves before you advance — the next slide is the answer.
+
+---
+
+## Why shorter, physically
+
+The wire is a **resonant standing-wave structure**, and its ends are not electrically where they look.
+
+- **End effect** — capacitance between the tips and to whatever is nearby stores charge past the physical end, so the wave "sees" more wire than there is.
+- **Wire thickness** — a fatter element has more end capacitance and a lower characteristic impedance, so it shortens further.
+- Both effects **slow the wave** on the wire relative to free space.
+
+**Practical resonance lands at $0.47\lambda$ to $0.48\lambda$; a fat element goes below that.**
+
+Note:
+This is the physical answer to the previous figure. An insulated wire shortens further still, because the dielectric slows the wave; hams call the whole thing the velocity factor. Tie it back to L4: the wire behaves like a slightly slow transmission line, and everything you know about electrical length applies.
 
 ---
 
