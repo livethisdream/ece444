@@ -26,7 +26,7 @@ Fall 2026 · Dr. Neil Rogers
 - **L7** predicted a half-wave dipole at $73 + j42.5\ \Omega$, resonant slightly short of $\lambda/2$.
 - **L12** set up measurement theory from the *radiated* side: ranges, far field, pattern cuts.
 
-**Today is the other terminal. One port, one cable, one number that tells you whether the antenna will accept power at all.**
+**Today you work the other terminal: one port, one cable, and one number that tells you whether the antenna will accept power.**
 
 Note:
 Frame the two labs as a pair: L13 is what happens at the connector, L14 is what happens in the air. Remind them the L7 prediction is about to be checked against hardware.
@@ -56,7 +56,7 @@ Budget: about 20 minutes of briefing, then everyone on hardware. The perturbatio
 <div class="fig" data-inline-svg="./fig/L13-vna-block.svg" style="max-width:830px; margin:0.2em auto 0;"></div>
 
 Note:
-Stress "ratioed": because both waves ride the same source, source drift cancels in the ratio. That is why a pocket-sized NanoVNA can be trusted at all.
+Stress "ratioed": because both waves ride the same source, source drift cancels in the ratio. That is why a pocket-sized NanoVNA can be trusted for this measurement.
 
 ---
 
@@ -97,7 +97,7 @@ The right column is the -10 dB spec written four ways. Make them say out loud: -
 
 ---
 
-## Raw data is garbage
+## Uncorrected data is not the antenna.
 
 Before calibration the VNA sees your antenna *through* its own hardware:
 
@@ -106,7 +106,7 @@ Before calibration the VNA sees your antenna *through* its own hardware:
 - **Tracking** — the two receiver paths have different gain and phase versus frequency.
 
 <div class="callout">
-Three error terms. So you need <strong>three</strong> known standards.
+Three error terms require <strong>three</strong> known standards.
 </div>
 
 Note:
@@ -129,7 +129,7 @@ Calibration does not make the instrument better. It <strong>teaches it where zer
 </div>
 
 Note:
-That last sentence is the whole slide. It sets up the reference-plane problem on the next slide.
+The last sentence is the point of the slide. It sets up the reference-plane problem on the next slide.
 
 ---
 
@@ -146,7 +146,7 @@ Warn them: port extension is a phase-only fix. It cannot undo loss, and it canno
 
 ---
 
-## How far does a pigtail rotate you?
+## How far does a pigtail rotate the trace?
 
 A wave travels the extra length **twice** — out and back. So the phase error is
 
@@ -155,11 +155,11 @@ $$\Delta\phi = 2\beta \ell = 2\ (360^\circ)\ \frac{\ell}{\lambda_g}, \qquad \lam
 10 cm of RG-58 ($v_f = 0.66$) at 915 MHz: $\lambda_g = 21.6$ cm, so $\ell = 0.46\lambda_g$ and $\Delta\phi = 333^\circ$.
 
 <div class="callout">
-Almost a full turn. $\vert S_{11}\vert$ is untouched, the impedance you read is <strong>nonsense</strong>.
+That is almost a full turn: $\vert S_{11}\vert$ is untouched, but the impedance reading is <strong>meaningless</strong>.
 </div>
 
 Note:
-Point out the trap: the dB plot looks perfect, so students trust the Z readout. Half a guided wavelength repeats the impedance exactly - here that is 990 MHz.
+Point out the trap: the dB plot still looks correct, so the Z readout looks trustworthy. Half a guided wavelength repeats the impedance exactly - here that is 990 MHz.
 
 ---
 
@@ -188,7 +188,7 @@ You met the chart in ECE 343. You do not have to build one today — you have to
 - **The whole trace spins** → your reference plane moved, not your antenna.
 
 Note:
-The last bullet is the diagnostic. If a student's Smith trace looks like a spiral of noodles, ask what is between the cal plane and the antenna.
+The last bullet is the diagnostic. If a student's trace rotates much further than the antenna alone would explain, ask what is between the cal plane and the antenna.
 
 ---
 
@@ -220,14 +220,14 @@ A trace dips to $-19$ dB and crosses $-10$ dB at 878 MHz and 922 MHz.
 | Absolute BW | $922 - 878$ | $44$ MHz |
 | Fractional BW | $44/900$ | $4.9\%$ |
 
-A thin wire dipole lands in the 3–10% range. Fatter conductor, lower $Q$, wider band — the same trade you saw in L3.
+A thin wire dipole lands in the 3–10% range. A fatter conductor lowers $Q$ and widens the band, which is the same trade you saw in L3.
 
 Note:
 If their measured bandwidth is 1%, the antenna is probably not the problem - a resonant feed cable is. Fractional bandwidth is the number to compare across frequencies.
 
 ---
 
-## The honest caveat
+## What $S_{11}$ cannot tell you
 
 <div class="callout">
 A $50\ \Omega$ resistor has $S_{11} \rightarrow -\infty$ dB, VSWR $= 1.00$, and radiates <strong>nothing</strong>.
@@ -236,12 +236,12 @@ A $50\ \Omega$ resistor has $S_{11} \rightarrow -\infty$ dB, VSWR $= 1.00$, and 
 $S_{11}$ measures **mismatch only**. The VNA cannot tell the difference between
 
 - power that left as radiation, and
-- power that died as heat in a lossy conductor, a resistive load, or wet cardboard.
+- power that died as heat in a lossy conductor, a resistive load, or damp packaging material.
 
-Efficiency needs a second measurement — a gain comparison or a Wheeler cap. Not today, and not from one port.
+Efficiency needs a second measurement — a gain comparison or a Wheeler cap. Neither is available today, and neither comes from a one-port measurement.
 
 Note:
-This is the slide that stops "my S11 is -30 dB so my antenna is great." A shorted, lossy, badly built antenna can look superb on a VNA.
+This slide addresses the assumption that a deep S11 implies a good antenna. A lossy or poorly built antenna can measure very well on a VNA.
 
 ---
 
@@ -254,7 +254,7 @@ This is the slide that stops "my S11 is -30 dB so my antenna is great." A shorte
 | Near a wall or monitor | small wiggles in the dip | re-radiated energy returns to the port |
 
 <div class="callout">
-Near-field coupling is the antenna's business. If it changed the reading, it was <strong>inside</strong> the near field.
+Near-field coupling changes the antenna itself. If it changed the reading, it was <strong>inside</strong> the near field.
 </div>
 
 Note:
@@ -287,7 +287,7 @@ Common failure: they cal with the standards, then swap to a different cable. Als
 - A Smith-chart screenshot with the resonance point marked.
 - One paragraph on the perturbation results: what moved, which direction, and why.
 
-**One page. Numbers with units. The paragraph is where the grade lives.**
+**One page, with units on every number. The paragraph carries the largest share of the grade.**
 
 Note:
 Tell them explicitly: a plot with no markers and no units is a screenshot, not a measurement. Due at the start of L15.
@@ -298,7 +298,7 @@ Tell them explicitly: a plot with no markers and no units is a screenshot, not a
 
 <div class="callout">
 <p>The VNA gives you one complex number per frequency, referenced to a plane <strong>you</strong> chose.</p>
-<p>Read it four ways if you like — dB, VSWR, impedance, Smith chart. It still only tells you what came <em>back</em>.</p>
+<p>Read it four ways — dB, VSWR, impedance, Smith chart. It still reports only what came <em>back</em>.</p>
 </div>
 
 Note:
@@ -313,4 +313,4 @@ If they leave with one sentence, make it this one. It sets up the next lab, wher
 - **Midterm project (L20)**: you will design, build, tune, and defend an antenna. Tuning means driving that dip onto your target frequency with the skills from this lab.
 
 Note:
-Sell the project link hard. Every student who can cal, measure, and read a Smith chart will finish the project; the ones who cannot will burn a week.
+Make the project link explicit: calibration and Smith-chart fluency are the rate-limiting skills on the midterm project. This lab is where the cost of a mistake is an afternoon rather than a week.

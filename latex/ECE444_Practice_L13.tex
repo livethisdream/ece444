@@ -270,8 +270,8 @@ pigtail ($v_f = 0.66$) between that connector and the antenna before sweeping.
 		dB plot still looks correct and the resonant frequency still reads correctly.
 		It adds round-trip \emph{phase}, which rotates the entire trace around the
 		Smith chart, so the impedance readout is wrong -- possibly wildly wrong,
-		including the sign of the reactance. That is dangerous precisely because the
-		plot that students trust is the one that still looks fine.
+		including the sign of the reactance. That combination is dangerous because
+		the plot that still looks correct is the one most likely to be trusted.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -284,7 +284,7 @@ pigtail ($v_f = 0.66$) between that connector and the antenna before sweeping.
 			\frac{\ell}{\lambda_g} &= \frac{10}{21.6} = 0.462 \\
 			2\beta\ell &= 2 \lp 360\mydeg \rp \lp 0.462 \rp = 333\mydeg
 		}
-		Nearly a full rotation of the chart.
+		That is nearly a full rotation of the chart.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -304,9 +304,9 @@ pigtail ($v_f = 0.66$) between that connector and the antenna before sweeping.
 		}
 		A half-wavelength line repeats its load impedance, so at $990\ \mhz$ (and
 		multiples of it) the un-de-embedded reading happens to be correct. At every
-		other frequency it is rotated. Getting the right answer at one frequency is
-		luck, not calibration -- fix it with port extension or by calibrating at the
-		antenna connector.
+		other frequency it is rotated. Obtaining the correct answer at that one
+		frequency is a coincidence rather than a calibration; fix it with port extension
+		or by calibrating at the antenna connector.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -346,7 +346,7 @@ number per frequency. This problem is about the questions that number cannot ans
 			L_B &= -10\ \mylog{1 - 0.126} = 0.58\db
 		}
 		Realized gains are $2.0 - 0.01 = 2.0\dbi$ and $5.0 - 0.58 = 4.4\dbi$.
-		\textbf{Antenna B wins by about $2.4\db$}, despite the far uglier $S_{11}$.
+		\textbf{Antenna B wins by about $2.4\db$}, despite its much worse $S_{11}$.
 		Mismatch loss is small until $|S_{11}|$ gets much worse than $-10\db$.
 		\end{solution}
 	\end{minipage}\hfill%
@@ -364,8 +364,8 @@ number per frequency. This problem is about the questions that number cannot ans
 		The resonance shifts \textbf{down} and the dip usually gets \textbf{shallower
 		and broader}. Tissue is a lossy dielectric: placed in the reactive near field
 		it adds capacitive loading, which lowers $f_0$, and it adds loss, which lowers
-		the antenna's $Q$. The input impedance genuinely changed, so the VNA is
-		reporting the truth -- the hand became part of the antenna.
+		the antenna's $Q$. The input impedance changed, so the VNA is
+		reporting a correct measurement -- the hand became part of the antenna.
 		\end{solution}
 
 	\part Your antenna measures $-30\db$ at the design frequency, yet the link will
@@ -374,7 +374,7 @@ number per frequency. This problem is about the questions that number cannot ans
 		\begin{solution}[1.3in]
 		(1) \textbf{Efficiency}: a lossy structure -- corroded joints, a resistive
 		loading element, wet material in the near field -- absorbs the power it
-		accepts, and looks beautifully matched while doing it. (2) \textbf{Pattern or
+		accepts while still presenting a good match. (2) \textbf{Pattern or
 		polarization}: the beam may point somewhere other than the far end of the
 		link, or be cross-polarized to it. Check the first with a gain comparison
 		against a standard-gain antenna on the range (Lesson 14): if the measured gain
