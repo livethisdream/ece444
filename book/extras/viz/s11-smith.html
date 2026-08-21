@@ -21,10 +21,28 @@
   .ctl label { white-space:nowrap; }
   .ctl input[type=range] { width:132px; accent-color:var(--mid); }
   .ctl .val { min-width:66px; font-variant-numeric:tabular-nums; color:var(--navy); font-weight:600; }
+  /* Below 430px the controls bar cannot fit a label, a slider and a value on one
+     line: .ctl's flex basis and the reserved .val column are both wider than the
+     content box, so the bar pushes the document past the viewport and the whole
+     widget scrolls sideways on a phone. Stack each control instead -- label and
+     value share the first line, the input takes the second -- and let every part
+     shrink. Labels keep their natural width, so none of them squeeze. Nothing
+     here applies above 430px: the desktop layout is byte-for-byte unchanged. */
+  @media (max-width:430px) {
+    canvas { max-width:100%; }
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
+  }
   /* Readouts as a row of instruments: equal-width cells on one grid, labels and
      values on shared baselines, edges flush with the canvases above. */
   .readouts { display:grid; gap:8px; margin-top:11px; grid-template-columns:repeat(5, minmax(0,1fr)); }
-  @media (max-width:700px) { .readouts { grid-template-columns:minmax(0,1fr); } }
+  /* The site serves these ~688-760px wide, where five across is too narrow for
+     the widest value; go three-then-one so a cell always fits its number. */
+  @media (max-width:860px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  @media (max-width:460px) { .readouts { grid-template-columns:minmax(0,1fr); } }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:4px; padding:7px 8px 8px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
@@ -74,7 +92,7 @@
     <div class="ro"><span class="k">\(Z\)</span><span class="v" id="pz">&ndash;</span></div>
     <div class="ro"><span class="k">\(\lvert S_{11}\rvert\)</span><span class="v" id="ps">&ndash;</span></div>
     <div class="ro"><span class="k">VSWR</span><span class="v" id="pv">&ndash;</span></div>
-    <div class="ro" id="pbwRo"><span class="k">&minus;10 dB bandwidth</span><span class="v" id="pb">&ndash;</span></div>
+    <div class="ro" id="pbwRo"><span class="k">BW (&minus;10 dB)</span><span class="v" id="pb">&ndash;</span></div>
   </div>
 
   <p class="hint">Drag or hover across either plot to move the marker &mdash; it tracks the same frequency on both.</p>
@@ -332,11 +350,13 @@
     var v = vswrOf(p.m);
     els.pv.textContent = (v > 99 ? '> 99' : v.toFixed(2)) + ' : 1';
     if (state.bw) {
-      els.pb.textContent = state.bw.mhz.toFixed(0) + ' MHz  (' + state.bw.pct.toFixed(1) + '%)';
+      els.pb.textContent = state.bw.mhz.toFixed(0) + ' MHz (' + state.bw.pct.toFixed(1) + '%)';
       els.pbwRo.classList.remove('warn');
+      els.pbwRo.removeAttribute('title');
     } else {
-      els.pb.textContent = 'never reaches −10 dB';
+      els.pb.textContent = 'none';
       els.pbwRo.classList.add('warn');
+      els.pbwRo.title = 'the return loss never reaches −10 dB';
     }
   }
 

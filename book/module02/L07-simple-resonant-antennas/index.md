@@ -259,7 +259,7 @@ slider at $0.50$ and confirm the canonical trio: $78.1^\circ$,
 $2.15\ \text{dBi}$, $73.1\ \Omega$.
 
 <iframe src="../../viz/dipole-explorer.html"
-        width="100%" height="710"
+        width="100%" height="737"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Dipole explorer: current, pattern, beamwidth, directivity and feed-point impedance against dipole length">
@@ -477,7 +477,7 @@ the same antenna lands closer to the center. A match is a property of an
 antenna *and* a line together, not of the antenna alone.
 
 <iframe src="../../viz/dipole-smith.html"
-        width="100%" height="628"
+        width="100%" height="616"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Smith chart showing how a dipole's input impedance moves as its length changes, with constant-VSWR circles">

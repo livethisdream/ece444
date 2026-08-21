@@ -19,11 +19,28 @@
   .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:56px; }
   .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
   select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
+  /* Below 430px the controls bar cannot fit a label, a slider and a value on one
+     line: .ctl's flex basis and the reserved .val column are both wider than the
+     content box, so the bar pushes the document past the viewport and the whole
+     widget scrolls sideways on a phone. Stack each control instead -- label and
+     value share the first line, the input takes the second -- and let every part
+     shrink. Labels keep their natural width, so none of them squeeze. Nothing
+     here applies above 430px: the desktop layout is byte-for-byte unchanged. */
+  @media (max-width:430px) {
+    canvas { max-width:100%; }
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
+  }
   /* Readouts as a row of instruments: equal-width cells on one grid, labels and
      values on shared baselines, edges flush with the canvases above. */
+  /* The values here are compound (measured plus the true figure), so a cell needs
+     ~180px of text room. Drop to two columns, then one, as soon as it stops fitting. */
   .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0,1fr)); }
-  @media (max-width:640px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
-  @media (max-width:420px) { .readouts { grid-template-columns:minmax(0,1fr); } }
+  @media (max-width:900px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width:460px) { .readouts { grid-template-columns:minmax(0,1fr); } }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:4px; padding:7px 8px 8px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
@@ -74,10 +91,10 @@
   </div>
 
   <div class="readouts">
-    <div class="ro hp"><span class="k">measured HPBW (true 6.3&#176;)</span><span class="v" id="p-hp">&#8212;</span></div>
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="p-hp">&#8212;</span></div>
     <div class="ro hp"><span class="k">HPBW error</span><span class="v" id="p-he">&#8212;</span></div>
-    <div class="ro sll"><span class="k">1st sidelobe (true &#8722;13.3 dB)</span><span class="v" id="p-sll">&#8212;</span></div>
-    <div class="ro nul"><span class="k">1st null, true / measured</span><span class="v"><span id="p-nt">&#8212;</span> / <span id="p-nm">&#8212;</span></span></div>
+    <div class="ro sll"><span class="k">1st sidelobe</span><span class="v" id="p-sll">&#8212;</span></div>
+    <div class="ro nul" title="1st null: true / measured"><span class="k">1st null</span><span class="v"><span id="p-nt">&#8212;</span> / <span id="p-nm">&#8212;</span></span></div>
   </div>
 </div>
 
@@ -250,11 +267,11 @@ function draw(){
 const HPTRUE=6.35;
 function readouts(){
   const m=extract(MEAS), t=extract(TRUE);
-  const f1=v=>(v===null?'\u2014':v.toFixed(1));
-  document.getElementById('p-hp').textContent=(m.hp===null?'\u2014':f1(m.hp)+'\u00b0');
+  const f1=v=>(v===null?'\u2014':v.toFixed(1).replace('-','\u2212'));
+  document.getElementById('p-hp').textContent=(m.hp===null?'\u2014':f1(m.hp)+'\u00b0 (true 6.3\u00b0)');
   document.getElementById('p-he').textContent=(m.hp===null?'\u2014':((m.hp-HPTRUE>=0?'+':'\u2212')+Math.abs(m.hp-HPTRUE).toFixed(2)+'\u00b0'));
-  document.getElementById('p-sll').textContent=(m.sll===null?'\u2014':f1(m.sll)+' dB');
-  document.getElementById('p-nt').textContent=(t.nul===null?'\u2014':f1(t.nul)+' dB');
+  document.getElementById('p-sll').textContent=(m.sll===null?'\u2014':f1(m.sll)+' dB (true \u221213.3)');
+  document.getElementById('p-nt').textContent=(t.nul===null?'\u2014':f1(t.nul));
   document.getElementById('p-nm').textContent=(m.nul===null?'\u2014':f1(m.nul)+' dB');
 }
 

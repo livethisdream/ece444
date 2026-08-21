@@ -144,10 +144,10 @@ Your receiver has a noise floor. The measured power at every angle is the true s
 
 Work it out for this lab. Peak at $-35.6\ \text{dBm}$, floor at $-78\ \text{dBm}$ with the source off: your **dynamic range is 42.4 dB**. Any pattern feature within a few dB of $-42.4\ \text{dB}$ relative is not a measurement of the antenna; it is a measurement of your receiver.
 
-The widget below makes the damage concrete. It takes a known pattern — a uniform $8\lambda$ aperture, first sidelobe exactly $-13.3\ \text{dB}$, HPBW $6.3^\circ$ — and "measures" it through a receiver with the dynamic range you choose. Drag the floor from $-45\ \text{dB}$ up toward $-15\ \text{dB}$ and watch the three readouts separately: the beamwidth barely moves, the first sidelobe creeps upward by about a dB as the noise adds to it, and the nulls stop dead at the floor. Then switch averaging from 1 sweep to 16 and notice what averaging does and does not buy you.
+The widget below makes the damage concrete. It takes a known pattern — a uniform $8\lambda$ aperture, first sidelobe exactly $-13.3\ \text{dB}$, HPBW $6.3^\circ$ — and "measures" it through a receiver with the dynamic range you choose. Drag the floor from $-45\ \text{dB}$ up toward $-15\ \text{dB}$ and watch the three readouts separately: the beamwidth barely moves, the first sidelobe creeps upward by about a dB as the noise adds to it, and the nulls stop dead at the floor. Each readout shows the measured figure against the true one, and the null cell reads true / measured in that order. Then switch averaging from 1 sweep to 16 and notice what averaging does and does not buy you.
 
 <iframe src="../../viz/pattern-floor.html"
-        width="100%" height="498"
+        width="100%" height="581"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="A true radiation pattern compared with the same pattern measured through a receiver with a finite noise floor">

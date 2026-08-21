@@ -77,7 +77,7 @@ wire is exactly $\lambda/2$ long — note that the plateau lands *near* them, no
 *on* them. Part 4 explains that gap.
 
 <iframe src="../../viz/mom-dipole.html"
-        width="100%" height="755"
+        width="100%" height="852"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Method-of-moments dipole: solved segment currents against the assumed sinusoid, and input impedance versus segment count">
