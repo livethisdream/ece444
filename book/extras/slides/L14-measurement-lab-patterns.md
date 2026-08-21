@@ -26,7 +26,7 @@ Fall 2026 · Dr. Neil Rogers
 - **L12** — pattern measurement theory: far field, range geometry, gain by comparison.
 - **L13** — impedance lab: you measured what happens at the **terminals**.
 
-<div class="callout"><strong>Today you measure what leaves the antenna.</strong> Same antenna, the other half of its description.</div>
+<div class="callout"><strong>Today you measure what leaves the antenna.</strong> It is the same antenna, described from its other half.</div>
 
 Note:
 L13 answered "does power get in?" Today answers "where does it go once it's in?" Both are needed before the midterm project.
@@ -35,14 +35,14 @@ L13 answered "does power get in?" Today answers "where does it go once it's in?"
 
 ## Today's plan
 
-1. Build an honest range — and prove it is honest before taking data.
+1. Build a valid range and verify it before taking data.
 2. Acquire two principal-plane cuts with disciplined settings.
 3. Reduce: normalize, plot, extract HPBW, sidelobe level, front-to-back.
 4. Gain by the comparison method; polarization by rotating the source.
-5. Decide which of your numbers you are allowed to believe.
+5. Decide which of your numbers are meaningful.
 
 Note:
-Item 5 is the real lesson. Everything above it is procedure; item 5 is judgment.
+Item 5 is the judgment call; items 1 through 4 are procedure.
 
 ---
 
@@ -51,7 +51,7 @@ Item 5 is the real lesson. Everything above it is procedure; item 5 is judgment.
 <div class="fig" data-inline-svg="./fig/L14-range-setup.svg" style="max-width:960px; margin:0 auto;"></div>
 
 Note:
-Walk the room through it: transmitter, source antenna fixed, AUT on the rotator, receiver logging power per angle. Point at the floor bounce — that is the error source they will actually see.
+Walk the room through it: transmitter, source antenna fixed, AUT on the rotator, receiver logging power per angle. Point at the floor bounce, which is the error source they will see.
 
 ---
 
@@ -68,7 +68,7 @@ Today's AUT: a pyramidal horn, aperture $24 \times 17$ cm, at $f = 2.45$ GHz, so
 Range set at **3.0 m** — clears all three by about 2×.
 
 Note:
-D is the largest dimension, the 29.4 cm diagonal, not a side. Note which criterion binds: for a small antenna it is often not the famous one.
+D is the largest dimension, the 29.4 cm diagonal, not a side. Note which criterion binds: for a small antenna it is often not $2D^2/\lambda$.
 
 ---
 
@@ -84,7 +84,7 @@ D is the largest dimension, the 29.4 cm diagonal, not a side. Note which criteri
 The instructor's **Pluto-SDR transmit/receive tool** does the measure-rotate-record loop for you.
 
 Note:
-Any hardware that gives you power at a known angle works: signal generator plus spectrum analyzer, or the SDR tool. The physics does not care; the discipline does.
+Any hardware that gives you power at a known angle works: signal generator plus spectrum analyzer, or the SDR tool. The hardware choice does not change the measurement; the discipline does.
 
 ---
 
@@ -97,7 +97,7 @@ Any hardware that gives you power at a known angle works: signal generator plus 
 5. **Repeat one cut.** Two sweeps that disagree by 1 dB tell you your real uncertainty.
 
 Note:
-Step 4 is the one everybody skips and the one that decides which numbers survive.
+Step 4 determines which of the later numbers can be trusted.
 
 ---
 
@@ -110,7 +110,7 @@ Step 4 is the one everybody skips and the one that decides which numbers survive
 <div class="callout">Normalized pattern shape and absolute gain are <strong>two separate measurements</strong>. The sweep gives shape; the comparison gives gain.</div>
 
 Note:
-Common student error: quoting sidelobe levels in dBm. Sidelobe level is always relative.
+Sidelobe level is always relative to the peak and is never quoted in dBm.
 
 ---
 
@@ -125,7 +125,7 @@ Common student error: quoting sidelobe levels in dBm. Sidelobe level is always r
 Interpolate between samples for the $-3$ dB crossings — do not snap to the nearest grid point.
 
 Note:
-Uniform illumination gives −13.3 dB; anything tapered does better. If you measure −8 dB, suspect the range before you suspect the antenna.
+Uniform illumination gives −13.3 dB, and a tapered illumination does better. A measured −8 dB points to a range problem before an antenna problem.
 
 ---
 
@@ -156,7 +156,7 @@ Everything common to both measurements — transmit power, path loss, cable loss
 <div class="callout">In dB, gain by comparison is <strong>one subtraction</strong>. Its accuracy is the accuracy of the reference plus your alignment.</div>
 
 Note:
-This is L12's substitution method, executed. Stress "change nothing else" — moving a cable between the two measurements is the classic way to lose 0.5 dB.
+This is L12's substitution method, executed. Stress "change nothing else" — moving a cable between the two measurements is a common way to lose 0.5 dB.
 
 ---
 
@@ -168,7 +168,7 @@ This is L12's substitution method, executed. Stress "change nothing else" — mo
 
 $$\text{XPD} = P_{co} - P_{cross} \quad \text{(dB)}$$
 
-A good linear antenna gives 20 to 30 dB. Below about 15 dB, suspect a tilted mount before you blame the antenna.
+A good linear antenna gives 20 to 30 dB. Below about 15 dB, check the mount alignment before attributing the result to the antenna.
 
 Note:
 Ask why we rotate the source and not the AUT: rotating the AUT would also change which cut you are taking.
@@ -192,7 +192,7 @@ Note:
 
 <!-- .slide: class="viz-cue-slide" -->
 
-## The floor eats your pattern
+## What the noise floor removes
 
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
@@ -222,11 +222,11 @@ Incoherent power averaging shrinks the variance as 1/N and leaves the mean noise
 
 ## What to trust, in order
 
-<div class="callout"><strong>Beamwidth</strong> — robust, it lives near the peak.<br>
-<strong>Sidelobes</strong> — only if the lobe is well above the floor.<br>
-<strong>Null depths</strong> — almost never; a null measures the floor.</div>
+<div class="callout"><strong>Beamwidth</strong> is robust, because it is read near the peak.<br>
+<strong>Sidelobe levels</strong> are valid only when the lobe sits well above the floor.<br>
+<strong>Null depths</strong> are floor-limited and belong in a report as bounds.</div>
 
-Quote every extracted number with the floor beside it, and refuse to claim any feature within a few dB of it.
+Quote every extracted number with the floor beside it, and do not claim any feature within a few dB of it.
 
 Note:
 "The null is at least 25 dB deep, limited by our 42 dB dynamic range" is a defensible sentence. "The null is 25 dB deep" is not.
@@ -254,17 +254,17 @@ Ripple is diagnostic: count the ripples per degree and you can back out the path
 3. Your measured **noise floor**, and a sentence per row saying whether that number clears it.
 4. Comparison against the predicted or datasheet values, with every discrepancy explained.
 
-<div class="callout">Unexplained is not the same as unexplainable. <strong>Explain it.</strong></div>
+<div class="callout">Every discrepancy larger than your uncertainty needs a <strong>named cause</strong>.</div>
 
 Note:
-Item 4 is where the grade is. A 2 dB gap with a named cause beats a 0.2 dB gap with no discussion.
+Item 4 carries most of the grade. A 2 dB gap with a named cause beats a 0.2 dB gap with no discussion.
 
 ---
 
 ## Key point
 
-<div class="callout">A pattern measurement is a <strong>dynamic-range measurement</strong> in disguise.<br>
-Every number you extract is only as deep as your floor lets you see.</div>
+<div class="callout">Every number you extract from a pattern is bounded by the system's <strong>dynamic range</strong>.<br>
+Report each one with the measured floor beside it.</div>
 
 Note:
 If they remember one sentence from this lab, this is it.

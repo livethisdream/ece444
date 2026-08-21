@@ -10,13 +10,13 @@
 ## Learning Objectives
 
 <ol class="lo-list lo-sublist" style="--module: '2'; --lo: '7'">
-  <li>I can set up a pattern measurement — source antenna, rotating antenna under test, one fixed frequency, adequate separation — and verify that the range geometry is honest before I trust any data.</li>
+  <li>I can set up a pattern measurement — source antenna, rotating antenna under test, one fixed frequency, adequate separation — and verify that the range geometry is valid before I trust any data.</li>
   <li>I can acquire principal-plane pattern cuts and normalize, plot, and annotate them correctly in dB down from the peak.</li>
   <li>I can extract half-power beamwidth, first sidelobe level, front-to-back ratio, and gain by the comparison method from measured pattern data.</li>
   <li>I can measure polarization by rotating the source antenna, compute cross-polarization discrimination, and state how the system's dynamic range limits every one of these numbers.</li>
 </ol>
 
-Last lesson you stood at the terminals and asked whether power gets *into* the antenna. Today you walk 3 meters away and ask where that power *goes*. Same antenna, the other half of its description — and this time the answer is not a single number but a curve, with a beamwidth, a sidelobe structure, a back level, a polarization, and a hard limit on how much of that curve is real. Everything Module 2 predicted, you now measure.
+Last lesson you stood at the terminals and asked whether power gets *into* the antenna. Today you walk 3 meters away and ask where that power *goes*. You are measuring the same antenna, describing its other half. The answer this time is not a single number but a curve: a beamwidth, a sidelobe structure, a back level, a polarization, and a hard limit on how much of that curve is real. Everything Module 2 predicted, you now measure.
 
 ## Part 1: Background
 
@@ -31,7 +31,7 @@ A pattern measurement produces two independent products: a **normalized shape** 
 
 ## Part 2: Equipment and range setup
 
-The chain has four links, and each one has a characteristic way of ruining your day.
+The chain has four links, each one with a characteristic failure mode.
 
 | Stage | What it must do | What goes wrong |
 | :-- | :-- | :-- |
@@ -40,7 +40,7 @@ The chain has four links, and each one has a characteristic way of ruining your 
 | AUT on rotator | rotate about one axis, centered | tilted or off-center cut, biased HPBW |
 | Receiver | log power at each angle | unrecorded settings, unusable data |
 
-The hardware is flexible. A signal generator into a source horn with a spectrum analyzer on the AUT works. So does an SDR-based transmitter and receiver: the course provides a **Pluto-SDR transmit/receive tool** that runs the measure-rotate-record loop and writes an angle-versus-power file, which is the option most sections will use. The physics does not care which you pick — the acquisition discipline in Part 3 does.
+The hardware is flexible. A signal generator into a source horn with a spectrum analyzer on the AUT works. So does an SDR-based transmitter and receiver: the course provides a **Pluto-SDR transmit/receive tool** that runs the measure-rotate-record loop and writes an angle-versus-power file, which is the option most sections will use. The choice of hardware does not change the measurement; the acquisition discipline in Part 3 does.
 
 Your bench range for this lab:
 
@@ -51,7 +51,7 @@ Your bench range for this lab:
 
 :::{admonition} Worked example — is 3.0 m far enough?
 :class: tip
-Run all three far-field criteria on both antennas, not just the famous one.
+Run all three far-field criteria on both antennas, not just $2D^2/\lambda$.
 
 For the AUT, $D$ is the aperture **diagonal**, not a side:
 
@@ -65,7 +65,7 @@ Now the reference horn, $D = \sqrt{(0.34)^2 + (0.25)^2} = 0.422\ \text{m}$:
 
 $$\frac{2D^2}{\lambda} = \frac{2(0.422)^2}{0.1224} = 2.91\ \text{m}$$
 
-The **reference** sizes the range, and 3.0 m clears it by only 3%. That is the honest answer, and it belongs in your report: the gain comparison is the measurement standing closest to the edge of the far field.
+The **reference** sizes the range, and 3.0 m clears it by only 3%. That is the correct statement of the margin, and it belongs in your report: the gain comparison is the measurement standing closest to the edge of the far field.
 :::
 
 ```{note}
@@ -74,7 +74,7 @@ Both antennas must be in each other's far field, and both must see the same illu
 
 ## Part 3: Procedure
 
-Work through these in order. Do not skip step 5 — it decides which of your later numbers survive.
+Work through these in order. Complete step 5 before you sweep: it determines which of your later numbers can be trusted.
 
 1. **Set up and align.** Both antennas at the same height, boresights facing, co-polarized. Absorber on the specular floor-bounce point at the midpoint of the range.
 2. **Set one frequency and log it.** Fix the transmit level, the receiver's resolution bandwidth, and the averaging. Retuning anything mid-sweep invalidates the cut.
@@ -83,7 +83,7 @@ Work through these in order. Do not skip step 5 — it decides which of your lat
 5. **Measure the noise floor.** Turn the source off, leave everything else exactly as it is, and record the receiver's reading. This single number sets the credibility of your entire data set.
 6. **Sweep the E-plane cut**, a full $\pm 180^\circ$ if your rotator allows it, otherwise $\pm 90^\circ$ plus a back-lobe spot check at $180^\circ$.
 7. **Sweep the H-plane cut**, either by rotating both antennas $90^\circ$ about the range axis or by remounting the AUT on its side.
-8. **Repeat one cut.** Two sweeps of the same cut that disagree by 1 dB have just told you your real uncertainty — better than any error propagation you could write down.
+8. **Repeat one cut.** Two sweeps of the same cut that disagree by 1 dB have measured your repeatability directly, which is a more reliable uncertainty estimate than propagating catalog tolerances.
 9. **Gain comparison.** Swap the AUT for the reference horn, peak it up, record the level. Change *nothing else*: same range, same cables, same source, same transmit level.
 10. **Polarization.** Reinstall the AUT, rotate the **source** $90^\circ$ about the range axis, and re-sweep. That cut is your cross-pol pattern.
 
@@ -93,7 +93,7 @@ Why rotate the source and not the AUT for the cross-pol cut? Rotating the AUT wo
 
 ## Part 4: Reduction — getting numbers out
 
-**Normalize first.** Subtract the peak level from every sample. Your data is now in dB down from the peak, and the transmit power, cable loss, and range loss have all dropped out. Plot it twice: **polar dB** shows the shape at a glance, **rectangular dB** lets you read values off an axis. Never plot pattern data on a linear scale — a $-13\ \text{dB}$ sidelobe is 5% of peak and simply disappears.
+**Normalize first.** Subtract the peak level from every sample. Your data is now in dB down from the peak, and the transmit power, cable loss, and range loss have all dropped out. Plot it twice: **polar dB** shows the shape at a glance, **rectangular dB** lets you read values off an axis. Never plot pattern data on a linear scale — a $-13\ \text{dB}$ sidelobe is 5% of peak and disappears.
 
 Then extract four things from the shape:
 
@@ -102,7 +102,7 @@ Then extract four things from the shape:
 | HPBW | angle between the two $-3\ \text{dB}$ crossings, interpolated | matches $\approx 26000/(\theta_E \theta_H)$ vs. gain |
 | First sidelobe | level of the first lobe past the first null | $-13$ to $-25\ \text{dB}$ |
 | Front-to-back | peak minus the level at $180^\circ$ | 15 to 25 dB for a horn |
-| Null depth | the minimum between lobes | usually a lie — see Part 5 |
+| Null depth | the minimum between lobes | floor-limited; see Part 5 |
 
 Interpolate between samples for the $-3\ \text{dB}$ crossings. Snapping to the nearest grid point throws away most of the precision your $2^\circ$ step bought you.
 
@@ -116,7 +116,7 @@ The first sidelobe peaks at $-51.4\ \text{dBm}$, and the level at $180^\circ$ is
 
 $$\text{SLL} = -51.4 - (-35.6) = -15.8\ \text{dB}, \qquad \text{F/B} = -35.6 - (-54.0) = 18.4\ \text{dB}$$
 
-Cross-check the beamwidths against the gain: with an H-plane HPBW of $42^\circ$, $26000/(40 \times 42) = 15.5$, or $11.9\ \text{dBi}$. Hold that thought for the gain comparison below.
+Cross-check the beamwidths against the gain: with an H-plane HPBW of $42^\circ$, $26000/(40 \times 42) = 15.5$, or $11.9\ \text{dBi}$. Compare that with the gain comparison below.
 :::
 
 **Gain by comparison** is Lesson 12's substitution method, and in dB it is one subtraction. Everything common to the two measurements — transmit power, path loss, cable loss, source gain — cancels:
@@ -129,22 +129,22 @@ The reference horn reads $-32.4\ \text{dBm}$ at its peak; the AUT reads $-35.6\ 
 
 $$G_{\text{AUT}} = 15.0 + (-35.6 + 32.4) = 15.0 - 3.2 = 11.8\ \text{dBi}$$
 
-Predicted from the aperture with $\eta_{\text{ap}} = 0.5$: $G = 0.5 \cdot 4\pi(0.0408)/(0.1224)^2 = 17.1$, or $12.3\ \text{dBi}$. Measured is 0.5 dB low, and the reference horn's own calibration is good to about 0.5 dB — that is agreement, and your report should say so rather than inventing a physical cause.
+Predicted from the aperture with $\eta_{\text{ap}} = 0.5$: $G = 0.5 \cdot 4\pi(0.0408)/(0.1224)^2 = 17.1$, or $12.3\ \text{dBi}$. Measured is 0.5 dB low, and the reference horn's own calibration is good to about 0.5 dB — that is agreement, and your report should state it as agreement rather than assign a physical cause.
 
 Rotating the source $90^\circ$ drops the boresight level to $-59.9\ \text{dBm}$:
 
 $$\text{XPD} = -35.6 - (-59.9) = 24.3\ \text{dB}$$
 
-A well-behaved linear antenna gives 20 to 30 dB. Below about 15 dB, suspect a tilted mount before you blame the antenna.
+A well-behaved linear antenna gives 20 to 30 dB. Below about 15 dB, check the mount alignment before attributing the result to the antenna.
 :::
 
 ## Part 5: Dynamic range — how much of your pattern is real
 
-Your receiver has a noise floor. The measured power at every angle is the true signal **plus** that floor, added in power, so no measured level can ever sit meaningfully below it. This one fact governs which of your extracted numbers you are allowed to believe.
+Your receiver has a noise floor. The measured power at every angle is the true signal **plus** that floor, added in power, so no measured level can ever sit meaningfully below it. This one fact governs which of your extracted numbers are meaningful.
 
 Work it out for this lab. Peak at $-35.6\ \text{dBm}$, floor at $-78\ \text{dBm}$ with the source off: your **dynamic range is 42.4 dB**. Any pattern feature within a few dB of $-42.4\ \text{dB}$ relative is not a measurement of the antenna; it is a measurement of your receiver.
 
-The widget below makes the damage concrete. It takes a known pattern — a uniform $8\lambda$ aperture, first sidelobe exactly $-13.3\ \text{dB}$, HPBW $6.3^\circ$ — and "measures" it through a receiver with the dynamic range you choose. Drag the floor from $-45\ \text{dB}$ up toward $-15\ \text{dB}$ and watch the three readouts separately: the beamwidth barely moves, the first sidelobe creeps upward by about a dB as the noise adds to it, and the nulls stop dead at the floor. Each readout shows the measured figure against the true one, and the null cell reads true / measured in that order. Then switch averaging from 1 sweep to 16 and notice what averaging does and does not buy you.
+The widget below makes the effect concrete. It takes a known pattern — a uniform $8\lambda$ aperture, first sidelobe exactly $-13.3\ \text{dB}$, HPBW $6.3^\circ$ — and "measures" it through a receiver with the dynamic range you choose. Drag the floor from $-45\ \text{dB}$ up toward $-15\ \text{dB}$ and watch the three readouts separately: the beamwidth barely moves, the first sidelobe creeps upward by about a dB as the noise adds to it, and the nulls stop dead at the floor. Each readout shows the measured figure against the true one, and the null cell reads true / measured in that order. Then switch averaging from 1 sweep to 16 and notice what averaging does and does not buy you.
 
 <iframe src="../../viz/pattern-floor.html"
         width="100%" height="579"
@@ -153,18 +153,18 @@ The widget below makes the damage concrete. It takes a known pattern — a unifo
         title="A true radiation pattern compared with the same pattern measured through a receiver with a finite noise floor">
 </iframe>
 
-Three lessons come out of that widget, and they are the reason this lab exists:
+Three conclusions follow from the widget, and they govern how you report your data:
 
-- **Beamwidth is robust.** It is measured 3 dB down from the peak, where the signal is 40 dB above any sane floor. Trust it first.
+- **Beamwidth is robust.** It is measured 3 dB down from the peak, where the signal sits far above any practical noise floor. Trust it first.
 - **Sidelobe levels are conditional.** A lobe 10 dB above the floor reads about 0.4 dB high; a lobe 3 dB above the floor reads 3 dB high and is nearly meaningless. Quote the floor next to every sidelobe number.
-- **Null depths are almost always fiction.** A null measures your floor, not the antenna. Averaging 16 sweeps smooths the fuzz — incoherent power averaging shrinks the *variance* like $1/N$ — but it leaves the mean noise power exactly where it was. To actually lower the floor you need more transmit power, a narrower resolution bandwidth, or a quieter receiver.
+- **Null depths are floor-limited.** A null measures your floor, not the antenna. Averaging 16 sweeps smooths the fuzz — incoherent power averaging shrinks the *variance* like $1/N$ — but it leaves the mean noise power exactly where it was. To lower the floor you need more transmit power, a narrower resolution bandwidth, or a quieter receiver.
 
 :::{admonition} Key Point
 :class: key-concept
-A pattern measurement is a dynamic-range measurement in disguise. "The null is at least 25 dB deep, limited by our 42 dB dynamic range" is a defensible engineering sentence. "The null is 25 dB deep" is not.
+Every number extracted from a measured pattern is bounded by the system's dynamic range. "The null is at least 25 dB deep, limited by our 42 dB dynamic range" is a defensible engineering sentence. "The null is 25 dB deep" is not.
 :::
 
-**The rest of the uncertainty budget.** The floor is the hard limit; these are the everyday errors, and all of them are visible in your data if you look.
+**The rest of the uncertainty budget.** The floor is the hard limit; these are the everyday errors, and each leaves a recognizable signature in the data.
 
 | Source | What it looks like | Typical size |
 | :-- | :-- | :-- |
@@ -173,18 +173,18 @@ A pattern measurement is a dynamic-range measurement in disguise. "The null is a
 | Pointing misalignment | peak reads low, HPBW biased | 0.2 dB at HPBW/8 off |
 | Reference tolerance | a fixed offset on every gain number | 0.3 to 0.5 dB |
 
-Ripple is diagnostic rather than merely annoying: a reflected path 20 dB below the direct path adds and subtracts to give $20\log_{10}(1.1) = +0.8\ \text{dB}$ and $20\log_{10}(0.9) = -0.9\ \text{dB}$, a peak-to-peak ripple of about 1.7 dB. Count the ripples per degree and you can work backward to where the reflection is coming from.
+Ripple is diagnostic: a reflected path 20 dB below the direct path adds and subtracts to give $20\log_{10}(1.1) = +0.8\ \text{dB}$ and $20\log_{10}(0.9) = -0.9\ \text{dB}$, a peak-to-peak ripple of about 1.7 dB. Count the ripples per degree and you can work backward to where the reflection is coming from.
 
 ## Part 6: Deliverables
 
 Turn in the following, as one document.
 
 1. **Two principal-plane cuts** (E-plane and H-plane), plotted in polar dB, normalized to the peak, with the angle convention and the frequency labeled on each.
-2. **An extracted table** — HPBW, first sidelobe level, front-to-back ratio, gain, XPD — with an **uncertainty estimate on every row**. Your repeated sweep from step 8 is the honest basis for most of them.
+2. **An extracted table** — HPBW, first sidelobe level, front-to-back ratio, gain, XPD — with an **uncertainty estimate on every row**. Your repeated sweep from step 8 is the basis for most of them.
 3. **Your measured noise floor**, stated as a level and as a dynamic range, with one sentence per table row saying whether that number clears the floor and by how much.
 4. **A comparison against prediction** — the aperture-formula gain, the $26000/(\theta_E \theta_H)$ beamwidth cross-check, and the datasheet values where you have them — with every discrepancy larger than your uncertainty named and explained.
 
-Unexplained is not the same as unexplainable. A 2 dB gap with a named cause is a better report than a 0.2 dB gap with no discussion.
+A 2 dB gap with a named cause is a better report than a 0.2 dB gap with no discussion.
 
 ## Summary
 
@@ -206,6 +206,6 @@ Unexplained is not the same as unexplainable. A 2 dB gap with a named cause is a
 
 ## Where this is going
 
-This lab is the **dress rehearsal for the midterm Antenna Pattern Measurement project, due at L20**. Same range, same extraction, same uncertainty discussion — but with more antennas, a written analysis, and no procedure handed to you. Everything you get wrong today is free; get it wrong in three weeks and it costs you.
+This lab is the **dress rehearsal for the midterm Antenna Pattern Measurement project, due at L20**. Same range, same extraction, same uncertainty discussion — but with more antennas, a written analysis, and no procedure handed to you. Mistakes made in this lab carry no grade penalty; the same mistakes in the graded project do.
 
-Module 2 closes here, and it closes with a complete loop. You can predict an antenna's pattern from its geometry, simulate it, and now measure it, with an honest statement of how much of the measurement to believe. Lesson 15 opens Module 3 by going back to the beginning of that loop and asking a sharper question: the aperture *size* set the beamwidth you just measured, but what set the sidelobe level? The answer is the illumination across the aperture, and choosing it deliberately is how every high-performance antenna and phased array is designed.
+Module 2 closes here, and it closes with a complete loop. You can predict an antenna's pattern from its geometry, simulate it, and now measure it, with a quantified statement of how much of the measurement to believe. Lesson 15 opens Module 3 by going back to the beginning of that loop and asking a sharper question: the aperture *size* set the beamwidth you just measured, but what set the sidelobe level? The answer is the illumination across the aperture, and choosing it deliberately is how every high-performance antenna and phased array is designed.
