@@ -31,15 +31,15 @@ Here is the whole lesson in one sentence. **High gain means a large radiating ar
 The quantitative version is the **aperture formula** from Lesson 2:
 
 $$
-G = \eta_{ap}\ \frac{4\pi A}{\lambda^{2}}
+G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}
 $$
 
-with $A$ the physical aperture area and $\eta_{ap}$ the **aperture efficiency** — the fraction of that area you actually manage to use. Read the physics before the algebra: $A/\lambda^2$ counts how many square wavelengths the antenna spans, and gain is proportional to that count. An aperture is not "big" in metres. It is big in wavelengths.
+with $A$ the physical aperture area and $\eta_{\text{ap}}$ the **aperture efficiency** — the fraction of that area you actually manage to use. Read the physics before the algebra: $A/\lambda^2$ counts how many square wavelengths the antenna spans, and gain is proportional to that count. An aperture is not "big" in metres. It is big in wavelengths.
 
 For a circular dish of diameter $D$, $A = \pi D^2/4$, and the formula collapses to the one you should memorize:
 
 $$
-G = \eta_{ap}\left(\frac{\pi D}{\lambda}\right)^{2}
+G = \eta_{\text{ap}}\left(\frac{\pi D}{\lambda}\right)^{2}
 $$
 
 Two consequences drop straight out. Gain goes as $D^2$, so **every doubling of diameter buys 6 dB**. And gain goes as $1/\lambda^2$, so the same dish gains 6 dB every time you double the frequency — which is why the satellite industry keeps climbing in frequency.
@@ -58,7 +58,7 @@ The $70^\circ$ coefficient already assumes a tapered illumination. A perfectly u
 
 :::{admonition} Key Point
 :class: key-concept
-Gain is a statement about **effective area in units of $\lambda^2$**, not about the shape of the antenna. $A_e = \eta_{ap}A = G\lambda^2/4\pi$ is the number Friis cares about. Reflectors, Yagis, and arrays are three different ways to buy the same thing.
+Gain is a statement about **effective area in units of $\lambda^2$**, not about the shape of the antenna. $A_e = \eta_{\text{ap}}A = G\lambda^2/4\pi$ is the number Friis cares about. Reflectors, Yagis, and arrays are three different ways to buy the same thing.
 :::
 
 Drive the sliders below and watch two numbers move together. Set $D/\lambda$ and the dish redraws with a tick on the rim for every wavelength across it, while the beam cone narrows on the same canvas. Notice that gain climbs 6 dB per doubling of $D$ while the beam halves — and then open the surface-error slider and watch the amber curve: hold the panel tolerance fixed and grow the dish, and surface error quietly caps how far you can push it.
@@ -72,7 +72,7 @@ Drive the sliders below and watch two numbers move together. Set $D/\lambda$ and
 
 :::{admonition} Worked example — a 1 m dish at 12 GHz
 :class: tip
-A home satellite-TV dish, roughly 1 m across, receiving Ku band at 12 GHz. Take $\eta_{ap} = 0.65$.
+A home satellite-TV dish, roughly 1 m across, receiving Ku band at 12 GHz. Take $\eta_{\text{ap}} = 0.65$.
 
 **Wavelength.** $\lambda = c/f = (3\times10^{8})/(12\times10^{9}) = 0.025\ \text{m}$, so $D/\lambda = 40$. Forty wavelengths across.
 
@@ -80,7 +80,7 @@ A home satellite-TV dish, roughly 1 m across, receiving Ku band at 12 GHz. Take 
 
 **Beamwidth.** $\theta_\text{HP} \approx 70^\circ (0.025/1) = 1.75^\circ$. That is why a dish that drifts two degrees off the satellite goes dark.
 
-**Effective aperture.** $A_e = \eta_{ap}A = 0.65 \cdot \pi(0.5)^2 = 0.51\ \text{m}^2$.
+**Effective aperture.** $A_e = \eta_{\text{ap}}A = 0.65 \cdot \pi(0.5)^2 = 0.51\ \text{m}^2$.
 
 **Sanity check on the far field.** $2D^2/\lambda = 2(1)^2/0.025 = 80\ \text{m}$. You cannot measure this antenna across the lab — which is exactly the problem L12 takes up.
 :::
@@ -114,7 +114,7 @@ A deep dish (small $f/D$) shields the feed from ground noise but demands a feed 
 
 ## Part 3: Where the Efficiency Goes
 
-$\eta_{ap} \approx 0.55\text{-}0.7$ for a good reflector. That missing 30–45% is not sloppiness; it is four unavoidable trades, and knowing them is what separates picking a dish from designing one.
+$\eta_{\text{ap}} \approx 0.55\text{-}0.7$ for a good reflector. That missing 30–45% is not sloppiness; it is four unavoidable trades, and knowing them is what separates picking a dish from designing one.
 
 **Illumination taper versus spillover.** The feed has a pattern. Aim a narrow feed at the dish and the rim sits 20 dB down: you have paid for aperture you are not using, and the effective area shrinks. Widen the feed and the rim brightens — but now power sails past the rim entirely and is simply gone, and on receive that spilled beam is looking at warm ground instead of cold sky.
 
@@ -213,11 +213,11 @@ You need a 20 dBi ground-station antenna at 2.4 GHz for a cubesat downlink. $\la
 
 **Required effective aperture.** $A_e = G\lambda^{2}/4\pi = 100(0.015625)/12.57 = 0.124\ \text{m}^{2}$. Every candidate has to deliver that much coherent area.
 
-**Dish.** With $\eta_{ap} = 0.6$, $A = 0.124/0.6 = 0.207\ \text{m}^{2}$, so $D = 2\sqrt{A/\pi} = 0.51\ \text{m}$. Beamwidth $\theta_\text{HP} \approx 70^\circ(0.125/0.51) = 17^\circ$. A half-metre dish with a 17-degree beam — forgiving to point, cheap, broadband. Hard to beat.
+**Dish.** With $\eta_{\text{ap}} = 0.6$, $A = 0.124/0.6 = 0.207\ \text{m}^{2}$, so $D = 2\sqrt{A/\pi} = 0.51\ \text{m}$. Beamwidth $\theta_\text{HP} \approx 70^\circ(0.125/0.51) = 17^\circ$. A half-metre dish with a 17-degree beam — forgiving to point, cheap, broadband. Hard to beat.
 
 **Yagi.** A single Yagi tops out near 15 dBi at a $4.5\lambda$ (0.56 m) boom, so 20 dBi needs four of them stacked in a 2x2 bay: $15 + 10\log_{10}4 = 21\ \text{dBi}$. It works, but it is four booms, a phasing harness, and a narrow band.
 
-**Patch array.** At $\lambda/2 = 6.25\ \text{cm}$ spacing with $\eta_{ap} = 0.75$, a $7\times7$ grid spans $0.44\ \text{m}$ square, $A = 0.191\ \text{m}^{2}$, giving $G = 0.75(4\pi)(0.191)/0.015625 = 115 = 20.6\ \text{dBi}$. Flat, low wind load, and steerable later — at the price of a 49-way feed network.
+**Patch array.** At $\lambda/2 = 6.25\ \text{cm}$ spacing with $\eta_{\text{ap}} = 0.75$, a $7\times7$ grid spans $0.44\ \text{m}$ square, $A = 0.191\ \text{m}^{2}$, giving $G = 0.75(4\pi)(0.191)/0.015625 = 115 = 20.6\ \text{dBi}$. Flat, low wind load, and steerable later — at the price of a 49-way feed network.
 
 **Decision.** For a fixed ground station on a rotator, take the 0.51 m dish: fewest parts, widest band, lowest cost. Choose the patch array instead the moment you need a flat profile or electronic steering.
 :::
@@ -238,10 +238,10 @@ Against a receiver noise floor of about $-121\ \text{dBm}$ in a 100 kHz channel 
 
 | Idea | What it says | Number to hold onto |
 | :-- | :-- | :-- |
-| $G = \eta_{ap}4\pi A/\lambda^{2}$ | gain is coherent area counted in square wavelengths | $\eta_{ap} \approx 0.55\text{-}0.7$ for reflectors |
-| $G = \eta_{ap}(\pi D/\lambda)^{2}$ | circular-dish shortcut | +6 dB per doubling of $D$ |
+| $G = \eta_{\text{ap}}4\pi A/\lambda^{2}$ | gain is coherent area counted in square wavelengths | $\eta_{\text{ap}} \approx 0.55\text{-}0.7$ for reflectors |
+| $G = \eta_{\text{ap}}(\pi D/\lambda)^{2}$ | circular-dish shortcut | +6 dB per doubling of $D$ |
 | $\theta_\text{HP} \approx 70^\circ\lambda/D$ | beamwidth is set by size in wavelengths | 1 m at 12 GHz $\rightarrow 1.75^\circ$ |
-| $A_e = \eta_{ap}A = G\lambda^{2}/4\pi$ | effective aperture — what Friis uses | 1 m dish at 12 GHz $\rightarrow 0.51\ \text{m}^2$ |
+| $A_e = \eta_{\text{ap}}A = G\lambda^{2}/4\pi$ | effective aperture — what Friis uses | 1 m dish at 12 GHz $\rightarrow 0.51\ \text{m}^2$ |
 | $f/D$ | sets the edge angle the feed must cover | 0.3–0.6 typical; 0.5 $\rightarrow 53^\circ$ |
 | Edge taper | spillover fights illumination taper | rim about $-10$ dB |
 | Ruze, $685.8(\sigma/\lambda)^{2}$ dB | surface error costs gain exponentially | $\lambda/50 \rightarrow 0.27$ dB; $\lambda/16 \rightarrow 2.7$ dB |
@@ -255,6 +255,6 @@ Against a receiver noise floor of about $-121\ \text{dBm}$ in a 100 kHz channel 
 
 ## Where this is going
 
-Every gain number in this lesson was a claim. $\eta_{ap} = 0.65$ was an assumption, $70^\circ\lambda/D$ was a rule of thumb, and the Ruze penalty depended on a surface you have not measured. Before you may write a gain on a data sheet — or in your midterm project report — you have to measure it. L12 builds the theory of pattern measurement: far-field ranges, why $2D^2/\lambda$ turned out to be 80 m for a dish you could carry, gain-comparison and three-antenna methods, and how to read a measured pattern honestly.
+Every gain number in this lesson was a claim. $\eta_{\text{ap}} = 0.65$ was an assumption, $70^\circ\lambda/D$ was a rule of thumb, and the Ruze penalty depended on a surface you have not measured. Before you may write a gain on a data sheet — or in your midterm project report — you have to measure it. L12 builds the theory of pattern measurement: far-field ranges, why $2D^2/\lambda$ turned out to be 80 m for a dish you could carry, gain-comparison and three-antenna methods, and how to read a measured pattern honestly.
 
 Then L13 and L14 put you on the instruments, and Module 3 picks up the third road. When you get there, remember what an array is really doing: assembling the same coherent aperture a dish assembles with a mirror, one element and one phase shifter at a time.

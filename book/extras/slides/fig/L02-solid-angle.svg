@@ -1,7 +1,8 @@
 <svg viewBox="64 88 232 232" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Solid angle: a cone of half-angle alpha subtends a surface patch of area A on a sphere of radius r">
 <circle cx="180" cy="205" r="110" fill="#eef3fb" stroke="#b8c9e8" stroke-width="1.5"/>
 <ellipse cx="180" cy="205" rx="110" ry="34" fill="none" stroke="#cdd8e8" stroke-width="1" stroke-dasharray="4 4"/>
-<polygon points="180,205 128.4,112.6 231.6,112.6" fill="#004a85" opacity="0.05"/>
+<polygon points="180,205 128.4,112.6 231.6,112.6" fill="#004a85" opacity="0.15"/>
+<path d="M180 205 L128.4 112.6 A51.6 15.9 0 0 0 231.6 112.6 Z" fill="#0067b9" opacity="0.14"/>
 <line x1="180" y1="205" x2="180" y2="94" stroke="#8a929c" stroke-width="1" stroke-dasharray="4 4"/>
 <line x1="180" y1="205" x2="128.4" y2="112.6" stroke="#004a85" stroke-width="1.7"/>
 <line x1="180" y1="205" x2="231.6" y2="112.6" stroke="#004a85" stroke-width="1.7"/>

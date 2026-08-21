@@ -1563,3 +1563,113 @@ html[data-theme="dark"] .sy-globaltoc li.sy-l2-slides     > a .sy-icon { color: 
 html[data-theme="dark"] .sy-globaltoc li.sy-l2-practice   > a .sy-icon { color: #d9a04a; }
 html[data-theme="dark"] .sy-globaltoc li.toctree-l2.current > a .sy-icon { color: #82bce8; }
 
+
+/* --- Worked example (tip) boxes — deck visual language ------ */
+/* Same construction as Key Concept, accented in the mid USAFA blue so
+   worked examples read as siblings of the key-concept cards. */
+.admonition.tip,
+div.admonition.tip {
+  border: 1px solid #b9d2e5 !important;
+  border-left: 5px solid #0067b9 !important;
+  border-radius: 0 6px 6px 0 !important;
+  background-color: #ffffff !important;
+  padding: 0 !important;
+  overflow: hidden;
+  margin: 1.5em 0;
+  box-shadow: none !important;
+}
+.admonition.tip > .admonition-title,
+div.admonition.tip > p.admonition-title {
+  background-color: #0067b9 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.85em !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4em 1em !important;
+  margin: 0 !important;
+}
+.admonition.tip > .admonition-title::before,
+div.admonition.tip > p.admonition-title::before,
+.admonition.tip > .admonition-title::after,
+div.admonition.tip > p.admonition-title::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+}
+.admonition.tip > *:not(.admonition-title),
+div.admonition.tip > *:not(.admonition-title) {
+  padding: 0.5em 1.5em !important;
+  margin: 0 !important;
+}
+
+/* --- Note asides — quiet card in the widget palette --------- */
+.admonition.note,
+div.admonition.note {
+  border: 1px solid #cddce9 !important;
+  border-left: 4px solid #b9d2e5 !important;
+  border-radius: 0 6px 6px 0 !important;
+  background-color: #f5f9fc !important;
+  padding: 0 !important;
+  overflow: hidden;
+  margin: 1.5em 0;
+  box-shadow: none !important;
+}
+.admonition.note > .admonition-title,
+div.admonition.note > p.admonition-title {
+  background-color: transparent !important;
+  color: #004a85 !important;
+  font-weight: 700 !important;
+  font-size: 0.85em !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.5em 1.2em 0 !important;
+  margin: 0 !important;
+}
+.admonition.note > .admonition-title::before,
+div.admonition.note > p.admonition-title::before,
+.admonition.note > .admonition-title::after,
+div.admonition.note > p.admonition-title::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+}
+.admonition.note > *:not(.admonition-title),
+div.admonition.note > *:not(.admonition-title) {
+  padding: 0.4em 1.2em 0.6em !important;
+  margin: 0 !important;
+}
+
+/* --- Dark mode: worked-example (tip) and note boxes --------
+   These blocks are defined above with hardcoded light values and
+   !important, so they need explicit dark variants or the theme's
+   light-gray body text lands on a white card. Palette matches the
+   key-concept dark treatment. */
+html[data-theme="dark"] .admonition.tip,
+html[data-theme="dark"] div.admonition.tip {
+  background-color: #1e2731 !important;
+  border-color: #2a4a6a !important;
+  border-left-color: #5aa3e5 !important;
+}
+html[data-theme="dark"] .admonition.tip > .admonition-title,
+html[data-theme="dark"] div.admonition.tip > p.admonition-title {
+  background-color: #2565a0 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .admonition.note,
+html[data-theme="dark"] div.admonition.note {
+  background-color: #232a33 !important;
+  border-color: #3a4552 !important;
+  border-left-color: #56708a !important;
+}
+html[data-theme="dark"] .admonition.note > .admonition-title,
+html[data-theme="dark"] div.admonition.note > p.admonition-title {
+  color: #82bce8 !important;
+}

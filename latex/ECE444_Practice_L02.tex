@@ -7,7 +7,7 @@
 
 \fullwidth{\textbf{Learning Objective 1.2: } I can define and calculate
 fundamental antenna properties --- gain, directivity, effective aperture,
-beamwidth, and sidelobe level --- apply the reciprocity principle linking an
+beamwidth, and sidelobe level --- apply the reciprocity principle that links an
 antenna's transmit and receive behavior, and use the Friis transmission
 equation to predict received power in a link.
 \\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
@@ -48,9 +48,10 @@ lossless transmission line is
 	\part In one sentence, explain what a ``velocity factor of 0.66'' (typical of
 	RG-58 coax) means physically.
 		\begin{solution}[0.9in]
-		Signals travel at about 66\% of the speed of light in vacuum --- the dielectric
-		between the conductors slows the wave, so the guided wavelength on the line is
-		$0.66\times$ the free-space wavelength at the same frequency.
+		Signals travel along the line at about 66\% of the speed of light in vacuum:
+		$u = 1/\sqrt{LC} \approx 0.66c$, set by the line's own $L$ and $C$. Since
+		$u = f\lambda$ still holds on the line, a wave at a fixed frequency has a
+		wavelength on the line that is $0.66\times$ its free-space value.
 		\end{solution}
 
 \end{parts}
@@ -72,7 +73,7 @@ $\vec{E}(z,t) = \xhat E_{0}\cosp{\omega t - kz}$.
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\omega$ = \ansbox[1.3in]{$1.51\times10^{10}$}
+		$\omega$ = \ansbox[1.5in]{$1.51\times10^{10}\ \text{rad/s}$}
 
 		\vspace{4pt}
 		$\lambda$ = \ansbox[1.3in]{$0.125\m$}
@@ -129,7 +130,7 @@ $\theta_{2} = 1.8\mydeg$ in elevation.
 		$D \approx 41{,}253/(\theta_{1}^{\circ}\theta_{2}^{\circ})$.
 		\begin{solution}[1.2in]
 		\eq{ D &\approx \dfrac{41{,}253}{(2.5)(1.8)} = \dfrac{41{,}253}{4.5} \approx 9170 \\
-			D_\mathrm{dBi} &= 10\mylog{9170} \approx 39.6\dbi }
+			D_\text{dBi} &= 10\mylog{9170} \approx 39.6\dbi }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -141,21 +142,21 @@ $\theta_{2} = 1.8\mydeg$ in elevation.
 		\part The antenna is measured to have radiation efficiency $88\%$ and impedance
 		mismatch $\left|\Gamma\right| = 0.25$. What is the realized gain at boresight, in dBi?
 		\begin{solution}[1.6in]
-		\eq{ G &= \eta_\mathrm{rad}D = 0.88(9170) \approx 8070 \to 39.1\dbi \\
+		\eq{ G &= \eta_\text{rad}D = 0.88(9170) \approx 8070 \to 39.1\dbi \\
 			1 - \left|\Gamma\right|^{2} &= 1 - 0.0625 = 0.9375 \\
-			G_\mathrm{re} &= 0.9375(8070) \approx 7560 \to 38.8\dbi }
+			G_\text{re} &= 0.9375(8070) \approx 7560 \to 38.8\dbi }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$G_\mathrm{re}$ = \ansbox[1.3in]{$\approx 38.8\dbi$}
+		$G_\text{re}$ = \ansbox[1.3in]{$\approx 38.8\dbi$}
 	\end{minipage}
 
 	\part In one sentence, explain the difference between $D$, $G$, and
-	$G_\mathrm{re}$ for this antenna.
+	$G_\text{re}$ for this antenna.
 		\begin{solution}[1.1in]
 		$D$ is purely geometric (pattern shape only); $G$ folds in the ohmic and
-		dielectric losses inside the antenna; $G_\mathrm{re}$ additionally subtracts the
+		dielectric losses inside the antenna; $G_\text{re}$ additionally subtracts the
 		impedance-mismatch loss at the terminals --- it is what you would actually measure
 		with a source connected through a transmission line.
 		\end{solution}
@@ -182,28 +183,28 @@ $\theta_{2} = 1.8\mydeg$ in elevation.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part The dish is physically $2.4\m$ in diameter. What is its aperture
-		efficiency $\eta_\mathrm{ap} = A_{e}/A_\mathrm{phys}$? Is that reasonable?
+		efficiency $\eta_\text{ap} = A_{e}/A_\text{phys}$? Is that reasonable?
 		\begin{solution}[1.4in]
-		\eq{ A_\mathrm{phys} &= \pi(1.2)^{2} \approx 4.52\ \text{m}^{2} \\
-			\eta_\mathrm{ap} &= \dfrac{2.49}{4.52} \approx 0.55 }
-		Realistic --- real dishes fall in $\eta_\mathrm{ap} \approx 0.5$--$0.7$ once
+		\eq{ A_\text{phys} &= \pi(1.2)^{2} \approx 4.52\ \text{m}^{2} \\
+			\eta_\text{ap} &= \dfrac{2.49}{4.52} \approx 0.55 }
+		Realistic --- real dishes fall in $\eta_\text{ap} \approx 0.5$--$0.7$ once
 		illumination taper, spillover, feed/strut blockage, and surface roughness are counted.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\eta_\mathrm{ap}$ = \ansbox[1.3in]{$\approx 0.55$}
+		$\eta_\text{ap}$ = \ansbox[1.3in]{$\approx 0.55$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Keeping the same physical dish but re-illuminating it efficiently at
-		$f = 30\ghz$ (Ka-band), what gain (dBi) would you expect if $\eta_\mathrm{ap}$
+		$f = 30\ghz$ (Ka-band), what gain (dBi) would you expect if $\eta_\text{ap}$
 		is unchanged?
 		\begin{solution}[1.4in]
 		$A_{e}$ fixed $\Rightarrow G = 4\pi A_{e}/\lambda^{2} \propto f^{2}$. From 12 to
 		30 GHz is $2.5\times$ in $f$, i.e.\ $6.25\times$ in gain $= 10\mylog{6.25} \approx 8.0\db$.
 		\eq{ G_{30} \approx 47 + 8 = 55\dbi }
-		(Optimistic: higher $f$ exposes surface roughness that erodes $\eta_\mathrm{ap}$.)
+		(Optimistic: higher $f$ exposes surface roughness that erodes $\eta_\text{ap}$.)
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -242,16 +243,16 @@ $G_{r} = 3\dbi$ and is on boresight for both antennas. Take $\lambda = c/f = 0.7
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the on-axis power density $S_\mathrm{inc}$ at the cubesat.
+		\part Compute the on-axis power density $S_\text{inc}$ at the cubesat.
 		\begin{solution}[1.5in]
 		$G_{t} = 8\dbi \to 6.31$.
-		\eq{ S_\mathrm{inc} &= \dfrac{P_{t} G_{t}}{4\pi r^{2}} = \dfrac{20(6.31)}{4\pi(8.0\times10^{5})^{2}} \\
+		\eq{ S_\text{inc} &= \dfrac{P_{t} G_{t}}{4\pi r^{2}} = \dfrac{20(6.31)}{4\pi(8.0\times10^{5})^{2}} \\
 			&\approx 1.57\times10^{-11}\ \text{W/m}^{2} }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$S_\mathrm{inc}$ = \ansbox[1.3in]{$1.57\times10^{-11}$}
+		$S_\text{inc}$ = \ansbox[1.6in]{$1.57\times10^{-11}\ \text{W/m}^{2}$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -267,11 +268,11 @@ $G_{r} = 3\dbi$ and is on boresight for both antennas. Take $\lambda = c/f = 0.7
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the received power $P_{r} = S_\mathrm{inc}A_{e,r}$ and express
+		\part Compute the received power $P_{r} = S_\text{inc}A_{e,r}$ and express
 		the result in dBm.
 		\begin{solution}[1.3in]
 		\eq{ P_{r} &= (1.57\times10^{-11})(0.0895) \approx 1.40\times10^{-12}\watts \\
-			P_{r,\mathrm{dBm}} &= 10\mylog{\dfrac{1.40\times10^{-12}}{10^{-3}}} \approx -88.5\dbm }
+			P_{r,\text{dBm}} &= 10\mylog{\dfrac{1.40\times10^{-12}}{10^{-3}}} \approx -88.5\dbm }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -279,13 +280,29 @@ $G_{r} = 3\dbi$ and is on boresight for both antennas. Take $\lambda = c/f = 0.7
 		$P_{r}$ = \ansbox[1.3in]{$\approx -88.5\dbm$}
 	\end{minipage}
 
-	\part Verify your answer by computing $P_{r}$ directly from the Friis equation
-	$P_{r} = P_{t}G_{t}G_{r}\lp \dfrac{\lambda}{4\pi r} \rp^{2}$.
-		\begin{solution}[1.6in]
-		\eq{ \lp \dfrac{\lambda}{4\pi r} \rp^{2} &= \lp \dfrac{0.75}{4\pi(8.0\times10^{5})} \rp^{2} \approx 5.56\times10^{-15} \\
-			P_{r} &= 20(6.31)(2.00)(5.56\times10^{-15}) \approx 1.40\times10^{-12}\watts \checkmark }
-		Same answer --- Friis is just $S_\mathrm{inc}\times A_{e,r}$ with $A_{e,r}$
-		written out in terms of $G_{r}$ and $\lambda$. Same physics.
+	\part The cubesat receiver needs $-82.5\dbm$ at its terminals to close the link
+	with the margin the program office demands, so this design is $6\db$ short. Friis,
+	$P_{r} = P_{t}G_{t}G_{r}\lp \dfrac{\lambda}{4\pi r} \rp^{2}$, says you can buy those
+	$6\db$ from $P_{t}$, from $G_{t}$, or from $G_{r}$. Pick one and defend it, saying
+	what each of the three costs.
+		\begin{solution}[2.0in]
+		All three enter Friis as a plain multiplication, so a decibel is a decibel no
+		matter which factor supplies it --- the choice is an engineering one, not a
+		physics one.
+		\textbf{$P_{t}$:} $6\db$ means going from $20\watts$ to $80\watts$. That is the
+		easiest change to make on the ground, but it costs prime power, cooling, and
+		amplifier linearity, and on a licensed band it may run straight into an EIRP
+		limit that more power cannot buy its way past.
+		\textbf{$G_{t}$:} $8\dbi \rightarrow 14\dbi$ roughly halves the ground antenna's
+		beamwidth. Ground real estate and structure are cheap, so this is usually the
+		right answer --- the price is that the station must now track the pass accurately,
+		and EIRP rises exactly as it would with more power.
+		\textbf{$G_{r}$:} $6\db$ more on the cubesat means a larger deployable antenna
+		with a narrower beam, on a spacecraft whose attitude control may not be able to
+		point it. Mass and pointing are the scarcest resources in the whole system.
+		\textbf{Recommendation: buy it at $G_{t}$.} It is the cheapest decibel in the
+		link and it sits on the end where size, power, and pointing hardware are all
+		affordable --- provided the EIRP limit leaves room.
 		\end{solution}
 
 \end{parts}

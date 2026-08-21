@@ -2,19 +2,21 @@
 """Generate the reciprocity diagram for the L02 deck.
 
 Two panels, same idea as a textbook reciprocity figure but drawn clean and
-native to the deck. Antenna A (directional, its lobe drawn identically in both
-panels) links to antenna B:
+native to the deck. Two dipoles, A and B, each carrying its true figure-eight
+pattern (|cos phi| in this plan view: broadside lobes along the link, nulls off
+the wire ends):
   - Transmit:  energy flows A -> B
   - Receive:   energy flows B -> A
-A's pattern/gain is the SAME either way — that's reciprocity. The lobe is drawn
-once per panel from one shared function so the two are provably identical.
+Both patterns are the SAME either way — that's reciprocity. The panels are
+identical except for the direction of the arrow, and every lobe comes from one
+shared function so they are provably identical.
 
 No baked prose beyond the panel/flow labels; the "gain / impedance /
 polarization unchanged" wording lives on the slide. Text carries no
 font-family, so injected inline it inherits the deck's Source Sans Pro.
 
     python scripts/graphics/reciprocity.py
-    -> writes book/extras/slides/fig/reciprocity.svg
+    -> writes book/extras/slides/fig/L02-reciprocity.svg
 """
 
 from __future__ import annotations
@@ -28,7 +30,13 @@ RED, BLUE, NAVY, GREY = "#b01e24", "#0067b9", "#004a85", "#5a5a5a"
 
 
 def lobe_r(phi: float) -> float:
-    return R0 * (0.2 + 0.8 * ((1 + math.cos(phi)) / 2) ** 2)
+    """Dipole field pattern, |sin(theta)| off the wire axis.
+
+    The wire is drawn vertical, so in this plan view the pattern is |cos(phi)|
+    measured from the horizontal link direction: two equal lobes pointing at the
+    other antenna and away from it, with nulls straight off the wire ends.
+    """
+    return R0 * abs(math.cos(phi))
 
 
 def lobe(cx: float, cy: float):
@@ -46,19 +54,22 @@ def main() -> int:
     xs, ys, body = [], [], []
 
     for name, cy in ROWS.items():
-        d, pts = lobe(XA, cy)
-        for x, y in pts:
-            xs.append(x); ys.append(y)
         body.append(f'<text x="30" y="{cy-46:.0f}" fill="{NAVY}" font-size="15" font-weight="700">{name}</text>')
         xs.append(30); ys.append(cy - 46 - 13)   # count the title's height in the bbox
-        body.append(f'<path d="{d}" fill="{BLUE}" opacity="0.15" stroke="{BLUE}" stroke-width="1.5"/>')
+        # Both antennas carry the same figure-eight — that is the whole point.
+        for cx in (XA, XB):
+            d, pts = lobe(cx, cy)
+            for x, y in pts:
+                xs.append(x); ys.append(y)
+            body.append(f'<path d="{d}" fill="{BLUE}" opacity="0.15" stroke="{BLUE}" stroke-width="1.5"/>')
         body.append(dipole(XA, cy))
         body.append(dipole(XB, cy))
+        body.append(f'<text x="{XA}" y="{cy+40:.0f}" fill="{GREY}" font-size="12" text-anchor="middle">A</text>')
+        body.append(f'<text x="{XB}" y="{cy+40:.0f}" fill="{GREY}" font-size="12" text-anchor="middle">B</text>')
+        xs += [XA, XB]; ys.append(cy + 40)
         if name == "Transmit":
             body.append(f'<line x1="152" y1="{cy}" x2="330" y2="{cy}" stroke="{NAVY}" stroke-width="3" marker-end="url(#txar)"/>')
             body.append(f'<text x="241" y="{cy-9:.0f}" fill="{NAVY}" font-size="13" text-anchor="middle">A → B</text>')
-            body.append(f'<text x="{XA}" y="{cy+32:.0f}" fill="{GREY}" font-size="12" text-anchor="middle">A</text>')
-            body.append(f'<text x="{XB}" y="{cy+32:.0f}" fill="{GREY}" font-size="12" text-anchor="middle">B</text>')
         else:
             body.append(f'<line x1="330" y1="{cy}" x2="152" y2="{cy}" stroke="{RED}" stroke-width="3" marker-end="url(#rxar)"/>')
             body.append(f'<text x="241" y="{cy-9:.0f}" fill="{RED}" font-size="13" text-anchor="middle">B → A</text>')
@@ -72,13 +83,13 @@ def main() -> int:
     vw, vh = max(xs) - min(xs) + 2 * pad, max(ys) - min(ys) + 2 * pad
 
     svg = (f'<svg viewBox="{vx:.0f} {vy:.0f} {vw:.0f} {vh:.0f}" xmlns="http://www.w3.org/2000/svg" '
-           f'role="img" aria-label="Reciprocity: antenna A has the same radiation pattern transmitting to B as receiving from B">\n'
+           f'role="img" aria-label="Reciprocity: two dipoles with identical figure-eight patterns, drawn the same whether energy flows from A to B or from B to A">\n'
            f'<defs>'
            f'<marker id="txar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="{NAVY}"/></marker>'
            f'<marker id="rxar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="{RED}"/></marker>'
            f'</defs>\n' + "\n".join(body) + "\n</svg>\n")
 
-    out = Path(__file__).resolve().parents[2] / "book/extras/slides/fig/reciprocity.svg"
+    out = Path(__file__).resolve().parents[2] / "book/extras/slides/fig/L02-reciprocity.svg"
     out.write_text(svg, encoding="utf-8")
     print(f"wrote {out} (viewBox {vx:.0f} {vy:.0f} {vw:.0f} {vh:.0f})")
     return 0

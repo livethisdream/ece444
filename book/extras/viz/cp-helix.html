@@ -5,182 +5,128 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Circular polarization — 3D helix</title>
 <style>
-  :root {
-    --navy: #004a85;
-    --mid:  #0067b9;
-    --edge: #cddce9;
-    --edge2:#b9d2e5;
-    --bg:   #f5f9fc;
-    --ink:  #15202b;
-    --ink3: #5b6573;
-    --rh:   #0067b9;
-    --lh:   #b3213a;
-    --tip:  #1d7a4d;
-  }
-  html, body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    color: var(--ink);
-    background: #fff;
-  }
-  .app {
-    display: grid;
-    grid-template-columns: 1fr 240px;
-    gap: 16px;
-    padding: 16px;
-    align-items: start;
-  }
-  @media (max-width: 720px) {
-    .app { grid-template-columns: 1fr; }
-  }
-  canvas {
-    display: block;
-    width: 100%;
-    height: auto;
-    background: #fff;
-    border: 1px solid var(--edge);
-    border-radius: 6px;
-  }
-  .panel {
-    font-size: 13.5px;
-    line-height: 1.4;
-  }
-  .panel h2 {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--navy);
-    margin: 0 0 8px;
-  }
-  .senseRow {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
-  .senseRow button {
-    font: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 8px;
-    border: 1px solid var(--edge2);
-    background: #fff;
-    color: var(--navy);
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .senseRow button:hover { background: var(--bg); border-color: var(--mid); }
-  .senseRow button.active {
-    background: var(--mid);
-    color: #fff;
-    border-color: var(--mid);
-  }
-  .slider {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  .slider label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ink3);
-    min-width: 62px;
-  }
-  .slider input[type="range"] { width: 100%; }
-  .slider .val {
-    font-family: 'JetBrains Mono', Menlo, monospace;
-    font-size: 12px;
-    font-variant-numeric: tabular-nums;
-    color: var(--navy);
-    min-width: 40px;
-    text-align: right;
-  }
-  .toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: var(--ink3);
-    margin-bottom: 10px;
-  }
-  .toggle input { margin: 0; }
-  .caption {
-    font-size: 12px;
-    color: var(--ink3);
-    margin-top: 10px;
-    line-height: 1.5;
-  }
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --rh:#0067b9; --lh:#b3213a; --tip:#1d7a4d; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:9px 18px; align-items:center;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:38px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:80px; accent-color:var(--mid); }
+  .seg { display:flex; width:100%; border:1px solid var(--edge2); border-radius:6px; overflow:hidden; background:#fff; }
+  .seg button { flex:1 1 0; font:600 12px/1.15 Inter,system-ui,sans-serif; padding:7px 6px; border:0;
+                background:#fff; color:var(--navy); cursor:pointer; }
+  .seg button + button { border-left:1px solid var(--edge2); }
+  .seg button[aria-pressed="true"] { background:var(--mid); color:#fff; }
+  .tgl { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; min-width:0; }
+  .tgl input { position:absolute; opacity:0; pointer-events:none; }
+  .tgl .sw { position:relative; flex:none; width:34px; height:19px; border-radius:999px;
+             background:#dfe8f1; border:1px solid var(--edge2); transition:background .15s, border-color .15s; }
+  .tgl .sw::after { content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; border-radius:50%;
+                    background:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.22); transition:transform .15s; }
+  .tgl input:checked + .sw { background:var(--mid); border-color:var(--mid); }
+  .tgl input:checked + .sw::after { transform:translateX(15px); }
+  .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
+  .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .tgl input:checked ~ .t { color:var(--navy); }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
+          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
+          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
+  .pill b { font-weight:700; }
+  .pill.sense { background:rgba(0,103,185,0.12); color:var(--rh); border-color:rgba(0,103,185,0.30); }
+  .pill.sense.lh { background:rgba(179,33,58,0.10); color:var(--lh); border-color:rgba(179,33,58,0.28); }
+  .hint { margin:0; text-align:center; font-size:11.5px; color:var(--ink3); line-height:1.45; }
 </style>
 </head>
 <body>
 <div class="app">
-  <canvas id="c" width="640" height="440"
-          aria-label="Circular polarization corkscrew propagating along z"></canvas>
-  <div class="panel">
-    <h2>Sense</h2>
-    <div class="senseRow" id="senseRow">
-      <button data-sense="rh" class="active">RHCP</button>
-      <button data-sense="lh">LHCP</button>
+  <canvas id="c" aria-label="Circular polarization corkscrew propagating along z"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <div class="seg" id="senseRow">
+        <button type="button" data-sense="rh" aria-pressed="true">RHCP</button>
+        <button type="button" data-sense="lh" aria-pressed="false">LHCP</button>
+      </div>
     </div>
-    <h2>Controls</h2>
-    <div class="slider">
-      <label>Rotate</label>
+    <div class="ctl">
+      <label>Rotate view</label>
       <input id="tilt" type="range" min="0" max="60" step="1" value="22">
       <span class="val" id="tilt-v">22°</span>
     </div>
-    <div class="slider">
+    <div class="ctl">
       <label>Speed</label>
       <input id="speed" type="range" min="0" max="2" step="0.05" value="1">
       <span class="val" id="speed-v">1.0×</span>
     </div>
-    <div class="toggle">
-      <input id="showComp" type="checkbox" checked>
-      <label for="showComp">Show x/y components</label>
-    </div>
-    <div class="toggle">
-      <input id="pause" type="checkbox">
-      <label for="pause">Pause</label>
-    </div>
-    <div class="caption">
-      Wave propagates in <b>+z</b>. Tip of the E-vector traces a helix.<br>
-      Point your right thumb along +z: fingers curl RHCP.
-    </div>
+    <label class="tgl"><input id="showComp" type="checkbox" checked><span class="sw"></span><span class="t">x / y components</span></label>
+    <label class="tgl"><input id="run" type="checkbox" checked><span class="sw"></span><span class="t">Animate</span></label>
   </div>
+
+  <div class="pills">
+    <span class="pill sense" id="p-sense-pill">sense = <b id="p-sense">RHCP</b></span>
+    <span class="pill">axial ratio = <b>1.00 (0 dB)</b></span>
+    <span class="pill">Ey vs Ex = <b id="p-phase">—</b></span>
+    <span class="pill">tip angle at z = 0: <b id="p-ang">—</b></span>
+    <span class="pill">one full turn per <b>&#955;</b></span>
+  </div>
+
+  <p class="hint">Wave propagates in <b>+z</b>; the tip of the E-vector traces a helix.
+  Point your right thumb along +z &#8212; fingers curl the way RHCP turns.</p>
 </div>
 
 <script>
 (function () {
+  'use strict';
   const cvs = document.getElementById('c');
   const ctx = cvs.getContext('2d');
+
+  const DW = 640, DH = 340;          // design canvas, scaled to the container width
 
   const senseRow = document.getElementById('senseRow');
   const tiltEl   = document.getElementById('tilt');
   const speedEl  = document.getElementById('speed');
   const showComp = document.getElementById('showComp');
-  const pauseEl  = document.getElementById('pause');
+  const runEl    = document.getElementById('run');
   const tiltV    = document.getElementById('tilt-v');
   const speedV   = document.getElementById('speed-v');
 
   let sense = 'rh';  // 'rh' or 'lh'
   let phase = 0;     // running time phase
   let lastT = performance.now();
+  let lastPill = 0;
 
   senseRow.addEventListener('click', e => {
     const btn = e.target.closest('button');
     if (!btn) return;
     sense = btn.dataset.sense;
     senseRow.querySelectorAll('button').forEach(b =>
-      b.classList.toggle('active', b.dataset.sense === sense));
+      b.setAttribute('aria-pressed', b.dataset.sense === sense ? 'true' : 'false'));
   });
 
   [tiltEl, speedEl].forEach(el => el.addEventListener('input', () => {
     tiltV.textContent  = tiltEl.value + '°';
     speedV.textContent = (+speedEl.value).toFixed(1) + '×';
   }));
+
+  function fit() {
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = Math.max(320, cvs.getBoundingClientRect().width);
+    const sc = Math.max(0.5, Math.min(cssW / DW, 0.95));
+    const cssH = DH * sc;
+    cvs.width  = Math.round(cssW * dpr);
+    cvs.height = Math.round(cssH * dpr);
+    cvs.style.height = cssH + 'px';
+    const tx = (cssW - DW * sc) / 2;
+    ctx.setTransform(dpr * sc, 0, 0, dpr * sc, dpr * tx, 0);
+  }
+  window.addEventListener('resize', fit);
 
   // Isometric-ish projection.  x_screen = x - z * cos(iso), y_screen = y - z * sin(iso).
   function project(x, y, z, params) {
@@ -191,21 +137,25 @@
   }
 
   function draw() {
-    const W = cvs.width, H = cvs.height;
+    const W = DW, H = DH;
     ctx.clearRect(0, 0, W, H);
 
     const tiltDeg = +tiltEl.value;
     const isoRad = tiltDeg * Math.PI / 180;
 
-    // z-axis runs left-to-right, tilted down.
+    // z-axis runs left-to-right, tilted down.  The depth scale is trimmed and the
+    // origin dropped so the whole corkscrew stays inside the frame at any tilt.
+    const isoS = Math.sin(isoRad);
+    const sz = Math.min(44, (H - 142) / (10 * Math.max(isoS, 1e-3)));
+    const rise = 10 * sz * isoS;
     const params = {
       cx: 110,               // origin near left edge
-      cy: H / 2,
+      cy: H / 2 + rise / 2,
       sx: 46,                // x scale (perp axis 1)
       sy: 46,                // y scale (perp axis 2)
-      sz: 44,                // z scale (into scene)
+      sz: sz,                // z scale (into scene)
       isoCos: Math.cos(isoRad * 0.6),
-      isoSin: -Math.sin(isoRad),
+      isoSin: -isoS,
     };
 
     // Frame: z-axis line + tick marks.
@@ -251,12 +201,14 @@
     const now = performance.now();
     const dt = (now - lastT) / 1000;
     lastT = now;
-    if (!pauseEl.checked) {
+    if (runEl.checked) {
       phase += dt * 2.5 * +speedEl.value;
     }
 
-    // Helix path
+    // Helix path.  angle = s (kz - wt): one rigid corkscrew of fixed handedness,
+    // translating along +z for either sense.
     const senseSign = (sense === 'rh') ? -1 : +1;
+    const angAt = z => senseSign * (z * Math.PI * 0.9 - phase);
     const zMax = 10, N = 260;
 
     // Faint helix outline (all-of-space snapshot).
@@ -265,7 +217,7 @@
     ctx.beginPath();
     for (let i = 0; i <= N; i++) {
       const z = (i / N) * zMax;
-      const ang = senseSign * (z * Math.PI * 0.9) - phase;
+      const ang = angAt(z);
       const x = Math.cos(ang);
       const y = Math.sin(ang);
       const [px, py] = project(x, y, z, params);
@@ -281,8 +233,7 @@
       ctx.beginPath();
       for (let i = 0; i <= N; i++) {
         const z = (i / N) * zMax;
-        const ang = senseSign * (z * Math.PI * 0.9) - phase;
-        const x = Math.cos(ang);
+        const x = Math.cos(angAt(z));
         const [px, py] = project(x, -1.2, z, params);
         if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
       }
@@ -293,20 +244,19 @@
       ctx.beginPath();
       for (let i = 0; i <= N; i++) {
         const z = (i / N) * zMax;
-        const ang = senseSign * (z * Math.PI * 0.9) - phase;
-        const y = Math.sin(ang);
+        const y = Math.sin(angAt(z));
         const [px, py] = project(-1.2, y, z, params);
         if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
       }
       ctx.stroke();
     }
 
-    // Arrows at 5 z-positions showing the current E-vector.
+    // Arrows at 13 z-positions showing the current E-vector.
     ctx.lineWidth = 2.5;
     const arrowN = 12;
     for (let k = 0; k <= arrowN; k++) {
       const z = (k / arrowN) * zMax;
-      const ang = senseSign * (z * Math.PI * 0.9) - phase;
+      const ang = angAt(z);
       const x = Math.cos(ang);
       const y = Math.sin(ang);
       const [px, py] = project(0, 0, z, params);
@@ -321,18 +271,32 @@
       ctx.arc(qx, qy, strong ? 4 : 2.5, 0, 2 * Math.PI); ctx.fill();
     }
 
-    // Legend on the top-right of the canvas.
-    ctx.font = '12px Inter, sans-serif';
-    ctx.fillStyle = '#3b4651';
+    // Legend in the top-left corner, clear of the +z arrow.
+    ctx.font = '700 12px Inter, sans-serif';
+    ctx.fillStyle = sense === 'rh' ? '#0067b9' : '#b3213a';
     ctx.textAlign = 'left';
-    ctx.fillText(sense === 'rh' ? 'RHCP  (right hand)' : 'LHCP  (left hand)', W - 170, 22);
-    ctx.fillStyle = '#5b6573';
-    ctx.font = '11px Inter, sans-serif';
-    ctx.fillText('Ex(t,z) — blue shadow', W - 170, 40);
-    ctx.fillText('Ey(t,z) — red shadow',  W - 170, 55);
+    ctx.fillText(sense === 'rh' ? 'RHCP  (right hand)' : 'LHCP  (left hand)', 14, 20);
+    if (showComp.checked) {
+      ctx.fillStyle = '#5b6573';
+      ctx.font = '11px Inter, sans-serif';
+      ctx.fillText('Ex(t,z) — blue shadow', 14, 38);
+      ctx.fillText('Ey(t,z) — red shadow',  14, 53);
+    }
+
+    // ---- live readouts, refreshed ~10 times a second ----
+    if (now - lastPill > 100) {
+      lastPill = now;
+      const a0 = angAt(0);
+      let deg = (a0 * 180 / Math.PI) % 360; if (deg < 0) deg += 360;
+      document.getElementById('p-ang').textContent = deg.toFixed(0) + '°';
+      document.getElementById('p-sense').textContent = (sense === 'rh') ? 'RHCP' : 'LHCP';
+      document.getElementById('p-phase').textContent = (sense === 'rh') ? '−90° (lags)' : '+90° (leads)';
+      document.getElementById('p-sense-pill').classList.toggle('lh', sense === 'lh');
+    }
   }
 
   function tick() { draw(); requestAnimationFrame(tick); }
+  fit();
   tick();
 })();
 </script>

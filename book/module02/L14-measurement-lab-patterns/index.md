@@ -129,7 +129,7 @@ The reference horn reads $-32.4\ \text{dBm}$ at its peak; the AUT reads $-35.6\ 
 
 $$G_{\text{AUT}} = 15.0 + (-35.6 + 32.4) = 15.0 - 3.2 = 11.8\ \text{dBi}$$
 
-Predicted from the aperture with $\eta_{ap} = 0.5$: $G = 0.5 \cdot 4\pi(0.0408)/(0.1224)^2 = 17.1$, or $12.3\ \text{dBi}$. Measured is 0.5 dB low, and the reference horn's own calibration is good to about 0.5 dB — that is agreement, and your report should say so rather than inventing a physical cause.
+Predicted from the aperture with $\eta_{\text{ap}} = 0.5$: $G = 0.5 \cdot 4\pi(0.0408)/(0.1224)^2 = 17.1$, or $12.3\ \text{dBi}$. Measured is 0.5 dB low, and the reference horn's own calibration is good to about 0.5 dB — that is agreement, and your report should say so rather than inventing a physical cause.
 
 Rotating the source $90^\circ$ drops the boresight level to $-59.9\ \text{dBm}$:
 

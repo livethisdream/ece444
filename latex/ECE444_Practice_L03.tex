@@ -15,12 +15,12 @@ is required (write \textbf{None} if you did not collaborate).}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Identify the polarization.} For each plane wave propagating in
 $+\zhat$, identify the polarization (linear, RHCP, LHCP, or elliptical) and ---
-where linear --- the tilt angle relative to $\xhat$.
+where linear --- the tilt angle $\psi$ measured from $\xhat$.
 \begin{parts}
 	\part $\vec{E} = \xhat 3\cosp{\omega t - kz}$
-		\begin{solution}[0.4in] Only an $\xhat$ component --- \textbf{linear along $\xhat$} ($0\mydeg$). \end{solution}
+		\begin{solution}[0.4in] Only an $\xhat$ component --- \textbf{linear along $\xhat$} ($\psi = 0\mydeg$). \end{solution}
 	\part $\vec{E} = \xhat 2\cosp{\omega t - kz} + \yhat 2\cosp{\omega t - kz}$
-		\begin{solution}[0.4in] Equal amplitudes, in phase --- \textbf{linear, tilted $+45\mydeg$}. \end{solution}
+		\begin{solution}[0.4in] Equal amplitudes, in phase --- \textbf{linear, tilted $\psi = +45\mydeg$}. \end{solution}
 	\part $\vec{E} = \xhat 5\cosp{\omega t - kz} + \yhat 5\cosp{\omega t - kz - 90\mydeg}$
 		\begin{solution}[0.5in] Equal amplitudes, $\delta = -90\mydeg$, $+\zhat$ propagation --- \textbf{RHCP}. \end{solution}
 	\part $\vec{E} = \xhat 5\cosp{\omega t - kz} + \yhat 5\cosp{\omega t - kz + 90\mydeg}$
@@ -34,37 +34,94 @@ where linear --- the tilt angle relative to $\xhat$.
 \question \textbf{Axial ratio.} A satellite downlink antenna is spec'd circularly
 polarized with $\text{AR} \le 3\db$ across its operating band.
 \begin{parts}
-	\part Convert the $3\db$ axial ratio to a linear ratio (major/minor axis).
-		\begin{solution}[0.9in] $\text{AR} = 10^{3/20} \approx 1.41$ (i.e.\ $\sqrt{2}$). \end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Convert the $3\db$ axial ratio to a linear ratio (major/minor axis).
+		\begin{solution}[0.9in]
+		\eq{ \text{AR} = 10^{3/20} \approx 1.41 \quad (\text{i.e. } \sqrt{2}) }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		AR = \ansbox[1.4in]{$\approx 1.41$ (unitless)}
+	\end{minipage}
+
 	\part Write the two orthogonal linear components (up to a common scale) with the
 	appropriate $90\mydeg$ phase, assuming the ellipse major axis is along $\xhat$.
 		\begin{solution}[1.1in]
 		\eq{ E_x(t) = 1 \cdot \cosp{\omega t}, \qquad E_y(t) = 0.707\cosp{\omega t \pm 90\mydeg} }
 		Sign of the phase sets the RHCP vs LHCP sense.
 		\end{solution}
-	\part An $\xhat$ receiver picks off $E_x$; a $\yhat$ receiver picks off $E_y$.
-	Compute the ratio of received \emph{power} in dB. Should it match part (a)?
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part An $\xhat$ receiver picks off $E_x$; a $\yhat$ receiver picks off $E_y$.
+		Compute the ratio of received \emph{power} in dB. Should it match part (a)?
 		\begin{solution}[1.2in]
 		\eq{ \dfrac{P_x}{P_y} = \lp \dfrac{1.0}{0.707} \rp^{2} = 2.0 \longrightarrow 10\mylog{2.0} \approx 3.0\db }
 		Yes --- the axial ratio in dB equals the received-power difference between the two aligned linear receivers.
 		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$P_x/P_y$ = \ansbox[1.4in]{$\approx 3.0\db$}
+	\end{minipage}
+
 \end{parts}
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Polarization loss factor.}
 \begin{parts}
-	\part A ground station transmits a \emph{linearly} polarized signal along $\xhat$.
-	A satellite receiver is \textbf{RHCP} and pointed correctly. Compute the PLF in dB.
-		\begin{solution}[0.7in] Linear $\leftrightarrow$ CP: $\text{PLF} = 0.5 = -3\db$. \end{solution}
-	\part Same ground station, but the satellite receiver is \textbf{LHCP}. Compute the PLF.
-		\begin{solution}[0.7in] Still $-3\db$ --- linear-to-CP does not depend on sense. \end{solution}
-	\part Two linear whip antennas: radio A vertical, radio B tilted $30\mydeg$ from
-	vertical. Compute the PLF.
-		\begin{solution}[0.8in] $\text{PLF} = \cos^{2}(30\mydeg) = (0.866)^{2} \approx 0.75 \longrightarrow 10\mylog{0.75} \approx -1.2\db$. \end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A ground station transmits a \emph{linearly} polarized signal along
+		$\xhat$. A satellite receiver is \textbf{RHCP} and pointed correctly. Compute
+		the PLF in dB.
+		\begin{solution}[0.9in]
+		Linear $\leftrightarrow$ CP splits the incident power evenly between the two
+		senses:
+		\eq{ \text{PLF} = 0.5 \longrightarrow 10\mylog{0.5} = -3.0\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		PLF = \ansbox[1.4in]{$0.5 = -3.0\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Same ground station, but the satellite receiver is \textbf{LHCP}.
+		Compute the PLF.
+		\begin{solution}[0.9in]
+		Still $-3.0\db$. A linear wave contains equal RHCP and LHCP content, so
+		linear-to-CP coupling does not depend on the sense of the CP antenna.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		PLF = \ansbox[1.4in]{$0.5 = -3.0\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Two linear whip antennas: radio A vertical, radio B tilted
+		$\psi = 30\mydeg$ from vertical. Compute the PLF.
+		\begin{solution}[1.0in]
+		\eq{ \text{PLF} &= \cos^{2}\psi = (0.866)^{2} \approx 0.75 \\
+			&\longrightarrow 10\mylog{0.75} \approx -1.2\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		PLF = \ansbox[1.4in]{$0.75 = -1.2\db$}
+	\end{minipage}
+
 	\part In one sentence, explain why aircraft-to-ground links almost always specify
 	circular polarization on at least one end.
-		\begin{solution}[0.9in] Airframe attitude (roll/pitch/yaw) sweeps a linear aircraft antenna through every tilt relative to the ground station; making one end CP caps the worst-case polarization loss at $3\db$ regardless of attitude. \end{solution}
+		\begin{solution}[0.9in]
+		Airframe attitude (roll/pitch/yaw) sweeps a linear aircraft antenna through
+		every tilt angle $\psi$ relative to the ground station, which for two linear
+		antennas means an occasional deep null; making one end CP holds the loss near
+		$3\db$ regardless of attitude.
+		\end{solution}
 \end{parts}
 
 \newpage
@@ -72,35 +129,113 @@ polarized with $\text{AR} \le 3\db$ across its operating band.
 \question \textbf{Impedance bandwidth from a VSWR spec.} An antenna is spec'd
 ``VSWR $\le 2$ from $2.30\ghz$ to $2.55\ghz$.''
 \begin{parts}
-	\part What is the impedance bandwidth in MHz?
-		\begin{solution}[0.5in] $2.55 - 2.30 = 250\mhz$. \end{solution}
-	\part What is the fractional bandwidth (FBW) in percent?
-		\begin{solution}[0.9in] \eq{ f_c = 2.425\ghz, \qquad \text{FBW} = \dfrac{250}{2425} \approx 10.3\% } \end{solution}
-	\part Convert VSWR $= 2$ to $\left| \Gamma \right|$ and to return loss in dB.
-		\begin{solution}[1in] \eq{ \left| \Gamma \right| = \dfrac{2-1}{2+1} = \dfrac{1}{3} \approx 0.333, \qquad \text{RL} = -20\mylog{0.333} \approx 9.5\db } \end{solution}
-	\part Narrowband, broadband, or ultra-wideband? Likely family --- patch, horn, or
-	log-periodic?
-		\begin{solution}[0.9in] FBW $\approx 10\%$ is \textbf{broadband}: a standard-gain horn or a well-designed half-wave dipole. A patch would need matching tricks; a log-periodic is overkill. \end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part What is the impedance bandwidth in MHz?
+		\begin{solution}[0.8in]
+		\eq{ \text{BW} = 2.55\ghz - 2.30\ghz = 250\mhz }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		BW = \ansbox[1.4in]{$250\mhz$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part What is the fractional bandwidth (FBW) in percent?
+		\begin{solution}[1.0in]
+		\eq{ f_c &= \dfrac{2.30 + 2.55}{2} = 2.425\ghz \\
+			\text{FBW} &= \dfrac{250}{2425} \approx 10.3\% }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		FBW = \ansbox[1.4in]{$\approx 10.3\%$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Convert VSWR $= 2$ to $\left| \Gamma \right|$ and to return loss in dB.
+		\begin{solution}[1.1in]
+		\eq{ \left| \Gamma \right| &= \dfrac{2-1}{2+1} = \dfrac{1}{3} \approx 0.333 \\
+			\text{RL} &= -20\mylog{0.333} \approx 9.5\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\left| \Gamma \right|$ = \ansbox[1.4in]{$\approx 0.333$ (unitless)}
+
+		\vspace{4pt}
+		RL = \ansbox[1.4in]{$\approx 9.5\db$}
+	\end{minipage}
+
+	\part Narrowband, broadband, or ultra-wideband? Name the likely antenna family,
+	using the bandwidth table from Lesson 3.
+		\begin{solution}[1.2in]
+		FBW $\approx 10\%$ is \textbf{broadband}. By the L3 table the natural fit is a
+		\textbf{dipole ($\lambda/2$)}, quoted at 8--15\%; a \textbf{slot} at 5--10\% is
+		defensible if the antenna has to live in a skin or a wall. A patch (1--5\%)
+		would need matching tricks to stretch this far, and a log-periodic (10:1 RBW)
+		is overkill for a $10\%$ requirement.
+		\end{solution}
 \end{parts}
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Fractional and ratio bandwidth.}
 \begin{parts}
-	\part A cellular antenna covers $698$--$960\mhz$ (low) and $1.71$--$2.69\ghz$
-	(high). Compute the FBW and RBW of each band.
-		\begin{solution}[1.7in]
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A cellular antenna covers $698$--$960\mhz$ (low) and $1.71$--$2.69\ghz$
+		(high). Compute the FBW and RBW of each band.
+		\begin{solution}[2.2in]
 		\eq{
-			\text{Low: } & f_c = 829\mhz, \quad \text{FBW} = \dfrac{262}{829} \approx 31.6\%, \quad \text{RBW} = \dfrac{960}{698} \approx 1.38{:}1 \\
-			\text{High: } & f_c = 2200\mhz, \quad \text{FBW} = \dfrac{980}{2200} \approx 44.5\%, \quad \text{RBW} = \dfrac{2690}{1710} \approx 1.57{:}1
+			\text{Low: } f_c &= 829\mhz \\
+			\text{FBW} &= \dfrac{262}{829} \approx 31.6\% \\
+			\text{RBW} &= \dfrac{960}{698} \approx 1.38{:}1 \\
+			\text{High: } f_c &= 2200\mhz \\
+			\text{FBW} &= \dfrac{980}{2200} \approx 44.5\% \\
+			\text{RBW} &= \dfrac{2690}{1710} \approx 1.57{:}1
 		}
 		\end{solution}
-	\part A UWB radar antenna covers $3.1$--$10.6\ghz$. Compute its RBW. Does it meet
-	the FCC UWB threshold of RBW $\ge 2{:}1$?
-		\begin{solution}[0.9in] \eq{ \text{RBW} = \dfrac{10.6}{3.1} \approx 3.42{:}1 } Yes --- well above the $2{:}1$ threshold. \end{solution}
-	\part Which antenna family would you pick for each of the three bands, with a
-	one-sentence reason?
-		\begin{solution}[1.4in] Low ($\approx 32\%$): broadband monopole or PIFA. High ($\approx 45\%$): chassis slot or stacked patch. UWB ($3.4{:}1$): Vivaldi (tapered slot) or log-periodic --- self-scaling over a wide band without matching tricks. \end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		low = \ansbox[1.5in]{$31.6\%$, $1.38{:}1$}
+
+		\vspace{4pt}
+		high = \ansbox[1.5in]{$44.5\%$, $1.57{:}1$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A UWB radar antenna covers $3.1$--$10.6\ghz$. Compute its RBW. Does it
+		meet the FCC UWB threshold of RBW $\ge 2{:}1$?
+		\begin{solution}[1.0in]
+		\eq{ \text{RBW} = \dfrac{10.6}{3.1} \approx 3.42{:}1 }
+		Yes --- well above the $2{:}1$ threshold.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		RBW = \ansbox[1.4in]{$\approx 3.42{:}1$}
+	\end{minipage}
+
+	\part Which antenna family would you pick for each of the three bands? Give a
+	one-sentence reason for each that names the \emph{mechanism} buying the
+	bandwidth --- resonant, traveling-wave, or self-scaling.
+		\begin{solution}[1.9in]
+		\textbf{Low ($\approx 32\%$):} a broadband monopole or dipole, fattened or
+		sleeved. It is still a \emph{resonant} radiator, but a thick element has a low
+		$Q$, and a low $Q$ is exactly how a resonant structure buys tens of percent.
+		\textbf{High ($\approx 45\%$):} a slot or a dipole again --- resonant, but at
+		these frequencies the element is physically small enough that you can afford to
+		make it electrically fat, which is the same low-$Q$ mechanism pushed further.
+		\textbf{UWB ($3.4{:}1$):} a Vivaldi (tapered slot) or a log-periodic. These are
+		\emph{traveling-wave} and \emph{self-scaling} structures: a different part of
+		the antenna does the radiating at each frequency, so there is no single
+		resonance to run out of and no matching network to fight.
+		(A PIFA at the low band or a stacked patch at the high band are legitimate
+		extras --- but justify them by the same $Q$ argument, not by name.)
+		\end{solution}
 \end{parts}
 
 \newpage
@@ -108,16 +243,58 @@ polarized with $\text{AR} \le 3\db$ across its operating band.
 \question \textbf{Chu-Harrington intuition.} A design must fit inside a sphere of
 radius $a = 15\text{ mm}$ and operate at $f = 915\mhz$ (ISM band).
 \begin{parts}
-	\part Compute $\lambda$, $k$, and the electrical size $ka$.
-		\begin{solution}[1.2in] \eq{ \lambda = \dfrac{c}{f} \approx 0.328\m, \quad k = \dfrac{2\pi}{\lambda} \approx 19.2\ \text{rad/m}, \quad ka = 19.2(0.015) \approx 0.288 } \end{solution}
-	\part Estimate the minimum $Q$ from $Q_{\min} \approx \dfrac{1}{(ka)^{3}} + \dfrac{1}{ka}$.
-		\begin{solution}[1in] \eq{ Q_{\min} \approx \dfrac{1}{0.0239} + 3.47 \approx 45 } \end{solution}
-	\part Estimate the maximum fractional bandwidth $\text{FBW}_{\max} \approx 1/Q_{\min}$
-	(for VSWR $\le 2$).
-		\begin{solution}[0.8in] $\approx 1/45 \approx 2.2\%$ ($\approx 20\mhz$ at 915 MHz). \end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute $\lambda$, $k$, and the electrical size $ka$.
+		\begin{solution}[1.4in]
+		\eq{ \lambda &= \dfrac{c}{f} = \dfrac{3\ee{8}}{915\ee{6}} \approx 0.328\m \\
+			k &= \dfrac{2\pi}{\lambda} \approx 19.2\ \text{rad/m} \\
+			ka &= 19.2(0.015) \approx 0.288 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\lambda$ = \ansbox[1.4in]{$\approx 0.328\m$}
+
+		\vspace{4pt}
+		$k$ = \ansbox[1.4in]{$\approx 19.2$ rad/m}
+
+		\vspace{4pt}
+		$ka$ = \ansbox[1.4in]{$\approx 0.288$ (unitless)}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Estimate the minimum $Q$ from
+		$Q_{\min} \approx \dfrac{1}{(ka)^{3}} + \dfrac{1}{ka}$.
+		\begin{solution}[1.1in]
+		\eq{ Q_{\min} \approx \dfrac{1}{0.0239} + 3.47 \approx 41.8 + 3.5 \approx 45 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$Q_{\min}$ = \ansbox[1.4in]{$\approx 45$ (unitless)}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Estimate the maximum fractional bandwidth
+		$\text{FBW}_{\max} \approx 1/Q_{\min}$ (for VSWR $\le 2$).
+		\begin{solution}[1.0in]
+		\eq{ \text{FBW}_{\max} \approx \dfrac{1}{45} \approx 2.2\% \approx 20\mhz
+			\text{ at } 915\mhz }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		FBW$_{\max}$ = \ansbox[1.3in]{$\approx 2.2\%$ ($20\mhz$)}
+	\end{minipage}
+
 	\part The designer wants 100 MHz of usable bandwidth at 915 MHz. Possible in a
 	15 mm sphere?
-		\begin{solution}[1.2in] No --- $100\mhz$ is FBW $\approx 11\%$, roughly $5\times$ the Chu-Harrington ceiling for a 15 mm sphere. It requires a larger antenna, or resistive loading / matching-network absorption that trades gain for bandwidth. \end{solution}
+		\begin{solution}[1.2in]
+		No --- $100\mhz$ is FBW $\approx 11\%$, roughly $5\times$ the Chu-Harrington
+		ceiling for a 15 mm sphere. It requires a larger antenna, or resistive loading /
+		matching-network absorption that trades gain for bandwidth.
+		\end{solution}
 \end{parts}
 
 \newpage
@@ -136,32 +313,64 @@ choosing the antenna for the other end of the link.
 		mismatch} --- ideally a null, and in practice only the few dB of rejection set
 		by the real axial ratio (part (e)). This is a link-killer, not a few-dB penalty.
 		\end{solution}
-	\part Convert $\text{AR} = 3\db$ to a linear ratio $A$, and give $A^{2}$.
-		\begin{solution}[0.8in] \eq{ A = 10^{3/20} \approx 1.41, \qquad A^{2} \approx 2.0 } \end{solution}
-	\part A \emph{linear} antenna receives from this patch. Using
-	$\text{PLF}(\theta) = \dfrac{A^{2}\cos^{2}\theta + \sin^{2}\theta}{A^{2}+1}$, find
-	the best and worst PLF over all orientations $\theta$, in dB.
-		\begin{solution}[1.5in]
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Convert $\text{AR} = 3\db$ to a linear ratio $A$, and give $A^{2}$.
+		\begin{solution}[0.9in]
+		\eq{ A = 10^{3/20} \approx 1.413, \qquad A^{2} \approx 1.995 \approx 2.0 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$A$ = \ansbox[1.5in]{$1.413$, $A^{2} = 1.995$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A \emph{linear} antenna receives from this patch. Using
+		$\text{PLF}(\psi) = \dfrac{A^{2}\cos^{2}\psi + \sin^{2}\psi}{A^{2}+1}$, find
+		the best and worst PLF over all orientations $\psi$, in dB.
+		\begin{solution}[1.6in]
 		\eq{ p_{\max} = \dfrac{A^{2}}{A^{2}+1} \approx \dfrac{2}{3} \longrightarrow 10\mylog{0.667} \approx -1.8\db }
 		\eq{ p_{\min} = \dfrac{1}{A^{2}+1} \approx \dfrac{1}{3} \longrightarrow 10\mylog{0.333} \approx -4.8\db }
-		Not the flat $-3\db$ of the ideal table --- and you rarely control $\theta$.
+		Not the flat $-3\db$ of the ideal table --- and you rarely control $\psi$.
 		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		best = \ansbox[1.4in]{$\approx -1.8\db$}
+
+		\vspace{4pt}
+		worst = \ansbox[1.4in]{$\approx -4.8\db$}
+	\end{minipage}
+
 	\part Show that the peak-to-null swing in dB equals the axial ratio in dB.
 		\begin{solution}[1.3in]
 		\eq{ \dfrac{p_{\max}}{p_{\min}} = \dfrac{A^{2}/(A^{2}+1)}{1/(A^{2}+1)} = A^{2} }
 		\eq{ 10\mylog{A^{2}} = 20\mylog{A} = \text{AR}_{\text{dB}} }
-		Here $10\mylog{2.0} \approx 3.0\db$, matching the spec. The result is exact, not
-		a rule of thumb.
+		Here $10\mylog{1.995} \approx 3.0\db$, matching the spec. The result is exact,
+		not a rule of thumb.
 		\end{solution}
-	\part The far end is an opposite-sense CP antenna, also $\text{AR} = 3\db$, major
-	axes aligned. Worst-case rejection is $\lp \dfrac{A^{2}-1}{A^{2}+1} \rp^{2}$.
-	Evaluate it and compare with the idealized PLF table.
-		\begin{solution}[1.3in]
-		\eq{ \lp \dfrac{2-1}{2+1} \rp^{2} = \dfrac{1}{9} \approx 0.111 \longrightarrow 10\mylog{0.111} \approx -9.5\db }
-		(Carrying $A^{2} = 1.995$ instead of $2$ gives $-9.6\db$.) The ideal table says
-		$-\infty\db$. Real hardware gives roughly $10\db$ of cross-pol isolation ---
-		useful, but nowhere near a null.
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The far end is an opposite-sense CP antenna, also $\text{AR} = 3\db$,
+		major axes aligned. Worst-case rejection is
+		$\lp \dfrac{A^{2}-1}{A^{2}+1} \rp^{2}$. Evaluate it and compare with the
+		idealized PLF table.
+		\begin{solution}[1.6in]
+		Carry the exact $A = 10^{3/20}$, so $A^{2} = 1.995$:
+		\eq{ \dfrac{A^{2}-1}{A^{2}+1} &= \dfrac{0.995}{2.995} = 0.3322 \\
+			\lp 0.3322 \rp^{2} &= 0.1104 \\
+			10\mylog{0.1104} &\approx -9.6\db }
+		(The $A^{2} = 2$ shortcut gives $1/9 = 0.111 \rightarrow -9.5\db$; the course
+		number is $-9.6\db$.) The ideal table says $-\infty\db$. Real hardware gives
+		roughly $10\db$ of cross-pol isolation --- useful, but nowhere near a null.
 		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		rejection = \ansbox[1.4in]{$\approx -9.6\db$}
+	\end{minipage}
+
 	\part Name two things you must ask before believing the antenna works over the
 	advertised 4\%.
 		\begin{solution}[1.3in]

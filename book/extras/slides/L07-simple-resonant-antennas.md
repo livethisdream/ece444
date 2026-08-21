@@ -54,27 +54,14 @@ An antenna that radiates **equally in every direction**. Same power density on e
 
 $$U_\text{iso} = \frac{P_\text{rad}}{4\pi} \qquad D_\text{iso} = 1 \qquad 0 \text{ dBi}$$
 
-<div class="callout">
-It is the <strong>unit of comparison</strong>, not a product. Directivity is defined as a ratio against it, so the isotropic radiator is baked into every gain number you will ever quote.
-</div>
+- It cannot be built. In the far field $\mathbf{E}$ is transverse, so it is *tangential* to that sphere — and the hairy-ball theorem forbids a nonvanishing tangential field everywhere on a sphere.
+- Somewhere the field must go to zero. That is a null, and **every real antenna has at least one**.
+- It survives anyway as the **unit of comparison**: directivity is defined as a ratio against it.
+
+**Not a product. A reference, baked into every gain number you will ever quote.**
 
 Note:
-Ask: has anyone bought one? No. Then ask why the datasheet still says dBi.
-
----
-
-## Why it cannot exist
-
-A truly isotropic radiator would need a **uniform outward vector field** on a sphere with no direction picked out.
-
-- The hairy-ball theorem forbids a nonvanishing tangential field everywhere on a sphere.
-- $\mathbf{E}$ is transverse in the far field — so it *is* tangential.
-- Somewhere on the sphere, the field must go to zero. That is a null.
-
-**Every real antenna has at least one null. The isotropic radiator has none, so it is not an antenna.**
-
-Note:
-Keep it to 60 seconds. The physics point that matters: a null is not a defect, it is a topological requirement.
+Ask: has anyone bought one? No. Then ask why the datasheet still says dBi. Keep the hairy-ball argument to 60 seconds — the physics point that matters is that a null is not a defect, it is a topological requirement.
 
 ---
 
@@ -126,74 +113,20 @@ Build it on the board: open-circuited two-wire line, current zero at the open en
 
 ---
 
-## Step 1: set up the radiation integral
+## The pattern, straight from L6's integral
 
-L6's radiation vector, for a thin wire on $z$ where $\hat{\mathbf r}\cdot\mathbf{r}' = z'\cos\theta$:
-
-$$N_z(\theta) = \int_{-L/2}^{L/2} I(z')\ e^{+jkz'\cos\theta}\ dz'$$
-
-The current is **even** in $z'$. Pair $z'$ with $-z'$, the two exponentials combine into a cosine, and the integral folds onto one arm:
-
-$$N_z(\theta) = 2 I_m \int_0^{L/2} \sin\left[k\left(\frac{L}{2} - z'\right)\right]\cos(kz'\cos\theta)\ dz'$$
-
-**No approximation yet — just symmetry.**
-
-Note:
-Emphasize that folding by symmetry is free and it also kills the imaginary part. Students who grind through the full complex integral get the same answer with three times the algebra.
-
----
-
-## Step 2: evaluate it
-
-Product-to-sum turns the integrand into two plain sines:
-
-$$\sin A \cos B = \frac{1}{2}\left[\sin(A+B) + \sin(A-B)\right]$$
-
-Both integrate on sight. Collecting terms:
+L6's recipe on a thin wire along $z$: assume the current, transform it, read the pattern. The current is **even** in $z'$, so the integral folds onto one arm and then integrates on sight.
 
 $$N_z(\theta) = \frac{2 I_m}{k}\ \frac{\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}}{\sin^2\theta}$$
 
-<div class="callout">
-A first-year integral. The hard part was choosing the current, not doing the calculus.
-</div>
+Projecting a $z$-directed current onto $\theta$ costs one power of $\sin\theta$:
 
-Note:
-Do not grind the algebra on the board unless asked. The point is that the integral is elementary once the current is sinusoidal — that is exactly why the sinusoidal assumption is worth making.
-
----
-
-## Step 3: project and normalize
-
-A $z$-directed current radiates only a $\theta$ component. L6's projection costs one power of $\sin\theta$:
-
-$$N_\theta = -N_z \sin\theta \quad \Longrightarrow \quad \vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}}{\sin\theta} \right\vert$$
-
-Bars, because the bracket flips sign past $L = \lambda$. Proportional, because normalizing divides by the peak — at broadside that is $1 - \cos\frac{kL}{2}$, which is **1** at $\lambda/2$ but **2** at $1\lambda$.
-
-At $L = \lambda/2$ the second cosine vanishes and the peak is exactly 1, so this one is already normalized:
-
-$$\vert F(\theta) \vert = \frac{\cos\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}$$
+$$\vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}}{\sin\theta} \right\vert \qquad \text{and at } L = \frac{\lambda}{2}, \quad \vert F(\theta) \vert = \frac{\cos\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}$$
 
 **One integral, every length — the multi-lobe patterns later come from this same formula.**
 
 Note:
-This is the payoff slide for the whole radiation-integral thread that started in L6. Assumed a current, transformed it, read the pattern. Point at the general formula and say: nothing about this was half-wave specific until the last line.
-
----
-
-## Reading the pattern
-
-<div class="two-col fig-wide"><div class="col-text">
-<p>Still a doughnut, broadside at $\theta = 90^\circ$, nulls straight off the wire ends.</p>
-<p>$$\theta_\text{HP} = 78^\circ$$</p>
-<p>$$D = 1.64 = 2.15 \text{ dBi}$$</p>
-<p><strong>Only 0.39 dB better than the short dipole.</strong> Doubling the wire barely sharpened the beam — it went from $90^\circ$ to $78^\circ$.</p>
-</div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L07-halfwave-pattern.svg" style="max-width:620px; margin:0 auto;"></div>
-</div></div>
-
-Note:
-The obvious question: so why bother with half a wavelength? Answer on the next slide — it is not about the pattern.
+Do not re-derive on the board; L6 did the integral and this slide spends it. If asked, the three moves are: fold by symmetry (free, and it kills the imaginary part), product-to-sum, integrate. Two warnings worth saying out loud. The bars are there because the bracket flips sign past a full wavelength. Proportional, because normalizing divides by the broadside peak, which is one at half a wavelength but two at a full wavelength — so only the half-wave case comes out already normalized. Nothing here was half-wave specific until the last line.
 
 ---
 
@@ -203,28 +136,15 @@ The obvious question: so why bother with half a wavelength? Answer on the next s
 Not for the pattern. For the <strong>impedance</strong>. At $\lambda/2$ the current maximum sits at the feed, the radiation resistance climbs to ~73 Ω, and the wire will accept power from an ordinary line without a matching network.
 </div>
 
-- Short dipole: $2\ \Omega$ — hopeless.
-- Half-wave dipole: $73\ \Omega$ — a 75 Ω line is nearly a perfect match.
+$$Z_{\text{in}} \approx 73 + j42.5\ \Omega$$
 
-**Resonance is a feed-point convenience, not a radiation improvement.**
+- Short dipole: $2\ \Omega$ — hopeless. Half-wave: $73\ \Omega$, and a 75 Ω line nearly matches it.
+- The resistive part is real radiation. The **+42.5 Ω is inductive** — stored energy sloshing in the near field, pure nuisance.
 
-Note:
-This is the slide students remember. The half-wave dipole is famous for its input impedance, not its 2.15 dBi.
-
----
-
-## Input impedance at exactly $\lambda/2$
-
-$$Z_{in} \approx 73 + j42.5\ \Omega$$
-
-- The resistive part is real radiation — power leaving, never to return.
-- The **+42.5 Ω is inductive**, and it is pure nuisance: stored energy sloshing in the near field.
-- Nothing is wrong with the antenna. It simply is not resonant at exactly half a wavelength.
-
-**Resonance means $X_{in} = 0$. We are 42.5 Ω away from it.**
+**Resonance means $X_{\text{in}} = 0$. At exactly half a wavelength we are 42.5 Ω away from it.**
 
 Note:
-Point back to L5's reactive near-field region. That stored energy is exactly the near-field term that never made it into the far field.
+This is the slide students remember: the half-wave dipole is famous for its input impedance, not its 2.15 dBi. Point back to L5's reactive near-field region — that stored energy is exactly the near-field term that never made it into the far field. Nothing is wrong with the antenna; it simply is not resonant at exactly half a wavelength.
 
 ---
 
@@ -291,7 +211,7 @@ The general result contains the wire radius, so **a dipole's reactance normally 
 
 $$X = \frac{\eta_0}{4\pi}Si(2\pi) = 30 \times 1.4182 = 42.5\ \Omega$$
 
-$$Z_{in} = \frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 73.1 + j42.5\ \Omega$$
+$$Z_{\text{in}} = \frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 73.1 + j42.5\ \Omega$$
 
 <div class="callout">
 Radius-independent <strong>only at exactly $\lambda/2$</strong> — which is why 42.5 is quotable at all.
@@ -304,27 +224,17 @@ Induced EMF means integrating the antenna's own field back against its own curre
 
 ## Trim it short
 
-<div class="fig" data-inline-svg="./fig/L07-dipole-resonance.svg" style="max-width:620px; margin:0 auto; display:block;"></div>
-
-These are **computed data, not a sketch**: the induced-EMF expression evaluated at hundreds of lengths, for three wire radii, and plotted.
-
-Note:
-Say plainly how the figure was made — sweep the length, sweep the wire radius, evaluate the impedance formula at every combination, plot the answers. Nothing here is drawn by hand. Then watch the zero crossing move left as the element gets fatter: that is the whole story of why a real dipole is never exactly half a wavelength. Note also that all three curves meet at exactly half a wavelength, which is the sine of pi being zero from the previous slide.
-
----
-
-## Why shorter, physically
-
-The wire is a **resonant standing-wave structure**, and its ends are not electrically where they look.
-
-- **End effect** — capacitance between the tips and to whatever is nearby stores charge past the physical end, so the wave "sees" more wire than there is.
-- **Wire thickness** — a fatter element has more end capacitance and a lower characteristic impedance, so it shortens further.
-- Both effects **slow the wave** on the wire relative to free space.
-
-**Practical resonance lands at $0.47\lambda$ to $0.48\lambda$; a fat element goes below that.**
+<div class="two-col fig-wide"><div class="col-text">
+<p>The wire is a <strong>resonant standing-wave structure</strong>, and its ends are not electrically where they look.</p>
+<p><strong>End effect</strong> — capacitance past the tips stores charge beyond the physical end.</p>
+<p><strong>Wire thickness</strong> — a fatter element has more of it, and shortens further.</p>
+<p><strong>Resonance lands at $0.47\lambda$ to $0.48\lambda$.</strong></p>
+</div><div class="col-fig">
+<div class="fig" data-inline-svg="./fig/L07-dipole-resonance.svg" style="max-width:620px; margin:0 auto;"></div>
+</div></div>
 
 Note:
-An insulated wire shortens further still — the dielectric slows the wave. Hams call the whole thing the velocity factor.
+Both effects slow the wave on the wire relative to free space, so it sees more wire than there is. Say plainly how the figure was made — sweep the length, sweep the wire radius, evaluate the induced-EMF impedance at every combination, plot the answers. Nothing here is drawn by hand. Then watch the zero crossing move left as the element gets fatter: that is the whole story of why a real dipole is never exactly half a wavelength. All three curves meet at exactly half a wavelength, which is the sine of pi being zero from the previous slide. An insulated wire shortens further still, because the dielectric slows the wave; hams call the whole thing the velocity factor.
 
 ---
 
@@ -349,7 +259,7 @@ The 5% is an average. It depends on wire gauge, insulation, and what is nearby �
 
 At resonance the reactance is gone and the resistance settles near $70\ \Omega$:
 
-| Feed line | $Z_{in}$ used | $\vert \Gamma \vert$ | VSWR |
+| Feed line | $Z_{\text{in}}$ used | $\vert \Gamma \vert$ | VSWR |
 | :-- | :-- | :-- | :-- |
 | 50 Ω | $73 + j42.5$ | 0.37 | 2.18 |
 | 50 Ω | $70 + j0$ | 0.17 | **1.40** |
@@ -382,40 +292,16 @@ Demo live: park at half a wavelength, read seventy-three plus j forty-two point 
 
 ---
 
-## One more thing before you connect it
-
-A dipole is a **balanced** antenna. Coax is **unbalanced**.
-
-- Connect them directly and current flows on the outside of the shield.
-- The feedline becomes part of the antenna: pattern distorts, VSWR moves when you touch the cable.
-- Fix from **L4**: a balun at the feed point.
-
-**Every dipole measurement in this course gets a balun. No exceptions.**
-
-Note:
-This is the number one reason a student's measured pattern will not match their simulation in L8 and L14.
-
----
-
 ## Make it longer
 
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
-<div class="fig" data-inline-svg="./fig/L07-dipole-currents.svg" style="max-width:900px; margin:0 auto;"></div>
-
-Past $\lambda/2$ the standing wave **reverses phase** along the wire. Reversed current radiates out of step — and interference does the rest.
-
-Note:
-Demo the widget here: drag from 0.5 to 1.5 and watch the reversals appear one at a time, each one buying a new pair of lobes.
-
----
-
-## What the lobes do
+Past $\lambda/2$ the standing wave **reverses phase** along the wire. Reversed current radiates out of step, interference does the rest, and each reversal buys a new pair of lobes.
 
 <div class="fig" data-inline-svg="./fig/L07-dipole-patterns.svg" style="max-width:1000px; margin:0 auto;"></div>
 
 Note:
-Full wave: still broadside, narrower, 3.8 dBi. At 1.25 wavelengths the broadside lobe is as good as it gets. At 1.5 the main lobes have walked off broadside entirely.
+Demo the widget here: drag from 0.5 to 1.5 and watch the reversals appear one at a time. Full wave: still broadside, narrower, 3.8 dBi. At 1.25 wavelengths the broadside lobe is as good as it gets. At 1.5 the main lobes have walked off broadside entirely.
 
 ---
 
@@ -466,16 +352,16 @@ Have them notice the two routes agree to a centimeter. Also: 49 cm is a length y
 
 | Quantity | Prediction | Confidence |
 | :-- | :-- | :-- |
-| $Z_{in}$ | $\approx 70 + j0\ \Omega$ | good |
+| $Z_{\text{in}}$ | $\approx 70 + j0\ \Omega$ | good |
 | VSWR on 50 Ω | $\approx 1.4$ | good |
 | Gain | $2.15$ dBi, less conductor loss | good |
 | HPBW | $\approx 78^\circ$ | good |
 | Far-field range | $2D^2/\lambda = 0.93\ \text{m}$ | from L5 |
 
-**If the analyzer disagrees by more than about 10%, suspect the balun before the theory.**
+**A dipole is balanced and coax is not — fit L4's balun, then trust the table. If the analyzer disagrees by more than about 10%, suspect the balun before the theory.**
 
 Note:
-$D$ here is the dipole length, 0.976 m, so $2D^2/\lambda$ is 0.93 m. Anything measured closer than a meter is not a pattern.
+$D$ here is the dipole length, 0.976 m, so $2D^2/\lambda$ is 0.93 m. Anything measured closer than a meter is not a pattern. On the balun: connect coax straight to a dipole and current flows on the outside of the shield, the feedline joins the radiating structure, and the pattern and VSWR both start depending on where you are standing. It is the number one reason a student's measured pattern will not match their simulation in L8 and L14.
 
 ---
 
@@ -508,29 +394,13 @@ Walk down the list. The last bullet is the bridge to L8 — every number on this
 
 ---
 
-## What is 4nec2?
-
-**4nec2** is a free Windows front end to **NEC-2**, the Numerical Electromagnetics Code — a method-of-moments solver from the 1970s, still the standard tool for wire antennas.
-
-- It **does not assume a current.** It chops the wire into short segments and solves for the current on each one, by enforcing that the tangential electric field vanishes on a perfect conductor.
-- Then it computes the pattern **the way you did today** — the same radiation integral, applied to the current it solved for.
-
-<div class="callout">
-Same physics as this lesson, with the assumption removed. That is exactly why comparing the two tells you something.
-</div>
-
-Note:
-They should not meet the name cold next lesson. Method of moments in one sentence: turn the integral equation into a matrix equation, invert it, get the current. The key contrast is that this lesson assumed the current and everything followed; NEC solves for it. Where the two disagree, the assumption is what is being measured.
-
----
-
 ## Where this is going
 
-- **L8** — you build this exact antenna in 4nec2. Length, impedance, VSWR, pattern. **The numbers you just predicted are the ones you will check against simulation.**
+- **L8** — you build this exact antenna in **4nec2**, a front end to NEC-2. It *does not assume a current*: it chops the wire into segments, solves for the current on each, then runs the same radiation integral you ran today. **The numbers you just predicted are the ones you will check against simulation.**
 - **L9** — cut the dipole in half and stand it on a ground plane, then bend one into a loop.
 - **Module 3** — a dipole becomes an *element*. Put many in a row and pattern multiplication takes over from 2.15 dBi.
 
 **Bring the 146 MHz numbers to L8. You are going to grade the simulator with them.**
 
 Note:
-Set the expectation now: NEC will not return exactly 73 ohms, and the gap between the sinusoidal-current model and a real solver is itself the lesson.
+They should not meet the name cold next lesson. Method of moments in one sentence: turn the integral equation into a matrix equation, invert it, get the current. This lesson assumed the current and everything followed; NEC solves for it, and where the two disagree, the assumption is what is being measured. Set the expectation now: NEC will not return exactly 73 ohms, and that gap is itself the lesson.

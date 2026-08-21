@@ -26,7 +26,7 @@ because *where you stand changes what you measure.*
 
 ## Part 1: The three regions
 
-<img src="../../viz/img/field-regions.svg" alt="Concentric field regions around an antenna: reactive near-field, radiating near-field, and far-field" style="max-width: 620px; width: 100%; display: block; margin: 1em auto;">
+<img src="../../viz/img/L05-field-regions.svg" alt="Concentric field regions around an antenna: reactive near-field, radiating near-field, and far-field" style="max-width: 620px; width: 100%; display: block; margin: 1em auto;">
 
 ### Reactive near-field
 
@@ -105,10 +105,10 @@ $$
 
 Those are the three regions, hiding inside one equation:
 
-| Term | Falls off as | Physical origin | Wins where |
+| Term | Falls off as | Physical origin | Where it matters |
 | :-- | :-- | :-- | :-- |
 | Radiation | $1/r$ | the escaping wave — Lesson 2's far field | $kr \gg 1$ |
-| Induction | $1/r^2$ | Biot–Savart / Ampère field of the current | $kr \sim 1$ |
+| Induction | $1/r^2$ | Biot–Savart / Ampère field of the current | comparable to the other two near $kr \sim 1$ |
 | Electrostatic | $1/r^3$ | quasi-static field of the charge $\pm q$ at the tips | $kr \ll 1$ |
 
 **The crossover is a single number.** The radiation term (size $\propto 1$
@@ -120,17 +120,44 @@ kr = 1
 r = \frac{1}{k} = \frac{\lambda}{2\pi} \approx 0.16\lambda .
 $$
 
-Inside $\lambda/2\pi$ the stored ($1/r^2$, $1/r^3$) terms take over and blow up as
-you approach the antenna; outside it, only the $1/r$ radiation term survives. This
-is exactly the $\lambda/2\pi$ figure quoted for small antennas in the next section
-— now *derived*, not asserted. The $0.62\sqrt{D^3/\lambda}$ boundary is the same
-idea generalized to an antenna of finite size $D$.
+Read that carefully, because it is the single most misquoted number in the
+subject. At $kr = 1$ all three terms are **the same size** — that is *all* it
+says. Inside $\lambda/2\pi$ the stored ($1/r^2$, $1/r^3$) terms take over and blow
+up as you approach the antenna. Outside it the radiation term does not suddenly
+stand alone; it merely starts to **dominate increasingly**, because each reactive
+term keeps shedding another factor of $1/kr$. Dividing the bracket through by the
+radiation term makes the bookkeeping obvious — the three sizes are
+$1 : 1/kr : 1/(kr)^2$:
+
+| $kr$ | $r$ | radiation : induction : electrostatic |
+| :-- | :-- | :-- |
+| $1$ | $0.16\lambda$ | $1 : 1 : 1$ |
+| $6$ | $\approx 1\lambda$ | $1 : 0.17 : 0.03$ |
+| $10$ | $\approx 1.6\lambda$ | $1 : 0.1 : 0.01$ |
+
+So the reactive terms are negligible only for $kr \gg 1$. They fall below about
+$10\%$ near $kr \approx 10$, i.e. $r \approx 1.6\lambda$; at one wavelength out
+induction is still $17\%$. **Rule of thumb: $kr = 1$ is the crossover, not the
+start of the far field — for a small antenna, give it a few wavelengths before
+you trust the pattern.** The $\lambda/2\pi$ figure quoted for small antennas in
+the next section is this crossover, now *derived* rather than asserted, and the
+$0.62\sqrt{D^3/\lambda}$ boundary is the same idea generalized to an antenna of
+finite size $D$.
 
 **Why "reactive" is the literal, correct word.** Stored energy that never leaves
 is *reactive power* — the same reactive power you met at the terminals in Lesson 4,
 now living in the surrounding field. Form the complex radial Poynting vector
-$\tfrac12 E_\theta H_\phi^{*}$ and, remarkably, the cross-terms collapse to just
-two:
+$\tfrac12 E_\theta H_\phi^{*}$ and the cross-terms collapse to just two: a **real**
+part falling as $1/r^2$, which is genuine outward power and contains no near-field
+terms at all, and an **imaginary** part falling as $1/r^5$, which is the stored
+energy sloshing out and back each cycle. Radiation is radiation at every distance;
+the near field adds nothing to it and carries nothing away.
+
+:::{admonition} Optional depth — the complex Poynting expansion
+:class: note dropdown
+
+Multiplying $E_\theta$ by $H_\phi^{*}$ term by term, everything cancels except
+two pieces:
 
 $$
 \tfrac12E_\theta H_\phi^{*} =
@@ -144,8 +171,8 @@ $$
 Two things to read off this:
 
 - The **real part** — genuine outward power — falls off as $1/r^2$ (the
-  inverse-square law) and *does not contain the near-field terms at all*.
-  Radiation is radiation at every distance; the near field adds nothing to it.
+  inverse-square law) and *does not contain the near-field terms at all* — no
+  cross-term between a $1/r$ field and a $1/r^2$ field survives the algebra.
 - The **imaginary part** — reactive, non-transported power — falls off as $1/r^5$.
   It is negligible far out but overwhelming close in, and the factor of $j$ says
   $\mathbf E$ and $\mathbf H$ are $90^{\circ}$ out of phase there: energy flows
@@ -156,13 +183,21 @@ The minus sign ($-j$) even tells you the stored energy is predominantly
 **electric** — which fits, because a short dipole is *capacitive* at its terminals.
 Its large negative reactance from Lesson 4 and this near-field electric energy are
 the same physics, seen from the outside versus the inside.
+:::
+
+The practice set for this lesson opens with a which-term-dominates part: you
+evaluate the ratio $1 : 1/kr : 1/(kr)^2$ at $kr = 0.1$ and $kr = 10$ and name the
+winner in each. Do it by hand once and the crossover stops being a number to
+memorize.
 
 ### Interactive — the three terms and their crossover
 
 Slide the observation point in and out. The three field terms are straight lines
 on a log–log plot (slopes $-1$, $-2$, $-3$); they all cross at $kr = 1$, i.e.
-$r = \lambda/2\pi$. To the left, the $1/r^3$ stored field dominates — the reactive
-near field. To the right, only the $1/r$ radiation term is left standing.
+$r = \lambda/2\pi$. To the left, the $1/r^3$ stored field runs away — the reactive
+near field. To the right the radiation term takes over, and its lead over the
+other two grows tenfold for every decade you move out — which is why "negligible"
+takes until $kr \approx 10$, not $kr = 1$.
 
 <iframe src="../../viz/near-field-terms.html"
         width="100%" height="480"
@@ -193,17 +228,29 @@ $$
 ```{note}
 These formulas apply to **electrically large** antennas ($D > \lambda$), where
 the $2D^2/\lambda$ distance is the meaningful one. For an electrically **small**
-antenna the reactive near-field simply extends out to about $\lambda / 2\pi$, and
-the far field begins there — this is precisely the $kr = 1$ crossover we derived
-from the dipole fields above.
+antenna the reactive near-field simply extends out to about $\lambda / 2\pi$ —
+precisely the $kr = 1$ crossover we derived from the dipole fields above. Take the
+larger of the two distances:
+
+$$
+r_\text{ff} \approx \max\left(\frac{2D^2}{\lambda},\ \frac{\lambda}{2\pi}\right).
+$$
+
+But do not read $\lambda/2\pi$ as "the far field begins here". At that radius the
+stored terms are merely *equal* to the radiation term, not gone. In practice give
+a small antenna **a few wavelengths** — $kr$ of order 10 — before you trust its
+pattern.
 ```
 
 ### Where the far-field distance comes from
 
 The far-field distance $2D^2/\lambda$ is a **phase-error** criterion. Picture a
-plane wavefront arriving at an aperture of size $D$ from a source a distance $r$
-away. The path from the source to the *edge* of the aperture is slightly longer
-than the path to the *center*. That extra path length is approximately
+point source a distance $r$ away, radiating a **spherical** wavefront onto an
+aperture of size $D$. Because the wavefront is a sphere, the path from the source
+to the *edge* of the aperture is slightly longer than the path to the *center* —
+a plane wave, by definition, would have no such difference, and the plane-wave
+limit is exactly what you earn once this criterion is met. That extra path length
+is approximately
 
 $$
 \Delta \approx \frac{(D/2)^2}{2r} = \frac{D^2}{8r}.
@@ -248,11 +295,15 @@ range you would need almost a **hundred metres** of separation.
 ### Interactive — field-region explorer
 
 Set the antenna's largest dimension $D$ and the frequency, and watch the three
-region boundaries move along a distance axis. The phase error across the aperture
-is shown so you can see why the far-field distance grows with $D^2$.
+region boundaries slide along the distance axis in the top panel. Then drag the
+range $r$: the lower panel redraws the spherical wavefront arriving over the
+aperture and plots the phase error it produces across $D$, turning green the
+moment that error drops under the $22.5^{\circ}$ limit. Notice that green arrives
+exactly as $r$ crosses $2D^2/\lambda$, and that doubling $D$ pushes it four times
+farther out — the $D^2$ in the formula, on screen.
 
 <iframe src="../../viz/field-regions.html"
-        width="100%" height="430"
+        width="100%" height="600"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Field-region explorer">
@@ -281,6 +332,23 @@ distance-independent pattern**. Every gain and pattern spec assumes you are out
 there in the far field.
 :::
 
+## Summary
+
+| Symbol / idea | What it is | Number to remember |
+| :-- | :-- | :-- |
+| Three field terms | One dipole equation holds all three regions | $1 : 1/kr : 1/(kr)^2$ |
+| $kr = 1$ crossover | Where all three terms are *equal* — not where the far field starts | $r = \lambda/2\pi \approx 0.16\lambda$ |
+| True far field | Reactive terms actually negligible | $kr \gg 1$; under $10\%$ near $kr \approx 10$ ($r \approx 1.6\lambda$), so allow $r \gtrsim \lambda$ and a few wavelengths in practice |
+| Reactive near-field edge | Inner boundary for an electrically large antenna | $r = 0.62\sqrt{D^3/\lambda}$ |
+| Far-field distance | Outer boundary; pattern stops changing with $r$ | $r \ge 2D^2/\lambda$ |
+| Phase-error tolerance | The criterion $2D^2/\lambda$ is built from | $\Delta \le \lambda/16$, i.e. $\pi/8 = 22.5^{\circ}$ |
+| Worked dish | $D = 1.2\ \text{m}$ at $10\ \text{GHz}$ ($\lambda = 0.03\ \text{m}$) | reactive to $4.7\ \text{m}$; far field beyond $96\ \text{m}$ |
+
+## Practice
+
+- <a href="../../practice/ECE444_L05_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a href="../../practice/ECE444_L05_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+
 ## Where this is going
 
 You now know *where* the far-field pattern lives and how far away it starts. Next,
@@ -288,3 +356,11 @@ You now know *where* the far-field pattern lives and how far away it starts. Nex
 current distribution on the antenna, we set up the radiation integrals that
 produce the far-field pattern directly — the mathematical machinery behind
 everything we have described qualitatively so far.
+
+Watch for one specific move in that derivation. Expanding the distance from a
+source point to the observer gives a linear term and a quadratic one, and the far
+field is defined by *throwing the quadratic term away*. That discarded term is the
+path difference $D^2/8r$ from this lesson, and the licence to drop it is the
+$\pi/8$ tolerance — so "the far-field approximation" in Lesson 6 and
+$r \ge 2D^2/\lambda$ here are the same statement, one written as an integral and
+one as a distance.

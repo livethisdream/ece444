@@ -62,7 +62,7 @@ Two things changed, and both follow from bookkeeping rather than new physics.
 **Impedance halves.** The feed current is the same as the dipole's, but you are only driving half the structure, so it takes half the voltage. Half the voltage at the same current is half the impedance:
 
 $$
-Z_{in}^{\text{mono}} = \tfrac{1}{2}\ Z_{in}^{\text{dipole}} = \tfrac{1}{2}(73 + j42.5) = 36.5 + j21.3\ \Omega
+Z_{\text{in}}^{\text{mono}} = \tfrac{1}{2}\ Z_{\text{in}}^{\text{dipole}} = \tfrac{1}{2}(73 + j42.5) = 36.5 + j21.3\ \Omega
 $$
 
 **Directivity doubles.** The same total pattern is squeezed into half the solid angle, because no power goes below the plane. Same peak intensity, half the radiated power, so
@@ -76,7 +76,7 @@ That 3 dB is free in exactly the sense that a mirror gives you free light: nothi
 | Quantity | Half-wave dipole | Quarter-wave monopole |
 | :-- | :-- | :-- |
 | Physical length | $0.5\lambda$ | $0.25\lambda$ |
-| $Z_{in}$ (thin wire) | $73 + j42.5\ \Omega$ | $36.5 + j21.3\ \Omega$ |
+| $Z_{\text{in}}$ (thin wire) | $73 + j42.5\ \Omega$ | $36.5 + j21.3\ \Omega$ |
 | Resonant (trimmed) length | $\approx 0.47\lambda$ at $\approx 70\ \Omega$ | $\approx 0.24\lambda$ at $\approx 36\ \Omega$ |
 | Directivity | 1.64 (2.15 dBi) | 3.28 (5.15 dBi) |
 | Elevation HPBW | $78^\circ$ | $39^\circ$ (upper half of the same beam) |
@@ -88,17 +88,17 @@ Design a quarter-wave monopole for the middle of the 2 m band and see how well i
 
 **Length.** $\lambda = c/f = (3\times10^8)/(146\times10^6) = 2.05\ \text{m}$, so $\lambda/4 = 0.514\ \text{m}$ — a 51 cm whip.
 
-**Match as-built.** With $Z_{in} = 36.5 + j21.3\ \Omega$ against $50\ \Omega$,
+**Match as-built.** With $Z_{\text{in}} = 36.5 + j21.3\ \Omega$ against $50\ \Omega$,
 
 $$
-\Gamma = \frac{Z_{in} - Z_0}{Z_{in} + Z_0} = \frac{-13.5 + j21.3}{86.5 + j21.3}, \qquad \vert\Gamma\vert = \frac{25.2}{89.1} = 0.283
+\Gamma = \frac{Z_{\text{in}} - Z_0}{Z_{\text{in}} + Z_0} = \frac{-13.5 + j21.3}{86.5 + j21.3}, \qquad \vert\Gamma\vert = \frac{25.2}{89.1} = 0.283
 $$
 
 $$
 \text{VSWR} = \frac{1 + 0.283}{1 - 0.283} = 1.79, \qquad \text{return loss} = 11.0\ \text{dB}
 $$
 
-**Match after trimming.** Shorten the whip by about 4% to $0.24\lambda = 49\ \text{cm}$ to cancel the reactance. Now $Z_{in} \approx 36\ \Omega$ real, and VSWR $= 50/36 = 1.39$.
+**Match after trimming.** Shorten the whip by about 4% to $0.24\lambda = 49\ \text{cm}$ to cancel the reactance. Now $Z_{\text{in}} \approx 36\ \Omega$ real, and VSWR $= 50/36 = 1.39$.
 
 **Match after tilting the radials.** Droop four quarter-wave radials down about $45^\circ$ and the base impedance climbs to roughly $50\ \Omega$: VSWR near 1.0, no matching network, no extra parts. This is why every commercial ground-plane antenna you have ever seen has sagging radials.
 :::
@@ -128,7 +128,7 @@ Real ground is a lossy dielectric, not a mirror. Three things go wrong, in order
 **Loss resistance.** Return current spreads out through the soil under the antenna and dissipates there. That loss appears in series with the feed as a ground resistance $R_g$, and the radiation efficiency becomes
 
 $$
-\eta_{cd} = \frac{R_r}{R_r + R_g + R_{\text{ohmic}}}
+\eta_{\text{rad}} = \frac{R_r}{R_r + R_g + R_{\text{ohmic}}}
 $$
 
 A monopole only has $36.5\ \Omega$ of radiation resistance to work with, so a few ohms of ground loss is a few tenths of a dB, and a badly grounded short whip — with an $R_r$ of a couple of ohms — can throw away most of its power. This is why AM broadcast stations bury a **radial system**: the FCC standard is 120 buried wires, each a quarter wavelength long, fanning out from the tower base. The radials do not radiate. They intercept the return current in copper instead of dirt.
@@ -186,7 +186,7 @@ $$
 R_{\text{ohmic}} = \frac{C}{2\pi b} R_s = 79.6 \times 1.43\ \text{m}\Omega = 0.114\ \Omega
 $$
 
-**Efficiency.** $\eta_{cd} = 0.0197/(0.0197 + 0.114) = 0.148$, i.e. **14.8%**, a loss of 8.3 dB. Gain $= 1.76 - 8.3 = -6.5\ \text{dBi}$.
+**Efficiency.** $\eta_{\text{rad}} = 0.0197/(0.0197 + 0.114) = 0.148$, i.e. **14.8%**, a loss of 8.3 dB. Gain $= 1.76 - 8.3 = -6.5\ \text{dBi}$.
 
 **What that means at the feed.** To deliver 100 W you need $I = \sqrt{2P/R_{\text{total}}} = 38.7\ \text{A}$ peak in that loop, of which 15 W radiates and 85 W heats the wire. Now you know why transmitting magnetic loops use fat copper tube, welded joints, and a vacuum capacitor.
 :::
@@ -202,7 +202,7 @@ Grow the loop until its circumference is about one wavelength and the story chan
 | Circumference | $C \ll \lambda$ (rule: $< 0.1\lambda$) | $C \approx 1\lambda$ |
 | Current | uniform, in phase | reverses around the loop |
 | Maximum | in the plane of the loop | along the axis |
-| $R_{in}$ | milliohms | $100\text{-}130\ \Omega$ |
+| $R_{\text{in}}$ | milliohms | $100\text{-}130\ \Omega$ |
 | Typical use | receiving, direction finding, sensing | transmitting element (quad) |
 
 The gap between those two columns is the same trade you met in Lesson 3. An antenna that fits inside a sphere of radius $a$ stores far more energy in its near field than it radiates each cycle, and the Chu limit puts a floor on the resulting quality factor, $Q \gtrsim 1/(ka)^3$ for a small antenna — so the fractional bandwidth, roughly $1/Q$, collapses as the cube of the size. The 30 MHz loop above has $ka = 0.1$, so $Q \approx 10^3$ and its matched bandwidth is on the order of 0.1%: about 30 kHz at 30 MHz, which is why magnetic loops are retuned every time you move across a band.
@@ -217,10 +217,10 @@ Small is expensive, and it is expensive twice. Shrinking an antenna drives the r
 | Symbol / idea | What it says | Number to remember |
 | :-- | :-- | :-- |
 | Image theory | vertical currents image in phase, horizontal currents image reversed | horizontal wire on the ground radiates nothing |
-| $Z_{in}^{\text{mono}} = \tfrac{1}{2}Z_{in}^{\text{dipole}}$ | half the structure, half the voltage, same current | $36.5 + j21.3\ \Omega$ |
+| $Z_{\text{in}}^{\text{mono}} = \tfrac{1}{2}Z_{\text{in}}^{\text{dipole}}$ | half the structure, half the voltage, same current | $36.5 + j21.3\ \Omega$ |
 | $D_{\text{mono}} = 2D_{\text{dipole}}$ | same beam into half the solid angle | 3.28, or 5.15 dBi |
 | Radial system / counterpoise | gives the return current a low-loss path | 120 buried radials (AM); 4 drooped radials $\approx 50\ \Omega$ |
-| $\eta_{cd} = R_r/(R_r + R_g + R_{\text{ohmic}})$ | ground and copper loss compete with radiation | a few ohms matters when $R_r$ is small |
+| $\eta_{\text{rad}} = R_r/(R_r + R_g + R_{\text{ohmic}})$ | ground and copper loss compete with radiation | a few ohms matters when $R_r$ is small |
 | Small loop | magnetic dipole: $\vert F\vert = \sin\theta$, $E$ in $\hat{\phi}$, null on the axis | $D = 1.5$ (1.76 dBi) |
 | $R_r = 20\pi^2 (C/\lambda)^4$ | fourth power in circumference | $0.02\ \Omega$ at $C = 0.1\lambda$ |
 | Resonant loop, $C \approx 1\lambda$ | current reverses, maximum swings onto the axis | $100\text{-}130\ \Omega$, $\approx 3.1$ dBi |

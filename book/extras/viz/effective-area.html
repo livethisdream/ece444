@@ -5,76 +5,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Effective area vs frequency</title>
 <style>
-  :root {
-    --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5;
-    --bg:#f5f9fc; --ink:#15202b; --ink3:#5b6573;
-    --gain:#004a85; --ae:#b3213a; --marker:#8a5a00;
-  }
-  html,body{margin:0;padding:0;font-family:'Inter',system-ui,-apple-system,sans-serif;color:var(--ink);background:#fff;}
-  .app{display:flex;flex-direction:column;gap:12px;padding:16px;}
-  canvas{display:block;width:100%;height:auto;background:#fff;border:1px solid var(--edge);border-radius:6px;}
-  .panel{font-size:13.5px;line-height:1.4;display:grid;
-         grid-template-columns:minmax(220px,1.1fr) minmax(210px,1fr) minmax(200px,1fr);gap:12px;align-items:start;}
-  @media (max-width:720px){.panel{grid-template-columns:1fr;}}
-  .panel h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--navy);margin:0 0 8px;}
-  .block{padding:8px 10px;background:var(--bg);border:1px solid var(--edge);border-radius:4px;}
-  .block label{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);font-weight:700;margin:10px 0 4px;}
-  .block label:first-of-type{margin-top:0;}
-  .block .val{font-size:13px;font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums;}
-  .block input[type=range]{width:100%;margin:4px 0 0;}
-  .modes{display:flex;gap:6px;margin-bottom:8px;}
-  .modes button{flex:1;font:600 12px/1.2 Inter,sans-serif;padding:7px 6px;border:1px solid var(--edge2);
-                border-radius:4px;background:#fff;color:var(--navy);cursor:pointer;}
-  .modes button.active{background:var(--navy);color:#fff;border-color:var(--navy);}
-  .readout dl{display:grid;grid-template-columns:auto 1fr;gap:5px 10px;margin:0;}
-  .readout dt{font-size:11px;text-transform:uppercase;letter-spacing:.05em;font-weight:700;color:var(--ink3);align-self:center;}
-  .readout dd{margin:0;font-size:13.5px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;}
-  .note{font-size:11.5px;color:var(--ink3);line-height:1.45;}
-  .eq{font-size:13px;color:var(--navy);font-weight:600;margin-bottom:4px;}
-  .hidden{display:none;}
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --gain:#004a85; --ae:#b3213a; --marker:#8a5a00; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(196px,1fr)); gap:9px 18px; align-items:center;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl label.mixed { text-transform:none; font-size:12.5px; letter-spacing:0; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:56px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:56px; accent-color:var(--mid); }
+  .seg { display:flex; width:100%; border:1px solid var(--edge2); border-radius:6px; overflow:hidden; background:#fff; }
+  .seg button { flex:1 1 0; font:600 12px/1.15 Inter,system-ui,sans-serif; padding:7px 6px; border:0;
+                background:#fff; color:var(--navy); cursor:pointer; }
+  .seg button + button { border-left:1px solid var(--edge2); }
+  .seg button[aria-pressed="true"] { background:var(--navy); color:#fff; }
+  .hidden { display:none; }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
+          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
+          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
+  .pill b { font-weight:700; }
+  .pill.ae { background:rgba(179,33,58,0.10); color:var(--ae); border-color:rgba(179,33,58,0.28); }
+  .hint { margin:0; text-align:center; font-size:11.5px; color:var(--ink3); line-height:1.45; }
 </style>
 </head>
 <body>
 <div class="app">
   <canvas id="plot" aria-label="Gain and effective area versus frequency"></canvas>
 
-  <div class="panel">
-    <div class="block">
-      <h2>Hold constant</h2>
-      <div class="modes">
-        <button id="m-dish" class="active">Physical dish</button>
-        <button id="m-gain">Gain</button>
+  <div class="controls">
+    <div class="ctl">
+      <div class="seg" id="modes">
+        <button id="m-dish" type="button" aria-pressed="true">Physical dish</button>
+        <button id="m-gain" type="button" aria-pressed="false">Fixed gain</button>
       </div>
-      <div id="ctl-dish">
-        <label>Dish diameter D = <span class="val" id="d-val">1.2</span> m</label>
-        <input type="range" id="dia" min="0.3" max="3" step="0.1" value="1.2">
-        <label>Aperture efficiency ε<sub>ap</sub> = <span class="val" id="e-val">60</span> %</label>
-        <input type="range" id="eff" min="30" max="80" step="1" value="60">
-      </div>
-      <div id="ctl-gain" class="hidden">
-        <label>Gain G = <span class="val" id="g-val">20</span> dBi</label>
-        <input type="range" id="gain" min="0" max="40" step="0.5" value="20">
-      </div>
-      <label>Frequency f = <span class="val" id="f-val">10.0</span> GHz</label>
+    </div>
+    <div class="ctl" id="ctl-dia">
+      <label>Dish D</label>
+      <input type="range" id="dia" min="0.3" max="3" step="0.1" value="1.2">
+      <span class="val" id="d-val">1.2 m</span>
+    </div>
+    <div class="ctl" id="ctl-eff">
+      <label class="mixed">&#949;<sub>ap</sub></label>
+      <input type="range" id="eff" min="30" max="80" step="1" value="60">
+      <span class="val" id="e-val">60 %</span>
+    </div>
+    <div class="ctl hidden" id="ctl-gain">
+      <label>Gain G</label>
+      <input type="range" id="gain" min="0" max="40" step="0.5" value="20">
+      <span class="val" id="g-val">20.0 dBi</span>
+    </div>
+    <div class="ctl">
+      <label>Freq f</label>
       <input type="range" id="freq" min="1" max="30" step="0.5" value="10">
-    </div>
-
-    <div class="readout">
-      <h2>At this frequency</h2>
-      <dl>
-        <dt>λ = c/f</dt>       <dd id="r-lam">—</dd>
-        <dt>Gain</dt>          <dd id="r-gain">—</dd>
-        <dt>Effective area A<sub>e</sub></dt> <dd id="r-ae">—</dd>
-        <dt id="dt-extra">Physical area</dt>  <dd id="r-extra">—</dd>
-      </dl>
-    </div>
-
-    <div class="readout">
-      <h2>The link</h2>
-      <div class="eq">A<sub>e</sub> = (λ² / 4π) · G</div>
-      <div class="note" id="explain">—</div>
+      <span class="val" id="f-val">10.0 GHz</span>
     </div>
   </div>
+
+  <div class="pills">
+    <span class="pill">&#955; = c/f = <b id="r-lam">—</b></span>
+    <span class="pill">gain = <b id="r-gain">—</b></span>
+    <span class="pill ae">A&#8337; = <b id="r-ae">—</b></span>
+    <span class="pill"><span id="lbl-extra">physical area</span> = <b id="r-extra">—</b></span>
+  </div>
+
+  <p class="hint" id="explain">—</p>
 </div>
 
 <script>
@@ -105,22 +105,23 @@ el('m-dish').addEventListener('click', ()=>setMode('dish'));
 el('m-gain').addEventListener('click', ()=>setMode('gain'));
 function setMode(m){
   state.mode = m;
-  el('m-dish').classList.toggle('active', m==='dish');
-  el('m-gain').classList.toggle('active', m==='gain');
-  el('ctl-dish').classList.toggle('hidden', m!=='dish');
+  el('m-dish').setAttribute('aria-pressed', m==='dish' ? 'true' : 'false');
+  el('m-gain').setAttribute('aria-pressed', m==='gain' ? 'true' : 'false');
+  el('ctl-dia').classList.toggle('hidden', m!=='dish');
+  el('ctl-eff').classList.toggle('hidden', m!=='dish');
   el('ctl-gain').classList.toggle('hidden', m!=='gain');
-  el('dt-extra').innerHTML = (m==='dish') ? 'Physical area' : 'A<sub>e</sub> at 1 GHz';
+  el('lbl-extra').innerHTML = (m==='dish') ? 'physical area' : 'A\u2091 at 1 GHz';
   draw();
 }
-el('dia').addEventListener('input',e=>{state.D=parseFloat(e.target.value);el('d-val').textContent=state.D.toFixed(1);draw();});
-el('eff').addEventListener('input',e=>{state.eff=parseFloat(e.target.value)/100;el('e-val').textContent=e.target.value;draw();});
-el('gain').addEventListener('input',e=>{state.Gdbi=parseFloat(e.target.value);el('g-val').textContent=state.Gdbi.toFixed(1);draw();});
-el('freq').addEventListener('input',e=>{state.f=parseFloat(e.target.value);el('f-val').textContent=state.f.toFixed(1);draw();});
+el('dia').addEventListener('input',e=>{state.D=parseFloat(e.target.value);el('d-val').textContent=state.D.toFixed(1)+' m';draw();});
+el('eff').addEventListener('input',e=>{state.eff=parseFloat(e.target.value)/100;el('e-val').textContent=e.target.value+' %';draw();});
+el('gain').addEventListener('input',e=>{state.Gdbi=parseFloat(e.target.value);el('g-val').textContent=state.Gdbi.toFixed(1)+' dBi';draw();});
+el('freq').addEventListener('input',e=>{state.f=parseFloat(e.target.value);el('f-val').textContent=state.f.toFixed(1)+' GHz';draw();});
 
 const canvas = el('plot'), ctx = canvas.getContext('2d');
 function fit(){
   const dpr=window.devicePixelRatio||1, rect=canvas.getBoundingClientRect();
-  const w=Math.max(360,rect.width), h=Math.max(300,Math.min(w*0.44,440));
+  const w=Math.max(360,rect.width), h=Math.max(280,Math.min(w*0.40,380));
   canvas.width=w*dpr; canvas.height=h*dpr; canvas.style.height=`${h}px`;
   ctx.setTransform(dpr,0,0,dpr,0,0); draw();
 }
@@ -198,16 +199,15 @@ function updateReadout(m){
   if(state.mode==='dish'){
     el('r-extra').textContent = m.Aphys.toFixed(3)+' m²';
     el('explain').innerHTML =
-      'The dish’s <b>physical area is fixed</b>, so A<sub>e</sub>=ε·A<sub>phys</sub> '+
-      '<b>does not change</b> with f. But the same aperture spans many more λ² as f rises, '+
-      'so <b style="color:var(--gain)">gain climbs as f²</b>. That is why high-gain dishes are used up high.';
+      'The dish’s <b>physical area is fixed</b>, so A<sub>e</sub> = ε·A<sub>phys</sub> '+
+      '<b>does not change</b> with f — but the same aperture spans many more λ² as f rises, so '+
+      '<b style="color:var(--gain)">gain climbs as f²</b>. That is why high-gain dishes are used up high.';
   } else {
     const ae1 = model(1).Ae;
     el('r-extra').textContent = ae1.toFixed(3)+' m²';
     el('explain').innerHTML =
-      'Here <b>gain is held fixed</b> (a scaled element, not a fixed dish). '+
-      'Then A<sub>e</sub>=(λ²/4π)G <b style="color:var(--ae)">shrinks as λ²</b> — '+
-      'higher f, smaller capture area for the same gain.';
+      'Here <b>gain is held fixed</b> (a scaled element, not a fixed dish). Then A<sub>e</sub> = (λ²/4π)G '+
+      '<b style="color:var(--ae)">shrinks as λ²</b> — higher f, smaller capture area for the same gain.';
   }
 }
 

@@ -233,7 +233,7 @@ directivity to get there.
 :::
 
 Copper is a good conductor, so radiation efficiency for a wire dipole is above
-about 98% and $G = \eta_{cd} D$ is within a tenth of a dB of $D$. For this antenna
+about 98% and $G = \eta_{\text{rad}} D$ is within a tenth of a dB of $D$. For this antenna
 you may quote gain and directivity interchangeably — but say which one you
 mean, because for the lossy antennas in Module 4 they part company.
 
@@ -357,7 +357,7 @@ except where they cross at $\lambda/2$.
 Put the two halves side by side and the whole impedance is one line, built from
 two tabulated numbers:
 
-$$Z_{in} = \frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 29.98\left(2.4376 + j1.4182\right) = 73.1 + j42.5\ \Omega$$
+$$Z_{\text{in}} = \frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 29.98\left(2.4376 + j1.4182\right) = 73.1 + j42.5\ \Omega$$
 
 So read the two parts separately. The $73\ \Omega$ is power leaving and never
 coming back — the whole point of the antenna. The $+j42.5\ \Omega$ is the
@@ -384,7 +384,7 @@ fields close to the wire. This is the main reason a simulator will not return
 exactly $73 + j42.5\ \Omega$. Measuring how large that disagreement is, and
 deciding whether it matters, is the work of Lesson 8.
 
-**Resonance** means $X_{in} = 0$. At exactly $\lambda/2$ we are $42.5\ \Omega$
+**Resonance** means $X_{\text{in}} = 0$. At exactly $\lambda/2$ we are $42.5\ \Omega$
 away from it, and the fix is to make the wire slightly *shorter*.
 
 <img src="../../viz/img/L07-dipole-resonance.svg"
@@ -474,10 +474,12 @@ and inside the 2:1 circle as the VSWR readout falls. Finally, switch the
 normalization from $50\ \Omega$ to $75\ \Omega$. The antenna does not change and
 the impedance readout does not change, but the grid re-scales underneath it and
 the same antenna lands closer to the center. A match is a property of an
-antenna *and* a line together, not of the antenna alone.
+antenna *and* a line together, not of the antenna alone. Throughout, the wire is
+assumed thin — radius $0.002\ \lambda$ — and only the colors are keyed under the
+chart; the list above is the full reading of it.
 
 <iframe src="../../viz/dipole-smith.html"
-        width="100%" height="616"
+        width="100%" height="843"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Smith chart showing how a dipole's input impedance moves as its length changes, with constant-VSWR circles">
@@ -490,8 +492,8 @@ has been telling you to design around $70\ \Omega$. Both numbers are correct,
 and the difference is not a mistake in either one.
 
 $63\ \Omega$ is what **this model** predicts. Everything in the widget comes
-from the assumed sinusoidal current of Part 2, applied to an infinitely thin
-wire. At exactly $\lambda/2$ that model is excellent, which is why the chart
+from the assumed sinusoidal current of Part 2, applied to a thin wire of radius
+$0.002\ \lambda$. At exactly $\lambda/2$ that model is excellent, which is why the chart
 reproduces $73 + j42.5\ \Omega$ there to the digit. Shorten the wire toward
 resonance and the model drifts: the real current on a slightly short, finite
 thickness wire is not quite sinusoidal, and the model responds by predicting a
@@ -516,7 +518,7 @@ Every dipole in this course gets one.
 ## Part 5: Cutting a real dipole
 
 :::{admonition} Worked example — a 2 meter dipole for 146 MHz
-:class: example-problem
+:class: tip
 **Design a resonant half-wave dipole for 146 MHz and predict what the analyzer
 will show.**
 
@@ -538,7 +540,7 @@ balun.
 
 | Quantity | Value | Where it came from |
 | :-- | :-- | :-- |
-| $Z_{in}$ | $\approx 70 + j0\ \Omega$ | resonant, trimmed |
+| $Z_{\text{in}}$ | $\approx 70 + j0\ \Omega$ | resonant, trimmed |
 | VSWR on $50\ \Omega$ | 1.40 | $\vert\Gamma\vert = 20/120 = 0.167$ |
 | VSWR on $75\ \Omega$ | 1.07 | $\vert\Gamma\vert = 5/145 = 0.034$ |
 | Gain | $2.15\ \text{dBi}$ | $D = 1.64$, copper loss negligible |
@@ -589,7 +591,7 @@ wire cutter, a ruler, and a soldering iron.
 | Arm length actually cut | ______ cm | — |
 | Total length $L$ | ______ cm | — |
 | Resonant frequency $f_\text{res}$ | ______ MHz | ______ MHz |
-| Feed impedance $Z_{in}$ at resonance | ______ $\Omega$ | ______ $\Omega$ |
+| Feed impedance $Z_{\text{in}}$ at resonance | ______ $\Omega$ | ______ $\Omega$ |
 | VSWR on a $50\ \Omega$ line | ______ | ______ |
 
 **This build has no balun, and that matters.** Soldering wire straight onto an
@@ -615,7 +617,7 @@ which is a far better way to learn it than a diagram.
 | Half-wave directivity | From integrating the pattern over the sphere | $D = 1.64 = 2.15\ \text{dBi}$ |
 | Special functions | Tabulated, like $\text{erf}$ — do not integrate them | $C_{in}(2\pi) = 2.4376$, $Si(2\pi) = 1.4182$ |
 | Half-wave impedance | Resistance from the far field, reactance from induced EMF | $\frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + jSi(2\pi)\right] = 73 + j42.5\ \Omega$ |
-| Resonance | $X_{in} = 0$, reached by trimming | $0.47\lambda$ to $0.48\lambda$, $\approx 70\ \Omega$ |
+| Resonance | $X_{\text{in}} = 0$, reached by trimming | $0.47\lambda$ to $0.48\lambda$, $\approx 70\ \Omega$ |
 | The 5% rule | Resonant length from frequency | $143/f_\text{MHz}$ meters |
 | Longer dipoles | Phase reversals build lobes | Peak $\approx 5.2\ \text{dBi}$ near $1.25\lambda$ |
 

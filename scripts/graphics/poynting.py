@@ -12,7 +12,7 @@ font-family, so when the file is injected inline (deck-tools.js inlineSVGs) it
 inherits the deck's Source Sans Pro.
 
     python scripts/graphics/poynting.py
-    -> writes book/extras/slides/fig/poynting.svg
+    -> writes book/extras/slides/fig/L02-poynting.svg
 """
 
 from __future__ import annotations
@@ -127,7 +127,7 @@ def main() -> int:
 {triad_lbl}
 </svg>
 """
-    out = Path(__file__).resolve().parents[2] / "book/extras/slides/fig/poynting.svg"
+    out = Path(__file__).resolve().parents[2] / "book/extras/slides/fig/L02-poynting.svg"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(svg, encoding="utf-8")
     print(f"wrote {out} (viewBox {vx:.0f} {vy:.0f} {vw:.0f} {vh:.0f})")

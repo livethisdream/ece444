@@ -13,35 +13,35 @@ is required (write \textbf{None} if you did not collaborate).}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Radiation resistance and efficiency.} A short dipole has length
 $\ell = 0.08\lambda$. Its conductors contribute a loss resistance of
-$R_\mathrm{loss} = 1.5\ohms$.
+$R_\text{loss} = 1.5\ \ohms$.
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the radiation resistance $R_\mathrm{rad} = 80\pi^{2}(\ell/\lambda)^{2}$.
+		\part Compute the radiation resistance $R_\text{rad} = 80\pi^{2}(\ell/\lambda)^{2}$.
 		\begin{solution}[1in]
-		\eq{ R_\mathrm{rad} = 80\pi^{2}(0.08)^{2} = 789.6 \times 0.0064 \approx 5.05\ohms }
+		\eq{ R_\text{rad} = 80\pi^{2}(0.08)^{2} = 789.6 \times 0.0064 \approx 5.05\ \ohms }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$R_\mathrm{rad}$ = \ansbox[1.3in]{$\approx 5.05\ohms$}
+		$R_\text{rad}$ = \ansbox[1.3in]{$\approx 5.05\ \ohms$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the radiation efficiency $\eta_\mathrm{rad}$.
+		\part Compute the radiation efficiency $\eta_\text{rad}$.
 		\begin{solution}[1in]
-		\eq{ \eta_\mathrm{rad} = \dfrac{R_\mathrm{rad}}{R_\mathrm{rad}+R_\mathrm{loss}} = \dfrac{5.05}{6.55} \approx 0.77 }
+		\eq{ \eta_\text{rad} = \dfrac{R_\text{rad}}{R_\text{rad}+R_\text{loss}} = \dfrac{5.05}{6.55} \approx 0.77 }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\eta_\mathrm{rad}$ = \ansbox[1.3in]{$\approx 0.77$ (77\%)}
+		$\eta_\text{rad}$ = \ansbox[1.3in]{$\approx 0.77$ (77\%)}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part The short dipole's directivity is $D = 1.5$ (1.76 dBi). Find the gain in dBi.
 		\begin{solution}[1in]
-		\eq{ G_\mathrm{dBi} = 1.76 + 10\mylog{0.77} = 1.76 - 1.13 \approx 0.6\dbi }
+		\eq{ G_\text{dBi} = 1.76 + 10\mylog{0.77} = 1.76 - 1.13 \approx 0.6\dbi }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -53,30 +53,39 @@ $R_\mathrm{loss} = 1.5\ohms$.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{Feeding a half-wave dipole with 50$\Omega$ coax.}
+\question \textbf{Feeding a half-wave dipole with $50\ \ohms$ coax.}
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part A dipole trimmed to resonance presents $\myz{in} = 70 + j0\ohms$. Find
-		$\Gamma$, VSWR, return loss, and mismatch loss on a $50\ohms$ line.
+		\part A dipole trimmed to resonance presents $\myz{in} = 70 + j0\ \ohms$. Find
+		$\Gamma$, VSWR, return loss, and mismatch loss on a $50\ \ohms$ line.
 		\begin{solution}[1.8in]
 		\eq{
-			\Gamma &= \dfrac{70-50}{70+50} = 0.167, \qquad \text{VSWR} = \dfrac{1.167}{0.833} \approx 1.40 \\
-			\text{RL} &= -20\mylog{0.167} \approx 15.6\db, \quad L_\mathrm{mm} = -10\mylog{1-0.167^{2}} \approx 0.12\db
+			\Gamma &= \dfrac{70-50}{70+50} = 0.167 \\
+			\text{VSWR} &= \dfrac{1.167}{0.833} \approx 1.40 \\
+			\text{RL} &= -20\mylog{0.167} \approx 15.6\db \\
+			L_\text{mm} &= -10\mylog{1-0.167^{2}} \approx 0.12\db
 		}
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
+		$\Gamma$ = \ansbox[1.3in]{$0.167$ (unitless)}
+
+		\vspace{4pt}
 		VSWR = \ansbox[1.3in]{$\approx 1.40$}
 
 		\vspace{4pt}
 		RL = \ansbox[1.3in]{$\approx 15.6\db$}
+
+		\vspace{4pt}
+		$L_\text{mm}$ = \ansbox[1.3in]{$\approx 0.12\db$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part An \emph{untrimmed} half-wave dipole presents $\myz{in} = 73 + j42.5\ohms$.
-		Find $\left| \Gamma \right|$ and VSWR on the same line.
+		\part An \emph{untrimmed} half-wave dipole presents
+		$\myz{in} = 73 + j42.5\ \ohms$. Find $\left| \Gamma \right|$ and VSWR on the
+		same line.
 		\begin{solution}[1.7in]
 		\eq{
 			\left| \Gamma \right| &= \dfrac{\sqrt{23^{2} + 42.5^{2}}}{\sqrt{123^{2} + 42.5^{2}}} = \dfrac{48.3}{130.1} \approx 0.371 \\
@@ -95,33 +104,54 @@ $R_\mathrm{loss} = 1.5\ohms$.
 	\part Compare (a) and (b): in one sentence, what did trimming to resonance buy
 	you, and why?
 		\begin{solution}[1in]
-		Trimming killed the $+j42.5\ohms$ reactance, dropping VSWR from $\approx 2.2$ to
-		$1.4$ --- the reactance, not the resistance, was doing most of the damage.
+		Trimming killed the $+j42.5\ \ohms$ of reactance, dropping VSWR from
+		$\approx 2.2$ to $1.4$ --- the reactance, not the resistance, was doing most of
+		the damage.
 		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A third dipole on the same $50\ \ohms$ line measures VSWR $= 1.5$, and
+		you know it is purely resistive at that frequency. What two real $\myz{in}$ are
+		consistent with that reading? State what a VSWR measurement alone can and
+		cannot tell you.
+		\begin{solution}[1.5in]
+		\eq{ \myz{in} = 50 \cdot \dfrac{1.5}{1} = 75\ \ohms \quad\text{or}\quad
+			 \myz{in} = \dfrac{50}{1.5} = 33.3\ \ohms }
+		VSWR is built from $\left| \Gamma \right|$ alone, so it reports the
+		\emph{magnitude} of the mismatch and nothing about its phase --- it cannot tell
+		you which side of $Z_0$ you are on, or how much of the mismatch is reactive.
+		That is what a Smith chart, or a complex $\Gamma$ measurement, is for.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\myz{in}$ = \ansbox[1.5in]{$75$ or $33.3\ \ohms$}
+	\end{minipage}
 
 \end{parts}
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Quarter-wave transformer.} A resonant antenna presents a real
-input impedance $R_L = 36\ohms$. You want to match it to a $50\ohms$ feed line
+input impedance $R_L = 36\ \ohms$. You want to match it to a $50\ \ohms$ feed line
 with a quarter-wave transformer.
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part What characteristic impedance $Z_1$ must the $\lambda/4$ section have?
 		\begin{solution}[1in]
-		\eq{ Z_1 = \sqrt{Z_0 R_L} = \sqrt{(50)(36)} = \sqrt{1800} \approx 42.4\ohms }
+		\eq{ Z_1 = \sqrt{Z_0 R_L} = \sqrt{(50)(36)} = \sqrt{1800} \approx 42.4\ \ohms }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$Z_1$ = \ansbox[1.3in]{$\approx 42.4\ohms$}
+		$Z_1$ = \ansbox[1.3in]{$\approx 42.4\ \ohms$}
 	\end{minipage}
 
 	\part What is $\Gamma$ at the design frequency?
 		\begin{solution}[0.8in]
-		The transformer makes $Z_1^{2}/R_L = 1800/36 = 50\ohms = Z_0$, so $\Gamma = 0$.
+		The transformer makes $Z_1^{2}/R_L = 1800/36 = 50\ \ohms = Z_0$, so
+		$\Gamma = 0$.
 		\end{solution}
 
 	\part In one sentence, what happens to the match off the design frequency, and why?
@@ -131,59 +161,109 @@ with a quarter-wave transformer.
 		longer holds, and $\left| \Gamma \right|$ climbs --- the match is narrowband.
 		\end{solution}
 
+	\part The antenna in this problem is purely resistive. Explain in one or two
+	sentences why a quarter-wave transformer is the wrong tool the moment
+	$\myz{in}$ has a reactive part.
+		\begin{solution}[1.2in]
+		A $\lambda/4$ section transforms $R_L$ to $Z_1^{2}/R_L$ --- a \emph{real}
+		number into a \emph{real} number. Hand it a complex load and the transformed
+		impedance is still complex, so $\Gamma \ne 0$ no matter what $Z_1$ you pick.
+		You must first cancel the reactance (or move to a matching topology that
+		handles both parts at once, which is Question 4).
+		\end{solution}
+
 \end{parts}
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{VSWR, reflection, and the impedance behind it.} An antenna
-measures VSWR $= 1.5$ on a $50\ohms$ line.
+\question \textbf{L-match design.} A compact antenna presents
+$\myz{in} = 25 - j40\ \ohms$ at $f = 1.5\ghz$. You must match it to a
+$50\ \ohms$ line with lumped elements. Work the match in two moves: \emph{cancel
+the reactance}, then \emph{transform the resistance}.
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Find $\left| \Gamma \right|$.
-		\begin{solution}[0.8in]
-		\eq{ \left| \Gamma \right| = \dfrac{1.5-1}{1.5+1} = \dfrac{0.5}{2.5} = 0.20 }
+		\part Find $\left| \Gamma \right|$ and VSWR for the raw, unmatched antenna.
+		\begin{solution}[1.6in]
+		\eq{
+			\Gamma &= \dfrac{(25 - j40) - 50}{(25 - j40) + 50} = \dfrac{-25 - j40}{75 - j40} \\
+			\left| \Gamma \right| &= \dfrac{\sqrt{25^{2}+40^{2}}}{\sqrt{75^{2}+40^{2}}}
+				= \dfrac{47.2}{85.0} \approx 0.555 \\
+			\text{VSWR} &= \dfrac{1.555}{0.445} \approx 3.49
+		}
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\left| \Gamma \right|$ = \ansbox[1.3in]{$0.20$}
+		$\left| \Gamma \right|$ = \ansbox[1.3in]{$\approx 0.555$}
+
+		\vspace{4pt}
+		VSWR = \ansbox[1.3in]{$\approx 3.49$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the return loss in dB.
-		\begin{solution}[0.8in]
-		\eq{ \text{RL} = -20\mylog{0.20} \approx 14\db }
+		\part \textbf{Move 1.} What series reactance cancels the load reactance, and
+		what component value does it correspond to at $1.5\ghz$?
+		\begin{solution}[1.5in]
+		Cancel $-j40\ \ohms$ with $+j40\ \ohms$ in series --- an inductor.
+		\eq{
+			\omega &= 2\pi(1.5\ee{9}) = 9.425\ee{9} \text{ rad/s} \\
+			L_1 &= \dfrac{40}{9.425\ee{9}} = 4.24\ \text{nH}
+		}
+		The load now looks like a plain $25\ \ohms$ resistor.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		RL = \ansbox[1.3in]{$\approx 14\db$}
+		$X_1$ = \ansbox[1.3in]{$+j40\ \ohms$}
+
+		\vspace{4pt}
+		$L_1$ = \ansbox[1.3in]{$4.24\ \text{nH}$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the mismatch loss in dB.
-		\begin{solution}[0.8in]
-		\eq{ L_\mathrm{mm} = -10\mylog{1-0.20^{2}} = -10\mylog{0.96} \approx 0.18\db }
+		\part \textbf{Move 2.} With $R_L = 25\ \ohms$ real, design the L-network that
+		transforms it to $50\ \ohms$. Use $Q = \sqrt{Z_0/R_L - 1}$, series
+		$X_s = QR_L$ on the load side and shunt $X_p = Z_0/Q$ on the line side. Give
+		both reactances and both component values, and combine the two series
+		inductors.
+		\begin{solution}[2.0in]
+		\eq{
+			Q &= \sqrt{\dfrac{50}{25} - 1} = 1 \\
+			X_s &= QR_L = 25\ \ohms \ (\text{series } L) \\
+			L_2 &= \dfrac{25}{9.425\ee{9}} = 2.65\ \text{nH} \\
+			X_p &= \dfrac{Z_0}{Q} = 50\ \ohms \ (\text{shunt } C) \\
+			C &= \dfrac{1}{\omega X_p} = \dfrac{1}{(9.425\ee{9})(50)} = 2.12\ \text{pF}
+		}
+		The two series inductors merge: $L_1 + L_2 = 6.9\ \text{nH}$ ($+j65\ \ohms$).
+		Check: $25 - j40 + j65 = 25 + j25$, whose admittance is
+		$0.02 - j0.02$ S; the shunt capacitor adds $+j0.02$ S, leaving $0.02$ S
+		$= 50\ \ohms$ and $\Gamma = 0$.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$L_\mathrm{mm}$ = \ansbox[1.3in]{$\approx 0.18\db$}
+		$L_\text{tot}$ = \ansbox[1.3in]{$6.9\ \text{nH}$}
+
+		\vspace{4pt}
+		$C$ = \ansbox[1.3in]{$2.12\ \text{pF}$}
 	\end{minipage}
 
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Assuming a purely resistive antenna, what two real $\myz{in}$ are consistent
-		with this VSWR?
-		\begin{solution}[1.2in]
-		\eq{ \myz{in} = 50 \cdot \dfrac{1.2}{0.8} = 75\ohms \quad\text{or}\quad 50 \cdot \dfrac{0.8}{1.2} = 33.3\ohms }
-		VSWR alone does not say which side of $Z_0$ you are on.
+	\part The loaded $Q$ of this match came out at $1$. Compare the bandwidth and the
+	practicality of this L-match against the $\lambda/4$ transformer of Question 3,
+	and say which you would build for a $1.5\ghz$ handheld radio.
+		\begin{solution}[1.6in]
+		A matching network's fractional bandwidth goes roughly as $1/Q$, so $Q = 1$ is
+		about as broadband as a two-element match gets --- a $2{:}1$ impedance ratio is
+		a gentle transformation. A larger ratio would force $Q$ up and the bandwidth
+		down; that is the fundamental cost of matching, not a property of this
+		topology. Against the $\lambda/4$ transformer: the transformer needs a
+		\emph{real} load and a physical quarter wavelength of line ($5\ \text{cm}$ at
+		$1.5\ghz$), while the L-match swallows the reactance directly and occupies two
+		0402 parts. \textbf{Build the L-match} in a handheld --- board area and the
+		complex load both argue for it; save the $\lambda/4$ transformer for a printed
+		feed where the line is free anyway.
 		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\myz{in}$ = \ansbox[1.3in]{$75$ or $33.3\ohms$}
-	\end{minipage}
 
 \end{parts}
 
@@ -193,21 +273,63 @@ measures VSWR $= 1.5$ on a $50\ohms$ line.
 delivers a forward power of $\myp{fwd} = +40\dbm$ toward a transmit antenna. A
 shunt protection diode at the PA output fails catastrophically if it must
 dissipate more than $\myp{max} = +30\dbm$. Model \emph{all} of the reflected
-power as landing on the diode.
+power as landing on the diode, so $\myp{ref} = \left| \Gamma \right|^{2}\myp{fwd}$.
 \begin{parts}
-	\part Convert $\myp{fwd}$ and $\myp{max}$ to watts.
-		\begin{solution}[0.9in] \eq{ \myp{fwd} = 10^{(40-30)/10}\watts = 10\watts, \qquad \myp{max} = 10^{0}\watts = 1\watts } \end{solution}
-	\part In terms of $\left| \Gamma \right|$ at the antenna, how much power is reflected
-	back toward the PA?
-		\begin{solution}[0.6in] $\myp{ref} = \left| \Gamma \right|^{2} \myp{fwd}$. \end{solution}
-	\part Find the largest $\left| \Gamma \right|$ the system can tolerate before the
-	diode is destroyed.
-		\begin{solution}[0.9in] \eq{ \left| \Gamma \right|_{\max} = \sqrt{\dfrac{\myp{max}}{\myp{fwd}}} = \sqrt{0.1} \approx 0.316 } \end{solution}
-	\part Convert to a VSWR limit and a return-loss limit, and state the datasheet rule.
-		\begin{solution}[1.3in] \eq{ \text{VSWR}_{\max} = \dfrac{1.316}{0.684} \approx 1.93, \qquad \text{RL}_{\min} = -10\mylog{0.1} = 10\db } Rule: keep VSWR $\le 1.9$ (return loss $\ge 10\db$); reflected power must stay $\ge 10\db$ below forward. \end{solution}
-	\part In one sentence: how does a circulator or isolator between the PA and antenna
-	change this picture?
-		\begin{solution}[1in] It routes the reflected wave into a matched dump-port load instead of back into the PA, so the diode no longer sees it --- the antenna can then run at much higher VSWR (paid for by insertion loss, size, and bandwidth). \end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Convert $\myp{fwd}$ and $\myp{max}$ to watts.
+		\begin{solution}[1in]
+		\eq{ \myp{fwd} &= 10^{(40-30)/10}\watts = 10\watts \\
+			 \myp{max} &= 10^{(30-30)/10}\watts = 1\watts }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\myp{fwd}$ = \ansbox[1.3in]{$10\watts$}
+
+		\vspace{4pt}
+		$\myp{max}$ = \ansbox[1.3in]{$1\watts$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the largest $\left| \Gamma \right|$ the system can tolerate before
+		the diode is destroyed.
+		\begin{solution}[1.1in]
+		\eq{ \left| \Gamma \right|_{\max} = \sqrt{\dfrac{\myp{max}}{\myp{fwd}}}
+			 = \sqrt{0.1} \approx 0.316 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\left| \Gamma \right|_{\max}$ = \ansbox[1.3in]{$\approx 0.316$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Convert to a VSWR limit and a return-loss limit, and state the
+		datasheet rule that follows.
+		\begin{solution}[1.5in]
+		\eq{ \text{VSWR}_{\max} &= \dfrac{1.316}{0.684} \approx 1.93 \\
+			 \text{RL}_{\min} &= -10\mylog{0.1} = 10\db }
+		Rule: keep VSWR $\le 1.9$ (return loss $\ge 10\db$); reflected power must stay
+		at least $10\db$ below forward power.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		VSWR$_{\max}$ = \ansbox[1.3in]{$\approx 1.93$}
+
+		\vspace{4pt}
+		RL$_{\min}$ = \ansbox[1.3in]{$10\db$}
+	\end{minipage}
+
+	\part In one sentence: how does a circulator or isolator between the PA and
+	antenna change this picture?
+		\begin{solution}[1in]
+		It routes the reflected wave into a matched dump-port load instead of back
+		into the PA, so the diode no longer sees it --- the antenna can then run at
+		much higher VSWR (paid for by insertion loss, size, and bandwidth).
+		\end{solution}
+
 \end{parts}
 
 \newpage
@@ -223,19 +345,19 @@ power as landing on the diode.
 		the pattern.
 		\end{solution}
 
-	\part You must feed a folded dipole ($\myz{in} \approx 292\ohms$) with $75\ohms$
-	coax. Which balun would you choose, and what does it do?
+	\part You must feed a folded dipole ($\myz{in} \approx 292\ \ohms$) with
+	$75\ \ohms$ coax. Which balun would you choose, and what does it do?
 		\begin{solution}[1.1in]
 		A \textbf{4:1 (half-wave) balun}: it balances the feed \emph{and} transforms
-		impedance 4:1, taking $292\ohms$ down to $\approx 73\ohms$ --- a good match to
-		$75\ohms$ coax.
+		impedance 4:1, taking $292\ \ohms$ down to $\approx 73\ \ohms$ --- a good match
+		to $75\ \ohms$ coax.
 		\end{solution}
 
-	\part You feed a straight resonant dipole ($\approx 70\ohms$) with $50\ohms$ coax.
-	Which balun would you choose, and why is it a \emph{different} choice than (b)?
+	\part You feed a straight resonant dipole ($\approx 70\ \ohms$) with $50\ \ohms$
+	coax. Which balun would you choose, and why is it a \emph{different} choice than (b)?
 		\begin{solution}[1.2in]
-		A \textbf{1:1 current (choke) balun}. The $70\ohms$ dipole already matches
-		$50\ohms$ well (VSWR $\approx 1.4$), so no impedance transformation is wanted ---
+		A \textbf{1:1 current (choke) balun}. The $70\ \ohms$ dipole already matches
+		$50\ \ohms$ well (VSWR $\approx 1.4$), so no impedance transformation is wanted ---
 		you only need to choke off the shield current. A 4:1 balun here would ruin the
 		match.
 		\end{solution}

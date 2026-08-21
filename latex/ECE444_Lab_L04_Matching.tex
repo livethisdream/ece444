@@ -1,0 +1,856 @@
+\documentclass{exam}
+
+\newif\ifA
+\newif\ifkey
+\newif\ifhavefigs
+\newif\ifprintselected   % required by exam_config's \ansbox
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lab Num
+\ifdefined\labNumIn
+	\def\labNum{\labNumIn}
+\else
+	\def\labNum{1}
+\fi
+
+% is this the key or not?
+\ifdefined\iskey
+	\ifnum\iskey=1
+		\keytrue
+	\else
+		\keyfalse
+	\fi
+\else
+	%% Pick one manually
+	\keyfalse % if this is NOT the key
+%	\keytrue     % if this IS the key
+\fi
+
+% set up the header and footer - change for every term
+\ifdefined\thisTermIn
+	\def\thisterm{\thisTermIn}
+\else
+	\def\thisterm{Fall 2026}
+\fi
+%
+\def\thisclass{ECE 444}
+
+% The VNA photographs live in the course figures folder, NOT in this repo.
+% Build with \def\nofigsIn{} to substitute placeholder boxes (useful for a
+% syntax check on a machine without the figures).
+\ifdefined\nofigsIn
+	\havefigsfalse
+\else
+	\havefigstrue
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% LAB PARAMETERS -- the mock antenna and its match
+%%% ---------------------------------------------------
+%%% Change these SEVEN values to re-target the lab to whatever parts are
+%%% actually in the drawer. The design equations are:
+%%%     X_Ca = -1/(2 pi f Ca)                      (antenna reactance)
+%%%     Q    = sqrt(Z0/Ra - 1)                     (L-network Q)
+%%%     Xs   = Q*Ra   -> Ls = (Xs - X_Ca)/(2 pi f) (series inductor)
+%%%     Xp   = Z0/Q   -> Cp = 1/(2 pi f Xp)        (shunt capacitor)
+%%% Current values solve as: Z_a = 15 - j79.6 ohms, VSWR 12:1 unmatched;
+%%% Ls = 8.16 uH (use 8.2), Cp = 2431 pF (use 2.4 nF); matched VSWR 1.03,
+%%% RL 35 dB; VSWR <= 2 from 1.88 to 2.11 MHz (11 percent).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\antR{15}			% ohms      -- mock-antenna resistance
+\def\antC{1}			% nF        -- mock-antenna series capacitance
+\def\fdes{2}			% MHz       -- design frequency
+\def\antX{-79.6}		% ohms      -- antenna reactance at fdes
+\def\netQ{1.53}			% --        -- L-network Q
+\def\matchL{8.2}		% micro-H   -- series inductor (nearest standard)
+\def\matchC{2.4}		% nF        -- shunt capacitor (nearest standard)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% END SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% packages and shortcuts
+\input{myPackages_gr}
+\usepackage{listings}
+\usepackage[hidelinks, linkcolor=red]{hyperref}
+\input{myShortcuts}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+%% exam class customization
+\input{exam_config}
+\printselectedfalse      % full worked solutions in the key, not answers-only
+\CorrectChoiceEmphasis{\color{red}}
+\SolutionEmphasis{\color{red}}
+\renewcommand\questionlabel{\textbf{\thequestion.}}
+\renewcommand{\thepartno}{\alph{partno}}
+\renewcommand{\partlabel}{(\thepartno)}
+
+% graphics path -- the course figures folder first, then repo-local
+\ifdefined\figPathIn
+	\def\mygraphicspath{\figPathIn}
+\else
+	\def\mygraphicspath{C:/Users/neil.rogers.1/OneDrive - afacademy.af.edu/figures/}
+\fi
+\graphicspath{{\mygraphicspath}{figures/}{../figures/}}
+
+% placeholder used when the figures folder is not present
+\newcommand{\figplaceholder}[1]{%
+	\fbox{\parbox[c][1.1in][c]{3.0in}{\centering\small\textit{[figure: #1]}\\[2pt]
+	\scriptsize available in the course figures folder}}%
+}
+
+% circuitikz config
+\ctikzset{voltage/distance from node=0.75}
+
+% print the answers if this is the key
+\ifkey
+	\printanswers % if this IS the key
+\else
+	\noprintanswers  %if this is NOT the key
+\fi
+
+% print the header and footer
+% need to print key on top if this is the key
+\ifkey
+	\firstpageheader{}{\color{red}{ KEY}}{}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\else
+	\firstpageheader{}{}{}
+	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\fi
+
+\runningheadrule
+
+\begin{document}
+\pagestyle{headandfoot}   % exam class
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% cover page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+USAF ACADEMY \\
+DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
+LAB \#\labNum\ - Impedance Measurement and Matching Networks \\
+\thisterm \\[5mm]
+\end{center}
+
+\fullwidth{\textbf{Learning Objective 1.4: } I can calculate input impedance, feed
+considerations, and the role of baluns in an antenna feed system.}
+
+\vspace{6pt}
+
+\textbf{\underline{COLLABORATION POLICY}}:  The lab itself is a team assignment; each team should submit one combined lab report. \\
+
+\textbf{\underline{AUTHORIZED RESOURCES}}:  Any resources are authorized. \\
+
+\textbf{\underline{DOCUMENTATION}}: You must include a documentation statement with each assignment in accordance with the course policy letter. \\
+
+\textbf{\underline{DUE DATES}}: The lab report will be due as indicated on Gradescope. \\
+
+\textbf{\underline{INSTRUCTIONS}}:
+\begin{itemize}
+	\item Before lab: read entire lab packet.
+	\item Before lab: read the \href{https://nanorfe.com/nanovna-v2-user-manual.html}{VNA user's guide}.
+	\item Before lab: work the Part II design by hand (Question 7) so you arrive with component values in hand.
+	\item During lab: complete the measurements as specified.
+\end{itemize}
+
+\vspace{8pt}
+
+\textbf{\underline{EQUIPMENT SAFETY}}:
+\begin{itemize}
+	\item Equipment safety rules must be observed at all times and are for the safety of the students and protection of the equipment.
+	\item No food or drink is allowed in the ECE labs while conducting measurements.  Cadets are requested to finish their snacks outside the classroom and place all trash in the trash containers before class starts, and keep all drinks off work surfaces.
+	\item At least two people (instructor/technician/cadet) must be in the room when equipment is in use.
+	\item Cadets should return equipment to original configuration before leaving.
+	\item Cadets must clean up their immediate area (return wires, pick up trash, etc.) before leaving.
+	\item Cadets are to refrain from ``playing'' with the equipment, parts, and wires when there is no hands-on activity underway.
+	\item When plugging in or unplugging wires, make sure any signal sources (AC or DC) are not transmitting.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Purpose}
+\label{purpose}
+
+This lab comes in two parts. In \textbf{Part I} you will use a Vector Network
+Analyzer (VNA) to measure reflection and transmission coefficients in the
+transmission line system shown below: you will familiarize yourself with RF
+measurement technique, calibrate the VNA, measure several known load
+impedances, and characterize an unknown device.
+
+In \textbf{Part II} you will put that skill to work. You will build a load that
+behaves like an electrically small antenna -- a small resistance in series with
+a large capacitive reactance -- measure how badly it is mismatched, then
+\textbf{design, build, and verify} an L-network that matches it to the
+50\ohms system. This is the measurement half of Lesson 4: the matching math
+you did on paper, checked against a real instrument.
+
+	\begin{center}
+	\begin{circuitikz}
+		\draw (0,0) to [sV, a^=\myv{s}] ++(0,3)
+				to[short] ++(0.5,0)
+				to[tline,o-o] ++(3,0)
+				to[short] ++(0.5,0)
+				to[twoport,a^={\myz{L}}]  ++(0,-3)
+				to[short] ++(-0.5,0)
+				to[tline,o-o] ++(-3,0)
+				to[short] ++(-0.5,0);
+		\node[below] at (2,1.75) {\myz{0}\equals 50\ohms};
+		\node[above] at (0.5,3) {$z=-\ell$};
+		\node[above] at (3.5,3) {$z=0$};
+	\end{circuitikz}
+	\end{center}
+
+\section{Background}
+\label{background}
+
+In this lab, we will measure the reflection and transmission coefficient for some devices over various frequency ranges. In these ranges, we can observe reflection and transmission as described in class. Recall the reflection and transmission coefficients are found by:
+\vspace{-6pt}
+\eq{
+	\Gamma_L &= \dfrac{\myz{L}-\myz{0}}{\myz{L}+\myz{0}} \\
+	T_L &=  1- \Gamma_L
+}
+\vspace{-12pt}
+
+In this lab, we won't be considering the length of our transmission lines ($\ell$), because we will calibrate the length out of our calculations.
+
+\subsection{Matching, in two moves}
+\label{matchbackground}
+
+An antenna is rarely 50\ohms\ on its own, and an electrically small antenna is
+nowhere close. From Lesson 4: a short dipole of length $\ell$ carrying a
+triangular current has radiation resistance
+$R_{\text{rad}} = 20\pi^2(\ell/\lambda)^2$ -- a fraction of an ohm for
+$\ell = 0.05\lambda$ -- sitting in series with a large \emph{capacitive}
+reactance. Small real part, big negative imaginary part. Connect that to a
+50\ohms\ radio and almost all of your power comes straight back at you.
+
+The L-network fixes this in two moves, and the order matters:
+
+\begin{enumerate}
+	\item \textbf{Cancel the reactance.} Add a series element whose reactance is
+	equal and opposite to the load's, so what remains is purely real.
+	\item \textbf{Transform the resistance.} Use the remaining series reactance
+	plus a shunt element to turn that real value into 50\ohms.
+\end{enumerate}
+
+For a load resistance $R_a$ smaller than $Z_0$, the series element goes on the
+\emph{load} side and the shunt element on the \emph{source} side, and the
+network's quality factor is set entirely by the ratio you are transforming:
+
+\eq{
+	Q &= \sqrt{\dfrac{Z_0}{R_a} - 1} \\
+	X_s &= Q R_a \qquad\qquad X_p = \dfrac{Z_0}{Q}
+}
+
+where $X_s$ is the \emph{total} series reactance the network needs to see --
+so the inductor you actually install must also make up for whatever reactance
+the load brought with it. Note what $Q$ does not depend on: frequency. It is
+fixed by how far you are transforming, and it sets the bandwidth you get. You
+will measure exactly that in Question 9.
+
+	\begin{center}
+	\begin{circuitikz}[scale=0.92, transform shape]
+		\draw (0,2.5) node[left]{\small VNA port} to[short,o-] (1.5,2.5);
+		\draw (1.5,2.5) to[C, l_=$C_p$] (1.5,0);
+		\draw (0,0) to[short,o-] (1.5,0);
+		\draw (1.5,2.5) to[L, l=$L_s$] (4.5,2.5) -- (6,2.5);
+		\draw (6,2.5) to[R, l=$R_a$] (8,2.5) to[C, l=$C_a$] (10,2.5);
+		\draw (10,2.5) -- (10,0) -- (1.5,0);
+		\draw[dashed, gray] (0.7,3.3) rectangle (5.2,-0.6);
+		\node[gray] at (2.95,3.6) {\small L-network};
+		\draw[dashed, gray] (5.6,3.3) rectangle (10.6,-0.6);
+		\node[gray] at (8.1,3.6) {\small mock antenna};
+	\end{circuitikz}
+	\end{center}
+
+\section{Equipment}
+\label{equipment}
+\subsection{Basic Familiarization}
+
+A full user's guide for the VNA is available \href{https://nanorfe.com/nanovna-v2-user-manual.html}{online}. Please familiarize yourself with this guide \textbf{before} the lab period.  The VNA is shown in Figure \ref{fig:vna} and some of the key components are highlighted.
+
+	\begin{figure}[H]
+	\begin{subfigure}[t]{0.5\textwidth}
+		\begin{center}
+		\ifhavefigs
+			\includegraphics[scale=0.23]{ECE343/vna_annotated}
+		\else
+			\figplaceholder{annotated VNA overview}
+		\fi
+		\end{center}
+		\caption{An annotated overview of the VNA.}
+		\label{fig:vna}
+	\end{subfigure} %
+	\begin{subfigure}[t]{0.5\textwidth}
+		\begin{center}
+			\ifhavefigs
+				\includegraphics[scale=0.23]{ECE343/nano_vna_initial}
+			\else
+				\figplaceholder{initial nano VNA screen}
+			\fi
+			\caption{An initial view of the nano VNA screen.}
+			\label{fig:vnainit}
+		\end{center}
+	\end{subfigure}
+	\caption{Familiarization views of the nano VNA.}
+	\end{figure}
+
+A VNA is used to measure S-parameters, which are essentially reflection and transmission coefficients. For a two-port network (which, in our case, are Channel 0 and Channel 1), we have 4 S-parameters: $S_{11}, S_{21}, S_{12}, \text{ and } S_{22}$. The subscripts represent the receiving port and the source port, so $S_{21}$ means the signal received at port 2 as a result of a source at port 1 -- this is the transmission coefficient from port 1 to port 2.
+
+These nano VNA's can be powered via the built-in battery or the micro-USB cable. To operate the VNA, turn on the device using the on/off slider on the left side of the device. Within a few seconds, you should see a display as shown in Figure \ref{fig:vnainit}. At first, the display will appear cluttered, because you are actually looking at several plots overlayed on one another. The labels for each trace are at the very top of the screen and the default quantities are as follows:
+
+\begin{itemize}
+
+\item Yellow: Channel 0's magnitude in log format. This represents the reflection coefficient and is plotted on the rectangular grid. The default scale, as shown, is 10dB per division. Usually, 0dB is at the top of the screen.
+\item Blue: Channel 1's magnitude in log format. This represents the transmission coefficient and is plotted on the rectangular grid.  The default scale, as shown, is 10dB per division.  Usually, 0dB is at the top of the screen.
+\item Magenta: Channel 0's phase in degrees. The default scale is 90\mydeg per division.
+\item Green: This is the smith chart plot of the measured complex impedance of the load (\myz{L}). It is plotted ``behind'' the rectangular grid and is on its own scale (normalized \textbf{impedance}).
+
+\end{itemize}
+
+Each scale can be customized, as described in the user's manual, but is not necessary for this lab.
+
+\subsection{VNA Setup}
+To bring up the menu, tap the screen (it helps to use a passive stylus) or press the middle tactile button. Your first task should be to flip the display, which will allow you to turn the ports away from you. To do this, tap the screen, then tap ``Display'' at the top of the menu. At the bottom, you should then see ``Flip Display'' -- tap this button and the screen should invert. You should also tap the ``Pause Sweep'' button -- this pauses the frequency sweep and measurement cycle of the VNA.  Take some time to explore the menu structure -- a full map is available in the user's guide.
+
+\subsection{Parts for Part II}
+
+Beyond the VNA and its cables, each team needs: a \antR\ohms\ resistor, a
+$\antC\ \text{nF}$ capacitor (these two form the mock antenna), and -- once you
+have done the design -- one inductor and one capacitor for the matching
+network. Keep your leads \textbf{short}: at these frequencies a few centimetres
+of wire is a small but measurable inductance, and it is one of the reasons your
+built network will not perform quite as well as your arithmetic promises.
+
+\section{Part I -- Measurement}
+\label{tasks}
+
+\subsection{Calibration}
+
+When performing RF measurements, you \textbf{always} need to calibrate your device to your particular configuration. This calibration needs to be performed every time a cable is connected or the frequency range is changed. First, connect the SMA cables to each port (SMA cables are the smaller coax connectors). On channel 0 (which is confusingly labeled ``1'' on the circuit board), connect the black SMA-BNC connector, then connect the BNC-grabber clips cable to the open end.  On channel 1 (labeled ``2'' on the circuit board), connect the blue SMA-SMA cable.  Don't worry about the different colors or lengths of the cables at this time. RF connectors are sensitive, so when connecting them \textbf{DO NOT} overtighten the connectors or cross-thread them. Finger tight is just right in this case.
+
+Before we calibrate the device, you will need to set your frequency range.
+
+\begin{enumerate}
+
+	\item Tap \textbf{Stimulus} from the main menu.
+
+	\item Set your frequency range from 50\khz\ to 5\mhz\ using the \textbf{Start} and \textbf{Stop} buttons.
+
+\end{enumerate}
+
+You will now follow the calibration procedure using an open, short, and load calibration standard.
+
+\begin{enumerate}
+
+	\item Every calibration standard will be connected to channel 0. Leave the SMA cable connected to channel 1 disconnected.
+
+	\item Bring up the menu and tap \textbf{Cal}.
+
+	\item Reset the calibration by tapping \textbf{Reset}.
+
+	\item Leave the grabber clips disconnected from any load. This is an open circuit.
+
+	\item Now, under the \textbf{Calibration} pane, tap \textbf{Open}. The calibration is complete when the background of the text turns black.
+
+	\item Connect the grabber clips to form a short circuit.
+
+	\item Under the \textbf{Calibration} pane, tap \textbf{Short}.
+
+	\item Once the calibration is complete, move on to the \textbf{Load} calibration. In this case, you will connect the grabber clips to a matched load of 50\ohms -- a simple resistor.
+
+	\item Do not conduct a \textbf{Thru} measurement. This involves adding another length of transmission line between channel 0 and channel 1.
+
+	\item Tap \textbf{Done} at the bottom of the \textbf{Calibration} pane.
+
+	\item If you wish, you may save your calibration by tapping ``Save 0''. You will be able to recall these calibration settings later.
+
+	\item From the \textbf{Cal} pane, ensure \textbf{Correction} is highlighted in black.
+
+	\item Calibration is now complete -- tap any portion of the plots to close the menu.
+
+\end{enumerate}
+
+\textbf{Note the reference plane.} Everything you just did tells the VNA to
+call the \emph{tips of the grabber clips} the place where $z=0$. Every
+impedance you report from here on is the impedance seen at those clips. You
+will rely on this in Part II.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\subsection{Measurement}
+
+When making measurements, be sure to pause the sweep while changing physical connections. Additionally, you may read values for the marker positions at the top of the screen. The markers may be moved  by either tapping/holding and dragging (this requires a stylus) or, choosing \textbf{Markers $\rightarrow$ Select Markers $\rightarrow$ Marker X} and then using the left/right tactile buttons to move the marker location. Figure \ref{fig: readout} shows an annotated example.
+
+\begin{figure}[H]
+	\centering{
+	\ifhavefigs
+		\includegraphics[scale=0.5]{ECE343/annotated_vna_readout}
+	\else
+		\figplaceholder{annotated VNA marker readout}
+	\fi
+	}
+	\caption{An example readout of a VNA measurement showing the location of Marker position information. }
+	\label{fig: readout}
+\end{figure}
+
+\begin{questions}
+
+	\question Given an open circuit load, what type of reflection would you expect to see, in terms of the reflection magnitude and phase? Use the reflection coefficient equation to inform your answer.  It may also help to include a screenshot of the resultant plot.
+	\begin{parts}
+
+			\begin{solution}[2in]
+			As $\myz{L} \rightarrow \infty$, $\Gamma_L \rightarrow +1$: full
+			reflection, magnitude 0\db, phase 0\mydeg.
+			\end{solution}
+
+		\part What amplitude and phase do you observe?
+
+			\vspace{12pt}
+
+			\begin{center}
+			Amplitude = \ansbox[2in]{$\approx 0\db$} %
+			Phase = \ansbox[2in]{$\approx 0\mydeg$}
+			\end{center}
+
+			\vspace{12pt}
+
+		\part What position is the open circuit indicating on the Smith Chart? Does this make sense, based on your understanding of the Smith Chart?
+
+				\begin{solution}
+				The far right edge of the chart, where the normalized
+				resistance axis runs off to infinity. It should: the right
+				edge is $\Gamma = +1$.
+				\end{solution}
+
+	\end{parts}
+
+	\newpage
+	\question Given a short circuit load, what type of reflection would you expect to see, in terms of the reflection magnitude and phase? Use the reflection coefficient equation to inform your answer.  It may also help to include a screenshot of the resultant plot.
+	\begin{parts}
+
+			\begin{solution}[2in]
+			With $\myz{L} = 0$, $\Gamma_L = -1$: full reflection again, but
+			inverted -- magnitude 0\db, phase 180\mydeg.
+			\end{solution}
+
+		\part What amplitude and phase do you observe?
+
+			\vspace{12pt}
+
+			\begin{center}
+			Amplitude = \ansbox[2in]{$\approx 0\db$} %
+			Phase = \ansbox[2in]{$\approx 180\mydeg$}
+			\end{center}
+
+			\vspace{36pt}
+
+		\part What position is the short circuit indicating on the Smith Chart? Does this make sense, based on your understanding of the Smith Chart?
+
+				\begin{solution}
+				The far left edge, the zero-resistance point, which is
+				$\Gamma = -1$.
+				\end{solution}
+
+	\end{parts}
+
+\newpage
+\question \textbf{Impedance Measurement:} Given a capacitor of value 470\ \text{pF},  calculate the impedance for the frequency ranges shown in the table below. Plot these values on the smith chart and compare the measurement results -- do they agree?
+
+\def\mylinespacing{12pt}
+\begin{center}
+\renewcommand{\arraystretch}{2}
+
+\begin{tabular}{| c | p{2in}| }
+
+\hline
+\textbf{Frequency} 	& \textbf{Expected \myz{C}} \\\hline\hline
+50 kHZ				& 					\\\hline
+100 kHz			&					\\\hline
+500 kHz 			&  					\\\hline
+700 kHz 			&  					\\\hline
+900 kHz 			&  					\\\hline
+1 MHz 				&  					\\\hline
+2 MHz 				&  					\\\hline
+3 MHz 				&  					\\\hline
+4 MHz 				&  					\\\hline
+5 MHz				&					\\\hline
+\end{tabular}
+\end{center}
+
+\begin{solution}
+$\myz{C} = -j/(2\pi f C)$ with $C = 470\ \text{pF}$: $-j6773$\ohms\ at
+50\khz, $-j3386$\ohms\ at 100\khz, $-j677$\ohms\ at 500\khz,
+$-j484$\ohms\ at 700\khz, $-j376$\ohms\ at 900\khz, $-j339$\ohms\ at
+1\mhz, $-j169$\ohms\ at 2\mhz, $-j113$\ohms\ at 3\mhz, $-j85$\ohms\ at
+4\mhz, $-j68$\ohms\ at 5\mhz. All lie on the lower (capacitive) half of the
+outer rim, walking clockwise toward the short as frequency rises.
+\end{solution}
+
+\ifhavefigs
+	\newpage
+	\includepdf[pages=1]{SmithChart_blank.pdf}
+\fi
+
+\newpage
+\question{\textbf{Matched Load Measurement: } Now, you will measure a matched load of 50\ohms. Simply connect the grabbers to each side of the same 50\ohms resistor used during calibration. }
+
+\begin{parts}
+	\part What is the predicted magnitude of the matched load reflection coefficient, in dB?  Remember, you are measuring \textbf{Voltages}.
+
+		\begin{solution}[1in]
+		$\Gamma_L = 0$, so the magnitude is $-\infty$\db\ in theory. In
+		practice the instrument's directivity floor sets what you actually
+		see, typically $-40$ to $-60$\db.
+		\end{solution}
+		\hfill\ansbox[2in]{$-\infty$}
+
+	\part What is the measured magnitude of the matched load reflection coefficient.
+
+		\vspace{12pt}
+		\hfill\ansbox[2in]{$$}
+		\vspace{12pt}
+
+	\part Identify the resistance value from the marker readout and the Smith Chart.
+
+		\vspace{12pt}
+		\hfill\ansbox[2in]{50\ohms}
+		\vspace{12pt}
+
+	\part Make at least one observation about your measurements.
+
+		\begin{solution}[1in]
+
+		\end{solution}
+
+\end{parts}
+
+\newpage
+\question{\textbf{Mismatched Load Measurement (Resistive): } Now you will measure a purely resistive mismatch. Connect the 1\ \text{k}\ohms\ resistor to the mini grabbers and answer the following questions. }
+
+\begin{parts}
+
+	\part What is the predicted magnitude and phase of the reflection coefficient for this system, in dB? Remember, you are measuring \textbf{Voltages}.
+		\begin{solution}[1in]
+		\eq{
+			\Gamma_L &= \frac{1000-50}{1000+50} = 0.905 \\
+			\vert\Gamma_L\vert_{\db} &= 20\mylog{0.905} = -0.87\db
+		}
+		The phase is 0\mydeg: the load is real and larger than $Z_0$.
+		\end{solution}
+		\hfill\ansbox[2in]{$-0.87\db \angle 0\mydeg$}
+
+	\part What is the measured magnitude/phase of the  load reflection coefficient.
+
+			\vspace{12pt}
+
+			\begin{center}
+			Amplitude = \ansbox[2in]{} %
+			Phase = \ansbox[2in]{}
+			\end{center}
+
+			\vspace{12pt}
+
+	\part Identify the resistance value from the marker readout and the Smith Chart.
+
+		\vspace{12pt}
+		\hfill\ansbox[2in]{1\ \text{k}\ohms}
+		\vspace{12pt}
+
+	\part Make at least one observation about your measurements.
+
+	\vfill
+
+\end{parts}
+
+	\begin{figure}[H]
+		\begin{center}
+			\ifhavefigs
+				\includegraphics[scale=0.5]{ECE343/cal_standards_annotated}
+			\else
+				\figplaceholder{RF calibration standards}
+			\fi
+		\end{center}
+		\caption{The RF calibration standards for this VNA, used in Part \ref{q:bb}.}
+		\label{fig:calstd}
+	\end{figure}
+
+\newpage
+\question{\textbf{Black Box Measurement}}
+\label{q:bb}
+
+Now, you will measure an unknown device, often referred to as the ``Device Under Test'' (DUT). The label of the DUT will be covered with tape -- do not remove the tape!  Also, note the DUT has SMA connectors -- disconnect the BNC cable with the minigrabbers. Due to the operational bandwidth of the DUT, you will need to adjust the frequency range to correlate to your specific filter and recalibrate. The calibration procedure is slightly different, in that SMA cables use different calibration standards (as shown in Figure \ref{fig:calstd}). Please use the short, open, and load connectors. This time, you may also perform a thru calibration by connecting channel 0 and channel 1 using a coupler, but this is optional. Now, connect the DUT to the VNA using the appropriate cables and restart the sweep.
+
+\begin{parts}
+
+	\part Looking at the plot of the transmission and reflection coefficient, what type of filter do you have? How do you know?
+		\begin{solution}[1in]
+
+		\end{solution}
+
+	\part Determine the cutoff frequency (or frequencies) of the filter (remember, this is the -3dB point).
+
+	\vspace{12pt}
+
+		\hfill\ansbox[2in]{}
+
+		\hfill\ansbox[2in]{}
+
+	\part Using the Smith Chart display, observe whether the DUT is capacitive or inductive over certain frequency ranges.  If you move the Smith Chart marker, you will see the reactance change -- can you correlate that change with a value of capacitance or inductance?
+
+		\begin{solution}[1in]
+
+		\end{solution}
+
+	\part Make at least one additional observation about your measurements.
+
+\end{parts}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% PART II -- MATCHING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\section{Part II -- Design a Matching Network}
+
+Reconnect the BNC-to-grabber cable to channel 0 and \textbf{recalibrate} over
+50\khz\ to 5\mhz\ (open, short, load) if you changed anything for the black-box
+measurement. Your reference plane is back at the grabber clips.
+
+\question{\textbf{Design (do this before lab).}}
+
+You are handed an ``antenna'': a \antR\ohms\ resistor in series with a
+$\antC\ \text{nF}$ capacitor. It is a stand-in for an electrically small
+antenna -- a small radiation resistance in series with a large capacitive
+reactance -- and your job is to feed it from a 50\ohms\ source at
+$f_0 = \fdes\ \mhz$.
+
+\begin{parts}
+
+	\part Compute the antenna impedance $\myz{a}$ at $f_0$. Express it as
+	$R_a + jX_a$.
+
+		\begin{solution}[1.2in]
+		\eq{
+			X_a &= \frac{-1}{2\pi f_0 C_a} = \frac{-1}{2\pi (\fdes \times 10^{6})(\antC \times 10^{-9})} = \antX\ \ohms \\
+			\myz{a} &= \antR - j79.6\ \ohms
+		}
+		Small real part, dominant negative reactance -- the signature of an
+		electrically small antenna.
+		\end{solution}
+		\hfill $\myz{a}$ = \ansbox[2in]{$\antR - j79.6\ \ohms$}
+
+	\part Before matching, what are $\vert\Gamma\vert$ and the VSWR at $f_0$?
+
+		\begin{solution}[1.2in]
+		\eq{
+			\Gamma &= \frac{(\antR - j79.6) - 50}{(\antR - j79.6) + 50} = \frac{-35 - j79.6}{65 - j79.6} \\
+			\vert\Gamma\vert &= \frac{86.9}{102.8} = 0.846 \qquad
+			\text{VSWR} = \frac{1+0.846}{1-0.846} = 12.0
+		}
+		Return loss is only 1.4\db -- about 72\% of the incident power comes
+		straight back.
+		\end{solution}
+
+		\begin{center}
+		$\vert\Gamma\vert$ = \ansbox[1.6in]{$0.846$} %
+		VSWR = \ansbox[1.6in]{$12.0:1$}
+		\end{center}
+
+	\part Design the L-network of Section \ref{matchbackground}. Find $Q$, the
+	total series reactance $X_s$, and the shunt reactance $X_p$; then convert
+	to an inductance and a capacitance at $f_0$. \textbf{Careful:} the series
+	inductor has to cancel $X_a$ \emph{and} supply $X_s$.
+
+		\begin{solution}[2.2in]
+		\eq{
+			Q &= \sqrt{\frac{Z_0}{R_a} - 1} = \sqrt{\frac{50}{\antR} - 1} = \netQ \\
+			X_s &= Q R_a = \netQ (\antR) = 22.9\ \ohms \\
+			X_{L} &= X_s - X_a = 22.9 + 79.6 = 102.5\ \ohms \\
+			L_s &= \frac{102.5}{2\pi (\fdes \times 10^{6})} = 8.16\ \mu\text{H} \\
+			X_p &= \frac{Z_0}{Q} = \frac{50}{\netQ} = 32.7\ \ohms \\
+			C_p &= \frac{1}{2\pi (\fdes \times 10^{6})(32.7)} = 2431\ \text{pF}
+		}
+		Nearest standard values: $L_s = \matchL\ \mu\text{H}$ and
+		$C_p = \matchC\ \text{nF}$.
+		\end{solution}
+
+		\begin{center}
+		$L_s$ = \ansbox[1.6in]{$8.16\ \mu\text{H}$} %
+		$C_p$ = \ansbox[1.6in]{$2431\ \text{pF}$}
+		\end{center}
+
+	\part Check your design in the \texttt{feed-match} widget on the Lesson 4
+	page: set $R$ and $X$ to your antenna impedance and confirm the point sits
+	where you expect on the Smith chart. Sketch or screenshot where the load
+	starts and where you expect it to end up.
+
+		\begin{solution}[1.4in]
+		The unmatched point sits low-left of centre (small $r$, capacitive);
+		a correct design walks it to the centre.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+\question{\textbf{Build and verify.}}
+
+Build the mock antenna first, measure it, then add the network. Keep leads short.
+
+\begin{parts}
+
+	\part Clip the mock antenna to the grabbers. Measure $R$ and $X$ at $f_0$
+	from the Smith Chart marker. How well does it agree with your prediction?
+
+		\vspace{6pt}
+		\begin{center}
+		$R$ measured = \ansbox[1.6in]{} %
+		$X$ measured = \ansbox[1.6in]{}
+		\end{center}
+		\vspace{6pt}
+
+		\begin{solution}[1in]
+		Expect close to $\antR - j79.6$\ohms. Capacitor tolerance and the
+		resistor's own parasitics move it a few ohms.
+		\end{solution}
+
+	\part Record $\vert\Gamma\vert$, VSWR, and return loss at $f_0$ for the
+	unmatched antenna.
+
+		\vspace{6pt}
+		\begin{center}
+		$\vert\Gamma\vert$ = \ansbox[1.3in]{} %
+		VSWR = \ansbox[1.3in]{} %
+		RL = \ansbox[1.3in]{}
+		\end{center}
+		\vspace{6pt}
+
+	\part Now build the L-network and connect it between the clips and the
+	antenna. Re-measure at $f_0$ and fill in the table.
+
+		\vspace{6pt}
+		\begin{center}
+		\renewcommand{\arraystretch}{1.8}
+		\begin{tabular}{| l | c | c | c |}
+		\hline
+		 					& $\vert\Gamma\vert$	& VSWR	& Return loss	\\\hline\hline
+		Unmatched			&						&		&				\\\hline
+		Matched (predicted)	&						&		&				\\\hline
+		Matched (measured)	&						&		&				\\\hline
+		\end{tabular}
+		\end{center}
+		\vspace{6pt}
+
+		\begin{solution}[1in]
+		With $\matchL\ \mu\text{H}$ and $\matchC\ \text{nF}$ the predicted
+		values are $\vert\Gamma\vert = 0.017$, VSWR $1.03:1$, RL $35$\db\ --
+		against $0.846$, $12:1$, and $1.4$\db\ unmatched. Measured return loss
+		of 20 to 30\db\ is a good result with clip leads.
+		\end{solution}
+
+	\part Where did the operating point move on the Smith Chart? Describe the
+	path in terms of the two design moves.
+
+		\begin{solution}[1.4in]
+		The series inductor walks the point clockwise along a constant-resistance
+		circle, up through the real axis and onto the $r$-circle that passes
+		near $50$\ohms; the shunt capacitor then walks it along a
+		constant-conductance circle into the centre.
+		\end{solution}
+
+	\part Your measured match is almost certainly worse than your predicted
+	one. Give two physical reasons.
+
+		\begin{solution}[1.4in]
+		Component tolerance (5--10\% parts move the null off $f_0$); the
+		inductor's series resistance and self-capacitance; lead and
+		grabber-clip inductance adding uncancelled reactance; and the
+		calibration reference plane not being exactly where the components
+		attach.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+\question{\textbf{Bandwidth -- what the match cost you.}}
+
+Restart the sweep and look at the return-loss trace across the full
+50\khz--5\mhz\ span.
+
+\begin{parts}
+
+	\part Over what frequency range does your matched antenna hold
+	VSWR $\le 2$? Report the band edges and the fractional bandwidth.
+
+		\vspace{6pt}
+		\begin{center}
+		$f_{\text{low}}$ = \ansbox[1.3in]{} %
+		$f_{\text{high}}$ = \ansbox[1.3in]{} %
+		FBW = \ansbox[1.3in]{}
+		\end{center}
+		\vspace{6pt}
+
+		\begin{solution}[1in]
+		Predicted: 1.88 to 2.11\mhz, a bandwidth of 222\khz, or about 11\%
+		fractional bandwidth.
+		\end{solution}
+
+	\part The network $Q$ you computed in Question 7 was \netQ. Explain, in one
+	or two sentences, the connection between that number and the bandwidth you
+	just measured.
+
+		\begin{solution}[1.4in]
+		The L-network is a resonant circuit; its loaded $Q$ sets how fast the
+		impedance walks away from the centre of the chart as frequency moves.
+		Roughly, fractional bandwidth falls as $1/Q$ -- and $Q$ was fixed the
+		moment you chose to transform \antR\ohms\ up to 50\ohms.
+		\end{solution}
+
+	\part A real $0.05\lambda$ dipole would have $R_{\text{rad}}$ well under an
+	ohm rather than \antR\ohms. What does that do to the required $Q$, and
+	therefore to the bandwidth? Connect your answer to the Chu-Harrington bound
+	from Lesson 3.
+
+		\begin{solution}[1.6in]
+		$Q = \sqrt{Z_0/R_a - 1}$ grows as $R_a$ shrinks: matching $0.5$\ohms\ to
+		50\ohms\ needs $Q \approx 10$, and the usable band collapses by roughly
+		the same factor. This is the Chu-Harrington story made physical -- the
+		smaller you make the antenna, the higher the minimum $Q$, and the less
+		bandwidth you can have no matter how clever the matching network is.
+		\end{solution}
+
+	\part Why did we not use a quarter-wave transformer here? Give both
+	reasons -- one about the load, one about the tape measure.
+
+		\begin{solution}[1.4in]
+		First, the quarter-wave transformer matches a \emph{real} load; ours is
+		strongly capacitive, so it would have to be resonated first. Second, at
+		$\fdes\ \mhz$ a quarter wavelength is about 25\ \m\ of coax
+		($\lambda = 150\ \m$ in free space, times a velocity factor near
+		$0.66$, divided by four) -- an impractical amount of cable for a
+		benchtop match.
+		\end{solution}
+
+	\part Make at least one additional observation about your measurements.
+
+	\vfill
+
+\end{parts}
+
+\end{questions}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{document}

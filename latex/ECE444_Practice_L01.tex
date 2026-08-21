@@ -1,0 +1,149 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L1 practice set (Course Introduction) -- a short identification/concept set, as
+% the practice contract allows for an intro lesson: recognize the six antenna
+% families from a geometry description, and state what an antenna is, what it
+% does not do, and what reciprocity buys a receiver. No numeric parts, so no
+% answer boxes; expected answers are one or two sentences each.
+
+\fullwidth{\textbf{Learning Objective 1.1: } I can explain what an antenna is,
+describe its role in a wireless system, and recognize common antenna types by
+sight.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Name that antenna.} Each description below is what you would
+see if you walked up to the hardware. For each, name the antenna family and give
+its \emph{job} --- the reason an engineer reaches for that shape --- in one or two
+sentences.
+
+\begin{parts}
+
+	\part \textbf{(i)} A straight metal rod, split and fed at its centre, roughly
+	half a wavelength long overall. \textbf{(ii)} A single rod about a quarter of a
+	wavelength tall, standing on a large sheet of metal or a vehicle roof and fed at
+	its base.
+		\begin{solution}[1.6in]
+		\textbf{(i) Half-wave dipole.} The reference element of the whole subject: it
+		is simple, resonant, easy to feed, and radiates in a doughnut around the wire,
+		which means it covers every azimuth direction at once. Nearly every gain figure
+		you will meet is quoted against it or against the isotropic radiator.
+		\textbf{(ii) Quarter-wave monopole.} The same antenna with the bottom half
+		replaced by an image in the ground plane, so it does the dipole's job at half
+		the height. That is why it is the default on vehicles, aircraft skins, and
+		handheld radios, where physical height is the scarce resource.
+		\end{solution}
+
+	\part A thin rectangle of copper etched on a grounded dielectric board, about
+	half a wavelength across, fed from underneath or from a trace at its edge.
+		\begin{solution}[1.4in]
+		A \textbf{microstrip patch}. Its job is to be \emph{flat}: it conforms to a
+		skin or a handset case, costs nothing to reproduce once the board is designed,
+		and tiles neatly into arrays. The price is narrow bandwidth and a pattern that
+		only covers the hemisphere above the board --- which is exactly what a GPS
+		receiver or a phased-array element wants anyway.
+		\end{solution}
+
+	\part A rectangular metal pipe that flares open at one end, fed from a waveguide
+	at the other.
+		\begin{solution}[1.4in]
+		A \textbf{horn}. Its job is to be trustworthy: a horn is a controlled,
+		well-understood aperture with moderate gain, low loss, and a clean pattern over
+		a wide band, so it serves as the standard-gain reference on a test range and as
+		the feed that illuminates a reflector. It is bulky, which is why you rarely see
+		one bolted to an aircraft.
+		\end{solution}
+
+	\part \textbf{(i)} A row of parallel rods of slightly different lengths mounted
+	along a boom, with only one of them connected to a cable. \textbf{(ii)} A large
+	curved metal dish with a small antenna suspended at its focus.
+		\begin{solution}[1.7in]
+		\textbf{(i) Yagi-Uda array.} Its job is cheap directional gain: the unfed
+		parasitic rods re-radiate with the right phase to reinforce the pattern forward
+		and cancel it backward, so you get a real beam from a single feed point and a
+		bag of aluminium. \textbf{(ii) Reflector (dish) antenna.} Its job is the
+		highest gain per dollar at microwave frequencies: the small antenna at the
+		focus is only the \emph{feed}, and the dish is the aperture that does the work.
+		Gain grows with the dish area, so you buy beam by buying diameter.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{What an antenna is, and what it is for.} Answer each part in
+one or two complete sentences.
+
+\begin{parts}
+
+	\part Define an antenna as a \emph{transducer}. Name the two kinds of wave it
+	sits between, and say which component in an RF link block diagram
+	(source $\rightarrow$ amplifier $\rightarrow$ transmission line
+	$\rightarrow$ antenna $\rightarrow$ channel) is the only one that touches free
+	space.
+		\begin{solution}[1.4in]
+		An antenna is the transducer between a \textbf{guided wave} --- a signal
+		travelling on a cable or in a waveguide, confined by conductors --- and a
+		\textbf{radiating wave} travelling freely through space. It is the only
+		component in the chain that touches free space; everything upstream of it is
+		guided-wave hardware, which is why an antenna problem cannot be repaired
+		anywhere else in the radio.
+		\end{solution}
+
+	\part Antennas do not create energy. Given that, explain what a vendor means by
+	``this antenna has 30 dBi of gain.''
+		\begin{solution}[1.4in]
+		Gain is a statement about \emph{direction}, not about power. The antenna
+		radiates whatever the amplifier hands it (less its own losses); $30\dbi$ says
+		that in its best direction the power density is $1000$ times what an isotropic
+		radiator fed the same power would produce there. That concentration is paid for
+		everywhere else --- a high-gain antenna radiates far \emph{less} than isotropic
+		over most of the sphere.
+		\end{solution}
+
+	\part A tracking antenna is measured on transmit and found to have a $3\mydeg$
+	beam pointed at boresight. You now use the same antenna to \emph{receive}. State
+	what reciprocity tells you about the receive pattern, and give two practical
+	consequences for the receiving station.
+		\begin{solution}[1.6in]
+		Reciprocity says the receive pattern is the \emph{same} pattern: the antenna is
+		$3\mydeg$ wide on receive too, with the same gain and the same sidelobes. Two
+		consequences. \textbf{Pointing:} the station must aim within a fraction of a
+		degree or the signal falls off the beam --- receive sensitivity is directional
+		in exactly the way transmit power is. \textbf{Interference and noise:} the same
+		narrow beam that concentrates transmitted power also rejects signals and thermal
+		noise arriving from every other direction, so a high-gain antenna improves the
+		link twice over --- once at each end.
+		\end{solution}
+
+	\part Match each band to the mission it is usually flown for, and state in one
+	sentence what sets the size of the antenna in each case.
+	\textbf{Bands:} (i) $3$--$30\mhz$ (HF), (ii) $225$--$400\mhz$ (UHF),
+	(iii) $1575\mhz$ (GPS L1), (iv) $8$--$12\ghz$ (X-band).
+	\textbf{Missions:} fire-control and imaging radar; beyond-line-of-sight skywave
+	communications; navigation; tactical manpack radio and UHF SATCOM.
+		\begin{solution}[1.8in]
+		\textbf{(i) HF $\rightarrow$ beyond-line-of-sight skywave communications},
+		bouncing off the ionosphere when no satellite is available.
+		\textbf{(ii) UHF $\rightarrow$ tactical manpack radio and UHF SATCOM}, the band
+		where a whip is short enough to carry but the wavelength still penetrates
+		foliage and buildings.
+		\textbf{(iii) $1575\mhz$ $\rightarrow$ navigation} (GPS L1), served by a small
+		circularly polarized patch.
+		\textbf{(iv) X-band $\rightarrow$ fire-control and imaging radar}, where a
+		modest dish still gives a very narrow beam.
+		What sets the size in every case is the \textbf{wavelength}: a resonant element
+		is a fixed fraction of $\lambda$, and an aperture needs many $\lambda$ across to
+		make a narrow beam. An HF antenna is tens of metres and a GPS patch is a few
+		centimetres for exactly the same reason.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

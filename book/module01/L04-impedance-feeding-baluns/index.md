@@ -46,7 +46,7 @@ P_\text{in} = \tfrac{1}{2} |I_0|^2 R_\text{in}
             + \underbrace{\tfrac{1}{2} |I_0|^2 R_\text{loss}}_{P_\text{loss}}.
 $$
 
-<img src="../../viz/img/antenna-input-z.svg" alt="Antenna input impedance as a series R_rad, R_loss, jX driven by a source through a feed line" style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
+<img src="../../viz/img/L04-antenna-input-z.svg" alt="Antenna input impedance as a series R_rad, R_loss, jX driven by a source through a feed line" style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
 
 **Radiation resistance $R_\text{rad}$ is not a physical resistor.** No component in
 the antenna gets warm from it. It is the *equivalent* resistance that would
@@ -66,17 +66,32 @@ $$
 
 ### Radiation resistance of a short dipole
 
-For a short dipole of length $\ell \ll \lambda$ carrying a (roughly uniform)
-current, the radiation resistance works out to
+For an **infinitesimal (Hertzian) dipole** of length $\ell \ll \lambda$ — the
+idealization that carries a *uniform* current over its whole length — the
+radiation resistance works out to
 
 $$
-R_\text{rad} = 80 \pi^2 \left( \frac{\ell}{\lambda} \right)^2.
+R_\text{rad} = 80 \pi^2 \left( \frac{\ell}{\lambda} \right)^2
+\qquad \text{(uniform current, Hertzian).}
+$$
+
+A real center-fed short dipole cannot do that: the current has to go to zero at
+the open ends, so it falls off roughly **triangularly** from a peak at the feed.
+The average current is half the peak, the radiated power a quarter, and the
+radiation resistance a quarter as well:
+
+$$
+R_\text{rad} = 20 \pi^2 \left( \frac{\ell}{\lambda} \right)^2
+\qquad \text{(triangular current, practical short dipole).}
 $$
 
 The $(\ell/\lambda)^2$ dependence is the whole story of why small antennas are
-hard: a $0.05\lambda$ dipole has $R_\text{rad} \approx 2\ \Omega$. Put even a
-fraction of an ohm of conductor loss next to that and the efficiency collapses.
-Make the antenna a half-wavelength long and the picture changes completely.
+hard, and the factor of four makes it worse: a $0.05\lambda$ center-fed dipole
+has $R_\text{rad} \approx 0.49\ \Omega$. Put even a fraction of an ohm of
+conductor loss next to *that* and the efficiency collapses — a single ohm of
+loss resistance already puts $\eta_\text{rad}$ under 35%. This is why
+electrically small antennas are so hard to feed efficiently. Make the antenna a
+half-wavelength long and the picture changes completely.
 
 ### The half-wave dipole
 
@@ -140,9 +155,9 @@ $$
 A perfectly matched antenna ($Z_\text{in} = Z_0$) has $\Gamma = 0$, VSWR $= 1{:}1$,
 and zero mismatch loss. As a rule of thumb, **VSWR $\le 2$** (return loss
 $\ge 9.5$ dB, mismatch loss $\le 0.5$ dB) is the usual "good enough" bar for a
-transmit antenna — and, as the amplifier/diode problem in Lesson 3 showed, the
-mismatch you can tolerate is sometimes set by what the *transmitter* can survive,
-not by the fraction of a dB you lose.
+transmit antenna — but the mismatch you can tolerate is sometimes set by what the
+*transmitter* can survive, not by the fraction of a dB you lose. You will price
+this in this lesson's practice set.
 
 ### Interactive — feed-match explorer
 
@@ -151,7 +166,7 @@ VSWR, and mismatch loss the feed line sees. Toggle a quarter-wave transformer
 (Part 3) to watch it pull a real load onto the $50\ \Omega$ point.
 
 <iframe src="../../viz/feed-match.html"
-        width="100%" height="560"
+        width="100%" height="520"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Feed-line match explorer">
@@ -178,22 +193,81 @@ $$
 Z_1 = \sqrt{Z_0 R_L}.
 $$
 
-**Example.** Match a resonant $70\ \Omega$ dipole to $50\ \Omega$ coax:
+:::{admonition} Worked example — a quarter-wave transformer for a resonant dipole
+:class: tip
+**Match a resonant $70\ \Omega$ dipole to $50\ \Omega$ coax.**
 
 $$
-Z_1 = \sqrt{(50)(70)} = \sqrt{3500} \approx 59\ \Omega,
+Z_1 = \sqrt{Z_0 R_L} = \sqrt{(50)(70)} = \sqrt{3500} \approx 59\ \Omega
 $$
 
-a quarter-wave section of $\approx 59\ \Omega$ line does it. The catch: the
-transformer is exactly $\lambda/4$ only at one frequency, so the match is
-**narrowband** — it degrades as you move off the design frequency.
+A quarter-wave section of $\approx 59\ \Omega$ line does it.
+:::
+
+The catch: the transformer is exactly $\lambda/4$ only at one frequency, so the
+match is **narrowband** — it degrades as you move off the design frequency. And
+it only works directly on a *real* load, which is why we trim the dipole to
+resonance first.
 
 ### The L-match
 
-For a **complex** load, a two-element L-network (one series reactance, one shunt
-reactance) can reach any $Z_0$: one element cancels the load reactance, the other
-transforms the resistance. It is the minimal lumped matching network, and the
-starting point for the Smith-chart matching you will do later in the course.
+A quarter-wave transformer needs a real load and a quarter wavelength of line.
+For a **complex** load — or at frequencies where $\lambda/4$ is inconveniently
+long — use a two-element **L-network**: one series reactance and one shunt
+reactance, which together reach any $Z_0$ from any complex load. It is the
+minimal lumped matching network, and the starting point for the Smith-chart
+matching you will do later in the course.
+
+<img src="../../viz/img/L04-lmatch.svg" alt="An L network between a feed line and a complex load: a series element next to the load cancels its reactance, then a shunt element transforms the resistance" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+
+Two reactances, two jobs, in this order:
+
+1. **Cancel the load reactance.** The series element next to the load adds
+   $-X_L$, leaving a purely resistive $R_L$.
+2. **Transform the remaining resistance.** The pair of elements works at a
+   network quality factor
+
+   $$
+   Q = \sqrt{\frac{R_\text{big}}{R_\text{small}} - 1},
+   $$
+
+   where $R_\text{big}$ and $R_\text{small}$ are the larger and smaller of $R_L$
+   and $Z_0$. The series reactance is $Q R_\text{small}$ and the shunt reactance
+   is $R_\text{big}/Q$. The shunt element goes on the side of the larger
+   resistance — toward the source when $R_L < Z_0$, as drawn above.
+
+:::{admonition} Worked example — matching $20 - j15\ \Omega$ at 1 GHz
+:class: tip
+**An antenna presents $Z_\text{in} = 20 - j15\ \Omega$ on a $50\ \Omega$ line at
+a design frequency of 1 GHz. Design the L-match.**
+
+*Cancel the reactance.* The load is capacitive, so add $+j15\ \Omega$ in series;
+what remains is $20 + j0\ \Omega$.
+
+*Network $Q$.* Here $R_\text{small} = 20\ \Omega$ and $R_\text{big} = 50\ \Omega$:
+
+$$
+Q = \sqrt{\frac{50}{20} - 1} = \sqrt{1.5} = 1.22
+$$
+
+*Series reactance.* $Q R_\text{small} = 1.22 \times 20 = 24.5\ \Omega$. Adding
+the $15\ \Omega$ of cancellation, the series element is $+j39.5\ \Omega$ total —
+an inductor:
+
+$$
+L = \frac{X}{2\pi f} = \frac{39.5}{2\pi (10^9)} = 6.3\ \text{nH}
+$$
+
+*Shunt reactance.* $R_\text{big}/Q = 50/1.22 = 40.8\ \Omega$, capacitive:
+
+$$
+C = \frac{1}{2\pi f X} = \frac{1}{2\pi (10^9)(40.8)} = 3.9\ \text{pF}
+$$
+
+A $6.3\ \text{nH}$ series inductor and a $3.9\ \text{pF}$ shunt capacitor, both
+lossless, and the $20 - j15\ \Omega$ antenna looks like $50\ \Omega$ — at 1 GHz
+and nowhere else. Move 10% in frequency and both reactances are off by 10%.
+:::
 
 ```{note}
 Every matching network is a **band-limited** fix. You can force $\Gamma = 0$ at
@@ -214,7 +288,7 @@ present different impedances to the coax, so the currents on the arms are no
 longer equal and opposite. The leftover **common-mode current** flows back down
 the *outside* of the shield — a third conductor the model forgot about.
 
-<img src="../../viz/img/balun-currents.svg" alt="Coax feeding a dipole: without a balun, common-mode current flows on the outside of the shield; a choke balun blocks it" style="max-width: 620px; width: 100%; display: block; margin: 1em auto;">
+<img src="../../viz/img/L04-balun-currents.svg" alt="Coax feeding a dipole: without a balun, common-mode current flows on the outside of the shield; a choke balun blocks it" style="max-width: 620px; width: 100%; display: block; margin: 1em auto;">
 
 That shield current has real consequences:
 
@@ -250,6 +324,21 @@ much power even makes it onto the antenna; and the **balun** makes sure it is th
 antenna radiating and not your feed line.
 :::
 
+## Summary
+
+| Symbol / idea | What it is | Number to remember |
+| :-- | :-- | :-- |
+| $Z_\text{in} = R_\text{in} + jX_\text{in}$ | What the radio sees at the terminals | Half-wave dipole: $73 + j42.5\ \Omega$; resonant at $\approx 0.48\lambda$, $\approx 70 + j0\ \Omega$ |
+| $R_\text{rad}$ | Equivalent resistance for power carried away as radiation — the useful part | Short dipole (triangular current): $20\pi^2(\ell/\lambda)^2$, so $0.49\ \Omega$ at $0.05\lambda$ |
+| $R_\text{loss}$ | Real ohmic and dielectric dissipation — becomes heat | A single ohm next to a small antenna is fatal |
+| $\eta_\text{rad}$ | Radiation efficiency, the split between the two resistances | $\eta_\text{rad} = R_\text{rad}/(R_\text{rad} + R_\text{loss})$, $G = \eta_\text{rad} D$ |
+| $\Gamma$ | Reflection coefficient at the terminals | $\Gamma = (Z_\text{in} - Z_0)/(Z_\text{in} + Z_0)$; $\vert\Gamma\vert^2$ of the power bounces back |
+| VSWR / return loss | Two readings of the same mismatch | VSWR $\le 2$ ↔ return loss $\ge 9.5$ dB ↔ 11% of the power reflected |
+| Mismatch loss | The dB the mismatch actually costs you | $-10\log_{10}(1 - \vert\Gamma\vert^2)$; $\le 0.5$ dB at VSWR $= 2$ |
+| $Z_1 = \sqrt{Z_0 R_L}$ | Quarter-wave transformer, real loads only | $70\ \Omega$ to $50\ \Omega$ needs $\approx 59\ \Omega$ line |
+| L-match $Q$ | Two lumped elements: cancel $X$, then transform $R$ | $Q = \sqrt{R_\text{big}/R_\text{small} - 1}$; $20 - j15\ \Omega$ at 1 GHz → 6.3 nH series, 3.9 pF shunt |
+| Balun | Kills common-mode current on the coax shield | 1:1 choke is the default dipole feed; 4:1 half-wave balun also transforms $300\ \Omega \to 75\ \Omega$ |
+
 ## Practice
 
 - <a href="../../practice/ECE444_L04_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
@@ -259,7 +348,15 @@ antenna radiating and not your feed line.
 
 You can now read an antenna's terminals as a circuit: split $Z_\text{in}$ into
 radiation and loss, turn the mismatch into $\Gamma$, VSWR, and lost dB, match a
-load with a quarter-wave section, and specify the right balun. Next, in
-**Lesson 5 (Field Regions)**, we step back out into space and ask *where* the
-radiated fields settle into their far-field form — and how far away you have to
-be before the pattern you measured is the pattern you actually have.
+load with a quarter-wave section or an L-network, and specify the right balun.
+Every one of those numbers is something you would want to *measure* — and that
+is where the next lesson comes in.
+
+**Lesson 5 (Field Regions)** steps back out into space and asks *where* the
+radiated fields settle into their far-field form. It matters more than it
+sounds: a pattern, a gain, an effective aperture — none of them mean anything
+until you are far enough away for the field to have stopped rearranging itself,
+and the boundary $r \ge 2D^2/\lambda$ is what tells you how far that is. Measure
+a 3-meter reflector at 10 meters and you are not measuring its pattern; you are
+measuring a near-field artifact. Before next lesson, reread the far-field
+criterion from Lesson 2 and come ready to say where it comes from.

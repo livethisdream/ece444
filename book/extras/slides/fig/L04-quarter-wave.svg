@@ -1,0 +1,38 @@
+<svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A quarter-wavelength section of line inserted between the feed line and a real load acts as an impedance transformer">
+<defs>
+<marker id="qwL" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>
+</defs>
+
+<!-- transformer section, shaded -->
+<rect x="320" y="88" width="200" height="48" fill="#cddce9" opacity="0.55"/>
+
+<!-- feed line -->
+<line x1="60" y1="88" x2="320" y2="88" stroke="#004a85" stroke-width="3.5"/>
+<line x1="60" y1="136" x2="320" y2="136" stroke="#004a85" stroke-width="3.5"/>
+<!-- quarter-wave section -->
+<line x1="320" y1="88" x2="520" y2="88" stroke="#0067b9" stroke-width="5.5"/>
+<line x1="320" y1="136" x2="520" y2="136" stroke="#0067b9" stroke-width="5.5"/>
+<!-- short leads into the load -->
+<line x1="520" y1="88" x2="546" y2="88" stroke="#004a85" stroke-width="3.5"/>
+<line x1="520" y1="136" x2="546" y2="136" stroke="#004a85" stroke-width="3.5"/>
+<line x1="546" y1="88" x2="546" y2="96" stroke="#004a85" stroke-width="2"/>
+<line x1="546" y1="128" x2="546" y2="136" stroke="#004a85" stroke-width="2"/>
+<rect x="534" y="96" width="24" height="32" rx="2" fill="#ffffff" stroke="#004a85" stroke-width="2.2"/>
+
+<!-- section boundaries -->
+<line x1="320" y1="66" x2="320" y2="178" stroke="#5a5a5a" stroke-width="1.2" stroke-dasharray="5 4" opacity="0.7"/>
+<line x1="520" y1="66" x2="520" y2="178" stroke="#5a5a5a" stroke-width="1.2" stroke-dasharray="5 4" opacity="0.7"/>
+
+<!-- labels -->
+<text x="190" y="46" fill="#004a85" font-size="16" font-weight="700" text-anchor="middle">feed line</text>
+<text x="190" y="68" fill="#5a5a5a" font-size="13" text-anchor="middle">the impedance you must hit</text>
+<text x="420" y="46" fill="#0067b9" font-size="16" font-weight="700" text-anchor="middle">matching section</text>
+<text x="420" y="68" fill="#5a5a5a" font-size="13" text-anchor="middle">impedance between the two</text>
+<text x="576" y="106" fill="#004a85" font-size="16" font-weight="700">antenna</text>
+<text x="576" y="128" fill="#5a5a5a" font-size="13">a real resistance</text>
+
+<!-- the length that does the work -->
+<line x1="320" y1="164" x2="520" y2="164" stroke="#b01e24" stroke-width="2" marker-start="url(#qwL)" marker-end="url(#qwL)"/>
+<text x="420" y="190" fill="#b01e24" font-size="15" font-weight="700" text-anchor="middle">one quarter wavelength</text>
+<text x="420" y="214" fill="#5a5a5a" font-size="13" text-anchor="middle">a quarter wavelength at one frequency only</text>
+</svg>

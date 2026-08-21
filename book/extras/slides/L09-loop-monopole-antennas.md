@@ -128,7 +128,7 @@ The current distribution on the remaining metal is unchanged. Above the plane it
 
 Same feed current as the dipole. Half the structure, so half the voltage.
 
-$$Z_{in}^{mono} = \tfrac{1}{2} Z_{in}^{dip} = \tfrac{1}{2}(73 + j42.5) = 36.5 + j21.3\ \Omega$$
+$$Z_{\text{in}}^{mono} = \tfrac{1}{2} Z_{\text{in}}^{dip} = \tfrac{1}{2}(73 + j42.5) = 36.5 + j21.3\ \Omega$$
 
 - Trim to resonance at $\approx 0.24\lambda$ and you get $\approx 36\ \Omega$ real.
 - Against $50\ \Omega$ that is VSWR 1.4 with no matching network at all.
@@ -165,7 +165,7 @@ Watch for the student who thinks the monopole radiates more total power. It radi
 | Quantity | Half-wave dipole | Quarter-wave monopole |
 | :-- | :-- | :-- |
 | Length | $0.5\lambda$ | $0.25\lambda$ |
-| $Z_{in}$ | $73 + j42.5\ \Omega$ | $36.5 + j21.3\ \Omega$ |
+| $Z_{\text{in}}$ | $73 + j42.5\ \Omega$ | $36.5 + j21.3\ \Omega$ |
 | Trimmed | $0.47\lambda$, $\approx 70\ \Omega$ | $0.24\lambda$, $\approx 36\ \Omega$ |
 | Directivity | 1.64 (2.15 dBi) | 3.28 (5.15 dBi) |
 | Coverage | all space | upper hemisphere |
@@ -209,7 +209,7 @@ Drooping radials also lift the pattern slightly. The impedance effect is the rea
 
 <div class="fig" data-inline-svg="./fig/L09-ground-systems.svg" style="max-width:770px; margin:0 auto;"></div>
 
-Return current in dirt is loss in series with your feed: $\eta_{cd} = R_r/(R_r + R_g + R_{ohmic})$.
+Return current in dirt is loss in series with your feed: $\eta_{\text{rad}} = R_r/(R_r + R_g + R_{ohmic})$.
 
 Note:
 120 buried quarter-wave radials is the FCC standard for AM broadcast. The radials do not radiate — they replace lossy soil with copper for the return current.
@@ -317,7 +317,7 @@ Also mention loops reject local electric-field noise — a shielded loop is the 
 | Circumference | $C < 0.1\lambda$ | $C \approx 1\lambda$ |
 | Current | uniform | reverses around the loop |
 | Maximum | in the plane | along the axis |
-| $R_{in}$ | milliohms | $100$ to $130\ \Omega$ |
+| $R_{\text{in}}$ | milliohms | $100$ to $130\ \Omega$ |
 | Use | receive, direction finding | transmit element (quad) |
 
 **The pattern maximum moves to where the small loop had its null.**

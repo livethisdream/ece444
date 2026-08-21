@@ -6,156 +6,62 @@
 <title>Radiation pattern features</title>
 <script src="mjlabel.js"></script>
 <style>
-  :root {
-    --navy: #004a85;
-    --mid:  #0067b9;
-    --edge: #cddce9;
-    --edge2:#b9d2e5;
-    --bg:   #f5f9fc;
-    --ink:  #15202b;
-    --ink3: #5b6573;
-    --pat:  #0067b9;
-    --hpbw: #1d7a4d;
-    --fnbw: #8a5a00;
-    --sll:  #b3213a;
-    --main: #004a85;
-  }
-  html, body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    color: var(--ink);
-    background: #fff;
-  }
-  .app {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px;
-  }
-  canvas {
-    display: block;
-    width: 100%;
-    height: auto;
-    background: #fff;
-    border: 1px solid var(--edge);
-    border-radius: 6px;
-  }
-  .panel {
-    font-size: 13.5px;
-    line-height: 1.4;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-    align-items: start;
-  }
-  @media (max-width: 380px) {
-    .panel { grid-template-columns: 1fr; }
-  }
-  .panel h2 {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--navy);
-    margin: 0 0 8px;
-  }
-  .slider-block, .readout, .toggles-block {
-    padding: 8px 10px;
-    background: var(--bg);
-    border: 1px solid var(--edge);
-    border-radius: 4px;
-  }
-  .slider-block label {
-    display: block;
-    font-size: 11.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--ink3);
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .slider-block .val {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--navy);
-    font-variant-numeric: tabular-nums;
-  }
-  .slider-block input[type=range] { width: 100%; margin: 4px 0 0; }
-  .readout dl {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 4px 10px;
-    margin: 0;
-  }
-  .readout dt {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 700;
-    color: var(--ink3);
-    align-self: center;
-  }
-  .readout dd {
-    margin: 0;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--navy);
-    font-variant-numeric: tabular-nums;
-  }
-  .toggles {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .toggles label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 6px;
-    font-size: 12.5px;
-    cursor: pointer;
-    user-select: none;
-  }
-  .toggles label:hover { background: var(--bg); border-radius: 3px; }
-  .toggles .swatch {
-    width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0;
-  }
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --pat:#0067b9; --hpbw:#1d7a4d; --fnbw:#8a5a00; --sll:#b3213a; --main:#004a85; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:9px 18px; align-items:center;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+  .ctl.full { grid-column:1/-1; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:34px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:80px; accent-color:var(--mid); }
+  .tgl { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; min-width:0; }
+  .tgl input { position:absolute; opacity:0; pointer-events:none; }
+  .tgl .sw { position:relative; flex:none; width:34px; height:19px; border-radius:999px;
+             background:#dfe8f1; border:1px solid var(--edge2); transition:background .15s, border-color .15s; }
+  .tgl .sw::after { content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; border-radius:50%;
+                    background:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.22); transition:transform .15s; }
+  .tgl input:checked + .sw { background:var(--on,var(--mid)); border-color:var(--on,var(--mid)); }
+  .tgl input:checked + .sw::after { transform:translateX(15px); }
+  .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
+  .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .tgl input:checked ~ .t { color:var(--on,var(--navy)); }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
+          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
+          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
+  .pill b { font-weight:700; }
+  .pill.hp  { background:rgba(29,122,77,0.12);  color:var(--hpbw); border-color:rgba(29,122,77,0.30); }
+  .pill.fn  { background:rgba(138,90,0,0.12);   color:var(--fnbw); border-color:rgba(138,90,0,0.30); }
+  .pill.sl  { background:rgba(179,33,58,0.10);  color:var(--sll);  border-color:rgba(179,33,58,0.28); }
 </style>
 </head>
 <body>
 <div class="app">
   <canvas id="plot" width="1000" height="520" aria-label="Rectilinear pattern"></canvas>
-  <div class="panel">
-    <div class="slider-block">
-      <h2>Aperture size</h2>
-      <label>\(D/\lambda\) = <span class="val" id="d-lambda-val">3</span></label>
+
+  <div class="controls">
+    <div class="ctl full">
+      <label>Aperture \(D/\lambda\)</label>
       <input type="range" id="d-lambda" min="2" max="20" step="0.5" value="3">
+      <span class="val" id="d-lambda-val">3</span>
     </div>
+    <label class="tgl" style="--on:var(--hpbw)"><input type="checkbox" data-key="hpbw" checked><span class="sw"></span><span class="t">HPBW</span></label>
+    <label class="tgl" style="--on:var(--fnbw)"><input type="checkbox" data-key="fnbw" checked><span class="sw"></span><span class="t">FNBW</span></label>
+    <label class="tgl" style="--on:var(--sll)"><input type="checkbox" data-key="sll" checked><span class="sw"></span><span class="t">Sidelobe level</span></label>
+    <label class="tgl" style="--on:var(--main)"><input type="checkbox" data-key="labels" checked><span class="sw"></span><span class="t">Lobe labels</span></label>
+  </div>
 
-    <div class="readout">
-      <h2>Pattern features</h2>
-      <dl>
-        <dt>HPBW</dt>       <dd id="r-hpbw">—</dd>
-        <dt>FNBW</dt>       <dd id="r-fnbw">—</dd>
-        <dt>SLL</dt>        <dd id="r-sll">—</dd>
-        <dt>F/B ratio</dt>  <dd id="r-fb">—</dd>
-      </dl>
-    </div>
-
-    <div class="toggles-block">
-      <h2>Show / hide</h2>
-      <div class="toggles">
-        <label><input type="checkbox" data-key="hpbw" checked>
-          <span class="swatch" style="background: var(--hpbw)"></span> HPBW markers</label>
-        <label><input type="checkbox" data-key="fnbw" checked>
-          <span class="swatch" style="background: var(--fnbw)"></span> FNBW markers</label>
-        <label><input type="checkbox" data-key="sll" checked>
-          <span class="swatch" style="background: var(--sll)"></span> Sidelobe level</label>
-        <label><input type="checkbox" data-key="labels" checked>
-          <span class="swatch" style="background: var(--main)"></span> Lobe labels</label>
-      </div>
-    </div>
+  <div class="pills">
+    <span class="pill hp">HPBW = <b id="r-hpbw">—</b></span>
+    <span class="pill fn">FNBW = <b id="r-fnbw">—</b></span>
+    <span class="pill sl">SLL = <b id="r-sll">—</b></span>
+    <span class="pill">front-to-back = <b id="r-fb">—</b></span>
   </div>
 </div>
 
@@ -237,7 +143,7 @@ dLambdaSlider.addEventListener('input', () => {
   draw();
 });
 
-document.querySelectorAll('.toggles input').forEach(cb => {
+document.querySelectorAll('.controls .tgl input').forEach(cb => {
   cb.addEventListener('change', () => {
     state.show[cb.dataset.key] = cb.checked;
     draw();
@@ -252,7 +158,7 @@ function resizeCanvas() {
   const rect = canvas.getBoundingClientRect();
   const dpr  = window.devicePixelRatio || 1;
   const w = Math.max(360, rect.width);
-  const h = Math.max(380, Math.min(w * 0.48, 560));
+  const h = Math.max(340, Math.min(w * 0.42, 430));
   canvas.width  = w * dpr;
   canvas.height = h * dpr;
   canvas.style.height = `${h}px`;

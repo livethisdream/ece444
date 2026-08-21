@@ -108,7 +108,7 @@ awkward, because $R$ changes as you move around the source. In the far field it
 simplifies dramatically, and the way it simplifies is worth being careful about:
 **amplitude and phase get different approximations.**
 
-<img src="../../viz/img/radiation-integral-geometry.svg" alt="Exact geometry with the vector R from a source point to the field point, and the far-field limit in which the rays are parallel and only the path difference r-hat dot r-prime survives" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+<img src="../../viz/img/L06-radiation-integral-geometry.svg" alt="Exact geometry with the vector R from a source point to the field point, and the far-field limit in which the rays are parallel and only the path difference r-hat dot r-prime survives" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
 Start with the exact distance and expand it for $r' \ll r$:
 
@@ -212,16 +212,16 @@ The magnetic field follows for free from the plane-wave relation, with no new
 integral:
 
 $$
-\mathbf{H} = \frac{1}{\eta}\ \hat{\mathbf r}\times\mathbf{E},
-\qquad \eta \approx 377\ \Omega .
+\mathbf{H} = \frac{1}{\eta_0}\ \hat{\mathbf r}\times\mathbf{E},
+\qquad \eta_0 \approx 377\ \Omega .
 $$
 
 Then radiation intensity — the quantity Lesson 2 built directivity and gain on —
 is
 
 $$
-U(\theta,\phi) = \frac{r^2|\mathbf{E}|^2}{2\eta}
-= \frac{\eta k^2}{32\pi^2}\Big(|N_\theta|^2 + |N_\phi|^2\Big),
+U(\theta,\phi) = \frac{r^2|\mathbf{E}|^2}{2\eta_0}
+= \frac{\eta_0 k^2}{32\pi^2}\Big(|N_\theta|^2 + |N_\phi|^2\Big),
 $$
 
 The normalized power pattern is $U/U_{\max}$; its square root is the
@@ -278,6 +278,20 @@ That is a Fourier transform. **The far-field pattern is the Fourier transform of
 the current distribution**, evaluated over the *visible region*
 $-k \le k_z \le +k$ and then bent onto angle by $k_z = k\cos\theta$.
 
+That restriction is worth a second look. The transform $N_z(k_z)$ is defined for
+every real $k_z$, but only $|k_z| \le k$ corresponds to a real direction, because
+$k_z = k\cos\theta$ and $\cos\theta$ can only run from $-1$ to $+1$. **Part of the
+transform is invisible** — it describes stored, non-radiating field near the
+aperture rather than anything you can measure at range, so the pattern is a
+window onto the transform, not the whole of it.
+
+Keep that window in mind, because it does not stay closed. When Module 3 samples
+a continuous aperture into a discrete array, the transform *repeats* at intervals
+of $2\pi/d$, and if the element spacing $d$ is large enough one of those repeats
+slides inside $|k_z| \le k$. Energy that was safely invisible becomes a second
+beam you did not ask for — a **grating lobe**, and the reason Lesson 16 spends so
+much effort on element spacing.
+
 Everything a Fourier transform does, an antenna does:
 
 | Fourier property | Antenna consequence | Where you will use it |
@@ -319,7 +333,7 @@ N_z = I_0\ dl, \qquad N_\theta = -I_0\ dl\ \sin\theta .
 $$
 
 $$
-E_\theta = \frac{j\ \eta k I_0\ dl\ \sin\theta}{4\pi r}\ e^{-jkr}
+E_\theta = \frac{j\ \eta_0 k I_0\ dl\ \sin\theta}{4\pi r}\ e^{-jkr}
 $$
 
 This is exactly the $1/r$ radiation term of the exact short-dipole field quoted
@@ -327,6 +341,36 @@ in Lesson 5 — the term that survived once $kr \gg 1$. What took a page of exac
 spherical-wave algebra there comes out here in one line. The pattern is
 $|F| = \sin\theta$: a doughnut, maximum broadside, null along the wire, and
 $D = 1.5$ (1.76 dBi).
+
+:::{admonition} Worked example — the doughnut integrated
+:class: tip
+
+That $D = 1.5$ has been quoted since Lesson 2 and taken on faith ever since.
+Now you can earn it. Directivity is peak intensity over average intensity, and
+with the pattern in hand both are just integrals. Normalize the intensity to its
+peak, $U = \sin^2\theta$ (intensity goes as the *square* of the field pattern),
+and integrate over the whole sphere:
+
+$$
+P_\text{rad} = \oint U\ d\Omega
+= \int_0^{2\pi}\!\!\int_0^{\pi} \sin^2\theta\ \cdot\ \sin\theta\ d\theta\ d\phi
+= 2\pi \int_0^{\pi} \sin^3\theta\ d\theta
+= 2\pi \cdot \frac{4}{3}
+= \frac{8\pi}{3}.
+$$
+
+The extra $\sin\theta$ is the solid-angle element $d\Omega = \sin\theta\ d\theta\ d\phi$,
+not part of the pattern — a bookkeeping trap worth naming. Then
+
+$$
+D = \frac{4\pi\ U_{\max}}{P_\text{rad}} = \frac{4\pi}{8\pi/3} = 1.5
+\quad (1.76\ \text{dBi}).
+$$
+
+The number is small because the doughnut is generous: a current element throws
+power almost everywhere except along its own axis, so concentrating it 1.5 times
+over isotropic is all the shape can do.
+:::
 
 ### 5.2 The uniform line source — the sinc
 
@@ -360,6 +404,11 @@ Near endfire it matters a great deal. This factorization — element pattern tim
 distribution — is **pattern multiplication**, and Lesson 16 builds all of array
 theory on it.
 ```
+
+Plotted against angle, that one expression is the shape every aperture antenna
+in this course is measured against:
+
+<img src="../../viz/img/L06-line-source-sinc.svg" alt="Space factor of a uniform line source plotted in dB against angle: a main beam at broadside, nulls where cos theta is a multiple of lambda over L, and a first sidelobe 13.3 dB below the peak marked by a dashed line" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
 Read off the space factor's three headline numbers:
 
@@ -399,6 +448,27 @@ while the sidelobes do not move at all. Beamwidth is bought with **size**;
 sidelobes are bought with **taper**.
 :::
 
+#### What a taper buys — and what it costs
+
+Since the transform's high-frequency content comes from the *edges* of the
+distribution, softening the edges must soften the sidelobes. It does, and the
+prices are known. Same length $L$, four ways to illuminate it:
+
+| Distribution | First sidelobe | HPBW constant ($\times\ \lambda/L$) |
+| :-- | :-: | :-: |
+| Uniform | $-13.3$ dB | 0.886 |
+| Cosine | $-23$ dB | 1.19 |
+| Triangular | $-26.5$ dB | 1.27 |
+| Cosine² | $-31.5$ dB | 1.44 |
+
+Read the second column as the cost. Relative to uniform, a taper broadens the
+main beam by a factor of **1.34 to 1.63** — you buy every dB of sidelobe
+suppression with beamwidth, and there is no distribution that gives you both.
+The ranking is the thing to carry forward: uniform is narrowest and worst on
+sidelobes, cosine² is widest and best, and everything useful in between is a
+Taylor or Chebyshev compromise. This table is a preview — **Lesson 15** derives
+it for apertures and **Lesson 24** turns it into a design procedure for arrays.
+
 ### 5.3 The half-wave dipole — a real antenna
 
 A thin wire cannot carry uniform current: the current has to vanish at the open
@@ -422,7 +492,7 @@ $$
 and therefore
 
 $$
-E_\theta = \frac{j\eta I_0 e^{-jkr}}{2\pi r}\
+E_\theta = \frac{j\eta_0 I_0 e^{-jkr}}{2\pi r}\
 \left[\frac{\cos\!\left(\tfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right],
 \qquad
 |F(\theta)| = \left|\frac{\cos\!\left(\tfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right| .
@@ -438,11 +508,17 @@ $\theta_\text{HP} = 78.1^{\circ}$ versus $90^{\circ}$, and $D = 1.64$
 | :-- | :-- | :-: | :-: |
 | Infinitesimal dipole | $\sin\theta$ | $90^{\circ}$ | 1.50 (1.76 dBi) |
 | Half-wave dipole | $\cos\!\left(\tfrac{\pi}{2}\cos\theta\right)/\sin\theta$ | $78.1^{\circ}$ | 1.64 (2.15 dBi) |
-| Uniform line source, $L = 2\lambda$ | $\vert\sin u/u\vert$, with $u = \tfrac{kL}{2}\cos\theta$ | $25.6^{\circ}$ | 4.21 (6.2 dBi) |
+| Uniform line source, $L = 2\lambda$ | $\vert\sin u/u\vert$, with $u = \tfrac{kL}{2}\cos\theta$ | $25.6^{\circ}$ | 4.21 (6.2 dBi) *(space factor only; 4.45 / 6.5 dBi with the element factor)* |
 
-The last row is the space factor on its own; multiply in the $\sin\theta$
-element factor and it becomes $24.8^{\circ}$ and $D = 4.45$ (6.5 dBi) — a small
-correction, as promised for a broadside beam. Either way the comparison holds: a
+<img src="../../viz/img/L06-three-patterns.svg" alt="Polar patterns in dB for the three distributions side by side: the infinitesimal dipole and half-wave dipole as nearly identical doughnuts, and the two-wavelength uniform line source as a narrow broadside beam with sidelobes" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+
+Walk the polar plot left to right and the trade is visible: the two dipoles are
+nearly the same doughnut, and the line source has traded its skirt for a beam
+and a set of sidelobes.
+
+The last row's headline number is the space factor on its own; multiply in the
+$\sin\theta$ element factor and it becomes $24.8^{\circ}$ and $D = 4.45$
+(6.5 dBi) — a small correction, as promised for a broadside beam. Either way the comparison holds: a
 $2\lambda$ line source is four times longer than a half-wave dipole, and it buys
 about 2.6 times the directivity with a beam three times narrower. For a long
 uniform line source $D \to 2L/\lambda$ — directivity sold by the wavelength.
@@ -500,13 +576,17 @@ of that transform.
 
 ## Summary
 
-| Symbol | Name | What it is |
+| Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| $\mathbf{A}$ | magnetic vector potential | the integral of the source; $\mathbf{B} = \nabla\times\mathbf{A}$ |
-| $e^{-jkr}/r$ | spherical-wave factor | distance only; the same for every antenna |
-| $\mathbf{N}(\theta,\phi)$ | radiation vector | direction only; all of the antenna's individuality |
-| $N_\theta,\ N_\phi$ | transverse components | the only parts that radiate; $E_\theta = -j\omega\mu e^{-jkr}N_\theta/4\pi r$ |
-| $U(\theta,\phi)$ | radiation intensity | $\dfrac{\eta k^2}{32\pi^2}\left(\vert N_\theta\vert^2 + \vert N_\phi\vert^2\right)$ — feeds $D$ and $G$ from Lesson 2 |
+| $\mathbf{A}$ | magnetic vector potential; the integral of the source, $\mathbf{B} = \nabla\times\mathbf{A}$ | one integral, then two curls — and in the far field the curls become multiplication by $-jk$ |
+| $e^{-jkr}/r$ | spherical-wave factor — distance only, identical for every antenna ever built | field $\propto 1/r$, power $\propto 1/r^2$ |
+| $\mathbf{N}(\theta,\phi)$ | radiation vector — direction only; all of the antenna's individuality | $E_\theta = -j\omega\mu\ e^{-jkr}N_\theta/4\pi r$, and $E_r \approx 0$ |
+| far-field approximation | parallel rays: keep $\hat{\mathbf r}\cdot\mathbf{r}'$ in the phase, drop it in the amplitude | valid for $r \ge 2D^2/\lambda$, the $\pi/8$ ($22.5^{\circ}$) phase-error budget |
+| $U(\theta,\phi)$ | radiation intensity; feeds $D$ and $G$ from Lesson 2 | $\dfrac{\eta_0 k^2}{32\pi^2}\left(\vert N_\theta\vert^2 + \vert N_\phi\vert^2\right)$, $\eta_0 \approx 377\ \Omega$ |
+| $I(z') \leftrightarrow N_z(k_z)$ | current and pattern are a Fourier transform pair | $k_z = k\cos\theta$, visible only over $-k \le k_z \le +k$ |
+| Infinitesimal dipole | $\vert F\vert = \sin\theta$ — the reference doughnut | HPBW $90^{\circ}$, $D = 1.5$ (1.76 dBi) |
+| Half-wave dipole | $\vert F\vert = \cos\!\left(\tfrac{\pi}{2}\cos\theta\right)/\sin\theta$ — a sharper doughnut | HPBW $78.1^{\circ}$, $D = 1.64$ (2.15 dBi) |
+| Uniform line source | space factor $\vert\sin u/u\vert$, $u = \tfrac{kL}{2}\cos\theta$; taper trades sidelobes for beamwidth | $\theta_\text{HP} \approx 0.886\ \lambda/L$, first sidelobe $-13.3$ dB; tapers reach $-23$ to $-31.5$ dB at 1.34–1.63× the beamwidth |
 
 ## Practice
 

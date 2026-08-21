@@ -68,12 +68,12 @@ Make them write this down. Everything else today is a corollary. If a student ca
 
 ## Gain is area
 
-$$G = \eta_{ap} \frac{4\pi A}{\lambda^2} \quad\quad A_e = \eta_{ap} A = \frac{G \lambda^2}{4\pi}$$
+$$G = \eta_{\text{ap}} \frac{4\pi A}{\lambda^2} \quad\quad A_e = \eta_{\text{ap}} A = \frac{G \lambda^2}{4\pi}$$
 
 - $A/\lambda^2$ counts **square wavelengths**, not square metres
 - An aperture is never simply *big* — it is big **at a frequency**
-- Circular dish of diameter $D$: $\quad G = \eta_{ap} \left( \pi D / \lambda \right)^2$
-- Good reflectors: $\eta_{ap} \approx 0.55$ to $0.7$; horns $\approx 0.5$
+- Circular dish of diameter $D$: $\quad G = \eta_{\text{ap}} \left( \pi D / \lambda \right)^2$
+- Good reflectors: $\eta_{\text{ap}} \approx 0.55$ to $0.7$; horns $\approx 0.5$
 
 <div class="callout">
 <p><strong>+6 dB every time you double D.</strong> And +6 dB every time you double the frequency.</p>
@@ -94,7 +94,7 @@ $$\theta_{\text{HP}} \approx 70^\circ \frac{\lambda}{D}$$
 - Double $D$: gain **+6 dB**, beam **halved** — the same statement twice
 - The $70^\circ$ already assumes a tapered illumination (uniform gives $58^\circ$)
 
-| $D/\lambda$ | Gain at $\eta_{ap}=0.55$ | HPBW |
+| $D/\lambda$ | Gain at $\eta_{\text{ap}}=0.55$ | HPBW |
 | :-- | :-- | :-- |
 | 10 | 27.3 dBi | $7.0^\circ$ |
 | 30 | 36.9 dBi | $2.3^\circ$ |
@@ -107,7 +107,7 @@ Demo the reflector-gain widget live. Sweep D/lambda from 3 to 300 and let them w
 
 ## Worked example — 1 m dish at 12 GHz
 
-Home satellite-TV dish, Ku band, $\eta_{ap} = 0.65$.
+Home satellite-TV dish, Ku band, $\eta_{\text{ap}} = 0.65$.
 
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
@@ -224,7 +224,7 @@ No derivation. Just note that phase error enters as an exponential, which is why
 | Surface (Ruze) | 0.94 | phase errors across the aperture |
 | Everything else | 0.97 | cross-pol, feed loss, misc. |
 
-**Product: 0.66.** That is where $\eta_{ap} \approx 0.55$ to $0.7$ comes from — four unavoidable trades, not sloppiness.
+**Product: 0.66.** That is where $\eta_{\text{ap}} \approx 0.55$ to $0.7$ comes from — four unavoidable trades, not sloppiness.
 
 Note:
 Have them multiply it on their calculators. The point is that 0.65 is not a fudge factor someone made up; it is a budget you can audit line by line.

@@ -106,7 +106,7 @@ r-dependence is only exp(-jkr)/r, so a curl becomes multiplication by -jk r-hat.
 
 ## Far field: the rays go parallel
 
-<div class="fig" data-inline-svg="./fig/radiation-integral-geometry.svg" style="max-width:790px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L06-radiation-integral-geometry.svg" style="max-width:790px; margin:0 auto;"></div>
 
 Note:
 Top: exact — every source point has its own R. Bottom: far field — the rays to P
@@ -175,7 +175,7 @@ $$ E_\theta = -j\omega\mu\frac{e^{-jkr}}{4\pi r}N_\theta, \qquad E_\phi = -j\ome
 
 $\mathbf{H}$ comes free from the plane-wave relation — no second integral:
 
-$$ \mathbf{H} = \frac{1}{\eta}\hat{\mathbf r}\times\mathbf{E}, \qquad U(\theta,\phi) = \frac{\eta k^{2}}{32\pi^{2}}\left(|N_\theta|^{2} + |N_\phi|^{2}\right) $$
+$$ \mathbf{H} = \frac{1}{\eta_0}\hat{\mathbf r}\times\mathbf{E}, \qquad U(\theta,\phi) = \frac{\eta_0 k^{2}}{32\pi^{2}}\left(|N_\theta|^{2} + |N_\phi|^{2}\right) $$
 
 Note:
 U is the radiation intensity from L2 — so this is where directivity and gain
@@ -198,13 +198,15 @@ This is why no wire antenna radiates off its own ends: at $\theta = 0$ there is 
 
 ---
 
+<!-- .slide: class="viz-cue-slide" -->
+
 ## The integral, as a picture
 
 Chop the source into elements. Each contributes a phasor turned by its own path difference, $kz'\cos\theta$.
 
-- **Broadside** — every phasor aligned, chain runs straight, sum is the full length
-- **Off broadside** — the chain curls
-- **Chain closes on itself** — that is a **null**
+<div class="fig" data-inline-svg="./fig/L06-phasor-chain.svg" style="max-width:790px; margin:0 auto;"></div>
+
+- Every null in every pattern in this course is a phasor chain that **closes on itself**
 
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
@@ -231,6 +233,8 @@ The far-field pattern is the <strong>Fourier transform of the current distributi
 
 ---
 
+<!-- .slide: class="viz-cue-slide" -->
+
 ## What Fourier buys you
 
 | Transform property | Antenna consequence | Later |
@@ -249,13 +253,35 @@ whose transform has the beamwidth, sidelobes, and nulls they want.
 
 ---
 
+## What a taper actually buys
+
+Same length $L$, four ways to illuminate it:
+
+| Current across the aperture | First sidelobe | HPBW |
+| :-- | :-: | :-: |
+| uniform | $-13.3$ dB | $0.886\ \lambda/L$ |
+| cosine | $-23$ dB | $1.19\ \lambda/L$ |
+| triangular | $-26.5$ dB | $1.27\ \lambda/L$ |
+| cosine² | $-31.5$ dB | $1.44\ \lambda/L$ |
+
+<div class="callout">
+Sidelobes are set by the distribution's <strong>shape</strong>, not its size — but the taper is never free: the beam comes out <strong>1.3 to 1.6 times wider</strong> than the uniform beam of the same length.
+</div>
+
+Note:
+Q6 on the practice set is exactly this table. The ranking is the thing to
+remember: uniform is narrowest and worst on sidelobes, cosine-squared is widest
+and best. Everything between is a Taylor or Chebyshev compromise — L15 and L25.
+
+---
+
 ## Example 1 — the infinitesimal dipole
 
 Current element $I_0 dl$, too short for the exponential to change across it:
 
 $$ N_z = I_0 dl, \qquad N_\theta = -I_0 dl \sin\theta $$
 
-$$ E_\theta = \frac{j\eta k I_0 dl \sin\theta}{4\pi r}e^{-jkr} $$
+$$ E_\theta = \frac{j\eta_0 k I_0 dl \sin\theta}{4\pi r}e^{-jkr} $$
 
 <div class="callout">
 Exactly L5's $1/r$ term — the one that survived $kr\gg1$. A page of exact algebra there; one line here. Pattern $\sin\theta$, $D = 1.5$ (1.76 dBi).
@@ -265,23 +291,16 @@ Exactly L5's $1/r$ term — the one that survived $kr\gg1$. A page of exact alge
 
 ## Example 2 — the uniform line source
 
-$I(z') = I_0$ over length $L$. The integral is an exponential:
+$I(z') = I_0$ over length $L$ → the integral is an exponential, and out falls a sinc: $N_z(\theta) = I_0 L \sin u/u$ with $u = (kL/2)\cos\theta$.
 
-$$ N_z(\theta) = I_0 L\frac{\sin u}{u}, \qquad u = \frac{kL}{2}\cos\theta $$
+<div class="fig" data-inline-svg="./fig/L06-line-source-sinc.svg" style="max-width:760px; margin:0 auto;"></div>
 
-Three numbers fall straight out:
-
-- **peak** at $u = 0$ → $\theta = 90^{\circ}$, **broadside**
-- **first null** at $u = \pi$ → $\cos\theta = \lambda/L$
-- **first sidelobe** $-13.3$ dB — **independent of $L$**
-
-<div class="callout">
-That is the <strong>space factor</strong>. Full pattern = element factor $\sin\theta$ × space factor — <strong>pattern multiplication</strong>, which is all of L16.
-</div>
+Peak at **broadside**, first null at $\cos\theta = \lambda/L$, first sidelobe $-13.3$ dB **however long you build it**. That is the **space factor** — times the element factor $\sin\theta$ it gives the full pattern: **pattern multiplication**, all of L16.
 
 Note:
-Emphasize the third one. Uniform illumination always costs 13.3 dB sidelobes,
-no matter how big you build it. Only tapering changes that.
+Point at the dashed line on the plot. Uniform illumination always costs 13.3 dB
+sidelobes, no matter how big you build it — the beam narrows with length, the
+sidelobe level does not move. Only tapering changes that, which we just priced.
 
 ---
 
@@ -324,9 +343,12 @@ Not $\sin\theta$ — a **sharper** doughnut, because the current is concentrated
 | half-wave dipole | $\cos(\frac{\pi}{2}\cos\theta)/\sin\theta$ | $78.1^{\circ}$ | 1.64 (2.15 dBi) |
 | uniform line, $L=2\lambda$ | $\vert\sin u/u\vert$ | $25.6^{\circ}$ | 4.21 (6.2 dBi) |
 
-<div class="callout">
-Same integral, three currents. Change the current, change the antenna.
-</div>
+<div class="fig" data-inline-svg="./fig/L06-three-patterns.svg" style="max-width:740px; margin:0 auto;"></div>
+
+Note:
+Same integral, three currents — change the current, change the antenna. Walk the
+polar plot left to right: the two dipoles are nearly the same doughnut, and the
+line source is the one that has traded its skirt for a beam and sidelobes.
 
 ---
 

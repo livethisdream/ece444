@@ -51,14 +51,16 @@ lesson delivers>
 ...
 ## Part N: <name>
 
-## Summary            (a symbol/idea table, 5-9 rows)
+## Summary            (3-column table, 5-9 rows: Symbol / idea | What it is | Number to remember)
 
 ## Practice           (only after the PDFs are built)
 
 - <a href="../../practice/ECE444_L<NN>_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
 - <a href="../../practice/ECE444_L<NN>_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 
-## Where this is going    (2 short paragraphs: what's next, why it matters)
+## Where this is going    (2 short paragraphs: what's next, why it matters;
+                           the "read before next lesson" note lives here —
+                           no separate "Preparing for L<N>" section)
 ```
 
 Rules:
@@ -87,6 +89,9 @@ Rules:
 </iframe>
 ```
 
+- Figure naming: every figure file is prefixed by its owning lesson,
+  `L<NN>-<name>.svg`, in both `book/extras/slides/fig/` and
+  `book/extras/viz/img/` — 41 lessons share these two flat directories.
 - Static figures (if any) go in `book/extras/viz/img/<name>.svg`, embedded
   with `<img src="../../viz/img/<name>.svg" ... style="max-width: 700px;
   width: 100%; display: block; margin: 1em auto;">`.
@@ -132,7 +137,8 @@ Fall 2026 · Dr. Neil Rogers
      `<strong>`/`<em>` inside, not markdown).
    - Markdown tables for comparisons (keep to <= 5 rows on a slide).
    - `<p class="viz-cue">↗ Interactive on the lesson page</p>` on slides
-     backed by a widget, plus a speaker note saying what to demo live.
+     backed by a widget, plus `<!-- .slide: class="viz-cue-slide" -->` as the
+     slide's first line, plus a speaker note saying what to demo live.
    - Two-column: `<div class="two-col"><div class="col-text"> ... </div>
      <div class="col-fig"> ... </div></div>` (raw HTML block).
    - Figures: `<div class="fig" data-inline-svg="./fig/<name>.svg"
@@ -250,7 +256,10 @@ is required (write \textbf{None} if you did not collaborate).}
 
 Rules:
 
-- 4-6 `\question`s, each 3-4 `\part`s, `\newpage` between questions.
+- Every lesson ships a practice set, labs and intro lessons included (an
+  intro-level set may be short — 2 questions of identification/concept parts).
+- 4-6 `\question`s, each 3-4 `\part`s (hard max 4), `\newpage` between
+  questions.
   Mix per set: ~40% concept/explain parts (1-2 sentence answers), ~45%
   numeric parts, ~15% design/interpretation parts that force a trade-off
   statement.
@@ -271,6 +280,7 @@ Rules:
 
 - `\begin{solution}[h]` height `h` (0.8-1.6in) reserves blank workspace in
   the student copy; scale it to the work required.
+- Every numeric part gets an `\ansbox` with units — 11-20 boxes per set.
 - House macros (available; use these, not raw equivalents):
   `\eq{...}` display math (align-style, `&` and `\\` allowed);
   `\sinp{x} \cosp{x} \tanp{x}` = sin(x) etc. with parens; `\lp \rp` = big
@@ -299,22 +309,29 @@ Rules:
 | :-- | :-- | :-- |
 | $k = 2\pi/\lambda$ | wavenumber | |
 | $\eta_0 \approx 377\ \Omega$ | free-space impedance | |
-| $D$, $G$ | directivity, gain | $G = \eta_{cd} D$; dBi when logarithmic |
+| $D$, $G$ | directivity, gain | $G = \eta_{\text{rad}} D$; dBi when logarithmic |
 | $U(\theta,\phi)$ | radiation intensity | W/sr |
 | $\vert F(\theta,\phi)\vert$ | normalized field pattern | |
 | $S(\theta)$ | space factor (distribution alone) | pattern = element factor × space factor |
 | $\mathbf{N}(\theta,\phi)$ | radiation vector | $\int \mathbf{J} e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'} dV'$ |
 | $\theta_\text{HP}$ | half-power beamwidth (HPBW) | |
-| $Z_{in} = R_{in} + jX_{in}$ | input impedance | resonance = $X_{in}=0$ |
+| $Z_{\text{in}} = R_{\text{in}} + jX_{\text{in}}$ | input impedance | resonance = $X_{\text{in}}=0$ |
+| $R_{\text{rad}}$, $R_{\text{loss}}$ | radiation / loss resistance | $\eta_{\text{rad}} = R_{\text{rad}}/(R_{\text{rad}}+R_{\text{loss}})$ |
+| $\psi$ | polarization tilt angle | never $\theta$, which is reserved for the polar angle |
 | $\Gamma$, VSWR | reflection coefficient, standing-wave ratio | ref. $50\ \Omega$ unless said |
 | $A_e$ | effective aperture | $A_e = G\lambda^2/4\pi$; "effective aperture", not "capture area" |
-| $\eta_{ap}$ | aperture efficiency | |
+| $\eta_{\text{ap}}$ | aperture efficiency | |
 | $r \ge 2D^2/\lambda$ | far-field distance | $D$ = largest dimension |
 | $k_z = k\cos\theta$ | space frequency | line source on z |
 
 Spherical coordinates: $\theta$ from the +z axis, $\phi$ from +x; wire
 antennas lie along z; broadside = $\theta = 90^\circ$. Time convention
 $e^{+j\omega t}$, phasors with $e^{-jkr}$ outgoing.
+
+Subscript style: any non-math word or abbreviation in a sub- or superscript
+is wrapped in `\text{}` — $Z_{\text{in}}$, $\eta_{\text{rad}}$,
+$R_{\text{loss}}$, $\eta_{\text{ap}}$. Single-letter/digit math subscripts
+stay bare ($\eta_0$, $A_e$, $G_t$, $G_r$).
 
 ## 7. Canonical numbers (must match everywhere they appear)
 
@@ -335,6 +352,12 @@ $e^{+j\omega t}$, phasors with $e^{-jkr}$ outgoing.
   the $\pi/8$ (22.5°) phase-error tolerance behind it.
 - Friis (L2): $P_r = P_t G_t G_r (\lambda/4\pi R)^2$. Radar range equation is
   deferred to L29 — preview only, never derived in Module 2.
+- CP against a linear antenna at AR = 3 dB: received power swings over a 3 dB
+  range with orientation, $-1.8$ to $-4.8$ dB (never "capped at 3 dB"); worst
+  case against the wrong circular sense at AR = 3 dB: $-9.6$ dB.
+- Pencil-beam directivity: $D \approx 41{,}253/(\theta_1^\circ\theta_2^\circ)$
+  is the lossless geometric bound; the practical constant for real horns and
+  dishes is 26,000-32,400 (sidelobes and spillover cost 1-2 dB).
 
 ## 8. Formatting rules (course-wide, non-negotiable)
 

@@ -61,7 +61,7 @@ $Z_0 = 50$~\ohms throughout.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Lesson 7 predicted $Z_{in} = 73 + j42.5$~\ohms for an ideal half-wave
+		\part Lesson 7 predicted $Z_{\text{in}} = 73 + j42.5$~\ohms for an ideal half-wave
 		dipole. Compute $|\Gamma|$, $|S_{11}|$ in dB, and the VSWR. Does the textbook
 		dipole meet the $-10\db$ specification, and what one change fixes it?
 		\begin{solution}[1.5in]
@@ -72,7 +72,7 @@ $Z_0 = 50$~\ohms throughout.
 			\text{VSWR} &= \frac{1.371}{0.629} = 2.18
 		}
 		It \textbf{fails}. The fix is to shorten the element to about $0.47$--$0.48\lambda$
-		so the reactance goes to zero and $R_{in}$ falls to roughly $70$~\ohms:
+		so the reactance goes to zero and $R_{\text{in}}$ falls to roughly $70$~\ohms:
 		\eq{
 			|\Gamma| = \frac{20}{120} = 0.167 \rightarrow -15.6\db, \qquad \text{VSWR} = 1.40
 		}
@@ -98,16 +98,16 @@ $S_{11} = 0.33\ \angle 155\mydeg$.
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Write $\Gamma$ in rectangular form and find the input impedance $Z_{in}$.
+		\part Write $\Gamma$ in rectangular form and find the input impedance $Z_{\text{in}}$.
 		\begin{solution}[1.6in]
 		\eq{
 			\Gamma &= 0.33\lp \cos 155\mydeg + j \sin 155\mydeg \rp = -0.299 + j0.140 \\
-			Z_{in} &= Z_0\ \frac{1+\Gamma}{1-\Gamma}
+			Z_{\text{in}} &= Z_0\ \frac{1+\Gamma}{1-\Gamma}
 			     = 50\ \frac{0.701 + j0.140}{1.299 - j0.140}
 		}
 		Multiplying numerator and denominator by the conjugate of the denominator,
 		\eq{
-			Z_{in} &= 50\ \frac{0.891 + j0.279}{1.707} \\
+			Z_{\text{in}} &= 50\ \frac{0.891 + j0.279}{1.707} \\
 			       &= 50 \lp 0.522 + j0.163 \rp \\
 			       &= 26.1 + j8.2\ \ohms
 		}
@@ -115,7 +115,7 @@ $S_{11} = 0.33\ \angle 155\mydeg$.
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$Z_{in}$ = \ansbox[1.5in]{$26.1 + j8.2$~\ohms}
+		$Z_{\text{in}}$ = \ansbox[1.5in]{$26.1 + j8.2$~\ohms}
 	\end{minipage}
 
 	\part The reactance came out positive. Is the element electrically long or short
@@ -214,13 +214,13 @@ $|S_{11}|$ (dB) & $-3.8$ & $-6.5$ & $-8.8$ & $-12.4$ & $-17.7$ & $-19.4$ & $-17.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part At resonance the Smith-chart marker sits on the real axis, to the
-		\emph{right} of centre. Find $Z_{in}$ at resonance.
+		\emph{right} of centre. Find $Z_{\text{in}}$ at resonance.
 		\begin{solution}[1.2in]
 		On the real axis $\Gamma$ is purely real, and right of centre means it is
-		positive, so $R_{in} > 50$~\ohms:
+		positive, so $R_{\text{in}} > 50$~\ohms:
 		\eq{
 			|\Gamma| &= 10^{-19.4/20} = 0.107 \\
-			Z_{in} &= 50\ \frac{1+0.107}{1-0.107} = 50 \lp 1.240 \rp = 62\ \ohms
+			Z_{\text{in}} &= 50\ \frac{1+0.107}{1-0.107} = 50 \lp 1.240 \rp = 62\ \ohms
 		}
 		Without the Smith chart you could not choose between $62$~\ohms and
 		$40$~\ohms: the magnitude alone does not carry the sign.
@@ -228,7 +228,7 @@ $|S_{11}|$ (dB) & $-3.8$ & $-6.5$ & $-8.8$ & $-12.4$ & $-17.7$ & $-19.4$ & $-17.
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$Z_{in}$ = \ansbox[1.4in]{$62 + j0$~\ohms}
+		$Z_{\text{in}}$ = \ansbox[1.4in]{$62 + j0$~\ohms}
 	\end{minipage}
 
 	\part A thin wire dipole typically shows $3$--$10\%$ impedance bandwidth. Does

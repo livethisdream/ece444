@@ -62,12 +62,20 @@ radiated away, or lost as heat.
 
 ## Radiation resistance is not a resistor
 
+<div class="fig" data-inline-svg="./fig/L04-zin-split.svg" style="max-width:760px; margin:0 auto;"></div>
+
 - **$R_\text{rad}$** — the equivalent resistance for power carried away as radiation. The *useful* part.
 - **$R_\text{loss}$** — real ohmic/dielectric loss. Becomes heat.
 
 <div class="callout">
 This split <em>is</em> the radiation efficiency from L2: &nbsp; $\eta_\text{rad}=\dfrac{R_\text{rad}}{R_\text{rad}+R_\text{loss}}$, &nbsp; $G=\eta_\text{rad}D$.
 </div>
+
+Note:
+Walk the diagram left to right: one pair of terminals, three things in series.
+Only the green box does anything you wanted. Point out that nothing in the box
+is a component you could unsolder — the split is bookkeeping for where the power
+ends up.
 
 ---
 
@@ -113,6 +121,25 @@ Matching is easiest at resonance — no reactance to cancel, only a resistance t
 
 ---
 
+## Resonance, seen on a curve
+
+<div class="fig" data-inline-svg="./fig/L04-reactance-vs-length.svg" style="max-width:820px; margin:0 auto;"></div>
+
+Resistance climbs smoothly. **The reactance is what swings** — and it crosses zero just short of $\lambda/2$.
+
+Note:
+Curves are the induced-EMF result for a thin wire — representative, not
+measured. Two things to make them see: the X curve is far steeper than the R
+curve, which is why a couple of percent of trim moves the reactance tens of
+ohms and barely touches the resistance; and resonance lands *below* 0.5λ, which
+is why every published dipole is cut short. Ask what a fatter wire does — it
+resonates shorter still and flattens the swing, which is the fat-dipole
+bandwidth trick from L3.
+
+---
+
+<!-- .slide: class="viz-cue-slide" -->
+
 ## Feeding: the reflection the source sees
 
 Feed line of characteristic impedance $Z_0$ (coax: $50\ \Omega$):
@@ -126,35 +153,67 @@ $$ L_\text{mismatch} = -10\log_{10}\!\left(1-|\Gamma|^2\right)\ \text{dB} $$
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
 Note:
-Same Γ/VSWR from L2–L3, now tied to the antenna's impedance. Rule of thumb:
-VSWR ≤ 2 (return loss ≥ 9.5 dB). Sometimes the limit is what the transmitter can
-survive — recall the diode problem.
+Demo live on the lesson page: drag the antenna impedance off 50 Ω and watch Γ,
+VSWR and the mismatch loss in dB move together; park it at VSWR 2 and show the
+loss is only 0.5 dB. Same Γ/VSWR from L2–L3, now tied to the antenna's
+impedance. Rule of thumb: VSWR ≤ 2 (return loss ≥ 9.5 dB). Sometimes the limit
+is what the transmitter can survive — recall the diode problem.
 
 ---
 
 ## The quarter-wave transformer
 
+<div class="fig" data-inline-svg="./fig/L04-quarter-wave.svg" style="max-width:830px; margin:0 auto;"></div>
+
 A $\lambda/4$ line of impedance $Z_1$ transforms a **real** load $R_L$:
 
 $$ Z_\text{in} = \frac{Z_1^2}{R_L} \qquad\Rightarrow\qquad Z_1 = \sqrt{Z_0R_L} $$
 
-**Match a $70\ \Omega$ dipole to $50\ \Omega$:**
+Match a $70\ \Omega$ dipole to $50\ \Omega$: $Z_1 = \sqrt{(50)(70)} \approx 59\ \Omega$. Catch: exactly $\lambda/4$ at **one** frequency → narrowband.
 
-$$ Z_1 = \sqrt{(50)(70)} \approx 59\ \Omega $$
-
-Catch: exactly $\lambda/4$ at **one** frequency → narrowband.
+Note:
+The geometric mean is the whole design. Ask what happens at twice the frequency
+— the section is a half wave, which is transparent, so the radio sees the raw
+70 Ω again. Real loads only: a complex antenna needs the reactance gone first.
 
 ---
 
 ## The L-match
 
-- Two reactances: one **cancels the load reactance**, the other **transforms the resistance**
-- The minimal lumped network — reaches any $Z_0$ from a complex load
-- The starting point for Smith-chart matching later in the course
+<div class="fig" data-inline-svg="./fig/L04-lmatch.svg" style="max-width:820px; margin:0 auto;"></div>
+
+Two reactances, two jobs, in this order: **cancel X, then transform R.**
+
+1. The **series** element next to the load cancels the load reactance — what is left is pure resistance.
+2. The **shunt** element toward the source transforms that resistance to $Z_0$.
+
+Note:
+Minimal lumped network — two elements, and it reaches any Z0 from any complex
+load. Which side the shunt goes on depends on whether the load resistance is
+below or above Z0: below, shunt toward the source, as drawn. This is the
+starting point for Smith-chart matching later in the course.
+
+---
+
+## Working an L-match
+
+Antenna $Z_\text{in} = 20 - j15\ \Omega$, feed line $50\ \Omega$, design frequency 1 GHz.
+
+| Quantity | Work | Result |
+| :-- | :-- | :-- |
+| Cancel X | series $+j15\ \Omega$ | $20 + j0\ \Omega$ |
+| Network $Q$ | $\sqrt{50/20 - 1}$ | $1.22$ |
+| Series reactance | $1.22 \times 20 = 24.5\ \Omega$, so $+j39.5\ \Omega$ total | $L = 6.3\ \text{nH}$ |
+| Shunt reactance | $50/1.22 = 40.8\ \Omega$, capacitive | $C = 3.9\ \text{pF}$ |
 
 <div class="callout">
 Every match is <strong>band-limited</strong>. Forcing $\Gamma=0$ at one frequency is easy; holding it across a band is the size-vs-bandwidth fight from L3.
 </div>
+
+Note:
+Do the first row out loud, then let them get Q. Two elements, both lossless, and
+the 20 Ω antenna now looks like 50 Ω — at 1 GHz and nowhere else. Move 10% in
+frequency and the reactances are wrong by 10% each.
 
 ---
 
@@ -169,7 +228,7 @@ Connect them directly and the arms are unequal → leftover **common-mode curren
 
 ## The shield-current problem
 
-Common-mode current on the shield means:
+<div class="fig" data-inline-svg="./fig/L04-balun-currents.svg" style="max-width:880px; margin:0 auto;"></div>
 
 - **The feed line radiates** — the coax becomes part of the antenna
 - **Pattern skews**, front-to-back ratio degrades
@@ -177,6 +236,9 @@ Common-mode current on the shield means:
 
 Note:
 The third conductor the ideal model forgot: the outside surface of the shield.
+Skin effect is the reason it is a separate conductor at all — inside and outside
+of the shield do not talk to each other at RF. Left panel is what you build by
+accident; right panel is a 30-cent ferrite.
 
 ---
 
@@ -204,7 +266,7 @@ Impedance is where the antenna meets the radio. <strong>Radiation resistance</st
 
 ## Where this is going
 
-- You can read the terminals as a circuit: split $Z_\text{in}$, turn mismatch into $\Gamma$/VSWR/dB, match with a $\lambda/4$ section, specify a balun
+- You can read the terminals as a circuit: split $Z_\text{in}$, turn mismatch into $\Gamma$/VSWR/dB, match with a $\lambda/4$ section or an L-network, specify a balun
 - **L5 — Field Regions:** step back into space. *Where* do the fields settle into the far field, and how far away must you be for the pattern you measured to be the pattern you have?
 
 Note:

@@ -182,7 +182,7 @@ Ask why we rotate the source and not the AUT: rotating the AUT would also change
 | reference level | $-32.4$ dBm, $G_{ref} = 15.0$ dBi | — |
 | AUT level | $-35.6$ dBm | $\Delta = -3.2$ dB |
 | AUT gain | $15.0 - 3.2$ | $11.8$ dBi |
-| predicted | $\eta_{ap} = 0.5$ aperture formula | $12.3$ dBi |
+| predicted | $\eta_{\text{ap}} = 0.5$ aperture formula | $12.3$ dBi |
 | cross-pol peak | $-59.9$ dBm | XPD $= 24.3$ dB |
 
 Note:

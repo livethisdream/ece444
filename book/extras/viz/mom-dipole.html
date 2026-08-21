@@ -82,7 +82,7 @@
   <div class="readouts">
     <div class="ro"><span class="k">segment \(\Delta\)</span><span class="v" id="p-d">&#8212;</span></div>
     <div class="ro" id="ro-ratio"><span class="k">\(\Delta/a\)</span><span class="v" id="p-ra">&#8212;</span></div>
-    <div class="ro"><span class="k">\(Z_{in}\)</span><span class="v" id="p-z">&#8212;</span></div>
+    <div class="ro"><span class="k">\(Z_{\text{in}}\)</span><span class="v" id="p-z">&#8212;</span></div>
     <div class="ro" id="ro-drift"><span class="k">drift since \(N/2\)</span><span class="v" id="p-dr">&#8212;</span></div>
     <div class="ro off" id="ro-ref"><span class="k">sinusoid theory</span><span class="v" id="p-ref">73 + j42.5 &#937;</span></div>
   </div>
@@ -393,10 +393,10 @@ function drawConv() {
   const lx = x1 - 118, ly = y0 + 8;
   ctx.strokeStyle = '#004a85'; ctx.lineWidth = 2.2;
   ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + 14, ly); ctx.stroke();
-  MJ.draw(ctx, 'R_{in}', lx + 20, ly, 14, '#004a85', 'left');
+  MJ.draw(ctx, 'R_{\text{in}}', lx + 20, ly, 14, '#004a85', 'left');
   ctx.strokeStyle = '#8a5a00';
   ctx.beginPath(); ctx.moveTo(lx, ly + 18); ctx.lineTo(lx + 14, ly + 18); ctx.stroke();
-  MJ.draw(ctx, 'X_{in}', lx + 20, ly + 18, 14, '#8a5a00', 'left');
+  MJ.draw(ctx, 'X_{\text{in}}', lx + 20, ly + 18, 14, '#8a5a00', 'left');
 }
 
 function fmtZ(R, X) {

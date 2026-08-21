@@ -48,8 +48,8 @@ Each LO is assessed at least once. LOs are assessed as **Mastered** or
 
 | LO | Description |
 | :-: | :- |
-| 1.1 | I can define what an antenna is, articulate the reciprocity principle, and describe the role of an antenna in a wireless system. |
-| 1.2 | I can define and calculate fundamental antenna properties: gain, directivity, effective aperture, beamwidth, and sidelobe level. |
+| 1.1 | I can explain what an antenna is, describe its role in a wireless system, and recognize common antenna types by sight. |
+| 1.2 | I can define and calculate fundamental antenna properties — gain, directivity, effective aperture, beamwidth, and sidelobe level — apply the reciprocity principle that links an antenna's transmit and receive behavior, and use the Friis transmission equation to predict received power in a link. |
 | 1.3 | I can determine the polarization of an antenna and describe the bandwidth characteristics of common antenna types. |
 | 1.4 | I can calculate input impedance, feed considerations, and the role of baluns in an antenna feed system. |
 | 1.5 | I can identify and distinguish the reactive near-field, radiating near-field, and far-field regions and calculate the boundaries for a given antenna. |

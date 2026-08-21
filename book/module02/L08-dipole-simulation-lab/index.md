@@ -69,7 +69,7 @@ The widget below runs an honest method-of-moments solve in your browser: thin
 wire, triangle basis functions, a voltage source on the center segment, no
 shortcuts. Drag the segment count from 5 upward and watch two things at once.
 The current samples settle onto the sinusoid — close to it, never exactly it,
-and fattest near the wire ends where the sinusoid is worst. And $Z_{in}$ stops
+and fattest near the wire ends where the sinusoid is worst. And $Z_{\text{in}}$ stops
 moving. **That plateau is what "converged" means.** It does not mean "agrees
 with theory"; it means "refining the model no longer changes the answer." The
 dashed green references are L7's $73\ \Omega$ and $42.5\ \Omega$, drawn when the
@@ -130,7 +130,7 @@ keyboard.
 
 4nec2 drives **one segment** with a 1 V source. That segment *is* the antenna
 terminal: no connector, no coaxial gap, no balun. Input impedance is read
-straight off it as $Z_{in} = 1\ \text{V} / I_{\text{feed}}$.
+straight off it as $Z_{\text{in}} = 1\ \text{V} / I_{\text{feed}}$.
 
 Two consequences follow. First, the source must sit on the center segment, which
 is why the segment count is odd. Second, the "gap" is as wide as a segment, so
@@ -205,13 +205,13 @@ if you write the prediction after seeing the answer, you have learned nothing
 and you will be able to tell.
 
 **Step 1 — Predict.** Before running anything, write down what L7 says this
-antenna should do: $Z_{in}$, resonant length, gain in dBi, and E-plane HPBW.
+antenna should do: $Z_{\text{in}}$, resonant length, gain in dBi, and E-plane HPBW.
 These are your reference numbers, and you do not get to change them later.
 
 **Step 2 — Segmentation arithmetic.** Compute $\Delta$, check it against
 $\lambda/20$ and $8a$, and compute your refinement ceiling. Do this on paper.
 
-**Step 3 — Baseline run.** Run the file from Part 3 at 915 MHz. Record $Z_{in}$
+**Step 3 — Baseline run.** Run the file from Part 3 at 915 MHz. Record $Z_{\text{in}}$
 and the gain. Compare with your prediction *now*, and write down your reaction
 before you do anything else.
 
@@ -233,14 +233,14 @@ field is what asks for the average gain. Record it. **If it is not close to
 FR 0 41 0 0 800 5
 ```
 
-which sweeps 800 to 1000 MHz in 5 MHz steps. Plot $R_{in}$ and $X_{in}$ against
-frequency and read off the frequency where $X_{in} = 0$. A wire cut to
+which sweeps 800 to 1000 MHz in 5 MHz steps. Plot $R_{\text{in}}$ and $X_{\text{in}}$ against
+frequency and read off the frequency where $X_{\text{in}} = 0$. A wire cut to
 $\lambda/2$ at 915 MHz will not resonate at 915 MHz — find out where it does,
 and by how much it misses.
 
 **Step 6 — Trim to resonance.** Now hold the frequency at 915 MHz and shorten
 the wire instead. Change the `GW` end coordinates in steps of a millimetre or
-two until $X_{in}$ crosses zero. Record the resonant length as a fraction of
+two until $X_{\text{in}}$ crosses zero. Record the resonant length as a fraction of
 $\lambda$ and the resistance there. Keep the segment count odd throughout, and
 recheck $\Delta$ against $8a$ after each change.
 
@@ -257,7 +257,7 @@ the wire axis. Confirm the H-plane is a circle to within a small fraction of a
 decibel.
 
 **Step 8 — Convergence study.** Re-run the resonant model at $N = 11$, 21, 41,
-and 81 segments. Tabulate $Z_{in}$ and gain for each. Identify where the answer
+and 81 segments. Tabulate $Z_{\text{in}}$ and gain for each. Identify where the answer
 stops moving, and where the $\Delta > 8a$ rule starts to bite.
 
 ## Part 5: Deliverables
@@ -274,9 +274,9 @@ Turn in a single short report containing:
 
 | Quantity | L7 analytical | Simulated | Difference | Why |
 | :-- | :-- | :-- | :-- | :-- |
-| $Z_{in}$ at exactly $\lambda/2$ | $73 + j42.5\ \Omega$ | | | |
+| $Z_{\text{in}}$ at exactly $\lambda/2$ | $73 + j42.5\ \Omega$ | | | |
 | Resonant length | $0.47\text{–}0.48\ \lambda$ | | | |
-| $R_{in}$ at resonance | $\approx 70\ \Omega$ | | | |
+| $R_{\text{in}}$ at resonance | $\approx 70\ \Omega$ | | | |
 | Gain | $2.15\ \text{dBi}$ | | | |
 | E-plane HPBW | $78^\circ$ | | | |
 
@@ -317,7 +317,7 @@ them match.
 | $\Delta$ vs $a$ | keep $\Delta > 8a$ or the thin-wire kernel fails |
 | Converged | the answer stops moving under refinement — not "matches theory" |
 | Average gain | must be $1.000$ for a lossless free-space model; it is an energy audit |
-| $Z_{in}$ at $\lambda/2$ | near $86 + j47\ \Omega$, not $73 + j42.5\ \Omega$ — the wire is 5% long |
+| $Z_{\text{in}}$ at $\lambda/2$ | near $86 + j47\ \Omega$, not $73 + j42.5\ \Omega$ — the wire is 5% long |
 | Resonance | about $0.473\lambda$ for a $0.0015\lambda$-radius wire; fatter wire resonates shorter |
 | Gain and HPBW | converge fast and match theory: $\approx 2.15\ \text{dBi}$, $78^\circ$ |
 
