@@ -374,6 +374,10 @@ stay bare ($\eta_0$, $A_e$, $G_t$, $G_r$).
 
 ## 9. Voice
 
+**Read `VOICE.md` before writing prose.** It carries the calibration set —
+before-and-after pairs from Neil's own review corrections, which make the
+target concrete. The rules below are the summary.
+
 Second person, direct, confident, and **professional**. Bold the key term at
 first use. Prefer "read the physics" framing over formalism: say what an
 equation *does* before what it *is*. Every lesson opens by connecting to the
