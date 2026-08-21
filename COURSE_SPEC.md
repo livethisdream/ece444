@@ -103,7 +103,10 @@ Rules:
 
 Slides are separated by a line containing only `---` (blank line before and
 after). Speaker notes: a `Note:` line at the end of a slide's markdown.
-Stage is 1244x700 px, 16:9. Target 18-26 slides (labs 14-20). Structure:
+Stage is 1244x700 px, 16:9. Target 18-26 slides (labs 14-20) — but a lesson
+that carries a full derivation may run longer when the brief says so, and a
+deck is never trimmed by collapsing a derivation the brief asked for.
+Structure:
 
 1. Title slide (copy exactly, substituting lesson number/title):
 
@@ -371,13 +374,32 @@ stay bare ($\eta_0$, $A_e$, $G_t$, $G_r$).
 
 ## 9. Voice
 
-Second person, direct, confident, occasionally wry. Short declarative
-sentences land the point ("Radiation is superposition with phase
-bookkeeping. Nothing more."). Bold the key term at first use. Prefer "read
-the physics" framing over formalism: say what an equation *does* before what
-it *is*. Every lesson opens by connecting to the previous one and closes by
-pointing forward. Rules of thumb are named as such and repeated deliberately.
-Tables summarize; prose explains. No filler ("In this lesson we will...").
+Second person, direct, confident, and **professional**. Bold the key term at
+first use. Prefer "read the physics" framing over formalism: say what an
+equation *does* before what it *is*. Every lesson opens by connecting to the
+previous one and closes by pointing forward. Rules of thumb are named as such
+and repeated deliberately. Tables summarize; prose explains. No filler ("In
+this lesson we will...").
+
+Four things to avoid. These were flagged in review as widespread, and they
+read as unprofessional in a course text:
+
+- **No sentence fragments used for rhythm or punch.** Write complete
+  sentences. "0.95 to 1.05, fine. 0.6 or 1.4, your model is broken." becomes
+  "An average gain between 0.95 and 1.05 is acceptable. A value near 0.6 or
+  1.4 means the model is wrong, and no other number on the page can be
+  trusted until it is fixed." Directness comes from short complete sentences,
+  not from dropped verbs.
+- **Never vouch for the material's own honesty or rigor.** Cut "honest",
+  "genuinely", "really does", "actually solves", "no hand-waving". Say what
+  the thing does; the reader assumes the text is truthful. (Neil: "if we're
+  not being honest, why are we writing this book?")
+- **No cheeky asides or winking humor** — arch understatement, jokes at the
+  reader's expense, exclamations.
+- **No scolding the reader.** State the fact ("a misplaced source moves the
+  impedance"), not the accusation ("your model is broken").
+
+Direct and plain is the target. Clever is not.
 
 ## 10. Self-checks before you report back (all mechanical, all required)
 
