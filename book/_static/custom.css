@@ -235,8 +235,13 @@ div.admonition.example-problem > p.admonition-title {
   padding: 0.4em 1em;
   margin: 0;
 }
-div.admonition.example-problem > p.admonition-title::before {
-  display: none;
+div.admonition.example-problem > p.admonition-title::before,
+.admonition.example-problem > .admonition-title::after,
+div.admonition.example-problem > p.admonition-title::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  margin: 0 !important;
 }
 div.admonition.example-problem > *:not(.admonition-title) {
   padding: 0.5em 1.5em 0.25em 1.5em;

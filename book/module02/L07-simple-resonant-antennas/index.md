@@ -176,8 +176,8 @@ That is the pattern of a center-fed dipole of **any** length, up to a constant:
 
 $$\vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta} \right\vert$$
 
-Both the proportionality and the magnitude bars are load-bearing. The bars
-matter because for wires longer than $\lambda$ the bracket changes sign — that
+Both the proportionality sign and the magnitude bars are there for a reason.
+The bars matter because for wires longer than $\lambda$ the bracket changes sign — that
 sign flip is how sidelobes end up radiating out of phase with the main lobe.
 The proportionality matters because **normalizing means dividing by the peak of
 that expression**, and the peak is not always 1. For $L \le \lambda$ it sits at
@@ -196,10 +196,10 @@ looks like trouble at $\theta = 0$, but the numerator vanishes there too and
 the ratio goes quietly to zero. The nulls are still straight off the wire ends.
 
 ```{note}
-Notice what you actually bought. That general formula is not a half-wave
-result — it holds for *any* $L$, and the multi-lobe patterns you will meet at
-the end of this lesson come from the same expression with a different number in
-it. One integral, every length. That is what the radiation integral is for.
+The general formula is not a half-wave result. It holds for any $L$, and the
+multi-lobe patterns at the end of this lesson come from the same expression
+with a different value of $L$ in it. One integral covers every length, which is
+what the radiation integral is for.
 ```
 
 The half-wave pattern is a doughnut again, only slightly slimmer than the short
@@ -259,7 +259,7 @@ slider at $0.50$ and confirm the canonical trio: $78.1^\circ$,
 $2.15\ \text{dBi}$, $73.1\ \Omega$.
 
 <iframe src="../../viz/dipole-explorer.html"
-        width="100%" height="711"
+        width="100%" height="710"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Dipole explorer: current, pattern, beamwidth, directivity and feed-point impedance against dipole length">
@@ -319,8 +319,8 @@ and the antenna's current level drops out, as it must:
 
 $$R_r = \frac{\eta}{4\pi}C_{in}(2\pi) = 29.98 \times 2.4376 = 73.1\ \Omega$$
 
-The $\eta/4\pi$ is just $30\ \Omega$ to slide-rule accuracy, so the whole result
-is worth remembering as **30 times 2.4376**.
+Since $\eta/4\pi = 29.98\ \Omega$, which is $30\ \Omega$ to better than one tenth
+of a percent, the result is easy to remember as **30 times 2.4376**.
 
 ### The reactance, and why 42.5 is a clean number
 
@@ -331,10 +331,12 @@ all, so no amount of pattern integration will produce it.
 
 Getting it requires the **induced-EMF method**: integrate the field the antenna
 produces back against its own current, along the wire. That is a near-field
-calculation, we are not going to do it here, and its general answer is an
-unpleasant expression involving $Si$, $Ci$, and the wire radius $a$. But at
-exactly $L = \lambda/2$ something very tidy happens. Every radius-dependent
-term in that expression carries a factor of $\sin(kL)$, and at $kL = \pi$,
+calculation, and we are not going to carry it out here. Its general result
+contains $Si$, $Ci$, and the wire radius $a$ — meaning that **the reactance of
+a dipole normally depends on how thick the wire is**.
+
+At exactly $L = \lambda/2$ that dependence disappears. Every term containing the
+wire radius is multiplied by $\sin(kL)$, and at $kL = \pi$,
 
 $$\sin(kL) = \sin\pi = 0.$$
 
@@ -362,15 +364,25 @@ coming back — the whole point of the antenna. The $+j42.5\ \Omega$ is the
 reactive near field of Lesson 5, sloshing energy back and forth, doing no
 useful work, and wrecking your match.
 
-```{note}
-Two honesty notes before we spend this number. $R_r$ came out referred to the
-**current maximum**, because $I_m$ is the current-maximum amplitude; it equals
-the *input* resistance here only because at $\lambda/2$ the maximum happens to
-sit at the feed. And the induced-EMF result inherits the assumed sinusoidal
-current from Part 2 — the impedance is the quantity most sensitive to that
-assumption, and closing that gap against a real solver is precisely what
-Lesson 8 is for.
-```
+Two limits on that result are worth stating clearly.
+
+**The 73.1 Ω is referred to the current maximum, not automatically to the
+feed.** The power calculation used $I_m$, which is the largest current anywhere
+on the wire. A resistance referred to that point equals the resistance measured
+at the feed terminals only when the current maximum is physically located at
+the feed. For a half-wave dipole it is, so the two numbers agree. For a
+full-wave dipole they do not: a full-wave dipole has a current *minimum* at the
+feed, and its feed resistance is enormous — hundreds to thousands of ohms — even
+though the current-maximum resistance is a moderate $199\ \Omega$.
+
+**Every step above assumed the sinusoidal current from Part 2.** How much that
+matters depends on what you are computing. The pattern shape barely cares: the
+radiation integral smooths over small errors in the current, so the $78^\circ$
+beamwidth and $2.15\ \text{dBi}$ hold up well. The impedance cares a great
+deal, because it depends on the current right at the feed and on the near
+fields close to the wire. This is the main reason a simulator will not return
+exactly $73 + j42.5\ \Omega$. Measuring how large that disagreement is, and
+deciding whether it matters, is the work of Lesson 8.
 
 **Resonance** means $X_{in} = 0$. At exactly $\lambda/2$ we are $42.5\ \Omega$
 away from it, and the fix is to make the wire slightly *shorter*.
@@ -416,46 +428,83 @@ from Lesson 4:
 | $75\ \Omega$ | $73 + j42.5$ (untrimmed) | 0.28 | 1.76 |
 | $75\ \Omega$ | $70 + j0$ (resonant) | 0.03 | 1.07 |
 
-Read that table as a decision. Trimming the antenna to resonance improves the
-$50\ \Omega$ match more than switching to a $75\ \Omega$ cable does. **Kill the reactance
-first; worry about the resistance second.**
+:::{admonition} Key Point
+:class: key-concept
+**Trimming to resonance is worth more than changing the cable.** On a
+$50\ \Omega$ line, removing the $+j42.5\ \Omega$ of reactance takes the VSWR
+from 2.18 to 1.40. Leaving the reactance in place and switching to a
+$75\ \Omega$ cable only reaches 1.76. Kill the reactance first; worry about the
+resistance second.
+:::
 
 ### Reading it off a Smith chart
 
 Those four rows are the same information a **Smith chart** shows at a glance,
 and you will be reading charts for the rest of the course — every VNA in the
-lab draws one. The chart is just the complex reflection coefficient plane with
-a grid of constant-resistance circles and constant-reactance arcs painted on
-it: the center is a perfect match, the rim is total reflection, the top half is
-inductive and the bottom half capacitive.
+lab draws one. The chart is the complex reflection coefficient plane. The
+center is a perfect match, the rim is total reflection, the upper half is
+inductive and the lower half capacitive.
 
-Sweep the length slider below and watch the dipole trace a path across the
-chart. Three things are worth pinning down. **Find the $\lambda/2$ marker** and
-confirm it reads $73 + j42.5\ \Omega$ sitting in the inductive half, outside the
-2:1 circle. **Then trim** — walk the slider down until the locus crosses the
-horizontal axis, which is the resonant length, and watch the VSWR pill drop as
-you cross inside the 2:1 circle. **Then flip the normalization to
-$75\ \Omega$**: the antenna does not change, the impedance readout does not
-change, but the whole grid re-scales underneath it and the same antenna lands
-closer to the center. That last point is the one students find surprising, and
-it is worth sitting with: a match is a statement about a *pair*, not about an
-antenna.
+Four kinds of thing are drawn on the chart below, and it is worth naming each
+one before you touch the slider.
+
+- **The faint grey grid** is the chart itself, printed once and never moving.
+  The circles that all pass through the right-hand point are lines of constant
+  resistance; the arcs curving away from that point are lines of constant
+  reactance. Together they let you read an impedance off any position.
+- **The amber dashed circles** are lines of constant VSWR, centered on the
+  match point at 2:1 and 3:1. Anything inside the 2:1 circle is a usable match.
+- **The blue curve is the antenna.** It is the **impedance locus**: the path the
+  dipole's feed impedance traces as its length $L/\lambda$ sweeps from one end
+  of the slider range to the other. Each point on it is one antenna, of one
+  particular length. The curve is not part of the chart — it is the data.
+- **The markers** call out two lengths on that locus: the red one is exactly
+  $\lambda/2$, and the green one is the resonant length.
+
+The single most important feature is **where the blue locus crosses the
+horizontal axis.** On the horizontal axis the reactance is zero, so that
+crossing *is* resonance — it is the same event as the zero crossing in the
+reactance figure earlier in this Part, drawn a different way. The resistance
+you read at that crossing is the radiation resistance of the resonant dipole.
+
+Now use the slider. Find the $\lambda/2$ marker and confirm it reads
+$73 + j42.5\ \Omega$, sitting in the upper (inductive) half and outside the 2:1
+circle. Then shorten the antenna and watch the locus walk down onto the axis
+and inside the 2:1 circle as the VSWR readout falls. Finally, switch the
+normalization from $50\ \Omega$ to $75\ \Omega$. The antenna does not change and
+the impedance readout does not change, but the grid re-scales underneath it and
+the same antenna lands closer to the center. A match is a property of an
+antenna *and* a line together, not of the antenna alone.
 
 <iframe src="../../viz/dipole-smith.html"
-        width="100%" height="597"
+        width="100%" height="628"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Smith chart showing how a dipole's input impedance moves as its length changes, with constant-VSWR circles">
 </iframe>
 
-```{note}
-The resonance marker in that chart sits near $63\ \Omega$, not the $70\ \Omega$
-the design rule quotes. That is the assumed-sinusoidal-current model showing
-its limits again, exactly as flagged above — the model puts resonance in the
-right *place* and gets the reactance slope right, but it runs a few ohms low on
-the resistance. Trust the chart for the shape of the behavior and the design
-rule for the number.
-```
+#### Why the chart says 63 ohms and the design rule says 70
+
+At the resonant crossing the chart reads about $63\ \Omega$, but this lesson
+has been telling you to design around $70\ \Omega$. Both numbers are correct,
+and the difference is not a mistake in either one.
+
+$63\ \Omega$ is what **this model** predicts. Everything in the widget comes
+from the assumed sinusoidal current of Part 2, applied to an infinitely thin
+wire. At exactly $\lambda/2$ that model is excellent, which is why the chart
+reproduces $73 + j42.5\ \Omega$ there to the digit. Shorten the wire toward
+resonance and the model drifts: the real current on a slightly short, finite
+thickness wire is not quite sinusoidal, and the model responds by predicting a
+resistance several ohms low.
+
+$70\ \Omega$ is what real resonant dipoles **measure**. It is the number that
+comes back from method-of-moments solvers and from antennas on a bench, and it
+is the number to carry into a design.
+
+So: use the chart to understand the *shape* of the behavior — that resonance is
+a crossing of the real axis, that trimming moves you there, that the locus
+leaves the useful region quickly on either side. Use $70\ \Omega$ when you need
+a number. Lesson 8 is where you measure the gap between the two for yourself.
 
 One last practical matter before you connect anything. A dipole is a
 **balanced** structure and coax is **unbalanced**. Wire them together directly
@@ -467,7 +516,7 @@ Every dipole in this course gets one.
 ## Part 5: Cutting a real dipole
 
 :::{admonition} Worked example — a 2 meter dipole for 146 MHz
-:class: tip
+:class: example-problem
 **Design a resonant half-wave dipole for 146 MHz and predict what the analyzer
 will show.**
 
@@ -496,9 +545,9 @@ balun.
 | $\theta_\text{HP}$ | $78^\circ$ | half-wave pattern |
 | Far-field distance | $2D^2/\lambda = 0.93\ \text{m}$ | Lesson 5, with $D = 0.976\ \text{m}$ |
 
-*Sanity check.* Every number is boring, which is the correct outcome. A dipole
-that predicts 12 dBi or $8\ \Omega$ means you made an arithmetic error, not a
-discovery.
+*Sanity check.* Every number above is unremarkable, which is what you want. If
+a dipole calculation predicts 12 dBi or $8\ \Omega$, you have made an arithmetic
+error.
 :::
 
 ```{note}
@@ -509,6 +558,49 @@ resonant length depends on wire gauge, insulation, and what is nearby. Carry
 $70\ \Omega$ and $0.475\lambda$ as the design numbers, and expect a few percent
 of disagreement — quantifying that disagreement is what the next lesson is for.
 ```
+
+:::{admonition} Build it — a 915 MHz wire dipole on an SMA connector
+:class: type-along
+Ten minutes with a wire cutter and a soldering iron gets you a real antenna.
+You will not measure it today. You will measure it in Lesson 13, on a vector
+network analyzer, against the predictions you write down now — so the value of
+this exercise depends entirely on committing to numbers **before** you cut.
+
+**Parts.** An SMA female panel-mount or edge-launch connector, about
+$20\ \text{cm}$ of 20 AWG solid copper wire — stiff enough to hold its shape — a
+wire cutter, a ruler, and a soldering iron.
+
+**Design, then build.**
+
+1. At $915\ \text{MHz}$, $\lambda = c/f = 32.8\ \text{cm}$. The 5% rule gives a
+   total length $L = 0.475\lambda = 15.6\ \text{cm}$, which is
+   $7.8\ \text{cm}$ **per arm**. (Different band? Same three lines, new $f$.)
+2. Cut two arms at $7.8\ \text{cm}$. Cut them long if you are unsure. You can
+   always trim; you cannot un-trim.
+3. Solder one arm to the connector's **center pin** and the other to the
+   connector **body or ground tab**, so the two arms run in opposite directions
+   along one straight line.
+4. Straighten both arms and check that the pair is collinear and square to the
+   connector. A bent dipole is a different antenna.
+5. Fill in the prediction column below and keep the sheet with the antenna.
+
+| What to record | Your prediction (now) | Measured in Lesson 13 |
+| :-- | :-- | :-- |
+| Arm length actually cut | ______ cm | — |
+| Total length $L$ | ______ cm | — |
+| Resonant frequency $f_\text{res}$ | ______ MHz | ______ MHz |
+| Feed impedance $Z_{in}$ at resonance | ______ $\Omega$ | ______ $\Omega$ |
+| VSWR on a $50\ \Omega$ line | ______ | ______ |
+
+**This build has no balun, and that matters.** Soldering wire straight onto an
+SMA connector is the crudest possible feed: the dipole is balanced, the coax
+behind it is not, and current will flow on the outside of the shield exactly as
+Lesson 4 warned. The feedline becomes part of the antenna. Expect your measured
+resonant frequency and impedance to drift from the predictions above, and
+expect the readings to twitch when you move your hand near the cable. That is
+not a botched build — it is the balun problem showing up in your own hardware,
+which is a far better way to learn it than a diagram.
+:::
 
 ## Summary
 
@@ -534,14 +626,32 @@ of disagreement — quantifying that disagreement is what the next lesson is for
 
 ## Where this is going
 
-Lesson 8 puts this exact antenna into 4nec2. You will model a wire, set its
-length, sweep the frequency, and read back impedance, VSWR, gain, and pattern —
-and then compare each one against the numbers you produced by hand today. **The
-numbers you just predicted are the ones you will check against simulation.** A
+Lesson 8 puts this exact antenna into **4nec2**.
+
+4nec2 is a free Windows program that acts as a front end to **NEC-2**, the
+Numerical Electromagnetics Code — a method-of-moments engine written in the
+1970s and still the standard tool for wire antennas. Method of moments does the
+one thing this lesson could not: instead of assuming a current, it divides the
+wire into short segments and *solves* for the current on each one, by enforcing
+the boundary condition that the total tangential electric field must vanish on
+a perfect conductor. Once it has that current, it computes the pattern the same
+way you did today — by putting the current through the radiation integral. So
+the simulator is not doing different physics from this lesson. It is doing the
+same physics with the assumption removed, and that is exactly why comparing the
+two is informative.
+
+In Lesson 8 you will model a wire, set its length, sweep the frequency, and
+read back impedance, VSWR, gain, and pattern — then compare each one against
+the numbers you produced by hand today. **The numbers you just predicted are
+the ones you will check against simulation.** A
 simulator that agrees with a hand calculation on a dipole can be trusted a
 little further on a structure you cannot solve by hand; a simulator that
 disagrees is telling you that you have set something up wrong, and the only way
-to know which is to bring predictions with you.
+to know which is to bring predictions with you. The 915 MHz dipole you soldered
+onto an SMA connector closes the same loop with hardware instead of software:
+in Lesson 13 you will put it on a vector network analyzer and see how far a real
+balun-less wire lands from the length, resonance, and impedance you wrote down
+today.
 
 After that, Lesson 9 takes the same wire apart. Cut a dipole in half and stand
 it on a ground plane and you have a monopole — half the impedance, double the

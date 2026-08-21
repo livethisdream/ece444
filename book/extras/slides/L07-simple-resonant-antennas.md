@@ -114,7 +114,7 @@ This is the L6 result, recalled not re-derived. Two ohms against a fifty ohm lin
 
 ## Where the current comes from
 
-<div class="fig" data-inline-svg="./fig/L07-dipole-currents.svg" style="max-width:700px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L07-dipole-currents.svg" style="max-width:700px; margin:0 auto; display:block;"></div>
 
 $$I(z) = I_m \sin\left[k\left(\frac{L}{2} - \vert z \vert\right)\right]$$
 
@@ -247,7 +247,7 @@ Nothing new is assumed here — it is the same pattern from Part 3, squared and 
 
 ---
 
-## And out falls 73 ohms
+## The result: 73 ohms
 
 $$\int_0^\pi \frac{\cos^2\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta = \frac{1}{2}C_{in}(2\pi) = 1.2188$$
 
@@ -266,11 +266,28 @@ Thirty times two point four is seventy-two, so a head check catches a slipped fa
 
 ---
 
+## What the induced-EMF method does
+
+A far-field power integral counts only what **leaves**. Reactance is energy stored close to the wire and handed back every cycle — it never crosses the far-field sphere, so no pattern integral can reveal it.
+
+The induced-EMF method works where that energy actually is:
+
+1. Take the current on the wire — the same assumed standing wave.
+2. Compute the electric field **that current produces back at the wire itself**, in the near field.
+3. Integrate that field against the current, along the wire.
+
+<div class="callout">
+That product is a complex power: <strong>real part = radiated power, imaginary part = stored energy.</strong> Near-field bookkeeping, done at the antenna instead of on a distant sphere.
+</div>
+
+Note:
+The physical picture: an antenna induces a voltage back along itself, hence induced EMF. Integrating field against current gives complex power, and the imaginary part is exactly the reactive energy a far-field integral throws away. Worth saying that it reproduces the seventy-three ohms as its real part, which is a good consistency check on both methods.
+
+---
+
 ## The reactance, and why 42.5 is clean
 
-A far-field power integral only ever gives the **real** part. Stored near-field energy never crosses the sphere, so the reactance needs the **induced-EMF method**.
-
-Its general answer drags in the wire radius — except that every radius-dependent term carries a factor $\sin(kL)$, and at $kL = \pi$ that factor is **zero**:
+The general result contains the wire radius, so **a dipole's reactance normally depends on how thick the wire is**. But every term carrying the radius is multiplied by $\sin(kL)$, and at $kL = \pi$ that factor is **zero**:
 
 $$X = \frac{\eta}{4\pi}Si(2\pi) = 30 \times 1.4182 = 42.5\ \Omega$$
 
@@ -287,10 +304,12 @@ Induced EMF means integrating the antenna's own field back against its own curre
 
 ## Trim it short
 
-<div class="fig" data-inline-svg="./fig/L07-dipole-resonance.svg" style="max-width:660px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L07-dipole-resonance.svg" style="max-width:620px; margin:0 auto; display:block;"></div>
+
+These are **computed data, not a sketch**: the induced-EMF expression evaluated at hundreds of lengths, for three wire radii, and plotted.
 
 Note:
-Watch the zero crossing move left as the element gets fatter. That is the whole story of why a real dipole is never exactly half a wavelength.
+Say plainly how the figure was made — sweep the length, sweep the wire radius, evaluate the impedance formula at every combination, plot the answers. Nothing here is drawn by hand. Then watch the zero crossing move left as the element gets fatter: that is the whole story of why a real dipole is never exactly half a wavelength. Note also that all three curves meet at exactly half a wavelength, which is the sine of pi being zero from the previous slide.
 
 ---
 
@@ -337,10 +356,12 @@ At resonance the reactance is gone and the resistance settles near $70\ \Omega$:
 | 75 Ω | $73 + j42.5$ | 0.28 | 1.76 |
 | 75 Ω | $70 + j0$ | 0.03 | **1.07** |
 
-**Trimming to resonance is worth more than changing the cable.**
+<div class="callout">
+<strong>Trimming to resonance is worth more than changing the cable.</strong> Removing the reactance: 2.18 &rarr; 1.40. Changing the cable instead: 2.18 &rarr; 1.76.
+</div>
 
 Note:
-Make them read the table as a decision: the reactance costs you more VSWR than the 50-versus-75 mismatch does.
+Make them read the table as a decision: the reactance costs more VSWR than the fifty-versus-seventy-five mismatch does. Kill the reactance first, worry about the resistance second.
 
 ---
 
@@ -473,16 +494,33 @@ Do the fat-wire demo live. It makes the shortening rule feel like physics instea
 
 ---
 
-## Key point
+## Key points
+
+- A dipole's **pattern** is set by how many wavelengths of current fit on the wire.
+- Its **impedance** is set by where the current maximum sits relative to the feed.
+- Half a wavelength is the useful length because it puts the current maximum at the feed. It costs only 0.39 dB of directivity to get there.
+- The resistance comes from a far-field power integral; the reactance does not and cannot.
+- A resonant dipole is about $0.475\lambda$, near $70\ \Omega$, $2.15\ \text{dBi}$, $78^\circ$ wide.
+- Every number here rests on the assumed sinusoidal current.
+
+Note:
+Walk down the list. The last bullet is the bridge to L8 — every number on this slide is a prediction from a model, and next lesson they test it.
+
+---
+
+## What is 4nec2?
+
+**4nec2** is a free Windows front end to **NEC-2**, the Numerical Electromagnetics Code — a method-of-moments solver from the 1970s, still the standard tool for wire antennas.
+
+- It **does not assume a current.** It chops the wire into short segments and solves for the current on each one, by enforcing that the tangential electric field vanishes on a perfect conductor.
+- Then it computes the pattern **the way you did today** — the same radiation integral, applied to the current it solved for.
 
 <div class="callout">
-<p>A dipole's <strong>pattern</strong> is set by how many wavelengths of current fit on the wire.</p>
-<p>Its <strong>impedance</strong> is set by where the current maximum lands relative to the feed.</p>
-<p>Half a wavelength is famous because it puts the current maximum at the feed — and it costs you only 0.39 dB of directivity to get there.</p>
+Same physics as this lesson, with the assumption removed. That is exactly why comparing the two tells you something.
 </div>
 
 Note:
-If they leave with one sentence, make it the last one.
+They should not meet the name cold next lesson. Method of moments in one sentence: turn the integral equation into a matrix equation, invert it, get the current. The key contrast is that this lesson assumed the current and everything followed; NEC solves for it. Where the two disagree, the assumption is what is being measured.
 
 ---
 

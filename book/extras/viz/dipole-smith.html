@@ -19,13 +19,26 @@
   .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
   .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
   select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.vs { background:rgba(138,90,0,0.12); color:var(--amber); border-color:rgba(138,90,0,0.30); }
-  .pill.rs { background:rgba(63,125,52,0.12); color:var(--grn);  border-color:rgba(63,125,52,0.30); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.vs { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.vs .v { color:var(--amber); }
+  .ro.rs { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.rs .v { color:var(--grn); }
 </style>
 </head>
 <body>
@@ -47,11 +60,11 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill">\(Z_{in}\) = <b id="p-z">&#8212;</b></span>
-    <span class="pill">\(\Gamma\) = <b id="p-g">&#8212;</b></span>
-    <span class="pill vs">VSWR = <b id="p-v">&#8212;</b></span>
-    <span class="pill rs">resonant at <b id="p-res">&#8212;</b></span>
+  <div class="readouts">
+    <div class="ro"><span class="k">\(Z_{in}\) at the feed</span><span class="v" id="p-z">&#8212;</span></div>
+    <div class="ro"><span class="k">reflection \(\Gamma\)</span><span class="v" id="p-g">&#8212;</span></div>
+    <div class="ro vs"><span class="k">VSWR</span><span class="v" id="p-v">&#8212;</span></div>
+    <div class="ro rs"><span class="k">resonant length</span><span class="v" id="p-res">&#8212;</span></div>
   </div>
 </div>
 
@@ -209,20 +222,33 @@ function drawLocus(){
 }
 
 function drawLegend(x0,y0){
-  const rows=[['locus as the wire grows', cssv('--mid')],
-              ['exactly half a wavelength', cssv('--red')],
-              ['resonant length', cssv('--grn')],
-              ['constant VSWR', cssv('--amber')]];
-  stext(ctx,'reading the chart', x0, y0, 11.5, cssv('--navy'),'left',true);
+  // every drawn element is named here, keyed by its colour
+  const rows=[[cssv('--edge2'),'dash', 'chart grid: constant R, constant X'],
+              [cssv('--amber'), 'dash', 'constant VSWR (2:1 and 3:1)'],
+              [cssv('--mid'),   'line', 'impedance locus: the antenna'],
+              [cssv('--red'),   'dot',  'exactly half a wavelength'],
+              [cssv('--grn'),   'dot',  'resonant length']];
+  stext(ctx,'what is drawn here', x0, y0, 11.5, cssv('--navy'),'left',true);
   rows.forEach((r,i)=>{
-    const y=y0+20+i*17;
-    ctx.strokeStyle=r[1]; ctx.lineWidth=2.6;
-    ctx.beginPath(); ctx.moveTo(x0,y); ctx.lineTo(x0+16,y); ctx.stroke();
-    stext(ctx,r[0], x0+22, y, 11, cssv('--ink3'),'left',false);
+    const y=y0+21+i*18;
+    ctx.strokeStyle=r[0]; ctx.fillStyle=r[0]; ctx.lineWidth=r[1]==='dash'?1.6:2.8;
+    if(r[1]==='dot'){
+      ctx.beginPath(); ctx.arc(x0+8,y,4.4,0,7); ctx.fill();
+    } else {
+      if(r[1]==='dash') ctx.setLineDash([5,4]);
+      ctx.beginPath(); ctx.moveTo(x0,y); ctx.lineTo(x0+17,y); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    stext(ctx,r[2], x0+23, y, 11, cssv('--ink3'),'left',false);
   });
-  const y=y0+20+rows.length*17+8;
+  let y=y0+21+rows.length*18+10;
+  stext(ctx,'The locus crosses the real axis', x0, y, 11, cssv('--ink3'),'left',false);
+  stext(ctx,'where X = 0. That crossing is', x0, y+15, 11, cssv('--ink3'),'left',false);
+  stext(ctx,'resonance, and the resistance', x0, y+30, 11, cssv('--ink3'),'left',false);
+  stext(ctx,'there is the radiation resistance.', x0, y+45, 11, cssv('--ink3'),'left',false);
+  y+=68;
   stext(ctx,'normalized to '+state.Z0+' ohms', x0, y, 11, cssv('--ink3'),'left',false);
-  stext(ctx,'wire radius 0.002 wavelengths', x0, y+16, 11, cssv('--ink3'),'left',false);
+  stext(ctx,'wire radius 0.002 wavelengths', x0, y+15, 11, cssv('--ink3'),'left',false);
 }
 
 function drawAll(){
