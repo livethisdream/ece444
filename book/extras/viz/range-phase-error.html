@@ -209,7 +209,7 @@ function drawSketch(ctx,x0,y0,w,h){
   stext(ctx,'AUT', bx+7, cy, 11, cssv('--navy'),'left',true);
   MJ.draw(ctx,'D', bx+14, cy-L/2+11, 12, cssv('--ink3'),'left');
 
-  // drawn wavefront radius: honest ordering (short range -> visibly curved),
+  // drawn wavefront radius: monotonic in range (short range -> visibly curved),
   // compressed by a power law so the arc stays on the canvas at any range
   const rOverD=2*state.u*state.Dl;
   const Rd=L*Math.max(0.60, Math.min(9.0, 0.60*Math.pow(rOverD/0.5, 0.42)));

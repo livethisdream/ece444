@@ -85,7 +85,7 @@ pattern-tested at $8\ \ghz$. Take $c = 3\ee{8}\ \m/\text{s}$ throughout.
 \newpage
 
 \question \textbf{Reading a suspect pattern.} A short range does not fail
-loudly. It returns a pattern that still looks like a pattern.
+obviously; it returns a pattern that still looks like a pattern.
 \begin{parts}
 
 	\part In one or two sentences, explain physically why a source at finite
@@ -226,8 +226,8 @@ with no reflections. It is a room with reflections below a stated level.
 
 \newpage
 
-\question \textbf{Two ways to an absolute number.} Pattern shape is free; gain
-costs you a calibration.
+\question \textbf{Two ways to an absolute number.} Pattern shape needs only a
+normalization; gain needs a calibration.
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -289,8 +289,8 @@ costs you a calibration.
 		The antenna under test delivers $0.51\db$ less power than a matched
 		antenna of the same gain would, so the comparison method reads
 		$0.51\db$ \textbf{low}: $31.8\dbi$ measured against $32.3\dbi$ of true
-		gain. Report the measured figure as \emph{realized gain} (which is the
-		honest system number), and quote the mismatch-corrected $32.3\dbi$
+		gain. Report the measured figure as \emph{realized gain}, which is the
+		system-level number, and quote the mismatch-corrected $32.3\dbi$
 		separately if the customer wants gain proper.
 		\end{solution}
 
@@ -316,7 +316,7 @@ characterization actually contains.
 		\end{solution}
 
 	\part Explain, in two or three sentences, why the near-field to far-field
-	transform is trustworthy rather than a curve fit. Name the earlier result it
+	transform is exact rather than a curve fit. Name the earlier result it
 	rests on.
 		\begin{solution}[1.2in]
 		L6 established that the far field is the Fourier transform of the source
@@ -324,8 +324,8 @@ characterization actually contains.
 		variable. Fourier transforms are invertible, so the complex tangential
 		field sampled on a surface enclosing the antenna determines the field
 		everywhere outside that surface -- uniquely, with no fitting or
-		assumption involved. The transform is simply the same relationship that
-		produced the pattern in the first place, run in the other direction.
+		assumption involved. The transform is the same relationship that produced the
+		pattern in the first place, run in the other direction.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -338,8 +338,8 @@ characterization actually contains.
 		Along one edge there are $1.5 / 8.33\ee{-3} = 180$ intervals, hence 181
 		points:
 		\eq{ N = \lp 181 \rp^2 = 32{,}761 \approx 3.3\ee{4}\ \text{points} }
-		At even a few points per second this is hours of scanning, which is the
-		real price of a near-field range.
+		At a few points per second this is several hours of scanning, which is
+		the principal cost of a near-field range.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}

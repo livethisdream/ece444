@@ -20,7 +20,7 @@ $c = 3\ee{8}\ \text{m/s}$.
 
 \begin{parts}
 
-	\part In one or two sentences, explain why the statement ``gain is really a
+	\part In one or two sentences, explain why the statement ``gain is fundamentally a
 	statement about area'' is more useful to a designer than ``gain is how much
 	the antenna amplifies.''
 		\begin{solution}[1.1in]
@@ -294,8 +294,9 @@ are fixed (no steering), the site is windy, and the budget is small.
 		Take the dish. It is a single moulded part 0.38\ \m\ across with one
 		feed, it is broadband, and its wind load at that size is modest; the
 		patch array needs 144 elements and a 144-way corporate feed network whose
-		loss at 5.8\ \ghz\ is real money and real dB. The array's advantages ---
-		flat profile and the option of electronic steering --- are worth nothing
+		loss at 5.8\ \ghz\ is significant in both cost and dB. The array's
+		advantages --- flat profile and the option of electronic steering --- are
+		worth nothing
 		on a fixed rooftop link, so they do not justify the cost. (A defensible
 		opposite answer: choose the panel if the roof lease or the wind survey
 		forbids a dish, and accept the feed loss.)
@@ -382,9 +383,9 @@ $P_r = P_t G_t G_r \lp\lambda/4\pi R\rp^{2}$.
 	\part Which link would you actually deploy, and why? Name two specific
 	things that eat margin on a real rooftop link.
 		\begin{solution}[1.3in]
-		Deploy the dish link. A 2.3\db\ margin is not a link, it is a demo: the
-		first bad day takes it down. Real margin eaters include rain and wet
-		foliage in the path, mount drift and building sway pushing the beam off
+		Deploy the dish link. A 2.3\db\ margin leaves no room for normal
+		propagation variation, so the link fails on the first bad day. Real
+		margin eaters include rain and wet foliage in the path, mount drift and building sway pushing the beam off
 		boresight (Q4d showed only $\pm2\mydeg$ of slack), multipath from nearby
 		rooftops, and connector and cable loss between the radio and the
 		antenna. With 36\db\ in hand the dish link absorbs all of that; with

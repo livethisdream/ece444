@@ -97,7 +97,7 @@ const el = id => document.getElementById(id);
 const XMIN = 3, XMAX = 300;                 // D/lambda range (log slider)
 const state = { x: 30, eps: 0.55, sig: 0 }; // sig = rms surface error in wavelengths
 
-// ---- the physics, done honestly ------------------------------------------
+// ---- the physics -----------------------------------------------------
 // Aperture gain of a circular dish: G = eps * (pi D / lambda)^2.
 // Ruze surface-error factor: exp(-(4 pi sigma / lambda)^2)  ->  685.8 (sigma/lambda)^2 dB.
 const gIdeal  = (x, eps) => eps * Math.pow(Math.PI * x, 2);

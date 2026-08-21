@@ -43,7 +43,7 @@ Anchor everything on the dipole numbers from L7 — today is two variations on a
 5. The resonant loop, and why small costs bandwidth.
 
 Note:
-Tell them parts 1-2 are the exam material and part 3 is the part that bites them in the field.
+Tell them parts 1-2 are the exam material and part 3 is what they will meet in the field.
 
 ---
 
@@ -57,7 +57,7 @@ An antenna over a large perfect conductor: tangential $E$ must be zero everywher
 - Below the plane the answer is fiction — and there was no field down there anyway.
 
 <div class="callout">
-Two sources in free space, no conductor. You already know how to add two sources.
+The problem becomes two sources in free space with no conductor, and you already know how to add two sources.
 </div>
 
 Note:
@@ -80,9 +80,9 @@ Make them say it back. Then the consequence: a vertical antenna works sitting on
 
 The image sits at $-h$: the two paths differ by $2kh\cos\theta$. That is L6 pattern multiplication, with a free second element.
 
-$$\vert F(\theta)\vert = \vert f_{el}(\theta)\vert \times 2\left\vert \cos(kh\cos\theta)\right\vert \quad \text{vertical}$$
+$$\vert F(\theta)\vert = \vert f_{\text{el}}(\theta)\vert \times 2\left\vert \cos(kh\cos\theta)\right\vert \quad \text{vertical}$$
 
-$$\vert F(\theta)\vert = \vert f_{el}(\theta)\vert \times 2\left\vert \sin(kh\cos\theta)\right\vert \quad \text{horizontal}$$
+$$\vert F(\theta)\vert = \vert f_{\text{el}}(\theta)\vert \times 2\left\vert \sin(kh\cos\theta)\right\vert \quad \text{horizontal}$$
 
 At the horizon $\cos\theta = 0$: vertical gives 2, horizontal gives 0.
 
@@ -109,7 +109,7 @@ Power is referred to the same element alone in free space, at the same feed curr
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
 Note:
-Demo live: vertical at h = 0.01 reads D = 3.28, peak on the horizon — that is the monopole. Switch to horizontal at the same height: directivity goes UP, radiated power falls off a cliff. Directivity is shape only; cancellation shows up in radiation resistance.
+Demo live: vertical at h = 0.01 reads D = 3.28, peak on the horizon — that is the monopole. Switch to horizontal at the same height: directivity goes up while the radiated power collapses. Directivity is shape only; cancellation shows up in radiation resistance.
 
 ---
 
@@ -128,7 +128,7 @@ The current distribution on the remaining metal is unchanged. Above the plane it
 
 Same feed current as the dipole. Half the structure, so half the voltage.
 
-$$Z_{\text{in}}^{mono} = \tfrac{1}{2} Z_{\text{in}}^{dip} = \tfrac{1}{2}(73 + j42.5) = 36.5 + j21.3\ \Omega$$
+$$Z_{\text{in}}^{\text{mono}} = \tfrac{1}{2} Z_{\text{in}}^{\text{dip}} = \tfrac{1}{2}(73 + j42.5) = 36.5 + j21.3\ \Omega$$
 
 - Trim to resonance at $\approx 0.24\lambda$ and you get $\approx 36\ \Omega$ real.
 - Against $50\ \Omega$ that is VSWR 1.4 with no matching network at all.
@@ -146,13 +146,13 @@ Ask why the current is the same but the voltage is halved — the feed point onl
 
 Same pattern shape, same peak intensity, but **no power goes downward** — so the same beam is packed into half the solid angle.
 
-$$D_{mono} = 2 D_{dip} = 2(1.64) = 3.28 \quad \rightarrow \quad 5.15\ \text{dBi}$$
+$$D_{\text{mono}} = 2 D_{\text{dip}} = 2(1.64) = 3.28 \quad \rightarrow \quad 5.15\ \text{dBi}$$
 
 - Elevation beam: the upper half of the dipole's $78^\circ$ beam.
 - Peak on the horizon, null straight up.
 
 <div class="callout">
-3 dB free, in the same sense a mirror gives you free light: nothing was created, it just stopped going the wrong way.
+The 3 dB is free in the same sense a mirror gives you free light: nothing was created, the power simply stopped going the wrong way.
 </div>
 
 Note:
@@ -197,7 +197,7 @@ Have them do the trim line themselves. Point out the reactance is what costs the
 - Result: VSWR near 1.0 with zero added parts.
 
 <div class="callout">
-Every commercial ground-plane antenna has sagging radials. Now you know it is a matching network, not a manufacturing defect.
+The sagging radials on a commercial ground-plane antenna are a matching network, not a manufacturing defect.
 </div>
 
 Note:
@@ -209,7 +209,7 @@ Drooping radials also lift the pattern slightly. The impedance effect is the rea
 
 <div class="fig" data-inline-svg="./fig/L09-ground-systems.svg" style="max-width:770px; margin:0 auto;"></div>
 
-Return current in dirt is loss in series with your feed: $\eta_{\text{rad}} = R_r/(R_r + R_g + R_{ohmic})$.
+Return current in dirt is loss in series with your feed: $\eta_{\text{rad}} = R_r/(R_r + R_g + R_{\text{ohmic}})$.
 
 Note:
 120 buried quarter-wave radials is the FCC standard for AM broadcast. The radials do not radiate — they replace lossy soil with copper for the return current.
@@ -223,11 +223,11 @@ Note:
 3. **Finite planes** — a car roof is many wavelengths at 800 MHz and a hundredth of a wavelength at 30 MHz. Same roof, different antenna.
 
 <div class="callout">
-No plane? Build a <strong>counterpoise</strong>: drooped radials, a ground pour, a GPS ground disc — or, on a handheld, the case, the board, and your hand.
+With no ground plane available, build a <strong>counterpoise</strong>: drooped radials, a ground pour, a GPS ground disc, or, on a handheld, the case, the board, and your hand.
 </div>
 
 Note:
-Handhelds really are tested against a phantom hand. Grip changes impedance and pattern. Callback to L8: a monopole in NEC needs an explicit ground — perfect plane for the textbook answer, real-earth model for the honest one, and feed the base segment against it.
+Handheld radios are tested against a phantom hand, because grip changes both impedance and pattern. Callback to L8: a monopole in NEC needs an explicit ground — a perfect plane for the textbook answer, a real-earth model for the realistic one — and the base segment is fed against it.
 
 ---
 
@@ -255,11 +255,11 @@ Uniform current is the defining assumption. It is what makes the loop a pure mag
 **Same donut. Orthogonal polarization. Maximum in the plane of the loop.**
 
 Note:
-Most students guess the loop radiates out of the hole. It does the opposite. This is the basis of direction finding: rotate for the null, because nulls are sharp and peaks are broad.
+Most students expect the loop to radiate out of the hole. It does the opposite. This is the basis of direction finding: rotate for the null, because nulls are sharp and peaks are broad.
 
 ---
 
-## The fourth power that ruins everything
+## The fourth-power penalty on circumference
 
 $$R_r = 20\pi^2 \left(\frac{C}{\lambda}\right)^4 = 320\pi^4 \left(\frac{A}{\lambda^2}\right)^2 \ \Omega$$
 
@@ -268,7 +268,7 @@ $$R_r = 20\pi^2 \left(\frac{C}{\lambda}\right)^4 = 320\pi^4 \left(\frac{A}{\lamb
 - Compare: the half-wave dipole sits at $73\ \Omega$.
 
 <div class="callout">
-The loop is not badly matched. It is barely an antenna — the radiation resistance is smaller than the wire's own loss.
+The problem is not the match. The radiation resistance is smaller than the loss resistance of the wire itself.
 </div>
 
 Note:
@@ -283,14 +283,14 @@ Single turn, $C = 0.1\lambda$ at 30 MHz, 4 mm copper wire.
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
 | $R_r$ | $20\pi^2 (0.1)^4$ | $0.0197\ \Omega$ |
-| $R_{ohmic}$ | $(C/2\pi b) R_s = 79.6 \times 1.43\ \text{m}\Omega$ | $0.114\ \Omega$ |
+| $R_{\text{ohmic}}$ | $(C/2\pi b) R_s = 79.6 \times 1.43\ \text{m}\Omega$ | $0.114\ \Omega$ |
 | Efficiency | $0.0197/(0.0197+0.114)$ | $14.8\%$, i.e. $-8.3$ dB |
 | Gain | $1.76 - 8.3$ | $-6.5\ \text{dBi}$ |
 
 For 100 W delivered you need 38.7 A peak — and 85 W of it heats the wire.
 
 Note:
-The 38.7 A is the punchline. Transmitting loops need copper tube, welded joints and a vacuum capacitor for exactly this reason.
+The 38.7 A is the number to emphasize. Transmitting loops need copper tube, welded joints and a vacuum capacitor for exactly this reason.
 
 ---
 
@@ -302,7 +302,7 @@ The 38.7 A is the punchline. Transmitting loops need copper tube, welded joints 
 - Wind those turns on a **ferrite rod** and the effective permeability multiplies the moment again.
 
 <div class="callout">
-The bar behind the dial of an AM radio is a many-turn ferrite loop: small, cheap, deeply inefficient, entirely adequate.
+The bar behind the dial of an AM radio is a many-turn ferrite loop. Its efficiency is very low, and at broadcast frequencies that costs nothing that matters.
 </div>
 
 Note:
@@ -337,7 +337,7 @@ $$Q \gtrsim \frac{1}{(ka)^3} \qquad \text{fractional bandwidth} \approx \frac{1}
 - Retune every time you move across the band.
 
 Note:
-One sentence of theory, no derivation — they saw the Chu curve in L3. The wry note: loss is the only thing that broadens a small antenna, and it does it by throwing your power away.
+One sentence of theory, no derivation — they saw the Chu curve in L3. Make the closing point explicitly: loss is the only thing that broadens a small antenna, and it does so by dissipating the power you meant to radiate.
 
 ---
 

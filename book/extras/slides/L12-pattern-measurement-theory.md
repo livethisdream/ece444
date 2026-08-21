@@ -24,10 +24,10 @@ Fall 2026 · Dr. Neil Rogers
 
 - L10 and L11 built the high-gain antennas — horns, reflectors, the standard gain horn — and told you their gain from geometry and aperture efficiency.
 - L11 also handed you the midterm project: measure an antenna pattern.
-- Every pattern we have drawn so far came out of an integral. None of them came off an instrument.
+- Every pattern we have drawn so far came out of an integral, not off an instrument.
 - L5 gave us the far-field boundary $r \geq 2D^2/\lambda$ and then we filed it away.
 
-**Today that boundary stops being trivia and becomes the length of your range.**
+**Today that boundary becomes the length of your range.**
 
 Note:
 Anchor the whole lesson on the midterm. They already know what they have to do; today is why the procedure looks the way it does.
@@ -51,11 +51,11 @@ Every pattern in this course is defined the same way: illuminate the antenna wit
 On a range you cannot buy a plane wave. You buy a source antenna at a finite distance, which radiates a **spherical** wave.
 
 <div class="callout">
-A range is a machine for <strong>faking a plane wave</strong> over the volume the antenna occupies. Every design rule below is a tolerance on that fake.
+A range is a machine for <strong>simulating a plane wave</strong> over the volume the antenna occupies. Every design rule below is a tolerance on that approximation.
 </div>
 
 Note:
-Reciprocity is doing real work here: measure receive, publish transmit. Say it out loud, they will ask.
+Reciprocity carries the argument: measure in receive, publish as transmit. State it explicitly, because they will ask.
 
 ---
 
@@ -82,11 +82,11 @@ Turn it into phase and demand no more than an eighth of a wavelength of error, $
 $$\Delta\phi_{\max} = k\ \Delta \ell = \frac{\pi D^2}{4\lambda r} \leq \frac{\pi}{8} \quad \Longrightarrow \quad r \geq \frac{2D^2}{\lambda}$$
 
 <div class="callout">
-$2D^2/\lambda$ is not a law of nature. It is <strong>22.5° of edge phase error</strong>, written as a distance.
+$2D^2/\lambda$ is <strong>22.5° of edge phase error</strong>, written as a distance.
 </div>
 
 Note:
-Do the algebra on the board. Set the pi/8 and solve. They have seen 2D squared over lambda since L5 and have never seen where it comes from.
+Do the algebra on the board: set the pi/8 tolerance and solve for r. They have seen 2D squared over lambda since L5 and have never seen where it comes from.
 
 ---
 
@@ -101,10 +101,10 @@ A 0.5 m reflector, tested at 10 GHz.
 | Far-field distance | $2D^2/\lambda = 2(0.5)^2/0.03$ | $16.7\ \text{m}$ |
 | Beamwidth to resolve | $\approx 51 \lambda/D$ | $3.1°$ |
 
-A 17 m chamber is a large, expensive room. It is also completely ordinary.
+A 17 m chamber is large and expensive, and entirely ordinary for this class of antenna.
 
 Note:
-16.7 m is about 55 feet. Ask them to picture the chamber. Then break it in the next slide.
+16.7 m is about 55 feet. Ask them to picture the chamber before the next slide scales the problem up.
 
 ---
 
@@ -118,11 +118,11 @@ A 3 m reflector at 30 GHz — a perfectly normal satellite terminal.
 | Far-field distance | $2D^2/\lambda = 2(9)/0.01$ | $1800\ \text{m}$ |
 
 <div class="callout">
-<strong>1.8 km of anechoic chamber.</strong> Nobody builds that. This single number is why compact ranges and near-field scanners exist.
+A far-field range for this antenna would be <strong>1.8 km long</strong>. Nobody builds that, and this single number is why compact ranges and near-field scanners exist.
 </div>
 
 Note:
-This is the hinge of the lesson. Everything after this is a way of not building a 1.8 km room.
+This is the hinge of the lesson: everything after it is a way of avoiding a 1.8 km room.
 
 ---
 
@@ -144,20 +144,20 @@ $2D^2/\lambda$ is a <strong>main-beam and gain</strong> criterion. Chasing a $-4
 </div>
 
 Note:
-Demo live: start at 2, slide down to a quarter. Point at the first null collapsing into a shoulder while the main beam sits there looking innocent — the pattern still looks like a pattern. Low-sidelobe work is exactly where near-field scanning wins; foreshadow it here.
+Demo live: start at 2, slide down to a quarter. Point out that the first null collapses into a shoulder while the main beam keeps its width, so the pattern still looks correct at a glance. Low-sidelobe work is where near-field scanning wins; foreshadow it here.
 
 ---
 
-## The source antenna is deliberately mediocre
+## Why the source antenna is modest-gain
 
 The amplitude spec bites from the other direction. The AUT subtends an angle $D/r$ as seen from the source.
 
 - For under 0.25 dB of taper, the source pattern must stay flat over that whole angle.
 - Rule of thumb: **source beamwidth at least 3–4× the angle the AUT subtends**.
-- So range source antennas are modest-gain horns. A high-gain source would taper the illumination and quietly widen every beamwidth you report.
+- So range source antennas are modest-gain horns. A high-gain source would taper the illumination and widen every beamwidth you report.
 
 <div class="callout">
-Bigger is not better at the transmit end of a range.
+A higher-gain source antenna makes the illumination <strong>worse</strong>, not better.
 </div>
 
 ---
@@ -184,7 +184,7 @@ Point out that the walls are not uniformly treated in a real chamber — the spe
 
 ---
 
-## What absorber is actually for
+## What the absorber does
 
 Carbon-loaded foam pyramids. The taper is a gradual impedance transition into a lossy medium — the wave gets in without a reflection, then dies.
 
@@ -213,7 +213,7 @@ The chamber spec you need is set by the <strong>lowest level you intend to belie
 </div>
 
 Note:
-Have them stare at the third row. A 3 dB error on a sidelobe is enormous, and the chamber that produced it is a good chamber.
+Draw attention to the third row: a 3 dB error on a sidelobe is large, and the chamber that produced it still meets a good specification.
 
 ---
 
@@ -246,13 +246,13 @@ Far-field conditions in a room a small fraction of 2D squared over lambda long, 
 
 ---
 
-## Why the transform is not a trick
+## Why the transform works
 
 L6 gave you the machinery: the far field is the **Fourier transform** of the source distribution. A radiation integral is a Fourier integral with $k\sin\theta$ as the frequency variable.
 
 - Fourier transforms are **invertible**. Given the complex field on a surface enclosing the antenna, the field everywhere outside it is determined.
 - So sampling tangential $\mathbf{E}$ on a plane a few wavelengths out, then transforming, gives the same far field the long range would have measured.
-- No new physics. The same relationship that *produced* the pattern is being run in the other direction.
+- There is no new physics here: the same relationship that *produced* the pattern is being run in the other direction.
 
 <div class="callout">
 You must measure <strong>amplitude and phase</strong>. Magnitude alone does not determine a transform.
@@ -287,7 +287,7 @@ $$G_\text{AUT} = G_\text{SGH} + \left( P_\text{AUT} - P_\text{SGH} \right) \quad
 Everything in Friis that you do not know — transmit power, source gain, range, cable loss — is identical in both measurements and subtracts out.
 
 <div class="callout">
-Also called the <strong>gain-transfer</strong> method. The horn's calibration is the only absolute number in the room.
+The method is also called <strong>gain transfer</strong>. The horn's calibration is the only absolute number in the room.
 </div>
 
 Note:
@@ -305,7 +305,7 @@ Conditions on validity: same position, same polarization, same frequency, and bo
 | Horn gain at this frequency | from the calibration curve | $16.8\ \text{dBi}$ |
 | AUT gain | $16.8 + 5.5$ | $22.3\ \text{dBi}$ |
 
-Five numbers, one subtraction, one addition. This is the whole method.
+The whole method is five numbers, one subtraction, and one addition.
 
 ---
 
@@ -322,7 +322,7 @@ If the antennas are **not** identical, use three of them and measure all three p
 $$G_A = \tfrac{1}{2}\left( M_{AB} + M_{AC} - M_{BC} \right)$$
 
 Note:
-M is the measured pair sum, path loss already removed. Three equations, three unknowns, no calibrated standard anywhere. This is how the standard gain horns themselves get calibrated in the first place.
+M is the measured pair sum with the path loss already removed. Three equations give three unknowns, with no calibrated standard involved, which is how the standard gain horns themselves are calibrated.
 
 ---
 
@@ -332,7 +332,7 @@ M is the measured pair sum, path loss already removed. Three equations, three un
 
 - **Great-circle cut** — hold $\phi$, sweep $\theta$ through the poles. **Conical cut** — hold $\theta$, sweep $\phi$: a ring at a fixed angle off boresight.
 - **Principal planes** — the E-plane holds the aperture electric field and boresight, the H-plane is perpendicular. For a horn, those are the two cuts you always publish.
-- Two principal cuts describe a well-behaved pencil beam. They say nothing about the diagonal planes, where the sidelobes often live.
+- Two principal cuts describe a well-behaved pencil beam, and say nothing about the diagonal planes, where the sidelobes often sit.
 
 ---
 
@@ -345,7 +345,7 @@ Run the same cut twice.
 - **Spinning linear** — spin the linear source continuously while sweeping. The pattern comes back as an envelope, and the **peak-to-trough ripple in dB is the axial ratio** (L3). A perfect circular antenna gives no ripple at all.
 
 Note:
-Spinning linear is the fastest honest axial-ratio measurement there is, and it is a nice payoff for the polarization ellipse work in L3.
+Spinning linear is the fastest axial-ratio measurement available, and it pays off the polarization ellipse work from L3.
 
 ---
 
@@ -365,4 +365,4 @@ Spinning linear is the fastest honest axial-ratio measurement there is, and it i
 - When you write that report, the range length, the quiet-zone spec, and the standard horn's calibration are your **error budget**. Today was how to build one.
 
 Note:
-Send them out knowing that "I measured it" is not a result. "I measured it, and here is what the range could and could not tell me" is.
+Send them out knowing that "I measured it" is not an engineering result, while "I measured it, and here is what the range could and could not tell me" is.

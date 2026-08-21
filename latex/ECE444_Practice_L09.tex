@@ -21,7 +21,7 @@ Take the thin-wire half-wave dipole as $73 + j42.5\ \ohms$.
 		\begin{solution}[1.0in]
 		\eq{ \lambda &= \frac{c}{f} = \frac{3\ee{8}}{121.5\ee{6}} = 2.47\ \m \\
 		     L &= \frac{\lambda}{4} = 0.617\ \m }
-		About 62 cm of metal above the plane.
+		The whip is about 62 cm of metal above the plane.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -113,7 +113,7 @@ vertical.
 		A horizontal (tangential) current images with the opposite sign, so the deck creates
 		an equal and opposite current directly beneath the wire. As the height goes to zero
 		the two are collocated and cancel everywhere, and the radiation resistance collapses
-		with them. The wire becomes a heater, not an antenna.
+		with them, so nearly all of the input power is dissipated rather than radiated.
 		\end{solution}
 
 	\part You must put up a field-expedient antenna on a large metal roof for
@@ -131,11 +131,11 @@ vertical.
 
 \newpage
 
-\question \textbf{A magnetic loop, costed honestly.} A single-turn circular loop of radius
+\question \textbf{The full loss budget of a magnetic loop.} A single-turn circular loop of radius
 $a = 0.30\ \m$ is made of copper wire of radius $b = 3\ \text{mm}$ and operated at
 $f = 14.2\ \mhz$. At that frequency the copper surface resistance is
 $R_s = 0.98\ \text{m}\ohms$ per square. Recall $R_r = 20\pi^2 \lp C/\lambda \rp^4$ and
-$R_{ohmic} = \lp C/2\pi b \rp R_s$ for a single turn.
+$R_{\text{ohmic}} = \lp C/2\pi b \rp R_s$ for a single turn.
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -169,9 +169,9 @@ $R_{ohmic} = \lp C/2\pi b \rp R_s$ for a single turn.
 		\part Find the ohmic resistance and the radiation efficiency. Express the efficiency
 		in dB and give the gain in dBi.
 		\begin{solution}[1.5in]
-		\eq{ R_{ohmic} &= \frac{C}{2\pi b} R_s = \frac{a}{b} R_s \\
+		\eq{ R_{\text{ohmic}} &= \frac{C}{2\pi b} R_s = \frac{a}{b} R_s \\
 		               &= 100 \lp 0.98\ \text{m}\ohms \rp = 0.098\ \ohms \\
-		     \eta_{\text{rad}} &= \frac{R_r}{R_r + R_{ohmic}} = \frac{0.0125}{0.1105} = 0.113 \\
+		     \eta_{\text{rad}} &= \frac{R_r}{R_r + R_{\text{ohmic}}} = \frac{0.0125}{0.1105} = 0.113 \\
 		     10\mylog{0.113} &= -9.5\db \\
 		     G &= 1.76 - 9.5 = -7.7\dbi }
 		The loop's own copper burns nearly eight times what it radiates.
@@ -228,7 +228,7 @@ $R_{ohmic} = \lp C/2\pi b \rp R_s$ for a single turn.
 		ohmic resistance as $N$. Find the new efficiency.
 		\begin{solution}[1.3in]
 		\eq{ R_r &= 20^2 \lp 0.0125 \rp = 5.00\ \ohms \\
-		     R_{ohmic} &= 20 \lp 0.098 \rp = 1.96\ \ohms \\
+		     R_{\text{ohmic}} &= 20 \lp 0.098 \rp = 1.96\ \ohms \\
 		     \eta_{\text{rad}} &= \frac{5.00}{6.96} = 0.718 }
 		71.8\%, a loss of only $1.4\db$: gain $= 1.76 - 1.4 = 0.4\dbi$.
 		\end{solution}
@@ -280,21 +280,20 @@ $Q \gtrsim 1/(ka)^3 + 1/(ka)$, and the fractional bandwidth is roughly $1/Q$.
 	\part A single-sideband voice channel needs about 3 kHz. Does the loop pass it, and what
 	does your answer imply about operating across a 350 kHz amateur band?
 		\begin{solution}[1.2in]
-		Yes, 10 kHz comfortably covers one 3 kHz channel -- the loop is not too narrow to use,
-		it is too narrow to leave alone. Moving anywhere else in a 350 kHz band means retuning
-		the loop capacitor, because the match walks off within a channel or two. Small antennas
-		buy their size back in operator workload.
+		Yes. 10 kHz comfortably covers one 3 kHz voice channel, so the loop is usable on any
+		single frequency. Moving elsewhere in a 350 kHz band means retuning the loop capacitor,
+		because the match degrades within a channel or two. The size reduction is paid for in
+		retuning.
 		\end{solution}
 
 	\part Measured on a VNA, this loop shows a $2{:}1$ VSWR bandwidth several times wider
 	than your Chu estimate. Why? Is that good news?
 		\begin{solution}[1.3in]
 		Loss lowers Q. The Chu number is the \emph{radiation} Q; the loaded Q is reduced
-		roughly in proportion to the efficiency, $Q_{loaded} \approx \eta_{\text{rad}} Q \approx
+		roughly in proportion to the efficiency, $Q_{\text{loaded}} \approx \eta_{\text{rad}} Q \approx
 		0.113(1420) \approx 160$, which widens the match to about $0.6\%$, or 90 kHz. It is
-		not good news: the extra bandwidth is bought by dissipating your power in copper. A
-		$50\ \ohms$ resistor is perfectly matched over every band on the dial and radiates
-		nothing.
+		not good news: the extra bandwidth is bought by dissipating power in copper. A
+		$50\ \ohms$ resistor is matched at every frequency and radiates nothing at all.
 		\end{solution}
 
 	\part State the size-bandwidth trade as a rule of thumb, in one sentence.

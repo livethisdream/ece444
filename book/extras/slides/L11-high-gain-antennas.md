@@ -52,7 +52,7 @@ Flag the midterm project up front — it is announced at the end of the hour and
 
 <div class="callout">
 <p><strong>High gain = a large radiating area, driven in phase.</strong></p>
-<p>Reflector, Yagi, array — three ways to assemble the same coherent aperture.</p>
+<p>The reflector, the Yagi, and the array are three ways to assemble the same coherent aperture.</p>
 </div>
 
 | Antenna | How it builds the area |
@@ -76,7 +76,7 @@ $$G = \eta_{\text{ap}} \frac{4\pi A}{\lambda^2} \quad\quad A_e = \eta_{\text{ap}
 - Good reflectors: $\eta_{\text{ap}} \approx 0.55$ to $0.7$; horns $\approx 0.5$
 
 <div class="callout">
-<p><strong>+6 dB every time you double D.</strong> And +6 dB every time you double the frequency.</p>
+<p><strong>Doubling D adds 6 dB</strong>, and doubling the frequency adds another 6 dB.</p>
 </div>
 
 Note:
@@ -185,15 +185,15 @@ Two losses pulling opposite ways means there is an optimum, and the answer has b
 
 - Prime-focus feed and struts sit **in the beam**
 - A blocked diameter $d$ costs roughly $\left[ 1 - (d/D)^2 \right]^2$ in gain, and raises sidelobes
-- 15 cm feed on a 3 m dish: nothing. On a 45 cm dish: a real bill.
+- 15 cm feed on a 3 m dish: negligible. On a 45 cm dish: a measurable loss.
 - **Offset feed** — cut the reflector as a slice off-axis from a bigger paraboloid
 
 <div class="callout">
-<p>Zero blockage, cleaner sidelobes — and the tilted slice is why the DirecTV dish looks taller than it is wide.</p>
+<p>An offset feed gives zero blockage and cleaner sidelobes, and the tilted slice is why an offset dish looks taller than it is wide.</p>
 </div>
 
 Note:
-Everyone in the room has seen an offset dish on a roof and never wondered why the arm hangs off the bottom. Now they know.
+Most students have seen an offset dish on a roof. Connect the shape they already know to the blockage argument.
 
 ---
 
@@ -210,7 +210,7 @@ $$G = G_0\ e^{-(4 \pi \sigma / \lambda)^2} \quad\quad \text{loss (dB)} = 685.8 \
 </div>
 
 Note:
-No derivation. Just note that phase error enters as an exponential, which is why the millimetre-wave people talk about surface tolerance and nothing else.
+Do not derive it. Note that phase error enters as an exponential, which is why surface tolerance dominates millimetre-wave reflector design.
 
 ---
 
@@ -236,7 +236,7 @@ Have them multiply it on their calculators. The point is that 0.65 is not a fudg
 <div class="fig" data-inline-svg="./fig/L11-yagi.svg" style="max-width:980px; margin:0 auto;"></div>
 
 Note:
-Exactly one element is connected. Everything else is a piece of metal in the near field. Students always assume the whole thing is fed — kill that idea here.
+Exactly one element is connected. Everything else is a piece of metal in the near field. Students often assume every element is fed, so correct that here.
 
 ---
 
@@ -249,7 +249,7 @@ Exactly one element is connected. Everything else is a piece of metal in the nea
 - Net effect: a slow travelling wave forward, **endfire** beam, 15–25 dB front-to-back
 
 <div class="callout">
-<p>Long lags, short leads — and the beam goes toward the short end.</p>
+<p>The long element lags, the short elements lead, and the beam goes toward the short end.</p>
 </div>
 
 Note:
@@ -300,7 +300,7 @@ Sell Module 3 here. The PHASER hardware is the payoff and they should be looking
 2. **What frequency?** Apertures shrink with $\lambda$; wires get fragile.
 3. **How much bandwidth?** Reflectors wide, Yagis narrow.
 4. **Does it steer?** Mechanical, fixed, or electronic.
-5. **Cost, size, weight, wind load?** A 20 dBi answer that snaps in January is not an answer.
+5. **Cost, size, weight, wind load?** A 20 dBi antenna that cannot survive local wind and ice loading is not a usable answer.
 
 Note:
 Order matters. Students always start at 5 and work backwards. Make them start at 1.
@@ -318,7 +318,7 @@ Order matters. Students always start at 5 and work backwards. Make them start at
 | Cost driver | surface accuracy | almost nothing | a chain per element |
 
 Note:
-The cost row is the one practising engineers argue about. An array is electrically beautiful and financially brutal.
+The cost row is the one practising engineers argue about. An array gives the best electrical performance and carries the highest cost.
 
 ---
 
@@ -358,7 +358,7 @@ This is the payoff slide. The 20 dB of antenna gain is the difference between a 
 ## Midterm Project — Antenna Pattern Measurement
 
 <div class="callout">
-<p><strong>Introduced today. Due at L20.</strong></p>
+<p><strong>Introduced today, due at L20.</strong></p>
 </div>
 
 - **Design or select** an antenna
@@ -377,7 +377,7 @@ Hand out the packet here. Take questions on scope only; the details are in the h
 
 <div class="callout">
 <p><strong>Gain is coherent area, counted in square wavelengths.</strong></p>
-<p>A reflector rearranges phase with a mirror. A Yagi borrows its neighbours' currents. An array buys the area element by element. Same destination, three roads.</p>
+<p>A reflector rearranges phase with a mirror. A Yagi borrows its neighbours' currents. An array buys the area element by element. All three roads reach the same destination.</p>
 </div>
 
 Note:

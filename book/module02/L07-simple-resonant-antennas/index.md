@@ -53,8 +53,8 @@ nulls, so it is not an antenna — it is a unit of measurement.
 
 And as a unit of measurement it earns its keep. Directivity, gain, and
 effective aperture are all defined as ratios against isotropic, which is why a
-horn is "16 dBi" rather than "16 dB compared to some other horn we happen to
-own". Two related conventions come out of the same reference:
+horn is "16 dBi" rather than "16 dB compared to some unnamed reference
+antenna". Two related conventions come out of the same reference:
 
 | Quantity | Definition | Reference |
 | :-- | :-- | :-- |
@@ -76,8 +76,8 @@ license.
 
 ```{note}
 Watch the units in the wild. "ERP" usually means effective radiated power
-referred to a *dipole*, so ERP and EIRP differ by that same 2.15 dB. Getting
-this backwards is a classic way to be 4.3 dB wrong.
+referred to a *dipole*, so ERP and EIRP differ by that same 2.15 dB. Confusing
+the two puts a link budget 4.3 dB off.
 ```
 
 ## Part 2: From a short wire to a half-wave dipole
@@ -115,8 +115,7 @@ both:
 
 $$I(z) = I_m \sin\left[k\left(\frac{L}{2} - \vert z \vert\right)\right]$$
 
-Check it against the boundary conditions, which is the only reason we believe
-it:
+Check it against the boundary conditions:
 
 - At the tips, $z = \pm L/2$, the sine argument is zero, so $I = 0$. **Current
   vanishes at both open ends** — charge has nowhere further to go.
@@ -161,12 +160,12 @@ $$N_z(\theta) = 2 I_m \int_0^{L/2} \sin\left[k\left(\frac{L}{2} - z'\right)\righ
 
 Now it is a first-year integral. The product-to-sum identity
 $\sin A \cos B = \tfrac{1}{2}\left[\sin(A+B) + \sin(A-B)\right]$ turns the
-integrand into two plain sines, both of which integrate on sight. Collecting
+integrand into two plain sines, both of which integrate directly. Collecting
 the result:
 
 $$N_z(\theta) = \frac{2 I_m}{k}\ \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin^2\theta}$$
 
-One step left. Lesson 6 showed that a $z$-directed current radiates only a
+One step remains. Lesson 6 showed that a $z$-directed current radiates only a
 $\theta$ component in the far field, obtained by projection:
 $N_\theta = -N_z \sin\theta$. That kills one power of $\sin\theta$:
 
@@ -220,8 +219,8 @@ $$D = \frac{2\ \vert F\vert^2_\text{max}}{\displaystyle\int_0^\pi \vert F(\theta
 
 Now look at what doubling the wire actually bought you: the beamwidth went from
 $90^\circ$ to $78^\circ$ and the directivity went from $1.76$ to
-$2.15\ \text{dBi}$. **A gain of 0.39 dB.** If the half-wave dipole is famous, it
-is not for its pattern.
+$2.15\ \text{dBi}$. **Doubling the wire bought 0.39 dB of directivity.** The
+half-wave dipole is not famous for its pattern.
 
 :::{admonition} Key Point
 :class: key-concept
@@ -391,7 +390,7 @@ away from it, and the fix is to make the wire slightly *shorter*.
      alt="Feed-point reactance against dipole length for three wire thicknesses, showing zero crossings below half a wavelength"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
-Why shorter? Because the wire is electrically longer than it is physically.
+The reason is that the wire is electrically longer than it is physically.
 
 - **End effect.** Capacitance between the tips of the dipole — and to the
   insulators, mast, and everything else nearby — lets charge accumulate past
@@ -445,8 +444,8 @@ lab draws one. The chart is the complex reflection coefficient plane. The
 center is a perfect match, the rim is total reflection, the upper half is
 inductive and the lower half capacitive.
 
-Four kinds of thing are drawn on the chart below, and it is worth naming each
-one before you touch the slider.
+Four kinds of object are drawn on the chart below, and each is worth naming
+before you touch the slider.
 
 - **The faint grey grid** is the chart itself, printed once and never moving.
   The circles that all pass through the right-hand point are lines of constant
@@ -503,12 +502,12 @@ $70\ \Omega$ is what real resonant dipoles **measure**. It is the number that
 comes back from method-of-moments solvers and from antennas on a bench, and it
 is the number to carry into a design.
 
-So: use the chart to understand the *shape* of the behavior — that resonance is
+Use the chart to understand the *shape* of the behavior — that resonance is
 a crossing of the real axis, that trimming moves you there, that the locus
 leaves the useful region quickly on either side. Use $70\ \Omega$ when you need
 a number. Lesson 8 is where you measure the gap between the two for yourself.
 
-One last practical matter before you connect anything. A dipole is a
+One practical matter remains before you connect anything. A dipole is a
 **balanced** structure and coax is **unbalanced**. Wire them together directly
 and current flows on the outside of the shield, the feedline joins the
 radiating structure, and your pattern and VSWR both start depending on where
@@ -531,7 +530,7 @@ $$\lambda = \frac{c}{f} = \frac{3 \times 10^8}{146 \times 10^6} = 2.055\ \text{m
 $$L = 0.475\lambda = 0.475 \times 2.055 = 0.976\ \text{m}$$
 
 Cross-check with the field-manual form: $143/146 = 0.980\ \text{m}$. The two
-agree to within a centimeter, which is about the precision the rule deserves.
+agree to within a centimeter, which is well inside the accuracy of the rule.
 
 *Cut list.* Two arms of $L/2 = 48.8\ \text{cm}$, fed at the center, with a
 balun.
@@ -547,18 +546,19 @@ balun.
 | $\theta_\text{HP}$ | $78^\circ$ | half-wave pattern |
 | Far-field distance | $2D^2/\lambda = 0.93\ \text{m}$ | Lesson 5, with $D = 0.976\ \text{m}$ |
 
-*Sanity check.* Every number above is unremarkable, which is what you want. If
-a dipole calculation predicts 12 dBi or $8\ \Omega$, you have made an arithmetic
-error.
+*Sanity check.* Every number above is unremarkable, which is what you want. A
+dipole calculation that returns 12 dBi or $8\ \Omega$ is outside the physically
+reasonable range and indicates an arithmetic error.
 :::
 
 ```{note}
-Two of those numbers deserve an honest footnote. The sinusoidal-current model
-used here predicts a resonant resistance in the low sixties; a full numerical
-solver and a real measurement both land closer to $70\ \Omega$. And the exact
-resonant length depends on wire gauge, insulation, and what is nearby. Carry
-$70\ \Omega$ and $0.475\lambda$ as the design numbers, and expect a few percent
-of disagreement — quantifying that disagreement is what the next lesson is for.
+Two of those numbers need a footnote. The sinusoidal-current model used here
+predicts a resonant resistance in the low sixties; a full numerical solver and
+a real measurement both land closer to $70\ \Omega$. And the exact resonant
+length depends on wire gauge, insulation, and what is nearby. Carry
+$70\ \Omega$ and $0.475\lambda$ as the design numbers, and expect a few
+percent of disagreement — quantifying that disagreement is what the next lesson
+is for.
 ```
 
 :::{admonition} Build it — a 915 MHz wire dipole on an SMA connector
@@ -576,7 +576,8 @@ wire cutter, a ruler, and a soldering iron.
 
 1. At $915\ \text{MHz}$, $\lambda = c/f = 32.8\ \text{cm}$. The 5% rule gives a
    total length $L = 0.475\lambda = 15.6\ \text{cm}$, which is
-   $7.8\ \text{cm}$ **per arm**. (Different band? Same three lines, new $f$.)
+   $7.8\ \text{cm}$ **per arm**. The same three lines work for any other band
+   with a new $f$.
 2. Cut two arms at $7.8\ \text{cm}$. Cut them long if you are unsure. You can
    always trim; you cannot un-trim.
 3. Solder one arm to the connector's **center pin** and the other to the
@@ -600,8 +601,7 @@ behind it is not, and current will flow on the outside of the shield exactly as
 Lesson 4 warned. The feedline becomes part of the antenna. Expect your measured
 resonant frequency and impedance to drift from the predictions above, and
 expect the readings to twitch when you move your hand near the cable. That is
-not a botched build — it is the balun problem showing up in your own hardware,
-which is a far better way to learn it than a diagram.
+not a botched build. It is the balun problem showing up in your own hardware.
 :::
 
 ## Summary
@@ -612,7 +612,7 @@ which is a far better way to learn it than a diagram.
 | EIRP | Transmitter and antenna as one number, $P_t G_t$ | $\text{dBi} = \text{dBd} + 2.15$ |
 | Assumed current | Standing wave from the unfolded open-circuited line | $I_m \sin[k(L/2 - \vert z\vert)]$ |
 | Short dipole | Constant current, limiting case | $\vert F\vert = \sin\theta$, $1.76\ \text{dBi}$ |
-| Dipole pattern, any length | One radiation integral, every length; normalize by the peak | $\vert F\vert \propto \left\vert\left[\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}\right]/\sin\theta\right\vert$ |
+| Dipole pattern, any length | One radiation integral covers every length; normalize by the peak | $\vert F\vert \propto \left\vert\left[\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}\right]/\sin\theta\right\vert$ |
 | Half-wave dipole pattern | The general result at $kL/2 = \pi/2$ | $\theta_\text{HP} = 78^\circ$ |
 | Half-wave directivity | From integrating the pattern over the sphere | $D = 1.64 = 2.15\ \text{dBi}$ |
 | Special functions | Tabulated, like $\text{erf}$ — do not integrate them | $C_{in}(2\pi) = 2.4376$, $Si(2\pi) = 1.4182$ |
@@ -645,15 +645,14 @@ two is informative.
 In Lesson 8 you will model a wire, set its length, sweep the frequency, and
 read back impedance, VSWR, gain, and pattern — then compare each one against
 the numbers you produced by hand today. **The numbers you just predicted are
-the ones you will check against simulation.** A
-simulator that agrees with a hand calculation on a dipole can be trusted a
-little further on a structure you cannot solve by hand; a simulator that
-disagrees is telling you that you have set something up wrong, and the only way
-to know which is to bring predictions with you. The 915 MHz dipole you soldered
-onto an SMA connector closes the same loop with hardware instead of software:
-in Lesson 13 you will put it on a vector network analyzer and see how far a real
-balun-less wire lands from the length, resonance, and impedance you wrote down
-today.
+the ones you will check against simulation.** A simulator that agrees with a
+hand calculation on a dipole can be trusted a little further on a structure
+you cannot solve by hand; a disagreement usually points to a setup error in
+the model, and the only way to notice it is to bring predictions with you. The
+915 MHz dipole you soldered onto an SMA connector closes the same loop with
+hardware instead of software: in Lesson 13 you will put it on a vector network
+analyzer and see how far a real balun-less wire lands from the length,
+resonance, and impedance you wrote down today.
 
 After that, Lesson 9 takes the same wire apart. Cut a dipole in half and stand
 it on a ground plane and you have a monopole — half the impedance, double the

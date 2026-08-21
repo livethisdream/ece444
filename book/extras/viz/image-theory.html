@@ -109,9 +109,9 @@ const state={ kind:'v', h:0.01 };
                                  cos psi = sin theta cos phi   (wire along x)
 
    f() is the half-wave dipole element factor, psi measured from the wire.
-   Everything below is the honest integral of |F|^2 over the upper hemisphere
-   — no closed-form shortcuts, so the readouts stay true off the special
-   heights.                                                                  */
+   Everything below integrates |F|^2 over the upper hemisphere numerically
+   rather than using a closed form, so the readouts remain correct away from
+   the special heights.                                                                  */
 function fdip(psi){
   const s=Math.sin(psi);
   if(Math.abs(s)<1e-9) return 0;

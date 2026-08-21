@@ -38,7 +38,7 @@ A plane wave is flat in amplitude and flat in phase across the aperture. A real 
 
 > The source antenna's beamwidth must be at least three to four times the angle the AUT subtends.
 
-That is why range source antennas are modest-gain horns. Bigger is not better at the transmit end.
+That is why range source antennas are modest-gain horns. A higher-gain source would taper the illumination and widen every beamwidth you report.
 
 **Phase curvature** comes from geometry alone and is the one that sets the range length.
 
@@ -52,7 +52,7 @@ Multiply by $k = 2\pi/\lambda$ to get phase. Now make a decision — and it *is*
 
 $$\Delta\phi_{\max} = k\ \Delta \ell = \frac{\pi D^2}{4 \lambda r} \le \frac{\pi}{8} \qquad \Longrightarrow \qquad r \ge \frac{2D^2}{\lambda}$$
 
-There it is. The far-field criterion you have been quoting since L5 is nothing more than $22.5^\circ$ of edge phase error, rewritten as a distance.
+The far-field criterion you have been quoting since L5 is $22.5^\circ$ of edge phase error, rewritten as a distance.
 
 :::{admonition} Worked example — how long a range does a 0.5 m antenna need?
 :class: tip
@@ -62,7 +62,7 @@ $$\lambda = \frac{c}{f} = \frac{3\times10^{8}}{10\times10^{9}} = 0.03\ \text{m},
 
 $$r \ge \frac{2D^2}{\lambda} = \frac{2(0.5)^2}{0.03} = 16.7\ \text{m}$$
 
-Seventeen metres — about 55 feet — of chamber, to measure an antenna the size of a dinner plate. That is a large, expensive room, and it is completely ordinary.
+Measuring an antenna 0.5 m across therefore requires a chamber seventeen metres — about 55 feet — long. That is a large, expensive room, and it is entirely ordinary for this class of antenna.
 
 Run the same arithmetic on a $3\ \text{m}$ satellite terminal reflector at $30\ \text{GHz}$, where $\lambda = 0.01\ \text{m}$:
 
@@ -81,7 +81,7 @@ Suppose you build the range too short anyway. The quadratic phase error $\Delta\
 
 $$F_\text{meas}(\theta) \propto \int_{-D/2}^{D/2} E(x)\ e^{-j \pi x^2 / \lambda r}\ e^{+jkx\sin\theta}\ dx$$
 
-Nothing here is subtle: a quadratic phase across an aperture is a **defocus**, exactly like a lens at the wrong distance. The interesting part is *which* pattern features it damages, and in what order.
+A quadratic phase across an aperture is a **defocus**, exactly like a lens at the wrong distance. What matters is *which* pattern features it damages, and in what order.
 
 Slide the range in and watch. The left panel shows the phase error across the aperture against the $22.5^\circ$ tolerance line; the right panel overlays the true far-field pattern (dashed) on what the range actually measures (solid). Notice that the nulls fill and the first sidelobe merges into a shoulder long before the main beam does anything at all — and that everything snaps clean right around $r = 2D^2/\lambda$, where the edge error reads exactly $22.5^\circ$.
 
@@ -101,14 +101,14 @@ The damage, tabulated for a uniform aperture:
 | 1/2 | $45^\circ$ | $-16$ dB | $-12.0$ dB | $+1.3\%$ |
 | 1/4 | $90^\circ$ | $-9.5$ dB | $-9.0$ dB | $+6\%$ |
 
-Read the top two rows carefully, because they carry the honest version of the rule. At exactly $r = 2D^2/\lambda$ you have **not** measured the true pattern. You have measured one whose deepest nulls are wrong by twenty decibels and whose first sidelobe reads $-12.9$ dB instead of the textbook $-13.3$ dB. What you *have* measured correctly is the main beam, the beamwidth, and the gain.
+Read the top two rows carefully, because they state what the rule delivers. At exactly $r = 2D^2/\lambda$ you have **not** measured the true pattern. You have measured one whose deepest nulls are wrong by twenty decibels and whose first sidelobe reads $-12.9$ dB instead of the textbook $-13.3$ dB. What you *have* measured correctly is the main beam, the beamwidth, and the gain.
 
 :::{admonition} Key Point
 :class: key-concept
 $2D^2/\lambda$ is a **main-beam and gain** criterion, not a sidelobe criterion. If you need a $-40$ dB sidelobe or a null depth you can defend, go to $5D^2/\lambda$ or further — or stop using a far-field range altogether.
 :::
 
-The failure mode here is nasty precisely because it is quiet. A pattern measured at a quarter of the far-field distance still looks like a pattern. It has a main beam of about the right width, it has sidelobes, it is smooth. It is simply wrong in the places you care about most.
+This failure mode is dangerous because it is quiet. A pattern measured at a quarter of the far-field distance still looks like a pattern: it has a main beam of about the right width, it has sidelobes, and it is smooth. It is wrong only in the places you care about most.
 
 ## Part 3: Three ways to make the plane wave
 
@@ -119,15 +119,15 @@ The failure mode here is nasty precisely because it is quiet. A pattern measured
 | Compact range | A reflector collimates it up close | Edge diffraction, feed spillover, reflector accuracy |
 | Near-field scanner | Measures close in and transforms | Needs phase, probe correction, and time |
 
-The first three are **far-field ranges**: they physically deliver an approximate plane wave to the AUT. The fourth changes the question entirely, and gets Part 4 to itself.
+The first three are **far-field ranges**: they physically deliver an approximate plane wave to the AUT. The fourth changes the question entirely, and Part 4 covers it.
 
 ### Outdoor ranges
 
-Distance is free outdoors, so the oldest ranges are two towers, or a tower and a hillside. Two variants matter. An **elevated range** puts both antennas high enough, and uses directive-enough source antennas, that the ground bounce misses the AUT. A **ground-reflection range** does the opposite: it chooses the geometry so the direct and ground-reflected rays arrive *in phase* at the AUT, deliberately using the ground as part of the illumination. Both work. Neither is private, dry, or free of interference, which is why most modern measurement happens indoors.
+Distance costs nothing outdoors, so the oldest ranges are two towers, or a tower and a hillside. Two variants matter. An **elevated range** puts both antennas high enough, and uses directive-enough source antennas, that the ground bounce misses the AUT. A **ground-reflection range** does the opposite: it chooses the geometry so the direct and ground-reflected rays arrive *in phase* at the AUT, deliberately using the ground as part of the illumination. Both approaches work. Neither offers security, weather protection, or freedom from interference, which is why most modern measurement happens indoors.
 
 ### Anechoic chambers
 
-An anechoic chamber is a shielded room lined with **absorber** — carbon-loaded foam, cut into pyramids. The pyramid shape is the whole trick: it is a gradual impedance transition from free space into a lossy medium, so the wave enters without a strong reflection at the surface and then dies inside the foam.
+An anechoic chamber is a shielded room lined with **absorber** — carbon-loaded foam, cut into pyramids. The pyramid shape provides a gradual impedance transition from free space into a lossy medium, so the wave enters without a strong reflection at the surface and is then absorbed.
 
 Absorber is specified by **reflectivity in dB**. Good pyramidal absorber reaches $-40$ to $-50$ dB at normal incidence, and performance degrades at grazing incidence — which is exactly the condition on the side walls. Performance also scales with pyramid height *in wavelengths*, so low-frequency absorber gets enormous, and a chamber rated to 200 MHz has metre-long spikes on the walls.
 
@@ -136,7 +136,7 @@ Absorber is specified by **reflectivity in dB**. Good pyramidal absorber reaches
 A chamber is never "no reflections". It is **reflections below a stated level**. Which level you need is set by the lowest signal you intend to believe, not by the main beam.
 :::
 
-That last sentence deserves numbers. Suppose one stray reflection arrives $-40$ dB below the main beam. As the positioner turns, it adds in and out of phase with whatever you are measuring, and the peak-to-peak ripple depends entirely on how strong that "whatever" is:
+Put numbers on that. Suppose one stray reflection arrives $-40$ dB below the main beam. As the positioner turns, it adds in and out of phase with the wanted signal, and the resulting ripple depends on how strong that wanted signal is:
 
 | What you are measuring | Error a $-40$ dB stray adds |
 | :-- | :-- |
@@ -144,17 +144,17 @@ That last sentence deserves numbers. Suppose one stray reflection arrives $-40$ 
 | A $-20$ dB sidelobe | $+0.8 / -0.9$ dB |
 | A $-30$ dB sidelobe | $+2.4 / -3.3$ dB |
 
-A three-decibel error on a sidelobe, in a chamber that meets a perfectly respectable $-40$ dB spec. This is the single most common way a measurement report overstates its own precision.
+A chamber that meets a respectable $-40$ dB specification can still put a three-decibel error on a sidelobe. This is the single most common way a measurement report overstates its own precision.
 
 ### The quiet zone
 
 The deliverable of a chamber is not the room; it is the **quiet zone** — a specified volume, usually a sphere or cylinder centred on the positioner, inside which the stray field is guaranteed below the reflectivity spec. It is quoted as a size *and* a level and a frequency band: "1.2 m quiet zone at $-45$ dB, 2 to 18 GHz". It is measured rather than assumed, typically by dragging a probe through the volume and recording the ripple.
 
-The practical consequence is blunt: **the AUT must fit inside the quiet zone.** An antenna that overhangs it is being measured in a room, not in a chamber.
+The practical consequence is that **the AUT must fit inside the quiet zone.** An antenna that overhangs it is being measured in a room rather than in a chamber.
 
 ### Compact ranges
 
-A **compact range** stops fighting the range equation and cheats it. Put a feed at the focus of a precision offset paraboloid and you get the L11 geometry again: every path from the focus to the reflector to the aperture plane has the same length, so the reflected wave leaves with flat phase. In L11 that plane wave was headed for a satellite. Here it only has to cross the room.
+A **compact range** produces the plane wave with optics instead of distance. Put a feed at the focus of a precision offset paraboloid and you get the L11 geometry again: every path from the focus to the reflector to the aperture plane has the same length, so the reflected wave leaves with flat phase. In L11 the collimated wave was aimed at a satellite; here it only has to cross the room.
 
 Two costs come with it. The usable quiet zone is only about **50 to 60% of the reflector aperture**, so the reflector must be substantially larger than the AUT — a metre of quiet zone needs close to a two-metre reflector, built to a fraction of a wavelength. And the reflector rim diffracts: a hard edge acts as a line source sitting right inside your quiet zone. Compact-range reflectors therefore have **serrated or rolled edges**, which scatter the edge contribution away from the test volume instead of into it.
 
@@ -175,7 +175,7 @@ Three consequences follow immediately, and they are all the practical content of
 
 **Sample at half-wavelength spacing or finer.** This is the same Nyquist argument as in L6's spatial spectrum: undersample the aperture field and the transform aliases, producing lobes in the far-field pattern that the antenna does not have.
 
-**Scan far enough out.** The transform assumes you captured everything. Truncate the scan plane before the field has decayed and you get truncation error, which is why planar scanning gives a trustworthy pattern only over a forward cone — roughly $\pm 60^\circ$ — and says nothing about the back lobes.
+**Scan far enough out.** The transform assumes the whole field was captured. Truncate the scan plane before the field has decayed and you get truncation error, which is why planar scanning gives a trustworthy pattern only over a forward cone — roughly $\pm 60^\circ$ — and says nothing about the back lobes.
 
 | Scan surface | Best suited to | Pattern coverage |
 | :-- | :-- | :-- |
@@ -189,7 +189,7 @@ One more step exists in a real near-field system: **probe compensation**. The pr
 
 ## Part 5: Measuring gain
 
-A pattern is a shape, and a shape is easy — normalize and you are done. Gain is an absolute number, and absolute numbers are hard. There are two honest ways to get one.
+A pattern is a shape, and a shape is easy: normalize it and you are done. Gain is an absolute number, and absolute numbers require a reference. There are two ways to get one.
 
 ### The comparison method
 
@@ -218,7 +218,7 @@ The conditions on validity are worth naming, because violating one silently bias
 
 ### When no standard exists
 
-Somebody had to calibrate that horn. Working from Friis (L2) with no calibrated antenna at all:
+The standard gain horn itself had to be calibrated somehow. Working from Friis (L2) with no calibrated antenna at all:
 
 $$P_r = P_t G_t G_r \left( \frac{\lambda}{4\pi R} \right)^2 \qquad \Longrightarrow \qquad \left( P_r - P_t \right)_{\text{dB}} = G_t + G_r + 20\log_{10}\!\left( \frac{\lambda}{4\pi R} \right)$$
 
@@ -232,14 +232,14 @@ $$20\log_{10}\!\left( \frac{\lambda}{4\pi R} \right) = 20\log_{10}\!\left( \frac
 
 $$2G = (P_r - P_t) - (-74.0) = -40.0 + 74.0 = 34.0\ \text{dB} \qquad \Longrightarrow \qquad G = 17.0\ \text{dBi}$$
 
-Check the range while you are here: for a horn of this gain, $D$ is roughly $0.2\ \text{m}$, so $2D^2/\lambda = 1.6\ \text{m}$. Twenty metres is comfortably far field.
+Check the range as well: for a horn of this gain, $D$ is roughly $0.2\ \text{m}$, so $2D^2/\lambda = 1.6\ \text{m}$. Twenty metres is comfortably far field.
 :::
 
 If the antennas are not identical, use **three** of them and measure all three pairs. Let $M_{AB}$ be the measured pair sum $(P_r - P_t)_{\text{dB}}$ with the path term already removed, so $M_{AB} = G_A + G_B$, and likewise for the other two pairs. Three equations, three unknowns:
 
 $$G_A = \tfrac{1}{2}\left( M_{AB} + M_{AC} - M_{BC} \right)$$
 
-with $G_B$ and $G_C$ following by symmetry. No calibrated antenna appears anywhere. This is how standard gain horns get their curves in the first place.
+with $G_B$ and $G_C$ following by symmetry. No calibrated antenna appears anywhere in the procedure, which is how standard gain horns get their curves in the first place.
 
 ## Part 6: Cuts and polarization
 
@@ -249,13 +249,13 @@ A complete pattern is a function on a sphere, and measuring the whole sphere fin
 - A **conical cut** holds $\theta$ fixed and sweeps $\phi$ — a ring at a constant angle off boresight. Useful for tracking antennas and for checking rotational symmetry.
 - The **principal planes** are two particular great-circle cuts. The **E-plane** contains the aperture electric field and the boresight direction; the **H-plane** contains the magnetic field and boresight, perpendicular to the E-plane. For a rectangular horn or a patch, these are the two cuts you always publish.
 
-Two principal cuts fully describe a well-behaved pencil beam, and say nothing whatsoever about the diagonal planes — where, for rectangular apertures, the sidelobes frequently live.
+Two principal cuts fully describe a well-behaved pencil beam, and say nothing about the diagonal planes, where the sidelobes of a rectangular aperture frequently sit.
 
 ### Co-polarization and cross-polarization
 
 Then run every cut twice. With the source antenna aligned to the AUT's nominal polarization you measure the **co-polarized** pattern. Rotate the source $90^\circ$ about the range axis, change nothing else, and repeat: that is the **cross-polarized** pattern, the power the antenna radiates into the polarization it is supposed to reject. A well-built linear antenna sits 20 to 30 dB below co-pol on boresight and is considerably worse off-axis, which is why cross-pol is quoted as a pattern and not as a single number.
 
-For a circularly polarized antenna there is a faster trick. Spin the linear source continuously while sweeping the cut — **spinning linear** — and the recorded pattern comes back as a band rather than a line. The peak-to-trough width of that band, in dB, *is* the axial ratio from L3. A perfectly circular antenna gives a band of zero width.
+For a circularly polarized antenna there is a faster method. Spin the linear source continuously while sweeping the cut — **spinning linear** — and the recorded pattern comes back as a band rather than a line. The peak-to-trough width of that band, in dB, *is* the axial ratio from L3. A perfectly circular antenna gives a band of zero width.
 
 ## Summary
 
@@ -280,4 +280,4 @@ For a circularly polarized antenna there is a faster trick. Spin the linear sour
 
 L13 and L14 are the two lessons where this becomes hardware. L13 puts an antenna on a vector network analyzer and measures S-parameters — match, resonance, bandwidth, the L4 material made real. L14 puts one on the positioner and takes the cuts, with the range length, the quiet zone, and the standard gain horn all sitting exactly where this lesson said they would.
 
-The midterm project, due L20, is the full bundle: measure a pattern, extract half-power beamwidth and sidelobe level, measure gain by comparison against the standard horn, and defend the numbers. That last part is what today was really about. "I measured it" is not a result. "I measured it, and here is precisely what my range could and could not tell me" is an engineering result — and the range length, the quiet-zone specification, and the horn's calibration uncertainty are the three lines of your error budget.
+The midterm project, due L20, is the full bundle: measure a pattern, extract half-power beamwidth and sidelobe level, measure gain by comparison against the standard horn, and defend the numbers. That last requirement is what this lesson serves. "I measured it" is not an engineering result; "I measured it, and here is what my range could and could not tell me" is. The range length, the quiet-zone specification, and the horn's calibration uncertainty are the three lines of your error budget.

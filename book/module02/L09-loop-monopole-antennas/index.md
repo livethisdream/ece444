@@ -20,7 +20,7 @@ Lesson 7 gave you two reference antennas — the isotropic radiator you measure 
 
 ## Part 1: The ground plane is a mirror
 
-Put an antenna above a large, perfectly conducting plane and you have a boundary-value problem: the tangential electric field must vanish everywhere on the conductor. Solving that directly is unpleasant. **Image theory** says you do not have to. Delete the conductor, add a mirror-image source below where the plane used to be, and choose the image's sign so that the tangential field cancels on the old boundary. The two sources together satisfy the same boundary condition, so above the plane they produce the identical field. Below the plane they produce nonsense, but there is no field down there anyway — the conductor shorted it out.
+Put an antenna above a large, perfectly conducting plane and you have a boundary-value problem: the tangential electric field must vanish everywhere on the conductor. Solving that directly is unpleasant. **Image theory** says you do not have to. Delete the conductor, add a mirror-image source below where the plane used to be, and choose the image's sign so that the tangential field cancels on the old boundary. The two sources together satisfy the same boundary condition, so above the plane they produce the identical field. Below the plane the pair produces a field that describes nothing physical, and there is no field there in any case because the conductor shorts it out.
 
 The sign rule is the whole lesson in two lines:
 
@@ -31,7 +31,7 @@ The sign rule is the whole lesson in two lines:
      alt="A vertical current above a perfect conductor images in phase; a horizontal current images reversed"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
-Read the consequence before you read another equation. A vertical wire and its image add, no matter how close to the plane you push it — so a vertical antenna works even when it is sitting right on the ground. A horizontal wire and its image subtract, and as the height goes to zero they cancel exactly — so a horizontal wire laid on the ground radiates essentially nothing. That is why broadcast towers are vertical and why your field-expedient dipole has to get up in the air.
+The consequence matters more than the derivation. A vertical wire and its image add, no matter how close to the plane you push it — so a vertical antenna works even when it is sitting right on the ground. A horizontal wire and its image subtract, and as the height goes to zero they cancel exactly — so a horizontal wire laid on the ground radiates essentially nothing. That is why broadcast towers are vertical and why your field-expedient dipole has to get up in the air.
 
 Once you have the image, the problem is one you already solved in Lesson 6: two sources, so the pattern is the element factor times a two-element array factor. With the element at height $h$ and its image at $-h$, the phase difference between the two paths is $2kh\cos\theta$, so
 
@@ -100,7 +100,7 @@ $$
 
 **Match after trimming.** Shorten the whip by about 4% to $0.24\lambda = 49\ \text{cm}$ to cancel the reactance. Now $Z_{\text{in}} \approx 36\ \Omega$ real, and VSWR $= 50/36 = 1.39$.
 
-**Match after tilting the radials.** Droop four quarter-wave radials down about $45^\circ$ and the base impedance climbs to roughly $50\ \Omega$: VSWR near 1.0, no matching network, no extra parts. This is why every commercial ground-plane antenna you have ever seen has sagging radials.
+**Match after tilting the radials.** Droop four quarter-wave radials down about $45^\circ$ and the base impedance climbs to roughly $50\ \Omega$: VSWR near 1.0, no matching network, no extra parts. This is why commercial ground-plane antennas have sagging radials.
 :::
 
 :::{admonition} Key Point
@@ -108,7 +108,7 @@ $$
 A quarter-wave monopole over a good ground plane **is** a half-wave dipole with half the impedance ($36.5 + j21.3\ \Omega$), twice the directivity (5.15 dBi), and one hemisphere of coverage. Nothing about it is new physics — it is a dipole plus a mirror.
 :::
 
-Drag the height slider below and watch the two rules fight it out. Start with the vertical element at the bottom of its range: the pattern is the monopole's, the directivity readout parks at 3.28, and the peak sits on the horizon. Then switch to the horizontal wire at the same height and look at the third pill — the directivity is *higher*, but the radiated power has collapsed by more than 10 dB, because the image is cancelling the source. Raise the horizontal wire and watch that power come back as the first lobe forms overhead.
+Drag the height slider below to compare the two rules. Start with the vertical element at the bottom of its range: the pattern is the monopole's, the directivity readout parks at 3.28, and the peak sits on the horizon. Then switch to the horizontal wire at the same height and look at the third pill — the directivity is *higher*, but the radiated power has collapsed by more than 10 dB, because the image is cancelling the source. Raise the horizontal wire and watch that power come back as the first lobe forms overhead.
 
 <iframe src="../../viz/image-theory.html"
         width="100%" height="687"
@@ -118,7 +118,7 @@ Drag the height slider below and watch the two rules fight it out. Start with th
 </iframe>
 
 ```{note}
-Directivity and gain part company here. Directivity only describes the *shape* of what gets out. A horizontal wire at $0.05\lambda$ has a beautiful 9 dBi shape pointed straight up and radiates almost nothing, because cancellation shows up in the radiation resistance, not in the pattern. Always check both numbers.
+Directivity and gain part company here. Directivity only describes the *shape* of what gets out. A horizontal wire at $0.05\lambda$ has a 9 dBi pattern shape pointed straight up and radiates almost nothing, because cancellation shows up in the radiation resistance, not in the pattern. Always check both numbers.
 ```
 
 ## Part 3: Real ground, and the hardware that fakes it
@@ -133,16 +133,16 @@ $$
 
 A monopole only has $36.5\ \Omega$ of radiation resistance to work with, so a few ohms of ground loss is a few tenths of a dB, and a badly grounded short whip — with an $R_r$ of a couple of ohms — can throw away most of its power. This is why AM broadcast stations bury a **radial system**: the FCC standard is 120 buried wires, each a quarter wavelength long, fanning out from the tower base. The radials do not radiate. They intercept the return current in copper instead of dirt.
 
-**Pattern damage at low angles.** A real earth cannot support the grazing field a perfect conductor can, so the reflection coefficient falls away near the horizon. The horizon-grazing lobe of a vertical antenna gets eaten, and the peak of the pattern lifts a few degrees off the ground. The 5.15 dBi you calculated is an upper bound on a perfect plane, and the elevation angle where the energy actually goes is set by the dirt, not by your antenna.
+**Pattern damage at low angles.** A real earth cannot support the grazing field a perfect conductor can, so the reflection coefficient falls away near the horizon. The horizon-grazing lobe of a vertical antenna is lost, and the peak of the pattern lifts a few degrees off the ground. The 5.15 dBi you calculated is an upper bound that assumes a perfect plane, and the elevation angle at which the energy leaves is set by the ground, not by the antenna.
 
-**Finite ground planes.** Nothing in the field is infinite. A quarter-wave whip on a car roof at 800 MHz sees a plane many wavelengths across and behaves like the textbook — but the same whip on the same roof at 30 MHz sees a plane a hundredth of a wavelength across and behaves like a capacitor. When you cannot get a plane, you fake one with a **counterpoise**: four drooping radials on a mast, a metal disc under a GPS patch, the ground pour on a circuit board. On a handheld radio the counterpoise is the case, the board, and your hand. That is not a joke — grip a handheld differently and its impedance and pattern both change, which is why radios are tested against a phantom hand.
+**Finite ground planes.** Nothing in the field is infinite. A quarter-wave whip on a car roof at 800 MHz sees a plane many wavelengths across and behaves like the textbook — but the same whip on the same roof at 30 MHz sees a plane a hundredth of a wavelength across and behaves like a capacitor. When you cannot get a plane, you fake one with a **counterpoise**: four drooping radials on a mast, a metal disc under a GPS patch, the ground pour on a circuit board. On a handheld radio the counterpoise is the case, the board, and your hand. Gripping a handheld differently changes both its impedance and its pattern, which is why handheld radios are tested against a phantom hand.
 
 <img src="../../viz/img/L09-ground-systems.svg"
      alt="Three ways to give a monopole a ground: a buried radial field, drooping quarter-wave radials, and a handheld counterpoise"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
 ```{note}
-If you go back to the simulator from Lesson 8 to model a monopole, remember that the model needs an explicit ground: a perfect-conductor plane for the textbook answer, or a real-earth model with a conductivity and a permittivity for the honest one. Feed the base segment against that plane. A monopole modelled in free space with no ground is just a very short dipole, and the simulator will happily hand you the wrong number.
+If you go back to the simulator from Lesson 8 to model a monopole, remember that the model needs an explicit ground: a perfect-conductor plane for the textbook answer, or a real-earth model with a conductivity and a permittivity for the realistic one. Feed the base segment against that plane. A monopole modelled in free space with no ground is a very short dipole, and the simulator will return a number that does not describe the antenna you meant to build.
 ```
 
 ## Part 4: The small loop is a magnetic dipole
@@ -164,17 +164,17 @@ Feed that uniform ring current into the radiation integral from Lesson 6 and eve
      alt="A small loop has the same donut pattern as a short dipole with the electric and magnetic fields interchanged"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
-Same donut. Orthogonal polarization. Maximum radiation **in the plane of the loop**, a null **through the hole** — which is the opposite of what most people guess, and it is the whole basis of direction finding: you rotate the loop for a null, and the null is sharp because it is a null, while the peak is broad.
+The loop has the same doughnut pattern as the short dipole with the polarization rotated by 90 degrees. Its maximum radiation lies in the plane of the loop and its null lies along the axis, through the hole, which is the opposite of what most people expect. That null is the basis of direction finding: you rotate the loop until the signal disappears, and the bearing is precise because a null is sharp while a pattern maximum is broad.
 
-The interesting number is that fourth power. Write it either way you like,
+The exponent is what matters here. The result can be written two ways,
 
 $$
 R_r = 20\pi^2 \left(\frac{C}{\lambda}\right)^4 = 320\pi^4 \left(\frac{A}{\lambda^2}\right)^2 \ \Omega \qquad \text{(single turn)}
 $$
 
-and notice how violently it punishes small size. Halve the loop and the radiation resistance drops by 16.
+and both forms punish small size severely. Halve the loop and the radiation resistance drops by a factor of 16.
 
-:::{admonition} Worked example — a 30 MHz loop, honestly costed
+:::{admonition} Worked example — the full loss budget of a 30 MHz loop
 :class: tip
 A single-turn copper loop, $C = 0.1\lambda$ at $f = 30\ \text{MHz}$ ($\lambda = 10\ \text{m}$), made of 4 mm diameter wire ($b = 2\ \text{mm}$). Loop radius $a = C/2\pi = 0.159\ \text{m}$.
 
@@ -188,14 +188,14 @@ $$
 
 **Efficiency.** $\eta_{\text{rad}} = 0.0197/(0.0197 + 0.114) = 0.148$, i.e. **14.8%**, a loss of 8.3 dB. Gain $= 1.76 - 8.3 = -6.5\ \text{dBi}$.
 
-**What that means at the feed.** To deliver 100 W you need $I = \sqrt{2P/R_{\text{total}}} = 38.7\ \text{A}$ peak in that loop, of which 15 W radiates and 85 W heats the wire. Now you know why transmitting magnetic loops use fat copper tube, welded joints, and a vacuum capacitor.
+**What that means at the feed.** To deliver 100 W you need $I = \sqrt{2P/R_{\text{total}}} = 38.7\ \text{A}$ peak in that loop, of which 15 W radiates and 85 W heats the wire. This is why transmitting magnetic loops are built from thick copper tubing with welded joints and a vacuum capacitor.
 :::
 
-Receiving is a different economy entirely, because on receive you are not fighting efficiency, you are fighting the *receiver's* noise — and at HF and below, external atmospheric noise is so large that a lossy antenna still delivers a signal-to-noise ratio limited by the sky, not by the antenna. So a small loop that would be a disgrace as a transmitter is a perfectly good receiving antenna. Wind $N$ turns and the radiation resistance goes as $N^2$ while the loss only goes as $N$; wrap those turns on a ferrite rod and the effective permeability multiplies the moment again. That bar behind the dial of an AM radio is a many-turn ferrite loop, and it is small, cheap, deeply inefficient, and entirely adequate.
+Receiving is a different economy entirely, because on receive you are not fighting efficiency, you are fighting the *receiver's* noise — and at HF and below, external atmospheric noise is so large that a lossy antenna still delivers a signal-to-noise ratio limited by the sky, not by the antenna. A loop that is a poor transmitter can therefore be a good receiving antenna. Wind $N$ turns and the radiation resistance goes as $N^2$ while the loss only goes as $N$; wrap those turns on a ferrite rod and the effective permeability multiplies the moment again. The bar behind the dial of an AM radio is a many-turn ferrite loop. Its efficiency is very low, and at broadcast frequencies that costs nothing that matters.
 
 ## Part 5: Resonant loops, and the price of being small
 
-Grow the loop until its circumference is about one wavelength and the story changes completely. The current is no longer uniform — it reverses around the loop — and the pattern flips: maximum radiation is now **along the axis**, broadside to the plane of the loop, where the small loop had its null. The feed impedance climbs to something civilized, roughly $100$ to $130\ \Omega$, and the directivity is about 3.1 dBi, a little under 1 dB better than a dipole. That is the loop you can actually transmit with, and it is the element in a **quad** antenna.
+Grow the loop until its circumference is about one wavelength and the story changes completely. The current is no longer uniform — it reverses around the loop — and the pattern flips: maximum radiation is now **along the axis**, broadside to the plane of the loop, where the small loop had its null. The feed impedance rises to roughly $100$ to $130\ \Omega$, and the directivity is about 3.1 dBi, a little under 1 dB better than a dipole. This is the loop you can transmit with efficiently, and it is the element in a **quad** antenna.
 
 | | Electrically small loop | Resonant loop |
 | :-- | :-- | :-- |
@@ -233,6 +233,6 @@ Small is expensive, and it is expensive twice. Shrinking an antenna drives the r
 
 ## Where this is going
 
-You now have the complete wire-antenna toolkit: dipole, monopole, loop, and the image trick that turns any of them into something mounted on a vehicle. Lesson 10 leaves wires behind for the printed and aperture antennas — the microstrip patch, the slot, and the horn — where the radiating object is a surface or an opening rather than a current filament. The patch will look suspiciously like two slots over a ground plane, and you will use image theory again to understand why it works at all.
+You now have the complete wire-antenna toolkit: dipole, monopole, loop, and the image trick that turns any of them into something mounted on a vehicle. Lesson 10 leaves wires behind for the printed and aperture antennas — the microstrip patch, the slot, and the horn — where the radiating object is a surface or an opening rather than a current filament. The patch behaves much like two slots over a ground plane, and you will use image theory again to understand why it works at all.
 
 The other thread from today runs into Module 3. A monopole is an element plus one image; an array is an element plus many neighbours, and the same element-factor-times-array-factor bookkeeping handles both. When you get to pattern multiplication in Lesson 16, notice that you have already done it once — the height-above-ground curve you played with today is a two-element array whose second element happens to be a reflection.

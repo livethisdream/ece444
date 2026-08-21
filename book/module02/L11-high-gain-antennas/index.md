@@ -10,7 +10,7 @@
 ## Learning Objectives
 
 <ol class="lo-list lo-sublist" style="--module: '2'; --lo: '4'">
-  <li>I can compute an aperture antenna's gain and beamwidth from its physical size, and explain why gain is really a statement about area.</li>
+  <li>I can compute an aperture antenna's gain and beamwidth from its physical size, and explain why gain is fundamentally a statement about area.</li>
   <li>I can explain how a parabolic reflector's equal-path geometry turns a spherical wave into a plane wave, and identify what f/D, feed illumination, blockage, and spillover do to aperture efficiency.</li>
   <li>I can explain how a Yagi-Uda gets gain from parasitic elements, and how detuning the reflector and directors sets the phase that puts the beam endfire.</li>
   <li>I can describe the array as the third road to high gain, and state why the next module is devoted to it.</li>
@@ -74,7 +74,7 @@ Drive the sliders below and watch two numbers move together. Set $D/\lambda$ and
 :class: tip
 A home satellite-TV dish, roughly 1 m across, receiving Ku band at 12 GHz. Take $\eta_{\text{ap}} = 0.65$.
 
-**Wavelength.** $\lambda = c/f = (3\times10^{8})/(12\times10^{9}) = 0.025\ \text{m}$, so $D/\lambda = 40$. Forty wavelengths across.
+**Wavelength.** $\lambda = c/f = (3\times10^{8})/(12\times10^{9}) = 0.025\ \text{m}$, so $D/\lambda = 40$ and the dish is forty wavelengths across.
 
 **Gain.** $G = 0.65\ (\pi \cdot 40)^{2} = 0.65 \cdot 15791 = 1.03\times10^{4}$, i.e. $10\log_{10}(1.03\times10^{4}) = 40.1\ \text{dBi}$.
 
@@ -124,7 +124,7 @@ $\eta_{\text{ap}} \approx 0.55\text{-}0.7$ for a good reflector. That missing 30
 
 These two losses pull in opposite directions, so there is an optimum, and it is famous: **illuminate the rim about 10 dB below the centre**. That is the house rule of thumb for reflector feeds, and it is why a dish's aperture distribution always looks like one of the tapers from Lesson 6 — with the sidelobe benefit that comes along for free ($-13.3$ dB for uniform, but a real dish runs closer to $-20$ dB because of the taper).
 
-**Blockage.** A prime-focus feed and its struts sit squarely in the beam. Removing a blocked diameter $d$ from a dish of diameter $D$ costs roughly a factor $[1-(d/D)^2]^2$ in gain and raises the sidelobes, because you have punched a hole in the aperture distribution. On a 3 m dish a 15 cm feed is a rounding error. On a 45 cm consumer dish it is not — which is why the DirecTV dish on the roof looks oval and has its arm hanging off the bottom. That is an **offset feed**: the reflector is a slice cut off-axis from a much larger imaginary paraboloid, so the feed sits entirely outside the beam. Zero blockage, cleaner sidelobes, and the tilted slice is what makes the panel look taller than it is wide.
+**Blockage.** A prime-focus feed and its struts sit squarely in the beam. Removing a blocked diameter $d$ from a dish of diameter $D$ costs roughly a factor $[1-(d/D)^2]^2$ in gain and raises the sidelobes, because you have punched a hole in the aperture distribution. On a 3 m dish a 15 cm feed is a rounding error. On a 45 cm consumer dish it is not — which is why the DirecTV dish on the roof looks oval and has its arm hanging off the bottom. That is an **offset feed**: the reflector is a slice cut off-axis from a much larger imaginary paraboloid, so the feed sits entirely outside the beam. An offset feed gives zero blockage and cleaner sidelobes, and the tilted slice is what makes the panel look taller than it is wide.
 
 **Surface accuracy.** Phase errors from a bumpy surface cost gain exponentially. **Ruze's formula** states the penalty compactly:
 
@@ -132,7 +132,7 @@ $$
 G = G_0\ e^{-(4\pi\sigma/\lambda)^{2}} \qquad\Longrightarrow\qquad \text{loss (dB)} = 685.8\left(\frac{\sigma}{\lambda}\right)^{2}
 $$
 
-with $\sigma$ the RMS surface error. We will not derive it; just use it. An RMS error of $\lambda/50$ costs 0.27 dB — negligible. An RMS error of $\lambda/16$ costs 2.7 dB — ruinous. Note what this means for a fixed piece of hardware: a dish held to 0.5 mm RMS is essentially perfect at 6 GHz and has thrown away 1.7 dB by 30 GHz. Big dishes at short wavelengths are a machining problem, not an electromagnetics problem.
+with $\sigma$ the RMS surface error. This course uses the result without deriving it. An RMS error of $\lambda/50$ costs 0.27 dB, which is negligible; an RMS error of $\lambda/16$ costs 2.7 dB, which is enough to disqualify the reflector. Note what this means for a fixed piece of hardware: a dish held to 0.5 mm RMS is essentially perfect at 6 GHz and has thrown away 1.7 dB by 30 GHz. Big dishes at short wavelengths are a machining problem, not an electromagnetics problem.
 
 Multiply the pieces to get a budget:
 
@@ -153,7 +153,7 @@ The reflector buys area with a mirror. The **Yagi-Uda** buys it with the neighbo
      alt="Yagi-Uda antenna showing a slightly long reflector, the fed driven element, and a row of progressively shorter directors along a boom, with the main beam endfire"
      style="max-width: 720px; width: 100%; display: block; margin: 1em auto;">
 
-Exactly one element is connected to the transmitter — the **driven element**, a dipole near $0.47\lambda$. Every other element is **parasitic**: no feed line, no source, just a rod that the driven element's near field induces a current on. That induced current re-radiates, and the total pattern is the superposition of all of them. Nothing new physically; it is Lesson 6's radiation integral with several current filaments instead of one.
+Exactly one element is connected to the transmitter — the **driven element**, a dipole near $0.47\lambda$. Every other element is **parasitic**: no feed line, no source, just a rod that the driven element's near field induces a current on. That induced current re-radiates, and the total pattern is the superposition of all of them. There is nothing new physically: this is Lesson 6's radiation integral with several current filaments instead of one.
 
 The trick is phase, and it is bought by **detuning**. A dipole slightly longer than resonance is inductive; a dipole slightly shorter is capacitive. The reactance sets the phase of the induced current relative to the driving field:
 
@@ -169,12 +169,12 @@ The result is an **endfire** beam: the main lobe points along the boom, away fro
 | 10 | $2.2\lambda$ | 12.5 dBi |
 | 16 | $4.5\lambda$ | 14.5 dBi |
 
-The rule of thumb: **roughly 3 dB per doubling of boom length, and it flattens out.** The boom, not the element count, is what buys the gain — stuffing more directors into the same boom does almost nothing. Practical single Yagis live between 8 and 15 dBi. Beyond that you stack several of them and let the stack act as an array.
+The rule of thumb is **roughly 3 dB per doubling of boom length**, and the gain flattens out as the boom grows. The boom, not the element count, is what buys the gain — stuffing more directors into the same boom does almost nothing. Practical single Yagis live between 8 and 15 dBi. Beyond that you stack several of them and let the stack act as an array.
 
 What you pay for the simplicity is bandwidth. Everything on a Yagi is a detuned resonator, so a few percent off design frequency and the phases drift and the pattern degrades. That is fine for a fixed-channel TV, amateur, or point-to-point link — which is where you find them — and a poor fit for anything wideband.
 
 ```{note}
-No mutual-impedance matrices in this course. If you want the currents on the parasites exactly, you solve a coupled system with one row per element — that is what NEC did for you in L8. Here, the phenomenology is the point: long lags, short leads, and the beam goes toward the short end.
+This course does not use mutual-impedance matrices. If you want the currents on the parasites exactly, you solve a coupled system with one row per element — that is what NEC did for you in L8. Here, the phenomenology is the point: long lags, short leads, and the beam goes toward the short end.
 ```
 
 ## Part 5: The Third Road — Arrays
@@ -197,7 +197,7 @@ Five questions, in this order, settle almost every real selection.
 2. **What frequency?** Aperture antennas get small and cheap as $\lambda$ shrinks; wire antennas get fragile.
 3. **How much bandwidth?** Reflectors and horns are broadband. Yagis and patch arrays are not.
 4. **Does it have to move or steer?** A dish steers mechanically and slowly; an array steers electronically and instantly; a Yagi mostly does not steer at all.
-5. **What are the cost, size, weight, and wind load?** A 20 dBi answer that will not survive a Colorado winter is not an answer.
+5. **What are the cost, size, weight, and wind load?** A 20 dBi antenna that cannot survive local wind and ice loading is not a usable answer.
 
 | | Reflector | Yagi-Uda | Planar array |
 | :-- | :-- | :-- | :-- |
@@ -213,11 +213,11 @@ You need a 20 dBi ground-station antenna at 2.4 GHz for a cubesat downlink. $\la
 
 **Required effective aperture.** $A_e = G\lambda^{2}/4\pi = 100(0.015625)/12.57 = 0.124\ \text{m}^{2}$. Every candidate has to deliver that much coherent area.
 
-**Dish.** With $\eta_{\text{ap}} = 0.6$, $A = 0.124/0.6 = 0.207\ \text{m}^{2}$, so $D = 2\sqrt{A/\pi} = 0.51\ \text{m}$. Beamwidth $\theta_\text{HP} \approx 70^\circ(0.125/0.51) = 17^\circ$. A half-metre dish with a 17-degree beam — forgiving to point, cheap, broadband. Hard to beat.
+**Dish.** With $\eta_{\text{ap}} = 0.6$, $A = 0.124/0.6 = 0.207\ \text{m}^{2}$, so $D = 2\sqrt{A/\pi} = 0.51\ \text{m}$. Beamwidth $\theta_\text{HP} \approx 70^\circ(0.125/0.51) = 17^\circ$. A half-metre dish with a 17-degree beam is forgiving to point, cheap, and broadband, and no other candidate here matches it on all three.
 
 **Yagi.** A single Yagi tops out near 15 dBi at a $4.5\lambda$ (0.56 m) boom, so 20 dBi needs four of them stacked in a 2x2 bay: $15 + 10\log_{10}4 = 21\ \text{dBi}$. It works, but it is four booms, a phasing harness, and a narrow band.
 
-**Patch array.** At $\lambda/2 = 6.25\ \text{cm}$ spacing with $\eta_{\text{ap}} = 0.75$, a $7\times7$ grid spans $0.44\ \text{m}$ square, $A = 0.191\ \text{m}^{2}$, giving $G = 0.75(4\pi)(0.191)/0.015625 = 115 = 20.6\ \text{dBi}$. Flat, low wind load, and steerable later — at the price of a 49-way feed network.
+**Patch array.** At $\lambda/2 = 6.25\ \text{cm}$ spacing with $\eta_{\text{ap}} = 0.75$, a $7\times7$ grid spans $0.44\ \text{m}$ square, $A = 0.191\ \text{m}^{2}$, giving $G = 0.75(4\pi)(0.191)/0.015625 = 115 = 20.6\ \text{dBi}$. The panel is flat, presents low wind load, and can be made steerable later, at the price of a 49-way feed network.
 
 **Decision.** For a fixed ground station on a rotator, take the 0.51 m dish: fewest parts, widest band, lowest cost. Choose the patch array instead the moment you need a flat profile or electronic steering.
 :::
@@ -255,6 +255,6 @@ Against a receiver noise floor of about $-121\ \text{dBm}$ in a 100 kHz channel 
 
 ## Where this is going
 
-Every gain number in this lesson was a claim. $\eta_{\text{ap}} = 0.65$ was an assumption, $70^\circ\lambda/D$ was a rule of thumb, and the Ruze penalty depended on a surface you have not measured. Before you may write a gain on a data sheet — or in your midterm project report — you have to measure it. L12 builds the theory of pattern measurement: far-field ranges, why $2D^2/\lambda$ turned out to be 80 m for a dish you could carry, gain-comparison and three-antenna methods, and how to read a measured pattern honestly.
+Every gain number in this lesson was a claim. $\eta_{\text{ap}} = 0.65$ was an assumption, $70^\circ\lambda/D$ was a rule of thumb, and the Ruze penalty depended on a surface you have not measured. Before you may write a gain on a data sheet — or in your midterm project report — you have to measure it. L12 builds the theory of pattern measurement: far-field ranges, why $2D^2/\lambda$ turned out to be 80 m for a dish you could carry, gain-comparison and three-antenna methods, and how to state what a measured pattern does and does not establish.
 
-Then L13 and L14 put you on the instruments, and Module 3 picks up the third road. When you get there, remember what an array is really doing: assembling the same coherent aperture a dish assembles with a mirror, one element and one phase shifter at a time.
+Then L13 and L14 put you on the instruments, and Module 3 picks up the third road. When you get there, remember what an array is doing: assembling the same coherent aperture a dish assembles with a mirror, one element and one phase shifter at a time.

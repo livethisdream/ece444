@@ -58,10 +58,10 @@ $$U_\text{iso} = \frac{P_\text{rad}}{4\pi} \qquad D_\text{iso} = 1 \qquad 0 \tex
 - Somewhere the field must go to zero. That is a null, and **every real antenna has at least one**.
 - It survives anyway as the **unit of comparison**: directivity is defined as a ratio against it.
 
-**Not a product. A reference, baked into every gain number you will ever quote.**
+**It is not a product. It is a reference, baked into every gain number you will ever quote.**
 
 Note:
-Ask: has anyone bought one? No. Then ask why the datasheet still says dBi. Keep the hairy-ball argument to 60 seconds — the physics point that matters is that a null is not a defect, it is a topological requirement.
+Ask whether anyone has ever bought one, then ask why the datasheet still says dBi. Keep the hairy-ball argument to 60 seconds — the physics point that matters is that a null is not a defect, it is a topological requirement.
 
 ---
 
@@ -80,7 +80,7 @@ EIRP collapses a transmitter and its antenna into <strong>one number</strong> th
 </div>
 
 Note:
-5 W into a half-wave dipole is 8.2 W EIRP — 39.1 dBm. Same power, bigger number, because the energy is not going everywhere.
+5 W into a half-wave dipole is 8.2 W EIRP, or 39.1 dBm. The power is the same and the number is bigger because the energy is no longer spread in every direction.
 
 ---
 
@@ -109,7 +109,7 @@ $$I(z) = I_m \sin\left[k\left(\frac{L}{2} - \vert z \vert\right)\right]$$
 - Feed: $I(0) = I_m \sin(kL/2)$ — a *maximum* at $\lambda/2$, a *null* at $1\lambda$.
 
 Note:
-Build it on the board: open-circuited two-wire line, current zero at the open end, then fold the last stretch apart into two arms and the standing wave comes with it. Then say the honest thing out loud: this current is assumed, not solved for. It is a very good guess with a transmission-line pedigree, confirmed by measurement, but it is not a solution of Maxwell's equations for a dipole — and everything downstream in this lesson inherits it. L8 is where they find out what the guess costs. Flag the feed-point contrast now, maximum at half a wave versus null at a full wave, because it decides the impedance story in Part 4.
+Build it on the board: open-circuited two-wire line, current zero at the open end, then fold the last stretch apart into two arms and the standing wave comes with it. Then say it out loud: this current is assumed, not solved for. It is a very good guess with a transmission-line pedigree, confirmed by measurement, but it is not a solution of Maxwell's equations for a dipole — and everything downstream in this lesson inherits it. L8 is where they find out what the guess costs. Flag the feed-point contrast now, maximum at half a wave versus null at a full wave, because it decides the impedance story in Part 4.
 
 ---
 
@@ -123,7 +123,7 @@ The current is **even** in $z'$. Pair $z'$ with $-z'$, the two exponentials comb
 
 $$N_z(\theta) = 2 I_m \int_0^{L/2} \sin\left[k\left(\frac{L}{2} - z'\right)\right]\cos(kz'\cos\theta)\ dz'$$
 
-**No approximation yet — just symmetry.**
+**No approximation has entered yet — this step is only symmetry.**
 
 Note:
 Do this one live on the board — it is the only antenna in the course where the whole machine runs end to end, and seeing it once is what makes L6 stick. Write the radiation vector, then ask them what makes the dot product collapse to z prime cos theta. Draw the pairing of plus z prime with minus z prime and let them tell you the exponentials become a cosine. Emphasize that folding by symmetry is free and that it also kills the imaginary part — students who grind through the full complex integral get the same answer with three times the algebra.
@@ -136,12 +136,12 @@ Product-to-sum turns the integrand into two plain sines:
 
 $$\sin A \cos B = \frac{1}{2}\left[\sin(A+B) + \sin(A-B)\right]$$
 
-Both integrate on sight. Collecting terms:
+Both integrate directly. Collecting terms:
 
 $$N_z(\theta) = \frac{2 I_m}{k}\ \frac{\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}}{\sin^2\theta}$$
 
 <div class="callout">
-A first-year integral. The hard part was choosing the current, not doing the calculus.
+The calculus is elementary. The hard part was choosing the current.
 </div>
 
 Note:
@@ -155,13 +155,13 @@ A $z$-directed current radiates only a $\theta$ component. L6's projection costs
 
 $$N_\theta = -N_z \sin\theta \quad \Longrightarrow \quad \vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}}{\sin\theta} \right\vert$$
 
-Bars, because the bracket flips sign past $L = \lambda$. Proportional, because normalizing divides by the peak — at broadside that is $1 - \cos\frac{kL}{2}$, which is **1** at $\lambda/2$ but **2** at $1\lambda$.
+The bars are there because the bracket flips sign past $L = \lambda$. The proportionality is there because normalizing divides by the peak — at broadside that is $1 - \cos\frac{kL}{2}$, which is **1** at $\lambda/2$ but **2** at $1\lambda$.
 
 At $L = \lambda/2$ the second cosine vanishes and the peak is exactly 1, so this one is already normalized:
 
 $$\vert F(\theta) \vert = \frac{\cos\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}$$
 
-**One integral, every length — the multi-lobe patterns later come from this same formula.**
+**One integral covers every length — the multi-lobe patterns later come from this same formula.**
 
 Note:
 Finish the derivation here, then stop and point at what is on the board. This is the payoff for the whole radiation-integral thread that started in L6: assumed a current, transformed it, projected it, read the pattern. Say the two warnings out loud as you write them — the bars because the bracket flips sign past a full wavelength, the proportionality because normalizing divides by the broadside peak and that peak is one at half a wavelength but two at a full wavelength, so only the half-wave case comes out already normalized. Then the closing line: nothing about any of this was half-wave specific until the last step.
@@ -171,7 +171,7 @@ Finish the derivation here, then stop and point at what is on the board. This is
 ## So why half a wavelength?
 
 <div class="callout">
-Not for the pattern. For the <strong>impedance</strong>. At $\lambda/2$ the current maximum sits at the feed, the radiation resistance climbs to ~73 Ω, and the wire will accept power from an ordinary line without a matching network.
+The reason is not the pattern; it is the <strong>impedance</strong>. At $\lambda/2$ the current maximum sits at the feed, the radiation resistance climbs to ~73 Ω, and the wire will accept power from an ordinary line without a matching network.
 </div>
 
 $$Z_{\text{in}} \approx 73 + j42.5\ \Omega$$
@@ -216,7 +216,7 @@ $$\int_0^\pi \frac{\cos^2\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\th
 | $R_r$ | $\left(\eta_0/4\pi\right) C_{in}(2\pi)$ | $\mathbf{73.1\ \Omega}$ |
 
 <div class="callout">
-Referred to the <strong>current maximum</strong> — which at $\lambda/2$ <em>is</em> the feed. That coincidence is the only reason this lands on the input resistance.
+This resistance is referred to the <strong>current maximum</strong>, which at $\lambda/2$ <em>is</em> the feed. That coincidence is the only reason this lands on the input resistance.
 </div>
 
 Note:
@@ -235,7 +235,7 @@ The induced-EMF method works where that energy actually is:
 3. Integrate that field against the current, along the wire.
 
 <div class="callout">
-That product is a complex power: <strong>real part = radiated power, imaginary part = stored energy.</strong> Near-field bookkeeping, done at the antenna instead of on a distant sphere.
+That product is a complex power: <strong>real part = radiated power, imaginary part = stored energy.</strong> It is near-field bookkeeping, done at the antenna instead of on a distant sphere.
 </div>
 
 Note:
@@ -252,7 +252,7 @@ $$X = \frac{\eta_0}{4\pi}Si(2\pi) = 30 \times 1.4182 = 42.5\ \Omega$$
 $$Z_{\text{in}} = \frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 73.1 + j42.5\ \Omega$$
 
 <div class="callout">
-Radius-independent <strong>only at exactly $\lambda/2$</strong> — which is why 42.5 is quotable at all.
+The reactance is radius-independent <strong>only at exactly $\lambda/2$</strong>, which is why 42.5 is quotable at all.
 </div>
 
 Note:
@@ -290,7 +290,7 @@ This is the physical answer to the previous figure. An insulated wire shortens f
 
 $$L_\text{resonant} \approx 0.95 \times \frac{\lambda}{2} = 0.475\ \lambda$$
 
-Which, with $\lambda = c/f$, is the number every field manual prints:
+With $\lambda = c/f$, that is the number every field manual prints:
 
 $$L \approx \frac{143}{f_\text{MHz}} \text{ meters} \qquad \left(\frac{468}{f_\text{MHz}} \text{ feet}\right)$$
 
@@ -315,7 +315,7 @@ At resonance the reactance is gone and the resistance settles near $70\ \Omega$:
 | 75 Ω | $70 + j0$ | 0.03 | **1.07** |
 
 <div class="callout">
-<strong>Trimming to resonance is worth more than changing the cable.</strong> Removing the reactance: 2.18 &rarr; 1.40. Changing the cable instead: 2.18 &rarr; 1.76.
+<strong>Trimming to resonance is worth more than changing the cable.</strong> Removing the reactance takes 2.18 to 1.40. Changing the cable instead takes 2.18 to 1.76.
 </div>
 
 Note:
@@ -349,7 +349,7 @@ Past $\lambda/2$ the standing wave **reverses phase** along the wire. Reversed c
 <div class="fig" data-inline-svg="./fig/L07-dipole-patterns.svg" style="max-width:1000px; margin:0 auto;"></div>
 
 Note:
-Demo the widget here: drag from 0.5 to 1.5 and watch the reversals appear one at a time. Full wave: still broadside, narrower, 3.8 dBi. At 1.25 wavelengths the broadside lobe is as good as it gets. At 1.5 the main lobes have walked off broadside entirely.
+Demo the widget here: drag from 0.5 to 1.5 and watch the reversals appear one at a time. At a full wave the pattern is still broadside, narrower, and 3.8 dBi. At 1.25 wavelengths the broadside lobe is as good as it gets. At 1.5 the main lobes have walked off broadside entirely.
 
 ---
 
@@ -358,7 +358,7 @@ Demo the widget here: drag from 0.5 to 1.5 and watch the reversals appear one at
 <div class="fig" data-inline-svg="./fig/L07-dipole-vs-length.svg" style="max-width:620px; margin:0 auto;"></div>
 
 Note:
-Two curves, two lessons. Directivity peaks near 1.25 wavelengths at about 5.2 dBi. Resistance sweeps through 50 ohms twice before the wire is a wavelength long — which is why non-resonant lengths are a matching adventure.
+Two curves carry two lessons. Directivity peaks near 1.25 wavelengths at about 5.2 dBi. Resistance sweeps through 50 ohms twice before the wire is a wavelength long — which is why non-resonant lengths are hard to match.
 
 ---
 
@@ -389,10 +389,10 @@ At 1.5 wavelengths the main lobes are off broadside, so a single broadside HPBW 
 | Each arm | half of that | $48.8\ \text{cm}$ |
 | Check | $143 / 146$ | $0.980\ \text{m}$ |
 
-**Two 49 cm arms. That is the whole design.**
+**The whole design is two 49 cm arms.**
 
 Note:
-Have them notice the two routes agree to a centimeter. Also: 49 cm is a length you can eyeball, which is the point of a rule of thumb.
+Have them notice the two routes agree to a centimeter. Also note that 49 cm is a length you can eyeball, which is the point of a rule of thumb.
 
 ---
 
@@ -417,7 +417,7 @@ $D$ here is the dipole length, 0.976 m, so $2D^2/\lambda$ is 0.93 m. Anything me
 
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
-The dipole explorer sweeps $L/\lambda$ from 0.05 to 1.5 and computes — honestly, by integration — the current, the pattern, the beamwidth, the directivity, and the feed-point resistance and reactance.
+The dipole explorer sweeps $L/\lambda$ from 0.05 to 1.5 and computes, by numerical integration, the current, the pattern, the beamwidth, the directivity, and the feed-point resistance and reactance.
 
 - Park it at $0.50$: **78.1°, 2.15 dBi, 73.1 Ω, +42.5 Ω**.
 - Back off to $0.474$: the reactance crosses zero.
