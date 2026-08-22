@@ -1,7 +1,6 @@
 # Seed prompt — Module 3
 
 Copy everything below the line into a new Claude Code session on this repo.
-Fill in the one bracketed slot first.
 
 ---
 
@@ -43,8 +42,9 @@ The ADALM-PHASER (CN0566) teaching material from Analog Devices:
 - **MATLAB control examples** — https://github.com/mathworks/Phaser-Control-with-MATLAB
 - Python control is via `pyadi-iio`; the Phaser examples live in that repo.
 
-Two things to confirm with Neil before authoring the lab lessons (L17, L19,
-L21, L23, L25, L28): whether Module 3 is built **from** this material or
+The PHASER is the hardware for Modules 3 and 4; L17, L19, L21, L23, L25, and
+L28 are hands-on lab lessons on it. Two things to confirm with Neil before
+authoring those: whether Module 3 is built **from** this material or
 merely consistent with it, and whether any of it may be reused directly
 versus rewritten in course voice.
 
@@ -57,12 +57,6 @@ names, `pyadi-iio` call signatures, IF frequencies, or lab procedures: the
 CN0566 is an 8-element array with downconverting mixers whose two IF outputs
 sit near 2.2 GHz and are digitized by a PlutoSDR, and everything beyond that
 should come from the source material or from Neil.
-
-The ADALM-PHASER (CN0566) is the hardware for Modules 3 and 4. Lessons 17, 19,
-21, 23, 25, and 28 are hands-on lab lessons on it. Before authoring those,
-confirm what the source material actually specifies — do not invent hardware
-details, register names, pyadi-iio call signatures, or lab procedures. Where
-the source is silent, say so and ask.
 
 ## Scope
 
