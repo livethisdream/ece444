@@ -32,10 +32,31 @@ concurrent sessions, so keep edits small.
 
 ## Source material for the second half of the course
 
-[PASTE THE LINK FROM YOUR module3.md HERE — the CN0566 / ADALM-PHASER lab and
-slide material. Also say whether you want Module 3 built *from* that material
-or merely consistent with it, and whether any of it can be reused directly
-versus rewritten in course voice.]
+The ADALM-PHASER (CN0566) teaching material from Analog Devices:
+
+- **Main page** — https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0566
+  The hardware description plus ADI's own short lecture series and hands-on
+  labs, which is the material this half of the course is meant to build on.
+- **Printable lab manual** — https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/phaser_lab_instructions_june14_2022_no_title.pdf
+  ("Phased Array Exploration Workshop")
+- **Circuit note (hardware detail)** — https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0566.pdf
+- **MATLAB control examples** — https://github.com/mathworks/Phaser-Control-with-MATLAB
+- Python control is via `pyadi-iio`; the Phaser examples live in that repo.
+
+Two things to confirm with Neil before authoring the lab lessons (L17, L19,
+L21, L23, L25, L28): whether Module 3 is built **from** this material or
+merely consistent with it, and whether any of it may be reused directly
+versus rewritten in course voice.
+
+**Verify these URLs resolve from your container before relying on them.**
+`wiki.analog.com` was blocked by the egress proxy in the Module 2 session —
+the links were confirmed to exist through search, but the pages could not be
+read. If they are blocked for you too, say so and ask Neil to attach or paste
+the material rather than inventing hardware detail. Do not invent register
+names, `pyadi-iio` call signatures, IF frequencies, or lab procedures: the
+CN0566 is an 8-element array with downconverting mixers whose two IF outputs
+sit near 2.2 GHz and are digitized by a PlutoSDR, and everything beyond that
+should come from the source material or from Neil.
 
 The ADALM-PHASER (CN0566) is the hardware for Modules 3 and 4. Lessons 17, 19,
 21, 23, 25, and 28 are hands-on lab lessons on it. Before authoring those,
