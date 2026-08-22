@@ -35,3 +35,6 @@ latex/*Assessment*.tex
 
 # Subagent scratch worktrees (session-local, never committed).
 .claude/worktrees/
+
+# vendored reveal.js + mathjax for the render harness
+scripts/verify/node_modules/

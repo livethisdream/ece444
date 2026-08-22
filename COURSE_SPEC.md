@@ -372,6 +372,15 @@ stay bare ($\eta_0$, $A_e$, $G_t$, $G_r$).
 - dB values get one decimal where meaningful ($-13.3$ dB, 2.15 dBi).
 - Em dashes with spaces — like this — for asides in prose.
 
+## 8b. Software and tooling
+
+**Python or another FOSS language, never MATLAB.** Every lab procedure,
+example, analysis script, and piece of code a student runs is Python unless
+Neil says otherwise. Hardware control for the ADALM-PHASER goes through
+`pyadi-iio`. Vendor material for this hardware is frequently MATLAB-first —
+read it for the control sequence, then write the course version in Python.
+Never assign, embed, or recommend MATLAB.
+
 ## 9. Voice
 
 **Read `VOICE.md` before writing prose.** It carries the calibration set —
@@ -412,17 +421,24 @@ Direct and plain is the target. Clever is not.
    for `Overfull`.
 2. Deck: `python3 scripts/make_deck_html.py --slug <slug> --title
    "L<N> - <Title>" --course "ECE 444"`, then run the render check:
-   `python3 $DECKCHECK/check_deck.py <slug>` (env var `DECKCHECK` is set in
-   your brief) — every slide must fit 700px, zero raw `$$`, zero missing
-   figures.
-3. Widget: `python3 $DECKCHECK/check_widget.py book/extras/viz/<name>.html`
-   — no console errors, canvas paints, returns measured height; use that
-   height in the lesson-page iframe.
-4. Greps: no U+2009 (`grep -rP '\x{2009}'` on your files), no `$|` in table
-   rows, no `\,`/`\;` in the deck `.md`, no unescaped `}_{` in deck markdown
-   regions (outside raw-HTML divs).
-5. Do NOT run `jupyter-book build` (the orchestrator builds once, centrally).
-6. Do NOT commit or push. Leave files in the working tree.
+   `scripts/verify/check_deck.py <slug>` — every slide must fit 700px, zero
+   raw `$$`, zero missing figures.
+3. Widget: `scripts/verify/check_widget.py book/extras/viz/<name>.html` — no
+   console errors, canvas paints, zero horizontal overflow down to 320px,
+   undistorted aspect. It reports the worst-case height across the widths the
+   article column actually takes; use that in the lesson-page iframe.
+4. Tables: `scripts/verify/check_tables.py <your .md files>` — a `|` inside
+   `$...$` splits a cell; use `\vert`.
+5. Greps: no U+2009 (`grep -rP '\x{2009}'` on your files), no `\,`/`\;` in
+   the deck `.md`, no unescaped `}_{` in deck markdown regions (outside
+   raw-HTML divs).
+6. Do NOT run `jupyter-book build` (the orchestrator builds once, centrally).
+7. Do NOT commit or push. Leave files in the working tree.
+
+`scripts/verify/mech_check.sh <NN> <slug>` runs all of the above at once, plus
+the checks the orchestrator would otherwise run by hand. Prefer it. It needs
+`cd scripts/verify && npm install` once per container — the CDNs are blocked
+here, so reveal.js and MathJax have to be vendored.
 
 Report back ≤20 lines: paths written, self-check results (pass/fail each),
 assumptions made, ambiguities. Never lesson content.
