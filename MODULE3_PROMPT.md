@@ -42,6 +42,11 @@ ADI Pluto for IQ, and an ADF4159 LO through `pyadi-iio`. A browser UI
 (vanilla JS + Plotly) connects over WebSocket from any machine on the network.
 A second frontend serves a CW Doppler radar app — that one is Module 4's.
 
+**Module 4 is not ready to author.** Neil is still building the radar GUI, so
+the FMCW work in Modules 4-5 has no finished platform yet. Module 3 is
+unaffected; do not scope Module 4 lessons against the current radar frontend
+without asking.
+
 Three things about it shape how Module 3 should be written:
 
 1. **Simulation mode means you can actually run the labs.** `python
@@ -54,8 +59,10 @@ Three things about it shape how Module 3 should be written:
    student will read against theory, the way Module 2 verified every widget.
    (CW Doppler radar is not simulated.)
 2. **The GUI already has lab presets**, selected by lab index, aligned to
-   `docs/2025_Phaser_labs_Python.pdf` in that repo. Course lab lessons should
-   drive those presets rather than inventing a parallel procedure.
+   `docs/2025_Phaser_labs_Python.pdf` in that repo. **Neil built the GUI to
+   follow those labs exactly**, so that document defines the lab sequence —
+   Module 3's lab lessons follow it rather than inventing a parallel
+   procedure. Read the PDF before writing any lab.
 3. **Instructor mode** (`?instructor=1`, sim only) exposes a configurable
    interferer for MVDR nulling demos, hidden from students. That is the
    natural vehicle for objective 3.9 and for the Module 5 jammer capstone.
@@ -65,11 +72,14 @@ per-element phase serve 3.4 and 3.5; taper presets serve 3.7; grating lobes on
 sparse tapers serve 3.8; MVDR and the interferer serve 3.9; comparing the
 array factor against a measured sweep serves 3.6.
 
-**One thing Neil must supply:** `docs/2025_Phaser_labs_Python.pdf`, the
-canonical workshop lab document the GUI's presets are aligned to, is
-gitignored and therefore not in the clone. Ask for it before writing lab
-procedures. Ask also whether Module 3 should follow that document's lab
-sequence or depart from it.
+**Check whether `docs/2025_Phaser_labs_Python.pdf` is in the clone.** It is
+the canonical workshop lab document, and `.gitignore` excluded `docs/*.pdf`
+as of the Module 2 session; Neil intended to un-ignore it (the repo is
+private, so the PDF is internal use, not redistribution). If it is still
+missing, ask him for it rather than reconstructing the labs from the GUI's
+preset code.
+
+**Clone note:** the repo's default branch is `browser-based`, not `main`.
 
 ## Background reading on the hardware
 
