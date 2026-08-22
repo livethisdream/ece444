@@ -47,7 +47,11 @@ Supplementary, found by search and not verified against Neil's intent:
   ("Phased Array Exploration Workshop")
 - **Circuit note (hardware detail)** — https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0566.pdf
 - **MATLAB control examples** — https://github.com/mathworks/Phaser-Control-with-MATLAB
+  **Reference only.** The course never uses MATLAB (see `CLAUDE.md` and
+  `COURSE_SPEC.md` §8b). Read it to understand a control sequence if useful,
+  then write the course version in Python.
 - Python control is via `pyadi-iio`; the Phaser examples live in that repo.
+  **All Module 3 labs, examples, and student-run code are Python.**
 
 The PHASER is the hardware for Modules 3 and 4; L17, L19, L21, L23, L25, and
 L28 are hands-on lab lessons on it. Two things to confirm with Neil before

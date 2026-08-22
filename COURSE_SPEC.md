@@ -372,6 +372,15 @@ stay bare ($\eta_0$, $A_e$, $G_t$, $G_r$).
 - dB values get one decimal where meaningful ($-13.3$ dB, 2.15 dBi).
 - Em dashes with spaces — like this — for asides in prose.
 
+## 8b. Software and tooling
+
+**Python or another FOSS language, never MATLAB.** Every lab procedure,
+example, analysis script, and piece of code a student runs is Python unless
+Neil says otherwise. Hardware control for the ADALM-PHASER goes through
+`pyadi-iio`. Vendor material for this hardware is frequently MATLAB-first —
+read it for the control sequence, then write the course version in Python.
+Never assign, embed, or recommend MATLAB.
+
 ## 9. Voice
 
 **Read `VOICE.md` before writing prose.** It carries the calibration set —

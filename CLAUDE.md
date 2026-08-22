@@ -107,6 +107,12 @@ The markdown parser mangles LaTeX in four specific ways:
 
 ## Don'ts
 
+- **Never use MATLAB.** Course software is Python or another FOSS language —
+  labs, examples, analysis scripts, and anything a cadet is asked to run. This
+  applies to the ADALM-PHASER labs in Modules 3-5, where vendor material is
+  often MATLAB-first: translate it to Python (`pyadi-iio`) rather than adopt
+  it. MATLAB sources may be read as reference; they are never a deliverable
+  and are never assigned.
 - **Don't hand-edit `book/_toc.yml`** — `scripts/scaffold_lessons.py` regenerates
   it wholesale from its `LESSONS` manifest. Edit the manifest and re-run.
 - **Don't commit practice PDFs built with stand-in macros.** Reimplementing the
