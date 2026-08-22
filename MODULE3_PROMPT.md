@@ -29,45 +29,65 @@ Also read `project/ECE444_PROJECT.md` for running status and decisions, and
 update its Status/ToDo sections when you finish. It is shared across
 concurrent sessions, so keep edits small.
 
-## Source material for the second half of the course
+## The tooling: Neil's Phaser GUI (this is the lab platform)
 
-The ADALM-PHASER (CN0566) teaching material from Analog Devices.
+**`https://github.com/livethisdream/phaser` — attach it with `add_repo` and
+clone it before authoring any lab lesson.** Neil built this, it is the
+software the labs run on, and it replaces ADI's own tooling. It is Python and
+vanilla JS, consistent with the no-MATLAB rule.
 
-**This is the source Neil intends the second half of the course to be built
-on — start here:**
+What it is: a headless Python backend (`phaser_headless.py`) that runs on the
+Raspberry Pi shipped with the Phaser kit, driving the ADAR1000 beamformer, an
+ADI Pluto for IQ, and an ADF4159 LO through `pyadi-iio`. A browser UI
+(vanilla JS + Plotly) connects over WebSocket from any machine on the network.
+A second frontend serves a CW Doppler radar app — that one is Module 4's.
 
-- **https://analogdevicesinc.github.io/documentation/solutions/platforms/phaser/index.html#adc-adalm-phaser**
-  ADI's Phaser platform documentation, carrying the lecture material and the
-  hands-on lab sequence.
+Three things about it shape how Module 3 should be written:
 
-Supplementary, found by search and not verified against Neil's intent:
+1. **Simulation mode means you can actually run the labs.** `python
+   phaser_headless.py --sim` brings up the whole UI against physics-based
+   stubs — beam sweeps, per-element phase, taper presets, Beam Steering,
+   Manual and MVDR digital beamforming — synthesizing element-level IQ from
+   an HB100 target so beamwidths, sidelobe roll-off, grating lobes on sparse
+   tapers, and MVDR nulls all come out physically consistent. **Use it.** Do
+   not write a lab procedure you have not executed. Verify the numbers a
+   student will read against theory, the way Module 2 verified every widget.
+   (CW Doppler radar is not simulated.)
+2. **The GUI already has lab presets**, selected by lab index, aligned to
+   `docs/2025_Phaser_labs_Python.pdf` in that repo. Course lab lessons should
+   drive those presets rather than inventing a parallel procedure.
+3. **Instructor mode** (`?instructor=1`, sim only) exposes a configurable
+   interferer for MVDR nulling demos, hidden from students. That is the
+   natural vehicle for objective 3.9 and for the Module 5 jammer capstone.
 
-- **Older wiki page** — https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0566
-- **Printable lab manual** — https://wiki.analog.com/_media/resources/eval/user-guides/circuits-from-the-lab/cn0566/phaser_lab_instructions_june14_2022_no_title.pdf
-  ("Phased Array Exploration Workshop")
-- **Circuit note (hardware detail)** — https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0566.pdf
-- **MATLAB control examples** — https://github.com/mathworks/Phaser-Control-with-MATLAB
-  **Reference only.** The course never uses MATLAB (see `CLAUDE.md` and
-  `COURSE_SPEC.md` §8b). Read it to understand a control sequence if useful,
-  then write the course version in Python.
-- Python control is via `pyadi-iio`; the Phaser examples live in that repo.
-  **All Module 3 labs, examples, and student-run code are Python.**
+Feature-to-objective mapping, to check rather than assume: beam sweep and
+per-element phase serve 3.4 and 3.5; taper presets serve 3.7; grating lobes on
+sparse tapers serve 3.8; MVDR and the interferer serve 3.9; comparing the
+array factor against a measured sweep serves 3.6.
+
+**One thing Neil must supply:** `docs/2025_Phaser_labs_Python.pdf`, the
+canonical workshop lab document the GUI's presets are aligned to, is
+gitignored and therefore not in the clone. Ask for it before writing lab
+procedures. Ask also whether Module 3 should follow that document's lab
+sequence or depart from it.
+
+## Background reading on the hardware
+
+ADI's own material describes the CN0566 hardware. It is background, not the
+lab source — the labs use Neil's GUI.
+
+- https://analogdevicesinc.github.io/documentation/solutions/platforms/phaser/index.html#adc-adalm-phaser
+- Circuit note (hardware detail) — https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0566.pdf
+- Older wiki page — https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0566
+
+**Both ADI hosts were blocked by the container egress proxy during Module 2**,
+so this material may be unreadable from inside a container. The Phaser repo
+itself clones fine, and its README carries the architecture you actually need.
+Do not invent register names, `pyadi-iio` call signatures, IF frequencies, or
+lab procedures: read them from Neil's repo, or ask.
 
 The PHASER is the hardware for Modules 3 and 4; L17, L19, L21, L23, L25, and
-L28 are hands-on lab lessons on it. Two things to confirm with Neil before
-authoring those: whether Module 3 is built **from** this material or
-merely consistent with it, and whether any of it may be reused directly
-versus rewritten in course voice.
-
-**Verify these URLs resolve from your container before relying on them.**
-Both `analogdevicesinc.github.io` and `wiki.analog.com` were blocked by the
-egress proxy in the Module 2 session, so none of this material could be read
-from inside a container. If they are blocked for you too, say so and ask Neil to attach or paste
-the material rather than inventing hardware detail. Do not invent register
-names, `pyadi-iio` call signatures, IF frequencies, or lab procedures: the
-CN0566 is an 8-element array with downconverting mixers whose two IF outputs
-sit near 2.2 GHz and are digitized by a PlutoSDR, and everything beyond that
-should come from the source material or from Neil.
+L28 are the hands-on lab lessons.
 
 ## Scope
 
