@@ -46,12 +46,23 @@ class _QuietHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
 
-def serve(directory, port):
+class _Server(socketserver.TCPServer):
+    # Must be a class attribute: TCPServer binds inside __init__, so setting
+    # it on the instance afterwards is too late to have any effect.
+    allow_reuse_address = True
+
+
+def serve(directory):
+    """Serve `directory` on an ephemeral port; return (httpd, port).
+
+    The port is chosen by the OS rather than derived from the target name.
+    A hashed port collides with a server still in TIME_WAIT from an earlier
+    run, which surfaces as an unrelated-looking check failure.
+    """
     handler = functools.partial(_QuietHandler, directory=str(directory))
-    httpd = socketserver.TCPServer(("127.0.0.1", port), handler)
-    httpd.allow_reuse_address = True
+    httpd = _Server(("127.0.0.1", 0), handler)
     threading.Thread(target=httpd.serve_forever, daemon=True).start()
-    return httpd
+    return httpd, httpd.server_address[1]
 
 
 def launch(playwright):

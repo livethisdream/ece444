@@ -34,8 +34,7 @@ def main():
 
     from playwright.sync_api import sync_playwright
 
-    port = 8700 + (abs(hash(slug)) % 200)
-    httpd = serve(SLIDES, port)
+    httpd, port = serve(SLIDES)
     failures, console_errs, missing = [], [], []
 
     with sync_playwright() as p:

@@ -30,8 +30,7 @@ def main():
 
     from playwright.sync_api import sync_playwright
 
-    port = 8300 + (abs(hash(rel)) % 200)
-    httpd = serve(ROOT, port)
+    httpd, port = serve(ROOT)
 
     with sync_playwright() as p:
         browser = launch(p)

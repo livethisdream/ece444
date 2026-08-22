@@ -46,8 +46,7 @@ def main():
 
     from playwright.sync_api import sync_playwright
 
-    port = 8500 + (abs(hash(target.name)) % 200)
-    httpd = serve(target.parent, port)
+    httpd, port = serve(target.parent)
     errs, failures = [], []
 
     with sync_playwright() as p:
