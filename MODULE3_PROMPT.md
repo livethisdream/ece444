@@ -72,13 +72,36 @@ per-element phase serve 3.4 and 3.5; taper presets serve 3.7; grating lobes on
 sparse tapers serve 3.8; MVDR and the interferer serve 3.9; comparing the
 array factor against a measured sweep serves 3.6.
 
-**`docs/2025_Phaser_labs_Python.pdf` is the canonical workshop lab document,
-and it may not be in the clone yet.** `.gitignore` on `browser-based` now
-carries `!docs/2025_Phaser_labs_Python.pdf` to un-ignore it, but as of commit
-`0278629` the file itself had not been committed, so the repo has no `docs/`
-directory. Check for it first; if it is absent, ask Neil to commit and push it
-rather than reconstructing the lab sequence from the GUI's preset code. The
-repo is private, so the PDF is internal use, not redistribution.
+**`docs/2025_Phaser_labs_Python.pdf` is in the clone** (committed to
+`browser-based`). It is ADI's *Phased Array Radar Exploration Workshop*,
+Python version, 40 pages, and it is the canonical lab sequence. Read it before
+writing any lab lesson. The repo is private, so the PDF is internal use, not
+redistribution — do not copy it into the public course repo or serve it from
+the site.
+
+Its beamforming labs, in order, with the Module 3 objective each one serves:
+
+| Lab (page) | Objective |
+| :-- | :-- |
+| SDR and Software Control (7) | 3.3 |
+| Steering Angle (9) | 3.4, 3.5 |
+| Array Factor and Beamwidth (11) | 3.2 |
+| Measuring the Actual Antenna Pattern (14) | 3.6 |
+| Sidelobes and Tapering (16) | 3.7 |
+| Grating Lobes (17) | 3.8 |
+| Beam Squint (19) | 3.8 |
+| Quantization Sidelobes (21) | 3.8 |
+| Phased Array Null Steering (23) | 3.9 |
+| Intro to Adaptive Beamforming (25) | 3.9 |
+| Monopulse Tracking (28) | beyond 3.x; optional enrichment |
+
+The sequence covers every Module 3 objective except 3.1 (aperture
+distributions and aperture efficiency), which has no lab and stays a
+lecture-and-practice objective. The document continues past Monopulse into
+FMCW Radar, Range-Doppler, MTI, and CFAR (pages 29-38) — that is Module 4
+material, and Neil's radar GUI for it is still being built, so do not scope
+lessons against it. The Appendix on page 39 carries the ADALM-PHASER frequency
+plan; take IF and LO numbers from there rather than inventing them.
 
 **Clone note:** the repo's default branch is `browser-based`, not `main`.
 
