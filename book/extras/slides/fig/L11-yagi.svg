@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 372" role="img" aria-label="Yagi-Uda antenna: a slightly long reflector behind the fed dipole and a row of progressively shorter directors ahead of it, beaming endfire along the boom">
+<defs>
+<marker id="l11ya" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>
+<marker id="l11yd" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5b6573"/></marker>
+</defs>
+<line x1="82" y1="190.0" x2="500" y2="190.0" stroke="#5b6573" stroke-width="7" opacity="0.3"/>
+<polyline points="212,98.0 268,100.0 324,102.0 380,104.0 436,106.0 492,108.0" fill="none" stroke="#5b6573" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.75"/>
+<polyline points="212,282.0 268,280.0 324,278.0 380,276.0 436,274.0 492,272.0" fill="none" stroke="#5b6573" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.75"/>
+<line x1="212" y1="98.0" x2="212" y2="282.0" stroke="#0067b9" stroke-width="4.5"/>
+<line x1="268" y1="100.0" x2="268" y2="280.0" stroke="#0067b9" stroke-width="4.5"/>
+<line x1="324" y1="102.0" x2="324" y2="278.0" stroke="#0067b9" stroke-width="4.5"/>
+<line x1="380" y1="104.0" x2="380" y2="276.0" stroke="#0067b9" stroke-width="4.5"/>
+<line x1="436" y1="106.0" x2="436" y2="274.0" stroke="#0067b9" stroke-width="4.5"/>
+<line x1="492" y1="108.0" x2="492" y2="272.0" stroke="#0067b9" stroke-width="4.5"/>
+<line x1="90" y1="78.0" x2="90" y2="302.0" stroke="#004a85" stroke-width="5.5"/>
+<line x1="152" y1="183.0" x2="152" y2="90.0" stroke="#b01e24" stroke-width="5.5"/>
+<line x1="152" y1="197.0" x2="152" y2="290.0" stroke="#b01e24" stroke-width="5.5"/>
+<circle cx="152" cy="183.0" r="3.4" fill="#b01e24"/>
+<circle cx="152" cy="197.0" r="3.4" fill="#b01e24"/>
+<text x="72.0" y="40.0" font-size="16" fill="#004a85" text-anchor="middle" font-weight="700">reflector</text>
+<text x="72.0" y="58.0" font-size="14" fill="#5b6573" text-anchor="middle">slightly long</text>
+<text x="360.0" y="40.0" font-size="16" fill="#0067b9" text-anchor="middle" font-weight="700">directors — each slightly short</text>
+<text x="360.0" y="58.0" font-size="13" fill="#5b6573" text-anchor="middle">parasitic: no feed line, current comes from coupling</text>
+<path d="M 152 296.0 L 152 316.0 L 166 316.0" fill="none" stroke="#b01e24" stroke-width="1.4"/>
+<text x="172.0" y="322.0" font-size="15" fill="#b01e24" font-weight="700">driven element — the only one fed</text>
+<line x1="536" y1="190.0" x2="672" y2="190.0" stroke="#b01e24" stroke-width="6" marker-end="url(#l11ya)"/>
+<text x="604.0" y="170.0" font-size="17" fill="#b01e24" text-anchor="middle" font-weight="700">main beam</text>
+<text x="604.0" y="224.0" font-size="13" fill="#5b6573" text-anchor="middle">endfire — along the boom,</text>
+<text x="604.0" y="241.0" font-size="13" fill="#5b6573" text-anchor="middle">away from the reflector</text>
+<path d="M 68 190.0 q -20 -19 -34 0 q 14 19 34 0 Z" fill="rgba(176,30,36,0.18)" stroke="#b01e24" stroke-width="1.6"/>
+<text x="48.0" y="232.0" font-size="13" fill="#5b6573" text-anchor="middle">small</text>
+<text x="48.0" y="248.0" font-size="13" fill="#5b6573" text-anchor="middle">back lobe</text>
+<line x1="90" y1="358" x2="492" y2="358" stroke="#5b6573" stroke-width="1.5" marker-start="url(#l11yd)" marker-end="url(#l11yd)"/>
+<line x1="90" y1="286.0" x2="90" y2="364" stroke="#5b6573" stroke-width="1" stroke-dasharray="4 3" opacity="0.55"/>
+<line x1="492" y1="286.0" x2="492" y2="364" stroke="#5b6573" stroke-width="1" stroke-dasharray="4 3" opacity="0.55"/>
+<text x="360.0" y="352.0" font-size="15" fill="#5b6573" text-anchor="middle" font-weight="700">boom length — this is what buys the gain</text>
+</svg>

@@ -1,0 +1,426 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L14 practice set (Measurement Lab 2: Radiation Patterns). Every question is
+% doable without hardware: range-geometry verification, extraction of HPBW /
+% sidelobe level / front-to-back from a printed table of measured data, gain by
+% comparison, cross-pol discrimination, and what a noise floor does to all of it.
+
+\fullwidth{\textbf{Learning Objective 2.7: } I can measure the radiation pattern of an antenna and extract gain, beamwidth, sidelobe level, and polarization from the data.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Is the range adequate?} You are setting up a pattern range at
+$f = 2.45\ \ghz$. The antenna under test (AUT) is a pyramidal horn with a
+$24 \times 17\ \text{cm}$ aperture. The lab bench gives you a separation of
+$r = 3.0\ \m$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the wavelength and the AUT's largest dimension $D$, then
+		evaluate the far-field criterion $r \ge 2D^2/\lambda$.
+		\begin{solution}[1.3in]
+		The largest dimension of a rectangular aperture is its diagonal, not a side.
+		\eq{
+			\lambda &= \frac{3\ee{8}}{2.45\ee{9}} = 0.1224\ \m = 12.2\ \text{cm} \\
+			D &= \sqrt{(0.24)^2 + (0.17)^2} = 0.294\ \m \\
+			\frac{2D^2}{\lambda} &= \frac{2(0.294)^2}{0.1224} = 1.41\ \m
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$2D^2/\lambda$ = \ansbox[1.3in]{$1.41\ \m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The far field also requires $r \ge 5D$ and $r \ge 10\lambda$.
+		Evaluate both, state which criterion binds, and say whether $3.0\ \m$
+		is acceptable.
+		\begin{solution}[1.3in]
+		\eq{
+			5D &= 5(0.294) = 1.47\ \m \\
+			10\lambda &= 10(0.1224) = 1.22\ \m
+		}
+		The binding criterion is $5D = 1.47\ \m$ --- for a physically small
+		antenna the $2D^2/\lambda$ rule is often \emph{not} the one that
+		decides. A $3.0\ \m$ range clears the binding value by a factor of
+		$2.0$, so it is comfortably acceptable.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		binding $r$ = \ansbox[1.3in]{$1.47\ \m$}
+	\end{minipage}
+
+	\part In one or two sentences: if you ran this measurement at
+	$r = 0.5\ \m$ instead, what specifically would go wrong with the recorded
+	pattern, and would the measured HPBW read too wide or too narrow?
+
+		\begin{solution}[1.1in]
+		At $0.5\ \m$ the spherical wave from the source is not flat across the
+		AUT aperture, so the edges of the aperture are excited with the wrong
+		relative phase. That phase error broadens the main beam and fills in the
+		nulls, and the sidelobes smear into the beam skirt. The measured HPBW
+		reads \textbf{too wide}, and the sidelobe structure you report would not
+		be the antenna's far-field pattern at all.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Your calibrated reference horn has a $34 \times 25\ \text{cm}$
+		aperture. Recompute the far-field distance for \emph{it}, and state what
+		that means for the range you just declared acceptable.
+		\begin{solution}[1.3in]
+		\eq{
+			D &= \sqrt{(0.34)^2 + (0.25)^2} = 0.422\ \m \\
+			\frac{2D^2}{\lambda} &= \frac{2(0.422)^2}{0.1224} = 2.91\ \m
+			\qquad (5D = 2.11\ \m)
+		}
+		The \emph{reference} sizes the range, not the AUT, and $3.0\ \m$ clears
+		$2.91\ \m$ by only 3\%. The gain comparison is therefore the one
+		measurement standing at the edge of the far field; say so in the report,
+		or lengthen the range to roughly $5.8\ \m$ for a factor-of-two margin.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$2D^2/\lambda$ = \ansbox[1.3in]{$2.91\ \m$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Reducing a measured cut.} The table below is one measured
+E-plane cut of an aperture antenna, in dBm at the receiver. The cut was
+symmetric about $0\mydeg$ to within $0.3\db$, so only $\theta \ge 0$ is
+tabulated. With the source switched off and every other setting unchanged, the
+receiver read $-78.0\dbm$.
+
+\begin{center}
+\small
+\begin{tabular}{r r @{\hspace{2em}} r r @{\hspace{2em}} r r}
+\hline
+$\theta$ & level & $\theta$ & level & $\theta$ & level \\
+\hline
+$0\mydeg$  & $-35.6$ & $18\mydeg$ & $-49.5$ & $48\mydeg$  & $-57.5$ \\
+$2\mydeg$  & $-36.0$ & $20\mydeg$ & $-48.7$ & $60\mydeg$  & $-59.8$ \\
+$4\mydeg$  & $-36.7$ & $22\mydeg$ & $-50.0$ & $75\mydeg$  & $-62.5$ \\
+$6\mydeg$  & $-38.3$ & $24\mydeg$ & $-52.7$ & $90\mydeg$  & $-64.0$ \\
+$8\mydeg$  & $-41.4$ & $28\mydeg$ & $-77.6$ & $120\mydeg$ & $-66.5$ \\
+$10\mydeg$ & $-45.4$ & $32\mydeg$ & $-55.6$ & $150\mydeg$ & $-63.0$ \\
+$12\mydeg$ & $-53.5$ & $36\mydeg$ & $-53.3$ & $180\mydeg$ & $-60.6$ \\
+$14\mydeg$ & $-66.4$ & $40\mydeg$ & $-56.7$ &             &         \\
+$16\mydeg$ & $-52.6$ & $44\mydeg$ & $-70.6$ &             &         \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Extract the half-power beamwidth. Interpolate between samples ---
+		do not snap to the nearest grid point.
+		\begin{solution}[1.3in]
+		The peak is $-35.6\dbm$, so the half-power level is $-38.6\dbm$. That
+		falls between $6\mydeg$ ($-38.3\dbm$) and $8\mydeg$ ($-41.4\dbm$):
+		\eq{
+			\theta_{-3} &= 6 + 2\lp\frac{38.6-38.3}{41.4-38.3}\rp
+			 = 6 + 2(0.097) = 6.19\mydeg \\
+			\theta_{HP} &= 2(6.19) = 12.4\mydeg
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{HP}$ = \ansbox[1.3in]{$12.4\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the first sidelobe level relative to the peak, and compare it
+		with the canonical value for a uniformly illuminated aperture.
+		\begin{solution}[1.3in]
+		The first null is near $14\mydeg$; the next lobe peaks at $20\mydeg$ with
+		$-48.7\dbm$:
+		\eq{
+			\text{SLL} = -48.7 - (-35.6) = -13.1\db
+		}
+		A uniformly illuminated aperture gives $-13.3\db$, so this aperture is
+		essentially uniformly illuminated --- no taper. The second lobe at
+		$36\mydeg$ gives $-53.3 + 35.6 = -17.7\db$, against the uniform-aperture
+		value of $-17.9\db$: the same story.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		SLL = \ansbox[1.3in]{$-13.1\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the front-to-back ratio.
+		\begin{solution}[1.0in]
+		\eq{
+			\text{F/B} = -35.6 - (-60.6) = 25.0\db
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		F/B = \ansbox[1.3in]{$25.0\db$}
+	\end{minipage}
+
+	\part The operator used a $2\mydeg$ step inside the main beam. Using the
+	rule of thumb for angle step, was that fine, wasteful, or too coarse?
+	Answer in one sentence, with the number that justifies it.
+
+		\begin{solution}[0.9in]
+		The rule is step $\le \theta_{HP}/5 = 12.4/5 = 2.5\mydeg$, so a
+		$2\mydeg$ step satisfies it with a little margin --- fine, not wasteful.
+		(The $4\mydeg$ and coarser steps used past $24\mydeg$ do \emph{not}
+		resolve the sidelobe peaks well, which is why the extracted sidelobe
+		levels deserve a wider error bar than the beamwidth does.)
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Gain by comparison, and polarization.} On the range of
+Question 1 you record a peak of $-35.6\dbm$ with the AUT installed. You then
+swap in the calibrated reference horn ($G_{ref} = 15.0\dbi$), change nothing
+else, and record $-32.4\dbm$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the gain of the AUT in dBi.
+		\begin{solution}[1.2in]
+		In dB the comparison method is a single subtraction, because transmit
+		power, path loss, cable loss and source gain are common to both
+		measurements and cancel:
+		\eq{
+			G_{AUT} &= G_{ref} + \lp P_{AUT} - P_{ref}\rp \\
+			 &= 15.0 + \lp -35.6 + 32.4 \rp \\
+			 &= 15.0 - 3.2 = 11.8\dbi
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G_{AUT}$ = \ansbox[1.3in]{$11.8\dbi$}
+	\end{minipage}
+
+	\part The procedure insists that you change \emph{nothing} between the two
+	measurements. Name two things that would silently corrupt the result if you
+	changed them, and say what the resulting gain error would look like.
+
+		\begin{solution}[1.1in]
+		Any change that is not common to both measurements survives the
+		subtraction and becomes gain error. Examples: moving or reseating a
+		cable (a fraction of a dB of extra loss appears as a fixed gain offset);
+		re-peaking sloppily so the reference is measured off boresight (the
+		reference reads low, so the AUT gain reads \emph{high}); changing the
+		transmit level or the resolution bandwidth between the two runs; moving
+		either mast so the range length differs. All of these are biases, not
+		noise --- repeating the sweep will not reveal them.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part You rotate the source antenna $90\mydeg$ about the range axis and
+		re-peak: the boresight level drops to $-59.9\dbm$. Compute the
+		cross-polarization discrimination.
+		\begin{solution}[1.1in]
+		\eq{
+			\text{XPD} = P_{co} - P_{cross} = -35.6 - (-59.9) = 24.3\db
+		}
+		That is squarely in the healthy $20$--$30\db$ band for a linearly
+		polarized antenna.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		XPD = \ansbox[1.3in]{$24.3\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Suppose instead the cross-pol peak had landed only $6.0\db$ above
+		your noise floor. By how much would the measured cross-pol level
+		overstate the true one, and what does that do to your reported XPD?
+		\begin{solution}[1.3in]
+		The reading is signal plus noise. If measured is $6.0\db$ above the
+		floor, then measured$/$noise $= 10^{0.6} = 3.98$, so
+		signal$/$noise $= 2.98$ and
+		\eq{
+			\text{error} = 10\ \mylog{\frac{3.98}{2.98}} = 1.25\db
+		}
+		The cross-pol level reads $1.25\db$ high, so the true XPD is
+		$1.25\db$ \emph{better} than reported. XPD measured near the floor is
+		therefore a \textbf{lower bound}: report it as ``XPD $\ge$'' with the
+		floor quoted beside it.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		error = \ansbox[1.3in]{$1.25\db$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{What the noise floor is doing to your numbers.} A measured
+pattern reaches its peak at $-35.6\dbm$; with the source off, the receiver reads
+$-78.0\dbm$. Levels below are quoted relative to the peak.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A null in a different data set measures $-25.0\db$ on a system
+		whose floor sits at $-30.0\db$ relative to the peak. Estimate the true
+		depth of that null.
+		\begin{solution}[1.3in]
+		Signal and noise add in \emph{power}, so subtract them in power:
+		\eq{
+			p_{true} &= 10^{-2.50} - 10^{-3.00} \\
+			 &= 3.162\ee{-3} - 1.000\ee{-3} = 2.162\ee{-3} \\
+			\text{null} &= 10\ \mylog{2.162\ee{-3}} = -26.7\db
+		}
+		The null is $1.7\db$ deeper than it measured.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		true null = \ansbox[1.3in]{$-26.7\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Now do the same subtraction for a reading of $-42.0\db$ on this
+		system, whose floor is at $-78.0 + 35.6 = -42.4\db$ relative. Comment on
+		the answer you get.
+		\begin{solution}[1.4in]
+		\eq{
+			p_{true} &= 10^{-4.20} - 10^{-4.24} \\
+			 &= 6.310\ee{-5} - 5.754\ee{-5} = 5.55\ee{-6} \\
+			\text{null} &= 10\ \mylog{5.55\ee{-6}} = -52.6\db
+		}
+		The number is not usable. It is the difference of two nearly equal
+		quantities: a $0.3\db$ error in either reading moves the answer by tens
+		of dB. The only defensible statement is ``the null is below
+		$-42\db$, floor-limited.''
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		true null = \ansbox[1.3in]{$\le -42\db$}
+	\end{minipage}
+
+	\part You average 16 sweeps instead of 1. In one or two sentences, say what
+	improves and what does not, and why.
+
+		\begin{solution}[1.1in]
+		Averaging power measurements incoherently reduces the \emph{variance} of
+		the noise --- the fuzz on the trace shrinks by about $\sqrt{16} = 4$ ---
+		but the \emph{mean} noise power is unchanged, so the floor does not
+		move. You get a prettier trace with exactly the same dynamic range.
+		Lowering the floor requires more transmit power, a narrower resolution
+		bandwidth, or a quieter receiver.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part State this system's dynamic range, then rank HPBW ($12.4\mydeg$),
+		first sidelobe ($-13.1\db$) and null depth ($-42.0\db$) by how much you
+		trust them, with the margin above the floor for each.
+		\begin{solution}[1.4in]
+		\eq{
+			\text{DR} = -35.6 - (-78.0) = 42.4\db
+		}
+		HPBW is read $3\db$ down, roughly $39\db$ above the floor --- trust it
+		first. The first sidelobe sits $29\db$ above the floor, so the noise
+		adds about $0.005\db$ to it --- trust it too. The null is \emph{at} the
+		floor, margin $\approx 0\db$ --- report it as a bound, never as a value.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		DR = \ansbox[1.3in]{$42.4\db$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The uncertainty paragraph you have to write.} Your report
+claims $G_{AUT} = 11.8\dbi$ for the horn of Question 3, against an
+aperture-formula prediction of $12.3\dbi$ (using $\eta_{\text{ap}} = 0.5$).
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Your peak-find left the AUT $1.5\mydeg$ off boresight on a
+		$12.4\mydeg$ beam. Using a parabolic approximation to the main beam near
+		its peak, how much does the recorded peak read low?
+		\begin{solution}[1.3in]
+		Near the peak the pattern in dB is parabolic and passes through
+		$-3\db$ at half the beamwidth, $6.2\mydeg$:
+		\eq{
+			\Delta &= -3\lp\frac{1.5}{6.2}\rp^2 = -3(0.0585) \\
+			 &= -0.18\db
+		}
+		Small --- but it is a \textbf{bias}, always in the same direction, so
+		repeating the sweep will never remove it.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta$ = \ansbox[1.3in]{$-0.18\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A floor reflection arrives $20\db$ below the direct path. Find the
+		peak-to-peak ripple it puts on your pattern, then find how far down the
+		reflection would have to be to hold the ripple inside $\pm 0.2\db$.
+		\begin{solution}[1.5in]
+		Voltage ratio $10^{-20/20} = 0.10$; the two paths add and subtract:
+		\eq{
+			\text{max} &= 20\ \mylog{1.10} = +0.83\db \\
+			\text{min} &= 20\ \mylog{0.90} = -0.92\db
+		}
+		so about $1.7\db$ peak to peak. For $\pm 0.2\db$ we need
+		$20\ \mylog{1+x} = 0.2$, giving $x = 0.023$, i.e. the reflection must be
+		$20\ \mylog{0.023} = -32.6\db$ below the direct path. That is the purpose
+		of the absorber on the bounce point.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		ripple = \ansbox[1.3in]{$1.7\db$ p-p}
+	\end{minipage}
+
+	\part Combine the error sources --- reference tolerance $0.5\db$, ripple
+	$0.9\db$, alignment $0.2\db$, sweep-to-sweep repeatability $0.3\db$ --- into
+	one uncertainty, then write the two-sentence verdict on the $0.5\db$ gap
+	between your measurement and the prediction.
+
+		\begin{solution}[1.5in]
+		Independent contributions add in quadrature:
+		\eq{
+			u = \sqrt{0.5^2 + 0.9^2 + 0.2^2 + 0.3^2} = \sqrt{1.19} = 1.1\db
+		}
+		Verdict: the measured $11.8\dbi$ and the predicted $12.3\dbi$ differ by
+		$0.5\db$, well inside the $\pm 1.1\db$ uncertainty, so the measurement
+		\textbf{agrees} with prediction and no physical explanation is required.
+		Note also that the prediction itself is soft --- it assumed
+		$\eta_{\text{ap}} = 0.5$, and real horns run anywhere from $0.4$ to
+		$0.6$, which is a further $\pm 1\db$ on the number being compared
+		against.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

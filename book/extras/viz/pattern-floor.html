@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What the noise floor does to a measured pattern</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:56px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
+  select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
+  /* Below 430px the controls bar cannot fit a label, a slider and a value on one
+     line: .ctl's flex basis and the reserved .val column are both wider than the
+     content box, so the bar pushes the document past the viewport and the whole
+     widget scrolls sideways on a phone. Stack each control instead -- label and
+     value share the first line, the input takes the second -- and let every part
+     shrink. Labels keep their natural width, so none of them squeeze. Nothing
+     here applies above 430px: the desktop layout is byte-for-byte unchanged. */
+  @media (max-width:430px) {
+    canvas { max-width:100%; }
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
+  }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  /* The values here are compound (measured plus the true figure), so a cell needs
+     ~180px of text room. Drop to two columns, then one, as soon as it stops fitting. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0,1fr)); }
+  @media (max-width:900px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width:460px) { .readouts { grid-template-columns:minmax(0,1fr); } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.sll { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.sll .v { color:var(--amber); }
+  .ro.hp { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.hp .v { color:var(--grn); }
+  .ro.nul { background:rgba(176,30,36,0.09); border-color:rgba(176,30,36,0.28); }
+  .ro.nul .v { color:var(--red); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="pat" aria-label="Measured versus true radiation pattern in decibels against angle, showing how a finite noise floor fills in the nulls and lifts the sidelobes"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Noise floor</label>
+      <input type="range" id="flr" min="-60" max="-15" step="1" value="-20">
+      <span class="val" id="flr-val">&#8722;20 dB</span>
+    </div>
+    <div class="ctl">
+      <label>Sweeps averaged</label>
+      <select id="avg">
+        <option value="1" selected>N = 1</option>
+        <option value="16">N = 16</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label>Angle step</label>
+      <select id="stp">
+        <option value="0.5">0.5&#176;</option>
+        <option value="1" selected>1&#176;</option>
+        <option value="2">2&#176;</option>
+        <option value="5">5&#176;</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="p-hp">&#8212;</span></div>
+    <div class="ro hp"><span class="k">HPBW error</span><span class="v" id="p-he">&#8212;</span></div>
+    <div class="ro sll"><span class="k">1st sidelobe</span><span class="v" id="p-sll">&#8212;</span></div>
+    <div class="ro nul" title="1st null: true / measured"><span class="k">1st null</span><span class="v"><span id="p-nt">&#8212;</span> / <span id="p-nm">&#8212;</span></span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const FLOORDB=-45;                 // bottom of the plot box
+const LOVERLAM=8;                  // uniform aperture, 8 wavelengths across
+const PSIMAX=30;                   // plot +/- 30 degrees off boresight
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+
+const cv=document.getElementById('pat'), ctx=cv.getContext('2d');
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const state={ floor:-20, navg:1, step:1 };
+
+/* ------------------------- the true pattern -------------------------
+   Uniform aperture of width L: the far-field voltage pattern is
+   sin(X)/X with X = pi (L/lambda) sin(psi), psi measured off boresight.
+   First sidelobe -13.26 dB, HPBW = 0.886 lambda/L = 6.35 deg at L = 8 lambda. */
+function volt(psiDeg){
+  const X=Math.PI*LOVERLAM*Math.sin(psiDeg*Math.PI/180);
+  return Math.abs(X)<1e-12 ? 1 : Math.sin(X)/X;
+}
+
+/* ------------------------ the receiver ------------------------------
+   Each sweep measures |a + n|^2, where a is the signal voltage and n is
+   complex Gaussian noise with mean power n0 = 10^(floor/10) relative to
+   the beam peak. Averaging N sweeps averages POWER: the fuzz shrinks
+   like 1/sqrt(N), the mean floor does not move at all. */
+let seed=1;
+function rnd(){ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; }
+function gauss(){ const u=Math.max(rnd(),1e-12), v=rnd(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+
+let TRUE=null, MEAS=null, ANG=null;
+function measure(){
+  const n0=Math.pow(10,state.floor/10), s2=Math.sqrt(n0/2);
+  const M=Math.round(2*PSIMAX/state.step)+1;
+  ANG=new Float64Array(M); TRUE=new Float64Array(M); MEAS=new Float64Array(M);
+  const pw=new Float64Array(M);
+  let pk=0;
+  for(let i=0;i<M;i++){
+    const psi=-PSIMAX+i*state.step;
+    const a=volt(psi);
+    ANG[i]=psi; TRUE[i]=a*a;
+    let acc=0;
+    for(let k=0;k<state.navg;k++){
+      const re=a+s2*gauss(), im=s2*gauss();
+      acc+=re*re+im*im;
+    }
+    pw[i]=acc/state.navg;
+    if(pw[i]>pk) pk=pw[i];
+  }
+  let tk=0; for(let i=0;i<M;i++) if(TRUE[i]>tk) tk=TRUE[i];
+  for(let i=0;i<M;i++){
+    MEAS[i]=10*Math.log10(Math.max(pw[i]/pk,1e-9));
+    TRUE[i]=10*Math.log10(Math.max(TRUE[i]/tk,1e-9));
+  }
+}
+
+/* --------------------------- extraction ---------------------------
+   Exactly what a student does with the data file: find the peak sample,
+   walk out to the -3 dB crossings (interpolating in dB between samples),
+   then find the first local maximum past the first null. */
+function extract(db){
+  const M=db.length;
+  let ip=0; for(let i=1;i<M;i++) if(db[i]>db[ip]) ip=i;
+  // -3 dB crossing: the first sample at or below -3 dB whose neighbour is
+  // also below, so one noisy sample cannot close the beam early
+  function cross(dir){
+    for(let i=ip;i>=0&&i<M;i+=dir){
+      const nx=i+dir;
+      if(db[i]<=-3 && (nx<0||nx>=M||db[nx]<=-3)){
+        const j=i-dir, f=(db[j]+3)/(db[j]-db[i]);
+        return ANG[j]+f*(ANG[i]-ANG[j]);
+      }
+    }
+    return null;
+  }
+  const lo=cross(-1), hi=cross(+1);
+  const hp=(lo!==null&&hi!==null)?hi-lo:null;
+
+  // First null then first sidelobe, walking out from the peak with 4 dB of
+  // hysteresis so noise wiggles are not mistaken for pattern structure.
+  const HYS=4;
+  function side(dir){
+    let i=ip+dir;
+    while(i>=1&&i<M-1&&db[i]>-8) i+=dir;              // clear the main beam
+    if(i<1||i>=M-1) return {nul:null,sll:null};
+    let nul=db[i];
+    while(i>=1&&i<M-1){ if(db[i]<nul) nul=db[i]; if(db[i]>nul+HYS) break; i+=dir; }
+    if(i<1||i>=M-1) return {nul:nul,sll:null};
+    let sll=db[i];
+    while(i>=1&&i<M-1){ if(db[i]>sll) sll=db[i]; if(db[i]<sll-HYS) break; i+=dir; }
+    return {nul:nul, sll:sll};
+  }
+  const A=side(1), B=side(-1);
+  const pick=(a,b,f)=>(a===null?b:(b===null?a:f(a,b)));
+  return { hp:hp, peak:ANG[ip],
+           nul:pick(A.nul,B.nul,Math.max),
+           sll:pick(A.sll,B.sll,Math.max) };
+}
+
+/* ----------------------------- drawing ----------------------------- */
+function draw(){
+  const dpr=window.devicePixelRatio||1, w=cv.width/(dpr*SCL), h=cv.height/(dpr*SCL);
+  ctx.clearRect(0,0,w,h);
+  const mL=52, mR=16, mT=26, mB=34;
+  const pw=w-mL-mR, ph=h-mT-mB;
+  const xp=d=>mL+(d+PSIMAX)/(2*PSIMAX)*pw;
+  const yp=v=>mT+(Math.min(0,Math.max(v,FLOORDB))/FLOORDB)*ph;
+
+  stext(ctx,'measured pattern, 8'+String.fromCharCode(955)+' uniform aperture', mL, mT-14, 11.5, cssv('--navy'),'left',true);
+
+  // grid
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let d=0;d>=FLOORDB;d-=5){ const y=yp(d);
+    ctx.beginPath(); ctx.moveTo(mL,y); ctx.lineTo(mL+pw,y); ctx.stroke();
+    if(d%10===0) stext(ctx,String(d),mL-8,y,10.5,cssv('--ink3'),'right',false); }
+  ctx.strokeStyle=cssv('--edge2');
+  for(let d=-30;d<=30;d+=10){ const x=xp(d);
+    ctx.beginPath(); ctx.moveTo(x,mT); ctx.lineTo(x,mT+ph); ctx.stroke();
+    stext(ctx,d+String.fromCharCode(176),x,mT+ph+14,10.5,cssv('--ink3'),'center',false); }
+  ctx.strokeStyle=cssv('--edge'); ctx.strokeRect(mL,mT,pw,ph);
+
+  // the declared noise floor
+  if(state.floor>FLOORDB){
+    ctx.strokeStyle='rgba(176,30,36,0.75)'; ctx.lineWidth=1.4; ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(mL,yp(state.floor)); ctx.lineTo(mL+pw,yp(state.floor)); ctx.stroke();
+    ctx.setLineDash([]);
+    stext(ctx,'noise floor',mL+pw-6,yp(state.floor)-9,10.5,cssv('--red'),'right',true);
+  }
+  // -3 dB reference
+  ctx.strokeStyle='rgba(63,125,52,0.55)'; ctx.lineWidth=1.2; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(mL,yp(-3)); ctx.lineTo(mL+pw,yp(-3)); ctx.stroke();
+  ctx.setLineDash([]);
+  stext(ctx,'\u22123 dB',mL+4,yp(-3)-9,10.5,cssv('--grn'),'left',true);
+
+  // true pattern, dashed
+  ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1.6; ctx.setLineDash([5,4]);
+  ctx.beginPath();
+  for(let i=0;i<TRUE.length;i++){ const x=xp(ANG[i]), y=yp(TRUE[i]); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+  ctx.stroke(); ctx.setLineDash([]);
+
+  // measured pattern, solid
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.2;
+  ctx.beginPath();
+  for(let i=0;i<MEAS.length;i++){ const x=xp(ANG[i]), y=yp(MEAS[i]); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+  ctx.stroke();
+  if(state.step>=2){
+    ctx.fillStyle=cssv('--mid');
+    for(let i=0;i<MEAS.length;i++){ ctx.beginPath(); ctx.arc(xp(ANG[i]),yp(MEAS[i]),2.1,0,7); ctx.fill(); }
+  }
+
+  // legend
+  const lx=mL+10, ly=mT+14;
+  ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1.6; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+22,ly); ctx.stroke(); ctx.setLineDash([]);
+  stext(ctx,'true',lx+27,ly,11,cssv('--ink3'),'left',false);
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.2;
+  ctx.beginPath(); ctx.moveTo(lx,ly+16); ctx.lineTo(lx+22,ly+16); ctx.stroke();
+  stext(ctx,'measured',lx+27,ly+16,11,cssv('--mid'),'left',true);
+
+  MJ.draw(ctx,'\\psi',mL+pw/2,mT+ph+27,12,cssv('--ink3'),'center');
+  ctx.save(); ctx.translate(15,mT+ph/2); ctx.rotate(-Math.PI/2);
+  stext(ctx,'dB down from peak',0,0,11,cssv('--ink3'),'center',false); ctx.restore();
+}
+
+/* ----------------------------- readouts ----------------------------- */
+const HPTRUE=6.35;
+function readouts(){
+  const m=extract(MEAS), t=extract(TRUE);
+  const f1=v=>(v===null?'\u2014':v.toFixed(1).replace('-','\u2212'));
+  document.getElementById('p-hp').textContent=(m.hp===null?'\u2014':f1(m.hp)+'\u00b0 (true 6.3\u00b0)');
+  document.getElementById('p-he').textContent=(m.hp===null?'\u2014':((m.hp-HPTRUE>=0?'+':'\u2212')+Math.abs(m.hp-HPTRUE).toFixed(2)+'\u00b0'));
+  document.getElementById('p-sll').textContent=(m.sll===null?'\u2014':f1(m.sll)+' dB (true \u221213.3)');
+  document.getElementById('p-nt').textContent=(t.nul===null?'\u2014':f1(t.nul));
+  document.getElementById('p-nm').textContent=(m.nul===null?'\u2014':f1(m.nul)+' dB');
+}
+
+function drawAll(){ draw(); readouts(); }
+function remeasure(){ measure(); drawAll(); }
+
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=380;
+let SCL=1;
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(cv);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
+  const hh=Math.max(250, Math.min(w*0.42, 340));
+  setSize(cv,wCss,hh*SCL,dpr);
+  ctx.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+const flrEl=document.getElementById('flr'), avgEl=document.getElementById('avg'), stpEl=document.getElementById('stp');
+flrEl.addEventListener('input',()=>{ state.floor=+flrEl.value;
+  document.getElementById('flr-val').textContent='\u2212'+Math.abs(state.floor)+' dB'; remeasure(); });
+avgEl.addEventListener('change',()=>{ state.navg=+avgEl.value; remeasure(); });
+stpEl.addEventListener('change',()=>{ state.step=+stpEl.value; remeasure(); });
+
+measure();
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>

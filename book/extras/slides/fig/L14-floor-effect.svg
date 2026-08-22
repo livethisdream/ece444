@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 400" width="790" height="400" role="img" aria-label="A true antenna pattern and the same pattern measured through a receiver with a 20 dB dynamic range: the sidelobes lift and the nulls fill in to the noise floor">
+<line x1="60" y1="34.0" x2="772" y2="34.0" stroke="#cddce9" stroke-width="1"/>
+<text x="51" y="38.0" font-size="14" fill="#5a5a5a" text-anchor="end">0</text>
+<line x1="60" y1="69.8" x2="772" y2="69.8" stroke="#cddce9" stroke-width="1"/>
+<line x1="60" y1="105.6" x2="772" y2="105.6" stroke="#cddce9" stroke-width="1"/>
+<text x="51" y="109.6" font-size="14" fill="#5a5a5a" text-anchor="end">−10</text>
+<line x1="60" y1="141.3" x2="772" y2="141.3" stroke="#cddce9" stroke-width="1"/>
+<line x1="60" y1="177.1" x2="772" y2="177.1" stroke="#cddce9" stroke-width="1"/>
+<text x="51" y="181.1" font-size="14" fill="#5a5a5a" text-anchor="end">−20</text>
+<line x1="60" y1="212.9" x2="772" y2="212.9" stroke="#cddce9" stroke-width="1"/>
+<line x1="60" y1="248.7" x2="772" y2="248.7" stroke="#cddce9" stroke-width="1"/>
+<text x="51" y="252.7" font-size="14" fill="#5a5a5a" text-anchor="end">−30</text>
+<line x1="60" y1="284.4" x2="772" y2="284.4" stroke="#cddce9" stroke-width="1"/>
+<line x1="60" y1="320.2" x2="772" y2="320.2" stroke="#cddce9" stroke-width="1"/>
+<text x="51" y="324.2" font-size="14" fill="#5a5a5a" text-anchor="end">−40</text>
+<line x1="60" y1="356.0" x2="772" y2="356.0" stroke="#cddce9" stroke-width="1"/>
+<line x1="60.0" y1="34" x2="60.0" y2="356" stroke="#b9d2e5" stroke-width="1"/>
+<text x="60.0" y="376" font-size="14" fill="#5a5a5a" text-anchor="middle">−30°</text>
+<line x1="178.7" y1="34" x2="178.7" y2="356" stroke="#b9d2e5" stroke-width="1"/>
+<text x="178.7" y="376" font-size="14" fill="#5a5a5a" text-anchor="middle">−20°</text>
+<line x1="297.3" y1="34" x2="297.3" y2="356" stroke="#b9d2e5" stroke-width="1"/>
+<text x="297.3" y="376" font-size="14" fill="#5a5a5a" text-anchor="middle">−10°</text>
+<line x1="416.0" y1="34" x2="416.0" y2="356" stroke="#b9d2e5" stroke-width="1"/>
+<text x="416.0" y="376" font-size="14" fill="#5a5a5a" text-anchor="middle">0°</text>
+<line x1="534.7" y1="34" x2="534.7" y2="356" stroke="#b9d2e5" stroke-width="1"/>
+<text x="534.7" y="376" font-size="14" fill="#5a5a5a" text-anchor="middle">10°</text>
+<line x1="653.3" y1="34" x2="653.3" y2="356" stroke="#b9d2e5" stroke-width="1"/>
+<text x="653.3" y="376" font-size="14" fill="#5a5a5a" text-anchor="middle">20°</text>
+<line x1="772.0" y1="34" x2="772.0" y2="356" stroke="#b9d2e5" stroke-width="1"/>
+<text x="772.0" y="376" font-size="14" fill="#5a5a5a" text-anchor="middle">30°</text>
+<rect x="60" y="34" width="712" height="322" fill="none" stroke="#cddce9" stroke-width="1"/>
+<line x1="60" y1="177.1" x2="772" y2="177.1" stroke="#b01e24" stroke-width="1.6" stroke-dasharray="7 5"/>
+<line x1="60" y1="55.5" x2="772" y2="55.5" stroke="#3f7d34" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.75"/>
+<text x="764" y="46.5" font-size="15" font-weight="700" fill="#3f7d34" text-anchor="end">−3 dB</text>
+<path d="M 60.0,356.0 L 71.9,250.8 L 83.7,210.1 L 95.6,190.8 L 107.5,183.1 L 119.3,185.3 L 131.2,199.3 L 143.1,235.3 L 154.9,356.0 L 166.8,226.6 L 178.7,186.7 L 190.5,168.1 L 202.4,161.6 L 214.3,166.3 L 226.1,186.0 L 238.0,244.5 L 249.9,245.7 L 261.7,174.6 L 273.6,145.3 L 285.5,131.7 L 297.3,129.4 L 309.2,140.3 L 321.1,177.3 L 332.9,261.6 L 344.8,138.1 L 356.7,95.5 L 368.5,69.9 L 380.4,53.1 L 392.3,42.2 L 404.1,36.0 L 416.0,34.0 L 427.9,36.0 L 439.7,42.2 L 451.6,53.1 L 463.5,69.9 L 475.3,95.5 L 487.2,138.1 L 499.1,261.6 L 510.9,177.3 L 522.8,140.3 L 534.7,129.4 L 546.5,131.7 L 558.4,145.3 L 570.3,174.6 L 582.1,245.7 L 594.0,244.5 L 605.9,186.0 L 617.7,166.3 L 629.6,161.6 L 641.5,168.1 L 653.3,186.7 L 665.2,226.6 L 677.1,356.0 L 688.9,235.3 L 700.8,199.3 L 712.7,185.3 L 724.5,183.1 L 736.4,190.8 L 748.3,210.1 L 760.1,250.8 L 772.0,356.0" fill="none" stroke="#5a5a5a" stroke-width="1.8" stroke-dasharray="6 5"/>
+<path d="M 60.0,188.0 L 71.9,180.2 L 83.7,158.9 L 95.6,170.7 L 107.5,160.3 L 119.3,166.4 L 131.2,165.2 L 143.1,163.5 L 154.9,174.7 L 166.8,162.1 L 178.7,148.8 L 190.5,154.6 L 202.4,145.1 L 214.3,150.2 L 226.1,157.8 L 238.0,189.6 L 249.9,177.8 L 261.7,158.0 L 273.6,136.0 L 285.5,124.2 L 297.3,123.8 L 309.2,131.6 L 321.1,152.4 L 332.9,183.8 L 344.8,123.7 L 356.7,91.3 L 368.5,68.2 L 380.4,52.0 L 392.3,41.7 L 404.1,34.4 L 416.0,34.0 L 427.9,35.1 L 439.7,40.5 L 451.6,53.1 L 463.5,65.7 L 475.3,91.6 L 487.2,129.4 L 499.1,171.0 L 510.9,157.0 L 522.8,131.4 L 534.7,125.0 L 546.5,125.1 L 558.4,133.2 L 570.3,148.3 L 582.1,177.8 L 594.0,161.3 L 605.9,174.4 L 617.7,160.7 L 629.6,147.9 L 641.5,150.7 L 653.3,151.2 L 665.2,165.1 L 677.1,168.4 L 688.9,175.4 L 700.8,163.4 L 712.7,151.3 L 724.5,171.6 L 736.4,161.8 L 748.3,185.1 L 760.1,179.1 L 772.0,191.6" fill="none" stroke="#0067b9" stroke-width="2.6" stroke-linejoin="round"/>
+<text x="554.5" y="119.2" font-size="15" font-weight="700" fill="#8a5a00">sidelobe survives</text>
+<text x="416.0" y="241.5" font-size="15" font-weight="700" fill="#b01e24" text-anchor="middle">nulls fill in</text>
+<text x="416.0" y="270.1" font-size="15" font-weight="700" fill="#b01e24" text-anchor="middle">to the floor</text>
+<line x1="74" y1="91.24444444444444" x2="100" y2="91.24444444444444" stroke="#5a5a5a" stroke-width="1.8" stroke-dasharray="6 5"/>
+<text x="107" y="96.24444444444444" font-size="15" fill="#5a5a5a">true</text>
+<line x1="74" y1="113.24444444444444" x2="100" y2="113.24444444444444" stroke="#0067b9" stroke-width="2.6"/>
+<text x="107" y="118.24444444444444" font-size="15" font-weight="700" fill="#0067b9">measured</text>
+<line x1="74" y1="135.24444444444444" x2="100" y2="135.24444444444444" stroke="#b01e24" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="107" y="140.24444444444444" font-size="15" font-weight="700" fill="#b01e24">noise floor</text>
+<text x="416.0" y="392" font-size="15" fill="#5a5a5a" text-anchor="middle">angle off boresight</text>
+<text transform="translate(18,195.0) rotate(-90)" font-size="15" fill="#5a5a5a" text-anchor="middle">dB down from peak</text>
+<text x="60" y="22" font-size="16" font-weight="700" fill="#004a85">an 8-wavelength aperture, measured with 20 dB of dynamic range</text>
+</svg>

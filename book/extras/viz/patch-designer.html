@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rectangular patch designer — the substrate sets the patch</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 230px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:58px; font-weight:600; font-size:12.5px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:100px; }
+  select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
+  /* Below 430px the controls bar cannot fit a label, a slider and a value on one
+     line: .ctl's flex basis and the reserved .val column are both wider than the
+     content box, so the bar pushes the document past the viewport and the whole
+     widget scrolls sideways on a phone. Stack each control instead -- label and
+     value share the first line, the input takes the second -- and let every part
+     shrink. Labels keep their natural width, so none of them squeeze. Nothing
+     here applies above 430px: the desktop layout is byte-for-byte unchanged. */
+  @media (max-width:430px) {
+    canvas { max-width:100%; }
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
+  }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(5, minmax(0,1fr)); }
+  /* The site serves these ~688-760px wide, where five across is too narrow for
+     the widest value; go three-then-one so a cell always fits its number. */
+  @media (max-width:860px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  @media (max-width:460px) { .readouts { grid-template-columns:minmax(0,1fr); } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.bw { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.bw .v { color:var(--amber); }
+  .ro.dir { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.dir .v { color:var(--grn); }
+  .note { font-size:11.5px; line-height:1.45; color:var(--ink3); }
+  .note b { color:var(--navy); }
+  .warn { color:var(--red); font-weight:700; }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="geo" aria-label="Scaled top view and side view of a rectangular microstrip patch, drawn inside a free-space half-wavelength reference box"></canvas>
+  <canvas id="pat" aria-label="E-plane and H-plane patterns of the two-slot patch model, plotted in decibels over the upper half space"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Frequency \(f\)</label>
+      <input type="range" id="freq" min="1" max="10" step="0.05" value="2.45">
+      <span class="val" id="f-val">2.45 GHz</span>
+    </div>
+    <div class="ctl">
+      <label>Substrate \(\varepsilon_r\)</label>
+      <select id="er">
+        <option value="2.2">2.2 — PTFE / RT-duroid</option>
+        <option value="4.4" selected>4.4 — FR-4</option>
+        <option value="6.15">6.15 — RO3006</option>
+        <option value="10.2">10.2 — alumina / RO3010</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label>Thickness \(h\)</label>
+      <input type="range" id="hh" min="0.5" max="3.2" step="0.1" value="1.6">
+      <span class="val" id="h-val">1.60 mm</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">patch width \(W\)</span><span class="v" id="p-w">&#8212;</span></div>
+    <div class="ro"><span class="k">patch length \(L\)</span><span class="v" id="p-l">&#8212;</span></div>
+    <div class="ro"><span class="k">\(\varepsilon_{\text{eff}}\)</span><span class="v" id="p-ee">&#8212;</span></div>
+    <div class="ro bw"><span class="k">bandwidth \(\approx\)</span><span class="v" id="p-bw">&#8212;</span></div>
+    <div class="ro dir"><span class="k">directivity</span><span class="v" id="p-d">&#8212;</span></div>
+  </div>
+
+  <p class="note" id="foot"></p>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const C=3e8, FLOOR=-40;
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS;
+  ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+
+const state={ f:2.45e9, er:4.4, h:1.6e-3 };
+
+/* ------------------------------------------------------------------ *
+ * The standard closed-form design set (transmission-line model).
+ * Everything below is computed from these — no fitted curves.
+ * ------------------------------------------------------------------ */
+function design(){
+  const f=state.f, er=state.er, h=state.h;
+  const lam=C/f, half=C/(2*f);                      // free-space lambda and lambda/2
+  const W = half*Math.sqrt(2/(er+1));               // half-power width formula
+  const ee = (er+1)/2 + (er-1)/2*Math.pow(1+12*h/W,-0.5);   // effective permittivity
+  const dL = 0.412*h*((ee+0.3)*(W/h+0.264))/((ee-0.258)*(W/h+0.8)); // Hammerstad extension
+  const L  = half/Math.sqrt(ee) - 2*dL;             // physical length
+  const Le = L + 2*dL;                              // electrical length = lambda_d/2
+  // Fractional bandwidth for VSWR <= 2 (Bahl & Bhartia closed form)
+  const BW = 3.77*((er-1)/(er*er))*(h/lam)*(W/L);
+  return {lam, half, W, ee, dL, L, Le, BW, lamd: lam/Math.sqrt(ee)};
+}
+
+/* ------------------------------------------------------------------ *
+ * Two-slot model of the far field. Two identical magnetic-current
+ * slots of width W, separated by Le along the resonant direction,
+ * radiating into the upper half space over a ground plane.
+ *   E-plane (phi = 0, the L direction):  sinc(kh/2 sin t) * cos(kLe/2 sin t)
+ *   H-plane (phi = 90, the W direction): sinc(kW/2 sin t) * cos t
+ * theta is measured from broadside (the patch normal).
+ * ------------------------------------------------------------------ */
+const sinc = x => (Math.abs(x)<1e-9) ? 1 : Math.sin(x)/x;
+function fields(d){
+  const k=2*Math.PI/d.lam;
+  return {
+    E: t => Math.abs(sinc(k*state.h/2*Math.sin(t)) * Math.cos(k*d.Le/2*Math.sin(t))),
+    H: t => Math.abs(sinc(k*d.W/2*Math.sin(t)) * Math.cos(t))
+  };
+}
+// full 3-D pattern, used only for the directivity integral
+function directivity(d){
+  const k=2*Math.PI/d.lam, NT=120, NP=180;
+  let sum=0, peak=0;
+  for(let i=0;i<NT;i++){
+    const t=(i+0.5)/NT*(Math.PI/2), st=Math.sin(t), ct=Math.cos(t);
+    for(let j=0;j<NP;j++){
+      const p=(j+0.5)/NP*2*Math.PI, cp=Math.cos(p), sp=Math.sin(p);
+      const obl=Math.sqrt(Math.max(0,1-st*st*sp*sp));      // magnetic dipole along the slot
+      const F = sinc(k*state.h/2*st*cp)*sinc(k*d.W/2*st*sp)*Math.cos(k*d.Le/2*st*cp)*obl;
+      const U = F*F;
+      if(U>peak) peak=U;
+      sum += U*st;
+    }
+  }
+  sum *= (Math.PI/2/NT)*(2*Math.PI/NP);
+  return 4*Math.PI*peak/sum;
+}
+// half-power beamwidth of a cut, or null when the cut never reaches -3 dB
+function hpbw(fn){
+  const N=2000, thr=Math.SQRT1_2;
+  let peak=0; for(let i=0;i<=N;i++) peak=Math.max(peak, fn(i/N*Math.PI/2));
+  for(let i=0;i<=N;i++){
+    const t=i/N*Math.PI/2;
+    if(fn(t)/peak <= thr) return 2*t*180/Math.PI;
+  }
+  return null;
+}
+
+/* ============================ geometry canvas ============================ */
+const cvG=document.getElementById('geo'), ctxG=cvG.getContext('2d');
+const cvP=document.getElementById('pat'), ctxP=cvP.getContext('2d');
+
+function drawGeo(d){
+  const dpr=window.devicePixelRatio||1, w=cvG.width/(dpr*SCL), h=cvG.height/(dpr*SCL);
+  const ctx=ctxG; ctx.clearRect(0,0,w,h);
+  const BOX=184;                                  // px across the free-space lambda/2 box
+  const mm = d.half*1000;                         // lambda/2 in mm
+  const s  = BOX/mm;                              // px per mm  -- everything uses this
+  const cx = Math.min(w*0.38, 240), cy = 140;
+
+  stext(ctx,'top view', 14, 18, 12, cssv('--navy'),'left',true);
+
+  // free-space half-wave reference box
+  ctx.strokeStyle=cssv('--edge2'); ctx.lineWidth=1.4; ctx.setLineDash([6,4]);
+  ctx.strokeRect(cx-BOX/2, cy-BOX/2, BOX, BOX);
+  ctx.setLineDash([]);
+  // caption above the box: "free-space  <lambda/2>  box = NN mm", laid out by measure
+  ctx.font='11.5px '+SANS;
+  const t1='free-space ', t2=' box = '+mm.toFixed(1)+' mm';
+  const w1=ctx.measureText(t1).width, w3=ctx.measureText(t2).width;
+  const w2=Math.max(24, MJ.width('\\lambda/2', cssv('--ink3'), 13) || 24);
+  const x0=cx-(w1+w2+w3)/2;
+  stext(ctx,t1, x0, cy-BOX/2-16, 11.5, cssv('--ink3'),'left',false);
+  MJ.draw(ctx,'\\lambda/2', x0+w1, cy-BOX/2-16, 13, cssv('--ink3'),'left');
+  stext(ctx,t2, x0+w1+w2, cy-BOX/2-16, 11.5, cssv('--ink3'),'left',false);
+
+  // the patch
+  const pw=d.W*1000*s, pl=d.L*1000*s;
+  ctx.fillStyle='rgba(0,103,185,0.14)';
+  ctx.fillRect(cx-pw/2, cy-pl/2, pw, pl);
+  ctx.strokeStyle=cssv('--navy'); ctx.lineWidth=1.8;
+  ctx.strokeRect(cx-pw/2, cy-pl/2, pw, pl);
+
+  // the two radiating edges
+  ctx.strokeStyle=cssv('--red'); ctx.lineWidth=4.5; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(cx-pw/2, cy-pl/2); ctx.lineTo(cx+pw/2, cy-pl/2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx-pw/2, cy+pl/2); ctx.lineTo(cx+pw/2, cy+pl/2); ctx.stroke();
+  ctx.lineCap='butt';
+
+  // feed stub off one radiating edge
+  ctx.fillStyle=cssv('--mid');
+  ctx.fillRect(cx-4, cy+pl/2, 8, Math.max(10, BOX/2-pl/2));
+
+  // W dimension, under the box
+  const yW=cy+BOX/2+24;
+  arrow(ctx, cx-pw/2, yW, cx+pw/2, yW, cssv('--navy'));
+  stext(ctx,'W = '+(d.W*1000).toFixed(1)+' mm', cx, yW-13, 12, cssv('--navy'),'center',true);
+  // L dimension, right of the box
+  const xL=cx+BOX/2+26;
+  arrow(ctx, xL, cy-pl/2, xL, cy+pl/2, cssv('--navy'));
+  stext(ctx,'L = '+(d.L*1000).toFixed(1)+' mm', xL+8, cy, 12, cssv('--navy'),'left',true);
+
+  /* ---- side view, same horizontal scale, directly below ---- */
+  const gy=h-26, sub=Math.min(40, Math.max(3, state.h*1000*s));
+  ctx.fillStyle='rgba(0,103,185,0.07)';
+  ctx.fillRect(cx-BOX/2, gy-sub, BOX, sub);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1; ctx.strokeRect(cx-BOX/2, gy-sub, BOX, sub);
+  ctx.strokeStyle=cssv('--navy'); ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(cx-BOX/2, gy); ctx.lineTo(cx+BOX/2, gy); ctx.stroke();   // ground
+  ctx.lineWidth=3.5;
+  ctx.beginPath(); ctx.moveTo(cx-pl/2, gy-sub); ctx.lineTo(cx+pl/2, gy-sub); ctx.stroke(); // patch
+  // fringing at the two ends
+  ctx.strokeStyle=cssv('--red'); ctx.lineWidth=2;
+  for(const sg of [-1,1]){
+    ctx.beginPath();
+    ctx.moveTo(cx+sg*pl/2, gy-sub-1);
+    ctx.quadraticCurveTo(cx+sg*(pl/2+20), gy-sub-16, cx+sg*(pl/2+16), gy);
+    ctx.stroke();
+  }
+  stext(ctx,'side view', cx-BOX/2, gy-sub-26, 11.5, cssv('--ink3'),'left',false);
+  stext(ctx,'h = '+(state.h*1000).toFixed(2)+' mm', cx+BOX/2, gy-sub-26, 11.5, cssv('--navy'),'right',true);
+  stext(ctx,'fringing', cx-pl/2-20, gy-sub-14, 10.5, cssv('--red'),'right',false);
+
+  /* ---- legend / notes on the right ---- */
+  const lx=Math.min(cx+BOX/2+150, w-200), ly=50;
+  ctx.strokeStyle=cssv('--red'); ctx.lineWidth=4; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx+20, ly); ctx.stroke(); ctx.lineCap='butt';
+  stext(ctx,'the two radiating edges', lx+28, ly, 12, cssv('--red'),'left',true);
+  stext(ctx,'each is a slot of width W;', lx, ly+18, 11.5, cssv('--ink3'),'left',false);
+  stext(ctx,'they sit L apart and add in phase', lx, ly+34, 11.5, cssv('--ink3'),'left',false);
+  stext(ctx,'straight up.', lx, ly+50, 11.5, cssv('--ink3'),'left',false);
+
+  stext(ctx,'dielectric half-wave', lx, ly+82, 12, cssv('--navy'),'left',true);
+  stext(ctx,(d.lamd*500).toFixed(1)+' mm  vs  '+(d.half*1000).toFixed(1)+' mm in air',
+        lx, ly+100, 11.5, cssv('--ink3'),'left',false);
+  stext(ctx,'the substrate is doing the shrinking', lx, ly+116, 11.5, cssv('--ink3'),'left',false);
+
+  if(state.h > 0.05*d.lam){
+    stext(ctx,'h > 0.05\u03bb: outside the range', lx, ly+146, 11.5, cssv('--red'),'left',true);
+    stext(ctx,'where these closed forms are', lx, ly+162, 11.5, cssv('--red'),'left',true);
+    stext(ctx,'trusted (surface waves).', lx, ly+178, 11.5, cssv('--red'),'left',true);
+  }
+}
+function arrow(ctx,x1,y1,x2,y2,col){
+  ctx.strokeStyle=col; ctx.lineWidth=1.3;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);
+  for(const [x,y,dir] of [[x1,y1,a+Math.PI],[x2,y2,a]]){
+    ctx.beginPath(); ctx.moveTo(x,y);
+    ctx.lineTo(x-5*Math.cos(dir-0.4), y-5*Math.sin(dir-0.4));
+    ctx.lineTo(x-5*Math.cos(dir+0.4), y-5*Math.sin(dir+0.4));
+    ctx.closePath(); ctx.fillStyle=col; ctx.fill();
+  }
+}
+
+/* ============================= pattern canvas ============================= */
+function drawPat(d){
+  const dpr=window.devicePixelRatio||1, w=cvP.width/(dpr*SCL), h=cvP.height/(dpr*SCL);
+  const ctx=ctxP; ctx.clearRect(0,0,w,h);
+  const F=fields(d);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(w/2,10); ctx.lineTo(w/2,h-10); ctx.stroke();
+  half(ctx, 0,   w/2, h, F.E, 'E-plane', 'across the two slots', cssv('--navy'));
+  half(ctx, w/2, w/2, h, F.H, 'H-plane', 'along each slot',       cssv('--grn'));
+}
+function half(ctx,x0,w,h,fn,name,sub,col){
+  const cx=x0+w*0.5, cy=h-46, R=Math.min(w*0.40, h-100);
+  stext(ctx,name, x0+14, 18, 13, col,'left',true);
+  stext(ctx,sub,  x0+14, 34, 11.5, cssv('--ink3'),'left',false);
+
+  // rings
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let db=-10; db>=FLOOR; db-=10){
+    const r=R*(1-db/FLOOR);
+    ctx.beginPath(); ctx.arc(cx,cy,r,Math.PI,2*Math.PI); ctx.stroke();
+    stext(ctx, db+'', cx+3, cy-r+7, 9.5, cssv('--ink3'),'left',false);
+  }
+  ctx.strokeStyle=cssv('--edge2');
+  ctx.beginPath(); ctx.arc(cx,cy,R,Math.PI,2*Math.PI); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx-R-10,cy); ctx.lineTo(cx+R+10,cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx,cy-R-10); ctx.stroke();
+  stext(ctx,'0\u00b0',   cx+6, cy-R-16, 10.5, cssv('--ink3'),'left',false);
+  stext(ctx,'\u221290\u00b0', cx-R-10, cy+13, 10.5, cssv('--ink3'),'center',false);
+  stext(ctx,'+90\u00b0', cx+R+10, cy+13, 10.5, cssv('--ink3'),'center',false);
+  stext(ctx,'ground plane below', cx, cy+28, 10.5, cssv('--ink3'),'center',false);
+
+  // the cut
+  let peak=0; const N=360, v=new Float64Array(N+1);
+  for(let i=0;i<=N;i++){ const t=(i/N-0.5)*Math.PI; v[i]=fn(Math.abs(t)); peak=Math.max(peak,v[i]); }
+  ctx.strokeStyle=col; ctx.lineWidth=2.4; ctx.beginPath();
+  for(let i=0;i<=N;i++){
+    const t=(i/N-0.5)*Math.PI;
+    const db=Math.max(FLOOR, 20*Math.log10(Math.max(v[i]/peak,1e-6)));
+    const r=R*(1-db/FLOOR);
+    const x=cx+r*Math.sin(t), y=cy-r*Math.cos(t);
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+  }
+  ctx.stroke();
+
+  // half-power markers
+  const bw=hpbw(fn);
+  if(bw!==null){
+    const t=bw/2*Math.PI/180, r=R*(1-(-3)/FLOOR);
+    ctx.strokeStyle='rgba(63,125,52,0.75)'; ctx.lineWidth=1.4; ctx.setLineDash([4,3]);
+    for(const sg of [-1,1]){
+      ctx.beginPath(); ctx.moveTo(cx,cy);
+      ctx.lineTo(cx+sg*R*Math.sin(t), cy-R*Math.cos(t)); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    stext(ctx,'HPBW '+bw.toFixed(0)+'\u00b0', x0+w-14, 18, 12.5, cssv('--grn'),'right',true);
+  } else {
+    stext(ctx,'no \u22123 dB point', x0+w-14, 18, 12, cssv('--amber'),'right',true);
+    stext(ctx,'in this model',    x0+w-14, 34, 11, cssv('--amber'),'right',false);
+  }
+  MJ.draw(ctx,'\\theta', cx+R*0.70, cy-R*0.34, 13, cssv('--ink3'),'center');
+}
+
+/* ================================= wiring ================================= */
+function readouts(d){
+  const el=id=>document.getElementById(id);
+  el('p-w').textContent  = (d.W*1000).toFixed(1)+' mm';
+  el('p-l').textContent  = (d.L*1000).toFixed(1)+' mm';
+  el('p-ee').textContent = d.ee.toFixed(2);
+  el('p-bw').textContent = (d.BW*100).toFixed(2)+' %';
+  el('p-d').textContent  = (10*Math.log10(directivity(d))).toFixed(1)+' dBi';
+  el('foot').innerHTML =
+    'Design set: <b>W</b> from the half-power width formula, <b>\u03b5<sub>eff</sub></b> and the '+
+    'edge extension <b>\u0394L</b> from the Hammerstad closed forms, then <b>L = \u03bb<sub>d</sub>/2 \u2212 2\u0394L</b>. '+
+    'Bandwidth is the VSWR\u00a0\u2264\u00a02 estimate 3.77\u00b7((\u03b5<sub>r</sub>\u22121)/\u03b5<sub>r</sub><sup>2</sup>)\u00b7(h/\u03bb)\u00b7(W/L). '+
+    'Patterns are the two-slot model over an infinite ground plane, so the E-plane stays optimistically '+
+    'broad out to the horizon \u2014 a real, finite ground rolls it off and puts a few dB behind the board.'+
+    (state.h > 0.05*d.lam ? ' <span class="warn">This substrate is thicker than 0.05\u03bb; treat the numbers as indicative only.</span>' : '');
+}
+function drawAll(){ const d=design(); drawGeo(d); drawPat(d); readouts(d); }
+
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=400;
+let SCL=1;
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(cvG);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
+  const h1=366, h2=Math.max(248, Math.min(w*0.30, 285));
+  setSize(cvG,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
+  ctxG.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+const fEl=document.getElementById('freq'), erEl=document.getElementById('er'), hEl=document.getElementById('hh');
+fEl.addEventListener('input', ()=>{ state.f=+fEl.value*1e9;
+  document.getElementById('f-val').textContent=(+fEl.value).toFixed(2)+' GHz'; drawAll(); });
+erEl.addEventListener('change', ()=>{ state.er=+erEl.value; drawAll(); });
+erEl.addEventListener('input',  ()=>{ state.er=+erEl.value; drawAll(); });
+hEl.addEventListener('input', ()=>{ state.h=+hEl.value/1000;
+  document.getElementById('h-val').textContent=(+hEl.value).toFixed(2)+' mm'; drawAll(); });
+
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>

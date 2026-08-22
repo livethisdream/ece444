@@ -1,0 +1,435 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L7 practice set (Simple Resonant Antennas) -- the isotropic reference, EIRP,
+% the half-wave dipole pattern and directivity, resonance and the VSWR that
+% follows from it, and a design-at-frequency problem. Monopoles and loops are
+% deliberately absent; they belong to L9.
+
+\fullwidth{\textbf{Learning Objective 2.1: } I can describe the radiation behavior of simple
+resonant antennas (isotropic radiator, half-wave dipole, monopole, loop) and calculate their
+gain and impedance.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The reference that cannot be built.} Every gain figure you will
+ever quote is a ratio against an antenna nobody has ever made.
+
+\begin{parts}
+
+	\part Explain, in one or two sentences, why a truly isotropic radiator cannot exist.
+	Your answer must mention what a real antenna is forced to have that an isotropic
+	radiator does not.
+		\begin{solution}[1.0in]
+		In the far field the electric field is transverse, so it lies tangent to any sphere
+		surrounding the antenna. A nonvanishing tangential vector field cannot be defined
+		everywhere on a sphere (the ``hairy ball'' result), so the field must go to zero
+		somewhere. That zero is a \textbf{null}. Every real antenna therefore has at least one
+		null; an isotropic radiator by definition has none, so it is a unit of comparison
+		rather than a buildable antenna.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A transmitter delivers $5\watts$ to a lossless half-wave dipole.
+		Find the EIRP in watts and in \dbm.
+		\begin{solution}[1.2in]
+		The half-wave dipole has $D = 1.64$, and with negligible conductor loss $G = D$.
+		\eq{
+		\text{EIRP} &= P_t G_t = \lp 5\watts \rp \lp 1.64 \rp = 8.2\watts \\
+		P_t \lb \dbm \rb &= 10\mylog{5000} = 37.0\dbm \\
+		\text{EIRP} &= 37.0\dbm + 2.15\dbi = 39.1\dbm
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		EIRP = \ansbox[1.5in]{$8.2\watts = 39.1\dbm$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A vendor lists an antenna at $8\db$ over a dipole. What transmit power is
+		needed to reach an EIRP of $40\dbm$?
+		\begin{solution}[1.2in]
+		Convert the gain to the isotropic reference first:
+		\eq{
+		G &= 8 \text{ dBd} + 2.15 = 10.15\dbi \\
+		P_t &= \text{EIRP} - G = 40\dbm - 10.15\dbi = 29.9\dbm \\
+		P_t &= 10^{29.85/10}\mwatts = 966\mwatts \approx 0.97\watts
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$P_t$ = \ansbox[1.5in]{$29.9\dbm = 0.97\watts$}
+	\end{minipage}
+
+	\part Why do spectrum regulators write emission limits in EIRP rather than in
+	transmitter power? Answer in one or two sentences.
+		\begin{solution}[0.9in]
+		Interference depends on the power density arriving at a victim receiver, which is set
+		by the transmitter power \emph{and} the antenna gain together. EIRP combines the two
+		into the single quantity that actually determines the field in a given direction, so a
+		limit on EIRP cannot be evaded by keeping the transmitter small and bolting on a very
+		high-gain antenna.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Cut a dipole for the 915 MHz ISM band.} You are building a resonant
+half-wave dipole for a $915\mhz$ telemetry link out of thin copper wire.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the free-space wavelength, the resonant total length using the 5\% rule,
+		and the length of each arm.
+		\begin{solution}[1.4in]
+		\eq{
+		\lambda &= \frac{c}{f} = \frac{3\ee{8}}{915\ee{6}} = 0.328\m = 32.8\text{cm} \\
+		L &= 0.475\lambda = 0.475 \lp 32.8\text{cm} \rp = 15.6\text{cm} \\
+		\frac{L}{2} &= 7.8\text{cm} \text{ per arm}
+		}
+		Cross-check with the field form: $143/915 = 0.156\m$, the same answer.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$L$ = \ansbox[1.3in]{$15.6\text{cm}$}
+		\\[10pt]
+		arm = \ansbox[1.3in]{$7.8\text{cm}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute $2D^2/\lambda$ for this antenna. Then state how far away you would
+		actually stand to measure its pattern, and why that is not the same number.
+		\begin{solution}[1.4in]
+		\eq{
+		\frac{2D^2}{\lambda} &= \frac{2\lp 0.156\m \rp^2}{0.328\m} = 0.148\m = 14.8\text{cm}
+		}
+		That is less than half a wavelength, so the far-field criterion from L5 is not the
+		binding one here. For an electrically small antenna the reactive near field is the
+		limitation, and the practical rule is $r \gg \lambda$ --- stand at several
+		wavelengths, say $5\lambda \approx 1.6\m$ or more. The $2D^2/\lambda$ criterion only
+		takes over once the antenna is large compared with a wavelength.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$2D^2/\lambda$ = \ansbox[1.3in]{$14.8\text{cm}$}
+		\\[10pt]
+		use $r >$ \ansbox[1.3in]{$\approx 1.6\m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The radio delivers $100\mwatts$ to this dipole. Find the EIRP in \dbm.
+		\begin{solution}[1.0in]
+		\eq{
+		P_t &= 10\mylog{100} = 20.0\dbm \\
+		\text{EIRP} &= 20.0\dbm + 2.15\dbi = 22.2\dbm = 164\mwatts
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		EIRP = \ansbox[1.4in]{$22.2\dbm$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part You build it and the analyzer shows resonance at $880\mhz$, not $915\mhz$.
+		Which way must you trim, and by how much per arm? Justify the direction in words.
+		\begin{solution}[1.4in]
+		Resonance low means the antenna is electrically \textbf{too long} --- a longer wire
+		resonates at a lower frequency --- so trim it shorter. Length scales inversely with
+		the resonant frequency:
+		\eq{
+		L_\text{new} &= L_\text{old}\frac{f_\text{old}}{f_\text{new}} = 15.6\text{cm} \lp \frac{880}{915} \rp = 15.0\text{cm} \\
+		\Delta L &= 0.6\text{cm} \text{ total}, \quad 0.3\text{cm} \text{ per arm}
+		}
+		Trim a little less than that and re-measure; you cannot put wire back.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		trim \ansbox[1.4in]{$0.3\text{cm}$ per arm}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Reading the half-wave pattern.} The normalized field pattern of a
+half-wave dipole lying along $z$ is
+\eq{
+\left| F(\theta) \right| = \frac{\cosp{\frac{\pi}{2}\cos\theta}}{\sin\theta}
+}
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Evaluate the pattern at $\theta = 45\mydeg$ and express it in \db\ relative
+		to the broadside peak.
+		\begin{solution}[1.3in]
+		\eq{
+		\cos 45\mydeg &= 0.7071, \quad \frac{\pi}{2}\lp 0.7071 \rp = 1.1107 \text{ rad} \\
+		\left| F \right| &= \frac{\cosp{1.1107}}{\sin 45\mydeg} = \frac{0.4441}{0.7071} = 0.628 \\
+		\left| F \right| \lb \db \rb &= 20\mylog{0.628} = -4.0\db
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\left| F \right|$ = \ansbox[1.4in]{$0.628 = -4.0\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Show that $\theta = 51\mydeg$ is a half-power point, and use it to state
+		the HPBW.
+		\begin{solution}[1.3in]
+		\eq{
+		\cos 51\mydeg &= 0.6293, \quad \frac{\pi}{2}\lp 0.6293 \rp = 0.9886 \text{ rad} \\
+		\left| F \right| &= \frac{0.5502}{0.7771} = 0.708 \approx \frac{1}{\sqrt{2}} \\
+		\left| F \right| \lb \db \rb &= 20\mylog{0.708} = -3.0\db
+		}
+		By symmetry about broadside the other half-power point is at $129\mydeg$, so
+		$\theta_\text{HP} = 129\mydeg - 51\mydeg = 78\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_\text{HP}$ = \ansbox[1.3in]{$78\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The half-wave dipole has $D = 1.64$. Find its directivity in the direction
+		$\theta = 45\mydeg$, in \dbi, and comment on the sign.
+		\begin{solution}[1.3in]
+		Directivity in a given direction is the peak value scaled by the normalized power
+		pattern:
+		\eq{
+		D(45\mydeg) &= D \left| F(45\mydeg) \right|^2 = 1.64 \lp 0.628 \rp^2 = 0.647 \\
+		D(45\mydeg) \lb \dbi \rb &= 10\mylog{0.647} = -1.9\dbi
+		}
+		It is \emph{negative}, meaning the dipole radiates less in that direction than an
+		isotropic radiator would. A directivity above 1 in one direction is always paid for
+		with a directivity below 1 somewhere else.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$D(45\mydeg)$ = \ansbox[1.3in]{$-1.9\dbi$}
+	\end{minipage}
+
+	\part The polar plot of a half-wave dipole looks strongly directional, yet its
+	directivity is only $1.64$ ($2.15\dbi$). Explain the apparent contradiction in one or
+	two sentences.
+		\begin{solution}[1.0in]
+		The plot is a single cut in a plane containing the wire. The pattern has \emph{no}
+		$\phi$ dependence at all, so the antenna radiates equally in every azimuth direction
+		--- it is a doughnut, not a beam. Directivity integrates over the whole sphere, and
+		concentrating power in a $78\mydeg$-wide band that wraps the full $360\mydeg$ of
+		azimuth buys very little concentration overall.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Impedance, resonance, and the match.} A thin dipole cut to exactly
+$\lambda/2$ presents an input impedance of $73 + j42.5$\ohms; trimmed to resonance it
+presents about $70 + j0$\ohms at its terminals.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find $\left| \Gamma \right|$ and the VSWR for the untrimmed dipole on a
+		$50$\ohms line.
+		\begin{solution}[1.4in]
+		\eq{
+		\Gamma &= \frac{Z_{\text{in}} - Z_0}{Z_{\text{in}} + Z_0} = \frac{23 + j42.5}{123 + j42.5} \\
+		\left| \Gamma \right| &= \frac{\sqrt{23^2 + 42.5^2}}{\sqrt{123^2 + 42.5^2}} = \frac{48.3}{130.1} = 0.371 \\
+		\text{VSWR} &= \frac{1 + 0.371}{1 - 0.371} = 2.18
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		VSWR = \ansbox[1.3in]{$2.18$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Repeat for the trimmed, resonant dipole on a $50$\ohms line, and again on a
+		$75$\ohms line.
+		\begin{solution}[1.4in]
+		\eq{
+		\left| \Gamma_{50} \right| &= \left| \frac{70 - 50}{70 + 50} \right| = \frac{20}{120} = 0.167 \\
+		\text{VSWR}_{50} &= \frac{1 + 0.167}{1 - 0.167} = 1.40 \\
+		\left| \Gamma_{75} \right| &= \left| \frac{70 - 75}{70 + 75} \right| = \frac{5}{145} = 0.034 \\
+		\text{VSWR}_{75} &= \frac{1 + 0.034}{1 - 0.034} = 1.07
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		VSWR$_{50}$ = \ansbox[1.2in]{$1.40$}
+		\\[10pt]
+		VSWR$_{75}$ = \ansbox[1.2in]{$1.07$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part What percentage of the incident power is reflected in the untrimmed
+		$50$\ohms case, and in the trimmed $50$\ohms case?
+		\begin{solution}[1.1in]
+		\eq{
+		\left| \Gamma \right|^2_\text{untrimmed} &= \lp 0.371 \rp^2 = 0.138 = 13.8\% \\
+		\left| \Gamma \right|^2_\text{trimmed} &= \lp 0.167 \rp^2 = 0.028 = 2.8\%
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\left| \Gamma \right|^2$ = \ansbox[1.5in]{$13.8\%$ vs $2.8\%$}
+	\end{minipage}
+
+	\part Using your answers above, argue in one or two sentences whether an engineer with
+	a $50$\ohms radio should spend effort trimming the dipole to resonance or sourcing
+	$75$\ohms cable. Support the recommendation with the numbers.
+		\begin{solution}[1.1in]
+		Trimming. Removing the $+j42.5$\ohms of reactance takes the $50$\ohms VSWR from
+		$2.18$ to $1.40$ --- from 13.8\% reflected power down to 2.8\% --- while the
+		remaining $70$ versus $50$\ohms resistance mismatch is worth only about $0.4$ of a
+		VSWR point. The reactance costs far more than the resistance offset does, and it is
+		removed for free with a pair of side cutters.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Why the wire is never exactly half a wavelength.} These parts are
+answered in words and with rules of thumb, not with long derivations.
+
+\begin{parts}
+
+	\part Explain physically why a resonant dipole is cut shorter than $\lambda/2$.
+	Name the two mechanisms.
+		\begin{solution}[1.2in]
+		\textbf{End effect}: capacitance from the tips of the dipole to the surroundings lets
+		charge accumulate past where the metal stops, so the standing wave behaves as though
+		the wire extended further than it physically does. \textbf{Wire thickness}: a fatter
+		element has more end capacitance and a lower characteristic impedance, shortening it
+		further. Both mechanisms slow the wave traveling on the wire relative to free space,
+		and a slower wave needs less physical length to make up an electrical half wavelength.
+		Practical resonance therefore lands near $0.47\lambda$ to $0.48\lambda$.
+		\end{solution}
+
+	\part A dipole built from thick aluminum tubing is measured to resonate at
+	$0.46\lambda$, shorter than the $0.475\lambda$ rule of thumb predicts. Is the
+	measurement suspicious? Explain.
+		\begin{solution}[1.0in]
+		No --- it is exactly what the thickness mechanism predicts. The 5\% rule assumes
+		ordinary thin wire; a fat tubular element carries more end capacitance and shortens
+		further, so $0.46\lambda$ is a reasonable resonant length for it. The rule of thumb is
+		a starting point for cutting, not a specification.
+		\end{solution}
+
+	\part A dipole one full wavelength long has a directivity of $3.82\dbi$, well above the
+	half-wave dipole's $2.15\dbi$. Give the reason engineers do not simply use the longer
+	one everywhere.
+		\begin{solution}[1.1in]
+		Its feed point is the problem, not its pattern. At $L = \lambda$ the standing-wave
+		current has a \emph{null} at the center, so the terminals see a very small current for
+		a given voltage and the input impedance climbs to hundreds or thousands of ohms ---
+		wildly mismatched to any ordinary line and extremely sensitive to construction
+		details. The half-wave dipole puts the current maximum at the feed instead, which is
+		worth far more in practice than $1.7\db$ of directivity.
+		\end{solution}
+
+	\part At roughly what length does the broadside directivity of a straight dipole peak,
+	what value does it reach, and what happens to the pattern beyond that length? State the
+	design consequence in one sentence.
+		\begin{solution}[1.2in]
+		Broadside directivity peaks near $L \approx 1.25\lambda$ at about $5.2\dbi$. Past that
+		length the accumulated phase reversals on the wire split the main lobe, and the peaks
+		walk off broadside entirely --- by $1.5\lambda$ the strongest lobes sit near
+		$43\mydeg$ and $137\mydeg$ and broadside gain has collapsed.
+		\textbf{Consequence:} a straight wire cannot be made into a high-gain broadside
+		antenna simply by making it longer; beyond about $1.25\lambda$ you must switch to an
+		array, which is where Module 3 begins.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Using the machinery.} The radiation integral gave you a pattern
+that works for \emph{any} dipole length,
+\eq{
+\left| F(\theta) \right| \propto \frac{\cosp{\frac{kL}{2}\cos\theta} - \cosp{\frac{kL}{2}}}{\sin\theta}
+}
+and the impedance came from two tabulated special functions, $C_{in}(2\pi) = 2.4376$ and
+$Si(2\pi) = 1.4182$. Use them.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part For a \textbf{full-wave} dipole ($L = \lambda$), evaluate the pattern at
+		$\theta = 90\mydeg$ and $\theta = 60\mydeg$, then express the $60\mydeg$ value in
+		\db\ relative to the peak.
+		\begin{solution}[1.5in]
+		With $L = \lambda$, $kL/2 = \pi$, so $\cosp{kL/2} = -1$.
+		\eq{
+		\theta = 90\mydeg: \quad \left| F \right| &= \frac{\cosp{0} - (-1)}{1} = 2 \\
+		\theta = 60\mydeg: \quad \left| F \right| &= \frac{\cosp{\pi/2} - (-1)}{\sin 60\mydeg} = \frac{1}{0.8660} = 1.155 \\
+		\text{normalized} &= \frac{1.155}{2} = 0.577 \\
+		&= 20\mylog{0.577} = -4.8\db
+		}
+		The peak is still at $90\mydeg$, so a full-wave dipole is still broadside.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		peak at \ansbox[1.2in]{$90\mydeg$}
+		\\[10pt]
+		$60\mydeg$ value = \ansbox[1.2in]{$-4.8\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the reactance of a half-wave dipole from $X = \frac{\eta_0}{4\pi}Si(2\pi)$,
+		and state in one sentence why the wire radius does not appear in the answer.
+		\begin{solution}[1.4in]
+		\eq{
+		\frac{\eta_0}{4\pi} &= \frac{377}{4\pi} = 30.0\ohms \\
+		X &= 30.0 \lp 1.4182 \rp = 42.5\ohms
+		}
+		Every radius-dependent term in the induced-EMF expression is multiplied by
+		$\sinp{kL}$, and at exactly $L = \lambda/2$ we have $kL = \pi$, so
+		$\sinp{\pi} = 0$ and those terms vanish. The radius independence holds
+		\emph{only} at exactly a half wavelength.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$X$ = \ansbox[1.3in]{$42.5$\ohms}
+	\end{minipage}
+
+	\part The resistance came out of an integral of the far-field pattern over a sphere,
+	but the reactance did not and could not. Explain why in one or two sentences.
+		\begin{solution}[1.0in]
+		A far-field power integral accounts only for power that \emph{leaves} the antenna and
+		never returns, which is precisely the definition of the real part. Reactance
+		represents energy stored in the reactive near field and handed back to the source
+		every cycle; it never crosses the far-field sphere, so no amount of pattern
+		integration can reveal it. Getting it requires a near-field calculation --- the
+		induced-EMF method.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

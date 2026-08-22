@@ -1,0 +1,361 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L10 practice set (Patch, Slot, and Horn Antennas) -- sizing a rectangular
+% microstrip patch from the transmission-line design set, the substrate
+% bandwidth trade, Babinet complementarity for slots, aperture gain and the
+% optimum-horn compromise, and choosing among the three for an application.
+
+\fullwidth{\textbf{Learning Objective 2.3: } I can describe the radiation mechanism, pattern, and typical
+use cases for patch, slot, and horn antennas.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate). Take
+$c = 3\times10^{8}\ \text{m/s}$ and $\eta_0 = 377\ \Omega$.}
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Sizing a patch.} You are designing a rectangular microstrip patch to resonate
+at $f_r = 3.5\ \ghz$ on Rogers RO4003C: $\varepsilon_r = 3.55$, substrate thickness
+$h = 0.813\ \text{mm}$. The transmission-line design set is
+\eq{
+W &= \frac{c}{2f_r}\sqrt{\frac{2}{\varepsilon_r+1}}
+\qquad
+\varepsilon_{\mathrm{eff}} = \frac{\varepsilon_r+1}{2} + \frac{\varepsilon_r-1}{2}
+\lp 1 + \frac{12h}{W} \rp^{-1/2} \\[4pt]
+\frac{\Delta L}{h} &= 0.412\ 
+\frac{(\varepsilon_{\mathrm{eff}}+0.3)(W/h+0.264)}{(\varepsilon_{\mathrm{eff}}-0.258)(W/h+0.8)}
+\qquad
+L = \frac{c}{2 f_r \sqrt{\varepsilon_{\mathrm{eff}}}} - 2\Delta L
+}
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the patch width $W$ in millimetres.
+		\begin{solution}[1.0in]
+		\eq{
+		\frac{c}{2f_r} &= \frac{3\times10^{8}}{2(3.5\times10^{9})} = 42.86\ \text{mm} \\
+		W &= 42.86\sqrt{\frac{2}{4.55}} = 42.86(0.6630) = 28.4\ \text{mm}
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$W$ = \ansbox[1.3in]{$28.4\ \text{mm}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the effective permittivity $\varepsilon_{\mathrm{eff}}$.
+		\begin{solution}[1.0in]
+		\eq{
+		\frac{12h}{W} &= \frac{12(0.813)}{28.41} = 0.3433 \\
+		\varepsilon_{\mathrm{eff}} &= 2.275 + 1.275(1.3433)^{-1/2} \\
+		&= 2.275 + 1.275(0.8628) = 3.375
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\varepsilon_{\mathrm{eff}}$ = \ansbox[1.3in]{$3.375$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the edge extension $\Delta L$ and the physical length $L$.
+		\begin{solution}[1.4in]
+		With $W/h = 28.41/0.813 = 34.95$,
+		\eq{
+		\frac{\Delta L}{h} &= 0.412\ \frac{(3.675)(35.21)}{(3.117)(35.75)}
+		= 0.412(1.1614) = 0.4785 \\
+		\Delta L &= 0.4785(0.813) = 0.389\ \text{mm} \\
+		L &= \frac{42.86}{\sqrt{3.375}} - 2(0.389) = 23.33 - 0.78 = 22.55\ \text{mm}
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta L$ = \ansbox[1.2in]{$0.389\ \text{mm}$}
+		\\[10pt]
+		$L$ = \ansbox[1.2in]{$22.6\ \text{mm}$}
+	\end{minipage}
+
+	\part The half-wavelength in the dielectric is $\lambda_d/2 = 23.3\ \text{mm}$, yet you etched
+	$L = 22.6\ \text{mm}$. Explain in one or two sentences what physical effect forces the metal
+	to be cut short, and state which way the resonant frequency moves if you etch the
+	full $23.3\ \text{mm}$ instead.
+		\begin{solution}[1.1in]
+		The fields fringe past each open edge, so the resonator is electrically longer than the
+		copper by $\Delta L$ at each end. Resonance is set by the electrical length, so the physical
+		metal must be shortened by $2\Delta L$ to keep the total at $\lambda_d/2$. Etching the full
+		$23.3\ \text{mm}$ makes the antenna electrically too long, and the resonance moves
+		\emph{down} in frequency --- here by roughly $3\%$, which is several times the patch's own
+		bandwidth, so the antenna would be badly mismatched at $3.5\ \ghz$.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The substrate trade.} A patch is a high-$Q$ cavity, and its impedance bandwidth
+for VSWR $\le 2$ follows the closed form
+\eq{
+\text{BW} \approx 3.77\ \frac{\varepsilon_r-1}{\varepsilon_r^{2}}\ \frac{h}{\lambda_0}\ \frac{W}{L}
+}
+Continue with the $3.5\ \ghz$ design of Question 1 ($W = 28.41\ \text{mm}$, $L = 22.55\ \text{mm}$,
+$h = 0.813\ \text{mm}$, $\varepsilon_r = 3.55$).
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Estimate the fractional bandwidth of the RO4003C design, as a percentage.
+		\begin{solution}[1.1in]
+		$\lambda_0 = c/f_r = 85.7\ \text{mm}$, so $h/\lambda_0 = 0.00949$.
+		\eq{
+		\text{BW} &\approx 3.77\lp\frac{2.55}{12.60}\rp(0.00949)\lp\frac{28.41}{22.55}\rp \\
+		&= 3.77(0.2023)(0.00949)(1.260) = 0.0091
+		}
+		About $0.9\%$ --- roughly $32\ \text{MHz}$ of usable band.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		BW = \ansbox[1.3in]{$0.91\%$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Rebuild the same $3.5\ \ghz$ patch on $\varepsilon_r = 10.2$ at the same $h$. Its design
+		works out to $W = 18.11\ \text{mm}$, $L = 13.35\ \text{mm}$. Find the new bandwidth, and the
+		factor by which the patch \emph{area} shrank.
+		\begin{solution}[1.3in]
+		\eq{
+		\text{BW} &\approx 3.77\lp\frac{9.2}{104.0}\rp(0.00949)\lp\frac{18.11}{13.35}\rp \\
+		&= 3.77(0.0884)(0.00949)(1.356) = 0.0043
+		}
+		Area: $28.41\times22.55 = 641\ \text{mm}^2$ against $18.11\times13.35 = 242\ \text{mm}^2$,
+		a factor of $2.6$ smaller. Bandwidth fell by a factor of $2.1$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		BW = \ansbox[1.2in]{$0.43\%$}
+		\\[10pt]
+		area $\div$ \ansbox[1.2in]{$2.6$}
+	\end{minipage}
+
+	\part Read the bandwidth formula: which single substrate parameter would you change to
+	\emph{buy} bandwidth without changing $\varepsilon_r$, and name one penalty that comes with it.
+		\begin{solution}[1.1in]
+		Increase the thickness $h$: bandwidth is directly proportional to $h/\lambda_0$. The penalties
+		are surface waves (power trapped in the substrate instead of radiated, so efficiency and
+		pattern quality drop), a larger probe or feed inductance that is harder to match, and a
+		thicker, heavier board. Above about $h = 0.05\lambda_0$ the closed forms above stop being
+		trustworthy at all.
+		\end{solution}
+
+	\part You are given $8\ \text{mm} \times 8\ \text{mm}$ of board area for a $3.5\ \ghz$ element
+	and told the link needs $2\%$ bandwidth. State whether a single patch on any of these
+	substrates can do the job, and what you would tell the systems lead.
+		\begin{solution}[1.2in]
+		No. Even the low-$\varepsilon_r$ option is far larger than $8\ \text{mm}$, and the only
+		substrate that fits the footprint ($\varepsilon_r = 10.2$, at $18\times13\ \text{mm}$) is still
+		too big \emph{and} delivers $0.43\%$, not $2\%$. Shrinking with permittivity and widening the
+		bandwidth pull in opposite directions on this element. Tell the lead the requirement needs a
+		different answer: a much thicker substrate, a stacked or aperture-coupled patch, or a
+		different element entirely --- not a tweak to this one.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Babinet and the slot.} A narrow half-wave slot is cut in a large, thin
+conducting sheet and fed across its middle.
+
+\begin{parts}
+
+	\part State Babinet's complementarity relation between a slot and its complementary dipole,
+	and say in one sentence what ``complementary'' means physically.
+		\begin{solution}[1.1in]
+		\eq{ Z_{\text{slot}}\ Z_{\text{dipole}} = \frac{\eta_0^{2}}{4} }
+		The complementary structure is the one you get by exchanging metal for air and air for
+		metal: the slot is exactly the hole left behind if the dipole were punched out of the sheet.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The complementary dipole is trimmed to resonance, where it presents $73\ \Omega$ real.
+		Find the slot's input impedance.
+		\begin{solution}[1.1in]
+		\eq{
+		\frac{\eta_0^{2}}{4} &= \frac{(377)^{2}}{4} = 3.553\times10^{4}\ \Omega^{2} \\
+		Z_{\text{slot}} &= \frac{3.553\times10^{4}}{73} = 487\ \Omega
+		}
+		This is the canonical ``about $485\ \Omega$'' resonant-slot value.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$Z_{\text{slot}}$ = \ansbox[1.3in]{$487\ \Omega$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Now take the untrimmed $\lambda/2$ dipole, $Z = 73 + j42.5\ \Omega$. Find the slot
+		impedance and comment on the sign of its reactance.
+		\begin{solution}[1.4in]
+		\eq{
+		Z_{\text{slot}} &= \frac{3.553\times10^{4}}{73+j42.5}
+		= \frac{3.553\times10^{4}(73-j42.5)}{73^{2}+42.5^{2}} \\
+		&= \frac{3.553\times10^{4}}{7135}(73-j42.5) = 4.980(73-j42.5) \\
+		&= 364 - j212\ \Omega
+		}
+		The inductive dipole becomes a \emph{capacitive} slot: inverting a complex impedance flips
+		the sign of the reactance. Both therefore go resonant at the same length.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$Z_{\text{slot}}$ = \ansbox[1.5in]{$364 - j212\ \Omega$}
+	\end{minipage}
+
+	\part A horizontal slot is cut in the vertical fin of an aircraft. State the polarization of
+	the radiated field and justify it in one sentence, then name one reason a designer chooses a
+	slot here rather than a monopole.
+		\begin{solution}[1.2in]
+		The field is \emph{vertically} polarized. The slot's \textbf{E} field runs \emph{across} the
+		cut rather than along it (fields swap under Babinet), so a horizontal slot radiates like a
+		vertical dipole. The slot is chosen because it is flush: it has no protrusion, adds no drag, and has nothing to
+		shear off or ice up, and it can be cut into structure that is already there.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{An X-band horn.} A pyramidal standard-gain horn has a rectangular aperture
+$16.5\ \text{cm} \times 12.2\ \text{cm}$ and is used at $9.4\ \ghz$. Aperture antennas obey
+$G = \eta_{\text{ap}}\,4\pi A/\lambda^{2}$; take the optimum-horn value
+$\eta_{\text{ap}} = 0.5$ unless told otherwise.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the gain, in dBi.
+		\begin{solution}[1.3in]
+		\eq{
+		\lambda &= \frac{3\times10^{8}}{9.4\times10^{9}} = 3.19\ \text{cm} \\
+		A &= 0.165(0.122) = 0.0201\ \text{m}^{2} \\
+		\frac{4\pi A}{\lambda^{2}} &= \frac{4\pi(0.0201)}{(0.0319)^{2}} = 248 \\
+		G &= 0.5(248) = 124 = 10\ \mylog{124} = 20.9\dbi
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G$ = \ansbox[1.3in]{$20.9\dbi$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part How far away must a receiving antenna sit for this horn to be in its far field?
+		\begin{solution}[1.1in]
+		The largest aperture dimension is the diagonal,
+		\eq{
+		D &= \sqrt{16.5^{2}+12.2^{2}} = 20.5\ \text{cm} \\
+		r &\ge \frac{2D^{2}}{\lambda} = \frac{2(0.205)^{2}}{0.0319} = 2.6\ \m
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$r$ = \ansbox[1.3in]{$2.6\ \m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A shorter, more sharply flared horn of the same aperture has enough edge phase error
+		to drop $\eta_{\text{ap}}$ to $0.35$. What gain does it deliver, and how much was lost?
+		\begin{solution}[1.1in]
+		\eq{
+		G &= 0.35(248) = 86.9 = 19.4\dbi \\
+		\Delta G &= 10\ \mylog{\frac{0.5}{0.35}} = 1.6\db
+		}
+		The physical area is unchanged, but the horn delivers $1.6$\db{} less gain, all of it lost to phase error.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G$ = \ansbox[1.2in]{$19.4\dbi$}
+		\\[10pt]
+		loss = \ansbox[1.2in]{$1.6\db$}
+	\end{minipage}
+
+	\part Explain in two or three sentences why enlarging a horn's aperture at fixed flare length
+	eventually stops increasing its gain, and what the phrase ``optimum horn'' names.
+		\begin{solution}[1.2in]
+		The wave leaving the flare is spherical while the aperture is flat, so the aperture edge is
+		farther from the virtual apex than the center and its phase lags. Widening the aperture at
+		fixed length raises $4\pi A/\lambda^{2}$ but steepens that quadratic phase error, so
+		$\eta_{\text{ap}}$ falls; past a point the efficiency loses faster than the area gains and the
+		curve turns over. The \emph{optimum horn} is that peak --- the shortest horn for a given
+		aperture whose edge phase error is still tolerable (about $\lambda/4$ in the E-plane and
+		$3\lambda/8$ in the H-plane), which is where $\eta_{\text{ap}} \approx 0.5$ comes from.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Mechanism and selection.} Answer in words. Full sentences.
+
+\begin{parts}
+
+	\part A patch is mostly a flat sheet of copper over a ground plane, and a sheet of copper is
+	a terrible radiator. Explain what actually radiates, and why the two contributions add rather
+	than cancel in the broadside direction.
+		\begin{solution}[1.4in]
+		The cavity between the patch and the ground plane holds a half-wave standing wave, so the
+		field points from patch to ground at one open edge and from ground to patch at the other. At
+		each open edge the field fringes out past the conductor. The vertical parts of the two
+		fringing fields are opposite and cancel; the horizontal parts point the same way and add.
+		Those two fringing edges behave as two slots of width $W$, spaced $L \approx \lambda_d/2$
+		apart, driven in phase --- so their contributions arrive with equal path length and add
+		straight up, giving a broadside beam.
+		\end{solution}
+
+	\part The two radiating slots sit only about a third of a free-space wavelength apart. Say
+	what that implies for the E-plane beamwidth, and why the patch's directivity therefore lands
+	near $6$\dbi{} rather than up with the horns.
+		\begin{solution}[1.2in]
+		A two-element array that short cannot form a narrow beam: the array factor barely varies
+		across the visible half space, so the E-plane pattern stays very broad. The whole radiating
+		structure is only a fraction of a wavelength across, and directivity tracks electrical size,
+		so a patch radiates a broad hemispherical beam worth roughly $5$ to $8$\dbi. Horns get their
+		$20$-plus dBi by being many wavelengths across.
+		\end{solution}
+
+	\part Match each application to the best of patch, slot, or horn, with a one-line
+	justification: \textbf{(i)} the gain reference in an anechoic chamber; \textbf{(ii)} a
+	telemetry antenna on a supersonic missile skin; \textbf{(iii)} the element of a printed
+	phased array for a $10\ \ghz$ radar demonstrator.
+		\begin{solution}[1.4in]
+		\textbf{(i)} Horn --- built to the optimum design and calibrated, so its gain is known to a
+		few tenths of a dB, which is exactly what a reference must be.
+		\textbf{(ii)} Slot --- it is flush with the skin, so it survives the aerodynamic and thermal
+		environment; cavity-backing makes it radiate outward only.
+		\textbf{(iii)} Patch --- planar, light, cheap, and reproducible, so hundreds of identical
+		elements and their feed network etch in the same step.
+		\end{solution}
+
+	\part Your team wants the phased-array demonstrator of part (c) to cover a $10\%$ band. State
+	the conflict this creates with the patch element and one concrete way to resolve it.
+		\begin{solution}[1.2in]
+		A thin-substrate patch delivers a few percent at best, so $10\%$ is roughly an order of
+		magnitude beyond a plain element --- and thinning the requirement is not an option if the
+		waveform needs the band. Concrete fixes: go to a thick, low-$\varepsilon_r$ substrate;
+		stack a parasitic patch above the driven one; or feed through an aperture-coupled slot,
+		which adds a second resonance and typically buys $10$ to $20\%$. Each costs board
+		thickness, layers, or both ; the bandwidth has to come from somewhere.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

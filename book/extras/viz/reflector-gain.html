@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reflector gain is aperture area</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:58px; font-weight:600; font-size:12.5px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
+  /* Below 430px the controls bar cannot fit a label, a slider and a value on one
+     line: .ctl's flex basis and the reserved .val column are both wider than the
+     content box, so the bar pushes the document past the viewport and the whole
+     widget scrolls sideways on a phone. Stack each control instead -- label and
+     value share the first line, the input takes the second -- and let every part
+     shrink. Labels keep their natural width, so none of them squeeze. Nothing
+     here applies above 430px: the desktop layout is byte-for-byte unchanged. */
+  @media (max-width:430px) {
+    canvas { max-width:100%; }
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
+  }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0,1fr)); }
+  @media (max-width:640px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width:420px) { .readouts { grid-template-columns:minmax(0,1fr); } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.hp { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.hp .v { color:var(--grn); }
+  .ro.sur { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.sur .v { color:var(--amber); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="scene" aria-label="Scale drawing of a reflector measured in wavelengths, with the half-power beam cone it produces"></canvas>
+  <canvas id="plot" aria-label="Gain in decibels and half-power beamwidth versus dish diameter in wavelengths"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Dish size \(D/\lambda\)</label>
+      <input type="range" id="dol" min="0" max="1000" step="1" value="500">
+      <span class="val" id="dol-val">30.0</span>
+    </div>
+    <div class="ctl">
+      <label>Aperture eff. \(\eta_{\text{ap}}\)</label>
+      <input type="range" id="eff" min="40" max="80" step="1" value="55">
+      <span class="val" id="eff-val">0.55</span>
+    </div>
+    <div class="ctl">
+      <label>Surface rms \(\sigma\)</label>
+      <input type="range" id="sig" min="0" max="625" step="5" value="0">
+      <span class="val" id="sig-val">0</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">gain</span><span class="v" id="p-g">&#8212;</span></div>
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="p-hp">&#8212;</span></div>
+    <div class="ro"><span class="k">\(A_e\)</span><span class="v" id="p-ae">&#8212;</span></div>
+    <div class="ro sur"><span class="k">surface loss</span><span class="v" id="p-loss">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS = "Inter, system-ui, -apple-system, sans-serif";
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const el = id => document.getElementById(id);
+
+const XMIN = 3, XMAX = 300;                 // D/lambda range (log slider)
+const state = { x: 30, eps: 0.55, sig: 0 }; // sig = rms surface error in wavelengths
+
+// ---- the physics -----------------------------------------------------
+// Aperture gain of a circular dish: G = eps * (pi D / lambda)^2.
+// Ruze surface-error factor: exp(-(4 pi sigma / lambda)^2)  ->  685.8 (sigma/lambda)^2 dB.
+const gIdeal  = (x, eps) => eps * Math.pow(Math.PI * x, 2);
+const ruze    = s => Math.exp(-Math.pow(4 * Math.PI * s, 2));
+const lossDb  = s => 10 * Math.log10(1 / ruze(s));
+const gDbi    = (x, eps, s) => 10 * Math.log10(gIdeal(x, eps) * ruze(s));
+const hpbwDeg = x => 70 / x;                          // rule of thumb, 70 lambda / D
+const aeLam2  = (x, eps, s) => eps * Math.PI * x * x / 4 * ruze(s);
+
+const sliderToX = t => XMIN * Math.pow(XMAX / XMIN, t / 1000);
+const xToSlider = x => 1000 * Math.log(x / XMIN) / Math.log(XMAX / XMIN);
+
+// ---- controls -------------------------------------------------------------
+function fmtSig(s) {
+  if (s <= 0) return 'perfect';
+  return 'λ/' + Math.round(1 / s);
+}
+el('dol').addEventListener('input', e => {
+  state.x = sliderToX(+e.target.value);
+  el('dol-val').textContent = state.x < 10 ? state.x.toFixed(2) : state.x.toFixed(1);
+  drawAll();
+});
+el('eff').addEventListener('input', e => {
+  state.eps = +e.target.value / 100;
+  el('eff-val').textContent = state.eps.toFixed(2);
+  drawAll();
+});
+el('sig').addEventListener('input', e => {
+  state.sig = +e.target.value / 10000;          // 0 .. 0.0625 lambda
+  el('sig-val').textContent = fmtSig(state.sig);
+  drawAll();
+});
+
+// ---- canvases -------------------------------------------------------------
+const scene = el('scene'), sctx = scene.getContext('2d');
+const plot = el('plot'), pctx = plot.getContext('2d');
+
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally. And with
+   box-sizing:border-box, style.height sets the OUTER height, so hand the border
+   back or the bitmap is 2px taller than its box. */
+const DESIGN_W = 340;
+function fitOne(cv, ratio, lo, hi) {
+  const dpr = window.devicePixelRatio || 1;
+  const wCss = Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
+  // Narrower than the width this drawing was composed for, scale the whole thing
+  // down rather than clamping the bitmap, so labels shrink together and nothing
+  // collides. At or above DESIGN_W the scale is 1 and nothing changes.
+  const s = Math.min(1, wCss / DESIGN_W);
+  const w = wCss / s;
+  const h = Math.max(lo, Math.min(w * ratio, hi));
+  cv.width = Math.round(wCss * dpr); cv.height = Math.round(h * s * dpr);
+  cv.style.height = (h * s) + 'px';
+  const bh = cv.offsetHeight - cv.clientHeight;
+  if (bh) cv.style.height = (h * s + bh) + 'px';
+  cv.getContext('2d').setTransform(dpr * s, 0, 0, dpr * s, 0, 0);
+  return { w, h };
+}
+function fit() { drawAll(); }
+window.addEventListener('resize', fit);
+
+function drawAll() { drawScene(); drawPlot(); updateReadouts(); }
+
+// ---------------------------------------------------------------- scene ----
+function drawScene() {
+  const { w, h } = fitOne(scene, 0.30, 200, 260);
+  const ctx = sctx;
+  ctx.clearRect(0, 0, w, h);
+  const yc = h / 2 + 4;
+  const HH = Math.min(80, h * 0.33);          // half the drawn dish height
+  const xd = 96;                              // dish vertex
+  const Fd = HH * HH / (4 * 26);              // drawn focal length -> 26 px depth
+  const surf = dy => xd + dy * dy / (4 * Fd);
+  const xend = w - 14;
+
+  // boresight
+  ctx.strokeStyle = '#dfe7ef'; ctx.lineWidth = 1; ctx.setLineDash([8, 4]);
+  ctx.beginPath(); ctx.moveTo(xd, yc); ctx.lineTo(xend, yc); ctx.stroke(); ctx.setLineDash([]);
+
+  // reference beam: what a 10-lambda dish would give
+  const apex = xd + 34;
+  const refHalf = Math.tan(Math.PI / 180 * hpbwDeg(10) / 2) * (xend - apex);
+  ctx.strokeStyle = '#c4ccd6'; ctx.lineWidth = 1.2; ctx.setLineDash([5, 4]);
+  ctx.beginPath();
+  ctx.moveTo(xend, yc - refHalf); ctx.lineTo(apex, yc); ctx.lineTo(xend, yc + refHalf);
+  ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = '#8d97a3'; ctx.font = '11px ' + SANS; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+  ctx.fillText('reference beam of a 10-wavelength dish', xend - 2, yc - refHalf - 3);
+
+  // live beam cone
+  const half = Math.tan(Math.PI / 180 * hpbwDeg(state.x) / 2) * (xend - apex);
+  ctx.beginPath();
+  ctx.moveTo(apex, yc); ctx.lineTo(xend, yc - half); ctx.lineTo(xend, yc + half); ctx.closePath();
+  ctx.fillStyle = 'rgba(63,125,52,0.16)'; ctx.fill();
+  ctx.strokeStyle = cssVar('--grn'); ctx.lineWidth = 2; ctx.stroke();
+
+  // dish surface
+  const pts = [];
+  for (let i = 0; i <= 60; i++) { const dy = -HH + 2 * HH * i / 60; pts.push([surf(dy), yc + dy]); }
+  ctx.strokeStyle = cssVar('--navy'); ctx.lineWidth = 4.5;
+  ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke();
+
+  // wavelength tick marks along the rim, while they are still resolvable
+  const pxPerLam = (2 * HH) / state.x;
+  if (pxPerLam >= 3.5) {
+    ctx.strokeStyle = cssVar('--mid'); ctx.lineWidth = 1;
+    for (let k = 0; k <= state.x; k++) {
+      const y = yc - HH + k * pxPerLam;
+      ctx.beginPath(); ctx.moveTo(xd - 16, y); ctx.lineTo(xd - 6, y); ctx.stroke();
+    }
+  }
+
+  // D dimension
+  ctx.strokeStyle = cssVar('--navy'); ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(34, yc - HH); ctx.lineTo(34, yc + HH); ctx.stroke();
+  [-1, 1].forEach(s => {
+    ctx.beginPath();
+    ctx.moveTo(34, yc + s * HH); ctx.lineTo(30, yc + s * HH - s * 7);
+    ctx.lineTo(38, yc + s * HH - s * 7); ctx.closePath(); ctx.fill();
+  });
+  ctx.save();
+  ctx.translate(20, yc); ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = cssVar('--navy'); ctx.font = '700 12.5px ' + SANS;
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  const nlam = 'D = ' + (state.x < 10 ? state.x.toFixed(2) : state.x.toFixed(0)) + ' ';
+  const tw = ctx.measureText(nlam).width;
+  const lw = MJ.width('\\lambda', cssVar('--navy'), 14) || 9;
+  ctx.fillText(nlam, -(tw + lw) / 2, 0);
+  MJ.draw(ctx, '\\lambda', -(tw + lw) / 2 + tw, 0, 14, cssVar('--navy'), 'left');
+  ctx.restore();
+
+  // feed at the focus
+  ctx.fillStyle = cssVar('--navy');
+  ctx.beginPath(); ctx.arc(xd + Fd, yc, 4.5, 0, 7); ctx.fill();
+
+  // beamwidth annotation
+  ctx.fillStyle = cssVar('--grn'); ctx.font = '700 12.5px ' + SANS;
+  ctx.textAlign = 'right'; ctx.textBaseline = 'top';
+  const hp = hpbwDeg(state.x);
+  ctx.fillText('half-power beam: ' + (hp < 1 ? hp.toFixed(2) : hp.toFixed(1)) + '°',
+               xend - 2, yc + Math.max(half, 8) + 5);
+
+  ctx.fillStyle = cssVar('--ink3'); ctx.font = '11.5px ' + SANS;
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText(pxPerLam >= 6 ? 'each tick on the rim is one wavelength'
+                             : 'the dish is now too many wavelengths across to tick off',
+               xd + 6, 8);
+}
+
+// ----------------------------------------------------------------- plot ----
+function drawPlot() {
+  const { w, h } = fitOne(plot, 0.40, 250, 330);
+  const ctx = pctx;
+  ctx.clearRect(0, 0, w, h);
+  const mL = 54, mR = 60, mT = 24, mB = 42;
+  const pW = w - mL - mR, pH = h - mT - mB;
+  const GMAX = 60;
+  const HPLO = 0.1, HPHI = 30;
+
+  const X = x => mL + pW * Math.log(x / XMIN) / Math.log(XMAX / XMIN);
+  const YG = g => mT + pH * (1 - Math.max(0, Math.min(GMAX, g)) / GMAX);
+  const YH = a => mT + pH * (1 - Math.log(a / HPLO) / Math.log(HPHI / HPLO));
+
+  // grid + frame
+  ctx.strokeStyle = '#eef3f8'; ctx.lineWidth = 1;
+  [3, 5, 10, 20, 30, 50, 100, 200, 300].forEach(x => {
+    ctx.beginPath(); ctx.moveTo(X(x), mT); ctx.lineTo(X(x), mT + pH); ctx.stroke();
+  });
+  for (let g = 0; g <= GMAX; g += 10) {
+    ctx.beginPath(); ctx.moveTo(mL, YG(g)); ctx.lineTo(mL + pW, YG(g)); ctx.stroke();
+  }
+  ctx.strokeStyle = cssVar('--edge'); ctx.strokeRect(mL, mT, pW, pH);
+
+  const curve = (fx, fy, col, wid, dash, lo, hi) => {
+    ctx.strokeStyle = col; ctx.lineWidth = wid; ctx.setLineDash(dash || []);
+    ctx.beginPath();
+    let pen = false;
+    for (let i = 0; i <= 240; i++) {
+      const x = sliderToX(1000 * i / 240), v = fx(x);
+      if (lo !== undefined && (v < lo || v > hi)) { pen = false; continue; }
+      const px = X(x), py = fy(v);
+      pen ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
+      pen = true;
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+  };
+
+  // HPBW (right axis)
+  curve(x => hpbwDeg(x), YH, cssVar('--grn'), 2.2, null, HPLO, HPHI);
+
+  // ideal gain and the gain you actually get
+  curve(x => 10 * Math.log10(gIdeal(x, state.eps)), YG, cssVar('--navy'), 1.6, [6, 4], 0, GMAX);
+  curve(x => gDbi(x, state.eps, state.sig), YG, cssVar('--navy'), 2.8, null, 0, GMAX);
+
+  // the ceiling: hold the PANEL tolerance (sigma/D) at its present value and grow the dish
+  if (state.sig > 0) {
+    const sOverD = state.sig / state.x;
+    curve(x => 10 * Math.log10(gIdeal(x, state.eps) * ruze(sOverD * x)),
+          YG, cssVar('--amber'), 2.2, [5, 4], 0, GMAX);
+    const xPeak = 1 / (4 * Math.PI * sOverD);
+    if (xPeak > XMIN && xPeak < XMAX) {
+      const gPk = 10 * Math.log10(gIdeal(xPeak, state.eps) * ruze(sOverD * xPeak));
+      ctx.fillStyle = cssVar('--amber');
+      ctx.beginPath(); ctx.arc(X(xPeak), YG(gPk), 4, 0, 7); ctx.fill();
+      ctx.font = '700 11px ' + SANS; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      ctx.fillText('ceiling', X(xPeak), YG(gPk) - 6);
+    }
+  }
+
+  // marker at the current dish
+  const gNow = gDbi(state.x, state.eps, state.sig);
+  ctx.strokeStyle = cssVar('--red'); ctx.lineWidth = 1.4; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(X(state.x), mT); ctx.lineTo(X(state.x), mT + pH); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = cssVar('--navy');
+  ctx.beginPath(); ctx.arc(X(state.x), YG(gNow), 4.5, 0, 7); ctx.fill();
+  ctx.fillStyle = cssVar('--grn');
+  ctx.beginPath(); ctx.arc(X(state.x), YH(hpbwDeg(state.x)), 4.5, 0, 7); ctx.fill();
+
+  // axes
+  ctx.font = '10.5px ' + SANS; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+  ctx.fillStyle = cssVar('--navy');
+  for (let g = 0; g <= GMAX; g += 10) ctx.fillText(String(g), mL - 6, YG(g));
+  ctx.textAlign = 'left'; ctx.fillStyle = cssVar('--grn');
+  [0.1, 0.3, 1, 3, 10, 30].forEach(a => ctx.fillText(String(a), mL + pW + 6, YH(a)));
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillStyle = cssVar('--ink3');
+  [3, 5, 10, 20, 30, 50, 100, 200, 300].forEach(x => ctx.fillText(String(x), X(x), mT + pH + 5));
+
+  // axis titles (words in sans, symbols via MathJax)
+  ctx.fillStyle = '#3b4651'; ctx.font = '600 12px ' + SANS;
+  const cx = mL + pW / 2, ttl = 'dish diameter  ';
+  const tw2 = ctx.measureText(ttl).width;
+  const sw2 = MJ.width('D/\\lambda', '#3b4651', 15) || 26;
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText(ttl, cx - (tw2 + sw2) / 2, mT + pH + 22);
+  MJ.draw(ctx, 'D/\\lambda', cx - (tw2 + sw2) / 2 + tw2, mT + pH + 29, 15, '#3b4651', 'left');
+  ctx.textBaseline = 'middle';
+  ctx.save(); ctx.translate(14, mT + pH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = cssVar('--navy'); ctx.textBaseline = 'middle';
+  ctx.fillText('gain (dBi)', 0, 0); ctx.restore();
+  ctx.save(); ctx.translate(w - 12, mT + pH / 2); ctx.rotate(Math.PI / 2);
+  ctx.fillStyle = cssVar('--grn'); ctx.fillText('HPBW (degrees)', 0, 0); ctx.restore();
+
+  // legend
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.font = '700 11px ' + SANS;
+  let ly = mT + 10;
+  const key = (col, label, dash) => {
+    ctx.strokeStyle = col; ctx.lineWidth = 2.4; ctx.setLineDash(dash || []);
+    ctx.beginPath(); ctx.moveTo(mL + 10, ly); ctx.lineTo(mL + 28, ly); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = col; ctx.fillText(label, mL + 34, ly + 1); ly += 15;
+  };
+  key(cssVar('--navy'), 'gain, this surface');
+  key(cssVar('--navy'), 'gain, perfect surface', [6, 4]);
+  if (state.sig > 0) key(cssVar('--amber'), 'same panel tolerance, bigger dish', [5, 4]);
+}
+
+// ------------------------------------------------------------- readouts ---
+function updateReadouts() {
+  const g = gDbi(state.x, state.eps, state.sig);
+  const hp = hpbwDeg(state.x);
+  const ae = aeLam2(state.x, state.eps, state.sig);
+  el('p-g').textContent = g.toFixed(1) + ' dBi';
+  el('p-hp').textContent = (hp < 1 ? hp.toFixed(2) : hp.toFixed(1)) + '°';
+  el('p-ae').innerHTML = (ae < 10 ? ae.toFixed(2) : ae.toFixed(0)) + ' λ²';
+  el('p-loss').textContent = lossDb(state.sig).toFixed(2) + ' dB';
+}
+
+MJ.setRedraw(drawAll);
+MJ.onReady(() => { MJ.typeset(document.querySelector('.app')).then(drawAll); });
+el('dol').value = xToSlider(state.x);
+el('dol-val').textContent = state.x.toFixed(1);
+el('eff-val').textContent = state.eps.toFixed(2);
+el('sig-val').textContent = fmtSig(state.sig);
+drawAll();
+</script>
+</body>
+</html>

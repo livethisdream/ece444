@@ -1,0 +1,376 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L12 practice set (Pattern Measurement Theory) -- range length from the pi/8
+% criterion, quiet-zone and absorber reasoning, comparison-method gain, and the
+% near-field scan and pattern-cut bookkeeping behind the midterm project.
+
+\fullwidth{\textbf{Learning Objective 2.5: } I can explain the theory behind antenna
+pattern measurement, including anechoic chambers, near-field to far-field
+transformations, and standard gain horns.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+\question \textbf{Sizing the range.} A $0.75\ \m$ aperture antenna is to be
+pattern-tested at $8\ \ghz$. Take $c = 3\ee{8}\ \m/\text{s}$ throughout.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the wavelength and the minimum far-field range length for
+		this antenna.
+		\begin{solution}[1.2in]
+		\eq{ \lambda &= \frac{c}{f} = \frac{3\ee{8}}{8\ee{9}} = 0.0375\ \m \\
+		     r_{ff} &= \frac{2D^2}{\lambda} = \frac{2\lp 0.75 \rp^2}{0.0375}
+		            = \frac{1.125}{0.0375} = 30.0\ \m }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$r_{ff}$ = \ansbox[1.3in]{$30.0\ \m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The only chamber available puts the source $12\ \m$ from the
+		positioner. Find the edge phase error, in degrees, that this range
+		imposes across the antenna.
+		\begin{solution}[1.3in]
+		\eq{ \Delta\phi_{max} &= \frac{\pi D^2}{4 \lambda r}
+		     = \frac{\pi \lp 0.75 \rp^2}{4 \lp 0.0375 \rp \lp 12 \rp}
+		     = \frac{1.767}{1.80} = 0.982\ \text{rad} \\
+		     &= 56.3\mydeg }
+		Equivalently, $r/r_{ff} = 12/30 = 0.40$, and the edge error scales as the
+		inverse of that ratio: $22.5\mydeg / 0.40 = 56.3\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta\phi_{max}$ = \ansbox[1.3in]{$56.3\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A colleague must test a $2.4\ \m$ reflector at $35\ \ghz$. Find
+		the far-field range length her measurement would require.
+		\begin{solution}[1.2in]
+		\eq{ \lambda &= \frac{3\ee{8}}{35\ee{9}} = 8.57\ee{-3}\ \m \\
+		     r_{ff} &= \frac{2 \lp 2.4 \rp^2}{8.57\ee{-3}} = \frac{11.52}{8.57\ee{-3}} \\
+		            &= 1344\ \m \approx 1.34\ \km }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$r_{ff}$ = \ansbox[1.3in]{$1.34\ \km$}
+	\end{minipage}
+
+	\part Your colleague has no 1.3 km of chamber and no budget for a
+	1.3 km outdoor range. Name the two measurement approaches that solve her
+	problem, and state in one sentence what each one trades away to do it.
+		\begin{solution}[1.4in]
+		A \textbf{compact range} puts a precision offset-parabolic reflector in
+		the room and collimates the feed's spherical wave into a plane wave over
+		a short distance; it trades away money and simplicity, since the usable
+		quiet zone is only about 50--60\% of the reflector aperture (so the
+		reflector must be far larger than the antenna) and the rim must be
+		serrated or rolled to keep edge diffraction out of the test volume.
+
+		A \textbf{near-field scanner} measures amplitude and phase on a surface a
+		few wavelengths from the aperture and transforms the result to the far
+		field; it trades away speed and simplicity, since it needs a
+		phase-coherent receiver, half-wavelength sampling over a large surface,
+		and probe compensation.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Reading a suspect pattern.} A short range does not fail
+obviously; it returns a pattern that still looks like a pattern.
+\begin{parts}
+
+	\part In one or two sentences, explain physically why a source at finite
+	range produces a phase error across the antenna under test that grows as the
+	\emph{square} of the distance from the aperture centre.
+		\begin{solution}[1.2in]
+		The incident wavefront is a sphere of radius $r$ centred on the source,
+		not a plane. A point a distance $x$ off the aperture centre is
+		$\sqrt{r^2 + x^2} \approx r + x^2/2r$ away from the source, so the extra
+		path -- and therefore the extra phase lag -- is $x^2/2r$. The linear term
+		vanishes because the geometry is symmetric about boresight, leaving the
+		quadratic term as the leading error.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part An antenna with $D/\lambda = 25$ is measured at half its far-field
+		distance. Find the edge phase error in degrees.
+		\begin{solution}[1.2in]
+		The far-field criterion is exactly $\pi/8 = 22.5\mydeg$ of edge error,
+		and the error scales as $1/r$:
+		\eq{ \Delta\phi_{max} = \frac{22.5\mydeg}{r/r_{ff}}
+		     = \frac{22.5\mydeg}{0.5} = 45\mydeg }
+		Note that this does not depend on $D/\lambda$ at all -- only on how short
+		the range is relative to $2D^2/\lambda$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta\phi_{max}$ = \ansbox[1.3in]{$45\mydeg$}
+	\end{minipage}
+
+	\part In that same measurement the first null reads $-16\db$ instead of
+	going deep, but the measured half-power beamwidth agrees with prediction to
+	better than 2\%. Explain, in one or two sentences, how both statements can be
+	true at once.
+		\begin{solution}[1.2in]
+		Quadratic phase error is a defocus, and a defocus destroys the precise
+		cancellation that creates a null long before it changes the width of the
+		main beam. The nulls depend on complete destructive interference across
+		the whole aperture, so a $45\mydeg$ edge error fills them to about
+		$-16\db$; the half-power points sit where the pattern is still dominated
+		by the aperture's size, which the phase error has not changed. This is
+		exactly why $2D^2/\lambda$ is a main-beam and gain criterion, not a
+		sidelobe criterion.
+		\end{solution}
+
+	\part A customer needs the $-25\db$ sidelobe of this antenna verified. Using
+	the fact that a range at $2D^2/\lambda$ fills the first null to about
+	$-22\db$, at $5D^2/\lambda$ to about $-30\db$, and at $10D^2/\lambda$ to about
+	$-36\db$, recommend a range length and defend it in one sentence.
+		\begin{solution}[1.3in]
+		Recommend $r \geq 10D^2/\lambda$, i.e.\ five times the usual far-field
+		distance. At $2D^2/\lambda$ the range's own artifact sits at $-22\db$,
+		which is \emph{above} the $-25\db$ feature being measured -- the
+		measurement would be reporting the range, not the antenna. At
+		$5D^2/\lambda$ the artifact is $-30\db$, only $5\db$ below the sidelobe,
+		which is still worth several dB of error. At $10D^2/\lambda$ the artifact
+		is $-36\db$, a comfortable $11\db$ below the feature, and the sidelobe
+		level can be quoted with confidence.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Specifying the chamber.} An anechoic chamber is not a room
+with no reflections. It is a room with reflections below a stated level.
+\begin{parts}
+
+	\part Absorber reflectivity is quoted at normal incidence and degrades at
+	grazing incidence. Explain why, and state which chamber surfaces this makes
+	the critical ones.
+		\begin{solution}[1.2in]
+		The pyramids work as a gradual impedance taper: at normal incidence a
+		wave travels a long way down into the lossy foam before it can reflect,
+		so it is absorbed. At grazing incidence the wave sees the pyramid tips as
+		a nearly continuous surface and travels only a short distance in the
+		lossy material, so it reflects far more strongly. The critical surfaces
+		are therefore the \textbf{side walls, ceiling, and floor} in the specular
+		region between the source and the antenna under test, where the stray
+		rays strike at a slant.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A single stray reflection arrives $40\db$ below the main beam.
+		Find the worst-case error, in dB, that it adds to a measurement of
+		(i) the main beam peak and (ii) a $-30\db$ sidelobe.
+		\begin{solution}[1.4in]
+		The stray adds in and out of phase with the wanted signal. Work with
+		voltage ratios. For the main beam, the ratio is
+		$10^{-40/20} = 0.0100$:
+		\eq{ 20\ \mylog{1 \pm 0.0100} = +0.09\db \text{ / } -0.09\db }
+		For a $-30\db$ sidelobe the stray is only $10\db$ below the wanted
+		signal, so the ratio is $10^{-10/20} = 0.316$:
+		\eq{ 20\ \mylog{1 \pm 0.316} = +2.4\db \text{ / } -3.3\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		main beam = \ansbox[1.1in]{$\pm 0.09\db$}
+		\\[10pt]
+		sidelobe = \ansbox[1.1in]{$+2.4/-3.3\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part You must verify a $-35\db$ sidelobe to within $\pm 1\db$. Find the
+		chamber reflectivity, relative to the main beam, that this requires.
+		\begin{solution}[1.4in]
+		Let $x$ be the stray-to-signal voltage ratio at the sidelobe. The
+		negative-going error is the binding one:
+		\eq{ 20\ \mylog{1 - x} &\geq -1\db \\
+		     1 - x &\geq 10^{-1/20} = 0.891 \\
+		     x &\leq 0.109 \quad \lp -19.3\db \rp }
+		The stray must therefore sit $19.3\db$ below the sidelobe, which is
+		$19.3\db$ below $-35\db$:
+		\eq{ -35\db - 19.3\db = -54.3\db }
+		Specify $-55\db$ over the band and quiet zone.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		reflectivity = \ansbox[1.3in]{$\approx -55\db$}
+	\end{minipage}
+
+	\part Your antenna under test is $1.5\ \m$ across. The chamber datasheet
+	advertises a $1.2\ \m$ quiet zone at $-45\db$. State the problem in one
+	sentence, and say what happens to the measurement if you proceed anyway.
+		\begin{solution}[1.1in]
+		The antenna does not fit inside the volume the chamber is certified for,
+		so its outer $0.15\ \m$ on each side is illuminated by fields that carry
+		no reflectivity guarantee at all. Proceeding means the aperture edges --
+		the region that sets the sidelobe structure -- are being measured in an
+		ordinary room, and any sidelobe or null result from the run is
+		indefensible even though the main beam and gain will still look fine.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Two ways to an absolute number.} Pattern shape needs only a
+normalization; gain needs a calibration.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part At $12\ \ghz$ a standard gain horn with a calibrated gain of
+		$20.4\dbi$ receives $-41.2\dbm$. Swapping in the antenna under test,
+		with nothing else touched, gives $-29.8\dbm$. Find the gain of the
+		antenna under test.
+		\begin{solution}[1.2in]
+		\eq{ \Delta P &= P_{AUT} - P_{SGH} = -29.8 - \lp -41.2 \rp \\
+		             &= +11.4\db \\
+		     G_{AUT} &= G_{SGH} + \Delta P = 20.4 + 11.4 = 31.8\dbi }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G_{AUT}$ = \ansbox[1.3in]{$31.8\dbi$}
+	\end{minipage}
+
+	\part The transmit power, the source antenna's gain, the range length, and
+	the cable losses were all unknown in part (a), yet the answer is exact.
+	Explain in one or two sentences why they do not matter.
+		\begin{solution}[1.1in]
+		Write Friis for each of the two measurements. Every one of those
+		quantities appears identically in both, because nothing but the antenna
+		on the positioner changed, so all of them cancel in the difference
+		$P_{AUT} - P_{SGH}$. The comparison method measures a \emph{ratio} of
+		gains, and the horn's calibration supplies the only absolute number in
+		the room.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part No standard is available, so you set up two identical antennas
+		facing each other at $R = 15\ \m$ and $10\ \ghz$. With $P_t = +10\dbm$
+		you measure $P_r = -30.0\dbm$. Find the gain of one antenna.
+		\begin{solution}[1.5in]
+		Friis in dB, with $G_t = G_r = G$:
+		\eq{ \lp P_r - P_t \rp_{dB} = 2G + 20\ \mylog{\frac{\lambda}{4\pi R}} }
+		With $\lambda = 0.03\ \m$:
+		\eq{ \frac{\lambda}{4\pi R} &= \frac{0.03}{4\pi \lp 15 \rp} = 1.592\ee{-4} \\
+		     20\ \mylog{1.592\ee{-4}} &= -76.0\db }
+		\eq{ 2G &= \lp -30.0 - 10.0 \rp - \lp -76.0 \rp = 36.0\db \\
+		     G &= 18.0\dbi }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G$ = \ansbox[1.3in]{$18.0\dbi$}
+	\end{minipage}
+
+	\part Back in part (a): the standard gain horn is well matched, but the
+	antenna under test has a VSWR of 2.0. Find the size of the resulting error,
+	say which direction it pushes the answer, and state how you would report the
+	result.
+		\begin{solution}[1.5in]
+		VSWR $= 2.0$ gives $\vert \Gamma \vert = \lp 2-1 \rp / \lp 2+1 \rp = 1/3$,
+		so the fraction of incident power accepted is
+		$1 - \vert \Gamma \vert ^2 = 1 - 1/9 = 0.889$:
+		\eq{ \text{mismatch loss} = -10\ \mylog{0.889} = 0.51\db }
+		The antenna under test delivers $0.51\db$ less power than a matched
+		antenna of the same gain would, so the comparison method reads
+		$0.51\db$ \textbf{low}: $31.8\dbi$ measured against $32.3\dbi$ of true
+		gain. Report the measured figure as \emph{realized gain}, which is the
+		system-level number, and quote the mismatch-corrected $32.3\dbi$
+		separately if the customer wants gain proper.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Near-field scanning and the cut list.} The last two pieces of
+the midterm: how you measure when the range cannot exist, and what a complete
+characterization actually contains.
+\begin{parts}
+
+	\part A near-field scanner must record both amplitude \emph{and} phase at
+	every sample point. Explain in one or two sentences why magnitude alone will
+	not do.
+		\begin{solution}[1.0in]
+		The near-field to far-field step is a Fourier transform, and a Fourier
+		transform operates on the complex field. Magnitude alone does not
+		determine the transform -- infinitely many different phase distributions
+		share the same magnitude on the scan plane and produce entirely different
+		far-field patterns -- so a scanner needs a phase-coherent receiver and
+		phase-stable cabling.
+		\end{solution}
+
+	\part Explain, in two or three sentences, why the near-field to far-field
+	transform is exact rather than a curve fit. Name the earlier result it
+	rests on.
+		\begin{solution}[1.2in]
+		L6 established that the far field is the Fourier transform of the source
+		distribution, with $k\sinp{\theta}$ acting as the spatial frequency
+		variable. Fourier transforms are invertible, so the complex tangential
+		field sampled on a surface enclosing the antenna determines the field
+		everywhere outside that surface -- uniquely, with no fitting or
+		assumption involved. The transform is the same relationship that produced the
+		pattern in the first place, run in the other direction.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A planar scan at $18\ \ghz$ covers a $1.5\ \m$ by $1.5\ \m$ plane
+		at the coarsest spacing the sampling rule allows. Find the required
+		sample spacing and the total number of sample points.
+		\begin{solution}[1.4in]
+		\eq{ \lambda &= \frac{3\ee{8}}{18\ee{9}} = 0.01667\ \m \\
+		     \Delta &= \frac{\lambda}{2} = 8.33\ee{-3}\ \m = 8.33\ \text{mm} }
+		Along one edge there are $1.5 / 8.33\ee{-3} = 180$ intervals, hence 181
+		points:
+		\eq{ N = \lp 181 \rp^2 = 32{,}761 \approx 3.3\ee{4}\ \text{points} }
+		At a few points per second this is several hours of scanning, which is
+		the principal cost of a near-field range.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta$ = \ansbox[1.1in]{$8.33\ \text{mm}$}
+		\\[10pt]
+		$N$ = \ansbox[1.1in]{$32{,}761$}
+	\end{minipage}
+
+	\part You are handed a linearly polarized pyramidal horn and told to
+	characterize it. List the pattern cuts and polarization configurations that
+	make up a minimum complete characterization, state how many sweeps that is,
+	and name one thing that set of sweeps still will not tell you.
+		\begin{solution}[1.5in]
+		Two principal-plane great-circle cuts, each run in two polarization
+		configurations:
+		\begin{enumerate}\itemsep0pt
+			\item E-plane, co-polarized (source aligned with the horn's E-field)
+			\item E-plane, cross-polarized (source rotated $90\mydeg$)
+			\item H-plane, co-polarized
+			\item H-plane, cross-polarized
+		\end{enumerate}
+		That is \textbf{four sweeps}. What it will not tell you is the pattern in
+		the diagonal ($45\mydeg$) planes, which for a rectangular aperture is
+		precisely where the highest sidelobes usually sit; a conical cut or a
+		full spherical scan is needed for those.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

@@ -1,0 +1,400 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L11 practice set (High-Gain Antennas) -- aperture gain and beamwidth, reflector
+% efficiency budgets and Ruze, Yagi-Uda behavior, and defending an antenna choice
+% with a Friis link check.
+
+\fullwidth{\textbf{Learning Objective 2.4: } I can describe how reflectors, Yagi-Uda
+antennas, and arrays achieve high gain, and select an appropriate high-gain antenna
+for a given application.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%============================================================ Q1
+\question \textbf{Sizing a C-band earth station.} A ground station uses a
+\textbf{3.0\ \m\ diameter} prime-focus parabolic reflector at \textbf{6.0\ \ghz}.
+Take the aperture efficiency to be $\eta_{\text{ap}} = 0.65$ and
+$c = 3\ee{8}\ \text{m/s}$.
+
+\begin{parts}
+
+	\part In one or two sentences, explain why the statement ``gain is fundamentally a
+	statement about area'' is more useful to a designer than ``gain is how much
+	the antenna amplifies.''
+		\begin{solution}[1.1in]
+		An antenna is passive: it amplifies nothing. What it does is collect the
+		radiated power into a smaller solid angle, and the size of the coherent
+		radiating area --- measured in square wavelengths --- is what sets how
+		small that solid angle can be. Writing $G = \eta_{\text{ap}} 4\pi A /
+		\lambda^2$ tells the designer the only two knobs that exist: make the
+		aperture physically bigger, or use a shorter wavelength. ``Amplification''
+		suggests a third knob (more gain from the same box) that does not exist.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the wavelength, the dish diameter in wavelengths, and the
+		gain in dBi.
+		\begin{solution}[1.5in]
+		\eq{
+			\lambda &= \frac{c}{f} = \frac{3\ee{8}}{6\ee{9}} = 0.050\ \m
+			\quad\Rightarrow\quad \frac{D}{\lambda} = \frac{3.0}{0.050} = 60 \\
+			G &= \eta_{\text{ap}}\lp \frac{\pi D}{\lambda}\rp^{2}
+			   = 0.65\,(60\pi)^{2} = 0.65\,(35531) \\
+			  &= 2.31\ee{4}
+			   \;\rightarrow\; 10\,\mylog{2.31\ee{4}} = 43.6\dbi
+		}
+		Remark: the effective aperture is $A_e = \eta_{\text{ap}}A =
+		0.65\,\pi(1.5)^2 = 4.60\ \m^2$ --- that is the number Friis uses.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G$ = \ansbox[1.3in]{$43.6\dbi$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Estimate the half-power beamwidth, and state in one sentence what
+		it implies about pointing.
+		\begin{solution}[1.2in]
+		\eq{
+			\theta_{HP} \approx 70\mydeg\,\frac{\lambda}{D}
+			= 70\mydeg\,\frac{0.050}{3.0} = 1.17\mydeg
+		}
+		A beam barely one degree wide means the mount has to hold the boresight
+		to a small fraction of a degree; a few tenths of a degree of wind sway or
+		thermal droop is already a measurable loss of signal. (Note also
+		$2D^2/\lambda = 2(3)^2/0.05 = 360\ \m$ --- the far field starts a long way
+		out, which is L12's problem.)
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{HP}$ = \ansbox[1.3in]{$1.17\mydeg$}
+	\end{minipage}
+
+	\part Management wants \textbf{3\db\ more gain} at the same frequency. What
+	dish diameter does that take, and name one specific cost of the change.
+		\begin{solution}[1.3in]
+		Gain goes as $D^2$, so $+3\db$ is a factor of 2 in gain and a factor of
+		$\sqrt{2}$ in diameter:
+		\eq{
+			D_{new} = \sqrt{2}\,(3.0) = 4.24\ \m
+			\qquad
+			\theta_{HP,new} \approx 70\mydeg\,\frac{0.050}{4.24} = 0.83\mydeg
+		}
+		The cost: the beam narrows to $0.83\mydeg$, so the pointing budget
+		tightens by the same factor of $\sqrt{2}$ --- and the reflector, mount,
+		and wind load all grow with $D^2$. (Accept also: surface tolerance must
+		be held over twice the area, or the far field moves out to 720\ \m.)
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%============================================================ Q2
+\question \textbf{Where the efficiency went.} Same 3.0\ \m\ dish. The
+manufacturer quotes the following loss factors: spillover 0.88, illumination
+taper 0.86, blockage 0.96, and a lumped ``everything else'' factor of 0.98. The
+reflector surface is held to \textbf{0.5\ \text{mm}\ RMS}. Ruze's formula gives the
+surface penalty as $\text{loss (dB)} = 685.8\,(\sigma/\lambda)^2$.
+
+\begin{parts}
+
+	\part Spillover and illumination taper trade directly against each other.
+	Explain the trade in one or two sentences, and state the rule of thumb for
+	where the optimum sits.
+		\begin{solution}[1.2in]
+		A narrow feed pattern puts almost all of its power on the dish, but
+		leaves the rim many dB below the center, so the outer part of the
+		aperture is not being used and the effective area shrinks. Widening the
+		feed brightens the rim but sends power straight past it, which is lost
+		entirely (and on receive replaces cold sky with 290\ K ground in the
+		spilled beam). The optimum is the familiar rule of thumb: illuminate the
+		\textbf{rim about 10\db\ below the center}.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the aperture efficiency from the four quoted factors,
+		before any surface error. Call it $\varepsilon_{ap,1}$.
+		\begin{solution}[1.1in]
+		\eq{
+			\varepsilon_{ap,1} &= (0.88)(0.86)(0.96)(0.98) \\
+			 &= 0.712
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\varepsilon_{ap,1}$ = \ansbox[1.3in]{$0.712$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Add the Ruze surface term at 6.0\ \ghz\ and report the total
+		aperture efficiency.
+		\begin{solution}[1.4in]
+		At 6\ \ghz, $\lambda = 50\ \text{mm}$, so $\sigma/\lambda = 0.5/50 = 0.010$.
+		\eq{
+			\text{loss} &= 685.8\,(0.010)^{2} = 0.069\db \\
+			\eta_{\text{surf}} &= 10^{-0.069/10} = 0.984 \\
+			\eta_{\text{ap}} &= (0.712)(0.984) = 0.700
+		}
+		A half-millimetre surface is essentially free at C band.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\eta_{\text{ap}}$ = \ansbox[1.3in]{$0.70$}
+	\end{minipage}
+
+	\part Someone proposes reusing this \emph{same physical dish} at
+	\textbf{30\ \ghz}. Recompute the surface term and the total aperture
+	efficiency, then say in one or two sentences what the result means for the
+	proposal.
+		\begin{solution}[1.5in]
+		At 30\ \ghz, $\lambda = 10\ \text{mm}$, so $\sigma/\lambda = 0.050$:
+		\eq{
+			\text{loss} &= 685.8\,(0.050)^{2} = 1.71\db \\
+			\eta_{\text{surf}} &= 10^{-0.171} = 0.674 \\
+			\eta_{\text{ap}} &= (0.712)(0.674) = 0.48
+		}
+		Nothing about the dish changed --- only $\lambda$ --- and the aperture
+		efficiency fell from 0.70 to 0.48. The dish still gains about
+		$56.3\dbi$ at 30\ \ghz\ (versus $58.0\dbi$ with a perfect surface), so
+		the proposal is not absurd, but $1.7\db$ has been thrown away for free
+		and it gets exponentially worse with frequency. Above roughly 30\ \ghz\
+		this reflector is a machining problem, not an antenna.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%============================================================ Q3
+\question \textbf{Reading a Yagi-Uda.} A Yagi-Uda has one driven element, one
+reflector behind it, and a row of directors in front along a boom.
+
+\begin{parts}
+
+	\part The reflector is cut slightly \emph{longer} than resonance and the
+	directors slightly \emph{shorter}. Explain what that detuning does
+	electrically, and how it produces an endfire beam.
+		\begin{solution}[1.4in]
+		Only the driven element is connected; the parasites carry currents
+		\emph{induced} by its near field, and the phase of that induced current
+		is set by the element's reactance. A slightly long element is inductive,
+		so its current lags; a slightly short element is capacitive, so its
+		current leads. Placing the lagging element behind and the leading
+		elements in front makes the re-radiated fields add in phase along the
+		boom in the forward direction and tend to cancel in the reverse
+		direction. The result is an endfire main lobe pointing away from the
+		reflector, with a front-to-back ratio of roughly 15 to 25 dB.
+		\end{solution}
+
+	\part A second reflector buys almost nothing, but a seventh director still
+	helps. Why?
+		\begin{solution}[1.1in]
+		The first reflector already cancels most of the field behind the
+		antenna, so a second one sits in a region where there is almost no field
+		to couple to and almost nothing left to cancel. The directors, by
+		contrast, sit in the forward beam where the field is strong, and each one
+		extends the slow forward travelling wave over a longer aperture. Gain
+		follows the length of that aperture --- the boom --- not the number of
+		rods on it.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A 6-element Yagi on a $1.0\lambda$ boom gives 10 dBi. Using the
+		rule of thumb of $+3\db$ per doubling of boom length, estimate the boom
+		needed for 16 dBi at 435\ \mhz. Then say whether you believe the
+		answer.
+		\begin{solution}[1.6in]
+		$16 - 10 = 6\db$, which is two doublings, so the rule of thumb predicts
+		a $4\lambda$ boom. At 435\ \mhz, $\lambda = 3\ee{8}/435\ee{6} = 0.69\ \m$:
+		\eq{
+			L = 4\lambda = 4\,(0.69) = 2.76\ \m
+		}
+		Do not believe it. The rule of thumb is optimistic past a few
+		wavelengths: published designs put a $4.5\lambda$ boom at about
+		14.5 dBi, not 16. Realistically you would either accept a much longer
+		boom with diminishing returns, or stack two 13\dbi\ Yagis and take the
+		$+3\db$ from the stack.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$L$ = \ansbox[1.3in]{$2.76\ \m$}
+	\end{minipage}
+
+	\part Yagis are narrowband --- a few percent. Explain why, and name one
+	application where that does not matter.
+		\begin{solution}[1.1in]
+		Every element is a detuned resonator, and the whole design depends on the
+		\emph{phases} of the induced parasite currents. Move off the design
+		frequency and each element's reactance changes, the phases drift, and the
+		forward addition and rearward cancellation both degrade --- gain drops and
+		the front-to-back ratio collapses. That is fine anywhere the frequency is
+		fixed: a single-channel broadcast TV antenna, an amateur band antenna, or
+		a fixed point-to-point link.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%============================================================ Q4
+\question \textbf{Choosing an antenna.} You need a \textbf{25\dbi} antenna at
+each end of a 2\ \km\ rooftop-to-rooftop link at \textbf{5.8\ \ghz}. The mounts
+are fixed (no steering), the site is windy, and the budget is small.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the required effective aperture, then the diameter of a
+		parabolic dish that delivers it with $\eta_{\text{ap}} = 0.60$.
+		\begin{solution}[1.6in]
+		$\lambda = 3\ee{8}/5.8\ee{9} = 0.0517\ \m$ and $G = 10^{25/10} = 316$.
+		\eq{
+			A_e &= \frac{G\lambda^{2}}{4\pi}
+			     = \frac{316\,(0.0517)^{2}}{4\pi} = 0.0673\ \m^{2} \\
+			A   &= \frac{A_e}{\eta_{\text{ap}}} = \frac{0.0673}{0.60}
+			     = 0.112\ \m^{2} \\
+			D   &= 2\sqrt{A/\pi} = 2\sqrt{0.0357} = 0.378\ \m
+		}
+		Beamwidth: $\theta_{HP} \approx 70\mydeg(0.0517/0.378) = 9.6\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$D$ = \ansbox[1.3in]{$0.38\ \m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A vendor offers a flat patch array instead, with
+		$\eta_{\text{ap}} = 0.75$ and elements on a $\lambda/2$ grid. How many
+		elements, and how big is the panel?
+		\begin{solution}[1.5in]
+		\eq{
+			A &= \frac{A_e}{0.75} = \frac{0.0673}{0.75} = 0.0898\ \m^{2}
+			\quad\Rightarrow\quad \text{side} = 0.300\ \m \\
+			\frac{\lambda}{2} &= 0.0259\ \m
+			\quad\Rightarrow\quad \frac{0.300}{0.0259} = 11.6 \;\rightarrow\; 12
+		}
+		A $12\times12 = 144$ element panel, about $0.31\ \m$ square. Check:
+		$G = 0.75\,(4\pi)(0.31)^2/(0.0517)^2 = 339 = 25.3\dbi$. Good.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$N$ = \ansbox[1.3in]{$144$}
+	\end{minipage}
+
+	\part Pick one and defend it in two or three sentences, using the numbers
+	you just computed.
+		\begin{solution}[1.4in]
+		Take the dish. It is a single moulded part 0.38\ \m\ across with one
+		feed, it is broadband, and its wind load at that size is modest; the
+		patch array needs 144 elements and a 144-way corporate feed network whose
+		loss at 5.8\ \ghz\ is significant in both cost and dB. The array's
+		advantages --- flat profile and the option of electronic steering --- are
+		worth nothing
+		on a fixed rooftop link, so they do not justify the cost. (A defensible
+		opposite answer: choose the panel if the roof lease or the wind survey
+		forbids a dish, and accept the feed loss.)
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The dish beam is $9.6\mydeg$ wide. Using the beam-shape
+		approximation $L(\theta) \approx 3\,(2\theta/\theta_{HP})^{2}$ dB, how
+		far off boresight can the mount drift before you lose 0.5 dB?
+		\begin{solution}[1.2in]
+		\eq{
+			0.5 &= 3\lp\frac{2\theta}{9.6\mydeg}\rp^{2}
+			\quad\Rightarrow\quad
+			\frac{2\theta}{9.6\mydeg} = \sqrt{0.1667} = 0.408 \\
+			\theta &= \frac{(0.408)(9.6\mydeg)}{2} = 1.96\mydeg
+		}
+		About $\pm2\mydeg$ --- comfortable for a rigid rooftop mount, which is
+		another argument for not buying more gain than the link needs.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta$ = \ansbox[1.3in]{$\pm 2.0\mydeg$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%============================================================ Q5
+\question \textbf{Does the link close?} Continue the 5.8\ \ghz, 2\ \km\ link
+from the previous question. The transmitter delivers \textbf{20 dBm} and the
+receiver sensitivity is \textbf{$-80$ dBm}. Use Friis,
+$P_r = P_t G_t G_r \lp\lambda/4\pi R\rp^{2}$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the free-space path loss in dB.
+		\begin{solution}[1.3in]
+		\eq{
+			L_{fs} &= 20\,\mylog{\frac{4\pi R}{\lambda}}
+			 = 20\,\mylog{\frac{4\pi(2000)}{0.0517}} \\
+			 &= 20\,\mylog{4.86\ee{5}} = 113.7\db
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$L_{fs}$ = \ansbox[1.3in]{$113.7\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the received power with the 25\dbi\ dishes at both ends, and
+		the link margin.
+		\begin{solution}[1.3in]
+		\eq{
+			P_r &= P_t + G_t + G_r - L_{fs} \\
+			 &= 20 + 25 + 25 - 113.7 = -43.7\dbm \\
+			\text{margin} &= -43.7 - (-80) = 36.3\db
+		}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$P_r$ = \ansbox[1.3in]{$-43.7\dbm$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Now replace both dishes with 8\dbi\ patches. Recompute $P_r$ and
+		the margin.
+		\begin{solution}[1.2in]
+		\eq{
+			P_r &= 20 + 8 + 8 - 113.7 = -77.7\dbm \\
+			\text{margin} &= -77.7 - (-80) = 2.3\db
+		}
+		The 34\db\ of antenna gain you gave up came straight out of the margin.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$P_r$ = \ansbox[1.3in]{$-77.7\dbm$}
+	\end{minipage}
+
+	\part Which link would you actually deploy, and why? Name two specific
+	things that eat margin on a real rooftop link.
+		\begin{solution}[1.3in]
+		Deploy the dish link. A 2.3\db\ margin leaves no room for normal
+		propagation variation, so the link fails on the first bad day. Real
+		margin eaters include rain and wet foliage in the path, mount drift and building sway pushing the beam off
+		boresight (Q4d showed only $\pm2\mydeg$ of slack), multipath from nearby
+		rooftops, and connector and cable loss between the radio and the
+		antenna. With 36\db\ in hand the dish link absorbs all of that; with
+		2.3\db\ it absorbs none of it.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}
