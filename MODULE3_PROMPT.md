@@ -72,12 +72,13 @@ per-element phase serve 3.4 and 3.5; taper presets serve 3.7; grating lobes on
 sparse tapers serve 3.8; MVDR and the interferer serve 3.9; comparing the
 array factor against a measured sweep serves 3.6.
 
-**Check whether `docs/2025_Phaser_labs_Python.pdf` is in the clone.** It is
-the canonical workshop lab document, and `.gitignore` excluded `docs/*.pdf`
-as of the Module 2 session; Neil intended to un-ignore it (the repo is
-private, so the PDF is internal use, not redistribution). If it is still
-missing, ask him for it rather than reconstructing the labs from the GUI's
-preset code.
+**`docs/2025_Phaser_labs_Python.pdf` is the canonical workshop lab document,
+and it may not be in the clone yet.** `.gitignore` on `browser-based` now
+carries `!docs/2025_Phaser_labs_Python.pdf` to un-ignore it, but as of commit
+`0278629` the file itself had not been committed, so the repo has no `docs/`
+directory. Check for it first; if it is absent, ask Neil to commit and push it
+rather than reconstructing the lab sequence from the GUI's preset code. The
+repo is private, so the PDF is internal use, not redistribution.
 
 **Clone note:** the repo's default branch is `browser-based`, not `main`.
 
