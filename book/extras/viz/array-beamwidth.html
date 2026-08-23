@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beamwidth, nulls and directivity of a uniform linear array</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 230px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:100px; }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
+          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
+          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
+  .pill b { font-weight:700; }
+  .pill.hp  { background:rgba(63,125,52,0.12); color:var(--grn);   border-color:rgba(63,125,52,0.30); }
+  .pill.fn  { background:rgba(176,30,36,0.10); color:var(--red);   border-color:rgba(176,30,36,0.28); }
+  .pill.sll { background:rgba(138,90,0,0.12);  color:var(--amber); border-color:rgba(138,90,0,0.30); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="pat" aria-label="Array factor of a uniform linear array in decibels against angle from broadside, with the half-power beamwidth shaded and every pattern null marked"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Elements \(N\)</label>
+      <input type="range" id="nn" min="2" max="16" step="1" value="8">
+      <span class="val" id="nn-val">8</span>
+    </div>
+    <div class="ctl">
+      <label>Spacing \(d/\lambda\)</label>
+      <input type="range" id="dl" min="0.25" max="1.0" step="0.001" value="0.481">
+      <span class="val" id="dl-val">0.481</span>
+    </div>
+    <div class="ctl">
+      <label>Steer \(\theta_0\)</label>
+      <input type="range" id="th0" min="-60" max="60" step="1" value="0">
+      <span class="val" id="th0-val">0&#176;</span>
+    </div>
+  </div>
+
+  <div class="pills">
+    <span class="pill hp">HPBW from pattern = <b id="p-hp">&#8212;</b></span>
+    <span class="pill hp">from \(0.886\lambda/(Nd\cos\theta_0)\) = <b id="p-fx">&#8212;</b></span>
+    <span class="pill fn">FNBW = <b id="p-fn">&#8212;</b></span>
+    <span class="pill sll">highest sidelobe = <b id="p-sl">&#8212;</b></span>
+    <span class="pill">directivity = <b id="p-d">&#8212;</b></span>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const FLOOR=-40;
+const DEG=180/Math.PI;
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const cv=document.getElementById('pat'), ctx=cv.getContext('2d');
+const state={ N:8, dl:0.481, th0:0 };
+
+/* ------------------------------- the array factor -------------------------------
+   AF_N(psi) = sin(N psi/2) / (N sin(psi/2)),  psi = k d (sin th - sin th0).
+   Peak = 1 at psi = 0, so the sweep needs no renormalization.                    */
+function af(thDeg){
+  const psi=2*Math.PI*state.dl*(Math.sin(thDeg/DEG)-Math.sin(state.th0/DEG));
+  const den=Math.sin(psi/2);
+  if(Math.abs(den)<1e-12) return 1;
+  return Math.abs(Math.sin(state.N*psi/2)/(state.N*den));
+}
+
+const M=7201;                                    // 0.025 deg steps over +-90
+let SW=null;
+function sweep(){
+  const db=new Float64Array(M);
+  for(let i=0;i<M;i++) db[i]=20*Math.log10(Math.max(af(degOf(i)),1e-9));
+  SW=db;
+}
+const degOf=i=>-90+i*180/(M-1);
+const idxOf=d=>Math.round((d+90)*(M-1)/180);
+
+/* --------------------------------- the numbers ---------------------------------
+   Nulls are analytic: psi = 2 pi m / N  ->  sin th = sin th0 + m lambda/(N d),
+   dropping m that is a multiple of N (those are grating lobes, not nulls).      */
+function nulls(){
+  const s0=Math.sin(state.th0/DEG), step=1/(state.N*state.dl), out=[];
+  for(let m=1;m<=state.N*4;m++){
+    if(m%state.N===0) continue;
+    for(const sg of [1,-1]){
+      const v=s0+sg*m*step;
+      if(Math.abs(v)<=1) out.push(Math.asin(v)*DEG);
+    }
+  }
+  out.sort((a,b)=>a-b);
+  return out;
+}
+
+function halfPower(){
+  const i0=idxOf(state.th0), db=SW;
+  const walk=dir=>{
+    for(let i=i0; i>=0 && i<M; i+=dir){
+      if(db[i]<=-3){
+        const j=i-dir, f=(db[j]+3)/(db[j]-db[i]);
+        return degOf(j)+dir*f*(180/(M-1));
+      }
+    }
+    return null;
+  };
+  return { lo:walk(-1), hi:walk(1) };
+}
+
+function directivity(){
+  // D = N^2 / sum_p (N-|p|) sinc(k d p) cos(p k d sin th0), isotropic elements.
+  const kd=2*Math.PI*state.dl, s0=Math.sin(state.th0/DEG);
+  let s=0;
+  for(let p=-(state.N-1); p<=state.N-1; p++){
+    const x=kd*p, sc=(p===0)?1:Math.sin(x)/x;
+    s+=(state.N-Math.abs(p))*sc*Math.cos(p*kd*s0);
+  }
+  return state.N*state.N/s;
+}
+
+function sidelobe(nl){
+  const lo=Math.max(...nl.filter(x=>x<state.th0), -91);
+  const hi=Math.min(...nl.filter(x=>x>state.th0),  91);
+  if(lo<-90 && hi>90) return null;               // no null in visible space
+  let best=null;
+  for(let i=1;i<M-1;i++){
+    const d=degOf(i);
+    if(d>lo && d<hi) continue;                   // inside the main lobe
+    if(SW[i]>=SW[i-1] && SW[i]>=SW[i+1] && (best===null||SW[i]>best)) best=SW[i];
+  }
+  return best;
+}
+
+function metrics(){
+  const nl=nulls(), hpx=halfPower();
+  const lo=nl.filter(x=>x<state.th0), hi=nl.filter(x=>x>state.th0);
+  const fn=(lo.length&&hi.length)? (Math.min(...hi)-Math.max(...lo)) : null;
+  const hp=(hpx.lo!==null&&hpx.hi!==null)? (hpx.hi-hpx.lo) : null;
+  const fx=0.886/(state.N*state.dl*Math.cos(state.th0/DEG))*DEG;
+  return { nl:nl, hpEdge:hpx, hp:hp, fn:fn, fx:fx, D:directivity(), sll:sidelobe(nl) };
+}
+
+/* ---------------------------------- drawing ---------------------------------- */
+function draw(){
+  const dpr=window.devicePixelRatio||1, w=cv.width/dpr, h=cv.height/dpr;
+  ctx.clearRect(0,0,w,h);
+  const mL=50, mR=14, mT=46, mB=36, pw=w-mL-mR, ph=h-mT-mB;
+  const xp=d=>mL+(d+90)/180*pw, yp=v=>mT+(v/FLOOR)*ph;
+  const m=metrics();
+
+  // header line: the configuration, in words and numbers
+  stext(ctx, state.N+' elements, spacing '+state.dl.toFixed(3)+' wavelengths, steered to '
+        +state.th0+'°', mL, 14, 12, cssv('--navy'),'left',true);
+
+  // main-lobe shading between the half-power points
+  if(m.hpEdge.lo!==null && m.hpEdge.hi!==null){
+    ctx.fillStyle='rgba(63,125,52,0.13)';
+    ctx.fillRect(xp(m.hpEdge.lo), mT, xp(m.hpEdge.hi)-xp(m.hpEdge.lo), ph);
+  }
+
+  // grid
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let d=0;d>=FLOOR;d-=10){ const y=yp(d);
+    ctx.beginPath(); ctx.moveTo(mL,y); ctx.lineTo(mL+pw,y); ctx.stroke();
+    stext(ctx,d.toString(), mL-8, y, 10.5, cssv('--ink3'),'right',false); }
+  ctx.strokeStyle=cssv('--edge2');
+  for(let d=-90;d<=90;d+=30){ const x=xp(d);
+    ctx.beginPath(); ctx.moveTo(x,mT); ctx.lineTo(x,mT+ph); ctx.stroke();
+    stext(ctx,d+'°', x, mT+ph+13, 10.5, cssv('--ink3'),'center',false); }
+  ctx.strokeStyle=cssv('--edge'); ctx.strokeRect(mL,mT,pw,ph);
+
+  // half-power reference level
+  ctx.strokeStyle='rgba(63,125,52,0.60)'; ctx.lineWidth=1.2; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(mL,yp(-3)); ctx.lineTo(mL+pw,yp(-3)); ctx.stroke();
+
+  // what the 0.886 formula predicts, as a dotted bar under the measured one
+  const eLo=Math.max(state.th0-m.fx/2,-90), eHi=Math.min(state.th0+m.fx/2,90);
+  if(m.fx<180){
+    ctx.strokeStyle='rgba(63,125,52,0.85)'; ctx.setLineDash([2,3]); ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(xp(eLo),yp(-7.5)); ctx.lineTo(xp(eHi),yp(-7.5)); ctx.stroke();
+    ctx.setLineDash([]);
+    for(const e of [eLo,eHi]){
+      ctx.beginPath(); ctx.moveTo(xp(e),yp(-7.5)-4); ctx.lineTo(xp(e),yp(-7.5)+4); ctx.stroke();
+    }
+  }
+  ctx.setLineDash([]);
+
+  // the sidelobe level that the taper, not the size, controls
+  if(m.sll!==null && m.sll>FLOOR){
+    ctx.strokeStyle='rgba(138,90,0,0.65)'; ctx.lineWidth=1.2; ctx.setLineDash([5,3]);
+    ctx.beginPath(); ctx.moveTo(mL,yp(m.sll)); ctx.lineTo(mL+pw,yp(m.sll)); ctx.stroke();
+    ctx.setLineDash([]);
+    stext(ctx, neg(m.sll)+' dB', mL+pw-4, yp(m.sll)-9, 11, cssv('--amber'),'right',true);
+  }
+
+  // the pattern
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.2; ctx.beginPath();
+  for(let i=0;i<M;i++){
+    const x=xp(degOf(i)), y=yp(Math.max(SW[i],FLOOR));
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+  }
+  ctx.stroke();
+
+  // null markers along the floor
+  ctx.strokeStyle=cssv('--red'); ctx.lineWidth=2;
+  for(const d of m.nl){
+    ctx.beginPath(); ctx.moveTo(xp(d),mT+ph); ctx.lineTo(xp(d),mT+ph-9); ctx.stroke();
+  }
+
+  // first-null width, drawn between the two nulls that bracket the beam
+  if(m.fn!==null){
+    const a=Math.max(...m.nl.filter(x=>x<state.th0)), b=Math.min(...m.nl.filter(x=>x>state.th0));
+    const y=yp(-26.5);
+    ctx.strokeStyle=cssv('--red'); ctx.lineWidth=1.4;
+    ctx.beginPath(); ctx.moveTo(xp(a),y); ctx.lineTo(xp(b),y); ctx.stroke();
+    for(const [x,s] of [[xp(a),1],[xp(b),-1]]){
+      ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+s*6,y-4); ctx.lineTo(x+s*6,y+4); ctx.closePath();
+      ctx.fillStyle=cssv('--red'); ctx.fill();
+    }
+    const lab='null-to-null '+m.fn.toFixed(1)+'°';
+    const cxm=(xp(a)+xp(b))/2;
+    ctx.font='700 11.5px '+SANS; const twd=ctx.measureText(lab).width;
+    ctx.fillStyle='rgba(255,255,255,0.88)'; ctx.fillRect(cxm-twd/2-3, y-19, twd+6, 13);
+    stext(ctx, lab, cxm, y-12.5, 11.5, cssv('--red'),'center',true);
+  }
+
+  // half-power width, drawn on the -3 dB line
+  if(m.hp!==null){
+    const y=yp(-3), a=xp(m.hpEdge.lo), b=xp(m.hpEdge.hi);
+    ctx.strokeStyle=cssv('--grn'); ctx.lineWidth=1.8;
+    ctx.beginPath(); ctx.moveTo(a,y); ctx.lineTo(b,y); ctx.stroke();
+    for(const [x,s] of [[a,1],[b,-1]]){
+      ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+s*6,y-4); ctx.lineTo(x+s*6,y+4); ctx.closePath();
+      ctx.fillStyle=cssv('--grn'); ctx.fill();
+    }
+  }
+
+  // the two beamwidth readings, above the frame so they never cross the beam
+  stext(ctx, (m.hp===null?'wider than the visible region':m.hp.toFixed(1)+'° wide at half power'),
+        mL, mT-14, 12, cssv('--grn'), 'left', true);
+  stext(ctx, (m.fx>=180?'0.886 formula off scale':'0.886 formula: '+m.fx.toFixed(1)+'°'),
+        mL+pw, mT-14, 11.5, 'rgba(63,125,52,0.85)', 'right', false);
+
+  // steer-angle marker
+  ctx.strokeStyle='rgba(0,74,133,0.55)'; ctx.lineWidth=1.2; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(xp(state.th0),mT); ctx.lineTo(xp(state.th0),mT+ph); ctx.stroke();
+  ctx.setLineDash([]);
+  MJ.draw(ctx,'\\theta_0', xp(state.th0), mT+ph-10, 13, cssv('--navy'),'center');
+
+  // axis labels
+  stext(ctx,'angle from broadside (deg)', mL+pw/2, mT+ph+28, 11.5, cssv('--ink3'),'center',false);
+  ctx.save(); ctx.translate(14, mT+ph/2); ctx.rotate(-Math.PI/2);
+  stext(ctx,'relative power (dB)', 0, 0, 11.5, cssv('--ink3'),'center',false); ctx.restore();
+
+  readouts(m);
+}
+
+const neg=x=>(Math.abs(x)<0.05?'0.0':x.toFixed(1)).replace('-','−');
+function readouts(m){
+  const set=(id,v)=>{ document.getElementById(id).textContent=v; };
+  set('p-hp', m.hp===null? '> 180°' : m.hp.toFixed(1)+'°');
+  set('p-fx', m.fx>=180? '> 180°' : m.fx.toFixed(1)+'°');
+  set('p-fn', m.fn!==null? m.fn.toFixed(1)+'°'
+              : (m.nl.length? 'one side unbounded' : '180° by convention'));
+  set('p-sl', m.sll===null? 'none in view'
+              : neg(m.sll)+' dB'+(m.sll>-1? ' (grating lobe)' : ''));
+  set('p-d', m.D.toFixed(1)+' = '+(10*Math.log10(m.D)).toFixed(1)+' dB');
+}
+
+function drawAll(){ sweep(); draw(); }
+
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const w=cv.getBoundingClientRect().width;
+  const h=Math.min(w*(w<460?0.72:0.50), 390);
+  cv.width=w*dpr; cv.height=h*dpr; cv.style.height=h+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+const nEl=document.getElementById('nn'), dEl=document.getElementById('dl'), tEl=document.getElementById('th0');
+nEl.addEventListener('input',()=>{ state.N=+nEl.value; document.getElementById('nn-val').textContent=state.N; drawAll(); });
+dEl.addEventListener('input',()=>{ state.dl=+dEl.value; document.getElementById('dl-val').textContent=state.dl.toFixed(3); drawAll(); });
+tEl.addEventListener('input',()=>{ state.th0=+tEl.value; document.getElementById('th0-val').textContent=state.th0+'°'; drawAll(); });
+
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>
