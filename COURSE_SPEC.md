@@ -620,8 +620,11 @@ sweep actually reads and belong in lab expectation tables.
   Note the workshop's rounded version: 10.5 vs 10 GHz at 45° → ≈ 3°.
 - **Quantization**: LSB $= 360°/2^B$; ADAR1000 gives B=7 → 2.8125°. RMS
   quantization sidelobe rule of thumb: QSLL $\approx -6B$ dB (2 bits →
-  −12 dB). Null depth is quantization-limited: with 2.8° LSB and 1%-step
-  gains, achievable pattern-notch depth ≈ 20–22 dB (measured 21.6 dB).
+  −12 dB). Quantization is NOT what limits
+  pattern-notch depth on the PHASER: 2.8° LSB + 1%-step gains still permit
+  ≈ −48 dB at the designed angle (verified numerically). The measured
+  20–22 dB notch is set by the sweep's noise floor (≈ 23 dB below the
+  uniform peak, less the ~2 dB main-lobe cost of the null weights).
 - **8-element taper presets** (the GUI's Element Gains percentages) and
   what the sweep measures relative to uniform:
 
@@ -658,8 +661,8 @@ sweep actually reads and belong in lab expectation tables.
   entered in Element Gains + Phase Control. Verified example: null at
   +22.5° from a broadside beam → gains 75, 65, 82, 100, 100, 82, 65, 75;
   phases −12.1°, +3.1°, +13.0°, +6.0°, −6.0°, −13.0°, −3.1°, +12.1°;
-  measured notch −21.6 dBc (12 dB below the uniform sidelobe there),
-  main-lobe cost 1.8 dB. Sign convention: $w_n$ built with
+  measured notch −21.6 dBc (noise-floor-limited, see the
+  quantization bullet), main-lobe cost 2.0 dB exact / 1.8 dB measured. Sign convention: $w_n$ built with
   $e^{-jnkd\sin\theta_1}$ puts the notch at $+\theta_1$ on the GUI axis.
 - **Two-channel (digital) delta null**: Beam 1 Phase = 180° subtracts the
   two subarray outputs → boresight null ≈ −22 dBc with twin peaks near
