@@ -41,7 +41,7 @@ step, reconciling, is the graded thinking.
 ## Today's plan
 
 1. Restate the prediction table, including the two entries that need care
-2. Understand what the Rectangular sweep actually plots
+2. Understand what the Rectangular sweep plots
 3. Sweep eight elements, then four, then two
 4. Read HPBW, FNBW, and first sidelobe level off each trace
 5. Reconcile the measurement against the array factor
@@ -91,7 +91,7 @@ shows them when a rule of thumb has left its range of validity.
 
 ---
 
-## What the sweep actually plots
+## What the sweep plots
 
 The Rectangular trace is **received power versus commanded steer angle**.
 

@@ -434,7 +434,7 @@ These five numbers are the Lesson 21 expectation table. Tell them now that the m
 ## Key point
 
 <div class="callout">
-<strong>One sum, one closed form, one multiplication.</strong><br>
+<strong>The array factor is one sum, uniform weights collapse it to one closed form, and the element pattern multiplies it.</strong><br>
 Add the element phasors to get <em>AF</em>. Uniform weights collapse it to sin(N&psi;/2) over N sin(&psi;/2). Multiply by the element pattern for the real thing. Length sets the beam, weights set the sidelobes, spacing sets what repeats.
 </div>
 

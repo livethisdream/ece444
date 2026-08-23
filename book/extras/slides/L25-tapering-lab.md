@@ -232,8 +232,8 @@ to the all-angle average, and the average shrank too.
 Note:
 The test question: if you re-normalized each trace to its own peak, the 4.7 dB
 would disappear from the plot and the beam shape would be unchanged. A link
-budget that charges the taper 4.7 dB has overcharged it by a factor of two in
-power.
+budget that debits 4.7 dB for the taper overstates the loss by a factor of two
+in power.
 
 ---
 

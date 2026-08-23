@@ -134,7 +134,7 @@ $$\Delta\phi = 2\pi\frac{d}{\lambda}\sin\theta_0$$
 - Wider spacing $d/\lambda$ means more phase per element.
 
 Note:
-The sine, not the angle. That single fact explains beam broadening later in
+It follows the sine, not the angle. That single fact explains beam broadening later in
 this lesson and grating lobes in L26.
 
 ---
@@ -398,7 +398,7 @@ delta-phi, so a rising ramp means a negative delta-phi.
 
 ---
 
-## What the hardware can actually set
+## What the hardware can set
 
 The ADAR1000 phase shifter has 7 bits, so its smallest step is
 $360^\circ/128 = 2.8125^\circ$ — your $122.5^\circ$ becomes $123.75^\circ$.

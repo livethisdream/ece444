@@ -63,10 +63,10 @@ Three predictions come with the settings, and you will check all three:
 
 - the notch at $+22.5^\circ$ reaches about $-21.6$ dBc, against a uniform
   reference sidelobe of $-12.8$ dBc at the same angle;
-- the main lobe pays about $1.8$ dB for it;
+- the main lobe loses about $1.8$ dB of gain;
 - the notch bottoms out at roughly $-21$ dB rather than going to zero, because
-  the ADAR1000 phase shifter quantizes to $2.8125^\circ$ and its gain control to
-  about $1\%$ steps.
+  the sweep's noise floor sits about $23$ dB below the uniform-taper peak and the
+  nulled pattern's main lobe is about $2$ dB below that reference.
 
 There is a second null available on this board that costs no computation at all.
 Each ADAR1000 sums its four elements into one RF channel, so the PHASER hands the
@@ -134,21 +134,26 @@ different from the reference, because the subtraction reshaped the whole apertur
 distribution, not just one angle.
 
 Now ask why the notch stopped at $-21.6$ dBc when the arithmetic in Lesson 27
-predicted a true zero. Two hardware limits set the floor, and both were named in
+predicted a true zero. The obvious suspect is the hardware resolution named in
 Lesson 26:
 
 - The phase shifter has a $2.8125^\circ$ LSB, so a commanded $+13.0^\circ$ is
-  applied as $+14.06^\circ$. The eight weights are each a little wrong, and the
-  cancellation they were designed to produce is correspondingly incomplete.
+  applied as $+14.06^\circ$.
 - The gain control moves in steps of about $1\%$, which perturbs the amplitudes
   the same way.
 
-A rounded weight vector is still a weight vector — it just nulls a slightly
-different direction, a degree or two off where you asked. On top of that, the
-sweep's own noise floor sits near $-22$ dBc, so even a perfect notch would read
-no deeper than the floor. This is the general rule for a real array: **null depth
-is set by weight accuracy, not by the null-steering algorithm**, and roughly
-$20\text{-}22$ dB is what $2.8^\circ$ phase resolution buys you.
+But a rounded weight vector is still a weight vector — it just nulls a slightly
+different direction, a fraction of a degree off where you asked. Push those
+quantized weights through the array factor and the residual at the designed angle
+is still about $-48$ dB, far below anything this sweep can display. What you are
+reading instead is the measurement floor: the sweep's noise floor sits about
+$23$ dB below the uniform-taper peak, and the null weights cost about $2$ dB of
+main lobe, so the deepest notch the plot can report is roughly $21$ dB below the
+null-steered peak. That is the general rule for a real array: **the notch you
+measure is limited by the dynamic range of the measurement, not by the
+null-steering algorithm and not by the phase shifter's resolution**. The
+$20\text{-}22$ dB you record is the sweep's floor, not what $2.8^\circ$ phase
+resolution buys you.
 
 Before moving on, press **Reset** in Phase Control and return Element Gains to
 Uniform.
@@ -180,7 +185,7 @@ to $0^\circ$ before continuing.
 
 Procedures A and B both required you to know something in advance: the jammer's
 angle in A, the array's symmetry in B. The **MVDR** beamformer requires neither.
-It estimates the covariance of what the two channels are actually receiving,
+It estimates the covariance of what the two channels are receiving,
 $\hat R = \frac{1}{K} X X^H$ over $K$ snapshots, and solves
 
 $$w_{\text{mvdr}} = \frac{R^{-1}s}{s^H R^{-1} s}$$
@@ -253,7 +258,7 @@ at the interferer's angle.
 | What must you know first? | the interferer's angle | nothing |
 | Interferer moves | recompute and re-enter eight weights | tracks it, sweep by sweep |
 | Digital channels needed | none — all eight analog elements | both, and the data behind them |
-| Null depth | quantization-limited, about $20\text{-}22$ dB | covariance-limited, $17\text{-}19$ dB here |
+| Null depth | noise-floor-limited here, about $20\text{-}22$ dB | covariance-limited, $17\text{-}19$ dB here |
 | Where it wins | a known, fixed direction; full aperture control | unknown or moving interference |
 
 The two rows in the middle are the trade. Manual null steering has eight degrees
@@ -283,9 +288,10 @@ Record and submit the following.
 3. **MVDR against manual.** From the instructor's demonstration, the response at
    the interferer angle under both modes and the difference between them, plus
    the look-direction level under both.
-4. **Two written answers.** (a) Why the measured notch depth is limited by
-   quantization rather than by the null-steering computation, with the numbers
-   that set the limit. (b) One situation where a computed static null is the
+4. **Two written answers.** (a) Why the measured notch depth is limited by the
+   sweep's noise floor rather than by quantization, with the numbers that set the
+   floor and with the depth the quantized weights alone would allow. (b) One
+   situation where a computed static null is the
    better choice than MVDR, and one where it is not, with a reason for each.
 
 ## Summary
@@ -293,8 +299,8 @@ Record and submit the following.
 | Idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | Weight subtraction | $w = w_d - r_n w_n$, then convert to gain % and phase | main-lobe cost $1.8$ dB for a null at $+22.5^\circ$ |
-| Measured notch | what the quantized weights actually produce | $-21.6$ dBc, against a $-12.8$ dBc reference sidelobe |
-| Depth limit | phase LSB and gain step, not the algorithm | $2.8125^\circ$ LSB gives $20\text{-}22$ dB |
+| Measured notch | what the sweep can actually show at that angle | $-21.6$ dBc, against a $-12.8$ dBc reference sidelobe |
+| Depth limit | the sweep's noise floor, not the phase LSB or the algorithm | floor $23$ dB below the uniform peak gives a $20\text{-}22$ dB notch |
 | Difference beam | Beam 1 Phase $= 180^\circ$ subtracts the two channels | null on boresight, $-22$ dBc, peaks at $\pm 11^\circ$ |
 | MVDR | $w = R^{-1}s / (s^H R^{-1} s)$ from $K$ snapshots | $17\text{-}19$ dB suppression, look direction held |
 | Degrees of freedom | one constraint plus one null per digital channel pair | 2 channels null 1 interferer |

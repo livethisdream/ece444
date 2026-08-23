@@ -379,7 +379,7 @@ Submit the following.
    - Why does the control software have to hunt for the HB100's frequency
      instead of assuming $10.525\ \text{GHz}$?
    - The array has eight elements, but software sees only two digital channels.
-     Explain where the other six went and name one thing this costs you.
+     Explain where the other six went and name one measurement this rules out.
 
 ## Summary
 

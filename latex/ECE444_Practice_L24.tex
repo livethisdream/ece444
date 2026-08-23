@@ -144,7 +144,7 @@ $a_n$ of $0.12$, $0.43$, $0.77$, $1.00$, $1.00$, $0.77$, $0.43$, $0.12$.
 \question \textbf{A Chebyshev design to specification.}
 A customer specifies that no sidelobe may exceed $-25\db$ relative to the peak,
 on the eight-element array at $d/\lambda = 0.481$. The uniform reference is
-$\theta_\text{HP} = 13.3\mydeg$.
+$\theta_\text{HP} = 13.2\mydeg$.
 \begin{parts}
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Compute the voltage ratio $R$ and the Chebyshev stretch factor
@@ -189,12 +189,12 @@ $\theta_\text{HP} = 13.3\mydeg$.
 		\part This design has a beam broadening factor of $1.20$. Compute its
 		half-power beamwidth.
 		\begin{solution}[1.1in]
-		\eq{ \theta_\text{HP} &= 1.20 \times 13.3\mydeg = 16.0\mydeg }
+		\eq{ \theta_\text{HP} &= 1.20 \times 13.2\mydeg = 15.8\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\theta_\text{HP}$ = \ansbox[1.2in]{$16.0\mydeg$}
+		$\theta_\text{HP}$ = \ansbox[1.2in]{$15.8\mydeg$}
 	\end{minipage}
 
 	\part State the price of this design for the customer in one sentence, then
@@ -202,7 +202,7 @@ $\theta_\text{HP} = 13.3\mydeg$.
 	reaches a similar sidelobe level.
 		\begin{solution}[1.6in]
 		Sidelobes drop from $-12.8\db$ to $-25\db$, and the cost is a beam
-		$2.7\mydeg$ wider, $0.48\db$ of directivity, and a $3.1\db$ lower peak on
+		$2.6\mydeg$ wider, $0.48\db$ of directivity, and a $3.1\db$ lower peak on
 		the displayed trace. The Chebyshev design is optimal in the sense that no
 		other set of amplitudes reaches $-25\db$ with a narrower main lobe,
 		because it holds every sidelobe exactly at the specification. A Hann
@@ -285,17 +285,17 @@ and $\eta_t = 0.710$.
 \begin{parts}
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Compute the half-power beamwidth and the peak drop for this design,
-		using $13.3\mydeg$ as the uniform reference.
+		using $13.2\mydeg$ as the uniform reference.
 		\begin{solution}[1.4in]
 		\eq{ \sum a_n &= 2\lp 0.09 + 0.35 + 0.72 + 1.00 \rp = 4.32 \\
-		\theta_\text{HP} &= 1.51 \times 13.3\mydeg = 20.1\mydeg \\
+		\theta_\text{HP} &= 1.51 \times 13.2\mydeg = 19.9\mydeg \\
 		\text{peak drop} &= 20\mylog{\frac{4.32}{8}} \\
 		&= 20\mylog{0.540} = -5.3\db }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\theta_\text{HP}$ = \ansbox[1.2in]{$20.1\mydeg$}
+		$\theta_\text{HP}$ = \ansbox[1.2in]{$19.9\mydeg$}
 		\\[10pt]
 		peak drop = \ansbox[1.2in]{$-5.3\db$}
 	\end{minipage}

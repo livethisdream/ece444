@@ -13,17 +13,17 @@
   <li>I can measure an antenna pattern by rotating a source around the array with the beam held fixed.</li>
   <li>I can compare the mechanically measured pattern against the electrically swept trace and account for the differences.</li>
   <li>I can extract sidelobe amplitudes from a measured pattern trace.</li>
-  <li>I can state the limits of a hand-rotation measurement and what an anechoic chamber buys.</li>
+  <li>I can state the limits of a hand-rotation measurement and what an anechoic chamber provides.</li>
 </ol>
 
-Lesson 22 separated the array factor from the pattern the array actually radiates,
+Lesson 22 separated the array factor from the pattern the array radiates,
 and predicted three places where the two part company: the peak sags as
 $\cos\theta_0$ when you steer, the sidelobes on either side of a steered beam stop
 matching each other, and nothing comes out the back. Today you measure all three.
 The measurement uses a different technique from every PHASER lab so far — the beam
 stays where you put it and the source moves — and by the end of the period you will
-have a pattern trace with real physical angles on it, plus a list of the ways your
-arm is not an antenna range.
+have a pattern trace with real physical angles on it, plus the limits of a
+hand-held measurement.
 
 ## Part 1: Two ways to trace a pattern
 
@@ -122,7 +122,7 @@ at the array the whole way and keeping the radius at $1\ \text{m}$. Take about
 seven or eight seconds for the walk. The amplitude trace paints the pattern as you
 go.
 
-Expect the first two attempts to be unusable. A walk that is too fast crams the
+Practice the walk before recording. A walk that is too fast crams the
 whole pattern into the left quarter of the plot, and one that is too slow runs off
 the right edge before you reach $+90^\circ$. Practice until one full rotation spans
 the plot with the main lobe somewhere near the middle, then record that run.
@@ -220,7 +220,9 @@ Expectation table for the lab report:
 | Inner sidelobe, beam at $30^\circ$ | $-12.2$ dBc | | below the sweep's floor |
 | Outer sidelobe, beam at $30^\circ$ | $-15.2$ dBc | | below the sweep's floor |
 
-The sweep's noise floor sits about $23\ \text{dB}$ below the peak, which is why two
+The calculated $-13.1$ dBc is the $-12.8$ dB array-factor sidelobe plus about
+$0.3$ dB of element-pattern roll-off at the $\pm 22^\circ$ where those sidelobes
+sit. The sweep's noise floor sits about $23\ \text{dB}$ below the peak, which is why two
 of the steered entries have nothing to compare against on that side of the table.
 
 ## Part 4: What the hand measurement cannot do
@@ -250,9 +252,9 @@ of the $\pm 1\ \text{dB}$ ripple you saw riding on the trace. An anechoic chambe
 lines every surface with absorber so only the direct path survives.
 
 **Guaranteed far field.** You taped the arc at $1\ \text{m}$ against Lesson 22's
-$0.66\ \text{m}$ criterion, and held it about as well as a person holds anything.
+$0.66\ \text{m}$ criterion, held to whatever tolerance a hand-held source allows.
 A range fixes the separation once, documents it, and the far-field condition is
-then a property of the facility rather than of your posture.
+then a documented property of the facility rather than of the operator.
 
 ## Part 5: Deliverables
 
@@ -296,8 +298,7 @@ into a design variable. Feeding the eight elements unequally — more power in t
 middle, less at the edges — pushes the sidelobes down, and the Element Gains
 sliders you have been leaving at 100% are how you do it on this hardware.
 
-Nothing is free in that trade. A taper that buys $10\ \text{dB}$ of sidelobe
-suppression widens the main lobe and costs peak gain, and Lesson 24 derives exactly
-how much of each. Before the next period, look back at your broadside trace and
+A taper that lowers the first sidelobes by $10\ \text{dB}$ widens the main lobe
+and lowers the peak gain, and Lesson 24 derives exactly how much of each. Before the next period, look back at your broadside trace and
 decide how much beamwidth you would give up to put those first sidelobes at
 $-25$ dBc, then check your guess against the numbers.

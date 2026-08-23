@@ -16,7 +16,7 @@
   <li>I can predict the achievable null depth given phase and gain quantization.</li>
 </ol>
 
-Lesson 26 catalogued the three ways a steered pattern breaks on its own: grating lobes when the elements are too far apart, squint when the frequency moves off the design point, and quantization lobes when the phase shifter runs out of bits. Those were accidents, and the work was to avoid them. Today you break the pattern on purpose. You will place a deep null exactly where an interferer sits, keep the main beam pointed where it was, and pay a known price in gain for the privilege.
+Lesson 26 catalogued the three ways a steered pattern breaks on its own: grating lobes when the elements are too far apart, squint when the frequency moves off the design point, and quantization lobes when the phase shifter runs out of bits. Those were accidents, and the work was to avoid them. Today you break the pattern on purpose. You will place a deep null exactly where an interferer sits, keep the main beam pointed where it was, and lose a known amount of main-lobe gain doing it.
 
 ## Part 1: When a null is worth more than gain
 
@@ -38,16 +38,16 @@ $$
 w_n = a_n e^{j\phi_n},
 $$
 
-with $a_n$ the element's amplitude setting and $\phi_n$ its phase setting. On the PHASER, $a_n$ is the Element Gains slider for that channel and $\phi_n$ is its Phase Control entry. The two ADAR1000s give you both knobs on all eight elements, which is exactly the degrees of freedom this lesson spends.
+with $a_n$ the element's amplitude setting and $\phi_n$ its phase setting. On the PHASER, $a_n$ is the Element Gains slider for that channel and $\phi_n$ is its Phase Control entry. The two ADAR1000s give you both knobs on all eight elements, which is exactly the degrees of freedom this lesson uses.
 
 :::{admonition} Key Point
 :class: key-concept
-An array is judged by the ratio of what you want to what you do not want. When the interferer is stronger than the target, moving the pattern *down* at one angle buys more than moving it *up* at another.
+An array is judged by the ratio of what you want to what you do not want. When the interferer is stronger than the target, moving the pattern *down* at one angle helps more than moving it *up* at another.
 :::
 
 ## Part 2: Steering vectors are the language
 
-Write the array response the way the elements actually see the world. A plane wave arriving from angle $\theta$ reaches element $n$ a distance $nd\sin\theta$ earlier than it reaches element 0, so the signal at element $n$ carries the extra phase $nkd\sin\theta$. Collect those factors into the **steering vector**
+Write the array response the way the elements see the world. A plane wave arriving from angle $\theta$ reaches element $n$ a distance $nd\sin\theta$ earlier than it reaches element 0, so the signal at element $n$ carries the extra phase $nkd\sin\theta$. Collect those factors into the **steering vector**
 
 $$
 \mathbf{v}(\theta) = \left[\ 1,\ e^{jkd\sin\theta},\ e^{j2kd\sin\theta},\ \ldots,\ e^{j(N-1)kd\sin\theta}\ \right],
@@ -120,7 +120,7 @@ $$
 y(\theta_1) = \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d} - \frac{\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d}}{\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}}\ \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n} = 0 .
 $$
 
-The null is exact, not approximate. No iteration, no optimization, one division.
+The null is exact, not approximate, and it takes one division, with no iteration and no optimizer.
 
 ### Reading $r_\text{n}$
 
@@ -190,7 +190,7 @@ The widget below applies the weight-subtraction rule to the course array and dra
 
 ## Part 5: What the null costs, and what limits it
 
-**The main lobe pays, and the bill is set by $\vert r_\text{n}\vert$.** Before rescaling, the response in the look direction falls from $N$ to $N(1 - \vert r_\text{n}\vert^2)$, a loss of $20\log_{10}(1 - \vert r_\text{n}\vert^2)$ — 0.4 dB for the $22.5^\circ$ example. Add the rescaling that keeps the largest gain at 100 % and the total loss at $\theta_0$ comes to 2.0 dB. Walk the null in toward the beam and both terms grow: 2.9 dB at $\theta_1 = 10^\circ$, 5.6 dB at $7^\circ$, 8.2 dB at $5^\circ$. As $\theta_1$ enters the main lobe $\vert r_\text{n}\vert \to 1$, the eight weights cancel one another, and what is left after rescaling is a split beam with a hole where the target used to be. A null inside the half-power beamwidth is not a null-steering problem, it is a resolution problem, and the answer is to move the beam or wait for the geometry to change.
+**The main-lobe loss is set by $\vert r_\text{n}\vert$.** Before rescaling, the response in the look direction falls from $N$ to $N(1 - \vert r_\text{n}\vert^2)$, a loss of $20\log_{10}(1 - \vert r_\text{n}\vert^2)$ — 0.4 dB for the $22.5^\circ$ example. Add the rescaling that keeps the largest gain at 100 % and the total loss at $\theta_0$ comes to 2.0 dB. Walk the null in toward the beam and both terms grow: 2.9 dB at $\theta_1 = 10^\circ$, 5.6 dB at $7^\circ$, 8.2 dB at $5^\circ$. As $\theta_1$ enters the main lobe $\vert r_\text{n}\vert \to 1$, the eight weights cancel one another, and what is left after rescaling is a split beam with a hole where the target used to be. A null inside the half-power beamwidth is not a null-steering problem, it is a resolution problem, and the answer is to move the beam or wait for the geometry to change.
 
 **Quantization sets a floor on the depth.** The weights above are exact real numbers, and the ADAR1000 accepts neither. Each element's phase lands on a $2.8125^\circ$ grid and each gain on a 1 % grid, so each weight carries a small error $\delta w_n$. Those errors are independent, so at the null angle they add in RMS rather than coherently, and the residual response relative to the beam peak is
 
@@ -198,7 +198,7 @@ $$
 \frac{\vert y(\theta_1)\vert}{N} \approx \frac{\epsilon_\text{rms}}{\sqrt{N}}, \qquad \epsilon_\text{rms} = \sqrt{\sigma_\phi^2 + \sigma_a^2},\ \ \sigma_\phi = \frac{\text{LSB}}{\sqrt{12}} .
 $$
 
-With $\text{LSB} = 2.8125^\circ = 0.0491$ rad and 1 % gain steps, $\epsilon_\text{rms} = 0.0145$ and the floor sits about 46 dB below the peak. That is the same $-6B$ scale as the quantization sidelobes of Lesson 26, a few decibels deeper because the error is spread over eight elements. Halve the bits and the floor rises fast: a 3-bit phase shifter cannot hold a null deeper than about 22 dB.
+With $\text{LSB} = 2.8125^\circ = 0.0491$ rad and 1 % gain steps, $\epsilon_\text{rms} = 0.0145$ and the estimate puts the floor about 46 dB below the peak — the RMS reading of the same result a direct numerical evaluation of the rounded weights gives, which is a residual of about $-48$ dB at the designed angle. Take $\approx -48$ dB as the number to quote and this estimate as where it comes from. That is the same $-6B$ scale as the quantization sidelobes of Lesson 26, a few decibels deeper because the error is spread over eight elements. Halve the bits and the floor rises fast: a 3-bit phase shifter cannot hold a null deeper than about 22 dB.
 
 **What you can measure is shallower still.** The PHASER's beam sweep has a noise floor about 23 dB below the uniform-taper peak, and the null-steered main lobe sits 2 dB below that reference, so nothing deeper than roughly 21 dB below the nulled peak can appear on the plot. The verified example measures a $-21.6$ dBc notch, which is the floor, not the weights. Achievable notch depth on this hardware is 20 to 22 dB, and it is enough: the interferer that was 3 dB below the target in Part 1 ends up more than 10 dB below it.
 
@@ -210,7 +210,7 @@ With $\text{LSB} = 2.8125^\circ = 0.0491$ rad and 1 % gain steps, $\epsilon_\tex
 
 :::{admonition} Key Point
 :class: key-concept
-$r_\text{n}$ is the whole story. It is the uniform pattern's level at the null angle, it sets the main-lobe loss, and it tells you before you compute anything whether the null is cheap or ruinous.
+$r_\text{n}$ is the whole story. It is the uniform pattern's level at the null angle, and it tells you the main-lobe loss before you compute anything.
 :::
 
 ## Summary
@@ -224,7 +224,7 @@ $r_\text{n}$ is the whole story. It is the uniform pattern's level at the null a
 | $\vert r_\text{n}\vert$ at a $-13$ dB sidelobe | cost driver | $0.225$ |
 | Main-lobe loss, null at $+22.5^\circ$ | price of the notch | 2.0 dB theory, 1.8 dB measured |
 | PHASER settings, null at $+22.5^\circ$ | gains, then phases | 75, 65, 82, 100, 100, 82, 65, 75 % |
-| Quantization floor | $\epsilon_\text{rms}/\sqrt{N}$, ADAR1000 LSBs | $\approx -46$ dB |
+| Quantization floor | $\epsilon_\text{rms}/\sqrt{N}$, ADAR1000 LSBs | $\approx -48$ dB (RMS estimate $-46$ dB) |
 | Measured notch | limited by the sweep noise floor | $-21.6$ dBc (20 to 22 dB) |
 | Maximum nulls | one weight holds the beam | $N - 1 = 7$ |
 

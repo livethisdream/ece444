@@ -55,7 +55,7 @@ $$\sin\theta_g = \pm 0.693 \quad \Longrightarrow \quad \theta_g = \pm 43.9^\circ
 The $m = 2$ solutions need $\vert \sin\theta_g \vert = 1.386$, which is not a real angle, so there are exactly three full-height beams: $0^\circ$ and $\pm 44^\circ$. Feed every fourth element instead ($56\ \text{mm}$, $\lambda/d = 0.520$) and the pair moves in to $\pm 31.3^\circ$, with the $m = 2$ repeat pressing right up against the horizon — the pattern comes back to within a fraction of a dB of full height at $\pm 90^\circ$.
 :::
 
-Thinning costs you twice. The three fed elements still span an $84\ \text{mm}$ aperture, so the main beam stays narrow, but with three elements instead of eight the array collects less signal and the pattern between the beams is poorly controlled. The narrow beam of a large aperture with the ambiguity of a sparse one is the classic thinned-array trade.
+Thinning has two effects. The three fed elements still span an $84\ \text{mm}$ aperture, so the main beam stays narrow, but with three elements instead of eight the array collects less signal and the pattern between the beams is poorly controlled. The narrow beam of a large aperture with the ambiguity of a sparse one is the classic thinned-array trade.
 
 ## Part 2: The spacing criterion
 
@@ -135,7 +135,7 @@ The measured limit comes from the receiver. A beam sweep on the PHASER has a noi
 
 :::{admonition} Key Point
 :class: key-concept
-Separate the two floors. **Quantization** sets a sidelobe floor at roughly $-6B$ dB and a pointing granularity of about one LSB, and on the course array it still allows a $-48$ dB null. The **noise floor** of the measurement sets what you can observe, which on the PHASER sweep is $20$ to $22$ dB below the peak. A shallow measured null usually means the second limit, not the first.
+Separate the two floors. **Quantization** sets a sidelobe floor at roughly $-6B$ dB and a pointing granularity of about one LSB, and on the course array it still allows a $-48$ dB null. The **noise floor** of the measurement sets what you can observe: on the PHASER sweep it sits about $23$ dB below the uniform-taper peak, and once the null weights cost roughly $2$ dB of main lobe the deepest observable notch is $20$ to $22$ dB. A shallow measured null usually means the second limit, not the first.
 :::
 
 ## Part 5: The three departures side by side
@@ -159,7 +159,7 @@ The three failures look different on a sweep and they are fixed in different pla
 | Pointing granularity | Finite phase steps in the beam-steering command | $\Delta\theta_0 \approx \text{LSB}/(360^\circ d/\lambda)$ | More bits |
 | Quantization sidelobes | Staircase error left after rounding the ramp | $\text{QSLL} \approx -6B$ dB | More bits, or dither the rounding across elements |
 
-Dither deserves one sentence, because it is the cheap fix. If the rounding error is the same sawtooth on every beam position, it radiates coherently into one lobe. Adding a small known phase offset per element before rounding breaks the periodicity, which spreads the same total error energy over many angles instead of concentrating it in one, lowering the peak quantization lobe at no hardware cost.
+Dither is the low-cost fix. If the rounding error is the same sawtooth on every beam position, it radiates coherently into one lobe. Adding a small known phase offset per element before rounding breaks the periodicity, which spreads the same total error energy over many angles instead of concentrating it in one, lowering the peak quantization lobe at no hardware cost.
 
 ## Summary
 

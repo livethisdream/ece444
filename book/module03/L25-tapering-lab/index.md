@@ -202,8 +202,8 @@ the plot entirely and the beam shape would be unchanged.
 
 The practical statement is short. **The peak drop is a plot artifact of a
 common reference; the taper efficiency is the antenna's actual loss.** A system
-budget that charges the taper 4.7 dB has overcharged it by a factor of two in
-power.
+budget that debits 4.7 dB for the taper overstates the loss by a factor of two
+in power.
 
 :::{admonition} Worked example — reading a disagreement
 :class: tip

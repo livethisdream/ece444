@@ -38,7 +38,7 @@ Reset the frame. Amplitude control is finished business after the tapering lab. 
 1. Why the array factor repeats, and where the repeats land.
 2. The spacing criterion that keeps them out of sight.
 3. Beam squint: one phase setting, a whole band of frequencies.
-4. Phase quantization: the beam angles you can actually command.
+4. Phase quantization: the beam angles you can command.
 5. What each one costs a radar or a comm link.
 
 Note:
@@ -76,7 +76,7 @@ $$\psi \ \text{spans a window of width} \ 2kd = 4\pi\ \frac{d}{\lambda}$$
 | 1.0 | $4\pi$ | one pair |
 | 1.5 | $6\pi$ | two pairs |
 
-<div class="callout">Spacing sets <strong>how much of the repeating array factor you can see</strong>. Wider elements, more periods in view.</div>
+<div class="callout">Spacing sets <strong>how much of the repeating array factor you can see</strong>. Wider spacing brings more periods into view.</div>
 
 Note:
 This is the whole idea in one table. The array factor does not change shape when you widen d — you just look at more of it.
@@ -177,12 +177,12 @@ Derive it, then read it out loud in words. Scan range and spacing trade against 
 | $\pm 60^\circ$ | $d < 0.536\lambda$ |
 | any angle | $d \le \lambda/2$ |
 
-The PHASER at 10.5 GHz: $d/\lambda = 14/28.6 = 0.49$, so $\lambda/d = 2.04 > 1 + \vert\sin\theta_0\vert$ for **every** real angle.
+The PHASER at the HB100's 10.525 GHz: $d/\lambda = 14/28.5 = 0.491$, so $\lambda/d = 2.04 > 1 + \vert\sin\theta_0\vert$ for **every** real angle.
 
 <div class="callout"><strong>Half-wavelength spacing is the default</strong> because it is grating-lobe-free at any scan angle you can command.</div>
 
 Note:
-Ask them why the board designer chose fourteen millimetres. Answer: it is just inside half a wavelength at the top of the band, which buys the full scan range with no ambiguity.
+Ask them why the board designer chose fourteen millimetres. Answer: it is just inside half a wavelength at the top of the band, which gives the full scan range with no ambiguity.
 
 ---
 
@@ -201,7 +201,7 @@ Set this up physically before any algebra. The delay across the array is a lengt
 
 ---
 
-## Beam squint: where the beam actually points
+## Beam squint: where the beam points, and where it was commanded
 
 Applied lag on element $n$, computed at $f_0$:
 
@@ -376,7 +376,7 @@ Eight elements, $d/\lambda = 0.491$, steered to $15^\circ$:
 | :-- | :-- | :-- | :-- | :-- |
 | 2 | $90^\circ$ | $29^\circ$ | $-12$ dB | $-6.7$ dB |
 | 3 | $45^\circ$ | $14.6^\circ$ | $-18$ dB | $-12.8$ dB (the natural one) |
-| 7 | $2.8125^\circ$ | $0.91^\circ$ | $-42$ dB | $-12.6$ dB (the natural one) |
+| 7 | $2.8125^\circ$ | $0.91^\circ$ | $-42$ dB | $-12.6$ dB (the natural one, as the 7-bit weights render it at $15^\circ$) |
 
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 

@@ -26,7 +26,7 @@ array that the array factor says cannot exist. Each of those is the element
 pattern, the hardware, or the room showing up in the trace, and each of them is
 predictable.
 
-## Part 1: What the sweep actually measured
+## Part 1: What the sweep measured
 
 Every trace you have recorded on the PHASER is a **received-power sweep**: the
 software steps the commanded steer angle across the scan range, applies the
@@ -46,9 +46,9 @@ $$
 
 where $AF(\theta)$ carries the geometry and the phasing of the array and
 $EF(\theta)$ carries the pattern of one element sitting in that array. Up to now
-we have compared measurements against $AF(\theta)$ alone and gotten away with
-it, because near broadside a patch radiates almost uniformly and $EF \approx 1$
-across the main lobe. That approximation stops being free the moment you steer.
+we have compared measurements against $AF(\theta)$ alone, and it held, because
+near broadside a patch radiates almost uniformly and $EF \approx 1$ across the
+main lobe. The approximation fails as soon as you steer.
 
 :::{admonition} Key Point
 :class: key-concept

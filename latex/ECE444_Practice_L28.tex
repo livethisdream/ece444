@@ -125,11 +125,13 @@ Level at $+22.5\mydeg$ & $-12.8\ \text{dBc}$ & $-21.6\ \text{dBc}$ \\
 	\end{minipage}
 
 	\part A second student reports a notch at $-31\ \text{dBc}$ on the same bench with the
-	same weights. The sweep's noise floor sits about $22$\db below the uniform peak.
+	same weights. The sweep's noise floor sits about $23$\db below the uniform peak.
 	Is the report credible? Explain.
 		\begin{solution}[1.2in]
 		No. The sweep cannot display anything below its own noise floor, so no point
-		on the trace can read more than about $22$\db below the reference peak. A
+		on the trace can read more than about $23$\db below the uniform reference
+		peak, which is about $21$\db below the null-steered array's own peak once the
+		$1.8$\db main-lobe cost is accounted for. A
 		reported $-31\ \text{dBc}$ is below the floor and indicates a reading taken from the
 		wrong axis, a different reference, or a mis-set peak marker. The correct
 		statement in that situation is that the notch reached the noise floor and its
@@ -173,7 +175,9 @@ board whose phase shifters have only $B = 2$ bits.
 		\eq{ \text{QSLL} \approx -6B = -6(2) = -12\db }
 		Quantization scatters roughly $12$\db of energy into the pattern, so a notch
 		cannot be held deeper than about $12$\db below the peak. The 7-bit ADAR1000
-		reaches $20$ to $22$\db by the same argument.
+		scatters far less: its rounded weights still permit a notch near $48$\db
+		down, so the $20$ to $22$\db measured in the lab is the sweep's noise floor
+		and not a quantization limit.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -205,7 +209,8 @@ board whose phase shifters have only $B = 2$ bits.
 		second-order loss. At a null the contributions are arranged to cancel
 		exactly, so the residual is a difference of nearly equal quantities and any
 		phase error appears in it directly, at first order. A $2.8\mydeg$ error costs
-		roughly $0.01$\db at the peak and sets a floor near $-21$\db in the null.
+		roughly $0.01$\db at the peak and sets a floor near $-48$\db in the null,
+		which is deeper than the lab sweep can display but a floor all the same.
 		\end{solution}
 
 \end{parts}
@@ -309,19 +314,19 @@ by the beamformer is $R = \sigma^2 I + P\,u u^T$.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part A requirement calls for a $33$\db notch. Taking $21$\db as the depth
-		achievable with the 7-bit ADAR1000 and roughly $6$\db of improvement per
-		added bit, how many phase bits are needed?
+		\part A requirement calls for a $33$\db notch on a board whose coarse 3-bit
+		phase shifters hold a null only to about $21$\db (Lesson 27). Taking roughly
+		$6$\db of improvement per added bit, how many phase bits are needed?
 		\begin{solution}[1.1in]
 		\eq{ 33\db - 21\db = 12\db \quad \Rightarrow \quad
 		     \frac{12}{6} = 2 \ \text{additional bits} }
-		\eq{ B = 7 + 2 = 9 \ \text{bits}, \qquad
-		     \text{LSB} = \frac{360\mydeg}{512} = 0.70\mydeg }
+		\eq{ B = 3 + 2 = 5 \ \text{bits}, \qquad
+		     \text{LSB} = \frac{360\mydeg}{32} = 11.25\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$B$ = \ansbox[1.3in]{$9\ \text{bits}$}
+		$B$ = \ansbox[1.3in]{$5\ \text{bits}$}
 	\end{minipage}
 
 	\part Two jammers now illuminate the array from different bearings. State what

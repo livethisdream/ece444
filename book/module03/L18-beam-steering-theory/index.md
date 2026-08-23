@@ -63,8 +63,8 @@ This is the **progressive phase**, and it is the equation the rest of Module 3
 runs on. Read what it says. At broadside, $\sin\theta_0 = 0$ and no phase is
 needed, which is why the array points to $0^\circ$ with every phase set to zero.
 The phase grows with the *sine* of the steer angle rather than with the angle,
-so the same $10^\circ$ of extra scan costs much less phase near endfire than it
-does near broadside. And the phase scales with the electrical spacing
+so the same $10^\circ$ of extra scan needs much less added phase near endfire
+than it does near broadside. And the phase scales with the electrical spacing
 $d/\lambda$: the same array asked to steer the same angle needs more phase per
 element as the frequency goes up.
 
@@ -179,7 +179,7 @@ printed on the pattern with the HPBW pill as you scan out toward $60^\circ$.
 
 ## Part 4: Beam broadening with scan angle
 
-Steering costs beamwidth, and the reason is visible in the geometry rather than
+Steering widens the beam, and the reason is visible in the geometry rather than
 in the algebra. A source out at $\theta_0$ does not see the full physical length
 of the array. It sees the array's projection onto the plane perpendicular to its
 line of sight, and that projection is shorter by $\cos\theta_0$.
@@ -215,7 +215,7 @@ estimates today, use $10\log_{10}(\cos\theta_0)$.
 
 Those four numbers are worth carrying. They are why a scanned array is specified
 over a limited field of view: at $60^\circ$ the PHASER's beam is twice as wide as
-at broadside and its peak gain has dropped by $3\ \text{dB}$, and pushing further buys
+at broadside and its peak gain has dropped by $3\ \text{dB}$, and pushing further gains
 very little.
 
 ```{note}

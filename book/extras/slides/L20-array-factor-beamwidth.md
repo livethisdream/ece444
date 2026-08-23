@@ -232,7 +232,7 @@ Every marked number on this plot was derived in the last ten minutes. The one th
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
 Note:
-Demo live: 8 elements broadside reads 13.3 degrees and 30.1 degrees, matching the table for L21. Drop to 4 and to 2 in front of them, then steer to 60 to show the formula and the pattern separating.
+Demo live: 8 elements broadside reads 13.2 degrees and 30.1 degrees, matching the table for L21. Drop to 4 and to 2 in front of them, then steer to 60 to show the formula and the pattern separating.
 
 ---
 
@@ -307,11 +307,11 @@ The linear array's main lobe is a cone about the array axis: steering thickens t
 3. **Element count is what is left.** $N = Nd/d$, rounded up
 
 <div class="callout">
-Every element is an antenna, a phase shifter, an amplifier and a control line. <strong>N is the cost.</strong>
+Each element adds an antenna, a phase shifter, an amplifier and a control line, so <strong>$N$ sets what the array costs to build</strong>.
 </div>
 
 Note:
-Steps one and two are independent: aperture buys beamwidth, spacing buys scan volume. Students routinely try to solve both with one knob.
+Steps one and two are independent: aperture sets beamwidth, spacing sets scan volume. Students routinely try to solve both with one knob.
 
 ---
 
@@ -350,7 +350,7 @@ Round up, never down — rounding down misses the specification by construction.
 | Directivity | $14.6$ dB |
 
 <div class="callout">
-Those eight extra channels are bought entirely by the last 45° of scan volume. Ask for the scan volume before you fix the aperture.
+The last 45° of scan volume is what added the eight extra channels. Ask for the scan volume before you fix the aperture.
 </div>
 
 Note:

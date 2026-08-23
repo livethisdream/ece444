@@ -292,9 +292,12 @@ peak.
 		\part Predict the half-power width at $45\mydeg$ and compare it with the
 		measurement.
 		\begin{solution}[1.1in]
-		\eq{\theta_\text{HP} \approx \frac{0.886\ \lambda}{Nd\cosp{\theta_0}} = \frac{13.1\mydeg}{\cosp{45\mydeg}}}
-		\eq{= \frac{13.1\mydeg}{0.7071} = 18.5\mydeg}
+		The beam broadens as $1/\cosp{\theta_0}$, so scaling the measured $13.1\mydeg$
+		broadside width gives
+		\eq{\theta_\text{HP} \approx \frac{13.1\mydeg}{\cosp{45\mydeg}} = \frac{13.1\mydeg}{0.7071} = 18.5\mydeg}
 		The trace reads $18.9\mydeg$, which is $0.4\mydeg$ wide and inside one grid step.
+		Starting instead from the theory width $0.886\lambda/(Nd) = 13.2\mydeg$ the same
+		rule gives $18.7\mydeg$, so either chain lands inside one grid step of the trace.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}

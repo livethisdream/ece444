@@ -61,7 +61,7 @@ At the HB100's $10.525$ GHz: $\lambda = 28.5$ mm, so $d/\lambda = 0.491$ and $\D
 | $\Delta\phi$ | $0.0^\circ$ | $45.8^\circ$ | $88.4^\circ$ | $125.0^\circ$ |
 
 <div class="callout">
-One number per steer angle. Every element phase follows from it.
+Each steer angle needs only this one number. Every element phase follows from it.
 </div>
 
 Note:
@@ -157,7 +157,7 @@ minutes later.
 - Each value sits on the nearest multiple of $2.8125^\circ$, so single elements differ from theory by up to $1.4^\circ$.
 
 <div class="callout">
-Element 6: theory says $442.0^\circ$, the GUI shows about $82^\circ$. Same array, same beam.
+Element 6: theory says $442.0^\circ$, the GUI shows about $82^\circ$. It is the same array and the same beam.
 </div>
 
 Note:
@@ -224,7 +224,7 @@ sidelobes are visible and the second ones are marginal.
 Both come from the same fact: steering tilts the beam off the aperture face, and the array presents $Nd\cos\theta_0$ instead of $Nd$.
 
 <div class="callout">
-A shorter aperture gives a wider beam and less collected power. One geometric cause, two measured effects.
+A shorter aperture gives a wider beam and less collected power. One geometric cause produces both effects.
 </div>
 
 Note:

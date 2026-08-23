@@ -13,7 +13,7 @@
   <li>I can explain how an aperture's field distribution determines its far-field pattern through the Fourier transform relationship.</li>
   <li>I can compute the beamwidth and first sidelobe level of a uniform aperture from its dimensions.</li>
   <li>I can calculate aperture efficiency for a given illumination and use it in the gain formula.</li>
-  <li>I can state the sidelobe, beamwidth, and efficiency trades that tapering the illumination buys.</li>
+  <li>I can state the sidelobe, beamwidth, and efficiency trades that tapering the illumination involves.</li>
   <li>I can predict how scaling an aperture in wavelengths changes its beamwidth and gain.</li>
 </ol>
 
@@ -99,7 +99,7 @@ To get $\eta_\text{ap}$ from the illumination, compare two quantities. The bores
 
 $$D = \frac{4\pi}{\lambda^2}\ \frac{\left\vert \int E_a\ da \right\vert^2}{\int \vert E_a\vert^2\ da}, \qquad \eta_\text{ap} = \frac{D}{4\pi A/\lambda^2} = \frac{\left\vert \int E_a\ da\right\vert^2}{A \int \vert E_a\vert^2\ da}.$$
 
-Read that ratio as **coherent gain over available gain**. The numerator rewards field that adds up in phase; the denominator charges you for field you had to pay for. By the Cauchy-Schwarz inequality the ratio never exceeds one, and it equals one only when $E_a$ has constant amplitude and constant phase over the whole aperture. Uniform illumination is the most efficient illumination there is, and every departure from it — a taper, a phase error, a piece of aperture with nothing on it — costs efficiency.
+Read that ratio as **coherent gain over available gain**. The numerator rewards field that adds up in phase; the denominator is the power the aperture had to radiate. By the Cauchy-Schwarz inequality the ratio never exceeds one, and it equals one only when $E_a$ has constant amplitude and constant phase over the whole aperture. Uniform illumination is the most efficient illumination there is, and every departure from it — a taper, a phase error, a piece of aperture with nothing on it — costs efficiency.
 
 :::{admonition} Worked example — efficiency of a cosine illumination
 :class: tip
@@ -119,9 +119,9 @@ Two cautions on using $\eta_\text{ap}$ in practice. First, the amplitude taper i
 $G = \eta_\text{ap}\ 4\pi A/\lambda^2$. Area and wavelength set the ceiling, and the illumination decides how close to the ceiling you get. Use $\eta_\text{ap} \approx 0.5$ for a horn and $0.55$ to $0.7$ for a good reflector when you have nothing better.
 :::
 
-## Part 4: What tapering buys and what it costs
+## Part 4: What tapering does to the pattern
 
-**Tapering** means letting the illumination fall off toward the edges of the aperture instead of stopping abruptly. The uniform aperture's $-13.3$ dB sidelobes come from the sharp edge: the transform of a function with a step in it decays slowly. Round the edge off and the sidelobes fall away much faster. The price is that the outer part of the aperture is no longer working at full strength, so the aperture behaves as though it were shorter and less complete than it is — a wider beam and a lower gain.
+**Tapering** means letting the illumination fall off toward the edges of the aperture instead of stopping abruptly. The uniform aperture's $-13.3$ dB sidelobes come from the sharp edge: the transform of a function with a step in it decays slowly. Round the edge off and the sidelobes fall away much faster. The outer part of the aperture no longer works at full strength, so the aperture behaves as though it were shorter and less complete than it is, the beam widens, and the gain falls.
 
 Four illuminations cover most of the ground, and their numbers are the ones this course uses everywhere:
 
@@ -132,7 +132,7 @@ Four illuminations cover most of the ground, and their numbers are the ones this
 | Triangular | $-26.5$ dB | $1.27$ | $0.75$ | $-1.2$ dB |
 | Cosine$^2$ | $-31.5$ dB | $1.44$ | $0.667$ | $-1.8$ dB |
 
-The table reads as one continuous trade. Going from uniform to $\cos^2$ buys $18$ dB of sidelobe suppression and charges $63\%$ more beamwidth and $1.8$ dB of gain. There is no illumination that lowers sidelobes and narrows the beam at the same time, and knowing that saves a great deal of time in front of a specification. When a radar system needs low sidelobes to keep clutter and jamming out of the receiver, it pays for them in beamwidth and in aperture size.
+The table reads as one continuous trade. Going from uniform to $\cos^2$ lowers the first sidelobe by $18$ dB, widens the beam by $63\%$, and loses $1.8$ dB of gain. There is no illumination that lowers sidelobes and narrows the beam at the same time, and knowing that saves a great deal of time in front of a specification. When a radar system needs low sidelobes to keep clutter and jamming out of the receiver, it gives up beamwidth and aperture size to get them.
 
 The widget below computes the pattern of each illumination directly from the aperture integral. Pick an illumination and watch three things: the sidelobe level and the half-power constant change together, while the aperture length slider moves the pattern in angle without touching either. Set the aperture to $2\lambda$ and step through the illuminations to see the sidelobes leave visible space entirely, then set it to $20\lambda$ and confirm that the first sidelobe of the uniform case is still exactly $13.3$ dB down.
 

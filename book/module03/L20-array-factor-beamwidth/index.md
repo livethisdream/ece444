@@ -111,7 +111,7 @@ Written in that last form, the result carries over to other spacings: for any un
 
 $$D \approx \frac{2Nd}{\lambda} = \frac{2L}{\lambda},$$
 
-which is the uniform line-source directivity from Lesson 15 with $L = Nd$ — the same sampled-aperture argument that produced the $0.886$. Directivity grows linearly with aperture in wavelengths. Doubling the element count at fixed spacing doubles $D$ and buys $3$ dB, and it does so by halving the beamwidth, not by making any element radiate harder.
+which is the uniform line-source directivity from Lesson 15 with $L = Nd$ — the same sampled-aperture argument that produced the $0.886$. Directivity grows linearly with aperture in wavelengths. Doubling the element count at fixed spacing doubles $D$ and adds $3$ dB, and it does so by halving the beamwidth, not by making any element radiate harder.
 
 :::{admonition} Worked example — directivity of the course array
 :class: tip
@@ -159,7 +159,7 @@ Specification: $\theta_\text{HP} \le 5^\circ$ at $10\ \text{GHz}$, scanning to $
 
 Now check the corner of the scan volume. At $45^\circ$ the same array gives $4.8^\circ/\cos 45^\circ = 6.8^\circ$, which misses the specification by nearly $2^\circ$. Holding $5^\circ$ at $45^\circ$ requires $Nd = 305/\cos 45^\circ = 431\ \text{mm}$, so $N = 29$ elements at half-wavelength spacing, a $43.5\ \text{cm}$ aperture and $14.6$ dB.
 
-Those eight extra channels are bought entirely by the last $45^\circ$ of scan volume. Whether that is the right trade depends on how much of the time the beam actually lives out at the edge of the volume, and it is a question worth asking before the aperture is fixed.
+The last $45^\circ$ of scan volume is what added the eight extra channels. Whether that is the right trade depends on how much of the time the beam sits out at the edge of the volume, and it is a question worth asking before the aperture is fixed.
 :::
 
 ## Part 5: What the lab should measure

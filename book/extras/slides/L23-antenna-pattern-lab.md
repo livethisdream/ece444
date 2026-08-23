@@ -23,7 +23,7 @@ Fall 2026 · Dr. Neil Rogers
 ## Where we were
 
 - L22 split the radiated pattern into element factor times array factor.
-- The element factor costs you $0.6\ \text{dB}$ of peak at a $30^\circ$ scan, and it is why a steered beam's two first sidelobes stop matching.
+- The element factor takes $0.6\ \text{dB}$ off the peak at a $30^\circ$ scan, and it is why a steered beam's two first sidelobes stop matching.
 - Every sweep you have run so far measures the array factor against a **commanded** angle.
 - Nothing you have measured yet has a physical angle on its x-axis.
 
@@ -43,11 +43,11 @@ should be able to produce all three from last lesson.
 3. Walk the HB100 around the arc at broadside.
 4. Steer to $30^\circ$ and walk it again.
 5. Compare against an electrical beam sweep.
-6. What an anechoic chamber buys.
+6. What an anechoic chamber provides.
 
 Note:
-Two walks and one sweep. Budget ten minutes for practice walks — the first two
-attempts are always unusable and that is fine.
+Two walks and one sweep. Budget ten minutes for practice walks — a usable run
+takes seven to eight seconds across the arc, and that pace takes practice.
 
 ---
 
@@ -104,7 +104,7 @@ The reconciliation at the end is worth much more when the prediction is public.
 - $1\ \text{m}$ of string as a radius gauge, and masking tape.
 - Tape the arc on the floor: marks at $-90^\circ$, $0^\circ$, $+90^\circ$, and every $30^\circ$ if there is time.
 
-**Calibrate first.** A broadside sweep with clean, equal first sidelobes, or stop and fix it.
+**Calibrate first.** Confirm a broadside sweep with clean, equal first sidelobes before going on.
 
 Note:
 Insist on the calibration check. A stale cal shows up as unequal broadside
@@ -138,7 +138,7 @@ angle axis to a time axis is the part they get wrong on the first run.
 3. Start the Tracking plot and walk smoothly to $+90^\circ$ at $1\ \text{m}$.
 4. Take seven or eight seconds. Keep the module aimed the whole way.
 
-Expect two unusable practice runs. Too fast crams the pattern into the left quarter; too slow runs off the right edge.
+Practice the walk before recording. Too fast crams the pattern into the left quarter; too slow runs off the right edge.
 
 Note:
 Demo one deliberately bad walk — sprint it — so they see the failure mode
@@ -250,7 +250,7 @@ Source back on the $0^\circ$ mark and **left there**. Steer Angle $= 0$, Rectang
 | Grid | your gait | $2.8125^\circ$ phase LSB |
 | Noise floor | room ripple, $\pm 1\ \text{dB}$ | $23\ \text{dB}$ below peak |
 
-Same amplitudes. Different axis, different meaning.
+The amplitudes agree; the axes do not mean the same thing.
 
 Note:
 The agreement in amplitude is the point: two completely different measurements
@@ -258,7 +258,7 @@ of the same array land on the same sidelobe level.
 
 ---
 
-## What a chamber buys
+## What a chamber provides
 
 <div class="fig" data-inline-svg="./fig/L23-range-artifacts.svg" style="max-width:820px; margin:0 auto;"></div>
 

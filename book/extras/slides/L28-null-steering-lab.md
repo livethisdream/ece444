@@ -24,7 +24,7 @@ Fall 2026 · Dr. Neil Rogers
 
 - L26: a real array is limited by its phase shifter — 2.8125° LSB on the ADAR1000
 - L27: weight subtraction puts a null exactly where you want one, at a known cost
-- L27 worked example: null at +22.5°, main lobe pays 1.8 dB
+- L27 worked example: null at +22.5°, main-lobe cost 2.0 dB in theory, 1.8 dB measured
 - The eight weights came out of arithmetic and have never touched hardware
 
 **Today the array runs those weights, and two more nulls it finds on its own.**
@@ -108,7 +108,7 @@ column means anything alone; the vector nulls, not the columns.
 | Uniform sidelobe at +22.5° | −12.8 dBc |
 | Notch at +22.5° | −21.6 dBc |
 | Main-lobe cost | 1.8 dB |
-| Sweep noise floor | about −22 dBc |
+| Sweep noise floor | about −23 dBc, i.e. 23 dB below the uniform peak |
 
 <div class="callout">
 Write these down <strong>before</strong> pressing Start. A measurement you did not
@@ -153,19 +153,21 @@ matters — the subtraction reshaped the whole distribution, not one angle.
 
 | Limit | Value | Effect |
 | :-- | :-- | :-- |
-| Phase LSB | 2.8125° | +13.0° is applied as +14.06° |
-| Gain step | about 1% | amplitudes rounded too |
-| Sweep floor | about −22 dBc | caps what you can read |
+| Phase LSB | 2.8125° | notch shifts a fraction of a degree; residual still about −48 dB |
+| Gain step | about 1% | same — it moves the null, it does not fill it |
+| Sweep noise floor | 23 dB below the uniform peak | sets the 20 to 22 dB you can read |
 
 <div class="callout">
-<strong>Null depth is set by weight accuracy, not by the algorithm.</strong> With
-2.8° phase resolution, 20 to 22 dB is what you get.
+<strong>The measured notch is set by the noise floor, not by the phase LSB.</strong>
+The quantized weights alone would still null to about −48 dB.
 </div>
 
 Note:
-Push on this. The rounded vector is still a valid weight vector — it just nulls a
-direction a degree or two away from the one asked for. That is why the notch is
-shallow and slightly displaced rather than simply noisy.
+Push on this, because the intuitive answer is wrong. The rounded vector is still a
+valid weight vector — it nulls a direction a fraction of a degree away from the one
+asked for, and at the designed angle the residual is still down near −48 dB. What
+caps the plot is the sweep's own noise floor, 23 dB below the uniform peak, less
+the 2 dB of main lobe the null weights cost. That is the 20 to 22 dB they measure.
 
 ---
 
@@ -258,7 +260,7 @@ the FFT tab cannot separate them; the sweep trace is the evidence.
 
 <!-- .slide: class="viz-cue-slide" -->
 
-## What MVDR actually chooses
+## What MVDR chooses
 
 <div class="fig" data-inline-svg="./fig/L28-mvdr-vs-manual.svg" style="max-width:790px; margin:0 auto;"></div>
 
@@ -282,7 +284,7 @@ degrees of freedom buy one constraint and one null.
 | Must know first | interferer angle | nothing |
 | Interferer moves | recompute eight weights | tracks it |
 | Channels needed | none extra | both digital |
-| Null depth | 20–22 dB, quantization | 17–19 dB, covariance |
+| Null depth | 20–22 dB, noise floor | 17–19 dB, covariance |
 
 <div class="callout">
 You can compute eight analog degrees of freedom yourself, or let the array
@@ -298,10 +300,10 @@ what the hybrid compromise costs.
 ## Key point
 
 <div class="callout">
-A null is only as deep as the weights are accurate. Compute it and you own the
-angle, the arithmetic, and a 20 dB floor set by the phase LSB. Let MVDR compute
-it and you own neither the angle nor the arithmetic, but you get only as many
-nulls as you have digital channels.
+A null is only as deep as your measurement can show. Compute it and you own the
+angle and the arithmetic, and you read a 20 dB notch set by the receiver noise
+floor. Let MVDR compute it and you own neither the angle nor the arithmetic, but
+you get only as many nulls as you have digital channels.
 </div>
 
 Note:

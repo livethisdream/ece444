@@ -36,7 +36,7 @@ Open on the L21 lab table. Ask the class which rows matched and which did not. T
 
 ## Today's plan
 
-1. What the beam sweep actually measures
+1. What the beam sweep measures
 2. The patch element factor, and the model we will use for it
 3. Scan loss: the decibel bookkeeping of steering off broadside
 4. Coupling, edges, errors, and the room

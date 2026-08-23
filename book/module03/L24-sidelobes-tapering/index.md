@@ -58,7 +58,7 @@ element amplitude from the center of the array toward its ends is called an
 **amplitude taper**, and every one of the tapers below is a different rule for
 how fast to fall off.
 
-:::{admonition} Why a system engineer pays for low sidelobes
+:::{admonition} Why low sidelobes matter to a system engineer
 :class: key-concept
 A sidelobe is a direction the antenna is listening to when you did not ask it
 to. A search radar at $-13\ \text{dB}$ sidelobes sees ground clutter through
@@ -91,7 +91,7 @@ renormalized:
 
 | Pedestal $P$ | $a_n$ (%) | First sidelobe | HPBW | $\eta_t$ |
 | :-- | :-- | :-- | :-- | :-- |
-| 1.00 (uniform) | 100, 100, 100, 100 | $-12.8$ dB | $13.3^\circ$ | 1.000 |
+| 1.00 (uniform) | 100, 100, 100, 100 | $-12.8$ dB | $13.2^\circ$ | 1.000 |
 | 0.50 | 57, 72, 89, 100 | $-18.8$ dB | $14.8^\circ$ | 0.959 |
 | 0.25 | 35, 57, 83, 100 | $-25.8$ dB | $16.2^\circ$ | 0.884 |
 | 0.08 (Hamming) | 19, 47, 79, 100 | $-33.0$ dB | $17.9^\circ$ | 0.800 |
@@ -99,8 +99,8 @@ renormalized:
 
 Only the inner four values are listed; the taper is symmetric, so elements 5
 through 8 mirror elements 4 through 1. Read the table downward and the trade is
-already visible: every step toward a smoother edge buys sidelobe suppression and
-pays for it in beamwidth. Note also that Hamming beats Hann on all three counts.
+already visible: every step toward a smoother edge lowers the sidelobes and
+widens the beam. Note also that Hamming beats Hann on all three counts.
 Leaving a small pedestal at the edge cancels the first sidelobe of the cosine
 term against the first sidelobe of the pedestal, which is why $P = 0.08$ is a
 named taper and not an arbitrary choice.
@@ -110,8 +110,8 @@ the sidelobe level you want, and Dolph's construction returns the amplitudes tha
 achieve it with the narrowest possible main lobe. The defining property is
 **equal ripple**: every sidelobe in the pattern sits at exactly the design level,
 none higher and none lower. That is what makes it optimal. A taper whose far
-sidelobes fall below the specification has spent aperture on suppression nobody
-asked for, and it paid for that suppression in beamwidth.
+sidelobes fall below the specification is delivering suppression nobody asked
+for, and it widened the main lobe to get it.
 
 The construction itself uses the Chebyshev polynomial $T_{N-1}$, whose ripples
 between $-1$ and $+1$ are the equal sidelobes and whose runaway growth beyond
@@ -135,13 +135,13 @@ controlling; $\bar{n} = 4$ to $6$ is typical.
 
 | Taper (8 elements, $d/\lambda = 0.481$) | $a_n$ (%) | Highest sidelobe | HPBW | Broadening | $\eta_t$ |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| Uniform | 100, 100, 100, 100 | $-12.8$ dB | $13.3^\circ$ | 1.00 | 1.000 |
-| Chebyshev $-20$ dB | 58, 66, 88, 100 | $-20.0$ dB | $14.8^\circ$ | 1.11 | 0.956 |
-| Chebyshev $-30$ dB | 26, 52, 81, 100 | $-30.0$ dB | $17.1^\circ$ | 1.28 | 0.842 |
-| Chebyshev $-40$ dB | 15, 42, 76, 100 | $-40.0$ dB | $18.8^\circ$ | 1.41 | 0.761 |
-| Taylor $-30$ dB, $\bar{n} = 4$ | 29, 53, 82, 100 | $-28.3$ dB | $16.8^\circ$ | 1.26 | 0.853 |
-| Hann | 12, 43, 77, 100 | $-31.8$ dB | $19.1^\circ$ | 1.44 | 0.750 |
-| Blackman | 6, 27, 66, 100 | $-50.5$ dB | $21.7^\circ$ | 1.63 | 0.655 |
+| Uniform | 100, 100, 100, 100 | $-12.8$ dB | $13.2^\circ$ | 1.00 | 1.000 |
+| Chebyshev $-20$ dB | 58, 66, 88, 100 | $-20.0$ dB | $14.8^\circ$ | 1.12 | 0.956 |
+| Chebyshev $-30$ dB | 26, 52, 81, 100 | $-30.0$ dB | $17.1^\circ$ | 1.30 | 0.841 |
+| Chebyshev $-40$ dB | 15, 42, 76, 100 | $-40.0$ dB | $18.8^\circ$ | 1.42 | 0.761 |
+| Taylor $-30$ dB, $\bar{n} = 4$ | 29, 53, 82, 100 | $-28.3$ dB | $16.8^\circ$ | 1.27 | 0.853 |
+| Hann | 12, 43, 77, 100 | $-31.8$ dB | $19.1^\circ$ | 1.45 | 0.750 |
+| Blackman | 6, 27, 66, 100 | $-50.5$ dB | $21.7^\circ$ | 1.64 | 0.655 |
 
 The Taylor row shows both sides of the compromise. On only eight elements the
 sampled Taylor distribution does not hold its sidelobes exactly on the design
@@ -166,8 +166,8 @@ design from a window function that happens to reach a similar level.
 
 ## Part 3: The three costs, in numbers
 
-Tapering is not free. There are three separate costs, and two of them are
-routinely confused with each other.
+Tapering has three separate costs, and two of them are routinely confused with
+each other.
 
 **Cost 1: the main lobe gets wider.** The physical aperture is unchanged, but the
 *effective* aperture is smaller because the outer elements now contribute less.
@@ -258,10 +258,10 @@ $$\eta_t = \frac{(5.18)^2}{8 \times 3.988} = \frac{26.83}{31.91} = 0.841 = -0.75
 $$20\log_{10}\left(\frac{5.18}{8}\right) = 20\log_{10}(0.648) = -3.8\ \text{dB}.$$
 
 **Beamwidth.** The pattern measures $17.1^\circ$ at half power against
-$13.3^\circ$ uniform, a broadening factor of 1.28.
+$13.2^\circ$ uniform, a broadening factor of 1.30.
 
-**The price, stated for the customer.** Sidelobes drop from $-12.8$ to $-30$ dB,
-a 17 dB improvement. The beam widens from $13.3^\circ$ to $17.1^\circ$, the array
+**Result.** Sidelobes drop from $-12.8$ to $-30$ dB,
+a 17 dB improvement. The beam widens from $13.2^\circ$ to $17.1^\circ$, the array
 loses $0.75\ \text{dB}$ of directivity, and the displayed peak falls
 $3.8\ \text{dB}$.
 
@@ -281,8 +281,8 @@ The curve is the whole design space for this array. Chebyshev designs run along
 it and the window functions sit above it, which is the geometric statement of
 Dolph optimality: Blackman reaches $-50\ \text{dB}$ with a $21.7^\circ$ beam,
 where the Chebyshev design at the same sidelobe level needs only $20.1^\circ$.
-Read the slope of the solid curve for the price of a specification. On eight
-elements the beam costs about $0.2^\circ$ per decibel of suppression across the
+The slope of the solid curve is the beamwidth a decibel of suppression takes. On
+eight elements the beam widens about $0.2^\circ$ per decibel of suppression across the
 whole range, and the efficiency falls from 1.00 to 0.71 over the same span.
 
 What stops you from going deeper is not the curve but the hardware and the
@@ -291,8 +291,8 @@ scale, where the gain word's 1% step is an 11% error on that element, and the
 sidelobes it was designed for will not survive that. The beam sweep's noise floor
 sits about 23 dB below the uniform peak, so a design deeper than roughly
 $-20\ \text{dB}$ relative to its own peak cannot be confirmed on this bench at
-all. Specifying $-50\ \text{dB}$ when $-30\ \text{dB}$ would do buys nothing you
-can measure and costs beamwidth, directivity, and setting accuracy.
+all. Specifying $-50\ \text{dB}$ when $-30\ \text{dB}$ would do gains nothing you
+can measure and gives up beamwidth, directivity, and setting accuracy.
 
 ## Part 5: Putting a taper on the PHASER
 
@@ -321,7 +321,7 @@ are below; predict these numbers now, because next lesson you will measure them.
 
 | Preset | $a_n$ (%) | Theory HPBW | Measured HPBW | Peak drop | First sidelobe |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| Uniform | 100, 100, 100, 100 | $13.3^\circ$ | $13.1^\circ$ | $0$ dB | $-11$ to $-13$ dBc |
+| Uniform | 100, 100, 100, 100 | $13.2^\circ$ | $13.1^\circ$ | $0$ dB | $-11$ to $-13$ dBc |
 | Hann | 12, 43, 77, 100 | $19.1^\circ$ | $19.5^\circ$ | $-4.7$ dB | below the noise floor |
 | Blackman | 6, 27, 66, 100 | $21.7^\circ$ | $23.1^\circ$ | $-6.1$ dB | below the noise floor |
 | Chebyshev | 4, 23, 62, 100 | $22.9^\circ$ | $24.3^\circ$ | $-6.5$ dB | below the noise floor |
@@ -356,7 +356,7 @@ twice as wide as uniform.
 | Cosine on pedestal | $a(p) = P + (1-P)\cos^2(\pi p)$ | Hann ($P = 0$): $-31.8$ dB, $19.1^\circ$ |
 | Chebyshev (Dolph) | Equal ripple; narrowest beam for a stated sidelobe level | $-30$ dB on 8 elements: 26, 52, 81, 100 (%) |
 | Taylor $\bar{n}$ | Chebyshev's buildable cousin; first $\bar{n}-1$ lobes held, rest decay | $-30$ dB, $\bar{n} = 4$: 29, 53, 82, 100 (%) |
-| Beam broadening | HPBW multiplier relative to uniform | 1.1 at $-20$ dB, 1.28 at $-30$ dB, 1.41 at $-40$ dB |
+| Beam broadening | HPBW multiplier relative to uniform | 1.12 at $-20$ dB, 1.30 at $-30$ dB, 1.42 at $-40$ dB |
 | Taper efficiency $\eta_t$ | $(\sum a_n)^2 / (N \sum a_n^2)$; the directivity you keep | $-30$ dB Chebyshev: $0.841$, i.e. $-0.75$ dB |
 | Peak drop | $20\log_{10}(\sum a_n / N)$; the coherent loss on the trace | Hann preset: $-4.7$ dB, of which only $-1.2$ dB is directivity |
 | PHASER conversion | $\text{Rx}_n\ (\%) = 100\ a_n / \max a_n$ | Sliders cap at 100%, resolve to about 1% |

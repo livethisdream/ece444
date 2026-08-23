@@ -279,6 +279,8 @@ $\sigma_\phi = \text{LSB}/\sqrt{12}$ in radians.
 		\\ \sigma_a &= \frac{0.01}{\sqrt{12}} = 0.0029 \\
 		\epsilon_\text{rms} &= \sqrt{0.0142^2 + 0.0029^2} = 0.0145 \\
 		\text{depth} &= 20\mylog{\frac{0.0145}{\sqrt{8}}} = -45.8\db }
+		This RMS estimate is consistent with the course number: evaluating the rounded
+		weights numerically leaves a residual of about $-48$\db at the designed angle.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -307,7 +309,8 @@ $\sigma_\phi = \text{LSB}/\sqrt{12}$ in radians.
 	floor sits $23\db$ below the uniform-taper peak and the null-steered main lobe sits
 	$2\db$ below that same reference.
 		\begin{solution}[1.3in]
-		The weights are good to about $-46\db$, so quantization is not what the plot is
+		The weights are good to about $-48\db$ (the RMS estimate above reads $-46\db$),
+		so quantization is not what the plot is
 		showing. The sweep cannot display anything below its own noise floor, which is
 		$23\db$ below the uniform peak. Measured against the null-steered main lobe, which is
 		$2\db$ lower, that floor is about $21\db$ down, and $-21.6\db$ is the floor rather

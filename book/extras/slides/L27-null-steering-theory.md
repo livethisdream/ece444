@@ -58,7 +58,7 @@ Ask what rejects the interferer. The answer they should give: not the angle, the
 
 ---
 
-## The arithmetic that should worry you
+## The interference arithmetic
 
 | Quantity | Value |
 | :-- | :-- |
@@ -83,7 +83,7 @@ Three decibels is a factor of two in power. Target fluctuation alone routinely e
 | Lower the pattern 20 dB at $+22.5^\circ$ | Recompute eight gains and eight phases | About 2 dB of main-lobe gain |
 
 <div class="callout">
-Moving the pattern <em>down</em> at one angle buys more than moving it <em>up</em> at another.
+Moving the pattern <em>down</em> at one angle helps more than moving it <em>up</em> at another.
 </div>
 
 Note:
@@ -101,7 +101,7 @@ $$w\_n = a\_n e^{j\phi\_n}$$
 - $\phi\_n$ — its Phase Control entry
 - Two ADAR1000s give both knobs on all eight elements
 
-L18 used the phases. L24 used the amplitudes. Null steering spends both.
+L18 used the phases. L24 used the amplitudes. Null steering uses both.
 
 Note:
 Emphasize that nothing new is being added to the hardware. The degrees of freedom were always there; we simply have not needed to use them at the same time.
@@ -215,7 +215,7 @@ $$\mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\ \mathbf{w}_\text{n}, \qquad r_\
 </div>
 
 Note:
-This is the result of the lesson. One division, no iteration, no optimizer. Write it on the board and leave it there for the rest of the hour.
+This is the result of the lesson. It takes one division, with no iteration and no optimizer. Write it on the board and leave it there for the rest of the hour.
 
 ---
 
@@ -301,7 +301,7 @@ $$\text{gain}\_n = \frac{100\ \vert w\_n\vert}{\max\_m \vert w\_m\vert}\ \%, \qq
 | Phase (deg) | $-12.1$ | $+3.1$ | $+13.0$ | $+6.0$ | $-6.0$ | $-13.0$ | $-3.1$ | $+12.1$ |
 
 Note:
-These sixteen numbers go straight into Element Gains and Phase Control in the lab. Gains symmetric, phases antisymmetric, largest phase thirteen degrees. Small changes, and easy to get backwards by a sign.
+These sixteen numbers go straight into Element Gains and Phase Control in the lab. Gains symmetric, phases antisymmetric, largest phase thirteen degrees. The changes are small, and a sign error is easy to make.
 
 ---
 
@@ -309,7 +309,7 @@ These sixteen numbers go straight into Element Gains and Phase Control in the la
 
 <div class="fig" data-inline-svg="./fig/L27-pattern-null.svg" style="max-width:740px; margin:0 auto;"></div>
 
-Response at $+22.5^\circ$ is zero. Beam stays at broadside. Main lobe pays 2.0 dB.
+Response at $+22.5^\circ$ is zero. Beam stays at broadside. The main lobe loses 2.0 dB.
 
 Note:
 Of the two decibels, four tenths come from the subtraction itself and the rest from rescaling so no element exceeds one hundred percent gain. The measured cost on the sweep is one point eight decibels.
@@ -351,7 +351,7 @@ Each weight lands on a grid, so each carries an error $\delta w\_n$. The errors 
 $$\frac{\vert y(\theta\_1)\vert}{N} \approx \frac{\epsilon\_\text{rms}}{\sqrt{N}}, \qquad \epsilon\_\text{rms} = \sqrt{\sigma\_\phi^2 + \sigma\_a^2}, \quad \sigma\_\phi = \frac{\text{LSB}}{\sqrt{12}}$$
 
 - ADAR1000: LSB $= 2.8125^\circ$, gains in 1 % steps $\Rightarrow \epsilon\_\text{rms} = 0.0145$
-- Floor $\approx -46$ dB — the same $-6B$ scale as the L26 quantization sidelobes
+- Floor $\approx -48$ dB numerically; this RMS estimate gives $-46$ dB — the same $-6B$ scale as the L26 quantization sidelobes
 - A 3-bit phase shifter cannot hold a null deeper than about 22 dB
 
 Note:
@@ -368,7 +368,7 @@ Floor 23 dB below the uniform peak, nulled beam 2 dB below that: achievable notc
 </div>
 
 Note:
-The weights are good to forty-six decibels and the measurement is good to twenty-one. What limits the plot is the floor, not the arithmetic. Twenty-one decibels is enough: the interferer that was three decibels below the target ends up more than ten decibels below it.
+The weights are good to about forty-eight decibels, which is what the RMS estimate of forty-six is pointing at, and the measurement is good to twenty-one. What limits the plot is the floor, not the arithmetic. Twenty-one decibels is enough: the interferer that was three decibels below the target ends up more than ten decibels below it.
 
 ---
 
@@ -402,11 +402,11 @@ This is the hinge into L28. Ask them how the array could find the interferer ang
 ## Key point
 
 <div class="callout">
-$r_\text{n}$ is the whole story: it is the uniform pattern's level at the null angle, it sets the main-lobe loss, and it tells you before you compute anything whether the null is cheap or ruinous.
+$r_\text{n}$ is the whole story: it is the uniform pattern's level at the null angle, and it tells you the main-lobe loss before you compute anything.
 </div>
 
 Note:
-If they remember one thing, this is it. Look at where the interferer falls on the pattern you already have, and you know the price.
+If they remember one thing, this is it. Look at where the interferer falls on the pattern you already have, and you know the main-lobe loss in decibels.
 
 ---
 

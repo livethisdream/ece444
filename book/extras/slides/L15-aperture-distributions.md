@@ -176,8 +176,8 @@ Notice what is missing from that number: **$L$**.
 A longer uniform aperture narrows the beam, raises the gain, and leaves the first sidelobe $13.3$ dB down.
 
 Note:
-This is the punchline of the first half. Size buys beamwidth and gain. Sidelobes are
-bought with shape, and shape only. Say it twice.
+This is the punchline of the first half. Size sets beamwidth and gain; shape sets
+the sidelobes, and shape only. Say it twice.
 
 ---
 
@@ -253,7 +253,7 @@ $$D = \frac{4\pi}{\lambda^2}\ \frac{\left\vert \int E_a\ da \right\vert^2}{\int 
 
 Note:
 Do not prove Cauchy-Schwarz. Do say what it means physically: any variation in
-amplitude or phase across the aperture costs you, and uniform is the best there is.
+amplitude or phase across the aperture lowers the efficiency, and uniform is the best there is.
 
 ---
 
@@ -304,7 +304,7 @@ one. Keep eta rad and eta ap separate in their heads.
 | Triangular | $-26.5$ dB | $1.27$ | $0.75$ | $-1.2$ dB |
 | Cosine$^2$ | $-31.5$ dB | $1.44$ | $0.667$ | $-1.8$ dB |
 
-<div class="callout">Uniform to cosine squared buys <strong>18 dB</strong> of sidelobe and charges <strong>63%</strong> more beamwidth plus <strong>1.8 dB</strong> of gain. No illumination lowers sidelobes and narrows the beam at once.</div>
+<div class="callout">Going from uniform to $\cos^2$ lowers the first sidelobe by <strong>18 dB</strong>, widens the beam by <strong>63%</strong>, and loses <strong>1.8 dB</strong> of gain. No illumination lowers sidelobes and narrows the beam at once.</div>
 
 Note:
 This table is the reason the lesson exists. Tell them it will be on every exam and in

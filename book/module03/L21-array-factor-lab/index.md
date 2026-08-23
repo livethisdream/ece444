@@ -139,9 +139,8 @@ change.
 ```{note}
 The HB100 is a free-running DRO and drifts across $10.1$ to $10.7\ \text{GHz}$
 with temperature. The GUI hunts for the tone, so a drift of tens of megahertz
-between sweeps costs you nothing in this lab. What does cost you is moving the
-source between sweeps, since all three traces are compared against each other
-at the end.
+between sweeps does not affect this lab. Moving the source does, because all
+three traces are compared against each other at the end.
 ```
 
 ## Part 3: Procedure

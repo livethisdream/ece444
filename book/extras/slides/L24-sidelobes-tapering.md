@@ -84,7 +84,7 @@ seven-eighths of a circle with one phasor left over is what students remember.
 
 ---
 
-## Why a system engineer pays for low sidelobes
+## Why low sidelobes matter to a system engineer
 
 | Situation | What comes in through the sidelobes |
 | :-- | :-- |
@@ -120,7 +120,7 @@ $$a(p) = P + (1-P)\cos^2(\pi p), \qquad -\tfrac{1}{2} \le p \le \tfrac{1}{2}$$
 
 | Pedestal $P$ | $a_n$ (%) | First SLL | HPBW |
 | :-- | :-- | :-- | :-- |
-| 1.00 uniform | 100, 100, 100, 100 | $-12.8$ dB | $13.3^\circ$ |
+| 1.00 uniform | 100, 100, 100, 100 | $-12.8$ dB | $13.2^\circ$ |
 | 0.25 | 35, 57, 83, 100 | $-25.8$ dB | $16.2^\circ$ |
 | 0.08 Hamming | 19, 47, 79, 100 | $-33.0$ dB | $17.9^\circ$ |
 | 0.00 Hann | 12, 43, 77, 100 | $-31.8$ dB | $19.1^\circ$ |
@@ -168,10 +168,10 @@ moves. Everything else follows from that one picture.
 
 | Design | $a_n$ (%) | HPBW | Broadening |
 | :-- | :-- | :-- | :-- |
-| Uniform | 100, 100, 100, 100 | $13.3^\circ$ | 1.00 |
-| $-20$ dB | 58, 66, 88, 100 | $14.8^\circ$ | 1.11 |
-| $-30$ dB | 26, 52, 81, 100 | $17.1^\circ$ | 1.28 |
-| $-40$ dB | 15, 42, 76, 100 | $18.8^\circ$ | 1.41 |
+| Uniform | 100, 100, 100, 100 | $13.2^\circ$ | 1.00 |
+| $-20$ dB | 58, 66, 88, 100 | $14.8^\circ$ | 1.12 |
+| $-30$ dB | 26, 52, 81, 100 | $17.1^\circ$ | 1.30 |
+| $-40$ dB | 15, 42, 76, 100 | $18.8^\circ$ | 1.42 |
 
 Every sidelobe of each design lands on its own line, within a tenth of a dB.
 
@@ -205,7 +205,7 @@ eight elements the sampled distribution misses the design line by a dB or two.
 Note:
 Walk the three curves. The green Chebyshev sidelobes all touch the dashed line.
 The orange Hann sidelobes decay away from the beam, which is suppression it did
-not need and paid for in width.
+not need, and it widened the beam to get it.
 
 ---
 
@@ -344,13 +344,13 @@ hand. The fourth is arithmetic they must be able to do in an exam.
 
 ---
 
-## Worked example: the price
+## Worked example: the numbers
 
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
 | Taper efficiency | $(5.18)^2 / (8 \times 3.988)$ | $0.841 = -0.75$ dB |
 | Peak drop | $20\log_{10}(5.18/8)$ | $-3.8$ dB |
-| Beamwidth | measured on the pattern | $17.1^\circ$, broadening 1.28 |
+| Beamwidth | measured on the pattern | $17.1^\circ$, broadening 1.30 |
 | Sidelobes | every one of them | $-30.0$ dB |
 
 <div class="callout">
@@ -401,7 +401,7 @@ eighty-one, one hundred, and mirrored. That is what they will type next lesson.
 
 | Preset | $a_n$ (%) | Theory HPBW | Measured HPBW | Peak drop | First SLL |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| Uniform | 100, 100, 100, 100 | $13.3^\circ$ | $13.1^\circ$ | $0$ dB | $-11$ to $-13$ dBc |
+| Uniform | 100, 100, 100, 100 | $13.2^\circ$ | $13.1^\circ$ | $0$ dB | $-11$ to $-13$ dBc |
 | Hann | 12, 43, 77, 100 | $19.1^\circ$ | $19.5^\circ$ | $-4.7$ dB | below the floor |
 | Blackman | 6, 27, 66, 100 | $21.7^\circ$ | $23.1^\circ$ | $-6.1$ dB | below the floor |
 | Chebyshev | 4, 23, 62, 100 | $22.9^\circ$ | $24.3^\circ$ | $-6.5$ dB | below the floor |
@@ -422,7 +422,7 @@ measuring second is the entire structure of next lesson.
 - So the prediction that matters for it is beamwidth: $22.9^\circ$ theory, $24.3^\circ$ measured.
 
 <div class="callout">
-Specifying 40 dB below what the hardware can show buys nothing measurable, and costs a beam almost twice as wide as uniform.
+Specifying 40 dB below what the hardware can show gains nothing measurable, and the beam ends up almost twice as wide as uniform.
 </div>
 
 Note:
@@ -434,7 +434,7 @@ The preset is useful for showing a very wide beam, not for showing low sidelobes
 ## Key point
 
 <div class="callout">
-Size sets the beamwidth. <strong>Shape sets the sidelobes.</strong> Every taper buys sidelobe suppression with beamwidth, and charges you twice on the display: once in directivity, which is <em>taper efficiency</em>, and once in raw signal you turned down, which is the <em>peak drop</em>. Keep the two numbers apart.
+Size sets the beamwidth. <strong>Shape sets the sidelobes.</strong> A taper lowers the sidelobes and widens the beam. Two separate dB numbers fall out of it: <em>taper efficiency</em>, the loss in directivity, and the <em>peak drop</em>, the raw signal you turned down. Keep them apart.
 </div>
 
 Note:
