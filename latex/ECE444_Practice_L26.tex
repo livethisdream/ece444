@@ -1,0 +1,375 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L26 practice set (Beam Squint and Quantization) -- grating lobes, the spacing
+% criterion, beam squint across a band, and B-bit phase quantization on the
+% 8-element ADALM-PHASER row.
+
+\fullwidth{\textbf{Learning Objective 3.8: } Predict and quantify the three ways a real
+steered array departs from the ideal pattern: grating lobes from element spacing, beam
+squint from operating away from the phase-set frequency, and the pointing and sidelobe
+limits of a $B$-bit phase shifter.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Where the array factor repeats.} The ADALM-PHASER carries 8 patch
+elements on a $14\ \text{mm}$ pitch. In a thinning demonstration only every third element
+is fed, so the fed elements sit $42\ \text{mm}$ apart. Work at the array design centre,
+$10.3\ \ghz$, where $\lambda = 29.1\ \text{mm}$.
+
+\begin{parts}
+
+	\part In one or two sentences, explain why a grating lobe reaches the same height as
+	the main lobe, while a sidelobe does not.
+		\begin{solution}[1.2in]
+		At a grating-lobe angle the path-length difference between neighbouring elements is
+		a whole wavelength rather than zero, so every element contribution arrives in phase
+		exactly as it does at the commanded angle. The array cannot distinguish the two
+		directions, and the summation reaches its maximum value $N$ in both. A sidelobe is a
+		partial cancellation of that same summation, so it is always below the peak.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part With the beam at broadside, find every grating-lobe angle in visible space.
+		\begin{solution}[1.3in]
+		\eq{ \sin\theta_g &= \sin\theta_0 \pm m\frac{\lambda}{d} = 0 \pm m\frac{29.1}{42} \\
+		     &= \pm 0.693 m }
+		For $m=1$, $\theta_g = \arcsin(\pm 0.693) = \pm 43.9\mydeg$. For $m=2$ the required
+		sine is $\pm 1.386$, which is not a real angle, so the pattern has three full-height
+		beams and no more.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_g$ = \ansbox[1.5in]{$\pm 43.9\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Now steer the beam to $\theta_0 = +20\mydeg$. Find every grating lobe that
+		remains in visible space.
+		\begin{solution}[1.4in]
+		\eq{ \sin\theta_g &= \sinp{20\mydeg} \pm 0.693 = 0.342 \pm 0.693 }
+		The plus sign gives $1.035$, which is outside $[-1,1]$, so that lobe has left visible
+		space. The minus sign gives $-0.351$, so
+		\eq{ \theta_g = \arcsin(-0.351) = -20.5\mydeg }
+		Steering the main beam to $+20\mydeg$ pushed one grating lobe past the horizon and
+		pulled the other in from $-43.9\mydeg$ to $-20.5\mydeg$. Grating lobes move
+		uniformly in $\sin\theta$, not in degrees.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_g$ = \ansbox[1.5in]{$-20.5\mydeg$}
+	\end{minipage}
+
+	\part A classmate proposes applying a Hann taper to remove the extra beams. Explain in
+	one or two sentences why that does not work.
+		\begin{solution}[1.2in]
+		A taper controls the sidelobe skirts that surround a single beam by smoothing the
+		aperture illumination. A grating lobe is a second main beam produced by the element
+		spacing, and it is present with any amplitude distribution, including a uniform one.
+		The taper lowers the sidelobes around both beams equally and leaves both peaks at
+		full height. The only cure is closer element spacing.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Choosing the element spacing.} An X-band linear array is being laid out.
+Use $c = 3\times10^8\ \m/\text{s}$ throughout.
+
+\begin{parts}
+
+	\part State the criterion that keeps grating lobes out of visible space over a scan
+	range $\pm\theta_0$, and explain why half-wavelength spacing is the usual default.
+		\begin{solution}[1.3in]
+		The criterion is
+		\eq{ d < \frac{\lambda}{1 + \left|\sin\theta_0\right|} }
+		Taking the scan range to its limit, $\theta_0 \rightarrow 90\mydeg$, gives
+		$d < \lambda/2$. A half-wavelength lattice therefore has no grating lobe at any
+		commandable scan angle, so it is the spacing that removes the question entirely
+		rather than tying the array to one scan sector.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The array must scan to $\pm 60\mydeg$ and operate up to $10.5\ \ghz$. Find the
+		largest usable element spacing in millimetres.
+		\begin{solution}[1.3in]
+		Use the highest frequency, where $\lambda$ is shortest and the criterion is tightest:
+		\eq{ \lambda = \frac{3\times10^8}{10.5\times10^9} = 28.6\ \text{mm} }
+		\eq{ d < \frac{28.6}{1 + \sinp{60\mydeg}} = \frac{28.6}{1.866} = 15.3\ \text{mm} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$d_{\max}$ = \ansbox[1.4in]{$15.3\ \text{mm}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A competing layout uses $d = 20\ \text{mm}$. At $10.5\ \ghz$, how far off
+		broadside can that array scan before a grating lobe enters visible space?
+		\begin{solution}[1.3in]
+		\eq{ \frac{\lambda}{d} = \frac{28.6}{20} = 1.429 }
+		\eq{ 1 + \left|\sin\theta_0\right| < 1.429 \quad \Rightarrow \quad
+		     \left|\sin\theta_0\right| < 0.429 }
+		\eq{ \theta_0 < \arcsin(0.429) = 25.4\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{0,\max}$ = \ansbox[1.4in]{$25.4\mydeg$}
+	\end{minipage}
+
+	\part The PHASER uses $d = 14\ \text{mm}$. State its scan limit from the same criterion,
+	and give one sentence on what the design gives up by choosing a spacing this tight.
+		\begin{solution}[1.3in]
+		At $10.5\ \ghz$, $\lambda/d = 28.6/14 = 2.04$, so the criterion requires
+		$1 + \left|\sin\theta_0\right| < 2.04$, which every real angle satisfies. The array
+		has no grating lobe at any scan angle in its band.
+
+		What it gives up is aperture. With the element count fixed at 8, tighter spacing
+		means a shorter array, $L = Nd = 112\ \text{mm}$ instead of $160\ \text{mm}$ at
+		$20\ \text{mm}$ pitch, so the beam is wider and the directivity lower. For a fixed
+		element count, wide scan coverage and a narrow beam pull in opposite directions.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Beam squint across a band.} An 8-element array with $d = 14\ \text{mm}$
+operates from $10.0$ to $10.5\ \ghz$. The beam-steering computer sets the element phases
+for $\theta_0 = 45\mydeg$ at the band centre, $f_0 = 10.25\ \ghz$. Use
+$c = 3\times10^8\ \m/\text{s}$.
+
+\begin{parts}
+
+	\part Explain in one or two sentences why a broadside beam does not squint at all.
+		\begin{solution}[1.1in]
+		At broadside the commanded phase ramp is zero, because every element is equidistant
+		from a source on boresight. Squint arises when a fixed phase ramp is interpreted at a
+		different wavenumber, and scaling a ramp of zero still gives zero. The condition
+		$\sin\theta = (f_0/f)\sin\theta_0$ returns $\theta = 0$ for any frequency.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the beam angle at the low band edge, $10.0\ \ghz$.
+		\begin{solution}[1.3in]
+		\eq{ \sin\theta &= \frac{f_0}{f}\sinp{45\mydeg}
+		     = \frac{10.25}{10.00}(0.7071) \\
+		     &= 1.025(0.7071) = 0.7248 }
+		\eq{ \theta = \arcsin(0.7248) = 46.5\mydeg }
+		The beam has squinted $+1.5\mydeg$ toward the horizon.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta$ = \ansbox[1.4in]{$46.5\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the beam angle at the high band edge, $10.5\ \ghz$, and state the total
+		angular walk of the beam across the band.
+		\begin{solution}[1.4in]
+		\eq{ \sin\theta &= \frac{10.25}{10.50}(0.7071) = 0.9762(0.7071) = 0.6903 }
+		\eq{ \theta = \arcsin(0.6903) = 43.6\mydeg }
+		The total walk from one band edge to the other is
+		\eq{ 46.5\mydeg - 43.6\mydeg = 2.9\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		walk = \ansbox[1.4in]{$2.9\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The half-power beamwidth of this array at $45\mydeg$ is
+		$\theta_\text{HP} \approx 0.886\lambda/(Nd\cosp{\theta_0})$. Express the walk from
+		part (c) as a fraction of a beamwidth, and recommend a fix if the requirement were
+		to hold the walk under 2\% of a beamwidth.
+		\begin{solution}[1.5in]
+		At $10.25\ \ghz$, $\lambda = 29.3\ \text{mm}$ and $Nd = 112\ \text{mm}$:
+		\eq{ \theta_\text{HP} &= \frac{0.886(29.3)}{112\cosp{45\mydeg}}
+		     = \frac{25.9}{79.2} = 0.327\ \text{rad} = 18.8\mydeg }
+		\eq{ \frac{2.9\mydeg}{18.8\mydeg} = 0.15 }
+		The beam walks about 15\% of a beamwidth, which costs a few tenths of a decibel at
+		the aimpoint and is usually acceptable for a narrowband link. Holding it under 2\%
+		is a factor of seven, and no phase setting achieves it because the walk is fixed by
+		the fractional bandwidth and $\tanp{\theta_0}$. The fix is to steer with true time
+		delay instead of phase, at the element or at the subarray level, so that the delay
+		compensates the path difference itself and every frequency in the band points the
+		same way.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		walk / $\theta_\text{HP}$ = \ansbox[1.2in]{$0.15$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{What the phase shifter can actually do.} The ADAR1000 beamformer on the
+PHASER uses a $B$-bit phase shifter. Work at the HB100 source frequency,
+$10.525\ \ghz$, where $\lambda = 28.5\ \text{mm}$ and $d/\lambda = 0.491$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the phase step (LSB) for $B = 6$ and for the ADAR1000's $B = 7$.
+		\begin{solution}[1.1in]
+		\eq{ \text{LSB} = \frac{360\mydeg}{2^B} }
+		\eq{ B = 6: \quad \frac{360\mydeg}{64} = 5.625\mydeg }
+		\eq{ B = 7: \quad \frac{360\mydeg}{128} = 2.8125\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$B=6$: \ansbox[1.1in]{$5.625\mydeg$} \\[10pt]
+		$B=7$: \ansbox[1.1in]{$2.8125\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part With $B = 7$, find the pointing step near broadside and at
+		$\theta_0 = 60\mydeg$.
+		\begin{solution}[1.5in]
+		The inter-element phase is $\Delta\phi = 360\mydeg (d/\lambda)\sin\theta_0$, so a
+		change of one LSB moves $\sin\theta_0$ by
+		\eq{ \Delta(\sin\theta_0) = \frac{\text{LSB}}{360\mydeg (d/\lambda)}
+		     = \frac{2.8125}{360(0.491)} = 0.0159 }
+		Near broadside $\sin\theta_0 \approx \theta_0$ in radians, so
+		\eq{ \Delta\theta_0 = 0.0159\ \text{rad} = 0.91\mydeg }
+		Off broadside divide by $\cos\theta_0$:
+		\eq{ \Delta\theta_0 = \frac{0.0159}{\cosp{60\mydeg}} = 0.0318\ \text{rad}
+		     = 1.82\mydeg }
+		Both are small next to the array's $13.2\mydeg$ beamwidth.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		broadside: \ansbox[1.1in]{$0.91\mydeg$} \\[10pt]
+		at $60\mydeg$: \ansbox[1.1in]{$1.82\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Use the rule of thumb $\text{QSLL} \approx -6B\ \db$ for $B = 3$ and $B = 7$,
+		and state which sidelobe mechanism dominates in each case for a uniform 8-element
+		array.
+		\begin{solution}[1.4in]
+		\eq{ B = 3: \quad \text{QSLL} \approx -18\ \db }
+		\eq{ B = 7: \quad \text{QSLL} \approx -42\ \db }
+		A uniform 8-element array has its own first sidelobe at about $-13\ \text{dB}$. At three
+		bits the quantization lobes are already below that, and at seven bits they are far
+		below it, so in both cases the ordinary sidelobe structure of the uniform
+		illumination dominates. Quantization only takes over below about two bits, where the
+		rule predicts $-12\ \db$ and the array's own sidelobes are no longer the largest
+		feature.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$B=3$: \ansbox[1.1in]{$-18\ \db$} \\[10pt]
+		$B=7$: \ansbox[1.1in]{$-42\ \db$}
+	\end{minipage}
+
+	\part A pattern null on the PHASER can be driven only about $21\ \db$ deep. Explain in
+	one or two sentences why the phase LSB sets that limit.
+		\begin{solution}[1.2in]
+		A null is produced by arranging element contributions that cancel, and the depth of
+		the cancellation is set by how exactly the residual can be driven to zero. With a
+		$2.8125\mydeg$ phase step the residual phase error can be up to half an LSB per
+		element, so a small uncancelled vector always remains. That leftover sets a floor on
+		the notch depth, measured at about $21\ \db$ on the course hardware once the roughly
+		1\% gain steps are included.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Reading a sweep and sizing a design.} Each part below reports something
+a student measured on the PHASER, or asks for a design decision. The array is 8 elements
+on a $14\ \text{mm}$ pitch unless stated otherwise.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A broadside sweep against the HB100 at $10.525\ \ghz$
+		($\lambda = 28.5\ \text{mm}$) shows three peaks of equal height, at $0\mydeg$ and
+		$\pm 42\mydeg$. What effective element spacing does that indicate, and how were the
+		elements fed?
+		\begin{solution}[1.4in]
+		\eq{ \sin\theta_g = \frac{\lambda}{d} \quad \Rightarrow \quad
+		     d = \frac{\lambda}{\sinp{42\mydeg}} = \frac{28.5}{0.669} = 42.6\ \text{mm} }
+		That is three times the $14\ \text{mm}$ pitch, so every third element was fed and the
+		other five were switched off. Equal peak heights confirm grating lobes rather than
+		sidelobes.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$d_\text{eff}$ = \ansbox[1.4in]{$42.6\ \text{mm}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The array is commanded to $+45\mydeg$ with phases set at $10.525\ \ghz$, but
+		the sweep peaks at $+47.9\mydeg$ with the source running at $10.025\ \ghz$. Name the
+		effect and confirm the measurement.
+		\begin{solution}[1.3in]
+		This is beam squint: the phase ramp was computed at one frequency and the signal
+		arrived at another.
+		\eq{ \sin\theta &= \frac{10.525}{10.025}\sinp{45\mydeg}
+		     = 1.0499(0.7071) = 0.7424 }
+		\eq{ \theta = \arcsin(0.7424) = 47.9\mydeg }
+		The measurement matches the prediction, so nothing is wrong with the array.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta$ = \ansbox[1.4in]{$47.9\mydeg$}
+	\end{minipage}
+
+	\part At $B = 2$ the sweep shows a lobe near $-55\mydeg$ about $7\ \db$ below the peak,
+	while the rule of thumb predicts $-12\ \text{dB}$. Explain the discrepancy in one or two
+	sentences.
+		\begin{solution}[1.2in]
+		The $-6B$ figure is an RMS estimate derived for a large aperture, where the staircase
+		phase error repeats over many periods and the resulting lobes average out to the
+		predicted level. An 8-element array holds only a couple of periods of that sawtooth,
+		so individual lobes scatter several decibels either side of the estimate. The rule
+		gives the expected level, not a bound on any single lobe.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A new array must scan to $\pm 50\mydeg$ over $10.0$ to $10.5\ \ghz$ and hold
+		every sidelobe below $-25\ \text{dB}$. State the maximum element spacing and the minimum
+		number of phase bits, and say which of the three defects the bandwidth requirement
+		drives.
+		\begin{solution}[1.6in]
+		Spacing, evaluated at the top of the band where $\lambda = 28.6\ \text{mm}$:
+		\eq{ d < \frac{28.6}{1 + \sinp{50\mydeg}} = \frac{28.6}{1.766} = 16.2\ \text{mm} }
+		Bits, from the quantization sidelobe rule:
+		\eq{ -6B < -25 \quad \Rightarrow \quad B > 4.2 \quad \Rightarrow \quad B = 5 }
+		The ADAR1000's seven bits clear this with margin. The bandwidth requirement drives
+		beam squint: the band is 4.9\% wide, so at $50\mydeg$ the beam walks roughly
+		$(0.024)\tanp{50\mydeg} = 0.029\ \text{rad} = 1.6\mydeg$ either side of centre. That
+		is a small fraction of the beamwidth here, so phase steering is adequate; a wider
+		band or a wider scan would force true time delay.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$d_{\max}$ = \ansbox[1.2in]{$16.2\ \text{mm}$} \\[10pt]
+		$B_{\min}$ = \ansbox[1.2in]{$5$ bits}
+	\end{minipage}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}
