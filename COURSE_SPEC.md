@@ -631,15 +631,15 @@ sweep actually reads and belong in lab expectation tables.
 | Preset | $a_n$ (%) | HPBW meas | Peak drop | $\eta_t$ |
 | :-- | :-- | :-- | :-- | :-- |
 | Uniform | 100 ×8 | 13.1° | 0 dB | 1.00 |
-| Hann | 12, 43, 77, 100, 100, 77, 43, 12 | 19.5° | −4.7 dB | 0.83 (−0.8 dB) |
-| Blackman | 6, 27, 66, 100, 100, 66, 27, 6 | 23.1° | −6.1 dB | 0.70 (−1.5 dB) |
-| Chebyshev | 4, 23, 62, 100, 100, 62, 23, 4 | 24.3° | −6.5 dB | 0.68 (−1.7 dB) |
+| Hann | 12, 43, 77, 100, 100, 77, 43, 12 | 19.5° | −4.7 dB | 0.75 (−1.2 dB) |
+| Blackman | 6, 27, 66, 100, 100, 66, 27, 6 | 23.1° | −6.1 dB | 0.66 (−1.8 dB) |
+| Chebyshev | 4, 23, 62, 100, 100, 62, 23, 4 | 24.3° | −6.5 dB | 0.62 (−2.1 dB) |
 
   Tapered first sidelobes drop below the sweep's noise floor (≥ 17 dB
   down) — lab tables should say "below the noise floor", not quote a
   number. **Peak drop on the plot** is the coherent receive-voltage loss
   $20\log_{10}(\sum a_n / N)$ — it is NOT the directivity loss, which is
-  the taper efficiency $\eta_t$ (about −0.8 dB for Hann). L24/L25 must
+  the taper efficiency $\eta_t$ (−1.2 dB for the Hann preset). L24/L25 must
   keep these two numbers distinct or students will misread the plot.
 - **Scan loss (canonical rule)**: peak *power* gain of the steered array
   falls as $\cos\theta_0$ — the projected-aperture rule: $-0.6$ dB at
