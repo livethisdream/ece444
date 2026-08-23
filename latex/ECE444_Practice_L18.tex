@@ -1,0 +1,350 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L18 practice set (Beam Steering Theory) -- progressive phase from the path
+% difference, the wrapped element phase table, the steered pattern, beam
+% broadening with scan angle, and the inverse problem worked on the course array
+% (N = 8, d = 14 mm, 10.3 GHz).
+
+\fullwidth{\textbf{Learning Objective 3.4: } Calculate the phase weights required to steer
+a beam to a given angle and predict the resulting array pattern.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+\question \textbf{From geometry to phase.} The course array is a uniform linear
+array of $N = 8$ patch elements spaced $d = 14$\ \text{mm} apart, receiving at
+$f = 10.3\ \ghz$. A plane wave arrives $\theta_0 = 25\mydeg$ from broadside.
+
+\begin{parts}
+
+	\part In one or two sentences, explain which element the wavefront reaches
+	first and why a fixed phase applied to each element can make all eight
+	received signals add together.
+		\begin{solution}[1.1in]
+		The wave arrives from the $+25\mydeg$ side, so it reaches the
+		highest-numbered element first and each lower-numbered element a little
+		later. Successive elements therefore see the same signal with a fixed
+		phase difference between neighbors. Adding a compensating phase to each
+		element cancels that difference, so all eight signals arrive at the
+		summing junction in phase and add coherently.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the wavelength, the electrical spacing $d/\lambda$, and the
+		product $kd$ in degrees.
+		\begin{solution}[1.3in]
+		\eq{ \lambda &= \frac{c}{f} = \frac{3\times 10^8}{10.3\times 10^9} = 0.0291\ \m = 29.1\ \text{mm} \\
+		     \frac{d}{\lambda} &= \frac{14}{29.1} = 0.481 \\
+		     kd &= 2\pi\lp 0.481\rp = 3.02\ \text{rad} = 173.2\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$kd$ = \ansbox[1.3in]{$173.2\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the progressive element-to-element phase $\Delta\phi$
+		required to steer the beam to $25\mydeg$.
+		\begin{solution}[1.1in]
+		\eq{ \Delta\phi &= kd\sinp{\theta_0} = 173.2\mydeg \times \sinp{25\mydeg} \\
+		     &= 173.2\mydeg \times 0.4226 = 73.2\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta\phi$ = \ansbox[1.3in]{$73.2\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the arrival-time difference between neighboring elements at
+		this steer angle, in picoseconds.
+		\begin{solution}[1.1in]
+		\eq{ \Delta t &= \frac{d\sinp{\theta_0}}{c} = \frac{\lp 0.014\rp \lp 0.4226\rp}{3\times 10^8} \\
+		     &= 1.97\times 10^{-11}\ \text{s} = 19.7\ \text{ps} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta t$ = \ansbox[1.3in]{$19.7\ \text{ps}$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{The phase table.} The same array is commanded to
+$\theta_0 = -40\mydeg$. Element 0 is the phase reference, and the ADAR1000 accepts
+a phase setting between $0\mydeg$ and $360\mydeg$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute $\Delta\phi$ for this steer angle, including its sign.
+		\begin{solution}[1.1in]
+		\eq{ \Delta\phi &= 173.2\mydeg \times \sinp{-40\mydeg} \\
+		     &= 173.2\mydeg \times \lp -0.6428\rp = -111.3\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta\phi$ = \ansbox[1.3in]{$-111.3\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the commanded phase of element 5 from
+		$\phi_n = -n\Delta\phi$, before any wrapping.
+		\begin{solution}[1.0in]
+		\eq{ \phi_5 &= -5\lp -111.3\mydeg\rp = +556.6\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\phi_5$ = \ansbox[1.3in]{$556.6\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Give the value actually written to element 5, wrapped into
+		$0\mydeg$ to $360\mydeg$.
+		\begin{solution}[1.0in]
+		\eq{ \phi_5 &= 556.6\mydeg - 360\mydeg = 196.6\mydeg }
+		One whole turn is removed.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\phi_5$ = \ansbox[1.3in]{$196.6\mydeg$}
+	\end{minipage}
+
+	\part Wrapping changed the number by $360\mydeg$ and did not change the
+	pattern. Explain why in one or two sentences, and state what information the
+	wrapped table no longer carries.
+		\begin{solution}[1.2in]
+		A phase difference of $360\mydeg$ is one full cycle of the carrier, so the
+		element radiates exactly the same field either way; at a single frequency
+		the two settings are indistinguishable. What is lost is the record of the
+		true time delay: the unwrapped ramp corresponds to a specific delay in
+		seconds, while the wrapped values only reproduce that delay at the design
+		frequency. That is why a wideband array needs time-delay units rather than
+		phase shifters alone.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{The steered pattern.} The array is steered to
+$\theta_0 = 50\mydeg$. Use $\psi = kd\lp \sinp{\theta} - \sinp{\theta_0}\rp$ with
+$kd = 173.2\mydeg$, and recall $\lambda/Nd = 29.1/112 = 0.260$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the array-factor argument $\psi$ at the observation angle
+		$\theta = 30\mydeg$.
+		\begin{solution}[1.1in]
+		\eq{ \psi &= 173.2\mydeg\lp \sinp{30\mydeg} - \sinp{50\mydeg}\rp \\
+		     &= 173.2\mydeg\lp 0.500 - 0.766\rp = -46.1\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\psi$ = \ansbox[1.3in]{$-46.1\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Locate the first null on the broadside side of the main lobe from
+		$\sinp{\theta} = \sinp{\theta_0} - \lambda/Nd$.
+		\begin{solution}[1.2in]
+		\eq{ \sinp{\theta} &= 0.766 - 0.260 = 0.506 \\
+		     \theta &= \arcsin\lp 0.506\rp = 30.4\mydeg }
+		The main lobe therefore reaches $19.6\mydeg$ below its peak.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta$ = \ansbox[1.3in]{$30.4\mydeg$}
+	\end{minipage}
+
+	\part The matching null on the other side requires
+	$\sinp{\theta} = 0.766 + 0.260 = 1.026$. Explain what that result means
+	physically and what the pattern looks like on that side of the beam.
+		\begin{solution}[1.2in]
+		No real angle has a sine greater than one, so that null lies outside
+		visible space and never appears in the pattern. The main lobe runs from
+		its peak out toward endfire without closing into a null, so the upper side
+		of the beam is a shoulder that stays well above the sidelobe floor rather
+		than a symmetric lobe edge. The beam is asymmetric about $50\mydeg$.
+		\end{solution}
+
+	\part Two commanded angles differ by $5\mydeg$ near broadside, and two others
+	differ by $5\mydeg$ near $60\mydeg$. Which pair requires the larger change in
+	$\Delta\phi$, and what does that mean for an array searching a sector in equal
+	phase steps?
+		\begin{solution}[1.3in]
+		The pattern is rigid in $\sinp{\theta}$, and $\Delta\phi$ is proportional
+		to $\sinp{\theta_0}$, so a $5\mydeg$ move near broadside changes
+		$\sinp{\theta_0}$ much more than the same move near $60\mydeg$: the pair
+		near broadside needs the larger phase change. An array stepped in equal
+		increments of $\Delta\phi$ therefore takes small angular steps near
+		broadside and large ones near endfire, so a uniform search grid in angle
+		requires unequal phase steps, and the beam positions crowd together near
+		broadside if you step the phase uniformly instead.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Scanning costs beamwidth.} Continue with $N = 8$,
+$d = 14$\ \text{mm}, $\lambda = 29.1$\ \text{mm}. Use
+$\theta_{\text{HP}} \approx 0.886\lambda/\lp Nd\cosp{\theta_0}\rp$ and the broadside
+uniform-array directivity $D \approx 2Nd/\lambda$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the broadside half-power beamwidth of the array.
+		\begin{solution}[1.2in]
+		\eq{ \theta_{\text{HP}}\lp 0\rp &= \frac{0.886\lp 29.1\rp}{112} = 0.2302\ \text{rad} \\
+		     &= 13.2\mydeg }
+		This is the canonical broadside beamwidth of the course array.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$13.2\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the half-power beamwidth when the beam is steered to
+		$\theta_0 = 55\mydeg$.
+		\begin{solution}[1.1in]
+		\eq{ \theta_{\text{HP}}\lp 55\mydeg\rp &= \frac{13.2\mydeg}{\cosp{55\mydeg}} = \frac{13.2\mydeg}{0.574} \\
+		     &= 23.0\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$23.0\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the broadside directivity of the array in \dbi. Then, using
+		the fact that the effective aperture shrinks to its projection
+		$Nd\cosp{\theta_0}$ when the beam is steered, compute the expected gain
+		reduction at $\theta_0 = 55\mydeg$ and name the effect.
+		\begin{solution}[1.5in]
+		\eq{ D\lp 0\rp &= \frac{2\lp 112\rp}{29.1} = 7.70 \rightarrow 10\mylog{7.70} = 8.9\ \dbi \\
+		     \Delta G &= 10\mylog{\cosp{55\mydeg}} \\
+		     &= 10\mylog{0.574} = -2.4\ \db }
+		This is \textbf{scan loss}. It is carried by the element pattern, not by the
+		array factor: the array factor of an isotropic-element array keeps
+		essentially the same directivity as it scans, and the projected-aperture
+		loss shows up in the pattern only when the element factor is included, which
+		is the subject of Lesson 22.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$D\lp 0 \rp$ = \ansbox[1.2in]{$8.9\ \dbi$} \\[10pt]
+		$\Delta G$ = \ansbox[1.2in]{$-2.4\ \db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A tracking requirement allows the beam to broaden to at most
+		$20\mydeg$. Find the largest usable scan angle, and state the trade-off
+		this puts on the system design in one sentence.
+		\begin{solution}[1.4in]
+		\eq{ \cosp{\theta_0} &\ge \frac{13.2\mydeg}{20\mydeg} = 0.66 \\
+		     \theta_0 &\le \arccos\lp 0.66\rp = 48.7\mydeg }
+		Field of view is bought with aperture: covering a wider sector at this
+		beamwidth requires more elements, since only a longer array can afford the
+		$\cosp{\theta_0}$ loss in projected length.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_0$ = \ansbox[1.3in]{$48.7\mydeg$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{The inverse problem.} You read the following phase settings out
+of the beamformer. The array is the course array, $kd = 173.2\mydeg$.
+
+\vspace{4pt}
+\begin{center}
+\begin{tabular}{l|cccccccc}
+$n$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
+$\phi_n$ (deg) & 0 & 260.7 & 161.4 & 62.1 & 322.8 & 223.5 & 124.2 & 24.9 \\
+\end{tabular}
+\end{center}
+\vspace{4pt}
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Difference neighboring elements, unwrap, and report the common step
+		and the value of $\Delta\phi$.
+		\begin{solution}[1.4in]
+		\eq{ \phi_2 - \phi_1 &= 161.4\mydeg - 260.7\mydeg = -99.3\mydeg \\
+		     \phi_1 - \phi_0 &= 260.7\mydeg \rightarrow 260.7\mydeg - 360\mydeg = -99.3\mydeg }
+		All seven differences reduce to $-99.3\mydeg$, and the ramp is
+		$\phi_n = -n\Delta\phi$, so $\Delta\phi = +99.3\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta\phi$ = \ansbox[1.3in]{$+99.3\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Recover the commanded steer angle.
+		\begin{solution}[1.2in]
+		\eq{ \sinp{\theta_0} &= \frac{\Delta\phi}{kd} = \frac{99.3\mydeg}{173.2\mydeg} = 0.573 \\
+		     \theta_0 &= \arcsin\lp 0.573\rp = 35.0\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_0$ = \ansbox[1.3in]{$+35.0\mydeg$}
+	\end{minipage}
+
+	\part Suppose the seven differences had come out as $-99.3\mydeg$ for six of
+	them and $-84\mydeg$ for one. State two things that could produce that
+	result, and what you would check first.
+		\begin{solution}[1.3in]
+		The array is not carrying a single uniform steering ramp. Either one
+		element has a calibration or cabling offset added to its steering phase,
+		or that channel's phase was written incorrectly, for example a wrapped
+		value entered without its whole turn. A taper affects amplitude and not
+		phase, so it is not a candidate. Check the per-element calibration offsets
+		first, then re-read the register value for that one element and compare it
+		with the commanded value.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The ADAR1000 sets phase on a $2.8125\mydeg$ grid. Give the value
+		element 1 actually takes and the resulting error.
+		\begin{solution}[1.3in]
+		\eq{ \frac{260.7\mydeg}{2.8125\mydeg} &= 92.69 \rightarrow 93\ \text{steps} \\
+		     \phi_1 &= 93\lp 2.8125\mydeg\rp = 261.6\mydeg }
+		The error is $+0.9\mydeg$, which is within half a step as expected. L26
+		works out what a grid of this size costs in sidelobe level and null depth.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\phi_1$ = \ansbox[1.3in]{$261.6\mydeg$}
+	\end{minipage}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}
