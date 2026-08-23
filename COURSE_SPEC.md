@@ -700,3 +700,21 @@ Pluto `rx_lo`, ADF4159 `frequency`); keep code excerpts short (≤ 15
 lines) and runnable in spirit — no invented attribute names. The course
 GUI is the deliverable interface; raw-Python excerpts exist to demystify
 it, not to replace it.
+
+## M7. Decisions added after the initial build (2026-08-23)
+
+- **Interferer sources are available.** Neil is procuring at least one spare
+  HB100 per classroom, so L28's MVDR procedure against a second source is a
+  student procedure, not an instructor demo.
+- **Monopulse is taught as the Module 4 lead-in, at the end of L28.** Scope:
+  sum and delta beams from the two digital subarray channels (the delta
+  null L28 already measures IS the monopulse delta beam), the error
+  function, and the GUI's Tracking mode (Lab preset 8). The backend's
+  error function is sign(Δphase)·(sum−delta)/(sum+delta) on the dB
+  channel readings. Verified sim numbers: delta-beam boresight null
+  −21.8 dBc with twin peaks near ±11°. Monopulse is enrichment beyond
+  objective 3.9: it appears on the L28 page and deck but NOT in the
+  L28 practice set, and the assessment does not test it. Framing: an
+  array that can form sum and delta simultaneously can measure angle from
+  a single look — which is what a tracking radar needs, and where
+  Module 4 begins.
