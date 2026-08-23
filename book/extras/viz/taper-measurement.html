@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taper measurement: what the PHASER sweep shows</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:12px; box-sizing:border-box; max-width:100%; }
+  canvas { display:block; width:100%; }
+  .controls { display:flex; flex-wrap:wrap; gap:12px 22px; align-items:center;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px;
+              padding:10px 14px; }
+  .ctl { display:flex; flex-wrap:wrap; align-items:center; gap:8px 9px;
+         font-size:14px; color:var(--ink); max-width:100%; }
+  .ctl label { white-space:nowrap; }
+  .ctl select { font:inherit; padding:3px 6px; border:1px solid var(--edge2);
+                border-radius:4px; background:#fff; color:var(--ink); }
+  .ctl input[type=range] { width:170px; max-width:38vw; min-width:0; accent-color:var(--mid); }
+  .ctl .val { font-variant-numeric:tabular-nums; min-width:3.4em; color:var(--navy); font-weight:600; }
+  .ctl.off { opacity:0.42; }
+  .pills { display:flex; flex-wrap:wrap; gap:8px; }
+  .pill { border:1px solid var(--edge2); background:#fff; border-radius:999px;
+          padding:5px 13px; font-size:14px; font-variant-numeric:tabular-nums;
+          color:var(--ink); white-space:nowrap; }
+  .pill b { font-weight:600; color:var(--navy); }
+  .pill.amber b { color:var(--amber); }
+  .pill.grn b { color:var(--grn); }
+  .note { font-size:12.5px; color:var(--ink3); line-height:1.45; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <canvas id="bars" aria-label="Element gain bars"></canvas>
+  <canvas id="plot" aria-label="Measured beam sweep"></canvas>
+
+  <div class="controls" id="panel">
+    <div class="ctl">
+      <label for="preset">Taper preset</label>
+      <select id="preset">
+        <option value="uniform" selected>Uniform</option>
+        <option value="hann">Hann</option>
+        <option value="blackman">Blackman</option>
+        <option value="cheby">Chebyshev</option>
+        <option value="custom">Custom</option>
+      </select>
+    </div>
+    <div class="ctl" id="edgeCtl">
+      <label for="edge">Edge attenuation</label>
+      <input type="range" id="edge" min="0" max="100" step="5" value="55">
+      <span class="val" id="edgeVal">55%</span>
+    </div>
+  </div>
+
+  <div class="pills">
+    <span class="pill">HPBW <b id="pHP">—</b></span>
+    <span class="pill amber">Peak drop <b id="pPk">—</b></span>
+    <span class="pill grn">\(\eta_t\) <b id="pEta">—</b></span>
+    <span class="pill">Highest sidelobe <b id="pSLL">—</b></span>
+  </div>
+
+  <p class="note">Sweep grid 2.8125° (the ADAR1000 phase LSB), noise floor 23 dB below the
+  uniform-taper peak. The thin grey trace is the frozen uniform reference.</p>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---- array model ------------------------------------------------------
+  const N = 8;                 // elements
+  const DL = 0.481;            // d / lambda  (d = 14 mm at 10.3 GHz)
+  const STEP = 2.8125;         // sweep step = phase LSB as a steer resolution
+  const FLOOR = -23;           // noise floor, dB below the uniform-taper peak
+  const VIEW = 60;             // plotted angle range, +/- deg
+  const DBMIN = -30, DBMAX = 3;
+
+  const PRESETS = {
+    uniform:  [100,100,100,100,100,100,100,100],
+    hann:     [ 12, 43, 77,100,100, 77, 43, 12],
+    blackman: [  6, 27, 66,100,100, 66, 27,  6],
+    cheby:    [  4, 23, 62,100,100, 62, 23,  4]
+  };
+
+  // Symmetric linear taper toward the ends ("Enforce Symmetric Taper" on):
+  // the end elements are pulled down by `e` percent, the rest interpolate.
+  function customGains(e) {
+    const g = [];
+    for (let n = 0; n < N; n++) {
+      const u = Math.abs(n - (N - 1) / 2) / ((N - 1) / 2);
+      g.push(Math.round(100 * (1 - (e / 100) * u)));
+    }
+    return g;
+  }
+
+  const grid = [];
+  for (let k = 0; k * STEP <= 180 + 1e-9; k++) grid.push(-90 + k * STEP);
+
+  // |AF| of the 8-element line array at one steer angle, weights a_n (linear)
+  function afMag(a, thDeg) {
+    const s = Math.sin(thDeg * Math.PI / 180);
+    let re = 0, im = 0;
+    for (let n = 0; n < N; n++) {
+      const p = 2 * Math.PI * DL * n * s;
+      re += a[n] * Math.cos(p);
+      im += a[n] * Math.sin(p);
+    }
+    return Math.hypot(re, im);
+  }
+  const UNI_PEAK = N;                       // |AF| of the uniform array at broadside
+
+  // Deterministic floor noise, so the trace is stable across redraws.
+  function noiseArray(seed) {
+    let x = seed, out = [];
+    for (let i = 0; i < grid.length; i++) {
+      x = (1103515245 * x + 12345) % 2147483648;
+      out.push(0.55 + 0.9 * (x / 2147483648));
+    }
+    return out;
+  }
+  const NOISE_A = noiseArray(20250823), NOISE_B = noiseArray(777);
+
+  // The trace the sweep produces: power relative to the uniform peak, in dB.
+  function sweep(gains, noise) {
+    const a = gains.map(g => g / 100);
+    const floorLin = Math.pow(10, FLOOR / 10);
+    const clean = [], meas = [];
+    for (let i = 0; i < grid.length; i++) {
+      const p = Math.pow(afMag(a, grid[i]) / UNI_PEAK, 2);
+      clean.push(10 * Math.log10(Math.max(p, 1e-12)));
+      meas.push(10 * Math.log10(p + floorLin * noise[i]));
+    }
+    return { clean: clean, meas: meas };
+  }
+
+  // -3 dB width read off the sampled trace, interpolating between samples.
+  function hpbw(db) {
+    let i = 0;
+    for (let k = 1; k < db.length; k++) if (db[k] > db[i]) i = k;
+    const lvl = db[i] - 3;
+    function cross(dir) {
+      let k = i;
+      while (k + dir >= 0 && k + dir < db.length && db[k + dir] > lvl) k += dir;
+      const k2 = k + dir;
+      if (k2 < 0 || k2 >= db.length) return grid[k];
+      const t = (lvl - db[k]) / (db[k2] - db[k]);
+      return grid[k] + t * (grid[k2] - grid[k]);
+    }
+    return { hp: cross(1) - cross(-1), left: cross(-1), right: cross(1),
+             peak: db[i], idx: i, peakAng: grid[i] };
+  }
+
+  // Highest sidelobe of the noiseless trace, in dB relative to its own peak.
+  function sidelobe(clean, edgeL, edgeR) {
+    const pk = Math.max.apply(null, clean);
+    let best = -999, bestAbs = -999, ang = 0;
+    for (let k = 1; k < clean.length - 1; k++) {
+      if (grid[k] > edgeL - 1 && grid[k] < edgeR + 1) continue;
+      if (clean[k] >= clean[k - 1] && clean[k] >= clean[k + 1]) {
+        if (clean[k] - pk > best) { best = clean[k] - pk; bestAbs = clean[k]; ang = grid[k]; }
+      }
+    }
+    return { rel: best, abs: bestAbs, ang: ang, buried: bestAbs < FLOOR + 1 };
+  }
+
+  function taperEff(gains) {
+    let s = 0, s2 = 0;
+    gains.forEach(function (g) { const a = g / 100; s += a; s2 += a * a; });
+    return (s * s) / (N * s2);
+  }
+
+  // ---- canvas plumbing --------------------------------------------------
+  const bars = document.getElementById("bars"), bctx = bars.getContext("2d");
+  const plot = document.getElementById("plot"), pctx = plot.getContext("2d");
+  const panel = document.getElementById("panel");
+  const selEl = document.getElementById("preset");
+  const edgeEl = document.getElementById("edge");
+  const edgeCtl = document.getElementById("edgeCtl");
+
+  function fit(cv, ctx, cssH) {
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = cv.parentNode.clientWidth - 24;   // .app padding
+    cv.style.height = cssH + "px";
+    cv.width = Math.max(1, Math.round(cssW * dpr));
+    cv.height = Math.max(1, Math.round(cssH * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { w: cssW, h: cssH };
+  }
+
+  // Course style: a real minus sign, not a hyphen, in every drawn number.
+  function neg(x) { return String(x).replace(/-/g, "\u2212"); }
+
+  function sans(ctx, px, weight) {
+    ctx.font = (weight || "") + " " + px + "px 'Inter',system-ui,-apple-system,sans-serif";
+  }
+
+  // ---- element-gain bars ------------------------------------------------
+  function drawBars(gains) {
+    const size = fit(bars, bctx, 132);
+    const W = size.w, H = size.h;
+    bctx.clearRect(0, 0, W, H);
+    const L = 44, R = 8, T = 20, B = 24;
+    const pw = W - L - R, ph = H - T - B;
+
+    bctx.strokeStyle = "#e3edf5"; bctx.lineWidth = 1;
+    [0, 50, 100].forEach(function (v) {
+      const y = T + ph * (1 - v / 100);
+      bctx.beginPath(); bctx.moveTo(L, y); bctx.lineTo(L + pw, y); bctx.stroke();
+      bctx.fillStyle = "#5b6573"; sans(bctx, 11); bctx.textAlign = "right";
+      bctx.fillText(v + "%", L - 7, y + 4);
+    });
+
+    const slot = pw / N, bw = Math.min(34, slot * 0.62);
+    for (let n = 0; n < N; n++) {
+      const cx = L + slot * (n + 0.5);
+      const h = ph * gains[n] / 100;
+      bctx.fillStyle = gains[n] >= 99 ? "#004a85" : "#0067b9";
+      bctx.fillRect(cx - bw / 2, T + ph - h, bw, h);
+      bctx.fillStyle = "#15202b"; sans(bctx, 11.5, "600"); bctx.textAlign = "center";
+      bctx.fillText(gains[n], cx, T + ph - h - 6);
+      bctx.fillStyle = "#5b6573"; sans(bctx, 11);
+      bctx.fillText("Rx" + (n + 1), cx, H - 7);
+    }
+    bctx.strokeStyle = "#8a929c";
+    bctx.beginPath(); bctx.moveTo(L, T + ph); bctx.lineTo(L + pw, T + ph); bctx.stroke();
+    bctx.fillStyle = "#15202b"; sans(bctx, 12, "600"); bctx.textAlign = "left";
+    bctx.fillText("Element gains", L, 12);
+  }
+
+  // ---- measured sweep ---------------------------------------------------
+  function drawPlot(state) {
+    const size = fit(plot, pctx, 320);
+    const W = size.w, H = size.h;
+    pctx.clearRect(0, 0, W, H);
+    const L = 48, R = 12, T = 14, B = 42;
+    const pw = W - L - R, ph = H - T - B;
+    const X = function (a) { return L + pw * (a + VIEW) / (2 * VIEW); };
+    const Y = function (d) { return T + ph * (DBMAX - d) / (DBMAX - DBMIN); };
+
+    // grid
+    pctx.strokeStyle = "#e3edf5"; pctx.lineWidth = 1;
+    for (let a = -VIEW; a <= VIEW; a += 15) {
+      pctx.beginPath(); pctx.moveTo(X(a), T); pctx.lineTo(X(a), T + ph); pctx.stroke();
+    }
+    for (let d = 0; d >= DBMIN; d -= 5) {
+      pctx.beginPath(); pctx.moveTo(L, Y(d)); pctx.lineTo(L + pw, Y(d)); pctx.stroke();
+    }
+    pctx.fillStyle = "#5b6573"; sans(pctx, 11); pctx.textAlign = "center";
+    for (let a = -VIEW; a <= VIEW; a += 15) pctx.fillText(neg(a), X(a), T + ph + 16);
+    pctx.textAlign = "right";
+    for (let d = 0; d >= DBMIN; d -= 5) pctx.fillText(neg(d), L - 7, Y(d) + 4);
+    pctx.fillStyle = "#15202b"; sans(pctx, 12); pctx.textAlign = "center";
+    pctx.fillText("Commanded steer angle (deg)", L + pw / 2, H - 8);
+    pctx.save();
+    pctx.translate(13, T + ph / 2); pctx.rotate(-Math.PI / 2);
+    pctx.fillText("Power rel. uniform peak (dB)", 0, 0);
+    pctx.restore();
+
+    // noise floor
+    pctx.strokeStyle = "#9aa5b1"; pctx.setLineDash([5, 4]); pctx.lineWidth = 1.2;
+    pctx.beginPath(); pctx.moveTo(L, Y(FLOOR)); pctx.lineTo(L + pw, Y(FLOOR)); pctx.stroke();
+    pctx.setLineDash([]);
+    sans(pctx, 11); pctx.textAlign = "left";
+    const nfw = pctx.measureText("noise floor").width;
+    pctx.fillStyle = "#fff";
+    pctx.fillRect(L + 3, Y(FLOOR) + 4, nfw + 6, 14);
+    pctx.fillStyle = "#5b6573";
+    pctx.fillText("noise floor", L + 6, Y(FLOOR) + 15);
+
+    function stroke(db, color, width) {
+      pctx.strokeStyle = color; pctx.lineWidth = width;
+      pctx.beginPath();
+      let started = false;
+      for (let i = 0; i < grid.length; i++) {
+        if (grid[i] < -VIEW || grid[i] > VIEW) continue;
+        const x = X(grid[i]), y = Y(Math.max(db[i], DBMIN));
+        if (!started) { pctx.moveTo(x, y); started = true; } else pctx.lineTo(x, y);
+      }
+      pctx.stroke();
+    }
+    stroke(state.ref.meas, "#9aa5b1", 1.3);     // frozen uniform reference
+    stroke(state.cur.meas, "#004a85", 2.2);
+
+    // HPBW marker
+    const m = state.hp;
+    const y3 = Y(m.peak - 3);
+    pctx.strokeStyle = "#3f7d34"; pctx.lineWidth = 1.6;
+    pctx.beginPath(); pctx.moveTo(X(m.left), y3); pctx.lineTo(X(m.right), y3); pctx.stroke();
+    [m.left, m.right].forEach(function (a) {
+      pctx.beginPath(); pctx.moveTo(X(a), y3 - 5); pctx.lineTo(X(a), y3 + 5); pctx.stroke();
+    });
+    const lab = m.hp.toFixed(1) + "°";
+    sans(pctx, 12, "600"); pctx.textAlign = "left";
+    const symW = MJ.ready ? MJ.width("\\theta_{HP}", "#3f7d34", 13) : 0;
+    const tw = pctx.measureText(" = " + lab).width;
+    let bx = X(m.right) + 10;
+    if (bx + symW + tw > L + pw) bx = X(m.left) - symW - tw - 10;
+    MJ.draw(pctx, "\\theta_{HP}", bx, y3, 13, "#3f7d34", "left");
+    pctx.fillStyle = "#3f7d34";
+    pctx.fillText(" = " + lab, bx + symW, y3 + 4);
+
+    // peak drop marker
+    if (state.drop < -0.2) {
+      pctx.strokeStyle = "#8a5a00"; pctx.lineWidth = 1.4; pctx.setLineDash([3, 3]);
+      pctx.beginPath(); pctx.moveTo(X(0), Y(0)); pctx.lineTo(X(0), Y(state.drop)); pctx.stroke();
+      pctx.setLineDash([]);
+      pctx.fillStyle = "#8a5a00"; sans(pctx, 12, "600"); pctx.textAlign = "left";
+      pctx.fillText(neg(state.drop.toFixed(1)) + " dB", X(0) + 7, Y(state.drop / 2) + 4);
+    }
+
+    // sidelobe marker
+    const sl = state.sl;
+    if (!sl.buried && Math.abs(sl.ang) <= VIEW) {
+      pctx.fillStyle = "#8a5a00";
+      pctx.beginPath(); pctx.arc(X(sl.ang), Y(sl.abs), 4, 0, 2 * Math.PI); pctx.fill();
+    }
+  }
+
+  // ---- state ------------------------------------------------------------
+  const refTrace = sweep(PRESETS.uniform, NOISE_B);
+
+  function currentGains() {
+    const p = selEl.value;
+    return p === "custom" ? customGains(+edgeEl.value) : PRESETS[p].slice();
+  }
+
+  function drawAll() {
+    const gains = currentGains();
+    const cur = sweep(gains, NOISE_A);
+    const m = hpbw(cur.meas);
+    const sl = sidelobe(cur.clean, m.left, m.right);
+    const eta = taperEff(gains);
+    // peak drop is read at the peak sample, which sits far above the floor
+    const drop = cur.clean[m.idx];
+    const state = { cur: cur, ref: refTrace, hp: m, sl: sl, drop: drop };
+
+    drawBars(gains);
+    drawPlot(state);
+
+    document.getElementById("pHP").textContent = m.hp.toFixed(1) + "°";
+    document.getElementById("pPk").textContent =
+      neg((drop > -0.05 ? "0.0" : drop.toFixed(1))) + " dB";
+    document.getElementById("pEta").textContent =
+      neg((eta > 0.999 ? "0.0" : (10 * Math.log10(eta)).toFixed(1))) + " dB";
+    document.getElementById("pSLL").textContent =
+      sl.buried ? "below floor" : neg(sl.rel.toFixed(1)) + " dBc";
+    edgeCtl.classList.toggle("off", selEl.value !== "custom");
+    edgeEl.disabled = selEl.value !== "custom";
+    document.getElementById("edgeVal").textContent = edgeEl.value + "%";
+  }
+
+  selEl.addEventListener("change", drawAll);
+  selEl.addEventListener("input", drawAll);
+  edgeEl.addEventListener("input", function () {
+    if (selEl.value !== "custom") selEl.value = "custom";
+    drawAll();
+  });
+  window.addEventListener("resize", drawAll);
+
+  MJ.setRedraw(drawAll);
+  MJ.onReady(function () { MJ.typeset(document.body); drawAll(); });
+  drawAll();
+})();
+</script>
+</body>
+</html>
