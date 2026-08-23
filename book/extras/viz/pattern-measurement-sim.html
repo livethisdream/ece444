@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hand-rotation pattern measurement — amplitude survives, angle does not</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { box-sizing:border-box; width:100%; max-width:820px; margin:0 auto; padding:10px 10px 12px; }
+  canvas { display:block; width:100%; border:1px solid var(--edge); border-radius:6px; background:#fff; }
+  canvas + canvas { margin-top:8px; }
+
+  .controls { margin-top:10px; display:flex; flex-wrap:wrap; gap:10px 18px;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px;
+              padding:9px 11px; }
+  .ctl { flex:1 1 210px; display:flex; flex-wrap:wrap; align-items:center; gap:7px 9px; font-size:13px; }
+  .ctl label { flex:0 0 auto; color:var(--ink); }
+  .ctl select { flex:1 1 90px; min-width:88px; font:inherit; font-size:13px; color:var(--navy);
+                background:#fff; border:1px solid var(--edge2); border-radius:5px; padding:3px 5px; }
+  .ctl button { flex:0 0 auto; font:inherit; font-size:13px; font-weight:600; color:#fff;
+                background:var(--mid); border:1px solid var(--navy); border-radius:5px;
+                padding:5px 14px; cursor:pointer; }
+  .ctl button:hover { background:var(--navy); }
+
+  .pills { margin-top:9px; display:flex; flex-wrap:wrap; gap:7px; }
+  .pill { border:1px solid var(--edge); border-radius:999px; padding:4px 11px;
+          font-size:13px; background:var(--bg); font-variant-numeric:tabular-nums; }
+  .pill i { font-style:normal; color:var(--ink3); }
+  .pill b { font-weight:600; color:var(--navy); }
+  .note { margin-top:9px; font-size:12px; color:var(--ink3); line-height:1.45; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <canvas id="cvPlan"></canvas>
+  <canvas id="cvTrace"></canvas>
+
+  <div class="controls" id="panel">
+    <div class="ctl">
+      <label for="steer">Steer Angle</label>
+      <select id="steer">
+        <option value="0" selected>0&deg; (broadside)</option>
+        <option value="30">30&deg;</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label for="prof">Rotation speed</label>
+      <select id="prof">
+        <option value="hand" selected>hand-like</option>
+        <option value="uniform">uniform</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <button id="replay" type="button">Replay walk</button>
+    </div>
+  </div>
+
+  <div class="pills">
+    <span class="pill"><i>main lobe =</i> <b id="pPeak">0.0 dB</b></span>
+    <span class="pill"><i>first SLL =</i> <b id="pSll">&minus;13.1 dBc</b></span>
+    <span class="pill"><i>source at</i> <b id="pAng">&minus;90&deg;</b></span>
+  </div>
+
+  <div class="note">N = 8, d = 14 mm, HB100 at 10.525 GHz, ideal element power
+  \(\cos\theta\). The main-lobe pill is referenced to the broadside peak, so the
+  30&deg; run reads the scan loss. Orange ticks under the trace mark the instants
+  the source passed each 30&deg;: with a hand-like walk they land unevenly, and
+  the lobe spacing stretches with them while the lobe amplitudes do not move.</div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var C = 3e8, F = 10.525e9, LAM = C / F, D = 0.014, N = 8;
+  var DL = D / LAM;                         // 0.4912
+  var FLOOR = -34, TOP = 4;                 // trace dB window
+  var WALK_MS = 7400;                       // one -90 -> +90 walk
+
+  var plan = document.getElementById('cvPlan'), pctx = plan.getContext('2d');
+  var trc = document.getElementById('cvTrace'), tctx = trc.getContext('2d');
+  var steerIn = document.getElementById('steer'), profIn = document.getElementById('prof');
+  var replayBtn = document.getElementById('replay');
+  var pPeak = document.getElementById('pPeak'), pSll = document.getElementById('pSll'),
+      pAng = document.getElementById('pAng');
+
+  var NAVY = '#004a85', MID = '#0067b9', GRN = '#3f7d34', AMB = '#8a5a00',
+      RED = '#b01e24', INK = '#15202b', INK3 = '#5b6573', EDGE = '#cddce9',
+      GRID = '#e6eef6';
+
+  /* ---------------- physics ----------------
+     Pattern = element factor x array factor (pattern multiplication).
+     Element POWER pattern is cos(theta) -- the projected-aperture rule that
+     sets the 0.6 dB scan loss at 30 deg -- so the element FIELD is
+     sqrt(cos theta). Referenced to the broadside peak, which is 0 dB. */
+  function afMag(th, t0) {
+    var psi = 2 * Math.PI * DL * (Math.sin(th * Math.PI / 180) - Math.sin(t0 * Math.PI / 180));
+    var den = N * Math.sin(psi / 2);
+    if (Math.abs(den) < 1e-9) return 1;
+    return Math.abs(Math.sin(N * psi / 2) / den);
+  }
+  function patternDb(th, t0) {
+    var ef = Math.max(Math.cos(th * Math.PI / 180), 1e-9);
+    return 20 * Math.log10(Math.max(afMag(th, t0), 1e-9)) + 10 * Math.log10(ef);
+  }
+
+  /* Monotone time warp on [0,1]: g(0)=0, g(1)=1,
+     g'(u) = 1 + sum c_k sin(2 pi k u). With sum|c_k| < 1 the walk never
+     reverses, so every angle is visited exactly once. */
+  var COEF = [0.45, 0.30, -0.18];
+  function warp(u, hand) {
+    if (!hand) return u;
+    var g = u, k;
+    for (k = 1; k <= COEF.length; k++) {
+      g += (COEF[k - 1] / (2 * Math.PI * k)) * (1 - Math.cos(2 * Math.PI * k * u));
+    }
+    return g;
+  }
+  function warpInv(g, hand) {          // bisection; warp is monotone
+    if (!hand) return g;
+    var lo = 0, hi = 1, m, i;
+    for (i = 0; i < 40; i++) { m = (lo + hi) / 2; if (warp(m, true) < g) lo = m; else hi = m; }
+    return (lo + hi) / 2;
+  }
+  function angleAt(u, hand) { return -90 + 180 * warp(u, hand); }
+
+  /* Reproducible amplitude noise: a small LCG, so the same walk replays the
+     same way and the pill values are stable. */
+  function noiseAt(i) {
+    var x = Math.sin(i * 12.9898 + 78.233) * 43758.5453;
+    return (x - Math.floor(x) - 0.5) * 0.30;      // about +/- 0.15 dB
+  }
+
+  /* ---------------- run state ---------------- */
+  var run = null;          // {t0, hand, samples:[{u,t,ang,db}], done}
+  var startTime = 0, raf = null;
+
+  function newRun() {
+    run = { t0: parseFloat(steerIn.value), hand: profIn.value === 'hand',
+            samples: [], done: false };
+    startTime = 0;
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(step);
+  }
+
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    var u = Math.min((ts - startTime) / WALK_MS, 1);
+    var last = run.samples.length ? run.samples[run.samples.length - 1].u : -1;
+    // sample on a fixed grid so the trace does not depend on frame rate
+    var grid = 900, i, uu, ang, db;
+    for (i = Math.floor(last * grid) + 1; i <= Math.floor(u * grid); i++) {
+      uu = i / grid;
+      ang = angleAt(uu, run.hand);
+      db = Math.max(patternDb(ang, run.t0), FLOOR) + noiseAt(i);
+      run.samples.push({ u: uu, ang: ang, db: db });
+    }
+    drawAll();
+    if (u >= 1) {
+      // hold the finished trace and its measurement lines; the walk repeats
+      // only when the student asks for it
+      run.done = true;
+      raf = null;
+      drawAll();
+    } else {
+      raf = requestAnimationFrame(step);
+    }
+  }
+
+  /* first sidelobe measured off the samples collected so far: the largest
+     sample lying between the first and second array-factor nulls. */
+  function measure() {
+    var w = LAM / (N * D), s0 = Math.sin(run.t0 * Math.PI / 180);
+    var peak = -999, sll = -999, i, s, u;
+    for (i = 0; i < run.samples.length; i++) {
+      s = run.samples[i];
+      if (s.db > peak) peak = s.db;
+      u = Math.abs(Math.sin(s.ang * Math.PI / 180) - s0);
+      if (u > w && u < 2 * w && s.db > sll) sll = s.db;
+    }
+    return { peak: peak, sll: sll };
+  }
+
+  /* ---------------- canvases ---------------- */
+  function sizeCanvas(cv, ctx, ratio, minH, maxH) {
+    var w = cv.clientWidth || cv.parentNode.clientWidth || 700;
+    var h = Math.round(Math.max(minH, Math.min(maxH, w * ratio)));
+    cv.style.height = h + 'px';
+    var dpr = window.devicePixelRatio || 1;
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { w: w, h: h };
+  }
+
+  function drawPlan() {
+    var sz = sizeCanvas(plan, pctx, 0.42, 160, 300), w = sz.w, h = sz.h;
+    var small = w < 470;
+    var cx = w / 2, cy = h - 26, R = Math.min(cy - 20, w / 2 - 30);
+    pctx.clearRect(0, 0, w, h);
+    pctx.font = (small ? 10 : 11.5) + "px 'Inter',system-ui,sans-serif";
+    pctx.lineJoin = 'round'; pctx.lineCap = 'round';
+
+    function P(r, a) {
+      var t = a * Math.PI / 180;
+      return [cx + r * Math.sin(t), cy - r * Math.cos(t)];
+    }
+
+    // the arc the source walks
+    pctx.strokeStyle = EDGE; pctx.lineWidth = 1.4;
+    pctx.setLineDash([5, 4]);
+    pctx.beginPath(); pctx.arc(cx, cy, R, Math.PI, 2 * Math.PI); pctx.stroke();
+    pctx.setLineDash([]);
+
+    // angle ticks every 30 deg
+    pctx.fillStyle = INK3; pctx.textAlign = 'center'; pctx.textBaseline = 'middle';
+    var a, p1, p2, lab;
+    for (a = -90; a <= 90; a += 30) {
+      p1 = P(R - 5, a); p2 = P(R + 5, a);
+      pctx.strokeStyle = EDGE; pctx.lineWidth = 1.2;
+      pctx.beginPath(); pctx.moveTo(p1[0], p1[1]); pctx.lineTo(p2[0], p2[1]); pctx.stroke();
+      if (small && (a % 90 !== 0)) continue;
+      lab = P(R + 15, a);
+      pctx.fillText((a > 0 ? '+' : a < 0 ? '−' : '') + Math.abs(a) + '°',
+                    lab[0], Math.min(lab[1], cy - 4));
+    }
+
+    // the commanded beam, drawn as the pattern's main lobe
+    var t0 = run.t0, half = 6.6, tip = P(R * 0.72, t0),
+        e1 = P(R * 0.68, t0 - half), e2 = P(R * 0.68, t0 + half);
+    pctx.fillStyle = 'rgba(0,74,133,0.26)';
+    pctx.beginPath();
+    pctx.moveTo(cx, cy); pctx.lineTo(e1[0], e1[1]);
+    pctx.quadraticCurveTo(tip[0], tip[1], e2[0], e2[1]);
+    pctx.closePath(); pctx.fill();
+    pctx.strokeStyle = NAVY; pctx.lineWidth = 1.5; pctx.stroke();
+
+    // the 8-element array
+    var i, ew = Math.max(4, R * 0.035), gap = ew * 0.55,
+        tot = N * ew + (N - 1) * gap, x0 = cx - tot / 2;
+    pctx.fillStyle = NAVY;
+    for (i = 0; i < N; i++) pctx.fillRect(x0 + i * (ew + gap), cy - 9, ew, 9);
+    pctx.strokeStyle = NAVY; pctx.lineWidth = 3;
+    pctx.beginPath(); pctx.moveTo(cx - tot / 2 - 4, cy + 2); pctx.lineTo(cx + tot / 2 + 4, cy + 2); pctx.stroke();
+
+    // the source, where it is now
+    var cur = run.samples.length ? run.samples[run.samples.length - 1] : { ang: -90 };
+    var sp = P(R, cur.ang);
+    pctx.strokeStyle = 'rgba(176,30,36,0.30)'; pctx.lineWidth = 1.1;
+    pctx.beginPath(); pctx.moveTo(cx, cy); pctx.lineTo(sp[0], sp[1]); pctx.stroke();
+    pctx.fillStyle = RED;
+    pctx.beginPath(); pctx.arc(sp[0], sp[1], small ? 5 : 6.5, 0, 2 * Math.PI); pctx.fill();
+
+    // captions
+    pctx.fillStyle = INK3; pctx.textAlign = 'left'; pctx.textBaseline = 'top';
+    pctx.fillText('HB100 on the arc, about 1 m out', 6, 4);
+    pctx.textAlign = 'right';
+    pctx.fillText('beam fixed at ' + (t0 > 0 ? '+' : '') + t0 + '°', w - 6, 4);
+  }
+
+  var M = { l: 50, r: 14, t: 12, b: 46 };
+
+  function drawTrace() {
+    var sz = sizeCanvas(trc, tctx, 0.40, 190, 300), w = sz.w, h = sz.h;
+    var small = w < 470;
+    M.l = small ? 38 : 50; M.b = small ? 42 : 46;
+    var x0 = M.l, x1 = w - M.r, y0 = M.t, y1 = h - M.b;
+    var X = function (u) { return x0 + u * (x1 - x0); };
+    var Y = function (db) { return y1 - (db - FLOOR) / (TOP - FLOOR) * (y1 - y0); };
+
+    tctx.clearRect(0, 0, w, h);
+    tctx.font = (small ? 10 : 11.5) + "px 'Inter',system-ui,sans-serif";
+    tctx.lineJoin = 'round'; tctx.lineCap = 'round';
+
+    // grid
+    tctx.strokeStyle = GRID; tctx.lineWidth = 1;
+    var db, i;
+    for (db = 0; db >= FLOOR; db -= 10) {
+      tctx.beginPath(); tctx.moveTo(x0, Y(db)); tctx.lineTo(x1, Y(db)); tctx.stroke();
+    }
+    for (i = 1; i < 8; i++) {
+      tctx.beginPath(); tctx.moveTo(X(i / 8), y0); tctx.lineTo(X(i / 8), y1); tctx.stroke();
+    }
+    tctx.strokeStyle = EDGE; tctx.lineWidth = 1.2;
+    tctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+
+    tctx.fillStyle = INK3; tctx.textAlign = 'right'; tctx.textBaseline = 'middle';
+    for (db = 0; db >= FLOOR; db -= 10) tctx.fillText(String(db), x0 - 6, Y(db));
+
+    tctx.fillStyle = INK; tctx.textAlign = 'center'; tctx.textBaseline = 'bottom';
+    tctx.fillText('elapsed time', (x0 + x1) / 2, h - 3);
+    tctx.save();
+    tctx.translate(small ? 11 : 13, (y0 + y1) / 2); tctx.rotate(-Math.PI / 2);
+    tctx.textBaseline = 'top';
+    tctx.fillText('amplitude (dBc)', 0, 0);
+    tctx.restore();
+
+    // ticks at the instants the source passed each 30 deg
+    var a, uu, xx;
+    tctx.textAlign = 'center'; tctx.textBaseline = 'top';
+    for (a = -60; a <= 60; a += 30) {
+      uu = warpInv((a + 90) / 180, run.hand);
+      xx = X(uu);
+      tctx.strokeStyle = AMB; tctx.lineWidth = 2;
+      tctx.beginPath(); tctx.moveTo(xx, y1); tctx.lineTo(xx, y1 + 7); tctx.stroke();
+      if (small && (a % 60 !== 0)) continue;
+      tctx.fillStyle = AMB;
+      tctx.fillText((a > 0 ? '+' : a < 0 ? '−' : '') + Math.abs(a) + '°', xx, y1 + 9);
+    }
+
+    // the trace painted so far
+    if (run.samples.length > 1) {
+      tctx.strokeStyle = NAVY; tctx.lineWidth = 1.8;
+      tctx.beginPath();
+      for (i = 0; i < run.samples.length; i++) {
+        var s = run.samples[i], px = X(s.u), py = Y(Math.max(s.db, FLOOR));
+        if (i === 0) tctx.moveTo(px, py); else tctx.lineTo(px, py);
+      }
+      tctx.stroke();
+      // the live pen
+      var last = run.samples[run.samples.length - 1];
+      if (!run.done) {
+        tctx.fillStyle = RED;
+        tctx.beginPath();
+        tctx.arc(X(last.u), Y(Math.max(last.db, FLOOR)), 3.2, 0, 2 * Math.PI);
+        tctx.fill();
+      }
+    }
+
+    // once the walk is finished, mark what was measured
+    if (run.done) {
+      var m = measure();
+      tctx.save();
+      tctx.setLineDash([4, 4]); tctx.lineWidth = 1.1;
+      tctx.strokeStyle = GRN;
+      tctx.beginPath(); tctx.moveTo(x0, Y(m.peak)); tctx.lineTo(x1, Y(m.peak)); tctx.stroke();
+      tctx.strokeStyle = AMB;
+      tctx.beginPath(); tctx.moveTo(x0, Y(m.sll)); tctx.lineTo(x1, Y(m.sll)); tctx.stroke();
+      tctx.restore();
+      tctx.textAlign = 'left'; tctx.textBaseline = 'bottom';
+      tctx.fillStyle = GRN;
+      tctx.fillText('main lobe', x0 + 5, Y(m.peak) - 3);
+      tctx.fillStyle = AMB;
+      tctx.fillText('first sidelobe', x0 + 5, Y(m.sll) - 3);
+    }
+  }
+
+  function drawReadouts() {
+    var m = measure();
+    var cur = run.samples.length ? run.samples[run.samples.length - 1] : { ang: -90 };
+    pPeak.textContent = run.samples.length
+      ? (m.peak >= 0 ? '' : '−') + Math.abs(m.peak).toFixed(1) + ' dB' : '--';
+    pSll.textContent = (m.sll > -900)
+      ? '−' + Math.abs(m.sll - m.peak).toFixed(1) + ' dBc' : 'not yet';
+    pAng.textContent = (cur.ang > 0 ? '+' : cur.ang < 0 ? '−' : '') +
+                       Math.abs(cur.ang).toFixed(0) + '°';
+  }
+
+  function drawAll() { drawPlan(); drawTrace(); drawReadouts(); }
+
+  steerIn.addEventListener('change', newRun);
+  profIn.addEventListener('change', newRun);
+  replayBtn.addEventListener('click', newRun);
+  window.addEventListener('resize', function () { if (run) drawAll(); });
+
+  if (window.MJ) {
+    MJ.setRedraw(function () { if (run) drawAll(); });
+    MJ.onReady(function () { MJ.typeset(document.getElementById('app')); if (run) drawAll(); });
+  }
+  newRun();
+})();
+</script>
+</body>
+</html>

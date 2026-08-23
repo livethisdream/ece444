@@ -1,0 +1,362 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L23 practice set (Antenna Pattern Lab) -- reading a hand-rotated pattern
+% trace: dBc extraction, why a time axis cannot be calibrated to angle, scan
+% loss and sidelobe asymmetry, far-field radius, and what a chamber removes.
+
+\fullwidth{\textbf{Learning Objective 3.6: } I can distinguish between array factor
+and true antenna pattern and account for element pattern effects.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+\question \textbf{Reading dBc off a Tracking-tab trace.} A cadet walks an HB100
+around the PHASER on a $1\ \m$ arc with the beam held at broadside and records the
+Signal vs Time trace. The three lobe peaks read $-18.4\ \text{dBFS}$ (main lobe),
+$-31.2\ \text{dBFS}$ (left first sidelobe), and $-29.9\ \text{dBFS}$ (right first
+sidelobe).
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Convert both sidelobe readings to dBc.
+		\begin{solution}[1.1in]
+		A dBc value is the lobe peak referred to the main-lobe peak, so subtract:
+		\eq{ L_{\text{left}} &= -31.2 - (-18.4) = -12.8\ \text{dBc} \\
+		     L_{\text{right}} &= -29.9 - (-18.4) = -11.5\ \text{dBc} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$L_{\text{left}}$ = \ansbox[1.25in]{$-12.8$ dBc}
+		\\[12pt]
+		$L_{\text{right}}$ = \ansbox[1.25in]{$-11.5$ dBc}
+	\end{minipage}
+
+	\part The cadet's partner raises \textbf{Rx Gain} by $6\ \db$ and repeats the
+	walk. State what happens to the three dBFS readings and what happens to the
+	two dBc values, and explain why the two answers differ.
+		\begin{solution}[1.3in]
+		All three dBFS readings rise by about $6\ \db$ as well, because the gain change
+		multiplies every received sample by the same factor. The dBc values do not
+		change, because each one is a difference between two readings taken through
+		the same gain setting and the common term cancels in the subtraction. This
+		is why a pattern is reported as a ratio to its own peak: the result does not
+		depend on the receiver's absolute scale, which is not calibrated here anyway.
+		\end{solution}
+
+	\part A uniform 8-element array has its first sidelobes at $-13$ dBc. Comment
+	on the pair measured above: is this array uniformly illuminated, and what
+	accounts for the $1.3\ \db$ spread between the two sides?
+		\begin{solution}[1.4in]
+		Both readings straddle $-13$ dBc within about a decibel and a half, which is
+		consistent with uniform illumination measured in a room. A tapered
+		illumination would put the sidelobes at least $17\ \db$ down, and a badly
+		calibrated array would show a much larger imbalance. The $1.3\ \db$ spread
+		between left and right comes from the measurement rather than the array:
+		classroom multipath adds roughly $\pm 1\ \db$ of ripple, and the walking speed
+		and radius were not identical on the two halves of the arc. The array factor
+		of a symmetric uniform array is symmetric at broadside, so the asymmetry has
+		no home in the physics of the array itself.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Why the time axis is not an angle axis.} The same trace runs from
+$t = 0.00\ \text{s}$, when the source was at $-90\mydeg$, to $t = 7.40\ \text{s}$,
+when it reached $+90\mydeg$. The main-lobe peak lands at $t = 3.10\ \text{s}$. The
+beam was commanded to broadside.
+
+\begin{parts}
+
+	\part Explain why the lobe \emph{amplitudes} on this trace are usable while the
+	lobe \emph{angles} are not.
+		\begin{solution}[1.5in]
+		The amplitude recorded at any instant is the pattern evaluated at whatever
+		angle the source occupied at that instant, and that value does not depend on
+		how fast the source was moving. Walking slowly through a lobe spends more
+		samples on it and draws it wider on the plot, but the height each sample
+		reaches is unchanged. The angle, in contrast, is never recorded at all. The
+		x-axis stores elapsed time, and recovering angle from time requires knowing
+		the walking speed at every instant, which nothing in the measurement captures.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Assume a constant walking speed and convert the main-lobe time to an
+		angle. Compare it against the commanded beam angle and state the error.
+		\begin{solution}[1.2in]
+		A constant speed maps time linearly onto the $180\mydeg$ swept:
+		\eq{ \theta &= -90\mydeg + 180\mydeg \lp \frac{3.10}{7.40} \rp \\
+		            &= -90\mydeg + 75.4\mydeg = -14.6\mydeg }
+		The beam was commanded to $0\mydeg$, so the linear map is in error by
+		$14.6\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta$ = \ansbox[1.25in]{$-14.6\mydeg$}
+		\\[12pt]
+		error = \ansbox[1.25in]{$14.6\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The true half-power beamwidth is $13.1\mydeg$. If the hand moves as
+		much as $30\%$ faster or slower than its average while crossing the main
+		lobe, give the range of beamwidths a constant-speed conversion would report.
+		\begin{solution}[1.2in]
+		A hand moving $30\%$ fast spends $1/1.30$ of the expected time in the lobe,
+		and a constant-speed map converts that shortened interval into a narrower
+		angle. A hand moving $30\%$ slow does the opposite:
+		\eq{ \theta_{\text{fast}} &= \frac{13.1\mydeg}{1.30} = 10.1\mydeg \\
+		     \theta_{\text{slow}} &= \frac{13.1\mydeg}{0.70} = 18.7\mydeg }
+		The reported beamwidth spans nearly a factor of two on a pattern that never
+		changed.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		range = \ansbox[1.4in]{$10.1\mydeg$ to $18.7\mydeg$}
+	\end{minipage}
+
+	\part Name the piece of range hardware that removes this error and state what
+	it records that the hand walk does not.
+		\begin{solution}[1.2in]
+		A turntable with a shaft encoder. The turntable carries the antenna through a
+		commanded rotation, and the encoder tags every recorded sample with the
+		angular position it was taken at, typically to a small fraction of a degree.
+		The measurement then stores angle directly instead of inferring it from time,
+		so no assumption about rotation speed is needed and a non-uniform rotation
+		costs nothing.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Scan loss and sidelobe asymmetry.} The projected-aperture rule
+puts the peak power gain of a steered array at $\cos\theta_0$ relative to broadside.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the predicted peak drop at steer angles of $30\mydeg$,
+		$45\mydeg$, and $60\mydeg$.
+		\begin{solution}[1.3in]
+		The rule applies to power, so the drop in dB is $10\mylog{\cos\theta_0}$:
+		\eq{ 30\mydeg&: \ 10\mylog{0.866} = -0.6\ \db \\
+		     45\mydeg&: \ 10\mylog{0.707} = -1.5\ \db \\
+		     60\mydeg&: \ 10\mylog{0.500} = -3.0\ \db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$30\mydeg$ = \ansbox[1.1in]{$-0.6\ \db$}
+		\\[10pt]
+		$45\mydeg$ = \ansbox[1.1in]{$-1.5\ \db$}
+		\\[10pt]
+		$60\mydeg$ = \ansbox[1.1in]{$-3.0\ \db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A broadside walk peaks at $-18.4\ \text{dBFS}$ and a $30\mydeg$ walk
+		peaks at $-19.3\ \text{dBFS}$. Give the measured scan loss, and state whether
+		one pair of walks resolves it given $\pm 0.5\ \db$ of run-to-run scatter.
+		\begin{solution}[1.3in]
+		\eq{ \Delta = -19.3 - (-18.4) = -0.9\ \db }
+		The measured $0.9\ \db$ sits $0.3\ \db$ from the predicted value of $0.6\ \db$ and well inside
+		the $\pm 0.5\ \db$ scatter of a hand walk. One pair of runs is therefore
+		consistent with the prediction but does not resolve it: the same pair of
+		numbers would also be consistent with a scan loss anywhere between about
+		$0.4$ and $1.4\ \db$ of scan loss. Averaging several walks at each steer angle narrows the
+		scatter enough to make the comparison worth reporting.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta$ = \ansbox[1.25in]{$-0.9\ \db$}
+	\end{minipage}
+
+	\part The measured $30\mydeg$ trace shows first sidelobes of $-12.2$ dBc on the
+	low-angle side and $-15.2$ dBc on the high-angle side. Explain why they are
+	unequal, given that the array factor alone would make them equal.
+		\begin{solution}[1.4in]
+		The array factor of a uniformly excited array is a function of
+		$\sin\theta - \sin\theta_0$, so its sidelobes are equal in that variable and
+		the two first sidelobes of a steered beam carry the same array-factor height.
+		The radiated pattern is the array factor multiplied by the element factor,
+		and the element factor falls off monotonically away from broadside. The
+		high-angle sidelobe near $+59\mydeg$ therefore sits where the element pattern
+		is much weaker than at the low-angle sidelobe near $+8\mydeg$, and the
+		element factor pulls it down by the difference. Asymmetry in a steered
+		pattern is evidence of the element factor, not of a fault in the array.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Real patch elements follow a power pattern nearer
+		$\cos^{1.4}\theta$ than $\cos\theta$. Recompute the $60\mydeg$ scan loss and
+		state how much worse it is than the ideal-element bound.
+		\begin{solution}[1.2in]
+		\eq{ 10\mylog{\cos^{1.4} 60\mydeg} &= 14\mylog{0.500} \\ &= -4.2\ \db }
+		That is $1.2\ \db$ worse than the $-3.0\ \db$ ideal-element bound. The
+		$\cos\theta$ rule is a best case set by the projected aperture alone; a real
+		element's own pattern adds to it, and a link budget that scans to $60\mydeg$
+		should carry the larger number.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		loss = \ansbox[1.25in]{$-4.2\ \db$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{How far out is far enough.} The PHASER's 8 elements are spaced
+$14\ \text{mm}$ apart, so the aperture spans $D = 98\ \text{mm}$ between the outer
+element centers. The HB100 runs at $10.525\ \ghz$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the far-field distance for this aperture and state whether the
+		$1\ \m$ arc used in lab is far enough.
+		\begin{solution}[1.3in]
+		\eq{ \lambda &= \frac{3\times 10^8}{10.525\times 10^9} = 0.0285\ \m \\
+		     r &\ge \frac{2D^2}{\lambda} = \frac{2(0.098)^2}{0.0285} = 0.67\ \m }
+		The $1\ \m$ arc is comfortably outside the $0.67\ \m$ boundary, so the pattern has settled
+		into its far-field shape everywhere along the walk.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$r$ = \ansbox[1.25in]{$0.67\ \m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A Ku-band panel with a $0.200\ \m$ aperture is to be measured at
+		$15.0\ \ghz$. Find its far-field distance.
+		\begin{solution}[1.2in]
+		\eq{ \lambda &= \frac{3\times 10^8}{15.0\times 10^9} = 0.0200\ \m \\
+		     r &\ge \frac{2(0.200)^2}{0.0200} = 4.00\ \m }
+		Doubling the aperture and halving the wavelength pushes the requirement out
+		by a factor of eight.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$r$ = \ansbox[1.25in]{$4.00\ \m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The Ku-band panel is measured on the same $1.0\ \m$ classroom arc anyway.
+		Find the phase error across the aperture edge and compare it against the
+		$22.5\mydeg$ tolerance behind the far-field criterion.
+		\begin{solution}[1.3in]
+		The extra path to the aperture edge relative to its center is
+		$\Delta \approx D^2/8r$, and the phase error is $360\mydeg\Delta/\lambda$:
+		\eq{ \Delta &= \frac{(0.200)^2}{8(1.0)} = 0.005\ \m \\
+		     \Delta\phi &= \frac{360\mydeg (0.005)}{0.0200} = 90\mydeg }
+		That is four times the $22.5\mydeg$ the criterion allows.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta\phi$ = \ansbox[1.25in]{$90\mydeg$}
+	\end{minipage}
+
+	\part Describe what a $90\mydeg$ edge phase error does to the measured pattern,
+	and say which pattern feature it corrupts worst.
+		\begin{solution}[1.4in]
+		The edges of the aperture arrive out of phase with the center, so the
+		measurement no longer sees a plane wave and the aperture is effectively
+		defocused. The main lobe broadens and its peak drops, but the damage is worst
+		in the nulls and the sidelobes: the cancellation that produces a deep null
+		depends on precise phase alignment across the aperture, so the nulls fill in
+		and the sidelobes read several decibels high. A sidelobe level measured this
+		way is pessimistic, and a null depth measured this way is meaningless.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Classroom against chamber.} The lab trace carries about
+$\pm 1\ \db$ of ripple from room reflections adding to the direct path.
+
+\begin{parts}
+
+	\part List which of the four hand-measurement artifacts from the lab an
+	anechoic chamber removes, and which one it does not remove by itself.
+		\begin{solution}[1.5in]
+		A chamber removes the reflection artifact directly: absorber on every surface
+		leaves only the direct path, so the ripple disappears. A chamber's fixtures
+		also remove the angle error and the amplitude instability, because the
+		antenna sits on an encoded turntable and the source is bolted at a fixed
+		range rather than carried. The far-field condition is not removed by the
+		absorber at all; it is a geometric requirement on the separation distance,
+		and a chamber satisfies it only if the chamber is long enough for the
+		aperture and frequency being measured. A large antenna in a short chamber has
+		the same problem as a large antenna in a classroom.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A single reflected path of relative amplitude $\rho$ adds to a direct
+		path of amplitude $1$. Find the $\rho$ that produces a $+1\ \db$ peak in the
+		received amplitude, and express it in dB.
+		\begin{solution}[1.3in]
+		The two paths add in phase at the ripple peak:
+		\eq{ 20\mylog{1+\rho} &= 1.0\ \db \\
+		     1+\rho &= 10^{0.05} = 1.122 \\
+		     \rho &= 0.122 \ \rightarrow \ -18.3\ \db }
+		A reflection only $18\ \db$ below the direct path is enough to move the
+		reading by a decibel, which is why room reflections matter at levels that
+		sound negligible.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\rho$ = \ansbox[1.25in]{$0.122 = -18.3\ \db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The main-lobe peak and the sidelobe peak each carry their own
+		$\pm 1\ \db$ of ripple. Give the worst-case uncertainty on a sidelobe level
+		reported in dBc, and give the range a true $-13$ dBc sidelobe could read.
+		\begin{solution}[1.2in]
+		A dBc value is a difference of two readings, and in the worst case the two
+		errors have opposite signs and add:
+		\eq{ \pm 1\ \db + \pm 1\ \db = \pm 2\ \db }
+		A true $-13$ dBc sidelobe can therefore be reported anywhere from $-11$ to
+		$-15$ dBc without anything being wrong with the array.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		uncertainty = \ansbox[1.1in]{$\pm 2\ \db$}
+		\\[12pt]
+		range = \ansbox[1.25in]{$-11$ to $-15$ dBc}
+	\end{minipage}
+
+	\part A customer requires written proof that this array's sidelobes are below
+	$-25$ dBc. State whether the classroom measurement can support that claim, and
+	give the two reasons that decide it.
+		\begin{solution}[1.4in]
+		It cannot. The first reason is the uncertainty computed above: a $\pm 2\ \db$
+		window on every dBc reading cannot certify a level that must sit below a
+		specific number, because a measured $-26$ dBc could be a true $-24$ dBc. The
+		second reason is dynamic range. The electrical sweep's noise floor sits about
+		$23\ \db$ below the peak, so a $-25$ dBc sidelobe is buried in the floor and
+		there is nothing to read. Both problems are what a chamber and a calibrated
+		receiver are for, and the claim needs a range measurement.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}
