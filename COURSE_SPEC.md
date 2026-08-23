@@ -703,6 +703,14 @@ it, not to replace it.
 
 ## M7. Decisions added after the initial build (2026-08-23)
 
+- **The GUI's Chebyshev preset stays as-is.** Its ≈ −70 dB-class design has
+  sidelobes far below the sweep's dynamic range, and no shallower preset
+  fixes that (even a −30 dB design sits ~11 dB under the floor). L24/L25
+  teach it honestly — verify its HPBW (24.3°), see the equal ripple in the
+  L24 widget — and that treatment is the decision. Any added sidelobe
+  transparency happens in the phaser repo (Neil may open a ToDo there),
+  not by changing course material.
+
 - **Interferer sources are available.** Neil is procuring at least one spare
   HB100 per classroom, so L28's MVDR procedure against a second source is a
   student procedure, not an instructor demo.
