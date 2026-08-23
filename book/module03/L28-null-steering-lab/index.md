@@ -23,7 +23,9 @@ three procedures, in increasing order of how much the array does for itself — 
 static notch you compute yourself, a boresight null you get for free by
 subtracting the two digital channels, and an adaptive beamformer that finds its
 own null from the received data. The three together are the whole null-steering
-toolbox, and the last one is the capstone problem in miniature.
+toolbox, and the last one is the capstone problem in miniature. The lesson closes
+on that same difference beam put to a different use, measuring a target's angle
+from a single look, which is where Module 4 begins.
 
 ## Part 1: What Lesson 27 computed
 
@@ -91,7 +93,7 @@ signal does.
 | :-- | :-- |
 | ADALM-PHASER (CN0566) + Raspberry Pi + ADALM-Pluto | powered, on the lab network |
 | HB100 Doppler module | the target source, on boresight, at least $2\ \text{m}$ out |
-| Second HB100 or X-band source | procedure C only; see the note there |
+| Second HB100 | the interferer for procedure C; one per kit |
 | Course Phaser GUI | `http://phaser.local:8080` in a browser |
 
 Bring the array up the way every Module 3 lab starts. Set Signal Freq to the
@@ -200,10 +202,10 @@ null, and the beamformer never has to be told where it is.
 2. Press **Start** with only the boresight HB100 running. The pattern keeps its
    main lobe on boresight and looks much like the manual sum beam. With nothing
    to reject, MVDR has nothing to do.
-3. Introduce a second X-band source off to one side — a second HB100 held at
-   roughly $+30^\circ$, and stronger than the target if you can manage it, about
-   $10$ dB. Sweep again with Mode set to Manual, then with Mode set to MVDR, and
-   compare the two traces.
+3. Have your partner hold the kit's second HB100 off to one side, at roughly
+   $+30^\circ$, and bring it close enough to run about $10$ dB stronger than the
+   boresight source. Sweep again with Mode set to Manual, then with Mode set to
+   MVDR, and compare the two traces.
 
 The manual beamformer is captured by the interferer: with $10$ dB in its favour,
 the second source dominates the received power and the trace peaks toward it.
@@ -222,9 +224,8 @@ plot.
 ```{note}
 **No hardware?** Simulation mode (`python phaser_headless.py --sim`) runs
 procedures A and B exactly as written — the weights, the notch, and the
-difference null are all in the physics model. It carries only one source, fixed
-at boresight, so procedure C has no simulated equivalent; your instructor will
-run that demonstration.
+difference null are all in the physics model. It carries a single source fixed at
+boresight, so procedure C and the tracking run in Part 7 need the bench.
 ```
 
 The widget below is the two-channel digital layer on its own, with the analog
@@ -261,7 +262,7 @@ at the interferer's angle.
 | Null depth | noise-floor-limited here, about $20\text{-}22$ dB | covariance-limited, $17\text{-}19$ dB here |
 | Where it wins | a known, fixed direction; full aperture control | unknown or moving interference |
 
-The two rows in the middle are the trade. Manual null steering has eight degrees
+That is the trade. Manual null steering has eight degrees
 of freedom and can place several nulls at once, but every one of them is your
 arithmetic, computed for a geometry you assumed. MVDR has two degrees of freedom
 on this board — one constraint and one null — and it finds that null itself, from
@@ -270,12 +271,75 @@ adaptive beamforming has both advantages at once; on the PHASER you can see
 precisely what the hybrid architecture costs, because the analog sums destroyed
 the per-element information before the algorithm ever saw it.
 
-That is the end of Module 3. Module 5's capstone is this lab with the target
-moving: track a maneuvering target with the sum and difference beams while an
-adaptive null holds a jammer down, which is procedures B and C running at the
-same time.
+Module 5's capstone is this lab with the target moving: track a maneuvering
+target with the sum and difference beams while an adaptive null holds a jammer
+down, which is procedures B and C running at the same time.
 
-## Part 7: Deliverables
+## Part 7: Monopulse — measuring angle with two beams
+
+Every measurement so far has come from a sweep. The array steps its commanded
+angle across the field of view, records power at each step, and you read the
+pattern off the trace. A sweep takes time, and a tracking radar does not have it:
+by the time the beam has stepped across and come back, a maneuvering target has
+moved. **Monopulse** is the answer, and you have already built half of it.
+
+The difference beam from Part 4 is the delta channel of a monopulse pair. Form
+both beams at once — add the two subarray channels for $\Sigma$, subtract them
+for $\Delta$ — and the pair carries angle information that neither beam carries
+alone. The sum beam is flat at its peak, so its level barely changes as the
+target drifts a degree off axis. The delta beam is zero on boresight and climbs
+steeply out of that null, so its level changes a great deal over the same degree.
+Divide one by the other and the small change becomes a large, readable number.
+
+<img src="../../viz/img/L28-monopulse.svg"
+     alt="Sum and delta channel levels, and the signed error function their ratio produces"
+     style="max-width: 760px; width: 100%; display: block; margin: 1em auto;">
+
+The two subarrays sit four elements apart, so $\Delta$ arrives in quadrature with
+$\Sigma$ and the useful quantity is the signed ratio
+
+$$\varepsilon(\theta) = -\ \frac{\text{Im}\lbrace \Delta\ \Sigma^{*} \rbrace}{\vert \Sigma \vert^{2}}$$
+
+which is zero on boresight, positive on one side and negative on the other, and
+straight within about $\pm 5^\circ$ — well inside the array's $13.1^\circ$
+beamwidth. Its slope near boresight is about $0.11$ per degree, so a target a
+single degree off axis produces an error reading of about $0.11$, and a tracker
+that drives that reading back to zero holds the beam on the target far more
+finely than the beamwidth alone would allow. All of it comes from one look, with
+no sweep at all. The GUI plots a normalized form of the same comparison, taking
+its sign from the phase difference between the two channels and its magnitude
+from the two dB channel readings as
+
+$$\text{sign}(\Delta\phi)\ \frac{\Sigma_{\text{dB}} - \Delta_{\text{dB}}}{\Sigma_{\text{dB}} + \Delta_{\text{dB}}}$$
+
+so the trace stays bounded and on screen no matter how strong the target is.
+
+Run it on the bench.
+
+1. Load **Lab preset 8 (Tracking)**. This restores a uniform taper and sets the
+   digital layer up to form both beams at once.
+2. In **Plot Options**, turn on **Show Monopulse Delta Beam** and **Show
+   Monopulse Error Function**.
+3. On the **Rectangular** tab, press **Start**. The sum trace peaks on boresight
+   and the delta trace nulls there, about $-21.8$ dBc deep with its twin peaks
+   near $\pm 11^\circ$ — the same null you measured in Part 4. The error trace
+   crosses zero at the same angle and changes sign across it.
+4. Set Mode to **Tracking** and move the HB100 slowly across the front of the
+   array. The tracker reads the error function, drives it back toward zero, and
+   follows the source without sweeping.
+
+:::{admonition} Key Point
+:class: key-concept
+A sweep finds targets; a monopulse pair measures them. Two beams formed at the
+same time turn a single look into a signed angle error, which is the measurement
+a tracking radar runs on.
+:::
+
+That is the end of Module 3, and the door into Module 4. A radar has to know
+where its target is right now, not where it was at the end of the last sweep, and
+the sum and delta beams you just formed are how it finds out.
+
+## Part 8: Deliverables
 
 Record and submit the following.
 
@@ -285,7 +349,7 @@ Record and submit the following.
    $-12.8$ dBc, $-21.6$ dBc, and $1.8$ dB.
 2. **The difference null.** Null depth in dBc and the two peak angles, against
    the predicted $-22$ dBc and $\pm 11^\circ$.
-3. **MVDR against manual.** From the instructor's demonstration, the response at
+3. **MVDR against manual.** From your own procedure C sweeps, the response at
    the interferer angle under both modes and the difference between them, plus
    the look-direction level under both.
 4. **Two written answers.** (a) Why the measured notch depth is limited by the
@@ -305,6 +369,7 @@ Record and submit the following.
 | MVDR | $w = R^{-1}s / (s^H R^{-1} s)$ from $K$ snapshots | $17\text{-}19$ dB suppression, look direction held |
 | Degrees of freedom | one constraint plus one null per digital channel pair | 2 channels null 1 interferer |
 | Hybrid cost | analog sums discard per-element data | 8 elements, 2 adaptive degrees of freedom |
+| Monopulse error | signed ratio of delta to sum, from one look | zero on boresight, slope $0.11$ per degree |
 
 ## Practice
 
@@ -319,9 +384,14 @@ does not transmit anything of its own. Everything Module 3 built — beamwidth,
 sidelobes, scan loss, steering — becomes the antenna terms in that equation, and
 the array you have been sweeping becomes the front end of a radar.
 
-The difference beam from Part 4 returns first. Monopulse angle tracking forms the
-sum and difference beams at the same time and uses their ratio to measure where a
-target is inside the beam, far more finely than the beamwidth alone would allow.
+You have already been through the door. The monopulse pair in Part 7 measures a
+target's angle from a single look, which is what a radar needs in order to track
+something that moves, and Lesson 29 puts a power budget behind that measurement:
+how much energy has to leave the antenna for the echo to be detectable at all.
+The error function you watched cross zero is the angle channel of the tracking
+loop; the range equation supplies the signal that feeds it.
+
 Read the radar range equation section of the text before Lesson 29, and bring
-your Part 4 numbers; the twin peaks at $\pm 11^\circ$ are the slope that
-monopulse tracking rides.
+your Part 7 numbers. The slope of the error curve near boresight is the quantity
+that sets how finely a tracking radar can measure angle, and Module 4 returns to
+it as soon as the power budget is in place.

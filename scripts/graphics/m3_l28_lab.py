@@ -11,6 +11,8 @@
                            boresight null and the twin peaks near +/-11 deg
   - L28-mvdr-vs-manual   : two-channel manual vs MVDR response against an
                            interferer -- the static fallback for the widget
+  - L28-monopulse        : sum and delta together, and the signed error function
+                           their ratio produces across boresight
 
 Array is the PHASER's: N = 8, d = 14 mm, 10.525 GHz -> d/lambda = 0.491, with
 the two ADAR1000 subarrays (elements 1-4 and 5-8) forming the digital pair.
@@ -263,12 +265,72 @@ def mvdr_vs_manual() -> None:
     print(f"  [check] suppression {d_supp:.1f} dB, look-direction change {d_look:.2f} dB")
 
 
+# ------------------------------------------------------------------ figure 5
+def monopulse() -> None:
+    """Sum and delta together, and the error function their ratio produces."""
+    th = np.linspace(-20, 20, 4001)
+    A = np.exp(1j * np.outer(np.sin(np.deg2rad(th)), NIDX) * KD)
+    sig = A @ np.ones(N)
+    dlt = A @ np.r_[np.ones(4), -np.ones(4)]
+    ps = with_floor(20 * np.log10(np.maximum(np.abs(sig), 1e-9) / N), -21.8)
+    pd = with_floor(20 * np.log10(np.maximum(np.abs(dlt), 1e-9) / N), -21.8)
+
+    # the two subarrays are displaced, so delta sits in quadrature with sum:
+    # the error signal is Im(delta * conj(sum)) / |sum|^2
+    err = -np.imag(dlt * np.conj(sig)) / np.abs(sig) ** 2
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10.2, 3.9))
+
+    a1.set_xlim(-20, 20)
+    a1.set_ylim(-26, 3)
+    a1.set_xticks(range(-20, 21, 10))
+    a1.set_xlabel("angle from broadside (deg)")
+    a1.set_ylabel("channel level (dB)")
+    a1.grid(color=RULE, linewidth=0.8)
+    a1.plot(th, ps, color=GREY, linewidth=1.6, label="sum")
+    a1.plot(th, pd, color=NAVY, linewidth=2.6, label="delta")
+    a1.plot([0], [-21.8], "o", color=RED, markersize=6)
+    a1.annotate("delta null  -21.8 dBc", xy=(0.4, -21.6), xytext=(2.6, -24.8),
+                fontsize=11.5, color=RED,
+                arrowprops=dict(arrowstyle="->", color=RED, linewidth=1.2))
+    a1.annotate("sum is flat here", xy=(0.5, 0.15), xytext=(5.0, 1.6),
+                fontsize=11.5, color=GREY,
+                arrowprops=dict(arrowstyle="->", color=GREY, linewidth=1.2))
+    a1.legend(loc="upper left", fontsize=11.5)
+
+    win = np.abs(th) <= 12
+    a2.set_xlim(-12, 12)
+    a2.set_ylim(-2.2, 2.2)
+    a2.set_xticks(range(-12, 13, 4))
+    a2.set_xlabel("angle from broadside (deg)")
+    a2.set_ylabel("error function")
+    a2.grid(color=RULE, linewidth=0.8)
+    a2.axhline(0, color="#8a929c", linewidth=1.0)
+    a2.axvline(0, color="#8a929c", linewidth=1.0)
+    lin = np.abs(th) <= 5
+    a2.plot(th[win], err[win], color=NAVY, linewidth=2.6)
+    a2.plot(th[lin], err[lin], color=GREEN, linewidth=3.4)
+    a2.text(-11.4, 1.82, "slope 0.11 per degree", fontsize=11.5, color=INK)
+    a2.annotate("straight within +/-5 deg",
+                xy=(-3.6, err[np.argmin(np.abs(th + 3.6))]), xytext=(-11.4, 1.18),
+                fontsize=11.5, color=GREEN,
+                arrowprops=dict(arrowstyle="->", color=GREEN, linewidth=1.2))
+    a2.annotate("zero on boresight", xy=(0.15, 0.02), xytext=(2.2, -1.85),
+                fontsize=11.5, color=RED,
+                arrowprops=dict(arrowstyle="->", color=RED, linewidth=1.2))
+
+    fig.tight_layout()
+    finalize(fig, "L28-monopulse", also_page=True)
+
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     element_settings()
     sweep_notch()
     delta_beam()
     mvdr_vs_manual()
+    monopulse()
 
 
 if __name__ == "__main__":

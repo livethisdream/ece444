@@ -38,11 +38,11 @@ same eight numbers. The only question is what the hardware does with them.
 ## Today's plan
 
 1. Recall the weights and convert them to GUI settings
-2. Procedure A — enter them, sweep, measure the notch
-3. Why the notch stops around twenty decibels down
-4. Procedure B — subtract the two digital channels, get a boresight null free
-5. Procedure C — MVDR finds its own null against an interferer
-6. Manual against adaptive: where each one wins
+2. Procedure A — enter them, sweep, and find what really limits the notch
+3. Procedure B — subtract the two digital channels, get a boresight null free
+4. Procedure C — MVDR finds its own null against an interferer
+5. Manual against adaptive: where each one wins
+6. Monopulse — the same delta beam measures angle, and Module 4 starts there
 
 Note:
 The three procedures increase in how much the array does for itself. Say that
@@ -212,7 +212,7 @@ phases. That is the point: this null is structural, not computed.
 
 ---
 
-## Procedure B — the monopulse pair
+## Procedure B — what comes back
 
 <div class="fig" data-inline-svg="./fig/L28-delta-beam.svg" style="max-width:790px; margin:0 auto;"></div>
 
@@ -242,7 +242,7 @@ direction, spend everything else on making the output quiet.
 
 1. Mode **MVDR**, Snapshots 128, Diagonal Load 0.001, Steer Angle 0°
 2. **Start** with only the boresight source — MVDR has nothing to reject
-3. Bring in a second X-band source near +30°, about 10 dB stronger
+3. Partner holds the kit's second HB100 near +30°, about 10 dB stronger
 4. Sweep in **Manual**, then in **MVDR**, and compare the traces
 
 <div class="callout">
@@ -251,10 +251,11 @@ response toward the interferer down <strong>17 to 19 dB</strong>.
 </div>
 
 Note:
-Instructor demo: the simulator's instructor view has a configurable interferer
-panel — set angle and power there and the class sees the same numbers without a
-second HB100. Say plainly that both sources are on the same nominal frequency, so
-the FFT tab cannot separate them; the sweep trace is the evidence.
+Every kit has a second HB100, so each bench runs this themselves. Say plainly that
+both sources are on the same nominal frequency, so the FFT tab cannot separate
+them; the sweep trace is the evidence. If a bench is running in simulation, the
+simulator's instructor view carries a configurable interferer panel — set angle
+and power there and they see the same numbers.
 
 ---
 
@@ -297,6 +298,76 @@ what the hybrid compromise costs.
 
 ---
 
+## A sweep is too slow to track
+
+- Every number so far came from stepping the beam across and reading the trace
+- A sweep takes time, and a maneuvering target moves while it runs
+- A tracking radar needs the target's angle **now**, from one look
+- You already built half the answer in procedure B
+
+<div class="callout">
+The delta beam is not just a null. Paired with the sum beam it is an angle
+<strong>measurement</strong>.
+</div>
+
+Note:
+Ask them how long a full sweep takes and what a fighter does in that time. That
+gap is the entire reason monopulse exists.
+
+---
+
+## Sum and delta together
+
+<div class="fig" data-inline-svg="./fig/L28-monopulse.svg" style="max-width:850px; margin:0 auto;"></div>
+
+Note:
+Left panel: the sum is flat at its peak, so its level hardly moves for a target a
+degree off axis. The delta is zero on boresight and climbs steeply out of the
+null, so its level moves a great deal over that same degree. Right panel is what
+you get when you divide one by the other.
+
+---
+
+## The error function
+
+$$\varepsilon(\theta) = -\ \frac{\text{Im}\lbrace \Delta\ \Sigma^{*} \rbrace}{\vert \Sigma \vert^{2}}$$
+
+- Zero on boresight, positive one side, negative the other
+- Straight within about ±5°, well inside the 13.1° beam
+- Slope about 0.11 per degree — one degree off axis reads 0.11
+- The GUI plots a normalized form of it, bounded so the trace stays on screen
+
+<div class="callout">
+Sign says which side of boresight. Magnitude says how far. Both come from a
+single look.
+</div>
+
+Note:
+The subarrays sit four elements apart, so delta arrives in quadrature with sum —
+that is why the imaginary part is the useful piece. No full derivation here; the
+shape is the point.
+
+---
+
+## Procedure D — watch it track
+
+1. **Lab preset 8 (Tracking)**
+2. **Plot Options** → Show Monopulse Delta Beam, Show Monopulse Error Function
+3. **Rectangular** tab, **Start** — delta nulls at −21.8 dBc, peaks near ±11°
+4. Mode → **Tracking**, then walk the HB100 slowly across the front of the array
+
+<div class="callout">
+The tracker reads the error function, drives it back toward zero, and follows the
+source without ever sweeping.
+</div>
+
+Note:
+Do this one live at the front of the room. Move the source slowly and let them
+watch the error trace cross zero and the estimate follow. Then say the sentence
+that opens Module 4: a radar has to know where the target is right now.
+
+---
+
 ## Key point
 
 <div class="callout">
@@ -313,13 +384,14 @@ If they remember one sentence from this lab, this is it.
 
 ## Where this is going
 
-- L29 opens Module 4 with the radar range equation
-- Every Module 3 quantity becomes an antenna term in it
-- The difference beam returns as monopulse angle tracking
+- Monopulse gave you the angle; L29 asks what it costs in power to get an echo
+- The radar range equation opens Module 4, and every Module 3 quantity is in it
+- The error-curve slope sets how finely a tracking radar measures angle
 - Module 5 capstone: track a target while an adaptive null holds a jammer down
 
 **Deliverables: record notch depth and main-lobe cost, difference-null depth and peak angles, MVDR against manual, and two written answers.**
 
 Note:
-Point at the capstone explicitly. Procedures B and C running at the same time,
-with the target moving, is the whole final project in one sentence.
+Point at the capstone explicitly. Procedures B, C and D running at the same time,
+with the target moving, is the whole final project in one sentence. Assign the
+radar range equation reading before L29.
