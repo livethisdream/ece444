@@ -638,6 +638,13 @@ sweep actually reads and belong in lab expectation tables.
   $20\log_{10}(\sum a_n / N)$ — it is NOT the directivity loss, which is
   the taper efficiency $\eta_t$ (about −0.8 dB for Hann). L24/L25 must
   keep these two numbers distinct or students will misread the plot.
+- **Scan loss (canonical rule)**: peak *power* gain of the steered array
+  falls as $\cos\theta_0$ — the projected-aperture rule: $-0.6$ dB at
+  30°, $-1.5$ dB at 45°, $-3.0$ dB at 60° ($-2.4$ dB at 55°). This is the
+  ideal-element bound; real patch elements are steeper (power
+  $\cos^{1.3\text{-}1.5}\theta$), which L22 states as the caveat. Do not
+  use a $\cos\theta$ *field* pattern ($-6$ dB at 60°) as the canonical
+  element model.
 - **Continuous apertures (L15)** reuse the L06 table verbatim: uniform
   −13.3 dB / 0.886; cosine −23 dB / 1.19; triangular −26.5 dB / 1.27;
   cosine² −31.5 dB / 1.44 (HPBW constant × $\lambda/L$). Aperture
