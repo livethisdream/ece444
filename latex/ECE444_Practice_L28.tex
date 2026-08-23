@@ -1,0 +1,343 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L28 practice set (Null Steering Lab) -- converting computed weights into
+% PHASER settings, reading a null-steered sweep, quantization limits on null
+% depth, a two-channel MVDR solve by hand, and choosing between the two.
+
+\fullwidth{\textbf{Learning Objective 3.9: } Calculate null-steering weights,
+implement pattern nulls on the ADALM-PHASER, and compare manual null steering
+with adaptive beamforming.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+\question \textbf{From weights to GUI settings.} A null-steering calculation for
+a 4-element subarray returns the complex weights
+\eq{ w_1 = 0.62 - j0.13, \quad w_2 = 0.88 + j0.05, \quad w_3 = 0.88 - j0.05,
+\quad w_4 = 0.62 + j0.13 }
+The Phaser GUI takes element amplitude as a percentage of the largest weight and
+element phase as an offset in degrees.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the four magnitudes and convert them to the percentages you
+		would type into Element Gains.
+		\begin{solution}[1.3in]
+		\eq{ \vert w_1 \vert &= \sqrt{0.62^2 + 0.13^2} = 0.634 \\
+		     \vert w_2 \vert &= \sqrt{0.88^2 + 0.05^2} = 0.881 }
+		Elements 3 and 4 have the same magnitudes as 2 and 1. The largest weight is
+		$0.881$, so the percentages are $100\vert w_n\vert/0.881$.
+		\eq{ 72\%, \quad 100\%, \quad 100\%, \quad 72\% }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		gains = \ansbox[1.6in]{$72, 100, 100, 72\ \%$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the four phase offsets in degrees.
+		\begin{solution}[1.2in]
+		Each phase is $\angle w_n = \arctan(\text{Im}/\text{Re})$, with both weights
+		in the right half plane so no quadrant correction is needed.
+		\eq{ \angle w_1 &= \arctan\lp -0.13/0.62 \rp = -11.9\mydeg \\
+		     \angle w_2 &= \arctan\lp +0.05/0.88 \rp = +3.3\mydeg }
+		\eq{ -11.9\mydeg, \quad +3.3\mydeg, \quad -3.3\mydeg, \quad +11.9\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		phases = \ansbox[1.6in]{$-11.9, +3.3, -3.3, +11.9\mydeg$}
+	\end{minipage}
+
+	\part A student enters the four gain percentages but forgets to enter the phase
+	offsets. Describe the pattern they will measure and say whether a notch appears.
+		\begin{solution}[1.2in]
+		With the phases left at zero the array is a uniform-phase amplitude taper of
+		$72, 100, 100, 72$ percent. That is a mild taper, so the beam broadens
+		slightly and the sidelobes drop by a fraction of a decibel, but the pattern
+		stays symmetric about broadside and no notch appears at the intended angle.
+		The amplitudes alone cannot place a null; the cancellation depends on the
+		relative phases, and setting them all to zero removes it.
+		\end{solution}
+
+	\part All four weights are multiplied by $e^{j40\mydeg}$ before being entered.
+	How does the measured pattern change, and why?
+		\begin{solution}[1.1in]
+		It does not change. A common phase factor multiplies the entire array sum by
+		a constant of unit magnitude, and the measured quantity is
+		$\vert F(\theta) \vert$. Only the phase \emph{differences} between elements
+		affect the pattern, which is why the GUI accepts phase offsets rather than
+		absolute phases.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Reading a null-steered sweep.} A student sweeps the uniform
+8-element array, freezes the trace, enters null-steering weights for a null at
+$+22.5\mydeg$, and sweeps again. The two traces read as follows.
+
+\begin{center}
+\begin{tabular}{lcc}
+\hline
+ & \textbf{Uniform (frozen)} & \textbf{Null steered} \\
+\hline
+Peak level & $0.0$\db (reference) & $-1.8$\db \\
+Level at $+22.5\mydeg$ & $-12.8\ \text{dBc}$ & $-21.6\ \text{dBc}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part How much additional rejection did the null steering buy at
+		$+22.5\mydeg$?
+		\begin{solution}[0.9in]
+		\eq{ \Delta = -12.8\db - \lp -21.6\db \rp = 8.8\db }
+		The response at the interferer angle dropped by $8.8$\db relative to the
+		frozen uniform reference.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta$ = \ansbox[1.3in]{$8.8\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Express the notch depth relative to the null-steered array's own peak,
+		which is the number a jammer-to-signal calculation needs.
+		\begin{solution}[1.0in]
+		Both levels are quoted against the uniform reference peak, so subtract the
+		new peak level from the notch level.
+		\eq{ -21.6\db - \lp -1.8\db \rp = -19.8\db }
+		Relative to its own main lobe the array rejects the interferer by
+		$19.8$\db, not $21.6$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		depth = \ansbox[1.3in]{$-19.8\ \text{dBc}$}
+	\end{minipage}
+
+	\part A second student reports a notch at $-31\ \text{dBc}$ on the same bench with the
+	same weights. The sweep's noise floor sits about $22$\db below the uniform peak.
+	Is the report credible? Explain.
+		\begin{solution}[1.2in]
+		No. The sweep cannot display anything below its own noise floor, so no point
+		on the trace can read more than about $22$\db below the reference peak. A
+		reported $-31\ \text{dBc}$ is below the floor and indicates a reading taken from the
+		wrong axis, a different reference, or a mis-set peak marker. The correct
+		statement in that situation is that the notch reached the noise floor and its
+		true depth is not observable with this measurement.
+		\end{solution}
+
+	\part The notch appears centred at $+19.7\mydeg$ rather than $+22.5\mydeg$.
+	Give the most likely cause.
+		\begin{solution}[1.1in]
+		Phase quantization. The ADAR1000 rounds each commanded phase to the nearest
+		$2.8125\mydeg$, so the vector the hardware applies is not the vector that was
+		computed. The rounded vector is still a valid weight vector, and it places
+		its null a step or two away from the requested angle. The sweep grid is the
+		same $2.8125\mydeg$ step, which is why the displacement lands on a grid point.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Null depth under coarse quantization.} The lab is repeated on a
+board whose phase shifters have only $B = 2$ bits.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the phase LSB.
+		\begin{solution}[0.9in]
+		\eq{ \text{LSB} = \frac{360\mydeg}{2^B} = \frac{360\mydeg}{4} = 90\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		LSB = \ansbox[1.3in]{$90\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Use the rule of thumb that quantization sidelobes sit near $-6B$\db to
+		estimate the deepest notch this board can hold.
+		\begin{solution}[1.0in]
+		\eq{ \text{QSLL} \approx -6B = -6(2) = -12\db }
+		Quantization scatters roughly $12$\db of energy into the pattern, so a notch
+		cannot be held deeper than about $12$\db below the peak. The 7-bit ADAR1000
+		reaches $20$ to $22$\db by the same argument.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		depth $\approx$ \ansbox[1.3in]{$-12\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Round the four phases from Question 1(b) to the nearest multiple of the
+		$90\mydeg$ LSB. What does the resulting weight vector do?
+		\begin{solution}[1.1in]
+		Every one of $-11.9\mydeg$, $+3.3\mydeg$, $-3.3\mydeg$ and $+11.9\mydeg$ is
+		within $45\mydeg$ of zero, so all four round to $0\mydeg$.
+		\eq{ 0\mydeg, \quad 0\mydeg, \quad 0\mydeg, \quad 0\mydeg }
+		The phase information is gone entirely and the array is left as the amplitude
+		taper of part 1(c), with no null at all.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		phases = \ansbox[1.4in]{$0, 0, 0, 0\mydeg$}
+	\end{minipage}
+
+	\part Explain why holding a deep null is more demanding of phase resolution
+	than holding a beam peak.
+		\begin{solution}[1.3in]
+		At the beam peak all element contributions add in phase, and a small phase
+		error reduces each contribution by $\cos$ of that error, which is a
+		second-order loss. At a null the contributions are arranged to cancel
+		exactly, so the residual is a difference of nearly equal quantities and any
+		phase error appears in it directly, at first order. A $2.8\mydeg$ error costs
+		roughly $0.01$\db at the peak and sets a floor near $-21$\db in the null.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Two-channel MVDR by hand.} The PHASER's two digital channels
+are steered so that a target off boresight presents the real steering vector
+$s = [1, -1]^T$, while an interferer on boresight presents $u = [1, 1]^T$ with
+power $P = 9$ relative to a per-channel noise power of $1$. The covariance seen
+by the beamformer is $R = \sigma^2 I + P\,u u^T$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Build $R$.
+		\begin{solution}[1.1in]
+		\eq{ u u^T = \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}, \qquad
+		     R = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}
+		         + 9\begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}
+		       = \begin{bmatrix} 10 & 9 \\ 9 & 10 \end{bmatrix} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$R$ = \ansbox[1.4in]{$\begin{bmatrix} 10 & 9 \\ 9 & 10 \end{bmatrix}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the MVDR weights $w = R^{-1}s / (s^T R^{-1} s)$.
+		\begin{solution}[1.7in]
+		The determinant is $100 - 81 = 19$, so
+		\eq{ R^{-1} &= \frac{1}{19}\begin{bmatrix} 10 & -9 \\ -9 & 10 \end{bmatrix} \\
+		     R^{-1}s &= \frac{1}{19}\begin{bmatrix} 19 \\ -19 \end{bmatrix}
+		     = \begin{bmatrix} 1 \\ -1 \end{bmatrix} }
+		\eq{ s^T R^{-1} s &= (1)(1) + (-1)(-1) = 2 \\
+		     w &= \frac{1}{2}\begin{bmatrix} 1 \\ -1 \end{bmatrix}
+		     = \begin{bmatrix} 0.5 \\ -0.5 \end{bmatrix} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$w$ = \ansbox[1.4in]{{$(0.5,\ -0.5)^T$}}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Evaluate the beamformer's response to the target, $w^T s$, and to the
+		interferer, $w^T u$.
+		\begin{solution}[1.0in]
+		\eq{ w^T s &= (0.5)(1) + (-0.5)(-1) = 1 \\
+		     w^T u &= (0.5)(1) + (-0.5)(1) = 0 }
+		Unit gain on the target, as the constraint requires, and a complete null on
+		the interferer.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$w^T s$, $w^T u$ = \ansbox[1.3in]{$1, \ 0$}
+	\end{minipage}
+
+	\part Which lab procedure did MVDR just reproduce, and what would $w$ become if
+	the interferer were switched off?
+		\begin{solution}[1.3in]
+		The weights $[0.5, -0.5]^T$ subtract one channel from the other, which is
+		procedure B: Beam 1 Phase set to $180\mydeg$, the monopulse difference beam.
+		MVDR was not told about boresight interference; it found the difference beam
+		because that is the quietest combination that still holds unit gain on the
+		target. With the interferer switched off, $R = I$ and
+		$w = s/(s^T s) = [0.5, -0.5]^T$, the ordinary matched beamformer for this
+		look direction, which here happens to be the same vector.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Choosing an approach.} Each situation below uses the same
+8-element PHASER.
+
+\begin{parts}
+
+	\part A fixed ground emitter sits at a surveyed bearing of $+35\mydeg$ from the
+	array face and does not move. The array must keep its beam on a target at
+	$-10\mydeg$. Which approach would you use, and why?
+		\begin{solution}[1.3in]
+		Manual null steering. The interferer's angle is known and fixed, so the
+		weights can be computed once and left in place, and the calculation gets all
+		eight analog elements to work with rather than the two digital channels. It
+		also costs no digital processing and no snapshot collection. The main lobe
+		pays a fraction of a decibel because the null is far from the beam.
+		\end{solution}
+
+	\part An airborne jammer of unknown and changing bearing appears during a
+	mission. Which approach would you use, and why?
+		\begin{solution}[1.2in]
+		MVDR. Manual null steering needs the interferer's angle before it can
+		compute anything, and by the time an operator measures the bearing and
+		re-enters eight weights the jammer has moved. MVDR estimates the covariance
+		from the received data and re-solves every few snapshots, so the null follows
+		the jammer without anyone knowing where it is.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A requirement calls for a $33$\db notch. Taking $21$\db as the depth
+		achievable with the 7-bit ADAR1000 and roughly $6$\db of improvement per
+		added bit, how many phase bits are needed?
+		\begin{solution}[1.1in]
+		\eq{ 33\db - 21\db = 12\db \quad \Rightarrow \quad
+		     \frac{12}{6} = 2 \ \text{additional bits} }
+		\eq{ B = 7 + 2 = 9 \ \text{bits}, \qquad
+		     \text{LSB} = \frac{360\mydeg}{512} = 0.70\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$B$ = \ansbox[1.3in]{$9\ \text{bits}$}
+	\end{minipage}
+
+	\part Two jammers now illuminate the array from different bearings. State what
+	happens when MVDR is asked to handle both on this hardware.
+		\begin{solution}[1.3in]
+		It cannot. Two digital channels give two degrees of freedom, one of which is
+		spent on the look-direction constraint, leaving exactly one null. Facing two
+		interferers the beamformer places its single null where it reduces total
+		output power the most, which is generally a compromise between the two and a
+		deep null on neither. Handling both would require a third digital channel, so
+		the limit is the hybrid architecture rather than the algorithm.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}
