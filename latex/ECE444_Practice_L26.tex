@@ -276,15 +276,21 @@ $10.525\ \ghz$, where $\lambda = 28.5\ \text{mm}$ and $d/\lambda = 0.491$.
 		$B=7$: \ansbox[1.1in]{$-42\ \db$}
 	\end{minipage}
 
-	\part A pattern null on the PHASER can be driven only about $21\ \db$ deep. Explain in
-	one or two sentences why the phase LSB sets that limit.
-		\begin{solution}[1.2in]
-		A null is produced by arranging element contributions that cancel, and the depth of
-		the cancellation is set by how exactly the residual can be driven to zero. With a
-		$2.8125\mydeg$ phase step the residual phase error can be up to half an LSB per
-		element, so a small uncancelled vector always remains. That leftover sets a floor on
-		the notch depth, measured at about $21\ \db$ on the course hardware once the roughly
-		1\% gain steps are included.
+	\part A classmate argues that because the phase shifter resolves only $2.8125\mydeg$, a
+	pattern null on the PHASER can never be driven deeper than the $21\ \text{dB}$ a sweep
+	shows. Explain in two or three sentences why that reasoning is wrong, and state what
+	does set the measured depth.
+		\begin{solution}[1.5in]
+		Rounding the null weights onto the $2.8125\mydeg$ phase grid, with gain steps of about
+		1\%, still produces a notch near $-48\ \text{dB}$ at the angle the weights were
+		designed for. Quantization displaces the notch by a fraction of a degree from its
+		commanded angle rather than filling it in, so it is a pointing error and not a depth
+		limit.
+
+		What caps the measurement is the receiver. The beam sweep's noise floor sits about
+		$23\ \db$ below the uniform-taper peak, and the null weights give up roughly
+		$2\ \db$ of main-lobe gain, leaving about $21\ \db$ of usable dynamic range. The
+		pattern goes deeper than that; the sweep cannot follow it down.
 		\end{solution}
 
 \end{parts}

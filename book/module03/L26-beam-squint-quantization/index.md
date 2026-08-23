@@ -127,12 +127,16 @@ $$\text{QSLL} \approx -6B\ \text{dB},$$
 
 so 2 bits puts a lobe near $-12$ dB, 3 bits near $-18$ dB, and the ADAR1000's 7 bits near $-42$ dB. Treat this as an RMS estimate for a large array. On an aperture as short as eight elements there are only a couple of sawtooth periods, individual lobes scatter several dB either side of the rule, and for $B \ge 3$ they drop below the array's own $-13$ dB sidelobes and stop mattering.
 
+More bits buy two different things. They buy finer pointing, which scales as the LSB, and they buy a lower sidelobe floor, which scales as $6$ dB per bit. Seven bits is the standard choice because it puts the quantization floor far below every other error in the array.
+
+One thing quantization does *not* set is how deep a null can go. It is tempting to assume that a cancellation is only as good as the phase resolution behind it, but the weights that place a null are not fighting the LSB: rounding them to a $2.8125^\circ$ grid with 1% gain steps still produces a notch near $-48$ dB at the angle it was designed for. What rounding does instead is move the notch a fraction of a degree off its commanded angle, which is a pointing effect, not a depth effect.
+
+The measured limit comes from the receiver. A beam sweep on the PHASER has a noise floor about $23$ dB below the uniform-taper peak, and the weights that create a null cost roughly $2$ dB of main-lobe gain, so nothing deeper than about $21$ dB below the new peak can be seen at all. That is why the nulls measured in the next two lessons land at $20$ to $22$ dB: the pattern goes further down than that, and the sweep cannot follow it.
+
 :::{admonition} Key Point
 :class: key-concept
-More bits buy two different things. They buy finer pointing, which scales as the LSB, and they buy a lower sidelobe floor, which scales as $6$ dB per bit. Seven bits is the standard choice because it puts the quantization floor far below every other error in the array.
+Separate the two floors. **Quantization** sets a sidelobe floor at roughly $-6B$ dB and a pointing granularity of about one LSB, and on the course array it still allows a $-48$ dB null. The **noise floor** of the measurement sets what you can observe, which on the PHASER sweep is $20$ to $22$ dB below the peak. A shallow measured null usually means the second limit, not the first.
 :::
-
-The floor matters most when you are trying to put a *null* somewhere. A null is a deliberate cancellation, and a cancellation is only as deep as the smallest phase error you can leave uncorrected. With a $2.8^\circ$ LSB and gain steps of about 1%, the PHASER can hold a pattern notch about $20$ to $22$ dB deep and no deeper. That number is the practical ceiling on everything in the next two lessons.
 
 ## Part 5: The three departures side by side
 
@@ -180,4 +184,4 @@ Dither deserves one sentence, because it is the cheap fix. If the rounding error
 
 Lesson 27 turns pattern control up a notch. So far you have shaped the beam and the sidelobes as a whole; next you will place a null at a chosen angle on purpose, which is what an array does when a jammer or an interfering transmitter sits somewhere you know about. The weights come from subtracting one steering vector from another, and the arithmetic is short.
 
-Quantization comes back immediately when it does. A null is a cancellation between element contributions, so it is only as deep as the residual phase error allows, and the $2.8125^\circ$ LSB is that residual. Before Lesson 27, be able to state the LSB of a $B$-bit shifter and the pointing step it implies on the course array, and review the complex element weights $w_n$ from Lesson 24 — the null-steering result is written entirely in that notation.
+Both of today's floors come back with it. Quantization moves the notch slightly off its commanded angle without filling it, and the sweep's noise floor decides how much of the notch you can see, which is why the measured depth in Lesson 28 stops near $21$ dB while the designed null is far deeper. Before Lesson 27, be able to state the LSB of a $B$-bit shifter and the pointing step it implies on the course array, and review the complex element weights $w_n$ from Lesson 24 — the null-steering result is written entirely in that notation.

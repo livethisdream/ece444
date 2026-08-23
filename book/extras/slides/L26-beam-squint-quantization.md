@@ -385,29 +385,27 @@ Demo on the kit: the Quantization section, Phase Shift Bits slider, with Use Bit
 
 ---
 
-## The floor under everything
+## Two different floors
 
 <div class="two-col"><div class="col-text">
 
-A **null** is a deliberate cancellation between element contributions.
+**Quantization does not cap a null.** Round the null weights onto the 2.8125&deg; grid with 1% gain steps and the notch is still about <strong>&minus;48 dB</strong> at its design angle. Rounding <em>moves</em> the notch a fraction of a degree; it does not fill it.
 
-A cancellation is only as deep as the smallest phase error you can leave uncorrected.
-
-With a 2.8&deg; LSB and roughly 1% gain steps, the PHASER holds a pattern notch about **20 to 22 dB** deep and no deeper.
+**The receiver caps what you can see.** The sweep's noise floor sits 23 dB under the uniform peak, and the null weights give up about 2 dB of main lobe.
 
 </div><div class="col-fig">
 
-| Limit | Value |
-| :-- | :-- |
-| Phase LSB | 2.8125° |
-| Gain step | ~1% |
-| Achievable notch | 20–22 dB |
-| Measured (L28) | 21.6 dB |
+| Floor | Set by | Value |
+| :-- | :-- | :-- |
+| Sidelobes | bits | $-6B$ dB |
+| Pointing | LSB | 0.91° |
+| Notch depth | quantization | −48 dB |
+| Notch measured | noise floor | 20–22 dB |
 
 </div></div>
 
 Note:
-This is the hook into the next two lessons. When their null comes out at twenty-one decibels instead of infinity, this slide is the reason.
+This is the hook into the next two lessons. Correct the intuitive story before they build it: a cancellation is not limited by the phase resolution here. Quantized null weights still hold about minus forty-eight decibels at the designed angle. What they will measure in Lesson 28 is twenty-one decibels, and that number is the sweep's noise floor — twenty-three decibels below the uniform peak, less the two decibels of main lobe the null weights give up. The pattern goes deeper than the plot can show.
 
 ---
 
@@ -438,7 +436,7 @@ If they remember one slide, this is it. Three causes, three cures, none of them 
 ## Where this is going
 
 - **L27 — Null steering theory.** Stop shaping the beam as a whole and place a null exactly where an interferer sits. The weights come from subtracting one steering vector from another.
-- **L28 — Null steering lab.** Enter those weights on the kit and measure the notch. It will come out near 21 dB, and today's LSB is why.
+- **L28 — Null steering lab.** Enter those weights on the kit and measure the notch. It will read near 21 dB — not because quantization filled it, but because that is where the sweep's noise floor sits.
 
 **Before L27:** be able to state the LSB of a $B$-bit shifter and the pointing step it implies on the course array, and review the complex element weights from L24.
 
