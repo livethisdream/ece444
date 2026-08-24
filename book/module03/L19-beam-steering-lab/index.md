@@ -267,6 +267,8 @@ difference between the two traces in dB.
    are relying on and say what would change if the source were moving during the
    sweep.
 
+The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_Lab_L19_Steering_blank.pdf" target="_blank" rel="noopener">Lab sheet (PDF)</a>.
+
 ## Summary
 
 | Symbol / idea | What it is | Number to remember |

@@ -1,0 +1,263 @@
+\documentclass{exam}
+
+\newif\ifA
+\newif\ifkey
+\newif\ifprintselected   % required by exam_config's \ansbox
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lab Num -- Module 3's six lab periods follow L04 (Lab 1) and the two
+% Module 2 measurement labs, so L19 is Lab 5. Override with \def\labNumIn{}
+% if the course sequence renumbers.
+\ifdefined\labNumIn
+	\def\labNum{\labNumIn}
+\else
+	\def\labNum{5}
+\fi
+
+% is this the key or not?
+\ifdefined\iskey
+	\ifnum\iskey=1
+		\keytrue
+	\else
+		\keyfalse
+	\fi
+\else
+	%% Pick one manually
+	\keyfalse % if this is NOT the key
+%	\keytrue     % if this IS the key
+\fi
+
+% set up the header and footer - change for every term
+\ifdefined\thisTermIn
+	\def\thisterm{\thisTermIn}
+\else
+	\def\thisterm{Fall 2026}
+\fi
+%
+\def\thisclass{ECE 444}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% END SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% packages and shortcuts
+\input{myPackages_gr}
+\usepackage[hidelinks, linkcolor=red]{hyperref}
+\input{myShortcuts}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+%% exam class customization
+\input{exam_config}
+\printselectedfalse      % full worked solutions in the key, not answers-only
+\CorrectChoiceEmphasis{\color{red}}
+\SolutionEmphasis{\color{red}}
+\renewcommand\questionlabel{\textbf{\thequestion.}}
+\renewcommand{\thepartno}{\alph{partno}}
+\renewcommand{\partlabel}{(\thepartno)}
+
+% Fillable table cell: blank in the student copy, the expected value in red on
+% the KEY. Fixed-width centered columns keep the blank cells writable.
+\newcolumntype{K}[1]{>{\centering\arraybackslash}p{#1}}
+\newcommand{\kv}[1]{\ifkey{\color{red}#1}\fi\rule[-0.10in]{0pt}{0.34in}}
+
+% print the answers if this is the key
+\ifkey
+	\printanswers % if this IS the key
+\else
+	\noprintanswers  %if this is NOT the key
+\fi
+
+% print the header and footer
+% need to print key on top if this is the key
+\ifkey
+	\firstpageheader{}{\color{red}{ KEY}}{}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\else
+	\firstpageheader{}{}{}
+	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\fi
+
+\runningheadrule
+
+\begin{document}
+\pagestyle{headandfoot}   % exam class
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% title block
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+USAF ACADEMY \\
+DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
+LAB \#\labNum\ (Lesson 19) - Beam Steering Lab \\
+\textbf{Lab Sheet} \\
+\thisterm \\[4mm]
+\end{center}
+
+\vspace{-4pt}
+\textbf{Name:} \rule[-2pt]{2.6in}{0.4pt} \hfill
+\textbf{Section:} \rule[-2pt]{0.9in}{0.4pt} \hfill
+\textbf{Date:} \rule[-2pt]{1.1in}{0.4pt}
+
+\vspace{4pt}
+
+\fullwidth{\textbf{Learning Objective 3.5: } I can implement beam steering on the
+ADALM-PHASER and verify the steered pattern against theory.}
+
+\vspace{2pt}
+
+This sheet is the turn-in document for the Lesson 19 lab. Record the source
+frequency the GUI reports before you start, fill in every box, and keep the
+prediction table from Lesson 18 beside you. The lab is a team assignment, so one
+sheet per team.
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Table A -- commanded against physical angle.} Place the source
+at each position on the arc, hunt for the commanded Steer Angle that maximizes
+the FFT amplitude, and record it. The last column expresses the difference in
+sweep grid steps, one step being the ADAR1000's $2.8125\mydeg$ phase LSB.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{1.5in} | K{1.3in} | K{1.5in} |}
+\hline
+\textbf{Physical angle} & \textbf{Commanded angle at peak} & \textbf{Difference} & \textbf{Difference $/\ 2.8125\mydeg$} \\\hline\hline
+$0\mydeg$  & \kv{$0\mydeg \pm 2.8\mydeg$}  & \kv{$\le 2.8\mydeg$} & \kv{$\le 1$} \\\hline
+$30\mydeg$ & \kv{$30\mydeg \pm 2.8\mydeg$} & \kv{$\le 2.8\mydeg$} & \kv{$\le 1$} \\\hline
+$45\mydeg$ & \kv{$45\mydeg \pm 2.8\mydeg$} & \kv{$\le 2.8\mydeg$} & \kv{$\le 1$} \\\hline
+\end{tabular}
+\end{center}
+
+\begin{solution}
+There is no single right commanded angle here, because the physical angle set on
+the arc carries its own error. The standard is one grid step: each difference
+should be no larger than $2.8125\mydeg$, so the last column reads at most 1.
+Grid discretization alone allows half a step, $1.41\mydeg$; protractor and
+aiming error at $1\ \m$ adds about $1.5\mydeg$, HB100 drift adds a few tenths,
+and room multipath moves the apparent peak by up to about a degree. Added in
+quadrature those give a peak-angle uncertainty near $2.5\mydeg$. Agreement to
+$0.1\mydeg$ indicates an error in how the comparison was made rather than an
+unusually good measurement.
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Table B -- phase check at $30\mydeg$.} With the peak command
+applied, read the eight per-element phases out of Phase Control and compare them
+against the wrapped ramp predicted in Lesson 18. At $\theta_0 = 30\mydeg$ the
+progressive phase is $\Delta\phi = 176.8\mydeg \sin 30\mydeg = 88.4\mydeg$. All
+values in the table are in degrees.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} |}
+\hline
+\textbf{Element} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} \\\hline\hline
+Predicted & \kv{$0.0$} & \kv{$88.4$} & \kv{$176.8$} & \kv{$265.2$} & \kv{$353.6$} & \kv{$82.0$} & \kv{$170.5$} & \kv{$258.9$} \\\hline
+Applied & \kv{$0.00$} & \kv{$87.19$} & \kv{$177.19$} & \kv{$264.38$} & \kv{$354.38$} & \kv{$81.56$} & \kv{$171.56$} & \kv{$258.75$} \\\hline
+Difference & \kv{$0.00$} & \kv{$1.21$} & \kv{$-0.39$} & \kv{$0.83$} & \kv{$-0.78$} & \kv{$0.44$} & \kv{$-1.06$} & \kv{$0.15$} \\\hline
+\end{tabular}
+\end{center}
+
+\vspace{2pt}
+\begin{center}
+Half an LSB = \ansbox[1.3in]{$1.41\mydeg$} %
+Is every difference smaller than that? \ansbox[1.0in]{yes}
+\end{center}
+\vspace{2pt}
+
+\begin{solution}
+The backend rounds each commanded phase to the nearest multiple of
+$2.8125\mydeg$ and wraps the result into $0$ to $360\mydeg$, so no element can
+miss its predicted value by more than half a step. Element 6 is the clearest
+check: the unwrapped ramp value $442.0\mydeg$ has to appear as $82.0\mydeg$, and
+the applied $81.56\mydeg$ is the nearest grid point to it. A difference larger
+than $1.41\mydeg$ on any element means the per-element calibration offsets are
+included in the reading, or the steer angle applied is not the one assumed here.
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{Table C -- beamwidth.} Measure the half-power width of the
+frozen boresight trace and of the $30\mydeg$ trace by reading the angles where
+each trace falls 3 dB below its own peak, then record the peak-level difference
+between the two traces.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{1.9in} | K{1.6in} |}
+\hline
+\textbf{Quantity} & \textbf{Measured} & \textbf{Calculated} \\\hline\hline
+HPBW at $\theta_0 = 0\mydeg$ & \kv{$13.1\mydeg$, $\pm$ one grid step} & \kv{$13.0\mydeg$} \\\hline
+HPBW at $\theta_0 = 30\mydeg$ & \kv{$\approx 15\mydeg$, $\pm$ one grid step} & \kv{$15.1\mydeg$} \\\hline
+Peak level, $30\mydeg$ against $0\mydeg$ & \kv{$-0.5$ to $-1.5$ dB} & \kv{$-0.6$ dB} \\\hline
+\end{tabular}
+\end{center}
+
+\begin{solution}
+The calculated column comes from the array factor for $N = 8$ at
+$d/\lambda = 0.491$. The steered beamwidth is the $1/\cos\theta_0$ broadening of
+Lesson 18, $13.0\mydeg / \cos 30\mydeg = 15.0\mydeg$, and the exact array factor
+gives $15.1\mydeg$. The peak drops because the array presents a projected
+aperture of $Nd\cos\theta_0$ instead of $Nd$, which is
+$10\mylog{\cos 30\mydeg} = -0.6$ dB for an ideal element; a real patch element
+rolls off faster and usually costs a few tenths more. Measured beamwidths are
+quoted to the nearest degree, because the sweep samples on a $2.8125\mydeg$ grid
+and the half-power crossings land between samples.
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{Written answers.} Three or four sentences each.
+
+\begin{parts}
+
+	\part Why does the commanded angle at which the trace peaks move in steps of
+	about $2.8\mydeg$ rather than continuously, and what in the hardware sets that
+	step size?
+
+	\begin{solutionorlines}[2.0in]
+	The ADAR1000 phase shifter is a 7-bit device, so its smallest phase increment
+	is $360\mydeg / 2^7 = 2.8125\mydeg$. The sweep expresses that LSB as a
+	steering resolution and visits commanded angles on the same grid, so the trace
+	holds no information between grid points and the peak that is read is the grid
+	point nearest the true peak. The worst case error is half a step,
+	$1.41\mydeg$. No angle between two grid points can be commanded, so the peak
+	moves in steps rather than continuously.
+	\end{solutionorlines}
+
+	\part Explain why a plot of received power against commanded steer angle is a
+	picture of the array's pattern at all. Name the principle you are relying on,
+	and say what would change if the source were moving during the sweep.
+
+	\begin{solutionorlines}[2.3in]
+	The instrument holds the source still and steps the commanded angle across its
+	range, recording received power at each step. Reciprocity says the array's
+	receive pattern equals its transmit pattern, so the power received from a
+	fixed direction as the beam is steered traces out the same shape the array
+	would radiate. The x-axis is still the commanded angle and not a measured
+	arrival angle, and every point on the trace was produced by a different set of
+	element phases. If the source moved during the sweep, the received power would
+	change for two reasons at once, and the trace would no longer be a pattern:
+	the peak would appear at whatever command happened to coincide with the
+	source's closest approach to the beam.
+	\end{solutionorlines}
+
+\end{parts}
+
+\end{questions}
+
+\vspace{1.0em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{document}

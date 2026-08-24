@@ -358,6 +358,8 @@ Record and submit the following.
    situation where a computed static null is the
    better choice than MVDR, and one where it is not, with a reason for each.
 
+The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_Lab_L28_NullSteering_blank.pdf" target="_blank" rel="noopener">Lab sheet (PDF)</a>.
+
 ## Summary
 
 | Idea | What it is | Number to remember |

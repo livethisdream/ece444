@@ -1,0 +1,274 @@
+\documentclass{exam}
+
+\newif\ifA
+\newif\ifkey
+\newif\ifprintselected   % required by exam_config's \ansbox
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lab Num -- Module 3's six lab periods follow L04 (Lab 1) and the two
+% Module 2 measurement labs, so L17 is Lab 4. Override with \def\labNumIn{}
+% if the course sequence renumbers.
+\ifdefined\labNumIn
+	\def\labNum{\labNumIn}
+\else
+	\def\labNum{4}
+\fi
+
+% is this the key or not?
+\ifdefined\iskey
+	\ifnum\iskey=1
+		\keytrue
+	\else
+		\keyfalse
+	\fi
+\else
+	%% Pick one manually
+	\keyfalse % if this is NOT the key
+%	\keytrue     % if this IS the key
+\fi
+
+% set up the header and footer - change for every term
+\ifdefined\thisTermIn
+	\def\thisterm{\thisTermIn}
+\else
+	\def\thisterm{Fall 2026}
+\fi
+%
+\def\thisclass{ECE 444}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% END SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% packages and shortcuts
+\input{myPackages_gr}
+\usepackage[hidelinks, linkcolor=red]{hyperref}
+\input{myShortcuts}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+%% exam class customization
+\input{exam_config}
+\printselectedfalse      % full worked solutions in the key, not answers-only
+\CorrectChoiceEmphasis{\color{red}}
+\SolutionEmphasis{\color{red}}
+\renewcommand\questionlabel{\textbf{\thequestion.}}
+\renewcommand{\thepartno}{\alph{partno}}
+\renewcommand{\partlabel}{(\thepartno)}
+
+% Fillable table cell: blank in the student copy, the expected value in red on
+% the KEY. Fixed-width centered columns keep the blank cells writable.
+\newcolumntype{K}[1]{>{\centering\arraybackslash}p{#1}}
+\newcommand{\kv}[1]{\ifkey{\color{red}#1}\fi\rule[-0.10in]{0pt}{0.34in}}
+
+% print the answers if this is the key
+\ifkey
+	\printanswers % if this IS the key
+\else
+	\noprintanswers  %if this is NOT the key
+\fi
+
+% print the header and footer
+% need to print key on top if this is the key
+\ifkey
+	\firstpageheader{}{\color{red}{ KEY}}{}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\else
+	\firstpageheader{}{}{}
+	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\fi
+
+\runningheadrule
+
+\begin{document}
+\pagestyle{headandfoot}   % exam class
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% title block
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+USAF ACADEMY \\
+DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
+LAB \#\labNum\ (Lesson 17) - Introduction to Phased Array Hardware \\
+\textbf{Lab Sheet} \\
+\thisterm \\[4mm]
+\end{center}
+
+\vspace{-4pt}
+\textbf{Name:} \rule[-2pt]{2.6in}{0.4pt} \hfill
+\textbf{Section:} \rule[-2pt]{0.9in}{0.4pt} \hfill
+\textbf{Date:} \rule[-2pt]{1.1in}{0.4pt}
+
+\vspace{4pt}
+
+\fullwidth{\textbf{Learning Objective 3.3: } I can identify the hardware architecture
+of the ADALM-PHASER and control it via SDR software.}
+
+\vspace{2pt}
+
+This sheet is the turn-in document for the Lesson 17 lab. Fill in every box, and
+show the arithmetic where a box asks for a calculated value. The lab is a team
+assignment, so one sheet per team.
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The frequency plan.} Record the frequency the GUI reports for
+your HB100 after pressing \textbf{Find HB100}, then work the high-side mixing
+arithmetic that follows from it. The IF is fixed by the filtering after the
+mixer, so the LO is the only frequency that moves when the source moves.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{2.4in} |}
+\hline
+\textbf{Quantity} & \textbf{Value} \\\hline\hline
+Measured HB100 frequency $f_{\text{RF}}$ & \kv{your own, in $10.1$--$10.7\ \ghz$} \\\hline
+Required LO frequency $f_{\text{LO}}$ & \kv{$f_{\text{RF}} + 2.2\ \ghz$} \\\hline
+Resulting IF $f_{\text{IF}}$ & \kv{$2.200\ \ghz$} \\\hline
+Is the LO inside $12.2$--$13.0\ \ghz$? & \kv{yes, for any HB100 in that band} \\\hline
+\end{tabular}
+\end{center}
+
+Show the arithmetic for your measured frequency here.
+
+\begin{solutionorlines}[1.1in]
+For a nominal source at $10.525\ \ghz$, high-side injection puts the LO at
+\eq{
+	f_{\text{LO}} &= f_{\text{RF}} + f_{\text{IF}} = 10.525 + 2.200 = 12.725\ \ghz \\
+	f_{\text{IF}} &= f_{\text{LO}} - f_{\text{RF}} = 12.725 - 10.525 = 2.200\ \ghz
+}
+That LO sits inside the $12.2$ to $13.0\ \ghz$ VCO range, so the setting is
+reachable. Any measured frequency in $10.1$ to $10.7\ \ghz$ gives an LO inside
+the range, which is why the hardware covers every HB100 in the drawer.
+\end{solutionorlines}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{The labeled block diagram.} Sketch the receive chain from the
+patches to the Raspberry Pi. Label every block with its name and with the
+frequency present at that point, mark where the analog summing happens, and mark
+where the two digital channels begin.
+
+\begin{solutionorbox}[3.4in]
+Patches ($f_{\text{RF}}$, eight of them, $d = 14$ mm apart) $\rightarrow$ ADL8107
+LNA behind each patch ($f_{\text{RF}}$) $\rightarrow$ two ADAR1000 beamformers,
+four elements each, phase and gain per element, \textbf{analog summing happens
+here} ($f_{\text{RF}}$, two outputs) $\rightarrow$ two LTC5548 mixers driven by
+the ADF4159 PLL and HMC735 VCO at $f_{\text{LO}} = f_{\text{RF}} + 2.2\ \ghz$
+($12.2$ to $13.0\ \ghz$) $\rightarrow$ two IF channels at $2.2\ \ghz$
+$\rightarrow$ ADALM-Pluto (AD9361), tuned to $2.2\ \ghz$, sampling at 3 MSPS,
+\textbf{the digital channels begin here} $\rightarrow$ Raspberry Pi over USB,
+running the backend and serving the browser interface.
+\end{solutionorbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{FFT observations.} Work on the FFT tab with the source at
+$1\ \m$ and record what the spectrum does as you change two controls.
+
+\begin{parts}
+
+	\part Where does the tone sit in the baseband window, and how far above the
+	noise floor is it at the preset Rx Gain?
+
+	\vspace{6pt}
+	\begin{center}
+	Peak offset = \ansbox[1.7in]{$\approx 1\ \mhz$} %
+	Peak above floor = \ansbox[1.7in]{$\ge 20\db$}
+	\end{center}
+	\vspace{6pt}
+
+	\part Step \textbf{Rx Gain} down 10 dB and up 10 dB from its preset value and
+	record all three settings. Report the peak and floor levels in dBFS and the
+	separation between them in dB.
+
+	\vspace{4pt}
+	\begin{center}
+	\renewcommand{\arraystretch}{1.25}
+	\begin{tabular}{| l | K{1.25in} | K{1.25in} | K{1.35in} |}
+	\hline
+	\textbf{Rx Gain} & \textbf{Peak (dBFS)} & \textbf{Floor (dBFS)} & \textbf{Separation (dB)} \\\hline\hline
+	Preset $-10$ dB & \kv{$10$ dB below the reference row} & \kv{$10$ dB below the reference row} & \kv{1--2 dB less than the reference row} \\\hline
+	Preset & \kv{reference} & \kv{reference} & \kv{$\ge 20$ dB} \\\hline
+	Preset $+10$ dB & \kv{$10$ dB above the reference row} & \kv{$10$ dB above the reference row} & \kv{$\ge 20$ dB} \\\hline
+	\end{tabular}
+	\end{center}
+	\vspace{4pt}
+
+	\begin{solution}
+	Both levels move together with the slider, because this gain is applied
+	inside the SDR, long after the LNAs have set how much noise rides on the
+	signal. The separation therefore holds within a decibel or two across the
+	three settings. It shrinks at the lowest setting, where the SDR's own noise
+	starts to contribute. Any set of readings whose separation changes by more
+	than a few dB across the three rows points to a saturating or misaimed setup.
+	\end{solution}
+
+	\part Change \textbf{Signal Freq (GHz)} by $-0.0005\ \ghz$ and record how far
+	the peak moves and in which direction.
+
+	\vspace{6pt}
+	\begin{center}
+	Peak shift = \ansbox[2.0in]{$-500\ \khz$}
+	\end{center}
+	\vspace{6pt}
+
+	\begin{solutionorlines}[0.9in]
+	The GUI holds the IF fixed and moves the LO, so lowering the assumed source
+	frequency by 500 kHz lowers the LO by the same amount and the tone appears
+	500 kHz lower in the baseband window. The window is only 3 MHz wide at a
+	3 MSPS sample rate, so an error larger than about 1.5 MHz walks the tone off
+	the display, which is what a bad \textbf{Find HB100} result looks like.
+	\end{solutionorlines}
+
+\end{parts}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{Written answers.} Three or four sentences each.
+
+\begin{parts}
+
+	\part Why does the control software have to hunt for the HB100's frequency
+	instead of assuming $10.525\ \ghz$?
+
+	\begin{solutionorlines}[1.7in]
+	The HB100's oscillator is a free-running dielectric resonator, not a locked
+	synthesizer, so its output frequency is set by the mechanical dimensions of
+	that resonator and drifts with temperature. Units land anywhere from about
+	$10.1$ to $10.7\ \ghz$. Every LO setting and every steering phase the backend
+	computes depends on the actual frequency, so the software sweeps the LO,
+	watches where the IF tone appears, and records the answer instead of assuming
+	one.
+	\end{solutionorlines}
+
+	\part The array has eight elements, but software sees only two digital
+	channels. Explain where the other six went, and name one measurement this
+	rules out.
+
+	\begin{solutionorlines}[1.9in]
+	Each ADAR1000 applies a phase and a gain to its four elements at RF and then
+	sums those four into a single output, so the individual element signals stop
+	existing before anything is digitized. Two subarray sums reach the Pluto, and
+	the eight per-element signals cannot be recovered from them. That rules out
+	any measurement that needs per-element data after the fact, such as forming
+	several independent beams from one set of samples, or running an adaptive
+	beamformer with more than one null. The MVDR run in Lesson 28 has exactly two
+	digital degrees of freedom for this reason.
+	\end{solutionorlines}
+
+\end{parts}
+
+\end{questions}
+
+\vspace{1.0em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{document}

@@ -1,0 +1,206 @@
+\documentclass{exam}
+
+\newif\ifA
+\newif\ifkey
+\newif\ifprintselected   % required by exam_config's \ansbox
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lab Num -- Module 3's six lab periods follow L04 (Lab 1) and the two
+% Module 2 measurement labs, so L21 is Lab 6. Override with \def\labNumIn{}
+% if the course sequence renumbers.
+\ifdefined\labNumIn
+	\def\labNum{\labNumIn}
+\else
+	\def\labNum{6}
+\fi
+
+% is this the key or not?
+\ifdefined\iskey
+	\ifnum\iskey=1
+		\keytrue
+	\else
+		\keyfalse
+	\fi
+\else
+	%% Pick one manually
+	\keyfalse % if this is NOT the key
+%	\keytrue     % if this IS the key
+\fi
+
+% set up the header and footer - change for every term
+\ifdefined\thisTermIn
+	\def\thisterm{\thisTermIn}
+\else
+	\def\thisterm{Fall 2026}
+\fi
+%
+\def\thisclass{ECE 444}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% END SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% packages and shortcuts
+\input{myPackages_gr}
+\usepackage[hidelinks, linkcolor=red]{hyperref}
+\input{myShortcuts}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+%% exam class customization
+\input{exam_config}
+\printselectedfalse      % full worked solutions in the key, not answers-only
+\CorrectChoiceEmphasis{\color{red}}
+\SolutionEmphasis{\color{red}}
+\renewcommand\questionlabel{\textbf{\thequestion.}}
+\renewcommand{\thepartno}{\alph{partno}}
+\renewcommand{\partlabel}{(\thepartno)}
+
+% Fillable table cell: blank in the student copy, the expected value in red on
+% the KEY. Fixed-width centered columns keep the blank cells writable.
+\newcolumntype{K}[1]{>{\centering\arraybackslash}p{#1}}
+\newcommand{\kv}[1]{\ifkey{\color{red}#1}\fi\rule[-0.10in]{0pt}{0.34in}}
+
+% print the answers if this is the key
+\ifkey
+	\printanswers % if this IS the key
+\else
+	\noprintanswers  %if this is NOT the key
+\fi
+
+% print the header and footer
+% need to print key on top if this is the key
+\ifkey
+	\firstpageheader{}{\color{red}{ KEY}}{}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\else
+	\firstpageheader{}{}{}
+	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\fi
+
+\runningheadrule
+
+\begin{document}
+\pagestyle{headandfoot}   % exam class
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% title block
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+USAF ACADEMY \\
+DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
+LAB \#\labNum\ (Lesson 21) - Array Factor Lab \\
+\textbf{Lab Sheet} \\
+\thisterm \\[4mm]
+\end{center}
+
+\vspace{-4pt}
+\textbf{Name:} \rule[-2pt]{2.6in}{0.4pt} \hfill
+\textbf{Section:} \rule[-2pt]{0.9in}{0.4pt} \hfill
+\textbf{Date:} \rule[-2pt]{1.1in}{0.4pt}
+
+\vspace{4pt}
+
+\fullwidth{\textbf{Learning Objective 3.2: } Derive and apply the array factor for a
+uniform linear array, and relate its beamwidth and sidelobe structure to what a
+beam sweep measures.}
+
+\vspace{2pt}
+
+This sheet is the turn-in document for the Lesson 21 lab. Fill the calculated
+columns before you sweep and the measured columns at the bench, so the
+prediction is on paper before the trace is on the screen. The lab is a team
+assignment, so one sheet per team.
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The measurement table.} One row per aperture, at
+$10.3\ \ghz$ with $d = 14$ mm. Report each trace's peak level, and the step from the
+eight-element peak beside it, and report each sidelobe level relative to that trace's own
+peak.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{0.72in} | K{0.62in} | K{0.62in} | K{0.85in} | K{0.62in} | K{0.85in} |}
+\hline
+\textbf{Active elements} & \textbf{Peak (dBFS)} & \textbf{HPBW meas} & \textbf{HPBW calc} & \textbf{FNBW meas} & \textbf{FNBW calc} & \textbf{First SLL} \\\hline\hline
+8 (Rx1-Rx8) & \kv{reference} & \kv{$13.1\mydeg$} & \kv{$13\mydeg$} & \kv{$28.1\mydeg$} & \kv{$30.1\mydeg$} & \kv{$-11$ to $-13$ dBc} \\\hline
+4 (Rx3-Rx6) & \kv{$-6.0$ dB rel.} & \kv{$29\mydeg$} & \kv{$27\mydeg$} & \kv{$60$ to $62\mydeg$} & \kv{$62\mydeg$} & \kv{$-10$ to $-12$ dBc} \\\hline
+2 (Rx4, Rx5) & \kv{$-11.5$ dB rel.} & \kv{$65\mydeg$} & \kv{$62\mydeg$} & \kv{no null in the scan} & \kv{$180\mydeg$} & \kv{none} \\\hline
+\end{tabular}
+\end{center}
+
+\begin{solution}
+The calculated column uses $\theta_{\text{HP}} \approx 0.886\lambda/(Nd)$ and
+$\text{FNBW} = 2\arcsin(\lambda/Nd)$ with $\lambda = 29.1$ mm and $d = 14$ mm.
+The two-element entries are the exceptions: the $62\mydeg$ comes from solving
+$\cos(\psi/2) = 1/\sqrt{2}$ directly, and the $180\mydeg$ is a convention,
+because a null there needs $\sin\theta = \lambda/2d = 1.04$ and no real angle
+satisfies that.
+
+Three measured deviations are expected, and each has a number attached. The
+eight-element FNBW reads $28.1\mydeg$ rather than $30.1\mydeg$ because the true
+null at $15.1\mydeg$ falls between grid samples and the nearest sample sits at
+$14.06\mydeg$. The first step in peak level is very close to the $6.0$ dB the
+voltage sum predicts, and the second is nearer $5.5$ dB, because with only two
+elements on the peak sits about 11 dB above the floor and the reported power
+includes the noise, which lifts the reading by roughly $0.3$ dB. The
+four-element sidelobe reads high for the same reason, since the floor is then
+only about 17 dB below that trace's peak. Sidelobe entries are reported as a
+range and not as a single number at this dynamic range. In simulation the three
+sweeps read $13.1\mydeg$, $29.1\mydeg$, and $65.4\mydeg$.
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Written answer 1.} Explain why the first-null beamwidth of the
+two-element array is quoted as $180\mydeg$ rather than measured. Name the
+condition on $\lambda/2d$ that decides whether a null exists in visible space,
+and evaluate it for $d = 14$ mm at $10.3\ \ghz$.
+
+\begin{solutionorlines}[2.6in]
+For two elements the array factor is $\cos(\psi/2)$ with $\psi = kd\sin\theta$,
+so the first null needs $\psi = \pi$, which is $\sin\theta = \lambda/2d$. A null
+exists in visible space only when $\lambda/2d \le 1$, that is when
+$d \ge \lambda/2$. At $10.3\ \ghz$ the wavelength is $29.1$ mm, so
+\eq{ \frac{\lambda}{2d} = \frac{29.1}{2(14)} = \frac{29.1}{28} = 1.04 > 1 }
+and no real angle satisfies the condition. The null exists in the mathematics
+but falls outside the range of angles the array can see, so the pattern has no
+null anywhere in the scan and the beamwidth between first nulls is quoted as the
+full $180\mydeg$ of the scan range.
+\end{solutionorlines}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Written answer 2.} The gain of each patch element is the same
+whether the other seven elements are on or off, and the amplifier behind each
+element is unchanged. Explain why the peak of the sweep nonetheless drops by
+about 6 dB every time you halve the number of active elements.
+
+\begin{solutionorlines}[2.4in]
+At boresight the element signals arrive in phase, so the beamformer adds them as
+voltages rather than as powers. Eight equal in-phase signals give eight times the
+voltage of one, four give four times, and the plotted peak follows
+\eq{ 20\mylog{\frac{N_{\text{active}}}{8}} = -6.0 \text{ dB at } N = 4,
+\qquad -12.0 \text{ dB at } N = 2 }
+Nothing about the individual element changed. What changed is how many copies of
+the same signal are being summed, and the summed voltage halves each time the
+active count halves. The measured second step comes out nearer $5.5$ dB, because
+by then the peak is only about 11 dB above the noise floor and the reported power
+is the sum of signal power and noise power.
+\end{solutionorlines}
+
+\end{questions}
+
+\vspace{1.0em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{document}

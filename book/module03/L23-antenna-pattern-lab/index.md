@@ -272,6 +272,8 @@ Submit the following at the start of the next period.
    - Which of the four artifacts in Part 4 does an anechoic chamber remove, and
      which of them would still be present in a chamber measurement?
 
+The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_Lab_L23_Pattern_blank.pdf" target="_blank" rel="noopener">Lab sheet (PDF)</a>.
+
 ## Summary
 
 | Idea | What it is | Number to remember |

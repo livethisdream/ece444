@@ -283,6 +283,8 @@ whether the other seven elements are on or off, and the amplifier behind each
 element is unchanged. Explain why the peak of the sweep nonetheless drops by
 about $6\ \text{dB}$ every time you halve the number of active elements.
 
+The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_Lab_L21_ArrayFactor_blank.pdf" target="_blank" rel="noopener">Lab sheet (PDF)</a>.
+
 ## Summary
 
 | Symbol / idea | What it is | Number to remember |

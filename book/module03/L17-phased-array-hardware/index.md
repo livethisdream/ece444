@@ -381,6 +381,8 @@ Submit the following.
    - The array has eight elements, but software sees only two digital channels.
      Explain where the other six went and name one measurement this rules out.
 
+The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">Lab sheet (PDF)</a>.
+
 ## Summary
 
 | Symbol / idea | What it is | Number to remember |
