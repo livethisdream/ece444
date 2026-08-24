@@ -217,9 +217,14 @@ left with a quarter-wave line. For the $20 - j15\ \Omega$ antenna in the next
 section that is $+j15\ \Omega$ in series, leaving $20 + j0\ \Omega$, followed by
 a $Z_1 = \sqrt{(50)(20)} = 31.6\ \Omega$ quarter-wave section.
 
-That is a perfectly good design, and it is not the narrower one: for this load
-both approaches hold VSWR $\le 2$ over roughly 45–50% bandwidth. What actually
-decides between them is **what you are building on**:
+That is a perfectly good design, and it is not the narrower one. Put both
+designs on the same axes and the answer is plain — they null at the same place
+and their VSWR $\le 2$ bands differ by a few percent:
+
+<img src="../../viz/img/L04-match-compare.svg" alt="Reflection versus frequency for the two matching designs: both null at 1 GHz and hold VSWR under 2 over comparable bandwidth" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+
+So bandwidth does not decide it. What actually decides between them is **what
+you are building on**:
 
 | | Cancel + $\lambda/4$ | L-match |
 | :-- | :-- | :-- |

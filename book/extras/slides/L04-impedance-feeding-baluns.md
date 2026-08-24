@@ -185,6 +185,23 @@ The geometric mean is the whole design. Ask what happens at twice the frequency
 
 Cancel the reactance first, and the quarter-wave transformer is back on the table. For $20 - j15\ \Omega$: add $+j15$, then a $\sqrt{(50)(20)} = 31.6\ \Omega$ section.
 
+<div class="fig" data-inline-svg="./fig/L04-match-compare.svg" style="max-width:700px; margin:0 auto;"></div>
+
+<div class="callout">
+Two correct designs, near-identical bandwidth. What separates them is the <strong>build medium</strong>, not the physics.
+</div>
+
+Note:
+Someone always asks this, and it is the right question. Put the two curves up and
+let them see the answer: both designs null at 1 GHz and the VSWR-2 bands are
+within a few percent of each other. So bandwidth does NOT decide it. What decides
+it is on the next slide — whether you can realise the line impedance, and whether
+a quarter wave is a sane length at your frequency.
+
+---
+
+## So which one?
+
 | | cancel $+\lambda/4$ | L-match |
 | :-- | :-- | :-- |
 | needs | a $31.6\ \Omega$ line | two lumped parts |
@@ -193,15 +210,14 @@ Cancel the reactance first, and the quarter-wave transformer is back on the tabl
 | VSWR $\le 2$ | $\approx 49\%$ | $\approx 45\%$ |
 
 <div class="callout">
-Bandwidth is <em>not</em> what separates them — the build medium is. Print any $Z_1$ you like on a board; you cannot buy 31.6 $\Omega$ cable.
+Print any $Z_1$ you like on a board — but you cannot <em>buy</em> 31.6 $\Omega$ cable.
 </div>
 
 Note:
-Someone always asks this, and it is the right question. Both designs are correct
-and the bandwidths are within a few percent of each other. What decides it is
-whether you can realise the line impedance and whether a quarter wave is a sane
-length at your frequency. Microwave PCB — take the transformer. HF with coax —
-take the L-match, which is why the lab is lumped.
+Microwave PCB, where any Z1 is a trace width and lumped parts have ugly
+parasitics — take the transformer. HF with off-the-shelf coax, where a quarter
+wave is tens of metres and only 50 and 75 Ω exist — take the L-match. That
+second row is exactly why the matching lab is lumped.
 
 ---
 
