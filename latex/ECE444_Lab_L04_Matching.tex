@@ -56,8 +56,13 @@
 %%%     Xs   = Q*Ra   -> Ls = (Xs - X_Ca)/(2 pi f) (series inductor)
 %%%     Xp   = Z0/Q   -> Cp = 1/(2 pi f Xp)        (shunt capacitor)
 %%% Current values solve as: Z_a = 15 - j79.6 ohms, VSWR 12:1 unmatched;
-%%% Ls = 8.16 uH (use 8.2), Cp = 2431 pF (use 2.4 nF); matched VSWR 1.03,
-%%% RL 35 dB; VSWR <= 2 from 1.88 to 2.11 MHz (11 percent).
+%%% Ls = 8.16 uH (stock 8.2), Cp = 2431 pF ideal. The stocked shunt cap is
+%%% 0.0022 uF; a measured sample came in at 2.14 nF, which lands the built
+%%% network at VSWR 1.19 and RL 21 dB -- still a 12:1 -> 1.2:1 improvement,
+%%% and it makes the component-tolerance question in Q8(e) concrete.
+%%% VSWR <= 2 from 1.89 to 2.12 MHz (12 percent).
+%%% Sanity check worth keeping: a FIXED 8.2 uH series inductor implies a
+%%% design frequency of 1.994 MHz, so 2 MHz is the honest target here.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\antR{15}			% ohms      -- mock-antenna resistance
 \def\antC{1}			% nF        -- mock-antenna series capacitance
@@ -65,7 +70,7 @@
 \def\antX{-79.6}		% ohms      -- antenna reactance at fdes
 \def\netQ{1.53}			% --        -- L-network Q
 \def\matchL{8.2}		% micro-H   -- series inductor (nearest standard)
-\def\matchC{2.4}		% nF        -- shunt capacitor (nearest standard)
+\def\matchC{2.2}		% nF        -- shunt capacitor, stocked as 0.0022 uF
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% END SET THESE IF VARIABLES
@@ -324,10 +329,30 @@ To bring up the menu, tap the screen (it helps to use a passive stylus) or press
 
 \subsection{Parts for Part II}
 
-Beyond the VNA and its cables, each team needs: a \antR\ohms\ resistor, a
-$\antC\ \text{nF}$ capacitor (these two form the mock antenna), and -- once you
-have done the design -- one inductor and one capacitor for the matching
-network. Keep your leads \textbf{short}: at these frequencies a few centimetres
+Beyond the VNA and its cables, each team needs four components:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{| l | l | l |}
+\hline
+\textbf{Part}		& \textbf{Marked}		& \textbf{Role}					\\\hline\hline
+\antR\ohms\ resistor	& \antR\ohms			& mock antenna, radiation resistance	\\\hline
+$\antC\ \text{nF}$ capacitor	& 0.001\ $\mu$F		& mock antenna, series reactance		\\\hline
+$\matchL\ \mu\text{H}$ inductor	& $\matchL\ \mu$H		& matching network, series element		\\\hline
+$\matchC\ \text{nF}$ capacitor	& 0.0022\ $\mu$F		& matching network, shunt element		\\\hline
+\end{tabular}
+\end{center}
+
+Watch the units on the two capacitors: $0.001\ \mu$F is $\antC$\ nF and
+$0.0022\ \mu$F is $\matchC$\ nF. They differ by roughly a factor of two, and
+swapping them will not work.
+
+\textbf{Measure your actual capacitors} on the bench LCR meter before you build
+and write the values down -- a part marked $0.0022\ \mu$F may well measure
+$2.14$\ nF. You will need those numbers to explain your results in
+Question 8.
+
+Keep your leads \textbf{short}: at these frequencies a few centimetres
 of wire is a small but measurable inductance, and it is one of the reasons your
 built network will not perform quite as well as your arithmetic promises.
 
@@ -682,8 +707,10 @@ $f_0 = \fdes\ \mhz$.
 			X_p &= \frac{Z_0}{Q} = \frac{50}{\netQ} = 32.7\ \ohms \\
 			C_p &= \frac{1}{2\pi (\fdes \times 10^{6})(32.7)} = 2431\ \text{pF}
 		}
-		Nearest standard values: $L_s = \matchL\ \mu\text{H}$ and
-		$C_p = \matchC\ \text{nF}$.
+		The stocked parts are $L_s = \matchL\ \mu\text{H}$ (right on the
+		money) and $C_p = \matchC\ \text{nF}$, marked $0.0022\ \mu$F -- about
+		10\% below the ideal $2431$\ pF. Install those and predict what the
+		shortfall costs you; Question 8 is where you find out.
 		\end{solution}
 
 		\begin{center}
@@ -752,11 +779,14 @@ Build the mock antenna first, measure it, then add the network. Keep leads short
 		\end{center}
 		\vspace{6pt}
 
-		\begin{solution}[1in]
-		With $\matchL\ \mu\text{H}$ and $\matchC\ \text{nF}$ the predicted
-		values are $\vert\Gamma\vert = 0.017$, VSWR $1.03:1$, RL $35$\db\ --
-		against $0.846$, $12:1$, and $1.4$\db\ unmatched. Measured return loss
-		of 20 to 30\db\ is a good result with clip leads.
+		\begin{solution}[1.2in]
+		With the stocked $\matchL\ \mu\text{H}$ and a nominal
+		$\matchC\ \text{nF}$: $\vert\Gamma\vert = 0.068$, VSWR $1.15:1$,
+		RL $23$\db. With a capacitor that actually measures $2.14$\ nF:
+		$\vert\Gamma\vert = 0.087$, VSWR $1.19:1$, RL $21$\db. Either way it is
+		a collapse from $0.846$, $12:1$, and $1.4$\db\ unmatched -- the point
+		of the exercise. Measured return loss anywhere from 15 to 25\db\ is a
+		good result with clip leads.
 		\end{solution}
 
 	\part Where did the operating point move on the Smith Chart? Describe the
@@ -769,15 +799,31 @@ Build the mock antenna first, measure it, then add the network. Keep leads short
 		constant-conductance circle into the centre.
 		\end{solution}
 
-	\part Your measured match is almost certainly worse than your predicted
-	one. Give two physical reasons.
+	\part Your measured match is almost certainly worse than the ideal
+	$2431$\ pF design predicted. Using the capacitance you actually measured
+	in the Equipment section, account for as much of the gap as you can, then
+	name two further physical reasons for whatever is left over.
 
-		\begin{solution}[1.4in]
-		Component tolerance (5--10\% parts move the null off $f_0$); the
-		inductor's series resistance and self-capacitance; lead and
-		grabber-clip inductance adding uncancelled reactance; and the
-		calibration reference plane not being exactly where the components
-		attach.
+		\begin{solution}[1.8in]
+		The dominant term is the part itself: a $0.0022\ \mu$F capacitor
+		measuring $2.14$\ nF is 12\% below the $2431$\ pF the design asked
+		for, which on its own accounts for VSWR $1.19$ instead of $1.04$.
+		Beyond that: the inductor's series resistance and self-capacitance;
+		lead and grabber-clip inductance adding reactance nobody cancelled;
+		the $\antR\ohms$ resistor's own tolerance; and the calibration
+		reference plane not sitting exactly where the components attach.
+		\end{solution}
+
+	\part \textbf{Optional -- trim it.} If small capacitors are available, add
+	one in parallel with $C_p$ to make up the shortfall and re-measure. What
+	value do you need, and what does it buy you?
+
+		\begin{solution}[1.2in]
+		About $300$\ pF in parallel with the measured $2.14$\ nF brings the
+		total to $2.44$\ nF, essentially the ideal value: VSWR falls to
+		$1.04:1$ and return loss climbs to roughly $34$\db. Capacitors in
+		parallel add, which is why trimming up is easy and trimming down is
+		not.
 		\end{solution}
 
 \end{parts}
@@ -802,8 +848,10 @@ Restart the sweep and look at the return-loss trace across the full
 		\vspace{6pt}
 
 		\begin{solution}[1in]
-		Predicted: 1.88 to 2.11\mhz, a bandwidth of 222\khz, or about 11\%
-		fractional bandwidth.
+		Predicted with the stocked parts: about 1.89 to 2.12\mhz, a bandwidth
+		near 230\khz, or roughly 12\% fractional bandwidth. Note how little
+		the 10\% capacitor error moved this -- the tolerance cost you depth of
+		match, not bandwidth. Bandwidth is set by $Q$.
 		\end{solution}
 
 	\part The network $Q$ you computed in Question 7 was \netQ. Explain, in one
