@@ -257,6 +257,51 @@ Two reactances, two jobs, in this order:
 2. **Transform the remaining resistance.** The series element sets how far the
    resistance moves; the shunt element cleans up what is left over.
 
+#### Building the same 31.6 Ω out of lumped parts
+
+Start from where the quarter-wave section left off, because the number you need
+is the same one. To bridge $R_L$ and $Z_0$ you have to meet at their **geometric
+mean** — for a $20\ \Omega$ load on a $50\ \Omega$ line,
+
+$$
+\sqrt{Z_0 R_L} = \sqrt{(50)(20)} = 31.6\ \Omega.
+$$
+
+The quarter-wave transformer realizes that number as a *line's characteristic
+impedance*. The L-match realizes the very same number as a **branch's impedance
+magnitude**. That is the only difference between them.
+
+So: cancel the load reactance, leaving $20 + j0\ \Omega$, and add a series
+reactance $X$. The resistance is stuck at $20\ \Omega$ — a series element cannot
+change it — but the *magnitude* of the branch grows:
+
+$$
+\vert Z \vert = \sqrt{R_L^{2} + X^{2}}.
+$$
+
+Demand that the magnitude be the geometric mean, and Pythagoras hands you the
+reactance:
+
+$$
+X = \sqrt{Z_0 R_L - R_L^{2}} = \sqrt{1000 - 400} = \sqrt{600} = 24.5\ \Omega.
+$$
+
+**That is where the $24.5\ \Omega$ comes from** — no new machinery, just the
+geometric mean you already used for the transformer and a right triangle.
+
+Why is that the right thing to demand? Work out the admittance of the branch you
+just built:
+
+$$
+Y = \frac{1}{20 + j24.5} = \frac{20 - j24.5}{20^{2} + 24.5^{2}}
+  = \frac{1}{50} - j\,\frac{1}{40.8}.
+$$
+
+The real part is $1/50$ — precisely the conductance of a $50\ \Omega$ resistor.
+Setting $\vert Z \vert^2 = Z_0 R_L$ is exactly the condition that makes it so.
+What remains is the $-j/40.8$, and a shunt element supplying $+j/40.8$ cancels
+it dead, leaving a clean $50\ \Omega$.
+
 #### The two moves, on the Smith chart
 
 Before the algebra, look at what the two elements can actually *do*. A series
@@ -318,48 +363,35 @@ can climb. That is why the order is forced: series element to raise the
 resistance, shunt element to cancel what the climb left behind.
 :::
 
-There is one more thing hiding in the arithmetic. The magnitude of that series
-branch is $|Z| = 31.6\ \Omega$ — and $\sqrt{R_s R_p} = \sqrt{(20)(50)} =
-31.6\ \Omega$, the geometric mean. It is the same number as the quarter-wave
-transformer's $Z_1$ from the section above, and for the same reason: since
-$X_s = Q R_s$ with $Q^2 = R_p/R_s - 1$,
+#### Naming it: the network Q
 
-$$
-|Z|^2 = R_s^2 + X_s^2 = R_s^2 + \left(R_s R_p - R_s^2\right) = R_s R_p.
-$$
-
-Both tools bridge two resistances by meeting at their geometric mean. The
-quarter-wave line gets there with a characteristic impedance; the L-match gets
-there with a lumped reactance.
-
-#### Where the network Q comes from
-
-The algebra is just the shortcut for the same journey. Any series branch
-$R_s + jX_s$ can be rewritten as a parallel pair. Define the branch's
+Everything above was done with a geometric mean and a right triangle. The
+textbook formulas are just that same result, named. Define the branch's
 reactance-to-resistance ratio
 
 $$
-Q = \frac{X_s}{R_s},
+Q = \frac{X}{R_L} = \frac{24.5}{20} = 1.22,
 $$
 
 which is the same stored-energy-to-dissipated-energy ratio that defined the
 antenna $Q$ in Lesson 3 — applied to a circuit branch instead of a radiating
-structure. The series-to-parallel transformation is then
+structure. Divide our condition $R_L^2 + X^2 = Z_0 R_L$ through by $R_L^2$ and
+it reads
 
 $$
-R_p = R_s\left(1 + Q^{2}\right), \qquad X_p = X_s\left(1 + \frac{1}{Q^{2}}\right).
-$$
-
-The shunt element cancels $X_p$, so what the source sees is just $R_p$ — and we
-need that to equal $Z_0$. Setting $R_p = Z_0$ and solving for $Q$:
-
-$$
+1 + Q^{2} = \frac{Z_0}{R_L} \qquad\Longleftrightarrow\qquad
 Q = \sqrt{\frac{R_\text{big}}{R_\text{small}} - 1},
 $$
 
-where $R_\text{big}$ and $R_\text{small}$ are the larger and smaller of $R_L$
-and $Z_0$. The shunt reactance is $R_\text{big}/Q$, and it goes on the side of
-the larger resistance — toward the source when $R_L < Z_0$, as drawn above.
+the formula you will meet in any matching reference, with $R_\text{big}$ and
+$R_\text{small}$ the larger and smaller of $R_L$ and $Z_0$. In that language the
+series reactance is $Q R_\text{small}$ and the shunt reactance is
+$R_\text{big}/Q$, and the shunt element goes on the side of the larger
+resistance — toward the source when $R_L < Z_0$, as drawn above.
+
+It is worth having both routes. The geometric mean tells you *what* number to
+build and why it is the same one the transformer uses; $Q$ tells you what that
+number will **cost** you in bandwidth.
 
 **Careful with the series element.** $Q R_\text{small}$ is the **total**
 reactance that has to be present in the series branch when you are finished —
@@ -392,26 +424,37 @@ a design frequency of 1 GHz. Design the L-match.**
 *Cancel the reactance.* The load is capacitive, so add $+j15\ \Omega$ in series;
 what remains is $20 + j0\ \Omega$.
 
-*Network $Q$.* Here $R_\text{small} = 20\ \Omega$ and $R_\text{big} = 50\ \Omega$ — this is the arc up the constant-resistance circle in the chart above:
+*Find the number to build.* The geometric mean of the two resistances:
 
 $$
-Q = \sqrt{\frac{50}{20} - 1} = \sqrt{1.5} = 1.22
+\sqrt{Z_0 R_L} = \sqrt{(50)(20)} = 31.6\ \Omega
 $$
 
-*Series reactance.* The branch needs $Q R_\text{small} = 1.22 \times 20 =
-24.5\ \Omega$ in total. The load already supplies $X_L = -15\ \Omega$ of that,
-so the component makes up the difference — $24.5 - (-15) = +39.5\ \Omega$, an
-inductor:
+*Series reactance.* The branch must have that magnitude, and its resistance is
+stuck at $20\ \Omega$, so Pythagoras gives the reactance the branch needs — this
+is the arc up the constant-resistance circle in the chart above:
+
+$$
+X = \sqrt{31.6^{2} - 20^{2}} = \sqrt{600} = 24.5\ \Omega
+$$
+
+The load already supplies $X_L = -15\ \Omega$ of that, so the component makes up
+the difference — $24.5 - (-15) = +39.5\ \Omega$, an inductor:
 
 $$
 L = \frac{X}{2\pi f} = \frac{39.5}{2\pi (10^9)} = 6.3\ \text{nH}
 $$
 
-*Shunt reactance.* $R_\text{big}/Q = 50/1.22 = 40.8\ \Omega$, capacitive:
+*Shunt reactance.* The branch $20 + j24.5\ \Omega$ has a parallel equivalent of
+$50\ \Omega$ alongside $-j40.8\ \Omega$; the shunt element cancels that leftover,
+so it is $+j/40.8$ — a capacitor:
 
 $$
 C = \frac{1}{2\pi f X} = \frac{1}{2\pi (10^9)(40.8)} = 3.9\ \text{pF}
 $$
+
+(Equivalently, in $Q$ language: $Q = 24.5/20 = 1.22$, so the shunt reactance is
+$R_\text{big}/Q = 50/1.22 = 40.8\ \Omega$.)
 
 A $6.3\ \text{nH}$ series inductor and a $3.9\ \text{pF}$ shunt capacitor, both
 lossless, and the $20 - j15\ \Omega$ antenna looks like $50\ \Omega$ — at 1 GHz

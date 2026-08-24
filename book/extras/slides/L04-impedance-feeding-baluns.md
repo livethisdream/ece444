@@ -237,6 +237,30 @@ below or above Z0: below, shunt toward the source, as drawn.
 
 ---
 
+## Same 31.6 Ω, built from lumped parts
+
+To bridge $20\ \Omega$ and $50\ \Omega$ you meet at the **geometric mean** — the number you already used for the transformer:
+
+$$ \sqrt{Z_0 R_L} = \sqrt{(50)(20)} = 31.6\ \Omega $$
+
+The $\lambda/4$ line realizes it as a *characteristic impedance*. The L-match realizes it as a **branch's impedance magnitude**. Cancel the load reactance, then add series $X$ — the resistance is stuck at 20, so:
+
+$$ \vert Z \vert = \sqrt{R_L^2 + X^2} = 31.6 \quad\Longrightarrow\quad X = \sqrt{1000-400} = 24.5\ \Omega $$
+
+<div class="callout">
+That is where <strong>24.5 Ω</strong> comes from — a geometric mean and a right triangle. Nothing else.
+</div>
+
+Note:
+This is the slide that answers "why 24.5?" using only what they own from ECE 343.
+Same geometric mean as the quarter-wave transformer; the only difference is
+whether you realise it as a line impedance or a branch magnitude. Resistance is
+pinned at 20 because a series element cannot move it, so Pythagoras finishes the
+job. Then show why that demand is the right one: 1/(20+j24.5) has real part
+exactly 1/50, so the shunt element only has to clean up the leftover -j40.8.
+
+---
+
 <!-- .slide: class="viz-cue-slide" -->
 
 ## The same two moves, on the Smith chart
@@ -276,30 +300,26 @@ the same geometric mean as the quarter-wave transformer.
 
 ---
 
-## Where the network Q comes from
+## Naming it: the network Q
 
-Any series branch can be rewritten as a parallel pair. Define the branch's **reactance-to-resistance ratio** $Q = X_s/R_s$ — the same stored-versus-dissipated ratio as the antenna $Q$ in L3:
+Everything so far was a geometric mean and a triangle. The textbook formula is that same result, named — divide $R_L^2 + X^2 = Z_0R_L$ by $R_L^2$:
 
-$$ R_p = R_s\left(1 + Q^2\right) \qquad\qquad X_p = X_s\left(1 + \frac{1}{Q^2}\right) $$
+$$ Q = \frac{X}{R_L} = \frac{24.5}{20} = 1.22 \qquad 1 + Q^2 = \frac{Z_0}{R_L} \qquad Q = \sqrt{\frac{R_\text{big}}{R_\text{small}} - 1} $$
 
-The shunt element cancels $X_p$, so all that is left is $R_p$ — and we need that to be $Z_0$:
+$Q R_L$ is the **total** branch reactance — not the part you install. The load already contributes $X_L$:
 
-$$ Z_0 = R_s\left(1+Q^2\right) \quad\Longrightarrow\quad Q = \sqrt{\frac{Z_0}{R_s} - 1} $$
-
-$Q R_s$ is the **total** reactance the series branch needs — not the part you install. The load already contributes $X_L$, so the element supplies the difference:
-
-$$ X_\text{element} = Q R_s - X_L $$
+$$ X_\text{element} = Q R_L - X_L $$
 
 <div class="callout">
-The transformation ratio <strong>sets</strong> $Q$. You do not get to choose it — and $Q$ is what sets your bandwidth.
+The geometric mean says <em>what</em> to build. $Q$ says what it <strong>costs</strong> you in bandwidth.
 </div>
 
 Note:
-This is the slide that keeps the next one from looking like magic. Stress that Q
-here is the SAME definition as the antenna Q from L3 — reactance over resistance,
-energy stored over energy dissipated per radian — just applied to a circuit
-branch instead of a radiating structure. That is why the L3 bandwidth argument
-carries straight over: transform further, get a higher Q, get less bandwidth.
+Q is the same definition as the antenna Q from L3 — reactance over resistance,
+energy stored over energy dissipated per radian — now for a circuit branch. That
+is why the L3 bandwidth argument carries straight over: transform further, higher
+Q, less bandwidth. And flag the trap: QR is the TOTAL, so with a capacitive load
+the inductor you install is bigger than QR, not equal to it.
 
 ---
 
@@ -310,9 +330,9 @@ Antenna $Z_\text{in} = 20 - j15\ \Omega$, feed line $50\ \Omega$, design frequen
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
 | Cancel X | series $+j15\ \Omega$ | $20 + j0\ \Omega$ |
-| Network $Q$ | $\sqrt{50/20 - 1}$ | $1.22$ |
-| Series reactance | branch needs $1.22 \times 20 = 24.5\ \Omega$; load brings $-15$, so install $24.5-(-15)$ | $+j39.5\ \Omega \Rightarrow L = 6.3\ \text{nH}$ |
-| Shunt reactance | $50/1.22 = 40.8\ \Omega$, capacitive | $C = 3.9\ \text{pF}$ |
+| Number to build | $\sqrt{(50)(20)}$ | $31.6\ \Omega$ |
+| Series reactance | $\sqrt{31.6^2-20^2}=24.5$; load brings $-15$, so install $24.5-(-15)$ | $+j39.5\ \Omega \Rightarrow L = 6.3\ \text{nH}$ |
+| Shunt reactance | cancels the leftover $-j40.8$ | $C = 3.9\ \text{pF}$ |
 
 <div class="callout">
 Same answer the chart gave: $+j39.5\ \Omega$ then $3.9$ pF. The algebra is the shortcut; the chart is the picture.
