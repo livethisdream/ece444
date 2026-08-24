@@ -111,10 +111,10 @@ look like with two sources on the arc.
 
 <div class="fig" data-inline-svg="./fig/L19-bench-setup.svg" style="max-width:760px; margin:0 auto;"></div>
 
-Source at about one metre, at the height of the element row, aimed back at the array.
+Source at about one meter, at the height of the element row, aimed back at the array.
 
 Note:
-One degree of arc at one metre is seventeen millimetres. Show them that with a
+One degree of arc at one meter is seventeen millimeters. Show them that with a
 ruler before they place the tripod.
 
 ---
@@ -248,7 +248,7 @@ Agreement to a tenth of a degree means the comparison was set up wrong.
 ## The four sources, sized
 
 - **Sweep grid**: the trace has no information between $2.8125^\circ$ points, so the peak reads to half a step, $1.41^\circ$.
-- **Protractor and aim**: $1^\circ$ of arc is $17$ mm at one metre. This error is in the reference, not the array.
+- **Protractor and aim**: $1^\circ$ of arc is $17$ mm at one meter. This error is in the reference, not the array.
 - **HB100 drift**: phases were computed at an assumed frequency. A $200$ MHz drift moves the beam to $\arcsin[(f_0/f)\sin\theta_0]$, which is $+0.6^\circ$ at $30^\circ$.
 - **Multipath**: about $1$ dB of ripple on the main lobe and several dB on a sidelobe.
 

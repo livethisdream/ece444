@@ -49,7 +49,7 @@ Beamwidth is set by the aperture measured in wavelengths, $Nd/\lambda$, and by n
 
 :::{admonition} Worked example — the PHASER array
 :class: tip
-The course array has $N = 8$ patches on $d = 14\ \text{mm}$ centres. At the workshop frequency of $10.3\ \text{GHz}$, $\lambda = 29.1\ \text{mm}$, so $d/\lambda = 0.481$ and the aperture is $Nd = 112\ \text{mm} = 3.85\ \lambda$.
+The course array has $N = 8$ patches on $d = 14\ \text{mm}$ centers. At the workshop frequency of $10.3\ \text{GHz}$, $\lambda = 29.1\ \text{mm}$, so $d/\lambda = 0.481$ and the aperture is $Nd = 112\ \text{mm} = 3.85\ \lambda$.
 
 Broadside: $\theta_\text{HP} = 0.886/3.85 = 0.230\ \text{rad} = 13.2^\circ$.
 
@@ -115,7 +115,7 @@ which is the uniform line-source directivity from Lesson 15 with $L = Nd$ — th
 
 :::{admonition} Worked example — directivity of the course array
 :class: tip
-$D \approx 2(8)(0.481) = 7.7$, or $10\log_{10}(7.7) = 8.9$ dB. Turning off four elements to leave the centre four gives $D \approx 3.85 = 5.9$ dB, exactly $3$ dB less, and doubles the beamwidth from $13.2^\circ$ to $27^\circ$.
+$D \approx 2(8)(0.481) = 7.7$, or $10\log_{10}(7.7) = 8.9$ dB. Turning off four elements to leave the center four gives $D \approx 3.85 = 5.9$ dB, exactly $3$ dB less, and doubles the beamwidth from $13.2^\circ$ to $27^\circ$.
 
 The eight elements are patches, not isotropic radiators, so the array's gain is the element gain plus the array gain. Pattern multiplication becomes addition in dB:
 
@@ -164,7 +164,7 @@ The last $45^\circ$ of scan volume is what added the eight extra channels. Wheth
 
 ## Part 5: What the lab should measure
 
-Lesson 21 sweeps the PHASER with all eight elements on, then with the centre four, then with the centre pair, and measures the beamwidth each time. Predict first, measure second, reconcile third. Every number below comes from this lesson.
+Lesson 21 sweeps the PHASER with all eight elements on, then with the center four, then with the center pair, and measures the beamwidth each time. Predict first, measure second, reconcile third. Every number below comes from this lesson.
 
 | Configuration | Aperture $Nd$ | HPBW | FNBW | First sidelobe |
 | :-- | :-- | :-- | :-- | :-- |

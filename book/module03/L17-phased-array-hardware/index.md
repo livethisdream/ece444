@@ -38,7 +38,7 @@ Follow the figure left to right.
 <img src="../../viz/img/L17-signal-chain.svg" alt="ADALM-PHASER receive signal chain from the patch array through the ADAR1000 beamformers, mixers, and Pluto SDR to the Raspberry Pi" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
 **The patches.** Eight microstrip patches sit in a horizontal row on the front
-face of the board, spaced $d = 14\ \text{mm}$ centre to centre. Each one is an
+face of the board, spaced $d = 14\ \text{mm}$ center to center. Each one is an
 antenna in its own right with its own element pattern. A wave arriving off
 broadside reaches them in sequence, so the eight signals differ in phase by the
 progressive amount Lesson 16 called $\Delta\phi$. That phase difference is the
@@ -148,8 +148,8 @@ reachable. The mixer output is
 $$ f_{\text{IF}} = f_{\text{LO}} - f_{\text{RF}} = 12.725 - 10.525 = 2.200\ \text{GHz}, $$
 
 and the Pluto is tuned to $2.2\ \text{GHz}$ with a 3 MSPS sample rate, giving a
-3 MHz-wide window around that centre. A tone $1\ \text{MHz}$ off the tuned
-centre lands inside the window and shows up as a peak in the FFT display. A
+3 MHz-wide window around that center. A tone $1\ \text{MHz}$ off the tuned
+center lands inside the window and shows up as a peak in the FFT display. A
 tone $200\ \text{MHz}$ off does not appear at all, which is what a wrong LO
 looks like on the screen.
 :::
@@ -279,7 +279,7 @@ python phaser_headless.py --sim
 
 and open `http://localhost:8080`. The sim synthesizes element-level IQ from a
 target at boresight, so steps 1, 4, 5, and 6 behave as described; the tone
-appears $1\ \text{MHz}$ above the centre of the baseband window. Two steps have
+appears $1\ \text{MHz}$ above the center of the baseband window. Two steps have
 no simulated equivalent. Step 3 is unnecessary, because the simulated source is
 already at a known frequency, and step 7 cannot be done at all, because the
 simulated target is fixed at boresight and cannot be rotated.

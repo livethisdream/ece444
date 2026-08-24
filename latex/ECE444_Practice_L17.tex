@@ -139,7 +139,7 @@ tuned to $2.2\ \ghz$ and sampled at $3\ \text{MSPS}$.
 		and say in one or two sentences what the student of part (c) sees on the FFT tab.
 		\begin{solution}[1.2in]
 		\eq{ \text{window} = f_s = 3\ \mhz \quad (\pm 1.5\ \mhz) }
-		The window is centred on the 2.2 GHz tuning. The offset of 225 MHz is 150 times
+		The window is centered on the 2.2 GHz tuning. The offset of 225 MHz is 150 times
 		the half-width of that window, so the tone is far
 		outside it and nothing appears but the noise floor. An empty FFT with a powered,
 		correctly aimed source is a frequency error, not a hardware failure.
@@ -224,7 +224,7 @@ is tuned to $2.2\ \ghz$ and the LO is at $12.725\ \ghz$.
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part The FFT peak sits $1\ \mhz$ above the centre of the window. Find the IF of the
+		\part The FFT peak sits $1\ \mhz$ above the center of the window. Find the IF of the
 		received tone and the frequency of the source.
 		\begin{solution}[1.3in]
 		\eq{ f_{\text{IF}} &= 2.200 + 0.001 = 2.201\ \ghz \\
@@ -254,7 +254,7 @@ is tuned to $2.2\ \ghz$ and the LO is at $12.725\ \ghz$.
 	\part A student reports no peak anywhere in the FFT. Give the first two checks you would
 	make, in order, and say what each one rules out.
 		\begin{solution}[1.2in]
-		First, confirm the HB100 is powered and aimed at the array from about a metre --
+		First, confirm the HB100 is powered and aimed at the array from about a meter --
 		this rules out having no signal to receive at all, which is the most common cause.
 		Second, run \textbf{Find HB100} and compare the result with the Signal Freq the GUI
 		is using -- this rules out a source sitting outside the 3 MHz baseband window

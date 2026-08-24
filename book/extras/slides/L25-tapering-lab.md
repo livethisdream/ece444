@@ -127,7 +127,7 @@ discipline as reporting a limit rather than a value in any measurement.
 
 ## Setup
 
-1. HB100 at boresight, about 1 m out, aimed at the centre of the patch row
+1. HB100 at boresight, about 1 m out, aimed at the center of the patch row
 2. Power up, open `http://phaser.local:8080`
 3. **Calibrate** under Configuration — an uncalibrated array carries a taper
    you did not ask for
@@ -245,7 +245,7 @@ $$\sum a_n = 8 \times 10^{-6.8/20} = 3.66$$
 
 That is 0.98 short of 4.64 — one full-amplitude element is at zero.
 
-<div class="callout">The pattern agrees independently: with a centre element dead the trace loses its symmetry and the sidelobes climb back out of the floor.</div>
+<div class="callout">The pattern agrees independently: with a center element dead the trace loses its symmetry and the sidelobes climb back out of the floor.</div>
 
 Note:
 This is the practice-set problem in advance. Point out that the peak drop

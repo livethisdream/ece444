@@ -703,6 +703,33 @@ it, not to replace it.
 
 ## M7. Decisions added after the initial build (2026-08-23)
 
+- **American English throughout** (course rule, applies to every artifact):
+  center, color, behavior, analyze, normalize, meter, gray. Sweep before
+  reporting; "centre" was caught in review.
+- **Widget pill design language** (supersedes the plainer M3 pill style):
+  use Module 1's adjusted house pattern, verbatim from
+  `book/extras/viz/polar-gain.html` / `field-regions.html`:
+  `.pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }`
+  `.pill { padding:4px 12px; border-radius:1em; font-size:12px;
+  font-weight:600; white-space:nowrap; font-variant-numeric:tabular-nums;
+  display:inline-flex; align-items:center; gap:5px; border:1px solid
+  var(--edge2); background:#eef4fa; color:var(--navy); }` with
+  `.pill b { font-weight:700; }` for values, plus tinted variants where a
+  pill carries state or annotates a colored trace (`.pill.good`,
+  `.pill.warn`, or a series-colored variant tinted from the trace color at
+  ~0.10–0.12 alpha with a ~0.28–0.30 alpha border).
+- **Lab sheets** (one per lab lesson: L17, L19, L21, L23, L25, L28): a
+  fillable turn-in document `latex/ECE444_Lab_L<NN>_<Short>.tex` on the
+  `build_lab.sh` harness, exactly following `ECE444_Lab_L04_Matching.tex`
+  (standalone document, `\iskey` switch, `\ansbox` fields and blank
+  measurement tables). Content mirrors the lab lesson's Deliverables part:
+  the prediction/measurement tables with calculated columns left blank,
+  the written-answer prompts with ruled space, name/section/date header,
+  Documentation line. Only the blank copy is committed/published, to
+  `book/extras/labs/`; the KEY is gitignored in the public repo and
+  archived in `ece444-faculty`. Lab lesson pages link the sheet from their
+  Deliverables part only once the blank PDF is committed.
+
 - **The GUI's Chebyshev preset stays as-is.** Its ≈ −70 dB-class design has
   sidelobes far below the sweep's dynamic range, and no shallower preset
   fixes that (even a −30 dB design sits ~11 dB under the floor). L24/L25

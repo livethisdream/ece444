@@ -46,7 +46,7 @@ A grating lobe is not a sidelobe. At $\theta_g$ every element is back in phase â
 
 :::{admonition} Worked example â€” thinning the PHASER row
 :class: tip
-The PHASER array is 8 patches on a $d = 14\ \text{mm}$ pitch. Feed only every third element and the fed elements sit $42\ \text{mm}$ apart. At the array's design centre of $10.3\ \text{GHz}$, $\lambda = 29.1\ \text{mm}$, so $\lambda/d = 29.1/42 = 0.693$.
+The PHASER array is 8 patches on a $d = 14\ \text{mm}$ pitch. Feed only every third element and the fed elements sit $42\ \text{mm}$ apart. At the array's design center of $10.3\ \text{GHz}$, $\lambda = 29.1\ \text{mm}$, so $\lambda/d = 29.1/42 = 0.693$.
 
 At broadside ($\theta_0 = 0$), the $m = 1$ solutions are
 
@@ -103,7 +103,7 @@ $$\sin\theta = \frac{10.525}{10.025}\ \sin 45^\circ = 1.0499 \times 0.7071 = 0.7
 The beam has squinted $\Delta\theta = +2.9^\circ$. The approximation gives $-(-0.0475)(1.000) = 0.0475\ \text{rad} = 2.7^\circ$, close enough for a budget. At $45^\circ$ the beam is about $18^\circ$ wide, so $2.9^\circ$ of squint costs only $0.25\ \text{dB}$ at the aimpoint. Push the offset to $1\ \text{GHz}$ and the squint reaches $6.4^\circ$, roughly a third of a beamwidth, and the loss grows to $1.0\ \text{dB}$.
 :::
 
-Two systems care about this for different reasons. A **wideband radar** transmits a pulse whose spectrum is the bandwidth; each frequency component in that pulse points somewhere slightly different, so the compressed pulse is smeared in angle and the effective beam is broadened and depointed. A **communications link** running a modulated carrier loses gain at the band edges relative to the centre, which shows up as amplitude tilt across the channel rather than as an angle error.
+Two systems care about this for different reasons. A **wideband radar** transmits a pulse whose spectrum is the bandwidth; each frequency component in that pulse points somewhere slightly different, so the compressed pulse is smeared in angle and the effective beam is broadened and depointed. A **communications link** running a modulated carrier loses gain at the band edges relative to the center, which shows up as amplitude tilt across the channel rather than as an angle error.
 
 The cure is to stop steering with phase. If instead of a phase lag you insert a **true time delay** of $\tau_n = n\ d \sin\theta_0 / c$ in each element, the delay compensates the geometric path difference itself, which is a length and not a phase. Every frequency in the band then arrives in phase at the same angle, and the squint is gone at all offsets. True time delay is expensive in analog hardware, which is why large wideband arrays usually compromise: time delay at the subarray level to control the squint across the aperture, phase shifters inside each subarray where the residual path differences are small.
 

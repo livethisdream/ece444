@@ -75,7 +75,7 @@ frequency assumption — into the shape of the trace.
 The widget below is the prediction tool for today's lab. Set the frequency to the
 value the GUI reports for your HB100 and the steer angle to the angle you plan to
 command, then read $\Delta\phi$, the eight applied phases, and the predicted
-half-power beamwidth. Notice two behaviours before you go to the bench: the dots
+half-power beamwidth. Notice two behaviors before you go to the bench: the dots
 mark the $2.8125^\circ$ sample grid the sweep visits, so a narrow beam is
 described by only a handful of samples, and the beam widens as you steer away from
 broadside while the sidelobe structure stretches with it.
@@ -91,7 +91,7 @@ broadside while the sidelobe structure stretches with it.
 
 You need the ADALM-PHASER kit on its stand, the HB100 source on a tripod at
 approximately $1\ \text{m}$ from the array face and at the same height as the
-element row, a protractor arc or a printed angle scale centred under the array,
+element row, a protractor arc or a printed angle scale centered under the array,
 and a laptop on the same network as the board.
 
 Bring the GUI up the way you did in Lesson 17: power the board, wait for the
@@ -118,7 +118,7 @@ Work through the steps in order. Each one names the control you touch and the
 observation you should get before moving on.
 
 **1. Confirm the source on the FFT tab.** Place the HB100 at boresight
-($0^\circ$ on the arc), aimed at the centre of the array. Open the **FFT** tab.
+($0^\circ$ on the arc), aimed at the center of the array. Open the **FFT** tab.
 You should see one narrow tone standing $20\ \text{dB}$ or more above the noise,
 near the $1\ \text{MHz}$ offset in the baseband spectrum. If the tone is buried,
 raise **Rx Gain** or re-aim the module before continuing. Record the frequency the

@@ -74,7 +74,7 @@ You need the ADALM-PHASER kit with its Raspberry Pi and Pluto attached, the
 HB100 source and its battery, and a laptop on the same network.
 
 1. Place the HB100 at boresight, about 1 m from the array face, aimed at the
-   centre of the patch row. Leave it there for the whole lab. Every number
+   center of the patch row. Leave it there for the whole lab. Every number
    today is a comparison between tapers, so the source must not move between
    sweeps.
 2. Power the PHASER, wait for the Pi to boot, and open
@@ -213,10 +213,10 @@ achieved:
 
 $$\sum a_n = N \times 10^{-6.8/20} = 8 \times 0.457 = 3.66 .$$
 
-That is 0.98 short of 4.64, which is one full-amplitude element. A centre
+That is 0.98 short of 4.64, which is one full-amplitude element. A center
 element is set to 0% — either its slider was dragged while Enforce Symmetric
 Taper was off, or its channel failed. The pattern gives the same verdict
-independently: with one centre element dead the trace loses its symmetry and
+independently: with one center element dead the trace loses its symmetry and
 the sidelobes climb back up instead of staying buried.
 :::
 

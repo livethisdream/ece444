@@ -128,7 +128,7 @@ This is the misconception to kill. Students who just finished the tapering lab w
 <div class="fig" data-inline-svg="./fig/L26-grating-thinning.svg" style="max-width:1060px; margin:0 auto;"></div>
 
 Note:
-Walk left to right. Fourteen millimetres: one beam, nothing else in view. Twenty-eight: still one beam, but the horizon has come up to full height. Forty-two and fifty-six: two extra beams, same height as the main one, marching inward as the spacing grows.
+Walk left to right. Fourteen millimeters: one beam, nothing else in view. Twenty-eight: still one beam, but the horizon has come up to full height. Forty-two and fifty-six: two extra beams, same height as the main one, marching inward as the spacing grows.
 
 ---
 
@@ -182,7 +182,7 @@ The PHASER at the HB100's 10.525 GHz: $d/\lambda = 14/28.5 = 0.491$, so $\lambda
 <div class="callout"><strong>Half-wavelength spacing is the default</strong> because it is grating-lobe-free at any scan angle you can command.</div>
 
 Note:
-Ask them why the board designer chose fourteen millimetres. Answer: it is just inside half a wavelength at the top of the band, which gives the full scan range with no ambiguity.
+Ask them why the board designer chose fourteen millimeters. Answer: it is just inside half a wavelength at the top of the band, which gives the full scan range with no ambiguity.
 
 ---
 
@@ -270,7 +270,7 @@ Demo on the kit: Lab preset 5, Beam Squint. Steer to forty-five degrees, turn on
 
 **Wideband radar.** Every frequency in the pulse points somewhere slightly different. The compressed pulse is smeared in angle, the effective beam is broadened, and the reported target angle is biased.
 
-**Communications.** A modulated carrier loses gain at the band edges relative to the centre, which appears as amplitude tilt across the channel.
+**Communications.** A modulated carrier loses gain at the band edges relative to the center, which appears as amplitude tilt across the channel.
 
 </div><div class="col-fig">
 

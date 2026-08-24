@@ -79,7 +79,7 @@ Two columns, entered in two panels:
 | Phase Control | phase offset in degrees | $\angle w_n$ |
 
 <div class="callout">
-Sixteen numbers, entered by hand. The gains are symmetric about the array centre;
+Sixteen numbers, entered by hand. The gains are symmetric about the array center;
 the phases that place the null are equal and opposite across it.
 </div>
 
@@ -96,7 +96,7 @@ edit mirrored onto its partner and will chase the wrong fault.
 
 Note:
 Ask them what taper this is. It is not one — the amplitudes are symmetric but not
-monotonic, and the phases are equal and opposite across the centre. Neither
+monotonic, and the phases are equal and opposite across the center. Neither
 column means anything alone; the vector nulls, not the columns.
 
 ---

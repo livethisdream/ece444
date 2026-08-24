@@ -165,7 +165,7 @@ and nothing else.
 Run it backwards: LO limits of 12.2–13.0 GHz give **10.0–10.8 GHz** of RF coverage.
 
 <div class="callout">
-The window is only <strong>3 MHz wide</strong> at 3 MSPS. A tone 1 MHz off centre is a clean peak; a tone 200 MHz off does not appear at all. An empty FFT is almost always a frequency error, not a dead array.
+The window is only <strong>3 MHz wide</strong> at 3 MSPS. A tone 1 MHz off center is a clean peak; a tone 200 MHz off does not appear at all. An empty FFT is almost always a frequency error, not a dead array.
 </div>
 
 Note:

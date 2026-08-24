@@ -55,10 +55,10 @@ $\angle w_n$ — gives the eight settings you will enter.
      alt="The eight element gains and phase offsets for a null at +22.5 degrees"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
-Read the amplitudes first. They are symmetric about the array centre but not
+Read the amplitudes first. They are symmetric about the array center but not
 monotonic — element 2 is quieter than element 1 — so this is no taper you would
 have reached for. The phases are antisymmetric, equal and opposite across the
-centre. Neither column means much on its own. The eight numbers together are one
+center. Neither column means much on its own. The eight numbers together are one
 vector, and only the vector nulls anything.
 
 Three predictions come with the settings, and you will check all three:
@@ -116,7 +116,7 @@ top of it. Every measurement below is a comparison against a frozen trace.
    the level of the sidelobe nearest $+22.5^\circ$; it should be about
    $-12.8$ dBc.
 2. Enter the eight percentages from Part 1 into **Element Gains** (Rx1 through
-   Rx8). This set is symmetric about the array centre, so **Enforce Symmetric
+   Rx8). This set is symmetric about the array center, so **Enforce Symmetric
    Taper** makes no difference to it; leave the switch off so that a later edit to
    one slider is not mirrored onto its partner.
 3. Enter the eight phase offsets from Part 1 into **Phase Control**. Keep the

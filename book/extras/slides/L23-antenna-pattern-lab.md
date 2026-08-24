@@ -271,7 +271,7 @@ of the same array land on the same sidelobe level.
 
 Note:
 Four artifacts, and they have one of each sitting in their own data. A ten
-centimetre radius error at one metre is about zero point eight decibels, which
+centimeter radius error at one meter is about zero point eight decibels, which
 is larger than the scan loss they were trying to measure. That comparison lands
 better than any of the others.
 
