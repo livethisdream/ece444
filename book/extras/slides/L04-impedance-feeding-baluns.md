@@ -81,17 +81,20 @@ ends up.
 
 ## Why small antennas are hard
 
-Short dipole ($\ell \ll \lambda$):
+Infinitesimal (Hertzian) dipole, uniform current — and the practical centre-fed short dipole, whose current tapers to zero at the tips:
 
-$$ R_\text{rad} = 80\pi^2\left(\frac{\ell}{\lambda}\right)^2 $$
+$$ R_\text{rad} = 80\pi^2\left(\frac{\ell}{\lambda}\right)^2 \qquad\text{vs}\qquad R_\text{rad} = 20\pi^2\left(\frac{\ell}{\lambda}\right)^2 $$
 
-- $\ell = 0.05\lambda \Rightarrow R_\text{rad} \approx 2\ \Omega$
+- $\ell = 0.05\lambda \Rightarrow R_\text{rad} \approx 0.49\ \Omega$ for the real thing
 - A fraction of an ohm of conductor loss now wrecks the efficiency
 
 Make it $\lambda/2$ long and the picture changes completely.
 
 Note:
-The (ℓ/λ)² dependence is the whole story of small-antenna inefficiency.
+The (ℓ/λ)² dependence is the whole story of small-antenna inefficiency. The
+triangular current distribution halves the effective length, which quarters the
+radiation resistance — so quote 20π², not 80π², for anything you would actually
+build. Half an ohm is the number they meet again in the matching lab.
 
 ---
 
@@ -190,8 +193,49 @@ Two reactances, two jobs, in this order: **cancel X, then transform R.**
 Note:
 Minimal lumped network — two elements, and it reaches any Z0 from any complex
 load. Which side the shunt goes on depends on whether the load resistance is
-below or above Z0: below, shunt toward the source, as drawn. This is the
-starting point for Smith-chart matching later in the course.
+below or above Z0: below, shunt toward the source, as drawn.
+
+---
+
+<!-- .slide: class="viz-cue-slide" -->
+
+## The same two moves, on the Smith chart
+
+<div class="fig" data-inline-svg="./fig/L04-lmatch-smith.svg" style="max-width:560px; margin:0 auto;"></div>
+
+<p class="viz-cue">↗ Interactive on the lesson page</p>
+
+Note:
+This is the picture, and they already own the tool from ECE 343 — same chart,
+same circles. Walk it live: the antenna sits low and left of centre, capacitive.
+A SERIES element can only move you along a constant-resistance circle, so walk
+up that circle until you cross the unit-conductance circle. Now a SHUNT element
+moves you along constant conductance, straight into the centre. Two moves, two
+elements. Emphasise that the series element cannot change the resistance and the
+shunt element cannot change it back — that is why the order is forced.
+
+---
+
+## Where the network Q comes from
+
+Any series branch can be rewritten as a parallel pair. Define the branch's **reactance-to-resistance ratio** $Q = X_s/R_s$ — the same stored-versus-dissipated ratio as the antenna $Q$ in L3:
+
+$$ R_p = R_s\left(1 + Q^2\right) \qquad\qquad X_p = X_s\left(1 + \frac{1}{Q^2}\right) $$
+
+The shunt element cancels $X_p$, so all that is left is $R_p$ — and we need that to be $Z_0$:
+
+$$ Z_0 = R_s\left(1+Q^2\right) \quad\Longrightarrow\quad Q = \sqrt{\frac{Z_0}{R_s} - 1} $$
+
+<div class="callout">
+The transformation ratio <strong>sets</strong> $Q$. You do not get to choose it — and $Q$ is what sets your bandwidth.
+</div>
+
+Note:
+This is the slide that keeps the next one from looking like magic. Stress that Q
+here is the SAME definition as the antenna Q from L3 — reactance over resistance,
+energy stored over energy dissipated per radian — just applied to a circuit
+branch instead of a radiating structure. That is why the L3 bandwidth argument
+carries straight over: transform further, get a higher Q, get less bandwidth.
 
 ---
 
@@ -207,13 +251,16 @@ Antenna $Z_\text{in} = 20 - j15\ \Omega$, feed line $50\ \Omega$, design frequen
 | Shunt reactance | $50/1.22 = 40.8\ \Omega$, capacitive | $C = 3.9\ \text{pF}$ |
 
 <div class="callout">
-Every match is <strong>band-limited</strong>. Forcing $\Gamma=0$ at one frequency is easy; holding it across a band is the size-vs-bandwidth fight from L3.
+Same answer the chart gave: $+j39.5\ \Omega$ then $3.9$ pF. The algebra is the shortcut; the chart is the picture.
 </div>
 
 Note:
-Do the first row out loud, then let them get Q. Two elements, both lossless, and
-the 20 Ω antenna now looks like 50 Ω — at 1 GHz and nowhere else. Move 10% in
-frequency and the reactances are wrong by 10% each.
+Point back at the Smith chart slide — the series step is that navy arc, the shunt
+step is the green one, and 39.5 Ω and 3.9 pF are exactly what the arcs measured.
+Two elements, both lossless, and the 20 Ω antenna now looks like 50 Ω — at 1 GHz
+and nowhere else. Move 10% in frequency and the reactances are wrong by 10% each,
+which is the band-limit point: forcing Γ = 0 at one frequency is easy, holding it
+across a band is the size-versus-bandwidth fight from L3.
 
 ---
 

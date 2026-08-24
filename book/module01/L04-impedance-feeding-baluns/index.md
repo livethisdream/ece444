@@ -215,8 +215,8 @@ A quarter-wave transformer needs a real load and a quarter wavelength of line.
 For a **complex** load — or at frequencies where $\lambda/4$ is inconveniently
 long — use a two-element **L-network**: one series reactance and one shunt
 reactance, which together reach any $Z_0$ from any complex load. It is the
-minimal lumped matching network, and the starting point for the Smith-chart
-matching you will do later in the course.
+minimal lumped matching network, and you already own the tool for reading it:
+the Smith chart from your transmission-lines course.
 
 <img src="../../viz/img/L04-lmatch.svg" alt="An L network between a feed line and a complex load: a series element next to the load cancels its reactance, then a shunt element transforms the resistance" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
@@ -224,17 +224,60 @@ Two reactances, two jobs, in this order:
 
 1. **Cancel the load reactance.** The series element next to the load adds
    $-X_L$, leaving a purely resistive $R_L$.
-2. **Transform the remaining resistance.** The pair of elements works at a
-   network quality factor
+2. **Transform the remaining resistance.** The series element sets how far the
+   resistance moves; the shunt element cleans up what is left over.
 
-   $$
-   Q = \sqrt{\frac{R_\text{big}}{R_\text{small}} - 1},
-   $$
+#### The two moves, on the Smith chart
 
-   where $R_\text{big}$ and $R_\text{small}$ are the larger and smaller of $R_L$
-   and $Z_0$. The series reactance is $Q R_\text{small}$ and the shunt reactance
-   is $R_\text{big}/Q$. The shunt element goes on the side of the larger
-   resistance — toward the source when $R_L < Z_0$, as drawn above.
+Before the algebra, look at what the two elements can actually *do*. A series
+element changes reactance but not resistance, so it can only walk the operating
+point along a **constant-resistance circle**. A shunt element changes
+susceptance but not conductance, so it can only walk along a **constant-conductance
+circle**. Matching is therefore a two-leg journey to the centre of the chart:
+walk the constant-resistance circle until you cross the unit-conductance circle,
+then walk that circle home.
+
+<img src="../../viz/img/L04-lmatch-smith.svg" alt="Smith chart showing the L-match as two arcs: a series element walking a constant-resistance circle, then a shunt element walking a constant-conductance circle into the centre" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+
+That picture is the whole method, and it is why the order is forced: the series
+element cannot change the resistance, and the shunt element cannot change it
+back.
+
+#### Where the network Q comes from
+
+The algebra is just the shortcut for the same journey. Any series branch
+$R_s + jX_s$ can be rewritten as a parallel pair. Define the branch's
+reactance-to-resistance ratio
+
+$$
+Q = \frac{X_s}{R_s},
+$$
+
+which is the same stored-energy-to-dissipated-energy ratio that defined the
+antenna $Q$ in Lesson 3 — applied to a circuit branch instead of a radiating
+structure. The series-to-parallel transformation is then
+
+$$
+R_p = R_s\left(1 + Q^{2}\right), \qquad X_p = X_s\left(1 + \frac{1}{Q^{2}}\right).
+$$
+
+The shunt element cancels $X_p$, so what the source sees is just $R_p$ — and we
+need that to equal $Z_0$. Setting $R_p = Z_0$ and solving for $Q$:
+
+$$
+Q = \sqrt{\frac{R_\text{big}}{R_\text{small}} - 1},
+$$
+
+where $R_\text{big}$ and $R_\text{small}$ are the larger and smaller of $R_L$
+and $Z_0$. The series reactance is $Q R_\text{small}$ and the shunt reactance
+is $R_\text{big}/Q$. The shunt element goes on the side of the larger
+resistance — toward the source when $R_L < Z_0$, as drawn above.
+
+Note what this says: **you do not get to choose $Q$.** The transformation ratio
+sets it. And since $Q$ sets bandwidth exactly as it did in Lesson 3, the further
+you have to transform, the narrower the band you get — which is why an
+electrically small antenna, with its fraction of an ohm of radiation resistance,
+is so painful to feed over any useful bandwidth.
 
 :::{admonition} Worked example — matching $20 - j15\ \Omega$ at 1 GHz
 :class: tip
@@ -244,7 +287,7 @@ a design frequency of 1 GHz. Design the L-match.**
 *Cancel the reactance.* The load is capacitive, so add $+j15\ \Omega$ in series;
 what remains is $20 + j0\ \Omega$.
 
-*Network $Q$.* Here $R_\text{small} = 20\ \Omega$ and $R_\text{big} = 50\ \Omega$:
+*Network $Q$.* Here $R_\text{small} = 20\ \Omega$ and $R_\text{big} = 50\ \Omega$ — this is the arc up the constant-resistance circle in the chart above:
 
 $$
 Q = \sqrt{\frac{50}{20} - 1} = \sqrt{1.5} = 1.22

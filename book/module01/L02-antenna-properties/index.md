@@ -308,7 +308,7 @@ $G = \eta_{\text{rad}} D$ → realized gain** in dBi.
         title="Gain builder">
 </iframe>
 
-### $\Gamma$, VSWR, and Power Reflected
+### Γ, VSWR, and Power Reflected
 
 Recall the transmission-line result you already own.
 
@@ -338,7 +338,7 @@ $$
 \frac{P_{\text{acc}}}{P_{\text{inc}}} = 1 - \vert\Gamma\vert^{2}.
 $$
 
-### Quick Reference $\Gamma$ vs VSWR vs Power
+### Quick Reference — Γ vs VSWR vs Power
 
 <img src="../../viz/img/L02-vswr.svg"
      alt="VSWR plotted against the magnitude of the reflection coefficient"

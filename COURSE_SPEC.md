@@ -366,6 +366,10 @@ stay bare ($\eta_0$, $A_e$, $G_t$, $G_r$).
 
 - **No thin spaces (U+2009) anywhere.** Use `\ ` for spacing in math on MyST
   pages (never `\,` or `\;`).
+- **No math in markdown headings.** `## ... $\Gamma$ ...` is converted to
+  `\(\Gamma\)` and then never typeset — the heading ships the literal
+  delimiters. Write the symbol as a plain character (Γ, Q, λ) instead. Same
+  hazard as math inside raw-HTML blocks and LO `<li>` items.
 - In markdown tables, absolute values/norms use `\vert`, never `|`.
 - Units in math with an escaped space: `$0.05\ \text{m}$` style on pages;
   house unit macros in LaTeX practice sets.
