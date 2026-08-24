@@ -87,9 +87,11 @@ def main() -> int:
                     zorder=5)
 
     start, mid, end = G(complex(r, x0)), G(complex(r, x1)), 0 + 0j
-    for pt, col, lab, off in ((start, RED, "start: the antenna", (-0.10, -0.22)),
-                              (mid, ORANGE, "after the series inductor", (-0.02, 0.24)),
-                              (end, GREEN, "matched", (0.10, -0.20))):
+    # offsets pull the labels INWARD -- placed outward their left edges ran
+    # across the rim of the chart
+    for pt, col, lab, off in ((start, RED, "start: the antenna", (0.34, -0.20)),
+                              (mid, ORANGE, "after the series inductor", (0.38, 0.20)),
+                              (end, GREEN, "matched", (0.16, -0.17))):
         ax.plot(pt.real, pt.imag, "o", color=col, ms=9, zorder=6,
                 markeredgecolor="white", markeredgewidth=1.4)
         ax.annotate(lab, xy=(pt.real, pt.imag),
