@@ -302,6 +302,58 @@ Setting $\vert Z \vert^2 = Z_0 R_L$ is exactly the condition that makes it so.
 What remains is the $-j/40.8$, and a shunt element supplying $+j/40.8$ cancels
 it dead, leaving a clean $50\ \Omega$.
 
+#### Why we have to switch to the parallel equivalent
+
+That admittance step is the one that feels like a rabbit out of a hat, so it is
+worth saying why it is unavoidable. **Impedances add in series; admittances add
+in parallel** — and an L-network has one element of each kind. No single
+currency describes both moves, so somewhere in the middle you have to change
+money.
+
+Underneath that bookkeeping is a symmetry that explains why the network works at
+all. Add a *series* reactance to a $20\ \Omega$ branch: the series resistance
+never moves, but the parallel-equivalent resistance climbs.
+
+| series $X$ added | $\text{Re}(Z)$ | parallel equivalent $1/\text{Re}(Y)$ |
+| :-- | :-: | :-: |
+| $0$ | $20\ \Omega$ | $20\ \Omega$ |
+| $+j10$ | $20\ \Omega$ | $25\ \Omega$ |
+| $+j24.5$ | $20\ \Omega$ | $50\ \Omega$ |
+| $+j40$ | $20\ \Omega$ | $100\ \Omega$ |
+
+Now put a *shunt* reactance across a $20\ \Omega$ resistor and precisely the
+opposite happens — the conductance is pinned and the series-equivalent
+resistance falls.
+
+| shunt $X$ across | $\text{Re}(Y)$ | series equivalent $\text{Re}(Z)$ |
+| :-- | :-: | :-: |
+| none | $1/20$ | $20\ \Omega$ |
+| $-j100$ | $1/20$ | $19.2\ \Omega$ |
+| $-j50$ | $1/20$ | $17.2\ \Omega$ |
+| $-j20$ | $1/20$ | $10.0\ \Omega$ |
+
+The two elements are exact duals:
+
+- a **series** element cannot touch $\text{Re}(Z)$, but it steers $\text{Re}(Y)$
+- a **shunt** element cannot touch $\text{Re}(Y)$, but it steers $\text{Re}(Z)$
+
+That hands you the whole design. You are aiming for $50\ \Omega$, and during the
+series move $\text{Re}(Z)$ is frozen at $20\ \Omega$ — a useless thing to aim
+at. The only quantity you can steer is $\text{Re}(Y)$, so you steer it to
+$1/50$. Then the shunt element is the perfect finisher: it *cannot* disturb
+$\text{Re}(Y)$, so the $50\ \Omega$ you just earned is locked in, and its only
+remaining job is to cancel the susceptance.
+
+It also explains why two series elements could never do it — they would just sum
+reactance, and $\text{Re}(Z)$ would sit at $20\ \Omega$ forever. You need one
+element of each kind, and the moment you have a shunt element you are obliged to
+speak admittance.
+
+So the parallel equivalent is not a trick. It is the only view in which the
+intermediate state is legible: written as $20 + j24.5\ \Omega$ it tells you
+nothing, since the 20 has not budged. Written as $50\ \Omega$ alongside
+$-j40.8\ \Omega$ it says *you have arrived — one cancellation to go.*
+
 #### The two moves, on the Smith chart
 
 Before the algebra, look at what the two elements can actually *do*. A series

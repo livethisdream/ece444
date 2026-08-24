@@ -263,6 +263,29 @@ exactly 1/50, so the shunt element only has to clean up the leftover -j40.8.
 
 <!-- .slide: class="viz-cue-slide" -->
 
+## Why switch to admittance?
+
+Impedances add in **series**. Admittances add in **parallel**. An L-network has one of each — so you must change currency in the middle.
+
+| | cannot change | steers |
+| :-- | :-- | :-- |
+| **series** element | $\text{Re}(Z)$ — stuck at $20\ \Omega$ | $\text{Re}(Y)$ |
+| **shunt** element | $\text{Re}(Y)$ | $\text{Re}(Z)$ |
+
+<div class="callout">
+Exact duals. So: steer $\text{Re}(Y)$ to $1/50$ with the series part — then the shunt part <strong>cannot undo it</strong>, and only cancels the leftover.
+</div>
+
+Note:
+This is the step that feels like a rabbit out of a hat, so name it plainly: the
+topology forces it. Then the duality, which is the real payoff. Two series
+elements could never work — they only sum reactance and Re(Z) sits at 20 forever.
+You need one of each kind. And the reason we read the middle state in parallel
+terms is that "20 + j24.5" tells you nothing, the 20 has not moved; "50 Ω
+alongside −j40.8" tells you that you have arrived with one cancellation to go.
+
+---
+
 ## The same two moves, on the Smith chart
 
 <div class="fig" data-inline-svg="./fig/L04-lmatch-smith.svg" style="max-width:560px; margin:0 auto;"></div>
