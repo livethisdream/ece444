@@ -706,18 +706,24 @@ it, not to replace it.
 - **American English throughout** (course rule, applies to every artifact):
   center, color, behavior, analyze, normalize, meter, gray. Sweep before
   reporting; "centre" was caught in review.
-- **Widget pill design language** (supersedes the plainer M3 pill style):
-  use Module 1's adjusted house pattern, verbatim from
-  `book/extras/viz/polar-gain.html` / `field-regions.html`:
-  `.pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }`
-  `.pill { padding:4px 12px; border-radius:1em; font-size:12px;
-  font-weight:600; white-space:nowrap; font-variant-numeric:tabular-nums;
-  display:inline-flex; align-items:center; gap:5px; border:1px solid
-  var(--edge2); background:#eef4fa; color:var(--navy); }` with
-  `.pill b { font-weight:700; }` for values, plus tinted variants where a
-  pill carries state or annotates a colored trace (`.pill.good`,
-  `.pill.warn`, or a series-colored variant tinted from the trace color at
-  ~0.10–0.12 alpha with a ~0.28–0.30 alpha border).
+- **Widget readout design language — the instrument grid** (final, per
+  Neil's review 2026-08-24; supersedes BOTH inline-pill styles that
+  preceded it). The reference is `book/extras/viz/dipole-explorer.html`
+  (Module 2 L07, "current standing wave on the wire"). Readouts are a grid
+  of equal-width two-row cells, flush with the canvases above: a small
+  uppercase label over a large bold value, symmetric and instrument-like.
+  Verbatim from the reference:
+  `.readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }`
+  `.ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:4px; padding:7px 8px 8px; min-width:0; border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }`
+  `.ro .k { display:block; text-align:center; height:15px; line-height:15px; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; }`
+  `.ro .k mjx-container { font-size:inherit !important; }`
+  `.ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1; text-align:center; min-width:8ch; color:var(--navy); }`
+  State/series variants tint the cell like the reference's `.ro.hp`
+  (background rgba of the trace color at ~0.10 alpha, border ~0.30 alpha,
+  value colored to match); most cells stay neutral. Labels are SHORT (the
+  cell clips overflow) — any comparison or unit lives in the value field.
+  The `.k` label may hold a MathJax symbol; keep `.k` display:block, not
+  flex, so the space between symbol and word survives.
 - **Lab sheets** (one per lab lesson: L17, L19, L21, L23, L25, L28): a
   fillable turn-in document `latex/ECE444_Lab_L<NN>_<Short>.tex` on the
   `build_lab.sh` harness, exactly following `ECE444_Lab_L04_Matching.tex`
