@@ -1,0 +1,212 @@
+\documentclass{exam}
+
+\newif\ifA
+\newif\ifkey
+\newif\ifprintselected   % required by exam_config's \ansbox
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lab Num -- Module 3's six lab periods follow L04 (Lab 1) and the two
+% Module 2 measurement labs, so L23 is Lab 7. Override with \def\labNumIn{}
+% if the course sequence renumbers.
+\ifdefined\labNumIn
+	\def\labNum{\labNumIn}
+\else
+	\def\labNum{7}
+\fi
+
+% is this the key or not?
+\ifdefined\iskey
+	\ifnum\iskey=1
+		\keytrue
+	\else
+		\keyfalse
+	\fi
+\else
+	%% Pick one manually
+	\keyfalse % if this is NOT the key
+%	\keytrue     % if this IS the key
+\fi
+
+% set up the header and footer - change for every term
+\ifdefined\thisTermIn
+	\def\thisterm{\thisTermIn}
+\else
+	\def\thisterm{Fall 2026}
+\fi
+%
+\def\thisclass{ECE 444}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% END SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% packages and shortcuts
+\input{myPackages_gr}
+\usepackage[hidelinks, linkcolor=red]{hyperref}
+\input{myShortcuts}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+%% exam class customization
+\input{exam_config}
+\printselectedfalse      % full worked solutions in the key, not answers-only
+\CorrectChoiceEmphasis{\color{red}}
+\SolutionEmphasis{\color{red}}
+\renewcommand\questionlabel{\textbf{\thequestion.}}
+\renewcommand{\thepartno}{\alph{partno}}
+\renewcommand{\partlabel}{(\thepartno)}
+
+% Fillable table cell: blank in the student copy, the expected value in red on
+% the KEY. Fixed-width centered columns keep the blank cells writable.
+\newcolumntype{K}[1]{>{\centering\arraybackslash}p{#1}}
+\newcommand{\kv}[1]{\ifkey{\color{red}#1}\fi\rule[-0.10in]{0pt}{0.34in}}
+
+% print the answers if this is the key
+\ifkey
+	\printanswers % if this IS the key
+\else
+	\noprintanswers  %if this is NOT the key
+\fi
+
+% print the header and footer
+% need to print key on top if this is the key
+\ifkey
+	\firstpageheader{}{\color{red}{ KEY}}{}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\else
+	\firstpageheader{}{}{}
+	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\fi
+
+\runningheadrule
+
+\begin{document}
+\pagestyle{headandfoot}   % exam class
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% title block
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+USAF ACADEMY \\
+DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
+LAB \#\labNum\ (Lesson 23) - Antenna Pattern Lab \\
+\textbf{Lab Sheet} \\
+\thisterm \\[4mm]
+\end{center}
+
+\vspace{-4pt}
+\textbf{Name:} \rule[-2pt]{2.6in}{0.4pt} \hfill
+\textbf{Section:} \rule[-2pt]{0.9in}{0.4pt} \hfill
+\textbf{Date:} \rule[-2pt]{1.1in}{0.4pt}
+
+\vspace{4pt}
+
+\fullwidth{\textbf{Learning Objective 3.6: } I can distinguish between array factor
+and true antenna pattern and account for element pattern effects.}
+
+\vspace{2pt}
+
+This sheet is the turn-in document for the Lesson 23 lab. Report every lobe
+amplitude relative to the main-lobe peak, in dBc, and state the uncertainty next
+to any number read off a hand-walked trace. The lab is a team assignment, so one
+sheet per team.
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The annotated trace.} Attach or sketch one screenshot of your
+best broadside run from the Tracking tab, with the main lobe and both first
+sidelobes labeled with their dBc values.
+
+\begin{solutionorbox}[3.7in]
+An acceptable trace shows one main lobe near the middle of the walk with a
+sidelobe on each side of it, and all three labeled with an amplitude relative to
+the main-lobe peak. The main lobe is $0$ dBc by definition, and the two
+sidelobes should land within a decibel or two of $-13$ dBc. The reader has to be
+able to tell which lobe each label belongs to, and to see that the values are
+differences from the peak rather than absolute dBFS numbers. A trace whose
+sidelobes read $-6$ or $-7$ dBc is not a uniform illumination, and it sends the
+team back to Calibrate and to the element gain sliders.
+\end{solutionorbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{The amplitude comparison table.} Three lobes from the
+broadside run, each as an amplitude relative to the main-lobe peak. The
+mechanical column is your hand-walked trace, the electrical column is the
+Rectangular-tab sweep of step 4, and the calculated column comes from theory.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{1.1in} | K{1.15in} | K{1.05in} | K{1.15in} |}
+\hline
+\textbf{Lobe} & \textbf{Mechanical (dBc)} & \textbf{Electrical sweep (dBc)} & \textbf{Calculated (dBc)} & \textbf{Mechanical $-$ electrical} \\\hline\hline
+Main lobe & \kv{$0$ by definition} & \kv{$0$ by definition} & \kv{$0$} & \kv{$0$} \\\hline
+First sidelobe, left & \kv{$-11$ to $-15$} & \kv{$-11$ to $-13$} & \kv{$-13.1$} & \kv{$\le 2$ dB} \\\hline
+First sidelobe, right & \kv{$-11$ to $-15$} & \kv{$-11$ to $-13$} & \kv{$-13.1$} & \kv{$\le 2$ dB} \\\hline
+\end{tabular}
+\end{center}
+
+\begin{solution}
+The calculated $-13.1$ dBc is the $-12.8$ dB array-factor sidelobe of a uniform
+eight-element array plus about $0.3$ dB of element-pattern roll-off at the
+$\pm 22\mydeg$ where those sidelobes sit. A hand-walked trace in a classroom
+carries about $\pm 1$ dB of multipath ripple, so the mechanical column is
+accepted over a wider window than the electrical one. The two columns should
+agree within about 2 dB, and a larger gap usually means the radius changed
+during the walk, since received power goes as $1/r^2$ and a $10$ cm error at
+$1\ \m$ is worth about $0.8$ dB. The left and right readings need not match each
+other exactly; a spread of about a decibel between them is normal in a room.
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{Written answers.} Three or four sentences each.
+
+\begin{parts}
+
+	\part Why do the lobe amplitudes survive a sloppy rotation while the lobe
+	angles do not? Refer to what the time axis does and does not record.
+
+	\begin{solutionorlines}[2.2in]
+	The plot records received amplitude against elapsed time, and the amplitude at
+	any instant is whatever the array collected from the direction the source
+	occupied at that instant. Walking unevenly changes when each direction is
+	visited, not how much power arrives from it, so every lobe keeps its height
+	and only its position and width on the plot change. The time axis records
+	nothing about where your hand was, so converting it to angle requires assuming
+	a constant speed you did not have. That is why the amplitudes are reportable
+	and the angles are not.
+	\end{solutionorlines}
+
+	\part Which of the four artifacts in Part 4 does an anechoic chamber remove,
+	and which of them would still be present in a chamber measurement?
+
+	\begin{solutionorlines}[2.4in]
+	The absorber in an anechoic chamber removes the reflections, so the floor,
+	ceiling, and whiteboard paths disappear and the $\pm 1$ dB ripple riding on
+	the trace goes with them. The other three artifacts belong to the positioner
+	and the range geometry rather than to the room. A hand-held source walked
+	around a chamber would still have an uncalibrated angle axis, a radius that
+	varies with the operator's arm, and a separation that is only as good as the
+	tape measure. A range fixes those with a turntable and a shaft encoder, a
+	source bolted at a fixed distance, and a documented far-field separation.
+	\end{solutionorlines}
+
+\end{parts}
+
+\end{questions}
+
+\vspace{1.0em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{document}

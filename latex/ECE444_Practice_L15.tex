@@ -1,0 +1,363 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L15 practice set (Aperture Distributions and Efficiency) -- the continuous
+% aperture results that Module 3 samples into arrays from L16 onward.
+
+\fullwidth{\textbf{Learning Objective 3.1: } Describe an aperture distribution,
+compute the beamwidth, sidelobe level and aperture efficiency it produces, and
+use those results to size an aperture for a specification.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+\question \textbf{The uniform aperture.} A rectangular horn is fed so that the
+field across its $24$\ \text{cm} broad dimension is essentially constant in
+amplitude and phase. It operates at $12\ \ghz$.
+
+\begin{parts}
+
+	\part In one or two sentences, state the relationship between the aperture
+	distribution and the far-field pattern, and say what the space frequency
+	$u = (L/\lambda)\sinp{\theta}$ does for you that the angle $\theta$ does not.
+		\begin{solution}[1.2in]
+		The far field is the Fourier transform of the aperture distribution: the
+		space factor is the integral of the aperture field weighted by the phase
+		$e^{jkx\sinp{\theta}}$ across the opening. Written against $u$, the
+		pattern shape depends only on the \emph{shape} of the illumination, so
+		one curve serves every aperture with that illumination; the size
+		$L/\lambda$ only sets how many degrees each unit of $u$ costs.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the aperture length in wavelengths and the half-power
+		beamwidth in the broad-dimension plane.
+		\begin{solution}[1.3in]
+		\eq{ \lambda &= \frac{3\times 10^{8}}{12\times 10^{9}} = 0.025\ \m
+		     = 2.5\ \text{cm} \\
+		     \frac{L}{\lambda} &= \frac{24}{2.5} = 9.6 \\
+		     \theta_{\text{HP}} &= 50.8\mydeg \frac{\lambda}{L}
+		     = \frac{50.8\mydeg}{9.6} = 5.29\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$5.29\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the angle of the first null measured from broadside.
+		\begin{solution}[1.1in]
+		The sinc pattern nulls at $u = 1$, so
+		\eq{ \sinp{\theta} &= \frac{\lambda}{L} = \frac{1}{9.6} = 0.1042 \\
+		     \theta &= 5.98\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{null}}$ = \ansbox[1.3in]{$\pm 5.98\mydeg$}
+	\end{minipage}
+
+	\part State the first sidelobe level of this aperture, and explain in one
+	sentence why lengthening the horn would not change it.
+		\begin{solution}[1.2in]
+		The first sidelobe of a uniformly illuminated aperture is $-13.3\ \db$
+		relative to the peak. The normalized pattern $\sinp{\pi u}/(\pi u)$
+		contains no $L$ at all, so lengthening the aperture rescales the angle
+		axis (narrower beam, higher gain) without changing the height of any
+		lobe. Sidelobe level is set by the shape of the illumination, and the
+		uniform shape is fixed at $-13.3\ \db$ regardless of size.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Aperture efficiency.} Aperture efficiency converts physical
+area into gain through $G = \eta_{\text{ap}}\ 4\pi A/\lambda^{2}$.
+
+\begin{parts}
+
+	\part Write the definition of $\eta_{\text{ap}}$ in terms of the aperture
+	field, and state in words what the numerator and the denominator each
+	represent.
+		\begin{solution}[1.3in]
+		\eq{ \eta_{\text{ap}} = \frac{\left| \int E_a\ da \right|^{2}}
+		     {A \int \left| E_a \right|^{2} da} }
+		The numerator is the coherent sum of the aperture field, which is what
+		arrives on boresight when every point adds in phase. The denominator is
+		the area times the power the aperture actually had to radiate. The ratio
+		is coherent gain over available gain, it never exceeds one, and it
+		reaches one only for constant amplitude and constant phase.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A line aperture carries a triangular illumination,
+		$E_a = 1 - 2\left| x \right|/L$. Evaluate the two integrals over
+		$\xi = x/L$ and compute $\eta_{\text{ap}}$.
+		\begin{solution}[1.5in]
+		\eq{ \int_{-1/2}^{1/2}\lp 1 - 2\left| \xi \right| \rp d\xi &= \frac{1}{2} \\
+		     \int_{-1/2}^{1/2}\lp 1 - 2\left| \xi \right| \rp^{2} d\xi &= \frac{1}{3} \\
+		     \eta_{\text{ap}} &= \frac{(1/2)^{2}}{1 \times (1/3)} = 0.750 }
+		This is the canonical triangular value, a gain penalty of
+		$10\ \mylog{0.75} = -1.25\ \db$ against uniform.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\eta_{\text{ap}}$ = \ansbox[1.3in]{$0.750$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A pyramidal horn has an $8\ \text{cm} \times 6\ \text{cm}$ mouth
+		and a measured aperture efficiency of $0.51$ at $10\ \ghz$. Find its
+		gain in dBi.
+		\begin{solution}[1.4in]
+		\eq{ \lambda &= 0.03\ \m, \qquad A = 0.08 \times 0.06 = 0.0048\ \m^{2} \\
+		     \frac{4\pi A}{\lambda^{2}} &= \frac{4\pi (0.0048)}{(0.03)^{2}} = 67.0 \\
+		     G &= 0.51 \times 67.0 = 34.2 \\
+		     G_{\text{dBi}} &= 10\ \mylog{34.2} = 15.3\ \dbi }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G$ = \ansbox[1.3in]{$15.3\ \dbi$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the effective aperture $A_e$ of that horn, and say in one
+		sentence what the difference between $A_e$ and the mouth area
+		physically represents.
+		\begin{solution}[1.4in]
+		\eq{ A_e &= \eta_{\text{ap}} A = 0.51 \times 0.0048 \\
+		     &= 0.00245\ \m^{2} = 24.5\ \text{cm}^{2} }
+		The missing $23.5\ \text{cm}^{2}$ is area whose field still radiates but
+		does not contribute coherently on boresight, mostly because the horn's
+		flare puts a quadratic phase error across the mouth and because the
+		field tapers toward the edges. None of it is dissipated as heat, which
+		is why $\eta_{\text{ap}}$ is not radiation efficiency.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$A_e$ = \ansbox[1.3in]{$0.00245\ \m^{2}$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{The taper trade.} A line aperture is $40\lambda$ long. The
+canonical taper table is reproduced here.
+
+\fullwidth{\centering\small
+\begin{tabular}{lcccc}
+\hline
+Illumination & First sidelobe & HPBW ($\times\ \lambda/L$) & $\eta_{\text{ap}}$ \\
+\hline
+Uniform      & $-13.3\ \db$ & $0.886$ & $1.00$  \\
+Cosine       & $-23\ \db$   & $1.19$  & $0.81$  \\
+Triangular   & $-26.5\ \db$ & $1.27$  & $0.75$  \\
+Cosine$^{2}$ & $-31.5\ \db$ & $1.44$  & $0.667$ \\
+\hline
+\end{tabular}}
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the half-power beamwidth with uniform illumination.
+		\begin{solution}[1.0in]
+		\eq{ \theta_{\text{HP}} = \frac{50.8\mydeg}{40} = 1.27\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$1.27\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The system requires a first sidelobe no higher than $-25\ \db$.
+		Choose the illumination from the table that meets it with the narrowest
+		beam, and find the beamwidth you get.
+		\begin{solution}[1.3in]
+		Cosine gives only $-23\ \db$, so the narrowest-beam choice that meets
+		$-25\ \db$ is triangular at $-26.5\ \db$:
+		\eq{ \theta_{\text{HP}} &= 1.27 \frac{\lambda}{L}
+		     = \frac{1.27 \times 57.3\mydeg}{40} \\
+		     &= 1.82\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$1.82\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the gain penalty in dB that this taper costs relative to
+		uniform illumination on the same aperture.
+		\begin{solution}[1.0in]
+		\eq{ \Delta G = 10\ \mylog{0.75} = -1.25\ \db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta G$ = \ansbox[1.3in]{$-1.25\ \db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Suppose the $1.27\mydeg$ beamwidth is also a requirement. How long
+		must the triangular-illuminated aperture be, and what has the sidelobe
+		requirement actually cost you? Answer with a number and one sentence.
+		\begin{solution}[1.4in]
+		\eq{ L^{\prime} = 40\lambda \times \frac{1.27}{0.886} = 57.3\lambda }
+		The aperture must be $43\%$ longer to hold the same beamwidth. Low
+		sidelobes are bought with aperture, not with cleverness: you either
+		accept a wider beam or you build a bigger antenna, and on a real
+		platform that length is usually the binding constraint.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$L^{\prime}$ = \ansbox[1.3in]{$57.3\lambda$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Scaling a reflector.} A circular reflector of diameter
+$D = 1.2\ \m$ is uniformly illuminated to a good approximation and has an
+aperture efficiency of $0.60$ at $10\ \ghz$. Use $\theta_{\text{HP}} =
+58.4\mydeg\ \lambda/D$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the half-power beamwidth at $10\ \ghz$.
+		\begin{solution}[1.1in]
+		\eq{ \lambda &= 0.03\ \m \\
+		     \theta_{\text{HP}} &= 58.4\mydeg \frac{0.03}{1.2} = 1.46\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$1.46\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the gain in dBi at $10\ \ghz$.
+		\begin{solution}[1.4in]
+		\eq{ A &= \pi \lp \frac{1.2}{2} \rp^{2} = 1.131\ \m^{2} \\
+		     \frac{4\pi A}{\lambda^{2}} &= \frac{4\pi (1.131)}{(0.03)^{2}}
+		     = 1.579\times 10^{4} \\
+		     G &= 0.60 \lp 1.579\times 10^{4} \rp = 9475 \\
+		     G_{\text{dBi}} &= 10\ \mylog{9475} = 39.8\ \dbi }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G$ = \ansbox[1.3in]{$39.8\ \dbi$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The same dish is used at $30\ \ghz$ with the same aperture
+		efficiency. Find the new beamwidth and the new gain.
+		\begin{solution}[1.4in]
+		Tripling the frequency triples $D/\lambda$:
+		\eq{ \theta_{\text{HP}} &= \frac{1.46\mydeg}{3} = 0.487\mydeg \\
+		     \Delta G &= 20\ \mylog{3} = 9.5\ \db \\
+		     G_{\text{dBi}} &= 39.8 + 9.5 = 49.3\ \dbi }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{HP}}$ = \ansbox[1.2in]{$0.487\mydeg$} \\[8pt]
+		$G$ = \ansbox[1.2in]{$49.3\ \dbi$}
+	\end{minipage}
+
+	\part The dish did not change, yet the gain rose by $9.5\ \db$. Explain
+	where that gain came from, and name one practical reason a real reflector
+	will fall short of the predicted $49.3\ \dbi$ at $30\ \ghz$.
+		\begin{solution}[1.4in]
+		Gain is $\eta_{\text{ap}}4\pi A/\lambda^{2}$, so it depends on area
+		measured in square wavelengths. At $30\ \ghz$ the same $1.131\ \m^{2}$
+		spans nine times as many square wavelengths, which is a factor of nine
+		or $9.5\ \db$. In practice the aperture efficiency will not hold: the
+		surface tolerance and the feed's own illumination taper both scale with
+		wavelength, so a surface accurate enough at $10\ \ghz$ introduces
+		significant phase error at $30\ \ghz$ and $\eta_{\text{ap}}$ drops.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Reading a measured pattern.} A student measures the pattern of
+an unknown aperture antenna at $10\ \ghz$ on the course range. The main lobe is
+symmetric about boresight, the first nulls fall at $\pm 3.4\mydeg$, and the first
+sidelobes read $19\ \db$ below the peak.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Assuming the illumination is uniform, find the aperture dimension
+		in the measured plane.
+		\begin{solution}[1.2in]
+		\eq{ \sinp{\theta_{\text{null}}} &= \frac{\lambda}{L} \\
+		     L &= \frac{0.03}{\sinp{3.4\mydeg}} = \frac{0.03}{0.0593} \\
+		     &= 0.506\ \m = 16.9\lambda }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$L$ = \ansbox[1.3in]{$0.506\ \m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Predict the half-power beamwidth that this aperture should show.
+		\begin{solution}[1.1in]
+		\eq{ \theta_{\text{HP}} &= 0.886 \frac{\lambda}{L}
+		     = 0.886 \frac{0.03}{0.506} \\
+		     &= 0.0525\ \text{rad} = 3.01\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$3.01\mydeg$}
+	\end{minipage}
+
+	\part The measured sidelobe is $19\ \db$ down, not $13.3\ \db$ down. Give
+	two distinct explanations, one about the antenna and one about the
+	measurement.
+		\begin{solution}[1.4in]
+		The antenna explanation is that the illumination is not uniform. A
+		sidelobe between $-13.3\ \db$ and $-23\ \db$ is what a mild amplitude
+		taper produces, so the aperture is probably tapered somewhere between
+		uniform and cosine, and the beamwidth will be correspondingly wider than
+		the $3.01\mydeg$ predicted in part (b). The measurement explanation is
+		that the sidelobe was not resolved: too coarse an angular step, a range
+		shorter than $2D^{2}/\lambda$, or reflections from the room all fill in
+		nulls and can raise or lower a narrow sidelobe by several dB.
+		\end{solution}
+
+	\part The same antenna is later found to have $\eta_{\text{ap}} = 0.44$,
+	although its amplitude taper alone would predict about $0.81$. Name two
+	mechanisms that account for the difference, and state whether each one
+	belongs to aperture efficiency or to radiation efficiency.
+		\begin{solution}[1.5in]
+		Phase error across the aperture and spillover past the aperture edge
+		both belong to aperture efficiency: the power leaves the antenna, but
+		it does not add coherently on boresight. Feed and strut blockage and
+		cross-polarization are two more of the same kind. Conductor and
+		dielectric loss in the feed structure belongs to radiation efficiency
+		instead, because that power becomes heat and never radiates at all.
+		Measured gain carries both, which is why $G = \eta_{\text{rad}} D$ and
+		$D = \eta_{\text{ap}}\ 4\pi A/\lambda^{2}$ are separate statements.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

@@ -1,0 +1,300 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L25 practice set (Tapering Lab). Lab-flavored: every question starts from a
+% gain list read off the PHASER's Element Gains sliders or from a described
+% sweep, and asks what the measurement will show. The recurring theme is the
+% two-number discipline -- plotted peak drop vs taper efficiency.
+
+\fullwidth{\textbf{Learning Objective 3.7: } Apply amplitude tapering to control
+sidelobe level, and predict the resulting pattern trade-off.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Reading a taper off the sliders.} You find the eight Element
+Gains sliders on the PHASER set to
+\[ 30,\ 60,\ 90,\ 100,\ 100,\ 90,\ 60,\ 30 \ \ \text{percent.} \]
+The array is the standard 8-element row, broadside, with the HB100 at boresight.
+A uniform-taper sweep has already been frozen as the reference trace.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the amplitude sum $\sum a_n$ and the peak drop this taper
+		will show on the sweep plot relative to the frozen uniform trace.
+		\begin{solution}[1.3in]
+		The percentages are voltage amplitudes, so work in fractions of full scale:
+		\eq{ \sum a_n &= 2\lp 0.30 + 0.60 + 0.90 + 1.00 \rp = 5.60 }
+		The eight signals add in phase at boresight, so the summed voltage is
+		proportional to $\sum a_n$ instead of $N = 8$:
+		\eq{ \text{peak drop} &= 20\ \mylog{5.60/8} \\
+		     &= 20\ \mylog{0.700} = -3.10\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\sum a_n$ = \ansbox[1.1in]{$5.60$}
+		\\[10pt]
+		peak drop = \ansbox[1.3in]{$-3.10\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the taper efficiency $\eta_t$ for this distribution, as a
+		ratio and in dB.
+		\begin{solution}[1.3in]
+		\eq{ \sum a_n^2 &= 2\lp 0.09 + 0.36 + 0.81 + 1.00 \rp = 4.52 \\
+		     \eta_t &= \frac{\lp \sum a_n \rp^2}{N \sum a_n^2} = \frac{5.60^2}{8 \times 4.52} \\
+		     &= \frac{31.36}{36.16} = 0.867 \quad \lp -0.62\db \rp }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\eta_t$ = \ansbox[1.1in]{$0.867$}
+		\\[10pt]
+		$\eta_t$ = \ansbox[1.1in]{$-0.62\db$}
+	\end{minipage}
+
+	\part Your two answers differ by 2.5 dB. State which one the Rectangular
+	plot shows you, and which one belongs in a link budget as the antenna's loss.
+
+		\begin{solution}[1.0in]
+		The plot shows the $-3.10\db$ peak drop. That is the coherent
+		receive-voltage loss, and it appears only because every trace is
+		referenced to the same uniform-taper full scale. The link budget takes
+		the $-0.62\db$ taper efficiency, because that is the directivity the
+		array gave up. Charging a link budget the full 3.10 dB
+		overstates the antenna's loss by 2.5 dB.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The uniform 8-element array has a broadside directivity of about
+		8.9 dB. What is the directivity of the tapered array?
+		\begin{solution}[1.0in]
+		Directivity falls by the taper efficiency and by nothing else:
+		\eq{ D &= 8.9\db - 0.62\db = 8.3\db }
+		The peak drop plays no part in this calculation.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$D$ = \ansbox[1.2in]{$8.3\dbi$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Predicting a sweep.} A lab group presses the \textbf{Blackman}
+preset, which sets the eight elements to
+\[ 6,\ 27,\ 66,\ 100,\ 100,\ 66,\ 27,\ 6 \ \ \text{percent,} \]
+and prepares to sweep. Their frozen uniform reference measured a
+$13.1\mydeg$ half-power beamwidth with its first sidelobe at $-13$ dBc, and the
+sweep's noise floor sits 23 dB below the uniform-taper peak.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Predict the peak drop the Blackman trace will show relative to the
+		frozen uniform trace.
+		\begin{solution}[1.2in]
+		\eq{ \sum a_n &= 2\lp 0.06 + 0.27 + 0.66 + 1.00 \rp = 3.98 \\
+		     \text{peak drop} &= 20\ \mylog{3.98/8} \\
+		     &= 20\ \mylog{0.4975} = -6.1\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		peak drop = \ansbox[1.3in]{$-6.1\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The measured Blackman beamwidth is $23.1\mydeg$. By what factor has
+		the beam broadened, and what physical change in the array produced it?
+		\begin{solution}[1.2in]
+		\eq{ \frac{23.1\mydeg}{13.1\mydeg} &= 1.76 }
+		The taper leaves the end elements at 6\% of full amplitude, so the
+		outer aperture contributes almost nothing. The array's effective
+		aperture is smaller than its physical length, and beamwidth is set by
+		aperture size.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		broadening = \ansbox[1.1in]{$1.76\times$}
+	\end{minipage}
+
+	\part Theory puts Blackman's first sidelobe roughly 33 dB below its own
+	peak. What will the group see at that angle on the sweep, and what should
+	they write in the sidelobe column of their table?
+
+		\begin{solution}[1.1in]
+		The Blackman peak sits 6.1 dB below the uniform peak, so a sidelobe 33 dB
+		below it lands about 39 dB below full scale --- roughly 16 dB below the
+		noise floor. Nothing is visible at that angle except the floor itself.
+		The correct entry is \textbf{below the noise floor}. Reading a number off
+		the grass would report the receiver's noise, not the antenna's sidelobe.
+		\end{solution}
+
+	\part A group member argues that Blackman is the better taper because its
+	sidelobes are lower than Hann's. Using only what this measurement can show,
+	evaluate that claim.
+
+		\begin{solution}[1.2in]
+		This measurement cannot support the claim. Hann's sidelobes are already
+		below the noise floor, so both tapers produce the same observable
+		result --- no visible sidelobes. Blackman costs $3.6\mydeg$ more
+		beamwidth and 1.4 dB more peak drop than Hann, for an improvement the
+		sweep cannot resolve. Against this receiver, Hann is the better choice;
+		Blackman only earns its cost if the floor is lowered far enough to see
+		Hann's sidelobes.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{A measurement that disagrees.} A student applies the
+\textbf{Hann} preset ($12,\ 43,\ 77,\ 100,\ 100,\ 77,\ 43,\ 12$ percent),
+predicts a $-4.7\db$ peak drop from the gain list, and measures $-6.8\db$
+against the frozen uniform trace. The beam is also wider than the $19.5\mydeg$
+the expectation table predicts.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Run the peak-drop formula backwards to find the amplitude sum the
+		array achieved.
+		\begin{solution}[1.2in]
+		\eq{ \sum a_n &= N \times 10^{-6.8/20} = 8 \times 0.4571 = 3.66 }
+		The commanded distribution sums to 4.64, so the array is short by
+		$4.64 - 3.66 = 0.98$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\sum a_n$ = \ansbox[1.1in]{$3.66$}
+	\end{minipage}
+
+	\part Identify the fault. Which element is misbehaving, and what amplitude
+	is it contributing?
+
+		\begin{solution}[1.0in]
+		The shortfall of 0.98 is one full-amplitude element, so one of the two
+		center elements (commanded to 100\%) is contributing nothing --- its
+		gain is set to 0\%, or its channel has failed. No combination of the
+		outer elements can account for a deficit that large: the two end
+		elements together only carry 0.24.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the taper efficiency of the array as it stands,
+		with that element at zero.
+		\begin{solution}[1.3in]
+		The working elements are $0.12,\ 0.43,\ 0.77,\ 1.00,\ 0,\ 0.77,\ 0.43,\ 0.12$:
+		\eq{ \sum a_n &= 3.64, \qquad \sum a_n^2 = 2.584 \\
+		     \eta_t &= \frac{3.64^2}{8 \times 2.584} = \frac{13.25}{20.67} = 0.641 }
+		which is $-1.9\db$, against $-1.2\db$ for the intended Hann taper.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\eta_t$ = \ansbox[1.1in]{$0.641$}
+		\\[10pt]
+		$\eta_t$ = \ansbox[1.1in]{$-1.9\db$}
+	\end{minipage}
+
+	\part Name one feature of the trace itself, other than the peak level, that
+	confirms your diagnosis.
+
+		\begin{solution}[1.0in]
+		A dead center element breaks the symmetry of the distribution, so the
+		measured pattern is no longer symmetric about boresight and the beam
+		peak shifts slightly off $0\mydeg$. The gap in the middle of the
+		aperture also raises the sidelobes back out of the noise floor, which a
+		correctly applied Hann taper had buried.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Designing to a specification.} You need a taper that keeps the
+half-power beamwidth no wider than $17\mydeg$ while pushing the first sidelobe
+below $-20$ dBc. With Enforce Symmetric Taper on, you set a linear ramp from
+40\% at the ends to 91\% at the center:
+\[ 40,\ 57,\ 74,\ 91,\ 91,\ 74,\ 57,\ 40 \ \ \text{percent.} \]
+The measured sweep returns a $15.5\mydeg$ beamwidth with nothing visible above
+the noise floor outside the main lobe.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the peak drop and the taper efficiency of this design.
+		\begin{solution}[1.4in]
+		\eq{ \sum a_n &= 2\lp 0.40 + 0.57 + 0.74 + 0.91 \rp = 5.24 \\
+		     \sum a_n^2 &= 2\lp 0.160 + 0.325 + 0.548 + 0.828 \rp = 3.721 \\
+		     \text{peak drop} &= 20\ \mylog{5.24/8} = -3.7\db \\
+		     \eta_t &= \frac{5.24^2}{8 \times 3.721} = 0.922 \quad \lp -0.35\db \rp }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		peak drop = \ansbox[1.2in]{$-3.7\db$}
+		\\[10pt]
+		$\eta_t$ = \ansbox[1.2in]{$0.922$}
+	\end{minipage}
+
+	\part The measurement shows nothing above the noise floor outside the main
+	lobe. Explain what you can and cannot conclude about whether the $-20$ dBc
+	part of the specification is met.
+
+		\begin{solution}[1.2in]
+		The floor sits 23 dB below the uniform peak, which is 19.3 dB below this
+		trace's own peak. Nothing visible outside the main lobe therefore means
+		the first sidelobe is at least 19.3 dB down. That demonstrates the
+		specification is met to within the resolution of the measurement, but it
+		does not produce a sidelobe number. To verify $-20$ dBc directly, the
+		floor has to be lowered --- a stronger source, more averaging, or a
+		quieter receiver.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compare this design against the Hann preset ($-4.7\db$ peak drop,
+		$-1.2\db$ taper efficiency, $19.5\mydeg$ beamwidth). State which you
+		would fly on a radar that must resolve two targets $18\mydeg$ apart, and
+		why.
+		\begin{solution}[1.3in]
+		The custom taper keeps $15.5\mydeg$ of beamwidth against Hann's
+		$19.5\mydeg$, and gives up only 0.35 dB of directivity against Hann's
+		1.2 dB. Two targets $18\mydeg$ apart fall inside a $19.5\mydeg$ beam and
+		cannot be separated, so Hann fails the requirement outright. The custom
+		taper resolves them and costs less directivity. Hann buys deeper
+		sidelobes, but on this receiver that improvement is below the noise floor
+		and cannot be measured.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		beamwidth margin = \ansbox[1.2in]{$2.5\mydeg$}
+	\end{minipage}
+
+	\part Enforce Symmetric Taper was on for this design. State what would
+	change in the measured pattern if you set the same eight values with the
+	switch off and mistyped one of them.
+
+		\begin{solution}[1.0in]
+		An asymmetric amplitude distribution produces an asymmetric pattern: the
+		two sides of the trace no longer match, the sidelobes on one side rise
+		above those on the other, and the beam peak moves off boresight. The
+		symmetry switch makes that class of error impossible to enter by hand,
+		which is why the lab keeps it on.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

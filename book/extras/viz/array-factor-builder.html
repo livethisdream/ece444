@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Array factor builder</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --af:#004a85; --tot:#0067b9; --ef:#5b6573;
+          --hpbw:#1d7a4d; --null:#b01e24; --sll:#8a5a00; --gl:#b3213a; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:9px 18px; align-items:center;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+  .ctl.full { grid-column:1/-1; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:38px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:70px; accent-color:var(--mid); }
+  .tgl { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; min-width:0; }
+  .tgl input { position:absolute; opacity:0; pointer-events:none; }
+  .tgl .sw { position:relative; flex:none; width:34px; height:19px; border-radius:999px;
+             background:#dfe8f1; border:1px solid var(--edge2); transition:background .15s, border-color .15s; }
+  .tgl .sw::after { content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; border-radius:50%;
+                    background:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.22); transition:transform .15s; }
+  .tgl input:checked + .sw { background:var(--on,var(--mid)); border-color:var(--on,var(--mid)); }
+  .tgl input:checked + .sw::after { transform:translateX(15px); }
+  .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
+  .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .tgl input:checked ~ .t { color:var(--on,var(--navy)); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvas above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.hp { background:rgba(29,122,77,0.12);  border-color:rgba(29,122,77,0.30); }
+  .ro.hp .v { color:var(--hpbw); }
+  .ro.nl { background:rgba(176,30,36,0.10);  border-color:rgba(176,30,36,0.28); }
+  .ro.nl .v { color:var(--null); }
+  .ro.sl { background:rgba(138,90,0,0.12);   border-color:rgba(138,90,0,0.30); }
+  .ro.sl .v { color:var(--sll); }
+  .ro.gl { background:rgba(179,33,58,0.10);  border-color:rgba(179,33,58,0.28); }
+  .ro.gl .v { color:var(--gl); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" width="1000" height="460" aria-label="Array factor in decibels versus scan angle"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Elements \(N\)</label>
+      <input type="range" id="n" min="2" max="16" step="1" value="8">
+      <span class="val" id="n-val">8</span>
+    </div>
+    <div class="ctl">
+      <label>Spacing \(d/\lambda\)</label>
+      <input type="range" id="dl" min="0.1" max="1.5" step="0.001" value="0.481">
+      <span class="val" id="dl-val">0.481</span>
+    </div>
+    <label class="tgl" style="--on:var(--tot)"><input type="checkbox" id="ef"><span class="sw"></span><span class="t">Element factor</span></label>
+  </div>
+
+  <div class="readouts">
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="r-hpbw">&mdash;</span></div>
+    <div class="ro nl"><span class="k">first null</span><span class="v" id="r-null">&mdash;</span></div>
+    <div class="ro sl"><span class="k">first sidelobe</span><span class="v" id="r-sll">&mdash;</span></div>
+    <div class="ro gl"><span class="k">grating lobes</span><span class="v" id="r-gl">&mdash;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ---- labels: MathJax for math symbols, sans UI font for words/units ----
+const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+function mixLabel(ctx,chunks,x,yc,h,color,align,bold){
+  const fpx=h-1, f=(bold?'700 ':'')+fpx+'px '+SANS;
+  let tot=0;
+  for(const c of chunks){ if(c.m) tot+=MJ.width(c.m,color,h); else { ctx.font=f; tot+=ctx.measureText(c.s).width; } }
+  let cx = align==='right' ? x-tot : (align==='center' ? x-tot/2 : x);
+  for(const c of chunks){
+    if(c.m){ MJ.draw(ctx,c.m,cx,yc,h,color,'left'); cx+=MJ.width(c.m,color,h); }
+    else { stext(ctx,c.s,cx,yc,fpx,color,'left',bold); ctx.font=f; cx+=ctx.measureText(c.s).width; }
+  }
+}
+
+const FLOOR = -40;                       // dB floor of the plot
+const state = { N: 8, dl: 0.481, ef: false };
+
+// ---------------------------------------------------------------- physics --
+const rad = d => d*Math.PI/180;
+
+// Uniform linear array, broadside, normalized so the peak is 1.
+function afMag(thDeg, N, dl){
+  const psi = 2*Math.PI*dl*Math.sin(rad(thDeg));
+  const s = Math.sin(psi/2);
+  if (Math.abs(s) < 1e-9) return 1;
+  return Math.abs(Math.sin(N*psi/2)/(N*s));
+}
+const efMag  = thDeg => Math.abs(Math.cos(rad(thDeg)));
+const dB     = x => 20*Math.log10(Math.max(x, 1e-6));
+// The curve the readouts describe: the array factor alone, or element x array.
+const curve  = (thDeg, st) => afMag(thDeg, st.N, st.dl) * (st.ef ? efMag(thDeg) : 1);
+
+// First null of the array factor: sin(theta) = lambda/(N d).
+function firstNull(st){
+  const a = 1/(st.N*st.dl);
+  return (a <= 1) ? Math.asin(a)*180/Math.PI : null;
+}
+
+// Half-power beamwidth.
+//
+// For the array factor alone the course quotes the closed form
+// HPBW = 0.886 lambda/(N d) -- the L06/L15 line-source constant with L = N d --
+// written here as 2 asin(1.391 lambda/(pi N d)). That is the number in the
+// lesson and in the Module 3 tables (N = 8, d/lambda = 0.481 -> 13.2 deg), and
+// it is what this readout reports whenever the line-source approximation holds
+// (six or more elements spanning at least 1.5 wavelengths).
+//
+// Outside that regime -- a two- or four-element array, a very short aperture,
+// or an element factor multiplying the array factor -- the approximation is
+// several degrees off, so the -3 dB width is read straight off the plotted
+// curve instead.
+function hpbw(st){
+  if (!st.ef && st.N >= 6 && st.N*st.dl >= 1.5){
+    const a = 1.391/(Math.PI*st.N*st.dl);
+    if (a <= 1) return 2*Math.asin(a)*180/Math.PI;
+  }
+  const half = 10**(-3.0103/20);
+  let prev = curve(0, st), prevTh = 0;
+  for (let t = 0.01; t <= 90; t += 0.01){
+    const v = curve(t, st);
+    if (v <= half){
+      const f = (prev - half)/Math.max(prev - v, 1e-12);
+      return 2*(prevTh + f*(t - prevTh));
+    }
+    prev = v; prevTh = t;
+  }
+  return null;                          // never falls 3 dB inside the visible region
+}
+
+// First sidelobe past the first null, on the curve being plotted: the first
+// interior peak of the pattern. A grating lobe is a full-height repeat of the
+// main lobe rather than a sidelobe, so peaks within half a dB of the top are
+// left out.
+function firstSidelobe(st){
+  const n1 = firstNull(st);
+  if (n1 === null) return null;
+  let prev2 = -Infinity, prev = -Infinity, prevTh = null;
+  for (let t = n1 + 0.02; t <= 90; t += 0.02){
+    const v = dB(curve(t, st));
+    if (prev > prev2 && prev > v && prev < -0.5) return { db: prev, th: prevTh };
+    prev2 = prev; prev = v; prevTh = t - 0.02;
+  }
+  return null;
+}
+
+// Grating lobes: full-height repeats of the main lobe inside +/-90 deg.
+// Broadside beam, so sin(theta_g) = +/- m lambda/d.
+function gratingLobes(st){
+  const out = [];
+  for (let m = 1; m/st.dl <= 1 + 1e-9; m++){
+    out.push(Math.asin(Math.min(m/st.dl, 1))*180/Math.PI);
+  }
+  return out;                            // one entry per +/- pair
+}
+
+// ---------------------------------------------------------------- drawing --
+const canvas = document.getElementById('plot');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas(){
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  const w = rect.width;
+  const h = Math.max(250, Math.min(w*0.52, 430));
+  canvas.width  = w*dpr;
+  canvas.height = h*dpr;
+  canvas.style.height = `${h}px`;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+window.addEventListener('resize', resizeCanvas);
+
+function draw(){
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.width/dpr, h = canvas.height/dpr;
+  ctx.clearRect(0, 0, w, h);
+
+  const narrow = w < 470;
+  const mL = narrow ? 40 : 54, mR = 16, mT = 30, mB = narrow ? 42 : 48;
+  const pw = w - mL - mR, ph = h - mT - mB;
+  const xFor = t  => mL + ((t + 90)/180)*pw;
+  const yFor = v  => mT + (Math.min(Math.max(-v, 0), -FLOOR)/(-FLOOR))*ph;
+
+  const cAF = css('--af'), cTOT = css('--tot'), cEF = css('--ef');
+  const cHP = css('--hpbw'), cNL = css('--null'), cSL = css('--sll'), cGL = css('--gl');
+
+  // grid
+  ctx.strokeStyle = '#e6eef6'; ctx.lineWidth = 1;
+  for (let t = -90; t <= 90; t += 30){ ctx.beginPath(); ctx.moveTo(xFor(t), mT); ctx.lineTo(xFor(t), mT+ph); ctx.stroke(); }
+  for (let v = 0; v >= FLOOR; v -= 10){ ctx.beginPath(); ctx.moveTo(mL, yFor(v)); ctx.lineTo(mL+pw, yFor(v)); ctx.stroke(); }
+  ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.1;
+  ctx.beginPath(); ctx.moveTo(mL, mT); ctx.lineTo(mL, mT+ph); ctx.lineTo(mL+pw, mT+ph); ctx.stroke();
+
+  for (let t = -90; t <= 90; t += 30) stext(ctx, `${t}`, xFor(t), mT+ph+14, narrow?10:11.5, '#5b6573', 'center');
+  for (let v = 0; v >= FLOOR; v -= 10) stext(ctx, `${v}`, mL-7, yFor(v), narrow?10:11.5, '#5b6573', 'right');
+  mixLabel(ctx, [{s:'Scan angle '},{m:'\\theta'},{s:' from broadside (degrees)'}], mL+pw/2, mT+ph+(narrow?32:36), narrow?11:12.5, '#15202b', 'center');
+  ctx.save();
+  ctx.translate(narrow?12:14, mT+ph/2); ctx.rotate(-Math.PI/2);
+  stext(ctx, 'Relative power (dB)', 0, 0, narrow?11:12.5, '#15202b', 'center');
+  ctx.restore();
+
+  const st = state;
+  const feat = { hp: hpbw(st), n1: firstNull(st), sl: firstSidelobe(st), gl: gratingLobes(st) };
+
+  // grating lobes first, so the curves sit on top
+  ctx.strokeStyle = cGL; ctx.lineWidth = 1.4; ctx.setLineDash([5,4]);
+  for (const g of feat.gl){
+    for (const s of [-1, 1]){
+      const x = xFor(s*g);
+      ctx.beginPath(); ctx.moveTo(x, mT); ctx.lineTo(x, mT+ph); ctx.stroke();
+    }
+  }
+  ctx.setLineDash([]);
+  if (feat.gl.length){
+    stext(ctx, 'grating lobe', xFor(-feat.gl[0]) + 6, mT + 12, 11, cGL, 'left', true);
+  }
+
+  // half-power markers
+  if (feat.hp !== null){
+    const y3 = yFor(-3.0103), xl = xFor(-feat.hp/2), xr = xFor(feat.hp/2);
+    ctx.strokeStyle = cHP; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(xl, y3); ctx.lineTo(xr, y3); ctx.stroke();
+    for (const x of [xl, xr]){ ctx.beginPath(); ctx.moveTo(x, y3-5); ctx.lineTo(x, y3+5); ctx.stroke(); }
+    if (!narrow) stext(ctx, 'half power', xr + 6, y3, 11, cHP, 'left', true);
+  }
+
+  // first null of the array factor
+  if (feat.n1 !== null){
+    ctx.strokeStyle = cNL; ctx.lineWidth = 1.2; ctx.setLineDash([4,3]);
+    for (const s of [-1, 1]){
+      const x = xFor(s*feat.n1);
+      ctx.beginPath(); ctx.moveTo(x, yFor(-6)); ctx.lineTo(x, mT+ph); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+
+  // curves
+  const plot = (fn, color, lw, dash) => {
+    ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash || []);
+    ctx.beginPath();
+    let started = false;
+    for (let t = -90; t <= 90.0001; t += 0.12){
+      const x = xFor(t), y = yFor(dB(fn(t)));
+      if (!started){ ctx.moveTo(x, y); started = true; } else ctx.lineTo(x, y);
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+  };
+  if (st.ef){
+    plot(t => efMag(t), cEF, 1.2, [5,4]);
+    plot(t => afMag(t, st.N, st.dl), cAF, 1.4);
+    plot(t => afMag(t, st.N, st.dl)*efMag(t), cTOT, 2.2);
+  } else {
+    plot(t => afMag(t, st.N, st.dl), cAF, 2.2);
+  }
+
+  // first sidelobe marker
+  if (feat.sl && feat.sl.db > FLOOR + 2){
+    const x = xFor(feat.sl.th), y = yFor(feat.sl.db);
+    ctx.fillStyle = cSL;
+    ctx.beginPath(); ctx.arc(x, y, 4, 0, 2*Math.PI); ctx.fill();
+    if (!narrow) stext(ctx, 'first sidelobe', x + 8, y - 9, 11, cSL, 'left', true);
+  }
+
+  // legend
+  let lx = mL + 6;
+  const kpx = narrow ? 10 : 11.5;
+  const key = (chunks, color, dash) => {
+    ctx.strokeStyle = color; ctx.lineWidth = 2.2; ctx.setLineDash(dash || []);
+    ctx.beginPath(); ctx.moveTo(lx, mT-14); ctx.lineTo(lx+18, mT-14); ctx.stroke(); ctx.setLineDash([]);
+    mixLabel(ctx, chunks, lx+23, mT-14, kpx, '#5b6573', 'left');
+    let wd = 0;
+    for (const c of chunks){
+      if (c.m) wd += MJ.width(c.m, '#5b6573', kpx);
+      else { ctx.font = (kpx-1)+'px '+SANS; wd += ctx.measureText(c.s).width; }
+    }
+    lx += 23 + wd + 16;
+  };
+  key([{s:'array factor'}], cAF);
+  if (st.ef){
+    key([{s:'element × array'}], cTOT);
+    key([{s:'element factor '},{m:'\\cos\\theta'}], cEF, [5,4]);
+  }
+
+  // readouts
+  const fmtA = v => `${v.toFixed(1)}°`;
+  const fmtD = v => `${v < 0 ? '\u2212' : ''}${Math.abs(v).toFixed(1)} dB`;
+  document.getElementById('r-hpbw').textContent = feat.hp === null ? 'none in view' : fmtA(feat.hp);
+  document.getElementById('r-null').textContent = feat.n1 === null ? 'none in view' : fmtA(feat.n1);
+  document.getElementById('r-sll').textContent  = feat.sl === null ? 'none in view' : fmtD(feat.sl.db);
+  document.getElementById('r-gl').textContent   = feat.gl.length === 0 ? 'none'
+      : `${2*feat.gl.length} at ±${feat.gl.map(g => g.toFixed(1)).join('°, ±')}°`;
+}
+
+function css(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+// ---------------------------------------------------------------- controls --
+const nEl = document.getElementById('n'), dlEl = document.getElementById('dl'), efEl = document.getElementById('ef');
+function sync(){
+  state.N  = parseInt(nEl.value, 10);
+  state.dl = parseFloat(dlEl.value);
+  state.ef = efEl.checked;
+  document.getElementById('n-val').textContent  = state.N;
+  document.getElementById('dl-val').textContent = state.dl.toFixed(3);
+  draw();
+}
+nEl.addEventListener('input', sync);
+dlEl.addEventListener('input', sync);
+efEl.addEventListener('change', sync);
+
+resizeCanvas();
+sync();
+
+MJ.setRedraw(() => draw());
+MJ.onReady(() => { MJ.typeset(document.body).then(() => draw()); draw(); });
+</script>
+</body>
+</html>

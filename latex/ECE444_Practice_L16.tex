@@ -1,0 +1,371 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L16 practice set (The Array Factor and Pattern Multiplication) -- builds the
+% array factor from element phasors, reads the uniform closed form, applies
+% pattern multiplication, and sizes element spacing against grating lobes.
+
+\fullwidth{\textbf{Learning Objective 3.2: } Derive the array factor of a linear
+array by summing element phasors, reduce the uniform case to its closed form,
+apply pattern multiplication, and relate element spacing to the visible region
+and the onset of grating lobes.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+%========================================================== Q1
+\question \textbf{Building the sum.} Three isotropic elements sit on a line at
+$z = 0$, $z = d$, and $z = 2d$ with $d = \lambda/2$. They are fed in phase with
+amplitude weights $a_0 = 1$, $a_1 = 2$, $a_2 = 1$. Scan angle $\theta$ is
+measured from broadside.
+
+\begin{parts}
+
+	\part Pattern multiplication lets you write the array pattern as one element
+	pattern times one sum. State the two conditions the elements must satisfy for
+	that factoring to be legal, and name the step in the derivation where each one
+	is used.
+		\begin{solution}[1.0in]
+		The elements must be \textbf{identical} and \textbf{identically oriented}.
+		Both are used at the superposition step: only if every element carries the
+		same $E_0(\theta)$ can that factor be pulled outside the sum. If the elements
+		differ, or one is rotated, each term keeps its own pattern.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Write the array factor as a function of $\psi = kd\sinp{\theta}$, then
+		find the extra path length and the extra phase that element 2 contributes
+		relative to element 0 when $\theta = 30\mydeg$.
+		\begin{solution}[1.5in]
+		\eq{ AF(\psi) &= 1 + 2e^{j\psi} + e^{j2\psi} }
+		The extra path is the projection of the element position on the look
+		direction:
+		\eq{ \Delta r_2 &= 2d\sinp{30\mydeg} = 2(0.5\lambda)(0.5) = 0.5\lambda }
+		\eq{ \Delta\phi_2 &= k\,\Delta r_2 = \frac{2\pi}{\lambda}(0.5\lambda) = \pi = 180\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta r_2$ = \ansbox[1.3in]{$0.5\lambda$}
+		\\[10pt]
+		$\Delta\phi_2$ = \ansbox[1.3in]{$180\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Evaluate $\vert AF\vert$ at broadside and at $\theta = 30\mydeg$, and
+		give the $30\mydeg$ value in dB relative to the broadside peak.
+		\begin{solution}[1.3in]
+		Factor the sum: $AF = e^{j\psi}(2 + 2\cos\psi)$, so
+		$\vert AF\vert = 2 + 2\cos\psi$.
+		\eq{ \theta = 0: \quad \psi &= 0, \qquad \vert AF\vert = 4 }
+		\eq{ \theta = 30\mydeg: \quad \psi &= \pi\sinp{30\mydeg} = 90\mydeg }
+		\eq{ \vert AF\vert &= 2 + 2\cos(90\mydeg) = 2 }
+		\eq{ 20\mylog{2/4} &= -6.0\ \db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\vert AF\vert_{\theta=0}$ = \ansbox[1.1in]{$4$}
+		\\[10pt]
+		Level at $30\mydeg$ = \ansbox[1.1in]{$-6.0\ \db$}
+	\end{minipage}
+
+	\part The derivation keeps the phase difference between elements but throws
+	away the amplitude difference. Explain in one or two sentences why that is
+	consistent, given a $112\ \text{mm}$ array observed at a range of $30\ \m$.
+		\begin{solution}[1.0in]
+		The path lengths differ by at most the array length, $112\ \text{mm}$, which
+		against a $30\ \m$ range changes $1/r$ by about $0.4\%$. That same
+		$112\ \text{mm}$ is nearly four wavelengths at X-band, so it changes the phase
+		by up to $1400\mydeg$. The pattern is built entirely from phase.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%========================================================== Q2
+\question \textbf{The course array.} The PHASER carries $N = 8$ patch elements on
+a line with spacing $d = 14\ \text{mm}$, uniformly excited and unsteered. Work at
+$f = 10.3\ \ghz$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find $\lambda$, the spacing in wavelengths, and the range of the
+		array-factor argument $\psi$ over the visible region.
+		\begin{solution}[1.5in]
+		\eq{ \lambda &= \frac{3\times 10^{8}}{10.3\times 10^{9}} = 29.1\ \text{mm} }
+		\eq{ \frac{d}{\lambda} &= \frac{14}{29.1} = 0.481 }
+		At broadside $\psi = kd\sinp{\theta}$, and $\sinp{\theta}$ runs over $\pm 1$:
+		\eq{ \psi_{\max} &= kd = 2\pi(0.481) = 3.02\ \text{rad} = 173\mydeg }
+		so $-173\mydeg \le \psi \le +173\mydeg$, just short of one full period.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$d/\lambda$ = \ansbox[1.1in]{$0.481$}
+		\\[10pt]
+		$\psi$ range = \ansbox[1.1in]{$\pm 173\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Locate every null of the array factor that falls in the visible
+		region.
+		\begin{solution}[1.4in]
+		\eq{ \sinp{\theta_m} &= \frac{m\lambda}{Nd} = \frac{m}{8(0.481)} = \frac{m}{3.85} }
+		\eq{ m = 1: \ \theta &= \arcsin(0.260) = 15.1\mydeg }
+		\eq{ m = 2: \ \theta &= \arcsin(0.520) = 31.3\mydeg }
+		\eq{ m = 3: \ \theta &= \arcsin(0.780) = 51.2\mydeg }
+		$m = 4$ needs $\sinp{\theta} = 1.04$, which is not a real angle. Nulls occur
+		at $\pm 15.1\mydeg$, $\pm 31.3\mydeg$, $\pm 51.2\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		Nulls = \ansbox[1.5in]{$\pm 15.1\mydeg,\ \pm 31.3\mydeg,\ \pm 51.2\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the first-null beamwidth and the half-power beamwidth, and state
+		the first sidelobe level you expect.
+		\begin{solution}[1.5in]
+		\eq{ \text{FNBW} &= 2\arcsin\lp\frac{\lambda}{Nd}\rp = 2(15.1\mydeg) = 30.1\mydeg }
+		\eq{ \text{HPBW} &\approx \frac{0.886\lambda}{Nd} = \frac{0.886}{3.85} = 0.230\ \text{rad} = 13.2\mydeg }
+		Uniform excitation puts the first sidelobe about $13\ \db$ down; the exact
+		value for $N = 8$ is $-12.8\ \db$, at $\pm 21.9\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		FNBW = \ansbox[1.1in]{$30.1\mydeg$}
+		\\[10pt]
+		HPBW = \ansbox[1.1in]{$13.2\mydeg$}
+		\\[10pt]
+		SLL = \ansbox[1.1in]{$-12.8\ \db$}
+	\end{minipage}
+
+	\part A uniform array of $N$ elements has $N-2$ sidelobes in one period of
+	$\psi$. Count the sidelobes that are actually visible for this array, and
+	explain the count using your answer to part (a).
+		\begin{solution}[1.2in]
+		With $N = 8$ there are six sidelobes per period, three on each side of the
+		main lobe. The visible region spans $\pm 173\mydeg$ of $\psi$, which is
+		$96\%$ of the $\pm 180\mydeg$ period, so all six appear --- the three nulls
+		found in part (b) bracket three sidelobes on each side. Nothing is cut off
+		because the spacing is just under half a wavelength.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%========================================================== Q3
+\question \textbf{Pattern multiplication.} Four short dipoles lie end to end
+along the array axis, spaced $d = \lambda/2$ and fed in phase. In scan angle the
+short dipole's element factor is $EF(\theta) = \cosp{\theta}$. The four-element
+uniform array factor has its first sidelobe at $\theta = 47.1\mydeg$, where
+$AF_4 = -11.3\ \db$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Evaluate the element factor at the sidelobe angle in dB, and find the
+		first sidelobe level of the total pattern.
+		\begin{solution}[1.4in]
+		\eq{ EF(47.1\mydeg) &= \cosp{47.1\mydeg} = 0.681 }
+		\eq{ 20\mylog{0.681} &= -3.3\ \db }
+		Pattern multiplication is a product, so in dB the two levels add:
+		\eq{ \text{SLL} &= -11.3\ \db + (-3.3\ \db) = -14.6\ \db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$EF$ at $47.1\mydeg$ = \ansbox[1.1in]{$-3.3\ \db$}
+		\\[10pt]
+		Total SLL = \ansbox[1.1in]{$-14.6\ \db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The array factor of this array has nulls at $\pm 30\mydeg$ and
+		$\pm 90\mydeg$. Which nulls survive in the total pattern, and what is the
+		total pattern at $\theta = 90\mydeg$?
+		\begin{solution}[1.3in]
+		All of them survive: a zero in either factor is a zero in the product. At
+		$\theta = 90\mydeg$ both factors vanish, since $\cosp{90\mydeg} = 0$ and the
+		$m = 2$ array-factor null also sits there, so the total is zero (a deeper,
+		wider null than either factor produces alone).
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\vert F(90\mydeg)\vert$ = \ansbox[1.1in]{$0$}
+	\end{minipage}
+
+	\part The element factor changed the sidelobe by $3.3\ \db$ but changed the
+	half-power beamwidth by almost nothing. Explain why, in terms of the shape of
+	$\cosp{\theta}$ near broadside.
+		\begin{solution}[1.2in]
+		$\cosp{\theta}$ is flat near $\theta = 0$: at the $\pm 6.3\mydeg$ half-power
+		edges of the four-element beam it is still $0.994$, or $-0.05\ \db$, so it
+		scales both the peak and the half-power points by the same amount and leaves
+		the width where it was. Out at $47\mydeg$ the cosine has fallen by
+		$3.3\ \db$, which is why the sidelobe moved. A directive element reshapes the
+		skirts of a pattern; the main lobe belongs to the array factor.
+		\end{solution}
+
+	\part A colleague proposes fixing a beam that is too wide by replacing the
+	short dipoles with more directive elements, keeping $N$ and $d$ the same. Say
+	whether that works and what it would actually change.
+		\begin{solution}[1.2in]
+		It does not fix the beamwidth. The main lobe is set by the array factor,
+		whose width follows the total length $Nd$; a more directive element is nearly
+		constant across that narrow main lobe and only scales it. What the change
+		does deliver is lower sidelobes and less wide-angle radiation. To narrow the
+		beam you must increase $Nd$, by adding elements or increasing the spacing
+		within the grating-lobe limit.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%========================================================== Q4
+\question \textbf{Spacing, the visible region, and grating lobes.} A uniform
+linear array is steered to $\theta_0$ by a progressive phase, so
+$\psi = kd(\sinp{\theta} - \sinp{\theta_0})$ and grating lobes appear wherever
+$\sinp{\theta_g} = \sinp{\theta_0} \pm m\lambda/d$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part An unsteered array uses $d = \lambda$. Find every grating lobe in the
+		visible region, and give the width of the visible region in $\psi$.
+		\begin{solution}[1.4in]
+		\eq{ \sinp{\theta_g} &= 0 \pm \frac{\lambda}{\lambda} = \pm 1 \quad\Longrightarrow\quad \theta_g = \pm 90\mydeg }
+		The visible region spans $2kd = 4\pi(d/\lambda) = 4\pi$, which is two full
+		periods of the array factor, so exactly one repeat of the main lobe reaches
+		each edge of real space.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_g$ = \ansbox[1.1in]{$\pm 90\mydeg$}
+		\\[10pt]
+		$\psi$ width = \ansbox[1.1in]{$720\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A second array uses $d = 0.75\lambda$ and is steered to
+		$\theta_0 = 30\mydeg$. Apply the avoidance criterion, then find any grating
+		lobe that is present.
+		\begin{solution}[1.5in]
+		\eq{ d_{\max} &= \frac{\lambda}{1 + \vert\sinp{30\mydeg}\vert} = \frac{\lambda}{1.5} = 0.667\lambda }
+		$0.75\lambda > 0.667\lambda$, so the criterion is violated and a grating lobe
+		is in view.
+		\eq{ \sinp{\theta_g} &= 0.5 - \frac{1}{0.75} = 0.5 - 1.333 = -0.833 }
+		\eq{ \theta_g &= -56.4\mydeg }
+		The $+$ branch gives $1.833$, which is not a real angle.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$d_{\max}$ = \ansbox[1.1in]{$0.667\lambda$}
+		\\[10pt]
+		$\theta_g$ = \ansbox[1.1in]{$-56.4\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part You must scan to $\pm 45\mydeg$ at $10.3\ \ghz$ with no grating lobe.
+		Find the largest usable element spacing in millimeters, and state the
+		trade-off that stops you from simply making $d$ much smaller.
+		\begin{solution}[1.5in]
+		\eq{ d &< \frac{\lambda}{1 + \sinp{45\mydeg}} = \frac{29.1\ \text{mm}}{1.707} = 17.1\ \text{mm} }
+		Smaller spacing is safe from grating lobes but shortens the array for a given
+		element count, so the beam widens as $0.886\lambda/Nd$; holding the beamwidth
+		then requires more elements, more phase shifters, and more channels. Close
+		spacing also increases mutual coupling between elements. The usual
+		compromise is $0.4\lambda$ to $0.5\lambda$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$d_{\max}$ = \ansbox[1.3in]{$17.1\ \text{mm}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part In the lab you will turn on every third element of the PHASER, making
+		the effective spacing $42\ \text{mm}$ at $10.3\ \ghz$. Predict the grating
+		lobe angles for the unsteered array.
+		\begin{solution}[1.4in]
+		\eq{ \frac{d}{\lambda} &= \frac{42}{29.1} = 1.44 }
+		\eq{ \sinp{\theta_g} &= \pm\frac{1}{1.44} = \pm 0.693 \quad\Longrightarrow\quad \theta_g = \pm 43.9\mydeg }
+		$m = 2$ would need $\sinp{\theta} = 1.39$, so only the first pair appears.
+		Expect three lobes of equal height: the main lobe at $0\mydeg$ and grating
+		lobes near $\pm 44\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_g$ = \ansbox[1.3in]{$\pm 43.9\mydeg$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+%========================================================== Q5
+\question \textbf{The array as a sampled aperture.} Two unsteered uniform arrays
+are proposed for the same job. Array A has $N = 8$ elements at $d = \lambda/2$.
+Array B has $N = 4$ elements at $d = \lambda$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the total length and the half-power beamwidth of each array.
+		\begin{solution}[1.5in]
+		\eq{ \text{A}: \ Nd &= 8(0.5\lambda) = 4\lambda }
+		\eq{ \text{B}: \ Nd &= 4(1.0\lambda) = 4\lambda }
+		\eq{ \text{HPBW} &\approx \frac{0.886\lambda}{4\lambda} = 0.222\ \text{rad} = 12.7\mydeg }
+		Both arrays are the same length, so both have the same main lobe.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$Nd$ (both) = \ansbox[1.1in]{$4\lambda$}
+		\\[10pt]
+		HPBW (both) = \ansbox[1.1in]{$12.7\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the first sidelobe level and the grating lobe angles of each
+		array.
+		\begin{solution}[1.5in]
+		Both are uniformly excited, so both show the uniform first sidelobe near
+		$-13\ \db$ ($-12.8\ \db$ for A at $N = 8$, $-11.3\ \db$ for B at $N = 4$).
+		\eq{ \text{A}: \ \sinp{\theta_g} &= \pm\frac{\lambda}{0.5\lambda} = \pm 2 \quad \text{(not real, none)} }
+		\eq{ \text{B}: \ \sinp{\theta_g} &= \pm\frac{\lambda}{\lambda} = \pm 1 \quad\Longrightarrow\quad \pm 90\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		A: $\theta_g$ = \ansbox[1.1in]{none}
+		\\[10pt]
+		B: $\theta_g$ = \ansbox[1.1in]{$\pm 90\mydeg$}
+	\end{minipage}
+
+	\part Array B uses half the elements for the same beamwidth. State which array
+	you would build and why, and say what happens to Array B's pattern the moment
+	it is steered off broadside.
+		\begin{solution}[1.4in]
+		Build Array A. Both have the same main lobe because both have the same
+		length $Nd$, but Array B radiates a full-strength grating lobe at
+		$\pm 90\mydeg$ at broadside, and steering slides that lobe into the forward
+		half-space while the intended beam moves the other way --- so power and
+		receive sensitivity go where they were not commanded. Saving four channels leaves the array
+		unable to steer at all. Element count is what provides grating-lobe
+		headroom; length is what sets the beamwidth.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

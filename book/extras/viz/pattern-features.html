@@ -12,7 +12,7 @@
           --pat:#0067b9; --hpbw:#1d7a4d; --fnbw:#8a5a00; --sll:#b3213a; --main:#004a85; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:9px 18px; align-items:center;
               padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
@@ -31,14 +31,28 @@
   .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
   .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
   .tgl input:checked ~ .t { color:var(--on,var(--navy)); }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.hp  { background:rgba(29,122,77,0.12);  color:var(--hpbw); border-color:rgba(29,122,77,0.30); }
-  .pill.fn  { background:rgba(138,90,0,0.12);   color:var(--fnbw); border-color:rgba(138,90,0,0.30); }
-  .pill.sl  { background:rgba(179,33,58,0.10);  color:var(--sll);  border-color:rgba(179,33,58,0.28); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.hp { background:rgba(29,122,77,0.12); border-color:rgba(29,122,77,0.30); }
+  .ro.hp .v { color:var(--hpbw); }
+  .ro.fn { background:rgba(138,90,0,0.12);  border-color:rgba(138,90,0,0.30); }
+  .ro.fn .v { color:var(--fnbw); }
+  .ro.sl { background:rgba(179,33,58,0.10); border-color:rgba(179,33,58,0.28); }
+  .ro.sl .v { color:var(--sll); }
 </style>
 </head>
 <body>
@@ -57,11 +71,11 @@
     <label class="tgl" style="--on:var(--main)"><input type="checkbox" data-key="labels" checked><span class="sw"></span><span class="t">Lobe labels</span></label>
   </div>
 
-  <div class="pills">
-    <span class="pill hp">HPBW = <b id="r-hpbw">—</b></span>
-    <span class="pill fn">FNBW = <b id="r-fnbw">—</b></span>
-    <span class="pill sl">SLL = <b id="r-sll">—</b></span>
-    <span class="pill">front-to-back = <b id="r-fb">—</b></span>
+  <div class="readouts">
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="r-hpbw">—</span></div>
+    <div class="ro fn"><span class="k">FNBW</span><span class="v" id="r-fnbw">—</span></div>
+    <div class="ro sl"><span class="k">sidelobe level</span><span class="v" id="r-sll">—</span></div>
+    <div class="ro"><span class="k">front-to-back</span><span class="v" id="r-fb">—</span></div>
   </div>
 </div>
 
@@ -154,23 +168,40 @@ document.querySelectorAll('.controls .tgl input').forEach(cb => {
 const canvas = document.getElementById('plot');
 const ctx    = canvas.getContext('2d');
 
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=360;
+let SCL=1;
 function resizeCanvas() {
-  const rect = canvas.getBoundingClientRect();
   const dpr  = window.devicePixelRatio || 1;
-  const w = Math.max(360, rect.width);
+  const wCss = cvWidth(canvas);
+  SCL = Math.min(1, wCss / DESIGN_W);
+  const w = wCss / SCL;
   const h = Math.max(340, Math.min(w * 0.42, 430));
-  canvas.width  = w * dpr;
-  canvas.height = h * dpr;
-  canvas.style.height = `${h}px`;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  setSize(canvas, wCss, h * SCL, dpr);
+  ctx.setTransform(dpr * SCL, 0, 0, dpr * SCL, 0, 0);
   draw();
 }
 window.addEventListener('resize', resizeCanvas);
 
 function draw() {
   const dpr = window.devicePixelRatio || 1;
-  const w   = canvas.width  / dpr;
-  const h   = canvas.height / dpr;
+  const w   = canvas.width  / (dpr * SCL);
+  const h   = canvas.height / (dpr * SCL);
   ctx.clearRect(0, 0, w, h);
 
   // margins — mT is large to reserve a top annotation lane for the brackets

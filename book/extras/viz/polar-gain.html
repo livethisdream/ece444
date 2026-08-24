@@ -11,7 +11,7 @@
           --iso:#6c757d; --dip:#0067b9; --pat:#1d7a4d; --horn:#8a5a00; --dish:#b3213a; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:9px 18px; align-items:center;
               padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
@@ -31,12 +31,21 @@
   .chip .g { font-size:11px; font-weight:600; color:var(--ink3); font-variant-numeric:tabular-nums; }
   .chip[aria-pressed="true"] { color:var(--navy); background:var(--bg); border-color:var(--c); box-shadow:inset 0 0 0 1px var(--c); }
   .chip[aria-pressed="true"] .dot { opacity:1; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.dish { background:rgba(179,33,58,0.10); color:var(--dish); border-color:rgba(179,33,58,0.28); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.dish { background:rgba(179,33,58,0.10); border-color:rgba(179,33,58,0.30); }
+  .ro.dish .v { color:var(--dish); }
   .hint { margin:0; text-align:center; font-size:11.5px; color:var(--ink3); line-height:1.45; }
 </style>
 </head>
@@ -62,12 +71,12 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill dish">dish gain = <b id="p-dish">—</b></span>
-    <span class="pill dish">dish HPBW = <b id="p-hpbw">—</b></span>
-    <span class="pill">outer ring = <b id="p-outer">—</b></span>
-    <span class="pill">centre = <b id="p-floor">—</b></span>
-    <span class="pill">curves shown = <b id="p-n">—</b></span>
+  <div class="readouts">
+    <div class="ro dish"><span class="k">dish gain</span><span class="v" id="p-dish">—</span></div>
+    <div class="ro dish"><span class="k">dish HPBW</span><span class="v" id="p-hpbw">—</span></div>
+    <div class="ro"><span class="k">outer ring</span><span class="v" id="p-outer">—</span></div>
+    <div class="ro"><span class="k">center</span><span class="v" id="p-floor">—</span></div>
+    <div class="ro"><span class="k">curves shown</span><span class="v" id="p-n">—</span></div>
   </div>
 
   <p class="hint">2D E-plane cut (&#952; from 0&#176; at top to &#177;180&#176;). Each curve keeps its own shape and sits at its own peak gain in dBi,
@@ -245,23 +254,41 @@ scaleSelect.addEventListener('change', () => {
 const canvas = document.getElementById('plot');
 const ctx    = canvas.getContext('2d');
 
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=320;
+let SCL=1;
 function resizeCanvas() {
-  const rect = canvas.getBoundingClientRect();
   const dpr  = window.devicePixelRatio || 1;
-  const w = Math.max(320, rect.width);
+  const wCss = cvWidth(canvas);
+  SCL = Math.min(1, wCss / DESIGN_W);
+  const w = wCss / SCL;
   const h = Math.max(300, Math.min(w * 0.62, 420));
-  canvas.width  = w * dpr;
-  canvas.height = h * dpr;
-  canvas.style.height = `${h}px`;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  setSize(canvas, wCss, h * SCL, dpr);
+  ctx.setTransform(dpr * SCL, 0, 0, dpr * SCL, 0, 0);
   draw();
 }
 
 window.addEventListener('resize', resizeCanvas);
 
 function draw() {
-  const w = canvas.width  / (window.devicePixelRatio || 1);
-  const h = canvas.height / (window.devicePixelRatio || 1);
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.width  / (dpr * SCL);
+  const h = canvas.height / (dpr * SCL);
   const cx = w / 2;
   const cy = h / 2 + 8;
   const R  = Math.min(w, h) / 2 - 40;
@@ -363,10 +390,10 @@ function draw() {
     ly += 34;
   }
 
-  updatePills();
+  updateReadouts();
 }
 
-function updatePills() {
+function updateReadouts() {
   const D = state.dLambda;
   const dishDbi = 10 * Math.log10(0.55 * Math.pow(Math.PI * D, 2));
   // half-power point of the sinc^2 aperture pattern: sin(theta) = 1.3916 / (pi D)

@@ -84,7 +84,7 @@ to an ellipse to a circle. The two component waveforms below the trace
 show what each linear channel sees.
 
 <iframe src="../../viz/polarization-playground.html"
-        width="100%" height="580"
+        width="100%" height="953"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Polarization playground">
@@ -233,7 +233,7 @@ handedness. The blue and red shadows on the back walls are the
 component sinusoids $E_{x}(z, t)$ and $E_{y}(z, t)$.
 
 <iframe src="../../viz/cp-helix.html"
-        width="100%" height="515"
+        width="100%" height="654"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Circular polarization helix">

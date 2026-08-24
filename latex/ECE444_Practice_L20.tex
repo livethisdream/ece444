@@ -1,0 +1,323 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L20 practice set (Array Factor and Beamwidth Theory) -- extracting numbers from
+% the uniform array factor: HPBW, null locations, FNBW, directivity, and sizing an
+% array to a beamwidth specification. Course array: N = 8, d = 14 mm, 10.3 GHz.
+
+\fullwidth{\textbf{Learning Objective 3.2: } Compute the half-power and first-null
+beamwidths of a steered uniform linear array, locate every pattern null, estimate the
+broadside directivity, and size an array to meet a beamwidth specification.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+\question \textbf{Beamwidth of the course array.} The ADALM-PHASER array has $N = 8$
+patch elements on $d = 14\ \text{mm}$ centers and operates at $10.3\ \ghz$. Use
+$\theta_\text{HP} \approx 0.886\lambda / \lp N d \cos\theta_0 \rp$ throughout.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the wavelength and the element spacing in wavelengths.
+		\begin{solution}[1.0in]
+		\eq{ \lambda &= \frac{3\ee{8}}{10.3\ee{9}} = 29.1\ \text{mm} \\
+		     \frac{d}{\lambda} &= \frac{14}{29.1} = 0.481 }
+		The aperture is $Nd = 112\ \text{mm} = 3.85\lambda$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$d/\lambda$ = \ansbox[1.3in]{$0.481$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the half-power beamwidth at broadside.
+		\begin{solution}[1.0in]
+		\eq{ \theta_\text{HP} &= \frac{0.886}{3.85} = 0.230\ \text{rad} \\
+		                      &= 13.2\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_\text{HP}$ = \ansbox[1.3in]{$13.2\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the half-power beamwidth with the beam steered to
+		$\theta_0 = 45\mydeg$.
+		\begin{solution}[1.0in]
+		\eq{ \theta_\text{HP} = \frac{13.2\mydeg}{\cosp{45\mydeg}}
+		     = \frac{13.2\mydeg}{0.707} = 18.7\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_\text{HP}$ = \ansbox[1.3in]{$18.7\mydeg$}
+	\end{minipage}
+
+	\part In one or two sentences, explain physically why the beam widens by
+	$1/\cos\theta_0$ when the array is steered, even though no hardware changed.
+		\begin{solution}[1.1in]
+		A source in the direction $\theta_0$ sees the aperture foreshortened: the
+		projected length of the array normal to the beam is $Nd\cos\theta_0$, not
+		$Nd$. Beamwidth is set by the aperture in wavelengths, so the effective
+		aperture shrinks as the beam steers away from broadside and the beam widens
+		by the same factor. At $60\mydeg$ the projected aperture is half its
+		broadside value.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+\question \textbf{Nulls and the first-null beamwidth.} Same array as Question 1:
+$N = 8$, $d/\lambda = 0.481$, so $Nd = 3.85\lambda$. The nulls of a uniform array are
+at $\sin\theta = \sin\theta_0 \pm m\lambda/\lp Nd \rp$ for $m = 1, 2, 3, \ldots$,
+excluding multiples of $N$.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part With the beam at broadside, find every null angle on the positive side
+		of the pattern.
+		\begin{solution}[1.3in]
+		The tooth spacing in sine space is $\lambda/Nd = 1/3.85 = 0.260$.
+		\eq{ m &= 1: & \sinp{\theta} &= 0.260 \rightarrow 15.1\mydeg \\
+		     m &= 2: & \sinp{\theta} &= 0.520 \rightarrow 31.3\mydeg \\
+		     m &= 3: & \sinp{\theta} &= 0.780 \rightarrow 51.2\mydeg \\
+		     m &= 4: & \sinp{\theta} &= 1.040 \rightarrow \text{no real angle} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		nulls = \ansbox[1.5in]{$15.1, 31.3, 51.2\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the first-null beamwidth at broadside, and the ratio of it to
+		the half-power beamwidth from Question 1(b).
+		\begin{solution}[1.0in]
+		\eq{ \text{FNBW} &= 2\arcsin\lp \frac{\lambda}{Nd} \rp = 2\lp 15.1\mydeg \rp
+		     = 30.1\mydeg \\
+		     \frac{\text{FNBW}}{\theta_\text{HP}} &= \frac{30.1}{13.2} = 2.3 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		FNBW = \ansbox[1.3in]{$30.1\mydeg$}
+	\end{minipage}
+
+	\part The array factor of an 8-element array has 7 nulls per period, but part (a)
+	found only 3 on each side of broadside. Explain in one or two sentences where the
+	others went.
+		\begin{solution}[1.1in]
+		The nulls are equally spaced in $\sin\theta$, and only those landing inside
+		the visible region $\vert \sin\theta \vert \le 1$ correspond to real
+		directions. With $\lambda/Nd = 0.260$, the fourth null would require
+		$\sin\theta = 1.04$, which is outside visible space. The pattern is periodic
+		in sine space, but the antenna can only radiate into the visible part of it.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Steer the beam to $\theta_0 = 30\mydeg$ and find the two nulls that
+		bracket the main lobe, then the first-null beamwidth.
+		\begin{solution}[1.3in]
+		\eq{ \sinp{\theta} &= 0.500 - 0.260 = 0.240 \rightarrow 13.9\mydeg \\
+		     \sinp{\theta} &= 0.500 + 0.260 = 0.760 \rightarrow 49.4\mydeg \\
+		     \text{FNBW} &= 49.4\mydeg - 13.9\mydeg = 35.5\mydeg }
+		The peak is $16.1\mydeg$ above the lower null and $19.4\mydeg$ below the
+		upper one, so a steered beam is not symmetric about its own peak.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		FNBW = \ansbox[1.3in]{$35.5\mydeg$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+\question \textbf{Directivity of a uniform linear array.} Use $D \approx 2Nd/\lambda$
+for a uniform broadside array of isotropic elements.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the directivity of the 8-element course array, in linear units
+		and in decibels.
+		\begin{solution}[1.0in]
+		\eq{ D &\approx 2 \lp 8 \rp \lp 0.481 \rp = 7.7 \\
+		     D_\text{dB} &= 10 \mylog{7.7} = 8.9\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$D$ = \ansbox[1.4in]{$7.7 = 8.9\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Suppose the same 8 elements were half-wave dipoles rather than patches.
+		Estimate the total gain of the array in dBi.
+		\begin{solution}[1.0in]
+		Pattern multiplication becomes addition in decibels:
+		\eq{ G_\text{total} &= G_\text{element} + D_\text{array} \\
+		                    &= 2.15\dbi + 8.9\db = 11.1\dbi }
+		This holds while the element pattern is nearly flat across the main lobe.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G_\text{total}$ = \ansbox[1.3in]{$11.1\dbi$}
+	\end{minipage}
+
+	\part Turning off the outer four elements leaves the center four running. State
+	what happens to the directivity and to the half-power beamwidth, with numbers, and
+	explain in one sentence why both changes have the same cause.
+		\begin{solution}[1.2in]
+		The aperture halves from $3.85\lambda$ to $1.92\lambda$. Directivity halves,
+		$D \approx 3.85 = 5.9\db$, a drop of exactly $3\db$, and the beamwidth
+		doubles from $13.2\mydeg$ to about $27\mydeg$. Both follow from the aperture
+		in wavelengths: directivity is proportional to $Nd/\lambda$ and beamwidth is
+		inversely proportional to it, so any change in aperture moves them in
+		opposite directions by the same factor.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+\question \textbf{Sizing an array.} A ground-based X-band tracker at $10\ \ghz$
+requires a half-power beamwidth of $2.0\mydeg$ and must steer to $\pm 60\mydeg$.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the aperture length required at broadside, in millimeters and in
+		wavelengths.
+		\begin{solution}[1.1in]
+		\eq{ \lambda &= 30\ \text{mm}, \qquad
+		     \theta_\text{HP} = 2.0\mydeg = 0.0349\ \text{rad} \\
+		     Nd &= \frac{0.886 \lambda}{\theta_\text{HP}}
+		     = \frac{0.886 \lp 30 \rp}{0.0349} = 762\ \text{mm} \\
+		     \frac{Nd}{\lambda} &= 25.4 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$Nd$ = \ansbox[1.4in]{$762\ \text{mm} = 25.4\lambda$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The grating-lobe criterion is $d < \lambda /
+		\lp 1 + \vert \sin\theta_0 \vert_\text{max} \rp$. Find the largest usable
+		spacing for this scan volume, then the element count if you build the array
+		at $d = \lambda/2$.
+		\begin{solution}[1.2in]
+		\eq{ d &< \frac{\lambda}{1 + \sinp{60\mydeg}} = \frac{\lambda}{1.866}
+		     = 0.536\lambda = 16.1\ \text{mm} \\
+		     N &= \frac{762}{15} = 50.8 \rightarrow 51 \text{ elements} }
+		Round up, never down: rounding down misses the beamwidth specification.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$d_\text{max}$ = \ansbox[1.2in]{$0.536\lambda$}
+		\\[10pt]
+		$N$ = \ansbox[1.2in]{$51$}
+	\end{minipage}
+
+	\part A colleague proposes $d = 0.9\lambda$ instead, which reaches the same
+	$25.4\lambda$ aperture with 28 elements rather than 51 — a large saving in phase
+	shifters and amplifiers. Evaluate the proposal: compute where the grating lobe
+	lands at the edge of the scan volume, and state whether you would accept it.
+		\begin{solution}[1.4in]
+		Grating lobes appear at $\sin\theta_g = \sin\theta_0 \pm \lambda/d$. With
+		$d = 0.9\lambda$, $\lambda/d = 1.111$. At broadside, $\sin\theta_g = 1.111$
+		is outside visible space and nothing is wrong. Steered to $60\mydeg$:
+		\eq{ \sinp{\theta_g} = 0.866 - 1.111 = -0.245 \rightarrow -14.2\mydeg }
+		A full-strength second beam appears at $-14.2\mydeg$ whenever the array
+		looks at the edge of its volume, so the tracker would report targets in the
+		wrong direction. Reject the proposal: the saving in elements is real, but
+		the array no longer meets the scan requirement.
+		\end{solution}
+
+	\part The beamwidth requirement must hold across the whole scan volume, not just
+	at broadside. State the aperture this actually demands and the resulting element
+	count at $d = \lambda/2$.
+		\begin{solution}[1.1in]
+		The beam is widest at the edge of the volume, so size for $\theta_0 =
+		60\mydeg$:
+		\eq{ Nd = \frac{762}{\cosp{60\mydeg}} = 1524\ \text{mm} = 50.8\lambda,
+		     \qquad N = \frac{1524}{15} = 102 }
+		The last $60\mydeg$ of scan doubles the array. Whether that is worth paying
+		for is a system question, and it has to be asked before the aperture is
+		fixed.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+\question \textbf{Reading a measured sweep.} A student sweeps the course array at
+$10.3\ \ghz$ ($\lambda = 29.1\ \text{mm}$) with the GUI and records a main lobe
+$13.1\mydeg$ wide at half power, a null-to-null width of $28.5\mydeg$, and a first
+sidelobe at $-11.5$ dBc.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part From the measured half-power width alone, infer the aperture in
+		millimeters and the number of active elements on $14\ \text{mm}$ centers.
+		\begin{solution}[1.2in]
+		\eq{ Nd &= \frac{0.886 \lambda}{\theta_\text{HP}}
+		     = \frac{0.886 \lp 29.1 \rp}{0.2287} = 113\ \text{mm} \\
+		     N &= \frac{113}{14} = 8.1 \rightarrow 8 \text{ elements} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$N$ = \ansbox[1.3in]{$8$}
+	\end{minipage}
+
+	\part Theory puts the first-null beamwidth at $30.1\mydeg$ and the student
+	measured $28.5\mydeg$. The sweep steps the commanded angle by the phase-shifter
+	resolution of $2.8125\mydeg$. Explain the discrepancy in one or two sentences.
+		\begin{solution}[1.1in]
+		The sweep samples the pattern every $2.8125\mydeg$, so the recorded trace
+		almost never lands on the exact null angle of $15.1\mydeg$. Nulls are narrow,
+		sharp features, so the apparent null position moves to the nearest grid point
+		and the measured null-to-null width reads one to three degrees off. The
+		half-power points sit on a gentle slope and interpolate far more reliably,
+		which is why beamwidth is quoted at half power.
+		\end{solution}
+
+	\part The measured first sidelobe is $-11.5$ dBc, while theory for a uniform
+	8-element array gives $-12.8$ dBc. Is this evidence of a fault? Answer in one or
+	two sentences.
+		\begin{solution}[1.1in]
+		No. A uniform array's first sidelobe is expected between $-11$ and
+		$-13\ $dBc on this hardware once element-to-element amplitude and phase
+		errors, the coarse sweep grid, and the finite noise floor are included, and
+		$-11.5$ dBc sits inside that band. A sidelobe several decibels high, or a
+		main lobe that is not at the commanded angle, would be evidence of a fault.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A second sweep, taken after a lab partner changed the element gains,
+		shows a main lobe $27\mydeg$ wide with no visible sidelobes above the noise
+		floor. State which aperture configuration this is and what it implies about
+		the number of active elements.
+		\begin{solution}[1.2in]
+		\eq{ \theta_\text{HP} &= 27\mydeg = 0.471\ \text{rad} \\
+		     Nd &= \frac{0.886 \lp 29.1 \rp}{0.471} = 54.7\ \text{mm}
+		     \approx 1.9\lambda }
+		That is four elements at $14\ \text{mm}$ spacing, so the center four are on
+		and the outer four are off. With only four elements the sidelobes rise to
+		about $-11$ dBc, so ``none visible'' points instead to a tapered set of
+		element gains rather than a clean four-element aperture.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$N$ = \ansbox[1.3in]{$4$}
+	\end{minipage}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

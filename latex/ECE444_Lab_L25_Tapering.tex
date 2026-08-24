@@ -1,0 +1,258 @@
+\documentclass{exam}
+
+\newif\ifA
+\newif\ifkey
+\newif\ifprintselected   % required by exam_config's \ansbox
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lab Num -- Module 3's six lab periods follow L04 (Lab 1) and the two
+% Module 2 measurement labs, so L25 is Lab 8. Override with \def\labNumIn{}
+% if the course sequence renumbers.
+\ifdefined\labNumIn
+	\def\labNum{\labNumIn}
+\else
+	\def\labNum{8}
+\fi
+
+% is this the key or not?
+\ifdefined\iskey
+	\ifnum\iskey=1
+		\keytrue
+	\else
+		\keyfalse
+	\fi
+\else
+	%% Pick one manually
+	\keyfalse % if this is NOT the key
+%	\keytrue     % if this IS the key
+\fi
+
+% set up the header and footer - change for every term
+\ifdefined\thisTermIn
+	\def\thisterm{\thisTermIn}
+\else
+	\def\thisterm{Fall 2026}
+\fi
+%
+\def\thisclass{ECE 444}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% END SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% packages and shortcuts
+\input{myPackages_gr}
+\usepackage[hidelinks, linkcolor=red]{hyperref}
+\input{myShortcuts}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+%% exam class customization
+\input{exam_config}
+\printselectedfalse      % full worked solutions in the key, not answers-only
+\CorrectChoiceEmphasis{\color{red}}
+\SolutionEmphasis{\color{red}}
+\renewcommand\questionlabel{\textbf{\thequestion.}}
+\renewcommand{\thepartno}{\alph{partno}}
+\renewcommand{\partlabel}{(\thepartno)}
+
+% Fillable table cell: blank in the student copy, the expected value in red on
+% the KEY. Fixed-width centered columns keep the blank cells writable.
+\newcolumntype{K}[1]{>{\centering\arraybackslash}p{#1}}
+\newcommand{\kv}[1]{\ifkey{\color{red}#1}\fi\rule[-0.10in]{0pt}{0.34in}}
+
+% print the answers if this is the key
+\ifkey
+	\printanswers % if this IS the key
+\else
+	\noprintanswers  %if this is NOT the key
+\fi
+
+% print the header and footer
+% need to print key on top if this is the key
+\ifkey
+	\firstpageheader{}{\color{red}{ KEY}}{}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\else
+	\firstpageheader{}{}{}
+	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpagefooter{}{}{}
+	\runningfooter{}{}{}
+\fi
+
+\runningheadrule
+
+\begin{document}
+\pagestyle{headandfoot}   % exam class
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% title block
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+USAF ACADEMY \\
+DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
+LAB \#\labNum\ (Lesson 25) - Tapering Lab \\
+\textbf{Lab Sheet} \\
+\thisterm \\[4mm]
+\end{center}
+
+\vspace{-4pt}
+\textbf{Name:} \rule[-2pt]{2.6in}{0.4pt} \hfill
+\textbf{Section:} \rule[-2pt]{0.9in}{0.4pt} \hfill
+\textbf{Date:} \rule[-2pt]{1.1in}{0.4pt}
+
+\vspace{4pt}
+
+\fullwidth{\textbf{Learning Objective 3.7: } Apply amplitude tapering to control
+sidelobe level, and predict the resulting pattern trade-off.}
+
+\vspace{2pt}
+
+This sheet is the turn-in document for the Lesson 25 lab. Predict each row
+before you sweep it, and keep the peak drop and the taper efficiency in separate
+columns throughout. The lab is a team assignment, so one sheet per team.
+
+\begin{questions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The taper table, part 1: the element gains.} Read the eight
+slider values off Element Gains for each preset and record them as percentages.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{0.5in} | K{0.5in} | K{0.5in} | K{0.5in} | K{0.5in} | K{0.5in} | K{0.5in} | K{0.5in} |}
+\hline
+\textbf{Preset} & \textbf{Rx1} & \textbf{Rx2} & \textbf{Rx3} & \textbf{Rx4} & \textbf{Rx5} & \textbf{Rx6} & \textbf{Rx7} & \textbf{Rx8} \\\hline\hline
+Uniform & \kv{100} & \kv{100} & \kv{100} & \kv{100} & \kv{100} & \kv{100} & \kv{100} & \kv{100} \\\hline
+Hann & \kv{12} & \kv{43} & \kv{77} & \kv{100} & \kv{100} & \kv{77} & \kv{43} & \kv{12} \\\hline
+Blackman & \kv{6} & \kv{27} & \kv{66} & \kv{100} & \kv{100} & \kv{66} & \kv{27} & \kv{6} \\\hline
+Chebyshev & \kv{4} & \kv{23} & \kv{62} & \kv{100} & \kv{100} & \kv{62} & \kv{23} & \kv{4} \\\hline
+\end{tabular}
+\end{center}
+
+\textbf{The taper table, part 2: what the sweep reads.} Predict each row before
+you press Start. The peak drop is measured against the frozen uniform trace, and
+$\eta_t = (\sum a_n)^2 / (N \sum a_n^2)$ is computed rather than measured.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{0.6in} | K{0.65in} | K{0.6in} | K{0.95in} | K{0.9in} | K{0.45in} | K{0.55in} |}
+\hline
+\textbf{Preset} & \textbf{HPBW pred} & \textbf{HPBW meas} & \textbf{Drop pred} & \textbf{Drop meas} & \textbf{First sidelobe} & $\boldsymbol{\eta_t}$ & $\boldsymbol{\eta_t}$ \textbf{(dB)} \\\hline\hline
+Uniform & \kv{$13.1\mydeg$} & \kv{$\approx 13\mydeg$} & \kv{$0$ dB} & \kv{$0$ dB} & \kv{$-11$ to $-13$ dBc} & \kv{1.00} & \kv{$0$} \\\hline
+Hann & \kv{$19.5\mydeg$} & \kv{$19$ to $20\mydeg$} & \kv{$-4.7$ dB} & \kv{$-4.7 \pm 0.5$ dB} & \kv{below the noise floor} & \kv{0.75} & \kv{$-1.2$} \\\hline
+Blackman & \kv{$23.1\mydeg$} & \kv{$22$ to $24\mydeg$} & \kv{$-6.1$ dB} & \kv{$-6.1 \pm 0.5$ dB} & \kv{below the noise floor} & \kv{0.66} & \kv{$-1.8$} \\\hline
+Chebyshev & \kv{$24.3\mydeg$} & \kv{$23$ to $25\mydeg$} & \kv{$-6.5$ dB} & \kv{$-6.5 \pm 0.5$ dB} & \kv{below the noise floor} & \kv{0.62} & \kv{$-2.1$} \\\hline
+\end{tabular}
+\end{center}
+
+\begin{solution}
+Work the Hann row through as the model. With
+$a_n = 0.12,\ 0.43,\ 0.77,\ 1.00,\ 1.00,\ 0.77,\ 0.43,\ 0.12$,
+\eq{
+	\sum a_n &= 4.64, \qquad \sum a_n^2 = 3.584 \\
+	\text{peak drop} &= 20\mylog{\frac{4.64}{8}} = 20\mylog{0.580} = -4.7 \text{ dB} \\
+	\eta_t &= \frac{(4.64)^2}{8(3.584)} = \frac{21.53}{28.67} = 0.751 \quad \rightarrow \quad -1.2 \text{ dB}
+}
+The same two sums give $-6.1$ dB and $0.655$ for Blackman ($\sum a_n = 3.98$,
+$\sum a_n^2 = 3.024$), and $-6.5$ dB and $0.621$ for Chebyshev
+($\sum a_n = 3.78$, $\sum a_n^2 = 2.878$). Measured beamwidths land within a
+degree or so of the prediction, because the sweep steps in $2.8125\mydeg$
+increments and the 3 dB crossings fall between samples. Every tapered sidelobe
+sits below the sweep's floor, which is about 23 dB under the uniform peak, so
+the entry in that column is the phrase and not a number read off the grass.
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{Your custom taper.} Record the eight gain values you settled
+on and the measured result. The specification was a half-power beamwidth no
+wider than $17\mydeg$ with the first sidelobe below $-20$ dBc.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{0.5in} | K{0.5in} | K{0.5in} | K{0.5in} | K{0.5in} | K{0.5in} | K{0.5in} | K{0.5in} |}
+\hline
+\textbf{Taper} & \textbf{Rx1} & \textbf{Rx2} & \textbf{Rx3} & \textbf{Rx4} & \textbf{Rx5} & \textbf{Rx6} & \textbf{Rx7} & \textbf{Rx8} \\\hline\hline
+Custom & \kv{$\approx 45$} & \kv{$\approx 65$} & \kv{$\approx 85$} & \kv{100} & \kv{100} & \kv{$\approx 85$} & \kv{$\approx 65$} & \kv{$\approx 45$} \\\hline
+\end{tabular}
+\end{center}
+
+\vspace{4pt}
+\begin{center}
+Measured HPBW = \ansbox[1.4in]{$\le 17\mydeg$} %
+Measured first sidelobe = \ansbox[1.8in]{below $-20$ dBc}
+\end{center}
+\vspace{4pt}
+
+In one sentence, how did you arrive at these values?
+
+\begin{solutionorlines}[1.2in]
+Any symmetric taper that meets the specification is acceptable, so there is no
+single set of eight numbers to look for. Grade the arithmetic instead: the peak
+drop reported has to equal $20\mylog{\sum a_n / 8}$ for the gains written down.
+A taper with the end elements near 45 percent, stepping smoothly up to 100
+percent in the middle, reads roughly $15\mydeg$ of beamwidth and a peak drop
+near $-3.3$ dB, with the first sidelobe just reaching the floor. The last line
+should describe two or three iterations: set the sliders, sweep, read the HPBW
+and the sidelobe level, and adjust.
+\end{solutionorlines}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{Written answers.} A short paragraph each.
+
+\begin{parts}
+
+	\part The tapered sidelobes disappear from the plot, but the beamwidth change
+	is easy to see and easy to measure. Explain why the measurement gives a good
+	number for one and no number at all for the other.
+
+	\begin{solutionorlines}[2.2in]
+	The beamwidth is read near the top of the trace, 3 dB below a peak that stands
+	about 23 dB above the noise floor, so both crossings are well inside the
+	dynamic range of the measurement. The tapered sidelobes are pushed more than
+	17 dB below that peak, which puts them under the floor, and anything below the
+	floor reads as noise rather than as pattern. The instrument is not measuring
+	the sidelobe at all in those rows, so a number taken from the trace would
+	report the receiver's noise. The correct entry is that the sidelobe is below
+	the noise floor.
+	\end{solutionorlines}
+
+	\part Explain why the peak drop you measured is not the directivity the array
+	lost, and what each number would be used for.
+
+	\begin{solutionorlines}[2.6in]
+	The peak drop is the coherent receive-voltage loss,
+	$20\mylog{\sum a_n / N}$, read off a trace that is normalized to the uniform
+	peak. The tapered array does collect less signal voltage from the source, and
+	that is the $4.7$ dB the Hann trace falls. It also responds to less of
+	everything arriving from off-boresight, and directivity is the ratio of
+	on-axis intensity to the average over all angles, so that ratio falls only by
+	the taper efficiency, $\eta_t = 0.75$, or $1.2$ dB. Re-normalizing each trace
+	to its own peak would remove the $4.7$ dB from the plot entirely and leave the
+	beam shape unchanged. Use the peak drop to predict what the plot will show and
+	to check that the intended gains were loaded, and use $\eta_t$ in a link or
+	system budget, where debiting $4.7$ dB would overstate the loss by a factor of
+	two in power.
+	\end{solutionorlines}
+
+\end{parts}
+
+\end{questions}
+
+\vspace{1.0em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{document}

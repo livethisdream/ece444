@@ -56,25 +56,31 @@
   .note { font-size:11.5px; color:var(--ink3); line-height:1.45; }
   .eq { font-size:13px; color:var(--navy); font-weight:600; margin:2px 0 6px; }
   .stage { position: relative; flex: 1 1 auto; min-height: 0; }
-  .overlay { position: absolute; top: 12px; right: 12px;
-             display: flex; flex-direction: column; gap: 6px; width: 164px; pointer-events: none; }
-  .overlay .pill { display: flex; justify-content: center; align-items: center; gap: 5px;
-                   padding: 4px 12px; background: rgba(0,103,185,0.12);
-                   border: 1px solid rgba(0,103,185,0.30); color: #0067b9;
-                   border-radius: 1em; font-size: 12px; font-weight: 600;
-                   white-space: nowrap; font-variant-numeric: tabular-nums; line-height: 1.4; }
-  .overlay .pill b { color: #004a85; font-weight: 700; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .app > .readouts { flex: 0 0 auto; }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.cone { background:rgba(0,103,185,0.12); border-color:rgba(0,103,185,0.30); }
+  .ro.cone .v { color:var(--cone); }
 </style>
 </head>
 <body>
 <div class="app">
   <div class="stage">
     <canvas id="scene" aria-label="Sphere with solid-angle cone"></canvas>
-    <div class="overlay">
-      <span class="pill">\(\Omega\) = <b id="r-omega">—</b></span>
-      <span class="pill">\(\Omega/4\pi\) = <b id="r-frac">—</b></span>
-      <span class="pill">patch area = <b id="r-area">—</b></span>
-    </div>
   </div>
 
   <div class="controls">
@@ -82,6 +88,12 @@
     <input type="range" id="alpha" min="3" max="60" step="1" value="20">
     <button id="reset">Reset view</button>
     <span class="note">Drag to rotate.</span>
+  </div>
+
+  <div class="readouts">
+    <div class="ro cone"><span class="k">\(\Omega\)</span><span class="v" id="r-omega">—</span></div>
+    <div class="ro"><span class="k">\(\Omega/4\pi\)</span><span class="v" id="r-frac">—</span></div>
+    <div class="ro"><span class="k">patch area</span><span class="v" id="r-area">—</span></div>
   </div>
 </div>
 
@@ -185,11 +197,11 @@ function draw() {
   const dpr = window.devicePixelRatio || 1;
   const w = canvas.width / dpr, h = canvas.height / dpr;
   ctx.clearRect(0, 0, w, h);
-  // Keep the sphere clear of the top-right stats pills (pill column + insets ≈ 186px).
-  const pillBand = 186;
-  S = Math.min(w - pillBand, h) * 0.34;
+  // The readouts moved out of the canvas into the instrument grid below it, so
+  // nothing overlaps the scene any more and the sphere gets the whole frame.
+  S = Math.min(w, h) * 0.34;
   CY = h / 2 + 6;
-  CX = Math.min(w / 2, w - pillBand - S);
+  CX = w / 2;
 
   // ---- sphere wireframe (latitudes + longitudes) ----
   const NLAT = 9, NLONG = 12, SEG = 60;

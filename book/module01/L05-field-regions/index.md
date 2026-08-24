@@ -200,7 +200,7 @@ other two grows tenfold for every decade you move out — which is why "negligib
 takes until $kr \approx 10$, not $kr = 1$.
 
 <iframe src="../../viz/near-field-terms.html"
-        width="100%" height="480"
+        width="100%" height="521"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Near-field term crossover">
@@ -303,7 +303,7 @@ exactly as $r$ crosses $2D^2/\lambda$, and that doubling $D$ pushes it four time
 farther out — the $D^2$ in the formula, on screen.
 
 <iframe src="../../viz/field-regions.html"
-        width="100%" height="600"
+        width="100%" height="656"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Field-region explorer">

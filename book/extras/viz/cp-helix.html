@@ -11,7 +11,7 @@
           --rh:#0067b9; --lh:#b3213a; --tip:#1d7a4d; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:9px 18px; align-items:center;
               padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
@@ -34,13 +34,23 @@
   .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
   .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
   .tgl input:checked ~ .t { color:var(--navy); }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.sense { background:rgba(0,103,185,0.12); color:var(--rh); border-color:rgba(0,103,185,0.30); }
-  .pill.sense.lh { background:rgba(179,33,58,0.10); color:var(--lh); border-color:rgba(179,33,58,0.28); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.sense { background:rgba(0,103,185,0.12); border-color:rgba(0,103,185,0.30); }
+  .ro.sense .v { color:var(--rh); }
+  .ro.sense.lh { background:rgba(179,33,58,0.10); border-color:rgba(179,33,58,0.28); }
+  .ro.sense.lh .v { color:var(--lh); }
   .hint { margin:0; text-align:center; font-size:11.5px; color:var(--ink3); line-height:1.45; }
 </style>
 </head>
@@ -69,12 +79,12 @@
     <label class="tgl"><input id="run" type="checkbox" checked><span class="sw"></span><span class="t">Animate</span></label>
   </div>
 
-  <div class="pills">
-    <span class="pill sense" id="p-sense-pill">sense = <b id="p-sense">RHCP</b></span>
-    <span class="pill">axial ratio = <b>1.00 (0 dB)</b></span>
-    <span class="pill">Ey vs Ex = <b id="p-phase">—</b></span>
-    <span class="pill">tip angle at z = 0: <b id="p-ang">—</b></span>
-    <span class="pill">one full turn per <b>&#955;</b></span>
+  <div class="readouts">
+    <div class="ro sense" id="ro-sense"><span class="k">sense</span><span class="v" id="p-sense">RHCP</span></div>
+    <div class="ro"><span class="k">axial ratio</span><span class="v">1.00 (0 dB)</span></div>
+    <div class="ro"><span class="k">Ey vs Ex</span><span class="v" id="p-phase">—</span></div>
+    <div class="ro"><span class="k">tip angle, z = 0</span><span class="v" id="p-ang">—</span></div>
+    <div class="ro"><span class="k">one full turn</span><span class="v">every &#955;</span></div>
   </div>
 
   <p class="hint">Wave propagates in <b>+z</b>; the tip of the E-vector traces a helix.
@@ -115,14 +125,24 @@
     speedV.textContent = (+speedEl.value).toFixed(1) + '×';
   }));
 
+  /* clientWidth, not getBoundingClientRect(): the rect includes the 1px border
+     on each side, so a bitmap sized from it is 2px wider than the box it is
+     painted into and the drawing comes out stretched horizontally. And with
+     box-sizing:border-box, style.height sets the OUTER height, so hand the
+     border back or the bitmap is 2px taller than its box. The scale has no
+     floor any more: below it the composition would be wider than the canvas
+     and the corkscrew would be clipped at both ends. */
+  function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
   function fit() {
     const dpr = window.devicePixelRatio || 1;
-    const cssW = Math.max(320, cvs.getBoundingClientRect().width);
-    const sc = Math.max(0.5, Math.min(cssW / DW, 0.95));
+    const cssW = cvWidth(cvs);
+    const sc = Math.min(cssW / DW, 0.95);
     const cssH = DH * sc;
     cvs.width  = Math.round(cssW * dpr);
     cvs.height = Math.round(cssH * dpr);
     cvs.style.height = cssH + 'px';
+    const bh = cvs.offsetHeight - cvs.clientHeight;
+    if (bh) cvs.style.height = (cssH + bh) + 'px';
     const tx = (cssW - DW * sc) / 2;
     ctx.setTransform(dpr * sc, 0, 0, dpr * sc, dpr * tx, 0);
   }
@@ -291,7 +311,7 @@
       document.getElementById('p-ang').textContent = deg.toFixed(0) + '°';
       document.getElementById('p-sense').textContent = (sense === 'rh') ? 'RHCP' : 'LHCP';
       document.getElementById('p-phase').textContent = (sense === 'rh') ? '−90° (lags)' : '+90° (leads)';
-      document.getElementById('p-sense-pill').classList.toggle('lh', sense === 'lh');
+      document.getElementById('ro-sense').classList.toggle('lh', sense === 'lh');
     }
   }
 

@@ -1,0 +1,150 @@
+<svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A classroom measurement with reflected paths off the floor and ceiling beside an anechoic chamber measurement with absorber-lined walls, a turntable, and a single direct path">
+<defs>
+<marker id="l23bGrey" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker>
+</defs>
+
+<!-- ========================= (a) classroom ========================= -->
+<text x="220" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="#004a85">(a) classroom</text>
+<rect x="20" y="52" width="400" height="214" rx="6" fill="#f5f9fc" stroke="#c7d2e0" stroke-width="1.6"/>
+
+<!-- direct path -->
+<line x1="90" y1="222" x2="358" y2="152" stroke="#004a85" stroke-width="2.2"/>
+<text x="214" y="176" text-anchor="middle" font-size="12" fill="#004a85">direct</text>
+
+<!-- floor and ceiling bounces -->
+<path d="M92 230 L226 262 L356 160" fill="none" stroke="#8a5a00" stroke-width="1.8" stroke-dasharray="6 4"/>
+<path d="M90 214 L232 62 L358 146" fill="none" stroke="#8a5a00" stroke-width="1.8" stroke-dasharray="6 4"/>
+<text x="226" y="252" text-anchor="middle" font-size="12" fill="#8a5a00">reflections</text>
+<text x="232" y="100" text-anchor="middle" font-size="12" fill="#8a5a00">reflections</text>
+
+<rect x="64.0" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="70.5" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="77.0" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="83.5" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="90.0" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="96.5" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="103.0" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="109.5" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<line x1="60" y1="230" x2="120" y2="230" stroke="#004a85" stroke-width="3" stroke-linecap="round"/>
+<text x="90" y="250" text-anchor="middle" font-size="12" fill="#004a85">array</text>
+<circle cx="366" cy="150" r="8" fill="#b01e24"/>
+<text x="366" y="132" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b01e24">HB100</text>
+<text x="366" y="184" text-anchor="middle" font-size="12" fill="#5a5a5a">hand-held</text>
+
+<text x="220" y="298" text-anchor="middle" font-size="13" fill="#1a1a1a">three paths add: about &#177;1 dB of ripple</text>
+<text x="220" y="320" text-anchor="middle" font-size="13" fill="#1a1a1a">range and angle set by your arm</text>
+
+<!-- divider -->
+<line x1="440" y1="24" x2="440" y2="330" stroke="#c7d2e0" stroke-width="1.4"/>
+
+<!-- ========================= (b) chamber ========================= -->
+<text x="660" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="#004a85">(b) anechoic chamber</text>
+<rect x="460" y="52" width="400" height="214" rx="6" fill="#f5f9fc" stroke="#c7d2e0" stroke-width="1.6"/>
+<path d="M460.0 52 L467.7 63.0 L475.4 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M475.4 52 L483.1 63.0 L490.8 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M490.8 52 L498.5 63.0 L506.2 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M506.2 52 L513.8 63.0 L521.5 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M521.5 52 L529.2 63.0 L536.9 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M536.9 52 L544.6 63.0 L552.3 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M552.3 52 L560.0 63.0 L567.7 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M567.7 52 L575.4 63.0 L583.1 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M583.1 52 L590.8 63.0 L598.5 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M598.5 52 L606.2 63.0 L613.8 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M613.8 52 L621.5 63.0 L629.2 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M629.2 52 L636.9 63.0 L644.6 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M644.6 52 L652.3 63.0 L660.0 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M660.0 52 L667.7 63.0 L675.4 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M675.4 52 L683.1 63.0 L690.8 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M690.8 52 L698.5 63.0 L706.2 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M706.2 52 L713.8 63.0 L721.5 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M721.5 52 L729.2 63.0 L736.9 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M736.9 52 L744.6 63.0 L752.3 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M752.3 52 L760.0 63.0 L767.7 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M767.7 52 L775.4 63.0 L783.1 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M783.1 52 L790.8 63.0 L798.5 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M798.5 52 L806.2 63.0 L813.8 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M813.8 52 L821.5 63.0 L829.2 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M829.2 52 L836.9 63.0 L844.6 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M844.6 52 L852.3 63.0 L860.0 52 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460.0 266 L467.7 255.0 L475.4 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M475.4 266 L483.1 255.0 L490.8 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M490.8 266 L498.5 255.0 L506.2 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M506.2 266 L513.8 255.0 L521.5 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M521.5 266 L529.2 255.0 L536.9 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M536.9 266 L544.6 255.0 L552.3 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M552.3 266 L560.0 255.0 L567.7 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M567.7 266 L575.4 255.0 L583.1 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M583.1 266 L590.8 255.0 L598.5 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M598.5 266 L606.2 255.0 L613.8 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M613.8 266 L621.5 255.0 L629.2 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M629.2 266 L636.9 255.0 L644.6 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M644.6 266 L652.3 255.0 L660.0 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M660.0 266 L667.7 255.0 L675.4 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M675.4 266 L683.1 255.0 L690.8 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M690.8 266 L698.5 255.0 L706.2 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M706.2 266 L713.8 255.0 L721.5 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M721.5 266 L729.2 255.0 L736.9 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M736.9 266 L744.6 255.0 L752.3 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M752.3 266 L760.0 255.0 L767.7 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M767.7 266 L775.4 255.0 L783.1 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M783.1 266 L790.8 255.0 L798.5 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M798.5 266 L806.2 255.0 L813.8 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M813.8 266 L821.5 255.0 L829.2 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M829.2 266 L836.9 255.0 L844.6 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M844.6 266 L852.3 255.0 L860.0 266 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 52.0 L471.0 59.6 L460 67.3 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 67.3 L471.0 74.9 L460 82.6 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 82.6 L471.0 90.2 L460 97.9 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 97.9 L471.0 105.5 L460 113.1 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 113.1 L471.0 120.8 L460 128.4 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 128.4 L471.0 136.1 L460 143.7 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 143.7 L471.0 151.4 L460 159.0 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 159.0 L471.0 166.6 L460 174.3 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 174.3 L471.0 181.9 L460 189.6 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 189.6 L471.0 197.2 L460 204.9 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 204.9 L471.0 212.5 L460 220.1 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 220.1 L471.0 227.8 L460 235.4 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 235.4 L471.0 243.1 L460 250.7 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M460 250.7 L471.0 258.4 L460 266.0 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 52.0 L849.0 59.6 L860 67.3 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 67.3 L849.0 74.9 L860 82.6 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 82.6 L849.0 90.2 L860 97.9 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 97.9 L849.0 105.5 L860 113.1 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 113.1 L849.0 120.8 L860 128.4 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 128.4 L849.0 136.1 L860 143.7 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 143.7 L849.0 151.4 L860 159.0 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 159.0 L849.0 166.6 L860 174.3 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 174.3 L849.0 181.9 L860 189.6 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 189.6 L849.0 197.2 L860 204.9 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 204.9 L849.0 212.5 L860 220.1 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 220.1 L849.0 227.8 L860 235.4 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 235.4 L849.0 243.1 L860 250.7 Z" fill="#0067b9" opacity="0.30"/>
+<path d="M860 250.7 L849.0 258.4 L860 266.0 Z" fill="#0067b9" opacity="0.30"/>
+
+<!-- the one path that survives -->
+<line x1="530" y1="222" x2="798" y2="152" stroke="#004a85" stroke-width="2.2"/>
+<text x="654" y="176" text-anchor="middle" font-size="12" fill="#004a85">direct only</text>
+
+<rect x="504.0" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="510.5" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="517.0" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="523.5" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="530.0" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="536.5" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="543.0" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<rect x="549.5" y="220" width="4.5" height="9" rx="1" fill="#004a85"/>
+<line x1="500" y1="230" x2="560" y2="230" stroke="#004a85" stroke-width="3" stroke-linecap="round"/>
+<!-- turntable -->
+<ellipse cx="530" cy="248" rx="44" ry="9" fill="#1d7a4d" opacity="0.22"/>
+<ellipse cx="530" cy="248" rx="44" ry="9" fill="none" stroke="#1d7a4d" stroke-width="1.4"/>
+<path d="M500 256 A44 20 0 0 0 560 256" fill="none" stroke="#1d7a4d" stroke-width="1.5" marker-end="url(#l23bGrey)"/>
+<text x="530" y="284" text-anchor="middle" font-size="12" fill="#1d7a4d">turntable + encoder</text>
+
+<circle cx="806" cy="150" r="8" fill="#b01e24"/>
+<text x="806" y="132" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b01e24">source</text>
+<text x="806" y="172" text-anchor="middle" font-size="12" fill="#5a5a5a">fixed mount</text>
+<text x="700" y="248" text-anchor="middle" font-size="12" fill="#0067b9">absorber</text>
+
+<text x="660" y="298" text-anchor="middle" font-size="13" fill="#1a1a1a">one path arrives: no room ripple</text>
+<text x="660" y="320" text-anchor="middle" font-size="13" fill="#1a1a1a">range and angle set by the fixtures</text>
+</svg>

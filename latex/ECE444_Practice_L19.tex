@@ -1,0 +1,354 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L19 practice set (Beam Steering Lab) -- reading and defending a PHASER beam
+% sweep: wrapped phase tables, peak-angle quantization, and the error budget.
+
+\fullwidth{\textbf{Learning Objective 3.5: } I can implement beam steering on the
+ADALM-PHASER and verify the steered pattern against theory.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+\question \textbf{Building the phase table for a new angle.} Your HB100 locks at
+$10.525\ \ghz$ and the PHASER array has $N = 8$ elements on a $d = 14\ \text{mm}$
+pitch. You plan to steer to $\theta_0 = 20\mydeg$.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the wavelength and the electrical spacing $d/\lambda$.
+		\begin{solution}[1.0in]
+		\eq{\lambda = \frac{c}{f} = \frac{3\times10^{8}}{10.525\times10^{9}} = 0.02850\ \m = 28.50\ \text{mm}}
+		\eq{\frac{d}{\lambda} = \frac{14}{28.50} = 0.491}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\lambda$ = \ansbox[1.3in]{$28.5\ \text{mm}$}\\[10pt]
+		$d/\lambda$ = \ansbox[1.3in]{$0.491$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the progressive element phase $\Delta\phi$ required to
+		steer the beam to $20\mydeg$.
+		\begin{solution}[1.1in]
+		\eq{\Delta\phi = kd\sinp{\theta_0} = 360\mydeg\ \frac{d}{\lambda}\ \sinp{\theta_0}}
+		\eq{= 360\mydeg (0.491)(0.3420) = 176.8\mydeg (0.3420) = 60.5\mydeg}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta\phi$ = \ansbox[1.3in]{$60.5\mydeg$}
+	\end{minipage}
+
+	\part Complete the table of phases the beamformer will apply, wrapping each
+	value into $0\mydeg$ to $360\mydeg$. State which element is the first to wrap.
+
+	\vspace{4pt}
+	\noindent\begin{tabular}{l|cccccccc}
+	Element & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\ \hline
+	Applied phase & & & & & & & & \\[10pt]
+	\end{tabular}
+	\vspace{2pt}
+
+		\begin{solution}[1.0in]
+		Element $n$ carries $(n-1)\Delta\phi$ with $\Delta\phi = 60.5\mydeg$, wrapped modulo $360\mydeg$:
+		\eq{0.0\mydeg,\ 60.5\mydeg,\ 121.0\mydeg,\ 181.4\mydeg,\ 241.9\mydeg,\ 302.4\mydeg,\ 2.9\mydeg,\ 63.4\mydeg}
+		Element 7 is the first to wrap: its unwrapped value is $6(60.5\mydeg) = 362.9\mydeg$, which the shifter produces as $2.9\mydeg$.
+		\end{solution}
+
+	\part A classmate says the wrapped table cannot produce the same beam as the
+	unwrapped ramp, because element 7 now leads element 1 by only $2.9\mydeg$
+	instead of lagging a full turn behind. In one or two sentences, explain why
+	the two tables give identical patterns.
+		\begin{solution}[1.0in]
+		The field radiated by an element depends on its phase only through
+		$e^{j\phi}$, which is unchanged by adding or subtracting any whole number
+		of $360\mydeg$. A $362.9\mydeg$ shift and a $2.9\mydeg$ shift are the same
+		complex weight, so every term in the array sum is identical and the
+		patterns are identical. Wrapping matters only because the hardware cannot
+		store a number larger than $360\mydeg$.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Reading a measured sweep.} A cadet places the HB100 at
+$+30.0\mydeg$ on the protractor arc, hunts for the peak in the Beam Steering box,
+and then runs a full sweep on the Rectangular tab. The trace peaks at a commanded
+angle of $28.1\mydeg$, its half-power crossings are at $20.5\mydeg$ and
+$35.8\mydeg$, the peak sits $0.7\ \db$ below the frozen boresight trace, and the
+first sidelobes read $-11.8$ dBc. The steer resolution is the default
+$2.8125\mydeg$.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the measured half-power beamwidth and compare it with the
+		value predicted from the $13.1\mydeg$ boresight beamwidth.
+		\begin{solution}[1.1in]
+		\eq{\theta_\text{HP,meas} = 35.8\mydeg - 20.5\mydeg = 15.3\mydeg}
+		The $1/\cosp{\theta_0}$ broadening predicts
+		\eq{\frac{13.1\mydeg}{\cosp{30\mydeg}} = \frac{13.1\mydeg}{0.866} = 15.1\mydeg}
+		The measurement is $0.2\mydeg$ wide, well inside one grid step.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_\text{HP}$ = \ansbox[1.3in]{$15.3\mydeg$}\\[10pt]
+		predicted = \ansbox[1.3in]{$15.1\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Express the difference between the physical angle and the commanded
+		angle at the peak as a fraction of one sweep grid step.
+		\begin{solution}[1.0in]
+		\eq{\Delta\theta = 30.0\mydeg - 28.1\mydeg = 1.9\mydeg}
+		\eq{\frac{1.9\mydeg}{2.8125\mydeg} = 0.68 \text{ grid steps}}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		offset = \ansbox[1.3in]{$0.68$ steps}
+	\end{minipage}
+
+	\part The cadet reports the array as broken because the beam did not go to
+	$30\mydeg$. In two or three sentences, say whether the data support that
+	conclusion.
+		\begin{solution}[1.1in]
+		They do not. The sweep only samples commanded angles on a $2.8125\mydeg$
+		grid, so the reported peak is the grid point nearest the true peak and can
+		be wrong by half a step, $1.41\mydeg$, on the grid alone. Adding the
+		protractor and aiming error of roughly $1.5\mydeg$ puts a $1.9\mydeg$
+		disagreement inside the expected spread. A pointing fault would show up as
+		an offset of several degrees that persists at every commanded angle.
+		\end{solution}
+
+	\part The peak fell $0.7\ \db$ when the beam was steered to $30\mydeg$, while
+	the projected-aperture rule predicts a drop of $10\mylog{\cosp{30\mydeg}} = -0.6\ \db$ instead.
+	Give the most likely reason the measured loss is the larger of the two, and
+	state whether you would expect the gap to grow or shrink at $50\mydeg$.
+		\begin{solution}[1.2in]
+		The projected-aperture rule is the ideal-element bound: it assumes every
+		patch radiates equally in all scan directions and charges only for the
+		foreshortened aperture. A real patch element has its own pattern that rolls
+		off away from broadside, closer to $\cos^{1.3}\theta$ to
+		$\cos^{1.5}\theta$ in power, so the measured scan loss is always at least
+		as large as the bound. The gap grows with scan angle, so a $50\mydeg$ scan
+		would show a larger excess than the $0.1\ \db$ seen here.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Bounding the error sources.} You need to state an uncertainty
+for the peak angle you measured. Work with the default $2.8125\mydeg$ steer
+resolution, a source range of $1.00\ \m$, and an HB100 nominal frequency of
+$10.525\ \ghz$.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part From the sweep grid alone, give the worst-case error in the peak
+		angle read off the trace, and the RMS error if the true peak is equally
+		likely to fall anywhere between two grid points.
+		\begin{solution}[1.1in]
+		The reported peak is the nearest grid point, so the worst case is half a
+		step, and a uniform spread of width $\Delta$ has standard deviation
+		$\Delta/\sqrt{12}$:
+		\eq{\Delta\theta_\text{max} &= \frac{2.8125\mydeg}{2} = 1.41\mydeg \\ \Delta\theta_\text{rms} &= \frac{2.8125\mydeg}{\sqrt{12}} = 0.81\mydeg}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		worst case = \ansbox[1.3in]{$1.41\mydeg$}\\[10pt]
+		RMS = \ansbox[1.3in]{$0.81\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The phases were computed for $10.525\ \ghz$ and applied for
+		$\theta_0 = 45\mydeg$. The module then drifts to $10.325\ \ghz$. Find the
+		angle the beam points at, and the resulting error.
+		\begin{solution}[1.2in]
+		The ramp is fixed, so the beam sits where $kd\sinp{\theta} = \Delta\phi$ at
+		the new frequency:
+		\eq{\theta &= \arcsin\lp \frac{f_0}{f}\sinp{\theta_0} \rp = \arcsin\lp \frac{10.525}{10.325}(0.7071) \rp \\ &= \arcsin(0.7208) = 46.1\mydeg, \qquad \Delta\theta = +1.1\mydeg}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta$ = \ansbox[1.3in]{$46.1\mydeg$}\\[10pt]
+		$\Delta\theta$ = \ansbox[1.3in]{$+1.1\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part How far along the arc must the tripod be misplaced to introduce a
+		$1.0\mydeg$ error in the reference angle?
+		\begin{solution}[1.0in]
+		\eq{s = R\,\theta_\text{rad} = (1.00\ \m)\lp \frac{1.0\pi}{180} \rp = 0.0175\ \m}
+		which is $17\ \text{mm}$ of lateral placement error.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$s$ = \ansbox[1.3in]{$17\ \text{mm}$}
+	\end{minipage}
+
+	\part Multipath in the classroom adds roughly $1\mydeg$ of peak-angle
+	wander. Combine all four contributions in quadrature, then say which one you
+	could reduce from the GUI and how, and which one you could not.
+		\begin{solution}[1.3in]
+		Taking $1.41\mydeg$ (grid), $1.5\mydeg$ (aim), $1.1\mydeg$ (drift) and
+		$1.0\mydeg$ (multipath):
+		\eq{\sqrt{1.41^2 + 1.5^2 + 1.1^2 + 1.0^2} = 2.5\mydeg}
+		The grid term is the one the GUI controls: a smaller Steer Resolution, or
+		more Phase Shift Bits, samples the trace more finely. Drift cannot be fixed
+		from the GUI, since the HB100 free-runs with no reference input.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Working backwards from the phase read-back.} A lab partner
+recorded the Phase Control values below but forgot which steer angle was
+commanded. The HB100 was at $10.525\ \ghz$.
+
+\vspace{4pt}
+\noindent\begin{tabular}{l|cccccccc}
+Element & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\ \hline
+Applied phase & $0.0\mydeg$ & $125.0\mydeg$ & $250.1\mydeg$ & $15.1\mydeg$ & $140.1\mydeg$ & $265.2\mydeg$ & $30.2\mydeg$ & $155.2\mydeg$ \\
+\end{tabular}
+\vspace{6pt}
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Recover the progressive phase $\Delta\phi$ from the table.
+		\begin{solution}[1.1in]
+		Take successive differences and add $360\mydeg$ wherever the value drops:
+		\eq{125.0\mydeg,\ 125.1\mydeg,\ (375.1 - 250.1) = 125.0\mydeg,\ \ldots}
+		Every step is the same, so
+		\eq{\Delta\phi = 125.0\mydeg}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta\phi$ = \ansbox[1.3in]{$125.0\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the commanded steer angle.
+		\begin{solution}[1.1in]
+		\eq{\sinp{\theta_0} = \frac{\Delta\phi}{360\mydeg (d/\lambda)} = \frac{125.0\mydeg}{176.8\mydeg} = 0.7071}
+		\eq{\theta_0 = 45.0\mydeg}
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_0$ = \ansbox[1.3in]{$45.0\mydeg$}
+	\end{minipage}
+
+	\part The same read-back is also consistent with $\Delta\phi = 125.0\mydeg +
+	360\mydeg = 485.0\mydeg$. Explain in one or two sentences why that second
+	solution can be discarded for this array.
+		\begin{solution}[1.1in]
+		A progressive phase of $485.0\mydeg$ would require
+		$\sinp{\theta_0} = 485.0/176.8 = 2.74$, which no real angle satisfies.
+		Because $d/\lambda = 0.491$ is less than one half, every wrapped phase
+		table maps to exactly one beam direction in visible space, and the
+		ambiguity does not arise. Spacings above a half wavelength are where the
+		second solution becomes real, and that is the grating lobe of L26.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The partner later finds the HB100 was running at
+		$10.300\ \ghz$ while these phases were applied. Where did the beam
+		point?
+		\begin{solution}[1.2in]
+		At $10.300\ \ghz$, $\lambda = 29.13\ \text{mm}$ and $d/\lambda = 0.4807$, so
+		\eq{\sinp{\theta_0} = \frac{125.0\mydeg}{360\mydeg (0.4807)} = \frac{125.0\mydeg}{173.0\mydeg} = 0.7226}
+		\eq{\theta_0 = 46.3\mydeg}
+		The beam sat $1.3\mydeg$ past the commanded angle.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_0$ = \ansbox[1.3in]{$46.3\mydeg$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Two frozen traces.} A group freezes the boresight sweep, then
+steers to $45\mydeg$ and sweeps again. The boresight trace has a half-power width
+of $13.1\mydeg$ and defines the $0\ \db$ reference. The steered trace peaks at $45.0\mydeg$,
+is $18.9\mydeg$ wide at half power, and its peak is $1.7\ \db$ below the boresight
+peak.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Predict the half-power width at $45\mydeg$ and compare it with the
+		measurement.
+		\begin{solution}[1.1in]
+		The beam broadens as $1/\cosp{\theta_0}$, so scaling the measured $13.1\mydeg$
+		broadside width gives
+		\eq{\theta_\text{HP} \approx \frac{13.1\mydeg}{\cosp{45\mydeg}} = \frac{13.1\mydeg}{0.7071} = 18.5\mydeg}
+		The trace reads $18.9\mydeg$, which is $0.4\mydeg$ wide and inside one grid step.
+		Starting instead from the theory width $0.886\lambda/(Nd) = 13.2\mydeg$ the same
+		rule gives $18.7\mydeg$, so either chain lands inside one grid step of the trace.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_\text{HP}$ = \ansbox[1.3in]{$18.5\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Predict the peak drop from the projected-aperture rule and compare
+		it with the measured $1.7\ \db$ drop.
+		\begin{solution}[1.0in]
+		\eq{\Delta G &= 10\mylog{\cosp{45\mydeg}} \\ &= 10\mylog{0.7071} = -1.5\ \db}
+		The measurement is $0.2\ \db$ deeper, consistent with the element pattern
+		rolling off faster than the ideal cosine.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta G$ = \ansbox[1.3in]{$-1.5\ \db$}
+	\end{minipage}
+
+	\part In one or two sentences, name the single geometric fact behind both the
+	wider beam and the lower peak.
+		\begin{solution}[0.9in]
+		Steering tilts the beam off the face of the aperture, so the array presents
+		a projected length of $Nd\cosp{\theta_0}$ rather than $Nd$ to the incoming
+		wave. A shorter effective aperture gives a proportionally wider beam and
+		collects proportionally less power, which is the same $\cosp{\theta_0}$
+		appearing in both results.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A radar specification calls for a $13\mydeg$ beam maintained out to
+		$45\mydeg$ of scan. How many elements would this array need at the same
+		$14\ \text{mm}$ spacing, and state the cost of that choice in one phrase.
+		\begin{solution}[1.2in]
+		The projected aperture must equal the present one at $45\mydeg$:
+		\eq{N\cosp{45\mydeg} &= 8 \\ N &= \frac{8}{0.7071} = 11.3 \rightarrow 12 \text{ elements}}
+		The cost is hardware: twelve elements need twelve LNAs and phase shifters,
+		three ADAR1000 chips instead of two, and a wider aperture that still loses
+		the same $1.5\ \db$ of scan loss.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$N$ = \ansbox[1.3in]{$12$ elements}
+	\end{minipage}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

@@ -150,7 +150,7 @@ tied together by the crest speed/phase velocity $c = \lambda f = \omega / k$. Dr
 sliders, or press play to watch a crest travel.
 
 <iframe src="../../viz/plane-wave-freeze.html"
-        width="100%" height="470"
+        width="100%" height="567"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Plane wave — freeze time / freeze space">
@@ -302,7 +302,7 @@ carve a few dB away. The bars trace **directivity → gain
 $G = \eta_{\text{rad}} D$ → realized gain** in dBi.
 
 <iframe src="../../viz/gain-builder.html"
-        width="100%" height="425"
+        width="100%" height="503"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Gain builder">
@@ -358,7 +358,7 @@ to a **standing wave**. Slide $|\Gamma|$ and press play — the envelope's
 maxima and minima set the VSWR, and the nulls stay pinned in place.
 
 <iframe src="../../viz/vswr-standing-wave.html"
-        width="100%" height="507"
+        width="100%" height="523"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="VSWR standing wave">
@@ -372,7 +372,7 @@ parabolic beam narrow and its peak gain climb — a direct look at how a
 larger $A_{\text{phys}} / \lambda^{2}$ buys gain.
 
 <iframe src="../../viz/polar-gain.html"
-        width="100%" height="645"
+        width="100%" height="778"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Polar gain patterns">
@@ -407,7 +407,7 @@ Slide **D/λ** to change the aperture size; the HPBW, FNBW, and SLL
 markers move with it.
 
 <iframe src="../../viz/pattern-features.html"
-        width="100%" height="522"
+        width="100%" height="555"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Rectilinear pattern features">

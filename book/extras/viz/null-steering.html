@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Null steering on the 8-element PHASER array</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  *, *::before, *::after { box-sizing:border-box; }
+  .app { max-width:820px; margin:0 auto; padding:10px 10px 14px; }
+  .card { border:1px solid var(--edge); border-radius:6px; background:#fff; padding:6px 8px 2px; margin-bottom:10px; }
+  canvas { display:block; width:100%; }
+  .controls { display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px;
+              padding:9px 12px; margin-bottom:10px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 260px; min-width:0; }
+  .ctl label { font-size:13.5px; color:var(--ink); white-space:nowrap; }
+  .ctl input[type=range] { flex:1 1 90px; min-width:80px; accent-color:var(--navy); }
+  .ctl select { font:inherit; font-size:13px; padding:3px 6px; border:1px solid var(--edge2);
+                border-radius:4px; background:#fff; color:var(--ink); flex:1 1 120px; min-width:0; }
+  .val { font-variant-numeric:tabular-nums; font-size:13.5px; color:var(--navy);
+         font-weight:600; min-width:58px; text-align:right; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the cards above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.dgr { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.dgr .v { color:var(--red); }
+  .note { font-size:12.5px; color:var(--ink3); margin:9px 2px 0; line-height:1.45; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <div class="card"><canvas id="pat"></canvas></div>
+  <div class="card"><canvas id="bars"></canvas></div>
+
+  <div class="controls" id="panel">
+    <div class="ctl">
+      <label for="ang">Null angle \(\theta_1\)</label>
+      <input id="ang" type="range" min="0" max="221" step="1" value="146">
+      <span class="val" id="angv">+22.5&deg;</span>
+    </div>
+    <div class="ctl">
+      <label for="mode">Weights</label>
+      <select id="mode">
+        <option value="ideal" selected>Ideal (exact)</option>
+        <option value="phaser">PHASER (quantized + sweep floor)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro dgr"><span class="k">null depth</span><span class="v" id="pDepth">&mdash;</span></div>
+    <div class="ro"><span class="k">main-lobe loss</span><span class="v" id="pLoss">&mdash;</span></div>
+    <div class="ro"><span class="k">\(\lvert r_\text{n}\rvert\)</span><span class="v" id="pR">&mdash;</span></div>
+  </div>
+
+  <p class="note" id="note"></p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---- the course array: PHASER, 8 elements, d = 14 mm at 10.525 GHz ----
+  const N = 8, DL = 0.491, KD = 2 * Math.PI * DL;
+  const LSB = 2.8125, GSTEP = 0.01;      // ADAR1000 phase LSB, 1% gain steps
+  const SWEEP_FLOOR_DB = -23;            // measured sweep floor below the uniform peak
+  const FLOOR = -50;                     // plot floor
+  const DEG = Math.PI / 180;
+
+  // allowed null angles: -60..-5 and +5..+60 in 0.5 deg steps
+  const ANG = [];
+  for (let a = -60; a <= -5 + 1e-9; a += 0.5) ANG.push(+a.toFixed(1));
+  for (let a = 5; a <= 60 + 1e-9; a += 0.5) ANG.push(+a.toFixed(1));
+
+  const pat = document.getElementById('pat'), bars = document.getElementById('bars');
+  const px = pat.getContext('2d'), bx = bars.getContext('2d');
+  const angEl = document.getElementById('ang'), modeEl = document.getElementById('mode');
+  const angv = document.getElementById('angv');
+  const pDepth = document.getElementById('pDepth'), pLoss = document.getElementById('pLoss'),
+        pR = document.getElementById('pR'), note = document.getElementById('note');
+
+  // ---- complex helpers (plain arrays of {re,im}) ----
+  const cx = (re, im) => ({ re: re, im: im });
+  const abs2 = z => z.re * z.re + z.im * z.im;
+  const cabs = z => Math.hypot(z.re, z.im);
+
+  function steerVec(thDeg) {                 // w = v*(theta): e^{-j n kd sin theta}
+    const p = KD * Math.sin(thDeg * DEG), v = [];
+    for (let n = 0; n < N; n++) v.push(cx(Math.cos(n * p), -Math.sin(n * p)));
+    return v;
+  }
+
+  // weights that hold the broadside beam and null theta1
+  function weights(th1) {
+    const wd = steerVec(0), wn = steerVec(th1);
+    let nr = 0, ni = 0, dd = 0;              // wn^H wd  and  wn^H wn
+    for (let n = 0; n < N; n++) {
+      nr += wn[n].re * wd[n].re + wn[n].im * wd[n].im;
+      ni += wn[n].re * wd[n].im - wn[n].im * wd[n].re;
+      dd += abs2(wn[n]);
+    }
+    const r = cx(nr / dd, ni / dd), w = [];
+    for (let n = 0; n < N; n++)
+      w.push(cx(wd[n].re - (r.re * wn[n].re - r.im * wn[n].im),
+                wd[n].im - (r.re * wn[n].im + r.im * wn[n].re)));
+    return { w: w, r: r };
+  }
+
+  function normalize(w) {                    // largest element to 100 % gain
+    let m = 0;
+    for (let n = 0; n < N; n++) m = Math.max(m, cabs(w[n]));
+    return w.map(z => cx(z.re / m, z.im / m));
+  }
+
+  function quantize(w) {                     // ADAR1000 grid: 2.8125 deg, 1 % gain
+    return w.map(function (z) {
+      const a = Math.round(cabs(z) / GSTEP) * GSTEP;
+      const ph = Math.round(Math.atan2(z.im, z.re) / DEG / LSB) * LSB * DEG;
+      return cx(a * Math.cos(ph), a * Math.sin(ph));
+    });
+  }
+
+  function resp(w, thDeg) {                  // |w^T v(theta)|, v_n = e^{+j n kd sin theta}
+    const p = KD * Math.sin(thDeg * DEG);
+    let re = 0, im = 0;
+    for (let n = 0; n < N; n++) {
+      const c = Math.cos(n * p), s = Math.sin(n * p);
+      re += w[n].re * c - w[n].im * s;
+      im += w[n].re * s + w[n].im * c;
+    }
+    return Math.hypot(re, im);
+  }
+
+  // ---- model state, recomputed on every input ----
+  const S = {};
+  function compute() {
+    const th1 = ANG[+angEl.value | 0], phaser = modeEl.value === 'phaser';
+    const res = weights(th1);
+    const wIdeal = normalize(res.w);
+    const w = phaser ? quantize(wIdeal) : wIdeal;
+    const uni = steerVec(0);
+    const noise = phaser ? Math.pow(10, SWEEP_FLOOR_DB / 10) * N * N : 0;
+    const pw = th => 10 * Math.log10(resp(w, th) * resp(w, th) + noise);
+    const pu = th => 10 * Math.log10(resp(uni, th) * resp(uni, th) + noise);
+    const ref = 20 * Math.log10(N);          // uniform broadside peak
+
+    let peak = -999;
+    for (let t = -90; t <= 90; t += 0.05) peak = Math.max(peak, pw(t));
+    const look = pw(0);                      // response in the look direction
+    let deep = pw(th1);
+    for (let t = th1 - 3; t <= th1 + 3; t += 0.02) deep = Math.min(deep, pw(t));
+
+    S.th1 = th1; S.w = w; S.r = res.r; S.phaser = phaser;
+    S.curve = t => pw(t) - ref;              // dB relative to the uniform peak
+    S.curveU = t => pu(t) - ref;
+    S.loss = ref - look;                     // loss in the look direction, dB
+    S.depth = peak - deep;                   // null depth below this pattern's own peak
+    S.noiseDb = phaser ? 10 * Math.log10(noise) - ref : null;
+
+    angv.textContent = (th1 > 0 ? '+' : '−') + Math.abs(th1).toFixed(1) + '°';
+    pDepth.textContent = S.depth > 60 ? '>60 dB' : S.depth.toFixed(1) + ' dB';
+    pLoss.textContent = S.loss.toFixed(1) + ' dB';
+    pR.textContent = cabs(S.r).toFixed(3) + ' (' + (20 * Math.log10(cabs(S.r))).toFixed(1) + ' dB)';
+    note.textContent = phaser
+      ? 'PHASER mode rounds every phase to the ADAR1000’s 2.8125° step and every '
+        + 'gain to 1 %, then adds the beam sweep’s noise floor 23 dB below the uniform peak. '
+        + 'The notch stops at that floor near 21 dB, which is what the hardware sweep reads.'
+      : 'Ideal mode applies the exact complex weights: the response at the null angle is zero, '
+        + 'so the notch runs off the bottom of the plot. The main lobe still pays for it.';
+  }
+
+  // ---- canvas plumbing ----
+  function fit(cv, ctx, h) {
+    const dpr = window.devicePixelRatio || 1;
+    const w = cv.parentNode.clientWidth - 16;
+    cv.style.height = h + 'px';
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    return { w: w, h: h };
+  }
+  const F = (s, w) => (w || '') + ' ' + s + 'px Inter, system-ui, sans-serif';
+
+  function drawPattern() {
+    const H = Math.max(210, Math.min(300, Math.round(pat.parentNode.clientWidth * 0.42)));
+    const g = fit(pat, px, H);
+    const L = 44, R = 10, T = 12, B = 30;
+    const x = d => L + (d + 90) / 180 * (g.w - L - R);
+    const y = db => T + (0 - db) / (0 - FLOOR) * (g.h - T - B);
+
+    px.strokeStyle = '#e6eef6'; px.lineWidth = 1;
+    px.fillStyle = '#8792a2'; px.font = F(11); px.textAlign = 'center';
+    for (let d = -90; d <= 90; d += 30) {
+      px.beginPath(); px.moveTo(x(d), T); px.lineTo(x(d), g.h - B); px.stroke();
+      px.fillText(d + '°', x(d), g.h - B + 15);
+    }
+    px.textAlign = 'right';
+    for (let db = 0; db >= FLOOR; db -= 10) {
+      px.beginPath(); px.moveTo(L, y(db)); px.lineTo(g.w - R, y(db)); px.stroke();
+      px.fillText(db, L - 6, y(db) + 4);
+    }
+    px.fillStyle = '#5b6573'; px.textAlign = 'left'; px.font = F(11.5);
+    px.fillText('dB', 6, T + 6);
+
+    if (S.noiseDb !== null) {                       // measured floor
+      px.save(); px.setLineDash([5, 4]); px.strokeStyle = '#d9a7a9'; px.lineWidth = 1.2;
+      px.beginPath(); px.moveTo(L, y(S.noiseDb)); px.lineTo(g.w - R, y(S.noiseDb)); px.stroke();
+      px.restore();
+      px.fillStyle = '#b01e24'; px.font = F(11); px.textAlign = 'right';
+      px.fillText('sweep floor', g.w - R - 6, y(S.noiseDb) - 5);
+    }
+
+    const grid = [];                                 // fine sampling through the null
+    for (let d = -90; d <= 90; d += 0.25) grid.push(d);
+    for (let o = -0.3; o <= 0.3; o += 0.05) grid.push(S.th1 + o);
+    grid.sort((a, b) => a - b);
+    const trace = (fn, color, lw) => {
+      px.beginPath();
+      for (let i = 0; i < grid.length; i++) {
+        const v = Math.max(FLOOR, Math.min(0.5, fn(grid[i])));
+        if (i === 0) px.moveTo(x(grid[i]), y(v)); else px.lineTo(x(grid[i]), y(v));
+      }
+      px.strokeStyle = color; px.lineWidth = lw; px.lineJoin = 'round'; px.stroke();
+    };
+    trace(S.curveU, '#9aa7b4', 1.2);                 // uniform reference
+    trace(S.curve, '#004a85', 2.2);                  // null-steered
+
+    px.save();                                       // null marker
+    px.setLineDash([4, 4]); px.strokeStyle = '#b01e24'; px.lineWidth = 1.4;
+    px.beginPath(); px.moveTo(x(S.th1), T); px.lineTo(x(S.th1), g.h - B); px.stroke();
+    px.restore();
+    const side = S.th1 > 30 ? -1 : 1;
+    px.fillStyle = '#b01e24'; px.font = F(12, '600');
+    px.textAlign = side < 0 ? 'right' : 'left';
+    px.fillText((S.th1 > 0 ? '+' : '−') + Math.abs(S.th1).toFixed(1) + '°',
+                x(S.th1) + side * 6, T + 26);
+    if (window.MJ && MJ.ready)
+      MJ.draw(px, '\\theta_1', x(S.th1) + side * 14, T + 9, 13, '#b01e24', 'center');
+
+    px.fillStyle = '#5b6573'; px.font = F(12); px.textAlign = 'left';
+    px.fillText('uniform', L + 6, g.h - B - 22);
+    px.fillStyle = '#004a85'; px.font = F(12, '600');
+    px.fillText('null steered', L + 6, g.h - B - 7);
+  }
+
+  function drawBars() {
+    const H = 180, g = fit(bars, bx, H);
+    const L = 34, R = 8, T = 16, B = 40;
+    const bw = (g.w - L - R) / N;
+    bx.fillStyle = '#5b6573'; bx.font = F(11.5); bx.textAlign = 'left';
+    bx.fillText('element gain (%) and phase', L, T - 3);
+    bx.strokeStyle = '#dbe6f0'; bx.lineWidth = 1;
+    bx.beginPath(); bx.moveTo(L, g.h - B); bx.lineTo(g.w - R, g.h - B); bx.stroke();
+
+    for (let n = 0; n < N; n++) {
+      const a = cabs(S.w[n]), ph = Math.atan2(S.w[n].im, S.w[n].re) / DEG;
+      const h = a * (g.h - T - B - 6), xx = L + n * bw + bw * 0.16, ww = bw * 0.68;
+      bx.fillStyle = '#004a85';
+      bx.fillRect(xx, g.h - B - h, ww, h);
+      bx.fillStyle = '#fff'; bx.font = F(11.5, '600'); bx.textAlign = 'center';
+      if (h > 26) bx.fillText(Math.round(a * 100), xx + ww / 2, g.h - B - h + 15);
+      else { bx.fillStyle = '#004a85'; bx.fillText(Math.round(a * 100), xx + ww / 2, g.h - B - h - 5); }
+      bx.fillStyle = '#5b6573'; bx.font = F(11);
+      bx.fillText((ph >= 0 ? '+' : '−') + Math.abs(ph).toFixed(1) + '°',
+                  xx + ww / 2, g.h - B + 16);
+      bx.fillStyle = '#8792a2'; bx.font = F(10.5);
+      bx.fillText(n + 1, xx + ww / 2, g.h - B + 31);
+    }
+    bx.textAlign = 'right'; bx.fillStyle = '#8792a2'; bx.font = F(11);
+    bx.fillText('100', L - 5, T + 14);
+    if (window.MJ && MJ.ready) MJ.draw(bx, '\\lvert w_n\\rvert', 16, T + 44, 14, '#5b6573', 'center');
+  }
+
+  function drawAll() { drawPattern(); drawBars(); }
+
+  function update() { compute(); drawAll(); }
+
+  angEl.addEventListener('input', update);
+  modeEl.addEventListener('change', update);
+  window.addEventListener('resize', drawAll);
+
+  update();
+  if (window.MJ) {
+    MJ.setRedraw(drawAll);
+    MJ.onReady(function () { MJ.typeset(document.getElementById('app')); drawAll(); });
+  }
+})();
+</script>
+</body>
+</html>

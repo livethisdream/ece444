@@ -11,7 +11,7 @@
           --gain:#004a85; --ae:#b3213a; --marker:#8a5a00; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(196px,1fr)); gap:9px 18px; align-items:center;
               padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
@@ -25,12 +25,21 @@
   .seg button + button { border-left:1px solid var(--edge2); }
   .seg button[aria-pressed="true"] { background:var(--navy); color:#fff; }
   .hidden { display:none; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.ae { background:rgba(179,33,58,0.10); color:var(--ae); border-color:rgba(179,33,58,0.28); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.ae { background:rgba(179,33,58,0.10); border-color:rgba(179,33,58,0.28); }
+  .ro.ae .v { color:var(--ae); }
   .hint { margin:0; text-align:center; font-size:11.5px; color:var(--ink3); line-height:1.45; }
 </style>
 </head>
@@ -67,11 +76,11 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill">&#955; = c/f = <b id="r-lam">—</b></span>
-    <span class="pill">gain = <b id="r-gain">—</b></span>
-    <span class="pill ae">A&#8337; = <b id="r-ae">—</b></span>
-    <span class="pill"><span id="lbl-extra">physical area</span> = <b id="r-extra">—</b></span>
+  <div class="readouts">
+    <div class="ro"><span class="k">wavelength</span><span class="v" id="r-lam">—</span></div>
+    <div class="ro"><span class="k">gain</span><span class="v" id="r-gain">—</span></div>
+    <div class="ro ae"><span class="k">effective area A&#8337;</span><span class="v" id="r-ae">—</span></div>
+    <div class="ro"><span class="k" id="lbl-extra">physical area</span><span class="v" id="r-extra">—</span></div>
   </div>
 
   <p class="hint" id="explain">—</p>
@@ -119,11 +128,31 @@ el('gain').addEventListener('input',e=>{state.Gdbi=parseFloat(e.target.value);el
 el('freq').addEventListener('input',e=>{state.f=parseFloat(e.target.value);el('f-val').textContent=state.f.toFixed(1)+' GHz';draw();});
 
 const canvas = el('plot'), ctx = canvas.getContext('2d');
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=360;
+let SCL=1;
 function fit(){
-  const dpr=window.devicePixelRatio||1, rect=canvas.getBoundingClientRect();
-  const w=Math.max(360,rect.width), h=Math.max(280,Math.min(w*0.40,380));
-  canvas.width=w*dpr; canvas.height=h*dpr; canvas.style.height=`${h}px`;
-  ctx.setTransform(dpr,0,0,dpr,0,0); draw();
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(canvas);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL, h=Math.max(280,Math.min(w*0.40,380));
+  setSize(canvas,wCss,h*SCL,dpr);
+  ctx.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); draw();
 }
 window.addEventListener('resize',fit);
 
@@ -131,7 +160,7 @@ function niceCeil(v){ const p=Math.pow(10,Math.floor(Math.log10(v))); const m=v/
   return (m<=1?1:m<=2?2:m<=5?5:10)*p; }
 
 function draw(){
-  const dpr=window.devicePixelRatio||1, w=canvas.width/dpr, h=canvas.height/dpr;
+  const dpr=window.devicePixelRatio||1, w=canvas.width/(dpr*SCL), h=canvas.height/(dpr*SCL);
   ctx.clearRect(0,0,w,h);
   const mL=52,mR=58,mT=28,mB=42, pW=w-mL-mR, pH=h-mT-mB;
 

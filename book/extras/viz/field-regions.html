@@ -12,7 +12,7 @@
           --react:#8a5a00; --rad:#0067b9; --far:#004a85; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:grid; grid-template-columns:repeat(3,1fr); gap:9px 18px; align-items:center;
               padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   @media (max-width:700px) { .controls { grid-template-columns:1fr; } }
@@ -20,13 +20,26 @@
   .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
   .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:64px; text-align:right; }
   .ctl input[type=range]{ flex:1 1 auto; min-width:80px; accent-color:var(--mid); }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.good { background:rgba(63,125,52,0.12); color:var(--grn);   border-color:rgba(63,125,52,0.30); }
-  .pill.warn { background:rgba(138,90,0,0.12);  color:var(--amber); border-color:rgba(138,90,0,0.30); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.good { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.good .v { color:var(--grn); }
+  .ro.warn { background:rgba(138,90,0,0.12);  border-color:rgba(138,90,0,0.30); }
+  .ro.warn .v { color:var(--amber); }
 </style>
 </head>
 <body>
@@ -40,13 +53,13 @@
     <div class="ctl"><label>Range \(r\)</label><input type="range" id="r" min="-1.6" max="0.8" step="0.01" value="0"><span class="val" id="r-val">—</span></div>
   </div>
 
-  <div class="pills">
-    <span class="pill">\(\lambda\) = <b id="r-lam">—</b></span>
-    <span class="pill">reactive \(0.62\sqrt{D^3/\lambda}\) = <b id="r-re">—</b></span>
-    <span class="pill">far-field \(2D^2/\lambda\) = <b id="r-ff">—</b></span>
-    <span class="pill">\(r\) = <b id="r-r">—</b></span>
-    <span class="pill">edge path \(\Delta\) = <b id="r-del">—</b></span>
-    <span class="pill" id="pill-phi">phase error = <b id="r-phi">—</b></span>
+  <div class="readouts">
+    <div class="ro"><span class="k">\(\lambda\)</span><span class="v" id="r-lam">—</span></div>
+    <div class="ro"><span class="k">reactive limit</span><span class="v" id="r-re">—</span></div>
+    <div class="ro"><span class="k">far-field limit</span><span class="v" id="r-ff">—</span></div>
+    <div class="ro"><span class="k">range \(r\)</span><span class="v" id="r-r">—</span></div>
+    <div class="ro"><span class="k">edge path \(\Delta\)</span><span class="v" id="r-del">—</span></div>
+    <div class="ro" id="ro-phi"><span class="k">phase error</span><span class="v" id="r-phi">—</span></div>
   </div>
 </div>
 
@@ -90,14 +103,33 @@ dEl.addEventListener('input',()=>{ state.D=+dEl.value; dV.textContent=state.D.to
 fEl.addEventListener('input',()=>{ state.f=(+fEl.value)*1e9; fV.textContent=(+fEl.value).toFixed(1)+' GHz'; drawAll(); });
 rEl.addEventListener('input',()=>{ state.mult=Math.pow(10,+rEl.value); drawAll(); });
 
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=360;
+let SCL=1;
 function fit(){
   const dpr=window.devicePixelRatio||1;
-  const w=Math.max(360, cvR.getBoundingClientRect().width);
+  const wCss=cvWidth(cvR);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
   const h1=Math.max(132, Math.min(w*0.22, 170));
   const h2=Math.max(212, Math.min(w*0.34, 260));
-  cvR.width=w*dpr; cvR.height=h1*dpr; cvR.style.height=h1+'px';
-  cvP.width=w*dpr; cvP.height=h2*dpr; cvP.style.height=h2+'px';
-  ctxR.setTransform(dpr,0,0,dpr,0,0); ctxP.setTransform(dpr,0,0,dpr,0,0);
+  setSize(cvR,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
+  ctxR.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();
 }
 window.addEventListener('resize', fit);
@@ -105,7 +137,7 @@ window.addEventListener('resize', fit);
 /* ============================ panel 1: the ruler ============================ */
 function drawRuler(d){
   const dpr=window.devicePixelRatio||1;
-  const w=cvR.width/dpr, h=cvR.height/dpr;
+  const w=cvR.width/(dpr*SCL), h=cvR.height/(dpr*SCL);
   const ctx=ctxR;
   ctx.clearRect(0,0,w,h);
 
@@ -163,7 +195,7 @@ function drawRuler(d){
 /* ================= panel 2: wavefront curvature and phase error ================= */
 function drawPhase(d){
   const dpr=window.devicePixelRatio||1;
-  const w=cvP.width/dpr, h=cvP.height/dpr;
+  const w=cvP.width/(dpr*SCL), h=cvP.height/(dpr*SCL);
   const ctx=ctxP;
   ctx.clearRect(0,0,w,h);
   const ok = d.phi<=CRIT;
@@ -259,20 +291,20 @@ function drawPhase(d){
         mL+pw/2, mT+ph+26, 11, okc,'center',true);
 }
 
-function pills(d){
+function readouts(d){
   document.getElementById('r-lam').textContent=fmt(d.lam);
   document.getElementById('r-re').textContent=fmt(d.rRe);
   document.getElementById('r-ff').textContent=fmt(d.rFf);
   document.getElementById('r-r').textContent=fmt(d.r)+' ('+state.mult.toFixed(2)+'×)';
   document.getElementById('r-del').textContent=fmtSmall(d.del);
   document.getElementById('r-phi').textContent=d.phi.toFixed(1)+'°';
-  const p=document.getElementById('pill-phi');
+  const p=document.getElementById('ro-phi');
   p.classList.toggle('good', d.phi<=CRIT);
   p.classList.toggle('warn', d.phi>CRIT);
   document.getElementById('r-val').textContent=fmt(d.r);
 }
 
-function drawAll(){ const d=derived(); drawRuler(d); drawPhase(d); pills(d); }
+function drawAll(){ const d=derived(); drawRuler(d); drawPhase(d); readouts(d); }
 
 fit();
 MJ.setRedraw(()=>drawAll());

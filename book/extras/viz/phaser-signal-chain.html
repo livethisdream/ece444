@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADALM-PHASER receive signal chain</title>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  *, *::before, *::after { box-sizing:border-box; }
+  .app { max-width:820px; margin:0 auto; padding:10px 12px 14px; }
+  .stage { width:100%; }
+  canvas { display:block; width:100%; }
+  .hint { font-size:12px; color:var(--ink3); margin:6px 2px 10px; }
+
+  .controls { display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px;
+              padding:9px 12px; }
+  .ctl { display:flex; align-items:center; gap:9px; font-size:13px; color:var(--ink);
+         flex:1 1 260px; min-width:0; }
+  .ctl input[type=range] { flex:1 1 auto; min-width:90px; accent-color:var(--navy); }
+  .ctl .val { font-variant-numeric:tabular-nums; font-weight:600; color:var(--navy);
+              min-width:80px; text-align:right; }
+
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the stage above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); margin:10px 0 0; }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.lo { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.28); }
+  .ro.lo .v { color:var(--amber); }
+  .ro.if { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.28); }
+  .ro.if .v { color:var(--grn); }
+
+  .panel { margin-top:11px; border:1px solid var(--edge); border-left:4px solid var(--navy);
+           border-radius:6px; background:var(--bg); padding:10px 13px; min-height:106px; }
+  .panel h3 { margin:0 0 5px; font-size:14.5px; color:var(--navy); }
+  .panel p { margin:0 0 7px; font-size:13px; line-height:1.45; color:var(--ink); }
+  .panel .node { font-size:12.5px; color:var(--ink3); }
+  .panel .node b { font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="stage"><canvas id="chain" tabindex="0" aria-label="ADALM-PHASER receive signal chain block diagram"></canvas></div>
+  <p class="hint">Click a block to see what it does and what frequency lives there. Arrow keys move along the chain.</p>
+
+  <div class="controls">
+    <label class="ctl" for="fhb">HB100 frequency
+      <input type="range" id="fhb" min="10.10" max="10.70" step="0.005" value="10.525">
+      <span class="val" id="fhbv">10.525 GHz</span>
+    </label>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">RF</span><span class="v" id="pRF">10.525 GHz</span></div>
+    <div class="ro lo"><span class="k">LO</span><span class="v" id="pLO">12.725 GHz</span></div>
+    <div class="ro if"><span class="k">IF</span><span class="v" id="pIF">2.200 GHz</span></div>
+  </div>
+
+  <div class="panel" id="panel" role="status" aria-live="polite">
+    <h3 id="ptitle">Patch array</h3>
+    <p id="pdesc"></p>
+    <div class="node" id="pnode"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var C = { navy:'#004a85', mid:'#0067b9', edge:'#cddce9', edge2:'#b9d2e5', bg:'#f5f9fc',
+            ink:'#15202b', ink3:'#5b6573', amber:'#8a5a00', grn:'#3f7d34' };
+  var IF_GHZ = 2.2;                       // fixed by the PHASER's IF filtering
+  var FONT = "'Inter',system-ui,-apple-system,sans-serif";
+
+  // band -> stroke/fill/accent
+  var BAND = {
+    rf:  { line:C.navy,  fill:'#eef5fb', text:C.navy },
+    lo:  { line:C.amber, fill:'#fdf6e8', text:C.amber },
+    ifb: { line:C.grn,   fill:'#eef6ec', text:C.grn },
+    mix: { line:C.ink,   fill:'#ffffff', text:C.ink },
+    ctl: { line:C.ink3,  fill:'#f4f5f7', text:C.ink3 }
+  };
+
+  var BLOCKS = [
+    { id:'patch', name:'Patch ×8', band:'rf', chain:true,
+      title:'Microstrip patch array',
+      desc:'Eight patches in a horizontal row, spaced 14 mm, each one an antenna in its own right. '
+         + 'A wave arriving off broadside reaches them in turn, so each patch hands the receiver the same signal with a different phase.' },
+    { id:'lna', name:'LNA ×8', band:'rf', chain:true,
+      title:'Per-element low-noise amplifier',
+      desc:'One ADL8107 sits directly behind every patch, before any phase shifting or combining. '
+         + 'Putting the gain first is what keeps the array’s noise figure low, because everything lossy downstream is divided by this gain.' },
+    { id:'adar', name:'ADAR1000 ×2', band:'rf', chain:true,
+      title:'Analog beamformer',
+      desc:'Two 4-channel ADAR1000 chips apply a phase and a gain to each element at RF, then sum their four channels into one output. '
+         + 'This is where the array factor is physically built: the phase LSB is 2.8125°, and the summing is done in hardware.' },
+    { id:'mix', name:'Mixer ×2', band:'mix', chain:true,
+      title:'Downconverting mixer',
+      desc:'Each LTC5548 multiplies one subarray output by the LO and keeps the difference term. '
+         + 'X-band goes in and a 2.2 GHz IF comes out, which is the only frequency the SDR downstream ever has to handle.' },
+    { id:'pluto', name:'ADALM-Pluto', band:'ifb', chain:true,
+      title:'Two-channel SDR',
+      desc:'An AD9361 transceiver with two receive channels, tuned to 2.2 GHz and sampling at 3 MSPS. '
+         + 'It digitizes the two subarray sums, not the eight elements, so only two complex numbers per snapshot reach software.' },
+    { id:'pi', name:'Raspberry Pi', band:'ctl', chain:true,
+      title:'Control computer',
+      desc:'The Pi runs the headless Python backend, writes phase and gain to the ADAR1000s over SPI, and tunes the Pluto and the ADF4159 through pyadi-iio. '
+         + 'It also serves the browser interface you drive the lab from.' },
+    { id:'lo', name:'ADF4159 + VCO', band:'lo', chain:false,
+      title:'Local oscillator',
+      desc:'An ADF4159 PLL locks an HMC735 VCO somewhere in 12.2–13.0 GHz. '
+         + 'Its frequency is set to the signal you want plus 2.2 GHz, so retuning the array across X-band means retuning this block and nothing else.' }
+  ];
+  var byId = {}; BLOCKS.forEach(function (b) { byId[b.id] = b; });
+
+  var cv = document.getElementById('chain'), ctx = cv.getContext('2d');
+  var slider = document.getElementById('fhb');
+  var sel = 'patch', boxes = {}, layoutH = 240;
+
+  function fRF() { return parseFloat(slider.value); }
+  function fLO() { return fRF() + IF_GHZ; }
+
+  // ---- what each node carries, in the block and in the panel ------------
+  function nodeLine(id) {
+    if (id === 'patch' || id === 'lna' || id === 'adar') return fRF().toFixed(3) + ' GHz';
+    if (id === 'mix')   return '→ 2.200 GHz';
+    if (id === 'lo')    return fLO().toFixed(3) + ' GHz';
+    if (id === 'pluto') return '2.200 GHz';
+    return 'IQ + SPI';
+  }
+  function nodeText(id) {
+    if (id === 'patch' || id === 'lna' || id === 'adar')
+      return 'Signal here: <b>' + fRF().toFixed(3) + ' GHz</b> at RF.';
+    if (id === 'mix')
+      return 'In: <b>' + fRF().toFixed(3) + ' GHz</b> RF and <b>' + fLO().toFixed(3)
+           + ' GHz</b> LO. Out: <b>2.200 GHz</b> IF.';
+    if (id === 'lo')
+      return 'Must sit at <b>' + fLO().toFixed(3) + ' GHz</b> to land the signal on the 2.2 GHz IF.';
+    if (id === 'pluto')
+      return 'Tuned to <b>2.200 GHz</b> on both receive channels, whatever the source does.';
+    return 'Carries digitized IQ from the Pluto and phase and gain commands back to the beamformers.';
+  }
+
+  // ---- layout ----------------------------------------------------------
+  function layout(W) {
+    boxes = {};
+    var chain = BLOCKS.filter(function (b) { return b.chain; });
+    var pad = 12;
+    if (W >= 520) {
+      var g = Math.max(12, Math.min(20, (W - 2 * pad) * 0.028));
+      var bw = (W - 2 * pad - g * (chain.length - 1)) / chain.length;
+      var bh = 58, y = 40;
+      chain.forEach(function (b, i) {
+        boxes[b.id] = { x: pad + i * (bw + g), y: y, w: bw, h: bh };
+      });
+      var m = boxes.mix;
+      boxes.lo = { x: m.x, y: y + bh + 48, w: bw, h: 44 };
+      layoutH = boxes.lo.y + boxes.lo.h + 16;
+      return 'row';
+    }
+    var lw = 64, gap = 10;
+    var cx = pad + lw + gap, cwid = W - pad - cx;
+    var h = 44, vg = 13, y0 = 12;
+    chain.forEach(function (b, i) {
+      boxes[b.id] = { x: cx, y: y0 + i * (h + vg), w: cwid, h: h };
+    });
+    var mm = boxes.mix;
+    boxes.lo = { x: pad, y: mm.y, w: lw, h: h };
+    layoutH = y0 + chain.length * (h + vg) - vg + 12;
+    return 'col';
+  }
+
+  // ---- drawing ---------------------------------------------------------
+  function rrect(x, y, w, h, r) {
+    ctx.beginPath();
+    if (ctx.roundRect) { ctx.roundRect(x, y, w, h, r); return; }
+    ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  function fitText(s, maxw, size, weight) {
+    var f = size;
+    while (f > 8) {
+      ctx.font = (weight || '400') + ' ' + f + 'px ' + FONT;
+      if (ctx.measureText(s).width <= maxw) break;
+      f -= 0.5;
+    }
+    return f;
+  }
+
+  function drawBlock(b, mode) {
+    var r = boxes[b.id], pal = BAND[b.band], on = (sel === b.id);
+    ctx.save();
+    rrect(r.x, r.y, r.w, r.h, 6);
+    ctx.fillStyle = on ? pal.fill : '#ffffff';
+    ctx.fill();
+    ctx.strokeStyle = pal.line;
+    ctx.lineWidth = on ? 3 : 1.5;
+    ctx.stroke();
+    ctx.restore();
+
+    var maxw = r.w - 12, cx = r.x + r.w / 2;
+    var twoLine = r.h >= 40;
+    var f1 = fitText(b.name, maxw, mode === 'row' ? 13 : 13.5, '600');
+    ctx.font = '600 ' + f1 + 'px ' + FONT;
+    ctx.fillStyle = pal.text;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(b.name, cx, twoLine ? r.y + r.h / 2 - 9 : r.y + r.h / 2);
+    if (twoLine) {
+      var s2 = nodeLine(b.id);
+      var f2 = fitText(s2, maxw, 11.5, '400');
+      ctx.font = '400 ' + f2 + 'px ' + FONT;
+      ctx.fillStyle = b.band === 'ctl' ? C.ink3 : pal.text;
+      ctx.fillText(s2, cx, r.y + r.h / 2 + 10);
+    }
+  }
+
+  function arrow(x1, y1, x2, y2, color) {
+    ctx.save();
+    ctx.strokeStyle = color; ctx.fillStyle = color;
+    ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    var a = Math.atan2(y2 - y1, x2 - x1), s = 6;
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - s * Math.cos(a - 0.42), y2 - s * Math.sin(a - 0.42));
+    ctx.lineTo(x2 - s * Math.cos(a + 0.42), y2 - s * Math.sin(a + 0.42));
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+
+  function draw() {
+    var stage = cv.parentNode;
+    var W = Math.max(280, Math.floor(stage.clientWidth));
+    var mode = layout(W);
+    var H = Math.round(layoutH);
+    var dpr = window.devicePixelRatio || 1;
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
+    cv.style.width = W + 'px';
+    cv.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
+
+    var chain = BLOCKS.filter(function (b) { return b.chain; });
+    // connectors along the chain: RF up to the mixer, IF after it
+    for (var i = 0; i < chain.length - 1; i++) {
+      var a = boxes[chain[i].id], b = boxes[chain[i + 1].id];
+      var col = i < 3 ? C.navy : (i === 4 ? C.ink3 : C.grn);
+      if (mode === 'row') arrow(a.x + a.w, a.y + a.h / 2, b.x - 2, b.y + b.h / 2, col);
+      else arrow(a.x + a.w / 2, a.y + a.h, b.x + b.w / 2, b.y - 2, col);
+    }
+    // LO into the mixer
+    var lo = boxes.lo, mx = boxes.mix;
+    if (mode === 'row') arrow(lo.x + lo.w / 2, lo.y, mx.x + mx.w / 2, mx.y + mx.h + 2, C.amber);
+    else arrow(lo.x + lo.w, lo.y + lo.h / 2, mx.x - 2, mx.y + mx.h / 2, C.amber);
+
+    BLOCKS.forEach(function (b) { drawBlock(b, mode); });
+
+    // band key
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    var keys = [[C.navy, 'RF'], [C.amber, 'LO'], [C.grn, 'IF'], [C.ink3, 'digital']];
+    if (mode === 'row') {
+      var kx = 12, ky = 20;
+      keys.forEach(function (k) {
+        ctx.strokeStyle = k[0]; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(kx, ky); ctx.lineTo(kx + 18, ky); ctx.stroke();
+        ctx.font = '400 11.5px ' + FONT; ctx.fillStyle = k[0];
+        ctx.fillText(k[1], kx + 23, ky + 0.5);
+        kx += 23 + ctx.measureText(k[1]).width + 16;
+      });
+    }
+  }
+
+  // ---- panel -----------------------------------------------------------
+  function refresh() {
+    var b = byId[sel];
+    document.getElementById('ptitle').textContent = b.title;
+    document.getElementById('pdesc').textContent = b.desc;
+    document.getElementById('pnode').innerHTML = nodeText(sel);
+    document.getElementById('panel').style.borderLeftColor = BAND[b.band].line;
+    document.getElementById('fhbv').textContent = fRF().toFixed(3) + ' GHz';
+    document.getElementById('pRF').textContent = fRF().toFixed(3) + ' GHz';
+    document.getElementById('pLO').textContent = fLO().toFixed(3) + ' GHz';
+    document.getElementById('pIF').textContent = IF_GHZ.toFixed(3) + ' GHz';
+    draw();
+  }
+
+  // ---- interaction -----------------------------------------------------
+  cv.addEventListener('pointerdown', function (e) {
+    var r = cv.getBoundingClientRect();
+    var x = e.clientX - r.left, y = e.clientY - r.top;
+    for (var id in boxes) {
+      var q = boxes[id];
+      if (x >= q.x && x <= q.x + q.w && y >= q.y && y <= q.y + q.h) {
+        sel = id; cv.focus(); refresh(); return;
+      }
+    }
+  });
+  cv.addEventListener('keydown', function (e) {
+    var order = BLOCKS.map(function (b) { return b.id; });
+    var i = order.indexOf(sel), d = 0;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') d = 1;
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') d = -1;
+    else return;
+    e.preventDefault();
+    sel = order[(i + d + order.length) % order.length];
+    refresh();
+  });
+  slider.addEventListener('input', refresh);
+  window.addEventListener('resize', draw);
+  if (window.ResizeObserver) new ResizeObserver(draw).observe(cv.parentNode);
+
+  refresh();
+})();
+</script>
+</body>
+</html>

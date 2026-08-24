@@ -11,7 +11,7 @@
           --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
@@ -20,13 +20,26 @@
   .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
   select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
   .chk { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink3); font-weight:600; flex:0 0 auto; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.sll { background:rgba(138,90,0,0.12); color:var(--amber); border-color:rgba(138,90,0,0.30); }
-  .pill.hp  { background:rgba(63,125,52,0.12); color:var(--grn);   border-color:rgba(63,125,52,0.30); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.sll { background:rgba(138,90,0,0.12); border-color:rgba(138,90,0,0.30); }
+  .ro.sll .v { color:var(--amber); }
+  .ro.hp  { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.hp  .v { color:var(--grn); }
 </style>
 </head>
 <body>
@@ -57,11 +70,11 @@
     <label class="chk"><input type="checkbox" id="ef"> &#215; element factor sin&#952;</label>
   </div>
 
-  <div class="pills">
-    <span class="pill">peak at <b id="p-peak">&#8212;</b></span>
-    <span class="pill hp">HPBW = <b id="p-hp">&#8212;</b></span>
-    <span class="pill sll">first sidelobe = <b id="p-sll">&#8212;</b></span>
-    <span class="pill">\(0.886\,\lambda/L\) = <b id="p-rot">&#8212;</b></span>
+  <div class="readouts">
+    <div class="ro"><span class="k">peak</span><span class="v" id="p-peak">&#8212;</span></div>
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="p-hp">&#8212;</span></div>
+    <div class="ro sll"><span class="k">first sidelobe</span><span class="v" id="p-sll">&#8212;</span></div>
+    <div class="ro"><span class="k">\(0.886\,\lambda/L\)</span><span class="v" id="p-rot">&#8212;</span></div>
   </div>
 </div>
 
@@ -167,7 +180,7 @@ function metrics(){
 
 /* ------------------------------ current canvas ------------------------------ */
 function drawCur(){
-  const dpr=window.devicePixelRatio||1, w=cvC.width/dpr, h=cvC.height/dpr;
+  const dpr=window.devicePixelRatio||1, w=cvC.width/(dpr*SCL), h=cvC.height/(dpr*SCL);
   const ctx=ctxC; ctx.clearRect(0,0,w,h);
   const mL=54, mR=132, mT=30, mB=26, pw=w-mL-mR, ph=h-mT-mB;
   const xp=t=>mL+(t+0.5)*pw, yp=v=>mT+ph-v*ph;
@@ -212,7 +225,7 @@ function drawCur(){
 
 /* ------------------------------ pattern canvas ------------------------------ */
 function drawPat(){
-  const dpr=window.devicePixelRatio||1, w=cvP.width/dpr, h=cvP.height/dpr;
+  const dpr=window.devicePixelRatio||1, w=cvP.width/(dpr*SCL), h=cvP.height/(dpr*SCL);
   const ctx=ctxP; ctx.clearRect(0,0,w,h);
   const split=Math.round(w*0.40);
   ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
@@ -300,13 +313,32 @@ function readouts(){
 
 function drawAll(){ buildAmp(); sweep(); drawCur(); drawPat(); readouts(); }
 
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=380;
+let SCL=1;
 function fit(){
   const dpr=window.devicePixelRatio||1;
-  const w=Math.max(380, cvC.getBoundingClientRect().width);
+  const wCss=cvWidth(cvC);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
   const h1=Math.max(110, Math.min(w*0.17, 140)), h2=Math.max(230, Math.min(w*0.36, 300));
-  cvC.width=w*dpr; cvC.height=h1*dpr; cvC.style.height=h1+'px';
-  cvP.width=w*dpr; cvP.height=h2*dpr; cvP.style.height=h2+'px';
-  ctxC.setTransform(dpr,0,0,dpr,0,0); ctxP.setTransform(dpr,0,0,dpr,0,0);
+  setSize(cvC,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
+  ctxC.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();
 }
 window.addEventListener('resize', fit);

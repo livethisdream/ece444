@@ -1,0 +1,335 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L24 practice set (Sidelobes and Tapering Theory) -- why an untapered aperture
+% has sidelobes, the cosine/Chebyshev/Taylor families, the three costs of a
+% taper, and converting a design to PHASER element gains.
+
+\fullwidth{\textbf{Learning Objective 3.7: } I can apply amplitude tapering
+(uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the
+pattern trade-off.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+\question \textbf{Where sidelobes come from, and why a system cares.}
+The PHASER's eight elements are driven at equal amplitude and spaced
+$d = 14\text{ mm}$, which is $d/\lambda = 0.481$ at $10.3\ \ghz$. Its measured
+first sidelobe sits $12.8\db$ below the peak.
+\begin{parts}
+	\part In two or three sentences, explain why a uniformly illuminated aperture
+	has sidelobes at all. Use the Fourier relationship between the aperture
+	illumination and the far-field pattern in your answer.
+		\begin{solution}[1.4in]
+		The far-field pattern is the Fourier transform of the aperture
+		illumination, with the transform variable being the space frequency
+		$k\sinp{\theta}$. Uniform illumination is a rectangle: full amplitude
+		across the array and nothing beyond the ends. That abrupt edge is a
+		discontinuity, and a discontinuity contains energy at every spatial
+		frequency, so the transform cannot fall off quickly. The transform of a
+		rectangle is a sinc function, whose ripples decay only as $1/u$, and
+		those ripples are the sidelobes.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The array is rebuilt with $N = 16$ elements at the same spacing,
+		still uniformly driven. Compute the new half-power beamwidth from
+		$\theta_\text{HP} \approx 0.886\lambda/(Nd)$, and state what happens to the
+		first sidelobe level.
+		\begin{solution}[1.3in]
+		\eq{ \theta_\text{HP} &\approx \frac{0.886}{16 \times 0.481} = 0.1151
+		\text{ rad} = 6.6\mydeg }
+		The first sidelobe does not move: it stays near $-13\db$. Doubling the
+		aperture halves the beamwidth, but sidelobe level is set by the
+		\emph{shape} of the illumination, not by its size, and the shape is still
+		uniform.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_\text{HP}$ = \ansbox[1.3in]{$6.6\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A search radar looks at a target on boresight while ground clutter
+		$40\db$ stronger than the target return arrives through the $-12.8\db$
+		first sidelobe. Compute the clutter-to-target ratio at the beamformer
+		output, then find the sidelobe level that would put the clutter $3\db$
+		\emph{below} the target.
+		\begin{solution}[1.4in]
+		The target enters on the main beam at $0\db$ of pattern gain and the
+		clutter enters $12.8\db$ down, so the antenna gives the target a
+		$12.8\db$ advantage:
+		\eq{ C/T &= 40 - 12.8 = 27.2\db \text{ (clutter above target)} }
+		To land at $C/T = -3\db$ the pattern must supply $43\db$ of
+		discrimination:
+		\eq{ \text{SLL} &= -(40 + 3) = -43\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$C/T$ = \ansbox[1.2in]{$27.2\db$}
+		\\[10pt]
+		SLL = \ansbox[1.2in]{$-43\db$}
+	\end{minipage}
+\end{parts}
+
+\newpage
+
+\question \textbf{The Hann preset by the numbers.}
+The PHASER GUI's Hann preset sets the eight Element Gains to
+$12, 43, 77, 100, 100, 77, 43, 12$ percent. Work in normalized amplitudes
+$a_n$ of $0.12$, $0.43$, $0.77$, $1.00$, $1.00$, $0.77$, $0.43$, $0.12$.
+\begin{parts}
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute $\sum a_n$ and $\sum a_n^2$.
+		\begin{solution}[1.3in]
+		The taper is symmetric, so sum the inner four and double:
+		\eq{ \sum a_n &= 2\lp 0.12 + 0.43 + 0.77 + 1.00 \rp = 2\lp 2.32 \rp = 4.64 \\
+		\sum a_n^2 &= 2\lp 0.0144 + 0.1849 + 0.5929 + 1.0000 \rp = 3.584 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\sum a_n$ = \ansbox[1.1in]{$4.64$}
+		\\[10pt]
+		$\sum a_n^2$ = \ansbox[1.1in]{$3.584$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the taper efficiency $\eta_t = \lp\sum a_n\rp^2 / \lp N \sum a_n^2 \rp$
+		as a ratio and in decibels.
+		\begin{solution}[1.3in]
+		\eq{ \eta_t &= \frac{\lp 4.64 \rp^2}{8 \times 3.584} = \frac{21.53}{28.67}
+		= 0.751 \\
+		10\mylog{0.751} &= -1.24\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\eta_t$ = \ansbox[1.5in]{$0.751 = -1.2\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute how far the peak of the measured sweep falls below the
+		uniform-taper trace.
+		\begin{solution}[1.2in]
+		\eq{ \text{peak drop} &= 20\mylog{\frac{\sum a_n}{N}}
+		= 20\mylog{\frac{4.64}{8}} \\
+		&= 20\mylog{0.580} = -4.7\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		peak drop = \ansbox[1.3in]{$-4.7\db$}
+	\end{minipage}
+
+	\part Parts (b) and (c) are both decibel losses, and they are not equal. In
+	two or three sentences, say what each one measures and which of the two is
+	the loss of directivity.
+		\begin{solution}[1.5in]
+		The taper efficiency in part (b) is the fraction of the uniform array's
+		directivity that the tapered array keeps, so $-1.2\db$ is the loss of
+		antenna performance. The peak drop in part (c) is a coherent
+		receive-voltage loss: six of the eight channels were attenuated, so the
+		plotted peak fell, but the channel noise was attenuated along with the
+		signal. The difference,
+		$-4.7 - \lp -1.2 \rp = -3.5\db$, is gain that was simply turned down and
+		would return if the sliders could be scaled back up past $100\%$.
+		\end{solution}
+\end{parts}
+
+\newpage
+
+\question \textbf{A Chebyshev design to specification.}
+A customer specifies that no sidelobe may exceed $-25\db$ relative to the peak,
+on the eight-element array at $d/\lambda = 0.481$. The uniform reference is
+$\theta_\text{HP} = 13.2\mydeg$.
+\begin{parts}
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the voltage ratio $R$ and the Chebyshev stretch factor
+		$x_0 = \cosh\lp \cosh^{-1}(R)/(N-1) \rp$.
+		\begin{solution}[1.4in]
+		\eq{ R &= 10^{25/20} = 10^{1.25} = 17.78 \\
+		\cosh^{-1}(17.78) &= 3.571 \\
+		x_0 &= \cosh\lp \frac{3.571}{7} \rp = \cosh\lp 0.5101 \rp \\
+		&= 1.133 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$R$ = \ansbox[1.1in]{$17.78$}
+		\\[10pt]
+		$x_0$ = \ansbox[1.1in]{$1.133$}
+	\end{minipage}
+
+	The Dolph expansion for this $x_0$ returns element amplitudes of
+	$38, 58, 84, 100, 100, 84, 58, 38$ percent.
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the taper efficiency and the peak drop for this design.
+		\begin{solution}[1.5in]
+		\eq{ \sum a_n &= 2\lp 0.38 + 0.58 + 0.84 + 1.00 \rp = 5.60 \\
+		\sum a_n^2 &= 2\lp 0.1444 + 0.3364 + 0.7056 + 1 \rp \\
+		&= 4.373 \\
+		\eta_t &= \frac{\lp 5.60 \rp^2}{8 \times 4.373} = \frac{31.36}{34.98}
+		= 0.896 = -0.48\db \\
+		\text{peak drop} &= 20\mylog{\frac{5.60}{8}} \\
+		&= 20\mylog{0.700} = -3.1\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\eta_t$ = \ansbox[1.4in]{$0.896 = -0.48\db$}
+		\\[10pt]
+		peak drop = \ansbox[1.2in]{$-3.1\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part This design has a beam broadening factor of $1.20$. Compute its
+		half-power beamwidth.
+		\begin{solution}[1.1in]
+		\eq{ \theta_\text{HP} &= 1.20 \times 13.2\mydeg = 15.8\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_\text{HP}$ = \ansbox[1.2in]{$15.8\mydeg$}
+	\end{minipage}
+
+	\part State the price of this design for the customer in one sentence, then
+	explain in one or two more why a Chebyshev design beats a Hann window that
+	reaches a similar sidelobe level.
+		\begin{solution}[1.6in]
+		Sidelobes drop from $-12.8\db$ to $-25\db$, and the cost is a beam
+		$2.6\mydeg$ wider, $0.48\db$ of directivity, and a $3.1\db$ lower peak on
+		the displayed trace. The Chebyshev design is optimal in the sense that no
+		other set of amplitudes reaches $-25\db$ with a narrower main lobe,
+		because it holds every sidelobe exactly at the specification. A Hann
+		window pushes its far sidelobes well below $-25\db$, which is suppression
+		the specification never asked for, and it paid for that suppression in
+		beamwidth it did not need to spend.
+		\end{solution}
+\end{parts}
+
+\newpage
+
+\question \textbf{Reading a tapered sweep.}
+A student loads an unknown taper into the GUI and runs a beam sweep against the
+HB100. Compared with the uniform trace taken a minute earlier, the peak is
+$3.8\db$ lower, the half-power beamwidth reads $17.5\mydeg$, and no sidelobe is
+visible above the sweep's noise floor, which sits $23\db$ below the
+\emph{uniform} peak.
+\begin{parts}
+	\part Which of the designs from this lesson is the student most likely
+	using? Give the two measurements that identify it.
+		\begin{solution}[1.3in]
+		The $-30\db$ Chebyshev design, whose element gains are
+		$26, 52, 81, 100, 100, 81, 52, 26$ percent. It predicts a peak drop of
+		$-3.8\db$ and a half-power beamwidth of $17.1\mydeg$, and the measured
+		$-3.8\db$ and $17.5\mydeg$ match both within the sweep's angular
+		resolution. The Hann preset would have dropped the peak $4.7\db$ and
+		widened the beam to about $19.5\mydeg$.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part How much directivity did the array lose? The design has
+		$\sum a_n = 5.18$ and $\sum a_n^2 = 3.988$.
+		\begin{solution}[1.3in]
+		\eq{ \eta_t &= \frac{\lp 5.18 \rp^2}{8 \times 3.988} = \frac{26.83}{31.91}
+		= 0.841 \\
+		10\mylog{0.841} &= -0.75\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		loss = \ansbox[1.2in]{$-0.75\db$}
+	\end{minipage}
+
+	\part The student writes in the lab notebook that the array lost $3.8\db$ of
+	gain. Correct that statement in two sentences.
+		\begin{solution}[1.4in]
+		The array lost $0.75\db$ of directivity, which is the taper efficiency
+		computed in part (b). The remaining $3.0\db$ of the drop is signal that
+		six attenuated channels never delivered to the summing node, and the
+		noise from those channels was attenuated by the same factor, so the
+		sensitivity of the array did not fall by $3.8\db$.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part State the tightest upper bound the student can honestly put on this
+		taper's sidelobe level, expressed relative to the taper's own peak.
+		\begin{solution}[1.3in]
+		The floor sits $23\db$ below the uniform peak, and this taper's peak is
+		itself $3.8\db$ below the uniform peak, so relative to its own peak the
+		floor is only
+		\eq{ 23 - 3.8 &= 19.2\db \text{ down} }
+		The sidelobes are therefore below $-19\db$ relative to the tapered peak.
+		The theoretical value is $-30\db$, but the measurement cannot confirm
+		anything deeper than the floor allows.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		SLL $<$ \ansbox[1.3in]{$-19.2\db$}
+	\end{minipage}
+\end{parts}
+
+\newpage
+
+\question \textbf{Design judgment on eight elements.}
+A program office asks for $-50\db$ sidelobes from the eight-element PHASER
+array. The Chebyshev design that meets it has element amplitudes
+$9$, $35$, $72$, $100$, $100$, $72$, $35$, $9$ percent, a beam broadening factor of $1.51$,
+and $\eta_t = 0.710$.
+\begin{parts}
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the half-power beamwidth and the peak drop for this design,
+		using $13.2\mydeg$ as the uniform reference.
+		\begin{solution}[1.4in]
+		\eq{ \sum a_n &= 2\lp 0.09 + 0.35 + 0.72 + 1.00 \rp = 4.32 \\
+		\theta_\text{HP} &= 1.51 \times 13.2\mydeg = 19.9\mydeg \\
+		\text{peak drop} &= 20\mylog{\frac{4.32}{8}} \\
+		&= 20\mylog{0.540} = -5.3\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_\text{HP}$ = \ansbox[1.2in]{$19.9\mydeg$}
+		\\[10pt]
+		peak drop = \ansbox[1.2in]{$-5.3\db$}
+	\end{minipage}
+
+	\part The ADAR1000 sets each element gain to a resolution of about one
+	percent of full scale. Explain in two or three sentences why that resolution
+	threatens a $-50\db$ design more than it threatens a $-25\db$ design.
+		\begin{solution}[1.6in]
+		A sidelobe at $-50\db$ is a residue about three parts in a thousand of
+		the peak, so it survives only if the eight amplitudes hold their designed
+		ratios to better than that. The outermost elements of this design sit at
+		$9\%$, where a one-percent step is an eleven-percent error on that
+		element, which is two orders of magnitude larger than the residue the
+		design is trying to preserve. The $-25\db$ design keeps its smallest
+		element at $38\%$, where the same step is under three percent, so its
+		sidelobes move by a fraction of a decibel instead of being swamped.
+		\end{solution}
+
+	\part Recommend what to do about the program office's request. Your answer
+	must name the specification you would propose instead and give the reason in
+	terms of what the hardware can show.
+		\begin{solution}[1.7in]
+		Propose $-30\db$ rather than $-50\db$. The beam sweep's noise floor is
+		about $23\db$ below the uniform peak, so a $-30\db$ design is already
+		below anything this instrument can measure, and a $-50\db$ design cannot
+		be verified on the bench at all. The deeper specification also costs
+		$3\mydeg$ more beamwidth and roughly $0.7\db$ more directivity than the
+		$-30\db$ design, and its edge elements are too small to set accurately.
+		If the office needs suppression in one specific direction rather than
+		everywhere, the correct tool is a steered null, not a deeper taper.
+		\end{solution}
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

@@ -1,0 +1,380 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L21 practice set (Array Factor Lab) -- reading HPBW, FNBW and sidelobe level
+% off a PHASER beam sweep, predicting a reduced aperture before measuring it,
+% and reconciling a measured sidelobe against the array-factor value.
+
+\fullwidth{\textbf{Learning Objective 3.2: } Derive and apply the array factor for a
+uniform linear array, and relate its beamwidth and sidelobe structure to what a
+beam sweep measures.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+\question \textbf{Reading a sweep.} A lab group sweeps the PHASER with all eight
+elements active and a source at boresight. Working at $10.3\ \ghz$ with element
+spacing $d = 14\ \text{mm}$, they record the trace below. The sweep step is
+$2.8125\mydeg$ and the peak reads $-4.1$ dBFS.
+
+\begin{center}
+\begin{tabular}{r|rrrrrrrrrr}
+$\theta$ (\mydeg) & $0.0$ & $2.8$ & $5.6$ & $8.4$ & $11.3$ & $14.1$ & $16.9$ & $19.7$ & $22.5$ & $25.3$ \\ \hline
+Power (dBFS) & $-4.1$ & $-4.6$ & $-6.2$ & $-9.1$ & $-14.3$ & $-24.1$ & $-22.0$ & $-17.4$ & $-16.6$ & $-18.1$ \\
+\end{tabular}
+\end{center}
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Using linear interpolation between the two samples that bracket the
+		half-power level, find the half-power beamwidth. The trace is symmetric
+		about $0\mydeg$.
+		\begin{solution}[1.3in]
+		Half power is $3$ dB below the peak, so the level is
+		$-4.1 - 3.0 = -7.1$ dBFS. That falls between the samples at $5.6\mydeg$
+		($-6.2$) and $8.4\mydeg$ ($-9.1$).
+		\eq{ \theta_{-3} &= 5.6 + 2.8\lp\frac{7.1-6.2}{9.1-6.2}\rp = 5.6 + 2.8(0.31) = 6.5\mydeg }
+		The trace is symmetric, so the beamwidth is twice this.
+		\eq{ \theta_{\text{HP}} = 2(6.5) = 12.9\mydeg }
+		Theory gives $13.2\mydeg$, so the sweep reads about three tenths of a
+		degree narrow.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$12.9\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the first-null beamwidth as the sweep reports it, and compare it
+		with $\text{FNBW} = 2\arcsin\lp\lambda/Nd\rp$.
+		\begin{solution}[1.4in]
+		The deepest sample between the main lobe and the sidelobe is $-24.1$ dBFS
+		at $14.1\mydeg$, so the sweep reports
+		\eq{ \text{FNBW}_{\text{meas}} = 2(14.1) = 28.2\mydeg }
+		With $\lambda = 29.1\ \text{mm}$ and $Nd = 8(14) = 112\ \text{mm}$,
+		\eq{ \text{FNBW} &= 2\arcsin\lp\frac{29.1}{112}\rp = 2\arcsin(0.2598) \\ &= 2(15.1\mydeg) = 30.1\mydeg }
+		The measured value is $1.9\mydeg$ narrow because the true null at
+		$15.1\mydeg$ falls between the samples at $14.1\mydeg$ and $16.9\mydeg$.
+		The sweep can only report a null at an angle it actually visited.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\text{FNBW}_{\text{meas}}$ = \ansbox[1.3in]{$28.2\mydeg$}
+		\\[10pt]
+		$\text{FNBW}_{\text{calc}}$ = \ansbox[1.3in]{$30.1\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the first sidelobe level relative to the peak, in dBc.
+		\begin{solution}[1.1in]
+		The tallest sample beyond the null is $-16.6$ dBFS at $22.5\mydeg$.
+		Relative to the peak,
+		\eq{ \text{SLL} = -16.6 - (-4.1) = -12.5\ \text{dBc} }
+		which is within a few tenths of the $-12.8$ dB the array factor gives
+		for eight uniform elements.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		SLL = \ansbox[1.3in]{$-12.5$ dBc}
+	\end{minipage}
+
+	\part No sample in the sweep reads below about $-24$ dBFS, which is $20$ dB
+	below the peak, yet the noise floor on this kit is $23$ dB below the peak.
+	Explain in one or two sentences why the deepest sample sits $3$ dB above the
+	floor rather than on it.
+		\begin{solution}[1.3in]
+		The receiver reports signal power plus noise power. At the sample nearest
+		the null the array factor has fallen to about $-23$ dB, which is the floor
+		level itself, so the two contributions are equal and their sum is $3$ dB
+		above either one. A measured null depth is therefore a statement about the
+		dynamic range of the measurement rather than about the array.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Predict before you measure.} The same array is reconfigured by
+setting some element gains to zero. The spacing $d = 14\ \text{mm}$ and the
+frequency $10.3\ \ghz$ do not change, so $\lambda = 29.1\ \text{mm}$ throughout.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Rx1, Rx2, Rx7 and Rx8 are set to zero, leaving Rx3 through Rx6
+		active --- four adjacent elements. Predict the half-power beamwidth from
+		$\theta_{\text{HP}} \approx 0.886\lambda/(Nd)$.
+		\begin{solution}[1.2in]
+		Four active elements span $Nd = 4(14) = 56\ \text{mm}$.
+		\eq{ \theta_{\text{HP}} \approx \frac{0.886(29.1)}{56} = 0.4604\ \text{rad} = 26.4\mydeg }
+		Solving the array factor exactly gives $27.4\mydeg$; the small-angle step
+		inside the $0.886$ rule costs about a degree at this beamwidth.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$\approx 26\text{-}27\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Now only Rx3, Rx4 and Rx5 are left on --- three adjacent elements.
+		Predict the half-power beamwidth and the first-null beamwidth.
+		\begin{solution}[1.4in]
+		Three adjacent elements span $Nd = 3(14) = 42\ \text{mm}$.
+		\eq{ \theta_{\text{HP}} \approx \frac{0.886(29.1)}{42} = 0.6138\ \text{rad} = 35.2\mydeg }
+		\eq{ \text{FNBW} &= 2\arcsin\lp\frac{29.1}{42}\rp = 2\arcsin(0.6929) \\ &= 2(43.8\mydeg) = 87.7\mydeg }
+		The beam is wide enough that the $0.886$ rule is starting to under-predict;
+		expect the sweep to read closer to $37\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$\approx 35\mydeg$}
+		\\[10pt]
+		FNBW = \ansbox[1.3in]{$87.7\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part By how many dB should the peak of the three-element sweep sit below
+		the peak of the full eight-element sweep, if every element gain that is
+		still on remains at 100\%?
+		\begin{solution}[1.1in]
+		At boresight the element signals add in voltage, so the peak field is
+		proportional to the number of active elements.
+		\eq{ \Delta = 20\mylog{\frac{3}{8}} = 20\mylog{0.375} = -8.5\ \db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta$ = \ansbox[1.3in]{$-8.5\ \db$}
+	\end{minipage}
+
+	\part A student proposes reaching the same $35\mydeg$ beamwidth by leaving all
+	eight elements on and turning every gain down to $37.5\%$. Explain in one or
+	two sentences why that does not work.
+		\begin{solution}[1.2in]
+		Beamwidth is set by the active aperture $Nd$, not by how much gain the
+		elements are given. Turning all eight gains down uniformly keeps the
+		aperture at $112\ \text{mm}$, so the beam stays at about $13\mydeg$ and
+		only the peak level drops. To widen the beam the aperture itself has to
+		shrink.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Reconciling a sidelobe.} A second group measures the first
+sidelobe of the full eight-element array at $-11.5$ dBc, while the array factor
+for $N = 8$ predicts $-12.8$ dB. Their noise floor sits at $-23$ dBc and the
+sweep step is $2.8125\mydeg$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The floor adds noise power to the sidelobe power the receiver
+		reports. Treating the two as uncorrelated, compute the level the sweep
+		should report for a true $-12.8$ dB sidelobe sitting on a $-23$ dBc
+		floor.
+		\begin{solution}[1.4in]
+		Convert both to power ratios and add.
+		\eq{ p_{\text{sig}} = 10^{-12.8/10} = 0.0525, \qquad p_{\text{n}} = 10^{-23/10} = 0.0050 }
+		\eq{ p_{\text{tot}} = 0.0525 + 0.0050 = 0.0575 }
+		\eq{ \text{SLL} = 10\mylog{0.0575} = -12.4\ \text{dBc} }
+		The floor alone accounts for about $0.4$ dB of lift.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		SLL = \ansbox[1.3in]{$-12.4$ dBc}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Their peak reading is also affected. The peak is $23$ dB above the
+		floor by definition. By how much does the floor lift the peak reading, and
+		which way does that push the reported sidelobe level in dBc?
+		\begin{solution}[1.3in]
+		Normalize the peak signal power to 1.
+		\eq{ p_{\text{tot}} &= 1 + 0.0050 = 1.0050 \\ 10\mylog{1.0050} &= +0.02\ \db }
+		The peak lifts by only about $0.02$ dB, which is negligible. Because the
+		sidelobe lifts by $0.4$ dB and the peak barely moves, the ratio of the
+		two moves \emph{up}, making the reported sidelobe look higher than the
+		array factor predicts.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		peak lift = \ansbox[1.3in]{$+0.02\ \db$}
+	\end{minipage}
+
+	\part The floor explains $0.4$ dB of the $1.3$ dB discrepancy. Name two
+	other contributions that plausibly make up the rest, and say for each whether
+	it would move the reading up or down.
+		\begin{solution}[1.5in]
+		First, run-to-run noise on the sidelobe sample itself. The sidelobe is only
+		about $10$ dB above the floor, so a single sweep reading scatters a few
+		tenths of a decibel in either direction. Second, residual amplitude and
+		phase errors across the eight elements after calibration. These break the
+		uniform distribution slightly and raise the sidelobes, so that contribution
+		moves the reading up. Grid straddle is a third contribution, but it moves
+		the reading \emph{down} and by very little here, since the sidelobe peak at
+		$21.9\mydeg$ is caught by the sample at $22.5\mydeg$ to within
+		$0.05$ dB.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{The two-element case.} With only Rx4 and Rx5 active the array
+has two elements at $d = 14\ \text{mm}$, and at $10.3\ \ghz$ the array factor is
+$AF = \cosp{\psi/2}$ with $\psi = kd\sinp{\theta}$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the half-power beamwidth exactly, without using the
+		$0.886\lambda/(Nd)$ rule.
+		\begin{solution}[1.4in]
+		Set the array factor to $1/\sqrt{2}$.
+		\eq{ \cosp{\psi/2} = \frac{1}{\sqrt{2}} \quad\Rightarrow\quad \frac{\psi}{2} = \frac{\pi}{4} \quad\Rightarrow\quad \psi = \frac{\pi}{2} }
+		With $\psi = kd\sinp{\theta}$ and $kd = 2\pi d/\lambda$,
+		\eq{ \sinp{\theta} = \frac{\pi/2}{2\pi d/\lambda} = \frac{\lambda}{4d} = \frac{29.1}{4(14)} = 0.5196 }
+		\eq{ \theta = 31.3\mydeg \quad\Rightarrow\quad \theta_{\text{HP}} = 62.6\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$62.6\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Show that the $0.886\lambda/(Nd)$ rule fails here, and state the
+		percentage error it makes.
+		\begin{solution}[1.2in]
+		\eq{ \theta_{\text{HP}} \approx \frac{0.886(29.1)}{28} = 0.9208\ \text{rad} = 52.8\mydeg }
+		\eq{ \text{error} = \frac{52.8 - 62.6}{62.6} = -15.7\% }
+		The rule assumes the half-power point is at a small enough angle that
+		$\sinp{\theta} \approx \theta$. At $31\mydeg$ that is no longer true.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		error = \ansbox[1.3in]{$-15.7\%$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Evaluate $\lambda/2d$ and use it to explain why the lab table lists
+		the first-null beamwidth of this array as $180\mydeg$.
+		\begin{solution}[1.3in]
+		The first null of $\cosp{\psi/2}$ needs $\psi = \pi$, which requires
+		\eq{ \sinp{\theta} = \frac{\lambda}{2d} = \frac{29.1}{2(14)} = 1.039 }
+		No real angle has a sine greater than 1, so the null lies outside visible
+		space and no null appears anywhere in the $\pm 90\mydeg$ scan. With no
+		null to measure, the beamwidth between first nulls is quoted as the full
+		$180\mydeg$ scan range by convention.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\lambda/2d$ = \ansbox[1.3in]{$1.039$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part How far below its own peak does this two-element pattern fall at
+		$\theta = 90\mydeg$? Compare that with the $23$ dB of dynamic range the
+		sweep has above the noise floor at eight elements, and say what the trace
+		will look like near the edges of the scan.
+		\begin{solution}[1.5in]
+		At $\theta = 90\mydeg$, $\sinp{\theta} = 1$ and
+		$\psi = 2\pi(14)/29.1 = 3.023$ rad, so
+		\eq{ \vert AF \vert &= \cosp{1.511} = 0.0597 \\ 20\mylog{0.0597} &= -24.5\ \db }
+		The two-element peak is itself $12$ dB below the eight-element peak, so
+		it clears the floor by only about $11$ dB. The pattern needs
+		$24.5$ dB of range to reach endfire and the measurement has $11$ dB,
+		so the trace flattens into the noise well before $\pm 90\mydeg$ and the
+		outer part of the roll-off is not visible.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		drop at $90\mydeg$ = \ansbox[1.3in]{$-24.5\ \db$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Design judgement.} Your section is asked to demonstrate a
+$20\mydeg$ beam on the PHASER at $10.3\ \ghz$, using only the Element Gains
+controls.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part How many adjacent elements must be active to give a half-power
+		beamwidth closest to $20\mydeg$? Give the aperture and the resulting
+		beamwidth.
+		\begin{solution}[1.4in]
+		Solve the beamwidth rule for the aperture.
+		\eq{ Nd = \frac{0.886\lambda}{\theta_{\text{HP}}} = \frac{0.886(29.1)}{20\mydeg(\pi/180)} = \frac{25.78}{0.3491} = 73.8\ \text{mm} }
+		\eq{ N = \frac{73.8}{14} = 5.3 }
+		Element counts are integers, so take $N = 5$: $Nd = 70\ \text{mm}$ and
+		\eq{ \theta_{\text{HP}} \approx \frac{0.886(29.1)}{70} = 0.3683\ \text{rad} = 21.1\mydeg }
+		Six elements would give $17.6\mydeg$, which is further from the target.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$N$ = \ansbox[1.3in]{$5$ elements}
+		\\[10pt]
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$21.1\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part What does this cost in peak received level compared with the full
+		eight-element array, and how much dynamic range is left above the noise
+		floor?
+		\begin{solution}[1.3in]
+		\eq{ \Delta = 20\mylog{\frac{5}{8}} = 20\mylog{0.625} = -4.1\ \db }
+		The floor does not move, so the range above it drops from about $23$ dB
+		to
+		\eq{ 23 - 4.1 = 18.9\ \db }
+		The first sidelobe of a five-element uniform array is near $-12$ dB,
+		which still clears the floor comfortably.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta$ = \ansbox[1.3in]{$-4.1\ \db$}
+		\\[10pt]
+		range = \ansbox[1.3in]{$18.9\ \db$}
+	\end{minipage}
+
+	\part A classmate suggests instead applying a Hann taper to all eight
+	elements, since that also widens the beam to about $19.5\mydeg$. State one
+	advantage and one disadvantage of the taper against switching elements off,
+	and say which you would choose for a demonstration whose purpose is to show
+	that beamwidth depends on aperture.
+		\begin{solution}[1.6in]
+		The taper keeps the full $112\ \text{mm}$ aperture and pushes the
+		sidelobes below the noise floor, so the trace is cleaner and the main lobe
+		is the only thing on the plot. Its disadvantage for this purpose is that
+		it widens the beam by changing the shape of the amplitude distribution,
+		not by changing the aperture, so it demonstrates the opposite of the
+		intended point. It also costs about $4.7$ dB of peak, which is no better
+		than the five-element case. For a demonstration about aperture, switch
+		elements off: the beamwidth and the aperture then move together and the
+		claim is visible in one control.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

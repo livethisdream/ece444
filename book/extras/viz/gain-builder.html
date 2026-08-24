@@ -16,7 +16,7 @@
           --mis:#b3213a; } /* mismatch loss */
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:grid; grid-template-columns:repeat(3,1fr); gap:9px 18px; align-items:center;
               padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   @media (max-width:700px) { .controls { grid-template-columns:1fr; } }
@@ -24,13 +24,26 @@
   .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
   .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:58px; text-align:right; }
   .ctl input[type=range]{ flex:1 1 auto; min-width:80px; accent-color:var(--mid); }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.loss  { background:rgba(138,90,0,0.12); color:var(--amber); border-color:rgba(138,90,0,0.30); }
-  .pill.loss2 { background:rgba(176,30,36,0.10); color:var(--red);  border-color:rgba(176,30,36,0.28); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.loss  { background:rgba(138,90,0,0.12);  border-color:rgba(138,90,0,0.30); }
+  .ro.loss  .v { color:var(--amber); }
+  .ro.loss2 { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.loss2 .v { color:var(--red); }
   .hint { margin:0; text-align:center; font-size:12px; color:var(--ink3); }
 </style>
 </head>
@@ -56,13 +69,13 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill">directivity = <b id="p-dir">—</b></span>
-    <span class="pill loss">efficiency loss = <b id="p-eff">—</b></span>
-    <span class="pill">gain \(G\) = <b id="p-gain">—</b></span>
-    <span class="pill loss2">mismatch loss = <b id="p-mis">—</b></span>
-    <span class="pill">realized gain = <b id="p-real">—</b></span>
-    <span class="pill">VSWR = <b id="p-vswr">—</b></span>
+  <div class="readouts">
+    <div class="ro"><span class="k">directivity \(D\)</span><span class="v" id="p-dir">—</span></div>
+    <div class="ro loss"><span class="k">efficiency loss</span><span class="v" id="p-eff">—</span></div>
+    <div class="ro"><span class="k">gain \(G\)</span><span class="v" id="p-gain">—</span></div>
+    <div class="ro loss2"><span class="k">mismatch loss</span><span class="v" id="p-mis">—</span></div>
+    <div class="ro"><span class="k">realized gain</span><span class="v" id="p-real">—</span></div>
+    <div class="ro"><span class="k">VSWR</span><span class="v" id="p-vswr">—</span></div>
   </div>
 
   <p class="hint">\(G = \eta_{\text{rad}}\,D\) &nbsp;·&nbsp; \(G_{\text{re}} = (1-\lvert\Gamma\rvert^2)\,G\) &nbsp;·&nbsp; reflected power <span id="p-refl">—</span></p>
@@ -115,21 +128,39 @@ gamEl.addEventListener('input', () => { state.gam = parseFloat(gamEl.value); gam
 const canvas = document.getElementById('plot');
 const ctx = canvas.getContext('2d');
 
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=360;
+let SCL=1;
 function fit() {
   const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.getBoundingClientRect();
-  const w = Math.max(360, rect.width);
+  const wCss = cvWidth(canvas);
+  SCL = Math.min(1, wCss / DESIGN_W);
+  const w = wCss / SCL;
   const h = Math.max(200, Math.min(w * 0.28, 250));
-  canvas.width = w * dpr; canvas.height = h * dpr;
-  canvas.style.height = `${h}px`;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  setSize(canvas, wCss, h * SCL, dpr);
+  ctx.setTransform(dpr * SCL, 0, 0, dpr * SCL, 0, 0);
   draw();
 }
 window.addEventListener('resize', fit);
 
 function draw() {
   const dpr = window.devicePixelRatio || 1;
-  const w = canvas.width / dpr, h = canvas.height / dpr;
+  const w = canvas.width / (dpr * SCL), h = canvas.height / (dpr * SCL);
   ctx.clearRect(0, 0, w, h);
   const d = derived();
 

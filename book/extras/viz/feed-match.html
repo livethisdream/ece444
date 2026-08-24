@@ -12,7 +12,7 @@
           --load:#8a5a00; --match:#0067b9; --sll:#b3213a; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:9px 18px; align-items:center;
               padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
@@ -31,14 +31,28 @@
   .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
   .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; }
   .tgl input:checked ~ .t { color:var(--navy); }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.good { background:rgba(63,125,52,0.12); color:var(--grn);   border-color:rgba(63,125,52,0.30); }
-  .pill.warn { background:rgba(138,90,0,0.12);  color:var(--amber); border-color:rgba(138,90,0,0.30); }
-  .pill.bad  { background:rgba(176,30,36,0.10); color:var(--red);   border-color:rgba(176,30,36,0.28); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.good { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.good .v { color:var(--grn); }
+  .ro.warn { background:rgba(138,90,0,0.12);  border-color:rgba(138,90,0,0.30); }
+  .ro.warn .v { color:var(--amber); }
+  .ro.bad  { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.bad  .v { color:var(--red); }
 </style>
 </head>
 <body>
@@ -66,13 +80,13 @@
     </label>
   </div>
 
-  <div class="pills">
-    <span class="pill">\(Z_\text{in}\) = <b id="p-z">—</b></span>
-    <span class="pill">\(\lvert\Gamma\rvert\) = <b id="p-gam">—</b></span>
-    <span class="pill" id="pill-vswr">VSWR = <b id="p-vswr">—</b></span>
-    <span class="pill">return loss = <b id="p-rl">—</b></span>
-    <span class="pill">mismatch loss = <b id="p-ml">—</b></span>
-    <span class="pill" id="pill-z1" style="display:none">\(Z_1\) = <b id="p-z1">—</b></span>
+  <div class="readouts">
+    <div class="ro"><span class="k">\(Z_\text{in}\)</span><span class="v" id="p-z">—</span></div>
+    <div class="ro"><span class="k">\(\lvert\Gamma\rvert\)</span><span class="v" id="p-gam">—</span></div>
+    <div class="ro" id="ro-vswr"><span class="k">VSWR</span><span class="v" id="p-vswr">—</span></div>
+    <div class="ro"><span class="k">return loss</span><span class="v" id="p-rl">—</span></div>
+    <div class="ro"><span class="k">mismatch loss</span><span class="v" id="p-ml">—</span></div>
+    <div class="ro" id="ro-z1" style="display:none"><span class="k">\(Z_1\) transformer</span><span class="v" id="p-z1">—</span></div>
   </div>
 </div>
 
@@ -121,22 +135,42 @@ qwEl.addEventListener('change',()=>{
     state.Z1=Math.sqrt(state.Z0*state.qwR);
     document.getElementById('p-z1').textContent=state.Z1.toFixed(1)+' Ω';
   } else { state.Z1=null; state.qwR=null; }
-  document.getElementById('pill-z1').style.display=state.qw?'':'none';
+  document.getElementById('ro-z1').style.display=state.qw?'':'none';
   draw();
 });
 
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=300;
+let SCL=1;
 function fit(){
   const dpr=window.devicePixelRatio||1;
-  const w=Math.max(300, cv.getBoundingClientRect().width);
+  const wCss=cvWidth(cv);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
   const h=Math.max(260, Math.min(w*0.46, 330));
-  cv.width=w*dpr; cv.height=h*dpr; cv.style.height=h+'px';
-  ctx.setTransform(dpr,0,0,dpr,0,0); draw();
+  setSize(cv,wCss,h*SCL,dpr);
+  ctx.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); draw();
 }
 window.addEventListener('resize', fit);
 
 function draw(){
   const dpr=window.devicePixelRatio||1;
-  const w=cv.width/dpr, h=cv.height/dpr;
+  const w=cv.width/(dpr*SCL), h=cv.height/(dpr*SCL);
   ctx.clearRect(0,0,w,h);
   const d=derived();
 
@@ -215,7 +249,7 @@ function updateReadout(d){
   document.getElementById('p-vswr').textContent= (d.vswr===Infinity)?'∞:1':`${d.vswr.toFixed(2)}:1`;
   document.getElementById('p-rl').textContent  = (d.rl===Infinity)?'∞ dB':`${d.rl.toFixed(1)} dB`;
   document.getElementById('p-ml').textContent  = `${d.ml.toFixed(2)} dB`;
-  const p=document.getElementById('pill-vswr');
+  const p=document.getElementById('ro-vswr');
   p.classList.toggle('good', d.vswr<=1.5);
   p.classList.toggle('warn', d.vswr>1.5 && d.vswr<=2.0);
   p.classList.toggle('bad',  d.vswr>2.0);
