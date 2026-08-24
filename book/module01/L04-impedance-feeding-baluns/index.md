@@ -273,6 +273,65 @@ That picture is the whole method, and it is why the order is forced: the series
 element cannot change the resistance, and the shunt element cannot change it
 back.
 
+#### Why a series reactance makes a small resistor look big
+
+Before the algebra, the physical mechanism — because this is the part that is
+easy to compute and hard to *believe*. How can adding a reactance, which
+dissipates nothing, change what the source thinks the resistance is?
+
+Drive the series branch $20 + j24.5\ \Omega$ with 1 A. The resistor dissipates
+$P = \tfrac{1}{2}|I|^2 R = 10\ \text{W}$ — and nothing about the resistor
+changes. But the voltage across the *whole branch* is not 20 V, it is
+
+$$
+|V| = |I|\,|Z| = \sqrt{20^2 + 24.5^2} = 31.6\ \text{V},
+$$
+
+because the reactance's voltage adds in quadrature with the resistor's.
+
+<img src="../../viz/img/L04-series-parallel.svg" alt="Left: voltage phasors forming a right triangle, 20 V across the resistor and 24.5 V across the reactance summing to 31.6 V. Right: the series pair and the parallel 50 ohm equivalent a source cannot distinguish" style="max-width: 760px; width: 100%; display: block; margin: 1em auto;">
+
+Now stand at the terminals with no way to see inside. You measure 31.6 V, and
+10 W is being consumed. The only conclusion available to you is
+
+$$
+R = \frac{|V|^2}{2P} = \frac{31.6^2}{2(10)} = 50\ \Omega.
+$$
+
+**The reactance is a lever on voltage that costs no power.** The resistor is
+still 20 Ω burning 10 W; the source simply cannot tell that apart from a 50 Ω
+resistor. That is the entire transformation, and the lever ratio is
+
+$$
+\frac{R_p}{R_s} = \frac{|Z|^2}{R_s^2} = 1 + Q^2.
+$$
+
+So $24.5\ \Omega$ is not a magic number — it is *exactly enough lever* to make
+$1 + Q^2 = 50/20 = 2.5$.
+
+:::{admonition} Key Point
+:class: key-concept
+A shunt element alone could never do this. Put any reactance in parallel with
+20 Ω and the apparent resistance only goes **down** — 17.2 Ω at $-j50$, 19.2 Ω
+at $-j100$, creeping toward 20 Ω but never past it. Only a *series* reactance
+can climb. That is why the order is forced: series element to raise the
+resistance, shunt element to cancel what the climb left behind.
+:::
+
+There is one more thing hiding in the arithmetic. The magnitude of that series
+branch is $|Z| = 31.6\ \Omega$ — and $\sqrt{R_s R_p} = \sqrt{(20)(50)} =
+31.6\ \Omega$, the geometric mean. It is the same number as the quarter-wave
+transformer's $Z_1$ from the section above, and for the same reason: since
+$X_s = Q R_s$ with $Q^2 = R_p/R_s - 1$,
+
+$$
+|Z|^2 = R_s^2 + X_s^2 = R_s^2 + \left(R_s R_p - R_s^2\right) = R_s R_p.
+$$
+
+Both tools bridge two resistances by meeting at their geometric mean. The
+quarter-wave line gets there with a characteristic impedance; the L-match gets
+there with a lumped reactance.
+
 #### Where the network Q comes from
 
 The algebra is just the shortcut for the same journey. Any series branch

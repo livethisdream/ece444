@@ -256,6 +256,26 @@ shunt element cannot change it back — that is why the order is forced.
 
 ---
 
+## How does a lossless part change the resistance?
+
+<div class="fig" data-inline-svg="./fig/L04-series-parallel.svg" style="max-width:880px; margin:0 auto;"></div>
+
+<div class="callout">
+The reactance is a <strong>lever on voltage that costs no power</strong>. Same 10 W, more volts — so the source infers a bigger resistance.
+</div>
+
+Note:
+This is the slide that answers "but why 24.5 Ω?" physically. Walk it: 1 A in, the
+resistor burns 10 W and that never changes. But the branch voltage is 31.6 V, not
+20 V, because the reactor's volts add in quadrature. Stand at the terminals — 31.6
+V and 10 W means R = V²/2P = 50 Ω. Nothing was dissipated to achieve it. Then the
+punchline: a SHUNT element across 20 Ω can only ever make it look smaller — 17 Ω,
+19 Ω, never past 20 — so only a series element can climb, which is why the order
+is forced. If they are with you, mention that |Z| = 31.6 Ω is exactly sqrt(20x50),
+the same geometric mean as the quarter-wave transformer.
+
+---
+
 ## Where the network Q comes from
 
 Any series branch can be rewritten as a parallel pair. Define the branch's **reactance-to-resistance ratio** $Q = X_s/R_s$ — the same stored-versus-dissipated ratio as the antenna $Q$ in L3:
