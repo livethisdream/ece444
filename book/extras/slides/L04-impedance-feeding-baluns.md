@@ -181,6 +181,30 @@ The geometric mean is the whole design. Ask what happens at twice the frequency
 
 ---
 
+## "Real load only" is not a veto
+
+Cancel the reactance first, and the quarter-wave transformer is back on the table. For $20 - j15\ \Omega$: add $+j15$, then a $\sqrt{(50)(20)} = 31.6\ \Omega$ section.
+
+| | cancel $+\lambda/4$ | L-match |
+| :-- | :-- | :-- |
+| needs | a $31.6\ \Omega$ line | two lumped parts |
+| at 1 GHz | $\approx 4$ cm printed | millimetres |
+| at 2 MHz | $\approx 25$ m of coax | millimetres |
+| VSWR $\le 2$ | $\approx 49\%$ | $\approx 45\%$ |
+
+<div class="callout">
+Bandwidth is <em>not</em> what separates them — the build medium is. Print any $Z_1$ you like on a board; you cannot buy 31.6 $\Omega$ cable.
+</div>
+
+Note:
+Someone always asks this, and it is the right question. Both designs are correct
+and the bandwidths are within a few percent of each other. What decides it is
+whether you can realise the line impedance and whether a quarter wave is a sane
+length at your frequency. Microwave PCB — take the transformer. HF with coax —
+take the L-match, which is why the lab is lumped.
+
+---
+
 ## The L-match
 
 <div class="fig" data-inline-svg="./fig/L04-lmatch.svg" style="max-width:820px; margin:0 auto;"></div>

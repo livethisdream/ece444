@@ -209,6 +209,31 @@ match is **narrowband** — it degrades as you move off the design frequency. An
 it only works directly on a *real* load, which is why we trim the dipole to
 resonance first.
 
+#### A complex load does not rule it out
+
+"Real load only" is a requirement, not a veto — you can always *make* the load
+real first. Cancel the reactance with a series element, then transform what is
+left with a quarter-wave line. For the $20 - j15\ \Omega$ antenna in the next
+section that is $+j15\ \Omega$ in series, leaving $20 + j0\ \Omega$, followed by
+a $Z_1 = \sqrt{(50)(20)} = 31.6\ \Omega$ quarter-wave section.
+
+That is a perfectly good design, and it is not the narrower one: for this load
+both approaches hold VSWR $\le 2$ over roughly 45–50% bandwidth. What actually
+decides between them is **what you are building on**:
+
+| | Cancel + $\lambda/4$ | L-match |
+| :-- | :-- | :-- |
+| Needs | a line of $Z_1 = \sqrt{Z_0 R_L}$ | two lumped reactances |
+| $Z_1 = 31.6\ \Omega$? | trivial on microstrip, unbuyable as cable | not applicable |
+| Size at 1 GHz | $\approx 4$ cm of printed line | two parts, millimetres |
+| Size at 2 MHz | $\approx 25$ m of coax | two parts, millimetres |
+
+So on a microwave PCB, where any $Z_1$ can be printed and lumped parts have
+awkward parasitics, the quarter-wave route is often the better engineering. Down
+at HF, where $\lambda/4$ is measured in tens of metres and only 50 and 75 $\Omega$
+cable exists off the shelf, the L-match wins — which is why the matching lab is
+lumped.
+
 ### The L-match
 
 A quarter-wave transformer needs a real load and a quarter wavelength of line.
