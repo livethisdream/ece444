@@ -366,6 +366,19 @@ stay bare ($\eta_0$, $A_e$, $G_t$, $G_r$).
 
 - **No thin spaces (U+2009) anywhere.** Use `\ ` for spacing in math on MyST
   pages (never `\,` or `\;`).
+- **Stack real quotients; do not use a slash.** Anything a student would
+  *evaluate* — a defining formula or a computed number — gets `\frac{}{}`
+  inline and `\dfrac{}{}` in display math: `\frac{R_\text{big}}{Q}` not
+  `R_\text{big}/Q`, `\frac{50}{1.22}` not `50/1.22`,
+  `\frac{Z_\text{in}-Z_0}{Z_\text{in}+Z_0}` not `(Z_\text{in}-Z_0)/(...)`.
+  Stacked fractions read faster.
+  **Standard notation keeps its slash** — restacking these makes them harder to
+  read, not easier: falloff rates (`1/r`, `1/r^2`, `1/r^3`), the outgoing wave
+  (`e^{-jkr}/r`), wavenumber (`2\pi/\lambda`), wavelength fractions
+  (`\lambda/4`, `\lambda/2`), the sinc (`\sin u/u`), beamwidth constants
+  (`0.886\ \lambda/L`), ratios inside a power (`(\ell/\lambda)^2`), the
+  far-field criterion (`2D^2/\lambda`), small numeric fractions (`1/2`, `1/3`,
+  `\pi/8`, `D/2`), unit compounds (W/m²), and prose separators (Γ/VSWR/dB).
 - **No math in markdown headings.** `## ... $\Gamma$ ...` is converted to
   `\(\Gamma\)` and then never typeset — the heading ships the literal
   delimiters. Write the symbol as a plain character (Γ, Q, λ) instead. Same

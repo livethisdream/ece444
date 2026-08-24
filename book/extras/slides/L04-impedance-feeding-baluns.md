@@ -273,7 +273,7 @@ Impedances add in **series**. Admittances add in **parallel**. An L-network has 
 | **shunt** element | $\text{Re}(Y)$ | $\text{Re}(Z)$ |
 
 <div class="callout">
-Exact duals. So: steer $\text{Re}(Y)$ to $1/50$ with the series part — then the shunt part <strong>cannot undo it</strong>, and only cancels the leftover.
+Exact duals. So: steer $\text{Re}(Y)$ to $\frac{1}{50}$ with the series part — then the shunt part <strong>cannot undo it</strong>, and only cancels the leftover.
 </div>
 
 Note:

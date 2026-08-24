@@ -66,7 +66,7 @@ def main() -> int:
     x1 = np.sqrt(r - r * r)                       # where r-circle meets g = 1
     y_mid = 1 / complex(r, x1)                    # g = 1, b = -1.225
 
-    fig, ax = plt.subplots(figsize=(5.6, 5.6))
+    fig, ax = plt.subplots(figsize=(7.6, 5.0))
     smith_grid(ax)
 
     # move 1: series inductor, clockwise along constant resistance r
@@ -87,23 +87,28 @@ def main() -> int:
                     zorder=5)
 
     start, mid, end = G(complex(r, x0)), G(complex(r, x1)), 0 + 0j
-    for pt, col, lab, off in ((start, RED, "start: the antenna", (0.06, -0.16)),
-                              (mid, ORANGE, "after the series inductor", (0.20, 0.12)),
-                              (end, GREEN, "matched", (0.16, -0.13))):
+    for pt, col, lab, off in ((start, RED, "start: the antenna", (-0.10, -0.22)),
+                              (mid, ORANGE, "after the series inductor", (-0.02, 0.24)),
+                              (end, GREEN, "matched", (0.10, -0.20))):
         ax.plot(pt.real, pt.imag, "o", color=col, ms=9, zorder=6,
                 markeredgecolor="white", markeredgewidth=1.4)
         ax.annotate(lab, xy=(pt.real, pt.imag),
                     xytext=(pt.real + off[0], pt.imag + off[1]),
-                    color=col, fontsize=11.5, fontweight="bold",
-                    ha="left", va="center", zorder=6,
+                    color=col, fontsize=11, fontweight="bold",
+                    ha="center", va="center", zorder=6,
+                    bbox=dict(boxstyle="round,pad=0.18", fc="white", ec="none", alpha=0.92),
                     arrowprops=dict(arrowstyle="-", color=col, lw=1.0))
 
-    ax.text(-0.98, 0.92, "series element walks a\nconstant-resistance circle",
-            color=NAVY, fontsize=11.5, fontweight="bold", ha="left", va="top")
-    ax.text(-0.98, -0.78, "shunt element walks a\nconstant-conductance circle",
-            color=GREEN, fontsize=11.5, fontweight="bold", ha="left", va="top")
+    # legend to the RIGHT of the chart, clear of the circle entirely
+    lx = 1.20
+    ax.plot([lx, lx + 0.13], [0.34, 0.34], color=NAVY, lw=3.0, solid_capstyle="round")
+    ax.text(lx, 0.24, "series element walks a\nconstant-resistance circle",
+            color=NAVY, fontsize=11, fontweight="bold", ha="left", va="top")
+    ax.plot([lx, lx + 0.13], [-0.18, -0.18], color=GREEN, lw=3.0, solid_capstyle="round")
+    ax.text(lx, -0.28, "shunt element walks a\nconstant-conductance circle",
+            color=GREEN, fontsize=11, fontweight="bold", ha="left", va="top")
 
-    ax.set_xlim(-1.30, 1.42); ax.set_ylim(-1.18, 1.18)
+    ax.set_xlim(-1.10, 2.32); ax.set_ylim(-1.14, 1.14)
     ax.set_aspect("equal"); ax.axis("off")
 
     buf = io.StringIO()

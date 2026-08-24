@@ -297,9 +297,9 @@ Y = \frac{1}{20 + j24.5} = \frac{20 - j24.5}{20^{2} + 24.5^{2}}
   = \frac{1}{50} - j\,\frac{1}{40.8}.
 $$
 
-The real part is $1/50$ — precisely the conductance of a $50\ \Omega$ resistor.
+The real part is $\frac{1}{50}$ — precisely the conductance of a $50\ \Omega$ resistor.
 Setting $\vert Z \vert^2 = Z_0 R_L$ is exactly the condition that makes it so.
-What remains is the $-j/40.8$, and a shunt element supplying $+j/40.8$ cancels
+What remains is the $-\frac{j}{40.8}$, and a shunt element supplying $+\frac{j}{40.8}$ cancels
 it dead, leaving a clean $50\ \Omega$.
 
 #### Why we have to switch to the parallel equivalent
@@ -314,7 +314,7 @@ Underneath that bookkeeping is a symmetry that explains why the network works at
 all. Add a *series* reactance to a $20\ \Omega$ branch: the series resistance
 never moves, but the parallel-equivalent resistance climbs.
 
-| series $X$ added | $\text{Re}(Z)$ | parallel equivalent $1/\text{Re}(Y)$ |
+| series $X$ added | $\text{Re}(Z)$ | parallel equivalent $\frac{1}{\text{Re}(Y)}$ |
 | :-- | :-: | :-: |
 | $0$ | $20\ \Omega$ | $20\ \Omega$ |
 | $+j10$ | $20\ \Omega$ | $25\ \Omega$ |
@@ -327,10 +327,10 @@ resistance falls.
 
 | shunt $X$ across | $\text{Re}(Y)$ | series equivalent $\text{Re}(Z)$ |
 | :-- | :-: | :-: |
-| none | $1/20$ | $20\ \Omega$ |
-| $-j100$ | $1/20$ | $19.2\ \Omega$ |
-| $-j50$ | $1/20$ | $17.2\ \Omega$ |
-| $-j20$ | $1/20$ | $10.0\ \Omega$ |
+| none | $\frac{1}{20}$ | $20\ \Omega$ |
+| $-j100$ | $\frac{1}{20}$ | $19.2\ \Omega$ |
+| $-j50$ | $\frac{1}{20}$ | $17.2\ \Omega$ |
+| $-j20$ | $\frac{1}{20}$ | $10.0\ \Omega$ |
 
 The two elements are exact duals:
 
@@ -340,7 +340,7 @@ The two elements are exact duals:
 That hands you the whole design. You are aiming for $50\ \Omega$, and during the
 series move $\text{Re}(Z)$ is frozen at $20\ \Omega$ — a useless thing to aim
 at. The only quantity you can steer is $\text{Re}(Y)$, so you steer it to
-$1/50$. Then the shunt element is the perfect finisher: it *cannot* disturb
+$\frac{1}{50}$. Then the shunt element is the perfect finisher: it *cannot* disturb
 $\text{Re}(Y)$, so the $50\ \Omega$ you just earned is locked in, and its only
 remaining job is to cancel the susceptance.
 
@@ -404,7 +404,7 @@ $$
 $$
 
 So $24.5\ \Omega$ is not a magic number — it is *exactly enough lever* to make
-$1 + Q^2 = 50/20 = 2.5$.
+$1 + Q^2 = \frac{50}{20} = 2.5$.
 
 :::{admonition} Key Point
 :class: key-concept
@@ -438,7 +438,7 @@ $$
 the formula you will meet in any matching reference, with $R_\text{big}$ and
 $R_\text{small}$ the larger and smaller of $R_L$ and $Z_0$. In that language the
 series reactance is $Q R_\text{small}$ and the shunt reactance is
-$R_\text{big}/Q$, and the shunt element goes on the side of the larger
+$\frac{R_\text{big}}{Q}$, and the shunt element goes on the side of the larger
 resistance — toward the source when $R_L < Z_0$, as drawn above.
 
 It is worth having both routes. The geometric mean tells you *what* number to
@@ -499,14 +499,14 @@ $$
 
 *Shunt reactance.* The branch $20 + j24.5\ \Omega$ has a parallel equivalent of
 $50\ \Omega$ alongside $-j40.8\ \Omega$; the shunt element cancels that leftover,
-so it is $+j/40.8$ — a capacitor:
+so it is $+\frac{j}{40.8}$ — a capacitor:
 
 $$
 C = \frac{1}{2\pi f X} = \frac{1}{2\pi (10^9)(40.8)} = 3.9\ \text{pF}
 $$
 
-(Equivalently, in $Q$ language: $Q = 24.5/20 = 1.22$, so the shunt reactance is
-$R_\text{big}/Q = 50/1.22 = 40.8\ \Omega$.)
+(Equivalently, in $Q$ language: $Q = \frac{24.5}{20} = 1.22$, so the shunt reactance is
+$\frac{R_\text{big}}{Q} = \frac{50}{1.22} = 40.8\ \Omega$.)
 
 A $6.3\ \text{nH}$ series inductor and a $3.9\ \text{pF}$ shunt capacitor, both
 lossless, and the $20 - j15\ \Omega$ antenna looks like $50\ \Omega$ — at 1 GHz
@@ -575,12 +575,12 @@ antenna radiating and not your feed line.
 | $Z_\text{in} = R_\text{in} + jX_\text{in}$ | What the radio sees at the terminals | Half-wave dipole: $73 + j42.5\ \Omega$; resonant at $\approx 0.48\lambda$, $\approx 70 + j0\ \Omega$ |
 | $R_\text{rad}$ | Equivalent resistance for power carried away as radiation — the useful part | Short dipole (triangular current): $20\pi^2(\ell/\lambda)^2$, so $0.49\ \Omega$ at $0.05\lambda$ |
 | $R_\text{loss}$ | Real ohmic and dielectric dissipation — becomes heat | A single ohm next to a small antenna is fatal |
-| $\eta_\text{rad}$ | Radiation efficiency, the split between the two resistances | $\eta_\text{rad} = R_\text{rad}/(R_\text{rad} + R_\text{loss})$, $G = \eta_\text{rad} D$ |
-| $\Gamma$ | Reflection coefficient at the terminals | $\Gamma = (Z_\text{in} - Z_0)/(Z_\text{in} + Z_0)$; $\vert\Gamma\vert^2$ of the power bounces back |
+| $\eta_\text{rad}$ | Radiation efficiency, the split between the two resistances | $\eta_\text{rad} = \frac{R_\text{rad}}{R_\text{rad} + R_\text{loss}}$, $G = \eta_\text{rad} D$ |
+| $\Gamma$ | Reflection coefficient at the terminals | $\Gamma = \frac{Z_\text{in} - Z_0}{Z_\text{in} + Z_0}$; $\vert\Gamma\vert^2$ of the power bounces back |
 | VSWR / return loss | Two readings of the same mismatch | VSWR $\le 2$ ↔ return loss $\ge 9.5$ dB ↔ 11% of the power reflected |
 | Mismatch loss | The dB the mismatch actually costs you | $-10\log_{10}(1 - \vert\Gamma\vert^2)$; $\le 0.5$ dB at VSWR $= 2$ |
 | $Z_1 = \sqrt{Z_0 R_L}$ | Quarter-wave transformer, real loads only | $70\ \Omega$ to $50\ \Omega$ needs $\approx 59\ \Omega$ line |
-| L-match $Q$ | Two lumped elements: cancel $X$, then transform $R$ | $Q = \sqrt{R_\text{big}/R_\text{small} - 1}$; $20 - j15\ \Omega$ at 1 GHz → 6.3 nH series, 3.9 pF shunt |
+| L-match $Q$ | Two lumped elements: cancel $X$, then transform $R$ | $Q = \sqrt{\frac{R_\text{big}}{R_\text{small}} - 1}$; $20 - j15\ \Omega$ at 1 GHz → 6.3 nH series, 3.9 pF shunt |
 | Balun | Kills common-mode current on the coax shield | 1:1 choke is the default dipole feed; 4:1 half-wave balun also transforms $300\ \Omega \to 75\ \Omega$ |
 
 ## Practice

@@ -228,16 +228,20 @@ function draw(){
   ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(px,py); ctx.stroke();
   ctx.fillStyle=cssv('--match'); ctx.beginPath(); ctx.arc(px,py,5,0,2*Math.PI); ctx.fill();
 
-  // labels (sans words; math via MathJax)
-  stext(ctx,'rim = total reflection', cx-Rp+6, cy-Rp+26, 10, cssv('--ink3'),'left',false);
-  stext(ctx,'matched', cx-10, cy+13, 10.5, cssv('--ink3'),'right',false);
+  // Legend lives in the left margin, clear of the chart. In-chart text used to
+  // collide with the r-axis ticks (the r = 1 tick sits exactly at the centre)
+  // and with the +/-j0.5 rim label.
+  const lx = 14; let ly = 30;
+  MJ.draw(ctx,'z = \\dfrac{Z}{Z_0}', lx, ly, 13, cssv('--ink3'),'left'); ly += 30;
+  stext(ctx,'rim: total reflection', lx, ly, 10.5, cssv('--ink3'),'left',false); ly += 18;
+  stext(ctx,'centre: matched',      lx, ly, 10.5, cssv('--ink3'),'left',false); ly += 18;
+  stext(ctx,'dashed: VSWR = 2',     lx, ly, 10.5, cssv('--sll'),'left',false);
+
   if(state.qw && state.Z1){
     stext(ctx,'λ/4 line: Z1 = '+state.Z1.toFixed(1)+' Ω, designed for '+state.qwR+' Ω',
       12, h-30, 11.5, cssv('--load'),'left',true);
     stext(ctx,'move the load → match degrades; re-toggle to re-design', 12, h-14, 10, cssv('--ink3'),'left',false);
   }
-  MJ.draw(ctx,'\\mathrm{VSWR}=2', cx, cy+Rp/3+13, 11, cssv('--sll'),'center');
-  MJ.draw(ctx,'z = Z/Z_0', cx-Rp+6, cy-Rp+10, 11, cssv('--ink3'),'left');
 
   updateReadout(d);
 }
