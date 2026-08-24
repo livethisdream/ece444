@@ -269,9 +269,25 @@ Q = \sqrt{\frac{R_\text{big}}{R_\text{small}} - 1},
 $$
 
 where $R_\text{big}$ and $R_\text{small}$ are the larger and smaller of $R_L$
-and $Z_0$. The series reactance is $Q R_\text{small}$ and the shunt reactance
-is $R_\text{big}/Q$. The shunt element goes on the side of the larger
-resistance — toward the source when $R_L < Z_0$, as drawn above.
+and $Z_0$. The shunt reactance is $R_\text{big}/Q$, and it goes on the side of
+the larger resistance — toward the source when $R_L < Z_0$, as drawn above.
+
+**Careful with the series element.** $Q R_\text{small}$ is the **total**
+reactance that has to be present in the series branch when you are finished —
+it is *not* the value of the part you install. The load is already contributing
+its own $X_L$ to that same branch, so the component supplies the difference:
+
+$$
+X_\text{element} = Q R_\text{small} - X_L.
+$$
+
+For a capacitive load $X_L$ is negative, so the inductor has to be *larger*
+than the transformation alone would suggest: it pays off the load's reactance
+first, then delivers $Q R_\text{small}$ on top. This is where the two-step story
+becomes misleading — on the Smith chart there is only ever **one** arc. You do
+not stop at the real axis and start again; you walk the constant-resistance
+circle all the way from the load to the unit-conductance circle in a single
+move, with a single component.
 
 Note what this says: **you do not get to choose $Q$.** The transformation ratio
 sets it. And since $Q$ sets bandwidth exactly as it did in Lesson 3, the further
@@ -293,9 +309,10 @@ $$
 Q = \sqrt{\frac{50}{20} - 1} = \sqrt{1.5} = 1.22
 $$
 
-*Series reactance.* $Q R_\text{small} = 1.22 \times 20 = 24.5\ \Omega$. Adding
-the $15\ \Omega$ of cancellation, the series element is $+j39.5\ \Omega$ total —
-an inductor:
+*Series reactance.* The branch needs $Q R_\text{small} = 1.22 \times 20 =
+24.5\ \Omega$ in total. The load already supplies $X_L = -15\ \Omega$ of that,
+so the component makes up the difference — $24.5 - (-15) = +39.5\ \Omega$, an
+inductor:
 
 $$
 L = \frac{X}{2\pi f} = \frac{39.5}{2\pi (10^9)} = 6.3\ \text{nH}

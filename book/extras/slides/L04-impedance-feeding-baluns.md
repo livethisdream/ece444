@@ -226,6 +226,10 @@ The shunt element cancels $X_p$, so all that is left is $R_p$ — and we need th
 
 $$ Z_0 = R_s\left(1+Q^2\right) \quad\Longrightarrow\quad Q = \sqrt{\frac{Z_0}{R_s} - 1} $$
 
+$Q R_s$ is the **total** reactance the series branch needs — not the part you install. The load already contributes $X_L$, so the element supplies the difference:
+
+$$ X_\text{element} = Q R_s - X_L $$
+
 <div class="callout">
 The transformation ratio <strong>sets</strong> $Q$. You do not get to choose it — and $Q$ is what sets your bandwidth.
 </div>
@@ -247,7 +251,7 @@ Antenna $Z_\text{in} = 20 - j15\ \Omega$, feed line $50\ \Omega$, design frequen
 | :-- | :-- | :-- |
 | Cancel X | series $+j15\ \Omega$ | $20 + j0\ \Omega$ |
 | Network $Q$ | $\sqrt{50/20 - 1}$ | $1.22$ |
-| Series reactance | $1.22 \times 20 = 24.5\ \Omega$, so $+j39.5\ \Omega$ total | $L = 6.3\ \text{nH}$ |
+| Series reactance | branch needs $1.22 \times 20 = 24.5\ \Omega$; load brings $-15$, so install $24.5-(-15)$ | $+j39.5\ \Omega \Rightarrow L = 6.3\ \text{nH}$ |
 | Shunt reactance | $50/1.22 = 40.8\ \Omega$, capacitive | $C = 3.9\ \text{pF}$ |
 
 <div class="callout">
