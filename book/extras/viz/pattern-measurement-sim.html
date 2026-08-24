@@ -26,11 +26,11 @@
                 padding:5px 14px; cursor:pointer; }
   .ctl button:hover { background:var(--navy); }
 
-  .pills { margin-top:9px; display:flex; flex-wrap:wrap; gap:7px; }
-  .pill { border:1px solid var(--edge); border-radius:999px; padding:4px 11px;
-          font-size:13px; background:var(--bg); font-variant-numeric:tabular-nums; }
-  .pill i { font-style:normal; color:var(--ink3); }
-  .pill b { font-weight:600; color:var(--navy); }
+  .pills { margin-top:9px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
+          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
+          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
+  .pill b { font-weight:700; }
   .note { margin-top:9px; font-size:12px; color:var(--ink3); line-height:1.45; }
 </style>
 </head>
@@ -60,9 +60,9 @@
   </div>
 
   <div class="pills">
-    <span class="pill"><i>main lobe =</i> <b id="pPeak">0.0 dB</b></span>
-    <span class="pill"><i>first SLL =</i> <b id="pSll">&minus;13.1 dBc</b></span>
-    <span class="pill"><i>source at</i> <b id="pAng">&minus;90&deg;</b></span>
+    <span class="pill">main lobe = <b id="pPeak">0.0 dB</b></span>
+    <span class="pill">first SLL = <b id="pSll">&minus;13.1 dBc</b></span>
+    <span class="pill">source angle = <b id="pAng">&minus;90&deg;</b></span>
   </div>
 
   <div class="note">N = 8, d = 14 mm, HB100 at 10.525 GHz, ideal element power

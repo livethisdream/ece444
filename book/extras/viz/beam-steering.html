@@ -21,11 +21,11 @@
                 border-radius:4px; background:#fff; color:var(--ink); min-width:0; }
   .ctl output { font-size:13px; font-variant-numeric:tabular-nums; color:var(--navy);
                 font-weight:600; min-width:44px; text-align:right; }
-  .pills { display:flex; flex-wrap:wrap; gap:8px; }
-  .pill { background:var(--bg); border:1px solid var(--edge); border-radius:999px;
-          padding:4px 12px; font-size:13px; color:var(--ink);
-          font-variant-numeric:tabular-nums; white-space:nowrap; }
-  .pill b { font-weight:600; color:var(--navy); }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
+          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
+          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
+  .pill b { font-weight:700; }
   .note { margin:0; font-size:12px; line-height:1.45; color:var(--ink3); }
 </style>
 </head>
@@ -50,9 +50,9 @@
   </div>
 
   <div class="pills" id="pills">
-    <span class="pill"><span class="sym">\(\Delta\phi\)</span> = <b id="pdphi">86.6°</b> per element</span>
+    <span class="pill">\(\Delta\phi\) per element = <b id="pdphi">86.6°</b></span>
     <span class="pill">HPBW = <b id="phpbw">15.2°</b></span>
-    <span class="pill">peak at <b id="ppeak">+30.0°</b></span>
+    <span class="pill">pattern peak = <b id="ppeak">+30.0°</b></span>
   </div>
 
   <p class="note">N = 8, d = 14 mm, 10.3 GHz (d/&lambda; = 0.481). The HPBW pill is the

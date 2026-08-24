@@ -20,11 +20,14 @@
   .ctl input[type=range] { flex:1 1 auto; min-width:90px; accent-color:var(--mid); }
   .ctl .val { font-variant-numeric:tabular-nums; font-size:13.5px; color:var(--ink);
               min-width:56px; text-align:right; }
-  .pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-  .pill { font-size:13px; padding:5px 11px; border-radius:999px; border:1px solid var(--edge2);
-          background:#fff; color:var(--ink); font-variant-numeric:tabular-nums; }
-  .pill b { font-weight:600; color:var(--ink3); font-variant-numeric:normal; }
-  .pill.warn { border-color:#e6c98a; background:#fdf7ea; }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:10px; }
+  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
+          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
+          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
+  .pill b { font-weight:700; }
+  .pill.intf { background:rgba(176,30,36,0.10); color:var(--red);   border-color:rgba(176,30,36,0.28); }
+  .pill.look { background:rgba(63,125,52,0.10); color:var(--grn);   border-color:rgba(63,125,52,0.28); }
+  .pill.warn { background:rgba(138,90,0,0.12);  color:var(--amber); border-color:rgba(138,90,0,0.30); }
   .note { font-size:12.5px; color:var(--ink3); margin-top:9px; line-height:1.45; }
 </style>
 </head>
@@ -46,10 +49,10 @@
   </div>
 
   <div class="pills">
-    <span class="pill" id="p1"><b>suppression</b> &mdash;</span>
-    <span class="pill" id="p2"><b>look direction</b> &mdash;</span>
-    <span class="pill" id="p3"><b>MVDR null</b> &mdash;</span>
-    <span class="pill" id="p4"><b>subarray gain there</b> &mdash;</span>
+    <span class="pill intf" id="p1">suppression = <b>&mdash;</b></span>
+    <span class="pill look" id="p2">look direction = <b>&mdash;</b></span>
+    <span class="pill" id="p3">MVDR null = <b>&mdash;</b></span>
+    <span class="pill" id="p4">subarray gain there = <b>&mdash;</b></span>
   </div>
 
   <p class="note" id="msg"></p>
@@ -248,13 +251,13 @@
     document.getElementById('angv').textContent = (thI > 0 ? '+' : '') + thI.toFixed(0) + '°';
     document.getElementById('pwrv').textContent = pdB.toFixed(0) + ' dB';
     document.getElementById('p1').innerHTML =
-      '<b>suppression</b> ' + supp.toFixed(1) + ' dB';
+      'suppression = <b>' + supp.toFixed(1) + ' dB</b>';
     document.getElementById('p2').innerHTML =
-      '<b>look direction</b> ' + (look >= 0 ? '+' : '') + look.toFixed(1) + ' dB';
+      'look direction = <b>' + (look >= 0 ? '+' : '') + look.toFixed(1) + ' dB</b>';
     document.getElementById('p3').innerHTML =
-      '<b>MVDR null</b> ' + (best > 0 ? '+' : '') + best.toFixed(1) + '°';
+      'MVDR null = <b>' + (best > 0 ? '+' : '') + best.toFixed(1) + '°</b>';
     var p4 = document.getElementById('p4');
-    p4.innerHTML = '<b>subarray gain there</b> ' + sub.toFixed(1) + ' dB';
+    p4.innerHTML = 'subarray gain there = <b>' + sub.toFixed(1) + ' dB</b>';
     p4.className = (sub < -18) ? 'pill warn' : 'pill';
 
     var msg = document.getElementById('msg');

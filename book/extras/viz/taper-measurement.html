@@ -23,13 +23,14 @@
   .ctl input[type=range] { width:170px; max-width:38vw; min-width:0; accent-color:var(--mid); }
   .ctl .val { font-variant-numeric:tabular-nums; min-width:3.4em; color:var(--navy); font-weight:600; }
   .ctl.off { opacity:0.42; }
-  .pills { display:flex; flex-wrap:wrap; gap:8px; }
-  .pill { border:1px solid var(--edge2); background:#fff; border-radius:999px;
-          padding:5px 13px; font-size:14px; font-variant-numeric:tabular-nums;
-          color:var(--ink); white-space:nowrap; }
-  .pill b { font-weight:600; color:var(--navy); }
-  .pill.amber b { color:var(--amber); }
-  .pill.grn b { color:var(--grn); }
+  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
+          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
+          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
+  .pill b { font-weight:700; }
+  .pill.amber { background:rgba(138,90,0,0.10); color:var(--amber); border-color:rgba(138,90,0,0.28); }
+  .pill.grn   { background:rgba(63,125,52,0.10); color:var(--grn);  border-color:rgba(63,125,52,0.28); }
+  .pill.good  { background:rgba(63,125,52,0.12); color:var(--grn);  border-color:rgba(63,125,52,0.30); }
   .note { font-size:12.5px; color:var(--ink3); line-height:1.45; }
 </style>
 </head>
@@ -58,14 +59,14 @@
   </div>
 
   <div class="pills">
-    <span class="pill">HPBW <b id="pHP">—</b></span>
-    <span class="pill amber">Peak drop <b id="pPk">—</b></span>
-    <span class="pill grn">\(\eta_t\) <b id="pEta">—</b></span>
-    <span class="pill">Highest sidelobe <b id="pSLL">—</b></span>
+    <span class="pill grn">HPBW = <b id="pHP">—</b></span>
+    <span class="pill amber">Peak drop = <b id="pPk">—</b></span>
+    <span class="pill">\(\eta_t\) = <b id="pEta">—</b></span>
+    <span class="pill amber" id="pillSLL">Highest sidelobe = <b id="pSLL">—</b></span>
   </div>
 
   <p class="note">Sweep grid 2.8125° (the ADAR1000 phase LSB), noise floor 23 dB below the
-  uniform-taper peak. The thin grey trace is the frozen uniform reference.</p>
+  uniform-taper peak. The thin gray trace is the frozen uniform reference.</p>
 
 </div>
 
@@ -350,6 +351,9 @@
       neg((eta > 0.999 ? "0.0" : (10 * Math.log10(eta)).toFixed(1))) + " dB";
     document.getElementById("pSLL").textContent =
       sl.buried ? "below floor" : neg(sl.rel.toFixed(1)) + " dBc";
+    const pillSLL = document.getElementById("pillSLL");
+    pillSLL.classList.toggle("good", !!sl.buried);
+    pillSLL.classList.toggle("amber", !sl.buried);
     edgeCtl.classList.toggle("off", selEl.value !== "custom");
     edgeEl.disabled = selEl.value !== "custom";
     document.getElementById("edgeVal").textContent = edgeEl.value + "%";

@@ -112,7 +112,7 @@ const UNIFORM=TAPERS.uniform.a;
 
 /* ------------------------------ the pattern -------------------------------
    Broadside sum over the eight elements at n = -3.5 ... +3.5 element spacings,
-   normalised to the coherent peak sum(a). No small-angle shortcuts.          */
+   normalized to the coherent peak sum(a). No small-angle shortcuts.          */
 const M=7201, degOf=i=>-90+i*180/(M-1);
 function sweep(a){
   const s=a.reduce((p,q)=>p+q,0), db=new Float64Array(M);
