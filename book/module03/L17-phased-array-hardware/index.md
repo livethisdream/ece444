@@ -166,7 +166,7 @@ Notice that only one block changes its setting when the source frequency
 changes: the LO. That is the point of a fixed-IF plan.
 
 <iframe src="../../viz/phaser-signal-chain.html"
-        width="100%" height="478"
+        width="100%" height="508"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Interactive block diagram of the PHASER receive chain with a tunable HB100 source">

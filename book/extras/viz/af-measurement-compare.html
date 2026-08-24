@@ -29,14 +29,28 @@
   .controls label.tog input { width:15px; height:15px; accent-color:#0067b9; cursor:pointer; }
   .controls .note { color:var(--ink3); font-size:11.5px; font-weight:400;
                     text-transform:none; letter-spacing:0; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.grn { background:rgba(63,125,52,0.12); color:var(--grn);   border-color:rgba(63,125,52,0.30); }
-  .pill.red { background:rgba(176,30,36,0.10); color:var(--red);   border-color:rgba(176,30,36,0.28); }
-  .pill.amb { background:rgba(138,90,0,0.12); color:var(--amber); border-color:rgba(138,90,0,0.30); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvas above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.grn { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.grn .v { color:var(--grn); }
+  .ro.red { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.red .v { color:var(--red); }
+  .ro.amb { background:rgba(138,90,0,0.12); border-color:rgba(138,90,0,0.30); }
+  .ro.amb .v { color:var(--amber); }
   .cap { font-size:11.5px; color:var(--ink3); line-height:1.5; margin:0; }
 </style>
 </head>
@@ -55,11 +69,11 @@
     <span class="note">2.8125&deg; sweep grid, &minus;23 dBc floor, receiver noise.</span>
   </div>
 
-  <div class="pills">
-    <span class="pill">Peak = <b id="r-peak">&mdash;</b></span>
-    <span class="pill grn">HPBW = <b id="r-hpbw">&mdash;</b></span>
-    <span class="pill red">FNBW = <b id="r-fnbw">&mdash;</b></span>
-    <span class="pill amb">First SLL = <b id="r-sll">&mdash;</b></span>
+  <div class="readouts">
+    <div class="ro"><span class="k">peak</span><span class="v" id="r-peak">&mdash;</span></div>
+    <div class="ro grn"><span class="k">HPBW</span><span class="v" id="r-hpbw">&mdash;</span></div>
+    <div class="ro red"><span class="k">FNBW</span><span class="v" id="r-fnbw">&mdash;</span></div>
+    <div class="ro amb"><span class="k">first SLL</span><span class="v" id="r-sll">&mdash;</span></div>
   </div>
 
   <p class="cap">Every number is read off the drawn trace, the way it is read off the
@@ -100,7 +114,7 @@ function afComplex(thetaDeg, w) {
   return [re / NEL, im / NEL];
 }
 
-// ---------- seeded noise, so the pills read the same on every machine ----------
+// ---------- seeded noise, so the readouts read the same on every machine ----------
 function LCG(seed) {
   let s = seed >>> 0;
   return function () { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return (s + 0.5) / 4294967296; };
@@ -346,7 +360,7 @@ function drawAll() {
   stext(state.n + ' of 8 active', bx + NEL * (bw + gap) + 6, by + bw / 2,
         narrow ? 9.5 : 10.5, '#5b6573', 'left', true);
 
-  // --- pills ---
+  // --- readouts ---
   const f1 = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1);
   document.getElementById('r-peak').textContent = f1(m.pk) + ' dB';
   document.getElementById('r-hpbw').textContent = m.hpbw === null ? '—' : m.hpbw.toFixed(1) + '°';

@@ -24,12 +24,24 @@
                 border-radius:4px; background:#fff; color:var(--ink); flex:1 1 120px; min-width:0; }
   .val { font-variant-numeric:tabular-nums; font-size:13.5px; color:var(--navy);
          font-weight:600; min-width:58px; text-align:right; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.dgr { background:rgba(176,30,36,0.10); color:var(--red); border-color:rgba(176,30,36,0.28); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the cards above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.dgr { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.dgr .v { color:var(--red); }
   .note { font-size:12.5px; color:var(--ink3); margin:9px 2px 0; line-height:1.45; }
 </style>
 </head>
@@ -54,10 +66,10 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill dgr">Null depth = <b id="pDepth">&mdash;</b></span>
-    <span class="pill">Main-lobe loss = <b id="pLoss">&mdash;</b></span>
-    <span class="pill">\(\lvert r_\text{n}\rvert\) = <b id="pR">&mdash;</b></span>
+  <div class="readouts">
+    <div class="ro dgr"><span class="k">null depth</span><span class="v" id="pDepth">&mdash;</span></div>
+    <div class="ro"><span class="k">main-lobe loss</span><span class="v" id="pLoss">&mdash;</span></div>
+    <div class="ro"><span class="k">\(\lvert r_\text{n}\rvert\)</span><span class="v" id="pR">&mdash;</span></div>
   </div>
 
   <p class="note" id="note"></p>
@@ -167,7 +179,7 @@
     angv.textContent = (th1 > 0 ? '+' : '−') + Math.abs(th1).toFixed(1) + '°';
     pDepth.textContent = S.depth > 60 ? '>60 dB' : S.depth.toFixed(1) + ' dB';
     pLoss.textContent = S.loss.toFixed(1) + ' dB';
-    pR.textContent = cabs(S.r).toFixed(3) + '  (' + (20 * Math.log10(cabs(S.r))).toFixed(1) + ' dB)';
+    pR.textContent = cabs(S.r).toFixed(3) + ' (' + (20 * Math.log10(cabs(S.r))).toFixed(1) + ' dB)';
     note.textContent = phaser
       ? 'PHASER mode rounds every phase to the ADAR1000’s 2.8125° step and every '
         + 'gain to 1 %, then adds the beam sweep’s noise floor 23 dB below the uniform peak. '

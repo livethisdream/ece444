@@ -252,7 +252,7 @@ broadside and the chain curls up; when it closes on itself, you are looking at a
 null.
 
 <iframe src="../../viz/radiation-integral.html"
-        width="100%" height="640"
+        width="100%" height="653"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="The radiation integral as a coherent phasor sum">

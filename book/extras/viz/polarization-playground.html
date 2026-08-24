@@ -104,28 +104,22 @@
     min-width: 44px;
     text-align: right;
   }
-  .readout {
-    margin-top: 14px;
-    padding: 10px 12px;
-    background: var(--bg);
-    border: 1px solid var(--edge);
-    border-radius: 6px;
-  }
-  .readout .type {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--navy);
-    margin-bottom: 4px;
-  }
-  .readout .stats {
-    font-size: 12px;
-    color: var(--ink3);
-    font-variant-numeric: tabular-nums;
-  }
-  .readout .stats span {
-    color: var(--navy);
-    font-weight: 600;
-  }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the panel above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr));
+              margin-top:14px; }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.tip { background:rgba(29,122,77,0.10); border-color:rgba(29,122,77,0.30); }
+  .ro.tip .v { color:var(--tip); }
   .legend {
     display: flex;
     gap: 12px;
@@ -181,9 +175,10 @@
       <input id="d" type="range" min="-180" max="180" step="1" value="0">
       <span class="val" id="d-v">0°</span>
     </div>
-    <div class="readout">
-      <div class="type" id="type-out">Linear (x)</div>
-      <div class="stats" id="stats-out">AR = ∞ dB · τ = 0°</div>
+    <div class="readouts">
+      <div class="ro tip"><span class="k">state</span><span class="v" id="type-out">Linear</span></div>
+      <div class="ro"><span class="k">axial ratio</span><span class="v" id="ar-out">&#8734; dB</span></div>
+      <div class="ro"><span class="k">tilt angle</span><span class="v" id="tilt-out">0&#176;</span></div>
     </div>
   </div>
 </div>
@@ -200,7 +195,8 @@
   const eyV = document.getElementById('ey-v');
   const dV  = document.getElementById('d-v');
   const typeOut = document.getElementById('type-out');
-  const statsOut = document.getElementById('stats-out');
+  const arOut   = document.getElementById('ar-out');
+  const tiltOut = document.getElementById('tilt-out');
   const presetsWrap = document.getElementById('presets');
 
   const PRESETS = {
@@ -303,13 +299,12 @@
 
     const cls = classify(Ex, Ey, deltaDeg);
     typeOut.textContent = cls.label;
-    const arStr = cls.AR_dB === Infinity
-      ? 'AR = ∞ dB'
-      : `AR = ${cls.AR_dB.toFixed(1)} dB`;
-    const tiltStr = cls.label === 'Linear'
-      ? `τ = ${cls.tiltDeg.toFixed(0)}°`
-      : `τ = ${cls.tiltDeg.toFixed(0)}° (major axis)`;
-    statsOut.textContent = `${arStr} · ${tiltStr}`;
+    // The cells clip overflow, so the units sit in the value and the
+    // "major axis" qualifier is carried by the state cell beside it.
+    arOut.textContent = cls.AR_dB === Infinity
+      ? '∞ dB'
+      : `${cls.AR_dB.toFixed(1)} dB`;
+    tiltOut.textContent = `${cls.tiltDeg.toFixed(0)}°`;
 
     // Layout: top-half = 2D trace, bottom-half = two time waveforms.
     const W = cvs.width, H = cvs.height;

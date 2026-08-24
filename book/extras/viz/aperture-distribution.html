@@ -22,13 +22,26 @@
   .ctl input[type=range]{ flex:1 1 auto; min-width:56px; accent-color:var(--mid); }
   .ctl select { flex:1 1 auto; min-width:0; font:600 12.5px Inter,system-ui,sans-serif; color:var(--navy);
                 padding:5px 6px; background:#fff; border:1px solid var(--edge2); border-radius:6px; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.hp { background:rgba(63,125,52,0.10); color:var(--grn); border-color:rgba(63,125,52,0.30); }
-  .pill.sl { background:rgba(138,90,0,0.10); color:var(--amber); border-color:rgba(138,90,0,0.30); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.hp { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.hp .v { color:var(--grn); }
+  .ro.sl { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.sl .v { color:var(--amber); }
   .hint { margin:0; text-align:center; font-size:11.5px; color:var(--ink3); line-height:1.45; }
 </style>
 </head>
@@ -54,11 +67,11 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill hp">HPBW = <b id="r-hp">&#8212;</b></span>
-    <span class="pill">half-power constant = <b id="r-k">&#8212;</b></span>
-    <span class="pill sl">first sidelobe = <b id="r-sl">&#8212;</b></span>
-    <span class="pill">aperture efficiency = <b id="r-eta">&#8212;</b></span>
+  <div class="readouts">
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="r-hp">&#8212;</span></div>
+    <div class="ro"><span class="k">HPBW constant</span><span class="v" id="r-k">&#8212;</span></div>
+    <div class="ro sl"><span class="k">first sidelobe</span><span class="v" id="r-sl">&#8212;</span></div>
+    <div class="ro"><span class="k">aperture eff.</span><span class="v" id="r-eta">&#8212;</span></div>
   </div>
 
   <p class="hint" id="hint">&#8212;</p>
@@ -305,7 +318,7 @@ function drawAll() {
   const d = shapeData(state.kind);
   if (!r) return;
   el('r-hp').textContent = r.hpbw.toFixed(1) + '°';
-  el('r-k').textContent = (2 * d.uHalf).toFixed(3);
+  el('r-k').innerHTML = (2 * d.uHalf).toFixed(3) + ' &#955;/L';
   el('r-sl').textContent = d.slDb === null ? 'none' : d.slDb.toFixed(1) + ' dB';
   el('r-eta').textContent = d.eta.toFixed(3);
   const hint = el('hint');

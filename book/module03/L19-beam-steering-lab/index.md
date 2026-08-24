@@ -81,7 +81,7 @@ described by only a handful of samples, and the beam widens as you steer away fr
 broadside while the sidelobe structure stretches with it.
 
 <iframe src="../../viz/steering-predictor.html"
-        width="100%" height="568"
+        width="100%" height="598"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Predicted beam-sweep trace and wrapped element phases for the PHASER array">

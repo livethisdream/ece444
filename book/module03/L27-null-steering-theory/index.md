@@ -180,7 +180,7 @@ The gains are symmetric and the phases are antisymmetric, which is what a null p
 The widget below applies the weight-subtraction rule to the course array and draws the result. Drag the null angle and watch three things: where the notch lands, how the eight element gains and phases redistribute, and how the main-lobe loss pill tracks $\vert r_\text{n}\vert$ rather than the null angle itself. Then switch the weights from Ideal to PHASER, which rounds every phase to the ADAR1000's $2.8125^\circ$ step and every gain to 1 %, and adds the beam sweep's noise floor 23 dB below the uniform peak — the notch stops being infinite and settles at what the hardware can actually show you.
 
 <iframe src="../../viz/null-steering.html"
-        width="100%" height="702"
+        width="100%" height="727"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Null steering on the 8-element PHASER array: pattern, element weights, and null depth">

@@ -171,7 +171,7 @@ check the bars against the worked table above, then compare the $-3$ dB width
 printed on the pattern with the HPBW pill as you scan out toward $60^\circ$.
 
 <iframe src="../../viz/beam-steering.html"
-        width="100%" height="698"
+        width="100%" height="727"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Steered pattern and per-element phase ramp for the 8-element course array">

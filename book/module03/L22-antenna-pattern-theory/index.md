@@ -185,7 +185,7 @@ side of broadside dropping below their mirror images on the near side. The third
 setting is a real patch, steeper by about a decibel at wide scan.
 
 <iframe src="../../viz/element-pattern-multiplication.html"
-        width="100%" height="587"
+        width="100%" height="615"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Element factor times array factor for the eight-element course array">

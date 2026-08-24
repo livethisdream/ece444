@@ -11,22 +11,47 @@
           --rad:#0067b9; --ind:#3f7d34; --elec:#8a5a00; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:12px; padding:16px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:flex; align-items:center; gap:16px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 320px; }
   .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
   .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; }
   .ctl input[type=range]{ flex:1 1 auto; min-width:120px; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid rgba(0,0,0,0.12); }
-  .pill b { font-weight:700; }
-  .pill.rad  { background:rgba(0,103,185,0.12);  color:#0067b9; border-color:rgba(0,103,185,0.30); }
-  .pill.ind  { background:rgba(63,125,52,0.12);  color:#3f7d34; border-color:rgba(63,125,52,0.30); }
-  .pill.elec { background:rgba(138,90,0,0.12);   color:#8a5a00; border-color:rgba(138,90,0,0.30); }
-  .pill.dom  { background:#eef4fa; color:var(--navy); border-color:var(--edge2); }
+  /* Below 430px the controls bar cannot fit a label, a slider and a value on one
+     line: .ctl's flex basis and the reserved .val column are both wider than the
+     content box, so the bar pushes the document past the viewport and the whole
+     widget scrolls sideways on a phone. Stack each control instead -- label and
+     value share the first line, the input takes the second -- and let every part
+     shrink. Nothing here applies above 430px. */
+  @media (max-width:430px) {
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+  }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.rad  { background:rgba(0,103,185,0.12); border-color:rgba(0,103,185,0.30); }
+  .ro.rad  .v { color:#0067b9; }
+  .ro.ind  { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.ind  .v { color:#3f7d34; }
+  .ro.elec { background:rgba(138,90,0,0.12);  border-color:rgba(138,90,0,0.30); }
+  .ro.elec .v { color:#8a5a00; }
 </style>
 </head>
 <body>
@@ -41,11 +66,11 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill rad">radiation \(\;1/r\) = <b id="p-rad">—</b></span>
-    <span class="pill ind">induction \(\;1/r^2\) = <b id="p-ind">—</b></span>
-    <span class="pill elec">electrostatic \(\;1/r^3\) = <b id="p-elec">—</b></span>
-    <span class="pill dom">dominant: <b id="p-dom">—</b></span>
+  <div class="readouts">
+    <div class="ro rad"><span class="k">radiation \(1/r\)</span><span class="v" id="p-rad">—</span></div>
+    <div class="ro ind"><span class="k">induction \(1/r^2\)</span><span class="v" id="p-ind">—</span></div>
+    <div class="ro elec"><span class="k">electrostatic \(1/r^3\)</span><span class="v" id="p-elec">—</span></div>
+    <div class="ro"><span class="k">dominant</span><span class="v" id="p-dom">—</span></div>
   </div>
 </div>
 
@@ -74,18 +99,38 @@ function fmtMag(v){
   return v.toExponential(1);
 }
 
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=360;
+let SCL=1;
 function fit(){
   const dpr=window.devicePixelRatio||1;
-  const w=Math.max(360, cv.getBoundingClientRect().width);
+  const wCss=cvWidth(cv);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
   const h=Math.max(260, Math.min(w*0.62, 360));
-  cv.width=w*dpr; cv.height=h*dpr; cv.style.height=h+'px';
-  ctx.setTransform(dpr,0,0,dpr,0,0); draw();
+  setSize(cv,wCss,h*SCL,dpr);
+  ctx.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); draw();
 }
 window.addEventListener('resize', fit);
 
 function draw(){
   const dpr=window.devicePixelRatio||1;
-  const w=cv.width/dpr, h=cv.height/dpr;
+  const w=cv.width/(dpr*SCL), h=cv.height/(dpr*SCL);
   ctx.clearRect(0,0,w,h);
 
   const mL=54, mR=118, mT=18, mB=52;

@@ -62,7 +62,7 @@ sidelobes sink into the grass. The $\eta_t$ pill is the directivity loss, so
 compare it against the peak drop pill each time — the two never agree.
 
 <iframe src="../../viz/taper-measurement.html"
-        width="100%" height="664"
+        width="100%" height="690"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Measured beam sweep for the PHASER taper presets, with element gains, HPBW, peak drop and taper efficiency">

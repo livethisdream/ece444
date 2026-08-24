@@ -20,14 +20,28 @@
   .ctl input[type=range]{ flex:1 1 auto; min-width:80px; width:0; }
   .ctl select { flex:1 1 auto; min-width:0; max-width:100%; font:inherit; font-size:13px; color:var(--navy);
                 background:#fff; border:1px solid var(--edge2); border-radius:5px; padding:3px 6px; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.warn { background:rgba(138,90,0,0.12); color:var(--amber); border-color:rgba(138,90,0,0.30); }
-  .pill.good { background:rgba(63,125,52,0.12); color:var(--grn);   border-color:rgba(63,125,52,0.30); }
-  .pill.bad  { background:rgba(176,30,36,0.10); color:var(--red);   border-color:rgba(176,30,36,0.28); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.warn { background:rgba(138,90,0,0.12); border-color:rgba(138,90,0,0.30); }
+  .ro.warn .v { color:var(--amber); }
+  .ro.good { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.good .v { color:var(--grn); }
+  .ro.bad  { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.bad  .v { color:var(--red); }
 </style>
 </head>
 <body>
@@ -68,7 +82,7 @@
     </div>
   </div>
 
-  <div class="pills" id="pills"></div>
+  <div class="readouts" id="readouts"></div>
 </div>
 
 <script>
@@ -421,39 +435,41 @@ function drawPhases(m,x,w,h){
   stext(cA, sgn(worst)+'°', lx, mT+70, 13, cssv('--amber'),'left',true);
 }
 
-/* ------------------------------------------------------------------- pills */
-function pills(m,x){
+/* --------------------------------------------------------------- readouts */
+/* One instrument-grid cell per row: [variant, short key, value with its unit].
+   The cells are rebuilt per mode, exactly as the row of readouts used to be. */
+function readouts(m,x){
   const rows=[];
   if(state.mode==='grating'){
-    rows.push(['','spacing = <b>'+x.dlam.toFixed(3)+'</b> wavelengths']);
-    rows.push([x.pred.length?'warn':'good', x.pred.length
-      ? 'predicted lobes at <b>'+x.pred.map(v=>sgn(v)+'°').join(', ')+'</b>'
-      : '<b>no grating lobe predicted</b>']);
-    rows.push([x.meas.length?'warn':'good', x.meas.length
-      ? 'measured lobes at <b>'+x.meas.map(v=>sgn(v)+'°').join(', ')+'</b>'
-      : '<b>none found in the pattern</b>']);
-    rows.push([x.edge>-6?'bad':'', 'level at the horizon = <b>'+neg(x.edge)+' dB</b>']);
+    rows.push(['','spacing', x.dlam.toFixed(3)+' λ']);
+    rows.push([x.pred.length?'warn':'good', 'predicted lobes', x.pred.length
+      ? x.pred.map(v=>sgn(v)+'°').join(', ')
+      : 'none predicted']);
+    rows.push([x.meas.length?'warn':'good', 'measured lobes', x.meas.length
+      ? x.meas.map(v=>sgn(v)+'°').join(', ')
+      : 'none found']);
+    rows.push([x.edge>-6?'bad':'', 'level at horizon', neg(x.edge)+' dB']);
   } else if(state.mode==='squint'){
-    rows.push(['','signal at <b>'+(m.f/1e9).toFixed(3)+' GHz</b>']);
-    rows.push([Math.abs(x.pred)>1?'bad':'good',
-      'predicted squint = <b>'+sgn(x.pred)+'°</b>']);
-    rows.push(['','measured peak = <b>'+x.pk.x.toFixed(1)+'°</b>']);
-    rows.push([x.lossAim<-0.5?'warn':'', 'gain lost at 45° = <b>'+neg(x.lossAim)+' dB</b>']);
+    rows.push(['','signal', (m.f/1e9).toFixed(3)+' GHz']);
+    rows.push([Math.abs(x.pred)>1?'bad':'good', 'predicted squint', sgn(x.pred)+'°']);
+    rows.push(['','measured peak', x.pk.x.toFixed(1)+'°']);
+    rows.push([x.lossAim<-0.5?'warn':'', 'gain lost at 45°', neg(x.lossAim)+' dB']);
   } else {
-    rows.push(['','LSB = <b>'+x.lsb.toFixed(4).replace(/0+$/,'').replace(/\.$/,'')+'°</b>']);
-    rows.push(['','pointing step at broadside = <b>'+x.step.toFixed(2)+'°</b>']);
-    rows.push(['warn','rule of thumb −6B = <b>−'+(6*state.bits)+' dB</b>']);
-    rows.push([x.worst&&x.worst.y>-11?'bad':'',
-      'worst sidelobe = <b>'+neg(x.worst?x.worst.y:FLOOR)+' dB</b>']);
+    rows.push(['','LSB', x.lsb.toFixed(4).replace(/0+$/,'').replace(/\.$/,'')+'°']);
+    rows.push(['','step at broadside', x.step.toFixed(2)+'°']);
+    rows.push(['warn','rule of thumb −6B', '−'+(6*state.bits)+' dB']);
+    rows.push([x.worst&&x.worst.y>-11?'bad':'', 'worst sidelobe',
+      neg(x.worst?x.worst.y:FLOOR)+' dB']);
   }
-  document.getElementById('pills').innerHTML =
-    rows.map(r=>'<span class="pill'+(r[0]?' '+r[0]:'')+'">'+r[1]+'</span>').join('');
+  document.getElementById('readouts').innerHTML =
+    rows.map(r=>'<div class="ro'+(r[0]?' '+r[0]:'')+'"><span class="k">'+r[1]
+                +'</span><span class="v">'+r[2]+'</span></div>').join('');
 }
 
 /* ------------------------------------------------------------------- glue */
 function drawAll(){
   const m=model(), x=metrics(m);
-  drawPattern(m,x); drawAux(m,x); pills(m,x);
+  drawPattern(m,x); drawAux(m,x); readouts(m,x);
 }
 
 function fit(){

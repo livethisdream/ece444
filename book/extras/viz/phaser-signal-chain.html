@@ -24,13 +24,26 @@
   .ctl .val { font-variant-numeric:tabular-nums; font-weight:600; color:var(--navy);
               min-width:80px; text-align:right; }
 
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin:10px 0 0; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.lo { background:rgba(138,90,0,0.10); color:var(--amber); border-color:rgba(138,90,0,0.28); }
-  .pill.if { background:rgba(63,125,52,0.10); color:var(--grn);   border-color:rgba(63,125,52,0.28); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the stage above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); margin:10px 0 0; }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.lo { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.28); }
+  .ro.lo .v { color:var(--amber); }
+  .ro.if { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.28); }
+  .ro.if .v { color:var(--grn); }
 
   .panel { margin-top:11px; border:1px solid var(--edge); border-left:4px solid var(--navy);
            border-radius:6px; background:var(--bg); padding:10px 13px; min-height:106px; }
@@ -52,10 +65,10 @@
     </label>
   </div>
 
-  <div class="pills">
-    <span class="pill">RF = <b id="pRF">10.525 GHz</b></span>
-    <span class="pill lo">LO = <b id="pLO">12.725 GHz</b></span>
-    <span class="pill if">IF = <b id="pIF">2.200 GHz</b></span>
+  <div class="readouts">
+    <div class="ro"><span class="k">RF</span><span class="v" id="pRF">10.525 GHz</span></div>
+    <div class="ro lo"><span class="k">LO</span><span class="v" id="pLO">12.725 GHz</span></div>
+    <div class="ro if"><span class="k">IF</span><span class="v" id="pIF">2.200 GHz</span></div>
   </div>
 
   <div class="panel" id="panel" role="status" aria-live="polite">

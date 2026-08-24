@@ -11,20 +11,49 @@
           --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
-  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 250px; }
   .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
   .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:56px; }
   .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid rgba(0,0,0,0.12); background:#eef4fa; color:var(--navy); border-color:var(--edge2); }
-  .pill b { font-weight:700; }
-  .pill.hot { background:rgba(176,30,36,0.10); color:var(--red); border-color:rgba(176,30,36,0.30); }
-  .pill.ok  { background:rgba(63,125,52,0.12); color:var(--grn); border-color:rgba(63,125,52,0.30); }
+  /* Below 430px the controls bar cannot fit a label, a slider and a value on one
+     line: .ctl's flex basis and the reserved .val column are both wider than the
+     content box, so the bar pushes the document past the viewport and the whole
+     widget scrolls sideways on a phone. Stack each control instead -- label and
+     value share the first line, the input takes the second -- and let every part
+     shrink. Nothing here applies above 430px. */
+  @media (max-width:430px) {
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .btns { flex:1 1 100%; justify-content:stretch; }
+    .btns button { flex:1 1 0; }
+  }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  /* The state line is a sentence, not a quantity, so it stays a caption under
+     the instrument row -- only its colour carries the good/bad signal. */
+  .state { margin:0; text-align:center; font-size:12px; font-weight:700;
+           letter-spacing:0.01em; color:var(--ink3); }
+  .state.hot { color:var(--red); }
+  .state.ok  { color:var(--grn); }
   .btns { display:flex; gap:6px; }
   button { font:inherit; font-size:12px; font-weight:600; padding:4px 10px; border-radius:5px;
            border:1px solid var(--edge2); background:#fff; color:var(--navy); cursor:pointer; }
@@ -58,11 +87,11 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill">total phase spread \(kL\cos\theta\) = <b id="p-spread">&#8212;</b></span>
-    <span class="pill" id="pill-mag">&#124;N&#124; / N<sub>max</sub> = <b id="p-mag">&#8212;</b></span>
-    <span class="pill" id="p-state-pill">&#8212;</span>
+  <div class="readouts">
+    <div class="ro"><span class="k">phase spread \(kL\cos\theta\)</span><span class="v" id="p-spread">&#8212;</span></div>
+    <div class="ro" id="ro-mag"><span class="k">\(\lvert N\rvert / N_{\max}\)</span><span class="v" id="p-mag">&#8212;</span></div>
   </div>
+  <p class="state" id="p-state">&#8212;</p>
 </div>
 
 <script>
@@ -102,7 +131,7 @@ function sumAt(th){                      // returns {re, im, mag} with mag in [0
 
 /* ---------------------------- top canvas ---------------------------- */
 function drawTop(){
-  const dpr=window.devicePixelRatio||1, w=cvT.width/dpr, h=cvT.height/dpr;
+  const dpr=window.devicePixelRatio||1, w=cvT.width/(dpr*SCL), h=cvT.height/(dpr*SCL);
   ctxT.clearRect(0,0,w,h);
   const split=Math.round(w*0.52);
   ctxT.strokeStyle=cssv('--edge'); ctxT.lineWidth=1;
@@ -200,7 +229,7 @@ function drawPhasors(x0,y0,w,h){
 
 /* ---------------------------- pattern canvas ---------------------------- */
 function drawPat(){
-  const dpr=window.devicePixelRatio||1, w=cvP.width/dpr, h=cvP.height/dpr;
+  const dpr=window.devicePixelRatio||1, w=cvP.width/(dpr*SCL), h=cvP.height/(dpr*SCL);
   ctxP.clearRect(0,0,w,h);
   const ctx=ctxP, mL=52, mR=18, mT=20, mB=34;
   const pw=w-mL-mR, ph=h-mT-mB;
@@ -245,26 +274,45 @@ function readouts(){
   const s=sumAt(state.th), spread=2*Math.PI*state.L*Math.cos(state.th);
   document.getElementById('p-spread').textContent=(spread*180/Math.PI).toFixed(0)+'°';
   document.getElementById('p-mag').textContent=s.mag.toFixed(3);
-  const pill=document.getElementById('p-state-pill');
-  pill.className='pill';
+  const st=document.getElementById('p-state');
+  st.className='state';
   if(state.L/state.N >= 1){
     // the discrete sum has stopped standing in for the integral — say so
-    pill.textContent='spacing ≥ λ — add elements'; pill.classList.add('hot');
+    st.textContent='spacing ≥ λ — add elements'; st.classList.add('hot');
   }
-  else if(s.mag>0.98){ pill.textContent='every element in phase — peak'; pill.classList.add('ok'); }
-  else if(s.mag<0.02){ pill.textContent='contributions cancel — null'; pill.classList.add('hot'); }
-  else { pill.textContent='partial cancellation'; }
+  else if(s.mag>0.98){ st.textContent='every element in phase — peak'; st.classList.add('ok'); }
+  else if(s.mag<0.02){ st.textContent='contributions cancel — null'; st.classList.add('hot'); }
+  else { st.textContent='partial cancellation'; }
 }
 
 function drawAll(){ drawTop(); drawPat(); readouts(); }
 
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=380;
+let SCL=1;
 function fit(){
   const dpr=window.devicePixelRatio||1;
-  const w=Math.max(380, cvT.getBoundingClientRect().width);
+  const wCss=cvWidth(cvT);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
   const h1=Math.max(230, Math.min(w*0.36, 290)), h2=Math.max(120, Math.min(w*0.20, 160));
-  cvT.width=w*dpr; cvT.height=h1*dpr; cvT.style.height=h1+'px';
-  cvP.width=w*dpr; cvP.height=h2*dpr; cvP.style.height=h2+'px';
-  ctxT.setTransform(dpr,0,0,dpr,0,0); ctxP.setTransform(dpr,0,0,dpr,0,0);
+  setSize(cvT,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
+  ctxT.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();
 }
 window.addEventListener('resize', fit);

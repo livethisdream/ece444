@@ -32,15 +32,30 @@
   .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
   .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
   .tgl input:checked ~ .t { color:var(--on,var(--navy)); }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.hp { background:rgba(29,122,77,0.12);  color:var(--hpbw); border-color:rgba(29,122,77,0.30); }
-  .pill.nl { background:rgba(176,30,36,0.10);  color:var(--null); border-color:rgba(176,30,36,0.28); }
-  .pill.sl { background:rgba(138,90,0,0.12);   color:var(--sll);  border-color:rgba(138,90,0,0.30); }
-  .pill.gl { background:rgba(179,33,58,0.10);  color:var(--gl);   border-color:rgba(179,33,58,0.28); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvas above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.hp { background:rgba(29,122,77,0.12);  border-color:rgba(29,122,77,0.30); }
+  .ro.hp .v { color:var(--hpbw); }
+  .ro.nl { background:rgba(176,30,36,0.10);  border-color:rgba(176,30,36,0.28); }
+  .ro.nl .v { color:var(--null); }
+  .ro.sl { background:rgba(138,90,0,0.12);   border-color:rgba(138,90,0,0.30); }
+  .ro.sl .v { color:var(--sll); }
+  .ro.gl { background:rgba(179,33,58,0.10);  border-color:rgba(179,33,58,0.28); }
+  .ro.gl .v { color:var(--gl); }
 </style>
 </head>
 <body>
@@ -61,11 +76,11 @@
     <label class="tgl" style="--on:var(--tot)"><input type="checkbox" id="ef"><span class="sw"></span><span class="t">Element factor</span></label>
   </div>
 
-  <div class="pills">
-    <span class="pill hp">HPBW = <b id="r-hpbw">&mdash;</b></span>
-    <span class="pill nl">First null = <b id="r-null">&mdash;</b></span>
-    <span class="pill sl">First sidelobe = <b id="r-sll">&mdash;</b></span>
-    <span class="pill gl">Grating lobes = <b id="r-gl">&mdash;</b></span>
+  <div class="readouts">
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="r-hpbw">&mdash;</span></div>
+    <div class="ro nl"><span class="k">first null</span><span class="v" id="r-null">&mdash;</span></div>
+    <div class="ro sl"><span class="k">first sidelobe</span><span class="v" id="r-sll">&mdash;</span></div>
+    <div class="ro gl"><span class="k">grating lobes</span><span class="v" id="r-gl">&mdash;</span></div>
   </div>
 </div>
 
@@ -101,7 +116,7 @@ function afMag(thDeg, N, dl){
 }
 const efMag  = thDeg => Math.abs(Math.cos(rad(thDeg)));
 const dB     = x => 20*Math.log10(Math.max(x, 1e-6));
-// The curve the pills describe: the array factor alone, or element x array.
+// The curve the readouts describe: the array factor alone, or element x array.
 const curve  = (thDeg, st) => afMag(thDeg, st.N, st.dl) * (st.ef ? efMag(thDeg) : 1);
 
 // First null of the array factor: sin(theta) = lambda/(N d).
@@ -116,7 +131,7 @@ function firstNull(st){
 // HPBW = 0.886 lambda/(N d) -- the L06/L15 line-source constant with L = N d --
 // written here as 2 asin(1.391 lambda/(pi N d)). That is the number in the
 // lesson and in the Module 3 tables (N = 8, d/lambda = 0.481 -> 13.2 deg), and
-// it is what this pill reports whenever the line-source approximation holds
+// it is what this readout reports whenever the line-source approximation holds
 // (six or more elements spanning at least 1.5 wavelengths).
 //
 // Outside that regime -- a two- or four-element array, a very short aperture,

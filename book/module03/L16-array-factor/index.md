@@ -155,7 +155,7 @@ That last observation generalizes. A directive element reshapes the skirts of th
 The widget below builds the array factor one control at a time. Start at the course array — $N = 8$, $d/\lambda = 0.481$ — and confirm the pills against Part 2: half-power width $13.2^\circ$, first null $15.1^\circ$, first sidelobe $-12.8$ dB. Then sweep $N$ and watch the beam narrow while the sidelobe level holds near $-13$ dB, since $N$ sets the width and the shape of the excitation sets the sidelobes. Switch the element factor on to see pattern multiplication happen: the dashed $\cos\theta$ envelope pulls the outer lobes down and leaves the main lobe alone. Then push $d/\lambda$ toward 1.5 and watch a second full-height beam walk in from the edge — Part 4 names it.
 
 <iframe src="../../viz/array-factor-builder.html"
-        width="100%" height="522"
+        width="100%" height="553"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Array factor builder: pattern in dB versus scan angle for N elements at spacing d over lambda, with an optional cosine element factor">

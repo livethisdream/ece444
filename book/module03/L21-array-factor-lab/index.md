@@ -107,7 +107,7 @@ $28.1^\circ$ the moment the grid appears, and at two elements it reports a dash
 because there is no null to find.
 
 <iframe src="../../viz/af-measurement-compare.html"
-        width="100%" height="568"
+        width="100%" height="593"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Ideal array factor and measured sweep at 8, 4, and 2 active elements">

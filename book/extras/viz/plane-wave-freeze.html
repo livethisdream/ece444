@@ -14,7 +14,7 @@
   html,body{margin:0;padding:0;font-family:'Inter',system-ui,-apple-system,sans-serif;color:var(--ink);background:#fff;}
   .app{display:flex;flex-direction:column;gap:8px;padding:12px;}
   .cap{font-size:12.5px;color:var(--ink3);line-height:1.35;text-align:center;margin:0 4px;}
-  canvas{display:block;width:100%;height:auto;background:#fff;border:1px solid var(--edge);border-radius:6px;}
+  canvas{display:block;box-sizing:border-box;width:100%;height:auto;background:#fff;border:1px solid var(--edge);border-radius:6px;}
   .controls{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px 16px;
             padding:8px 12px;background:var(--bg);border:1px solid var(--edge);border-radius:4px;font-size:12.5px;}
   .ctl{display:flex;flex-direction:column;gap:2px;min-width:132px;flex:1 1 132px;}
@@ -26,8 +26,26 @@
                border-radius:4px;background:#fff;color:var(--navy);cursor:pointer;}
   .btns button:hover{background:#eef4fa;}
   .btns button.active{background:var(--navy);color:#fff;border-color:var(--navy);}
-  .readout{display:flex;gap:14px;align-items:center;font-size:13px;color:var(--navy);font-weight:600;}
-  .readout .v{font-variant-numeric:tabular-nums;}
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts{display:grid;gap:8px;grid-template-columns:repeat(auto-fit, minmax(148px, 1fr));}
+  .ro{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+      gap:4px;padding:7px 8px 8px;min-width:0;
+      border:1px solid var(--edge2);border-radius:6px;background:#eef4fa;}
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k{display:block;text-align:center;
+         height:15px;line-height:15px;font-size:10.5px;font-weight:700;
+         text-transform:uppercase;letter-spacing:0.045em;color:var(--ink3);
+         white-space:nowrap;overflow:hidden;}
+  .ro .k mjx-container{font-size:inherit !important;}
+  .ro .v{height:19px;line-height:19px;font-size:14.5px;font-weight:700;white-space:nowrap;
+         font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;
+         text-align:center;min-width:8ch;color:var(--navy);}
+  .ro.space{background:rgba(0,74,133,0.09);border-color:rgba(0,74,133,0.30);}
+  .ro.space .v{color:var(--space);}
+  .ro.time{background:rgba(179,33,58,0.10);border-color:rgba(179,33,58,0.30);}
+  .ro.time .v{color:var(--time);}
 </style>
 </head>
 <body>
@@ -43,11 +61,12 @@
     <div class="ctl"><label>probe \(z_0\) = <span class="v" id="zv">0.40</span> m</label>
       <input id="z0" type="range" min="0" max="1.2" step="0.01" value="0.4"></div>
     <div class="btns"><button id="play" class="active">▶ Play</button><button id="step">Step</button></div>
-    <div class="readout">
-      <span>\(\lambda\)&nbsp;=&nbsp;<span class="v" id="rlam">—</span></span>
-      <span>\(T\)&nbsp;=&nbsp;<span class="v" id="rT">—</span></span>
-      <span>\(c\)&nbsp;=&nbsp;<span class="v" id="rc">—</span></span>
-    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro space"><span class="k">\(\lambda\) in space</span><span class="v" id="rlam">—</span></div>
+    <div class="ro time"><span class="k">\(T\) in time</span><span class="v" id="rT">—</span></div>
+    <div class="ro"><span class="k">\(c=\lambda f\)</span><span class="v" id="rc">—</span></div>
   </div>
 </div>
 
@@ -99,9 +118,33 @@ function tick(ts){ if(!state.playing) return; if(lastTs===null) lastTs=ts;
 // ---------- canvas ----------
 const spaceCv=el('space'), timeCv=el('time');
 const sctx=spaceCv.getContext('2d'), tctx=timeCv.getContext('2d');
-function fitOne(cv){ const dpr=window.devicePixelRatio||1, rect=cv.getBoundingClientRect();
-  const w=Math.max(360,rect.width), h=Math.max(120,Math.min(w*0.235,190));
-  cv.width=w*dpr; cv.height=h*dpr; cv.style.height=h+'px'; cv.getContext('2d').setTransform(dpr,0,0,dpr,0,0); return {w,h}; }
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=360;
+let SCL=1;
+function fitOne(cv){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(cv);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL, h=Math.max(120,Math.min(w*0.235,190));
+  setSize(cv,wCss,h*SCL,dpr);
+  cv.getContext('2d').setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  return {w,h};
+}
 
 function frame(ctx,w,h){
   const mL=42,mR=16,mT=18,mB=28, pW=w-mL-mR, pH=h-mT-mB, y0=mT+pH/2, yAmp=pH/2-4;

@@ -22,11 +22,22 @@
   .ctl select { width:100%; box-sizing:border-box; font:inherit; font-size:13px; padding:4px 6px;
                 border:1px solid var(--edge2); border-radius:4px; background:#fff; color:var(--ink); }
   .val { font-variant-numeric:tabular-nums; color:var(--navy); font-weight:700; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvas above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
   .note { font-size:12.5px; color:var(--ink3); line-height:1.45; margin:0; }
 </style>
 </head>
@@ -50,10 +61,10 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill">Scan loss at command = <b id="pScan">0.0 dB</b></span>
-    <span class="pill">Half-power beamwidth = <b id="pHp">13.2&deg;</b></span>
-    <span class="pill">Peak angle = <b id="pAng">0.0&deg;</b></span>
+  <div class="readouts">
+    <div class="ro"><span class="k">scan loss</span><span class="v" id="pScan">0.0 dB</span></div>
+    <div class="ro"><span class="k">HPBW</span><span class="v" id="pHp">13.2&deg;</span></div>
+    <div class="ro"><span class="k">peak angle</span><span class="v" id="pAng">0.0&deg;</span></div>
   </div>
 
   <p class="note">Eight elements, spacing 0.481 wavelengths &mdash; the course array at 10.3 GHz.

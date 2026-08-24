@@ -18,14 +18,28 @@
   .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
   .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
   .ctl input[type=range]{ flex:1 1 auto; min-width:100px; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.hp  { background:rgba(63,125,52,0.12); color:var(--grn);   border-color:rgba(63,125,52,0.30); }
-  .pill.fn  { background:rgba(176,30,36,0.10); color:var(--red);   border-color:rgba(176,30,36,0.28); }
-  .pill.sll { background:rgba(138,90,0,0.12);  color:var(--amber); border-color:rgba(138,90,0,0.30); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvas above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.hp  { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.hp  .v { color:var(--grn); }
+  .ro.fn  { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.fn  .v { color:var(--red); }
+  .ro.sll { background:rgba(138,90,0,0.12);  border-color:rgba(138,90,0,0.30); }
+  .ro.sll .v { color:var(--amber); }
 </style>
 </head>
 <body>
@@ -50,12 +64,12 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill hp">HPBW from pattern = <b id="p-hp">&#8212;</b></span>
-    <span class="pill hp">from \(0.886\lambda/(Nd\cos\theta_0)\) = <b id="p-fx">&#8212;</b></span>
-    <span class="pill fn">FNBW = <b id="p-fn">&#8212;</b></span>
-    <span class="pill sll">highest sidelobe = <b id="p-sl">&#8212;</b></span>
-    <span class="pill">directivity = <b id="p-d">&#8212;</b></span>
+  <div class="readouts">
+    <div class="ro hp"><span class="k">HPBW from pattern</span><span class="v" id="p-hp">&#8212;</span></div>
+    <div class="ro hp"><span class="k">\(0.886\lambda/(Nd\cos\theta_0)\)</span><span class="v" id="p-fx">&#8212;</span></div>
+    <div class="ro fn"><span class="k">FNBW</span><span class="v" id="p-fn">&#8212;</span></div>
+    <div class="ro sll"><span class="k">highest sidelobe</span><span class="v" id="p-sl">&#8212;</span></div>
+    <div class="ro"><span class="k">directivity</span><span class="v" id="p-d">&#8212;</span></div>
   </div>
 </div>
 
@@ -274,9 +288,9 @@ function readouts(m){
   set('p-hp', m.hp===null? '> 180°' : m.hp.toFixed(1)+'°');
   set('p-fx', m.fx>=180? '> 180°' : m.fx.toFixed(1)+'°');
   set('p-fn', m.fn!==null? m.fn.toFixed(1)+'°'
-              : (m.nl.length? 'one side unbounded' : '180° by convention'));
+              : (m.nl.length? 'unbounded' : '180° by conv.'));
   set('p-sl', m.sll===null? 'none in view'
-              : neg(m.sll)+' dB'+(m.sll>-1? ' (grating lobe)' : ''));
+              : neg(m.sll)+' dB'+(m.sll>-1? ', grating' : ''));
   set('p-d', m.D.toFixed(1)+' = '+(10*Math.log10(m.D)).toFixed(1)+' dB');
 }
 

@@ -26,11 +26,22 @@
                 padding:5px 14px; cursor:pointer; }
   .ctl button:hover { background:var(--navy); }
 
-  .pills { margin-top:9px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvas above. */
+  .readouts { margin-top:9px; display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
   .note { margin-top:9px; font-size:12px; color:var(--ink3); line-height:1.45; }
 </style>
 </head>
@@ -59,14 +70,14 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill">main lobe = <b id="pPeak">0.0 dB</b></span>
-    <span class="pill">first SLL = <b id="pSll">&minus;13.1 dBc</b></span>
-    <span class="pill">source angle = <b id="pAng">&minus;90&deg;</b></span>
+  <div class="readouts">
+    <div class="ro"><span class="k">main lobe</span><span class="v" id="pPeak">0.0 dB</span></div>
+    <div class="ro"><span class="k">first SLL</span><span class="v" id="pSll">&minus;13.1 dBc</span></div>
+    <div class="ro"><span class="k">source angle</span><span class="v" id="pAng">&minus;90&deg;</span></div>
   </div>
 
   <div class="note">N = 8, d = 14 mm, HB100 at 10.525 GHz, ideal element power
-  \(\cos\theta\). The main-lobe pill is referenced to the broadside peak, so the
+  \(\cos\theta\). The main-lobe readout is referenced to the broadside peak, so the
   30&deg; run reads the scan loss. Orange ticks under the trace mark the instants
   the source passed each 30&deg;: with a hand-like walk they land unevenly, and
   the lobe spacing stretches with them while the lobe amplitudes do not move.</div>
@@ -128,7 +139,7 @@
   function angleAt(u, hand) { return -90 + 180 * warp(u, hand); }
 
   /* Reproducible amplitude noise: a small LCG, so the same walk replays the
-     same way and the pill values are stable. */
+     same way and the readout values are stable. */
   function noiseAt(i) {
     var x = Math.sin(i * 12.9898 + 78.233) * 43758.5453;
     return (x - Math.floor(x) - 0.5) * 0.30;      // about +/- 0.15 dB

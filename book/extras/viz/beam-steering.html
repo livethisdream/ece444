@@ -21,11 +21,22 @@
                 border-radius:4px; background:#fff; color:var(--ink); min-width:0; }
   .ctl output { font-size:13px; font-variant-numeric:tabular-nums; color:var(--navy);
                 font-weight:600; min-width:44px; text-align:right; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
   .note { margin:0; font-size:12px; line-height:1.45; color:var(--ink3); }
 </style>
 </head>
@@ -49,13 +60,13 @@
     </div>
   </div>
 
-  <div class="pills" id="pills">
-    <span class="pill">\(\Delta\phi\) per element = <b id="pdphi">86.6°</b></span>
-    <span class="pill">HPBW = <b id="phpbw">15.2°</b></span>
-    <span class="pill">pattern peak = <b id="ppeak">+30.0°</b></span>
+  <div class="readouts" id="readouts">
+    <div class="ro"><span class="k">\(\Delta\phi\) per element</span><span class="v" id="pdphi">86.6°</span></div>
+    <div class="ro"><span class="k">HPBW</span><span class="v" id="phpbw">15.2°</span></div>
+    <div class="ro"><span class="k">pattern peak</span><span class="v" id="ppeak">+30.0°</span></div>
   </div>
 
-  <p class="note">N = 8, d = 14 mm, 10.3 GHz (d/&lambda; = 0.481). The HPBW pill is the
+  <p class="note">N = 8, d = 14 mm, 10.3 GHz (d/&lambda; = 0.481). The HPBW readout is the
     rule of thumb 0.886&lambda;/(Nd cos &theta;<sub>0</sub>); the width read off the
     plotted pattern is printed on the graph and runs wider past about 50°.</p>
 </div>
@@ -342,7 +353,7 @@
     MJ.setRedraw(drawAll);
     MJ.onReady(function () {
       MJ.typeset(document.getElementById("panel"));
-      MJ.typeset(document.getElementById("pills"));
+      MJ.typeset(document.getElementById("readouts"));
       drawAll();
     });
   }

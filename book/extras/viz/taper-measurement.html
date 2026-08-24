@@ -23,14 +23,28 @@
   .ctl input[type=range] { width:170px; max-width:38vw; min-width:0; accent-color:var(--mid); }
   .ctl .val { font-variant-numeric:tabular-nums; min-width:3.4em; color:var(--navy); font-weight:600; }
   .ctl.off { opacity:0.42; }
-  .pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
-  .pill.amber { background:rgba(138,90,0,0.10); color:var(--amber); border-color:rgba(138,90,0,0.28); }
-  .pill.grn   { background:rgba(63,125,52,0.10); color:var(--grn);  border-color:rgba(63,125,52,0.28); }
-  .pill.good  { background:rgba(63,125,52,0.12); color:var(--grn);  border-color:rgba(63,125,52,0.30); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.amber { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.28); }
+  .ro.amber .v { color:var(--amber); }
+  .ro.grn   { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.28); }
+  .ro.grn .v { color:var(--grn); }
+  .ro.good  { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.good .v { color:var(--grn); }
   .note { font-size:12.5px; color:var(--ink3); line-height:1.45; }
 </style>
 </head>
@@ -58,11 +72,11 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill grn">HPBW = <b id="pHP">—</b></span>
-    <span class="pill amber">Peak drop = <b id="pPk">—</b></span>
-    <span class="pill">\(\eta_t\) = <b id="pEta">—</b></span>
-    <span class="pill amber" id="pillSLL">Highest sidelobe = <b id="pSLL">—</b></span>
+  <div class="readouts">
+    <div class="ro grn"><span class="k">HPBW</span><span class="v" id="pHP">—</span></div>
+    <div class="ro amber"><span class="k">peak drop</span><span class="v" id="pPk">—</span></div>
+    <div class="ro"><span class="k">taper eff. \(\eta_t\)</span><span class="v" id="pEta">—</span></div>
+    <div class="ro amber" id="roSLL"><span class="k">highest sidelobe</span><span class="v" id="pSLL">—</span></div>
   </div>
 
   <p class="note">Sweep grid 2.8125° (the ADAR1000 phase LSB), noise floor 23 dB below the
@@ -351,9 +365,9 @@
       neg((eta > 0.999 ? "0.0" : (10 * Math.log10(eta)).toFixed(1))) + " dB";
     document.getElementById("pSLL").textContent =
       sl.buried ? "below floor" : neg(sl.rel.toFixed(1)) + " dBc";
-    const pillSLL = document.getElementById("pillSLL");
-    pillSLL.classList.toggle("good", !!sl.buried);
-    pillSLL.classList.toggle("amber", !sl.buried);
+    const roSLL = document.getElementById("roSLL");
+    roSLL.classList.toggle("good", !!sl.buried);
+    roSLL.classList.toggle("amber", !sl.buried);
     edgeCtl.classList.toggle("off", selEl.value !== "custom");
     edgeEl.disabled = selEl.value !== "custom";
     document.getElementById("edgeVal").textContent = edgeEl.value + "%";

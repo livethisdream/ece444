@@ -34,11 +34,22 @@
   .ctl output { flex:0 0 auto; min-width:56px; text-align:right; font-weight:600;
                 color:var(--navy); font-variant-numeric:tabular-nums; }
 
-  .pills { margin-top:9px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .pill { padding:4px 12px; border-radius:1em; font-size:12px; font-weight:600; white-space:nowrap;
-          font-variant-numeric:tabular-nums; display:inline-flex; align-items:center; gap:5px;
-          border:1px solid var(--edge2); background:#eef4fa; color:var(--navy); }
-  .pill b { font-weight:700; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvas above. */
+  .readouts { margin-top:9px; display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
   .note { margin-top:9px; font-size:12px; color:var(--ink3); line-height:1.45; }
 </style>
 </head>
@@ -62,10 +73,10 @@
     </div>
   </div>
 
-  <div class="pills">
-    <span class="pill">&Delta;&phi; = <b id="pdphi">88.4&deg;</b></span>
-    <span class="pill">element 8 phase = <b id="pphi8">258.9&deg;</b></span>
-    <span class="pill">HPBW = <b id="php">15.1&deg;</b></span>
+  <div class="readouts">
+    <div class="ro"><span class="k">&Delta;&phi; per element</span><span class="v" id="pdphi">88.4&deg;</span></div>
+    <div class="ro"><span class="k">element 8 phase</span><span class="v" id="pphi8">258.9&deg;</span></div>
+    <div class="ro"><span class="k">HPBW</span><span class="v" id="php">15.1&deg;</span></div>
   </div>
 
   <div class="note">N = 8, d = 14 mm. The trace is the array factor alone; the
