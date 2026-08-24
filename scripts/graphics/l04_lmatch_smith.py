@@ -99,13 +99,12 @@ def main() -> int:
                     bbox=dict(boxstyle="round,pad=0.18", fc="white", ec="none", alpha=0.92),
                     arrowprops=dict(arrowstyle="-", color=col, lw=1.0))
 
-    # legend to the RIGHT of the chart, clear of the circle entirely
+    # legend to the RIGHT of the chart, clear of the circle entirely.
+    # No swatches -- the text colour matches its arc, which is enough.
     lx = 1.20
-    ax.plot([lx, lx + 0.13], [0.34, 0.34], color=NAVY, lw=3.0, solid_capstyle="round")
-    ax.text(lx, 0.24, "series element walks a\nconstant-resistance circle",
+    ax.text(lx, 0.30, "series element walks a\nconstant-resistance circle",
             color=NAVY, fontsize=11, fontweight="bold", ha="left", va="top")
-    ax.plot([lx, lx + 0.13], [-0.18, -0.18], color=GREEN, lw=3.0, solid_capstyle="round")
-    ax.text(lx, -0.28, "shunt element walks a\nconstant-conductance circle",
+    ax.text(lx, -0.16, "shunt element walks a\nconstant-conductance circle",
             color=GREEN, fontsize=11, fontweight="bold", ha="left", va="top")
 
     ax.set_xlim(-1.10, 2.32); ax.set_ylim(-1.14, 1.14)
