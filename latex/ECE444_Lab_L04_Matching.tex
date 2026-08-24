@@ -878,16 +878,26 @@ Restart the sweep and look at the return-loss trace across the full
 		bandwidth you can have no matter how clever the matching network is.
 		\end{solution}
 
-	\part Why did we not use a quarter-wave transformer here? Give both
-	reasons -- one about the load, one about the tape measure.
+	\part Why did we not use a quarter-wave transformer here? One tempting
+	answer -- ``the load is complex'' -- is not by itself a reason. Explain why
+	that objection does not hold, then give the two things that actually rule
+	the transformer out at this frequency.
 
-		\begin{solution}[1.4in]
-		First, the quarter-wave transformer matches a \emph{real} load; ours is
-		strongly capacitive, so it would have to be resonated first. Second, at
-		$\fdes\ \mhz$ a quarter wavelength is about 25\ \m\ of coax
-		($\lambda = 150\ \m$ in free space, times a velocity factor near
-		$0.66$, divided by four) -- an impractical amount of cable for a
-		benchtop match.
+		\begin{solution}[1.8in]
+		The complex load is \emph{not} the obstacle. You could cancel the
+		reactance with a series inductor exactly as you did in Question 7,
+		leaving a real $\antR\ \ohms$, and then transform that with a
+		quarter-wave section of $Z_1 = \sqrt{(50)(\antR)} = 27.4\ \ohms$. That
+		is a legitimate design, and at microwave frequencies on a printed board
+		it is often the better one.
+
+		What rules it out here is \textbf{length} and \textbf{availability}. At
+		$\fdes\ \mhz$ the free-space wavelength is $150\ \m$; in coax with a
+		velocity factor near $0.66$ a quarter wave is about $25\ \m$ of cable --
+		absurd for a benchtop match. And $27.4\ \ohms$ is not a cable you can
+		buy: coax comes in $50$ and $75\ \ohms$. On a microstrip board you can
+		print any $Z_1$ you like, which is precisely why the transformer wins
+		there and the lumped L-match wins here.
 		\end{solution}
 
 	\part Make at least one additional observation about your measurements.
