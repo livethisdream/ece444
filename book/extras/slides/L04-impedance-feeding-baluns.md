@@ -221,44 +221,76 @@ second row is exactly why the matching lab is lumped.
 
 ---
 
-## The L-match
+## The L-match — solve one, learn the method
 
-<div class="fig" data-inline-svg="./fig/L04-lmatch.svg" style="max-width:820px; margin:0 auto;"></div>
-
-Two reactances, two jobs, in this order: **cancel X, then transform R.**
-
-1. The **series** element next to the load cancels the load reactance — what is left is pure resistance.
-2. The **shunt** element toward the source transforms that resistance to $Z_0$.
-
-Note:
-Minimal lumped network — two elements, and it reaches any Z0 from any complex
-load. Which side the shunt goes on depends on whether the load resistance is
-below or above Z0: below, shunt toward the source, as drawn.
-
----
-
-## Same 31.6 Ω, built from lumped parts
-
-To bridge $20\ \Omega$ and $50\ \Omega$ you meet at the **geometric mean** — the number you already used for the transformer:
-
-$$ \sqrt{Z_0 R_L} = \sqrt{(50)(20)} = 31.6\ \Omega $$
-
-The $\lambda/4$ line realizes it as a *characteristic impedance*. The L-match realizes it as a **branch's impedance magnitude**. Cancel the load reactance, then add series $X$ — the resistance is stuck at 20, so:
-
-$$ \vert Z \vert = \sqrt{R_L^2 + X^2} = 31.6 \quad\Longrightarrow\quad X = \sqrt{1000-400} = 24.5\ \Omega $$
+<div class="fig" data-inline-svg="./fig/L04-lmatch.svg" style="max-width:760px; margin:0 auto;"></div>
 
 <div class="callout">
-That is where <strong>24.5 Ω</strong> comes from — a geometric mean and a right triangle. Nothing else.
+An antenna presents $Z_\text{in} = 20 - j15\ \Omega$ on a $50\ \Omega$ line at <strong>1 GHz</strong>. Match it.
 </div>
 
 Note:
-This is the slide that answers "why 24.5?" using only what they own from ECE 343.
-Same geometric mean as the quarter-wave transformer; the only difference is
-whether you realise it as a line impedance or a branch magnitude. Resistance is
-pinned at 20 because a series element cannot move it, so Pythagoras finishes the
-job. Then show why that demand is the right one: 1/(20+j24.5) has real part
-exactly 1/50, so the shunt element only has to clean up the leftover -j40.8.
+Do not give them the recipe and then demonstrate it — derive it by solving this
+one all the way through. Everything needed is already on the table: the
+geometric mean from the transformer slide, and the Smith chart from ECE 343.
+Five steps, one per slide.
 
+---
+
+## Steps 1-3: reduce, choose, plan
+
+**1. Cancel the load reactance.** Add $+j15\ \Omega$ in series: $(20-j15)+j15 = 20 + j0\ \Omega$. Now it is a *real* 20 Ω to match.
+
+**2. Two ways to get 20 Ω to 50 Ω.** A $\lambda/4$ line of $\sqrt{(50)(20)} = 31.6\ \Omega$ — correct, but no such cable exists and the length is awkward. Or an L-network: one more series element plus a shunt element.
+
+**3. The plan.** The pair must present $50 + j0$ to the line:
+
+- **series** element → make the branch magnitude $= 31.6\ \Omega$
+- **shunt** element → clean up the excess reactance
+
+Note:
+Step 1 is the move that makes the problem recognisable. Step 2 is where they see
+the transformer is not disqualified, just impractical here. Step 3 is the whole
+strategy in two bullets — and note the transformer realises 31.6 as a LINE
+impedance while the L-network realises it as a BRANCH magnitude. Same number.
+
+---
+## Step 4: size the series element
+
+Resistance is stuck at 20 Ω — a series element cannot move it — so the magnitude must come from the reactance:
+
+$$ \vert 20 + jX \vert = 31.6 \quad\Longrightarrow\quad X = \sqrt{31.6^2 - 20^2} = 24.5\ \Omega $$
+
+**Do not forget the $+j15$ from Step 1** — same branch, so the part you install supplies the sum:
+
+$$ X_\text{series} = 15 + 24.5 = 39.5\ \Omega \quad\Longrightarrow\quad L = \frac{39.5}{2\pi(10^9)} = 6.3\ \text{nH} $$
+
+Note:
+This is the step they get wrong: 24.5 is what the BRANCH needs, not what you
+solder in. The load already brought -j15, so the inductor pays that off first and
+then supplies the 24.5.
+
+---
+
+## Step 5: size the shunt element
+
+It sits in **parallel**, and admittances add in parallel — so transform:
+
+$$ Y = \frac{1}{20 + j24.5} = \frac{20 - j24.5}{20^2 + 24.5^2} = 0.0200 - j0.0245\ \text{S} $$
+
+$\frac{1}{\text{Re}\lbrace Y \rbrace} = 50\ \Omega$ — **that is what Step 4 bought.** Cancel the rest with $+j0.0245$ (a capacitor):
+
+$$ \omega C = 0.0245 \quad\Longrightarrow\quad C = \frac{0.0245}{2\pi(10^9)} = 3.9\ \text{pF} $$
+
+<div class="callout">
+<strong>6.3 nH series, 3.9 pF shunt.</strong> The antenna looks like 50 Ω — at 1 GHz and nowhere else.
+</div>
+
+Note:
+Land on the real part: setting the magnitude to the geometric mean IS the
+condition that makes 1/Re{Y} come out at 50. Everything after that is one
+cancellation. Then the punchline — two lossless parts, and a 20 - j15 antenna
+now looks like 50 Ω.
 ---
 
 <!-- .slide: class="viz-cue-slide" -->
@@ -323,51 +355,45 @@ the same geometric mean as the quarter-wave transformer.
 
 ---
 
-## Naming it: the network Q
+## Where Q comes from
 
-Everything so far was a geometric mean and a triangle. The textbook formula is that same result, named — divide $R_L^2 + X^2 = Z_0R_L$ by $R_L^2$:
+References state the design with a network $Q$. It is worth deriving, not quoting — $Q$ is **not** defined by $R$ and $X$. It is defined by energy, exactly as in L3:
 
-$$ Q = \frac{X}{R_L} = \frac{24.5}{20} = 1.22 \qquad 1 + Q^2 = \frac{Z_0}{R_L} \qquad Q = \sqrt{\frac{R_\text{big}}{R_\text{small}} - 1} $$
+$$ Q = \omega\,\frac{\text{peak energy stored}}{\text{average power dissipated}} $$
 
-$Q R_L$ is the **total** branch reactance — not the part you install. The load already contributes $X_L$:
+Drive the branch with current amplitude $I_0$:
 
-$$ X_\text{element} = Q R_L - X_L $$
+$$ W_\text{peak} = \tfrac{1}{2}LI_0^2, \qquad P_\text{avg} = \tfrac{1}{2}I_0^2 R \quad\Longrightarrow\quad Q = \frac{\omega L}{R} = \frac{X}{R} $$
 
 <div class="callout">
-The geometric mean says <em>what</em> to build. $Q$ says what it <strong>costs</strong> you in bandwidth.
+$X/R$ is not a definition — it is what the <strong>energy ratio evaluates to</strong> for a series branch. Here $Q = \frac{24.5}{20} = 1.22$.
 </div>
 
 Note:
-Q is the same definition as the antenna Q from L3 — reactance over resistance,
-energy stored over energy dissipated per radian — now for a circuit branch. That
-is why the L3 bandwidth argument carries straight over: transform further, higher
-Q, less bandwidth. And flag the trap: QR is the TOTAL, so with a capacitive load
-the inductor you install is bigger than QR, not equal to it.
+This is the slide that stops Q being a magic symbol. Same energy definition as
+the antenna Q in L3; for a series branch it just happens to evaluate to X/R.
+Do the two-line evaluation on the board — the I0 squared cancels and you are
+left with omega L over R.
 
 ---
 
-## Working an L-match
+## What Q costs you
 
-Antenna $Z_\text{in} = 20 - j15\ \Omega$, feed line $50\ \Omega$, design frequency 1 GHz.
+Divide the Step 4 condition $R_L^2 + X^2 = Z_0R_L$ by $R_L^2$:
 
-| Quantity | Work | Result |
-| :-- | :-- | :-- |
-| Cancel X | series $+j15\ \Omega$ | $20 + j0\ \Omega$ |
-| Number to build | $\sqrt{(50)(20)}$ | $31.6\ \Omega$ |
-| Series reactance | $\sqrt{31.6^2-20^2}=24.5$; load brings $-15$, so install $24.5-(-15)$ | $+j39.5\ \Omega \Rightarrow L = 6.3\ \text{nH}$ |
-| Shunt reactance | cancels the leftover $-j40.8$ | $C = 3.9\ \text{pF}$ |
+$$ 1 + Q^2 = \frac{Z_0}{R_L} \qquad\Longrightarrow\qquad Q = \sqrt{\frac{R_\text{big}}{R_\text{small}} - 1} $$
+
+- **You do not choose $Q$** — the ratio $\frac{Z_0}{R_L}$ sets it
+- Stored-over-dissipated energy is what set **bandwidth** in L3
 
 <div class="callout">
-Same answer the chart gave: $+j39.5\ \Omega$ then $3.9$ pF. The algebra is the shortcut; the chart is the picture.
+Transform further → higher $Q$ → less bandwidth. A small antenna with a fraction of an ohm of $R_\text{rad}$ needs an enormous $Q$ to reach 50 Ω.
 </div>
 
 Note:
-Point back at the Smith chart slide — the series step is that navy arc, the shunt
-step is the green one, and 39.5 Ω and 3.9 pF are exactly what the arcs measured.
-Two elements, both lossless, and the 20 Ω antenna now looks like 50 Ω — at 1 GHz
-and nowhere else. Move 10% in frequency and the reactances are wrong by 10% each,
-which is the band-limit point: forcing Γ = 0 at one frequency is easy, holding it
-across a band is the size-versus-bandwidth fight from L3.
+Close the loop with L3 and Chu-Harrington. High Q means a lot of energy sloshing
+between L and C for every watt delivered — that is what makes the match
+narrowband. And the small-antenna case is the one they meet in the lab.
 
 ---
 

@@ -250,69 +250,178 @@ the Smith chart from your transmission-lines course.
 
 <img src="../../viz/img/L04-lmatch.svg" alt="An L network between a feed line and a complex load: a series element next to the load cancels its reactance, then a shunt element transforms the resistance" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
-Two reactances, two jobs, in this order:
+Rather than state the recipe and then demonstrate it, we will derive it by
+solving one problem all the way through. Everything you need is already on the
+table: the geometric mean from the quarter-wave section, and the Smith chart
+from your transmission-lines course.
 
-1. **Cancel the load reactance.** The series element next to the load adds
-   $-X_L$, leaving a purely resistive $R_L$.
-2. **Transform the remaining resistance.** The series element sets how far the
-   resistance moves; the shunt element cleans up what is left over.
+:::{admonition} The problem
+:class: key-concept
+**An antenna presents $Z_\text{in} = 20 - j15\ \Omega$ on a $50\ \Omega$ line at
+a design frequency of 1 GHz. Match it.**
+:::
 
-#### Building the same 31.6 Ω out of lumped parts
+#### Step 1 — Cancel the load reactance
 
-Start from where the quarter-wave section left off, because the number you need
-is the same one. To bridge $R_L$ and $Z_0$ you have to meet at their **geometric
-mean** — for a $20\ \Omega$ load on a $50\ \Omega$ line,
-
-$$
-\sqrt{Z_0 R_L} = \sqrt{(50)(20)} = 31.6\ \Omega.
-$$
-
-The quarter-wave transformer realizes that number as a *line's characteristic
-impedance*. The L-match realizes the very same number as a **branch's impedance
-magnitude**. That is the only difference between them.
-
-So: cancel the load reactance, leaving $20 + j0\ \Omega$, and add a series
-reactance $X$. The resistance is stuck at $20\ \Omega$ — a series element cannot
-change it — but the *magnitude* of the branch grows:
+The load is capacitive. Put $+j15\ \Omega$ in series with it and the reactance
+is gone:
 
 $$
-\vert Z \vert = \sqrt{R_L^{2} + X^{2}}.
+(20 - j15) + j15 = 20 + j0\ \Omega.
 $$
 
-Demand that the magnitude be the geometric mean, and Pythagoras hands you the
-reactance:
+That reduces the problem to something familiar: **match a real $20\ \Omega$ to a
+real $50\ \Omega$ line.**
+
+#### Step 2 — Two ways to transform 20 Ω to 50 Ω
+
+**(a) A quarter-wave transformer.** From the section above, a $\lambda/4$ line of
 
 $$
-X = \sqrt{Z_0 R_L - R_L^{2}} = \sqrt{1000 - 400} = \sqrt{600} = 24.5\ \Omega.
+Z_1 = \sqrt{Z_0 R_L} = \sqrt{(50)(20)} = 31.6\ \Omega
 $$
 
-**That is where the $24.5\ \Omega$ comes from** — no new machinery, just the
-geometric mean you already used for the transformer and a right triangle.
+does it. This is a correct design — but a physically awkward one here. Coax is
+sold in $50$ and $75\ \Omega$; there is no $31.6\ \Omega$ cable. And a quarter
+wavelength is only a convenient length in some bands: about 4 cm of printed line
+at 1 GHz, but roughly 25 m of coax at 2 MHz. On a microwave board the
+transformer often wins; with lumped parts at low frequency it does not.
 
-Why is that the right thing to demand? Work out the admittance of the branch you
-just built:
+**(b) An L-network.** A second series reactance plus a shunt reactance. Two
+lumped components, no transmission line, no exotic impedance to source.
+
+#### Step 3 — What the L-network has to achieve
+
+The two elements together must present $50 + j0\ \Omega$ to the line. The
+strategy that gets there:
+
+1. Use the **series** element to make the magnitude of the series branch equal
+   the same geometric mean the transformer needed, $\sqrt{(50)(20)} =
+   31.6\ \Omega$.
+2. Use the **shunt** element to clean up the excess reactance that step leaves
+   behind.
+
+The quarter-wave line realizes $31.6\ \Omega$ as a *characteristic impedance*;
+the L-network realizes it as a **branch impedance magnitude**. Same number, two
+ways of building it.
+
+#### Step 4 — Size the series element
+
+The branch resistance is stuck at $20\ \Omega$ — a series element cannot change
+it — so the magnitude has to come from the reactance. Set the magnitude and
+solve:
+
+$$
+\vert 20 + jX \vert = 31.6 \quad\Longrightarrow\quad
+X = \sqrt{31.6^{2} - 20^{2}} = \sqrt{600} = 24.5\ \Omega.
+$$
+
+**Do not forget the $+j15\ \Omega$ from Step 1.** Both live in the same series
+branch, so the component you actually install supplies the sum:
+
+$$
+X_\text{series} = 15 + 24.5 = 39.5\ \Omega.
+$$
+
+At 1 GHz, $X = \omega L$ gives
+
+$$
+L = \frac{X_\text{series}}{2\pi f} = \frac{39.5}{2\pi(10^{9})} = 6.3\ \text{nH}.
+$$
+
+#### Step 5 — Size the shunt element
+
+The second element sits in **parallel**, and admittances — not impedances — are
+what add in parallel. So transform the branch:
 
 $$
 Y = \frac{1}{20 + j24.5} = \frac{20 - j24.5}{20^{2} + 24.5^{2}}
-  = \frac{1}{50} - j\,\frac{1}{40.8}.
+  = 0.0200 - j0.0245\ \text{S}.
 $$
 
-The real part is $\frac{1}{50}$ — precisely the conductance of a $50\ \Omega$ resistor.
-Setting $\vert Z \vert^2 = Z_0 R_L$ is exactly the condition that makes it so.
-What remains is the $-\frac{j}{40.8}$, and a shunt element supplying $+\frac{j}{40.8}$ cancels
-it dead, leaving a clean $50\ \Omega$.
+Look at the real part: $1/\text{Re}\{Y\} = 1/0.0200 = 50\ \Omega$. **That is the
+whole point of Step 4** — setting the magnitude to the geometric mean is exactly
+the condition that makes the parallel-equivalent resistance come out at $Z_0$.
 
-#### Why we have to switch to the parallel equivalent
+All that is left is the $-j0.0245$ S. Cancel it with an equal and opposite
+susceptance — a capacitor, since $+jB$ is capacitive:
 
-That admittance step is the one that feels like a rabbit out of a hat, so it is
-worth saying why it is unavoidable. **Impedances add in series; admittances add
-in parallel** — and an L-network has one element of each kind. No single
-currency describes both moves, so somewhere in the middle you have to change
-money.
+$$
+\omega C = 0.0245 \quad\Longrightarrow\quad
+C = \frac{0.0245}{2\pi(10^{9})} = 3.9\ \text{pF}.
+$$
 
-Underneath that bookkeeping is a symmetry that explains why the network works at
-all. Add a *series* reactance to a $20\ \Omega$ branch: the series resistance
-never moves, but the parallel-equivalent resistance climbs.
+:::{admonition} The answer
+:class: key-concept
+A **6.3 nH series inductor** and a **3.9 pF shunt capacitor**, both lossless,
+and the $20 - j15\ \Omega$ antenna looks like $50\ \Omega$ — at 1 GHz and
+nowhere else. Move 10% in frequency and both reactances are off by 10%.
+:::
+
+#### The same design, on the Smith chart
+
+The two moves are the two things the two elements are *able* to do. A series
+element changes reactance but not resistance, so it can only walk the operating
+point along a **constant-resistance circle**. A shunt element changes
+susceptance but not conductance, so it can only walk along a
+**constant-conductance circle**. Matching is therefore a two-leg journey to the
+centre: walk the constant-resistance circle until you cross the
+unit-conductance circle, then walk that circle home.
+
+<img src="../../viz/img/L04-lmatch-smith.svg" alt="Smith chart showing the L-match as two arcs: a series element walking a constant-resistance circle, then a shunt element walking a constant-conductance circle into the centre" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+
+Measure the arcs and you get $+j39.5\ \Omega$ and $3.9$ pF — the numbers you
+just computed. Note also that there is only **one** arc for the series element:
+you do not stop at the real axis after Step 1 and start again. Steps 1 and 4 are
+one component and one continuous move; splitting them is a thinking aid, not a
+parts list.
+
+#### Why a lossless element can change the resistance at all
+
+Step 4 is easy to compute and hard to believe. How can adding a reactance, which
+dissipates nothing, change what the source thinks the resistance is?
+
+Drive the branch $20 + j24.5\ \Omega$ with 1 A. The resistor dissipates
+$P = \tfrac{1}{2}|I|^2 R = 10\ \text{W}$, and nothing about the resistor
+changes. But the voltage across the *whole branch* is not 20 V, it is
+
+$$
+|V| = |I|\,|Z| = \sqrt{20^2 + 24.5^2} = 31.6\ \text{V},
+$$
+
+because the reactance's voltage adds in quadrature with the resistor's.
+
+<img src="../../viz/img/L04-series-parallel.svg" alt="Left: voltage phasors forming a right triangle, 20 V across the resistor and 24.5 V across the reactance summing to 31.6 V. Right: the series pair and the parallel 50 ohm equivalent a source cannot distinguish" style="max-width: 760px; width: 100%; display: block; margin: 1em auto;">
+
+Stand at the terminals with no way to see inside. You measure 31.6 V, and 10 W
+is being consumed. The only conclusion available to you is
+
+$$
+R = \frac{|V|^2}{2P} = \frac{31.6^2}{2(10)} = 50\ \Omega.
+$$
+
+**The reactance is a lever on voltage that costs no power.** The resistor is
+still 20 Ω burning 10 W; the source simply cannot tell that apart from a 50 Ω
+resistor.
+
+:::{admonition} Key Point
+:class: key-concept
+A shunt element alone could never do this. Put any reactance in parallel with
+20 Ω and the apparent resistance only goes **down** — 17.2 Ω at $-j50$, 19.2 Ω
+at $-j100$, creeping toward 20 Ω but never past it. Only a *series* reactance
+can climb. That is why the order is forced: series element to raise the
+resistance, shunt element to cancel what the climb left behind.
+:::
+
+#### Why Step 5 had to switch to admittance
+
+The move that feels like a rabbit out of a hat is worth naming: it is forced by
+the topology. **Impedances add in series; admittances add in parallel** — and an
+L-network has one element of each kind. No single currency describes both moves.
+
+Underneath that bookkeeping is a symmetry. Add a *series* reactance to a
+$20\ \Omega$ branch: the series resistance never moves, but the
+parallel-equivalent resistance climbs.
 
 | series $X$ added | $\text{Re}(Z)$ | parallel equivalent $\frac{1}{\text{Re}(Y)}$ |
 | :-- | :-: | :-: |
@@ -337,181 +446,78 @@ The two elements are exact duals:
 - a **series** element cannot touch $\text{Re}(Z)$, but it steers $\text{Re}(Y)$
 - a **shunt** element cannot touch $\text{Re}(Y)$, but it steers $\text{Re}(Z)$
 
-That hands you the whole design. You are aiming for $50\ \Omega$, and during the
-series move $\text{Re}(Z)$ is frozen at $20\ \Omega$ — a useless thing to aim
-at. The only quantity you can steer is $\text{Re}(Y)$, so you steer it to
-$\frac{1}{50}$. Then the shunt element is the perfect finisher: it *cannot* disturb
-$\text{Re}(Y)$, so the $50\ \Omega$ you just earned is locked in, and its only
-remaining job is to cancel the susceptance.
+That is why Step 4 aimed at the admittance. You are after $50\ \Omega$, and
+during the series move $\text{Re}(Z)$ is frozen at $20\ \Omega$ — a useless
+thing to aim at. The only quantity you can steer is $\text{Re}(Y)$, so you steer
+it to $\frac{1}{50}$. Then the shunt element is the perfect finisher: it
+*cannot* disturb $\text{Re}(Y)$, so the $50\ \Omega$ you earned is locked in,
+and its only remaining job is to cancel the susceptance.
 
 It also explains why two series elements could never do it — they would just sum
-reactance, and $\text{Re}(Z)$ would sit at $20\ \Omega$ forever. You need one
-element of each kind, and the moment you have a shunt element you are obliged to
-speak admittance.
+reactance, and $\text{Re}(Z)$ would sit at $20\ \Omega$ forever.
 
-So the parallel equivalent is not a trick. It is the only view in which the
-intermediate state is legible: written as $20 + j24.5\ \Omega$ it tells you
-nothing, since the 20 has not budged. Written as $50\ \Omega$ alongside
-$-j40.8\ \Omega$ it says *you have arrived — one cancellation to go.*
+#### Where Q comes from
 
-#### The two moves, on the Smith chart
+Matching references state the design in terms of a **network $Q$** rather than a
+geometric mean. That is the same result wearing different clothes, but $Q$ is
+worth deriving properly rather than quoting, because it is the quantity that
+tells you what the match costs.
 
-Before the algebra, look at what the two elements can actually *do*. A series
-element changes reactance but not resistance, so it can only walk the operating
-point along a **constant-resistance circle**. A shunt element changes
-susceptance but not conductance, so it can only walk along a **constant-conductance
-circle**. Matching is therefore a two-leg journey to the centre of the chart:
-walk the constant-resistance circle until you cross the unit-conductance circle,
-then walk that circle home.
-
-<img src="../../viz/img/L04-lmatch-smith.svg" alt="Smith chart showing the L-match as two arcs: a series element walking a constant-resistance circle, then a shunt element walking a constant-conductance circle into the centre" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
-
-That picture is the whole method, and it is why the order is forced: the series
-element cannot change the resistance, and the shunt element cannot change it
-back.
-
-#### Why a series reactance makes a small resistor look big
-
-Before the algebra, the physical mechanism — because this is the part that is
-easy to compute and hard to *believe*. How can adding a reactance, which
-dissipates nothing, change what the source thinks the resistance is?
-
-Drive the series branch $20 + j24.5\ \Omega$ with 1 A. The resistor dissipates
-$P = \tfrac{1}{2}|I|^2 R = 10\ \text{W}$ — and nothing about the resistor
-changes. But the voltage across the *whole branch* is not 20 V, it is
+$Q$ is not defined by any formula involving $R$ and $X$. It is defined by
+energy — the same definition you met for antennas in Lesson 3:
 
 $$
-|V| = |I|\,|Z| = \sqrt{20^2 + 24.5^2} = 31.6\ \text{V},
+Q = \omega\,\frac{\text{peak energy stored}}{\text{average power dissipated}}.
 $$
 
-because the reactance's voltage adds in quadrature with the resistor's.
-
-<img src="../../viz/img/L04-series-parallel.svg" alt="Left: voltage phasors forming a right triangle, 20 V across the resistor and 24.5 V across the reactance summing to 31.6 V. Right: the series pair and the parallel 50 ohm equivalent a source cannot distinguish" style="max-width: 760px; width: 100%; display: block; margin: 1em auto;">
-
-Now stand at the terminals with no way to see inside. You measure 31.6 V, and
-10 W is being consumed. The only conclusion available to you is
+Evaluate that for our series branch. Drive it with a current of amplitude
+$I_0$. The inductor's peak stored energy and the resistor's average dissipated
+power are
 
 $$
-R = \frac{|V|^2}{2P} = \frac{31.6^2}{2(10)} = 50\ \Omega.
+W_\text{peak} = \tfrac{1}{2} L I_0^{2}, \qquad
+P_\text{avg} = \tfrac{1}{2} I_0^{2} R,
 $$
 
-**The reactance is a lever on voltage that costs no power.** The resistor is
-still 20 Ω burning 10 W; the source simply cannot tell that apart from a 50 Ω
-resistor. That is the entire transformation, and the lever ratio is
+so
 
 $$
-\frac{R_p}{R_s} = \frac{|Z|^2}{R_s^2} = 1 + Q^2.
+Q = \omega\,\frac{\tfrac{1}{2} L I_0^{2}}{\tfrac{1}{2} I_0^{2} R}
+  = \frac{\omega L}{R} = \frac{X}{R}.
 $$
 
-So $24.5\ \Omega$ is not a magic number — it is *exactly enough lever* to make
-$1 + Q^2 = \frac{50}{20} = 2.5$.
-
-:::{admonition} Key Point
-:class: key-concept
-A shunt element alone could never do this. Put any reactance in parallel with
-20 Ω and the apparent resistance only goes **down** — 17.2 Ω at $-j50$, 19.2 Ω
-at $-j100$, creeping toward 20 Ω but never past it. Only a *series* reactance
-can climb. That is why the order is forced: series element to raise the
-resistance, shunt element to cancel what the climb left behind.
-:::
-
-#### Naming it: the network Q
-
-Everything above was done with a geometric mean and a right triangle. The
-textbook formulas are just that same result, named. Define the branch's
-reactance-to-resistance ratio
+**That** is where $X/R$ comes from: it is not a definition, it is what the
+energy ratio evaluates to for a series branch. For our design,
 
 $$
-Q = \frac{X}{R_L} = \frac{24.5}{20} = 1.22,
+Q = \frac{X}{R_L} = \frac{24.5}{20} = 1.22.
 $$
 
-which is the same stored-energy-to-dissipated-energy ratio that defined the
-antenna $Q$ in Lesson 3 — applied to a circuit branch instead of a radiating
-structure. Divide our condition $R_L^2 + X^2 = Z_0 R_L$ through by $R_L^2$ and
-it reads
+Now take the condition from Step 4, $R_L^2 + X^2 = Z_0 R_L$, and divide through
+by $R_L^2$:
 
 $$
 1 + Q^{2} = \frac{Z_0}{R_L} \qquad\Longleftrightarrow\qquad
 Q = \sqrt{\frac{R_\text{big}}{R_\text{small}} - 1},
 $$
 
-the formula you will meet in any matching reference, with $R_\text{big}$ and
-$R_\text{small}$ the larger and smaller of $R_L$ and $Z_0$. In that language the
-series reactance is $Q R_\text{small}$ and the shunt reactance is
-$\frac{R_\text{big}}{Q}$, and the shunt element goes on the side of the larger
-resistance — toward the source when $R_L < Z_0$, as drawn above.
+the formula in the references, with $R_\text{big}$ and $R_\text{small}$ the
+larger and smaller of $R_L$ and $Z_0$. In that language the series reactance is
+$Q R_\text{small}$ and the shunt reactance is $\frac{R_\text{big}}{Q}$ — check:
+$\frac{50}{1.22} = 40.8\ \Omega$, and $\frac{1}{2\pi(10^9)(40.8)} = 3.9$ pF,
+the same capacitor.
 
-It is worth having both routes. The geometric mean tells you *what* number to
-build and why it is the same one the transformer uses; $Q$ tells you what that
-number will **cost** you in bandwidth.
+Two things follow, and they are the reason to bother with $Q$ at all:
 
-**Careful with the series element.** $Q R_\text{small}$ is the **total**
-reactance that has to be present in the series branch when you are finished —
-it is *not* the value of the part you install. The load is already contributing
-its own $X_L$ to that same branch, so the component supplies the difference:
-
-$$
-X_\text{element} = Q R_\text{small} - X_L.
-$$
-
-For a capacitive load $X_L$ is negative, so the inductor has to be *larger*
-than the transformation alone would suggest: it pays off the load's reactance
-first, then delivers $Q R_\text{small}$ on top. This is where the two-step story
-becomes misleading — on the Smith chart there is only ever **one** arc. You do
-not stop at the real axis and start again; you walk the constant-resistance
-circle all the way from the load to the unit-conductance circle in a single
-move, with a single component.
-
-Note what this says: **you do not get to choose $Q$.** The transformation ratio
-sets it. And since $Q$ sets bandwidth exactly as it did in Lesson 3, the further
-you have to transform, the narrower the band you get — which is why an
-electrically small antenna, with its fraction of an ohm of radiation resistance,
-is so painful to feed over any useful bandwidth.
-
-:::{admonition} Worked example — matching $20 - j15\ \Omega$ at 1 GHz
-:class: tip
-**An antenna presents $Z_\text{in} = 20 - j15\ \Omega$ on a $50\ \Omega$ line at
-a design frequency of 1 GHz. Design the L-match.**
-
-*Cancel the reactance.* The load is capacitive, so add $+j15\ \Omega$ in series;
-what remains is $20 + j0\ \Omega$.
-
-*Find the number to build.* The geometric mean of the two resistances:
-
-$$
-\sqrt{Z_0 R_L} = \sqrt{(50)(20)} = 31.6\ \Omega
-$$
-
-*Series reactance.* The branch must have that magnitude, and its resistance is
-stuck at $20\ \Omega$, so Pythagoras gives the reactance the branch needs — this
-is the arc up the constant-resistance circle in the chart above:
-
-$$
-X = \sqrt{31.6^{2} - 20^{2}} = \sqrt{600} = 24.5\ \Omega
-$$
-
-The load already supplies $X_L = -15\ \Omega$ of that, so the component makes up
-the difference — $24.5 - (-15) = +39.5\ \Omega$, an inductor:
-
-$$
-L = \frac{X}{2\pi f} = \frac{39.5}{2\pi (10^9)} = 6.3\ \text{nH}
-$$
-
-*Shunt reactance.* The branch $20 + j24.5\ \Omega$ has a parallel equivalent of
-$50\ \Omega$ alongside $-j40.8\ \Omega$; the shunt element cancels that leftover,
-so it is $+\frac{j}{40.8}$ — a capacitor:
-
-$$
-C = \frac{1}{2\pi f X} = \frac{1}{2\pi (10^9)(40.8)} = 3.9\ \text{pF}
-$$
-
-(Equivalently, in $Q$ language: $Q = \frac{24.5}{20} = 1.22$, so the shunt reactance is
-$\frac{R_\text{big}}{Q} = \frac{50}{1.22} = 40.8\ \Omega$.)
-
-A $6.3\ \text{nH}$ series inductor and a $3.9\ \text{pF}$ shunt capacitor, both
-lossless, and the $20 - j15\ \Omega$ antenna looks like $50\ \Omega$ — at 1 GHz
-and nowhere else. Move 10% in frequency and both reactances are off by 10%.
-:::
+- **You do not get to choose it.** The transformation ratio $Z_0/R_L$ sets $Q$
+  completely. Wanting a gentler match is not an option the physics offers.
+- **It is stored energy over dissipated energy** — the same ratio that set
+  bandwidth in Lesson 3. High $Q$ means a lot of energy sloshing between the
+  inductor and capacitor for every watt delivered, and that is exactly what
+  makes the match narrowband. Transform further, get a higher $Q$, get less
+  bandwidth. An electrically small antenna, with its fraction of an ohm of
+  radiation resistance, needs an enormous $Q$ to reach $50\ \Omega$ — which is
+  precisely why it is so painful to feed over any useful bandwidth.
 
 ```{note}
 Every matching network is a **band-limited** fix. You can force $\Gamma = 0$ at
