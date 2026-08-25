@@ -255,11 +255,8 @@ solving one problem all the way through. Everything you need is already on the
 table: the geometric mean from the quarter-wave section, and the Smith chart
 from your transmission-lines course.
 
-:::{admonition} The problem
-:class: key-concept
 **An antenna presents $Z_\text{in} = 20 - j15\ \Omega$ on a $50\ \Omega$ line at
 a design frequency of 1 GHz. Match it.**
-:::
 
 #### Step 1 — Cancel the load reactance
 
@@ -351,12 +348,9 @@ $$
 C = \frac{0.0245}{2\pi(10^{9})} = 3.9\ \text{pF}.
 $$
 
-:::{admonition} The answer
-:class: key-concept
 A **6.3 nH series inductor** and a **3.9 pF shunt capacitor**, both lossless,
 and the $20 - j15\ \Omega$ antenna looks like $50\ \Omega$ — at 1 GHz and
 nowhere else. Move 10% in frequency and both reactances are off by 10%.
-:::
 
 #### The same design, on the Smith chart
 
