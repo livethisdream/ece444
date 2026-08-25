@@ -23,6 +23,7 @@ Conventions and the traps that ship silently wrong live in
 | `book/extras/labs/*.pdf` | built lab packets (blank copies only) |
 | `book/extras/handouts/*` | printable reference sheets (Smith charts) |
 | `latex/` | practice and lab sources, and their build scripts |
+| `latex/fonts/Barlow/` | the body font, vendored (SIL OFL) — loaded by path, no install |
 | `scripts/` | deck wrapper generator, lesson scaffolder, figure generators |
 | `scripts/verify/` | headless-chromium render checks — see its own README |
 
@@ -114,6 +115,12 @@ TEXINPUTS=/workspace/latex-tools/tex/latex//: bash latex/build_practice.sh 06
 
 That builds `ECE444_L06_Practice_{blank,SOLUTIONS}.pdf` and copies both to
 `book/extras/practice/`. Commit them.
+
+The scripts run **lualatex, not pdflatex** — the body font is Barlow, loaded as
+OpenType through `fontspec` (see `latex/ece444_fonts.tex`). If lualatex dies
+with `module 'luaotfload-main' not found`, that is a missing `texlive-luatex`
+apt package, not a font problem. Math stays in Computer Modern deliberately;
+the reasoning is in the header comment of `ece444_fonts.tex`.
 
 Never commit a PDF built with stand-in macros. Reimplementing the macros well
 enough to compile is easy and useful for syntax-checking the source; measured

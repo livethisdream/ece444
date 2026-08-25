@@ -53,11 +53,21 @@ TEX_PKGS=(
   texlive-plain-generic
   texlive-bibtex-extra
   texlive-lang-greek
+  texlive-luatex
   asymptote
   poppler-utils
 )
 
-if command -v pdflatex >/dev/null 2>&1 && kpsewhich asymptote.sty >/dev/null 2>&1; then
+# texlive-luatex is load-bearing, not optional: the body font is Barlow, loaded
+# as OpenType through fontspec, so the practice sets and labs build with
+# lualatex. Without this package luaotfload is missing and lualatex dies with
+# "module 'luaotfload-main' not found" -- which reads like a font problem and is
+# actually a missing apt package. Hence the probe below tests for it directly:
+# a container provisioned before this change has pdflatex and asymptote and
+# would otherwise be waved through.
+if command -v lualatex >/dev/null 2>&1 \
+   && kpsewhich asymptote.sty >/dev/null 2>&1 \
+   && kpsewhich -format=lua luaotfload-main.lua >/dev/null 2>&1; then
   log "TeX Live present, skipping apt install"
 else
   log "installing TeX Live (~1.5 GB, a few minutes on a cold container)"

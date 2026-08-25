@@ -1,0 +1,55 @@
+% ECE 444 document fonts.
+%
+% Body text is Barlow (SIL OFL; the faces and the licence are in
+% latex/fonts/Barlow/). Barlow is not in TeX Live, so it is loaded as an
+% OpenType face through fontspec -- which means the document must be built
+% with lualatex, not pdflatex. build_practice.sh and build_lab.sh both do.
+%
+% Compiling with pdflatex anyway is not an error: the guard below falls back
+% to the LaTeX default so the source still compiles under any engine and can
+% be syntax-checked. The resulting PDF just is not the one we ship.
+%
+% Paths are relative to latex/, which is where both build scripts run
+% (each does cd "$(dirname "$0")"). Loading by path rather than by installed
+% family name means no system font install and no fontconfig, so a fresh
+% clone builds a byte-comparable PDF anywhere.
+%
+% MATH IS DELIBERATELY LEFT IN COMPUTER MODERN. Barlow has no math companion,
+% and CM math under sans body text is already the house pairing: the decks set
+% words in Source Sans Pro and let MathJax render symbols in its CM-derived
+% face. Moving math to a sans as well would mean unicode-math plus a sans math
+% font (Fira Math being the plausible one) and re-checking every equation in
+% the course for symbol coverage. That is a separate decision, not a side
+% effect of this one.
+
+\usepackage{iftex}
+\ifLuaTeX
+	\usepackage{fontspec}
+	\defaultfontfeatures{Ligatures=TeX}
+	\setmainfont{Barlow}[
+		Path           = fonts/Barlow/,
+		Extension      = .ttf,
+		UprightFont    = *-Regular,
+		ItalicFont     = *-Italic,
+		BoldFont       = *-Bold,
+		BoldItalicFont = *-BoldItalic,
+	]
+	\setsansfont{Barlow}[
+		Path           = fonts/Barlow/,
+		Extension      = .ttf,
+		UprightFont    = *-Regular,
+		ItalicFont     = *-Italic,
+		BoldFont       = *-SemiBold,
+		BoldItalicFont = *-BoldItalic,
+	]
+	% microtype earns its place here specifically because of Barlow. Its
+	% glyphs are narrower than Computer Modern's, so justified prose sets
+	% tighter and TeX has to squeeze interword space to fit; two paragraphs
+	% in the L02/L03 sets went overfull on the first Barlow build. Protrusion
+	% and font expansion absorb that -- both are lualatex features, so this
+	% belongs inside the guard with everything else.
+	\usepackage{microtype}
+
+	% Mono stays Latin Modern: Barlow ships no monospaced face, and verbatim
+	% and code need one that actually is fixed-pitch.
+\fi

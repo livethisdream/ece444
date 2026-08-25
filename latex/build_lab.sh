@@ -5,8 +5,9 @@
 #   ./build_lab.sh [SLUG]        # SLUG defaults to L04_Matching
 #
 # Content lives in ECE444_Lab_<SLUG>.tex. Unlike the practice sets there is no
-# separate harness -- each lab is a standalone document. Runs pdflatex twice
-# per version for \numpages.
+# separate harness -- each lab is a standalone document. Runs lualatex twice
+# per version for \numpages. lualatex, not pdflatex:
+# the body font is Barlow, loaded as OpenType via fontspec (ece444_fonts.tex).
 #
 # The VNA photographs live in the course figures folder, not in this repo.
 # Pass NOFIGS=1 to substitute placeholder boxes (lets the packet compile on a
@@ -31,7 +32,7 @@ build() {                       # build <iskey:0|1> <suffix>
 	local iskey="$1" suffix="$2"
 	local job="ECE444_Lab_${SLUG}_${suffix}"
 	for _ in 1 2; do
-		pdflatex -interaction=nonstopmode -halt-on-error -jobname="$job" \
+		lualatex -interaction=nonstopmode -halt-on-error -jobname="$job" \
 			"${NOFIGSDEF}\\def\\iskey{${iskey}}\\input{${SRC}}" >/dev/null
 	done
 	echo "wrote ${job}.pdf"

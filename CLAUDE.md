@@ -41,6 +41,12 @@ TEXINPUTS=/workspace/latex-tools/tex/latex//: bash latex/build_practice.sh 06
 The SessionStart hook installs both toolchains and pre-exports `TEXINPUTS`, so in
 a web session only the attach + clone is left to do.
 
+Both build scripts run **lualatex**: body text is Barlow, vendored in
+`latex/fonts/Barlow/` and loaded by path through `fontspec` (`ece444_fonts.tex`).
+Math is deliberately left in Computer Modern. Building with pdflatex still
+compiles — the font setup is guarded by `\ifLuaTeX` — but silently falls back to
+Computer Modern throughout, so the PDF is not the one we ship.
+
 **Verify by rendering, not by reading.** Headless chromium is available. The CDNs
 (jsdelivr, Google Fonts) are blocked in these containers, so reveal.js and MathJax
 never load on their own — vendor them from npm (`npm i reveal.js@5.1.0 mathjax@3`)
