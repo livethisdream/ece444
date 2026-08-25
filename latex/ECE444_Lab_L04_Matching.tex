@@ -37,13 +37,17 @@
 %
 \def\thisclass{ECE 444}
 
-% The VNA photographs live in the course figures folder, NOT in this repo.
-% Build with \def\nofigsIn{} to substitute placeholder boxes (useful for a
-% syntax check on a machine without the figures).
+% The VNA photographs are auto-detected: if latex/figures/ECE343/ carries
+% them the packet uses them, otherwise it substitutes labelled placeholder
+% boxes so the source still compiles. \def\nofigsIn{} forces placeholders.
+% See latex/figures/ECE343/README.md for the four files and what each shows.
+\havefigsfalse
+\IfFileExists{figures/ECE343/vna_annotated.png}{\havefigstrue}{%
+	\IfFileExists{figures/ECE343/vna_annotated.jpg}{\havefigstrue}{%
+		\IfFileExists{../figures/ECE343/vna_annotated.png}{\havefigstrue}{%
+			\IfFileExists{../figures/ECE343/vna_annotated.jpg}{\havefigstrue}{}}}}
 \ifdefined\nofigsIn
 	\havefigsfalse
-\else
-	\havefigstrue
 \fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -92,13 +96,14 @@
 \renewcommand{\thepartno}{\alph{partno}}
 \renewcommand{\partlabel}{(\thepartno)}
 
-% graphics path -- the course figures folder first, then repo-local
+% graphics path -- repo-local first so a fresh clone builds the same packet
+% anywhere; the course figures folder is the fallback for Neil's own machine.
 \ifdefined\figPathIn
 	\def\mygraphicspath{\figPathIn}
 \else
 	\def\mygraphicspath{C:/Users/neil.rogers.1/OneDrive - afacademy.af.edu/figures/}
 \fi
-\graphicspath{{\mygraphicspath}{figures/}{../figures/}}
+\graphicspath{{figures/}{../figures/}{\mygraphicspath}}
 
 % placeholder used when the figures folder is not present
 \newcommand{\figplaceholder}[1]{%

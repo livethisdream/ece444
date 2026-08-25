@@ -55,8 +55,8 @@ your answer on a Smith chart before you touch a component.
 
 ## Lab packet
 
-The lab sheet is the turn-in document:
-<a href="../../labs/ECE444_Lab_L04_Matching_blank.pdf" target="_blank" rel="noopener">Lab sheet (PDF)</a>.
+The lab sheet is the turn-in document. It is handed out in class; the PDF is
+posted here once the packet is final.
 
 ## Where this is going
 
