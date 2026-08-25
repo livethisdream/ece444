@@ -23,6 +23,8 @@ parts:
         title: "L3 — Polarization and Bandwidth"
       - file: module01/L04-impedance-feeding-baluns/index
         title: "L4 — Impedance, Feeding, and Baluns"
+      - file: module01/L04-lab-matching/index
+        title: "L4 Lab — Matching Procedures"
       - file: module01/L05-field-regions/index
         title: "L5 — Field Regions"
       - file: module01/L06-radiation-integrals/index

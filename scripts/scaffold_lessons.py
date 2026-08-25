@@ -73,7 +73,7 @@ LO_TEXT = {
 # ---- Module metadata -------------------------------------------------------
 MODULES = {
     1: dict(
-        caption="Module 1 — Antenna Fundamentals",
+        caption="Module 1 — Foundations of Electromagnetics and Antennas",
         title="Module 1 — Antenna Fundamentals",
         los=["1.1", "1.2", "1.3", "1.4", "1.5", "1.6"],
         synopsis="Ground the physics. What an antenna is and why it matters, the chain from Maxwell's equations to the plane wave, the headline parameters (gain, directivity, effective area, beamwidth), impedance and feeding, field regions, and the radiation integrals.",
@@ -101,13 +101,21 @@ MODULES = {
         generate_index=True,
     ),
     5: dict(
-        caption="Module 5 — Capstone",
-        title="Module 5 — Capstone",
+        caption="Module 5 — Capstone Project",
+        title="Module 5 — Capstone Project",
         los=["5.1", "5.2", "5.3", "5.4"],
         synopsis="Capstone. Integrate beam steering, null steering, and FMCW radar into a working demo that tracks a moving target while suppressing a static jammer, and brief the results.",
         generate_index=True,
     ),
 }
+
+# ---- Lab manifest: labs that hang off a lesson without taking a lesson number.
+# (module, anchor_lesson_slug, lab_slug, toc_title). The TOC lists each one
+# directly after its anchor lesson. Lab pages are hand-written -- the scaffolder
+# only places them in the TOC, it does not generate them.
+LABS = [
+    (1, "L04-impedance-feeding-baluns", "L04-lab-matching", "L4 Lab — Matching Procedures"),
+]
 
 # ---- Lesson manifest: (module, num, slug, title, [lo_ids], synopsis, has_practice)
 LESSONS = [
@@ -295,12 +303,12 @@ def toc_yaml():
         for (_, num, slug, title, lo_ids, _syn, has_practice) in [x for x in LESSONS if x[0] == mnum]:
             lines.append(f"      - file: module{mnum:02d}/{slug}/index")
             lines.append(f'        title: "L{num} — {title}"')
-            if has_practice:
-                lines.append("        sections:")
-                lines.append(f"          - file: module{mnum:02d}/{slug}/practice")
-                lines.append("            title: Practice")
-                lines.append(f"          - file: module{mnum:02d}/{slug}/practice-solutions")
-                lines.append("            title: Practice Solutions")
+            # Practice is served as linked PDFs from the lesson page itself --
+            # there are no practice.md / practice-solutions.md pages to list.
+            for (lmnum, anchor, lslug, ltitle) in LABS:
+                if lmnum == mnum and anchor == slug:
+                    lines.append(f"      - file: module{mnum:02d}/{lslug}/index")
+                    lines.append(f'        title: "{ltitle}"')
     return "\n".join(lines) + "\n"
 
 

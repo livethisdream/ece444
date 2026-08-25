@@ -379,10 +379,11 @@ stay bare ($\eta_0$, $A_e$, $G_t$, $G_r$).
   (`0.886\ \lambda/L`), ratios inside a power (`(\ell/\lambda)^2`), the
   far-field criterion (`2D^2/\lambda`), small numeric fractions (`1/2`, `1/3`,
   `\pi/8`, `D/2`), unit compounds (W/m²), and prose separators (Γ/VSWR/dB).
-- **No math in markdown headings.** `## ... $\Gamma$ ...` is converted to
-  `\(\Gamma\)` and then never typeset — the heading ships the literal
-  delimiters. Write the symbol as a plain character (Γ, Q, λ) instead. Same
-  hazard as math inside raw-HTML blocks and LO `<li>` items.
+- **Prefer a plain character to math in a heading.** `## Γ, VSWR, and Power`
+  rather than `## $\Gamma$, VSWR, and Power` — a heading is a label, it does not
+  need typeset math, and a plain character survives anywhere the page is
+  rendered without MathJax (offline previews, print, feed readers). This is a
+  style preference, not a bug: MathJax does typeset headings normally.
 - In markdown tables, absolute values/norms use `\vert`, never `|`.
 - Units in math with an escaped space: `$0.05\ \text{m}$` style on pages;
   house unit macros in LaTeX practice sets.
