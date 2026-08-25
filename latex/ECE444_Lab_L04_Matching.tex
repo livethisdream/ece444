@@ -40,15 +40,24 @@
 % The VNA photographs are auto-detected: if latex/figures/ECE343/ carries
 % them the packet uses them, otherwise it substitutes labelled placeholder
 % boxes so the source still compiles. \def\nofigsIn{} forces placeholders.
-% See latex/figures/ECE343/README.md for the four files and what each shows.
+% See latex/figures/README.md for the four files and what each shows.
 \havefigsfalse
-\IfFileExists{figures/ECE343/vna_annotated.png}{\havefigstrue}{%
-	\IfFileExists{figures/ECE343/vna_annotated.jpg}{\havefigstrue}{%
-		\IfFileExists{../figures/ECE343/vna_annotated.png}{\havefigstrue}{%
-			\IfFileExists{../figures/ECE343/vna_annotated.jpg}{\havefigstrue}{}}}}
+\IfFileExists{figures/vna_annotated.png}{\havefigstrue}{%
+	\IfFileExists{figures/vna_annotated.jpg}{\havefigstrue}{%
+		\IfFileExists{../figures/vna_annotated.png}{\havefigstrue}{%
+			\IfFileExists{../figures/vna_annotated.jpg}{\havefigstrue}{}}}}
 \ifdefined\nofigsIn
 	\havefigsfalse
 \fi
+
+% The blank Smith chart students plot on. It is published on the course site
+% (book/extras/handouts/) and pulled in from there, so there is one copy.
+\newif\ifhavesmith
+\havesmithfalse
+\def\smithchartpath{../book/extras/handouts/SmithChart_blank.pdf}
+\IfFileExists{\smithchartpath}{\havesmithtrue}{%
+	\IfFileExists{SmithChart_blank.pdf}{%
+		\havesmithtrue\def\smithchartpath{SmithChart_blank.pdf}}{}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% LAB PARAMETERS -- the mock antenna and its match
@@ -289,21 +298,21 @@ will measure exactly that in Question 9.
 A full user's guide for the VNA is available \href{https://nanorfe.com/nanovna-v2-user-manual.html}{online}. Please familiarize yourself with this guide \textbf{before} the lab period.  The VNA is shown in Figure \ref{fig:vna} and some of the key components are highlighted.
 
 	\begin{figure}[H]
-	\begin{subfigure}[t]{0.5\textwidth}
+	\begin{subfigure}[t]{0.48\textwidth}
 		\begin{center}
 		\ifhavefigs
-			\includegraphics[scale=0.23]{ECE343/vna_annotated}
+			\includegraphics[width=0.8\linewidth]{vna_annotated}
 		\else
 			\figplaceholder{annotated VNA overview}
 		\fi
 		\end{center}
 		\caption{An annotated overview of the VNA.}
 		\label{fig:vna}
-	\end{subfigure} %
-	\begin{subfigure}[t]{0.5\textwidth}
+	\end{subfigure}\hfill
+	\begin{subfigure}[t]{0.48\textwidth}
 		\begin{center}
 			\ifhavefigs
-				\includegraphics[scale=0.23]{ECE343/nano_vna_initial}
+				\includegraphics[width=0.95\linewidth]{nano_vna_initial}
 			\else
 				\figplaceholder{initial nano VNA screen}
 			\fi
@@ -426,7 +435,7 @@ When making measurements, be sure to pause the sweep while changing physical con
 \begin{figure}[H]
 	\centering{
 	\ifhavefigs
-		\includegraphics[scale=0.5]{ECE343/annotated_vna_readout}
+		\includegraphics[width=0.92\textwidth]{annotated_vna_readout}
 	\else
 		\figplaceholder{annotated VNA marker readout}
 	\fi
@@ -520,7 +529,7 @@ When making measurements, be sure to pause the sweep while changing physical con
 \end{center}
 
 \begin{solution}
-$\myz{C} = -j/(2\pi f C)$ with $C = 470\ \text{pF}$: $-j6773$\ohms\ at
+$\myz{C} = -\frac{j}{2\pi f C}$ with $C = 470\ \text{pF}$: $-j6773$\ohms\ at
 50\khz, $-j3386$\ohms\ at 100\khz, $-j677$\ohms\ at 500\khz,
 $-j484$\ohms\ at 700\khz, $-j376$\ohms\ at 900\khz, $-j339$\ohms\ at
 1\mhz, $-j169$\ohms\ at 2\mhz, $-j113$\ohms\ at 3\mhz, $-j85$\ohms\ at
@@ -528,9 +537,9 @@ $-j484$\ohms\ at 700\khz, $-j376$\ohms\ at 900\khz, $-j339$\ohms\ at
 outer rim, walking clockwise toward the short as frequency rises.
 \end{solution}
 
-\ifhavefigs
+\ifhavesmith
 	\newpage
-	\includepdf[pages=1]{SmithChart_blank.pdf}
+	\includepdf[pages=1]{\smithchartpath}
 \fi
 
 \newpage
@@ -607,7 +616,7 @@ outer rim, walking clockwise toward the short as frequency rises.
 	\begin{figure}[H]
 		\begin{center}
 			\ifhavefigs
-				\includegraphics[scale=0.5]{ECE343/cal_standards_annotated}
+				\includegraphics[width=0.8\linewidth]{cal_standards_annotated}
 			\else
 				\figplaceholder{RF calibration standards}
 			\fi
@@ -876,7 +885,7 @@ Restart the sweep and look at the return-loss trace across the full
 	from Lesson 3.
 
 		\begin{solution}[1.6in]
-		$Q = \sqrt{Z_0/R_a - 1}$ grows as $R_a$ shrinks: matching $0.5$\ohms\ to
+		$Q = \sqrt{\frac{Z_0}{R_a} - 1}$ grows as $R_a$ shrinks: matching $0.5$\ohms\ to
 		50\ohms\ needs $Q \approx 10$, and the usable band collapses by roughly
 		the same factor. This is the Chu-Harrington story made physical -- the
 		smaller you make the antenna, the higher the minimum $Q$, and the less

@@ -55,8 +55,14 @@ your answer on a Smith chart before you touch a component.
 
 ## Lab packet
 
-The lab sheet is the turn-in document. It is handed out in class; the PDF is
-posted here once the packet is final.
+The lab sheet is the turn-in document:
+<a href="../../labs/ECE444_Lab_L04_Matching_blank.pdf" target="_blank" rel="noopener">Lab sheet (PDF)</a>.
+It already contains a blank Smith chart to plot on. If you want spares, or a
+combined impedance-admittance chart for the Part II design:
+
+- <a href="../../handouts/SmithChart_blank.pdf" target="_blank" rel="noopener">Blank Smith chart (PDF, print)</a> — the same chart bound into the packet.
+- <a href="../../handouts/SmithChart_ZY_colour.pdf" target="_blank" rel="noopener">Impedance-admittance chart (PDF, colour)</a> — red impedance grid over blue admittance grid. This is the one to use when you cross from $Z$ to $Y$ in Step 5 of the design.
+- <a href="../../handouts/SmithChart_blank.svg" target="_blank" rel="noopener">Blank Smith chart (SVG)</a> — vector, for zooming on screen.
 
 ## Where this is going
 

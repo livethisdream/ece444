@@ -370,6 +370,14 @@ you do not stop at the real axis after Step 1 and start again. Steps 1 and 4 are
 one component and one continuous move; splitting them is a thinking aid, not a
 parts list.
 
+Work it yourself on paper — that is how the chart stops being a picture and
+starts being a tool. Printable copies:
+<a href="../../handouts/SmithChart_blank.pdf" target="_blank" rel="noopener">blank chart</a>
+for the walk above, and a
+<a href="../../handouts/SmithChart_ZY_colour.pdf" target="_blank" rel="noopener">combined impedance-admittance chart</a>
+for Step 5, where you need the constant-conductance circles overlaid on the
+constant-resistance ones.
+
 #### Why a lossless element can change the resistance at all
 
 Step 4 is easy to compute and hard to believe. How can adding a reactance, which
