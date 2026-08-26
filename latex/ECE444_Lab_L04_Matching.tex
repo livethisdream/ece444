@@ -342,7 +342,7 @@ You can customize each scale -- the user's manual describes how -- but this lab 
 \subsection{VNA Setup}
 To bring up the menu, tap the screen (it helps to use a passive stylus) or press the middle tactile button. Your first task should be to flip the display, which will allow you to turn the ports away from you. To do this, tap the screen, then tap ``Display'' at the top of the menu. At the bottom, you should then see ``Flip Display'' -- tap this button and the screen should invert. You should also tap the ``Pause Sweep'' button -- this pauses the frequency sweep and measurement cycle of the VNA.  Take some time to explore the menu structure -- a full map is available in the user's guide.
 
-\subsection{Parts for Part II}
+\subsection{Parts for Part II}\label{parts}
 
 Beyond the VNA and its cables, each team builds a mock antenna from two
 components:
@@ -744,21 +744,30 @@ $f_0 = \fdes\ \mhz$.
 \question{\textbf{Build and verify.}}
 
 The bench kit stocks standard values, not whatever came out of your arithmetic.
-The nearest parts to your Question 7 answers are an inductor of
-$\matchL\ \mu\text{H}$ and a capacitor marked $0.0022\ \mu$F ($\matchC$\ nF). Take those,
-and note how far each sits from your calculated value -- part (e) asks what the
-difference cost you.
+Draw the nearest stocked inductor and capacitor to your Question 7 answers, and
+record both numbers -- what you asked for and what you took. Part (e) asks what
+the difference cost you.
 
-\textbf{Measure your actual capacitor} on the bench LCR meter before you build
-and write the value down: a part marked $0.0022\ \mu$F may well measure
-$2.14$\ nF.
+\textbf{Measure the capacitor you took} on the bench LCR meter before you build,
+and write that value down as well: a marked value and a measured value are not
+the same thing.
 
-Watch the units. $0.001\ \mu$F ($\antC$\ nF) is the \emph{antenna}
-capacitor and $0.0022\ \mu$F ($\matchC$\ nF) is the \emph{matching}
-capacitor; they differ by roughly a factor of two and swapping them will not
-work.
+Watch which capacitor is which. One is the antenna's series capacitor from the
+table in Section \ref{parts}; the other is the matching capacitor you just drew.
+They differ by roughly a factor of two, and swapping them will not work.
 
 Build the mock antenna first, measure it, then add the network. Keep leads short.
+
+\ifkey
+\begin{center}
+\fbox{\parbox{0.93\textwidth}{\small\color{red}\textbf{Instructor note.} The
+kit parts that bracket the Question 7 answers are $\matchL\ \mu$H (essentially
+exact against the ideal $8.16\ \mu$H) and a capacitor marked $0.0022\ \mu$F,
+$\matchC$\ nF nominal -- about 10\% under the ideal $2431$\ pF. A sampled part
+measured $2.14$\ nF. Keep these off the board until the designs are collected;
+rounding to the drawer is part of the exercise.}}
+\end{center}
+\fi
 
 \begin{parts}
 
@@ -824,10 +833,10 @@ Build the mock antenna first, measure it, then add the network. Keep leads short
 		constant-conductance circle into the centre.
 		\end{solution}
 
-	\part Your measured match is almost certainly worse than the ideal
-	$2431$\ pF design predicted. Using the capacitance you actually measured
-	in the Equipment section, account for as much of the gap as you can, then
-	name two further physical reasons for whatever is left over.
+	\part Your measured match is almost certainly worse than your Question 7
+	design predicted. Using the capacitance you actually measured at the start
+	of this question, account for as much of the gap as you can, then name two
+	further physical reasons for whatever is left over.
 
 		\begin{solution}[1.8in]
 		The dominant term is the part itself: a $0.0022\ \mu$F capacitor
