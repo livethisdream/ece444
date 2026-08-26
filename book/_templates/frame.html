@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" data-mode="present">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title|striptags }} — {{ docstitle|striptags }}</title>
+{{ metatags }}
+{%- for css in css_files %}
+  <link rel="stylesheet" href="{{ pathto(css, 1) }}">
+{%- endfor %}
+</head>
+<body>
+<div class="deck" id="deck" tabindex="-1">
+{{ body }}
+</div>
+<div class="hud">
+  <span>SPIKE</span>
+  {%- if prev %}<a href="{{ prev.link|e }}">prev: {{ prev.title|striptags }}</a>{% endif %}
+  {%- if next %}<a href="{{ next.link|e }}">next: {{ next.title|striptags }}</a>{% endif %}
+</div>
+{%- for js in script_files %}
+  <script src="{{ pathto(js, 1) }}"></script>
+{%- endfor %}
+</body>
+</html>

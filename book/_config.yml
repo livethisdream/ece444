@@ -43,6 +43,8 @@ html:
   use_repository_button: true
 
 sphinx:
+  local_extensions:
+    frames: _ext
   config:
     # Reveal.js decks live under book/extras/slides/ and must survive the
     # Sphinx build with their /slides/ URL prefix intact. html_extra_path
