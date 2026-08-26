@@ -83,6 +83,13 @@ The markdown parser mangles LaTeX in four specific ways:
   on one line (simplest, and what L06 does).
 - MyST is immune to all of this, so the *same equation* can render on the lesson
   page and break on the slide. Check the deck itself.
+- **A `---` needs a blank line above *and* below** to separate slides. The
+  wrapper's `data-separator` regex requires both; miss either and the `---`
+  renders as an `<hr>` (or, with nothing blank above it, promotes the line
+  before it to an `<h2>`), the two slides merge, and the first one's speaker
+  notes appear on screen. It then reads as a too-tall slide rather than a dead
+  separator — L04 shipped two merged pairs measuring 1235px and 1710px. Run
+  `scripts/verify/check_separators.py` before trimming any slide for height.
 
 **Build**
 

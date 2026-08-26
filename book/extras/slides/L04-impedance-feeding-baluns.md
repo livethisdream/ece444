@@ -183,12 +183,12 @@ The geometric mean is the whole design. Ask what happens at twice the frequency
 
 ## "Real load only" is not a veto
 
-Cancel the reactance first, and the quarter-wave transformer is back on the table. For $20 - j15\ \Omega$: add $+j15$, then a $\sqrt{(50)(20)} = 31.6\ \Omega$ section.
+Cancel the reactance first and the transformer is back on the table. For $20 - j15\ \Omega$: add $+j15$, then a $\sqrt{(50)(20)} = 31.6\ \Omega$ section.
 
-<div class="fig" data-inline-svg="./fig/L04-match-compare.svg" style="max-width:700px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L04-match-compare.svg" style="max-width:430px; margin:0 auto;"></div>
 
 <div class="callout">
-Two correct designs, near-identical bandwidth. What separates them is the <strong>build medium</strong>, not the physics.
+Two correct designs, near-identical bandwidth. The <strong>build medium</strong> separates them.
 </div>
 
 Note:
@@ -255,6 +255,7 @@ strategy in two bullets — and note the transformer realises 31.6 as a LINE
 impedance while the L-network realises it as a BRANCH magnitude. Same number.
 
 ---
+
 ## Step 4: size the series element
 
 Resistance is stuck at 20 Ω — a series element cannot move it — so the magnitude must come from the reactance:
@@ -291,6 +292,7 @@ Land on the real part: setting the magnitude to the geometric mean IS the
 condition that makes 1/Re{Y} come out at 50. Everything after that is one
 cancellation. Then the punchline — two lossless parts, and a 20 - j15 antenna
 now looks like 50 Ω.
+
 ---
 
 <!-- .slide: class="viz-cue-slide" -->

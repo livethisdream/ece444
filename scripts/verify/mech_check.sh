@@ -87,7 +87,17 @@ ps=$(pdfinfo "$s" 2>/dev/null | awk '/^Pages/{print $2}')
 [ -n "$ps" ] && [ "$ps" -ge "$pb" ] && ok "pages: blank=$pb solutions=$ps" \
   || bad "pagecount odd: blank=$pb sol=$ps"
 
-# 3. deck render
+# 3a. deck separators -- must run before the render check, because a dead
+# separator merges two slides and then shows up as a bogus "slide too tall"
+# rather than as what it is.
+if sep=$(python3 "$HERE/check_separators.py" "$LNN" 2>&1); then
+  ok "deck separators: all '---' live"
+else
+  bad "deck separators: $(echo "$sep" | grep -c 'line ') dead -- two slides are merged"
+  echo "$sep" | grep '  line ' | sed 's/^/        /'
+fi
+
+# 3b. deck render
 if python3 "$HERE/check_deck.py" "$LNN" >"/tmp/mc_deck_$NN.log" 2>&1; then
   ok "deck render: $(grep -m1 -E '^[A-Za-z0-9._-]+: [0-9]+ slides' "/tmp/mc_deck_$NN.log")"
 else

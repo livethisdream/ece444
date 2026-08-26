@@ -47,11 +47,29 @@ TEXINPUTS=/workspace/latex-tools/tex/latex//: \
 
 | Script | Checks |
 | :-- | :-- |
+| `check_separators.py` | every `---` in a deck has a blank line **above and below** — the only form reveal accepts as a slide separator |
 | `check_deck.py` | slide count; every slide fits the 700px stage; no raw `$$` or literal `\_` after MathJax typesets; no missing figures |
 | `check_widget.py` | worst-case height across the real serving widths; zero horizontal overflow at 430/390/320; canvas aspect undistorted; no blank canvas; no console errors |
 | `check_page.py` | math typeset; no raw `$$`/`$` leaking into the article; iframe targets resolve |
 | `check_tables.py` | markdown table rows where a `|` inside `$...$` splits a cell |
 | `mech_check.sh` | all of the above for one lesson, plus files present, LaTeX compiles without errors or overfull boxes >10pt, every `\part` has a `\begin{solution}`, LO markup matches the module, no thin spaces, no `\,`/`\;` in deck math, no `\|` inside table math, no self-vouching wording |
+
+## The separator trap
+
+`data-separator="^\r?\n---\r?\n$"` needs a blank line **on both sides** of a
+`---`. Read the regex: the leading `\r?\n` requires the preceding line to be
+empty, and the trailing `\r?\n$` requires the following one to be empty too.
+
+Miss either and nothing complains. Markdown renders the `---` as an `<hr>`, or
+— with no blank line before it — as a setext underline that silently promotes
+the previous line to an `<h2>`. Either way the separator dies, two slides merge
+into one, and the first slide's speaker notes land in the visible body, because
+reveal splits notes off a section only once.
+
+The merge then *masquerades* as a height problem: L04 shipped two merged pairs
+that `check_deck.py` reported as slides 1235px and 1710px tall. Nothing was too
+tall. Run `check_separators.py` first and read its answer before trimming any
+content.
 
 ## Two measurement rules worth keeping
 

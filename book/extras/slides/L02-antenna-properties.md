@@ -223,8 +223,7 @@ A = r^{2} \Rightarrow 1\ \text{sr}
 $$
 $$
 \Omega = 2\pi(1 - \cos\alpha)\ \text{sr}
-$$
-$$
+\qquad
 \Omega_{\text{sphere}} = 4\pi\ \text{sr}
 $$
 <p class="viz-cue">↗ Interactive on the lesson page</p>

@@ -293,9 +293,9 @@ Exactly L5's $1/r$ term — the one that survived $kr\gg1$. A page of exact alge
 
 $I(z') = I_0$ over length $L$ → the integral is an exponential, and out falls a sinc: $N_z(\theta) = I_0 L \sin u/u$ with $u = (kL/2)\cos\theta$.
 
-<div class="fig" data-inline-svg="./fig/L06-line-source-sinc.svg" style="max-width:760px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L06-line-source-sinc.svg" style="max-width:640px; margin:0 auto;"></div>
 
-Peak at **broadside**, first null at $\cos\theta = \lambda/L$, first sidelobe $-13.3$ dB **however long you build it**. That is the **space factor** — times the element factor $\sin\theta$ it gives the full pattern: **pattern multiplication**, all of L16.
+Peak at **broadside**, first null at $\cos\theta = \lambda/L$, first sidelobe $-13.3$ dB **however long you build it**. That is the **space factor**; times the element factor $\sin\theta$ it gives the full pattern — **pattern multiplication**, all of L16.
 
 Note:
 Point at the dashed line on the plot. Uniform illumination always costs 13.3 dB

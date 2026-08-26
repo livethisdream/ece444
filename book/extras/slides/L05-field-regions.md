@@ -198,14 +198,14 @@ $$ r < 0.62\sqrt{\frac{D^{3}}{\lambda}} \qquad 0.62\sqrt{\frac{D^{3}}{\lambda}} 
 
 ## Careful: these are for *large* antennas
 
-The two formulas assume an **electrically large** antenna, $D > \lambda$, where $2D^{2}/\lambda$ is the distance that means anything.
+Both formulas assume an **electrically large** antenna, $D > \lambda$ — the regime where $2D^{2}/\lambda$ means anything.
 
-For an electrically **small** antenna, $2D^{2}/\lambda$ can come out smaller than a wavelength, which is nonsense. There the reactive near-field just extends to about $\lambda/2\pi$ — the $kr = 1$ crossover we derived:
+For a **small** antenna it can come out smaller than a wavelength, which is nonsense: the reactive near field runs to about $\lambda/2\pi$, the $kr = 1$ crossover we derived:
 
 $$ r_{\text{ff}} \approx \max\left(\frac{2D^{2}}{\lambda},\ \frac{\lambda}{2\pi}\right) $$
 
 <div class="callout">
-And remember the previous slide: at $\lambda/2\pi$ the stored terms are merely <em>equal</em>, so in practice give a small antenna <strong>a few wavelengths</strong> before you trust the pattern.
+At $\lambda/2\pi$ the stored terms are merely <em>equal</em>, so give a small antenna <strong>a few wavelengths</strong> before you trust the pattern.
 </div>
 
 ---
@@ -223,16 +223,16 @@ flat enough across D.
 
 ## The phase-error budget
 
-Extra path from the source to the **edge** of the aperture over the path to its **centre**:
+Extra path from the source to the aperture **edge** over the path to its **centre**:
 
 $$ \Delta \approx \frac{(D/2)^{2}}{2r} = \frac{D^{2}}{8r} $$
 
-The agreed tolerance is $\Delta \le \lambda/16$ — a maximum phase error of $22.5^{\circ}$, or $\pi/8$ radians, across the aperture. Set $\Delta = \lambda/16$:
+Tolerance: $\Delta \le \lambda/16$, a peak phase error of $22.5^{\circ}$ ($\pi/8$). Set $\Delta = \lambda/16$:
 
 $$ \frac{D^{2}}{8r} = \frac{\lambda}{16} \qquad\Longrightarrow\qquad r = \frac{2D^{2}}{\lambda} $$
 
 <div class="callout">
-$2D^{2}/\lambda$ is a <strong>budget</strong>, not a wall. Inside it the phase across the aperture curves enough to distort the pattern; beyond it, the wavefront is flat enough and the pattern stops moving.
+$2D^{2}/\lambda$ is a <strong>budget</strong>, not a wall — inside it aperture phase distorts the pattern, beyond it the pattern stops moving.
 </div>
 
 ---
