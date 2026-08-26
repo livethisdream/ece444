@@ -743,29 +743,52 @@ $f_0 = \fdes\ \mhz$.
 \newpage
 \question{\textbf{Build and verify.}}
 
-The bench kit stocks standard values, not whatever came out of your arithmetic.
-Draw the nearest stocked inductor and capacitor to your Question 7 answers, and
-record both numbers -- what you asked for and what you took. Part (e) asks what
-the difference cost you.
+Now go and find the parts. The inductor and capacitor you calculated in
+Question 7 are not on your bench -- they are across the hallway in the
+electronics lab, in whatever bins happen to be stocked. Nobody has laid out a
+kit for you.
 
-\textbf{Measure the capacitor you took} on the bench LCR meter before you build,
-and write that value down as well: a marked value and a measured value are not
-the same thing.
+\textbf{Take the closest thing you can find} to each of your two values, and
+write down all four numbers: what you calculated, and what you actually came
+back with. Measure the capacitor on the bench LCR meter while you are at it --
+a marked value and a measured value are not the same thing, and part (e) turns
+on the difference.
+
+You will not get exactly what you asked for. That is the normal case in this
+line of work, and the useful question is not whether the match is perfect but
+whether it is \textbf{good enough} for what the radio needs. Part (f) asks you
+to answer that.
 
 Watch which capacitor is which. One is the antenna's series capacitor from the
-table in Section \ref{parts}; the other is the matching capacitor you just drew.
-They differ by roughly a factor of two, and swapping them will not work.
+table in Section \ref{parts}; the other is the matching capacitor you just
+fetched. They differ by roughly a factor of two, and swapping them will not
+work.
 
 Build the mock antenna first, measure it, then add the network. Keep leads short.
 
 \ifkey
 \begin{center}
-\fbox{\parbox{0.93\textwidth}{\small\color{red}\textbf{Instructor note.} The
-kit parts that bracket the Question 7 answers are $\matchL\ \mu$H (essentially
-exact against the ideal $8.16\ \mu$H) and a capacitor marked $0.0022\ \mu$F,
-$\matchC$\ nF nominal -- about 10\% under the ideal $2431$\ pF. A sampled part
-measured $2.14$\ nF. Keep these off the board until the designs are collected;
-rounding to the drawer is part of the exercise.}}
+\fbox{\parbox{0.93\textwidth}{\small\color{red}\textbf{Instructor note --
+grading a team that came back with anything.} Ideal design: $8.16\ \mu$H and
+$2431$\ pF. VSWR at $\fdes$\mhz\ for the E12 values they are likely to find,
+against $12.0{:}1$ unmatched:
+\begin{center}\small\color{red}
+\begin{tabular}{r|ccccc}
+$L\ (\mu$H) $\backslash\ C$ (nF) & 1.0 & 1.5 & 2.2 & 3.3 & 4.7 \\\hline
+4.7  & 6.09 & 7.40 & 9.52 & 13.5 & 19.7 \\
+6.8  & 2.99 & 2.90 & 2.91 & 3.23 & 4.14 \\
+8.2  & 2.39 & 1.77 & \textbf{1.15} & 1.76 & 3.89 \\
+10   & 3.56 & 3.14 & 3.68 & 7.05 & 15.6 \\
+15   & 16.6 & 20.0 & 30.1 & 58.6 & 117 \\
+\end{tabular}
+\end{center}
+Read the shape, not just the sweet spot. \textbf{The inductor is the sensitive
+part}: one E12 step off $8.2$ costs a factor of three in VSWR ($2.9$ or $3.7$
+against $1.15$), because it sets both the reactance cancellation and the
+resistance transformation. \textbf{The capacitor is forgiving}: a step either
+way lands near $1.8{:}1$. Any row from $6.8$ to $10\ \mu$H still beats $12{:}1$
+comfortably; $15\ \mu$H and up makes it \emph{worse} than no network at all,
+which is worth drawing out if a team lands there.}}
 \end{center}
 \fi
 
@@ -834,23 +857,52 @@ rounding to the drawer is part of the exercise.}}
 		\end{solution}
 
 	\part Your measured match is almost certainly worse than your Question 7
-	design predicted. Using the capacitance you actually measured at the start
-	of this question, account for as much of the gap as you can, then name two
-	further physical reasons for whatever is left over.
+	design predicted. Recompute the prediction using the parts you actually
+	came back with -- the marked inductance and your measured capacitance --
+	and see how much of the gap that alone explains. Name two further physical
+	reasons for whatever is left over.
 
 		\begin{solution}[1.8in]
-		The dominant term is the part itself: a $0.0022\ \mu$F capacitor
-		measuring $2.14$\ nF is 12\% below the $2431$\ pF the design asked
-		for, which on its own accounts for VSWR $1.19$ instead of $1.04$.
-		Beyond that: the inductor's series resistance and self-capacitance;
-		lead and grabber-clip inductance adding reactance nobody cancelled;
-		the $\antR\ohms$ resistor's own tolerance; and the calibration
-		reference plane not sitting exactly where the components attach.
+		The dominant term is nearly always the parts. Work an example: an
+		$8.2\ \mu$H inductor against the ideal $8.16\ \mu$H is negligible,
+		but a capacitor marked $0.0022\ \mu$F that measures $2.14$\ nF is
+		12\% under the $2431$\ pF asked for, which on its own moves VSWR from
+		$1.04$ to $1.19$. A team that could only find $6.8$ or $10\ \mu$H
+		will see far more than that -- around $3{:}1$ -- and the recomputed
+		prediction should land close to what they measured. If it does not,
+		the rest is physical: the inductor's series resistance and
+		self-capacitance; lead and grabber-clip inductance adding reactance
+		nobody cancelled; the $\antR\ohms$ resistor's own tolerance; and the
+		calibration reference plane not sitting exactly where the components
+		attach.
+		\end{solution}
+
+	\part \textbf{Is it good enough?} You did not get the parts you designed
+	for, and you will not next time either. State the VSWR your network
+	actually holds at $f_0$, and the mismatch loss that costs in dB. Then take
+	a position: for a transmitter that wants VSWR $\le 2$, would you ship this
+	network, go back across the hallway for a better part, or redesign around
+	what the bins actually carry? Defend the answer with your two numbers, not
+	with a preference.
+
+		\begin{solution}[1.8in]
+		The point of the question is that ``good enough'' is a specification,
+		not an opinion, and that they can now compute whether they meet it.
+		Any network from roughly $6.8$ to $10\ \mu$H clears $12{:}1$ by a
+		wide margin, but only the $8.2\ \mu$H row clears VSWR $2$; at
+		$3{:}1$ the mismatch loss is still only $\approx 0.7$\db, so a team
+		arguing ``ship it, we lose under a dB'' is making a defensible
+		engineering case and should get credit for it -- provided they say
+		what bar they are clearing. Going back for a better \emph{inductor}
+		is the high-value trip; a better capacitor is not worth the walk. The
+		strongest answer notices that the design should have started from the
+		bins: pick the inductor first from what exists, then solve for the
+		capacitor it wants.
 		\end{solution}
 
 	\part \textbf{Optional -- trim it.} If small capacitors are available, add
-	one in parallel with $C_p$ to make up the shortfall and re-measure. What
-	value do you need, and what does it buy you?
+	one in parallel with your $C_p$ to make up a shortfall and re-measure.
+	What value do you need, and what does it buy you?
 
 		\begin{solution}[1.2in]
 		About $300$\ pF in parallel with the measured $2.14$\ nF brings the

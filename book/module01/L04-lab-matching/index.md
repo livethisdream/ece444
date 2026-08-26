@@ -11,6 +11,7 @@ you were right.
   <li>I can measure the complex impedance of a load and read its position on the Smith chart.</li>
   <li>I can design, build, and verify an L-network that matches a complex load to a 50 ohm line.</li>
   <li>I can measure the bandwidth a match holds and connect it to the network's quality factor.</li>
+  <li>I can substitute the parts I can actually source for the ones I designed, predict what the substitution costs, and judge whether the result meets the specification.</li>
 </ol>
 
 ## What you will do
@@ -24,8 +25,9 @@ mismatch. You finish by characterizing an unknown filter as a black box.
 small antenna: a 15 Ω resistor in series with a 1 nF capacitor, which at 2 MHz
 presents about $15 - j79.6\ \Omega$ — a small radiation resistance behind a
 large capacitive reactance, exactly the situation Lesson 4 described. Unmatched,
-that is a 12:1 VSWR. You design an L-network for it, build it, and measure the
-improvement, then sweep to find the band over which the match survives.
+that is a 12:1 VSWR. You design an L-network for it, source the parts yourself,
+build it, and measure the improvement — then sweep to find the band over which
+the match survives.
 
 ## Equipment
 
@@ -38,11 +40,15 @@ components:
 | 1 nF capacitor | 0.001 µF | mock antenna, series reactance |
 
 Those two values are the whole input to the design. The matching network's
-inductor and capacitor are what you calculate — you draw them from the bench kit
-once you have, and picking the nearest stocked value to your answer is part of
-the exercise. Measure the capacitor you actually get on the bench LCR meter
-before you build; marked value and real value are not the same thing, and the
-difference is one of the questions.
+inductor and capacitor are what you calculate — and then go and find. They are
+not on your bench: they are across the hallway in the electronics lab, in
+whatever bins happen to be stocked. Take the closest thing to each of your two
+values, measure the capacitor you came back with, and record all four numbers.
+
+You will not get what you asked for. That is the normal case, and the lab asks
+you to price it: how much did the substitution cost, and is the result **good
+enough** for what the radio needs? One of those two parts matters far more than
+the other, and finding out which is most of the lesson.
 
 ## Before lab
 
