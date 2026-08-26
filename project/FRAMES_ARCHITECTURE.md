@@ -1,9 +1,9 @@
 # Frame-view lessons — architecture
 
-Status: **mechanism proven, nothing adopted.** `book/_ext/frames.py` and
-`book/_templates/frame.html` are in the build and inert; no lesson opts in.
-The L05 prototype at `book/extras/frames/` is the *old* approach and is
-superseded by everything below.
+Status: **one lesson built this way.** `book/module01/L05a-field-regions-frames/`
+is a real MyST page using the directives below, in the TOC, on the site. The
+generated prototype at `book/extras/frames/` is the *old* approach, kept only
+for comparison until L05a has been taught from.
 
 The question this answers: if a lesson's deck and its page become one
 scroll-frame document, where does the source live and what generates what?
@@ -60,9 +60,9 @@ subject. Inside $\lambda/2\pi$ the stored terms take over...
 `depth` is the lesson-page material a deck would not carry. It is always in the
 DOM; present mode hides it with CSS. Presenting can therefore never lose it.
 
-## Three constraints the spike surfaced
+## Six constraints, each of which cost a failed build
 
-These are docutils/Sphinx facts, not preferences. Each one cost a failed build.
+docutils/Sphinx facts, not preferences.
 
 1. **A frame title must be a directive argument, not a heading.** docutils
    demotes a header nested in a container to a rubric
@@ -76,6 +76,17 @@ These are docutils/Sphinx facts, not preferences. Each one cost a failed build.
 3. **Append it on `config-inited`, not `builder-inited`.** The builder
    constructs its Jinja loader from `templates_path` during init, so
    `builder-inited` is already too late — `TemplateNotFound: frame.html`.
+4. **A frame holding a `depth` or `callout` needs a longer fence.** MyST
+   requires the outer fence to out-length the inner, so frames open `::::` and
+   nested blocks `:::`. Get it wrong and the frame silently swallows its
+   siblings — 25 frames parsed as 11, with no warning.
+5. **Do not emit `script_files` wholesale.** It drags the theme's JS onto a page
+   with no theme DOM and it throws on every selector it owns. Filter to
+   MathJax. And use `js_tag(js)`, not `pathto(js, 1)` — the latter renders
+   `None` and requests `/None`.
+6. **Scope `display: contents` carefully.** A blanket rule on
+   `.docutils.container` also hits `.depth` and `.callout`, which then have no
+   box, so read mode shows nothing. `:not(.depth):not(.callout)`.
 
 ## What is still open
 

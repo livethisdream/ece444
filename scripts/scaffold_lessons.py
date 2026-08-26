@@ -117,6 +117,13 @@ LABS = [
     (1, "L04-impedance-feeding-baluns", "L04-lab-matching", "L4 Lab — Matching Procedures"),
 ]
 
+# Extra pages that sit after a lesson in the TOC but are NOT scaffolded --
+# they are hand-authored and this list only places them in the nav.
+#   (module, after-slug, slug, title)
+EXTRA_PAGES = [
+    (1, "L05-field-regions", "L05a-field-regions-frames", "L5a — Field Regions (frame view)"),
+]
+
 # ---- Lesson manifest: (module, num, slug, title, [lo_ids], synopsis, has_practice)
 LESSONS = [
     (1, 1, "L01-course-intro", "Course Introduction", ["1.1"], "What an antenna is, why antennas matter to the Air Force mission, and how ECE 444 is organized.", False),
@@ -305,7 +312,7 @@ def toc_yaml():
             lines.append(f'        title: "L{num} — {title}"')
             # Practice is served as linked PDFs from the lesson page itself --
             # there are no practice.md / practice-solutions.md pages to list.
-            for (lmnum, anchor, lslug, ltitle) in LABS:
+            for (lmnum, anchor, lslug, ltitle) in LABS + EXTRA_PAGES:
                 if lmnum == mnum and anchor == slug:
                     lines.append(f"      - file: module{mnum:02d}/{lslug}/index")
                     lines.append(f'        title: "{ltitle}"')

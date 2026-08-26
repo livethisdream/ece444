@@ -1,25 +1,64 @@
+{#- Chrome-free lecture page for `frame_view: true` lessons.
+
+    Deliberately NOT extending the theme: a frame is a full-viewport
+    scroll-snap section, so the page has to own the window. Everything the
+    sidebar would have given us that still matters -- prev, next, the module
+    index -- comes from Sphinx's own TOC context and is rendered into the HUD
+    instead.
+-#}
 <!doctype html>
 <html lang="en" data-mode="present">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ title|striptags }} — {{ docstitle|striptags }}</title>
+<title>{{ title|striptags|e }} &mdash; {{ docstitle|striptags|e }}</title>
 {{ metatags }}
-{%- for css in css_files %}
-  <link rel="stylesheet" href="{{ pathto(css, 1) }}">
+<link rel="icon" href="{{ pathto('_static/favicon.ico', 1) }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="{{ pathto('_static/frames.css', 1) }}">
+{#- Only MathJax. Pulling in script_files wholesale drags the theme's JS onto
+    a page with no theme DOM, and it throws on every one of its selectors.
+    js_tag() is required too: pathto() on a _JavaScript object renders None. -#}
+{%- for js in script_files if 'mathjax' in js|string|lower %}
+{{ js_tag(js) }}
 {%- endfor %}
 </head>
 <body>
-<div class="deck" id="deck" tabindex="-1">
-{{ body }}
+
+<div class="rail"><span id="railfill"></span></div>
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame">
+  <div class="wrap"><h2>Jump to</h2><ol id="indexlist"></ol></div>
 </div>
+
 <div class="hud">
-  <span>SPIKE</span>
-  {%- if prev %}<a href="{{ prev.link|e }}">prev: {{ prev.title|striptags }}</a>{% endif %}
-  {%- if next %}<a href="{{ next.link|e }}">next: {{ next.title|striptags }}</a>{% endif %}
+  <span><b id="cur">1</b>/<span id="tot">0</span></span>
+  <span class="sep"></span>
+  <button id="btnMode" type="button" title="Present or read (P)">present</button>
+  <button id="btnIndex" type="button" aria-pressed="false" title="Jump to a frame (G)">index</button>
+  <button id="btnLaser" type="button" aria-pressed="false" title="Laser pointer (L)">laser</button>
+  <button id="btnSpot" type="button" aria-pressed="false" title="Spotlight (S)">spot</button>
+  <button id="btnFull" type="button" title="Fullscreen (F)">full</button>
+  <span class="sep"></span>
+  {%- if parents %}
+  <a class="navlink" href="{{ parents[-1].link|e }}" title="{{ parents[-1].title|striptags|e }}">up</a>
+  {%- endif %}
+  {%- if prev %}
+  <a class="navlink" href="{{ prev.link|e }}" title="{{ prev.title|striptags|e }}">&larr; prev</a>
+  {%- endif %}
+  {%- if next %}
+  <a class="navlink" href="{{ next.link|e }}" title="{{ next.title|striptags|e }}">next &rarr;</a>
+  {%- endif %}
 </div>
-{%- for js in script_files %}
-  <script src="{{ pathto(js, 1) }}"></script>
-{%- endfor %}
+
+<main class="deck" id="deck" tabindex="-1">
+{{ body }}
+</main>
+
+<script src="{{ pathto('_static/frames.js', 1) }}"></script>
 </body>
 </html>

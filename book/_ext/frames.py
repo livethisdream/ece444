@@ -42,17 +42,30 @@ class FrameDirective(_Wrapper):
     final_argument_whitespace = True
 
     def run(self):
-        (node,) = super().run()
+        # frame > wrap > content, because the layout centres a measured column
+        # inside a full-viewport box; one element cannot do both jobs.
+        inner = nodes.container()
+        inner["classes"] = ["wrap"]
         if self.arguments:
             # NOT nodes.title: docutils asserts that a title's parent is a
             # section, and a frame is a container. rubric is precisely the
             # node for a heading that does not open a section.
-            node.insert(0, nodes.rubric(text=self.arguments[0]))
-        return [node]
+            inner += nodes.rubric(text=self.arguments[0])
+        self.state.nested_parse(self.content, self.content_offset, inner)
+        outer = nodes.container()
+        # :class: belongs to the FRAME, not the inner column -- that is what an
+        # author means by `:class: viz-frame`.
+        outer["classes"] = ["frame"] + self.options.get("class", [])
+        outer += inner
+        return [outer]
 
 
 class DepthDirective(_Wrapper):
     default_class = "depth"
+
+
+class CalloutDirective(_Wrapper):
+    default_class = "callout"
 
 
 def choose_template(app, pagename, templatename, context, doctree):
@@ -87,5 +100,6 @@ def setup(app):
     app.connect("config-inited", add_template_dir)
     app.add_directive("frame", FrameDirective)
     app.add_directive("depth", DepthDirective)
+    app.add_directive("callout", CalloutDirective)
     app.connect("html-page-context", choose_template)
     return {"version": "0.1", "parallel_read_safe": True}
