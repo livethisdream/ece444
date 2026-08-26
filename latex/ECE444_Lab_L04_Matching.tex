@@ -232,7 +232,7 @@ you did on paper, checked against a real instrument.
 \section{Background}
 \label{background}
 
-In this lab, we will measure the reflection and transmission coefficient for some devices over various frequency ranges. In these ranges, we can observe reflection and transmission as described in class. Recall the reflection and transmission coefficients are found by:
+In this lab, we will measure the reflection and transmission coefficient for some devices over various frequency ranges. In these ranges, we can observe reflection and transmission as described in class. Recall that you find the reflection and transmission coefficients from:
 \vspace{-6pt}
 \eq{
 	\Gamma_L &= \dfrac{\myz{L}-\myz{0}}{\myz{L}+\myz{0}} \\
@@ -264,7 +264,7 @@ The L-network fixes this in two moves, and the order matters:
 
 For a load resistance $R_a$ smaller than $Z_0$, the series element goes on the
 \emph{load} side and the shunt element on the \emph{source} side, and the
-network's quality factor is set entirely by the ratio you are transforming:
+ratio you are transforming sets the network's quality factor entirely:
 
 \eq{
 	Q &= \sqrt{\dfrac{Z_0}{R_a} - 1} \\
@@ -296,7 +296,7 @@ will measure exactly that in Question 9.
 \label{equipment}
 \subsection{Basic Familiarization}
 
-A full user's guide for the VNA is available \href{https://nanorfe.com/nanovna-v2-user-manual.html}{online}. Please familiarize yourself with this guide \textbf{before} the lab period.  The VNA is shown in Figure \ref{fig:vna} and some of the key components are highlighted.
+A full user's guide for the VNA is available \href{https://nanorfe.com/nanovna-v2-user-manual.html}{online}. Please familiarize yourself with this guide \textbf{before} the lab period.  Figure \ref{fig:vna} shows the VNA and calls out its key components.
 
 	\begin{figure}[h]
 	\begin{subfigure}[t]{0.48\textwidth}
@@ -324,20 +324,20 @@ A full user's guide for the VNA is available \href{https://nanorfe.com/nanovna-v
 	\caption{Familiarization views of the nano VNA.}
 	\end{figure}
 
-We will use A VNA to measure S-parameters, which are essentially reflection and transmission coefficients. For a two-port network (which, in our case, are Channel 0 and Channel 1), we have 4 S-parameters: $S_{11}, S_{21}, S_{12}, \text{ and } S_{22}$. The subscripts represent the receiving port and the source port, so $S_{21}$ means the signal received at port 2 as a result of a source at port 1 -- this is the transmission coefficient from port 1 to port 2.
+We will use a VNA to measure S-parameters, which are essentially reflection and transmission coefficients. For a two-port network (which, in our case, are Channel 0 and Channel 1), we have 4 S-parameters: $S_{11}, S_{21}, S_{12}, \text{ and } S_{22}$. The subscripts represent the receiving port and the source port, so $S_{21}$ means the signal received at port 2 as a result of a source at port 1 -- this is the transmission coefficient from port 1 to port 2.
 
-These nano VNA's can be powered via the built-in battery or the micro-USB cable. To operate the VNA, turn on the device using the on/off slider on the left side of the device. Within a few seconds, you should see a display as shown in Figure \ref{fig:vnainit}. At first, the display will appear cluttered, because you are actually looking at several plots overlayed on one another. The labels for each trace are at the very top of the screen and the default quantities are as follows:
+You can power these nano VNAs from the built-in battery or the micro-USB cable. To operate the VNA, turn on the device using the on/off slider on the left side of the device. Within a few seconds, you should see a display as shown in Figure \ref{fig:vnainit}. At first, the display will appear cluttered, because you are actually looking at several plots overlayed on one another. The labels for each trace are at the very top of the screen and the default quantities are as follows:
 
 \begin{itemize}
 
-\item Yellow: Channel 0's magnitude in log format. This represents the reflection coefficient and is plotted on the rectangular grid. The default scale, as shown, is 10dB per division. Usually, 0dB is at the top of the screen.
-\item Blue: Channel 1's magnitude in log format. This represents the transmission coefficient and is plotted on the rectangular grid.  The default scale, as shown, is 10dB per division.  Usually, 0dB is at the top of the screen.
+\item Yellow: Channel 0's magnitude in log format. This is the reflection coefficient, which the VNA plots on the rectangular grid. The default scale, as shown, is 10dB per division. Usually, 0dB is at the top of the screen.
+\item Blue: Channel 1's magnitude in log format. This is the transmission coefficient, which the VNA plots on the rectangular grid.  The default scale, as shown, is 10dB per division.  Usually, 0dB is at the top of the screen.
 \item Magenta: Channel 0's phase in degrees. The default scale is 90\mydeg per division.
-\item Green: This is the smith chart plot of the measured complex impedance of the load (\myz{L}). It is plotted ``behind'' the rectangular grid and is on its own scale (normalized \textbf{impedance}).
+\item Green: This is the smith chart plot of the measured complex impedance of the load (\myz{L}). The VNA plots it ``behind'' the rectangular grid, on its own scale (normalized \textbf{impedance}).
 
 \end{itemize}
 
-Each scale can be customized, as described in the user's manual, but is not necessary for this lab.
+You can customize each scale -- the user's manual describes how -- but this lab does not need it.
 
 \subsection{VNA Setup}
 To bring up the menu, tap the screen (it helps to use a passive stylus) or press the middle tactile button. Your first task should be to flip the display, which will allow you to turn the ports away from you. To do this, tap the screen, then tap ``Display'' at the top of the menu. At the bottom, you should then see ``Flip Display'' -- tap this button and the screen should invert. You should also tap the ``Pause Sweep'' button -- this pauses the frequency sweep and measurement cycle of the VNA.  Take some time to explore the menu structure -- a full map is available in the user's guide.
@@ -376,7 +376,7 @@ built network will not perform quite as well as your arithmetic promises.
 
 \subsection{Calibration}
 
-When performing RF measurements, you \textbf{always} need to calibrate your device to your particular configuration. This calibration needs to be performed every time a cable is connected or the frequency range is changed. First, connect the SMA cables to each port (SMA cables are the smaller coax connectors). On channel 0 (which is confusingly labeled ``1'' on the circuit board), connect the black SMA-BNC connector, then connect the BNC-grabber clips cable to the open end.  On channel 1 (labeled ``2'' on the circuit board), connect the blue SMA-SMA cable.  Don't worry about the different colors or lengths of the cables at this time. RF connectors are sensitive, so when connecting them \textbf{DO NOT} overtighten the connectors or cross-thread them. Finger tight is just right in this case.
+When performing RF measurements, you \textbf{always} need to calibrate your device to your particular configuration. You must recalibrate every time you connect a cable or change the frequency range. First, connect the SMA cables to each port (SMA cables are the smaller coax connectors). On channel 0 (which is confusingly labeled ``1'' on the circuit board), connect the black SMA-BNC connector, then connect the BNC-grabber clips cable to the open end.  On channel 1 (labeled ``2'' on the circuit board), connect the blue SMA-SMA cable.  Don't worry about the different colors or lengths of the cables at this time. RF connectors are sensitive, so when connecting them \textbf{DO NOT} overtighten the connectors or cross-thread them. Finger tight is just right in this case.
 
 Before we calibrate the device, you will need to set your frequency range.
 
@@ -392,7 +392,7 @@ You will now follow the calibration procedure using an open, short, and load cal
 
 \begin{enumerate}
 
-	\item Every calibration standard will be connected to channel 0. Leave the SMA cable connected to channel 1 disconnected.
+	\item Connect every calibration standard to channel 0, and leave channel 1's SMA cable disconnected.
 
 	\item Bring up the menu and tap \textbf{Cal}.
 
@@ -431,7 +431,7 @@ will rely on this in Part II.
 \newpage
 \subsection{Measurement}
 
-When making measurements, be sure to pause the sweep while changing physical connections. Additionally, you may read values for the marker positions at the top of the screen. The markers may be moved  by either tapping/holding and dragging (this requires a stylus) or, choosing \textbf{Markers $\rightarrow$ Select Markers $\rightarrow$ Marker X} and then using the left/right tactile buttons to move the marker location. Figure \ref{fig: readout} shows an annotated example.
+When making measurements, be sure to pause the sweep while changing physical connections. Additionally, you may read values for the marker positions at the top of the screen. You can move the markers by tapping/holding and dragging (this requires a stylus), or by choosing \textbf{Markers $\rightarrow$ Select Markers $\rightarrow$ Marker X} and then using the left/right tactile buttons to move the marker location. Figure \ref{fig: readout} shows an annotated example.
 
 \begin{figure}[H]
 	\centering{
@@ -630,7 +630,7 @@ outer rim, walking clockwise toward the short as frequency rises.
 \question{\textbf{Black Box Measurement}}
 \label{q:bb}
 
-Now, you will measure an unknown device, often referred to as the ``Device Under Test'' (DUT). The label of the DUT will be covered with tape -- do not remove the tape!  Also, note the DUT has SMA connectors -- disconnect the BNC cable with the minigrabbers. Due to the operational bandwidth of the DUT, you will need to adjust the frequency range to correlate to your specific filter and recalibrate. The calibration procedure is slightly different, in that SMA cables use different calibration standards (as shown in Figure \ref{fig:calstd}). Please use the short, open, and load connectors. This time, you may also perform a thru calibration by connecting channel 0 and channel 1 using a coupler, but this is optional. Now, connect the DUT to the VNA using the appropriate cables and restart the sweep.
+Now, you will measure an unknown device, often called the ``Device Under Test'' (DUT). Tape covers the DUT's label -- do not remove it!  Also, note the DUT has SMA connectors -- disconnect the BNC cable with the minigrabbers. Due to the operational bandwidth of the DUT, you will need to adjust the frequency range to correlate to your specific filter and recalibrate. The calibration procedure is slightly different, in that SMA cables use different calibration standards (as shown in Figure \ref{fig:calstd}). Please use the short, open, and load connectors. This time, you may also perform a thru calibration by connecting channel 0 and channel 1 using a coupler, but this is optional. Now, connect the DUT to the VNA using the appropriate cables and restart the sweep.
 
 \begin{parts}
 

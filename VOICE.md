@@ -111,6 +111,29 @@ From his Smith-chart review: *"the Smith chart plot has too many words - those
 should be in the text around it, not in the graphic."* A figure carries a
 minimal key. The prose does the explaining.
 
+### 9. Active voice; name the agent
+
+Neil, on his own edit to the L4 lab packet: *"I heavily prefer active voice,
+and squash passive voice everywhere I can."*
+
+> **Before:** A VNA is used to measure S-parameters.
+>
+> **After:** We will use a VNA to measure S-parameters.
+
+> **Before:** The markers may be moved by tapping and dragging.
+>
+> **After:** You can move the markers by tapping and dragging.
+
+> **Before:** This calibration needs to be performed every time a cable is
+> connected or the frequency range is changed.
+>
+> **After:** You must recalibrate every time you connect a cable or change the
+> frequency range.
+
+In procedure text the agent is almost always **you** or **the instrument**.
+Naming it is not just style — it is what makes a step followable, because the
+reader learns whose job each step is.
+
 ## What he does *not* want changed
 
 His voice is direct, and that is deliberate. Do not soften it into hedged
@@ -127,6 +150,9 @@ is not.
 ## Self-check before reporting
 
 Grep your own draft for: `honest`, `genuinely`, `truly`, `rigorous`, `no
-hand-waving`, `is the price`, `dear reader`. Then read every sentence and ask
+hand-waving`, `is the price`, `dear reader`. Then grep for passive tells —
+`is used`, `is shown`, `can be seen`, `will be connected`, `needs to be`,
+`is referred to as`, and `\b(is|are|was|were|be|been)\b +\w+(ed|en)\b` — and
+rewrite each one with its agent named. Then read every sentence and ask
 whether it has a subject and a verb. Then ask whether any sentence is a joke,
 a wink, or a judgement about the reader. Rewrite anything that is.

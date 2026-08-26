@@ -412,7 +412,18 @@ previous one and closes by pointing forward. Rules of thumb are named as such
 and repeated deliberately. Tables summarize; prose explains. No filler ("In
 this lesson we will...").
 
-Four things to avoid. These were flagged in review as widespread, and they
+**Active voice, hard.** Neil (2026-08-25): *"I heavily prefer active voice,
+and squash passive voice everywhere I can."* Name the agent and let it act.
+"A VNA is used to measure S-parameters" becomes "we will use a VNA to measure
+S-parameters"; "the markers may be moved by dragging" becomes "you can move
+the markers by dragging"; "the calibration needs to be performed every time a
+cable is connected" becomes "you must recalibrate every time you connect a
+cable." In lab and procedure text the agent is almost always **you** or **the
+instrument**, and naming it is what makes a step followable. Passive is
+allowed only where the agent genuinely does not matter or is unknown, which in
+this course is rare.
+
+Five things to avoid. These were flagged in review as widespread, and they
 read as unprofessional in a course text:
 
 - **No sentence fragments used for rhythm or punch.** Write complete
@@ -429,6 +440,9 @@ read as unprofessional in a course text:
   reader's expense, exclamations.
 - **No scolding the reader.** State the fact ("a misplaced source moves the
   impedance"), not the accusation ("your model is broken").
+- **No agentless passive.** See the rule above. The usual tells are "is
+  used", "is shown", "can be seen", "will be connected", "needs to be
+  performed", "is referred to as".
 
 Direct and plain is the target. Clever is not.
 
