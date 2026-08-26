@@ -29,19 +29,20 @@ improvement, then sweep to find the band over which the match survives.
 
 ## Equipment
 
-Beyond the VNA and its cables, each team needs four components:
+Beyond the VNA and its cables, each team builds a mock antenna from two
+components:
 
 | Part | Marked | Role |
 | :-- | :-- | :-- |
 | 15 Ω resistor | 15 Ω | mock antenna, radiation resistance |
 | 1 nF capacitor | 0.001 µF | mock antenna, series reactance |
-| 8.2 µH inductor | 8.2 µH | matching network, series element |
-| 2.2 nF capacitor | 0.0022 µF | matching network, shunt element |
 
-Watch the units on the two capacitors — 0.001 µF and 0.0022 µF differ by
-roughly a factor of two, and swapping them will not work. **Measure your actual
-capacitors before you build**; a part marked 0.0022 µF may well measure 2.14 nF,
-and you will need that number to explain your results.
+Those two values are the whole input to the design. The matching network's
+inductor and capacitor are what you calculate — you draw them from the bench kit
+once you have, and picking the nearest stocked value to your answer is part of
+the exercise. Measure the capacitor you actually get on the bench LCR meter
+before you build; marked value and real value are not the same thing, and the
+difference is one of the questions.
 
 ## Before lab
 

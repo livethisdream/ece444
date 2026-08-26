@@ -344,7 +344,8 @@ To bring up the menu, tap the screen (it helps to use a passive stylus) or press
 
 \subsection{Parts for Part II}
 
-Beyond the VNA and its cables, each team needs four components:
+Beyond the VNA and its cables, each team builds a mock antenna from two
+components:
 
 \begin{center}
 \renewcommand{\arraystretch}{1.5}
@@ -353,19 +354,13 @@ Beyond the VNA and its cables, each team needs four components:
 \textbf{Part}		& \textbf{Marked}		& \textbf{Role}					\\\hline\hline
 \antR\ohms\ resistor	& \antR\ohms			& mock antenna, radiation resistance	\\\hline
 $\antC\ \text{nF}$ capacitor	& 0.001\ $\mu$F		& mock antenna, series reactance		\\\hline
-$\matchL\ \mu\text{H}$ inductor	& $\matchL\ \mu$H		& matching network, series element		\\\hline
-$\matchC\ \text{nF}$ capacitor	& 0.0022\ $\mu$F		& matching network, shunt element		\\\hline
 \end{tabular}
 \end{center}
 
-Watch the units on the two capacitors: $0.001\ \mu$F is $\antC$\ nF and
-$0.0022\ \mu$F is $\matchC$\ nF. They differ by roughly a factor of two, and
-swapping them will not work.
-
-\textbf{Measure your actual capacitors} on the bench LCR meter before you build
-and write the values down -- a part marked $0.0022\ \mu$F may well measure
-$2.14$\ nF. You will need those numbers to explain your results in
-Question 8.
+Those two values are the whole input to the Question 7 design, which you do
+\textbf{before} lab. The matching network's inductor and capacitor come out of
+that calculation -- you draw them from the bench kit in Question 8, and picking
+the nearest stocked value to what you computed is part of the exercise.
 
 Keep your leads \textbf{short}: at these frequencies a few centimetres
 of wire is a small but measurable inductance, and it is one of the reasons your
@@ -747,6 +742,21 @@ $f_0 = \fdes\ \mhz$.
 
 \newpage
 \question{\textbf{Build and verify.}}
+
+The bench kit stocks standard values, not whatever came out of your arithmetic.
+The nearest parts to your Question 7 answers are an inductor of
+$\matchL\ \mu\text{H}$ and a capacitor marked $0.0022\ \mu$F ($\matchC$\ nF). Take those,
+and note how far each sits from your calculated value -- part (e) asks what the
+difference cost you.
+
+\textbf{Measure your actual capacitor} on the bench LCR meter before you build
+and write the value down: a part marked $0.0022\ \mu$F may well measure
+$2.14$\ nF.
+
+Watch the units. $0.001\ \mu$F ($\antC$\ nF) is the \emph{antenna}
+capacitor and $0.0022\ \mu$F ($\matchC$\ nF) is the \emph{matching}
+capacitor; they differ by roughly a factor of two and swapping them will not
+work.
 
 Build the mock antenna first, measure it, then add the network. Keep leads short.
 
