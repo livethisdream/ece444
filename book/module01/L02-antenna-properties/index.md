@@ -551,8 +551,8 @@ $P_{\text{rx}} = S_{\text{inc}} A_{e} \approx 0.68\ \mu\text{W}$.
 **A subtlety worth pinning down.** People often say "effective aperture shrinks
 with frequency," but that is only true if you hold *gain* fixed — then
 $A_{e} = (\lambda^{2}/4\pi)G$ falls as $\lambda^{2}$. For a **fixed
-physical dish**, $A_{e} = \eta_{\text{ap}} A_{\text{phys}}$ is set by
-the metal and does *not* change with frequency — to first order: $\eta_{\text{ap}}$
+physical dish**, the metal fixes
+$A_{e} = \eta_{\text{ap}} A_{\text{phys}}$, and it does *not* change with frequency — to first order: $\eta_{\text{ap}}$
 itself drifts with illumination taper and surface tolerance (the Ruze
 relation), which is why real dishes stop gaining at the top of their band.
 Instead the **gain climbs as $f^{2}$**, because the same aperture spans many

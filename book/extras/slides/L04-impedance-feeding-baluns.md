@@ -357,7 +357,7 @@ the same geometric mean as the quarter-wave transformer.
 
 ## Where Q comes from
 
-References state the design with a network $Q$. It is worth deriving, not quoting — $Q$ is **not** defined by $R$ and $X$. It is defined by energy, exactly as in L3:
+References state the design with a network $Q$. It is worth deriving, not quoting — $R$ and $X$ do **not** define $Q$. Energy defines it, exactly as in L3:
 
 $$ Q = \omega\,\frac{\text{peak energy stored}}{\text{average power dissipated}} $$
 

@@ -265,7 +265,7 @@ Same length $L$, four ways to illuminate it:
 | cosine² | $-31.5$ dB | $1.44\ \lambda/L$ |
 
 <div class="callout">
-Sidelobes are set by the distribution's <strong>shape</strong>, not its size — but the taper is never free: the beam comes out <strong>1.3 to 1.6 times wider</strong> than the uniform beam of the same length.
+The distribution's <strong>shape</strong> sets the sidelobes, not its size — but the taper is never free: the beam comes out <strong>1.3 to 1.6 times wider</strong> than the uniform beam of the same length.
 </div>
 
 Note:
@@ -354,7 +354,7 @@ line source is the one that has traded its skirt for a beam and sidelobes.
 
 ## The catch: you have to know the current
 
-The integral is **exact given $\mathbf{J}$**. But $\mathbf{J}$ is set by the fields, which are set by $\mathbf{J}$.
+The integral is **exact given $\mathbf{J}$**. But the fields set $\mathbf{J}$, and $\mathbf{J}$ sets the fields.
 
 Assumptions that work:
 

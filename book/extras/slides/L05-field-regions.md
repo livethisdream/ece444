@@ -66,7 +66,7 @@ $$ E_\theta = \frac{jk\eta_0 Idl\sin\theta}{4\pi r}\left(1 + \frac{1}{jkr} - \fr
 
 $$ H_\phi = \frac{jkIdl\sin\theta}{4\pi r}\left(1 + \frac{1}{jkr}\right)e^{-jkr} $$
 
-**Every antenna is built from current elements like this.** Whatever these fields do, real antennas do too — superposed.
+**Current elements like this make up every antenna.** Whatever these fields do, real antennas do too — superposed.
 
 ---
 
@@ -83,7 +83,7 @@ $$ E_\theta \ \propto\ \frac{1}{r} \ +\ \frac{1}{kr^{2}} \ +\ \frac{1}{k^{2}r^{3
 | electrostatic | $1/r^{3}$ | quasi-static field of the charge at the tips | $kr \ll 1$ |
 
 <div class="callout">
-Three regions, hiding inside one equation. Their relative sizes are set <strong>entirely</strong> by the single number $kr$.
+Three regions, hiding inside one equation. The single number $kr$ sets their relative sizes <strong>entirely</strong>.
 </div>
 
 ---

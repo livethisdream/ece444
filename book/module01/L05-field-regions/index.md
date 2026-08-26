@@ -12,7 +12,7 @@
 <ol class="lo-list lo-sublist" style="--module: '1'; --lo: '5'">
   <li>I can distinguish the reactive near-field, radiating near-field, and far-field regions by what the fields are actually doing in each.</li>
   <li>I can calculate the boundaries between the three regions for a given antenna size and wavelength.</li>
-  <li>I can explain the phase-error criterion behind the far-field distance, and why an antenna must be measured in its far field.</li>
+  <li>I can explain the phase-error criterion behind the far-field distance, and why you must measure an antenna in its far field.</li>
 </ol>
 
 Lesson 4 looked *into* the antenna terminals. Now we step back *out* into the
@@ -30,7 +30,7 @@ because *where you stand changes what you measure.*
 
 ### Reactive near-field
 
-Right up against the antenna, the fields are dominated by **stored energy**, not
+Right up against the antenna, **stored energy** dominates the fields, not
 radiation. Energy sloshes back and forth between the antenna and the surrounding
 space each cycle — like the field around a charged capacitor or a current-carrying
 inductor. These are the terms that fall off fast, as $1/r^2$ and $1/r^3$, so they
@@ -86,13 +86,13 @@ H_\phi = \frac{j kIdl\sin\theta}{4\pi r}
       \left(1 + \frac{1}{jkr}\right)e^{-jkr}
 $$
 
-with $E_\phi = H_r = H_\theta = 0$. Every antenna is built from current elements
-like this, so whatever these fields do, real antennas do too — the near field is
+with $E_\phi = H_r = H_\theta = 0$. Current elements like this make up every
+antenna, so whatever these fields do, real antennas do too — the near field is
 just this, superposed.
 
 **Read the fields by their powers of $r$.** Pull the $1/r$ out front of
-$E_\theta$ and the bracket holds three terms whose relative sizes are set entirely
-by $kr$. Multiplying through, the actual field is a sum of three pieces:
+$E_\theta$ and the bracket holds three terms, and $kr$ alone sets their
+relative sizes. Multiplying through, the actual field is a sum of three pieces:
 
 $$
 E_\theta \propto
@@ -319,8 +319,8 @@ high frequency that can mean hundreds of metres, which is often impractical.
 That is exactly why **near-field scanning** exists: you measure the fields on a
 surface *close* to the antenna (in the radiating near-field), then mathematically
 propagate them out to the far field. You will see this in Module 2's measurement
-lessons — but it only works because the far-field pattern is completely determined
-by the near-field distribution, which is the subject of the next lesson.
+lessons — but it only works because the near-field distribution completely
+determines the far-field pattern, which is the subject of the next lesson.
 
 :::{admonition} Key Point
 :class: key-concept
@@ -341,7 +341,7 @@ there in the far field.
 | True far field | Reactive terms actually negligible | $kr \gg 1$; under $10\%$ near $kr \approx 10$ ($r \approx 1.6\lambda$), so allow $r \gtrsim \lambda$ and a few wavelengths in practice |
 | Reactive near-field edge | Inner boundary for an electrically large antenna | $r = 0.62\sqrt{D^3/\lambda}$ |
 | Far-field distance | Outer boundary; pattern stops changing with $r$ | $r \ge 2D^2/\lambda$ |
-| Phase-error tolerance | The criterion $2D^2/\lambda$ is built from | $\Delta \le \lambda/16$, i.e. $\pi/8 = 22.5^{\circ}$ |
+| Phase-error tolerance | What the criterion $2D^2/\lambda$ comes from | $\Delta \le \lambda/16$, i.e. $\pi/8 = 22.5^{\circ}$ |
 | Worked dish | $D = 1.2\ \text{m}$ at $10\ \text{GHz}$ ($\lambda = 0.03\ \text{m}$) | reactive to $4.7\ \text{m}$; far field beyond $96\ \text{m}$ |
 
 ## Practice
@@ -358,8 +358,8 @@ produce the far-field pattern directly — the mathematical machinery behind
 everything we have described qualitatively so far.
 
 Watch for one specific move in that derivation. Expanding the distance from a
-source point to the observer gives a linear term and a quadratic one, and the far
-field is defined by *throwing the quadratic term away*. That discarded term is the
+source point to the observer gives a linear term and a quadratic one, and *throwing the quadratic
+term away* is what defines the far field. That discarded term is the
 path difference $D^2/8r$ from this lesson, and the licence to drop it is the
 $\pi/8$ tolerance — so "the far-field approximation" in Lesson 6 and
 $r \ge 2D^2/\lambda$ here are the same statement, one written as an integral and

@@ -8,15 +8,15 @@
 \fullwidth{\textbf{Learning Objective 1.5: } I can identify and distinguish the
 reactive near-field, radiating near-field, and far-field regions and calculate
 the boundaries for a given antenna.
-\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
-is required (write \textbf{None} if you did not collaborate).}
+\\[4pt]\normalfont\small Show your work. Write a \textbf{Documentation} line at the
+end (\textbf{None} if you did not collaborate).}
 
 \begin{questions}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Three terms in one equation.} The exact $E_\theta$ of an
-infinitesimal dipole is a sum of three pieces whose relative sizes are set
-entirely by $kr$:
+infinitesimal dipole is a sum of three pieces, and $kr$ alone sets their
+relative sizes:
 \eq{ E_\theta \propto
      \underbrace{\dfrac{1}{r}}_{\text{radiation}} +
      \underbrace{\dfrac{1}{kr^{2}}}_{\text{induction}} +
@@ -25,7 +25,7 @@ Throughout this question the antenna operates at $f = 915\mhz$.
 
 \begin{parts}
 
-	\part The innermost region is called \emph{reactive}. Justify that word in one
+	\part We call the innermost region \emph{reactive}. Justify that word in one
 	or two sentences, using what the complex Poynting vector does there.
 		\begin{solution}[1.2in]
 		Close in, $\vec{E}$ and $\vec{H}$ are $90\mydeg$ out of phase, so the radial
@@ -87,7 +87,7 @@ Throughout this question the antenna operates at $f = 915\mhz$.
 		up was never radiated and would have returned to the antenna anyway. Worse, the
 		probe sits in the stored field and \emph{loads} the antenna, shifting its input
 		impedance and its resonance, so the reading describes a two-body system rather
-		than the antenna. Gain is defined in the far field; there is no valid gain
+		than the antenna. Gain only means something in the far field; there is no valid gain
 		number to be had at $2\ \text{cm}$.
 		\end{solution}
 
@@ -378,8 +378,8 @@ reflector, mounted $10\m$ apart.
 				= 0.05\m \\
 			\text{dish:} \quad \dfrac{2(2.0)^{2}}{0.1} &= \dfrac{8}{0.1} = 80\m
 		}
-		A factor of $1600$ between two antennas sharing a frequency --- the far-field
-		distance is set by \emph{size}, not by wavelength alone.
+		A factor of $1600$ between two antennas sharing a frequency --- \emph{size}
+		sets the far-field distance, not wavelength alone.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}

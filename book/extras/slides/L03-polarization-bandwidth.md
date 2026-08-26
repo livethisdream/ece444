@@ -295,7 +295,7 @@ Rough categories:
 
 ---
 
-## Bandwidth is limited by size
+## Size limits bandwidth
 
 <div class="two-col"><div class="col-text">
 <p><strong>Chu-Harrington bound</strong> — antenna inside a sphere of radius $a$:</p>
@@ -467,7 +467,7 @@ no isolation at all.
 
 - The quoted number is nearly always **impedance** BW (VSWR ≤ 2) — the **widest** of the three
 - **Pattern** BW and **axial-ratio** BW are narrower, and usually go unquoted
-- Axial ratio is typically specified **at boresight only**, and degrades off-axis
+- Datasheets typically quote axial ratio **at boresight only**; it degrades off-axis
 
 <div class="callout">
 The usable band is the <strong>intersection</strong>, not the headline.

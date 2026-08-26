@@ -49,8 +49,8 @@ polarization. Everything else is thrown away.
 
 ### Building any polarization from two linear components
 
-Any plane wave propagating along $+\hat{z}$ can be written as the sum
-of two orthogonal linear components:
+You can write any plane wave propagating along $+\hat{z}$ as the sum of
+two orthogonal linear components:
 
 $$
 \mathbf{E}(z, t)
@@ -58,9 +58,8 @@ $$
 + \hat{y} E_{y} \cos(\omega t - k z + \delta).
 $$
 
-The polarization is entirely determined by three numbers: the
-amplitudes $E_{x}$ and $E_{y}$, and the relative phase $\delta$
-between them.
+Three numbers fix the polarization completely: the amplitudes $E_{x}$
+and $E_{y}$, and the relative phase $\delta$ between them.
 
 | $E_{x}$, $E_{y}$ | $\delta$ | Polarization |
 | :--- | :---: | :--- |
@@ -123,7 +122,7 @@ numbers.
 
 :::{admonition} Worked example — axial ratio of a measured wave
 :class: tip
-A wave travelling along $+\hat{z}$ is measured to be
+You measure a wave travelling along $+\hat{z}$:
 
 $$
 \mathbf{E}(z, t) = \hat{x}\ 3 \cos(\omega t - k z)
@@ -174,8 +173,8 @@ Five cases you should know cold:
 | RHCP | RHCP | 1 | 0 dB |
 | RHCP | LHCP | 0 | $-\infty$ dB — sense mismatch |
 
-Every row here assumes *perfect* circular polarization. Real "CP"
-hardware is specified at AR ≤ 3 dB, which moves several of these numbers
+Every row here assumes *perfect* circular polarization. Datasheets spec real "CP"
+hardware at AR ≤ 3 dB, which moves several of these numbers
 substantially; Part 3 prices the difference.
 
 For two linear antennas tilted by angle $\psi$ relative to each
@@ -268,7 +267,7 @@ about:
 - **Polarization bandwidth** — range where axial ratio stays below a
   threshold, typically 3 dB.
 
-The three don't have to coincide. A patch antenna can be matched over
+The three don't have to coincide. You can match a patch antenna over
 a wider band than it produces good CP, so its polarization bandwidth
 is narrower than its impedance bandwidth. Stack the three bands against
 frequency and the antenna is only usable where all of them overlap:
@@ -313,7 +312,7 @@ much looser test: a UWB emission is one whose fractional bandwidth is at
 least $0.20$ **or** whose absolute bandwidth is at least 500 MHz. An
 antenna can satisfy the FCC and still be nowhere near 2:1.
 
-### Bandwidth is limited by size
+### Size limits bandwidth
 
 There is no free lunch. The **Chu-Harrington bound** ties minimum
 antenna Q to the smallest sphere that encloses the antenna:
@@ -353,8 +352,8 @@ never promised you could not build a bad antenna with a wide match.
 
 ### Resonant, traveling-wave, and self-scaling
 
-An antenna's bandwidth is decided less by what it is made of than by
-what the current on it does when it reaches the end of the structure.
+An antenna's bandwidth depends less on its material than on what the
+current does when it reaches the end of the structure.
 
 **Resonant antennas.** The current travels out along the structure,
 reflects off the open end, and travels back. Forward and reflected
@@ -383,7 +382,7 @@ Log-periodics and spirals are the classic cases.
 :class: key-concept
 "Resonant" returns in L4 meaning something narrower — the frequency at
 which $X_{\text{in}} = 0$ and the input impedance is purely real. The
-two senses are connected: a resonant *structure* is one you operate at
+two senses connect: a resonant *structure* is one you operate at
 that frequency, which is exactly why it is narrowband.
 :::
 
@@ -531,12 +530,12 @@ figure is nearly always the **impedance** bandwidth — generally the
 
 Two further qualifications usually go unstated:
 
-- **Threshold.** "Impedance bandwidth" means nothing until the VSWR bar
-  is given. The same antenna is wider at VSWR ≤ 3 than at ≤ 1.5.
-- **Scan angle.** Axial ratio is typically specified **at boresight
+- **Threshold.** "Impedance bandwidth" means nothing until you state the VSWR
+  bar. The same antenna is wider at VSWR ≤ 3 than at ≤ 1.5.
+- **Scan angle.** Datasheets typically quote axial ratio **at boresight
   only**. It degrades off-axis, so a patch holding AR ≤ 3 dB on boresight
   may be well outside it at $\pm 45^{\circ}$ — exactly where a wide-beam
-  GPS or telemetry antenna is expected to work.
+  GPS or telemetry antenna has to work.
 
 The usable band is the **intersection** of all three bandwidths, over the
 scan angles you actually operate at. A CP patch matched over 4% may hold

@@ -13,7 +13,7 @@
   <li>I can decompose an antenna's input impedance into radiation resistance, loss resistance, and reactance, and connect the radiation resistance to the power actually radiated.</li>
   <li>I can compute the reflection coefficient and VSWR a feed line sees at the antenna terminals, and the resulting mismatch loss.</li>
   <li>I can design a quarter-wave transformer — and read an L-match — to match a load to a feed line.</li>
-  <li>I can explain why a balun is required to feed a balanced antenna from unbalanced coax, and identify the common balun types and what each one does.</li>
+  <li>I can explain why a balanced antenna needs a balun when you feed it from unbalanced coax, and identify the common balun types and what each one does.</li>
 </ol>
 
 So far we have treated an antenna by *what it radiates* — pattern, directivity,
@@ -145,8 +145,7 @@ $$
 
 This is the same $\Gamma$ / VSWR pair from Lessons 2 and 3 — now tied directly to
 the antenna's impedance. The fraction of incident power that bounces back is
-$|\Gamma|^2$, so the power actually accepted by the antenna is reduced by the
-**mismatch loss**
+$|\Gamma|^2$, and the **mismatch loss** prices what that costs the antenna:
 
 $$
 L_\text{mismatch} = -10 \log_{10}\!\left( 1 - |\Gamma|^2 \right)\ \text{dB}.
@@ -155,8 +154,8 @@ $$
 A perfectly matched antenna ($Z_\text{in} = Z_0$) has $\Gamma = 0$, VSWR $= 1{:}1$,
 and zero mismatch loss. As a rule of thumb, **VSWR $\le 2$** (return loss
 $\ge 9.5$ dB, mismatch loss $\le 0.5$ dB) is the usual "good enough" bar for a
-transmit antenna — but the mismatch you can tolerate is sometimes set by what the
-*transmitter* can survive, not by the fraction of a dB you lose. You will price
+transmit antenna — but what the *transmitter* can survive sometimes sets the
+mismatch you can tolerate, not the fraction of a dB you lose. You will price
 this in this lesson's practice set.
 
 ### Interactive — feed-match explorer
@@ -235,7 +234,7 @@ you are building on**:
 
 So on a microwave PCB, where any $Z_1$ can be printed and lumped parts have
 awkward parasitics, the quarter-wave route is often the better engineering. Down
-at HF, where $\lambda/4$ is measured in tens of metres and only 50 and 75 $\Omega$
+at HF, where $\lambda/4$ runs to tens of metres and only 50 and 75 $\Omega$
 cable exists off the shelf, the L-match wins — which is why the matching lab is
 lumped.
 
@@ -465,8 +464,8 @@ geometric mean. That is the same result wearing different clothes, but $Q$ is
 worth deriving properly rather than quoting, because it is the quantity that
 tells you what the match costs.
 
-$Q$ is not defined by any formula involving $R$ and $X$. It is defined by
-energy — the same definition you met for antennas in Lesson 3:
+No formula involving $R$ and $X$ defines $Q$. Energy defines it — the same
+definition you met for antennas in Lesson 3:
 
 $$
 Q = \omega\,\frac{\text{peak energy stored}}{\text{average power dissipated}}.

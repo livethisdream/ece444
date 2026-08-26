@@ -6,8 +6,8 @@
 
 \fullwidth{\textbf{Learning Objective 1.6: } I can set up and interpret the
 radiation integrals to derive the far-field pattern of a current distribution.
-\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
-is required (write \textbf{None} if you did not collaborate).}
+\\[4pt]\normalfont\small Show your work. Write a \textbf{Documentation} line at the
+end (\textbf{None} if you did not collaborate).}
 
 \begin{questions}
 
@@ -27,7 +27,7 @@ is required (write \textbf{None} if you did not collaborate).}
 		\end{solution}
 
 	\part The far field uses \emph{two different} approximations to
-	$R = |\vec{r} - \vec{r}^{\prime}|$. Write both and state where each is used.
+	$R = |\vec{r} - \vec{r}^{\prime}|$. Write both and state where you use each.
 		\begin{solution}[1.2in]
 		Amplitude: $1/R \approx 1/r$ (a fractional error of order $r^{\prime}/r$).
 		Phase: $R \approx r - \rhat \cdot \vec{r}^{\prime}$, because
@@ -174,7 +174,7 @@ $u = \tfrac{kL}{2}\cosp{\theta}$.
 		\begin{solution}[1.3in]
 		Beamwidth \textbf{halves} to $\approx 8.5\mydeg$ --- stretching the current
 		distribution squeezes its transform. The first sidelobe \textbf{does not
-		move}: it stays at $-13.3\db$, because it is set by the \emph{shape} (the
+		move}: it stays at $-13.3\db$, because the \emph{shape} sets it (the
 		abrupt edges of a uniform distribution), not the length. Beamwidth is bought
 		with size; sidelobes are bought with taper.
 		\end{solution}
@@ -184,7 +184,7 @@ $u = \tfrac{kL}{2}\cosp{\theta}$.
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Steering with a phase slope.} A uniform line source of length
-$L = 4\lambda$ is fed with a progressive phase so that the pattern peak moves off
+$L = 4\lambda$ carries a progressive phase that moves the pattern peak off
 broadside to $\theta_0 = 60\mydeg$. The excitation is
 $I(z^{\prime}) = I_0 e^{-jkz^{\prime}\cosp{\theta_0}}$.
 \begin{parts}
@@ -291,7 +291,7 @@ produces the far-field pattern
 	\part The radiation integral is exact once $\vec{J}$ is known. State what makes
 	$\vec{J}$ hard to know, and name the numerical method that solves for it.
 		\begin{solution}[1.1in]
-		The current is set by the fields, which are set by the current --- a
+		The fields set the current, and the current sets the fields --- a
 		self-consistent (boundary-value) problem. The \textbf{method of moments}
 		discretizes the structure, enforces the boundary condition on each segment,
 		and solves a linear system for the segment currents; it then runs this same

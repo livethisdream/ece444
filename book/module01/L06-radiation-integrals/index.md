@@ -10,7 +10,7 @@
 ## Learning Objectives
 
 <ol class="lo-list lo-sublist" style="--module: '1'; --lo: '6'">
-  <li>I can explain why the radiated field is found through the magnetic vector potential rather than by solving for E directly, and state the three-step recipe from current to far field.</li>
+  <li>I can explain why we find the radiated field through the magnetic vector potential rather than by solving for E directly, and state the three-step recipe from current to far field.</li>
   <li>I can apply the far-field approximations to the exact integral — one for amplitude, a different one for phase — and show that the leftover phase error is exactly the far-field distance criterion from Lesson 5.</li>
   <li>I can set up and evaluate the radiation integral for a given current distribution, and turn the resulting radiation vector into the far-field pattern.</li>
   <li>I can recognize the current distribution and the far-field pattern as a Fourier transform pair, and predict how a change in the current changes the pattern.</li>
@@ -40,8 +40,8 @@ $$
 \nabla \cdot \mathbf{B} = 0
 $$
 
-*always*, and because the divergence of any curl vanishes, $\mathbf{B}$ can
-always be written as the curl of some vector field. Define the **magnetic vector
+*always*, and because the divergence of any curl vanishes, you can
+always write $\mathbf{B}$ as the curl of some vector field. Define the **magnetic vector
 potential** $\mathbf{A}$ by
 
 $$
@@ -71,8 +71,8 @@ $\mathbf{J}(\mathbf{r}')\ dV'$ launches its own outgoing spherical wave,
 $e^{-jkR}/R$, and that wave arrives at the observation point with an amplitude
 set by $1/R$ and a phase delay set by $kR$. The integral is nothing more
 profound than **adding up those contributions** — superposition, with the
-bookkeeping done in phase. The unknown field has been replaced by a definite
-integral over something we can write down.
+bookkeeping done in phase. A definite integral over something we can
+write down has replaced the unknown field.
 
 :::{admonition} The three-step recipe
 :class: key-concept
@@ -278,7 +278,7 @@ That is a Fourier transform. **The far-field pattern is the Fourier transform of
 the current distribution**, evaluated over the *visible region*
 $-k \le k_z \le +k$ and then bent onto angle by $k_z = k\cos\theta$.
 
-That restriction is worth a second look. The transform $N_z(k_z)$ is defined for
+That restriction is worth a second look. The transform $N_z(k_z)$ exists for
 every real $k_z$, but only $|k_z| \le k$ corresponds to a real direction, because
 $k_z = k\cos\theta$ and $\cos\theta$ can only run from $-1$ to $+1$. **Part of the
 transform is invisible** — it describes stored, non-radiating field near the
@@ -405,8 +405,8 @@ distribution — is **pattern multiplication**, and Lesson 16 builds all of arra
 theory on it.
 ```
 
-Plotted against angle, that one expression is the shape every aperture antenna
-in this course is measured against:
+Plotted against angle, that one expression is the shape you measure every
+aperture antenna in this course against:
 
 <img src="../../viz/img/L06-line-source-sinc.svg" alt="Space factor of a uniform line source plotted in dB against angle: a main beam at broadside, nulls where cos theta is a multiple of lambda over L, and a first sidelobe 13.3 dB below the peak marked by a dashed line" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
@@ -526,8 +526,8 @@ uniform line source $D \to 2L/\lambda$ — directivity sold by the wavelength.
 ## Part 6: The catch — you have to know the current
 
 The radiation integral is exact given $\mathbf{J}$. The difficulty is that
-$\mathbf{J}$ is not given: the current on a conductor is itself set by the
-fields, which are set by the current. Solving that self-consistently is the
+$\mathbf{J}$ is not given: the fields set the current on a
+conductor, and the current sets the fields. Solving that self-consistently is the
 genuinely hard part of antenna analysis, and the radiation integral does not
 touch it.
 
