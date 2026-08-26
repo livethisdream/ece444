@@ -60,7 +60,7 @@ subject. Inside $\lambda/2\pi$ the stored terms take over...
 `depth` is the lesson-page material a deck would not carry. It is always in the
 DOM; present mode hides it with CSS. Presenting can therefore never lose it.
 
-## Six constraints, each of which cost a failed build
+## Eight constraints, each of which cost a failed build
 
 docutils/Sphinx facts, not preferences.
 
@@ -87,6 +87,20 @@ docutils/Sphinx facts, not preferences.
 6. **Scope `display: contents` carefully.** A blanket rule on
    `.docutils.container` also hits `.depth` and `.callout`, which then have no
    box, so read mode shows nothing. `:not(.depth):not(.callout)`.
+7. **jupyter-book auto-links every file in `_static` onto every page.** So
+   `frames.css` -- which carries bare `body`, `h1`, `p`, `table` and `:root`
+   rules -- silently restyled the whole book. Nothing errors; the theme pages
+   just quietly stop looking like themselves. `_ext/frames.py` strips
+   `frames.css`/`frames.js` from `css_files` and `script_files` on every
+   non-frame page, `search.html` and `genindex.html` included -- those two
+   arrive with `doctree is None`, so an early return skips them.
+8. **`min-width: auto` is what breaks a frame on a phone.** A flex or grid
+   item's automatic minimum is its min-content width, and display math and
+   tables do not wrap. The `overflow-x: auto` further down never fires,
+   because the box has already grown to fit. Measured at 390px: four L05a
+   frames ran 354-482px wide and the deck panned sideways. `.wrap` and the
+   jump overlay's columns need an explicit `min-width: 0`, and an
+   `auto-fill` track floor needs `minmax(min(19rem, 100%), 1fr)`.
 
 ## What is still open
 

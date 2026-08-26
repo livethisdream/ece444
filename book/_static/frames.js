@@ -67,7 +67,10 @@
   var listEl  = document.getElementById('indexlist');
   var showing = false;
   frames.forEach(function (f, i) {
-    var h = f.querySelector('h1, h2');
+    /* Sphinx frames title themselves with a rubric, not a heading -- docutils
+       will not allow a title node outside a section. The generated prototype
+       used h2, so accept both. */
+    var h = f.querySelector('h1, h2, p.rubric');
     var li = document.createElement('li');
     var b  = document.createElement('button');
     b.type = 'button';
@@ -88,6 +91,12 @@
     }
   }
   document.getElementById('btnIndex').addEventListener('click', function () { toggleIndex(); });
+  /* Escape closes it, but a phone has no Escape key. */
+  document.getElementById('btnIndexClose')
+    .addEventListener('click', function () { toggleIndex(false); });
+  indexEl.addEventListener('click', function (e) {
+    if (e.target === indexEl) toggleIndex(false);
+  });
 
   document.getElementById('btnLaser').addEventListener('click', toggleLaser);
   document.getElementById('btnSpot').addEventListener('click', toggleSpot);

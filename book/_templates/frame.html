@@ -18,10 +18,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap">
 <link rel="stylesheet" href="{{ pathto('_static/frames.css', 1) }}">
-{#- Only MathJax. Pulling in script_files wholesale drags the theme's JS onto
-    a page with no theme DOM, and it throws on every one of its selectors.
-    js_tag() is required too: pathto() on a _JavaScript object renders None. -#}
-{%- for js in script_files if 'mathjax' in js|string|lower %}
+{#- script_files has already been filtered to MathJax by _ext/frames.py --
+    including its inline config, which has no filename to match on here.
+    js_tag() is required: pathto() on a _JavaScript object renders None. -#}
+{%- for js in script_files %}
 {{ js_tag(js) }}
 {%- endfor %}
 </head>
@@ -31,8 +31,20 @@
 <div class="laser" id="laser" aria-hidden="true"></div>
 <div class="spot" id="spot" aria-hidden="true"></div>
 
-<div class="index" id="index" role="dialog" aria-label="Jump to a frame">
-  <div class="wrap"><h2>Jump to</h2><ol id="indexlist"></ol></div>
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div>
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        {{ toctree(collapse=False, includehidden=True, titles_only=True, maxdepth=2) }}
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="hud">
@@ -40,9 +52,9 @@
   <span class="sep"></span>
   <button id="btnMode" type="button" title="Present or read (P)">present</button>
   <button id="btnIndex" type="button" aria-pressed="false" title="Jump to a frame (G)">index</button>
-  <button id="btnLaser" type="button" aria-pressed="false" title="Laser pointer (L)">laser</button>
-  <button id="btnSpot" type="button" aria-pressed="false" title="Spotlight (S)">spot</button>
-  <button id="btnFull" type="button" title="Fullscreen (F)">full</button>
+  <button id="btnLaser" class="wide-only" type="button" aria-pressed="false" title="Laser pointer (L)">laser</button>
+  <button id="btnSpot" class="wide-only" type="button" aria-pressed="false" title="Spotlight (S)">spot</button>
+  <button id="btnFull" class="wide-only" type="button" title="Fullscreen (F)">full</button>
   <span class="sep"></span>
   {%- if parents %}
   <a class="navlink" href="{{ parents[-1].link|e }}" title="{{ parents[-1].title|striptags|e }}">up</a>

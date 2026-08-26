@@ -68,15 +68,55 @@ class CalloutDirective(_Wrapper):
     default_class = "callout"
 
 
+#: Assets that belong to the frame template alone. jupyter-book auto-links
+#: every file in `_static`, so without stripping these a frame stylesheet full
+#: of bare `body`, `h1`, `p`, `table` and `:root` rules lands on every page in
+#: the book and quietly restyles the whole site.
+_FRAME_ASSETS = ("frames.css", "frames.js")
+
+
+def _drop_frame_assets(context):
+    """Remove frames.css / frames.js from the auto-linked asset lists.
+
+    Safe on the frame page too: frame.html links its own stylesheet by path.
+    """
+    for key in ("css_files", "script_files"):
+        files = context.get(key)
+        if not files:
+            continue
+        context[key] = [
+            f for f in files
+            if not any(a in str(getattr(f, "filename", f) or "")
+                       for a in _FRAME_ASSETS)
+        ]
+
+
 def choose_template(app, pagename, templatename, context, doctree):
     """Render frame lessons with a chrome-free template."""
-    if doctree is None:
+    # search.html and genindex.html arrive with doctree None -- they are still
+    # ordinary pages that must not pick up the frame stylesheet.
+    meta = {} if doctree is None else app.env.metadata.get(pagename, {})
+    if "frame_view" not in meta:
+        _drop_frame_assets(context)
         return None
-    meta = app.env.metadata.get(pagename, {})
-    if "frame_view" in meta:
-        context["is_frame_view"] = True
-        return "frame.html"
-    return None
+    context["is_frame_view"] = True
+
+    # Keep MathJax, drop everything else. The theme's JS expects theme DOM and
+    # throws on every selector it owns once the sidebar is gone.
+    #
+    # This has to be done here, not in the template: Sphinx adds the
+    # `window.MathJax = {...}` config as an INLINE script with no filename, so
+    # a Jinja filter matching on the name keeps the MathJax file and silently
+    # drops its config -- and the page then renders no math at all.
+    keep = []
+    for js in context.get("script_files", []):
+        name = str(getattr(js, "filename", js) or "")
+        body = str(getattr(js, "attributes", {}).get("body", "") or "")
+        if "mathjax" in name.lower() or "MathJax" in body:
+            keep.append(js)
+    context["script_files"] = keep
+    _drop_frame_assets(context)
+    return "frame.html"
 
 
 def add_template_dir(app, config=None):

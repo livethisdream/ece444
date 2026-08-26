@@ -105,7 +105,15 @@ body {
   display: flex;
   flex-direction: column;
   gap: clamp(.9rem, 2.2vh, 1.5rem);
+  /* A flex/grid item's automatic minimum is its min-content width, and a
+     display-math container or a table will not wrap. Without this the wrap
+     grows past the viewport on a phone and the frame pans sideways -- and
+     the overflow-x rules further down never fire, because their own box has
+     already been widened to fit. Measured at 390px: four L05a frames ran
+     354-482px wide. */
+  min-width: 0;
 }
+.wrap > * { min-width: 0; max-width: 100%; }
 .wrap.narrow { max-width: 46rem; }
 
 /* ---- type ----------------------------------------------------------- */
@@ -412,11 +420,26 @@ iframe.viz {
   padding: clamp(2rem, 6vh, 4rem) clamp(1.2rem, 5vw, 4rem);
 }
 .index.on { display: block; }
+/* `.index button` above is (0,1,1) and sets width:100% and display:flex, so
+   this needs the type selector too or the close button spans the viewport and
+   the glyph lands in the top-left corner. */
+.index button.index-close {
+  position: fixed; top: clamp(.6rem, 2vh, 1.2rem); right: clamp(.6rem, 3vw, 1.4rem);
+  z-index: 1; font: 400 1.5rem/1 var(--sans); cursor: pointer;
+  width: 2.2rem; height: 2.2rem; padding: 0; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--soft); border: 1px solid var(--rule); color: var(--muted);
+}
+.index button.index-close:hover { color: var(--ink); background: var(--soft); }
+.index button.index-close:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 .index h2 { margin-bottom: .8em; }
 .index ol {
   list-style: none; margin: 0; padding: 0;
   display: grid; gap: .3rem 1.6rem;
-  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  /* min() is load-bearing: a bare minmax(19rem, 1fr) floor is wider than a
+     phone viewport, so the track cannot shrink and the whole overlay
+     overflows sideways (measured 963px of content in a 351px box). */
+  grid-template-columns: repeat(auto-fill, minmax(min(19rem, 100%), 1fr));
   max-width: 72rem;
 }
 .index button {
@@ -444,7 +467,10 @@ iframe.viz {
   border-bottom: 2px solid var(--rule-strong);
 }
 /* Sphinx wraps display math in div.math; inline in span.math */
-.frame div.math { padding: clamp(.5rem,1.6vh,1rem) 0; overflow-x: auto; }
+.frame div.math { padding: clamp(.5rem,1.6vh,1rem) 0; overflow-x: auto; overflow-y: hidden; }
+/* The theme supplies this wrapper's scrolling; frame pages do not load the
+   theme CSS, so it has to be restated here or wide tables push the frame out. */
+.frame .pst-scrollable-table-container { overflow-x: auto; max-width: 100%; }
 .frame > .wrap > .docutils.container:not(.depth):not(.callout) { display: contents; }
 .frame img { max-width: 100%; height: auto; }
 /* the page H1 is Sphinx's section title; the title frame carries the real one */
@@ -457,4 +483,57 @@ iframe.viz {
 [data-mode="present"] .frame.viz-frame {
   padding-top: clamp(1.8rem, 4vh, 3rem);
   padding-bottom: clamp(3rem, 6vh, 4.5rem);
+}
+
+
+/* ---- HUD nav links --------------------------------------------------- */
+/* These are real links, so they arrive underlined and blue. Make them read
+   as part of the HUD. */
+.hud a.navlink {
+  color: var(--muted); text-decoration: none; font: inherit;
+  padding: .18rem .45rem; border-radius: 4px; white-space: nowrap;
+}
+.hud a.navlink:hover { color: var(--ink); background: var(--soft); }
+.hud a.navlink:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* ---- HUD on a phone -------------------------------------------------- */
+/* The presenter controls are useless on a handset and were pushing prev/next
+   off the screen. Keep counter, mode, index, and navigation. */
+@media (max-width: 46rem) {
+  .hud .wide-only { display: none; }
+  .hud {
+    left: clamp(.5rem, 3vw, 1rem); right: clamp(.5rem, 3vw, 1rem);
+    justify-content: center; flex-wrap: wrap; gap: .35rem .5rem;
+    border-radius: 12px; padding: .4rem .6rem;
+  }
+}
+
+/* ---- jump overlay: this lesson + the whole course -------------------- */
+.index-cols {
+  display: grid; gap: clamp(1.2rem, 4vw, 3rem);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: start;
+  /* Flex item in .wrap: without this its automatic minimum is min-content,
+     which no amount of column sizing below can claw back. */
+  min-width: 0;
+}
+.index-cols > div { min-width: 0; }
+@media (max-width: 52rem) { .index-cols { grid-template-columns: 1fr; } }
+
+.index-toc ul { list-style: none; margin: 0; padding: 0; display: block; max-width: none; }
+.index-toc ul ul { padding-left: .9rem; margin: .15em 0 .5em; }
+.index-toc li { margin: 0; }
+.index-toc a {
+  display: block; padding: .3rem .5rem; border-radius: 4px;
+  color: var(--ink); text-decoration: none;
+  font-size: calc(var(--step-0) * .92); line-height: 1.3;
+}
+.index-toc a:hover { background: var(--soft); color: var(--blue-dark); }
+.index-toc a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.index-toc li.current > a, .index-toc a.current {
+  color: var(--blue-dark); font-weight: 700; background: var(--soft);
+}
+.index-toc .caption, .index-toc p.caption {
+  font-size: var(--step--1); letter-spacing: .1em; text-transform: uppercase;
+  font-weight: 700; color: var(--muted); margin: .9em 0 .2em; padding-left: .5rem;
 }
