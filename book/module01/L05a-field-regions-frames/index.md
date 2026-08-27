@@ -52,6 +52,10 @@ Today we step outside the antenna. Where you stand changes what you measure.
 6. Why an antenna range has to be so long
 ::::
 
+::::{frame} The three regions
+<img src="../../slides/fig/L05-region-diagram.svg" alt="Three concentric field regions around an antenna: a small reactive near field, a radiating near field around it, and the far field extending outward">
+::::
+
 ::::{frame} Near and far
 Walk away from a transmitting antenna and watch the field.
 
@@ -210,10 +214,6 @@ The minus sign on the $j$ even tells you the stored energy is predominantly
 large negative reactance from Lesson 4 and this near-field electric energy are
 the same physics, seen from the outside versus the inside.
 :::
-::::
-
-::::{frame} The three regions
-<img src="../../slides/fig/L05-region-diagram.svg" alt="Three concentric field regions around an antenna: a small reactive near field, a radiating near field around it, and the far field extending outward">
 ::::
 
 ::::{frame} Reactive near-field

@@ -67,20 +67,20 @@
 <div class="hud">
   <span><b id="cur">1</b>/<span id="tot">0</span></span>
   <span class="sep"></span>
-  {#- A segmented pair, not a single button. The old control showed the mode
-      you were IN, while every other control in this bar names an action -- so
-      pressing the one labelled "present" took you away from present, and it
-      read as doing nothing at all. Two segments with the live one lit cannot
-      be misread in either direction. -#}
-  <span class="seg" role="group" aria-label="View mode">
-    <button id="btnPresent" type="button" aria-pressed="true"
-            title="Present: one frame at a time (P)">present</button>
-    <button id="btnRead" type="button" aria-pressed="false"
-            title="Read: the whole lesson, continuous (P)">read</button>
-  </span>
+  <button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+          title="How the lesson is laid out (P)">mode</button>
   <button id="btnIndex" type="button" aria-pressed="false" title="Contents (G)">index</button>
   <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
           title="Presenter tools">tools</button>
+
+  {#- Both panels list their options with the live one lit, so neither the
+      button nor the rows can be read as "press this to do nothing". -#}
+  <div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="true">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="false">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div>
 
   {#- These three keep their ids: frames.js wires them by id, so the move
       into a panel costs no JS change. -#}

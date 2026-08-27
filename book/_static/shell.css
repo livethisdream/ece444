@@ -316,16 +316,15 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
 }
 .hud b { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
 
-/* Segmented control: two options, the live one lit. Used for present/read,
-   where a single toggle labelled with the current state read as inert. */
-.hud .seg { display: inline-flex; align-items: center; gap: .1rem; }
-.hud .seg button { padding: .1rem .38rem; }
-.hud .seg button[aria-pressed="true"] {
-  color: var(--blue-dark); background: var(--soft);
-  border-radius: 999px; font-weight: 700;
+/* The mode button carries the mode in force after its label, so the bar says
+   which layout you are looking at without opening anything -- and pressing a
+   mode visibly changes the bar, which is the confirmation a popover hides. */
+.hud button[data-mode]::after {
+  /* A literal middot, not an escape: "\00b7 " swallows the trailing space
+     as the escape terminator and the label reads "\u00b7present". */
+  content: " · " attr(data-mode);
+  color: var(--blue-dark); font-weight: 700;
 }
-.hud .seg button[aria-pressed="false"] { opacity: .62; }
-.hud .seg button[aria-pressed="false"]:hover { opacity: 1; }
 .hud .sep { width: 1px; height: .95em; background: var(--rule-strong); }
 .hud button {
   font: inherit; color: var(--muted); background: none; border: none;
@@ -372,6 +371,20 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
   color: var(--red); background: var(--soft-red); font-weight: 700;
 }
 .hud .pop-empty { padding: .4rem .55rem; color: var(--muted); opacity: .7; }
+/* A popover row that is a CHOICE, not an action: it stacks a short note under
+   the label and lights whichever one is in force. Without the lit state a
+   panel of options reads as a panel of buttons that do nothing. */
+.hud .pop button.choice {
+  flex-direction: column; align-items: flex-start; gap: .1rem;
+}
+.hud .pop-note {
+  font-size: .92em; opacity: .7; letter-spacing: 0; text-transform: none;
+  font-weight: 400; color: var(--muted);
+}
+.hud .pop button[aria-pressed="true"] {
+  color: var(--blue-dark); background: var(--soft); font-weight: 700;
+}
+.hud .pop button[aria-pressed="true"] .pop-note { color: var(--blue-dark); }
 .hud kbd {
   font-family: var(--mono); font-size: .82em; color: var(--muted);
   border: 1px solid var(--rule); border-radius: 3px; padding: 0 .3em;

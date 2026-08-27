@@ -19,7 +19,15 @@
     curEl.textContent = i + 1;
     railfill.style.height = ((i + 1) / frames.length * 100) + '%';
     var id = '#' + frames[i].id;
-    if (location.hash !== id) history.replaceState(null, '', id);
+    /* Deep-linking is a nicety; it must never take the page down. In any
+       sandboxed or opaque-origin document -- an about:srcdoc iframe, a
+       file:// page -- replaceState throws, and because setIndex runs during
+       init the throw aborted the rest of this file: no present/read control,
+       no "More detail" expanders, no widget sizing. All of it silently, with
+       the page looking fine. */
+    try {
+      if (location.hash !== id) history.replaceState(null, '', id);
+    } catch (err) { /* no addressable history here; carry on */ }
   }
 
   var io = new IntersectionObserver(function (entries) {
@@ -126,7 +134,7 @@
   }
   function anyPopOpen() { return pops.some(function (p) { return p.isOpen(); }); }
 
-  /* Only the tools panel is left; prev/next moved off the bar entirely. */
+  var modePop  = popover('btnMode', 'modepop');
   var toolsPop = popover('btnTools', 'toolspop');
 
   /* A tap anywhere off the bar dismisses whatever is open. */
@@ -222,6 +230,8 @@
     document.documentElement.setAttribute('data-mode', m);
     segPresent.setAttribute('aria-pressed', m === 'present');
     segRead.setAttribute('aria-pressed', m === 'read');
+    /* The panel is usually shut, so the button carries the live mode. */
+    document.getElementById('btnMode').setAttribute('data-mode', m);
     try { localStorage.setItem('ece444-frames-mode', m); } catch (err) {}
     /* Coming back to present, land on the frame you were reading rather than
        wherever the continuous scroll had got to. */
@@ -230,8 +240,8 @@
   var startMode = 'present';
   try { startMode = localStorage.getItem('ece444-frames-mode') || 'present'; } catch (err) {}
   setMode(startMode === 'read' ? 'read' : 'present');
-  segPresent.addEventListener('click', function () { setMode('present'); });
-  segRead.addEventListener('click', function () { setMode('read'); });
+  segPresent.addEventListener('click', function () { setMode('present'); modePop.open(false); });
+  segRead.addEventListener('click', function () { setMode('read'); modePop.open(false); });
 
   /* an inline expander, so a question mid-lecture does not cost you the deck */
   Array.prototype.forEach.call(document.querySelectorAll('.depth'), function (d) {
