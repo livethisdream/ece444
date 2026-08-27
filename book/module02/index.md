@@ -1,26 +1,67 @@
 ---
 nav: Antenna Types
+frame_view: true
 ---
 
 # Module 2 — Antenna Types, Simulation, and Measurement
 
-<p class="module-meta"><span class="m-module">Module 02</span><span class="m-time">Lessons 7–14</span></p>
+::::{frame}
+:class: title-frame
 
-<p class="module-synopsis">Move from theory to real antennas: the canonical families — dipoles, loops, monopoles, patches, slots, horns, reflectors, Yagis — and how we simulate and measure them. You'll simulate a dipole, then measure impedance and radiation patterns in the lab.</p>
+<div class="course-mark">ECE 444 · Module 02</div>
 
-## Learning Objectives
+<h1 class="frame-title">Antenna Types, Simulation, and Measurement</h1>
+
+<div class="title-rule"></div>
+
+Theory is cheap. Build it, simulate it, then measure it.
+
+Lessons 7–14 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+::::
+
+::::{frame} Where this module goes
+Module 1 described *any* radiator in the abstract. This module meets the real
+families — dipoles, loops, monopoles, patches, slots, horns, reflectors, Yagis
+— and asks what each one is actually good for.
+
+Then it puts numbers on them twice over: **once in a simulator, once on the
+bench**. When those two disagree, one of them is wrong, and finding out which
+is the skill.
+
+:::{depth}
+You will simulate a dipole and predict its impedance, then walk to the VNA and
+measure the same antenna. Expect the two to differ. The gap between a model
+and a measurement is where engineering judgement lives, and it is far more
+useful than either number on its own.
+:::
+::::
+
+::::{frame} Learning objectives — 2.1 to 2.3
 
 <ol class="lo-list" style="--module: '2'">
   <li>I can describe the radiation behavior of simple resonant antennas (isotropic radiator, half-wave dipole, monopole, loop) and calculate their gain and impedance.</li>
   <li>I can simulate a dipole antenna using an EM simulation tool and interpret the results against analytical predictions.</li>
   <li>I can describe the radiation mechanism, pattern, and typical use cases for patch, slot, and horn antennas.</li>
+</ol>
+::::
+
+::::{frame} Learning objectives — 2.4 to 2.6
+
+<ol class="lo-list" start="4" style="--module: '2'">
   <li>I can describe how reflectors, Yagi-Uda antennas, and arrays achieve high gain, and select an appropriate high-gain antenna for a given application.</li>
   <li>I can explain the theory behind antenna pattern measurement, including anechoic chambers, near-field to far-field transformations, and standard gain horns.</li>
   <li>I can measure the impedance and S-parameters of an antenna using a vector network analyzer and interpret the results.</li>
+</ol>
+::::
+
+::::{frame} Learning objective 2.7
+
+<ol class="lo-list" start="7" style="--module: '2'">
   <li>I can measure the radiation pattern of an antenna and extract gain, beamwidth, sidelobe level, and polarization from the data.</li>
 </ol>
+::::
 
-## Module Lessons
+::::{frame} Lessons 7–9 — the canonical radiators
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L07-simple-resonant-antennas/index.html">
@@ -38,6 +79,12 @@ nav: Antenna Types
     <h4>Loop and Monopole Antennas</h4>
     <p>Small loops and monopoles: radiation behavior, gain, and impedance. Objective 2.1.</p>
   </a>
+</div>
+::::
+
+::::{frame} Lessons 10–11 — shaped apertures and high gain
+
+<div class="module-toc">
   <a class="mt-card mt-lesson" href="L10-patch-slot-horn/index.html">
     <span class="mt-kind">Lesson 10</span>
     <h4>Patch, Slot, and Horn Antennas</h4>
@@ -48,6 +95,12 @@ nav: Antenna Types
     <h4>High-Gain Antennas</h4>
     <p>Reflectors, Yagi-Uda, and arrays — how they get gain. Midterm project introduced. Objective 2.4.</p>
   </a>
+</div>
+::::
+
+::::{frame} Lessons 12–14 — measuring what you built
+
+<div class="module-toc">
   <a class="mt-card mt-lesson" href="L12-pattern-measurement-theory/index.html">
     <span class="mt-kind">Lesson 12</span>
     <h4>Pattern Measurement Theory</h4>
@@ -64,3 +117,13 @@ nav: Antenna Types
     <p>Measure a radiation pattern and extract gain, beamwidth, sidelobe level, and polarization. Objective 2.7.</p>
   </a>
 </div>
+::::
+
+::::{frame} Where this is going
+**Module 3** stops treating an antenna as one object. Put several in a row,
+control the phase of each, and the pattern becomes something you steer rather
+than something you accept.
+
+Everything you measure here — pattern, gain, beamwidth, sidelobe level — is
+what you will steer there.
+::::

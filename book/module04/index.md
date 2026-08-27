@@ -1,26 +1,66 @@
 ---
 nav: Radar
+frame_view: true
 ---
 
 # Module 4 — Radar Fundamentals and FMCW
 
-<p class="module-meta"><span class="m-module">Module 04</span><span class="m-time">Lessons 29–38</span></p>
+::::{frame}
+:class: title-frame
 
-<p class="module-synopsis">From antennas to radar. The radar equation, range/Doppler/resolution, detection theory, and FMCW processing on the PHASER — range, range-Doppler, MTI, and CFAR.</p>
+<div class="course-mark">ECE 444 · Module 04</div>
 
-## Learning Objectives
+<h1 class="frame-title">Radar Fundamentals and FMCW</h1>
+
+<div class="title-rule"></div>
+
+Send it, hear it come back, and work out what is out there.
+
+Lessons 29–38 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+::::
+
+::::{frame} Where this module goes
+Radar is the antenna course with a clock attached. The radar equation says
+whether you will hear the echo at all; range, resolution and Doppler say what
+you can tell about the thing that sent it back.
+
+Then it gets real: **FMCW on the PHASER**, processed into range, a range
+waterfall, range-Doppler, MTI, and CFAR — the same chain a fielded radar runs.
+
+:::{depth}
+Detection is a decision under noise, not a measurement. Probability of
+detection and false-alarm rate move together, and CFAR exists because the
+noise floor will not hold still. That is why the last two lessons of this
+module are the ones the capstone leans on hardest.
+:::
+::::
+
+::::{frame} Learning objectives — 4.1 to 4.3
 
 <ol class="lo-list" style="--module: '4'">
   <li>I can apply the radar equation to calculate received power for a given geometry, and account for path loss and radar cross section (RCS).</li>
   <li>I can calculate range resolution, unambiguous range, and Doppler shift for a given radar waveform.</li>
   <li>I can apply radar detection theory (PD, FAR, dwell time) to determine detection performance under noise.</li>
+</ol>
+::::
+
+::::{frame} Learning objectives — 4.4 to 4.6
+
+<ol class="lo-list" start="4" style="--module: '4'">
   <li>I can describe FMCW radar operation and configure an FMCW waveform on the ADALM-PHASER.</li>
   <li>I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.</li>
   <li>I can implement moving target indication (MTI) processing to distinguish moving targets from clutter.</li>
+</ol>
+::::
+
+::::{frame} Learning objective 4.7
+
+<ol class="lo-list" start="7" style="--module: '4'">
   <li>I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance.</li>
 </ol>
+::::
 
-## Module Lessons
+::::{frame} Lessons 29–31 — the equation, and what it takes to detect
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L29-radar-equation/index.html">
@@ -38,6 +78,12 @@ nav: Radar
     <h4>Radar Detection Theory</h4>
     <p>Detection theory: probability of detection, false-alarm rate, and dwell time under noise. Objective 4.3.</p>
   </a>
+</div>
+::::
+
+::::{frame} Lessons 32–35 — FMCW on the bench: range and Doppler
+
+<div class="module-toc">
   <a class="mt-card mt-lesson" href="L32-fmcw-intro/index.html">
     <span class="mt-kind">Lesson 32</span>
     <h4>Introduction to FMCW on Phaser</h4>
@@ -58,6 +104,12 @@ nav: Radar
     <h4>Range-Doppler Lab</h4>
     <p>Produce range-Doppler results from FMCW data. Objective 4.5.</p>
   </a>
+</div>
+::::
+
+::::{frame} Lessons 36–38 — separating movers from clutter
+
+<div class="module-toc">
   <a class="mt-card mt-lesson" href="L36-mti-lab/index.html">
     <span class="mt-kind">Lesson 36</span>
     <h4>Moving Target Indication (MTI) Lab</h4>
@@ -74,3 +126,11 @@ nav: Radar
     <p>Apply CFAR to radar data and evaluate detection performance. Objective 4.7.</p>
   </a>
 </div>
+::::
+
+::::{frame} Where this is going
+**Module 5** puts the two halves of the course together. The array from Module
+3 points and nulls; the radar from Module 4 detects and tracks.
+
+Nothing new is introduced. The capstone is the integration.
+::::

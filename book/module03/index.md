@@ -1,28 +1,69 @@
 ---
 nav: Arrays
+frame_view: true
 ---
 
 # Module 3 — Arrays and ADALM-PHASER Beamforming
 
-<p class="module-meta"><span class="m-module">Module 03</span><span class="m-time">Lessons 15–28</span></p>
+::::{frame}
+:class: title-frame
 
-<p class="module-synopsis">Build beams from elements. Aperture distributions and the array factor, then hands-on beam steering, tapering, beam squint, and null steering on the ADALM-PHASER.</p>
+<div class="course-mark">ECE 444 · Module 03</div>
 
-## Learning Objectives
+<h1 class="frame-title">Arrays and ADALM-PHASER Beamforming</h1>
+
+<div class="title-rule"></div>
+
+Point the beam without moving the antenna.
+
+Lessons 15–28 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+::::
+
+::::{frame} Where this module goes
+An array is many small antennas behaving as one large one. Feed the elements
+with the right phases and the beam points where you choose; feed them with the
+right amplitudes and you decide how much energy leaks into the sidelobes.
+
+This is the longest module in the course, and the most hands-on. **Every
+theory lesson is followed by a lab on the ADALM-PHASER**, so you never take
+the array factor on faith.
+
+:::{depth}
+The through-line is one equation — the array factor — met four times: derived,
+steered, tapered, and nulled. Each time it is the same sum over elements with
+different weights. If you leave this module able to write that sum from memory
+and say what each term does, the rest is arithmetic.
+:::
+::::
+
+::::{frame} Learning objectives — 3.1 to 3.3
 
 <ol class="lo-list" style="--module: '3'">
   <li>I can describe aperture distributions and calculate aperture efficiency for a given illumination.</li>
   <li>I can derive the array factor for an arbitrary linear array and apply pattern multiplication.</li>
   <li>I can identify the hardware architecture of the ADALM-PHASER and control it via SDR software.</li>
+</ol>
+::::
+
+::::{frame} Learning objectives — 3.4 to 3.6
+
+<ol class="lo-list" start="4" style="--module: '3'">
   <li>I can calculate the phase weights required to steer a beam to a given angle and predict the resulting array pattern.</li>
   <li>I can implement beam steering on the ADALM-PHASER and verify the steered pattern against theory.</li>
   <li>I can distinguish between array factor and true antenna pattern and account for element pattern effects.</li>
+</ol>
+::::
+
+::::{frame} Learning objectives — 3.7 to 3.9
+
+<ol class="lo-list" start="7" style="--module: '3'">
   <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
   <li>I can identify beam squint and quantization effects in a phased array and describe their impact on system performance.</li>
   <li>I can calculate null-steering weights and implement pattern nulls on the ADALM-PHASER.</li>
 </ol>
+::::
 
-## Module Lessons
+::::{frame} Lessons 15–17 — from aperture to array, and the hardware
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L15-aperture-distributions/index.html">
@@ -40,6 +81,12 @@ nav: Arrays
     <h4>Introduction to Phased Array Hardware</h4>
     <p>ADALM-PHASER architecture and SDR control. Objective 3.3.</p>
   </a>
+</div>
+::::
+
+::::{frame} Lessons 18–21 — steering the beam, and proving it
+
+<div class="module-toc">
   <a class="mt-card mt-lesson" href="L18-beam-steering-theory/index.html">
     <span class="mt-kind">Lesson 18</span>
     <h4>Beam Steering Theory</h4>
@@ -60,6 +107,12 @@ nav: Arrays
     <h4>Array Factor Lab</h4>
     <p>Measure the array factor on the PHASER. Objective 3.2.</p>
   </a>
+</div>
+::::
+
+::::{frame} Lessons 22–25 — the real pattern, and shaping it
+
+<div class="module-toc">
   <a class="mt-card mt-lesson" href="L22-antenna-pattern-theory/index.html">
     <span class="mt-kind">Lesson 22</span>
     <h4>Antenna Pattern Theory</h4>
@@ -80,6 +133,12 @@ nav: Arrays
     <h4>Tapering Lab</h4>
     <p>Apply tapers on the PHASER and measure the sidelobe trade-off. Objective 3.7.</p>
   </a>
+</div>
+::::
+
+::::{frame} Lessons 26–28 — where arrays misbehave, and nulling
+
+<div class="module-toc">
   <a class="mt-card mt-lesson" href="L26-beam-squint-quantization/index.html">
     <span class="mt-kind">Lesson 26</span>
     <h4>Beam Squint and Quantization</h4>
@@ -96,3 +155,13 @@ nav: Arrays
     <p>Implement pattern nulls on the PHASER. Objective 3.9.</p>
   </a>
 </div>
+::::
+
+::::{frame} Where this is going
+**Module 4** gives the array something to look for. The same hardware becomes
+a radar: send a chirp, listen for the echo, and work out how far away the
+target is and how fast it is moving.
+
+The null steering you learn at the end of this module is what the capstone
+uses to ignore a jammer.
+::::

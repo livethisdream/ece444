@@ -1,23 +1,57 @@
 ---
 nav: Capstone
+frame_view: true
 ---
 
 # Module 5 — Capstone Project
 
-<p class="module-meta"><span class="m-module">Module 05</span><span class="m-time">Lessons 39–41</span></p>
+::::{frame}
+:class: title-frame
 
-<p class="module-synopsis">Capstone. Integrate beam steering, null steering, and FMCW radar into a working demo that tracks a moving target while suppressing a static jammer, and brief the results.</p>
+<div class="course-mark">ECE 444 · Module 05</div>
 
-## Learning Objectives
+<h1 class="frame-title">Capstone Project</h1>
+
+<div class="title-rule"></div>
+
+Track the mover. Ignore the jammer. Defend the design.
+
+Lessons 39–41 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+::::
+
+::::{frame} Where this module goes
+Everything the course has built arrives here at once: beam steering and null
+steering from Module 3, FMCW detection and tracking from Module 4, on the
+hardware you have been using all semester.
+
+**No new theory.** Three lessons, one working demonstration, and a technical
+briefing in which you explain the trade-offs you chose and why.
+
+:::{depth}
+The scenario is deliberately over-constrained: a moving target you must hold,
+a static jammer you must reject, and one array to do both. Every weight that
+deepens the null costs you somewhere in the main beam. Knowing where you spent
+it, and being able to say so under questioning, is the point of the briefing.
+:::
+::::
+
+::::{frame} Learning objectives — 5.1 to 5.3
 
 <ol class="lo-list" style="--module: '5'">
   <li>I can integrate beam-steering and null-steering weights to optimize array performance against a specified scenario.</li>
   <li>I can integrate FMCW radar processing with a phased-array front-end to track a moving target.</li>
   <li>I can suppress a static jammer using null steering while maintaining detection of a moving target.</li>
+</ol>
+::::
+
+::::{frame} Learning objective 5.4
+
+<ol class="lo-list" start="4" style="--module: '5'">
   <li>I can present system performance results and defend engineering trade-offs in a technical briefing.</li>
 </ol>
+::::
 
-## Module Lessons
+::::{frame} Lessons 39–41 — the capstone
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L39-final-project-kickoff/index.html">
@@ -36,3 +70,4 @@ nav: Capstone
     <p>Integrate FMCW + Doppler tracking, overlay tracks on the array pattern, and brief the results. Objectives 5.2, 5.3, 5.4.</p>
   </a>
 </div>
+::::
