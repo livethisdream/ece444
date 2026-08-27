@@ -1,4 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 430" font-family="Inter, system-ui, -apple-system, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 0 660 430" font-family="Inter, system-ui, -apple-system, sans-serif">
+  <!-- viewBox starts at -20, not 0: the outer circle is cx=175 r=188,
+       so it reaches x=-13 and was being clipped down its left side.
+       -->
   <!-- concentric field regions centered on the antenna -->
   <circle cx="175" cy="215" r="188" fill="rgba(0,74,133,0.045)" stroke="#b9d2e5"/>
   <circle cx="175" cy="215" r="126" fill="rgba(0,103,185,0.10)" stroke="#0067b9" stroke-width="1.4" stroke-dasharray="5 4"/>

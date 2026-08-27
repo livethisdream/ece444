@@ -126,7 +126,7 @@
   }
   function anyPopOpen() { return pops.some(function (p) { return p.isOpen(); }); }
 
-  var navPop   = popover('btnNav', 'navpop');
+  /* Only the tools panel is left; prev/next moved off the bar entirely. */
   var toolsPop = popover('btnTools', 'toolspop');
 
   /* A tap anywhere off the bar dismisses whatever is open. */

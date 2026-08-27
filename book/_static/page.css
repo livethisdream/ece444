@@ -124,6 +124,36 @@ body.chrome-away .hud { transform: translateY(160%); opacity: 0; }
    gives tall math somewhere to sit inside the scroll box. */
 .page .scrolls-x { overflow-x: auto; }
 
+/* ---- where to go when the page ends ---------------------------------- */
+/* This replaces the `nav` popover that used to sit in the bar. Sequential
+   reading is a thing you want at the END of a lesson, not permanently in the
+   corner, so it lives in the flow where the reader already is. */
+.page-next {
+  display: grid; gap: .8rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+  max-width: min(68rem, 100% - 2.4rem);
+  margin: 0 auto clamp(4rem, 10vh, 7rem);
+  padding-top: clamp(1.5rem, 4vh, 2.5rem);
+  border-top: 1px solid var(--rule);
+}
+.page-next a {
+  display: flex; flex-direction: column; gap: .2rem;
+  padding: .9rem 1.1rem; border-radius: 12px;
+  text-decoration: none; color: var(--ink);
+  border: 1px solid var(--rule); background: var(--panel);
+}
+.page-next a:hover { border-color: var(--rule-strong); background: var(--soft); }
+.page-next a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.pn-kind {
+  font-family: var(--mono); font-size: .7rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.pn-title { font-weight: 600; color: var(--blue-dark); line-height: 1.3; }
+/* Next sits on the right when both are present, and alone on the right when
+   it is the only one -- so the direction of travel always reads left to right. */
+.page-next a.pn-next { text-align: right; }
+.page-next a.pn-next:only-child { grid-column: -2; }
+
 /* ---- search field in the overlay -------------------------------------- */
 .index-search { margin: 0 0 clamp(1rem, 3vh, 1.8rem); }
 .index-search input {

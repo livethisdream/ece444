@@ -72,21 +72,7 @@
   <span id="pct">0%</span>
   <span class="sep"></span>
   <button id="btnIndex" type="button" aria-pressed="false" title="Contents and search (G)">contents</button>
-  <button id="btnNav" type="button" aria-expanded="false" aria-controls="navpop"
-          title="Previous or next lesson">nav</button>
   <button id="btnTop" type="button" title="Back to top">&#9650; top</button>
-
-  <div class="pop" id="navpop" role="group" aria-label="Lessons" hidden>
-    {%- if prev %}
-    <a href="{{ prev.link|e }}">&larr; {{ prev.title|striptags|e }}</a>
-    {%- endif %}
-    {%- if next %}
-    <a href="{{ next.link|e }}">{{ next.title|striptags|e }} &rarr;</a>
-    {%- endif %}
-    {%- if not prev and not next %}
-    <span class="pop-empty">No neighbouring lesson</span>
-    {%- endif %}
-  </div>
 </div>
 
 {#- `bd-article` is a compatibility class, not a theme leftover. 149 of
@@ -98,6 +84,26 @@
 <main class="page bd-article" id="page">
 {{ body }}
 </main>
+
+{#- Sequential reading still needs a next step. It belongs at the END of the
+    page, where the reader actually is when they want it -- not as a permanent
+    control in the bar. -#}
+{%- if prev or next %}
+<nav class="page-next" aria-label="Nearby lessons">
+  {%- if prev %}
+  <a class="pn-prev" href="{{ prev.link|e }}">
+    <span class="pn-kind">Previous</span>
+    <span class="pn-title">{{ prev.title|striptags|e }}</span>
+  </a>
+  {%- endif %}
+  {%- if next %}
+  <a class="pn-next" href="{{ next.link|e }}">
+    <span class="pn-kind">Next</span>
+    <span class="pn-title">{{ next.title|striptags|e }}</span>
+  </a>
+  {%- endif %}
+</nav>
+{%- endif %}
 
 <script src="{{ pathto('_static/shell.js', 1) }}"></script>
 <script src="{{ pathto('_static/page.js', 1) }}"></script>

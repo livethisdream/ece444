@@ -69,22 +69,8 @@
   <span class="sep"></span>
   <button id="btnMode" type="button" title="Present or read (P)">present</button>
   <button id="btnIndex" type="button" aria-pressed="false" title="Contents (G)">index</button>
-  <button id="btnNav" type="button" aria-expanded="false" aria-controls="navpop"
-          title="Previous or next lesson">nav</button>
   <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
           title="Presenter tools">tools</button>
-
-  <div class="pop" id="navpop" role="group" aria-label="Lessons" hidden>
-    {%- if prev %}
-    <a href="{{ prev.link|e }}">&larr; {{ prev.title|striptags|e }}</a>
-    {%- endif %}
-    {%- if next %}
-    <a href="{{ next.link|e }}">{{ next.title|striptags|e }} &rarr;</a>
-    {%- endif %}
-    {%- if not prev and not next %}
-    <span class="pop-empty">No neighbouring lesson</span>
-    {%- endif %}
-  </div>
 
   {#- These three keep their ids: frames.js wires them by id, so the move
       into a panel costs no JS change. -#}

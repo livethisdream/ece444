@@ -51,37 +51,23 @@
     if (e.target.closest && e.target.closest('.hud, .mark-nav')) chrome(false);
   });
 
-  /* ---- popovers ------------------------------------------------------- */
-  var pops = [];
-  function popover(btnId, panelId) {
-    var btn = document.getElementById(btnId), panel = document.getElementById(panelId);
-    if (!btn || !panel) return null;
-    var pop = {
-      open: function (want) {
-        var on = (want === undefined) ? panel.hidden : want;
-        if (on) closePops(pop);
-        panel.hidden = !on;
-        btn.setAttribute('aria-expanded', on);
-        if (on) chrome(false);
-        if (on) { toggleIndex(false); (panel.querySelector('button, a') || btn).focus(); }
-      },
-      isOpen: function () { return !panel.hidden; }
-    };
-    btn.addEventListener('click', function () { pop.open(); });
-    pops.push(pop);
-    return pop;
-  }
-  function closePops(except) { pops.forEach(function (p) { if (p !== except) p.open(false); }); }
-  function anyPopOpen() { return pops.some(function (p) { return p.isOpen(); }); }
-  popover('btnNav', 'navpop');
-  document.addEventListener('pointerdown', function (e) {
-    if (!anyPopOpen()) return;
-    var t = e.target;
-    if (!t || !t.closest || !t.closest('.hud')) closePops();
-  });
+  /* Nothing pops out of the bar any more -- prev/next moved into the page
+     footer and the presenter tools live on frame pages only. anyPopOpen and
+     closePops are kept as no-ops so the scroll and Escape handlers below read
+     the same in both shells. */
+  function closePops() {}
+  function anyPopOpen() { return false; }
 
   /* ---- contents overlay ----------------------------------------------- */
   var qEl = document.getElementById('q');
+  /* Autofocusing the search field summons the on-screen keyboard, which eats
+     half a phone screen the instant you open the contents -- exactly when you
+     wanted to SEE the contents. Focus it only where a keyboard is already
+     present; a touch user taps the field when they actually want to type. */
+  function wantsKeyboard() {
+    try { return window.matchMedia('(pointer: fine)').matches; }
+    catch (e) { return false; }
+  }
   /* Sphinx resolves the relative path for us; deriving it here would break at
      any nesting depth other than the one it was written for. */
   var SEARCH_URL = document.body.getAttribute('data-search');
@@ -91,7 +77,7 @@
     indexEl.classList.toggle('on', showing);
     if (showing) chrome(false);
     document.getElementById('btnIndex').setAttribute('aria-pressed', showing);
-    if (showing) { markHere(); qEl && qEl.focus(); }
+    if (showing) { markHere(); if (qEl && wantsKeyboard()) qEl.focus(); }
   }
   document.getElementById('btnIndex').addEventListener('click', function () { toggleIndex(); });
   document.getElementById('btnIndexClose').addEventListener('click', function () { toggleIndex(false); });
@@ -179,7 +165,9 @@
     }
     switch (e.key) {
       case 'g': case 'G': e.preventDefault(); toggleIndex(); break;
-      case '/': e.preventDefault(); toggleIndex(true); break;
+      /* Typing "/" is itself a keyboard action, so land in the field
+         regardless of what the pointer says. */
+      case '/': e.preventDefault(); toggleIndex(true); qEl && qEl.focus(); break;
       case 'Escape':
         if (anyPopOpen()) closePops();
         else if (showing) toggleIndex(false);
