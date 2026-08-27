@@ -65,11 +65,18 @@
     position:fixed and so already a containing block, and anchoring to the bar
     keeps a long lesson title from running off the edge of a phone screen. -#}
 <div class="hud">
-  <span><b id="cur">1</b>/<span id="tot">0</span></span>
+  {#- The counter is the button. "12/25" already says what it opens -- a deck
+      you can jump around in -- so a separate "index" label was a word for
+      something the number was saying anyway. -#}
+  <button id="btnIndex" class="counter" type="button" aria-pressed="false"
+          title="Contents (G)"><b id="cur">1</b>/<span id="tot">0</span></button>
   <span class="sep"></span>
+  {#- And the mode button is labelled with the mode in force. That read as
+      inert when pressing it silently swapped the caption; now it opens a menu
+      showing both options with the live one lit, which is just a control
+      labelled with its current value. -#}
   <button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
-          title="How the lesson is laid out (P)">mode</button>
-  <button id="btnIndex" type="button" aria-pressed="false" title="Contents (G)">index</button>
+          title="How the lesson is laid out (P)">present</button>
   <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
           title="Presenter tools">tools</button>
 

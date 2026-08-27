@@ -230,8 +230,9 @@
     document.documentElement.setAttribute('data-mode', m);
     segPresent.setAttribute('aria-pressed', m === 'present');
     segRead.setAttribute('aria-pressed', m === 'read');
-    /* The panel is usually shut, so the button carries the live mode. */
-    document.getElementById('btnMode').setAttribute('data-mode', m);
+    /* The panel is usually shut, so the button IS the readout: labelled with
+       the mode in force, the way a select shows its current value. */
+    document.getElementById('btnMode').textContent = m;
     try { localStorage.setItem('ece444-frames-mode', m); } catch (err) {}
     /* Coming back to present, land on the frame you were reading rather than
        wherever the continuous scroll had got to. */

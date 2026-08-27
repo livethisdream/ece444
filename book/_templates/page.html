@@ -69,9 +69,10 @@
 </div>
 
 <div class="hud">
-  <span id="pct">0%</span>
+  {#- Same as the frame bar: the readout is the button. -#}
+  <button id="btnIndex" class="counter" type="button" aria-pressed="false"
+          title="Contents and search (G)"><span id="pct">0%</span></button>
   <span class="sep"></span>
-  <button id="btnIndex" type="button" aria-pressed="false" title="Contents and search (G)">contents</button>
   <button id="btnTop" type="button" title="Back to top">&#9650; top</button>
 </div>
 
