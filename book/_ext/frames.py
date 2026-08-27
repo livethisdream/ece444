@@ -68,17 +68,42 @@ class CalloutDirective(_Wrapper):
     default_class = "callout"
 
 
-#: Assets that belong to the frame template alone. jupyter-book auto-links
-#: every file in `_static`, so without stripping these a frame stylesheet full
-#: of bare `body`, `h1`, `p`, `table` and `:root` rules lands on every page in
-#: the book and quietly restyles the whole site.
-_FRAME_ASSETS = ("frames.css", "frames.js")
+#: The shell's own assets. jupyter-book auto-links every file in `_static`, so
+#: without stripping these a stylesheet full of bare `body`, `h1`, `p`, `table`
+#: and `:root` rules lands on every page in the book -- including the theme
+#: pages -- and quietly restyles things it was never meant to touch. Both
+#: templates link what they need by path instead.
+_SHELL_ASSETS = ("shell.css", "frames.css", "page.css", "frames.js", "page.js")
+
+#: Kept on a reading page. page.html links shell/page/custom by path, so the
+#: only stylesheet still wanted from the auto-linked list is the syntax
+#: colouring Sphinx generates for the configured pygments style -- easy to
+#: miss, because without it code blocks still lay out, they just quietly lose
+#: every colour.
+_PAGE_KEEP_CSS = ("pygments.css",)
+
+#: viz-autosize.js measures the widget iframes with a ResizeObserver. Reading
+#: pages need it; do not reimplement it in page.js.
+_PAGE_KEEP_JS = ("viz-autosize.js",)
 
 
-def _drop_frame_assets(context):
-    """Remove frames.css / frames.js from the auto-linked asset lists.
+def _asset_name(f):
+    return str(getattr(f, "filename", f) or "")
 
-    Safe on the frame page too: frame.html links its own stylesheet by path.
+
+def _is_mathjax(f):
+    """MathJax arrives as two entries: the CDN file, and an inline config with
+    no filename at all. Matching on the name alone keeps the library and drops
+    its configuration, and the page then renders no math."""
+    name = _asset_name(f)
+    body = str(getattr(f, "attributes", {}).get("body", "") or "")
+    return "mathjax" in name.lower() or "MathJax" in body
+
+
+def _drop_shell_assets(context):
+    """Remove the shell's own files from the auto-linked lists.
+
+    Safe on the shell pages too: their templates link them by path.
     """
     for key in ("css_files", "script_files"):
         files = context.get(key)
@@ -86,37 +111,86 @@ def _drop_frame_assets(context):
             continue
         context[key] = [
             f for f in files
-            if not any(a in str(getattr(f, "filename", f) or "")
-                       for a in _FRAME_ASSETS)
+            if not any(a in _asset_name(f) for a in _SHELL_ASSETS)
         ]
 
 
-def choose_template(app, pagename, templatename, context, doctree):
-    """Render frame lessons with a chrome-free template."""
-    # search.html and genindex.html arrive with doctree None -- they are still
-    # ordinary pages that must not pick up the frame stylesheet.
-    meta = {} if doctree is None else app.env.metadata.get(pagename, {})
-    if "frame_view" not in meta:
-        _drop_frame_assets(context)
-        return None
-    context["is_frame_view"] = True
+def _keep_only(context, key, predicate):
+    files = context.get(key)
+    if files:
+        context[key] = [f for f in files if predicate(f)]
 
-    # Keep MathJax, drop everything else. The theme's JS expects theme DOM and
-    # throws on every selector it owns once the sidebar is gone.
-    #
-    # This has to be done here, not in the template: Sphinx adds the
-    # `window.MathJax = {...}` config as an INLINE script with no filename, so
-    # a Jinja filter matching on the name keeps the MathJax file and silently
-    # drops its config -- and the page then renders no math at all.
-    keep = []
-    for js in context.get("script_files", []):
-        name = str(getattr(js, "filename", js) or "")
-        body = str(getattr(js, "attributes", {}).get("body", "") or "")
-        if "mathjax" in name.lower() or "MathJax" in body:
-            keep.append(js)
-    context["script_files"] = keep
-    _drop_frame_assets(context)
-    return "frame.html"
+
+def _breadcrumb(app, pagename):
+    """The module a page belongs to, for the breadcrumb chip.
+
+    Computed here rather than in Jinja because the theme emits no breadcrumb
+    nav to borrow, and Sphinx's `parents` does not carry the module: in this
+    book a module overview is a chapter, a sibling of its lessons, not their
+    ancestor. The directory is the reliable signal.
+    """
+    head = pagename.split("/")[0]
+    if head == pagename:
+        return None
+    for candidate in (head + "/index", head):
+        if candidate == pagename:
+            continue
+        title = app.env.titles.get(candidate)
+        if title is not None:
+            text = title.astext()
+            # A module's own title is its full name -- "Module 1 -- Foundations
+            # of Electromagnetics and Antennas". As a breadcrumb only the label
+            # before the dash earns its width; the rest is in the overlay.
+            for dash in ("\u2014", "\u2013", " - "):
+                if dash in text:
+                    text = text.split(dash)[0]
+                    break
+            for suffix in (" overview", " Overview"):
+                if text.endswith(suffix):
+                    text = text[: -len(suffix)]
+            return text.strip()
+    return None
+
+
+def choose_template(app, pagename, templatename, context, doctree):
+    """Route a page to the frame template, the reading template, or the theme.
+
+    Three cases, in order:
+
+    * `frame_view: true` in front matter -> frame.html, the scroll-snap lesson.
+    * the shell is on and the page has not opted out -> page.html.
+    * anything else -> the theme, untouched.
+
+    `ece444_shell: false` in _config.yml puts the whole site back on the theme
+    in one line, and `shell: false` in a page's front matter does the same for
+    that page alone.
+    """
+    # search.html and genindex.html arrive with doctree None. They have no
+    # front matter and no body, so they stay on the theme for now -- but they
+    # must still be stripped of the shell's stylesheets.
+    meta = {} if doctree is None else app.env.metadata.get(pagename, {})
+
+    if "frame_view" in meta:
+        context["is_frame_view"] = True
+        # The theme's JS expects theme DOM and throws on every selector it owns
+        # once the sidebar is gone. Keep MathJax, drop the rest.
+        _keep_only(context, "script_files", _is_mathjax)
+        _drop_shell_assets(context)
+        return "frame.html"
+
+    shell_on = getattr(app.config, "ece444_shell", True)
+    opted_out = str(meta.get("shell", "")).lower() in ("false", "no", "0")
+    if doctree is None or not shell_on or opted_out:
+        _drop_shell_assets(context)
+        return None
+
+    context["crumb_module"] = _breadcrumb(app, pagename)
+    _keep_only(context, "script_files",
+               lambda f: _is_mathjax(f) or any(a in _asset_name(f) for a in _PAGE_KEEP_JS))
+    _keep_only(context, "css_files",
+               lambda f: any(a in _asset_name(f) for a in _PAGE_KEEP_CSS))
+    _drop_shell_assets(context)
+    return "page.html"
 
 
 def add_template_dir(app, config=None):
@@ -137,6 +211,8 @@ def add_template_dir(app, config=None):
 
 
 def setup(app):
+    # The kill switch. One line in _config.yml puts the site back on the theme.
+    app.add_config_value("ece444_shell", True, "html")
     app.connect("config-inited", add_template_dir)
     app.add_directive("frame", FrameDirective)
     app.add_directive("depth", DepthDirective)

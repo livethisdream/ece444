@@ -1,0 +1,182 @@
+/* ECE 444 -- reading-page layout.
+ *
+ * Layers on top of shell.css. Everything here is scoped under `.page` or a
+ * page-only component (.crumb, .index-search), because shell.css's type scale
+ * is tuned for a slide-sized frame -- h1 at --step-3, zero margins, flex-gap
+ * lists -- and a reading page needs document rhythm instead.
+ *
+ * custom.css loads after this and owns the content components themselves
+ * (.callout, .fig, .two-col, .lo-list, admonitions).
+ */
+
+/* ---- breadcrumb chip -------------------------------------------------- */
+/* The sidebar's one real virtue was telling you where you are without a
+   click. This is that, in 2rem instead of 300px -- and it opens the overlay,
+   so it doubles as a mouse-reachable entry point for the `G` shortcut. */
+.crumb {
+  position: fixed; z-index: 40;
+  top: clamp(.5rem, 1.6vh, 1rem); left: clamp(.6rem, 2vw, 1.4rem);
+  display: flex; align-items: baseline; gap: .45rem;
+  max-width: calc(100vw - 2rem);
+  padding: .3rem .7rem; border-radius: 999px;
+  font-family: var(--mono); font-size: .74rem; text-decoration: none;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  border: 1px solid var(--rule); box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+}
+.crumb:hover { color: var(--ink); }
+.crumb:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.crumb-mod { text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
+.crumb-sep { opacity: .5; }
+.crumb-page {
+  color: var(--ink); font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* On a handset the module is the half you can infer from the lesson number. */
+@media (max-width: 34rem) {
+  .crumb-mod, .crumb-sep { display: none; }
+}
+
+/* Both the chip and the HUD are fixed over a full-width reading column, so
+   they sit on top of the text at almost every scroll position. Rather than
+   narrow the column to dodge them, they retract while you are reading forward
+   and come back the moment you scroll up, reach for them, or open something. */
+.crumb, .hud { transition: transform .22s ease, opacity .22s ease; }
+body.chrome-away .crumb { transform: translateY(-160%); opacity: 0; }
+body.chrome-away .hud { transform: translateY(160%); opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .crumb, .hud { transition: none; }
+}
+
+/* ---- the reading column ----------------------------------------------- */
+/* A breakout grid: prose sits in the `text` track, and the components that
+   were authored to be wider -- two-column figures, wide tables, the module
+   dashboard -- reach into `wide` without any negative-margin tricks.
+   Docutils nests each section in its own <section>, so those wrappers are
+   flattened with display:contents to let their children reach the grid. */
+.page {
+  --text-w: min(54rem, 100% - 2.4rem);
+  --gutter: minmax(0, 7rem);
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(1.2rem, 1fr)
+    [wide-start] var(--gutter)
+    [text-start] var(--text-w) [text-end]
+    var(--gutter)
+    [wide-end] minmax(1.2rem, 1fr) [full-end];
+  padding: clamp(3.5rem, 9vh, 6rem) 0 clamp(6rem, 14vh, 9rem);
+  row-gap: clamp(.9rem, 2vh, 1.4rem);
+}
+.page section { display: contents; }
+.page > *, .page section > * { grid-column: text; min-width: 0; }
+
+.page .two-col,
+.page .fig-wide,
+.page .fig-xwide,
+.page .module-toc,
+.page .schedule-grid,
+.page .deliverable-cards,
+.page .hero,
+.page .pst-scrollable-table-container,
+.page .table-scroll,
+.page > table,
+.page section > table { grid-column: wide; }
+
+/* ---- document rhythm --------------------------------------------------- */
+/* shell.css sets margin:0 on p/h1/h2 because a frame lays out with flex gap.
+   A reading page flows, so the margins come back -- scoped, so frames are
+   untouched. */
+.page h1 {
+  font-size: clamp(2rem, 1.5rem + 2vw, 2.9rem);
+  margin: 0 0 .15em;
+}
+.page h2 {
+  font-size: clamp(1.35rem, 1.15rem + .8vw, 1.75rem);
+  margin: 2.2em 0 .1em;
+}
+.page h3 {
+  font-size: clamp(1.1rem, 1rem + .4vw, 1.3rem);
+  font-weight: 700; color: var(--blue-dark);
+  margin: 1.6em 0 .1em; border-bottom: none;
+}
+.page h1 + p, .page h2 + p, .page h3 + p { margin-top: .35em; }
+.page p { margin: 0; max-width: none; line-height: 1.62; }
+.page ul, .page ol {
+  display: block; max-width: none;
+  margin: 0; padding-left: 1.35em; line-height: 1.62;
+}
+.page li { margin: 0 0 .35em; }
+.page li > ul, .page li > ol { margin-top: .35em; }
+
+/* The heading anchors the theme adds; keep them, keep them quiet. */
+.page a.headerlink {
+  opacity: 0; margin-left: .35em; text-decoration: none;
+  color: var(--blue); font-weight: 400;
+}
+.page :hover > a.headerlink, .page a.headerlink:focus-visible { opacity: .6; }
+
+.page a { color: var(--blue-dark); text-underline-offset: .18em; }
+.page a:hover { color: var(--blue); }
+
+/* The theme's bootstrap was quietly supplying this. Without it a bare <img>
+   renders at its intrinsic size -- L01 has one 4080px wide, which dragged the
+   whole page 3000px sideways on a desktop. */
+.page img, .page svg, .page video, .page canvas, .page iframe {
+  max-width: 100%;
+}
+.page img, .page video { height: auto; }
+
+/* Wide content scrolls inside its own box rather than pushing the page. */
+.page .pst-scrollable-table-container,
+.page .table-scroll { overflow-x: auto; max-width: 100%; }
+.page div.math { overflow-x: auto; overflow-y: hidden; }
+
+/* Code does not wrap either, and the theme's stylesheet was what let it
+   scroll. Without this a long line in a lesson's Python sample drags the page
+   sideways -- 263px on the syllabus, 399px on L17. */
+.page div[class^="highlight-"], .page div.highlight, .page pre {
+  overflow-x: auto; max-width: 100%;
+}
+
+/* Inline math does not wrap, and a long run of it -- "2.200 GHz, ..." on L17 --
+   pushed the page 399px sideways on a phone. inline-block is what lets the
+   overflow rule bite; MathJax sets its own vertical-align, so leave that be. */
+.page mjx-container:not([display="true"]) {
+  display: inline-block; max-width: 100%;
+  overflow-x: auto; overflow-y: hidden;
+}
+
+/* ---- search field in the overlay -------------------------------------- */
+.index-search { margin: 0 0 clamp(1rem, 3vh, 1.8rem); }
+.index-search input {
+  width: 100%; font: inherit; font-size: var(--step-0);
+  padding: .6rem .85rem; border-radius: 10px;
+  color: var(--ink); background: var(--panel);
+  border: 1px solid var(--rule);
+}
+.index-search input:focus {
+  outline: none; border-color: var(--blue);
+  box-shadow: 0 0 0 3px var(--soft);
+}
+.index-search input::placeholder { color: var(--muted); opacity: .8; }
+
+/* The page-local TOC Sphinx already builds, restyled to match the course
+   column beside it. */
+.index-pagetoc ul { list-style: none; margin: 0; padding: 0; display: block; max-width: none; }
+.index-pagetoc ul ul { padding-left: .9rem; margin: .15em 0 .5em; }
+.index-pagetoc li { margin: 0; }
+.index-pagetoc a {
+  display: block; padding: .3rem .5rem; border-radius: 4px;
+  color: var(--ink); text-decoration: none;
+  font-size: calc(var(--step-0) * .92); line-height: 1.3;
+}
+.index-pagetoc a:hover { background: var(--soft); color: var(--blue-dark); }
+.index-pagetoc a.here { color: var(--blue-dark); font-weight: 700; background: var(--soft); }
+
+/* Rows hidden by the instant filter. */
+.index li[data-hit="0"] { display: none; }
+.index-empty {
+  padding: .4rem .5rem; color: var(--muted);
+  font-size: calc(var(--step-0) * .92);
+}

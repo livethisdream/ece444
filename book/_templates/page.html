@@ -1,0 +1,98 @@
+{#- Chrome-free reading page -- the site shell for everything that is not a
+    frame lesson.
+
+    Same relationship to the theme as frame.html: this does NOT extend it. The
+    sidebar, the secondary TOC column and the whole `.bd-*` chrome are gone,
+    and what mattered about them -- where am I, what is next, what else is
+    there -- comes from Sphinx's own context into the breadcrumb and the
+    overlay instead.
+
+    Assets are linked by path here and stripped from the auto-linked lists in
+    _ext/frames.py, so a reading page carries shell + page + custom and nothing
+    of the theme's 2.3 MB.
+-#}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title|striptags|e }} &mdash; {{ docstitle|striptags|e }}</title>
+{{ metatags }}
+<link rel="icon" href="{{ pathto('_static/favicon.ico', 1) }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+{#- Whatever survived the filter in _ext/frames.py -- pygments only. First,
+    so the shell and custom.css can still override it. -#}
+{%- for css in css_files %}
+<link rel="stylesheet" href="{{ pathto(css.filename if css.filename is defined else css, 1) }}">
+{%- endfor %}
+<link rel="stylesheet" href="{{ pathto('_static/shell.css', 1) }}">
+<link rel="stylesheet" href="{{ pathto('_static/page.css', 1) }}">
+<link rel="stylesheet" href="{{ pathto('_static/custom.css', 1) }}">
+{#- script_files has already been filtered to MathJax by _ext/frames.py --
+    including its inline config, which has no filename to match on here. -#}
+{%- for js in script_files %}
+{{ js_tag(js) }}
+{%- endfor %}
+</head>
+<body data-search="{{ pathto('search') }}">
+
+<div class="rail"><span id="railfill"></span></div>
+
+<a class="crumb" href="#" id="crumb" aria-label="Contents">
+  {%- if crumb_module %}
+  <span class="crumb-mod">{{ crumb_module|e }}</span>
+  <span class="crumb-sep" aria-hidden="true">/</span>
+  {%- endif %}
+  <span class="crumb-page">{{ title|striptags|e }}</span>
+</a>
+
+<div class="index" id="index" role="dialog" aria-label="Contents and search">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <form class="index-search" id="searchform" role="search" onsubmit="return false">
+      <input type="search" id="q" autocomplete="off" spellcheck="false"
+             placeholder="Search the course&hellip;" aria-label="Search the course">
+    </form>
+    <div class="index-cols">
+      <div>
+        <h2>This page</h2>
+        <div class="index-pagetoc" id="pagetoc">{{ toc }}</div>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        {{ toctree(collapse=False, includehidden=True, titles_only=True, maxdepth=2) }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hud">
+  <span id="pct">0%</span>
+  <span class="sep"></span>
+  <button id="btnIndex" type="button" aria-pressed="false" title="Contents and search (G)">contents</button>
+  <button id="btnNav" type="button" aria-expanded="false" aria-controls="navpop"
+          title="Previous or next lesson">nav</button>
+  <button id="btnTop" type="button" title="Back to top">&#9650; top</button>
+
+  <div class="pop" id="navpop" role="group" aria-label="Lessons" hidden>
+    {%- if prev %}
+    <a href="{{ prev.link|e }}">&larr; {{ prev.title|striptags|e }}</a>
+    {%- endif %}
+    {%- if next %}
+    <a href="{{ next.link|e }}">{{ next.title|striptags|e }} &rarr;</a>
+    {%- endif %}
+    {%- if not prev and not next %}
+    <span class="pop-empty">No neighbouring lesson</span>
+    {%- endif %}
+  </div>
+</div>
+
+<main class="page" id="page">
+{{ body }}
+</main>
+
+<script src="{{ pathto('_static/page.js', 1) }}"></script>
+</body>
+</html>
