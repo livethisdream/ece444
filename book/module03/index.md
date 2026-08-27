@@ -1,3 +1,7 @@
+---
+nav: Arrays
+---
+
 # Module 3 — Arrays and ADALM-PHASER Beamforming
 
 <p class="module-meta"><span class="m-module">Module 03</span><span class="m-time">Lessons 15–28</span></p>

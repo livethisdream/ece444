@@ -9,44 +9,15 @@
  * (.callout, .fig, .two-col, .lo-list, admonitions).
  */
 
-/* ---- breadcrumb chip -------------------------------------------------- */
-/* The sidebar's one real virtue was telling you where you are without a
-   click. This is that, in 2rem instead of 300px -- and it opens the overlay,
-   so it doubles as a mouse-reachable entry point for the `G` shortcut. */
-.crumb {
-  position: fixed; z-index: 40;
-  top: clamp(.5rem, 1.6vh, 1rem); left: clamp(.6rem, 2vw, 1.4rem);
-  display: flex; align-items: baseline; gap: .45rem;
-  max-width: calc(100vw - 2rem);
-  padding: .3rem .7rem; border-radius: 999px;
-  font-family: var(--mono); font-size: .74rem; text-decoration: none;
-  color: var(--muted);
-  background: color-mix(in srgb, var(--panel) 88%, transparent);
-  border: 1px solid var(--rule); box-shadow: var(--shadow);
-  backdrop-filter: blur(6px);
-}
-.crumb:hover { color: var(--ink); }
-.crumb:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-.crumb-mod { text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
-.crumb-sep { opacity: .5; }
-.crumb-page {
-  color: var(--ink); font-weight: 600;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-/* On a handset the module is the half you can infer from the lesson number. */
-@media (max-width: 34rem) {
-  .crumb-mod, .crumb-sep { display: none; }
-}
-
-/* Both the chip and the HUD are fixed over a full-width reading column, so
-   they sit on top of the text at almost every scroll position. Rather than
-   narrow the column to dodge them, they retract while you are reading forward
-   and come back the moment you scroll up, reach for them, or open something. */
-.crumb, .hud { transition: transform .22s ease, opacity .22s ease; }
-body.chrome-away .crumb { transform: translateY(-160%); opacity: 0; }
+/* The mark and the bar are fixed over a full-width reading column, so they sit
+   on top of the text at almost every scroll position. Rather than narrow the
+   column to dodge them, they retract while you are reading forward and come
+   back the moment you scroll up, reach for them, or open something. */
+.mark-nav, .hud { transition: transform .22s ease, opacity .22s ease; }
+body.chrome-away .mark-nav { transform: translateY(-160%); opacity: 0; }
 body.chrome-away .hud { transform: translateY(160%); opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
-  .crumb, .hud { transition: none; }
+  .mark-nav, .hud { transition: none; }
 }
 
 /* ---- the reading column ----------------------------------------------- */

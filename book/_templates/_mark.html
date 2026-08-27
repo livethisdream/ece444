@@ -1,0 +1,22 @@
+{#- The course mark, and the module pills that fan out of it.
+
+    Included by both page.html and frame.html so the two views cannot drift.
+    Collapsed it is one small pill; pressed, the five modules spring out of it
+    left-to-right and fold back into it on the way out. That is the whole
+    header -- there is no bar, no strip, and nothing else between the reader
+    and the page.
+-#}
+<nav class="mark-nav" aria-label="Modules">
+  <button class="mark" id="btnMark" type="button"
+          aria-expanded="false" aria-controls="pills"
+          title="Modules">{{ docstitle.split('—')[0].strip()|e if docstitle else 'ECE 444' }}</button>
+  <ul class="pills" id="pills">
+    {%- for m in modules %}
+    <li style="--i: {{ loop.index0 }}">
+      <a href="{{ m.url|e }}"{% if m.current %} aria-current="page"{% endif %}>
+        <span class="pill-n">{{ m.num }}</span><span class="pill-label">{{ m.label|e }}</span>
+      </a>
+    </li>
+    {%- endfor %}
+  </ul>
+</nav>

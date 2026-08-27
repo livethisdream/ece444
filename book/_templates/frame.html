@@ -35,6 +35,8 @@
 <body>
 
 <div class="rail"><span id="railfill"></span></div>
+
+{% include "_mark.html" %}
 <div class="laser" id="laser" aria-hidden="true"></div>
 <div class="spot" id="spot" aria-hidden="true"></div>
 
@@ -103,6 +105,7 @@
 {{ body }}
 </main>
 
+<script src="{{ pathto('_static/shell.js', 1) }}"></script>
 <script src="{{ pathto('_static/frames.js', 1) }}"></script>
 </body>
 </html>

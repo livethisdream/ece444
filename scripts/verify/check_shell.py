@@ -3,8 +3,8 @@
 
 The theme used to guarantee a lot of this for free. Now that the pages own
 their own layout, it has to be checked: no sideways scroll at phone width, no
-JS error, a breadcrumb that says something, and no theme asset sneaking back
-onto a page that no longer has the DOM to support it.
+JS error, the course mark with its module pills folded away, and no theme asset
+sneaking back onto a page that no longer has the DOM to support it.
 """
 import json, pathlib, sys
 
@@ -17,7 +17,8 @@ SKIP_DIRS = {"slides", "viz", "frames", "_static", "practice"}
 
 PROBE = """() => {
   const page = document.querySelector('.page');
-  const crumb = document.getElementById('crumb');
+  const mark = document.getElementById('btnMark');
+  const pills = document.querySelectorAll('.pills a');
   const hud = document.querySelector('.hud');
   const theme = [...document.querySelectorAll('link[rel=stylesheet], script[src]')]
       .map(e => e.getAttribute('href') || e.getAttribute('src') || '')
@@ -30,7 +31,9 @@ PROBE = """() => {
   return {
     isShell: !!page,
     docOverflow: document.documentElement.scrollWidth - window.innerWidth,
-    crumb: crumb ? crumb.innerText.replace(/\\s+/g, ' ').trim() : null,
+    mark: mark ? mark.textContent.trim() : null,
+    pills: pills.length,
+    pillsFolded: [...pills].every(a => a.getAttribute('tabindex') === '-1'),
     hud: !!hud,
     overlay: !!document.getElementById('index'),
     themeAssets: theme,
@@ -81,8 +84,12 @@ def main():
                     fails.append(f"{label} {rel}: {msg}")
                 if r["docOverflow"] > 0:
                     bad(f"scrolls sideways by {r['docOverflow']}px")
-                if not r["crumb"]:
-                    bad("empty breadcrumb")
+                if not r["mark"]:
+                    bad("no course mark")
+                if r["pills"] != 5:
+                    bad(f"expected 5 module pills, got {r['pills']}")
+                if not r["pillsFolded"]:
+                    bad("module pills not folded away on load")
                 if not r["hud"] or not r["overlay"]:
                     bad("missing HUD or overlay")
                 if r["themeAssets"]:

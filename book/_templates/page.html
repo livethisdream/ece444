@@ -46,13 +46,7 @@
 
 <div class="rail"><span id="railfill"></span></div>
 
-<a class="crumb" href="#" id="crumb" aria-label="Contents">
-  {%- if crumb_module %}
-  <span class="crumb-mod">{{ crumb_module|e }}</span>
-  <span class="crumb-sep" aria-hidden="true">/</span>
-  {%- endif %}
-  <span class="crumb-page">{{ title|striptags|e }}</span>
-</a>
+{% include "_mark.html" %}
 
 <div class="index" id="index" role="dialog" aria-label="Contents and search">
   <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
@@ -105,6 +99,7 @@
 {{ body }}
 </main>
 
+<script src="{{ pathto('_static/shell.js', 1) }}"></script>
 <script src="{{ pathto('_static/page.js', 1) }}"></script>
 </body>
 </html>

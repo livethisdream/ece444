@@ -1,3 +1,7 @@
+---
+nav: Antenna Types
+---
+
 # Module 2 — Antenna Types, Simulation, and Measurement
 
 <p class="module-meta"><span class="m-module">Module 02</span><span class="m-time">Lessons 7–14</span></p>

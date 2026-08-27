@@ -10,8 +10,11 @@ prev/next links, which is how a chrome-free page still offers navigation.
 
 See project/FRAMES_ARCHITECTURE.md for the design and what is still open.
 """
+import re
+
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
+from sphinx.util.osutil import relative_uri
 
 
 class _Wrapper(Directive):
@@ -73,7 +76,8 @@ class CalloutDirective(_Wrapper):
 #: and `:root` rules lands on every page in the book -- including the theme
 #: pages -- and quietly restyles things it was never meant to touch. Both
 #: templates link what they need by path instead.
-_SHELL_ASSETS = ("shell.css", "frames.css", "page.css", "frames.js", "page.js")
+_SHELL_ASSETS = ("shell.css", "frames.css", "page.css",
+                 "shell.js", "frames.js", "page.js")
 
 #: Kept on a reading page. page.html links shell/page/custom by path, so the
 #: only stylesheet still wanted from the auto-linked list is the syntax
@@ -152,6 +156,36 @@ def _breadcrumb(app, pagename):
     return None
 
 
+_MODULE_DOC = re.compile(r"^module(\d+)/index$")
+
+
+def _modules(app, pagename):
+    """The five module overviews, for the pills that fan out of the mark.
+
+    Read from the environment rather than hard-coded: a sixth module would
+    appear on its own. The short label comes from `nav:` in each module's front
+    matter -- the full title ("Module 3 -- Arrays and ADALM-PHASER
+    Beamforming") is far too long to sit in a pill.
+    """
+    here = pagename.split("/")[0]
+    out = []
+    for doc in sorted(app.env.found_docs):
+        m = _MODULE_DOC.match(doc)
+        if not m:
+            continue
+        meta = app.env.metadata.get(doc, {})
+        title = app.env.titles.get(doc)
+        label = meta.get("nav") or (title.astext() if title else doc)
+        out.append({
+            "num": m.group(1).lstrip("0") or m.group(1),
+            "label": label,
+            "url": relative_uri(app.builder.get_target_uri(pagename),
+                                app.builder.get_target_uri(doc)),
+            "current": doc.split("/")[0] == here,
+        })
+    return out
+
+
 def choose_template(app, pagename, templatename, context, doctree):
     """Route a page to the frame template, the reading template, or the theme.
 
@@ -172,6 +206,7 @@ def choose_template(app, pagename, templatename, context, doctree):
 
     if "frame_view" in meta:
         context["is_frame_view"] = True
+        context["modules"] = _modules(app, pagename)
         # The theme's JS expects theme DOM and throws on every selector it owns
         # once the sidebar is gone. Keep MathJax, drop the rest.
         _keep_only(context, "script_files", _is_mathjax)
@@ -185,6 +220,7 @@ def choose_template(app, pagename, templatename, context, doctree):
         return None
 
     context["crumb_module"] = _breadcrumb(app, pagename)
+    context["modules"] = _modules(app, pagename)
     _keep_only(context, "script_files",
                lambda f: _is_mathjax(f) or any(a in _asset_name(f) for a in _PAGE_KEEP_JS))
     _keep_only(context, "css_files",

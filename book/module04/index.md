@@ -1,3 +1,7 @@
+---
+nav: Radar
+---
+
 # Module 4 — Radar Fundamentals and FMCW
 
 <p class="module-meta"><span class="m-module">Module 04</span><span class="m-time">Lessons 29–38</span></p>

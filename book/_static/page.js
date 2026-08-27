@@ -48,7 +48,7 @@
     if (parked && (e.clientY > innerHeight - 90 || e.clientY < 90)) chrome(false);
   }, { passive: true });
   document.addEventListener('focusin', function (e) {
-    if (e.target.closest && e.target.closest('.hud, .crumb')) chrome(false);
+    if (e.target.closest && e.target.closest('.hud, .mark-nav')) chrome(false);
   });
 
   /* ---- popovers ------------------------------------------------------- */
@@ -95,9 +95,6 @@
   }
   document.getElementById('btnIndex').addEventListener('click', function () { toggleIndex(); });
   document.getElementById('btnIndexClose').addEventListener('click', function () { toggleIndex(false); });
-  document.getElementById('crumb').addEventListener('click', function (e) {
-    e.preventDefault(); toggleIndex(true);
-  });
   indexEl.addEventListener('click', function (e) { if (e.target === indexEl) toggleIndex(false); });
 
   /* Mark the section you are currently reading in the page-local TOC. */

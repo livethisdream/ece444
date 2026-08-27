@@ -1,5 +1,6 @@
 ---
 frame_view: true
+nav: Foundations
 ---
 
 # Module 1 — Foundations of Electromagnetics and Antennas

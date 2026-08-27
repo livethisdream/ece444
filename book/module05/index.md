@@ -1,3 +1,7 @@
+---
+nav: Capstone
+---
+
 # Module 5 — Capstone Project
 
 <p class="module-meta"><span class="m-module">Module 05</span><span class="m-time">Lessons 39–41</span></p>
