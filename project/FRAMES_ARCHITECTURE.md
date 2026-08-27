@@ -60,7 +60,7 @@ subject. Inside $\lambda/2\pi$ the stored terms take over...
 `depth` is the lesson-page material a deck would not carry. It is always in the
 DOM; present mode hides it with CSS. Presenting can therefore never lose it.
 
-## Eight constraints, each of which cost a failed build
+## Ten constraints, each of which cost a failed build
 
 docutils/Sphinx facts, not preferences.
 
@@ -94,7 +94,18 @@ docutils/Sphinx facts, not preferences.
    `frames.css`/`frames.js` from `css_files` and `script_files` on every
    non-frame page, `search.html` and `genindex.html` included -- those two
    arrive with `doctree is None`, so an early return skips them.
-8. **`min-width: auto` is what breaks a frame on a phone.** A flex or grid
+8. **`[hidden]` loses to a class that sets `display`.** The attribute's
+   `display: none` comes from the UA stylesheet, so `.hud .pop { display:
+   flex }` beats it and a panel meant to be shut is permanently open. Any
+   component toggled by the `hidden` property needs an explicit
+   `.thing[hidden] { display: none; }`.
+9. **A component's own button rule outranks a single-class override.** `.hud
+   button` and `.index button` are (0,1,1); `.index-close` is (0,1,0) and lost,
+   so the close button inherited `width: 100%` and spanned the viewport with
+   its glyph in the corner. Anything styling a button inside those components
+   needs the type selector too -- `.index button.index-close`, `.hud .pop
+   button`.
+10. **`min-width: auto` is what breaks a frame on a phone.** A flex or grid
    item's automatic minimum is its min-content width, and display math and
    tables do not wrap. The `overflow-x: auto` further down never fires,
    because the box has already grown to fit. Measured at 390px: four L05a

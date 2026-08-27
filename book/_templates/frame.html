@@ -47,24 +47,43 @@
   </div>
 </div>
 
+{#- Four controls, two of which open a panel. The presenter tools used to sit
+    inline and were hidden below 46rem to stop the bar overflowing a phone --
+    exactly the wrong things to drop. Folding nav and tools into popovers wins
+    back the width, so every control is now available at every size.
+
+    The panels are children of .hud rather than of their buttons: .hud is
+    position:fixed and so already a containing block, and anchoring to the bar
+    keeps a long lesson title from running off the edge of a phone screen. -#}
 <div class="hud">
   <span><b id="cur">1</b>/<span id="tot">0</span></span>
   <span class="sep"></span>
   <button id="btnMode" type="button" title="Present or read (P)">present</button>
-  <button id="btnIndex" type="button" aria-pressed="false" title="Jump to a frame (G)">index</button>
-  <button id="btnLaser" class="wide-only" type="button" aria-pressed="false" title="Laser pointer (L)">laser</button>
-  <button id="btnSpot" class="wide-only" type="button" aria-pressed="false" title="Spotlight (S)">spot</button>
-  <button id="btnFull" class="wide-only" type="button" title="Fullscreen (F)">full</button>
-  <span class="sep"></span>
-  {%- if parents %}
-  <a class="navlink" href="{{ parents[-1].link|e }}" title="{{ parents[-1].title|striptags|e }}">up</a>
-  {%- endif %}
-  {%- if prev %}
-  <a class="navlink" href="{{ prev.link|e }}" title="{{ prev.title|striptags|e }}">&larr; prev</a>
-  {%- endif %}
-  {%- if next %}
-  <a class="navlink" href="{{ next.link|e }}" title="{{ next.title|striptags|e }}">next &rarr;</a>
-  {%- endif %}
+  <button id="btnIndex" type="button" aria-pressed="false" title="Contents (G)">index</button>
+  <button id="btnNav" type="button" aria-expanded="false" aria-controls="navpop"
+          title="Previous or next lesson">nav</button>
+  <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+          title="Presenter tools">tools</button>
+
+  <div class="pop" id="navpop" role="group" aria-label="Lessons" hidden>
+    {%- if prev %}
+    <a href="{{ prev.link|e }}">&larr; {{ prev.title|striptags|e }}</a>
+    {%- endif %}
+    {%- if next %}
+    <a href="{{ next.link|e }}">{{ next.title|striptags|e }} &rarr;</a>
+    {%- endif %}
+    {%- if not prev and not next %}
+    <span class="pop-empty">No neighbouring lesson</span>
+    {%- endif %}
+  </div>
+
+  {#- These three keep their ids: frames.js wires them by id, so the move
+      into a panel costs no JS change. -#}
+  <div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
 </div>
 
 <main class="deck" id="deck" tabindex="-1">

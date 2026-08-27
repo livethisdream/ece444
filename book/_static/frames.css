@@ -287,6 +287,11 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
 }
 .spot.on { opacity: 1; }
 body.pointing, body.pointing * { cursor: none !important; }
+/* On a touch screen `pointermove` only fires while a finger is down, and the
+   browser claims that drag as a scroll -- so the deck slides away under the
+   pointer. Handing the gesture to the pointer handler is what makes the laser
+   and spotlight usable on a tablet or phone at all. */
+body.pointing .deck { touch-action: none; }
 @media (prefers-reduced-motion: reduce) {
   .laser, .spot { transition: none; }
 }
@@ -489,18 +494,54 @@ iframe.viz {
 /* ---- HUD nav links --------------------------------------------------- */
 /* These are real links, so they arrive underlined and blue. Make them read
    as part of the HUD. */
-.hud a.navlink {
-  color: var(--muted); text-decoration: none; font: inherit;
-  padding: .18rem .45rem; border-radius: 4px; white-space: nowrap;
+/* ---- HUD popovers: nav and tools ------------------------------------- */
+/* Anchored to .hud, not to the button that opens them -- .hud is fixed and so
+   already a containing block, and `right: 0` plus a viewport-aware max-width
+   keeps a long lesson title on screen at any size. */
+.hud .pop {
+  position: absolute; bottom: calc(100% + .5rem); right: 0;
+  display: flex; flex-direction: column; gap: .1rem;
+  min-width: max-content; max-width: min(22rem, calc(100vw - 2rem));
+  padding: .3rem; border-radius: 12px;
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
+  border: 1px solid var(--rule); box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
 }
-.hud a.navlink:hover { color: var(--ink); background: var(--soft); }
-.hud a.navlink:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+/* Load-bearing: the class above sets `display: flex`, which beats the UA
+   stylesheet's `[hidden] { display: none }` on specificity. Without this the
+   panels never close. */
+.hud .pop[hidden] { display: none; }
+
+/* (0,2,1), because plain `.hud button` is (0,1,1) and would otherwise win --
+   the same trap that made .index-close span the whole viewport. */
+.hud .pop button, .hud .pop a {
+  font: inherit; color: var(--muted); background: none; border: none;
+  cursor: pointer; text-decoration: none; text-align: left; white-space: nowrap;
+  display: flex; align-items: center; justify-content: space-between; gap: 1.4rem;
+  padding: .4rem .55rem; border-radius: 7px; letter-spacing: .04em;
+}
+.hud .pop button:hover, .hud .pop a:hover { color: var(--ink); background: var(--soft); }
+.hud .pop button:focus-visible, .hud .pop a:focus-visible {
+  outline: 2px solid var(--blue); outline-offset: -2px;
+}
+.hud .pop button[aria-pressed="true"] {
+  color: var(--red); background: var(--soft-red); font-weight: 700;
+}
+.hud .pop-empty { padding: .4rem .55rem; color: var(--muted); opacity: .7; }
+.hud kbd {
+  font-family: var(--mono); font-size: .82em; color: var(--muted);
+  border: 1px solid var(--rule); border-radius: 3px; padding: 0 .3em;
+}
+/* A laser left running is invisible once the panel closes, so light the button
+   that opens it. */
+.hud button[data-active="true"] {
+  color: var(--red); background: var(--soft-red); font-weight: 700;
+}
 
 /* ---- HUD on a phone -------------------------------------------------- */
-/* The presenter controls are useless on a handset and were pushing prev/next
-   off the screen. Keep counter, mode, index, and navigation. */
+/* Nothing is dropped any more -- four buttons fit, and the panels carry the
+   rest. The bar just stretches and gains a squarer radius. */
 @media (max-width: 46rem) {
-  .hud .wide-only { display: none; }
   .hud {
     left: clamp(.5rem, 3vw, 1rem); right: clamp(.5rem, 3vw, 1rem);
     justify-content: center; flex-wrap: wrap; gap: .35rem .5rem;

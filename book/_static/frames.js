@@ -57,6 +57,9 @@
     document.body.classList.toggle('pointing', pointing || spotting);
     document.getElementById('btnLaser').setAttribute('aria-pressed', pointing);
     document.getElementById('btnSpot').setAttribute('aria-pressed', spotting);
+    /* The panel is usually shut, so the button that opens it has to show that
+       something is running. */
+    document.getElementById('btnTools').setAttribute('data-active', pointing || spotting);
     paint();
   }
   function toggleLaser() { pointing = !pointing; sync(); }
@@ -81,6 +84,7 @@
   });
   function toggleIndex(force) {
     showing = (force === undefined) ? !showing : force;
+    if (showing) closePops();
     indexEl.classList.toggle('on', showing);
     document.getElementById('btnIndex').setAttribute('aria-pressed', showing);
     if (showing) {
@@ -98,13 +102,59 @@
     if (e.target === indexEl) toggleIndex(false);
   });
 
-  document.getElementById('btnLaser').addEventListener('click', toggleLaser);
-  document.getElementById('btnSpot').addEventListener('click', toggleSpot);
-  document.getElementById('btnFull').addEventListener('click', fullscreen);
+  /* ---- HUD popovers -------------------------------------------------- */
+  var pops = [];
+  function popover(btnId, panelId) {
+    var btn = document.getElementById(btnId), panel = document.getElementById(panelId);
+    var pop = {
+      btn: btn, panel: panel,
+      open: function (want) {
+        var on = (want === undefined) ? panel.hidden : want;
+        if (on) closePops(pop);            /* only one panel at a time */
+        panel.hidden = !on;
+        btn.setAttribute('aria-expanded', on);
+        if (on) { toggleIndex(false); (panel.querySelector('button, a') || btn).focus(); }
+      },
+      isOpen: function () { return !panel.hidden; }
+    };
+    btn.addEventListener('click', function () { pop.open(); });
+    pops.push(pop);
+    return pop;
+  }
+  function closePops(except) {
+    pops.forEach(function (p) { if (p !== except) p.open(false); });
+  }
+  function anyPopOpen() { return pops.some(function (p) { return p.isOpen(); }); }
+
+  var navPop   = popover('btnNav', 'navpop');
+  var toolsPop = popover('btnTools', 'toolspop');
+
+  /* A tap anywhere off the bar dismisses whatever is open. */
+  document.addEventListener('pointerdown', function (e) {
+    if (!anyPopOpen()) return;
+    var t = e.target;
+    if (!t || !t.closest || !t.closest('.hud')) closePops();
+  });
+
+  /* Picking a tool shuts the panel -- you turned the laser on to point at the
+     slide, not at the menu. */
+  document.getElementById('btnLaser').addEventListener('click', function () {
+    toggleLaser(); toolsPop.open(false);
+  });
+  document.getElementById('btnSpot').addEventListener('click', function () {
+    toggleSpot(); toolsPop.open(false);
+  });
+  document.getElementById('btnFull').addEventListener('click', function () {
+    fullscreen(); toolsPop.open(false);
+  });
 
   function fullscreen() {
     if (document.fullscreenElement) document.exitFullscreen();
     else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+  }
+  /* iPhone Safari has never implemented it; the call above would just no-op. */
+  if (!document.documentElement.requestFullscreen) {
+    document.getElementById('btnFull').hidden = true;
   }
 
   /* ---- keys ---------------------------------------------------------- */
@@ -113,6 +163,10 @@
     var t = e.target;
     if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
     if (showing && e.key !== 'Escape' && e.key !== 'g' && e.key !== 'G') return;
+    /* Space advances a frame, which would otherwise swallow the activation of
+       whichever popover button has focus. Let the button have those two keys;
+       every other shortcut still works with a panel open. */
+    if ((e.key === ' ' || e.key === 'Enter') && t && t.closest && t.closest('.pop')) return;
     switch (e.key) {
       case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ':
         e.preventDefault(); go(idx + 1); break;
@@ -133,7 +187,8 @@
         frames[idx] && frames[idx].classList.toggle('open');
         break;
       case 'Escape':
-        if (showing) { toggleIndex(false); }
+        if (anyPopOpen()) { closePops(); }
+        else if (showing) { toggleIndex(false); }
         else if (pointing || spotting) { pointing = spotting = false; sync(); }
         break;
     }
