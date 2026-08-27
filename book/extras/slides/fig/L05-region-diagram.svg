@@ -1,11 +1,10 @@
-<svg viewBox="0 0 790 410" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three concentric field regions around an antenna: a small reactive near field, a radiating near field around it, and the far field extending outward">
+<svg viewBox="0 0 790 396" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three concentric field regions around an antenna: a small reactive near field, a radiating near field around it, and the far field extending outward">
 <defs>
 <marker id="fr5Grey" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker>
 </defs>
 
 <!-- far field: fills the frame, i.e. keeps going -->
 <rect x="10" y="12" width="462" height="372" rx="8" fill="#cddce9" opacity="0.55"/>
-<text x="26" y="36" font-size="12.5" fill="#5a5a5a">far field continues outward without end</text>
 
 <!-- radiating near field -->
 <circle cx="285" cy="196" r="118" fill="#0067b9" opacity="0.26"/>
@@ -46,5 +45,4 @@
 <text x="503" y="319" font-size="13" fill="#5a5a5a">nothing leaves</text>
 
 
-<text x="14" y="402" font-size="12" fill="#5a5a5a">Not to scale, and the boundaries are gradual, not walls. Both radii depend on antenna size and wavelength.</text>
 </svg>

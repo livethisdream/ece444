@@ -214,9 +214,6 @@ the same physics, seen from the outside versus the inside.
 
 ::::{frame} The three regions
 <img src="../../slides/fig/L05-region-diagram.svg" alt="Three concentric field regions around an antenna: a small reactive near field, a radiating near field around it, and the far field extending outward">
-
-Not to scale, and the boundaries are gradual, not walls. Both radii depend on
-antenna size and wavelength.
 ::::
 
 ::::{frame} Reactive near-field
