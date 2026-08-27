@@ -89,6 +89,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* The bd-article compatibility class on the shell containers brings
+   custom.css's `body, .bd-article { font-family: 'Inter' }` back with it, and
+   (0,1,0) beats a bare `body`. Reassert the shell's stack at matching
+   specificity -- Inter is not shipped any more, so leaving it in place means a
+   generic fallback. Goes when custom.css is rewritten. */
+.bd-article { font-family: var(--sans); }
+
 /* ---- type ----------------------------------------------------------- */
 .eyebrow {
   font-size: var(--step--1);

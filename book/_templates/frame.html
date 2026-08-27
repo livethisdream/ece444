@@ -17,6 +17,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+{#- custom.css owns the content components a frame page may still use --
+    .module-toc lesson cards, .lo-list objective numbering, .fig. L05a needed
+    none of them, but the module overviews are built from exactly those, and
+    without this they render as bare underlined links. Loaded FIRST so the
+    shell and frames win on type, palette and .callout. -#}
+<link rel="stylesheet" href="{{ pathto('_static/custom.css', 1) }}">
 <link rel="stylesheet" href="{{ pathto('_static/shell.css', 1) }}">
 <link rel="stylesheet" href="{{ pathto('_static/frames.css', 1) }}">
 {#- script_files has already been filtered to MathJax by _ext/frames.py --
@@ -87,7 +93,13 @@
   </div>
 </div>
 
-<main class="deck" id="deck" tabindex="-1">
+{#- `bd-article` is a compatibility class, not a theme leftover. 149 of
+    custom.css's 256 rules are scoped `.bd-article ...` -- the theme's article
+    wrapper -- and that is where every content component lives: the callout
+    variants, the hero, the block grid, the deliverable cards, the module TOC
+    and its lesson cards. Without this class they all render unstyled. It comes
+    out when custom.css is rewritten against the shell's own selectors. -#}
+<main class="deck bd-article" id="deck" tabindex="-1">
 {{ body }}
 </main>
 
