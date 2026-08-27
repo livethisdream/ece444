@@ -59,8 +59,32 @@ class FrameDirective(_Wrapper):
         # :class: belongs to the FRAME, not the inner column -- that is what an
         # author means by `:class: viz-frame`.
         outer["classes"] = ["frame"] + self.options.get("class", [])
+        outer["ids"] = [self._frame_id()]
         outer += inner
         return [outer]
+
+    def _frame_id(self):
+        """A stable anchor per frame, so a URL can name one.
+
+        Without an id frames.js had nothing to put in the hash and wrote a bare
+        "#" on every frame change -- which is why deep links never worked and
+        why the call threw in a sandboxed document.
+
+        Slugged from the title rather than numbered, so a link survives frames
+        being reordered; numbered only as a fallback, and suffixed on a clash.
+        """
+        title = self.arguments[0] if self.arguments else ""
+        slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
+        doc = self.state.document
+        seen = doc.attributes.setdefault("ece444_frame_ids", {})
+        count = doc.attributes.get("ece444_frame_count", 0) + 1
+        doc.attributes["ece444_frame_count"] = count
+        if not slug:
+            # An untitled frame -- the opening title card -- gets its position.
+            return "frame-%d" % count
+        n = seen.get(slug, 0)
+        seen[slug] = n + 1
+        return "frame-" + (slug if n == 0 else "%s-%d" % (slug, n + 1))
 
 
 class DepthDirective(_Wrapper):
