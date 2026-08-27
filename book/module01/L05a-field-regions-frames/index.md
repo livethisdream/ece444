@@ -112,16 +112,18 @@ $$
 E_\theta \propto \frac{1}{r} + \frac{1}{kr^{2}} + \frac{1}{k^{2}r^{3}}
 $$
 
+:::{callout}
+Three regions, hiding inside one equation. The single number $kr$ sets their
+relative sizes **entirely**.
+:::
+::::
+
+::::{frame} What each term is, and where it wins
 | Term | Falls off as | Physical origin | Wins where |
 | :-- | :-- | :-- | :-- |
 | radiation | $1/r$ | the escaping wave — L2's far field | $kr \gg 1$ |
 | induction | $1/r^{2}$ | Biot–Savart field of the current | $kr \sim 1$ |
 | electrostatic | $1/r^{3}$ | quasi-static field of the charge at the tips | $kr \ll 1$ |
-
-:::{callout}
-Three regions, hiding inside one equation. The single number $kr$ sets their
-relative sizes **entirely**.
-:::
 ::::
 
 ::::{frame} The three terms, on log–log axes
@@ -262,7 +264,7 @@ Let $D$ be the antenna's **largest dimension** and $\lambda$ the wavelength.
 | Region | Extent | Fields |
 | :-- | :-- | :-- |
 | reactive near-field | $r < 0.62\sqrt{D^{3}/\lambda}$ | stored, non-radiating; $1/r^{2}$, $1/r^{3}$ |
-| radiating near-field | $0.62\sqrt{D^{3}/\lambda} \le r < 2D^{2}/\lambda$ | radiating, pattern varies with $r$; curved wavefront |
+| radiating near-field | $0.62\sqrt{D^{3}/\lambda} \le r < 2D^{2}/\lambda$ | radiating; pattern varies with $r$ |
 | far-field | $r \ge 2D^{2}/\lambda$ | pattern fixed; $1/r$; locally a plane wave |
 
 Not walls — the fields transition gradually.
@@ -402,12 +404,17 @@ there in the far field.
 :::
 ::::
 
-::::{frame} Summary
+::::{frame} Summary — the three terms and the crossover
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | Three field terms | One dipole equation holds all three regions | $1 : 1/kr : 1/(kr)^{2}$ |
 | $kr = 1$ crossover | Where all three terms are *equal* — not where the far field starts | $r = \lambda/2\pi \approx 0.16\lambda$ |
 | True far field | Reactive terms actually negligible | $kr \gg 1$; under 10% near $kr \approx 10$ ($r \approx 1.6\lambda$) |
+::::
+
+::::{frame} Summary — the boundaries
+| Symbol / idea | What it is | Number to remember |
+| :-- | :-- | :-- |
 | Reactive near-field edge | Inner boundary for an electrically large antenna | $r = 0.62\sqrt{D^{3}/\lambda}$ |
 | Far-field distance | Outer boundary; pattern stops changing with $r$ | $r \ge 2D^{2}/\lambda$ |
 | Phase-error tolerance | What the criterion $2D^{2}/\lambda$ comes from | $\Delta \le \lambda/16$, i.e. $\pi/8 = 22.5^{\circ}$ |

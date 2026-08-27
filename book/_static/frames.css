@@ -184,6 +184,18 @@ kbd {
 [data-mode="present"] .frame.open .depth { display: flex; }
 [data-mode="present"] .frame.open .more { display: none; }
 
+/* A frame is one screen, so anything with an intrinsic size has to be told
+   the ceiling. shell.css already caps `figure svg`; a bare <img> in a frame
+   needs the same or a wide figure pushes the frame past the viewport --
+   measured 735px of content in a 672px budget on a laptop. */
+[data-mode="present"] .frame img { max-height: 58vh; width: auto; }
+
+/* A widget cannot be shrunk to fit the way a figure can: it stacks its own
+   controls as it narrows, so on a phone it is genuinely taller than the
+   screen. Let that one frame scroll rather than clipping the controls off
+   the bottom. */
+[data-mode="present"] .frame.viz-frame { overflow-y: auto; }
+
 /* read: a lesson page. no snapping, everything visible, frames sized to
    their content so the document scrolls continuously. */
 [data-mode="read"] .deck  { scroll-snap-type: none; }

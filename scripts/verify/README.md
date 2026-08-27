@@ -28,6 +28,27 @@ scripts/verify/mech_check.sh 07 simple-resonant-antennas
 scripts/verify/check_deck.py   L07-simple-resonant-antennas
 scripts/verify/check_widget.py book/extras/viz/dipole-explorer.html
 scripts/verify/check_page.py   module02/L07-simple-resonant-antennas/index.html
+```
+
+## Site-wide, after any change to the shell
+
+These two take no arguments -- they sweep the whole build, so run them after
+touching `book/_templates/`, `book/_static/shell.css`, `page.css`, `frames.css`,
+or `_ext/frames.py`. Both need `jupyter-book build book/ --all` first.
+
+```sh
+scripts/verify/check_shell.py    # every page: no sideways scroll at 390px, no
+                                 # JS error, the mark and its five module pills
+                                 # folded away, no theme asset sneaking back
+scripts/verify/check_frames.py   # every frame fits one screen in present mode
+```
+
+`check_frames.py` is the frame-page equivalent of `check_deck.py`'s height
+budget. A frame taller than the viewport is clipped in present mode with
+nothing to say so -- it found five such frames on L05a that had been live for
+weeks. Frames that scroll on purpose (the widget frames, which stack their own
+controls as they narrow) are exempt and counted separately in the output.
+```
 scripts/verify/check_tables.py book/module02/L07-simple-resonant-antennas/index.md
 ```
 

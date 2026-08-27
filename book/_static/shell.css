@@ -405,6 +405,16 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
   }
 }
 
+/* The intro's module cards and deliverable cards were authored for a scrolling
+   page. Stacked in a frame on a phone they run past the screen -- 761px into a
+   709px budget -- so they tighten up inside one. */
+@media (max-width: 44rem) {
+  .frame .block-card, .frame .deliverable-card { padding: .6rem .85rem; }
+  .frame .block-card h3, .frame .deliverable-card h3 { font-size: .98rem; }
+  .frame .block-card p, .frame .deliverable-card p { font-size: .84rem; line-height: 1.4; }
+  .frame .block-grid, .frame .deliverable-cards { gap: .45rem; }
+}
+
 /* ---- jump overlay: the shell's one navigational surface -------------- */
 /* The panel chrome is shared. The frame-numbered list inside it lives in
    frames.css; the reading page's page-local TOC lives in page.css. */
