@@ -27,9 +27,15 @@
 {%- for css in css_files %}
 <link rel="stylesheet" href="{{ pathto(css.filename if css.filename is defined else css, 1) }}">
 {%- endfor %}
+{#- custom.css FIRST, then the shell. It is the theme-era stylesheet: it still
+    owns the content components (.callout, .fig, .hero, .lo-list) that nothing
+    else defines, but its page-level decisions were made for a theme that is no
+    longer here -- `body { font-family: Inter }` among them, a face the site
+    stopped shipping when the theme went. Loading it ahead of the shell keeps
+    its components and lets the shell win on type and colour. -#}
+<link rel="stylesheet" href="{{ pathto('_static/custom.css', 1) }}">
 <link rel="stylesheet" href="{{ pathto('_static/shell.css', 1) }}">
 <link rel="stylesheet" href="{{ pathto('_static/page.css', 1) }}">
-<link rel="stylesheet" href="{{ pathto('_static/custom.css', 1) }}">
 {#- script_files has already been filtered to MathJax by _ext/frames.py --
     including its inline config, which has no filename to match on here. -#}
 {%- for js in script_files %}

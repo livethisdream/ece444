@@ -140,12 +140,18 @@ body.chrome-away .hud { transform: translateY(160%); opacity: 0; }
 }
 
 /* Inline math does not wrap, and a long run of it -- "2.200 GHz, ..." on L17 --
-   pushed the page 399px sideways on a phone. inline-block is what lets the
-   overflow rule bite; MathJax sets its own vertical-align, so leave that be. */
-.page mjx-container:not([display="true"]) {
-  display: inline-block; max-width: 100%;
-  overflow-x: auto; overflow-y: hidden;
-}
+   pushes the page sideways on a phone.
+   Two ways NOT to fix this, both measured:
+   - a scroll container on the mjx-container moves its baseline to its bottom
+     margin edge, and every inline formula on the site rides 4px above the text
+     around it. MathJax's own `display: inline` is what keeps math on the
+     baseline; do not override it.
+   - `overflow-x: auto` on every p/li also turns on overflow-y, which clipped
+     11px off the tall radicals in L05's boundary table -- blocks that had no
+     horizontal overflow to begin with.
+   So page.js tags only the blocks that genuinely overflow, and the padding
+   gives tall math somewhere to sit inside the scroll box. */
+.page .scrolls-x { overflow-x: auto; }
 
 /* ---- search field in the overlay -------------------------------------- */
 .index-search { margin: 0 0 clamp(1rem, 3vh, 1.8rem); }

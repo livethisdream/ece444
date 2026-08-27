@@ -190,6 +190,30 @@
     }
   });
 
+  /* ---- let only the blocks that overflow scroll ------------------------ */
+  /* A long run of inline math cannot wrap. Rather than make every block a
+     scroll container -- which turns on overflow-y and clips tall radicals --
+     measure first and tag only what actually needs it. Re-run on resize,
+     because what overflows at 390px does not at 1280. */
+  function tagOverflow() {
+    Array.prototype.forEach.call(
+      document.querySelectorAll('.page p, .page li, .page dd'), function (el) {
+        el.classList.remove('scrolls-x');
+        /* Never inside a table: the table already sits in its own scroll box,
+           so a second one on the cell buys nothing and shaves the overbar off
+           a tall radical that overflows the cell vertically. */
+        if (el.closest('table')) return;
+        if (el.scrollWidth > el.clientWidth + 1) el.classList.add('scrolls-x');
+      });
+  }
+  var tagTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(tagTimer); tagTimer = setTimeout(tagOverflow, 150);
+  }, { passive: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(tagOverflow);
+  window.addEventListener('load', tagOverflow);
+  tagOverflow();
+
   /* ---- give a bare table somewhere to scroll --------------------------- */
   /* Sphinx wraps the tables it generates in .pst-scrollable-table-container,
      but a table written as raw HTML in a lesson -- the syllabus grade scale --
