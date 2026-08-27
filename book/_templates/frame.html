@@ -44,7 +44,7 @@
   <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
   <div class="wrap">
     <div class="index-cols">
-      <div>
+      <div class="index-here">
         <h2>This lesson</h2>
         <ol id="indexlist"></ol>
       </div>
@@ -67,7 +67,17 @@
 <div class="hud">
   <span><b id="cur">1</b>/<span id="tot">0</span></span>
   <span class="sep"></span>
-  <button id="btnMode" type="button" title="Present or read (P)">present</button>
+  {#- A segmented pair, not a single button. The old control showed the mode
+      you were IN, while every other control in this bar names an action -- so
+      pressing the one labelled "present" took you away from present, and it
+      read as doing nothing at all. Two segments with the live one lit cannot
+      be misread in either direction. -#}
+  <span class="seg" role="group" aria-label="View mode">
+    <button id="btnPresent" type="button" aria-pressed="true"
+            title="Present: one frame at a time (P)">present</button>
+    <button id="btnRead" type="button" aria-pressed="false"
+            title="Read: the whole lesson, continuous (P)">read</button>
+  </span>
   <button id="btnIndex" type="button" aria-pressed="false" title="Contents (G)">index</button>
   <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
           title="Presenter tools">tools</button>

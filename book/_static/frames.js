@@ -216,20 +216,22 @@
     });
 
   /* ---- present / read ------------------------------------------------ */
-  var modeBtn = document.getElementById('btnMode');
+  var segPresent = document.getElementById('btnPresent');
+  var segRead    = document.getElementById('btnRead');
   function setMode(m) {
     document.documentElement.setAttribute('data-mode', m);
-    modeBtn.textContent = m;
-    modeBtn.setAttribute('aria-label', 'Mode: ' + m + '. Press P to switch.');
+    segPresent.setAttribute('aria-pressed', m === 'present');
+    segRead.setAttribute('aria-pressed', m === 'read');
     try { localStorage.setItem('ece444-frames-mode', m); } catch (err) {}
+    /* Coming back to present, land on the frame you were reading rather than
+       wherever the continuous scroll had got to. */
     if (m === 'present') frames[idx] && frames[idx].scrollIntoView({ block: 'start' });
   }
   var startMode = 'present';
   try { startMode = localStorage.getItem('ece444-frames-mode') || 'present'; } catch (err) {}
   setMode(startMode === 'read' ? 'read' : 'present');
-  modeBtn.addEventListener('click', function () {
-    setMode(document.documentElement.getAttribute('data-mode') === 'read' ? 'present' : 'read');
-  });
+  segPresent.addEventListener('click', function () { setMode('present'); });
+  segRead.addEventListener('click', function () { setMode('read'); });
 
   /* an inline expander, so a question mid-lecture does not cost you the deck */
   Array.prototype.forEach.call(document.querySelectorAll('.depth'), function (d) {

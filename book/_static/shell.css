@@ -315,6 +315,17 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
   backdrop-filter: blur(6px);
 }
 .hud b { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Segmented control: two options, the live one lit. Used for present/read,
+   where a single toggle labelled with the current state read as inert. */
+.hud .seg { display: inline-flex; align-items: center; gap: .1rem; }
+.hud .seg button { padding: .1rem .38rem; }
+.hud .seg button[aria-pressed="true"] {
+  color: var(--blue-dark); background: var(--soft);
+  border-radius: 999px; font-weight: 700;
+}
+.hud .seg button[aria-pressed="false"] { opacity: .62; }
+.hud .seg button[aria-pressed="false"]:hover { opacity: 1; }
 .hud .sep { width: 1px; height: .95em; background: var(--rule-strong); }
 .hud button {
   font: inherit; color: var(--muted); background: none; border: none;
@@ -416,7 +427,26 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
   min-width: 0;
 }
 .index-cols > div { min-width: 0; }
-@media (max-width: 52rem) { .index-cols { grid-template-columns: 1fr; } }
+
+/* Side by side, the course goes on the left and this page on the right --
+   the whole course first, then where you are inside it.
+   The DOM keeps "this page" first, because that is the order a phone wants
+   when the two stack, and it is the order a screen reader should hear:
+   immediate context before the whole catalogue. So the swap is visual, and
+   only at the width where there are two columns to swap. */
+/* grid-row is load-bearing: with an explicit column and an automatic row,
+   auto-placement never backs up -- it put "this page" at row 1 column 2 and
+   then dropped the course to row 2 column 1, one under the other. */
+.index-cols > .index-here { grid-column: 2; grid-row: 1; }
+.index-cols > .index-toc  { grid-column: 1; grid-row: 1; }
+@media (max-width: 52rem) {
+  .index-cols { grid-template-columns: 1fr; }
+  /* One column: back to DOM order, this page on top. Row must go automatic
+     again or both would be pinned to the same row and overlap. */
+  .index-cols > .index-here, .index-cols > .index-toc {
+    grid-column: 1; grid-row: auto;
+  }
+}
 
 .index-toc ul { list-style: none; margin: 0; padding: 0; display: block; max-width: none; }
 .index-toc ul ul { padding-left: .9rem; margin: .15em 0 .5em; }
