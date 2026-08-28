@@ -284,6 +284,12 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
   content: ""; flex: none; width: 1px; height: .95em;
   background: var(--rule-strong);
 }
+/* A reading page has nothing to put in the middle run, so the run IS the rule:
+   one line, dead centre, with the site on its left and the contents on its
+   right. Two rules around a zero-width run would read as `ECE 444 || 34%`.
+   The template must emit that div with no whitespace inside it -- a text node
+   is enough to make `:empty` fail and both rules come back. */
+.hud-mid:empty::after { content: none; }
 .hud b { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
 
 /* The counter doubles as the contents button, so it has to read as a value

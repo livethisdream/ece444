@@ -5,15 +5,15 @@
 <a href="../../slides/L05-field-regions.html" target="_blank" rel="noopener">html slides</a>
 <a href="../../slides/L05-field-regions.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
 <a href="../../slides/L05-field-regions.md" target="_blank" rel="noopener">raw markdown slides</a>
-<a href="../../frames/L05-field-regions.html" target="_blank" rel="noopener">frame view (experimental)</a>
+<a href="../L05a-field-regions-frames/index.html">frame view</a>
 :::
 
 :::{note}
-The **frame view** above is an experiment: this lesson page and its deck merged
-into one scrolling document, with both interactives running inside it. Press
-<kbd>P</kbd> to switch between presenting and reading. Nothing here is going
-away &mdash; it is a parallel copy, built by `scripts/build_frames.py`, so the two
-can be compared on real material.
+The **frame view** above is this lesson page and its deck merged into one
+document, with both interactives running inside it. The bar at the bottom
+switches between **present** (one frame at a time) and **read** (the whole
+lesson, continuous). Nothing here is going away &mdash; it is a parallel copy,
+so the two can be compared on real material.
 :::
 
 ## Learning Objectives

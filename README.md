@@ -22,7 +22,6 @@ Conventions and the traps that ship silently wrong live in
 | `book/extras/practice/*.pdf` | built practice PDFs — **committed**; what the site serves |
 | `book/extras/labs/*.pdf` | built lab packets (blank copies only) |
 | `book/extras/handouts/*` | printable reference sheets (Smith charts) |
-| `book/extras/frames/*.html` | **experimental** scroll-frame lectures — generated, committed |
 | `latex/` | practice and lab sources, and their build scripts |
 | `latex/fonts/Barlow/` | the body font, vendored (SIL OFL) — loaded by path, no install |
 | `scripts/` | deck wrapper generator, lesson scaffolder, figure generators |
@@ -146,29 +145,20 @@ a replacement silently runs off the margin. Store photos at print resolution
 (~200 dpi for the size they actually print) — the originals are embedded in a
 PDF the site serves.
 
-## Rebuild the experimental frame view
+## Frame-view lessons
 
-`book/extras/frames/L05-field-regions.html` is one lesson built as a single
-scrolling document — the lesson page and the deck merged, one full-viewport
-frame per beat, with both interactives running inside it. <kbd>P</kbd> switches
-between presenting and reading. It is a **parallel copy**: the L05 page and deck
-are untouched, and it exists so the two approaches can be compared on real
-material.
+A frame lesson is an ordinary MyST page with `frame_view: true` in its front
+matter and its body written as `:::{frame}` / `:::{depth}` directives — the
+lesson page and the deck merged, one full-viewport frame per beat, with the
+interactives running inside it. `book/module01/L05a-field-regions-frames/` is
+the one built this way; the bar at the bottom switches between **present** (one
+frame at a time) and **read** (the whole lesson, continuous).
 
-```sh
-python scripts/build_frames.py               # -> book/extras/frames/
-python scripts/build_frames.py --standalone  # one self-contained file to share
-```
-
-Figures and widgets are read from the repo at build time, so they never drift;
-only the frame prose lives in the script. CI does not run this, so the generated
-HTML is committed like the deck wrappers — re-run and re-commit after changing a
-figure, a widget, or the prose.
-
-The standalone build inlines the widgets and swaps `mjlabel.js` for a shim that
-needs no CDN. Use it for sending the file to someone, or anywhere jsdelivr is
-blocked; the site build uses ordinary same-origin iframes instead, so the
-widgets are the same single copy the lesson page uses.
+Nothing to generate: `jupyter-book build book/ --all` builds it like any other
+page, and `book/_ext/frames.py` swaps in the chrome-free template. See
+`project/FRAMES_ARCHITECTURE.md` for the design and what is still open, and
+`scripts/verify/check_frames.py` for the one-screen budget every frame is held
+to.
 
 ## Add a lesson
 

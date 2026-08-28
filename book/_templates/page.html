@@ -68,15 +68,24 @@
 </div>
 
 <div class="hud">
-  {#- The same three runs as the frame bar, in the same order, so the two
-      shells read as one site:
+  {#- The same shape as the frame bar, in the same order, so the two shells
+      read as one site -- site on the left, contents on the right, and the
+      middle run holding whatever this shell offers. On a reading page that is
+      nothing, so the bar is:
 
-          ECE 444 | top | 34% -#}
+          ECE 444 | 34% -#}
   {% include "_sitenav.html" %}
 
-  <div class="hud-group hud-mid">
-    <button id="btnTop" type="button" title="Back to top">&#9650; top</button>
-  </div>
+  {#- Empty on purpose, and it must stay empty of whitespace too -- CSS
+      `:empty` counts a text node, and that is what drops the second rule so a
+      two-run bar reads `ECE 444 | 34%` with the rule dead centre rather than
+      `ECE 444 || 34%`. The run still occupies the grid's middle column, which
+      is what keeps the outer two equal and the bar centred.
+
+      There was a `top` button here. Scrolling up is not a thing a reader needs
+      a control for, and it was the only difference in format between this bar
+      and a lesson's. -#}
+  <div class="hud-group hud-mid"></div>
 
   <div class="hud-group">
     {#- Same as the frame bar: the readout is the button. -#}

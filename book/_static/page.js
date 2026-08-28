@@ -151,11 +151,6 @@
       }
     });
   }
-  /* ---- top ------------------------------------------------------------- */
-  document.getElementById('btnTop').addEventListener('click', function () {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-
   /* ---- keys ------------------------------------------------------------ */
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;

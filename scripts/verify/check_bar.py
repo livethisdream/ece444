@@ -10,7 +10,9 @@ Symmetry is the whole point, so it is measured on both axes:
 * the middle run is centred in the PILL. The outer runs hold different content
   -- "ECE 444" against "1/27" -- so the bar is a `1fr auto 1fr` grid whose
   outer columns are equal by definition. Nothing measures them, so nothing can
-  drift when the counter reaches two digits.
+  drift when the counter reaches two digits. On a reading page the middle run
+  is empty and collapses to the single centre rule, which is what keeps the
+  two shells' bars the same shape.
 
 Checked at four widths on both shells, with every panel landing under its own
 button and actually receiving clicks.
@@ -32,6 +34,11 @@ PAGES = [("frame", "module01/L05a-field-regions-frames/index.html"),
 SIZES = [("desk", 1280, 800), ("tablet", 768, 1024), ("phone", 390, 844), ("320", 320, 640)]
 PANELS = {"frame": [("btnSite", "sitepop"), ("btnMode", "modepop"), ("btnTools", "toolspop")],
           "read":  [("btnSite", "sitepop")]}
+
+#: Rules painted around the middle run. A reading page has nothing to put in
+#: the middle, so the run IS the rule -- one line, dead centre -- rather than
+#: two rules around a zero-width run reading `ECE 444 || 34%`.
+RULES = {"frame": 2, "read": 1}
 
 GEOM = """() => {
   const hud = document.querySelector('.hud');
@@ -83,8 +90,9 @@ def main():
                                f"(x={g['x']:.0f} w={g['w']:.0f} vp={w})")
                 if len(g["gs"]) != 3:
                     bad.append(f"{tag}: {len(g['gs'])} runs, expected 3")
-                elif g["rules"] != 2:
-                    bad.append(f"{tag}: {g['rules']} separating rules, expected 2")
+                elif g["rules"] != RULES[kind]:
+                    bad.append(f"{tag}: {g['rules']} separating rules, "
+                               f"expected {RULES[kind]}")
                 else:
                     # the outer runs are equal, so the middle one is centred
                     # in the pill and not merely between its neighbours

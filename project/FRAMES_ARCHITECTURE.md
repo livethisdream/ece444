@@ -1,9 +1,12 @@
 # Frame-view lessons — architecture
 
 Status: **one lesson built this way.** `book/module01/L05a-field-regions-frames/`
-is a real MyST page using the directives below, in the TOC, on the site. The
-generated prototype at `book/extras/frames/` is the *old* approach, kept only
-for comparison until L05a has been taught from.
+is a real MyST page using the directives below, in the TOC, on the site — and
+so are the landing page and all five module overviews. The generated prototype
+that used to sit at `book/extras/frames/`, built by `scripts/build_frames.py`,
+is gone: it was the *old* approach, it still carried the old bottom-right bar,
+and the L05 page linked to it as "frame view", so a reader following that link
+landed on a stale duplicate of the lesson rather than on L05a.
 
 The question this answers: if a lesson's deck and its page become one
 scroll-frame document, where does the source live and what generates what?
