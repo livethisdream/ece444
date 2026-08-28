@@ -68,14 +68,13 @@
 </div>
 
 <div class="hud">
-  {#- The same three groups as the frame bar, so the two shells read as one
-      site: who and where on the left, what you can do here in the middle, and
-      the contents on the right. -#}
-  <div class="hud-group">
-    {% include "_sitenav.html" %}
-  </div>
+  {#- The same three runs as the frame bar, in the same order, so the two
+      shells read as one site:
 
-  <div class="hud-group">
+          ECE 444 | top | 34% -#}
+  {% include "_sitenav.html" %}
+
+  <div class="hud-group hud-mid">
     <button id="btnTop" type="button" title="Back to top">&#9650; top</button>
   </div>
 

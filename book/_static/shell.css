@@ -233,36 +233,57 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
 @media (prefers-reduced-motion: reduce) { .rail span { transition: none; } }
 
 /* ---- HUD ------------------------------------------------------------ */
-/* The bar spans the window and holds three groups: who and where on the left,
-   what you can do here in the middle, the contents on the right. One pill
-   holding all of it sat off to one side and read as lopsided -- the groups are
-   pinned to the bar's thirds, so the bar reads as a bar at any width and the
-   gaps between them do the job the `|` dividers used to.
+/* One pill, centred in the window.
 
-   .hud itself is a transparent frame; the pill chrome belongs to each group.
-   It stays the popovers' containing block, which is why it must span the whole
-   width: a panel is placed under its own button and then pulled back on screen
-   if it would overhang. */
+   Three separately-pinned groups looked symmetric and were not: with
+   `space-between` the middle group is centred between the other two, not in
+   the window, so it sat off centre by exactly half the difference between the
+   outer groups' widths -- 16px on a 1280px desktop, and it moves whenever any
+   label changes. Spread across a wide window they also stopped reading as one
+   bar.
+
+   Centring one pill is immune to both. `translateX(-50%)` puts it dead centre
+   at every width whatever it contains, so no label can ever knock it off, and
+   the pill is only as wide as its contents -- there is no gap to judge. The
+   groups survive as plain flex runs inside it, separated by a rule. */
 .hud {
   position: fixed; z-index: 45;
-  left: clamp(.7rem, 2vw, 1.6rem); right: clamp(.7rem, 2vw, 1.6rem);
+  left: 50%; transform: translateX(-50%);
   bottom: clamp(.7rem, 2vh, 1.4rem);
-  display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+  /* max-content is load-bearing. A fixed element with `left` and no `right`
+     shrink-to-fits against what is left of the window -- here 50vw -- so the
+     bar wrapped onto two rows at every phone width while its contents needed
+     241px and 304px were available. */
+  width: max-content; max-width: calc(100vw - 1.4rem);
+  /* A grid, not a flex row, and this is the whole trick: `1fr auto 1fr` makes
+     the two outer columns EQUAL by definition, whatever is in them. Under
+     max-content sizing both settle at the wider one's width, so the middle
+     run sits at the pill's true centre -- and stays there when `1/27` becomes
+     `12/27` or the site label changes. Flex can centre the pill in the window
+     but cannot centre a run inside the pill without measuring. */
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: center; column-gap: .55rem;
   font-family: var(--mono); font-size: .74rem; color: var(--muted);
-  pointer-events: none;                 /* only the groups are clickable */
-}
-.hud-group {
-  pointer-events: auto;
-  display: flex; align-items: center; gap: .55rem;
   background: color-mix(in srgb, var(--panel) 88%, transparent);
   border: 1px solid var(--rule); border-radius: 999px;
   padding: .32rem .72rem; box-shadow: var(--shadow);
   backdrop-filter: blur(6px);
 }
-/* An empty group -- the left one on a build with no site nav configured --
-   must not draw a stray pill. The other two hold their positions regardless,
-   because they are placed by the bar and not by each other. */
-.hud-group:empty { display: none; }
+/* min-width:0 so a column can be narrower than its content rather than
+   pushing the pill past max-width at 320px. */
+.hud-group {
+  display: flex; align-items: center; justify-content: center;
+  gap: .55rem; min-width: 0;
+}
+/* Both rules belong to the MIDDLE run, one on each side. Hanging them off the
+   groups that follow a group put the second rule at the left edge of the
+   right-hand column instead of the right edge of the middle one -- the pill
+   was then symmetric in its columns and visibly not in its rules. Owned by the
+   middle run they cannot drift, and they disappear with it. */
+.hud-mid::before, .hud-mid::after {
+  content: ""; flex: none; width: 1px; height: .95em;
+  background: var(--rule-strong);
+}
 .hud b { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
 
 /* The counter doubles as the contents button, so it has to read as a value
@@ -299,17 +320,11 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
 /* These are real links, so they arrive underlined and blue. Make them read
    as part of the HUD. */
 /* ---- HUD popovers ---------------------------------------------------- */
-/* Children of .hud, not of a group -- .hud spans the bar and is fixed, so it
-   is one containing block wide enough to place a panel under its own button
-   and still pull it back on screen. shell.js sets `left` on open; the value
-   here is only what a panel shows for the frame before that runs. */
+/* Children of .hud, which is fixed and so a containing block. Each panel is
+   placed under the button that opened it; shell.js sets `left` on open, and
+   the value here is only what a panel would show for the frame before that
+   runs. */
 .hud .pop {
-  /* Load-bearing: .hud is a transparent full-width frame and so is
-     pointer-events:none, or it would swallow clicks along the whole bottom of
-     the window. The groups turn them back on -- and a panel is a child of .hud,
-     not of a group, so it has to turn them on for itself. Without this the
-     panel renders and every click goes through it to the page behind. */
-  pointer-events: auto;
   position: absolute; bottom: calc(100% + .5rem); left: 0;
   display: flex; flex-direction: column; gap: .1rem;
   min-width: max-content; max-width: min(22rem, calc(100vw - 2rem));
@@ -376,10 +391,10 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
    which is the whole point of splitting them. */
 @media (max-width: 46rem) {
   .hud {
-    left: clamp(.5rem, 3vw, 1rem); right: clamp(.5rem, 3vw, 1rem);
-    gap: .35rem;
+    max-width: calc(100vw - 1rem);
+    column-gap: .3rem; padding: .34rem .4rem;
   }
-  .hud-group { border-radius: 12px; padding: .34rem .5rem; gap: .4rem; }
+  .hud-group { gap: .35rem; }
 }
 
 /* The intro's module cards and deliverable cards were authored for a scrolling

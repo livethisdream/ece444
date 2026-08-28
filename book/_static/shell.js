@@ -44,17 +44,20 @@
     return pop;
   }
 
-  /* Every panel opens under its own button. The bar is three groups pinned to
-     its left, centre and right, so no single anchor -- left or right edge --
-     is right for all of them, and a panel opening away from its button reads
-     as belonging to something else. Measured on open rather than guessed,
-     then pulled back if it would overhang the bar. */
+  /* Every panel opens under its own button, and a panel wider than the bar
+     is normal -- the bar is a centred pill only as wide as its contents.
+     So clamp to the WINDOW, not to the bar: measure where the button is,
+     then pull the panel back if either edge would leave the screen. Done on
+     open rather than guessed, because the bar's width changes with its
+     labels. */
+  var EDGE = 8;
   function place(btn, panel) {
     var bar = panel.parentNode.getBoundingClientRect();
-    var x = btn.getBoundingClientRect().left - bar.left;
-    var over = x + panel.getBoundingClientRect().width - bar.width;
-    if (over > 0) x -= over;
-    panel.style.left = Math.max(0, x) + 'px';
+    var w = panel.getBoundingClientRect().width;
+    var x = btn.getBoundingClientRect().left;                 /* window coords */
+    x = Math.min(x, window.innerWidth - w - EDGE);
+    x = Math.max(x, EDGE);
+    panel.style.left = (x - bar.left) + 'px';                 /* back to the bar */
   }
 
   function closePops(except) {

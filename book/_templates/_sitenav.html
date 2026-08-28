@@ -7,19 +7,24 @@
     costs nothing, and the useful thing behind a site's own name is the rest
     of the site.
 
-    Renders nothing at all when `ece444_site_nav` is unset, so a build outside
-    this site simply has no button -- the bar's left group is then empty and
-    the other two hold their positions, because the groups are placed by the
-    bar, not by each other.
+    The group is emitted either way, empty if there is no nav to show: the bar
+    is a three-column grid whose outer columns are equal, so dropping one would
+    leave the middle run off centre -- the exact fault this layout exists to
+    fix. Empty it draws nothing, because both separating rules belong to the
+    middle run.
 -#}
 {%- if site_nav %}
 {%- set here = (site_nav | selectattr('current') | list | first) %}
-<button id="btnSite" class="site" type="button"
-        aria-expanded="false" aria-controls="sitepop"
-        title="Elsewhere on this site">{{ (here.label if here else 'Site')|e }}</button>
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">{{ (here.label if here else 'Site')|e }}</button>
+</div>
 <div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
   {%- for s in site_nav %}
   <a href="{{ s.url|e }}"{% if s.current %} aria-current="page"{% endif %}>{{ s.label|e }}</a>
   {%- endfor %}
 </div>
+{%- else %}
+<div class="hud-group"></div>
 {%- endif %}

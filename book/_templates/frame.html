@@ -64,19 +64,23 @@
     position:fixed and so already a containing block, and anchoring to the bar
     keeps a long lesson title from running off the edge of a phone screen. -#}
 <div class="hud">
-  {#- Three groups, pinned left / centre / right. One pill holding everything
-      sat off to one side and read as lopsided; three read as a bar. Each group
-      is its own pill, and the gaps between them do the job the `|` dividers
-      used to. -#}
-  <div class="hud-group">
-    {#- The site's own name, and behind it the other sites it sits beside. It
-        used to float in the top-left corner with the modules springing out of
-        it; it covered the first line of every page for a nav the index overlay
-        already carries. -#}
-    {% include "_sitenav.html" %}
-  </div>
+  {#- One pill, centred, holding three runs separated by a rule:
 
-  <div class="hud-group">
+          ECE 444 | present  tools | 12/27
+
+      Who and where, then what you can do here, then the contents. Pinning the
+      three as separate pills looked symmetric and was not -- `space-between`
+      centres the middle one between the other two rather than in the window,
+      so it sat off centre by half the difference in the outer widths and moved
+      whenever a label changed. A centred pill cannot drift. -#}
+  {#- The site's own name, and behind it the other sites it sits beside. It
+      used to float in the top-left corner with the modules springing out of
+      it; it covered the first line of every page for a nav the index overlay
+      already carries. Renders its own group, so an unconfigured nav leaves no
+      trace. -#}
+  {% include "_sitenav.html" %}
+
+  <div class="hud-group hud-mid">
     {#- How the lesson is laid out, and what you point at it with. The mode
         button is labelled with the mode in force: pressing it used to silently
         swap the caption, which read as inert. Now it opens a menu showing both
