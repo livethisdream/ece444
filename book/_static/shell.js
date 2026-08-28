@@ -44,14 +44,12 @@
     return pop;
   }
 
-  /* A panel hangs off the right end of the bar by default, which is where
-     most of the buttons are. `.pop-left` ones follow their own button
-     instead -- on a phone the bar stretches full width and centres its
-     controls, so the leftmost button is nowhere near the bar's left edge and
-     a panel pinned there reads as belonging to something else. Measured on
-     open rather than guessed, then pulled back if it would overhang. */
+  /* Every panel opens under its own button. The bar is three groups pinned to
+     its left, centre and right, so no single anchor -- left or right edge --
+     is right for all of them, and a panel opening away from its button reads
+     as belonging to something else. Measured on open rather than guessed,
+     then pulled back if it would overhang the bar. */
   function place(btn, panel) {
-    if (!panel.classList.contains('pop-left')) return;
     var bar = panel.parentNode.getBoundingClientRect();
     var x = btn.getBoundingClientRect().left - bar.left;
     var over = x + panel.getBoundingClientRect().width - bar.width;

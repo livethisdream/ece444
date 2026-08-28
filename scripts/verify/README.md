@@ -41,6 +41,9 @@ scripts/verify/check_shell.py    # every page: no sideways scroll at 390px, no
                                  # JS error, the HUD's site button with its
                                  # panel closed, no theme asset sneaking back
 scripts/verify/check_frames.py   # every frame fits one screen in present mode
+scripts/verify/check_bar.py      # the HUD's three groups: same height, one row,
+                                 # pinned to the bar's thirds, and every panel
+                                 # placed under its own button and clickable
 ```
 
 `check_frames.py` is the frame-page equivalent of `check_deck.py`'s height

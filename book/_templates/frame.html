@@ -64,28 +64,42 @@
     position:fixed and so already a containing block, and anchoring to the bar
     keeps a long lesson title from running off the edge of a phone screen. -#}
 <div class="hud">
-  {#- The site's own name, and behind it the other sites it sits beside. It
-      used to float in the top-left corner with the modules springing out of
-      it; it covered the first line of every page for a nav the index overlay
-      already carries. -#}
-  {% include "_sitenav.html" %}
-  {#- The counter is the button. "12/25" already says what it opens -- a deck
-      you can jump around in -- so a separate "index" label was a word for
-      something the number was saying anyway. -#}
-  <button id="btnIndex" class="counter" type="button" aria-pressed="false"
-          title="Contents (G)"><b id="cur">1</b>/<span id="tot">0</span></button>
-  <span class="sep"></span>
-  {#- And the mode button is labelled with the mode in force. That read as
-      inert when pressing it silently swapped the caption; now it opens a menu
-      showing both options with the live one lit, which is just a control
-      labelled with its current value. -#}
-  <button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
-          title="How the lesson is laid out (P)">present</button>
-  <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
-          title="Presenter tools">tools</button>
+  {#- Three groups, pinned left / centre / right. One pill holding everything
+      sat off to one side and read as lopsided; three read as a bar. Each group
+      is its own pill, and the gaps between them do the job the `|` dividers
+      used to. -#}
+  <div class="hud-group">
+    {#- The site's own name, and behind it the other sites it sits beside. It
+        used to float in the top-left corner with the modules springing out of
+        it; it covered the first line of every page for a nav the index overlay
+        already carries. -#}
+    {% include "_sitenav.html" %}
+  </div>
 
-  {#- Both panels list their options with the live one lit, so neither the
-      button nor the rows can be read as "press this to do nothing". -#}
+  <div class="hud-group">
+    {#- How the lesson is laid out, and what you point at it with. The mode
+        button is labelled with the mode in force: pressing it used to silently
+        swap the caption, which read as inert. Now it opens a menu showing both
+        options with the live one lit -- a control labelled with its current
+        value. -#}
+    <button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">present</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group">
+    {#- The counter is the button. "12/25" already says what it opens -- a deck
+        you can jump around in -- so a separate "index" label was a word for
+        something the number was saying anyway. -#}
+    <button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G)"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div>
+
+  {#- The panels are children of .hud rather than of a group: .hud spans the
+      whole bar and is position:fixed, so it is one containing block wide
+      enough for a panel to be placed under its own button and still be pulled
+      back on screen at a phone width. shell.js measures and places them. -#}
   <div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
     <button id="btnPresent" class="choice" type="button" aria-pressed="true">
       present<span class="pop-note">one frame at a time</span></button>

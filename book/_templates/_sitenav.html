@@ -8,15 +8,16 @@
     of the site.
 
     Renders nothing at all when `ece444_site_nav` is unset, so a build outside
-    this site simply has no button.
+    this site simply has no button -- the bar's left group is then empty and
+    the other two hold their positions, because the groups are placed by the
+    bar, not by each other.
 -#}
 {%- if site_nav %}
 {%- set here = (site_nav | selectattr('current') | list | first) %}
 <button id="btnSite" class="site" type="button"
         aria-expanded="false" aria-controls="sitepop"
         title="Elsewhere on this site">{{ (here.label if here else 'Site')|e }}</button>
-<span class="sep"></span>
-<div class="pop pop-left" id="sitepop" role="group" aria-label="Site" hidden>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
   {%- for s in site_nav %}
   <a href="{{ s.url|e }}"{% if s.current %} aria-current="page"{% endif %}>{{ s.label|e }}</a>
   {%- endfor %}

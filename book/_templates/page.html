@@ -68,12 +68,22 @@
 </div>
 
 <div class="hud">
-  {% include "_sitenav.html" %}
-  {#- Same as the frame bar: the readout is the button. -#}
-  <button id="btnIndex" class="counter" type="button" aria-pressed="false"
-          title="Contents and search (G)"><span id="pct">0%</span></button>
-  <span class="sep"></span>
-  <button id="btnTop" type="button" title="Back to top">&#9650; top</button>
+  {#- The same three groups as the frame bar, so the two shells read as one
+      site: who and where on the left, what you can do here in the middle, and
+      the contents on the right. -#}
+  <div class="hud-group">
+    {% include "_sitenav.html" %}
+  </div>
+
+  <div class="hud-group">
+    <button id="btnTop" type="button" title="Back to top">&#9650; top</button>
+  </div>
+
+  <div class="hud-group">
+    {#- Same as the frame bar: the readout is the button. -#}
+    <button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents and search (G)"><span id="pct">0%</span></button>
+  </div>
 </div>
 
 {#- `bd-article` is a compatibility class, not a theme leftover. 149 of
