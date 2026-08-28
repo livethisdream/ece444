@@ -46,7 +46,6 @@
 
 <div class="rail"><span id="railfill"></span></div>
 
-{% include "_mark.html" %}
 
 <div class="index" id="index" role="dialog" aria-label="Contents and search">
   <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
@@ -69,6 +68,7 @@
 </div>
 
 <div class="hud">
+  {% include "_sitenav.html" %}
   {#- Same as the frame bar: the readout is the button. -#}
   <button id="btnIndex" class="counter" type="button" aria-pressed="false"
           title="Contents and search (G)"><span id="pct">0%</span></button>

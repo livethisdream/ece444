@@ -111,38 +111,16 @@
   });
 
   /* ---- HUD popovers -------------------------------------------------- */
-  var pops = [];
-  function popover(btnId, panelId) {
-    var btn = document.getElementById(btnId), panel = document.getElementById(panelId);
-    var pop = {
-      btn: btn, panel: panel,
-      open: function (want) {
-        var on = (want === undefined) ? panel.hidden : want;
-        if (on) closePops(pop);            /* only one panel at a time */
-        panel.hidden = !on;
-        btn.setAttribute('aria-expanded', on);
-        if (on) { toggleIndex(false); (panel.querySelector('button, a') || btn).focus(); }
-      },
-      isOpen: function () { return !panel.hidden; }
-    };
-    btn.addEventListener('click', function () { pop.open(); });
-    pops.push(pop);
-    return pop;
-  }
-  function closePops(except) {
-    pops.forEach(function (p) { if (p !== except) p.open(false); });
-  }
-  function anyPopOpen() { return pops.some(function (p) { return p.isOpen(); }); }
+  /* The implementation, the one-at-a-time rule and the tap-off-the-bar
+     dismissal all live in shell.js, so the site button in the same bar plays
+     by the same rules as these two. All that is local is what a frame page
+     wants when any panel opens: the index overlay out of the way. */
+  var shell = window.ECE444;
+  var closePops = shell.closePops, anyPopOpen = shell.anyPopOpen;
+  shell.onOpen.push(function () { toggleIndex(false); });
 
-  var modePop  = popover('btnMode', 'modepop');
-  var toolsPop = popover('btnTools', 'toolspop');
-
-  /* A tap anywhere off the bar dismisses whatever is open. */
-  document.addEventListener('pointerdown', function (e) {
-    if (!anyPopOpen()) return;
-    var t = e.target;
-    if (!t || !t.closest || !t.closest('.hud')) closePops();
-  });
+  var modePop  = shell.popover('btnMode', 'modepop');
+  var toolsPop = shell.popover('btnTools', 'toolspop');
 
   /* Picking a tool shuts the panel -- you turned the laser on to point at the
      slide, not at the menu. */

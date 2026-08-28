@@ -36,7 +36,6 @@
 
 <div class="rail"><span id="railfill"></span></div>
 
-{% include "_mark.html" %}
 <div class="laser" id="laser" aria-hidden="true"></div>
 <div class="spot" id="spot" aria-hidden="true"></div>
 
@@ -65,6 +64,11 @@
     position:fixed and so already a containing block, and anchoring to the bar
     keeps a long lesson title from running off the edge of a phone screen. -#}
 <div class="hud">
+  {#- The site's own name, and behind it the other sites it sits beside. It
+      used to float in the top-left corner with the modules springing out of
+      it; it covered the first line of every page for a nav the index overlay
+      already carries. -#}
+  {% include "_sitenav.html" %}
   {#- The counter is the button. "12/25" already says what it opens -- a deck
       you can jump around in -- so a separate "index" label was a word for
       something the number was saying anyway. -#}

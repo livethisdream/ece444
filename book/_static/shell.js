@@ -1,55 +1,89 @@
-/* ECE 444 -- the course mark and its module pills.
+/* ECE 444 -- the HUD's popovers, and the site nav that is one of them.
  *
- * Shared by the reading pages and the frame lessons, which otherwise run
- * page.js and frames.js respectively. This is the site's whole header: a mark
- * in the corner, and five module pills that spring out of it on demand.
+ * Loaded by both the reading pages and the frame lessons, which otherwise run
+ * page.js and frames.js respectively. Two jobs:
  *
- * Loaded by both templates, so it must not assume either one's DOM beyond the
- * mark itself.
+ *   1. One popover implementation for the whole shell. It used to live in
+ *      frames.js, which meant a reading page could not have a panel at all --
+ *      page.js carried no-op `closePops`/`anyPopOpen` stubs purely so its
+ *      handlers could read the same. Now both pages get the real thing.
+ *   2. The site button, which is the only popover present on both.
+ *
+ * Deliberately does NOT bind Escape. Each shell already handles it in its own
+ * order -- close a panel, else the index, else the laser -- and a second
+ * handler here would close the panel first and let the page's chain fall
+ * through to the wrong step.
  */
 (function () {
-  var nav = document.querySelector('.mark-nav');
-  if (!nav) return;
-  var btn = document.getElementById('btnMark');
-  var pills = document.getElementById('pills');
-  if (!btn || !pills) return;
+  var pops = [];
+  /* A page adds "and put your own surfaces away" here; opening a panel runs
+     them. Keeps the index overlay and a popover from being open at once
+     without shell.js knowing what an index is. */
+  var onOpen = [];
 
-  function open(want) {
-    var on = (want === undefined) ? !nav.classList.contains('open') : want;
-    nav.classList.toggle('open', on);
-    btn.setAttribute('aria-expanded', on);
-    /* Out of the tab order while folded away, so keyboard users are not
-       walked through five links they cannot see. */
-    Array.prototype.forEach.call(pills.querySelectorAll('a'), function (a) {
-      if (on) a.removeAttribute('tabindex');
-      else a.setAttribute('tabindex', '-1');
-    });
-    if (on) {
-      var first = pills.querySelector('a[aria-current="page"]') || pills.querySelector('a');
-      first && first.focus();
-    }
+  function popover(btnId, panelId) {
+    var btn = document.getElementById(btnId), panel = document.getElementById(panelId);
+    if (!btn || !panel) return null;
+    var pop = {
+      btn: btn, panel: panel,
+      open: function (want) {
+        var on = (want === undefined) ? panel.hidden : want;
+        if (on) closePops(pop);            /* only one panel at a time */
+        panel.hidden = !on;
+        btn.setAttribute('aria-expanded', on);
+        if (on) {
+          place(btn, panel);
+          onOpen.forEach(function (fn) { fn(); });
+          (panel.querySelector('button, a') || btn).focus();
+        }
+      },
+      isOpen: function () { return !panel.hidden; }
+    };
+    btn.addEventListener('click', function () { pop.open(); });
+    pops.push(pop);
+    return pop;
   }
-  open(false);
 
-  btn.addEventListener('click', function () { open(); });
+  /* A panel hangs off the right end of the bar by default, which is where
+     most of the buttons are. `.pop-left` ones follow their own button
+     instead -- on a phone the bar stretches full width and centres its
+     controls, so the leftmost button is nowhere near the bar's left edge and
+     a panel pinned there reads as belonging to something else. Measured on
+     open rather than guessed, then pulled back if it would overhang. */
+  function place(btn, panel) {
+    if (!panel.classList.contains('pop-left')) return;
+    var bar = panel.parentNode.getBoundingClientRect();
+    var x = btn.getBoundingClientRect().left - bar.left;
+    var over = x + panel.getBoundingClientRect().width - bar.width;
+    if (over > 0) x -= over;
+    panel.style.left = Math.max(0, x) + 'px';
+  }
 
+  function closePops(except) {
+    pops.forEach(function (p) { if (p !== except) p.open(false); });
+  }
+  function anyPopOpen() {
+    return pops.some(function (p) { return p.isOpen(); });
+  }
+
+  window.ECE444 = {
+    popover: popover, closePops: closePops, anyPopOpen: anyPopOpen, onOpen: onOpen
+  };
+
+  /* The site nav. Rendered only when _config.yml configures one, so this is a
+     no-op on a build with no siblings. */
+  popover('btnSite', 'sitepop');
+
+  /* A tap anywhere off the bar dismisses whatever is open. */
   document.addEventListener('pointerdown', function (e) {
-    if (!nav.classList.contains('open')) return;
+    if (!anyPopOpen()) return;
     var t = e.target;
-    if (!t || !t.closest || !t.closest('.mark-nav')) open(false);
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape' || !nav.classList.contains('open')) return;
-    open(false);
-    btn.focus();
-    /* Let the page's own Escape handling run too -- it may have an overlay or
-       a pointer of its own to put away. */
+    if (!t || !t.closest || !t.closest('.hud')) closePops();
   });
 
   /* Whatever the page uses to retract its chrome applies here as well. */
   var mo = new MutationObserver(function () {
-    if (document.body.classList.contains('chrome-away')) open(false);
+    if (document.body.classList.contains('chrome-away')) closePops();
   });
   mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 })();

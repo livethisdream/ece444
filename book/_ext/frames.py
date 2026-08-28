@@ -180,33 +180,33 @@ def _breadcrumb(app, pagename):
     return None
 
 
-_MODULE_DOC = re.compile(r"^module(\d+)/index$")
+def _site_nav(app, pagename):
+    """The other sites this one sits beside, for the HUD's site button.
 
+    The course used to announce itself with a mark in the top-left corner that
+    the five modules sprang out of. It was the wrong thing in the wrong place
+    twice over: it covered the first line of every page, and the modules were
+    already one tap away in the index overlay. The bar at the bottom is where
+    the controls live, so the identity goes there too -- and once it is a
+    button in a bar, the useful thing behind it is not the modules again but
+    the rest of the site.
 
-def _modules(app, pagename):
-    """The five module overviews, for the pills that fan out of the mark.
-
-    Read from the environment rather than hard-coded: a sixth module would
-    appear on its own. The short label comes from `nav:` in each module's front
-    matter -- the full title ("Module 3 -- Arrays and ADALM-PHASER
-    Beamforming") is far too long to sit in a pill.
+    Configured in _config.yml, not derived: these are sibling sites, and this
+    build knows nothing about them. The entry marked `here: true` is this book
+    -- it is linked to the book's own root doc so the link works from a local
+    unzipped build as well as from the published site, and its label is what
+    the button itself shows.
     """
-    here = pagename.split("/")[0]
+    entries = getattr(app.config, "ece444_site_nav", None) or []
+    here_uri = app.builder.get_target_uri(pagename)
     out = []
-    for doc in sorted(app.env.found_docs):
-        m = _MODULE_DOC.match(doc)
-        if not m:
-            continue
-        meta = app.env.metadata.get(doc, {})
-        title = app.env.titles.get(doc)
-        label = meta.get("nav") or (title.astext() if title else doc)
-        out.append({
-            "num": m.group(1).lstrip("0") or m.group(1),
-            "label": label,
-            "url": relative_uri(app.builder.get_target_uri(pagename),
-                                app.builder.get_target_uri(doc)),
-            "current": doc.split("/")[0] == here,
-        })
+    for e in entries:
+        here = bool(e.get("here"))
+        url = e.get("url", "")
+        if here:
+            url = relative_uri(here_uri,
+                               app.builder.get_target_uri(app.config.root_doc))
+        out.append({"label": e.get("label", ""), "url": url, "current": here})
     return out
 
 
@@ -230,7 +230,7 @@ def choose_template(app, pagename, templatename, context, doctree):
 
     if "frame_view" in meta:
         context["is_frame_view"] = True
-        context["modules"] = _modules(app, pagename)
+        context["site_nav"] = _site_nav(app, pagename)
         # The theme's JS expects theme DOM and throws on every selector it owns
         # once the sidebar is gone. Keep MathJax, drop the rest.
         _keep_only(context, "script_files", _is_mathjax)
@@ -244,7 +244,7 @@ def choose_template(app, pagename, templatename, context, doctree):
         return None
 
     context["crumb_module"] = _breadcrumb(app, pagename)
-    context["modules"] = _modules(app, pagename)
+    context["site_nav"] = _site_nav(app, pagename)
     _keep_only(context, "script_files",
                lambda f: _is_mathjax(f) or any(a in _asset_name(f) for a in _PAGE_KEEP_JS))
     _keep_only(context, "css_files",
@@ -273,6 +273,9 @@ def add_template_dir(app, config=None):
 def setup(app):
     # The kill switch. One line in _config.yml puts the site back on the theme.
     app.add_config_value("ece444_shell", True, "html")
+    # The HUD's site nav. Empty by default, and the button is then not
+    # rendered at all -- a book built outside this site has no siblings.
+    app.add_config_value("ece444_site_nav", [], "html")
     app.connect("config-inited", add_template_dir)
     app.add_directive("frame", FrameDirective)
     app.add_directive("depth", DepthDirective)

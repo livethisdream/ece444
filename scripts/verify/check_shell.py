@@ -3,7 +3,7 @@
 
 The theme used to guarantee a lot of this for free. Now that the pages own
 their own layout, it has to be checked: no sideways scroll at phone width, no
-JS error, the course mark with its module pills folded away, and no theme asset
+JS error, the HUD's site button with its panel closed, and no theme asset
 sneaking back onto a page that no longer has the DOM to support it.
 """
 import json, pathlib, sys
@@ -17,8 +17,8 @@ SKIP_DIRS = {"slides", "viz", "frames", "_static", "practice"}
 
 PROBE = """() => {
   const page = document.querySelector('.page');
-  const mark = document.getElementById('btnMark');
-  const pills = document.querySelectorAll('.pills a');
+  const site = document.getElementById('btnSite');
+  const sitepop = document.getElementById('sitepop');
   const hud = document.querySelector('.hud');
   const theme = [...document.querySelectorAll('link[rel=stylesheet], script[src]')]
       .map(e => e.getAttribute('href') || e.getAttribute('src') || '')
@@ -31,9 +31,10 @@ PROBE = """() => {
   return {
     isShell: !!page,
     docOverflow: document.documentElement.scrollWidth - window.innerWidth,
-    mark: mark ? mark.textContent.trim() : null,
-    pills: pills.length,
-    pillsFolded: [...pills].every(a => a.getAttribute('tabindex') === '-1'),
+    site: site ? site.textContent.trim() : null,
+    siteLinks: sitepop ? sitepop.querySelectorAll('a').length : 0,
+    siteClosed: !!sitepop && sitepop.hidden,
+    strayMark: !!document.querySelector('.mark-nav'),
     hud: !!hud,
     overlay: !!document.getElementById('index'),
     themeAssets: theme,
@@ -84,12 +85,14 @@ def main():
                     fails.append(f"{label} {rel}: {msg}")
                 if r["docOverflow"] > 0:
                     bad(f"scrolls sideways by {r['docOverflow']}px")
-                if not r["mark"]:
-                    bad("no course mark")
-                if r["pills"] != 5:
-                    bad(f"expected 5 module pills, got {r['pills']}")
-                if not r["pillsFolded"]:
-                    bad("module pills not folded away on load")
+                if not r["site"]:
+                    bad("no site button in the HUD")
+                if r["siteLinks"] < 2:
+                    bad(f"site panel has {r['siteLinks']} links")
+                if not r["siteClosed"]:
+                    bad("site panel not closed on load")
+                if r["strayMark"]:
+                    bad("the old top-left mark is still being rendered")
                 if not r["hud"] or not r["overlay"]:
                     bad("missing HUD or overlay")
                 if r["themeAssets"]:

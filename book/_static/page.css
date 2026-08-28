@@ -9,15 +9,14 @@
  * (.callout, .fig, .two-col, .lo-list, admonitions).
  */
 
-/* The mark and the bar are fixed over a full-width reading column, so they sit
-   on top of the text at almost every scroll position. Rather than narrow the
-   column to dodge them, they retract while you are reading forward and come
-   back the moment you scroll up, reach for them, or open something. */
-.mark-nav, .hud { transition: transform .22s ease, opacity .22s ease; }
-body.chrome-away .mark-nav { transform: translateY(-160%); opacity: 0; }
+/* The bar is fixed over a full-width reading column, so it sits on top of the
+   text at almost every scroll position. Rather than narrow the column to dodge
+   it, it retracts while you are reading forward and comes back the moment you
+   scroll up, reach for it, or open something. */
+.hud { transition: transform .22s ease, opacity .22s ease; }
 body.chrome-away .hud { transform: translateY(160%); opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
-  .mark-nav, .hud { transition: none; }
+  .hud { transition: none; }
 }
 
 /* ---- the reading column ----------------------------------------------- */

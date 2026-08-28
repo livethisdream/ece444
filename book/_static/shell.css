@@ -232,78 +232,6 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
 }
 @media (prefers-reduced-motion: reduce) { .rail span { transition: none; } }
 
-/* ---- the mark, and the module pills that spring out of it ------------ */
-/* This is the entire header. Collapsed it is one small pill in the corner;
-   pressed, the five modules spring out of it and fold back in. Nothing sits
-   between the reader and the page. */
-.mark-nav {
-  position: fixed; z-index: 40;
-  top: clamp(.5rem, 1.6vh, 1rem); left: clamp(.6rem, 2vw, 1.4rem);
-  right: clamp(.6rem, 2vw, 1.4rem);
-  display: flex; align-items: center; gap: .4rem;
-  pointer-events: none;                 /* only the controls are clickable */
-}
-.mark-nav > * { pointer-events: auto; }
-
-.mark {
-  flex: none; font: 700 .74rem/1 var(--mono); letter-spacing: .14em;
-  cursor: pointer; white-space: nowrap;
-  padding: .45rem .75rem; border-radius: 999px;
-  color: var(--blue); background: color-mix(in srgb, var(--panel) 88%, transparent);
-  border: 1px solid var(--rule); box-shadow: var(--shadow);
-  backdrop-filter: blur(6px);
-}
-.mark:hover { color: var(--blue-dark); }
-.mark:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-.mark[aria-expanded="true"] { color: var(--blue-dark); background: var(--soft); }
-
-.pills {
-  list-style: none; margin: 0; padding: 0;
-  /* flex-direction is load-bearing: the generic `ul` rule in the type section
-     sets `column`, and .pills does not out-specify a property it never
-     declares -- the pills stacked vertically down over the page heading. */
-  display: flex; flex-direction: row; flex-wrap: nowrap;
-  align-items: center; gap: .35rem;
-  min-width: 0; overflow: hidden;
-}
-.pills li {
-  margin: 0; min-width: 0;
-  /* Each pill starts collapsed INTO the mark -- no width, no scale -- and the
-     stagger makes them read as springing out of it rather than a row
-     appearing. Reversed on the way in, so they fold back the way they came. */
-  transform: scale(.6); opacity: 0;
-  max-width: 0; transition:
-    transform .26s cubic-bezier(.2, .9, .3, 1.3) calc(var(--i) * 32ms),
-    opacity .18s ease calc(var(--i) * 32ms),
-    max-width .26s ease calc(var(--i) * 32ms);
-}
-.mark-nav.open .pills li { transform: scale(1); opacity: 1; max-width: 16rem; }
-.pills a {
-  display: flex; align-items: baseline; gap: .4rem;
-  padding: .45rem .8rem; border-radius: 999px;
-  font: 600 .74rem/1 var(--mono); letter-spacing: .04em;
-  text-decoration: none; white-space: nowrap;
-  color: var(--muted); background: color-mix(in srgb, var(--panel) 88%, transparent);
-  border: 1px solid var(--rule); box-shadow: var(--shadow);
-  backdrop-filter: blur(6px);
-}
-.pills a:hover { color: var(--ink); border-color: var(--rule-strong); }
-.pills a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-.pills a[aria-current="page"] {
-  color: var(--blue-dark); background: var(--soft); border-color: var(--rule-strong);
-}
-.pill-n { color: var(--blue); font-weight: 700; }
-.pills a[aria-current="page"] .pill-n { color: var(--blue-dark); }
-
-/* A phone fits the numbers but not the names. */
-@media (max-width: 44rem) {
-  .pill-label { display: none; }
-  .pills a { padding: .45rem .7rem; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .pills li { transition-duration: 1ms; transition-delay: 0ms; }
-}
-
 /* ---- HUD ------------------------------------------------------------ */
 .hud {
   position: fixed; right: clamp(.7rem, 2vw, 1.6rem); bottom: clamp(.7rem, 2vh, 1.4rem);
@@ -325,6 +253,16 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
 .hud button.counter[aria-pressed="true"] { color: var(--blue-dark); background: var(--soft); }
 .hud button.counter[aria-pressed="true"] b { color: var(--blue-dark); }
 .hud .sep { width: 1px; height: .95em; background: var(--rule-strong); }
+
+/* The site button carries the site's name, so it keeps the mark's voice --
+   the same mono, the same wide tracking, the same blue. It is the only
+   coloured thing in the bar, which is what makes the bar readable as "you are
+   here, and here is everything else". */
+.hud button.site {
+  font: 700 .74rem/1 var(--mono); letter-spacing: .14em; color: var(--blue);
+}
+.hud button.site:hover { color: var(--blue-dark); background: var(--soft); }
+.hud button.site[aria-expanded="true"] { color: var(--blue-dark); background: var(--soft); }
 .hud button {
   font: inherit; color: var(--muted); background: none; border: none;
   cursor: pointer; padding: .1rem .3rem; border-radius: 4px; letter-spacing: .04em;
@@ -353,6 +291,19 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
    stylesheet's `[hidden] { display: none }` on specificity. Without this the
    panels never close. */
 .hud .pop[hidden] { display: none; }
+
+/* The panels anchor to the right end of the bar because that is where their
+   buttons are. The site button is the exception -- it is the leftmost control,
+   and a panel opening away from its button reads as belonging to something
+   else. */
+.hud .pop-left { left: 0; right: auto; }
+
+/* The current site is a link to where you already are. It stays in the list --
+   dropping it would make the panel a list of elsewhere with no "here" -- but
+   it is lit rather than offered. */
+.hud .pop a[aria-current="page"] {
+  color: var(--blue-dark); background: var(--soft); font-weight: 700;
+}
 
 /* (0,2,1), because plain `.hud button` is (0,1,1) and would otherwise win --
    the same trap that made .index-close span the whole viewport. */

@@ -73,6 +73,26 @@ sphinx:
         - search-button-field.html
         - globaltoc.html
 
+    # The site nav behind the HUD's leftmost button. This book is one course
+    # among several on the same GitHub Pages site, so the bar carries the whole
+    # site rather than just this course -- which is what the module pills in
+    # the old top-left mark were doing badly, since the modules are already in
+    # the index overlay.
+    #
+    # `here: true` marks this book: it is linked to the book's own root doc, so
+    # the link works from an unzipped local build as well as from the published
+    # site, and its label is what the button itself shows. An empty list drops
+    # the button entirely.
+    #
+    # NOTE: the off-site URLs below follow this site's own publishing pattern
+    # (livethisdream.github.io/<repo>/). Confirm each one resolves before this
+    # reaches main -- a nav is the one thing on a page nobody forgives a 404 in.
+    ece444_site_nav:
+      - {label: "Home",     url: "https://livethisdream.github.io/"}
+      - {label: "ECE 444",  here: true}
+      - {label: "ECE 448",  url: "https://livethisdream.github.io/ece448/"}
+      - {label: "Projects", url: "https://livethisdream.github.io/projects/"}
+
     html_theme: sphinx_book_theme
     html_theme_options:
       show_navbar_depth: 1

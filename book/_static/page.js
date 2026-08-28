@@ -48,15 +48,14 @@
     if (parked && (e.clientY > innerHeight - 90 || e.clientY < 90)) chrome(false);
   }, { passive: true });
   document.addEventListener('focusin', function (e) {
-    if (e.target.closest && e.target.closest('.hud, .mark-nav')) chrome(false);
+    if (e.target.closest && e.target.closest('.hud')) chrome(false);
   });
 
-  /* Nothing pops out of the bar any more -- prev/next moved into the page
-     footer and the presenter tools live on frame pages only. anyPopOpen and
-     closePops are kept as no-ops so the scroll and Escape handlers below read
-     the same in both shells. */
-  function closePops() {}
-  function anyPopOpen() { return false; }
+  /* The bar's one panel here is the site nav, wired in shell.js along with
+     the popover machinery both shells share. These two were no-op stubs while
+     that machinery was stuck inside frames.js. */
+  var shell = window.ECE444;
+  var closePops = shell.closePops, anyPopOpen = shell.anyPopOpen;
 
   /* ---- contents overlay ----------------------------------------------- */
   var qEl = document.getElementById('q');
@@ -79,6 +78,8 @@
     document.getElementById('btnIndex').setAttribute('aria-pressed', showing);
     if (showing) { markHere(); if (qEl && wantsKeyboard()) qEl.focus(); }
   }
+  /* ...and the other direction: opening the site panel puts the index away. */
+  shell.onOpen.push(function () { toggleIndex(false); });
   document.getElementById('btnIndex').addEventListener('click', function () { toggleIndex(); });
   document.getElementById('btnIndexClose').addEventListener('click', function () { toggleIndex(false); });
   indexEl.addEventListener('click', function (e) { if (e.target === indexEl) toggleIndex(false); });

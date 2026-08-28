@@ -72,7 +72,7 @@ body.pointing .deck { touch-action: none; }
    .hero -- a dark navy card with `color: #fff !important` -- so reusing that
    here would mean white text on the frame's light ground, or a navy block
    dropped into the middle of a title frame. They get the shell's own pill
-   treatment instead, which is what the mark and the module pills already use. */
+   treatment instead, which is what the HUD's own controls already use. */
 .title-frame .hero-cta {
   display: flex; flex-wrap: wrap; gap: .5rem;
   margin-top: clamp(.6rem, 2vh, 1.2rem);

@@ -1,0 +1,24 @@
+{#- The site button and its panel, for the HUD bar.
+
+    Included by both page.html and frame.html so the two views cannot drift.
+    This replaced the course mark that used to float in the top-left corner:
+    the mark sat on top of the first line of every page, and the modules it
+    fanned out are already in the index overlay one tap away. Down here it
+    costs nothing, and the useful thing behind a site's own name is the rest
+    of the site.
+
+    Renders nothing at all when `ece444_site_nav` is unset, so a build outside
+    this site simply has no button.
+-#}
+{%- if site_nav %}
+{%- set here = (site_nav | selectattr('current') | list | first) %}
+<button id="btnSite" class="site" type="button"
+        aria-expanded="false" aria-controls="sitepop"
+        title="Elsewhere on this site">{{ (here.label if here else 'Site')|e }}</button>
+<span class="sep"></span>
+<div class="pop pop-left" id="sitepop" role="group" aria-label="Site" hidden>
+  {%- for s in site_nav %}
+  <a href="{{ s.url|e }}"{% if s.current %} aria-current="page"{% endif %}>{{ s.label|e }}</a>
+  {%- endfor %}
+</div>
+{%- endif %}

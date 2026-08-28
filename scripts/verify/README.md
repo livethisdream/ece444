@@ -38,8 +38,8 @@ or `_ext/frames.py`. Both need `jupyter-book build book/ --all` first.
 
 ```sh
 scripts/verify/check_shell.py    # every page: no sideways scroll at 390px, no
-                                 # JS error, the mark and its five module pills
-                                 # folded away, no theme asset sneaking back
+                                 # JS error, the HUD's site button with its
+                                 # panel closed, no theme asset sneaking back
 scripts/verify/check_frames.py   # every frame fits one screen in present mode
 ```
 
