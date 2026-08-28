@@ -84,14 +84,15 @@ sphinx:
     # site, and its label is what the button itself shows. An empty list drops
     # the button entirely.
     #
-    # NOTE: the off-site URLs below follow this site's own publishing pattern
-    # (livethisdream.github.io/<repo>/). Confirm each one resolves before this
-    # reaches main -- a nav is the one thing on a page nobody forgives a 404 in.
+    # The off-site URLs are Neil's, given verbatim -- ECE 448 is a Jupyter Book
+    # like this one, so its landing page is intro.html rather than the
+    # directory. Check any new entry actually resolves: a nav is the one thing
+    # on a page nobody forgives a 404 in.
     ece444_site_nav:
       - {label: "Home",     url: "https://livethisdream.github.io/"}
       - {label: "ECE 444",  here: true}
-      - {label: "ECE 448",  url: "https://livethisdream.github.io/ece448/"}
-      - {label: "Projects", url: "https://livethisdream.github.io/projects/"}
+      - {label: "ECE 448",  url: "https://livethisdream.github.io/ece448/intro.html"}
+      - {label: "Projects", url: "https://livethisdream.github.io/projects"}
 
     html_theme: sphinx_book_theme
     html_theme_options:
