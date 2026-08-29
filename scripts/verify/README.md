@@ -44,6 +44,8 @@ scripts/verify/check_frames.py   # every frame fits one screen in present mode
 scripts/verify/check_bar.py      # the bottom bar: centred in the window, outer
                                  # runs equal, middle run centred in the pill,
                                  # nothing wrapped, panels clickable
+scripts/verify/check_print.py    # every frame page prints one sheet per frame;
+                                 # every long reading page prints more than one
 scripts/verify/check_parity.py <baseline-html-dir>
                                  # did the change quietly drop content?
 ```
@@ -99,6 +101,7 @@ TEXINPUTS=/workspace/latex-tools/tex/latex//: \
 | `check_widget.py` | worst-case height across the real serving widths; zero horizontal overflow at 430/390/320; canvas aspect undistorted; no blank canvas; no console errors |
 | `check_page.py` | math typeset; no raw `$$`/`$` leaking into the article; iframe targets resolve |
 | `check_tables.py` | markdown table rows where a `|` inside `$...$` splits a cell |
+| `check_print.py` | `.deck`'s scroller does not clip `@media print` to one sheet; the depth is visible in print regardless of on-screen mode; the bar/rail/overlay/laser/spotlight are gone on paper |
 | `mech_check.sh` | all of the above for one lesson, plus files present, LaTeX compiles without errors or overfull boxes >10pt, every `\part` has a `\begin{solution}`, LO markup matches the module, no thin spaces, no `\,`/`\;` in deck math, no `\|` inside table math, no self-vouching wording |
 
 ## The separator trap

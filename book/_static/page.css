@@ -188,3 +188,12 @@ body.chrome-away .hud { transform: translateX(-50%) translateY(160%); opacity: 0
   padding: .4rem .5rem; color: var(--muted);
   font-size: calc(var(--step-0) * .92);
 }
+
+/* ---- print -------------------------------------------------------------- */
+/* A reading page is already natural document flow -- .page is a grid, not a
+   scroll container, so nothing here needs unclipping the way a frame page's
+   `.deck` does. Only the screen-only chrome needs to go: the bottom bar and
+   its panels, the progress rail, and the search/jump overlay. */
+@media print {
+  .hud, .rail, .index { display: none !important; }
+}

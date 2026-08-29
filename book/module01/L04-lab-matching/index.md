@@ -1,10 +1,27 @@
+---
+frame_view: true
+---
+
 # L4 Lab — Matching Procedures
 
-This lab is the measurement half of Lesson 4. You designed an L-network on
-paper; here you build one and watch a vector network analyzer tell you whether
-you were right.
+::::{frame}
+:class: title-frame
 
-## Learning Objectives
+<div class="course-mark">ECE 444 · Fall 2026</div>
+
+<h1 class="frame-title">Matching Procedures</h1>
+
+<div class="title-rule"></div>
+
+This lab is the measurement half of Lesson 4.
+
+You designed an L-network on paper; here you build one and watch a vector
+network analyzer tell you whether you were right.
+
+Lesson 4 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+::::
+
+::::{frame} Learning Objectives
 
 <ol class="lo-list lo-sublist" style="--module: '1'; --lo: '4'">
   <li>I can calibrate a VNA to a defined reference plane and explain why every cable change invalidates the calibration.</li>
@@ -13,14 +30,16 @@ you were right.
   <li>I can measure the bandwidth a match holds and connect it to the network's quality factor.</li>
   <li>I can substitute the parts I can actually source for the ones I designed, predict what the substitution costs, and judge whether the result meets the specification.</li>
 </ol>
+::::
 
-## What you will do
-
+::::{frame} Part I — measurement
 **Part I — measurement.** Calibrate the NanoVNA over 50 kHz to 5 MHz with an
 open, short, and load, then measure a series of known loads: an open, a short, a
 capacitor across a frequency sweep, a matched 50 Ω resistor, and a 1 kΩ
 mismatch. You finish by characterizing an unknown filter as a black box.
+::::
 
+::::{frame} Part II — design and build
 **Part II — design and build.** You are handed a stand-in for an electrically
 small antenna: a 15 Ω resistor in series with a 1 nF capacitor, which at 2 MHz
 presents about $15 - j79.6\ \Omega$ — a small radiation resistance behind a
@@ -28,9 +47,9 @@ large capacitive reactance, exactly the situation Lesson 4 described. Unmatched,
 that is a 12:1 VSWR. You design an L-network for it, source the parts yourself,
 build it, and measure the improvement — then sweep to find the band over which
 the match survives.
+::::
 
-## Equipment
-
+::::{frame} Equipment
 Beyond the VNA and its cables, each team builds a mock antenna from two
 components:
 
@@ -38,7 +57,9 @@ components:
 | :-- | :-- | :-- |
 | 15 Ω resistor | 15 Ω | mock antenna, radiation resistance |
 | 1 nF capacitor | 0.001 µF | mock antenna, series reactance |
+::::
 
+::::{frame} You will not get what you asked for
 Those two values are the whole input to the design. The matching network's
 inductor and capacitor are what you calculate — and then go and find. They are
 not on your bench: they are across the hallway in the electronics lab, in
@@ -49,9 +70,9 @@ You will not get what you asked for. That is the normal case, and the lab asks
 you to price it: how much did the substitution cost, and is the result **good
 enough** for what the radio needs? One of those two parts matters far more than
 the other, and finding out which is most of the lesson.
+::::
 
-## Before lab
-
+::::{frame} Before lab
 Read the whole packet, skim the
 <a href="https://nanorfe.com/nanovna-v2-user-manual.html" target="_blank" rel="noopener">VNA user's guide</a>,
 and **work the Part II design by hand** so you arrive with component values
@@ -59,9 +80,9 @@ already in front of you. The
 <a href="../L04-impedance-feeding-baluns/index.html">Lesson 4 page</a> walks the
 same design one step at a time, and the feed-match widget there lets you check
 your answer on a Smith chart before you touch a component.
+::::
 
-## Lab packet
-
+::::{frame} Lab packet
 The lab sheet is the turn-in document:
 <a href="../../labs/ECE444_Lab_L04_Matching_blank.pdf" target="_blank" rel="noopener">Lab sheet (PDF)</a>.
 It already contains a blank Smith chart to plot on. If you want spares, or a
@@ -70,12 +91,13 @@ combined impedance-admittance chart for the Part II design:
 - <a href="../../handouts/SmithChart_blank.pdf" target="_blank" rel="noopener">Blank Smith chart (PDF, print)</a> — the same chart bound into the packet.
 - <a href="../../handouts/SmithChart_ZY_colour.pdf" target="_blank" rel="noopener">Impedance-admittance chart (PDF, colour)</a> — red impedance grid over blue admittance grid. This is the one to use when you cross from $Z$ to $Y$ in Step 5 of the design.
 - <a href="../../handouts/SmithChart_blank.svg" target="_blank" rel="noopener">Blank Smith chart (SVG)</a> — vector, for zooming on screen.
+::::
 
-## Where this is going
-
+::::{frame} Where this is going
 Matching is the last piece of the antenna-as-a-circuit picture. From here Lesson
 5 leaves the terminals behind and asks where the radiated field actually
 begins — the field regions — which is the question you have to answer before you
 can measure a pattern at all. The VNA skills you build here return in Module 2,
 where S-parameters become the standard language for describing every antenna and
 network you meet.
+::::

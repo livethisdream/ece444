@@ -1,14 +1,33 @@
+---
+frame_view: true
+---
+
 # L3 - Polarization and Bandwidth
 
+::::{frame}
+:class: title-frame
+
+<div class="course-mark">ECE 444 · Fall 2026</div>
+
+<h1 class="frame-title">Polarization and Bandwidth</h1>
+
+<div class="title-rule"></div>
+
+Polarization and bandwidth are the two most misquoted specs on a datasheet.
+
+Lesson 3 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+::::
+
+::::{frame} Slides
 :::{admonition} Slides
 :class: slides
 <a href="../../slides/L03-polarization-bandwidth.html" target="_blank" rel="noopener">html slides</a>
 <a href="../../slides/L03-polarization-bandwidth.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
 <a href="../../slides/L03-polarization-bandwidth.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
+::::
 
-## Learning Objectives
-
+::::{frame} Learning Objectives
 <ol class="lo-list lo-sublist" style="--module: '1'; --lo: '3'">
   <li>I can identify the polarization state of a plane wave (linear, circular, elliptical) from the amplitude and phase of its two orthogonal components.</li>
   <li>I can compute the axial ratio of an elliptically polarized wave and explain what a "3 dB axial ratio" spec means for a circularly polarized antenna.</li>
@@ -16,7 +35,9 @@
   <li>I can define the impedance, pattern, and polarization bandwidths of an antenna and compute fractional bandwidth from the endpoint frequencies.</li>
   <li>I can match common antenna families (patch, dipole, horn, log-periodic, spiral, Vivaldi) to their typical bandwidth range.</li>
 </ol>
+::::
 
+::::{frame} Where we were
 Lesson 2 handed you the terms of a link budget — directivity, gain, effective
 aperture, Friis. Every one of them quietly assumed the two antennas were
 polarization matched and operating at a single frequency. Today you pay for
@@ -25,11 +46,12 @@ antenna can see at all, and **bandwidth** decides over what span of frequencies
 any of the datasheet numbers still hold. They are also the two most misquoted
 specs on an antenna datasheet, and the last part of this lesson prices each
 misquote in dB.
+::::
 
-## Part 1: Polarization
+::::{frame} Part 1: Polarization
+::::
 
-### What polarization is
-
+::::{frame} What polarization is
 Fix a point in space and watch the tip of the electric field vector
 $\mathbf{E}(t)$ trace a curve over one period. **That curve is the
 polarization.**
@@ -43,12 +65,14 @@ polarized**. If it traces an ellipse (the general case), the wave is
      alt="Three polarization states: the tip of the electric field traces a line, a circle, or an ellipse over one period at a fixed point"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
+:::{depth}
 Polarization matters because a receive antenna is only sensitive to the
 component of the incident $\mathbf{E}$ that is aligned with its own
 polarization. Everything else is thrown away.
+:::
+::::
 
-### Building any polarization from two linear components
-
+::::{frame} Building any polarization from two linear components
 You can write any plane wave propagating along $+\hat{z}$ as the sum of
 two orthogonal linear components:
 
@@ -57,7 +81,9 @@ $$
 = \hat{x} E_{x} \cos(\omega t - k z)
 + \hat{y} E_{y} \cos(\omega t - k z + \delta).
 $$
+::::
 
+::::{frame} Three numbers fix the polarization completely
 Three numbers fix the polarization completely: the amplitudes $E_{x}$
 and $E_{y}$, and the relative phase $\delta$ between them.
 
@@ -70,12 +96,16 @@ and $E_{y}$, and the relative phase $\delta$ between them.
 | $E_{x} = E_{y}$ | $+90^{\circ}$ | **Left-hand** circular (LHCP) |
 | $E_{x} \ne E_{y}$, $\delta = \pm 90^{\circ}$ | | Elliptical, axes on $\hat{x}$ / $\hat{y}$ |
 | Anything else | | Elliptical, tilted |
+::::
 
+::::{frame} Right or left hand?
 **IEEE convention** — point your right thumb along the direction of
 propagation. If the E-vector rotates in the direction your fingers
 curl, it's right-hand polarized. Left-hand is the mirror image.
+::::
 
-#### Interactive — polarization playground
+::::{frame} The E-vector trace changes from a line to an ellipse to a circle
+:class: viz-frame
 
 Move the sliders for $E_{x}$, $E_{y}$, and phase $\delta$ (or hit a
 preset) and watch the E-vector trace at a fixed $z$ change from a line
@@ -88,9 +118,9 @@ show what each linear channel sees.
         loading="lazy"
         title="Polarization playground">
 </iframe>
+::::
 
-### Axial ratio
-
+::::{frame} Axial ratio
 For the general elliptical case, the axial ratio is the ratio of the
 major axis of the ellipse to the minor axis:
 
@@ -98,14 +128,18 @@ $$
 \text{AR} = \frac{|E_{\text{maj}}|}{|E_{\text{min}}|}, \qquad
 \text{AR} \ge 1.
 $$
+::::
 
+::::{frame} The polarization ellipse
 Those are the two lengths marked on the ellipse below, along with the
 tilt of the ellipse in the transverse plane:
 
 <img src="../../viz/img/L03-axial-ratio.svg"
      alt="The polarization ellipse with its major and minor axes and its tilt angle; the axial ratio is the ratio of the two axes"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+::::
 
+::::{frame} A "CP antenna" is really a nearly-CP antenna
 In dB: $\text{AR}_{\text{dB}} = 20 \log_{10}(\text{AR})$.
 
 - $\text{AR} = 1$ (0 dB) — pure **circular** polarization.
@@ -119,7 +153,9 @@ power a linear antenna recovers **swings over a 3 dB range** as you
 rotate it — between $-1.8$ and $-4.8$ dB, rather than sitting at the
 flat $-3$ dB an ideal circular wave would give. Part 3 derives those two
 numbers.
+::::
 
+::::{frame} Worked example — axial ratio of a measured wave
 :::{admonition} Worked example — axial ratio of a measured wave
 :class: tip
 You measure a wave travelling along $+\hat{z}$:
@@ -136,7 +172,12 @@ is **elliptical** rather than circular, with the ellipse axes lying
 along $\hat{x}$ and $\hat{y}$ (the second-to-last row of the table
 above). The major axis is the larger amplitude and the minor axis the
 smaller:
+:::
+::::
 
+::::{frame} Worked example — right-hand elliptical
+:::{admonition} Worked example — right-hand elliptical
+:class: tip
 $$
 \text{AR} = \frac{3}{1} = 3,
 \qquad
@@ -148,9 +189,9 @@ So the wave is right-hand elliptical — and it would miss an
 than to circular, which is exactly what you would guess from a 3:1
 amplitude imbalance.
 :::
+::::
 
-### Polarization loss factor (PLF)
-
+::::{frame} Polarization loss factor (PLF)
 When a wave with polarization $\hat{\rho}_{\text{w}}$ arrives at an
 antenna with polarization $\hat{\rho}_{\text{a}}$, the fraction of
 incident power the antenna captures is the **polarization loss factor**:
@@ -162,7 +203,9 @@ $$
 The unit vectors are complex when either wave is not purely linear —
 that dot product hides the phase relationship between $E_{x}$ and
 $E_{y}$.
+::::
 
+::::{frame} PLF cheat sheet
 Five cases you should know cold:
 
 | Wave | Antenna | PLF | PLF (dB) |
@@ -176,21 +219,30 @@ Five cases you should know cold:
 Every row here assumes *perfect* circular polarization. Datasheets spec real "CP"
 hardware at AR ≤ 3 dB, which moves several of these numbers
 substantially; Part 3 prices the difference.
+::::
 
+::::{frame} Two linear antennas tilted by angle ψ
 For two linear antennas tilted by angle $\psi$ relative to each
 other, $\text{PLF} = \cos^{2}\psi$ — this is why aligning your
 handheld radio matters. (The tilt gets its own symbol $\psi$ because
-$\theta$ is already spoken for as the polar angle.) The curve is gentle
-near alignment and brutal near $90^{\circ}$:
+$\theta$ is already spoken for as the polar angle.)
+::::
+
+::::{frame} Polarization loss factor against tilt angle
+The curve is gentle near alignment and brutal near $90^{\circ}$:
 
 <img src="../../viz/img/L03-plf-cos2.svg"
      alt="Polarization loss factor against tilt angle between two linear antennas, falling as cosine squared from 1 at 0 degrees to 0 at 90 degrees, with the 0 dB, minus 3 dB, and minus infinity dB points marked"
-     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+     style="max-width: 700px; width: 100%; display: block; margin: .25em auto;">
 
+:::{depth}
 Thirty degrees of misalignment costs about a decibel; the last ten
 degrees before broadside costs everything.
+:::
+::::
 
-:::{admonition} Worked example — pricing two everyday mismatches
+::::{frame} Worked example — pricing two everyday mismatches (GPS and a linear whip)
+:::{admonition} Worked example — pricing two everyday mismatches (GPS and a linear whip)
 :class: tip
 A GPS satellite transmits RHCP; your receiver is a plain
 linear whip. This is the third row of the table — a linear antenna
@@ -206,7 +258,12 @@ $$
 Half the incident power is thrown away and no amount of turning the whip
 recovers it. That fixed 3 dB is the price of the rotation-immunity
 described in the next section.
+:::
+::::
 
+::::{frame} Worked example — pricing two everyday mismatches (two linear antennas)
+:::{admonition} Worked example — pricing two everyday mismatches (two linear antennas)
+:class: tip
 Now put linear antennas on *both* ends: a base-station dipole is
 vertical, and the handheld talking to it is tilted $\psi = 30^{\circ}$
 off vertical. Here the $\cos^{2}\psi$ rule applies:
@@ -223,8 +280,10 @@ practice it does not quite: multipath scatters some energy back into the
 orthogonal polarization, so a real cross-polarized null bottoms out
 somewhere around $-20$ dB rather than at zero.
 :::
+::::
 
-#### Interactive — CP wave in 3-D
+::::{frame} The E-vector traces a helix as the wave propagates
+:class: viz-frame
 
 The E-vector doesn't just rotate at a point — it traces a *helix* as
 the wave propagates. Toggle RHCP / LHCP to see the corkscrew flip
@@ -237,9 +296,9 @@ component sinusoids $E_{x}(z, t)$ and $E_{y}(z, t)$.
         loading="lazy"
         title="Circular polarization helix">
 </iframe>
+::::
 
-### Why satellite and GPS links use circular polarization
-
+::::{frame} Why satellite and GPS links use circular polarization
 Faraday rotation in the ionosphere rotates the plane of a linearly
 polarized wave by an unpredictable angle as it passes through — so a
 purely linear satellite downlink would fade in and out as ionospheric
@@ -250,11 +309,12 @@ when either end is only linear.
 
 The same argument applies whenever the receiver's orientation isn't
 fixed — cubesats tumble, handhelds rotate, aircraft bank.
+::::
 
-## Part 2: Bandwidth
+::::{frame} Part 2: Bandwidth
+::::
 
-### An antenna has multiple bandwidths
-
+::::{frame} An antenna has multiple bandwidths
 An antenna has multiple bandwidths, one for each parameter you care
 about:
 
@@ -266,7 +326,9 @@ about:
   beamwidth, sidelobe level) stays within spec.
 - **Polarization bandwidth** — range where axial ratio stays below a
   threshold, typically 3 dB.
+::::
 
+::::{frame} The three don't have to coincide
 The three don't have to coincide. You can match a patch antenna over
 a wider band than it produces good CP, so its polarization bandwidth
 is narrower than its impedance bandwidth. Stack the three bands against
@@ -275,12 +337,14 @@ frequency and the antenna is only usable where all of them overlap:
 <img src="../../viz/img/L03-bandwidth-intersection.svg"
      alt="Three spec bands plotted against frequency — a wide impedance bandwidth, a narrower pattern bandwidth, and a narrower still axial-ratio bandwidth — with the usable band marked where all three overlap"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+::::
 
+::::{frame} Quote the widest bar and you have quoted the impedance bandwidth
 Quote the widest bar and you have quoted the impedance bandwidth. Quote
 the overlap and you have quoted something a system can actually use.
+::::
 
-### Fractional and ratio bandwidth
-
+::::{frame} Fractional and ratio bandwidth
 Report bandwidth as a *fraction* of the center frequency, not just Hz:
 
 $$
@@ -295,7 +359,9 @@ For wideband antennas the more useful figure is the **ratio bandwidth** (RBW):
 $$
 \text{RBW} = \frac{f_{H}}{f_{L}}.
 $$
+::::
 
+::::{frame} Narrowband, broadband, ultra-wideband
 Rough categories:
 
 - **Narrowband** — FBW $\lesssim 5\%$. Resonant antennas: patches,
@@ -311,9 +377,9 @@ it is a demanding one. The FCC's regulatory definition is a separate and
 much looser test: a UWB emission is one whose fractional bandwidth is at
 least $0.20$ **or** whose absolute bandwidth is at least 500 MHz. An
 antenna can satisfy the FCC and still be nowhere near 2:1.
+::::
 
-### Size limits bandwidth
-
+::::{frame} Size limits bandwidth
 There is no free lunch. The **Chu-Harrington bound** ties minimum
 antenna Q to the smallest sphere that encloses the antenna:
 
@@ -331,27 +397,37 @@ $Q$ buys less band —
 $\text{FBW} \approx (s-1)/(Q\sqrt{s})$, or $\approx 0.71/Q$ at
 $s = 2$. Same physics, a factor of about $1.4$ apart, and worth
 knowing which one a datasheet has used.
+::::
 
+::::{frame} Minimum Q against electrical size
 <img src="../../viz/img/L03-chu-q-vs-ka.svg"
      alt="Minimum antenna Q against electrical size ka, rising steeply below ka equal to 1, with the corresponding approximate fractional bandwidth on the right axis"
-     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+     style="max-width: 700px; width: 100%; display: block; margin: .25em auto;">
+::::
 
+::::{frame} The knee sits at ka = 1
 The knee sits at $ka = 1$ — an antenna that just fills a sphere of
 radius $\lambda/2\pi$, where $Q \approx 2$. To the left of it the curve
 turns nearly vertical: that $1/(ka)^{3}$ term means halving the size
 octuples the minimum $Q$. Small antennas (small $ka$) inevitably have
-high $Q$ and narrow bandwidth. This is
+high $Q$ and narrow bandwidth.
+
+:::{depth}
+This is
 why AM broadcast receivers use physically small ferrite-loaded loops
 and get by with narrow bandwidth, while a WiFi router's antenna is
 already close to $\lambda/2$ and can afford tens of percent bandwidth.
+:::
+::::
 
+::::{frame} You can beat the bound — but only by adding loss
 You *can* beat the bound — but only by adding **loss**. Resistive
 loading damps the resonance and widens the band, and the wasted power
 comes straight out of gain. The bound constrains the lossless case; it
 never promised you could not build a bad antenna with a wide match.
+::::
 
-### Resonant, traveling-wave, and self-scaling
-
+::::{frame} Resonant antennas
 An antenna's bandwidth depends less on its material than on what the
 current does when it reaches the end of the structure.
 
@@ -363,7 +439,9 @@ $\ell \approx \lambda/2$. Move away in frequency and the pattern no
 longer fits: the input reactance climbs, the match collapses, and the
 band ends. One resonance buys one narrow band. Patches, half-wave
 dipoles, and slots all work this way.
+::::
 
+::::{frame} Traveling-wave and self-scaling antennas
 **Traveling-wave antennas.** Here the current is gone before it can
 come back — radiated away as it travels, or dumped into a resistive
 termination at the far end. With little or no reflected wave there is
@@ -377,9 +455,10 @@ structure as a scaled copy of itself, so that at every frequency *some*
 section of it is the right electrical size. That section is the active
 region, and it slides along the antenna as frequency changes.
 Log-periodics and spirals are the classic cases.
+::::
 
-:::{admonition} Key Point
-:class: key-concept
+::::{frame} Key point
+:::{callout}
 "Resonant" returns in L4 meaning something narrower — the frequency at
 which $X_{\text{in}} = 0$ and the input impedance is purely real. The
 two senses connect: a resonant *structure* is one you operate at
@@ -388,36 +467,43 @@ that frequency, which is exactly why it is narrowband.
 
 Module 2 takes these families apart one at a time, starting with the
 simple resonant antennas in L7.
+::::
 
-### Bandwidth by Antenna Type
-
+::::{frame} Bandwidth by Antenna Type
 | Antenna | Typical FBW | Application |
 | :--- | :---: | :--- |
 | Patch (single element) | 1 – 5% | GPS, cell handsets, tags |
 | Dipole (λ/2) | 8 – 15% | Broadcast, generic |
 | Slot antenna | 5 – 10% | Aircraft skins |
 | Horn (standard gain) | 30 – 50% | Test ranges, feeds |
+::::
+
+::::{frame} Bandwidth by Antenna Type — the wideband families
+| Antenna | Typical FBW | Application |
+| :--- | :---: | :--- |
 | Log-periodic | 10:1 RBW | Broadband probing |
 | Spiral | 10:1+ | Electronic warfare, DF |
 | Vivaldi / TSA | 10:1+ | UWB radar, phased arrays |
 | Biconical | 3:1+ | EMC testing |
 
+:::{depth}
 The rule of thumb, restated: **resonant antennas are narrowband;
 traveling-wave and self-scaling antennas are wideband.** Every row of
 the table is an instance of it — a patch has one resonant length and
 only works near it, while a log-periodic looks the same electrical size
 at every frequency in its band.
+:::
+::::
 
-## Part 3: Reading a datasheet — the two most misquoted specs
-
+::::{frame} Part 3: Reading a datasheet — the two most misquoted specs
 This lesson opened with a claim — that polarization and bandwidth are the
 two most misquoted specs on an antenna datasheet. Here is the evidence.
 None of what follows is a lie on the vendor's part. Each is a defensible
 reading of a real measurement, which is precisely why these survive all
 the way to a design review.
+::::
 
-### Misquote 1 — whose right hand?
-
+::::{frame} Misquote 1 — whose right hand?
 The handedness convention introduced above is the **IEEE** one: point
 your right thumb along the direction of propagation. There is a second
 convention in wide use.
@@ -426,7 +512,9 @@ convention in wide use.
 | :--- | :--- | :--- |
 | **IEEE** | *Along* propagation — the wave travels away from you | Antenna engineering, radar, this course |
 | **Optics / physics** | *Toward* the source — the wave comes at you | Optics, remote sensing, some older European sources |
+::::
 
+::::{frame} Same physical wave, opposite name
 The two label the *same physical wave* with *opposite* handedness. A part
 sold as "RHCP" under the optics convention is IEEE **LHCP**. Order its
 mate on the strength of the label and you have designed in a sense
@@ -436,14 +524,16 @@ that takes the whole link rather than a few dB of it.
 There is no clever fix, only a procedural one: on any CP datasheet,
 confirm which way the observer is facing before you commit to the other
 end of the link.
+::::
 
-### Misquote 2 — "circularly polarized" at what axial ratio?
-
+::::{frame} Misquote 2 — "circularly polarized" at what axial ratio?
 The PLF table above is the idealized one — it assumes perfect circular
 polarization, AR = 0 dB. Real hardware is sold as "circular" at
 AR ≤ 3 dB, and parts marketed as circular at 6 dB are not hard to find.
 It is worth knowing exactly what that costs.
+::::
 
+::::{frame} The polarization vector of a real CP antenna
 Work in the basis of the ellipse's own major and minor axes. An antenna
 with axial ratio $A$ (linear, $\ge 1$) has polarization unit vector
 
@@ -452,11 +542,16 @@ $$
 = \frac{A \hat{u}_{\text{maj}} + j \hat{u}_{\text{min}}}{\sqrt{A^{2}+1}},
 $$
 
+:::{depth}
 where the $+j$ makes the minor-axis component lag the major-axis one,
 which under the IEEE convention of Part 1 is one specific sense — take
 it as left-hand here; only the *relative* sign of the two $j$ terms
-matters for everything below. A linearly polarized wave arriving at
-angle $\psi$ from the major axis is
+matters for everything below.
+:::
+::::
+
+::::{frame} PLF as a function of orientation
+A linearly polarized wave arriving at angle $\psi$ from the major axis is
 $\hat{\rho}_{\text{w}} = \cos\psi \hat{u}_{\text{maj}} +
 \sin\psi \hat{u}_{\text{min}}$. Then
 
@@ -470,7 +565,9 @@ This single expression contains three rows of the earlier table. Set
 $A = 1$ (perfect CP) and it collapses to $1/2$ for *every* $\psi$ — the
 fixed $-3$ dB, independent of orientation. Let $A \to \infty$ (perfectly
 linear) and it becomes $\cos^{2}\psi$, the two-linear-antennas rule.
+::::
 
+::::{frame} The captured power swings between two limits
 In between, the captured power swings with orientation between
 
 $$
@@ -478,7 +575,9 @@ p_{\max} = \frac{A^{2}}{A^{2}+1}
 \qquad\text{and}\qquad
 p_{\min} = \frac{1}{A^{2}+1},
 $$
+::::
 
+::::{frame} Their ratio is what matters
 the powers in the major and minor axes respectively — note that
 $p_{\max} + p_{\min} = 1$, as it must be. Their ratio is what matters:
 
@@ -489,15 +588,18 @@ $$
 = 20\log_{10} A
 = \text{AR}_{\text{dB}}.
 $$
+::::
 
-:::{admonition} Key Point
-:class: key-concept
+::::{frame} Key point
+:::{callout}
 The peak-to-null swing in received power, expressed in dB, **equals the
 axial ratio in dB**. A "3 dB CP" antenna does not cost a flat 3 dB
 against a linear antenna — it costs between 1.8 and 4.8 dB depending on
 an orientation you usually do not control.
 :::
+::::
 
+::::{frame} The same treatment prices the other idealization
 The same treatment prices the *other* idealization. Two antennas of equal
 axial ratio, opposite sense, major axes aligned, gives
 $\hat{\rho}_{\text{b}} = (A \hat{u}_{\text{maj}} - j \hat{u}_{\text{min}})/\sqrt{A^{2}+1}$
@@ -507,7 +609,9 @@ $$
 \text{PLF}_{\text{cross}}
 = \left| \frac{A^{2} - 1}{A^{2} + 1} \right|^{2}.
 $$
+::::
 
+::::{frame} What 3 dB of axial ratio actually costs
 At $A = 1$ this is zero — the $-\infty$ dB in the ideal table. At a real
 3 dB axial ratio it is $-9.6$ dB. Collecting the numbers:
 
@@ -520,14 +624,16 @@ At $A = 1$ this is zero — the $-\infty$ dB in the ideal table. At a real
 The lesson: the "infinite" cross-polarization rejection of opposite-sense
 CP is worth about 10 dB in practice, and at 6 dB axial ratio it is worth
 4.5 dB — essentially no isolation at all. Budget accordingly.
+::::
 
-### Misquote 3 — "4% bandwidth" of what?
-
+::::{frame} Misquote 3 — "4% bandwidth" of what?
 Recall that an antenna has impedance, pattern, and polarization
 bandwidths, and that they need not coincide. A single quoted bandwidth
 figure is nearly always the **impedance** bandwidth — generally the
 **widest** of the three, and so the most flattering.
+::::
 
+::::{frame} The usable band is the intersection
 Two further qualifications usually go unstated:
 
 - **Threshold.** "Impedance bandwidth" means nothing until you state the VSWR
@@ -540,34 +646,46 @@ Two further qualifications usually go unstated:
 The usable band is the **intersection** of all three bandwidths, over the
 scan angles you actually operate at. A CP patch matched over 4% may hold
 AR ≤ 3 dB over barely 1% of it, and only near boresight.
+::::
 
+::::{frame} How to read the spec properly
 ```{admonition} How to read the spec properly
 :class: note
 "Bandwidth" is underspecified until you have said *which* bandwidth, *at
 what threshold*, and *over what scan angle*. Ask all three.
 ```
+::::
 
-## Summary
-
+::::{frame} Summary — polarization
 | Symbol / idea | What it is | Number to remember |
 | :--- | :--- | :--- |
 | Polarization | The curve the tip of $\mathbf{E}$ traces at a fixed point | Fixed by three numbers: $E_{x}$, $E_{y}$, $\delta$ |
 | $\text{AR}$ | Major axis over minor axis of the polarization ellipse | 0 dB = pure CP, $\infty$ dB = pure linear; hardware sells at $\le 3$ dB |
 | $\text{PLF}$ | Fraction of incident power a mismatched polarization lets through | $\text{PLF} = \lvert\hat{\rho}_{\text{w}} \cdot \hat{\rho}_{\text{a}}^{*}\rvert^{2}$; $\cos^{2}\psi$ for two linears |
+::::
+
+::::{frame} Summary — the misquotes
+| Symbol / idea | What it is | Number to remember |
+| :--- | :--- | :--- |
 | CP against a linear antenna | Ideal CP is orientation-blind; real CP is not | $-3$ dB flat at AR = 0 dB; $-1.8$ to $-4.8$ dB at AR = 3 dB |
 | Wrong circular sense | The "infinite" cross-pol rejection is finite in hardware | $-9.6$ dB at AR = 3 dB, $-4.5$ dB at AR = 6 dB |
 | Handedness | IEEE faces along propagation, optics faces the source | Opposite labels for the same wave — confirm before you order the mate |
+::::
+
+::::{frame} Summary — bandwidth
+| Symbol / idea | What it is | Number to remember |
+| :--- | :--- | :--- |
 | The three bandwidths | Impedance, pattern, polarization; the usable band is their intersection | $\text{FBW} = (f_{H} - f_{L})/f_{c}$, at VSWR $\le 2$ unless stated |
 | Chu-Harrington bound | Minimum $Q$ set by the smallest enclosing sphere | $\text{FBW} \approx 1/Q$ (half-power), $\approx 0.71/Q$ at VSWR $\le 2$; knee at $ka = 1$, $Q \approx 2$ |
 | Antenna families | Resonant narrow, traveling-wave and self-scaling wide | Patch 1–5%, dipole 8–15%, horn 30–50%, spiral and Vivaldi 10:1 |
+::::
 
-## Practice
-
+::::{frame} Practice
 - <a href="../../practice/ECE444_L03_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
 - <a href="../../practice/ECE444_L03_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+::::
 
-## Where this is going
-
+::::{frame} Where this is going
 Lesson 4 takes the impedance side of the story apart. Bandwidth was
 defined here as the span over which the match holds; next lesson you see
 what sets that match in the first place — input impedance, $S_{11}$, feed
@@ -583,3 +701,4 @@ pulses to read a target's scattering matrix. Before Lesson 4, read the
 assigned sections on **input impedance, feed lines, and baluns**, and
 come ready to say what a "50 Ω antenna" actually means and why a dipole
 fed by coax needs a balun.
+::::

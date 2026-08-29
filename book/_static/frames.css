@@ -280,3 +280,48 @@ iframe.viz {
   padding-top: clamp(1.8rem, 4vh, 3rem);
   padding-bottom: clamp(3rem, 6vh, 4.5rem);
 }
+
+/* ---- print ------------------------------------------------------------ */
+/* `.deck` is a fixed-height scroll container so present mode can pin one
+   frame per viewport -- exactly what print cannot have. Left alone, print
+   sees the container's one clipped viewport and the whole lesson comes out
+   as a single sheet with the bottom bar stamped on it. Let the deck flow
+   like an ordinary document, and cut that flow back into one sheet per frame
+   -- `break-after` -- so a printed frame has room to write beside it, the
+   way a slide handout would.
+
+   Every rule here carries `!important`: the selectors it is overriding
+   (`[data-mode="present"] .frame`, `.deck`, `.depth`) are not, so cascade
+   order alone would not be enough to win against whichever mode the page
+   happened to be in when it was sent to the printer. */
+@media print {
+  .deck {
+    height: auto !important;
+    overflow: visible !important;
+    scroll-snap-type: none !important;
+  }
+  .frame {
+    min-height: 0 !important;
+    scroll-snap-align: none !important;
+    scroll-snap-stop: normal !important;
+    break-after: page;
+  }
+
+  /* Print has no mode toggle, so it always renders as read mode: the depth
+     is the rest of the lesson, not an aside collapsed behind a button,
+     whichever mode the screen happened to be in. */
+  .depth {
+    display: flex !important;
+    border-left: none !important;
+    padding-left: 0 !important;
+  }
+  /* "More detail +" is a screen affordance for revealing the depth above --
+     on paper the depth is already there, so the button would just be a
+     button that does nothing. */
+  .more { display: none !important; }
+
+  /* Screen-only chrome: the bottom bar and its panels, the progress rail,
+     the jump overlay, and the presenter's laser and spotlight. None of it
+     means anything on a printed page. */
+  .hud, .rail, .index, .laser, .spot { display: none !important; }
+}
