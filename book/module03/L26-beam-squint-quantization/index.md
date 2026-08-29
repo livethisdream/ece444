@@ -177,6 +177,8 @@ The ADAR1000 does not accept an arbitrary phase. It has a $B$-bit phase shifter,
 $$\text{LSB} = \frac{360^\circ}{2^B}.$$
 
 The ADAR1000 uses $B = 7$, giving 128 states and an LSB of $2.8125^\circ$.
+Everything the beamformer commands gets rounded to that grid, with two separate
+consequences.
 ::::
 
 ::::{frame} Pointing granularity

@@ -222,6 +222,8 @@ with $\sigma$ the RMS surface error. This course uses the result without derivin
 
 ::::{frame} The efficiency budget
 
+Multiply the pieces to get a budget:
+
 | Loss term | Typical | Why |
 | :-- | :-- | :-- |
 | Spillover | 0.90 | power past the rim |
