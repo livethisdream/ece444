@@ -35,7 +35,7 @@ uniform, and treating them as one batch of 41 wastes most of the run:
 | :-- | :-- | :-- | :-- |
 | Authored | L01–L28, plus `L04-lab-matching` | 2,300–5,600 words, practice sets, decks | **Convert.** This is the work. |
 | Stubs | L29–L41 | 64–137 words: a title, an LO list, an "under construction" note | **Leave alone.** |
-| Already converted | L05a | frame page | Leave. See the open question below. |
+| Duplicate | L05a | the frame-view copy of L05, built as the experiment | **Retire it** once L05 is converted — see below. |
 
 A 68-word stub has no beats to break into frames. Wrapping one in frame
 directives produces a single frame that says "under construction" and costs a
@@ -203,11 +203,29 @@ compares zero pages is a failure, not a pass.
   them as a side effect — `git checkout` any that show up in `git status`.
 - Do not convert the stubs.
 
-## Two open questions — bring them to Neil, do not decide them
+## Retiring L05a
 
-1. **L05 and L05a.** L05a is the frame-view copy of L05, built as the
-   experiment. Once L05 itself is a frame page they are near-duplicates, both
-   in the TOC, both in the search index. L05a is also the worked example
-   `CLAUDE.md` and `FRAMES_ARCHITECTURE.md` point at.
-2. **The manual `## Contents` sections** on some lesson pages now duplicate
-   what the index overlay shows. Removing them is a content decision.
+`L05a-field-regions-frames` is the frame-view copy of L05, built as the
+experiment that proved the format. Neil's call: **one L05.** Once L05 itself is
+a frame page the two are near-duplicates — both in the TOC, both in the search
+index — and the copy goes.
+
+Order matters. L05a is the reference example the docs point at, so do not
+delete it until its replacement exists and passes:
+
+1. Convert `L05-field-regions` and let `mech_check.sh 05 field-regions` pass.
+2. Read the two pages side by side and move anything L05a has that L05 does
+   not. L05a was authored separately and is 2,867 words against L05's 2,627 —
+   assume it has beats worth keeping until you have checked, and check by
+   diffing the rendered text, not by skimming.
+3. Delete the `L05a-field-regions-frames` entry from the `LESSONS` manifest in
+   `scripts/scaffold_lessons.py` (it is the tuple on the line beginning
+   `(1, "L05-field-regions", "L05a-field-regions-frames"`), re-run the script
+   to regenerate `_toc.yml`, and delete the directory.
+4. Repoint every reference to the worked example at L05: `CLAUDE.md`,
+   `project/FRAMES_ARCHITECTURE.md`, `README.md`. Grep for `L05a` and leave
+   none behind except in historical notes.
+5. The L05 page links to L05a as "frame view". That link becomes a link to
+   itself — remove it and the paragraph explaining it.
+
+L05a has no practice set or deck of its own; L05's are the real ones and stay.
