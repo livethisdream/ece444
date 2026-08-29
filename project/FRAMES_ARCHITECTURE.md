@@ -8,6 +8,12 @@ is gone: it was the *old* approach, it still carried the old bottom-right bar,
 and the L05 page linked to it as "frame view", so a reader following that link
 landed on a stale duplicate of the lesson rather than on L05a.
 
+**Decks stay** (2026-08-29, Neil): converting a lesson to a frame page does not
+retire its reveal.js deck. They are a parallel pair while the frame view is
+proven in front of real classes, and `mech_check.sh` still requires and
+render-checks the deck for every lesson. This is the "keep it until I'm sure I
+don't need it" call, not a permanent answer.
+
 The question this answers: if a lesson's deck and its page become one
 scroll-frame document, where does the source live and what generates what?
 

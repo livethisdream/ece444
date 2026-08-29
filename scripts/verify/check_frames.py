@@ -5,6 +5,9 @@ A frame taller than the viewport is the same defect an overflowing slide was
 in the deck: nothing errors, the build is happy, and the bottom of the frame is
 simply not there when you present it. Checked at a phone and a laptop, because
 a frame that fits one can overflow the other.
+
+    check_frames.py                 # every frame page in the book
+    check_frames.py L07-dipoles     # only pages whose path contains this
 """
 import pathlib, sys
 
@@ -39,8 +42,12 @@ PROBE = """() => {
 
 def main():
     require_vendored()
+    # An optional path filter, so the per-lesson gate in mech_check.sh can hold
+    # one converted lesson to the budget without sweeping all 41.
+    want = sys.argv[1] if len(sys.argv) > 1 else ""
     pages = sorted(p for p in ROOT.rglob("*.html")
-                   if p.relative_to(ROOT).parts[0] not in ("slides", "viz", "frames", "_static"))
+                   if p.relative_to(ROOT).parts[0] not in ("slides", "viz", "frames", "_static")
+                   and want in p.relative_to(ROOT).as_posix())
     httpd, port = serve(ROOT)
     over, checked, scrollable = [], 0, 0
     with sync_playwright() as pw:
@@ -77,6 +84,11 @@ def main():
         browser.close()
     httpd.shutdown()
 
+    if want and not checked:
+        # Silence here would read as a pass. If the filter matched nothing, or
+        # matched a page that is not a frame page, say so and fail.
+        print(f"no frame page matched {want!r} -- nothing was checked")
+        return 1
     print(f"checked {checked} frame-page renders at two widths"
           f" ({scrollable} frames scroll by design and are exempt)")
     if over:

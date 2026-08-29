@@ -41,9 +41,32 @@ scripts/verify/check_shell.py    # every page: no sideways scroll at 390px, no
                                  # JS error, the HUD's site button with its
                                  # panel closed, no theme asset sneaking back
 scripts/verify/check_frames.py   # every frame fits one screen in present mode
-scripts/verify/check_bar.py      # the HUD's three groups: same height, one row,
-                                 # pinned to the bar's thirds, and every panel
-                                 # placed under its own button and clickable
+scripts/verify/check_bar.py      # the bottom bar: centred in the window, outer
+                                 # runs equal, middle run centred in the pill,
+                                 # nothing wrapped, panels clickable
+scripts/verify/check_parity.py <baseline-html-dir>
+                                 # did the change quietly drop content?
+```
+
+`check_parity.py` needs a baseline built from whatever you are changing *from*:
+
+```sh
+git worktree add /tmp/base main
+(cd /tmp/base && jupyter-book build book/ --all)
+scripts/verify/check_parity.py /tmp/base/book/_build/html
+```
+
+It compares the rendered text and the component counts (callouts, two-col, LO
+lists, module TOCs, math nodes, tables) of every page present in both builds.
+A run that compares **zero** pages fails rather than passes — it was silently
+vacuous once, when a new template's content region matched none of its
+patterns.
+
+`check_frames.py` takes an optional path filter, which is how the per-lesson
+gate holds one converted lesson to the budget without sweeping all 41:
+
+```sh
+scripts/verify/check_frames.py L07-simple-resonant-antennas
 ```
 
 `check_frames.py` is the frame-page equivalent of `check_deck.py`'s height

@@ -12,6 +12,11 @@
 # Requires the vendored render harness (cd scripts/verify && npm install) and,
 # for the practice build, the private latex-tools macros:
 #   TEXINPUTS=/workspace/latex-tools/tex/latex//:
+#
+# This gate is per-lesson. Two sweeps are site-wide and belong at the END of a
+# batch, not here -- run them once when the batch is done:
+#   scripts/verify/check_shell.py    every page, two widths
+#   scripts/verify/check_bar.py      the HUD's geometry on both shells
 set -u
 
 if [ $# -lt 2 ]; then
@@ -102,6 +107,21 @@ if python3 "$HERE/check_deck.py" "$LNN" >"/tmp/mc_deck_$NN.log" 2>&1; then
   ok "deck render: $(grep -m1 -E '^[A-Za-z0-9._-]+: [0-9]+ slides' "/tmp/mc_deck_$NN.log")"
 else
   bad "deck render (see /tmp/mc_deck_$NN.log)"
+fi
+
+# 3c. frame budget -- only for a lesson that has opted into the frame view.
+# A frame taller than the viewport is the deck's "slide too tall" defect in a
+# new place: the build is happy and the bottom of the frame is simply gone when
+# you present it. It has shipped that way before, so it is a gate, not a sweep.
+if grep -qE '^frame_view:' "$page"; then
+  if fr=$(python3 "$HERE/check_frames.py" "$LNN" 2>&1); then
+    ok "frame budget: $(echo "$fr" | head -1)"
+  else
+    bad "frames over budget"
+    echo "$fr" | sed 's/^/        /'
+  fi
+else
+  ok "not a frame page (no frame_view in front matter)"
 fi
 
 # 4. widget render, height, overflow, aspect

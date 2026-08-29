@@ -21,6 +21,10 @@ conflict magnet: keep edits to it small and localized.
 | `book/extras/viz/img/*.svg` | lesson-page figures |
 | `book/extras/practice/*.pdf` | **committed** practice PDFs — what the site actually serves |
 | `latex/ECE444_Practice_L<NN>.tex` | practice source; `_main.tex` is the harness |
+| `book/_templates/` | the shell: `frame.html`, `page.html`, `_sitenav.html` |
+| `book/_static/shell.*` | palette, type, the bottom bar, the index overlay — every page |
+| `book/_static/frames.*` | frame lessons only; `page.*` reading pages only |
+| `book/_ext/frames.py` | the `:::{frame}` directives, and which template a page gets |
 | `scripts/` | deck HTML generator, lesson scaffolder, figure generators |
 
 ## Build and verify
@@ -46,6 +50,23 @@ Both build scripts run **lualatex**: body text is Barlow, vendored in
 Math is deliberately left in Computer Modern. Building with pdflatex still
 compiles — the font setup is guarded by `\ifLuaTeX` — but silently falls back to
 Computer Modern throughout, so the PDF is not the one we ship.
+
+Three checks are site-wide rather than per-lesson. Run them once at the end of
+a batch, not per page:
+
+```sh
+scripts/verify/check_shell.py     # every page at 390 and 1280: no sideways
+                                  # scroll, no JS error, no theme asset
+scripts/verify/check_bar.py       # the bottom bar's geometry, both shells
+scripts/verify/check_parity.py <baseline-html-dir>
+                                  # did this change quietly drop content?
+```
+
+`check_parity.py` wants a baseline built from whatever you are changing *from*
+(`git worktree add /tmp/base main && cd /tmp/base && jupyter-book build book/
+--all`). It compares rendered text and component counts page for page. The
+pages you meant to rewrite will be listed — that is the point; the list should
+be exactly the pages you touched.
 
 **Verify by rendering, not by reading.** Headless chromium is available. The CDNs
 (jsdelivr, Google Fonts) are blocked in these containers, so reveal.js and MathJax
@@ -91,6 +112,46 @@ The markdown parser mangles LaTeX in four specific ways:
   separator — L04 shipped two merged pairs measuring 1235px and 1710px. Run
   `scripts/verify/check_separators.py` before trimming any slide for height.
 
+**Frame lessons (`frame_view: true`)**
+
+A frame lesson is an ordinary MyST page whose body is `:::{frame}` directives —
+the lesson page and its deck merged into one document, one full-viewport frame
+per beat. `book/module01/L05a-field-regions-frames/` is the worked example; the
+landing page and the five module overviews are built the same way.
+
+- **A frame's title is a directive ARGUMENT, not a heading.** `::::{frame} The
+  three regions`, never `## The three regions` inside the frame. docutils
+  demotes a heading inside a container to a rubric, so the `##` form silently
+  loses its place in the document structure.
+- **Fence lengths nest.** The frame is `::::`, anything inside it — `callout`,
+  `depth`, `note` — is `:::`. Same-length fences close the outer block early
+  and the rest of the frame lands outside it.
+- **Every frame must fit one screen in present mode.** This is the deck's
+  "slide too tall" defect in a new place: nothing errors, the build is happy,
+  and the bottom of the frame is simply gone when you present it. Five such
+  frames sat on L05a for weeks. `scripts/verify/check_frames.py <LNN>` measures
+  it, and `mech_check.sh` gates on it for any page with `frame_view` set.
+- **A bare `<img>` is capped at 58vh** in present mode, and a widget frame
+  (`:class: viz-frame`) is allowed to scroll — a widget stacks its own controls
+  as it narrows and genuinely cannot be shrunk to fit. Nothing else may scroll.
+- **`:::{depth}` is the detail that shows in read mode and hides in present.**
+  It is always in the DOM, so it stays searchable and stays in the page's text.
+- MyST is immune to the whole `marked` gotcha class above — Sphinx renders the
+  math once. The raw-HTML rule still bites: no `$…$` inside a raw `<ol><li>`.
+
+**The shell**
+
+Every page is chrome-free: no sidebar, no header, one centred bar at the bottom
+(`ECE 444 | present tools | 12/27`). `book/_ext/frames.py` routes each page to
+`frame.html`, `page.html`, or the theme. Two things to know before touching it:
+
+- `ece444_shell: false` in `_config.yml` reverts the whole site to the theme in
+  one line. `shell: false` in a page's front matter does it for one page.
+- `custom.css` is **load-bearing and mis-scoped**: 149 of its 256 rules are
+  scoped `.bd-article`, the theme's wrapper, and that is where every content
+  component lives. Both templates carry `class="bd-article"` for exactly that
+  reason. Do not remove it without rewriting those rules.
+
 **Build**
 
 - A change touching only `book/extras/**` leaves Sphinx with no out-of-date
@@ -134,6 +195,12 @@ The markdown parser mangles LaTeX in four specific ways:
   build diverges from the real one by 2–4% of pixels, with the error accumulating
   into visibly different vertical placement down each page, so the set would not
   match its siblings in front of students. Real macros or no PDF.
+- **Don't delete a lesson's reveal.js deck when it becomes a frame page.**
+  Course decision (2026-08-29): the decks stay while the frame view is still
+  being proven in front of real classes. A frame lesson and its deck are a
+  parallel pair on purpose — `mech_check.sh` still requires the deck `.md` and
+  `.html` for every lesson, and still render-checks it. Revisit only when Neil
+  says the decks are no longer needed.
 - **Don't switch the decks to Beamer.** reveal.js is a deliberate choice — the
   course is demo-heavy and the decks integrate with the interactive widgets.
 - **Don't link a practice PDF that has not been built yet.** Add the Practice
