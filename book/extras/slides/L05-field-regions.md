@@ -147,7 +147,7 @@ The same reactive power you met at the terminals in L4 — now seen from <em>out
 Right up against the antenna the field is **stored energy**, not radiation — the $1/r^{2}$ and $1/r^{3}$ terms, sloshing in and out each cycle.
 
 - Like the field around a charged capacitor or a current-carrying inductor.
-- Put a receiver here and it **loads the antenna** and changes its behaviour.
+- Put a receiver here and it **loads the antenna** and changes its behavior.
 - Which is also why you keep hands, heads, and hardware out of it.
 
 **It falls off fast. Take one step out and it is gone.**
@@ -223,7 +223,7 @@ flat enough across D.
 
 ## The phase-error budget
 
-Extra path from the source to the aperture **edge** over the path to its **centre**:
+Extra path from the source to the aperture **edge** over the path to its **center**:
 
 $$ \Delta \approx \frac{(D/2)^{2}}{2r} = \frac{D^{2}}{8r} $$
 
@@ -247,7 +247,7 @@ $2D^{2}/\lambda$ is a <strong>budget</strong>, not a wall — inside it aperture
 | far-field distance | $2(1.2)^{2}/0.03$ | $\mathbf{96\ m}$ |
 | radiating near-field | everything between | $4.7$ to $96\ \text{m}$ |
 
-**Almost a hundred metres of separation to measure a dish you can carry.**
+**Almost a hundred meters of separation to measure a dish you can carry.**
 
 Note:
 Have them notice the D-squared: go to 20 GHz and the far field starts at 192 m,
@@ -259,7 +259,7 @@ for the same dish.
 
 To measure a true pattern, gain, or sidelobe level, the antenna under test must sit in the **far field** of the source — and the source in the far field of the antenna.
 
-- A large dish at high frequency wants **hundreds of metres** of clear, reflection-free range.
+- A large dish at high frequency wants **hundreds of meters** of clear, reflection-free range.
 - Often impractical, sometimes impossible indoors.
 
 **So instead: measure close in, on a surface in the radiating near-field, and propagate the result out mathematically — near-field scanning, in Module 2.**

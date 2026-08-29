@@ -70,7 +70,7 @@ Make them write this down. Everything else today is a corollary. If a student ca
 
 $$G = \eta_{\text{ap}} \frac{4\pi A}{\lambda^2} \quad\quad A_e = \eta_{\text{ap}} A = \frac{G \lambda^2}{4\pi}$$
 
-- $A/\lambda^2$ counts **square wavelengths**, not square metres
+- $A/\lambda^2$ counts **square wavelengths**, not square meters
 - An aperture is never simply *big* — it is big **at a frequency**
 - Circular dish of diameter $D$: $\quad G = \eta_{\text{ap}} \left( \pi D / \lambda \right)^2$
 - Good reflectors: $\eta_{\text{ap}} \approx 0.55$ to $0.7$; horns $\approx 0.5$
@@ -173,7 +173,7 @@ f/D is the first number on any reflector data sheet. It tells the feed designer 
 <div class="fig" data-inline-svg="./fig/L11-illumination-taper.svg" style="max-width:860px; margin:0 auto;"></div>
 
 <div class="callout">
-<p>Rule of thumb: illuminate the rim about <strong>10 dB below centre</strong>.</p>
+<p>Rule of thumb: illuminate the rim about <strong>10 dB below center</strong>.</p>
 </div>
 
 Note:
@@ -219,7 +219,7 @@ Do not derive it. Note that phase error enters as an exponential, which is why s
 | Loss term | Typical | Why |
 | :-- | :-- | :-- |
 | Spillover | 0.90 | power sails past the rim |
-| Illumination taper | 0.85 | rim darker than centre |
+| Illumination taper | 0.85 | rim darker than center |
 | Blockage | 0.95 | feed and struts in the beam |
 | Surface (Ruze) | 0.94 | phase errors across the aperture |
 | Everything else | 0.97 | cross-pol, feed loss, misc. |
@@ -335,7 +335,7 @@ Cubesat ground station. $\lambda = 0.125$ m, $G = 20$ dBi $= 100$, so $A_e = G \
 **Take the dish:** fewest parts, widest band, lowest cost. Take the array the moment you need a flat profile or electronic steering.
 
 Note:
-Every candidate has to deliver the same 0.124 square metres of coherent area. That is the whole selection argument in one number.
+Every candidate has to deliver the same 0.124 square meters of coherent area. That is the whole selection argument in one number.
 
 ---
 

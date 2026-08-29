@@ -81,7 +81,7 @@ ends up.
 
 ## Why small antennas are hard
 
-Infinitesimal (Hertzian) dipole, uniform current — and the practical centre-fed short dipole, whose current tapers to zero at the tips:
+Infinitesimal (Hertzian) dipole, uniform current — and the practical center-fed short dipole, whose current tapers to zero at the tips:
 
 $$ R_\text{rad} = 80\pi^2\left(\frac{\ell}{\lambda}\right)^2 \qquad\text{vs}\qquad R_\text{rad} = 20\pi^2\left(\frac{\ell}{\lambda}\right)^2 $$
 
@@ -216,7 +216,7 @@ Print any $Z_1$ you like on a board — but you cannot <em>buy</em> 31.6 $\Omega
 Note:
 Microwave PCB, where any Z1 is a trace width and lumped parts have ugly
 parasitics — take the transformer. HF with off-the-shelf coax, where a quarter
-wave is tens of metres and only 50 and 75 Ω exist — take the L-match. That
+wave is tens of meters and only 50 and 75 Ω exist — take the L-match. That
 second row is exactly why the matching lab is lumped.
 
 ---
@@ -328,10 +328,10 @@ alongside −j40.8" tells you that you have arrived with one cancellation to go.
 
 Note:
 This is the picture, and they already own the tool from ECE 343 — same chart,
-same circles. Walk it live: the antenna sits low and left of centre, capacitive.
+same circles. Walk it live: the antenna sits low and left of center, capacitive.
 A SERIES element can only move you along a constant-resistance circle, so walk
 up that circle until you cross the unit-conductance circle. Now a SHUNT element
-moves you along constant conductance, straight into the centre. Two moves, two
+moves you along constant conductance, straight into the center. Two moves, two
 elements. Emphasise that the series element cannot change the resistance and the
 shunt element cannot change it back — that is why the order is forced.
 

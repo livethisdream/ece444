@@ -271,8 +271,8 @@ Half-wave spacing makes the elements' contributions orthogonal, which is the dee
 | Configuration | $2Nd/\lambda$ | $D$ | dB |
 | :-- | :-- | :-- | :-- |
 | 8 elements | $2(8)(0.481)$ | $7.7$ | $8.9$ dB |
-| Centre 4 | $2(4)(0.481)$ | $3.85$ | $5.9$ dB |
-| Centre 2 | $2(2)(0.481)$ | $1.92$ | $2.8$ dB |
+| Center 4 | $2(4)(0.481)$ | $3.85$ | $5.9$ dB |
+| Center 2 | $2(2)(0.481)$ | $1.92$ | $2.8$ dB |
 
 <div class="callout">
 Halving the array costs exactly <strong>3 dB</strong> and doubles the beamwidth. Both come from the same aperture.
@@ -363,8 +363,8 @@ Worth a minute of discussion: is the beam out at 45 degrees often enough to just
 | Configuration | Aperture | HPBW | FNBW | First sidelobe |
 | :-- | :-- | :-- | :-- | :-- |
 | 8 elements | $3.85\ \lambda$ | $13.2^\circ$ | $30.1^\circ$ | $-13$ dB |
-| Centre 4 | $1.92\ \lambda$ | $27^\circ$ | $62^\circ$ | $-11$ dB |
-| Centre 2 | $0.96\ \lambda$ | $62^\circ$ | $180^\circ$ by convention | none |
+| Center 4 | $1.92\ \lambda$ | $27^\circ$ | $62^\circ$ | $-11$ dB |
+| Center 2 | $0.96\ \lambda$ | $62^\circ$ | $180^\circ$ by convention | none |
 
 - Two elements: $\lambda/Nd > 1$, so there is **no null in visible space**
 - Sweep grid is $2.8125^\circ$, so measured widths land $1$ to $3^\circ$ off

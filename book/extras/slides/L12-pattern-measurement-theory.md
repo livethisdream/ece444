@@ -64,7 +64,7 @@ Reciprocity carries the argument: measure in receive, publish as transmit. State
 <div class="fig" data-inline-svg="./fig/L12-range-geometry.svg" style="max-width:700px; margin:0 auto;"></div>
 
 - **Amplitude taper** — the source antenna's own pattern falls off across the AUT. Spec: under 0.25 dB edge to edge.
-- **Phase curvature** — the spherical wavefront runs behind at the edges. Spec: under 22.5° edge to centre, and it is the spec that sets the range length.
+- **Phase curvature** — the spherical wavefront runs behind at the edges. Spec: under 22.5° edge to center, and it is the spec that sets the range length.
 
 Note:
 Two knobs, and students always remember only the second. The amplitude one is why the source antenna on a range is deliberately a modest-gain horn, not the biggest dish available.
@@ -73,7 +73,7 @@ Two knobs, and students always remember only the second. The amplitude one is wh
 
 ## Where 2D²/λ actually comes from
 
-The extra path from the source to the aperture edge, over the path to the centre, is the sagitta of the wavefront:
+The extra path from the source to the aperture edge, over the path to the center, is the sagitta of the wavefront:
 
 $$\Delta \ell \approx \frac{(D/2)^2}{2r} = \frac{D^2}{8r}$$
 
@@ -231,7 +231,7 @@ The deliverable of a chamber is not the room. It is a **volume** — usually a s
 
 <div class="fig" data-inline-svg="./fig/L12-compact-range.svg" style="max-width:680px; margin:0 auto;"></div>
 
-- The L11 parabola run backwards: feed at the focus, every path to the aperture plane the same length, plane wave a few metres later.
+- The L11 parabola run backwards: feed at the focus, every path to the aperture plane the same length, plane wave a few meters later.
 - Quiet zone is roughly **50–60% of the reflector aperture**, so the reflector is much bigger than the AUT.
 - The rim is **serrated or rolled** — a hard edge diffracts, and that diffraction is a second source sitting inside your quiet zone.
 

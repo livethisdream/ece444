@@ -63,7 +63,7 @@ $$
 G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}
 $$
 
-with $A$ the physical aperture area and $\eta_{\text{ap}}$ the **aperture efficiency** — the fraction of that area you actually manage to use. Read the physics before the algebra: $A/\lambda^2$ counts how many square wavelengths the antenna spans, and gain is proportional to that count. An aperture is not "big" in metres. It is big in wavelengths.
+with $A$ the physical aperture area and $\eta_{\text{ap}}$ the **aperture efficiency** — the fraction of that area you actually manage to use. Read the physics before the algebra: $A/\lambda^2$ counts how many square wavelengths the antenna spans, and gain is proportional to that count. An aperture is not "big" in meters. It is big in wavelengths.
 ::::
 
 ::::{frame} The circular-dish shortcut
@@ -155,7 +155,7 @@ $$
 \overline{FP} + \overline{PA} = (f + z_P) + (z_a - z_P) = f + z_a
 $$
 
-The $z_P$ cancels. **Every ray, edge to centre, takes the same path length**, so every point of the aperture plane is in phase. That single line of algebra is the entire reason parabolic reflectors exist.
+The $z_P$ cancels. **Every ray, edge to center, takes the same path length**, so every point of the aperture plane is in phase. That single line of algebra is the entire reason parabolic reflectors exist.
 ::::
 
 ::::{frame} f/D sets the feed's job
@@ -193,7 +193,7 @@ The feed has a pattern. Aim a narrow feed at the dish and the rim sits 20 dB dow
 
 ::::{frame} The 10 dB rule
 
-These two losses pull in opposite directions, so there is an optimum, and it is famous: **illuminate the rim about 10 dB below the centre**. That is the house rule of thumb for reflector feeds, and it is why a dish's aperture distribution always looks like one of the tapers from Lesson 6 — with the sidelobe benefit that comes along for free ($-13.3$ dB for uniform, but a real dish runs closer to $-20$ dB because of the taper).
+These two losses pull in opposite directions, so there is an optimum, and it is famous: **illuminate the rim about 10 dB below the center**. That is the house rule of thumb for reflector feeds, and it is why a dish's aperture distribution always looks like one of the tapers from Lesson 6 — with the sidelobe benefit that comes along for free ($-13.3$ dB for uniform, but a real dish runs closer to $-20$ dB because of the taper).
 ::::
 
 ::::{frame} Blockage
@@ -227,7 +227,7 @@ Multiply the pieces to get a budget:
 | Loss term | Typical | Why |
 | :-- | :-- | :-- |
 | Spillover | 0.90 | power past the rim |
-| Illumination taper | 0.85 | rim darker than centre |
+| Illumination taper | 0.85 | rim darker than center |
 | Blockage | 0.95 | feed and struts in the beam |
 ::::
 
@@ -346,7 +346,7 @@ You need a 20 dBi ground-station antenna at 2.4 GHz for a cubesat downlink. $\la
 ::::{frame} Worked selection — 20 dBi at 2.4 GHz for a ground station (cont.)
 :::{admonition} Worked example — 20 dBi at 2.4 GHz for a ground station (cont.)
 :class: tip
-**Dish.** With $\eta_{\text{ap}} = 0.6$, $A = 0.124/0.6 = 0.207\ \text{m}^{2}$, so $D = 2\sqrt{A/\pi} = 0.51\ \text{m}$. Beamwidth $\theta_\text{HP} \approx 70^\circ(0.125/0.51) = 17^\circ$. A half-metre dish with a 17-degree beam is forgiving to point, cheap, and broadband, and no other candidate here matches it on all three.
+**Dish.** With $\eta_{\text{ap}} = 0.6$, $A = 0.124/0.6 = 0.207\ \text{m}^{2}$, so $D = 2\sqrt{A/\pi} = 0.51\ \text{m}$. Beamwidth $\theta_\text{HP} \approx 70^\circ(0.125/0.51) = 17^\circ$. A half-meter dish with a 17-degree beam is forgiving to point, cheap, and broadband, and no other candidate here matches it on all three.
 
 **Yagi.** A single Yagi tops out near 15 dBi at a $4.5\lambda$ (0.56 m) boom, so 20 dBi needs four of them stacked in a 2x2 bay: $15 + 10\log_{10}4 = 21\ \text{dBi}$. It works, but it is four booms, a phasing harness, and a narrow band.
 :::

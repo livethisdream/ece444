@@ -182,7 +182,7 @@ Demo the widget live: sweep R away from 50 and watch the dip get shallow while t
 
 You met the chart in ECE 343. You do not have to build one today — you have to **read** one.
 
-- **Crosses the real axis** → reactance is zero → resonance. Left of centre means $R < 50\ \Omega$, right means $R > 50\ \Omega$.
+- **Crosses the real axis** → reactance is zero → resonance. Left of center means $R < 50\ \Omega$, right means $R > 50\ \Omega$.
 - **Inside the small circle** → $\vert\Gamma\vert < 0.316$ → you are under $-10$ dB.
 - **A loop** → two resonances close together, or a resonance plus a feed structure.
 - **The whole trace spins** → your reference plane moved, not your antenna.
@@ -216,7 +216,7 @@ A trace dips to $-19$ dB and crosses $-10$ dB at 878 MHz and 922 MHz.
 
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
-| Centre | dip location | $900$ MHz |
+| Center | dip location | $900$ MHz |
 | Absolute BW | $922 - 878$ | $44$ MHz |
 | Fractional BW | $44/900$ | $4.9\%$ |
 

@@ -260,7 +260,7 @@ Line by line:
 
 | Card | What it says |
 | :-- | :-- |
-| `GW 1 21 ...` | wire tag 1, 21 segments, from $z = -81.97\ \text{mm}$ to $+81.97\ \text{mm}$, radius $0.5\ \text{mm}$ (all in metres) |
+| `GW 1 21 ...` | wire tag 1, 21 segments, from $z = -81.97\ \text{mm}$ to $+81.97\ \text{mm}$, radius $0.5\ \text{mm}$ (all in meters) |
 | `GE 0` | geometry complete, free space, no ground |
 | `EX 0 1 11 0 1 0` | voltage source, 1 V, on wire 1 segment 11 — the middle of 21 |
 ::::

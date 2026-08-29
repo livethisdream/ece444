@@ -246,8 +246,8 @@ Lesson 21 sweeps the PHASER with all eight elements on, then with the center fou
 | Configuration | Aperture $Nd$ | HPBW | FNBW | First sidelobe |
 | :-- | :-- | :-- | :-- | :-- |
 | 8 elements | $112\ \text{mm} = 3.85\ \lambda$ | $13.2^\circ$ | $30.1^\circ$ | $-13$ dB |
-| Centre 4 | $56\ \text{mm} = 1.92\ \lambda$ | $27^\circ$ | $62^\circ$ | $-11$ dB |
-| Centre 2 | $28\ \text{mm} = 0.96\ \lambda$ | $62^\circ$ | $180^\circ$ by convention | none |
+| Center 4 | $56\ \text{mm} = 1.92\ \lambda$ | $27^\circ$ | $62^\circ$ | $-11$ dB |
+| Center 2 | $28\ \text{mm} = 0.96\ \lambda$ | $62^\circ$ | $180^\circ$ by convention | none |
 
 Three details in that table are worth stating before the lab rather than after.
 ::::

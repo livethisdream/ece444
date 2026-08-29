@@ -278,7 +278,7 @@ you are building on**:
 
 So on a microwave PCB, where any $Z_1$ can be printed and lumped parts have
 awkward parasitics, the quarter-wave route is often the better engineering. Down
-at HF, where $\lambda/4$ runs to tens of metres and only 50 and 75 $\Omega$
+at HF, where $\lambda/4$ runs to tens of meters and only 50 and 75 $\Omega$
 cable exists off the shelf, the L-match wins — which is why the matching lab is
 lumped.
 ::::
@@ -405,15 +405,15 @@ nowhere else. Move 10% in frequency and both reactances are off by 10%.
 ::::{frame} The same design, on the Smith chart
 The two moves are the two things the two elements are *able* to do.
 
-<img src="../../viz/img/L04-lmatch-smith.svg" alt="Smith chart showing the L-match as two arcs: a series element walking a constant-resistance circle, then a shunt element walking a constant-conductance circle into the centre" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+<img src="../../viz/img/L04-lmatch-smith.svg" alt="Smith chart showing the L-match as two arcs: a series element walking a constant-resistance circle, then a shunt element walking a constant-conductance circle into the center" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 ::::
 
-::::{frame} A two-leg journey to the centre
+::::{frame} A two-leg journey to the center
 A series element changes reactance but not resistance, so it can only walk the
 operating point along a **constant-resistance circle**. A shunt element changes
 susceptance but not conductance, so it can only walk along a
 **constant-conductance circle**. Matching is therefore a two-leg journey to the
-centre: walk the constant-resistance circle until you cross the
+center: walk the constant-resistance circle until you cross the
 unit-conductance circle, then walk that circle home.
 ::::
 

@@ -75,13 +75,13 @@ That is why range source antennas are modest-gain horns. A higher-gain source wo
 ::::
 
 ::::{frame} Where 2D²/λ actually comes from
-Take a source a distance $r$ away on boresight. The path to a point a distance $x$ off the aperture centre is $\sqrt{r^2 + x^2}$, and for $x \ll r$ that is $r + x^2/2r$. The extra path at the aperture edge, where $x = D/2$, is
+Take a source a distance $r$ away on boresight. The path to a point a distance $x$ off the aperture center is $\sqrt{r^2 + x^2}$, and for $x \ll r$ that is $r + x^2/2r$. The extra path at the aperture edge, where $x = D/2$, is
 
 $$\Delta \ell \approx \frac{(D/2)^2}{2r} = \frac{D^2}{8r}$$
 ::::
 
 ::::{frame} The phase-error tolerance
-Multiply by $k = 2\pi/\lambda$ to get phase. Now make a decision — and it *is* a decision, not a derivation. Allow the edge of the aperture to lag the centre by at most an eighth of a wavelength, $\pi/8$ radians or $22.5^\circ$:
+Multiply by $k = 2\pi/\lambda$ to get phase. Now make a decision — and it *is* a decision, not a derivation. Allow the edge of the aperture to lag the center by at most an eighth of a wavelength, $\pi/8$ radians or $22.5^\circ$:
 
 $$\Delta\phi_{\max} = k\ \Delta \ell = \frac{\pi D^2}{4 \lambda r} \le \frac{\pi}{8} \qquad \Longrightarrow \qquad r \ge \frac{2D^2}{\lambda}$$
 
@@ -97,7 +97,7 @@ $$\lambda = \frac{c}{f} = \frac{3\times10^{8}}{10\times10^{9}} = 0.03\ \text{m},
 
 $$r \ge \frac{2D^2}{\lambda} = \frac{2(0.5)^2}{0.03} = 16.7\ \text{m}$$
 
-Measuring an antenna 0.5 m across therefore requires a chamber seventeen metres — about 55 feet — long. That is a large, expensive room, and it is entirely ordinary for this class of antenna.
+Measuring an antenna 0.5 m across therefore requires a chamber seventeen meters — about 55 feet — long. That is a large, expensive room, and it is entirely ordinary for this class of antenna.
 :::
 ::::
 
@@ -187,7 +187,7 @@ An anechoic chamber is a shielded room lined with **absorber** — carbon-loaded
 ::::
 
 ::::{frame} What the absorber does
-Absorber is specified by **reflectivity in dB**. Good pyramidal absorber reaches $-40$ to $-50$ dB at normal incidence, and performance degrades at grazing incidence — which is exactly the condition on the side walls. Performance also scales with pyramid height *in wavelengths*, so low-frequency absorber gets enormous, and a chamber rated to 200 MHz has metre-long spikes on the walls.
+Absorber is specified by **reflectivity in dB**. Good pyramidal absorber reaches $-40$ to $-50$ dB at normal incidence, and performance degrades at grazing incidence — which is exactly the condition on the side walls. Performance also scales with pyramid height *in wavelengths*, so low-frequency absorber gets enormous, and a chamber rated to 200 MHz has meter-long spikes on the walls.
 
 :::{callout}
 A chamber is never "no reflections". It is **reflections below a stated level**. Which level you need is set by the lowest signal you intend to believe, not by the main beam.
@@ -207,7 +207,7 @@ A chamber that meets a respectable $-40$ dB specification can still put a three-
 ::::
 
 ::::{frame} The quiet zone
-The deliverable of a chamber is not the room; it is the **quiet zone** — a specified volume, usually a sphere or cylinder centred on the positioner, inside which the stray field is guaranteed below the reflectivity spec. It is quoted as a size *and* a level and a frequency band: "1.2 m quiet zone at $-45$ dB, 2 to 18 GHz". It is measured rather than assumed, typically by dragging a probe through the volume and recording the ripple.
+The deliverable of a chamber is not the room; it is the **quiet zone** — a specified volume, usually a sphere or cylinder centered on the positioner, inside which the stray field is guaranteed below the reflectivity spec. It is quoted as a size *and* a level and a frequency band: "1.2 m quiet zone at $-45$ dB, 2 to 18 GHz". It is measured rather than assumed, typically by dragging a probe through the volume and recording the ripple.
 
 The practical consequence is that **the AUT must fit inside the quiet zone.** An antenna that overhangs it is being measured in a room rather than in a chamber.
 ::::
@@ -217,7 +217,7 @@ A **compact range** produces the plane wave with optics instead of distance. Put
 ::::
 
 ::::{frame} Two costs of a compact range
-Two costs come with it. The usable quiet zone is only about **50 to 60% of the reflector aperture**, so the reflector must be substantially larger than the AUT — a metre of quiet zone needs close to a two-metre reflector, built to a fraction of a wavelength. And the reflector rim diffracts: a hard edge acts as a line source sitting right inside your quiet zone. Compact-range reflectors therefore have **serrated or rolled edges**, which scatter the edge contribution away from the test volume instead of into it.
+Two costs come with it. The usable quiet zone is only about **50 to 60% of the reflector aperture**, so the reflector must be substantially larger than the AUT — a meter of quiet zone needs close to a two-meter reflector, built to a fraction of a wavelength. And the reflector rim diffracts: a hard edge acts as a line source sitting right inside your quiet zone. Compact-range reflectors therefore have **serrated or rolled edges**, which scatter the edge contribution away from the test volume instead of into it.
 ::::
 
 ::::{frame} Near-field scanning — change the question
@@ -317,7 +317,7 @@ $$20\log_{10}\!\left( \frac{\lambda}{4\pi R} \right) = 20\log_{10}\!\left( \frac
 :class: tip
 $$2G = (P_r - P_t) - (-74.0) = -40.0 + 74.0 = 34.0\ \text{dB} \qquad \Longrightarrow \qquad G = 17.0\ \text{dBi}$$
 
-Check the range as well: for a horn of this gain, $D$ is roughly $0.2\ \text{m}$, so $2D^2/\lambda = 1.6\ \text{m}$. Twenty metres is comfortably far field.
+Check the range as well: for a horn of this gain, $D$ is roughly $0.2\ \text{m}$, so $2D^2/\lambda = 1.6\ \text{m}$. Twenty meters is comfortably far field.
 :::
 ::::
 

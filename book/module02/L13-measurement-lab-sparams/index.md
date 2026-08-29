@@ -219,11 +219,11 @@ Always verify a calibration before you trust it. Reconnect the load standard and
 
 ::::{frame} Part 3: Reading the sweep, three ways
 
-Plot $\vert S_{11}\vert$ in dB against frequency and the antenna's behaviour is immediately visible:
+Plot $\vert S_{11}\vert$ in dB against frequency and the antenna's behavior is immediately visible:
 
 - A **dip** marks a resonance — a frequency where the antenna accepts power.
 - The **depth** of the dip says how well matched it is at that frequency. It says nothing about how well it radiates.
-- The **width** of the region below −10 dB is the **impedance bandwidth**. Report it two ways: absolute (MHz) and fractional (percent of centre frequency). Fractional bandwidth is what lets you compare a 900 MHz antenna to a 2.4 GHz one.
+- The **width** of the region below −10 dB is the **impedance bandwidth**. Report it two ways: absolute (MHz) and fractional (percent of center frequency). Fractional bandwidth is what lets you compare a 900 MHz antenna to a 2.4 GHz one.
 
 ::::
 
@@ -242,13 +242,13 @@ A thin wire dipole lands in the 3–10% range, so this is entirely believable. I
 
 ::::{frame} The same event on the Smith chart
 
-You met the Smith chart in ECE 343 as a graphical impedance calculator. Today you only need to **read** one. It is the complex $\Gamma$ plane with a normalized-impedance grid drawn on top: the centre is $50\ \Omega$, the left edge is a short, the right edge is an open, the upper half is inductive and the lower half is capacitive. Four reading skills cover almost everything you will see this semester:
+You met the Smith chart in ECE 343 as a graphical impedance calculator. Today you only need to **read** one. It is the complex $\Gamma$ plane with a normalized-impedance grid drawn on top: the center is $50\ \Omega$, the left edge is a short, the right edge is an open, the upper half is inductive and the lower half is capacitive. Four reading skills cover almost everything you will see this semester:
 
 ::::
 
 ::::{frame} Four reading skills
 
-- The locus **crosses the real axis** → the reactance is zero → resonance. Left of centre means $R < 50\ \Omega$, right of centre means $R > 50\ \Omega$.
+- The locus **crosses the real axis** → the reactance is zero → resonance. Left of center means $R < 50\ \Omega$, right of center means $R > 50\ \Omega$.
 - The locus is **inside the circle of radius 0.316** → $\vert S_{11}\vert < -10$ dB. That circle is the specification drawn on the chart.
 - A **loop** in the trace means two resonances close together — often the element plus something in the feed.
 - The **whole trace rotating** means your reference plane moved, not your antenna. Added transmission line produces rotation and nothing else.
@@ -271,7 +271,7 @@ The widget below shows one physical resonance in both languages at once. Drag ac
 
 ::::{frame} Part 4: What the VNA will not tell you
 
-One limitation governs everything in this lab. Solder a $50\ \Omega$ resistor across the connector and measure it. $\Gamma = 0$, $\vert S_{11}\vert$ plunges to the noise floor, VSWR reads $1.00$, and the Smith chart marker sits precisely at the centre. It is a *perfect* match at every frequency in the sweep. It also radiates **nothing** — all of your power turns into heat. $S_{11}$ measures **mismatch only**. It cannot distinguish power that left as radiation from power that died as loss in a resistive conductor, a lossy dielectric, or damp packaging material. Radiation efficiency needs a second, independent measurement — a gain comparison against a standard antenna (Lesson 14) or a Wheeler cap. You cannot get it from one port.
+One limitation governs everything in this lab. Solder a $50\ \Omega$ resistor across the connector and measure it. $\Gamma = 0$, $\vert S_{11}\vert$ plunges to the noise floor, VSWR reads $1.00$, and the Smith chart marker sits precisely at the center. It is a *perfect* match at every frequency in the sweep. It also radiates **nothing** — all of your power turns into heat. $S_{11}$ measures **mismatch only**. It cannot distinguish power that left as radiation from power that died as loss in a resistive conductor, a lossy dielectric, or damp packaging material. Radiation efficiency needs a second, independent measurement — a gain comparison against a standard antenna (Lesson 14) or a Wheeler cap. You cannot get it from one port.
 
 This cuts both ways on the bench. A deep, wide dip is *necessary* for a good antenna, not *sufficient*. Conversely, an antenna with a mediocre $-8$ dB match may still be the better radiator.
 

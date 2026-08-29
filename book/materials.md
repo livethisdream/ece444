@@ -20,7 +20,7 @@ reading list. A third standard text is listed as an alternate.
 ## Charts & Handouts
 
 - <a href="handouts/SmithChart_blank.pdf" target="_blank" rel="noopener">Blank Smith chart (PDF, print)</a> — the chart bound into the L4 lab packet.
-- <a href="handouts/SmithChart_ZY_colour.pdf" target="_blank" rel="noopener">Impedance–admittance Smith chart (PDF, colour)</a> — red impedance grid over blue admittance grid, for designs that cross from $Z$ to $Y$.
+- <a href="handouts/SmithChart_ZY_colour.pdf" target="_blank" rel="noopener">Impedance–admittance Smith chart (PDF, color)</a> — red impedance grid over blue admittance grid, for designs that cross from $Z$ to $Y$.
 - <a href="handouts/SmithChart_blank.svg" target="_blank" rel="noopener">Blank Smith chart (SVG)</a> — vector, for zooming on screen.
 
 ## Practice Problem Sets

@@ -343,7 +343,7 @@ $f = 10\ \text{GHz}$.
 So the reactive near-field ends at $\approx 4.7\ \text{m}$, the radiating
 near-field runs from there to $96\ \text{m}$, and only beyond $96\ \text{m}$ is
 the antenna in its far field. To measure this dish's pattern on a conventional
-range you would need almost a **hundred metres** of separation.
+range you would need almost a **hundred meters** of separation.
 
 :::{depth}
 $$
@@ -390,7 +390,7 @@ doubles.
 The far-field distance is not academic — it sets the size of your test range. To
 measure an antenna's true pattern, gain, and sidelobes, the antenna under test
 must sit in the **far field** of the source (and vice versa). For a large dish at
-high frequency that can mean hundreds of metres of clear, reflection-free
+high frequency that can mean hundreds of meters of clear, reflection-free
 range — often impractical, sometimes impossible indoors.
 
 That is exactly why **near-field scanning** exists: you measure the fields on a
