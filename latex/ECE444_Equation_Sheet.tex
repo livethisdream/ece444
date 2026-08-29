@@ -1,0 +1,227 @@
+\documentclass[9pt]{extarticle} % extarticle: font sizes < 10
+
+% modeled on the ECE 343 Equation Sheet (Neil Rogers); refcards.sty + house
+% macros give the bold headers, \eq{} align blocks, and \lp \rp parens.
+
+\usepackage[
+      pdftitle={ECE 444 Equation Sheet},
+      pdfauthor={Neil Rogers},
+]{hyperref}
+
+\usepackage{refcards}
+\input{myPackages_gr}
+\input{myShortcuts}
+
+\usepackage{vmargin}
+% A4 landscape, tighter margins than the ECE343 sheet -- more sections here
+\setpapersize[landscape]{A4}
+\setmarginsrb%
+{1.0cm}  % left
+{0.6cm}  % top
+{1.0cm}  % right
+{0.6cm}  % bottom
+{0ex}    % header height
+{0ex}    % header separation
+{0ex}    % footer height
+{0ex}    % footer separation
+\setlength\columnsep{6mm}
+\setlength{\columnseprule}{0.6pt}
+\def\columnseprulecolor{\color{black}}
+\renewcommand{\arraystretch}{1.1}
+
+\begin{document}
+\raggedright
+
+\title{ECE 444 Equation Sheet - Fall 2026 (Modules 1-3)}
+
+{\small
+Department of Electrical and Computer Engineering \\
+United States Air Force Academy}
+
+\footnotesize
+\begin{multicols*}{3}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Wave Fundamentals and the Far Field}
+\def\linespacing{3pt}
+\eq{
+&k = \dfrac{2\pi}{\lambda}, \quad c = 3\ee{8}\ \text{m/s} \\[\linespacing]
+&\eta_0 = \dfrac{\vert\mathbf{E}\vert}{\vert\mathbf{H}\vert} \approx 377\ \ohms\text{ (free space)} \\[\linespacing]
+&\text{outgoing wave: } \dfrac{e^{-jkr}}{r};\ \text{field} \propto \dfrac{1}{r},\ \text{power} \propto \dfrac{1}{r^2} \\[\linespacing]
+&P_\text{avg} = \dfrac{1}{2}\re{\mathbf{E}\times\mathbf{H}^*}; \quad S_\text{rad} = \dfrac{\vert\mathbf{E}\vert^2}{2\eta_0} \\[\linespacing]
+&U(\theta,\phi) = r^2 S_\text{rad}\text{ (W/sr); whole sphere} = 4\pi\ \text{sr}
+}
+
+\vspace{4pt}
+\textbf{Pattern, Directivity, Gain}
+\def\linespacing{3pt}
+\eq{
+&\vert F(\theta,\phi)\vert\text{ normalized field pattern; isotropic: } D{=}1,\ 0\ \dbi \\[\linespacing]
+&D(\theta,\phi) = \dfrac{4\pi U}{P_\text{rad}};\ \text{pencil beam} \approx \dfrac{41{,}253}{\theta_1^\circ\theta_2^\circ}\ \text{(real 26k--32k)} \\[\linespacing]
+&G = \eta_\text{rad} D,\ \eta_\text{rad} = \dfrac{P_\text{rad}}{P_\text{in}}; \quad \text{dBi} = \text{dBd} + 2.15 \\[\linespacing]
+&G_\text{re} = \lp 1-\vert\Gamma\vert^2\rp G;\ \text{VSWR 2:1 costs } 11\%\ (\approx 0.5\ \db) \\[\linespacing]
+&\theta_\text{HP}\text{ (HPBW) at} -3\ \db;\quad \text{FNBW} \approx 2\ \theta_\text{HP} \\[\linespacing]
+&A_e = \dfrac{\lambda^2 G}{4\pi} = \eta_\text{ap} A_\text{phys} \\[\linespacing]
+&\text{reciprocity: } A_e/G = \lambda^2/4\pi\text{ for every antenna}
+}
+
+\vspace{4pt}
+\textbf{Polarization}
+\def\linespacing{3pt}
+\eq{
+&\text{fixed by } E_x,\ E_y,\ \delta; \quad \text{AR} = \dfrac{\text{major axis}}{\text{minor axis}} \\[\linespacing]
+&0\ \db = \text{pure CP};\ \infty = \text{pure linear};\ \text{hardware} \le 3\ \db \\[\linespacing]
+&\text{PLF} = \left\vert \hat\rho_\text{w}\mycdot\hat\rho_\text{a}^*\right\vert^2; \quad \cos^2\psi\text{ for two linears} \\[\linespacing]
+&\text{CP vs.\ linear, AR}{=}0\ \db\text{: flat} -3\ \db;\ \text{AR}{=}3\ \db\text{: } -1.8\text{ to} -4.8\ \db \\[\linespacing]
+&\text{wrong circular sense: AR}{=}3\ \db{\to}{-}9.6\ \db,\ \text{AR}{=}6\ \db{\to}{-}4.5\ \db \\[\linespacing]
+&\text{FBW} = \dfrac{f_H - f_L}{f_c}; \quad \text{Chu-Harrington: FBW} \approx 1/Q\ (ka{=}1, Q{\approx}2)
+}
+
+\columnbreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Impedance, VSWR, Matching}
+\def\linespacing{3pt}
+\eq{
+&Z_\text{in} = R_\text{in} + jX_\text{in}\text{ (resonance: } X_\text{in}{=}0\text{)}; \quad \eta_\text{rad} = \dfrac{R_\text{rad}}{R_\text{rad}+R_\text{loss}} \\[\linespacing]
+&\Gamma = \dfrac{Z_\text{in}-Z_0}{Z_\text{in}+Z_0}; \quad \text{VSWR} = \dfrac{1+\vert\Gamma\vert}{1-\vert\Gamma\vert} \\[\linespacing]
+&\text{VSWR}{\le}2 \leftrightarrow \text{RL}{\ge}9.5\ \db \leftrightarrow 11\%\text{ reflected} \\[\linespacing]
+&\text{mismatch loss} = -10\log_{10}\lp1-\vert\Gamma\vert^2\rp \le 0.5\ \db\text{ at VSWR}{=}2 \\[\linespacing]
+&Z_\text{in} = Z_0\dfrac{Z_L + Z_0\tanh\lp\gamma\ell\rp}{Z_0 + Z_L\tanh\lp\gamma\ell\rp};\text{ lossless: tan for tanh} \\[\linespacing]
+&\Gamma(z) = \Gamma_L e^{2\gamma z}; \quad \beta = \omega\sqrt{\mu\epsilon} = 2\pi/\lambda \\[\linespacing]
+&\text{quarter-wave transf.: } Z_1 = \sqrt{Z_0 R_L} \\[\linespacing]
+&\text{L-match } Q = \sqrt{R_\text{big}/R_\text{small} - 1};\ \text{balun 4:1: } 300\ \ohms \to 75\ \ohms
+}
+
+\vspace{4pt}
+\textbf{Field Regions}
+\def\linespacing{3pt}
+\eq{
+&\text{one dipole eqn, three terms: } 1 : \dfrac{1}{kr} : \dfrac{1}{(kr)^2};\text{ } kr{=}1 \text{ crossover} \\[\linespacing]
+&\text{true far field: } kr \gg 1 \\[\linespacing]
+&\text{reactive near-field edge: } r = 0.62\sqrt{D^3/\lambda} \\[\linespacing]
+&\text{far-field distance: } r \ge \dfrac{2D^2}{\lambda}\ (D{=}\text{largest dim}) \\[\linespacing]
+&\text{phase-error budget: } \Delta \le \lambda/16,\ \pi/8\ (22.5^\circ)
+}
+
+\vspace{4pt}
+\textbf{Radiation Integrals}
+\def\linespacing{3pt}
+\eq{
+&\mathbf{A}\text{ (vector potential)}, \mathbf{B}{=}\nabla\times\mathbf{A};\text{ one integral, two curls} \\[\linespacing]
+&\mathbf{N}(\theta,\phi) = \displaystyle\int \mathbf{J}\ e^{+jk\hat{\mathbf{r}}\mycdot\mathbf{r}^{\prime}}\, dV^{\prime} \\[\linespacing]
+&E_\theta = -j\omega\mu\dfrac{e^{-jkr}}{4\pi r}N_\theta, \quad E_r \approx 0 \\[\linespacing]
+&\text{far-field approx: keep } \hat{\mathbf r}\mycdot\mathbf{r}^{\prime}\text{ in phase, drop in ampl.} \\[\linespacing]
+&U(\theta,\phi) = \dfrac{\eta_0 k^2}{32\pi^2}\lp\vert N_\theta\vert^2 {+} \vert N_\phi\vert^2\rp;\ I(z^{\prime}){\leftrightarrow}N_z(k_z)\text{ Fourier pair}
+}
+
+\columnbreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Wire Antennas}
+\def\linespacing{3pt}
+\eq{
+&\text{infinitesimal dipole: } \vert F\vert = \sin\theta;\ \text{HPBW}90^\circ,\ D{=}1.5\ (1.76\ \dbi) \\[\linespacing]
+&\text{general dipole: } \vert F\vert \propto \left\vert\dfrac{\cos\lp\frac{kL}{2}\cos\theta\rp - \cos\frac{kL}{2}}{\sin\theta}\right\vert \\[\linespacing]
+&\text{half-wave dipole: } \vert F\vert = \dfrac{\cos\lp\frac{\pi}{2}\cos\theta\rp}{\sin\theta};\ \text{HPBW}78.1^\circ,\ D{=}1.64\ (2.15\ \dbi) \\[\linespacing]
+&Z_\text{in} \approx 73 + j42.5\ \ohms;\ \text{resonant} \approx 0.47\text{--}0.48\lambda,\ \approx 70\ \ohms\text{ real} \\[\linespacing]
+&\text{5\% rule: } \dfrac{143}{f_\text{MHz}}\ \text{m};\ \text{longer dipoles: peak} \approx 5.2\ \dbi\text{ near} 1.25\lambda \\[\linespacing]
+&R_\text{rad}\text{ (short dipole)}: 20\pi^2(\ell/\lambda)^2 \\[\linespacing]
+&\text{quarter-wave monopole: } Z_\text{in} = \tfrac{1}{2}Z_\text{in}^\text{dipole} \approx 36.5{+}j21.3\ \ohms,\ D{=}5.15\ \dbi \\[\linespacing]
+&\text{small loop: } \vert F\vert = \sin\theta,\ D{=}1.5\ (1.76\ \dbi);\ R_r = 20\pi^2(C/\lambda)^4 \\[\linespacing]
+&\text{resonant loop, } C \approx 1\lambda: 100\text{--}130\ \ohms,\ \approx 3.1\ \dbi \\[\linespacing]
+&\text{Chu limit: } Q \gtrsim 1/(ka)^3
+}
+
+\vspace{4pt}
+\textbf{Apertures and Patches}
+\def\linespacing{3pt}
+\eq{
+&G = \eta_\text{ap}\dfrac{4\pi A}{\lambda^2};\ \eta_\text{ap} \approx 0.5\text{--}0.7\text{ (horn} \approx 0.5\text{, reflector} 0.55\text{--}0.7\text{)} \\[\linespacing]
+&\text{circular dish: } G = \eta_\text{ap}\lp\pi D/\lambda\rp^2, {+}6\ \db\text{/doubling}; \theta_\text{HP} \approx 70^\circ\lambda/D \\[\linespacing]
+&f/D:\ 0.3\text{--}0.6\text{ typ.};\ \text{edge taper} \approx -10\ \db \\[\linespacing]
+&\text{Ruze: } 685.8(\sigma/\lambda)^2\ \db;\ \lambda/50{\to}0.27\ \db,\ \lambda/16{\to}2.7\ \db \\[\linespacing]
+&\text{patch: } L \approx \lambda_d/2,\text{ shorten} 2\Delta L;\text{ broadside}5\text{--}8\ \dbi,\text{ BW}1\text{--}5\% \\[\linespacing]
+&\text{slot: } Z_\text{slot} Z_\text{dipole} = \eta_0^2/4\text{ (Babinet)}; \text{resonant} \approx 485\ \ohms \\[\linespacing]
+&\text{horn: optimum} \lambda/4\text{ E-plane}, 3\lambda/8\text{ H-plane} \\[\linespacing]
+&\text{Yagi: } {+}3\ \db\text{/boom doubling}, 8\text{--}15\ \dbi \\[\linespacing]
+&\text{array gain over 1 elem.: } 10\log_{10}N
+}
+
+\columnbreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Link Budget}
+\def\linespacing{3pt}
+\eq{
+&\text{EIRP} = P_t G_t; \quad \text{FSPL} = 20\log_{10}\lp\dfrac{4\pi R}{\lambda}\rp \\[\linespacing]
+&\text{Friis: } P_r = P_t G_t G_r\lp\dfrac{\lambda}{4\pi R}\rp^2;\ \text{2.4 GHz ex.: } 156\ \db\text{ loss}, -90\ \dbm \\[\linespacing]
+&\text{radar range eqn.: deferred to Module 4/L29 (preview only)}
+}
+
+\vspace{4pt}
+\textbf{Aperture Distributions and Tapers}
+\def\linespacing{3pt}
+\eq{
+&E_a(x)\text{ aperture distribution}; u{=}\dfrac{L}{\lambda}\sin\theta;\text{ pattern}{=}\mathcal{F}\{E_a(x)\} \\[\linespacing]
+&\text{uniform: } \vert F\vert = \left\vert\dfrac{\sin\pi u}{\pi u}\right\vert;\ \theta_\text{HP} \approx 0.886\lambda/L \\[\linespacing]
+&\text{1st sidelobe uniform: } -13.3\ \db\ \text{(line)}, -17.6\ \db\ \text{(circ.)} \\[\linespacing]
+&\text{taper } \eta_\text{ap}/\text{SLL}/\theta_\text{HP}\times\text{: uniform} 1.00/{-}13.3\db/1.00 \\[\linespacing]
+&\qquad\text{cosine} 0.81/{-}23\db/1.19;\ \text{triangular} 0.75/{-}26.5\db/1.27 \\[\linespacing]
+&\qquad\text{cosine}^2\ 0.667/{-}31.5\db/1.44 \\[\linespacing]
+&\text{taper trade: } {-}13.3{\to}{-}31.5\ \db\text{ costs} 63\%\text{ beamwidth}, 1.8\ \db \\[\linespacing]
+&\text{8-elem.\ presets, HPBW/peak drop/}\eta_t\text{: Uniform} 13.1^\circ/0\db/1.00 \\[\linespacing]
+&\qquad\text{Hann} 19.5^\circ/{-}4.7\db/0.75\,({-}1.2\db) \\[\linespacing]
+&\qquad\text{Blackman} 23.1^\circ/{-}6.1\db/0.66\,({-}1.8\db) \\[\linespacing]
+&\qquad\text{Chebyshev} 24.3^\circ/{-}6.5\db/0.62\,({-}2.1\db) \\[\linespacing]
+&\eta_t = \dfrac{(\sum a_n)^2}{N\sum a_n^2};\ \text{peak drop}{=}20\log_{10}\lp\sum a_n / N\rp \ne \eta_t \\[\linespacing]
+&\text{Chebyshev (Dolph)}, {-}30\ \db\text{ on } N{=}8{:} 26,52,81,100\ \% \\[\linespacing]
+&\text{HPBW mult.\ vs.\ uniform:} \\[\linespacing]
+&\qquad 1.12\,({-}20\db),\ 1.30\,({-}30\db),\ 1.42\,({-}40\db)
+}
+
+\columnbreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Array Factor, Steering, Beamwidth}
+\def\linespacing{3pt}
+\eq{
+&\theta,\ \theta_0\text{ from broadside}; \quad AF(\theta) = \displaystyle\sum_n a_n\, e^{jnkd\sin\theta} \\[\linespacing]
+&\psi = kd\lp\sin\theta - \sin\theta_0\rp; \quad AF_N(\psi) = \dfrac{\sin(N\psi/2)}{N\sin(\psi/2)}\text{ (peak}{=}1\text{)} \\[\linespacing]
+&\text{nulls at } \psi{=}2\pi m/N;\ \text{1st sidelobe unif.: } {-}13\ \db\ ({-}12.8\ \db\text{ at}\ N{=}8) \\[\linespacing]
+&F(\theta) = EF(\theta)\, AF(\theta)\text{ (pattern mult.)} \\[\linespacing]
+&\theta_\text{HP} \approx \dfrac{0.886\ \lambda}{Nd\cos\theta_0}; \text{FNBW}{=}2\arcsin\dfrac{\lambda}{Nd};\text{ PHASER: } 13.2^\circ/30.1^\circ \\[\linespacing]
+&D \approx \dfrac{2Nd}{\lambda}\text{ (broadside ULA;} 8.9\ \dbi\text{ at }N{=}8\text{)} \\[\linespacing]
+&\Delta\phi = kd\sin\theta_0\text{ (elem.\ phase)}; \quad \phi_n = -n\,\Delta\phi \\[\linespacing]
+&\sin\theta_\text{null} = \sin\theta_0 \pm \dfrac{m\lambda}{Nd} \\[\linespacing]
+&\theta_\text{HP}(\theta_0) \approx \dfrac{\theta_\text{HP}(0)}{\cos\theta_0};\ \text{scan loss}{\propto}\cos\theta_0{:} {-}0.6,{-}1.5,{-}3.0\db\text{ at } 30^\circ{,}45^\circ{,}60^\circ \\[\linespacing]
+&G_e(\theta) = G_e(0)\cos\theta;\quad G_\text{total(dB)} = G_\text{element} + D_\text{array} \\[\linespacing]
+&d < \dfrac{\lambda}{1+\vert\sin\theta_0\vert}\text{ for scan volume;} \ \lambda/2\text{ scans anywhere}
+}
+
+\columnbreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Grating Lobes, Squint, Quantization}
+\def\linespacing{3pt}
+\eq{
+&\sin\theta_g = \sin\theta_0 \pm \dfrac{m\lambda}{d};\ \text{avoid: } d < \dfrac{\lambda}{1+\vert\sin\theta_0\vert},\ d{\le}\lambda/2\text{ safe} \\[\linespacing]
+&\text{grating lobe height} = \text{main lobe (taper doesn't reduce it)} \\[\linespacing]
+&\Delta\theta = \arcsin\lp\dfrac{f_0}{f}\sin\theta_0\rp - \theta_0;\ 500\ \mhz\text{ off at } 45^\circ \to +2.9^\circ \\[\linespacing]
+&\Delta\theta \approx -\dfrac{\Delta f}{f_0}\tan\theta_0;\ \text{true time delay removes squint} \\[\linespacing]
+&\text{LSB} = \dfrac{360^\circ}{2^B};\ \text{ADAR1000 } B{=}7 \to \text{LSB} = 2.8125^\circ \\[\linespacing]
+&\Delta\theta_0 \approx \dfrac{\text{LSB}}{360^\circ\, d/\lambda} \approx 0.91^\circ\text{ on the PHASER} \\[\linespacing]
+&\text{QSLL} \approx -6B\ \db;\ 2\text{ bits}\to{-}12\ \db,\ 7\text{ bits}\to{-}42\ \db
+}
+
+\vspace{4pt}
+\textbf{Null Steering}
+\def\linespacing{3pt}
+\eq{
+&v_n(\theta) = e^{jnkd\sin\theta}; \quad \mathbf{w}_d = \mathbf{v}^*(\theta_0) \\[\linespacing]
+&\mathbf{w} = \mathbf{w}_d - r_n\mathbf{w}_n; \quad r_n = \dfrac{\mathbf{w}_n^H \mathbf{w}_d}{\mathbf{w}_n^H \mathbf{w}_n} \\[\linespacing]
+&\vert r_n\vert{=}0.225\text{ at} -13\db\text{ SLL} \\[\linespacing]
+&\text{null}{+}22.5^\circ\text{: cost }2.0\db\text{ theory}, 1.8\db\text{ meas.} \\[\linespacing]
+&\text{max.\ simultaneous nulls: } N-1 \\[\linespacing]
+&\text{MVDR: } \mathbf{w} = \dfrac{R^{-1}\mathbf{s}}{\mathbf{s}^H R^{-1}\mathbf{s}};\ 17\text{--}19\ \db\text{ suppression} \\[\linespacing]
+&\epsilon_0 {=} 8.854\ee{-12}\ \text{F/m},\ \mu_0 {=} 4\pi\ee{-7}\ \text{H/m} \\[\linespacing]
+&c {=} 3\ee{8}\ \text{m/s}
+}
+
+\end{multicols*}
+\end{document}

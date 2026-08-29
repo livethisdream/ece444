@@ -26,7 +26,7 @@ moving target in your sights.
 </div>
 ::::
 
-::::{frame} Modules 1–3 — build the antenna, then build the beam
+::::{frame} Modules 1-3: Build the Antenna and the Beam
 
 <div class="block-grid">
   <a class="block-card" href="module01/index.html">
@@ -50,7 +50,7 @@ moving target in your sights.
 </div>
 ::::
 
-::::{frame} Modules 4–5 — give it something to look for
+::::{frame} Modules 4-5: Give It Something to Look For
 
 <div class="block-grid">
   <a class="block-card" href="module04/index.html">
@@ -68,7 +68,7 @@ moving target in your sights.
 </div>
 ::::
 
-::::{frame} What you are graded on
+::::{frame} What You Are Graded On
 
 <div class="deliverable-cards">
   <div class="deliverable-card">
@@ -95,7 +95,7 @@ moving target in your sights.
 </div>
 ::::
 
-::::{frame} Terminal learning objectives — 1 to 3
+::::{frame} Course Objectives 1-3
 By the end of this course you should be able to:
 
 1. Describe fundamental antenna properties — gain, directivity, polarization, impedance — and connect them to system-level radio performance.
@@ -103,13 +103,13 @@ By the end of this course you should be able to:
 3. Apply phased-array theory — array factor, beam steering, tapering, null steering — using the ADALM-PHASER platform.
 ::::
 
-::::{frame} Terminal learning objectives — 4 and 5
+::::{frame} Course Objectives 4-5
 
 4. Analyze radar performance using the radar equation, detection theory, and FMCW signal processing (range, Doppler, CFAR).
 5. Integrate array beamforming and radar signal processing into a working demonstration of tracking a moving target while suppressing a jammer.
 ::::
 
-::::{frame} How this course is graded
+::::{frame} How This Course Is Graded
 
 :::{callout}
 Every learning objective is scored on a **binary 1 / 0** scale — no partial
@@ -122,14 +122,14 @@ The bar is simple: I want you to learn this material, and I would rather you
 learn it late than not at all.
 ::::
 
-::::{frame} Rules of engagement
+::::{frame} Rules of Engagement
 1. **The website is the course.** Lesson pages, practice problems, and slide decks are updated during the semester — pull the latest before class.
 2. **Practice problems are your reps.** They are ungraded for correctness but graded for a genuine, documented attempt. Do the work.
 3. **EI early and often.** It is the single best predictor of doing well in this course, and it counts toward engagement.
 4. **Ask questions in public.** If you had it, someone else had it too. The person who was afraid to ask is grateful.
 ::::
 
-::::{frame} What each lesson contains
+::::{frame} What Each Lesson Contains
 - **Reading.** Expanded notes on the objective — the equations worked through, the diagrams annotated, the connections to real hardware called out.
 - **Slides.** The deck used in class. Open it in a browser and read along.
 - **Practice problems.** Ungraded reps keyed to the lesson's learning objectives, with worked solutions on a separate page.

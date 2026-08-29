@@ -19,7 +19,7 @@ Track the mover. Ignore the jammer. Defend the design.
 Lessons 39–41 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame} Where this module goes
+::::{frame} Where This Module Goes
 Everything the course has built arrives here at once: beam steering and null
 steering from Module 3, FMCW detection and tracking from Module 4, on the
 hardware you have been using all semester.
@@ -35,7 +35,7 @@ it, and being able to say so under questioning, is the point of the briefing.
 :::
 ::::
 
-::::{frame} Learning objectives — 5.1 to 5.3
+::::{frame} Learning Objectives 5.1-5.3
 
 <ol class="lo-list" style="--module: '5'">
   <li>I can integrate beam-steering and null-steering weights to optimize array performance against a specified scenario.</li>
@@ -44,14 +44,14 @@ it, and being able to say so under questioning, is the point of the briefing.
 </ol>
 ::::
 
-::::{frame} Learning objective 5.4
+::::{frame} Learning Objective 5.4
 
 <ol class="lo-list" start="4" style="--module: '5'">
   <li>I can present system performance results and defend engineering trade-offs in a technical briefing.</li>
 </ol>
 ::::
 
-::::{frame} Lessons 39–41 — the capstone
+::::{frame} Lessons 39-41: The Capstone
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L39-final-project-kickoff/index.html">

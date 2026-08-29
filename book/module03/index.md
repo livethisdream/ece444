@@ -19,7 +19,7 @@ Point the beam without moving the antenna.
 Lessons 15–28 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame} Where this module goes
+::::{frame} Where This Module Goes
 An array is many small antennas behaving as one large one. Feed the elements
 with the right phases and the beam points where you choose; feed them with the
 right amplitudes and you decide how much energy leaks into the sidelobes.
@@ -36,7 +36,7 @@ and say what each term does, the rest is arithmetic.
 :::
 ::::
 
-::::{frame} Learning objectives — 3.1 to 3.3
+::::{frame} Learning Objectives 3.1-3.3
 
 <ol class="lo-list" style="--module: '3'">
   <li>I can describe aperture distributions and calculate aperture efficiency for a given illumination.</li>
@@ -45,7 +45,7 @@ and say what each term does, the rest is arithmetic.
 </ol>
 ::::
 
-::::{frame} Learning objectives — 3.4 to 3.6
+::::{frame} Learning Objectives 3.4-3.6
 
 <ol class="lo-list" start="4" style="--module: '3'">
   <li>I can calculate the phase weights required to steer a beam to a given angle and predict the resulting array pattern.</li>
@@ -54,7 +54,7 @@ and say what each term does, the rest is arithmetic.
 </ol>
 ::::
 
-::::{frame} Learning objectives — 3.7 to 3.9
+::::{frame} Learning Objectives 3.7-3.9
 
 <ol class="lo-list" start="7" style="--module: '3'">
   <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
@@ -63,7 +63,7 @@ and say what each term does, the rest is arithmetic.
 </ol>
 ::::
 
-::::{frame} Lessons 15–17 — from aperture to array, and the hardware
+::::{frame} Lessons 15-17: From Aperture to Array, and the Hardware
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L15-aperture-distributions/index.html">
@@ -84,7 +84,7 @@ and say what each term does, the rest is arithmetic.
 </div>
 ::::
 
-::::{frame} Lessons 18–21 — steering the beam, and proving it
+::::{frame} Lessons 18-21: Steering the Beam, and Proving It
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L18-beam-steering-theory/index.html">
@@ -110,7 +110,7 @@ and say what each term does, the rest is arithmetic.
 </div>
 ::::
 
-::::{frame} Lessons 22–25 — the real pattern, and shaping it
+::::{frame} Lessons 22-25: The Real Pattern, and Shaping It
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L22-antenna-pattern-theory/index.html">
@@ -136,7 +136,7 @@ and say what each term does, the rest is arithmetic.
 </div>
 ::::
 
-::::{frame} Lessons 26–28 — where arrays misbehave, and nulling
+::::{frame} Lessons 26-28: Where Arrays Misbehave, and Nulling
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L26-beam-squint-quantization/index.html">
@@ -157,7 +157,7 @@ and say what each term does, the rest is arithmetic.
 </div>
 ::::
 
-::::{frame} Where this is going
+::::{frame} Where This Is Going
 **Module 4** gives the array something to look for. The same hardware becomes
 a radar: send a chirp, listen for the echo, and work out how far away the
 target is and how fast it is moving.

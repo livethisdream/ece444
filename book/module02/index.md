@@ -19,7 +19,7 @@ Theory is cheap. Build it, simulate it, then measure it.
 Lessons 7–14 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame} Where this module goes
+::::{frame} Where This Module Goes
 Module 1 described *any* radiator in the abstract. This module meets the real
 families — dipoles, loops, monopoles, patches, slots, horns, reflectors, Yagis
 — and asks what each one is actually good for.
@@ -36,7 +36,7 @@ useful than either number on its own.
 :::
 ::::
 
-::::{frame} Learning objectives — 2.1 to 2.3
+::::{frame} Learning Objectives 2.1-2.3
 
 <ol class="lo-list" style="--module: '2'">
   <li>I can describe the radiation behavior of simple resonant antennas (isotropic radiator, half-wave dipole, monopole, loop) and calculate their gain and impedance.</li>
@@ -45,7 +45,7 @@ useful than either number on its own.
 </ol>
 ::::
 
-::::{frame} Learning objectives — 2.4 to 2.6
+::::{frame} Learning Objectives 2.4-2.6
 
 <ol class="lo-list" start="4" style="--module: '2'">
   <li>I can describe how reflectors, Yagi-Uda antennas, and arrays achieve high gain, and select an appropriate high-gain antenna for a given application.</li>
@@ -54,14 +54,14 @@ useful than either number on its own.
 </ol>
 ::::
 
-::::{frame} Learning objective 2.7
+::::{frame} Learning Objective 2.7
 
 <ol class="lo-list" start="7" style="--module: '2'">
   <li>I can measure the radiation pattern of an antenna and extract gain, beamwidth, sidelobe level, and polarization from the data.</li>
 </ol>
 ::::
 
-::::{frame} Lessons 7–9 — the canonical radiators
+::::{frame} Lessons 7-9: The Canonical Radiators
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L07-simple-resonant-antennas/index.html">
@@ -82,7 +82,7 @@ useful than either number on its own.
 </div>
 ::::
 
-::::{frame} Lessons 10–11 — shaped apertures and high gain
+::::{frame} Lessons 10-11: Shaped Apertures and High Gain
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L10-patch-slot-horn/index.html">
@@ -98,7 +98,7 @@ useful than either number on its own.
 </div>
 ::::
 
-::::{frame} Lessons 12–14 — measuring what you built
+::::{frame} Lessons 12-14: Measuring What You Built
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L12-pattern-measurement-theory/index.html">
@@ -119,7 +119,7 @@ useful than either number on its own.
 </div>
 ::::
 
-::::{frame} Where this is going
+::::{frame} Where This Is Going
 **Module 3** stops treating an antenna as one object. Put several in a row,
 control the phase of each, and the pattern becomes something you steer rather
 than something you accept.

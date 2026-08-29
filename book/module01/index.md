@@ -19,7 +19,7 @@ Ground the physics before you trust a pattern.
 Lessons 1–6 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame} Where this module goes
+::::{frame} Where This Module Goes
 We start with what an antenna is and why it matters, then trace the chain from
 Maxwell's equations to the plane wave, define the headline antenna parameters —
 gain, directivity, effective aperture, beamwidth — and end with the radiation
@@ -37,7 +37,7 @@ polarization you actually have, at the distance you can actually stand.
 :::
 ::::
 
-::::{frame} Learning objectives — 1.1 to 1.3
+::::{frame} Learning Objectives 1.1-1.3
 
 <ol class="lo-list" style="--module: '1'">
   <li>I can explain what an antenna is, describe its role in a wireless system, and recognize common antenna types by sight.</li>
@@ -46,7 +46,7 @@ polarization you actually have, at the distance you can actually stand.
 </ol>
 ::::
 
-::::{frame} Learning objectives — 1.4 to 1.6
+::::{frame} Learning Objectives 1.4-1.6
 
 <ol class="lo-list" start="4" style="--module: '1'">
   <li>I can calculate input impedance, feed considerations, and the role of baluns in an antenna feed system.</li>
@@ -55,7 +55,7 @@ polarization you actually have, at the distance you can actually stand.
 </ol>
 ::::
 
-::::{frame} Lessons 1–3 — what an antenna is, and how we describe it
+::::{frame} Lessons 1-3: What an Antenna Is, and How We Describe It
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L01-course-intro/index.html">
@@ -76,7 +76,7 @@ polarization you actually have, at the distance you can actually stand.
 </div>
 ::::
 
-::::{frame} Lessons 4–6 — the terminals, the space around them, and the integral
+::::{frame} Lessons 4-6: The Terminals, the Space Around Them, and the Integral
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L04-impedance-feeding-baluns/index.html">
@@ -97,7 +97,7 @@ polarization you actually have, at the distance you can actually stand.
 </div>
 ::::
 
-::::{frame} Where this is going
+::::{frame} Where This Is Going
 **Module 2** takes these foundations to real antenna types — dipoles, loops,
 patches, horns — and to the bench, where you measure the numbers you have so
 far only calculated.

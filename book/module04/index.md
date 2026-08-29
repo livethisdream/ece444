@@ -19,7 +19,7 @@ Send it, hear it come back, and work out what is out there.
 Lessons 29–38 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame} Where this module goes
+::::{frame} Where This Module Goes
 Radar is the antenna course with a clock attached. The radar equation says
 whether you will hear the echo at all; range, resolution and Doppler say what
 you can tell about the thing that sent it back.
@@ -35,7 +35,7 @@ module are the ones the capstone leans on hardest.
 :::
 ::::
 
-::::{frame} Learning objectives — 4.1 to 4.3
+::::{frame} Learning Objectives 4.1-4.3
 
 <ol class="lo-list" style="--module: '4'">
   <li>I can apply the radar equation to calculate received power for a given geometry, and account for path loss and radar cross section (RCS).</li>
@@ -44,7 +44,7 @@ module are the ones the capstone leans on hardest.
 </ol>
 ::::
 
-::::{frame} Learning objectives — 4.4 to 4.6
+::::{frame} Learning Objectives 4.4-4.6
 
 <ol class="lo-list" start="4" style="--module: '4'">
   <li>I can describe FMCW radar operation and configure an FMCW waveform on the ADALM-PHASER.</li>
@@ -53,14 +53,14 @@ module are the ones the capstone leans on hardest.
 </ol>
 ::::
 
-::::{frame} Learning objective 4.7
+::::{frame} Learning Objective 4.7
 
 <ol class="lo-list" start="7" style="--module: '4'">
   <li>I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance.</li>
 </ol>
 ::::
 
-::::{frame} Lessons 29–31 — the equation, and what it takes to detect
+::::{frame} Lessons 29-31: The Equation, and What It Takes to Detect
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L29-radar-equation/index.html">
@@ -81,7 +81,7 @@ module are the ones the capstone leans on hardest.
 </div>
 ::::
 
-::::{frame} Lessons 32–35 — FMCW on the bench: range and Doppler
+::::{frame} Lessons 32-35: FMCW Range and Doppler on the Bench
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L32-fmcw-intro/index.html">
@@ -107,7 +107,7 @@ module are the ones the capstone leans on hardest.
 </div>
 ::::
 
-::::{frame} Lessons 36–38 — separating movers from clutter
+::::{frame} Lessons 36-38: Separating Movers from Clutter
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L36-mti-lab/index.html">
@@ -128,7 +128,7 @@ module are the ones the capstone leans on hardest.
 </div>
 ::::
 
-::::{frame} Where this is going
+::::{frame} Where This Is Going
 **Module 5** puts the two halves of the course together. The array from Module
 3 points and nulls; the radar from Module 4 detects and tracks.
 

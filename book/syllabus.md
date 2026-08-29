@@ -23,7 +23,7 @@ platform, and FMCW radar concepts. Students combine theory and hands-on
 laboratories culminating in a capstone project integrating beamforming and
 radar signal processing.
 
-## Course goals
+## Course Objectives
 
 By the end of this course, you will be able to:
 
@@ -44,7 +44,7 @@ The course is organized around specific, testable learning objectives (LOs).
 Each LO is assessed at least once. LOs are assessed as **Mastered** or
 **Not Yet Mastered** through module assessments.
 
-### Module 1 — Foundations
+### Module 1: Foundations
 
 | LO | Description |
 | :-: | :- |
@@ -55,7 +55,7 @@ Each LO is assessed at least once. LOs are assessed as **Mastered** or
 | 1.5 | I can identify and distinguish the reactive near-field, radiating near-field, and far-field regions and calculate the boundaries for a given antenna. |
 | 1.6 | I can set up and interpret the radiation integrals to derive the far-field pattern of a current distribution. |
 
-### Module 2 — Antenna Types, Simulation, and Measurement
+### Module 2: Antenna Types, Simulation, and Measurement
 
 | LO | Description |
 | :-: | :- |
@@ -67,7 +67,7 @@ Each LO is assessed at least once. LOs are assessed as **Mastered** or
 | 2.6 | I can measure the impedance and S-parameters of an antenna using a vector network analyzer and interpret the results. |
 | 2.7 | I can measure the radiation pattern of an antenna and extract gain, beamwidth, sidelobe level, and polarization from the data. |
 
-### Module 3 — Arrays and ADALM-PHASER Beamforming
+### Module 3: Arrays and ADALM-PHASER Beamforming
 
 | LO | Description |
 | :-: | :- |
@@ -81,7 +81,7 @@ Each LO is assessed at least once. LOs are assessed as **Mastered** or
 | 3.8 | I can identify beam squint and quantization effects in a phased array and describe their impact on system performance. |
 | 3.9 | I can calculate null-steering weights and implement pattern nulls on the ADALM-PHASER. |
 
-### Module 4 — Radar Fundamentals and FMCW
+### Module 4: Radar Fundamentals and FMCW
 
 | LO | Description |
 | :-: | :- |
@@ -93,7 +93,7 @@ Each LO is assessed at least once. LOs are assessed as **Mastered** or
 | 4.6 | I can implement moving target indication (MTI) processing to distinguish moving targets from clutter. |
 | 4.7 | I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance. |
 
-### Module 5 — Capstone Project
+### Module 5: Capstone Project
 
 | LO | Description |
 | :-: | :- |
@@ -281,7 +281,7 @@ include a documentation statement** as outlined in the Documentation policy.
 Lessons link to notes on the [course home](intro.md).
 Labs are marked **LAB**.
 
-### Module 1 — Foundations of Electromagnetics and Antennas
+### Module 1: Foundations of Electromagnetics and Antennas
 
 1. Course Introduction — what an antenna is, why it matters to Air Force operators, course roadmap, SDR + acoustic-beam demos
 2. Basic Properties and Terminology — gain, directivity, effective area, beamwidth, boresight, lobes
@@ -290,7 +290,7 @@ Labs are marked **LAB**.
 5. Field Regions — reactive near-field, radiating near-field, far-field
 6. Radiation Integrals
 
-### Module 2 — Antenna Types, Simulation, and Measurement
+### Module 2: Antenna Types, Simulation, and Measurement
 
 7. Simple Resonant Antennas — isotropic radiators, half-wave dipoles
 8. Dipole Simulation Lab **(LAB)**
@@ -301,7 +301,7 @@ Labs are marked **LAB**.
 13. Measurement Lab Part 1 — Impedance and S-parameters **(LAB)**
 14. Measurement Lab Part 2 — Radiation Patterns **(LAB)**
 
-### Module 3 — Arrays and ADALM-PHASER Beamforming
+### Module 3: Arrays and ADALM-PHASER Beamforming
 
 15. Aperture Distributions and Efficiency
 16. The Array Factor and Pattern Multiplication
@@ -318,7 +318,7 @@ Labs are marked **LAB**.
 27. Null Steering Theory
 28. Null Steering Lab **(LAB)**
 
-### Module 4 — Radar Fundamentals and FMCW
+### Module 4: Radar Fundamentals and FMCW
 
 29. The Radar Equation, Path Loss, and Radar Cross Section (RCS)
 30. Range, Resolution, Doppler Effect, and Radar Types
@@ -331,7 +331,7 @@ Labs are marked **LAB**.
 37. CFAR Processing Theory
 38. CFAR Processing Lab **(LAB)**
 
-### Module 5 — Capstone Project
+### Module 5: Capstone Project
 
 **Scenario:** Track a moving target while suppressing a static jammer.
 
