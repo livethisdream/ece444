@@ -24,7 +24,7 @@ from _common import launch, make_cdn_router, serve, require_vendored, REPO  # no
 from playwright.sync_api import sync_playwright  # noqa: E402
 
 BUILD = REPO / "book" / "_build" / "html"
-PAGES = [("frame", "module01/L05a-field-regions-frames/index.html"),
+PAGES = [("frame", "module01/L05-field-regions/index.html"),
          ("read",  "syllabus.html")]
 # Desktop first, deliberately: it is the width with room to spare, so its bar
 # height is the reference for "one row" that the narrow widths are measured

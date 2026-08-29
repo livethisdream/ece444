@@ -121,7 +121,6 @@ LABS = [
 # they are hand-authored and this list only places them in the nav.
 #   (module, after-slug, slug, title)
 EXTRA_PAGES = [
-    (1, "L05-field-regions", "L05a-field-regions-frames", "L5a — Field Regions (frame view)"),
 ]
 
 # ---- Lesson manifest: (module, num, slug, title, [lo_ids], synopsis, has_practice)

@@ -150,8 +150,8 @@ PDF the site serves.
 A frame lesson is an ordinary MyST page with `frame_view: true` in its front
 matter and its body written as `:::{frame}` / `:::{depth}` directives — the
 lesson page and the deck merged, one full-viewport frame per beat, with the
-interactives running inside it. `book/module01/L05a-field-regions-frames/` is
-the one built this way; the bar at the bottom switches between **present** (one
+interactives running inside it. `book/module01/L05-field-regions/` is the
+worked example; the bar at the bottom switches between **present** (one
 frame at a time) and **read** (the whole lesson, continuous).
 
 Nothing to generate: `jupyter-book build book/ --all` builds it like any other

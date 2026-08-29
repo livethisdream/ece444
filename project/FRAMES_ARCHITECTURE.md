@@ -1,8 +1,11 @@
 # Frame-view lessons — architecture
 
-Status: **one lesson built this way.** `book/module01/L05a-field-regions-frames/`
-is a real MyST page using the directives below, in the TOC, on the site — and
-so are the landing page and all five module overviews. The generated prototype
+Status: **the format is the site's lesson format.** `book/module01/L05-field-regions/`
+is the worked example — a real MyST page using the directives below, in the TOC,
+on the site — and so are the landing page and all five module overviews. The
+L05a experimental copy that proved the format is retired (2026-08-29): once L05
+itself was converted the two were near-duplicates, and its extra beats were
+ported into L05 before deletion. The generated prototype
 that used to sit at `book/extras/frames/`, built by `scripts/build_frames.py`,
 is gone: it was the *old* approach, it still carried the old bottom-right bar,
 and the L05 page linked to it as "frame view", so a reader following that link

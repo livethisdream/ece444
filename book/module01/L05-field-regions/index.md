@@ -41,6 +41,9 @@ space around the antenna and ask: as you walk away from the antenna, at what
 point do the fields settle into the clean, predictable radiation pattern from
 Lesson 2 — and what are they doing before that?
 
+**L2** — pattern, directivity, gain. Every one of those numbers was quoted *far
+away*, without ever saying so.
+
 The space around any antenna divides into **three regions**. They are not sharp
 walls; the fields transition gradually. But the boundaries are worth knowing,
 because *where you stand changes what you measure.*
@@ -68,6 +71,10 @@ far away you are.** Because different parts of the antenna are at meaningfully
 different distances from your observation point, the contributions add up with
 distance-dependent phase, so the angular pattern keeps changing as you move out.
 The wavefront is noticeably **curved**.
+
+:::{callout}
+Measure a pattern here and you have measured *this range*, not the antenna.
+:::
 ::::
 
 ::::{frame} Far-field (Fraunhofer region)
@@ -110,10 +117,16 @@ antenna, so whatever these fields do, real antennas do too — the near field is
 just this, superposed.
 
 :::{depth}
+There is a third component the slide leaves out — a purely radial field with no
+radiation term at all:
+
 $$
 E_r = \frac{\eta_0Idl\cos\theta}{2\pi r^2}
       \left(1 + \frac{1}{jkr}\right)e^{-jkr}
 $$
+
+It falls as $1/r^2$ at best, so it is a near-field quantity only — it
+contributes nothing to the pattern you measure far away.
 :::
 ::::
 
@@ -316,6 +329,11 @@ $$
 
 Inside this distance the phase across the aperture curves enough to distort the
 pattern; beyond it, the wavefront is "flat enough" and the pattern is stable.
+
+:::{depth}
+That is the whole content of the criterion: a statement about how flat a
+sphere looks over a finite width, not about where radiation starts.
+:::
 ::::
 
 ::::{frame} Worked example
@@ -332,6 +350,8 @@ $$
 \lambda = \frac{c}{f} = \frac{3\times10^8}{10\times10^9} = 0.03\ \text{m}
 $$
 
+The antenna is electrically large: $D/\lambda = 1.2 \div 0.03 = 40$.
+
 $$
 r_\text{ff} = \frac{2D^2}{\lambda} = \frac{2(1.2)^2}{0.03} = 96\ \text{m}
 $$
@@ -340,6 +360,9 @@ $$
 r_\text{reactive} = 0.62\sqrt{\frac{D^3}{\lambda}}
 = 0.62\sqrt{\frac{1.728}{0.03}} = 0.62\sqrt{57.6} \approx 4.7\ \text{m}
 $$
+
+Notice the $D^2$: go to 20 GHz and the far field starts at 192 m for the same
+dish.
 :::
 ::::
 
@@ -352,7 +375,8 @@ range $r$: the lower panel redraws the spherical wavefront arriving over the
 aperture and plots the phase error it produces across $D$, turning green the
 moment that error drops under the $22.5^{\circ}$ limit. Notice that green arrives
 exactly as $r$ crosses $2D^2/\lambda$, and that doubling $D$ pushes it four times
-farther out — the $D^2$ in the formula, on screen.
+farther out — the $D^2$ in the formula, on screen. Hold $D$ and double $f$: it
+doubles.
 
 <iframe src="../../viz/field-regions.html"
         width="100%" height="656"
@@ -366,7 +390,8 @@ farther out — the $D^2$ in the formula, on screen.
 The far-field distance is not academic — it sets the size of your test range. To
 measure an antenna's true pattern, gain, and sidelobes, the antenna under test
 must sit in the **far field** of the source (and vice versa). For a large dish at
-high frequency that can mean hundreds of metres, which is often impractical.
+high frequency that can mean hundreds of metres of clear, reflection-free
+range — often impractical, sometimes impossible indoors.
 
 That is exactly why **near-field scanning** exists: you measure the fields on a
 surface *close* to the antenna (in the radiating near-field), then mathematically
@@ -427,5 +452,7 @@ path difference $D^2/8r$ from this lesson, and the licence to drop it is the
 $\pi/8$ tolerance — so "the far-field approximation" in Lesson 6 and
 $r \ge 2D^2/\lambda$ here are the same statement, one written as an integral and
 one as a distance.
+
+Same number, two stories. That is usually a sign you have the physics right.
 :::
 ::::

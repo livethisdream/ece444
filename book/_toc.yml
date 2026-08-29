@@ -27,8 +27,6 @@ parts:
         title: "L4 Lab — Matching Procedures"
       - file: module01/L05-field-regions/index
         title: "L5 — Field Regions"
-      - file: module01/L05a-field-regions-frames/index
-        title: "L5a — Field Regions (frame view)"
       - file: module01/L06-radiation-integrals/index
         title: "L6 — Radiation Integrals"
 

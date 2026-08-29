@@ -116,7 +116,7 @@ The markdown parser mangles LaTeX in four specific ways:
 
 A frame lesson is an ordinary MyST page whose body is `:::{frame}` directives —
 the lesson page and its deck merged into one document, one full-viewport frame
-per beat. `book/module01/L05a-field-regions-frames/` is the worked example; the
+per beat. `book/module01/L05-field-regions/` is the worked example; the
 landing page and the five module overviews are built the same way.
 
 - **A frame's title is a directive ARGUMENT, not a heading.** `::::{frame} The

@@ -16,7 +16,7 @@ there means `.page`'s natural document flow got trapped in a fixed-height
 box, or the bar/overlay chrome ate the only sheet whole.
 
     check_print.py                       # every printable page in the book
-    check_print.py L05a-field-regions    # only pages whose path contains this
+    check_print.py L05-field-regions    # only pages whose path contains this
 """
 import pathlib
 import subprocess
