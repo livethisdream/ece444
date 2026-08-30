@@ -379,7 +379,11 @@ function drawAll(){ sweep(); drawWire(); drawPolarPanel(); drawRectPanel(); read
    into and the drawing comes out stretched horizontally -- circles turn into
    ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
    so hand the border back or the bitmap is 2px taller than its box. */
-function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+/* Floor lowered from the usual 240: three columns now share the row, so a
+   single column can be narrower than 240 at the widths the site serves (down
+   to ~210px at 688px total). A too-high floor here mismatches the bitmap
+   against the CSS box and stretches the drawing into an ellipse. */
+function cvWidth(cv){ return Math.max(100, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
 function setSize(cv,wCss,hCss,dpr){
   cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
   cv.style.height=hCss+'px';
