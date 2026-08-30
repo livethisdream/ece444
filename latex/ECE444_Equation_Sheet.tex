@@ -43,10 +43,10 @@
   \hrule height 0.9pt%
   \vspace{5pt}%
 }
-% Sub-heads are small caps: they read as headings at a glance without
-% competing with the module banner (bold sans + rule) the way a smaller bold
-% sans does, and without the second rule weight an underlined variant adds.
-\newcommand{\grp}[1]{\vspace{2pt}{\scshape #1}\vspace{-2pt}}
+% Sub-heads are bold sans with a trailing rule to the column edge. The rule
+% is \hrulefill's default 0.4pt against the module banner's 0.9pt, so the two
+% levels stay distinguishable by weight rather than competing.
+\newcommand{\grp}[1]{\vspace{1pt}{\sffamily\bfseries\footnotesize #1}\ \hrulefill\vspace{-4pt}}
 
 % Left-aligned display block. \eq (align*) centres its contents, which in a
 % narrow column strands every short equation in the middle with a ragged
