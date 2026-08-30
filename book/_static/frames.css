@@ -190,11 +190,13 @@ kbd {
    measured 735px of content in a 672px budget on a laptop. */
 [data-mode="present"] .frame img { max-height: 58vh; width: auto; }
 
-/* A widget cannot be shrunk to fit the way a figure can: it stacks its own
-   controls as it narrows, so on a phone it is genuinely taller than the
-   screen. Let that one frame scroll rather than clipping the controls off
-   the bottom. */
-[data-mode="present"] .frame.viz-frame { overflow-y: auto; }
+/* Widget frames do NOT scroll. A widget that needs a scrollbar to show its
+   own controls has been laid out wrong: the fix is a shorter canvas or a
+   more compact control bar in the widget itself, not a scroll container
+   here. Measured budget for a widget frame at 1280x800 is 720px, of which
+   the title takes 56-98px -- so a widget iframe belongs at 600px or less,
+   and any lead-in prose belongs in :::{depth} where present mode hides it.
+   check_frames.py enforces this; nothing is exempt. */
 
 /* read: a lesson page. no snapping, everything visible, frames sized to
    their content so the document scrolls continuously. */

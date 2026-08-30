@@ -31,9 +31,8 @@ PROBE = """() => {
       title: ((f.querySelector('.rubric') || {}).textContent || '(title frame)').trim().slice(0, 46),
       content: Math.round(wrap.getBoundingClientRect().height),
       budget: Math.round(window.innerHeight - pad),
-      // A frame that scrolls is not clipping anything, so it is not over
-      // budget -- the widget frames are deliberately scrollable because a
-      // widget stacks its own controls and cannot be shrunk to fit.
+      // Reported, but no longer an excuse: a frame that scrolls to fit its
+      // widget is hiding controls below the fold.
       scrolls: cs.overflowY !== 'visible',
     };
   });
@@ -74,9 +73,14 @@ def main():
                     continue
                 checked += 1
                 for f in frames:
-                    if f["content"] > f["budget"] and f["scrolls"]:
+                    # No exemption for scrollable frames. A widget frame that
+                    # scrolls is hiding its own controls below the fold, which
+                    # is the defect, not a licence for it. Course rule: a
+                    # graphic fits the span of one frame or it gets laid out
+                    # until it does.
+                    if f["scrolls"]:
                         scrollable += 1
-                    elif f["content"] > f["budget"]:
+                    if f["content"] > f["budget"]:
                         over.append(f"{label} {rel} frame {f['n']} "
                                     f"\"{f['title']}\": {f['content']}px "
                                     f"in {f['budget']}px")
@@ -90,7 +94,7 @@ def main():
         print(f"no frame page matched {want!r} -- nothing was checked")
         return 1
     print(f"checked {checked} frame-page renders at two widths"
-          f" ({scrollable} frames scroll by design and are exempt)")
+          f" ({scrollable} frames still declare a scroll container)")
     if over:
         print(f"\n{len(over)} FRAMES OVER BUDGET:")
         for o in over:
