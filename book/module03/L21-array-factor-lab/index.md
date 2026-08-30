@@ -143,6 +143,7 @@ grid does reach.
 ::::{frame} Ideal versus measured, on a toggle
 :class: viz-frame
 
+:::{depth}
 The widget below draws the array factor for each of the three apertures, then
 adds those three measurement effects on a toggle. Set the aperture, read HPBW,
 FNBW, and first sidelobe level off the ideal curve, then switch measurement
@@ -150,9 +151,10 @@ effects on and read the same three numbers again from the sampled trace. Watch
 the FNBW pill in particular: at eight elements it moves from $30.1^\circ$ to
 $28.1^\circ$ the moment the grid appears, and at two elements it reports a dash
 because there is no null to find.
+:::
 
 <iframe src="../../viz/af-measurement-compare.html"
-        width="100%" height="593"
+        width="100%" height="463"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Ideal array factor and measured sweep at 8, 4, and 2 active elements">

@@ -146,7 +146,7 @@
 
   function sizeCanvas() {
     var w = cv.clientWidth || cv.parentNode.clientWidth || 700;
-    var h = Math.round(Math.max(210, Math.min(340, w * 0.50)));
+    var h = Math.round(Math.max(180, Math.min(230, w * 0.32)));
     cv.style.height = h + 'px';
     var dpr = window.devicePixelRatio || 1;
     cv.width = Math.round(w * dpr);

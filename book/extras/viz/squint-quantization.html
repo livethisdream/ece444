@@ -12,6 +12,8 @@
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
   canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .canvases { display:grid; grid-template-columns:1fr; gap:10px; }
+  @media (min-width:660px) { .canvases { grid-template-columns:1fr 1fr; align-items:start; } }
   .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 230px; min-width:0; flex-wrap:wrap; }
@@ -46,8 +48,10 @@
 </head>
 <body>
 <div class="app">
-  <canvas id="pat" aria-label="Array factor in decibels against angle from broadside for the eight-element course array, showing grating lobes, beam squint or phase-quantization sidelobes depending on the selected mode"></canvas>
-  <canvas id="aux" aria-label="Companion panel showing the element layout or the commanded element phases that produce the pattern above"></canvas>
+  <div class="canvases">
+    <canvas id="pat" aria-label="Array factor in decibels against angle from broadside for the eight-element course array, showing grating lobes, beam squint or phase-quantization sidelobes depending on the selected mode"></canvas>
+    <canvas id="aux" aria-label="Companion panel showing the element layout or the commanded element phases that produce the pattern above"></canvas>
+  </div>
 
   <div class="controls">
     <div class="ctl">
@@ -474,11 +478,12 @@ function drawAll(){
 
 function fit(){
   const dpr=window.devicePixelRatio||1;
-  const w=cvP.getBoundingClientRect().width;
-  const hP=Math.min(Math.max(w*(w<460?0.70:0.48),230), 360);
-  const hA=Math.min(Math.max(w*(w<460?0.36:0.22),120), 170);
-  for(const [cv,ctx,hh] of [[cvP,cP,hP],[cvA,cA,hA]]){
-    cv.width=w*dpr; cv.height=hh*dpr; cv.style.height=hh+'px';
+  const wP=Math.round(cvP.getBoundingClientRect().width);
+  const wA=Math.round(cvA.getBoundingClientRect().width);
+  const hP=Math.round(Math.min(Math.max(wP*(wP<460?0.70:0.48),230), 360));
+  const hA=Math.round(Math.min(Math.max(wA*(wA<460?0.36:0.22),120), 170));
+  for(const [cv,ctx,ww,hh] of [[cvP,cP,wP,hP],[cvA,cA,wA,hA]]){
+    cv.width=ww*dpr; cv.height=hh*dpr; cv.style.height=hh+'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
   }
   drawAll();

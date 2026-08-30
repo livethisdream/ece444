@@ -12,6 +12,10 @@
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
   canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* Stacked below ~650px (phone); side by side above it -- halves the vertical
+     space the two canvases cost on any reader-width viewport. */
+  .canvases { display:flex; flex-direction:column; gap:10px; }
+  @media (min-width:650px) { .canvases { display:grid; grid-template-columns:1fr 1fr; gap:14px; } }
   .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 250px; }
@@ -62,8 +66,10 @@
 </head>
 <body>
 <div class="app">
-  <canvas id="top" aria-label="Left: a line source split into elements, each sending a parallel ray toward the observation direction. Right: the phasor chain formed by adding those element contributions."></canvas>
-  <canvas id="pat" aria-label="Magnitude of the radiation integral versus observation angle, with a marker at the current angle"></canvas>
+  <div class="canvases">
+    <canvas id="top" aria-label="Left: a line source split into elements, each sending a parallel ray toward the observation direction. Right: the phasor chain formed by adding those element contributions."></canvas>
+    <canvas id="pat" aria-label="Magnitude of the radiation integral versus observation angle, with a marker at the current angle"></canvas>
+  </div>
 
   <div class="controls">
     <div class="ctl">
@@ -142,9 +148,10 @@ function drawTop(){
 
 function drawSource(x0,y0,w,h){
   const ctx=ctxT;
-  stext(ctx,'the source, element by element', x0+14, y0+18, 12, cssv('--navy'),'left',true);
-
-  const cx=x0+w*0.34, cy=y0+h*0.52, half=Math.min(h*0.30, 100);
+  // No caption -- the lesson prose already says the source is chopped into
+  // elements each carrying a phasor (Neil's rule: don't restate in-graphic
+  // what the text says).
+  const cx=x0+w*0.34, cy=y0+h*0.55, half=Math.min(h*0.32, 100);
   const th=state.th, ux=Math.sin(th), uy=-Math.cos(th);   // observation direction
 
   // z axis
@@ -188,13 +195,12 @@ function drawSource(x0,y0,w,h){
 
 function drawPhasors(x0,y0,w,h){
   const ctx=ctxT;
-  stext(ctx,'their phasors, added tip to tail', x0+16, y0+18, 12, cssv('--navy'),'left',true);
-
-  const cx=x0+w*0.5, cy=y0+h*0.60;
-  const R=Math.min(w*0.62, h*0.42);          // chain length when every phasor aligns
+  // No caption here either -- same reason as drawSource above.
+  const cx=x0+w*0.5, cy=y0+h*0.58;
+  const R=Math.min(w*0.62, h*0.46);          // chain length when every phasor aligns
 
   // reference bar: the length the chain reaches when nothing cancels
-  const by=y0+50;
+  const by=y0+24;
   ctx.strokeStyle=cssv('--edge2'); ctx.lineWidth=3; ctx.lineCap='round';
   ctx.beginPath(); ctx.moveTo(cx-R/2,by); ctx.lineTo(cx+R/2,by); ctx.stroke(); ctx.lineCap='butt';
   stext(ctx,'maximum — every element in phase', cx, by-14, 10.5, cssv('--ink3'),'center',false);

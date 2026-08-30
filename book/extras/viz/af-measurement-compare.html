@@ -222,7 +222,7 @@ let W = 0, H = 0, PAD = null;
 
 function sizeCanvas() {
   const cssW = cv.getBoundingClientRect().width || 700;
-  const cssH = Math.max(250, Math.min(380, Math.round(cssW * 0.50)));
+  const cssH = Math.max(190, Math.min(250, Math.round(cssW * 0.34)));
   cv.style.height = cssH + 'px';
   const dpr = window.devicePixelRatio || 1;
   cv.width  = Math.round(cssW * dpr);

@@ -249,12 +249,14 @@ memorize.
 ::::{frame} Interactive — the three terms and their crossover
 :class: viz-frame
 
+:::{depth}
 Slide the observation point in and out. The three field terms are straight lines
 on a log–log plot (slopes $-1$, $-2$, $-3$); they all cross at $kr = 1$, i.e.
 $r = \lambda/2\pi$. To the left, the $1/r^3$ stored field runs away — the reactive
 near field. To the right the radiation term takes over, and its lead over the
 other two grows tenfold for every decade you move out — which is why "negligible"
 takes until $kr \approx 10$, not $kr = 1$.
+:::
 
 <iframe src="../../viz/near-field-terms.html"
         width="100%" height="521"
@@ -369,17 +371,20 @@ dish.
 ::::{frame} Interactive — field-region explorer
 :class: viz-frame
 
+:::{depth}
 Set the antenna's largest dimension $D$ and the frequency, and watch the three
 region boundaries slide along the distance axis in the top panel. Then drag the
-range $r$: the lower panel redraws the spherical wavefront arriving over the
-aperture and plots the phase error it produces across $D$, turning green the
-moment that error drops under the $22.5^{\circ}$ limit. Notice that green arrives
-exactly as $r$ crosses $2D^2/\lambda$, and that doubling $D$ pushes it four times
-farther out — the $D^2$ in the formula, on screen. Hold $D$ and double $f$: it
-doubles.
+range $r$: the lower-left panel redraws the spherical wavefront arriving over
+the aperture — its curvature is drawn to scale with the phase error, not with
+$r$ itself — and the lower-right panel plots the phase error it produces
+across $D$, turning green the moment that error drops under the
+$22.5^{\circ}$ limit. Notice that green arrives exactly as $r$ crosses
+$2D^2/\lambda$, and that doubling $D$ pushes it four times farther out — the
+$D^2$ in the formula, on screen. Hold $D$ and double $f$: it doubles.
+:::
 
 <iframe src="../../viz/field-regions.html"
-        width="100%" height="656"
+        width="100%" height="465"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Field-region explorer">

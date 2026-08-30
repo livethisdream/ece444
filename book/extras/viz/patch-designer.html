@@ -12,6 +12,11 @@
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
   canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* The two canvases side by side above ~600px halves their contribution to the
+     page height -- the single biggest lever on this widget's overall height.
+     Below 600px (phone) there isn't room for two useful columns, so stack. */
+  .canvases { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:600px) { .canvases { grid-template-columns:1fr; } }
   .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 230px; }
@@ -65,8 +70,10 @@
 </head>
 <body>
 <div class="app">
-  <canvas id="geo" aria-label="Scaled top view and side view of a rectangular microstrip patch, drawn inside a free-space half-wavelength reference box"></canvas>
-  <canvas id="pat" aria-label="E-plane and H-plane patterns of the two-slot patch model, plotted in decibels over the upper half space"></canvas>
+  <div class="canvases">
+    <canvas id="geo" aria-label="Scaled top view and side view of a rectangular microstrip patch, drawn inside a free-space half-wavelength reference box"></canvas>
+    <canvas id="pat" aria-label="E-plane and H-plane patterns of the two-slot patch model, plotted in decibels over the upper half space"></canvas>
+  </div>
 
   <div class="controls">
     <div class="ctl">
@@ -180,10 +187,10 @@ const cvP=document.getElementById('pat'), ctxP=cvP.getContext('2d');
 function drawGeo(d){
   const dpr=window.devicePixelRatio||1, w=cvG.width/(dpr*SCL), h=cvG.height/(dpr*SCL);
   const ctx=ctxG; ctx.clearRect(0,0,w,h);
-  const BOX=184;                                  // px across the free-space lambda/2 box
+  const BOX=150;                                  // px across the free-space lambda/2 box
   const mm = d.half*1000;                         // lambda/2 in mm
   const s  = BOX/mm;                              // px per mm  -- everything uses this
-  const cx = Math.min(w*0.38, 240), cy = 140;
+  const cx = Math.min(w*0.38, 240), cy = 124;
 
   stext(ctx,'top view', 14, 18, 12, cssv('--navy'),'left',true);
 
@@ -248,24 +255,19 @@ function drawGeo(d){
   stext(ctx,'h = '+(state.h*1000).toFixed(2)+' mm', cx+BOX/2, gy-sub-26, 11.5, cssv('--navy'),'right',true);
   stext(ctx,'fringing', cx-pl/2-20, gy-sub-14, 10.5, cssv('--red'),'right',false);
 
-  /* ---- legend / notes on the right ---- */
-  const lx=Math.min(cx+BOX/2+150, w-200), ly=50;
+  /* ---- legend on the right: labels only, the explanation lives in the
+     lesson prose and (for the h>0.05\u03bb case) in the .note warning below ---- */
+  const lx=Math.min(cx+BOX/2+150, w-200), ly=56;
   ctx.strokeStyle=cssv('--red'); ctx.lineWidth=4; ctx.lineCap='round';
   ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx+20, ly); ctx.stroke(); ctx.lineCap='butt';
-  stext(ctx,'the two radiating edges', lx+28, ly, 12, cssv('--red'),'left',true);
-  stext(ctx,'each is a slot of width W;', lx, ly+18, 11.5, cssv('--ink3'),'left',false);
-  stext(ctx,'they sit L apart and add in phase', lx, ly+34, 11.5, cssv('--ink3'),'left',false);
-  stext(ctx,'straight up.', lx, ly+50, 11.5, cssv('--ink3'),'left',false);
+  stext(ctx,'radiating edges', lx+28, ly, 12, cssv('--red'),'left',true);
 
-  stext(ctx,'dielectric half-wave', lx, ly+82, 12, cssv('--navy'),'left',true);
+  stext(ctx,'dielectric half-wave', lx, ly+30, 12, cssv('--navy'),'left',true);
   stext(ctx,(d.lamd*500).toFixed(1)+' mm  vs  '+(d.half*1000).toFixed(1)+' mm in air',
-        lx, ly+100, 11.5, cssv('--ink3'),'left',false);
-  stext(ctx,'the substrate is doing the shrinking', lx, ly+116, 11.5, cssv('--ink3'),'left',false);
+        lx, ly+48, 11.5, cssv('--ink3'),'left',false);
 
   if(state.h > 0.05*d.lam){
-    stext(ctx,'h > 0.05\u03bb: outside the range', lx, ly+146, 11.5, cssv('--red'),'left',true);
-    stext(ctx,'where these closed forms are', lx, ly+162, 11.5, cssv('--red'),'left',true);
-    stext(ctx,'trusted (surface waves).', lx, ly+178, 11.5, cssv('--red'),'left',true);
+    stext(ctx,'h > 0.05\u03bb: outside model range', lx, ly+95, 11.5, cssv('--red'),'left',true);
   }
 }
 function arrow(ctx,x1,y1,x2,y2,col){
@@ -334,10 +336,13 @@ function half(ctx,x0,w,h,fn,name,sub,col){
       ctx.lineTo(cx+sg*R*Math.sin(t), cy-R*Math.cos(t)); ctx.stroke();
     }
     ctx.setLineDash([]);
-    stext(ctx,'HPBW '+bw.toFixed(0)+'\u00b0', x0+w-14, 18, 12.5, cssv('--grn'),'right',true);
+    /* Stacked under name/sub, not right-aligned across from them -- at the
+       half-width this canvas now draws at (side by side with the geometry
+       canvas), a right-aligned status line sits close enough to collide with
+       the neighbouring half's title. */
+    stext(ctx,'HPBW '+bw.toFixed(0)+'\u00b0', x0+14, 50, 12, cssv('--grn'),'left',true);
   } else {
-    stext(ctx,'no \u22123 dB point', x0+w-14, 18, 12, cssv('--amber'),'right',true);
-    stext(ctx,'in this model',    x0+w-14, 34, 11, cssv('--amber'),'right',false);
+    stext(ctx,'no \u22123 dB point in this model', x0+14, 50, 11, cssv('--amber'),'left',false);
   }
   MJ.draw(ctx,'\\theta', cx+R*0.70, cy-R*0.34, 13, cssv('--ink3'),'center');
 }
@@ -383,7 +388,7 @@ function fit(){
   const wCss=cvWidth(cvG);
   SCL=Math.min(1, wCss/DESIGN_W);
   const w=wCss/SCL;
-  const h1=366, h2=Math.max(248, Math.min(w*0.30, 285));
+  const h1=320, h2=Math.max(200, Math.min(w*0.30, 230));
   setSize(cvG,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
   ctxG.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();

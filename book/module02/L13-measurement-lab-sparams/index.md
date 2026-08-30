@@ -258,10 +258,12 @@ You met the Smith chart in ECE 343 as a graphical impedance calculator. Today yo
 ::::{frame} Drive it yourself — S11 and the Smith chart
 :class: viz-frame
 
+:::{depth}
 The widget below shows one physical resonance in both languages at once. Drag across either plot: the marker tracks the same frequency on both. Watch three things. First, the dip in dB, the real-axis crossing on the chart, and the VSWR minimum are the *same event* seen three ways. Second, slide $R$ at resonance away from $50\ \Omega$ and the dip gets shallower while the resonant frequency does not move — mismatch and resonance are independent. Third, raise $Q$ and the bandwidth pinches shut, which is exactly why fat conductors are wideband and thin ones are not.
+:::
 
 <iframe src="../../viz/s11-smith.html"
-        width="100%" height="639"
+        width="100%" height="549"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="An antenna resonance shown as an S11 dip in dB and as a Smith-chart locus, with linked marker, impedance, VSWR, and −10 dB bandwidth readouts.">

@@ -90,14 +90,16 @@ from a trace whose floor is at $-23$ dBc reports the noise, not the antenna.
 ::::{frame} Interactive — the measured sweep for each taper preset
 :class: viz-frame
 
+:::{depth}
 The widget below runs the same sweep in the browser. Start on Uniform and note
 the first sidelobe near $-13$ dBc, then step through the presets and watch two
 things happen at once: the main lobe widens and its peak drops, while the
 sidelobes sink into the grass. The $\eta_t$ pill is the directivity loss, so
 compare it against the peak drop pill each time — the two never agree.
+:::
 
 <iframe src="../../viz/taper-measurement.html"
-        width="100%" height="690"
+        width="100%" height="500"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Measured beam sweep for the PHASER taper presets, with element gains, HPBW, peak drop and taper efficiency">

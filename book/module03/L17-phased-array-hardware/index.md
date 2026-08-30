@@ -219,11 +219,13 @@ HB100 you are likely to be handed falls inside it.
 ::::{frame} Interactive — the PHASER signal chain
 :class: viz-frame
 
+:::{depth}
 The widget below is the same chain as the figure, but you can click it. Select a
 block to see what it does and what frequency lives at that node, then drag the
 HB100 slider and watch the RF and LO labels move while the IF label does not.
 Notice that only one block changes its setting when the source frequency
 changes: the LO. That is the point of a fixed-IF plan.
+:::
 
 <iframe src="../../viz/phaser-signal-chain.html"
         width="100%" height="508"

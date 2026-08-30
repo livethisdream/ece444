@@ -13,6 +13,8 @@
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
   canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .canvases { display:grid; grid-template-columns:1fr; gap:10px; }
+  @media (min-width:600px) { .canvases { grid-template-columns:1fr 1fr; } }
   .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(196px,1fr)); gap:9px 18px; align-items:center;
               padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
@@ -47,8 +49,10 @@
 </head>
 <body>
 <div class="app">
-  <canvas id="ap" aria-label="Field amplitude across the aperture"></canvas>
-  <canvas id="pat" aria-label="Far-field power pattern in decibels versus angle from broadside"></canvas>
+  <div class="canvases">
+    <canvas id="ap" aria-label="Field amplitude across the aperture"></canvas>
+    <canvas id="pat" aria-label="Far-field power pattern in decibels versus angle from broadside"></canvas>
+  </div>
 
   <div class="controls">
     <div class="ctl">

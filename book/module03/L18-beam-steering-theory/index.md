@@ -237,15 +237,17 @@ visible space entirely.
 ::::{frame} The ramp and the beam together
 :class: viz-frame
 
+:::{depth}
 Use the widget below to connect the two halves of the lesson. Drag the steer
 angle and watch the eight commanded phases and the main lobe move together, then
 switch the phase display between the wrapped values and the unwrapped ramp — the
 sawtooth is the same physics as the straight line. Set $\theta_0 = 30^\circ$ and
 check the bars against the worked table above, then compare the $-3$ dB width
 printed on the pattern with the HPBW pill as you scan out toward $60^\circ$.
+:::
 
 <iframe src="../../viz/beam-steering.html"
-        width="100%" height="727"
+        width="100%" height="426"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Steered pattern and per-element phase ramp for the 8-element course array">

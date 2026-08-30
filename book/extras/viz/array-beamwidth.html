@@ -34,8 +34,6 @@
   .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
            font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
            text-align:center; min-width:8ch; color:var(--navy); }
-  .ro.hp  { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
-  .ro.hp  .v { color:var(--grn); }
   .ro.fn  { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
   .ro.fn  .v { color:var(--red); }
   .ro.sll { background:rgba(138,90,0,0.12);  border-color:rgba(138,90,0,0.30); }
@@ -64,9 +62,10 @@
     </div>
   </div>
 
+  <!-- HPBW-from-pattern and the 0.886 formula are already printed on the plot
+       itself (draw(), the two stext() calls above the frame); the readouts
+       row keeps only the numbers the canvas does not already show. -->
   <div class="readouts">
-    <div class="ro hp"><span class="k">HPBW from pattern</span><span class="v" id="p-hp">&#8212;</span></div>
-    <div class="ro hp"><span class="k">\(0.886\lambda/(Nd\cos\theta_0)\)</span><span class="v" id="p-fx">&#8212;</span></div>
     <div class="ro fn"><span class="k">FNBW</span><span class="v" id="p-fn">&#8212;</span></div>
     <div class="ro sll"><span class="k">highest sidelobe</span><span class="v" id="p-sl">&#8212;</span></div>
     <div class="ro"><span class="k">directivity</span><span class="v" id="p-d">&#8212;</span></div>
@@ -285,8 +284,6 @@ function draw(){
 const neg=x=>(Math.abs(x)<0.05?'0.0':x.toFixed(1)).replace('-','−');
 function readouts(m){
   const set=(id,v)=>{ document.getElementById(id).textContent=v; };
-  set('p-hp', m.hp===null? '> 180°' : m.hp.toFixed(1)+'°');
-  set('p-fx', m.fx>=180? '> 180°' : m.fx.toFixed(1)+'°');
   set('p-fn', m.fn!==null? m.fn.toFixed(1)+'°'
               : (m.nl.length? 'unbounded' : '180° by conv.'));
   set('p-sl', m.sll===null? 'none in view'
@@ -299,7 +296,7 @@ function drawAll(){ sweep(); draw(); }
 function fit(){
   const dpr=window.devicePixelRatio||1;
   const w=cv.getBoundingClientRect().width;
-  const h=Math.min(w*(w<460?0.72:0.50), 390);
+  const h=Math.min(w*(w<460?0.72:0.44), 340);
   cv.width=w*dpr; cv.height=h*dpr; cv.style.height=h+'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
   drawAll();

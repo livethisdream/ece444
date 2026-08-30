@@ -203,10 +203,12 @@ The table reads as one continuous trade. Going from uniform to $\cos^2$ lowers t
 ::::{frame} Interactive — shape sets sidelobe and beamwidth; length only rescales
 :class: viz-frame
 
+:::{depth}
 The widget below computes the pattern of each illumination directly from the aperture integral. Pick an illumination and watch three things: the sidelobe level and the half-power constant change together, while the aperture length slider moves the pattern in angle without touching either. Set the aperture to $2\lambda$ and step through the illuminations to see the sidelobes leave visible space entirely, then set it to $20\lambda$ and confirm that the first sidelobe of the uniform case is still exactly $13.3$ dB down.
+:::
 
 <iframe src="../../viz/aperture-distribution.html"
-        width="100%" height="764"
+        width="100%" height="437"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Aperture illumination and the far-field pattern it produces">

@@ -131,9 +131,9 @@
     var w = Math.max(240, Math.floor(cv.parentNode.clientWidth));
     var narrow = w < 560;
     var legendRows = narrow ? 3 : 1;
-    var B = 42 + legendRows * 18;                 // ticks + axis title + legend
-    var T = 12;
-    var plotH = Math.round(Math.min(300, Math.max(170, w * 0.42)));
+    var B = 36 + legendRows * 16;                 // ticks + axis title + legend
+    var T = 10;
+    var plotH = Math.round(Math.min(210, Math.max(140, w * 0.30)));
     var h = T + plotH + B;
     var dpr = window.devicePixelRatio || 1;
     cv.style.width = w + 'px'; cv.style.height = h + 'px';

@@ -107,13 +107,15 @@ curl, it's right-hand polarized. Left-hand is the mirror image.
 ::::{frame} The E-vector trace changes from a line to an ellipse to a circle
 :class: viz-frame
 
+:::{depth}
 Move the sliders for $E_{x}$, $E_{y}$, and phase $\delta$ (or hit a
 preset) and watch the E-vector trace at a fixed $z$ change from a line
 to an ellipse to a circle. The two component waveforms below the trace
 show what each linear channel sees.
+:::
 
 <iframe src="../../viz/polarization-playground.html"
-        width="100%" height="953"
+        width="100%" height="522"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Polarization playground">

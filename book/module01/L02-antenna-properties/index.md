@@ -169,10 +169,12 @@ on your receiver in a given direction.
 ::::{frame} The same wave is a ripple in space and in time
 :class: viz-frame
 
+:::{depth}
 The same wave is a ripple in **space** (freeze the clock → wavelength
 $\lambda$) and a ripple in **time** (stand at one point → period $T$),
 tied together by the crest speed/phase velocity $c = \lambda f = \omega / k$. Drag the
 sliders, or press play to watch a crest travel.
+:::
 
 <iframe src="../../viz/plane-wave-freeze.html"
         width="100%" height="567"
@@ -264,6 +266,7 @@ $$
 ::::{frame} Solid angle
 :class: viz-frame
 
+:::{depth}
 A **solid angle** $\Omega$ (in steradians) is the 3-D analogue of a planar
 angle: the area a cone cuts out of a unit sphere. A cone pointed in some
 direction subtends a solid angle $d\Omega$ and intercepts a patch of area
@@ -274,6 +277,7 @@ angle — which is why it is a property of *direction alone*.
 Drag to rotate the sphere; slide the cone half-angle $\alpha$ to watch the
 solid angle $\Omega = 2\pi(1 - \cos\alpha)$ and the patch it carves out
 grow.
+:::
 
 <iframe src="../../viz/solid-angle.html"
         width="100%" height="490"
@@ -334,9 +338,11 @@ When your instrument or datasheet reports gain in dBi, it is almost always the r
 ::::{frame} Build the gain
 :class: viz-frame
 
+:::{depth}
 Start from a directivity, then watch radiation efficiency and mismatch each
 carve a few dB away. The bars trace **directivity → gain
 $G = \eta_{\text{rad}} D$ → realized gain** in dBi.
+:::
 
 <iframe src="../../viz/gain-builder.html"
         width="100%" height="503"
@@ -396,9 +402,11 @@ $$
 ::::{frame} The forward and reflected waves add to a standing wave
 :class: viz-frame
 
+:::{depth}
 A mismatch sends part of the wave back; the forward and reflected waves add
 to a **standing wave**. Slide $|\Gamma|$ and press play — the envelope's
 maxima and minima set the VSWR, and the nulls stay pinned in place.
+:::
 
 <iframe src="../../viz/vswr-standing-wave.html"
         width="100%" height="523"
@@ -411,13 +419,15 @@ maxima and minima set the VSWR, and the nulls stay pinned in place.
 ::::{frame} Comparing gain patterns
 :class: viz-frame
 
+:::{depth}
 Toggle antenna types on/off to compare their **E-plane** gain patterns
 against an isotropic reference. Slide the dish diameter to watch the
 parabolic beam narrow and its peak gain climb — a direct look at how a
 larger $A_{\text{phys}} / \lambda^{2}$ buys gain.
+:::
 
 <iframe src="../../viz/polar-gain.html"
-        width="100%" height="778"
+        width="100%" height="533"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Polar gain patterns">
@@ -448,10 +458,12 @@ each other in every array-tapering problem in Module 3.
 ::::{frame} HPBW, FNBW, and SLL move with aperture size
 :class: viz-frame
 
+:::{depth}
 The plot below shows the **rectilinear** ($\theta$ vs. dB) view of the
 same aperture pattern we used for the horn and dish in the polar plot.
 Slide **D/λ** to change the aperture size; the HPBW, FNBW, and SLL
 markers move with it.
+:::
 
 <iframe src="../../viz/pattern-features.html"
         width="100%" height="555"
@@ -638,15 +650,17 @@ opposite directions.
 ::::{frame} Effective aperture vs gain and frequency
 :class: viz-frame
 
+:::{depth}
 The widget below lets you run that argument both ways. Start in **Physical
 dish** mode and sweep the frequency: the effective aperture sits still while
 the gain climbs about 6 dB per octave. Then switch to **Fixed gain** mode and
 sweep again — now the gain is pinned and the effective aperture collapses as
 $\lambda^{2}$. Same equation, two different things held fixed, and knowing
 which one your problem holds fixed is the whole trick.
+:::
 
 <iframe src="../../viz/effective-area.html"
-        width="100%" height="545"
+        width="100%" height="544"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Effective aperture vs gain and frequency">

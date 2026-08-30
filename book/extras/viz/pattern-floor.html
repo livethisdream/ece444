@@ -301,7 +301,7 @@ function fit(){
   const wCss=cvWidth(cv);
   SCL=Math.min(1, wCss/DESIGN_W);
   const w=wCss/SCL;
-  const hh=Math.max(250, Math.min(w*0.42, 340));
+  const hh=Math.max(190, Math.min(w*0.30, 240));
   setSize(cv,wCss,hh*SCL,dpr);
   ctx.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();

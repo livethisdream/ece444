@@ -12,6 +12,8 @@
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
   canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .canvases { display:grid; grid-template-columns:1fr; gap:10px; }
+  @media (min-width:660px) { .canvases { grid-template-columns:1fr 1fr; align-items:start; } }
   .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; min-width:0; }
@@ -45,8 +47,10 @@
 </head>
 <body>
 <div class="app">
-  <canvas id="bars" aria-label="The eight element amplitudes of the selected taper, drawn as bars in percent of full gain"></canvas>
-  <canvas id="pat" aria-label="Array pattern of the selected taper in decibels against angle from broadside, with the uniform-taper pattern shown for reference"></canvas>
+  <div class="canvases">
+    <canvas id="bars" aria-label="The eight element amplitudes of the selected taper, drawn as bars in percent of full gain"></canvas>
+    <canvas id="pat" aria-label="Array pattern of the selected taper in decibels against angle from broadside, with the uniform-taper pattern shown for reference"></canvas>
+  </div>
 
   <div class="controls">
     <div class="ctl">
@@ -280,11 +284,13 @@ function drawAll(){ drawBars(); drawPattern(); readouts(); }
 
 function fit(){
   const dpr=window.devicePixelRatio||1;
-  const w=cvB.getBoundingClientRect().width;
-  const hb=Math.min(Math.max(w*(w<460?0.44:0.30), 140), 225);
-  const hp=Math.min(w*(w<460?0.74:0.52), 400);
-  for(const pr of [[cvB,cB,hb],[cvP,cP,hp]]){
-    pr[0].width=w*dpr; pr[0].height=pr[2]*dpr; pr[0].style.height=pr[2]+'px';
+  const wb=Math.round(cvB.getBoundingClientRect().width);
+  const wp=Math.round(cvP.getBoundingClientRect().width);
+  const hb=Math.round(Math.min(Math.max(wb*(wb<460?0.44:0.30), 140), 225));
+  const hp=Math.round(Math.min(wp*(wp<460?0.74:0.52), 400));
+  for(const pr of [[cvB,cB,wb,hb],[cvP,cP,wp,hp]]){
+    pr[0].width=pr[2]*dpr; pr[0].height=pr[3]*dpr;
+    pr[0].style.height=pr[3]+'px';
     pr[1].setTransform(dpr,0,0,dpr,0,0);
   }
   drawAll();

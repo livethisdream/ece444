@@ -214,15 +214,17 @@ sidelobes land where they were designed to.
 ::::{frame} Five tapers on the eight-element array
 :class: viz-frame
 
+:::{depth}
 Work through the widget before reading on. Step through the five tapers and
 watch three things at once: the bars redistribute amplitude away from the array
 edges, the main lobe widens, and the sidelobes drop. On the three Chebyshev
 settings, check that every sidelobe touches the dashed design line — that equal
 ripple is the whole point of the family, and it is what separates a Chebyshev
 design from a window function that happens to reach a similar level.
+:::
 
 <iframe src="../../viz/taper-explorer.html"
-        width="100%" height="794"
+        width="100%" height="438"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Element amplitudes, pattern, sidelobe level, beamwidth, taper efficiency and peak drop for five tapers on the eight-element PHASER array">

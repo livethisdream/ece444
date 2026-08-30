@@ -188,14 +188,16 @@ the plot with the main lobe somewhere near the middle, then record that run.
 ::::{frame} The trace paints as you walk
 :class: viz-frame
 
+:::{depth}
 The widget below runs the same walk in simulation. Choose a steer angle and a
 rotation speed profile, then watch the trace paint as the source moves around the
 arc. Run it once with the uniform profile and once with the hand-like profile, and
 compare the two pill readouts: the lobe spacing changes completely and the lobe
 amplitudes do not move at all. That is the result the rest of this lab depends on.
+:::
 
 <iframe src="../../viz/pattern-measurement-sim.html"
-        width="100%" height="838"
+        width="100%" height="459"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Simulated hand-rotation pattern measurement: a source walks an arc around a fixed beam while the amplitude-versus-time trace paints below">

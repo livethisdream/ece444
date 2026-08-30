@@ -111,6 +111,7 @@ frequency assumption — into the shape of the trace.
 ::::{frame} Interactive — the predicted sweep trace and wrapped phases
 :class: viz-frame
 
+:::{depth}
 The widget below is the prediction tool for today's lab. Set the frequency to the
 value the GUI reports for your HB100 and the steer angle to the angle you plan to
 command, then read $\Delta\phi$, the eight applied phases, and the predicted
@@ -118,9 +119,10 @@ half-power beamwidth. Notice two behaviors before you go to the bench: the dots
 mark the $2.8125^\circ$ sample grid the sweep visits, so a narrow beam is
 described by only a handful of samples, and the beam widens as you steer away from
 broadside while the sidelobe structure stretches with it.
+:::
 
 <iframe src="../../viz/steering-predictor.html"
-        width="100%" height="598"
+        width="100%" height="488"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Predicted beam-sweep trace and wrapped element phases for the PHASER array">

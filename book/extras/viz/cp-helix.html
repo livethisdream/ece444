@@ -10,7 +10,9 @@
           --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
           --rh:#0067b9; --lh:#b3213a; --tip:#1d7a4d; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
-  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  .app { display:grid; grid-template-columns: 1fr 280px; gap:14px; padding:14px; align-items:start; }
+  @media (max-width:640px) { .app { grid-template-columns: 1fr; } }
+  .side { display:flex; flex-direction:column; gap:9px; min-width:0; }
   canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:9px 18px; align-items:center;
               padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
@@ -36,7 +38,7 @@
   .tgl input:checked ~ .t { color:var(--navy); }
   /* Readouts as a row of instruments: equal-width cells on one grid, labels and
      values on shared baselines, edges flush with the canvases above. */
-  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(2, 1fr); }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:4px; padding:7px 8px 8px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }

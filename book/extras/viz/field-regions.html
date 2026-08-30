@@ -13,6 +13,10 @@
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
   canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* Stacked below ~650px (phone); side by side above it -- halves the vertical
+     space the two canvases cost on any reader-width viewport. */
+  .canvases { display:flex; flex-direction:column; gap:10px; }
+  @media (min-width:650px) { .canvases { display:grid; grid-template-columns:1fr 1fr; gap:14px; } }
   .controls { display:grid; grid-template-columns:repeat(3,1fr); gap:9px 18px; align-items:center;
               padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   @media (max-width:700px) { .controls { grid-template-columns:1fr; } }
@@ -44,8 +48,10 @@
 </head>
 <body>
 <div class="app">
-  <canvas id="ruler" aria-label="Field regions on a distance axis"></canvas>
-  <canvas id="phase" aria-label="Spherical wavefront over the aperture and the phase error it produces"></canvas>
+  <div class="canvases">
+    <canvas id="ruler" aria-label="Field regions on a distance axis"></canvas>
+    <canvas id="phase" aria-label="Spherical wavefront over the aperture and the phase error it produces"></canvas>
+  </div>
 
   <div class="controls">
     <div class="ctl"><label>Size \(D\)</label><input type="range" id="d" min="0.05" max="3" step="0.05" value="1.2"><span class="val" id="d-val">1.20 m</span></div>
@@ -205,9 +211,10 @@ function drawPhase(d){
   ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(split, 10); ctx.lineTo(split, h-10); ctx.stroke();
 
-  /* ---- left: source, spherical wavefront, aperture, edge-vs-centre path ---- */
-  stext(ctx,'spherical wave over an aperture of size D', 12, 14, 11.5, cssv('--navy'),'left',true);
-  const yc=h*0.55, xs=34, xa=split-64, ah=Math.min(52, h*0.30);
+  /* ---- left: source, spherical wavefront, aperture, edge-vs-centre path ----
+     No caption here -- the lesson prose already explains what this panel
+     shows (Neil's rule: don't restate in-graphic what the text says). */
+  const yc=h*0.58, xs=30, xa=split-64, ah=Math.min(52, h*0.32);
 
   // aperture (the D-sized line the wave has to fill)
   ctx.strokeStyle=cssv('--navy'); ctx.lineWidth=3.2; ctx.lineCap='round';
@@ -248,16 +255,17 @@ function drawPhase(d){
   }
   MJ.draw(ctx,'\\Delta', xa-sag/2, ye-22, 12, okc,'center');
   stext(ctx, fmtSmall(d.del), xa-sag/2, ye-9, 10.5, okc,'center',true);
-  stext(ctx,'curvature drawn to scale with the phase error, not with r', 12, h-11, 10, cssv('--ink3'),'left',false);
 
-  /* ---- right: the phase error straight across the aperture ---- */
-  const mL=split+48, mR=18, mT=30, mB=34;
+  /* ---- right: the phase error straight across the aperture ----
+     No caption here either -- same reason as the left panel. Curvature is
+     drawn to scale with the phase error, not with r; that caveat lives in
+     the lesson prose now, not on the canvas. */
+  const mL=split+48, mR=18, mT=14, mB=34;
   const pw=w-mL-mR, ph=h-mT-mB;
   const top=Math.max(30, Math.min(360, d.phi*1.35));
   const xp=y=>mL+pw*(y/(state.D/2)+1)/2;         // y in [-D/2, D/2]
   const yp=v=>mT+ph*(1-v/top);
 
-  stext(ctx,'phase error across the aperture', split+12, 14, 11.5, cssv('--navy'),'left',true);
   ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
   const stepDeg=top<=45?15:(top<=120?30:90);
   for(let v=0; v<=top+1e-9; v+=stepDeg){ const y=yp(v);

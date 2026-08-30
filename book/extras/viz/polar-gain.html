@@ -10,7 +10,9 @@
           --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
           --iso:#6c757d; --dip:#0067b9; --pat:#1d7a4d; --horn:#8a5a00; --dish:#b3213a; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
-  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  .app { display:grid; grid-template-columns: 1fr 300px; gap:14px; padding:14px; align-items:start; }
+  @media (max-width:680px) { .app { grid-template-columns: 1fr; } }
+  .side { display:flex; flex-direction:column; gap:9px; min-width:0; }
   canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
   .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:9px 18px; align-items:center;
               padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
@@ -33,7 +35,7 @@
   .chip[aria-pressed="true"] .dot { opacity:1; }
   /* Readouts as a row of instruments: equal-width cells on one grid, labels and
      values on shared baselines, edges flush with the canvases above. */
-  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(2, 1fr); }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:4px; padding:7px 8px 8px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
@@ -53,34 +55,36 @@
 <div class="app">
   <canvas id="plot" aria-label="Polar gain plot"></canvas>
 
-  <div class="controls">
-    <div class="chips" id="antennas"></div>
-    <div class="ctl">
-      <label class="mixed">Dish D/&#955;</label>
-      <input type="range" id="d-lambda" min="2" max="40" step="0.5" value="10">
-      <span class="val" id="d-lambda-val">10</span>
+  <div class="side">
+    <div class="controls">
+      <div class="chips" id="antennas"></div>
+      <div class="ctl">
+        <label class="mixed">Dish D/&#955;</label>
+        <input type="range" id="d-lambda" min="2" max="40" step="0.5" value="10">
+        <span class="val" id="d-lambda-val">10</span>
+      </div>
+      <div class="ctl">
+        <label>Radial range</label>
+        <select id="scale">
+          <option value="30">0 to 30 dBi</option>
+          <option value="40" selected>&#8722;10 to 30 dBi</option>
+          <option value="50">&#8722;20 to 30 dBi</option>
+          <option value="60">&#8722;30 to 30 dBi</option>
+        </select>
+      </div>
     </div>
-    <div class="ctl">
-      <label>Radial range</label>
-      <select id="scale">
-        <option value="30">0 to 30 dBi</option>
-        <option value="40" selected>&#8722;10 to 30 dBi</option>
-        <option value="50">&#8722;20 to 30 dBi</option>
-        <option value="60">&#8722;30 to 30 dBi</option>
-      </select>
+
+    <div class="readouts">
+      <div class="ro dish"><span class="k">dish gain</span><span class="v" id="p-dish">—</span></div>
+      <div class="ro dish"><span class="k">dish HPBW</span><span class="v" id="p-hpbw">—</span></div>
+      <div class="ro"><span class="k">outer ring</span><span class="v" id="p-outer">—</span></div>
+      <div class="ro"><span class="k">center</span><span class="v" id="p-floor">—</span></div>
+      <div class="ro"><span class="k">curves shown</span><span class="v" id="p-n">—</span></div>
     </div>
-  </div>
 
-  <div class="readouts">
-    <div class="ro dish"><span class="k">dish gain</span><span class="v" id="p-dish">—</span></div>
-    <div class="ro dish"><span class="k">dish HPBW</span><span class="v" id="p-hpbw">—</span></div>
-    <div class="ro"><span class="k">outer ring</span><span class="v" id="p-outer">—</span></div>
-    <div class="ro"><span class="k">center</span><span class="v" id="p-floor">—</span></div>
-    <div class="ro"><span class="k">curves shown</span><span class="v" id="p-n">—</span></div>
+    <p class="hint">2D E-plane cut (&#952; from 0&#176; at top to &#177;180&#176;). Each curve keeps its own shape and sits at its own peak gain in dBi,
+    so beamwidths and sidelobes compare directly.</p>
   </div>
-
-  <p class="hint">2D E-plane cut (&#952; from 0&#176; at top to &#177;180&#176;). Each curve keeps its own shape and sits at its own peak gain in dBi,
-  so beamwidths and sidelobes compare directly.</p>
 </div>
 
 <script>
@@ -277,7 +281,7 @@ function resizeCanvas() {
   const wCss = cvWidth(canvas);
   SCL = Math.min(1, wCss / DESIGN_W);
   const w = wCss / SCL;
-  const h = Math.max(300, Math.min(w * 0.62, 420));
+  const h = Math.max(240, Math.min(w * 0.85, 320));
   setSize(canvas, wCss, h * SCL, dpr);
   ctx.setTransform(dpr * SCL, 0, 0, dpr * SCL, 0, 0);
   draw();

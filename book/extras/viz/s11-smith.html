@@ -194,7 +194,7 @@
   // ---------------- plot 1: |S11| in dB ----------------
   var dbBox = null;
   function drawDb() {
-    var d = fit(cvDb, ctxDb, 330), w = d.w, h = d.h, ctx = ctxDb;
+    var d = fit(cvDb, ctxDb, 240), w = d.w, h = d.h, ctx = ctxDb;
     var L = 52, R = 26, T = 34, B = 40;
     var pw = w - L - R, ph = h - T - B;
     dbBox = { L: L, T: T, pw: pw, ph: ph };
@@ -260,7 +260,7 @@
   // ---------------- plot 2: Smith chart ----------------
   var smBox = null;
   function drawSm() {
-    var d = fit(cvSm, ctxSm, 330), w = d.w, h = d.h, ctx = ctxSm;
+    var d = fit(cvSm, ctxSm, 240), w = d.w, h = d.h, ctx = ctxSm;
     var pad = 40, T = 34;
     var Rp = Math.min((w - 2 * pad) / 2, (h - T - pad) / 2);
     var cx = w / 2, cy = T + Rp;

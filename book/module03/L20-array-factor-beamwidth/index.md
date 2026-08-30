@@ -198,10 +198,12 @@ Every result so far runs backwards. A radar or communications requirement arrive
 ::::{frame} Where the 0.886 formula holds, and where it doesn't
 :class: viz-frame
 
+:::{depth}
 The widget below runs the first two steps in reverse so you can see them. Set $N$ and $d/\lambda$ and watch the main lobe narrow as the aperture grows; the green bar is the half-power width read off the pattern and the dotted bar underneath is what $0.886\lambda/(Nd\cos\theta_0)$ predicts. Steer toward $\pm 60^\circ$ and two things happen at once: the beam widens, and the dotted bar falls short of the real one. Push $d/\lambda$ toward $1.0$ with the beam steered and a grating lobe walks in from the edge of visible space.
+:::
 
 <iframe src="../../viz/array-beamwidth.html"
-        width="100%" height="632"
+        width="100%" height="523"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Uniform linear array pattern with half-power beamwidth, nulls, first-null beamwidth and directivity">

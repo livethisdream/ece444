@@ -11,6 +11,8 @@
           --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { box-sizing:border-box; width:100%; padding:10px 10px 12px; display:flex; flex-direction:column; gap:9px; }
+  .plots { display:grid; grid-template-columns:1fr; gap:9px; }
+  @media (min-width:660px) { .plots { grid-template-columns:1.3fr 1fr; align-items:start; } }
   canvas { display:block; width:100%; border:1px solid var(--edge); border-radius:6px; background:#fff; }
   .controls { box-sizing:border-box; background:var(--bg); border:1px solid var(--edge); border-radius:6px;
               padding:9px 11px; display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center; }
@@ -42,8 +44,10 @@
 </head>
 <body>
 <div class="app">
-  <canvas id="pat"></canvas>
-  <canvas id="ph"></canvas>
+  <div class="plots">
+    <canvas id="pat"></canvas>
+    <canvas id="ph"></canvas>
+  </div>
 
   <div class="controls" id="panel">
     <div class="ctl">
@@ -329,14 +333,15 @@
   function drawAll() {
     var t0 = parseFloat(t0El.value);
     var wrapped = modeEl.value === "wrap";
-    var w = Math.floor(document.querySelector(".app").clientWidth - 20);
-    if (w < 240) w = 240;
-    var hPat = Math.round(Math.max(230, Math.min(320, w * 0.42)));
-    var hPh = Math.round(Math.max(165, Math.min(215, w * 0.26)));
-    pat.style.width = w + "px";
-    ph.style.width = w + "px";
-    drawPattern(t0, w, hPat);
-    drawPhases(t0, wrapped, w, hPh);
+    // Each canvas is sized from its own grid cell, not the whole .app: side
+    // by side at wide widths, stacked (and shorter) on a phone.
+    var wide = window.matchMedia("(min-width:660px)").matches;
+    var wPat = Math.max(200, Math.floor(pat.clientWidth));
+    var wPh = Math.max(200, Math.floor(ph.clientWidth));
+    var hPat = wide ? 230 : 190;
+    var hPh = wide ? 180 : 150;
+    drawPattern(t0, wPat, hPat);
+    drawPhases(t0, wrapped, wPh, hPh);
 
     t0vEl.textContent = sgn(t0, 0) + "°";
     pdphi.textContent = fmt(Math.abs(KD_DEG * Math.sin(rad(t0))), 1) + "°";

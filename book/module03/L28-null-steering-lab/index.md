@@ -370,12 +370,14 @@ can tell apart.
 ::::{frame} What MVDR chooses
 :class: viz-frame
 
+:::{depth}
 On the bench the analog beam is sweeping rather than parked, so the number you
 record there is the gap between the manual and MVDR sweep traces at the
 interferer's angle.
+:::
 
 <iframe src="../../viz/mvdr-interferer.html"
-        width="100%" height="556"
+        width="100%" height="489"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Two-channel MVDR beamformer against an interferer">

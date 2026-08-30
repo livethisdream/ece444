@@ -12,8 +12,10 @@
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   *, *::before, *::after { box-sizing:border-box; }
   .app { max-width:820px; margin:0 auto; padding:10px 10px 14px; }
-  .card { border:1px solid var(--edge); border-radius:6px; background:#fff; padding:6px 8px 2px; margin-bottom:10px; }
+  .card { border:1px solid var(--edge); border-radius:6px; background:#fff; padding:6px 8px 2px; margin-bottom:0; }
   canvas { display:block; width:100%; }
+  .canvases { display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:10px; }
+  @media (min-width:660px) { .canvases { grid-template-columns:1fr 1fr; align-items:start; } }
   .controls { display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center;
               background:var(--bg); border:1px solid var(--edge); border-radius:6px;
               padding:9px 12px; margin-bottom:10px; }
@@ -48,8 +50,10 @@
 <body>
 <div class="app" id="app">
 
-  <div class="card"><canvas id="pat"></canvas></div>
-  <div class="card"><canvas id="bars"></canvas></div>
+  <div class="canvases">
+    <div class="card"><canvas id="pat"></canvas></div>
+    <div class="card"><canvas id="bars"></canvas></div>
+  </div>
 
   <div class="controls" id="panel">
     <div class="ctl">

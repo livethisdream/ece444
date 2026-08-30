@@ -225,7 +225,7 @@ The widget below runs the same array-factor calculation for all three effects on
 :class: viz-frame
 
 <iframe src="../../viz/squint-quantization.html"
-        width="100%" height="699"
+        width="100%" height="423"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Grating lobes, beam squint and phase quantization on the 8-element course array">

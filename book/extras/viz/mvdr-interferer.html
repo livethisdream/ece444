@@ -163,7 +163,7 @@
   function sizeCanvas() {
     var w = document.getElementById('app').clientWidth - 24;
     if (w < 240) w = 240;
-    var h = Math.round(Math.max(230, Math.min(340, w * 0.52)));
+    var h = Math.round(Math.max(210, Math.min(280, w * 0.44)));
     var dpr = window.devicePixelRatio || 1;
     cv.style.height = h + 'px';
     cv.width = Math.round(w * dpr);

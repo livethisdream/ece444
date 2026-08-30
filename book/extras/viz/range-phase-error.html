@@ -200,7 +200,10 @@ function drawSketch(ctx,x0,y0,w,h){
   stext(ctx,'range geometry', x0+12, y0+15, 11.5, cssv('--navy'),'left',true);
   stext(ctx,'not to scale', x0+w-12, y0+15, 10, cssv('--ink3'),'right',false);
 
-  const bx=x0+w-46, cy=y0+h*0.50, L=Math.min(h*0.52, 74);   // AUT spans cy +/- L/2
+  // AUT spans cy +/- L/2, kept clear of the title above and the legend below so
+  // the two never collide even at the shorter panel heights the fit budget needs.
+  const topPad=38, botPad=34, bandH=Math.max(10, h-topPad-botPad);
+  const bx=x0+w-46, cy=y0+topPad+bandH/2, L=Math.min(bandH, 74);
   const wx=bx-20;                                            // wavefronts touch here
 
   // aperture bar (the antenna under test)
@@ -376,7 +379,7 @@ function fit(){
   const wCss=cvWidth(cvG);
   SCL=Math.min(1, wCss/DESIGN_W);
   const w=wCss/SCL;
-  const h1=Math.max(150, Math.min(w*0.22, 185)), h2=Math.max(250, Math.min(w*0.38, 320));
+  const h1=Math.max(118, Math.min(w*0.16, 140)), h2=Math.max(190, Math.min(w*0.28, 226));
   setSize(cvG,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
   ctxG.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();

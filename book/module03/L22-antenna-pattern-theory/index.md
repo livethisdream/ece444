@@ -271,6 +271,7 @@ gain at the commanded angle, which is why scan loss is quoted at the command.
 ::::{frame} Interactive — element factor times array factor
 :class: viz-frame
 
+:::{depth}
 The widget below multiplies the two curves for you. Set the element factor to
 isotropic and sweep the steer angle: the scan loss stays at 0 dB and the peak
 lands exactly on the commanded angle, which is the array factor you measured in
@@ -279,9 +280,10 @@ the scan loss reading $-0.6$, $-1.5$, and $-3.0$ dB at $30^\circ$, $45^\circ$,
 and $60^\circ$, the peak angle lagging the command, and the sidelobes on the far
 side of broadside dropping below their mirror images on the near side. The third
 setting is a real patch, steeper by about a decibel at wide scan.
+:::
 
 <iframe src="../../viz/element-pattern-multiplication.html"
-        width="100%" height="615"
+        width="100%" height="515"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Element factor times array factor for the eight-element course array">
