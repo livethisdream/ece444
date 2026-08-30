@@ -131,9 +131,22 @@ landing page and the five module overviews are built the same way.
   and the bottom of the frame is simply gone when you present it. Five such
   frames sat on L05a for weeks. `scripts/verify/check_frames.py <LNN>` measures
   it, and `mech_check.sh` gates on it for any page with `frame_view` set.
-- **A bare `<img>` is capped at 58vh** in present mode, and a widget frame
-  (`:class: viz-frame`) is allowed to scroll — a widget stacks its own controls
-  as it narrows and genuinely cannot be shrunk to fit. Nothing else may scroll.
+- **A bare `<img>` is capped at 58vh** in present mode. **Nothing scrolls — a
+  widget frame least of all.** This rule used to say the opposite, that a
+  `viz-frame` could scroll because a widget "genuinely cannot be shrunk to
+  fit". That was wrong, and it cost a full rework: 24 of 38 widgets were over
+  budget behind that exemption. A widget frame's measured budget is **720px at
+  1280x800** and **760px at 390x844**, of which the title takes 56px on one
+  line and 96-98px wrapped — so **a widget iframe belongs at 555px or less**,
+  and its `height` attribute must match what `check_widget.py` measures.
+  When a widget is too tall, in order: put stacked canvases side by side above
+  ~650px (usually the whole fix — most of these were two full-width canvases
+  in a column); lower the canvas height clamps; compact the control bar; drop
+  readouts and in-canvas captions that restate the lesson prose; and only then
+  touch font sizes, never below 10.5px. Never drop a control or a curve.
+  Two things to watch when you halve a canvas's width: text that used to fit
+  starts colliding — `check_widget` cannot see this, only a screenshot can —
+  and prose that says "the lower panel" now means "the lower-left panel".
 - **`:::{depth}` is the detail that shows in read mode and hides in present.**
   It is always in the DOM, so it stays searchable and stays in the page's text.
 - MyST is immune to the whole `marked` gotcha class above — Sphinx renders the

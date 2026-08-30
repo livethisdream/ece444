@@ -188,7 +188,7 @@ sliders, or press play to watch a crest travel.
 :class: viz-frame
 
 <iframe src="https://emanim.szialab.org/index.html"
-        width="100%" height="700"
+        width="100%" height="560"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="EM wave animation (Szialab)">
