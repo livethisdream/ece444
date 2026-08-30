@@ -12,6 +12,12 @@
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
   canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* Three independent canvases side by side, not two stacked (one of which was
+     already an internal two-up split) -- the row height becomes the tallest of
+     the three instead of their sum, which is the single biggest lever here.
+     Below 600px there isn't room for three useful columns, so stack. */
+  .cv3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  @media (max-width:600px) { .cv3 { grid-template-columns:1fr; } }
   .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
@@ -60,8 +66,11 @@
 </head>
 <body>
 <div class="app">
-  <canvas id="wire" aria-label="Standing-wave current amplitude along a center-fed dipole"></canvas>
-  <canvas id="pat" aria-label="Directivity pattern of the dipole, as a polar cut in decibels above isotropic and as a plot against angle from the wire axis"></canvas>
+  <div class="cv3">
+    <canvas id="wire" aria-label="Standing-wave current amplitude along a center-fed dipole"></canvas>
+    <canvas id="polar" aria-label="Polar cut of the dipole pattern, in decibels over isotropic"></canvas>
+    <canvas id="rect" aria-label="Dipole gain plotted against angle from the wire axis, referenced to isotropic"></canvas>
+  </div>
 
   <div class="controls">
     <div class="ctl">
@@ -97,7 +106,8 @@ function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bo
 const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 
 const cvW=document.getElementById('wire'), ctxW=cvW.getContext('2d');
-const cvP=document.getElementById('pat'),  ctxP=cvP.getContext('2d');
+const cvPolar=document.getElementById('polar'), ctxPolar=cvPolar.getContext('2d');
+const cvRect=document.getElementById('rect'),   ctxRect=cvRect.getContext('2d');
 
 const state={ L:0.50, a:0.002 };
 
@@ -252,23 +262,26 @@ function drawWire(){
   MJ.draw(ctx,'z', cx, mT-12, 12, cssv('--ink3'),'center');
 }
 
-/* ============================ the pattern panel ============================ */
-function drawPat(){
-  const dpr=window.devicePixelRatio||1, w=cvP.width/(dpr*SCL), h=cvP.height/(dpr*SCL);
-  const ctx=ctxP; ctx.clearRect(0,0,w,h);
-  const split=Math.round(w*0.42);
-  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(split,10); ctx.lineTo(split,h-10); ctx.stroke();
-  drawPolar(0,0,split,h);
-  drawRect(split,0,w-split,h);
+/* ============================ the pattern panels ============================
+   Two independent canvases now (own column each), not one canvas split
+   internally in two -- see the .cv3 comment above for why. */
+function drawPolarPanel(){
+  const dpr=window.devicePixelRatio||1, w=cvPolar.width/(dpr*SCL), h=cvPolar.height/(dpr*SCL);
+  ctxPolar.clearRect(0,0,w,h);
+  drawPolar(ctxPolar,w,h);
+}
+function drawRectPanel(){
+  const dpr=window.devicePixelRatio||1, w=cvRect.width/(dpr*SCL), h=cvRect.height/(dpr*SCL);
+  ctxRect.clearRect(0,0,w,h);
+  drawRect(ctxRect,w,h);
 }
 
 const radOf=(db,R)=>R*Math.max(0,(Math.max(db,DBFLOOR)-DBFLOOR)/(DBTOP-DBFLOOR));
 
-function drawPolar(x0,y0,w,h){
-  const ctx=ctxP;
+function drawPolar(ctx,w,h){
+  const x0=0, y0=0;
   const cx=x0+w*0.52, cy=y0+h*0.52, R=Math.min(w*0.40,h*0.40);
-  stext(ctx,'polar cut, decibels over isotropic', x0+12, y0+14, 11.5, cssv('--navy'),'left',true);
+  stext(ctx,'polar cut, dB over isotropic', x0+12, y0+14, 11.5, cssv('--navy'),'left',true);
 
   ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
   for(let d=DBFLOOR+5; d<=DBTOP-5; d+=5){ ctx.beginPath(); ctx.arc(cx,cy,radOf(d,R),0,7); ctx.stroke(); }
@@ -304,8 +317,8 @@ function drawPolar(x0,y0,w,h){
   stext(ctx, DBFLOOR+' dBi at the center', x0+12, y0+h-12, 10, cssv('--ink3'),'left',false);
 }
 
-function drawRect(x0,y0,w,h){
-  const ctx=ctxP;
+function drawRect(ctx,w,h){
+  const x0=0, y0=0;
   const mL=x0+46, mR=16, mT=y0+26, mB=34;
   const pw=w-(mL-x0)-mR, ph=h-(mT-y0)-mB;
   const xp=d=>mL+d/180*pw, yp=v=>mT+ph*(DBTOP-v)/(DBTOP-DBFLOOR);
@@ -359,7 +372,7 @@ function readouts(){
   document.getElementById('p-res').textContent = res===null?'—':res.toFixed(3)+' λ';
 }
 
-function drawAll(){ sweep(); drawWire(); drawPat(); readouts(); }
+function drawAll(){ sweep(); drawWire(); drawPolarPanel(); drawRectPanel(); readouts(); }
 
 /* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
    each side, so a bitmap sized from it is 2px wider than the box it is painted
@@ -384,10 +397,15 @@ function fit(){
   const wCss=cvWidth(cvW);
   SCL=Math.min(1, wCss/DESIGN_W);
   const w=wCss/SCL;
-  const h1=Math.max(170, Math.min(w*0.26, 220));
-  const h2=Math.max(250, Math.min(w*0.40, 320));
-  setSize(cvW,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
-  ctxW.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  const h1=Math.max(170, Math.min(w*0.26, 220));      // wire
+  const h2=Math.max(190, Math.min(w*0.62, 250));      // polar (wants to stay square-ish)
+  const h3=Math.max(170, Math.min(w*0.52, 220));      // rect
+  setSize(cvW,wCss,h1*SCL,dpr);
+  setSize(cvPolar,wCss,h2*SCL,dpr);
+  setSize(cvRect,wCss,h3*SCL,dpr);
+  ctxW.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  ctxPolar.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  ctxRect.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();
 }
 window.addEventListener('resize', fit);
