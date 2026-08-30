@@ -200,12 +200,14 @@ this in this lesson's practice set.
 ::::{frame} Drive it yourself — reflection, VSWR, and mismatch loss
 :class: viz-frame
 
+:::{depth}
 Set the antenna's resistance and reactance and watch the reflection coefficient,
 VSWR, and mismatch loss the feed line sees. Toggle a quarter-wave transformer
 (Part 3) to watch it pull a real load onto the $50\ \Omega$ point.
+:::
 
 <iframe src="../../viz/feed-match.html"
-        width="100%" height="583"
+        width="100%" height="529"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Feed-line match explorer">
