@@ -190,7 +190,7 @@ function resizeCanvas(){
   const rect = canvas.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
   const w = rect.width;
-  const h = Math.max(250, Math.min(w*0.52, 430));
+  const h = Math.max(230, Math.min(w*0.46, 380));
   canvas.width  = w*dpr;
   canvas.height = h*dpr;
   canvas.style.height = `${h}px`;

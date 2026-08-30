@@ -10,7 +10,7 @@
           --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
           --rh:#0067b9; --lh:#b3213a; --tip:#1d7a4d; }
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
-  .app { display:grid; grid-template-columns: 1fr 280px; gap:14px; padding:14px; align-items:start; }
+  .app { display:grid; grid-template-columns: 1fr 250px; gap:14px; padding:14px; align-items:start; }
   @media (max-width:640px) { .app { grid-template-columns: 1fr; } }
   .side { display:flex; flex-direction:column; gap:9px; min-width:0; }
   canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
@@ -60,37 +60,39 @@
 <div class="app">
   <canvas id="c" aria-label="Circular polarization corkscrew propagating along z"></canvas>
 
-  <div class="controls">
-    <div class="ctl">
-      <div class="seg" id="senseRow">
-        <button type="button" data-sense="rh" aria-pressed="true">RHCP</button>
-        <button type="button" data-sense="lh" aria-pressed="false">LHCP</button>
+  <div class="side">
+    <div class="controls">
+      <div class="ctl">
+        <div class="seg" id="senseRow">
+          <button type="button" data-sense="rh" aria-pressed="true">RHCP</button>
+          <button type="button" data-sense="lh" aria-pressed="false">LHCP</button>
+        </div>
       </div>
+      <div class="ctl">
+        <label>Rotate view</label>
+        <input id="tilt" type="range" min="0" max="60" step="1" value="22">
+        <span class="val" id="tilt-v">22°</span>
+      </div>
+      <div class="ctl">
+        <label>Speed</label>
+        <input id="speed" type="range" min="0" max="2" step="0.05" value="1">
+        <span class="val" id="speed-v">1.0×</span>
+      </div>
+      <label class="tgl"><input id="showComp" type="checkbox" checked><span class="sw"></span><span class="t">x / y components</span></label>
+      <label class="tgl"><input id="run" type="checkbox" checked><span class="sw"></span><span class="t">Animate</span></label>
     </div>
-    <div class="ctl">
-      <label>Rotate view</label>
-      <input id="tilt" type="range" min="0" max="60" step="1" value="22">
-      <span class="val" id="tilt-v">22°</span>
-    </div>
-    <div class="ctl">
-      <label>Speed</label>
-      <input id="speed" type="range" min="0" max="2" step="0.05" value="1">
-      <span class="val" id="speed-v">1.0×</span>
-    </div>
-    <label class="tgl"><input id="showComp" type="checkbox" checked><span class="sw"></span><span class="t">x / y components</span></label>
-    <label class="tgl"><input id="run" type="checkbox" checked><span class="sw"></span><span class="t">Animate</span></label>
-  </div>
 
-  <div class="readouts">
-    <div class="ro sense" id="ro-sense"><span class="k">sense</span><span class="v" id="p-sense">RHCP</span></div>
-    <div class="ro"><span class="k">axial ratio</span><span class="v">1.00 (0 dB)</span></div>
-    <div class="ro"><span class="k">Ey vs Ex</span><span class="v" id="p-phase">—</span></div>
-    <div class="ro"><span class="k">tip angle, z = 0</span><span class="v" id="p-ang">—</span></div>
-    <div class="ro"><span class="k">one full turn</span><span class="v">every &#955;</span></div>
-  </div>
+    <div class="readouts">
+      <div class="ro sense" id="ro-sense"><span class="k">sense</span><span class="v" id="p-sense">RHCP</span></div>
+      <div class="ro"><span class="k">axial ratio</span><span class="v">1.00 (0 dB)</span></div>
+      <div class="ro"><span class="k">Ey vs Ex</span><span class="v" id="p-phase">—</span></div>
+      <div class="ro"><span class="k">tip angle, z = 0</span><span class="v" id="p-ang">—</span></div>
+      <div class="ro"><span class="k">one full turn</span><span class="v">every &#955;</span></div>
+    </div>
 
-  <p class="hint">Wave propagates in <b>+z</b>; the tip of the E-vector traces a helix.
-  Point your right thumb along +z &#8212; fingers curl the way RHCP turns.</p>
+    <p class="hint">Wave propagates in <b>+z</b>; the tip of the E-vector traces a helix.
+    Point your right thumb along +z &#8212; fingers curl the way RHCP turns.</p>
+  </div>
 </div>
 
 <script>

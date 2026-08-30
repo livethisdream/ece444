@@ -203,7 +203,8 @@ function drawPhasors(x0,y0,w,h){
   const by=y0+24;
   ctx.strokeStyle=cssv('--edge2'); ctx.lineWidth=3; ctx.lineCap='round';
   ctx.beginPath(); ctx.moveTo(cx-R/2,by); ctx.lineTo(cx+R/2,by); ctx.stroke(); ctx.lineCap='butt';
-  stext(ctx,'maximum — every element in phase', cx, by-14, 10.5, cssv('--ink3'),'center',false);
+  // No caption on the reference bar -- the lesson prose already says every
+  // phasor lines up into a straight chain at broadside.
 
   // the chain: start so the resultant is centred
   const s=sumAt(state.th);
@@ -227,10 +228,10 @@ function drawPhasors(x0,y0,w,h){
     MJ.draw(ctx,'N(\\theta)', mx+16, my+14, 13, cssv('--red'),'left');
   } else {
     ctx.fillStyle=cssv('--red'); ctx.beginPath(); ctx.arc(sx,sy,4.5,0,7); ctx.fill();
-    stext(ctx,'chain closes → null', cx, y0+h-30, 12, cssv('--red'),'center',true);
   }
-  ctx.fillStyle=cssv('--ink3');
-  stext(ctx,'each link turns by k z′ cos θ', cx, y0+h-14, 11, cssv('--ink3'),'center',false);
+  // No "closes -> null" / "each link turns by..." captions -- both are
+  // already said in the lesson prose and in the .state line below the
+  // readouts, which reports the same condition live.
 }
 
 /* ---------------------------- pattern canvas ---------------------------- */
