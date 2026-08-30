@@ -140,7 +140,7 @@ function fitOne(cv){
   const dpr=window.devicePixelRatio||1;
   const wCss=cvWidth(cv);
   SCL=Math.min(1, wCss/DESIGN_W);
-  const w=wCss/SCL, h=Math.max(120,Math.min(w*0.235,190));
+  const w=wCss/SCL, h=Math.max(104,Math.min(w*0.205,166));
   setSize(cv,wCss,h*SCL,dpr);
   cv.getContext('2d').setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   return {w,h};
