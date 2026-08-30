@@ -294,7 +294,7 @@ function drawKey(rows,y0,w){
 /* Geometry: the chart is a circle and gets the frame. PAD_SIDE/PAD_TOP/PAD_BOT
    are only what the rim annotations need; the key strip takes the bottom. The
    same RR is used for x and y, so the rim is a true circle at every width. */
-const PAD_SIDE=24, PAD_TOP=32, PAD_BOT=28, RR_MAX=300;
+const PAD_SIDE=24, PAD_TOP=32, PAD_BOT=28, RR_MAX=150;
 
 function drawAll(){
   const dpr=window.devicePixelRatio||1, w=cv.width/dpr, h=cv.height/dpr;
