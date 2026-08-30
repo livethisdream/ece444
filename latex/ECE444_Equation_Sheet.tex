@@ -43,14 +43,16 @@
   \hrule height 0.9pt%
   \vspace{5pt}%
 }
-% Sub-heads are bold sans with a trailing rule to the column edge. The rule
-% is \hrulefill's default 0.4pt against the module banner's 0.9pt, so the two
-% levels stay distinguishable by weight rather than competing.
-\newcommand{\grp}[1]{\vspace{1pt}{\sffamily\bfseries\footnotesize #1}\ \hrulefill\vspace{-4pt}}
+% Sub-heads are bold sans with a trailing rule to the column edge. The rule is
+% light grey -- black!45, the same value as the column separators -- against the
+% module banner's solid 0.9pt black, so the three levels separate by tone as
+% well as weight: banner, sub-head, body.
+%
+% \hrulefill inside a colour group is what does it. A measured-width \rule also
+% takes the colour, but sizing it to the column made every heading fragile
+% about \parindent and paragraph breaks; \hrulefill just fills what is left.
+\newcommand{\grp}[1]{\vspace{1pt}{\sffamily\bfseries\footnotesize #1}\ {\color{black!45}\hrulefill}\vspace{-4pt}}
 
-% Left-aligned display block. \eq (align*) centres its contents, which in a
-% narrow column strands every short equation in the middle with a ragged
-% gutter beside it. flalign* with the trailing & pins each line to the left.
 \newcommand{\eqL}[1]{\begin{flalign*}#1\end{flalign*}}
 
 \begin{document}
