@@ -174,7 +174,9 @@ A quarter-wave monopole over a good ground plane **is** a half-wave dipole with 
 ::::{frame} Drive it yourself — height above ground
 :class: viz-frame
 
+:::{depth}
 Drag the height slider below to compare the two rules. Start with the vertical element at the bottom of its range: the pattern is the monopole's, the directivity readout parks at 3.28, and the peak sits on the horizon. Then switch to the horizontal wire at the same height and look at the third pill — the directivity is *higher*, but the radiated power has collapsed by more than 10 dB, because the image is cancelling the source. Raise the horizontal wire and watch that power come back as the first lobe forms overhead.
+:::
 
 <iframe src="../../viz/image-theory.html"
         width="100%" height="687"

@@ -394,12 +394,14 @@ building a current distribution that realizes it.
 ::::{frame} Line-source current distribution and its far-field pattern
 :class: viz-frame
 
+:::{depth}
 Choose a distribution, stretch it, taper it, put a linear phase slope across it,
 and watch the pattern respond. Three habits worth building here: **length sets
 beamwidth**, **taper sets sidelobes**, **phase slope sets pointing direction**.
+:::
 
 <iframe src="../../viz/line-source-pattern.html"
-        width="100%" height="630"
+        width="100%" height="417"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Line-source current distribution and its far-field pattern">

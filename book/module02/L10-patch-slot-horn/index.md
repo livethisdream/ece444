@@ -198,15 +198,19 @@ board gives four times less area and two and a half times less bandwidth. Neithe
 ::::{frame} Substrate versus patch size, bandwidth, and pattern
 :class: viz-frame
 
+:::{depth}
 Drive the designer below. Set a frequency, pick a substrate, and watch the patch redraw itself
 inside the fixed free-space half-wave box: the gap between the dashed box and the copper is
 exactly what the dielectric bought you. Walk $\varepsilon_r$ up the list and notice two things at
 once — the patch shrinks, and the bandwidth pill falls. Then push the thickness slider and watch
 the bandwidth come back. The patterns underneath are the two-slot model; note that no control
-moves the beam off broadside, because the two slots always add in phase along the normal.
+moves the beam off broadside, because the two slots always add in phase along the normal. The
+red edges on the top view are the radiating slots; the "dielectric half-wave" figure compares the
+in-substrate half-wavelength to the free-space one shown by the dashed box.
+:::
 
 <iframe src="../../viz/patch-designer.html"
-        width="100%" height="989"
+        width="100%" height="533"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Rectangular patch designer: substrate versus patch size, bandwidth, and the two-slot pattern">
