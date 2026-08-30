@@ -179,7 +179,7 @@ Drag the height slider below to compare the two rules. Start with the vertical e
 :::
 
 <iframe src="../../viz/image-theory.html"
-        width="100%" height="687"
+        width="100%" height="394"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="An antenna over a perfect ground plane, its image, and the resulting upper-half-space pattern">

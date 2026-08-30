@@ -12,12 +12,20 @@
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
   canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
-  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
-              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
-  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
-  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
-  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:58px; font-weight:600; font-size:12.5px; }
-  .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
+  /* The two canvases side by side above ~600px: the row height becomes the
+     taller of the two instead of their sum. Below 600px (phone) there isn't
+     room for two useful columns, so stack. */
+  .cv2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:600px) { .cv2 { grid-template-columns:1fr; } }
+  /* Grid, not flex-wrap: three equal tracks guarantee one row at the widths
+     the site actually serves instead of wrapping whenever a control's
+     min-content nudges past its flex-basis share. */
+  .controls { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:6px 12px;
+              padding:7px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:6px; min-width:0; }
+  .ctl label { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:0; font-weight:600; font-size:12px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:36px; width:0; }
   /* Below 430px the controls bar cannot fit a label, a slider and a value on one
      line: .ctl's flex basis and the reserved .val column are both wider than the
      content box, so the bar pushes the document past the viewport and the whole
@@ -27,7 +35,8 @@
      here applies above 430px: the desktop layout is byte-for-byte unchanged. */
   @media (max-width:430px) {
     canvas { max-width:100%; }
-    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .controls { grid-template-columns:1fr; }
+    .ctl { flex-wrap:wrap; row-gap:4px; }
     .ctl label { order:1; flex:0 0 auto; }
     .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
     .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
@@ -59,8 +68,10 @@
 </head>
 <body>
 <div class="app">
-  <canvas id="scene" aria-label="Scale drawing of a reflector measured in wavelengths, with the half-power beam cone it produces"></canvas>
-  <canvas id="plot" aria-label="Gain in decibels and half-power beamwidth versus dish diameter in wavelengths"></canvas>
+  <div class="cv2">
+    <canvas id="scene" aria-label="Scale drawing of a reflector measured in wavelengths, with the half-power beam cone it produces"></canvas>
+    <canvas id="plot" aria-label="Gain in decibels and half-power beamwidth versus dish diameter in wavelengths"></canvas>
+  </div>
 
   <div class="controls">
     <div class="ctl">
@@ -243,8 +254,8 @@ function drawScene() {
 
   ctx.fillStyle = cssVar('--ink3'); ctx.font = '11.5px ' + SANS;
   ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-  ctx.fillText(pxPerLam >= 6 ? 'each tick on the rim is one wavelength'
-                             : 'the dish is now too many wavelengths across to tick off',
+  ctx.fillText(pxPerLam >= 6 ? 'each tick is one wavelength'
+                             : 'too many wavelengths to tick off',
                xd + 6, 8);
 }
 
@@ -264,7 +275,7 @@ function drawPlot() {
 
   // grid + frame
   ctx.strokeStyle = '#eef3f8'; ctx.lineWidth = 1;
-  [3, 5, 10, 20, 30, 50, 100, 200, 300].forEach(x => {
+  [3, 5, 10, 20, 30, 50, 100, 300].forEach(x => {
     ctx.beginPath(); ctx.moveTo(X(x), mT); ctx.lineTo(X(x), mT + pH); ctx.stroke();
   });
   for (let g = 0; g <= GMAX; g += 10) {
@@ -303,8 +314,20 @@ function drawPlot() {
       const gPk = 10 * Math.log10(gIdeal(xPeak, state.eps) * ruze(sOverD * xPeak));
       ctx.fillStyle = cssVar('--amber');
       ctx.beginPath(); ctx.arc(X(xPeak), YG(gPk), 4, 0, 7); ctx.fill();
-      ctx.font = '700 11px ' + SANS; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
-      ctx.fillText('ceiling', X(xPeak), YG(gPk) - 6);
+      ctx.font = '700 11px ' + SANS; ctx.textAlign = 'center';
+      /* The legend sits top-left of the plot at a roughly fixed pixel size, so
+         on a narrower canvas (the two panels now side by side) the ceiling
+         point can land inside or right under its footprint. When it does,
+         park the label a fixed distance below the whole legend block instead
+         of a few px from the point -- a point sitting just under the legend
+         has no room to clear it by offsetting from itself. */
+      const legendR = mL + 260, legendLastY = mT + 40;
+      if (X(xPeak) < legendR && YG(gPk) < legendLastY + 24) {
+        ctx.textBaseline = 'top';
+        ctx.fillText('ceiling', X(xPeak), Math.max(YG(gPk) + 8, legendLastY + 14));
+      } else {
+        ctx.textBaseline = 'bottom'; ctx.fillText('ceiling', X(xPeak), YG(gPk) - 6);
+      }
     }
   }
 
@@ -325,7 +348,7 @@ function drawPlot() {
   ctx.textAlign = 'left'; ctx.fillStyle = cssVar('--grn');
   [0.1, 0.3, 1, 3, 10, 30].forEach(a => ctx.fillText(String(a), mL + pW + 6, YH(a)));
   ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillStyle = cssVar('--ink3');
-  [3, 5, 10, 20, 30, 50, 100, 200, 300].forEach(x => ctx.fillText(String(x), X(x), mT + pH + 5));
+  [3, 5, 10, 20, 30, 50, 100, 300].forEach(x => ctx.fillText(String(x), X(x), mT + pH + 5));
 
   // axis titles (words in sans, symbols via MathJax)
   ctx.fillStyle = '#3b4651'; ctx.font = '600 12px ' + SANS;

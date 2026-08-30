@@ -103,10 +103,12 @@ Gain is a statement about **effective area in units of $\lambda^2$**, not about 
 ::::{frame} Drive it yourself — gain, beamwidth, and surface error
 :class: viz-frame
 
+:::{depth}
 Drive the sliders below and watch two numbers move together. Set $D/\lambda$ and the dish redraws with a tick on the rim for every wavelength across it, while the beam cone narrows on the same canvas. Notice that gain climbs 6 dB per doubling of $D$ while the beam halves — and then open the surface-error slider and watch the amber curve: hold the panel tolerance fixed and grow the dish, and surface error quietly caps how far you can push it.
+:::
 
 <iframe src="../../viz/reflector-gain.html"
-        width="100%" height="731"
+        width="100%" height="401"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Dish gain, beamwidth, and effective area versus diameter in wavelengths, with the Ruze surface-error penalty">

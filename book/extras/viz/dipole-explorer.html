@@ -41,8 +41,12 @@
     .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
   }
   /* Readouts as a row of instruments: equal-width cells on one grid, labels and
-     values on shared baselines, edges flush with the canvases above. */
-  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+     values on shared baselines, edges flush with the canvases above. Explicit
+     column counts, not auto-fit -- auto-fit's per-track minimum left a 4-across
+     row with one cell orphaned onto its own line at these widths. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(5, minmax(0,1fr)); }
+  @media (max-width:620px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  @media (max-width:460px) { .readouts { grid-template-columns:minmax(0,1fr); } }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:4px; padding:7px 8px 8px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }

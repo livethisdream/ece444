@@ -12,6 +12,11 @@
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
   canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* The two canvases side by side above ~600px: the row height becomes the
+     taller of the two instead of their sum. Below 600px (phone) there isn't
+     room for two useful columns, so stack. */
+  .cv2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:600px) { .cv2 { grid-template-columns:1fr; } }
   .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
@@ -61,8 +66,10 @@
 </head>
 <body>
 <div class="app">
-  <canvas id="geo" aria-label="An antenna at a height above a perfect ground plane, with its image below the plane"></canvas>
-  <canvas id="pat" aria-label="Elevation pattern above the ground plane, on a decibel scale"></canvas>
+  <div class="cv2">
+    <canvas id="geo" aria-label="An antenna at a height above a perfect ground plane, with its image below the plane"></canvas>
+    <canvas id="pat" aria-label="Elevation pattern above the ground plane, on a decibel scale"></canvas>
+  </div>
 
   <div class="controls">
     <div class="ctl">
@@ -188,8 +195,13 @@ function sweep(){
 function drawGeo(){
   const dpr=window.devicePixelRatio||1, w=cvG.width/(dpr*SCL), h=cvG.height/(dpr*SCL);
   const ctx=ctxG; ctx.clearRect(0,0,w,h);
-  const gy=Math.round(h*0.50), cx=Math.round(w*0.40);
-  const SC=Math.min(gy-46, h-gy-46);            // px per wavelength of height
+  /* Captions run full-width above the schematic, not in a right-hand column
+     beside it -- with the geometry and pattern canvases now side by side (see
+     the .cv2 comment above), a right-hand column is too narrow for a 40-ch
+     line and clips it. Full width has room for all of them. */
+  const HDR=52;
+  const gy=Math.round(HDR+(h-HDR)*0.52), cx=Math.round(w*0.40);
+  const SC=Math.min(gy-HDR-8, h-gy-46);         // px per wavelength of height
   const hp=Math.min(state.h,1.0)*SC;
   const half=26;                                // the element is drawn schematically
 
@@ -245,31 +257,31 @@ function drawGeo(){
   stext(ctx,'= '+state.h.toFixed(2), cx-half-76, hy, 11.5, cssv('--ink3'),'left',false);
   MJ.draw(ctx,'\\lambda', cx-half-40, hy, 12, cssv('--ink3'),'left');
 
-  // captions
-  const tx=Math.round(w*0.62);
-  stext(ctx, vert?'vertical element':'horizontal element', tx, 26, 13, cssv('--navy'),'left',true);
+  // captions: full width, stacked above the schematic
+  stext(ctx, vert?'vertical element':'horizontal element', 14, 14, 13, cssv('--navy'),'left',true);
   stext(ctx, vert?'image points the same way' : 'image points the other way',
-        tx, 46, 12.5, vert?cssv('--grn'):cssv('--red'),'left',true);
+        14, 32, 12.5, vert?cssv('--grn'):cssv('--red'),'left',true);
   const note = vert
     ? (state.h<0.03 ? 'on the plane: this is the quarter-wave monopole'
                     : 'raised element: the image still adds at the horizon')
     : (state.h<0.15 ? 'too low: source and image very nearly cancel'
                     : 'high enough that the two no longer cancel');
-  stext(ctx, note, tx, 66, 12, cssv('--ink3'),'left',false);
-  stext(ctx, 'wire drawn schematically: a half-wave', tx, gy+34, 11.5, cssv('--ink3'),'left',false);
-  stext(ctx, 'element plus its image. Nothing below', tx, gy+50, 11.5, cssv('--ink3'),'left',false);
-  stext(ctx, 'the plane is real metal.', tx, gy+66, 11.5, cssv('--ink3'),'left',false);
+  stext(ctx, note, 14, 48, 12, cssv('--ink3'),'left',false);
 }
 
 /* ---------------------------------------------------------------- pattern */
 function drawPat(){
   const dpr=window.devicePixelRatio||1, w=cvP.width/(dpr*SCL), h=cvP.height/(dpr*SCL);
   const ctx=ctxP; ctx.clearRect(0,0,w,h);
-  const cx=w/2, cy=h-50, R=Math.min(w*0.40, h-84);
+  const cx=w/2, cy=h-50, R=Math.min(w*0.40, h-120);
 
-  stext(ctx,'elevation pattern above the plane (dB)', 14, 20, 11.5, cssv('--navy'),'left',true);
-  stext(ctx, state.kind==='v' ? 'cut: any vertical plane' : 'cut: the vertical plane broadside to the wire',
-        w-14, 20, 11.5, cssv('--ink3'),'right',false);
+  /* Title and the cut description stack on the left now, not opposite ends of
+     one row -- with the two canvases side by side (see the .cv2 comment
+     above), a right-aligned line here ran back under the title's own text. */
+  stext(ctx,'elevation pattern above the plane (dB)', 14, 16, 11.5, cssv('--navy'),'left',true);
+  stext(ctx, (state.kind==='v' ? 'cut: any vertical plane' : 'cut: broadside to the wire')
+             + '  ·  floor '+FLOOR+' dB',
+        14, 33, 11, cssv('--ink3'),'left',false);
 
   // rings and radials
   ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
@@ -289,8 +301,11 @@ function drawPat(){
   stext(ctx,'0°', cx+R+16, cy-2, 10.5, cssv('--ink3'),'center',false);
   stext(ctx,'0°', cx-R-16, cy-2, 10.5, cssv('--ink3'),'center',false);
   stext(ctx,'90°', cx, cy-R-14, 10.5, cssv('--ink3'),'center',false);
-  stext(ctx,'elevation above the horizon', cx, cy+22, 11, cssv('--ink3'),'center',false);
-  stext(ctx, FLOOR+' dB at the centre of the plot', cx, cy+38, 10.5, cssv('--ink3'),'center',false);
+  /* The dB-floor note now rides on the "cut" line above (folded in there) --
+     with the legend only 12-16px below the plot's own bottom edge on the
+     shorter canvas, a caption row between them collided with the legend text
+     below it. "elevation above the horizon" is dropped outright: the
+     0/30/60/90 ring labels already say that. */
 
   const plot=(arr,color,width,dash)=>{
     ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width; if(dash) ctx.setLineDash(dash);
@@ -359,7 +374,7 @@ function fit(){
   const wCss=cvWidth(cvG);
   SCL=Math.min(1, wCss/DESIGN_W);
   const w=wCss/SCL;
-  const h1=Math.max(180, Math.min(w*0.26, 220)), h2=Math.max(260, Math.min(w*0.42, 340));
+  const h1=Math.max(240, Math.min(w*0.30, 260)), h2=Math.max(220, Math.min(w*0.42, 280));
   setSize(cvG,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
   ctxG.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();

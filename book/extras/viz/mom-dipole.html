@@ -12,6 +12,11 @@
   html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
   .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
   canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* The two plots side by side above ~600px: the row height becomes the taller
+     of the two instead of their sum, which is the single biggest lever here.
+     Below 600px (phone) there isn't room for two useful columns, so stack. */
+  .cv2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:600px) { .cv2 { grid-template-columns:1fr; } }
   .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
               padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
   .ctl { display:flex; align-items:center; gap:8px; flex:1 1 260px; }
@@ -35,10 +40,8 @@
   }
   /* Readouts as a row of instruments: equal-width cells on one grid, labels and
      values on shared baselines, edges flush with the canvases above. */
-  .readouts { display:grid; gap:8px; grid-template-columns:repeat(5, minmax(0,1fr)); }
-  /* The site serves these ~688-760px wide, where five across is too narrow for
-     the widest value; go three-then-one so a cell always fits its number. */
-  @media (max-width:860px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  .readouts { display:grid; gap:6px; grid-template-columns:repeat(5, minmax(0,1fr)); }
+  @media (max-width:600px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
   @media (max-width:460px) { .readouts { grid-template-columns:minmax(0,1fr); } }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:4px; padding:7px 8px 8px; min-width:0;
@@ -63,8 +66,10 @@
 </head>
 <body>
 <div class="app">
-  <canvas id="cur" aria-label="Current magnitude along the dipole: method-of-moments samples against the ideal sinusoid"></canvas>
-  <canvas id="conv" aria-label="Input resistance and reactance versus the number of segments, showing the converged plateau"></canvas>
+  <div class="cv2">
+    <canvas id="cur" aria-label="Current magnitude along the dipole: method-of-moments samples against the ideal sinusoid"></canvas>
+    <canvas id="conv" aria-label="Input resistance and reactance versus the number of segments, showing the converged plateau"></canvas>
+  </div>
 
   <div class="controls">
     <div class="ctl">
@@ -82,7 +87,7 @@
   <div class="readouts">
     <div class="ro"><span class="k">\(V_{\text{feed}}\)</span><span class="v" id="p-v">1.000 V</span></div>
     <div class="ro"><span class="k">\(I_{\text{feed}}\)</span><span class="v" id="p-i">&#8212;</span></div>
-    <div class="ro"><span class="k">\(Z_{\text{in}} = V_{\text{feed}}/I_{\text{feed}}\)</span><span class="v" id="p-z">&#8212;</span></div>
+    <div class="ro"><span class="k">\(Z_{\text{in}}\)</span><span class="v" id="p-z">&#8212;</span></div>
     <div class="ro" id="ro-ratio"><span class="k">\(\Delta/a\)</span><span class="v" id="p-ra">&#8212;</span></div>
     <div class="ro" id="ro-drift"><span class="k">drift since \(N/2\)</span><span class="v" id="p-dr">&#8212;</span></div>
   </div>
@@ -337,7 +342,9 @@ function drawCurrent() {
   stext(ctx, 'assumed sinusoid', lx + 18, ly + 17, 12, '#8a5a00', 'left');
   ctx.strokeStyle = '#b01e24'; ctx.lineWidth = 7; ctx.lineCap = 'butt';
   ctx.beginPath(); ctx.moveTo(lx, ly + 34); ctx.lineTo(lx + 12, ly + 34); ctx.stroke();
-  stext(ctx, 'source segment: this current sets the impedance', lx + 18, ly + 34, 12, '#b01e24', 'left');
+  /* Short label -- which current sets the impedance, and why, is in the lesson
+     prose beside this widget rather than spelled out again on the canvas. */
+  stext(ctx, 'source segment', lx + 18, ly + 34, 12, '#b01e24', 'left');
   /* segment length as a fraction of a wavelength: symbols first, number after,
      so no label has to be positioned past a run of drawn text */
   const dw = MJ.draw(ctx, '\\Delta/\\lambda', lx, ly + 51, 13, '#5b6573', 'left');
@@ -409,7 +416,7 @@ function drawConv() {
   if (state.drift != null) {
     const side = px(state.N) > (x0 + x1) / 2 ? 'right' : 'left';
     const dx = side === 'right' ? px(state.N) - 8 : px(state.N) + 8;
-    stext(ctx, 'moved ' + state.drift.toFixed(1) + ' \u03a9 since ' + state.driftN + ' segments',
+    stext(ctx, '\u0394 ' + state.drift.toFixed(1) + ' \u03a9 since N=' + state.driftN,
           dx, y1 - 12, 11.5, state.drift < 1 ? '#3f7d34' : '#5b6573', side, true);
   }
 

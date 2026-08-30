@@ -328,6 +328,7 @@ contributions interfere, and the single doughnut breaks into lobes.
 ::::{frame} Drive it yourself — the dipole explorer
 :class: viz-frame
 
+:::{depth}
 The interactive below is the fastest way to internalize all of this. Drag the
 length slider from one end to the other and watch three things at once: the
 standing-wave current on the wire, the pattern it produces, and the numbers in
@@ -339,9 +340,10 @@ not a pattern problem. Then notice that directivity **creeps upward until about
 that point **the main lobe splits** and the broadside gain collapses. Park the
 slider at $0.50$ and confirm the canonical trio: $78.1^\circ$,
 $2.15\ \text{dBi}$, $73.1\ \Omega$.
+:::
 
 <iframe src="../../viz/dipole-explorer.html"
-        width="100%" height="735"
+        width="100%" height="310"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Dipole explorer: current, pattern, beamwidth, directivity and feed-point impedance against dipole length">
@@ -626,7 +628,7 @@ chart; the list above is the full reading of it.
 :class: viz-frame
 
 <iframe src="../../viz/dipole-smith.html"
-        width="100%" height="843"
+        width="100%" height="551"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Smith chart showing how a dipole's input impedance moves as its length changes, with constant-VSWR circles">

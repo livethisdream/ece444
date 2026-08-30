@@ -120,6 +120,7 @@ the pattern is an integral over a current distribution that hardly changed.
 ::::{frame} Watch the current converge
 :class: viz-frame
 
+:::{depth}
 The widget below runs a method-of-moments solve in your browser using a thin
 wire, triangle basis functions, and a voltage source on the center segment. Drag
 the segment count up from 5 and watch two things at once. The current samples
@@ -129,13 +130,15 @@ same time $Z_{\text{in}}$ stops moving, and that plateau is what "converged"
 means: it does not mean the answer agrees with theory, only that refining the
 model no longer changes it. Watch the feed readouts as you drag, since
 $V_{\text{feed}}$ is fixed while $I_{\text{feed}}$ moves, and every change in
-$Z_{\text{in}}$ comes from that one current. The dashed green references are
+$Z_{\text{in}}$ comes from that one current — the red band on the wire plot,
+where the source sits. The dashed green references are
 Lesson 7's $73\ \Omega$ and $42.5\ \Omega$, drawn when the wire is exactly
 $\lambda/2$ long, and the plateau lands near them rather than on them. Part 5
 explains that gap.
+:::
 
 <iframe src="../../viz/mom-dipole.html"
-        width="100%" height="818"
+        width="100%" height="453"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Method-of-moments dipole: solved segment currents against the assumed sinusoid, the feed voltage and current that set the input impedance, and impedance versus segment count">
