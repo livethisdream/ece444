@@ -1,7 +1,8 @@
 # Materials
 
 Everything you download or reference in this course lives on this page:
-textbooks, charts and handouts, every practice set, and every lab sheet. Each lesson page links its own materials in place; this is the one
+textbooks, the equation sheet and charts, every practice set, and every lab
+sheet. Each lesson page links its own materials in place; this is the one
 place they are all together.
 
 ## Textbooks & References
@@ -17,8 +18,9 @@ reading list. A third standard text is listed as an alternate.
 - **Balanis — *Antenna Theory: Analysis and Design*** (Constantine A. Balanis, 4th ed., Wiley)
   The standard graduate-level reference, and the one most antenna literature cites. Not provided here — the lesson reading lists offer it as an alternate to Milligan wherever the chapters cover the same ground.
 
-## Charts & Handouts
+## Equation Sheet & Charts
 
+- <a href="handouts/ECE444_Equation_Sheet.pdf" target="_blank" rel="noopener">ECE 444 Equation Sheet (PDF)</a> — one landscape page, front and back, organized by module. Modules 4–5 are added as those lessons are authored.
 - <a href="handouts/SmithChart_blank.pdf" target="_blank" rel="noopener">Blank Smith chart (PDF, print)</a> — the chart bound into the L4 lab packet.
 - <a href="handouts/SmithChart_ZY_colour.pdf" target="_blank" rel="noopener">Impedance–admittance Smith chart (PDF, color)</a> — red impedance grid over blue admittance grid, for designs that cross from $Z$ to $Y$.
 - <a href="handouts/SmithChart_blank.svg" target="_blank" rel="noopener">Blank Smith chart (SVG)</a> — vector, for zooming on screen.

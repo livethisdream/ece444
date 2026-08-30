@@ -1,0 +1,343 @@
+\documentclass[10pt]{extarticle} % extarticle: font sizes < 10
+
+% Modeled on the ECE 343 Equation Sheet (Neil Rogers). The organizing rule
+% here is ONE MODULE PER COLUMN GROUP and ONE EQUATION PER LINE: a student
+% should find a formula by remembering which module taught it, then scanning
+% a single column. Density is deliberately low -- if a section grows past its
+% column, cut an equation rather than tightening the spacing.
+%
+% Page 1: Module 1 (cols 1-2), Module 2 (col 3)
+% Page 2: Module 3 (cols 4-5), Reference (col 6)
+%
+% Build: bash build_equation_sheet.sh   (lualatex, needs latex-tools on TEXINPUTS)
+
+\usepackage[
+      pdftitle={ECE 444 Equation Sheet},
+      pdfauthor={Neil Rogers},
+]{hyperref}
+
+\usepackage{refcards}
+\input{myPackages_gr}
+\input{myShortcuts}
+
+\usepackage{vmargin}
+\setpapersize[landscape]{A4}
+\setmarginsrb%
+{1.2cm}  % left
+{0.9cm}  % top
+{1.2cm}  % right
+{0.9cm}  % bottom
+{0ex}    % header height
+{0ex}    % header separation
+{0ex}    % footer height
+{0ex}    % footer separation
+\setlength\columnsep{8mm}
+\setlength{\columnseprule}{0.4pt}
+\def\columnseprulecolor{\color{black!45}}
+
+% Module banner: the one heavy element on the page, so a module is findable
+% at arm's length. Sub-heads are light by comparison -- they group, not divide.
+\newcommand{\modhead}[1]{%
+  \vspace{1pt}%
+  {\normalfont\sffamily\normalsize\bfseries #1}\\[1.5pt]%
+  \hrule height 0.9pt%
+  \vspace{5pt}%
+}
+\newcommand{\grp}[1]{\vspace{1pt}{\itshape #1}\vspace{-2pt}}
+
+% Left-aligned display block. \eq (align*) centres its contents, which in a
+% narrow column strands every short equation in the middle with a ragged
+% gutter beside it. flalign* with the trailing & pins each line to the left.
+\newcommand{\eqL}[1]{\begin{flalign*}#1\end{flalign*}}
+
+\begin{document}
+\raggedright
+
+\title{ECE 444 Equation Sheet}
+
+{\small
+Antennas, Phased Arrays, and Radar Systems \quad$\vert$\quad
+Department of Electrical and Computer Engineering, United States Air Force Academy}
+
+\vspace{6pt}
+\small
+\begin{multicols*}{3}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% COLUMN 1 %%%%%%%%%%%%%%%%%%%%%%%%%%
+\modhead{Module 1 \quad Foundations}
+
+\grp{Waves and power}
+\def\linespacing{7pt}
+\eqL{
+&k = \dfrac{2\pi}{\lambda} &\\[\linespacing]
+&\eta_0 = \sqrt{\dfrac{\mu_0}{\epsilon_0}} \approx 377\ \ohms &\\[\linespacing]
+&S = \dfrac{\vert \mathbf{E}\vert^2}{2\eta_0} &\\[\linespacing]
+&U(\theta,\phi) = r^2 S &\\[\linespacing]
+&P_\text{rad} = \oint U(\theta,\phi)\, d\Omega &
+}
+
+\grp{Directivity and gain}
+\def\linespacing{7pt}
+\eqL{
+&D = \dfrac{4\pi U_\text{max}}{P_\text{rad}} &\\[\linespacing]
+&D \approx \dfrac{41{,}253}{\theta_E^\circ\, \theta_H^\circ} &\\[\linespacing]
+&\Omega_A = \dfrac{P_\text{rad}}{U_\text{max}} &\\[\linespacing]
+&D = \dfrac{4\pi}{\Omega_A} &\\[\linespacing]
+&\eta_\text{rad} = \dfrac{R_\text{rad}}{R_\text{rad} + R_\text{loss}} &\\[\linespacing]
+&G = \eta_\text{rad}\, D &\\[\linespacing]
+&A_e = \dfrac{\lambda^2 G}{4\pi} &
+}
+
+\grp{Polarization}
+\def\linespacing{7pt}
+\eqL{
+&\text{AR} = \dfrac{E_\text{major}}{E_\text{minor}} &\\[\linespacing]
+&\text{PLF} = \vert \myhat{\rho}_w \mycdot \myhat{\rho}_a \vert^2 &
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% COLUMN 2 %%%%%%%%%%%%%%%%%%%%%%%%%%
+\columnbreak
+\modhead{Module 1 \quad Foundations, cont.}
+
+\grp{Impedance and matching}
+\def\linespacing{4pt}
+\eqL{
+&Z_\text{in} = R_\text{rad} + R_\text{loss} + jX_\text{in} &\\[\linespacing]
+&\Gamma = \dfrac{Z_L - Z_0}{Z_L + Z_0} &\\[\linespacing]
+&\text{VSWR} = \dfrac{1 + \vert\Gamma\vert}{1 - \vert\Gamma\vert} &\\[\linespacing]
+&\text{ML} = -10\log_{10}\lp 1 - \vert\Gamma\vert^2 \rp &\\[\linespacing]
+&Z_1 = \sqrt{Z_0 Z_L} &\\[\linespacing]
+&Q = \sqrt{\dfrac{R_\text{high}}{R_\text{low}} - 1} &
+}
+
+\grp{Field regions}
+\def\linespacing{4pt}
+\eqL{
+&r = \dfrac{\lambda}{2\pi} &\\[\linespacing]
+&r < 0.62\sqrt{\dfrac{D^3}{\lambda}} &\\[\linespacing]
+&r \geq \dfrac{2D^2}{\lambda} &
+}
+
+\grp{Radiation integral}
+\def\linespacing{4pt}
+\eqL{
+&\mathbf{A} = \dfrac{\mu}{4\pi}\int \mathbf{J}\, \dfrac{e^{-jkR}}{R}\, dV^{\prime} &\\[\linespacing]
+&R \approx r - \myhat{r}\mycdot\mathbf{r}^{\prime} &\\[\linespacing]
+&\mathbf{N} = \int \mathbf{J}\, e^{jk\myhat{r}\mycdot\mathbf{r}^{\prime}}\, dV^{\prime} &\\[\linespacing]
+&E_\theta = -j\omega\mu\, \dfrac{e^{-jkr}}{4\pi r}\, N_\theta &
+}
+
+\grp{Link budget}
+\def\linespacing{4pt}
+\eqL{
+&\text{EIRP} = P_t G_t &\\[\linespacing]
+&\text{FSPL} = 20\log_{10}\lp \dfrac{4\pi R}{\lambda} \rp &\\[\linespacing]
+&P_r = P_t G_t G_r \lp \dfrac{\lambda}{4\pi R} \rp^2 &
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% COLUMN 3 %%%%%%%%%%%%%%%%%%%%%%%%%%
+\columnbreak
+\modhead{Module 2 \quad Antenna Types}
+
+\grp{Dipoles and monopoles}
+\def\linespacing{4pt}
+\eqL{
+&R_\text{rad} = 80\pi^2 \lp \dfrac{\ell}{\lambda} \rp^2 \ \ \text{(uniform } I) &\\[\linespacing]
+&R_\text{rad} = 20\pi^2 \lp \dfrac{\ell}{\lambda} \rp^2 \ \ \text{(triangular } I) &\\[\linespacing]
+&D_\text{short} = 1.5 = 1.76\dbi &\\[\linespacing]
+&Z_\text{in} = 73 + j42.5\ \ohms &\\[\linespacing]
+&D_{\lambda/2} = 1.64 = 2.15\dbi &\\[\linespacing]
+&\ell_\text{res} \approx 0.48\lambda &\\[\linespacing]
+&Z_\text{mono} = \tfrac{1}{2} Z_\text{dipole} &\\[\linespacing]
+&D_\text{mono} = 2 D_\text{dipole} &
+}
+
+\grp{Loops}
+\def\linespacing{4pt}
+\eqL{
+&R_\text{rad} = 20\pi^2 \lp \dfrac{C}{\lambda} \rp^4 &\\[\linespacing]
+&Q_\text{min} = \dfrac{1}{(ka)^3} + \dfrac{1}{ka} &
+}
+
+\grp{Patches and apertures}
+\def\linespacing{4pt}
+\eqL{
+&L \approx \dfrac{\lambda_0}{2\sqrt{\epsilon_\text{eff}}} &\\[\linespacing]
+&G = \eta_\text{ap}\, \dfrac{4\pi A}{\lambda^2} &\\[\linespacing]
+&\tan\lp \dfrac{\theta_0}{2} \rp = \dfrac{1}{4(f/D)} &\\[\linespacing]
+&\Delta G = -685.8 \lp \dfrac{\sigma}{\lambda} \rp^2 \text{dB} &
+}
+
+\grp{Measurement}
+\def\linespacing{4pt}
+\eqL{
+&R_\text{min} = \dfrac{2D^2}{\lambda} &\\[\linespacing]
+&G_\text{AUT} = G_\text{std} + \lp P_\text{AUT} - P_\text{std} \rp &\\[\linespacing]
+&G = \tfrac{1}{2}\lb 20\log_{10}\lp\dfrac{4\pi R}{\lambda}\rp + \dfrac{P_r}{P_t}\bigg\vert_\text{dB} \rb &
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% COLUMN 4 %%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\modhead{Module 3 \quad Arrays and Beamforming}
+
+\grp{Array factor}
+\def\linespacing{8pt}
+\eqL{
+&\text{AF}(\psi) = \sum_{n=0}^{N-1} a_n e^{jn\psi} &\\[\linespacing]
+&\psi = kd\sin\theta + \beta &\\[\linespacing]
+&\vert \text{AF} \vert = \dfrac{\sin(N\psi/2)}{N\sin(\psi/2)} &\\[\linespacing]
+&F(\theta) = \text{EF}(\theta) \cdot \text{AF}(\theta) &
+}
+
+\grp{Beam steering}
+\def\linespacing{8pt}
+\eqL{
+&\beta = -kd\sin\theta_0 &\\[\linespacing]
+&\Delta\phi = 360^\circ \lp \dfrac{d}{\lambda} \rp \sin\theta_0 &\\[\linespacing]
+&\beta = 0 \ \text{(broadside)} \qquad \beta = -kd \ \text{(endfire)} &
+}
+
+\grp{Beamwidth and directivity}
+\def\linespacing{8pt}
+\eqL{
+&\sin\theta_n = \dfrac{n\lambda}{Nd} &\\[\linespacing]
+&\theta_\text{HP} = \dfrac{0.886\,\lambda}{Nd} &\\[\linespacing]
+&\theta_\text{HP}(\theta_0) = \dfrac{\theta_\text{HP}(0)}{\cos\theta_0} &\\[\linespacing]
+&D = \dfrac{2Nd}{\lambda} &
+}
+
+\grp{Gain and scan loss}
+\def\linespacing{8pt}
+\eqL{
+&G(\theta_0) = G_e(\theta_0) + 10\log_{10} N &\\[\linespacing]
+&G_e(\theta_0) = G_e(0) + 10\log_{10}\lp \cos\theta_0 \rp &
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% COLUMN 5 %%%%%%%%%%%%%%%%%%%%%%%%%%
+\columnbreak
+\modhead{Module 3 \quad Arrays, cont.}
+
+\grp{Amplitude tapering}
+\def\linespacing{8pt}
+\eqL{
+&\eta_t = \dfrac{\lp \sum a_n \rp^2}{N \sum a_n^2} &\\[\linespacing]
+&\Delta P_\text{peak} = 20\log_{10}\lp \dfrac{\sum a_n}{N} \rp &
+}
+
+\vspace{2pt}
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{| l | c | c | c |}
+\hline
+\textbf{Taper} & \textbf{SLL} & $\boldsymbol{\theta_\text{HP}}$ & $\boldsymbol{\eta_t}$ \\ \hline
+Uniform             & $-13.3$ dB & $13.2^\circ$ & $1.00$ \\ \hline
+Taylor $\bar{n}{=}4$ & $-28.3$ dB & $16.8^\circ$ & $0.85$ \\ \hline
+Hann                & $-31.8$ dB & $19.1^\circ$ & $0.75$ \\ \hline
+Blackman            & $-50.5$ dB & $21.7^\circ$ & $0.66$ \\ \hline
+Chebyshev           & by design  & $22.9^\circ$ & $0.62$ \\ \hline
+\end{tabular}
+\end{center}
+\vspace{2pt}
+
+\grp{Grating lobes}
+\def\linespacing{8pt}
+\eqL{
+&\sin\theta_g = \sin\theta_0 \pm \dfrac{m\lambda}{d} &\\[\linespacing]
+&d < \dfrac{\lambda}{1 + \vert\sin\theta_0\vert} &
+}
+
+\grp{Squint and quantization}
+\def\linespacing{8pt}
+\eqL{
+&\Delta\theta \approx -\dfrac{\Delta f}{f}\tan\theta_0 &\\[\linespacing]
+&\text{LSB} = \dfrac{360^\circ}{2^B} &\\[\linespacing]
+&\text{SLL}_q \approx -6B \ \text{dB} &
+}
+
+\grp{Null steering}
+\def\linespacing{8pt}
+\eqL{
+&\mathbf{w} = \mathbf{w}_d - r_n \mathbf{w}_i &\\[\linespacing]
+&r_n = \dfrac{\mathbf{w}_i^H \mathbf{w}_d}{\mathbf{w}_i^H \mathbf{w}_i} &\\[\linespacing]
+&\mathbf{w}_\text{MVDR} = \dfrac{\mathbf{R}^{-1}\mathbf{s}}{\mathbf{s}^H \mathbf{R}^{-1}\mathbf{s}} &
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% COLUMN 6 %%%%%%%%%%%%%%%%%%%%%%%%%%
+\columnbreak
+\modhead{Reference}
+
+\grp{Constants}
+\def\linespacing{7pt}
+\eqL{
+&c = 2.998\ee{8}\ \text{m/s} &\\[\linespacing]
+&\eta_0 = 376.7\ \ohms &\\[\linespacing]
+&\epsilon_0 = 8.854\ee{-12}\ \text{F/m} \qquad \mu_0 = 4\pi\ee{-7}\ \text{H/m} &\\[\linespacing]
+&4\pi\ \text{sr} = 41{,}253\ \text{deg}^2 &
+}
+
+\grp{Decibels}
+\def\linespacing{7pt}
+\eqL{
+&X_\text{dB} = 10\log_{10} X \quad \text{(power)} &\\[\linespacing]
+&X_\text{dB} = 20\log_{10}\vert X \vert \quad \text{(field)} &\\[\linespacing]
+&\dbi = \text{dBd} + 2.15 &\\[\linespacing]
+&3\ \text{dB} = \times 2 \qquad 10\ \text{dB} = \times 10 &\\[\linespacing]
+&6\ \text{dB} = \times 4 \qquad 20\ \text{dB} = \times 100 &
+}
+
+\grp{VSWR, reflection, and loss}
+\vspace{2pt}
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{| c | c | c | c |}
+\hline
+\textbf{VSWR} & $\boldsymbol{\vert\Gamma\vert}$ & \textbf{RL} & \textbf{ML} \\ \hline
+$1.0$ & $0$    & $\infty$   & $0$ \\ \hline
+$1.5$ & $0.20$ & $14.0$ dB  & $0.18$ dB \\ \hline
+$2.0$ & $0.33$ & $9.5$ dB   & $0.51$ dB \\ \hline
+$3.0$ & $0.50$ & $6.0$ dB   & $1.25$ dB \\ \hline
+\end{tabular}
+\end{center}
+
+\grp{Wavelength}
+\vspace{2pt}
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{| c | c | l |}
+\hline
+$\boldsymbol{f}$ & $\boldsymbol{\lambda}$ & \textbf{Where} \\ \hline
+$300$ MHz   & $1.00$ m   & scaling anchor \\ \hline
+$915$ MHz   & $32.8$ cm  & L7 dipole \\ \hline
+$2.45$ GHz  & $12.2$ cm  & L10 patch \\ \hline
+$10.25$ GHz & $2.93$ cm  & PHASER \\ \hline
+\end{tabular}
+\end{center}
+
+\grp{Typical gains (sanity check)}
+\vspace{2pt}
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{| l | c |}
+\hline
+\textbf{Antenna} & $\boldsymbol{G}$ \\ \hline
+Isotropic            & $0$ dBi \\ \hline
+$\lambda/2$ dipole   & $2.15$ dBi \\ \hline
+Patch                & $6$--$8$ dBi \\ \hline
+Standard-gain horn   & $15$--$20$ dBi \\ \hline
+$1$ m dish, $10$ GHz & $\approx 38$ dBi \\ \hline
+\end{tabular}
+\end{center}
+
+\grp{Course array (ADALM-PHASER)}
+\def\linespacing{7pt}
+\eqL{
+&N = 8 \ \text{elements} &\\[\linespacing]
+&d = 14\ \text{mm} \approx \lambda/2 \qquad f = 10.25\ \text{GHz} &
+}
+
+\end{multicols*}
+\end{document}
