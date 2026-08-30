@@ -306,15 +306,17 @@ transverse component to project.
 ::::{frame} The radiation integral as a coherent phasor sum
 :class: viz-frame
 
+:::{depth}
 Before evaluating anything, get a feel for what the integral *does*. The source
 below is chopped into elements; each one contributes a phasor whose angle is
 $k z' \cos\theta$ — its path difference in radians. At broadside every phasor
 points the same way and they stack into a long straight chain. Swing off
 broadside and the chain curls up; when it closes on itself, you are looking at a
 null.
+:::
 
 <iframe src="../../viz/radiation-integral.html"
-        width="100%" height="653"
+        width="100%" height="440"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="The radiation integral as a coherent phasor sum">

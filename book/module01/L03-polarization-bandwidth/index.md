@@ -287,13 +287,15 @@ somewhere around $-20$ dB rather than at zero.
 ::::{frame} The E-vector traces a helix as the wave propagates
 :class: viz-frame
 
+:::{depth}
 The E-vector doesn't just rotate at a point — it traces a *helix* as
 the wave propagates. Toggle RHCP / LHCP to see the corkscrew flip
 handedness. The blue and red shadows on the back walls are the
 component sinusoids $E_{x}(z, t)$ and $E_{y}(z, t)$.
+:::
 
 <iframe src="../../viz/cp-helix.html"
-        width="100%" height="654"
+        width="100%" height="471"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Circular polarization helix">
