@@ -177,7 +177,7 @@ sliders, or press play to watch a crest travel.
 :::
 
 <iframe src="../../viz/plane-wave-freeze.html"
-        width="100%" height="567"
+        width="100%" height="521"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Plane wave — freeze time / freeze space">
