@@ -184,20 +184,23 @@ sliders, or press play to watch a crest travel.
 </iframe>
 ::::
 
-::::{frame} A fuller 3-D view of the same wave
+::::{frame} The same wave in 3-D: two fields at right angles
 :class: viz-frame
 
-<iframe src="https://emanim.szialab.org/index.html"
-        width="100%" height="560"
+:::{depth}
+Two fields, not one — each at right angles to the other and to the direction
+of travel. Drag the phase and watch two things. $\mathbf{E}$ and $\mathbf{H}$
+peak together and cross zero together, so they are *in phase*; and when both
+swing negative, the green arrow does not turn round. Power keeps flowing in
+$+z$.
+:::
+
+<iframe src="../../viz/em-wave-3d.html"
+        width="100%" height="336"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
-        title="EM wave animation (Szialab)">
+        title="Plane wave in 3-D — E, H, and the direction of power flow">
 </iframe>
-
-<p><small>
-Interactive EM wave animation by Szilárd Szabó (Szialab).
-<a href="https://emanim.szialab.org/index.html" target="_blank" rel="noopener">Open in a new tab →</a>
-</small></p>
 ::::
 
 ::::{frame} The Poynting vector

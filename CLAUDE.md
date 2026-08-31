@@ -187,7 +187,13 @@ Every page is chrome-free: no sidebar, no header, one centred bar at the bottom
   Lesson-page copies live in `viz/img/` and may include formulas.
 - **Widgets** are vanilla canvas + `mjlabel.js`, in the house palette. MathJax is
   for symbols only; words, units, and numbers are drawn in the sans UI font.
-  Set the iframe height to the widget's measured height.
+  Set the iframe height to the widget's measured height. Two exceptions to that
+  last rule, both real: a widget written to fill its iframe (`height:100vh;
+  overflow:hidden`, as `solid-angle.html` is) reports the *measuring viewport*,
+  1600px, at every width — `check_widget` cannot size it, so render it at the
+  iframe's actual height and look. And **don't iframe a third-party page into a
+  frame**: you control neither its height nor its internal scrolling, and it can
+  404 in front of a class. Build the widget.
 - **No thin spaces** (U+2009) anywhere in markdown or LaTeX — course rule.
 - Practice problems are labeled at the **2nd LO level**, one `LO 1.X` banner per
   set.
