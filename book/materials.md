@@ -24,6 +24,7 @@ reading list. A third standard text is listed as an alternate.
 - <a href="handouts/SmithChart_blank.pdf" target="_blank" rel="noopener">Blank Smith chart (PDF, print)</a> — the chart bound into the L4 lab packet.
 - <a href="handouts/SmithChart_ZY_colour.pdf" target="_blank" rel="noopener">Impedance–admittance Smith chart (PDF, color)</a> — red impedance grid over blue admittance grid, for designs that cross from $Z$ to $Y$.
 - <a href="handouts/SmithChart_blank.svg" target="_blank" rel="noopener">Blank Smith chart (SVG)</a> — vector, for zooming on screen.
+- <a href="handouts/SmithChart_Lynch_tutorial.pdf" target="_blank" rel="noopener">Smith chart walkthrough (PDF, 30 pages)</a> — the chart from the ground up: the normalized $Z_n = R/Z_0 \pm jX/Z_0$, the constant-$R$ and constant-$X$ circles, constant-VSWR circles, and matching worked on the chart with stubs, quarter-wave sections and lumped L–C. Good company for Lesson 4 and the Lesson 13 measurement lab. By Frank A. Lynch (W4FAL), 24 April 2008; reproduced with attribution, original at <a href="http://smithchart.org" target="_blank" rel="noopener">smithchart.org</a>.
 
 ## Practice Problem Sets
 
