@@ -48,7 +48,11 @@
      size below are trimmed; a second row was the single biggest readout-area
      cost, so keep it one row as long into the phone range as the numbers fit. */
   @media (max-width:600px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
-  @media (max-width:460px) { .readouts { grid-template-columns:minmax(0,1fr); } }
+  /* Never one column: a readout row that stacks one cell per line is the
+     cheapest 100-150px a widget can waste on a phone, and it is what pushed
+     these past the frame budget. Two columns always fit -- the cells are
+     min-width:0 and the values are short. */
+  @media (max-width:460px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:2px; padding:5px 4px 6px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }

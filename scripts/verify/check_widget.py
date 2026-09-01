@@ -31,6 +31,18 @@ from _common import launch, make_cdn_router, require_vendored, serve
 HEIGHT_SWEEP = [688, 720, 755, 790]
 # Widths where horizontal overflow and canvas aspect are verified.
 NARROW_SWEEP = [430, 390, 320]
+
+# Height is capped at EVERY width, not just the desktop ones. Measuring only
+# 688-790 is how 29 widgets shipped over budget on a phone: the reader gets an
+# inner scrollbar inside the widget, which is the one thing a frame may never
+# do. The two caps come from the measured viz-frame budgets -- 720px at
+# 1280x800 and 760px at 390x844 -- less the frame title, which takes 56px on
+# one line and 96-98px wrapped.
+CAP_WIDE, CAP_NARROW = 555, 660
+# A widget written to fill its iframe (height:100vh; overflow:hidden, as
+# solid-angle.html is) reports the measuring viewport at every width. It cannot
+# be sized this way and is not over budget; check it by eye at its real height.
+FILL_VIEWPORT_H = 1600
 # A canvas whose drawn aspect differs from its CSS box by more than this is
 # being stretched -- usually a Math.max() clamp fighting the layout.
 MAX_ASPECT_SKEW = 0.02
@@ -74,10 +86,14 @@ def main():
         page.wait_for_timeout(800)
 
         probe = """() => {
-            const canvases = [...document.querySelectorAll('canvas')].map(cv => {
-                const box = cv.getBoundingClientRect();
-                return { bw: cv.width, bh: cv.height, cw: box.width, ch: box.height };
-            });
+            // clientWidth/clientHeight, NOT getBoundingClientRect: the rect is the
+            // OUTER box and includes the 1px border on each side, while the bitmap
+            // covers the content box. Comparing the two adds a fixed +2px to the
+            // box, which is under 1% on a 300px canvas but 3% on a 70px one -- so
+            // the old check reported phantom "distortion" on every short canvas.
+            const canvases = [...document.querySelectorAll('canvas')].map(cv => ({
+                bw: cv.width, bh: cv.height, cw: cv.clientWidth, ch: cv.clientHeight
+            }));
             return { height: Math.ceil(document.body.scrollHeight),
                      scrollW: document.documentElement.scrollWidth,
                      clientW: document.documentElement.clientWidth,
@@ -89,8 +105,7 @@ def main():
             page.set_viewport_size({"width": w, "height": 1600})
             page.wait_for_timeout(700)
             info = page.evaluate(probe)
-            if w in HEIGHT_SWEEP:
-                heights.append((w, info["height"]))
+            heights.append((w, info["height"]))
             over = info["scrollW"] - info["clientW"]
             overflows.append((w, over))
             if over > 0:
@@ -106,7 +121,19 @@ def main():
                         f"{c['cw']:.0f}x{c['ch']:.0f} (skew {skew:.2f})"
                     )
 
-        worst_w, worst_h = max(heights, key=lambda kv: kv[1])
+        if all(h == FILL_VIEWPORT_H for _, h in heights):
+            fills = True
+        else:
+            fills = False
+            for w, h in heights:
+                cap = CAP_WIDE if w in HEIGHT_SWEEP else CAP_NARROW
+                if h > cap:
+                    failures.append(
+                        f"height {h}px at {w}px wide exceeds the {cap}px cap "
+                        f"-- the widget scrolls inside its own frame"
+                    )
+        wide = [kv for kv in heights if kv[0] in HEIGHT_SWEEP]
+        worst_w, worst_h = max(wide, key=lambda kv: kv[1])
         page.set_viewport_size({"width": 790, "height": 1600})
         page.wait_for_timeout(500)
 
@@ -128,10 +155,15 @@ def main():
         browser.close()
     httpd.shutdown()
 
-    print(
-        f"{target.name}: worst-case height = {worst_h}px (at {worst_w}px width) "
-        f'-> use height="{worst_h + 10}" in the iframe'
-    )
+    if fills:
+        print(f"{target.name}: fills its iframe (reports {FILL_VIEWPORT_H}px at every "
+              "width) -- height not checkable here; render it at the iframe's real "
+              "height and look")
+    else:
+        print(
+            f"{target.name}: worst-case height = {worst_h}px (at {worst_w}px width) "
+            f'-> use height="{worst_h + 10}" in the iframe'
+        )
     print("  heights by width: " + ", ".join(f"{w}:{h}" for w, h in heights))
     print("  overflow by width: " + ", ".join(f"{w}:{o}" for w, o in overflows))
     for i, n in enumerate(ink):

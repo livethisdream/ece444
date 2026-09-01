@@ -46,7 +46,10 @@
      row with one cell orphaned onto its own line at these widths. */
   .readouts { display:grid; gap:8px; grid-template-columns:repeat(5, minmax(0,1fr)); }
   @media (max-width:620px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
-  @media (max-width:460px) { .readouts { grid-template-columns:minmax(0,1fr); } }
+  /* Never one column: a readout stacked one cell per line is the cheapest
+     100-150px a widget can waste on a phone. Three across still fit a 390
+     phone; at 320 they overflow by 3px, so drop to two there. */
+  @media (max-width:360px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:4px; padding:7px 8px 8px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
@@ -95,9 +98,9 @@
   <div class="readouts">
     <div class="ro hp"><span class="k">HPBW</span><span class="v" id="p-hp">&#8212;</span></div>
     <div class="ro"><span class="k">directivity</span><span class="v" id="p-d">&#8212;</span></div>
-    <div class="ro"><span class="k">\(R\) at current max</span><span class="v" id="p-r">&#8212;</span></div>
-    <div class="ro rx"><span class="k">\(X\) at current max</span><span class="v" id="p-x">&#8212;</span></div>
-    <div class="ro res"><span class="k">resonant length</span><span class="v" id="p-res">&#8212;</span></div>
+    <div class="ro"><span class="k">\(R\) at \(I_{\max}\)</span><span class="v" id="p-r">&#8212;</span></div>
+    <div class="ro rx"><span class="k">\(X\) at \(I_{\max}\)</span><span class="v" id="p-x">&#8212;</span></div>
+    <div class="ro res"><span class="k">resonant \(L\)</span><span class="v" id="p-res">&#8212;</span></div>
   </div>
 </div>
 
@@ -213,7 +216,9 @@ function sweep(){
 function drawWire(){
   const dpr=window.devicePixelRatio||1, w=cvW.width/(dpr*SCL), h=cvW.height/(dpr*SCL);
   const ctx=ctxW; ctx.clearRect(0,0,w,h);
-  const cx=w*0.42, mT=24, mB=22, half=(h-mT-mB)/2, cy=mT+half;
+  /* mT clears the title: the axis label sits at 42% of the width, which is
+     inside a left-aligned title at every width the widget is served at. */
+  const cx=w*0.42, mT=32, mB=22, half=(h-mT-mB)/2, cy=mT+half;
 
   stext(ctx,'current standing wave on the wire', 14, 14, 11.5, cssv('--navy'),'left',true);
 
@@ -263,7 +268,7 @@ function drawWire(){
   stext(ctx, rev===0 ? 'the whole wire is in phase'
                      : rev+(rev===1?' phase reversal':' phase reversals')+' along the wire',
         rx, h-16, 11.5, rev===0?cssv('--ink3'):cssv('--amber'),'left', rev>0);
-  MJ.draw(ctx,'z', cx, mT-12, 12, cssv('--ink3'),'center');
+  MJ.draw(ctx,'z', cx, mT-6, 12, cssv('--ink3'),'center');
 }
 
 /* ============================ the pattern panels ============================
@@ -400,14 +405,23 @@ function setSize(cv,wCss,hCss,dpr){
    and every number below is exactly what it was. */
 const DESIGN_W=380;
 let SCL=1;
+/* Below .cv3's breakpoint the three canvases stop being a row and become a
+   column, so their heights ADD instead of taking the tallest. Left alone that
+   is 631px of canvas at 430 -- the widget then scrolls inside its own frame,
+   which is the one thing a frame may never do. Every canvas keeps its curves
+   and every control stays; they just get a shorter design box. Note the worst
+   case is 430, not 320: the column is widest there, and a height that tracks
+   width is tallest there too. */
+const STACK_MQ = window.matchMedia ? window.matchMedia('(max-width:600px)') : null;
+function stackQ(){ return (STACK_MQ && STACK_MQ.matches) ? 0.55 : 1; }
 function fit(){
   const dpr=window.devicePixelRatio||1;
   const wCss=cvWidth(cvW);
   SCL=Math.min(1, wCss/DESIGN_W);
-  const w=wCss/SCL;
-  const h1=Math.max(170, Math.min(w*0.26, 220));      // wire
-  const h2=Math.max(190, Math.min(w*0.62, 250));      // polar (wants to stay square-ish)
-  const h3=Math.max(170, Math.min(w*0.52, 220));      // rect
+  const w=wCss/SCL, q=stackQ();
+  const h1=q*Math.max(170, Math.min(w*0.26, 220));      // wire
+  const h2=q*Math.max(190, Math.min(w*0.62, 250));      // polar (wants to stay square-ish)
+  const h3=q*Math.max(170, Math.min(w*0.52, 220));      // rect
   setSize(cvW,wCss,h1*SCL,dpr);
   setSize(cvPolar,wCss,h2*SCL,dpr);
   setSize(cvRect,wCss,h3*SCL,dpr);
