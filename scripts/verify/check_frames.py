@@ -17,6 +17,12 @@ from playwright.sync_api import sync_playwright  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parents[2] / "book" / "_build" / "html"
 
+FORCE_IFRAMES = """() => {
+  const fr = [...document.querySelectorAll('iframe')];
+  fr.forEach(f => { f.loading = 'eager'; if (!f.src) f.src = f.getAttribute('src'); });
+  return fr.length;
+}"""
+
 PROBE = """() => {
   const deck = document.querySelector('.deck');
   if (!deck) return null;
@@ -68,6 +74,14 @@ def main():
                 page.goto(f"http://127.0.0.1:{port}/{rel.as_posix()}",
                           wait_until="domcontentloaded")
                 page.wait_for_timeout(900)
+                # Widget iframes carry loading="lazy" and sit below the fold, so
+                # on a plain load they never fetch: the .wrap this measures then
+                # contains an iframe still at its hardcoded markup height, and a
+                # widget far taller than that box passes. Force them eager, let
+                # viz-autosize settle on the real content height, and measure
+                # what a reader actually gets.
+                if page.evaluate(FORCE_IFRAMES):
+                    page.wait_for_timeout(2200)
                 frames = page.evaluate(PROBE)
                 if not frames:
                     continue

@@ -132,5 +132,15 @@
 
 <script src="{{ pathto('_static/shell.js', 1) }}"></script>
 <script src="{{ pathto('_static/frames.js', 1) }}"></script>
+{#- viz-autosize sizes each widget iframe to its content. Reading pages have
+    always loaded it; frame pages never did, so every widget iframe on a frame
+    lesson stayed pinned to the one hardcoded height in the markup -- correct at
+    a desktop column, far too short on a phone, where the widget then scrolled
+    inside its own frame. That is the whole course now, so it belongs here too.
+    It is only safe because every widget fits the frame budget at every width
+    (check_widget caps height at 555 wide / 660 narrow): without that, giving
+    the iframe its true height trades an inner scrollbar for a frame whose
+    bottom is simply gone in present mode. -#}
+<script src="{{ pathto('_static/viz-autosize.js', 1) }}"></script>
 </body>
 </html>

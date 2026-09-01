@@ -84,6 +84,12 @@
   .note { margin:0; font-size:11.5px; line-height:1.45; color:var(--ink3); }
   .note b { color:var(--navy); }
   .warn { color:var(--red); font-weight:700; }
+  /* On a phone the graphic has to win. This trailing note is the widget's own
+     commentary, not a control or a curve, and the same ground is covered by the
+     lesson prose around the frame -- so hiding it below 620px buys back the
+     height the canvases need to lay out without their labels colliding. It is
+     still there in read mode and on any desktop width. */
+  @media (max-width:620px) { .note { display:none; } }
 </style>
 </head>
 <body>
@@ -253,6 +259,12 @@ function drawGeo(d){
   stext(ctx,'L = '+(d.L*1000).toFixed(1)+' mm', xL+8, cy, 12, cssv('--navy'),'left',true);
 
   /* ---- side view, same horizontal scale, directly below ---- */
+  /* Skipped on a phone. It is the densest part of the panel -- a substrate
+     block, a ground line, two fringing curves and two dimension labels -- and
+     the only quantity unique to it is h, which the thickness control and the
+     readouts both give as a number. Dropping it here is what buys the two
+     pattern cuts below enough height to stay readable. */
+  if (!NARROW) {
   const gy=h-26, sub=Math.min(40, Math.max(3, state.h*1000*s));
   ctx.fillStyle='rgba(0,103,185,0.07)';
   ctx.fillRect(cx-BOX/2, gy-sub, BOX, sub);
@@ -269,9 +281,17 @@ function drawGeo(d){
     ctx.quadraticCurveTo(cx+sg*(pl/2+20), gy-sub-16, cx+sg*(pl/2+16), gy);
     ctx.stroke();
   }
-  stext(ctx,'side view', cx-BOX/2, gy-sub-26, 11.5, cssv('--ink3'),'left',false);
+  /* 'side view' and the h dimension share one line, anchored to the two edges of
+     the reference box; once the box narrows they run into each other, and
+     'fringing' lands on the substrate block. The dimension is the one that
+     carries a number, so it stays: the view is named by the panel it sits in
+     and by the canvas's own aria-label, and the fringing curves are still drawn
+     whether or not the word fits beside them. */
+  const roomy = BOX >= 210;
+  if (roomy) stext(ctx,'side view', cx-BOX/2, gy-sub-26, 11.5, cssv('--ink3'),'left',false);
   stext(ctx,'h = '+(state.h*1000).toFixed(2)+' mm', cx+BOX/2, gy-sub-26, 11.5, cssv('--navy'),'right',true);
-  stext(ctx,'fringing', cx-pl/2-20, gy-sub-14, 10.5, cssv('--red'),'right',false);
+  if (roomy) stext(ctx,'fringing', cx-pl/2-20, gy-sub-14, 10.5, cssv('--red'),'right',false);
+  }
 
   /* ---- legend on the right: labels only, the explanation lives in the
      lesson prose and (for the h>0.05\u03bb case) in the .note warning below ---- */
@@ -405,7 +425,11 @@ function setSize(cv,wCss,hCss,dpr){
    the canvases just get a shorter design box. Shrinking the design height (not
    the bitmap) keeps text at full size and the composition undistorted. */
 var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:600px)') : null;
-function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.50) : h; }
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.74) : h; }
+/* Enough for the top view plus its W dimension, which sits BOX/2+24 below the
+   box centre and simply gets clipped off the bottom if the panel is shorter. */
+function SQGEO(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.74) : h; }
+var NARROW = false;   // set in fit(); the side view is skipped when true
 const DESIGN_W=400;
 let SCL=1;
 function fit(){
@@ -413,7 +437,13 @@ function fit(){
   const wCss=cvWidth(cvG);
   SCL=Math.min(1, wCss/DESIGN_W);
   const w=wCss/SCL;
-  const h1=SQ(320), h2=SQ(Math.max(200, Math.min(w*0.30, 230)));
+  /* The geometry panel carries a top view, a side view and four dimension
+     labels; squeezed as hard as the pattern panel it starts writing the h
+     dimension over the substrate and clipping W off the bottom. Give it most
+     of its height back and take the difference from the patterns, which are
+     two smooth curves and shrink without losing anything. */
+  NARROW = !!(__SQ_MQ && __SQ_MQ.matches);
+  const h1=SQGEO(320), h2=SQ(Math.max(200, Math.min(w*0.30, 230)));
   setSize(cvG,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
   ctxG.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();

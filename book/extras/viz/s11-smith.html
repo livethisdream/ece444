@@ -72,6 +72,12 @@
   .ro.warn { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
   .ro.warn .v { color:var(--amber); }
   .hint { margin:9px 2px 0; font-size:12.5px; color:var(--ink3); }
+  /* On a phone the graphic has to win. This trailing note is the widget's own
+     commentary, not a control or a curve, and the same ground is covered by the
+     lesson prose around the frame -- so hiding it below 620px buys back the
+     height the canvases need to lay out without their labels colliding. It is
+     still there in read mode and on any desktop width. */
+  @media (max-width:620px) { .hint { display:none; } }
 </style>
 </head>
 <body>
@@ -190,7 +196,7 @@
    the canvases just get a shorter design box. Shrinking the design height (not
    the bitmap) keeps text at full size and the composition undistorted. */
 var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:660px)') : null;
-function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.51) : h; }
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; }
   function fit(cv, ctx, cssH) {
     var dpr = window.devicePixelRatio || 1;
     var w = cv.clientWidth || 420;
@@ -343,13 +349,21 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.51) : h; 
     txt(ctx, '50 Ω', cx, cy + 15, 11.5, '#5b6573', 'center');
     txt(ctx, 'short', cx - Rp - 6, cy, 11, '#5b6573', 'right');
     txt(ctx, 'open', cx + Rp + 6, cy, 11, '#5b6573', 'left');
-    txt(ctx, '−10 dB circle', cx, cy - Rp * G10 - 11, 11, '#3f7d34', 'center', 600);
+    /* The three annotations that live INSIDE the circle only have room while the
+       chart is reasonably large. On a phone the panel is short, Rp collapses,
+       and they pile onto the 50 ohm dot and each other. The chart, its marker
+       and the -10 dB circle itself all stay; only the words go, and the lesson
+       prose beside the frame already names what they said. */
+    var roomy = Rp >= 76;
+    if (roomy) txt(ctx, '−10 dB circle', cx, cy - Rp * G10 - 11, 11, '#3f7d34', 'center', 600);
     if (MJ.ready && mp.m > 0.10) {
       var lx = (mx + cx) / 2, ly = (my + cy) / 2;
       MJ.draw(ctx, '\\Gamma', lx + 9, ly - 10, 15, '#8a5a00', 'left');
     }
-    txt(ctx, 'inductive', cx, cy - Rp + 13, 11, '#5b6573', 'center');
-    txt(ctx, 'capacitive', cx, cy + Rp - 13, 11, '#5b6573', 'center');
+    if (roomy) {
+      txt(ctx, 'inductive', cx, cy - Rp + 13, 11, '#5b6573', 'center');
+      txt(ctx, 'capacitive', cx, cy + Rp - 13, 11, '#5b6573', 'center');
+    }
   }
 
   // nearest sweep sample to a frequency
