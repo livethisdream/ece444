@@ -100,7 +100,7 @@ Gain is a statement about **effective area in units of $\lambda^2$**, not about 
 :::
 ::::
 
-::::{frame} Drive it yourself — gain, beamwidth, and surface error
+::::{frame} Gain, beamwidth and surface error
 :class: viz-frame
 
 :::{depth}

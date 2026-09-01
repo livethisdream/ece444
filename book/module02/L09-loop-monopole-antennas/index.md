@@ -171,7 +171,7 @@ A quarter-wave monopole over a good ground plane **is** a half-wave dipole with 
 :::
 ::::
 
-::::{frame} Drive it yourself — height above ground
+::::{frame} Height above ground
 :class: viz-frame
 
 :::{depth}

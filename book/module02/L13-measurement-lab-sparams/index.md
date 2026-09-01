@@ -255,7 +255,7 @@ You met the Smith chart in ECE 343 as a graphical impedance calculator. Today yo
 
 ::::
 
-::::{frame} Drive it yourself — S11 and the Smith chart
+::::{frame} S11 and the Smith chart
 :class: viz-frame
 
 :::{depth}

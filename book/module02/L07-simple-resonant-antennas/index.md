@@ -325,7 +325,7 @@ contributions interfere, and the single doughnut breaks into lobes.
      style="max-width: 760px; width: 100%; display: block; margin: 1em auto;">
 ::::
 
-::::{frame} Drive it yourself — the dipole explorer
+::::{frame} The dipole explorer
 :class: viz-frame
 
 :::{depth}
@@ -624,7 +624,7 @@ assumed thin — radius $0.002\ \lambda$ — and only the colors are keyed under
 chart; the list above is the full reading of it.
 ::::
 
-::::{frame} Drive it yourself — the impedance locus
+::::{frame} The impedance locus
 :class: viz-frame
 
 <iframe src="../../viz/dipole-smith.html"

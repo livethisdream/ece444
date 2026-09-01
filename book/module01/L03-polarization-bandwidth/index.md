@@ -104,7 +104,7 @@ propagation. If the E-vector rotates in the direction your fingers
 curl, it's right-hand polarized. Left-hand is the mirror image.
 ::::
 
-::::{frame} The E-vector trace changes from a line to an ellipse to a circle
+::::{frame} From a line to an ellipse to a circle
 :class: viz-frame
 
 :::{depth}

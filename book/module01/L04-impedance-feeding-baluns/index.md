@@ -197,7 +197,7 @@ mismatch you can tolerate, not the fraction of a dB you lose. You will price
 this in this lesson's practice set.
 ::::
 
-::::{frame} Drive it yourself — reflection, VSWR, and mismatch loss
+::::{frame} Reflection, VSWR and mismatch loss
 :class: viz-frame
 
 :::{depth}

@@ -108,7 +108,7 @@ one carries the beamformer's own errors — phase quantization, gain imbalance,
 frequency assumption — into the shape of the trace.
 ::::
 
-::::{frame} Interactive — the predicted sweep trace and wrapped phases
+::::{frame} Predicted sweep and wrapped phases
 :class: viz-frame
 
 :::{depth}
