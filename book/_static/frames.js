@@ -30,6 +30,21 @@
     } catch (err) { /* no addressable history here; carry on */ }
   }
 
+  /* ---- pinch-to-zoom ------------------------------------------------ */
+  /* Release scroll snapping while the reader is pinched in -- see the
+     `body.zoomed` block in frames.css for why. Guarded because visualViewport
+     is absent in older browsers and in some embedded webviews; without it the
+     class is simply never stamped and behaviour is what it was. */
+  var vv = window.visualViewport;
+  if (vv) {
+    var syncZoom = function () {
+      document.body.classList.toggle('zoomed', vv.scale > 1.01);
+    };
+    vv.addEventListener('resize', syncZoom);
+    vv.addEventListener('scroll', syncZoom);
+    syncZoom();
+  }
+
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (e.isIntersecting && e.intersectionRatio > 0.5) {

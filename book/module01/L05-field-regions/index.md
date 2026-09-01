@@ -56,9 +56,10 @@ because *where you stand changes what you measure.*
 
 ::::{frame} Reactive near-field
 Right up against the antenna, **stored energy** dominates the fields, not
-radiation. Energy sloshes back and forth between the antenna and the surrounding
-space each cycle — like the field around a charged capacitor or a current-carrying
-inductor. These are the terms that fall off fast, as $1/r^2$ and $1/r^3$, so they
+radiation. Twice in every cycle of the drive current — period $T = 1/f$ — energy
+leaves the antenna, fills the space around it, and comes straight back, like the
+field around a charged capacitor or a current-carrying inductor. Nothing escapes.
+These are the terms that fall off fast, as $1/r^2$ and $1/r^3$, so they
 vanish quickly with distance. A receiver here would load the antenna and change
 its behavior; this is also why you keep objects away from a transmitting antenna's
 immediate vicinity.
@@ -98,7 +99,8 @@ dipole**: a current element $Idl$ pointing along $\hat{\mathbf z}$, short enough
 ($dl \ll \lambda$) that the current is uniform along it. Solving Maxwell's
 equations for this element gives the fields in closed form (spherical
 coordinates, phasor convention with the $e^{-jkr}$ carried along as in Lesson 2,
-and $k = 2\pi/\lambda$):
+and $k = 2\pi/\lambda$; the $e^{j\omega t}$ is suppressed throughout, so every field
+below is an amplitude and a phase, not an instantaneous value):
 
 $$
 E_\theta = \frac{j k\eta_0Idl\sin\theta}{4\pi r}
@@ -205,7 +207,7 @@ now living in the surrounding field. Form the complex radial Poynting vector
 $\tfrac12 E_\theta H_\phi^{*}$ and the cross-terms collapse to just two: a **real**
 part falling as $1/r^2$, which is genuine outward power and contains no near-field
 terms at all, and an **imaginary** part falling as $1/r^5$, which is the stored
-energy sloshing out and back each cycle. Radiation is radiation at every distance;
+energy sloshing out and back twice per cycle. Radiation is radiation at every distance;
 the near field adds nothing to it and carries nothing away.
 
 :::{depth}
@@ -228,9 +230,14 @@ Two things to read off this:
   cross-term between a $1/r$ field and a $1/r^2$ field survives the algebra.
 - The **imaginary part** — reactive, non-transported power — falls off as $1/r^5$.
   It is negligible far out but overwhelming close in, and the factor of $j$ says
-  $\mathbf E$ and $\mathbf H$ are $90^{\circ}$ out of phase there: energy flows
-  outward for a quarter cycle, then all the way back. Nothing leaves. That is the
-  "sloshing" of the qualitative picture, made exact.
+  $\mathbf E$ and $\mathbf H$ are $90^{\circ}$ out of phase there. That is where the
+  time the phasors hid comes back. Restore the $e^{j\omega t}$, take the real part,
+  and with the two fields a quarter turn apart the instantaneous radial flow goes as
+  $\sin 2\omega t$: outward for a quarter period, back for the next quarter, twice in
+  every cycle of the drive current, averaging to exactly zero. Nothing leaves. That
+  is the "sloshing" of the qualitative picture, made exact — and note the rate, $2\omega$
+  rather than $\omega$, which is the same doubling you get for reactive power at a
+  circuit's terminals.
 
 The minus sign ($-j$) even tells you the stored energy is predominantly
 **electric** — which fits, because a short dipole is *capacitive* at its terminals.

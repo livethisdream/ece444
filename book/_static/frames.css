@@ -208,6 +208,20 @@ kbd {
   border-bottom: 1px solid var(--rule);
 }
 [data-mode="read"] .frame:last-child { border-bottom: none; }
+
+/* ---- pinch-to-zoom --------------------------------------------------- */
+/* Mandatory snapping and a pinch fight each other: iOS re-snaps the deck on
+   every pan, so a zoomed frame springs straight back to the top and the zoom
+   reads as broken. The decks hit the same wall in August from the other
+   side -- reveal's swipe handler ate the pinch, fixed by handing the gesture
+   to the browser (`touch:false`) -- and the resolution here is the same one.
+   While the reader is pinched in, the deck stops snapping and they can pan
+   wherever they like; let go back to 1x and snapping returns. frames.js
+   stamps `.zoomed` from visualViewport.scale. Specificity note: `data-mode`
+   sits on <html>, so `body.zoomed .deck` (0,2,1) outranks the
+   `[data-mode="present"]` rule above (0,2,0) without needing !important. */
+body.zoomed .deck  { scroll-snap-type: none; }
+body.zoomed .frame { scroll-snap-align: none; scroll-snap-stop: normal; }
 [data-mode="read"] .more  { display: none; }
 [data-mode="read"] .depth { display: flex; }
 [data-mode="read"] iframe.viz { max-width: 54rem; }

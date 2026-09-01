@@ -258,11 +258,17 @@ div.admonition.example-problem > *:not(.admonition-title) {
   font-size: 0.95em;
   margin: 1.25em 0;
 }
+/* Every colour here is a token from shell.css, never a literal. These rules
+   were written light-mode-only -- a #0067b9 header slab, a #f5f9fc stripe and
+   `color:#000 !important` on every cell -- so in dark mode the odd rows went
+   black-on-near-black and the even ones showed as a white band. The literals
+   survive only as var() fallbacks, for a page served with `ece444_shell:
+   false`, where shell.css and its palette are not loaded at all. */
 .bd-article table thead tr {
-  background-color: #0067b9;
+  background-color: var(--tbl-head, #0067b9);
 }
 .bd-article table thead th {
-  color: #ffffff;
+  color: var(--tbl-head-ink, #ffffff);
   font-weight: 600;
   padding: 0.5em 0.85em;
   border: none;
@@ -270,20 +276,20 @@ div.admonition.example-problem > *:not(.admonition-title) {
 }
 .bd-article table tbody td {
   padding: 0.45em 0.85em;
-  border-bottom: 1px solid #b9d2e5;
-  color: #000000 !important;
+  border-bottom: 1px solid var(--tbl-rule, #b9d2e5);
+  color: var(--ink, #000000) !important;
   text-wrap: pretty;
 }
 .bd-article table tbody tr:nth-child(even) {
-  background-color: #f5f9fc;
+  background-color: var(--tbl-stripe, #f5f9fc);
 }
 .bd-article table tbody tr:hover {
-  background-color: #f0f5fa;
-  box-shadow: inset 3px 0 0 #0067b9;
+  background-color: var(--tbl-hover, #f0f5fa);
+  box-shadow: inset 3px 0 0 var(--blue, #0067b9);
 }
 .bd-article table tbody tr:nth-child(even) td,
 .bd-article table tbody tr:hover td {
-  color: #000000 !important;
+  color: var(--ink, #000000) !important;
 }
 
 /* ============================================================
