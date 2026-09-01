@@ -203,7 +203,8 @@ finite size $D$.
 
 ::::{frame} Why "reactive" is the literal, correct word
 Stored energy that never leaves is *reactive power* — the same reactive power you met at the terminals in Lesson 4,
-now living in the surrounding field. Form the complex radial Poynting vector
+now living in the surrounding field. All of this is a **power factor**, read exactly the way you read one for a load:
+$\cos$ of the angle between $E$ and $H$. Form the complex radial Poynting vector
 $\tfrac12 E_\theta H_\phi^{*}$ and the cross-terms collapse to just two: a **real**
 part falling as $1/r^2$, which is genuine outward power and contains no near-field
 terms at all, and an **imaginary** part falling as $1/r^5$, which is the stored
@@ -246,19 +247,23 @@ the same physics, seen from the outside versus the inside.
 :::
 ::::
 
-::::{frame} What the phasors hide
+::::{frame} Power factor, in the field
 :class: viz-frame
 
 :::{depth}
-This is the $e^{j\omega t}$ put back. Pick a radius: the **left** panel is
-$E$ and $H$ over two periods, and the only thing $kr$ changes is the phase
-between them. The **right** panel is their product — the power actually
-crossing that radius, instant by instant.
+Swap $E$ for $v$ and $H$ for $i$ and this is the $p(t) = v i$ picture from
+circuits, unchanged. **Left:** the two waveforms over two periods — the only
+thing $kr$ changes is the angle between them. **Right:** their product, the
+power crossing that radius instant by instant, with its average dashed across.
 
-Deep in the reactive zone the green and red areas are equal and $\langle S\rangle$
-sits on zero: out, back, twice a cycle, nothing leaving. Slide past $kr = 1$ and
-the red disappears — the flow stops reversing. Nothing about the *phasors* moved;
-only the angle between them did.
+Read $Z_w = E/H$ as the load. Far out it is $377\ \Omega$ at $0^\circ$, power
+factor $1$: free space is a resistor, the flow never reverses, and the green
+area is all there is. Close in the angle swings to $-90^\circ$ and the power
+factor goes to $0$: a pure reactance, green and red areas equal, average on
+zero — out and back twice a cycle, nothing leaving. The sign is negative, the
+same capacitive sign the short dipole shows at its own terminals in Lesson 4.
+
+Nothing about the *phasors* moves as you slide. Only the angle between them does.
 :::
 
 <iframe src="../../viz/near-field-time.html"
