@@ -79,17 +79,28 @@ fi
 # --- where the house macros live --------------------------------------------
 # myPackages_gr / myShortcuts / exam_config live in the PRIVATE livethisdream/
 # latex-tools repo, which is not vendored here and cannot be cloned by a hook.
-# Attach it in-session, which clones it to /workspace/latex-tools:
+# Attach it in-session:
 #
 #     add_repo(owner="livethisdream", repo="latex-tools")
-#     git clone --depth 1 https://github.com/livethisdream/latex-tools /workspace/latex-tools
 #
-# Exporting TEXINPUTS now — pointing at a directory that does not exist yet is
-# harmless, and it means build_practice.sh just works the moment the clone lands,
-# with no second step to remember.
+# It is NOT always /workspace. An attach lands the clone beside this repo, under
+# whatever base directory the session was given -- /home/user/latex-tools on a
+# web session, /workspace/latex-tools elsewhere. Hard-coding /workspace is how
+# this silently failed for a whole run: the repo was attached and present, the
+# macros were on disk, and every practice build still fell back to "file
+# myPackages_gr.sty not found" because TEXINPUTS pointed at a path that did not
+# exist. So list every candidate instead of guessing one. TEXINPUTS is a search
+# path and kpathsea skips entries that are not there, which also means this
+# stays correct when the clone lands after the hook has run.
 if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
-  echo 'export TEXINPUTS=/workspace/latex-tools/tex/latex//:' >> "$CLAUDE_ENV_FILE"
-  log "TEXINPUTS exported for /workspace/latex-tools"
+  TT_ROOTS="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && dirname "$(pwd)")/latex-tools /home/user/latex-tools /workspace/latex-tools"
+  TT_PATH=""
+  for r in $TT_ROOTS; do
+    case ":$TT_PATH" in *":$r/tex/latex//:"*) continue;; esac
+    TT_PATH="$TT_PATH$r/tex/latex//:"
+  done
+  echo "export TEXINPUTS=$TT_PATH" >> "$CLAUDE_ENV_FILE"
+  log "TEXINPUTS exported: $TT_PATH"
 fi
 
 log "ready: jupyter-book $(python3 -c 'import jupyter_book;print(jupyter_book.__version__)' 2>/dev/null || echo '?'), $(pdflatex --version 2>/dev/null | head -1 || echo 'no pdflatex')"
