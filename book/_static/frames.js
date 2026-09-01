@@ -117,7 +117,28 @@
       btns[idx] && btns[idx].focus();
     }
   }
-  document.getElementById('btnIndex').addEventListener('click', function () { toggleIndex(); });
+  /* The counter: one tap for the contents, two to jump to the top.
+
+     Both gestures share a target, so the open is deferred by one double-tap
+     window and a second tap cancels it outright -- the overlay never flashes
+     on its way to frame 1. The same path serves mouse and touch, which is not
+     just tidiness: the open overlay covers the counter, so on a mouse the
+     second click of a real double-click lands on the backdrop and the native
+     dblclick never fires at all. 220ms is the whole cost, on a control whose
+     job is to open a list you then read rather than to fire rapidly. */
+  var TAP_MS = 220;
+  var btnIdx = document.getElementById('btnIndex');
+  var tapTimer = null;
+
+  btnIdx.addEventListener('click', function () {
+    if (tapTimer) {
+      clearTimeout(tapTimer); tapTimer = null;
+      toggleIndex(false);
+      go(0);
+      return;
+    }
+    tapTimer = setTimeout(function () { tapTimer = null; toggleIndex(); }, TAP_MS);
+  });
   /* Escape closes it, but a phone has no Escape key. */
   document.getElementById('btnIndexClose')
     .addEventListener('click', function () { toggleIndex(false); });
