@@ -220,9 +220,16 @@ function stext(s, x, y, px, color, align, bold, baseline) {
 
 let W = 0, H = 0, PAD = null;
 
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:430px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
 function sizeCanvas() {
   const cssW = cv.getBoundingClientRect().width || 700;
-  const cssH = Math.max(190, Math.min(250, Math.round(cssW * 0.34)));
+  const cssH = SQ(Math.max(190, Math.min(250, Math.round(cssW * 0.34))));
   cv.style.height = cssH + 'px';
   const dpr = window.devicePixelRatio || 1;
   cv.width  = Math.round(cssW * dpr);

@@ -47,6 +47,15 @@
 
   .panel { margin-top:11px; border:1px solid var(--edge); border-left:4px solid var(--navy);
            border-radius:6px; background:var(--bg); padding:10px 13px; min-height:106px; }
+  /* The panel's floor reserves room for the longest block description so the
+     layout does not jump between blocks. On a phone that reserve is the
+     difference between fitting the frame and scrolling inside it, and the
+     text wraps taller there anyway, so the floor stops earning its keep. */
+  @media (max-width:620px) { .panel { min-height:0; padding:8px 10px; }
+                             .hint { margin:4px 2px 7px; } }
+  @media (max-width:360px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); gap:5px; }
+                             .ro .v { min-width:0; font-size:12.5px; }
+                             .hint { display:none; } }
   .panel h3 { margin:0 0 5px; font-size:14.5px; color:var(--navy); }
   .panel p { margin:0 0 7px; font-size:13px; line-height:1.45; color:var(--ink); }
   .panel .node { font-size:12.5px; color:var(--ink3); }
@@ -173,7 +182,11 @@
     }
     var lw = 64, gap = 10;
     var cx = pad + lw + gap, cwid = W - pad - cx;
-    var h = 44, vg = 13, y0 = 12;
+    /* The column stacks one block per row, so its height is the block count
+       times the pitch -- the widest part of this widget's budget on a phone.
+       Tighten the pitch below 420 rather than dropping a block. */
+    var tight = W < 420, tiny = W < 340;
+    var h = tiny ? 24 : tight ? 28 : 44, vg = tiny ? 5 : tight ? 6 : 13, y0 = tight ? 6 : 12;
     chain.forEach(function (b, i) {
       boxes[b.id] = { x: cx, y: y0 + i * (h + vg), w: cwid, h: h };
     });

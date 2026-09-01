@@ -317,7 +317,14 @@ function fit(){
   const wCss=cvWidth(cvT);
   SCL=Math.min(1, wCss/DESIGN_W);
   const w=wCss/SCL;
-  const h1=Math.max(230, Math.min(w*0.36, 290)), h2=Math.max(120, Math.min(w*0.20, 160));
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:599px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+  const h1=SQ(Math.max(230, Math.min(w*0.36, 290))), h2=SQ(Math.max(120, Math.min(w*0.20, 160)));
   setSize(cvT,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
   ctxT.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();

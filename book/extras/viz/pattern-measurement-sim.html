@@ -201,7 +201,14 @@
   /* ---------------- canvases ---------------- */
   function sizeCanvas(cv, ctx, ratio, minH, maxH) {
     var w = cv.clientWidth || cv.parentNode.clientWidth || 700;
-    var h = Math.round(Math.max(minH, Math.min(maxH, w * ratio)));
+/* Stacked below the canvases grid's breakpoint, so their heights ADD instead of
+   the row taking the tallest -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvases just get a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:659px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.46) : h; }
+    var h = SQ(Math.round(Math.max(minH, Math.min(maxH, w * ratio))));
     cv.style.height = h + 'px';
     var dpr = window.devicePixelRatio || 1;
     cv.width = Math.round(w * dpr);

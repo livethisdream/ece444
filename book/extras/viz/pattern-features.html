@@ -191,7 +191,14 @@ function resizeCanvas() {
   const wCss = cvWidth(canvas);
   SCL = Math.min(1, wCss / DESIGN_W);
   const w = wCss / SCL;
-  const h = Math.max(340, Math.min(w * 0.42, 430));
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:430px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+  const h = SQ(Math.max(340, Math.min(w * 0.42, 430)));
   setSize(canvas, wCss, h * SCL, dpr);
   ctx.setTransform(dpr * SCL, 0, 0, dpr * SCL, 0, 0);
   draw();

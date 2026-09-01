@@ -288,7 +288,24 @@
     return { label, AR_dB: 20 * Math.log10(AR), tiltDeg };
   }
 
+  /* The canvas carries its size in its width/height attributes and the drawing
+     reads them, so shortening the bitmap shortens the composition with it --
+     CSS keeps width:100% and derives the displayed height from the new aspect.
+     On a phone the panel below (presets, three sliders, three readouts) already
+     fills most of the frame, so a 4:3 trace pushes the widget past the budget
+     and it scrolls inside its own iframe. */
+  var __shortMQ = window.matchMedia ? window.matchMedia('(max-width:620px)') : null;
+  var __tinyMQ  = window.matchMedia ? window.matchMedia('(max-width:360px)') : null;
+  function fitCanvas() {
+    var want = (__tinyMQ && __tinyMQ.matches) ? 232
+             : (__shortMQ && __shortMQ.matches) ? 268 : 480;
+    if (cvs.height !== want) { cvs.height = want; return true; }
+    return false;
+  }
+  window.addEventListener('resize', function () { if (fitCanvas()) draw(); });
+
   function draw() {
+    fitCanvas();
     const Ex = +ex.value, Ey = +ey.value, deltaDeg = +d.value;
     exV.textContent = Ex.toFixed(2);
     eyV.textContent = Ey.toFixed(2);

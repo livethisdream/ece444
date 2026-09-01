@@ -342,7 +342,14 @@ function fit(){
   ctx.setTransform(1,0,0,1,0,0);
   const kh=keyHeight(keyRows(w));
   const rr=Math.min((w-2*PAD_SIDE)/2, RR_MAX);
-  const h=Math.round(2*rr+PAD_TOP+PAD_BOT+kh);
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:430px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+  const h=SQ(Math.round(2*rr+PAD_TOP+PAD_BOT+kh));
   cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr);
   // border-box: style.height sets the OUTER height, so hand back the border or
   // the bitmap is 2px taller than the box it paints into -- a vertical squash.

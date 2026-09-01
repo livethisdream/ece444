@@ -133,7 +133,14 @@
     var legendRows = narrow ? 3 : 1;
     var B = 36 + legendRows * 16;                 // ticks + axis title + legend
     var T = 10;
-    var plotH = Math.round(Math.min(210, Math.max(140, w * 0.30)));
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:430px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.58) : h; }
+    var plotH = SQ(Math.round(Math.min(210, Math.max(140, w * 0.30))));
     var h = T + plotH + B;
     var dpr = window.devicePixelRatio || 1;
     cv.style.width = w + 'px'; cv.style.height = h + 'px';

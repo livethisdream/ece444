@@ -156,7 +156,15 @@ const plot = el('plot'), pctx = plot.getContext('2d');
    box-sizing:border-box, style.height sets the OUTER height, so hand the border
    back or the bitmap is 2px taller than its box. */
 const DESIGN_W = 340;
+/* Narrow: the canvases stack (or the control and readout rows do), so the parts
+   ADD instead of sharing a row -- which puts the widget past the frame budget
+   and makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:599px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
 function fitOne(cv, ratio, lo, hi) {
+  lo = SQ(lo); hi = SQ(hi);
   const dpr = window.devicePixelRatio || 1;
   const wCss = Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
   // Narrower than the width this drawing was composed for, scale the whole thing
