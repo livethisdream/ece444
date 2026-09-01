@@ -246,6 +246,29 @@ the same physics, seen from the outside versus the inside.
 :::
 ::::
 
+::::{frame} What the phasors hide
+:class: viz-frame
+
+:::{depth}
+This is the $e^{j\omega t}$ put back. Pick a radius: the **left** panel is
+$E$ and $H$ over two periods, and the only thing $kr$ changes is the phase
+between them. The **right** panel is their product — the power actually
+crossing that radius, instant by instant.
+
+Deep in the reactive zone the green and red areas are equal and $\langle S\rangle$
+sits on zero: out, back, twice a cycle, nothing leaving. Slide past $kr = 1$ and
+the red disappears — the flow stops reversing. Nothing about the *phasors* moved;
+only the angle between them did.
+:::
+
+<iframe src="../../viz/near-field-time.html"
+        width="100%" height="366"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="E, H and the instantaneous power flow versus time, as a function of kr">
+</iframe>
+::::
+
 ::::{frame} A preview from the practice set
 The practice set for this lesson opens with a which-term-dominates part: you
 evaluate the ratio $1 : 1/kr : 1/(kr)^2$ at $kr = 0.1$ and $kr = 10$ and name the
