@@ -230,10 +230,13 @@ function draw() {
   ctx.setLineDash([2,3]); ctx.lineWidth = 1;
   ctx.strokeStyle = cssVar('--env');
   ctx.beginPath(); ctx.moveTo(mL,yFor(Vmax)); ctx.lineTo(mL+pW,yFor(Vmax)); ctx.stroke();
-  mixLabel(ctx,[{m:'V_{\\max}'},{s:' = '+Vmax.toFixed(2)}],mL+6,yFor(Vmax)-8,12,cssVar('--env'),'left',false);
+  /* Right edge, not left: 'load (d=0)' is pinned to the left edge at the top of
+     the plot, and V_max rides up there too whenever the envelope peaks near
+     the top -- the two then overprint. The right edge is clear. */
+  mixLabel(ctx,[{m:'V_{\\max}'},{s:' = '+Vmax.toFixed(2)}],mL+pW-6,yFor(Vmax)-8,12,cssVar('--env'),'right',false);
   ctx.strokeStyle = cssVar('--node');
   ctx.beginPath(); ctx.moveTo(mL,yFor(Vmin)); ctx.lineTo(mL+pW,yFor(Vmin)); ctx.stroke();
-  if (Vmin > 0.06) mixLabel(ctx,[{m:'V_{\\min}'},{s:' = '+Vmin.toFixed(2)}],mL+6,yFor(Vmin)-8,12,cssVar('--node'),'left',false);
+  if (Vmin > 0.06) mixLabel(ctx,[{m:'V_{\\min}'},{s:' = '+Vmin.toFixed(2)}],mL+pW-6,yFor(Vmin)-8,12,cssVar('--node'),'right',false);
   ctx.setLineDash([]);
 
   // node markers (minima) at d = 0.25 + 0.5n

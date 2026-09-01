@@ -187,12 +187,18 @@ function draw() {
   ctx.fillText('dBi', mL + pW / 2, mT + pH + 22);
 
   // three bars
+  /* Bar rows were pinned to fixed offsets from the top, middle and bottom of the
+     plot, which only works while the plot is tall: shorten it and the three
+     30px bars overrun each other and all three labels overprint. Size the bar
+     and the gutters from the height that is actually available. */
+  const barH = Math.max(15, Math.min(30, Math.round((pH - 20) / 3) - 8));
+  const gap  = Math.max(4, Math.round((pH - 3 * barH) / 4));
+  const rowY = i => mT + gap + i * (barH + gap);
   const rows = [
-    { y: mT + 8,             val: d.D,   col: cssVar('--dir'),  chunks: [{s:'Directivity '},{m:'D'}] },
-    { y: mT + pH / 2 - 15,   val: d.G,   col: cssVar('--gain'), chunks: [{s:'Gain '},{m:'G=\\eta\\cdot D'}] },
-    { y: mT + pH - 38,       val: d.Gre, col: cssVar('--real'), chunks: [{s:'Realized gain'}] },
+    { y: rowY(0), val: d.D,   col: cssVar('--dir'),  chunks: [{s:'Directivity '},{m:'D'}] },
+    { y: rowY(1), val: d.G,   col: cssVar('--gain'), chunks: [{s:'Gain '},{m:'G=\\eta\\cdot D'}] },
+    { y: rowY(2), val: d.Gre, col: cssVar('--real'), chunks: [{s:'Realized gain'}] },
   ];
-  const barH = 30;
 
   // guide lines at bar-end x positions (D and G) to show where losses bite
   ctx.setLineDash([4, 3]); ctx.lineWidth = 1.2;
@@ -229,13 +235,17 @@ function draw() {
       ctx.lineTo(x - dir * hd, yc - hd * 0.85); ctx.lineTo(x - dir * hd, yc + hd * 0.85);
       ctx.closePath(); ctx.fill();
     }
-    mixLabel(ctx, chunks, (xa + xb) / 2, yc - 10, 12, color, 'center', true);
+    /* Only when the gutter can hold it. The arrow used to sit 4px above its
+       bar with the caption 10px above that, which needed a tall plot; in a
+       short one the caption lands on the bar above and overprints its value.
+       Both losses are in the readouts below either way. */
+    if (gap >= 22) mixLabel(ctx, chunks, (xa + xb) / 2, yc - 9, 12, color, 'center', true);
   }
   // efficiency loss: on the Gain row's tail, from x(G) to x(D)
-  lossArrow(rows[1].y - 4, xFor(d.G), xFor(d.D), cssVar('--eff'),
+  lossArrow(rows[1].y - Math.round(gap / 2), xFor(d.G), xFor(d.D), cssVar('--eff'),
             [{s:'− '+d.effLoss.toFixed(1)+' dB '},{m:'(\\eta = '+(state.eta * 100).toFixed(0)+'\\%)'}]);
   // mismatch loss: on the Realized row's tail, from x(Gre) to x(G)
-  lossArrow(rows[2].y - 4, xFor(d.Gre), xFor(d.G), cssVar('--mis'),
+  lossArrow(rows[2].y - Math.round(gap / 2), xFor(d.Gre), xFor(d.G), cssVar('--mis'),
             [{s:'− '+d.misLoss.toFixed(1)+' dB '},{m:'(\\lvert\\Gamma\\rvert = '+state.gam.toFixed(2)+')'}]);
 
   updateReadout(d);

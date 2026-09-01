@@ -177,7 +177,12 @@ function drawSource(x0,y0,w,h){
     ctx.fillStyle=ramp(t); ctx.beginPath(); ctx.arc(cx,py,3.4,0,7); ctx.fill();
     ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke();
   }
-  stext(ctx,'L = '+state.L.toFixed(2)+' λ', cx-12, cy+half+20, 12, cssv('--navy'),'end',true);
+  /* End-aligned 12px left of the source line: once the panel shortens, cx moves
+     left with it and the label runs off the canvas -- the screenshot showed
+     'L' gone and only '= 2.00 lambda' left. Anchor it from the left instead
+     and clamp so it always starts inside. */
+  stext(ctx,'L = '+state.L.toFixed(2)+' λ', Math.max(6, cx-12), cy+half+20, 12, cssv('--navy'),
+        cx-12 < 60 ? 'left' : 'end', true);
   stext(ctx,state.N+' elements', cx-12, cy+half+36, 11.5, cssv('--ink3'),'end',false);
 
   // observation direction

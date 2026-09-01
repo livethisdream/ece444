@@ -336,7 +336,11 @@ function drawRow(m,x,w,h){
     cA.beginPath(); cA.moveTo(px,dy); cA.lineTo(px+s*6,dy-4); cA.lineTo(px+s*6,dy+4);
     cA.closePath(); cA.fillStyle=cssv('--amber'); cA.fill();
   }
-  stext(cA, state.dmm+' mm = '+x.dlam.toFixed(3)+' wavelengths', (a+b)/2, dy-12, 11.5, cssv('--amber'),'center',true);
+  /* This sits 12px above the spacing bracket, which rides up into the panel
+     title once the canvas is short. The element-spacing control below the
+     canvas carries the same number, so drop it rather than overprint. */
+  if (dy - 12 > 32)
+    stext(cA, state.dmm+' mm = '+x.dlam.toFixed(3)+' wavelengths', (a+b)/2, dy-12, 11.5, cssv('--amber'),'center',true);
   stext(cA,'aperture '+(state.dmm*(m.el.length-1))+' mm', w-16, 16, 11.5, cssv('--ink3'),'right',false);
 }
 
