@@ -46,7 +46,16 @@
      cheapest 100-150px a widget can waste on a phone, and it is what pushed
      these past the frame budget. Two columns always fit -- the cells are
      min-width:0 and the values are short. */
-  @media (max-width:460px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width:460px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  /* Hold 3 columns to the bottom instead of dropping to two, which costs a
+     whole row. What actually overflowed at 320 was `.ro .v`'s 8ch floor, not
+     the column count: release it and tighten the gutters and they fit. */
+  @media (max-width:360px) {
+    .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); gap:5px; }
+    .ro { padding:5px 3px 6px; }
+    .ro .v { min-width:0; font-size:13px; }
+    .ro .k { font-size:9.5px; letter-spacing:0.02em; }
+  }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:4px; padding:7px 8px 8px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
@@ -253,6 +262,13 @@ function recompute(full) {
 /* ------------------------------- drawing ------------------------------- */
 const cvC = document.getElementById('cur'), ctxC = cvC.getContext('2d');
 const cvV = document.getElementById('conv'), ctxV = cvV.getContext('2d');
+/* Stacked below the grid's breakpoint, so the canvas heights ADD instead of the
+   row taking the tallest. Left alone that puts the widget past the frame budget
+   and it scrolls inside its own iframe. Every curve and every control stays;
+   the canvases just get a shorter design box. Shrinking the design height (not
+   the bitmap) keeps text at full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:600px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.60) : h; }
 function fit(cv, ctx, hCss) {
   const dpr = window.devicePixelRatio || 1;
   const w = cv.clientWidth || 900;
@@ -268,7 +284,7 @@ function niceStep(span, target) {
 }
 
 function drawCurrent() {
-  const g = fit(cvC, ctxC, 290), ctx = ctxC;
+  const g = fit(cvC, ctxC, SQ(290)), ctx = ctxC;
   const ML = 62, MR = 20, MT = 26, MB = 56;
   const x0 = ML, x1 = g.w - MR, y0 = MT, y1 = g.h - MB;
   const ZMAX = 0.36;
@@ -356,7 +372,7 @@ function drawCurrent() {
 }
 
 function drawConv() {
-  const g = fit(cvV, ctxV, 300), ctx = ctxV;
+  const g = fit(cvV, ctxV, SQ(300)), ctx = ctxV;
   const ML = 62, MR = 20, MT = 26, MB = 46;
   const x0 = ML, x1 = g.w - MR, y0 = MT, y1 = g.h - MB;
   const pts = state.curve.pts;

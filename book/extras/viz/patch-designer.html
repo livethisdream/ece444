@@ -34,7 +34,9 @@
      so none of them squeeze. */
   @media (max-width:430px) {
     canvas { max-width:100%; }
-    .controls { grid-template-columns:1fr; }
+    /* Two across, not one: three controls in a single column is three rows,
+       and the stacked label/input arrangement below fits a ~190px cell. */
+    .controls { grid-template-columns:repeat(2, minmax(0,1fr)); }
     .ctl { flex-wrap:wrap; row-gap:4px; }
     .ctl label { order:1; flex:0 0 auto; }
     .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
@@ -52,7 +54,16 @@
      cheapest 100-150px a widget can waste on a phone, and it is what pushed
      these past the frame budget. Two columns always fit -- the cells are
      min-width:0 and the values are short. */
-  @media (max-width:460px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width:460px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  /* Hold 3 columns to the bottom instead of dropping to two, which costs a
+     whole row. What actually overflowed at 320 was `.ro .v`'s 8ch floor, not
+     the column count: release it and tighten the gutters and they fit. */
+  @media (max-width:360px) {
+    .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); gap:5px; }
+    .ro { padding:5px 3px 6px; }
+    .ro .v { min-width:0; font-size:13px; }
+    .ro .k { font-size:9.5px; letter-spacing:0.02em; }
+  }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:2px; padding:5px 4px 6px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
@@ -388,6 +399,13 @@ function setSize(cv,wCss,hCss,dpr){
    down instead of clamping the bitmap: same composition, just smaller, so the
    labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
    and every number below is exactly what it was. */
+/* Stacked below the grid's breakpoint, so the canvas heights ADD instead of the
+   row taking the tallest. Left alone that puts the widget past the frame budget
+   and it scrolls inside its own iframe. Every curve and every control stays;
+   the canvases just get a shorter design box. Shrinking the design height (not
+   the bitmap) keeps text at full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:600px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.50) : h; }
 const DESIGN_W=400;
 let SCL=1;
 function fit(){
@@ -395,7 +413,7 @@ function fit(){
   const wCss=cvWidth(cvG);
   SCL=Math.min(1, wCss/DESIGN_W);
   const w=wCss/SCL;
-  const h1=320, h2=Math.max(200, Math.min(w*0.30, 230));
+  const h1=SQ(320), h2=SQ(Math.max(200, Math.min(w*0.30, 230)));
   setSize(cvG,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
   ctxG.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
   drawAll();

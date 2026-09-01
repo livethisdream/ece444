@@ -46,7 +46,16 @@
      cheapest 100-150px a widget can waste on a phone, and it is what pushed
      these past the frame budget. Two columns always fit -- the cells are
      min-width:0 and the values are short. */
-  @media (max-width:460px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width:460px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  /* Hold 3 columns to the bottom instead of dropping to two, which costs a
+     whole row. What actually overflowed at 320 was `.ro .v`'s 8ch floor, not
+     the column count: release it and tighten the gutters and they fit. */
+  @media (max-width:360px) {
+    .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); gap:5px; }
+    .ro { padding:5px 3px 6px; }
+    .ro .v { min-width:0; font-size:13px; }
+    .ro .k { font-size:9.5px; letter-spacing:0.02em; }
+  }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:4px; padding:7px 8px 8px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
@@ -175,6 +184,13 @@
   }
 
   // ---------------- canvas plumbing ----------------
+/* Stacked below the grid's breakpoint, so the canvas heights ADD instead of the
+   row taking the tallest. Left alone that puts the widget past the frame budget
+   and it scrolls inside its own iframe. Every curve and every control stays;
+   the canvases just get a shorter design box. Shrinking the design height (not
+   the bitmap) keeps text at full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:660px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.51) : h; }
   function fit(cv, ctx, cssH) {
     var dpr = window.devicePixelRatio || 1;
     var w = cv.clientWidth || 420;
@@ -198,7 +214,7 @@
   // ---------------- plot 1: |S11| in dB ----------------
   var dbBox = null;
   function drawDb() {
-    var d = fit(cvDb, ctxDb, 240), w = d.w, h = d.h, ctx = ctxDb;
+    var d = fit(cvDb, ctxDb, SQ(240)), w = d.w, h = d.h, ctx = ctxDb;
     var L = 52, R = 26, T = 34, B = 40;
     var pw = w - L - R, ph = h - T - B;
     dbBox = { L: L, T: T, pw: pw, ph: ph };
@@ -264,7 +280,7 @@
   // ---------------- plot 2: Smith chart ----------------
   var smBox = null;
   function drawSm() {
-    var d = fit(cvSm, ctxSm, 240), w = d.w, h = d.h, ctx = ctxSm;
+    var d = fit(cvSm, ctxSm, SQ(240)), w = d.w, h = d.h, ctx = ctxSm;
     var pad = 40, T = 34;
     var Rp = Math.min((w - 2 * pad) / 2, (h - T - pad) / 2);
     var cx = w / 2, cy = T + Rp;
