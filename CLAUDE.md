@@ -144,6 +144,20 @@ landing page and the five module overviews are built the same way.
   in a column); lower the canvas height clamps; compact the control bar; drop
   readouts and in-canvas captions that restate the lesson prose; and only then
   touch font sizes, never below 10.5px. Never drop a control or a curve.
+  **The budget is per width, and a phone is the hard case, not the easy one.**
+  `check_widget` caps height at **555px at 688-790** and **660px at 320-430**
+  (the 720/760 frame budgets less the title, wrapped). Below ~620px the canvas
+  grids collapse to one column and the heights *add*, so a widget that fits a
+  desktop column can be twice the budget on a phone -- 36 of 39 were, unseen,
+  because the checker recorded heights only at desktop widths. There is no room
+  for two columns at 390, so the fix is the mirror of the side-by-side one:
+  **shorten the design box when the canvases stack**, scaling the height that
+  feeds both the bitmap and the drawing, never the bitmap alone.
+  **Shrinking a canvas moves the labels inside it.** Every collision found in
+  that rework was a label pinned to a fixed offset -- three bars at fixed y, a
+  value written 6px above a bar that reaches the top, a title sharing a y with
+  an axis label. Derive in-canvas positions from the height available, and
+  guard a label that has nowhere to go rather than overprinting it.
   Two things to watch when you halve a canvas's width: text that used to fit
   starts colliding — `check_widget` cannot see this, only a screenshot can —
   and prose that says "the lower panel" now means "the lower-left panel".
@@ -194,6 +208,18 @@ Every page is chrome-free: no sidebar, no header, one centred bar at the bottom
   iframe's actual height and look. And **don't iframe a third-party page into a
   frame**: you control neither its height nor its internal scrolling, and it can
   404 in front of a class. Build the widget.
+- **`viz-autosize.js` is what makes the iframe height right**, and BOTH
+  `frame.html` and `page.html` must load it. A widget's height is not a
+  constant -- the column is 688-790px on a desktop and ~343px in a frame on a
+  phone -- so the `height` attribute in the markup is only the no-JS fallback.
+  It was missing from `frame.html` for the whole frame conversion, which is why
+  every widget on every frame lesson scrolled inside itself on a phone. If it
+  is ever removed and restored, order matters: **the widgets must fit the
+  budget first**, or giving each iframe its true height trades an inner
+  scrollbar for a frame whose bottom is gone in present mode.
+- **A frame title wraps to 96-98px instead of 56.** On a viz-frame that is the
+  difference between fitting a phone and not, so keep widget-frame titles short
+  enough to sit on one line at 390.
 - **No thin spaces** (U+2009) anywhere in markdown or LaTeX — course rule.
 - Practice problems are labeled at the **2nd LO level**, one `LO 1.X` banner per
   set.
