@@ -88,8 +88,17 @@
   var cF = document.getElementById('fields'), xF = cF.getContext('2d');
   var cP = document.getElementById('poynt'),  xP = cP.getContext('2d');
 
-  var DW = 360, DH = 218;        // design canvas per panel
+  var DW = 360, DH_WIDE = 218, DH_TALL = 138;
+  var DH = DH_WIDE;              // design canvas per panel, set in fit()
   var CYCLES = 2;                // periods across the x axis
+
+  /* Below the CSS breakpoint the two panels stack, so their heights ADD and a
+     desktop aspect blows the frame budget -- measured 683px at 390 against a
+     555px cap, which the reader sees as the widget scrolling inside its own
+     iframe. Stacked panels get a shorter design box. Keep this number in sync
+     with the .cv2 media query above; they describe the same breakpoint. */
+  var STACK_MQ = window.matchMedia ? window.matchMedia('(max-width: 620px)') : null;
+  function stacked() { return !!(STACK_MQ && STACK_MQ.matches); }
 
   var krEl = document.getElementById('kr'), krV = document.getElementById('kr-v');
   var runEl = document.getElementById('run');
@@ -148,12 +157,13 @@
   }
   /* Each canvas is measured on its OWN width. Measuring one and applying it to
      both is the aspect-skew bug that bit three widgets in the August rework. */
-  function fit() { fitOne(cF, xF); fitOne(cP, xP); }
+  function fit() { DH = stacked() ? DH_TALL : DH_WIDE; fitOne(cF, xF); fitOne(cP, xP); }
   window.addEventListener('resize', fit);
 
-  var PAD_L = 34, PAD_R = 10, PAD_T = 24, PAD_B = 26;
+  var PAD_L = 34, PAD_R = 10, PAD_B = 26;
+  function padTop() { return stacked() ? 18 : 24; }
   function plotBox() {
-    return { x0: PAD_L, x1: DW - PAD_R, y0: PAD_T, y1: DH - PAD_B };
+    return { x0: PAD_L, x1: DW - PAD_R, y0: padTop(), y1: DH - PAD_B };
   }
   function axes(ctx, yLo, yHi, zeroLabel) {
     var b = plotBox();
@@ -217,9 +227,9 @@
       xF.beginPath(); xF.moveTo(xc, a1.yOf(0)); xF.lineTo(xc, yv); xF.stroke();
       xF.fillStyle = p[1]; xF.beginPath(); xF.arc(xc, yv, 3.2, 0, 2 * Math.PI); xF.fill();
     });
-    MJ.draw(xF, '\\mathbf{E}', b1.x0 + 6, PAD_T - 12, 13, '#0067b9', 'left');
-    MJ.draw(xF, '\\mathbf{H}', b1.x0 + 32, PAD_T - 12, 13, '#b3213a', 'left');
-    stext(xF, 'in time, one radius', b1.x1, PAD_T - 12, 10.5, '#8a93a0', 'right');
+    MJ.draw(xF, '\\mathbf{E}', b1.x0 + 6, padTop() - 11, 13, '#0067b9', 'left');
+    MJ.draw(xF, '\\mathbf{H}', b1.x0 + 32, padTop() - 11, 13, '#b3213a', 'left');
+    stext(xF, 'in time, one radius', b1.x1, padTop() - 11, 10.5, '#8a93a0', 'right');
 
     /* ---------------- panel 2: what their product does ---------------- */
     xP.clearRect(0, 0, DW, DH);
@@ -250,7 +260,7 @@
     xP.setLineDash([]);
     var ys = a2.yOf(s(tPhase * CYCLES));
     xP.fillStyle = '#1d7a4d'; xP.beginPath(); xP.arc(xc2, ys, 3.2, 0, 2 * Math.PI); xP.fill();
-    MJ.draw(xP, 'S(t) = E(t)\\,H(t)', b2.x0 + 6, PAD_T - 12, 13, '#1d7a4d', 'left');
+    MJ.draw(xP, 'S(t) = E(t)\\,H(t)', b2.x0 + 6, padTop() - 11, 13, '#1d7a4d', 'left');
     MJ.draw(xP, '\\langle S\\rangle', b2.x0 + 7, ym - 10, 12, '#0f5c39', 'left');
 
     /* ---------------- readouts ---------------- */
