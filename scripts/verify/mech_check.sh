@@ -82,9 +82,13 @@ for L in "$REPO/latex/ECE444_L${NN}_Practice_SOLUTIONS.log" \
   grep -q "^!" "$L" && bad "$(basename "$L"): LaTeX errors" || true
 done
 
-# every \part has a solution
-np=$(grep -c '\\part\b' "$tex" 2>/dev/null)
-ns=$(grep -c '\\begin{solution}' "$tex" 2>/dev/null)
+# every \part has a solution. Strip LaTeX comments first: L02's header comment
+# explains the macro ("Blank copy: \begin{solution}[h] reserves h of work
+# space") and a raw grep counted that sentence as a 23rd solution, failing a
+# set whose 22 parts all had one.
+uncommented=$(sed 's/\(^\|[^\\]\)%.*/\1/' "$tex" 2>/dev/null)
+np=$(printf '%s\n' "$uncommented" | grep -c '\\part\b')
+ns=$(printf '%s\n' "$uncommented" | grep -c '\\begin{solution}')
 [ "$np" -gt 0 ] && [ "$np" -eq "$ns" ] && ok "parts=$np solutions=$ns" \
   || bad "parts=$np vs solutions=$ns"
 pb=$(pdfinfo "$b" 2>/dev/null | awk '/^Pages/{print $2}')
