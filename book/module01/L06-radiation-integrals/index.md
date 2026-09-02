@@ -315,36 +315,56 @@ The normalized power pattern is $U/U_{\max}$; its square root is the
 ```{note}
 Watch the components. $\mathbf{N}$ is a *vector* integral: it adds up
 $\mathbf{J}$ from every source point, and vectors from different points can
-only be added in a basis that is the same at all of them. The Cartesian unit
-vectors are; the spherical ones are not — $\hat{\mathbf r}'$ and
-$\hat{\boldsymbol\theta}'$ point differently at every $\mathbf{r}'$. So
-whatever coordinates you use to parametrize $V'$, the integral hands you
-$\mathbf{N}$ as three scalar integrals $N_x, N_y, N_z$ of $J_x, J_y, J_z$.
-
-What radiates is the transverse part of $\mathbf{N}$ **at the field point**,
-projected onto the spherical unit vectors of the observation direction
-$(\theta,\phi)$: $N_\theta = \hat{\boldsymbol\theta}\cdot\mathbf{N}$ and
-$N_\phi = \hat{\boldsymbol\phi}\cdot\mathbf{N}$.
+only be added in a basis that **stays fixed while $\mathbf{r}'$ sweeps the
+antenna**. Two bases qualify. Cartesian $\hat{\mathbf x}, \hat{\mathbf y},
+\hat{\mathbf z}$ is one. The spherical basis of the *observation direction*,
+$\hat{\mathbf r}, \hat{\boldsymbol\theta}, \hat{\boldsymbol\phi}$ at the one
+$(\theta,\phi)$ you are computing, is the other — those are constants once
+the direction is chosen. The basis that does **not** qualify is the spherical
+basis at each source point: $\hat{\mathbf r}'$ and $\hat{\boldsymbol\theta}'$
+rotate with $\mathbf{r}'$, so $\int J_{\theta'}\ \hat{\boldsymbol\theta}'\ dV'$
+does not factor into a unit vector times a scalar integral.
 ```
 ::::
 
-::::{frame} Which sin θ?
+::::{frame} Why Cartesian here
 
-For the $z$-directed currents that dominate this lesson,
-$\mathbf{N} = N_z\hat{\mathbf z}$ and
-$\hat{\boldsymbol\theta}\cdot\hat{\mathbf z} = -\sin\theta$, so
+The wire antennas of this lesson carry a current $I(z')\ \hat{\mathbf z}$: one
+Cartesian component, pointing the same way at every source point. So the
+vector integral collapses to **one scalar integral**,
+
+$$
+N_z(\theta) = \int I(z')\ e^{+jkz'\cos\theta}\ dz',
+$$
+
+and the projection onto the observation basis is one dot product, done once,
+afterwards: $\hat{\boldsymbol\theta}\cdot\hat{\mathbf z} = -\sin\theta$, so
 
 $$
 N_\theta = -N_z\sin\theta, \qquad N_\phi = 0.
 $$
+::::
 
-That $\sin\theta$ is the projection of a $z$-directed current onto
-$\hat{\boldsymbol\theta}$ at the **observation** angle $\theta$. It is not
-part of the integral, and it is not the $\sin\theta'$ of a spherical source
-volume element $dV' = r'^2\sin\theta'\ dr'\ d\theta'\ d\phi'$ — that one
-belongs to a source angle and is used up inside $N_z$. The projection is also
-why no wire antenna radiates off its own ends: at $\theta = 0$ the current has
-no transverse component to project.
+::::{frame} The other order gives the same answer
+
+You could instead expand $\hat{\mathbf z} = \cos\theta\ \hat{\mathbf r} -
+\sin\theta\ \hat{\boldsymbol\theta}$ *before* integrating. Since $\theta$ is the
+observation angle, constant over the integral, the $-\sin\theta$ comes
+straight out and you land on the same $N_\theta$. Cartesian simply keeps the
+two jobs apart: the integral, which depends only on the current distribution,
+and the projection, which depends only on where you look. That separation is
+the space-factor / element-factor split later in this lesson, and all of L16.
+::::
+
+::::{frame} Which sin θ?
+
+That $\sin\theta$ is $\hat{\boldsymbol\theta}\cdot\hat{\mathbf z}$ at the
+**observation** angle $\theta$. It is not part of the integral, and it is not
+the $\sin\theta'$ of a spherical source volume element
+$dV' = r'^2\sin\theta'\ dr'\ d\theta'\ d\phi'$ — that one belongs to a source
+angle and is used up inside $N_z$. The projection is also why no wire antenna
+radiates off its own ends: at $\theta = 0$ the current has no transverse
+component to project.
 
 :::{depth}
 With all three Cartesian components present the same projection reads
@@ -355,8 +375,13 @@ N_\theta = N_x\cos\theta\cos\phi + N_y\cos\theta\sin\phi - N_z\sin\theta,
 N_\phi = -N_x\sin\phi + N_y\cos\phi .
 $$
 
-Compute $N_x, N_y, N_z$ from the integral, then project. Never try to integrate
-$J_\theta$ directly.
+And here is the source-point basis failing on the simplest case. For the
+Hertzian dipole on the $z$-axis every source point has $\theta' = 0$, so in
+its own spherical basis $J_{r'} = J_z$ and $J_{\theta'} = 0$. Integrate those
+and you would conclude $N_\theta = 0$ — no radiation at all. The error is that
+$\hat{\boldsymbol\theta}'$ at the source is not $\hat{\boldsymbol\theta}$ at
+the field point. Never integrate components taken in the source point's
+spherical basis.
 :::
 ::::
 
