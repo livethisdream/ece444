@@ -120,6 +120,31 @@ Module 2 for slots and horns; everything in this lesson carries over by duality.
 :::
 ::::
 
+::::{frame} Who is r, who is r′
+
+Two position vectors from one origin $O$. Neither is a spherical coordinate.
+
+| Symbol | What it is |
+| :-- | :-- |
+| $\mathbf{r}$ | origin → the **field point** $P$, where we want the field |
+| $\mathbf{r}'$ | origin → a **source point**, where a piece of current $\mathbf{J}(\mathbf{r}')\ dV'$ sits |
+| $R = \vert\mathbf{r}-\mathbf{r}'\vert$ | distance from that source point to $P$ |
+| $V'$, $dV'$ | the volume the current occupies, and its element |
+::::
+
+::::{frame} Primed means source, unprimed means field point
+
+The prime is the whole convention. The integral sweeps $\mathbf{r}'$ over the
+antenna while $\mathbf{r}$ stays fixed at $P$.
+
+The scalars are the lengths of these vectors. $r = \vert\mathbf{r}\vert$
+happens to be the spherical radial coordinate of $P$, and
+$\hat{\mathbf r} = \mathbf{r}/r$ is the unit vector from the origin toward
+$P$, in the direction $(\theta,\phi)$. $r' = \vert\mathbf{r}'\vert$ is
+simply how far a source point is from the origin; it has nothing to do with
+$P$.
+::::
+
 ::::{frame} The three-step recipe
 :::{callout}
 $$
@@ -288,19 +313,51 @@ The normalized power pattern is $U/U_{\max}$; its square root is the
 ::::{frame} Careful: the sin θ factor is a projection
 
 ```{note}
-Watch the components. The integral naturally produces $\mathbf{N}$ in Cartesian
-components, but only the **spherical** transverse components radiate. For the
-$z$-directed currents that dominate this lesson,
+Watch the components. $\mathbf{N}$ is a *vector* integral: it adds up
+$\mathbf{J}$ from every source point, and vectors from different points can
+only be added in a basis that is the same at all of them. The Cartesian unit
+vectors are; the spherical ones are not — $\hat{\mathbf r}'$ and
+$\hat{\boldsymbol\theta}'$ point differently at every $\mathbf{r}'$. So
+whatever coordinates you use to parametrize $V'$, the integral hands you
+$\mathbf{N}$ as three scalar integrals $N_x, N_y, N_z$ of $J_x, J_y, J_z$.
 
-$$
-N_\theta = -N_z\sin\theta, \qquad N_\phi = 0,
-$$
-
-so that $\sin\theta$ is not part of the integral at all — it is the projection
-of a $z$-directed current onto $\hat{\boldsymbol\theta}$. It is also the reason
-no wire antenna radiates off its own ends: at $\theta = 0$ the current has no
-transverse component to project.
+What radiates is the transverse part of $\mathbf{N}$ **at the field point**,
+projected onto the spherical unit vectors of the observation direction
+$(\theta,\phi)$: $N_\theta = \hat{\boldsymbol\theta}\cdot\mathbf{N}$ and
+$N_\phi = \hat{\boldsymbol\phi}\cdot\mathbf{N}$.
 ```
+::::
+
+::::{frame} Which sin θ?
+
+For the $z$-directed currents that dominate this lesson,
+$\mathbf{N} = N_z\hat{\mathbf z}$ and
+$\hat{\boldsymbol\theta}\cdot\hat{\mathbf z} = -\sin\theta$, so
+
+$$
+N_\theta = -N_z\sin\theta, \qquad N_\phi = 0.
+$$
+
+That $\sin\theta$ is the projection of a $z$-directed current onto
+$\hat{\boldsymbol\theta}$ at the **observation** angle $\theta$. It is not
+part of the integral, and it is not the $\sin\theta'$ of a spherical source
+volume element $dV' = r'^2\sin\theta'\ dr'\ d\theta'\ d\phi'$ — that one
+belongs to a source angle and is used up inside $N_z$. The projection is also
+why no wire antenna radiates off its own ends: at $\theta = 0$ the current has
+no transverse component to project.
+
+:::{depth}
+With all three Cartesian components present the same projection reads
+
+$$
+N_\theta = N_x\cos\theta\cos\phi + N_y\cos\theta\sin\phi - N_z\sin\theta,
+\qquad
+N_\phi = -N_x\sin\phi + N_y\cos\phi .
+$$
+
+Compute $N_x, N_y, N_z$ from the integral, then project. Never try to integrate
+$J_\theta$ directly.
+:::
 ::::
 
 ::::{frame} The radiation integral as a coherent phasor sum
