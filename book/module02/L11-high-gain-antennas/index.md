@@ -43,10 +43,10 @@ Lesson 11 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 Lesson 10 handed you patches, slots, and horns — single radiators that top out somewhere between 6 and 20 dBi. That is enough for a handheld, a wall-mounted access point, or a short hop across the airfield. It is nowhere near enough to close a link to a satellite 36,000 km away, or to put a radar beam on a target ten miles out. Today you get the antennas that live at 20, 30, and 40 dBi, and — more importantly — the single idea underneath all three of them.
 ::::
 
-::::{frame} Midterm Project — Antenna Pattern Measurement
-:::{admonition} Midterm Project — Antenna Pattern Measurement
+::::{frame} Project 1 — your midterm
+:::{admonition} Project 1 — your midterm
 :class: important
-The midterm project is introduced today and is **due at L20**. You will design or select an antenna, measure its pattern using the techniques you learn in L12–L14, and report its **gain, beamwidth, sidelobe levels, and polarization**. Full requirements come in the project handout distributed in class. Start thinking now about which antenna you want to build — the selection framework at the end of this lesson is exactly the reasoning your report will have to show.
+Project 1, the dipole you built at L7, is your midterm and is **due 2 October**. Its last two steps are the measurements you learn in L12–L14: S-parameters on the analyzer, then the pattern and gain on the range. Every requirement is on the <a href="../../projects/project1-dipole/index.html">Project 1 page</a>. The selection framework at the end of this lesson is the reasoning a report has to show whenever it argues that one antenna is the right one for a job — keep it in mind when you write up why a dipole was, or was not, the antenna you would have chosen.
 :::
 ::::
 

@@ -447,6 +447,7 @@ Walk down the list. The last bullet is the bridge to L8 — every number on this
 - **L8** — you build this exact antenna in **4nec2**, a front end to NEC-2. It *does not assume a current*: it chops the wire into segments, solves for the current on each, then runs the same radiation integral you ran today. **The numbers you just predicted are the ones you will check against simulation.**
 - **L9** — cut the dipole in half and stand it on a ground plane, then bend one into a loop.
 - **Module 3** — a dipole becomes an *element*. Put many in a row and pattern multiplication takes over from 2.15 dBi.
+- **Project 1** — the 915 MHz dipole you cut today is your midterm: simulate it, measure it, match it, pattern it. One page holds the whole project. Due **2 October**.
 
 **Bring the 146 MHz numbers to L8. You are going to grade the simulator with them.**
 

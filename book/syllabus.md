@@ -111,7 +111,7 @@ project-based evaluation. Four components make up your final grade:
 | :- | :-: | :- |
 | Learning Objective (LO) mastery | 30% | Percent of course LOs mastered, multiplied by 30% |
 | Engagement | 10% | Participation, preparation, practice, EI, and course engagement |
-| Midterm Project — Antenna Pattern Measurement | 30% | Mastered / Not Yet Mastered, with resubmission opportunity |
+| Midterm Project — Project 1: Build and Characterize a Dipole | 30% | Mastered / Not Yet Mastered, with resubmission opportunity |
 | Final Project — Combined Beamforming + Radar | 30% | Traditional rubric-based sliding-scale assessment |
 
 ### LO mastery assessment
@@ -194,7 +194,7 @@ Engagement is capped at 10%; extra credit does not roll over.
 
 Two graded projects anchor the course:
 
-- **Midterm Project — Antenna Pattern Measurement.** Introduced at Lesson 11, due at Lesson 20. Students design and execute a pattern-measurement campaign on an antenna under test, reduce the data, and report gain, beamwidth, sidelobe level, and polarization behavior against expectations. Assessed as **Mastered / Not Yet Mastered** with resubmission opportunity.
+- **Midterm Project — [Project 1: Build and Characterize a Dipole](projects/project1-dipole/index.md).** Introduced at Lesson 7, due **2 October**. Students build a 915 MHz wire dipole, predict its behavior on paper, simulate it, measure its resonance and S-parameters on a vector network analyzer, fit a balun and match it to a 50 ohm line, measure its radiation pattern and gain, and report every quantity against prediction and simulation with a named cause for each disagreement. Assessed as **Mastered / Not Yet Mastered** with resubmission opportunity.
 - **Final Project — Combined Beamforming + Radar.** Track a moving target while suppressing a static jammer using the ADALM-PHASER. Runs across Lessons 39–41 (Module 5). Graded using a **traditional rubric-based sliding scale**.
 
 ## Course policies
@@ -292,11 +292,11 @@ Labs are marked **LAB**.
 
 ### Module 2: Antenna Types, Simulation, and Measurement
 
-7. Simple Resonant Antennas — isotropic radiators, half-wave dipoles
+7. Simple Resonant Antennas — isotropic radiators, half-wave dipoles &nbsp; · &nbsp; **Project 1 (midterm) introduced — due 2 October**
 8. Dipole Simulation Lab **(LAB)**
 9. Loop and Monopole Antennas
 10. Patch, Slot, and Horn Antennas
-11. High-Gain Antennas — reflectors, Yagi-Uda, arrays &nbsp; · &nbsp; **Midterm project introduced**
+11. High-Gain Antennas — reflectors, Yagi-Uda, arrays
 12. Pattern Measurement Theory — anechoic chambers, near-field / far-field transformations, standard gain horns
 13. Measurement Lab Part 1 — Impedance and S-parameters **(LAB)**
 14. Measurement Lab Part 2 — Radiation Patterns **(LAB)**
@@ -308,7 +308,7 @@ Labs are marked **LAB**.
 17. Introduction to Phased Array Hardware — ADALM-PHASER, SDR control
 18. Beam Steering Theory
 19. Beam Steering Lab **(LAB)**
-20. Array Factor and Beamwidth Theory &nbsp; · &nbsp; **Midterm project due**
+20. Array Factor and Beamwidth Theory
 21. Array Factor Lab **(LAB)**
 22. Antenna Pattern Theory — true pattern vs. array factor
 23. Antenna Pattern Lab **(LAB)** — AUT measurement using Phaser

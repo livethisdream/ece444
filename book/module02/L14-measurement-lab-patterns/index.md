@@ -351,7 +351,7 @@ A 2 dB gap with a named cause is a better report than a 0.2 dB gap with no discu
 
 ::::{frame} Where this is going
 
-This lab is the **dress rehearsal for the midterm Antenna Pattern Measurement project, due at L20**. Same range, same extraction, same uncertainty discussion — but with more antennas, a written analysis, and no procedure handed to you. Mistakes made in this lab carry no grade penalty; the same mistakes in the graded project do.
+This lab is also where you take the pattern data for <a href="../../projects/project1-dipole/index.html">Project 1</a>, your midterm, due **2 October**. Once the horn is done, put your dipole on the positioner and run the same procedure — same range, same extraction, same uncertainty discussion. The project page says what to record and what the range margin looks like for an antenna that small. Mistakes made on the horn carry no grade penalty; the same mistakes on your dipole do.
 
 Module 2 closes here, and it closes with a complete loop. You can predict an antenna's pattern from its geometry, simulate it, and now measure it, with a quantified statement of how much of the measurement to believe. Lesson 15 opens Module 3 by going back to the beginning of that loop and asking a sharper question: the aperture *size* set the beamwidth you just measured, but what set the sidelobe level? The answer is the illumination across the aperture, and choosing it deliberately is how every high-performance antenna and phased array is designed.
 ::::

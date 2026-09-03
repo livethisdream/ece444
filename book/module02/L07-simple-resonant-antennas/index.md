@@ -742,88 +742,20 @@ is for.
 ```
 ::::
 
-::::{frame} Build it — a 915 MHz wire dipole on an SMA connector
+::::{frame} Build it — Project 1
 
-:::{admonition} Build it — a 915 MHz wire dipole on an SMA connector
+:::{admonition} Build it — your Project 1 dipole
 :class: type-along
-Ten minutes with a wire cutter and a soldering iron gets you a real antenna.
-You will not measure it today. You will measure it in Lesson 13, on a vector
-network analyzer, against the predictions you write down now — so the value of
-this exercise depends entirely on committing to numbers **before** you cut.
+Ten minutes with a wire cutter and a soldering iron gets you a real antenna,
+and that antenna is your **midterm**. Project 1 has you cut a 915 MHz dipole
+today, predict what it should do *before* you cut, and then simulate it, put
+it on a network analyzer, match it to a 50 ohm line, and measure its pattern
+over the rest of Module 2. The report is due **2 October**.
 
-**Parts.** An SMA female panel-mount or edge-launch connector, about
-$20\ \text{cm}$ of 20 AWG solid copper wire — stiff enough to hold its shape — a
-wire cutter, a ruler, and a soldering iron.
-:::
-::::
-
-::::{frame} Design, then build
-
-:::{admonition} Build it — a 915 MHz wire dipole on an SMA connector, continued
-:class: type-along
-
-**Design, then build.**
-
-1. At $915\ \text{MHz}$, $\lambda = c/f = 32.8\ \text{cm}$. The 5% rule gives a
-   total length $L = 0.475\lambda = 15.6\ \text{cm}$, which is
-   $7.8\ \text{cm}$ **per arm**. The same three lines work for any other band
-   with a new $f$.
-2. Cut two arms at $7.8\ \text{cm}$. Cut them long if you are unsure. You can
-   always trim; you cannot un-trim.
-:::
-::::
-
-::::{frame} Build it, continued — solder and check
-
-:::{admonition} Build it — a 915 MHz wire dipole on an SMA connector, continued
-:class: type-along
-
-3. Solder one arm to the connector's **center pin** and the other to the
-   connector **body or ground tab**, so the two arms run in opposite directions
-   along one straight line.
-4. Straighten both arms and check that the pair is collinear and square to the
-   connector. A bent dipole is a different antenna.
-:::
-::::
-
-::::{frame} Build it, continued — fill in your predictions
-
-:::{admonition} Build it — a 915 MHz wire dipole on an SMA connector, continued
-:class: type-along
-
-5. Fill in the prediction column below and keep the sheet with the antenna.
-
-| What to record | Your prediction (now) | Measured in Lesson 13 |
-| :-- | :-- | :-- |
-| Arm length actually cut | ______ cm | — |
-| Total length $L$ | ______ cm | — |
-| Resonant frequency $f_\text{res}$ | ______ MHz | ______ MHz |
-:::
-::::
-
-::::{frame} Build it, continued — impedance and VSWR predictions
-
-:::{admonition} Build it — a 915 MHz wire dipole on an SMA connector, continued
-:class: type-along
-
-| What to record | Your prediction (now) | Measured in Lesson 13 |
-| :-- | :-- | :-- |
-| Feed impedance $Z_{\text{in}}$ at resonance | ______ $\Omega$ | ______ $\Omega$ |
-| VSWR on a $50\ \Omega$ line | ______ | ______ |
-:::
-::::
-
-::::{frame} This build has no balun, and that matters
-
-:::{admonition} Build it — a 915 MHz wire dipole on an SMA connector, continued
-:class: type-along
-Soldering wire straight onto an
-SMA connector is the crudest possible feed: the dipole is balanced, the coax
-behind it is not, and current will flow on the outside of the shield exactly as
-Lesson 4 warned. The feedline becomes part of the antenna. Expect your measured
-resonant frequency and impedance to drift from the predictions above, and
-expect the readings to twitch when you move your hand near the cable. That is
-not a botched build. It is the balun problem showing up in your own hardware.
+The parts list, the build steps, the prediction sheet, and every step after
+it live in one place:
+<a href="../../projects/project1-dipole/index.html">Project 1 — Build and Characterize a Dipole</a>.
+Fill in the prediction column there before you touch the wire cutters.
 :::
 ::::
 
@@ -897,14 +829,7 @@ two is informative.
 In Lesson 8 you will model a wire, set its length, sweep the frequency, and
 read back impedance, VSWR, gain, and pattern — then compare each one against
 the numbers you produced by hand today. **The numbers you just predicted are
-the ones you will check against simulation.** A simulator that agrees with a
-hand calculation on a dipole can be trusted a little further on a structure
-you cannot solve by hand; a disagreement usually points to a setup error in
-the model, and the only way to notice it is to bring predictions with you. The
-915 MHz dipole you soldered onto an SMA connector closes the same loop with
-hardware instead of software: in Lesson 13 you will put it on a vector network
-analyzer and see how far a real balun-less wire lands from the length,
-resonance, and impedance you wrote down today.
+the ones you will check against simulation.**
 ::::
 
 ::::{frame} Predictions catch simulator mistakes
@@ -913,10 +838,9 @@ A simulator that agrees with a hand
 calculation on a dipole can be trusted a little further on a structure
 you cannot solve by hand; a disagreement usually points to a setup error in
 the model, and the only way to notice it is to bring predictions with you. The
-915 MHz dipole you soldered onto an SMA connector closes the same loop with
-hardware instead of software: in Lesson 13 you will put it on a vector network
-analyzer and see how far a real balun-less wire lands from the length,
-resonance, and impedance you wrote down today.
+915 MHz dipole you build for Project 1 closes the same loop with hardware
+instead of software: on a vector network analyzer you will see how far a real
+wire lands from the length, resonance, and impedance you wrote down today.
 ::::
 
 ::::{frame} Lesson 9 and beyond

@@ -82,8 +82,8 @@ moving target in your sights.
     <p class="d-eyebrow">Individual deliverable</p>
     <h3>Midterm Project</h3>
     <p class="d-weight"><span class="d-w-num">35%</span> of course grade</p>
-    <p class="d-due">Antenna pattern measurement · introduced <strong>Lesson 11</strong>, due <strong>Lesson 20</strong></p>
-    <a class="d-link" href="syllabus.html#grading">How mastery grading works →</a>
+    <p class="d-due">Project 1: build and characterize a dipole · introduced <strong>Lesson 7</strong>, due <strong>2 October</strong></p>
+    <a class="d-link" href="projects/project1-dipole/index.html">The Project 1 page →</a>
   </div>
   <div class="deliverable-card">
     <p class="d-eyebrow">Ongoing</p>

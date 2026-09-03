@@ -44,7 +44,7 @@ Lesson 12 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 
 :::{depth}
-L10 and L11 built the high-gain antennas and told you their gain from geometry and aperture efficiency. L11 also handed you the midterm project: put an antenna on a positioner and measure its pattern. Every pattern in this course so far came out of an integral — none of them came off an instrument. This lesson is the theory that midterm measurement stands on. It runs the whole problem backwards: instead of computing a far field, you have to *build* one, and every rule that follows is a tolerance on how well you built it.
+L10 and L11 built the high-gain antennas and told you their gain from geometry and aperture efficiency. Project 1, your midterm, ends the same way: put the dipole you built on a positioner and measure its pattern. Every pattern in this course so far came out of an integral — none of them came off an instrument. This lesson is the theory that measurement stands on. It runs the whole problem backwards: instead of computing a far field, you have to *build* one, and every rule that follows is a tolerance on how well you built it.
 :::
 ::::
 

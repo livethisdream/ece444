@@ -11,6 +11,11 @@ parts:
       - file: syllabus
       - file: materials
 
+  - caption: Projects
+    chapters:
+      - file: projects/project1-dipole/index
+        title: "Project 1 — Build and Characterize a Dipole"
+
   - caption: Module 1 — Foundations of Electromagnetics and Antennas
     chapters:
       - file: module01/index

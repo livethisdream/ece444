@@ -302,7 +302,7 @@ None of this is instrument error. It is a real change in the antenna's input imp
 - A VNA — bench instrument or NanoVNA, either is fine. The steps below are written to work on both.
 - A calibration kit for your connector type: short, open, and $50\ \Omega$ load.
 - One test cable, plus a torque wrench if your bench has one.
-- A supplied dipole or monopole with a known nominal resonance.
+- Your <a href="../../projects/project1-dipole/index.html">Project 1</a> dipole, or a supplied dipole or monopole with a known nominal resonance.
 - A non-metallic stand or a length of foam to hold the antenna clear of everything.
 
 ::::

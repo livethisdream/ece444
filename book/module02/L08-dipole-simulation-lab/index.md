@@ -295,6 +295,10 @@ always editable directly, and the run always produces the same output file.
 Work through these steps in order and record your results as you go. Write every
 prediction down before you run the corresponding case, because a prediction
 written after the fact teaches you nothing.
+
+For <a href="../../projects/project1-dipole/index.html">Project 1</a>, run the
+same procedure on **your** antenna: the length you actually cut and trimmed,
+and the real wire radius. The project page says which numbers to record.
 ::::
 
 ::::{frame} Step 1 — Predict

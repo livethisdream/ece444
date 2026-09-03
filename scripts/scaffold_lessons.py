@@ -84,30 +84,37 @@ MODULES = {
         title="Module 2 — Antenna Types, Simulation, and Measurement",
         los=["2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7"],
         synopsis="Move from theory to real antennas: the canonical families — dipoles, loops, monopoles, patches, slots, horns, reflectors, Yagis — and how we simulate and measure them. You'll simulate a dipole, then measure impedance and radiation patterns in the lab.",
-        generate_index=True,
+        generate_index=False,  # hand-edited since (nav + frame_view); regenerating would clobber it
     ),
     3: dict(
         caption="Module 3 — Arrays and ADALM-PHASER Beamforming",
         title="Module 3 — Arrays and ADALM-PHASER Beamforming",
         los=["3.1", "3.2", "3.3", "3.4", "3.5", "3.6", "3.7", "3.8", "3.9"],
         synopsis="Build beams from elements. Aperture distributions and the array factor, then hands-on beam steering, tapering, beam squint, and null steering on the ADALM-PHASER.",
-        generate_index=True,
+        generate_index=False,  # hand-edited since (nav + frame_view)
     ),
     4: dict(
         caption="Module 4 — Radar Fundamentals and FMCW",
         title="Module 4 — Radar Fundamentals and FMCW",
         los=["4.1", "4.2", "4.3", "4.4", "4.5", "4.6", "4.7"],
         synopsis="From antennas to radar. The radar equation, range/Doppler/resolution, detection theory, and FMCW processing on the PHASER — range, range-Doppler, MTI, and CFAR.",
-        generate_index=True,
+        generate_index=False,  # hand-edited since (nav + frame_view)
     ),
     5: dict(
         caption="Module 5 — Capstone Project",
         title="Module 5 — Capstone Project",
         los=["5.1", "5.2", "5.3", "5.4"],
         synopsis="Capstone. Integrate beam steering, null steering, and FMCW radar into a working demo that tracks a moving target while suppressing a static jammer, and brief the results.",
-        generate_index=True,
+        generate_index=False,  # hand-edited since (nav + frame_view)
     ),
 }
+
+# ---- Projects: hand-authored pages that get their own TOC part, placed after
+# Course Information and before Module 1. (slug-dir, toc_title). Only placed
+# in the nav; never scaffolded.
+PROJECTS = [
+    ("projects/project1-dipole", "Project 1 — Build and Characterize a Dipole"),
+]
 
 # ---- Lab manifest: labs that hang off a lesson without taking a lesson number.
 # (module, anchor_lesson_slug, lab_slug, toc_title). The TOC lists each one
@@ -300,6 +307,13 @@ def toc_yaml():
         "      - file: syllabus",
         "      - file: materials",
     ]
+    if PROJECTS:
+        lines.append("")
+        lines.append("  - caption: Projects")
+        lines.append("    chapters:")
+        for (pslug, ptitle) in PROJECTS:
+            lines.append(f"      - file: {pslug}/index")
+            lines.append(f'        title: "{ptitle}"')
     for mnum, m in MODULES.items():
         lines.append("")
         lines.append(f"  - caption: {m['caption']}")
