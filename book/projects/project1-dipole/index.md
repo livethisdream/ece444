@@ -356,21 +356,32 @@ measures the transmission $S_{21}$ from the horn to the dipole at each
 turntable angle. Reciprocity says it does not matter which end transmits, and
 this arrangement keeps the transmit power off the rotating cable.
 
+The horn is an **ETS-Lindgren 3164-07**, an open-boundary quad-ridged horn
+rated from $700\ \text{MHz}$ to $6\ \text{GHz}$. Two things about it shape
+the measurement. It is **dual-polarized**, with one connector per
+polarization, so you change polarization by moving the VNA cable to the
+other port, never by rotating the horn. And $915\ \text{MHz}$ sits near the
+bottom of its band, where its gain is lowest and its beam broadest — which
+is fine for illuminating a dipole, but means you must read its gain at
+$915\ \text{MHz}$ specifically, not a mid-band number.
+
 **Range check first.** For your dipole $D = 15.6\ \text{cm}$, and the three
 far-field criteria from L12 give $2D^2/\lambda = 0.15\ \text{m}$,
 $5D = 0.78\ \text{m}$, and $10\lambda = 3.3\ \text{m}$. The last one binds
-for an antenna this small, and the horn has its own $2D^2/\lambda$ at
-$915\ \text{MHz}$ that you must run as well. Measure the distance $r$ from
-the horn aperture to the turntable axis with a tape and compare it against
-both. If the chamber is shorter than $3.3\ \text{m}$, state the margin in your
+for an antenna this small. The horn has its own $2D^2/\lambda$ as well:
+measure its aperture with a tape (it is roughly half a meter across, which
+puts its $2D^2/\lambda$ near $1.3\ \text{m}$ at $915\ \text{MHz}$) and run
+the number. Then measure the distance $r$ from the horn aperture to the
+turntable axis and compare it against both. If the chamber is shorter than $3.3\ \text{m}$, state the margin in your
 report, say which criterion it violates and what that criterion protects
 against, and argue whether it matters for a dipole.
 
 **Setup.**
 
-- Confirm the chamber horn's rated band covers $915\ \text{MHz}$ and write
-  down its datasheet gain there, $G_\text{horn}$. That number is your gain
-  reference.
+- Read the horn's gain at $915\ \text{MHz}$, $G_\text{horn}$, from the
+  3164-07 datasheet gain curve, or from the calibration data that came with
+  the chamber's horn if it has one, and cite which. That number is your gain
+  reference, and every decibel it is off lands directly on your result.
 - Set the VNA to a narrow sweep or CW at $915\ \text{MHz}$, a low IF bandwidth
   and averaging for dynamic range, and calibrate a **two-port through** at the
   ends of both cables, so that cable loss on both sides is inside the
@@ -379,8 +390,8 @@ against, and argue whether it matters for a dipole.
 - Mount the dipole on the turntable, connector down, with the coax and its
   choke running straight down the axis of rotation. A cable that leaves the
   feed sideways is in the pattern.
-- Co-polarize the horn with the dipole, peak up, and define that angle as
-  $0^\circ$.
+- Connect the VNA to the horn port whose polarization matches the dipole,
+  peak up, and define that angle as $0^\circ$.
 - **Measure the noise floor**: replace the dipole with a $50\ \Omega$ load and
   read $\vert S_{21}\vert$. That is leakage plus receiver noise, and it caps
   every number that follows.
@@ -393,8 +404,8 @@ is that curve normalized to its peak.
    circle; the measurement will show ripple. The peak-to-peak ripple is your
    first estimate of the chamber's quiet zone.
 2. **E-plane**: the cut containing the wire. Remount the dipole horizontal in
-   the plane of the turntable, rotate the horn to horizontal polarization,
-   re-peak, and sweep again. HPBW/5 is about $15^\circ$; $5^\circ$ steps resolve
+   the plane of the turntable, move the VNA cable to the horn's horizontally
+   polarized port, re-peak, and sweep again. HPBW/5 is about $15^\circ$; $5^\circ$ steps resolve
    the nulls along the wire axis.
 3. **Repeat one cut.** The disagreement between two sweeps of the same cut is
    your repeatability.
@@ -408,9 +419,11 @@ is that curve normalized to its peak.
    on your gain, so say what those uncertainties are. If a calibrated reference
    antenna for $915\ \text{MHz}$ is available, use the comparison method from
    L14 as a cross-check.
-5. **Cross-polarization.** Rotate the horn $90^\circ$ and re-sweep the
-   E-plane. A dipole's XPD should be high; a low number points at the feed
-   cable radiating.
+5. **Cross-polarization.** Move the VNA cable to the horn's other port and
+   re-sweep the E-plane. A dipole's XPD should be high; a low number points at
+   the feed cable radiating. The horn's own port-to-port cross-polarization
+   isolation, from the datasheet, is the most XPD this setup can ever show,
+   so quote your result against it.
 6. **Antenna B.** Repeat the boresight gain measurement only. The pattern
    shape should not change; the level should move by the difference in
    mismatch loss, about $0.1\ \text{dB}$, which is inside your repeatability.
