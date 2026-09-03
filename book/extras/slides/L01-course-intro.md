@@ -207,8 +207,8 @@ If the antenna is wrong, nothing downstream can fix it.
 
 ## Homework
 
-- **Practice sets are your reps.** One per lesson, keyed to that lesson's objectives. Graded on a **genuine, documented attempt** — not on correctness. That is engagement credit (10% of the grade).
-- **LO mastery is 30%.** Every objective is scored **Mastered** or **Not Yet Mastered** on the module assessments; your score is the fraction you master.
+- **Practice sets are your reps.** One per lesson, keyed to that lesson's objectives. Graded on a **genuine, documented attempt** — not on correctness. That is engagement credit (15% of the grade).
+- **LO mastery is 25%.** Every objective is scored **Mastered** or **Not Yet Mastered** on the module assessments; your score is the fraction you master.
 - **The midterm project is resubmittable.** Mastered / Not Yet Mastered, revise after feedback, turn it in again.
 
 <div class="callout">

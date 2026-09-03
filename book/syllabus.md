@@ -109,10 +109,10 @@ project-based evaluation. Four components make up your final grade:
 
 | Component | Weight | Evaluation method |
 | :- | :-: | :- |
-| Learning Objective (LO) mastery | 30% | Percent of course LOs mastered, multiplied by 30% |
-| Engagement | 10% | Participation, preparation, practice, EI, and course engagement |
-| Midterm Project — Project 1: Build and Characterize a Dipole | 30% | Mastered / Not Yet Mastered, with resubmission opportunity |
-| Final Project — Combined Beamforming + Radar | 30% | Traditional rubric-based sliding-scale assessment |
+| Learning Objective (LO) mastery | 25% | Percent of course LOs mastered, multiplied by 25% |
+| Engagement | 15% | Participation, preparation, practice, EI, and course engagement |
+| Midterm Project — Project 1: Build and Characterize a Dipole | 25% | Mastered / Not Yet Mastered, with resubmission opportunity |
+| Final Project — Combined Beamforming + Radar | 35% | Traditional rubric-based sliding-scale assessment |
 
 ### LO mastery assessment
 
@@ -121,14 +121,14 @@ through module assessments. The LO Mastery portion of the final grade is
 calculated as:
 
 ```text
-LO Mastery contribution = (LOs mastered / total course LOs) × 30%
+LO Mastery contribution = (LOs mastered / total course LOs) × 25%
 ```
 
 For example, if a cadet masters 30 of 33 course LOs, the LO Mastery
 contribution is:
 
 ```text
-(30 / 33) × 30% = 27.3%
+(30 / 33) × 25% = 22.7%
 ```
 
 ### Midterm project mastery assessment
@@ -152,7 +152,7 @@ performance, and technical communication across a range of performance levels.
 
 ### Engagement credits (EC)
 
-Engagement is worth **10% of your final grade** and rewards active participation
+Engagement is worth **15% of your final grade** and rewards active participation
 in the course rather than single-attempt performance on graded work. You may
 earn engagement points in the following ways:
 
@@ -171,7 +171,7 @@ earn engagement points in the following ways:
 - **Course improvement contributions.** Spotted a bug in a lab writeup, an
   unclear slide, a broken link on the course site? Tell me and it counts.
 
-Engagement is capped at 10%; extra credit does not roll over.
+Engagement is capped at 15%; extra credit does not roll over.
 
 ### Grade scale
 

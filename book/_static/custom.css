@@ -578,7 +578,14 @@ nav .theme-switch-button {
   margin: 28px 0;
 }
 @media (max-width: 720px) {
-  .bd-article .deliverable-cards { grid-template-columns: 1fr; }
+  .bd-article .deliverable-cards { grid-template-columns: 1fr; gap: 8px; margin: 18px 0; }
+  /* Four cards stack in one column on a phone and must still fit the intro's
+     one-screen present budget: drop the eyebrow and tighten the vertical
+     rhythm. Layout only; no colour, so nothing to mirror for dark mode. */
+  .bd-article .deliverable-card { padding: 8px 12px 8px; }
+  .bd-article .deliverable-card .d-eyebrow { display: none; }
+  .bd-article .deliverable-card h3 { margin: 0 0 4px; font-size: 18px; }
+  .bd-article .deliverable-card .d-due { margin: 0 0 6px; }
 }
 .bd-article .deliverable-card {
   border: 1px solid var(--tps-rule, #d8e2ec);

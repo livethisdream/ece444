@@ -13,12 +13,13 @@ what to turn in. Bookmark it and bring it to every lab in Module 2.
 :::{admonition} Project 1 at a glance
 :class: key-concept
 - **Antenna:** a wire half-wave dipole on an SMA connector, designed for
-  **915 MHz**.
+  **915 MHz**. You build **two copies**: antenna A stays bare, antenna B gets
+  the matching network.
 - **Build:** at Lesson 7. Ten minutes with a wire cutter and a soldering iron.
 - **Characterize:** resonance and VSWR (Lesson 7, right after the build), a
   balun and a 50 ohm match (before the S-parameter lab), a 4nec2 simulation
   (Lesson 8), calibrated S-parameters (Lesson 13), and a radiation pattern with
-  gain (Lesson 14).
+  gain in the anechoic chamber (Lesson 14).
 - **Report due: 2 October.** This is the midterm project. It is assessed
   **Mastered / Not Yet Mastered**, with one resubmission after feedback (see the
   <a href="../../syllabus.html#midterm-project-mastery-assessment">syllabus</a>).
@@ -38,12 +39,12 @@ at the end of this page.
 | Step | When | The method is taught in | What you record |
 | :-- | :-- | :-- | :-- |
 | 1. Design | L7 | <a href="../../module02/L07-simple-resonant-antennas/index.html">L7</a>, <a href="../../module01/L05-field-regions/index.html">L5</a> | cut length, predicted $Z_{\text{in}}$, VSWR, gain, HPBW, bandwidth |
-| 2. Build | L7 | this page | arm lengths as cut, wire gauge, a photo |
+| 2. Build | L7 | this page | arm lengths as cut for A and B, wire gauge, a photo |
 | 3. Resonance and VSWR | L7 to L8 | <a href="../../module01/L04-lab-matching/index.html">L4 lab</a> | $f_\text{res}$ and VSWR at 915 MHz, before and after trimming |
 | 4. Balun and match | before the S-parameter lab | <a href="../../module01/L04-impedance-feeding-baluns/index.html">L4</a>, <a href="../../module01/L04-lab-matching/index.html">L4 lab</a> | effect of the choke; matching-network design and measured VSWR |
 | 5. Simulate | L8 | <a href="../../module02/L08-dipole-simulation-lab/index.html">L8</a> | simulated $Z_{\text{in}}$, $f_\text{res}$, gain, HPBW, average gain |
 | 6. S-parameters | S-parameter lab (L13) | <a href="../../module02/L13-measurement-lab-sparams/index.html">L13</a> | calibrated $S_{11}$ sweep, Smith chart, −10 dB bandwidth, Touchstone file |
-| 7. Pattern | pattern lab (L14) | <a href="../../module02/L12-pattern-measurement-theory/index.html">L12</a>, <a href="../../module02/L14-measurement-lab-patterns/index.html">L14</a> | E- and H-plane cuts, gain by comparison, XPD, noise floor |
+| 7. Pattern | pattern lab (L14), in the anechoic chamber | <a href="../../module02/L12-pattern-measurement-theory/index.html">L12</a>, <a href="../../module02/L14-measurement-lab-patterns/index.html">L14</a> | E- and H-plane cuts, gain from the chamber horn, XPD, noise floor, range length |
 | 8. Compare and report | **due 2 October** | this page | the filled record sheet and the report |
 
 The report is graded on the comparison, not on how close the numbers land. A
@@ -92,9 +93,9 @@ of disagreement. Quantifying that disagreement is the project.
 
 :::{admonition} Parts and tools
 :class: type-along
-- An **SMA female** connector: panel-mount (four-hole flange) or edge-launch.
-  Either works; the flange type is easier to solder to.
-- About $20\ \text{cm}$ of **20 AWG solid copper wire** (bare or enameled; if
+- **Two SMA female** connectors, panel-mount (four-hole flange) or
+  edge-launch. Either works; the flange type is easier to solder to.
+- About $40\ \text{cm}$ of **20 AWG solid copper wire** (bare or enameled; if
   enameled, scrape the last centimeter clean). Radius $0.41\ \text{mm}$ — you
   will need that number in Step 5.
 - Wire cutters, a metric ruler, a soldering iron, and a permanent marker.
@@ -102,10 +103,10 @@ of disagreement. Quantifying that disagreement is the project.
   of foam or a cardboard strip to hold the antenna clear of the bench.
 :::
 
-1. **Cut two arms at $7.8\ \text{cm}$.** Cut them a few millimeters long if you
-   are unsure. You can always trim; you cannot un-trim. Measure each arm with
-   the ruler and write both lengths on the record sheet — the number you *cut*,
-   not the number you *meant to cut*.
+1. **Cut four arms at $7.8\ \text{cm}$**, two per antenna. Cut them a few
+   millimeters long if you are unsure. You can always trim; you cannot
+   un-trim. Measure each arm with the ruler and write all four lengths on the
+   record sheet — the number you *cut*, not the number you *meant to cut*.
 2. **Solder one arm to the center pin** and the other to the connector
    **body or a ground tab**, so that the two arms run in opposite directions
    along one straight line through the connector. Keep the solder joints short:
@@ -114,8 +115,19 @@ of disagreement. Quantifying that disagreement is the project.
 3. **Straighten both arms** and check that the pair is collinear and square to
    the connector. A bent dipole is a different antenna, and a dipole that
    changes shape between measurements will not give you the same answer twice.
-4. **Mark the antenna** with your name and the frequency, and **photograph it**
-   next to the ruler. The photo goes in the report.
+4. **Build the second one the same way.** Label them **A** and **B** with your
+   name and the frequency, and **photograph both** next to the ruler. The
+   photos go in the report.
+
+:::{admonition} Why two antennas
+:class: note
+Antenna A is your reference: it stays a bare dipole for the whole project.
+Antenna B is the one that gets the matching network in Step 4, so that you can
+measure the matched and unmatched antenna side by side in Steps 6 and 7
+without unsoldering anything. Two antennas cut to the same numbers also give
+you a free data point that no simulation offers: how repeatable *your* build
+is. Both resonant frequencies go in the record sheet.
+:::
 
 :::{admonition} This feed has no balun, and that matters
 :class: note
@@ -141,7 +153,7 @@ not skip the calibration here either, but do not agonize over it.
 2. **Calibrate** short, open, and load at the end of the test cable, then
    reconnect the load and confirm $\vert S_{11}\vert$ is below $-30\ \text{dB}$
    across the band.
-3. **Connect the antenna** and hold it clear of the bench, your hands, and your
+3. **Connect antenna A** and hold it clear of the bench, your hands, and your
    body. Set it on the foam or hang it by the cable. Read off:
    - the resonant frequency $f_\text{res}$, the real-axis crossing on the Smith
      chart (or the $\vert S_{11}\vert$ dip, which is usually close);
@@ -153,7 +165,7 @@ not skip the calibration here either, but do not agonize over it.
    numbers first — they are data — then trim **both arms equally**, a
    millimeter or two at a time, and re-sweep after each cut until
    $f_\text{res}$ sits within about $10\ \text{MHz}$ of $915$. Write down the
-   final arm lengths.
+   final arm lengths. Then do the same for antenna B.
 5. **Perturb it** once: hand $2$ to $3\ \text{cm}$ from an arm, then a hand on
    the coax just behind the connector. Note what moves. You will explain it in
    Step 4.
@@ -176,9 +188,12 @@ antenna with real parts at UHF is a skill the L4 lab only practiced at 2 MHz.
 **4a. Fit a choke balun.** Lesson 4's table says the default dipole feed is a
 1:1 current balun. Two ways to make one at $915\ \text{MHz}$:
 
-- **Ferrite beads.** Slip two or three clip-on or slip-on ferrite beads (a
-  mix rated for UHF, such as mix 43 or mix 61) over the coax right behind the
-  SMA connector. This is the fast option and usually the better one.
+- **Ferrite beads.** Snap two or three clip-on ferrite cores (a mix rated for
+  UHF, such as mix 43 or mix 61, from the course kit) onto the test cable right
+  behind the SMA connector. Nothing to solder, and because the choke lives on
+  the cable rather than the antenna, the same choked cable serves antenna A,
+  antenna B, and the chamber measurement. This is the fast option and usually
+  the better one.
 - **A sleeve (bazooka) balun.** A $\lambda/4 = 8.2\ \text{cm}$ length of brass
   or copper tube slipped over the coax, open at the antenna end and soldered to
   the shield at the far end. Elegant, narrowband, and fussier to build.
@@ -210,9 +225,10 @@ Either of the two dual networks realizes it at $915\ \text{MHz}$:
 
 Your measured impedance will not be exactly $70 + j0$, so recompute from your
 own number and check the design on the feed-match widget below before you
-solder anything. Nearest standard values are fine: $1.5\ \text{pF}$ and
-$5.6\ \text{nH}$ are E-series parts, and the L4 lab already taught you how to
-price the substitution.
+solder anything. Build the **low-pass** version: its capacitor is a stock
+value and its inductor is a piece of wire, as Step 4c explains. The nearest
+standard capacitor, $1.5\ \text{pF}$, is fine — the L4 lab already taught you
+how to price the substitution.
 
 <iframe src="../../viz/feed-match.html"
         width="100%" height="529"
@@ -221,11 +237,39 @@ price the substitution.
         title="Feed-line match explorer">
 </iframe>
 
-**4c. Build and verify it.** At $915\ \text{MHz}$ a few picofarads and a few
-nanohenries are parts the size of a grain of rice, and every millimeter of lead
-is a fraction of a nanohenry you did not design in. Use 0603 or 0805 surface
-mount parts, solder them directly across the SMA connector's pin and flange,
-and keep the leads as short as physically possible. Then re-sweep.
+**4c. Build and verify it, on antenna B.** At $915\ \text{MHz}$ the parts are
+tiny — a picofarad and a few nanohenries — and the lesson of this step is that
+at UHF **a lead is an inductor and a loop of wire is a component**. You will
+build the network from a leaded capacitor and the antenna's own wire, and
+design the leads in rather than pretending they are not there.
+
+- **The shunt capacitor** is a through-hole **NP0 (C0G) ceramic** capacitor
+  from the course kit, nominally $1.5\ \text{pF}$. Solder it between the
+  center-pin arm and the connector flange, right at the feed, with the leads
+  trimmed to **$2\ \text{mm}$ or less** on each side. Straight wire adds
+  roughly $1\ \text{nH}$ per millimeter, so two 2 mm leads put about
+  $2\ \text{nH}$ in series with the capacitor: that turns $-116\ \Omega$ into
+  $-104\ \Omega$, which is the same as a $1.7\ \text{pF}$ part. Inside the
+  tolerance of the capacitor, and only because the leads are short. A
+  capacitor on $10\ \text{mm}$ leads is a different component.
+- **The series inductor is a loop in the wire.** Form a single circular turn
+  about $5\ \text{mm}$ in diameter in the center-pin arm, between the pin and
+  the point where the capacitor attaches. A single turn of radius $R$ in wire
+  of radius $a$ has
+
+  $$L \approx \mu_0 R \left[\ln\frac{8R}{a} - 2\right],$$
+
+  which for $R = 2.5\ \text{mm}$ and $a = 0.41\ \text{mm}$ gives
+  $6\ \text{nH}$. A straight extension does the same job —
+  $9\ \text{mm}$ of 20 AWG wire is $5.5\ \text{nH}$ — but the loop keeps the
+  arm length honest and makes the component visible. Either way, the loop or
+  extension is part of antenna B now, so re-measure B's arm length from the
+  far side of it.
+- **Keep the geometry of A and B identical** apart from the network. That is
+  what makes the A-versus-B comparison in Steps 6 and 7 a measurement of the
+  network and nothing else.
+
+Then re-sweep B, with the choke on the cable.
 
 | What "good" looks like | Target |
 | :-- | :-- |
@@ -234,18 +278,13 @@ and keep the leads as short as physically possible. Then re-sweep.
 
 If the network makes things worse, that is a result, not a failure. The L4
 lab's lesson applies verbatim: state the VSWR you actually hold, the mismatch
-loss it costs, and argue ship / re-source / redesign. Keep the unmatched
-antenna's numbers too — the pattern measurement in Step 7 works fine at
-$1.4{:}1$, and a network that loses its match when the antenna is handled is
-worse than no network.
-
-:::{admonition} Save both configurations
-:class: note
-From here on you have two antennas: the bare dipole with its choke, and the
-matched dipole. Keep the matching network on a separate short SMA adapter if
-you can, so that you can remove it without unsoldering. Steps 6 and 7 measure
-both.
-:::
+loss it costs, and argue ship / re-source / redesign. If the match lands off
+frequency, the first suspects are the capacitor's leads and the loop's
+diameter — squeeze or open the loop a little and watch the marker move. That
+adjustment is the same trim-to-resonance skill from Step 3, applied to a
+component you made. Antenna A is untouched throughout, so the pattern
+measurement in Step 7 has a $1.4{:}1$ reference to compare against whatever
+B turned out to be.
 
 ## Step 5 — Simulate
 
@@ -282,19 +321,19 @@ the current the choke exists to block.
 ## Step 6 — S-parameters
 
 This is Lesson 13's lab, run on your antenna. Follow L13 Part 5 exactly, on
-whichever VNA your bench has, and take the full data set for both
-configurations from Step 4.
+whichever VNA your bench has, and take the full data set for both antennas.
 
 1. **Sweep** $600$ to $1200\ \text{MHz}$, at least 401 points.
 2. **Calibrate** at the end of the test cable and **verify** on the load
    standard. Screenshot the verification.
-3. **Measure the bare dipole with its choke**: $f_\text{res}$ as the real-axis
-   crossing, $Z$ at resonance and at $915\ \text{MHz}$, both $-10\ \text{dB}$
-   crossing frequencies, and the Smith chart with the resonance marked.
-4. **Measure the matched dipole** the same way. Its locus should now pass
-   through, or near, the center of the chart.
-5. **Perturb** the bare antenna, one variable at a time, as L13 Part 5
-   describes: free space, a hand near the element, flat on the bench.
+3. **Measure antenna A**, with the choke on the cable: $f_\text{res}$ as the
+   real-axis crossing, $Z$ at resonance and at $915\ \text{MHz}$, both
+   $-10\ \text{dB}$ crossing frequencies, and the Smith chart with the
+   resonance marked.
+4. **Measure antenna B** the same way. Its locus should now pass through, or
+   near, the center of the chart.
+5. **Perturb** antenna A, one variable at a time, as L13 Part 5 describes:
+   free space, a hand near the element, flat on the bench.
 6. **Save the data**, not just screenshots. Export each sweep as a Touchstone
    `.s1p` file (NanoVNA-Saver and every bench analyzer can do this) and plot
    it yourself in Python. `scikit-rf` reads Touchstone files directly;
@@ -306,55 +345,73 @@ configurations from Step 4.
 $S_{11}$ measures **mismatch only**. A deep dip is necessary for a good
 antenna, not sufficient: a $50\ \Omega$ resistor gives a perfect match and
 radiates nothing. The efficiency question is answered in Step 7, by the gain
-comparison, and nowhere else.
+measurement, and nowhere else.
 :::
 
 ## Step 7 — Pattern
 
-This is Lesson 14's lab, run on your antenna instead of the horn. The range,
-the acquisition discipline, and the reduction are the same; the numbers
-change.
+This is Lesson 14's lab, run on your antenna in the **anechoic chamber**. The
+chamber's horn is the source, your dipole goes on the turntable, and the VNA
+measures the transmission $S_{21}$ from the horn to the dipole at each
+turntable angle. Reciprocity says it does not matter which end transmits, and
+this arrangement keeps the transmit power off the rotating cable.
 
 **Range check first.** For your dipole $D = 15.6\ \text{cm}$, and the three
 far-field criteria from L12 give $2D^2/\lambda = 0.15\ \text{m}$,
-$5D = 0.78\ \text{m}$, and $10\lambda = 3.3\ \text{m}$. The last one binds. The
-L14 bench range is $3.0\ \text{m}$, which is about 9% short of $10\lambda$.
-State that margin in your report, say which of the three criteria it
-violates and what that criterion protects against, and argue whether it
-matters for a dipole.
+$5D = 0.78\ \text{m}$, and $10\lambda = 3.3\ \text{m}$. The last one binds
+for an antenna this small, and the horn has its own $2D^2/\lambda$ at
+$915\ \text{MHz}$ that you must run as well. Measure the distance $r$ from
+the horn aperture to the turntable axis with a tape and compare it against
+both. If the chamber is shorter than $3.3\ \text{m}$, state the margin in your
+report, say which criterion it violates and what that criterion protects
+against, and argue whether it matters for a dipole.
 
 **Setup.**
 
-- The source and the reference are whatever the instructor supplies for
-  $915\ \text{MHz}$. The course's Pluto-SDR transmit/receive tool tunes there.
-- Mount the dipole **vertically** on the rotator, connector down, with the coax
-  and its choke running straight down the axis of rotation. A cable that
-  leaves the feed sideways is in the pattern.
-- Co-polarize the source (vertical too), peak up, and define that angle as
+- Confirm the chamber horn's rated band covers $915\ \text{MHz}$ and write
+  down its datasheet gain there, $G_\text{horn}$. That number is your gain
+  reference.
+- Set the VNA to a narrow sweep or CW at $915\ \text{MHz}$, a low IF bandwidth
+  and averaging for dynamic range, and calibrate a **two-port through** at the
+  ends of both cables, so that cable loss on both sides is inside the
+  calibration. If the instrument cannot, measure each cable's loss separately
+  and subtract it later.
+- Mount the dipole on the turntable, connector down, with the coax and its
+  choke running straight down the axis of rotation. A cable that leaves the
+  feed sideways is in the pattern.
+- Co-polarize the horn with the dipole, peak up, and define that angle as
   $0^\circ$.
-- Measure the noise floor with the source off. That number caps everything
-  that follows.
+- **Measure the noise floor**: replace the dipole with a $50\ \Omega$ load and
+  read $\vert S_{21}\vert$. That is leakage plus receiver noise, and it caps
+  every number that follows.
 
-**Cuts.**
+**Cuts.** Take $\vert S_{21}\vert$ in dB at every turntable angle; the pattern
+is that curve normalized to its peak.
 
-1. **E-plane**: the cut containing the wire. Rotate the dipole about a
-   horizontal axis through its center, or, if the rotator only turns about a
-   vertical axis, mount the dipole horizontally and rotate it in azimuth. Take
-   a full $\pm 180^\circ$ in $5^\circ$ steps (HPBW/5 is about $15^\circ$;
-   $5^\circ$ resolves the nulls).
-2. **H-plane**: rotate the vertical dipole in azimuth. The prediction is a
+1. **H-plane**: dipole vertical, horn vertically polarized, rotate the
+   turntable through a full $360^\circ$ in $5^\circ$ steps. The prediction is a
    circle; the measurement will show ripple. The peak-to-peak ripple is your
-   first estimate of range quality.
+   first estimate of the chamber's quiet zone.
+2. **E-plane**: the cut containing the wire. Remount the dipole horizontal in
+   the plane of the turntable, rotate the horn to horizontal polarization,
+   re-peak, and sweep again. HPBW/5 is about $15^\circ$; $5^\circ$ steps resolve
+   the nulls along the wire axis.
 3. **Repeat one cut.** The disagreement between two sweeps of the same cut is
    your repeatability.
-4. **Gain by comparison.** Swap in the reference antenna, peak it up, record
-   the level, change nothing else. If no calibrated reference exists at
-   $915\ \text{MHz}$, use the **two-antenna method** from L12 with a
-   classmate's dipole, and state the assumption it rests on.
-5. **Cross-polarization.** Rotate the source $90^\circ$ and re-sweep the
+4. **Gain, from the horn.** At boresight, Friis (L2) with a known source gain
+   gives the dipole's gain in one line:
+
+   $$G_\text{AUT}\ [\text{dBi}] = \vert S_{21}\vert^2\ [\text{dB}] - G_\text{horn}\ [\text{dBi}] + 20\log_{10}\frac{4\pi r}{\lambda}.$$
+
+   At $r = 3\ \text{m}$ the last term is $41.2\ \text{dB}$. Every decibel of
+   uncertainty in $G_\text{horn}$ or of uncalibrated cable loss lands directly
+   on your gain, so say what those uncertainties are. If a calibrated reference
+   antenna for $915\ \text{MHz}$ is available, use the comparison method from
+   L14 as a cross-check.
+5. **Cross-polarization.** Rotate the horn $90^\circ$ and re-sweep the
    E-plane. A dipole's XPD should be high; a low number points at the feed
    cable radiating.
-6. **The matched antenna.** Repeat the gain comparison only. The pattern
+6. **Antenna B.** Repeat the boresight gain measurement only. The pattern
    shape should not change; the level should move by the difference in
    mismatch loss, about $0.1\ \text{dB}$, which is inside your repeatability.
    Say so, with the numbers.
@@ -375,23 +432,24 @@ prediction and the simulation.
 
 | Quantity | Predicted (Step 1) | Simulated (Step 5) | Measured | Difference | Why |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| Arm lengths as cut | $7.8\ \text{cm}$ | — | ______ / ______ cm | | |
-| Arm lengths after trimming | — | — | ______ / ______ cm | | |
-| $f_\text{res}$, untrimmed, no choke | — | — | ______ MHz | | |
-| $f_\text{res}$, trimmed, no choke | $915\ \text{MHz}$ | ______ MHz | ______ MHz | | |
-| $f_\text{res}$, trimmed, with choke | $915\ \text{MHz}$ | — | ______ MHz | | |
-| $Z_{\text{in}}$ at $915\ \text{MHz}$, with choke | $70 + j0\ \Omega$ | ______ | ______ $\Omega$ | | |
-| VSWR at $915\ \text{MHz}$, with choke | $1.40$ | ______ | ______ | | |
-| VSWR at $915\ \text{MHz}$, matched | $\le 1.2$ (target) | — | ______ | | |
-| $-10\ \text{dB}$ bandwidth, with choke | $\approx 70\ \text{MHz}$ | ______ MHz | ______ MHz | | |
-| $-10\ \text{dB}$ bandwidth, matched | narrower | — | ______ MHz | | |
+| Arm lengths as cut, A | $7.8\ \text{cm}$ | — | ______ / ______ cm | | |
+| Arm lengths as cut, B | $7.8\ \text{cm}$ | — | ______ / ______ cm | | |
+| Arm lengths after trimming, A | — | — | ______ / ______ cm | | |
+| $f_\text{res}$, untrimmed, no choke, A / B | — | — | ______ / ______ MHz | | |
+| $f_\text{res}$, trimmed, no choke, A | $915\ \text{MHz}$ | ______ MHz | ______ MHz | | |
+| $f_\text{res}$, trimmed, with choke, A | $915\ \text{MHz}$ | — | ______ MHz | | |
+| $Z_{\text{in}}$ at $915\ \text{MHz}$, A | $70 + j0\ \Omega$ | ______ | ______ $\Omega$ | | |
+| VSWR at $915\ \text{MHz}$, A | $1.40$ | ______ | ______ | | |
+| VSWR at $915\ \text{MHz}$, B (matched) | $\le 1.2$ (target) | — | ______ | | |
+| $-10\ \text{dB}$ bandwidth, A | $\approx 70\ \text{MHz}$ | ______ MHz | ______ MHz | | |
+| $-10\ \text{dB}$ bandwidth, B | narrower | — | ______ MHz | | |
 | Shift in $f_\text{res}$ from a hand on the coax, no choke / with choke | — | — | ______ / ______ MHz | | |
-| Gain | $2.15\ \text{dBi}$ | ______ dBi | ______ $\pm$ ______ dBi | | |
+| Gain, A / B | $2.15\ \text{dBi}$ | ______ dBi | ______ / ______ $\pm$ ______ dBi | | |
 | E-plane HPBW | $78^\circ$ | ______ | ______ $\pm$ ______ | | |
 | H-plane ripple, peak to peak | $0\ \text{dB}$ | $0\ \text{dB}$ | ______ dB | | |
 | Null depth along the wire axis | $-\infty$ | ______ dB | $\le$ ______ dB (floor) | | |
 | XPD at boresight | high | — | ______ dB | | |
-| Range margin against $10\lambda$ | $3.3\ \text{m}$ | — | ______ m | | |
+| Range length $r$, against $10\lambda$ | $3.3\ \text{m}$ | — | ______ m | | |
 
 ### The report
 
@@ -401,28 +459,31 @@ engineer who has not taken this course.
 1. **Design.** The frequency, the length calculation, and the prediction table
    from Step 1, as written before the build. A photo of the antenna next to a
    ruler.
-2. **Build and first measurement.** Arm lengths as cut and as trimmed. The
-   untrimmed and trimmed sweeps, and which way you trimmed and why.
+2. **Build and first measurement.** Arm lengths as cut and as trimmed, for
+   both antennas. The untrimmed and trimmed sweeps, which way you trimmed and
+   why, and how far apart A and B landed before trimming.
 3. **Balun and match.** The with-choke / without-choke comparison, with the
    hand-on-the-coax numbers. The matching-network design from your measured
-   impedance, the parts you actually used, the measured result, and the
+   impedance, the capacitor and the loop you actually built with their
+   as-built lead lengths and diameter, the measured result on B, and the
    ship / re-source / redesign argument.
 4. **Simulation.** The NEC model as run (the card deck, verbatim), the average
    gain figure, the frequency sweep, the two pattern cuts, and the convergence
    table with one sentence defending your segment count.
 5. **S-parameters.** The calibration verification screenshot. Annotated
-   $\vert S_{11}\vert$ plots and Smith charts for both configurations, plotted
+   $\vert S_{11}\vert$ plots and Smith charts for both antennas, plotted
    from the Touchstone data, with the simulated sweep overlaid. The perturbation
    results and a paragraph connecting at least one of them to the near-field
    argument in L13.
-6. **Pattern.** The range-margin argument. Both principal-plane cuts in polar
-   dB, the repeated cut, the noise floor and dynamic range, and the extracted
-   table with an uncertainty on every row.
+6. **Pattern.** The measured range length and the margin argument. Both
+   principal-plane cuts in polar dB, the repeated cut, the noise floor and
+   dynamic range, the horn gain you used and where it came from, and the
+   extracted table with an uncertainty on every row.
 7. **Comparison.** The filled record sheet, and **one paragraph per row that
    disagrees by more than your uncertainty**, naming the mechanism.
    "Simulation error" and "measurement error" are not mechanisms. End effect,
-   finite wire radius, feed-line radiation, bench coupling, range reflections,
-   reference-antenna gain uncertainty, and parasitic lead inductance are.
+   finite wire radius, feed-line radiation, bench coupling, chamber
+   reflections, horn gain uncertainty, and lead inductance are.
 
 ### What Mastered looks like
 
@@ -433,8 +494,9 @@ that misses one comes back with feedback and can be resubmitted once.
 - The antenna resonates within $\pm 2\%$ of $915\ \text{MHz}$ after trimming,
   or the report explains why it could not be brought there.
 - The choke's effect is measured and reported, not just asserted.
-- A matching network is designed from a measured impedance, built, and its
-  result is measured and judged — whatever that result was.
+- A matching network is designed from a measured impedance, built on
+  antenna B, and its result is measured and judged — whatever that result
+  was.
 - The simulation passes the average gain test and is run at the as-built
   dimensions.
 - Every plot is annotated, has units, and was produced from saved data.

@@ -74,23 +74,30 @@ moving target in your sights.
   <div class="deliverable-card">
     <p class="d-eyebrow">Individual deliverable</p>
     <h3>Final Project</h3>
-    <p class="d-weight"><span class="d-w-num">40%</span> of course grade</p>
-    <p class="d-due">Capstone Project: moving target, static jammer, technical briefing</p>
+    <p class="d-weight"><span class="d-w-num">35%</span> of course grade</p>
+    <p class="d-due">Moving target, static jammer, technical briefing</p>
     <a class="d-link" href="syllabus.html#grading">How mastery grading works →</a>
   </div>
   <div class="deliverable-card">
     <p class="d-eyebrow">Individual deliverable</p>
     <h3>Midterm Project</h3>
-    <p class="d-weight"><span class="d-w-num">35%</span> of course grade</p>
-    <p class="d-due">Project 1: build and characterize a dipole · introduced <strong>Lesson 7</strong>, due <strong>2 October</strong></p>
+    <p class="d-weight"><span class="d-w-num">25%</span> of course grade</p>
+    <p class="d-due">Project 1: a dipole, built and characterized · due <strong>2 October</strong></p>
     <a class="d-link" href="projects/project1-dipole/index.html">The Project 1 page →</a>
   </div>
   <div class="deliverable-card">
     <p class="d-eyebrow">Ongoing</p>
     <h3>Engagement</h3>
-    <p class="d-weight"><span class="d-w-num">25%</span> of course grade</p>
-    <p class="d-due">Practice problems, EI, lab prep, and course-improvement contributions</p>
+    <p class="d-weight"><span class="d-w-num">15%</span> of course grade</p>
+    <p class="d-due">Practice, EI, lab prep, course improvements</p>
     <a class="d-link" href="syllabus.html#engagement-credits-ec">Ways to earn engagement →</a>
+  </div>
+  <div class="deliverable-card">
+    <p class="d-eyebrow">Module assessments</p>
+    <h3>LO Mastery</h3>
+    <p class="d-weight"><span class="d-w-num">25%</span> of course grade</p>
+    <p class="d-due">Module assessments · Mastered / Not Yet Mastered</p>
+    <a class="d-link" href="syllabus.html#lo-mastery-assessment">How LO mastery is scored →</a>
   </div>
 </div>
 ::::
