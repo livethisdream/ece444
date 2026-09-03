@@ -182,7 +182,8 @@ kbd {
 [data-mode="present"] .frame { min-height: 100dvh; }
 [data-mode="present"] .depth { display: none; }
 [data-mode="present"] .frame.open .depth { display: flex; }
-[data-mode="present"] .frame.open .more { display: none; }
+/* The button stays while the depth is open: it now reads "Less detail" and
+   closes it again. */
 
 /* A frame is one screen, so anything with an intrinsic size has to be told
    the ceiling. shell.css already caps `figure svg`; a bare <img> in a frame

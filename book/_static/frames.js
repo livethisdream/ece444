@@ -209,7 +209,7 @@
         break;
       case 'd': case 'D':
         e.preventDefault();
-        frames[idx] && frames[idx].classList.toggle('open');
+        frames[idx] && setOpen(frames[idx], !frames[idx].classList.contains('open'));
         break;
       case 'Escape':
         if (anyPopOpen()) { closePops(); }
@@ -269,14 +269,30 @@
 
   /* an inline expander, so a question mid-lecture does not cost you the deck.
      One per frame, before its first depth: a cut frame (`:::{present}`) can
-     hold several depth runs, and `.open` reveals all of them at once. */
+     hold several depth runs, and `.open` reveals all of them at once. It is
+     a toggle (Neil, 2026-09-03: "how do we re-collapse detail sections?" --
+     until then the button hid itself once open and only the D key closed the
+     depth, which is no use from a phone or a clicker). */
+  function setOpen(f, on) {
+    f.classList.toggle('open', on);
+    var b = f.querySelector('.more');
+    if (b) {
+      b.textContent = on ? 'Less detail  \u2212' : 'More detail  +';
+      b.setAttribute('aria-expanded', on);
+    }
+  }
   frames.forEach(function (f) {
     var d = f.querySelector('.depth');
     if (!d) return;
     var b = document.createElement('button');
     b.type = 'button'; b.className = 'more';
     b.textContent = 'More detail  +';
-    b.addEventListener('click', function () { f.classList.add('open'); d.focus && d.focus(); });
+    b.setAttribute('aria-expanded', 'false');
+    b.addEventListener('click', function () {
+      var on = !f.classList.contains('open');
+      setOpen(f, on);
+      if (on && d.focus) d.focus();
+    });
     d.parentNode.insertBefore(b, d);
   });
 
