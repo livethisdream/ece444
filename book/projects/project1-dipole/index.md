@@ -372,9 +372,15 @@ for an antenna this small. The horn has its own $2D^2/\lambda$ as well:
 measure its aperture with a tape (it is roughly half a meter across, which
 puts its $2D^2/\lambda$ near $1.3\ \text{m}$ at $915\ \text{MHz}$) and run
 the number. Then measure the distance $r$ from the horn aperture to the
-turntable axis and compare it against both. If the chamber is shorter than $3.3\ \text{m}$, state the margin in your
-report, say which criterion it violates and what that criterion protects
-against, and argue whether it matters for a dipole.
+turntable axis and compare it against both. Expect a little over
+$3\ \text{m}$ — the chamber is about ten feet from horn to turntable — which
+clears the horn's criterion easily and falls **roughly 8% short of
+$10\lambda$**. That is not a reason to skip the measurement; it is a line in
+your report. State the measured margin, say what the $10\lambda$ criterion
+protects against (Lesson 5: the reactive and induction terms of the field,
+which fall as $1/(kr)$ and $1/(kr)^2$ relative to the radiated term), put a
+number on how large those terms are at your $r$, and argue whether they
+matter for a dipole.
 
 **Setup.**
 
