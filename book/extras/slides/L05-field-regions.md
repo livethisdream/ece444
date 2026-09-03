@@ -156,7 +156,7 @@ Right up against the antenna the field is **stored energy**, not radiation — t
 
 ## Radiating near-field (Fresnel)
 
-Energy is now genuinely leaving — **but the shape of the pattern still depends on how far away you are.**
+Energy is now leaving — **but the shape of the pattern still depends on how far away you are.**
 
 - Different parts of the antenna are at meaningfully different distances from your observation point.
 - Their contributions add with **distance-dependent phase**, so the angular pattern keeps changing as you move out.
