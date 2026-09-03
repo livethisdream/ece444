@@ -157,7 +157,7 @@ Only the first step involves the source. The last two are differentiation, and
 in the far field, as the next frames show, they collapse into multiplication.
 ::::
 
-::::{frame} Which r is which
+::::{frame} r, me mateys
 :::{present}
 | Symbol | What it is |
 | :-- | :-- |
