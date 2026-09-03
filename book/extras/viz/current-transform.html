@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The current, its transform, and the visible window</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* Phone: the three panels stack. Desktop: current and pattern share the left
+     column, the transform takes the whole right column at the same height, so
+     the widget costs the same vertical space as one tall canvas. */
+  .canvases { display:flex; flex-direction:column; gap:10px; }
+  .col { display:flex; flex-direction:column; gap:10px; }
+  @media (min-width:650px) { .canvases { display:grid; grid-template-columns:1fr 1fr; gap:14px; } }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; min-width:0; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:38px; }
+  .ctl input[type=range]{ flex:1 1 70px; min-width:0; }
+  .ctl input[type=range]:disabled { opacity:0.4; }
+  select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
+  .chk { display:flex; align-items:center; gap:6px; font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="canvases">
+    <div class="col">
+      <canvas id="cur" aria-label="Current amplitude along the line source"></canvas>
+      <canvas id="pat" aria-label="Far-field pattern in decibels against angle: the visible window of the transform bent onto angle"></canvas>
+    </div>
+    <canvas id="ksp" aria-label="Magnitude of the transform of the current against spatial frequency, with the visible region shaded"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Distribution</label>
+      <select id="dist">
+        <option value="uni" selected>uniform</option>
+        <option value="cos">cosine taper</option>
+        <option value="cos2">cosine-squared</option>
+        <option value="tri">triangular</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label>Length \(L/\lambda\)</label>
+      <input type="range" id="len" min="1" max="10" step="0.1" value="4">
+      <span class="val" id="len-val">4.0</span>
+    </div>
+    <div class="ctl">
+      <label>Steer \(\theta_0\)</label>
+      <input type="range" id="th0" min="20" max="160" step="1" value="90">
+      <span class="val" id="th0-val">90&#176;</span>
+    </div>
+    <div class="ctl">
+      <label class="chk"><input type="checkbox" id="smp"> sample \(d/\lambda\)</label>
+      <input type="range" id="spc" min="0.25" max="1.5" step="0.05" value="0.5" disabled>
+      <span class="val" id="spc-val">0.50</span>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const FLOOR=-40;          // dB floor, both dB panels
+const KMAX=3;             // k-space axis runs over |k_z/k| <= KMAX; the window is |k_z/k| <= 1
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+
+const cvC=document.getElementById('cur'), ctxC=cvC.getContext('2d');
+const cvP=document.getElementById('pat'), ctxP=cvP.getContext('2d');
+const cvK=document.getElementById('ksp'), ctxK=cvK.getContext('2d');
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const state={ dist:'uni', L:4.0, th0:90, smp:false, d:0.5 };
+
+/* --------------------------- the current distribution --------------------------- */
+// t = z'/L in [-0.5, 0.5]
+function amp(t){
+  switch(state.dist){
+    case 'cos':  return Math.cos(Math.PI*t);
+    case 'cos2': return Math.pow(Math.cos(Math.PI*t),2);
+    case 'tri':  return 1-2*Math.abs(t);
+    default:     return 1;
+  }
+}
+
+/* ---------------------------------- the source ----------------------------------
+   Continuous: NS+1 trapezoid samples across the length. Sampled: one weight per
+   element at spacing d, centred on the source. Either way the transform is
+   sum_n w_n exp(+j k_z z_n), normalised so its peak (at k_z = k cos th0) is 1. */
+const NS=400;
+let Z=null, W=null, WSUM=1;            // element positions (wavelengths) and weights
+function buildSource(){
+  if(state.smp){
+    const n=Math.floor(state.L/state.d+1e-9)+1;
+    Z=new Float64Array(n); W=new Float64Array(n);
+    for(let i=0;i<n;i++){ const z=(i-(n-1)/2)*state.d; Z[i]=z; W[i]=amp(z/state.L); }
+  } else {
+    Z=new Float64Array(NS+1); W=new Float64Array(NS+1);
+    for(let i=0;i<=NS;i++){ const t=i/NS-0.5; Z[i]=t*state.L; W[i]=amp(t)*((i===0||i===NS)?0.5:1); }
+  }
+  WSUM=0; for(let i=0;i<W.length;i++) WSUM+=W[i];
+}
+// |N| at spatial frequency kappa = k_z/k, steering included, peak-normalised
+function Tk(kappa){
+  const c=kappa-Math.cos(state.th0*Math.PI/180);
+  let re=0, im=0;
+  const n=Z.length;
+  if(state.smp){
+    for(let i=0;i<n;i++){ const p=2*Math.PI*c*Z[i]; re+=W[i]*Math.cos(p); im+=W[i]*Math.sin(p); }
+  } else {
+    // uniform spacing: advance the exponential by rotation instead of a trig call per sample
+    const a=2*Math.PI*c*state.L, d=a/NS, cd=Math.cos(d), sd=Math.sin(d);
+    let cr=Math.cos(-a/2), ci=Math.sin(-a/2);
+    for(let i=0;i<n;i++){ re+=W[i]*cr; im+=W[i]*ci; const nr=cr*cd-ci*sd; ci=cr*sd+ci*cd; cr=nr; }
+  }
+  return Math.hypot(re,im)/WSUM;
+}
+const dB=v=>20*Math.log10(Math.max(v,1e-6));
+
+// sweep both once per redraw
+let KS=null, PS=null;
+function sweep(){
+  const MK=1201, k=new Float64Array(MK);
+  for(let i=0;i<MK;i++) k[i]=dB(Tk(-KMAX+2*KMAX*i/(MK-1)));
+  KS={M:MK, db:k};
+  const MP=541, p=new Float64Array(MP);
+  for(let i=0;i<MP;i++) p[i]=dB(Tk(Math.cos(i/(MP-1)*Math.PI)));
+  PS={M:MP, db:p};
+}
+
+/* ------------------------------ current panel ------------------------------ */
+function drawCur(){
+  const dpr=window.devicePixelRatio||1, w=cvC.width/(dpr*SCL), h=cvC.height/(dpr*SCL);
+  const ctx=ctxC; ctx.clearRect(0,0,w,h);
+  const mL=44, mR=14, mT=28, mB=24, pw=w-mL-mR, ph=h-mT-mB;
+  const xp=t=>mL+(t+0.5)*pw, yp=v=>mT+ph-v*ph;
+
+  stext(ctx,'current along the source', mL, mT-15, 11.5, cssv('--navy'),'left',true);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(mL,yp(0)); ctx.lineTo(mL+pw,yp(0)); ctx.stroke();
+
+  if(state.smp){
+    // envelope, faint; the elements as stems
+    ctx.strokeStyle=cssv('--edge2'); ctx.lineWidth=1.2; ctx.setLineDash([3,3]); ctx.beginPath();
+    for(let i=0;i<=200;i++){ const t=i/200-0.5; const x=xp(t), y=yp(Math.max(amp(t),0)); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+    ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle=cssv('--mid'); ctx.fillStyle=cssv('--mid'); ctx.lineWidth=1.6;
+    for(let i=0;i<Z.length;i++){
+      const x=xp(Z[i]/state.L), y=yp(W[i]);
+      ctx.beginPath(); ctx.moveTo(x,yp(0)); ctx.lineTo(x,y); ctx.stroke();
+      ctx.beginPath(); ctx.arc(x,y,2.6,0,7); ctx.fill();
+    }
+  } else {
+    ctx.beginPath(); ctx.moveTo(xp(-0.5),yp(0));
+    for(let i=0;i<=200;i++){ const t=i/200-0.5; ctx.lineTo(xp(t),yp(Math.max(amp(t),0))); }
+    ctx.lineTo(xp(0.5),yp(0)); ctx.closePath();
+    ctx.fillStyle='rgba(0,103,185,0.16)'; ctx.fill();
+    ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.2; ctx.beginPath();
+    for(let i=0;i<=200;i++){ const t=i/200-0.5; const x=xp(t), y=yp(Math.max(amp(t),0)); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+    ctx.stroke();
+  }
+
+  // steering phase, drawn as the tilt of the excitation across the aperture
+  const dc=Math.cos(state.th0*Math.PI/180);
+  if(Math.abs(dc)>1e-6){
+    ctx.strokeStyle=cssv('--amber'); ctx.lineWidth=1.8; ctx.setLineDash([6,4]);
+    const tilt=Math.max(-1,Math.min(1,dc*state.L/4));
+    ctx.beginPath(); ctx.moveTo(xp(-0.5), yp(0.5-tilt*0.42)); ctx.lineTo(xp(0.5), yp(0.5+tilt*0.42)); ctx.stroke();
+    ctx.setLineDash([]);
+    stext(ctx,'phase slope', xp(0.5)-6, yp(0.5+tilt*0.42)-11, 10.5, cssv('--amber'),'end',true);
+  }
+
+  stext(ctx,'−L/2', xp(-0.5), yp(0)+12, 10.5, cssv('--ink3'),'center',false);
+  stext(ctx,'+L/2', xp(0.5),  yp(0)+12, 10.5, cssv('--ink3'),'center',false);
+  MJ.draw(ctx,"z'", mL+pw/2, yp(0)+13, 12, cssv('--ink3'),'center');
+  ctx.save(); ctx.translate(14, mT+ph/2); ctx.rotate(-Math.PI/2);
+  MJ.draw(ctx,'I(z\')', 0, 0, 12, cssv('--ink3'),'center'); ctx.restore();
+}
+
+/* ----------------------------- k-space panel ------------------------------ */
+function drawK(){
+  const dpr=window.devicePixelRatio||1, w=cvK.width/(dpr*KSCL), h=cvK.height/(dpr*KSCL);
+  const ctx=ctxK; ctx.clearRect(0,0,w,h);
+  const mL=40, mR=14, mT=42, mB=44, pw=w-mL-mR, ph=h-mT-mB;
+  const xp=kap=>mL+(kap+KMAX)/(2*KMAX)*pw, yp=v=>mT+(v/FLOOR)*ph;
+
+  stext(ctx,'the transform of the current, all of it', mL, 14, 11.5, cssv('--navy'),'left',true);
+
+  // the visible window
+  ctx.fillStyle='rgba(0,103,185,0.09)'; ctx.fillRect(xp(-1),mT,xp(1)-xp(-1),ph);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let d=0;d>=FLOOR;d-=(ph<90?20:10)){ const y=yp(d);
+    ctx.beginPath(); ctx.moveTo(mL,y); ctx.lineTo(mL+pw,y); ctx.stroke();
+    stext(ctx,d.toString(), mL-7, y, 10.5, cssv('--ink3'),'right',false); }
+  for(let kap=-KMAX;kap<=KMAX;kap++){ const x=xp(kap);
+    ctx.strokeStyle=(Math.abs(kap)===1)?cssv('--mid'):cssv('--edge2'); ctx.lineWidth=(Math.abs(kap)===1)?1.4:1;
+    ctx.beginPath(); ctx.moveTo(x,mT); ctx.lineTo(x,mT+ph); ctx.stroke();
+    stext(ctx,(kap>0?'+':'')+kap, x, mT+ph+11, 10.5, cssv('--ink3'),'center',false); }
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1; ctx.strokeRect(mL,mT,pw,ph);
+
+  // words: where the window sits, and what maps to what
+  // the words sit in the margin above the plot, clear of the main lobe
+  stext(ctx,'visible', (xp(-1)+xp(1))/2, mT-8, 10.5, cssv('--mid'),'center',true);
+  stext(ctx,'invisible', (xp(-KMAX)+xp(-1))/2, mT-8, 10.5, cssv('--ink3'),'center',false);
+  stext(ctx,'invisible', (xp(1)+xp(KMAX))/2, mT-8, 10.5, cssv('--ink3'),'center',false);
+  stext(ctx,'θ = 180°', xp(-1), mT+ph+24, 10, cssv('--grn'),'center',true);
+  stext(ctx,'90°',      xp(0),  mT+ph+24, 10, cssv('--grn'),'center',true);
+  stext(ctx,'0°',       xp(1),  mT+ph+24, 10, cssv('--grn'),'center',true);
+  MJ.draw(ctx,'k_z/k', mL+pw/2, mT+ph+37, 12, cssv('--ink3'),'center');
+
+  // the repeats a sampled source makes, at multiples of lambda/d from the peak
+  if(state.smp){
+    const c0=Math.cos(state.th0*Math.PI/180), per=1/state.d;
+    ctx.strokeStyle='rgba(138,90,0,0.7)'; ctx.lineWidth=1.4; ctx.setLineDash([5,4]);
+    let labelled=false;
+    for(let n=-6;n<=6;n++){ if(n===0) continue;
+      const kap=c0+n*per; if(Math.abs(kap)>KMAX) continue;
+      const x=xp(kap); ctx.beginPath(); ctx.moveTo(x,mT); ctx.lineTo(x,mT+ph); ctx.stroke();
+      if(!labelled){
+        // guard the word with a white box: the curve runs through this corner
+        ctx.setLineDash([]); ctx.font='700 10px '+SANS; const tw=ctx.measureText('repeat').width;
+        ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fillRect(x+3, mT+ph-16, tw+6, 14);
+        stext(ctx,'repeat', x+6, mT+ph-9, 10, cssv('--amber'),'left',true); labelled=true;
+        ctx.setLineDash([5,4]);
+      }
+    }
+    ctx.setLineDash([]);
+  }
+
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2; ctx.beginPath();
+  for(let i=0;i<KS.M;i++){
+    const x=xp(-KMAX+2*KMAX*i/(KS.M-1)), y=yp(Math.max(KS.db[i],FLOOR));
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+  }
+  ctx.stroke();
+}
+
+/* ------------------------------ pattern panel ------------------------------ */
+function drawPat(){
+  const dpr=window.devicePixelRatio||1, w=cvP.width/(dpr*SCL), h=cvP.height/(dpr*SCL);
+  const ctx=ctxP; ctx.clearRect(0,0,w,h);
+  const mL=40, mR=14, mT=28, mB=32, pw=w-mL-mR, ph=h-mT-mB;
+  const xp=d=>mL+d/180*pw, yp=v=>mT+(v/FLOOR)*ph;
+
+  stext(ctx,'the window, bent onto angle', mL, 14, 11.5, cssv('--navy'),'left',true);
+  ctx.fillStyle='rgba(0,103,185,0.09)'; ctx.fillRect(mL,mT,pw,ph);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let d=0;d>=FLOOR;d-=(ph<90?20:10)){ const y=yp(d);
+    ctx.beginPath(); ctx.moveTo(mL,y); ctx.lineTo(mL+pw,y); ctx.stroke();
+    stext(ctx,d.toString(), mL-7, y, 10.5, cssv('--ink3'),'right',false); }
+  for(let d=0;d<=180;d+=30){ const x=xp(d);
+    ctx.strokeStyle=cssv('--edge2'); ctx.beginPath(); ctx.moveTo(x,mT); ctx.lineTo(x,mT+ph); ctx.stroke();
+    stext(ctx,d+'°', x, mT+ph+11, 10.5, (d%90===0)?cssv('--grn'):cssv('--ink3'),'center',d%90===0); }
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=1.4; ctx.strokeRect(mL,mT,pw,ph);
+
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2; ctx.beginPath();
+  for(let i=0;i<PS.M;i++){
+    const x=xp(i/(PS.M-1)*180), y=yp(Math.max(PS.db[i],FLOOR));
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+  }
+  ctx.stroke();
+  MJ.draw(ctx,'\\theta', mL+pw/2, mT+ph+25, 12, cssv('--ink3'),'center');
+}
+
+function drawAll(){ buildSource(); sweep(); drawCur(); drawK(); drawPat(); }
+
+/* ------------------------------- sizing --------------------------------- */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Below DESIGN_W the whole drawing scales down together so labels never
+   collide; on a phone the panels stack and the design heights shrink so the
+   three panels together stay inside the frame budget. */
+const DESIGN_W=320;
+let SCL=1;
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:649px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h*0.72) : h; }
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(cvC);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const hC=SQ(112), hP=SQ(156);
+  const stacked=__SQ_MQ && __SQ_MQ.matches;
+  const hK=stacked ? SQ(230) : hC+hP+10;       // desktop: fill the left column's height exactly
+  setSize(cvC,wCss,hC*SCL,dpr); setSize(cvP,wCss,hP*SCL,dpr);
+  const wK=cvWidth(cvK); const sK=Math.min(1, wK/DESIGN_W);
+  setSize(cvK,wK,hK*sK,dpr);
+  ctxC.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  ctxK.setTransform(dpr*sK,0,0,dpr*sK,0,0);
+  KSCL=sK;
+  drawAll();
+}
+let KSCL=1;
+window.addEventListener('resize', fit);
+
+const distEl=document.getElementById('dist'), lenEl=document.getElementById('len'),
+      th0El=document.getElementById('th0'), smpEl=document.getElementById('smp'), spcEl=document.getElementById('spc');
+distEl.addEventListener('change',()=>{ state.dist=distEl.value; drawAll(); });
+lenEl .addEventListener('input',()=>{ state.L=+lenEl.value; document.getElementById('len-val').textContent=state.L.toFixed(1); drawAll(); });
+th0El .addEventListener('input',()=>{ state.th0=+th0El.value; document.getElementById('th0-val').textContent=state.th0+'°'; drawAll(); });
+smpEl .addEventListener('change',()=>{ state.smp=smpEl.checked; spcEl.disabled=!state.smp; drawAll(); });
+spcEl .addEventListener('input',()=>{ state.d=+spcEl.value; document.getElementById('spc-val').textContent=state.d.toFixed(2); drawAll(); });
+
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>

@@ -426,6 +426,51 @@ the current distribution**, evaluated over the *visible region*
 $-k \le k_z \le +k$ and then bent onto angle by $k_z = k\cos\theta$.
 ::::
 
+::::{frame} You have seen this transform before
+
+This is not a new transform with an antenna flavor. It is the Fourier transform
+from your signals course with the variables renamed, and every result you
+learned there comes across unchanged.
+
+| Signals and systems | Antennas |
+| :-- | :-- |
+| time $t$ | position along the source $z'$ |
+| frequency $\omega$ | spatial frequency $k_z = k\cos\theta$ |
+| a signal $x(t)$ | the current $I(z')$ |
+| its spectrum $X(\omega)$ | the pattern $N_z(k_z)$ |
+::::
+
+::::{frame} The dictionary — shapes
+
+| Signals and systems | Antennas |
+| :-- | :-- |
+| a rectangular pulse | a uniform line source |
+| its sinc spectrum, first sidelobe $-13.3$ dB | the sinc pattern, first sidelobe $-13.3$ dB |
+| a longer pulse has a narrower spectrum | a longer source has a narrower beam, $\theta_\text{HP} \approx 0.886\ \lambda/L$ |
+| a window function tames spectral leakage | an amplitude taper tames sidelobes — **the same functions, with the same names**: Hamming, Taylor, Chebyshev |
+::::
+
+::::{frame} The dictionary — operations
+
+| Signals and systems | Antennas |
+| :-- | :-- |
+| modulation by $e^{j\omega_0 t}$ shifts the spectrum | a linear phase across the source steers the beam to $\theta_0$ |
+| sampling makes the spectrum repeat | discrete elements make the transform repeat, every $2\pi/d$ |
+| aliasing above the Nyquist rate | grating lobes once the spacing passes $\lambda/2$ |
+| convolution in time is multiplication in frequency | an array is one element convolved with a comb of positions, so its pattern is element factor × array factor |
+
+Nothing on the right is derived in this course from scratch. Each row is the
+left column, applied.
+::::
+
+::::{frame} The one thing that is new
+
+A spectrum analyzer shows whatever span you dial in. An antenna's span is fixed
+by geometry: $k_z = k\cos\theta$, and $\cos\theta$ cannot leave $[-1, +1]$.
+That is the only idea here with no counterpart in your signals course, and it is
+the subject of the next two frames.
+::::
+
 ::::{frame} Part of the transform is invisible
 
 That restriction is worth a second look. The transform $N_z(k_z)$ exists for
@@ -446,23 +491,36 @@ beam you did not ask for — a **grating lobe**, and the reason Lesson 16 spends
 much effort on element spacing.
 ::::
 
-::::{frame} What Fourier buys you
+::::{frame} The transform and its window
+:class: viz-frame
 
-Everything a Fourier transform does, an antenna does:
+:::{depth}
+The whole dictionary on one screen. The right panel is the transform of the
+current, *all* of it; the shaded band is the part a real direction can reach,
+and the lower-left panel is that band bent onto $\theta$. Lengthen $L$ and the
+transform narrows while the window stays put. Steer, and the whole transform
+slides. Tick *sample* and spread the elements out: the repeats march in from
+the invisible region, and the moment one crosses the window edge you have a
+grating lobe.
+:::
 
-| Fourier property | Antenna consequence | Where you will use it |
-| :-- | :-- | :-- |
-| Stretch the function → squeeze its transform | Longer aperture → **narrower beam**: $\theta_\text{HP} \approx 0.886\ \lambda/L$ | L15, L20 |
-| Sharp edges → high-frequency content | Abrupt current cutoff → **high sidelobes** ($-13.3$ dB for uniform); smooth taper buys them down | L15, L24, L25 |
-| Multiply by $e^{-j\alpha z'}$ → shift the transform | Linear phase across the aperture → the **beam steers** | L18, L19, L26 |
+<iframe src="../../viz/current-transform.html"
+        width="100%" height="407"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="The current, its transform, and the visible window">
+</iframe>
 ::::
 
-::::{frame} What Fourier buys you — sampling and linearity
+::::{frame} Where each row of the dictionary lands
 
-| Fourier property | Antenna consequence | Where you will use it |
-| :-- | :-- | :-- |
-| Sample a function → its transform repeats | Discrete elements instead of a continuous line → **grating lobes** | L16, L26 |
-| Transform is linear | Superposing currents superposes patterns → **pattern multiplication** | L16 |
+| Antenna consequence | Where you will use it |
+| :-- | :-- |
+| Longer aperture → **narrower beam** | L15, L20 |
+| Smooth taper → **lower sidelobes**, wider beam | L15, L24, L25 |
+| Linear phase → the **beam steers** | L18, L19, L26 |
+| Element spacing → **grating lobes** | L16, L26 |
+| Element × comb → **pattern multiplication** | L16 |
 ::::
 
 ::::{frame} Choosing a function, not solving Maxwell's equations
