@@ -435,9 +435,53 @@ learned there comes across unchanged.
 | Signals and systems | Antennas |
 | :-- | :-- |
 | time $t$ | position along the source $z'$ |
-| frequency $\omega$ | spatial frequency $k_z = k\cos\theta$ |
+| frequency $\omega$, radians per second | spatial frequency $k_z = k\cos\theta$, radians per meter along the source |
 | a signal $x(t)$ | the current $I(z')$ |
 | its spectrum $X(\omega)$ | the pattern $N_z(k_z)$ |
+::::
+
+::::{frame} What k is telling you
+
+$\omega$ is how fast a signal's phase turns as time passes. $k$ is the same
+thing for space: how fast a wave's phase turns as you move through it.
+
+| In time | In space |
+| :-- | :-- |
+| $\omega$, radians per second | $k = 2\pi/\lambda$, radians per meter |
+| one period, $T = 2\pi/\omega$ | one wavelength, $\lambda = 2\pi/k$ |
+| $f = 1/T$, cycles per second | $1/\lambda$, cycles per meter |
+| $\omega t$: phase accumulated after $t$ seconds | $kz$: phase accumulated across $z$ meters |
+
+So the exponent in the radiation integral, $k\ \hat{\mathbf r}\cdot\mathbf{r}'$,
+is $k$ times a path difference in meters: a phase in radians, exactly as
+$\omega t$ is.
+::::
+
+::::{frame} What k cos θ is telling you
+
+<img src="../../viz/img/L06-trace-wavelength.svg" alt="Three line sources with the wavefronts of a plane wave leaving at 90, 60, and 0 degrees from the source axis. Along the direction of travel the wavefronts are one wavelength apart; along the source they are one wavelength over cos theta apart." style="max-width: 720px; width: 100%; display: block; margin: .6em auto;">
+
+A wave leaving in direction $\theta$ has wavefronts $\lambda$ apart along its
+own direction of travel. Along the *source* they are $\lambda/\cos\theta$
+apart, so the phase advances $k\cos\theta$ radians per meter along $z$.
+That rate is $k_z$: **the phase per meter along the source that direction
+$\theta$ demands.**
+::::
+
+::::{frame} The transform as a question
+
+Broadside demands nothing: the whole source lies on one wavefront, $k_z = 0$,
+and a current that is simply in phase everywhere radiates there. Endfire
+demands the full $k$: one cycle of phase every wavelength along the source.
+Every other direction sits in between, and no direction can demand more than
+$k$, because the projection of a vector onto an axis is never longer than the
+vector.
+
+So read $N_z(k_z)$ as the answer to a question asked once per direction: *does
+the current contain a ripple at the rate this direction demands, and how much
+of it?* A plain in-phase current answers loudly at $k_z = 0$ and fades from
+there — the broadside beam. Put a linear phase slope across the current and
+the loud answer moves to whatever $k_z$ matches the slope — the beam steers.
 ::::
 
 ::::{frame} Same shapes
