@@ -18,8 +18,11 @@ Work on a branch cut from `main` after the present-layer mechanism has merged
   already shipped once.
 - **`project/FRAMES_ARCHITECTURE.md`**, "The present layer": why, and the
   writing discipline that keeps read mode intact.
-- **`book/module01/L05-field-regions/index.md`**: the worked example. Read it
-  in full, once, and hold every other lesson to it.
+- **`book/module01/L05-field-regions/index.md`** and
+  **`book/module01/L06-radiation-integrals/index.md`**: the worked examples.
+  L05 is a straight cut; L06 is a cut plus a re-telling of its first half for
+  undergraduates, with the derivations moved to read-only frames. Read both in
+  full, once, and hold every other lesson to them.
 - **`VOICE.md`** before writing or trimming any prose. Present blocks are
   prose too: complete sentences, no fragments, no self-praise.
 - **`project/ECE444_PROJECT.md`**, running status. Only you, the
@@ -31,9 +34,9 @@ Work on a branch cut from `main` after the present-layer mechanism has merged
 present block is what he talks *to*, not what he reads *out*. If a present
 block reads as a paragraph, it is wrong.
 
-## Scope: 27 lessons
+## Scope: 26 lessons
 
-L01–L28 and `L04-lab-matching` are frame pages. L05 is done. The stubs
+L01–L28 and `L04-lab-matching` are frame pages. L05 and L06 are done. The stubs
 L29–L41 are not frame pages and are not in scope. Verify the list yourself:
 
 ```sh
@@ -64,15 +67,20 @@ each one is from budget before you start.
 once the lesson has any present block; so is the frame-height check, which is
 the one that catches a side-by-side stage that does not fit a phone.
 
-**Batch by module.** Module 1 first (L01–L04, L06, the L04 lab), look at the
-result yourself in present mode at 1280x800 and 390x844, then Modules 2 and 3.
+**Go in teaching order, not module order.** L07 next, then L08 and on, one or
+two lessons ahead of the calendar; L01–L04 and the L04 lab when the calendar
+allows. Look at each result yourself in present mode at 1280x800 and 390x844.
 
 ## What a good cut looks like
 
 - A claim frame: one or two complete sentences, the frame's topic sentence,
   the prose after it continuing that sentence. Not a summary of the prose.
-- A figure or widget frame: the graphic in one present block and three or
-  four key points in another, so they sit side by side.
+- A figure frame: the graphic in one present block and three or four key
+  points in another, so they sit side by side on a laptop and stack on a phone.
+- A widget frame: the widget alone in the present block, or one short line
+  above it inside the same block if the phone budget allows. A widget is
+  already most of a phone screen, so a paragraph beside it never fits;
+  `check_frames.py` decides, not taste.
 - An equation frame: the lead-in clause and the equation, nothing else.
 - A table frame: the table, trimmed to what a reader can take in at a glance.
 - A derivation, a practice preview, a link list: `:class: read-only`.

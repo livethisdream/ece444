@@ -140,7 +140,7 @@ $$ \Delta\phi = k\frac{(D/2)^{2}}{2r} = \frac{\pi D^{2}}{4\lambda r} \quad\le\qu
 $$ \Longrightarrow \qquad r \ \ge\ \frac{2D^{2}}{\lambda} $$
 
 <div class="callout">
-Not a coincidence. The far-field distance <em>is</em> the distance at which the parallel-ray approximation becomes honest.
+Not a coincidence. The far-field distance <em>is</em> the distance at which the parallel-ray approximation becomes accurate.
 </div>
 
 Note:
