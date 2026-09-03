@@ -120,7 +120,7 @@ Module 2 for slots and horns; everything in this lesson carries over by duality.
 :::
 ::::
 
-::::{frame} Who is r, who is r′
+::::{frame} r, me mateys
 
 Two position vectors from one origin $O$. Neither is a spherical coordinate.
 
@@ -426,7 +426,7 @@ the current distribution**, evaluated over the *visible region*
 $-k \le k_z \le +k$ and then bent onto angle by $k_z = k\cos\theta$.
 ::::
 
-::::{frame} You have seen this transform before
+::::{frame} Same transform, new names
 
 This is not a new transform with an antenna flavor. It is the Fourier transform
 from your signals course with the variables renamed, and every result you
@@ -440,7 +440,7 @@ learned there comes across unchanged.
 | its spectrum $X(\omega)$ | the pattern $N_z(k_z)$ |
 ::::
 
-::::{frame} The dictionary — shapes
+::::{frame} Same shapes
 
 | Signals and systems | Antennas |
 | :-- | :-- |
@@ -450,7 +450,7 @@ learned there comes across unchanged.
 | a window function tames spectral leakage | an amplitude taper tames sidelobes — **the same functions, with the same names**: Hamming, Taylor, Chebyshev |
 ::::
 
-::::{frame} The dictionary — operations
+::::{frame} Same operations
 
 | Signals and systems | Antennas |
 | :-- | :-- |
@@ -495,7 +495,7 @@ much effort on element spacing.
 :class: viz-frame
 
 :::{depth}
-The whole dictionary on one screen. The right panel is the transform of the
+Every row of those three tables on one screen. The right panel is the transform of the
 current, *all* of it; the shaded band is the part a real direction can reach,
 and the lower-left panel is that band bent onto $\theta$. Lengthen $L$ and the
 transform narrows while the window stays put. Steer, and the whole transform
@@ -512,7 +512,7 @@ grating lobe.
 </iframe>
 ::::
 
-::::{frame} Where each row of the dictionary lands
+::::{frame} Where each row lands
 
 | Antenna consequence | Where you will use it |
 | :-- | :-- |
