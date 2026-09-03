@@ -463,12 +463,20 @@ Nothing on the right is derived in this course from scratch. Each row is the
 left column, applied.
 ::::
 
-::::{frame} The one thing that is new
+::::{frame} Where the analogy stops
 
-A spectrum analyzer shows whatever span you dial in. An antenna's span is fixed
-by geometry: $k_z = k\cos\theta$, and $\cos\theta$ cannot leave $[-1, +1]$.
-That is the only idea here with no counterpart in your signals course, and it is
-the subject of the next two frames.
+A spectrum extends over every $\omega$, and every $\omega$ is a frequency you
+can measure. This transform extends over every $k_z$ too, but
+$k_z = k\cos\theta$ ties it to a direction, and $\cos\theta$ is constrained to
+$[-1, +1]$. Only the spatial-frequency band $\lvert k_z\rvert \le k$ is
+somewhere you can stand. The rest of the transform is real, and it never
+leaves the antenna.
+
+Said in wavelengths: a spatial frequency $k_z$ is a ripple in the current with
+period $2\pi/k_z$, and the band edge $k_z = k$ is a period of exactly
+$\lambda$. **The far field cannot see detail finer than a wavelength in the
+current.** That idea has no counterpart in your signals course, and it is the
+subject of the next two frames.
 ::::
 
 ::::{frame} Part of the transform is invisible
