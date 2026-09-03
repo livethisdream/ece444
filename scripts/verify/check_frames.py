@@ -82,6 +82,11 @@ def main():
                 # what a reader actually gets.
                 if page.evaluate(FORCE_IFRAMES):
                     page.wait_for_timeout(2200)
+                # Read mode is the default since 2026-09-03, and in read mode
+                # a frame is content-height with its depth blocks showing --
+                # not the thing this budget is about. Measure present mode.
+                page.evaluate("() => document.documentElement.setAttribute('data-mode', 'present')")
+                page.wait_for_timeout(300)
                 frames = page.evaluate(PROBE)
                 if not frames:
                     continue

@@ -202,7 +202,7 @@
       case 'g': case 'G': e.preventDefault(); toggleIndex(); break;
       case 'p': case 'P':
         e.preventDefault();
-        setMode(document.documentElement.getAttribute('data-mode') === 'read' ? 'present' : 'read');
+        setMode(document.documentElement.getAttribute('data-mode') === 'read' ? 'present' : 'read', true);
         break;
       case 'd': case 'D':
         e.preventDefault();
@@ -240,23 +240,29 @@
   /* ---- present / read ------------------------------------------------ */
   var segPresent = document.getElementById('btnPresent');
   var segRead    = document.getElementById('btnRead');
-  function setMode(m) {
+  /* Read is the default (Neil, 2026-09-03): a lesson opens as a continuous
+     page, and present is something you choose. Only an explicit choice is
+     remembered -- the old code wrote the default into localStorage on every
+     load, which is why the key changed: a stale 'present' written that way
+     would otherwise pin every returning reader to the old default. */
+  var MODE_KEY = 'ece444-frames-mode-v2';
+  function setMode(m, remember) {
     document.documentElement.setAttribute('data-mode', m);
     segPresent.setAttribute('aria-pressed', m === 'present');
     segRead.setAttribute('aria-pressed', m === 'read');
     /* The panel is usually shut, so the button IS the readout: labelled with
        the mode in force, the way a select shows its current value. */
     document.getElementById('btnMode').textContent = m;
-    try { localStorage.setItem('ece444-frames-mode', m); } catch (err) {}
+    if (remember) { try { localStorage.setItem(MODE_KEY, m); } catch (err) {} }
     /* Coming back to present, land on the frame you were reading rather than
        wherever the continuous scroll had got to. */
     if (m === 'present') frames[idx] && frames[idx].scrollIntoView({ block: 'start' });
   }
-  var startMode = 'present';
-  try { startMode = localStorage.getItem('ece444-frames-mode') || 'present'; } catch (err) {}
-  setMode(startMode === 'read' ? 'read' : 'present');
-  segPresent.addEventListener('click', function () { setMode('present'); modePop.open(false); });
-  segRead.addEventListener('click', function () { setMode('read'); modePop.open(false); });
+  var startMode = 'read';
+  try { startMode = localStorage.getItem(MODE_KEY) || 'read'; } catch (err) {}
+  setMode(startMode === 'present' ? 'present' : 'read', false);
+  segPresent.addEventListener('click', function () { setMode('present', true); modePop.open(false); });
+  segRead.addEventListener('click', function () { setMode('read', true); modePop.open(false); });
 
   /* an inline expander, so a question mid-lecture does not cost you the deck */
   Array.prototype.forEach.call(document.querySelectorAll('.depth'), function (d) {

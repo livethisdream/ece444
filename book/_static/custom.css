@@ -1551,3 +1551,269 @@ html[data-theme="dark"] .admonition.note > .admonition-title,
 html[data-theme="dark"] div.admonition.note > p.admonition-title {
   color: #82bce8 !important;
 }
+
+/* ============================================================
+   System dark on the shell pages
+   ------------------------------------------------------------
+   Every dark rule above is keyed to the theme's html[data-theme="dark"]
+   stamp. The frame and page shells never stamp it: their dark mode comes
+   from prefers-color-scheme alone (see shell.css). So on a phone in system
+   dark those rules never fired, and a note box shipped as a light card with
+   the dark theme's light text on it -- unreadable. This block repeats them
+   for that state, guarded the same way shell.css guards its tokens, so an
+   explicit light stamp still wins if one is ever added.
+   GENERATED from the rules above: keep the two in step.
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+html:not([data-theme="light"]) {
+  --pst-color-primary:    #5aa3e5;
+  --pst-color-primary-bg: #1e2833;
+  --pst-color-link:       #82bce8;
+  --pst-color-link-hover: #b4d4f0;
+  --pst-color-inline-code-links: #82bce8;
+  --pst-color-accent:     #5aa3e5;
+}
+html:not([data-theme="light"]) .bd-article h1,
+html:not([data-theme="light"]) .bd-article h2 {
+  color: #b4d4f0;
+}
+html:not([data-theme="light"]) .bd-article h2 {
+  border-bottom-color: #3a4552;
+}
+html:not([data-theme="light"]) .bd-article h3 {
+  color: #82bce8;
+  border-left-color: #5aa3e5;
+}
+html:not([data-theme="light"]) .bd-article h4 {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article :not(pre) > code {
+  background-color: #232a33;
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .bd-article table thead tr {
+  background-color: #1e4e7a;
+}
+html:not([data-theme="light"]) .bd-article table thead th {
+  color: #ffffff;
+}
+html:not([data-theme="light"]) .bd-article table tbody td {
+  color: #e6edf3 !important;
+  border-bottom-color: #3a4552;
+  background-color: transparent;
+}
+html:not([data-theme="light"]) .bd-article table tbody tr:nth-child(even) {
+  background-color: #232a33;
+}
+html:not([data-theme="light"]) .bd-article table tbody tr:hover {
+  background-color: #2a323d;
+  box-shadow: inset 3px 0 0 #5aa3e5;
+}
+html:not([data-theme="light"]) .bd-article table tbody tr:nth-child(even) td,
+html:not([data-theme="light"]) .bd-article table tbody tr:hover td {
+  color: #e6edf3 !important;
+}
+html:not([data-theme="light"]) .bd-article table.grade-scale th,
+html:not([data-theme="light"]) .bd-article table.grade-scale td {
+  border-color: #3a4552;
+  color: #e6edf3;
+}
+html:not([data-theme="light"]) .bd-article table.grade-scale thead th {
+  color: #e6edf3;
+}
+html:not([data-theme="light"]) .admonition.key-concept,
+html:not([data-theme="light"]) div.admonition.key-concept {
+  background-color: #1a2838 !important;
+  border-color: #2a4a6a !important;
+  border-left-color: #5aa3e5 !important;
+}
+html:not([data-theme="light"]) .admonition.key-concept > .admonition-title,
+html:not([data-theme="light"]) div.admonition.key-concept > p.admonition-title {
+  background-color: #1e4e7a !important;
+}
+html:not([data-theme="light"]) .admonition.type-along,
+html:not([data-theme="light"]) div.admonition.type-along {
+  background-color: #17232f !important;
+  border-color: #2a4a6a !important;
+  border-left-color: #5aa3e5 !important;
+}
+html:not([data-theme="light"]) .admonition.type-along > .admonition-title,
+html:not([data-theme="light"]) div.admonition.type-along > p.admonition-title {
+  background-color: #1e4e7a !important;
+}
+html:not([data-theme="light"]) div.admonition.example-problem {
+  background-color: #2a1f16;
+  border-color: #6a4a2c;
+  border-left-color: #c47030;
+}
+html:not([data-theme="light"]) div.admonition.example-problem > p.admonition-title {
+  background-color: #6a3410;
+}
+html:not([data-theme="light"]) .admonition.ground-rules,
+html:not([data-theme="light"]) div.admonition.ground-rules {
+  background-color: #2a1f16 !important;
+  border-color: #6a4a2c !important;
+  border-left-color: #c47030 !important;
+}
+html:not([data-theme="light"]) .admonition.ground-rules > .admonition-title,
+html:not([data-theme="light"]) div.admonition.ground-rules > p.admonition-title {
+  background-color: #6a3410 !important;
+}
+html:not([data-theme="light"]) .admonition.slides a,
+html:not([data-theme="light"]) div.admonition.slides a {
+  background: rgba(90, 163, 229, 0.15);
+  border-color: rgba(90, 163, 229, 0.40);
+  color: #82bce8 !important;
+}
+html:not([data-theme="light"]) .admonition.slides a:hover,
+html:not([data-theme="light"]) div.admonition.slides a:hover {
+  background: rgba(90, 163, 229, 0.28);
+  border-color: rgba(90, 163, 229, 0.65);
+  color: #b4d4f0 !important;
+}
+html:not([data-theme="light"]) .bd-article figure {
+  background: #232a33;
+  border-color: #3a4552;
+}
+html:not([data-theme="light"]) .bd-article figure figcaption {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article .block-card,
+html:not([data-theme="light"]) .bd-article .mt-card {
+  background: #232a33;
+  border-color: #3a4552;
+  color: #e6edf3 !important;
+}
+html:not([data-theme="light"]) .bd-article .block-card h3,
+html:not([data-theme="light"]) .bd-article .mt-card h4 {
+  color: #b4d4f0;
+}
+html:not([data-theme="light"]) .bd-article .block-card p,
+html:not([data-theme="light"]) .bd-article .mt-card p {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article .block-card:hover,
+html:not([data-theme="light"]) .bd-article .mt-card:hover {
+  background: #2a323d;
+  border-color: #5aa3e5;
+}
+html:not([data-theme="light"]) .bd-article .deliverable-card {
+  background: #232a33;
+  border-color: #3a4552;
+  border-left-color: #5aa3e5;
+}
+html:not([data-theme="light"]) .bd-article .deliverable-card h3,
+html:not([data-theme="light"]) .bd-article .deliverable-card .d-w-num,
+html:not([data-theme="light"]) .bd-article .deliverable-card .d-due strong {
+  color: #b4d4f0;
+}
+html:not([data-theme="light"]) .bd-article .deliverable-card .d-eyebrow,
+html:not([data-theme="light"]) .bd-article .deliverable-card .d-link {
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .bd-article .deliverable-card .d-weight,
+html:not([data-theme="light"]) .bd-article .deliverable-card .d-due {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article .module-meta {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article .module-meta .m-module {
+  color: #b4d4f0;
+  background: #1e2833;
+}
+html:not([data-theme="light"]) .bd-article .module-synopsis {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article .mt-card .mt-kind {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article .module-nav {
+  border-top-color: #3a4552;
+}
+html:not([data-theme="light"]) .bd-article .module-nav a {
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .bd-article .module-nav a:hover {
+  color: #b4d4f0;
+}
+html:not([data-theme="light"]) .bd-article .matlab-link {
+  background: #2a1f16;
+  border-color: #6a4a2c;
+  color: #e0b088 !important;
+}
+html:not([data-theme="light"]) .bd-article .matlab-link:hover {
+  background: #3a2a1e;
+  border-color: #c47030;
+}
+html:not([data-theme="light"]) .bd-article .matlab-link .ml-arrow {
+  color: #e87722;
+}
+html:not([data-theme="light"]) .bd-article ol.lo-list > li::before {
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .sy-globaltoc p.caption {
+  color: #e6edf3;
+}
+html:not([data-theme="light"]) .sy-globaltoc > h3.sy-globaltoc-home a,
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l1 > a {
+  color: #c8d1db;
+}
+html:not([data-theme="light"]) .sy-globaltoc > h3.sy-globaltoc-home a:hover,
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l1 > a:hover {
+  background: #232a33;
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .sy-globaltoc > h3.sy-globaltoc-home.current a,
+html:not([data-theme="light"]) .sy-globaltoc > h3.sy-globaltoc-home a.current,
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l1.current > a,
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l1 > a.current {
+  color: #82bce8;
+  border-left-color: #5aa3e5;
+}
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l2 > a {
+  color: #a1adb9;
+}
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l2 > a:hover {
+  background: #232a33;
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l2 > a.current,
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l2.current > a {
+  color: #82bce8;
+  background: #1e2833;
+  border-left-color: #5aa3e5;
+}
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l1.has-children > details > summary {
+  color: #7d8b99;
+}
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l1.has-children > details > summary:hover {
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .sy-globaltoc li.sy-l2-reading    > a .sy-icon { color: #5aa3e5; }
+html:not([data-theme="light"]) .sy-globaltoc li.sy-l2-flashcards > a .sy-icon { color: #4ec4de; }
+html:not([data-theme="light"]) .sy-globaltoc li.sy-l2-slides     > a .sy-icon { color: #4fb478; }
+html:not([data-theme="light"]) .sy-globaltoc li.sy-l2-practice   > a .sy-icon { color: #d9a04a; }
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l2.current > a .sy-icon { color: #82bce8; }
+html:not([data-theme="light"]) .admonition.tip,
+html:not([data-theme="light"]) div.admonition.tip {
+  background-color: #1e2731 !important;
+  border-color: #2a4a6a !important;
+  border-left-color: #5aa3e5 !important;
+}
+html:not([data-theme="light"]) .admonition.tip > .admonition-title,
+html:not([data-theme="light"]) div.admonition.tip > p.admonition-title {
+  background-color: #2565a0 !important;
+  color: #ffffff !important;
+}
+html:not([data-theme="light"]) .admonition.note,
+html:not([data-theme="light"]) div.admonition.note {
+  background-color: #232a33 !important;
+  border-color: #3a4552 !important;
+  border-left-color: #56708a !important;
+}
+html:not([data-theme="light"]) .admonition.note > .admonition-title,
+html:not([data-theme="light"]) div.admonition.note > p.admonition-title {
+  color: #82bce8 !important;
+}
+}

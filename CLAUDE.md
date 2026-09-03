@@ -163,6 +163,16 @@ landing page and the five module overviews are built the same way.
   and prose that says "the lower panel" now means "the lower-left panel".
 - **`:::{depth}` is the detail that shows in read mode and hides in present.**
   It is always in the DOM, so it stays searchable and stays in the page's text.
+- **Read mode is the default** (2026-09-03). A lesson opens as a continuous
+  page; present is chosen from the bar and remembered per browser. The
+  one-screen budget above is still a present-mode budget, and
+  `check_frames.py` forces present mode before it measures.
+- **Dark mode on the shell is `prefers-color-scheme` only.** The shell never
+  stamps `data-theme`, so a rule keyed to `html[data-theme="dark"]` never
+  fires on a frame or reading page. `custom.css` ends with a generated
+  `@media (prefers-color-scheme: dark)` block that mirrors every such rule
+  under `html:not([data-theme="light"])`; add a dark rule in both places or
+  it ships as a light card with light text on a phone in dark mode.
 - MyST is immune to the whole `marked` gotcha class above — Sphinx renders the
   math once. The raw-HTML rule still bites: no `$…$` inside a raw `<ol><li>`.
 
