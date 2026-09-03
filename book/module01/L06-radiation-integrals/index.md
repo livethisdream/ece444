@@ -426,7 +426,7 @@ the current distribution**, evaluated over the *visible region*
 $-k \le k_z \le +k$ and then bent onto angle by $k_z = k\cos\theta$.
 ::::
 
-::::{frame} Same transform, new names
+::::{frame} A rose by any other name
 
 This is not a new transform with an antenna flavor. It is the Fourier transform
 from your signals course with the variables renamed, and every result you
