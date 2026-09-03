@@ -1,7 +1,10 @@
 
 (function () {
   var deck   = document.getElementById('deck');
-  var frames = Array.prototype.slice.call(deck.querySelectorAll('.frame'));
+  /* A `.read-only` frame is page material, not a beat: present mode hides it
+     (frames.css), so it is left out of the counter and the contents overlay in
+     both modes -- otherwise "12/27" in class would count frames nobody sees. */
+  var frames = Array.prototype.slice.call(deck.querySelectorAll('.frame:not(.read-only)'));
   var laser  = document.getElementById('laser');
   var spot   = document.getElementById('spot');
   var railfill = document.getElementById('railfill');
@@ -264,9 +267,12 @@
   segPresent.addEventListener('click', function () { setMode('present', true); modePop.open(false); });
   segRead.addEventListener('click', function () { setMode('read', true); modePop.open(false); });
 
-  /* an inline expander, so a question mid-lecture does not cost you the deck */
-  Array.prototype.forEach.call(document.querySelectorAll('.depth'), function (d) {
-    var f = d.closest('.frame');
+  /* an inline expander, so a question mid-lecture does not cost you the deck.
+     One per frame, before its first depth: a cut frame (`:::{present}`) can
+     hold several depth runs, and `.open` reveals all of them at once. */
+  frames.forEach(function (f) {
+    var d = f.querySelector('.depth');
+    if (!d) return;
     var b = document.createElement('button');
     b.type = 'button'; b.className = 'more';
     b.textContent = 'More detail  +';

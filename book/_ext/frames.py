@@ -1,4 +1,5 @@
-"""Frame-view lessons: `:::{frame}` / `:::{depth}` plus a chrome-free template.
+"""Frame-view lessons: `:::{frame}` / `:::{present}` / `:::{depth}` plus a
+chrome-free template.
 
 INERT until a lesson opts in. A page renders normally unless its front matter
 carries `frame_view: true`; only then is the sidebar-free template used. So
@@ -55,10 +56,13 @@ class FrameDirective(_Wrapper):
             # node for a heading that does not open a section.
             inner += nodes.rubric(text=self.arguments[0])
         self.state.nested_parse(self.content, self.content_offset, inner)
+        cut = _cut(inner)
         outer = nodes.container()
         # :class: belongs to the FRAME, not the inner column -- that is what an
         # author means by `:class: viz-frame`.
         outer["classes"] = ["frame"] + self.options.get("class", [])
+        if cut:
+            outer["classes"].append("cut")
         outer["ids"] = [self._frame_id()]
         outer += inner
         return [outer]
@@ -89,6 +93,75 @@ class FrameDirective(_Wrapper):
 
 class DepthDirective(_Wrapper):
     default_class = "depth"
+
+
+class PresentDirective(_Wrapper):
+    """:::{present} -- what a frame shows on screen in present mode.
+
+    The inverse of `depth`, and the one that inverts the default. A frame
+    with no present block shows everything but its depth, which is how the
+    lesson pages were first converted: the prose was wrapped in frames, so the
+    prose is what the class saw, 60-90 words a screen. A frame that carries
+    one or more present blocks shows ONLY those (plus its title); everything
+    else in the frame becomes depth, without the author wrapping it. The
+    lesson text is untouched either way -- read mode shows the whole frame in
+    document order -- so the present layer is a view, not a second copy.
+    """
+    default_class = "present"
+
+
+def _has_class(node, cls):
+    return isinstance(node, nodes.container) and cls in node.get("classes", [])
+
+
+def _cut(inner):
+    """Apply the present layer to a parsed frame body. Returns True if it did.
+
+    With at least one `present` child, the body is regrouped:
+
+    * consecutive present blocks are wrapped in one `stage` container, so two
+      of them sit side by side in present mode (key points beside the figure
+      -- Neil's brief, 2026-09-03) and stack on a phone;
+    * every run of anything else is wrapped in a `depth` container, so the
+      existing "More detail +" expander, the print rules and check_frames all
+      see it as what it now is: material the screen does not carry;
+    * the rubric and any explicit `depth` block stay where they are.
+
+    Document order is preserved throughout, which is what keeps read mode
+    reading as the page the author wrote.
+    """
+    kids = list(inner.children)
+    if not any(_has_class(k, "present") for k in kids):
+        return False
+    out, run, stage = [], [], []
+
+    def flush_run():
+        if run:
+            d = nodes.container()
+            d["classes"] = ["depth", "depth-cut"]
+            d.extend(run)
+            out.append(d)
+            run.clear()
+
+    def flush_stage():
+        if stage:
+            st = nodes.container()
+            st["classes"] = ["stage"]
+            st.extend(stage)
+            out.append(st)
+            stage.clear()
+
+    for k in kids:
+        if isinstance(k, nodes.rubric) or _has_class(k, "depth"):
+            flush_run(); flush_stage(); out.append(k)
+        elif _has_class(k, "present"):
+            flush_run(); stage.append(k)
+        else:
+            flush_stage(); run.append(k)
+    flush_run(); flush_stage()
+    inner.children = []
+    inner.extend(out)
+    return True
 
 
 class CalloutDirective(_Wrapper):
@@ -279,6 +352,7 @@ def setup(app):
     app.connect("config-inited", add_template_dir)
     app.add_directive("frame", FrameDirective)
     app.add_directive("depth", DepthDirective)
+    app.add_directive("present", PresentDirective)
     app.add_directive("callout", CalloutDirective)
     app.connect("html-page-context", choose_template)
     return {"version": "0.1", "parallel_read_safe": True}

@@ -163,6 +163,26 @@ landing page and the five module overviews are built the same way.
   and prose that says "the lower panel" now means "the lower-left panel".
 - **`:::{depth}` is the detail that shows in read mode and hides in present.**
   It is always in the DOM, so it stays searchable and stays in the page's text.
+- **`:::{present}` is the inverse, and it inverts the default** (2026-09-03,
+  Neil: the frames were too dense to talk to). A frame with no present block
+  shows everything but its depth, which is how the 2026-08-29 conversion left
+  every lesson: prose in frames, 55-93 words a screen. A frame with one or
+  more present blocks shows ONLY those and its title; the extension wraps
+  everything else in the frame into `depth` at build time, in document
+  order, so read mode still reads as the page the author wrote. Write the
+  present block as the frame's **topic sentence or its figure**, and let the
+  prose after it continue that sentence rather than restate it. Budgets:
+  **40 words a present frame, 30 present frames a lesson** (one period);
+  `scripts/verify/check_density.py <LNN>` counts them from the source with
+  no build, and `mech_check.sh` gates on it once a lesson carries any
+  present block. Two present blocks in a row sit **side by side** in present
+  mode (key points beside the graphic) and stack on a phone. `:::{present}`
+  with `:class: callout` keeps the callout card. A frame that is page
+  material only, a derivation, a link list, a practice preview, takes
+  `:class: read-only`: present mode skips it and it is not in the counter.
+  The LO frame is exempt from the word budget. Fences nest: a present block
+  inside a `::::{frame}` is `:::`, so a callout cannot go *inside* a present
+  block; use `:class: callout` on the present block instead.
 - **Read mode is the default** (2026-09-03). A lesson opens as a continuous
   page; present is chosen from the bar and remembered per browser. The
   one-screen budget above is still a present-mode budget, and

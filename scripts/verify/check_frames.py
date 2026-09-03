@@ -28,7 +28,8 @@ PROBE = """() => {
   if (!deck) return null;
   // The frame's own padding is the budget: content taller than that is clipped
   // in present mode, where every frame is exactly one viewport tall.
-  return [...document.querySelectorAll('.frame')].map((f, i) => {
+  // A read-only frame is hidden in present mode, so it has no budget to meet.
+  return [...document.querySelectorAll('.frame:not(.read-only)')].map((f, i) => {
     const cs = getComputedStyle(f);
     const pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
     const wrap = f.querySelector('.wrap');

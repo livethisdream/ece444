@@ -72,6 +72,62 @@ subject. Inside $\lambda/2\pi$ the stored terms take over...
 `depth` is the lesson-page material a deck would not carry. It is always in the
 DOM; present mode hides it with CSS. Presenting can therefore never lose it.
 
+## The present layer (2026-09-03)
+
+Neil, after a term's worth of frames on screen: the site's format and its
+single source are right, but the frames are too dense to talk to, and a lesson
+has too many of them for one period. Measured the day he said it, on the
+source: the median frame carried 55-93 words in present mode and the lessons
+ran 28-76 frames. The conversion had wrapped the lesson prose in frames and
+used `depth` sparingly, so the prose *was* the slide.
+
+The fix inverts the default per frame rather than site-wide. `:::{present}`
+marks what a frame shows on screen; a frame that carries one shows only its
+present blocks and its title, and `_ext/frames.py` wraps everything else in
+that frame into `depth` at build time, in document order. A frame with no
+present block behaves as before, so a lesson can be re-cut one frame at a
+time without blanking the other twenty-seven.
+
+```markdown
+::::{frame} Radiating near-field (Fresnel region)
+:::{present}
+A little farther out, energy leaves the antenna, **but the shape of the
+pattern still depends on how far away you are.**
+:::
+
+Different parts of the antenna are at meaningfully different distances from
+your observation point, so their contributions add up with distance-dependent
+phase ...                       <- becomes depth; "More detail +" in class
+::::
+```
+
+Three rules that came with it:
+
+* **Two present blocks in a row share a stage.** In present mode they sit
+  side by side (`grid`, `auto-fit`, 21rem floor via `min()`), which is Neil's
+  brief in one line: key points beside the graphic or the widget, to be
+  talked to. On a phone they stack. In read mode neither wrapper has a box.
+* **`:class: read-only` on a frame** removes it from present mode and from
+  the counter and contents overlay in both modes. That is how the beat count
+  comes down without deleting a derivation from the page. Leave a blank line
+  after the option or MyST reads the next line as YAML and the build errors.
+* **Budgets, and a static check.** 40 words a present frame, 30 present
+  frames a lesson. `scripts/verify/check_density.py` counts from the markdown
+  (display math is not words, inline math is one word, the LO frame is
+  exempt) and `mech_check.sh` gates on it once a lesson has opted in.
+
+The writing discipline is what makes read mode survive it: the present block
+is the frame's topic sentence or its figure, and the prose after it continues
+that sentence. Where the L05 pilot restated the sentence in the paragraph, the
+paragraph was trimmed, not the sentence. **L05 is the worked example**: 30
+frames became 24 beats, 19 of them cut, none over 40 words.
+
+What it does not do, yet: the reveal.js deck is still a parallel copy. Once
+every lesson carries a present layer, the deck could be generated from it
+(present blocks as slides, the rest as speaker notes) and the "decks are the
+source of truth for nomenclature" rule would retire with the second copy.
+That waits on the decision to keep the decks.
+
 ## Ten constraints, each of which cost a failed build
 
 docutils/Sphinx facts, not preferences.

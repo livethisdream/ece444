@@ -269,6 +269,51 @@ iframe.viz {
 }
 
 
+/* ---- the present layer ---------------------------------------------- */
+/* `:::{present}` inverts the default: a frame that carries one shows ONLY
+   its title and its present blocks on screen, and _ext/frames.py has already
+   wrapped everything else in `.depth`, so the rules above do the hiding.
+   All that is left to say here is how the present blocks sit.
+
+   In READ mode neither wrapper has a box. The present block is the frame's
+   topic sentence or its figure and the prose after it continues it; a rule
+   or a card here would rebuild the deck/page seam. */
+.stage, .present { display: contents; }
+/* `:::{present}` + `:class: callout` is the one present block with a box of
+   its own, in both modes: it IS the callout, so it keeps shell.css's card. */
+.present.callout { display: flex; }
+
+/* In PRESENT mode the stage is a row: two present blocks -- the key points
+   and the graphic they talk to -- sit side by side on a laptop and stack on a
+   phone. `min()` keeps the track able to shrink below a phone's width, the
+   same trap the jump overlay fell into. */
+[data-mode="present"] .frame.cut .stage {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(21rem, 100%), 1fr));
+  gap: clamp(1rem, 3vw, 2.6rem);
+  align-items: center;
+}
+[data-mode="present"] .frame.cut .present {
+  display: flex; flex-direction: column; min-width: 0; max-width: 100%;
+  gap: clamp(.7rem, 1.8vh, 1.1rem);
+}
+/* Forty words a screen earns slide-size type. Only the present block grows;
+   the depth behind "More detail +" keeps the page size, since it is the page. */
+[data-mode="present"] .frame.cut .present { font-size: var(--step-1); line-height: 1.32; }
+[data-mode="present"] .frame.cut .present p,
+[data-mode="present"] .frame.cut .present li { max-width: 46ch; }
+[data-mode="present"] .frame.cut .present ul,
+[data-mode="present"] .frame.cut .present ol { margin: 0; padding-left: 1.1em; }
+[data-mode="present"] .frame.cut .present li + li { margin-top: .35em; }
+[data-mode="present"] .frame.cut .present table { font-size: var(--step-0); }
+[data-mode="present"] .frame.cut .present img { max-height: 58vh; width: auto; max-width: 100%; }
+
+/* A read-only frame is a beat that exists on the page and not in class: a
+   derivation, a link list, a preview of the practice set. Present mode skips
+   it, and frames.js leaves it out of the counter and the contents overlay in
+   both modes so the numbers agree with what the class sees. */
+[data-mode="present"] .frame.read-only { display: none; }
+
 /* ---- Sphinx-rendered frame bodies ----------------------------------- */
 /* :::{frame} Title emits a rubric, not a heading -- docutils will not allow
    a title node outside a section. Style it as the frame heading. */
@@ -283,7 +328,7 @@ iframe.viz {
 /* The theme supplies this wrapper's scrolling; frame pages do not load the
    theme CSS, so it has to be restated here or wide tables push the frame out. */
 .frame .pst-scrollable-table-container { overflow-x: auto; max-width: 100%; }
-.frame > .wrap > .docutils.container:not(.depth):not(.callout) { display: contents; }
+.frame > .wrap > .docutils.container:not(.depth):not(.callout):not(.stage):not(.present) { display: contents; }
 .frame img { max-width: 100%; height: auto; }
 /* the page H1 is Sphinx's section title; the title frame carries the real one */
 .deck > section > h1, .deck > section > h1 + p { display: none; }

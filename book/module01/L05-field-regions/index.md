@@ -19,6 +19,8 @@ Lesson 5 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame}
+:class: read-only
+
 :::{admonition} Slides
 :class: slides
 <a href="../../slides/L05-field-regions.html" target="_blank" rel="noopener">html slides</a>
@@ -51,72 +53,88 @@ because *where you stand changes what you measure.*
 ::::
 
 ::::{frame} The three regions
+:::{present}
+- **Reactive near field**: stored energy. Nothing leaves.
+- **Radiating near field**: energy leaves, but the pattern is still forming.
+- **Far field**: the pattern you measure, and the one every spec quotes.
+:::
+:::{present}
 <img src="../../viz/img/L05-field-regions.svg" alt="Concentric field regions around an antenna: reactive near-field, radiating near-field, and far-field" style="max-width: 620px; width: 100%; display: block; margin: 1em auto;">
-::::
-
-::::{frame} Reactive near-field
-Right up against the antenna, **stored energy** dominates the fields, not
-radiation. Twice in every cycle of the drive current — period $T = 1/f$ — energy
-leaves the antenna, fills the space around it, and comes straight back, like the
-field around a charged capacitor or a current-carrying inductor. Nothing escapes.
-These are the terms that fall off fast, as $1/r^2$ and $1/r^3$, so they
-vanish quickly with distance. A receiver here would load the antenna and change
-its behavior; this is also why you keep objects away from a transmitting antenna's
-immediate vicinity.
-::::
-
-::::{frame} Radiating near-field (Fresnel region)
-A little farther out, the radiating part of the field takes over — energy is now
-genuinely leaving the antenna. **But the shape of the pattern still depends on how
-far away you are.** Because different parts of the antenna are at meaningfully
-different distances from your observation point, the contributions add up with
-distance-dependent phase, so the angular pattern keeps changing as you move out.
-The wavefront is noticeably **curved**.
-
-:::{callout}
-Measure a pattern here and you have measured *this range*, not the antenna.
 :::
 ::::
 
+::::{frame} Reactive near-field
+:::{present}
+Right up against the antenna, **stored energy** dominates the fields, not
+radiation. Twice in every cycle the field fills the space around the antenna
+and comes straight back. Nothing escapes.
+:::
+
+The period is $T = 1/f$, and the picture is the field around a charged
+capacitor or a current-carrying inductor. These are the terms that fall off
+fast, as $1/r^2$ and $1/r^3$, so they vanish quickly with distance. A receiver
+here would load the antenna and change its behavior, which is also why you keep
+objects away from a transmitting antenna's immediate vicinity.
+::::
+
+::::{frame} Radiating near-field (Fresnel region)
+:::{present}
+A little farther out, energy leaves the antenna, **but the shape of the
+pattern still depends on how far away you are.** The wavefront is curved.
+
+**Measure a pattern here and you have measured this range, not the antenna.**
+:::
+
+Different parts of the antenna are at meaningfully different distances from
+your observation point, so their contributions add up with distance-dependent
+phase, and the angular pattern keeps changing as you move out.
+::::
+
 ::::{frame} Far-field (Fraunhofer region)
-Far enough away, the antenna looks essentially like a **point source**. The
-pattern shape stops changing with distance — measure it at $100\ \text{m}$ or
-$1\ \text{km}$ and you get the same angular pattern, just weaker. In this region:
+:::{present}
+Far enough away, the antenna is a **point source**: the pattern shape stops
+changing with distance.
 
-- the fields fall off as $1/r$ (power as $1/r^2$),
-- $\mathbf{E}$, $\mathbf{H}$, and the propagation direction are mutually
-  perpendicular,
-- and locally the wave looks like a **plane wave** (flat wavefront).
+- the fields fall off as $1/r$, the power as $1/r^2$
+- $\mathbf{E}$, $\mathbf{H}$, and the direction of travel are mutually perpendicular: locally a **plane wave**
+:::
 
-This is the region every antenna specification implicitly refers to. "The gain
-is 15 dBi" means *in the far field*.
+Measure the pattern at $100\ \text{m}$ or $1\ \text{km}$ and you get the same
+angular pattern, just weaker. This is the region every antenna specification
+implicitly refers to: "the gain is 15 dBi" means *in the far field*.
 ::::
 
 ::::{frame} Where the regions come from: the fields of a short dipole
-The three regions are not a convention someone imposed — they fall straight out
-of the exact fields of the simplest possible antenna. Take an **infinitesimal
-dipole**: a current element $Idl$ pointing along $\hat{\mathbf z}$, short enough
-($dl \ll \lambda$) that the current is uniform along it. Solving Maxwell's
-equations for this element gives the fields in closed form (spherical
-coordinates, phasor convention with the $e^{-jkr}$ carried along as in Lesson 2,
-and $k = 2\pi/\lambda$; the $e^{j\omega t}$ is suppressed throughout, so every field
-below is an amplitude and a phase, not an instantaneous value):
+:::{present}
+The three regions fall straight out of the exact fields of the simplest
+antenna: an **infinitesimal dipole**, a current element $Idl$ along
+$\hat{\mathbf z}$ with $dl \ll \lambda$.
 
 $$
 E_\theta = \frac{j k\eta_0Idl\sin\theta}{4\pi r}
       \left(1 + \frac{1}{jkr} - \frac{1}{(kr)^2}\right)e^{-jkr}
 $$
+:::
+
+That is the closed-form solution of Maxwell's equations for the element,
+written in spherical coordinates and in phasor form: the $e^{-jkr}$ is carried
+along as in Lesson 2, $k = 2\pi/\lambda$, and the $e^{j\omega t}$ is
+suppressed throughout, so every field here is an amplitude and a phase rather
+than an instantaneous value. The regions are not a convention someone imposed.
 ::::
 
 ::::{frame} The near field is just this, superposed
+:::{present}
 $$
 H_\phi = \frac{j kIdl\sin\theta}{4\pi r}
       \left(1 + \frac{1}{jkr}\right)e^{-jkr}
 $$
 
 with $E_\phi = H_r = H_\theta = 0$. Current elements like this make up every
-antenna, so whatever these fields do, real antennas do too — the near field is
-just this, superposed.
+antenna, so whatever these fields do, real antennas do too.
+:::
+
+The near field of any antenna is just this, superposed.
 
 :::{depth}
 There is a third component the slide leaves out — a purely radial field with no
@@ -133,9 +151,9 @@ contributes nothing to the pattern you measure far away.
 ::::
 
 ::::{frame} Read the fields by their powers of r
-Pull the $1/r$ out front of
-$E_\theta$ and the bracket holds three terms, and $kr$ alone sets their
-relative sizes. Multiplying through, the actual field is a sum of three pieces:
+:::{present}
+Pull the $1/r$ out front of $E_\theta$ and the bracket holds three terms.
+$kr$ alone sets their relative sizes:
 
 $$
 E_\theta \propto
@@ -145,34 +163,33 @@ E_\theta \propto
 +
 \underbrace{\frac{1}{k^{2}r^{3}}}_{\text{electrostatic}}
 $$
-::::
-
-::::{frame} What each term is, and where it wins
-| Term | Falls off as | Physical origin | Where it matters |
-| :-- | :-- | :-- | :-- |
-| Radiation | $1/r$ | the escaping wave — Lesson 2's far field | $kr \gg 1$ |
-| Induction | $1/r^2$ | Biot–Savart / Ampère field of the current | comparable to the other two near $kr \sim 1$ |
-
-:::{depth}
-Those are the three regions, hiding inside one equation:
 :::
 ::::
 
-::::{frame} Electrostatic — quasi-static field of the charge at the tips
-| Term | Falls off as | Physical origin | Where it matters |
+::::{frame} What each term is, and where it wins
+:::{present}
+| Term | Falls off as | Physical origin | Wins where |
 | :-- | :-- | :-- | :-- |
+| Radiation | $1/r$ | the escaping wave, Lesson 2's far field | $kr \gg 1$ |
+| Induction | $1/r^2$ | Biot–Savart field of the current | near $kr \sim 1$ |
 | Electrostatic | $1/r^3$ | quasi-static field of the charge $\pm q$ at the tips | $kr \ll 1$ |
+:::
+
+Those are the three regions, hiding inside one equation. Near $kr \sim 1$ the
+induction term is comparable to the other two.
 ::::
 
 ::::{frame} The crossover is a single number
-The radiation term (size $\propto 1$
-inside the bracket) and the induction term (size $\propto 1/kr$) are equal when
+:::{present}
+The radiation term (size $\propto 1$ inside the bracket) and the induction
+term (size $\propto 1/kr$) are equal when
 
 $$
 kr = 1
 \qquad\Longrightarrow\qquad
 r = \frac{1}{k} = \frac{\lambda}{2\pi} \approx 0.16\lambda .
 $$
+:::
 
 :::{depth}
 Read that carefully, because it is the single most misquoted number in the
@@ -202,14 +219,19 @@ finite size $D$.
 ::::
 
 ::::{frame} Why "reactive" is the literal, correct word
-Stored energy that never leaves is *reactive power* — the same reactive power you met at the terminals in Lesson 4,
-now living in the surrounding field. All of this is a **power factor**, read exactly the way you read one for a load:
-$\cos$ of the angle between $E$ and $H$. Form the complex radial Poynting vector
-$\tfrac12 E_\theta H_\phi^{*}$ and the cross-terms collapse to just two: a **real**
-part falling as $1/r^2$, which is genuine outward power and contains no near-field
-terms at all, and an **imaginary** part falling as $1/r^5$, which is the stored
-energy sloshing out and back twice per cycle. Radiation is radiation at every distance;
-the near field adds nothing to it and carries nothing away.
+:::{present}
+Stored energy that never leaves is **reactive power**, the same reactive power
+you met at the terminals in Lesson 4.
+
+- Complex radial Poynting vector $\tfrac12 E_\theta H_\phi^{*}$: a **real** part $\propto 1/r^2$ and an **imaginary** part $\propto 1/r^5$
+- Radiation is radiation at every distance.
+:::
+
+The reactive power now lives in the surrounding field, and the near field
+carries nothing away. All of this is a **power factor**, read exactly the way
+you read one for a load: $\cos$ of the angle between $E$ and $H$. The real part is outward power
+and contains no near-field terms at all; the imaginary part is the stored
+energy sloshing out and back twice per cycle.
 
 :::{depth}
 Multiplying $E_\theta$ by $H_\phi^{*}$ term by term, everything cancels except
@@ -275,6 +297,8 @@ Nothing about the *phasors* moves as you slide. Only the angle between them does
 ::::
 
 ::::{frame} A preview from the practice set
+:class: read-only
+
 The practice set for this lesson opens with a which-term-dominates part: you
 evaluate the ratio $1 : 1/kr : 1/(kr)^2$ at $kr = 0.1$ and $kr = 10$ and name the
 winner in each. Do it by hand once and the crossover stops being a number to
@@ -302,8 +326,8 @@ takes until $kr \approx 10$, not $kr = 1$.
 ::::
 
 ::::{frame} The boundaries
-Let $D$ be the antenna's **largest dimension** and $\lambda$ the wavelength. The
-two boundaries are:
+:::{present}
+Let $D$ be the antenna's **largest dimension** and $\lambda$ the wavelength.
 
 $$
 \underbrace{r < 0.62\sqrt{\dfrac{D^3}{\lambda}}}_{\text{reactive near-field}}
@@ -312,14 +336,17 @@ $$
 \qquad
 \underbrace{r \ge \dfrac{2D^2}{\lambda}}_{\text{far-field}}
 $$
+:::
 ::::
 
 ::::{frame} Region, extent, and fields
+:::{present}
 | Region | Extent | Fields |
 | :-- | :-- | :-- |
 | Reactive near-field | $r < 0.62\sqrt{D^3/\lambda}$ | stored, non-radiating; $1/r^2$, $1/r^3$ |
 | Radiating near-field | $0.62\sqrt{D^3/\lambda} \le r < 2D^2/\lambda$ | radiating, but pattern varies with $r$; curved wavefront |
 | Far-field | $r \ge 2D^2/\lambda$ | pattern fixed; $1/r$; locally plane wave |
+:::
 
 :::{depth}
 These formulas apply to **electrically large** antennas ($D > \lambda$), where
@@ -340,49 +367,49 @@ pattern.
 ::::
 
 ::::{frame} Where the far-field distance comes from
-The far-field distance $2D^2/\lambda$ is a **phase-error** criterion. Picture a
-point source a distance $r$ away, radiating a **spherical** wavefront onto an
-aperture of size $D$. Because the wavefront is a sphere, the path from the source
-to the *edge* of the aperture is slightly longer than the path to the *center* —
-a plane wave, by definition, would have no such difference, and the plane-wave
-limit is exactly what you earn once this criterion is met. That extra path length
-is approximately
+:::{present}
+$2D^2/\lambda$ is a **phase-error** criterion. A spherical wavefront from a
+source at distance $r$ reaches the *edge* of an aperture of size $D$ later
+than its *center*, by
 
 $$
 \Delta \approx \frac{(D/2)^2}{2r} = \frac{D^2}{8r}.
 $$
+:::
+
+Picture a point source a distance $r$ away, radiating onto the aperture. A
+plane wave, by definition, would have no such path difference, and the
+plane-wave limit is exactly what you earn once this criterion is met.
 ::::
 
 ::::{frame} The phase-error budget
-The agreed-upon tolerance is that this path difference should be no more than
-$\lambda/16$, which corresponds to a **maximum phase error of $22.5^{\circ}$**
-across the aperture. Setting $\Delta = \lambda/16$:
+:::{present}
+The agreed tolerance is $\Delta \le \lambda/16$, a **maximum phase error of
+$22.5^{\circ}$** across the aperture:
 
 $$
 \frac{D^2}{8r} = \frac{\lambda}{16}
 \qquad\Longrightarrow\qquad
 r = \frac{2D^2}{\lambda}.
 $$
+:::
 
 Inside this distance the phase across the aperture curves enough to distort the
 pattern; beyond it, the wavefront is "flat enough" and the pattern is stable.
-
-:::{depth}
 That is the whole content of the criterion: a statement about how flat a
 sphere looks over a finite width, not about where radiation starts.
-:::
 ::::
 
 ::::{frame} Worked example
-A reflector antenna has diameter $D = 1.2\ \text{m}$ and operates at
-$f = 10\ \text{GHz}$.
+:::{present}
+A $D = 1.2\ \text{m}$ reflector at $f = 10\ \text{GHz}$, so
+$\lambda = 0.03\ \text{m}$ and $D/\lambda = 40$.
 
-So the reactive near-field ends at $\approx 4.7\ \text{m}$, the radiating
-near-field runs from there to $96\ \text{m}$, and only beyond $96\ \text{m}$ is
-the antenna in its far field. To measure this dish's pattern on a conventional
-range you would need almost a **hundred meters** of separation.
+- reactive near field ends at $\approx 4.7\ \text{m}$
+- far field begins at $96\ \text{m}$
+- a conventional range needs almost a **hundred meters** of separation
+:::
 
-:::{depth}
 $$
 \lambda = \frac{c}{f} = \frac{3\times10^8}{10\times10^9} = 0.03\ \text{m}
 $$
@@ -398,9 +425,8 @@ r_\text{reactive} = 0.62\sqrt{\frac{D^3}{\lambda}}
 = 0.62\sqrt{\frac{1.728}{0.03}} = 0.62\sqrt{57.6} \approx 4.7\ \text{m}
 $$
 
-Notice the $D^2$: go to 20 GHz and the far field starts at 192 m for the same
-dish.
-:::
+The radiating near field runs from $4.7\ \text{m}$ to $96\ \text{m}$. Notice
+the $D^2$: go to 20 GHz and the far field starts at 192 m for the same dish.
 ::::
 
 ::::{frame} Interactive — field-region explorer
@@ -427,45 +453,47 @@ $D^2$ in the formula, on screen. Hold $D$ and double $f$: it doubles.
 ::::
 
 ::::{frame} Why the far-field distance matters
-The far-field distance is not academic — it sets the size of your test range. To
-measure an antenna's true pattern, gain, and sidelobes, the antenna under test
-must sit in the **far field** of the source (and vice versa). For a large dish at
-high frequency that can mean hundreds of meters of clear, reflection-free
-range — often impractical, sometimes impossible indoors.
+:::{present}
+The far-field distance sets the size of your test range.
 
-That is exactly why **near-field scanning** exists: you measure the fields on a
-surface *close* to the antenna (in the radiating near-field), then mathematically
-propagate them out to the far field. You will see this in Module 2's measurement
-lessons — but it only works because the near-field distribution completely
-determines the far-field pattern, which is the subject of the next lesson.
+- The antenna under test must be in the source's far field.
+- A large dish at high frequency: hundreds of meters.
+- **Near-field scanning**: measure close in, propagate out mathematically.
+:::
+
+To measure an antenna's true pattern, gain, and sidelobes you need that
+separation, reflection-free, which is often impractical and sometimes
+impossible indoors. That is exactly why near-field scanning exists: you measure
+the fields on a surface *close* to the antenna, in the radiating near field,
+and compute the far field from them. You will see this in Module 2's
+measurement lessons. It only works because the near-field distribution
+completely determines the far-field pattern, which is the subject of the next
+lesson.
 ::::
 
 ::::{frame} Key point
-:::{callout}
-Where you stand changes what you see. Close in, the field is **stored energy**
-that doesn't radiate; a bit farther, it **radiates but the pattern is still
-forming**; and only beyond $2D^2/\lambda$ does the antenna show its **true,
-distance-independent pattern**. Every gain and pattern spec assumes you are out
-there in the far field.
+:::{present}
+:class: callout
+Where you stand changes what you see. Close in, the field is **stored
+energy**. Farther out it **radiates, but the pattern is still forming**.
+Only beyond $2D^2/\lambda$ does the antenna show its **true pattern**.
+Every spec assumes the far field.
 :::
 ::::
 
-::::{frame} Summary — the three terms and the crossover
+::::{frame} Summary
+:::{present}
+- One dipole equation holds all three regions: $1 : 1/kr : 1/(kr)^2$.
+- $kr = 1$ ($r = \lambda/2\pi$) is where the terms are *equal*, not the far field. Allow a few wavelengths.
+- Far field: $r \ge 2D^2/\lambda$, from a $22.5^{\circ}$ phase-error budget.
+- Reactive near field ends at $0.62\sqrt{D^3/\lambda}$.
+:::
+
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | Three field terms | One dipole equation holds all three regions | $1 : 1/kr : 1/(kr)^2$ |
 | $kr = 1$ crossover | Where all three terms are *equal* — not where the far field starts | $r = \lambda/2\pi \approx 0.16\lambda$ |
-::::
-
-::::{frame} Summary — the true far field
-| Symbol / idea | What it is | Number to remember |
-| :-- | :-- | :-- |
-| True far field | Reactive terms actually negligible | $kr \gg 1$; under $10\%$ near $kr \approx 10$ ($r \approx 1.6\lambda$), so allow $r \gtrsim \lambda$ and a few wavelengths in practice |
-::::
-
-::::{frame} Summary — the boundaries
-| Symbol / idea | What it is | Number to remember |
-| :-- | :-- | :-- |
+| True far field | Reactive terms actually negligible | $kr \gg 1$; under $10\%$ near $kr \approx 10$ ($r \approx 1.6\lambda$), so allow $r \gtrsim \lambda$ and preferably a few $\lambda$ |
 | Reactive near-field edge | Inner boundary for an electrically large antenna | $r = 0.62\sqrt{D^3/\lambda}$ |
 | Far-field distance | Outer boundary; pattern stops changing with $r$ | $r \ge 2D^2/\lambda$ |
 | Phase-error tolerance | What the criterion $2D^2/\lambda$ comes from | $\Delta \le \lambda/16$, i.e. $\pi/8 = 22.5^{\circ}$ |
@@ -473,16 +501,21 @@ there in the far field.
 ::::
 
 ::::{frame} Practice
+:class: read-only
+
 - <a href="../../practice/ECE444_L05_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
 - <a href="../../practice/ECE444_L05_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
 ::::{frame} Where this is going
-You now know *where* the far-field pattern lives and how far away it starts. Next,
-**Lesson 6 (Radiation Integrals)** answers *what* that pattern is: given the
-current distribution on the antenna, we set up the radiation integrals that
-produce the far-field pattern directly — the mathematical machinery behind
-everything we have described qualitatively so far.
+:::{present}
+You now know *where* the far-field pattern lives and how far away it starts.
+Next, **Lesson 6 (Radiation Integrals)** answers *what* that pattern is:
+from the current distribution on the antenna to the far-field pattern, directly.
+:::
+
+The radiation integrals are the mathematical machinery behind everything we
+have described qualitatively so far.
 
 :::{depth}
 Watch for one specific move in that derivation. Expanding the distance from a

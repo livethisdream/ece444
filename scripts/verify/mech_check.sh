@@ -128,6 +128,19 @@ else
   ok "not a frame page (no frame_view in front matter)"
 fi
 
+# 3d. present-mode density -- what the class sees, counted from the source.
+# Forty words a frame and thirty frames a lesson (Neil, 2026-09-03). A lesson
+# that has not been cut yet (no :::{present} block) is reported, not failed:
+# the gate bites once the lesson opts in. Static, so it costs nothing.
+if grep -qE '^frame_view:' "$page"; then
+  if dn=$(python3 "$HERE/check_density.py" "$LNN" 2>&1); then
+    ok "present density: $(echo "$dn" | head -1 | sed 's/  */ /g')"
+  else
+    bad "present density over budget"
+    echo "$dn" | grep -E '^\s+(!!|LO)' | sed 's/^/        /'
+  fi
+fi
+
 # 4. widget render, height, overflow, aspect
 for w in $widgets; do
   if python3 "$HERE/check_widget.py" "$REPO/book/extras/viz/$w" \
