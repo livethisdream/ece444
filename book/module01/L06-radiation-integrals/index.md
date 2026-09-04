@@ -72,7 +72,7 @@ more elements.
 The next frame shows those two sources radiating: the field around them, with
 the bright and dark directions their phase difference makes. Slide the element
 count up and the fringes of the double slit sharpen into the lobes of a line
-source. Drag $ around the edge to move the observer.
+source. Drag $P$ around the edge to move the observer.
 ::::
 
 ::::{frame} Two sources, in space

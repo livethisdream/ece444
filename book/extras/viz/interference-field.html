@@ -101,39 +101,59 @@ function sumAt(th){                             // far-field sum, normalized to 
   return Math.hypot(re,im)/state.M;
 }
 /* ---- the field: every element a cylindrical wave, summed on a coarse grid
-   and scaled up. Animated, the map is the instantaneous field, blue positive
-   and amber negative; still, it is the amplitude. Both are normalized to
-   the largest value the source can reach at the map's edge. */
+   and scaled up. Every element shares one frequency, so the instantaneous
+   field at a cell is Re{(C + jS) e^{j w t}} = C cos(wt) - S sin(wt), with
+   C = sum a_i cos(k d_i) and S = sum a_i sin(k d_i) fixed by the geometry.
+   Those two arrays are computed once per geometry; a frame is then one
+   multiply-add per cell. The first version summed every element in every
+   cell on every frame and made the whole browser jitter (Neil, 2026-09-03).
+   Animated, the map is the instantaneous field, blue positive and amber
+   negative; still, it is the amplitude. Both are normalized to the largest
+   value the source can reach at the map's edge. */
 let tmp=document.createElement('canvas'), tctx=tmp.getContext('2d');
-function drawField(now){
+let grid={ cols:0, rows:0, cell:0, C:null, S:null, key:'' };
+function computeField(){
   const w=W, h=H;
-  ctx.clearRect(0,0,w,h);
   const cell=Math.max(2.2, h/105);
   const cols=Math.ceil(w/cell), rows=Math.ceil(h/cell);
-  if(tmp.width!==cols||tmp.height!==rows){ tmp.width=cols; tmp.height=rows; }
-  const img=tctx.createImageData(cols,rows);
-  const ox=w/2, oy=h/2;
-  const wt=state.anim ? ((now-t0)/1000)*2*Math.PI*0.45 : 0;
+  const key=[w,h,state.L,state.M].join('|');
+  if(grid.key===key) return;
+  const C=new Float32Array(cols*rows), S=new Float32Array(cols*rows);
+  const ox=w/2, oy=h/2, k=2*Math.PI;
   const zs=[]; for(let i=0;i<state.M;i++) zs.push(zOf(i));
-  const k=2*Math.PI, norm=state.M/Math.sqrt(SPAN);
-  const A=[0,74,133], B=[176,110,20], base=[255,255,255];
   for(let r=0;r<rows;r++){
     const y=-((r+0.5)*cell-oy)/pxPerL;
     for(let c=0;c<cols;c++){
       const x=((c+0.5)*cell-ox)/pxPerL;
       let re=0, im=0;
       for(let i=0;i<state.M;i++){
-        const dz=y-zs[i], d=Math.hypot(x,dz)+0.02, a=1/Math.sqrt(d), p=-k*d+wt;
+        const dz=y-zs[i], d=Math.hypot(x,dz)+0.02, a=1/Math.sqrt(d), p=-k*d;
         re+=a*Math.cos(p); im+=a*Math.sin(p);
       }
-      let v=state.anim ? re/norm : Math.hypot(re,im)/norm;
-      v=Math.max(-1,Math.min(1,v));
-      const m=Math.pow(Math.abs(v), state.anim?0.6:0.5), col=(v>=0||!state.anim)?A:B;
-      const o=4*(r*cols+c);
-      img.data[o]=base[0]+(col[0]-base[0])*m; img.data[o+1]=base[1]+(col[1]-base[1])*m; img.data[o+2]=base[2]+(col[2]-base[2])*m; img.data[o+3]=255;
+      const o=r*cols+c; C[o]=re; S[o]=im;
     }
   }
+  grid={ cols, rows, cell, C, S, key };
+  if(tmp.width!==cols||tmp.height!==rows){ tmp.width=cols; tmp.height=rows; }
+}
+function drawField(now){
+  const w=W, h=H;
+  computeField();
+  const { cols, rows, cell, C, S } = grid;
+  const img=tctx.createImageData(cols,rows), px=img.data;
+  const wt=state.anim ? ((now-t0)/1000)*2*Math.PI*0.45 : 0;
+  const cw=Math.cos(wt), sw=Math.sin(wt), norm=state.M/Math.sqrt(SPAN);
+  const A=[0,74,133], B=[176,110,20];
+  const n=cols*rows;
+  for(let o=0;o<n;o++){
+    let v = state.anim ? (C[o]*cw - S[o]*sw)/norm : Math.hypot(C[o],S[o])/norm;
+    if(v>1) v=1; else if(v<-1) v=-1;
+    const m=Math.pow(Math.abs(v), state.anim?0.6:0.5), col=(v>=0||!state.anim)?A:B;
+    const q=4*o;
+    px[q]=255+(col[0]-255)*m; px[q+1]=255+(col[1]-255)*m; px[q+2]=255+(col[2]-255)*m; px[q+3]=255;
+  }
   tctx.putImageData(img,0,0);
+  ctx.clearRect(0,0,w,h);
   ctx.imageSmoothingEnabled=true;
   ctx.drawImage(tmp,0,0,cols,rows,0,0,cols*cell,rows*cell);
   drawOverlay(w,h);
@@ -209,9 +229,12 @@ function fit(){
   drawField(performance.now()); readouts();
 }
 window.addEventListener('resize', fit);
-let last=0;
+let last=0, visible=true;
+if('IntersectionObserver' in window){
+  new IntersectionObserver(es=>{ es.forEach(e=>{ visible=e.isIntersecting; }); }, {threshold:0.05}).observe(cv);
+}
 function loop(now){
-  if(state.anim && !document.hidden && now-last>40){ last=now; drawField(now); }
+  if(state.anim && visible && !document.hidden && now-last>50){ last=now; drawField(now); }
   requestAnimationFrame(loop);
 }
 // drag P around the map to set theta
