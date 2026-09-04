@@ -388,76 +388,66 @@ The current points the same way at every source point, so the vector integral
 collapses to one scalar integral, and the projection onto the observation
 basis is one dot product, done once, afterwards:
 $\hat{\boldsymbol\theta}\cdot\hat{\mathbf z} = -\sin\theta$, so
-$N_\theta = -N_z\sin\theta$ and $N_\phi = 0$. That $\sin\theta$ is taken at the
-**observation** angle $\theta$. It is not part of the integral, and it is not
-the $\sin\theta'$ of a spherical source volume element
-$dV' = r'^2\sin\theta'\ dr'\ d\theta'\ d\phi'$, which belongs to a source angle
-and is used up inside $N_z$. At $\theta = 0$ the current has no transverse
-component to project, which is why no wire antenna radiates off its own ends.
+$N_\theta = -N_z\sin\theta$ and $N_\phi = 0$. At $\theta = 0$ the current has
+no transverse component to project, which is why no wire antenna radiates off
+its own ends.
 
-You could instead expand $\hat{\mathbf z} = \cos\theta\ \hat{\mathbf r} -
-\sin\theta\ \hat{\boldsymbol\theta}$ *before* integrating. Since $\theta$ is the
-observation angle, constant over the integral, the $-\sin\theta$ comes
-straight out and you land on the same $N_\theta$. Cartesian simply keeps the
-two jobs apart: the integral, which depends only on the current distribution,
-and the projection, which depends only on where you look. That separation is
-the space-factor / element-factor split later in this lesson, and all of L16.
+**Why Cartesian, and why afterward.** The integral adds up vectors from many
+different source points, and you can only add vectors component by component
+when every component is measured against the same unit vectors. Cartesian
+unit vectors are the same everywhere, so integrating $J_x$, $J_y$ and $J_z$
+is safe. Spherical unit vectors at the source are not: $\hat{\mathbf r}'$ and
+$\hat{\boldsymbol\theta}'$ change direction as you move from one source point
+to the next, so an integral of $J_{\theta'}$ adds numbers that each mean
+something different, and the total is not the component of anything. So
+integrate the Cartesian components, get $N_x$, $N_y$ and $N_z$, and only then
+take the components along $\hat{\boldsymbol\theta}$ and
+$\hat{\boldsymbol\phi}$ of the observation direction. Those two are fixed once
+you choose where you look, which is why the $\sin\theta$ can sit outside the
+integral.
+
+Try it the wrong way on a dipole along $z$ and it fails on the first line:
+every source point has $\theta' = 0$, so $J_{\theta'} = 0$ everywhere, and you
+would conclude that a dipole does not radiate at all.
+
+Expanding $\hat{\mathbf z} = \cos\theta\ \hat{\mathbf r} - \sin\theta\
+\hat{\boldsymbol\theta}$ *before* integrating gives the same answer, because
+$\theta$ is the observation angle and constant over the integral. Cartesian
+simply keeps the two jobs apart: the integral, which depends only on the
+current distribution, and the projection, which depends only on where you
+look. That separation is the space-factor / element-factor split later in
+this lesson, and all of L16.
 
 :::{depth}
-```{note}
-Watch the components. $\mathbf{N}$ is a *vector* integral: it adds up
-$\mathbf{J}$ from every source point, and vectors from different points can
-only be added in a basis that **stays fixed while $\mathbf{r}'$ sweeps the
-antenna**. Two bases qualify. Cartesian $\hat{\mathbf x}, \hat{\mathbf y},
-\hat{\mathbf z}$ is one. The spherical basis of the *observation direction*,
-$\hat{\mathbf r}, \hat{\boldsymbol\theta}, \hat{\boldsymbol\phi}$ at the one
-$(\theta,\phi)$ you are computing, is the other — those are constants once
-the direction is chosen. The basis that does **not** qualify is the spherical
-basis at each source point: $\hat{\mathbf r}'$ and $\hat{\boldsymbol\theta}'$
-rotate with $\mathbf{r}'$, so $\int J_{\theta'}\ \hat{\boldsymbol\theta}'\ dV'$
-does not factor into a unit vector times a scalar integral.
-```
-
-With all three Cartesian components present the same projection reads
+With all three Cartesian components present the projection reads
 
 $$
 N_\theta = N_x\cos\theta\cos\phi + N_y\cos\theta\sin\phi - N_z\sin\theta,
 \qquad
 N_\phi = -N_x\sin\phi + N_y\cos\phi .
 $$
-
-And here is the source-point basis failing on the simplest case. For the
-Hertzian dipole on the $z$-axis every source point has $\theta' = 0$, so in
-its own spherical basis $J_{r'} = J_z$ and $J_{\theta'} = 0$. Integrate those
-and you would conclude $N_\theta = 0$ — no radiation at all. The error is that
-$\hat{\boldsymbol\theta}'$ at the source is not $\hat{\boldsymbol\theta}$ at
-the field point. Never integrate components taken in the source point's
-spherical basis.
 :::
+
+The next frame shows the integral as a picture. The source is chopped into
+elements; each one contributes a phasor whose angle is $kz'\cos\theta$, its
+path difference in radians. At broadside every phasor points the same way and
+they stack into a long straight chain. Swing off broadside and the chain curls
+up; when it closes on itself, you are looking at a null. It is the two-source
+picture with many sources, and it is the picture the rest of the lesson
+computes.
 ::::
 
 ::::{frame} The integral, as a picture
 :class: viz-frame
 
 :::{present}
-Phasors at angle $kz'\cos\theta$: aligned at broadside, curling off it,
-closed at a null.
-
 <iframe src="../../viz/radiation-integral.html"
-        width="100%" height="440"
+        width="100%" height="480"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="The radiation integral as a coherent phasor sum">
 </iframe>
 :::
-
-Before evaluating anything, get a feel for what the integral *does*. The source
-above is chopped into elements; each one contributes a phasor whose angle is
-$kz'\cos\theta$, its path difference in radians. At broadside every phasor
-points the same way and they stack into a long straight chain. Swing off broadside and the chain curls up;
-when it closes on itself, you are looking at a null. This is the two-source
-picture with many sources, and it is the picture the rest of the lesson
-computes.
 ::::
 
 ::::{frame} The radiation integral is a Fourier transform
