@@ -202,7 +202,7 @@
     lastT = now;
     if (runEl.checked) tPhase = (tPhase + dt * 0.32) % 1;   // in periods
 
-    // Unit-amplitude normalisation: this panel is about PHASE, and both field
+    // Unit-amplitude normalization: this panel is about PHASE, and both field
     // magnitudes blow up as u -> 0, so plotting them raw would show nothing else.
     var e = function (tau) { return Math.cos(2 * Math.PI * tau - ps); };
     var h = function (tau) { return Math.cos(2 * Math.PI * tau); };

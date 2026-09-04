@@ -94,8 +94,8 @@ function amp(t){
 
 /* ---------------------------------- the source ----------------------------------
    Continuous: NS+1 trapezoid samples across the length. Sampled: one weight per
-   element at spacing d, centred on the source. Either way the transform is
-   sum_n w_n exp(+j k_z z_n), normalised so its peak (at k_z = k cos th0) is 1. */
+   element at spacing d, centerd on the source. Either way the transform is
+   sum_n w_n exp(+j k_z z_n), normalize so its peak (at k_z = k cos th0) is 1. */
 const NS=400;
 let Z=null, W=null, WSUM=1;            // element positions (wavelengths) and weights
 function buildSource(){
@@ -109,7 +109,7 @@ function buildSource(){
   }
   WSUM=0; for(let i=0;i<W.length;i++) WSUM+=W[i];
 }
-// |N| at spatial frequency kappa = k_z/k, steering included, peak-normalised
+// |N| at spatial frequency kappa = k_z/k, steering included, peak-normalize
 function Tk(kappa){
   const c=kappa-Math.cos(state.th0*Math.PI/180);
   let re=0, im=0;
@@ -221,15 +221,15 @@ function drawK(){
   if(state.smp){
     const c0=Math.cos(state.th0*Math.PI/180), per=1/state.d;
     ctx.strokeStyle='rgba(138,90,0,0.7)'; ctx.lineWidth=1.4; ctx.setLineDash([5,4]);
-    let labelled=false;
+    let labeled=false;
     for(let n=-6;n<=6;n++){ if(n===0) continue;
       const kap=c0+n*per; if(Math.abs(kap)>KMAX) continue;
       const x=xp(kap); ctx.beginPath(); ctx.moveTo(x,mT); ctx.lineTo(x,mT+ph); ctx.stroke();
-      if(!labelled){
+      if(!labeled){
         // guard the word with a white box: the curve runs through this corner
         ctx.setLineDash([]); ctx.font='700 10px '+SANS; const tw=ctx.measureText('repeat').width;
         ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fillRect(x+3, mT+ph-16, tw+6, 14);
-        stext(ctx,'repeat', x+6, mT+ph-9, 10, cssv('--amber'),'left',true); labelled=true;
+        stext(ctx,'repeat', x+6, mT+ph-9, 10, cssv('--amber'),'left',true); labeled=true;
         ctx.setLineDash([5,4]);
       }
     }

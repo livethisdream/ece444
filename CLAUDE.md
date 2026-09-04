@@ -198,7 +198,7 @@ landing page and the five module overviews are built the same way.
 
 **The shell**
 
-Every page is chrome-free: no sidebar, no header, one centred bar at the bottom
+Every page is chrome-free: no sidebar, no header, one centerd bar at the bottom
 (`ECE 444 | present tools | 12/27`). `book/_ext/frames.py` routes each page to
 `frame.html`, `page.html`, or the theme. Two things to know before touching it:
 
@@ -251,6 +251,11 @@ Every page is chrome-free: no sidebar, no header, one centred bar at the bottom
   difference between fitting a phone and not, so keep widget-frame titles short
   enough to sit on one line at 390.
 - **No thin spaces** (U+2009) anywhere in markdown or LaTeX — course rule.
+- **American spelling, everywhere** (Neil, 2026-09-03: "stop that, globally"): color,
+  center, gray, canceling, labeled, license, judgment, -ize. Prose, comments,
+  widget labels, and code identifiers alike; the sweep that enforced it is the
+  regex in the 2026-09-03 commit, and `grep -rniE 'colour|centre|grey'` should
+  come back empty outside `_build`, `node_modules` and vendored code.
 - Practice problems are labeled at the **2nd LO level**, one `LO 1.X` banner per
   set.
 

@@ -335,12 +335,12 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; 
     }
     ctx.stroke(); ctx.restore();
 
-    // marker + the Gamma vector from centre
+    // marker + the Gamma vector from center
     var mp = at(state.fm);
     var mx = GX(mp.g), my = GY(mp.g);
     line(ctx, cx, cy, mx, my, '#8a5a00', 1.2, [4, 3]);
     ctx.fillStyle = '#8a5a00'; ctx.beginPath(); ctx.arc(mx, my, 4.4, 0, 6.2832); ctx.fill();
-    // centre cross
+    // center cross
     line(ctx, cx - 5, cy, cx + 5, cy, '#5b6573', 1.2);
     line(ctx, cx, cy - 5, cx, cy + 5, '#5b6573', 1.2);
 

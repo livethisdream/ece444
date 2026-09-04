@@ -37,7 +37,7 @@
   /* Release scroll snapping while the reader is pinched in -- see the
      `body.zoomed` block in frames.css for why. Guarded because visualViewport
      is absent in older browsers and in some embedded webviews; without it the
-     class is simply never stamped and behaviour is what it was. */
+     class is simply never stamped and behavior is what it was. */
   var vv = window.visualViewport;
   if (vv) {
     var syncZoom = function () {
@@ -253,7 +253,7 @@
     document.documentElement.setAttribute('data-mode', m);
     segPresent.setAttribute('aria-pressed', m === 'present');
     segRead.setAttribute('aria-pressed', m === 'read');
-    /* The panel is usually shut, so the button IS the readout: labelled with
+    /* The panel is usually shut, so the button IS the readout: labeled with
        the mode in force, the way a select shows its current value. */
     document.getElementById('btnMode').textContent = m;
     if (remember) { try { localStorage.setItem(MODE_KEY, m); } catch (err) {} }

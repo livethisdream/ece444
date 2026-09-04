@@ -293,7 +293,7 @@ Lesson 5 defined the reactive near field as the region where energy is stored ra
 
 ::::{frame} Not instrument error — real physics
 
-None of this is instrument error. It is a real change in the antenna's input impedance, and the same physics reappears in Module 3 as **mutual impedance** between array elements. When you put your hand near a dipole today, you are running a one-element preview of what neighbours in an array do to each other.
+None of this is instrument error. It is a real change in the antenna's input impedance, and the same physics reappears in Module 3 as **mutual impedance** between array elements. When you put your hand near a dipole today, you are running a one-element preview of what neighbors in an array do to each other.
 
 ::::
 
@@ -358,7 +358,7 @@ Two failure modes account for most bad lab data. The first is calibrating with o
 
 One page, submitted at the start of Lesson 15:
 
-1. **An annotated $\vert S_{11}\vert$ plot.** Resonance marked, both −10 dB crossings marked, axes labelled with units.
+1. **An annotated $\vert S_{11}\vert$ plot.** Resonance marked, both −10 dB crossings marked, axes labeled with units.
 2. **A results table**: $f_0$, $Z$ at resonance, −10 dB bandwidth in MHz and in percent, for all three perturbation configurations.
 3. **A Smith-chart screenshot** with the resonance point marked, and one sentence identifying it as the real-axis crossing.
 4. **A paragraph on the perturbation results.** What moved, in which direction, by how much, and why. Connect at least one observation to the near-field argument in Part 4.
@@ -408,7 +408,7 @@ A plot with no markers and no units is a screenshot rather than a measurement, a
 Lesson 14 measures the half of the problem this lab cannot reach. A VNA tells you power went *in*; only a pattern range tells you it came back *out*, and in which direction. Together the two labs give you match, pattern, and gain — the complete characterization of a single element, and the efficiency question Part 4 left open.
 
 :::{depth}
-Further out, the skills compound. Module 3 builds arrays from these elements, and every element in an array sees its neighbours as a mutual impedance — precisely the $S_{11}$ shift you produced with your hand. And the midterm project due at Lesson 20 asks you to design, build, tune, and defend an antenna. Tuning *is* this lab: measure, read the sign of the reactance, trim, measure again. Calibration and Smith-chart fluency are the rate-limiting skills on that project. Practice both in this lab, where the cost of a mistake is an afternoon rather than a week.
+Further out, the skills compound. Module 3 builds arrays from these elements, and every element in an array sees its neighbors as a mutual impedance — precisely the $S_{11}$ shift you produced with your hand. And the midterm project due at Lesson 20 asks you to design, build, tune, and defend an antenna. Tuning *is* this lab: measure, read the sign of the reactance, trim, measure again. Calibration and Smith-chart fluency are the rate-limiting skills on that project. Practice both in this lab, where the cost of a mistake is an afternoon rather than a week.
 :::
 
 ::::

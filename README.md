@@ -138,7 +138,7 @@ TEXINPUTS=/workspace/latex-tools/tex/latex//: bash latex/build_lab.sh L04_Matchi
 ```
 
 Photographs live in `latex/figures/` and are detected with `\IfFileExists`, so
-the packet compiles either way — with the photos if present, with labelled
+the packet compiles either way — with the photos if present, with labeled
 placeholder boxes if not. Size them with `width=`, never `scale=`: `scale=` is
 tied to the pixel dimensions of whatever image was there when you tuned it, and
 a replacement silently runs off the margin. Store photos at print resolution

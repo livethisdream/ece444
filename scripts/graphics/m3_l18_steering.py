@@ -26,7 +26,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
-NAVY, BLUE, RED, GREEN, AMBER, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, AMBER, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 
 FIG = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
@@ -41,8 +41,8 @@ plt.rcParams.update(
         "font.size": 13,
         "axes.edgecolor": "#8a929c",
         "axes.labelcolor": INK,
-        "xtick.color": GREY,
-        "ytick.color": GREY,
+        "xtick.color": GRAY,
+        "ytick.color": GRAY,
         "text.color": INK,
         "axes.linewidth": 1.0,
         "legend.frameon": False,
@@ -88,7 +88,7 @@ def path_difference() -> None:
     ax.axis("off")
 
     xs = np.arange(N) * 1.0
-    ax.plot([-0.6, N - 0.4], [0, 0], color=GREY, lw=1.2, zorder=1)
+    ax.plot([-0.6, N - 0.4], [0, 0], color=GRAY, lw=1.2, zorder=1)
     for i, x in enumerate(xs):
         ax.add_patch(plt.Rectangle((x - 0.16, -0.12), 0.32, 0.24,
                                    facecolor="white", edgecolor=NAVY, lw=1.6, zorder=3))
@@ -126,8 +126,8 @@ def path_difference() -> None:
     ax.text((a + b) / 2, -0.34, "d", color=NAVY, fontsize=14, ha="center", va="top", style="italic")
 
     # broadside reference and the scan angle
-    ax.plot([b, b], [0, 2.6], color=GREY, lw=1.1, ls=":", zorder=2)
-    ax.text(b, 2.68, "broadside", color=GREY, fontsize=11.5, ha="center", va="bottom")
+    ax.plot([b, b], [0, 2.6], color=GRAY, lw=1.1, ls=":", zorder=2)
+    ax.text(b, 2.68, "broadside", color=GRAY, fontsize=11.5, ha="center", va="bottom")
     arc = np.linspace(0, t0, 60)
     r = 1.5
     ax.plot(b + r * np.sin(arc), r * np.cos(arc), color=INK, lw=1.1)
@@ -136,8 +136,8 @@ def path_difference() -> None:
     ax.plot([b, b + 2.6 * u[0]], [0, 2.6 * u[1]], color=INK, lw=1.2)
 
     for i, x in enumerate(xs):
-        ax.text(x, -0.5, f"{i}", color=GREY, fontsize=11, ha="center", va="top")
-    ax.text(-0.6, -0.95, "element number", color=GREY, fontsize=11.5, ha="left", va="top")
+        ax.text(x, -0.5, f"{i}", color=GRAY, fontsize=11, ha="center", va="top")
+    ax.text(-0.6, -0.95, "element number", color=GRAY, fontsize=11.5, ha="left", va="top")
 
     ax.set_xlim(-1.2, N + 2.6)
     ax.set_ylim(-1.3, 3.5)
@@ -188,9 +188,9 @@ def sin_space() -> None:
     fig, axes = plt.subplots(1, 2, figsize=(8.8, 3.8))
 
     ax = axes[0]
-    ax.plot(th, af_db(th, 0.0), color=GREY, lw=1.6)
+    ax.plot(th, af_db(th, 0.0), color=GRAY, lw=1.6)
     ax.plot(th, af_db(th, 45.0), color=NAVY, lw=2.0)
-    ax.text(-2, 1.2, "broadside", color=GREY, fontsize=11.5, ha="right", va="bottom")
+    ax.text(-2, 1.2, "broadside", color=GRAY, fontsize=11.5, ha="right", va="bottom")
     ax.text(47, 1.2, "steered", color=NAVY, fontsize=11.5, ha="left", va="bottom")
     ax.set_xlim(-90, 90)
     ax.set_xticks([-90, -45, 0, 45, 90])
@@ -200,7 +200,7 @@ def sin_space() -> None:
 
     ax = axes[1]
     s = np.sin(np.radians(th))
-    ax.plot(s, af_db(th, 0.0), color=GREY, lw=1.6)
+    ax.plot(s, af_db(th, 0.0), color=GRAY, lw=1.6)
     ax.plot(s, af_db(th, 45.0), color=NAVY, lw=2.0)
     ax.annotate("", xy=(0.707, -6), xytext=(0.0, -6),
                 arrowprops=dict(arrowstyle="-|>", color=RED, lw=1.6))
@@ -232,7 +232,7 @@ def broadening() -> None:
     ax.axis("off")
 
     xs = np.arange(N) * 1.0
-    ax.plot([-0.5, L + 0.5], [0, 0], color=GREY, lw=1.2)
+    ax.plot([-0.5, L + 0.5], [0, 0], color=GRAY, lw=1.2)
     for x in xs:
         ax.add_patch(plt.Rectangle((x - 0.16, -0.12), 0.32, 0.24,
                                    facecolor="white", edgecolor=NAVY, lw=1.6, zorder=3))
@@ -252,8 +252,8 @@ def broadening() -> None:
     ax.text(mid[0] + 0.95 * u[0], mid[1] + 0.95 * u[1], "projected length",
             color=RED, fontsize=12.5, ha="center", va="bottom")
 
-    ax.plot([L, L], [0, 3.4], color=GREY, lw=1.1, ls=":")
-    ax.text(L, 3.5, "broadside", color=GREY, fontsize=11.5, ha="center", va="bottom")
+    ax.plot([L, L], [0, 3.4], color=GRAY, lw=1.1, ls=":")
+    ax.text(L, 3.5, "broadside", color=GRAY, fontsize=11.5, ha="center", va="bottom")
     arc = np.linspace(0, t0, 60)
     r = 2.0
     ax.plot(L + r * np.sin(arc), r * np.cos(arc), color=INK, lw=1.1)
@@ -270,7 +270,7 @@ def steered_patterns() -> None:
     """Static fallback for the widget: four commanded angles on one axis."""
     th = np.linspace(-90, 90, 6001)
     fig, ax = plt.subplots(figsize=(8.6, 4.1))
-    for t0, c, lw in ((0, GREY, 1.6), (30, BLUE, 1.7), (45, NAVY, 1.9), (60, AMBER, 1.9)):
+    for t0, c, lw in ((0, GRAY, 1.6), (30, BLUE, 1.7), (45, NAVY, 1.9), (60, AMBER, 1.9)):
         ax.plot(th, af_db(th, t0), color=c, lw=lw, label=f"{t0}°")
     ax.axhline(-3, color=GREEN, lw=1.0, ls="--")
     ax.text(88, -2.6, "half power", color=GREEN, fontsize=11, ha="right", va="bottom")

@@ -31,7 +31,7 @@ is the skill.
 :::{depth}
 You will simulate a dipole and predict its impedance, then walk to the VNA and
 measure the same antenna. Expect the two to differ. The gap between a model
-and a measurement is where engineering judgement lives, and it is far more
+and a measurement is where engineering judgment lives, and it is far more
 useful than either number on its own.
 :::
 ::::

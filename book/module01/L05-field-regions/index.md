@@ -521,7 +521,7 @@ have described qualitatively so far.
 Watch for one specific move in that derivation. Expanding the distance from a
 source point to the observer gives a linear term and a quadratic one, and *throwing the quadratic
 term away* is what defines the far field. That discarded term is the
-path difference $D^2/8r$ from this lesson, and the licence to drop it is the
+path difference $D^2/8r$ from this lesson, and the license to drop it is the
 $\pi/8$ tolerance — so "the far-field approximation" in Lesson 6 and
 $r \ge 2D^2/\lambda$ here are the same statement, one written as an integral and
 one as a distance.

@@ -14,7 +14,7 @@
    it, it retracts while you are reading forward and comes back the moment you
    scroll up, reach for it, or open something. */
 .hud { transition: transform .22s ease, opacity .22s ease; }
-/* Both transforms, together: .hud is centred with translateX(-50%), and a
+/* Both transforms, together: .hud is centerd with translateX(-50%), and a
    bare translateY here would replace it and snap the bar to the left half. */
 body.chrome-away .hud { transform: translateX(-50%) translateY(160%); opacity: 0; }
 @media (prefers-reduced-motion: reduce) {

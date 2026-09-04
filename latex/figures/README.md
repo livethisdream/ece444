@@ -2,7 +2,7 @@
 
 `ECE444_Lab_L04_Matching.tex` looks for these here. They are detected with
 `\IfFileExists`, so the packet compiles either way — with the photographs if
-they are present, with labelled placeholder boxes if not. Nothing in the
+they are present, with labeled placeholder boxes if not. Nothing in the
 source needs editing to switch between the two.
 
 | File | What it shows | Used in |
@@ -10,7 +10,7 @@ source needs editing to switch between the two.
 | `vna_annotated.jpg` | The NanoVNA with callouts: on/off switch, touch screen, input buttons, Ch 0 (source / reflection), Ch 1 (transmission), SMA cable | Familiarization views, left panel |
 | `nano_vna_initial.jpg` | The NanoVNA screen with the four default traces overlaid | Familiarization views, right panel |
 | `annotated_vna_readout.jpg` | The same screen with the marker readout called out — trace/scale, marker value, marker frequency | Reading the display, Part I |
-| `cal_standards_annotated.jpg` | The three SMA calibration standards, labelled load / short / open | Calibration, Part I |
+| `cal_standards_annotated.jpg` | The three SMA calibration standards, labeled load / short / open | Calibration, Part I |
 | `vna_front.jpg` | The unannotated NanoVNA — the source photograph `vna_annotated.png` was drawn over. Not used by the packet; kept so the callouts can be redrawn. | — |
 
 `annotated_vna_readout.jpg` is **generated**, not photographed:

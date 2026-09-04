@@ -312,7 +312,7 @@ null, and the beamformer never has to be told where it is.
 
 ::::{frame} The manual beamformer is captured
 
-The manual beamformer is captured by the interferer: with $10$ dB in its favour,
+The manual beamformer is captured by the interferer: with $10$ dB in its favor,
 the second source dominates the received power and the trace peaks toward it.
 MVDR holds the look direction and pushes its response toward the interferer down
 by $17$ to $19$ dB. That difference between the two traces, read at the

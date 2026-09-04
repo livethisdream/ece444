@@ -166,7 +166,7 @@ function measure(){
 function extract(db){
   const M=db.length;
   let ip=0; for(let i=1;i<M;i++) if(db[i]>db[ip]) ip=i;
-  // -3 dB crossing: the first sample at or below -3 dB whose neighbour is
+  // -3 dB crossing: the first sample at or below -3 dB whose neighbor is
   // also below, so one noisy sample cannot close the beam early
   function cross(dir){
     for(let i=ip;i>=0&&i<M;i+=dir){

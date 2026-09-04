@@ -95,7 +95,7 @@ def main():
                 for f in frames:
                     # No exemption for scrollable frames. A widget frame that
                     # scrolls is hiding its own controls below the fold, which
-                    # is the defect, not a licence for it. Course rule: a
+                    # is the defect, not a license for it. Course rule: a
                     # graphic fits the span of one frame or it gets laid out
                     # until it does.
                     if f["scrolls"]:

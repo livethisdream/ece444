@@ -23,7 +23,7 @@ They encode decisions already made — follow them rather than re-deriving them:
   from my own review corrections. Read it before writing any prose. It also
   records what *not* to flatten.
 - **`REVIEW.md`** — the review rubric: which checks are mechanical and which
-  need judgement.
+  need judgment.
 
 Also read `project/ECE444_PROJECT.md` for running status and decisions, and
 update its Status/ToDo sections when you finish. It is shared across

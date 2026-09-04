@@ -31,7 +31,7 @@ import numpy as np
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = (
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = (
     "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a")
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
@@ -56,7 +56,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -103,8 +103,8 @@ def taper_traces() -> None:
         th, db = swept(g, seed=3 + i)
         ax.plot(th, db, color=COLORS[name], lw=2.0 if name == "Uniform" else 1.7,
                 label=name)
-    ax.axhline(FLOOR, color=GREY, lw=1.1, ls=(0, (4, 3)))
-    ax.text(-58, FLOOR - 2.6, "noise floor", color=GREY, fontsize=11.5)
+    ax.axhline(FLOOR, color=GRAY, lw=1.1, ls=(0, (4, 3)))
+    ax.text(-58, FLOOR - 2.6, "noise floor", color=GRAY, fontsize=11.5)
     ax.set_xlim(-60, 60)
     ax.set_ylim(-30, 3)
     ax.set_xticks(range(-60, 61, 15))
@@ -146,7 +146,7 @@ def two_numbers() -> None:
     for b, v, c in zip(bars, vals, cols):
         ax.text(v - 0.18, b.get_y() + b.get_height() / 2, f"−{abs(v):.1f} dB",
                 va="center", ha="right", color=c, fontsize=13.5, fontweight="bold")
-    ax.axvline(0, color=GREY, lw=1.2)
+    ax.axvline(0, color=GRAY, lw=1.2)
     ax.set_xlim(-6.0, 1.2)
     ax.set_xlabel("Change from uniform  (dB)")
     ax.set_xticks([-6, -5, -4, -3, -2, -1, 0])
@@ -169,11 +169,11 @@ def custom_target() -> None:
     g = 100 * (1 - 0.60 * u)
     fig, ax = plt.subplots(figsize=(7.4, 3.7))
     th, db = swept(PRESETS["Uniform"], seed=3)
-    ax.plot(th, db, color=GREY, lw=1.4, label="Uniform")
+    ax.plot(th, db, color=GRAY, lw=1.4, label="Uniform")
     th, db = swept(g, seed=11)
     ax.plot(th, db, color=NAVY, lw=2.1, label="Custom  40 / 57 / 74 / 91 %")
     ax.axhline(-20, color=RED, lw=1.3, ls=(0, (5, 3)), label="Design target")
-    ax.axhline(FLOOR, color=GREY, lw=1.1, ls=(0, (4, 3)), label="Noise floor")
+    ax.axhline(FLOOR, color=GRAY, lw=1.1, ls=(0, (4, 3)), label="Noise floor")
     ax.set_xlim(-60, 60)
     ax.set_ylim(-30, 3)
     ax.set_xticks(range(-60, 61, 15))

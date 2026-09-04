@@ -31,7 +31,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, AMBER, GREY = (
+NAVY, BLUE, RED, GREEN, AMBER, GRAY = (
     "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5a5a5a")
 INK, RULE = "#1a1a1a", "#c7d2e0"
 OUT = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
@@ -44,7 +44,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -64,7 +64,7 @@ def finalize(fig, name: str) -> None:
 
 def af_db(theta_deg, n_on, d_m, lam, phase=None):
     """Array factor in dB for `n_on` isotropic elements at spacing d_m, with an
-    optional per-element commanded phase (radians). Peak normalised to 0 dB."""
+    optional per-element commanded phase (radians). Peak normalize to 0 dB."""
     n = np.arange(n_on)
     kd = 2 * np.pi * d_m / lam
     a = np.zeros(n_on) if phase is None else phase
@@ -86,7 +86,7 @@ def style_db_axis(ax, xlo=-90, xhi=90, xstep=30):
 # --------------------------------------------------------------------------
 def grating_thinning() -> None:
     """Thin the 14 mm row and watch full-height lobes walk into visible space."""
-    lam = C / 10.3e9                       # array design centre, 29.1 mm
+    lam = C / 10.3e9                       # array design center, 29.1 mm
     th = np.linspace(-90, 90, 6001)
     cases = [(14e-3, 8, "14 mm - all 8 elements"),
              (28e-3, 4, "28 mm - every 2nd element"),
@@ -151,9 +151,9 @@ def squint_band() -> None:
                     arrowprops=None if dx == 0 else
                     dict(arrowstyle="-", color=col, lw=1.0))
 
-    ax.axvline(th0, color=GREY, lw=1.1, ls=(0, (3, 3)))
+    ax.axvline(th0, color=GRAY, lw=1.1, ls=(0, (3, 3)))
     ax.annotate("commanded 45°", xy=(th0, -33), xytext=(th0 - 1.5, -33),
-                color=GREY, fontsize=11, ha="right")
+                color=GRAY, fontsize=11, ha="right")
     style_db_axis(ax, xlo=15, xhi=75, xstep=10)
     ax.set_ylim(FLOOR, 11)
     ax.set_yticks(np.arange(FLOOR, 1, 10))
@@ -184,7 +184,7 @@ def quant_staircase() -> None:
                                    gridspec_kw={"width_ratios": [1.0, 1.25]})
 
     en = n + 1                                   # Rx1..Rx8, as the GUI labels them
-    axL.plot(en, lag(ideal), color=GREY, lw=1.6, ls=(0, (4, 3)),
+    axL.plot(en, lag(ideal), color=GRAY, lw=1.6, ls=(0, (4, 3)),
              marker="o", ms=5, mfc="white", label="ideal ramp")
     axL.step(en, lag(q(2)), where="mid", color=RED, lw=2.2, label="2-bit steps")
     axL.step(en, lag(q(4)), where="mid", color=NAVY, lw=2.0, label="4-bit steps")
@@ -197,7 +197,7 @@ def quant_staircase() -> None:
     axL.set_axisbelow(True)
     axL.legend(loc="upper left", fontsize=11)
 
-    for bits, col, lw, lab in ((None, GREY, 1.5, "ideal"),
+    for bits, col, lw, lab in ((None, GRAY, 1.5, "ideal"),
                                (4, NAVY, 2.0, "4 bits"),
                                (2, RED, 2.2, "2 bits")):
         ph = ideal if bits is None else q(bits)

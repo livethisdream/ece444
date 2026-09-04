@@ -127,7 +127,7 @@ tallest sidelobe. That order is the order of the table they fill in.
 <div class="fig" data-inline-svg="./fig/L21-ideal-vs-measured.svg" style="max-width:750px; margin:0 auto;"></div>
 
 Note:
-Grey is the array factor, blue is what the sweep returns. Point out that the
+Gray is the array factor, blue is what the sweep returns. Point out that the
 main lobe agrees almost exactly and everything below about twenty decibels
 does not.
 

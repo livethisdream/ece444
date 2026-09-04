@@ -578,7 +578,7 @@ before you touch the slider.
 
 ::::{frame} The chart's grid and VSWR circles
 
-- **The faint grey grid** is the chart itself, printed once and never moving.
+- **The faint gray grid** is the chart itself, printed once and never moving.
   The circles that all pass through the right-hand point are lines of constant
   resistance; the arcs curving away from that point are lines of constant
   reactance. Together they let you read an impedance off any position.

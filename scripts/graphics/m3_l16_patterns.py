@@ -35,7 +35,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
 NAVY, BLUE, RED = "#004a85", "#0067b9", "#b01e24"
-GREEN, AMBER, GREY = "#1d7a4d", "#8a5a00", "#5a5a5a"
+GREEN, AMBER, GRAY = "#1d7a4d", "#8a5a00", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -47,8 +47,8 @@ plt.rcParams.update(
         "font.size": 12,
         "axes.edgecolor": "#8a929c",
         "axes.labelcolor": INK,
-        "xtick.color": GREY,
-        "ytick.color": GREY,
+        "xtick.color": GRAY,
+        "ytick.color": GRAY,
         "text.color": INK,
         "axes.linewidth": 1.0,
         "legend.frameon": False,
@@ -144,8 +144,8 @@ def anatomy() -> None:
     )
     ax.text(0, 0.6, "half-power width  13.2°", color=GREEN, fontsize=11, ha="center")
     ax.text(-86, -6.5, "main lobe", color=NAVY, fontsize=11, ha="left")
-    ax.text(-86, -10.2, "6 sidelobes in view", color=GREY, fontsize=10.5, ha="left")
-    ax.text(88, -37.6, "N = 8, spacing 0.481 wavelength", color=GREY, fontsize=10.5, ha="right")
+    ax.text(-86, -10.2, "6 sidelobes in view", color=GRAY, fontsize=10.5, ha="left")
+    ax.text(88, -37.6, "N = 8, spacing 0.481 wavelength", color=GRAY, fontsize=10.5, ha="right")
     finalize(fig, "L16-af-anatomy")
 
 
@@ -159,7 +159,7 @@ def pattern_multiplication() -> None:
     for ax, (y, c, ttl) in zip(
         axes,
         [
-            (ef, GREY, "Element factor"),
+            (ef, GRAY, "Element factor"),
             (af, BLUE, "Array factor"),
             (ef * af, NAVY, "Total pattern"),
         ],
@@ -171,7 +171,7 @@ def pattern_multiplication() -> None:
     axes[0].set_ylabel("Relative power (dB)")
     axes[2].plot(th, db(af), color=BLUE, lw=0.9, ls=(0, (3, 3)))
     axes[2].text(-86, -37.5, "array factor dashed", color=BLUE, fontsize=9.5, ha="left")
-    axes[0].text(-86, -37.5, "short dipole element", color=GREY, fontsize=9.5, ha="left")
+    axes[0].text(-86, -37.5, "short dipole element", color=GRAY, fontsize=9.5, ha="left")
     fig.subplots_adjust(wspace=0.22)
     finalize(fig, "L16-pattern-multiplication")
 
@@ -190,8 +190,8 @@ def visible_region() -> None:
     for ax, (half, color, ttl) in zip(axes, cases):
         ax.plot(psi, y, color=NAVY, lw=1.6)
         ax.axvspan(-620, -half, color="#ffffff", alpha=0.0, lw=0)
-        ax.add_patch(plt.Rectangle((-620, -40), 620 - half, 44, color=GREY, alpha=0.16, lw=0))
-        ax.add_patch(plt.Rectangle((half, -40), 620 - half, 44, color=GREY, alpha=0.16, lw=0))
+        ax.add_patch(plt.Rectangle((-620, -40), 620 - half, 44, color=GRAY, alpha=0.16, lw=0))
+        ax.add_patch(plt.Rectangle((half, -40), 620 - half, 44, color=GRAY, alpha=0.16, lw=0))
         for s_ in (-1, 1):
             ax.plot([s_ * half, s_ * half], [-40, 4], color=color, lw=1.8)
         ax.set_xlim(-620, 620)
@@ -212,7 +212,7 @@ def visible_region() -> None:
         color=RED, fontsize=10.5, ha="center",
         arrowprops=dict(arrowstyle="-", color=RED, lw=0.9),
     )
-    axes[0].text(-600, -34, "out of view", color=GREY, fontsize=10, ha="left")
+    axes[0].text(-600, -34, "out of view", color=GRAY, fontsize=10, ha="left")
     fig.subplots_adjust(hspace=0.42)
     finalize(fig, "L16-visible-region")
 
@@ -224,7 +224,7 @@ def builder_static() -> None:
     ef = np.abs(np.cos(np.radians(th)))
 
     fig, ax = plt.subplots(figsize=(7.9, 3.5))
-    ax.plot(th, db(ef), color=GREY, lw=1.2, ls=(0, (4, 3)))
+    ax.plot(th, db(ef), color=GRAY, lw=1.2, ls=(0, (4, 3)))
     ax.plot(th, db(af), color=NAVY, lw=2.0)
     ax.plot(th, db(af * ef), color=BLUE, lw=1.5)
     style_db_axes(ax)
@@ -232,12 +232,12 @@ def builder_static() -> None:
     ax.set_ylabel("Relative power (dB)")
     ax.text(-88, 3.4, "array factor", color=NAVY, fontsize=10.5, ha="left")
     ax.text(0, 3.4, "element × array", color=BLUE, fontsize=10.5, ha="center")
-    ax.text(88, 3.4, "element factor", color=GREY, fontsize=10.5, ha="right")
+    ax.text(88, 3.4, "element factor", color=GRAY, fontsize=10.5, ha="right")
     fig.text(
         0.5, -0.135,
         "N = 8   ·   spacing 0.481 wavelength   ·   half-power width 13.2°   ·   "
         "first null 15.1°   ·   first sidelobe −12.8 dB   ·   no grating lobes",
-        color=GREY, fontsize=9.5, ha="center",
+        color=GRAY, fontsize=9.5, ha="center",
     )
     finalize(fig, "L16-af-builder")
 
@@ -276,17 +276,17 @@ def array_geometry() -> None:
     svg = f"""<svg viewBox="0 0 790 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five array elements on a straight line radiating toward a far-field direction tilted off broadside, with the extra path length each element adds marked in red between the element line and a common equiphase front">
 <defs>
 <marker id="l16arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="{BLUE}"/></marker>
-<marker id="l16grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="{GREY}"/></marker>
+<marker id="l16grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="{GRAY}"/></marker>
 </defs>
 <g style="font-family:inherit">
 
-<line x1="90" y1="{y0}" x2="660" y2="{y0}" stroke="{GREY}" stroke-width="1.2" stroke-dasharray="6 5"/>
-<text x="96" y="{y0 - 12}" font-size="12.5" fill="{GREY}">array axis</text>
+<line x1="90" y1="{y0}" x2="660" y2="{y0}" stroke="{GRAY}" stroke-width="1.2" stroke-dasharray="6 5"/>
+<text x="96" y="{y0 - 12}" font-size="12.5" fill="{GRAY}">array axis</text>
 
 {ray_svg}
-<line x1="{xs[2]}" y1="{y0}" x2="{xs[2]}" y2="{y0 - 190}" stroke="{GREY}" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#l16grey)"/>
-<text x="{xs[2] - 8}" y="{y0 - 196}" font-size="12.5" fill="{GREY}" text-anchor="end">broadside</text>
-<path d="M {xs[2]} {y0 - 96} A 96 96 0 0 1 {xs[2] + 96 * np.sin(t):.1f} {y0 - 96 * np.cos(t):.1f}" fill="none" stroke="{GREY}" stroke-width="1.2"/>
+<line x1="{xs[2]}" y1="{y0}" x2="{xs[2]}" y2="{y0 - 190}" stroke="{GRAY}" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#l16grey)"/>
+<text x="{xs[2] - 8}" y="{y0 - 196}" font-size="12.5" fill="{GRAY}" text-anchor="end">broadside</text>
+<path d="M {xs[2]} {y0 - 96} A 96 96 0 0 1 {xs[2] + 96 * np.sin(t):.1f} {y0 - 96 * np.cos(t):.1f}" fill="none" stroke="{GRAY}" stroke-width="1.2"/>
 <text x="{xs[2] + 30}" y="{y0 - 110}" font-size="15" font-weight="700" fill="{INK}">&#952;</text>
 
 {front_svg}
@@ -299,7 +299,7 @@ def array_geometry() -> None:
 </g>
 <line x1="{xs[0]}" y1="{y0 + 62}" x2="{xs[1]}" y2="{y0 + 62}" stroke="{INK}" stroke-width="1.2" marker-start="url(#l16grey)" marker-end="url(#l16grey)"/>
 <text x="{(xs[0] + xs[1]) / 2}" y="{y0 + 80}" font-size="15" font-weight="700" fill="{INK}" text-anchor="middle">d</text>
-<text x="660" y="{y0 + 44}" font-size="12.5" fill="{GREY}">element number</text>
+<text x="660" y="{y0 + 44}" font-size="12.5" fill="{GRAY}">element number</text>
 </g>
 </svg>
 """
@@ -307,7 +307,7 @@ def array_geometry() -> None:
 
 
 def phasor_sum() -> None:
-    """Three phasor fans: aligned, partly cancelling, and closing on a null."""
+    """Three phasor fans: aligned, partly canceling, and closing on a null."""
     panels = [
         (0.0, "all in phase", "peak", NAVY),
         (26.0, "fanned out", "partial cancellation", AMBER),
@@ -319,7 +319,7 @@ def phasor_sum() -> None:
     for k, (step_deg, ttl, sub, color) in enumerate(panels):
         cx = 132 + k * 262
         cy = 170
-        # walk the phasor chain, then centre it in the panel
+        # walk the phasor chain, then center it in the panel
         pts = [(0.0, 0.0)]
         for n in range(N):
             a = np.radians(-n * step_deg)
@@ -347,7 +347,7 @@ def phasor_sum() -> None:
 {seg}
 {res}
 <text x="{cx}" y="{cy + 128}" font-size="13.5" font-weight="700" fill="{color}" text-anchor="middle">{ttl}</text>
-<text x="{cx}" y="{cy + 148}" font-size="12.5" fill="{GREY}" text-anchor="middle">{sub}</text>
+<text x="{cx}" y="{cy + 148}" font-size="12.5" fill="{GRAY}" text-anchor="middle">{sub}</text>
 </g>"""
         )
     markers = "".join(
@@ -357,7 +357,7 @@ def phasor_sum() -> None:
     svg = f"""<svg viewBox="0 0 790 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Eight element phasors added tip to tail in three cases: all aligned giving the largest sum, fanned out giving a shorter sum, and stepped by one eighth of a turn so the chain closes into a circle and the sum is zero">
 <defs>{markers}</defs>
 <g style="font-family:inherit">
-<text x="395" y="26" font-size="13.5" fill="{GREY}" text-anchor="middle">Eight element phasors added tip to tail; the sum runs from the first tail to the last tip</text>
+<text x="395" y="26" font-size="13.5" fill="{GRAY}" text-anchor="middle">Eight element phasors added tip to tail; the sum runs from the first tail to the last tip</text>
 {"".join(blocks)}
 </g>
 </svg>
@@ -379,10 +379,10 @@ def sampled_aperture() -> None:
     )
     svg = f"""<svg viewBox="0 0 790 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A continuous uniform aperture of length L above, and below it the same length occupied by eight equally spaced elements carrying the same total excitation">
 <g style="font-family:inherit">
-<text x="30" y="34" font-size="13.5" font-weight="700" fill="{GREY}">Continuous aperture</text>
-<rect x="{x0}" y="60" width="{x1 - x0}" height="34" fill="{GREY}" opacity="0.30"/>
-<line x1="{x0}" y1="60" x2="{x1}" y2="60" stroke="{GREY}" stroke-width="2.4"/>
-<line x1="{x0}" y1="94" x2="{x1}" y2="94" stroke="{GREY}" stroke-width="1.2"/>
+<text x="30" y="34" font-size="13.5" font-weight="700" fill="{GRAY}">Continuous aperture</text>
+<rect x="{x0}" y="60" width="{x1 - x0}" height="34" fill="{GRAY}" opacity="0.30"/>
+<line x1="{x0}" y1="60" x2="{x1}" y2="60" stroke="{GRAY}" stroke-width="2.4"/>
+<line x1="{x0}" y1="94" x2="{x1}" y2="94" stroke="{GRAY}" stroke-width="1.2"/>
 <text x="30" y="196" font-size="13.5" font-weight="700" fill="{NAVY}">Sampled by N elements</text>
 {ticks}
 <line x1="{x0}" y1="255" x2="{x1}" y2="255" stroke="{RULE}" stroke-width="1.4"/>
@@ -393,14 +393,14 @@ def sampled_aperture() -> None:
 <line x1="{x0}" y1="148" x2="{x0}" y2="164" stroke="{RED}" stroke-width="1.6"/>
 <line x1="{x1}" y1="148" x2="{x1}" y2="164" stroke="{RED}" stroke-width="1.6"/>
 <text x="{(x0 + x1) / 2}" y="140" font-size="14" font-weight="700" fill="{RED}" text-anchor="middle">same overall length</text>
-<text x="690" y="259" font-size="12.5" fill="{GREY}">beam width follows the length; the sampling sets what repeats</text>
+<text x="690" y="259" font-size="12.5" fill="{GRAY}">beam width follows the length; the sampling sets what repeats</text>
 </g>
 </svg>
 """
     # keep the trailing note inside the frame
     svg = svg.replace(
-        f'<text x="690" y="259" font-size="12.5" fill="{GREY}">beam width follows the length; the sampling sets what repeats</text>',
-        f'<text x="{(x0 + x1) / 2}" y="{330 - 8}" font-size="12.5" fill="{GREY}" text-anchor="middle">the length sets the beam width; the spacing sets what repeats</text>',
+        f'<text x="690" y="259" font-size="12.5" fill="{GRAY}">beam width follows the length; the sampling sets what repeats</text>',
+        f'<text x="{(x0 + x1) / 2}" y="{330 - 8}" font-size="12.5" fill="{GRAY}" text-anchor="middle">the length sets the beam width; the spacing sets what repeats</text>',
     )
     write("L16-sampled-aperture", svg)
 

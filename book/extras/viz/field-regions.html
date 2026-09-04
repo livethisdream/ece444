@@ -81,7 +81,7 @@ const cvP=document.getElementById('phase'), ctxP=cvP.getContext('2d');
 const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const state={ D:1.2, f:10e9, mult:1.0 };   // mult = r / (2D^2/lambda)
 
-function fmt(r){ // metres, human
+function fmt(r){ // meters, human
   if(r>=1000) return (r/1000).toFixed(2)+' km';
   if(r>=1) return r.toFixed(r<10?2:1)+' m';
   if(r>=0.01) return (r*100).toFixed(1)+' cm';
@@ -97,7 +97,7 @@ function derived(){
   const rRe=0.62*Math.sqrt(state.D**3/lam);
   const rFf=2*state.D**2/lam;
   const r=state.mult*rFf;
-  // honest path difference from the source to the aperture edge vs its centre
+  // honest path difference from the source to the aperture edge vs its center
   const del=Math.sqrt(r*r+(state.D/2)*(state.D/2))-r;
   const phi=360*del/lam;
   return {lam,rRe,rFf,r,del,phi};
@@ -218,7 +218,7 @@ function drawPhase(d){
   ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(split, 10); ctx.lineTo(split, h-10); ctx.stroke();
 
-  /* ---- left: source, spherical wavefront, aperture, edge-vs-centre path ----
+  /* ---- left: source, spherical wavefront, aperture, edge-vs-center path ----
      No caption here -- the lesson prose already explains what this panel
      shows (Neil's rule: don't restate in-graphic what the text says). */
   const yc=h*0.58, xs=30, xa=split-64, ah=Math.min(52, h*0.32);
@@ -299,7 +299,7 @@ function drawPhase(d){
   ctx.fillStyle=okc;
   for(const s of [-1,1]){ ctx.beginPath(); ctx.arc(xp(s*state.D/2), yp(Math.min(d.phi,top)), 3.6, 0, 7); ctx.fill(); }
 
-  stext(ctx,'centre', xp(0), mT+ph+12, 10, cssv('--ink3'),'center',false);
+  stext(ctx,'center', xp(0), mT+ph+12, 10, cssv('--ink3'),'center',false);
   stext(ctx,'edge', mL, mT+ph+12, 10, cssv('--ink3'),'left',false);
   stext(ctx,'edge', mL+pw, mT+ph+12, 10, cssv('--ink3'),'right',false);
   stext(ctx, ok?'inside the far field':'too close: the wave is still curved',

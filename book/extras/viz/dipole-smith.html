@@ -243,10 +243,10 @@ function drawLocus(){
 }
 
 /* ---------------------------------------------------------------------------
-   A colour key, not a caption. The lesson page names every element and states
+   A color key, not a caption. The lesson page names every element and states
    what the real-axis crossing means; repeating that prose inside the canvas
    both duplicated the page and squeezed the chart into the left 60% of the
-   frame. What stays here is the minimum a reader needs to map colour ->
+   frame. What stays here is the minimum a reader needs to map color ->
    thing, laid out as a horizontal strip under the chart so it costs height,
    not width. --------------------------------------------------------------- */
 const KEY=[[cssv('--edge2'),'dash','grid'],
@@ -256,7 +256,7 @@ const KEY=[[cssv('--edge2'),'dash','grid'],
            [cssv('--grn'),  'dot', 'resonance']];
 const KEY_FS=11, KEY_ROW=17, KEY_GAP=16;
 
-// pack the key into as few centred rows as the width allows
+// pack the key into as few centerd rows as the width allows
 function keyRows(w){
   ctx.font=KEY_FS+'px '+SANS;
   const avail=Math.max(60, w-20);

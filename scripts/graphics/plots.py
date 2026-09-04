@@ -30,7 +30,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 OUT = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
 
@@ -39,7 +39,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -99,7 +99,7 @@ def gain_polar() -> None:
     ax.set_rlabel_position(112)
     ax.set_thetagrids(range(0, 360, 30), fontsize=10)
     ax.grid(color=RULE, linewidth=0.8)
-    ax.plot(phi, iso, color=GREY, lw=1.6, ls=(0, (5, 4)), label="Isotropic  0 dBi")
+    ax.plot(phi, iso, color=GRAY, lw=1.6, ls=(0, (5, 4)), label="Isotropic  0 dBi")
     ax.plot(phi, dip, color=GREEN, lw=2.0, label="λ/2 dipole  2.15 dBi")
     ax.plot(phi, horn, color=BLUE, lw=2.2, label="Horn  16 dBi")
     ax.plot(phi, dish, color=NAVY, lw=2.4, label="Dish (D/λ=10)  28 dBi")
@@ -187,7 +187,7 @@ def plf_cos2() -> None:
     # the three rows of the cheat sheet, marked on the curve
     for t, lab, col, xy in ((0.0, "0 dB", GREEN, (7, 0.85)),
                             (45.0, "−3 dB", RED, (52, 0.64)),
-                            (90.0, "−∞ dB", GREY, (58, 0.17))):
+                            (90.0, "−∞ dB", GRAY, (58, 0.17))):
         v = float(np.cos(np.deg2rad(t)) ** 2)
         ax.plot(t, v, "o", color=col, ms=7, zorder=5)
         ax.annotate(lab, xy=(t, v), xytext=xy, color=col, fontsize=12.5, fontweight="bold",
@@ -202,9 +202,9 @@ def plf_cos2() -> None:
     ins.plot([-np.cos(tilt), np.cos(tilt)], [-np.sin(tilt), np.sin(tilt)],
              color=RED, lw=3.2, solid_capstyle="round")
     a = np.linspace(0, tilt, 60)
-    ins.plot(0.45 * np.cos(a), 0.45 * np.sin(a), color=GREY, lw=1.4)
+    ins.plot(0.45 * np.cos(a), 0.45 * np.sin(a), color=GRAY, lw=1.4)
     ins.text(0.62 * np.cos(tilt / 2), 0.62 * np.sin(tilt / 2), "ψ",
-             color=GREY, fontsize=13, fontweight="bold", ha="center", va="center")
+             color=GRAY, fontsize=13, fontweight="bold", ha="center", va="center")
     ins.set_xlim(-1.25, 1.25); ins.set_ylim(-1.05, 1.05)
     ins.set_aspect("equal"); ins.set_xticks([]); ins.set_yticks([])
     ins.patch.set_alpha(0)
@@ -233,10 +233,10 @@ def chu_q_vs_ka() -> None:
     ax.set_xticklabels(["0.2", "0.5", "1", "2", "3"])
     ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
 
-    ax.axvline(1.0, color=GREY, lw=1.4, ls=(0, (4, 3)), zorder=2)
-    ax.text(0.98, 250, "ka = 1", color=GREY, fontsize=12, fontweight="bold",
+    ax.axvline(1.0, color=GRAY, lw=1.4, ls=(0, (4, 3)), zorder=2)
+    ax.text(0.98, 250, "ka = 1", color=GRAY, fontsize=12, fontweight="bold",
             ha="right", va="center")
-    ax.text(0.165, 0.45, "electrically small", color=GREY, fontsize=12,
+    ax.text(0.165, 0.45, "electrically small", color=GRAY, fontsize=12,
             fontweight="bold", ha="left", va="bottom")
 
     ax.plot(1.0, 2.0, "o", color=ORANGE, ms=7, zorder=5)
@@ -253,7 +253,7 @@ def chu_q_vs_ka() -> None:
     # inset: the enclosing sphere that sets ka
     ins = ax.inset_axes((0.56, 0.58, 0.38, 0.40))
     t = np.linspace(0, 2 * np.pi, 200)
-    ins.plot(np.cos(t), np.sin(t), color=GREY, lw=1.5, ls=(0, (4, 3)))
+    ins.plot(np.cos(t), np.sin(t), color=GRAY, lw=1.5, ls=(0, (4, 3)))
     zx = np.linspace(-0.45, 0.45, 200)
     ins.plot(zx, 0.42 * np.sin(2 * np.pi * zx / 0.30), color=NAVY, lw=2.4)
     ins.annotate("", xy=(np.cos(np.pi / 4), np.sin(np.pi / 4)), xytext=(0, 0),

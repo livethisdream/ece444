@@ -390,7 +390,7 @@ whole point of Step 4** — setting the magnitude to the geometric mean is exact
 the condition that makes the parallel-equivalent resistance come out at $Z_0$.
 ::::
 
-::::{frame} Cancelling the shunt susceptance
+::::{frame} Canceling the shunt susceptance
 All that is left is the $-j0.0245$ S. Cancel it with an equal and opposite
 susceptance — a capacitor, since $+jB$ is capacitive:
 

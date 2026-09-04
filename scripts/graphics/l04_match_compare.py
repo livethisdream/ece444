@@ -25,7 +25,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
 OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
@@ -35,7 +35,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -45,7 +45,7 @@ Z0, F0, R, X0 = 50.0, 1e9, 20.0, -15.0
 CL = 1 / (2 * np.pi * F0 * abs(X0))       # load capacitance giving -j15 at f0
 LA = 39.5 / (2 * np.pi * F0)              # L-match series inductor
 CA = 1 / (2 * np.pi * F0 * 40.8)          # L-match shunt capacitor
-LB = abs(X0) / (2 * np.pi * F0)           # cancelling inductor
+LB = abs(X0) / (2 * np.pi * F0)           # canceling inductor
 Z1 = np.sqrt(Z0 * R)                      # quarter-wave line impedance
 
 zload = lambda f: complex(R, -1 / (2 * np.pi * f * CL))
@@ -91,8 +91,8 @@ def main() -> int:
         for f in bw[k]:
             ax.plot([f / 1e9], [-9.54], marker="|", color=col, ms=11, mew=2.2, zorder=5)
 
-    ax.axvline(1.0, color=GREY, lw=1.1, ls=(0, (3, 3)))
-    ax.text(1.012, -2.0, "design\nfrequency", color=GREY, fontsize=10.5, va="top")
+    ax.axvline(1.0, color=GRAY, lw=1.1, ls=(0, (3, 3)))
+    ax.text(1.012, -2.0, "design\nfrequency", color=GRAY, fontsize=10.5, va="top")
 
     ax.set_xlim(0.5, 1.5); ax.set_ylim(-40, 0)
     ax.set_xlabel("Frequency  (GHz)")

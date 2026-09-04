@@ -258,7 +258,7 @@ div.admonition.example-problem > *:not(.admonition-title) {
   font-size: 0.95em;
   margin: 1.25em 0;
 }
-/* Every colour here is a token from shell.css, never a literal. These rules
+/* Every color here is a token from shell.css, never a literal. These rules
    were written light-mode-only -- a #0067b9 header slab, a #f5f9fc stripe and
    `color:#000 !important` on every cell -- so in dark mode the odd rows went
    black-on-near-black and the even ones showed as a white band. The literals

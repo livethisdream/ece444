@@ -48,7 +48,7 @@ each one is from budget before you start.
 
 ## How to spend the budget
 
-**Two stages per lesson.** Only the first needs judgement.
+**Two stages per lesson.** Only the first needs judgment.
 
 1. **Plan.** One agent reads the lesson page and its deck and writes a *cut
    plan*: for every frame, the present block's text (verbatim, ready to

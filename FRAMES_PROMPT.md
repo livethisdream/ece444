@@ -58,9 +58,9 @@ You are the expensive part of this system. Behave accordingly.
 If you find yourself reading 4,000 words of a lesson to check an agent's work,
 the gate is wrong — fix the gate instead.
 
-**Two stages per lesson, and only one of them needs judgement.**
+**Two stages per lesson, and only one of them needs judgment.**
 
-1. **Plan (judgement, expensive, once per lesson).** One agent reads the
+1. **Plan (judgment, expensive, once per lesson).** One agent reads the
    lesson page and its deck and produces a *frame plan*: an ordered list of
    frame titles, which existing section or deck beat feeds each one, and what
    drops into `:::{depth}`. It writes the plan and nothing else — no edits.

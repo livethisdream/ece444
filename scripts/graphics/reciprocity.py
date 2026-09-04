@@ -26,7 +26,7 @@ from pathlib import Path
 R0 = 52.0
 XA, XB = 86.0, 384.0
 ROWS = {"Transmit": 92.0, "Receive": 252.0}
-RED, BLUE, NAVY, GREY = "#b01e24", "#0067b9", "#004a85", "#5a5a5a"
+RED, BLUE, NAVY, GRAY = "#b01e24", "#0067b9", "#004a85", "#5a5a5a"
 
 
 def lobe_r(phi: float) -> float:
@@ -64,8 +64,8 @@ def main() -> int:
             body.append(f'<path d="{d}" fill="{BLUE}" opacity="0.15" stroke="{BLUE}" stroke-width="1.5"/>')
         body.append(dipole(XA, cy))
         body.append(dipole(XB, cy))
-        body.append(f'<text x="{XA}" y="{cy+40:.0f}" fill="{GREY}" font-size="12" text-anchor="middle">A</text>')
-        body.append(f'<text x="{XB}" y="{cy+40:.0f}" fill="{GREY}" font-size="12" text-anchor="middle">B</text>')
+        body.append(f'<text x="{XA}" y="{cy+40:.0f}" fill="{GRAY}" font-size="12" text-anchor="middle">A</text>')
+        body.append(f'<text x="{XB}" y="{cy+40:.0f}" fill="{GRAY}" font-size="12" text-anchor="middle">B</text>')
         xs += [XA, XB]; ys.append(cy + 40)
         if name == "Transmit":
             body.append(f'<line x1="152" y1="{cy}" x2="330" y2="{cy}" stroke="{NAVY}" stroke-width="3" marker-end="url(#txar)"/>')

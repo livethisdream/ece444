@@ -96,7 +96,7 @@ $$\sin\theta_g = \sin\theta_0 \pm m\ \frac{\lambda}{d} \qquad m = 1, 2, \ldots$$
 Any solution with $\vert \sin\theta_g \vert \le 1$ is a real angle, and the array puts a beam there.
 
 Note:
-Three lines, do them live. Emphasise that the steer angle carries the whole lobe pattern with it: steer the main beam and every grating lobe slides by the same amount in sine space, not in degrees.
+Three lines, do them live. Emphasize that the steer angle carries the whole lobe pattern with it: steer the main beam and every grating lobe slides by the same amount in sine space, not in degrees.
 
 ---
 
@@ -104,7 +104,7 @@ Three lines, do them live. Emphasise that the steer angle carries the whole lobe
 
 <div class="two-col"><div class="col-text">
 
-At $\theta_g$ the path difference between neighbouring elements is a **whole wavelength** instead of zero.
+At $\theta_g$ the path difference between neighboring elements is a **whole wavelength** instead of zero.
 
 Every element is back in phase. The array cannot tell the two directions apart.
 
@@ -214,7 +214,7 @@ $$kd\sin\theta = k_0 d\sin\theta_0 \quad \Longrightarrow \quad \sin\theta = \fra
 $$\Delta\theta = \arcsin\left(\frac{f_0}{f}\sin\theta_0\right) - \theta_0$$
 
 Note:
-Two lines at the board. Point out what cancelled: N is gone, d is gone. Only the frequency ratio survives, so squint is a property of the steer angle and the band, not of the array size.
+Two lines at the board. Point out what canceled: N is gone, d is gone. Only the frequency ratio survives, so squint is a property of the steer angle and the band, not of the array size.
 
 ---
 

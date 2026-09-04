@@ -737,7 +737,7 @@ it, not to replace it.
 
 - **American English throughout** (course rule, applies to every artifact):
   center, color, behavior, analyze, normalize, meter, gray. Sweep before
-  reporting; "centre" was caught in review.
+  reporting; "center" was caught in review.
 - **Widget readout design language — the instrument grid** (final, per
   Neil's review 2026-08-24; supersedes BOTH inline-pill styles that
   preceded it). The reference is `book/extras/viz/dipole-explorer.html`

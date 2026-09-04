@@ -64,15 +64,15 @@
     position:fixed and so already a containing block, and anchoring to the bar
     keeps a long lesson title from running off the edge of a phone screen. -#}
 <div class="hud">
-  {#- One pill, centred, holding three runs separated by a rule:
+  {#- One pill, centerd, holding three runs separated by a rule:
 
           ECE 444 | present  tools | 12/27
 
       Who and where, then what you can do here, then the contents. Pinning the
       three as separate pills looked symmetric and was not -- `space-between`
-      centres the middle one between the other two rather than in the window,
-      so it sat off centre by half the difference in the outer widths and moved
-      whenever a label changed. A centred pill cannot drift. -#}
+      centers the middle one between the other two rather than in the window,
+      so it sat off center by half the difference in the outer widths and moved
+      whenever a label changed. A centerd pill cannot drift. -#}
   {#- The site's own name, and behind it the other sites it sits beside. It
       used to float in the top-left corner with the modules springing out of
       it; it covered the first line of every page for a nav the index overlay
@@ -82,9 +82,9 @@
 
   <div class="hud-group hud-mid">
     {#- How the lesson is laid out, and what you point at it with. The mode
-        button is labelled with the mode in force: pressing it used to silently
+        button is labeled with the mode in force: pressing it used to silently
         swap the caption, which read as inert. Now it opens a menu showing both
-        options with the live one lit -- a control labelled with its current
+        options with the live one lit -- a control labeled with its current
         value. -#}
     <button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
             title="How the lesson is laid out (P)">read</button>

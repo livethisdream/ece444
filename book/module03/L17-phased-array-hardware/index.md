@@ -482,7 +482,7 @@ Submit the following.
 ::::
 
 ::::{frame} Deliverables — the diagram and the FFT
-2. **A labelled block diagram.** Sketch the receive chain from patch to Pi and
+2. **A labeled block diagram.** Sketch the receive chain from patch to Pi and
    label every block with its name and the frequency present at that point. Mark
    where the analog summing happens and where the digital channels begin.
 

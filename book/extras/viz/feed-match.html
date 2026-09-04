@@ -229,12 +229,12 @@ function draw(){
   ctx.fillStyle=cssv('--match'); ctx.beginPath(); ctx.arc(px,py,5,0,2*Math.PI); ctx.fill();
 
   // Legend lives in the left margin, clear of the chart. In-chart text used to
-  // collide with the r-axis ticks (the r = 1 tick sits exactly at the centre)
+  // collide with the r-axis ticks (the r = 1 tick sits exactly at the center)
   // and with the +/-j0.5 rim label.
   const lx = 14; let ly = 30;
   MJ.draw(ctx,'z = \\dfrac{Z}{Z_0}', lx, ly, 13, cssv('--ink3'),'left'); ly += 30;
   stext(ctx,'rim: total reflection', lx, ly, 10.5, cssv('--ink3'),'left',false); ly += 18;
-  stext(ctx,'centre: matched',      lx, ly, 10.5, cssv('--ink3'),'left',false); ly += 18;
+  stext(ctx,'center: matched',      lx, ly, 10.5, cssv('--ink3'),'left',false); ly += 18;
   stext(ctx,'dashed: VSWR = 2',     lx, ly, 10.5, cssv('--sll'),'left',false);
 
   if(state.qw && state.Z1){

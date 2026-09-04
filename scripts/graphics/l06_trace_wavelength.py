@@ -4,7 +4,7 @@
 Three panels, one line source each, with the wavefronts of a plane wave
 leaving in direction theta. Along its own direction of travel the
 wavefronts are lambda apart; along the source they are lambda / cos(theta)
-apart, so the phase advances k cos(theta) radians per metre along z. That
+apart, so the phase advances k cos(theta) radians per meter along z. That
 rate is k_z. Broadside (theta = 90 deg) asks for none of it: the whole
 source lies on one wavefront. Endfire (theta = 0) asks for the full k.
 
@@ -37,7 +37,7 @@ def panel(i: int, th_deg: int, cap1: str, cap2: str, cap3: str) -> str:
     x0, y0 = i * PW, 0
     cx = x0 + PW * 0.42                      # z axis
     ztop, zbot = 46, 206                     # source extent on screen
-    oy = (ztop + zbot) / 2                   # origin (source centre)
+    oy = (ztop + zbot) / 2                   # origin (source center)
     # direction of travel d and wavefront direction n, screen coords (y down)
     dx, dy = math.sin(th), -math.cos(th)
     nx, ny = math.cos(th), math.sin(th)
@@ -53,7 +53,7 @@ def panel(i: int, th_deg: int, cap1: str, cap2: str, cap3: str) -> str:
     s.append(f'<line x1="{cx:.1f}" y1="{zbot}" x2="{cx:.1f}" y2="{ztop}" stroke="{NAVY}" stroke-width="5" stroke-linecap="round"/>')
     s.append(f'<line x1="{cx:.1f}" y1="{ztop}" x2="{cx:.1f}" y2="{ztop - 22}" stroke="{INK3}" stroke-width="1.2" marker-end="url(#twArr)"/>')
     s.append(f'<text x="{cx + 8:.1f}" y="{ztop - 14}" font-size="12" fill="{INK3}">z</text>')
-    # ray: direction of travel from the source centre
+    # ray: direction of travel from the source center
     L = 78
     # at endfire the ray runs along the source itself; draw it just beside it
     rx = cx + (16 if th_deg == 0 else 0)

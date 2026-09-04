@@ -32,7 +32,7 @@
     else defines, but its page-level decisions were made for a theme that is no
     longer here -- `body { font-family: Inter }` among them, a face the site
     stopped shipping when the theme went. Loading it ahead of the shell keeps
-    its components and lets the shell win on type and colour. -#}
+    its components and lets the shell win on type and color. -#}
 <link rel="stylesheet" href="{{ pathto('_static/custom.css', 1) }}">
 <link rel="stylesheet" href="{{ pathto('_static/shell.css', 1) }}">
 <link rel="stylesheet" href="{{ pathto('_static/page.css', 1) }}">
@@ -78,9 +78,9 @@
 
   {#- Empty on purpose, and it must stay empty of whitespace too -- CSS
       `:empty` counts a text node, and that is what drops the second rule so a
-      two-run bar reads `ECE 444 | 34%` with the rule dead centre rather than
+      two-run bar reads `ECE 444 | 34%` with the rule dead center rather than
       `ECE 444 || 34%`. The run still occupies the grid's middle column, which
-      is what keeps the outer two equal and the bar centred.
+      is what keeps the outer two equal and the bar centerd.
 
       There was a `top` button here. Scrolling up is not a thing a reader needs
       a control for, and it was the only difference in format between this bar

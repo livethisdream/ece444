@@ -32,7 +32,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 OUT = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
 
@@ -47,7 +47,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -180,7 +180,7 @@ def time_vs_angle() -> None:
         for ax, x in ((ax_t, tt), (ax_a, ang)):
             ax.annotate(label, xy=(x, db + 0.4), xytext=(x, db + 6.2),
                         color=color, fontsize=11, ha="center", va="bottom",
-                        arrowprops=dict(arrowstyle="-", color=GREY, lw=0.9))
+                        arrowprops=dict(arrowstyle="-", color=GRAY, lw=0.9))
 
     fig.tight_layout(h_pad=2.0)
     finalize(fig, "L23-time-vs-angle")
@@ -219,9 +219,9 @@ def steer_compare() -> None:
     for (ang, db) in first_sidelobes(30.0):
         ax.annotate(f"{db:.1f} dBc", xy=(ang, db + pk30), xytext=(ang, db + pk30 + 5.0),
                     color=RED, fontsize=11, ha="center",
-                    arrowprops=dict(arrowstyle="-", color=GREY, lw=0.9))
+                    arrowprops=dict(arrowstyle="-", color=GRAY, lw=0.9))
     ax.text(-87, -7.5, "equal sidelobes at broadside, unequal when steered",
-            color=GREY, fontsize=11, va="center")
+            color=GRAY, fontsize=11, va="center")
 
     fig.tight_layout()
     finalize(fig, "L23-steer-compare")

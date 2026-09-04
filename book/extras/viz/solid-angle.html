@@ -274,7 +274,7 @@ function draw() {
   ctx.font = '700 12px Inter, sans-serif'; ctx.textBaseline = 'bottom'; ctx.textAlign = 'center';
   ctx.fillStyle = cssVar('--axis');
   ctx.fillText('boresight', tip[0], tip[1] - 6);
-  // Ω near cap centre
+  // Ω near cap center
   const capMid = toScreen([0, R, 0]);
   MJ.draw(ctx, '\\Omega', capMid[0] + 8, capMid[1], 13, cssVar('--cone'), 'left');
   // antenna label

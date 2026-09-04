@@ -41,8 +41,8 @@ scripts/verify/check_shell.py    # every page: no sideways scroll at 390px, no
                                  # JS error, the HUD's site button with its
                                  # panel closed, no theme asset sneaking back
 scripts/verify/check_frames.py   # every frame fits one screen in present mode
-scripts/verify/check_bar.py      # the bottom bar: centred in the window, outer
-                                 # runs equal, middle run centred in the pill,
+scripts/verify/check_bar.py      # the bottom bar: centerd in the window, outer
+                                 # runs equal, middle run centerd in the pill,
                                  # nothing wrapped, panels clickable
 scripts/verify/check_print.py    # every frame page prints one sheet per frame;
                                  # every long reading page prints more than one

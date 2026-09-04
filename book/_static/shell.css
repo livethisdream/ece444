@@ -179,7 +179,7 @@ li::marker { color: var(--blue); }
    take the box width, so the rule spans the wider of numerator and
    denominator -- not just the denominator, which is what a border on the
    lower half gives you. Equal line-heights and mirrored padding put the rule
-   exactly at the box's vertical centre, which is what makes
+   exactly at the box's vertical center, which is what makes
    `vertical-align: middle` land it on the math axis, level with the `=`.
    No magic offset. */
 .frac {
@@ -192,7 +192,7 @@ li::marker { color: var(--blue); }
 .frac > span:first-child { padding-bottom: .1em; border-bottom: 1px solid currentColor; }
 .frac > span:last-child  { padding-top: .1em; }
 
-/* parens around a fraction: centred on the same axis, and kept out of the
+/* parens around a fraction: centerd on the same axis, and kept out of the
    line box so they do not stretch the row */
 .paren {
   display: inline-block; vertical-align: middle;
@@ -252,16 +252,16 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
 @media (prefers-reduced-motion: reduce) { .rail span { transition: none; } }
 
 /* ---- HUD ------------------------------------------------------------ */
-/* One pill, centred in the window.
+/* One pill, centerd in the window.
 
    Three separately-pinned groups looked symmetric and were not: with
-   `space-between` the middle group is centred between the other two, not in
-   the window, so it sat off centre by exactly half the difference between the
+   `space-between` the middle group is centerd between the other two, not in
+   the window, so it sat off center by exactly half the difference between the
    outer groups' widths -- 16px on a 1280px desktop, and it moves whenever any
    label changes. Spread across a wide window they also stopped reading as one
    bar.
 
-   Centring one pill is immune to both. `translateX(-50%)` puts it dead centre
+   Centering one pill is immune to both. `translateX(-50%)` puts it dead center
    at every width whatever it contains, so no label can ever knock it off, and
    the pill is only as wide as its contents -- there is no gap to judge. The
    groups survive as plain flex runs inside it, separated by a rule. */
@@ -277,9 +277,9 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
   /* A grid, not a flex row, and this is the whole trick: `1fr auto 1fr` makes
      the two outer columns EQUAL by definition, whatever is in them. Under
      max-content sizing both settle at the wider one's width, so the middle
-     run sits at the pill's true centre -- and stays there when `1/27` becomes
-     `12/27` or the site label changes. Flex can centre the pill in the window
-     but cannot centre a run inside the pill without measuring. */
+     run sits at the pill's true center -- and stays there when `1/27` becomes
+     `12/27` or the site label changes. Flex can center the pill in the window
+     but cannot center a run inside the pill without measuring. */
   display: grid; grid-template-columns: 1fr auto 1fr;
   align-items: center; column-gap: .55rem;
   font-family: var(--mono); font-size: .74rem; color: var(--muted);
@@ -304,7 +304,7 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
   background: var(--rule-strong);
 }
 /* A reading page has nothing to put in the middle run, so the run IS the rule:
-   one line, dead centre, with the site on its left and the contents on its
+   one line, dead center, with the site on its left and the contents on its
    right. Two rules around a zero-width run would read as `ECE 444 || 34%`.
    The template must emit that div with no whitespace inside it -- a text node
    is enough to make `:empty` fail and both rules come back. */
@@ -321,7 +321,7 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
 .hud button.counter[aria-pressed="true"] b { color: var(--blue-dark); }
 /* The site button carries the site's name, so it keeps the mark's voice --
    the same mono, the same wide tracking, the same blue. It is the only
-   coloured thing in the bar, which is what makes the bar readable as "you are
+   colored thing in the bar, which is what makes the bar readable as "you are
    here, and here is everything else". */
 /* Everything but the line-height: it inherits the bar's, because the site
    button is alone in its group and a shorter button makes a shorter pill --
@@ -412,7 +412,7 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
 
 /* ---- HUD on a phone -------------------------------------------------- */
 /* Nothing is dropped -- the panels carry everything that does not fit. The
-   groups tighten and square off; they stay pinned left, centre and right,
+   groups tighten and square off; they stay pinned left, center and right,
    which is the whole point of splitting them. */
 @media (max-width: 46rem) {
   .hud {

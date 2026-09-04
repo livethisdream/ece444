@@ -105,7 +105,7 @@ const state={ u:1.0, Dl:20 };
 
 /* ------------------------------------------------------------------ physics
    An aperture of width D is illuminated from a point source a distance r away.
-   Relative to the aperture centre the incident phase runs behind by
+   Relative to the aperture center the incident phase runs behind by
        delta(x) = k x^2 / (2r) = pi x^2 / (lambda r),
    so with t = x/(D/2) in [-1,1],
        delta(t) = dmax * t^2,  dmax = pi D^2 / (4 lambda r).
@@ -294,7 +294,7 @@ function drawPhase(ctx,x0,y0,w,h){
   ctx.stroke();
 
   stext(ctx,'−D/2', xp(-1), mT+ph+13, 10.5, cssv('--ink3'),'center',false);
-  stext(ctx,'centre', xp(0), mT+ph+13, 10.5, cssv('--ink3'),'center',false);
+  stext(ctx,'center', xp(0), mT+ph+13, 10.5, cssv('--ink3'),'center',false);
   stext(ctx,'+D/2', xp(1),  mT+ph+13, 10.5, cssv('--ink3'),'center',false);
 
   const gx=mL+pw+14;

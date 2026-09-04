@@ -28,7 +28,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 SLIDE_BG = "#fafaf7"          # deck --slide-bg, for label knock-outs over a curve
 OUT = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
@@ -38,7 +38,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -109,7 +109,7 @@ def line_source_sinc() -> None:
                 arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.2))
 
     ax.text(-34, 9.8, "Uniform line source, 6 wavelengths long",
-            color=GREY, fontsize=12, ha="left", va="top")
+            color=GRAY, fontsize=12, ha="left", va="top")
     finalize(fig, "L06-line-source-sinc")
 
 
@@ -148,7 +148,7 @@ def three_patterns() -> None:
               handlelength=1.7, labelspacing=1.15, borderaxespad=0.0)
 
     fig.text(0.565, 0.09, "Wire axis vertical.\nBroadside is left and right.",
-             color=GREY, fontsize=11, ha="left", va="bottom", linespacing=1.4)
+             color=GRAY, fontsize=11, ha="left", va="bottom", linespacing=1.4)
     finalize(fig, "L06-three-patterns")
 
 

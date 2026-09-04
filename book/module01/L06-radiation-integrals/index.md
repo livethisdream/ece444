@@ -248,7 +248,7 @@ $$
 **Phase.** In $e^{-jkR}$ the same correction is multiplied by $k$, and what
 matters is whether $k\ \hat{\mathbf r}\cdot\mathbf{r}'$ is comparable to a
 radian. For a source a few wavelengths across it is *several* radians, and it
-flips contributions from adding to cancelling. Dropping it would destroy the
+flips contributions from adding to canceling. Dropping it would destroy the
 pattern. So we keep the linear term and only discard the quadratic one:
 
 $$
@@ -345,7 +345,7 @@ The recipe is $\mathbf{J} \to \mathbf{N} \to$ pattern, and only the first step
 involves the antenna.
 :::
 
-In the far field the wave is locally a plane wave travelling radially outward
+In the far field the wave is locally a plane wave traveling radially outward
 (Lesson 5), so it can have **no radial field component**: $E_r \approx 0$, and
 only the transverse parts of $\mathbf{A}$ survive. The magnetic field follows
 for free from the plane-wave relation, with no new integral:
@@ -442,7 +442,7 @@ computes.
 
 :::{present}
 <iframe src="../../viz/radiation-integral.html"
-        width="100%" height="480"
+        width="100%" height="445"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="The radiation integral as a coherent phasor sum">

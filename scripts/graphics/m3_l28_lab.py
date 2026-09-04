@@ -34,7 +34,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "book/extras/slides/fig"
@@ -53,7 +53,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -164,7 +164,7 @@ def sweep_notch() -> None:
 
     fig, ax = plt.subplots(figsize=(8.6, 4.2))
     _axes(ax, ymin=-31)
-    ax.plot(GRID, u, color=GREY, linewidth=1.3, label="uniform (frozen reference)")
+    ax.plot(GRID, u, color=GRAY, linewidth=1.3, label="uniform (frozen reference)")
     ax.plot(GRID, q, color=NAVY, linewidth=2.6, label="null steered")
     ax.axhline(FLOOR_DBC, color=RULE, linewidth=1.4, linestyle=(0, (5, 4)),
                label="sweep noise floor")
@@ -177,10 +177,10 @@ def sweep_notch() -> None:
     ax.annotate("main lobe  -1.8 dB", xy=(0, q.max()), xytext=(-57, -5.0),
                 fontsize=12, color=NAVY,
                 arrowprops=dict(arrowstyle="->", color=NAVY, linewidth=1.3))
-    ax.plot([NULL_ANG], [u[i]], "o", color=GREY, markersize=6)
+    ax.plot([NULL_ANG], [u[i]], "o", color=GRAY, markersize=6)
     ax.annotate("reference sidelobe  -12.8 dBc", xy=(NULL_ANG + 0.6, u[i]),
-                xytext=(30, -9.5), fontsize=12, color=GREY,
-                arrowprops=dict(arrowstyle="->", color=GREY, linewidth=1.2))
+                xytext=(30, -9.5), fontsize=12, color=GRAY,
+                arrowprops=dict(arrowstyle="->", color=GRAY, linewidth=1.2))
     ax.legend(loc="lower left", fontsize=11.5, ncol=1)
     fig.tight_layout()
     finalize(fig, "L28-sweep-notch", also_page=True)
@@ -198,7 +198,7 @@ def delta_beam() -> None:
     fig, ax = plt.subplots(figsize=(8.6, 4.2))
     _axes(ax, ymin=-31)
     ax.set_xlabel("angle from broadside (deg)")
-    ax.plot(th, ps, color=GREY, linewidth=1.4, label="sum  (Beam 1 Phase 0)")
+    ax.plot(th, ps, color=GRAY, linewidth=1.4, label="sum  (Beam 1 Phase 0)")
     ax.plot(th, pd, color=NAVY, linewidth=2.6,
             label="difference  (Beam 1 Phase 180)")
     for sgn in (-1, 1):
@@ -246,7 +246,7 @@ def mvdr_vs_manual() -> None:
     fig, ax = plt.subplots(figsize=(8.6, 4.0))
     _axes(ax, ymin=-39)
     ax.set_xlabel("angle from broadside (deg)")
-    ax.plot(th, pm, color=GREY, linewidth=1.4, label="manual  (both channels added)")
+    ax.plot(th, pm, color=GRAY, linewidth=1.4, label="manual  (both channels added)")
     ax.plot(th, pv, color=NAVY, linewidth=2.6, label="MVDR")
     ax.axvline(ti, color=ORANGE, linewidth=1.4, linestyle=(0, (5, 4)))
     ax.text(ti + 1.5, 1.2, "interferer", fontsize=11.5, color=ORANGE)
@@ -287,15 +287,15 @@ def monopulse() -> None:
     a1.set_xlabel("angle from broadside (deg)")
     a1.set_ylabel("channel level (dB)")
     a1.grid(color=RULE, linewidth=0.8)
-    a1.plot(th, ps, color=GREY, linewidth=1.6, label="sum")
+    a1.plot(th, ps, color=GRAY, linewidth=1.6, label="sum")
     a1.plot(th, pd, color=NAVY, linewidth=2.6, label="delta")
     a1.plot([0], [-21.8], "o", color=RED, markersize=6)
     a1.annotate("delta null  -21.8 dBc", xy=(0.4, -21.6), xytext=(2.6, -24.8),
                 fontsize=11.5, color=RED,
                 arrowprops=dict(arrowstyle="->", color=RED, linewidth=1.2))
     a1.annotate("sum is flat here", xy=(0.5, 0.15), xytext=(5.0, 1.6),
-                fontsize=11.5, color=GREY,
-                arrowprops=dict(arrowstyle="->", color=GREY, linewidth=1.2))
+                fontsize=11.5, color=GRAY,
+                arrowprops=dict(arrowstyle="->", color=GRAY, linewidth=1.2))
     a1.legend(loc="upper left", fontsize=11.5)
 
     win = np.abs(th) <= 12

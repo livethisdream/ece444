@@ -26,11 +26,11 @@ import math
 import re
 from pathlib import Path
 
-NAVY, BLUE, RED, GREEN, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 OUT = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
 
-MARKERS = {"navy": NAVY, "blue": BLUE, "red": RED, "grey": GREY, "ink": INK, "green": GREEN}
+MARKERS = {"navy": NAVY, "blue": BLUE, "red": RED, "gray": GRAY, "ink": INK, "green": GREEN}
 TAU = 2 * math.pi
 
 
@@ -83,7 +83,7 @@ class Fig:
                  f'marker-end="url(#ar-{key})"/>',
                  (x0, y0), (cx + x, cy - y))
 
-    def arc_arrow(self, cx, cy, r, a0, a1, key="grey", width=2.0, ccw=True) -> None:
+    def arc_arrow(self, cx, cy, r, a0, a1, key="gray", width=2.0, ccw=True) -> None:
         """Arrowed circular arc, angles in degrees, math convention (ccw positive)."""
         x0, y0 = cx + r * math.cos(math.radians(a0)), cy - r * math.sin(math.radians(a0))
         x1, y1 = cx + r * math.cos(math.radians(a1)), cy - r * math.sin(math.radians(a1))
@@ -99,10 +99,10 @@ class Fig:
         self.add(f'<line x1="{cx}" y1="{cy - r:.1f}" x2="{cx}" y2="{cy + r:.1f}" '
                  f'stroke="{RULE}" stroke-width="1.2"/>', (cx, cy - r), (cx, cy + r))
         if label:
-            self.text(cx + r + 8, cy + 4, "x", GREY, size, "start")
+            self.text(cx + r + 8, cy + 4, "x", GRAY, size, "start")
             # beside the axis tip, not on top of it — the top of the panel is
             # where the rotation-sense arc reads most clearly
-            self.text(cx + 8, cy - r + 3, "y", GREY, size, "start")
+            self.text(cx + 8, cy - r + 3, "y", GRAY, size, "start")
 
     def write(self, name: str, aria: str, pad: float = 12.0) -> None:
         vx, vy = min(self.xs) - pad, min(self.ys) - pad
@@ -160,12 +160,12 @@ def pol_states() -> None:
                 x = u * math.cos(tilt) - v * math.sin(tilt)
                 y = u * math.sin(tilt) + v * math.cos(tilt)
                 f.vec(cx, cy, x, y, "navy", 2.6, op)
-            f.arc_arrow(cx, cy, R + 20, 62, 118, "grey", 1.8, ccw=True)
+            f.arc_arrow(cx, cy, R + 20, 62, 118, "gray", 1.8, ccw=True)
 
         f.text(cx, cy + R + 48, name, NAVY, 16, "middle", "700")
 
     f.text(sum(centers) / 3, cy + R + 74, "tip of E over one period, at a fixed point",
-           GREY, 13.5)
+           GRAY, 13.5)
     f.write("L03-pol-states",
             "Three polarization states: the electric-field tip traces a line, "
             "a circle, or an ellipse over one period")
@@ -184,7 +184,7 @@ def pol_construction() -> None:
     # --- component waveforms, one period plus a little ---
     f.add(f'<line x1="{x0}" y1="{y0}" x2="{x0 + W:.1f}" y2="{y0}" '
           f'stroke="{RULE}" stroke-width="1.2"/>', (x0, y0), (x0 + W, y0))
-    f.text(x0 + W + 8, y0 + 5, "ωt", GREY, 13, "start")
+    f.text(x0 + W + 8, y0 + 5, "ωt", GRAY, 13, "start")
 
     for amp, phase, color, key in ((AX, 0.0, BLUE, "blue"), (AY, DELTA, RED, "red")):
         pts = [(x0 + W * i / 240, y0 - AMP * amp * math.cos(TAU * (1.15 * i / 240) + phase))
@@ -201,13 +201,13 @@ def pol_construction() -> None:
     # --- the relative phase, marked between the two peaks ---
     y_d = y0 - AMP - 30
     f.add(f'<line x1="{x0:.1f}" y1="{y_d:.1f}" x2="{x0 + W * t_ey:.1f}" y2="{y_d:.1f}" '
-          f'stroke="{GREY}" stroke-width="1.8" marker-start="url(#ar-grey)" '
-          f'marker-end="url(#ar-grey)"/>', (x0, y_d), (x0 + W * t_ey, y_d))
+          f'stroke="{GRAY}" stroke-width="1.8" marker-start="url(#ar-gray)" '
+          f'marker-end="url(#ar-gray)"/>', (x0, y_d), (x0 + W * t_ey, y_d))
     for x_tick in (x0, x0 + W * t_ey):
         f.add(f'<line x1="{x_tick:.1f}" y1="{y_d:.1f}" x2="{x_tick:.1f}" y2="{y0 - AMP * 0.55:.1f}" '
               f'stroke="{RULE}" stroke-width="1.1" stroke-dasharray="3 3"/>',
               (x_tick, y_d), (x_tick, y0))
-    f.text(x0 + W * t_ey / 2, y_d - 8, "δ", GREY, 16, "middle", "700")
+    f.text(x0 + W * t_ey / 2, y_d - 8, "δ", GRAY, 16, "middle", "700")
 
     # --- resultant locus ---
     cx, cy, S = x0 + W / 2, y0 + 152.0, 52.0
@@ -221,7 +221,7 @@ def pol_construction() -> None:
     # With Ey lagging Ex (DELTA < 0) this locus is traced counter-clockwise:
     # at wt=0 the tip is at (1, 0.36) and moves to (0.87, 0.62). Placed upper-left
     # so it clears the y-axis label and the wt=0 E-vector.
-    f.arc_arrow(cx, cy, S + 8, 55, 125, "grey", 1.8, ccw=True)
+    f.arc_arrow(cx, cy, S + 8, 55, 125, "gray", 1.8, ccw=True)
     f.text(cx, cy + S + 52, "resultant trace", NAVY, 15, "middle", "700")
 
     f.write("L03-pol-construction",
@@ -244,11 +244,11 @@ def handedness() -> None:
         f.add(f'<circle cx="{cx}" cy="{cy}" r="{R}" fill="none" stroke="{RULE}" '
               f'stroke-width="1.4"/>', (cx - R, cy - R), (cx + R, cy + R))
         # propagation into the page
-        f.add(f'<circle cx="{cx}" cy="{cy}" r="8" fill="none" stroke="{GREY}" stroke-width="1.6"/>'
+        f.add(f'<circle cx="{cx}" cy="{cy}" r="8" fill="none" stroke="{GRAY}" stroke-width="1.6"/>'
               f'<line x1="{cx - 5.7:.1f}" y1="{cy - 5.7:.1f}" x2="{cx + 5.7:.1f}" '
-              f'y2="{cy + 5.7:.1f}" stroke="{GREY}" stroke-width="1.6"/>'
+              f'y2="{cy + 5.7:.1f}" stroke="{GRAY}" stroke-width="1.6"/>'
               f'<line x1="{cx - 5.7:.1f}" y1="{cy + 5.7:.1f}" x2="{cx + 5.7:.1f}" '
-              f'y2="{cy - 5.7:.1f}" stroke="{GREY}" stroke-width="1.6"/>')
+              f'y2="{cy - 5.7:.1f}" stroke="{GRAY}" stroke-width="1.6"/>')
 
         for a_deg, op, lab in zip(angles, (0.3, 0.58, 1.0), ("t₁", "t₂", "t₃")):
             a = math.radians(a_deg)
@@ -261,7 +261,7 @@ def handedness() -> None:
         f.text(cx, cy + R + 34, name, NAVY, 16, "middle", "700")
 
     f.text((108.0 + 326.0) / 2, cy + R + 58,
-           "viewed looking along the propagation direction", GREY, 13.5)
+           "viewed looking along the propagation direction", GRAY, 13.5)
     f.write("L03-handedness",
             "IEEE handedness: looking along the propagation direction, the E-vector of a "
             "right-hand polarized wave rotates clockwise and a left-hand wave counter-clockwise")
@@ -286,7 +286,7 @@ def axial_ratio() -> None:
     f.add(f'<path d="{d_of(pts, True)}" fill="{BLUE}" fill-opacity="0.08" '
           f'stroke="{BLUE}" stroke-width="2.6"/>', *pts)
 
-    # major axis (navy) and minor axis (red), drawn full-width through the centre
+    # major axis (navy) and minor axis (red), drawn full-width through the center
     for mag, ang, color, key, lab, off in (
             (A, TILT, NAVY, "navy", "E<tspan font-size=\"10\" dy=\"4\">maj</tspan>", 20),
             (B, TILT + math.pi / 2, RED, "red", "E<tspan font-size=\"10\" dy=\"4\">min</tspan>", 18)):
@@ -308,7 +308,7 @@ def axial_ratio() -> None:
            cy - (r_arc + 15) * math.sin(TILT / 2) + 5, "τ", GREEN, 16, "middle", "700")
 
     # straddling the top: leftward motion there reads unambiguously as ccw
-    f.arc_arrow(cx, cy, A + 8, 55, 125, "grey", 1.8, ccw=True)
+    f.arc_arrow(cx, cy, A + 8, 55, 125, "gray", 1.8, ccw=True)
     f.write("L03-axial-ratio",
             "The polarization ellipse with its major and minor axes and tilt angle tau; "
             "the axial ratio is the ratio of the two axes")

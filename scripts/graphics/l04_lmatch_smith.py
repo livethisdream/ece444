@@ -8,7 +8,7 @@ a 50 ohm line. Normalized, z_L = 0.4 - j0.3. The two design moves are:
      r = 0.4 until it crosses the unit-conductance (g = 1) circle, at
      z = 0.4 + j0.49. The reactance added is (0.49 + 0.30) x 50 = +39.5 ohms.
   2. shunt capacitor  -> walk along that constant-CONDUCTANCE circle into the
-     centre. The susceptance added is 1.225/50 S, i.e. 3.9 pF at 1 GHz.
+     center. The susceptance added is 1.225/50 S, i.e. 3.9 pF at 1 GHz.
 
 Those are the same numbers the algebra gives, which is the point of the slide.
 
@@ -27,7 +27,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
 OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
@@ -74,7 +74,7 @@ def main() -> int:
     p1 = G(r + 1j * xs)
     ax.plot(p1.real, p1.imag, color=NAVY, lw=3.0, zorder=4, solid_capstyle="round")
 
-    # move 2: shunt capacitor, along constant conductance g = 1 into the centre
+    # move 2: shunt capacitor, along constant conductance g = 1 into the center
     bs = np.linspace(y_mid.imag, 0.0, 400)
     p2 = G(1 / (1 + 1j * bs))
     ax.plot(p2.real, p2.imag, color=GREEN, lw=3.0, zorder=4, solid_capstyle="round")
@@ -102,7 +102,7 @@ def main() -> int:
                     arrowprops=dict(arrowstyle="-", color=col, lw=1.0))
 
     # legend to the RIGHT of the chart, clear of the circle entirely.
-    # No swatches -- the text colour matches its arc, which is enough.
+    # No swatches -- the text color matches its arc, which is enough.
     lx = 1.20
     ax.text(lx, 0.30, "series element walks a\nconstant-resistance circle",
             color=NAVY, fontsize=11, fontweight="bold", ha="left", va="top")

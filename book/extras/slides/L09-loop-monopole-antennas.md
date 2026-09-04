@@ -356,7 +356,7 @@ If they remember one slide, this is it. Both antennas are the dipole they alread
 ## Where this is going
 
 - **L10:** patch, slot, and horn — the radiator becomes a surface or an opening. The patch is two slots over a ground plane, so you will use image theory again on day one.
-- **Module 3:** a monopole is an element plus one image; an array is an element plus many neighbours. Same element-factor-times-array-factor bookkeeping.
+- **Module 3:** a monopole is an element plus one image; an array is an element plus many neighbors. Same element-factor-times-array-factor bookkeeping.
 - **L16:** when we do pattern multiplication properly, remember that today's height-above-ground curve was already a two-element array.
 
 <div class="callout">

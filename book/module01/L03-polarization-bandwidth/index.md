@@ -160,7 +160,7 @@ numbers.
 ::::{frame} Worked example — axial ratio of a measured wave
 :::{admonition} Worked example — axial ratio of a measured wave
 :class: tip
-You measure a wave travelling along $+\hat{z}$:
+You measure a wave traveling along $+\hat{z}$:
 
 $$
 \mathbf{E}(z, t) = \hat{x}\ 3 \cos(\omega t - k z)

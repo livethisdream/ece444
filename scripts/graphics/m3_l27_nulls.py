@@ -26,7 +26,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "book/extras/slides/fig"
@@ -44,7 +44,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -143,7 +143,7 @@ def weight_phasors() -> None:
         th = np.linspace(0, 2 * np.pi, 400)
         ax.plot(1 + abs(r) * np.cos(th), abs(r) * np.sin(th), color=RED, lw=1.4, ls=(0, (5, 4)))
         ax.annotate("", xy=(1, 0), xytext=(0, 0),
-                    arrowprops=dict(arrowstyle="->", color=GREY, lw=2.0))
+                    arrowprops=dict(arrowstyle="->", color=GRAY, lw=2.0))
         for n in range(N):
             ax.annotate("", xy=(w[n].real, w[n].imag), xytext=(0, 0),
                         arrowprops=dict(arrowstyle="->", color=NAVY, lw=1.7))
@@ -152,8 +152,8 @@ def weight_phasors() -> None:
                 ha="left", va="center", fontsize=12.5)
         ax.text(0.8, -1.02, f"null at {t1:g} deg", color=INK, ha="center", fontsize=13.5)
     axes[0].annotate("steering weight", xy=(0.88, 0.015), xytext=(0.15, 1.30),
-                     arrowprops=dict(arrowstyle="->", color=GREY, lw=1.3),
-                     color=GREY, fontsize=12.5)
+                     arrowprops=dict(arrowstyle="->", color=GRAY, lw=1.3),
+                     color=GRAY, fontsize=12.5)
     axes[1].annotate("eight element weights", xy=(0.72, 0.62), xytext=(0.05, 1.30),
                      arrowprops=dict(arrowstyle="->", color=NAVY, lw=1.3),
                      color=NAVY, fontsize=12.5)
@@ -166,7 +166,7 @@ def pattern_null() -> None:
     ws = w / np.abs(w).max()
     p_null = db_pattern(ws, TH, PK)
     fig, ax = plt.subplots(figsize=(8.4, 4.2))
-    ax.plot(TH, db_pattern(UNIF, TH, PK), color=GREY, lw=1.2, label="uniform, broadside")
+    ax.plot(TH, db_pattern(UNIF, TH, PK), color=GRAY, lw=1.2, label="uniform, broadside")
     ax.plot(TH, p_null, color=NAVY, lw=2.4, label="null steered to +22.5 deg")
     _axes(ax)
     loss = p_null.max()
@@ -219,7 +219,7 @@ def quant_depth() -> None:
     noise = 10 ** (SWEEP_FLOOR / 10) * PK ** 2 / pk ** 2
     meas = 10 * np.log10(np.clip(response(wq, th) ** 2 / pk ** 2 + noise, 1e-12, None))
     fig, ax = plt.subplots(figsize=(8.4, 4.0))
-    ax.plot(th, ideal, color=GREY, lw=1.4, label="exact weights")
+    ax.plot(th, ideal, color=GRAY, lw=1.4, label="exact weights")
     ax.plot(th, meas, color=NAVY, lw=2.4, label="quantized weights, measured sweep")
     ax.axhline(10 * np.log10(noise), color=RED, lw=1.2, ls=(0, (5, 4)))
     ax.text(1.5, 10 * np.log10(noise) + 1.2, "sweep noise floor", color=RED, fontsize=12)

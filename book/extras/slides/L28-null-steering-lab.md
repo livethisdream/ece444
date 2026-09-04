@@ -64,7 +64,7 @@ is whatever falls out.
 
 Note:
 One line of recall, no re-derivation. If they want the derivation it is L27.
-Emphasise that the null is exact on paper; the whole lab is about why it is not
+Emphasize that the null is exact on paper; the whole lab is about why it is not
 exact on the bench.
 
 ---

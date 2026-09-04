@@ -309,7 +309,7 @@ If they leave with one sentence, make it this one. It sets up the next lab, wher
 ## Where this is going
 
 - **L14** measures what this lab cannot: the pattern, and with it the gain and the efficiency question you just left open.
-- **Module 3** builds arrays out of these elements — and every element in an array sees its neighbours as a *mutual impedance*, which is exactly the $S_{11}$ shift you produced with your hand today.
+- **Module 3** builds arrays out of these elements — and every element in an array sees its neighbors as a *mutual impedance*, which is exactly the $S_{11}$ shift you produced with your hand today.
 - **Midterm project (L20)**: you will design, build, tune, and defend an antenna. Tuning means driving that dip onto your target frequency with the skills from this lab.
 
 Note:

@@ -37,7 +37,7 @@ import numpy as np
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = (
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = (
     "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a",
 )
 INK, RULE = "#1a1a1a", "#c7d2e0"
@@ -51,7 +51,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -208,21 +208,21 @@ def geometry_schematic() -> None:
         f'<path d="M 0,0 L 10,5 L 0,10 z" fill="{BLUE}"/></marker>'
         '<marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" '
         'markerWidth="6" markerHeight="6" orient="auto">'
-        f'<path d="M 0,0 L 10,5 L 0,10 z" fill="{GREY}"/></marker>'
+        f'<path d="M 0,0 L 10,5 L 0,10 z" fill="{GRAY}"/></marker>'
         '<marker id="ad" viewBox="0 0 10 10" refX="9" refY="5" '
         'markerWidth="6" markerHeight="6" orient="auto">'
         f'<path d="M 0,0 L 10,5 L 0,10 z" fill="{INK}"/></marker>'
         '</defs>',
         '<g fill="none" stroke-linecap="round" stroke-linejoin="round">',
-        f'<path d="M {org_x:.0f},{org_y:.0f} L {W - 30},{org_y:.0f}" stroke="{GREY}" '
+        f'<path d="M {org_x:.0f},{org_y:.0f} L {W - 30},{org_y:.0f}" stroke="{GRAY}" '
         'stroke-width="1.2" stroke-dasharray="6 5"/>',
         f'<path d="{lobe} Z" fill="{NAVY}" fill-opacity="0.13" stroke="{NAVY}" '
         'stroke-width="2.2"/>',
         f'<path d="M {ap_x - 40:.0f},{ap_c - ap_h - 30:.0f} L {ap_x:.0f},'
-        f'{ap_c - ap_h - 30:.0f} L {ap_x:.0f},{ap_c - ap_h:.0f}" stroke="{GREY}" '
+        f'{ap_c - ap_h - 30:.0f} L {ap_x:.0f},{ap_c - ap_h:.0f}" stroke="{GRAY}" '
         'stroke-width="3.2"/>',
         f'<path d="M {ap_x - 40:.0f},{ap_c + ap_h + 30:.0f} L {ap_x:.0f},'
-        f'{ap_c + ap_h + 30:.0f} L {ap_x:.0f},{ap_c + ap_h:.0f}" stroke="{GREY}" '
+        f'{ap_c + ap_h + 30:.0f} L {ap_x:.0f},{ap_c + ap_h:.0f}" stroke="{GRAY}" '
         'stroke-width="3.2"/>',
         f'<path d="M {ap_x - prof_w:.0f},{ap_c - ap_h:.0f} L {ap_x:.0f},'
         f'{ap_c - ap_h:.0f} L {ap_x:.0f},{ap_c + ap_h:.0f} L {ap_x - prof_w:.0f},'
@@ -255,7 +255,7 @@ def geometry_schematic() -> None:
                                       np.array([2.0 * np.sin(sl_th)])))[0]
     sx, sy = org_x + sl_r * np.cos(sl_th), org_y - sl_r * np.sin(sl_th)
     parts.append(
-        f'<path d="M 486,46 L {sx - 6:.0f},{sy - 8:.0f}" stroke="{GREY}" '
+        f'<path d="M 486,46 L {sx - 6:.0f},{sy - 8:.0f}" stroke="{GRAY}" '
         'stroke-width="1.2" marker-end="url(#ag)"/>'
     )
     txt = 'font-family="inherit" font-size="15" fill="{c}" text-anchor="{a}"'
@@ -266,10 +266,10 @@ def geometry_schematic() -> None:
         + txt.format(c=INK, a="middle")
         + f' transform="rotate(-90 {dim_x - 12:.0f} {ap_c:.0f})">aperture length</text>',
         f'<text x="{W - 18}" y="{org_y - 12:.0f}" '
-        + txt.format(c=GREY, a="end") + ">boresight</text>",
+        + txt.format(c=GRAY, a="end") + ">boresight</text>",
         f'<text x="600" y="{ap_c + ap_h + 52:.0f}" '
         + txt.format(c=NAVY, a="middle") + ">far-field pattern</text>",
-        f'<text x="482" y="50" ' + txt.format(c=GREY, a="end") + ">sidelobes</text>",
+        f'<text x="482" y="50" ' + txt.format(c=GRAY, a="end") + ">sidelobes</text>",
     ]
     parts.append("</svg>")
     svg = "\n".join(parts)

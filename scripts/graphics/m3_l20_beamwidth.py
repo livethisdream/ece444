@@ -6,7 +6,7 @@ L20:
                               dB pattern with HPBW, first nulls, FNBW and the
                               -13 dB first sidelobe marked
   - L20-scan-broadening     : the same array steered to 0, 30 and 60 degrees,
-                              labelled with the beamwidth read off each curve
+                              labeled with the beamwidth read off each curve
   - L20-aperture-vs-beamwidth : HPBW against aperture length in wavelengths,
                               broadside and 45-degree scan, with the PHASER
                               array and a 5-degree design target marked
@@ -30,7 +30,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 SLIDE_BG = "#fafaf7"
 ROOT = Path(__file__).resolve().parents[2]
@@ -45,7 +45,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -132,7 +132,7 @@ def beamwidth_anatomy() -> None:
                 arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.2))
 
     ax.text(-88, 11.0, "8 elements, half-wavelength spacing, broadside",
-            color=GREY, fontsize=12, ha="left", va="top")
+            color=GRAY, fontsize=12, ha="left", va="top")
     finalize(fig, "L20-beamwidth-anatomy")
 
 

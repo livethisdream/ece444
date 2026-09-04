@@ -175,7 +175,7 @@ A quarter-wave monopole over a good ground plane **is** a half-wave dipole with 
 :class: viz-frame
 
 :::{depth}
-Drag the height slider below to compare the two rules. Start with the vertical element at the bottom of its range: the pattern is the monopole's, the directivity readout parks at 3.28, and the peak sits on the horizon. Then switch to the horizontal wire at the same height and look at the third pill — the directivity is *higher*, but the radiated power has collapsed by more than 10 dB, because the image is cancelling the source. Raise the horizontal wire and watch that power come back as the first lobe forms overhead.
+Drag the height slider below to compare the two rules. Start with the vertical element at the bottom of its range: the pattern is the monopole's, the directivity readout parks at 3.28, and the peak sits on the horizon. Then switch to the horizontal wire at the same height and look at the third pill — the directivity is *higher*, but the radiated power has collapsed by more than 10 dB, because the image is canceling the source. Raise the horizontal wire and watch that power come back as the first lobe forms overhead.
 :::
 
 <iframe src="../../viz/image-theory.html"
@@ -222,12 +222,12 @@ Nothing in the field is infinite. A quarter-wave whip on a car roof at 800 MHz s
 
 ::::{frame} Model the ground explicitly
 ```{note}
-If you go back to the simulator from Lesson 8 to model a monopole, remember that the model needs an explicit ground: a perfect-conductor plane for the textbook answer, or a real-earth model with a conductivity and a permittivity for the realistic one. Feed the base segment against that plane. A monopole modelled in free space with no ground is a very short dipole, and the simulator will return a number that does not describe the antenna you meant to build.
+If you go back to the simulator from Lesson 8 to model a monopole, remember that the model needs an explicit ground: a perfect-conductor plane for the textbook answer, or a real-earth model with a conductivity and a permittivity for the realistic one. Feed the base segment against that plane. A monopole modeled in free space with no ground is a very short dipole, and the simulator will return a number that does not describe the antenna you meant to build.
 ```
 ::::
 
 ::::{frame} The small loop is a magnetic dipole
-Now change the current's shape instead of its neighbourhood. Take a loop of wire whose circumference is much less than a wavelength — $C < 0.1\lambda$ is the usual line — and drive it. The current is essentially **uniform** all the way around, in phase, because there is not enough electrical length for it to vary.
+Now change the current's shape instead of its neighborhood. Take a loop of wire whose circumference is much less than a wavelength — $C < 0.1\lambda$ is the usual line — and drive it. The current is essentially **uniform** all the way around, in phase, because there is not enough electrical length for it to vary.
 ::::
 
 ::::{frame} The dual of the short dipole
@@ -365,6 +365,6 @@ Small is expensive, and it is expensive twice. Shrinking an antenna drives the r
 You now have the complete wire-antenna toolkit: dipole, monopole, loop, and the image trick that turns any of them into something mounted on a vehicle. Lesson 10 leaves wires behind for the printed and aperture antennas — the microstrip patch, the slot, and the horn — where the radiating object is a surface or an opening rather than a current filament. The patch behaves much like two slots over a ground plane, and you will use image theory again to understand why it works at all.
 
 :::{depth}
-The other thread from today runs into Module 3. A monopole is an element plus one image; an array is an element plus many neighbours, and the same element-factor-times-array-factor bookkeeping handles both. When you get to pattern multiplication in Lesson 16, notice that you have already done it once — the height-above-ground curve you played with today is a two-element array whose second element happens to be a reflection.
+The other thread from today runs into Module 3. A monopole is an element plus one image; an array is an element plus many neighbors, and the same element-factor-times-array-factor bookkeeping handles both. When you get to pattern multiplication in Lesson 16, notice that you have already done it once — the height-above-ground curve you played with today is a two-element array whose second element happens to be a reflection.
 :::
 ::::

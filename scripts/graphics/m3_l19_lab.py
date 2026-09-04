@@ -29,7 +29,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = (
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = (
     "#004a85",
     "#0067b9",
     "#b01e24",
@@ -56,8 +56,8 @@ plt.rcParams.update(
         "font.size": 13,
         "axes.edgecolor": "#8a929c",
         "axes.labelcolor": INK,
-        "xtick.color": GREY,
-        "ytick.color": GREY,
+        "xtick.color": GRAY,
+        "ytick.color": GRAY,
         "text.color": INK,
         "axes.linewidth": 1.0,
         "legend.frameon": False,
@@ -114,16 +114,16 @@ def bench_setup() -> None:
     # protractor arc
     R = 1.0
     a = np.radians(np.linspace(-62, 62, 400))
-    ax.plot(R * np.sin(a), R * np.cos(a), color=GREY, lw=1.4, ls=(0, (6, 4)))
+    ax.plot(R * np.sin(a), R * np.cos(a), color=GRAY, lw=1.4, ls=(0, (6, 4)))
     for t in range(-60, 61, 15):
         ar = np.radians(t)
         ax.plot([0.965 * R * np.sin(ar), R * np.sin(ar)],
-                [0.965 * R * np.cos(ar), R * np.cos(ar)], color=GREY, lw=1.2)
+                [0.965 * R * np.cos(ar), R * np.cos(ar)], color=GRAY, lw=1.2)
         ax.text(1.10 * R * np.sin(ar), 1.10 * R * np.cos(ar), f"{t}",
-                ha="center", va="center", fontsize=10.5, color=GREY)
+                ha="center", va="center", fontsize=10.5, color=GRAY)
 
     # boresight ray + source position 1
-    ax.plot([0, 0], [0, R], color=GREY, lw=1.2, ls=(0, (2, 3)))
+    ax.plot([0, 0], [0, R], color=GRAY, lw=1.2, ls=(0, (2, 3)))
     ax.plot(0, R, marker="v", ms=13, color=GREEN)
     ax.text(0, R + 0.15, "HB100 at boresight", ha="center", va="bottom",
             fontsize=12, color=GREEN)
@@ -155,8 +155,8 @@ def sweep_compare() -> None:
         ax.plot(grid, af_db(grid, src), ls="none", marker="o", ms=3.4,
                 color=col, alpha=0.85)
 
-    ax.axhline(-23, color=GREY, lw=1.1, ls=(0, (5, 4)))
-    ax.text(-58, -24.2, "sweep noise floor", fontsize=11, color=GREY, va="top")
+    ax.axhline(-23, color=GRAY, lw=1.1, ls=(0, (5, 4)))
+    ax.text(-58, -24.2, "sweep noise floor", fontsize=11, color=GRAY, va="top")
     ax.axhline(-3, color=GREEN, lw=1.1, ls=(0, (3, 3)))
     ax.text(58, -2.6, "-3 dB", fontsize=11, color=GREEN, va="bottom", ha="right")
 
@@ -180,7 +180,7 @@ def phase_ramp() -> None:
     quant = np.round(wrapped / LSB) * LSB
 
     fig, ax = plt.subplots(figsize=(7.8, 4.0))
-    ax.plot(n + 1, raw, color=GREY, lw=1.6, ls=(0, (5, 4)), marker="o", ms=5,
+    ax.plot(n + 1, raw, color=GRAY, lw=1.6, ls=(0, (5, 4)), marker="o", ms=5,
             label="commanded ramp")
     ax.plot(n + 1, wrapped, color=NAVY, lw=0, marker="o", ms=9,
             label="wrapped into 0-360")
@@ -214,7 +214,7 @@ def error_budget() -> None:
     ]
     lo = [0.0, 0.0, 0.0, 0.0]
     hi = [1.0, 1.15, 1.5, 1.41]
-    cols = [GREY, ORANGE, BLUE, NAVY]
+    cols = [GRAY, ORANGE, BLUE, NAVY]
     fig, ax = plt.subplots(figsize=(7.6, 3.4))
     y = np.arange(len(labels))
     ax.barh(y, hi, left=lo, height=0.52, color=cols, alpha=0.9)

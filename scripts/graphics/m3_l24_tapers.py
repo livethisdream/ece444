@@ -24,7 +24,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 OUT = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
 
@@ -35,7 +35,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -271,7 +271,7 @@ def sll_vs_cost() -> None:
 
     for a, lab, col, dy in [(hann(), "Hann", RED, -0.35),
                             (BLACKMAN, "Blackman", GREEN, -0.35),
-                            (taylor(30.0, 4), "Taylor −30 dB", GREY, -0.45)]:
+                            (taylor(30.0, 4), "Taylor −30 dB", GRAY, -0.45)]:
         x = first_sll(a)
         side = "left" if lab.startswith("Taylor") else "right"
         ax.plot(x, hpbw(a), "D", color=col, ms=7, zorder=6)

@@ -195,7 +195,7 @@ Note:
 Someone always asks this, and it is the right question. Put the two curves up and
 let them see the answer: both designs null at 1 GHz and the VSWR-2 bands are
 within a few percent of each other. So bandwidth does NOT decide it. What decides
-it is on the next slide — whether you can realise the line impedance, and whether
+it is on the next slide — whether you can realize the line impedance, and whether
 a quarter wave is a sane length at your frequency.
 
 ---
@@ -251,8 +251,8 @@ Five steps, one per slide.
 Note:
 Step 1 is the move that makes the problem recognisable. Step 2 is where they see
 the transformer is not disqualified, just impractical here. Step 3 is the whole
-strategy in two bullets — and note the transformer realises 31.6 as a LINE
-impedance while the L-network realises it as a BRANCH magnitude. Same number.
+strategy in two bullets — and note the transformer realize 31.6 as a LINE
+impedance while the L-network realize it as a BRANCH magnitude. Same number.
 
 ---
 
@@ -332,7 +332,7 @@ same circles. Walk it live: the antenna sits low and left of center, capacitive.
 A SERIES element can only move you along a constant-resistance circle, so walk
 up that circle until you cross the unit-conductance circle. Now a SHUNT element
 moves you along constant conductance, straight into the center. Two moves, two
-elements. Emphasise that the series element cannot change the resistance and the
+elements. Emphasize that the series element cannot change the resistance and the
 shunt element cannot change it back — that is why the order is forced.
 
 ---

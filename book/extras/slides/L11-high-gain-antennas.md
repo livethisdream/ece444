@@ -58,7 +58,7 @@ Flag the midterm project up front — it is announced at the end of the hour and
 | Antenna | How it builds the area |
 | :-- | :-- |
 | Reflector | borrows a mirror's area, phase fixed by geometry |
-| Yagi-Uda | borrows the neighbours' currents, phase fixed by detuning |
+| Yagi-Uda | borrows the neighbors' currents, phase fixed by detuning |
 | Array | buys the area one element at a time, phase set electronically |
 
 Note:
@@ -246,7 +246,7 @@ Exactly one element is connected. Everything else is a piece of metal in the nea
 - **Parasites** carry current *induced* by the driven element's near field
 - Slightly **long** = inductive = current **lags** $\rightarrow$ reflector, behind
 - Slightly **short** = capacitive = current **leads** $\rightarrow$ directors, in front
-- Net effect: a slow travelling wave forward, **endfire** beam, 15–25 dB front-to-back
+- Net effect: a slow traveling wave forward, **endfire** beam, 15–25 dB front-to-back
 
 <div class="callout">
 <p>The long element lags, the short elements lead, and the beam goes toward the short end.</p>
@@ -318,7 +318,7 @@ Order matters. Students always start at 5 and work backwards. Make them start at
 | Cost driver | surface accuracy | almost nothing | a chain per element |
 
 Note:
-The cost row is the one practising engineers argue about. An array gives the best electrical performance and carries the highest cost.
+The cost row is the one practicing engineers argue about. An array gives the best electrical performance and carries the highest cost.
 
 ---
 
@@ -377,7 +377,7 @@ Hand out the packet here. Take questions on scope only; the details are in the h
 
 <div class="callout">
 <p><strong>Gain is coherent area, counted in square wavelengths.</strong></p>
-<p>A reflector rearranges phase with a mirror. A Yagi borrows its neighbours' currents. An array buys the area element by element. All three roads reach the same destination.</p>
+<p>A reflector rearranges phase with a mirror. A Yagi borrows its neighbors' currents. An array buys the area element by element. All three roads reach the same destination.</p>
 </div>
 
 Note:

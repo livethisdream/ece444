@@ -3,7 +3,7 @@
  * The HUD, the contents overlay and the scroll rail for a normal (non-frame)
  * page. Deliberately a separate file from frames.js: a reading page has no
  * frames, no present mode and no laser, and frames.js is built around a
- * scroll-snap deck. The popover and overlay behaviour is the same shape in
+ * scroll-snap deck. The popover and overlay behavior is the same shape in
  * both, which is a dedup worth doing once the shell has settled.
  */
 (function () {

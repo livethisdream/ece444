@@ -126,7 +126,7 @@ $$ R = r - \hat{\mathbf r}\cdot\mathbf{r}' + \frac{r'^{2} - (\hat{\mathbf r}\cdo
 | phase $e^{-jkR}$ | $R \approx r - \hat{\mathbf r}\cdot\mathbf{r}'$ | $k\hat{\mathbf r}\cdot\mathbf{r}'$ is **several radians** |
 
 <div class="callout">
-Sloppy on amplitude, careful on phase. Phase is what turns "adding" into "cancelling."
+Sloppy on amplitude, careful on phase. Phase is what turns "adding" into "canceling."
 </div>
 
 ---

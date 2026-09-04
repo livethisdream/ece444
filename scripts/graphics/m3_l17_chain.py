@@ -77,7 +77,7 @@ def arrow_defs():
 
 def signal_chain(page_copy: bool) -> str:
     W, H = 800, 400
-    ys = [72 + 34 * i for i in range(8)]           # element centres
+    ys = [72 + 34 * i for i in range(8)]           # element centers
     px, pw, ph = 26, 32, 22                        # patch rects
     lx, lw, lh = 84, 26, 20                        # LNA triangles
     ax, aw = 132, 86                               # ADAR boxes

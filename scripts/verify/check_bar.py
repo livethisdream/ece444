@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""The HUD is one pill, centred, holding three runs separated by a rule.
+"""The HUD is one pill, centerd, holding three runs separated by a rule.
 
 Symmetry is the whole point, so it is measured on both axes:
 
-* the pill is centred in the WINDOW. Three separately pinned groups were not:
-  `space-between` centres the middle group between the other two rather than
+* the pill is centerd in the WINDOW. Three separately pinned groups were not:
+  `space-between` centers the middle group between the other two rather than
   in the window, which put it 16px off on a desktop and moved it whenever a
   label changed.
-* the middle run is centred in the PILL. The outer runs hold different content
+* the middle run is centerd in the PILL. The outer runs hold different content
   -- "ECE 444" against "1/27" -- so the bar is a `1fr auto 1fr` grid whose
   outer columns are equal by definition. Nothing measures them, so nothing can
   drift when the counter reaches two digits. On a reading page the middle run
-  is empty and collapses to the single centre rule, which is what keeps the
+  is empty and collapses to the single center rule, which is what keeps the
   two shells' bars the same shape.
 
 Checked at four widths on both shells, with every panel landing under its own
@@ -36,7 +36,7 @@ PANELS = {"frame": [("btnSite", "sitepop"), ("btnMode", "modepop"), ("btnTools",
           "read":  [("btnSite", "sitepop")]}
 
 #: Rules painted around the middle run. A reading page has nothing to put in
-#: the middle, so the run IS the rule -- one line, dead centre -- rather than
+#: the middle, so the run IS the rule -- one line, dead center -- rather than
 #: two rules around a zero-width run reading `ECE 444 || 34%`.
 RULES = {"frame": 2, "read": 1}
 
@@ -81,10 +81,10 @@ def main():
                 tag = f"{kind} {label}"
 
                 g = page.evaluate(GEOM)
-                # centred in the WINDOW, which is what pinned groups could not do
+                # centerd in the WINDOW, which is what pinned groups could not do
                 off = (g["x"] + g["w"] / 2) - w / 2
                 if abs(off) > 1:
-                    bad.append(f"{tag}: bar off centre by {off:.0f}px")
+                    bad.append(f"{tag}: bar off center by {off:.0f}px")
                 if g["x"] < -0.5 or g["x"] + g["w"] > w + 0.5:
                     bad.append(f"{tag}: bar overhangs the window "
                                f"(x={g['x']:.0f} w={g['w']:.0f} vp={w})")
@@ -94,17 +94,17 @@ def main():
                     bad.append(f"{tag}: {g['rules']} separating rules, "
                                f"expected {RULES[kind]}")
                 else:
-                    # the outer runs are equal, so the middle one is centred
-                    # in the pill and not merely between its neighbours
+                    # the outer runs are equal, so the middle one is centerd
+                    # in the pill and not merely between its neighbors
                     left, mid, right = g["gs"]
                     if abs(left["w"] - right["w"]) > 1:
                         bad.append(f"{tag}: outer runs differ: "
                                    f"{left['w']:.0f}px vs {right['w']:.0f}px")
                     midoff = (mid["x"] + mid["w"] / 2) - (g["x"] + g["w"] / 2)
                     if abs(midoff) > 1:
-                        bad.append(f"{tag}: middle run off the pill's centre "
+                        bad.append(f"{tag}: middle run off the pill's center "
                                    f"by {midoff:.0f}px")
-                    # one row: a wrapped bar is still centred but is not the
+                    # one row: a wrapped bar is still centerd but is not the
                     # design, so say so rather than passing it silently
                     mids = [x["y"] + x["h"] / 2 for x in g["gs"]]
                     if max(mids) - min(mids) > 1:
@@ -157,7 +157,7 @@ def main():
         for x in bad:
             print("  " + x)
         return 1
-    print("centred bar OK")
+    print("centerd bar OK")
     return 0
 
 

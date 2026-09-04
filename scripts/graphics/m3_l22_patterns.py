@@ -34,7 +34,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
 NAVY, BLUE, RED, GREEN = "#004a85", "#0067b9", "#b01e24", "#1d7a4d"
-ORANGE, GREY, INK, RULE = "#e67e22", "#5a5a5a", "#1a1a1a", "#c7d2e0"
+ORANGE, GRAY, INK, RULE = "#e67e22", "#5a5a5a", "#1a1a1a", "#c7d2e0"
 REPO = Path(__file__).resolve().parents[2]
 OUT = REPO / "book/extras/slides/fig"
 # Lesson-page copies of the two figures the page embeds directly.
@@ -52,8 +52,8 @@ plt.rcParams.update(
         "font.size": 13,
         "axes.edgecolor": "#8a929c",
         "axes.labelcolor": INK,
-        "xtick.color": GREY,
-        "ytick.color": GREY,
+        "xtick.color": GRAY,
+        "ytick.color": GRAY,
         "text.color": INK,
         "axes.linewidth": 1.0,
         "legend.frameon": False,
@@ -115,8 +115,8 @@ def pattern_multiplication() -> None:
     ax.set_xlabel("Angle from broadside (deg)")
     ax.set_ylabel("Relative power (dB)")
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.42), ncol=3, fontsize=12)
-    ax.axvline(45, color=GREY, lw=1.0, ls=(0, (2, 3)))
-    ax.text(43.5, 1.6, "commanded 45°", fontsize=11.5, color=GREY, ha="right")
+    ax.axvline(45, color=GRAY, lw=1.0, ls=(0, (2, 3)))
+    ax.text(43.5, 1.6, "commanded 45°", fontsize=11.5, color=GRAY, ha="right")
     finalize(fig, "L22-pattern-multiplication")
 
 
@@ -135,13 +135,13 @@ def patch_element() -> None:
     for ring, lab in [(0.75, "-10"), (0.5, "-20"), (0.25, "-30")]:
         c = np.linspace(0, np.pi, 200)
         ax.plot(ring * np.cos(c), ring * np.sin(c), color=RULE, lw=0.8, zorder=0)
-        ax.text(0.02, ring + 0.03, lab, fontsize=10, color=GREY)
-    ax.text(0.02, 1.03, "0 dB", fontsize=10, color=GREY)
+        ax.text(0.02, ring + 0.03, lab, fontsize=10, color=GRAY)
+    ax.text(0.02, 1.03, "0 dB", fontsize=10, color=GRAY)
     for a_deg in (-60, -30, 0, 30, 60):
         aa = np.radians(90 - a_deg)
         ax.plot([0, 1.06 * np.cos(aa)], [0, 1.06 * np.sin(aa)], color=RULE, lw=0.8, zorder=0)
         ax.text(1.14 * np.cos(aa), 1.14 * np.sin(aa), f"{a_deg}°", fontsize=11,
-                color=GREY, ha="center", va="center")
+                color=GRAY, ha="center", va="center")
     ax.fill(r_ideal * np.cos(ang), r_ideal * np.sin(ang), color=BLUE, alpha=0.10)
     ax.plot(r_ideal * np.cos(ang), r_ideal * np.sin(ang), color=NAVY, lw=2.6,
             label="Ideal element")
@@ -159,7 +159,7 @@ def patch_element() -> None:
     ax.text(0.81, 0.80, "120° half-power\nbeamwidth, ideal",
             fontsize=11.5, color=GREEN, ha="left", va="center")
     ax.text(0, -0.30, "no radiation into the back hemisphere",
-            fontsize=11.5, color=GREY, ha="center", va="top")
+            fontsize=11.5, color=GRAY, ha="center", va="top")
     ax.legend(loc="lower center", fontsize=11.5, ncol=2, bbox_to_anchor=(0.5, -0.06))
     ax.set_xlim(-1.55, 1.80)
     ax.set_ylim(-0.62, 1.30)

@@ -46,7 +46,7 @@ class FrameDirective(_Wrapper):
     final_argument_whitespace = True
 
     def run(self):
-        # frame > wrap > content, because the layout centres a measured column
+        # frame > wrap > content, because the layout centers a measured column
         # inside a full-viewport box; one element cannot do both jobs.
         inner = nodes.container()
         inner["classes"] = ["wrap"]
@@ -178,9 +178,9 @@ _SHELL_ASSETS = ("shell.css", "frames.css", "page.css",
 
 #: Kept on a reading page. page.html links shell/page/custom by path, so the
 #: only stylesheet still wanted from the auto-linked list is the syntax
-#: colouring Sphinx generates for the configured pygments style -- easy to
+#: coloring Sphinx generates for the configured pygments style -- easy to
 #: miss, because without it code blocks still lay out, they just quietly lose
-#: every colour.
+#: every color.
 _PAGE_KEEP_CSS = ("pygments.css",)
 
 #: viz-autosize.js measures the widget iframes with a ResizeObserver. Reading

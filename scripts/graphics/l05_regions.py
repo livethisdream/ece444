@@ -27,7 +27,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 OUT = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
 
@@ -36,7 +36,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -84,19 +84,19 @@ def term_crossover() -> None:
         ax.spines[sp].set_visible(False)
 
     # the crossover itself
-    ax.axvline(1.0, color=GREY, lw=1.4, ls=(0, (4, 3)), zorder=2)
+    ax.axvline(1.0, color=GRAY, lw=1.4, ls=(0, (4, 3)), zorder=2)
     ax.plot(1.0, 1.0, "o", color=RED, ms=9, zorder=6)
     ax.annotate("all three equal here", xy=(1.0, 1.0), xytext=(1.55, 40.0),
                 color=RED, fontsize=12.5, fontweight="bold", ha="left", va="center",
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.4))
-    ax.text(1.08, 3.2e-4, "kr = 1", color=GREY, fontsize=12, fontweight="bold",
+    ax.text(1.08, 3.2e-4, "kr = 1", color=GRAY, fontsize=12, fontweight="bold",
             ha="left", va="bottom")
 
     # what each half means
     ax.text(0.105, 1700, "stored terms dominate\nreactive near field",
             color=RED, fontsize=11.5, fontweight="bold", ha="left", va="top")
     ax.text(19.0, 1700, "kr ≫ 1\nradiation term alone",
-            color=GREY, fontsize=11.5, fontweight="bold", ha="right", va="top")
+            color=GRAY, fontsize=11.5, fontweight="bold", ha="right", va="top")
 
     ax.legend(loc="lower left", bbox_to_anchor=(0.015, 0.02), fontsize=11.5,
               handlelength=1.7, labelspacing=0.35)

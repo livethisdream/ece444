@@ -85,7 +85,7 @@
   var KD_DEG = 360 * DL;                // kd in degrees = phase step per unit sin
   var FLOOR = -40;
 
-  var NAVY = "#004a85", MID = "#0067b9", GREY = "#9fb1c2", INK = "#15202b",
+  var NAVY = "#004a85", MID = "#0067b9", GRAY = "#9fb1c2", INK = "#15202b",
       INK3 = "#5b6573", EDGE = "#cddce9", RED = "#b01e24", GRN = "#3f7d34",
       AMBER = "#8a5a00";
 
@@ -232,7 +232,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
       }
       ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.stroke();
     }
-    if (Math.abs(t0) > 0.5) curve(0, GREY, 1.3);
+    if (Math.abs(t0) > 0.5) curve(0, GRAY, 1.3);
     curve(t0, NAVY, 2);
 
     // first nulls either side of the commanded angle

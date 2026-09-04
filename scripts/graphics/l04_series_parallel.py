@@ -27,7 +27,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
 OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
@@ -45,7 +45,7 @@ def phasors(ax):
                 arrowprops=dict(arrowstyle="-|>", color=ORANGE, lw=2.6, mutation_scale=18))
     ax.annotate("", xy=(RS, XS), xytext=(0, 0),
                 arrowprops=dict(arrowstyle="-|>", color=GREEN, lw=3.0, mutation_scale=20))
-    ax.plot([RS - 2.2, RS - 2.2, RS], [0, 2.2, 2.2], color=GREY, lw=1.0)
+    ax.plot([RS - 2.2, RS - 2.2, RS], [0, 2.2, 2.2], color=GRAY, lw=1.0)
 
     ax.text(RS / 2, -2.6, "20 V across the resistor", color=NAVY,
             fontsize=11.5, fontweight="bold", ha="center", va="top")
@@ -73,7 +73,7 @@ def circuits(ax):
     ax.add_patch(plt.Rectangle((3.9, 7.7), 1.5, 1.0, fc="none", ec=ORANGE, lw=2.0))
     ax.text(4.65, 8.2, "+j24.5", ha="center", va="center", fontsize=11, color=ORANGE, fontweight="bold")
     ax.plot([5.4, 6.2], [8.2, 8.2], color=INK, lw=1.6)
-    ax.text(0.6, 9.3, "what is really there", fontsize=11.5, color=GREY, fontweight="bold")
+    ax.text(0.6, 9.3, "what is really there", fontsize=11.5, color=GRAY, fontweight="bold")
 
     # right: parallel R_p + X_p
     ax.plot([0.6, 3.0], [3.6, 3.6], color=INK, lw=1.6)
@@ -87,11 +87,11 @@ def circuits(ax):
     ax.text(5.2, 1.7, "−j40.8", ha="center", va="center", fontsize=11, color=ORANGE, fontweight="bold")
     ax.plot([5.2, 5.2], [1.2, 0.4], color=INK, lw=1.6)
     ax.plot([3.0, 6.2], [3.6, 3.6], color=INK, lw=1.6)
-    ax.text(0.6, 4.7, "what the source sees", fontsize=11.5, color=GREY, fontweight="bold")
+    ax.text(0.6, 4.7, "what the source sees", fontsize=11.5, color=GRAY, fontweight="bold")
 
     ax.annotate("", xy=(3.4, 5.4), xytext=(3.4, 7.2),
-                arrowprops=dict(arrowstyle="-|>", color=GREY, lw=2.0, mutation_scale=20))
-    ax.text(3.8, 6.3, "identical at one frequency", fontsize=11.5, color=GREY,
+                arrowprops=dict(arrowstyle="-|>", color=GRAY, lw=2.0, mutation_scale=20))
+    ax.text(3.8, 6.3, "identical at one frequency", fontsize=11.5, color=GRAY,
             fontweight="bold", va="center")
     ax.text(0.2, -0.9, "Cancel the −j40.8 with a shunt element and a clean 50 Ω is left.",
             fontsize=11, color=INK, ha="left", va="top")

@@ -222,7 +222,7 @@ he does use.
 - **Committed SVGs can be made theme-aware with no generator changes.** CSS
   attribute selectors beat SVG presentation attributes, so
   `[fill="#5a5a5a"] { fill: var(--fig-line); }` retargets the house palette in
-  all 24 figures. Twelve rules cover every colour in use.
+  all 24 figures. Twelve rules cover every color in use.
 - **`mjlabel.js` fetches MathJax from a CDN.** Where that is blocked — the
   course containers included — `MJ.draw` returns 0 *and* the widgets' first
   paint never fires, because they kick it from `MJ.onReady`. A canvas can sit

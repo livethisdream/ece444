@@ -35,7 +35,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-NAVY, BLUE, RED, GREEN, ORANGE, GREY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 OUT = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
 
@@ -47,7 +47,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -119,7 +119,7 @@ def reactance_vs_length() -> None:
     Lres = float(np.interp(0.0, [X[i], X[i + 1]], [L[i], L[i + 1]]))
 
     fig, ax = plt.subplots(figsize=(6.7, 3.9))
-    ax.axhline(0.0, color=GREY, lw=1.1, ls=(0, (4, 3)), zorder=1)
+    ax.axhline(0.0, color=GRAY, lw=1.1, ls=(0, (4, 3)), zorder=1)
     ax.plot(L, R, color=NAVY, lw=2.6, label="Resistance  R", zorder=3)
     ax.plot(L, X, color=ORANGE, lw=2.6, label="Reactance  X", zorder=3)
 
@@ -147,9 +147,9 @@ def reactance_vs_length() -> None:
                 color=NAVY, fontsize=12, fontweight="bold", ha="left", va="center",
                 arrowprops=dict(arrowstyle="->", color=NAVY, lw=1.3))
 
-    ax.text(0.365, -330, "too short → capacitive", color=GREY, fontsize=12,
+    ax.text(0.365, -330, "too short → capacitive", color=GRAY, fontsize=12,
             fontweight="bold", ha="left", va="center")
-    ax.text(0.625, 530, "too long → inductive", color=GREY, fontsize=12,
+    ax.text(0.625, 530, "too long → inductive", color=GRAY, fontsize=12,
             fontweight="bold", ha="right", va="center")
 
     ax.legend(loc="upper left", fontsize=12.5, handlelength=1.7)

@@ -155,4 +155,4 @@ hand-waving`, `is the price`, `dear reader`. Then grep for passive tells —
 `is referred to as`, and `\b(is|are|was|were|be|been)\b +\w+(ed|en)\b` — and
 rewrite each one with its agent named. Then read every sentence and ask
 whether it has a subject and a verb. Then ask whether any sentence is a joke,
-a wink, or a judgement about the reader. Rewrite anything that is.
+a wink, or a judgment about the reader. Rewrite anything that is.

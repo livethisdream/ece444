@@ -45,7 +45,7 @@
   }
 
   /* Every panel opens under its own button, and a panel wider than the bar
-     is normal -- the bar is a centred pill only as wide as its contents.
+     is normal -- the bar is a centerd pill only as wide as its contents.
      So clamp to the WINDOW, not to the bar: measure where the button is,
      then pull the panel back if either edge would leave the screen. Done on
      open rather than guessed, because the bar's width changes with its

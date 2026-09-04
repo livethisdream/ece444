@@ -244,7 +244,7 @@ Multiply the pieces to get a budget:
 
 ::::{frame} The Yagi-Uda
 
-The reflector buys area with a mirror. The **Yagi-Uda** buys it with the neighbours.
+The reflector buys area with a mirror. The **Yagi-Uda** buys it with the neighbors.
 
 <img src="../../viz/img/L11-yagi.svg"
      alt="Yagi-Uda antenna showing a slightly long reflector, the fed driven element, and a row of progressively shorter directors along a boom, with the main beam endfire"
@@ -261,7 +261,7 @@ Exactly one element is connected to the transmitter — the **driven element**, 
 The trick is phase, and it is bought by **detuning**. A dipole slightly longer than resonance is inductive; a dipole slightly shorter is capacitive. The reactance sets the phase of the induced current relative to the driving field:
 
 - The **reflector**, about $0.5\lambda$ and placed behind the driven element, runs long and inductive. Its current lags, and by the time its radiation reaches the front of the antenna it adds in phase with the driven element's, while behind the antenna the two tend to cancel.
-- The **directors**, each around $0.40\text{-}0.45\lambda$ and progressively shorter down the boom, run short and capacitive. Their currents lead by just enough that the whole structure passes a slow travelling wave forward.
+- The **directors**, each around $0.40\text{-}0.45\lambda$ and progressively shorter down the boom, run short and capacitive. Their currents lead by just enough that the whole structure passes a slow traveling wave forward.
 ::::
 
 ::::{frame} Endfire, front-to-back, and diminishing returns

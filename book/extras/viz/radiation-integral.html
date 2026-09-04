@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The radiation integral as a coherent sum</title>
+<title>The radiation integral as waves arriving at the observer</title>
 <script src="mjlabel.js"></script>
 <style>
   :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
@@ -53,15 +53,10 @@
            font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
            text-align:center; min-width:8ch; color:var(--navy); }
   /* The state line is a sentence, not a quantity, so it stays a caption under
-     the instrument row -- only its colour carries the good/bad signal. */
+     the instrument row -- only its color carries the good/bad signal. */
   .state { margin:0; text-align:center; font-size:12px; font-weight:700;
            letter-spacing:0.01em; color:var(--ink3); }
   .state.hot { color:var(--red); }
-  /* What the marks are. The lesson prose used to carry this and the rule was
-     not to restate it in the graphic; in present mode that prose is behind
-     "More detail", so the widget says it once, here, in words. */
-  .key { margin:-4px 0 0; text-align:center; font-size:11px; line-height:1.3; color:var(--ink3); }
-  .key mjx-container { font-size:inherit !important; }
   .state.ok  { color:var(--grn); }
   .btns { display:flex; gap:6px; }
   button { font:inherit; font-size:12px; font-weight:600; padding:4px 10px; border-radius:5px;
@@ -72,12 +67,9 @@
 <body>
 <div class="app">
   <div class="canvases">
-    <canvas id="top" aria-label="Left: a line source split into elements, each sending a parallel ray toward the observation direction. Right: the phasor chain formed by adding those element contributions."></canvas>
-    <canvas id="pat" aria-label="Magnitude of the radiation integral versus observation angle, with a marker at the current angle"></canvas>
+    <canvas id="top" aria-label="Left: a line source split into elements, each sending a parallel ray toward the observation direction, with each element's path difference to the wavefront through the origin drawn in the element's color. Right: the wave from each element as it arrives at the observer, delayed by that path difference, and below them the sum of all the waves."></canvas>
+    <canvas id="pat" aria-label="Amplitude of the summed wave versus observation angle, with a marker at the current angle"></canvas>
   </div>
-
-  <p class="key">Coloured segments: each element&#8217;s path to the wavefront, \(z'\cos\theta\).
-     Right: one phasor per element, turned by \(kz'\cos\theta\); their sum is \(N(\theta)\).</p>
   <div class="controls">
     <div class="ctl">
       <label>Source length \(L/\lambda\)</label>
@@ -90,23 +82,21 @@
       <span class="val" id="th-val">90.0&#176;</span>
     </div>
     <div class="ctl">
-      <label>Elements \(N\)</label>
+      <label>Elements</label>
       <input type="range" id="n" min="4" max="60" step="1" value="24">
       <span class="val" id="n-val">24</span>
     </div>
     <div class="btns">
-      <button id="broad">broadside</button>
-      <button id="null1">first null</button>
+      <button id="broad" type="button">broadside</button>
+      <button id="null1" type="button">first null</button>
     </div>
   </div>
-
   <div class="readouts">
     <div class="ro"><span class="k">phase spread \(kL\cos\theta\)</span><span class="v" id="p-spread">&#8212;</span></div>
     <div class="ro" id="ro-mag"><span class="k">\(\lvert N\rvert / N_{\max}\)</span><span class="v" id="p-mag">&#8212;</span></div>
   </div>
   <p class="state" id="p-state">&#8212;</p>
 </div>
-
 <script>
 'use strict';
 const SANS='Inter, system-ui, -apple-system, sans-serif';
@@ -119,108 +109,87 @@ function arrow(ctx,x1,y1,x2,y2,color,w,head){
   ctx.lineTo(x2-h*Math.cos(a+0.42), y2-h*Math.sin(a+0.42));
   ctx.closePath(); ctx.fill();
 }
-// position along the source -> colour (blue at the bottom, amber at the top)
-function ramp(t){
+// position along the source -> color (blue at the bottom, amber at the top)
+function ramp(t, alpha){
   const a=[0,103,185], b=[138,90,0];
-  return 'rgb('+Math.round(a[0]+(b[0]-a[0])*t)+','+Math.round(a[1]+(b[1]-a[1])*t)+','+Math.round(a[2]+(b[2]-a[2])*t)+')';
+  const r=Math.round(a[0]+(b[0]-a[0])*t), g=Math.round(a[1]+(b[1]-a[1])*t), bl=Math.round(a[2]+(b[2]-a[2])*t);
+  return alpha===undefined ? 'rgb('+r+','+g+','+bl+')' : 'rgba('+r+','+g+','+bl+','+alpha+')';
 }
-
 const cvT=document.getElementById('top'), ctxT=cvT.getContext('2d');
 const cvP=document.getElementById('pat'), ctxP=cvP.getContext('2d');
 const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-
-const state={ L:2.0, th:90*Math.PI/180, N:24 };
-
+const state={ L:2.0, th:90*Math.PI/180, M:24 };
+/* The element at z' (in wavelengths) is closer to the observer by z' cos(theta),
+   so its wave arrives EARLY by that much: a phase lead of k z' cos(theta). */
+function phaseOf(i, th){
+  const z=((i+0.5)/state.M - 0.5)*state.L;
+  return 2*Math.PI*z*Math.cos(th);
+}
 /* ---- the radiation integral, done as the discrete sum the picture shows ---- */
 function sumAt(th){                      // returns {re, im, mag} with mag in [0,1]
-  const c=Math.cos(th); let re=0, im=0;
-  for(let i=0;i<state.N;i++){
-    const z=((i+0.5)/state.N - 0.5)*state.L;   // element position, wavelengths
-    const ph=2*Math.PI*z*c;                    // k z' cos(theta)
-    re+=Math.cos(ph); im+=Math.sin(ph);
-  }
-  return { re:re/state.N, im:im/state.N, mag:Math.hypot(re,im)/state.N };
+  let re=0, im=0;
+  for(let i=0;i<state.M;i++){ const ph=phaseOf(i,th); re+=Math.cos(ph); im+=Math.sin(ph); }
+  return { re:re/state.M, im:im/state.M, mag:Math.hypot(re,im)/state.M };
 }
-
 /* ---------------------------- top canvas ---------------------------- */
 function drawTop(){
   const dpr=window.devicePixelRatio||1, w=cvT.width/(dpr*SCL), h=cvT.height/(dpr*SCL);
   ctxT.clearRect(0,0,w,h);
-  const split=Math.round(w*0.52);
+  const split=Math.round(w*0.46);
   ctxT.strokeStyle=cssv('--edge'); ctxT.lineWidth=1;
   ctxT.beginPath(); ctxT.moveTo(split,10); ctxT.lineTo(split,h-10); ctxT.stroke();
   drawSource(0,0,split,h);
-  drawPhasors(split,0,w-split,h);
+  drawWaves(split,0,w-split,h);
 }
-
 function drawSource(x0,y0,w,h){
   const ctx=ctxT;
-  // No caption -- the lesson prose already says the source is chopped into
-  // elements each carrying a phasor (Neil's rule: don't restate in-graphic
-  // what the text says).
-  const cx=x0+w*0.34, cy=y0+h*0.55, half=Math.min(h*0.32, 100);
+  const cx=x0+w*0.38, cy=y0+h*0.52, half=Math.min(h*0.34, 100);
   const th=state.th, ux=Math.sin(th), uy=-Math.cos(th);   // observation direction
-
   // z axis
   ctx.strokeStyle=cssv('--edge2'); ctx.lineWidth=1; ctx.setLineDash([3,3]);
   ctx.beginPath(); ctx.moveTo(cx,cy-half-18); ctx.lineTo(cx,cy+half+10); ctx.stroke(); ctx.setLineDash([]);
   MJ.draw(ctx,'z',cx+9,cy-half-14,13,cssv('--ink3'),'left');
-
   // parallel rays, one per element, all pointing at P
   const rayLen=Math.min(w*0.52, 150);
-  for(let i=0;i<state.N;i++){
-    const t=(i+0.5)/state.N;
+  for(let i=0;i<state.M;i++){
+    const t=(i+0.5)/state.M;
     const py=cy-(t-0.5)*2*half;                            // top of canvas = +z
     ctx.strokeStyle='rgba(91,101,115,0.35)'; ctx.lineWidth=1; ctx.setLineDash([3,4]);
     ctx.beginPath(); ctx.moveTo(cx,py); ctx.lineTo(cx+ux*rayLen, py+uy*rayLen); ctx.stroke(); ctx.setLineDash([]);
   }
   /* The wavefront through the origin, perpendicular to the rays, and each
-     element's own path difference to it, drawn in the element's colour:
-     the segment from the element to the wavefront is z' cos(theta), the
-     length that becomes that element's phasor angle in the right panel.
-     Neil (2026-09-03): "how is N related to the direction theta?" -- this
-     is the link. At broadside the wavefront lies on the source and every
-     segment is zero; at endfire the segments are the full spacing. */
+     element's own path difference to it in the element's color. That segment
+     is z' cos(theta): the head start (or delay) its wave has in the right
+     panel. At broadside the wavefront lies along the source and every
+     segment is zero; toward endfire they grow to the full spacing. */
   const wx=uy, wy=-ux, wl=half*1.15;                       // along the wavefront
   ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1.1; ctx.setLineDash([6,3]);
   ctx.beginPath(); ctx.moveTo(cx-wx*wl,cy-wy*wl); ctx.lineTo(cx+wx*wl,cy+wy*wl); ctx.stroke(); ctx.setLineDash([]);
-  for(let i=0;i<state.N;i++){
-    const t=(i+0.5)/state.N;
+  for(let i=0;i<state.M;i++){
+    const t=(i+0.5)/state.M;
     const py=cy-(t-0.5)*2*half;
     const s=-(py-cy)*uy;                                   // signed distance to the wavefront
     if(Math.abs(s)<0.6) continue;
     ctx.strokeStyle=ramp(t); ctx.lineWidth=2; ctx.lineCap='round';
     ctx.beginPath(); ctx.moveTo(cx,py); ctx.lineTo(cx+ux*s, py+uy*s); ctx.stroke(); ctx.lineCap='butt';
   }
-  if(Math.abs(Math.cos(th))>0.25){
-    // label the downward end, offset outward and aligned away from the source
-    const sgn = wy>0 ? 1 : -1;
-    let lx=cx+sgn*wx*(wl+6), ly=cy+sgn*wy*(wl+6);
-    lx=Math.min(x0+w-4, Math.max(x0+4, lx)); ly=Math.min(y0+h-22, Math.max(y0+10, ly));
-    stext(ctx,'wavefront', lx, ly, 10, cssv('--ink3'), lx>=cx?'left':'right', false);
-  }
-
   // the source itself
   ctx.strokeStyle=cssv('--navy'); ctx.lineWidth=3.5; ctx.lineCap='round';
   ctx.beginPath(); ctx.moveTo(cx,cy-half); ctx.lineTo(cx,cy+half); ctx.stroke(); ctx.lineCap='butt';
-  for(let i=0;i<state.N;i++){
-    const t=(i+0.5)/state.N;
+  for(let i=0;i<state.M;i++){
+    const t=(i+0.5)/state.M;
     const py=cy-(t-0.5)*2*half;
     ctx.fillStyle=ramp(t); ctx.beginPath(); ctx.arc(cx,py,3.4,0,7); ctx.fill();
     ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke();
   }
-  /* End-aligned 12px left of the source line: once the panel shortens, cx moves
-     left with it and the label runs off the canvas -- the screenshot showed
-     'L' gone and only '= 2.00 lambda' left. Anchor it from the left instead
-     and clamp so it always starts inside. */
-  /* One line, anchored from the left so it cannot run off a short panel. */
-  stext(ctx,'L = '+state.L.toFixed(2)+' λ  ·  '+state.N+' elements', x0+8, Math.min(y0+h-9, cy+half+16), 11, cssv('--navy'),'left',true);
-
   // observation direction
-  const A=Math.min(w*0.56,168);
+  const A=Math.min(w*0.50,150);
   arrow(ctx,cx,cy,cx+ux*A,cy+uy*A,cssv('--navy'),2.4,9);
-  stext(ctx,'to P', cx+ux*A+6*ux+4, cy+uy*A+6*uy, 11.5, cssv('--navy'),'left',true);
-
+  /* keep the label inside the panel whichever way the arrow points */
+  ctx.font='700 11.5px '+SANS; const lw=ctx.measureText('to P').width;
+  let lx=cx+ux*A+6*ux+4, ly=Math.min(y0+h-8, Math.max(y0+8, cy+uy*A+6*uy));
+  if(lx+lw>x0+w-4) lx=x0+w-4-lw;
+  stext(ctx,'to P', lx, ly, 11.5, cssv('--navy'),'left',true);
   // theta arc from +z round to the observation direction
   const R=Math.min(half*0.42,44);
   ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1.2;
@@ -228,55 +197,67 @@ function drawSource(x0,y0,w,h){
   const mth=th/2;
   MJ.draw(ctx,'\\theta', cx+Math.sin(mth)*(R+13), cy-Math.cos(mth)*(R+13), 13, cssv('--ink3'),'center');
 }
-
-function drawPhasors(x0,y0,w,h){
+/* The waves as they arrive at P. Upper strip: one trace per element, the same
+   sinusoid shifted by that element's path difference, in the element's color.
+   Lower strip: their sum, on the scale where every element in phase reaches
+   the dotted lines. The sum's amplitude is |N(theta)| -- the same number the
+   pattern panel plots against theta. */
+function drawWaves(x0,y0,w,h){
   const ctx=ctxT;
-  // No caption here either -- same reason as drawSource above.
-  const cx=x0+w*0.5, cy=y0+h*0.58;
-  const R=Math.min(w*0.62, h*0.46);          // chain length when every phasor aligns
-
-  // reference bar: the length the chain reaches when nothing cancels
-  const by=y0+24;
-  ctx.strokeStyle=cssv('--edge2'); ctx.lineWidth=3; ctx.lineCap='round';
-  ctx.beginPath(); ctx.moveTo(cx-R/2,by); ctx.lineTo(cx+R/2,by); ctx.stroke(); ctx.lineCap='butt';
-  stext(ctx,'all in phase', cx-R/2, by+13, 10.5, cssv('--ink3'),'left',false);
-
-  // the chain: start so the resultant is centred
-  const s=sumAt(state.th);
-  const step=R/state.N;
-  let px=cx - s.re*R/2, py=cy + s.im*R/2;     // canvas y is flipped
-  const sx=px, sy=py;
-  const c=Math.cos(state.th);
-  for(let i=0;i<state.N;i++){
-    const t=(i+0.5)/state.N;
-    const z=(t-0.5)*state.L;
-    const ph=2*Math.PI*z*c;
-    const nx=px+Math.cos(ph)*step, ny=py-Math.sin(ph)*step;
-    ctx.strokeStyle=ramp(t); ctx.lineWidth=2.6;
-    ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(nx,ny); ctx.stroke();
-    px=nx; py=ny;
+  const left=x0+14, right=x0+w-46, span=right-left;
+  const cycles=2;
+  const gap=12, top=y0+16, bot=y0+h-14;
+  const stripH=(bot-top-gap)/2;
+  const cA=top+stripH/2, cB=top+stripH+gap+stripH/2;     // strip centers
+  const amp=stripH*0.42;
+  // zero lines
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(const cy of [cA,cB]){ ctx.beginPath(); ctx.moveTo(left,cy); ctx.lineTo(right,cy); ctx.stroke(); }
+  // the in-phase envelope on the sum strip
+  ctx.strokeStyle=cssv('--edge2'); ctx.setLineDash([3,3]);
+  for(const s of [-1,1]){ ctx.beginPath(); ctx.moveTo(left,cB-s*amp); ctx.lineTo(right,cB-s*amp); ctx.stroke(); }
+  ctx.setLineDash([]);
+  MJ.draw(ctx,'N_{\\max}', right+6, cB-amp, 10.5, cssv('--ink3'),'left');
+  // each element's wave, delayed by its path difference
+  const steps=Math.max(120, Math.round(span/2));
+  for(let i=0;i<state.M;i++){
+    const t=(i+0.5)/state.M, ph=phaseOf(i,state.th);
+    ctx.strokeStyle=ramp(t, 0.55); ctx.lineWidth=1.2; ctx.beginPath();
+    for(let k=0;k<=steps;k++){
+      const x=left+span*k/steps, wt=2*Math.PI*cycles*k/steps;
+      const y=cA-amp*Math.cos(wt+ph);
+      k? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+    }
+    ctx.stroke();
   }
-  // resultant
-  if(s.mag>0.004){
-    arrow(ctx,sx,sy,px,py,cssv('--red'),2.6,10);
-    const mx=(sx+px)/2, my=(sy+py)/2;
-    MJ.draw(ctx,'N(\\theta)', mx+16, my+14, 13, cssv('--red'),'left');
+  // their sum, normalized so that "all in phase" is the dotted envelope
+  const s=sumAt(state.th), mag=s.mag, arg=Math.atan2(s.im,s.re);
+  ctx.strokeStyle=cssv('--navy'); ctx.lineWidth=2.4; ctx.beginPath();
+  for(let k=0;k<=steps;k++){
+    const x=left+span*k/steps, wt=2*Math.PI*cycles*k/steps;
+    const y=cB-amp*mag*Math.cos(wt+arg);
+    k? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+  }
+  ctx.stroke();
+  // the sum's amplitude, marked at the right: this is |N(theta)|
+  const bx=right+10;
+  if(mag>0.01){
+    ctx.strokeStyle=cssv('--red'); ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(bx,cB-amp*mag); ctx.lineTo(bx,cB+amp*mag); ctx.stroke();
+    for(const s2 of [-1,1]){ ctx.beginPath(); ctx.moveTo(bx-3,cB+s2*amp*mag); ctx.lineTo(bx+3,cB+s2*amp*mag); ctx.stroke(); }
   } else {
-    ctx.fillStyle=cssv('--red'); ctx.beginPath(); ctx.arc(sx,sy,4.5,0,7); ctx.fill();
+    ctx.fillStyle=cssv('--red'); ctx.beginPath(); ctx.arc(bx,cB,3,0,7); ctx.fill();
   }
-  // No "closes -> null" / "each link turns by..." captions -- both are
-  // already said in the lesson prose and in the .state line below the
-  // readouts, which reports the same condition live.
+  MJ.draw(ctx,'|N(\\theta)|', bx+5, cB+ (mag>0.35? 0 : amp*0.55), 11, cssv('--red'),'left');
+  MJ.draw(ctx,'t', right, bot+2, 11, cssv('--ink3'),'right');
 }
-
 /* ---------------------------- pattern canvas ---------------------------- */
 function drawPat(){
   const dpr=window.devicePixelRatio||1, w=cvP.width/(dpr*SCL), h=cvP.height/(dpr*SCL);
   ctxP.clearRect(0,0,w,h);
-  const ctx=ctxP, mL=52, mR=18, mT=20, mB=34;
+  const ctx=ctxP, mL=52, mR=18, mT=14, mB=34;
   const pw=w-mL-mR, ph=h-mT-mB;
   const xp=d=>mL+d/180*pw, yp=v=>mT+(1-v)*ph;
-
   ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
   for(let v=0;v<=1.001;v+=0.25){ const y=yp(v);
     ctx.beginPath(); ctx.moveTo(mL,y); ctx.lineTo(mL+pw,y); ctx.stroke();
@@ -288,8 +269,6 @@ function drawPat(){
   }
   ctx.strokeStyle=cssv('--edge'); ctx.strokeRect(mL,mT,pw,ph);
   stext(ctx,'broadside', xp(90), mT+ph-10, 10.5, cssv('--ink3'),'center',false);
-  stext(ctx,'the sum for every direction; the dot is this one', mL, 9, 10.5, cssv('--ink3'),'left',false);
-
   // |N(theta)| over the whole sweep
   ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.2; ctx.beginPath();
   for(let i=0;i<=540;i++){
@@ -298,20 +277,17 @@ function drawPat(){
     i? ctx.lineTo(x,y) : ctx.moveTo(x,y);
   }
   ctx.stroke();
-
   // marker at the current angle
   const d0=state.th*180/Math.PI, v0=sumAt(state.th).mag;
   ctx.strokeStyle='rgba(21,32,43,0.5)'; ctx.lineWidth=1.4; ctx.setLineDash([3,3]);
   ctx.beginPath(); ctx.moveTo(xp(d0),mT); ctx.lineTo(xp(d0),mT+ph); ctx.stroke(); ctx.setLineDash([]);
   ctx.fillStyle=cssv('--red'); ctx.beginPath(); ctx.arc(xp(d0),yp(v0),4.4,0,7); ctx.fill();
   ctx.strokeStyle='#fff'; ctx.lineWidth=1.3; ctx.stroke();
-
   MJ.draw(ctx,'\\theta', mL+pw/2, mT+ph+27, 12, cssv('--ink3'),'center');
   ctx.save(); ctx.translate(15, mT+ph/2); ctx.rotate(-Math.PI/2);
-  MJ.draw(ctx,'|N(\\theta)|\\,/\\,N', 0, 0, 12, cssv('--ink3'),'center');
+  MJ.draw(ctx,'|N(\\theta)|\\,/\\,N_{\\max}', 0, 0, 12, cssv('--ink3'),'center');
   ctx.restore();
 }
-
 /* ---------------------------- readouts + wiring ---------------------------- */
 function readouts(){
   const s=sumAt(state.th), spread=2*Math.PI*state.L*Math.cos(state.th);
@@ -319,17 +295,15 @@ function readouts(){
   document.getElementById('p-mag').textContent=s.mag.toFixed(3);
   const st=document.getElementById('p-state');
   st.className='state';
-  if(state.L/state.N >= 1){
+  if(state.L/state.M >= 1){
     // the discrete sum has stopped standing in for the integral — say so
     st.textContent='spacing ≥ λ — add elements'; st.classList.add('hot');
   }
   else if(s.mag>0.98){ st.textContent='every element in phase — peak'; st.classList.add('ok'); }
-  else if(s.mag<0.02){ st.textContent='contributions cancel — null'; st.classList.add('hot'); }
+  else if(s.mag<0.02){ st.textContent='the waves cancel — null'; st.classList.add('hot'); }
   else { st.textContent='partial cancellation'; }
 }
-
 function drawAll(){ drawTop(); drawPat(); readouts(); }
-
 /* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
    each side, so a bitmap sized from it is 2px wider than the box it is painted
    into and the drawing comes out stretched horizontally -- circles turn into
@@ -348,11 +322,6 @@ function setSize(cv,wCss,hCss,dpr){
    and every number below is exactly what it was. */
 const DESIGN_W=380;
 let SCL=1;
-function fit(){
-  const dpr=window.devicePixelRatio||1;
-  const wCss=cvWidth(cvT);
-  SCL=Math.min(1, wCss/DESIGN_W);
-  const w=wCss/SCL;
 /* Narrow: the canvases and the control/readout rows stack, so the parts ADD
    instead of sharing a row -- which puts the widget past the frame budget and
    makes it scroll inside its own iframe. Every curve and control stays; the
@@ -360,8 +329,13 @@ function fit(){
    than the bitmap keeps text full size and the composition undistorted. */
 var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:599px)') : null;
 function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(cvT);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
   const h1=SQ(Math.max(230, Math.min(w*0.36, 290))), h2=SQ(Math.max(120, Math.min(w*0.20, 160)));
-  /* The two canvases no longer share a column width (1.35fr / 1fr above 650px),
+  /* The two canvases do not share a column width (1.35fr / 1fr above 650px),
      so the pattern canvas is sized from its own box or its bitmap is stretched. */
   const wP=cvWidth(cvP);
   setSize(cvT,wCss,h1*SCL,dpr); setSize(cvP,wP,h2*SCL,dpr);
@@ -369,17 +343,15 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
   drawAll();
 }
 window.addEventListener('resize', fit);
-
 const lenEl=document.getElementById('len'), thEl=document.getElementById('th'), nEl=document.getElementById('n');
 function syncLabels(){
   document.getElementById('len-val').textContent=state.L.toFixed(2);
   document.getElementById('th-val').textContent=(state.th*180/Math.PI).toFixed(1)+'°';
-  document.getElementById('n-val').textContent=state.N;
+  document.getElementById('n-val').textContent=state.M;
 }
 lenEl.addEventListener('input',()=>{ state.L=+lenEl.value; syncLabels(); drawAll(); });
 thEl .addEventListener('input',()=>{ state.th=+thEl.value*Math.PI/180; syncLabels(); drawAll(); });
-nEl  .addEventListener('input',()=>{ state.N=+nEl.value; syncLabels(); drawAll(); });
-
+nEl  .addEventListener('input',()=>{ state.M=+nEl.value; syncLabels(); drawAll(); });
 document.getElementById('broad').addEventListener('click',()=>{
   thEl.value=90; state.th=Math.PI/2; syncLabels(); drawAll();
 });
@@ -389,7 +361,6 @@ document.getElementById('null1').addEventListener('click',()=>{
   const d=Math.acos(Math.min(0.999,1/state.L))*180/Math.PI;
   thEl.value=d.toFixed(1); state.th=d*Math.PI/180; syncLabels(); drawAll();
 });
-
 syncLabels();
 fit();
 MJ.setRedraw(()=>drawAll());

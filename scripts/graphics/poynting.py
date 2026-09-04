@@ -26,7 +26,7 @@ PERIODS = 2.25
 K = PERIODS * 2 * math.pi / L
 DX, DY = 0.55, -0.32           # isometric depth-axis unit (H points up-right)
 
-RED, BLUE, NAVY, GREY = "#b01e24", "#0067b9", "#004a85", "#5a5a5a"
+RED, BLUE, NAVY, GRAY = "#b01e24", "#0067b9", "#004a85", "#5a5a5a"
 AXCOL = "#8a929c"              # subtle coordinate frame
 
 
@@ -123,7 +123,7 @@ def main() -> int:
 <text x="{e_lbl[0]:.1f}" y="{e_lbl[1]:.1f}" fill="{RED}" font-size="18" font-weight="700" text-anchor="middle">E</text>
 <text x="{h_lbl[0]:.1f}" y="{h_lbl[1]:.1f}" fill="{BLUE}" font-size="18" font-weight="700">H</text>
 <text x="{s_lbl[0]:.1f}" y="{s_lbl[1]:.1f}" fill="{NAVY}" font-size="18" font-weight="700">S</text>
-<text x="{prop_lbl[0]:.1f}" y="{prop_lbl[1]:.1f}" fill="{GREY}" font-size="12">propagation</text>
+<text x="{prop_lbl[0]:.1f}" y="{prop_lbl[1]:.1f}" fill="{GRAY}" font-size="12">propagation</text>
 {triad_lbl}
 </svg>
 """

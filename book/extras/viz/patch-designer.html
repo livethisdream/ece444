@@ -377,7 +377,7 @@ function half(ctx,x0,w,h,fn,name,sub,col){
     /* Stacked under name/sub, not right-aligned across from them -- at the
        half-width this canvas now draws at (side by side with the geometry
        canvas), a right-aligned status line sits close enough to collide with
-       the neighbouring half's title. */
+       the neighboring half's title. */
     stext(ctx,'HPBW '+bw.toFixed(0)+'\u00b0', x0+14, 50, 12, cssv('--grn'),'left',true);
   } else {
     stext(ctx,'no \u22123 dB point in this model', x0+14, 50, 11, cssv('--amber'),'left',false);
@@ -427,7 +427,7 @@ function setSize(cv,wCss,hCss,dpr){
 var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:600px)') : null;
 function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.74) : h; }
 /* Enough for the top view plus its W dimension, which sits BOX/2+24 below the
-   box centre and simply gets clipped off the bottom if the panel is shorter. */
+   box center and simply gets clipped off the bottom if the panel is shorter. */
 function SQGEO(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.74) : h; }
 var NARROW = false;   // set in fit(); the side view is skipped when true
 const DESIGN_W=400;

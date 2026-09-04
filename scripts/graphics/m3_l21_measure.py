@@ -29,7 +29,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-NAVY, BLUE, RED, GREEN, AMBER, GREY = "#004a85", "#0067b9", "#b01e24", "#3f7d34", "#8a5a00", "#5a5a5a"
+NAVY, BLUE, RED, GREEN, AMBER, GRAY = "#004a85", "#0067b9", "#b01e24", "#3f7d34", "#8a5a00", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
 FIG = ROOT / "book/extras/slides/fig"
@@ -45,7 +45,7 @@ plt.rcParams.update({
     "font.size": 13,
     "axes.edgecolor": "#8a929c",
     "axes.labelcolor": INK,
-    "xtick.color": GREY, "ytick.color": GREY,
+    "xtick.color": GRAY, "ytick.color": GRAY,
     "text.color": INK,
     "axes.linewidth": 1.0,
     "legend.frameon": False,
@@ -231,7 +231,7 @@ def ideal_vs_measured() -> None:
     frame(ax, (-60, 60))
     ax.axhline(FLOOR_DB, color=AMBER, lw=1.2, ls=(0, (4, 4)))
     ax.text(-57, FLOOR_DB - 1.4, "noise floor", color=AMBER, fontsize=11, va="top")
-    ax.plot(ti, di, color=GREY, lw=1.5, label="Array factor, 8 elements")
+    ax.plot(ti, di, color=GRAY, lw=1.5, label="Array factor, 8 elements")
     ax.plot(tm, np.clip(dm, YMIN, None), color=BLUE, lw=2.2, marker="o", ms=3.6,
             mfc=NAVY, mec=NAVY, label="Measured sweep, 2.8125° steps", zorder=3)
 
