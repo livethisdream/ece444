@@ -68,6 +68,25 @@ about the antenna enters except where the elements are and what phase each one
 carries; the direction $\theta$ does the rest, through the path difference.
 Every antenna in this course, and every array in Module 3, is this picture with
 more elements.
+
+The next frame shows those two sources radiating: the field around them, with
+the bright and dark directions their phase difference makes. Slide the element
+count up and the fringes of the double slit sharpen into the lobes of a line
+source. Drag $ around the edge to move the observer.
+::::
+
+::::{frame} Two sources, in space
+:class: viz-frame
+
+:::{present}
+<iframe src="../../viz/interference-field.html"
+        width="100%" height="538"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="The field around a line source, with the observer direction and the far-field pattern"
+        data-autosize>
+</iframe>
+:::
 ::::
 
 ::::{frame} Many sources: the radiation integral
@@ -478,6 +497,42 @@ learned there comes across unchanged.
 | frequency $\omega$, radians per second | spatial frequency $k_z = k\cos\theta$, radians per meter along the source |
 | a signal $x(t)$ | the current $I(z')$ |
 | its spectrum $X(\omega)$ | the pattern $N_z(k_z)$ |
+
+What the transform buys you, row by row:
+
+| Signals and systems | Antennas |
+| :-- | :-- |
+| longer pulse, narrower spectrum | longer source, narrower beam |
+| a window tames leakage | a taper tames sidelobes |
+| modulation shifts the spectrum | linear phase steers the beam |
+| sampling repeats the spectrum | discrete elements repeat the pattern |
+
+Every row is the left column, applied. Nothing on the right is derived in this
+course from scratch.
+
+| Signals and systems | Antennas |
+| :-- | :-- |
+| a rectangular pulse | a uniform line source |
+| its sinc spectrum, first sidelobe $-13.3$ dB | the sinc pattern, first sidelobe $-13.3$ dB |
+| a longer pulse has a narrower spectrum | a longer source has a narrower beam, $\theta_\text{HP} \approx 0.886\ \lambda/L$ |
+| a window function tames spectral leakage | an amplitude taper tames sidelobes — **the same functions, with the same names**: Hamming, Taylor, Chebyshev |
+| modulation by $e^{j\omega_0 t}$ shifts the spectrum | a linear phase across the source steers the beam to $\theta_0$ |
+| sampling makes the spectrum repeat | discrete elements make the transform repeat, every $2\pi/d$ |
+| aliasing above the Nyquist rate | grating lobes once the spacing passes $\lambda/2$ |
+| convolution in time is multiplication in frequency | an array is one element convolved with a comb of positions, so its pattern is element factor × array factor |
+
+This is why Module 3 works the way it does. An array designer is not really
+solving Maxwell's equations. They are choosing a function whose Fourier
+transform has the beamwidth, sidelobe level, and null placement they want, then
+building a current distribution that realizes it.
+
+| Antenna consequence | Where you will use it |
+| :-- | :-- |
+| Longer aperture → **narrower beam** | L15, L20 |
+| Smooth taper → **lower sidelobes**, wider beam | L15, L24, L25 |
+| Linear phase → the **beam steers** | L18, L19, L26 |
+| Element spacing → **grating lobes** | L16, L26 |
+| Element × comb → **pattern multiplication** | L16 |
 ::::
 
 ::::{frame} What k is telling you
@@ -523,43 +578,6 @@ there — the broadside beam. Put a linear phase slope across the current and
 the loud answer moves to whatever $k_z$ matches the slope — the beam steers.
 ::::
 
-::::{frame} What Fourier buys you
-:::{present}
-| Signals and systems | Antennas |
-| :-- | :-- |
-| longer pulse, narrower spectrum | longer source, narrower beam |
-| a window tames leakage | a taper tames sidelobes |
-| modulation shifts the spectrum | linear phase steers the beam |
-| sampling repeats the spectrum | discrete elements repeat the pattern |
-:::
-
-Every row is the left column, applied. Nothing on the right is derived in this
-course from scratch.
-
-| Signals and systems | Antennas |
-| :-- | :-- |
-| a rectangular pulse | a uniform line source |
-| its sinc spectrum, first sidelobe $-13.3$ dB | the sinc pattern, first sidelobe $-13.3$ dB |
-| a longer pulse has a narrower spectrum | a longer source has a narrower beam, $\theta_\text{HP} \approx 0.886\ \lambda/L$ |
-| a window function tames spectral leakage | an amplitude taper tames sidelobes — **the same functions, with the same names**: Hamming, Taylor, Chebyshev |
-| modulation by $e^{j\omega_0 t}$ shifts the spectrum | a linear phase across the source steers the beam to $\theta_0$ |
-| sampling makes the spectrum repeat | discrete elements make the transform repeat, every $2\pi/d$ |
-| aliasing above the Nyquist rate | grating lobes once the spacing passes $\lambda/2$ |
-| convolution in time is multiplication in frequency | an array is one element convolved with a comb of positions, so its pattern is element factor × array factor |
-
-This is why Module 3 works the way it does. An array designer is not really
-solving Maxwell's equations. They are choosing a function whose Fourier
-transform has the beamwidth, sidelobe level, and null placement they want, then
-building a current distribution that realizes it.
-
-| Antenna consequence | Where you will use it |
-| :-- | :-- |
-| Longer aperture → **narrower beam** | L15, L20 |
-| Smooth taper → **lower sidelobes**, wider beam | L15, L24, L25 |
-| Linear phase → the **beam steers** | L18, L19, L26 |
-| Element spacing → **grating lobes** | L16, L26 |
-| Element × comb → **pattern multiplication** | L16 |
-::::
 
 ::::{frame} Part of the transform is invisible
 :::{present}
