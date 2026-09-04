@@ -599,12 +599,9 @@ Said in wavelengths: a spatial frequency $k_z$ is a ripple in the current with
 period $2\pi/k_z$, and the band edge $k_z = k$ is a period of exactly
 $\lambda$. That idea has no counterpart in your signals course.
 
-Keep that window in mind, because it does not stay closed. When Module 3 samples
-a continuous aperture into a discrete array, the transform *repeats* at intervals
-of $2\pi/d$, and if the element spacing $d$ is large enough one of those repeats
-slides inside $|k_z| \le k$. Energy that was safely invisible becomes a second
-beam you did not ask for — a **grating lobe**, and the reason Lesson 16 spends so
-much effort on element spacing.
+Keep that window in mind. When Module 3 builds an array out of separate
+elements, the transform repeats, and a repeat that slides inside the window is
+a second beam you did not ask for. Lesson 16 is about keeping it out.
 ::::
 
 ::::{frame} The transform and its window
@@ -649,6 +646,10 @@ direction.**
 Choose a distribution, stretch it, taper it, put a linear phase slope across it,
 and watch the pattern respond. Those three habits are the ones to build here,
 and the next frames put numbers on each of them.
+
+Beamwidth is bought with **size** and sidelobes are bought with **taper**;
+that trade has a price list, and Lesson 15 derives it. A phase slope across
+the current steers the beam, and Lesson 18 makes it a design tool.
 ::::
 
 ::::{frame} The infinitesimal dipole recovers Lesson 5
@@ -796,16 +797,18 @@ sidelobes are bought with **taper**.
 ::::
 
 ::::{frame} What a taper buys, and what it costs
-:::{present}
+:class: read-only
+
+Beamwidth is bought with **size**. Sidelobes are bought with **taper**. The
+numbers behind that sentence are Module 3's, and they are here only so the
+sentence has something to point at.
+
 | Distribution | First sidelobe | HPBW constant ($\times\ \lambda/L$) |
 | :-- | :-: | :-: |
 | Uniform | $-13.3$ dB | 0.886 |
 | Cosine | $-23$ dB | 1.19 |
 | Triangular | $-26.5$ dB | 1.27 |
 | Cosine² | $-31.5$ dB | 1.44 |
-
-Beamwidth is bought with **size**. Sidelobes are bought with **taper**.
-:::
 
 Since the transform's high-frequency content comes from the *edges* of the
 distribution, softening the edges must soften the sidelobes. It does, and the
