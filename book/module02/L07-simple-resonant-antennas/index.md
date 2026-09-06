@@ -155,15 +155,14 @@ $$I(z) = I_m \sin\left[k\left(\frac{L}{2} - \vert z \vert\right)\right]$$
   $L = \lambda$ it is $I_m \sin(\pi) = 0$: a current *null* at the feed. Remember that contrast — it determines the impedance in Part 4.
 ::::
 
-::::{frame} The current is assumed, not solved for
+::::{frame} The current is the excitation, not the solution 
 
 :::{callout}
-This current is **assumed**, not solved for. It is justified by the
+This current is **an input**, not the solution. It is justified by the
 transmission-line analogy, and it is confirmed to be very close to the truth by
 measurement and by numerical solvers — but it is not a solution of Maxwell's
 equations for a dipole, and for thick or non-resonant wires it is visibly
-wrong. Everything downstream in this lesson inherits that assumption. Lesson 8
-is where you find out how much it costs.
+wrong. Everything downstream in this module inherits that assumption and we will be exploring the tradeoffs.  
 :::
 ::::
 
@@ -176,8 +175,7 @@ is where you find out how much it costs.
 
 ::::{frame} Step 1: set up the radiation integral
 
-You have a current. Lesson 6 gives you the rest, and this is the one antenna in
-the course where we run that machine end to end.
+You have a current. The radiation integrals of Lesson 6 gives you the rest, and this is the one antenna in the course where we run that computation end to end.
 
 Lesson 6's radiation vector is
 $\mathbf{N} = \int \mathbf{J}\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'$.
@@ -198,36 +196,35 @@ $$N_z(\theta) = 2 I_m \int_0^{L/2} \sin\left[k\left(\frac{L}{2} - z'\right)\righ
 
 ::::{frame} Step 2: evaluate it
 
-Now it is a first-year integral. The product-to-sum identity
+This is a relatively straightforward integral. The product-to-sum identity
 $\sin A \cos B = \tfrac{1}{2}\left[\sin(A+B) + \sin(A-B)\right]$ turns the
-integrand into two plain sines, both of which integrate directly. Collecting
-the result:
+integrand into two plain sines, both of which integrate directly. Collecting the result:
 
 $$N_z(\theta) = \frac{2 I_m}{k}\ \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin^2\theta}$$
 ::::
 
 ::::{frame} Step 3: project and normalize
 
-One step remains. Lesson 6 showed that a $z$-directed current radiates only a
+Lesson 6 showed that a $z$-directed current radiates only a
 $\theta$ component in the far field, obtained by projection:
-$N_\theta = -N_z \sin\theta$. That kills one power of $\sin\theta$:
+$N_\theta = -N_z \sin\theta$. That eliminates one power of $\sin\theta$:
 
 $$N_\theta(\theta) \propto \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta}$$
 
-That is the pattern of a center-fed dipole of **any** length, up to a constant:
+That is the pattern of a center-fed dipole of **any** length, within a constant:
 
 $$\vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta} \right\vert$$
 ::::
 
-::::{frame} What the bars and the proportionality sign mean
+::::{frame} Absolute Value and Proportionality 
 
 Both the proportionality sign and the magnitude bars are there for a reason.
 The bars matter because for wires longer than $\lambda$ the bracket changes sign — that
 sign flip is how sidelobes end up radiating out of phase with the main lobe.
-The proportionality matters because **normalizing means dividing by the peak of
-that expression**, and the peak is not always 1. For $L \le \lambda$ it sits at
+The proportionality matters because **normalizing** means dividing by the peak of
+that expression, and the peak is not always 1. For $L \le \lambda$ it sits at
 broadside, $\theta = 90^\circ$, where the expression evaluates to
-$1 - \cos\dfrac{kL}{2}$; for longer wires the peak walks off broadside
+$1 - \cos\dfrac{kL}{2}$; for longer wires the peak moves off broadside
 entirely, which is the story at the end of this lesson.
 ::::
 
@@ -241,22 +238,22 @@ $$\vert F(\theta) \vert = \frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\
 
 That is the **half-wave dipole** pattern. The $\sin\theta$ in the denominator
 looks like trouble at $\theta = 0$, but the numerator vanishes there too and
-the ratio goes quietly to zero. The nulls are still straight off the wire ends.
+the ratio goes quietly to zero. The nulls are still straight off the ends of the wire.
 ::::
 
-::::{frame} One formula, every length
+::::{frame} A Single Formul for Every Length
 
 ```{note}
 The general formula is not a half-wave result. It holds for any $L$, and the
 multi-lobe patterns at the end of this lesson come from the same expression
 with a different value of $L$ in it. One integral covers every length, which is
-what the radiation integral is for.
+the entire purpose of the radiation integral.
 ```
 ::::
 
-::::{frame} The half-wave pattern is a doughnut again
+::::{frame} The Half-Wave Pattern is a Donut Again
 
-The half-wave pattern is a doughnut again, only slightly slimmer than the short
+The half-wave pattern is a donut again, only slightly narrower than the short
 dipole's.
 
 <img src="../../viz/img/L07-halfwave-pattern.svg"
@@ -276,22 +273,21 @@ Integrating $\vert F\vert^2$ over the sphere gives the directivity,
 $$D = \frac{2\ \vert F\vert^2_\text{max}}{\displaystyle\int_0^\pi \vert F(\theta)\vert^2 \sin\theta\ d\theta} = 1.64 = 2.15\ \text{dBi}.$$
 ::::
 
-::::{frame} What doubling the wire bought you
+::::{frame} Why Double the Wire?
 
-Now look at what doubling the wire actually bought you: the beamwidth went from
+Now look at what doubling the wire actually gained us: the beamwidth went from
 $90^\circ$ to $78^\circ$ and the directivity went from $1.76$ to
-$2.15\ \text{dBi}$. **Doubling the wire bought 0.39 dB of directivity.** The
-half-wave dipole is not famous for its pattern.
+$2.15\ \text{dBi}$. **Doubling the wire brought 0.39 dB of directivity.** 
 ::::
 
-::::{frame} Pattern versus impedance
+::::{frame} Pattern vs Impedance
 
 :::{callout}
 A dipole's **pattern** is set by how many wavelengths of current fit on the
-wire. Its **impedance** is set by where the current maximum lands relative to
-the feed. Half a wavelength is the celebrated length because it puts the
+wire. Its **impedance** is set by where the current maximum sits relative to
+the feed. Half a wavelength is the optimal length because it puts the
 current maximum right at the feed point, and it costs only 0.39 dB of
-directivity to get there.
+directivity to implement.
 :::
 ::::
 
