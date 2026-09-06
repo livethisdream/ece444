@@ -38,12 +38,12 @@ Lesson 7 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 :::{depth}
 Lesson 6 built the machine: assume a current on a structure, push it through the
-radiation integral, and out comes the far-field pattern. Today you spend that
-answer on hardware. Two antennas carry the lesson — the **isotropic radiator**,
-which cannot be built but which every gain number on every datasheet secretly
-refers to, and the **half-wave dipole**, which you can cut with a tape measure
-and which will be sitting in the simulator next lesson. By the end you will be
-able to name a frequency, cut a wire to length, and predict its pattern, its
+radiation integral, and out comes the far-field pattern. Today you extend that
+answer to real hardware. Two antennas form the foundation of the lesson — the **isotropic radiator**
+which cannot be built but which every gain number on every datasheet
+references, and the **half-wave dipole**, which you can build with basic tools
+and which you will be  simulating next lesson. By the end of this lesson, you will be
+able to pick a frequency, cut a wire to length, and predict its pattern, its
 gain, and what a network analyzer will read at its terminals.
 :::
 ::::
@@ -61,18 +61,13 @@ so its directivity is exactly $D = 1$, which is $0\ \text{dBi}$ — the "i" is
 literally there to say *relative to isotropic*.
 ::::
 
-::::{frame} The antenna that cannot exist
+::::{frame} The Impossible Antenna 
 
-It cannot exist. The argument is short. In the far field the electric field is
-transverse: it lies tangent to the sphere of constant $r$. A truly isotropic
-radiator would need that tangential field to be nonzero everywhere on the
-sphere with no direction singled out, and topology forbids it — you cannot comb
-a hairy ball flat. Somewhere the field has to vanish, and a place where the
+An isotropic antenna is a physical impossibility. In order to creat an antenna, we have to seoarate charge, which inherently produces curves electric field lines, which means at some physical location, the field has to vanish, and a place where the
 field vanishes is a **null**.
 
 :::{callout}
-Every real antenna has at least one null. That is not a manufacturing defect,
-it is a requirement of the geometry of a sphere. The isotropic radiator has no
+Every real antenna has at least one null. That is a requirement of the physics. The isotropic radiator has no
 nulls, so it is not an antenna — it is a unit of measurement.
 :::
 ::::
