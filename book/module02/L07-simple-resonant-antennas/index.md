@@ -74,10 +74,9 @@ nulls, so it is not an antenna — it is a unit of measurement.
 
 ::::{frame} What the fiction buys you
 
-And as a unit of measurement it earns its keep. Directivity, gain, and
-effective aperture are all defined as ratios against isotropic, which is why a
-horn is "16 dBi" rather than "16 dB compared to some unnamed reference
-antenna". Two related conventions come out of the same reference:
+The gain of this theoretical antenna is most useful as a unit of measurement. Recall that dB is a power ratio, so directivity, gain, and
+effective aperture are all defined as ratios against isotropic. This is why a
+horn is "16 dBi" rather than "16 dB". Two related conventions come out of the same reference:
 
 | Quantity | Definition | Reference |
 | :-- | :-- | :-- |
@@ -88,20 +87,19 @@ antenna". Two related conventions come out of the same reference:
 
 ::::{frame} The two decibel scales differ by a constant
 
-Because a half-wave dipole is $2.15\ \text{dBi}$ (we get there in Part 3), the
+Because a half-wave dipole is $2.15\ \text{dBi}$, the
 two decibel scales differ by a constant:
 
 $$\text{dBi} = \text{dBd} + 2.15$$
 ::::
 
-::::{frame} What EIRP buys you
+::::{frame} Effective Isotropic Radiated Power 
 
-**EIRP** is the payoff. Feeding $5\ \text{W}$ into a half-wave dipole produces
+**EIRP** is the standard measure of antenna power performance. Feeding $5\ \text{W}$ into a half-wave dipole produces
 the same peak power density as feeding $5 \times 1.64 = 8.2\ \text{W}$ into an
 isotropic radiator, so the EIRP is $8.2\ \text{W}$, or $39.1\ \text{dBm}$. One
 number now describes the transmitter and the antenna together, which is exactly
-what a link budget needs and exactly what a spectrum regulator writes into a
-license.
+what a link budget needs and exactly what the FCC specifies in their licensing regulations. 
 
 ```{note}
 Watch the units in the wild. "ERP" usually means effective radiated power
