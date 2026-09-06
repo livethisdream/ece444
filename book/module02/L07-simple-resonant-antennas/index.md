@@ -120,24 +120,23 @@ hopeless match, and that, not the pattern, is why nobody feeds a short dipole
 directly.
 ::::
 
-::::{frame} Where the standing wave comes from
+::::{frame} The Standing Wave
 
-Make the wire longer and the current can no longer be treated as constant. So
-before we can use Lesson 6's machinery, we need a current to feed it.
+Moving away from the infintesmal wire; as the wire becomes longer and the current is not a constant. So
+before we can use Lesson 6's machinery, we need to understand the effects of a variable current feeding our antenna. 
 
-Start with a two-wire transmission line, open-circuited at the far end. You
-already know its current: on an open-circuited line the current must be **zero
-at the open end**, and the standing wave grows sinusoidally as you walk back
-from it. Measuring a distance $s$ back from the open end,
+To construct our more realistic dipole, start with a two-wire transmission line, open-circuited at the far end. You
+already know the mathematical form of its current; on an open-circuited line the current must be **zero
+at the open end**. Furthermore, the standing wave varies sinusoidally as you move from the open circuit load back towards the source. At a distance $s$ back from the open end, the current is:
 
 $$I(s) = I_m \sin(ks).$$
 ::::
 
 ::::{frame} Fold it into a dipole
 
-Now take the last stretch of that line and **fold the two conductors apart**
-until they lie in a straight line, one arm up and one arm down. You have built
-a center-fed dipole, and the standing wave came with it.
+Now take the open end of that line and **fold the two conductors apart**
+until they lie in a straight line, one arm up and one arm down. Congratulations, you have built
+a center-fed dipole, and inherit the standing wave came with it.
 
 Each arm still ends in an open tip. A point at height $z$ on the upper arm sits
 a distance $s = L/2 - z$ back from its tip, so $I(z) = I_m \sin[k(L/2 - z)]$.
@@ -147,14 +146,13 @@ both:
 $$I(z) = I_m \sin\left[k\left(\frac{L}{2} - \vert z \vert\right)\right]$$
 ::::
 
-::::{frame} Check it against the boundary conditions
+::::{frame} Confirm the boundary conditions
 
 - At the tips, $z = \pm L/2$, the sine argument is zero, so $I = 0$. **Current
   vanishes at both open ends** — charge has nowhere further to go.
 - At the feed, $I(0) = I_m \sin(kL/2)$. For $L = \lambda/2$ that is
   $I_m \sin(\pi/2) = I_m$: the current *maximum* lands exactly at the feed. For
-  $L = \lambda$ it is $I_m \sin(\pi) = 0$: a current *null* at the feed. Hold on
-  to that contrast — it decides everything about impedance in Part 4.
+  $L = \lambda$ it is $I_m \sin(\pi) = 0$: a current *null* at the feed. Remember that contrast — it determines the impedance in Part 4.
 ::::
 
 ::::{frame} The current is assumed, not solved for
