@@ -38,8 +38,7 @@ Lesson 7 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 :::{depth}
 Lesson 6 built the machine: assume a current on a structure, push it through the
-radiation integral, and out comes the far-field pattern. Today you extend that
-answer to real hardware. Two antennas form the foundation of the lesson — the **isotropic radiator**
+radiation integral, and out comes the far-field pattern. Today you will extend the math to real hardware. Two antennas form the foundation of the lesson — the **isotropic radiator**
 which cannot be built but which every gain number on every datasheet
 references, and the **half-wave dipole**, which you can build with basic tools
 and which you will be  simulating next lesson. By the end of this lesson, you will be
@@ -63,11 +62,11 @@ literally there to say *relative to isotropic*.
 
 ::::{frame} The Impossible Antenna 
 
-An isotropic antenna is a physical impossibility. In order to creat an antenna, we have to seoarate charge, which inherently produces curves electric field lines, which means at some physical location, the field has to vanish, and a place where the
+An isotropic antenna is a physical impossibility. In order to creat an antenna, we have to separate charge, which inherently produces curves electric field lines, which means at some physical location, the field has to vanish, and a place where the
 field vanishes is a **null**.
 
 :::{callout}
-Every real antenna has at least one null. That is a requirement of the physics. The isotropic radiator has no
+Every real antenna has at least one null; that is simply a requirement of the physics. The isotropic radiator has no
 nulls, so it is not an antenna — it is a unit of measurement.
 :::
 ::::
@@ -104,11 +103,11 @@ what a link budget needs and exactly what the FCC specifies in their licensing r
 ```{note}
 Watch the units in the wild. "ERP" usually means effective radiated power
 referred to a *dipole*, so ERP and EIRP differ by that same 2.15 dB. Confusing
-the two puts a link budget 4.3 dB off.
+the two changes a link budget by 4.3 dB.
 ```
 ::::
 
-::::{frame} The short dipole, in one slide
+::::{frame} The Short Dipole
 
 Lesson 6 handled the **infinitesimal dipole** — a current element so short that
 the current is essentially constant along it. Its pattern is
