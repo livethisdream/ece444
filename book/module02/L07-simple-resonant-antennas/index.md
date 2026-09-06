@@ -228,7 +228,7 @@ $1 - \cos\dfrac{kL}{2}$; for longer wires the peak moves off broadside
 entirely, which is the story at the end of this lesson.
 ::::
 
-::::{frame} The half-wave dipole pattern
+::::{frame} The Half-Wave Dipole Pattern
 
 Set $L = \lambda/2$, so that $kL/2 = \pi/2$ and the second cosine vanishes. The
 broadside peak is then $1 - 0 = 1$, so this one is already normalized and can
@@ -241,7 +241,7 @@ looks like trouble at $\theta = 0$, but the numerator vanishes there too and
 the ratio goes quietly to zero. The nulls are still straight off the ends of the wire.
 ::::
 
-::::{frame} A Single Formul for Every Length
+::::{frame} A Single Formula for Every Length
 
 ```{note}
 The general formula is not a half-wave result. It holds for any $L$, and the
@@ -251,7 +251,7 @@ the entire purpose of the radiation integral.
 ```
 ::::
 
-::::{frame} The Half-Wave Pattern is a Donut Again
+::::{frame} The Half-Wave Pattern is a Donut
 
 The half-wave pattern is a donut again, only slightly narrower than the short
 dipole's.
@@ -295,16 +295,15 @@ directivity to implement.
 
 Copper is a good conductor, so radiation efficiency for a wire dipole is above
 about 98% and $G = \eta_{\text{rad}} D$ is within a tenth of a dB of $D$. For this antenna
-you may quote gain and directivity interchangeably — but say which one you
-mean, because for the lossy antennas in Module 4 they part company.
+we can quote gain and directivity interchangeably — but it is still helpful to be in the habit of specifying which one you mean, because for the lossy antennas in Module 4 they diverge significantly.
 ::::
 
 ::::{frame} Longer dipoles grow lobes
 
 Keep stretching the wire past $\lambda/2$ and the standing wave develops
 **phase reversals**: sections of the wire carry current in the opposite
-direction. Reversed current radiates out of step with the rest, the
-contributions interfere, and the single doughnut breaks into lobes.
+direction. Reversed current radiates out of phase with the rest, the
+contributions interfere, and the single donut breaks into lobes.
 
 <img src="../../viz/img/L07-dipole-patterns.svg"
      alt="Polar patterns of dipoles half a wavelength, one wavelength, 1.25 and 1.5 wavelengths long"
@@ -315,14 +314,13 @@ contributions interfere, and the single doughnut breaks into lobes.
 :class: viz-frame
 
 :::{depth}
-The interactive below is the fastest way to internalize all of this. Drag the
+The interactive animation below is a good way to intuit the effects of length and current distribution on the pattern. Drag the
 length slider from one end to the other and watch three things at once: the
 standing-wave current on the wire, the pattern it produces, and the numbers in
 the pills underneath. Notice that **below half a wavelength almost nothing
-changes** — the pattern is essentially the short-dipole doughnut all the way
-down, which is why an electrically small antenna is an impedance problem and
+changes** — the pattern is essentially the short-dipole donut all the way down to the infintesmal case. This means an electrically small antenna is an impedance problem and
 not a pattern problem. Then notice that directivity **creeps upward until about
-1.2 to 1.25 wavelengths**, where it peaks near $5.2\ \text{dBi}$, and that past
+1.2 to 1.25 wavelengths**, where it peaks near $5.2\ \text{dBi}$; past
 that point **the main lobe splits** and the broadside gain collapses. Park the
 slider at $0.50$ and confirm the canonical trio: $78.1^\circ$,
 $2.15\ \text{dBi}$, $73.1\ \Omega$.
@@ -339,7 +337,7 @@ $2.15\ \text{dBi}$, $73.1\ \Omega$.
 ::::{frame} Referred to the current maximum, not the terminals
 
 ```{note}
-The resistance and reactance in that widget are referred to the **current
+The resistance and reactance in the interactive widget are referred to the **current
 maximum**, not to the terminals. At $L = \lambda/2$ the current maximum sits at
 the feed and the two are the same number, which is the case you care about. For
 other lengths the terminal values are larger by $1/\sin^2(kL/2)$ — a short
@@ -350,49 +348,46 @@ which is precisely why short antennas are so hard to feed.
 
 ::::{frame} The resistance, from the pattern
 
-The pattern was the easy half. What the transmitter actually feels is the
-**input impedance**, and for a thin half-wave dipole both parts of it can be
-computed — the resistance from the pattern you just derived, the reactance from
-one standard result we will name but not re-derive.
+The pattern was the easy half. What the transmitter actually sees is the
+**input impedance**, and for a thin half-wave dipole both parts of it, we can actually calculate it — the resistance comes from the pattern we just derived and the reactance from one standard result we will name but not re-derive.
 
-**Radiation resistance** is defined by asking what resistor, carrying the same
-current, would dissipate the power the antenna radiates:
+**Radiation resistance** is defined by asking what resistor, carrying the same current, would dissipate the power the antenna radiates:
 
 $$P_\text{rad} = \frac{1}{2}\vert I_m \vert^2 R_r$$
 ::::
 
-::::{frame} Setting up the power integral
+::::{frame} The Power Integral
 
-So compute $P_\text{rad}$ and you have $R_r$. Start from Part 3's pattern. The
+If we can compute $P_\text{rad}$, we can find $R_r$. Start from Part 3's pattern. The
 radiation intensity of the half-wave dipole is
 
 $$U(\theta) = \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right]^2$$
 
 ::::
 
-::::{frame} That integral has no elementary antiderivative
+::::{frame} Tricky Integrals
 
 The radiated power is that intensity integrated over the whole sphere.
 Nothing depends on $\phi$, so the azimuth integral simply contributes $2\pi$:
 
 $$P_\text{rad} = \int_0^{2\pi}\int_0^\pi U(\theta) \sin\theta\ d\theta\ d\phi = \frac{\eta_0 \vert I_m \vert^2}{4\pi}\int_0^\pi \frac{\cos^2\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta$$
 
-Here the derivation stops being algebra. **That integral has no elementary
-antiderivative.** You cannot write the answer in terms of sines, logs, and
+Here the derivation stops being algebra. That integral has no elementary
+antiderivative. You cannot write the answer in terms of sines, logs, and
 powers — this is the point where a *number* enters instead of a formula.
 ::::
 
-::::{frame} Special functions
+::::{frame} Special Functions
 
 That is not a failure, and it is not unusual. It is the same situation as
 $\text{erf}$ in probability: the integral is important enough that somebody
 tabulated it, gave it a name, and moved on. Antenna work leans on three such
-**special functions**, and you will meet all of them again:
+**special functions**, and we will use all of them again:
 
 $$C_{in}(x) = \int_0^x \frac{1 - \cos u}{u}\ du \qquad Si(x) = \int_0^x \frac{\sin u}{u}\ du \qquad Ci(x) = -\int_x^\infty \frac{\cos u}{u}\ du$$
 
 Look them up, or let a calculator evaluate them; do not try to integrate them.
-The value this problem needs is
+The solution function we need for this integral is:
 
 $$\int_0^\pi \frac{\cos^2\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta = \frac{1}{2}C_{in}(2\pi) = 1.2188$$
 ::::
@@ -408,7 +403,7 @@ Since $\eta_0/4\pi = 29.98\ \Omega$, which is $30\ \Omega$ to better than one te
 of a percent, the result is easy to remember as **30 times 2.4376**.
 ::::
 
-::::{frame} Why the reactance needs a different method
+::::{frame} Reactance Needs a Different Method
 
 A far-field power integral can only ever produce the real part — it accounts
 for power that *leaves*. The reactance describes energy stored in the near
@@ -416,7 +411,7 @@ field and handed back every cycle, which never crosses the far-field sphere at
 all, so no amount of pattern integration will produce it.
 
 Getting it requires the **induced-EMF method**: integrate the field the antenna
-produces back against its own current, along the wire. That is a near-field
+reflects back against its own current, along the wire. That is a near-field
 calculation, and we are not going to carry it out here. Its general result
 contains $Si$, $Ci$, and the wire radius $a$ — meaning that **the reactance of
 a dipole normally depends on how thick the wire is**.
@@ -443,7 +438,7 @@ except where they cross at $\lambda/2$.
 :::
 ::::
 
-::::{frame} Putting the two halves together
+::::{frame} Combining Resistance and Reactance for Total Impedance 
 
 Put the two halves side by side and the whole impedance is one line, built from
 two tabulated numbers:
