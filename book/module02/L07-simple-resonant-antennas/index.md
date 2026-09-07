@@ -228,13 +228,10 @@ first.
 
 ::::{frame} The Radiation Integral
 :::{present}
-**Step 1: set up**, for the assumed current on a thin wire along $z$
+**Step 1: set up and fold.** The general integral, then the thin wire along
+$z$, then the even current folds onto one arm.
 
-$$N_z(\theta) = \int_{-L/2}^{L/2} I(z')\ e^{+jkz'\cos\theta}\ dz'$$
-
-**Fold by symmetry**, since $I(z')$ is even
-
-$$\begin{aligned} N_z(\theta) &= 2 I_m \int_0^{L/2} \sin\left[k\left(\tfrac{L}{2} - z'\right)\right] \\ &\qquad\times \cos(kz'\cos\theta)\ dz' \end{aligned}$$
+$$\begin{aligned} \mathbf{N} &= \int \mathbf{J}\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV' \\ N_z(\theta) &= \int_{-L/2}^{L/2} I(z')\ e^{+jkz'\cos\theta}\ dz' \\ &= 2 I_m \int_0^{L/2} \sin\left[k\left(\tfrac{L}{2} - z'\right)\right] \\ &\qquad\times \cos(kz'\cos\theta)\ dz' \end{aligned}$$
 :::
 
 We start with the current, and the radiation integrals of Lesson 6 provide the

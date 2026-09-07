@@ -304,6 +304,21 @@ or a relation as short as $X_\text{in} = 0$. A fraction, an integral, a
 product-to-sum identity, or a definition is display math, in prose and on
 slides alike.
 
+### 19. A derivation runs general to specific, as one chain
+
+> **Before:** *Step 1: set up* $N_z(\theta) = \int I(z')\,e^{+jkz'\cos\theta}\,dz'$
+> *Fold by symmetry* $N_z(\theta) = 2I_m\int_0^{L/2}\cdots$
+>
+> **After:** $\mathbf{N} = \int \mathbf{J}\,e^{+jk\hat{\mathbf r}\cdot\mathbf r'}\,dV'$,
+> then $N_z(\theta) = \int I(z')\,e^{+jkz'\cos\theta}\,dz'$, then
+> $= 2I_m\int_0^{L/2}\cdots$, aligned on the equals signs.
+
+Neil, 2026-09-07: "You repeat $N_z(\theta)$. Step 1 starts with it, then we
+do the symmetry argument, then you go back to $N_z(\theta)$. Always go from
+general to specific. Going back and forth is confusing." Start from the
+general form, specialize once, and continue the same equals sign. Never
+restate a left-hand side the reader already has.
+
 ## What he does *not* want changed
 
 His voice is direct, and that is deliberate. Do not soften it into hedged
