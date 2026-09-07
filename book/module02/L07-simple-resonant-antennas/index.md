@@ -53,9 +53,16 @@ terminals.
 
 ::::{frame} Where We Were
 :::{present}
-- **Lesson 5**: the far field starts at $r \ge 2D^2/\lambda$.
-- **Lesson 6**: $\mathbf{N} = \int \mathbf{J}\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'$, then $U \propto \vert N_\theta\vert^2 + \vert N_\phi\vert^2$, $\vert F\vert = \sqrt{U/U_\text{max}}$, and $D = 4\pi U_\text{max}/P_\text{rad}$.
-- **Lesson 4**: $\Gamma = (Z_L - Z_0)/(Z_L + Z_0)$, $\text{VSWR} = (1 + \vert\Gamma\vert)/(1 - \vert\Gamma\vert)$, and a balun at a balanced feed.
+**Lesson 4: reflection coefficient**
+
+$$\begin{aligned} \Gamma &= \frac{Z_L - Z_0}{Z_L + Z_0} \\ \text{VSWR} &= \frac{1 + \vert\Gamma\vert}{1 - \vert\Gamma\vert} \end{aligned}$$
+
+**Lesson 5: far field** starts at $r \ge 2D^2/\lambda$.
+:::
+:::{present}
+**Lesson 6: radiation integrals**
+
+$$\begin{aligned} \mathbf{N} &= \int \mathbf{J}\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV' \\ U &\propto \vert N_\theta\vert^2 + \vert N_\phi\vert^2 \\ \vert F\vert &= \sqrt{U/U_\text{max}} \\ D &= 4\pi U_\text{max}/P_\text{rad} \end{aligned}$$
 :::
 
 Lesson 5 told us where the far field starts, and only there does the pattern
@@ -73,7 +80,7 @@ and baluns. Today we need all of these on the same antenna.
 :::{present}
 $$U_\text{iso} = \frac{P_\text{rad}}{4\pi} \quad\Longrightarrow\quad D = 1$$
 
-- Equal power density on every square meter of the sphere: the $0\ \text{dBi}$ reference.
+- Equal power density everywhere on the sphere: the $0\ \text{dBi}$ reference.
 - It cannot be built: separating charge curves the field lines, so somewhere the field vanishes.
 - A place where the field vanishes is a **null**. Every real antenna has one.
 :::
@@ -132,7 +139,9 @@ the two changes a link budget by 4.3 dB.
 :::{present}
 - Pattern: $\vert F(\theta)\vert = \sin\theta$, a donut broadside to the wire.
 - HPBW $90^\circ$, $D = 1.5$, which is $1.76\ \text{dBi}$.
-- $R_r = 80\pi^2 (L/\lambda)^2$, about $2\ \Omega$ at $L = 0.1\lambda$.
+- Radiation resistance, about $2\ \Omega$ at $L = 0.1\lambda$:
+
+$$R_r = 80\pi^2 \left(\frac{L}{\lambda}\right)^2$$
 
 **The pattern is already almost as good as it gets. The impedance is the
 problem.**
@@ -143,8 +152,11 @@ the current is essentially constant along it. Its field pattern is
 $\vert F(\theta)\vert = \sin\theta$, a donut with its maximum broadside at
 $\theta = 90^\circ$ and nulls off the wire ends. Its beamwidth is $90^\circ$
 and its directivity is $D = 1.5$, or $1.76\ \text{dBi}$. Its radiation
-resistance, however, is $R_r = 80\pi^2 (L/\lambda)^2$ — about $2\ \Omega$ for a
-wire a tenth of a wavelength long. $2\ \Omega$ against a $50\ \Omega$ line is a
+resistance, however, is
+
+$$R_r = 80\pi^2 \left(\frac{L}{\lambda}\right)^2,$$
+
+about $2\ \Omega$ for a wire a tenth of a wavelength long. $2\ \Omega$ against a $50\ \Omega$ line is a
 hopeless match, and that, not the pattern, is why nobody feeds a short dipole
 directly.
 ::::
@@ -183,7 +195,10 @@ have built a center-fed dipole, and it inherits the standing wave that came
 with it.
 
 Each arm still ends in an open tip. A point at height $z$ on the upper arm sits
-a distance $s = L/2 - z$ back from its tip, so $I(z) = I_m \sin[k(L/2 - z)]$.
+a distance $s = L/2 - z$ back from its tip, so
+
+$$I(z) = I_m \sin\left[k\left(\frac{L}{2} - z\right)\right].$$
+
 The lower arm is the mirror image, so replacing $z$ by $\vert z \vert$ covers
 both. Confirm the boundary conditions:
 
@@ -251,7 +266,9 @@ entire purpose of the radiation integral.
 :class: read-only
 
 **Step 1: set up the radiation integral.** Lesson 6's radiation vector is
-$\mathbf{N} = \int \mathbf{J}\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'$.
+
+$$\mathbf{N} = \int \mathbf{J}\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'.$$
+
 For a thin wire lying on $z$, the volume integral collapses to a line integral,
 the current is $z$-directed, and $\hat{\mathbf r}\cdot\mathbf{r}' = z'\cos\theta$:
 
@@ -265,9 +282,11 @@ $$N_z(\theta) = 2 I_m \int_0^{L/2} \sin\left[k\left(\frac{L}{2} - z'\right)\righ
 
 **Step 2: evaluate it.** This is a relatively straightforward integral. The
 product-to-sum identity
-$\sin A \cos B = \tfrac{1}{2}\left[\sin(A+B) + \sin(A-B)\right]$ turns the
-integrand into two plain sines, both of which integrate directly. Collecting
-the result:
+
+$$\sin A \cos B = \tfrac{1}{2}\left[\sin(A+B) + \sin(A-B)\right]$$
+
+turns the integrand into two plain sines, both of which integrate directly.
+Collecting the result:
 
 $$N_z(\theta) = \frac{2 I_m}{k}\ \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin^2\theta}$$
 
@@ -278,8 +297,11 @@ $N_\theta = -N_z \sin\theta$. That eliminates one power of $\sin\theta$:
 $$N_\theta(\theta) \propto \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta}$$
 
 The radiation intensity is $U \propto \vert N_\theta\vert^2$, and the field
-pattern is its normalized square root, $\vert F\vert = \sqrt{U/U_\text{max}}
-\propto \vert N_\theta\vert$. That is the pattern of a center-fed dipole of
+pattern is its normalized square root,
+
+$$\vert F\vert = \sqrt{\frac{U}{U_\text{max}}} \propto \vert N_\theta\vert .$$
+
+That is the pattern of a center-fed dipole of
 **any** length, within a constant:
 
 $$\vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta} \right\vert$$
@@ -565,8 +587,11 @@ worry about the resistance second.
 :::
 
 With a resonant dipole in hand, the match is a one-line calculation. Using
-$\Gamma = (Z_L - Z_0)/(Z_L + Z_0)$ and $\text{VSWR} = (1+\vert\Gamma\vert)/(1-\vert\Gamma\vert)$
-from Lesson 4, the table compares the untrimmed and resonant dipole on each
+Lesson 4's
+
+$$\Gamma = \frac{Z_L - Z_0}{Z_L + Z_0}, \qquad \text{VSWR} = \frac{1 + \vert\Gamma\vert}{1 - \vert\Gamma\vert},$$
+
+the table compares the untrimmed and resonant dipole on each
 line. On a $50\ \Omega$ line, removing the $+j42.5\ \Omega$ of reactance takes
 the VSWR from 2.18 to 1.40. Leaving the reactance in place and switching to a
 $75\ \Omega$ cable only reaches 1.76. Trimming to resonance is worth more than

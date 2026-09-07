@@ -289,6 +289,21 @@ Em-dashes stayed in every sentence that had one, and he added a semicolon.
 dB is a power ratio" went in. A little warmth and a reminder of a
 prerequisite are both in the voice; a joke about the reader is not.
 
+### 18. An equation gets its own line
+
+> **Before:** **Lesson 6**: $\mathbf{N} = \int \mathbf{J}\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'$, then $U \propto \vert N_\theta\vert^2 + \vert N_\phi\vert^2$, $\vert F\vert = \sqrt{U/U_\text{max}}$, and $D = 4\pi U_\text{max}/P_\text{rad}$.
+>
+> **After (his layout):** **Lesson 6: radiation integrals**, then each of
+> $\mathbf{N}$, $U$, $\vert F\vert$, and $D$ as display math on its own line.
+
+Neil, 2026-09-07: "Sometimes you include many equations in a line of text,
+but we need to set them on their own line. This is a general rule. Unless it's
+a simple equation, like $F = ma$, it should be on its own line. Reading it in
+text makes it hard to follow the logic." Inline math is for a symbol, a value,
+or a relation as short as $X_\text{in} = 0$. A fraction, an integral, a
+product-to-sum identity, or a definition is display math, in prose and on
+slides alike.
+
 ## What he does *not* want changed
 
 His voice is direct, and that is deliberate. Do not soften it into hedged
