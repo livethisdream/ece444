@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image theory: an antenna over a ground plane</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* The two canvases side by side above ~600px: the row height becomes the
+     taller of the two instead of their sum. Below 600px (phone) there isn't
+     room for two useful columns, so stack. */
+  .cv2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:600px) { .cv2 { grid-template-columns:1fr; } }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
+  select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
+  /* Below 430px the controls bar cannot fit a label, a slider and a value on one
+     line: .ctl's flex basis and the reserved .val column are both wider than the
+     content box, so the bar pushes the document past the viewport and the whole
+     widget scrolls sideways on a phone. Stack each control instead -- label and
+     value share the first line, the input takes the second -- and let every part
+     shrink. Labels keep their natural width, so none of them squeeze. Nothing
+     here applies above 430px: the desktop layout is byte-for-byte unchanged. */
+  @media (max-width:430px) {
+    canvas { max-width:100%; }
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
+  }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(3, minmax(0,1fr)); }
+  /* Never one column: a readout row that stacks one cell per line is the
+     cheapest 100-150px a widget can waste on a phone, and it is what pushed
+     these past the frame budget. Two columns always fit -- the cells are
+     min-width:0 and the values are short. */
+  @media (max-width:600px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.pk { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.pk .v { color:var(--grn); }
+  .ro.pw { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.pw .v { color:var(--amber); }
+  .ro.pw.bad { background:rgba(176,30,36,0.09); border-color:rgba(176,30,36,0.28); }
+  .ro.pw.bad .v { color:var(--red); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="cv2">
+    <canvas id="geo" aria-label="An antenna at a height above a perfect ground plane, with its image below the plane"></canvas>
+    <canvas id="pat" aria-label="Elevation pattern above the ground plane, on a decibel scale"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Antenna</label>
+      <select id="kind">
+        <option value="v" selected>vertical (monopole / whip)</option>
+        <option value="h">horizontal wire</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label>Height \(h/\lambda\)</label>
+      <input type="range" id="hh" min="0.01" max="1.0" step="0.01" value="0.01">
+      <span class="val" id="hh-val">0.01</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro pk"><span class="k">peak elevation</span><span class="v" id="p-peak">&#8212;</span></div>
+    <div class="ro"><span class="k">directivity \(D\)</span><span class="v" id="p-dir">&#8212;</span></div>
+    <div class="ro pw" id="ro-pw"><span class="k">power vs. free space</span><span class="v" id="p-pw">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const FLOOR=-40;                                     // dB floor for the polar plot
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const cvG=document.getElementById('geo'), ctxG=cvG.getContext('2d');
+const cvP=document.getElementById('pat'), ctxP=cvP.getContext('2d');
+
+const state={ kind:'v', h:0.01 };
+
+/* ------------------------------------------------------------------ physics
+   Element: a half-wave dipole carrying a fixed current, at height h above a
+   perfect electric conductor. Image theory replaces the conductor with a
+   second dipole at -h: same sign when the element is vertical (normal to the
+   plane), reversed sign when it is horizontal (tangential).
+
+     vertical    F(theta)      = f(theta) * 2|cos(kh cos theta)|
+     horizontal  F(theta,phi)  = f(psi)   * 2|sin(kh cos theta)|,
+                                 cos psi = sin theta cos phi   (wire along x)
+
+   f() is the half-wave dipole element factor, psi measured from the wire.
+   Everything below integrates |F|^2 over the upper hemisphere numerically
+   rather than using a closed form, so the readouts remain correct away from
+   the special heights.                                                                  */
+function fdip(psi){
+  const s=Math.sin(psi);
+  if(Math.abs(s)<1e-9) return 0;
+  return Math.abs(Math.cos(Math.PI/2*Math.cos(psi))/s);
+}
+// power radiated by the same element alone in free space (same current)
+const P_FREE=(function(){
+  const N=2000; let sum=0;
+  for(let i=0;i<=N;i++){
+    const th=i/N*Math.PI, w=(i===0||i===N)?0.5:1;
+    const f=fdip(th); sum+=w*f*f*Math.sin(th);
+  }
+  return 2*Math.PI*sum*(Math.PI/N);
+})();
+
+// pattern in the displayed elevation cut: vertical -> any phi (symmetric),
+// horizontal -> the plane broadside to the wire (phi = 90 deg, f = 1 there).
+function cut(th){
+  const kh=2*Math.PI*state.h, c=Math.cos(th);
+  return state.kind==='v' ? fdip(th)*2*Math.abs(Math.cos(kh*c))
+                          : 1.0    *2*Math.abs(Math.sin(kh*c));
+}
+
+// directivity over the upper hemisphere + radiated power relative to the
+// same element alone in free space
+function metrics(){
+  const kh=2*Math.PI*state.h;
+  let P=0, Umax=0;
+  if(state.kind==='v'){
+    const N=1200;
+    for(let i=0;i<=N;i++){
+      const th=i/N*(Math.PI/2), w=(i===0||i===N)?0.5:1;
+      const F=fdip(th)*2*Math.abs(Math.cos(kh*Math.cos(th))), U=F*F;
+      if(U>Umax) Umax=U;
+      P+=w*U*Math.sin(th);
+    }
+    P*=2*Math.PI*(Math.PI/2/N);
+  }else{
+    const NT=180, NP=180;                       // phi symmetric about the wire
+    for(let i=0;i<=NT;i++){
+      const th=i/NT*(Math.PI/2), wt=(i===0||i===NT)?0.5:1;
+      const af=2*Math.abs(Math.sin(kh*Math.cos(th))), st=Math.sin(th);
+      for(let j=0;j<=NP;j++){
+        const ph=j/NP*Math.PI, wp=(j===0||j===NP)?0.5:1;
+        const cpsi=Math.max(-1,Math.min(1,st*Math.cos(ph)));
+        const F=fdip(Math.acos(cpsiFix(cpsi)))*af, U=F*F;
+        if(U>Umax) Umax=U;
+        P+=wt*wp*U*st;
+      }
+    }
+    P*=2*(Math.PI/2/NT)*(Math.PI/NP);           // x2: phi in [pi, 2pi] mirrors
+  }
+  return { D: P>0 ? 4*Math.PI*Umax/P : 0, prel: P/P_FREE };
+}
+function cpsiFix(c){ return c; }
+
+let SW=null;                                    // the displayed cut, sampled
+function sweep(){
+  const M=541, lin=new Float64Array(M);
+  let mx=0;
+  for(let i=0;i<M;i++){ const th=i/(M-1)*(Math.PI/2); const v=cut(th); lin[i]=v; if(v>mx) mx=v; }
+  const db=new Float64Array(M);
+  for(let i=0;i<M;i++) db[i]=20*Math.log10(Math.max(lin[i]/(mx||1),1e-6));
+  // free-space element in the same cut, for the dashed reference curve
+  const ref=new Float64Array(M); let rmx=0;
+  for(let i=0;i<M;i++){ const th=i/(M-1)*(Math.PI/2); const v=state.kind==='v'?fdip(th):1; ref[i]=v; if(v>rmx) rmx=v; }
+  const refdb=new Float64Array(M);
+  for(let i=0;i<M;i++) refdb[i]=20*Math.log10(Math.max(ref[i]/(rmx||1),1e-6));
+  let ip=0; for(let i=1;i<M;i++) if(lin[i]>lin[ip]) ip=i;
+  SW={M:M, db:db, refdb:refdb, peakEl:90-ip/(M-1)*90};
+}
+
+/* --------------------------------------------------------------- geometry */
+function drawGeo(){
+  const dpr=window.devicePixelRatio||1, w=cvG.width/(dpr*SCL), h=cvG.height/(dpr*SCL);
+  const ctx=ctxG; ctx.clearRect(0,0,w,h);
+  /* Captions run full-width above the schematic, not in a right-hand column
+     beside it -- with the geometry and pattern canvases now side by side (see
+     the .cv2 comment above), a right-hand column is too narrow for a 40-ch
+     line and clips it. Full width has room for all of them. */
+  const HDR=52;
+  const gy=Math.round(HDR+(h-HDR)*0.52), cx=Math.round(w*0.40);
+  const SC=Math.min(gy-HDR-8, h-gy-46);         // px per wavelength of height
+  const hp=Math.min(state.h,1.0)*SC;
+  const half=26;                                // the element is drawn schematically
+
+  // ground plane + hatching
+  ctx.strokeStyle=cssv('--navy'); ctx.lineWidth=2.5;
+  ctx.beginPath(); ctx.moveTo(14,gy); ctx.lineTo(w-14,gy); ctx.stroke();
+  ctx.lineWidth=1.1; ctx.globalAlpha=0.5;
+  for(let x=20;x<w-14;x+=15){ ctx.beginPath(); ctx.moveTo(x,gy); ctx.lineTo(x-8,gy+9); ctx.stroke(); }
+  ctx.globalAlpha=1;
+  stext(ctx,'perfect ground plane', w-16, gy+20, 11.5, cssv('--ink3'),'right',false);
+
+  const vert=state.kind==='v';
+  const drawWire=(yc,ghost,flip)=>{
+    const col=ghost?(vert?cssv('--mid'):cssv('--red')):cssv('--navy');
+    ctx.save();
+    if(ghost){ ctx.globalAlpha=0.55; ctx.setLineDash([8,5]); }
+    ctx.strokeStyle=col; ctx.lineWidth=5; ctx.lineCap='round';
+    if(vert){
+      ctx.beginPath(); ctx.moveTo(cx,yc-half); ctx.lineTo(cx,yc-5); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx,yc+5); ctx.lineTo(cx,yc+half); ctx.stroke();
+    }else{
+      ctx.beginPath(); ctx.moveTo(cx-half,yc); ctx.lineTo(cx-5,yc); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx+5,yc); ctx.lineTo(cx+half,yc); ctx.stroke();
+    }
+    ctx.restore();
+    // current-direction arrow: the whole point of the picture
+    ctx.save();
+    ctx.globalAlpha=ghost?0.75:1; ctx.strokeStyle=col; ctx.fillStyle=col; ctx.lineWidth=2.2;
+    const L=half*0.72, dir=flip?-1:1, ox=vert?26:0, oy=vert?0:-20;
+    const x0=cx+ox+(vert?0:-dir*L), y0=yc+oy+(vert?dir*L/1:0);
+    const x1=cx+ox+(vert?0:dir*L),  y1=yc+oy-(vert?dir*L/1:0);
+    ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x1,y1); ctx.stroke();
+    const ang=Math.atan2(y1-y0,x1-x0);
+    ctx.beginPath();
+    ctx.moveTo(x1,y1);
+    ctx.lineTo(x1-8*Math.cos(ang-0.45), y1-8*Math.sin(ang-0.45));
+    ctx.lineTo(x1-8*Math.cos(ang+0.45), y1-8*Math.sin(ang+0.45));
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  };
+
+  drawWire(gy-hp,false,false);
+  drawWire(gy+hp,true, !vert);                  // image: reversed only if horizontal
+
+  // feed dot and the height dimension
+  ctx.fillStyle=cssv('--red'); ctx.beginPath(); ctx.arc(cx,gy-hp,4,0,7); ctx.fill();
+  ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(cx-half-34,gy-hp); ctx.lineTo(cx-half-34,gy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx-half-40,gy-hp); ctx.lineTo(cx-half-28,gy-hp); ctx.stroke();
+  ctx.setLineDash([]);
+  const hy=gy-hp-16;
+  MJ.draw(ctx,'h', cx-half-88, hy, 13, cssv('--ink3'),'left');
+  stext(ctx,'= '+state.h.toFixed(2), cx-half-76, hy, 11.5, cssv('--ink3'),'left',false);
+  MJ.draw(ctx,'\\lambda', cx-half-40, hy, 12, cssv('--ink3'),'left');
+
+  // captions: full width, stacked above the schematic
+  stext(ctx, vert?'vertical element':'horizontal element', 14, 14, 13, cssv('--navy'),'left',true);
+  stext(ctx, vert?'image points the same way' : 'image points the other way',
+        14, 32, 12.5, vert?cssv('--grn'):cssv('--red'),'left',true);
+  const note = vert
+    ? (state.h<0.03 ? 'on the plane: this is the quarter-wave monopole'
+                    : 'raised element: the image still adds at the horizon')
+    : (state.h<0.15 ? 'too low: source and image very nearly cancel'
+                    : 'high enough that the two no longer cancel');
+  stext(ctx, note, 14, 48, 12, cssv('--ink3'),'left',false);
+}
+
+/* ---------------------------------------------------------------- pattern */
+function drawPat(){
+  const dpr=window.devicePixelRatio||1, w=cvP.width/(dpr*SCL), h=cvP.height/(dpr*SCL);
+  const ctx=ctxP; ctx.clearRect(0,0,w,h);
+  const cx=w/2, cy=h-50, R=Math.min(w*0.40, h-120);
+
+  /* Title and the cut description stack on the left now, not opposite ends of
+     one row -- with the two canvases side by side (see the .cv2 comment
+     above), a right-aligned line here ran back under the title's own text. */
+  stext(ctx,'elevation pattern above the plane (dB)', 14, 16, 11.5, cssv('--navy'),'left',true);
+  stext(ctx, (state.kind==='v' ? 'cut: any vertical plane' : 'cut: broadside to the wire')
+             + '  ·  floor '+FLOOR+' dB',
+        14, 33, 11, cssv('--ink3'),'left',false);
+
+  // rings and radials
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let d=-10;d>=FLOOR;d-=10){ const r=R*(1-d/FLOOR);
+    ctx.beginPath(); ctx.arc(cx,cy,r,Math.PI,0); ctx.stroke(); }
+  ctx.strokeStyle=cssv('--edge2');
+  ctx.beginPath(); ctx.arc(cx,cy,R,Math.PI,0); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx-R-10,cy); ctx.lineTo(cx+R+10,cy); ctx.stroke();
+  for(const el of [30,60]){
+    const a=el*Math.PI/180;
+    for(const s of [-1,1]){
+      ctx.strokeStyle=cssv('--edge');
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+s*R*Math.cos(a), cy-R*Math.sin(a)); ctx.stroke();
+      stext(ctx, el+'°', cx+s*(R+14)*Math.cos(a), cy-(R+14)*Math.sin(a), 10.5, cssv('--ink3'),'center',false);
+    }
+  }
+  stext(ctx,'0°', cx+R+16, cy-2, 10.5, cssv('--ink3'),'center',false);
+  stext(ctx,'0°', cx-R-16, cy-2, 10.5, cssv('--ink3'),'center',false);
+  stext(ctx,'90°', cx, cy-R-14, 10.5, cssv('--ink3'),'center',false);
+  /* The dB-floor note now rides on the "cut" line above (folded in there) --
+     with the legend only 12-16px below the plot's own bottom edge on the
+     shorter canvas, a caption row between them collided with the legend text
+     below it. "elevation above the horizon" is dropped outright: the
+     0/30/60/90 ring labels already say that. */
+
+  const plot=(arr,color,width,dash)=>{
+    ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width; if(dash) ctx.setLineDash(dash);
+    for(const s of [1,-1]){
+      ctx.beginPath();
+      for(let i=0;i<SW.M;i++){
+        const el=(1-i/(SW.M-1))*Math.PI/2;      // i = 0 is zenith
+        const r=R*Math.max(0,1-arr[i]/FLOOR);
+        const x=cx+s*r*Math.cos(el), y=cy-r*Math.sin(el);
+        i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  };
+  plot(SW.refdb, 'rgba(91,101,115,0.55)', 1.4, [5,4]);   // element alone
+  plot(SW.db, cssv('--mid'), 2.4, null);                 // element + image
+
+  // peak marker
+  const el=SW.peakEl*Math.PI/180;
+  ctx.strokeStyle=cssv('--grn'); ctx.lineWidth=1.8; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+R*Math.cos(el), cy-R*Math.sin(el)); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // legend
+  const lx=14, ly=h-40;
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.4;
+  ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+22,ly); ctx.stroke();
+  stext(ctx,'with the ground plane', lx+28, ly, 11, cssv('--ink3'),'left',false);
+  ctx.strokeStyle='rgba(91,101,115,0.55)'; ctx.lineWidth=1.4; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(lx,ly+16); ctx.lineTo(lx+22,ly+16); ctx.stroke(); ctx.setLineDash([]);
+  stext(ctx,'element alone, free space', lx+28, ly+16, 11, cssv('--ink3'),'left',false);
+}
+
+/* ---------------------------------------------------------------- wiring */
+function readouts(){
+  const m=metrics();
+  document.getElementById('p-peak').textContent=SW.peakEl.toFixed(1)+'°';
+  document.getElementById('p-dir').textContent=m.D.toFixed(2)+'  ('+(10*Math.log10(m.D)).toFixed(2)+' dBi)';
+  const dbp=10*Math.log10(Math.max(m.prel,1e-9));
+  document.getElementById('p-pw').textContent=(dbp>=0?'+':'')+dbp.toFixed(1)+' dB';
+  document.getElementById('ro-pw').classList.toggle('bad', dbp<-3);
+}
+function drawAll(){ sweep(); drawGeo(); drawPat(); readouts(); }
+
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=380;
+let SCL=1;
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(cvG);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
+/* Narrow: the canvases stack (or the control and readout rows do), so the parts
+   ADD instead of sharing a row -- which puts the widget past the frame budget
+   and makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:599px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+  const h1=SQ(Math.max(240, Math.min(w*0.30, 260))), h2=SQ(Math.max(220, Math.min(w*0.42, 280)));
+  setSize(cvG,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
+  ctxG.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+const kindEl=document.getElementById('kind'), hEl=document.getElementById('hh');
+kindEl.addEventListener('change',()=>{ state.kind=kindEl.value; drawAll(); });
+hEl.addEventListener('input',()=>{ state.h=+hEl.value; document.getElementById('hh-val').textContent=state.h.toFixed(2); drawAll(); });
+
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>

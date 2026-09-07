@@ -1,0 +1,1309 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L7 - Simple Resonant Antennas &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 2 overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l7-simple-resonant-antennas">
+<h1>L7 - Simple Resonant Antennas<a class="headerlink" href="#l7-simple-resonant-antennas" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Simple Resonant Antennas</h1>
+<div class="title-rule"></div>
+<p>Today you spend that answer on hardware.</p>
+<p>Lesson 7 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-2">
+<div class="wrap docutils container">
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L07-simple-resonant-antennas.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L07-simple-resonant-antennas.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L07-simple-resonant-antennas.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '1'">
+  <li>I can explain why the isotropic radiator cannot exist yet anchors every gain specification, and use it as the 0 dBi reference.</li>
+  <li>I can obtain the half-wave dipole's pattern, beamwidth, and directivity from its sinusoidal current, and explain how the pattern changes as the dipole gets longer.</li>
+  <li>I can state the half-wave dipole's input impedance, explain physically why a resonant wire is slightly shorter than half a wavelength, and compute the VSWR when it is fed by a 50 or 75 ohm line.</li>
+  <li>I can calculate the physical dimensions of a resonant dipole at a given frequency and predict its gain and impedance well enough to sanity-check a simulation.</li>
+</ol>
+<div class="depth docutils container">
+<p>Lesson 6 built the machine: assume a current on a structure, push it through the
+radiation integral, and out comes the far-field pattern. Today you will extend the math to real hardware. Two antennas form the foundation of the lesson — the <strong>isotropic radiator</strong>
+which cannot be built but which every gain number on every datasheet
+references, and the <strong>half-wave dipole</strong>, which you can build with basic tools
+and which you will be  simulating next lesson. By the end of this lesson, you will be
+able to pick a frequency, cut a wire to length, and predict its pattern, its
+gain, and what a network analyzer will read at its terminals.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-isotropic-radiator">
+<div class="wrap docutils container">
+<p class="rubric">The isotropic radiator</p>
+<p>An <strong>isotropic radiator</strong> radiates equally in every direction. Wrap a sphere
+around it and every square meter of that sphere receives the same power
+density. Its radiation intensity is simply the radiated power spread over the
+whole sphere,</p>
+<div class="math notranslate nohighlight">
+\[U_\text{iso} = \frac{P_\text{rad}}{4\pi},\]</div>
+<p>so its directivity is exactly <span class="math notranslate nohighlight">\(D = 1\)</span>, which is <span class="math notranslate nohighlight">\(0\ \text{dBi}\)</span> — the “i” is
+literally there to say <em>relative to isotropic</em>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-impossible-antenna">
+<div class="wrap docutils container">
+<p class="rubric">The Impossible Antenna </p>
+<p>An isotropic antenna is a physical impossibility. In order to creat an antenna, we have to separate charge, which inherently produces curves electric field lines, which means at some physical location, the field has to vanish, and a place where the
+field vanishes is a <strong>null</strong>.</p>
+<div class="callout docutils container">
+<p>Every real antenna has at least one null; that is simply a requirement of the physics. The isotropic radiator has no
+nulls, so it is not an antenna — it is a unit of measurement.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-the-fiction-buys-you">
+<div class="wrap docutils container">
+<p class="rubric">What the fiction buys you</p>
+<p>The gain of this theoretical antenna is most useful as a unit of measurement. Recall that dB is a power ratio, so directivity, gain, and
+effective aperture are all defined as ratios against isotropic. This is why a
+horn is “16 dBi” rather than “16 dB”. Two related conventions come out of the same reference:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>Definition</p></th>
+<th class="head text-left"><p>Reference</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>dBi</p></td>
+<td class="text-left"><p>gain over an isotropic radiator</p></td>
+<td class="text-left"><p>the fiction</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>dBd</p></td>
+<td class="text-left"><p>gain over a half-wave dipole</p></td>
+<td class="text-left"><p>a real antenna</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>EIRP</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(P_t G_t\)</span> — the power an isotropic radiator would need to match your antenna’s peak</p></td>
+<td class="text-left"><p>the fiction</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-two-decibel-scales-differ-by-a-constant">
+<div class="wrap docutils container">
+<p class="rubric">The two decibel scales differ by a constant</p>
+<p>Because a half-wave dipole is <span class="math notranslate nohighlight">\(2.15\ \text{dBi}\)</span>, the
+two decibel scales differ by a constant:</p>
+<div class="math notranslate nohighlight">
+\[\text{dBi} = \text{dBd} + 2.15\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-effective-isotropic-radiated-power">
+<div class="wrap docutils container">
+<p class="rubric">Effective Isotropic Radiated Power </p>
+<p><strong>EIRP</strong> is the standard measure of antenna power performance. Feeding <span class="math notranslate nohighlight">\(5\ \text{W}\)</span> into a half-wave dipole produces
+the same peak power density as feeding <span class="math notranslate nohighlight">\(5 \times 1.64 = 8.2\ \text{W}\)</span> into an
+isotropic radiator, so the EIRP is <span class="math notranslate nohighlight">\(8.2\ \text{W}\)</span>, or <span class="math notranslate nohighlight">\(39.1\ \text{dBm}\)</span>. One
+number now describes the transmitter and the antenna together, which is exactly
+what a link budget needs and exactly what the FCC specifies in their licensing regulations.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Watch the units in the wild. “ERP” usually means effective radiated power
+referred to a <em>dipole</em>, so ERP and EIRP differ by that same 2.15 dB. Confusing
+the two changes a link budget by 4.3 dB.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-short-dipole">
+<div class="wrap docutils container">
+<p class="rubric">The Short Dipole</p>
+<p>Lesson 6 handled the <strong>infinitesimal dipole</strong> — a current element so short that
+the current is essentially constant along it. Its pattern is
+<span class="math notranslate nohighlight">\(\vert F(\theta)\vert = \sin\theta\)</span>, a doughnut with its maximum broadside at
+<span class="math notranslate nohighlight">\(\theta = 90^\circ\)</span> and nulls off the wire ends. Its beamwidth is <span class="math notranslate nohighlight">\(90^\circ\)</span>
+and its directivity is <span class="math notranslate nohighlight">\(D = 1.5\)</span>, or <span class="math notranslate nohighlight">\(1.76\ \text{dBi}\)</span>. Its radiation
+resistance, however, is <span class="math notranslate nohighlight">\(R_r = 80\pi^2 (L/\lambda)^2\)</span> — about <span class="math notranslate nohighlight">\(2\ \Omega\)</span> for a
+wire a tenth of a wavelength long. <span class="math notranslate nohighlight">\(2\ \Omega\)</span> against a <span class="math notranslate nohighlight">\(50\ \Omega\)</span> line is a
+hopeless match, and that, not the pattern, is why nobody feeds a short dipole
+directly.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-standing-wave">
+<div class="wrap docutils container">
+<p class="rubric">The Standing Wave</p>
+<p>Moving away from the infintesmal wire; as the wire becomes longer and the current is not a constant. So
+before we can use Lesson 6’s machinery, we need to understand the effects of a variable current feeding our antenna.</p>
+<p>To construct our more realistic dipole, start with a two-wire transmission line, open-circuited at the far end. You
+already know the mathematical form of its current; on an open-circuited line the current must be <strong>zero
+at the open end</strong>. Furthermore, the standing wave varies sinusoidally as you move from the open circuit load back towards the source. At a distance <span class="math notranslate nohighlight">\(s\)</span> back from the open end, the current is:</p>
+<div class="math notranslate nohighlight">
+\[I(s) = I_m \sin(ks).\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-fold-it-into-a-dipole">
+<div class="wrap docutils container">
+<p class="rubric">Fold it into a dipole</p>
+<p>Now take the open end of that line and <strong>fold the two conductors apart</strong>
+until they lie in a straight line, one arm up and one arm down. Congratulations, you have built
+a center-fed dipole, and inherit the standing wave came with it.</p>
+<p>Each arm still ends in an open tip. A point at height <span class="math notranslate nohighlight">\(z\)</span> on the upper arm sits
+a distance <span class="math notranslate nohighlight">\(s = L/2 - z\)</span> back from its tip, so <span class="math notranslate nohighlight">\(I(z) = I_m \sin[k(L/2 - z)]\)</span>.
+The lower arm is the mirror image, so replacing <span class="math notranslate nohighlight">\(z\)</span> by <span class="math notranslate nohighlight">\(\vert z \vert\)</span> covers
+both:</p>
+<div class="math notranslate nohighlight">
+\[I(z) = I_m \sin\left[k\left(\frac{L}{2} - \vert z \vert\right)\right]\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-confirm-the-boundary-conditions">
+<div class="wrap docutils container">
+<p class="rubric">Confirm the boundary conditions</p>
+<ul class="simple">
+<li><p>At the tips, <span class="math notranslate nohighlight">\(z = \pm L/2\)</span>, the sine argument is zero, so <span class="math notranslate nohighlight">\(I = 0\)</span>. <strong>Current
+vanishes at both open ends</strong> — charge has nowhere further to go.</p></li>
+<li><p>At the feed, <span class="math notranslate nohighlight">\(I(0) = I_m \sin(kL/2)\)</span>. For <span class="math notranslate nohighlight">\(L = \lambda/2\)</span> that is
+<span class="math notranslate nohighlight">\(I_m \sin(\pi/2) = I_m\)</span>: the current <em>maximum</em> lands exactly at the feed. For
+<span class="math notranslate nohighlight">\(L = \lambda\)</span> it is <span class="math notranslate nohighlight">\(I_m \sin(\pi) = 0\)</span>: a current <em>null</em> at the feed. Remember that contrast — it determines the impedance in Part 4.</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-current-is-the-excitation-not-the-solution">
+<div class="wrap docutils container">
+<p class="rubric">The current is the excitation, not the solution </p>
+<div class="callout docutils container">
+<p>This current is <strong>an input</strong>, not the solution. It is justified by the
+transmission-line analogy, and it is confirmed to be very close to the truth by
+measurement and by numerical solvers — but it is not a solution of Maxwell’s
+equations for a dipole, and for thick or non-resonant wires it is visibly
+wrong. Everything downstream in this module inherits that assumption and we will be exploring the tradeoffs.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-standing-wave-current-on-the-wire">
+<div class="wrap docutils container">
+<p class="rubric">Standing-wave current on the wire</p>
+<p><img src="../../viz/img/L07-dipole-currents.svg"
+     alt="Standing-wave current on center-fed wires of four different lengths"
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-1-set-up-the-radiation-integral">
+<div class="wrap docutils container">
+<p class="rubric">Step 1: set up the radiation integral</p>
+<p>We start with the current and the radiation integrals of Lesson 6 provide the rest, and this is the one antenna in the course where we will run that computation end to end.</p>
+<p>Lesson 6’s radiation vector is
+<span class="math notranslate nohighlight">\(\mathbf{N} = \int \mathbf{J}\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'\)</span>.
+For a thin wire lying on <span class="math notranslate nohighlight">\(z\)</span>, the volume integral collapses to a line integral,
+the current is <span class="math notranslate nohighlight">\(z\)</span>-directed, and <span class="math notranslate nohighlight">\(\hat{\mathbf r}\cdot\mathbf{r}' = z'\cos\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[N_z(\theta) = \int_{-L/2}^{L/2} I(z')\ e^{+jkz'\cos\theta}\ dz'\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-integral-folds-onto-one-arm">
+<div class="wrap docutils container">
+<p class="rubric">The integral folds onto one arm</p>
+<p>The current is an <strong>even</strong> function of <span class="math notranslate nohighlight">\(z'\)</span>. Pair each <span class="math notranslate nohighlight">\(z'\)</span> with <span class="math notranslate nohighlight">\(-z'\)</span> and the
+two exponentials combine into a cosine, which folds the integral onto the upper
+arm and throws away the imaginary part:</p>
+<div class="math notranslate nohighlight">
+\[N_z(\theta) = 2 I_m \int_0^{L/2} \sin\left[k\left(\frac{L}{2} - z'\right)\right]\cos(kz'\cos\theta)\ dz'\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-2-evaluate-it">
+<div class="wrap docutils container">
+<p class="rubric">Step 2: evaluate it</p>
+<p>This is a relatively straightforward integral. The product-to-sum identity
+<span class="math notranslate nohighlight">\(\sin A \cos B = \tfrac{1}{2}\left[\sin(A+B) + \sin(A-B)\right]\)</span> turns the
+integrand into two plain sines, both of which integrate directly. Collecting the result:</p>
+<div class="math notranslate nohighlight">
+\[N_z(\theta) = \frac{2 I_m}{k}\ \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin^2\theta}\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-3-project-and-normalize">
+<div class="wrap docutils container">
+<p class="rubric">Step 3: project and normalize</p>
+<p>Lesson 6 showed that a <span class="math notranslate nohighlight">\(z\)</span>-directed current radiates only a
+<span class="math notranslate nohighlight">\(\theta\)</span> component in the far field, obtained by projection:
+<span class="math notranslate nohighlight">\(N_\theta = -N_z \sin\theta\)</span>. That eliminates one power of <span class="math notranslate nohighlight">\(\sin\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[N_\theta(\theta) \propto \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta}\]</div>
+<p>That is the pattern of a center-fed dipole of <strong>any</strong> length, within a constant:</p>
+<div class="math notranslate nohighlight">
+\[\vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta} \right\vert\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-absolute-value-and-proportionality">
+<div class="wrap docutils container">
+<p class="rubric">Absolute Value and Proportionality </p>
+<p>Both the proportionality sign and the magnitude bars are there for a reason.
+The bars matter because for wires longer than <span class="math notranslate nohighlight">\(\lambda\)</span> the bracket changes sign — that
+sign flip is how sidelobes end up radiating out of phase with the main lobe.
+The proportionality matters because <strong>normalizing</strong> means dividing by the peak of
+that expression, and the peak is not always 1. For <span class="math notranslate nohighlight">\(L \le \lambda\)</span> it sits at
+broadside, <span class="math notranslate nohighlight">\(\theta = 90^\circ\)</span>, where the expression evaluates to
+<span class="math notranslate nohighlight">\(1 - \cos\dfrac{kL}{2}\)</span>; for longer wires the peak moves off broadside
+entirely, which is the story at the end of this lesson.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-half-wave-dipole-pattern">
+<div class="wrap docutils container">
+<p class="rubric">The Half-Wave Dipole Pattern</p>
+<p>Set <span class="math notranslate nohighlight">\(L = \lambda/2\)</span>, so that <span class="math notranslate nohighlight">\(kL/2 = \pi/2\)</span> and the second cosine vanishes. The
+broadside peak is then <span class="math notranslate nohighlight">\(1 - 0 = 1\)</span>, so this one is already normalized and can
+be written with an equals sign:</p>
+<div class="math notranslate nohighlight">
+\[\vert F(\theta) \vert = \frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\]</div>
+<p>This is the <strong>half-wave dipole</strong> pattern. The <span class="math notranslate nohighlight">\(\sin\theta\)</span> in the denominator
+looks like trouble at <span class="math notranslate nohighlight">\(\theta = 0\)</span>, but the numerator vanishes there too and
+the ratio goes quietly to zero. The nulls are still straight off the ends of the wire.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-a-single-formula-for-every-length">
+<div class="wrap docutils container">
+<p class="rubric">A Single Formula for Every Length</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The general formula is not a half-wave result. It holds for any <span class="math notranslate nohighlight">\(L\)</span>, and the
+multi-lobe patterns at the end of this lesson come from the same expression
+with a different value of <span class="math notranslate nohighlight">\(L\)</span> in it. One integral covers every length, which is
+the entire purpose of the radiation integral.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-half-wave-pattern-is-a-donut">
+<div class="wrap docutils container">
+<p class="rubric">The Half-Wave Pattern is a Donut</p>
+<p>The half-wave pattern is a donut again, only slightly narrower than the short
+dipole’s.</p>
+<p><img src="../../viz/img/L07-halfwave-pattern.svg"
+     alt="Polar pattern of a half-wave dipole with the half-power points and nulls marked"
+     style="max-width: 620px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-beamwidth-and-directivity">
+<div class="wrap docutils container">
+<p class="rubric">Beamwidth and directivity</p>
+<p>Solving <span class="math notranslate nohighlight">\(\vert F(\theta)\vert^2 = 1/2\)</span> numerically gives half-power points at
+<span class="math notranslate nohighlight">\(\theta = 51.0^\circ\)</span> and <span class="math notranslate nohighlight">\(129.0^\circ\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[\theta_\text{HP} = 78^\circ.\]</div>
+<p>Integrating <span class="math notranslate nohighlight">\(\vert F\vert^2\)</span> over the sphere gives the directivity,</p>
+<div class="math notranslate nohighlight">
+\[D = \frac{2\ \vert F\vert^2_\text{max}}{\displaystyle\int_0^\pi \vert F(\theta)\vert^2 \sin\theta\ d\theta} = 1.64 = 2.15\ \text{dBi}.\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-double-the-wire">
+<div class="wrap docutils container">
+<p class="rubric">Why Double the Wire?</p>
+<p>Now look at what doubling the wire actually gained us: the beamwidth went from
+<span class="math notranslate nohighlight">\(90^\circ\)</span> to <span class="math notranslate nohighlight">\(78^\circ\)</span> and the directivity went from <span class="math notranslate nohighlight">\(1.76\)</span> to
+<span class="math notranslate nohighlight">\(2.15\ \text{dBi}\)</span>. <strong>Doubling the wire brought 0.39 dB of directivity.</strong></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-pattern-vs-impedance">
+<div class="wrap docutils container">
+<p class="rubric">Pattern vs Impedance</p>
+<div class="callout docutils container">
+<p>A dipole’s <strong>pattern</strong> is set by how many wavelengths of current fit on the
+wire. Its <strong>impedance</strong> is set by where the current maximum sits relative to
+the feed. Half a wavelength is the optimal length because it puts the
+current maximum right at the feed point, and it costs only 0.39 dB of
+directivity to implement.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-efficiency-gain-versus-directivity">
+<div class="wrap docutils container">
+<p class="rubric">Efficiency: gain versus directivity</p>
+<p>Copper is a good conductor, so radiation efficiency for a wire dipole is above
+about 98% and <span class="math notranslate nohighlight">\(G = \eta_{\text{rad}} D\)</span> is within a tenth of a dB of <span class="math notranslate nohighlight">\(D\)</span>. For this antenna
+we can quote gain and directivity interchangeably — but it is still helpful to be in the habit of specifying which one you mean, because for the lossy antennas in Module 4 they diverge significantly.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-longer-dipoles-grow-lobes">
+<div class="wrap docutils container">
+<p class="rubric">Longer dipoles grow lobes</p>
+<p>Keep stretching the wire past <span class="math notranslate nohighlight">\(\lambda/2\)</span> and the standing wave develops
+<strong>phase reversals</strong>: sections of the wire carry current in the opposite
+direction. Reversed current radiates out of phase with the rest, the
+contributions interfere, and the single donut breaks into lobes.</p>
+<p><img src="../../viz/img/L07-dipole-patterns.svg"
+     alt="Polar patterns of dipoles half a wavelength, one wavelength, 1.25 and 1.5 wavelengths long"
+     style="max-width: 760px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-the-dipole-explorer">
+<div class="wrap docutils container">
+<p class="rubric">The dipole explorer</p>
+<div class="depth docutils container">
+<p>The interactive animation below is a good way to intuit the effects of length and current distribution on the pattern. Drag the
+length slider from one end to the other and watch three things at once: the
+standing-wave current on the wire, the pattern it produces, and the numbers in
+the pills underneath. Notice that <strong>below half a wavelength almost nothing
+changes</strong> — the pattern is essentially the short-dipole donut all the way down to the infintesmal case. This means an electrically small antenna is an impedance problem and
+not a pattern problem. Then notice that directivity <strong>creeps upward until about
+1.2 to 1.25 wavelengths</strong>, where it peaks near <span class="math notranslate nohighlight">\(5.2\ \text{dBi}\)</span>; past
+that point <strong>the main lobe splits</strong> and the broadside gain collapses. Park the
+slider at <span class="math notranslate nohighlight">\(0.50\)</span> and confirm the canonical trio: <span class="math notranslate nohighlight">\(78.1^\circ\)</span>,
+<span class="math notranslate nohighlight">\(2.15\ \text{dBi}\)</span>, <span class="math notranslate nohighlight">\(73.1\ \Omega\)</span>.</p>
+</div>
+<iframe src="../../viz/dipole-explorer.html"
+        width="100%" height="310"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Dipole explorer: current, pattern, beamwidth, directivity and feed-point impedance against dipole length">
+</iframe>
+</div>
+</div>
+<div class="frame docutils container" id="frame-referred-to-the-current-maximum-not-the-terminals">
+<div class="wrap docutils container">
+<p class="rubric">Referred to the current maximum, not the terminals</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The resistance and reactance in the interactive widget are referred to the <strong>current
+maximum</strong>, not to the terminals. At <span class="math notranslate nohighlight">\(L = \lambda/2\)</span> the current maximum sits at
+the feed and the two are the same number, which is the case you care about. For
+other lengths the terminal values are larger by <span class="math notranslate nohighlight">\(1/\sin^2(kL/2)\)</span> — a short
+dipole’s tiny current-maximum reactance becomes an enormous terminal reactance,
+which is precisely why short antennas are so hard to feed.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-resistance">
+<div class="wrap docutils container">
+<p class="rubric">The resistance</p>
+<p>The pattern was the easy half. What the transmitter actually sees is the
+<strong>input impedance</strong>, and for a thin half-wave dipole both parts of it, we can actually calculate it — the resistance comes from the pattern we just derived and the reactance from one standard result we will name but not re-derive.</p>
+<p><strong>Radiation resistance</strong> is defined by asking what resistor, carrying the same current, would dissipate the power the antenna radiates:</p>
+<div class="math notranslate nohighlight">
+\[P_\text{rad} = \frac{1}{2}\vert I_m \vert^2 R_r\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-power-integral">
+<div class="wrap docutils container">
+<p class="rubric">The Power Integral</p>
+<p>If we can compute <span class="math notranslate nohighlight">\(P_\text{rad}\)</span>, we can find <span class="math notranslate nohighlight">\(R_r\)</span>. Start from Part 3’s pattern. The
+radiation intensity of the half-wave dipole is</p>
+<div class="math notranslate nohighlight">
+\[U(\theta) = \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right]^2\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-tricky-integrals">
+<div class="wrap docutils container">
+<p class="rubric">Tricky Integrals</p>
+<p>The radiated power is that intensity integrated over the whole sphere.
+Nothing depends on <span class="math notranslate nohighlight">\(\phi\)</span>, so the azimuth integral simply contributes <span class="math notranslate nohighlight">\(2\pi\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[P_\text{rad} = \int_0^{2\pi}\int_0^\pi U(\theta) \sin\theta\ d\theta\ d\phi = \frac{\eta_0 \vert I_m \vert^2}{4\pi}\int_0^\pi \frac{\cos^2\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta\]</div>
+<p>Here the derivation stops being algebra. That integral has no elementary
+antiderivative. You cannot write the answer in terms of sines, logs, and
+powers — this is the point where a <em>number</em> enters instead of a formula.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-special-functions">
+<div class="wrap docutils container">
+<p class="rubric">Special Functions</p>
+<p>That is not a failure, and it is not unusual. It is the same situation as
+<span class="math notranslate nohighlight">\(\text{erf}\)</span> in probability: the integral is important enough that somebody
+tabulated it, gave it a name, and moved on. Antenna work leans on three such
+<strong>special functions</strong>, and we will use all of them again:</p>
+<div class="math notranslate nohighlight">
+\[C_{in}(x) = \int_0^x \frac{1 - \cos u}{u}\ du \qquad Si(x) = \int_0^x \frac{\sin u}{u}\ du \qquad Ci(x) = -\int_x^\infty \frac{\cos u}{u}\ du\]</div>
+<p>Look them up, or let a calculator evaluate them; do not try to integrate them.
+The solution function we need for this integral is:</p>
+<div class="math notranslate nohighlight">
+\[\int_0^\pi \frac{\cos^2\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta = \frac{1}{2}C_{in}(2\pi) = 1.2188\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-result-73-ohms">
+<div class="wrap docutils container">
+<p class="rubric">The result: 73 ohms</p>
+<p>Equate the two expressions for <span class="math notranslate nohighlight">\(P_\text{rad}\)</span>; the <span class="math notranslate nohighlight">\(\vert I_m \vert^2\)</span> cancels
+and the antenna’s current level drops out, as it must:</p>
+<div class="math notranslate nohighlight">
+\[R_r = \frac{\eta_0}{4\pi}C_{in}(2\pi) = 29.98 \times 2.4376 = 73.1\ \Omega\]</div>
+<p>Since <span class="math notranslate nohighlight">\(\eta_0/4\pi = 29.98\ \Omega\)</span>, which is <span class="math notranslate nohighlight">\(30\ \Omega\)</span> to better than one tenth
+of a percent, the result is easy to remember as <strong>30 times 2.4376</strong>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-reactance-via-induced-emf-method">
+<div class="wrap docutils container">
+<p class="rubric">Reactance via Induced EMF Method</p>
+<p>A far-field power integral can only ever produce the real part — it accounts
+for power that <em>leaves</em>. The reactance describes cyclical energy in the near field which never crosses the far-field sphere at
+all, so no amount of pattern integration will produce it.</p>
+<p>Finding the reactance requires a different technique. We will use the <strong>induced-EMF method</strong>, in which we integrate the field the antenna
+reflects back against its own current, along the wire. That is a near-field
+calculation, and we are not going to carry it out here. Its general result
+contains <span class="math notranslate nohighlight">\(Si\)</span>, <span class="math notranslate nohighlight">\(Ci\)</span>, and the wire radius <span class="math notranslate nohighlight">\(a\)</span> — meaning that <strong>the reactance of
+a dipole normally depends on how thick the wire is</strong>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-42-5-is-a-clean-number">
+<div class="wrap docutils container">
+<p class="rubric">Why 42.5 is a clean number</p>
+<p>At exactly <span class="math notranslate nohighlight">\(L = \lambda/2\)</span> that dependence disappears. Every term containing the
+wire radius is multiplied by <span class="math notranslate nohighlight">\(\sin(kL)\)</span>, and at <span class="math notranslate nohighlight">\(kL = \pi\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\sin(kL) = \sin\pi = 0.\]</div>
+<p>The wire radius factors out, and what survives is a single special
+function:</p>
+<div class="math notranslate nohighlight">
+\[X = \frac{\eta_0}{4\pi}Si(2\pi) = 29.98 \times 1.4182 = 42.5\ \Omega\]</div>
+<div class="callout docutils container">
+<p><strong>The reactance of a dipole is radius-independent only at exactly
+<span class="math notranslate nohighlight">\(\lambda/2\)</span>.</strong> That is why <span class="math notranslate nohighlight">\(42.5\ \Omega\)</span> can be quoted as a clean number at
+all, while at every other length the reactance depends on how thick the wire is —
+which is exactly why the three curves in the figure below separate everywhere, but cross at <span class="math notranslate nohighlight">\(\lambda/2\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-combining-resistance-and-reactance-for-total-impedance">
+<div class="wrap docutils container">
+<p class="rubric">Combining Resistance and Reactance for Total Impedance </p>
+<p>Put the two halves side by side and the whole impedance is one line, built from
+two tabulated numbers:</p>
+<div class="math notranslate nohighlight">
+\[Z_{\text{in}} = \frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 29.98\left(2.4376 + j1.4182\right) = 73.1 + j42.5\ \Omega\]</div>
+<p>So read the two parts separately. The <span class="math notranslate nohighlight">\(73\ \Omega\)</span> is power leaving and never
+coming back — the whole point of the antenna. The <span class="math notranslate nohighlight">\(+j42.5\ \Omega\)</span> is the
+reactive near field of Lesson 5, which does no
+useful work, and wrecking your match.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-73-1-is-referred-to-the-current-maximum">
+<div class="wrap docutils container">
+<p class="rubric">The 73.1 Ω is referred to the current maximum</p>
+<p>Two limits on that result are worth stating clearly.</p>
+<p>The power calculation used <span class="math notranslate nohighlight">\(I_m\)</span>, which is the largest current anywhere
+on the wire. A resistance referred to that point equals the resistance measured
+at the feed terminals only when the current maximum is physically located at
+the feed. For a half-wave dipole it is, so the two numbers agree. For a
+full-wave dipole they do not: a full-wave dipole has a current <em>minimum</em> at the
+feed, and its feed resistance is enormous — hundreds to thousands of ohms — even
+though the current-maximum resistance is a moderate <span class="math notranslate nohighlight">\(199\ \Omega\)</span>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-every-step-above-assumed-the-sinusoidal-current-from-part-2">
+<div class="wrap docutils container">
+<p class="rubric">Every step above assumed the sinusoidal current from Part 2</p>
+<p>How much that
+matters depends on what you are computing. The pattern shape barely cares: the
+radiation integral smooths over small errors in the current, so the <span class="math notranslate nohighlight">\(78^\circ\)</span>
+beamwidth and <span class="math notranslate nohighlight">\(2.15\ \text{dBi}\)</span> hold up well. The impedance cares a great
+deal, because it depends on the current right at the feed and on the near
+fields close to the wire. This is the main reason a simulator will not return
+exactly <span class="math notranslate nohighlight">\(73 + j42.5\ \Omega\)</span>. Measuring how large that disagreement is, and
+deciding whether it matters, is the work of Lesson 8.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-resonance-means-x-in-0">
+<div class="wrap docutils container">
+<p class="rubric">Resonance means X_in = 0</p>
+<p><strong>Resonance</strong> means <span class="math notranslate nohighlight">\(X_{\text{in}} = 0\)</span>. At exactly <span class="math notranslate nohighlight">\(\lambda/2\)</span> we are <span class="math notranslate nohighlight">\(42.5\ \Omega\)</span>
+away from it, and the fix is to make the wire slightly <em>shorter</em>.</p>
+<p><img src="../../viz/img/L07-dipole-resonance.svg"
+     alt="Feed-point reactance against dipole length for three wire thicknesses, showing zero crossings below half a wavelength"
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-shorter-physically">
+<div class="wrap docutils container">
+<p class="rubric">Why shorter, physically</p>
+<p>The reason is that the wire is electrically longer than it is physically.</p>
+<ul class="simple">
+<li><p><strong>End effect.</strong> Capacitance between the tips of the dipole — and to the
+insulators, mast, and everything else nearby — lets charge accumulate past
+where the metal stops. The standing wave behaves as though the wire continued
+a little further than it does.</p></li>
+<li><p><strong>Wire thickness.</strong> A fatter element has more end capacitance and a lower
+characteristic impedance, so it shortens further. This is why a thin wire
+resonates near <span class="math notranslate nohighlight">\(0.480\lambda\)</span> while a fat tubular element can drop to
+<span class="math notranslate nohighlight">\(0.46\lambda\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-both-effects-slow-the-wave">
+<div class="wrap docutils container">
+<p class="rubric">Both effects slow the wave</p>
+<p>Both effects slow the wave traveling on the wire relative to free space, and a
+slower wave needs less physical length to fit the same electrical half
+wavelength. For ordinary wire the answer lands in the range
+<span class="math notranslate nohighlight">\(0.47\lambda\)</span> to <span class="math notranslate nohighlight">\(0.48\lambda\)</span>, and the resistance drops with the length, to
+roughly <span class="math notranslate nohighlight">\(70\ \Omega\)</span>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-rule-of-thumb-the-5-rule">
+<div class="wrap docutils container">
+<p class="rubric">Rule of thumb — the 5% rule</p>
+<div class="callout docutils container">
+<p>Cut a resonant dipole to about <strong>95% of a half wavelength</strong>:</p>
+<div class="math notranslate nohighlight">
+\[L \approx 0.95 \times \frac{\lambda}{2} = 0.475\ \lambda \approx \frac{143}{f_\text{MHz}}\ \text{m} \qquad \left(\frac{468}{f_\text{MHz}}\ \text{ft}\right)\]</div>
+<p>Cut it long and trim. You can always remove wire.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-the-match-looks-like">
+<div class="wrap docutils container">
+<p class="rubric">What the match looks like</p>
+<p>With a resonant dipole in hand, the match is a one-line calculation. Using
+<span class="math notranslate nohighlight">\(\Gamma = (Z_L - Z_0)/(Z_L + Z_0)\)</span> and <span class="math notranslate nohighlight">\(\text{VSWR} = (1+\vert\Gamma\vert)/(1-\vert\Gamma\vert)\)</span>
+from Lesson 4:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Line</p></th>
+<th class="head text-left"><p>Load used</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\vert \Gamma \vert\)</span></p></th>
+<th class="head text-left"><p>VSWR</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(50\ \Omega\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(73 + j42.5\)</span> (untrimmed)</p></td>
+<td class="text-left"><p>0.37</p></td>
+<td class="text-left"><p>2.18</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(50\ \Omega\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(70 + j0\)</span> (resonant)</p></td>
+<td class="text-left"><p>0.17</p></td>
+<td class="text-left"><p>1.40</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(75\ \Omega\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(73 + j42.5\)</span> (untrimmed)</p></td>
+<td class="text-left"><p>0.28</p></td>
+<td class="text-left"><p>1.76</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(75\ \Omega\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(70 + j0\)</span> (resonant)</p></td>
+<td class="text-left"><p>0.03</p></td>
+<td class="text-left"><p>1.07</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-kill-the-reactance-first">
+<div class="wrap docutils container">
+<p class="rubric">Kill the reactance first</p>
+<div class="callout docutils container">
+<p><strong>Trimming to resonance is worth more than changing the cable.</strong> On a
+<span class="math notranslate nohighlight">\(50\ \Omega\)</span> line, removing the <span class="math notranslate nohighlight">\(+j42.5\ \Omega\)</span> of reactance takes the VSWR
+from 2.18 to 1.40. Leaving the reactance in place and switching to a
+<span class="math notranslate nohighlight">\(75\ \Omega\)</span> cable only reaches 1.76. Kill the reactance first; worry about the
+resistance second.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-reading-it-off-a-smith-chart">
+<div class="wrap docutils container">
+<p class="rubric">Reading it off a Smith chart</p>
+<p>Those four rows are the same information a <strong>Smith chart</strong> shows at a glance,
+and you will be reading charts for the rest of the course — every VNA in the
+lab draws one. The chart is the complex reflection coefficient plane. The
+center is a perfect match, the rim is total reflection, the upper half is
+inductive and the lower half capacitive.</p>
+<p>Four kinds of object are drawn on the chart below, and each is worth naming
+before you touch the slider.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-chart-s-grid-and-vswr-circles">
+<div class="wrap docutils container">
+<p class="rubric">The chart’s grid and VSWR circles</p>
+<ul class="simple">
+<li><p><strong>The faint gray grid</strong> is the chart itself, printed once and never moving.
+The circles that all pass through the right-hand point are lines of constant
+resistance; the arcs curving away from that point are lines of constant
+reactance. Together they let you read an impedance off any position.</p></li>
+<li><p><strong>The amber dashed circles</strong> are lines of constant VSWR, centered on the
+match point at 2:1 and 3:1. Anything inside the 2:1 circle is a usable match.</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-locus-is-the-antenna-and-its-markers">
+<div class="wrap docutils container">
+<p class="rubric">The locus is the antenna, and its markers</p>
+<ul class="simple">
+<li><p><strong>The blue curve is the antenna.</strong> It is the <strong>impedance locus</strong>: the path the
+dipole’s feed impedance traces as its length <span class="math notranslate nohighlight">\(L/\lambda\)</span> sweeps from one end
+of the slider range to the other. Each point on it is one antenna, of one
+particular length. The curve is not part of the chart — it is the data.</p></li>
+<li><p><strong>The markers</strong> call out two lengths on that locus: the red one is exactly
+<span class="math notranslate nohighlight">\(\lambda/2\)</span>, and the green one is the resonant length.</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-the-locus-crosses-the-axis">
+<div class="wrap docutils container">
+<p class="rubric">Where the locus crosses the axis</p>
+<p>The single most important feature is where the blue locus crosses the
+horizontal axis. On the horizontal axis the reactance is zero, so that
+crossing <em>is</em> resonance — it is the same event as the zero crossing in the
+reactance figure earlier in this Part, drawn a different way. The resistance
+you read at that crossing is the radiation resistance of the resonant dipole.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-now-use-the-slider">
+<div class="wrap docutils container">
+<p class="rubric">Now use the slider</p>
+<p>Now use the slider. Find the <span class="math notranslate nohighlight">\(\lambda/2\)</span> marker and confirm it reads
+<span class="math notranslate nohighlight">\(73 + j42.5\ \Omega\)</span>, sitting in the upper (inductive) half and outside the 2:1
+circle. Then shorten the antenna and watch the locus walk down onto the axis
+and inside the 2:1 circle as the VSWR readout falls.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-shorten-it-then-re-normalize">
+<div class="wrap docutils container">
+<p class="rubric">Shorten it, then re-normalize</p>
+<p>Finally, switch the
+normalization from <span class="math notranslate nohighlight">\(50\ \Omega\)</span> to <span class="math notranslate nohighlight">\(75\ \Omega\)</span>. The antenna does not change and
+the impedance readout does not change, but the grid re-scales underneath it and
+the same antenna lands closer to the center. A match is a property of an
+antenna <em>and</em> a line together, not of the antenna alone. Throughout, the wire is
+assumed thin — radius <span class="math notranslate nohighlight">\(0.002\ \lambda\)</span> — and only the colors are keyed under the
+chart; the list above is the full reading of it.</p>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-the-impedance-locus">
+<div class="wrap docutils container">
+<p class="rubric">The impedance locus</p>
+<iframe src="../../viz/dipole-smith.html"
+        width="100%" height="551"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Smith chart showing how a dipole's input impedance moves as its length changes, with constant-VSWR circles">
+</iframe>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-the-chart-says-63-ohms">
+<div class="wrap docutils container">
+<p class="rubric">Why the chart says 63 ohms</p>
+<p>At the resonant crossing the chart reads about <span class="math notranslate nohighlight">\(63\ \Omega\)</span>, but this lesson
+has been telling you to design around <span class="math notranslate nohighlight">\(70\ \Omega\)</span>. Both numbers are correct,
+and the difference is not a mistake in either one.</p>
+<p><span class="math notranslate nohighlight">\(63\ \Omega\)</span> is what <strong>this model</strong> predicts. Everything in the widget comes
+from the assumed sinusoidal current of Part 2, applied to a thin wire of radius
+<span class="math notranslate nohighlight">\(0.002\ \lambda\)</span>. At exactly <span class="math notranslate nohighlight">\(\lambda/2\)</span> that model is excellent, which is why the chart
+reproduces <span class="math notranslate nohighlight">\(73 + j42.5\ \Omega\)</span> there to the digit. Shorten the wire toward
+resonance and the model drifts: the real current on a slightly short, finite
+thickness wire is not quite sinusoidal, and the model responds by predicting a
+resistance several ohms low.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-real-dipoles-measure-70-ohms">
+<div class="wrap docutils container">
+<p class="rubric">What real dipoles measure: 70 ohms</p>
+<p><span class="math notranslate nohighlight">\(70\ \Omega\)</span> is what real resonant dipoles <strong>measure</strong>. It is the number that
+comes back from method-of-moments solvers and from antennas on a bench, and it
+is the number to carry into a design.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-the-chart-is-for-and-what-it-isn-t">
+<div class="wrap docutils container">
+<p class="rubric">What the chart is for, and what it isn’t</p>
+<p>Use the chart to understand the <em>shape</em> of the behavior — that resonance is
+a crossing of the real axis, that trimming moves you there, that the locus
+leaves the useful region quickly on either side. Use <span class="math notranslate nohighlight">\(70\ \Omega\)</span> when you need
+a number. Lesson 8 is where you measure the gap between the two for yourself.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-balanced-dipole-unbalanced-coax">
+<div class="wrap docutils container">
+<p class="rubric">Balanced dipole, unbalanced coax</p>
+<p>One practical matter remains before you connect anything. A dipole is a
+<strong>balanced</strong> structure and coax is <strong>unbalanced</strong>. Wire them together directly
+and current flows on the outside of the shield, the feedline joins the
+radiating structure, and your pattern and VSWR both start depending on where
+you are standing. Lesson 4 gave you the fix: put a <strong>balun</strong> at the feed point.
+Every dipole in this course gets one.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-a-2-meter-dipole-for-146-mhz">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — a 2 meter dipole for 146 MHz</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — a 2 meter dipole for 146 MHz</p>
+<p><strong>Design a resonant half-wave dipole for 146 MHz and predict what the analyzer
+will show.</strong></p>
+<p><em>Wavelength.</em></p>
+<div class="math notranslate nohighlight">
+\[\lambda = \frac{c}{f} = \frac{3 \times 10^8}{146 \times 10^6} = 2.055\ \text{m}\]</div>
+<p><em>Physical length.</em> A half wavelength is <span class="math notranslate nohighlight">\(1.027\ \text{m}\)</span>; apply the 5% rule:</p>
+<div class="math notranslate nohighlight">
+\[L = 0.475\lambda = 0.475 \times 2.055 = 0.976\ \text{m}\]</div>
+<p>Cross-check with the field-manual form: <span class="math notranslate nohighlight">\(143/146 = 0.980\ \text{m}\)</span>. The two
+agree to within a centimeter, which is well inside the accuracy of the rule.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-continued-cut-list-and-predicted-z-vswr">
+<div class="wrap docutils container">
+<p class="rubric">Worked example, continued — cut list and predicted Z/VSWR</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — a 2 meter dipole for 146 MHz, continued</p>
+<p><em>Cut list.</em> Two arms of <span class="math notranslate nohighlight">\(L/2 = 48.8\ \text{cm}\)</span>, fed at the center, with a
+balun.</p>
+<p><em>Predicted performance.</em></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>Value</p></th>
+<th class="head text-left"><p>Where it came from</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(Z_{\text{in}}\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx 70 + j0\ \Omega\)</span></p></td>
+<td class="text-left"><p>resonant, trimmed</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>VSWR on <span class="math notranslate nohighlight">\(50\ \Omega\)</span></p></td>
+<td class="text-left"><p>1.40</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\vert\Gamma\vert = 20/120 = 0.167\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>VSWR on <span class="math notranslate nohighlight">\(75\ \Omega\)</span></p></td>
+<td class="text-left"><p>1.07</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\vert\Gamma\vert = 5/145 = 0.034\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-continued-gain-beamwidth-and-range">
+<div class="wrap docutils container">
+<p class="rubric">Worked example, continued — gain, beamwidth, and range</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — a 2 meter dipole for 146 MHz, continued</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>Value</p></th>
+<th class="head text-left"><p>Where it came from</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Gain</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2.15\ \text{dBi}\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(D = 1.64\)</span>, copper loss negligible</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_\text{HP}\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(78^\circ\)</span></p></td>
+<td class="text-left"><p>half-wave pattern</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Far-field distance</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2D^2/\lambda = 0.93\ \text{m}\)</span></p></td>
+<td class="text-left"><p>Lesson 5, with <span class="math notranslate nohighlight">\(D = 0.976\ \text{m}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><em>Sanity check.</em> Every number above is unremarkable, which is what you want. A
+dipole calculation that returns 12 dBi or <span class="math notranslate nohighlight">\(8\ \Omega\)</span> is outside the physically
+reasonable range and indicates an arithmetic error.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-two-numbers-need-a-footnote">
+<div class="wrap docutils container">
+<p class="rubric">Two numbers need a footnote</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Two of those numbers need a footnote. The sinusoidal-current model used here
+predicts a resonant resistance in the low sixties; a full numerical solver and
+a real measurement both land closer to <span class="math notranslate nohighlight">\(70\ \Omega\)</span>. And the exact resonant
+length depends on wire gauge, insulation, and what is nearby. Carry
+<span class="math notranslate nohighlight">\(70\ \Omega\)</span> and <span class="math notranslate nohighlight">\(0.475\lambda\)</span> as the design numbers, and expect a few
+percent of disagreement — quantifying that disagreement is what the next lesson
+is for.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-build-it-a-915-mhz-wire-dipole-on-an-sma-connector">
+<div class="wrap docutils container">
+<p class="rubric">Build it — a 915 MHz wire dipole on an SMA connector</p>
+<div class="type-along admonition">
+<p class="admonition-title">Build it — a 915 MHz wire dipole on an SMA connector</p>
+<p>Ten minutes with a wire cutter and a soldering iron gets you a real antenna.
+You will not measure it today. You will measure it in Lesson 13, on a vector
+network analyzer, against the predictions you write down now — so the value of
+this exercise depends entirely on committing to numbers <strong>before</strong> you cut.</p>
+<p><strong>Parts.</strong> An SMA female panel-mount or edge-launch connector, about
+<span class="math notranslate nohighlight">\(20\ \text{cm}\)</span> of 20 AWG solid copper wire — stiff enough to hold its shape — a
+wire cutter, a ruler, and a soldering iron.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-design-then-build">
+<div class="wrap docutils container">
+<p class="rubric">Design, then build</p>
+<div class="type-along admonition">
+<p class="admonition-title">Build it — a 915 MHz wire dipole on an SMA connector, continued</p>
+<p><strong>Design, then build.</strong></p>
+<ol class="arabic simple">
+<li><p>At <span class="math notranslate nohighlight">\(915\ \text{MHz}\)</span>, <span class="math notranslate nohighlight">\(\lambda = c/f = 32.8\ \text{cm}\)</span>. The 5% rule gives a
+total length <span class="math notranslate nohighlight">\(L = 0.475\lambda = 15.6\ \text{cm}\)</span>, which is
+<span class="math notranslate nohighlight">\(7.8\ \text{cm}\)</span> <strong>per arm</strong>. The same three lines work for any other band
+with a new <span class="math notranslate nohighlight">\(f\)</span>.</p></li>
+<li><p>Cut two arms at <span class="math notranslate nohighlight">\(7.8\ \text{cm}\)</span>. Cut them long if you are unsure. You can
+always trim; you cannot un-trim.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-build-it-continued-solder-and-check">
+<div class="wrap docutils container">
+<p class="rubric">Build it, continued — solder and check</p>
+<div class="type-along admonition">
+<p class="admonition-title">Build it — a 915 MHz wire dipole on an SMA connector, continued</p>
+<ol class="arabic simple" start="3">
+<li><p>Solder one arm to the connector’s <strong>center pin</strong> and the other to the
+connector <strong>body or ground tab</strong>, so the two arms run in opposite directions
+along one straight line.</p></li>
+<li><p>Straighten both arms and check that the pair is collinear and square to the
+connector. A bent dipole is a different antenna.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-build-it-continued-fill-in-your-predictions">
+<div class="wrap docutils container">
+<p class="rubric">Build it, continued — fill in your predictions</p>
+<div class="type-along admonition">
+<p class="admonition-title">Build it — a 915 MHz wire dipole on an SMA connector, continued</p>
+<ol class="arabic simple" start="5">
+<li><p>Fill in the prediction column below and keep the sheet with the antenna.</p></li>
+</ol>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>What to record</p></th>
+<th class="head text-left"><p>Your prediction (now)</p></th>
+<th class="head text-left"><p>Measured in Lesson 13</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Arm length actually cut</p></td>
+<td class="text-left"><p>______ cm</p></td>
+<td class="text-left"><p>—</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Total length <span class="math notranslate nohighlight">\(L\)</span></p></td>
+<td class="text-left"><p>______ cm</p></td>
+<td class="text-left"><p>—</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Resonant frequency <span class="math notranslate nohighlight">\(f_\text{res}\)</span></p></td>
+<td class="text-left"><p>______ MHz</p></td>
+<td class="text-left"><p>______ MHz</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-build-it-continued-impedance-and-vswr-predictions">
+<div class="wrap docutils container">
+<p class="rubric">Build it, continued — impedance and VSWR predictions</p>
+<div class="type-along admonition">
+<p class="admonition-title">Build it — a 915 MHz wire dipole on an SMA connector, continued</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>What to record</p></th>
+<th class="head text-left"><p>Your prediction (now)</p></th>
+<th class="head text-left"><p>Measured in Lesson 13</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Feed impedance <span class="math notranslate nohighlight">\(Z_{\text{in}}\)</span> at resonance</p></td>
+<td class="text-left"><p>______ <span class="math notranslate nohighlight">\(\Omega\)</span></p></td>
+<td class="text-left"><p>______ <span class="math notranslate nohighlight">\(\Omega\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>VSWR on a <span class="math notranslate nohighlight">\(50\ \Omega\)</span> line</p></td>
+<td class="text-left"><p>______</p></td>
+<td class="text-left"><p>______</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-this-build-has-no-balun-and-that-matters">
+<div class="wrap docutils container">
+<p class="rubric">This build has no balun, and that matters</p>
+<div class="type-along admonition">
+<p class="admonition-title">Build it — a 915 MHz wire dipole on an SMA connector, continued</p>
+<p>Soldering wire straight onto an
+SMA connector is the crudest possible feed: the dipole is balanced, the coax
+behind it is not, and current will flow on the outside of the shield exactly as
+Lesson 4 warned. The feedline becomes part of the antenna. Expect your measured
+resonant frequency and impedance to drift from the predictions above, and
+expect the readings to twitch when you move your hand near the cable. That is
+not a botched build. It is the balun problem showing up in your own hardware.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-reference-and-the-assumed-current">
+<div class="wrap docutils container">
+<p class="rubric">Summary — reference and the assumed current</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Isotropic radiator</p></td>
+<td class="text-left"><p>Equal radiation in all directions; impossible, but the reference for everything</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(D = 1\)</span>, <span class="math notranslate nohighlight">\(0\ \text{dBi}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>EIRP</p></td>
+<td class="text-left"><p>Transmitter and antenna as one number, <span class="math notranslate nohighlight">\(P_t G_t\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\text{dBi} = \text{dBd} + 2.15\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-assumed-current">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the assumed current</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Assumed current</p></td>
+<td class="text-left"><p>Standing wave from the unfolded open-circuited line</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(I_m \sin[k(L/2 - \vert z\vert)]\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-pattern-by-length">
+<div class="wrap docutils container">
+<p class="rubric">Summary — pattern by length</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Short dipole</p></td>
+<td class="text-left"><p>Constant current, limiting case</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\vert F\vert = \sin\theta\)</span>, <span class="math notranslate nohighlight">\(1.76\ \text{dBi}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Dipole pattern, any length</p></td>
+<td class="text-left"><p>One radiation integral covers every length; normalize by the peak</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\vert F\vert \propto \left\vert\left[\cos\left(\frac{kL}{2}\cos\theta\right) - \cos\frac{kL}{2}\right]/\sin\theta\right\vert\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Half-wave dipole pattern</p></td>
+<td class="text-left"><p>The general result at <span class="math notranslate nohighlight">\(kL/2 = \pi/2\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_\text{HP} = 78^\circ\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-directivity-and-impedance">
+<div class="wrap docutils container">
+<p class="rubric">Summary — directivity and impedance</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Half-wave directivity</p></td>
+<td class="text-left"><p>From integrating the pattern over the sphere</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(D = 1.64 = 2.15\ \text{dBi}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Special functions</p></td>
+<td class="text-left"><p>Tabulated, like <span class="math notranslate nohighlight">\(\text{erf}\)</span> — do not integrate them</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(C_{in}(2\pi) = 2.4376\)</span>, <span class="math notranslate nohighlight">\(Si(2\pi) = 1.4182\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Half-wave impedance</p></td>
+<td class="text-left"><p>Resistance from the far field, reactance from induced EMF</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + jSi(2\pi)\right] = 73 + j42.5\ \Omega\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-resonance-and-design">
+<div class="wrap docutils container">
+<p class="rubric">Summary — resonance and design</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Resonance</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(X_{\text{in}} = 0\)</span>, reached by trimming</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.47\lambda\)</span> to <span class="math notranslate nohighlight">\(0.48\lambda\)</span>, <span class="math notranslate nohighlight">\(\approx 70\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>The 5% rule</p></td>
+<td class="text-left"><p>Resonant length from frequency</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(143/f_\text{MHz}\)</span> meters</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Longer dipoles</p></td>
+<td class="text-left"><p>Phase reversals build lobes</p></td>
+<td class="text-left"><p>Peak <span class="math notranslate nohighlight">\(\approx 5.2\ \text{dBi}\)</span> near <span class="math notranslate nohighlight">\(1.25\lambda\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a href="../../practice/ECE444_L07_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a href="../../practice/ECE444_L07_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-4nec2-does-differently">
+<div class="wrap docutils container">
+<p class="rubric">What 4nec2 does differently</p>
+<p>Lesson 8 puts this exact antenna into <strong>4nec2</strong>.</p>
+<p>4nec2 is a free Windows program that acts as a front end to <strong>NEC-2</strong>, the
+Numerical Electromagnetics Code — a method-of-moments engine written in the
+1970s and still the standard tool for wire antennas. Method of moments does the
+one thing this lesson could not: instead of assuming a current, it divides the
+wire into short segments and <em>solves</em> for the current on each one, by enforcing
+the boundary condition that the total tangential electric field must vanish on
+a perfect conductor. Once it has that current, it computes the pattern the same
+way you did today — by putting the current through the radiation integral. So
+the simulator is not doing different physics from this lesson. It is doing the
+same physics with the assumption removed, and that is exactly why comparing the
+two is informative.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-you-ll-do-with-the-simulator-in-lesson-8">
+<div class="wrap docutils container">
+<p class="rubric">What you’ll do with the simulator in Lesson 8</p>
+<p>In Lesson 8 you will model a wire, set its length, sweep the frequency, and
+read back impedance, VSWR, gain, and pattern — then compare each one against
+the numbers you produced by hand today. <strong>The numbers you just predicted are
+the ones you will check against simulation.</strong> A simulator that agrees with a
+hand calculation on a dipole can be trusted a little further on a structure
+you cannot solve by hand; a disagreement usually points to a setup error in
+the model, and the only way to notice it is to bring predictions with you. The
+915 MHz dipole you soldered onto an SMA connector closes the same loop with
+hardware instead of software: in Lesson 13 you will put it on a vector network
+analyzer and see how far a real balun-less wire lands from the length,
+resonance, and impedance you wrote down today.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-predictions-catch-simulator-mistakes">
+<div class="wrap docutils container">
+<p class="rubric">Predictions catch simulator mistakes</p>
+<p>A simulator that agrees with a hand
+calculation on a dipole can be trusted a little further on a structure
+you cannot solve by hand; a disagreement usually points to a setup error in
+the model, and the only way to notice it is to bring predictions with you. The
+915 MHz dipole you soldered onto an SMA connector closes the same loop with
+hardware instead of software: in Lesson 13 you will put it on a vector network
+analyzer and see how far a real balun-less wire lands from the length,
+resonance, and impedance you wrote down today.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lesson-9-and-beyond">
+<div class="wrap docutils container">
+<p class="rubric">Lesson 9 and beyond</p>
+<p>After that, Lesson 9 takes the same wire apart. Cut a dipole in half and stand
+it on a ground plane and you have a monopole — half the impedance, double the
+directivity, and only the upper half-space to radiate into. Bend it into a
+circle and you have a loop, whose behavior depends entirely on whether the
+circumference is small or comparable to a wavelength. Further out, in Module 3,
+the dipole stops being an antenna and becomes an <em>element</em>: line up many of
+them, control the phase of each, and pattern multiplication turns 2.15 dBi into
+whatever the array is long enough to deliver.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module02/L07-simple-resonant-antennas"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

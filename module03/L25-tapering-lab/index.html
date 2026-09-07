@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L25 - Tapering Lab &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l25-tapering-lab">
+<h1>L25 - Tapering Lab<a class="headerlink" href="#l25-tapering-lab" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Tapering Lab</h1>
+<div class="title-rule"></div>
+<p>Today that table goes to the bench.</p>
+<p>Lesson 25 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-2">
+<div class="wrap docutils container">
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L25-tapering-lab.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L25-tapering-lab.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L25-tapering-lab.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '7'; counter-reset: lo 5">
+  <li>I can apply amplitude tapers on the PHASER and measure the sidelobe and beamwidth changes.</li>
+  <li>I can distinguish the plotted peak drop from the directivity loss when a taper is applied.</li>
+  <li>I can verify a taper's predicted beam broadening against measurement.</li>
+  <li>I can design my own taper and evaluate it against the presets.</li>
+</ol>
+<div class="depth docutils container">
+<p>Lesson 24 ended with a table of what each taper family costs: sidelobes come
+down, the beam broadens, and the aperture gives up some efficiency. Today that
+table goes to the bench. You will load each preset on the PHASER, sweep the
+beam past the HB100, and check the measured beamwidth and peak level against
+the numbers you predicted. The measurement also forces a distinction that is
+easy to lose on paper — the <strong>peak drop</strong> you watch happen on the plot is not
+the <strong>directivity loss</strong> the array suffers, and the gap between them
+is several decibels.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-lesson-24-predicts">
+<div class="wrap docutils container">
+<p class="rubric">What Lesson 24 predicts</p>
+<p>The expectation table below is the prediction column for every measurement you
+make today. The <span class="math notranslate nohighlight">\(a_n\)</span> column is what the GUI writes to the eight Element Gains
+sliders when you press a preset button; everything to its right is what the
+sweep reads relative to a uniform-taper reference.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Preset</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(a_n\)</span> (%)</p></th>
+<th class="head text-left"><p>HPBW</p></th>
+<th class="head text-left"><p>Peak drop</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\eta_t\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Uniform</p></td>
+<td class="text-left"><p>100 × 8</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.1^\circ\)</span></p></td>
+<td class="text-left"><p>0 dB</p></td>
+<td class="text-left"><p>1.00 (0 dB)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Hann</p></td>
+<td class="text-left"><p>12, 43, 77, 100, 100, 77, 43, 12</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(19.5^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-4.7\)</span> dB</p></td>
+<td class="text-left"><p>0.75 (<span class="math notranslate nohighlight">\(-1.2\)</span> dB)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-lesson-24-predicts-blackman-and-chebyshev">
+<div class="wrap docutils container">
+<p class="rubric">What Lesson 24 predicts — Blackman and Chebyshev</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Preset</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(a_n\)</span> (%)</p></th>
+<th class="head text-left"><p>HPBW</p></th>
+<th class="head text-left"><p>Peak drop</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\eta_t\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Blackman</p></td>
+<td class="text-left"><p>6, 27, 66, 100, 100, 66, 27, 6</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(23.1^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-6.1\)</span> dB</p></td>
+<td class="text-left"><p>0.66 (<span class="math notranslate nohighlight">\(-1.8\)</span> dB)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Chebyshev</p></td>
+<td class="text-left"><p>4, 23, 62, 100, 100, 62, 23, 4</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(24.3^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-6.5\)</span> dB</p></td>
+<td class="text-left"><p>0.62 (<span class="math notranslate nohighlight">\(-2.1\)</span> dB)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-record-two-numbers-not-one">
+<div class="wrap docutils container">
+<p class="rubric">Record two numbers, not one</p>
+<p>The peak drop is the <strong>coherent receive-voltage
+loss</strong>: at broadside the eight element signals add in phase, so the summed
+voltage is proportional to <span class="math notranslate nohighlight">\(\sum a_n\)</span> instead of <span class="math notranslate nohighlight">\(N\)</span>, and the plotted peak
+falls by <span class="math notranslate nohighlight">\(20\log_{10}(\sum a_n / N)\)</span>. That is the number the Rectangular plot
+shows you. The directivity loss is the <strong>taper efficiency</strong>
+<span class="math notranslate nohighlight">\(\eta_t = (\sum a_n)^2 / (N \sum a_n^2)\)</span>, which for the Hann preset is <span class="math notranslate nohighlight">\(-1.2\)</span>
+dB, not <span class="math notranslate nohighlight">\(-4.7\)</span> dB. Both numbers are real and both belong in your table, so
+record them in separate columns and never let one stand in for the other.
+Part 4 works through where the difference comes from.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-floor-sets-what-you-can-report">
+<div class="wrap docutils container">
+<p class="rubric">The floor sets what you can report</p>
+<p>One measurement will refuse to give you a number. The sweep’s noise floor sits
+about 23 dB below the uniform-taper peak, and every tapered preset pushes its
+first sidelobe further down than that. The correct table entry in those rows is
+<strong>“below the noise floor”</strong>, not a value read off the grass. Quoting <span class="math notranslate nohighlight">\(-27\)</span> dBc
+from a trace whose floor is at <span class="math notranslate nohighlight">\(-23\)</span> dBc reports the noise, not the antenna.</p>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-interactive-the-measured-sweep-for-each-taper-preset">
+<div class="wrap docutils container">
+<p class="rubric">Interactive — the measured sweep for each taper preset</p>
+<div class="depth docutils container">
+<p>The widget below runs the same sweep in the browser. Start on Uniform and note
+the first sidelobe near <span class="math notranslate nohighlight">\(-13\)</span> dBc, then step through the presets and watch two
+things happen at once: the main lobe widens and its peak drops, while the
+sidelobes sink into the grass. The <span class="math notranslate nohighlight">\(\eta_t\)</span> pill is the directivity loss, so
+compare it against the peak drop pill each time — the two never agree.</p>
+</div>
+<iframe src="../../viz/taper-measurement.html"
+        width="100%" height="500"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Measured beam sweep for the PHASER taper presets, with element gains, HPBW, peak drop and taper efficiency">
+</iframe>
+</div>
+</div>
+<div class="frame docutils container" id="frame-equipment-and-setup">
+<div class="wrap docutils container">
+<p class="rubric">Equipment and setup</p>
+<p>You need the ADALM-PHASER kit with its Raspberry Pi and Pluto attached, the
+HB100 source and its battery, and a laptop on the same network.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-setup">
+<div class="wrap docutils container">
+<p class="rubric">Setup</p>
+<ol class="arabic simple">
+<li><p>Place the HB100 at boresight, about 1 m from the array face, aimed at the
+center of the patch row. Leave it there for the whole lab. Every number
+today is a comparison between tapers, so the source must not move between
+sweeps.</p></li>
+<li><p>Power the PHASER, wait for the Pi to boot, and open
+<code class="docutils literal notranslate"><span class="pre">http://phaser.local:8080</span></code> in a browser.</p></li>
+<li><p>In the sidebar, press <strong>Calibrate</strong> under Configuration and let it finish.
+An uncalibrated array carries element-to-element gain and phase errors that
+look exactly like a taper you did not ask for.</p></li>
+<li><p>Press Lab preset <strong>3 Tapering</strong>. This loads the Configuration values for the
+HB100 and selects the <strong>Rectangular</strong> plot tab.</p></li>
+<li><p>Under Element Gains, confirm <strong>Enforce Symmetric Taper</strong> is on. With it on,
+moving one slider moves its mirror-image partner, which is what you want for
+every taper in this lab.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-no-hardware">
+<div class="wrap docutils container">
+<p class="rubric">No hardware?</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Run the backend in simulation mode with
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">phaser_headless.py</span> <span class="pre">--sim</span></code> and open the same URL. The simulator places
+a target at boresight, which is where this lab needs it, and the expectation
+table above was measured against it. Every step below works unchanged.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-a-the-uniform-reference">
+<div class="wrap docutils container">
+<p class="rubric">Step (a): the uniform reference</p>
+<p>Press the <strong>Uniform</strong> taper preset, confirm all eight sliders read 100%, and
+press <strong>Start</strong>. Read the Peak Array Gain and Est. Angle values, then press
+<strong>Freeze</strong> to hold this trace. It stays on the plot as your reference for the
+rest of the lab, and every peak drop you record is measured against it.</p>
+<p>Record the uniform HPBW by reading the angles where the trace falls 3 dB below
+its own peak. Expect about <span class="math notranslate nohighlight">\(13^\circ\)</span>, and expect it to disagree with the
+<span class="math notranslate nohighlight">\(13.2^\circ\)</span> theory value by a degree or so — the sweep steps in <span class="math notranslate nohighlight">\(2.8125^\circ\)</span>
+increments, so the 3 dB crossings land between samples.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-b-hann">
+<div class="wrap docutils container">
+<p class="rubric">Step (b): Hann</p>
+<p>Press the <strong>Hann</strong> preset. Before sweeping, do three things:</p>
+<ol class="arabic simple">
+<li><p>Read the eight slider values and copy them into your table. They should read
+12, 43, 77, 100, 100, 77, 43, 12.</p></li>
+<li><p>Compute <span class="math notranslate nohighlight">\(\sum a_n\)</span> and predict the peak drop from
+<span class="math notranslate nohighlight">\(20\log_{10}(\sum a_n/N)\)</span>.</p></li>
+<li><p>Write down the predicted HPBW from the Part 1 table, <span class="math notranslate nohighlight">\(19.5^\circ\)</span>.</p></li>
+</ol>
+<p>Now press <strong>Start</strong>. The main lobe should widen from about <span class="math notranslate nohighlight">\(13^\circ\)</span> to about
+<span class="math notranslate nohighlight">\(19^\circ\)</span>, the peak should sit about 4.7 dB below the frozen uniform trace,
+and the first sidelobes that were plainly visible at <span class="math notranslate nohighlight">\(\pm 22^\circ\)</span> should be
+gone into the noise. Record the peak drop, the HPBW, and “below the noise
+floor” for the sidelobe level.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-c-blackman-and-chebyshev">
+<div class="wrap docutils container">
+<p class="rubric">Step (c): Blackman and Chebyshev</p>
+<p>Repeat step (b) for the <strong>Blackman</strong> and <strong>Chebyshev</strong> presets, predicting
+before each sweep. These two tapers pull the end elements down to 6% and 4%,
+so most of the array’s outer aperture is barely contributing: the beam widens
+past <span class="math notranslate nohighlight">\(23^\circ\)</span> and the peak drops past 6 dB, for sidelobes that were already
+invisible after Hann. This is the point of diminishing returns that Lesson 24
+described: here it costs 5 degrees of beamwidth and returns nothing this
+measurement can see.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-d-design-your-own-taper">
+<div class="wrap docutils container">
+<p class="rubric">Step (d): design your own taper</p>
+<p>With Enforce Symmetric Taper still on, design a taper of your own against this
+specification:</p>
+<blockquote>
+<div><p><strong>HPBW no wider than <span class="math notranslate nohighlight">\(17^\circ\)</span>, with the first sidelobe below <span class="math notranslate nohighlight">\(-20\)</span> dBc.</strong></p>
+</div></blockquote>
+<p>Start from Uniform and pull the two end elements down together, leaving the
+middle elements high. A mild taper is enough: put the end elements somewhere
+near 40% to 50% and step the elements between them smoothly up to 100%. Work by
+iteration — set the sliders, press <strong>Start</strong>, read the
+HPBW and the sidelobe level, and adjust. Two or three passes will get you
+there.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-d-design-your-own-taper-continued">
+<div class="wrap docutils container">
+<p class="rubric">Step (d): design your own taper, continued</p>
+<p>Record your final eight gain values and the measured result. A taper with the
+end elements at 45% gives roughly <span class="math notranslate nohighlight">\(15^\circ\)</span> of beamwidth, a peak drop near
+<span class="math notranslate nohighlight">\(-3.3\)</span> dB, and sidelobes that have just reached the floor.</p>
+<p><img src="../../viz/img/L25-custom-target.svg"
+     alt="Custom mild taper sweep against the uniform reference, with the design target and noise floor marked"
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point">
+<div class="wrap docutils container">
+<p class="rubric">Key point</p>
+<div class="callout docutils container">
+<p>Sidelobe control is not all-or-nothing. Pulling only the end elements down by
+half takes the first sidelobe from <span class="math notranslate nohighlight">\(-13\)</span> dBc to below <span class="math notranslate nohighlight">\(-20\)</span> dBc, for 2 degrees
+of beamwidth and a third of a decibel of directivity. The presets go much
+further than that, at a much higher cost in both.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-e-restore">
+<div class="wrap docutils container">
+<p class="rubric">Step (e): restore</p>
+<p>Press the <strong>Uniform</strong> preset before you leave, so the next section starts from
+a known state.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-working-the-hann-numbers">
+<div class="wrap docutils container">
+<p class="rubric">Working the Hann numbers</p>
+<p>Work the Hann preset all the way through. The eight amplitudes are
+<span class="math notranslate nohighlight">\(a_n = 0.12,\ 0.43,\ 0.77,\ 1.00,\ 1.00,\ 0.77,\ 0.43,\ 0.12\)</span>, giving</p>
+<div class="math notranslate nohighlight">
+\[\sum a_n = 4.64, \qquad \sum a_n^2 = 3.584 .\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-peak-drop-and-directivity-loss">
+<div class="wrap docutils container">
+<p class="rubric">Peak drop and directivity loss</p>
+<p>The plotted peak drop follows from the first sum alone:</p>
+<div class="math notranslate nohighlight">
+\[20\log_{10}\!\left(\frac{4.64}{8}\right) = 20\log_{10}(0.580) = -4.7\ \text{dB}.\]</div>
+<p>The directivity loss follows from both sums:</p>
+<div class="math notranslate nohighlight">
+\[\eta_t = \frac{\left(\sum a_n\right)^2}{N \sum a_n^2} = \frac{21.53}{8 \times 3.584} = 0.751 \quad \rightarrow \quad -1.2\ \text{dB}.\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-plotted-drop-and-the-directivity-loss-compared">
+<div class="wrap docutils container">
+<p class="rubric">The plotted drop and the directivity loss compared</p>
+<p><img src="../../viz/img/L25-two-numbers.svg"
+     alt="Bar comparison: the plotted peak falls 4.7 dB while directivity falls 1.2 dB, a 3.5 dB difference"
+     style="max-width: 620px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-the-other-3-5-db-went">
+<div class="wrap docutils container">
+<p class="rubric">Where the other 3.5 dB went</p>
+<p>So the trace drops 4.7 dB and the antenna loses 1.2 dB of directivity. The
+remaining 3.5 dB did not go anywhere, because it was never a loss. The sweep
+plots received power normalized to full scale, and the tapered array collects
+less signal voltage from the source — that part is real and it is the 4.7 dB.
+But the tapered array also responds to less of everything else arriving from
+off-boresight, and the noise-equivalent aperture shrinks along with the signal
+sum. Directivity is the ratio of on-axis intensity to the average over all
+angles, and that ratio only falls by <span class="math notranslate nohighlight">\(\eta_t\)</span>. If you re-normalized each trace
+to its own peak instead of to the uniform peak, the 4.7 dB would vanish from
+the plot entirely and the beam shape would be unchanged.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-practical-statement">
+<div class="wrap docutils container">
+<p class="rubric">The practical statement</p>
+<p>The practical statement is short. <strong>The peak drop is a plot artifact of a
+common reference; the taper efficiency is the antenna’s actual loss.</strong> A system
+budget that debits 4.7 dB for the taper overstates the loss by a factor of two
+in power.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-reading-a-disagreement">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — reading a disagreement</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — reading a disagreement</p>
+<p>A student applies the Hann preset, predicts a <span class="math notranslate nohighlight">\(-4.7\)</span> dB peak drop, and measures
+<span class="math notranslate nohighlight">\(-6.8\)</span> dB. Inverting the peak-drop formula gives the sum the array
+achieved:</p>
+<div class="math notranslate nohighlight">
+\[\sum a_n = N \times 10^{-6.8/20} = 8 \times 0.457 = 3.66 .\]</div>
+<p>That is 0.98 short of 4.64, which is one full-amplitude element. A center
+element is set to 0% — either its slider was dragged while Enforce Symmetric
+Taper was off, or its channel failed. The pattern gives the same verdict
+independently: with one center element dead the trace loses its symmetry and
+the sidelobes climb back up instead of staying buried.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-deliverables-the-taper-table">
+<div class="wrap docutils container">
+<p class="rubric">Deliverables — the taper table</p>
+<p>Submit the following.</p>
+<p><strong>1. The taper table</strong>, one row per preset, with these columns filled in:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Column</p></th>
+<th class="head text-left"><p>Where it comes from</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Preset and the eight <span class="math notranslate nohighlight">\(a_n\)</span> values</p></td>
+<td class="text-left"><p>read off the Element Gains sliders</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>HPBW, predicted and measured</p></td>
+<td class="text-left"><p>Part 1 table; 3 dB points on your sweep</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Peak drop, predicted and measured</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(20\log_{10}(\sum a_n/N)\)</span>; the frozen uniform trace</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-deliverables-the-taper-table-continued">
+<div class="wrap docutils container">
+<p class="rubric">Deliverables — the taper table, continued</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Column</p></th>
+<th class="head text-left"><p>Where it comes from</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>First sidelobe</p></td>
+<td class="text-left"><p>a value in dBc, or “below the noise floor”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\eta_t\)</span>, computed</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\((\sum a_n)^2 / (N \sum a_n^2)\)</span>, reported as a ratio and in dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-deliverables-your-taper-and-written-answers">
+<div class="wrap docutils container">
+<p class="rubric">Deliverables — your taper and written answers</p>
+<p><strong>2. Your custom taper</strong>: the eight gain values you settled on, the measured
+HPBW and sidelobe level, and one sentence on how you arrived at them.</p>
+<p><strong>3. Two written answers</strong>, a short paragraph each:</p>
+<ul class="simple">
+<li><p>The tapered sidelobes disappear from the plot, but the beamwidth change is
+easy to see and easy to measure. Explain why the measurement gives you a good
+number for one and no number at all for the other.</p></li>
+<li><p>Explain, in your own words, why the peak drop you measured is not the
+directivity your array lost, and what each number would be used for.</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lab-sheet">
+<div class="wrap docutils container">
+<p class="rubric">Lab sheet</p>
+<p>The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_Lab_L25_Tapering_blank.pdf" target="_blank" rel="noopener">Lab sheet (PDF)</a>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-two-numbers">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the two numbers</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\sum a_n / N\)</span></p></td>
+<td class="text-left"><p>coherent receive-voltage fraction at broadside</p></td>
+<td class="text-left"><p>Hann: <span class="math notranslate nohighlight">\(4.64/8 \rightarrow -4.7\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\eta_t = (\sum a_n)^2/(N\sum a_n^2)\)</span></p></td>
+<td class="text-left"><p>taper efficiency — the directivity the array loses</p></td>
+<td class="text-left"><p>Hann: 0.75, or <span class="math notranslate nohighlight">\(-1.2\)</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-peak-drop-and-beamwidth">
+<div class="wrap docutils container">
+<p class="rubric">Summary — peak drop and beamwidth</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Peak drop vs <span class="math notranslate nohighlight">\(\eta_t\)</span></p></td>
+<td class="text-left"><p>the plot reads one, the aperture loses the other</p></td>
+<td class="text-left"><p>3.5 dB apart for Hann</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>HPBW with taper</p></td>
+<td class="text-left"><p>broadens as the aperture is de-weighted</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.1^\circ\)</span> uniform, <span class="math notranslate nohighlight">\(19.5^\circ\)</span> Hann, <span class="math notranslate nohighlight">\(24.3^\circ\)</span> Chebyshev</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-noise-floor-and-sweep-grid">
+<div class="wrap docutils container">
+<p class="rubric">Summary — noise floor and sweep grid</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Noise floor</p></td>
+<td class="text-left"><p>the limit on any sidelobe reading</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx -23\)</span> dBc; tapered sidelobes sit below it</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Sweep grid</p></td>
+<td class="text-left"><p>steer resolution equals the phase LSB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2.8125^\circ\)</span>, worth 1 to <span class="math notranslate nohighlight">\(3^\circ\)</span> of HPBW read error</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-mild-taper">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the mild taper</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Mild taper</p></td>
+<td class="text-left"><p>most of the sidelobe benefit, little of the cost</p></td>
+<td class="text-left"><p>ends at 40 to 50%: <span class="math notranslate nohighlight">\(15^\circ\)</span>, <span class="math notranslate nohighlight">\(-0.3\)</span> dB of <span class="math notranslate nohighlight">\(\eta_t\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a href="../../practice/ECE444_L25_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a href="../../practice/ECE444_L25_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where this is going</p>
+<p>Every pattern defect you have measured so far is one a taper can fix. Lesson 26
+covers the three that it cannot. Grating lobes appear when the element spacing
+is too large for the scan angle, and they are full-height copies of the main
+beam — no amplitude weighting removes them, because they are the array factor
+doing exactly what the geometry tells it to. Beam squint moves the beam when
+the signal frequency drifts away from the frequency the phase shifts were
+computed for. Phase quantization scatters energy into a floor of small
+sidelobes set by the shifter’s bit count, and on the PHASER you can watch that
+floor rise by taking bits away.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-before-lesson-26">
+<div class="wrap docutils container">
+<p class="rubric">Before Lesson 26</p>
+<p>Read the Lesson 26 page before class, and bring today’s measured Chebyshev
+sidelobe entry with you. When we turn on every third element and the grating
+lobes appear at <span class="math notranslate nohighlight">\(\pm 44^\circ\)</span> at full height, the contrast with a taper’s
+neatly buried sidelobes is the whole point.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L25-tapering-lab"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

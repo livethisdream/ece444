@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3 — Arrays and ADALM-PHASER Beamforming &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../_static/custom.css">
+<link rel="stylesheet" href="../_static/shell.css">
+<link rel="stylesheet" href="../_static/frames.css">
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="module-3-arrays-and-adalm-phaser-beamforming">
+<h1>Module 3 — Arrays and ADALM-PHASER Beamforming<a class="headerlink" href="#module-3-arrays-and-adalm-phaser-beamforming" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Module 03</div>
+<h1 class="frame-title">Arrays and ADALM-PHASER Beamforming</h1>
+<div class="title-rule"></div>
+<p>Point the beam without moving the antenna.</p>
+<p>Lessons 15–28 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-module-goes">
+<div class="wrap docutils container">
+<p class="rubric">Where This Module Goes</p>
+<p>An array is many small antennas behaving as one large one. Feed the elements
+with the right phases and the beam points where you choose; feed them with the
+right amplitudes and you decide how much energy leaks into the sidelobes.</p>
+<p>This is the longest module in the course, and the most hands-on. <strong>Every
+theory lesson is followed by a lab on the ADALM-PHASER</strong>, so you never take
+the array factor on faith.</p>
+<div class="depth docutils container">
+<p>The through-line is one equation — the array factor — met four times: derived,
+steered, tapered, and nulled. Each time it is the same sum over elements with
+different weights. If you leave this module able to write that sum from memory
+and say what each term does, the rest is arithmetic.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives-3-1-3-3">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives 3.1-3.3</p>
+<ol class="lo-list" style="--module: '3'">
+  <li>I can describe aperture distributions and calculate aperture efficiency for a given illumination.</li>
+  <li>I can derive the array factor for an arbitrary linear array and apply pattern multiplication.</li>
+  <li>I can identify the hardware architecture of the ADALM-PHASER and control it via SDR software.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives-3-4-3-6">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives 3.4-3.6</p>
+<ol class="lo-list" start="4" style="--module: '3'">
+  <li>I can calculate the phase weights required to steer a beam to a given angle and predict the resulting array pattern.</li>
+  <li>I can implement beam steering on the ADALM-PHASER and verify the steered pattern against theory.</li>
+  <li>I can distinguish between array factor and true antenna pattern and account for element pattern effects.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives-3-7-3-9">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives 3.7-3.9</p>
+<ol class="lo-list" start="7" style="--module: '3'">
+  <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
+  <li>I can identify beam squint and quantization effects in a phased array and describe their impact on system performance.</li>
+  <li>I can calculate null-steering weights and implement pattern nulls on the ADALM-PHASER.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-15-17-from-aperture-to-array-and-the-hardware">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 15-17: From Aperture to Array, and the Hardware</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L15-aperture-distributions/index.html">
+    <span class="mt-kind">Lesson 15</span>
+    <h4>Aperture Distributions and Efficiency</h4>
+    <p>Aperture distributions and aperture efficiency for a given illumination. Objective 3.1.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L16-array-factor/index.html">
+    <span class="mt-kind">Lesson 16</span>
+    <h4>The Array Factor and Pattern Multiplication</h4>
+    <p>Array factor for a linear array and pattern multiplication. Objective 3.2.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L17-phased-array-hardware/index.html">
+    <span class="mt-kind">Lesson 17</span>
+    <h4>Introduction to Phased Array Hardware</h4>
+    <p>ADALM-PHASER architecture and SDR control. Objective 3.3.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-18-21-steering-the-beam-and-proving-it">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 18-21: Steering the Beam, and Proving It</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L18-beam-steering-theory/index.html">
+    <span class="mt-kind">Lesson 18</span>
+    <h4>Beam Steering Theory</h4>
+    <p>Phase weights to steer a beam and the resulting array pattern. Objective 3.4.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L19-beam-steering-lab/index.html">
+    <span class="mt-kind">Lesson 19</span>
+    <h4>Beam Steering Lab</h4>
+    <p>Implement beam steering on the PHASER and verify against theory. Objective 3.5.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L20-array-factor-beamwidth/index.html">
+    <span class="mt-kind">Lesson 20</span>
+    <h4>Array Factor and Beamwidth Theory</h4>
+    <p>Array factor and beamwidth in depth. Midterm project due. Objective 3.2.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L21-array-factor-lab/index.html">
+    <span class="mt-kind">Lesson 21</span>
+    <h4>Array Factor Lab</h4>
+    <p>Measure the array factor on the PHASER. Objective 3.2.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-22-25-the-real-pattern-and-shaping-it">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 22-25: The Real Pattern, and Shaping It</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L22-antenna-pattern-theory/index.html">
+    <span class="mt-kind">Lesson 22</span>
+    <h4>Antenna Pattern Theory</h4>
+    <p>True antenna pattern vs. array factor; element-pattern effects. Objective 3.6.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L23-antenna-pattern-lab/index.html">
+    <span class="mt-kind">Lesson 23</span>
+    <h4>Antenna Pattern Lab</h4>
+    <p>AUT pattern measurement using the PHASER. Objective 3.6.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L24-sidelobes-tapering/index.html">
+    <span class="mt-kind">Lesson 24</span>
+    <h4>Sidelobes and Tapering Theory</h4>
+    <p>Amplitude tapering (uniform, cosine, Chebyshev, Taylor) and the sidelobe trade-off. Objective 3.7.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L25-tapering-lab/index.html">
+    <span class="mt-kind">Lesson 25</span>
+    <h4>Tapering Lab</h4>
+    <p>Apply tapers on the PHASER and measure the sidelobe trade-off. Objective 3.7.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-26-28-where-arrays-misbehave-and-nulling">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 26-28: Where Arrays Misbehave, and Nulling</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L26-beam-squint-quantization/index.html">
+    <span class="mt-kind">Lesson 26</span>
+    <h4>Beam Squint and Quantization</h4>
+    <p>Beam squint and phase-quantization effects on array performance. Objective 3.8.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L27-null-steering-theory/index.html">
+    <span class="mt-kind">Lesson 27</span>
+    <h4>Null Steering Theory</h4>
+    <p>Null-steering weights and pattern nulls. Objective 3.9.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L28-null-steering-lab/index.html">
+    <span class="mt-kind">Lesson 28</span>
+    <h4>Null Steering Lab</h4>
+    <p>Implement pattern nulls on the PHASER. Objective 3.9.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where This Is Going</p>
+<p><strong>Module 4</strong> gives the array something to look for. The same hardware becomes
+a radar: send a chirp, listen for the echo, and work out how far away the
+target is and how fast it is moving.</p>
+<p>The null steering you learn at the end of this module is what the capstone
+uses to ignore a jammer.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../_static/shell.js"></script>
+<script src="../_static/frames.js"></script><script src="../_static/viz-autosize.js"></script>
+</body>
+</html>

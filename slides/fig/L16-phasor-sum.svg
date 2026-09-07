@@ -1,0 +1,25 @@
+<svg viewBox="0 0 790 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Eight element phasors added tip to tail in three cases: all aligned giving the largest sum, fanned out giving a shorter sum, and stepped by one eighth of a turn so the chain closes into a circle and the sum is zero">
+<defs><marker id="l16ph0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker><marker id="l16ph1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a5a00"/></marker><marker id="l16ph2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker></defs>
+<g style="font-family:inherit">
+<text x="395" y="26" font-size="13.5" fill="#5a5a5a" text-anchor="middle">Eight element phasors added tip to tail; the sum runs from the first tail to the last tip</text>
+<g>
+<rect x="10" y="46" width="244" height="250" rx="8" fill="#f5f9fc" stroke="#c7d2e0" stroke-width="1"/>
+<line x1="12.0" y1="170.0" x2="42.0" y2="170.0" stroke="#004a85" stroke-width="2.2" marker-end="url(#l16ph0)"/><line x1="42.0" y1="170.0" x2="72.0" y2="170.0" stroke="#004a85" stroke-width="2.2" marker-end="url(#l16ph0)"/><line x1="72.0" y1="170.0" x2="102.0" y2="170.0" stroke="#004a85" stroke-width="2.2" marker-end="url(#l16ph0)"/><line x1="102.0" y1="170.0" x2="132.0" y2="170.0" stroke="#004a85" stroke-width="2.2" marker-end="url(#l16ph0)"/><line x1="132.0" y1="170.0" x2="162.0" y2="170.0" stroke="#004a85" stroke-width="2.2" marker-end="url(#l16ph0)"/><line x1="162.0" y1="170.0" x2="192.0" y2="170.0" stroke="#004a85" stroke-width="2.2" marker-end="url(#l16ph0)"/><line x1="192.0" y1="170.0" x2="222.0" y2="170.0" stroke="#004a85" stroke-width="2.2" marker-end="url(#l16ph0)"/><line x1="222.0" y1="170.0" x2="252.0" y2="170.0" stroke="#004a85" stroke-width="2.2" marker-end="url(#l16ph0)"/>
+
+<text x="132" y="298" font-size="13.5" font-weight="700" fill="#004a85" text-anchor="middle">all in phase</text>
+<text x="132" y="318" font-size="12.5" fill="#5a5a5a" text-anchor="middle">peak</text>
+</g><g>
+<rect x="272" y="46" width="244" height="250" rx="8" fill="#f5f9fc" stroke="#c7d2e0" stroke-width="1"/>
+<line x1="354.3" y1="235.2" x2="384.3" y2="235.2" stroke="#8a5a00" stroke-width="2.2" marker-end="url(#l16ph1)"/><line x1="384.3" y1="235.2" x2="411.3" y2="222.1" stroke="#8a5a00" stroke-width="2.2" marker-end="url(#l16ph1)"/><line x1="411.3" y1="222.1" x2="429.7" y2="198.4" stroke="#8a5a00" stroke-width="2.2" marker-end="url(#l16ph1)"/><line x1="429.7" y1="198.4" x2="436.0" y2="169.1" stroke="#8a5a00" stroke-width="2.2" marker-end="url(#l16ph1)"/><line x1="436.0" y1="169.1" x2="428.7" y2="140.0" stroke="#8a5a00" stroke-width="2.2" marker-end="url(#l16ph1)"/><line x1="428.7" y1="140.0" x2="409.4" y2="117.0" stroke="#8a5a00" stroke-width="2.2" marker-end="url(#l16ph1)"/><line x1="409.4" y1="117.0" x2="382.0" y2="104.8" stroke="#8a5a00" stroke-width="2.2" marker-end="url(#l16ph1)"/><line x1="382.0" y1="104.8" x2="352.0" y2="105.8" stroke="#8a5a00" stroke-width="2.2" marker-end="url(#l16ph1)"/>
+<line x1="354.3" y1="235.2" x2="352.0" y2="105.8" stroke="#1a1a1a" stroke-width="2.6" stroke-dasharray="7 4"/>
+<text x="394" y="298" font-size="13.5" font-weight="700" fill="#8a5a00" text-anchor="middle">fanned out</text>
+<text x="394" y="318" font-size="12.5" fill="#5a5a5a" text-anchor="middle">partial cancellation</text>
+</g><g>
+<rect x="534" y="46" width="244" height="250" rx="8" fill="#f5f9fc" stroke="#c7d2e0" stroke-width="1"/>
+<line x1="641.0" y1="206.2" x2="671.0" y2="206.2" stroke="#b01e24" stroke-width="2.2" marker-end="url(#l16ph2)"/><line x1="671.0" y1="206.2" x2="692.2" y2="185.0" stroke="#b01e24" stroke-width="2.2" marker-end="url(#l16ph2)"/><line x1="692.2" y1="185.0" x2="692.2" y2="155.0" stroke="#b01e24" stroke-width="2.2" marker-end="url(#l16ph2)"/><line x1="692.2" y1="155.0" x2="671.0" y2="133.8" stroke="#b01e24" stroke-width="2.2" marker-end="url(#l16ph2)"/><line x1="671.0" y1="133.8" x2="641.0" y2="133.8" stroke="#b01e24" stroke-width="2.2" marker-end="url(#l16ph2)"/><line x1="641.0" y1="133.8" x2="619.8" y2="155.0" stroke="#b01e24" stroke-width="2.2" marker-end="url(#l16ph2)"/><line x1="619.8" y1="155.0" x2="619.8" y2="185.0" stroke="#b01e24" stroke-width="2.2" marker-end="url(#l16ph2)"/><line x1="619.8" y1="185.0" x2="641.0" y2="206.2" stroke="#b01e24" stroke-width="2.2" marker-end="url(#l16ph2)"/>
+<line x1="641.0" y1="206.2" x2="641.0" y2="206.2" stroke="#1a1a1a" stroke-width="2.6" stroke-dasharray="7 4"/>
+<text x="656" y="298" font-size="13.5" font-weight="700" fill="#b01e24" text-anchor="middle">closes on itself</text>
+<text x="656" y="318" font-size="12.5" fill="#5a5a5a" text-anchor="middle">null</text>
+</g>
+</g>
+</svg>

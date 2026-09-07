@@ -1,0 +1,1819 @@
+/* ECE 444 book custom stylesheet.
+   Adapted from USAFA/ece215-book/book/_static/custom.css:
+   ECE-215-specific sections (flashcards, sy-globaltoc, hero, block-grid,
+   deliverable-cards, demo-iframe, breadcrumb, download-cards, ref-tags,
+   ground-rules) removed. Palette swapped from DFEC navy/blue to the
+   usafa-blue palette used in assets/reveal/course-slides.css so the
+   book, slides, and (eventually) landing site read as one system. */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* ============================================================
+   Recolor pydata-sphinx-theme primary chrome to DFEC navy.
+   ----------------------------------------------------------
+   The theme's default `--pst-color-primary` is a teal (#0a7d91)
+   that drives the sidebar-toggle, article-header buttons, the
+   search-button keycap hints, and link color. We retarget it
+   onto the DFEC palette so all chrome reads as one family.
+   ============================================================ */
+html[data-theme="light"],
+html {
+  --pst-color-primary:    #004a85;
+  --pst-color-primary-bg: #f0f5fa;
+  --pst-color-link:       #0067b9;
+  --pst-color-link-hover: #004a85;
+  --pst-color-inline-code-links: #0067b9;
+  /* --pst-color-accent drives the focus box-shadow on the Cmd+K
+     search-modal input. Default is a magenta (#c132af) that clashes
+     with the DFEC navy/blue palette; retarget to DFEC mid-blue. */
+  --pst-color-accent:     #0067b9;
+}
+
+/* ============================================================
+   ECE 444 — palette (matched to assets/reveal/course-slides.css)
+   ============================================================
+   --tps-navy   : #004a85    (primary, brand)
+   --tps-mid    : #0067b9    (accent / borders / table headers)
+   --tps-light  : #0067b9    (h3 left border)
+   --tps-bg     : #f0f5fa    (key concept background)
+   --tps-bg-alt : #f5f9fc    (example/table even rows)
+   --tps-edge   : #cddce9    (light divider)
+   --tps-edge-2 : #b9d2e5    (medium divider)
+*/
+
+/* ============================================================
+   Typography
+   ============================================================ */
+
+body, .bd-article {
+  font-family: 'Inter', sans-serif;
+}
+
+/* ============================================================
+   Heading Styles
+   ============================================================ */
+
+.bd-article h1 {
+  color: #004a85;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.15;
+}
+
+.bd-article h2 {
+  color: #004a85;
+  font-weight: 700;
+  border-bottom: 1px solid #cddce9;
+  padding-bottom: 0.2em;
+  font-size: clamp(22px, 3vw, 28px);
+  line-height: 1.2;
+}
+
+.bd-article h3 {
+  color: #0067b9;
+  font-weight: 600;
+  border-left: 4px solid #0067b9;
+  padding-left: 0.65em;
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.bd-article h4 {
+  color: #3b4651;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.3;
+  margin-top: 1.2em;
+  margin-bottom: 0.4em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Inline code styling (consumes JetBrains Mono, navy on --tps-bg) */
+.bd-article :not(pre) > code {
+  background-color: #f0f5fa;
+  color: #004a85;
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 0.86em;
+  font-weight: 500;
+}
+/* ============================================================
+   Textbook Callout Styles
+   ============================================================ */
+
+/* --- Key Concept boxes ------------------------------------ */
+.admonition.key-concept,
+div.admonition.key-concept {
+  border: 1px solid #b8c9e8 !important;
+  border-left: 5px solid #004a85 !important;
+  border-radius: 0 6px 6px 0 !important;
+  background-color: #f0f5fa !important;
+  padding: 0 !important;
+  overflow: hidden;
+  margin: 1.5em 0;
+  box-shadow: none !important;
+}
+.admonition.key-concept > .admonition-title,
+div.admonition.key-concept > p.admonition-title {
+  background-color: #004a85 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.85em !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4em 1em !important;
+  margin: 0 !important;
+}
+/* Aggressively suppress the theme's bell/warning icon on Key Concept titles */
+.admonition.key-concept > .admonition-title::before,
+div.admonition.key-concept > p.admonition-title::before,
+.admonition.key-concept > .admonition-title::after,
+div.admonition.key-concept > p.admonition-title::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+}
+.admonition.key-concept > *:not(.admonition-title),
+div.admonition.key-concept > *:not(.admonition-title) {
+  padding: 0.75em 1.5em !important;
+  margin: 0 !important;
+}
+
+/* --- Callout list breathing room --------------------------- */
+/* Bump padding-left on ordered / unordered lists inside any of the
+   four callout cards so the list markers ("1.", "•") don't crowd
+   the colored left border. Higher specificity than the body padding
+   rules below so it actually wins. */
+.bd-article .admonition.key-concept > ol,
+.bd-article .admonition.key-concept > ul,
+.bd-article .admonition.example-problem > ol,
+.bd-article .admonition.example-problem > ul,
+.bd-article .admonition.type-along > ol,
+.bd-article .admonition.type-along > ul,
+.bd-article .admonition.ground-rules > ol,
+.bd-article .admonition.ground-rules > ul,
+.bd-article div.admonition.key-concept > ol,
+.bd-article div.admonition.key-concept > ul,
+.bd-article div.admonition.example-problem > ol,
+.bd-article div.admonition.example-problem > ul,
+.bd-article div.admonition.type-along > ol,
+.bd-article div.admonition.type-along > ul,
+.bd-article div.admonition.ground-rules > ol,
+.bd-article div.admonition.ground-rules > ul {
+  padding-left: 2.6em !important;
+}
+
+/* --- Type-along boxes (mid-blue) -------------------------- */
+.admonition.type-along,
+div.admonition.type-along {
+  border: 1px solid #b9d2e5 !important;
+  border-left: 5px solid #0067b9 !important;
+  border-radius: 0 6px 6px 0 !important;
+  background-color: #f6fbff !important;
+  padding: 0 !important;
+  overflow: hidden;
+  margin: 1.5em 0;
+  box-shadow: none !important;
+}
+.admonition.type-along > .admonition-title,
+div.admonition.type-along > p.admonition-title {
+  background-color: #0067b9 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.85em !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4em 1em !important;
+  margin: 0 !important;
+}
+.admonition.type-along > .admonition-title::before,
+div.admonition.type-along > p.admonition-title::before,
+.admonition.type-along > .admonition-title::after,
+div.admonition.type-along > p.admonition-title::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+}
+.admonition.type-along > *:not(.admonition-title),
+div.admonition.type-along > *:not(.admonition-title) {
+  padding: 0.5em 1.5em !important;
+  margin: 0 !important;
+}
+/* Make the nested Solution dropdown read as a child of the exercise. */
+.admonition.type-along .admonition.dropdown {
+  margin: 0.5em 0 0 !important;
+  border-radius: 4px !important;
+}
+
+/* --- Example Problem boxes -------------------------------- */
+div.admonition.example-problem {
+  border: 1px solid #ddb896;
+  border-left: 5px solid #7b3000;
+  border-radius: 0 6px 6px 0;
+  background-color: #fdf6f1;
+  padding: 0;
+  overflow: hidden;
+  margin: 1.5em 0;
+}
+div.admonition.example-problem > p.admonition-title {
+  background-color: #7b3000;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.85em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4em 1em;
+  margin: 0;
+}
+div.admonition.example-problem > p.admonition-title::before,
+.admonition.example-problem > .admonition-title::after,
+div.admonition.example-problem > p.admonition-title::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  margin: 0 !important;
+}
+div.admonition.example-problem > *:not(.admonition-title) {
+  padding: 0.5em 1.5em 0.25em 1.5em;
+  margin: 0;
+}
+
+/* ============================================================
+   Table Styles
+   ============================================================ */
+
+.bd-article table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.95em;
+  margin: 1.25em 0;
+}
+/* Every color here is a token from shell.css, never a literal. These rules
+   were written light-mode-only -- a #0067b9 header slab, a #f5f9fc stripe and
+   `color:#000 !important` on every cell -- so in dark mode the odd rows went
+   black-on-near-black and the even ones showed as a white band. The literals
+   survive only as var() fallbacks, for a page served with `ece444_shell:
+   false`, where shell.css and its palette are not loaded at all. */
+.bd-article table thead tr {
+  background-color: var(--tbl-head, #0067b9);
+}
+.bd-article table thead th {
+  color: var(--tbl-head-ink, #ffffff);
+  font-weight: 600;
+  padding: 0.5em 0.85em;
+  border: none;
+  text-align: left;
+}
+.bd-article table tbody td {
+  padding: 0.45em 0.85em;
+  border-bottom: 1px solid var(--tbl-rule, #b9d2e5);
+  color: var(--ink, #000000) !important;
+  text-wrap: pretty;
+}
+.bd-article table tbody tr:nth-child(even) {
+  background-color: var(--tbl-stripe, #f5f9fc);
+}
+.bd-article table tbody tr:hover {
+  background-color: var(--tbl-hover, #f0f5fa);
+  box-shadow: inset 3px 0 0 var(--blue, #0067b9);
+}
+.bd-article table tbody tr:nth-child(even) td,
+.bd-article table tbody tr:hover td {
+  color: var(--ink, #000000) !important;
+}
+
+/* ============================================================
+   Page-width utilities
+   ============================================================ */
+
+.wide-page .bd-main .bd-content,
+.wide-page .bd-main .bd-content .bd-article-container,
+.wide-page .bd-main .bd-content .bd-article {
+  max-width: 100% !important;
+}
+
+.wide-page .bd-container {
+  max-width: 100% !important;
+}
+
+.full-width {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+/* ============================================================
+   Embedded media
+   ============================================================ */
+
+.bd-article video {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 1em 0;
+}
+
+.bd-article iframe.pdf-embed {
+  width: 100%;
+  height: 80vh;
+  border: 1px solid #cddce9;
+  border-radius: 6px;
+}
+
+/* ============================================================
+   Disable the dark-mode theme switcher.
+   default_mode: light is set in _config.yml, so the page renders
+   in light mode by default. Hiding the toggle removes the option
+   for users to switch (the dark mode styles don't play well with
+   our hardcoded DFEC palette).
+   ============================================================ */
+.theme-switch-button,
+button.theme-switch-button,
+.bd-header .theme-switch-button,
+.bd-header-article .theme-switch-button,
+.header-article-items .theme-switch-button,
+.navbar-header-items .theme-switch-button,
+nav .theme-switch-button {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ============================================================
+   MATLAB cross-reference chip
+   ============================================================ */
+.bd-article .matlab-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 8px 14px;
+  margin: 0.4em 0 0.6em;
+  background: #fff7ed;
+  border: 1px solid #f3c89a;
+  border-radius: 5px;
+  color: #7b3000 !important;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.bd-article .matlab-link:hover {
+  background: #fdf0dc;
+  border-color: #e87722;
+}
+.bd-article .matlab-link .ml-text {
+  font-variant-numeric: tabular-nums;
+}
+.bd-article .matlab-link .ml-text code,
+.bd-article .matlab-link code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: 0.95em;
+}
+.bd-article .matlab-link .ml-arrow {
+  margin-left: 10px;
+  font-weight: 700;
+  color: #e87722;
+}
+
+/* ============================================================
+   Figures (inline reading figures)
+   ============================================================ */
+.bd-article figure {
+  margin: 1.5em 0;
+  padding: 10px 12px 6px;
+  background: #fff;
+  border: 1px solid var(--tps-rule, #d8e2ec);
+  border-radius: 8px;
+}
+.bd-article figure > img,
+.bd-article figure > picture > img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+.bd-article figure figcaption {
+  color: var(--ink-3, #5b6573);
+  font-size: 0.92em;
+  font-style: italic;
+  margin-top: 8px;
+  padding: 0 4px;
+  text-wrap: pretty;
+}
+
+/* ============================================================
+   Hero section (intro page)
+   ============================================================ */
+.bd-article .hero {
+  position: relative;
+  margin: 0 0 28px;
+  padding: 40px 44px 44px;
+  background:
+    radial-gradient(ellipse at top right, rgba(31, 96, 152, 0.20), transparent 55%),
+    linear-gradient(180deg, #001541 0%, #00205B 60%, #002a76 100%);
+  color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.bd-article .hero::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 6px;
+  background: linear-gradient(90deg, #1f6098 0%, #4a8fce 50%, #1f6098 100%);
+}
+.bd-article .hero .hero-eyebrow {
+  margin: 0 0 12px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.78);
+}
+.bd-article .hero h1.hero-title {
+  color: #fff;
+  font-size: clamp(28px, 4.2vw, 44px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  margin: 0 0 12px;
+  max-width: 18ch;
+}
+/* Suppress the normal h1::after underline inside the hero. */
+.bd-article .hero h1.hero-title::after { display: none; }
+.bd-article .hero .hero-lede {
+  margin: 0 0 22px;
+  font-size: 17px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.86);
+  max-width: 50ch;
+}
+.bd-article .hero .hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.bd-article .hero .cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.bd-article .hero .cta:hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.65);
+}
+.bd-article .hero .cta-primary {
+  background: #1f6098;
+  border-color: #1f6098;
+}
+.bd-article .hero .cta-primary:hover {
+  background: #2c75b3;
+  border-color: #2c75b3;
+}
+@media (max-width: 720px) {
+  .bd-article .hero {
+    padding: 28px 24px 32px;
+  }
+}
+
+/* ============================================================
+   Block grid (intro page)
+   ============================================================ */
+/* ECE 215 has three blocks, not the four ECE 495 had, so a fixed 2-column grid
+   would strand the third card alone on a second row. Auto-fit keeps all three
+   on one row when there is width for it and degrades gracefully. */
+.bd-article .block-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin: 28px 0;
+}
+@media (max-width: 560px) {
+  .bd-article .block-grid { grid-template-columns: 1fr; }
+}
+.bd-article .block-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 18px 14px;
+  background: #fff;
+  border: 1px solid var(--tps-rule, #d8e2ec);
+  border-radius: 8px;
+  color: var(--ink, #15202b) !important;
+  text-decoration: none !important;
+  transition: border-color 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
+}
+.bd-article .block-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: #00205B;
+  border-radius: 8px 8px 0 0;
+}
+.bd-article .block-card:hover {
+  border-color: #1f6098;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 32, 91, 0.08);
+}
+.bd-article .block-card .num {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 11px;
+  color: #5b6573;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.bd-article .block-card h3 {
+  margin: 4px 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #00205B;
+  border-left: none;
+  padding-left: 0;
+}
+.bd-article .block-card p {
+  margin: 0 0 12px;
+  font-size: 13.5px;
+  color: #3b4651;
+  line-height: 1.45;
+  flex: 1;
+}
+.bd-article .block-card footer {
+  font-size: 11px;
+  color: #1d7a4d;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* ============================================================
+   Deliverable cards (intro page)
+   ============================================================ */
+.bd-article .deliverable-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 28px 0;
+}
+@media (max-width: 720px) {
+  .bd-article .deliverable-cards { grid-template-columns: 1fr; }
+}
+.bd-article .deliverable-card {
+  border: 1px solid var(--tps-rule, #d8e2ec);
+  border-left: 5px solid #00205B;
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px 14px;
+  background: #f8fbff;
+}
+.bd-article .deliverable-card .d-eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1f6098;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.bd-article .deliverable-card h3 {
+  margin: 4px 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #00205B;
+  border-left: none;
+  padding-left: 0;
+}
+.bd-article .deliverable-card .d-weight {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: #3b4651;
+}
+.bd-article .deliverable-card .d-weight .d-w-num {
+  font-weight: 700;
+  color: #00205B;
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+  margin-right: 4px;
+}
+.bd-article .deliverable-card .d-due {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #3b4651;
+}
+.bd-article .deliverable-card .d-due strong {
+  color: #00205B;
+  font-weight: 700;
+}
+.bd-article .deliverable-card .d-link {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f6098;
+  text-decoration: none;
+}
+.bd-article .deliverable-card .d-link:hover {
+  text-decoration: underline;
+  color: #00205B;
+}
+.bd-article .deliverable-card .d-link-muted {
+  color: #1d7a4d;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.bd-article .deliverable-card .d-link-muted:hover {
+  text-decoration: none;
+  color: #1d7a4d;
+}
+
+/* ============================================================
+   Ground-rules callout (rust accent, like example-problem)
+   ============================================================ */
+.admonition.ground-rules,
+div.admonition.ground-rules {
+  border: 1px solid #ddb896 !important;
+  border-left: 5px solid #7b3000 !important;
+  border-radius: 0 6px 6px 0 !important;
+  background-color: #fdf6f1 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  margin: 1.5em 0;
+  box-shadow: none !important;
+}
+.admonition.ground-rules > .admonition-title,
+div.admonition.ground-rules > p.admonition-title {
+  background-color: #7b3000 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.85em !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4em 1em !important;
+  margin: 0 !important;
+}
+.admonition.ground-rules > .admonition-title::before,
+div.admonition.ground-rules > p.admonition-title::before,
+.admonition.ground-rules > .admonition-title::after,
+div.admonition.ground-rules > p.admonition-title::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+}
+.admonition.ground-rules > *:not(.admonition-title),
+div.admonition.ground-rules > *:not(.admonition-title) {
+  padding: 0.75em 1.5em !important;
+  margin: 0 !important;
+}
+
+
+/* Print styles for the theme chrome this stylesheet used to own (sidebar,
+   navy hero, theme switcher) were removed here -- every page is chrome-free
+   now (frame.html / page.html, routed by _ext/frames.py), so `.bd-sidebar-
+   primary`, `.bd-header` and the rest of that block had nothing left to
+   select. The site's print rules live where the chrome they hide actually
+   is: book/_static/frames.css and book/_static/page.css. */
+
+/* In-class media demos (Lesson 20 aliasing/quantization). Constrain the video
+   so a 16:9 clip does not blow past the content column on wide screens. */
+video.lesson-demo {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  margin: 0.5rem 0 1rem;
+  border-radius: 6px;
+  background: #000;
+}
+
+audio.lesson-demo {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  margin: 0.5rem 0 1rem;
+}
+
+/* ============================================================
+   Grade scale (syllabus.md)
+   ----------------------------------------------------------
+   A on the left, F on the right, tinted with a green→red
+   gradient at low opacity so it reads as one system with the
+   rest of the tables (which have a solid navy header row).
+   Overrides the theme's default table styling.
+   ============================================================ */
+.bd-article table.grade-scale {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.25em 0;
+  font-size: 0.95em;
+  table-layout: fixed;
+}
+.bd-article table.grade-scale th,
+.bd-article table.grade-scale td {
+  text-align: center;
+  padding: 0.55em 0.5em;
+  border: 1px solid #cddce9;
+  font-variant-numeric: tabular-nums;
+}
+.bd-article table.grade-scale thead tr {
+  background-color: transparent;
+}
+.bd-article table.grade-scale thead th {
+  font-weight: 700;
+  color: #15202b;
+  background-color: transparent;
+  border: 1px solid #cddce9;
+}
+.bd-article table.grade-scale tbody tr {
+  background-color: transparent;
+}
+.bd-article table.grade-scale tbody tr:nth-child(even) {
+  background-color: transparent;
+}
+/* Column tint: green → yellow → red at 12% opacity, applied to
+   both the header cell and the body cell in each column. */
+.bd-article table.grade-scale th:nth-child(1),
+.bd-article table.grade-scale td:nth-child(1)  { background-color: rgba(29, 122, 77, 0.20); }
+.bd-article table.grade-scale th:nth-child(2),
+.bd-article table.grade-scale td:nth-child(2)  { background-color: rgba(72, 148, 74, 0.18); }
+.bd-article table.grade-scale th:nth-child(3),
+.bd-article table.grade-scale td:nth-child(3)  { background-color: rgba(122, 172, 71, 0.16); }
+.bd-article table.grade-scale th:nth-child(4),
+.bd-article table.grade-scale td:nth-child(4)  { background-color: rgba(168, 189, 65, 0.15); }
+.bd-article table.grade-scale th:nth-child(5),
+.bd-article table.grade-scale td:nth-child(5)  { background-color: rgba(210, 203, 58, 0.15); }
+.bd-article table.grade-scale th:nth-child(6),
+.bd-article table.grade-scale td:nth-child(6)  { background-color: rgba(232, 191, 60, 0.16); }
+.bd-article table.grade-scale th:nth-child(7),
+.bd-article table.grade-scale td:nth-child(7)  { background-color: rgba(232, 158, 60, 0.17); }
+.bd-article table.grade-scale th:nth-child(8),
+.bd-article table.grade-scale td:nth-child(8)  { background-color: rgba(224, 121, 55, 0.18); }
+.bd-article table.grade-scale th:nth-child(9),
+.bd-article table.grade-scale td:nth-child(9)  { background-color: rgba(212, 79, 51, 0.20); }
+.bd-article table.grade-scale th:nth-child(10),
+.bd-article table.grade-scale td:nth-child(10) { background-color: rgba(190, 45, 45, 0.22); }
+/* Suppress the theme's hover/inset-blue rule on this table. */
+.bd-article table.grade-scale tbody tr:hover {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/* ============================================================
+   Learning-objective list (moduleNN/index.md)
+   ----------------------------------------------------------
+   Author each module's LOs as a plain ordered list wrapped in
+   a `.lo-list` container with a `--module` CSS variable set to
+   the module number. The CSS then renders each item as
+   "<module>.<n> — <text>" (e.g. 1.1, 1.2, ...) so numbering
+   stays in sync with the list order and scales to future
+   modules without hand-editing every prefix.
+   ============================================================ */
+.bd-article ol.lo-list {
+  counter-reset: lo;
+  list-style: none;
+  padding-left: 1.5em;
+  margin: 1em 0 0.5em;
+}
+.bd-article ol.lo-list > li {
+  counter-increment: lo;
+  padding-left: 2.2em;
+  position: relative;
+  margin-bottom: 0.5em;
+  line-height: 1.5;
+}
+.bd-article ol.lo-list > li::before {
+  content: var(--module) "." counter(lo);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: 700;
+  color: #004a85;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lesson-level sub-objectives. Add the `lo-sublist` modifier and set
+   --module to the module number and --lo to the module objective this
+   lesson rolls up to. The prefix then renders as
+   "<module>.<objective>.<n>" (e.g. 1.2.1) so every lesson objective
+   ties back to the module objective it supports. */
+.bd-article ol.lo-list.lo-sublist > li {
+  padding-left: 2.9em;
+}
+.bd-article ol.lo-list.lo-sublist > li::before {
+  content: var(--module) "." var(--lo) "." counter(lo);
+}
+
+/* ============================================================
+   Per-module dashboard (moduleNN/index.md)
+   ============================================================ */
+.bd-article .module-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: -8px 0 18px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: #5b6573;
+  font-weight: 600;
+}
+.bd-article .module-meta .m-module {
+  color: #004a85;
+  padding: 2px 8px;
+  background: #f0f5fa;
+  border-radius: 3px;
+  letter-spacing: 0.08em;
+}
+.bd-article .module-meta .m-time,
+.bd-article .module-meta .m-demos {
+  display: inline-flex;
+  align-items: center;
+}
+.bd-article .module-meta .m-time::before {
+  content: "○ ";
+  color: #b9d2e5;
+  margin-right: 4px;
+}
+.bd-article .module-meta .m-demos::before {
+  content: "▶ ";
+  color: #1d7a4d;
+  margin-right: 4px;
+}
+.bd-article .module-synopsis {
+  font-size: 17px;
+  line-height: 1.55;
+  color: #3b4651;
+  max-width: 68ch;
+  margin: 0 0 22px;
+}
+
+.bd-article .module-toc {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 8px;
+}
+@media (max-width: 720px) {
+  .bd-article .module-toc { grid-template-columns: 1fr; }
+}
+.bd-article .mt-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 16px 12px 18px;
+  background: #fff;
+  border: 1px solid var(--tps-rule, #d8e2ec);
+  border-left: 4px solid #0067b9;
+  border-radius: 0 6px 6px 0;
+  color: var(--ink, #15202b) !important;
+  text-decoration: none !important;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+.bd-article .mt-card:hover {
+  background: #f5f9fc;
+  border-color: #0067b9;
+  border-left-color: #004a85;
+}
+.bd-article .mt-card .mt-kind {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: #5b6573;
+  margin-bottom: 2px;
+}
+.bd-article .mt-card h4 {
+  margin: 2px 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #004a85;
+}
+.bd-article .mt-card p {
+  margin: 0;
+  font-size: 13px;
+  color: #3b4651;
+  line-height: 1.45;
+}
+.bd-article .mt-card.mt-lesson    { border-left-color: #0067b9; }
+.bd-article .mt-card.mt-flashcards { border-left-color: #14a8c8; }
+.bd-article .mt-card.mt-slides     { border-left-color: #1d7a4d; }
+.bd-article .mt-card.mt-practice   { border-left-color: #8a5a00; }
+.bd-article .mt-card.mt-lesson .mt-kind    { color: #0067b9; }
+.bd-article .mt-card.mt-flashcards .mt-kind { color: #0c8aa5; }
+.bd-article .mt-card.mt-slides .mt-kind     { color: #1d7a4d; }
+.bd-article .mt-card.mt-practice .mt-kind   { color: #8a5a00; }
+
+.bd-article .module-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 28px 0 8px;
+  padding: 14px 0 0;
+  border-top: 1px solid var(--tps-rule, #d8e2ec);
+  font-size: 13.5px;
+}
+.bd-article .module-nav a {
+  color: #0067b9;
+  text-decoration: none;
+  font-weight: 600;
+}
+.bd-article .module-nav a:hover { color: #004a85; }
+.bd-article .module-nav .module-nav-prev { margin-right: auto; }
+.bd-article .module-nav .module-nav-next { margin-left:  auto; text-align: right; }
+
+/* ============================================================
+   Slides admonition (lesson pages) — compact pill strip
+   ============================================================ */
+.admonition.slides,
+div.admonition.slides {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 0 1.25em !important;
+}
+.admonition.slides > .admonition-title,
+div.admonition.slides > p.admonition-title {
+  display: none !important;
+}
+.admonition.slides > p,
+div.admonition.slides > p {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.admonition.slides a,
+div.admonition.slides a {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: rgba(0, 103, 185, 0.12);
+  border: 1px solid rgba(0, 103, 185, 0.30);
+  color: #0067b9 !important;
+  border-radius: 1em;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-decoration: none !important;
+  white-space: nowrap;
+  line-height: 1.4;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.admonition.slides a:hover,
+div.admonition.slides a:hover {
+  background: rgba(0, 103, 185, 0.22);
+  border-color: rgba(0, 103, 185, 0.55);
+  color: #004a85 !important;
+}
+
+/* ============================================================
+   Sidebar TOC — sphinx-book-theme globaltoc look, ported from ECE 215.
+   globaltoc.html output that we use to render the FULL nav tree
+   on every page. sbt-sidebar-shim.js adds <details>/<summary>
+   chevron wrappers; this CSS styles them.
+   ============================================================ */
+
+/* The globaltoc heading is repurposed as a Home link by the JS shim
+   (see sbt-sidebar-shim.js). Show only the tagged variant. */
+.sy-globaltoc > h3 { display: none; }
+.sy-globaltoc > h3.sy-globaltoc-home {
+  display: block;
+  margin: 0 0 0.6em 0;
+  padding: 0;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+.sy-globaltoc > h3.sy-globaltoc-home a {
+  display: block;
+  padding: 0.4em 1.6em 0.4em 0.5em;
+  color: #495057;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+}
+.sy-globaltoc > h3.sy-globaltoc-home a:hover {
+  background: #f5f9fc;
+  color: #0067b9;
+}
+.sy-globaltoc > h3.sy-globaltoc-home.current a,
+.sy-globaltoc > h3.sy-globaltoc-home a.current {
+  color: #0067b9;
+  border-left-color: #0067b9;
+  font-weight: 600;
+}
+
+/* Caption rows ("Block 1", "Block 2", ...) */
+.sy-globaltoc p.caption {
+  font-weight: 700;
+  font-size: 0.9em;
+  color: #212529;
+  margin: 1.2em 0 0.4em 0;
+  padding: 0;
+  text-transform: none;
+}
+
+/* Top-level UL: kill default bullet marks, indent */
+.sy-globaltoc ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Top-level lessons */
+.sy-globaltoc li.toctree-l1 {
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+.sy-globaltoc li.toctree-l1 > a {
+  display: block;
+  padding: 0.4em 1.6em 0.4em 0.5em;
+  color: #495057;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  font-weight: 500;
+  font-size: 0.9em;
+  line-height: 1.35;
+}
+.sy-globaltoc li.toctree-l1 > a:hover {
+  background: #f5f9fc;
+  color: #0067b9;
+}
+
+/* Active top-level lesson: blue text + blue left bar */
+.sy-globaltoc li.toctree-l1.current > a,
+.sy-globaltoc li.toctree-l1 > a.current {
+  color: #0067b9;
+  border-left-color: #0067b9;
+  font-weight: 600;
+  background: transparent;
+}
+
+/* Chevron toggle: position absolute on the right of each l1 row */
+.sy-globaltoc li.toctree-l1.has-children > details > summary {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.4em 0.6em;
+  cursor: pointer;
+  list-style: none;
+  color: #6c757d;
+  background: transparent;
+  border: none;
+  font-size: 0.85em;
+}
+.sy-globaltoc li.toctree-l1.has-children > details > summary::-webkit-details-marker {
+  display: none;
+}
+.sy-globaltoc li.toctree-l1.has-children > details > summary i {
+  transition: transform 0.2s ease;
+}
+.sy-globaltoc li.toctree-l1.has-children > details[open] > summary i {
+  transform: rotate(180deg);
+}
+.sy-globaltoc li.toctree-l1.has-children > details > summary:hover {
+  color: #0067b9;
+}
+
+/* Sub-items (Lesson sub-pages) */
+.sy-globaltoc li.toctree-l2 {
+  margin: 0;
+}
+.sy-globaltoc li.toctree-l2 > a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.3em 0.5em 0.3em 1.5em;
+  color: #6c757d;
+  text-decoration: none;
+  font-size: 0.85em;
+  line-height: 1.35;
+  border-left: 4px solid transparent;
+}
+.sy-globaltoc li.toctree-l2 > a:hover {
+  background: #f5f9fc;
+  color: #0067b9;
+}
+.sy-globaltoc li.toctree-l2 > a.current,
+.sy-globaltoc li.toctree-l2.current > a {
+  color: #0067b9;
+  font-weight: 600;
+  background: #f0f5fa;
+  border-left-color: #0067b9;
+}
+
+/* Sidebar l2 glyphs (Reading / Flashcards / Demo) */
+.sy-globaltoc .sy-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: currentColor;
+}
+.sy-globaltoc li.sy-l2-reading    > a .sy-icon { color: #0067b9; }
+.sy-globaltoc li.sy-l2-flashcards > a .sy-icon { color: #14a8c8; }
+.sy-globaltoc li.sy-l2-slides     > a .sy-icon { color: #1d7a4d; }
+.sy-globaltoc li.sy-l2-practice   > a .sy-icon { color: #8a5a00; }
+.sy-globaltoc li.toctree-l2.current > a .sy-icon { color: #0067b9; }
+
+/* Hide toctree details summary's default UA list-style triangle */
+.sy-globaltoc details > summary { list-style: none; }
+.sy-globaltoc details > summary::marker { content: ""; }
+
+/* ============================================================
+   Dark mode overrides
+   ----------------------------------------------------------
+   Re-enable the theme toggle (previously hidden) and remap all
+   hardcoded light-palette values so pages remain readable when
+   sphinx-book-theme flips to data-theme="dark". The dark palette
+   is a shifted version of the DFEC navy/blue system:
+
+   Dark bg   : #1a1f26 (page)  · #232a33 (cards) · #2a323d (alt rows)
+   Dark ink  : #e6edf3 (body)  · #b4c0cc (muted) · #7d8b99 (dim)
+   Dark blue : #5aa3e5 (nav headers, links)  · #82bce8 (hover)
+   ============================================================ */
+
+/* Un-hide the theme switch button */
+html[data-theme="dark"] .theme-switch-button,
+html[data-theme="dark"] button.theme-switch-button,
+html[data-theme="dark"] .bd-header .theme-switch-button,
+html[data-theme="dark"] .bd-header-article .theme-switch-button,
+html[data-theme="dark"] .header-article-items .theme-switch-button,
+html[data-theme="dark"] .navbar-header-items .theme-switch-button,
+html[data-theme="dark"] nav .theme-switch-button,
+html[data-theme="light"] .theme-switch-button,
+html[data-theme="light"] button.theme-switch-button,
+html[data-theme="light"] .bd-header .theme-switch-button,
+html[data-theme="light"] .bd-header-article .theme-switch-button,
+html[data-theme="light"] .header-article-items .theme-switch-button,
+html[data-theme="light"] .navbar-header-items .theme-switch-button,
+html[data-theme="light"] nav .theme-switch-button {
+  display: inline-flex !important;
+  visibility: visible !important;
+  width: auto !important;
+  height: auto !important;
+  margin: revert !important;
+  padding: revert !important;
+  pointer-events: auto !important;
+}
+
+/* Repoint pydata-sphinx-theme primary variables for dark mode */
+html[data-theme="dark"] {
+  --pst-color-primary:    #5aa3e5;
+  --pst-color-primary-bg: #1e2833;
+  --pst-color-link:       #82bce8;
+  --pst-color-link-hover: #b4d4f0;
+  --pst-color-inline-code-links: #82bce8;
+  --pst-color-accent:     #5aa3e5;
+}
+
+/* Headings: brighten navy so they read on dark background */
+html[data-theme="dark"] .bd-article h1,
+html[data-theme="dark"] .bd-article h2 {
+  color: #b4d4f0;
+}
+html[data-theme="dark"] .bd-article h2 {
+  border-bottom-color: #3a4552;
+}
+html[data-theme="dark"] .bd-article h3 {
+  color: #82bce8;
+  border-left-color: #5aa3e5;
+}
+html[data-theme="dark"] .bd-article h4 {
+  color: #b4c0cc;
+}
+
+/* Inline code */
+html[data-theme="dark"] .bd-article :not(pre) > code {
+  background-color: #232a33;
+  color: #82bce8;
+}
+
+/* Tables — the biggest offender */
+html[data-theme="dark"] .bd-article table thead tr {
+  background-color: #1e4e7a;
+}
+html[data-theme="dark"] .bd-article table thead th {
+  color: #ffffff;
+}
+html[data-theme="dark"] .bd-article table tbody td {
+  color: #e6edf3 !important;
+  border-bottom-color: #3a4552;
+  background-color: transparent;
+}
+html[data-theme="dark"] .bd-article table tbody tr:nth-child(even) {
+  background-color: #232a33;
+}
+html[data-theme="dark"] .bd-article table tbody tr:hover {
+  background-color: #2a323d;
+  box-shadow: inset 3px 0 0 #5aa3e5;
+}
+html[data-theme="dark"] .bd-article table tbody tr:nth-child(even) td,
+html[data-theme="dark"] .bd-article table tbody tr:hover td {
+  color: #e6edf3 !important;
+}
+
+/* Grade-scale table: keep the green→red tint but darken the base */
+html[data-theme="dark"] .bd-article table.grade-scale th,
+html[data-theme="dark"] .bd-article table.grade-scale td {
+  border-color: #3a4552;
+  color: #e6edf3;
+}
+html[data-theme="dark"] .bd-article table.grade-scale thead th {
+  color: #e6edf3;
+}
+
+/* --- Admonition callouts ---------------------------------- */
+html[data-theme="dark"] .admonition.key-concept,
+html[data-theme="dark"] div.admonition.key-concept {
+  background-color: #1a2838 !important;
+  border-color: #2a4a6a !important;
+  border-left-color: #5aa3e5 !important;
+}
+html[data-theme="dark"] .admonition.key-concept > .admonition-title,
+html[data-theme="dark"] div.admonition.key-concept > p.admonition-title {
+  background-color: #1e4e7a !important;
+}
+
+html[data-theme="dark"] .admonition.type-along,
+html[data-theme="dark"] div.admonition.type-along {
+  background-color: #17232f !important;
+  border-color: #2a4a6a !important;
+  border-left-color: #5aa3e5 !important;
+}
+html[data-theme="dark"] .admonition.type-along > .admonition-title,
+html[data-theme="dark"] div.admonition.type-along > p.admonition-title {
+  background-color: #1e4e7a !important;
+}
+
+html[data-theme="dark"] div.admonition.example-problem {
+  background-color: #2a1f16;
+  border-color: #6a4a2c;
+  border-left-color: #c47030;
+}
+html[data-theme="dark"] div.admonition.example-problem > p.admonition-title {
+  background-color: #6a3410;
+}
+
+html[data-theme="dark"] .admonition.ground-rules,
+html[data-theme="dark"] div.admonition.ground-rules {
+  background-color: #2a1f16 !important;
+  border-color: #6a4a2c !important;
+  border-left-color: #c47030 !important;
+}
+html[data-theme="dark"] .admonition.ground-rules > .admonition-title,
+html[data-theme="dark"] div.admonition.ground-rules > p.admonition-title {
+  background-color: #6a3410 !important;
+}
+
+/* Slides pill strip */
+html[data-theme="dark"] .admonition.slides a,
+html[data-theme="dark"] div.admonition.slides a {
+  background: rgba(90, 163, 229, 0.15);
+  border-color: rgba(90, 163, 229, 0.40);
+  color: #82bce8 !important;
+}
+html[data-theme="dark"] .admonition.slides a:hover,
+html[data-theme="dark"] div.admonition.slides a:hover {
+  background: rgba(90, 163, 229, 0.28);
+  border-color: rgba(90, 163, 229, 0.65);
+  color: #b4d4f0 !important;
+}
+
+/* Figures */
+html[data-theme="dark"] .bd-article figure {
+  background: #232a33;
+  border-color: #3a4552;
+}
+html[data-theme="dark"] .bd-article figure figcaption {
+  color: #b4c0cc;
+}
+
+/* Hero — the navy gradient still reads fine, just soften card fill */
+html[data-theme="dark"] .bd-article .block-card,
+html[data-theme="dark"] .bd-article .mt-card {
+  background: #232a33;
+  border-color: #3a4552;
+  color: #e6edf3 !important;
+}
+html[data-theme="dark"] .bd-article .block-card h3,
+html[data-theme="dark"] .bd-article .mt-card h4 {
+  color: #b4d4f0;
+}
+html[data-theme="dark"] .bd-article .block-card p,
+html[data-theme="dark"] .bd-article .mt-card p {
+  color: #b4c0cc;
+}
+html[data-theme="dark"] .bd-article .block-card:hover,
+html[data-theme="dark"] .bd-article .mt-card:hover {
+  background: #2a323d;
+  border-color: #5aa3e5;
+}
+
+/* Deliverable cards */
+html[data-theme="dark"] .bd-article .deliverable-card {
+  background: #232a33;
+  border-color: #3a4552;
+  border-left-color: #5aa3e5;
+}
+html[data-theme="dark"] .bd-article .deliverable-card h3,
+html[data-theme="dark"] .bd-article .deliverable-card .d-w-num,
+html[data-theme="dark"] .bd-article .deliverable-card .d-due strong {
+  color: #b4d4f0;
+}
+html[data-theme="dark"] .bd-article .deliverable-card .d-eyebrow,
+html[data-theme="dark"] .bd-article .deliverable-card .d-link {
+  color: #82bce8;
+}
+html[data-theme="dark"] .bd-article .deliverable-card .d-weight,
+html[data-theme="dark"] .bd-article .deliverable-card .d-due {
+  color: #b4c0cc;
+}
+
+/* Module dashboard */
+html[data-theme="dark"] .bd-article .module-meta {
+  color: #b4c0cc;
+}
+html[data-theme="dark"] .bd-article .module-meta .m-module {
+  color: #b4d4f0;
+  background: #1e2833;
+}
+html[data-theme="dark"] .bd-article .module-synopsis {
+  color: #b4c0cc;
+}
+html[data-theme="dark"] .bd-article .mt-card .mt-kind {
+  color: #b4c0cc;
+}
+html[data-theme="dark"] .bd-article .module-nav {
+  border-top-color: #3a4552;
+}
+html[data-theme="dark"] .bd-article .module-nav a {
+  color: #82bce8;
+}
+html[data-theme="dark"] .bd-article .module-nav a:hover {
+  color: #b4d4f0;
+}
+
+/* MATLAB chip */
+html[data-theme="dark"] .bd-article .matlab-link {
+  background: #2a1f16;
+  border-color: #6a4a2c;
+  color: #e0b088 !important;
+}
+html[data-theme="dark"] .bd-article .matlab-link:hover {
+  background: #3a2a1e;
+  border-color: #c47030;
+}
+html[data-theme="dark"] .bd-article .matlab-link .ml-arrow {
+  color: #e87722;
+}
+
+/* LO list numbers */
+html[data-theme="dark"] .bd-article ol.lo-list > li::before {
+  color: #82bce8;
+}
+
+/* --- Left sidebar (globaltoc) ---------------------------- */
+html[data-theme="dark"] .sy-globaltoc p.caption {
+  color: #e6edf3;
+}
+html[data-theme="dark"] .sy-globaltoc > h3.sy-globaltoc-home a,
+html[data-theme="dark"] .sy-globaltoc li.toctree-l1 > a {
+  color: #c8d1db;
+}
+html[data-theme="dark"] .sy-globaltoc > h3.sy-globaltoc-home a:hover,
+html[data-theme="dark"] .sy-globaltoc li.toctree-l1 > a:hover {
+  background: #232a33;
+  color: #82bce8;
+}
+html[data-theme="dark"] .sy-globaltoc > h3.sy-globaltoc-home.current a,
+html[data-theme="dark"] .sy-globaltoc > h3.sy-globaltoc-home a.current,
+html[data-theme="dark"] .sy-globaltoc li.toctree-l1.current > a,
+html[data-theme="dark"] .sy-globaltoc li.toctree-l1 > a.current {
+  color: #82bce8;
+  border-left-color: #5aa3e5;
+}
+html[data-theme="dark"] .sy-globaltoc li.toctree-l2 > a {
+  color: #a1adb9;
+}
+html[data-theme="dark"] .sy-globaltoc li.toctree-l2 > a:hover {
+  background: #232a33;
+  color: #82bce8;
+}
+html[data-theme="dark"] .sy-globaltoc li.toctree-l2 > a.current,
+html[data-theme="dark"] .sy-globaltoc li.toctree-l2.current > a {
+  color: #82bce8;
+  background: #1e2833;
+  border-left-color: #5aa3e5;
+}
+html[data-theme="dark"] .sy-globaltoc li.toctree-l1.has-children > details > summary {
+  color: #7d8b99;
+}
+html[data-theme="dark"] .sy-globaltoc li.toctree-l1.has-children > details > summary:hover {
+  color: #82bce8;
+}
+html[data-theme="dark"] .sy-globaltoc li.sy-l2-reading    > a .sy-icon { color: #5aa3e5; }
+html[data-theme="dark"] .sy-globaltoc li.sy-l2-flashcards > a .sy-icon { color: #4ec4de; }
+html[data-theme="dark"] .sy-globaltoc li.sy-l2-slides     > a .sy-icon { color: #4fb478; }
+html[data-theme="dark"] .sy-globaltoc li.sy-l2-practice   > a .sy-icon { color: #d9a04a; }
+html[data-theme="dark"] .sy-globaltoc li.toctree-l2.current > a .sy-icon { color: #82bce8; }
+
+
+/* --- Worked example (tip) boxes — deck visual language ------ */
+/* Same construction as Key Concept, accented in the mid USAFA blue so
+   worked examples read as siblings of the key-concept cards. */
+.admonition.tip,
+div.admonition.tip {
+  border: 1px solid #b9d2e5 !important;
+  border-left: 5px solid #0067b9 !important;
+  border-radius: 0 6px 6px 0 !important;
+  background-color: #ffffff !important;
+  padding: 0 !important;
+  overflow: hidden;
+  margin: 1.5em 0;
+  box-shadow: none !important;
+}
+.admonition.tip > .admonition-title,
+div.admonition.tip > p.admonition-title {
+  background-color: #0067b9 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.85em !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4em 1em !important;
+  margin: 0 !important;
+}
+.admonition.tip > .admonition-title::before,
+div.admonition.tip > p.admonition-title::before,
+.admonition.tip > .admonition-title::after,
+div.admonition.tip > p.admonition-title::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+}
+.admonition.tip > *:not(.admonition-title),
+div.admonition.tip > *:not(.admonition-title) {
+  padding: 0.5em 1.5em !important;
+  margin: 0 !important;
+}
+
+/* --- Note asides — quiet card in the widget palette --------- */
+.admonition.note,
+div.admonition.note {
+  border: 1px solid #cddce9 !important;
+  border-left: 4px solid #b9d2e5 !important;
+  border-radius: 0 6px 6px 0 !important;
+  background-color: #f5f9fc !important;
+  padding: 0 !important;
+  overflow: hidden;
+  margin: 1.5em 0;
+  box-shadow: none !important;
+}
+.admonition.note > .admonition-title,
+div.admonition.note > p.admonition-title {
+  background-color: transparent !important;
+  color: #004a85 !important;
+  font-weight: 700 !important;
+  font-size: 0.85em !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.5em 1.2em 0 !important;
+  margin: 0 !important;
+}
+.admonition.note > .admonition-title::before,
+div.admonition.note > p.admonition-title::before,
+.admonition.note > .admonition-title::after,
+div.admonition.note > p.admonition-title::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+}
+.admonition.note > *:not(.admonition-title),
+div.admonition.note > *:not(.admonition-title) {
+  padding: 0.4em 1.2em 0.6em !important;
+  margin: 0 !important;
+}
+
+/* --- Dark mode: worked-example (tip) and note boxes --------
+   These blocks are defined above with hardcoded light values and
+   !important, so they need explicit dark variants or the theme's
+   light-gray body text lands on a white card. Palette matches the
+   key-concept dark treatment. */
+html[data-theme="dark"] .admonition.tip,
+html[data-theme="dark"] div.admonition.tip {
+  background-color: #1e2731 !important;
+  border-color: #2a4a6a !important;
+  border-left-color: #5aa3e5 !important;
+}
+html[data-theme="dark"] .admonition.tip > .admonition-title,
+html[data-theme="dark"] div.admonition.tip > p.admonition-title {
+  background-color: #2565a0 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .admonition.note,
+html[data-theme="dark"] div.admonition.note {
+  background-color: #232a33 !important;
+  border-color: #3a4552 !important;
+  border-left-color: #56708a !important;
+}
+html[data-theme="dark"] .admonition.note > .admonition-title,
+html[data-theme="dark"] div.admonition.note > p.admonition-title {
+  color: #82bce8 !important;
+}
+
+/* ============================================================
+   System dark on the shell pages
+   ------------------------------------------------------------
+   Every dark rule above is keyed to the theme's html[data-theme="dark"]
+   stamp. The frame and page shells never stamp it: their dark mode comes
+   from prefers-color-scheme alone (see shell.css). So on a phone in system
+   dark those rules never fired, and a note box shipped as a light card with
+   the dark theme's light text on it -- unreadable. This block repeats them
+   for that state, guarded the same way shell.css guards its tokens, so an
+   explicit light stamp still wins if one is ever added.
+   GENERATED from the rules above: keep the two in step.
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+html:not([data-theme="light"]) {
+  --pst-color-primary:    #5aa3e5;
+  --pst-color-primary-bg: #1e2833;
+  --pst-color-link:       #82bce8;
+  --pst-color-link-hover: #b4d4f0;
+  --pst-color-inline-code-links: #82bce8;
+  --pst-color-accent:     #5aa3e5;
+}
+html:not([data-theme="light"]) .bd-article h1,
+html:not([data-theme="light"]) .bd-article h2 {
+  color: #b4d4f0;
+}
+html:not([data-theme="light"]) .bd-article h2 {
+  border-bottom-color: #3a4552;
+}
+html:not([data-theme="light"]) .bd-article h3 {
+  color: #82bce8;
+  border-left-color: #5aa3e5;
+}
+html:not([data-theme="light"]) .bd-article h4 {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article :not(pre) > code {
+  background-color: #232a33;
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .bd-article table thead tr {
+  background-color: #1e4e7a;
+}
+html:not([data-theme="light"]) .bd-article table thead th {
+  color: #ffffff;
+}
+html:not([data-theme="light"]) .bd-article table tbody td {
+  color: #e6edf3 !important;
+  border-bottom-color: #3a4552;
+  background-color: transparent;
+}
+html:not([data-theme="light"]) .bd-article table tbody tr:nth-child(even) {
+  background-color: #232a33;
+}
+html:not([data-theme="light"]) .bd-article table tbody tr:hover {
+  background-color: #2a323d;
+  box-shadow: inset 3px 0 0 #5aa3e5;
+}
+html:not([data-theme="light"]) .bd-article table tbody tr:nth-child(even) td,
+html:not([data-theme="light"]) .bd-article table tbody tr:hover td {
+  color: #e6edf3 !important;
+}
+html:not([data-theme="light"]) .bd-article table.grade-scale th,
+html:not([data-theme="light"]) .bd-article table.grade-scale td {
+  border-color: #3a4552;
+  color: #e6edf3;
+}
+html:not([data-theme="light"]) .bd-article table.grade-scale thead th {
+  color: #e6edf3;
+}
+html:not([data-theme="light"]) .admonition.key-concept,
+html:not([data-theme="light"]) div.admonition.key-concept {
+  background-color: #1a2838 !important;
+  border-color: #2a4a6a !important;
+  border-left-color: #5aa3e5 !important;
+}
+html:not([data-theme="light"]) .admonition.key-concept > .admonition-title,
+html:not([data-theme="light"]) div.admonition.key-concept > p.admonition-title {
+  background-color: #1e4e7a !important;
+}
+html:not([data-theme="light"]) .admonition.type-along,
+html:not([data-theme="light"]) div.admonition.type-along {
+  background-color: #17232f !important;
+  border-color: #2a4a6a !important;
+  border-left-color: #5aa3e5 !important;
+}
+html:not([data-theme="light"]) .admonition.type-along > .admonition-title,
+html:not([data-theme="light"]) div.admonition.type-along > p.admonition-title {
+  background-color: #1e4e7a !important;
+}
+html:not([data-theme="light"]) div.admonition.example-problem {
+  background-color: #2a1f16;
+  border-color: #6a4a2c;
+  border-left-color: #c47030;
+}
+html:not([data-theme="light"]) div.admonition.example-problem > p.admonition-title {
+  background-color: #6a3410;
+}
+html:not([data-theme="light"]) .admonition.ground-rules,
+html:not([data-theme="light"]) div.admonition.ground-rules {
+  background-color: #2a1f16 !important;
+  border-color: #6a4a2c !important;
+  border-left-color: #c47030 !important;
+}
+html:not([data-theme="light"]) .admonition.ground-rules > .admonition-title,
+html:not([data-theme="light"]) div.admonition.ground-rules > p.admonition-title {
+  background-color: #6a3410 !important;
+}
+html:not([data-theme="light"]) .admonition.slides a,
+html:not([data-theme="light"]) div.admonition.slides a {
+  background: rgba(90, 163, 229, 0.15);
+  border-color: rgba(90, 163, 229, 0.40);
+  color: #82bce8 !important;
+}
+html:not([data-theme="light"]) .admonition.slides a:hover,
+html:not([data-theme="light"]) div.admonition.slides a:hover {
+  background: rgba(90, 163, 229, 0.28);
+  border-color: rgba(90, 163, 229, 0.65);
+  color: #b4d4f0 !important;
+}
+html:not([data-theme="light"]) .bd-article figure {
+  background: #232a33;
+  border-color: #3a4552;
+}
+html:not([data-theme="light"]) .bd-article figure figcaption {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article .block-card,
+html:not([data-theme="light"]) .bd-article .mt-card {
+  background: #232a33;
+  border-color: #3a4552;
+  color: #e6edf3 !important;
+}
+html:not([data-theme="light"]) .bd-article .block-card h3,
+html:not([data-theme="light"]) .bd-article .mt-card h4 {
+  color: #b4d4f0;
+}
+html:not([data-theme="light"]) .bd-article .block-card p,
+html:not([data-theme="light"]) .bd-article .mt-card p {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article .block-card:hover,
+html:not([data-theme="light"]) .bd-article .mt-card:hover {
+  background: #2a323d;
+  border-color: #5aa3e5;
+}
+html:not([data-theme="light"]) .bd-article .deliverable-card {
+  background: #232a33;
+  border-color: #3a4552;
+  border-left-color: #5aa3e5;
+}
+html:not([data-theme="light"]) .bd-article .deliverable-card h3,
+html:not([data-theme="light"]) .bd-article .deliverable-card .d-w-num,
+html:not([data-theme="light"]) .bd-article .deliverable-card .d-due strong {
+  color: #b4d4f0;
+}
+html:not([data-theme="light"]) .bd-article .deliverable-card .d-eyebrow,
+html:not([data-theme="light"]) .bd-article .deliverable-card .d-link {
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .bd-article .deliverable-card .d-weight,
+html:not([data-theme="light"]) .bd-article .deliverable-card .d-due {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article .module-meta {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article .module-meta .m-module {
+  color: #b4d4f0;
+  background: #1e2833;
+}
+html:not([data-theme="light"]) .bd-article .module-synopsis {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article .mt-card .mt-kind {
+  color: #b4c0cc;
+}
+html:not([data-theme="light"]) .bd-article .module-nav {
+  border-top-color: #3a4552;
+}
+html:not([data-theme="light"]) .bd-article .module-nav a {
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .bd-article .module-nav a:hover {
+  color: #b4d4f0;
+}
+html:not([data-theme="light"]) .bd-article .matlab-link {
+  background: #2a1f16;
+  border-color: #6a4a2c;
+  color: #e0b088 !important;
+}
+html:not([data-theme="light"]) .bd-article .matlab-link:hover {
+  background: #3a2a1e;
+  border-color: #c47030;
+}
+html:not([data-theme="light"]) .bd-article .matlab-link .ml-arrow {
+  color: #e87722;
+}
+html:not([data-theme="light"]) .bd-article ol.lo-list > li::before {
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .sy-globaltoc p.caption {
+  color: #e6edf3;
+}
+html:not([data-theme="light"]) .sy-globaltoc > h3.sy-globaltoc-home a,
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l1 > a {
+  color: #c8d1db;
+}
+html:not([data-theme="light"]) .sy-globaltoc > h3.sy-globaltoc-home a:hover,
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l1 > a:hover {
+  background: #232a33;
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .sy-globaltoc > h3.sy-globaltoc-home.current a,
+html:not([data-theme="light"]) .sy-globaltoc > h3.sy-globaltoc-home a.current,
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l1.current > a,
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l1 > a.current {
+  color: #82bce8;
+  border-left-color: #5aa3e5;
+}
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l2 > a {
+  color: #a1adb9;
+}
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l2 > a:hover {
+  background: #232a33;
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l2 > a.current,
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l2.current > a {
+  color: #82bce8;
+  background: #1e2833;
+  border-left-color: #5aa3e5;
+}
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l1.has-children > details > summary {
+  color: #7d8b99;
+}
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l1.has-children > details > summary:hover {
+  color: #82bce8;
+}
+html:not([data-theme="light"]) .sy-globaltoc li.sy-l2-reading    > a .sy-icon { color: #5aa3e5; }
+html:not([data-theme="light"]) .sy-globaltoc li.sy-l2-flashcards > a .sy-icon { color: #4ec4de; }
+html:not([data-theme="light"]) .sy-globaltoc li.sy-l2-slides     > a .sy-icon { color: #4fb478; }
+html:not([data-theme="light"]) .sy-globaltoc li.sy-l2-practice   > a .sy-icon { color: #d9a04a; }
+html:not([data-theme="light"]) .sy-globaltoc li.toctree-l2.current > a .sy-icon { color: #82bce8; }
+html:not([data-theme="light"]) .admonition.tip,
+html:not([data-theme="light"]) div.admonition.tip {
+  background-color: #1e2731 !important;
+  border-color: #2a4a6a !important;
+  border-left-color: #5aa3e5 !important;
+}
+html:not([data-theme="light"]) .admonition.tip > .admonition-title,
+html:not([data-theme="light"]) div.admonition.tip > p.admonition-title {
+  background-color: #2565a0 !important;
+  color: #ffffff !important;
+}
+html:not([data-theme="light"]) .admonition.note,
+html:not([data-theme="light"]) div.admonition.note {
+  background-color: #232a33 !important;
+  border-color: #3a4552 !important;
+  border-left-color: #56708a !important;
+}
+html:not([data-theme="light"]) .admonition.note > .admonition-title,
+html:not([data-theme="light"]) div.admonition.note > p.admonition-title {
+  color: #82bce8 !important;
+}
+}

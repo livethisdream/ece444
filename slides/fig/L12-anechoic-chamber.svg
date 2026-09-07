@@ -1,0 +1,24 @@
+<svg viewBox="0 0 790 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Anechoic chamber: absorber-lined walls, a source antenna at one end, the antenna under test on a positioner inside a quiet zone, and specular reflection paths landing on the absorber">
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0067b9"/></marker>
+<marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3f7d34"/></marker>
+<marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b01e24"/></marker>
+<marker id="ahk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5b6573"/></marker>
+</defs>
+
+<rect x="26" y="18" width="738" height="282" fill="#ffffff" stroke="#004a85" stroke-width="2.5" rx="4"/>
+<path d="M50,18 L63.0,42 L76,18 Z M50,300 L63.0,276 L76,300 Z M76,18 L89.0,42 L102,18 Z M76,300 L89.0,276 L102,300 Z M102,18 L115.0,42 L128,18 Z M102,300 L115.0,276 L128,300 Z M128,18 L141.0,42 L154,18 Z M128,300 L141.0,276 L154,300 Z M154,18 L167.0,42 L180,18 Z M154,300 L167.0,276 L180,300 Z M180,18 L193.0,42 L206,18 Z M180,300 L193.0,276 L206,300 Z M206,18 L219.0,42 L232,18 Z M206,300 L219.0,276 L232,300 Z M232,18 L245.0,42 L258,18 Z M232,300 L245.0,276 L258,300 Z M258,18 L271.0,42 L284,18 Z M258,300 L271.0,276 L284,300 Z M284,18 L297.0,42 L310,18 Z M284,300 L297.0,276 L310,300 Z M310,18 L323.0,42 L336,18 Z M310,300 L323.0,276 L336,300 Z M336,18 L349.0,42 L362,18 Z M336,300 L349.0,276 L362,300 Z M362,18 L375.0,42 L388,18 Z M362,300 L375.0,276 L388,300 Z M388,18 L401.0,42 L414,18 Z M388,300 L401.0,276 L414,300 Z M414,18 L427.0,42 L440,18 Z M414,300 L427.0,276 L440,300 Z M440,18 L453.0,42 L466,18 Z M440,300 L453.0,276 L466,300 Z M466,18 L479.0,42 L492,18 Z M466,300 L479.0,276 L492,300 Z M492,18 L505.0,42 L518,18 Z M492,300 L505.0,276 L518,300 Z M518,18 L531.0,42 L544,18 Z M518,300 L531.0,276 L544,300 Z M544,18 L557.0,42 L570,18 Z M544,300 L557.0,276 L570,300 Z M570,18 L583.0,42 L596,18 Z M570,300 L583.0,276 L596,300 Z M596,18 L609.0,42 L622,18 Z M596,300 L609.0,276 L622,300 Z M622,18 L635.0,42 L648,18 Z M622,300 L635.0,276 L648,300 Z M648,18 L661.0,42 L674,18 Z M648,300 L661.0,276 L674,300 Z M674,18 L687.0,42 L700,18 Z M674,300 L687.0,276 L700,300 Z M700,18 L713.0,42 L726,18 Z M700,300 L713.0,276 L726,300 Z M26,42 L50,55.0 L26,68 Z M764,42 L740,55.0 L764,68 Z M26,68 L50,81.0 L26,94 Z M764,68 L740,81.0 L764,94 Z M26,94 L50,107.0 L26,120 Z M764,94 L740,107.0 L764,120 Z M26,120 L50,133.0 L26,146 Z M764,120 L740,133.0 L764,146 Z M26,146 L50,159.0 L26,172 Z M764,146 L740,159.0 L764,172 Z M26,172 L50,185.0 L26,198 Z M764,172 L740,185.0 L764,198 Z M26,198 L50,211.0 L26,224 Z M764,198 L740,211.0 L764,224 Z M26,224 L50,237.0 L26,250 Z M764,224 L740,237.0 L764,250 Z M26,250 L50,263.0 L26,276 Z M764,250 L740,263.0 L764,276 Z" fill="#004a85" fill-opacity="0.16" stroke="#004a85" stroke-opacity="0.45" stroke-width="1"/>
+<path d="M112.7,144.2 L112.7,155.8 L94.3,155.8 L94.3,144.2 Z" fill="#0067b9" opacity="0.9"/><path d="M112.7,144.2 L138.0,132.8 L138.0,167.2 L112.7,155.8 Z" fill="#0067b9" opacity="0.55" stroke="#0067b9" stroke-width="1.5"/>
+<text x="118.0" y="204.0" font-size="15" font-weight="600" fill="#0067b9" text-anchor="middle">source</text>
+<ellipse cx="600" cy="150" rx="86" ry="82" fill="#3f7d34" fill-opacity="0.07" stroke="#3f7d34" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="600.0" y="258.0" font-size="16" font-weight="700" fill="#3f7d34" text-anchor="middle">quiet zone</text>
+<line x1="600" y1="104" x2="600" y2="196" stroke="#004a85" stroke-width="6.5"/>
+<path d="M584,226 L595,196 L605,196 L616,226 Z" fill="#004a85" opacity="0.45"/>
+<text x="600.0" y="54.0" font-size="14" font-weight="600" fill="#004a85" text-anchor="middle">antenna under test</text>
+<line x1="146" y1="150" x2="506" y2="150" stroke="#3f7d34" stroke-width="2.6" marker-end="url(#ahg)"/>
+<text x="320.0" y="138.0" font-size="15" font-weight="600" fill="#3f7d34" text-anchor="middle">direct path</text>
+<path d="M146,150 L330,44 L516,106" fill="none" stroke="#b01e24" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#ahr)"/>
+<path d="M146,150 L330,274 L516,194" fill="none" stroke="#b01e24" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#ahr)"/>
+<text x="340.0" y="80.0" font-size="13" font-weight="600" fill="#b01e24" text-anchor="middle">specular region</text>
+<text x="58.0" y="252.0" font-size="14" font-weight="600" fill="#004a85">pyramidal absorber</text>
+</svg>

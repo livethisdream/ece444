@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L1 - Course Introduction &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 1 overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l1-course-introduction">
+<h1>L1 - Course Introduction<a class="headerlink" href="#l1-course-introduction" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Course Introduction</h1>
+<div class="title-rule"></div>
+<p>Antennas are the front door of every RF system the Air Force fields.</p>
+<p>Lesson 1 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-slides">
+<div class="wrap docutils container">
+<p class="rubric">Slides</p>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L01-course-intro.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L01-course-intro.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L01-course-intro.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '1'">
+  <li>I can state in plain language what an antenna is and what it does in a radio system.</li>
+  <li>I can explain why antennas matter across the Air Force mission set (comms, radar, EW, SATCOM, GPS).</li>
+  <li>I can identify the five modules of ECE 444 and how they build toward the final capstone.</li>
+  <li>I can recognize several real antennas by sight and connect their geometry to the job they do.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-welcome-introductions">
+<div class="wrap docutils container">
+<p class="rubric">Welcome &amp; Introductions</p>
+<p><em>Instructor and student introductions — background, career interests, prior exposure to RF or radar.</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-about-your-instructor">
+<div class="wrap docutils container">
+<p class="rubric">About Your Instructor</p>
+<p><strong>Lt Col Neil Rogers, USAF (Ret)</strong> — BS from TU; MSEE and PhD from AFIT.
+Currently the <strong>Erdle Chair</strong> at USAFA and a <strong>Field Applications Engineer</strong> at <strong>Analog Devices</strong>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-i-ve-been">
+<div class="wrap docutils container">
+<p class="rubric">Where I’ve been</p>
+<p><img alt="Duty stations across the career" src="../../_images/Duty_stations.png" />
+<em>DF/USAFA · AFRL Directed Energy, Kirtland AFB · NASIC and AFIT (×2), WPAFB · AFLCMC, Hanscom AFB.</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-officer-training-school">
+<div class="wrap docutils container">
+<p class="rubric">Officer Training School</p>
+<p><img alt="OTS commissioning" src="../../_images/nr-ots.jpg" />
+<em>Officer Training School — where it started.</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-active-denial-system-2">
+<div class="wrap docutils container">
+<p class="rubric">Active Denial System 2</p>
+<p><img alt="Active Denial System 2" src="../../_images/ads2.jpg" />
+<em>Active Denial System 2 at AFRL Directed Energy. Section chief for Active Denial and High-Power Sources.</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-deployment-with-the-379th-aew">
+<div class="wrap docutils container">
+<p class="rubric">Deployment with the 379th AEW</p>
+<p><img alt="379th AEW deployment" src="../../_images/ig-team.JPG" />
+<em>Deployment with the 379th AEW.</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-e-8c-joint-stars">
+<div class="wrap docutils container">
+<p class="rubric">E-8C Joint STARS</p>
+<p><img alt="E-8C Joint STARS" src="../../_images/E8C.jpg" />
+<em>E-8C Joint STARS — airborne ground surveillance radar.</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-academy-center-for-uas-research">
+<div class="wrap docutils container">
+<p class="rubric">Academy Center for UAS Research</p>
+<p><img alt="ACUASR UAS Lab at USAFA" src="../../_images/Rogers_UAS_Lab.jpg" />
+<em>Directed the Academy Center for UAS Research (ACUASR) at USAFA through 2025.</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-retirement-from-active-duty">
+<div class="wrap docutils container">
+<p class="rubric">Retirement from active duty</p>
+<p><img alt="USAFA retirement" src="../../_images/usafa-retirement.jpg" />
+<em>Retirement from active duty — cadets sent me off with “No More Blues.”</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-now-analog-devices">
+<div class="wrap docutils container">
+<p class="rubric">Now — Analog Devices</p>
+<p>My day job with <strong>Analog Devices</strong> puts me shoulder-to-shoulder with the team designing the <strong>ADALM-PHASER</strong> you’ll use in Module 3, and customers designing advanced Comms and RADAR systems based on its technology.</p>
+<p><img alt="Analog Devices booth" src="../../_images/nr-adi.jpg" />
+<em>Field Applications Engineer at Analog Devices — the folks who make the ADALM-PHASER.</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-off-the-clock">
+<div class="wrap docutils container">
+<p class="rubric">Off the clock</p>
+<p><img alt="Family in the new house" src="../../_images/fam_newhouse.jpg" />
+<em>Four kids (ages 11, 13, 15, 17). We just moved into a new house — fixing it up is a running hobby.</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-crossfit">
+<div class="wrap docutils container">
+<p class="rubric">CrossFit</p>
+<p><img alt="CrossFit" src="../../_images/CF_dying.png" />
+<em>CrossFit.</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-guitar-with-the-band-at-trace-church">
+<div class="wrap docutils container">
+<p class="rubric">Guitar with the band at Trace church</p>
+<p><img alt="Guitar at Trace church" src="../../_images/trace_guitar.jpg" />
+<em>Playing guitar with the band at Trace, my church.</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-how-i-teach">
+<div class="wrap docutils container">
+<p class="rubric">How I teach</p>
+<ul class="simple">
+<li><p><strong>We’re learning this together.</strong> I don’t have all the answers, and I’ll say so when I don’t.</p></li>
+<li><p><strong>Mistakes are part of learning.</strong> Make them cheaply, and make them count.</p></li>
+<li><p><strong>Ask questions.</strong> There is no such thing as a dumb question — if something isn’t clicking for you, it’s almost certainly not clicking for someone else.</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-is-an-antenna">
+<div class="wrap docutils container">
+<p class="rubric">What is an antenna?</p>
+<p>An antenna is the <strong>transducer between a guided wave</strong> (a signal traveling on a cable or waveguide) <strong>and a radiating wave</strong> (a signal traveling freely through space). Every wireless system on Earth has at least one on each end of the link.</p>
+<p>Two ideas we’ll keep coming back to:</p>
+<ol class="arabic simple">
+<li><p>Antennas are <strong>reciprocal</strong> — the same antenna transmits and receives with the same pattern.</p></li>
+<li><p>Antennas do <strong>not create energy</strong> — they shape <em>where</em> the energy goes.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-every-wireless-system-has-one">
+<div class="wrap docutils container">
+<p class="rubric">Every wireless system has one</p>
+<p><img alt="RF link block diagram: RF Source → Amp → Transmission Line → TX Antenna → Channel → RX Antenna → LNA → Radio" src="../../_images/rf-link-block-diagram.svg" />
+<em>A generic RF link. The antennas are the only components that touch free space; everything else is guided-wave.</em></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-this-matters-to-you">
+<div class="wrap docutils container">
+<p class="rubric">Why this matters to you</p>
+<p>Antennas are the front door of every RF system the Air Force fields. If the antenna is wrong, nothing downstream can fix it.</p>
+<ul class="simple">
+<li><p><strong>Communications</strong> — HF/VHF/UHF/SATCOM links, tactical radios, data links.</p></li>
+<li><p><strong>Radar</strong> — surveillance, tracking, targeting, weather, altimeters.</p></li>
+<li><p><strong>Electronic warfare</strong> — direction finding, jamming, protection.</p></li>
+<li><p><strong>Navigation</strong> — GPS, TACAN, ILS, IFF.</p></li>
+<li><p><strong>ISR</strong> — SIGINT payloads, synthetic aperture radar.</p></li>
+</ul>
+<p>By the end of this course you will have designed, measured, and steered real antennas — the same class of hardware sitting on the aircraft, satellite, or ground station you may one day operate or specify.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-course-roadmap">
+<div class="wrap docutils container">
+<p class="rubric">Course roadmap</p>
+<p>Five modules, forty-one lessons, culminating in an integrated beamforming + radar capstone:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Module</p></th>
+<th class="head text-left"><p>Focus</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>1</p></td>
+<td class="text-left"><p>Foundations of Electromagnetics and Antennas</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>2</p></td>
+<td class="text-left"><p>Antenna Types, Simulation, and Measurement</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>3</p></td>
+<td class="text-left"><p>Arrays and ADALM-PHASER Beamforming</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>4</p></td>
+<td class="text-left"><p>Radar Fundamentals and FMCW</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>5</p></td>
+<td class="text-left"><p>Capstone Project</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>See the <a class="reference internal" href="../../syllabus.html"><span class="doc std std-doc">syllabus</span></a> for the full schedule and both project descriptions.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-show-tell-real-antennas-sdr">
+<div class="wrap docutils container">
+<p class="rubric">Show &amp; tell - real antennas + SDR</p>
+<p>Seven shapes cover most of what the Air Force flies, drives, and parks on a roof. Learn to name them on sight, and to say in one sentence why each one looks the way it does — the geometry <em>is</em> the specification.</p>
+<img src="../../viz/img/L01-antenna-gallery.svg" alt="Seven common antenna types" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+</div>
+</div>
+<div class="frame docutils container" id="frame-show-tell-real-antennas-sdr-cont">
+<div class="wrap docutils container">
+<p class="rubric">Show &amp; tell - real antennas + SDR (cont.)</p>
+<ul class="simple">
+<li><p><strong>Half-wave dipole</strong> — a resonant wire, fed at the center. The reference workhorse: doughnut pattern, 2.15 dBi, and the antenna every other gain number is quietly compared against.</p></li>
+<li><p><strong>Monopole</strong> — half a dipole standing on a ground plane, which mirrors the missing half. Half the height for the same job, which is why it is the whip on vehicles and handhelds.</p></li>
+<li><p><strong>Patch</strong> — a printed resonant cavity, a metal rectangle over a grounded substrate. Flat and conformal, so it rides the skin of an aircraft or a GPS puck: GPS, telemetry, and the elements of most planar arrays.</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-show-tell-real-antennas-sdr-cont-2">
+<div class="wrap docutils container">
+<p class="rubric">Show &amp; tell - real antennas + SDR (cont.)</p>
+<ul class="simple">
+<li><p><strong>Horn</strong> — a flared waveguide that eases a guided wave into free space. Clean, predictable pattern, so it serves as the gain standard on the range and as the feed for dishes and reflectors.</p></li>
+<li><p><strong>Yagi</strong> — one driven element plus a parasitic chain of reflector and directors, each re-radiating with the phase that reinforces one direction. Cheap point-to-point gain along the boom.</p></li>
+<li><p><strong>Spiral</strong> — a self-scaling geometry, where each frequency radiates from the part of the curve that happens to be resonant. Extremely wideband and circularly polarized, which is why it shows up on EW and wideband sensing payloads.</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-show-tell-real-antennas-sdr-cont-3">
+<div class="wrap docutils container">
+<p class="rubric">Show &amp; tell - real antennas + SDR (cont.)</p>
+<ul class="simple">
+<li><p><strong>Parabolic dish</strong> — optics done in metal: a reflector focuses a whole aperture onto a small feed. The highest gain per dollar, and the reason SATCOM and long-range radar look the way they do.</p></li>
+</ul>
+<p><em>Activity:</em> pass the hardware around, then demonstrate reception with an SDR (RTL-SDR / HackRF / Phaser) tuned to a live signal. Swap antennas on the same signal and discuss what changes on the spectrum display.</p>
+<p><em>Hardware checklist:</em> half-wave dipole (VHF, telescoping) · monopole whip with ground plane · patch (GPS or 2.4 GHz) · pyramidal horn · VHF/UHF Yagi · spiral or log-periodic wideband element · small parabolic dish or reflector, plus an SDR with a laptop and display cable.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-demo-acoustic-beam-pattern">
+<div class="wrap docutils container">
+<p class="rubric">Demo - acoustic beam pattern</p>
+<p><em>Live demonstration of a small speaker array driven by a multi-channel audio interface, showing how phasing multiple sources produces a directional acoustic beam. Serves as an audible, tangible analog for the phased-array behavior we’ll formalize in Module 3.</em></p>
+<p>See the <a class="reference internal" href="../../materials.html"><span class="doc std std-doc">acoustic antenna simulator concept</span></a> for the build plan.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a href="../../practice/ECE444_L01_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a href="../../practice/ECE444_L01_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where this is going</p>
+<p>Lesson 2 turns today’s plain-language description into physics. We trace the chain from Maxwell’s equations to the plane wave, then define the headline parameters every datasheet quotes: radiation intensity, directivity, gain, effective aperture, and beamwidth. Read the assigned sections on <strong>basic antenna properties</strong> before the next class.</p>
+<p>Those parameters are the vocabulary for everything that follows. They are what you will measure in Module 2, what pattern multiplication manipulates when we build arrays in Module 3, and what the radar range equation consumes in Module 4. Get comfortable with them now and the rest of the course is bookkeeping on top of ideas you already own.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module01/L01-course-intro"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

@@ -1,0 +1,1135 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L4 - Impedance, Feeding, and Baluns &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l4-impedance-feeding-and-baluns">
+<h1>L4 - Impedance, Feeding, and Baluns<a class="headerlink" href="#l4-impedance-feeding-and-baluns" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Impedance, Feeding, and Baluns</h1>
+<div class="title-rule"></div>
+<p>The other side of the terminals — what the antenna looks like to the radio.</p>
+<p>Lesson 4 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-slides">
+<div class="wrap docutils container">
+<p class="rubric">Slides</p>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L04-impedance-feeding-baluns.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L04-impedance-feeding-baluns.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L04-impedance-feeding-baluns.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '4'">
+  <li>I can decompose an antenna's input impedance into radiation resistance, loss resistance, and reactance, and connect the radiation resistance to the power actually radiated.</li>
+  <li>I can compute the reflection coefficient and VSWR a feed line sees at the antenna terminals, and the resulting mismatch loss.</li>
+  <li>I can design a quarter-wave transformer — and read an L-match — to match a load to a feed line.</li>
+  <li>I can explain why a balanced antenna needs a balun when you feed it from unbalanced coax, and identify the common balun types and what each one does.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-we-were">
+<div class="wrap docutils container">
+<p class="rubric">Where we were</p>
+<p>So far we have treated an antenna by <em>what it radiates</em> — pattern, directivity,
+gain, effective area. This lesson looks at the other side of the terminals: what
+the antenna looks like to the <strong>radio</strong>. Before a single watt can be radiated it
+has to get <em>onto</em> the antenna, and that is an impedance-matching problem.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-antenna-is-a-one-port">
+<div class="wrap docutils container">
+<p class="rubric">The antenna is a one-port</p>
+<p>Stand at the two feed terminals of an antenna and look in. Regardless of how
+complicated the structure is, at a single frequency it presents a <strong>complex input
+impedance</strong></p>
+<div class="math notranslate nohighlight">
+\[
+Z_\text{in} = R_\text{in} + j X_\text{in}.
+\]</div>
+<p>The resistive part splits into two physically distinct pieces:</p>
+<div class="math notranslate nohighlight">
+\[
+R_\text{in} = R_\text{rad} + R_\text{loss}.
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-the-input-power-goes">
+<div class="wrap docutils container">
+<p class="rubric">Where the input power goes</p>
+<p>Drive the terminals with a current of amplitude <span class="math notranslate nohighlight">\(I_0\)</span>. The time-average power
+delivered to the antenna is</p>
+<div class="math notranslate nohighlight">
+\[
+P_\text{in} = \tfrac{1}{2} |I_0|^2 R_\text{in}
+            = \underbrace{\tfrac{1}{2} |I_0|^2 R_\text{rad}}_{P_\text{rad}}
+            + \underbrace{\tfrac{1}{2} |I_0|^2 R_\text{loss}}_{P_\text{loss}}.
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-radiation-resistance-is-not-a-resistor">
+<div class="wrap docutils container">
+<p class="rubric">Radiation resistance is not a resistor</p>
+<img src="../../viz/img/L04-antenna-input-z.svg" alt="Antenna input impedance as a series R_rad, R_loss, jX driven by a source through a feed line" style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
+<p><strong>Radiation resistance <span class="math notranslate nohighlight">\(R_\text{rad}\)</span> is not a physical resistor.</strong> No component in
+the antenna gets warm from it.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-part-doing-the-job">
+<div class="wrap docutils container">
+<p class="rubric">The part doing the job</p>
+<p>It is the <em>equivalent</em> resistance that would dissipate the same power the
+antenna carries away as radiation. It is the useful part of <span class="math notranslate nohighlight">\(R_\text{in}\)</span> — the
+part doing the job.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-loss-resistance-is-the-real-dissipation">
+<div class="wrap docutils container">
+<p class="rubric">Loss resistance is the real dissipation</p>
+<p><strong>Loss resistance <span class="math notranslate nohighlight">\(R_\text{loss}\)</span></strong> is the real dissipation: ohmic loss in the
+conductors, dielectric loss in nearby insulators. That power turns into heat and
+never leaves.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-radiation-efficiency">
+<div class="wrap docutils container">
+<p class="rubric">Radiation efficiency</p>
+<p>The ratio of the two is exactly the <strong>radiation efficiency</strong> from Lesson 2:</p>
+<div class="math notranslate nohighlight">
+\[
+\eta_\text{rad} = \frac{R_\text{rad}}{R_\text{rad} + R_\text{loss}},
+\qquad G = \eta_\text{rad} D.
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-radiation-resistance-of-a-short-dipole">
+<div class="wrap docutils container">
+<p class="rubric">Radiation resistance of a short dipole</p>
+<p>For an <strong>infinitesimal (Hertzian) dipole</strong> of length <span class="math notranslate nohighlight">\(\ell \ll \lambda\)</span> — the
+idealization that carries a <em>uniform</em> current over its whole length — the
+radiation resistance works out to</p>
+<div class="math notranslate nohighlight">
+\[
+R_\text{rad} = 80 \pi^2 \left( \frac{\ell}{\lambda} \right)^2
+\qquad \text{(uniform current, Hertzian).}
+\]</div>
+<p>A real center-fed short dipole cannot do that: the current has to go to zero at
+the open ends, so it falls off roughly <strong>triangularly</strong> from a peak at the feed.
+The average current is half the peak, the radiated power a quarter, and the
+radiation resistance a quarter as well:</p>
+<div class="math notranslate nohighlight">
+\[
+R_\text{rad} = 20 \pi^2 \left( \frac{\ell}{\lambda} \right)^2
+\qquad \text{(triangular current, practical short dipole).}
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-small-antennas-are-hard">
+<div class="wrap docutils container">
+<p class="rubric">Why small antennas are hard</p>
+<p>The <span class="math notranslate nohighlight">\((\ell/\lambda)^2\)</span> dependence is the whole story of why small antennas are
+hard, and the factor of four makes it worse: a <span class="math notranslate nohighlight">\(0.05\lambda\)</span> center-fed dipole
+has <span class="math notranslate nohighlight">\(R_\text{rad} \approx 0.49\ \Omega\)</span>. Put even a fraction of an ohm of
+conductor loss next to <em>that</em> and the efficiency collapses — a single ohm of
+loss resistance already puts <span class="math notranslate nohighlight">\(\eta_\text{rad}\)</span> under 35%. This is why
+electrically small antennas are so hard to feed efficiently. Make the antenna a
+half-wavelength long and the picture changes completely.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-half-wave-dipole">
+<div class="wrap docutils container">
+<p class="rubric">The half-wave dipole</p>
+<p>At exactly <span class="math notranslate nohighlight">\(\ell = \lambda/2\)</span> the dipole presents about</p>
+<div class="math notranslate nohighlight">
+\[
+Z_\text{in} \approx 73 + j42.5\ \Omega.
+\]</div>
+<p>The reactance is inductive. Trim the arms slightly — to roughly <span class="math notranslate nohighlight">\(0.48\lambda\)</span> —
+and the reactance cancels: the antenna is <strong>resonant</strong>, with</p>
+<div class="math notranslate nohighlight">
+\[
+Z_\text{in} \approx 70 + j0\ \Omega.
+\]</div>
+<p>That near-<span class="math notranslate nohighlight">\(70\ \Omega\)</span>, near-real impedance is why the half-wave dipole is the
+workhorse of antenna engineering: it is naturally close to standard feed-line
+impedances.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-reading-the-reactance">
+<div class="wrap docutils container">
+<p class="rubric">Reading the reactance</p>
+<p>The sign of <span class="math notranslate nohighlight">\(X_\text{in}\)</span> tells you where you are relative to resonance:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Condition</p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(X_\text{in}\)</span></p></th>
+<th class="head text-left"><p>Behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Electrically short (<span class="math notranslate nohighlight">\(\ell &lt; \ell_\text{res}\)</span>)</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(X_\text{in} &lt; 0\)</span></p></td>
+<td class="text-left"><p><strong>capacitive</strong></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Resonant (<span class="math notranslate nohighlight">\(\ell = \ell_\text{res}\)</span>)</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(X_\text{in} = 0\)</span></p></td>
+<td class="text-left"><p>pure resistance</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Long (<span class="math notranslate nohighlight">\(\ell &gt; \ell_\text{res}\)</span>)</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(X_\text{in} &gt; 0\)</span></p></td>
+<td class="text-left"><p><strong>inductive</strong></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Matching is easiest at resonance, where there is no reactance to cancel — only a
+resistance to transform.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-feeding-the-reflection-the-source-sees">
+<div class="wrap docutils container">
+<p class="rubric">Feeding — the reflection the source sees</p>
+<p>The antenna connects to the radio through a <strong>feed line</strong> of characteristic
+impedance <span class="math notranslate nohighlight">\(Z_0\)</span> (coax is almost always <span class="math notranslate nohighlight">\(50\ \Omega\)</span>; some TV/antenna hardware is
+<span class="math notranslate nohighlight">\(75\ \Omega\)</span> or <span class="math notranslate nohighlight">\(300\ \Omega\)</span>). When the antenna impedance <span class="math notranslate nohighlight">\(Z_\text{in}\)</span> does not
+equal <span class="math notranslate nohighlight">\(Z_0\)</span>, part of the incident wave reflects back down the line. The
+<strong>reflection coefficient</strong> at the terminals is</p>
+<div class="math notranslate nohighlight">
+\[
+\Gamma = \frac{Z_\text{in} - Z_0}{Z_\text{in} + Z_0},
+\]</div>
+<p>and the standing-wave ratio it produces is</p>
+<div class="math notranslate nohighlight">
+\[
+\text{VSWR} = \frac{1 + |\Gamma|}{1 - |\Gamma|}.
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-mismatch-loss">
+<div class="wrap docutils container">
+<p class="rubric">Mismatch loss</p>
+<p>This is the same <span class="math notranslate nohighlight">\(\Gamma\)</span> / VSWR pair from Lessons 2 and 3 — now tied directly to
+the antenna’s impedance. The fraction of incident power that bounces back is
+<span class="math notranslate nohighlight">\(|\Gamma|^2\)</span>, and the <strong>mismatch loss</strong> prices what that costs the antenna:</p>
+<div class="math notranslate nohighlight">
+\[
+L_\text{mismatch} = -10 \log_{10}\!\left( 1 - |\Gamma|^2 \right)\ \text{dB}.
+\]</div>
+<p>A perfectly matched antenna (<span class="math notranslate nohighlight">\(Z_\text{in} = Z_0\)</span>) has <span class="math notranslate nohighlight">\(\Gamma = 0\)</span>, VSWR <span class="math notranslate nohighlight">\(= 1{:}1\)</span>,
+and zero mismatch loss. As a rule of thumb, <strong>VSWR <span class="math notranslate nohighlight">\(\le 2\)</span></strong> (return loss
+<span class="math notranslate nohighlight">\(\ge 9.5\)</span> dB, mismatch loss <span class="math notranslate nohighlight">\(\le 0.5\)</span> dB) is the usual “good enough” bar for a
+transmit antenna — but what the <em>transmitter</em> can survive sometimes sets the
+mismatch you can tolerate, not the fraction of a dB you lose. You will price
+this in this lesson’s practice set.</p>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-reflection-vswr-and-mismatch-loss">
+<div class="wrap docutils container">
+<p class="rubric">Reflection, VSWR and mismatch loss</p>
+<div class="depth docutils container">
+<p>Set the antenna’s resistance and reactance and watch the reflection coefficient,
+VSWR, and mismatch loss the feed line sees. Toggle a quarter-wave transformer
+(Part 3) to watch it pull a real load onto the <span class="math notranslate nohighlight">\(50\ \Omega\)</span> point.</p>
+</div>
+<iframe src="../../viz/feed-match.html"
+        width="100%" height="529"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Feed-line match explorer">
+</iframe>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-quarter-wave-transformer">
+<div class="wrap docutils container">
+<p class="rubric">The quarter-wave transformer</p>
+<p>When the antenna impedance is not close to <span class="math notranslate nohighlight">\(Z_0\)</span>, we insert a lossless network
+between the feed line and the antenna to <strong>transform</strong> the impedance so the source
+sees <span class="math notranslate nohighlight">\(Z_0\)</span>. Two workhorses:</p>
+<p>A quarter-wavelength section of line with characteristic impedance <span class="math notranslate nohighlight">\(Z_1\)</span>
+transforms a <strong>real</strong> load <span class="math notranslate nohighlight">\(R_L\)</span> to an input impedance</p>
+<div class="math notranslate nohighlight">
+\[
+Z_\text{in} = \frac{Z_1^2}{R_L}.
+\]</div>
+<p>To match <span class="math notranslate nohighlight">\(R_L\)</span> to a feed line <span class="math notranslate nohighlight">\(Z_0\)</span>, pick</p>
+<div class="math notranslate nohighlight">
+\[
+Z_1 = \sqrt{Z_0 R_L}.
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-matching-the-resonant-dipole">
+<div class="wrap docutils container">
+<p class="rubric">Matching the resonant dipole</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — a quarter-wave transformer for a resonant dipole</p>
+<p><strong>Match a resonant <span class="math notranslate nohighlight">\(70\ \Omega\)</span> dipole to <span class="math notranslate nohighlight">\(50\ \Omega\)</span> coax.</strong></p>
+<div class="math notranslate nohighlight">
+\[
+Z_1 = \sqrt{Z_0 R_L} = \sqrt{(50)(70)} = \sqrt{3500} \approx 59\ \Omega
+\]</div>
+<p>A quarter-wave section of <span class="math notranslate nohighlight">\(\approx 59\ \Omega\)</span> line does it.</p>
+</div>
+<p>The catch: the transformer is exactly <span class="math notranslate nohighlight">\(\lambda/4\)</span> only at one frequency, so the
+match is <strong>narrowband</strong> — it degrades as you move off the design frequency. And
+it only works directly on a <em>real</em> load, which is why we trim the dipole to
+resonance first.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-real-load-only-is-not-a-veto">
+<div class="wrap docutils container">
+<p class="rubric">“Real load only” is not a veto</p>
+<p>“Real load only” is a requirement, not a veto — you can always <em>make</em> the load
+real first. Cancel the reactance with a series element, then transform what is
+left with a quarter-wave line. For the <span class="math notranslate nohighlight">\(20 - j15\ \Omega\)</span> antenna in the next
+section that is <span class="math notranslate nohighlight">\(+j15\ \Omega\)</span> in series, leaving <span class="math notranslate nohighlight">\(20 + j0\ \Omega\)</span>, followed by
+a <span class="math notranslate nohighlight">\(Z_1 = \sqrt{(50)(20)} = 31.6\ \Omega\)</span> quarter-wave section.</p>
+<p>That is a perfectly good design, and it is not the narrower one. Put both
+designs on the same axes and the answer is plain — they null at the same place
+and their VSWR <span class="math notranslate nohighlight">\(\le 2\)</span> bands differ by a few percent:</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-comparing-the-two-designs">
+<div class="wrap docutils container">
+<p class="rubric">Comparing the two designs</p>
+<img src="../../viz/img/L04-match-compare.svg" alt="Reflection versus frequency for the two matching designs: both null at 1 GHz and hold VSWR under 2 over comparable bandwidth" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+<p>So bandwidth does not decide it. What actually decides between them is <strong>what
+you are building on</strong>:</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-so-which-one">
+<div class="wrap docutils container">
+<p class="rubric">So which one?</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-left"><p>Cancel + <span class="math notranslate nohighlight">\(\lambda/4\)</span></p></th>
+<th class="head text-left"><p>L-match</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Needs</p></td>
+<td class="text-left"><p>a line of <span class="math notranslate nohighlight">\(Z_1 = \sqrt{Z_0 R_L}\)</span></p></td>
+<td class="text-left"><p>two lumped reactances</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(Z_1 = 31.6\ \Omega\)</span>?</p></td>
+<td class="text-left"><p>trivial on microstrip, unbuyable as cable</p></td>
+<td class="text-left"><p>not applicable</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Size at 1 GHz</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx 4\)</span> cm of printed line</p></td>
+<td class="text-left"><p>two parts, millimetres</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Size at 2 MHz</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx 25\)</span> m of coax</p></td>
+<td class="text-left"><p>two parts, millimetres</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>So on a microwave PCB, where any <span class="math notranslate nohighlight">\(Z_1\)</span> can be printed and lumped parts have
+awkward parasitics, the quarter-wave route is often the better engineering. Down
+at HF, where <span class="math notranslate nohighlight">\(\lambda/4\)</span> runs to tens of meters and only 50 and 75 <span class="math notranslate nohighlight">\(\Omega\)</span>
+cable exists off the shelf, the L-match wins — which is why the matching lab is
+lumped.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-l-match">
+<div class="wrap docutils container">
+<p class="rubric">The L-match</p>
+<p>A quarter-wave transformer needs a real load and a quarter wavelength of line.
+For a <strong>complex</strong> load — or at frequencies where <span class="math notranslate nohighlight">\(\lambda/4\)</span> is inconveniently
+long — use a two-element <strong>L-network</strong>: one series reactance and one shunt
+reactance, which together reach any <span class="math notranslate nohighlight">\(Z_0\)</span> from any complex load. It is the
+minimal lumped matching network, and you already own the tool for reading it:
+the Smith chart from your transmission-lines course.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-l-match-solve-one-learn-the-method">
+<div class="wrap docutils container">
+<p class="rubric">The L-match — solve one, learn the method</p>
+<img src="../../viz/img/L04-lmatch.svg" alt="An L network between a feed line and a complex load: a series element next to the load cancels its reactance, then a shunt element transforms the resistance" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+<p>Rather than state the recipe and then demonstrate it, we will derive it by
+solving one problem all the way through. Everything you need is already on the
+table: the geometric mean from the quarter-wave section, and the Smith chart
+from your transmission-lines course.</p>
+<p><strong>An antenna presents <span class="math notranslate nohighlight">\(Z_\text{in} = 20 - j15\ \Omega\)</span> on a <span class="math notranslate nohighlight">\(50\ \Omega\)</span> line at
+a design frequency of 1 GHz. Match it.</strong></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-1-cancel-the-load-reactance">
+<div class="wrap docutils container">
+<p class="rubric">Step 1 — Cancel the load reactance</p>
+<p>The load is capacitive. Put <span class="math notranslate nohighlight">\(+j15\ \Omega\)</span> in series with it and the reactance
+is gone:</p>
+<div class="math notranslate nohighlight">
+\[
+(20 - j15) + j15 = 20 + j0\ \Omega.
+\]</div>
+<p>That reduces the problem to something familiar: <strong>match a real <span class="math notranslate nohighlight">\(20\ \Omega\)</span> to a
+real <span class="math notranslate nohighlight">\(50\ \Omega\)</span> line.</strong></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-2-two-ways-to-transform-20-to-50">
+<div class="wrap docutils container">
+<p class="rubric">Step 2 — Two ways to transform 20 Ω to 50 Ω</p>
+<p><strong>(a) A quarter-wave transformer.</strong> From the section above, a <span class="math notranslate nohighlight">\(\lambda/4\)</span> line of</p>
+<div class="math notranslate nohighlight">
+\[
+Z_1 = \sqrt{Z_0 R_L} = \sqrt{(50)(20)} = 31.6\ \Omega
+\]</div>
+<p>does it. This is a correct design — but a physically awkward one here. Coax is
+sold in <span class="math notranslate nohighlight">\(50\)</span> and <span class="math notranslate nohighlight">\(75\ \Omega\)</span>; there is no <span class="math notranslate nohighlight">\(31.6\ \Omega\)</span> cable. And a quarter
+wavelength is only a convenient length in some bands: about 4 cm of printed line
+at 1 GHz, but roughly 25 m of coax at 2 MHz. On a microwave board the
+transformer often wins; with lumped parts at low frequency it does not.</p>
+<p><strong>(b) An L-network.</strong> A second series reactance plus a shunt reactance. Two
+lumped components, no transmission line, no exotic impedance to source.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-3-what-the-l-network-has-to-achieve">
+<div class="wrap docutils container">
+<p class="rubric">Step 3 — What the L-network has to achieve</p>
+<p>The two elements together must present <span class="math notranslate nohighlight">\(50 + j0\ \Omega\)</span> to the line. The
+strategy that gets there:</p>
+<ol class="arabic simple">
+<li><p>Use the <strong>series</strong> element to make the magnitude of the series branch equal
+the same geometric mean the transformer needed, <span class="math notranslate nohighlight">\(\sqrt{(50)(20)} =
+31.6\ \Omega\)</span>.</p></li>
+<li><p>Use the <strong>shunt</strong> element to clean up the excess reactance that step leaves
+behind.</p></li>
+</ol>
+<p>The quarter-wave line realizes <span class="math notranslate nohighlight">\(31.6\ \Omega\)</span> as a <em>characteristic impedance</em>;
+the L-network realizes it as a <strong>branch impedance magnitude</strong>. Same number, two
+ways of building it.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-4-size-the-series-element">
+<div class="wrap docutils container">
+<p class="rubric">Step 4 — Size the series element</p>
+<p>The branch resistance is stuck at <span class="math notranslate nohighlight">\(20\ \Omega\)</span> — a series element cannot change
+it — so the magnitude has to come from the reactance. Set the magnitude and
+solve:</p>
+<div class="math notranslate nohighlight">
+\[
+\vert 20 + jX \vert = 31.6 \quad\Longrightarrow\quad
+X = \sqrt{31.6^{2} - 20^{2}} = \sqrt{600} = 24.5\ \Omega.
+\]</div>
+<p><strong>Do not forget the <span class="math notranslate nohighlight">\(+j15\ \Omega\)</span> from Step 1.</strong> Both live in the same series
+branch, so the component you actually install supplies the sum:</p>
+<div class="math notranslate nohighlight">
+\[
+X_\text{series} = 15 + 24.5 = 39.5\ \Omega.
+\]</div>
+<div class="depth docutils container">
+<p>At 1 GHz, <span class="math notranslate nohighlight">\(X = \omega L\)</span> gives</p>
+<div class="math notranslate nohighlight">
+\[
+L = \frac{X_\text{series}}{2\pi f} = \frac{39.5}{2\pi(10^{9})} = 6.3\ \text{nH}.
+\]</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-5-size-the-shunt-element">
+<div class="wrap docutils container">
+<p class="rubric">Step 5 — Size the shunt element</p>
+<p>The second element sits in <strong>parallel</strong>, and admittances — not impedances — are
+what add in parallel. So transform the branch:</p>
+<div class="math notranslate nohighlight">
+\[
+Y = \frac{1}{20 + j24.5} = \frac{20 - j24.5}{20^{2} + 24.5^{2}}
+  = 0.0200 - j0.0245\ \text{S}.
+\]</div>
+<p>Look at the real part: <span class="math notranslate nohighlight">\(1/\text{Re}\{Y\} = 1/0.0200 = 50\ \Omega\)</span>. <strong>That is the
+whole point of Step 4</strong> — setting the magnitude to the geometric mean is exactly
+the condition that makes the parallel-equivalent resistance come out at <span class="math notranslate nohighlight">\(Z_0\)</span>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-canceling-the-shunt-susceptance">
+<div class="wrap docutils container">
+<p class="rubric">Canceling the shunt susceptance</p>
+<p>All that is left is the <span class="math notranslate nohighlight">\(-j0.0245\)</span> S. Cancel it with an equal and opposite
+susceptance — a capacitor, since <span class="math notranslate nohighlight">\(+jB\)</span> is capacitive:</p>
+<div class="math notranslate nohighlight">
+\[
+\omega C = 0.0245 \quad\Longrightarrow\quad
+C = \frac{0.0245}{2\pi(10^{9})} = 3.9\ \text{pF}.
+\]</div>
+<p>A <strong>6.3 nH series inductor</strong> and a <strong>3.9 pF shunt capacitor</strong>, both lossless,
+and the <span class="math notranslate nohighlight">\(20 - j15\ \Omega\)</span> antenna looks like <span class="math notranslate nohighlight">\(50\ \Omega\)</span> — at 1 GHz and
+nowhere else. Move 10% in frequency and both reactances are off by 10%.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-same-design-on-the-smith-chart">
+<div class="wrap docutils container">
+<p class="rubric">The same design, on the Smith chart</p>
+<p>The two moves are the two things the two elements are <em>able</em> to do.</p>
+<img src="../../viz/img/L04-lmatch-smith.svg" alt="Smith chart showing the L-match as two arcs: a series element walking a constant-resistance circle, then a shunt element walking a constant-conductance circle into the center" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+</div>
+</div>
+<div class="frame docutils container" id="frame-a-two-leg-journey-to-the-center">
+<div class="wrap docutils container">
+<p class="rubric">A two-leg journey to the center</p>
+<p>A series element changes reactance but not resistance, so it can only walk the
+operating point along a <strong>constant-resistance circle</strong>. A shunt element changes
+susceptance but not conductance, so it can only walk along a
+<strong>constant-conductance circle</strong>. Matching is therefore a two-leg journey to the
+center: walk the constant-resistance circle until you cross the
+unit-conductance circle, then walk that circle home.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-reading-the-arcs">
+<div class="wrap docutils container">
+<p class="rubric">Reading the arcs</p>
+<p>Measure the arcs and you get <span class="math notranslate nohighlight">\(+j39.5\ \Omega\)</span> and <span class="math notranslate nohighlight">\(3.9\)</span> pF — the numbers you
+just computed. Note also that there is only <strong>one</strong> arc for the series element:
+you do not stop at the real axis after Step 1 and start again. Steps 1 and 4 are
+one component and one continuous move; splitting them is a thinking aid, not a
+parts list.</p>
+<p>Work it yourself on paper — that is how the chart stops being a picture and
+starts being a tool. Printable copies:
+<a href="../../handouts/SmithChart_blank.pdf" target="_blank" rel="noopener">blank chart</a>
+for the walk above, and a
+<a href="../../handouts/SmithChart_ZY_colour.pdf" target="_blank" rel="noopener">combined impedance-admittance chart</a>
+for Step 5, where you need the constant-conductance circles overlaid on the
+constant-resistance ones.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-a-lossless-element-can-change-the-resistance-at-all">
+<div class="wrap docutils container">
+<p class="rubric">Why a lossless element can change the resistance at all</p>
+<p>Step 4 is easy to compute and hard to believe. How can adding a reactance, which
+dissipates nothing, change what the source thinks the resistance is?</p>
+<p>Drive the branch <span class="math notranslate nohighlight">\(20 + j24.5\ \Omega\)</span> with 1 A. The resistor dissipates
+<span class="math notranslate nohighlight">\(P = \tfrac{1}{2}|I|^2 R = 10\ \text{W}\)</span>, and nothing about the resistor
+changes. But the voltage across the <em>whole branch</em> is not 20 V, it is</p>
+<div class="math notranslate nohighlight">
+\[
+|V| = |I|\,|Z| = \sqrt{20^2 + 24.5^2} = 31.6\ \text{V},
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-voltage-lever">
+<div class="wrap docutils container">
+<p class="rubric">The voltage lever</p>
+<p>because the reactance’s voltage adds in quadrature with the resistor’s.</p>
+<img src="../../viz/img/L04-series-parallel.svg" alt="Left: voltage phasors forming a right triangle, 20 V across the resistor and 24.5 V across the reactance summing to 31.6 V. Right: the series pair and the parallel 50 ohm equivalent a source cannot distinguish" style="max-width: 760px; width: 100%; display: block; margin: 1em auto;">
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-the-terminals-can-tell">
+<div class="wrap docutils container">
+<p class="rubric">What the terminals can tell</p>
+<p>Stand at the terminals with no way to see inside. You measure 31.6 V, and 10 W
+is being consumed. The only conclusion available to you is</p>
+<div class="math notranslate nohighlight">
+\[
+R = \frac{|V|^2}{2P} = \frac{31.6^2}{2(10)} = 50\ \Omega.
+\]</div>
+<p><strong>The reactance is a lever on voltage that costs no power.</strong> The resistor is
+still 20 Ω burning 10 W; the source simply cannot tell that apart from a 50 Ω
+resistor.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point">
+<div class="wrap docutils container">
+<p class="rubric">Key Point</p>
+<div class="callout docutils container">
+<p>A shunt element alone could never do this. Put any reactance in parallel with
+20 Ω and the apparent resistance only goes <strong>down</strong> — 17.2 Ω at <span class="math notranslate nohighlight">\(-j50\)</span>, 19.2 Ω
+at <span class="math notranslate nohighlight">\(-j100\)</span>, creeping toward 20 Ω but never past it. Only a <em>series</em> reactance
+can climb. That is why the order is forced: series element to raise the
+resistance, shunt element to cancel what the climb left behind.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-switch-to-admittance">
+<div class="wrap docutils container">
+<p class="rubric">Why switch to admittance?</p>
+<p>The move that feels like a rabbit out of a hat is worth naming: it is forced by
+the topology. <strong>Impedances add in series; admittances add in parallel</strong> — and an
+L-network has one element of each kind. No single currency describes both moves.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-steering-the-series-branch">
+<div class="wrap docutils container">
+<p class="rubric">Steering the series branch</p>
+<p>Underneath that bookkeeping is a symmetry. Add a <em>series</em> reactance to a
+<span class="math notranslate nohighlight">\(20\ \Omega\)</span> branch: the series resistance never moves, but the
+parallel-equivalent resistance climbs.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>series <span class="math notranslate nohighlight">\(X\)</span> added</p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(\text{Re}(Z)\)</span></p></th>
+<th class="head text-center"><p>parallel equivalent <span class="math notranslate nohighlight">\(\frac{1}{\text{Re}(Y)}\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(20\ \Omega\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(20\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(+j10\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(20\ \Omega\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(25\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(+j24.5\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(20\ \Omega\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(50\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(+j40\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(20\ \Omega\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(100\ \Omega\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-steering-the-shunt-branch">
+<div class="wrap docutils container">
+<p class="rubric">Steering the shunt branch</p>
+<p>Now put a <em>shunt</em> reactance across a <span class="math notranslate nohighlight">\(20\ \Omega\)</span> resistor and precisely the
+opposite happens — the conductance is pinned and the series-equivalent
+resistance falls.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>shunt <span class="math notranslate nohighlight">\(X\)</span> across</p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(\text{Re}(Y)\)</span></p></th>
+<th class="head text-center"><p>series equivalent <span class="math notranslate nohighlight">\(\text{Re}(Z)\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>none</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(\frac{1}{20}\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(20\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(-j100\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(\frac{1}{20}\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(19.2\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(-j50\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(\frac{1}{20}\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(17.2\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(-j20\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(\frac{1}{20}\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(10.0\ \Omega\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-exact-duals">
+<div class="wrap docutils container">
+<p class="rubric">Exact duals</p>
+<p>The two elements are exact duals:</p>
+<ul class="simple">
+<li><p>a <strong>series</strong> element cannot touch <span class="math notranslate nohighlight">\(\text{Re}(Z)\)</span>, but it steers <span class="math notranslate nohighlight">\(\text{Re}(Y)\)</span></p></li>
+<li><p>a <strong>shunt</strong> element cannot touch <span class="math notranslate nohighlight">\(\text{Re}(Y)\)</span>, but it steers <span class="math notranslate nohighlight">\(\text{Re}(Z)\)</span></p></li>
+</ul>
+<p>That is why Step 4 aimed at the admittance. You are after <span class="math notranslate nohighlight">\(50\ \Omega\)</span>, and
+during the series move <span class="math notranslate nohighlight">\(\text{Re}(Z)\)</span> is frozen at <span class="math notranslate nohighlight">\(20\ \Omega\)</span> — a useless
+thing to aim at. The only quantity you can steer is <span class="math notranslate nohighlight">\(\text{Re}(Y)\)</span>, so you steer
+it to <span class="math notranslate nohighlight">\(\frac{1}{50}\)</span>. Then the shunt element is the perfect finisher: it
+<em>cannot</em> disturb <span class="math notranslate nohighlight">\(\text{Re}(Y)\)</span>, so the <span class="math notranslate nohighlight">\(50\ \Omega\)</span> you earned is locked in,
+and its only remaining job is to cancel the susceptance.</p>
+<p>It also explains why two series elements could never do it — they would just sum
+reactance, and <span class="math notranslate nohighlight">\(\text{Re}(Z)\)</span> would sit at <span class="math notranslate nohighlight">\(20\ \Omega\)</span> forever.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-q-comes-from">
+<div class="wrap docutils container">
+<p class="rubric">Where Q comes from</p>
+<p>Matching references state the design in terms of a <strong>network <span class="math notranslate nohighlight">\(Q\)</span></strong> rather than a
+geometric mean. That is the same result wearing different clothes, but <span class="math notranslate nohighlight">\(Q\)</span> is
+worth deriving properly rather than quoting, because it is the quantity that
+tells you what the match costs.</p>
+<p>No formula involving <span class="math notranslate nohighlight">\(R\)</span> and <span class="math notranslate nohighlight">\(X\)</span> defines <span class="math notranslate nohighlight">\(Q\)</span>. Energy defines it — the same
+definition you met for antennas in Lesson 3:</p>
+<div class="math notranslate nohighlight">
+\[
+Q = \omega\,\frac{\text{peak energy stored}}{\text{average power dissipated}}.
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-deriving-q-for-the-series-branch">
+<div class="wrap docutils container">
+<p class="rubric">Deriving Q for the series branch</p>
+<p>Evaluate that for our series branch. Drive it with a current of amplitude
+<span class="math notranslate nohighlight">\(I_0\)</span>. The inductor’s peak stored energy and the resistor’s average dissipated
+power are</p>
+<div class="math notranslate nohighlight">
+\[
+W_\text{peak} = \tfrac{1}{2} L I_0^{2}, \qquad
+P_\text{avg} = \tfrac{1}{2} I_0^{2} R,
+\]</div>
+<p>so</p>
+<div class="math notranslate nohighlight">
+\[
+Q = \omega\,\frac{\tfrac{1}{2} L I_0^{2}}{\tfrac{1}{2} I_0^{2} R}
+  = \frac{\omega L}{R} = \frac{X}{R}.
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-x-r-comes-from">
+<div class="wrap docutils container">
+<p class="rubric">Where X/R comes from</p>
+<p><strong>That</strong> is where <span class="math notranslate nohighlight">\(X/R\)</span> comes from: it is not a definition, it is what the
+energy ratio evaluates to for a series branch. For our design,</p>
+<div class="math notranslate nohighlight">
+\[
+Q = \frac{X}{R_L} = \frac{24.5}{20} = 1.22.
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-q-formula-in-the-references">
+<div class="wrap docutils container">
+<p class="rubric">The Q formula in the references</p>
+<p>Now take the condition from Step 4, <span class="math notranslate nohighlight">\(R_L^2 + X^2 = Z_0 R_L\)</span>, and divide through
+by <span class="math notranslate nohighlight">\(R_L^2\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+1 + Q^{2} = \frac{Z_0}{R_L} \qquad\Longleftrightarrow\qquad
+Q = \sqrt{\frac{R_\text{big}}{R_\text{small}} - 1},
+\]</div>
+<p>the formula in the references, with <span class="math notranslate nohighlight">\(R_\text{big}\)</span> and <span class="math notranslate nohighlight">\(R_\text{small}\)</span> the
+larger and smaller of <span class="math notranslate nohighlight">\(R_L\)</span> and <span class="math notranslate nohighlight">\(Z_0\)</span>. In that language the series reactance is
+<span class="math notranslate nohighlight">\(Q R_\text{small}\)</span> and the shunt reactance is <span class="math notranslate nohighlight">\(\frac{R_\text{big}}{Q}\)</span> — check:
+<span class="math notranslate nohighlight">\(\frac{50}{1.22} = 40.8\ \Omega\)</span>, and <span class="math notranslate nohighlight">\(\frac{1}{2\pi(10^9)(40.8)} = 3.9\)</span> pF,
+the same capacitor.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-q-costs-you">
+<div class="wrap docutils container">
+<p class="rubric">What Q costs you</p>
+<p>Two things follow, and they are the reason to bother with <span class="math notranslate nohighlight">\(Q\)</span> at all:</p>
+<ul class="simple">
+<li><p><strong>You do not get to choose it.</strong> The transformation ratio <span class="math notranslate nohighlight">\(Z_0/R_L\)</span> sets <span class="math notranslate nohighlight">\(Q\)</span>
+completely. Wanting a gentler match is not an option the physics offers.</p></li>
+<li><p><strong>It is stored energy over dissipated energy</strong> — the same ratio that set
+bandwidth in Lesson 3. High <span class="math notranslate nohighlight">\(Q\)</span> means a lot of energy sloshing between the
+inductor and capacitor for every watt delivered, and that is exactly what
+makes the match narrowband. Transform further, get a higher <span class="math notranslate nohighlight">\(Q\)</span>, get less
+bandwidth. An electrically small antenna, with its fraction of an ohm of
+radiation resistance, needs an enormous <span class="math notranslate nohighlight">\(Q\)</span> to reach <span class="math notranslate nohighlight">\(50\ \Omega\)</span> — which is
+precisely why it is so painful to feed over any useful bandwidth.</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-a-band-limited-fix">
+<div class="wrap docutils container">
+<p class="rubric">A band-limited fix</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Every matching network is a <strong>band-limited</strong> fix. You can force <span class="math notranslate nohighlight">\(\Gamma = 0\)</span> at
+one frequency easily; holding it low across a wide band is exactly the
+bandwidth-versus-size fight from Lesson 3 (Chu-Harrington). Matching buys you
+bandwidth only up to the antenna’s own <span class="math notranslate nohighlight">\(Q\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-baluns-balanced-meets-unbalanced">
+<div class="wrap docutils container">
+<p class="rubric">Baluns: balanced meets unbalanced</p>
+<p>A dipole is a <strong>balanced</strong> structure: two symmetric arms carrying equal and
+opposite currents, with no reference to ground. Coax is an <strong>unbalanced</strong> line:
+signal on the center conductor, return on the inside of the shield, with the
+shield’s <em>outside</em> tied (electrically) to ground.</p>
+<p>Connect coax straight to a dipole and you have a problem. The two dipole arms
+present different impedances to the coax, so the currents on the arms are no
+longer equal and opposite. The leftover <strong>common-mode current</strong> flows back down
+the <em>outside</em> of the shield — a third conductor the model forgot about.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-shield-current-problem">
+<div class="wrap docutils container">
+<p class="rubric">The shield-current problem</p>
+<img src="../../viz/img/L04-balun-currents.svg" alt="Coax feeding a dipole: without a balun, common-mode current flows on the outside of the shield; a choke balun blocks it" style="max-width: 620px; width: 100%; display: block; margin: 1em auto;">
+<p>That shield current has real consequences:</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-the-shield-current-costs-you">
+<div class="wrap docutils container">
+<p class="rubric">What the shield current costs you</p>
+<ul class="simple">
+<li><p><strong>The feed line radiates.</strong> Your coax becomes part of the antenna, distorting
+the pattern in ways that depend on how the cable is routed.</p></li>
+<li><p><strong>The pattern skews and the front-to-back ratio degrades</strong>, because the antenna
+is no longer symmetric.</p></li>
+<li><p><strong>RF appears on the equipment chassis</strong>, causing measurement errors and, in
+transmit systems, “RF in the shack.”</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-fix-a-balun">
+<div class="wrap docutils container">
+<p class="rubric">The fix: a balun</p>
+<p>The fix is a <strong>balun</strong> (<strong>bal</strong>anced-to-<strong>un</strong>balanced), inserted at the feed
+point. Its job is to force equal-and-opposite currents on the two arms and to
+present a high impedance to common-mode current on the shield. Common types:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Balun</p></th>
+<th class="head text-left"><p>Purpose</p></th>
+<th class="head text-left"><p>Use</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>Choke / current balun</strong> (ferrite beads, coiled coax, sleeve/”bazooka”)</p></td>
+<td class="text-left"><p>Adds a high common-mode impedance in series with the shield outside, choking off feed-line current</p></td>
+<td class="text-left"><p>The default 1:1 dipole feed</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-fix-a-balun-continued">
+<div class="wrap docutils container">
+<p class="rubric">The fix: a balun, continued</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Balun</p></th>
+<th class="head text-left"><p>Purpose</p></th>
+<th class="head text-left"><p>Use</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>Voltage balun</strong> (transformer)</p></td>
+<td class="text-left"><p>Forces balanced <em>voltages</em> across the load</p></td>
+<td class="text-left"><p>Where a symmetric voltage drive is needed</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Half-wave (4:1) balun</strong></p></td>
+<td class="text-left"><p>Uses a <span class="math notranslate nohighlight">\(\lambda/2\)</span> line to both balance and <strong>transform impedance 4:1</strong></p></td>
+<td class="text-left"><p>Feeding a <span class="math notranslate nohighlight">\(\approx 300\ \Omega\)</span> folded dipole from <span class="math notranslate nohighlight">\(75\ \Omega\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-a-balun-can-do-two-jobs-at-once">
+<div class="wrap docutils container">
+<p class="rubric">A balun can do two jobs at once</p>
+<p>A balun can therefore do <em>two</em> jobs at once — balance the feed <strong>and</strong> transform
+impedance — which is why the 4:1 half-wave balun is so common on folded dipoles.
+For most straight dipoles, a <strong>1:1 current (choke) balun</strong> is all you need: it
+does not change the impedance, it just keeps the antenna radiating instead of the
+coax.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point-2">
+<div class="wrap docutils container">
+<p class="rubric">Key Point</p>
+<div class="callout docutils container">
+<p>Impedance is where the antenna meets the radio. <strong>Radiation resistance</strong> sets how
+much of your power leaves as radiation; the <strong>reactance and mismatch</strong> decide how
+much power even makes it onto the antenna; and the <strong>balun</strong> makes sure it is the
+antenna radiating and not your feed line.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-impedance">
+<div class="wrap docutils container">
+<p class="rubric">Summary — impedance</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(Z_\text{in} = R_\text{in} + jX_\text{in}\)</span></p></td>
+<td class="text-left"><p>What the radio sees at the terminals</p></td>
+<td class="text-left"><p>Half-wave dipole: <span class="math notranslate nohighlight">\(73 + j42.5\ \Omega\)</span>; resonant at <span class="math notranslate nohighlight">\(\approx 0.48\lambda\)</span>, <span class="math notranslate nohighlight">\(\approx 70 + j0\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(R_\text{rad}\)</span></p></td>
+<td class="text-left"><p>Equivalent resistance for power carried away as radiation — the useful part</p></td>
+<td class="text-left"><p>Short dipole (triangular current): <span class="math notranslate nohighlight">\(20\pi^2(\ell/\lambda)^2\)</span>, so <span class="math notranslate nohighlight">\(0.49\ \Omega\)</span> at <span class="math notranslate nohighlight">\(0.05\lambda\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-loss-and-efficiency">
+<div class="wrap docutils container">
+<p class="rubric">Summary — loss and efficiency</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(R_\text{loss}\)</span></p></td>
+<td class="text-left"><p>Real ohmic and dielectric dissipation — becomes heat</p></td>
+<td class="text-left"><p>A single ohm next to a small antenna is fatal</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\eta_\text{rad}\)</span></p></td>
+<td class="text-left"><p>Radiation efficiency, the split between the two resistances</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\eta_\text{rad} = \frac{R_\text{rad}}{R_\text{rad} + R_\text{loss}}\)</span>, <span class="math notranslate nohighlight">\(G = \eta_\text{rad} D\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-feeding-and-mismatch">
+<div class="wrap docutils container">
+<p class="rubric">Summary — feeding and mismatch</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Gamma\)</span></p></td>
+<td class="text-left"><p>Reflection coefficient at the terminals</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\Gamma = \frac{Z_\text{in} - Z_0}{Z_\text{in} + Z_0}\)</span>; <span class="math notranslate nohighlight">\(\vert\Gamma\vert^2\)</span> of the power bounces back</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>VSWR / return loss</p></td>
+<td class="text-left"><p>Two readings of the same mismatch</p></td>
+<td class="text-left"><p>VSWR <span class="math notranslate nohighlight">\(\le 2\)</span> ↔ return loss <span class="math notranslate nohighlight">\(\ge 9.5\)</span> dB ↔ 11% of the power reflected</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Mismatch loss</p></td>
+<td class="text-left"><p>The dB the mismatch actually costs you</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-10\log_{10}(1 - \vert\Gamma\vert^2)\)</span>; <span class="math notranslate nohighlight">\(\le 0.5\)</span> dB at VSWR <span class="math notranslate nohighlight">\(= 2\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-matching-and-baluns">
+<div class="wrap docutils container">
+<p class="rubric">Summary — matching and baluns</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(Z_1 = \sqrt{Z_0 R_L}\)</span></p></td>
+<td class="text-left"><p>Quarter-wave transformer, real loads only</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(70\ \Omega\)</span> to <span class="math notranslate nohighlight">\(50\ \Omega\)</span> needs <span class="math notranslate nohighlight">\(\approx 59\ \Omega\)</span> line</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>L-match <span class="math notranslate nohighlight">\(Q\)</span></p></td>
+<td class="text-left"><p>Two lumped elements: cancel <span class="math notranslate nohighlight">\(X\)</span>, then transform <span class="math notranslate nohighlight">\(R\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(Q = \sqrt{\frac{R_\text{big}}{R_\text{small}} - 1}\)</span>; <span class="math notranslate nohighlight">\(20 - j15\ \Omega\)</span> at 1 GHz → 6.3 nH series, 3.9 pF shunt</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Balun</p></td>
+<td class="text-left"><p>Kills common-mode current on the coax shield</p></td>
+<td class="text-left"><p>1:1 choke is the default dipole feed; 4:1 half-wave balun also transforms <span class="math notranslate nohighlight">\(300\ \Omega \to 75\ \Omega\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a href="../../practice/ECE444_L04_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a href="../../practice/ECE444_L04_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where this is going</p>
+<p>You can now read an antenna’s terminals as a circuit: split <span class="math notranslate nohighlight">\(Z_\text{in}\)</span> into
+radiation and loss, turn the mismatch into <span class="math notranslate nohighlight">\(\Gamma\)</span>, VSWR, and lost dB, match a
+load with a quarter-wave section or an L-network, and specify the right balun.
+Every one of those numbers is something you would want to <em>measure</em> — and that
+is where the next lesson comes in.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lesson-5-field-regions">
+<div class="wrap docutils container">
+<p class="rubric">Lesson 5 — Field Regions</p>
+<p><strong>Lesson 5 (Field Regions)</strong> steps back out into space and asks <em>where</em> the
+radiated fields settle into their far-field form. It matters more than it
+sounds: a pattern, a gain, an effective aperture — none of them mean anything
+until you are far enough away for the field to have stopped rearranging itself,
+and the boundary <span class="math notranslate nohighlight">\(r \ge 2D^2/\lambda\)</span> is what tells you how far that is. Measure
+a 3-meter reflector at 10 meters and you are not measuring its pattern; you are
+measuring a near-field artifact. Before next lesson, reread the far-field
+criterion from Lesson 2 and come ready to say where it comes from.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module01/L04-impedance-feeding-baluns"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

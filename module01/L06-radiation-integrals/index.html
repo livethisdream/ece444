@@ -1,0 +1,1437 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L6 - Radiation Integrals &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l6-radiation-integrals">
+<h1>L6 - Radiation Integrals<a class="headerlink" href="#l6-radiation-integrals" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Radiation Integrals</h1>
+<div class="title-rule"></div>
+<p>Lesson 5 told you <em>where</em> the far field is. This lesson tells you <em>what it is</em>.</p>
+<p>Lesson 6 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-slides">
+<div class="wrap docutils container">
+<p class="rubric">Slides</p>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L06-radiation-integrals.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L06-radiation-integrals.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L06-radiation-integrals.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '6'">
+  <li>I can explain the radiation integral as the sum of the spherical waves launched by every current element on the antenna, and state the recipe that takes a current distribution to a far-field pattern.</li>
+  <li>I can apply the far-field approximations to the exact integral — one for amplitude, a different one for phase — and show that the leftover phase error is exactly the far-field distance criterion from Lesson 5.</li>
+  <li>I can set up and evaluate the radiation integral for a given current distribution, and turn the resulting radiation vector into the far-field pattern.</li>
+  <li>I can recognize the current distribution and the far-field pattern as a Fourier transform pair, and predict how a change in the current changes the pattern.</li>
+</ol>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-now-we-compute-the-pattern">
+<div class="wrap docutils container">
+<p class="rubric">Now we compute the pattern</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>The input is the <strong>current distribution</strong> on the antenna. The output is the
+<strong>far-field pattern</strong>. The machinery in between is a single integral, and every
+array in Module 3 is that integral with a different current in it.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Everything up to now has taken the radiation pattern as a given, something you
+measure or read off a datasheet. Now we compute it. That integral is the last
+piece of Module 1, and it is the piece that makes the rest of the course
+possible: steered, tapered, thinned, nulled, every array in Module 3 is this
+integral with a different current in it.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-start-with-two-sources">
+<div class="wrap docutils container">
+<p class="rubric">Start with two sources</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Two current elements <span class="math notranslate nohighlight">\(d\)</span> apart, seen from far away in direction <span class="math notranslate nohighlight">\(\theta\)</span>.</p></li>
+<li><p>Parallel rays: element 2’s wave travels <span class="math notranslate nohighlight">\(d\cos\theta\)</span> farther, so it arrives <span class="math notranslate nohighlight">\(kd\cos\theta\)</span> radians late.</p></li>
+<li><p>Add the phasors: in phase, a beam; half a cycle apart, a null.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<img src="../../viz/img/L06-two-sources.svg" alt="Two current elements a distance d apart on the z axis, seen from far away in direction theta. The two rays to the observer are parallel; the lower element's wave travels d cos theta farther than the upper one's." style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This is the double-slit experiment with currents in place of slits. Nothing
+about the antenna enters except where the elements are and what phase each one
+carries; the direction <span class="math notranslate nohighlight">\(\theta\)</span> does the rest, through the path difference.
+Every antenna in this course, and every array in Module 3, is this picture with
+more elements.</p>
+<p>The next frame shows those two sources radiating: the field around them, with
+the bright and dark directions their phase difference makes. Slide the element
+count up and the fringes of the double slit sharpen into the lobes of a line
+source. Drag <span class="math notranslate nohighlight">\(P\)</span> around the edge to move the observer.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-two-sources-in-space">
+<div class="wrap docutils container">
+<p class="rubric">Two sources, in space</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/interference-field.html"
+        width="100%" height="538"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="The field around a line source, with the observer direction and the far-field pattern"
+        data-autosize>
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-many-sources-the-radiation-integral">
+<div class="wrap docutils container">
+<p class="rubric">Many sources: the radiation integral</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>A real antenna is a continuum of current elements. Each piece
+<span class="math notranslate nohighlight">\(\mathbf{J}(\mathbf{r}')\ dV'\)</span> launches its own spherical wave, and the field
+is their sum:</p>
+<div class="math notranslate nohighlight">
+\[
+\boxed{
+\mathbf{A}(\mathbf{r}) = \frac{\mu}{4\pi}\int_{V'}
+\mathbf{J}(\mathbf{r}')\ \frac{e^{-jkR}}{R}\ dV',
+\qquad R = \vert\mathbf{r} - \mathbf{r}'\vert }
+\]</div>
+<p>Radiation is superposition with phase bookkeeping.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><strong>Read the integrand, not the integral.</strong> The wave from each element arrives
+at the observation point with an amplitude set by <span class="math notranslate nohighlight">\(1/R\)</span> and a phase delay set
+by <span class="math notranslate nohighlight">\(kR\)</span>, and the integral adds those contributions with the bookkeeping done
+in phase. A definite integral over something we can write down has replaced
+the unknown field. <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> is the <strong>magnetic vector potential</strong>: the
+field follows from it by differentiation, and the next frame shows where the
+integral comes from.</p>
+</div>
+<div class="depth docutils container">
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is a <strong>second</strong> radiation integral. Antennas that radiate through an
+opening rather than off a wire — slots, horns, reflector feeds — are handled by
+replacing the aperture with an equivalent <strong>magnetic</strong> current <span class="math notranslate nohighlight">\(\mathbf{M}\)</span>,
+which produces an electric vector potential <span class="math notranslate nohighlight">\(\mathbf{F}\)</span> through an integral of
+exactly the same form. Balanis writes the pair as <span class="math notranslate nohighlight">\(\mathbf{N}\)</span> (from
+<span class="math notranslate nohighlight">\(\mathbf{J}\)</span>) and <span class="math notranslate nohighlight">\(\mathbf{L}\)</span> (from <span class="math notranslate nohighlight">\(\mathbf{M}\)</span>). We will need <span class="math notranslate nohighlight">\(\mathbf{L}\)</span> in
+Module 2 for slots and horns; everything in this lesson carries over by duality.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-where-the-integral-comes-from">
+<div class="wrap docutils container">
+<p class="rubric">Where the integral comes from</p>
+<p>We want <span class="math notranslate nohighlight">\(\mathbf{E}\)</span> far away, given a known current density <span class="math notranslate nohighlight">\(\mathbf{J}\)</span> on the
+antenna. Attacking Maxwell’s equations directly is unpleasant: <span class="math notranslate nohighlight">\(\mathbf{E}\)</span> and
+<span class="math notranslate nohighlight">\(\mathbf{H}\)</span> are coupled, and the source enters through a curl. The standard
+move is to introduce an intermediate quantity that absorbs the source, solve for
+<em>that</em>, and differentiate at the end.</p>
+<p>The opening is Gauss’s law for magnetism. Because</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla \cdot \mathbf{B} = 0
+\]</div>
+<p><em>always</em>, and because the divergence of any curl vanishes, you can
+always write <span class="math notranslate nohighlight">\(\mathbf{B}\)</span> as the curl of some vector field. Define the <strong>magnetic vector
+potential</strong> <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> by</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{B} = \nabla \times \mathbf{A}, \qquad \mathbf{H} = \frac{1}{\mu}\nabla \times \mathbf{A}.
+\]</div>
+<p>Substituting this into the remaining Maxwell equations and fixing the leftover
+freedom in <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> with the Lorenz condition turns two coupled first-order
+equations into one <strong>vector Helmholtz equation</strong> with the current sitting on the
+right-hand side:</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla^2 \mathbf{A} + k^2\mathbf{A} = -\mu \mathbf{J}, \qquad k = \frac{2\pi}{\lambda}.
+\]</div>
+<p>That equation has a known solution, and this is the whole reason for the
+detour: its solution is the radiation integral on the previous frame. Once
+<span class="math notranslate nohighlight">\(\mathbf{A}\)</span> is known, the fields follow by differentiation:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{J}
+\ \xrightarrow[\text{(the integral)}]{}\
+\mathbf{A}
+\ \xrightarrow[\ \mathbf{H} = \frac{1}{\mu}\nabla\times\mathbf{A}\ ]{}\
+\mathbf{H}
+\ \xrightarrow[\ \mathbf{E} = \frac{1}{j\omega\varepsilon}\nabla\times\mathbf{H}\ ]{}\
+\mathbf{E}
+\]</div>
+<p>Only the first step involves the source. The last two are differentiation, and
+in the far field, as the next frames show, they collapse into multiplication.</p>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-r-me-mateys">
+<div class="wrap docutils container">
+<p class="rubric">r, me mateys</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol</p></th>
+<th class="head text-left"><p>What it is</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\mathbf{r}\)</span></p></td>
+<td class="text-left"><p>origin to the <strong>field point</strong> <span class="math notranslate nohighlight">\(P\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\mathbf{r}'\)</span></p></td>
+<td class="text-left"><p>origin to a <strong>source point</strong>, where a piece of current sits</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(R = \vert\mathbf{r}-\mathbf{r}'\vert\)</span></p></td>
+<td class="text-left"><p>distance from that source point to <span class="math notranslate nohighlight">\(P\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Primed means source. Unprimed means field point.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Two position vectors from one origin <span class="math notranslate nohighlight">\(O\)</span>, and neither is a spherical
+coordinate. The prime is the whole convention: the integral sweeps
+<span class="math notranslate nohighlight">\(\mathbf{r}'\)</span> over the antenna while <span class="math notranslate nohighlight">\(\mathbf{r}\)</span> stays fixed at <span class="math notranslate nohighlight">\(P\)</span>, and <span class="math notranslate nohighlight">\(V'\)</span>
+with its element <span class="math notranslate nohighlight">\(dV'\)</span> is the volume the current occupies.</p>
+<p>The scalars are the lengths of these vectors. <span class="math notranslate nohighlight">\(r = \vert\mathbf{r}\vert\)</span>
+happens to be the spherical radial coordinate of <span class="math notranslate nohighlight">\(P\)</span>, and
+<span class="math notranslate nohighlight">\(\hat{\mathbf r} = \mathbf{r}/r\)</span> is the unit vector from the origin toward
+<span class="math notranslate nohighlight">\(P\)</span>, in the direction <span class="math notranslate nohighlight">\((\theta,\phi)\)</span>. <span class="math notranslate nohighlight">\(r' = \vert\mathbf{r}'\vert\)</span> is
+simply how far a source point is from the origin; it has nothing to do with
+<span class="math notranslate nohighlight">\(P\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-a-pattern-is">
+<div class="wrap docutils container">
+<p class="rubric">What a pattern is</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>A pattern is a function of <strong>direction only</strong>. The exact integral tangles
+distance and direction together inside <span class="math notranslate nohighlight">\(R\)</span>, so it cannot give us a pattern
+until we pull the two apart. That is the whole job of the far-field
+approximation.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The exact integral is correct everywhere, near field included, but
+<span class="math notranslate nohighlight">\(R = \vert\mathbf{r} - \mathbf{r}'\vert\)</span> depends on where <span class="math notranslate nohighlight">\(P\)</span> is and on which
+source point you are looking at, and the two dependences do not separate. What
+we want is to write <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> as a factor that depends only on the distance
+<span class="math notranslate nohighlight">\(r\)</span> times a factor that depends only on the direction <span class="math notranslate nohighlight">\((\theta,\phi)\)</span>. Lesson 5
+said the pattern stops changing with distance once you are far enough away;
+this is the same statement, seen from inside the integral.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-far-field-the-rays-go-parallel">
+<div class="wrap docutils container">
+<p class="rubric">Far field: the rays go parallel</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L06-radiation-integral-geometry.svg" alt="Exact geometry with the vector R from a source point to the field point, and the far-field limit in which the rays are parallel and only the path difference r-hat dot r-prime survives" style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<p>Far away, the rays from every source point to <span class="math notranslate nohighlight">\(P\)</span> are parallel, so</p>
+<div class="math notranslate nohighlight">
+\[
+R \approx r - \hat{\mathbf r}\cdot\mathbf{r}'
+\]</div>
+<p>the same distance for everyone, plus a path difference set by direction. That
+is the two-source picture again.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Start with the exact distance and expand it for <span class="math notranslate nohighlight">\(r' \ll r\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+R = |\mathbf{r} - \mathbf{r}'|
+  = r\sqrt{1 - \frac{2\ \hat{\mathbf r}\cdot\mathbf{r}'}{r} + \frac{r'^2}{r^2}}
+  = r - \hat{\mathbf r}\cdot\mathbf{r}'
+    + \frac{r'^2 - (\hat{\mathbf r}\cdot\mathbf{r}')^2}{2r} + \cdots
+\]</div>
+<p>The linear term is the path difference: the projection of the source point’s
+position onto the viewing direction. The quadratic term is what we drop, and
+the next two frames say when that is safe. <span class="math notranslate nohighlight">\(R\)</span> appears in two places in the
+integral, and the two places get different treatment.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-amplitude-versus-phase">
+<div class="wrap docutils container">
+<p class="rubric">Amplitude versus phase</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>In the amplitude <span class="math notranslate nohighlight">\(1/R\)</span> it is a fraction of a percent, so <span class="math notranslate nohighlight">\(1/R \approx 1/r\)</span>.</p></li>
+<li><p>In the phase <span class="math notranslate nohighlight">\(e^{-jkR}\)</span> it is several radians. Keep it.</p></li>
+</ul>
+<p>A 1 m antenna at 100 m, <span class="math notranslate nohighlight">\(\lambda = 10\ \text{cm}\)</span>: <span class="math notranslate nohighlight">\(1/R\)</span> moves 1%, <span class="math notranslate nohighlight">\(kR\)</span>
+ten full cycles.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><strong>Amplitude.</strong> In the <span class="math notranslate nohighlight">\(1/R\)</span> factor, the correction <span class="math notranslate nohighlight">\(\hat{\mathbf r}\cdot\mathbf{r}'\)</span>
+is a <em>fractional</em> change of order <span class="math notranslate nohighlight">\(r'/r\)</span>. At any useful distance that is a
+fraction of a percent, and nobody can measure it. So</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{R} \approx \frac{1}{r}.
+\]</div>
+<p><strong>Phase.</strong> In <span class="math notranslate nohighlight">\(e^{-jkR}\)</span> the same correction is multiplied by <span class="math notranslate nohighlight">\(k\)</span>, and what
+matters is whether <span class="math notranslate nohighlight">\(k\ \hat{\mathbf r}\cdot\mathbf{r}'\)</span> is comparable to a
+radian. For a source a few wavelengths across it is <em>several</em> radians, and it
+flips contributions from adding to canceling. Dropping it would destroy the
+pattern. So we keep the linear term and only discard the quadratic one:</p>
+<div class="math notranslate nohighlight">
+\[
+R \approx r - \hat{\mathbf r}\cdot\mathbf{r}'.
+\]</div>
+<p>This is the entire content of “far field”: <strong>the rays from every part of the
+antenna to the observation point are parallel</strong>, so the only thing that
+distinguishes one source point from another is a <em>path difference</em>
+<span class="math notranslate nohighlight">\(\hat{\mathbf r}\cdot\mathbf{r}'\)</span>, the projection of its position onto the
+viewing direction.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-term-we-threw-away-is-l5-s-boundary">
+<div class="wrap docutils container">
+<p class="rubric">The term we threw away is L5’s boundary</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>The dropped quadratic term is a phase error of at most</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta\phi = \frac{\pi D^2}{4\lambda r}.
+\]</div>
+<p>Hold it under <span class="math notranslate nohighlight">\(\pi/8\)</span>, the <span class="math notranslate nohighlight">\(22.5^{\circ}\)</span> budget from Lesson 5, and</p>
+<div class="math notranslate nohighlight">
+\[
+r \ge \frac{2D^2}{\lambda}.
+\]</div>
+<p>Not a coincidence: the far-field distance is where the parallel-ray
+approximation becomes accurate.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The worst case of the quadratic term is <span class="math notranslate nohighlight">\(r'_{\max}{}^2/2r\)</span>, and for an antenna
+of largest dimension <span class="math notranslate nohighlight">\(D\)</span> the source extends to <span class="math notranslate nohighlight">\(r'_{\max} = D/2\)</span>, so the
+leftover phase error is at most</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta\phi = k\ \frac{(D/2)^2}{2r} = \frac{2\pi}{\lambda}\cdot\frac{D^2}{8r}
+           = \frac{\pi D^2}{4\lambda r}.
+\]</div>
+<p>Demand that this stay under <span class="math notranslate nohighlight">\(\pi/8\)</span> radians and it rearranges to
+<span class="math notranslate nohighlight">\(r \ge 2D^2/\lambda\)</span>. That is not a second criterion. Lesson 5 derived the
+same number from the geometry of a curved wavefront; here it falls out of the
+term we need to drop to make the integral tractable. Same number, same
+physics, arrived at from opposite directions.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-radiation-vector">
+<div class="wrap docutils container">
+<p class="rubric">The radiation vector</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>With both approximations in, the <span class="math notranslate nohighlight">\(e^{-jkr}/r\)</span> factor no longer depends on
+<span class="math notranslate nohighlight">\(\mathbf{r}'\)</span> and comes out of the integral:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{A}(\mathbf{r}) = \frac{\mu e^{-jkr}}{4\pi r}
+\underbrace{\int_{V'}\mathbf{J}(\mathbf{r}')\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'}_{\textstyle \mathbf{N}(\theta,\phi)}
+\]</div>
+<p>Distance out front, the same for every antenna ever built. Direction inside
+<span class="math notranslate nohighlight">\(\mathbf{N}\)</span>, everything that makes this antenna different.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The integral that is left is the <strong>radiation vector</strong> <span class="math notranslate nohighlight">\(\mathbf{N}(\theta,\phi)\)</span>,
+and this split is the payoff of the whole lesson:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Factor</p></th>
+<th class="head text-left"><p>Depends on</p></th>
+<th class="head text-left"><p>What it carries</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(e^{-jkr}/r\)</span></p></td>
+<td class="text-left"><p>distance only</p></td>
+<td class="text-left"><p>the outgoing spherical wave — <em>identical for every antenna ever built</em></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\mathbf{N}(\theta,\phi)\)</span></p></td>
+<td class="text-left"><p>direction only</p></td>
+<td class="text-left"><p>everything that makes <strong>this</strong> antenna different from any other</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>An antenna’s pattern, its polarization, its directivity, its sidelobes — all of
+it lives in <span class="math notranslate nohighlight">\(\mathbf{N}\)</span>, and <span class="math notranslate nohighlight">\(\mathbf{N}\)</span> is a single integral over the
+currents. Note also what became of the recipe’s second and third steps: with the
+<span class="math notranslate nohighlight">\(\mathbf{r}\)</span>-dependence reduced to <span class="math notranslate nohighlight">\(e^{-jkr}/r\)</span>, taking a curl in the far field
+just multiplies by <span class="math notranslate nohighlight">\(-jk\hat{\mathbf r}\)</span>. Differentiation has collapsed into
+multiplication.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-from-n-to-the-pattern">
+<div class="wrap docutils container">
+<p class="rubric">From N to the pattern</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>Only the transverse parts of <span class="math notranslate nohighlight">\(\mathbf{N}\)</span> reach the far field:</p>
+<div class="math notranslate nohighlight">
+\[
+E_\theta = -j\omega\mu\ \frac{e^{-jkr}}{4\pi r}\ N_\theta,
+\qquad
+E_\phi   = -j\omega\mu\ \frac{e^{-jkr}}{4\pi r}\ N_\phi
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+U(\theta,\phi) \propto |N_\theta|^2 + |N_\phi|^2
+\]</div>
+<p>Normalize <span class="math notranslate nohighlight">\(U\)</span> to its peak; its square root is the field pattern <span class="math notranslate nohighlight">\(\vert F\vert\)</span>.
+The recipe is <span class="math notranslate nohighlight">\(\mathbf{J} \to \mathbf{N} \to\)</span> pattern, and only the first step
+involves the antenna.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>In the far field the wave is locally a plane wave traveling radially outward
+(Lesson 5), so it can have <strong>no radial field component</strong>: <span class="math notranslate nohighlight">\(E_r \approx 0\)</span>, and
+only the transverse parts of <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> survive. The magnetic field follows
+for free from the plane-wave relation, with no new integral:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{H} = \frac{1}{\eta_0}\ \hat{\mathbf r}\times\mathbf{E},
+\qquad \eta_0 \approx 377\ \Omega .
+\]</div>
+<p>Then radiation intensity, the quantity Lesson 2 built directivity and gain on,
+is</p>
+<div class="math notranslate nohighlight">
+\[
+U(\theta,\phi) = \frac{r^2|\mathbf{E}|^2}{2\eta_0}
+= \frac{\eta_0 k^2}{32\pi^2}\Big(|N_\theta|^2 + |N_\phi|^2\Big).
+\]</div>
+<p>The normalized power pattern is <span class="math notranslate nohighlight">\(U/U_{\max}\)</span>; its square root is the
+<strong>field pattern</strong> <span class="math notranslate nohighlight">\(|F(\theta,\phi)|\)</span> used for the rest of this lesson. Compare
+this with the three-step recipe on the read-only frame above: the two curls
+that took <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> to <span class="math notranslate nohighlight">\(\mathbf{E}\)</span> have become a projection onto the
+transverse directions and a constant.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-a-wire-along-z-one-scalar-integral">
+<div class="wrap docutils container">
+<p class="rubric">A wire along z: one scalar integral</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>A wire along <span class="math notranslate nohighlight">\(z\)</span> carries <span class="math notranslate nohighlight">\(I(z')\ \hat{\mathbf z}\)</span>, so the vector integral is
+one scalar integral:</p>
+<div class="math notranslate nohighlight">
+\[
+N_z(\theta) = \int I(z')\ e^{+jkz'\cos\theta}\ dz' .
+\]</div>
+<p>Do the integral in Cartesian, then convert to spherical:
+<span class="math notranslate nohighlight">\(N_\theta = -N_z\sin\theta\)</span>. The <span class="math notranslate nohighlight">\(\sin\theta\)</span> is the conversion, and it is why
+no wire radiates off its own ends.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The current points the same way at every source point, so the vector integral
+collapses to one scalar integral, and the projection onto the observation
+basis is one dot product, done once, afterwards:
+<span class="math notranslate nohighlight">\(\hat{\boldsymbol\theta}\cdot\hat{\mathbf z} = -\sin\theta\)</span>, so
+<span class="math notranslate nohighlight">\(N_\theta = -N_z\sin\theta\)</span> and <span class="math notranslate nohighlight">\(N_\phi = 0\)</span>. At <span class="math notranslate nohighlight">\(\theta = 0\)</span> the current has
+no transverse component to project, which is why no wire antenna radiates off
+its own ends.</p>
+<p><strong>Why Cartesian, and why afterward.</strong> The integral adds up vectors from many
+different source points, and you can only add vectors component by component
+when every component is measured against the same unit vectors. Cartesian
+unit vectors are the same everywhere, so integrating <span class="math notranslate nohighlight">\(J_x\)</span>, <span class="math notranslate nohighlight">\(J_y\)</span> and <span class="math notranslate nohighlight">\(J_z\)</span>
+is safe. Spherical unit vectors at the source are not: <span class="math notranslate nohighlight">\(\hat{\mathbf r}'\)</span> and
+<span class="math notranslate nohighlight">\(\hat{\boldsymbol\theta}'\)</span> change direction as you move from one source point
+to the next, so an integral of <span class="math notranslate nohighlight">\(J_{\theta'}\)</span> adds numbers that each mean
+something different, and the total is not the component of anything. So
+integrate the Cartesian components, get <span class="math notranslate nohighlight">\(N_x\)</span>, <span class="math notranslate nohighlight">\(N_y\)</span> and <span class="math notranslate nohighlight">\(N_z\)</span>, and only then
+take the components along <span class="math notranslate nohighlight">\(\hat{\boldsymbol\theta}\)</span> and
+<span class="math notranslate nohighlight">\(\hat{\boldsymbol\phi}\)</span> of the observation direction. Those two are fixed once
+you choose where you look, which is why the <span class="math notranslate nohighlight">\(\sin\theta\)</span> can sit outside the
+integral.</p>
+<p>Try it the wrong way on a dipole along <span class="math notranslate nohighlight">\(z\)</span> and it fails on the first line:
+every source point has <span class="math notranslate nohighlight">\(\theta' = 0\)</span>, so <span class="math notranslate nohighlight">\(J_{\theta'} = 0\)</span> everywhere, and you
+would conclude that a dipole does not radiate at all.</p>
+<p>Expanding <span class="math notranslate nohighlight">\(\hat{\mathbf z} = \cos\theta\ \hat{\mathbf r} - \sin\theta\
+\hat{\boldsymbol\theta}\)</span> <em>before</em> integrating gives the same answer, because
+<span class="math notranslate nohighlight">\(\theta\)</span> is the observation angle and constant over the integral. Cartesian
+simply keeps the two jobs apart: the integral, which depends only on the
+current distribution, and the projection, which depends only on where you
+look. That separation is the space-factor / element-factor split later in
+this lesson, and all of L16.</p>
+</div>
+<div class="depth docutils container">
+<p>With all three Cartesian components present the projection reads</p>
+<div class="math notranslate nohighlight">
+\[
+N_\theta = N_x\cos\theta\cos\phi + N_y\cos\theta\sin\phi - N_z\sin\theta,
+\qquad
+N_\phi = -N_x\sin\phi + N_y\cos\phi .
+\]</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The next frame shows the integral as a picture. The source is chopped into
+elements; each one contributes a phasor whose angle is <span class="math notranslate nohighlight">\(kz'\cos\theta\)</span>, its
+path difference in radians. At broadside every phasor points the same way and
+they stack into a long straight chain. Swing off broadside and the chain curls
+up; when it closes on itself, you are looking at a null. It is the two-source
+picture with many sources, and it is the picture the rest of the lesson
+computes.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-the-integral-as-a-picture">
+<div class="wrap docutils container">
+<p class="rubric">The integral, as a picture</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/radiation-integral.html"
+        width="100%" height="445"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="The radiation integral as a coherent phasor sum">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-radiation-integral-is-a-fourier-transform">
+<div class="wrap docutils container">
+<p class="rubric">The radiation integral is a Fourier transform</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>Define the <strong>spatial frequency</strong> <span class="math notranslate nohighlight">\(k_z = k\cos\theta\)</span> and the wire integral reads</p>
+<div class="math notranslate nohighlight">
+\[
+N_z(k_z) = \int I(z')\ e^{+jk_z z'}\ dz' .
+\]</div>
+<p>That is a Fourier transform. <strong>The far-field pattern is the Fourier transform
+of the current distribution</strong>, seen through the window <span class="math notranslate nohighlight">\(-k \le k_z \le +k\)</span>.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>For a line source on the <span class="math notranslate nohighlight">\(z\)</span>-axis carrying current <span class="math notranslate nohighlight">\(I(z')\)</span>,
+<span class="math notranslate nohighlight">\(\hat{\mathbf r}\cdot\mathbf{r}' = z'\cos\theta\)</span>, so the whole radiation vector
+is the one scalar integral above, over <span class="math notranslate nohighlight">\(-L/2 \le z' \le L/2\)</span>. The transform is
+evaluated over the <em>visible region</em> <span class="math notranslate nohighlight">\(-k \le k_z \le +k\)</span> and then bent onto
+angle by <span class="math notranslate nohighlight">\(k_z = k\cos\theta\)</span>.</p>
+<p>This is not a new transform with an antenna flavor. It is the Fourier transform
+from your signals course with the variables renamed, and every result you
+learned there comes across unchanged.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Signals and systems</p></th>
+<th class="head text-left"><p>Antennas</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>time <span class="math notranslate nohighlight">\(t\)</span></p></td>
+<td class="text-left"><p>position along the source <span class="math notranslate nohighlight">\(z'\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>frequency <span class="math notranslate nohighlight">\(\omega\)</span>, radians per second</p></td>
+<td class="text-left"><p>spatial frequency <span class="math notranslate nohighlight">\(k_z = k\cos\theta\)</span>, radians per meter along the source</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>a signal <span class="math notranslate nohighlight">\(x(t)\)</span></p></td>
+<td class="text-left"><p>the current <span class="math notranslate nohighlight">\(I(z')\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>its spectrum <span class="math notranslate nohighlight">\(X(\omega)\)</span></p></td>
+<td class="text-left"><p>the pattern <span class="math notranslate nohighlight">\(N_z(k_z)\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>What the transform buys you, row by row:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Signals and systems</p></th>
+<th class="head text-left"><p>Antennas</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>longer pulse, narrower spectrum</p></td>
+<td class="text-left"><p>longer source, narrower beam</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>a window tames leakage</p></td>
+<td class="text-left"><p>a taper tames sidelobes</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>modulation shifts the spectrum</p></td>
+<td class="text-left"><p>linear phase steers the beam</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>sampling repeats the spectrum</p></td>
+<td class="text-left"><p>discrete elements repeat the pattern</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Every row is the left column, applied. Nothing on the right is derived in this
+course from scratch.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Signals and systems</p></th>
+<th class="head text-left"><p>Antennas</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>a rectangular pulse</p></td>
+<td class="text-left"><p>a uniform line source</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>its sinc spectrum, first sidelobe <span class="math notranslate nohighlight">\(-13.3\)</span> dB</p></td>
+<td class="text-left"><p>the sinc pattern, first sidelobe <span class="math notranslate nohighlight">\(-13.3\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>a longer pulse has a narrower spectrum</p></td>
+<td class="text-left"><p>a longer source has a narrower beam, <span class="math notranslate nohighlight">\(\theta_\text{HP} \approx 0.886\ \lambda/L\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>a window function tames spectral leakage</p></td>
+<td class="text-left"><p>an amplitude taper tames sidelobes — <strong>the same functions, with the same names</strong>: Hamming, Taylor, Chebyshev</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>modulation by <span class="math notranslate nohighlight">\(e^{j\omega_0 t}\)</span> shifts the spectrum</p></td>
+<td class="text-left"><p>a linear phase across the source steers the beam to <span class="math notranslate nohighlight">\(\theta_0\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>sampling makes the spectrum repeat</p></td>
+<td class="text-left"><p>discrete elements make the transform repeat, every <span class="math notranslate nohighlight">\(2\pi/d\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>aliasing above the Nyquist rate</p></td>
+<td class="text-left"><p>grating lobes once the spacing passes <span class="math notranslate nohighlight">\(\lambda/2\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>convolution in time is multiplication in frequency</p></td>
+<td class="text-left"><p>an array is one element convolved with a comb of positions, so its pattern is element factor × array factor</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This is why Module 3 works the way it does. An array designer is not really
+solving Maxwell’s equations. They are choosing a function whose Fourier
+transform has the beamwidth, sidelobe level, and null placement they want, then
+building a current distribution that realizes it.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Antenna consequence</p></th>
+<th class="head text-left"><p>Where you will use it</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Longer aperture → <strong>narrower beam</strong></p></td>
+<td class="text-left"><p>L15, L20</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Smooth taper → <strong>lower sidelobes</strong>, wider beam</p></td>
+<td class="text-left"><p>L15, L24, L25</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Linear phase → the <strong>beam steers</strong></p></td>
+<td class="text-left"><p>L18, L19, L26</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Element spacing → <strong>grating lobes</strong></p></td>
+<td class="text-left"><p>L16, L26</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Element × comb → <strong>pattern multiplication</strong></p></td>
+<td class="text-left"><p>L16</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-k-is-telling-you">
+<div class="wrap docutils container">
+<p class="rubric">What k is telling you</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><span class="math notranslate nohighlight">\(k\)</span> is <span class="math notranslate nohighlight">\(\omega\)</span> for space: phase per meter instead of phase per second.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>In time</p></th>
+<th class="head text-left"><p>In space</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\omega\)</span>, rad/s</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(k = 2\pi/\lambda\)</span>, rad/m</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>one period, <span class="math notranslate nohighlight">\(T = 2\pi/\omega\)</span></p></td>
+<td class="text-left"><p>one wavelength, <span class="math notranslate nohighlight">\(\lambda = 2\pi/k\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\omega t\)</span>: phase after <span class="math notranslate nohighlight">\(t\)</span> seconds</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(kz\)</span>: phase across <span class="math notranslate nohighlight">\(z\)</span> meters</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><span class="math notranslate nohighlight">\(\omega\)</span> is how fast a signal’s phase turns as time passes. <span class="math notranslate nohighlight">\(k\)</span> is the same
+thing for space: how fast a wave’s phase turns as you move through it, with
+<span class="math notranslate nohighlight">\(1/\lambda\)</span> in cycles per meter playing the part of <span class="math notranslate nohighlight">\(f = 1/T\)</span> in cycles per
+second. So the exponent in the radiation integral,
+<span class="math notranslate nohighlight">\(k\ \hat{\mathbf r}\cdot\mathbf{r}'\)</span>, is <span class="math notranslate nohighlight">\(k\)</span> times a path difference in
+meters: a phase in radians, exactly as <span class="math notranslate nohighlight">\(\omega t\)</span> is.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-k-cos-is-telling-you">
+<div class="wrap docutils container">
+<p class="rubric">What k cos θ is telling you</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L06-trace-wavelength.svg" alt="Three line sources with the wavefronts of a plane wave leaving at 90, 60, and 0 degrees from the source axis. Along the direction of travel the wavefronts are one wavelength apart; along the source they are one wavelength over cos theta apart." style="max-width: 720px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<p>A wave leaving at <span class="math notranslate nohighlight">\(\theta\)</span> has wavefronts <span class="math notranslate nohighlight">\(\lambda\)</span> apart along its own
+travel and <span class="math notranslate nohighlight">\(\lambda/\cos\theta\)</span> apart along the source. So the phase advances
+<span class="math notranslate nohighlight">\(k\cos\theta\)</span> per meter along <span class="math notranslate nohighlight">\(z\)</span>: <strong>the rate direction <span class="math notranslate nohighlight">\(\theta\)</span> demands.</strong></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Broadside demands nothing: the whole source lies on one wavefront, <span class="math notranslate nohighlight">\(k_z = 0\)</span>,
+and a current that is simply in phase everywhere radiates there. Endfire
+demands the full <span class="math notranslate nohighlight">\(k\)</span>: one cycle of phase every wavelength along the source.
+Every other direction sits in between, and no direction can demand more than
+<span class="math notranslate nohighlight">\(k\)</span>, because the projection of a vector onto an axis is never longer than the
+vector.</p>
+<p>So read <span class="math notranslate nohighlight">\(N_z(k_z)\)</span> as the answer to a question asked once per direction: <em>does
+the current contain a ripple at the rate this direction demands, and how much
+of it?</em> A plain in-phase current answers loudly at <span class="math notranslate nohighlight">\(k_z = 0\)</span> and fades from
+there — the broadside beam. Put a linear phase slope across the current and
+the loud answer moves to whatever <span class="math notranslate nohighlight">\(k_z\)</span> matches the slope — the beam steers.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-part-of-the-transform-is-invisible">
+<div class="wrap docutils container">
+<p class="rubric">Part of the transform is invisible</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><span class="math notranslate nohighlight">\(k_z = k\cos\theta\)</span>, and <span class="math notranslate nohighlight">\(\cos\theta\)</span> runs only from <span class="math notranslate nohighlight">\(-1\)</span> to <span class="math notranslate nohighlight">\(+1\)</span>. Only
+<span class="math notranslate nohighlight">\(\lvert k_z\rvert \le k\)</span> is a direction you can stand in. The rest is real and
+never leaves the antenna: <strong>the far field cannot see detail finer than a
+wavelength.</strong></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A spectrum extends over every <span class="math notranslate nohighlight">\(\omega\)</span>, and every <span class="math notranslate nohighlight">\(\omega\)</span> is a frequency you
+can measure. This transform extends over every <span class="math notranslate nohighlight">\(k_z\)</span> too, but
+<span class="math notranslate nohighlight">\(k_z = k\cos\theta\)</span> ties it to a direction, and <span class="math notranslate nohighlight">\(\cos\theta\)</span> is constrained to
+<span class="math notranslate nohighlight">\([-1, +1]\)</span>. Only the spatial-frequency band <span class="math notranslate nohighlight">\(\lvert k_z\rvert \le k\)</span> is
+somewhere you can stand. The invisible part describes stored, non-radiating
+field near the aperture rather than anything you can measure at range, so the
+pattern is a window onto the transform, not the whole of it.</p>
+<p>Said in wavelengths: a spatial frequency <span class="math notranslate nohighlight">\(k_z\)</span> is a ripple in the current with
+period <span class="math notranslate nohighlight">\(2\pi/k_z\)</span>, and the band edge <span class="math notranslate nohighlight">\(k_z = k\)</span> is a period of exactly
+<span class="math notranslate nohighlight">\(\lambda\)</span>. That idea has no counterpart in your signals course.</p>
+<p>Keep that window in mind. When Module 3 builds an array out of separate
+elements, the transform repeats, and a repeat that slides inside the window is
+a second beam you did not ask for. Lesson 16 is about keeping it out.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-the-transform-and-its-window">
+<div class="wrap docutils container">
+<p class="rubric">The transform and its window</p>
+<div class="depth depth-cut docutils container">
+<p>Lengthen <span class="math notranslate nohighlight">\(L\)</span>: narrower transform, same window. Steer: it slides. Sample: the
+repeats march in.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/current-transform.html"
+        width="100%" height="407"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="The current, its transform, and the visible window">
+</iframe>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Every row of the tables above on one screen. The right panel is the transform
+of the current, <em>all</em> of it; the shaded band is the part a real direction can
+reach, and the lower-left panel is that band bent onto <span class="math notranslate nohighlight">\(\theta\)</span>. Lengthen <span class="math notranslate nohighlight">\(L\)</span>
+and the transform narrows while the window stays put. Steer, and the whole
+transform slides. Tick <em>sample</em> and spread the elements out: the repeats march
+in from the invisible region, and the moment one crosses the window edge you
+have a grating lobe.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-current-in-pattern-out">
+<div class="wrap docutils container">
+<p class="rubric">Current in, pattern out</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><strong>Length sets beamwidth. Taper sets sidelobes. Phase slope sets pointing
+direction.</strong></p>
+<iframe src="../../viz/line-source-pattern.html"
+        width="100%" height="417"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Line-source current distribution and its far-field pattern">
+</iframe>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Choose a distribution, stretch it, taper it, put a linear phase slope across it,
+and watch the pattern respond. Those three habits are the ones to build here,
+and the next frames put numbers on each of them.</p>
+<p>Beamwidth is bought with <strong>size</strong> and sidelobes are bought with <strong>taper</strong>;
+that trade has a price list, and Lesson 15 derives it. A phase slope across
+the current steers the beam, and Lesson 18 makes it a design tool.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-infinitesimal-dipole-recovers-lesson-5">
+<div class="wrap docutils container">
+<p class="rubric">The infinitesimal dipole recovers Lesson 5</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>A current element <span class="math notranslate nohighlight">\(I_0\ dl\)</span> at the origin is so short that
+<span class="math notranslate nohighlight">\(e^{+jkz'\cos\theta} \approx 1\)</span> across it:</p>
+<div class="math notranslate nohighlight">
+\[
+N_z = I_0\ dl, \qquad N_\theta = -I_0\ dl\ \sin\theta,
+\qquad
+E_\theta = \frac{j\ \eta_0 k I_0\ dl\ \sin\theta}{4\pi r}\ e^{-jkr} .
+\]</div>
+<p>This is Lesson 5’s <span class="math notranslate nohighlight">\(1/r\)</span> radiation term, in one line. The pattern is
+<span class="math notranslate nohighlight">\(\sin\theta\)</span>, the doughnut, with <span class="math notranslate nohighlight">\(D = 1.5\)</span>.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This is exactly the <span class="math notranslate nohighlight">\(1/r\)</span> radiation term of the exact short-dipole field quoted
+in Lesson 5, the term that survived once <span class="math notranslate nohighlight">\(kr \gg 1\)</span>. What took a page of exact
+spherical-wave algebra there comes out here in one line. The pattern is
+<span class="math notranslate nohighlight">\(|F| = \sin\theta\)</span>: a doughnut, maximum broadside, null along the wire, and
+<span class="math notranslate nohighlight">\(D = 1.5\)</span> (1.76 dBi). The read-only frame below earns that <span class="math notranslate nohighlight">\(1.5\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-worked-example-the-doughnut-integrated">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — the doughnut integrated</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — the doughnut integrated</p>
+<p>That <span class="math notranslate nohighlight">\(D = 1.5\)</span> has been quoted since Lesson 2 and taken on faith ever since.
+Now you can earn it. Directivity is peak intensity over average intensity, and
+with the pattern in hand both are just integrals. Normalize the intensity to its
+peak, <span class="math notranslate nohighlight">\(U = \sin^2\theta\)</span> (intensity goes as the <em>square</em> of the field pattern),
+and integrate over the whole sphere:</p>
+<div class="math notranslate nohighlight">
+\[
+P_\text{rad} = \oint U\ d\Omega
+= \int_0^{2\pi}\!\!\int_0^{\pi} \sin^2\theta\ \cdot\ \sin\theta\ d\theta\ d\phi
+= 2\pi \int_0^{\pi} \sin^3\theta\ d\theta
+= 2\pi \cdot \frac{4}{3}
+= \frac{8\pi}{3}.
+\]</div>
+<p>The extra <span class="math notranslate nohighlight">\(\sin\theta\)</span> is the solid-angle element <span class="math notranslate nohighlight">\(d\Omega = \sin\theta\ d\theta\ d\phi\)</span>,
+not part of the pattern — a bookkeeping trap worth naming. Then</p>
+<div class="math notranslate nohighlight">
+\[
+D = \frac{4\pi\ U_{\max}}{P_\text{rad}} = \frac{4\pi}{8\pi/3} = 1.5
+\quad (1.76\ \text{dBi}).
+\]</div>
+<p>The number is small because the doughnut is generous: a current element throws
+power almost everywhere except along its own axis, so concentrating it 1.5 times
+over isotropic is all the shape can do.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-uniform-line-source-the-sinc">
+<div class="wrap docutils container">
+<p class="rubric">The uniform line source: the sinc</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>Constant current <span class="math notranslate nohighlight">\(I_0\)</span> over a length <span class="math notranslate nohighlight">\(L\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+N_z(\theta) = I_0\int_{-L/2}^{L/2} e^{+jkz'\cos\theta}\ dz'
+            = I_0 L\ \frac{\sin u}{u},
+\qquad u = \tfrac{kL}{2}\cos\theta .
+\]</div>
+<p>The <strong>space factor</strong> <span class="math notranslate nohighlight">\(S(\theta) = \lvert\sin u/u\rvert\)</span> is the distribution’s
+own pattern. The radiated pattern is <span class="math notranslate nohighlight">\(\sin\theta \cdot S(\theta)\)</span>: element
+factor times space factor.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><span class="math notranslate nohighlight">\(S(\theta)\)</span> is the contribution of the <em>distribution</em> alone. The radiated
+pattern still needs the projection from the wire frame above:</p>
+<div class="math notranslate nohighlight">
+\[
+|F(\theta)| \propto \underbrace{\sin\theta}_{\text{element factor}}\ \cdot\
+\underbrace{S(\theta)}_{\text{space factor}} .
+\]</div>
+<p>For a beam near broadside the <span class="math notranslate nohighlight">\(\sin\theta\)</span> is essentially 1 and changes nothing
+you would notice (<span class="math notranslate nohighlight">\(25.6^{\circ}\)</span> becomes <span class="math notranslate nohighlight">\(24.8^{\circ}\)</span> for the example below).
+Near endfire it matters a great deal. This factorization — element pattern times
+distribution — is <strong>pattern multiplication</strong>, and Lesson 16 builds all of array
+theory on it.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-uniform-line-source-pattern">
+<div class="wrap docutils container">
+<p class="rubric">The uniform line source pattern</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L06-line-source-sinc.svg" alt="Space factor of a uniform line source plotted in dB against angle: a main beam at broadside, nulls where cos theta is a multiple of lambda over L, and a first sidelobe 13.3 dB below the peak marked by a dashed line" style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Peak at broadside, <span class="math notranslate nohighlight">\(u = 0\)</span>.</p></li>
+<li><p>First null where <span class="math notranslate nohighlight">\(\cos\theta = \lambda/L\)</span>.</p></li>
+<li><p>First sidelobe <span class="math notranslate nohighlight">\(-13.3\)</span> dB, whatever <span class="math notranslate nohighlight">\(L\)</span> is.</p></li>
+<li><p><span class="math notranslate nohighlight">\(L = 2\lambda\)</span>: nulls at <span class="math notranslate nohighlight">\(60^{\circ}\)</span> and <span class="math notranslate nohighlight">\(120^{\circ}\)</span>, half-power beamwidth <span class="math notranslate nohighlight">\(25.6^{\circ}\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Plotted against angle, that one expression is the shape you measure every
+aperture antenna in this course against. Read off the space factor’s three
+headline numbers:</p>
+<ul class="simple">
+<li><p><strong>Peak</strong> at <span class="math notranslate nohighlight">\(u = 0\)</span>, i.e. <span class="math notranslate nohighlight">\(\theta = 90^{\circ}\)</span>, <strong>broadside</strong>. All elements are
+equidistant from the observer, every phasor is aligned, and the sum is the
+full length <span class="math notranslate nohighlight">\(L\)</span>.</p></li>
+<li><p><strong>First null</strong> where <span class="math notranslate nohighlight">\(u = \pi\)</span>, i.e. <span class="math notranslate nohighlight">\(\cos\theta_\text{null} = \lambda/L\)</span>.</p></li>
+<li><p><strong>First sidelobe</strong> at <span class="math notranslate nohighlight">\(u \approx 4.493\)</span>, height <span class="math notranslate nohighlight">\(-13.3\)</span> dB, a fixed number,
+independent of <span class="math notranslate nohighlight">\(L\)</span>. Uniform illumination <em>always</em> costs you <span class="math notranslate nohighlight">\(13.3\)</span> dB
+sidelobes; only tapering changes that.</p></li>
+</ul>
+<p>The read-only frame below works the <span class="math notranslate nohighlight">\(2\lambda\)</span> case through.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-worked-example-a-2-uniform-line-source">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — a 2λ uniform line source</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — a <span class="math notranslate nohighlight">\(2\lambda\)</span> uniform line source</p>
+<p>Take <span class="math notranslate nohighlight">\(L = 2\lambda\)</span>, so <span class="math notranslate nohighlight">\(kL/2 = 2\pi\)</span>.</p>
+<p><strong>First null.</strong> <span class="math notranslate nohighlight">\(\cos\theta_\text{null} = \lambda/L = 0.5 \Rightarrow
+\theta_\text{null} = 60^{\circ}\)</span> and <span class="math notranslate nohighlight">\(120^{\circ}\)</span>. Null-to-null beamwidth
+<span class="math notranslate nohighlight">\(= 60^{\circ}\)</span>.</p>
+<p><strong>Half-power beamwidth.</strong> <span class="math notranslate nohighlight">\(|\sin u / u| = 0.707\)</span> at <span class="math notranslate nohighlight">\(u = 1.392\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[
+\cos\theta_\text{HP} = \frac{1.392}{2\pi} = 0.2215
+\quad\Rightarrow\quad \theta_\text{HP} = 77.2^{\circ},
+\]</div>
+<p>and by symmetry about broadside the beamwidth is
+<span class="math notranslate nohighlight">\(2(90^{\circ} - 77.2^{\circ}) = 25.6^{\circ}\)</span>. Compare the rule of thumb
+<span class="math notranslate nohighlight">\(0.886\ \lambda/L = 0.443\ \text{rad} = 25.4^{\circ}\)</span>, within a fifth of a
+degree, which is why that rule of thumb is worth memorizing.</p>
+<p><strong>Sidelobes.</strong> <span class="math notranslate nohighlight">\(-13.3\)</span> dB, whatever <span class="math notranslate nohighlight">\(L\)</span> is.</p>
+<p>Double the length to <span class="math notranslate nohighlight">\(4\lambda\)</span> and the beamwidth halves to <span class="math notranslate nohighlight">\(12.7^{\circ}\)</span>,
+while the sidelobes do not move at all. Beamwidth is bought with <strong>size</strong>;
+sidelobes are bought with <strong>taper</strong>.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-what-a-taper-buys-and-what-it-costs">
+<div class="wrap docutils container">
+<p class="rubric">What a taper buys, and what it costs</p>
+<p>Beamwidth is bought with <strong>size</strong>. Sidelobes are bought with <strong>taper</strong>. The
+numbers behind that sentence are Module 3’s, and they are here only so the
+sentence has something to point at.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Distribution</p></th>
+<th class="head text-center"><p>First sidelobe</p></th>
+<th class="head text-center"><p>HPBW constant (<span class="math notranslate nohighlight">\(\times\ \lambda/L\)</span>)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Uniform</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-13.3\)</span> dB</p></td>
+<td class="text-center"><p>0.886</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Cosine</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-23\)</span> dB</p></td>
+<td class="text-center"><p>1.19</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Triangular</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-26.5\)</span> dB</p></td>
+<td class="text-center"><p>1.27</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Cosine²</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-31.5\)</span> dB</p></td>
+<td class="text-center"><p>1.44</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Since the transform’s high-frequency content comes from the <em>edges</em> of the
+distribution, softening the edges must soften the sidelobes. It does, and the
+prices are known: same length <span class="math notranslate nohighlight">\(L\)</span>, four ways to illuminate it. Read the third
+column as the cost. Relative to uniform, a taper broadens the main beam by a
+factor of <strong>1.34 to 1.63</strong>. You buy every dB of sidelobe suppression with
+beamwidth, and there is no distribution that gives you both.</p>
+<p>The ranking is the thing to carry forward: uniform is narrowest and worst on
+sidelobes, cosine² is widest and best, and everything useful in between is a
+Taylor or Chebyshev compromise. This table is a preview. <strong>Lesson 15</strong> derives
+it for apertures and <strong>Lesson 24</strong> turns it into a design procedure for arrays.</p>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-half-wave-dipole-a-real-antenna">
+<div class="wrap docutils container">
+<p class="rubric">The half-wave dipole, a real antenna</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>A thin wire cannot carry uniform current. On a resonant half-wave wire it is a
+single cosine hump, zero at both tips, and the integral gives</p>
+<div class="math notranslate nohighlight">
+\[
+|F(\theta)| = \left|\frac{\cos\!\left(\tfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right| ,
+\]</div>
+<p>a slightly <strong>sharper</strong> doughnut: HPBW <span class="math notranslate nohighlight">\(78.1^{\circ}\)</span>, <span class="math notranslate nohighlight">\(D = 1.64\)</span> (2.15 dBi).</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The current has to vanish at the open ends, and the standing wave on a resonant
+wire of length <span class="math notranslate nohighlight">\(L\)</span> is well approximated by</p>
+<div class="math notranslate nohighlight">
+\[
+I(z') = I_0 \sin\!\left[k\left(\frac{L}{2} - |z'|\right)\right],
+\]</div>
+<p>which for <span class="math notranslate nohighlight">\(L = \lambda/2\)</span> is a single cosine hump, maximum at the feed and
+zero at both tips. Putting that into the radiation integral gives a standard
+(if tedious) result:</p>
+<div class="math notranslate nohighlight">
+\[
+N_z(\theta) = \frac{2I_0}{k}\
+\frac{\cos\!\left(\tfrac{\pi}{2}\cos\theta\right)}{\sin^2\theta},
+\qquad
+N_\theta = -N_z\sin\theta ,
+\]</div>
+<p>and therefore</p>
+<div class="math notranslate nohighlight">
+\[
+E_\theta = \frac{j\eta_0 I_0 e^{-jkr}}{2\pi r}\
+\left[\frac{\cos\!\left(\tfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right] .
+\]</div>
+<p>The bracket is <em>not</em> <span class="math notranslate nohighlight">\(\sin\theta\)</span>, but it is close: it is a slightly sharper
+doughnut, because the tapered current is concentrated near the middle rather
+than spread over the whole length. That small difference is worth real numbers:
+<span class="math notranslate nohighlight">\(\theta_\text{HP} = 78.1^{\circ}\)</span> versus <span class="math notranslate nohighlight">\(90^{\circ}\)</span>, and <span class="math notranslate nohighlight">\(D = 1.64\)</span>
+(2.15 dBi) versus 1.5 (1.76 dBi).</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-three-distributions-side-by-side">
+<div class="wrap docutils container">
+<p class="rubric">Three distributions, side by side</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<img src="../../viz/img/L06-three-patterns.svg" alt="Polar patterns in dB for the three distributions side by side: the infinitesimal dipole and half-wave dipole as nearly identical doughnuts, and the two-wavelength uniform line source as a narrow broadside beam with sidelobes" style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
+</div>
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Distribution</p></th>
+<th class="head text-center"><p>HPBW</p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(D\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Infinitesimal dipole</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(90^{\circ}\)</span></p></td>
+<td class="text-center"><p>1.50</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Half-wave dipole</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(78.1^{\circ}\)</span></p></td>
+<td class="text-center"><p>1.64</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Uniform line source, <span class="math notranslate nohighlight">\(L = 2\lambda\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(25.6^{\circ}\)</span></p></td>
+<td class="text-center"><p>4.21</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The two dipoles are nearly the same doughnut. The line source traded its skirt
+for a beam and a set of sidelobes.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Distribution</p></th>
+<th class="head text-left"><p>Pattern <span class="math notranslate nohighlight">\(\vert F(\theta)\vert\)</span></p></th>
+<th class="head text-center"><p>HPBW</p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(D\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Infinitesimal dipole</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\sin\theta\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(90^{\circ}\)</span></p></td>
+<td class="text-center"><p>1.50 (1.76 dBi)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Half-wave dipole</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\cos\!\left(\tfrac{\pi}{2}\cos\theta\right)/\sin\theta\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(78.1^{\circ}\)</span></p></td>
+<td class="text-center"><p>1.64 (2.15 dBi)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Uniform line source, <span class="math notranslate nohighlight">\(L = 2\lambda\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\vert\sin u/u\vert\)</span>, with <span class="math notranslate nohighlight">\(u = \tfrac{kL}{2}\cos\theta\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(25.6^{\circ}\)</span></p></td>
+<td class="text-center"><p>4.21 (6.2 dBi) <em>(space factor only; 4.45 / 6.5 dBi with the element factor)</em></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The last row’s headline number is the space factor on its own; multiply in the
+<span class="math notranslate nohighlight">\(\sin\theta\)</span> element factor and it becomes <span class="math notranslate nohighlight">\(24.8^{\circ}\)</span> and <span class="math notranslate nohighlight">\(D = 4.45\)</span>
+(6.5 dBi), a small correction, as promised for a broadside beam. Either way the
+comparison holds: a <span class="math notranslate nohighlight">\(2\lambda\)</span> line source is four times longer than a
+half-wave dipole, and it buys about 2.6 times the directivity with a beam three
+times narrower. For a long uniform line source <span class="math notranslate nohighlight">\(D \to 2L/\lambda\)</span>, directivity
+sold by the wavelength.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-catch-you-have-to-know-the-current">
+<div class="wrap docutils container">
+<p class="rubric">The catch: you have to know the current</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>The integral is exact given <span class="math notranslate nohighlight">\(\mathbf{J}\)</span>, but <span class="math notranslate nohighlight">\(\mathbf{J}\)</span> is not given: fields
+set currents and currents set fields. So we assume it:</p>
+<ul class="simple">
+<li><p>Thin wires: a sinusoidal standing wave.</p></li>
+<li><p>Apertures: the field in the opening.</p></li>
+<li><p>Arrays: isolated element patterns.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The fields set the current on a conductor, and the current sets the fields.
+Solving that self-consistently is the hard part of antenna analysis, and the
+radiation integral does not touch it. What saves us is that for many antennas
+the current can be <strong>assumed</strong> with good accuracy:</p>
+<ul class="simple">
+<li><p><strong>Thin wires</strong>: the sinusoidal standing wave used above. Excellent for
+<span class="math notranslate nohighlight">\(\ell/\text{diameter} \gtrsim 100\)</span>, and it is why hand analysis of dipoles
+works so well.</p></li>
+<li><p><strong>Apertures</strong>: assume the field in the opening (often the incident waveguide
+mode) and integrate that instead. This is the standard treatment of horns and
+reflectors in Module 2.</p></li>
+<li><p><strong>Arrays</strong>: assume each element keeps its isolated pattern and only the
+excitation changes. That assumption is what pattern multiplication rests on in
+Module 3, and mutual coupling is where it starts to fray.</p></li>
+</ul>
+<p>When the assumption fails, for thick elements, tightly coupled arrays, or
+antennas close to a ground plane or an airframe, you solve for the current
+numerically. The <strong>method of moments</strong> discretizes the structure, enforces the
+boundary condition on each segment, and solves a linear system for the segment
+currents; then it runs the very same radiation integral to get the pattern.
+That is literally what NEC is doing under the hood in the <strong>Lesson 8
+simulation lab</strong>.</p>
+<p>There is a measurement version of the same idea, too. Near-field scanning
+(Lesson 5, and Module 2’s measurement labs) samples the field on a surface close
+to the antenna and transforms it to the far field, which is possible for
+exactly one reason: the transform between the source distribution and the
+far-field pattern is invertible.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-key-point">
+<div class="wrap docutils container">
+<p class="rubric">Key point</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p>Radiation is superposition with phase bookkeeping. Far away the rays run
+parallel, so an element’s only signature is its path difference
+<span class="math notranslate nohighlight">\(\hat{\mathbf r}\cdot\mathbf{r}'\)</span>. Their sum is the radiation vector, a
+Fourier transform of the current. The whole pattern lives there.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="math notranslate nohighlight">
+\[
+\mathbf{N}(\theta,\phi) = \int_{V'}\mathbf{J}(\mathbf{r}')\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'
+\]</div>
+<p>Beamwidth, sidelobes, and where you point the beam are all properties of that
+transform.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary">
+<div class="wrap docutils container">
+<p class="rubric">Summary</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\mathbf{A}\)</span></p></td>
+<td class="text-left"><p>magnetic vector potential; the integral of the source, <span class="math notranslate nohighlight">\(\mathbf{B} = \nabla\times\mathbf{A}\)</span></p></td>
+<td class="text-left"><p>one integral, then two curls — and in the far field the curls become multiplication by <span class="math notranslate nohighlight">\(-jk\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(e^{-jkr}/r\)</span></p></td>
+<td class="text-left"><p>spherical-wave factor — distance only, identical for every antenna ever built</p></td>
+<td class="text-left"><p>field <span class="math notranslate nohighlight">\(\propto 1/r\)</span>, power <span class="math notranslate nohighlight">\(\propto 1/r^2\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\mathbf{N}(\theta,\phi)\)</span></p></td>
+<td class="text-left"><p>radiation vector — direction only; all of the antenna’s individuality</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(E_\theta = -j\omega\mu\ e^{-jkr}N_\theta/4\pi r\)</span>, and <span class="math notranslate nohighlight">\(E_r \approx 0\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>far-field approximation</p></td>
+<td class="text-left"><p>parallel rays: keep <span class="math notranslate nohighlight">\(\hat{\mathbf r}\cdot\mathbf{r}'\)</span> in the phase, drop it in the amplitude</p></td>
+<td class="text-left"><p>valid for <span class="math notranslate nohighlight">\(r \ge 2D^2/\lambda\)</span>, the <span class="math notranslate nohighlight">\(\pi/8\)</span> (<span class="math notranslate nohighlight">\(22.5^{\circ}\)</span>) phase-error budget</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(U(\theta,\phi)\)</span></p></td>
+<td class="text-left"><p>radiation intensity; feeds <span class="math notranslate nohighlight">\(D\)</span> and <span class="math notranslate nohighlight">\(G\)</span> from Lesson 2</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\dfrac{\eta_0 k^2}{32\pi^2}\left(\vert N_\theta\vert^2 + \vert N_\phi\vert^2\right)\)</span>, <span class="math notranslate nohighlight">\(\eta_0 \approx 377\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(I(z') \leftrightarrow N_z(k_z)\)</span></p></td>
+<td class="text-left"><p>current and pattern are a Fourier transform pair</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(k_z = k\cos\theta\)</span>, visible only over <span class="math notranslate nohighlight">\(-k \le k_z \le +k\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Infinitesimal dipole</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\vert F\vert = \sin\theta\)</span> — the reference doughnut</p></td>
+<td class="text-left"><p>HPBW <span class="math notranslate nohighlight">\(90^{\circ}\)</span>, <span class="math notranslate nohighlight">\(D = 1.5\)</span> (1.76 dBi)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Half-wave dipole</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\vert F\vert = \cos\!\left(\tfrac{\pi}{2}\cos\theta\right)/\sin\theta\)</span> — a sharper doughnut</p></td>
+<td class="text-left"><p>HPBW <span class="math notranslate nohighlight">\(78.1^{\circ}\)</span>, <span class="math notranslate nohighlight">\(D = 1.64\)</span> (2.15 dBi)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Uniform line source</p></td>
+<td class="text-left"><p>space factor <span class="math notranslate nohighlight">\(\vert\sin u/u\vert\)</span>, <span class="math notranslate nohighlight">\(u = \tfrac{kL}{2}\cos\theta\)</span>; taper trades sidelobes for beamwidth</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_\text{HP} \approx 0.886\ \lambda/L\)</span>, first sidelobe <span class="math notranslate nohighlight">\(-13.3\)</span> dB; tapers reach <span class="math notranslate nohighlight">\(-23\)</span> to <span class="math notranslate nohighlight">\(-31.5\)</span> dB at 1.34–1.63× the beamwidth</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a href="../../practice/ECE444_L06_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a href="../../practice/ECE444_L06_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where this is going</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>Module 1 is complete. <strong>Module 2</strong> puts real currents into the integral:
+dipoles, monopoles, loops, patches, slots, and horns. <strong>Module 3</strong> turns the
+Fourier relationship around and uses it as a design tool: choose the pattern,
+then synthesize the current.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>You can describe an antenna’s pattern and gain (L2), its polarization and
+bandwidth (L3), its terminals (L4), where its far field starts (L5), and now
+how to compute the pattern from the current (L6). In Module 2 each antenna is
+a different <span class="math notranslate nohighlight">\(\mathbf{J}\)</span> producing a different <span class="math notranslate nohighlight">\(\mathbf{N}\)</span>, and the Lesson 8
+simulation lab solves for the current the integral needs. Module 3 chooses the
+pattern you want and synthesizes the current distribution that produces it.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module01/L06-radiation-integrals"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

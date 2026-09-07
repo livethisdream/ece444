@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L17 - Introduction to Phased Array Hardware &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l17-introduction-to-phased-array-hardware">
+<h1>L17 - Introduction to Phased Array Hardware<a class="headerlink" href="#l17-introduction-to-phased-array-hardware" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Introduction to Phased Array Hardware</h1>
+<div class="title-rule"></div>
+<p>Today you meet the machine that provides it.</p>
+<p>Lesson 17 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-2">
+<div class="wrap docutils container">
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L17-phased-array-hardware.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L17-phased-array-hardware.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L17-phased-array-hardware.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '3'">
+  <li>I can identify each block of the ADALM-PHASER signal chain and state its role.</li>
+  <li>I can trace a received X-band signal through the frequency plan to the IF the SDR digitizes.</li>
+  <li>I can explain the PHASER's hybrid beamforming architecture — analog within each 4-element subarray, digital across the two subarray outputs.</li>
+  <li>I can bring up the Phaser GUI, find the microwave source, and control array gain and frequency from the browser.</li>
+  <li>I can read the Python calls that set the array's phases and the SDR's tuning.</li>
+</ol>
+<div class="depth docutils container">
+<p>Lesson 16 built the array factor by assuming you can hand every element its
+own amplitude and phase, then add the results. That assumption is the whole
+of array theory, and satisfying it takes real hardware: eight phase
+shifters, eight attenuators, a summing network, a downconverter, and a
+computer to command all of it. Today you meet the machine that provides it.
+This is the first hands-on session with the <strong>ADALM-PHASER</strong>, the 8-element
+X-band array the rest of Module 3 runs on. By the end of the period you will
+have found each block on the board, traced a <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span> signal
+from a patch to a spectrum display, and moved two controls in the browser
+interface you will use in every lab that follows.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-receive-chain">
+<div class="wrap docutils container">
+<p class="rubric">The receive chain</p>
+<p>The PHASER is a receive array. A source somewhere in front of it radiates, the
+eight patches capture the wave, and everything between the patches and the
+Raspberry Pi exists to turn eight microwave signals into two streams of
+numbers.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-adalm-phaser-receive-chain">
+<div class="wrap docutils container">
+<p class="rubric">The ADALM-PHASER receive chain</p>
+<p>Follow the figure left to right.</p>
+<img src="../../viz/img/L17-signal-chain.svg" alt="ADALM-PHASER receive signal chain from the patch array through the ADAR1000 beamformers, mixers, and Pluto SDR to the Raspberry Pi" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-patches">
+<div class="wrap docutils container">
+<p class="rubric">The patches</p>
+<p>Eight microstrip patches sit in a horizontal row on the front
+face of the board, spaced <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span> center to center. Each one is an
+antenna in its own right with its own element pattern. A wave arriving off
+broadside reaches them in sequence, so the eight signals differ in phase by the
+progressive amount Lesson 16 called <span class="math notranslate nohighlight">\(\Delta\phi\)</span>. That phase difference is the
+only information the array has about arrival angle, and preserving it is the
+job of everything downstream.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-lnas">
+<div class="wrap docutils container">
+<p class="rubric">The LNAs</p>
+<p>An ADL8107 low-noise amplifier sits directly behind every patch,
+ahead of any phase shifting or combining. Gain placed first sets the receiver’s
+noise figure, because every loss after it is divided by that gain when referred
+to the input. Phase shifters and power combiners are lossy, so the order here
+is deliberate.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-adar1000s">
+<div class="wrap docutils container">
+<p class="rubric">The ADAR1000s</p>
+<p>Two ADAR1000 chips do the beamforming. Each is a 4-channel
+analog beamformer: it applies a programmable phase and a programmable gain to
+each of its four inputs at RF, then sums the four into a single output. The
+phase is set in steps of <span class="math notranslate nohighlight">\(2.8125^\circ\)</span>, which is <span class="math notranslate nohighlight">\(360^\circ/2^7\)</span> — a 7-bit
+phase shifter. The gain is what you will use as a taper in Lesson 25. When the
+GUI shows you eight element sliders, those sliders are writing registers in
+these two chips.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-mixers-and-the-lo">
+<div class="wrap docutils container">
+<p class="rubric">The mixers and the LO</p>
+<p>Each ADAR1000 output goes into an LTC5548 mixer,
+where it is multiplied by a local oscillator generated by an ADF4159 PLL
+driving an HMC735 VCO. The mixer keeps the difference between the two, which
+lands at a fixed <span class="math notranslate nohighlight">\(2.2\ \text{GHz}\)</span> intermediate frequency. Part 2 works the
+numbers.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-pluto">
+<div class="wrap docutils container">
+<p class="rubric">The Pluto</p>
+<p>An ADALM-Pluto — an AD9361 transceiver — digitizes the two IF
+channels. It is tuned to <span class="math notranslate nohighlight">\(2.2\ \text{GHz}\)</span> and samples at 3 MSPS in the course
+GUI. It has two receive channels and produces two streams of complex samples.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-raspberry-pi">
+<div class="wrap docutils container">
+<p class="rubric">The Raspberry Pi</p>
+<p>The Pi on the back of the board runs the Python backend.
+It writes phases and gains to the ADAR1000s over SPI, tunes the Pluto and the
+ADF4159 through <code class="docutils literal notranslate"><span class="pre">pyadi-iio</span></code>, reads the IQ buffers, and serves the browser
+interface. Everything you do in the lab arrives here as a command over a
+WebSocket.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-the-architecture-splits-where-it-does">
+<div class="wrap docutils container">
+<p class="rubric">Why the architecture splits where it does</p>
+<p>Count the phase shifters and count the analog-to-digital converters. There are
+eight phase shifters and two ADC channels. That ratio is the design decision.</p>
+<p>A phase shifter and an attenuator at RF are small, cheap, and low-power, so
+putting one behind each element costs little. A receive channel — mixer, filter,
+ADC, and the data plumbing to carry the samples away — is expensive in parts,
+in board area, and in power. Digitizing all eight elements would give software
+complete freedom to form any pattern it likes after the fact, and it would cost
+four times the receiver hardware this board carries.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-the-split-decides">
+<div class="wrap docutils container">
+<p class="rubric">What the split decides</p>
+<p>The PHASER takes the middle road. It is a <strong>hybrid beamformer</strong>: the beam is
+formed in analog inside each 4-element subarray, and the two subarray outputs
+are combined digitally afterwards.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-left"><p>Analog beamforming</p></th>
+<th class="head text-left"><p>Digital beamforming</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Where on the PHASER</p></td>
+<td class="text-left"><p>inside each ADAR1000, 4 elements</p></td>
+<td class="text-left"><p>across the two subarray outputs</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Weights available</p></td>
+<td class="text-left"><p>8, one per element</p></td>
+<td class="text-left"><p>2, one per channel</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Receiver channels needed</p></td>
+<td class="text-left"><p>1 per subarray</p></td>
+<td class="text-left"><p>1 per channel</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Beams at once</p></td>
+<td class="text-left"><p>one</p></td>
+<td class="text-left"><p>as many as software can compute</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point">
+<div class="wrap docutils container">
+<p class="rubric">Key point</p>
+<div class="callout docutils container">
+<p>The hybrid split decides what is possible later. Eight elements give you eight
+analog weights, so the array can steer, taper, and place a null anywhere you
+want it. But once the ADAR1000 sums its four elements, the individual element
+signals are gone, and software downstream sees two numbers, not eight. When you
+reach adaptive nulling in Lesson 28, the MVDR algorithm has exactly two digital
+degrees of freedom to work with, and that limit comes from this figure.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-frequency-plan">
+<div class="wrap docutils container">
+<p class="rubric">The frequency plan</p>
+<p>The board receives X-band, roughly <span class="math notranslate nohighlight">\(10.0\)</span> to <span class="math notranslate nohighlight">\(10.5\ \text{GHz}\)</span>. Nothing in the
+lab digitizes X-band. The mixers move the received signal down to a single
+fixed IF, and that IF is the only frequency the SDR ever tunes.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-rf-band-the-lo-band-and-the-fixed-if">
+<div class="wrap docutils container">
+<p class="rubric">The RF band, the LO band, and the fixed IF</p>
+<img src="../../viz/img/L17-frequency-plan.svg" alt="Frequency plan showing the 10.1 to 10.7 GHz RF band, the 12.2 to 13.0 GHz LO band, and the fixed 2.2 GHz IF" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-hb100-source">
+<div class="wrap docutils container">
+<p class="rubric">The HB100 source</p>
+<p>The source is an <strong>HB100</strong> Doppler module, a self-contained X-band transmitter
+about the size of a matchbox. Its nominal output is <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>. The
+oscillator inside it is a free-running dielectric resonator, not a locked
+synthesizer, so the actual frequency of any particular unit is set by the
+mechanical dimensions of that resonator and drifts with temperature. Units land
+anywhere from about <span class="math notranslate nohighlight">\(10.1\)</span> to <span class="math notranslate nohighlight">\(10.7\ \text{GHz}\)</span>. This is why the GUI has a
+<strong>Find HB100</strong> button: the software sweeps the LO, watches where the IF tone
+appears, and records the answer. The array cannot assume the source frequency,
+so it measures it.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-high-side-injection-and-the-if">
+<div class="wrap docutils container">
+<p class="rubric">High-side injection and the IF</p>
+<p>The LO comes from an ADF4159 PLL locking an HMC735 VCO, tunable over
+<span class="math notranslate nohighlight">\(12.2\)</span> to <span class="math notranslate nohighlight">\(13.0\ \text{GHz}\)</span>. The mixers use <strong>high-side injection</strong>, meaning
+the LO sits above the RF rather than below it, so</p>
+<div class="math notranslate nohighlight">
+\[ f_{\text{LO}} = f_{\text{RF}} + f_{\text{IF}}, \qquad f_{\text{IF}} = 2.2\ \text{GHz}. \]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-tracing-the-nominal-source-to-the-if">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — tracing the nominal source to the IF</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — tracing the nominal source to the IF</p>
+<p>An HB100 measures <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>. Where does the LO have to sit, and what
+does the Pluto see?</p>
+<p>The IF is fixed at <span class="math notranslate nohighlight">\(2.2\ \text{GHz}\)</span> by the filtering after the mixer, so the LO
+must sit that far above the signal:</p>
+<div class="math notranslate nohighlight">
+\[ f_{\text{LO}} = 10.525 + 2.200 = 12.725\ \text{GHz}. \]</div>
+<p>That value is inside the <span class="math notranslate nohighlight">\(12.2\)</span> to <span class="math notranslate nohighlight">\(13.0\ \text{GHz}\)</span> VCO range, so it is
+reachable. The mixer output is</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-continued">
+<div class="wrap docutils container">
+<p class="rubric">Worked example, continued</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example, continued</p>
+<div class="math notranslate nohighlight">
+\[ f_{\text{IF}} = f_{\text{LO}} - f_{\text{RF}} = 12.725 - 10.525 = 2.200\ \text{GHz}, \]</div>
+<p>and the Pluto is tuned to <span class="math notranslate nohighlight">\(2.2\ \text{GHz}\)</span> with a 3 MSPS sample rate, giving a
+3 MHz-wide window around that center. A tone <span class="math notranslate nohighlight">\(1\ \text{MHz}\)</span> off the tuned
+center lands inside the window and shows up as a peak in the FFT display. A
+tone <span class="math notranslate nohighlight">\(200\ \text{MHz}\)</span> off does not appear at all, which is what a wrong LO
+looks like on the screen.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-reachable-rf-band">
+<div class="wrap docutils container">
+<p class="rubric">The reachable RF band</p>
+<p>Run the arithmetic the other way to see the coverage the hardware has. With the
+LO limited to <span class="math notranslate nohighlight">\(12.2\)</span> to <span class="math notranslate nohighlight">\(13.0\ \text{GHz}\)</span> and the IF fixed at
+<span class="math notranslate nohighlight">\(2.2\ \text{GHz}\)</span>, the reachable RF band is <span class="math notranslate nohighlight">\(10.0\)</span> to <span class="math notranslate nohighlight">\(10.8\ \text{GHz}\)</span>. Every
+HB100 you are likely to be handed falls inside it.</p>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-interactive-the-phaser-signal-chain">
+<div class="wrap docutils container">
+<p class="rubric">Interactive — the PHASER signal chain</p>
+<div class="depth docutils container">
+<p>The widget below is the same chain as the figure, but you can click it. Select a
+block to see what it does and what frequency lives at that node, then drag the
+HB100 slider and watch the RF and LO labels move while the IF label does not.
+Notice that only one block changes its setting when the source frequency
+changes: the LO. That is the point of a fixed-IF plan.</p>
+</div>
+<iframe src="../../viz/phaser-signal-chain.html"
+        width="100%" height="508"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Interactive block diagram of the PHASER receive chain with a tunable HB100 source">
+</iframe>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-station">
+<div class="wrap docutils container">
+<p class="rubric">The station</p>
+<p>Each station has one kit:</p>
+<ul class="simple">
+<li><p>the ADALM-PHASER board, with the Raspberry Pi and the ADALM-Pluto attached on the back</p></li>
+<li><p>an HB100 microwave source on its own small stand or battery holder</p></li>
+<li><p>a USB-C supply for the board and a supply for the Pi</p></li>
+<li><p>a camera tripod, for the board and for aiming the source</p></li>
+<li><p>a laptop on the lab network — the laptop only runs a browser</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-bringing-the-station-up">
+<div class="wrap docutils container">
+<p class="rubric">Bringing the station up</p>
+<ol class="arabic simple">
+<li><p>Mount the PHASER on the tripod with the patch face vertical and the row of
+patches horizontal. The array steers in the plane of that row, so a board
+mounted on its side steers up and down and none of the lab works.</p></li>
+<li><p>Connect the board and the Pi supplies. Give the Pi about a minute to boot and
+start the service.</p></li>
+<li><p>On the laptop, browse to <code class="docutils literal notranslate"><span class="pre">http://phaser.local:8080</span></code>. The page connects over a
+WebSocket and the plot area starts drawing. If the page loads but no data
+arrives, the backend is not running yet — wait, then reload.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-phaser-gui-configuration">
+<div class="wrap docutils container">
+<p class="rubric">The Phaser GUI — Configuration</p>
+<p>The interface has a <strong>sidebar</strong> of control sections on the left and a <strong>plot
+area</strong> with tabs on the right. You will use all of these over the next several
+lessons; today only a few matter.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Sidebar section</p></th>
+<th class="head text-left"><p>What lives there</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Configuration</p></td>
+<td class="text-left"><p>Signal Freq (GHz), Rx Gain (dB), Tx Gain (dB), Signal BW (MHz), Tx Mode, Calibrate</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-phaser-gui-element-gains-and-phase-control">
+<div class="wrap docutils container">
+<p class="rubric">The Phaser GUI — Element Gains and Phase Control</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Sidebar section</p></th>
+<th class="head text-left"><p>What lives there</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Element Gains</p></td>
+<td class="text-left"><p>Rx1–Rx8 sliders and the taper presets</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Phase Control</p></td>
+<td class="text-left"><p>per-element phase offsets and Reset</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-phaser-gui-beam-steering-quantization-and-digital-beam-forming">
+<div class="wrap docutils container">
+<p class="rubric">The Phaser GUI — Beam Steering, Quantization, and Digital Beam Forming</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Sidebar section</p></th>
+<th class="head text-left"><p>What lives there</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Beam Steering</p></td>
+<td class="text-left"><p>Steer Angle (deg) and Apply</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Quantization</p></td>
+<td class="text-left"><p>Steer Resolution (deg), Phase Shift Bits</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Digital Beam Forming</p></td>
+<td class="text-left"><p>Manual and MVDR modes for the two digital channels</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-phaser-gui-plot-options-and-lab-presets">
+<div class="wrap docutils container">
+<p class="rubric">The Phaser GUI — Plot Options and Lab Presets</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Sidebar section</p></th>
+<th class="head text-left"><p>What lives there</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Plot Options</p></td>
+<td class="text-left"><p>peak markers, squint info, monopulse traces</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Lab Presets</p></td>
+<td class="text-left"><p>buttons 1 through 8, one per workshop lab</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-plot-tabs">
+<div class="wrap docutils container">
+<p class="rubric">The plot tabs</p>
+<p>The plot tabs are <strong>Rectangular</strong>, <strong>Polar</strong>, <strong>FFT</strong>, and <strong>Tracking</strong>.
+<strong>Start</strong> runs a beam sweep and <strong>Freeze</strong> holds a trace so you can compare
+against it. Today you work in the FFT tab, which shows the baseband spectrum of
+one receive channel rather than a beam pattern.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-find-hb100">
+<div class="wrap docutils container">
+<p class="rubric">Find HB100</p>
+<p>Two buttons need a word before you press anything.</p>
+<p><strong>Find HB100</strong> sweeps the LO until it locates the source and writes the measured
+frequency to a calibration file on the Pi. Run it once per source, at the start
+of the period, with the HB100 powered and pointed at the array. Every later
+calculation the software does uses that number.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-calibrate">
+<div class="wrap docutils container">
+<p class="rubric">Calibrate</p>
+<p><strong>Calibrate</strong> measures the per-element gain and phase offsets of the array
+itself — the small differences between the eight channels caused by trace
+lengths and part tolerances — and stores them so that commanding zero phase
+across the array actually produces a broadside beam. The stored calibration
+survives a reboot, so you normally run it once at the start of a lab period and
+leave it alone.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-both-buttons-take-a-few-seconds">
+<div class="wrap docutils container">
+<p class="rubric">Both buttons take a few seconds</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Both buttons write files on the Pi and both take some seconds to finish. Do not
+press them repeatedly while they run.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-load-the-preset-and-place-the-source">
+<div class="wrap docutils container">
+<p class="rubric">Load the preset and place the source</p>
+<p>Work through these in order and record what the numbered steps ask for.</p>
+<ol class="arabic simple">
+<li><p>Press <strong>Lab Preset 1 (Steering Angle)</strong>. The GUI loads the workshop’s initial
+state and opens the FFT tab in Beam Sweep mode, with a uniform taper and the
+beam commanded to broadside.</p></li>
+<li><p>Power the HB100 and place it about <span class="math notranslate nohighlight">\(1\ \text{m}\)</span> in front of the array at
+boresight, at the same height as the patch row, with its own patch face
+toward the board.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-find-hb100-and-read-the-peak">
+<div class="wrap docutils container">
+<p class="rubric">Find HB100 and read the peak</p>
+<ol class="arabic simple" start="3">
+<li><p>Press <strong>Find HB100</strong>. When it finishes, read the value it reports and write
+it down. Expect something within a few hundred MHz of
+<span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>.</p></li>
+<li><p>Look at the FFT tab. A single narrow peak should stand well above a flat
+noise floor. Record the frequency at which the peak appears in the baseband
+spectrum and how far above the floor it sits, in dB. The separation should be
+unambiguous — at least 20 dB with the source at <span class="math notranslate nohighlight">\(1\ \text{m}\)</span>. Less than that
+means the source is misaimed, too far away, or the LO is wrong.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-vary-the-receive-gain">
+<div class="wrap docutils container">
+<p class="rubric">Vary the receive gain</p>
+<ol class="arabic simple" start="5">
+<li><p>Change <strong>Rx Gain</strong> from its preset value down by 10 dB, then up by 10 dB.
+Record the peak level and the noise floor level at each of the three
+settings. Both move together, because this gain is applied inside the SDR,
+long after the LNAs have already set how much noise is riding on the signal.
+The separation between peak and floor therefore changes little. It does
+shrink at the lowest gain setting, where the SDR’s own noise starts to
+contribute.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-shift-the-tuned-frequency">
+<div class="wrap docutils container">
+<p class="rubric">Shift the tuned frequency</p>
+<ol class="arabic simple" start="6">
+<li><p>Change <strong>Signal Freq (GHz)</strong> by <span class="math notranslate nohighlight">\(-0.0005\ \text{GHz}\)</span>, which is 500 kHz down,
+and watch the peak. The GUI holds the IF fixed and moves the LO, so lowering
+the assumed source frequency lowers the LO by the same amount and the
+observed tone moves 500 kHz down in the baseband window. Record the shift and
+check it against the arithmetic in Part 2. The whole window is only 3 MHz
+wide at a 3 MSPS sample rate, so an error of more than about 1.5 MHz walks
+the tone off the display entirely, which is what a bad <strong>Find HB100</strong> result
+looks like. Return Signal Freq to the measured value before continuing.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-rotate-the-source">
+<div class="wrap docutils container">
+<p class="rubric">Rotate the source</p>
+<ol class="arabic simple" start="7">
+<li><p>Rotate the HB100 by hand to point away from the array, then back. The peak
+drops and returns. This is a first look at the element pattern you will
+measure properly in Lesson 23.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-no-hardware">
+<div class="wrap docutils container">
+<p class="rubric">No hardware?</p>
+<div class="tip admonition">
+<p class="admonition-title">No hardware?</p>
+<p>The same procedure runs against the simulator. Start the backend with</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>phaser_headless.py<span class="w"> </span>--sim
+</pre></div>
+</div>
+<p>and open <code class="docutils literal notranslate"><span class="pre">http://localhost:8080</span></code>. The sim synthesizes element-level IQ from a
+target at boresight, so steps 1, 4, 5, and 6 behave as described; the tone
+appears <span class="math notranslate nohighlight">\(1\ \text{MHz}\)</span> above the center of the baseband window. Two steps have
+no simulated equivalent. Step 3 is unnecessary, because the simulated source is
+already at a known frequency, and step 7 cannot be done at all, because the
+simulated target is fixed at boresight and cannot be rotated.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-reading-the-code-tuning-the-sdr">
+<div class="wrap docutils container">
+<p class="rubric">Reading the code — tuning the SDR</p>
+<p>Everything the GUI does reaches the hardware as a <code class="docutils literal notranslate"><span class="pre">pyadi-iio</span></code> call. Three short
+excerpts from the course backend cover the parts you have just used.</p>
+<p>Tuning the SDR and setting its gain:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sdr</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">ad9361</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">ip</span><span class="p">)</span>                     <span class="c1"># the Pluto's AD9361 transceiver</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">rx_enabled_channels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>             <span class="c1"># both subarray channels</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">sample_rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sample_rate</span><span class="p">)</span>           <span class="c1"># 3e6 in the GUI</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">rx_lo</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rx_lo</span><span class="p">)</span>                       <span class="c1"># 2.2e9 - the IF, never X-band</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">rx_rf_bandwidth</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sample_rate</span><span class="p">)</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">gain_control_mode_chan0</span> <span class="o">=</span> <span class="s2">"manual"</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">rx_hardwaregain_chan0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rx_gain</span><span class="p">)</span>     <span class="c1"># the Rx Gain slider, in dB</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">gain_control_mode_chan1</span> <span class="o">=</span> <span class="s2">"manual"</span>
+<span class="n">sdr</span><span class="o">.</span><span class="n">rx_hardwaregain_chan1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rx_gain</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-the-tuning-call-does">
+<div class="wrap docutils container">
+<p class="rubric">What the tuning call does</p>
+<p>Line by line: <code class="docutils literal notranslate"><span class="pre">adi.ad9361</span></code> opens a connection to the transceiver at a network
+address, and the two enabled receive channels are the two subarray outputs. The
+sample rate fixes the width of the baseband window, and <code class="docutils literal notranslate"><span class="pre">rx_rf_bandwidth</span></code>
+matches the analog filter to it. <code class="docutils literal notranslate"><span class="pre">rx_lo</span></code> is the tuned frequency, and it is
+<span class="math notranslate nohighlight">\(2.2\ \text{GHz}\)</span> every time — the SDR never learns what band the array is
+looking at. Automatic gain control is switched off deliberately, because a
+receiver that changes its own gain during a beam sweep produces a pattern
+measurement that means nothing. The manual gain is what the <strong>Rx Gain</strong> slider
+writes.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-local-oscillator-on-its-own-chip">
+<div class="wrap docutils container">
+<p class="rubric">The local oscillator, on its own chip</p>
+<p>The LO is a separate device on the same board:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">synth</span> <span class="o">=</span> <span class="n">adi</span><span class="o">.</span><span class="n">adf4159</span><span class="p">(</span><span class="n">rpi_ip</span><span class="p">)</span>
+<span class="n">synth</span><span class="o">.</span><span class="n">frequency</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lo_freq</span><span class="p">)</span>               <span class="c1"># 12.725e9 for a 10.525 GHz source</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-reading-the-code-writing-the-phases">
+<div class="wrap docutils container">
+<p class="rubric">Reading the code — writing the phases</p>
+<p>Setting the array’s phases:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ADAR_set_Phase</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">PhDelta</span><span class="p">,</span> <span class="n">phase_step_size</span><span class="p">,</span> <span class="n">phaseList</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">""" Set array phases for given steering angle/delta """</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="n">element_id</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">base_phase</span> <span class="o">=</span> <span class="n">phaseList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">PhDelta</span>
+        <span class="n">q_phase</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">base_phase</span> <span class="o">/</span> <span class="n">phase_step_size</span><span class="p">)</span> <span class="o">*</span> <span class="n">phase_step_size</span>
+        <span class="n">q_phase</span> <span class="o">=</span> <span class="n">q_phase</span> <span class="o">%</span> <span class="mi">360</span>
+        <span class="n">array</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="n">element_id</span><span class="p">]</span><span class="o">.</span><span class="n">rx_phase</span> <span class="o">=</span> <span class="n">q_phase</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-the-phase-setting-loop-does">
+<div class="wrap docutils container">
+<p class="rubric">What the phase-setting loop does</p>
+<p>Here <code class="docutils literal notranslate"><span class="pre">array</span></code> is the <code class="docutils literal notranslate"><span class="pre">pyadi-iio</span></code> object that represents both ADAR1000s as one
+8-element array, so <code class="docutils literal notranslate"><span class="pre">array.elements[1]</span></code> through <code class="docutils literal notranslate"><span class="pre">array.elements[8]</span></code> reach the
+individual channels regardless of which chip they live on. <code class="docutils literal notranslate"><span class="pre">phaseList</span></code> holds the
+per-element calibration offsets measured by <strong>Calibrate</strong>. <code class="docutils literal notranslate"><span class="pre">PhDelta</span></code> is the
+progressive phase from element to element — the <span class="math notranslate nohighlight">\(\Delta\phi\)</span> of Lesson 16 — so
+<code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">*</span> <span class="pre">PhDelta</span></code> builds the linear phase ramp across the aperture and the
+calibration offset is added on top. The next two lines are the hardware’s
+limitation made explicit: the commanded phase is rounded to the nearest multiple
+of <code class="docutils literal notranslate"><span class="pre">phase_step_size</span></code>, which is <span class="math notranslate nohighlight">\(2.8125^\circ\)</span>, and wrapped into <span class="math notranslate nohighlight">\(0\)</span> to
+<span class="math notranslate nohighlight">\(360^\circ\)</span>. Lesson 18 computes <code class="docutils literal notranslate"><span class="pre">PhDelta</span></code> from a steering angle, and Lesson 26
+studies what that rounding does to the pattern.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-writing-the-taper">
+<div class="wrap docutils container">
+<p class="rubric">Writing the taper</p>
+<p>The matching call for the taper writes gains instead of phases:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="n">element_id</span><span class="p">]</span><span class="o">.</span><span class="n">rx_gain</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">taper_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-deliverables">
+<div class="wrap docutils container">
+<p class="rubric">Deliverables</p>
+<p>Submit the following.</p>
+<ol class="arabic">
+<li><p><strong>The measured HB100 frequency</strong> from step 3, and the IF arithmetic that goes
+with it. Fill in this table.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Measured HB100 frequency</p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Required LO frequency</p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Resulting IF</p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Is the LO inside 12.2–13.0 GHz?</p></td>
+<td class="text-left"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-deliverables-the-diagram-and-the-fft">
+<div class="wrap docutils container">
+<p class="rubric">Deliverables — the diagram and the FFT</p>
+<ol class="arabic simple" start="2">
+<li><p><strong>A labeled block diagram.</strong> Sketch the receive chain from patch to Pi and
+label every block with its name and the frequency present at that point. Mark
+where the analog summing happens and where the digital channels begin.</p></li>
+<li><p><strong>Your FFT observations</strong> from steps 4, 5, and 6: peak frequency, peak level
+and noise floor at each of the three Rx Gain settings, and the shift in the
+peak when Signal Freq moved by 500 kHz.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-deliverables-the-write-up">
+<div class="wrap docutils container">
+<p class="rubric">Deliverables — the write-up</p>
+<ol class="arabic simple" start="4">
+<li><p><strong>Two written answers</strong>, three or four sentences each.</p>
+<ul class="simple">
+<li><p>Why does the control software have to hunt for the HB100’s frequency
+instead of assuming <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>?</p></li>
+<li><p>The array has eight elements, but software sees only two digital channels.
+Explain where the other six went and name one measurement this rules out.</p></li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lab-sheet">
+<div class="wrap docutils container">
+<p class="rubric">Lab sheet</p>
+<p>The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">Lab sheet (PDF)</a>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-array-hardware">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the array hardware</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(d\)</span></p></td>
+<td class="text-left"><p>patch pitch along the array</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(14\ \text{mm}\)</span>, which is <span class="math notranslate nohighlight">\(0.491\lambda\)</span> at 10.525 GHz</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>ADAR1000</p></td>
+<td class="text-left"><p>4-channel analog beamformer, phase and gain per element</p></td>
+<td class="text-left"><p>two chips, four elements each, phase LSB <span class="math notranslate nohighlight">\(2.8125^\circ\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-hybrid-split">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the hybrid split</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Hybrid split</p></td>
+<td class="text-left"><p>analog sum inside a subarray, digital across subarrays</p></td>
+<td class="text-left"><p>8 elements in, 2 digital channels out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-source-and-the-lo">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the source and the LO</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>HB100</p></td>
+<td class="text-left"><p>free-running DRO source, not a synthesizer</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span> nominal, found anywhere in 10.1–10.7 GHz</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>LO</p></td>
+<td class="text-left"><p>ADF4159 PLL driving an HMC735 VCO</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(12.2\)</span> to <span class="math notranslate nohighlight">\(13.0\ \text{GHz}\)</span>, high-side</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-if-and-the-mixing-rule">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the IF and the mixing rule</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(f_{\text{IF}}\)</span></p></td>
+<td class="text-left"><p>mixer output the SDR tunes</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2.2\ \text{GHz}\)</span>, fixed</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Frequency plan</p></td>
+<td class="text-left"><p>high-side mixing rule</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(f_{\text{LO}} = f_{\text{RF}} + 2.2\ \text{GHz}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-receiver-and-interface">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the receiver and interface</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>ADALM-Pluto</p></td>
+<td class="text-left"><p>AD9361 SDR, two receive channels</p></td>
+<td class="text-left"><p>3 MSPS in the GUI, tuned to 2.2 GHz</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Phaser GUI</p></td>
+<td class="text-left"><p>browser front end served by the Pi</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">http://phaser.local:8080</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a href="../../practice/ECE444_L17_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a href="../../practice/ECE444_L17_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where this is going</p>
+<p>You now have a machine that can put an arbitrary phase on each of eight
+elements, and you have not yet told it what phase to use. Lesson 18 supplies the
+missing piece with a path-length argument: a wave arriving at angle <span class="math notranslate nohighlight">\(\theta_0\)</span>
+reaches consecutive elements <span class="math notranslate nohighlight">\(d\sin\theta_0\)</span> apart in distance, and the phase
+ramp that compensates that delay is <span class="math notranslate nohighlight">\(\Delta\phi = kd\sin\theta_0\)</span>. That single
+expression turns a steering angle into the eight numbers <code class="docutils literal notranslate"><span class="pre">ADAR_set_Phase</span></code>
+writes. Lesson 19 brings you back to this station to steer the real beam with
+them and measure where it actually points.</p>
+<div class="depth docutils container">
+<p>Before Lesson 18, review the array factor from Lesson 16 and be ready to state
+what <span class="math notranslate nohighlight">\(\psi\)</span> is and why the pattern peaks when it is zero. It is worth keeping
+the deliverable block diagram from today somewhere you can find it; the same
+figure comes back in Lesson 28, when the two digital channels stop being a
+detail and become the constraint the whole lab works around.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L17-phased-array-hardware"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

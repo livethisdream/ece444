@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Element factor times array factor</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:12px; box-sizing:border-box; max-width:100%; }
+  .plotwrap { width:100%; }
+  canvas { display:block; width:100%; border:1px solid var(--edge); border-radius:6px; background:#fff; }
+  .controls { display:flex; flex-wrap:wrap; gap:14px 22px; align-items:flex-end;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px;
+              padding:10px 12px; box-sizing:border-box; }
+  .ctl { display:flex; flex-direction:column; gap:4px; flex:1 1 210px; min-width:0; }
+  .ctl label { font-size:13px; color:var(--ink3); font-weight:600; }
+  .ctl input[type=range] { width:100%; accent-color:var(--mid); }
+  .ctl select { width:100%; box-sizing:border-box; font:inherit; font-size:13px; padding:4px 6px;
+                border:1px solid var(--edge2); border-radius:4px; background:#fff; color:var(--ink); }
+  .val { font-variant-numeric:tabular-nums; color:var(--navy); font-weight:700; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvas above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .note { font-size:12.5px; color:var(--ink3); line-height:1.45; margin:0; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <div class="plotwrap"><canvas id="plot"></canvas></div>
+
+  <div class="controls" id="panel">
+    <div class="ctl">
+      <label for="steer">Steer angle \(\theta_0\): <span class="val" id="steerv">0&deg;</span></label>
+      <input type="range" id="steer" min="-75" max="75" step="1" value="0">
+    </div>
+    <div class="ctl">
+      <label for="elem">Element factor</label>
+      <select id="elem">
+        <option value="iso">Isotropic (array factor alone)</option>
+        <option value="ideal" selected>Ideal element (power &prop; cos &theta;)</option>
+        <option value="patch">Real patch (steeper roll-off)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">scan loss</span><span class="v" id="pScan">0.0 dB</span></div>
+    <div class="ro"><span class="k">HPBW</span><span class="v" id="pHp">13.2&deg;</span></div>
+    <div class="ro"><span class="k">peak angle</span><span class="v" id="pAng">0.0&deg;</span></div>
+  </div>
+
+  <p class="note">Eight elements, spacing 0.481 wavelengths &mdash; the course array at 10.3 GHz.
+     Curves are normalized so that 0 dB is the broadside peak. The dashed envelope is the
+     element power pattern: flat for an isotropic element, cos &theta; for an element
+     that captures its share of the aperture, and steeper for a real patch.</p>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var N = 8, DL = 14.0 / 29.1, FLOOR = -40;
+  var NAVY = '#004a85', MID = '#0067b9', AMBER = '#8a5a00', GRN = '#3f7d34',
+      INK = '#15202b', INK3 = '#5b6573', EDGE = '#cddce9', GRID = '#e3edf5';
+
+  var cv = document.getElementById('plot'), ctx = cv.getContext('2d');
+  var steer = document.getElementById('steer'), elem = document.getElementById('elem');
+  var panel = document.getElementById('panel');
+  var rad = function (d) { return d * Math.PI / 180; };
+
+  // ---- physics -----------------------------------------------------------
+  function af(thDeg, t0Deg) {                    // normalized uniform AF, field
+    var psi = 2 * Math.PI * DL * (Math.sin(rad(thDeg)) - Math.sin(rad(t0Deg)));
+    var s = Math.sin(psi / 2);
+    if (Math.abs(s) < 1e-12) return 1;
+    return Math.sin(N * psi / 2) / (N * s);
+  }
+  // Element power pattern cos^p(theta); the field pattern is its square root.
+  // p = 0 isotropic, p = 1 the ideal element (projected-aperture rule),
+  // p = 1.4 a real patch, which rolls off faster.
+  var PW = { iso: 0, ideal: 1.0, patch: 1.4 };
+  function ef(thDeg, p) {                        // element factor, field
+    if (!p) return 1;
+    return Math.pow(Math.max(Math.cos(rad(thDeg)), 0), p / 2);
+  }
+  function dB(x) { return 20 * Math.log10(Math.max(Math.abs(x), 1e-6)); }
+
+  // Fine sweep for peak, beamwidth and peak angle.
+  function analyze(t0, pw) {
+    var n = 7201, best = -1e9, iBest = 0, i, th, v, P = new Float64Array(n);
+    for (i = 0; i < n; i++) {
+      th = -90 + 180 * i / (n - 1);
+      v = ef(th, pw) * af(th, t0);
+      P[i] = v * v;
+      if (P[i] > best) { best = P[i]; iBest = i; }
+    }
+    var half = best * 0.5, lo = iBest, hi = iBest;
+    while (lo > 0 && P[lo] > half) lo--;
+    while (hi < n - 1 && P[hi] > half) hi++;
+    var step = 180 / (n - 1);
+    // Scan loss is the gain in the commanded direction, where AF = 1 exactly,
+    // so it is the element envelope evaluated at the steer angle.
+    return { scan: dB(ef(t0, pw)),
+             peak: 10 * Math.log10(best),
+             ang: -90 + step * iBest,
+             hp: step * (hi - lo) };
+  }
+
+  // ---- geometry ----------------------------------------------------------
+  var G = {};
+  function layout() {
+    var w = Math.max(240, Math.floor(cv.parentNode.clientWidth));
+    var narrow = w < 560;
+    var legendRows = narrow ? 3 : 1;
+    var B = 36 + legendRows * 16;                 // ticks + axis title + legend
+    var T = 10;
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:430px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.58) : h; }
+    var plotH = SQ(Math.round(Math.min(210, Math.max(140, w * 0.30))));
+    var h = T + plotH + B;
+    var dpr = window.devicePixelRatio || 1;
+    cv.style.width = w + 'px'; cv.style.height = h + 'px';
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    G.w = w; G.h = h; G.narrow = narrow;
+    G.L = narrow ? 40 : 52; G.R = 12; G.T = T; G.B = B;
+    G.x0 = G.L; G.x1 = w - G.R; G.y0 = G.T; G.y1 = h - G.B;
+    G.legendRows = legendRows;
+  }
+  function X(thDeg) { return G.x0 + (thDeg + 90) / 180 * (G.x1 - G.x0); }
+  function Y(d) { return G.y1 - (Math.max(d, FLOOR) - FLOOR) / (-FLOOR) * (G.y1 - G.y0); }
+
+  function curve(t0, pw, kind) {
+    ctx.beginPath();
+    var n = 1401, started = false, i, th, v;
+    for (i = 0; i < n; i++) {
+      th = -90 + 180 * i / (n - 1);
+      if (kind === 'af') v = af(th, t0);
+      else if (kind === 'ef') v = ef(th, pw);
+      else v = ef(th, pw) * af(th, t0);
+      var d = dB(v);
+      if (d < FLOOR - 2) { started = false; continue; }
+      if (!started) { ctx.moveTo(X(th), Y(d)); started = true; }
+      else ctx.lineTo(X(th), Y(d));
+    }
+    ctx.stroke();
+  }
+
+  function legend() {
+    var items = [
+      { c: AMBER, dash: [7, 4], w: 1.8, t: 'Element factor' },
+      { c: MID, dash: [], w: 1.2, t: 'Array factor' },
+      { c: NAVY, dash: [], w: 3.0, t: 'Element × array' }
+    ];
+    ctx.font = '12.5px Inter, system-ui, sans-serif';
+    ctx.textBaseline = 'middle';
+    var y = G.y1 + 51, i, seg = 22, gap = 7;
+    if (G.narrow) {
+      ctx.textAlign = 'left';
+      for (i = 0; i < items.length; i++) {
+        var yy = y + i * 18;
+        ctx.save(); ctx.strokeStyle = items[i].c; ctx.lineWidth = items[i].w;
+        ctx.setLineDash(items[i].dash);
+        ctx.beginPath(); ctx.moveTo(G.x0, yy); ctx.lineTo(G.x0 + seg, yy); ctx.stroke(); ctx.restore();
+        ctx.fillStyle = INK3; ctx.fillText(items[i].t, G.x0 + seg + gap, yy);
+      }
+      return;
+    }
+    var widths = [], total = 0;
+    ctx.textAlign = 'left';
+    for (i = 0; i < items.length; i++) {
+      widths[i] = seg + gap + ctx.measureText(items[i].t).width;
+      total += widths[i];
+    }
+    var pad = 26, x = (G.x0 + G.x1) / 2 - (total + pad * (items.length - 1)) / 2;
+    for (i = 0; i < items.length; i++) {
+      ctx.save(); ctx.strokeStyle = items[i].c; ctx.lineWidth = items[i].w;
+      ctx.setLineDash(items[i].dash);
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + seg, y); ctx.stroke(); ctx.restore();
+      ctx.fillStyle = INK3; ctx.fillText(items[i].t, x + seg + gap, y);
+      x += widths[i] + pad;
+    }
+  }
+
+  function drawAll() {
+    layout();
+    var t0 = Number(steer.value), pw = PW[elem.value];
+    ctx.clearRect(0, 0, G.w, G.h);
+
+    // grid
+    ctx.font = (G.narrow ? '11px' : '12px') + ' Inter, system-ui, sans-serif';
+    ctx.lineWidth = 1;
+    var d, t;
+    for (d = 0; d >= FLOOR; d -= 10) {
+      ctx.strokeStyle = GRID;
+      ctx.beginPath(); ctx.moveTo(G.x0, Y(d) + 0.5); ctx.lineTo(G.x1, Y(d) + 0.5); ctx.stroke();
+      ctx.fillStyle = INK3; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+      ctx.fillText(String(d), G.x0 - 6, Y(d));
+    }
+    for (t = -90; t <= 90; t += 30) {
+      ctx.strokeStyle = GRID;
+      ctx.beginPath(); ctx.moveTo(X(t) + 0.5, G.y0); ctx.lineTo(X(t) + 0.5, G.y1); ctx.stroke();
+      ctx.fillStyle = INK3; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      ctx.fillText(t + '°', X(t), G.y1 + 6);
+    }
+    ctx.strokeStyle = EDGE;
+    ctx.strokeRect(G.x0 + 0.5, G.y0 + 0.5, G.x1 - G.x0, G.y1 - G.y0);
+
+    // axis titles
+    ctx.fillStyle = INK3; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.font = (G.narrow ? '12px' : '12.5px') + ' Inter, system-ui, sans-serif';
+    ctx.fillText('Angle from broadside (deg)', (G.x0 + G.x1) / 2, G.y1 + 22);
+    ctx.save();
+    ctx.translate(G.narrow ? 11 : 14, (G.y0 + G.y1) / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Relative power (dB)', 0, 0);
+    ctx.restore();
+
+    // commanded steer angle
+    ctx.save();
+    ctx.strokeStyle = '#9aa6b2'; ctx.lineWidth = 1; ctx.setLineDash([3, 4]);
+    ctx.beginPath(); ctx.moveTo(X(t0), G.y0); ctx.lineTo(X(t0), G.y1); ctx.stroke();
+    ctx.restore();
+
+    // curves
+    ctx.save();
+    ctx.strokeStyle = AMBER; ctx.lineWidth = 1.8; ctx.setLineDash([7, 4]);
+    curve(t0, pw, 'ef');
+    ctx.restore();
+    ctx.strokeStyle = MID; ctx.lineWidth = 1.2; curve(t0, pw, 'af');
+    ctx.strokeStyle = NAVY; ctx.lineWidth = 3.0;
+    ctx.lineJoin = 'round'; curve(t0, pw, 'prod');
+
+    // peak marker
+    var r = analyze(t0, pw);
+    ctx.fillStyle = NAVY;
+    ctx.beginPath(); ctx.arc(X(r.ang), Y(r.peak), 4.2, 0, 2 * Math.PI); ctx.fill();
+
+    // half-power span, drawn on the beam
+    ctx.save();
+    ctx.strokeStyle = GRN; ctx.lineWidth = 2;
+    var yh = Y(r.peak - 3);
+    ctx.beginPath();
+    ctx.moveTo(X(Math.max(-90, r.ang - r.hp / 2)), yh);
+    ctx.lineTo(X(Math.min(90, r.ang + r.hp / 2)), yh);
+    ctx.stroke();
+    ctx.restore();
+
+    legend();
+
+    // element-factor symbol on the envelope, when there is one
+    if (pw && MJ.ready) {
+      var xs = t0 > 0 ? -68 : 68;
+      var tex = pw === 1 ? '\\cos\\theta' : '\\cos^{1.4}\\theta';
+      MJ.draw(ctx, tex, X(xs), Y(dB(ef(xs, pw))) - 14, 15, AMBER, 'center');
+    }
+
+    document.getElementById('steerv').textContent = t0 + '°';
+    document.getElementById('pScan').textContent = r.scan.toFixed(1) + ' dB';
+    document.getElementById('pHp').textContent = r.hp.toFixed(1) + '°';
+    document.getElementById('pAng').textContent = r.ang.toFixed(1) + '°';
+  }
+
+  steer.addEventListener('input', drawAll);
+  elem.addEventListener('input', drawAll);
+  elem.addEventListener('change', drawAll);
+  window.addEventListener('resize', drawAll);
+
+  MJ.setRedraw(drawAll);
+  MJ.onReady(function () { MJ.typeset(panel); drawAll(); });
+  drawAll();
+})();
+</script>
+</body>
+</html>

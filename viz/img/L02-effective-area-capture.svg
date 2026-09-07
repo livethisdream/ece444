@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" font-family="Inter,system-ui,sans-serif">
+<defs>
+<marker id="eaB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0067b9"/></marker>
+<marker id="eaN" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
+</defs>
+<rect width="640" height="300" fill="#ffffff"/>
+<text x="44" y="52" fill="#0067b9" font-size="14" font-weight="700">incident wave — S (W/m²)</text>
+<g stroke="#0067b9" stroke-width="2" opacity="0.42">
+<line x1="50" y1="80" x2="50" y2="230"/><line x1="88" y1="80" x2="88" y2="230"/><line x1="126" y1="80" x2="126" y2="230"/>
+</g>
+<g stroke="#0067b9" stroke-width="1.8" marker-end="url(#eaB)">
+<line x1="136" y1="100" x2="248" y2="100"/><line x1="136" y1="155" x2="248" y2="155"/><line x1="136" y1="210" x2="248" y2="210"/>
+</g>
+<rect x="250" y="94" width="26" height="122" fill="#b3213a" opacity="0.14" stroke="#b3213a" stroke-width="2"/>
+<text x="263" y="242" fill="#b3213a" font-size="17" font-weight="700" text-anchor="middle">A<tspan dy="4" font-size="12">e</tspan></text>
+<line x1="276" y1="155" x2="370" y2="155" stroke="#004a85" stroke-width="2.6" marker-end="url(#eaN)"/>
+<rect x="370" y="131" width="58" height="48" rx="5" fill="#ffffff" stroke="#004a85" stroke-width="1.8"/>
+<text x="399" y="152" fill="#004a85" font-size="15" font-weight="700" text-anchor="middle">P<tspan dy="4" font-size="10">rx</tspan></text>
+<text x="399" y="170" fill="#5b6573" font-size="11" text-anchor="middle">to load</text>
+<text x="470" y="150" fill="#15202b" font-size="22" font-weight="700">P</text>
+<text x="488" y="156" fill="#15202b" font-size="14" font-weight="700">rx</text>
+<text x="510" y="150" fill="#15202b" font-size="22" font-weight="700">= S·A</text>
+<text x="571" y="156" fill="#15202b" font-size="14" font-weight="700">e</text>
+<text x="470" y="178" fill="#5b6573" font-size="13">the slice of the wavefront</text>
+<text x="470" y="196" fill="#5b6573" font-size="13">the antenna captures</text>
+</svg>

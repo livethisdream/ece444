@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The field around a line source</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; cursor:crosshair; touch-action:none; }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 230px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:56px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
+  .chk { display:flex; align-items:center; gap:6px; font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  @media (max-width:430px) {
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .btns { flex:1 1 100%; justify-content:stretch; }
+    .btns button { flex:1 1 0; }
+  }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .state { margin:0; text-align:center; font-size:12px; font-weight:700;
+           letter-spacing:0.01em; color:var(--ink3); }
+  .state.hot { color:var(--red); }
+  .state.ok  { color:var(--grn); }
+  .btns { display:flex; gap:6px; }
+  button { font:inherit; font-size:12px; font-weight:600; padding:4px 10px; border-radius:5px;
+           border:1px solid var(--edge2); background:#fff; color:var(--navy); cursor:pointer; }
+  button:hover { background:var(--bg); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="map" aria-label="The field around a line source, every element radiating a wave. The observer direction is a line from the source to a point P at the edge, and the far-field pattern is drawn as a polar curve around the source."></canvas>
+  <div class="controls">
+    <div class="ctl">
+      <label>Source length \(L/\lambda\)</label>
+      <input type="range" id="len" min="0.25" max="4" step="0.05" value="1">
+      <span class="val" id="len-val">1.00</span>
+    </div>
+    <div class="ctl">
+      <label>Angle \(\theta\)</label>
+      <input type="range" id="th" min="0" max="180" step="0.5" value="90">
+      <span class="val" id="th-val">90.0&#176;</span>
+    </div>
+    <div class="ctl">
+      <label>Elements</label>
+      <input type="range" id="n" min="2" max="40" step="1" value="2">
+      <span class="val" id="n-val">2</span>
+    </div>
+    <div class="btns">
+      <button id="broad" type="button">broadside</button>
+      <button id="null1" type="button">first null</button>
+      <button id="many" type="button">24 elements</button>
+    </div>
+    <label class="chk"><input type="checkbox" id="anim" checked> animate</label>
+  </div>
+  <div class="readouts">
+    <div class="ro"><span class="k">\(\lvert N(\theta)\rvert / N_{\max}\)</span><span class="v" id="p-mag">&#8212;</span></div>
+    <div class="ro"><span class="k">far field \(2L^2/\lambda\)</span><span class="v" id="p-ff">&#8212;</span></div>
+  </div>
+  <p class="state" id="p-state">&#8212;</p>
+</div>
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+function ramp(t){
+  const a=[0,103,185], b=[138,90,0];
+  return 'rgb('+Math.round(a[0]+(b[0]-a[0])*t)+','+Math.round(a[1]+(b[1]-a[1])*t)+','+Math.round(a[2]+(b[2]-a[2])*t)+')';
+}
+const cv=document.getElementById('map'), ctx=cv.getContext('2d');
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const state={ L:1.0, th:Math.PI/2, M:2, anim:true };
+const SPAN=6;                                  // half-height of the map, in wavelengths
+let W=0, H=0, SCL=1, pxPerL=1, t0=performance.now();
+function zOf(i){ return ((i+0.5)/state.M-0.5)*state.L; }
+function sumAt(th){                             // far-field sum, normalized to [0,1]
+  const c=Math.cos(th); let re=0, im=0;
+  for(let i=0;i<state.M;i++){ const p=2*Math.PI*zOf(i)*c; re+=Math.cos(p); im+=Math.sin(p); }
+  return Math.hypot(re,im)/state.M;
+}
+/* ---- the field: every element a cylindrical wave, summed on a coarse grid
+   and scaled up. Every element shares one frequency, so the instantaneous
+   field at a cell is Re{(C + jS) e^{j w t}} = C cos(wt) - S sin(wt), with
+   C = sum a_i cos(k d_i) and S = sum a_i sin(k d_i) fixed by the geometry.
+   Those two arrays are computed once per geometry; a frame is then one
+   multiply-add per cell. The first version summed every element in every
+   cell on every frame and made the whole browser jitter (Neil, 2026-09-03).
+   Animated, the map is the instantaneous field, blue positive and amber
+   negative; still, it is the amplitude. Both are normalized to the largest
+   value the source can reach at the map's edge. */
+let tmp=document.createElement('canvas'), tctx=tmp.getContext('2d');
+let grid={ cols:0, rows:0, cell:0, C:null, S:null, key:'' };
+function computeField(){
+  const w=W, h=H;
+  const cell=Math.max(2.2, h/105);
+  const cols=Math.ceil(w/cell), rows=Math.ceil(h/cell);
+  const key=[w,h,state.L,state.M].join('|');
+  if(grid.key===key) return;
+  const C=new Float32Array(cols*rows), S=new Float32Array(cols*rows);
+  const ox=w/2, oy=h/2, k=2*Math.PI;
+  const zs=[]; for(let i=0;i<state.M;i++) zs.push(zOf(i));
+  for(let r=0;r<rows;r++){
+    const y=-((r+0.5)*cell-oy)/pxPerL;
+    for(let c=0;c<cols;c++){
+      const x=((c+0.5)*cell-ox)/pxPerL;
+      let re=0, im=0;
+      for(let i=0;i<state.M;i++){
+        const dz=y-zs[i], d=Math.hypot(x,dz)+0.02, a=1/Math.sqrt(d), p=-k*d;
+        re+=a*Math.cos(p); im+=a*Math.sin(p);
+      }
+      const o=r*cols+c; C[o]=re; S[o]=im;
+    }
+  }
+  grid={ cols, rows, cell, C, S, key };
+  if(tmp.width!==cols||tmp.height!==rows){ tmp.width=cols; tmp.height=rows; }
+}
+function drawField(now){
+  const w=W, h=H;
+  computeField();
+  const { cols, rows, cell, C, S } = grid;
+  const img=tctx.createImageData(cols,rows), px=img.data;
+  const wt=state.anim ? ((now-t0)/1000)*2*Math.PI*0.45 : 0;
+  const cw=Math.cos(wt), sw=Math.sin(wt), norm=state.M/Math.sqrt(SPAN);
+  const A=[0,74,133], B=[176,110,20];
+  const n=cols*rows;
+  for(let o=0;o<n;o++){
+    let v = state.anim ? (C[o]*cw - S[o]*sw)/norm : Math.hypot(C[o],S[o])/norm;
+    if(v>1) v=1; else if(v<-1) v=-1;
+    const m=Math.pow(Math.abs(v), state.anim?0.6:0.5), col=(v>=0||!state.anim)?A:B;
+    const q=4*o;
+    px[q]=255+(col[0]-255)*m; px[q+1]=255+(col[1]-255)*m; px[q+2]=255+(col[2]-255)*m; px[q+3]=255;
+  }
+  tctx.putImageData(img,0,0);
+  ctx.clearRect(0,0,w,h);
+  ctx.imageSmoothingEnabled=true;
+  ctx.drawImage(tmp,0,0,cols,rows,0,0,cols*cell,rows*cell);
+  drawOverlay(w,h);
+}
+function drawOverlay(w,h){
+  const ox=w/2, oy=h/2;
+  // the far-field pattern, as a polar curve around the source
+  const r0=Math.min(w,h)*0.46;
+  ctx.strokeStyle='rgba(255,255,255,0.85)'; ctx.lineWidth=3.2; ctx.beginPath();
+  for(let i=0;i<=360;i++){ const a=i*Math.PI/180, m=sumAt(a), x=ox+Math.sin(a)*r0*m, y=oy-Math.cos(a)*r0*m; i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+  ctx.closePath(); ctx.stroke();
+  ctx.strokeStyle=cssv('--navy'); ctx.lineWidth=1.4; ctx.stroke();
+  // the far-field distance, when it fits on the map
+  const ff=2*state.L*state.L;
+  if(ff*pxPerL < Math.min(w,h)*0.5 && ff>0.05){
+    ctx.strokeStyle='rgba(21,32,43,0.6)'; ctx.lineWidth=1; ctx.setLineDash([2,4]);
+    ctx.beginPath(); ctx.arc(ox,oy,ff*pxPerL,0,7); ctx.stroke(); ctx.setLineDash([]);
+    MJ.draw(ctx,'2L^2/\\lambda', ox+ff*pxPerL*0.71+4, oy+ff*pxPerL*0.71+6, 10.5, cssv('--ink'),'left');
+  }
+  // the source
+  const half=state.L/2*pxPerL;
+  ctx.strokeStyle=cssv('--ink'); ctx.lineWidth=3; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(ox,oy-half); ctx.lineTo(ox,oy+half); ctx.stroke(); ctx.lineCap='butt';
+  for(let i=0;i<state.M;i++){
+    const y=oy-zOf(i)*pxPerL;
+    ctx.fillStyle=ramp((i+0.5)/state.M); ctx.beginPath(); ctx.arc(ox,y,Math.max(2.2, Math.min(3.6, half/state.M)),0,7); ctx.fill();
+  }
+  // the observer direction, out to P at the edge
+  const ux=Math.sin(state.th), uy=-Math.cos(state.th);
+  const len=edgeDistance(ox,oy,ux,uy,w,h)-10;
+  ctx.setLineDash([6,4]); ctx.strokeStyle=cssv('--red'); ctx.lineWidth=1.8;
+  ctx.beginPath(); ctx.moveTo(ox,oy); ctx.lineTo(ox+ux*len,oy+uy*len); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle=cssv('--red'); ctx.beginPath(); ctx.arc(ox+ux*len,oy+uy*len,5,0,7); ctx.fill();
+  ctx.strokeStyle='#fff'; ctx.lineWidth=1.5; ctx.stroke();
+  MJ.draw(ctx,'P', ox+ux*len-12*ux+ (ux>0?-10:10), oy+uy*len-12*uy+8, 12, cssv('--red'), ux>0?'right':'left');
+  // theta arc from +z
+  const R=Math.min(28, half*0.9+10);
+  ctx.strokeStyle=cssv('--ink'); ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.arc(ox,oy,R,-Math.PI/2,-Math.PI/2+state.th,false); ctx.stroke();
+  MJ.draw(ctx,'\\theta', ox+Math.sin(state.th/2)*(R+11), oy-Math.cos(state.th/2)*(R+11), 12, cssv('--ink'),'center');
+  MJ.draw(ctx,'z', ox+8, oy-Math.max(R+16, half+12), 12, cssv('--ink'),'left');
+  stext(ctx,'±'+SPAN+' λ', w-8, h-10, 10.5, cssv('--ink3'),'right',false);
+}
+function edgeDistance(ox,oy,ux,uy,w,h){
+  let t=1e9;
+  if(ux>1e-9) t=Math.min(t,(w-ox)/ux); if(ux<-1e-9) t=Math.min(t,-ox/ux);
+  if(uy>1e-9) t=Math.min(t,(h-oy)/uy); if(uy<-1e-9) t=Math.min(t,-oy/uy);
+  return t;
+}
+/* ---------------------------- readouts + wiring ---------------------------- */
+function readouts(){
+  const m=sumAt(state.th);
+  document.getElementById('p-mag').textContent=m.toFixed(3);
+  document.getElementById('p-ff').textContent=(2*state.L*state.L).toFixed(2)+' λ';
+  const st=document.getElementById('p-state'); st.className='state';
+  if(state.M>1 && state.L/(state.M-1) > 1.0){ st.textContent='spacing > λ: more than one lobe'; st.classList.add('hot'); }
+  else if(m>0.98){ st.textContent='every element in phase — peak'; st.classList.add('ok'); }
+  else if(m<0.02){ st.textContent='the waves cancel — null'; st.classList.add('hot'); }
+  else st.textContent='partial cancellation';
+}
+function cvWidth(c){ return Math.max(240, c.clientWidth || Math.floor(c.getBoundingClientRect().width)); }
+function setSize(c,wCss,hCss,dpr){
+  c.width=Math.round(wCss*dpr); c.height=Math.round(hCss*dpr); c.style.height=hCss+'px';
+  const bh=c.offsetHeight-c.clientHeight; if(bh) c.style.height=(hCss+bh)+'px';
+}
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:599px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.78) : h; }
+function fit(){
+  const dpr=window.devicePixelRatio||1, wCss=cvWidth(cv);
+  const hCss=SQ(Math.max(220, Math.min(wCss*0.42, 300)));
+  setSize(cv,wCss,hCss,dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+  W=wCss; H=hCss; pxPerL=(H/2)/SPAN;
+  drawField(performance.now()); readouts();
+}
+window.addEventListener('resize', fit);
+let last=0, visible=true;
+if('IntersectionObserver' in window){
+  new IntersectionObserver(es=>{ es.forEach(e=>{ visible=e.isIntersecting; }); }, {threshold:0.05}).observe(cv);
+}
+function loop(now){
+  if(state.anim && visible && !document.hidden && now-last>50){ last=now; drawField(now); }
+  requestAnimationFrame(loop);
+}
+// drag P around the map to set theta
+function pointerTheta(e){
+  const r=cv.getBoundingClientRect(), x=e.clientX-r.left-W/2, y=e.clientY-r.top-H/2;
+  if(Math.hypot(x,y)<6) return null;
+  let th=Math.atan2(x,-y); if(th<0) th=-th;          // fold to 0..pi, symmetric about z
+  return th;
+}
+let dragging=false;
+cv.addEventListener('pointerdown',e=>{ dragging=true; cv.setPointerCapture(e.pointerId); const th=pointerTheta(e); if(th!==null) setTheta(th); });
+cv.addEventListener('pointermove',e=>{ if(!dragging) return; const th=pointerTheta(e); if(th!==null) setTheta(th); });
+cv.addEventListener('pointerup',()=>{ dragging=false; });
+cv.addEventListener('pointercancel',()=>{ dragging=false; });
+const lenEl=document.getElementById('len'), thEl=document.getElementById('th'), nEl=document.getElementById('n'), animEl=document.getElementById('anim');
+function syncLabels(){
+  document.getElementById('len-val').textContent=state.L.toFixed(2);
+  document.getElementById('th-val').textContent=(state.th*180/Math.PI).toFixed(1)+'°';
+  document.getElementById('n-val').textContent=state.M;
+}
+function setTheta(th){ state.th=th; thEl.value=(th*180/Math.PI).toFixed(1); syncLabels(); if(!state.anim) drawField(performance.now()); readouts(); }
+function refresh(){ syncLabels(); drawField(performance.now()); readouts(); }
+lenEl.addEventListener('input',()=>{ state.L=+lenEl.value; refresh(); });
+thEl .addEventListener('input',()=>{ state.th=+thEl.value*Math.PI/180; refresh(); });
+nEl  .addEventListener('input',()=>{ state.M=+nEl.value; refresh(); });
+animEl.addEventListener('change',()=>{ state.anim=animEl.checked; refresh(); });
+document.getElementById('broad').addEventListener('click',()=>{ state.th=Math.PI/2; thEl.value=90; refresh(); });
+document.getElementById('null1').addEventListener('click',()=>{
+  // first null at cos(theta) = lambda/L: exact for the uniform line source, and
+  // exact for two elements too, since they sit L/2 apart and null at lambda/(2d)
+  let c = 1/state.L;
+  if(c>0.95){ state.L=1.5; lenEl.value=state.L; c=1/state.L; }
+  state.th=Math.acos(Math.min(0.999,c)); thEl.value=(state.th*180/Math.PI).toFixed(1); refresh();
+});
+document.getElementById('many').addEventListener('click',()=>{ state.M=24; nEl.value=24; if(state.L<2){ state.L=2; lenEl.value=2; } refresh(); });
+if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){ state.anim=false; animEl.checked=false; }
+syncLabels();
+fit();
+requestAnimationFrame(loop);
+MJ.setRedraw(()=>{ drawField(performance.now()); });
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawField(performance.now())); drawField(performance.now()); });
+</script>
+</body>
+</html>

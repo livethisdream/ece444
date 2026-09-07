@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MVDR against an interferer — the PHASER's two digital channels</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { max-width:820px; margin:0 auto; padding:10px 12px 14px; box-sizing:border-box; }
+  canvas { display:block; width:100%; }
+  .controls { display:flex; flex-wrap:wrap; gap:14px 22px; align-items:center;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px;
+              padding:10px 14px; margin-top:10px; }
+  .ctl { display:flex; align-items:center; gap:9px; flex:1 1 300px; min-width:0; }
+  .ctl label { font-size:13.5px; color:var(--ink3); white-space:nowrap; }
+  .ctl input[type=range] { flex:1 1 auto; min-width:90px; accent-color:var(--mid); }
+  .ctl .val { font-variant-numeric:tabular-nums; font-size:13.5px; color:var(--ink);
+              min-width:56px; text-align:right; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); margin-top:10px; }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.intf { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.intf .v { color:var(--red); }
+  .ro.look { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.28); }
+  .ro.look .v { color:var(--grn); }
+  .ro.warn { background:rgba(138,90,0,0.12);  border-color:rgba(138,90,0,0.30); }
+  .ro.warn .v { color:var(--amber); }
+  .note { font-size:12.5px; color:var(--ink3); margin-top:9px; line-height:1.45; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <canvas id="cv"></canvas>
+
+  <div class="controls" id="panel">
+    <div class="ctl">
+      <label for="ang">interferer angle \(\theta_i\)</label>
+      <input id="ang" type="range" min="-60" max="60" step="1" value="20">
+      <span class="val" id="angv">+20°</span>
+    </div>
+    <div class="ctl">
+      <label for="pwr">interferer power</label>
+      <input id="pwr" type="range" min="0" max="20" step="1" value="10">
+      <span class="val" id="pwrv">10 dB</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro intf"><span class="k">suppression</span><span class="v" id="p1">&mdash;</span></div>
+    <div class="ro look"><span class="k">look direction</span><span class="v" id="p2">&mdash;</span></div>
+    <div class="ro"><span class="k">MVDR null</span><span class="v" id="p3">&mdash;</span></div>
+    <div class="ro" id="ro4"><span class="k">subarray gain there</span><span class="v" id="p4">&mdash;</span></div>
+  </div>
+
+  <p class="note" id="msg"></p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---- array constants: the PHASER at 10.525 GHz -------------------------
+  var DL = 0.491;                 // d / lambda  (d = 14 mm)
+  var KD = 2 * Math.PI * DL;      // k d
+  var NOISE = 1e-3;               // display noise floor, -30 dB below the peak
+  var SIGMA2 = 1e-3;              // per-channel receiver noise power in R
+  var LOAD = 1e-3;                // diagonal loading, matching the GUI default
+  var DEADBAND = 3;               // interferer is kept off the look direction
+
+  // ---- tiny complex helpers ---------------------------------------------
+  function cmul(a, b) { return [a[0]*b[0] - a[1]*b[1], a[0]*b[1] + a[1]*b[0]]; }
+  function cadd(a, b) { return [a[0]+b[0], a[1]+b[1]]; }
+  function cconj(a) { return [a[0], -a[1]]; }
+  function cabs2(a) { return a[0]*a[0] + a[1]*a[1]; }
+  function cexp(t) { return [Math.cos(t), Math.sin(t)]; }
+  function cscale(a, s) { return [a[0]*s, a[1]*s]; }
+
+  // 4-element subarray sum (the analog beamformer, phased to boresight)
+  function gsub(u) {
+    var re = 0, im = 0;
+    for (var m = 0; m < 4; m++) { re += Math.cos(m*u); im += Math.sin(m*u); }
+    return [re, im];
+  }
+
+  // two-channel steering vector: subarray pattern times the channel phases
+  function chan(thDeg) {
+    var u = KD * Math.sin(thDeg * Math.PI / 180);
+    var g = gsub(u);
+    return [g, cmul(g, cexp(4 * u))];
+  }
+
+  // w = R^-1 s / (s^H R^-1 s) for the 2x2 case, written out
+  function mvdrWeights(thI, pdB) {
+    var s = chan(0), vi = chan(thI);
+    var P = Math.pow(10, pdB / 10);
+    // R = sigma^2 I + s s^H + P vi vi^H
+    var R = [[[0,0],[0,0]],[[0,0],[0,0]]];
+    for (var i = 0; i < 2; i++) for (var j = 0; j < 2; j++) {
+      var t = cadd(cmul(s[i], cconj(s[j])), cscale(cmul(vi[i], cconj(vi[j])), P));
+      R[i][j] = t;
+    }
+    var tr = R[0][0][0] + R[1][1][0];
+    var dl = SIGMA2 + LOAD * tr / 2;
+    R[0][0] = cadd(R[0][0], [dl, 0]);
+    R[1][1] = cadd(R[1][1], [dl, 0]);
+    // inverse of a 2x2: [d -b; -c a] / det
+    var det = cadd(cmul(R[0][0], R[1][1]), cscale(cmul(R[0][1], R[1][0]), -1));
+    var idet2 = 1 / cabs2(det), dc = cscale(cconj(det), idet2);
+    var Ri = [[cmul(R[1][1], dc), cmul(cscale(R[0][1], -1), dc)],
+              [cmul(cscale(R[1][0], -1), dc), cmul(R[0][0], dc)]];
+    var y = [cadd(cmul(Ri[0][0], s[0]), cmul(Ri[0][1], s[1])),
+             cadd(cmul(Ri[1][0], s[0]), cmul(Ri[1][1], s[1]))];
+    var den = cadd(cmul(cconj(s[0]), y[0]), cmul(cconj(s[1]), y[1]));   // real > 0
+    var w = [cscale(y[0], 1/den[0]), cscale(y[1], 1/den[0])];
+    var n = Math.sqrt(cabs2(w[0]) + cabs2(w[1]));                       // unit norm
+    return [cscale(w[0], 1/n), cscale(w[1], 1/n)];
+  }
+
+  var MAN = [[1/Math.SQRT2, 0], [1/Math.SQRT2, 0]];
+
+  // |w^H a(theta)|
+  function respLin(w, thDeg) {
+    var a = chan(thDeg);
+    var y = cadd(cmul(cconj(w[0]), a[0]), cmul(cconj(w[1]), a[1]));
+    return Math.sqrt(cabs2(y));
+  }
+
+  var REF = respLin(MAN, 0);   // manual look-direction voltage = normalization
+
+  function respDb(w, thDeg) {
+    var v = respLin(w, thDeg) / REF;
+    return 10 * Math.log10(v * v + NOISE);
+  }
+
+  // ---- state -------------------------------------------------------------
+  var cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+  var angEl = document.getElementById('ang'), pwrEl = document.getElementById('pwr');
+  var TH0 = -60, TH1 = 60, DBMIN = -32, DBMAX = 4;
+
+  function readAngle() {
+    var a = +angEl.value;
+    if (Math.abs(a) < DEADBAND) a = (a < 0 ? -1 : 1) * DEADBAND;   // never the look direction
+    return a;
+  }
+
+  function sizeCanvas() {
+    var w = document.getElementById('app').clientWidth - 24;
+    if (w < 240) w = 240;
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:430px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+    var h = SQ(Math.round(Math.max(210, Math.min(280, w * 0.44))));
+    var dpr = window.devicePixelRatio || 1;
+    cv.style.height = h + 'px';
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return [w, h];
+  }
+
+  function drawAll() {
+    var dim = sizeCanvas(), W = dim[0], H = dim[1];
+    var thI = readAngle(), pdB = +pwrEl.value;
+    var w = mvdrWeights(thI, pdB);
+
+    var L = 46, R = 12, T = 12, B = 34;
+    var px = function (t) { return L + (t - TH0) / (TH1 - TH0) * (W - L - R); };
+    var py = function (d) { return T + (DBMAX - d) / (DBMAX - DBMIN) * (H - T - B); };
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+    // grid
+    ctx.strokeStyle = '#e3ecf4'; ctx.lineWidth = 1;
+    ctx.font = '11px Inter, system-ui, sans-serif';
+    ctx.fillStyle = '#5b6573';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    for (var t = TH0; t <= TH1; t += 15) {
+      ctx.beginPath(); ctx.moveTo(px(t), T); ctx.lineTo(px(t), H - B); ctx.stroke();
+      ctx.fillText((t > 0 ? '+' : '') + t, px(t), H - B + 6);
+    }
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    for (var d = 0; d >= DBMIN + 2; d -= 10) {
+      ctx.beginPath(); ctx.moveTo(L, py(d)); ctx.lineTo(W - R, py(d)); ctx.stroke();
+      ctx.fillText(d, L - 6, py(d));
+    }
+    ctx.strokeStyle = '#8a929c';
+    ctx.beginPath(); ctx.moveTo(L, T); ctx.lineTo(L, H - B); ctx.lineTo(W - R, H - B); ctx.stroke();
+
+    // axis names, drawn as words in the UI font
+    ctx.fillStyle = '#5b6573'; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    ctx.fillText('angle from broadside (deg)', (L + W - R) / 2, H - 6);
+    ctx.save();
+    ctx.translate(12, (T + H - B) / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText('response (dB)', 0, 0);
+    ctx.restore();
+
+    // interferer marker
+    ctx.save();
+    ctx.strokeStyle = '#c9922a'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(px(thI), T); ctx.lineTo(px(thI), H - B); ctx.stroke();
+    ctx.restore();
+
+    // traces
+    function trace(wt, color, width) {
+      ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath();
+      for (var i = 0; i <= 720; i++) {
+        var th = TH0 + (TH1 - TH0) * i / 720, y = py(respDb(wt, th));
+        if (i === 0) ctx.moveTo(px(th), y); else ctx.lineTo(px(th), y);
+      }
+      ctx.stroke();
+    }
+    trace(MAN, '#8a929c', 1.4);
+    trace(w, '#004a85', 2.6);
+
+    // look direction and interferer dots
+    ctx.fillStyle = '#3f7d34';
+    ctx.beginPath(); ctx.arc(px(0), py(respDb(w, 0)), 4, 0, 6.2832); ctx.fill();
+    ctx.fillStyle = '#b01e24';
+    ctx.beginPath(); ctx.arc(px(thI), py(respDb(w, thI)), 4, 0, 6.2832); ctx.fill();
+
+    // legend, words in the UI font
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    var lx = L + 10, ly = T + 12;
+    ctx.strokeStyle = '#8a929c'; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + 22, ly); ctx.stroke();
+    ctx.fillStyle = '#15202b'; ctx.fillText('manual: channels added', lx + 28, ly);
+    ctx.strokeStyle = '#004a85'; ctx.lineWidth = 2.6;
+    ctx.beginPath(); ctx.moveTo(lx, ly + 16); ctx.lineTo(lx + 22, ly + 16); ctx.stroke();
+    ctx.fillStyle = '#15202b'; ctx.fillText('MVDR', lx + 28, ly + 16);
+
+    // the one place a math symbol earns a MathJax label
+    if (window.MJ && MJ.ready) {
+      MJ.draw(ctx, '\\theta_i', px(thI), T + 8, 13, '#8a5a00', 'center');
+    }
+
+    // ---- readouts --------------------------------------------------------
+    var supp = respDb(MAN, thI) - respDb(w, thI);
+    var look = respDb(w, 0) - respDb(MAN, 0);
+    var sub = 20 * Math.log10(Math.sqrt(cabs2(gsub(KD * Math.sin(thI * Math.PI / 180)))) / 4);
+
+    // MVDR null: deepest point within 12 deg of the interferer
+    var best = thI, bestv = 1e9;
+    for (var s2 = -120; s2 <= 120; s2++) {
+      var th2 = thI + s2 * 0.1;
+      if (th2 < TH0 || th2 > TH1) continue;
+      var v2 = respDb(w, th2);
+      if (v2 < bestv) { bestv = v2; best = th2; }
+    }
+
+    document.getElementById('angv').textContent = (thI > 0 ? '+' : '') + thI.toFixed(0) + '°';
+    document.getElementById('pwrv').textContent = pdB.toFixed(0) + ' dB';
+    document.getElementById('p1').textContent = supp.toFixed(1) + ' dB';
+    document.getElementById('p2').textContent =
+      (look >= 0 ? '+' : '') + look.toFixed(1) + ' dB';
+    document.getElementById('p3').textContent =
+      (best > 0 ? '+' : '') + best.toFixed(1) + '°';
+    document.getElementById('p4').textContent = sub.toFixed(1) + ' dB';
+    document.getElementById('ro4').className = (sub < -18) ? 'ro warn' : 'ro';
+
+    var msg = document.getElementById('msg');
+    if (sub < -18) {
+      msg.textContent = 'The 4-element analog subarray already has a null near this angle, ' +
+        'so almost no interferer power reaches either channel and the digital layer has ' +
+        'little left to remove. Two channels spaced four elements apart also read this ' +
+        'direction as nearly the same phase difference as boresight.';
+    } else if (supp < 6) {
+      msg.textContent = 'The two channels see this direction at nearly the same relative ' +
+        'phase as the look direction, so nulling it would take the target with it.';
+    } else {
+      msg.textContent = 'MVDR spends its one spare degree of freedom on a null at the ' +
+        'interferer and holds unit gain on boresight. The sidelobes elsewhere are free to ' +
+        'move, and they do.';
+    }
+  }
+
+  ['input', 'change'].forEach(function (ev) {
+    angEl.addEventListener(ev, drawAll);
+    pwrEl.addEventListener(ev, drawAll);
+  });
+  window.addEventListener('resize', drawAll);
+
+  drawAll();
+  if (window.MJ) {
+    MJ.setRedraw(drawAll);
+    MJ.onReady(function () { MJ.typeset(document.getElementById('panel')); drawAll(); });
+  }
+})();
+</script>
+</body>
+</html>

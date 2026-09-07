@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="36 76 752 396" role="img" aria-label="Effective aperture A_e = eta_ap times physical area, compared across a dish, horn, and small dipole">
+<defs>
+<marker id="apA" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
+</defs>
+
+
+<!-- ===================== HERO: dish, physical vs effective ===================== -->
+<!-- physical-area bracket -->
+<text x="200" y="92" text-anchor="middle" fill="#004a85" font-size="14" font-weight="700">Physical area</text>
+<line x1="60" y1="104" x2="340" y2="104" stroke="#004a85" stroke-width="1.6" marker-start="url(#apA)" marker-end="url(#apA)"/>
+<line x1="60" y1="104" x2="60" y2="140" stroke="#004a85" stroke-width="1.2" stroke-dasharray="4 3"/>
+<line x1="340" y1="104" x2="340" y2="140" stroke="#004a85" stroke-width="1.2" stroke-dasharray="4 3"/>
+
+<!-- dish rim (physical aperture) -->
+<circle cx="200" cy="278" r="140" fill="rgba(0,103,185,0.05)" stroke="#004a85" stroke-width="2.5"/>
+<!-- effective aperture disk (smaller than rim) -->
+<circle cx="200" cy="278" r="114" fill="rgba(176,30,36,0.15)" stroke="#b01e24" stroke-width="2"/>
+<!-- dish ribs -->
+<circle cx="200" cy="278" r="74" fill="none" stroke="#004a85" stroke-width="1" opacity="0.4"/>
+<circle cx="200" cy="278" r="38" fill="none" stroke="#004a85" stroke-width="1" opacity="0.4"/>
+<!-- spokes -->
+<g stroke="#004a85" stroke-width="1" opacity="0.38">
+<line x1="200" y1="278" x2="340" y2="278"/><line x1="200" y1="278" x2="299" y2="179"/>
+<line x1="200" y1="278" x2="200" y2="138"/><line x1="200" y1="278" x2="101" y2="179"/>
+<line x1="200" y1="278" x2="60" y2="278"/><line x1="200" y1="278" x2="101" y2="377"/>
+<line x1="200" y1="278" x2="200" y2="418"/><line x1="200" y1="278" x2="299" y2="377"/>
+</g>
+<!-- feed hub -->
+<circle cx="200" cy="278" r="9" fill="#004a85"/>
+
+<!-- legend -->
+<circle cx="54" cy="450" r="9" fill="rgba(176,30,36,0.15)" stroke="#b01e24" stroke-width="2"/>
+<text x="70" y="457" fill="#15202b" font-size="18" font-weight="700">A</text>
+<text x="83" y="461" fill="#15202b" font-size="12" font-weight="700">e</text>
+<text x="95" y="457" fill="#15202b" font-size="15">effective aperture</text>
+<circle cx="252" cy="450" r="9" fill="none" stroke="#004a85" stroke-width="2" stroke-dasharray="3 2"/>
+<text x="268" y="457" fill="#15202b" font-size="18" font-weight="700">A</text>
+<text x="281" y="461" fill="#15202b" font-size="12" font-weight="700">p</text>
+<text x="293" y="457" fill="#15202b" font-size="15">physical area</text>
+
+<!-- divider between hero and comparison -->
+<line x1="378" y1="100" x2="378" y2="440" stroke="#cddce9" stroke-width="1.4"/>
+
+<!-- ===================== RIGHT: comparison by antenna (enlarged, middle column moved to the slide) ===================== -->
+<g transform="translate(-434,-30) scale(1.35)">
+<rect x="624" y="96" width="276" height="30" rx="8" fill="#004a85"/>
+<text x="762" y="116" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">Physical vs. effective area</text>
+
+<!-- row 1: parabolic dish -->
+<path d="M654 154 Q636 176 654 198" fill="rgba(0,103,185,0.15)" stroke="#004a85" stroke-width="2.5"/>
+<line x1="648" y1="176" x2="676" y2="176" stroke="#004a85" stroke-width="1.4"/><circle cx="676" cy="176" r="3" fill="#004a85"/>
+<text x="694" y="172" fill="#004a85" font-size="14" font-weight="700">Parabolic dish</text>
+<text x="694" y="191" fill="#5b6573" font-size="13">A</text>
+<text x="703" y="194" fill="#5b6573" font-size="9">e</text>
+<text x="711" y="191" fill="#5b6573" font-size="13">&lt; A</text>
+<text x="731" y="194" fill="#5b6573" font-size="9">p</text>
+<circle cx="866" cy="176" r="25" fill="none" stroke="#004a85" stroke-width="1.6" stroke-dasharray="3 2"/>
+<circle cx="866" cy="176" r="16" fill="rgba(176,30,36,0.55)" stroke="#b01e24" stroke-width="1.4"/>
+
+<!-- row 2: horn -->
+<path d="M646 232 L646 258 L678 268 L678 222 Z" fill="rgba(0,103,185,0.15)" stroke="#004a85" stroke-width="2"/>
+<rect x="636" y="238" width="12" height="14" fill="rgba(0,103,185,0.15)" stroke="#004a85" stroke-width="1.6"/>
+<text x="694" y="240" fill="#004a85" font-size="14" font-weight="700">Horn</text>
+<text x="694" y="259" fill="#5b6573" font-size="13">A</text>
+<text x="703" y="262" fill="#5b6573" font-size="9">e</text>
+<text x="711" y="259" fill="#5b6573" font-size="13">≈ A</text>
+<text x="730" y="262" fill="#5b6573" font-size="9">p</text>
+<circle cx="866" cy="244" r="25" fill="none" stroke="#004a85" stroke-width="1.6" stroke-dasharray="3 2"/>
+<circle cx="866" cy="244" r="22" fill="rgba(176,30,36,0.55)" stroke="#b01e24" stroke-width="1.4"/>
+
+<!-- row 3: dipole -->
+<line x1="660" y1="300" x2="660" y2="322" stroke="#004a85" stroke-width="3"/>
+<line x1="660" y1="330" x2="660" y2="352" stroke="#004a85" stroke-width="3"/>
+<line x1="652" y1="326" x2="660" y2="326" stroke="#004a85" stroke-width="1.6"/>
+<text x="694" y="318" fill="#004a85" font-size="14" font-weight="700">Small dipole</text>
+<text x="694" y="337" fill="#5b6573" font-size="13">A</text>
+<text x="703" y="340" fill="#5b6573" font-size="9">e</text>
+<text x="711" y="337" fill="#5b6573" font-size="13">&gt; A</text>
+<text x="731" y="340" fill="#5b6573" font-size="9">p</text>
+<circle cx="866" cy="326" r="25" fill="rgba(176,30,36,0.55)" stroke="#b01e24" stroke-width="1.4"/>
+<circle cx="866" cy="326" r="12" fill="none" stroke="#004a85" stroke-width="1.6" stroke-dasharray="3 2"/>
+</g>
+</svg>

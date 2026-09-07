@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 360" width="790" height="360" role="img" aria-label="A pattern measurement range: a fixed source antenna on the left, the antenna under test on a rotator on the right, the separation between them, and the floor reflection that has to be absorbed">
+
+  <!-- ground -->
+  <line x1="20" y1="300" x2="770" y2="300" stroke="#5a5a5a" stroke-width="2"/>
+  <g stroke="#b9d2e5" stroke-width="2">
+    <line x1="30" y1="300" x2="16" y2="314"/><line x1="70" y1="300" x2="56" y2="314"/>
+    <line x1="110" y1="300" x2="96" y2="314"/><line x1="150" y1="300" x2="136" y2="314"/>
+    <line x1="190" y1="300" x2="176" y2="314"/><line x1="230" y1="300" x2="216" y2="314"/>
+    <line x1="270" y1="300" x2="256" y2="314"/><line x1="310" y1="300" x2="296" y2="314"/>
+    <line x1="350" y1="300" x2="336" y2="314"/><line x1="390" y1="300" x2="376" y2="314"/>
+    <line x1="430" y1="300" x2="416" y2="314"/><line x1="470" y1="300" x2="456" y2="314"/>
+    <line x1="510" y1="300" x2="496" y2="314"/><line x1="550" y1="300" x2="536" y2="314"/>
+    <line x1="590" y1="300" x2="576" y2="314"/><line x1="630" y1="300" x2="616" y2="314"/>
+    <line x1="670" y1="300" x2="656" y2="314"/><line x1="710" y1="300" x2="696" y2="314"/>
+    <line x1="750" y1="300" x2="736" y2="314"/>
+  </g>
+
+  <!-- absorber slab on the specular bounce point -->
+  <rect x="330" y="284" width="130" height="16" rx="3" fill="#eef4fa" stroke="#0067b9" stroke-width="1.6"/>
+  <g stroke="#0067b9" stroke-width="1.2" opacity="0.8">
+    <line x1="342" y1="300" x2="352" y2="284"/><line x1="362" y1="300" x2="372" y2="284"/>
+    <line x1="382" y1="300" x2="392" y2="284"/><line x1="402" y1="300" x2="412" y2="284"/>
+    <line x1="422" y1="300" x2="432" y2="284"/><line x1="442" y1="300" x2="452" y2="284"/>
+  </g>
+  <text x="395" y="330" font-size="16" fill="#0067b9" font-weight="700" text-anchor="middle">absorber on the bounce point</text>
+
+  <!-- masts -->
+  <rect x="146" y="150" width="10" height="150" fill="#b9d2e5" stroke="#5a5a5a" stroke-width="1.2"/>
+  <rect x="634" y="150" width="10" height="150" fill="#b9d2e5" stroke="#5a5a5a" stroke-width="1.2"/>
+
+  <!-- source horn, pointing right -->
+  <g stroke="#004a85" stroke-width="2.4" fill="#dbe9f5" stroke-linejoin="round">
+    <path d="M 112,140 L 151,128 L 151,172 L 112,160 Z"/>
+    <rect x="96" y="142" width="17" height="16"/>
+  </g>
+  <text x="124" y="98" font-size="17" font-weight="700" fill="#004a85" text-anchor="middle">source antenna</text>
+  <text x="124" y="118" font-size="15" fill="#5a5a5a" text-anchor="middle">fixed, known pol.</text>
+
+  <!-- AUT horn, pointing left -->
+  <g stroke="#004a85" stroke-width="2.4" fill="#dbe9f5" stroke-linejoin="round">
+    <path d="M 678,140 L 639,128 L 639,172 L 678,160 Z"/>
+    <rect x="677" y="142" width="17" height="16"/>
+  </g>
+  <text x="666" y="98" font-size="17" font-weight="700" fill="#004a85" text-anchor="middle">antenna under test</text>
+
+  <!-- rotator -->
+  <ellipse cx="639" cy="240" rx="36" ry="12" fill="#eef4fa" stroke="#004a85" stroke-width="2"/>
+  <path d="M 578,240 A 62,20 0 0 0 700,240" fill="none" stroke="#3f7d34" stroke-width="2.4" marker-end="url(#ar)"/>
+  <text x="639" y="282" font-size="16" font-weight="700" fill="#3f7d34" text-anchor="middle">rotator sweeps the cut</text>
+
+  <!-- boresight path -->
+  <line x1="156" y1="150" x2="634" y2="150" stroke="#0067b9" stroke-width="2.2" marker-end="url(#ab)"/>
+  <text x="395" y="140" font-size="16" font-weight="700" fill="#0067b9" text-anchor="middle">direct path</text>
+
+  <!-- reflected path -->
+  <path d="M 158,158 L 395,292 L 632,158" fill="none" stroke="#b01e24" stroke-width="1.8" stroke-dasharray="7 5"/>
+  <text x="243" y="252" font-size="15" font-weight="700" fill="#b01e24" text-anchor="middle">floor bounce</text>
+
+  <!-- separation dimension -->
+  <line x1="151" y1="200" x2="292" y2="200" stroke="#5a5a5a" stroke-width="1.6" marker-start="url(#as)"/>
+  <line x1="498" y1="200" x2="639" y2="200" stroke="#5a5a5a" stroke-width="1.6" marker-end="url(#as)"/>
+  <line x1="151" y1="184" x2="151" y2="216" stroke="#5a5a5a" stroke-width="1.2"/>
+  <line x1="639" y1="184" x2="639" y2="216" stroke="#5a5a5a" stroke-width="1.2"/>
+  <text x="395" y="206" font-size="17" font-weight="700" fill="#1a1a1a" text-anchor="middle">separation, far field</text>
+
+  <!-- instruments -->
+  <rect x="14" y="176" width="112" height="48" rx="5" fill="none" stroke="#004a85" stroke-width="2"/>
+  <text x="70" y="198" font-size="15" font-weight="700" fill="#004a85" text-anchor="middle">transmitter</text>
+  <text x="70" y="215" font-size="14" fill="#5a5a5a" text-anchor="middle">one frequency</text>
+  <path d="M 96,150 L 70,150 L 70,176" fill="none" stroke="#5a5a5a" stroke-width="2"/>
+
+  <rect x="664" y="176" width="114" height="48" rx="5" fill="none" stroke="#004a85" stroke-width="2"/>
+  <text x="721" y="198" font-size="15" font-weight="700" fill="#004a85" text-anchor="middle">receiver</text>
+  <text x="721" y="215" font-size="14" fill="#5a5a5a" text-anchor="middle">power per angle</text>
+  <path d="M 694,150 L 721,150 L 721,176" fill="none" stroke="#5a5a5a" stroke-width="2"/>
+
+  <defs>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0067b9"/>
+    </marker>
+    <marker id="as" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5a5a5a"/>
+    </marker>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3f7d34"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Method-of-moments dipole: current samples and impedance convergence</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* The two plots side by side above ~600px: the row height becomes the taller
+     of the two instead of their sum, which is the single biggest lever here.
+     Below 600px (phone) there isn't room for two useful columns, so stack. */
+  .cv2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:600px) { .cv2 { grid-template-columns:1fr; } }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 260px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
+  /* Below 430px the controls bar cannot fit a label, a slider and a value on one
+     line: .ctl's flex basis and the reserved .val column are both wider than the
+     content box, so the bar pushes the document past the viewport and the whole
+     widget scrolls sideways on a phone. Stack each control instead -- label and
+     value share the first line, the input takes the second -- and let every part
+     shrink. Labels keep their natural width, so none of them squeeze. Nothing
+     here applies above 430px: the desktop layout is byte-for-byte unchanged. */
+  @media (max-width:430px) {
+    canvas { max-width:100%; }
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
+  }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:6px; grid-template-columns:repeat(5, minmax(0,1fr)); }
+  @media (max-width:600px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  /* Never one column: a readout row that stacks one cell per line is the
+     cheapest 100-150px a widget can waste on a phone, and it is what pushed
+     these past the frame budget. Two columns always fit -- the cells are
+     min-width:0 and the values are short. */
+  @media (max-width:460px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  /* Hold 3 columns to the bottom instead of dropping to two, which costs a
+     whole row. What actually overflowed at 320 was `.ro .v`'s 8ch floor, not
+     the column count: release it and tighten the gutters and they fit. */
+  @media (max-width:360px) {
+    .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); gap:5px; }
+    .ro { padding:5px 3px 6px; }
+    .ro .v { min-width:0; font-size:13px; }
+    .ro .k { font-size:9.5px; letter-spacing:0.02em; }
+  }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.warn { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.warn .v { color:var(--amber); }
+  .ro.ok { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.ok .v { color:var(--grn); }
+  .ro.off { background:#f2f4f7; border-color:#dfe4ea; }
+  .ro.off .v { color:var(--ink3); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="cv2">
+    <canvas id="cur" aria-label="Current magnitude along the dipole: method-of-moments samples against the ideal sinusoid"></canvas>
+    <canvas id="conv" aria-label="Input resistance and reactance versus the number of segments, showing the converged plateau"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Segments \(N\)</label>
+      <input type="range" id="nseg" min="5" max="101" step="2" value="21">
+      <span class="val" id="nseg-val">21</span>
+    </div>
+    <div class="ctl">
+      <label>Length \(L/\lambda\)</label>
+      <input type="range" id="len" min="0.30" max="0.70" step="0.005" value="0.50">
+      <span class="val" id="len-val">0.500</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">\(V_{\text{feed}}\)</span><span class="v" id="p-v">1.000 V</span></div>
+    <div class="ro"><span class="k">\(I_{\text{feed}}\)</span><span class="v" id="p-i">&#8212;</span></div>
+    <div class="ro"><span class="k">\(Z_{\text{in}}\)</span><span class="v" id="p-z">&#8212;</span></div>
+    <div class="ro" id="ro-ratio"><span class="k">\(\Delta/a\)</span><span class="v" id="p-ra">&#8212;</span></div>
+    <div class="ro" id="ro-drift"><span class="k">drift since \(N/2\)</span><span class="v" id="p-dr">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* ------------------------------------------------------------------ *
+ * Method-of-moments solve for a center-fed straight dipole.
+ *
+ * Electric-field integral equation in Pocklington form with the thin-wire
+ * (reduced) kernel, triangle basis functions on the segment junctions,
+ * Galerkin testing, and a voltage source across the center segment — the
+ * same model NEC applies, with simpler basis functions. Lengths are in
+ * wavelengths, so k = 2*pi and the wire radius a is a fraction of lambda.
+ *
+ * Validated three ways:
+ *   - the closed-form kernel matches a finite difference of e^{-jkR}/4*pi*R;
+ *   - the same matrix evaluated on a sinusoidal trial current reproduces the
+ *     induced-EMF answer 73.0 + j42.3 ohms (textbook: 73.1 + j42.5);
+ *   - radiated power from the solved current equals Re(Zin)|I(0)|^2/2 to
+ *     twelve digits, i.e. the solution conserves energy.
+ * ------------------------------------------------------------------ */
+const K = 2 * Math.PI, ETA = 376.730313;
+const AWIRE = 0.001;                 // wire radius in wavelengths (fixed)
+const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+function stext(ctx, s, x, y, px, color, align, bold) {
+  ctx.fillStyle = color; ctx.font = (bold ? '700 ' : '') + px + 'px ' + SANS;
+  ctx.textAlign = align || 'left'; ctx.textBaseline = 'middle'; ctx.fillText(s, x, y);
+}
+
+/* --- Pocklington kernel: (d^2/du^2 + k^2) e^{-jkR}/(4 pi R), R = sqrt(u^2+a^2) --- */
+function kern(u, a) {
+  const R = Math.hypot(u, a), kR = K * R, R5 = R * R * R * R * R;
+  const c = Math.cos(kR) / (4 * Math.PI * R5), s = -Math.sin(kR) / (4 * Math.PI * R5);
+  const t = 2 * R * R - 3 * a * a;
+  const br = t + (K * a * R) * (K * a * R), bi = kR * t;
+  return [c * br - s * bi, c * bi + s * br];
+}
+/* cubic B-spline = autocorrelation of the triangle basis, divided by its width */
+function b3(x) {
+  x = Math.abs(x);
+  if (x >= 2) return 0;
+  if (x >= 1) { const t = 2 - x; return t * t * t / 6; }
+  return 2 / 3 - x * x + x * x * x / 2;
+}
+/* One Galerkin matrix entry for junction spacing d. The kernel spikes over a
+   width ~a, so integrate in s with u = a*sinh(s): that packs quadrature points
+   into the spike and leaves the smooth tail cheap. */
+function zterm(d, D, a, M) {
+  const u1 = d - 2 * D, u2 = d + 2 * D;
+  const s1 = Math.asinh(u1 / a), s2 = Math.asinh(u2 / a), h = (s2 - s1) / M;
+  let re = 0, im = 0;
+  for (let i = 0; i <= M; i++) {
+    const s = s1 + i * h, w = (i === 0 || i === M) ? 1 : (i % 2 ? 4 : 2);
+    const u = a * Math.sinh(s), jac = a * Math.cosh(s);
+    const g = D * b3((d - u) / D);
+    if (g === 0) continue;
+    const kv = kern(u, a);
+    re += w * g * kv[0] * jac; im += w * g * kv[1] * jac;
+  }
+  return [re * h / 3, im * h / 3];
+}
+/* complex Gaussian elimination with partial pivoting; A is row-major [re,im] */
+function solveLin(N, A, b) {
+  const ix = (i, j) => 2 * (i * N + j);
+  for (let c = 0; c < N; c++) {
+    let p = c, best = 0;
+    for (let r = c; r < N; r++) { const m = Math.hypot(A[ix(r, c)], A[ix(r, c) + 1]); if (m > best) { best = m; p = r; } }
+    if (p !== c) {
+      for (let j = 0; j < N; j++) {
+        const t0 = A[ix(c, j)], t1 = A[ix(c, j) + 1];
+        A[ix(c, j)] = A[ix(p, j)]; A[ix(c, j) + 1] = A[ix(p, j) + 1];
+        A[ix(p, j)] = t0; A[ix(p, j) + 1] = t1;
+      }
+      const t0 = b[2 * c], t1 = b[2 * c + 1];
+      b[2 * c] = b[2 * p]; b[2 * c + 1] = b[2 * p + 1]; b[2 * p] = t0; b[2 * p + 1] = t1;
+    }
+    const dr = A[ix(c, c)], di = A[ix(c, c) + 1], dd = dr * dr + di * di;
+    for (let r = c + 1; r < N; r++) {
+      const ar = A[ix(r, c)], ai = A[ix(r, c) + 1];
+      const fr = (ar * dr + ai * di) / dd, fi = (ai * dr - ar * di) / dd;
+      if (fr === 0 && fi === 0) continue;
+      for (let j = c; j < N; j++) {
+        const br = A[ix(c, j)], bi = A[ix(c, j) + 1];
+        A[ix(r, j)] -= fr * br - fi * bi;
+        A[ix(r, j) + 1] -= fr * bi + fi * br;
+      }
+      b[2 * r] -= fr * b[2 * c] - fi * b[2 * c + 1];
+      b[2 * r + 1] -= fr * b[2 * c + 1] + fi * b[2 * c];
+    }
+  }
+  const x = new Float64Array(2 * N);
+  for (let r = N - 1; r >= 0; r--) {
+    let sr = b[2 * r], si = b[2 * r + 1];
+    for (let j = r + 1; j < N; j++) {
+      sr -= A[ix(r, j)] * x[2 * j] - A[ix(r, j) + 1] * x[2 * j + 1];
+      si -= A[ix(r, j)] * x[2 * j + 1] + A[ix(r, j) + 1] * x[2 * j];
+    }
+    const dr = A[ix(r, r)], di = A[ix(r, r) + 1], dd = dr * dr + di * di;
+    x[2 * r] = (sr * dr + si * di) / dd;
+    x[2 * r + 1] = (si * dr - sr * di) / dd;
+  }
+  return x;
+}
+/* Solve one model: L in wavelengths, N segments (odd), radius a. */
+const CACHE = new Map();
+function mom(L, N, a) {
+  const key = L.toFixed(4) + '/' + N;
+  if (CACHE.has(key)) return CACHE.get(key);
+  const D = L / N, NU = N - 1;
+  const row = [];
+  for (let p = 0; p < NU; p++) row.push(zterm(p * D, D, a, 320));
+  const A = new Float64Array(2 * NU * NU);
+  for (let m = 0; m < NU; m++) for (let n = 0; n < NU; n++) {
+    const v = row[Math.abs(m - n)];
+    A[2 * (m * NU + n)] = v[0]; A[2 * (m * NU + n) + 1] = v[1];
+  }
+  const zc = m => (m - (NU - 1) / 2) * D;
+  const we = K / ETA, b = new Float64Array(2 * NU);
+  for (let m = 0; m < NU; m++) {                  // source across the center segment
+    const zm = zc(m), lo = Math.max(-D / 2, zm - D), hi = Math.min(D / 2, zm + D);
+    if (hi <= lo) continue;
+    const M = 120; let s = 0;
+    for (let i = 0; i <= M; i++) {
+      const z = lo + (hi - lo) * i / M, w = (i === 0 || i === M) ? 1 : (i % 2 ? 4 : 2);
+      s += w * (1 - Math.abs(z - zm) / D);
+    }
+    b[2 * m + 1] = we * (s * (hi - lo) / M / 3) / D;
+  }
+  const I = solveLin(NU, A, b);
+  let ir = 0, ii = 0;                             // I(0) from the two center triangles
+  for (let m = 0; m < NU; m++) {
+    const t = 1 - Math.abs(zc(m)) / D;
+    if (t > 0) { ir += t * I[2 * m]; ii += t * I[2 * m + 1]; }
+  }
+  const den = ir * ir + ii * ii;
+  /* The solve is driven by +1 V, so the physical feed current is -(ir + j ii)
+     and Z = 1/I_feed exactly -- the division the readouts show. */
+  const out = { R: -ir / den, X: ii / den, Ifr: -ir, Ifi: -ii,
+                I: I, D: D, NU: NU, z: m => zc(m), L: L, N: N };
+  if (CACHE.size > 400) CACHE.clear();
+  CACHE.set(key, out);
+  return out;
+}
+
+/* ------------------------------- state ------------------------------- */
+const LADDER = [5, 7, 9, 11, 13, 15, 19, 23, 27, 33, 41, 51, 61, 71, 81, 91, 101];
+const state = { N: 21, L: 0.50, sol: null, curve: null, drift: null, driftN: 5 };
+
+function recompute(full) {
+  state.sol = mom(state.L, state.N, AWIRE);
+  if (full || !state.curve || Math.abs(state.curve.L - state.L) > 1e-9) {
+    const pts = LADDER.map(n => { const r = mom(state.L, n, AWIRE); return { n: n, R: r.R, X: r.X }; });
+    state.curve = { L: state.L, pts: pts };
+  }
+}
+
+/* ------------------------------- drawing ------------------------------- */
+const cvC = document.getElementById('cur'), ctxC = cvC.getContext('2d');
+const cvV = document.getElementById('conv'), ctxV = cvV.getContext('2d');
+/* Stacked below the grid's breakpoint, so the canvas heights ADD instead of the
+   row taking the tallest. Left alone that puts the widget past the frame budget
+   and it scrolls inside its own iframe. Every curve and every control stays;
+   the canvases just get a shorter design box. Shrinking the design height (not
+   the bitmap) keeps text at full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:600px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.60) : h; }
+function fit(cv, ctx, hCss) {
+  const dpr = window.devicePixelRatio || 1;
+  const w = cv.clientWidth || 900;
+  cv.width = Math.round(w * dpr); cv.height = Math.round(hCss * dpr);
+  cv.style.height = hCss + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, hCss);
+  return { w: w, h: hCss };
+}
+function niceStep(span, target) {
+  const raw = span / target, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p;
+  return (m < 1.5 ? 1 : m < 3 ? 2 : m < 7 ? 5 : 10) * p;
+}
+
+function drawCurrent() {
+  const g = fit(cvC, ctxC, SQ(290)), ctx = ctxC;
+  const ML = 62, MR = 20, MT = 26, MB = 56;
+  const x0 = ML, x1 = g.w - MR, y0 = MT, y1 = g.h - MB;
+  const ZMAX = 0.36;
+  const px = z => x0 + (z + ZMAX) / (2 * ZMAX) * (x1 - x0);
+  const py = v => y1 - v * (y1 - y0);
+
+  ctx.strokeStyle = '#e7eef5'; ctx.lineWidth = 1;
+  for (let v = 0; v <= 1.001; v += 0.25) { ctx.beginPath(); ctx.moveTo(x0, py(v)); ctx.lineTo(x1, py(v)); ctx.stroke(); }
+  ctx.strokeStyle = '#9fb4c7';
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1); ctx.stroke();
+  for (let v = 0; v <= 1.001; v += 0.25) stext(ctx, v.toFixed(2), x0 - 8, py(v), 11.5, '#5b6573', 'right');
+  for (let z = -0.3; z <= 0.301; z += 0.1) {
+    const X = px(z);
+    ctx.strokeStyle = '#c9d7e4'; ctx.beginPath(); ctx.moveTo(X, y1); ctx.lineTo(X, y1 + 4); ctx.stroke();
+    stext(ctx, (Math.abs(z) < 1e-9 ? '0' : z.toFixed(1)), X, y1 + 26, 11.5, '#5b6573', 'center');
+  }
+  MJ.draw(ctx, 'z/\\lambda', (x0 + x1) / 2, y1 + 43, 14, '#15202b', 'center');
+  stext(ctx, 'normalized to peak', x1 - 2, y0 - 12, 11.5, '#5b6573', 'right');
+  ctx.save(); ctx.translate(x0 - 44, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2);
+  MJ.draw(ctx, '\\lvert I(z)\\rvert', 0, 0, 15, '#15202b', 'center'); ctx.restore();
+
+  const sol = state.sol, L = state.L, half = L / 2;
+
+  /* the wire itself, drawn on the baseline, with segment boundaries */
+  ctx.strokeStyle = '#b9d2e5'; ctx.lineWidth = 1;
+  if (sol.N <= 45) {
+    for (let i = 0; i <= sol.N; i++) {
+      const X = px(-half + i * sol.D);
+      ctx.beginPath(); ctx.moveTo(X, y1); ctx.lineTo(X, y1 + 9); ctx.stroke();
+    }
+  }
+  ctx.strokeStyle = 'rgba(0,74,133,0.45)'; ctx.lineWidth = 4; ctx.lineCap = 'butt';
+  ctx.beginPath(); ctx.moveTo(px(-half), y1 + 5); ctx.lineTo(px(half), y1 + 5); ctx.stroke();
+  /* the source segment, drawn as a band one segment wide so it reads as a
+     piece of the wire rather than as a tick mark */
+  ctx.strokeStyle = '#b01e24'; ctx.lineWidth = 7; ctx.lineCap = 'butt';
+  ctx.beginPath();
+  ctx.moveTo(px(-sol.D / 2), y1 + 5); ctx.lineTo(px(sol.D / 2), y1 + 5); ctx.stroke();
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(px(0), y1 - 4); ctx.lineTo(px(0), y1 + 12); ctx.stroke();
+
+  /* ideal sinusoid, normalized to its own peak */
+  const sinAt = z => Math.abs(Math.sin(K * (half - Math.abs(z))));
+  let smax = 0;
+  for (let i = 0; i <= 400; i++) smax = Math.max(smax, sinAt(-half + i / 400 * L));
+  ctx.strokeStyle = '#8a5a00'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  for (let i = 0; i <= 400; i++) {
+    const z = -half + i / 400 * L, X = px(z), Y = py(sinAt(z) / smax);
+    i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+  }
+  ctx.stroke(); ctx.setLineDash([]);
+
+  /* MoM samples */
+  let mmax = 0; const am = [];
+  for (let n = 0; n < sol.NU; n++) { const v = Math.hypot(sol.I[2 * n], sol.I[2 * n + 1]); am.push(v); if (v > mmax) mmax = v; }
+  const dotR = sol.NU > 60 ? 1.9 : sol.NU > 30 ? 2.5 : 3.2;
+  ctx.strokeStyle = 'rgba(0,103,185,0.30)'; ctx.lineWidth = 1;
+  for (let n = 0; n < sol.NU; n++) {
+    const X = px(sol.z(n)), Y = py(am[n] / mmax);
+    ctx.beginPath(); ctx.moveTo(X, y1); ctx.lineTo(X, Y); ctx.stroke();
+  }
+  for (let n = 0; n < sol.NU; n++) {
+    const feed = Math.abs(sol.z(n)) < sol.D * 0.75;   // the pair straddling the source
+    ctx.fillStyle = feed ? '#b01e24' : '#004a85';
+    ctx.beginPath(); ctx.arc(px(sol.z(n)), py(am[n] / mmax), feed ? dotR + 1.3 : dotR, 0, 2 * Math.PI); ctx.fill();
+  }
+
+  /* legend */
+  const lx = x0 + 12, ly = y0 + 8;
+  ctx.fillStyle = '#004a85'; ctx.beginPath(); ctx.arc(lx + 5, ly, 3.2, 0, 2 * Math.PI); ctx.fill();
+  stext(ctx, 'solved segment currents', lx + 14, ly, 12, '#15202b', 'left');
+  ctx.strokeStyle = '#8a5a00'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(lx, ly + 17); ctx.lineTo(lx + 12, ly + 17); ctx.stroke(); ctx.setLineDash([]);
+  stext(ctx, 'assumed sinusoid', lx + 18, ly + 17, 12, '#8a5a00', 'left');
+  ctx.strokeStyle = '#b01e24'; ctx.lineWidth = 7; ctx.lineCap = 'butt';
+  ctx.beginPath(); ctx.moveTo(lx, ly + 34); ctx.lineTo(lx + 12, ly + 34); ctx.stroke();
+  /* Short label -- which current sets the impedance, and why, is in the lesson
+     prose beside this widget rather than spelled out again on the canvas. */
+  stext(ctx, 'source segment', lx + 18, ly + 34, 12, '#b01e24', 'left');
+  /* segment length as a fraction of a wavelength: symbols first, number after,
+     so no label has to be positioned past a run of drawn text */
+  const dw = MJ.draw(ctx, '\\Delta/\\lambda', lx, ly + 51, 13, '#5b6573', 'left');
+  stext(ctx, '= ' + sol.D.toFixed(4), lx + (dw || 26) + 5, ly + 51, 12, '#5b6573', 'left');
+}
+
+function drawConv() {
+  const g = fit(cvV, ctxV, SQ(300)), ctx = ctxV;
+  const ML = 62, MR = 20, MT = 26, MB = 46;
+  const x0 = ML, x1 = g.w - MR, y0 = MT, y1 = g.h - MB;
+  const pts = state.curve.pts;
+  const atHalf = Math.abs(state.L - 0.5) < 1e-6;
+
+  let lo = Infinity, hi = -Infinity;
+  pts.forEach(p => { lo = Math.min(lo, p.R, p.X); hi = Math.max(hi, p.R, p.X); });
+  if (atHalf) { lo = Math.min(lo, 42.5, 73); hi = Math.max(hi, 73, 42.5); }
+  const pad = 0.12 * (hi - lo || 1); lo -= pad; hi += pad;
+  const px = n => x0 + (n - 5) / 96 * (x1 - x0);
+  const py = v => y1 - (v - lo) / (hi - lo) * (y1 - y0);
+
+  const step = niceStep(hi - lo, 5);
+  ctx.lineWidth = 1;
+  for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) {
+    ctx.strokeStyle = (Math.abs(v) < 1e-9) ? '#c9d7e4' : '#e7eef5';
+    ctx.beginPath(); ctx.moveTo(x0, py(v)); ctx.lineTo(x1, py(v)); ctx.stroke();
+    stext(ctx, String(Math.round(v)), x0 - 8, py(v), 11.5, '#5b6573', 'right');
+  }
+  ctx.strokeStyle = '#9fb4c7';
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1); ctx.stroke();
+  [5, 21, 41, 61, 81, 101].forEach(n => {
+    const X = px(n);
+    ctx.strokeStyle = '#c9d7e4'; ctx.beginPath(); ctx.moveTo(X, y1); ctx.lineTo(X, y1 + 4); ctx.stroke();
+    stext(ctx, String(n), X, y1 + 15, 11.5, '#5b6573', 'center');
+  });
+  stext(ctx, 'segments', (x0 + x1) / 2 - 22, y1 + 33, 12.5, '#15202b', 'center');
+  MJ.draw(ctx, 'N', (x0 + x1) / 2 + 24, y1 + 33, 14, '#15202b', 'center');
+  ctx.save(); ctx.translate(x0 - 44, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2);
+  stext(ctx, 'ohms', 0, 0, 12.5, '#5b6573', 'center'); ctx.restore();
+
+  if (atHalf) {                       /* the induced-EMF reference numbers */
+    ctx.setLineDash([5, 4]); ctx.lineWidth = 1.5; ctx.strokeStyle = '#3f7d34';
+    [[73, '73'], [42.5, '42.5']].forEach(r => {
+      ctx.beginPath(); ctx.moveTo(x0, py(r[0])); ctx.lineTo(x1, py(r[0])); ctx.stroke();
+      stext(ctx, r[1], x1 - 4, py(r[0]) - 9, 11.5, '#3f7d34', 'right', true);
+    });
+    const rw = MJ.draw(ctx, 'L = 0.5\\lambda', x0 + 8, py(73) - 9, 13, '#3f7d34', 'left');
+    stext(ctx, 'sinusoid theory', x0 + 8 + (rw || 52) + 6, py(73) - 9, 11.5, '#3f7d34', 'left');
+    ctx.setLineDash([]);
+  }
+
+  function curve(key, color) {
+    ctx.strokeStyle = color; ctx.lineWidth = 2.2; ctx.beginPath();
+    pts.forEach((p, i) => { const X = px(p.n), Y = py(p[key]); i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); });
+    ctx.stroke();
+    ctx.fillStyle = color;
+    pts.forEach(p => { ctx.beginPath(); ctx.arc(px(p.n), py(p[key]), 2.6, 0, 2 * Math.PI); ctx.fill(); });
+  }
+  curve('R', '#004a85'); curve('X', '#8a5a00');
+
+  const sol = state.sol;
+  [[sol.R, '#004a85'], [sol.X, '#8a5a00']].forEach(m => {
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = m[1]; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.arc(px(state.N), py(m[0]), 5, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+  });
+  ctx.strokeStyle = 'rgba(0,74,133,0.35)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(px(state.N), y0); ctx.lineTo(px(state.N), y1); ctx.stroke(); ctx.setLineDash([]);
+  /* how far the answer moved when the segment count last doubled: the plateau
+     test, stated in ohms rather than left to the eye */
+  if (state.drift != null) {
+    const side = px(state.N) > (x0 + x1) / 2 ? 'right' : 'left';
+    const dx = side === 'right' ? px(state.N) - 8 : px(state.N) + 8;
+    stext(ctx, '\u0394 ' + state.drift.toFixed(1) + ' \u03a9 since N=' + state.driftN,
+          dx, y1 - 12, 11.5, state.drift < 1 ? '#3f7d34' : '#5b6573', side, true);
+  }
+
+  const lx = x1 - 118, ly = y0 + 8;
+  ctx.strokeStyle = '#004a85'; ctx.lineWidth = 2.2;
+  ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + 14, ly); ctx.stroke();
+  MJ.draw(ctx, 'R_{\\text{in}}', lx + 20, ly, 14, '#004a85', 'left');
+  ctx.strokeStyle = '#8a5a00';
+  ctx.beginPath(); ctx.moveTo(lx, ly + 18); ctx.lineTo(lx + 14, ly + 18); ctx.stroke();
+  MJ.draw(ctx, 'X_{\\text{in}}', lx + 20, ly + 18, 14, '#8a5a00', 'left');
+}
+
+function fmtZ(R, X) {
+  return R.toFixed(1) + (X >= 0 ? ' + j' : ' − j') + Math.abs(X).toFixed(1) + ' Ω';
+}
+function drawAll() {
+  if (!state.sol) recompute(true);
+  const sol = state.sol;
+  /* the same model at half the segment count, so "has it stopped moving?" has
+     a number attached to it */
+  const hN = (state.N >= 11) ? (2 * Math.round(state.N / 4) - 1) : 5;
+  const half = mom(state.L, hN, AWIRE);
+  state.drift = Math.hypot(sol.R - half.R, sol.X - half.X);
+  state.driftN = hN;
+
+  drawCurrent(); drawConv();
+
+  document.getElementById('p-i').textContent =
+    (sol.Ifr * 1000).toFixed(2) + (sol.Ifi >= 0 ? ' + j' : ' − j') +
+    Math.abs(sol.Ifi * 1000).toFixed(2) + ' mA';
+  document.getElementById('p-z').textContent = fmtZ(sol.R, sol.X);
+  const ra = sol.D / AWIRE;
+  document.getElementById('p-ra').textContent = ra.toFixed(1);
+  document.getElementById('ro-ratio').className = ra < 4 ? 'ro warn' : 'ro';
+  document.getElementById('p-dr').textContent = state.drift.toFixed(1) + ' Ω';
+  document.getElementById('ro-drift').className = state.drift < 1 ? 'ro ok' : 'ro';
+}
+
+/* ------------------------------- wiring ------------------------------- */
+const elN = document.getElementById('nseg'), elL = document.getElementById('len');
+function onInput(full) {
+  state.N = Number(elN.value); state.L = Number(elL.value);
+  document.getElementById('nseg-val').textContent = state.N;
+  document.getElementById('len-val').textContent = state.L.toFixed(3);
+  recompute(full);
+  drawAll();
+}
+elN.addEventListener('input', () => onInput(false));
+elL.addEventListener('input', () => onInput(true));
+window.addEventListener('resize', drawAll);
+MJ.setRedraw(drawAll);
+MJ.onReady(() => { MJ.typeset(document.body); drawAll(); });
+onInput(true);
+</script>
+</body>
+</html>

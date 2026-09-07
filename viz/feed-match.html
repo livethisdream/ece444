@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feed-line match explorer</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --load:#8a5a00; --match:#0067b9; --sll:#b3213a; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:9px 16px; align-items:center;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:56px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:80px; accent-color:var(--mid); }
+  select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
+  .tgl { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; min-width:0; }
+  .tgl input { position:absolute; opacity:0; pointer-events:none; }
+  .tgl .sw { position:relative; flex:none; width:34px; height:19px; border-radius:999px;
+             background:#dfe8f1; border:1px solid var(--edge2); transition:background .15s, border-color .15s; }
+  .tgl .sw::after { content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; border-radius:50%;
+                    background:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.22); transition:transform .15s; }
+  .tgl input:checked + .sw { background:var(--mid); border-color:var(--mid); }
+  .tgl input:checked + .sw::after { transform:translateX(15px); }
+  .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
+  .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; }
+  .tgl input:checked ~ .t { color:var(--navy); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(122px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.good { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.good .v { color:var(--grn); }
+  .ro.warn { background:rgba(138,90,0,0.12);  border-color:rgba(138,90,0,0.30); }
+  .ro.warn .v { color:var(--amber); }
+  .ro.bad  { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.bad  .v { color:var(--red); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" aria-label="Reflection-coefficient plane"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>\(R\)</label>
+      <input type="range" id="r" min="1" max="200" step="1" value="70">
+      <span class="val" id="r-val">70 &Omega;</span>
+    </div>
+    <div class="ctl">
+      <label>\(X\)</label>
+      <input type="range" id="x" min="-150" max="150" step="1" value="0">
+      <span class="val" id="x-val">0 &Omega;</span>
+    </div>
+    <div class="ctl">
+      <label>Feed line \(Z_0\)</label>
+      <select id="z0"><option value="50" selected>50 &Omega;</option><option value="75">75 &Omega;</option></select>
+    </div>
+    <label class="tgl">
+      <input type="checkbox" id="qw"><span class="sw"></span>
+      <span class="t" style="text-transform:none; font-size:12.5px; letter-spacing:0;">\(\lambda/4\) transformer</span>
+    </label>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">\(Z_\text{in}\)</span><span class="v" id="p-z">—</span></div>
+    <div class="ro"><span class="k">\(\lvert\Gamma\rvert\)</span><span class="v" id="p-gam">—</span></div>
+    <div class="ro" id="ro-vswr"><span class="k">VSWR</span><span class="v" id="p-vswr">—</span></div>
+    <div class="ro"><span class="k">return loss</span><span class="v" id="p-rl">—</span></div>
+    <div class="ro"><span class="k">mismatch loss</span><span class="v" id="p-ml">—</span></div>
+    <div class="ro" id="ro-z1" style="display:none"><span class="k">\(Z_1\) transformer</span><span class="v" id="p-z1">—</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+
+const cv=document.getElementById('plot'), ctx=cv.getContext('2d');
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const state={ R:70, X:0, Z0:50, qw:false, Z1:null, qwR:null };
+
+// complex helpers
+const cdiv=(a,b,c,d)=>{ const den=c*c+d*d; return [ (a*c+b*d)/den, (b*c-a*d)/den ]; }; // (a+jb)/(c+jd)
+function gammaOf(R,X,Z0){ // Gamma = (Z - Z0)/(Z + Z0)
+  return cdiv(R-Z0, X, R+Z0, X);
+}
+function derived(){
+  let R=state.R, X=state.X;
+  if(state.qw && state.Z1){
+    // The transformer is a physical line: Z1 was fixed when the toggle came
+    // on (designed for that moment's R). Moving the load afterward does NOT
+    // redesign it — Zin' = Z1^2 / (R + jX), and the match degrades.
+    const t=cdiv(state.Z1*state.Z1,0,R,X); R=t[0]; X=t[1];
+  }
+  const g=gammaOf(R,X,state.Z0);
+  const gm=Math.hypot(g[0],g[1]);
+  const vswr = gm>=0.999 ? Infinity : (1+gm)/(1-gm);
+  const rl = gm<=1e-6 ? Infinity : -20*Math.log10(gm);
+  const ml = -10*Math.log10(Math.max(1e-9,1-gm*gm));
+  return { Rin:R, Xin:X, g, gm, vswr, rl, ml };
+}
+
+// controls
+const rEl=document.getElementById('r'), xEl=document.getElementById('x'),
+      z0El=document.getElementById('z0'), qwEl=document.getElementById('qw'),
+      rv=document.getElementById('r-val'), xv=document.getElementById('x-val');
+rEl.addEventListener('input',()=>{ state.R=+rEl.value; rv.textContent=state.R+' Ω'; draw(); });
+xEl.addEventListener('input',()=>{ state.X=+xEl.value; xv.textContent=state.X+' Ω'; draw(); });
+z0El.addEventListener('change',()=>{ state.Z0=+z0El.value; draw(); });
+qwEl.addEventListener('change',()=>{
+  state.qw=qwEl.checked;
+  if(state.qw){ // design the line for the load as it is RIGHT NOW (real part only)
+    state.qwR=state.R;
+    state.Z1=Math.sqrt(state.Z0*state.qwR);
+    document.getElementById('p-z1').textContent=state.Z1.toFixed(1)+' Ω';
+  } else { state.Z1=null; state.qwR=null; }
+  document.getElementById('ro-z1').style.display=state.qw?'':'none';
+  draw();
+});
+
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=300;
+let SCL=1;
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(cv);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
+  const h=Math.max(230, Math.min(w*0.40, 290));
+  setSize(cv,wCss,h*SCL,dpr);
+  ctx.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); draw();
+}
+window.addEventListener('resize', fit);
+
+function draw(){
+  const dpr=window.devicePixelRatio||1;
+  const w=cv.width/(dpr*SCL), h=cv.height/(dpr*SCL);
+  ctx.clearRect(0,0,w,h);
+  const d=derived();
+
+  // plot geometry: Gamma-plane, unit circle centered
+  const cx=w/2, cy=h/2, Rp=Math.min(w,h)/2 - 34;
+  const gx=gr=>cx+gr*Rp, gy=gi=>cy-gi*Rp;
+
+  // Smith-chart grid (normalized to the feed Z0), clipped to the unit circle
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx,cy,Rp,0,2*Math.PI); ctx.clip();
+  ctx.strokeStyle='#e2ebf3'; ctx.lineWidth=1;
+  const RS=[0.2,0.5,1,2,5];
+  for(const r of RS){ // constant-resistance circles: center r/(1+r), radius 1/(1+r)
+    ctx.beginPath(); ctx.arc(cx+Rp*r/(1+r), cy, Rp/(1+r), 0, 2*Math.PI); ctx.stroke();
+  }
+  for(const x of RS){ // constant-reactance arcs: center (1, ±1/x), radius 1/x
+    ctx.beginPath(); ctx.arc(cx+Rp, cy-Rp/x, Rp/x, 0, 2*Math.PI); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx+Rp, cy+Rp/x, Rp/x, 0, 2*Math.PI); ctx.stroke();
+  }
+  ctx.restore();
+  // real axis + rim
+  ctx.strokeStyle='#b9d2e5'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(cx-Rp,cy); ctx.lineTo(cx+Rp,cy); ctx.stroke();
+  ctx.strokeStyle='#7fa8c9'; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.arc(cx,cy,Rp,0,2*Math.PI); ctx.stroke();
+  // grid labels: r values on the real axis, x values around the rim
+  for(const r of RS){
+    const gr=(r-1)/(r+1);
+    stext(ctx, r<1?r.toFixed(1):r.toFixed(0), gx(gr)+2, cy+9, 9.5, '#9fb1c1','left',false);
+  }
+  stext(ctx,'0', cx-Rp-8, cy, 10, '#9fb1c1','center',false);
+  stext(ctx,'∞', cx+Rp+9, cy, 11, '#9fb1c1','center',false);
+  for(const x of [0.5,1,2]){ // rim intersection of z = ±jx
+    const c=(x*x-1)/(x*x+1), s=2*x/(x*x+1);
+    const lab=(x<1?'±j'+x.toFixed(1):'±j'+x.toFixed(0));
+    stext(ctx, lab, cx+c*(Rp+16), cy-s*(Rp+11), 9.5, '#9fb1c1','center',false);
+    stext(ctx, lab, cx+c*(Rp+16), cy+s*(Rp+11), 9.5, '#9fb1c1','center',false);
+  }
+
+  // VSWR=2 reference circle (|Gamma|=1/3)
+  ctx.strokeStyle=cssv('--sll'); ctx.setLineDash([3,3]); ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.arc(cx,cy,Rp/3,0,2*Math.PI); ctx.stroke(); ctx.setLineDash([]);
+
+  // matched center
+  ctx.fillStyle=cssv('--ink3'); ctx.beginPath(); ctx.arc(cx,cy,2.5,0,2*Math.PI); ctx.fill();
+
+  // VSWR circle through the operating point
+  if(isFinite(d.gm)&&d.gm>1e-4){
+    ctx.strokeStyle=cssv('--match'); ctx.lineWidth=1; ctx.globalAlpha=0.5;
+    ctx.beginPath(); ctx.arc(cx,cy,d.gm*Rp,0,2*Math.PI); ctx.stroke(); ctx.globalAlpha=1;
+  }
+  // operating point
+  const px=gx(d.g[0]), py=gy(d.g[1]);
+  ctx.strokeStyle=cssv('--match'); ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(px,py); ctx.stroke();
+  ctx.fillStyle=cssv('--match'); ctx.beginPath(); ctx.arc(px,py,5,0,2*Math.PI); ctx.fill();
+
+  // Legend lives in the left margin, clear of the chart. In-chart text used to
+  // collide with the r-axis ticks (the r = 1 tick sits exactly at the center)
+  // and with the +/-j0.5 rim label.
+  const lx = 14; let ly = 30;
+  MJ.draw(ctx,'z = \\dfrac{Z}{Z_0}', lx, ly, 13, cssv('--ink3'),'left'); ly += 30;
+  stext(ctx,'rim: total reflection', lx, ly, 10.5, cssv('--ink3'),'left',false); ly += 18;
+  stext(ctx,'center: matched',      lx, ly, 10.5, cssv('--ink3'),'left',false); ly += 18;
+  stext(ctx,'dashed: VSWR = 2',     lx, ly, 10.5, cssv('--sll'),'left',false);
+
+  if(state.qw && state.Z1){
+    stext(ctx,'λ/4 line: Z1 = '+state.Z1.toFixed(1)+' Ω, designed for '+state.qwR+' Ω',
+      12, h-30, 11.5, cssv('--load'),'left',true);
+    stext(ctx,'move the load → match degrades; re-toggle to re-design', 12, h-14, 10, cssv('--ink3'),'left',false);
+  }
+
+  updateReadout(d);
+}
+
+function fmt(z){ const s=z.Xin>=0?'+':'−'; return `${z.Rin.toFixed(0)} ${s} j${Math.abs(z.Xin).toFixed(0)} Ω`; }
+function updateReadout(d){
+  document.getElementById('p-z').textContent   = fmt(d);
+  document.getElementById('p-gam').textContent = d.gm.toFixed(3);
+  document.getElementById('p-vswr').textContent= (d.vswr===Infinity)?'∞:1':`${d.vswr.toFixed(2)}:1`;
+  document.getElementById('p-rl').textContent  = (d.rl===Infinity)?'∞ dB':`${d.rl.toFixed(1)} dB`;
+  document.getElementById('p-ml').textContent  = `${d.ml.toFixed(2)} dB`;
+  const p=document.getElementById('ro-vswr');
+  p.classList.toggle('good', d.vswr<=1.5);
+  p.classList.toggle('warn', d.vswr>1.5 && d.vswr<=2.0);
+  p.classList.toggle('bad',  d.vswr>2.0);
+}
+
+fit();
+MJ.setRedraw(()=>draw());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>draw()); draw(); });
+</script>
+</body>
+</html>
