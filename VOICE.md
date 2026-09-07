@@ -134,6 +134,161 @@ In procedure text the agent is almost always **you** or **the instrument**.
 Naming it is not just style — it is what makes a step followable, because the
 reader learns whose job each step is.
 
+## Neil's own hand: the Lesson 7 edit (2026-09-06)
+
+Neil edited the first half of L07 himself, 45 lines. Every pair below is his
+wording replacing the draft's. Together with the ECE 448 decks and his papers,
+this is the largest sample of his course voice in the repo.
+
+### 10. Plain verbs, not colorful ones
+
+> **Before:** That kills one power of $\sin\theta$.
+>
+> **After:** That eliminates one power of $\sin\theta$.
+
+> **Before:** for longer wires the peak walks off broadside entirely
+>
+> **After:** for longer wires the peak moves off broadside entirely
+
+> **Before:** The wire radius drops straight out
+>
+> **After:** The wire radius factors out
+
+> **Before:** the reactive near field of Lesson 5, sloshing energy back and
+> forth, doing no useful work, and wrecking your match.
+>
+> **After:** the reactive near field of Lesson 5, which does no useful work,
+> and wrecking your match.
+
+> **Before:** Now it is a first-year integral.
+>
+> **After:** This is a relatively straightforward integral.
+
+The verb does its job and nothing else. "Sloshing," "kills," "walks off," and
+"drops straight out" are the draft performing; his versions describe.
+
+### 11. No kicker sentences
+
+> **Before:** **Doubling the wire bought 0.39 dB of directivity.** The
+> half-wave dipole is not famous for its pattern.
+>
+> **After:** **Doubling the wire brought 0.39 dB of directivity.**
+
+> **Before:** Lesson 8 is where you find out how much it costs.
+>
+> **After:** we will be exploring the tradeoffs.
+
+> **Before:** One integral covers every length, which is what the radiation
+> integral is for.
+>
+> **After:** One integral covers every length, which is the entire purpose of
+> the radiation integral.
+
+The one-line payoff at the end of a paragraph, the sentence that lands the
+point with a snap, is deleted or flattened every time it appears. State the
+fact; do not close on it.
+
+### 12. "We," not "you," for the work of the lesson
+
+> **Before:** You have a current. Lesson 6 gives you the rest, and this is the
+> one antenna in the course where we run that machine end to end.
+>
+> **After:** We start with the current and the radiation integrals of Lesson 6
+> provide the rest, and this is the one antenna in the course where we will
+> run that computation end to end.
+
+> **Before:** So compute $P_\text{rad}$ and you have $R_r$.
+>
+> **After:** If we can compute $P_\text{rad}$, we can find $R_r$.
+
+> **Before:** For this antenna you may quote gain and directivity
+> interchangeably — but say which one you mean
+>
+> **After:** For this antenna we can quote gain and directivity
+> interchangeably — but it is still helpful to be in the habit of specifying
+> which one you mean
+
+"You" survives for what the reader will do at a bench or an analyzer (§9).
+For the derivation and the reasoning, the lesson is something we do together.
+
+### 13. Titles are Title Case noun phrases
+
+> **Before:** What doubling the wire bought you
+>
+> **After:** Why Double the Wire?
+
+> **Before:** The current is assumed, not solved for
+>
+> **After:** The current is the excitation, not the solution
+
+> **Before:** That integral has no elementary antiderivative
+>
+> **After:** Tricky Integrals
+
+> **Before:** What the bars and the proportionality sign mean
+>
+> **After:** Absolute Value and Proportionality
+
+> **Before:** The antenna that cannot exist
+>
+> **After:** The Impossible Antenna
+
+A title names the topic. It does not make the point; the frame does.
+
+### 14. Bold a term, not a claim
+
+> **Before:** Here the derivation stops being algebra. **That integral has no
+> elementary antiderivative.**
+>
+> **After:** Here the derivation stops being algebra. That integral has no
+> elementary antiderivative.
+
+> **Before:** The proportionality matters because **normalizing means dividing
+> by the peak of that expression**
+>
+> **After:** The proportionality matters because **normalizing** means dividing
+> by the peak of that expression
+
+### 15. Concrete names, ordinary words
+
+> **Before:** exactly what a spectrum regulator writes into a license.
+>
+> **After:** exactly what the FCC specifies in their licensing regulations.
+
+> **Before:** Half a wavelength is the celebrated length because it puts the
+> current maximum right at the feed point, and it costs only 0.39 dB of
+> directivity to get there.
+>
+> **After:** Half a wavelength is the optimal length because it puts the
+> current maximum right at the feed point, and it costs only 0.39 dB of
+> directivity to implement.
+
+Also "donut," not "doughnut"; "thick," not "fat"; "out of phase," not "out of
+step"; "narrower," not "slimmer."
+
+### 16. A physical picture over a theorem
+
+> **Before:** It cannot exist. The argument is short. In the far field the
+> electric field is transverse: it lies tangent to the sphere of constant
+> $r$. A truly isotropic radiator would need that tangential field to be
+> nonzero everywhere on the sphere with no direction singled out, and
+> topology forbids it — you cannot comb a hairy ball flat.
+>
+> **After:** An isotropic antenna is a physical impossibility. In order to
+> create an antenna, we have to separate charge, which inherently produces
+> curved electric field lines, which means at some physical location the
+> field has to vanish
+
+Trees, not species. The cadet needs to believe the null is required, not to
+know which theorem requires it.
+
+### 17. What he kept
+
+Em-dashes stayed in every sentence that had one, and he added a semicolon.
+"Congratulations, you have built a center-fed dipole" went in. "Recall that
+dB is a power ratio" went in. A little warmth and a reminder of a
+prerequisite are both in the voice; a joke about the reader is not.
+
 ## What he does *not* want changed
 
 His voice is direct, and that is deliberate. Do not soften it into hedged
