@@ -228,13 +228,13 @@ first.
 
 ::::{frame} The Radiation Integral
 :::{present}
-- Fold Lesson 6's integral onto one arm by symmetry.
-- Evaluate it with a product-to-sum identity.
-- Project with $N_\theta = -N_z \sin\theta$.
+**Step 1: set up**, for the assumed current on a thin wire along $z$
 
-$$\vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\tfrac{kL}{2}\cos\theta\right) - \cos\tfrac{kL}{2}}{\sin\theta} \right\vert$$
+$$N_z(\theta) = \int_{-L/2}^{L/2} I(z')\ e^{+jkz'\cos\theta}\ dz'$$
 
-**One integral covers every length.**
+**Fold by symmetry**, since $I(z')$ is even
+
+$$\begin{aligned} N_z(\theta) &= 2 I_m \int_0^{L/2} \sin\left[k\left(\tfrac{L}{2} - z'\right)\right] \\ &\qquad\times \cos(kz'\cos\theta)\ dz' \end{aligned}$$
 :::
 
 We start with the current, and the radiation integrals of Lesson 6 provide the
@@ -260,6 +260,25 @@ multi-lobe patterns later in this lesson come from the same expression with a
 different value of $L$ in it. One integral covers every length, which is the
 entire purpose of the radiation integral.
 ```
+::::
+
+::::{frame} Evaluate and Project
+:::{present}
+**Step 2: evaluate**, with $u = kL/2$
+
+$$N_z(\theta) = \frac{2 I_m}{k}\ \frac{\cos(u\cos\theta) - \cos u}{\sin^2\theta}$$
+
+**Step 3: project**, $N_\theta = -N_z \sin\theta$
+
+$$\vert F(\theta) \vert \propto \left\vert \frac{\cos(u\cos\theta) - \cos u}{\sin\theta} \right\vert$$
+
+**One integral covers every length.**
+:::
+
+The product-to-sum identity turns the integrand into two plain sines, both of
+which integrate directly, and the projection onto the observation direction
+removes one power of $\sin\theta$. The derivation frame below works both
+steps in full, with $kL/2$ written out.
 ::::
 
 ::::{frame} Derivation: The Pattern of a Center-Fed Dipole
@@ -598,11 +617,17 @@ $75\ \Omega$ cable only reaches 1.76. Trimming to resonance is worth more than
 changing the cable.
 ::::
 
-::::{frame} Reading the Smith Chart
+::::{frame} Resonance on the Smith Chart
+:class: viz-frame
+
 :::{present}
-- Center: a perfect match. Rim: total reflection. Upper half: inductive.
-- The blue curve is the antenna, its impedance as the length sweeps.
-- Where the curve crosses the horizontal axis is resonance.
+<iframe src="../../viz/dipole-smith.html"
+        width="100%" height="551"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Smith chart showing how a dipole's input impedance moves as its length changes, with constant-VSWR circles"
+        data-autosize>
+</iframe>
 :::
 
 Those four rows are the same information a **Smith chart** shows at a glance,
@@ -611,8 +636,8 @@ lab draws one. The chart is the complex reflection coefficient plane. The
 center is a perfect match, the rim is total reflection, the upper half is
 inductive and the lower half capacitive.
 
-Four kinds of object are drawn on the chart on the next frame, and each is
-worth naming before you touch the slider.
+Four kinds of object are drawn on the chart, and each is worth naming before
+you touch the slider.
 
 - **The faint gray grid** is the chart itself, printed once and never moving.
   The circles that all pass through the right-hand point are lines of constant
@@ -644,20 +669,6 @@ grid re-scales underneath it and the same antenna lands closer to the center. A
 match is a property of an antenna *and* a line together, not of the antenna
 alone. Throughout, the wire is assumed thin — radius $0.002\ \lambda$ — and only
 the colors are keyed under the chart; the list above is the full reading of it.
-::::
-
-::::{frame} The Impedance Locus
-:class: viz-frame
-
-:::{present}
-<iframe src="../../viz/dipole-smith.html"
-        width="100%" height="551"
-        style="border: 1px solid #cddce9; border-radius: 6px;"
-        loading="lazy"
-        title="Smith chart showing how a dipole's input impedance moves as its length changes, with constant-VSWR circles"
-        data-autosize>
-</iframe>
-:::
 ::::
 
 ::::{frame} Why the Chart Says 63 Ohms
