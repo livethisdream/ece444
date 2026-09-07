@@ -175,7 +175,7 @@ wrong. Everything downstream in this module inherits that assumption and we will
 
 ::::{frame} Step 1: set up the radiation integral
 
-You have a current. The radiation integrals of Lesson 6 gives you the rest, and this is the one antenna in the course where we run that computation end to end.
+We start with the current and the radiation integrals of Lesson 6 provide the rest, and this is the one antenna in the course where we will run that computation end to end.
 
 Lesson 6's radiation vector is
 $\mathbf{N} = \int \mathbf{J}\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'$.
@@ -236,7 +236,7 @@ be written with an equals sign:
 
 $$\vert F(\theta) \vert = \frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}$$
 
-That is the **half-wave dipole** pattern. The $\sin\theta$ in the denominator
+This is the **half-wave dipole** pattern. The $\sin\theta$ in the denominator
 looks like trouble at $\theta = 0$, but the numerator vanishes there too and
 the ratio goes quietly to zero. The nulls are still straight off the ends of the wire.
 ::::
@@ -346,7 +346,7 @@ which is precisely why short antennas are so hard to feed.
 ```
 ::::
 
-::::{frame} The resistance, from the pattern
+::::{frame} The resistance
 
 The pattern was the easy half. What the transmitter actually sees is the
 **input impedance**, and for a thin half-wave dipole both parts of it, we can actually calculate it — the resistance comes from the pattern we just derived and the reactance from one standard result we will name but not re-derive.
@@ -403,14 +403,13 @@ Since $\eta_0/4\pi = 29.98\ \Omega$, which is $30\ \Omega$ to better than one te
 of a percent, the result is easy to remember as **30 times 2.4376**.
 ::::
 
-::::{frame} Reactance Needs a Different Method
+::::{frame} Reactance via Induced EMF Method
 
 A far-field power integral can only ever produce the real part — it accounts
-for power that *leaves*. The reactance describes energy stored in the near
-field and handed back every cycle, which never crosses the far-field sphere at
+for power that *leaves*. The reactance describes cyclical energy in the near field which never crosses the far-field sphere at
 all, so no amount of pattern integration will produce it.
 
-Getting it requires the **induced-EMF method**: integrate the field the antenna
+Finding the reactance requires a different technique. We will use the **induced-EMF method**, in which we integrate the field the antenna
 reflects back against its own current, along the wire. That is a near-field
 calculation, and we are not going to carry it out here. Its general result
 contains $Si$, $Ci$, and the wire radius $a$ — meaning that **the reactance of
@@ -424,7 +423,7 @@ wire radius is multiplied by $\sin(kL)$, and at $kL = \pi$,
 
 $$\sin(kL) = \sin\pi = 0.$$
 
-The wire radius drops straight out, and what survives is a single special
+The wire radius factors out, and what survives is a single special
 function:
 
 $$X = \frac{\eta_0}{4\pi}Si(2\pi) = 29.98 \times 1.4182 = 42.5\ \Omega$$
@@ -432,9 +431,8 @@ $$X = \frac{\eta_0}{4\pi}Si(2\pi) = 29.98 \times 1.4182 = 42.5\ \Omega$$
 :::{callout}
 **The reactance of a dipole is radius-independent only at exactly
 $\lambda/2$.** That is why $42.5\ \Omega$ can be quoted as a clean number at
-all, while at every other length the reactance depends on how fat the wire is —
-which is exactly why the three curves in the figure below separate everywhere
-except where they cross at $\lambda/2$.
+all, while at every other length the reactance depends on how thick the wire is —
+which is exactly why the three curves in the figure below separate everywhere, but cross at $\lambda/2$.
 :::
 ::::
 
@@ -447,7 +445,7 @@ $$Z_{\text{in}} = \frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 2
 
 So read the two parts separately. The $73\ \Omega$ is power leaving and never
 coming back — the whole point of the antenna. The $+j42.5\ \Omega$ is the
-reactive near field of Lesson 5, sloshing energy back and forth, doing no
+reactive near field of Lesson 5, which does no
 useful work, and wrecking your match.
 ::::
 
