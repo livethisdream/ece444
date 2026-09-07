@@ -130,8 +130,12 @@ problem.**
 :::
 
 Lesson 6 handled the **infinitesimal dipole** — a current element so short that
-the current is essentially constant along it. Its pattern is
-$\vert F(\theta)\vert = \sin\theta$, a donut with its maximum broadside at
+the current is essentially constant along it. Its field pattern, the square
+root of the normalized radiation intensity,
+
+$$\vert F(\theta,\phi)\vert = \sqrt{\frac{U(\theta,\phi)}{U_\text{max}}},$$
+
+is $\vert F(\theta)\vert = \sin\theta$, a donut with its maximum broadside at
 $\theta = 90^\circ$ and nulls off the wire ends. Its beamwidth is $90^\circ$
 and its directivity is $D = 1.5$, or $1.76\ \text{dBi}$. Its radiation
 resistance, however, is $R_r = 80\pi^2 (L/\lambda)^2$ — about $2\ \Omega$ for a
@@ -221,8 +225,13 @@ to one scalar integral,
 $$N_z(\theta) = \int_{-L/2}^{L/2} I(z')\ e^{+jkz'\cos\theta}\ dz',$$
 
 and the three steps from there are worked in full on the derivation frame
-below. The result holds within a constant, which is what the proportionality
-sign is for. The calculus is elementary; the hard part was choosing the
+below. The radiation intensity goes as $U \propto \vert N_\theta\vert^2$, so
+the field pattern is
+
+$$\vert F(\theta)\vert = \sqrt{\frac{U(\theta)}{U_\text{max}}} \propto \vert N_\theta(\theta)\vert .$$
+
+The result holds within a constant, which is what the proportionality sign is
+for. The calculus is elementary; the hard part was choosing the
 current.
 
 ```{note}
@@ -263,8 +272,10 @@ $N_\theta = -N_z \sin\theta$. That eliminates one power of $\sin\theta$:
 
 $$N_\theta(\theta) \propto \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta}$$
 
-That is the pattern of a center-fed dipole of **any** length, within a
-constant:
+The radiation intensity is $U \propto \vert N_\theta\vert^2$, and the field
+pattern is its normalized square root, $\vert F\vert = \sqrt{U/U_\text{max}}
+\propto \vert N_\theta\vert$. That is the pattern of a center-fed dipole of
+**any** length, within a constant:
 
 $$\vert F(\theta) \vert \propto \left\vert \frac{\cos\left(\dfrac{kL}{2}\cos\theta\right) - \cos\dfrac{kL}{2}}{\sin\theta} \right\vert$$
 
