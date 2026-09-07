@@ -51,12 +51,31 @@ terminals.
 :::
 ::::
 
+::::{frame} Where We Were
+:::{present}
+- **Lesson 5**: the far field starts at $r \ge 2D^2/\lambda$.
+- **Lesson 6**: $\mathbf{N} = \int \mathbf{J}\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'$, then $U \propto \vert N_\theta\vert^2 + \vert N_\phi\vert^2$, $\vert F\vert = \sqrt{U/U_\text{max}}$, and $D = 4\pi U_\text{max}/P_\text{rad}$.
+- **Lesson 4**: $\Gamma = (Z_L - Z_0)/(Z_L + Z_0)$, $\text{VSWR} = (1 + \vert\Gamma\vert)/(1 - \vert\Gamma\vert)$, and a balun at a balanced feed.
+:::
+
+Lesson 5 told us where the far field starts, and only there does the pattern
+stop changing with range. Lesson 6 gave us the radiation integral: assume a
+current, transform it into the radiation vector $\mathbf{N}$, and read the
+pattern from it. The radiation intensity goes as the square of the transverse
+part of $\mathbf{N}$, the **field pattern** $\vert F\vert$ is the square root
+of the intensity normalized to its peak, and directivity compares that peak to
+the average over the sphere. Lesson 6 also handed us the half-wave dipole
+pattern from an assumed sinusoidal current. Lesson 4 gave us matching, VSWR,
+and baluns. Today we need all of these on the same antenna.
+::::
+
 ::::{frame} The Isotropic Radiator
 :::{present}
 $$U_\text{iso} = \frac{P_\text{rad}}{4\pi} \quad\Longrightarrow\quad D = 1$$
 
-- Equal power density on every square meter of the sphere.
-- Directivity exactly 1, which is $0\ \text{dBi}$. The "i" means *relative to isotropic*.
+- Equal power density on every square meter of the sphere: the $0\ \text{dBi}$ reference.
+- It cannot be built: separating charge curves the field lines, so somewhere the field vanishes.
+- A place where the field vanishes is a **null**. Every real antenna has one.
 :::
 
 An **isotropic radiator** radiates equally in every direction. Wrap a sphere
@@ -64,16 +83,6 @@ around it and every square meter of that sphere receives the same power
 density. Its radiation intensity is simply the radiated power spread over the
 whole sphere, so its directivity is exactly $D = 1$, which is $0\ \text{dBi}$
 — the "i" is literally there to say *relative to isotropic*.
-::::
-
-::::{frame} The Impossible Antenna
-:::{present}
-- To create an antenna, we have to separate charge.
-- Separated charge produces curved field lines, so somewhere the field vanishes.
-- A place where the field vanishes is a **null**.
-
-**Every real antenna has at least one null.**
-:::
 
 An isotropic antenna is a physical impossibility. In order to create an
 antenna, we have to separate charge, which inherently produces curved electric
@@ -130,12 +139,8 @@ problem.**
 :::
 
 Lesson 6 handled the **infinitesimal dipole** — a current element so short that
-the current is essentially constant along it. Its field pattern, the square
-root of the normalized radiation intensity,
-
-$$\vert F(\theta,\phi)\vert = \sqrt{\frac{U(\theta,\phi)}{U_\text{max}}},$$
-
-is $\vert F(\theta)\vert = \sin\theta$, a donut with its maximum broadside at
+the current is essentially constant along it. Its field pattern is
+$\vert F(\theta)\vert = \sin\theta$, a donut with its maximum broadside at
 $\theta = 90^\circ$ and nulls off the wire ends. Its beamwidth is $90^\circ$
 and its directivity is $D = 1.5$, or $1.76\ \text{dBi}$. Its radiation
 resistance, however, is $R_r = 80\pi^2 (L/\lambda)^2$ — about $2\ \Omega$ for a

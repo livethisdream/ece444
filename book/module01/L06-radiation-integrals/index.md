@@ -359,8 +359,8 @@ $$
 U(\theta,\phi) \propto |N_\theta|^2 + |N_\phi|^2
 $$
 
-Normalize $U$ to its peak; its square root is the field pattern $\vert F\vert$.
-The recipe is $\mathbf{J} \to \mathbf{N} \to$ pattern, and only the first step
+Normalize $U$ to its peak; its square root is the field pattern,
+$\vert F\vert = \sqrt{U/U_\text{max}}$. The recipe is $\mathbf{J} \to \mathbf{N} \to$ pattern, and only the first step
 involves the antenna.
 :::
 
@@ -382,8 +382,15 @@ U(\theta,\phi) = \frac{r^2|\mathbf{E}|^2}{2\eta_0}
 = \frac{\eta_0 k^2}{32\pi^2}\Big(|N_\theta|^2 + |N_\phi|^2\Big).
 $$
 
-The normalized power pattern is $U/U_{\max}$; its square root is the
-**field pattern** $|F(\theta,\phi)|$ used for the rest of this lesson. Compare
+The normalized power pattern is $U/U_{\max}$, and its square root is the
+**field pattern** used for the rest of this lesson and the next:
+
+$$
+\vert F(\theta,\phi)\vert = \sqrt{\frac{U(\theta,\phi)}{U_{\max}}}
+= \frac{\sqrt{|N_\theta|^2 + |N_\phi|^2}}{\max\sqrt{|N_\theta|^2 + |N_\phi|^2}} .
+$$
+
+Compare
 this with the three-step recipe on the read-only frame above: the two curls
 that took $\mathbf{A}$ to $\mathbf{E}$ have become a projection onto the
 transverse directions and a constant.
