@@ -252,10 +252,12 @@ Every page is chrome-free: no sidebar, no header, one centerd bar at the bottom
   enough to sit on one line at 390.
 - **No thin spaces** (U+2009) anywhere in markdown or LaTeX — course rule.
 - **American spelling, everywhere** (Neil, 2026-09-03: "stop that, globally"): color,
-  center, gray, canceling, labeled, license, judgment, -ize. Prose, comments,
-  widget labels, and code identifiers alike; the sweep that enforced it is the
-  regex in the 2026-09-03 commit, and `grep -rniE 'colour|centre|grey'` should
-  come back empty outside `_build`, `node_modules` and vendored code.
+  center, gray, canceling, labeled, license, judgment, donut, -ize. Prose,
+  comments, widget labels, and code identifiers alike; the sweep that enforced
+  it is the regex in the 2026-09-03 commit, and
+  `grep -rniE 'colour|centre|grey|doughnut'` should come back empty outside
+  `_build`, `node_modules`, vendored code, and the before-side of a VOICE.md
+  pair.
 - Practice problems are labeled at the **2nd LO level**, one `LO 1.X` banner per
   set.
 

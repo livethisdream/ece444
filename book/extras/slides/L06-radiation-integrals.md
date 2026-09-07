@@ -331,7 +331,7 @@ Through the integral, for $L = \lambda/2$:
 
 $$ |F(\theta)| = \left|\frac{\cos\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}\right| $$
 
-Not $\sin\theta$ — a **sharper** doughnut, because the current is concentrated near the middle.
+Not $\sin\theta$ — a **sharper** donut, because the current is concentrated near the middle.
 
 ---
 
@@ -347,7 +347,7 @@ Not $\sin\theta$ — a **sharper** doughnut, because the current is concentrated
 
 Note:
 Same integral, three currents — change the current, change the antenna. Walk the
-polar plot left to right: the two dipoles are nearly the same doughnut, and the
+polar plot left to right: the two dipoles are nearly the same donut, and the
 line source is the one that has traded its skirt for a beam and sidelobes.
 
 ---

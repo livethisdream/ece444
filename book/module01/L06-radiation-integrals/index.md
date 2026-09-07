@@ -671,20 +671,20 @@ E_\theta = \frac{j\ \eta_0 k I_0\ dl\ \sin\theta}{4\pi r}\ e^{-jkr} .
 $$
 
 This is Lesson 5's $1/r$ radiation term, in one line. The pattern is
-$\sin\theta$, the doughnut, with $D = 1.5$.
+$\sin\theta$, the donut, with $D = 1.5$.
 :::
 
 This is exactly the $1/r$ radiation term of the exact short-dipole field quoted
 in Lesson 5, the term that survived once $kr \gg 1$. What took a page of exact
 spherical-wave algebra there comes out here in one line. The pattern is
-$|F| = \sin\theta$: a doughnut, maximum broadside, null along the wire, and
+$|F| = \sin\theta$: a donut, maximum broadside, null along the wire, and
 $D = 1.5$ (1.76 dBi). The read-only frame below earns that $1.5$.
 ::::
 
-::::{frame} Worked example — the doughnut integrated
+::::{frame} Worked example — the donut integrated
 :class: read-only
 
-:::{admonition} Worked example — the doughnut integrated
+:::{admonition} Worked example — the donut integrated
 :class: tip
 That $D = 1.5$ has been quoted since Lesson 2 and taken on faith ever since.
 Now you can earn it. Directivity is peak intensity over average intensity, and
@@ -708,7 +708,7 @@ D = \frac{4\pi\ U_{\max}}{P_\text{rad}} = \frac{4\pi}{8\pi/3} = 1.5
 \quad (1.76\ \text{dBi}).
 $$
 
-The number is small because the doughnut is generous: a current element throws
+The number is small because the donut is generous: a current element throws
 power almost everywhere except along its own axis, so concentrating it 1.5 times
 over isotropic is all the shape can do.
 :::
@@ -839,7 +839,7 @@ $$
 |F(\theta)| = \left|\frac{\cos\!\left(\tfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right| ,
 $$
 
-a slightly **sharper** doughnut: HPBW $78.1^{\circ}$, $D = 1.64$ (2.15 dBi).
+a slightly **sharper** donut: HPBW $78.1^{\circ}$, $D = 1.64$ (2.15 dBi).
 :::
 
 The current has to vanish at the open ends, and the standing wave on a resonant
@@ -868,7 +868,7 @@ E_\theta = \frac{j\eta_0 I_0 e^{-jkr}}{2\pi r}\
 $$
 
 The bracket is *not* $\sin\theta$, but it is close: it is a slightly sharper
-doughnut, because the tapered current is concentrated near the middle rather
+donut, because the tapered current is concentrated near the middle rather
 than spread over the whole length. That small difference is worth real numbers:
 $\theta_\text{HP} = 78.1^{\circ}$ versus $90^{\circ}$, and $D = 1.64$
 (2.15 dBi) versus 1.5 (1.76 dBi).
@@ -876,7 +876,7 @@ $\theta_\text{HP} = 78.1^{\circ}$ versus $90^{\circ}$, and $D = 1.64$
 
 ::::{frame} Three distributions, side by side
 :::{present}
-<img src="../../viz/img/L06-three-patterns.svg" alt="Polar patterns in dB for the three distributions side by side: the infinitesimal dipole and half-wave dipole as nearly identical doughnuts, and the two-wavelength uniform line source as a narrow broadside beam with sidelobes" style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L06-three-patterns.svg" alt="Polar patterns in dB for the three distributions side by side: the infinitesimal dipole and half-wave dipole as nearly identical donuts, and the two-wavelength uniform line source as a narrow broadside beam with sidelobes" style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
 | Distribution | HPBW | $D$ |
@@ -885,7 +885,7 @@ $\theta_\text{HP} = 78.1^{\circ}$ versus $90^{\circ}$, and $D = 1.64$
 | Half-wave dipole | $78.1^{\circ}$ | 1.64 |
 | Uniform line source, $L = 2\lambda$ | $25.6^{\circ}$ | 4.21 |
 
-The two dipoles are nearly the same doughnut. The line source traded its skirt
+The two dipoles are nearly the same donut. The line source traded its skirt
 for a beam and a set of sidelobes.
 :::
 
@@ -972,8 +972,8 @@ transform.
 | far-field approximation | parallel rays: keep $\hat{\mathbf r}\cdot\mathbf{r}'$ in the phase, drop it in the amplitude | valid for $r \ge 2D^2/\lambda$, the $\pi/8$ ($22.5^{\circ}$) phase-error budget |
 | $U(\theta,\phi)$ | radiation intensity; feeds $D$ and $G$ from Lesson 2 | $\dfrac{\eta_0 k^2}{32\pi^2}\left(\vert N_\theta\vert^2 + \vert N_\phi\vert^2\right)$, $\eta_0 \approx 377\ \Omega$ |
 | $I(z') \leftrightarrow N_z(k_z)$ | current and pattern are a Fourier transform pair | $k_z = k\cos\theta$, visible only over $-k \le k_z \le +k$ |
-| Infinitesimal dipole | $\vert F\vert = \sin\theta$ — the reference doughnut | HPBW $90^{\circ}$, $D = 1.5$ (1.76 dBi) |
-| Half-wave dipole | $\vert F\vert = \cos\!\left(\tfrac{\pi}{2}\cos\theta\right)/\sin\theta$ — a sharper doughnut | HPBW $78.1^{\circ}$, $D = 1.64$ (2.15 dBi) |
+| Infinitesimal dipole | $\vert F\vert = \sin\theta$ — the reference donut | HPBW $90^{\circ}$, $D = 1.5$ (1.76 dBi) |
+| Half-wave dipole | $\vert F\vert = \cos\!\left(\tfrac{\pi}{2}\cos\theta\right)/\sin\theta$ — a sharper donut | HPBW $78.1^{\circ}$, $D = 1.64$ (2.15 dBi) |
 | Uniform line source | space factor $\vert\sin u/u\vert$, $u = \tfrac{kL}{2}\cos\theta$; taper trades sidelobes for beamwidth | $\theta_\text{HP} \approx 0.886\ \lambda/L$, first sidelobe $-13.3$ dB; tapers reach $-23$ to $-31.5$ dB at 1.34–1.63× the beamwidth |
 ::::
 

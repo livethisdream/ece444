@@ -257,7 +257,7 @@ Feed that uniform ring current into the radiation integral from Lesson 6 and eve
 ::::
 
 ::::{frame} Maximum in the plane, null through the hole
-The loop has the same doughnut pattern as the short dipole with the polarization rotated by 90 degrees. Its maximum radiation lies in the plane of the loop and its null lies along the axis, through the hole, which is the opposite of what most people expect. That null is the basis of direction finding: you rotate the loop until the signal disappears, and the bearing is precise because a null is sharp while a pattern maximum is broad.
+The loop has the same donut pattern as the short dipole with the polarization rotated by 90 degrees. Its maximum radiation lies in the plane of the loop and its null lies along the axis, through the hole, which is the opposite of what most people expect. That null is the basis of direction finding: you rotate the loop until the signal disappears, and the bearing is precise because a null is sharp while a pattern maximum is broad.
 ::::
 
 ::::{frame} The fourth-power penalty on circumference
