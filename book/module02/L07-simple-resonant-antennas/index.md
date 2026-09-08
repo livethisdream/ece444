@@ -80,12 +80,12 @@ and baluns. Today we need all of these on the same antenna.
 :::{present}
 - We measure $\vert F(\theta)\vert$.
 - The **element factor** is one element's pattern, here $\sin\theta$.
-- The **space factor** $S(\theta)$ comes from the positions and phases.
+- The **space factor** $S(\theta)$ is the pattern of the current distribution.
 :::
 :::{present}
 $$\vert F(\theta)\vert \propto \underbrace{\sin\theta}_{\text{element factor}}\ \cdot\ \underbrace{S(\theta)}_{\text{space factor}}$$
 
-- Today the integral is $S(\theta)$, and the projection supplies $\sin\theta$.
+- Today the integral gives $S(\theta)$, and the projection supplies $\sin\theta$.
 - Lesson 16 calls $S(\theta)$ the **array factor**.
 :::
 
