@@ -76,6 +76,29 @@ pattern from an assumed sinusoidal current. Lesson 4 gave us matching, VSWR,
 and baluns. Today we need all of these on the same antenna.
 ::::
 
+::::{frame} Element Factor and Space Factor
+:::{present}
+- We measure $\vert F(\theta)\vert$.
+- The **element factor** is one element's pattern, here $\sin\theta$.
+- The **space factor** $S(\theta)$ comes from the positions and phases.
+:::
+:::{present}
+$$\vert F(\theta)\vert \propto \underbrace{\sin\theta}_{\text{element factor}}\ \cdot\ \underbrace{S(\theta)}_{\text{space factor}}$$
+
+- Today the integral is $S(\theta)$, and the projection supplies $\sin\theta$.
+- Lesson 16 calls $S(\theta)$ the **array factor**.
+:::
+
+Lesson 6 closed on this factorization, and we use it once today, in Step 3
+of the pattern derivation. The radiation integral over the sinusoidal current
+is the space factor of that distribution. Projecting $N_z$ onto the observer's
+transverse direction multiplies by $\sin\theta$, which is the element factor
+of every short piece of the wire. Module 3 keeps the same product with a sum
+in place of the integral. The element factor becomes the pattern of the
+antenna at each position, and the space factor becomes the array factor, the
+part of the pattern you steer.
+::::
+
 ::::{frame} The Isotropic Radiator
 :::{present}
 $$U_\text{iso} = \frac{P_\text{rad}}{4\pi} \quad\Longrightarrow\quad D = 1$$
@@ -269,8 +292,10 @@ $$\vert F(\theta) \vert \propto \left\vert \frac{\cos(u\cos\theta) - \cos u}{\si
 
 The product-to-sum identity turns the integrand into two plain sines, both of
 which integrate directly, and the projection onto the observation direction
-removes one power of $\sin\theta$. The derivation frame below works both
-steps in full, with $kL/2$ written out.
+removes one power of $\sin\theta$. In the language of the recap frame, the
+integral is the space factor of the sinusoidal current and the $\sin\theta$
+from the projection is the element factor. The derivation frame below works
+both steps in full, with $kL/2$ written out.
 ::::
 
 ::::{frame} Derivation: The Pattern of a Center-Fed Dipole
@@ -674,12 +699,12 @@ the colors are keyed under the chart; the list above is the full reading of it.
 ::::
 
 ::::{frame} Why the Chart Says 63 Ohms
-:::{present}
+:class: read-only
+
 - The chart reads about $63\ \Omega$ at the resonant crossing.
 - Real resonant dipoles measure about $70\ \Omega$.
 - The first is the sinusoidal-current model on a slightly short wire; the second is what solvers and benches return.
 - Design with $70\ \Omega$.
-:::
 
 At the resonant crossing the chart reads about $63\ \Omega$, but this lesson
 has been telling you to design around $70\ \Omega$. Both numbers are correct,
