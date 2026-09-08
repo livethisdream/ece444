@@ -738,6 +738,12 @@ $$
 \underbrace{S(\theta)}_{\text{space factor}} .
 $$
 
+$S(\theta)$ is the continuous-distribution counterpart of the **array factor**:
+the same sum over source positions and phases, an integral for a continuum and a
+discrete sum for an array. Either way the radiated pattern is the element's own
+pattern times that factor, and here every element is an infinitesimal
+$z$-directed dipole, so the element factor is $\sin\theta$.
+
 For a beam near broadside the $\sin\theta$ is essentially 1 and changes nothing
 you would notice ($25.6^{\circ}$ becomes $24.8^{\circ}$ for the example below).
 Near endfire it matters a great deal. This factorization — element pattern times
