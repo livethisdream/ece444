@@ -80,7 +80,7 @@ source. Drag $P$ around the edge to move the observer.
 
 :::{present}
 <iframe src="../../viz/interference-field.html"
-        width="100%" height="538"
+        width="100%" height="548"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="The field around a line source, with the observer direction and the far-field pattern"
