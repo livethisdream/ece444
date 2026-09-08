@@ -226,7 +226,7 @@ research paper, or telling me about a bug on the course site.
 <div class="fig" data-inline-svg="./fig/L01-antenna-gallery.svg" style="max-width:1100px; margin:0 auto;"></div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.15em 1.6em;font-size:0.58em;max-width:1100px;margin:0.4em auto 0;text-align:left;">
-  <div><strong>dipole</strong> — a resonant wire; the reference antenna, doughnut pattern</div>
+  <div><strong>dipole</strong> — a resonant wire; the reference antenna, donut pattern</div>
   <div><strong>Yagi</strong> — one driven element plus parasites; cheap gain along the boom</div>
   <div><strong>monopole</strong> — half a dipole over a ground plane; the whip on every vehicle</div>
   <div><strong>spiral</strong> — a self-scaling curve; very wideband, circularly polarized</div>

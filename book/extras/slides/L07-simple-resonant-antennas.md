@@ -88,7 +88,7 @@ Note:
 
 A wire much shorter than a wavelength, $L \ll \lambda$. The current tapers linearly from the feed to zero at the ends.
 
-- Pattern: $\vert F(\theta) \vert = \sin\theta$ — a doughnut, broadside at $\theta = 90^\circ$.
+- Pattern: $\vert F(\theta) \vert = \sin\theta$ — a donut, broadside at $\theta = 90^\circ$.
 - HPBW $= 90^\circ$, $D = 1.5$ (**1.76 dBi**).
 - Radiation resistance $R_r = 80\pi^2 (L/\lambda)^2$ — about $2\ \Omega$ at $L = 0.1\lambda$.
 

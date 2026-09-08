@@ -176,7 +176,7 @@ Seven shapes cover most of what the Air Force flies, drives, and parks on a roof
 
 ::::{frame} Show & tell - real antennas + SDR (cont.)
 
-- **Half-wave dipole** — a resonant wire, fed at the center. The reference workhorse: doughnut pattern, 2.15 dBi, and the antenna every other gain number is quietly compared against.
+- **Half-wave dipole** — a resonant wire, fed at the center. The reference workhorse: donut pattern, 2.15 dBi, and the antenna every other gain number is quietly compared against.
 - **Monopole** — half a dipole standing on a ground plane, which mirrors the missing half. Half the height for the same job, which is why it is the whip on vehicles and handhelds.
 - **Patch** — a printed resonant cavity, a metal rectangle over a grounded substrate. Flat and conformal, so it rides the skin of an aircraft or a GPS puck: GPS, telemetry, and the elements of most planar arrays.
 ::::
