@@ -319,6 +319,63 @@ general to specific. Going back and forth is confusing." Start from the
 general form, specialize once, and continue the same equals sign. Never
 restate a left-hand side the reader already has.
 
+### 20. Standard, precise engineering language; no figurative framing
+
+Neil, 2026-09-08: "Use standard, precise engineering language. Do not use
+flowery phrases like 'what X bought you,' 'spend it on Y,' 'the shape of it
+is...,' 'Z in one line.' Those get in the way of the material. The goal is to
+make the material approachable and let the writing style get out of the way."
+
+> **Before:** What doubling the wire bought you
+>
+> **After:** Why Double the Wire?
+
+> **Before:** Today you spend that answer on hardware.
+>
+> **After:** Today we extend the math to real hardware.
+
+> **Before:** The short dipole, in one slide
+>
+> **After:** The Short Dipole
+
+> **Before:** Use the chart to understand the *shape* of the behavior
+>
+> **After:** Use the chart to see how the impedance moves with length
+
+Money metaphors (bought, spend, cost, price, earn its keep, payoff), "the
+shape of," "in one line," "in one slide," "the whole of it," and any phrase
+that describes the explanation instead of the physics are out. Name the
+quantity and say what it does.
+
+### 21. No clipped sentences for effect
+
+Neil, 2026-09-08: "Don't use short sentence fragments as a way to sound
+concise. 'Start with the current. The calculus is easy.' That just doesn't
+land in this course."
+
+> **Before:** You have a current. Lesson 6 gives you the rest.
+>
+> **After:** We start with the current, and the radiation integrals of
+> Lesson 6 provide the rest.
+
+> **Before:** The calculus is elementary; the hard part was choosing the
+> current.
+>
+> **After:** The integral is straightforward once the current is sinusoidal,
+> which is why the sinusoidal assumption is worth making.
+
+Section 4 bans verbless fragments. This goes further: a run of very short
+complete sentences used for punch reads the same way. Prose in this course
+runs at the length of his papers, with connectives, and a two-word sentence
+is a signal that the writing is performing.
+
+### 22. American English
+
+Neil, 2026-09-08: "I live in America, so let's use American English. Do not
+use 'centre,' 'colour,' etc." Also gray, canceling, labeled, license,
+judgment, donut, and -ize. The rule and its sweep are in CLAUDE.md; it is
+repeated here because it is a voice rule, not only a repo rule.
+
 ## What he does *not* want changed
 
 His voice is direct, and that is deliberate. Do not soften it into hedged
