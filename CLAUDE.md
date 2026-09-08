@@ -169,9 +169,21 @@ landing page and the five module overviews are built the same way.
   every lesson: prose in frames, 55-93 words a screen. A frame with one or
   more present blocks shows ONLY those and its title; the extension wraps
   everything else in the frame into `depth` at build time, in document
-  order, so read mode still reads as the page the author wrote. Write the
-  present block as the frame's **topic sentence or its figure**, and let the
-  prose after it continue that sentence rather than restate it. Budgets:
+  order, so read mode still reads as the page the author wrote. **What goes
+  in a present block** (Neil, 2026-09-07, after L07: "talk to and about the
+  slide, not read it ... think TED talk, with the equations and animations we
+  love and short, concise bullet points / key point callouts"): two to four
+  short bullets, a figure, a table, an equation chain, or a callout. Not a
+  paragraph, and not a topic sentence the prose continues -- that was the
+  L05/L06 shape, and L07 is the worked example of the new one. The
+  connective prose is spoken; it lives in depth. Two rules that came with
+  it: **a non-trivial equation gets its own line** (display math; inline is
+  for a symbol, a value, or $X_\text{in} = 0$), and **a derivation runs
+  general to specific as one chain** aligned on the equals signs, never
+  restating a left-hand side. Which derivations go on screen is Neil's call
+  per lesson (L07: the pattern and the radiation resistance, as their major
+  steps; the details stay in the reading). Frame titles are Title Case noun
+  phrases. Budgets:
   **40 words a present frame, 30 present frames a lesson** (one period);
   `scripts/verify/check_density.py <LNN>` counts them from the source with
   no build, and `mech_check.sh` gates on it once a lesson carries any
