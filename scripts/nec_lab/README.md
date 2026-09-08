@@ -91,6 +91,38 @@ The browser opens on the tool. No admin rights, no command line, no
 installation step -- it uses the Python the machine already has, and says so
 plainly if there is none.
 
+### Trying it on a Windows laptop first
+
+Worth knowing before you start, because Windows is the one place the engine
+question actually bites. `run.py engines` prints what a machine has, and the
+error when it has nothing names these same three ways out.
+
+1. **In WSL**, if the laptop has it: `sudo apt install nec2c`, then
+   `python3 scripts/nec_lab/run.py serve`. Browse from Windows to
+   `http://127.0.0.1:8444/` -- WSL2 forwards localhost, so nothing else is
+   needed. This is the quickest honest test of the whole tool.
+2. **Windows natively**, which is the student path: double-click
+   `nec_lab.bat`. It needs an engine, and on Windows that means 4nec2 being
+   installed -- `pip install PyNEC` will not work, because there is no Windows
+   wheel and it would want a C++ toolchain.
+3. **Docker** last, on whatever box will actually serve the room. Docker
+   Desktop on a managed laptop usually wants admin rights; inside WSL,
+   `sudo apt install docker.io` and starting `dockerd` avoids that entirely.
+
+One WSL wrinkle if you want to test *shared* mode from a second device: a
+service bound inside WSL2 is reachable from the Windows host but not from the
+network, because WSL2 sits behind its own NAT. Either run that test from
+Windows directly, or add a port proxy on the host:
+
+```powershell
+netsh interface portproxy add v4tov4 listenport=8444 connectport=8444 ^
+      connectaddress=(wsl hostname -I).Trim()
+```
+
+That is a Windows-side workaround for a WSL networking detail, not something
+nec_lab needs -- on the box that finally serves the class there is no NAT in
+the way.
+
 ### 3. The command line
 
 ```sh

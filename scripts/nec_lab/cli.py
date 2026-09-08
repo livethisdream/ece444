@@ -180,12 +180,36 @@ def cmd_serve(a, engine) -> int:
     return 0
 
 
+# What to do when a machine has no engine at all. Platform-specific, because
+# the answer genuinely differs: pip solves it everywhere except Windows, which
+# is the one place a student is most likely to be standing.
+_NO_ENGINE_HELP = {
+    "win32": [
+        "Windows has no PyNEC wheel, so pip will not solve this. Either:",
+        "  - install 4nec2 and this tool will use its engine (nec2dxs*.exe),",
+        "    or point NEC_LAB_ENGINE straight at that file;",
+        "  - or run nec_lab inside WSL, where `sudo apt install nec2c` works;",
+        "  - or use the shared copy your instructor is running, and skip all",
+        "    of this.",
+    ],
+    "darwin": ["Run `pip install PyNEC`."],
+    "linux": ["Run `pip install PyNEC`, or `sudo apt install nec2c`."],
+}
+
+
 def cmd_engines(a, engine) -> int:
+    print(f"platform         {sys.platform}, Python "
+          f"{sys.version_info.major}.{sys.version_info.minor}")
     print(f"PyNEC            {'available' if PyNecEngine.available() else 'not installed'}")
     exe = ExecutableEngine()
     print(f"NEC executable   {exe.exe or 'not found (set NEC_LAB_ENGINE)'}")
     print(f"in use           {engine.describe()}")
     return 0
+
+
+def no_engine_help() -> str:
+    lines = _NO_ENGINE_HELP.get(sys.platform, _NO_ENGINE_HELP["linux"])
+    return "\n".join(lines)
 
 
 def main(argv=None) -> int:
@@ -240,7 +264,8 @@ def main(argv=None) -> int:
     try:
         engine = pick_engine(None if a.engine == "auto" else a.engine)
     except EngineError as exc:
-        print(f"error: {exc}", file=sys.stderr)
+        print(f"error: {exc}\n", file=sys.stderr)
+        print(no_engine_help(), file=sys.stderr)
         return 2
     try:
         return a.func(a, engine)
