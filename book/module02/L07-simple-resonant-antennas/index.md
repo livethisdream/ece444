@@ -80,9 +80,10 @@ and baluns. Today we need all of these on the same antenna.
 :::{present}
 $$U_\text{iso} = \frac{P_\text{rad}}{4\pi} \quad\Longrightarrow\quad D = 1$$
 
-- Equal power density everywhere on the sphere: the $0\ \text{dBi}$ reference.
-- It cannot be built: separating charge curves the field lines, so somewhere the field vanishes.
-- A place where the field vanishes is a **null**. Every real antenna has one.
+- It cannot be built: separating charge curves the field lines, so somewhere the field vanishes, and every real antenna has a **null**.
+- dBd and EIRP are ratios against the same $0\ \text{dBi}$ reference:
+
+$$\begin{aligned} \text{dBi} &= \text{dBd} + 2.15 \\ \text{EIRP} &= P_t G_t \end{aligned}$$
 :::
 
 An **isotropic radiator** radiates equally in every direction. Wrap a sphere
@@ -101,18 +102,12 @@ Every real antenna has at least one null; that is simply a requirement of the
 physics. The isotropic radiator has no nulls, so it is not an antenna — it is
 a unit of measurement.
 :::
-::::
 
-::::{frame} What the Fiction Buys You
-:::{present}
 | Quantity | Definition | Reference |
 | :-- | :-- | :-- |
 | dBi | gain over an isotropic radiator | the fiction |
 | dBd | gain over a half-wave dipole | a real antenna |
 | EIRP | $P_t G_t$, transmitter and antenna as one number | the fiction |
-
-$$\text{dBi} = \text{dBd} + 2.15$$
-:::
 
 The gain of this theoretical antenna is most useful as a unit of measurement.
 Recall that dB is a power ratio, so directivity, gain, and effective aperture
@@ -416,12 +411,10 @@ result that we name but do not re-derive.
 
 ::::{frame} The Radiation Resistance
 :::{present}
-$$P_\text{rad} = \frac{1}{2}\vert I_m \vert^2 R_r$$
+**The resistor that would burn the radiated power.** Square the half-wave
+pattern, with $u = \pi/2$, and sum it over the sphere.
 
-- Square the pattern and integrate it over the sphere.
-- No elementary antiderivative: a tabulated number enters, $C_{in}(2\pi) = 2.4376$.
-
-$$\begin{aligned} R_r &= \frac{\eta_0}{4\pi}C_{in}(2\pi) \\ &= 29.98 \times 2.4376 = 73.1\ \Omega \end{aligned}$$
+$$\begin{aligned} P_\text{rad} &= \tfrac{1}{2}\vert I_m \vert^2 R_r = \oint U\ d\Omega \\ U(\theta) &= \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos(u\cos\theta)}{\sin\theta}\right]^2 \\ P_\text{rad} &= \frac{\eta_0 \vert I_m \vert^2}{4\pi} \\ &\qquad\times \int_0^\pi \frac{\cos^2(u\cos\theta)}{\sin\theta}\ d\theta \end{aligned}$$
 :::
 
 The pattern was the easy half. What the transmitter actually sees is the
@@ -440,6 +433,18 @@ The radiated power is that intensity integrated over the whole sphere.
 Nothing depends on $\phi$, so the azimuth integral simply contributes $2\pi$:
 
 $$P_\text{rad} = \int_0^{2\pi}\int_0^\pi U(\theta) \sin\theta\ d\theta\ d\phi = \frac{\eta_0 \vert I_m \vert^2}{4\pi}\int_0^\pi \frac{\cos^2\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta$$
+
+::::
+
+::::{frame} The Result: 73 Ohms
+:::{present}
+**No elementary antiderivative.** The integral is a tabulated number,
+$\tfrac{1}{2}C_{in}(2\pi) = 1.2188$, and the current level cancels.
+
+$$\int_0^\pi \frac{\cos^2(u\cos\theta)}{\sin\theta}\ d\theta = \tfrac{1}{2}C_{in}(2\pi)$$
+
+$$\begin{aligned} R_r &= \frac{\eta_0}{4\pi}\,C_{in}(2\pi) \\ &= 29.98 \times 2.4376 = 73.1\ \Omega \end{aligned}$$
+:::
 
 Here the derivation stops being algebra. That integral has no elementary
 antiderivative. You cannot write the answer in terms of sines, logs, and
