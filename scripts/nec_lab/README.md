@@ -10,29 +10,80 @@ xnec2c if you would rather run them there.
 
 ```sh
 python scripts/nec_lab/run.py serve     # the GUI, at http://127.0.0.1:8444/
+```
+
+## Getting it in front of a class
+
+Ordered by what it costs the student, lowest first. On a managed Windows PC the
+first path costs nothing at all.
+
+### 1. One shared copy, and a URL (nothing installed at the student's end)
+
+Run it on a machine you control and hand out the address. Students open a
+browser; that is the whole procedure.
+
+```sh
+docker build -t nec_lab scripts/nec_lab
+docker run --rm -p 8444:8444 nec_lab
+# or: docker compose -f scripts/nec_lab/docker-compose.yml up -d
+```
+
+Without Docker, the same thing from a checkout:
+
+```sh
+python scripts/nec_lab/run.py serve --host 0.0.0.0 --no-browser
+```
+
+Either way the banner prints the addresses a browser can actually be pointed
+at, rather than `0.0.0.0`. The service holds no per-student state -- every
+request builds its model and solves independently -- so a room shares one copy
+happily. Two practical notes: Windows Firewall will ask to allow the port the
+first time, and this belongs on a classroom network, not a public one.
+
+### 2. Double-click, on the student's own machine
+
+Download the repository (**Code -> Download ZIP** on GitHub; no git needed),
+unzip, and double-click:
+
+| Platform | File |
+| :-- | :-- |
+| Windows | `scripts\nec_lab\nec_lab.bat` |
+| macOS | `scripts/nec_lab/nec_lab.command` |
+
+The browser opens on the tool. No admin rights, no command line, no
+installation step -- it uses the Python the machine already has, and says so
+plainly if there is none.
+
+### 3. The command line
+
+```sh
+python scripts/nec_lab/run.py serve     # the GUI, at http://127.0.0.1:8444/
 python scripts/nec_lab/run.py solve     # one frequency, in the terminal
 cd scripts && python -m nec_lab.selftest  # prove the numbers against L7 and L8
 ```
 
-`run.py` works from anywhere in the repository; from inside `scripts/` the
-same commands are `python -m nec_lab <subcommand>`.
+`run.py` works from anywhere in the repository; from inside `scripts/` the same
+commands are `python -m nec_lab <subcommand>`.
 
-## Installing
+## The NEC engine
 
-The Python side needs nothing but the standard library. The NEC engine is the
-part that varies, and `run.py engines` will tell you what this
-machine has.
+The Python side needs nothing but the standard library. The engine is the part
+that varies, and `run.py engines` will tell you what a machine has.
 
 | Machine | Engine | How |
 | :-- | :-- | :-- |
+| Windows lab PC with 4nec2 | the engine inside 4nec2 | nothing to install; the tool looks for `nec2dxs*.exe` under the usual install locations, including per-user ones, or set `NEC_LAB_ENGINE` to it |
 | Linux, macOS, WSL | PyNEC, in-process | `pip install PyNEC` |
 | Linux | `nec2c` | `apt install nec2c` |
-| Windows lab PC with 4nec2 | the engine inside 4nec2 | nothing to install; the tool finds `nec2dxs*.exe` under `C:\4nec2\exe`, or set `NEC_LAB_ENGINE` to it |
+| The container | both | already in the image |
 
-PyNEC publishes Linux wheels only, so a Windows machine without a C++
-toolchain will not `pip install` it — which is exactly the case the executable
-backend exists for. Both backends are real NEC-2; `python -m nec_lab.selftest`
-runs the same model through both when both are present and asserts they agree.
+PyNEC publishes Linux and macOS wheels but not Windows ones, so a Windows
+machine without a C++ toolchain will not `pip install` it -- which is exactly
+the case the executable backend exists for. Both backends are real NEC-2;
+`python -m nec_lab.selftest` runs the same model through both when both are
+present and asserts they agree. **The container build runs that selftest**, so
+an image only exists if the two engines agreed and the L7 and L8 numbers still
+came out right.
 
 ## The GUI
 
@@ -155,3 +206,5 @@ the *why* column empty, which is the part that is the student's to write.
 | `serve.py` | the JSON API and static server behind the GUI |
 | `static/` | the page: `index.html`, `app.js`, `style.css` |
 | `selftest.py` | the assertions against L7, L8, and the other engine |
+| `nec_lab.bat`, `nec_lab.command` | double-click launchers, Windows and macOS |
+| `Dockerfile`, `docker-compose.yml` | the shared copy that serves a room |

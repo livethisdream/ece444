@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import math
+import socket
 import threading
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -299,17 +300,56 @@ def make_handler(api: Api):
     return Handler
 
 
+def _reachable_urls(host: str, port: int) -> list[str]:
+    """The addresses a browser can actually be pointed at.
+
+    Binding 0.0.0.0 means "every interface", which is not something anyone can
+    type. When the service is shared with a room -- the container does exactly
+    this -- the banner has to name the addresses students should use, or the
+    first five minutes of the lab are spent finding them.
+    """
+    if host not in ("0.0.0.0", "::", ""):
+        return [f"http://{host}:{port}/"]
+    addrs: list[str] = []
+    try:
+        _, _, ips = socket.gethostbyname_ex(socket.gethostname())
+        addrs += [ip for ip in ips if not ip.startswith("127.")]
+    except OSError:
+        pass
+    if not addrs:
+        # No name resolution (common in a container): ask the routing table
+        # which address it would use to reach the outside world. Nothing is
+        # sent -- a UDP socket connect just picks the interface.
+        try:
+            probe = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            probe.connect(("8.8.8.8", 9))    # nothing is sent; this only
+                                             # asks which interface would be used
+            addrs.append(probe.getsockname()[0])
+            probe.close()
+        except OSError:
+            pass
+    return [f"http://{a}:{port}/" for a in dict.fromkeys(addrs)] \
+        + [f"http://127.0.0.1:{port}/"]
+
+
 def serve(host: str = "127.0.0.1", port: int = 8444, engine=None,
           open_browser: bool = True) -> None:
     from .engine import pick_engine
 
     engine = engine or pick_engine()
     httpd = ThreadingHTTPServer((host, port), make_handler(Api(engine)))
-    url = f"http://{host}:{port}/"
+    urls = _reachable_urls(host, port)
     print(f"nec_lab -- {engine.describe()}")
-    print(f"open {url}   (ctrl-c to stop)")
+    if len(urls) == 1:
+        print(f"open {urls[0]}   (ctrl-c to stop)")
+    else:
+        print("open one of these   (ctrl-c to stop):")
+        for u in urls:
+            print(f"    {u}")
+        print("shared mode: students on the same network use the address above "
+              "that matches this machine")
     if open_browser:
-        threading.Timer(0.6, lambda: webbrowser.open(url)).start()
+        threading.Timer(0.6, lambda: webbrowser.open(urls[0])).start()
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

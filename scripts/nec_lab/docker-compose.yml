@@ -1,0 +1,14 @@
+# One command to serve the room:
+#
+#   docker compose -f scripts/nec_lab/docker-compose.yml up -d
+#
+# Then hand out http://<this machine>:8444/. Nothing is installed at the
+# student's end, which is the whole point on a managed Windows PC.
+services:
+  nec_lab:
+    build: .
+    image: nec_lab:latest
+    container_name: nec_lab
+    ports:
+      - "8444:8444"
+    restart: unless-stopped

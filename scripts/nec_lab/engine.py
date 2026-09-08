@@ -259,12 +259,26 @@ class ExecutableEngine:
             found = shutil.which(cand)
             if found:
                 return found
-        for base in (r"C:\4nec2\exe", r"C:\Program Files\4nec2\exe",
-                     r"C:\Program Files (x86)\4nec2\exe"):
-            d = Path(base)
-            if d.is_dir():
-                for exe in sorted(d.glob("nec2dxs*.exe")):
-                    return str(exe)
+        # Where 4nec2 actually lands. A managed machine often cannot write to
+        # Program Files, so a per-user install under the profile or LocalAppData
+        # is at least as likely as the documented location.
+        import os as _os
+
+        roots = [r"C:\4nec2", r"C:\Program Files\4nec2",
+                 r"C:\Program Files (x86)\4nec2", r"D:\4nec2"]
+        for var in ("USERPROFILE", "LOCALAPPDATA", "APPDATA", "PUBLIC"):
+            base = _os.environ.get(var)
+            if base:
+                roots += [str(Path(base) / "4nec2"),
+                          str(Path(base) / "Programs" / "4nec2")]
+        for root in roots:
+            d = Path(root)
+            if not d.is_dir():
+                continue
+            for cand in (d / "exe", d):
+                if cand.is_dir():
+                    for exe in sorted(cand.glob("nec2dxs*.exe")):
+                        return str(exe)
         return None
 
     def available(self) -> bool:
