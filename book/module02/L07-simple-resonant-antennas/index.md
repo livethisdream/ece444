@@ -417,7 +417,7 @@ pattern, with $u = \pi/2$, and sum it over the sphere.
 $$\begin{aligned} P_\text{rad} &= \tfrac{1}{2}\vert I_m \vert^2 R_r = \oint U\ d\Omega \\ U(\theta) &= \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos(u\cos\theta)}{\sin\theta}\right]^2 \\ P_\text{rad} &= \frac{\eta_0 \vert I_m \vert^2}{4\pi} \\ &\qquad\times \int_0^\pi \frac{\cos^2(u\cos\theta)}{\sin\theta}\ d\theta \end{aligned}$$
 :::
 
-The pattern was the easy half. What the transmitter actually sees is the
+The pattern is only half of the analysis. What the transmitter actually sees is the
 **input impedance**, and for a thin half-wave dipole we can calculate both
 parts of it — the resistance comes from the pattern we just derived and the
 reactance from one standard result we will name but not re-derive.
