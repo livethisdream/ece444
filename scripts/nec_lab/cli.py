@@ -175,7 +175,8 @@ def cmd_report(a, engine) -> int:
 def cmd_serve(a, engine) -> int:
     from .serve import serve
 
-    serve(host=a.host, port=a.port, engine=engine, open_browser=not a.no_browser)
+    serve(host=a.host, port=a.port, engine=engine,
+          open_browser=not a.no_browser, public_url=a.public_url)
     return 0
 
 
@@ -225,6 +226,10 @@ def main(argv=None) -> int:
     p.add_argument("--host", default="127.0.0.1")
     p.add_argument("--port", type=int, default=8444)
     p.add_argument("--no-browser", action="store_true")
+    p.add_argument("--public-url", default=None,
+                   help="the address to hand out, when it is not one this "
+                        "machine can discover (a container, or a hostname). "
+                        "Also read from NEC_LAB_PUBLIC_URL.")
     p.set_defaults(func=cmd_serve)
 
     p = sub.add_parser("engines", help="which NEC backends this machine has")

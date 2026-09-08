@@ -1,0 +1,46 @@
+# nec_lab as a service on a headless box -- the copy that serves the room.
+#
+# For the plain-Python deployment. With Docker, `restart: unless-stopped` in
+# docker-compose.yml already does this and you do not need this file.
+#
+#   sudo useradd --system --home /opt/ece444 --shell /usr/sbin/nologin nec_lab
+#   sudo git clone https://github.com/livethisdream/ece444 /opt/ece444
+#   sudo apt install nec2c            # or: pip install PyNEC, in a venv
+#   sudo cp scripts/nec_lab/deploy/nec_lab.service /etc/systemd/system/
+#   sudo systemctl enable --now nec_lab
+#
+# Port 80 so students type an address with no port on the end. That needs the
+# capability granted below; nothing here runs as root.
+[Unit]
+Description=ECE 444 nec_lab -- NEC-2 wire modeling for the simulation lab
+Documentation=https://github.com/livethisdream/ece444
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=nec_lab
+WorkingDirectory=/opt/ece444
+# The address students type. Without it the banner prints this machine's own
+# interfaces, which is right for a bare host and wrong behind a name.
+Environment=NEC_LAB_PUBLIC_URL=http://nec-lab.local/
+ExecStart=/usr/bin/python3 /opt/ece444/scripts/nec_lab/run.py serve \
+          --host 0.0.0.0 --port 80 --no-browser
+Restart=always
+RestartSec=3
+
+# Bind 80 without being root, and give up everything else.
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

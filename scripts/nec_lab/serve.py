@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import socket
 import threading
 import webbrowser
@@ -300,6 +301,17 @@ def make_handler(api: Api):
     return Handler
 
 
+def _in_container() -> bool:
+    """Are we inside a container? Then our own addresses are not the ones to
+    hand out -- students reach the host, on whatever port it published."""
+    if Path("/.dockerenv").exists():
+        return True
+    try:
+        return "docker" in Path("/proc/1/cgroup").read_text()
+    except OSError:
+        return False
+
+
 def _reachable_urls(host: str, port: int) -> list[str]:
     """The addresses a browser can actually be pointed at.
 
@@ -333,14 +345,19 @@ def _reachable_urls(host: str, port: int) -> list[str]:
 
 
 def serve(host: str = "127.0.0.1", port: int = 8444, engine=None,
-          open_browser: bool = True) -> None:
+          open_browser: bool = True, public_url: str | None = None) -> None:
     from .engine import pick_engine
 
     engine = engine or pick_engine()
     httpd = ThreadingHTTPServer((host, port), make_handler(Api(engine)))
+    public_url = public_url or os.environ.get("NEC_LAB_PUBLIC_URL") or None
     urls = _reachable_urls(host, port)
     print(f"nec_lab -- {engine.describe()}")
-    if len(urls) == 1:
+    if public_url:
+        # A container, or a box behind a name: the address students type is not
+        # one this process can discover, so whoever deployed it says what it is.
+        print(f"hand out {public_url}   (ctrl-c to stop)")
+    elif len(urls) == 1:
         print(f"open {urls[0]}   (ctrl-c to stop)")
     else:
         print("open one of these   (ctrl-c to stop):")
@@ -348,6 +365,11 @@ def serve(host: str = "127.0.0.1", port: int = 8444, engine=None,
             print(f"    {u}")
         print("shared mode: students on the same network use the address above "
               "that matches this machine")
+    if _in_container() and not public_url:
+        print("note: this is a container -- the addresses above are the "
+              "container's own.\n      Students need the host's address and "
+              "the port it published. Set\n      NEC_LAB_PUBLIC_URL to have "
+              "that printed here instead.")
     if open_browser:
         threading.Timer(0.6, lambda: webbrowser.open(urls[0])).start()
     try:

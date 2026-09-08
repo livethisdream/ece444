@@ -40,6 +40,43 @@ request builds its model and solves independently -- so a room shares one copy
 happily. Two practical notes: Windows Firewall will ask to allow the port the
 first time, and this belongs on a classroom network, not a public one.
 
+#### On a headless box
+
+A small always-on machine is the best home for the shared copy: it is up before
+the class is, and nobody has to remember to start it.
+
+```sh
+sudo apt install docker.io docker-compose-v2 avahi-daemon
+git clone https://github.com/livethisdream/ece444 /opt/ece444
+cd /opt/ece444
+NEC_LAB_PORT=80 NEC_LAB_PUBLIC_URL=http://nec-lab.local/ \
+  docker compose -f scripts/nec_lab/docker-compose.yml up -d --build
+sudo ufw allow 80/tcp        # if the firewall is on
+```
+
+Four details that make the difference between an address students type once and
+one they fight with:
+
+- **Publish port 80.** `http://nec-lab.local` beats `http://10.1.2.3:8444` by
+  more than it looks like it should.
+- **Give the box a name and a fixed address.** A DHCP reservation on the
+  router, and `avahi-daemon` for the `.local` name -- Windows 10 and 11 resolve
+  mDNS natively, so nothing is needed at the student's end. If the campus
+  network blocks mDNS between clients, hand out the IP instead; the reservation
+  is what keeps it from moving.
+- **Set `NEC_LAB_PUBLIC_URL`.** A container cannot discover the host's name, so
+  without it the log prints the container's own address and the note saying so.
+- **`restart: unless-stopped` covers reboots**, and the image's healthcheck
+  makes `docker ps` tell you the truth about whether it is serving.
+
+Updating is `git pull` and the same `up -d --build`. The rebuild reruns the
+selftest, so a broken engine or a broken number stops the deploy rather than
+reaching a class.
+
+Without Docker, `deploy/nec_lab.service` is the same thing as a systemd unit:
+port 80 through `CAP_NET_BIND_SERVICE` rather than root, `Restart=always`, and
+the header of the file carries the four commands that install it.
+
 ### 2. Double-click, on the student's own machine
 
 Download the repository (**Code -> Download ZIP** on GitHub; no git needed),
