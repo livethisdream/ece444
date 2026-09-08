@@ -38,7 +38,13 @@
              <select id="floor"><option>-20</option><option selected>-30</option>
                                 <option>-40</option></select></div>
       </div>
+      <div class="row one">
+        <label class="check"><input type="checkbox" id="average" checked>
+          average power gain &mdash; the energy audit, from an added
+          <code>RP&nbsp;...1001</code> card</label>
+      </div>
       <div class="derived" id="derived">&nbsp;</div>
+      <canvas id="geom" aria-label="The wire geometry, with the fed segment marked"></canvas>
       <div class="row">
         <button id="solve">Solve</button>
         <button id="trim" class="ghost">Trim to resonance</button>
@@ -104,11 +110,7 @@
       <div class="plots">
         <div>
           <canvas id="polar" aria-label="Pattern cuts in dB, normalized to the peak"></canvas>
-          <div class="legend">
-            <span><i style="background:var(--blue)"></i>E-plane</span>
-            <span><i style="background:var(--trace3)"></i>H-plane</span>
-            <span><i style="background:var(--red)"></i>measured</span>
-          </div>
+          <div class="legend" id="legend"></div>
         </div>
         <div>
           <canvas id="sweep-plot" aria-label="Input resistance and reactance against frequency"></canvas>
@@ -130,11 +132,30 @@
     </section>
 
     <section class="panel">
-      <h2>NEC input file</h2>
-      <pre class="deck" id="deck">solve to generate the deck</pre>
-      <div class="row"><button id="copy" class="ghost">Copy deck</button></div>
+      <h2>NEC input file <span class="badge" id="source">from the form</span></h2>
+      <div class="deckgrid">
+        <div>
+          <textarea class="deck" id="deck" spellcheck="false"
+                    aria-label="NEC input cards; edit and run them"></textarea>
+          <div class="row three">
+            <button id="rundeck">Run these cards</button>
+            <button id="resetdeck" class="ghost">Back to the form</button>
+            <button id="copy" class="ghost">Copy</button>
+          </div>
+          <div class="fieldhelp" id="fieldhelp">Hover any field to see what it means.</div>
+        </div>
+        <div>
+          <div class="gloss" id="gloss"></div>
+          <div class="errors" id="deckerrors"></div>
+        </div>
+      </div>
       <p class="note">These cards are the actual interface to NEC, and they are
-      identical in 4nec2, xnec2c and this tool. Paste them into any of them.</p>
+      identical in 4nec2, xnec2c and this tool. Edit them here and press
+      <strong>Run these cards</strong>, or copy them into 4nec2. nec_lab reads
+      <code>CM CE GW GE EX FR RP XQ EN</code>; anything else &mdash; a ground
+      plane, a load, a transmission line &mdash; is refused by name, because the
+      rest of this page assumes a bare wire in free space and would keep
+      describing one.</p>
     </section>
   </div>
 </main>

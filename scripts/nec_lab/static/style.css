@@ -68,6 +68,8 @@ button:disabled { opacity:.5; cursor:progress; }
          font-variant-numeric:tabular-nums; white-space:nowrap; }
 .ro.ok .v { color:var(--green); } .ro.warn .v { color:var(--amber); }
 .ro.bad .v { color:var(--red); }
+.ro.off { background:transparent; }
+.ro.off .v { color:var(--muted); font-size:12px; font-weight:600; }
 canvas { display:block; width:100%; height:auto; background:var(--panel);
          border:1px solid var(--edge); border-radius:6px; }
 .plots { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
@@ -97,3 +99,39 @@ ul.rules .detail { color:var(--muted); margin-left:auto; text-align:right; }
 .status { font-size:12.5px; color:var(--muted); min-height:18px; margin-top:8px; }
 .status.err { color:var(--red); }
 .note { font-size:12px; color:var(--muted); margin:8px 0 0; line-height:1.45; }
+
+/* ---- the deck editor and its gloss ---------------------------------- */
+.deckgrid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; }
+@media (max-width:980px) { .deckgrid { grid-template-columns:1fr; } }
+textarea.deck { width:100%; min-height:210px; resize:vertical; padding:10px;
+                background:var(--ground); color:var(--ink);
+                border:1px solid var(--edge); border-radius:6px;
+                font-family:var(--mono); font-size:12.5px; line-height:1.55;
+                white-space:pre; overflow-x:auto; }
+.badge { font-size:10px; font-weight:700; letter-spacing:.04em; padding:2px 6px;
+         border-radius:10px; background:var(--soft); color:var(--blue-dark);
+         border:1px solid var(--edge2); text-transform:none; }
+.badge.cards { background:rgba(138,90,0,.12); color:var(--amber);
+               border-color:rgba(138,90,0,.35); }
+.fieldhelp { margin-top:7px; min-height:32px; font-size:12.5px; color:var(--muted);
+             border-left:3px solid var(--edge2); padding-left:8px; }
+.fieldhelp b { color:var(--ink); }
+.gloss { font-size:12.5px; max-height:340px; overflow-y:auto; }
+.gloss .line { padding:4px 0; border-bottom:1px solid var(--edge); }
+.gloss .line:last-child { border-bottom:0; }
+.gloss .cardtext { font-family:var(--mono); font-size:12px; }
+.gloss .tok { padding:0 2px; border-radius:3px; cursor:help; }
+.gloss .tok:hover, .gloss .tok.lit { background:var(--soft); color:var(--blue-dark); }
+.gloss .tok.card { font-weight:700; color:var(--blue-dark); }
+.gloss .say { display:block; color:var(--muted); padding-left:2px; }
+.gloss .line.bad .cardtext { color:var(--red); }
+.errors { margin-top:8px; font-size:12.5px; }
+.errors .e { padding:6px 8px; margin-bottom:6px; border-radius:5px;
+             background:rgba(176,30,36,.08); border:1px solid rgba(176,30,36,.3); }
+.errors .e b { color:var(--red); }
+.errors .e .hint { display:block; color:var(--muted); margin-top:2px; }
+label.check { display:flex; align-items:flex-start; gap:7px; font-size:12px;
+              color:var(--muted); line-height:1.35; }
+label.check input { margin-top:1px; }
+label.check code { font-family:var(--mono); font-size:11px; }
+canvas#geom { margin-bottom:10px; }

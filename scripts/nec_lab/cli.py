@@ -17,16 +17,36 @@ import os
 import sys
 from pathlib import Path
 
-from . import export, study
+from . import cards, export, study
 from .engine import EngineError, ExecutableEngine, PyNecEngine, pick_engine
 from .model import E_PLANE, H_PLANE, SPHERE_AVG, Model, Sweep, wavelength
 
 
 def _model_from_args(a) -> Model:
+    """The model: a deck file when one is given, otherwise the dipole flags."""
+    if getattr(a, "deck", None):
+        text = Path(a.deck).read_text()
+        parsed = cards.parse(text)
+        if not parsed.ok:
+            for err in parsed.errors:
+                where = f"line {err.line_no}" if err.line_no else "the deck"
+                print(f"error: {where}: {err.message}", file=sys.stderr)
+                if err.hint:
+                    print(f"       {err.hint}", file=sys.stderr)
+            raise SystemExit(2)
+        # A deck that asks for its own cuts gets them; one with no RP card
+        # falls back to the standard pair so `solve` still has a pattern to
+        # report. Stashed on the namespace so each command can pick it up.
+        a._deck_requests = parsed.requests
+        return parsed.model
     lam = wavelength(a.freq)
     length = a.length / 1000.0 if a.length else a.length_lambda * lam
     return Model.dipole(a.freq, length, radius_m=a.radius / 1000.0,
                         segments=a.segments)
+
+
+def _requests(a, default=(E_PLANE, H_PLANE, SPHERE_AVG)):
+    return getattr(a, "_deck_requests", ()) or default
 
 
 def _provenance(engine, model: Model) -> str:
@@ -44,6 +64,8 @@ def _add_model_args(p):
     p.add_argument("--radius", type=float, default=0.5, help="mm (default 0.5)")
     p.add_argument("--segments", type=int, default=21, help="odd (default 21)")
     p.add_argument("--engine", choices=("auto", "pynec", "exe"), default="auto")
+    p.add_argument("--deck", default=None,
+                   help="run a NEC deck file instead of the dipole flags above")
 
 
 def _rules(model: Model) -> str:
@@ -55,16 +77,18 @@ def _rules(model: Model) -> str:
 
 def cmd_solve(a, engine) -> int:
     model = _model_from_args(a)
-    sol = engine.solve(model, (E_PLANE, H_PLANE, SPHERE_AVG))
-    cut = sol.cuts[0]
+    sol = engine.solve(model, _requests(a))
+    cut = sol.cuts[0] if sol.cuts else None
     print(sol.deck)
     print(f"engine            {engine.describe()}")
     print(f"frequency         {sol.freq_hz / 1e6:.4f} MHz")
     print(f"Zin               {sol.z_real:.2f} {'+' if sol.z_imag >= 0 else '-'} "
           f"j{abs(sol.z_imag):.2f} ohm")
-    print(f"peak gain         {cut.peak_dbi:.2f} dBi at theta = {cut.peak_angle_deg:.0f} deg")
-    hp = cut.hpbw_deg()
-    print(f"E-plane HPBW      {hp:.1f} deg" if hp else "E-plane HPBW      -")
+    if cut:
+        print(f"peak gain         {cut.peak_dbi:.2f} dBi in cut '{cut.name}' "
+              f"at {cut.peak_angle_deg:.0f} deg")
+        hp = cut.hpbw_deg()
+        print(f"HPBW              {hp:.1f} deg" if hp else "HPBW              -")
     if sol.average_power_gain is not None:
         flag = "" if 0.95 <= sol.average_power_gain <= 1.05 else "   <-- MODEL IS BROKEN"
         print(f"avg power gain    {sol.average_power_gain:.4f}{flag}")
@@ -103,7 +127,7 @@ def cmd_pattern(a, engine) -> int:
             print(f"trimmed to {trim['resonant_length_lambda']:.4f} lambda "
                   f"({trim['resonant_length_m'] * 1000:.2f} mm), "
                   f"R = {trim['r_at_resonance']:.2f} ohm")
-    sol = engine.solve(model, (E_PLANE, H_PLANE, SPHERE_AVG))
+    sol = engine.solve(model, _requests(a))
     for cut in sol.cuts:
         hp = cut.hpbw_deg()
         print(f"{cut.name:10s} peak {cut.peak_dbi:6.2f} dBi   "
@@ -132,7 +156,7 @@ def cmd_converge(a, engine) -> int:
 def cmd_report(a, engine) -> int:
     model = _model_from_args(a)
     trim = study.trim_to_resonance(engine, model) if a.trim else None
-    sol = engine.solve(model, (E_PLANE, H_PLANE, SPHERE_AVG))
+    sol = engine.solve(model, _requests(a))
     print(f"# L8 comparison -- {engine.describe()}\n")
     print("```text")
     print(model.deck(requests=(E_PLANE,)).strip())

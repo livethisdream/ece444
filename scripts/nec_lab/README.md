@@ -40,7 +40,9 @@ runs the same model through both when both are present and asserts they agree.
 
 - **Model** — frequency, length in wavelengths or millimeters, wire radius,
   segment count, and every segmentation rule from Part 2 evaluated live with
-  the arithmetic behind it.
+  the arithmetic behind it. A drawing of the wire sits under the fields, with
+  the fed segment marked: a wire built along the wrong axis is invisible in a
+  column of coordinates and obvious in a picture.
 - **Solve / Trim to resonance** — impedance, VSWR, peak gain, E-plane HPBW,
   and the average-power-gain energy audit, with the audit colored red when the
   model is broken.
@@ -50,10 +52,54 @@ runs the same model through both when both are present and asserts they agree.
   rows where refinement has pushed the segment length below `8a`.
 - **Compare with a measurement** — load a chamber CSV and it is drawn over the
   simulated cut, with the RMS and worst-case difference reported.
-- **NEC input file** — the deck, to read and to copy.
+- **NEC input file** — the deck, to read, to edit, to run, and to copy.
 
-It binds `127.0.0.1` and takes model parameters, not decks: nothing you can
-type into the page is executed as NEC cards.
+It binds `127.0.0.1`, and the cards it will run are only the ones it can read
+(below).
+
+## Typing cards
+
+The deck panel is an editor, not a display. Edit the cards, press **Run these
+cards**, and the results come from what you typed; touch a form field and the
+form takes the model back. The badge next to the panel heading always says
+which one is driving.
+
+Beside the deck, every line is glossed: each field carries the name the lesson
+gives it, hovering one explains it underneath, and the `XNDA` field -- the four
+digits glued together on the `RP` card -- is spelled out digit by digit. Wrong
+cards are reported by line, in the terms of the card rather than of Python:
+
+```text
+line 6: GN is not a card nec_lab can run
+        a ground plane; nec_lab models free space only. Copy the deck into
+        4nec2 to run it there.
+the deck: the EX card feeds segment 11, but wire 1 has 9
+        a center feed on this wire is segment 5
+```
+
+That second one is a cross-card check, and it is the mistake this is really
+for: neither card is wrong on its own.
+
+**Trim to resonance rewrites your `GW` card** when you are working in cards,
+rather than moving a form field you are not looking at.
+
+The CLI reads decks too:
+
+```sh
+python scripts/nec_lab/run.py solve --deck my_dipole.nec
+```
+
+### What is read, and what is refused
+
+Read: `CM CE GW GE EX FR RP XQ EN` -- exactly what this tool writes.
+
+Everything else is refused by name, with what it does and a pointer to 4nec2.
+That is deliberate rather than lazy. A card like `GN` (a ground plane) or `LD`
+(a load) changes the antenna in a way the rest of nec_lab does not model: the
+segmentation rules, the free-space energy audit, and the study code all assume
+a bare wire in free space. Running it anyway would give a correct NEC answer
+wrapped in a page that had quietly stopped applying to it -- a worse failure
+than being told no.
 
 ## The chamber handoff
 
@@ -90,7 +136,8 @@ the *why* column empty, which is the part that is the student's to write.
   lab and a Yagi; it does not cover ground planes, loads, or transmission-line
   cards. The engines support all of that — the model layer here does not
   expose it yet.
-- **It will not run a deck you hand it.** Paste those into 4nec2.
+- **It runs only the cards it can read.** See the list above; anything else
+  belongs in 4nec2, and the page says so by name.
 - **The executable backend reads NEC's output file**, which prints gains to two
   decimals. Impedance is full precision; pattern values are not.
 
@@ -99,6 +146,7 @@ the *why* column empty, which is the part that is the student's to write.
 | File | What |
 | :-- | :-- |
 | `model.py` | geometry, feed, pattern requests, and the cards they write |
+| `cards.py` | reading cards back: the parser, the field glosses, the complaints |
 | `engine.py` | the two backends and the shared result types |
 | `study.py` | sweep, resonance, trim, convergence, energy audit |
 | `export.py` | chamber-shaped CSV, JSON, the comparison table |

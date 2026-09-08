@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import sys
 
-from . import export, study
+from . import cards, export, study
 from .engine import ExecutableEngine, PyNecEngine
 from .model import E_PLANE, H_PLANE, Model, SPHERE_AVG, Sweep, wavelength
 
@@ -125,6 +125,66 @@ def run() -> int:
         check("trimmed length agrees to 0.0005 lambda",
               near(a_trim["resonant_length_lambda"],
                    b_trim["resonant_length_lambda"], 5e-4))
+
+    print("\nreading cards back")
+    deck = model.deck(requests=(E_PLANE, H_PLANE, SPHERE_AVG))
+    parsed = cards.parse(deck)
+    check("the generated deck parses without complaint", parsed.ok,
+          "; ".join(e.message for e in parsed.errors))
+    if parsed.ok:
+        check("parsing round-trips to the same cards",
+              parsed.model.deck(sweep=parsed.sweep, requests=parsed.requests)
+              .splitlines()[2:] == deck.splitlines()[2:])
+        check("every line of the deck is glossed",
+              len(parsed.gloss) == len([ln for ln in deck.splitlines() if ln.strip()]))
+        xnda = [t for g in parsed.gloss for t in g.tokens if t.label == "XNDA"]
+        check("the XNDA field is decoded for the reader",
+              bool(xnda) and "average power gain" in xnda[-1].detail)
+        # Both sides on one engine: `sol` above is whichever engine ran last,
+        # and the claim here is about parsing, not about the engines agreeing.
+        direct = engines[0].solve(model, (E_PLANE,))
+        re_solved = engines[0].solve(parsed.model, parsed.requests)
+        check("a parsed deck solves to the same impedance as the model",
+              near(re_solved.z_real, direct.z_real, 1e-6)
+              and near(re_solved.z_imag, direct.z_imag, 1e-6),
+              f"{re_solved.z_real:.4f}{re_solved.z_imag:+.4f}j")
+
+    # The mistakes a student actually makes. Each has to be caught, and caught
+    # with a message that names the field rather than the exception.
+    base = ["CM t", "CE", "GW 1 9 0 0 -0.08 0 0 0.08 0.0005", "GE 0",
+            "EX 0 1 5 0 1 0", "FR 0 1 0 0 915 0", "RP 0 181 1 1000 0 0 1 0", "EN"]
+
+    def broken(swap: dict[int, str] | None = None, drop: int | None = None,
+               add: str | None = None) -> cards.ParsedDeck:
+        lines = list(base)
+        for i, text in (swap or {}).items():
+            lines[i] = text
+        if drop is not None:
+            lines.pop(drop)
+        if add:
+            lines.insert(-1, add)
+        return cards.parse("\n".join(lines))
+
+    def complains(label: str, parsed: cards.ParsedDeck, wanted: str) -> None:
+        msgs = " | ".join(e.message + " " + e.hint for e in parsed.errors)
+        check(label, not parsed.ok and wanted in msgs,
+              msgs or "no error was reported")
+
+    complains("a feed past the end of the wire is caught",
+              broken({4: "EX 0 1 11 0 1 0"}), "wire 1 has 9")
+    complains("a feed on a wire that does not exist is caught",
+              broken({4: "EX 0 2 5 0 1 0"}), "no GW card defines")
+    complains("a ground plane is refused by name",
+              broken(add="GN 1"), "free space")
+    complains("a missing frequency card is caught", broken(drop=5), "no FR card")
+    complains("a wire with no length is caught",
+              broken({2: "GW 1 9 0 0 0 0 0 0 0.0005"}), "zero length")
+    complains("a duplicate tag is caught",
+              broken(add="GW 1 9 0 0.02 -0.08 0 0.02 0.08 0.0005"), "already used")
+    complains("a short GW card is caught",
+              broken({2: "GW 1 9 0 0 -0.08"}), "GW needs 9 numbers")
+    complains("a non-numeric field is caught",
+              broken({2: "GW 1 nine 0 0 -0.08 0 0 0.08 0.0005"}), "not a number")
 
     print("\nchamber interoperability")
     sol = engines[0].solve(model, (E_PLANE, H_PLANE))

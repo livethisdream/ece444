@@ -185,9 +185,15 @@ class Model:
         """
         w = self.wires[0]
         scale = length_m / w.length
+        # About the wire's own midpoint, not the origin: a dipole modeled away
+        # from the origin -- which is what a typed deck often is -- has to stay
+        # where the student put it while it is trimmed.
+        cx, cy, cz = (w.x1 + w.x2) / 2, (w.y1 + w.y2) / 2, (w.z1 + w.z2) / 2
         moved = replace(w,
-                        x1=w.x1 * scale, y1=w.y1 * scale, z1=w.z1 * scale,
-                        x2=w.x2 * scale, y2=w.y2 * scale, z2=w.z2 * scale)
+                        x1=cx + (w.x1 - cx) * scale, y1=cy + (w.y1 - cy) * scale,
+                        z1=cz + (w.z1 - cz) * scale,
+                        x2=cx + (w.x2 - cx) * scale, y2=cy + (w.y2 - cy) * scale,
+                        z2=cz + (w.z2 - cz) * scale)
         return replace(self, wires=(moved,) + self.wires[1:])
 
     def with_segments(self, segments: int) -> "Model":

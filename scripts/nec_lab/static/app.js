@@ -15,6 +15,10 @@ const state = {
   sweep: null,        // last /api/sweep response
   measured: null,     // {cuts: Map, name}
   compare: null,
+  // Which half of the page owns the model. The form and the cards are two
+  // views of one thing, but only one of them can be the source at a time, so
+  // whichever was touched last wins and the badge on the deck panel says so.
+  mode: 'form',
 };
 
 /* ---- talking to the service ------------------------------------------ */
@@ -31,15 +35,26 @@ async function api(path, body) {
 }
 
 function modelArgs() {
+  if (state.mode === 'deck') return { deck: $('deck').value };
   const unit = $('unit').value;
   const len = parseFloat($('length').value);
   const args = {
     freq_mhz: parseFloat($('freq').value),
     radius_mm: parseFloat($('radius').value),
     segments: parseInt($('segments').value, 10),
+    average: $('average').checked,
   };
   if (unit === 'mm') args.length_mm = len; else args.length_lambda = len;
   return args;
+}
+
+function setMode(mode) {
+  state.mode = mode;
+  const badge = $('source');
+  badge.textContent = mode === 'deck' ? 'from these cards' : 'from the form';
+  badge.className = 'badge' + (mode === 'deck' ? ' cards' : '');
+  ['freq', 'length', 'unit', 'radius', 'segments', 'average']
+    .forEach((id) => { $(id).disabled = (mode === 'deck'); });
 }
 
 function sweepArgs() {
@@ -164,6 +179,137 @@ function drawPolar() {
   }
 }
 
+/* A typed RP card can be any cut, so traces are colored by position and the
+ * legend is built from whatever came back rather than from two fixed names. */
+function cutColor(i) {
+  return [css('--blue'), css('--trace3'), css('--trace2')][i % 3];
+}
+
+function renderLegend() {
+  const parts = (state.solve ? state.solve.cuts : []).map((c, i) =>
+    `<span><i style="background:${cutColor(i)}"></i>${c.name}</span>`);
+  if (currentMeasuredCut()) {
+    parts.push(`<span><i style="background:${css('--red')}"></i>measured</span>`);
+  }
+  $('legend').innerHTML = parts.join('') || '<span>no cuts requested</span>';
+}
+
+/* ---- the geometry preview --------------------------------------------- */
+
+/* The mistake this exists to catch: a wire built along x while the pattern cut
+ * assumes z, or a source on a segment that is not the one the student means.
+ * Neither is visible in a column of coordinates and both are obvious here. */
+function drawGeometry() {
+  const canvas = $('geom');
+  const { ctx, w, h } = fit(canvas, 0.52);
+  const muted = css('--muted');
+  const geo = state.solve && state.solve.geometry;
+  if (!geo || !geo.length) {
+    text(ctx, 'solve to draw the geometry', w / 2, h / 2, 12, muted, 'center');
+    return;
+  }
+  const pts = geo.flatMap((g) => [g.a, g.b]);
+  const lo = [0, 1, 2].map((i) => Math.min(...pts.map((p) => p[i])));
+  const hi = [0, 1, 2].map((i) => Math.max(...pts.map((p) => p[i])));
+  const ext = [0, 1, 2].map((i) => hi[i] - lo[i]);
+  const NAME = ['x', 'y', 'z'];
+  // Vertical axis: whichever the structure is longest along -- z for the
+  // course's dipole. Horizontal: the next longest, or a fixed second axis when
+  // the model is a single straight wire and there is nothing else to show.
+  const rank = [0, 1, 2].sort((a, b) => ext[b] - ext[a]);
+  const V = rank[0];
+  const H = ext[rank[1]] > 1e-12 ? rank[1] : (V === 0 ? 2 : 0);
+
+  const pad = 26;
+  // One scale for both axes -- a wire has to look like a wire, not an ellipse
+  // -- but an axis the structure has no extent along must not shrink the
+  // drawing, so it contributes no constraint rather than a huge one.
+  const fit1 = (avail, e) => (e > 1e-9 ? avail / e : Infinity);
+  const scale = Math.min(fit1(w - 2 * pad, ext[H]), fit1(h - 2 * pad, ext[V]));
+  const midH = (lo[H] + hi[H]) / 2, midV = (lo[V] + hi[V]) / 2;
+  const X = (p) => w / 2 + (p[H] - midH) * scale;
+  const Y = (p) => h / 2 - (p[V] - midV) * scale;
+
+  ctx.strokeStyle = css('--grid'); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(w / 2, 8); ctx.lineTo(w / 2, h - 8);
+  ctx.moveTo(10, h / 2); ctx.lineTo(w - 10, h / 2); ctx.stroke();
+  text(ctx, `+${NAME[V]}`, w / 2 + 5, 12, 10, muted, 'left');
+  text(ctx, `+${NAME[H]}`, w - 12, h / 2 - 8, 10, muted, 'right');
+
+  geo.forEach((g) => {
+    ctx.strokeStyle = css('--blue-dark'); ctx.lineWidth = 3.5; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(X(g.a), Y(g.a)); ctx.lineTo(X(g.b), Y(g.b)); ctx.stroke();
+    if (g.segments <= 41) {           // segment boundaries, while they are legible
+      ctx.strokeStyle = css('--panel'); ctx.lineWidth = 1;
+      for (let k = 1; k < g.segments; k++) {
+        const t = k / g.segments;
+        const p = [0, 1, 2].map((i) => g.a[i] + (g.b[i] - g.a[i]) * t);
+        ctx.beginPath();
+        ctx.arc(X(p), Y(p), 1.6, 0, 2 * Math.PI);
+        ctx.stroke();
+      }
+    }
+    if (g.fed) {
+      ctx.strokeStyle = css('--red'); ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(X(g.feed_a), Y(g.feed_a));
+      ctx.lineTo(X(g.feed_b), Y(g.feed_b));
+      ctx.stroke();
+      text(ctx, 'feed', X(g.feed_b) + 8, Y(g.feed_b), 10.5, css('--red'), 'left');
+    }
+    text(ctx, `wire ${g.tag}`, X(g.b) + 6, Y(g.b) - 6, 10.5, muted, 'left');
+  });
+
+  // Scale bar: a tenth of a wavelength, so the reader has a size reference in
+  // the unit the lab actually thinks in.
+  if (state.solve.wavelength_m) {
+    const bar = state.solve.wavelength_m / 10;
+    const x0 = 12, y0 = h - 12;
+    ctx.strokeStyle = muted; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + bar * scale, y0); ctx.stroke();
+    text(ctx, `lambda/10 = ${(bar * 1000).toFixed(1)} mm`,
+         x0 + bar * scale + 6, y0, 10, muted, 'left');
+  }
+}
+
+/* ---- the deck gloss ---------------------------------------------------- */
+
+function renderGloss(gloss, errors) {
+  const g = $('gloss');
+  g.innerHTML = (gloss || []).map((line) => {
+    const toks = line.tokens.map((t, i) =>
+      `<span class="tok${i === 0 ? ' card' : ''}" data-label="${escapeAttr(t.label)}"`
+      + ` data-detail="${escapeAttr(t.detail)}" title="${escapeAttr(t.label)}`
+      + `${t.detail ? ' -- ' + escapeAttr(t.detail) : ''}">${escapeHtml(t.text)}</span>`
+    ).join(' ');
+    return `<div class="line${line.ok ? '' : ' bad'}">`
+         + `<span class="cardtext">${toks}</span>`
+         + `<span class="say">${escapeHtml(line.summary)}</span></div>`;
+  }).join('') || '<div class="line"><span class="say">no cards yet</span></div>';
+
+  $('deckerrors').innerHTML = (errors || []).map((e) =>
+    `<div class="e"><b>${e.line_no ? 'line ' + e.line_no : 'the deck'}</b>: `
+    + `${escapeHtml(e.message)}`
+    + (e.hint ? `<span class="hint">${escapeHtml(e.hint)}</span>` : '')
+    + `</div>`).join('');
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>]/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+}
+function escapeAttr(s) { return escapeHtml(s).replace(/"/g, '&quot;'); }
+
+/* Hovering a field explains it in one line under the deck. The title
+ * attribute carries the same text for keyboard and touch users. */
+$('gloss').addEventListener('mouseover', (ev) => {
+  const t = ev.target.closest('.tok');
+  if (!t) return;
+  $('fieldhelp').innerHTML = `<b>${escapeHtml(t.textContent)}</b> &mdash; `
+    + escapeHtml(t.dataset.label)
+    + (t.dataset.detail ? `: ${escapeHtml(t.dataset.detail)}` : '');
+});
+
 /* ---- the impedance sweep plot ----------------------------------------- */
 
 function drawSweep() {
@@ -236,6 +382,13 @@ function setRo(id, value, cls) {
 }
 
 function renderSolve(data) {
+  if (data.ok === false) {          // a typed card is wrong; keep the old results
+    renderGloss(data.gloss, data.errors);
+    status(data.errors && data.errors.length
+      ? `${data.errors.length} problem(s) in the cards -- see the list beside the deck`
+      : 'the deck could not be read', true);
+    return false;
+  }
   state.solve = data;
   const z = data.z;
   setRo('ro-z', `${z.real.toFixed(1)} ${z.imag >= 0 ? '+' : '-'} j${Math.abs(z.imag).toFixed(1)}`);
@@ -245,10 +398,18 @@ function renderSolve(data) {
   setRo('ro-gain', e ? `${e.peak_dbi.toFixed(2)} dBi` : '—');
   setRo('ro-hpbw', e && e.hpbw_deg ? `${e.hpbw_deg.toFixed(1)}°` : '—');
   const g = data.average_power_gain;
-  setRo('ro-avg', g === null || g === undefined ? '—' : g.toFixed(4),
-        g === null || g === undefined ? '' : (g >= 0.95 && g <= 1.05 ? 'ok' : 'bad'));
+  // A typed deck with no averaging RP card has no audit to show. Say which
+  // card is missing rather than leaving a dash to be puzzled over.
+  setRo('ro-avg', g === null || g === undefined ? 'no ...1001 card' : g.toFixed(4),
+        g === null || g === undefined ? 'off' : (g >= 0.95 && g <= 1.05 ? 'ok' : 'bad'));
 
-  $('deck').textContent = data.deck;
+  // In card mode the text on screen is the student's own; replacing it would
+  // move their cursor for no reason.
+  if (state.mode === 'form') $('deck').value = data.deck;
+  renderGloss(data.gloss, []);
+  syncForm(data.form);
+  drawGeometry();
+  renderLegend();
   $('derived').textContent =
     `lambda ${(data.wavelength_m * 1000).toFixed(1)} mm | wire ${(data.length_m * 1000).toFixed(2)} mm `
     + `= ${data.length_lambda.toFixed(4)} lambda | segment ${(data.segment_length_m * 1000).toFixed(2)} mm`;
@@ -259,6 +420,22 @@ function renderSolve(data) {
 
   drawPolar();
   runCompare();
+  return true;
+}
+
+/* The four form fields can only describe a centered dipole along z. When the
+ * cards say something else the service sends form: null, and the fields stay
+ * disabled rather than showing numbers that no longer drive anything. */
+function syncForm(form) {
+  if (!form) return;
+  $('freq').value = form.freq_mhz;
+  $('radius').value = form.radius_mm;
+  $('segments').value = form.segments;
+  if ($('unit').value === 'mm') {
+    $('length').value = form.length_mm.toFixed(2);
+  } else {
+    $('length').value = (form.length_mm / (299792.458 / form.freq_mhz)).toFixed(4);
+  }
 }
 
 function renderConvergence(rows) {
@@ -389,17 +566,20 @@ function download(filename, text) {
 
 $('solve').onclick = () => busy(null, async () => {
   status('solving…');
-  renderSolve(await api('solve', modelArgs()));
-  status('solved');
+  if (await renderSolve(await api('solve', modelArgs()))) status('solved');
 });
 
 $('trim').onclick = () => busy(null, async () => {
   status('trimming to resonance…');
   const t = await api('trim', modelArgs());
   if (!t.resonant_length_lambda) { status(t.note || 'no resonance found', true); return; }
-  $('unit').value = 'lambda';
-  $('length').value = t.resonant_length_lambda.toFixed(4);
-  renderSolve(await api('solve', modelArgs()));
+  if (state.mode === 'deck' && t.deck) {
+    $('deck').value = t.deck;          // the trim rewrote the GW card; show it
+  } else {
+    $('unit').value = 'lambda';
+    $('length').value = t.resonant_length_lambda.toFixed(4);
+  }
+  await renderSolve(await api('solve', modelArgs()));
   status(`resonant at ${t.resonant_length_lambda.toFixed(4)} lambda `
          + `(${(t.resonant_length_m * 1000).toFixed(2)} mm), R = ${t.r_at_resonance.toFixed(2)} ohm`);
 });
@@ -434,8 +614,32 @@ $('exswp').onclick = () => busy(null, async () => {
   status(`exported ${r.filename}`);
 });
 
+$('rundeck').onclick = () => busy(null, async () => {
+  setMode('deck');
+  status('running your cards...');
+  if (await renderSolve(await api('solve', modelArgs()))) status('solved from the cards');
+});
+
+$('resetdeck').onclick = () => busy(null, async () => {
+  setMode('form');
+  status('back to the form');
+  await renderSolve(await api('solve', modelArgs()));
+});
+
+// Typing in the deck hands it the model, but nothing runs until the button is
+// pressed: a half-typed card is not a request to solve.
+$('deck').addEventListener('input', () => {
+  setMode('deck');
+  status('cards edited -- press Run these cards');
+});
+
+// Touching any form field hands the model back to the form.
+['freq', 'length', 'unit', 'radius', 'segments', 'average'].forEach((id) => {
+  $(id).addEventListener('input', () => { if (state.mode === 'deck') setMode('form'); });
+});
+
 $('copy').onclick = () => {
-  navigator.clipboard.writeText($('deck').textContent)
+  navigator.clipboard.writeText($('deck').value)
     .then(() => status('deck copied'))
     .catch(() => status('could not copy -- select the text instead', true));
 };
@@ -481,12 +685,14 @@ $('unit').onchange = () => {
   $('length').step = $('unit').value === 'mm' ? 0.5 : 0.005;
 };
 
-window.addEventListener('resize', () => { drawPolar(); drawSweep(); });
+window.addEventListener('resize', () => { drawPolar(); drawSweep(); drawGeometry(); });
 
 fetch('/api/engine').then((r) => r.json()).then((info) => {
   $('engine').textContent = info.engine;
 }).catch(() => { $('engine').textContent = 'engine unknown'; });
 
+setMode('form');
 drawPolar();
 drawSweep();
+drawGeometry();
 $('solve').click();

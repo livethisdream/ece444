@@ -20,7 +20,7 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from . import export, study
+from . import cards, export, study
 from .engine import EngineError
 from .model import E_PLANE, H_PLANE, Model, SPHERE_AVG, Sweep, wavelength
 from .reference import HALF_WAVE
@@ -30,8 +30,21 @@ _TYPES = {".html": "text/html; charset=utf-8", ".js": "text/javascript",
           ".css": "text/css", ".svg": "image/svg+xml", ".ico": "image/x-icon"}
 
 
+class DeckError(ValueError):
+    """The typed deck could not be read. Carries the per-line detail."""
+
+    def __init__(self, parsed: "cards.ParsedDeck"):
+        self.parsed = parsed
+        super().__init__("; ".join(e.message for e in parsed.errors))
+
+
 def _model(req: dict) -> Model:
-    """Build the model from a request body, in the units the page uses."""
+    """Build the model from a request body: typed cards, or the form fields."""
+    if req.get("deck"):
+        parsed = cards.parse(req["deck"])
+        if not parsed.ok:
+            raise DeckError(parsed)
+        return parsed.model
     freq = float(req.get("freq_mhz", 915.0))
     lam = wavelength(freq)
     if req.get("length_mm") is not None:
@@ -41,6 +54,59 @@ def _model(req: dict) -> Model:
     return Model.dipole(freq, length,
                         radius_m=float(req.get("radius_mm", 0.5)) / 1000.0,
                         segments=int(req.get("segments", 21)))
+
+
+def _geometry(model: Model) -> list[dict]:
+    """The wires, for the page to draw. A picture catches the mistakes a
+    column of coordinates hides -- a wire built along x when the pattern cut
+    assumes z, or a feed that is not where the student thinks it is."""
+    out = []
+    for w in model.wires:
+        fed = w.tag == model.feed.tag
+        seg = model.feed.segment
+        # Where the fed segment sits along the wire, as a fraction each end.
+        t0 = (seg - 1) / w.segments if fed else 0.0
+        t1 = seg / w.segments if fed else 0.0
+        out.append({
+            "tag": w.tag, "segments": w.segments, "radius": w.radius,
+            "a": [w.x1, w.y1, w.z1], "b": [w.x2, w.y2, w.z2],
+            "fed": fed,
+            "feed_a": [w.x1 + (w.x2 - w.x1) * t0, w.y1 + (w.y2 - w.y1) * t0,
+                       w.z1 + (w.z2 - w.z1) * t0] if fed else None,
+            "feed_b": [w.x1 + (w.x2 - w.x1) * t1, w.y1 + (w.y2 - w.y1) * t1,
+                       w.z1 + (w.z2 - w.z1) * t1] if fed else None,
+        })
+    return out
+
+
+def _gloss_json(parsed: "cards.ParsedDeck") -> list[dict]:
+    return [{"line_no": g.line_no, "text": g.text, "card": g.card, "ok": g.ok,
+             "summary": g.summary,
+             "tokens": [{"text": t.text, "label": t.label, "detail": t.detail}
+                        for t in g.tokens]}
+            for g in parsed.gloss]
+
+
+def _form_for(model: Model) -> dict | None:
+    """The form fields that would reproduce this model, when they can.
+
+    A typed deck may be a Yagi, or a dipole off the origin, or fed off center.
+    The four form fields cannot express any of those, so rather than showing
+    numbers that no longer drive anything, the page is told to say the model
+    came from the cards.
+    """
+    if len(model.wires) != 1:
+        return None
+    w = model.wires[0]
+    if model.feed.tag != w.tag or model.feed.segment != w.center_segment:
+        return None
+    along_z = (abs(w.x1) < 1e-12 and abs(w.x2) < 1e-12
+               and abs(w.y1) < 1e-12 and abs(w.y2) < 1e-12
+               and abs(w.z1 + w.z2) < 1e-12)
+    if not along_z:
+        return None
+    return {"freq_mhz": model.freq_mhz, "length_mm": w.length * 1000,
+            "radius_mm": w.radius * 1000, "segments": w.segments}
 
 
 def _cut_json(cut) -> dict:
@@ -53,6 +119,12 @@ def _cut_json(cut) -> dict:
 
 
 def _requests_for(req: dict):
+    """The pattern requests: the deck's own RP cards, or the standard pair."""
+    if req.get("deck"):
+        parsed = cards.parse(req["deck"])
+        if not parsed.ok:
+            raise DeckError(parsed)
+        return parsed.requests
     names = req.get("cuts") or ["E-plane", "H-plane"]
     out = []
     if "E-plane" in names:
@@ -77,14 +149,33 @@ class Api:
                               "gain_dbi": HALF_WAVE["gain_dbi"],
                               "hpbw_deg": HALF_WAVE["hpbw_deg"]}}
 
+    def deck(self, req: dict) -> dict:
+        """Read a typed deck without running it: glosses and complaints."""
+        parsed = cards.parse(req.get("deck", ""))
+        return {
+            "ok": parsed.ok,
+            "gloss": _gloss_json(parsed),
+            "errors": [{"line_no": e.line_no, "text": e.text,
+                        "message": e.message, "hint": e.hint}
+                       for e in parsed.errors],
+            "geometry": _geometry(parsed.model) if parsed.model else [],
+            "form": _form_for(parsed.model) if parsed.model else None,
+            "cuts": [r.name for r in parsed.requests],
+        }
+
     def solve(self, req: dict) -> dict:
         model = _model(req)
         sol = self.engine.solve(model, _requests_for(req))
         z = sol.z_in
         g = abs((z - 50) / (z + 50))
+        deck_text = req.get("deck") or model.deck(requests=_requests_for(req))
         return {
+            "ok": True,
             "engine": self.engine.describe(),
-            "deck": model.deck(requests=_requests_for(req)),
+            "deck": deck_text,
+            "gloss": _gloss_json(cards.parse(deck_text)),
+            "geometry": _geometry(model),
+            "form": _form_for(model),
             "freq_hz": sol.freq_hz,
             "wavelength_m": model.wavelength,
             "length_m": model.wires[0].length,
@@ -110,7 +201,16 @@ class Api:
 
     def trim(self, req: dict) -> dict:
         model = _model(req)
-        return study.trim_to_resonance(self.engine, model)
+        out = study.trim_to_resonance(self.engine, model)
+        if out.get("resonant_length_m"):
+            # Hand back the trimmed deck as well: when the student is working
+            # in the cards, trimming should visibly rewrite the GW card rather
+            # than move a form field they are not looking at.
+            trimmed = model.with_length(out["resonant_length_m"])
+            out["deck"] = trimmed.deck(requests=_requests_for(req))
+            out["geometry"] = _geometry(trimmed)
+            out["form"] = _form_for(trimmed)
+        return out
 
     def converge(self, req: dict) -> dict:
         model = _model(req)
@@ -168,6 +268,7 @@ def make_handler(api: Api):
         def do_POST(self):
             name = self.path.split("?")[0].removeprefix("/api/")
             fn = {"solve": api.solve, "sweep": api.sweep, "trim": api.trim,
+                  "deck": api.deck,
                   "converge": api.converge, "export/pattern": api.export_pattern,
                   "export/sweep": api.export_sweep}.get(name)
             if fn is None:
@@ -177,6 +278,16 @@ def make_handler(api: Api):
                 n = int(self.headers.get("Content-Length", 0))
                 req = json.loads(self.rfile.read(n) or b"{}")
                 body = json.dumps(fn(req)).encode()
+            except DeckError as exc:
+                # Not a server failure: the student typed a card wrong, and the
+                # page wants the per-line detail to show against the deck.
+                body = json.dumps({
+                    "ok": False, "error": "the deck has errors",
+                    "gloss": _gloss_json(exc.parsed),
+                    "errors": [{"line_no": e.line_no, "text": e.text,
+                                "message": e.message, "hint": e.hint}
+                               for e in exc.parsed.errors]}).encode()
+                return self._send(200, body, "application/json")
             except EngineError as exc:
                 return self._send(500, json.dumps({"error": str(exc)}).encode(),
                                   "application/json")
