@@ -74,6 +74,7 @@
       <button id="many" type="button">24 elements</button>
     </div>
     <label class="chk"><input type="checkbox" id="anim" checked> animate</label>
+    <label class="chk"><input type="checkbox" id="elem"> element factor \(\sin\theta\)</label>
   </div>
   <div class="readouts">
     <div class="ro"><span class="k">\(\lvert N(\theta)\rvert / N_{\max}\)</span><span class="v" id="p-mag">&#8212;</span></div>
@@ -91,14 +92,17 @@ function ramp(t){
 }
 const cv=document.getElementById('map'), ctx=cv.getContext('2d');
 const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const state={ L:1.0, th:Math.PI/2, M:2, anim:true };
+const state={ L:1.0, th:Math.PI/2, M:2, anim:true, elem:false };
 const SPAN=6;                                  // half-height of the map, in wavelengths
 let W=0, H=0, SCL=1, pxPerL=1, t0=performance.now();
 function zOf(i){ return ((i+0.5)/state.M-0.5)*state.L; }
 function sumAt(th){                             // far-field sum, normalized to [0,1]
   const c=Math.cos(th); let re=0, im=0;
   for(let i=0;i<state.M;i++){ const p=2*Math.PI*zOf(i)*c; re+=Math.cos(p); im+=Math.sin(p); }
-  return Math.hypot(re,im)/state.M;
+  // With the element factor on, each element is a short dipole along z rather
+  // than an isotropic point: its own pattern, sin(theta), multiplies the sum.
+  // That is pattern multiplication: element factor times space factor.
+  return Math.hypot(re,im)/state.M * (state.elem ? Math.abs(Math.sin(th)) : 1);
 }
 /* ---- the field: every element a cylindrical wave, summed on a coarse grid
    and scaled up. Every element shares one frequency, so the instantaneous
@@ -116,7 +120,7 @@ function computeField(){
   const w=W, h=H;
   const cell=Math.max(2.2, h/105);
   const cols=Math.ceil(w/cell), rows=Math.ceil(h/cell);
-  const key=[w,h,state.L,state.M].join('|');
+  const key=[w,h,state.L,state.M,state.elem?1:0].join('|');
   if(grid.key===key) return;
   const C=new Float32Array(cols*rows), S=new Float32Array(cols*rows);
   const ox=w/2, oy=h/2, k=2*Math.PI;
@@ -127,7 +131,11 @@ function computeField(){
       const x=((c+0.5)*cell-ox)/pxPerL;
       let re=0, im=0;
       for(let i=0;i<state.M;i++){
-        const dz=y-zs[i], d=Math.hypot(x,dz)+0.02, a=1/Math.sqrt(d), p=-k*d;
+        const dz=y-zs[i], d=Math.hypot(x,dz)+0.02, p=-k*d;
+        // element factor: a short dipole along z radiates nothing along its own
+        // axis, so its wave at this cell is weighted by sin of the angle from the
+        // axis, |x|/d, which the cell sees from that element.
+        const a=(1/Math.sqrt(d))*(state.elem ? Math.abs(x)/d : 1);
         re+=a*Math.cos(p); im+=a*Math.sin(p);
       }
       const o=r*cols+c; C[o]=re; S[o]=im;
@@ -249,7 +257,7 @@ cv.addEventListener('pointerdown',e=>{ dragging=true; cv.setPointerCapture(e.poi
 cv.addEventListener('pointermove',e=>{ if(!dragging) return; const th=pointerTheta(e); if(th!==null) setTheta(th); });
 cv.addEventListener('pointerup',()=>{ dragging=false; });
 cv.addEventListener('pointercancel',()=>{ dragging=false; });
-const lenEl=document.getElementById('len'), thEl=document.getElementById('th'), nEl=document.getElementById('n'), animEl=document.getElementById('anim');
+const lenEl=document.getElementById('len'), thEl=document.getElementById('th'), nEl=document.getElementById('n'), animEl=document.getElementById('anim'), elemEl=document.getElementById('elem');
 function syncLabels(){
   document.getElementById('len-val').textContent=state.L.toFixed(2);
   document.getElementById('th-val').textContent=(state.th*180/Math.PI).toFixed(1)+'°';
@@ -261,6 +269,7 @@ lenEl.addEventListener('input',()=>{ state.L=+lenEl.value; refresh(); });
 thEl .addEventListener('input',()=>{ state.th=+thEl.value*Math.PI/180; refresh(); });
 nEl  .addEventListener('input',()=>{ state.M=+nEl.value; refresh(); });
 animEl.addEventListener('change',()=>{ state.anim=animEl.checked; refresh(); });
+elemEl.addEventListener('change',()=>{ state.elem=elemEl.checked; refresh(); });
 document.getElementById('broad').addEventListener('click',()=>{ state.th=Math.PI/2; thEl.value=90; refresh(); });
 document.getElementById('null1').addEventListener('click',()=>{
   // first null at cos(theta) = lambda/L: exact for the uniform line source, and

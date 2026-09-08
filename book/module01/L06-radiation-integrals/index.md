@@ -80,13 +80,53 @@ source. Drag $P$ around the edge to move the observer.
 
 :::{present}
 <iframe src="../../viz/interference-field.html"
-        width="100%" height="538"
+        width="100%" height="548"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="The field around a line source, with the observer direction and the far-field pattern"
         data-autosize>
 </iframe>
 :::
+The field is the sum of $M$ point sources that radiate the same in every
+direction, so with the box unchecked the picture is the **space factor** of
+the distribution: the pattern its positions and phases make on their own. The
+**element factor** box multiplies every source by $\sin\theta$, the pattern of a
+short dipole along $z$ from Lesson 5. The fringes stay where they were, and the
+pattern gains the nulls on the axis that every wire along $z$ has. The next
+frame names the two factors and the product.
+::::
+
+::::{frame} Element Factor and Space Factor
+:::{present}
+- We measure $\vert F(\theta)\vert$.
+- One short dipole radiates $\sin\theta$, nothing off its ends.
+- Positions and phases make the **space factor** $S(\theta)$.
+:::
+:::{present}
+$$\vert F(\theta)\vert \propto \underbrace{\sin\theta}_{\text{element factor}}\ \cdot\ \underbrace{S(\theta)}_{\text{space factor}}$$
+
+- The widget shows $S(\theta)$ until the element factor is checked.
+- Lesson 16 calls it the **array factor**.
+:::
+
+Every element on the wire radiates the same pattern, so that pattern factors
+out of the sum. What is left inside the sum is the positions and phases of
+the elements, and that sum is the space factor. The widget on the previous
+frame adds isotropic point sources, so with the box unchecked it draws
+$S(\theta)$ on its own. Checking the box multiplies every element by
+$\sin\theta$, and the pattern acquires the nulls on the axis that every wire
+along $z$ has.
+
+Near broadside $\sin\theta$ is close to 1, and the space factor alone is a
+good approximation to the measured pattern. Near the axis the element factor
+dominates, and no phasing of the elements brings a lobe back there. This
+factorization is **pattern multiplication**. The element factor is set by the
+hardware at each position, and the space factor is what the current
+distribution controls. Lesson 16 replaces the integral with a sum over $N$
+discrete elements: the element factor becomes the pattern of whatever antenna
+sits at each position, and the space factor becomes the array factor, the
+part of the pattern you steer. The wire frame later in this lesson is where
+the $\sin\theta$ comes out of the mathematics.
 ::::
 
 ::::{frame} Many sources: the radiation integral
@@ -405,8 +445,8 @@ $$
 N_z(\theta) = \int I(z')\ e^{+jkz'\cos\theta}\ dz' .
 $$
 
-Do the integral in Cartesian, then convert to spherical:
-$N_\theta = -N_z\sin\theta$. The $\sin\theta$ is the conversion, and it is why
+Integrate in Cartesian, then convert to spherical:
+$N_\theta = -N_z\sin\theta$. The $\sin\theta$ is the element factor, and it is why
 no wire radiates off its own ends.
 :::
 
