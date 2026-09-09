@@ -79,7 +79,7 @@ equation — and crucially, one we already know the solution to.
 
 $$ \mathbf{A}(\mathbf{r}) = \frac{\mu}{4\pi}\int_{V'} \mathbf{J}(\mathbf{r}')\ \frac{e^{-jkR}}{R}\ dV', \qquad R = |\mathbf{r}-\mathbf{r}'| $$
 
-**Read the integrand, not the integral:**
+**The integrand:**
 
 - each piece of current launches its own spherical wave $e^{-jkR}/R$
 - it arrives with amplitude $1/R$ and phase delay $kR$
@@ -291,11 +291,13 @@ Exactly L5's $1/r$ term — the one that survived $kr\gg1$. L5 reached it throug
 
 ## Example 2 — the uniform line source
 
-$I(z') = I_0$ over length $L$ → the integral is an exponential, and out falls a sinc: $N_z(\theta) = I_0 L \sin u/u$ with $u = (kL/2)\cos\theta$.
+$I(z') = I_0$ over length $L$, and the integral of an exponential gives a sinc:
 
-<div class="fig" data-inline-svg="./fig/L06-line-source-sinc.svg" style="max-width:640px; margin:0 auto;"></div>
+$$ N_z(\theta) = I_0 L\ \frac{\sin u}{u}, \qquad u = \frac{kL}{2}\cos\theta $$
 
-Peak at **broadside**, first null at $\cos\theta = \lambda/L$, first sidelobe $-13.3$ dB **however long you build it**. That is the **space factor**; times the element factor $\sin\theta$ it gives the full pattern — **pattern multiplication**, all of L16.
+<div class="fig" data-inline-svg="./fig/L06-line-source-sinc.svg" style="max-width:560px; margin:0 auto;"></div>
+
+Peak at **broadside**, first null at $\cos\theta = \lambda/L$, first sidelobe $-13.3$ dB **however long you build it**. Times the element factor $\sin\theta$, that **space factor** gives the full pattern: **pattern multiplication**, all of L16.
 
 Note:
 Point at the dashed line on the plot. Uniform illumination always costs 13.3 dB
@@ -368,8 +370,12 @@ When they fail: solve numerically — **method of moments**, then run this same 
 
 ## Key Point
 
+- Each current element radiates a spherical wave
+- Far away the rays run parallel, so an element's signature is its path difference $\hat{\mathbf r}\cdot\mathbf{r}'$
+- Their sum is the radiation vector $\mathbf{N}(\theta,\phi)$
+
 <div class="callout">
-Every current element sends out a spherical wave. In the far field the rays run parallel, so an element's only signature is its path difference $\hat{\mathbf r}\cdot\mathbf{r}'$. Summing them gives the radiation vector $\mathbf{N}(\theta,\phi)$ — a <strong>Fourier transform of the current distribution</strong> — and the whole pattern is a property of that transform.
+$\mathbf{N}$ is the <strong>Fourier transform of the current distribution</strong>, and the pattern is a property of it.
 </div>
 
 ---
