@@ -104,6 +104,7 @@ Evidence: the ECE 448 Lesson 2 and Lesson 3 decks, and the user's own statement,
 - **One slide asks the class to do something.** "Map out Gray Code for 8-PSK" over an empty axis.
 - **Figure-only slides are common**, and one photo joke per deck: "Hey Bear, can you hear me now?"
 - **The connective prose is not on the slide.** It is spoken. A present block that reads as a paragraph is wrong for this surface.
+- **A slide states the point; it never withholds it.** Their rule, September 2026, on a slide that read "The pattern is already almost as good as it gets. The impedance is the problem.": "It reads like clickbait ... We don't have to hook people into reading our material, that's my job. The job of the slides is to provide context, a backdrop, and an outline." A line that names a problem without stating it is a teaser. Put the number or the mechanism on the slide, or leave the line out.
 
 ## Formal letters
 

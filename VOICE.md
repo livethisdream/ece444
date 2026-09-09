@@ -376,6 +376,25 @@ use 'centre,' 'colour,' etc." Also gray, canceling, labeled, license,
 judgment, donut, and -ize. The rule and its sweep are in CLAUDE.md; it is
 repeated here because it is a voice rule, not only a repo rule.
 
+### 23. A slide states the point; it never withholds it
+
+Neil, 2026-09-09, on L07's short-dipole frame: "It reads like clickbait ...
+Why not just explain what's wrong with the impedance? In fact, the slide
+doesn't say anything about the issue with the impedance. We don't have to
+hook people into reading our material, that's my job. The job of the slides
+is to provide context, a backdrop, and an outline."
+
+> **Before:** The pattern is already almost as good as it gets. The
+> impedance is the problem.
+>
+> **After:** On a 50 Ω line, 2 Ω gives |Γ| = 0.92 and VSWR 25: 85% of the
+> power reflects.
+
+A line that names a problem without stating it is a teaser, and a teaser is
+a hook. The hook is his, spoken. If the point is worth a line on the slide,
+the line carries the number or the mechanism; if it cannot, it goes to
+depth or is cut.
+
 ## What he does *not* want changed
 
 His voice is direct, and that is deliberate. Do not soften it into hedged

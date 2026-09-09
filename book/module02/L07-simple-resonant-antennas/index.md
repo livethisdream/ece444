@@ -161,8 +161,7 @@ the two changes a link budget by 4.3 dB.
 
 $$R_r = 80\pi^2 \left(\frac{L}{\lambda}\right)^2$$
 
-**The pattern is already almost as good as it gets. The impedance is the
-problem.**
+- On a $50\ \Omega$ line, $2\ \Omega$ gives $\vert\Gamma\vert = 0.92$ and VSWR 25: 85% of the power reflects.
 :::
 
 Lesson 6 handled the **infinitesimal dipole** — a current element so short that

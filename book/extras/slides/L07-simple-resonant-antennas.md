@@ -92,7 +92,7 @@ A wire much shorter than a wavelength, $L \ll \lambda$. The current tapers linea
 - HPBW $= 90^\circ$, $D = 1.5$ (**1.76 dBi**).
 - Radiation resistance $R_r = 80\pi^2 (L/\lambda)^2$ — about $2\ \Omega$ at $L = 0.1\lambda$.
 
-**The pattern is already almost as good as it gets. The impedance is the problem.**
+- On a $50\ \Omega$ line, $2\ \Omega$ gives $\vert\Gamma\vert = 0.92$ and VSWR 25: 85% of the power reflects.
 
 Note:
 This is the L6 result, recalled not re-derived. Two ohms against a fifty ohm line is the whole reason nobody feeds a short dipole directly.
