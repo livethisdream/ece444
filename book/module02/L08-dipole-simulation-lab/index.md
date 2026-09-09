@@ -32,7 +32,7 @@ Lesson 8 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::{frame} Learning Objectives
 
 <ol class="lo-list lo-sublist" style="--module: '2'; --lo: '2'">
-  <li>I can explain what the method of moments does — discretize the wire, enforce the boundary condition, solve for the segment currents — and why the simulator then runs the same radiation integral you ran by hand.</li>
+  <li>I can explain what the method of moments does — discretize the wire, expand the current in basis functions, enforce the boundary condition, and solve for the amplitudes — and why the simulator then runs the same radiation integral you ran by hand.</li>
   <li>I can build a wire-dipole model in 4nec2 with defensible segmentation and excitation, and run frequency sweeps and pattern computations.</li>
   <li>I can compare simulated impedance, resonant length, pattern, and gain against the analytical half-wave-dipole predictions and account for every difference.</li>
   <li>I can recognize when a simulation is misleading me — segmentation too coarse, wire radius unreasonable, source misplaced — and apply the standard convergence and energy checks.</li>
@@ -67,13 +67,13 @@ agreement you cannot.
 
 ::::{frame} The Method of Moments
 :::{present}
-- **Discretize**: $N$ segments, one unknown current on each.
-- **Enforce the boundary condition** on every segment of a perfect conductor:
+- **Discretize**: $N$ segments.
+- **Expand** the unknown current in $N$ known **basis functions** with unknown amplitudes:
 
-$$E_z^{\text{scattered}} = -E_z^{\text{source}}$$
+$$I(z) \approx \sum_{n=1}^{N} I_n\ f_n(z)$$
 
-- **Solve**: $N$ equations, $N$ unknowns, one complex matrix solve.
-- Then the radiation integral of Lesson 6, over the solved current.
+- **Enforce** $E_{\text{tan}} = 0$ on the conductor: one equation per segment.
+- **Solve** the $N \times N$ system for the $I_n$, then run the radiation integral of Lesson 6.
 :::
 
 Lesson 6 established the machinery: the far field is the radiation integral over
@@ -82,33 +82,51 @@ Lesson 7 supplied the current by assumption,
 $I(z) = I_m \sin\left(k\left(\frac{L}{2} - \vert z \vert\right)\right)$, and
 everything else followed from it.
 
-The **method of moments** (MoM) removes that assumption. It is three steps and a
-matrix solve:
+The **method of moments** (MoM) removes that assumption by solving for the
+current. We do not know $I(z)$, so we write it as a sum of $N$ known shapes,
+the **basis functions** $f_n(z)$, each one living on one short piece of the
+wire, with $N$ unknown amplitudes $I_n$:
 
-1. **Discretize.** Chop the wire into $N$ short **segments** and declare the
-   current on each one to be an unknown number. You now have $N$ unknowns
-   instead of an unknown function.
-2. **Enforce the boundary condition.** On a perfect conductor, the total
-   tangential electric field is zero. The total field is the source field plus
-   the field radiated by all $N$ segment currents, so at each segment
-   $E_z^{\text{scattered}} = -E_z^{\text{source}}$. That gives one equation per
-   segment.
-3. **Solve.** With $N$ equations in $N$ unknowns, one complex matrix solve
-   returns the current on every segment.
+$$I(z) \approx \sum_{n=1}^{N} I_n\ f_n(z)$$
+
+The choice of shape is the key decision. A pulse, constant across its segment,
+is the simplest, but it makes the current a staircase, and a staircase puts all
+of its charge in spikes at the steps, so the near field, and with it the
+reactance, comes out badly. A triangle, peaking at one segment junction and
+falling to zero at the next, keeps the current continuous and spreads the
+charge evenly. NEC uses a short piece of a sinusoid on each segment, which is
+what a standing wave looks like up close, so few segments are needed before
+the sum stops changing. The convergence widget below draws the pieces.
+
+With the shapes fixed, the physics is the boundary condition of a perfect
+conductor: the total tangential electric field on the wire is zero. The total
+field is the field of the source plus the field radiated by every one of the
+$N$ pieces of current, so requiring it to vanish on each segment gives $N$
+equations in the $N$ unknown amplitudes:
+
+$$E_z^{\text{scattered}}(z_m) = -E_z^{\text{source}}(z_m), \qquad m = 1, \ldots, N$$
+
+Each equation is one row of an $N \times N$ complex matrix whose entry
+$Z_{mn}$ is the field that basis function $n$ produces on segment $m$. One
+matrix solve returns every $I_n$, and the sum above is the current.
 ::::
 
-::::{frame} What the Simulator Knows
+::::{frame} Assumptions and Consequences
 :::{present}
 :class: callout
-A simulator knows no more physics than you do. It solves for the current you
-would have guessed, then computes the same integral. Everything it reports is
-as good as the segments, the radius, and the source you gave it.
+A simulator knows no more physics than you do. It solves for the current
+instead of assuming it, then computes the same integral. Everything it reports
+is as good as the segments, the basis functions, the radius, and the source.
 :::
 
-The solver then evaluates the radiation integral from Lesson 6 over that
-numerical current rather than over an analytical one. It sounds simple, but
-there are consequences to this approach: everything it reports is only as
-trustworthy as the segments, the wire radius, and the source you handed it.
+The solver evaluates the radiation integral from Lesson 6 over that numerical
+current rather than over an analytical one. It sounds simple, but there are
+consequences to this approach: every number the simulator reports inherits
+the choices in the model. The segments set how finely the current can vary,
+the basis functions set what shape it can take between the samples, the
+radius sets whether the thin-wire model describes the conductor at all, and
+the source sets the one segment the impedance is read from. The program
+checks none of them.
 ::::
 
 ::::{frame} NEC and 4nec2
@@ -130,7 +148,7 @@ segment count, and a Yagi is several wires. That simplicity makes NEC fast, but
 we have to follow some rules to avoid divergent results.
 ::::
 
-::::{frame} From Currents to One Impedance
+::::{frame} Finding the Impedance in MoM
 :::{present}
 - **One segment** carries the 1 V source and is the terminal.
 
@@ -144,6 +162,8 @@ $$Z_{\text{in}} = \frac{V_{\text{feed}}}{I_{\text{feed}}}$$
 A misplaced source corrupts the impedance and barely moves the pattern.
 :::
 
+4nec2 drives **one segment** with a 1 V source, and that segment is the antenna
+terminal: there is no connector, no coaxial gap, and no balun in the model.
 The solve returns a whole vector of currents, one per segment, but the terminal
 impedance comes from exactly one entry in that vector. You applied a known
 voltage to the source segment, and the solver reports the current that flows
@@ -156,7 +176,7 @@ impedance is simply the reciprocal of the feed-segment current, and its complex
 character carries straight through: a feed current lagging the applied voltage
 gives a positive reactance, which means an inductive terminal.
 
-Three consequences are worth stating plainly. First, the impedance of the entire
+There are three consequences to this approach. First, the impedance of the entire
 antenna comes from a single number in the solution, so it inherits whatever
 error that one segment carries. Second, the rest of the current distribution
 does not enter the terminal impedance at all; it sets the radiation pattern
@@ -175,39 +195,57 @@ the pattern is an integral over a current distribution that hardly changed.
 | $\Delta > 8a$ | keeps the thin-wire kernel valid | impedance becomes numerically unreliable |
 :::
 
-Here $\Delta$ is the segment length and $a$ the wire radius.
+Here $\Delta$ is the segment length and $a$ the wire radius. The thin-wire
+model treats each segment's current as a filament on the wire's axis and
+evaluates its field on the surface, a distance $a$ away. That describes a
+segment only when the segment is much longer than the radius. When $\Delta$
+falls below about $8a$ the segment is closer to a ring than to a piece of a
+line, the filament no longer describes it, and the matrix entries between
+neighboring segments become inaccurate.
 ::::
 
 ::::{frame} Segment Geometry Rules
 :::{present}
 | Rule | Reason | Consequence of breaking it |
 | :-- | :-- | :-- |
-| $2\pi a \ll \lambda$ | the wire is thin compared with a wavelength | NEC is solving the wrong problem |
+| $2\pi a \ll \lambda$ | the wire is thin compared with a wavelength | NEC solves a filament, not your conductor |
 | Odd segment count | puts a segment at the center | the source lands off-center |
 
 - Refining drives $\Delta$ toward $8a$.
 :::
 
+NEC models a wire as a single filament of axial current and enforces the
+boundary condition on the surface at radius $a$. That is the problem it solves.
+The problem we want solved is a conducting cylinder, whose surface current can
+vary around the circumference and can have a component around the wire near
+the ends. The two problems have the same answer only when the circumference is
+small compared with a wavelength, $2\pi a \ll \lambda$, because then nothing
+can vary around the wire within a wavelength and the surface current is the
+same as a filament on the axis. For a large-radius conductor NEC still returns
+a number, and it is the number for the filament, not for your antenna.
+
 Notice that two of these rules pull against each other, because refining the
-mesh drives $\Delta$ down toward $8a$. On a thick wire you eventually run out of
-room, and that limit is informative rather than annoying: it is NEC telling you
-that the thin-wire approximation does not describe your antenna.
+mesh drives $\Delta$ down toward $8a$. On a wire whose radius is large relative
+to the segment length you eventually run out of room, and that limit is
+informative rather than annoying: the segments have reached the length the
+thin-wire model needs, and refining further describes your antenna worse, not
+better.
 ::::
 
-::::{frame} Segmentation Arithmetic at 915 MHz
+::::{frame} Segmentation Math at 915 MHz
 :::{present}
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
 | $\lambda$, $\lambda/2$ | $c/f$ | $328$, $164\ \text{mm}$ |
 | $\Delta$ | $164/21$ | $7.8\ \text{mm}$, $0.024\lambda$ |
-| $\lambda/20$ | $16.4\ \text{mm}$ | passes |
-| $8a$, $a = 0.5\ \text{mm}$ | $4.0\ \text{mm}$ | passes |
+| $\lambda/20$ | $328/20$ | $16.4\ \text{mm} > \Delta$ |
+| $8a$, $a = 0.5\ \text{mm}$ | $8 \times 0.5$ | $4.0\ \text{mm} < \Delta$ |
 | Ceiling | $164/4.0$ | 41 segments |
 
-**Above 41 segments the thin-wire kernel fails.**
+**Above 41 segments, $\Delta < 8a$: the segments are shorter than the thin-wire model allows.**
 :::
 
-:::{admonition} Worked example — segmentation arithmetic for today's dipole
+:::{admonition} Worked example — segmentation math for today's dipole
 :class: tip
 At $f = 915\ \text{MHz}$:
 
@@ -220,35 +258,16 @@ $$\Delta = \frac{164\ \text{mm}}{21} = 7.8\ \text{mm} = 0.024\ \lambda$$
 
 Now check both bounds. The upper bound is $\lambda/20 = 16.4\ \text{mm}$, and
 $7.8\ \text{mm}$ clears it with room to spare. The lower bound is
-$8a = 4.0\ \text{mm}$, and $7.8\ \text{mm}$ clears that as well. The thinness
-check also passes, since $2\pi a/\lambda = 0.0096$.
+$8a = 4.0\ \text{mm}$, and $7.8\ \text{mm}$ clears that as well. The thin-wire
+condition also holds, since $2\pi a/\lambda = 0.0096$.
 
 How far can you refine? The segment length may fall to $4.0\ \text{mm}$, which
-corresponds to $164/4.0 \approx 41$ segments. **Past about 41 segments this wire
-is too fat for the standard kernel, and the extra segments make the answer worse
-rather than better.** That refinement ceiling is worth computing before you
-touch the keyboard.
+corresponds to $164/4.0 \approx 41$ segments. **Past about 41 segments the
+segment length falls below $8a$: the wire's radius is too large for the
+thin-wire model to describe segments that short, and the extra segments make
+the answer worse rather than better.** That refinement ceiling is worth
+computing before you touch the keyboard.
 :::
-::::
-
-::::{frame} The Source Model
-:::{present}
-- The source segment is the terminal: no connector, no gap, no balun.
-- Center segment, so the count is odd.
-- The feed gap is one segment wide, so refining the mesh refines the feed.
-- Gain settles first; impedance settles last.
-:::
-
-4nec2 drives **one segment** with a 1 V source, and that segment is the antenna
-terminal: there is no connector, no coaxial gap, and no balun in the model. The
-impedance comes out of that segment by the division above.
-
-Two modeling consequences follow. First, the source must sit on the center
-segment, which is why the segment count is odd. Second, the feed gap is as wide
-as a segment, so refining the mesh also refines the feed model. Gain is an
-integral over the entire current and settles quickly, while impedance is read
-from one segment and settles last. Expect your convergence study to show exactly
-that behavior.
 ::::
 
 ::::{frame} All Models Are Wrong, Some Are Useful
@@ -294,18 +313,26 @@ sphere in free space; adding a ground plane changes the expected value.
 
 :::{present}
 <iframe src="../../viz/mom-dipole.html"
-        width="100%" height="453"
+        width="100%" height="490"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Method-of-moments dipole: solved segment currents against the assumed sinusoid, the feed voltage and current that set the input impedance, and impedance versus segment count">
 </iframe>
 :::
 
-The widget above runs a method-of-moments solve in your browser using a thin
-wire, triangle basis functions, and a voltage source on the center segment. Drag
-the segment count up from 5 and watch two things at once. The current samples
-settle onto the sinusoid, staying close to it but never matching it exactly, and
-running fattest near the wire ends where the sinusoid is least accurate. At the
+The widget above runs a method-of-moments solve in your browser: a thin wire,
+a voltage source on the center segment, and your choice of basis function.
+Check **show basis functions** and the current is drawn as what it is, a sum
+of overlapping pieces, one per segment junction, each scaled by its solved
+amplitude; the dots are the amplitudes and the curve through them is the sum.
+Switch from triangles to sinusoidal pieces, NEC's choice, and watch the
+convergence plot: the same answer arrives with fewer segments, because a piece
+of a sinusoid is already the shape the current wants to take.
+
+Drag the segment count up from 5 and watch two things at once. The current
+samples settle onto the sinusoid, staying close to it but never matching it
+exactly, and running largest near the wire ends where the sinusoid is least
+accurate. At the
 same time $Z_{\text{in}}$ stops moving, and that plateau is what "converged"
 means: it does not mean the answer agrees with theory, only that refining the
 model no longer changes it. Watch the feed readouts as you drag, since
@@ -315,6 +342,18 @@ where the source sits. The dashed green references are
 Lesson 7's $73\ \Omega$ and $42.5\ \Omega$, drawn when the wire is exactly
 $\lambda/2$ long, and the plateau lands near them rather than on them. The frame
 on why the half-wave number misses explains that gap.
+
+Now drag the length past $0.5\lambda$ and the single hump splits into two.
+Nothing about the solver changed; that is the standing wave of Lesson 7. The
+current on each arm is a piece of a sinusoid that must be zero at the open
+tip, so its maximum sits a quarter wavelength in from that tip. On a half-wave
+dipole each arm is a quarter wavelength long and both maxima land on the feed,
+which is one hump. Lengthen the wire and each maximum stays a quarter
+wavelength from its tip, so the two move apart from the feed. By $0.7\lambda$,
+the end of the slider, they sit $0.1\lambda$ either side of the feed with a dip
+between them, and at $L = \lambda$ that dip would be a null. The solved
+current follows the same shape because the tips still force it to zero, and
+the assumed sinusoid tracks it.
 ::::
 
 ::::{frame} Software Setup
@@ -392,7 +431,7 @@ always editable directly, and the run always produces the same output file.
 ::::{frame} The Procedure
 :::{present}
 1. Predict
-2. Segmentation arithmetic
+2. Segmentation math
 3. Baseline run
 4. Average gain
 5. Frequency sweep
@@ -414,7 +453,7 @@ written after the fact teaches you nothing.
 gain, and E-plane HPBW. They do not change afterward.
 :::
 :::{present}
-**Step 2: segmentation arithmetic.** Compute $\Delta$, check it against
+**Step 2: segmentation math.** Compute $\Delta$, check it against
 $\lambda/20$ and $8a$, and compute the refinement ceiling, on paper.
 :::
 
@@ -523,21 +562,33 @@ begins to bite.
 
 ::::{frame} Deliverables
 :::{present}
-1. **The comparison table**, with a percent difference on every row.
-2. **One paragraph per row** naming the mechanism.
-3. **Your convergence table** and the segment count you would defend.
-4. **The average gain** from Step 4.
+For your midterm antenna:
+
+1. **Pattern**: E- and H-plane cuts, HPBW, sidelobes, gain.
+2. **Impedance**: $Z_{\text{in}}$ and VSWR across the band.
+3. **Checks**: average gain, convergence table.
+4. **Comparison** with hand analysis, every difference explained.
 :::
 
-Turn in a single short report containing:
+Today's dipole is the rehearsal. The product of this lab is the **Analysis**
+section of the midterm project: the simulated prediction for the antenna you
+will put on the range in Lessons 13 and 14. The project handout governs what
+that section must contain; this is how to build it.
 
-1. **The comparison table** below, filled in, with a percent difference on every
-   row.
-2. **One paragraph per row** accounting for the difference. "Simulation error"
-   is not an account of anything, so name the mechanism instead.
-3. **Your convergence table** from Step 8, plus one sentence defending the
-   segment count you would use if this were a real design.
-4. **The average gain figure** from Step 4.
+1. **Pattern.** Predict the E-plane and H-plane cuts, and read the half-power
+   beamwidth, the sidelobe level, and the gain from them.
+2. **Impedance.** Predict $Z_{\text{in}}$ and VSWR across the band you will
+   measure, and the resonant frequency.
+3. **Checks.** Run the average-gain test before recording anything, and show a
+   convergence table so the reader knows the numbers have stopped moving.
+4. **Comparison.** Set the simulation beside your hand analysis and account
+   for every difference. "Simulation error" is not an account of anything, so
+   name the mechanism. When the measurement comes in at Lesson 14 you will add
+   a third column.
+
+Build it the way you built the dipole today: predict by hand first, model the
+antenna, check the model, then compare. The dipole comparison table below,
+filled in, is the worked example.
 ::::
 
 ::::{frame} The Comparison Table
@@ -580,7 +631,7 @@ couple of ohms.
 The second mechanism worth naming is the **end effect**. The assumed sinusoid
 goes to zero at the wire tips with a clean slope, while the real current
 approaches the tips more gradually because charge accumulates there. That
-fattened current near the tips is visible in the convergence widget, and it is
+larger current near the tips is visible in the convergence widget, and it is
 what pushes resonance shorter and resistance higher.
 
 ```{note}
@@ -596,7 +647,8 @@ once you make the two models match.
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| Method of moments | discretize the wire, enforce $E_{\text{tan}} = 0$, solve for the segment currents, then integrate | $N$ unknowns, one matrix solve |
+| Method of moments | discretize the wire, expand the current in basis functions, enforce $E_{\text{tan}} = 0$, solve for the amplitudes, then integrate | $N$ unknowns, one matrix solve |
+| Basis functions | the shapes the current is built from; NEC uses a piece of a sinusoid per segment | $I(z) \approx \sum I_n f_n(z)$ |
 | $Z_{\text{in}} = V_{\text{feed}}/I_{\text{feed}}$ | terminal impedance from the one segment carrying the source | 1 V drive makes it $1/I_{\text{feed}}$ |
 | Segments $N$ | segmentation of the wire; odd, so a segment sits at the feed | 10–20 per half wavelength |
 | $\Delta$ against $\lambda$ | upper bound on segment length, set by phase change | $\Delta < \lambda/20$ |
