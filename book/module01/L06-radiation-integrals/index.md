@@ -13,7 +13,8 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-Lesson 5 told you *where* the far field is. This lesson tells you *what it is*.
+Lesson 5 established where the far field begins. This lesson computes the
+field itself, from the current on the antenna.
 
 Lesson 6 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -57,7 +58,7 @@ integral with a different current in it.
 :::{present}
 - Two current elements $d$ apart, seen from far away in direction $\theta$.
 - Parallel rays: element 2's wave travels $d\cos\theta$ farther, so it arrives $kd\cos\theta$ radians late.
-- Add the phasors: in phase, a beam; half a cycle apart, a null.
+- Add the phasors: in phase they reinforce, half a cycle apart they cancel.
 :::
 :::{present}
 <img src="../../viz/img/L06-two-sources.svg" alt="Two current elements a distance d apart on the z axis, seen from far away in direction theta. The two rays to the observer are parallel; the lower element's wave travels d cos theta farther than the upper one's." style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
@@ -289,11 +290,10 @@ integral, and the two places get different treatment.
 
 ::::{frame} Amplitude versus phase
 :::{present}
-- In the amplitude $1/R$ it is a fraction of a percent, so $1/R \approx 1/r$.
-- In the phase $e^{-jkR}$ it is several radians. Keep it.
-
-A 1 m antenna at 100 m, $\lambda = 10\ \text{cm}$: $1/R$ moves 1%, $kR$
-ten full cycles.
+- In the amplitude $1/R$ it is under a percent, so $1/R \approx 1/r$.
+- In the phase $e^{-jkR}$ it is several radians, so we keep it.
+- A 1 m antenna at 100 m, $\lambda = 10\ \text{cm}$: $1/R$ moves 1% and $kR$
+  moves ten cycles.
 :::
 
 **Amplitude.** In the $1/R$ factor, the correction $\hat{\mathbf r}\cdot\mathbf{r}'$
@@ -335,8 +335,8 @@ $$
 r \ge \frac{2D^2}{\lambda}.
 $$
 
-Not a coincidence: the far-field distance is where the parallel-ray
-approximation becomes accurate.
+The far-field distance is where the parallel-ray approximation becomes
+accurate. Lessons 5 and 6 give the same number.
 :::
 
 The worst case of the quadratic term is $r'_{\max}{}^2/2r$, and for an antenna
@@ -351,22 +351,21 @@ $$
 Demand that this stay under $\pi/8$ radians and it rearranges to
 $r \ge 2D^2/\lambda$. That is not a second criterion. Lesson 5 derived the
 same number from the geometry of a curved wavefront; here it falls out of the
-term we need to drop to make the integral tractable. Same number, same
-physics, arrived at from opposite directions.
+term we need to drop to make the integral tractable.
 ::::
 
 ::::{frame} The radiation vector
 :::{present}
-With both approximations in, the $e^{-jkr}/r$ factor no longer depends on
-$\mathbf{r}'$ and comes out of the integral:
+With both approximations in, the $e^{-jkr}/r$ factor comes out of the
+integral:
 
 $$
 \mathbf{A}(\mathbf{r}) = \frac{\mu e^{-jkr}}{4\pi r}
 \underbrace{\int_{V'}\mathbf{J}(\mathbf{r}')\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'}_{\textstyle \mathbf{N}(\theta,\phi)}
 $$
 
-Distance out front, the same for every antenna ever built. Direction inside
-$\mathbf{N}$, everything that makes this antenna different.
+$e^{-jkr}/r$ depends only on distance and is the same for every antenna.
+$\mathbf{N}$ depends only on direction and is specific to this one.
 :::
 
 The integral that is left is the **radiation vector** $\mathbf{N}(\theta,\phi)$,
@@ -554,8 +553,8 @@ The same properties, row by row:
 | modulation shifts the spectrum | linear phase steers the beam |
 | sampling repeats the spectrum | discrete elements repeat the pattern |
 
-Every row is the left column, applied. Nothing on the right is derived in this
-course from scratch.
+Every row on the right is the corresponding transform property applied to an
+antenna, and nothing on the right is derived in this course from scratch.
 
 | Signals and systems | Antennas |
 | :-- | :-- |
@@ -679,8 +678,9 @@ have a grating lobe.
 :class: viz-frame
 
 :::{present}
-**Length sets beamwidth. Taper sets sidelobes. Phase slope sets pointing
-direction.**
+- Length sets the beamwidth.
+- Taper sets the sidelobe level.
+- A linear phase slope sets the pointing direction.
 
 <iframe src="../../viz/line-source-pattern.html"
         width="100%" height="417"
@@ -993,9 +993,9 @@ far-field pattern is invertible.
 :::{present}
 :class: callout
 Radiation is superposition with phase bookkeeping. Far away the rays run
-parallel, so an element's only signature is its path difference
-$\hat{\mathbf r}\cdot\mathbf{r}'$. Their sum is the radiation vector, a
-Fourier transform of the current. The whole pattern lives there.
+parallel, so an element's signature is its path difference
+$\hat{\mathbf r}\cdot\mathbf{r}'$. Their sum is the radiation vector, the
+Fourier transform of the current. The pattern is a property of it.
 :::
 
 $$

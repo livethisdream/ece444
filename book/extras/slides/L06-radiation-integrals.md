@@ -26,7 +26,7 @@ Fall 2026 · Dr. Neil Rogers
 - L4: the **terminals** — what the radio sees
 - L5: **where** the far field starts, $r \ge 2D^{2}/\lambda$
 
-Today: stop taking the pattern as given. **Compute it** — from the current on the antenna.
+Today: **compute the pattern** from the current on the antenna
 
 Note:
 Every pattern so far has been handed to us: measured, or off a datasheet. Today
@@ -86,7 +86,7 @@ $$ \mathbf{A}(\mathbf{r}) = \frac{\mu}{4\pi}\int_{V'} \mathbf{J}(\mathbf{r}')\ \
 - the integral just **adds them up**
 
 <div class="callout">
-Radiation is <strong>superposition with phase bookkeeping</strong>. Nothing more.
+Radiation is <strong>superposition with phase bookkeeping</strong>.
 </div>
 
 ---
@@ -126,7 +126,7 @@ $$ R = r - \hat{\mathbf r}\cdot\mathbf{r}' + \frac{r'^{2} - (\hat{\mathbf r}\cdo
 | phase $e^{-jkR}$ | $R \approx r - \hat{\mathbf r}\cdot\mathbf{r}'$ | $k\hat{\mathbf r}\cdot\mathbf{r}'$ is **several radians** |
 
 <div class="callout">
-Sloppy on amplitude, careful on phase. Phase is what turns "adding" into "canceling."
+The amplitude tolerates the approximation and the phase does not, because phase is what turns adding into canceling.
 </div>
 
 ---
@@ -140,13 +140,13 @@ $$ \Delta\phi = k\frac{(D/2)^{2}}{2r} = \frac{\pi D^{2}}{4\lambda r} \quad\le\qu
 $$ \Longrightarrow \qquad r \ \ge\ \frac{2D^{2}}{\lambda} $$
 
 <div class="callout">
-Not a coincidence. The far-field distance <em>is</em> the distance at which the parallel-ray approximation becomes accurate.
+The far-field distance is the distance at which the parallel-ray approximation becomes accurate, which is why L5 and L6 give the same number.
 </div>
 
 Note:
 L5 got this from a curved wavefront across an aperture. Here it falls out of the
-term we must drop to make the integral tractable. Same number, opposite
-directions — worth pausing on.
+term we must drop to make the integral tractable. It is the same number from
+two different starting points.
 
 ---
 
@@ -331,7 +331,7 @@ Through the integral, for $L = \lambda/2$:
 
 $$ |F(\theta)| = \left|\frac{\cos\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}\right| $$
 
-Not $\sin\theta$ — a **sharper** donut, because the current is concentrated near the middle.
+The bracket is not $\sin\theta$, but it is close: a **sharper** donut, because the current is concentrated near the middle.
 
 ---
 
