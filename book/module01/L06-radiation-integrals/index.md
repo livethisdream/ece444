@@ -242,7 +242,7 @@ $P$.
 
 ::::{frame} What a pattern is
 :::{present}
-A pattern is a function of **direction only**. The exact integral tangles
+A pattern is a function of **direction only**. The exact integral mixes
 distance and direction together inside $R$, so it cannot give us a pattern
 until we pull the two apart. That is the whole job of the far-field
 approximation.
@@ -370,7 +370,7 @@ $\mathbf{N}$, everything that makes this antenna different.
 :::
 
 The integral that is left is the **radiation vector** $\mathbf{N}(\theta,\phi)$,
-and this split is the payoff of the whole lesson:
+and this split is the central result of the lesson:
 
 | Factor | Depends on | What it carries |
 | :-- | :-- | :-- |
@@ -407,7 +407,7 @@ involves the antenna.
 In the far field the wave is locally a plane wave traveling radially outward
 (Lesson 5), so it can have **no radial field component**: $E_r \approx 0$, and
 only the transverse parts of $\mathbf{A}$ survive. The magnetic field follows
-for free from the plane-wave relation, with no new integral:
+from the plane-wave relation, with no new integral:
 
 $$
 \mathbf{H} = \frac{1}{\eta_0}\ \hat{\mathbf r}\times\mathbf{E},
@@ -545,7 +545,7 @@ learned there comes across unchanged.
 | a signal $x(t)$ | the current $I(z')$ |
 | its spectrum $X(\omega)$ | the pattern $N_z(k_z)$ |
 
-What the transform buys you, row by row:
+The same properties, row by row:
 
 | Signals and systems | Antennas |
 | :-- | :-- |
@@ -694,8 +694,8 @@ Choose a distribution, stretch it, taper it, put a linear phase slope across it,
 and watch the pattern respond. Those three habits are the ones to build here,
 and the next frames put numbers on each of them.
 
-Beamwidth is bought with **size** and sidelobes are bought with **taper**;
-that trade has a price list, and Lesson 15 derives it. A phase slope across
+Length sets the beamwidth and taper sets the sidelobe level; Lesson 15
+derives the tradeoff between them. A phase slope across
 the current steers the beam, and Lesson 18 makes it a design tool.
 ::::
 
@@ -710,15 +710,15 @@ N_z = I_0\ dl, \qquad N_\theta = -I_0\ dl\ \sin\theta,
 E_\theta = \frac{j\ \eta_0 k I_0\ dl\ \sin\theta}{4\pi r}\ e^{-jkr} .
 $$
 
-This is Lesson 5's $1/r$ radiation term, in one line. The pattern is
+This is Lesson 5's $1/r$ radiation term. The pattern is
 $\sin\theta$, the donut, with $D = 1.5$.
 :::
 
 This is exactly the $1/r$ radiation term of the exact short-dipole field quoted
 in Lesson 5, the term that survived once $kr \gg 1$. What took a page of exact
-spherical-wave algebra there comes out here in one line. The pattern is
+spherical-wave algebra there comes out here in a few steps. The pattern is
 $|F| = \sin\theta$: a donut, maximum broadside, null along the wire, and
-$D = 1.5$ (1.76 dBi). The read-only frame below earns that $1.5$.
+$D = 1.5$ (1.76 dBi). The read-only frame below derives that $1.5$.
 ::::
 
 ::::{frame} Worked example — the donut integrated
@@ -727,7 +727,7 @@ $D = 1.5$ (1.76 dBi). The read-only frame below earns that $1.5$.
 :::{admonition} Worked example — the donut integrated
 :class: tip
 That $D = 1.5$ has been quoted since Lesson 2 and taken on faith ever since.
-Now you can earn it. Directivity is peak intensity over average intensity, and
+We can now derive it. Directivity is peak intensity over average intensity, and
 with the pattern in hand both are just integrals. Normalize the intensity to its
 peak, $U = \sin^2\theta$ (intensity goes as the *square* of the field pattern),
 and integrate over the whole sphere:
@@ -741,16 +741,16 @@ P_\text{rad} = \oint U\ d\Omega
 $$
 
 The extra $\sin\theta$ is the solid-angle element $d\Omega = \sin\theta\ d\theta\ d\phi$,
-not part of the pattern — a bookkeeping trap worth naming. Then
+not part of the pattern. Then
 
 $$
 D = \frac{4\pi\ U_{\max}}{P_\text{rad}} = \frac{4\pi}{8\pi/3} = 1.5
 \quad (1.76\ \text{dBi}).
 $$
 
-The number is small because the donut is generous: a current element throws
-power almost everywhere except along its own axis, so concentrating it 1.5 times
-over isotropic is all the shape can do.
+The number is small because the pattern is broad: a current element radiates
+in every direction except along its own axis, so concentrating the power 1.5
+times over isotropic is all this shape can do.
 :::
 ::::
 
@@ -803,7 +803,7 @@ theory on it.
 - $L = 2\lambda$: nulls at $60^{\circ}$ and $120^{\circ}$, half-power beamwidth $25.6^{\circ}$.
 :::
 
-Plotted against angle, that one expression is the shape you measure every
+Plotted against angle, that one expression is the pattern we compare every
 aperture antenna in this course against. Read off the space factor's three
 headline numbers:
 
@@ -812,7 +812,7 @@ headline numbers:
   full length $L$.
 - **First null** where $u = \pi$, i.e. $\cos\theta_\text{null} = \lambda/L$.
 - **First sidelobe** at $u \approx 4.493$, height $-13.3$ dB, a fixed number,
-  independent of $L$. Uniform illumination *always* costs you $13.3$ dB
+  independent of $L$. Uniform illumination always gives $-13.3$ dB
   sidelobes; only tapering changes that.
 
 The read-only frame below works the $2\lambda$ case through.
@@ -844,17 +844,17 @@ degree, which is why that rule of thumb is worth memorizing.
 **Sidelobes.** $-13.3$ dB, whatever $L$ is.
 
 Double the length to $4\lambda$ and the beamwidth halves to $12.7^{\circ}$,
-while the sidelobes do not move at all. Beamwidth is bought with **size**;
-sidelobes are bought with **taper**.
+while the sidelobes do not move at all. Length sets the beamwidth; taper sets
+the sidelobe level.
 :::
 ::::
 
 ::::{frame} What a taper buys, and what it costs
 :class: read-only
 
-Beamwidth is bought with **size**. Sidelobes are bought with **taper**. The
-numbers behind that sentence are Module 3's, and they are here only so the
-sentence has something to point at.
+Length sets the beamwidth and taper sets the sidelobe level. The numbers
+behind those two statements are Module 3's, and they are here only so the
+statements have something to point at.
 
 | Distribution | First sidelobe | HPBW constant ($\times\ \lambda/L$) |
 | :-- | :-: | :-: |
@@ -865,10 +865,10 @@ sentence has something to point at.
 
 Since the transform's high-frequency content comes from the *edges* of the
 distribution, softening the edges must soften the sidelobes. It does, and the
-prices are known: same length $L$, four ways to illuminate it. Read the third
-column as the cost. Relative to uniform, a taper broadens the main beam by a
-factor of **1.34 to 1.63**. You buy every dB of sidelobe suppression with
-beamwidth, and there is no distribution that gives you both.
+numbers are known: same length $L$, four ways to illuminate it. Read the third
+column as the beamwidth penalty. Relative to uniform, a taper broadens the main
+beam by a factor of **1.34 to 1.63**. Lower sidelobes always come with a wider
+main beam, and no distribution gives both.
 
 The ranking is the thing to carry forward: uniform is narrowest and worst on
 sidelobes, cosine² is widest and best, and everything useful in between is a
@@ -931,8 +931,8 @@ $\theta_\text{HP} = 78.1^{\circ}$ versus $90^{\circ}$, and $D = 1.64$
 | Half-wave dipole | $78.1^{\circ}$ | 1.64 |
 | Uniform line source, $L = 2\lambda$ | $25.6^{\circ}$ | 4.21 |
 
-The two dipoles are nearly the same donut. The line source traded its skirt
-for a beam and a set of sidelobes.
+The two dipoles are nearly the same donut. The line source has a much
+narrower main beam, and it has sidelobes.
 :::
 
 | Distribution | Pattern $\vert F(\theta)\vert$ | HPBW | $D$ |
@@ -945,9 +945,9 @@ The last row's headline number is the space factor on its own; multiply in the
 $\sin\theta$ element factor and it becomes $24.8^{\circ}$ and $D = 4.45$
 (6.5 dBi), a small correction, as promised for a broadside beam. Either way the
 comparison holds: a $2\lambda$ line source is four times longer than a
-half-wave dipole, and it buys about 2.6 times the directivity with a beam three
-times narrower. For a long uniform line source $D \to 2L/\lambda$, directivity
-sold by the wavelength.
+half-wave dipole, and it gives about 2.6 times the directivity with a beam
+three times narrower. For a long uniform line source $D \to 2L/\lambda$, so
+directivity grows in proportion to the length in wavelengths.
 ::::
 
 ::::{frame} The catch: you have to know the current
@@ -980,8 +980,7 @@ antennas close to a ground plane or an airframe, you solve for the current
 numerically. The **method of moments** discretizes the structure, enforces the
 boundary condition on each segment, and solves a linear system for the segment
 currents; then it runs the very same radiation integral to get the pattern.
-That is literally what NEC is doing under the hood in the **Lesson 8
-simulation lab**.
+That is what NEC does in the **Lesson 8 simulation lab**.
 
 There is a measurement version of the same idea, too. Near-field scanning
 (Lesson 5, and Module 2's measurement labs) samples the field on a surface close

@@ -40,7 +40,7 @@ one that makes Module 3 possible.
 1. **Why a potential** — the detour through $\mathbf{A}$
 2. **The far-field approximation** — two approximations, not one
 3. **The radiation vector** $\mathbf{N}(\theta,\phi)$ — where the pattern lives
-4. **It's a Fourier transform** — and what that buys you
+4. **The Fourier transform pair** — current and pattern
 5. **Three current distributions** worth knowing cold
 
 ---
@@ -162,7 +162,7 @@ $$ \mathbf{A}(\mathbf{r}) = \frac{\mu e^{-jkr}}{4\pi r}\underbrace{\int_{V'} \ma
 | $\mathbf{N}(\theta,\phi)$ | direction | **everything** that makes this antenna different |
 
 Note:
-This split is the payoff of the lesson. Pattern, polarization, directivity,
+This split is the central result of the lesson. Pattern, polarization, directivity,
 sidelobes — all of it lives in N, and N is one integral over the currents.
 
 ---
@@ -173,7 +173,7 @@ Locally a plane wave → **no radial component**. Only the transverse parts radi
 
 $$ E_\theta = -j\omega\mu\frac{e^{-jkr}}{4\pi r}N_\theta, \qquad E_\phi = -j\omega\mu\frac{e^{-jkr}}{4\pi r}N_\phi, \qquad E_r \approx 0 $$
 
-$\mathbf{H}$ comes free from the plane-wave relation — no second integral:
+$\mathbf{H}$ follows from the plane-wave relation — no second integral:
 
 $$ \mathbf{H} = \frac{1}{\eta_0}\hat{\mathbf r}\times\mathbf{E}, \qquad U(\theta,\phi) = \frac{\eta_0 k^{2}}{32\pi^{2}}\left(|N_\theta|^{2} + |N_\phi|^{2}\right) $$
 
@@ -240,7 +240,7 @@ The far-field pattern is the <strong>Fourier transform of the current distributi
 | Transform property | Antenna consequence | Later |
 | :-- | :-- | :-- |
 | stretch → squeeze | longer aperture → **narrower beam**, $\theta_\text{HP}\approx 0.886\lambda/L$ | L15, L20 |
-| sharp edges → high frequencies | abrupt current cutoff → **high sidelobes**; taper buys them down | L24, L25 |
+| sharp edges → high frequencies | abrupt current cutoff → **high sidelobes**; a taper lowers them | L24, L25 |
 | multiply by a linear phase → shift | phase slope across the aperture → the **beam steers** | L18, L19 |
 | sampling → repetition | discrete elements → **grating lobes** | L16, L26 |
 | linearity | superposed currents → **pattern multiplication** | L16 |
@@ -265,7 +265,7 @@ Same length $L$, four ways to illuminate it:
 | cosine² | $-31.5$ dB | $1.44\ \lambda/L$ |
 
 <div class="callout">
-The distribution's <strong>shape</strong> sets the sidelobes, not its size — but the taper is never free: the beam comes out <strong>1.3 to 1.6 times wider</strong> than the uniform beam of the same length.
+The distribution's <strong>shape</strong> sets the sidelobes, not its size, and the taper widens the main beam to <strong>1.3 to 1.6 times</strong> the uniform beam of the same length.
 </div>
 
 Note:
@@ -284,7 +284,7 @@ $$ N_z = I_0 dl, \qquad N_\theta = -I_0 dl \sin\theta $$
 $$ E_\theta = \frac{j\eta_0 k I_0 dl \sin\theta}{4\pi r}e^{-jkr} $$
 
 <div class="callout">
-Exactly L5's $1/r$ term — the one that survived $kr\gg1$. A page of exact algebra there; one line here. Pattern $\sin\theta$, $D = 1.5$ (1.76 dBi).
+Exactly L5's $1/r$ term — the one that survived $kr\gg1$. L5 reached it through the exact spherical-wave fields; the radiation integral gives it directly. Pattern $\sin\theta$, $D = 1.5$ (1.76 dBi).
 </div>
 
 ---
@@ -316,7 +316,7 @@ $L = 2\lambda \Rightarrow kL/2 = 2\pi$
 | rule of thumb | $0.886\lambda/L$ | $25.4^{\circ}$ ✓ |
 
 <div class="callout">
-Double $L$ → beamwidth halves to $12.7^{\circ}$; sidelobes <strong>do not move</strong>. Beamwidth is bought with <strong>size</strong>, sidelobes with <strong>taper</strong>.
+Double $L$ → beamwidth halves to $12.7^{\circ}$; sidelobes <strong>do not move</strong>. Length sets the beamwidth; taper sets the sidelobe level.
 </div>
 
 ---
@@ -360,7 +360,7 @@ Assumptions that work:
 
 - **thin wires** → sinusoidal standing wave (used above)
 - **apertures** → assume the field in the opening (horns, reflectors — M2)
-- **arrays** → each element keeps its isolated pattern (M3, until mutual coupling bites)
+- **arrays** → each element keeps its isolated pattern (M3, until mutual coupling matters)
 
 When they fail: solve numerically — **method of moments**, then run this same integral. That is NEC, in **L8**.
 

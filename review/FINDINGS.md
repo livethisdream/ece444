@@ -123,7 +123,7 @@ Effective length ℓ_e (defined in half a clause), R_r = 80π²(ℓ/λ)² (R_rad
 **F-19 · P_rad = ∮U dΩ is stated but never once evaluated in Module 1**
 `book/module01/L02-antenna-properties/index.md` "Radiation intensity"; no worked example, deck example, or practice part integrates a pattern.
 Directivity is *defined* by that integral and L6 hands U(θ,φ) back to it; students can only use the 41,253 rule.
-**Fix:** One worked example — D of the sinθ doughnut integrated to 1.5 — in L2 or L6 Part 5.1, plus a matching practice part. *(PED-11.)*
+**Fix:** One worked example — D of the sinθ donut integrated to 1.5 — in L2 or L6 Part 5.1, plus a matching practice part. *(PED-11.)*
 
 ## Majors — structure and form vs Module 2 (9)
 
