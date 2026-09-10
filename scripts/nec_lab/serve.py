@@ -17,8 +17,9 @@ import json
 import math
 import os
 import socket
+import subprocess
+import sys
 import threading
-import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -301,6 +302,46 @@ def make_handler(api: Api):
     return Handler
 
 
+def _is_wsl() -> bool:
+    """WSL: a Linux userland with no Linux browser and a Windows one next door."""
+    if os.environ.get("WSL_DISTRO_NAME") or os.environ.get("WSL_INTEROP"):
+        return True
+    try:
+        return "microsoft" in Path("/proc/version").read_text().lower()
+    except OSError:
+        return False
+
+
+def _open_browser(url: str) -> None:
+    """Open the page, and above all do it quietly.
+
+    Under WSL, `webbrowser` reaches for xdg-open, which tries sixteen Linux
+    browsers that are not installed and prints a "not found" line for each. The
+    service started perfectly; the log reads like a crash. So the opener is
+    ours: hand the URL to Windows under WSL, use the platform's own opener
+    elsewhere, and if none of it works, say nothing -- the banner has already
+    printed the address, which is all the student needs.
+    """
+    if _is_wsl():
+        attempts = [["wslview", url],                       # wslu, if installed
+                    ["explorer.exe", url],                  # always present
+                    ["powershell.exe", "-NoProfile", "-Command",
+                     f"Start-Process '{url}'"]]
+    elif sys.platform == "darwin":
+        attempts = [["open", url]]
+    elif sys.platform == "win32":
+        attempts = [["cmd", "/c", "start", "", url]]
+    else:
+        attempts = [["xdg-open", url]]
+    for argv in attempts:
+        try:
+            subprocess.run(argv, stdout=subprocess.DEVNULL,
+                           stderr=subprocess.DEVNULL, timeout=15, check=False)
+            return
+        except (OSError, subprocess.TimeoutExpired):
+            continue
+
+
 def _in_container() -> bool:
     """Are we inside a container? Then our own addresses are not the ones to
     hand out -- students reach the host, on whatever port it published."""
@@ -365,13 +406,15 @@ def serve(host: str = "127.0.0.1", port: int = 8444, engine=None,
             print(f"    {u}")
         print("shared mode: students on the same network use the address above "
               "that matches this machine")
+    if _is_wsl():
+        print("      (WSL: open that address in your Windows browser)")
     if _in_container() and not public_url:
         print("note: this is a container -- the addresses above are the "
               "container's own.\n      Students need the host's address and "
               "the port it published. Set\n      NEC_LAB_PUBLIC_URL to have "
               "that printed here instead.")
     if open_browser:
-        threading.Timer(0.6, lambda: webbrowser.open(urls[0])).start()
+        threading.Timer(0.6, lambda: _open_browser(urls[0])).start()
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

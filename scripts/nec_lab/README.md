@@ -91,6 +91,24 @@ The browser opens on the tool. No admin rights, no command line, no
 installation step -- it uses the Python the machine already has, and says so
 plainly if there is none.
 
+### With uv
+
+`uv run` works and needs no venv of its own, because `run.py` carries PEP 723
+metadata with an empty dependency list -- the tool is standard library only:
+
+```sh
+uv run scripts/nec_lab/run.py serve                  # stdlib only
+uv run --with PyNEC scripts/nec_lab/run.py serve     # + the in-process engine
+```
+
+PyNEC is deliberately **not** in that metadata. It is the one piece that is not
+always a Python package -- on Windows the engine is the executable inside
+4nec2, and PyNEC cannot be built there at all -- so listing it would make
+`uv run` fail on exactly the machines the fallback exists for. `--with PyNEC`
+asks for it where it works.
+
+Tested on Python 3.10 (the floor `run.py` declares) as well as 3.11 and 3.12.
+
 ### Trying it on a Windows laptop first
 
 Worth knowing before you start, because Windows is the one place the engine
