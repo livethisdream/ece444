@@ -613,26 +613,28 @@ discover it by accident.
 :::{present}
 - $73 + j42.5\ \Omega$ is the impedance of a **sinusoid**, not a **wire**.
 - Exactly $\lambda/2$ is about 5% long: inductive, near $86 + j47\ \Omega$.
-- **End effect**: charge accumulates at the tips, so resonance moves shorter.
+- **End effect**: the tip current exceeds the sinusoid, raising the resistance.
 - Trimmed, the two agree within a few ohms.
 :::
 
-The number $73 + j42.5\ \Omega$ is the impedance of a **sinusoid**, not of a
-**wire**. A sinusoidal current resonates when the wire is about $0.486\lambda$
-long. A real wire has finite radius, stores energy in the near field around that
-radius, and resonates shorter, at roughly $0.473\lambda$ for the wire you are
-modeling today. A wire cut to exactly $\lambda/2$ is therefore already about 5%
-long, which makes it inductive and raises its resistance well up the curve.
-Expect something near $86 + j47\ \Omega$ from the simulator. That is not a 17%
-error in NEC, because the two numbers describe two different antennas. Step 6
-trims the wire to resonance, and once you do the two answers agree to within a
-couple of ohms.
+The number $73 + j42.5\ \Omega$ is the impedance of the assumed **sinusoid**
+at exactly $\lambda/2$, not of the **wire**. The solved current differs from
+the sinusoid near the tips and at the feed, and the impedance is read at the
+feed, where that difference is largest, so the resistance comes out near
+$86\ \Omega$. Both models agree on where the wire resonates: the sinusoid at
+about $0.476\lambda$ for this radius, which is where Lesson 7's reactance
+curve crosses zero, and the solved current at about $0.473\lambda$. A wire cut
+to exactly $\lambda/2$ is therefore about 5% long under either model, which
+is why both call it inductive. The $13\ \Omega$ of resistance is the current
+shape, not the length; it is the same gap Lesson 7 noted between the model's
+$63\ \Omega$ and a real dipole's $70\ \Omega$ at resonance, and trimming
+does not remove it.
 
-The second mechanism worth naming is the **end effect**. The assumed sinusoid
-goes to zero at the wire tips with a clean slope, while the real current
-approaches the tips more gradually because charge accumulates there. That
-larger current near the tips is visible in the convergence widget, and it is
-what pushes resonance shorter and resistance higher.
+The difference in current shape has a name, the **end effect**. The assumed
+sinusoid goes to zero at the wire tips with a clean slope, while the real
+current approaches the tips more gradually because charge accumulates there.
+That larger current near the tips is visible in the convergence widget, and it
+is what raises the resistance and moves resonance slightly shorter.
 
 ```{note}
 A useful habit for the rest of the course is this: whenever a simulation and a
@@ -655,7 +657,7 @@ once you make the two models match.
 | $\Delta$ against $a$ | lower bound on segment length, set by the thin-wire kernel | $\Delta > 8a$ |
 | Convergence | the answer stops moving under refinement, which is not the same as matching theory | change $< 1\%$ per doubling |
 | Average power gain | conservation-of-energy audit on a lossless free-space model | $1.000$, accept 0.95–1.05 |
-| $Z_{\text{in}}$ at exactly $\lambda/2$ | the wire is about 5% long, so it is inductive | near $86 + j47\ \Omega$ |
+| $Z_{\text{in}}$ at exactly $\lambda/2$ | inductive because the wire is about 5% long; the resistance is higher because the solved current is not the sinusoid | near $86 + j47\ \Omega$ |
 | Resonant length and gain | where $X_{\text{in}} = 0$, and the gain there | $\approx 0.473\lambda$, $2.15\ \text{dBi}$, $78^\circ$ |
 ::::
 

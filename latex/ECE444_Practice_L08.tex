@@ -121,14 +121,14 @@ $Z_{\text{in}} = 86.9 + j46.2 \ohms$ and a peak gain of 2.17 dBi.
 	\part In two or three sentences, account for the resistance difference. Name
 	the mechanism; ``simulation error'' is not an explanation.
 		\begin{solution}[1.3in]
-		The value $73 + j42.5 \ohms$ is the impedance of an assumed sinusoidal
-		current, and a sinusoid resonates when the wire is about $0.486\ \lambda$
-		long. A real wire has finite radius, stores energy in the near field
-		around that radius, and resonates shorter --- near $0.47\ \lambda$. A wire
-		cut to exactly $\lambda/2$ is therefore already about 5\% long: it is
-		inductive, and its resistance has already climbed well up the steep part
-		of the $R_{\text{in}}$ versus length curve. The two numbers describe two
-		different antennas, not one antenna and one error.
+		The value $73 + j42.5 \ohms$ is the impedance of the assumed sinusoidal
+		current at exactly $\lambda/2$, not of the wire. The solved current
+		differs from the sinusoid near the tips and at the feed, and the impedance
+		is read at the feed, where that difference is largest, so the resistance
+		comes out near $87 \ohms$. Both models put resonance near $0.47$ to
+		$0.48\ \lambda$, so a wire cut to exactly $\lambda/2$ is about 5\% long
+		under either one, which is why both call it inductive. The resistance gap
+		is the current shape, not the length, and trimming does not remove it.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
