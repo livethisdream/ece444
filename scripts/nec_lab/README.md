@@ -190,6 +190,17 @@ came out right.
   rows where refinement has pushed the segment length below `8a`.
 - **Compare with a measurement** — load a chamber CSV and it is drawn over the
   simulated cut, with the RMS and worst-case difference reported.
+- **3D pattern** — gain over the whole sphere as a surface you can orbit, with
+  the wire drawn to scale at the center so the nulls have something to be
+  along. The radius scale is a choice and it matters: **linear power** is the
+  donut from the lesson, **linear field** is the same shape with the lobes
+  fattened, and **a dB radius** pushes everything far from the peak outward
+  until a dipole looks nearly round -- right for reading sidelobes, misleading
+  about a beam. The color is gain in dBi under all three. A 5 degree grid is
+  2701 directions and solves in under a tenth of a second; 2 degrees is 16471
+  and takes about a quarter. Exports as its own CSV (theta, phi, gain), not the
+  cut file -- the chamber importer keys on a single angle column and a sphere
+  has two.
 - **NEC input file** — the deck, to read, to edit, to run, and to copy.
 
 It binds `127.0.0.1`, and the cards it will run are only the ones it can read
@@ -287,7 +298,7 @@ the *why* column empty, which is the part that is the student's to write.
 | `cards.py` | reading cards back: the parser, the field glosses, the complaints |
 | `engine.py` | the two backends and the shared result types |
 | `study.py` | sweep, resonance, trim, convergence, energy audit |
-| `export.py` | chamber-shaped CSV, JSON, the comparison table |
+| `export.py` | chamber-shaped CSV, the sphere CSV, JSON, the comparison table |
 | `cli.py` | the command line |
 | `run.py` | launcher, so `run.py` works from any directory |
 | `serve.py` | the JSON API and static server behind the GUI |

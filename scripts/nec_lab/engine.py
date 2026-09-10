@@ -91,6 +91,33 @@ class Cut:
 
 
 @dataclass
+class Surface:
+    """Gain over the whole sphere: a grid, not a cut.
+
+    Stored as `gain_dbi[i_theta][i_phi]` with the two angle axes beside it, so
+    the page can walk it as a mesh and the CSV can walk it as rows.
+    """
+
+    freq_hz: float
+    theta_deg: list[float]
+    phi_deg: list[float]
+    gain_dbi: list[list[float]]
+
+    @property
+    def peak_dbi(self) -> float:
+        return max(max(row) for row in self.gain_dbi)
+
+    @property
+    def peak_direction(self) -> tuple[float, float]:
+        best, where = -1e9, (0.0, 0.0)
+        for i, row in enumerate(self.gain_dbi):
+            for j, g in enumerate(row):
+                if g > best:
+                    best, where = g, (self.theta_deg[i], self.phi_deg[j])
+        return where
+
+
+@dataclass
 class Solution:
     """One frequency, one geometry: impedance, cuts, and the energy audit."""
 
@@ -199,6 +226,21 @@ class PyNecEngine:
             sol.cuts.append(Cut(r.name, sol.freq_hz, r.swept_axis,
                                 [float(a) for a in angle], g, th, ph))
         return sol
+
+    def surface(self, model: Model, request: PatternRequest) -> Surface:
+        ctx = self._context(model)
+        ctx.fr_card(0, 1, model.freq_mhz, 0.0)
+        ctx.rp_card(0, request.n_theta, request.n_phi, 1, 0, 0, 0,
+                    request.theta_start, request.phi_start,
+                    request.d_theta, request.d_phi, 0.0, 0.0)
+        rp = ctx.get_radiation_pattern(0)
+        gains = rp.get_gain()
+        return Surface(
+            freq_hz=float(rp.get_frequency()),
+            theta_deg=[float(t) for t in rp.get_theta_angles()],
+            phi_deg=[float(p) for p in rp.get_phi_angles()],
+            gain_dbi=[[float(g) for g in row] for row in gains],
+        )
 
     def sweep(self, model: Model, sweep: Sweep) -> list[SweepPoint]:
         ctx = self._context(model)
@@ -410,6 +452,24 @@ class ExecutableEngine:
             angle = th if r.swept_axis == "theta" else ph
             sol.cuts.append(Cut(r.name, sol.freq_hz, r.swept_axis, angle, g, th, ph))
         return sol
+
+    def surface(self, model: Model, request: PatternRequest) -> Surface:
+        deck = model.deck(requests=(request,))
+        blocks = self.parse(self._run_deck(deck))
+        if not blocks or not blocks[0]["patterns"]:
+            raise EngineError("NEC ran but wrote no pattern rows")
+        rows = blocks[0]["patterns"][0]
+        thetas = [request.theta_start + k * request.d_theta
+                  for k in range(request.n_theta)]
+        phis = [request.phi_start + k * request.d_phi
+                for k in range(request.n_phi)]
+        # Index by the angles NEC printed rather than by row order: the output
+        # file is free to loop theta or phi on the inside, and a guess that is
+        # wrong transposes the pattern silently.
+        lookup = {(round(t, 3), round(p, 3)): g for t, p, g in rows}
+        grid = [[lookup.get((round(t, 3), round(p, 3)), -999.99) for p in phis]
+                for t in thetas]
+        return Surface(blocks[0]["freq_hz"], thetas, phis, grid)
 
     def sweep(self, model: Model, sweep: Sweep) -> list[SweepPoint]:
         deck = model.deck(sweep=sweep)

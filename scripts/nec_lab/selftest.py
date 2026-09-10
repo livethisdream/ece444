@@ -20,7 +20,8 @@ import sys
 
 from . import cards, export, study
 from .engine import ExecutableEngine, PyNecEngine
-from .model import E_PLANE, H_PLANE, Model, SPHERE_AVG, Sweep, wavelength
+from .model import (E_PLANE, H_PLANE, Model, SPHERE_AVG, Sweep,
+                    sphere_request, wavelength)
 
 FAILURES: list[str] = []
 
@@ -125,6 +126,45 @@ def run() -> int:
         check("trimmed length agrees to 0.0005 lambda",
               near(a_trim["resonant_length_lambda"],
                    b_trim["resonant_length_lambda"], 5e-4))
+
+    print("\nthe whole sphere")
+    surfaces = {}
+    for eng in engines:
+        surf = eng.surface(model, sphere_request(10.0))
+        surfaces[eng.name] = surf
+        theta, phi = surf.peak_direction
+        check(f"{eng.name}: the grid is the size the RP card asked for",
+              len(surf.theta_deg) == 19 and len(surf.phi_deg) == 37,
+              f"{len(surf.theta_deg)} x {len(surf.phi_deg)}")
+        check(f"{eng.name}: the sphere's peak is the cut's peak",
+              near(surf.peak_dbi, results[eng.name][0].cuts[0].peak_dbi, 0.01),
+              f"{surf.peak_dbi:.3f} dBi at theta {theta:.0f}")
+        check(f"{eng.name}: peak is broadside to the wire", near(theta, 90.0, 0.1))
+        # A wire along z radiates the same in every phi. If it does not, the
+        # grid has been transposed somewhere between NEC and here.
+        ripple = max(max(row) - min(row) for row in surf.gain_dbi[1:-1])
+        check(f"{eng.name}: gain does not vary with phi for a z-directed wire",
+              ripple < 0.01, f"ripple {ripple:.4f} dB")
+        # The null is on the wire axis, which is the whole point of the picture.
+        pole = max(surf.gain_dbi[0])
+        check(f"{eng.name}: the null is along the wire",
+              pole < surf.peak_dbi - 30, f"{pole:.1f} dBi at theta 0")
+
+    if len(engines) > 1:
+        a, b = surfaces[engines[0].name], surfaces[engines[1].name]
+        worst = max(abs(x - y) for ra, rb in zip(a.gain_dbi, b.gain_dbi)
+                    for x, y in zip(ra, rb) if x > -100 and y > -100)
+        check("the two engines agree over the whole sphere", worst < 0.02,
+              f"worst {worst:.4f} dB")
+
+    surf = surfaces[engines[0].name]
+    sphere_text = export.sphere_csv(surf, provenance="selftest")
+    body = [ln for ln in sphere_text.splitlines() if not ln.startswith("#")]
+    check("the sphere CSV has a row per direction",
+          len(body) - 1 == len(surf.theta_deg) * len(surf.phi_deg),
+          f"{len(body) - 1} rows")
+    check("the sphere CSV names both angles",
+          body[0].split(",")[:2] == ["theta_deg", "phi_deg"], body[0])
 
     print("\nreading cards back")
     deck = model.deck(requests=(E_PLANE, H_PLANE, SPHERE_AVG))

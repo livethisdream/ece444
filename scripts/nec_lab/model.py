@@ -133,6 +133,19 @@ SPHERE_AVG = PatternRequest("sphere", theta_start=0.0, n_theta=19, d_theta=10.0,
                             phi_start=0.0, n_phi=36, d_phi=10.0, average=True)
 
 
+def sphere_request(step_deg: float = 5.0, name: str = "sphere") -> PatternRequest:
+    """A whole-sphere RP card: theta 0-180 and phi 0-360 on one grid.
+
+    The same card the lab already uses for the energy audit, asked at a step
+    fine enough to draw. NEC has always computed this -- the cuts are what we
+    were choosing to look at.
+    """
+    n_theta = int(round(180.0 / step_deg)) + 1
+    n_phi = int(round(360.0 / step_deg)) + 1
+    return PatternRequest(name, theta_start=0.0, n_theta=n_theta, d_theta=step_deg,
+                          phi_start=0.0, n_phi=n_phi, d_phi=step_deg)
+
+
 @dataclass(frozen=True)
 class Sweep:
     """One FR card: `n` frequencies from `start_mhz` in `step_mhz` steps."""

@@ -124,6 +124,37 @@
       <div class="status" id="compare">&nbsp;</div>
     </section>
 
+    <section class="panel">
+      <h2>3D pattern</h2>
+      <div class="row three">
+        <div><label for="smode">Radius</label>
+             <select id="smode">
+               <option value="pow" selected>linear power</option>
+               <option value="field">linear field</option>
+               <option value="db">dB, floored</option>
+             </select></div>
+        <div><label for="sstep">Grid step (deg)</label>
+             <select id="sstep"><option>10</option><option selected>5</option>
+                                <option>2</option></select></div>
+        <div><label for="srange">Range (dB)</label>
+             <select id="srange"><option>20</option><option selected>30</option>
+                                 <option>40</option></select></div>
+      </div>
+      <div class="row"><button id="draw3d">Draw sphere</button></div>
+      <canvas id="sphere" aria-label="Gain over the whole sphere, as a surface whose radius is the gain in each direction"></canvas>
+      <div class="status" id="s3d">Drag to rotate, scroll to zoom.</div>
+      <div class="row"><button id="exsph" class="ghost">Sphere CSV</button></div>
+      <p class="note">The radius in each direction is the gain in that
+      direction and the color is the same number, always in dBi. <strong>The
+      radius scale changes the shape, not the pattern</strong>: linear power is
+      the donut from the lesson, and a dB radius inflates everything far from
+      the peak until a dipole looks nearly round &mdash; useful for reading
+      sidelobes, misleading about beam shape. The wire is drawn to scale at the
+      center, so the nulls along its axis are the ones you can see. This is one
+      more <code>RP</code> card than a cut &mdash; NEC has always computed the
+      sphere.</p>
+    </section>
+
     <section class="panel" id="conv-panel" hidden>
       <h2>Convergence</h2>
       <table id="conv"></table>

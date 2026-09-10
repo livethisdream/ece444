@@ -22,7 +22,7 @@ import json
 import math
 from dataclasses import asdict, is_dataclass
 
-from .engine import Cut, Solution, SweepPoint
+from .engine import Cut, Solution, Surface, SweepPoint
 from .reference import HALF_WAVE
 
 
@@ -41,6 +41,26 @@ def pattern_csv(cuts: list[Cut], provenance: str = "") -> str:
                         f"{cut.gain_dbi[i]:.4f}",
                         f"{cut.theta_deg[i]:.4f}" if cut.theta_deg else "",
                         f"{cut.phi_deg[i]:.4f}" if cut.phi_deg else ""])
+    return buf.getvalue()
+
+
+def sphere_csv(surface: Surface, provenance: str = "") -> str:
+    """The whole sphere, one row per direction.
+
+    Deliberately its own file rather than more rows in the cut export: the
+    chamber importer keys on a single angle column, and a sphere has two. This
+    is for a 3D plot, a solid-angle integration, or a student's own analysis.
+    """
+    buf = io.StringIO()
+    if provenance:
+        for line in provenance.strip().splitlines():
+            buf.write(f"# {line}\n")
+    w = csv.writer(buf, lineterminator="\n")
+    w.writerow(["theta_deg", "phi_deg", "freq_hz", "gain_dbi"])
+    for i, theta in enumerate(surface.theta_deg):
+        for j, phi in enumerate(surface.phi_deg):
+            w.writerow([f"{theta:.3f}", f"{phi:.3f}", f"{surface.freq_hz:.0f}",
+                        f"{surface.gain_dbi[i][j]:.4f}"])
     return buf.getvalue()
 
 

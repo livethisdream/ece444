@@ -25,7 +25,8 @@ from pathlib import Path
 
 from . import cards, export, study
 from .engine import EngineError
-from .model import E_PLANE, H_PLANE, Model, SPHERE_AVG, Sweep, wavelength
+from .model import (E_PLANE, H_PLANE, Model, SPHERE_AVG, Sweep,
+                    sphere_request, wavelength)
 from .reference import HALF_WAVE
 
 STATIC = Path(__file__).parent / "static"
@@ -221,6 +222,36 @@ class Api:
         rows = study.convergence(self.engine, model, counts)
         return {"rows": [r.__dict__ for r in rows]}
 
+    def sphere(self, req: dict) -> dict:
+        """Gain over the whole sphere, for the 3D view."""
+        model = _model(req)
+        step = float(req.get("step_deg", 5.0))
+        step = min(max(step, 1.0), 15.0)
+        surf = self.engine.surface(model, sphere_request(step))
+        theta, phi = surf.peak_direction
+        return {
+            "ok": True,
+            "freq_hz": surf.freq_hz,
+            "step_deg": step,
+            "theta_deg": surf.theta_deg,
+            "phi_deg": surf.phi_deg,
+            "gain_dbi": surf.gain_dbi,
+            "peak_dbi": surf.peak_dbi,
+            "peak_theta_deg": theta,
+            "peak_phi_deg": phi,
+            "geometry": _geometry(model),
+            "deck": model.deck(requests=(sphere_request(step),)),
+        }
+
+    def export_sphere(self, req: dict) -> dict:
+        model = _model(req)
+        step = min(max(float(req.get("step_deg", 5.0)), 1.0), 15.0)
+        surf = self.engine.surface(model, sphere_request(step))
+        prov = (f"ECE 444 nec_lab -- {self.engine.describe()}\n"
+                + model.deck().strip().replace("\n", " | "))
+        return {"filename": f"nec_lab_sphere_{model.freq_mhz:.0f}MHz.csv",
+                "text": export.sphere_csv(surf, provenance=prov)}
+
     def export_pattern(self, req: dict) -> dict:
         model = _model(req)
         sol = self.engine.solve(model, _requests_for(req))
@@ -271,7 +302,8 @@ def make_handler(api: Api):
         def do_POST(self):
             name = self.path.split("?")[0].removeprefix("/api/")
             fn = {"solve": api.solve, "sweep": api.sweep, "trim": api.trim,
-                  "deck": api.deck,
+                  "deck": api.deck, "sphere": api.sphere,
+                  "export/sphere": api.export_sphere,
                   "converge": api.converge, "export/pattern": api.export_pattern,
                   "export/sweep": api.export_sweep}.get(name)
             if fn is None:
