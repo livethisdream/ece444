@@ -389,24 +389,25 @@ still helpful to be in the habit of specifying which one you mean, because for
 the lossy antennas in Module 4 they diverge significantly.
 ::::
 
-::::{frame} Why Double the Wire?
+::::{frame} From Short to Half-Wave
 :::{present}
-- Beamwidth $90^\circ$ to $78^\circ$; directivity $1.76$ to $2.15\ \text{dBi}$.
-- **Pattern**: how many wavelengths of current fit on the wire.
+- Beamwidth $90^\circ$ to $78^\circ$; directivity $1.76$ to $2.15\ \text{dBi}$, up $0.39\ \text{dB}$.
+- **Pattern**: how many wavelengths of current fit the wire.
 - **Impedance**: where the current maximum sits relative to the feed.
 - Half a wavelength puts the current maximum at the feed.
 :::
 
-Now look at what doubling the wire actually gained us: the beamwidth went from
-$90^\circ$ to $78^\circ$ and the directivity went from $1.76$ to
-$2.15\ \text{dBi}$. **Doubling the wire brought 0.39 dB of directivity.**
+Now look at what lengthening the wire from a small fraction of a wavelength
+to $\lambda/2$ actually gained us: the beamwidth went from $90^\circ$ to
+$78^\circ$ and the directivity went from $1.76$ to $2.15\ \text{dBi}$.
+**Lengthening the wire brought 0.39 dB of directivity.**
 
 :::{callout}
 A dipole's **pattern** is set by how many wavelengths of current fit on the
 wire. Its **impedance** is set by where the current maximum sits relative to
 the feed. Half a wavelength is the optimal length because it puts the
-current maximum right at the feed point, and it costs only 0.39 dB of
-directivity to implement.
+current maximum right at the feed point, and the pattern is within 0.39 dB
+of the short dipole's.
 :::
 ::::
 
