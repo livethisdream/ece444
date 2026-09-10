@@ -161,8 +161,7 @@ the two changes a link budget by 4.3 dB.
 
 $$R_r = 80\pi^2 \left(\frac{L}{\lambda}\right)^2$$
 
-**The pattern is already almost as good as it gets. The impedance is the
-problem.**
+- On a $50\ \Omega$ line, $2\ \Omega$ gives $\vert\Gamma\vert = 0.92$ and VSWR 25: 85% of the power reflects.
 :::
 
 Lesson 6 handled the **infinitesimal dipole** — a current element so short that
@@ -390,24 +389,25 @@ still helpful to be in the habit of specifying which one you mean, because for
 the lossy antennas in Module 4 they diverge significantly.
 ::::
 
-::::{frame} Why Double the Wire?
+::::{frame} From Short to Half-Wave
 :::{present}
-- Beamwidth $90^\circ$ to $78^\circ$; directivity $1.76$ to $2.15\ \text{dBi}$.
-- **Pattern**: how many wavelengths of current fit on the wire.
+- Beamwidth $90^\circ$ to $78^\circ$; directivity $1.76$ to $2.15\ \text{dBi}$, up $0.39\ \text{dB}$.
+- **Pattern**: how many wavelengths of current fit the wire.
 - **Impedance**: where the current maximum sits relative to the feed.
 - Half a wavelength puts the current maximum at the feed.
 :::
 
-Now look at what doubling the wire actually gained us: the beamwidth went from
-$90^\circ$ to $78^\circ$ and the directivity went from $1.76$ to
-$2.15\ \text{dBi}$. **Doubling the wire brought 0.39 dB of directivity.**
+Now look at what lengthening the wire from a small fraction of a wavelength
+to $\lambda/2$ actually gained us: the beamwidth went from $90^\circ$ to
+$78^\circ$ and the directivity went from $1.76$ to $2.15\ \text{dBi}$.
+**Lengthening the wire brought 0.39 dB of directivity.**
 
 :::{callout}
 A dipole's **pattern** is set by how many wavelengths of current fit on the
 wire. Its **impedance** is set by where the current maximum sits relative to
 the feed. Half a wavelength is the optimal length because it puts the
-current maximum right at the feed point, and it costs only 0.39 dB of
-directivity to implement.
+current maximum right at the feed point, and the pattern is within 0.39 dB
+of the short dipole's.
 :::
 ::::
 
@@ -436,10 +436,7 @@ result that we name but do not re-derive.
 
 ::::{frame} The Radiation Resistance
 :::{present}
-**The resistor that would burn the radiated power.** Square the half-wave
-pattern, with $u = \pi/2$, and sum it over the sphere.
-
-$$\begin{aligned} P_\text{rad} &= \tfrac{1}{2}\vert I_m \vert^2 R_r = \oint U\ d\Omega \\ U(\theta) &= \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos(u\cos\theta)}{\sin\theta}\right]^2 \\ P_\text{rad} &= \frac{\eta_0 \vert I_m \vert^2}{4\pi} \\ &\qquad\times \int_0^\pi \frac{\cos^2(u\cos\theta)}{\sin\theta}\ d\theta \end{aligned}$$
+$$\begin{aligned} P_\text{rad} &= \tfrac{1}{2}\vert I_m \vert^2 R_r = \oint U\ d\Omega \\ U &= \frac{\eta_0 k^2}{32\pi^2}\ \vert N_\theta\vert^2 \quad \text{(Lesson 6)} \\ &= \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos(u\cos\theta)}{\sin\theta}\right]^2 \\ P_\text{rad} &= \frac{\eta_0 \vert I_m \vert^2}{4\pi} \\ &\qquad\times \int_0^\pi \frac{\cos^2(u\cos\theta)}{\sin\theta}\ d\theta \end{aligned}$$
 :::
 
 The pattern is only half of the analysis. What the transmitter actually sees is the
@@ -449,10 +446,26 @@ reactance from one standard result we will name but not re-derive.
 
 **Radiation resistance** is defined by asking what resistor, carrying the same
 current, would dissipate the power the antenna radiates. If we can compute
-$P_\text{rad}$, we can find $R_r$. Start from the half-wave pattern. The
-radiation intensity of the half-wave dipole is
+$P_\text{rad}$, we can find $R_r$. Start from the half-wave pattern, and
+this time keep the constants. Lesson 6 gave the radiation intensity in terms
+of the radiation vector,
 
-$$U(\theta) = \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right]^2$$
+$$U = \frac{\eta_0 k^2}{32\pi^2}\left(\vert N_\theta\vert^2 + \vert N_\phi\vert^2\right),$$
+
+and for the dipole $N_\phi = 0$ while Step 3 gave $N_\theta = -N_z\sin\theta$.
+With the Step 2 result for $N_z$ at $L = \lambda/2$,
+
+$$N_\theta = -\frac{2 I_m}{k}\ \frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}.$$
+
+Square it and multiply by the Lesson 6 constant. The $k^2$ cancels, which is
+why the radiation resistance of a half-wave dipole depends on the shape
+$\lambda/2$ and not on the frequency:
+
+$$U(\theta) = \frac{\eta_0 k^2}{32\pi^2}\cdot\frac{4\vert I_m\vert^2}{k^2}\left[\frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right]^2 = \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right]^2$$
+
+The $\vert I_m\vert^2$ out front is what makes the last step work: dividing
+$P_\text{rad}$ by $\tfrac{1}{2}\vert I_m\vert^2$ leaves a resistance with no
+current in it.
 
 The radiated power is that intensity integrated over the whole sphere.
 Nothing depends on $\phi$, so the azimuth integral simply contributes $2\pi$:
@@ -480,12 +493,15 @@ $\text{erf}$ in probability: the integral is important enough that somebody
 tabulated it, gave it a name, and moved on. Antenna work leans on three such
 **special functions**, and we will use all of them again:
 
-$$C_{in}(x) = \int_0^x \frac{1 - \cos u}{u}\ du \qquad Si(x) = \int_0^x \frac{\sin u}{u}\ du \qquad Ci(x) = -\int_x^\infty \frac{\cos u}{u}\ du$$
+$$\begin{aligned} C_{in}(x) &= \int_0^x \frac{1 - \cos u}{u}\ du \\ Si(x) &= \int_0^x \frac{\sin u}{u}\ du \\ Ci(x) &= -\int_x^\infty \frac{\cos u}{u}\ du \end{aligned}$$
 
+$Si$ is the sine integral, $Ci$ the cosine integral, and $C_{in}$ the modified
+cosine integral; the last two are one function apart,
+$C_{in}(x) = \gamma + \ln x - Ci(x)$ with $\gamma = 0.5772$, Euler's constant.
 Look them up, or let a calculator evaluate them; do not try to integrate them.
 The solution function we need for this integral is:
 
-$$\int_0^\pi \frac{\cos^2\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta = \frac{1}{2}C_{in}(2\pi) = 1.2188$$
+$$\int_0^\pi \frac{\cos^2\left(\tfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\ d\theta = \tfrac{1}{2}C_{in}(2\pi) \\ = 1.2188$$
 
 Equate the two expressions for $P_\text{rad}$; the $\vert I_m \vert^2$ cancels
 and the antenna's current level drops out, as it must. Since
@@ -505,9 +521,10 @@ though the current-maximum resistance is a moderate $199\ \Omega$.
 :::{present}
 - A far-field power integral counts only power that leaves.
 - Reactance is near-field energy, so it takes the **induced-EMF method**.
-- The result depends on wire radius, except at $\lambda/2$, where $\sin(kL) = 0$.
-
-$$\begin{aligned} X &= \frac{\eta_0}{4\pi}Si(2\pi) \\ &= 29.98 \times 1.4182 = 42.5\ \Omega \end{aligned}$$
+- At $\lambda/2$, $\sin kL = 0$ and every wire-radius term drops out.
+:::
+:::{present}
+$$\begin{aligned} X_m &= \tfrac{\eta_0}{4\pi}\big\lbrace 2Si(kL) \\ &\ + \cos kL\ [2Si(kL) - Si(2kL)] \\ &\ - \sin kL\ [2Ci(kL) - Ci(2kL) \\ &\qquad\qquad - Ci(2ka^2/L)]\big\rbrace \\ X &= \tfrac{\eta_0}{4\pi}Si(2\pi) = 42.5\ \Omega \end{aligned}$$
 :::
 
 A far-field power integral can only ever produce the real part — it accounts
@@ -518,9 +535,9 @@ integration will produce it.
 Finding the reactance requires a different technique. We will use the
 **induced-EMF method**, in which we integrate the field the antenna reflects
 back against its own current, along the wire. That is a near-field
-calculation, and we are not going to carry it out here. Its general result
-contains $Si$, $Ci$, and the wire radius $a$ — meaning that **the reactance of
-a dipole normally depends on how thick the wire is**.
+calculation, and the derivation frame below sets it up and states its general
+result. That result contains $Si$, $Ci$, and the wire radius $a$ — meaning
+that **the reactance of a dipole normally depends on how thick the wire is**.
 
 At exactly $L = \lambda/2$ that dependence disappears. Every term containing the
 wire radius is multiplied by $\sin(kL)$, and at $kL = \pi$,
@@ -540,7 +557,7 @@ everywhere, but cross at $\lambda/2$.
 Put the two halves side by side and the whole impedance is one line, built from
 two tabulated numbers:
 
-$$Z_{\text{in}} = \frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] = 29.98\left(2.4376 + j1.4182\right) = 73.1 + j42.5\ \Omega$$
+$$\begin{aligned} Z_{\text{in}} &= \frac{\eta_0}{4\pi}\left[C_{in}(2\pi) + j\ Si(2\pi)\right] \\ &= 29.98\left(2.4376 + j1.4182\right) \\ &= 73.1 + j42.5\ \Omega \end{aligned}$$
 
 So read the two parts separately. The $73\ \Omega$ is power leaving and never
 coming back — the whole point of the antenna. The $+j42.5\ \Omega$ is the
@@ -555,6 +572,71 @@ cares a great deal, because it depends on the current right at the feed and on
 the near fields close to the wire. This is the main reason a simulator will not
 return exactly $73 + j42.5\ \Omega$. Measuring how large that disagreement is,
 and deciding whether it matters, is the work of Lesson 8.
+::::
+
+::::{frame} Derivation: Input Impedance by the Induced-EMF Method
+:class: read-only
+
+**What the method does.** The far-field route cannot see the reactance, so
+this one stays close to the wire. Assume the same sinusoidal current on the
+surface of a wire of radius $a$, compute the electric field that current
+produces along the wire's own surface, $E_z(\rho = a, z')$, from the exact
+vector potential with the full $1/R$ kernel rather than the far-field
+approximation, and integrate that field against the current. The result is
+the impedance referred to the current maximum,
+
+$$Z_m = -\frac{1}{\vert I_m\vert^2}\int_{-L/2}^{L/2} E_z(a, z')\ I(z')\ dz' .$$
+
+The physical reading is that $-\tfrac{1}{2}\int E_z I\ dz'$ is the complex
+power the current delivers to its own field: the real part leaves as
+radiation, the imaginary part is stored and returned each cycle. Dividing by
+$\tfrac{1}{2}\vert I_m\vert^2$ turns that power into an impedance. The
+integration is long and is in Balanis, Chapter 8; the general result is what
+matters here.
+
+**The general result.** With $\gamma = 0.5772$, Euler's constant,
+
+$$\begin{aligned} R_m &= \tfrac{\eta_0}{2\pi}\big\lbrace \gamma + \ln(kL) - Ci(kL) \\ &\quad + \tfrac{1}{2}\sin kL\ [Si(2kL) - 2Si(kL)] \\ &\quad + \tfrac{1}{2}\cos kL\ [\gamma + \ln(kL/2) \\ &\qquad\qquad + Ci(2kL) - 2Ci(kL)]\big\rbrace \end{aligned}$$
+
+$$\begin{aligned} X_m &= \tfrac{\eta_0}{4\pi}\big\lbrace 2Si(kL) \\ &\ + \cos kL\ [2Si(kL) - Si(2kL)] \\ &\ - \sin kL\ [2Ci(kL) - Ci(2kL) \\ &\qquad\qquad - Ci(2ka^2/L)]\big\rbrace \end{aligned}$$
+
+Both are referred to the current maximum. The feed sees
+$Z_\text{in} = Z_m / \sin^2(kL/2)$, which is the same thing at $\lambda/2$
+and larger for a shorter wire, where the feed sits below the current maximum.
+
+**The special functions.** $Si$ is the **sine integral**, $Ci$ the **cosine
+integral**, and $C_{in}$ the **modified cosine integral**, and they are one
+family:
+
+$$\begin{aligned} Si(x) &= \int_0^x \frac{\sin u}{u}\ du \\ Ci(x) &= -\int_x^\infty \frac{\cos u}{u}\ du \\ C_{in}(x) &= \gamma + \ln x - Ci(x) \end{aligned}$$
+
+**At $L = \lambda/2$.** Then $kL = \pi$, $\sin kL = 0$, and $\cos kL = -1$.
+Every bracket multiplied by $\sin kL$ vanishes, and the wire radius, which
+appears only inside one of them, drops out. What survives is
+
+$$\begin{aligned} R_m &= \tfrac{\eta_0}{2\pi}\big\lbrace \gamma + \ln\pi - Ci(\pi) \\ &\qquad - \tfrac{1}{2}[\gamma + \ln(\pi/2) \\ &\qquad\qquad + Ci(2\pi) - 2Ci(\pi)]\big\rbrace \\ &= \tfrac{\eta_0}{4\pi}[\gamma + \ln(2\pi) - Ci(2\pi)] \\ &= \tfrac{\eta_0}{4\pi}C_{in}(2\pi) = 73.1\ \Omega \\ X_m &= \tfrac{\eta_0}{4\pi}\big\lbrace 2Si(\pi) - [2Si(\pi) - Si(2\pi)]\big\rbrace \\ &= \tfrac{\eta_0}{4\pi}Si(2\pi) = 42.5\ \Omega \end{aligned}$$
+
+The resistance is the same $73.1\ \Omega$ the far-field power integral gave,
+from a near-field calculation that shares nothing with it but the assumed
+current. That agreement is a check on both routes.
+
+**Off $\lambda/2$, the radius matters.** Solving $X_\text{in} = 0$ from the
+general result gives the resonant length and the feed resistance there:
+
+| $a/\lambda$ | $L/2a$ at resonance | Resonant length | $R_\text{in}$ |
+| :-- | :-- | :-- | :-- |
+| 0.0001 | 2400 | $0.485\lambda$ | $67\ \Omega$ |
+| 0.001 | 240 | $0.479\lambda$ | $65\ \Omega$ |
+| 0.002 | 120 | $0.476\lambda$ | $63\ \Omega$ |
+| 0.005 | 47 | $0.470\lambda$ | $61\ \Omega$ |
+| 0.01 | 23 | $0.463\lambda$ | $59\ \Omega$ |
+
+A thicker wire resonates shorter, which is the "Why Shorter?" frame with
+numbers on it. The $0.002\lambda$ row is the Smith chart widget's wire, and
+its $63\ \Omega$ is the number the chart reads at the resonant crossing. The
+resistances run below the $70\ \Omega$ a bench measures because the
+sinusoidal current is an approximation once the wire is off $\lambda/2$, and
+Lesson 8 measures that gap.
 ::::
 
 ::::{frame} Resonance
@@ -600,7 +682,8 @@ Both effects slow the wave traveling on the wire relative to free space, and a
 slower wave needs less physical length to fit the same electrical half
 wavelength. For ordinary wire the answer lands in the range
 $0.47\lambda$ to $0.48\lambda$, and the resistance drops with the length, to
-roughly $70\ \Omega$.
+roughly $70\ \Omega$. The induced-EMF derivation frame above tabulates both
+against wire radius from the general result.
 ::::
 
 ::::{frame} The 5% Rule
@@ -763,7 +846,14 @@ Each phase reversal past $\lambda/2$ adds a pair of lobes.
 Keep stretching the wire past $\lambda/2$ and the standing wave develops
 **phase reversals**: sections of the wire carry current in the opposite
 direction. Reversed current radiates out of phase with the rest, the
-contributions interfere, and the single donut breaks into lobes. Below
+contributions interfere, and the single donut breaks into lobes. The
+radiation integral is linear, so this is exact in the language of the recap
+frame: a $1.5\lambda$ wire is three half-wave sections carrying $+, -, +$, the
+half-wave pattern is the element factor, and the three sections at
+$\lambda/2$ spacing with alternating signs are a space factor, which Lesson 16
+would call a three-element array with $180^\circ$ progressive phase. The
+element factor's null on the axis is why the lobes lean toward the wire
+without reaching it. Below
 $\lambda/2$ nothing changes; above $1.25\lambda$ the main lobes move off
 broadside, so a single broadside beamwidth is meaningless at $1.5\lambda$.
 

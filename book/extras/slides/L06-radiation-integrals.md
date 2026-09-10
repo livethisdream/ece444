@@ -20,13 +20,13 @@ Fall 2026 · Dr. Neil Rogers
 
 ---
 
-## Where we were
+## Where We Were
 
 - L2: gain, directivity, pattern — all **given** to us
 - L4: the **terminals** — what the radio sees
 - L5: **where** the far field starts, $r \ge 2D^{2}/\lambda$
 
-Today: stop taking the pattern as given. **Compute it** — from the current on the antenna.
+Today: **compute the pattern** from the current on the antenna
 
 Note:
 Every pattern so far has been handed to us: measured, or off a datasheet. Today
@@ -35,17 +35,17 @@ one that makes Module 3 possible.
 
 ---
 
-## Today's plan
+## Today's Plan
 
 1. **Why a potential** — the detour through $\mathbf{A}$
 2. **The far-field approximation** — two approximations, not one
 3. **The radiation vector** $\mathbf{N}(\theta,\phi)$ — where the pattern lives
-4. **It's a Fourier transform** — and what that buys you
+4. **The Fourier transform pair** — current and pattern
 5. **Three current distributions** worth knowing cold
 
 ---
 
-## The problem
+## The Problem
 
 **Given:** the current $\mathbf{J}(\mathbf{r}')$ on the antenna
 **Wanted:** the field $\mathbf{E}$ far away
@@ -58,7 +58,7 @@ Standard move: invent an intermediate quantity that <strong>absorbs the source</
 
 ---
 
-## The opening: $\nabla\cdot\mathbf{B} = 0$
+## The Opening: $\nabla\cdot\mathbf{B} = 0$
 
 A divergence-free field is always the curl of something. Define the **magnetic vector potential**:
 
@@ -75,23 +75,23 @@ equation — and crucially, one we already know the solution to.
 
 ---
 
-## The radiation integral
+## The Radiation Integral
 
 $$ \mathbf{A}(\mathbf{r}) = \frac{\mu}{4\pi}\int_{V'} \mathbf{J}(\mathbf{r}')\ \frac{e^{-jkR}}{R}\ dV', \qquad R = |\mathbf{r}-\mathbf{r}'| $$
 
-**Read the integrand, not the integral:**
+**The integrand:**
 
 - each piece of current launches its own spherical wave $e^{-jkR}/R$
 - it arrives with amplitude $1/R$ and phase delay $kR$
 - the integral just **adds them up**
 
 <div class="callout">
-Radiation is <strong>superposition with phase bookkeeping</strong>. Nothing more.
+Radiation is <strong>superposition with phase bookkeeping</strong>.
 </div>
 
 ---
 
-## The three-step recipe
+## The Three-Step Recipe
 
 $$ \mathbf{J} \quad\longrightarrow\quad \mathbf{A} \quad\longrightarrow\quad \mathbf{H} = \frac{1}{\mu}\nabla\times\mathbf{A} \quad\longrightarrow\quad \mathbf{E} = \frac{1}{j\omega\varepsilon}\nabla\times\mathbf{H} $$
 
@@ -104,7 +104,7 @@ r-dependence is only exp(-jkr)/r, so a curl becomes multiplication by -jk r-hat.
 
 ---
 
-## Far field: the rays go parallel
+## Parallel Rays in the Far Field
 
 <div class="fig" data-inline-svg="./fig/L06-radiation-integral-geometry.svg" style="max-width:790px; margin:0 auto;"></div>
 
@@ -114,7 +114,7 @@ are parallel, so a source point's only signature is its path difference.
 
 ---
 
-## Two approximations, not one
+## Two Approximations, Not One
 
 Expand the exact distance for $r' \ll r$:
 
@@ -126,12 +126,12 @@ $$ R = r - \hat{\mathbf r}\cdot\mathbf{r}' + \frac{r'^{2} - (\hat{\mathbf r}\cdo
 | phase $e^{-jkR}$ | $R \approx r - \hat{\mathbf r}\cdot\mathbf{r}'$ | $k\hat{\mathbf r}\cdot\mathbf{r}'$ is **several radians** |
 
 <div class="callout">
-Sloppy on amplitude, careful on phase. Phase is what turns "adding" into "canceling."
+The amplitude tolerates the approximation and the phase does not, because phase is what turns adding into canceling.
 </div>
 
 ---
 
-## The term we threw away is L5's boundary
+## The Dropped Term and the Far-Field Distance
 
 Worst-case quadratic term, with $r'_\text{max} = D/2$:
 
@@ -140,17 +140,17 @@ $$ \Delta\phi = k\frac{(D/2)^{2}}{2r} = \frac{\pi D^{2}}{4\lambda r} \quad\le\qu
 $$ \Longrightarrow \qquad r \ \ge\ \frac{2D^{2}}{\lambda} $$
 
 <div class="callout">
-Not a coincidence. The far-field distance <em>is</em> the distance at which the parallel-ray approximation becomes accurate.
+The far-field distance is the distance at which the parallel-ray approximation becomes accurate, which is why L5 and L6 give the same number.
 </div>
 
 Note:
 L5 got this from a curved wavefront across an aperture. Here it falls out of the
-term we must drop to make the integral tractable. Same number, opposite
-directions — worth pausing on.
+term we must drop to make the integral tractable. It is the same number from
+two different starting points.
 
 ---
 
-## The radiation vector
+## The Radiation Vector
 
 Pull the constant factor out of the integral:
 
@@ -162,18 +162,18 @@ $$ \mathbf{A}(\mathbf{r}) = \frac{\mu e^{-jkr}}{4\pi r}\underbrace{\int_{V'} \ma
 | $\mathbf{N}(\theta,\phi)$ | direction | **everything** that makes this antenna different |
 
 Note:
-This split is the payoff of the lesson. Pattern, polarization, directivity,
+This split is the central result of the lesson. Pattern, polarization, directivity,
 sidelobes — all of it lives in N, and N is one integral over the currents.
 
 ---
 
-## From $\mathbf{N}$ to the field
+## From $\mathbf{N}$ to the Field
 
 Locally a plane wave → **no radial component**. Only the transverse parts radiate:
 
 $$ E_\theta = -j\omega\mu\frac{e^{-jkr}}{4\pi r}N_\theta, \qquad E_\phi = -j\omega\mu\frac{e^{-jkr}}{4\pi r}N_\phi, \qquad E_r \approx 0 $$
 
-$\mathbf{H}$ comes free from the plane-wave relation — no second integral:
+$\mathbf{H}$ follows from the plane-wave relation — no second integral:
 
 $$ \mathbf{H} = \frac{1}{\eta_0}\hat{\mathbf r}\times\mathbf{E}, \qquad U(\theta,\phi) = \frac{\eta_0 k^{2}}{32\pi^{2}}\left(|N_\theta|^{2} + |N_\phi|^{2}\right) $$
 
@@ -183,7 +183,7 @@ actually come from.
 
 ---
 
-## Careful: the $\sin\theta$ is a projection
+## The $\sin\theta$ Is a Projection
 
 For a $z$-directed current:
 
@@ -200,7 +200,7 @@ This is why no wire antenna radiates off its own ends: at $\theta = 0$ there is 
 
 <!-- .slide: class="viz-cue-slide" -->
 
-## The integral, as a picture
+## The Integral as a Picture
 
 Chop the source into elements. Each contributes a phasor turned by its own path difference, $kz'\cos\theta$.
 
@@ -217,7 +217,7 @@ that's the integral converging.
 
 ---
 
-## It is a Fourier transform
+## The Radiation Integral as a Fourier Transform
 
 Line source on the $z$-axis, $\hat{\mathbf r}\cdot\mathbf{r}' = z'\cos\theta$:
 
@@ -235,12 +235,12 @@ The far-field pattern is the <strong>Fourier transform of the current distributi
 
 <!-- .slide: class="viz-cue-slide" -->
 
-## What Fourier buys you
+## Fourier Properties and Antenna Consequences
 
 | Transform property | Antenna consequence | Later |
 | :-- | :-- | :-- |
 | stretch → squeeze | longer aperture → **narrower beam**, $\theta_\text{HP}\approx 0.886\lambda/L$ | L15, L20 |
-| sharp edges → high frequencies | abrupt current cutoff → **high sidelobes**; taper buys them down | L24, L25 |
+| sharp edges → high frequencies | abrupt current cutoff → **high sidelobes**; a taper lowers them | L24, L25 |
 | multiply by a linear phase → shift | phase slope across the aperture → the **beam steers** | L18, L19 |
 | sampling → repetition | discrete elements → **grating lobes** | L16, L26 |
 | linearity | superposed currents → **pattern multiplication** | L16 |
@@ -253,7 +253,7 @@ whose transform has the beamwidth, sidelobes, and nulls they want.
 
 ---
 
-## What a taper actually buys
+## Taper, Sidelobes, and Beamwidth
 
 Same length $L$, four ways to illuminate it:
 
@@ -265,7 +265,7 @@ Same length $L$, four ways to illuminate it:
 | cosine² | $-31.5$ dB | $1.44\ \lambda/L$ |
 
 <div class="callout">
-The distribution's <strong>shape</strong> sets the sidelobes, not its size — but the taper is never free: the beam comes out <strong>1.3 to 1.6 times wider</strong> than the uniform beam of the same length.
+The distribution's <strong>shape</strong> sets the sidelobes, not its size, and the taper widens the main beam to <strong>1.3 to 1.6 times</strong> the uniform beam of the same length.
 </div>
 
 Note:
@@ -284,18 +284,20 @@ $$ N_z = I_0 dl, \qquad N_\theta = -I_0 dl \sin\theta $$
 $$ E_\theta = \frac{j\eta_0 k I_0 dl \sin\theta}{4\pi r}e^{-jkr} $$
 
 <div class="callout">
-Exactly L5's $1/r$ term — the one that survived $kr\gg1$. A page of exact algebra there; one line here. Pattern $\sin\theta$, $D = 1.5$ (1.76 dBi).
+Exactly L5's $1/r$ term — the one that survived $kr\gg1$. L5 reached it through the exact spherical-wave fields; the radiation integral gives it directly. Pattern $\sin\theta$, $D = 1.5$ (1.76 dBi).
 </div>
 
 ---
 
 ## Example 2 — the uniform line source
 
-$I(z') = I_0$ over length $L$ → the integral is an exponential, and out falls a sinc: $N_z(\theta) = I_0 L \sin u/u$ with $u = (kL/2)\cos\theta$.
+$I(z') = I_0$ over length $L$, and the integral of an exponential gives a sinc:
 
-<div class="fig" data-inline-svg="./fig/L06-line-source-sinc.svg" style="max-width:640px; margin:0 auto;"></div>
+$$ N_z(\theta) = I_0 L\ \frac{\sin u}{u}, \qquad u = \frac{kL}{2}\cos\theta $$
 
-Peak at **broadside**, first null at $\cos\theta = \lambda/L$, first sidelobe $-13.3$ dB **however long you build it**. That is the **space factor**; times the element factor $\sin\theta$ it gives the full pattern — **pattern multiplication**, all of L16.
+<div class="fig" data-inline-svg="./fig/L06-line-source-sinc.svg" style="max-width:560px; margin:0 auto;"></div>
+
+Peak at **broadside**, first null at $\cos\theta = \lambda/L$, first sidelobe $-13.3$ dB **however long you build it**. Times the element factor $\sin\theta$, that **space factor** gives the full pattern: **pattern multiplication**, all of L16.
 
 Note:
 Point at the dashed line on the plot. Uniform illumination always costs 13.3 dB
@@ -304,7 +306,7 @@ sidelobe level does not move. Only tapering changes that, which we just priced.
 
 ---
 
-## Worked — a $2\lambda$ uniform line source
+## Worked example — a $2\lambda$ uniform line source
 
 $L = 2\lambda \Rightarrow kL/2 = 2\pi$
 
@@ -316,7 +318,7 @@ $L = 2\lambda \Rightarrow kL/2 = 2\pi$
 | rule of thumb | $0.886\lambda/L$ | $25.4^{\circ}$ ✓ |
 
 <div class="callout">
-Double $L$ → beamwidth halves to $12.7^{\circ}$; sidelobes <strong>do not move</strong>. Beamwidth is bought with <strong>size</strong>, sidelobes with <strong>taper</strong>.
+Double $L$ → beamwidth halves to $12.7^{\circ}$; sidelobes <strong>do not move</strong>. Length sets the beamwidth; taper sets the sidelobe level.
 </div>
 
 ---
@@ -331,11 +333,11 @@ Through the integral, for $L = \lambda/2$:
 
 $$ |F(\theta)| = \left|\frac{\cos\left(\frac{\pi}{2}\cos\theta\right)}{\sin\theta}\right| $$
 
-Not $\sin\theta$ — a **sharper** donut, because the current is concentrated near the middle.
+The bracket is not $\sin\theta$, but it is close: a **sharper** donut, because the current is concentrated near the middle.
 
 ---
 
-## Three distributions, side by side
+## Three Distributions
 
 | Distribution | Pattern | HPBW | $D$ |
 | :-- | :-- | :-: | :-: |
@@ -352,7 +354,7 @@ line source is the one that has traded its skirt for a beam and sidelobes.
 
 ---
 
-## The catch: you have to know the current
+## Assuming the Current
 
 The integral is **exact given $\mathbf{J}$**. But the fields set $\mathbf{J}$, and $\mathbf{J}$ sets the fields.
 
@@ -360,21 +362,25 @@ Assumptions that work:
 
 - **thin wires** → sinusoidal standing wave (used above)
 - **apertures** → assume the field in the opening (horns, reflectors — M2)
-- **arrays** → each element keeps its isolated pattern (M3, until mutual coupling bites)
+- **arrays** → each element keeps its isolated pattern (M3, until mutual coupling matters)
 
 When they fail: solve numerically — **method of moments**, then run this same integral. That is NEC, in **L8**.
 
 ---
 
-## Key point
+## Key Point
+
+- Each current element radiates a spherical wave
+- Far away the rays run parallel, so an element's signature is its path difference $\hat{\mathbf r}\cdot\mathbf{r}'$
+- Their sum is the radiation vector $\mathbf{N}(\theta,\phi)$
 
 <div class="callout">
-Every current element sends out a spherical wave. In the far field the rays run parallel, so an element's only signature is its path difference $\hat{\mathbf r}\cdot\mathbf{r}'$. Summing them gives the radiation vector $\mathbf{N}(\theta,\phi)$ — a <strong>Fourier transform of the current distribution</strong> — and the whole pattern is a property of that transform.
+$\mathbf{N}$ is the <strong>Fourier transform of the current distribution</strong>, and the pattern is a property of it.
 </div>
 
 ---
 
-## Where this is going
+## Where This Is Going
 
 - **Module 1 is done:** pattern and gain (L2), polarization and bandwidth (L3), terminals (L4), where the far field starts (L5), and now how to compute the pattern (L6)
 - **Module 2:** real currents in the integral — dipoles, loops, patches, slots, horns; L8 solves for the current numerically

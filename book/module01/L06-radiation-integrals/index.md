@@ -13,7 +13,8 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-Lesson 5 told you *where* the far field is. This lesson tells you *what it is*.
+Lesson 5 established where the far field begins. This lesson computes the
+field itself, from the current on the antenna.
 
 Lesson 6 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -39,25 +40,26 @@ Lesson 6 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 ::::
 
-::::{frame} Now we compute the pattern
+::::{frame} Computing the Pattern
 :::{present}
-The input is the **current distribution** on the antenna. The output is the
-**far-field pattern**. The machinery in between is a single integral, and every
-array in Module 3 is that integral with a different current in it.
+- Input: the **current distribution** on the antenna.
+- Output: the **far-field pattern**.
+- Between them: a single integral.
+- Every array in Module 3 is that integral with a different current.
 :::
 
-Everything up to now has taken the radiation pattern as a given, something you
+Everything up to now has taken the radiation pattern as a given, something we
 measure or read off a datasheet. Now we compute it. That integral is the last
 piece of Module 1, and it is the piece that makes the rest of the course
 possible: steered, tapered, thinned, nulled, every array in Module 3 is this
 integral with a different current in it.
 ::::
 
-::::{frame} Start with two sources
+::::{frame} Two Sources
 :::{present}
 - Two current elements $d$ apart, seen from far away in direction $\theta$.
 - Parallel rays: element 2's wave travels $d\cos\theta$ farther, so it arrives $kd\cos\theta$ radians late.
-- Add the phasors: in phase, a beam; half a cycle apart, a null.
+- Add the phasors: in phase they reinforce, half a cycle apart they cancel.
 :::
 :::{present}
 <img src="../../viz/img/L06-two-sources.svg" alt="Two current elements a distance d apart on the z axis, seen from far away in direction theta. The two rays to the observer are parallel; the lower element's wave travels d cos theta farther than the upper one's." style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
@@ -75,7 +77,7 @@ count up and the fringes of the double slit sharpen into the lobes of a line
 source. Drag $P$ around the edge to move the observer.
 ::::
 
-::::{frame} Two sources, in space
+::::{frame} Two Sources in Space
 :class: viz-frame
 
 :::{present}
@@ -125,11 +127,11 @@ hardware at each position, and the space factor is what the current
 distribution controls. Lesson 16 replaces the integral with a sum over $N$
 discrete elements: the element factor becomes the pattern of whatever antenna
 sits at each position, and the space factor becomes the array factor, the
-part of the pattern you steer. The wire frame later in this lesson is where
+part of the pattern we steer. The wire frame later in this lesson is where
 the $\sin\theta$ comes out of the mathematics.
 ::::
 
-::::{frame} Many sources: the radiation integral
+::::{frame} The Radiation Integral
 :::{present}
 A real antenna is a continuum of current elements. Each piece
 $\mathbf{J}(\mathbf{r}')\ dV'$ launches its own spherical wave, and the field
@@ -145,7 +147,7 @@ $$
 Radiation is superposition with phase bookkeeping.
 :::
 
-**Read the integrand, not the integral.** The wave from each element arrives
+The wave from each element arrives
 at the observation point with an amplitude set by $1/R$ and a phase delay set
 by $kR$, and the integral adds those contributions with the bookkeeping done
 in phase. A definite integral over something we can write down has replaced
@@ -166,7 +168,7 @@ Module 2 for slots and horns; everything in this lesson carries over by duality.
 :::
 ::::
 
-::::{frame} Where the integral comes from
+::::{frame} Where the Integral Comes From
 :class: read-only
 
 We want $\mathbf{E}$ far away, given a known current density $\mathbf{J}$ on the
@@ -181,7 +183,7 @@ $$
 \nabla \cdot \mathbf{B} = 0
 $$
 
-*always*, and because the divergence of any curl vanishes, you can
+*always*, and because the divergence of any curl vanishes, we can
 always write $\mathbf{B}$ as the curl of some vector field. Define the **magnetic vector
 potential** $\mathbf{A}$ by
 
@@ -240,24 +242,23 @@ simply how far a source point is from the origin; it has nothing to do with
 $P$.
 ::::
 
-::::{frame} What a pattern is
+::::{frame} What a Pattern Is
 :::{present}
-A pattern is a function of **direction only**. The exact integral tangles
-distance and direction together inside $R$, so it cannot give us a pattern
-until we pull the two apart. That is the whole job of the far-field
-approximation.
+- A pattern is a function of **direction only**.
+- In the exact integral, $R$ depends on both distance and direction.
+- The far-field approximation separates the two.
 :::
 
 The exact integral is correct everywhere, near field included, but
 $R = \vert\mathbf{r} - \mathbf{r}'\vert$ depends on where $P$ is and on which
-source point you are looking at, and the two dependences do not separate. What
+source point we are looking at, and the two dependences do not separate. What
 we want is to write $\mathbf{A}$ as a factor that depends only on the distance
 $r$ times a factor that depends only on the direction $(\theta,\phi)$. Lesson 5
-said the pattern stops changing with distance once you are far enough away;
+said the pattern stops changing with distance once we are far enough away;
 this is the same statement, seen from inside the integral.
 ::::
 
-::::{frame} Far field: the rays go parallel
+::::{frame} Parallel Rays in the Far Field
 :::{present}
 <img src="../../viz/img/L06-radiation-integral-geometry.svg" alt="Exact geometry with the vector R from a source point to the field point, and the far-field limit in which the rays are parallel and only the path difference r-hat dot r-prime survives" style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
@@ -287,13 +288,12 @@ the next two frames say when that is safe. $R$ appears in two places in the
 integral, and the two places get different treatment.
 ::::
 
-::::{frame} Amplitude versus phase
+::::{frame} Amplitude and Phase
 :::{present}
-- In the amplitude $1/R$ it is a fraction of a percent, so $1/R \approx 1/r$.
-- In the phase $e^{-jkR}$ it is several radians. Keep it.
-
-A 1 m antenna at 100 m, $\lambda = 10\ \text{cm}$: $1/R$ moves 1%, $kR$
-ten full cycles.
+- In the amplitude $1/R$ it is under a percent, so $1/R \approx 1/r$.
+- In the phase $e^{-jkR}$ it is several radians, so we keep it.
+- A 1 m antenna at 100 m, $\lambda = 10\ \text{cm}$: $1/R$ moves 1% and $kR$
+  moves ten cycles.
 :::
 
 **Amplitude.** In the $1/R$ factor, the correction $\hat{\mathbf r}\cdot\mathbf{r}'$
@@ -321,7 +321,7 @@ $\hat{\mathbf r}\cdot\mathbf{r}'$, the projection of its position onto the
 viewing direction.
 ::::
 
-::::{frame} The term we threw away is L5's boundary
+::::{frame} The Dropped Term and the Far-Field Distance
 :::{present}
 The dropped quadratic term is a phase error of at most
 
@@ -335,8 +335,8 @@ $$
 r \ge \frac{2D^2}{\lambda}.
 $$
 
-Not a coincidence: the far-field distance is where the parallel-ray
-approximation becomes accurate.
+The far-field distance is where the parallel-ray approximation becomes
+accurate. Lessons 5 and 6 give the same number.
 :::
 
 The worst case of the quadratic term is $r'_{\max}{}^2/2r$, and for an antenna
@@ -351,26 +351,25 @@ $$
 Demand that this stay under $\pi/8$ radians and it rearranges to
 $r \ge 2D^2/\lambda$. That is not a second criterion. Lesson 5 derived the
 same number from the geometry of a curved wavefront; here it falls out of the
-term we need to drop to make the integral tractable. Same number, same
-physics, arrived at from opposite directions.
+term we need to drop to make the integral tractable.
 ::::
 
-::::{frame} The radiation vector
+::::{frame} The Radiation Vector
 :::{present}
-With both approximations in, the $e^{-jkr}/r$ factor no longer depends on
-$\mathbf{r}'$ and comes out of the integral:
+With both approximations in, the $e^{-jkr}/r$ factor comes out of the
+integral:
 
 $$
 \mathbf{A}(\mathbf{r}) = \frac{\mu e^{-jkr}}{4\pi r}
 \underbrace{\int_{V'}\mathbf{J}(\mathbf{r}')\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'}_{\textstyle \mathbf{N}(\theta,\phi)}
 $$
 
-Distance out front, the same for every antenna ever built. Direction inside
-$\mathbf{N}$, everything that makes this antenna different.
+$e^{-jkr}/r$ depends only on distance and is the same for every antenna.
+$\mathbf{N}$ depends only on direction and is specific to this one.
 :::
 
 The integral that is left is the **radiation vector** $\mathbf{N}(\theta,\phi)$,
-and this split is the payoff of the whole lesson:
+and this split is the central result of the lesson:
 
 | Factor | Depends on | What it carries |
 | :-- | :-- | :-- |
@@ -385,7 +384,7 @@ just multiplies by $-jk\hat{\mathbf r}$. Differentiation has collapsed into
 multiplication.
 ::::
 
-::::{frame} From N to the pattern
+::::{frame} From N to the Pattern
 :::{present}
 Only the transverse parts of $\mathbf{N}$ reach the far field:
 
@@ -407,7 +406,7 @@ involves the antenna.
 In the far field the wave is locally a plane wave traveling radially outward
 (Lesson 5), so it can have **no radial field component**: $E_r \approx 0$, and
 only the transverse parts of $\mathbf{A}$ survive. The magnetic field follows
-for free from the plane-wave relation, with no new integral:
+from the plane-wave relation, with no new integral:
 
 $$
 \mathbf{H} = \frac{1}{\eta_0}\ \hat{\mathbf r}\times\mathbf{E},
@@ -436,7 +435,7 @@ that took $\mathbf{A}$ to $\mathbf{E}$ have become a projection onto the
 transverse directions and a constant.
 ::::
 
-::::{frame} A wire along z: one scalar integral
+::::{frame} A Wire Along z
 :::{present}
 A wire along $z$ carries $I(z')\ \hat{\mathbf z}$, so the vector integral is
 one scalar integral:
@@ -459,28 +458,28 @@ no transverse component to project, which is why no wire antenna radiates off
 its own ends.
 
 **Why Cartesian, and why afterward.** The integral adds up vectors from many
-different source points, and you can only add vectors component by component
+different source points, and we can only add vectors component by component
 when every component is measured against the same unit vectors. Cartesian
 unit vectors are the same everywhere, so integrating $J_x$, $J_y$ and $J_z$
 is safe. Spherical unit vectors at the source are not: $\hat{\mathbf r}'$ and
-$\hat{\boldsymbol\theta}'$ change direction as you move from one source point
+$\hat{\boldsymbol\theta}'$ change direction as we move from one source point
 to the next, so an integral of $J_{\theta'}$ adds numbers that each mean
 something different, and the total is not the component of anything. So
 integrate the Cartesian components, get $N_x$, $N_y$ and $N_z$, and only then
 take the components along $\hat{\boldsymbol\theta}$ and
 $\hat{\boldsymbol\phi}$ of the observation direction. Those two are fixed once
-you choose where you look, which is why the $\sin\theta$ can sit outside the
+we choose where we look, which is why the $\sin\theta$ can sit outside the
 integral.
 
 Try it the wrong way on a dipole along $z$ and it fails on the first line:
-every source point has $\theta' = 0$, so $J_{\theta'} = 0$ everywhere, and you
+every source point has $\theta' = 0$, so $J_{\theta'} = 0$ everywhere, and we
 would conclude that a dipole does not radiate at all.
 
 Expanding $\hat{\mathbf z} = \cos\theta\ \hat{\mathbf r} - \sin\theta\
 \hat{\boldsymbol\theta}$ *before* integrating gives the same answer, because
 $\theta$ is the observation angle and constant over the integral. Cartesian
 simply keeps the two jobs apart: the integral, which depends only on the
-current distribution, and the projection, which depends only on where you
+current distribution, and the projection, which depends only on where we
 look. That separation is the space-factor / element-factor split later in
 this lesson, and all of L16.
 
@@ -498,12 +497,12 @@ The next frame shows the integral as a picture. The source is chopped into
 elements; each one contributes a phasor whose angle is $kz'\cos\theta$, its
 path difference in radians. At broadside every phasor points the same way and
 they stack into a long straight chain. Swing off broadside and the chain curls
-up; when it closes on itself, you are looking at a null. It is the two-source
+up; when it closes on itself, we are looking at a null. It is the two-source
 picture with many sources, and it is the picture the rest of the lesson
 computes.
 ::::
 
-::::{frame} The integral, as a picture
+::::{frame} The Integral as a Picture
 :class: viz-frame
 
 :::{present}
@@ -516,7 +515,7 @@ computes.
 :::
 ::::
 
-::::{frame} The radiation integral is a Fourier transform
+::::{frame} The Radiation Integral as a Fourier Transform
 :::{present}
 Define the **spatial frequency** $k_z = k\cos\theta$ and the wire integral reads
 
@@ -545,7 +544,7 @@ learned there comes across unchanged.
 | a signal $x(t)$ | the current $I(z')$ |
 | its spectrum $X(\omega)$ | the pattern $N_z(k_z)$ |
 
-What the transform buys you, row by row:
+The same properties, row by row:
 
 | Signals and systems | Antennas |
 | :-- | :-- |
@@ -554,8 +553,8 @@ What the transform buys you, row by row:
 | modulation shifts the spectrum | linear phase steers the beam |
 | sampling repeats the spectrum | discrete elements repeat the pattern |
 
-Every row is the left column, applied. Nothing on the right is derived in this
-course from scratch.
+Every row on the right is the corresponding transform property applied to an
+antenna, and nothing on the right is derived in this course from scratch.
 
 | Signals and systems | Antennas |
 | :-- | :-- |
@@ -573,7 +572,7 @@ solving Maxwell's equations. They are choosing a function whose Fourier
 transform has the beamwidth, sidelobe level, and null placement they want, then
 building a current distribution that realizes it.
 
-| Antenna consequence | Where you will use it |
+| Antenna consequence | Where we will use it |
 | :-- | :-- |
 | Longer aperture → **narrower beam** | L15, L20 |
 | Smooth taper → **lower sidelobes**, wider beam | L15, L24, L25 |
@@ -582,7 +581,7 @@ building a current distribution that realizes it.
 | Element × comb → **pattern multiplication** | L16 |
 ::::
 
-::::{frame} What k is telling you
+::::{frame} Spatial Frequency k
 :::{present}
 $k$ is $\omega$ for space: phase per meter instead of phase per second.
 
@@ -594,21 +593,22 @@ $k$ is $\omega$ for space: phase per meter instead of phase per second.
 :::
 
 $\omega$ is how fast a signal's phase turns as time passes. $k$ is the same
-thing for space: how fast a wave's phase turns as you move through it, with
+thing for space: how fast a wave's phase turns as we move through it, with
 $1/\lambda$ in cycles per meter playing the part of $f = 1/T$ in cycles per
 second. So the exponent in the radiation integral,
 $k\ \hat{\mathbf r}\cdot\mathbf{r}'$, is $k$ times a path difference in
 meters: a phase in radians, exactly as $\omega t$ is.
 ::::
 
-::::{frame} What k cos θ is telling you
+::::{frame} Spatial Frequency Along the Source
 :::{present}
 <img src="../../viz/img/L06-trace-wavelength.svg" alt="Three line sources with the wavefronts of a plane wave leaving at 90, 60, and 0 degrees from the source axis. Along the direction of travel the wavefronts are one wavelength apart; along the source they are one wavelength over cos theta apart." style="max-width: 720px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
 A wave leaving at $\theta$ has wavefronts $\lambda$ apart along its own
 travel and $\lambda/\cos\theta$ apart along the source. So the phase advances
-$k\cos\theta$ per meter along $z$: **the rate direction $\theta$ demands.**
+$k\cos\theta$ per meter along $z$, and that rate is set by the direction
+$\theta$.
 :::
 
 Broadside demands nothing: the whole source lies on one wavefront, $k_z = 0$,
@@ -626,20 +626,20 @@ the loud answer moves to whatever $k_z$ matches the slope — the beam steers.
 ::::
 
 
-::::{frame} Part of the transform is invisible
+::::{frame} The Visible Region
 :::{present}
 $k_z = k\cos\theta$, and $\cos\theta$ runs only from $-1$ to $+1$. Only
-$\lvert k_z\rvert \le k$ is a direction you can stand in. The rest is real and
-never leaves the antenna: **the far field cannot see detail finer than a
-wavelength.**
+$\lvert k_z\rvert \le k$ is a direction we can stand in. The rest is real and
+never leaves the antenna: the far field cannot see detail finer than a
+wavelength.
 :::
 
-A spectrum extends over every $\omega$, and every $\omega$ is a frequency you
+A spectrum extends over every $\omega$, and every $\omega$ is a frequency we
 can measure. This transform extends over every $k_z$ too, but
 $k_z = k\cos\theta$ ties it to a direction, and $\cos\theta$ is constrained to
 $[-1, +1]$. Only the spatial-frequency band $\lvert k_z\rvert \le k$ is
-somewhere you can stand. The invisible part describes stored, non-radiating
-field near the aperture rather than anything you can measure at range, so the
+somewhere we can stand. The invisible part describes stored, non-radiating
+field near the aperture rather than anything we can measure at range, so the
 pattern is a window onto the transform, not the whole of it.
 
 Said in wavelengths: a spatial frequency $k_z$ is a ripple in the current with
@@ -648,10 +648,10 @@ $\lambda$. That idea has no counterpart in your signals course.
 
 Keep that window in mind. When Module 3 builds an array out of separate
 elements, the transform repeats, and a repeat that slides inside the window is
-a second beam you did not ask for. Lesson 16 is about keeping it out.
+a second beam we did not ask for. Lesson 16 is about keeping it out.
 ::::
 
-::::{frame} The transform and its window
+::::{frame} The Transform and Its Window
 :class: viz-frame
 
 Lengthen $L$: narrower transform, same window. Steer: it slides. Sample: the
@@ -671,16 +671,16 @@ of the current, *all* of it; the shaded band is the part a real direction can
 reach, and the lower-left panel is that band bent onto $\theta$. Lengthen $L$
 and the transform narrows while the window stays put. Steer, and the whole
 transform slides. Tick *sample* and spread the elements out: the repeats march
-in from the invisible region, and the moment one crosses the window edge you
+in from the invisible region, and the moment one crosses the window edge we
 have a grating lobe.
 ::::
 
-::::{frame} Current in, pattern out
+::::{frame} Current In, Pattern Out
 :class: viz-frame
 
 :::{present}
-**Length sets beamwidth. Taper sets sidelobes. Phase slope sets pointing
-direction.**
+Length sets the beamwidth, taper sets the sidelobe level, and a linear phase
+slope sets the pointing direction.
 
 <iframe src="../../viz/line-source-pattern.html"
         width="100%" height="417"
@@ -694,12 +694,12 @@ Choose a distribution, stretch it, taper it, put a linear phase slope across it,
 and watch the pattern respond. Those three habits are the ones to build here,
 and the next frames put numbers on each of them.
 
-Beamwidth is bought with **size** and sidelobes are bought with **taper**;
-that trade has a price list, and Lesson 15 derives it. A phase slope across
+Length sets the beamwidth and taper sets the sidelobe level; Lesson 15
+derives the tradeoff between them. A phase slope across
 the current steers the beam, and Lesson 18 makes it a design tool.
 ::::
 
-::::{frame} The infinitesimal dipole recovers Lesson 5
+::::{frame} The Infinitesimal Dipole
 :::{present}
 A current element $I_0\ dl$ at the origin is so short that
 $e^{+jkz'\cos\theta} \approx 1$ across it:
@@ -710,15 +710,15 @@ N_z = I_0\ dl, \qquad N_\theta = -I_0\ dl\ \sin\theta,
 E_\theta = \frac{j\ \eta_0 k I_0\ dl\ \sin\theta}{4\pi r}\ e^{-jkr} .
 $$
 
-This is Lesson 5's $1/r$ radiation term, in one line. The pattern is
+This is Lesson 5's $1/r$ radiation term. The pattern is
 $\sin\theta$, the donut, with $D = 1.5$.
 :::
 
 This is exactly the $1/r$ radiation term of the exact short-dipole field quoted
 in Lesson 5, the term that survived once $kr \gg 1$. What took a page of exact
-spherical-wave algebra there comes out here in one line. The pattern is
+spherical-wave algebra there comes out here in a few steps. The pattern is
 $|F| = \sin\theta$: a donut, maximum broadside, null along the wire, and
-$D = 1.5$ (1.76 dBi). The read-only frame below earns that $1.5$.
+$D = 1.5$ (1.76 dBi). The read-only frame below derives that $1.5$.
 ::::
 
 ::::{frame} Worked example — the donut integrated
@@ -727,7 +727,7 @@ $D = 1.5$ (1.76 dBi). The read-only frame below earns that $1.5$.
 :::{admonition} Worked example — the donut integrated
 :class: tip
 That $D = 1.5$ has been quoted since Lesson 2 and taken on faith ever since.
-Now you can earn it. Directivity is peak intensity over average intensity, and
+We can now derive it. Directivity is peak intensity over average intensity, and
 with the pattern in hand both are just integrals. Normalize the intensity to its
 peak, $U = \sin^2\theta$ (intensity goes as the *square* of the field pattern),
 and integrate over the whole sphere:
@@ -741,20 +741,20 @@ P_\text{rad} = \oint U\ d\Omega
 $$
 
 The extra $\sin\theta$ is the solid-angle element $d\Omega = \sin\theta\ d\theta\ d\phi$,
-not part of the pattern — a bookkeeping trap worth naming. Then
+not part of the pattern. Then
 
 $$
 D = \frac{4\pi\ U_{\max}}{P_\text{rad}} = \frac{4\pi}{8\pi/3} = 1.5
 \quad (1.76\ \text{dBi}).
 $$
 
-The number is small because the donut is generous: a current element throws
-power almost everywhere except along its own axis, so concentrating it 1.5 times
-over isotropic is all the shape can do.
+The number is small because the pattern is broad: a current element radiates
+in every direction except along its own axis, so concentrating the power 1.5
+times over isotropic is all this shape can do.
 :::
 ::::
 
-::::{frame} The uniform line source: the sinc
+::::{frame} The Uniform Line Source
 :::{present}
 Constant current $I_0$ over a length $L$:
 
@@ -785,14 +785,14 @@ pattern times that factor, and here every element is an infinitesimal
 $z$-directed dipole, so the element factor is $\sin\theta$.
 
 For a beam near broadside the $\sin\theta$ is essentially 1 and changes nothing
-you would notice ($25.6^{\circ}$ becomes $24.8^{\circ}$ for the example below).
+we would notice ($25.6^{\circ}$ becomes $24.8^{\circ}$ for the example below).
 Near endfire it matters a great deal. This factorization — element pattern times
 distribution — is **pattern multiplication**, and Lesson 16 builds all of array
 theory on it.
 ```
 ::::
 
-::::{frame} The uniform line source pattern
+::::{frame} The Uniform Line Source Pattern
 :::{present}
 <img src="../../viz/img/L06-line-source-sinc.svg" alt="Space factor of a uniform line source plotted in dB against angle: a main beam at broadside, nulls where cos theta is a multiple of lambda over L, and a first sidelobe 13.3 dB below the peak marked by a dashed line" style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
@@ -803,7 +803,7 @@ theory on it.
 - $L = 2\lambda$: nulls at $60^{\circ}$ and $120^{\circ}$, half-power beamwidth $25.6^{\circ}$.
 :::
 
-Plotted against angle, that one expression is the shape you measure every
+Plotted against angle, that one expression is the pattern we compare every
 aperture antenna in this course against. Read off the space factor's three
 headline numbers:
 
@@ -812,7 +812,7 @@ headline numbers:
   full length $L$.
 - **First null** where $u = \pi$, i.e. $\cos\theta_\text{null} = \lambda/L$.
 - **First sidelobe** at $u \approx 4.493$, height $-13.3$ dB, a fixed number,
-  independent of $L$. Uniform illumination *always* costs you $13.3$ dB
+  independent of $L$. Uniform illumination always gives $-13.3$ dB
   sidelobes; only tapering changes that.
 
 The read-only frame below works the $2\lambda$ case through.
@@ -844,17 +844,17 @@ degree, which is why that rule of thumb is worth memorizing.
 **Sidelobes.** $-13.3$ dB, whatever $L$ is.
 
 Double the length to $4\lambda$ and the beamwidth halves to $12.7^{\circ}$,
-while the sidelobes do not move at all. Beamwidth is bought with **size**;
-sidelobes are bought with **taper**.
+while the sidelobes do not move at all. Length sets the beamwidth; taper sets
+the sidelobe level.
 :::
 ::::
 
-::::{frame} What a taper buys, and what it costs
+::::{frame} Taper, Sidelobes, and Beamwidth
 :class: read-only
 
-Beamwidth is bought with **size**. Sidelobes are bought with **taper**. The
-numbers behind that sentence are Module 3's, and they are here only so the
-sentence has something to point at.
+Length sets the beamwidth and taper sets the sidelobe level. The numbers
+behind those two statements are Module 3's, and they are here only so the
+statements have something to point at.
 
 | Distribution | First sidelobe | HPBW constant ($\times\ \lambda/L$) |
 | :-- | :-: | :-: |
@@ -865,10 +865,10 @@ sentence has something to point at.
 
 Since the transform's high-frequency content comes from the *edges* of the
 distribution, softening the edges must soften the sidelobes. It does, and the
-prices are known: same length $L$, four ways to illuminate it. Read the third
-column as the cost. Relative to uniform, a taper broadens the main beam by a
-factor of **1.34 to 1.63**. You buy every dB of sidelobe suppression with
-beamwidth, and there is no distribution that gives you both.
+numbers are known: same length $L$, four ways to illuminate it. Read the third
+column as the beamwidth penalty. Relative to uniform, a taper broadens the main
+beam by a factor of **1.34 to 1.63**. Lower sidelobes always come with a wider
+main beam, and no distribution gives both.
 
 The ranking is the thing to carry forward: uniform is narrowest and worst on
 sidelobes, cosine² is widest and best, and everything useful in between is a
@@ -876,7 +876,7 @@ Taylor or Chebyshev compromise. This table is a preview. **Lesson 15** derives
 it for apertures and **Lesson 24** turns it into a design procedure for arrays.
 ::::
 
-::::{frame} The half-wave dipole, a real antenna
+::::{frame} The Half-Wave Dipole
 :::{present}
 A thin wire cannot carry uniform current. On a resonant half-wave wire it is a
 single cosine hump, zero at both tips, and the integral gives
@@ -920,7 +920,7 @@ $\theta_\text{HP} = 78.1^{\circ}$ versus $90^{\circ}$, and $D = 1.64$
 (2.15 dBi) versus 1.5 (1.76 dBi).
 ::::
 
-::::{frame} Three distributions, side by side
+::::{frame} Three Distributions
 :::{present}
 <img src="../../viz/img/L06-three-patterns.svg" alt="Polar patterns in dB for the three distributions side by side: the infinitesimal dipole and half-wave dipole as nearly identical donuts, and the two-wavelength uniform line source as a narrow broadside beam with sidelobes" style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
@@ -931,8 +931,8 @@ $\theta_\text{HP} = 78.1^{\circ}$ versus $90^{\circ}$, and $D = 1.64$
 | Half-wave dipole | $78.1^{\circ}$ | 1.64 |
 | Uniform line source, $L = 2\lambda$ | $25.6^{\circ}$ | 4.21 |
 
-The two dipoles are nearly the same donut. The line source traded its skirt
-for a beam and a set of sidelobes.
+The two dipoles are nearly the same donut. The line source has a much
+narrower main beam, and it has sidelobes.
 :::
 
 | Distribution | Pattern $\vert F(\theta)\vert$ | HPBW | $D$ |
@@ -945,12 +945,12 @@ The last row's headline number is the space factor on its own; multiply in the
 $\sin\theta$ element factor and it becomes $24.8^{\circ}$ and $D = 4.45$
 (6.5 dBi), a small correction, as promised for a broadside beam. Either way the
 comparison holds: a $2\lambda$ line source is four times longer than a
-half-wave dipole, and it buys about 2.6 times the directivity with a beam three
-times narrower. For a long uniform line source $D \to 2L/\lambda$, directivity
-sold by the wavelength.
+half-wave dipole, and it gives about 2.6 times the directivity with a beam
+three times narrower. For a long uniform line source $D \to 2L/\lambda$, so
+directivity grows in proportion to the length in wavelengths.
 ::::
 
-::::{frame} The catch: you have to know the current
+::::{frame} Assuming the Current
 :::{present}
 The integral is exact given $\mathbf{J}$, but $\mathbf{J}$ is not given: fields
 set currents and currents set fields. So we assume it:
@@ -976,12 +976,11 @@ the current can be **assumed** with good accuracy:
   Module 3, and mutual coupling is where it starts to fray.
 
 When the assumption fails, for thick elements, tightly coupled arrays, or
-antennas close to a ground plane or an airframe, you solve for the current
+antennas close to a ground plane or an airframe, we solve for the current
 numerically. The **method of moments** discretizes the structure, enforces the
 boundary condition on each segment, and solves a linear system for the segment
 currents; then it runs the very same radiation integral to get the pattern.
-That is literally what NEC is doing under the hood in the **Lesson 8
-simulation lab**.
+That is what NEC does in the **Lesson 8 simulation lab**.
 
 There is a measurement version of the same idea, too. Near-field scanning
 (Lesson 5, and Module 2's measurement labs) samples the field on a surface close
@@ -990,20 +989,20 @@ exactly one reason: the transform between the source distribution and the
 far-field pattern is invertible.
 ::::
 
-::::{frame} Key point
+::::{frame} Key Point
 :::{present}
 :class: callout
 Radiation is superposition with phase bookkeeping. Far away the rays run
-parallel, so an element's only signature is its path difference
-$\hat{\mathbf r}\cdot\mathbf{r}'$. Their sum is the radiation vector, a
-Fourier transform of the current. The whole pattern lives there.
+parallel, so an element's signature is its path difference
+$\hat{\mathbf r}\cdot\mathbf{r}'$. Their sum is the radiation vector, the
+Fourier transform of the current. The pattern is a property of it.
 :::
 
 $$
 \mathbf{N}(\theta,\phi) = \int_{V'}\mathbf{J}(\mathbf{r}')\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'
 $$
 
-Beamwidth, sidelobes, and where you point the beam are all properties of that
+Beamwidth, sidelobes, and where we point the beam are all properties of that
 transform.
 ::::
 
@@ -1030,7 +1029,7 @@ transform.
 - <a href="../../practice/ECE444_L06_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
-::::{frame} Where this is going
+::::{frame} Where This Is Going
 :::{present}
 Module 1 is complete. **Module 2** puts real currents into the integral:
 dipoles, monopoles, loops, patches, slots, and horns. **Module 3** turns the
@@ -1043,5 +1042,5 @@ bandwidth (L3), its terminals (L4), where its far field starts (L5), and now
 how to compute the pattern from the current (L6). In Module 2 each antenna is
 a different $\mathbf{J}$ producing a different $\mathbf{N}$, and the Lesson 8
 simulation lab solves for the current the integral needs. Module 3 chooses the
-pattern you want and synthesizes the current distribution that produces it.
+pattern we want and synthesizes the current distribution that produces it.
 ::::

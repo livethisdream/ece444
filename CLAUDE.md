@@ -180,7 +180,11 @@ landing page and the five module overviews are built the same way.
   it: **a non-trivial equation gets its own line** (display math; inline is
   for a symbol, a value, or $X_\text{in} = 0$), and **a derivation runs
   general to specific as one chain** aligned on the equals signs, never
-  restating a left-hand side. Which derivations go on screen is Neil's call
+  restating a left-hand side. A third (Neil, 2026-09-09): **a slide states
+  the point, never a teaser for it.** "The impedance is the problem" says
+  nothing; "2 Ω on a 50 Ω line reflects 85% of the power" does. Hooking the
+  class is his job, spoken; the slide is context, backdrop, and outline.
+  Which derivations go on screen is Neil's call
   per lesson (L07: the pattern and the radiation resistance, as their major
   steps; the details stay in the reading). Frame titles are Title Case noun
   phrases. Budgets:
