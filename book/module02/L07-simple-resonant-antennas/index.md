@@ -436,10 +436,7 @@ result that we name but do not re-derive.
 
 ::::{frame} The Radiation Resistance
 :::{present}
-**The resistor that would burn the radiated power.** Square the half-wave
-pattern, with $u = \pi/2$, and sum it over the sphere.
-
-$$\begin{aligned} P_\text{rad} &= \tfrac{1}{2}\vert I_m \vert^2 R_r = \oint U\ d\Omega \\ U(\theta) &= \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos(u\cos\theta)}{\sin\theta}\right]^2 \\ P_\text{rad} &= \frac{\eta_0 \vert I_m \vert^2}{4\pi} \\ &\qquad\times \int_0^\pi \frac{\cos^2(u\cos\theta)}{\sin\theta}\ d\theta \end{aligned}$$
+$$\begin{aligned} P_\text{rad} &= \tfrac{1}{2}\vert I_m \vert^2 R_r = \oint U\ d\Omega \\ U &= \frac{\eta_0 k^2}{32\pi^2}\ \vert N_\theta\vert^2 \quad \text{(Lesson 6)} \\ &= \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos(u\cos\theta)}{\sin\theta}\right]^2 \\ P_\text{rad} &= \frac{\eta_0 \vert I_m \vert^2}{4\pi} \\ &\qquad\times \int_0^\pi \frac{\cos^2(u\cos\theta)}{\sin\theta}\ d\theta \end{aligned}$$
 :::
 
 The pattern is only half of the analysis. What the transmitter actually sees is the
@@ -449,10 +446,26 @@ reactance from one standard result we will name but not re-derive.
 
 **Radiation resistance** is defined by asking what resistor, carrying the same
 current, would dissipate the power the antenna radiates. If we can compute
-$P_\text{rad}$, we can find $R_r$. Start from the half-wave pattern. The
-radiation intensity of the half-wave dipole is
+$P_\text{rad}$, we can find $R_r$. Start from the half-wave pattern, and
+this time keep the constants. Lesson 6 gave the radiation intensity in terms
+of the radiation vector,
 
-$$U(\theta) = \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right]^2$$
+$$U = \frac{\eta_0 k^2}{32\pi^2}\left(\vert N_\theta\vert^2 + \vert N_\phi\vert^2\right),$$
+
+and for the dipole $N_\phi = 0$ while Step 3 gave $N_\theta = -N_z\sin\theta$.
+With the Step 2 result for $N_z$ at $L = \lambda/2$,
+
+$$N_\theta = -\frac{2 I_m}{k}\ \frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}.$$
+
+Square it and multiply by the Lesson 6 constant. The $k^2$ cancels, which is
+why the radiation resistance of a half-wave dipole depends on the shape
+$\lambda/2$ and not on the frequency:
+
+$$U(\theta) = \frac{\eta_0 k^2}{32\pi^2}\cdot\frac{4\vert I_m\vert^2}{k^2}\left[\frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right]^2 = \frac{\eta_0 \vert I_m \vert^2}{8\pi^2}\left[\frac{\cos\left(\dfrac{\pi}{2}\cos\theta\right)}{\sin\theta}\right]^2$$
+
+The $\vert I_m\vert^2$ out front is what makes the last step work: dividing
+$P_\text{rad}$ by $\tfrac{1}{2}\vert I_m\vert^2$ leaves a resistance with no
+current in it.
 
 The radiated power is that intensity integrated over the whole sphere.
 Nothing depends on $\phi$, so the azimuth integral simply contributes $2\pi$:
