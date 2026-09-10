@@ -19,12 +19,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from .model import Feed, Model, PatternRequest, Sweep, Wire
+from .model import Feed, Ground, Model, PatternRequest, Sweep, Wire
 
 # Cards a NEC deck may carry that this tool cannot model, and what each one
 # does -- the message is more use to a student than "unsupported card".
 KNOWN_ELSEWHERE = {
-    "GN": "a ground plane; nec_lab models free space only",
     "GA": "an arc; nec_lab models straight wires only",
     "GH": "a helix; nec_lab models straight wires only",
     "GM": "a geometry copy/move; write the wires out as separate GW cards",
@@ -153,9 +152,29 @@ def annotate(line: str, line_no: int) -> CardGloss:
                    (t(9), "radius", "wire radius, meters")], summary)
     if card == "GE":
         flag = t(1) or "0"
+        grounded = flag.strip().startswith("1")
         return gl([(t(0), "card", "geometry complete"),
-                   (flag, "ground flag", "0 = free space")],
-                  "the geometry is finished; 0 means no ground plane")
+                   (flag, "ground flag",
+                    "1 = the structure meets a ground plane; 0 = free space")],
+                  "the geometry is finished; "
+                  + ("a ground plane follows on a GN card" if grounded
+                     else "0 means no ground plane"))
+    if card == "GN":
+        kind = t(1) or "0"
+        detail = {"1": "a perfect (infinite, lossless) ground plane",
+                  "2": "real ground, from the permittivity and conductivity"}
+        return gl([(t(0), "card", "ground"),
+                   (kind, "type", detail.get(kind, "a ground model nec_lab "
+                                                   "does not run")),
+                   (t(2), "radials", "0"), (t(3), "unused", ""),
+                   (t(4), "unused", ""), (t(5), "unused", ""),
+                   (t(6), "permittivity", "relative, real ground only"),
+                   (t(7), "conductivity", "S/m, real ground only")],
+                  "perfect ground: the image of the antenna, for free"
+                  if kind == "1" else
+                  f"real ground, eps_r {t(6) or '?'} and {t(7) or '?'} S/m"
+                  if kind == "2" else
+                  f"GN type {kind}: not one nec_lab runs")
     if card == "EX":
         return gl([(t(0), "card", "excitation"),
                    (t(1), "type", "0 = applied-field voltage source"),
@@ -212,7 +231,9 @@ def annotate(line: str, line_no: int) -> CardGloss:
 def parse(text: str) -> ParsedDeck:
     """Read a deck into a Model, a Sweep and a list of pattern requests."""
     wires: list[Wire] = []
-    feed: Feed | None = None
+    feeds: list[Feed] = []
+    ground = Ground("free")
+    ge_grounded = False
     sweep: Sweep | None = None
     requests: list[PatternRequest] = []
     comment = "ECE 444 -- from typed cards"
@@ -233,10 +254,26 @@ def parse(text: str) -> ParsedDeck:
         try:
             if card == "CM":
                 comment = line[2:].strip() or comment
-            elif card in ("CE", "GE", "XQ", "EN"):
-                if card == "GE" and len(toks) > 1 and int(_num(toks[1])) != 0:
-                    bad("GE asks for a ground plane",
-                        "nec_lab models free space; the flag must be 0")
+            elif card in ("CE", "XQ", "EN"):
+                pass
+            elif card == "GE":
+                flag = int(_num(toks[1])) if len(toks) > 1 else 0
+                if flag not in (0, 1):
+                    bad(f"GE flag {flag} is not one nec_lab runs",
+                        "0 for free space, 1 when the structure meets ground")
+                ge_grounded = flag == 1
+            elif card == "GN":
+                kind = int(_num(toks[1])) if len(toks) > 1 else -1
+                if kind == 1:
+                    ground = Ground("perfect")
+                elif kind == 2:
+                    eps = _num(toks[6]) if len(toks) > 6 else 13.0
+                    sig = _num(toks[7]) if len(toks) > 7 else 0.005
+                    ground = Ground("real", eps, sig)
+                else:
+                    bad(f"GN type {kind} is not a ground model nec_lab runs",
+                        "GN 1 for perfect ground, or GN 2 0 0 0 eps sigma "
+                        "for real ground")
             elif card == "GW":
                 if len(toks) < 10:
                     bad(f"GW needs 9 numbers after the card, found {len(toks) - 1}",
@@ -265,11 +302,9 @@ def parse(text: str) -> ParsedDeck:
                     bad("nec_lab supports excitation type 0 only",
                         "type 0 is the applied-field voltage source the lab uses")
                     continue
-                if feed is not None:
-                    bad("a second EX card", "nec_lab drives one source")
-                    continue
-                feed = Feed(int(_num(toks[2])), int(_num(toks[3])),
-                            _num(toks[5]), _num(toks[6]) if len(toks) > 6 else 0.0)
+                feeds.append(Feed(int(_num(toks[2])), int(_num(toks[3])),
+                                  _num(toks[5]),
+                                  _num(toks[6]) if len(toks) > 6 else 0.0))
             elif card == "FR":
                 if len(toks) < 6:
                     bad(f"FR needs 5 numbers after the card, found {len(toks) - 1}",
@@ -332,29 +367,38 @@ def parse(text: str) -> ParsedDeck:
     if not wires:
         errors.append(CardError(0, "", "the deck has no GW card",
                                 "a model needs at least one wire"))
-    if feed is None:
+    if not feeds:
         errors.append(CardError(0, "", "the deck has no EX card",
                                 "without a source there is no impedance to report"))
+    # GE and GN have to agree. Either alone is a model the author did not mean:
+    # a GN with GE 0 is a ground NEC will not connect anything to, and GE 1
+    # with no GN leaves the ground unspecified.
+    if ground.present and not ge_grounded:
+        errors.append(CardError(0, "", "there is a GN card but GE does not say 1",
+                                "GE 1 tells NEC the structure meets the ground"))
+    if ge_grounded and not ground.present:
+        errors.append(CardError(0, "", "GE says 1 but there is no GN card",
+                                "add GN 1 for a perfect ground plane"))
     if sweep is None:
         errors.append(CardError(0, "", "the deck has no FR card",
                                 "NEC needs to be told a frequency"))
 
     # Cross-card checks: the errors that only show up once the cards are read
     # together, which is exactly the class of mistake a beginner makes.
-    if wires and feed is not None:
+    for feed in feeds:
         host = next((w for w in wires if w.tag == feed.tag), None)
         if host is None:
             errors.append(CardError(
-                0, "", f"the EX card feeds wire {feed.tag}, which no GW card defines",
+                0, "", f"an EX card feeds wire {feed.tag}, which no GW card defines",
                 "the EX tag has to match a GW tag"))
         elif not 1 <= feed.segment <= host.segments:
             errors.append(CardError(
-                0, "", f"the EX card feeds segment {feed.segment}, but wire "
+                0, "", f"an EX card feeds segment {feed.segment}, but wire "
                        f"{feed.tag} has {host.segments}",
                 f"a center feed on this wire is segment {host.center_segment}"))
 
     model = None
-    if wires and feed is not None and sweep is not None:
-        model = Model(tuple(wires), feed, sweep.start_mhz, comment)
+    if wires and feeds and sweep is not None:
+        model = Model(tuple(wires), tuple(feeds), sweep.start_mhz, comment, ground)
 
     return ParsedDeck(model, sweep, tuple(requests), gloss, errors)

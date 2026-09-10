@@ -15,6 +15,7 @@ const state = {
   sweep: null,        // last /api/sweep response
   measured: null,     // {cuts: Map, name}
   compare: null,
+  types: [],          // the antenna catalog, from /api/types
   // Which half of the page owns the model. The form and the cards are two
   // views of one thing, but only one of them can be the source at a time, so
   // whichever was touched last wins and the badge on the deck panel says so.
@@ -34,27 +35,21 @@ async function api(path, body) {
   return data;
 }
 
+/* The model always reaches the service as cards. The builder writes them, the
+ * editor edits them, and there is exactly one path from here on -- so what the
+ * page solves is always what the deck says. */
 function modelArgs() {
-  if (state.mode === 'deck') return { deck: $('deck').value };
-  const unit = $('unit').value;
-  const len = parseFloat($('length').value);
-  const args = {
-    freq_mhz: parseFloat($('freq').value),
-    radius_mm: parseFloat($('radius').value),
-    segments: parseInt($('segments').value, 10),
-    average: $('average').checked,
-  };
-  if (unit === 'mm') args.length_mm = len; else args.length_lambda = len;
-  return args;
+  return { deck: $('deck').value, average: $('average').checked };
 }
 
-function setMode(mode) {
-  state.mode = mode;
-  const badge = $('source');
-  badge.textContent = mode === 'deck' ? 'from these cards' : 'from the form';
-  badge.className = 'badge' + (mode === 'deck' ? ' cards' : '');
-  ['freq', 'length', 'unit', 'radius', 'segments', 'average']
-    .forEach((id) => { $(id).disabled = (mode === 'deck'); });
+function buildArgs() {
+  const t = state.types.find((x) => x.key === $('atype').value);
+  const params = {};
+  (t ? t.params : []).forEach((p) => {
+    const el = $('p_' + p.key);
+    if (el) params[p.key] = el.value;
+  });
+  return { type: $('atype').value, params };
 }
 
 function sweepArgs() {
@@ -63,6 +58,57 @@ function sweepArgs() {
     stop_mhz: parseFloat($('fstop').value),
     step_mhz: parseFloat($('fstep').value),
   });
+}
+
+function setMode(mode, label) {
+  state.mode = mode;
+  const badge = $('source');
+  badge.textContent = label || (mode === 'deck' ? 'edited by hand' : 'from the form');
+  badge.className = 'badge' + (mode === 'deck' ? ' cards' : '');
+}
+
+/* The form is rendered from the catalog the service serves, so adding an
+ * antenna type is a Python change and nothing here has to know about it. */
+function renderTypes() {
+  $('atype').innerHTML = state.types.map((t) =>
+    `<option value="${t.key}">${t.name} (${t.lesson})</option>`).join('');
+  renderParams();
+}
+
+function renderParams() {
+  const t = state.types.find((x) => x.key === $('atype').value);
+  if (!t) return;
+  $('typenote').innerHTML = `<b>${t.name}</b> &mdash; ${t.summary}`;
+  const field = (p) => {
+    const id = 'p_' + p.key;
+    if (p.unit === 'choice') {
+      return `<div><label for="${id}">${p.label}</label>`
+           + `<select id="${id}">` + p.choices.map((c) =>
+               `<option${c === p.default ? ' selected' : ''}>${c}</option>`).join('')
+           + `</select></div>`;
+    }
+    const unit = p.unit && p.unit !== 'count'
+      ? ` <span class="punit">(${p.unit === 'lambda' ? 'wavelengths' : p.unit})</span>` : '';
+    return `<div><label for="${id}">${p.label}${unit}</label>`
+         + `<input type="number" id="${id}" value="${p.default}" step="${p.step}"`
+         + `${p.help ? ` title="${p.help}"` : ''}></div>`;
+  };
+  // Two to a row, so a nine-parameter Yagi does not become a nine-line column.
+  const cells = t.params.map(field);
+  let html = '';
+  for (let i = 0; i < cells.length; i += 2) {
+    html += `<div class="row">${cells[i]}${cells[i + 1] || '<div></div>'}</div>`;
+  }
+  $('params').innerHTML = html;
+}
+
+async function buildAndSolve() {
+  const b = await api('build', buildArgs());
+  if (b.ok === false) { status(b.error || 'could not build that', true); return false; }
+  $('deck').value = b.deck;
+  const t = state.types.find((x) => x.key === b.type);
+  setMode('deck', `from the ${t ? t.name : b.type} builder`);
+  return renderSolve(await api('solve', modelArgs()));
 }
 
 function status(text, isError) {
@@ -403,39 +449,51 @@ function renderSolve(data) {
   setRo('ro-avg', g === null || g === undefined ? 'no ...1001 card' : g.toFixed(4),
         g === null || g === undefined ? 'off' : (g >= 0.95 && g <= 1.05 ? 'ok' : 'bad'));
 
-  // In card mode the text on screen is the student's own; replacing it would
-  // move their cursor for no reason.
-  if (state.mode === 'form') $('deck').value = data.deck;
   renderGloss(data.gloss, []);
-  syncForm(data.form);
   drawGeometry();
   renderLegend();
   $('derived').textContent =
     `lambda ${(data.wavelength_m * 1000).toFixed(1)} mm | wire ${(data.length_m * 1000).toFixed(2)} mm `
     + `= ${data.length_lambda.toFixed(4)} lambda | segment ${(data.segment_length_m * 1000).toFixed(2)} mm`;
 
-  $('rules').innerHTML = data.rules.map((r) =>
-    `<li class="${r.ok ? 'ok' : 'bad'}"><span class="mark">${r.ok ? 'ok' : '!!'}</span>`
-    + `<span>${r.rule}</span><span class="detail">${r.detail}</span></li>`).join('');
+  renderRules(data.rules);
 
   drawPolar();
   runCompare();
   return true;
 }
 
-/* The four form fields can only describe a centered dipole along z. When the
- * cards say something else the service sends form: null, and the fields stay
- * disabled rather than showing numbers that no longer drive anything. */
-function syncForm(form) {
-  if (!form) return;
-  $('freq').value = form.freq_mhz;
-  $('radius').value = form.radius_mm;
-  $('segments').value = form.segments;
-  if ($('unit').value === 'mm') {
-    $('length').value = form.length_mm.toFixed(2);
-  } else {
-    $('length').value = (form.length_mm / (299792.458 / form.freq_mhz)).toFixed(4);
+/* One line per rule, not per rule per wire. A 5-element Yagi produced 25 rows
+ * of "ok" and a 16-element array would produce 80, which buries the one line
+ * that matters. Passing rules collapse to a count; failures are listed by wire,
+ * because when a rule fails you need to know which element broke it. */
+function renderRules(rules) {
+  const byRule = new Map();
+  rules.forEach((r) => {
+    if (!byRule.has(r.rule)) byRule.set(r.rule, []);
+    byRule.get(r.rule).push(r);
+  });
+  const rows = [];
+  for (const [rule, group] of byRule) {
+    const bad = group.filter((r) => !r.ok);
+    if (!bad.length) {
+      const detail = group.length > 1
+        ? `ok on all ${group.length} wires` : group[0].detail;
+      rows.push(`<li class="ok"><span class="mark">ok</span><span>${rule}</span>`
+              + `<span class="detail">${detail}</span></li>`);
+    } else {
+      bad.forEach((r) => rows.push(
+        `<li class="bad"><span class="mark">!!</span>`
+        + `<span>${rule}${group.length > 1 ? ` (wire ${r.wire})` : ''}</span>`
+        + `<span class="detail">${r.detail}</span></li>`));
+      const okCount = group.length - bad.length;
+      if (okCount) rows.push(
+        `<li class="ok"><span class="mark">ok</span><span>${rule}</span>`
+        + `<span class="detail">on the other ${okCount} wire`
+        + `${okCount > 1 ? 's' : ''}</span></li>`);
+    }
   }
+  $('rules').innerHTML = rows.join('');
 }
 
 function renderConvergence(rows) {
@@ -565,19 +623,17 @@ function download(filename, text) {
 /* ---- wiring ------------------------------------------------------------ */
 
 $('solve').onclick = () => busy(null, async () => {
-  status('solving…');
-  if (await renderSolve(await api('solve', modelArgs()))) status('solved');
+  status('building the cards and solving…');
+  if (await buildAndSolve()) status('solved');
 });
 
 $('trim').onclick = () => busy(null, async () => {
   status('trimming to resonance…');
   const t = await api('trim', modelArgs());
   if (!t.resonant_length_lambda) { status(t.note || 'no resonance found', true); return; }
-  if (state.mode === 'deck' && t.deck) {
-    $('deck').value = t.deck;          // the trim rewrote the GW card; show it
-  } else {
-    $('unit').value = 'lambda';
-    $('length').value = t.resonant_length_lambda.toFixed(4);
+  if (t.deck) {
+    $('deck').value = t.deck;          // the trim rewrote the driven element
+    setMode('deck', 'trimmed to resonance');
   }
   await renderSolve(await api('solve', modelArgs()));
   status(`resonant at ${t.resonant_length_lambda.toFixed(4)} lambda `
@@ -621,22 +677,23 @@ $('rundeck').onclick = () => busy(null, async () => {
 });
 
 $('resetdeck').onclick = () => busy(null, async () => {
-  setMode('form');
-  status('back to the form');
-  await renderSolve(await api('solve', modelArgs()));
+  status('rebuilding from the form…');
+  if (await buildAndSolve()) status('rebuilt from the form');
 });
 
 // Typing in the deck hands it the model, but nothing runs until the button is
 // pressed: a half-typed card is not a request to solve.
 $('deck').addEventListener('input', () => {
-  setMode('deck');
+  setMode('deck', 'edited by hand');
   status('cards edited -- press Run these cards');
 });
 
-// Touching any form field hands the model back to the form.
-['freq', 'length', 'unit', 'radius', 'segments', 'average'].forEach((id) => {
-  $(id).addEventListener('input', () => { if (state.mode === 'deck') setMode('form'); });
+$('atype').addEventListener('change', () => {
+  renderParams();
+  status('press Build & solve');
 });
+
+$('params').addEventListener('input', () => status('press Build & solve'));
 
 $('copy').onclick = () => {
   navigator.clipboard.writeText($('deck').value)
@@ -675,27 +732,23 @@ $('clearmeas').onclick = () => {
 $('mcut').onchange = () => { drawPolar(); runCompare(); };
 $('rotate').oninput = () => { drawPolar(); runCompare(); };
 $('floor').onchange = () => { drawPolar(); runCompare(); };
-$('unit').onchange = () => {
-  // Keep the number meaningful when the unit changes rather than reinterpreting
-  // 0.5 wavelengths as half a millimeter.
-  const f = parseFloat($('freq').value), lam = 299792.458 / f;  // mm
-  const v = parseFloat($('length').value);
-  $('length').value = $('unit').value === 'mm'
-    ? (v * lam).toFixed(2) : (v / lam).toFixed(4);
-  $('length').step = $('unit').value === 'mm' ? 0.5 : 0.005;
-};
-
 window.addEventListener('resize', () => { drawPolar(); drawSweep(); drawGeometry(); });
 
 fetch('/api/engine').then((r) => r.json()).then((info) => {
   $('engine').textContent = info.engine;
 }).catch(() => { $('engine').textContent = 'engine unknown'; });
 
-setMode('form');
 drawPolar();
 drawSweep();
 drawGeometry();
-$('solve').click();
+
+// The catalog comes over the same POST channel as everything else; only
+// /api/engine answers a GET.
+api('types').then((info) => {
+  state.types = info.types;
+  renderTypes();
+  return busy(null, async () => { await buildAndSolve(); status('solved'); });
+}).catch((err) => status(`could not load the antenna catalog: ${err.message}`, true));
 
 /* ---- the 3D pattern ---------------------------------------------------- */
 

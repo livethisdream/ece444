@@ -23,10 +23,10 @@ import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from . import cards, export, study
+from . import builders, cards, export, study
 from .engine import EngineError
 from .model import (E_PLANE, H_PLANE, Model, SPHERE_AVG, Sweep,
-                    sphere_request, wavelength)
+                    audit_request, cuts_for, sphere_request, wavelength)
 from .reference import HALF_WAVE
 
 STATIC = Path(__file__).parent / "static"
@@ -83,6 +83,27 @@ def _geometry(model: Model) -> list[dict]:
     return out
 
 
+def _front_to_back(surf) -> float | None:
+    """Peak gain minus the gain in the opposite direction.
+
+    The number a Yagi is judged by, and one a cut cannot give you unless the
+    cut happens to contain both directions. On the sphere it is always there.
+    """
+    theta, phi = surf.peak_direction
+    back_theta, back_phi = 180.0 - theta, (phi + 180.0) % 360.0
+    try:
+        i = min(range(len(surf.theta_deg)),
+                key=lambda k: abs(surf.theta_deg[k] - back_theta))
+        j = min(range(len(surf.phi_deg)),
+                key=lambda k: abs(surf.phi_deg[k] - back_phi))
+    except ValueError:
+        return None
+    back = surf.gain_dbi[i][j]
+    if back < -100:            # a true null behind: report the floor, not -1000
+        return None
+    return surf.peak_dbi - back
+
+
 def _gloss_json(parsed: "cards.ParsedDeck") -> list[dict]:
     return [{"line_no": g.line_no, "text": g.text, "card": g.card, "ok": g.ok,
              "summary": g.summary,
@@ -129,14 +150,13 @@ def _requests_for(req: dict):
         if not parsed.ok:
             raise DeckError(parsed)
         return parsed.requests
-    names = req.get("cuts") or ["E-plane", "H-plane"]
-    out = []
-    if "E-plane" in names:
-        out.append(E_PLANE)
-    if "H-plane" in names:
-        out.append(H_PLANE)
-    if req.get("average", True):
-        out.append(SPHERE_AVG)
+    grounded = _model(req).ground.present
+    out = list(cuts_for(grounded))
+    # The average power gain is a conservation check against a whole sphere in
+    # free space. Over ground half the sphere is not there, and the number
+    # stops meaning what the lab says it means, so it is not requested.
+    if req.get("average", True) and not grounded:
+        out.append(audit_request(_model(req)))
     return tuple(out)
 
 
@@ -152,6 +172,30 @@ class Api:
                               "z_imag": HALF_WAVE["z_in"].imag,
                               "gain_dbi": HALF_WAVE["gain_dbi"],
                               "hpbw_deg": HALF_WAVE["hpbw_deg"]}}
+
+    def types(self, req: dict) -> dict:
+        """The antenna catalog, for the page to render a form from."""
+        return {"types": builders.spec()}
+
+    def build(self, req: dict) -> dict:
+        """Turn a type and its parameters into cards.
+
+        The deck is the output. Everything downstream -- solving, the studies,
+        the 3D view -- goes through the same path a typed deck does, so the
+        builder cannot drift from what the cards say.
+        """
+        kind = req.get("type", "dipole")
+        try:
+            model = builders.build(kind, req.get("params", {}))
+        except KeyError as exc:
+            return {"ok": False, "error": str(exc)}
+        requests = cuts_for(model.ground.present)
+        if not model.ground.present:
+            requests = requests + (audit_request(model),)
+        return {"ok": True, "type": kind,
+                "deck": model.deck(requests=requests),
+                "geometry": _geometry(model),
+                "ground": model.ground.kind}
 
     def deck(self, req: dict) -> dict:
         """Read a typed deck without running it: glosses and complaints."""
@@ -190,6 +234,8 @@ class Api:
             "s11_db": 20 * math.log10(g) if g > 0 else None,
             "cuts": [_cut_json(c) for c in sol.cuts],
             "average_power_gain": sol.average_power_gain,
+            "feeds": sol.feeds,
+            "ground": model.ground.kind,
             "rules": model.check(),
         }
 
@@ -227,7 +273,9 @@ class Api:
         model = _model(req)
         step = float(req.get("step_deg", 5.0))
         step = min(max(step, 1.0), 15.0)
-        surf = self.engine.surface(model, sphere_request(step))
+        grounded = model.ground.present
+        request = sphere_request(step, hemisphere=grounded)
+        surf = self.engine.surface(model, request)
         theta, phi = surf.peak_direction
         return {
             "ok": True,
@@ -240,7 +288,9 @@ class Api:
             "peak_theta_deg": theta,
             "peak_phi_deg": phi,
             "geometry": _geometry(model),
-            "deck": model.deck(requests=(sphere_request(step),)),
+            "ground": model.ground.kind,
+            "front_back_db": _front_to_back(surf),
+            "deck": model.deck(requests=(request,)),
         }
 
     def export_sphere(self, req: dict) -> dict:
@@ -303,6 +353,7 @@ def make_handler(api: Api):
             name = self.path.split("?")[0].removeprefix("/api/")
             fn = {"solve": api.solve, "sweep": api.sweep, "trim": api.trim,
                   "deck": api.deck, "sphere": api.sphere,
+                  "types": api.types, "build": api.build,
                   "export/sphere": api.export_sphere,
                   "converge": api.converge, "export/pattern": api.export_pattern,
                   "export/sweep": api.export_sweep}.get(name)

@@ -172,6 +172,47 @@ present and asserts they agree. **The container build runs that selftest**, so
 an image only exists if the two engines agreed and the L7 and L8 numbers still
 came out right.
 
+## Antenna types
+
+The type picker drives everything. Choosing a type renders its parameters,
+and **Build & solve writes NEC cards** into the deck editor and runs them --
+so what the page solves is always what the deck says, and a student can pick
+up where the builder left off by editing the cards.
+
+| Type | Lesson | What it is for |
+| :-- | :-- | :-- |
+| Dipole | L7-L8 | the lab's antenna: one wire, center fed |
+| Monopole over ground | L9 | half a dipole fed against its image; perfect or real ground |
+| Loop | L9 | a closed loop as a polygon, because NEC-2 has no curve |
+| Yagi-Uda | L11 | driven element, reflector, N directors; the parasitic array |
+| Driven array | L16-L22 | dipoles with a source each and a phase per element |
+
+Adding a type is a Python change in `builders.py` and nothing in the page
+needs to know: the form is rendered from the catalog the service serves.
+
+Three things the types brought with them, worth knowing because they change
+what the numbers mean:
+
+- **Over ground, nothing is computed below the horizon.** Ask NEC for theta
+  past 90 degrees over a ground plane and what comes back is not a small
+  number, it is garbage -- 1e120 dBi in the case that found this. Cuts and the
+  sphere both stop at 90 when a ground plane is present.
+- **The energy audit's grid follows the structure.** L8's `RP 0 19 36 1001` is
+  ten degrees and plenty for a dipole. Point it at a 4-element Yagi and it
+  reads 0.88, because the main lobe falls between samples -- a correct model
+  reported as broken. Multi-element models get a 2 degree grid instead, and
+  the dipole keeps the handout's card exactly.
+- **Every element of a driven array reports its own impedance**, and they
+  differ. That difference is mutual coupling, and it is the gap between the
+  array factor and the pattern NEC computes -- which is L22's subject.
+
+### What NEC-2 cannot do
+
+NEC-2 is a thin-wire code. Patches, slots, horns (L10) and parabolic
+reflectors (half of L11) are not thin-wire problems, and they are absent here
+rather than approximated badly. L10's patch designer widget and the aperture
+theory in Module 3 cover that ground; this tool covers the wires.
+
 ## The GUI
 
 `run.py serve` starts a local service and opens a page with:
@@ -240,15 +281,23 @@ python scripts/nec_lab/run.py solve --deck my_dipole.nec
 
 ### What is read, and what is refused
 
-Read: `CM CE GW GE EX FR RP XQ EN` -- exactly what this tool writes.
+Read: `CM CE GW GE GN EX FR RP XQ EN` -- exactly what this tool writes.
+That covers any number of wires, any number of sources, and a perfect or real
+ground plane.
 
 Everything else is refused by name, with what it does and a pointer to 4nec2.
-That is deliberate rather than lazy. A card like `GN` (a ground plane) or `LD`
-(a load) changes the antenna in a way the rest of nec_lab does not model: the
-segmentation rules, the free-space energy audit, and the study code all assume
-a bare wire in free space. Running it anyway would give a correct NEC answer
-wrapped in a page that had quietly stopped applying to it -- a worse failure
-than being told no.
+That is deliberate rather than lazy. A card like `LD` (a load) or `TL` (a
+transmission line) changes the antenna in a way the rest of nec_lab does not
+model: the segmentation rules, the energy audit, and the study code all assume
+the structure is what the supported cards describe. Running it anyway would
+give a correct NEC answer wrapped in a page that had quietly stopped applying
+to it -- a worse failure than being told no.
+
+`GN` used to be on that list and is not any more: L9 needs a monopole, a
+monopole needs a ground plane, so the model layer learned about ground rather
+than the parser learning to lie. What is still checked is that `GE` and `GN`
+agree -- a `GN` card with `GE 0` is a ground NEC will never connect anything
+to.
 
 ## The chamber handoff
 
@@ -294,7 +343,8 @@ the *why* column empty, which is the part that is the student's to write.
 
 | File | What |
 | :-- | :-- |
-| `model.py` | geometry, feed, pattern requests, and the cards they write |
+| `model.py` | geometry, feeds, ground, pattern requests, and the cards they write |
+| `builders.py` | the antenna catalog: each type, its parameters, and its cards |
 | `cards.py` | reading cards back: the parser, the field glosses, the complaints |
 | `engine.py` | the two backends and the shared result types |
 | `study.py` | sweep, resonance, trim, convergence, energy audit |

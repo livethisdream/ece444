@@ -18,10 +18,10 @@ from __future__ import annotations
 
 import sys
 
-from . import cards, export, study
+from . import builders, cards, export, study
 from .engine import ExecutableEngine, PyNecEngine
 from .model import (E_PLANE, H_PLANE, Model, SPHERE_AVG, Sweep,
-                    sphere_request, wavelength)
+                    audit_request, cuts_for, sphere_request, wavelength)
 
 FAILURES: list[str] = []
 
@@ -214,8 +214,16 @@ def run() -> int:
               broken({4: "EX 0 1 11 0 1 0"}), "wire 1 has 9")
     complains("a feed on a wire that does not exist is caught",
               broken({4: "EX 0 2 5 0 1 0"}), "no GW card defines")
-    complains("a ground plane is refused by name",
-              broken(add="GN 1"), "free space")
+    # GN is supported now (L9 needs it), so what has to be caught is the pair
+    # coming apart: a ground card with a free-space GE, and the reverse.
+    complains("a GN card with no GE 1 is caught",
+              broken(add="GN 1"), "GE does not say 1")
+    complains("GE 1 with no GN card is caught",
+              broken(swap={3: "GE 1"}), "no GN card")
+    complains("a ground model nec_lab does not run is refused",
+              broken(swap={3: "GE 1"}, add="GN 0"), "not a ground model")
+    complains("a load is still refused by name",
+              broken(add="LD 0 1 5 5 10 0"), "load")
     complains("a missing frequency card is caught", broken(drop=5), "no FR card")
     complains("a wire with no length is caught",
               broken({2: "GW 1 9 0 0 0 0 0 0 0.0005"}), "zero length")
@@ -225,6 +233,106 @@ def run() -> int:
               broken({2: "GW 1 9 0 0 -0.08"}), "GW needs 9 numbers")
     complains("a non-numeric field is caught",
               broken({2: "GW 1 nine 0 0 -0.08 0 0 0.08 0.0005"}), "not a number")
+
+    print("\nthe antenna catalog")
+    eng = engines[0]
+
+    def built(kind, **params):
+        m = builders.build(kind, params)
+        grounded = m.ground.present
+        sol = eng.solve(m, cuts_for(grounded)
+                        + (() if grounded else (audit_request(m),)))
+        surf = eng.surface(m, sphere_request(5.0, hemisphere=grounded))
+        return m, sol, surf
+
+    # Monopole: half a dipole over its image. Half the impedance, 3 dB more
+    # gain, and the peak on the horizon.
+    m, sol, surf = built("monopole")
+    theta, _ = surf.peak_direction
+    check("monopole: Zin is about 36 ohm (half the dipole's)",
+          near(sol.z_real, 36.0, 3.0) and abs(sol.z_imag) < 5.0,
+          f"{sol.z_real:.2f} {'+' if sol.z_imag >= 0 else '-'} j{abs(sol.z_imag):.2f}")
+    check("monopole: gain is about 5.15 dBi (3 dB over the dipole)",
+          near(surf.peak_dbi, 5.15, 0.2), f"{surf.peak_dbi:.2f} dBi")
+    check("monopole: the peak is on the horizon", near(theta, 90.0, 1.0),
+          f"theta {theta:.0f}")
+    check("monopole: nothing is computed below the ground plane",
+          max(surf.theta_deg) <= 90.0, f"theta runs to {max(surf.theta_deg):.0f}")
+    # Take the ground away and it stops being a monopole: that is the point of
+    # L9, and it is also proof the GN card is doing something.
+    _, free_sol, _ = built("monopole", ground="free")
+    check("monopole: removing the ground changes the antenna",
+          abs(free_sol.z_real - sol.z_real) > 5.0,
+          f"free space gives {free_sol.z_real:.1f}{free_sol.z_imag:+.1f}j")
+
+    # A one-wavelength loop fires broadside to its own plane.
+    m, sol, surf = built("loop")
+    theta, _ = surf.peak_direction
+    check("1 lambda loop: the peak is normal to the loop's plane",
+          min(theta, 180 - theta) < 10.0, f"theta {theta:.0f}")
+    check("1 lambda loop: gain is about 3 dBi",
+          near(surf.peak_dbi, 3.2, 0.5), f"{surf.peak_dbi:.2f} dBi")
+
+    # Yagi: a beam toward the directors, and a real front-to-back.
+    m, sol, surf = built("yagi", directors=1)
+    theta, phi = surf.peak_direction
+    back = surf.gain_dbi[surf.theta_deg.index(90.0)][surf.phi_deg.index(180.0)]
+    check("Yagi: the beam points at the directors (+x)",
+          near(theta, 90.0, 1.0) and near(phi, 0.0, 1.0),
+          f"theta {theta:.0f}, phi {phi:.0f}")
+    check("Yagi: 3 elements give more than 7 dBi", surf.peak_dbi > 7.0,
+          f"{surf.peak_dbi:.2f} dBi")
+    check("Yagi: front-to-back is better than 10 dB",
+          surf.peak_dbi - back > 10.0, f"{surf.peak_dbi - back:.1f} dB")
+    check("Yagi: the driven element is not a dipole's 73 ohm",
+          10.0 < sol.z_real < 40.0, f"{sol.z_real:.1f} ohm")
+    # The studies must resize the driven element, not wire 1 (the reflector).
+    trimmed = m.with_length(0.9 * m.fed_wire.length)
+    check("Yagi: trimming resizes the driven element, not the reflector",
+          trimmed.wires[0].length == m.wires[0].length
+          and trimmed.wires[1].length < m.wires[1].length)
+
+    # A driven array: one source per element, and coupling that makes them
+    # differ. Then a phase slope that moves the beam.
+    m, sol, surf = built("array", elements=4)
+    theta, phi = surf.peak_direction
+    check("array: one feed per element", len(sol.feeds) == 4,
+          f"{len(sol.feeds)} feeds")
+    zs = [complex(f["z_real"], f["z_imag"]) for f in sol.feeds]
+    check("array: the element impedances differ (mutual coupling)",
+          abs(zs[0] - zs[1]) > 1.0,
+          " ".join(f"{z.real:.0f}{z.imag:+.0f}j" for z in zs))
+    check("array: an unphased array fires broadside",
+          near(theta, 90.0, 1.0) and min(abs(phi), abs(phi - 180)) < 2.0,
+          f"theta {theta:.0f}, phi {phi:.0f}")
+    _, _, steered = built("array", elements=4, phase_deg=-90)
+    st_theta, st_phi = steered.peak_direction
+    off = min(abs(st_phi - 150.0), abs(st_phi - 30.0))
+    check("array: 90 deg per element at half-wave spacing steers 60 deg",
+          off < 5.0, f"phi {st_phi:.0f}")
+
+    # The audit has to pass on every type. A ten-degree grid reads 0.88 on a
+    # 4-element Yagi -- a correct model called broken -- which is why the grid
+    # now follows the structure.
+    for kind, params in (("dipole", {}), ("loop", {}), ("yagi", {"directors": 3}),
+                         ("array", {"elements": 4})):
+        _, sol_k, _ = built(kind, **params)
+        g = sol_k.average_power_gain
+        check(f"{kind}: the energy audit passes at the grid we ask for",
+              g is not None and 0.95 <= g <= 1.05, f"{g:.4f}")
+
+    # Every builder writes cards, and those cards have to read back as the
+    # same antenna -- otherwise the deck on screen is not what was solved.
+    for kind in builders.BY_KEY:
+        m_k = builders.build(kind, {})
+        again = cards.parse(m_k.deck(requests=cuts_for(m_k.ground.present)))
+        ok = (again.ok and len(again.model.wires) == len(m_k.wires)
+              and len(again.model.feeds) == len(m_k.feeds)
+              and again.model.ground.kind == m_k.ground.kind)
+        check(f"{kind}: its deck reads back as the same antenna", ok,
+              "; ".join(e.message for e in again.errors) if not ok else
+              f"{len(m_k.wires)} wires, {len(m_k.feeds)} feeds, "
+              f"{m_k.ground.kind} ground")
 
     print("\nchamber interoperability")
     sol = engines[0].solve(model, (E_PLANE, H_PLANE))

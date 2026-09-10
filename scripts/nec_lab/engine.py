@@ -130,6 +130,10 @@ class Solution:
     current_imag: float
     cuts: list[Cut] = field(default_factory=list)
     average_power_gain: float | None = None
+    # One entry per EX card, in deck order: {tag, segment, z_real, z_imag}.
+    # A driven array has a feed impedance per element, and they differ --
+    # mutual coupling is exactly what makes an array not a set of dipoles.
+    feeds: list[dict] = field(default_factory=list)
 
     @property
     def z_in(self) -> complex:
@@ -180,10 +184,18 @@ class PyNecEngine:
             # what a uniform GW card means.
             geo.wire(w.tag, w.segments, w.x1, w.y1, w.z1, w.x2, w.y2, w.z2,
                      w.radius, 1.0, 1.0)
-        ctx.geometry_complete(0)
-        f = model.feed
-        ctx.ex_card(0, f.tag, f.segment, 0, f.volts_real, f.volts_imag,
-                    0, 0, 0, 0)
+        # Flag 1 tells NEC the structure meets a ground plane, and the GN card
+        # says what kind. Both are needed: a GN card with a free-space GE is
+        # a different (and wrong) model.
+        ctx.geometry_complete(1 if model.ground.present else 0)
+        if model.ground.kind == "perfect":
+            ctx.gn_card(1, 0, 0, 0, 0, 0, 0, 0)
+        elif model.ground.kind == "real":
+            ctx.gn_card(2, 0, model.ground.epsilon, model.ground.sigma,
+                        0, 0, 0, 0)
+        for f in model.feeds:
+            ctx.ex_card(0, f.tag, f.segment, 0, f.volts_real, f.volts_imag,
+                        0, 0, 0, 0)
         return ctx
 
     def solve(self, model: Model,
@@ -202,12 +214,17 @@ class PyNecEngine:
         ip = ctx.get_input_parameters(0)
         z = ip.get_impedance()[0]
         i = ip.get_current()[0]
+        feeds = [{"tag": int(t), "segment": int(sg),
+                  "z_real": float(zz.real), "z_imag": float(zz.imag)}
+                 for t, sg, zz in zip(ip.get_tag(), ip.get_segment(),
+                                      ip.get_impedance())]
         sol = Solution(
             engine=self.name,
             deck=model.deck(requests=requests),
             freq_hz=float(ip.get_frequency()),
             z_real=float(z.real), z_imag=float(z.imag),
             current_real=float(i.real), current_imag=float(i.imag),
+            feeds=feeds,
         )
         for n, r in enumerate(requests):
             rp = ctx.get_radiation_pattern(n)
@@ -375,7 +392,8 @@ class ExecutableEngine:
             m = _FREQ_RE.search(line)
             if m:
                 cur = {"freq_hz": _f(m.group(1)) * 1e6, "input": None,
-                       "patterns": [], "average_power_gain": None}
+                       "feeds": [], "patterns": [],
+                       "average_power_gain": None}
                 blocks.append(cur)
                 i += 1
                 continue
@@ -394,17 +412,20 @@ class ExecutableEngine:
                 while i < len(lines):
                     toks = lines[i].split()
                     if len(toks) >= 11 and all(_is_number(t) for t in toks[:11]):
-                        cur["input"] = {
+                        row = {
                             "tag": int(_f(toks[0])), "segment": int(_f(toks[1])),
                             "v_real": _f(toks[2]), "v_imag": _f(toks[3]),
                             "i_real": _f(toks[4]), "i_imag": _f(toks[5]),
                             "z_real": _f(toks[6]), "z_imag": _f(toks[7]),
                         }
-                        break
-                    if lines[i].strip() and "CURRENTS" in lines[i]:
+                        # One row per EX card. The first is "the" impedance;
+                        # the rest matter as soon as an array is driven.
+                        if cur["input"] is None:
+                            cur["input"] = row
+                        cur.setdefault("feeds", []).append(row)
+                    elif lines[i].strip() and "CURRENTS" in lines[i]:
                         break
                     i += 1
-                i += 1
                 continue
 
             if "RADIATION PATTERNS" in line:
@@ -443,6 +464,9 @@ class ExecutableEngine:
             z_real=b["input"]["z_real"], z_imag=b["input"]["z_imag"],
             current_real=b["input"]["i_real"], current_imag=b["input"]["i_imag"],
             average_power_gain=b["average_power_gain"],
+            feeds=[{"tag": r["tag"], "segment": r["segment"],
+                    "z_real": r["z_real"], "z_imag": r["z_imag"]}
+                   for r in b.get("feeds", [])],
         )
         pattern_requests = [r for r in requests if not r.average]
         for r, rows in zip(pattern_requests, b["patterns"]):

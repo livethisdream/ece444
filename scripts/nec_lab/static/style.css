@@ -135,3 +135,9 @@ label.check { display:flex; align-items:flex-start; gap:7px; font-size:12px;
 label.check input { margin-top:1px; }
 label.check code { font-family:var(--mono); font-size:11px; }
 canvas#geom { margin-bottom:10px; }
+
+/* ---- the antenna catalog form ---------------------------------------- */
+.typenote { font-size:12px; color:var(--muted); margin:-4px 0 10px; line-height:1.4; }
+.typenote b { color:var(--blue-dark); }
+#params .row { margin-bottom:8px; }
+.punit { font-size:11px; color:var(--muted); }
