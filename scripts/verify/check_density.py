@@ -66,6 +66,7 @@ def words(text):
     """Count what a reader sees as words. Markup, math and HTML are not words."""
     text = re.sub(r"<[^>]+>", " ", text)                # HTML tags
     text = re.sub(r"\$\$.*?\$\$", " ", text, flags=re.S)  # display math: 0
+    text = re.sub(r"```.*?```", " ", text, flags=re.S)    # fenced code: 0 (a card listing is not prose)
     text = re.sub(r"\$[^$\n]+\$", " EQ ", text)          # inline math: 1
     text = re.sub(r"^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$", " ", text, flags=re.M)  # table rules
     text = re.sub(r"^:[\w-]+:.*$", " ", text, flags=re.M)  # directive options
