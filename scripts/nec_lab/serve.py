@@ -138,6 +138,11 @@ def _cut_json(cut) -> dict:
     return {
         "name": cut.name, "axis": cut.axis, "freq_hz": cut.freq_hz,
         "angle_deg": cut.angle_deg, "gain_dbi": cut.gain_dbi,
+        # Both angles per sample: the page plots a cut by the direction each
+        # sample points in, not by the number on the swept axis, which is the
+        # only way two cuts in different planes can agree about where the beam
+        # is.
+        "theta_deg": cut.theta_deg, "phi_deg": cut.phi_deg,
         "peak_dbi": cut.peak_dbi, "peak_angle_deg": cut.peak_angle_deg,
         "hpbw_deg": cut.hpbw_deg(),
     }

@@ -16,6 +16,7 @@ Two kinds of assertion, and the second is the interesting one:
 
 from __future__ import annotations
 
+import math
 import sys
 
 from . import builders, cards, export, study
@@ -291,6 +292,37 @@ def run() -> int:
     check("Yagi: trimming resizes the driven element, not the reflector",
           trimmed.wires[0].length == m.wires[0].length
           and trimmed.wires[1].length < m.wires[1].length)
+
+    # The defect this guards: theta is measured from +z and phi from +x, so
+    # two cuts drawn on one dial by their swept angle disagree about where the
+    # beam is. Every cut carries the direction of each sample, and the peak
+    # directions have to be the same vector -- there is only one beam.
+    def peak_direction_of(cut):
+        i = cut.gain_dbi.index(cut.peak_dbi)
+        th = math.radians(cut.theta_deg[i])
+        ph = math.radians(cut.phi_deg[i])
+        return (math.sin(th) * math.cos(ph), math.sin(th) * math.sin(ph),
+                math.cos(th))
+
+    m, sol, _ = built("yagi", directors=1)
+    dirs = [peak_direction_of(c) for c in sol.cuts]
+    worst = max(math.dist(dirs[0], d) for d in dirs) if len(dirs) > 1 else 0.0
+    check("every cut agrees on which way the beam points",
+          worst < 0.05 and len(dirs) > 1,
+          f"{len(dirs)} cuts, peak directions differ by {worst:.4f} "
+          f"(1.0 would be 60 degrees apart)")
+
+    # A theta sweep at one phi is half a plane; in free space the cut closes
+    # the circle so a dipole's elevation pattern has both of its lobes.
+    _, dip_sol, _ = built("dipole")
+    elev = next(c for c in dip_sol.cuts if c.axis == "theta")
+    check("a free-space elevation cut is a whole plane, not half",
+          max(elev.theta_deg) > 350, f"theta runs to {max(elev.theta_deg):.0f}")
+    at90 = elev.gain_dbi[elev.theta_deg.index(90.0)]
+    at270 = elev.gain_dbi[elev.theta_deg.index(270.0)]
+    check("both lobes of the dipole are in that cut",
+          near(at90, at270, 0.01) and near(at90, elev.peak_dbi, 0.01),
+          f"{at90:.2f} dBi at theta 90, {at270:.2f} dBi at theta 270")
 
     # A driven array: one source per element, and coupling that makes them
     # differ. Then a phase slope that moves the beam.

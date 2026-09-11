@@ -231,6 +231,15 @@ theory in Module 3 cover that ground; this tool covers the wires.
   rows where refinement has pushed the segment length below `8a`.
 - **Compare with a measurement** — load a chamber CSV and it is drawn over the
   simulated cut, with the RMS and worst-case difference reported.
+- **Pattern cuts** — one dial per *plane*, not per swept angle. Theta is
+  measured from +z and phi from +x, so a single dial with "0 at the top" puts
+  the same beam in two different places: a Yagi beaming along +x lands at 90 on
+  a theta dial and at 0 on a phi dial, and the two pictures look rotated
+  against each other because they are. Each dial is a plane with a fixed
+  orientation in space instead, labeled with its own axes (+x to the right, +z
+  or +y up), and every sample is plotted by the direction it points in. Cuts
+  sharing a plane share a dial, which is how the two halves of an elevation
+  pattern over ground draw as one curve.
 - **3D pattern** — gain over the whole sphere as a surface you can orbit, with
   the wire drawn to scale at the center so the nulls have something to be
   along. The radius scale is a choice and it matters: **linear power** is the

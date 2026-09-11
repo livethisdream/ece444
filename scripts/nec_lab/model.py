@@ -173,13 +173,30 @@ def audit_request(model: "Model") -> PatternRequest:
 
 
 def cuts_for(ground_present: bool) -> tuple[PatternRequest, ...]:
-    """The two standard cuts, stopped at the horizon when there is ground."""
+    """The principal cuts, as whole planes rather than half of one.
+
+    A theta sweep at one phi is half a plane. The other half is the same theta
+    sweep at phi + 180, and without it a dipole's E-plane is drawn as one lobe
+    on the right of the dial. In free space NEC will sweep theta 0 to 360 in a
+    single card and close the circle itself; over ground it will not (theta
+    past 90 there returns garbage), so the plane is asked for as two cards and
+    the page draws both on one dial.
+    """
     if not ground_present:
-        return (E_PLANE, H_PLANE)
-    return (PatternRequest("elevation", theta_start=0.0, n_theta=91, d_theta=1.0,
-                           phi_start=0.0, n_phi=1, d_phi=0.0),
-            PatternRequest("azimuth", theta_start=89.0, n_theta=1, d_theta=0.0,
-                           phi_start=0.0, n_phi=361, d_phi=1.0))
+        return (
+            PatternRequest("elevation (x-z)", theta_start=0.0, n_theta=361,
+                           d_theta=1.0, phi_start=0.0, n_phi=1, d_phi=0.0),
+            PatternRequest("azimuth (x-y)", theta_start=90.0, n_theta=1,
+                           d_theta=0.0, phi_start=0.0, n_phi=361, d_phi=1.0),
+        )
+    return (
+        PatternRequest("elevation (+x side)", theta_start=0.0, n_theta=91,
+                       d_theta=1.0, phi_start=0.0, n_phi=1, d_phi=0.0),
+        PatternRequest("elevation (-x side)", theta_start=0.0, n_theta=91,
+                       d_theta=1.0, phi_start=180.0, n_phi=1, d_phi=0.0),
+        PatternRequest("azimuth (x-y)", theta_start=89.0, n_theta=1,
+                       d_theta=0.0, phi_start=0.0, n_phi=361, d_phi=1.0),
+    )
 
 
 @dataclass(frozen=True)

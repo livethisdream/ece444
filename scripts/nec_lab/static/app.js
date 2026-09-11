@@ -152,30 +152,111 @@ function text(ctx, s, x, y, size, color, align) {
   ctx.fillText(s, x, y);
 }
 
-/* ---- the polar pattern plot ------------------------------------------- */
+/* ---- the pattern cuts -------------------------------------------------
+ *
+ * A cut is drawn by the DIRECTION each sample points in, not by the number on
+ * the axis that was swept. That distinction is the whole of this section.
+ *
+ * Theta is measured from +z and phi from +x, so a dial with "0 at the top"
+ * means two different things to the two cuts: a Yagi beaming along +x lands at
+ * 90 on a theta dial and at 0 on a phi dial. Same beam, two places, and the
+ * pictures look rotated against each other -- because they are.
+ *
+ * So each dial is a PLANE with a fixed orientation in space: a right direction
+ * and an up direction. Every sample becomes a unit vector, is projected onto
+ * those two, and lands where it physically belongs. Cuts sharing a plane share
+ * a dial -- which is how the two halves of an elevation pattern over ground
+ * (phi = 0 and phi = 180) draw as one continuous curve.
+ */
 
-/* Every trace is normalized to its own peak. That is not a display
- * convenience: a simulated cut is absolute dBi and a measured cut is raw S21
- * in dB, and they only share an axis once each is referred to its own
- * maximum. The chamber app's compare() makes the same choice. */
-function normalize(values) {
-  const peak = Math.max(...values.filter(Number.isFinite));
-  return values.map((v) => v - peak);
+function dialsFor(cuts) {
+  const dials = new Map();
+  (cuts || []).forEach((cut) => {
+    if (!cut.theta_deg || !cut.theta_deg.length) return;
+    let key, u, v, right, up, name;
+    if (cut.axis === 'theta') {
+      // phi and phi+180 are the two halves of one plane.
+      const phi0 = ((cut.phi_deg[0] % 180) + 180) % 180;
+      const r = phi0 * Math.PI / 180;
+      key = 'theta@' + phi0.toFixed(1);
+      u = [Math.cos(r), Math.sin(r), 0];
+      v = [0, 0, 1];
+      right = phi0 === 0 ? '+x' : phi0 === 90 ? '+y' : `phi ${phi0.toFixed(0)}`;
+      up = '+z';
+      name = phi0 === 0 ? 'x-z plane' : phi0 === 90 ? 'y-z plane'
+                                      : `plane at phi = ${phi0.toFixed(0)}`;
+    } else {
+      key = 'phi';
+      u = [1, 0, 0]; v = [0, 1, 0];
+      right = '+x'; up = '+y'; name = 'x-y plane';
+    }
+    if (!dials.has(key)) dials.set(key, { key, u, v, right, up, name, cuts: [] });
+    dials.get(key).cuts.push(cut);
+  });
+  return [...dials.values()];
 }
 
-function drawPolar() {
-  const canvas = $('polar');
-  const { ctx, w, h } = fit(canvas, 1.0);
-  const floor = parseFloat($('floor').value);
-  const cx = w / 2, cy = h / 2 + 4;
-  const R = Math.min(w, h) / 2 - 26;
+function direction(cut, i) {
+  const th = cut.theta_deg[i] * Math.PI / 180;
+  const ph = cut.phi_deg[i] * Math.PI / 180;
+  return [Math.sin(th) * Math.cos(ph), Math.sin(th) * Math.sin(ph), Math.cos(th)];
+}
 
+const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+
+/* All simulated cuts share one reference -- the antenna's own peak -- so the
+ * two dials are comparable with each other. A measurement is normalized to its
+ * own peak instead, because it is dB of something else entirely. */
+function simPeak() {
+  const cuts = state.solve ? state.solve.cuts : [];
+  return cuts.reduce((m, c) => Math.max(m, c.peak_dbi), -Infinity);
+}
+
+function renderCuts() {
+  const host = $('cuts');
+  const dials = dialsFor(state.solve ? state.solve.cuts : []);
+  if (!dials.length) {
+    host.innerHTML = '<figure class="dial"><canvas id="dial0"></canvas>'
+      + '<figcaption>solve to draw a pattern</figcaption></figure>';
+  } else {
+    host.innerHTML = dials.map((d, i) =>
+      `<figure class="dial"><canvas id="dial${i}" aria-label="Pattern in the `
+      + `${d.name}, gain in dB below the peak"></canvas><figcaption>`
+      + `<b>${d.name}</b> &mdash; ${d.cuts.map((c) => c.name).join(' + ')}`
+      + `${d.key === 'phi' && currentMeasuredCut() ? ', with the measurement' : ''}`
+      + `</figcaption></figure>`).join('');
+  }
+  state.dials = dials;
+  drawCuts();
+}
+
+function drawCuts() {
+  const dials = state.dials || [];
+  if (!dials.length) {
+    const c = $('dial0');
+    if (c) {
+      const { ctx, w, h } = fit(c, 1.0);
+      text(ctx, 'solve to draw a pattern', w / 2, h / 2, 12, css('--muted'), 'center');
+    }
+    return;
+  }
+  dials.forEach((d, i) => drawDial($('dial' + i), d));
+}
+
+function drawDial(canvas, dial) {
+  if (!canvas) return;
+  const { ctx, w, h } = fit(canvas, 1.0);
+  const floorDb = parseFloat($('floor').value);
+  const peak = simPeak();
+  const lo = peak - Math.abs(floorDb);
+  const cx = w / 2, cy = h / 2 + 4;
+  const R = Math.min(w, h) / 2 - 24;
   const grid = css('--grid'), muted = css('--muted');
+
   ctx.lineWidth = 1;
-  for (let db = 0; db >= floor; db -= 10) {
-    const r = R * (db - floor) / (0 - floor);
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+  for (let db = 0; db >= -Math.abs(floorDb); db -= 10) {
+    const r = R * (db + Math.abs(floorDb)) / Math.abs(floorDb);
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI);
     ctx.strokeStyle = db === 0 ? css('--edge2') : grid;
     ctx.stroke();
     if (db < 0) text(ctx, `${db}`, cx + 3, cy - r, 10, muted, 'left');
@@ -184,44 +265,45 @@ function drawPolar() {
   ctx.moveTo(cx - R, cy); ctx.lineTo(cx + R, cy);
   ctx.moveTo(cx, cy - R); ctx.lineTo(cx, cy + R);
   ctx.strokeStyle = grid; ctx.stroke();
-  text(ctx, '0°', cx, cy - R - 12, 11, muted, 'center');
-  text(ctx, '90°', cx + R + 14, cy, 11, muted, 'center');
-  text(ctx, '180°', cx, cy + R + 12, 11, muted, 'center');
-  text(ctx, '270°', cx - R - 14, cy, 11, muted, 'center');
-  text(ctx, 'dB below peak', 4, 10, 11, muted, 'left');
 
-  const trace = (angles, values, color, width) => {
+  // The dial is a plane in space, so the labels are directions, not angles.
+  const neg = (s) => (s.startsWith('+') ? '-' + s.slice(1) : s);
+  text(ctx, dial.up, cx, cy - R - 11, 11, muted, 'center');
+  text(ctx, neg(dial.up), cx, cy + R + 11, 11, muted, 'center');
+  text(ctx, dial.right, cx + R + 13, cy, 11, muted, 'center');
+  text(ctx, neg(dial.right), cx - R - 13, cy, 11, muted, 'center');
+  text(ctx, 'dB below peak', 4, 10, 10.5, muted, 'left');
+
+  const plot = (pts, color, width) => {
     ctx.beginPath();
-    let started = false;
-    for (let i = 0; i < angles.length; i++) {
-      const v = Math.max(values[i], floor);
-      const r = R * (v - floor) / (0 - floor);
-      const a = (angles[i] - 90) * Math.PI / 180;
-      const x = cx + r * Math.cos(a), y = cy + r * Math.sin(a);
-      if (!started) { ctx.moveTo(x, y); started = true; } else ctx.lineTo(x, y);
-    }
-    ctx.strokeStyle = color;
-    ctx.lineWidth = width;
-    ctx.lineJoin = 'round';
-    ctx.stroke();
+    pts.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])));
+    ctx.strokeStyle = color; ctx.lineWidth = width;
+    ctx.lineJoin = 'round'; ctx.stroke();
   };
 
-  if (state.solve) {
-    // Blue, green, red: three hues that stay apart in both themes. Amber
-    // and the measured red were too close to tell apart in light mode.
-    const colors = { 'E-plane': css('--blue'), 'H-plane': css('--trace3') };
-    state.solve.cuts.forEach((cut) => {
-      trace(cut.angle_deg, normalize(cut.gain_dbi),
-            colors[cut.name] || css('--trace3'), 2);
-    });
-  }
+  dial.cuts.forEach((cut, k) => {
+    const pts = [];
+    for (let i = 0; i < cut.gain_dbi.length; i++) {
+      const g = Math.max(cut.gain_dbi[i], lo);
+      const r = R * (g - lo) / (peak - lo || 1);
+      const d = direction(cut, i);
+      pts.push([cx + r * dot3(d, dial.u), cy - r * dot3(d, dial.v)]);
+    }
+    plot(pts, cutColor(k), 2);
+  });
+
+  // The measurement is a turntable cut: it belongs on the x-y dial.
   const meas = currentMeasuredCut();
-  if (meas) {
+  if (meas && dial.key === 'phi') {
     const rot = parseFloat($('rotate').value) || 0;
-    trace(meas.angles.map((a) => a + rot), normalize(meas.values), css('--red'), 1.6);
-  }
-  if (!state.solve && !meas) {
-    text(ctx, 'solve to draw a pattern', cx, cy, 12, muted, 'center');
+    const mPeak = Math.max(...meas.values.filter(Number.isFinite));
+    const pts = meas.angles.map((a, i) => {
+      const g = Math.max(meas.values[i] - mPeak, -Math.abs(floorDb));
+      const r = R * (g + Math.abs(floorDb)) / Math.abs(floorDb);
+      const t = (a + rot) * Math.PI / 180;
+      return [cx + r * Math.cos(t), cy - r * Math.sin(t)];
+    });
+    plot(pts, css('--red'), 1.6);
   }
 }
 
@@ -229,15 +311,6 @@ function drawPolar() {
  * legend is built from whatever came back rather than from two fixed names. */
 function cutColor(i) {
   return [css('--blue'), css('--trace3'), css('--trace2')][i % 3];
-}
-
-function renderLegend() {
-  const parts = (state.solve ? state.solve.cuts : []).map((c, i) =>
-    `<span><i style="background:${cutColor(i)}"></i>${c.name}</span>`);
-  if (currentMeasuredCut()) {
-    parts.push(`<span><i style="background:${css('--red')}"></i>measured</span>`);
-  }
-  $('legend').innerHTML = parts.join('') || '<span>no cuts requested</span>';
 }
 
 /* ---- the geometry preview --------------------------------------------- */
@@ -451,14 +524,13 @@ function renderSolve(data) {
 
   renderGloss(data.gloss, []);
   drawGeometry();
-  renderLegend();
   $('derived').textContent =
     `lambda ${(data.wavelength_m * 1000).toFixed(1)} mm | wire ${(data.length_m * 1000).toFixed(2)} mm `
     + `= ${data.length_lambda.toFixed(4)} lambda | segment ${(data.segment_length_m * 1000).toFixed(2)} mm`;
 
   renderRules(data.rules);
 
-  drawPolar();
+  renderCuts();
   runCompare();
   return true;
 }
@@ -592,7 +664,7 @@ function runCompare() {
   const meas = currentMeasuredCut();
   const el = $('compare');
   if (!meas || !state.solve) { el.textContent = ' '; return; }
-  const sim = state.solve.cuts.find((c) => c.name === 'E-plane') || state.solve.cuts[0];
+  const sim = state.solve.cuts.find((c) => c.axis === 'phi') || state.solve.cuts[0];
   const floor = parseFloat($('floor').value);
   const rot = parseFloat($('rotate').value) || 0;
   const simN = normalize(sim.gain_dbi), measN = normalize(meas.values);
@@ -712,7 +784,7 @@ $('measured').onchange = (ev) => {
         `<option value="${k}">${c.param !== '—' ? c.param + ' @ ' : ''}`
         + `${c.freq ? (c.freq / 1e9).toFixed(4) + ' GHz' : 'no freq'} `
         + `(${c.angles.length} pts)</option>`).join('');
-      drawPolar(); runCompare();
+      renderCuts(); runCompare();
       status(`loaded ${file.name}: ${state.measured.size} cut(s)`);
     } catch (err) {
       status(`${file.name}: ${err.message}`, true);
@@ -725,20 +797,20 @@ $('clearmeas').onclick = () => {
   state.measured = null;
   $('mcut').innerHTML = '';
   $('measured').value = '';
-  drawPolar(); runCompare();
+  renderCuts(); runCompare();
   status('overlay cleared');
 };
 
-$('mcut').onchange = () => { drawPolar(); runCompare(); };
-$('rotate').oninput = () => { drawPolar(); runCompare(); };
-$('floor').onchange = () => { drawPolar(); runCompare(); };
-window.addEventListener('resize', () => { drawPolar(); drawSweep(); drawGeometry(); });
+$('mcut').onchange = () => { renderCuts(); runCompare(); };
+$('rotate').oninput = () => { renderCuts(); runCompare(); };
+$('floor').onchange = () => { renderCuts(); runCompare(); };
+window.addEventListener('resize', () => { drawCuts(); drawSweep(); drawGeometry(); });
 
 fetch('/api/engine').then((r) => r.json()).then((info) => {
   $('engine').textContent = info.engine;
 }).catch(() => { $('engine').textContent = 'engine unknown'; });
 
-drawPolar();
+renderCuts();
 drawSweep();
 drawGeometry();
 
