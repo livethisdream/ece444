@@ -496,6 +496,16 @@ def serve(host: str = "127.0.0.1", port: int = 8444, engine=None,
               "that matches this machine")
     if _is_wsl():
         print("      (WSL: open that address in your Windows browser)")
+    # Measured with ten simultaneous requests: PyNEC holds the GIL through the
+    # solve, so a shared server serializes; nec2c runs as subprocesses and uses
+    # every core. Same answers either way -- the selftest checks that -- but the
+    # worst-case wait was 5.4 s against 1.6 s on four cores.
+    if host in ("0.0.0.0", "::") and engine.name == "PyNEC":
+        from .engine import ExecutableEngine
+
+        if ExecutableEngine().available():
+            print("      (serving a room: --engine exe spreads solves across "
+                  "cores; PyNEC holds one)")
     if _in_container() and not public_url:
         print("note: this is a container -- the addresses above are the "
               "container's own.\n      Students need the host's address and "

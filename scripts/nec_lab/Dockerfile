@@ -27,7 +27,16 @@ RUN apt-get update \
 # venv rather than fighting apt for site-packages.
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
-RUN pip install --no-cache-dir PyNEC
+
+# Wheel or nothing. PyNEC publishes no ARM wheel, and this image has no
+# compiler, so on a Raspberry Pi the source build would fail and take the whole
+# image down with it. nec2c is already installed above and is packaged for
+# arm64, so an ARM build simply runs on that -- which is also the faster engine
+# when several people share one server, because subprocesses use every core
+# while PyNEC holds the GIL.
+RUN pip install --no-cache-dir --only-binary :all: PyNEC \
+ || echo "no PyNEC wheel for this architecture; nec2c will do the solving"
+
 
 WORKDIR /app
 COPY . /app/nec_lab

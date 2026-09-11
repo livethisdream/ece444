@@ -40,6 +40,39 @@ request builds its model and solves independently -- so a room shares one copy
 happily. Two practical notes: Windows Firewall will ask to allow the port the
 first time, and this belongs on a classroom network, not a public one.
 
+#### On a Raspberry Pi, or any small shared box
+
+It fits, with one choice to make. Measured on four cores (Xeon 2.8 GHz), ten
+students each firing solve + sweep + convergence + sphere at the same instant
+-- the worst case, everyone clicking when you say "go":
+
+| Engine | median | slowest | all 40 requests served in |
+| :-- | --: | --: | --: |
+| nec2c (subprocesses) | 383 ms | 1.2 s | 2.3 s |
+| PyNEC (in-process) | 743 ms | 4.1 s | 5.3 s |
+
+**Use `--engine exe` on a shared server.** PyNEC holds the GIL through the
+solve, so requests queue behind each other; nec2c runs as subprocesses and uses
+every core. The answers are identical -- the selftest asserts that -- so this
+is purely about throughput. On a single-user laptop PyNEC is the faster one and
+stays the default.
+
+A Pi has the same four cores and a slower one: expect roughly 2-3x these
+numbers on a Pi 5 and 4-5x on a Pi 4, so a worst-case wait of a few seconds
+during a simultaneous burst, and sub-second once the class spreads out. The
+service holds about 50 MB resident after serving 2-degree spheres on an
+8-element array, so memory is not the constraint on any Pi.
+
+Two practical notes:
+
+- **PyNEC has no ARM wheel.** `apt install nec2c` is the whole install on
+  Raspberry Pi OS, and the container image asks pip for a wheel only, so it
+  builds on ARM and runs on nec2c there rather than failing on a source build
+  with no compiler.
+- **The energy audit is the expensive part of a solve** on a multi-element
+  model -- a 2 degree sphere. Clear its checkbox if a Pi 4 feels slow during a
+  lab; the cuts and the impedance do not need it.
+
 #### On a headless box
 
 A small always-on machine is the best home for the shared copy: it is up before

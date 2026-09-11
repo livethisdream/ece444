@@ -71,7 +71,12 @@ def resonant_frequency(engine, model: Model, sweep: Sweep) -> dict:
             break
         if x0 * x1 < 0:
             lo, hi = f0 / 1e6, f1 / 1e6
-            for _ in range(40):
+            # Eighteen halvings of a 5 MHz bracket land inside 20 Hz, which is
+            # far finer than the sweep that found the bracket. Forty steps --
+            # what this used to do -- is forty extra solves for a precision of
+            # about a microhertz, and on a shared server that is the difference
+            # between a sweep taking 0.4 s and 0.15 s.
+            for _ in range(18):
                 mid = 0.5 * (lo + hi)
                 x = engine.solve(model.at_frequency(mid)).z_in.imag
                 if x * x0 < 0:
