@@ -38,7 +38,7 @@ Lesson 20 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Where we were
-The **Antenna Pattern Measurement** midterm project, assigned in Lesson 14, is due at the start of today's class. Turn in your report and the measured pattern files together. The quantities you extracted from a measured cut — the half-power width, the null positions, the sidelobe level referenced to the peak — are exactly the quantities this lesson computes from theory, so keep your project data at hand.
+The **Antenna Pattern Measurement** midterm project, assigned in Lesson 9, is due at the start of today's class. Turn in your report and the measured pattern files together. The quantities you extracted from a measured cut — the half-power width, the null positions, the sidelobe level referenced to the peak — are exactly the quantities this lesson computes from theory, so keep your project data at hand.
 ::::
 
 ::::{frame} Where we were, continued
