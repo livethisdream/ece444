@@ -33,7 +33,7 @@ Lesson 8 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 <ol class="lo-list lo-sublist" style="--module: '2'; --lo: '2'">
   <li>I can explain what the method of moments does — discretize the wire, enforce the boundary condition, solve for the segment currents — and why the simulator then runs the same radiation integral you ran by hand.</li>
-  <li>I can build a wire-dipole model in 4nec2 with defensible segmentation and excitation, and run frequency sweeps and pattern computations.</li>
+  <li>I can build a wire-dipole model with defensible segmentation and excitation, and run frequency sweeps and pattern computations.</li>
   <li>I can compare simulated impedance, resonant length, pattern, and gain against the analytical half-wave-dipole predictions and account for every difference.</li>
   <li>I can recognize when a simulation is misleading me — segmentation too coarse, wire radius unreasonable, source misplaced — and apply the standard convergence and energy checks.</li>
 </ol>
@@ -85,11 +85,15 @@ the wire radius, and the source you handed it.
 :::
 ::::
 
-::::{frame} NEC and 4nec2
+::::{frame} NEC and its front ends
 NEC — *Numerical Electromagnetics Code*, written at Lawrence Livermore in the
 1970s and still the workhorse of wire-antenna modeling — is this method
-specialized to thin wires. 4nec2 is a free Windows front end that writes NEC's
-input file for you and plots what comes back.
+specialized to thin wires. It has no interface of its own: it reads a text file
+of **cards** and writes a text file of results.
+
+Everything else is a front end. Ours is **nec_lab**, written for this course;
+4nec2 is the free Windows one you will meet in the field. Both send NEC the
+same cards, so the cards are what this handout teaches.
 ::::
 
 ::::{frame} From currents to one impedance
@@ -204,7 +208,7 @@ touch the keyboard.
 ::::
 
 ::::{frame} The source model in NEC
-4nec2 drives **one segment** with a 1 V source, and that segment is the antenna
+NEC drives **one segment** with a 1 V source, and that segment is the antenna
 terminal: there is no connector, no coaxial gap, and no balun in the model. The
 impedance comes out of that segment by the division you saw in Part 1.
 
@@ -235,16 +239,36 @@ ground plane changes the expected value.
 ```
 ::::
 
-::::{frame} Part 3 — Software setup
-4nec2 is free and runs on the lab PCs. Everything below is a NEC **input file**,
-which is a stack of two-letter cards. 4nec2 can draw the geometry for you, but
-type the cards at least once: they are the actual interface, they are identical
-across every NEC front end you will meet, and they do not move between versions
-the way menu items do.
+::::{frame} Part 3 — Getting to the tool
+**nec_lab** runs in a browser. You will reach it one of two ways, and your
+instructor will say which on the day:
+
+- **A shared copy.** Open the address given in class. Nothing to install.
+- **Your own copy.** From a clone of the course repository:
+  `python scripts/nec_lab/run.py serve`, which opens the page for you. On
+  Windows, double-click `scripts\nec_lab\nec_lab.bat` instead.
+
+Either way the page is the same, and so are your answers.
+::::
+
+::::{frame} What you are actually driving
+The page has a form at the left and a **NEC input file** at the bottom right.
+The form writes that file; the file is what NEC runs. Type the cards yourself at
+least once, because they are the real interface: they are identical in nec_lab,
+4nec2 and every other front end you will meet, and they do not move between
+versions the way menu items do.
+
+```{note}
+The **Copy** button under the deck puts the cards on your clipboard. They will
+run unchanged in 4nec2 if you would rather work there, or want to check one tool
+against the other.
+```
 ::::
 
 ::::{frame} The NEC input file
-Open 4nec2, choose to edit the input file, and enter:
+Choose **Dipole** in the antenna picker and press **Build & solve**. The deck
+below is what appears. Read it before you read the plots, and type it out once
+by hand into the editor to prove you can:
 
 ```text
 CM ECE 444 L8 -- half-wave dipole, 915 MHz
@@ -279,16 +303,26 @@ $\theta = 90^\circ$ and the pattern cut above is the E-plane.
 ::::
 
 ::::{frame} Running the model
-Run the model with the Calculate or Generate command, which 4nec2 offers on the
-toolbar and on the function keys, then read the results in the output-data and
-pattern windows. Impedance appears with the source data, and gain appears with
-the pattern.
+**Build & solve** runs what the form describes; **Run these cards** runs what is
+in the editor, which is how you run a deck you typed or changed yourself. Either
+way the answers land in the same places: $Z_{\text{in}}$, VSWR, peak gain, HPBW
+and the average power gain across the top, the pattern cuts below them, and the
+segmentation rules down the left.
 
 ```{note}
-Menu wording drifts between 4nec2 versions, so this handout names the input
-cards rather than click paths. If you cannot find a control, the input file is
-always editable directly, and the run always produces the same output file.
+This handout names cards, not buttons. Cards are the part that does not change:
+if a control moves, or you end up in 4nec2 instead, the deck still says exactly
+what the model is. Beside the editor, every field of every card is labeled —
+hover one to see what it means.
 ```
+::::
+
+::::{frame} When the tool disagrees with you
+The rules panel checks your segmentation against Part 2 as you build, and the
+average-power-gain readout turns red when the model has stopped conserving
+energy. Neither stops a run. NEC will solve a broken model and report the
+result with the same confidence it reports a good one, and the whole point of
+Part 2 is that **you** are the check.
 ::::
 
 ::::{frame} Part 4 — Procedure
@@ -316,8 +350,8 @@ and record the differences before you change anything in the model.
 ::::
 
 ::::{frame} Step 4 — Average gain
-Change the pattern request to a full sphere with the
-averaging flag on:
+Tick **average power gain** in the form, or change the pattern request yourself
+to a full sphere with the averaging flag on:
 
 ```text
 RP 0 19 36 1001 0 0 10 10
@@ -344,10 +378,17 @@ $X_{\text{in}} = 0$. A wire cut to $\lambda/2$ at 915 MHz will not resonate at
 
 ::::{frame} Step 6 — Trim to resonance
 Now hold the frequency at 915 MHz and shorten
-the wire instead. Change the `GW` end coordinates in steps of a millimetre or
+the wire instead. Change the `GW` end coordinates in steps of a millimeter or
 two until $X_{\text{in}}$ crosses zero. Record the resonant length as a fraction
 of $\lambda$ and the resistance there. Keep the segment count odd throughout,
 and recheck $\Delta$ against $8a$ after each change.
+
+```{note}
+**Trim to resonance** does this search for you, and you should not press it
+until you have done it by hand. Then press it: if your length and the tool's
+agree, you have learned something about both. If they do not, one of you missed
+the reactance crossing.
+```
 ::::
 
 ::::{frame} Step 7 — Pattern cuts
@@ -362,6 +403,18 @@ RP 0 1 361 1000 90 0 0 1
 Record the peak gain, the HPBW in the E-plane, and the depth of the nulls along
 the wire axis. Confirm that the H-plane cut is a circle to within a small
 fraction of a decibel.
+::::
+
+::::{frame} Keep the pattern file
+Press **Pattern CSV** and keep what it saves. In Lesson 13 and Lesson 14 you
+will measure a real antenna in the chamber, and that file drops straight onto
+the measured cut so the two can be compared on one plot.
+
+One difference to carry with you: this file is absolute gain in dBi, and a
+chamber measures raw $S_{21}$ through cables and fixture. Comparing the two
+means normalizing each to its own peak, which compares **shape**. Comparing
+absolute levels is a gain-transfer measurement against a standard-gain horn —
+Lesson 12's material, not something a file can fix.
 ::::
 
 ::::{frame} Step 8 — Convergence study

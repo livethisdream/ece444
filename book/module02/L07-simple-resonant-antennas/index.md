@@ -1097,12 +1097,12 @@ showing up in your own hardware.
 
 ::::{frame} Where This Is Going
 :::{present}
-- **Lesson 8**: 4nec2 solves for the current instead of assuming it. Bring the 146 MHz numbers and grade the simulator with them.
+- **Lesson 8**: a method-of-moments solver computes the current instead of assuming it. Bring the 146 MHz numbers and grade the simulator with them.
 - **Lesson 9**: a monopole and a loop from the same wire.
 - **Module 3**: the dipole becomes an element.
 :::
 
-Lesson 8 puts this exact antenna into **4nec2**, a free Windows program that
+Lesson 8 puts this exact antenna into **nec_lab**, the course simulator, which
 acts as a front end to **NEC-2**, the Numerical Electromagnetics Code — a
 method-of-moments engine written in the 1970s and still the standard tool for
 wire antennas. Method of moments does the one thing this lesson could not:

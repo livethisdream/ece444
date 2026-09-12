@@ -346,6 +346,6 @@ See the [materials page](materials.md).
 ## Software & hardware
 
 - ADALM-PHASER
-- Antenna simulation software _(TBD)_
+- Antenna simulation software — nec_lab (NEC-2), provided with the course
 - Vector network analyzer (VNA) — for measurement labs
 - Anechoic chamber — for pattern measurement labs
