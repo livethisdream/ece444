@@ -25,7 +25,7 @@ Fall 2026 · Dr. Neil Rogers
 - L7: the half-wave dipole — a resonant wire, $73 + j42.5\ \Omega$, $2.15$ dBi.
 - L12: loops and monopoles — folded, bent, and grounded, but still wire.
 - L6: the radiation integral does not care what carries the current. An aperture with a known field is just as good a source.
-- L5: $r \ge 2D^2/\lambda$, and gain lives in electrical size.
+- L11: you already measured one of today's three — the standard-gain horn was your reference.
 
 **Today the antenna stops being a wire. It becomes a surface, a hole, and an opening.**
 
@@ -389,11 +389,10 @@ These three sentences are the takeaway. If students can say them back, the lesso
 
 ## Where this is going
 
-- **L14** — reflectors, Yagis, and arrays: how to get past 25 dBi.
-- **L9** — pattern and gain measurement, with the standard-gain horn as the reference.
+- **L14** — reflectors, Yagis, and arrays: how to get past 25 dBi, and the last new candidates for the midterm.
 - **Module 3** — hundreds of patches, phased, steered. The PHASER's elements are exactly the antenna you sized today.
 
 <div class="callout">You have met the element. Next you build the <strong>array</strong>.</div>
 
 Note:
-Close on the PHASER. Every patch equation from today reappears in the element factor when we do pattern multiplication.
+Close on the PHASER. Every patch equation from today reappears in the element factor when we do pattern multiplication. The standard-gain horn thread closed today rather than opening one: they already used it as a reference in L11, and now they know why it was trustworthy.

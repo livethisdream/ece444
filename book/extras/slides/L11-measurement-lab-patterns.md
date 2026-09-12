@@ -22,14 +22,15 @@ Fall 2026 · Dr. Neil Rogers
 
 ## Where we were
 
-- **L14** — high-gain antennas: aperture size sets beamwidth, illumination sets sidelobes.
-- **L9** — pattern measurement theory: far field, range geometry, gain by comparison.
-- **L10** — impedance lab: you measured what happens at the **terminals**.
+- **L9** — the theory: far field, range geometry, gain by comparison, dynamic range.
+- **L10** — the impedance lab: you measured what happens at the **terminals**.
 
 <div class="callout"><strong>Today you measure what leaves the antenna.</strong> It is the same antenna, described from its other half.</div>
 
+**This is a lab period. Bring L9 with you.**
+
 Note:
-L10 answered "does power get in?" Today answers "where does it go once it's in?" Both are needed before the midterm project.
+L10 answered "does power get in?" Today answers "where does it go once it's in?" Both are needed before the midterm project, and both are procedure — the reasoning was all in L9.
 
 ---
 
@@ -59,16 +60,18 @@ Walk the room through it: transmitter, source antenna fixed, AUT on the rotator,
 
 Today's AUT: a pyramidal horn, aperture $24 \times 17$ cm, at $f = 2.45$ GHz, so $\lambda = 12.2$ cm.
 
-| Criterion | Value | Meaning |
+| Criterion | AUT | Meaning |
 | :-- | :-- | :-- |
 | $2D^2/\lambda$ | 1.41 m | phase taper under 22.5° |
-| $5D$ | 1.47 m | amplitude taper small |
+| $5D$ | **1.47 m** | amplitude taper small |
 | $10\lambda$ | 1.22 m | out of the reactive zone |
 
-Range set at **3.0 m** — clears all three by about 2×.
+The **reference horn** is bigger: $D = 0.422$ m, so it needs **2.91 m**.
+
+Range set at **3.0 m** — which clears the reference by only 3%.
 
 Note:
-D is the largest dimension, the 29.4 cm diagonal, not a side. Note which criterion binds: for a small antenna it is often not $2D^2/\lambda$.
+D is the largest dimension, the 29.4 cm diagonal, not a side. Two things to draw out: for a small antenna the binding criterion is often $5D$, not $2D^2/\lambda$; and the reference sizes the range, so the gain comparison is the measurement standing closest to the edge of the far field. That 3% belongs in their report.
 
 ---
 
@@ -273,9 +276,9 @@ If they remember one sentence from this lab, this is it.
 
 ## Where this is going
 
-- This lab is the **dress rehearsal** for the midterm Antenna Pattern Measurement project, due at L20 — same range, same extraction, more antennas and a written analysis.
-- **Module 2 closes here.** You can now predict a pattern, simulate it, and measure it.
-- **L15 opens Module 3**: aperture distributions — how the illumination across an aperture chooses the sidelobe level you just measured.
+- This lab is the **dress rehearsal** for the midterm Antenna Pattern Measurement project, due at L20 — same range, same extraction, more antennas and no procedure handed to you.
+- You now have nine lessons of bench access before it is due. That is why the measurement block runs here.
+- **L12 to L14** go back to antenna families: loops and monopoles, patches and horns, reflectors and Yagis. Every gain figure in them is now a claim you know how to check.
 
 Note:
-Point back at the −13.3 dB sidelobe from the widget: next lesson explains why that number is what it is, and how to trade it against beamwidth.
+Several of those antennas are defensible project choices, and they will be reading published patterns with a measurer's eye from here on. Point back at the −13.3 dB sidelobe from the widget: L15 explains why that number is what it is.

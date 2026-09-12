@@ -22,15 +22,15 @@ Fall 2026 · Dr. Neil Rogers
 
 ## Where we were
 
-- **L6:** the pattern is the radiation integral of the current — shape of the current in, shape of the beam out.
 - **L7:** the half-wave dipole, $73 + j42.5\ \Omega$, 2.15 dBi, HPBW $78^\circ$.
 - **L8:** you built one in the simulator and watched those numbers appear.
+- **L9–L11:** you learned to *check* an antenna — match, pattern, gain, and how much to believe.
 - **L3:** small antennas pay for their size in bandwidth.
 
 **Today: a mirror turns a dipole into a monopole, and a ring of current turns it into its magnetic twin.**
 
 Note:
-Anchor everything on the dipole numbers from L7 — today is two variations on an antenna they already own. Ask what happens to a dipole if you saw it in half.
+Anchor everything on the dipole numbers from L7 — today is two variations on an antenna they already own. Ask what happens to a dipole if you saw it in half. Worth saying explicitly: from here on every impedance and gain figure is a claim they know how to test, and several of today's antennas are defensible midterm choices.
 
 ---
 

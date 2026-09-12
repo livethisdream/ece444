@@ -271,7 +271,7 @@ Check the gain against the pencil-beam estimate from Lesson 2: $41{,}253/(3 \tim
 ::::{frame} Worked example — sizing an X-band aperture (cont.)
 :::{admonition} Worked example — sizing an X-band aperture, checking the design (cont.)
 :class: tip
-Two consequences worth carrying away. The $3^\circ$ azimuth requirement is what made this antenna $0.68\ \text{m}$ wide, and the sidelobe requirement made it $34\%$ wider than a uniform aperture with the same beamwidth would have been. Also, a $31\ \text{m}$ far-field distance means this antenna cannot be pattern-tested in any ordinary room, which is the same constraint you worked with in Lesson 11.
+Two consequences worth carrying away. The $3^\circ$ azimuth requirement is what made this antenna $0.68\ \text{m}$ wide, and the sidelobe requirement made it $34\%$ wider than a uniform aperture with the same beamwidth would have been. Also, a $31\ \text{m}$ far-field distance means this antenna cannot be pattern-tested in any ordinary room, which is the compact-range and near-field-scanning problem from Lesson 9.
 :::
 ::::
 

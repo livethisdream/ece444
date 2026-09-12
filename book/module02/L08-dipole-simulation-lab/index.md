@@ -513,18 +513,28 @@ once you make the two models match.
 ::::
 
 ::::{frame} Where this is going
-Lesson 12 returns to theory with loops and monopoles. The monopole is where your
-new NEC habits get their first real test, because a quarter-wave monopole is
-only half an antenna and the other half is the ground plane. NEC models ground
-with its own card, and getting that card wrong is a common way to produce a
-confident and completely incorrect monopole result, including an average gain
-that no longer has to equal one. Before Lesson 12, review your Lesson 7 notes on
-the sinusoidal current assumption, and be ready to state how a quarter-wave
-monopole over perfect ground relates to the half-wave dipole in both impedance
-and directivity.
+You have now predicted an antenna on paper and simulated it. The one thing you
+have not done is measure it, and a simulation nobody has checked against
+hardware is a very confident opinion. Lesson 9 is the theory of doing that
+checking — how a measurement range fakes a plane wave, what a network analyzer
+actually reports, and how to say what a measurement does and does not
+establish — and Lessons 10 and 11 put you on the instruments. The dipole you
+modeled today is the antenna you will hang on the analyzer next week, so keep
+your predicted impedance and resonant length where you can find them.
+
+Lesson 9 also introduces the midterm project, an antenna pattern measurement
+due at Lesson 20. The measurement block runs early for that reason.
 ::::
 
 ::::{frame} Where this is going, continued
+The remaining antenna families come back at Lessons 12 to 14 — loops and
+monopoles, then patches, slots and horns, then reflectors and Yagis. The
+monopole is where your new NEC habits get their first real test, because a
+quarter-wave monopole is only half an antenna and the other half is the ground
+plane. NEC models ground with its own card, and getting that card wrong is a
+common way to produce a confident and completely incorrect result, including
+an average gain that no longer has to equal one.
+
 Beyond that, Module 3 is built entirely on arrays, and an array is just more
 wires. The segmentation rules you applied to one dipole today apply to every
 element at once, and the matrix you solved for 21 unknowns becomes a matrix for
