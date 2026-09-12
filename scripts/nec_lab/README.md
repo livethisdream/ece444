@@ -215,9 +215,9 @@ up where the builder left off by editing the cards.
 | Type | Lesson | What it is for |
 | :-- | :-- | :-- |
 | Dipole | L7-L8 | the lab's antenna: one wire, center fed |
-| Monopole over ground | L9 | half a dipole fed against its image; perfect or real ground |
-| Loop | L9 | a closed loop as a polygon, because NEC-2 has no curve |
-| Yagi-Uda | L11 | driven element, reflector, N directors; the parasitic array |
+| Monopole over ground | L12 | half a dipole fed against its image; perfect or real ground |
+| Loop | L12 | a closed loop as a polygon, because NEC-2 has no curve |
+| Yagi-Uda | L14 | driven element, reflector, N directors; the parasitic array |
 | Driven array | L16-L22 | dipoles with a source each and a phase per element |
 
 Adding a type is a Python change in `builders.py` and nothing in the page
@@ -241,9 +241,9 @@ what the numbers mean:
 
 ### What NEC-2 cannot do
 
-NEC-2 is a thin-wire code. Patches, slots, horns (L10) and parabolic
-reflectors (half of L11) are not thin-wire problems, and they are absent here
-rather than approximated badly. L10's patch designer widget and the aperture
+NEC-2 is a thin-wire code. Patches, slots, horns (L13) and parabolic
+reflectors (half of L14) are not thin-wire problems, and they are absent here
+rather than approximated badly. L13's patch designer widget and the aperture
 theory in Module 3 cover that ground; this tool covers the wires.
 
 ## The GUI
@@ -335,7 +335,7 @@ the structure is what the supported cards describe. Running it anyway would
 give a correct NEC answer wrapped in a page that had quietly stopped applying
 to it -- a worse failure than being told no.
 
-`GN` used to be on that list and is not any more: L9 needs a monopole, a
+`GN` used to be on that list and is not any more: L12 needs a monopole, a
 monopole needs a ground plane, so the model layer learned about ground rather
 than the parser learning to lie. What is still checked is that `GE` and `GN`
 agree -- a `GN` card with `GE 0` is a ground NEC will never connect anything
@@ -353,7 +353,7 @@ The one thing the file cannot carry is the difference in what the two numbers
 through cables, connectors and fixture. Both tools normalize each trace to its
 own peak before differencing, which compares pattern shape and says nothing
 about absolute gain. Comparing absolute levels is a gain-transfer measurement
-against a standard-gain horn — L12's material, not something a CSV can fix.
+against a standard-gain horn — L9's material, not something a CSV can fix.
 
 ## The lab, step by step
 

@@ -219,7 +219,7 @@ class Sweep:
 class Ground:
     """The GE flag and the GN card: what sits under the antenna.
 
-    Free space is the L8 case. A monopole is the L9 case and is nothing
+    Free space is the L8 case. A monopole is the L12 case and is nothing
     without a ground plane -- half a dipole, fed against its image, and the
     image only exists because the ground is there.
     """

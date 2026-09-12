@@ -2,7 +2,7 @@
 frame_view: true
 ---
 
-# L10 - Patch, Slot, and Horn Antennas
+# L13 - Patch, Slot, and Horn Antennas
 
 ::::{frame}
 :class: title-frame
@@ -15,15 +15,15 @@ frame_view: true
 
 Today the antenna becomes a surface, a hole, and an opening.
 
-Lesson 10 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+Lesson 13 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Slides
 :::{admonition} Slides
 :class: slides
-<a href="../../slides/L10-patch-slot-horn.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L10-patch-slot-horn.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L10-patch-slot-horn.md" target="_blank" rel="noopener">raw markdown slides</a>
+<a href="../../slides/L13-patch-slot-horn.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L13-patch-slot-horn.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L13-patch-slot-horn.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 ::::
 
@@ -37,7 +37,7 @@ Lesson 10 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 
 :::{depth}
-Every antenna so far has been a wire. Lesson 7 gave you the resonant dipole, Lesson 9 bent it into
+Every antenna so far has been a wire. Lesson 7 gave you the resonant dipole, Lesson 12 bent it into
 a loop and grounded it into a monopole, and in all of it the current lived on a thin conductor you
 could point at. Today the antenna becomes a **surface**, a **hole**, and an **opening**. All three
 are things you can build into an airframe or bolt to a waveguide, and all three are read the same
@@ -363,7 +363,7 @@ it is the efficiency at a deliberate design optimum.
 
 A **standard-gain horn** is a horn built to that optimum design, measured at the factory, and
 tabulated across its band to a few tenths of a dB. It is not a good communication antenna. It is a
-**known** antenna, and that is the entire point: in L12 you will measure an unknown antenna's gain
+**known** antenna, and that is the entire point: in L9 you will measure an unknown antenna's gain
 by comparing it against a standard-gain horn on the same range. The standard-gain horn is the
 reference against which every other gain measurement is made.
 ::::
@@ -414,19 +414,19 @@ the horn.
 | :-- | :-- | :-- |
 | $G = \eta_{\text{ap}} 4\pi A/\lambda^2$ | aperture gain | horns $\eta_{\text{ap}} \approx 0.5$ |
 | optimum horn | shortest horn whose edge phase error is still tolerable | $\lambda/4$ E-plane, $3\lambda/8$ H-plane |
-| standard-gain horn | calibrated reference for gain measurement | used in L12 |
+| standard-gain horn | calibrated reference for gain measurement | used in L9 |
 ::::
 
 ::::{frame} Practice
-- <a href="../../practice/ECE444_L10_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a href="../../practice/ECE444_L10_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+- <a href="../../practice/ECE444_L13_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a href="../../practice/ECE444_L13_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
 ::::{frame} Where this is going
 
-Of the three antennas in this lesson, only the horn clears 10 dBi. L11 goes after the rest: reflectors, Yagis,
+Of the three antennas in this lesson, only the horn clears 10 dBi. L14 goes after the rest: reflectors, Yagis,
 and arrays — the three standard routes to a big electrical aperture, and how each of them pays for
-it. L12 then turns the horn around and uses it as an instrument, measuring pattern and gain
+it. L9 then turns the horn around and uses it as an instrument, measuring pattern and gain
 against a calibrated reference on a range whose length you now know how to compute.
 
 :::{depth}

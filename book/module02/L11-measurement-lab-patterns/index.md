@@ -2,7 +2,7 @@
 frame_view: true
 ---
 
-# L14 - Measurement Lab 2: Radiation Patterns
+# L11 - Measurement Lab 2: Radiation Patterns
 
 ::::{frame}
 :class: title-frame
@@ -15,16 +15,16 @@ frame_view: true
 
 You are measuring the same antenna, describing its other half.
 
-Lesson 14 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+Lesson 11 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame}
 
 :::{admonition} Slides
 :class: slides
-<a href="../../slides/L14-measurement-lab-patterns.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L14-measurement-lab-patterns.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L14-measurement-lab-patterns.md" target="_blank" rel="noopener">raw markdown slides</a>
+<a href="../../slides/L11-measurement-lab-patterns.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L11-measurement-lab-patterns.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L11-measurement-lab-patterns.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 ::::
 
@@ -44,7 +44,7 @@ Last lesson you stood at the terminals and asked whether power gets *into* the a
 
 ::::{frame} Part 1: Background
 
-A radiation pattern is the far-field power of an antenna as a function of angle. You cannot measure "the far field" directly; you measure **received power at a fixed distance while you rotate the antenna**, and you rely on the range being far enough away that the pattern has stopped changing shape with distance. Lesson 12 derived that condition — the phase across the aperture must be flat to within about $\pi/8$, which gives $r \ge 2D^2/\lambda$ with $D$ the antenna's largest dimension. Today you verify it with a tape measure and then take data.
+A radiation pattern is the far-field power of an antenna as a function of angle. You cannot measure "the far field" directly; you measure **received power at a fixed distance while you rotate the antenna**, and you rely on the range being far enough away that the pattern has stopped changing shape with distance. Lesson 9 derived that condition — the phase across the aperture must be flat to within about $\pi/8$, which gives $r \ge 2D^2/\lambda$ with $D$ the antenna's largest dimension. Today you verify it with a tape measure and then take data.
 ::::
 
 ::::{frame} Reciprocity: it doesn't matter which end transmits
@@ -202,7 +202,7 @@ Cross-check the beamwidths against the gain: with an H-plane HPBW of $42^\circ$,
 
 ::::{frame} Gain by comparison
 
-**Gain by comparison** is Lesson 12's substitution method, and in dB it is one subtraction. Everything common to the two measurements — transmit power, path loss, cable loss, source gain — cancels:
+**Gain by comparison** is Lesson 9's substitution method, and in dB it is one subtraction. Everything common to the two measurements — transmit power, path loss, cable loss, source gain — cancels:
 
 $$G_{\text{AUT}} = G_{\text{ref}} + \left( P_{\text{AUT}} - P_{\text{ref}} \right)$$
 ::::
@@ -345,8 +345,8 @@ A 2 dB gap with a named cause is a better report than a 0.2 dB gap with no discu
 
 ::::{frame} Practice
 
-- <a href="../../practice/ECE444_L14_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a href="../../practice/ECE444_L14_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+- <a href="../../practice/ECE444_L11_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a href="../../practice/ECE444_L11_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
 ::::{frame} Where this is going

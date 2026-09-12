@@ -6,7 +6,7 @@
 
 Antennas, Phased Arrays, and Radar Systems
 
-## Lesson 12 — Pattern Measurement Theory
+## Lesson 9 — Pattern Measurement Theory
 
 Fall 2026 · Dr. Neil Rogers
 
@@ -22,8 +22,8 @@ Fall 2026 · Dr. Neil Rogers
 
 ## Where we were
 
-- L10 and L11 built the high-gain antennas — horns, reflectors, the standard gain horn — and told you their gain from geometry and aperture efficiency.
-- L11 also handed you the midterm project: measure an antenna pattern.
+- L13 and L14 built the high-gain antennas — horns, reflectors, the standard gain horn — and told you their gain from geometry and aperture efficiency.
+- L14 also handed you the midterm project: measure an antenna pattern.
 - Every pattern we have drawn so far came out of an integral, not off an instrument.
 - L5 gave us the far-field boundary $r \geq 2D^2/\lambda$ and then we filed it away.
 
@@ -61,7 +61,7 @@ Reciprocity carries the argument: measure in receive, publish as transmit. State
 
 ## Two tolerances, not one
 
-<div class="fig" data-inline-svg="./fig/L12-range-geometry.svg" style="max-width:700px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L09-range-geometry.svg" style="max-width:700px; margin:0 auto;"></div>
 
 - **Amplitude taper** — the source antenna's own pattern falls off across the AUT. Spec: under 0.25 dB edge to edge.
 - **Phase curvature** — the spherical wavefront runs behind at the edges. Spec: under 22.5° edge to center, and it is the spec that sets the range length.
@@ -177,7 +177,7 @@ The first three are far-field ranges: they physically deliver the wave. The four
 
 ## Inside an anechoic chamber
 
-<div class="fig" data-inline-svg="./fig/L12-anechoic-chamber.svg" style="max-width:760px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L09-anechoic-chamber.svg" style="max-width:760px; margin:0 auto;"></div>
 
 Note:
 Point out that the walls are not uniformly treated in a real chamber — the specular regions get the tall absorber, the rest gets shorter and cheaper stuff.
@@ -229,9 +229,9 @@ The deliverable of a chamber is not the room. It is a **volume** — usually a s
 
 ## Compact range — a reflector does the collimating
 
-<div class="fig" data-inline-svg="./fig/L12-compact-range.svg" style="max-width:680px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L09-compact-range.svg" style="max-width:680px; margin:0 auto;"></div>
 
-- The L11 parabola run backwards: feed at the focus, every path to the aperture plane the same length, plane wave a few meters later.
+- The L14 parabola run backwards: feed at the focus, every path to the aperture plane the same length, plane wave a few meters later.
 - Quiet zone is roughly **50–60% of the reflector aperture**, so the reflector is much bigger than the AUT.
 - The rim is **serrated or rolled** — a hard edge diffracts, and that diffraction is a second source sitting inside your quiet zone.
 
@@ -242,7 +242,7 @@ Far-field conditions in a room a small fraction of 2D squared over lambda long, 
 
 ## Near-field scanning — change the question
 
-<div class="fig" data-inline-svg="./fig/L12-nearfield-scan.svg" style="max-width:790px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L09-nearfield-scan.svg" style="max-width:790px; margin:0 auto;"></div>
 
 ---
 
@@ -328,7 +328,7 @@ M is the measured pair sum with the path loss already removed. Three equations g
 
 ## Pattern cuts and principal planes
 
-<div class="fig" data-inline-svg="./fig/L12-pattern-cuts.svg" style="max-width:640px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L09-pattern-cuts.svg" style="max-width:640px; margin:0 auto;"></div>
 
 - **Great-circle cut** — hold $\phi$, sweep $\theta$ through the poles. **Conical cut** — hold $\theta$, sweep $\phi$: a ring at a fixed angle off boresight.
 - **Principal planes** — the E-plane holds the aperture electric field and boresight, the H-plane is perpendicular. For a horn, those are the two cuts you always publish.
@@ -360,7 +360,7 @@ Spinning linear is the fastest axial-ratio measurement available, and it pays of
 
 ## Where this is going
 
-- **L13 and L14** are the labs. L13 measures S-parameters — match and bandwidth on the bench. L14 puts an antenna on the positioner and takes the cuts.
+- **L10 and L11** are the labs. L10 measures S-parameters — match and bandwidth on the bench. L11 puts an antenna on the positioner and takes the cuts.
 - The **midterm project, due L20**, is exactly this: measure a pattern, extract HPBW and sidelobe level, measure gain by comparison, and defend the numbers.
 - When you write that report, the range length, the quiet-zone spec, and the standard horn's calibration are your **error budget**. Today was how to build one.
 

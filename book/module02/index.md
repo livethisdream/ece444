@@ -36,6 +36,22 @@ useful than either number on its own.
 :::
 ::::
 
+::::{frame} Measurement Comes Early
+The measurement block sits at Lessons 9–11, ahead of the remaining antenna
+families, because the midterm project is a pattern-measurement campaign and it
+is due at Lesson 20. Learning the range and the analyzer first buys you eleven
+lessons of bench time instead of six.
+
+:::{depth}
+The order costs you something and it is worth naming. When you measure in
+Lesson 11 you will have met the dipole and not yet met the patch, the horn, or
+the reflector, so the antenna you characterize is a simpler one than it would
+have been. Lessons 12–14 then read differently: every gain figure and every
+pattern in them is a claim you already know how to check, and several of them
+are claims you will want to check for your project report.
+:::
+::::
+
 ::::{frame} Learning Objectives 2.1-2.3
 
 <ol class="lo-list" style="--module: '2'">
@@ -61,7 +77,7 @@ useful than either number on its own.
 </ol>
 ::::
 
-::::{frame} Lessons 7-9: The Canonical Radiators
+::::{frame} Lessons 7-8: The Canonical Radiator, Modeled
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L07-simple-resonant-antennas/index.html">
@@ -74,47 +90,47 @@ useful than either number on its own.
     <h4>Dipole Simulation Lab</h4>
     <p>Simulate a dipole in an EM tool and compare against analytical predictions. Objective 2.2.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L09-loop-monopole-antennas/index.html">
+</div>
+::::
+
+::::{frame} Lessons 9-11: Measuring What You Built
+
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L09-pattern-measurement-theory/index.html">
     <span class="mt-kind">Lesson 9</span>
+    <h4>Measurement Theory</h4>
+    <p>Ranges and chambers, what a VNA measures and how it is calibrated, gain by comparison, and dynamic range. Midterm project introduced. Objectives 2.5, 2.6, 2.7.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L10-measurement-lab-sparams/index.html">
+    <span class="mt-kind">Lesson 10</span>
+    <h4>Measurement Lab 1 — Impedance and S-parameters</h4>
+    <p>Hands on the analyzer: calibrate, sweep, and reduce an antenna's impedance and bandwidth. Objective 2.6.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L11-measurement-lab-patterns/index.html">
+    <span class="mt-kind">Lesson 11</span>
+    <h4>Measurement Lab 2 — Radiation Patterns</h4>
+    <p>Hands on the range: cut two planes, then extract gain, beamwidth, sidelobe level, and polarization. Objective 2.7.</p>
+  </a>
+</div>
+::::
+
+::::{frame} Lessons 12-14: The Rest of the Families
+
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L12-loop-monopole-antennas/index.html">
+    <span class="mt-kind">Lesson 12</span>
     <h4>Loop and Monopole Antennas</h4>
     <p>Small loops and monopoles: radiation behavior, gain, and impedance. Objective 2.1.</p>
   </a>
-</div>
-::::
-
-::::{frame} Lessons 10-11: Shaped Apertures and High Gain
-
-<div class="module-toc">
-  <a class="mt-card mt-lesson" href="L10-patch-slot-horn/index.html">
-    <span class="mt-kind">Lesson 10</span>
+  <a class="mt-card mt-lesson" href="L13-patch-slot-horn/index.html">
+    <span class="mt-kind">Lesson 13</span>
     <h4>Patch, Slot, and Horn Antennas</h4>
     <p>Radiation mechanism, pattern, and use cases for patch, slot, and horn antennas. Objective 2.3.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L11-high-gain-antennas/index.html">
-    <span class="mt-kind">Lesson 11</span>
-    <h4>High-Gain Antennas</h4>
-    <p>Reflectors, Yagi-Uda, and arrays — how they get gain. Midterm project introduced. Objective 2.4.</p>
-  </a>
-</div>
-::::
-
-::::{frame} Lessons 12-14: Measuring What You Built
-
-<div class="module-toc">
-  <a class="mt-card mt-lesson" href="L12-pattern-measurement-theory/index.html">
-    <span class="mt-kind">Lesson 12</span>
-    <h4>Pattern Measurement Theory</h4>
-    <p>Anechoic chambers, near-field / far-field transformations, and standard gain horns. Objective 2.5.</p>
-  </a>
-  <a class="mt-card mt-lesson" href="L13-measurement-lab-sparams/index.html">
-    <span class="mt-kind">Lesson 13</span>
-    <h4>Measurement Lab 1 — Impedance and S-parameters</h4>
-    <p>Measure impedance and S-parameters on a vector network analyzer. Objective 2.6.</p>
-  </a>
-  <a class="mt-card mt-lesson" href="L14-measurement-lab-patterns/index.html">
+  <a class="mt-card mt-lesson" href="L14-high-gain-antennas/index.html">
     <span class="mt-kind">Lesson 14</span>
-    <h4>Measurement Lab 2 — Radiation Patterns</h4>
-    <p>Measure a radiation pattern and extract gain, beamwidth, sidelobe level, and polarization. Objective 2.7.</p>
+    <h4>High-Gain Antennas</h4>
+    <p>Reflectors, Yagi-Uda, and arrays — how they get gain. Objective 2.4.</p>
   </a>
 </div>
 ::::

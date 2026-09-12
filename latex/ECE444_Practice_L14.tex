@@ -1,421 +1,395 @@
 % !TEX root =./ECE444_Practice_main.tex
 %
-% L14 practice set (Measurement Lab 2: Radiation Patterns). Every question is
-% doable without hardware: range-geometry verification, extraction of HPBW /
-% sidelobe level / front-to-back from a printed table of measured data, gain by
-% comparison, cross-pol discrimination, and what a noise floor does to all of it.
+% L14 practice set (High-Gain Antennas) -- aperture gain and beamwidth, reflector
+% efficiency budgets and Ruze, Yagi-Uda behavior, and defending an antenna choice
+% with a Friis link check.
 
-\fullwidth{\textbf{Learning Objective 2.7: } I can measure the radiation pattern of an antenna and extract gain, beamwidth, sidelobe level, and polarization from the data.
+\fullwidth{\textbf{Learning Objective 2.4: } I can describe how reflectors, Yagi-Uda
+antennas, and arrays achieve high gain, and select an appropriate high-gain antenna
+for a given application.
 \\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
 is required (write \textbf{None} if you did not collaborate).}
 
 \begin{questions}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{Is the range adequate?} You are setting up a pattern range at
-$f = 2.45\ \ghz$. The antenna under test (AUT) is a pyramidal horn with a
-$24 \times 17\ \text{cm}$ aperture. The lab bench gives you a separation of
-$r = 3.0\ \m$.
+%============================================================ Q1
+\question \textbf{Sizing a C-band earth station.} A ground station uses a
+\textbf{3.0\ \m\ diameter} prime-focus parabolic reflector at \textbf{6.0\ \ghz}.
+Take the aperture efficiency to be $\eta_{\text{ap}} = 0.65$ and
+$c = 3\ee{8}\ \text{m/s}$.
 
 \begin{parts}
 
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the wavelength and the AUT's largest dimension $D$, then
-		evaluate the far-field criterion $r \ge 2D^2/\lambda$.
-		\begin{solution}[1.3in]
-		The largest dimension of a rectangular aperture is its diagonal, not a side.
-		\eq{
-			\lambda &= \frac{3\ee{8}}{2.45\ee{9}} = 0.1224\ \m = 12.2\ \text{cm} \\
-			D &= \sqrt{(0.24)^2 + (0.17)^2} = 0.294\ \m \\
-			\frac{2D^2}{\lambda} &= \frac{2(0.294)^2}{0.1224} = 1.41\ \m
-		}
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$2D^2/\lambda$ = \ansbox[1.3in]{$1.41\ \m$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part The far field also requires $r \ge 5D$ and $r \ge 10\lambda$.
-		Evaluate both, state which criterion binds, and say whether $3.0\ \m$
-		is acceptable.
-		\begin{solution}[1.3in]
-		\eq{
-			5D &= 5(0.294) = 1.47\ \m \\
-			10\lambda &= 10(0.1224) = 1.22\ \m
-		}
-		The binding criterion is $5D = 1.47\ \m$ --- for a physically small
-		antenna the $2D^2/\lambda$ rule is often \emph{not} the one that
-		decides. A $3.0\ \m$ range clears the binding value by a factor of
-		$2.0$, so it is comfortably acceptable.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		binding $r$ = \ansbox[1.3in]{$1.47\ \m$}
-	\end{minipage}
-
-	\part In one or two sentences: if you ran this measurement at
-	$r = 0.5\ \m$ instead, what specifically would go wrong with the recorded
-	pattern, and would the measured HPBW read too wide or too narrow?
-
+	\part In one or two sentences, explain why the statement ``gain is fundamentally a
+	statement about area'' is more useful to a designer than ``gain is how much
+	the antenna amplifies.''
 		\begin{solution}[1.1in]
-		At $0.5\ \m$ the spherical wave from the source is not flat across the
-		AUT aperture, so the edges of the aperture are excited with the wrong
-		relative phase. That phase error broadens the main beam and fills in the
-		nulls, and the sidelobes smear into the beam skirt. The measured HPBW
-		reads \textbf{too wide}, and the sidelobe structure you report would not
-		be the antenna's far-field pattern at all.
+		An antenna is passive: it amplifies nothing. What it does is collect the
+		radiated power into a smaller solid angle, and the size of the coherent
+		radiating area --- measured in square wavelengths --- is what sets how
+		small that solid angle can be. Writing $G = \eta_{\text{ap}} 4\pi A /
+		\lambda^2$ tells the designer the only two knobs that exist: make the
+		aperture physically bigger, or use a shorter wavelength. ``Amplification''
+		suggests a third knob (more gain from the same box) that does not exist.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Your calibrated reference horn has a $34 \times 25\ \text{cm}$
-		aperture. Recompute the far-field distance for \emph{it}, and state what
-		that means for the range you just declared acceptable.
-		\begin{solution}[1.3in]
+		\part Find the wavelength, the dish diameter in wavelengths, and the
+		gain in dBi.
+		\begin{solution}[1.5in]
 		\eq{
-			D &= \sqrt{(0.34)^2 + (0.25)^2} = 0.422\ \m \\
-			\frac{2D^2}{\lambda} &= \frac{2(0.422)^2}{0.1224} = 2.91\ \m
-			\qquad (5D = 2.11\ \m)
+			\lambda &= \frac{c}{f} = \frac{3\ee{8}}{6\ee{9}} = 0.050\ \m
+			\quad\Rightarrow\quad \frac{D}{\lambda} = \frac{3.0}{0.050} = 60 \\
+			G &= \eta_{\text{ap}}\lp \frac{\pi D}{\lambda}\rp^{2}
+			   = 0.65\,(60\pi)^{2} = 0.65\,(35531) \\
+			  &= 2.31\ee{4}
+			   \;\rightarrow\; 10\,\mylog{2.31\ee{4}} = 43.6\dbi
 		}
-		The \emph{reference} sizes the range, not the AUT, and $3.0\ \m$ clears
-		$2.91\ \m$ by only 3\%. The gain comparison is therefore the one
-		measurement standing at the edge of the far field; say so in the report,
-		or lengthen the range to roughly $5.8\ \m$ for a factor-of-two margin.
+		Remark: the effective aperture is $A_e = \eta_{\text{ap}}A =
+		0.65\,\pi(1.5)^2 = 4.60\ \m^2$ --- that is the number Friis uses.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$2D^2/\lambda$ = \ansbox[1.3in]{$2.91\ \m$}
-	\end{minipage}
-
-\end{parts}
-
-\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{Reducing a measured cut.} The table below is one measured
-E-plane cut of an aperture antenna, in dBm at the receiver. The cut was
-symmetric about $0\mydeg$ to within $0.3\db$, so only $\theta \ge 0$ is
-tabulated. With the source switched off and every other setting unchanged, the
-receiver read $-78.0\dbm$.
-
-\begin{center}
-\small
-\begin{tabular}{r r @{\hspace{2em}} r r @{\hspace{2em}} r r}
-\hline
-$\theta$ & level & $\theta$ & level & $\theta$ & level \\
-\hline
-$0\mydeg$  & $-35.6$ & $18\mydeg$ & $-49.5$ & $48\mydeg$  & $-57.5$ \\
-$2\mydeg$  & $-36.0$ & $20\mydeg$ & $-48.7$ & $60\mydeg$  & $-59.8$ \\
-$4\mydeg$  & $-36.7$ & $22\mydeg$ & $-50.0$ & $75\mydeg$  & $-62.5$ \\
-$6\mydeg$  & $-38.3$ & $24\mydeg$ & $-52.7$ & $90\mydeg$  & $-64.0$ \\
-$8\mydeg$  & $-41.4$ & $28\mydeg$ & $-77.6$ & $120\mydeg$ & $-66.5$ \\
-$10\mydeg$ & $-45.4$ & $32\mydeg$ & $-55.6$ & $150\mydeg$ & $-63.0$ \\
-$12\mydeg$ & $-53.5$ & $36\mydeg$ & $-53.3$ & $180\mydeg$ & $-60.6$ \\
-$14\mydeg$ & $-66.4$ & $40\mydeg$ & $-56.7$ &             &         \\
-$16\mydeg$ & $-52.6$ & $44\mydeg$ & $-70.6$ &             &         \\
-\hline
-\end{tabular}
-\end{center}
-
-\begin{parts}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Extract the half-power beamwidth. Interpolate between samples ---
-		do not snap to the nearest grid point.
-		\begin{solution}[1.3in]
-		The peak is $-35.6\dbm$, so the half-power level is $-38.6\dbm$. That
-		falls between $6\mydeg$ ($-38.3\dbm$) and $8\mydeg$ ($-41.4\dbm$):
-		\eq{
-			\theta_{-3} &= 6 + 2\lp\frac{38.6-38.3}{41.4-38.3}\rp
-			 = 6 + 2(0.097) = 6.19\mydeg \\
-			\theta_{HP} &= 2(6.19) = 12.4\mydeg
-		}
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\theta_{HP}$ = \ansbox[1.3in]{$12.4\mydeg$}
+		$G$ = \ansbox[1.3in]{$43.6\dbi$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the first sidelobe level relative to the peak, and compare it
-		with the canonical value for a uniformly illuminated aperture.
-		\begin{solution}[1.3in]
-		The first null is near $14\mydeg$; the next lobe peaks at $20\mydeg$ with
-		$-48.7\dbm$:
-		\eq{
-			\text{SLL} = -48.7 - (-35.6) = -13.1\db
-		}
-		A uniformly illuminated aperture gives $-13.3\db$, so this aperture is
-		essentially uniformly illuminated --- no taper. The second lobe at
-		$36\mydeg$ gives $-53.3 + 35.6 = -17.7\db$, against the uniform-aperture
-		value of $-17.9\db$: the same story.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		SLL = \ansbox[1.3in]{$-13.1\db$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the front-to-back ratio.
-		\begin{solution}[1.0in]
-		\eq{
-			\text{F/B} = -35.6 - (-60.6) = 25.0\db
-		}
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		F/B = \ansbox[1.3in]{$25.0\db$}
-	\end{minipage}
-
-	\part The operator used a $2\mydeg$ step inside the main beam. Using the
-	rule of thumb for angle step, was that fine, wasteful, or too coarse?
-	Answer in one sentence, with the number that justifies it.
-
-		\begin{solution}[0.9in]
-		The rule is step $\le \theta_{HP}/5 = 12.4/5 = 2.5\mydeg$, so a
-		$2\mydeg$ step satisfies it with a little margin --- fine, not wasteful.
-		(The $4\mydeg$ and coarser steps used past $24\mydeg$ do \emph{not}
-		resolve the sidelobe peaks well, which is why the extracted sidelobe
-		levels deserve a wider error bar than the beamwidth does.)
-		\end{solution}
-
-\end{parts}
-
-\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{Gain by comparison, and polarization.} On the range of
-Question 1 you record a peak of $-35.6\dbm$ with the AUT installed. You then
-swap in the calibrated reference horn ($G_{ref} = 15.0\dbi$), change nothing
-else, and record $-32.4\dbm$.
-
-\begin{parts}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the gain of the AUT in dBi.
+		\part Estimate the half-power beamwidth, and state in one sentence what
+		it implies about pointing.
 		\begin{solution}[1.2in]
-		In dB the comparison method is a single subtraction, because transmit
-		power, path loss, cable loss and source gain are common to both
-		measurements and cancel:
 		\eq{
-			G_{AUT} &= G_{ref} + \lp P_{AUT} - P_{ref}\rp \\
-			 &= 15.0 + \lp -35.6 + 32.4 \rp \\
-			 &= 15.0 - 3.2 = 11.8\dbi
+			\theta_{HP} \approx 70\mydeg\,\frac{\lambda}{D}
+			= 70\mydeg\,\frac{0.050}{3.0} = 1.17\mydeg
 		}
+		A beam barely one degree wide means the mount has to hold the boresight
+		to a small fraction of a degree; a few tenths of a degree of wind sway or
+		thermal droop is already a measurable loss of signal. (Note also
+		$2D^2/\lambda = 2(3)^2/0.05 = 360\ \m$ --- the far field starts a long way
+		out, which is L9's problem.)
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$G_{AUT}$ = \ansbox[1.3in]{$11.8\dbi$}
+		$\theta_{HP}$ = \ansbox[1.3in]{$1.17\mydeg$}
 	\end{minipage}
 
-	\part The procedure insists that you change \emph{nothing} between the two
-	measurements. Name two things that would silently corrupt the result if you
-	changed them, and say what the resulting gain error would look like.
-
-		\begin{solution}[1.1in]
-		Any change that is not common to both measurements survives the
-		subtraction and becomes gain error. Examples: moving or reseating a
-		cable (a fraction of a dB of extra loss appears as a fixed gain offset);
-		re-peaking sloppily so the reference is measured off boresight (the
-		reference reads low, so the AUT gain reads \emph{high}); changing the
-		transmit level or the resolution bandwidth between the two runs; moving
-		either mast so the range length differs. All of these are biases, not
-		noise --- repeating the sweep will not reveal them.
-		\end{solution}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part You rotate the source antenna $90\mydeg$ about the range axis and
-		re-peak: the boresight level drops to $-59.9\dbm$. Compute the
-		cross-polarization discrimination.
-		\begin{solution}[1.1in]
-		\eq{
-			\text{XPD} = P_{co} - P_{cross} = -35.6 - (-59.9) = 24.3\db
-		}
-		That is squarely in the healthy $20$--$30\db$ band for a linearly
-		polarized antenna.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		XPD = \ansbox[1.3in]{$24.3\db$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Suppose instead the cross-pol peak had landed only $6.0\db$ above
-		your noise floor. By how much would the measured cross-pol level
-		overstate the true one, and what does that do to your reported XPD?
+	\part Management wants \textbf{3\db\ more gain} at the same frequency. What
+	dish diameter does that take, and name one specific cost of the change.
 		\begin{solution}[1.3in]
-		The reading is signal plus noise. If measured is $6.0\db$ above the
-		floor, then measured$/$noise $= 10^{0.6} = 3.98$, so
-		signal$/$noise $= 2.98$ and
+		Gain goes as $D^2$, so $+3\db$ is a factor of 2 in gain and a factor of
+		$\sqrt{2}$ in diameter:
 		\eq{
-			\text{error} = 10\ \mylog{\frac{3.98}{2.98}} = 1.25\db
+			D_{new} = \sqrt{2}\,(3.0) = 4.24\ \m
+			\qquad
+			\theta_{HP,new} \approx 70\mydeg\,\frac{0.050}{4.24} = 0.83\mydeg
 		}
-		The cross-pol level reads $1.25\db$ high, so the true XPD is
-		$1.25\db$ \emph{better} than reported. XPD measured near the floor is
-		therefore a \textbf{lower bound}: report it as ``XPD $\ge$'' with the
-		floor quoted beside it.
+		The cost: the beam narrows to $0.83\mydeg$, so the pointing budget
+		tightens by the same factor of $\sqrt{2}$ --- and the reflector, mount,
+		and wind load all grow with $D^2$. (Accept also: surface tolerance must
+		be held over twice the area, or the far field moves out to 720\ \m.)
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%============================================================ Q2
+\question \textbf{Where the efficiency went.} Same 3.0\ \m\ dish. The
+manufacturer quotes the following loss factors: spillover 0.88, illumination
+taper 0.86, blockage 0.96, and a lumped ``everything else'' factor of 0.98. The
+reflector surface is held to \textbf{0.5\ \text{mm}\ RMS}. Ruze's formula gives the
+surface penalty as $\text{loss (dB)} = 685.8\,(\sigma/\lambda)^2$.
+
+\begin{parts}
+
+	\part Spillover and illumination taper trade directly against each other.
+	Explain the trade in one or two sentences, and state the rule of thumb for
+	where the optimum sits.
+		\begin{solution}[1.2in]
+		A narrow feed pattern puts almost all of its power on the dish, but
+		leaves the rim many dB below the center, so the outer part of the
+		aperture is not being used and the effective area shrinks. Widening the
+		feed brightens the rim but sends power straight past it, which is lost
+		entirely (and on receive replaces cold sky with 290\ K ground in the
+		spilled beam). The optimum is the familiar rule of thumb: illuminate the
+		\textbf{rim about 10\db\ below the center}.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the aperture efficiency from the four quoted factors,
+		before any surface error. Call it $\varepsilon_{ap,1}$.
+		\begin{solution}[1.1in]
+		\eq{
+			\varepsilon_{ap,1} &= (0.88)(0.86)(0.96)(0.98) \\
+			 &= 0.712
+		}
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		error = \ansbox[1.3in]{$1.25\db$}
+		$\varepsilon_{ap,1}$ = \ansbox[1.3in]{$0.712$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Add the Ruze surface term at 6.0\ \ghz\ and report the total
+		aperture efficiency.
+		\begin{solution}[1.4in]
+		At 6\ \ghz, $\lambda = 50\ \text{mm}$, so $\sigma/\lambda = 0.5/50 = 0.010$.
+		\eq{
+			\text{loss} &= 685.8\,(0.010)^{2} = 0.069\db \\
+			\eta_{\text{surf}} &= 10^{-0.069/10} = 0.984 \\
+			\eta_{\text{ap}} &= (0.712)(0.984) = 0.700
+		}
+		A half-millimetre surface is essentially free at C band.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\eta_{\text{ap}}$ = \ansbox[1.3in]{$0.70$}
+	\end{minipage}
+
+	\part Someone proposes reusing this \emph{same physical dish} at
+	\textbf{30\ \ghz}. Recompute the surface term and the total aperture
+	efficiency, then say in one or two sentences what the result means for the
+	proposal.
+		\begin{solution}[1.5in]
+		At 30\ \ghz, $\lambda = 10\ \text{mm}$, so $\sigma/\lambda = 0.050$:
+		\eq{
+			\text{loss} &= 685.8\,(0.050)^{2} = 1.71\db \\
+			\eta_{\text{surf}} &= 10^{-0.171} = 0.674 \\
+			\eta_{\text{ap}} &= (0.712)(0.674) = 0.48
+		}
+		Nothing about the dish changed --- only $\lambda$ --- and the aperture
+		efficiency fell from 0.70 to 0.48. The dish still gains about
+		$56.3\dbi$ at 30\ \ghz\ (versus $58.0\dbi$ with a perfect surface), so
+		the proposal is not absurd, but $1.7\db$ has been thrown away for free
+		and it gets exponentially worse with frequency. Above roughly 30\ \ghz\
+		this reflector is a machining problem, not an antenna.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%============================================================ Q3
+\question \textbf{Reading a Yagi-Uda.} A Yagi-Uda has one driven element, one
+reflector behind it, and a row of directors in front along a boom.
+
+\begin{parts}
+
+	\part The reflector is cut slightly \emph{longer} than resonance and the
+	directors slightly \emph{shorter}. Explain what that detuning does
+	electrically, and how it produces an endfire beam.
+		\begin{solution}[1.4in]
+		Only the driven element is connected; the parasites carry currents
+		\emph{induced} by its near field, and the phase of that induced current
+		is set by the element's reactance. A slightly long element is inductive,
+		so its current lags; a slightly short element is capacitive, so its
+		current leads. Placing the lagging element behind and the leading
+		elements in front makes the re-radiated fields add in phase along the
+		boom in the forward direction and tend to cancel in the reverse
+		direction. The result is an endfire main lobe pointing away from the
+		reflector, with a front-to-back ratio of roughly 15 to 25 dB.
+		\end{solution}
+
+	\part A second reflector buys almost nothing, but a seventh director still
+	helps. Why?
+		\begin{solution}[1.1in]
+		The first reflector already cancels most of the field behind the
+		antenna, so a second one sits in a region where there is almost no field
+		to couple to and almost nothing left to cancel. The directors, by
+		contrast, sit in the forward beam where the field is strong, and each one
+		extends the slow forward traveling wave over a longer aperture. Gain
+		follows the length of that aperture --- the boom --- not the number of
+		rods on it.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A 6-element Yagi on a $1.0\lambda$ boom gives 10 dBi. Using the
+		rule of thumb of $+3\db$ per doubling of boom length, estimate the boom
+		needed for 16 dBi at 435\ \mhz. Then say whether you believe the
+		answer.
+		\begin{solution}[1.6in]
+		$16 - 10 = 6\db$, which is two doublings, so the rule of thumb predicts
+		a $4\lambda$ boom. At 435\ \mhz, $\lambda = 3\ee{8}/435\ee{6} = 0.69\ \m$:
+		\eq{
+			L = 4\lambda = 4\,(0.69) = 2.76\ \m
+		}
+		Do not believe it. The rule of thumb is optimistic past a few
+		wavelengths: published designs put a $4.5\lambda$ boom at about
+		14.5 dBi, not 16. Realistically you would either accept a much longer
+		boom with diminishing returns, or stack two 13\dbi\ Yagis and take the
+		$+3\db$ from the stack.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$L$ = \ansbox[1.3in]{$2.76\ \m$}
+	\end{minipage}
+
+	\part Yagis are narrowband --- a few percent. Explain why, and name one
+	application where that does not matter.
+		\begin{solution}[1.1in]
+		Every element is a detuned resonator, and the whole design depends on the
+		\emph{phases} of the induced parasite currents. Move off the design
+		frequency and each element's reactance changes, the phases drift, and the
+		forward addition and rearward cancellation both degrade --- gain drops and
+		the front-to-back ratio collapses. That is fine anywhere the frequency is
+		fixed: a single-channel broadcast TV antenna, an amateur band antenna, or
+		a fixed point-to-point link.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%============================================================ Q4
+\question \textbf{Choosing an antenna.} You need a \textbf{25\dbi} antenna at
+each end of a 2\ \km\ rooftop-to-rooftop link at \textbf{5.8\ \ghz}. The mounts
+are fixed (no steering), the site is windy, and the budget is small.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the required effective aperture, then the diameter of a
+		parabolic dish that delivers it with $\eta_{\text{ap}} = 0.60$.
+		\begin{solution}[1.6in]
+		$\lambda = 3\ee{8}/5.8\ee{9} = 0.0517\ \m$ and $G = 10^{25/10} = 316$.
+		\eq{
+			A_e &= \frac{G\lambda^{2}}{4\pi}
+			     = \frac{316\,(0.0517)^{2}}{4\pi} = 0.0673\ \m^{2} \\
+			A   &= \frac{A_e}{\eta_{\text{ap}}} = \frac{0.0673}{0.60}
+			     = 0.112\ \m^{2} \\
+			D   &= 2\sqrt{A/\pi} = 2\sqrt{0.0357} = 0.378\ \m
+		}
+		Beamwidth: $\theta_{HP} \approx 70\mydeg(0.0517/0.378) = 9.6\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$D$ = \ansbox[1.3in]{$0.38\ \m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A vendor offers a flat patch array instead, with
+		$\eta_{\text{ap}} = 0.75$ and elements on a $\lambda/2$ grid. How many
+		elements, and how big is the panel?
+		\begin{solution}[1.5in]
+		\eq{
+			A &= \frac{A_e}{0.75} = \frac{0.0673}{0.75} = 0.0898\ \m^{2}
+			\quad\Rightarrow\quad \text{side} = 0.300\ \m \\
+			\frac{\lambda}{2} &= 0.0259\ \m
+			\quad\Rightarrow\quad \frac{0.300}{0.0259} = 11.6 \;\rightarrow\; 12
+		}
+		A $12\times12 = 144$ element panel, about $0.31\ \m$ square. Check:
+		$G = 0.75\,(4\pi)(0.31)^2/(0.0517)^2 = 339 = 25.3\dbi$. Good.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$N$ = \ansbox[1.3in]{$144$}
+	\end{minipage}
+
+	\part Pick one and defend it in two or three sentences, using the numbers
+	you just computed.
+		\begin{solution}[1.4in]
+		Take the dish. It is a single moulded part 0.38\ \m\ across with one
+		feed, it is broadband, and its wind load at that size is modest; the
+		patch array needs 144 elements and a 144-way corporate feed network whose
+		loss at 5.8\ \ghz\ is significant in both cost and dB. The array's
+		advantages --- flat profile and the option of electronic steering --- are
+		worth nothing
+		on a fixed rooftop link, so they do not justify the cost. (A defensible
+		opposite answer: choose the panel if the roof lease or the wind survey
+		forbids a dish, and accept the feed loss.)
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The dish beam is $9.6\mydeg$ wide. Using the beam-shape
+		approximation $L(\theta) \approx 3\,(2\theta/\theta_{HP})^{2}$ dB, how
+		far off boresight can the mount drift before you lose 0.5 dB?
+		\begin{solution}[1.2in]
+		\eq{
+			0.5 &= 3\lp\frac{2\theta}{9.6\mydeg}\rp^{2}
+			\quad\Rightarrow\quad
+			\frac{2\theta}{9.6\mydeg} = \sqrt{0.1667} = 0.408 \\
+			\theta &= \frac{(0.408)(9.6\mydeg)}{2} = 1.96\mydeg
+		}
+		About $\pm2\mydeg$ --- comfortable for a rigid rooftop mount, which is
+		another argument for not buying more gain than the link needs.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta$ = \ansbox[1.3in]{$\pm 2.0\mydeg$}
 	\end{minipage}
 
 \end{parts}
 
 \newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{What the noise floor is doing to your numbers.} A measured
-pattern reaches its peak at $-35.6\dbm$; with the source off, the receiver reads
-$-78.0\dbm$. Levels below are quoted relative to the peak.
+%============================================================ Q5
+\question \textbf{Does the link close?} Continue the 5.8\ \ghz, 2\ \km\ link
+from the previous question. The transmitter delivers \textbf{20 dBm} and the
+receiver sensitivity is \textbf{$-80$ dBm}. Use Friis,
+$P_r = P_t G_t G_r \lp\lambda/4\pi R\rp^{2}$.
 
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part A null in a different data set measures $-25.0\db$ on a system
-		whose floor sits at $-30.0\db$ relative to the peak. Estimate the true
-		depth of that null.
+		\part Compute the free-space path loss in dB.
 		\begin{solution}[1.3in]
-		Signal and noise add in \emph{power}, so subtract them in power:
 		\eq{
-			p_{true} &= 10^{-2.50} - 10^{-3.00} \\
-			 &= 3.162\ee{-3} - 1.000\ee{-3} = 2.162\ee{-3} \\
-			\text{null} &= 10\ \mylog{2.162\ee{-3}} = -26.7\db
+			L_{fs} &= 20\,\mylog{\frac{4\pi R}{\lambda}}
+			 = 20\,\mylog{\frac{4\pi(2000)}{0.0517}} \\
+			 &= 20\,\mylog{4.86\ee{5}} = 113.7\db
 		}
-		The null is $1.7\db$ deeper than it measured.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		true null = \ansbox[1.3in]{$-26.7\db$}
+		$L_{fs}$ = \ansbox[1.3in]{$113.7\db$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Now do the same subtraction for a reading of $-42.0\db$ on this
-		system, whose floor is at $-78.0 + 35.6 = -42.4\db$ relative. Comment on
-		the answer you get.
-		\begin{solution}[1.4in]
-		\eq{
-			p_{true} &= 10^{-4.20} - 10^{-4.24} \\
-			 &= 6.310\ee{-5} - 5.754\ee{-5} = 5.55\ee{-6} \\
-			\text{null} &= 10\ \mylog{5.55\ee{-6}} = -52.6\db
-		}
-		The number is not usable. It is the difference of two nearly equal
-		quantities: a $0.3\db$ error in either reading moves the answer by tens
-		of dB. The only defensible statement is ``the null is below
-		$-42\db$, floor-limited.''
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		true null = \ansbox[1.3in]{$\le -42\db$}
-	\end{minipage}
-
-	\part You average 16 sweeps instead of 1. In one or two sentences, say what
-	improves and what does not, and why.
-
-		\begin{solution}[1.1in]
-		Averaging power measurements incoherently reduces the \emph{variance} of
-		the noise --- the fuzz on the trace shrinks by about $\sqrt{16} = 4$ ---
-		but the \emph{mean} noise power is unchanged, so the floor does not
-		move. You get a prettier trace with exactly the same dynamic range.
-		Lowering the floor requires more transmit power, a narrower resolution
-		bandwidth, or a quieter receiver.
-		\end{solution}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part State this system's dynamic range, then rank HPBW ($12.4\mydeg$),
-		first sidelobe ($-13.1\db$) and null depth ($-42.0\db$) by how much you
-		trust them, with the margin above the floor for each.
-		\begin{solution}[1.4in]
-		\eq{
-			\text{DR} = -35.6 - (-78.0) = 42.4\db
-		}
-		HPBW is read $3\db$ down, roughly $39\db$ above the floor --- trust it
-		first. The first sidelobe sits $29\db$ above the floor, so the noise
-		adds about $0.005\db$ to it --- trust it too. The null is \emph{at} the
-		floor, margin $\approx 0\db$ --- report it as a bound, never as a value.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		DR = \ansbox[1.3in]{$42.4\db$}
-	\end{minipage}
-
-\end{parts}
-
-\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The uncertainty paragraph you have to write.} Your report
-claims $G_{AUT} = 11.8\dbi$ for the horn of Question 3, against an
-aperture-formula prediction of $12.3\dbi$ (using $\eta_{\text{ap}} = 0.5$).
-
-\begin{parts}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Your peak-find left the AUT $1.5\mydeg$ off boresight on a
-		$12.4\mydeg$ beam. Using a parabolic approximation to the main beam near
-		its peak, how much does the recorded peak read low?
+		\part Find the received power with the 25\dbi\ dishes at both ends, and
+		the link margin.
 		\begin{solution}[1.3in]
-		Near the peak the pattern in dB is parabolic and passes through
-		$-3\db$ at half the beamwidth, $6.2\mydeg$:
 		\eq{
-			\Delta &= -3\lp\frac{1.5}{6.2}\rp^2 = -3(0.0585) \\
-			 &= -0.18\db
+			P_r &= P_t + G_t + G_r - L_{fs} \\
+			 &= 20 + 25 + 25 - 113.7 = -43.7\dbm \\
+			\text{margin} &= -43.7 - (-80) = 36.3\db
 		}
-		Small --- but it is a \textbf{bias}, always in the same direction, so
-		repeating the sweep will never remove it.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\Delta$ = \ansbox[1.3in]{$-0.18\db$}
+		$P_r$ = \ansbox[1.3in]{$-43.7\dbm$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part A floor reflection arrives $20\db$ below the direct path. Find the
-		peak-to-peak ripple it puts on your pattern, then find how far down the
-		reflection would have to be to hold the ripple inside $\pm 0.2\db$.
-		\begin{solution}[1.5in]
-		Voltage ratio $10^{-20/20} = 0.10$; the two paths add and subtract:
+		\part Now replace both dishes with 8\dbi\ patches. Recompute $P_r$ and
+		the margin.
+		\begin{solution}[1.2in]
 		\eq{
-			\text{max} &= 20\ \mylog{1.10} = +0.83\db \\
-			\text{min} &= 20\ \mylog{0.90} = -0.92\db
+			P_r &= 20 + 8 + 8 - 113.7 = -77.7\dbm \\
+			\text{margin} &= -77.7 - (-80) = 2.3\db
 		}
-		so about $1.7\db$ peak to peak. For $\pm 0.2\db$ we need
-		$20\ \mylog{1+x} = 0.2$, giving $x = 0.023$, i.e. the reflection must be
-		$20\ \mylog{0.023} = -32.6\db$ below the direct path. That is the purpose
-		of the absorber on the bounce point.
+		The 34\db\ of antenna gain you gave up came straight out of the margin.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		ripple = \ansbox[1.3in]{$1.7\db$ p-p}
+		$P_r$ = \ansbox[1.3in]{$-77.7\dbm$}
 	\end{minipage}
 
-	\part Combine the error sources --- reference tolerance $0.5\db$, ripple
-	$0.9\db$, alignment $0.2\db$, sweep-to-sweep repeatability $0.3\db$ --- into
-	one uncertainty, then write the two-sentence verdict on the $0.5\db$ gap
-	between your measurement and the prediction.
-
-		\begin{solution}[1.5in]
-		Independent contributions add in quadrature:
-		\eq{
-			u = \sqrt{0.5^2 + 0.9^2 + 0.2^2 + 0.3^2} = \sqrt{1.19} = 1.1\db
-		}
-		Verdict: the measured $11.8\dbi$ and the predicted $12.3\dbi$ differ by
-		$0.5\db$, well inside the $\pm 1.1\db$ uncertainty, so the measurement
-		\textbf{agrees} with prediction and no physical explanation is required.
-		Note also that the prediction itself is soft --- it assumed
-		$\eta_{\text{ap}} = 0.5$, and real horns run anywhere from $0.4$ to
-		$0.6$, which is a further $\pm 1\db$ on the number being compared
-		against.
+	\part Which link would you actually deploy, and why? Name two specific
+	things that eat margin on a real rooftop link.
+		\begin{solution}[1.3in]
+		Deploy the dish link. A 2.3\db\ margin leaves no room for normal
+		propagation variation, so the link fails on the first bad day. Real
+		margin eaters include rain and wet foliage in the path, mount drift and building sway pushing the beam off
+		boresight (Q4d showed only $\pm2\mydeg$ of slack), multipath from nearby
+		rooftops, and connector and cable loss between the radio and the
+		antenna. With 36\db\ in hand the dish link absorbs all of that; with
+		2.3\db\ it absorbs none of it.
 		\end{solution}
 
 \end{parts}

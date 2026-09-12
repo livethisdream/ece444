@@ -429,7 +429,7 @@ elements are switched off. Bring today's traces to that lesson, because the
 derivation is easier to trust when you already have the measurement in front of
 you.
 
-The midterm project, the antenna pattern measurement assigned at Lesson 11, is due
+The midterm project, the antenna pattern measurement assigned at Lesson 14, is due
 at the start of Lesson 20. Before then, read the array-factor development in your
 text for the closed-form $\sin(N\psi/2)/[N\sin(\psi/2)]$ and its null locations.
 ::::

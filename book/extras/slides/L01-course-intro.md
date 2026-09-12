@@ -168,7 +168,7 @@ If the antenna is wrong, nothing downstream can fix it.
 
   <!-- Row 2: lesson range -->
   <div class="mod-lessons">L1 – L6</div>
-  <div class="mod-lessons">L7 – L14</div>
+  <div class="mod-lessons">L7 – L11</div>
   <div class="mod-lessons">L15 – L28</div>
   <div class="mod-lessons">L29 – L38</div>
   <div class="mod-lessons">L39 – L41</div>
@@ -179,7 +179,7 @@ If the antenna is wrong, nothing downstream can fix it.
   </div>
   <div class="mod-bottom">
     <div>3 labs</div>
-    <div><span class="milestone">Midterm intro · L11</span></div>
+    <div><span class="milestone">Midterm intro · L14</span></div>
   </div>
   <div class="mod-bottom">
     <div>7 labs · ADALM-PHASER</div>
@@ -198,7 +198,7 @@ If the antenna is wrong, nothing downstream can fix it.
 ## Two projects
 
 **Midterm** — Antenna Pattern Measurement
-- Introduced L11, due L20
+- Introduced L14, due L20
 
 **Final** — Combined Beamforming + Radar
 - Track a moving target while suppressing a static jammer

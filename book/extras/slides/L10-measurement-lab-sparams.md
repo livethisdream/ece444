@@ -6,7 +6,7 @@
 
 Antennas, Phased Arrays, and Radar Systems
 
-## Lesson 13 — Measurement Lab 1 — Impedance and S-parameters
+## Lesson 10 — Measurement Lab 1 — Impedance and S-parameters
 
 Fall 2026 · Dr. Neil Rogers
 
@@ -24,12 +24,12 @@ Fall 2026 · Dr. Neil Rogers
 
 - **L4** gave you $\Gamma$, VSWR, return loss, and the $-10$ dB convention — all on paper.
 - **L7** predicted a half-wave dipole at $73 + j42.5\ \Omega$, resonant slightly short of $\lambda/2$.
-- **L12** set up measurement theory from the *radiated* side: ranges, far field, pattern cuts.
+- **L9** set up measurement theory from the *radiated* side: ranges, far field, pattern cuts.
 
 **Today you work the other terminal: one port, one cable, and one number that tells you whether the antenna will accept power.**
 
 Note:
-Frame the two labs as a pair: L13 is what happens at the connector, L14 is what happens in the air. Remind them the L7 prediction is about to be checked against hardware.
+Frame the two labs as a pair: L10 is what happens at the connector, L11 is what happens in the air. Remind them the L7 prediction is about to be checked against hardware.
 
 ---
 
@@ -53,7 +53,7 @@ Budget: about 20 minutes of briefing, then everyone on hardware. The perturbatio
 - Two receivers measure both, in magnitude *and* phase — the instrument reports their **ratio**.
 - It never measures impedance. It measures a reflection and computes everything else from it.
 
-<div class="fig" data-inline-svg="./fig/L13-vna-block.svg" style="max-width:830px; margin:0.2em auto 0;"></div>
+<div class="fig" data-inline-svg="./fig/L10-vna-block.svg" style="max-width:830px; margin:0.2em auto 0;"></div>
 
 Note:
 Stress "ratioed": because both waves ride the same source, source drift cancels in the ratio. That is why a pocket-sized NanoVNA can be trusted for this measurement.
@@ -139,7 +139,7 @@ The last sentence is the point of the slide. It sets up the reference-plane prob
 - Anything past it — pigtail, adapter, balun leg — is invisible to the correction and shows up as extra phase.
 - Magnitude survives; **phase does not**. Fix it by calibrating at the antenna connector, or with port extension.
 
-<div class="fig" data-inline-svg="./fig/L13-cal-planes.svg" style="max-width:830px; margin:0.2em auto 0;"></div>
+<div class="fig" data-inline-svg="./fig/L10-cal-planes.svg" style="max-width:830px; margin:0.2em auto 0;"></div>
 
 Note:
 Warn them: port extension is a phase-only fix. It cannot undo loss, and it cannot undo a mismatch inside the adapter.
@@ -171,7 +171,7 @@ Point out the trap: the dB plot still looks correct, so the Z readout looks trus
 - **Width at $-10$ dB** = the usable impedance bandwidth.
 - Same event on the chart: the locus crosses the **real axis** and dives inside the $-10$ dB circle.
 
-<div class="fig" data-inline-svg="./fig/L13-three-views.svg" style="max-width:790px; margin:0.2em auto 0;"></div>
+<div class="fig" data-inline-svg="./fig/L10-three-views.svg" style="max-width:790px; margin:0.2em auto 0;"></div>
 
 Note:
 Demo the widget live: sweep R away from 50 and watch the dip get shallow while the resonant frequency does not move. Then raise Q and watch the band pinch shut.
@@ -308,7 +308,7 @@ If they leave with one sentence, make it this one. It sets up the next lab, wher
 
 ## Where this is going
 
-- **L14** measures what this lab cannot: the pattern, and with it the gain and the efficiency question you just left open.
+- **L11** measures what this lab cannot: the pattern, and with it the gain and the efficiency question you just left open.
 - **Module 3** builds arrays out of these elements — and every element in an array sees its neighbors as a *mutual impedance*, which is exactly the $S_{11}$ shift you produced with your hand today.
 - **Midterm project (L20)**: you will design, build, tune, and defend an antenna. Tuning means driving that dip onto your target frequency with the skills from this lab.
 

@@ -994,13 +994,13 @@ is for.
 - $\lambda = 32.8\ \text{cm}$, so $L = 0.475\lambda = 15.6\ \text{cm}$: $7.8\ \text{cm}$ per arm.
 - Cut long. Solder one arm to the center pin and the other to the body.
 - Straighten both arms.
-- Write your predictions down before Lesson 13.
+- Write your predictions down before Lesson 10.
 :::
 
 :::{admonition} Build it — a 915 MHz wire dipole on an SMA connector
 :class: type-along
 Ten minutes with a wire cutter and a soldering iron gets you a real antenna.
-You will not measure it today. You will measure it in Lesson 13, on a vector
+You will not measure it today. You will measure it in Lesson 10, on a vector
 network analyzer, against the predictions you write down now — so the value of
 this exercise depends entirely on committing to numbers **before** you cut.
 
@@ -1028,7 +1028,7 @@ wire cutter, a ruler, and a soldering iron.
 
 ::::{frame} Fill In Your Predictions Now
 :::{present}
-| What to record | Your prediction (now) | Measured in Lesson 13 |
+| What to record | Your prediction (now) | Measured in Lesson 10 |
 | :-- | :-- | :-- |
 | Arm length actually cut | ______ cm | — |
 | Total length $L$ | ______ cm | — |
@@ -1098,7 +1098,7 @@ showing up in your own hardware.
 ::::{frame} Where This Is Going
 :::{present}
 - **Lesson 8**: a method-of-moments solver computes the current instead of assuming it. Bring the 146 MHz numbers and grade the simulator with them.
-- **Lesson 9**: a monopole and a loop from the same wire.
+- **Lesson 12**: a monopole and a loop from the same wire.
 - **Module 3**: the dipole becomes an element.
 :::
 
@@ -1122,11 +1122,11 @@ hand calculation on a dipole can be trusted a little further on a structure
 you cannot solve by hand; a disagreement usually points to a setup error in
 the model, and the only way to notice it is to bring predictions with you. The
 915 MHz dipole you soldered onto an SMA connector closes the same loop with
-hardware instead of software: in Lesson 13 you will put it on a vector network
+hardware instead of software: in Lesson 10 you will put it on a vector network
 analyzer and see how far a real balun-less wire lands from the length,
 resonance, and impedance you wrote down today.
 
-After that, Lesson 9 takes the same wire apart. Cut a dipole in half and stand
+After that, Lesson 12 takes the same wire apart. Cut a dipole in half and stand
 it on a ground plane and you have a monopole — half the impedance, double the
 directivity, and only the upper half-space to radiate into. Bend it into a
 circle and you have a loop, whose behavior depends entirely on whether the

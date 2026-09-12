@@ -6,10 +6,12 @@ For each lesson in the manifest that does not already exist, this writes:
   book/extras/slides/<slug>.md      reveal.js deck (title slide + LO slide + outline stub)
   book/extras/slides/<slug>.html    generated via make_deck_html.TEMPLATE
 
-It also (re)generates the Module 2-5 landing pages and rewrites book/_toc.yml
-from the manifest. Existing lesson index.md / slide .md files are left
-UNTOUCHED unless --force is passed, so hand-written content (L1-L3, and any
-lesson you have since filled in) is safe to re-run over.
+It also rewrites book/_toc.yml from the manifest. Existing lesson index.md /
+slide .md files are left UNTOUCHED unless --force is passed, so hand-written
+content (L1-L3, and any lesson you have since filled in) is safe to re-run
+over. Every module landing page is now a hand-written frame page, so none of
+them is generated -- the generator below still emits the pre-frame shape, and
+running it over one would flatten the conversion.
 
 The manifest is the single source of truth for the lesson -> LO mapping;
 edit LESSONS below and re-run to change the scaffold.
@@ -77,35 +79,35 @@ MODULES = {
         title="Module 1 — Antenna Fundamentals",
         los=["1.1", "1.2", "1.3", "1.4", "1.5", "1.6"],
         synopsis="Ground the physics. What an antenna is and why it matters, the chain from Maxwell's equations to the plane wave, the headline parameters (gain, directivity, effective area, beamwidth), impedance and feeding, field regions, and the radiation integrals.",
-        generate_index=False,  # module 1 landing page is hand-written; leave it
+        generate_index=False,  # hand-written frame page; the generator predates frames
     ),
     2: dict(
         caption="Module 2 — Antenna Types, Simulation, and Measurement",
         title="Module 2 — Antenna Types, Simulation, and Measurement",
         los=["2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7"],
         synopsis="Move from theory to real antennas: the canonical families — dipoles, loops, monopoles, patches, slots, horns, reflectors, Yagis — and how we simulate and measure them. You'll simulate a dipole, then measure impedance and radiation patterns in the lab.",
-        generate_index=True,
+        generate_index=False,  # hand-written frame page; the generator predates frames
     ),
     3: dict(
         caption="Module 3 — Arrays and ADALM-PHASER Beamforming",
         title="Module 3 — Arrays and ADALM-PHASER Beamforming",
         los=["3.1", "3.2", "3.3", "3.4", "3.5", "3.6", "3.7", "3.8", "3.9"],
         synopsis="Build beams from elements. Aperture distributions and the array factor, then hands-on beam steering, tapering, beam squint, and null steering on the ADALM-PHASER.",
-        generate_index=True,
+        generate_index=False,  # hand-written frame page; the generator predates frames
     ),
     4: dict(
         caption="Module 4 — Radar Fundamentals and FMCW",
         title="Module 4 — Radar Fundamentals and FMCW",
         los=["4.1", "4.2", "4.3", "4.4", "4.5", "4.6", "4.7"],
         synopsis="From antennas to radar. The radar equation, range/Doppler/resolution, detection theory, and FMCW processing on the PHASER — range, range-Doppler, MTI, and CFAR.",
-        generate_index=True,
+        generate_index=False,  # hand-written frame page; the generator predates frames
     ),
     5: dict(
         caption="Module 5 — Capstone Project",
         title="Module 5 — Capstone Project",
         los=["5.1", "5.2", "5.3", "5.4"],
         synopsis="Capstone. Integrate beam steering, null steering, and FMCW radar into a working demo that tracks a moving target while suppressing a static jammer, and brief the results.",
-        generate_index=True,
+        generate_index=False,  # hand-written frame page; the generator predates frames
     ),
 }
 
@@ -134,12 +136,14 @@ LESSONS = [
 
     (2, 7, "L07-simple-resonant-antennas", "Simple Resonant Antennas", ["2.1"], "Isotropic radiators and the half-wave dipole: pattern, gain, and impedance.", False),
     (2, 8, "L08-dipole-simulation-lab", "Dipole Simulation Lab", ["2.2"], "Simulate a dipole in an EM tool and compare against analytical predictions.", False),
-    (2, 9, "L09-loop-monopole-antennas", "Loop and Monopole Antennas", ["2.1"], "Small loops and monopoles: radiation behavior, gain, and impedance.", False),
-    (2, 10, "L10-patch-slot-horn", "Patch, Slot, and Horn Antennas", ["2.3"], "Radiation mechanism, pattern, and use cases for patch, slot, and horn antennas.", False),
-    (2, 11, "L11-high-gain-antennas", "High-Gain Antennas", ["2.4"], "Reflectors, Yagi-Uda, and arrays — how they get gain. Midterm project introduced.", False),
-    (2, 12, "L12-pattern-measurement-theory", "Pattern Measurement Theory", ["2.5"], "Anechoic chambers, near-field / far-field transformations, and standard gain horns.", False),
-    (2, 13, "L13-measurement-lab-sparams", "Measurement Lab 1 — Impedance and S-parameters", ["2.6"], "Measure impedance and S-parameters on a vector network analyzer.", False),
-    (2, 14, "L14-measurement-lab-patterns", "Measurement Lab 2 — Radiation Patterns", ["2.7"], "Measure a radiation pattern and extract gain, beamwidth, sidelobe level, and polarization.", False),
+    # The measurement block runs before the remaining antenna families so that
+    # the midterm project is in cadets' hands as early as the calendar allows.
+    (2, 9, "L09-pattern-measurement-theory", "Measurement Theory", ["2.5", "2.6", "2.7"], "All the measurement theory in one place: ranges and chambers, what a VNA measures and how it is calibrated, gain by comparison, and dynamic range. Midterm project introduced.", False),
+    (2, 10, "L10-measurement-lab-sparams", "Measurement Lab 1 — Impedance and S-parameters", ["2.6"], "Measure impedance and S-parameters on a vector network analyzer.", False),
+    (2, 11, "L11-measurement-lab-patterns", "Measurement Lab 2 — Radiation Patterns", ["2.7"], "Measure a radiation pattern and extract gain, beamwidth, sidelobe level, and polarization.", False),
+    (2, 12, "L12-loop-monopole-antennas", "Loop and Monopole Antennas", ["2.1"], "Small loops and monopoles: radiation behavior, gain, and impedance.", False),
+    (2, 13, "L13-patch-slot-horn", "Patch, Slot, and Horn Antennas", ["2.3"], "Radiation mechanism, pattern, and use cases for patch, slot, and horn antennas.", False),
+    (2, 14, "L14-high-gain-antennas", "High-Gain Antennas", ["2.4"], "Reflectors, Yagi-Uda, and arrays — how they get gain.", False),
 
     (3, 15, "L15-aperture-distributions", "Aperture Distributions and Efficiency", ["3.1"], "Aperture distributions and aperture efficiency for a given illumination.", False),
     (3, 16, "L16-array-factor", "The Array Factor and Pattern Multiplication", ["3.2"], "Array factor for a linear array and pattern multiplication.", False),

@@ -138,7 +138,7 @@ Module 3 objectives, from the syllabus:
 - 3.8 beam squint and quantization effects
 - 3.9 null-steering weights, implemented on the PHASER
 
-The midterm project (Antenna Pattern Measurement, introduced at L11) is **due
+The midterm project (Antenna Pattern Measurement, introduced at L14) is **due
 at L20** — that lesson should acknowledge it.
 
 ## Done means

@@ -6,7 +6,7 @@
 
 Antennas, Phased Arrays, and Radar Systems
 
-## Lesson 10 — Patch, Slot, and Horn Antennas
+## Lesson 13 — Patch, Slot, and Horn Antennas
 
 Fall 2026 · Dr. Neil Rogers
 
@@ -23,7 +23,7 @@ Fall 2026 · Dr. Neil Rogers
 ## Where we were
 
 - L7: the half-wave dipole — a resonant wire, $73 + j42.5\ \Omega$, $2.15$ dBi.
-- L9: loops and monopoles — folded, bent, and grounded, but still wire.
+- L12: loops and monopoles — folded, bent, and grounded, but still wire.
 - L6: the radiation integral does not care what carries the current. An aperture with a known field is just as good a source.
 - L5: $r \ge 2D^2/\lambda$, and gain lives in electrical size.
 
@@ -56,7 +56,7 @@ Three antennas, one lesson. The organizing question every time: what physically 
 <p>Drive it and it is a <strong>half-wave resonator</strong> in the dielectric: $L \approx \lambda_d/2$, with $\lambda_d = \lambda_0/\sqrt{\varepsilon_{\text{eff}}}$.</p>
 <p>The metal is a poor radiator. <strong>The edges are the antenna.</strong></p>
 </div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L10-patch-anatomy.svg" style="max-width:560px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L13-patch-anatomy.svg" style="max-width:560px; margin:0 auto;"></div>
 </div></div>
 
 Note:
@@ -71,7 +71,7 @@ Stress the direction bookkeeping: L sets the resonance, W sets the impedance and
 <p>At each edge the field <strong>fringes</strong> past the conductor. The vertical parts are opposite and <strong>cancel</strong>. The horizontal parts point the same way and <strong>add</strong>.</p>
 <p>Two edges, $\lambda_d/2$ apart, in phase: <strong>the two-slot model</strong>.</p>
 </div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L10-patch-fringing.svg" style="max-width:660px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L13-patch-fringing.svg" style="max-width:660px; margin:0 auto;"></div>
 </div></div>
 
 Note:
@@ -204,7 +204,7 @@ Forward hook to L16 pattern multiplication: element factor equals the patch patt
 <p>The <strong>complement</strong> of a dipole: metal where the dipole is air, air where the dipole is metal.</p>
 <p>It has no protrusion, adds no drag, and has nothing to shear off.</p>
 </div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L10-slot-babinet.svg" style="max-width:680px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L13-slot-babinet.svg" style="max-width:680px; margin:0 auto;"></div>
 </div></div>
 
 Note:
@@ -277,7 +277,7 @@ Show a marine radar slotted-waveguide photo if you have one loaded. Then forward
 <p><strong>Flare it out.</strong> The mode expands, the mismatch smooths out, and you finish with a large, well-illuminated aperture.</p>
 <p>By L6's equivalence principle, that aperture field <em>is</em> the source.</p>
 </div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L10-horn-aperture.svg" style="max-width:660px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L13-horn-aperture.svg" style="max-width:660px; margin:0 auto;"></div>
 </div></div>
 
 Note:
@@ -352,7 +352,7 @@ If they only keep one thing: aperture efficiency is not a fudge factor, it is a 
 - It is not a good communication antenna. It is a **known** antenna.
 - Use it as the reference in the gain-comparison method: measure the unknown, measure the standard, take the ratio.
 
-<div class="callout">In <strong>L12</strong> the standard-gain horn is the reference against which every other antenna's gain is measured.</div>
+<div class="callout">In <strong>L9</strong> the standard-gain horn is the reference against which every other antenna's gain is measured.</div>
 
 Note:
 Point at the actual horn in the chamber if the deck is being run in the lab space.
@@ -389,8 +389,8 @@ These three sentences are the takeaway. If students can say them back, the lesso
 
 ## Where this is going
 
-- **L11** — reflectors, Yagis, and arrays: how to get past 25 dBi.
-- **L12** — pattern and gain measurement, with the standard-gain horn as the reference.
+- **L14** — reflectors, Yagis, and arrays: how to get past 25 dBi.
+- **L9** — pattern and gain measurement, with the standard-gain horn as the reference.
 - **Module 3** — hundreds of patches, phased, steered. The PHASER's elements are exactly the antenna you sized today.
 
 <div class="callout">You have met the element. Next you build the <strong>array</strong>.</div>

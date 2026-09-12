@@ -215,7 +215,7 @@ def run() -> int:
               broken({4: "EX 0 1 11 0 1 0"}), "wire 1 has 9")
     complains("a feed on a wire that does not exist is caught",
               broken({4: "EX 0 2 5 0 1 0"}), "no GW card defines")
-    # GN is supported now (L9 needs it), so what has to be caught is the pair
+    # GN is supported now (L12 needs it), so what has to be caught is the pair
     # coming apart: a ground card with a free-space GE, and the reverse.
     complains("a GN card with no GE 1 is caught",
               broken(add="GN 1"), "GE does not say 1")
@@ -260,7 +260,7 @@ def run() -> int:
     check("monopole: nothing is computed below the ground plane",
           max(surf.theta_deg) <= 90.0, f"theta runs to {max(surf.theta_deg):.0f}")
     # Take the ground away and it stops being a monopole: that is the point of
-    # L9, and it is also proof the GN card is doing something.
+    # L12, and it is also proof the GN card is doing something.
     _, free_sol, _ = built("monopole", ground="free")
     check("monopole: removing the ground changes the antenna",
           abs(free_sol.z_real - sol.z_real) > 5.0,

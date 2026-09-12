@@ -2,7 +2,7 @@
 frame_view: true
 ---
 
-# L12 - Pattern Measurement Theory
+# L9 - Pattern Measurement Theory
 
 ::::{frame}
 :class: title-frame
@@ -15,15 +15,15 @@ frame_view: true
 
 A range is a plane-wave simulator.
 
-Lesson 12 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+Lesson 9 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame}
 :::{admonition} Slides
 :class: slides
-<a href="../../slides/L12-pattern-measurement-theory.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L12-pattern-measurement-theory.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L12-pattern-measurement-theory.md" target="_blank" rel="noopener">raw markdown slides</a>
+<a href="../../slides/L09-pattern-measurement-theory.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L09-pattern-measurement-theory.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L09-pattern-measurement-theory.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 ::::
 
@@ -44,7 +44,7 @@ Lesson 12 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 
 :::{depth}
-L10 and L11 built the high-gain antennas and told you their gain from geometry and aperture efficiency. L11 also handed you the midterm project: put an antenna on a positioner and measure its pattern. Every pattern in this course so far came out of an integral — none of them came off an instrument. This lesson is the theory that midterm measurement stands on. It runs the whole problem backwards: instead of computing a far field, you have to *build* one, and every rule that follows is a tolerance on how well you built it.
+L13 and L14 built the high-gain antennas and told you their gain from geometry and aperture efficiency. L14 also handed you the midterm project: put an antenna on a positioner and measure its pattern. Every pattern in this course so far came out of an integral — none of them came off an instrument. This lesson is the theory that midterm measurement stands on. It runs the whole problem backwards: instead of computing a far field, you have to *build* one, and every rule that follows is a tolerance on how well you built it.
 :::
 ::::
 
@@ -215,7 +215,7 @@ The practical consequence is that **the AUT must fit inside the quiet zone.** An
 ::::
 
 ::::{frame} Compact ranges
-A **compact range** produces the plane wave with optics instead of distance. Put a feed at the focus of a precision offset paraboloid and you get the L11 geometry again: every path from the focus to the reflector to the aperture plane has the same length, so the reflected wave leaves with flat phase. In L11 the collimated wave was aimed at a satellite; here it only has to cross the room.
+A **compact range** produces the plane wave with optics instead of distance. Put a feed at the focus of a precision offset paraboloid and you get the L14 geometry again: every path from the focus to the reflector to the aperture plane has the same length, so the reflected wave leaves with flat phase. In L14 the collimated wave was aimed at a satellite; here it only has to cross the room.
 ::::
 
 ::::{frame} Two costs of a compact range
@@ -270,7 +270,7 @@ A pattern is a shape, and a shape is easy: normalize it and you are done. Gain i
 Gain is a ratio, so measure it as one. This is the **comparison** or **gain-transfer** method, and it is what you will use for the midterm.
 
 1. Put the AUT on the positioner, point it at the source, and record the received power $P_\text{AUT}$.
-2. Take it off. Put a **standard gain horn** — the calibrated pyramidal horn from L10, supplied with a gain-versus-frequency curve traceable to a national standard — in exactly the same place, pointed the same way, at the same frequency and polarization. Record $P_\text{SGH}$.
+2. Take it off. Put a **standard gain horn** — the calibrated pyramidal horn from L13, supplied with a gain-versus-frequency curve traceable to a national standard — in exactly the same place, pointed the same way, at the same frequency and polarization. Record $P_\text{SGH}$.
 3. Subtract.
 
 $$G_\text{AUT}\ [\text{dBi}] = G_\text{SGH}\ [\text{dBi}] + \left( P_\text{AUT} - P_\text{SGH} \right)\ [\text{dB}]$$
@@ -382,12 +382,12 @@ For a circularly polarized antenna there is a faster method. Spin the linear sou
 ::::
 
 ::::{frame} Practice
-- <a href="../../practice/ECE444_L12_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a href="../../practice/ECE444_L12_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+- <a href="../../practice/ECE444_L09_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a href="../../practice/ECE444_L09_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
 ::::{frame} Where this is going
-L13 and L14 are the two lessons where this becomes hardware. L13 puts an antenna on a vector network analyzer and measures S-parameters — match, resonance, bandwidth, the L4 material made real. L14 puts one on the positioner and takes the cuts, with the range length, the quiet zone, and the standard gain horn all sitting exactly where this lesson said they would.
+L10 and L11 are the two lessons where this becomes hardware. L10 puts an antenna on a vector network analyzer and measures S-parameters — match, resonance, bandwidth, the L4 material made real. L11 puts one on the positioner and takes the cuts, with the range length, the quiet zone, and the standard gain horn all sitting exactly where this lesson said they would.
 ::::
 
 ::::{frame} The midterm project

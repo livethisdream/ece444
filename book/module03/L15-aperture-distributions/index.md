@@ -39,7 +39,7 @@ Lesson 15 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Where we were
-In Lesson 14 you measured patterns: you turned an antenna in front of a source, recorded power against angle, and produced a main lobe, a set of sidelobes, and a beamwidth. Module 3 turns that around. From here on you are the one who decides where the lobes go, and the first design variable you get is the **aperture distribution** — the field across the opening that radiates. This lesson connects that distribution to the pattern it produces, puts numbers on the beamwidth and sidelobe level of the simplest case, and defines the efficiency that turns aperture area into gain. Those numbers carry straight into the array work that occupies the rest of the module.
+In Lesson 11 you measured patterns: you turned an antenna in front of a source, recorded power against angle, and produced a main lobe, a set of sidelobes, and a beamwidth. Module 3 turns that around. From here on you are the one who decides where the lobes go, and the first design variable you get is the **aperture distribution** — the field across the opening that radiates. This lesson connects that distribution to the pattern it produces, puts numbers on the beamwidth and sidelobe level of the simplest case, and defines the efficiency that turns aperture area into gain. Those numbers carry straight into the array work that occupies the rest of the module.
 ::::
 
 ::::{frame} Part 1: The aperture is the source
@@ -271,7 +271,7 @@ Check the gain against the pencil-beam estimate from Lesson 2: $41{,}253/(3 \tim
 ::::{frame} Worked example — sizing an X-band aperture (cont.)
 :::{admonition} Worked example — sizing an X-band aperture, checking the design (cont.)
 :class: tip
-Two consequences worth carrying away. The $3^\circ$ azimuth requirement is what made this antenna $0.68\ \text{m}$ wide, and the sidelobe requirement made it $34\%$ wider than a uniform aperture with the same beamwidth would have been. Also, a $31\ \text{m}$ far-field distance means this antenna cannot be pattern-tested in any ordinary room, which is the same constraint you worked with in Lesson 14.
+Two consequences worth carrying away. The $3^\circ$ azimuth requirement is what made this antenna $0.68\ \text{m}$ wide, and the sidelobe requirement made it $34\%$ wider than a uniform aperture with the same beamwidth would have been. Also, a $31\ \text{m}$ far-field distance means this antenna cannot be pattern-tested in any ordinary room, which is the same constraint you worked with in Lesson 11.
 :::
 ::::
 

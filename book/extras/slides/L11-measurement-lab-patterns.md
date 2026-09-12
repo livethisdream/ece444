@@ -6,7 +6,7 @@
 
 Antennas, Phased Arrays, and Radar Systems
 
-## Lesson 14 — Measurement Lab 2: Radiation Patterns
+## Lesson 11 — Measurement Lab 2: Radiation Patterns
 
 Fall 2026 · Dr. Neil Rogers
 
@@ -22,14 +22,14 @@ Fall 2026 · Dr. Neil Rogers
 
 ## Where we were
 
-- **L11** — high-gain antennas: aperture size sets beamwidth, illumination sets sidelobes.
-- **L12** — pattern measurement theory: far field, range geometry, gain by comparison.
-- **L13** — impedance lab: you measured what happens at the **terminals**.
+- **L14** — high-gain antennas: aperture size sets beamwidth, illumination sets sidelobes.
+- **L9** — pattern measurement theory: far field, range geometry, gain by comparison.
+- **L10** — impedance lab: you measured what happens at the **terminals**.
 
 <div class="callout"><strong>Today you measure what leaves the antenna.</strong> It is the same antenna, described from its other half.</div>
 
 Note:
-L13 answered "does power get in?" Today answers "where does it go once it's in?" Both are needed before the midterm project.
+L10 answered "does power get in?" Today answers "where does it go once it's in?" Both are needed before the midterm project.
 
 ---
 
@@ -48,7 +48,7 @@ Item 5 is the judgment call; items 1 through 4 are procedure.
 
 ## The range you are building
 
-<div class="fig" data-inline-svg="./fig/L14-range-setup.svg" style="max-width:960px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L11-range-setup.svg" style="max-width:960px; margin:0 auto;"></div>
 
 Note:
 Walk the room through it: transmitter, source antenna fixed, AUT on the rotator, receiver logging power per angle. Point at the floor bounce, which is the error source they will see.
@@ -156,7 +156,7 @@ Everything common to both measurements — transmit power, path loss, cable loss
 <div class="callout">In dB, gain by comparison is <strong>one subtraction</strong>. Its accuracy is the accuracy of the reference plus your alignment.</div>
 
 Note:
-This is L12's substitution method, executed. Stress "change nothing else" — moving a cable between the two measurements is a common way to lose 0.5 dB.
+This is L9's substitution method, executed. Stress "change nothing else" — moving a cable between the two measurements is a common way to lose 0.5 dB.
 
 ---
 
@@ -196,7 +196,7 @@ Note:
 
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
-<div class="fig" data-inline-svg="./fig/L14-floor-effect.svg" style="max-width:830px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L11-floor-effect.svg" style="max-width:830px; margin:0 auto;"></div>
 
 Note:
 Demo live: drag the floor from −45 dB up to −20 dB. HPBW barely moves, the first sidelobe creeps up about 1 dB, the nulls stop at the floor. Then switch averaging to 16 and show that the fuzz smooths but the floor does not drop.

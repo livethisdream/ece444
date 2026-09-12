@@ -409,7 +409,7 @@ Have them notice the two routes agree to a centimeter. Also note that 49 cm is a
 **A dipole is balanced and coax is not — fit L4's balun, then trust the table. If the analyzer disagrees by more than about 10%, suspect the balun before the theory.**
 
 Note:
-$D$ here is the dipole length, 0.976 m, so $2D^2/\lambda$ is 0.93 m. Anything measured closer than a meter is not a pattern. On the balun: connect coax straight to a dipole and current flows on the outside of the shield, the feedline joins the radiating structure, and the pattern and VSWR both start depending on where you are standing. It is the number one reason a student's measured pattern will not match their simulation in L8 and L14.
+$D$ here is the dipole length, 0.976 m, so $2D^2/\lambda$ is 0.93 m. Anything measured closer than a meter is not a pattern. On the balun: connect coax straight to a dipole and current flows on the outside of the shield, the feedline joins the radiating structure, and the pattern and VSWR both start depending on where you are standing. It is the number one reason a student's measured pattern will not match their simulation in L8 and L11.
 
 ---
 
@@ -445,7 +445,7 @@ Walk down the list. The last bullet is the bridge to L8 — every number on this
 ## Where this is going
 
 - **L8** — you build this exact antenna in **nec_lab**, our front end to NEC-2. It *does not assume a current*: it chops the wire into segments, solves for the current on each, then runs the same radiation integral you ran today. **The numbers you just predicted are the ones you will check against simulation.**
-- **L9** — cut the dipole in half and stand it on a ground plane, then bend one into a loop.
+- **L12** — cut the dipole in half and stand it on a ground plane, then bend one into a loop.
 - **Module 3** — a dipole becomes an *element*. Put many in a row and pattern multiplication takes over from 2.15 dBi.
 
 **Bring the 146 MHz numbers to L8. You are going to grade the simulator with them.**

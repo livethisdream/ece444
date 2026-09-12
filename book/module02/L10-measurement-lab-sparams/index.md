@@ -2,7 +2,7 @@
 frame_view: true
 ---
 
-# L13 - Measurement Lab 1 — Impedance and S-parameters
+# L10 - Measurement Lab 1 — Impedance and S-parameters
 
 ::::{frame}
 :class: title-frame
@@ -15,16 +15,16 @@ frame_view: true
 
 This is the lesson where that prediction meets a real piece of wire and a real instrument.
 
-Lesson 13 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+Lesson 10 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame}
 
 :::{admonition} Slides
 :class: slides
-<a href="../../slides/L13-measurement-lab-sparams.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L13-measurement-lab-sparams.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L13-measurement-lab-sparams.md" target="_blank" rel="noopener">raw markdown slides</a>
+<a href="../../slides/L10-measurement-lab-sparams.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L10-measurement-lab-sparams.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L10-measurement-lab-sparams.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 
 ::::
@@ -39,7 +39,7 @@ Lesson 13 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 
 :::{depth}
-Lesson 12 set up measurement from the radiated side: ranges, far-field distance, pattern cuts. Today you work the other terminal. The measurement is one port, one cable, and one complex number per frequency, and that number carries everything you have been predicting on paper since Lesson 4. Lesson 7 told you a half-wave dipole should sit near $73 + j42.5\ \Omega$ and resonate slightly short of $\lambda/2$. This is the lesson where that prediction meets a real piece of wire and a real instrument.
+Lesson 9 set up measurement from the radiated side: ranges, far-field distance, pattern cuts. Today you work the other terminal. The measurement is one port, one cable, and one complex number per frequency, and that number carries everything you have been predicting on paper since Lesson 4. Lesson 7 told you a half-wave dipole should sit near $73 + j42.5\ \Omega$ and resonate slightly short of $\lambda/2$. This is the lesson where that prediction meets a real piece of wire and a real instrument.
 :::
 
 ::::
@@ -52,7 +52,7 @@ A **vector network analyzer** (VNA) is a swept source, two receivers, and direct
 
 ::::{frame}
 
-<img src="../../slides/fig/L13-vna-block.svg"
+<img src="../../slides/fig/L10-vna-block.svg"
      alt="Block diagram of a one-port VNA: source, two directional couplers feeding a reference and a test receiver, and a ratio block producing S11."
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
@@ -183,7 +183,7 @@ That statement has a direct consequence. The plane where you attached the standa
 
 ::::{frame}
 
-<img src="../../slides/fig/L13-cal-planes.svg"
+<img src="../../slides/fig/L10-cal-planes.svg"
      alt="Reference planes: A at the VNA port, B at the end of the test cable where SOL is performed, C at the antenna terminals. The pigtail between B and C rotates the measured phase."
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 
@@ -273,7 +273,7 @@ The widget below shows one physical resonance in both languages at once. Drag ac
 
 ::::{frame} Part 4: What the VNA will not tell you
 
-One limitation governs everything in this lab. Solder a $50\ \Omega$ resistor across the connector and measure it. $\Gamma = 0$, $\vert S_{11}\vert$ plunges to the noise floor, VSWR reads $1.00$, and the Smith chart marker sits precisely at the center. It is a *perfect* match at every frequency in the sweep. It also radiates **nothing** — all of your power turns into heat. $S_{11}$ measures **mismatch only**. It cannot distinguish power that left as radiation from power that died as loss in a resistive conductor, a lossy dielectric, or damp packaging material. Radiation efficiency needs a second, independent measurement — a gain comparison against a standard antenna (Lesson 14) or a Wheeler cap. You cannot get it from one port.
+One limitation governs everything in this lab. Solder a $50\ \Omega$ resistor across the connector and measure it. $\Gamma = 0$, $\vert S_{11}\vert$ plunges to the noise floor, VSWR reads $1.00$, and the Smith chart marker sits precisely at the center. It is a *perfect* match at every frequency in the sweep. It also radiates **nothing** — all of your power turns into heat. $S_{11}$ measures **mismatch only**. It cannot distinguish power that left as radiation from power that died as loss in a resistive conductor, a lossy dielectric, or damp packaging material. Radiation efficiency needs a second, independent measurement — a gain comparison against a standard antenna (Lesson 11) or a Wheeler cap. You cannot get it from one port.
 
 This cuts both ways on the bench. A deep, wide dip is *necessary* for a good antenna, not *sufficient*. Conversely, an antenna with a mediocre $-8$ dB match may still be the better radiator.
 
@@ -398,14 +398,14 @@ A plot with no markers and no units is a screenshot rather than a measurement, a
 
 ::::{frame} Practice
 
-- <a href="../../practice/ECE444_L13_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a href="../../practice/ECE444_L13_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+- <a href="../../practice/ECE444_L10_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a href="../../practice/ECE444_L10_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 
 ::::
 
 ::::{frame} Where this is going
 
-Lesson 14 measures the half of the problem this lab cannot reach. A VNA tells you power went *in*; only a pattern range tells you it came back *out*, and in which direction. Together the two labs give you match, pattern, and gain — the complete characterization of a single element, and the efficiency question Part 4 left open.
+Lesson 11 measures the half of the problem this lab cannot reach. A VNA tells you power went *in*; only a pattern range tells you it came back *out*, and in which direction. Together the two labs give you match, pattern, and gain — the complete characterization of a single element, and the efficiency question Part 4 left open.
 
 :::{depth}
 Further out, the skills compound. Module 3 builds arrays from these elements, and every element in an array sees its neighbors as a mutual impedance — precisely the $S_{11}$ shift you produced with your hand. And the midterm project due at Lesson 20 asks you to design, build, tune, and defend an antenna. Tuning *is* this lab: measure, read the sign of the reactance, trim, measure again. Calibration and Smith-chart fluency are the rate-limiting skills on that project. Practice both in this lab, where the cost of a mistake is an afternoon rather than a week.

@@ -406,7 +406,7 @@ fraction of a decibel.
 ::::
 
 ::::{frame} Keep the pattern file
-Press **Pattern CSV** and keep what it saves. In Lesson 13 and Lesson 14 you
+Press **Pattern CSV** and keep what it saves. In Lesson 10 and Lesson 11 you
 will measure a real antenna in the chamber, and that file drops straight onto
 the measured cut so the two can be compared on one plot.
 
@@ -414,7 +414,7 @@ One difference to carry with you: this file is absolute gain in dBi, and a
 chamber measures raw $S_{21}$ through cables and fixture. Comparing the two
 means normalizing each to its own peak, which compares **shape**. Comparing
 absolute levels is a gain-transfer measurement against a standard-gain horn —
-Lesson 12's material, not something a file can fix.
+Lesson 9's material, not something a file can fix.
 ::::
 
 ::::{frame} Step 8 — Convergence study
@@ -513,12 +513,12 @@ once you make the two models match.
 ::::
 
 ::::{frame} Where this is going
-Lesson 9 returns to theory with loops and monopoles. The monopole is where your
+Lesson 12 returns to theory with loops and monopoles. The monopole is where your
 new NEC habits get their first real test, because a quarter-wave monopole is
 only half an antenna and the other half is the ground plane. NEC models ground
 with its own card, and getting that card wrong is a common way to produce a
 confident and completely incorrect monopole result, including an average gain
-that no longer has to equal one. Before Lesson 9, review your Lesson 7 notes on
+that no longer has to equal one. Before Lesson 12, review your Lesson 7 notes on
 the sinusoidal current assumption, and be ready to state how a quarter-wave
 monopole over perfect ground relates to the half-wave dipole in both impedance
 and directivity.

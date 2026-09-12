@@ -2,7 +2,7 @@
 frame_view: true
 ---
 
-# L11 - High-Gain Antennas
+# L14 - High-Gain Antennas
 
 ::::{frame}
 :class: title-frame
@@ -15,15 +15,15 @@ frame_view: true
 
 High gain means a large radiating area driven in phase.
 
-Lesson 11 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+Lesson 14 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Slides
 :::{admonition} Slides
 :class: slides
-<a href="../../slides/L11-high-gain-antennas.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L11-high-gain-antennas.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L11-high-gain-antennas.md" target="_blank" rel="noopener">raw markdown slides</a>
+<a href="../../slides/L14-high-gain-antennas.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L14-high-gain-antennas.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L14-high-gain-antennas.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 ::::
 
@@ -40,13 +40,13 @@ Lesson 11 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Where we were
 
-Lesson 10 handed you patches, slots, and horns — single radiators that top out somewhere between 6 and 20 dBi. That is enough for a handheld, a wall-mounted access point, or a short hop across the airfield. It is nowhere near enough to close a link to a satellite 36,000 km away, or to put a radar beam on a target ten miles out. Today you get the antennas that live at 20, 30, and 40 dBi, and — more importantly — the single idea underneath all three of them.
+Lesson 13 handed you patches, slots, and horns — single radiators that top out somewhere between 6 and 20 dBi. That is enough for a handheld, a wall-mounted access point, or a short hop across the airfield. It is nowhere near enough to close a link to a satellite 36,000 km away, or to put a radar beam on a target ten miles out. Today you get the antennas that live at 20, 30, and 40 dBi, and — more importantly — the single idea underneath all three of them.
 ::::
 
 ::::{frame} Midterm Project — Antenna Pattern Measurement
 :::{admonition} Midterm Project — Antenna Pattern Measurement
 :class: important
-The midterm project is introduced today and is **due at L20**. You will design or select an antenna, measure its pattern using the techniques you learn in L12–L14, and report its **gain, beamwidth, sidelobe levels, and polarization**. Full requirements come in the project handout distributed in class. Start thinking now about which antenna you want to build — the selection framework at the end of this lesson is exactly the reasoning your report will have to show.
+The midterm project is introduced today and is **due at L20**. You will design or select an antenna, measure its pattern using the techniques you learn in L9–L11, and report its **gain, beamwidth, sidelobe levels, and polarization**. Full requirements come in the project handout distributed in class. Start thinking now about which antenna you want to build — the selection framework at the end of this lesson is exactly the reasoning your report will have to show.
 :::
 ::::
 
@@ -133,7 +133,7 @@ A home satellite-TV dish, roughly 1 m across, receiving Ku band at 12 GHz. Take 
 :class: tip
 **Effective aperture.** $A_e = \eta_{\text{ap}}A = 0.65 \cdot \pi(0.5)^2 = 0.51\ \text{m}^2$.
 
-**Sanity check on the far field.** $2D^2/\lambda = 2(1)^2/0.025 = 80\ \text{m}$. You cannot measure this antenna across the lab — which is exactly the problem L12 takes up.
+**Sanity check on the far field.** $2D^2/\lambda = 2(1)^2/0.025 = 80\ \text{m}$. You cannot measure this antenna across the lab — which is exactly the problem L9 takes up.
 :::
 ::::
 
@@ -144,7 +144,7 @@ A reflector does not amplify anything. It takes the spherical wave a small feed 
 
 ::::{frame} Why a parabola
 
-<img src="../../viz/img/L11-parabola-geometry.svg"
+<img src="../../viz/img/L14-parabola-geometry.svg"
      alt="Rays leaving the feed at the focus of a parabola reflect into a parallel beam, and every path from the focus to the aperture plane has the same length"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 ::::
@@ -188,7 +188,7 @@ The feed has a pattern. Aim a narrow feed at the dish and the rim sits 20 dB dow
 
 ::::{frame} The illumination trade-off
 
-<img src="../../viz/img/L11-illumination-taper.svg"
+<img src="../../viz/img/L14-illumination-taper.svg"
      alt="Three feed illuminations of the same dish: too narrow with a starved rim, about right with a ten decibel edge taper, and too wide with power spilling past the rim"
      style="max-width: 760px; width: 100%; display: block; margin: 1em auto;">
 ::::
@@ -246,7 +246,7 @@ Multiply the pieces to get a budget:
 
 The reflector buys area with a mirror. The **Yagi-Uda** buys it with the neighbors.
 
-<img src="../../viz/img/L11-yagi.svg"
+<img src="../../viz/img/L14-yagi.svg"
      alt="Yagi-Uda antenna showing a slightly long reflector, the fed driven element, and a row of progressively shorter directors along a boom, with the main beam endfire"
      style="max-width: 720px; width: 100%; display: block; margin: 1em auto;">
 ::::
@@ -410,13 +410,13 @@ Against a receiver noise floor of about $-121\ \text{dBm}$ in a 100 kHz channel 
 
 ::::{frame} Practice
 
-- <a href="../../practice/ECE444_L11_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a href="../../practice/ECE444_L11_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+- <a href="../../practice/ECE444_L14_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a href="../../practice/ECE444_L14_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
 ::::{frame} Where this is going
 
-Every gain number in this lesson was a claim. $\eta_{\text{ap}} = 0.65$ was an assumption, $70^\circ\lambda/D$ was a rule of thumb, and the Ruze penalty depended on a surface you have not measured. Before you may write a gain on a data sheet — or in your midterm project report — you have to measure it. L12 builds the theory of pattern measurement: far-field ranges, why $2D^2/\lambda$ turned out to be 80 m for a dish you could carry, gain-comparison and three-antenna methods, and how to state what a measured pattern does and does not establish.
+Every gain number in this lesson was a claim. $\eta_{\text{ap}} = 0.65$ was an assumption, $70^\circ\lambda/D$ was a rule of thumb, and the Ruze penalty depended on a surface you have not measured. Before you may write a gain on a data sheet — or in your midterm project report — you have to measure it. L9 builds the theory of pattern measurement: far-field ranges, why $2D^2/\lambda$ turned out to be 80 m for a dish you could carry, gain-comparison and three-antenna methods, and how to state what a measured pattern does and does not establish.
 
-Then L13 and L14 put you on the instruments, and Module 3 picks up the third road. When you get there, remember what an array is doing: assembling the same coherent aperture a dish assembles with a mirror, one element and one phase shifter at a time.
+Then L10 and L11 put you on the instruments, and Module 3 picks up the third road. When you get there, remember what an array is doing: assembling the same coherent aperture a dish assembles with a mirror, one element and one phase shifter at a time.
 ::::

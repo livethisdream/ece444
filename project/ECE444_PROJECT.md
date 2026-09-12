@@ -10,7 +10,7 @@ ECE 444 — **Antennas, Phased Arrays, and Radar Systems** — is a new undergra
 
 The site was originally scaffolded inside the Chirpy Jekyll repo at `livethisdream.github.io`, then migrated onto Jupyter Book (patterned on [usafa-ece/ece215-book](https://usafa-ece.github.io/ece215-book/)) because Chirpy fought us on reveal.js integration, math rendering, and table layouts. Reveal.js decks are preserved — served alongside the book at `/slides/<slug>.html` via Sphinx's `html_extra_path`.
 
-Course structure: **5 modules / 41 lessons**. Module 1 Foundations (L1–6); Module 2 Antenna Types + Simulation + Measurement (L7–14, with labs); Module 3 Arrays + ADALM-PHASER Beamforming (L15–28, with labs, uses ADALM-PHASER hardware); Module 4 Radar + FMCW (L29–38, with labs); Module 5 Capstone (L39–41 — track a moving target while suppressing a static jammer). Midterm project (Antenna Pattern Measurement) is introduced at L11 and due at L20.
+Course structure: **5 modules / 41 lessons**. Module 1 Foundations (L1–6); Module 2 Antenna Types + Simulation + Measurement (L7–14, with labs); Module 3 Arrays + ADALM-PHASER Beamforming (L15–28, with labs, uses ADALM-PHASER hardware); Module 4 Radar + FMCW (L29–38, with labs); Module 5 Capstone (L39–41 — track a moving target while suppressing a static jammer). Module 2 runs out of numerical order on purpose: L7-L8 (dipole, simulation), then the measurement block L9-L11, then the remaining antenna families L12-L14. Midterm project (Antenna Pattern Measurement) is introduced at L9 and due at L20, so cadets have the range and the analyzer in hand eleven lessons before it is due.
 
 # Special Instructions
 

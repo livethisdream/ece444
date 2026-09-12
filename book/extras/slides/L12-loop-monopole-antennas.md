@@ -6,7 +6,7 @@
 
 Antennas, Phased Arrays, and Radar Systems
 
-## Lesson 9 — Loop and Monopole Antennas
+## Lesson 12 — Loop and Monopole Antennas
 
 Fall 2026 · Dr. Neil Rogers
 
@@ -67,7 +67,7 @@ Emphasize uniqueness: satisfy the boundary condition any way you like and you ha
 
 ## The sign rule
 
-<div class="fig" data-inline-svg="./fig/L09-image-theory.svg" style="max-width:760px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L12-image-theory.svg" style="max-width:760px; margin:0 auto;"></div>
 
 **Vertical (normal) currents image in phase. Horizontal (tangential) currents image reversed.**
 
@@ -115,7 +115,7 @@ Demo live: vertical at h = 0.01 reads D = 3.28, peak on the horizon — that is 
 
 ## Cut a dipole in half
 
-<div class="fig" data-inline-svg="./fig/L09-monopole-image.svg" style="max-width:760px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L12-monopole-image.svg" style="max-width:760px; margin:0 auto;"></div>
 
 Keep the top half, drive it against the plane, and the image restores the bottom half.
 
@@ -207,7 +207,7 @@ Drooping radials also lift the pattern slightly. The impedance effect is the rea
 
 ## Real ground is not a mirror
 
-<div class="fig" data-inline-svg="./fig/L09-ground-systems.svg" style="max-width:770px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L12-ground-systems.svg" style="max-width:770px; margin:0 auto;"></div>
 
 Return current in dirt is loss in series with your feed: $\eta_{\text{rad}} = R_r/(R_r + R_g + R_{\text{ohmic}})$.
 
@@ -233,7 +233,7 @@ Handheld radios are tested against a phantom hand, because grip changes both imp
 
 ## The small loop: uniform current
 
-<div class="fig" data-inline-svg="./fig/L09-loop-dipole-duality.svg" style="max-width:760px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L12-loop-dipole-duality.svg" style="max-width:760px; margin:0 auto;"></div>
 
 Circumference $C \ll \lambda$ (rule of thumb $C < 0.1\lambda$), so the current is the same everywhere around the ring.
 
@@ -355,7 +355,7 @@ If they remember one slide, this is it. Both antennas are the dipole they alread
 
 ## Where this is going
 
-- **L10:** patch, slot, and horn — the radiator becomes a surface or an opening. The patch is two slots over a ground plane, so you will use image theory again on day one.
+- **L13:** patch, slot, and horn — the radiator becomes a surface or an opening. The patch is two slots over a ground plane, so you will use image theory again on day one.
 - **Module 3:** a monopole is an element plus one image; an array is an element plus many neighbors. Same element-factor-times-array-factor bookkeeping.
 - **L16:** when we do pattern multiplication properly, remember that today's height-above-ground curve was already a two-element array.
 
@@ -364,4 +364,4 @@ You now own the whole wire-antenna toolkit. Everything after this is aperture, a
 </div>
 
 Note:
-Set up L10 by asking what happens when the current lives on a surface instead of a wire.
+Set up L13 by asking what happens when the current lives on a surface instead of a wire.

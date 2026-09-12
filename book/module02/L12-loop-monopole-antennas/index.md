@@ -2,7 +2,7 @@
 frame_view: true
 ---
 
-# L9 - Loop and Monopole Antennas
+# L12 - Loop and Monopole Antennas
 
 ::::{frame}
 :class: title-frame
@@ -15,15 +15,15 @@ frame_view: true
 
 A mirror turns a dipole into a monopole, and a ring of current turns it into its magnetic twin.
 
-Lesson 9 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+Lesson 12 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame}
 :::{admonition} Slides
 :class: slides
-<a href="../../slides/L09-loop-monopole-antennas.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L09-loop-monopole-antennas.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L09-loop-monopole-antennas.md" target="_blank" rel="noopener">raw markdown slides</a>
+<a href="../../slides/L12-loop-monopole-antennas.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L12-loop-monopole-antennas.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L12-loop-monopole-antennas.md" target="_blank" rel="noopener">raw markdown slides</a>
 :::
 ::::
 
@@ -53,7 +53,7 @@ The sign rule is the whole lesson in two lines:
 ::::
 
 ::::{frame} Vertical images in phase, horizontal reversed
-<img src="../../viz/img/L09-image-theory.svg"
+<img src="../../viz/img/L12-image-theory.svg"
      alt="A vertical current above a perfect conductor images in phase; a horizontal current images reversed"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 ::::
@@ -89,7 +89,7 @@ Now do the trick backwards. Take a half-wave dipole, cut it in half, throw away 
 ::::
 
 ::::{frame} The image restores the missing half
-<img src="../../viz/img/L09-monopole-image.svg"
+<img src="../../viz/img/L12-monopole-image.svg"
      alt="A quarter-wave monopole over a ground plane radiates the upper half of the half-wave dipole pattern"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 ::::
@@ -215,7 +215,7 @@ Nothing in the field is infinite. A quarter-wave whip on a car roof at 800 MHz s
 ::::
 
 ::::{frame} Three ways to fake a ground
-<img src="../../viz/img/L09-ground-systems.svg"
+<img src="../../viz/img/L12-ground-systems.svg"
      alt="Three ways to give a monopole a ground: a buried radial field, drooping quarter-wave radials, and a handheld counterpoise"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 ::::
@@ -251,7 +251,7 @@ Feed that uniform ring current into the radiation integral from Lesson 6 and eve
 ::::
 
 ::::{frame} Same donut, fields swapped
-<img src="../../viz/img/L09-loop-dipole-duality.svg"
+<img src="../../viz/img/L12-loop-dipole-duality.svg"
      alt="A small loop has the same donut pattern as a short dipole with the electric and magnetic fields interchanged"
      style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 ::::
@@ -357,12 +357,12 @@ Small is expensive, and it is expensive twice. Shrinking an antenna drives the r
 ::::
 
 ::::{frame} Practice
-- <a href="../../practice/ECE444_L09_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a href="../../practice/ECE444_L09_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+- <a href="../../practice/ECE444_L12_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a href="../../practice/ECE444_L12_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
 ::::{frame} Where this is going
-You now have the complete wire-antenna toolkit: dipole, monopole, loop, and the image trick that turns any of them into something mounted on a vehicle. Lesson 10 leaves wires behind for the printed and aperture antennas — the microstrip patch, the slot, and the horn — where the radiating object is a surface or an opening rather than a current filament. The patch behaves much like two slots over a ground plane, and you will use image theory again to understand why it works at all.
+You now have the complete wire-antenna toolkit: dipole, monopole, loop, and the image trick that turns any of them into something mounted on a vehicle. Lesson 13 leaves wires behind for the printed and aperture antennas — the microstrip patch, the slot, and the horn — where the radiating object is a surface or an opening rather than a current filament. The patch behaves much like two slots over a ground plane, and you will use image theory again to understand why it works at all.
 
 :::{depth}
 The other thread from today runs into Module 3. A monopole is an element plus one image; an array is an element plus many neighbors, and the same element-factor-times-array-factor bookkeeping handles both. When you get to pattern multiplication in Lesson 16, notice that you have already done it once — the height-above-ground curve you played with today is a two-element array whose second element happens to be a reflection.

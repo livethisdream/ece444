@@ -67,7 +67,7 @@ Rules:
 
 - LO markup: 3-level numbers render automatically (`2.<X>.n`). `<X>` is the
   module objective number from your brief. If your brief says your lesson
-  *continues* a shared objective (L09 continues 2.1 after L07), add a counter
+  *continues* a shared objective (L12 continues 2.1 after L07), add a counter
   offset: `style="--module: '2'; --lo: '1'; counter-reset: lo 4"` starts at
   2.1.5. Sub-LO text comes from your brief. **No math inside LO `<li>` items**
   (raw HTML block — `$...$` is not processed there; if unavoidable use
@@ -510,7 +510,7 @@ A lesson whose sub-LO start is not `.1` continues a shared objective: add
 onward). Your brief carries the exact sub-LO texts — use them verbatim.
 
 **L20 note:** the midterm project (Antenna Pattern Measurement, assigned at
-L11) is **due at L20**. L20's page and deck open by acknowledging the
+L14) is **due at L20**. L20's page and deck open by acknowledging the
 turn-in in one short paragraph/slide bullet before the lesson content; do
 not restate the project requirements.
 
