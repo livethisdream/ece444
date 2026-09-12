@@ -35,6 +35,7 @@ Lesson 9 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
   <li>I can state what a valid pattern measurement requires — plane-wave illumination across the antenna under test — and turn that requirement into a minimum range length.</li>
   <li>I can describe the far-field range types — outdoor, anechoic chamber, and compact range — and explain what absorber reflectivity and quiet-zone specifications actually control.</li>
   <li>I can explain how near-field scanning plus a transform substitutes for an impossibly long range, and why that transform is the same Fourier relationship that produced the pattern in the first place.</li>
+  <li>I can measure gain by the comparison method against a standard gain horn, define the standard pattern cuts and polarization measurements, and state the conditions under which each is valid.</li>
 </ol>
 
 :::{depth}
@@ -49,10 +50,10 @@ it.
 
 ::::{frame} Learning Objectives, continued
 
-<ol class="lo-list lo-sublist" start="4" style="--module: '2'; --lo: '5'">
-  <li>I can measure gain by the comparison method against a standard gain horn, and state the conditions under which the comparison is valid.</li>
+<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '6'">
   <li>I can explain what a vector network analyzer measures — the ratio of the returning wave to the outgoing wave — and translate that ratio into reflection coefficient, impedance, return loss, and VSWR.</li>
   <li>I can explain what a short-open-load calibration removes, why the reference plane decides what the numbers mean, and what a one-port measurement can never tell me.</li>
+  <li>I can state how a receiver's noise floor bounds every quantity extracted from a measured pattern.</li>
 </ol>
 
 :::{depth}

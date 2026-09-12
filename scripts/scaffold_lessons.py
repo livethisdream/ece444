@@ -138,7 +138,7 @@ LESSONS = [
     (2, 8, "L08-dipole-simulation-lab", "Dipole Simulation Lab", ["2.2"], "Simulate a dipole in an EM tool and compare against analytical predictions.", False),
     # The measurement block runs before the remaining antenna families so that
     # the midterm project is in cadets' hands as early as the calendar allows.
-    (2, 9, "L09-pattern-measurement-theory", "Measurement Theory", ["2.5", "2.6", "2.7"], "All the measurement theory in one place: ranges and chambers, what a VNA measures and how it is calibrated, gain by comparison, and dynamic range. Midterm project introduced.", False),
+    (2, 9, "L09-pattern-measurement-theory", "Measurement Theory", ["2.5", "2.6"], "All the measurement theory in one place: ranges and chambers, what a VNA measures and how it is calibrated, gain by comparison, and dynamic range. Midterm project introduced.", False),
     (2, 10, "L10-measurement-lab-sparams", "Measurement Lab 1 — Impedance and S-parameters", ["2.6"], "Measure impedance and S-parameters on a vector network analyzer.", False),
     (2, 11, "L11-measurement-lab-patterns", "Measurement Lab 2 — Radiation Patterns", ["2.7"], "Measure a radiation pattern and extract gain, beamwidth, sidelobe level, and polarization.", False),
     (2, 12, "L12-loop-monopole-antennas", "Loop and Monopole Antennas", ["2.1"], "Small loops and monopoles: radiation behavior, gain, and impedance.", False),

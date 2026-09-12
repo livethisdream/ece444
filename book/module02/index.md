@@ -99,7 +99,7 @@ are claims you will want to check for your project report.
   <a class="mt-card mt-lesson" href="L09-pattern-measurement-theory/index.html">
     <span class="mt-kind">Lesson 9</span>
     <h4>Measurement Theory</h4>
-    <p>Ranges and chambers, what a VNA measures and how it is calibrated, gain by comparison, and dynamic range. Midterm project introduced. Objectives 2.5, 2.6, 2.7.</p>
+    <p>Ranges and chambers, what a VNA measures and how it is calibrated, gain by comparison, and dynamic range. Midterm project introduced. Objectives 2.5, 2.6.</p>
   </a>
   <a class="mt-card mt-lesson" href="L10-measurement-lab-sparams/index.html">
     <span class="mt-kind">Lesson 10</span>
