@@ -1097,7 +1097,7 @@ showing up in your own hardware.
 
 ::::{frame} Where This Is Going
 :::{present}
-- **Lesson 8**: a method-of-moments solver computes the current instead of assuming it. Bring the 146 MHz numbers and grade the simulator with them.
+- **Lesson 8**: a solver computes the current instead of assuming it. Bring the 146 MHz numbers and grade it with them.
 - **Lesson 12**: a monopole and a loop from the same wire.
 - **Module 3**: the dipole becomes an element.
 :::
