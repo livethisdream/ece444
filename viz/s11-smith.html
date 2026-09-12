@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One resonance, three views: S11 in dB, on the Smith chart, and as VSWR</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { max-width:880px; margin:0 auto; padding:10px 12px 14px; box-sizing:border-box; }
+  .plots { display:grid; grid-template-columns:1.18fr 1fr; gap:12px; align-items:start; }
+  @media (max-width:660px) { .plots { grid-template-columns:1fr; } }
+  canvas { display:block; width:100%; touch-action:none; cursor:crosshair; }
+  .controls { display:flex; flex-wrap:wrap; gap:14px 22px; align-items:center;
+              margin-top:12px; padding:10px 14px;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:9px; font-size:13.5px; color:var(--ink); }
+  .ctl label { white-space:nowrap; }
+  .ctl input[type=range] { width:132px; accent-color:var(--mid); }
+  .ctl .val { min-width:66px; font-variant-numeric:tabular-nums; color:var(--navy); font-weight:600; }
+  /* Below 430px the controls bar cannot fit a label, a slider and a value on one
+     line: .ctl's flex basis and the reserved .val column are both wider than the
+     content box, so the bar pushes the document past the viewport and the whole
+     widget scrolls sideways on a phone. Stack each control instead -- label and
+     value share the first line, the input takes the second -- and let every part
+     shrink. Labels keep their natural width, so none of them squeeze. Nothing
+     here applies above 430px: the desktop layout is byte-for-byte unchanged. */
+  @media (max-width:430px) {
+    canvas { max-width:100%; }
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
+  }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; margin-top:11px; grid-template-columns:repeat(5, minmax(0,1fr)); }
+  /* The site serves these ~688-760px wide, where five across is too narrow for
+     the widest value; go three-then-one so a cell always fits its number. */
+  @media (max-width:860px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  /* Never one column: a readout row that stacks one cell per line is the
+     cheapest 100-150px a widget can waste on a phone, and it is what pushed
+     these past the frame budget. Two columns always fit -- the cells are
+     min-width:0 and the values are short. */
+  @media (max-width:460px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  /* Hold 3 columns to the bottom instead of dropping to two, which costs a
+     whole row. What actually overflowed at 320 was `.ro .v`'s 8ch floor, not
+     the column count: release it and tighten the gutters and they fit. */
+  @media (max-width:360px) {
+    .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); gap:5px; }
+    .ro { padding:5px 3px 6px; }
+    .ro .v { min-width:0; font-size:13px; }
+    .ro .k { font-size:9.5px; letter-spacing:0.02em; }
+  }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.warn { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.warn .v { color:var(--amber); }
+  .hint { margin:9px 2px 0; font-size:12.5px; color:var(--ink3); }
+  /* On a phone the graphic has to win. This trailing note is the widget's own
+     commentary, not a control or a curve, and the same ground is covered by the
+     lesson prose around the frame -- so hiding it below 620px buys back the
+     height the canvases need to lay out without their labels colliding. It is
+     still there in read mode and on any desktop width. */
+  @media (max-width:620px) { .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <div class="plots">
+    <canvas id="cvDb"></canvas>
+    <canvas id="cvSm"></canvas>
+  </div>
+
+  <div class="controls" id="ctlbar">
+    <div class="ctl">
+      <label for="f0">Resonance \(f_0\)</label>
+      <input type="range" id="f0" min="300" max="2000" step="5" value="900">
+      <span class="val" id="f0v">900 MHz</span>
+    </div>
+    <div class="ctl">
+      <label for="rr">\(R\) at resonance</label>
+      <input type="range" id="rr" min="20" max="150" step="1" value="70">
+      <span class="val" id="rrv">70 &#8486;</span>
+    </div>
+    <div class="ctl">
+      <label for="qq">Antenna \(Q\)</label>
+      <input type="range" id="qq" min="3" max="40" step="0.5" value="10">
+      <span class="val" id="qqv">10.0</span>
+    </div>
+  </div>
+
+  <div class="readouts" id="readouts">
+    <div class="ro"><span class="k">marker \(f\)</span><span class="v" id="pf">&ndash;</span></div>
+    <div class="ro"><span class="k">\(Z\)</span><span class="v" id="pz">&ndash;</span></div>
+    <div class="ro"><span class="k">\(\lvert S_{11}\rvert\)</span><span class="v" id="ps">&ndash;</span></div>
+    <div class="ro"><span class="k">VSWR</span><span class="v" id="pv">&ndash;</span></div>
+    <div class="ro" id="pbwRo"><span class="k">BW (&minus;10 dB)</span><span class="v" id="pb">&ndash;</span></div>
+  </div>
+
+  <p class="hint">Drag or hover across either plot to move the marker &mdash; it tracks the same frequency on both.</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var Z0 = 50;
+  var NS = 1201;                 // sweep points
+  var SPAN_LO = 0.55, SPAN_HI = 1.45;   // sweep runs 0.55 f0 ... 1.45 f0
+  var FLOOR = -40;               // dB floor
+  var G10 = Math.pow(10, -0.5);  // |Gamma| for -10 dB = 0.3162
+
+  var cvDb = document.getElementById('cvDb');
+  var cvSm = document.getElementById('cvSm');
+  var ctxDb = cvDb.getContext('2d');
+  var ctxSm = cvSm.getContext('2d');
+
+  var els = {
+    f0: document.getElementById('f0'), rr: document.getElementById('rr'), qq: document.getElementById('qq'),
+    f0v: document.getElementById('f0v'), rrv: document.getElementById('rrv'), qqv: document.getElementById('qqv'),
+    pf: document.getElementById('pf'), pz: document.getElementById('pz'), ps: document.getElementById('ps'),
+    pv: document.getElementById('pv'), pb: document.getElementById('pb'), pbwRo: document.getElementById('pbwRo')
+  };
+
+  var state = { f0: 900, R: 70, Q: 10, fm: 900, sweep: null, bw: null };
+
+  // ---- model: series RLC antenna, Z(f) = R + jR Q (u - 1/u), u = f/f0 -----
+  function zAt(f) {
+    var u = f / state.f0;
+    return { re: state.R, im: state.R * state.Q * (u - 1 / u) };
+  }
+  function gammaOf(z) {
+    var nr = z.re - Z0, ni = z.im, dr = z.re + Z0, di = z.im;
+    var d = dr * dr + di * di;
+    return { re: (nr * dr + ni * di) / d, im: (ni * dr - nr * di) / d };
+  }
+  function magOf(g) { return Math.sqrt(g.re * g.re + g.im * g.im); }
+  function dbOf(m) { return Math.max(FLOOR, 20 * Math.log10(Math.max(m, 1e-9))); }
+  function vswrOf(m) { return m >= 0.999999 ? Infinity : (1 + m) / (1 - m); }
+
+  function build() {
+    var f1 = SPAN_LO * state.f0, f2 = SPAN_HI * state.f0;
+    var pts = new Array(NS);
+    for (var i = 0; i < NS; i++) {
+      var f = f1 + (f2 - f1) * i / (NS - 1);
+      var z = zAt(f), g = gammaOf(z), m = magOf(g);
+      pts[i] = { f: f, z: z, g: g, m: m, db: dbOf(m) };
+    }
+    state.sweep = { f1: f1, f2: f2, pts: pts };
+    state.bw = bandwidth(pts);
+  }
+
+  // -10 dB band around the deepest point, edges by linear interpolation in dB
+  function bandwidth(pts) {
+    var iMin = 0;
+    for (var i = 1; i < pts.length; i++) if (pts[i].db < pts[iMin].db) iMin = i;
+    if (pts[iMin].db > -10) return null;
+    var lo = null, hi = null, j;
+    for (j = iMin; j > 0; j--) {
+      if (pts[j - 1].db > -10) {
+        var t1 = (-10 - pts[j - 1].db) / (pts[j].db - pts[j - 1].db);
+        lo = pts[j - 1].f + t1 * (pts[j].f - pts[j - 1].f); break;
+      }
+    }
+    for (j = iMin; j < pts.length - 1; j++) {
+      if (pts[j + 1].db > -10) {
+        var t2 = (-10 - pts[j].db) / (pts[j + 1].db - pts[j].db);
+        hi = pts[j].f + t2 * (pts[j + 1].f - pts[j].f); break;
+      }
+    }
+    if (lo === null || hi === null) return null;   // band runs off the sweep
+    return { lo: lo, hi: hi, mhz: hi - lo, pct: 100 * (hi - lo) / state.f0, fmin: pts[iMin].f };
+  }
+
+  // ---------------- canvas plumbing ----------------
+/* Stacked below the grid's breakpoint, so the canvas heights ADD instead of the
+   row taking the tallest. Left alone that puts the widget past the frame budget
+   and it scrolls inside its own iframe. Every curve and every control stays;
+   the canvases just get a shorter design box. Shrinking the design height (not
+   the bitmap) keeps text at full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:660px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; }
+  function fit(cv, ctx, cssH) {
+    var dpr = window.devicePixelRatio || 1;
+    var w = cv.clientWidth || 420;
+    cv.style.height = cssH + 'px';
+    cv.width = Math.round(w * dpr); cv.height = Math.round(cssH * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, cssH);
+    return { w: w, h: cssH };
+  }
+  function line(ctx, x1, y1, x2, y2, col, wid, dash) {
+    ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = wid || 1;
+    ctx.setLineDash(dash || []); ctx.beginPath();
+    ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.restore();
+  }
+  function txt(ctx, s, x, y, size, col, align, weight) {
+    ctx.save(); ctx.fillStyle = col; ctx.textAlign = align || 'left'; ctx.textBaseline = 'middle';
+    ctx.font = (weight || 400) + ' ' + size + "px 'Inter',system-ui,-apple-system,sans-serif";
+    ctx.fillText(s, x, y); ctx.restore();
+  }
+
+  // ---------------- plot 1: |S11| in dB ----------------
+  var dbBox = null;
+  function drawDb() {
+    var d = fit(cvDb, ctxDb, SQ(240)), w = d.w, h = d.h, ctx = ctxDb;
+    var L = 52, R = 26, T = 34, B = 40;
+    var pw = w - L - R, ph = h - T - B;
+    dbBox = { L: L, T: T, pw: pw, ph: ph };
+    var sw = state.sweep;
+    var fx = function (f) { return L + pw * (f - sw.f1) / (sw.f2 - sw.f1); };
+    var dy = function (v) { return T + ph * (0 - v) / (0 - FLOOR); };
+
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
+
+    // shaded -10 dB band
+    if (state.bw) {
+      ctx.fillStyle = 'rgba(63,125,52,0.11)';
+      ctx.fillRect(fx(state.bw.lo), T, fx(state.bw.hi) - fx(state.bw.lo), ph);
+    }
+    // grid
+    var v;
+    for (v = 0; v >= FLOOR; v -= 10) {
+      line(ctx, L, dy(v), L + pw, dy(v), v === 0 ? '#b9d2e5' : '#e6eef5', 1);
+      txt(ctx, (v === 0 ? '0' : '\u2212' + Math.abs(v)), L - 8, dy(v), 11.5, '#5b6573', 'right');
+    }
+    var nT = 5;
+    for (var i = 0; i <= nT; i++) {
+      var f = sw.f1 + (sw.f2 - sw.f1) * i / nT;
+      line(ctx, fx(f), T, fx(f), T + ph, '#eef4f9', 1);
+      txt(ctx, f.toFixed(0), fx(f), T + ph + 14, 11.5, '#5b6573', 'center');
+    }
+    // -10 dB rule
+    line(ctx, L, dy(-10), L + pw, dy(-10), '#3f7d34', 1.6, [6, 4]);
+    txt(ctx, '−10 dB', L + pw - 4, dy(-10) - 11, 11.5, '#3f7d34', 'right', 600);
+
+    // curve
+    ctx.save(); ctx.beginPath();
+    ctx.rect(L, T, pw, ph); ctx.clip();
+    ctx.strokeStyle = '#004a85'; ctx.lineWidth = 2.2; ctx.beginPath();
+    for (i = 0; i < sw.pts.length; i++) {
+      var p = sw.pts[i], X = fx(p.f), Y = dy(p.db);
+      if (i === 0) ctx.moveTo(X, Y); else ctx.lineTo(X, Y);
+    }
+    ctx.stroke(); ctx.restore();
+
+    // frame
+    ctx.strokeStyle = '#b9d2e5'; ctx.lineWidth = 1; ctx.strokeRect(L + 0.5, T + 0.5, pw, ph);
+
+    // bandwidth edge ticks
+    if (state.bw) {
+      line(ctx, fx(state.bw.lo), T, fx(state.bw.lo), T + ph, '#3f7d34', 1, [3, 3]);
+      line(ctx, fx(state.bw.hi), T, fx(state.bw.hi), T + ph, '#3f7d34', 1, [3, 3]);
+    }
+
+    // marker
+    var mp = at(state.fm);
+    var mx = fx(mp.f), my = dy(mp.db);
+    line(ctx, mx, T, mx, T + ph, '#8a5a00', 1.2, [4, 3]);
+    ctx.fillStyle = '#8a5a00'; ctx.beginPath(); ctx.arc(mx, my, 4.4, 0, 6.2832); ctx.fill();
+
+    // titles: symbols via MathJax, words/units/numbers in the UI font
+    var lx = L - 4;
+    if (MJ.ready) { lx = L + MJ.draw(ctx, '\\lvert S_{11}\\rvert', L, T - 18, 15, '#15202b', 'left'); }
+    txt(ctx, MJ.ready ? '  (dB)' : '|S11| (dB)', lx + 2, T - 18, 12.5, '#5b6573', 'left', 600);
+    txt(ctx, 'Frequency (MHz)', L + pw / 2, h - 9, 12, '#5b6573', 'center');
+  }
+
+  // ---------------- plot 2: Smith chart ----------------
+  var smBox = null;
+  function drawSm() {
+    var d = fit(cvSm, ctxSm, SQ(240)), w = d.w, h = d.h, ctx = ctxSm;
+    var pad = 40, T = 34;
+    var Rp = Math.min((w - 2 * pad) / 2, (h - T - pad) / 2);
+    var cx = w / 2, cy = T + Rp;
+    smBox = { cx: cx, cy: cy, Rp: Rp };
+    var GX = function (g) { return cx + g.re * Rp; };
+    var GY = function (g) { return cy - g.im * Rp; };
+
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
+
+    // clip everything grid-ish to the unit circle
+    ctx.save();
+    ctx.beginPath(); ctx.arc(cx, cy, Rp, 0, 6.2832); ctx.clip();
+    var r, x, i;
+    ctx.strokeStyle = '#e2ebf3'; ctx.lineWidth = 1;
+    // constant-resistance circles
+    var rs = [0.2, 0.5, 1, 2, 5];
+    for (i = 0; i < rs.length; i++) {
+      r = rs[i];
+      ctx.beginPath(); ctx.arc(cx + Rp * r / (1 + r), cy, Rp / (1 + r), 0, 6.2832); ctx.stroke();
+    }
+    // constant-reactance arcs
+    var xs = [0.2, 0.5, 1, 2, 5];
+    for (i = 0; i < xs.length; i++) {
+      x = xs[i];
+      ctx.beginPath(); ctx.arc(cx + Rp, cy - Rp / x, Rp / x, 0, 6.2832); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx + Rp, cy + Rp / x, Rp / x, 0, 6.2832); ctx.stroke();
+    }
+    ctx.restore();
+
+    // real axis + unit circle
+    line(ctx, cx - Rp, cy, cx + Rp, cy, '#b9d2e5', 1.2);
+    ctx.strokeStyle = '#7fa8c9'; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.arc(cx, cy, Rp, 0, 6.2832); ctx.stroke();
+
+    // the -10 dB circle (|Gamma| = 0.316)
+    ctx.save(); ctx.strokeStyle = '#3f7d34'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
+    ctx.beginPath(); ctx.arc(cx, cy, Rp * G10, 0, 6.2832); ctx.stroke(); ctx.restore();
+
+    // locus
+    var sw = state.sweep;
+    ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, Rp, 0, 6.2832); ctx.clip();
+    ctx.strokeStyle = '#004a85'; ctx.lineWidth = 2.2; ctx.beginPath();
+    for (i = 0; i < sw.pts.length; i++) {
+      var g = sw.pts[i].g, X = GX(g), Y = GY(g);
+      if (i === 0) ctx.moveTo(X, Y); else ctx.lineTo(X, Y);
+    }
+    ctx.stroke(); ctx.restore();
+
+    // marker + the Gamma vector from center
+    var mp = at(state.fm);
+    var mx = GX(mp.g), my = GY(mp.g);
+    line(ctx, cx, cy, mx, my, '#8a5a00', 1.2, [4, 3]);
+    ctx.fillStyle = '#8a5a00'; ctx.beginPath(); ctx.arc(mx, my, 4.4, 0, 6.2832); ctx.fill();
+    // center cross
+    line(ctx, cx - 5, cy, cx + 5, cy, '#5b6573', 1.2);
+    line(ctx, cx, cy - 5, cx, cy + 5, '#5b6573', 1.2);
+
+    // labels
+    txt(ctx, 'Smith chart', cx - Rp, T - 18, 13, '#15202b', 'left', 600);
+    txt(ctx, '50 Ω', cx, cy + 15, 11.5, '#5b6573', 'center');
+    txt(ctx, 'short', cx - Rp - 6, cy, 11, '#5b6573', 'right');
+    txt(ctx, 'open', cx + Rp + 6, cy, 11, '#5b6573', 'left');
+    /* The three annotations that live INSIDE the circle only have room while the
+       chart is reasonably large. On a phone the panel is short, Rp collapses,
+       and they pile onto the 50 ohm dot and each other. The chart, its marker
+       and the -10 dB circle itself all stay; only the words go, and the lesson
+       prose beside the frame already names what they said. */
+    var roomy = Rp >= 76;
+    if (roomy) txt(ctx, '−10 dB circle', cx, cy - Rp * G10 - 11, 11, '#3f7d34', 'center', 600);
+    if (MJ.ready && mp.m > 0.10) {
+      var lx = (mx + cx) / 2, ly = (my + cy) / 2;
+      MJ.draw(ctx, '\\Gamma', lx + 9, ly - 10, 15, '#8a5a00', 'left');
+    }
+    if (roomy) {
+      txt(ctx, 'inductive', cx, cy - Rp + 13, 11, '#5b6573', 'center');
+      txt(ctx, 'capacitive', cx, cy + Rp - 13, 11, '#5b6573', 'center');
+    }
+  }
+
+  // nearest sweep sample to a frequency
+  function at(f) {
+    var sw = state.sweep;
+    var i = Math.round((f - sw.f1) / (sw.f2 - sw.f1) * (NS - 1));
+    i = Math.max(0, Math.min(NS - 1, i));
+    return sw.pts[i];
+  }
+
+  function updateReadouts() {
+    var p = at(state.fm);
+    els.pf.textContent = p.f.toFixed(0) + ' MHz';
+    var sgn = p.z.im >= 0 ? ' + j' : ' − j';
+    els.pz.textContent = p.z.re.toFixed(1) + sgn + Math.abs(p.z.im).toFixed(1) + ' Ω';
+    els.ps.textContent = (p.db <= FLOOR + 0.05 ? '< −40'
+                          : (p.db < 0 ? '−' + Math.abs(p.db).toFixed(1) : p.db.toFixed(1))) + ' dB';
+    var v = vswrOf(p.m);
+    els.pv.textContent = (v > 99 ? '> 99' : v.toFixed(2)) + ' : 1';
+    if (state.bw) {
+      els.pb.textContent = state.bw.mhz.toFixed(0) + ' MHz (' + state.bw.pct.toFixed(1) + '%)';
+      els.pbwRo.classList.remove('warn');
+      els.pbwRo.removeAttribute('title');
+    } else {
+      els.pb.textContent = 'none';
+      els.pbwRo.classList.add('warn');
+      els.pbwRo.title = 'the return loss never reaches −10 dB';
+    }
+  }
+
+  // ---------------- interaction ----------------
+  function readControls() {
+    state.f0 = +els.f0.value; state.R = +els.rr.value; state.Q = +els.qq.value;
+    els.f0v.textContent = state.f0 + ' MHz';
+    els.rrv.textContent = state.R + ' Ω';
+    els.qqv.textContent = state.Q.toFixed(1);
+  }
+  function onControl() {
+    var rel = (state.fm - state.f0 * SPAN_LO) / (state.f0 * (SPAN_HI - SPAN_LO));
+    readControls();
+    build();
+    if (!isFinite(rel)) rel = 0.5;
+    state.fm = state.sweep.f1 + Math.max(0, Math.min(1, rel)) * (state.sweep.f2 - state.sweep.f1);
+    drawDb(); drawSm(); updateReadouts();
+  }
+  ['f0', 'rr', 'qq'].forEach(function (k) { els[k].addEventListener('input', onControl); });
+
+  function setFm(f) {
+    state.fm = Math.max(state.sweep.f1, Math.min(state.sweep.f2, f));
+    drawDb(); drawSm(); updateReadouts();
+  }
+  function trackDb(ev) {
+    if (!dbBox) return;
+    var r = cvDb.getBoundingClientRect(), px = ev.clientX - r.left;
+    var t = (px - dbBox.L) / dbBox.pw;
+    setFm(state.sweep.f1 + t * (state.sweep.f2 - state.sweep.f1));
+  }
+  function trackSm(ev) {
+    if (!smBox) return;
+    var r = cvSm.getBoundingClientRect();
+    var gx = (ev.clientX - r.left - smBox.cx) / smBox.Rp;
+    var gy = (smBox.cy - (ev.clientY - r.top)) / smBox.Rp;
+    var best = 0, bd = 1e9, pts = state.sweep.pts;
+    for (var i = 0; i < pts.length; i++) {
+      var dx = pts[i].g.re - gx, dy = pts[i].g.im - gy, dd = dx * dx + dy * dy;
+      if (dd < bd) { bd = dd; best = i; }
+    }
+    setFm(pts[best].f);
+  }
+  function wire(cv, fn) {
+    cv.addEventListener('pointermove', function (e) { fn(e); });
+    cv.addEventListener('pointerdown', function (e) { cv.setPointerCapture(e.pointerId); fn(e); });
+  }
+  wire(cvDb, trackDb);
+  wire(cvSm, trackSm);
+
+  window.addEventListener('resize', function () { drawDb(); drawSm(); });
+
+  // ---------------- boot ----------------
+  readControls();
+  build();
+  state.fm = state.f0;
+  MJ.setRedraw(function () { drawDb(); drawSm(); });
+  drawDb(); drawSm(); updateReadouts();
+  MJ.onReady(function () {
+    MJ.typeset(document.getElementById('app')).then(function () { drawDb(); drawSm(); });
+  });
+})();
+</script>
+</body>
+</html>

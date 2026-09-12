@@ -1,0 +1,526 @@
+/* USAFA / DFEC course-slide theme.
+   Overrides reveal.js's white theme. Applies to every deck via slides.html. */
+
+:root {
+  --usafa-blue: #0067b9;
+  --usafa-blue-dark: #004a85;
+  --usafa-red: #b01e24;
+  --slide-ink: #1a1a1a;
+  --slide-muted: #5a5a5a;
+  --slide-bg: #fafaf7;
+  --slide-rule: rgba(0, 48, 135, 0.85);
+}
+
+/* Backdrop + base type. */
+.reveal, .reveal .slides { background: var(--slide-bg); }
+.reveal {
+  font-family: "Source Sans Pro", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--slide-ink);
+  font-size: 30px;
+}
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  font-family: "Source Sans Pro", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--usafa-blue-dark);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 700;
+  text-align: left;
+  margin: 0 0 0.4em 0;
+  line-height: 1.15;
+}
+.reveal h1 { font-size: 2.0em; }
+.reveal h2 { font-size: 1.55em; }
+.reveal h3 { font-size: 1.2em; }
+
+.reveal p, .reveal li { line-height: 1.4; }
+.reveal strong { color: var(--usafa-blue-dark); }
+.reveal em { color: var(--slide-muted); font-style: italic; }
+.reveal a { color: var(--usafa-blue); text-decoration: none; border-bottom: 1px dotted currentColor; }
+
+.reveal blockquote {
+  font-style: italic;
+  border-left: 4px solid var(--usafa-blue);
+  padding: 0.3em 0.9em;
+  background: rgba(0, 48, 135, 0.04);
+  box-shadow: none;
+}
+
+/* Left-align slide bodies globally. Vertical alignment stays reveal's default. */
+.reveal .slides { text-align: left; }
+.reveal .slides section { text-align: left; }
+
+/* Tables — markdown tables inherit the 30px base and overflow the stage
+   without this. Sized so a 9-row comparison table fits the 700px stage. */
+.reveal table { font-size: 0.62em; margin: 0.4em auto; }
+.reveal table th, .reveal table td { padding: 0.28em 0.55em; }
+
+/* Code. */
+.reveal pre { font-size: 0.55em; line-height: 1.3; box-shadow: none; }
+.reveal pre code { padding: 12px 16px; max-height: 620px; border-radius: 4px; }
+.reveal code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+/* Lists — colored accent on first-level bullets. */
+.reveal ul, .reveal ol { display: block; margin: 0.35em 0 0.5em 1.1em; }
+.reveal ul li, .reveal ol li { margin: 0.28em 0; padding-left: 0.15em; }
+.reveal ul li::marker { color: var(--usafa-blue); }
+.reveal ol li::marker { color: var(--usafa-blue); font-weight: 700; }
+
+/* Images: max height so tall shots don't dominate. */
+.reveal img {
+  max-height: 480px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Persistent per-slide chrome via ::before / ::after on the viewport.
+   These float above slide content but below reveal's UI (arrows, progress). */
+body.reveal-viewport::before,
+body.reveal-viewport::after {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+  z-index: 30;
+}
+/* Top rule — thin USAFA-blue accent across every slide. */
+body.reveal-viewport::before {
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: var(--usafa-blue);
+}
+/* USAFA logo, top-right of every slide. */
+body.reveal-viewport::after {
+  top: 22px;
+  right: 22px;
+  width: 54px;
+  height: 54px;
+  /* Relative to THIS stylesheet, not the site root — decks are standalone and
+     the old absolute /assets/ece444/… Jekyll path 404s everywhere. */
+  background: url("./img/01-course-intro/USAFA-logo.png") no-repeat center / contain;
+  opacity: 0.9;
+}
+
+/* Callout — big-idea statement. Tinted-blue transparent bg, crisp squircle border, centered. */
+.reveal .callout {
+  display: block;
+  max-width: 80%;
+  margin: 1.2em auto;
+  padding: 0.9em 1.4em;
+  background: rgba(0, 103, 185, 0.08);
+  border: 2px solid var(--usafa-blue);
+  border-radius: 18px;
+  text-align: center;
+  color: var(--usafa-blue-dark);
+  font-weight: 600;
+  font-size: 1.15em;
+  line-height: 1.3;
+  box-shadow: 0 2px 6px rgba(0, 103, 185, 0.12);
+}
+.reveal .callout p { margin: 0; }
+.reveal .callout p + p { margin-top: 0.4em; }
+
+/* Prose card — bordered, subtly opaque, justified. */
+.reveal .slide-box {
+  border: 1px solid rgba(0, 48, 135, 0.25);
+  background: #ffffff;
+  padding: 0.9em 1.1em;
+  border-radius: 6px;
+  text-align: justify;
+  hyphens: auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.reveal .slide-box p:last-child,
+.reveal .slide-box ol:last-child,
+.reveal .slide-box ul:last-child { margin-bottom: 0; }
+
+/* Title slide — apply .title-slide to the first <section> in a deck. */
+.reveal .title-slide {
+  display: grid !important;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2em;
+  align-items: center;
+  padding: 1.5em 2em;
+}
+.reveal .title-slide .title-left {
+  border-left: 8px solid var(--usafa-blue);
+  padding: 0.6em 0 0.6em 1em;
+}
+.reveal .title-slide h1 {
+  font-size: 2.2em;
+  color: var(--usafa-blue-dark);
+  margin: 0 0 0.25em 0;
+}
+.reveal .title-slide h1 + p {
+  font-size: 1.05em;
+  color: var(--slide-muted);
+  margin: 0 0 1.1em 0;
+}
+.reveal .title-slide h2 {
+  font-size: 1.4em;
+  font-weight: 600;
+  color: var(--slide-ink);
+  margin: 0 0 0.15em 0;
+}
+.reveal .title-slide .title-right {
+  text-align: center;
+}
+.reveal .title-slide .title-right img {
+  max-height: 380px;
+  max-width: 90%;
+  box-shadow: none;
+  border-radius: 0;
+}
+/* On the title slide, don't repeat the small top-right logo — the big one carries. */
+body.reveal-viewport:has(.title-slide.present)::after { display: none; }
+
+/* Course schedule / module timeline.
+   One overarching grid: 5 columns (modules) × 3 rows (top / middle / bottom).
+   Zones line up horizontally across every module. Each column is visually
+   framed by a card wrapper (.module-frame) sitting behind its three cells. */
+.reveal .schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: auto auto 1fr;
+  gap: 0;
+  column-gap: 0.6em;
+  margin: 0.4em 0;
+  align-items: stretch;
+}
+.reveal .schedule-grid.cols-6 { grid-template-columns: repeat(6, 1fr); column-gap: 0.5em; }
+.reveal .schedule-grid.cols-7 { grid-template-columns: repeat(7, 1fr); column-gap: 0.4em; }
+.reveal .schedule-grid.cols-6 .mod-top,
+.reveal .schedule-grid.cols-6 .mod-lessons,
+.reveal .schedule-grid.cols-6 .mod-bottom,
+.reveal .schedule-grid.cols-7 .mod-top,
+.reveal .schedule-grid.cols-7 .mod-lessons,
+.reveal .schedule-grid.cols-7 .mod-bottom { padding: 0.5em 0.55em; }
+.reveal .schedule-grid.cols-7 .mod-title { font-size: 0.85em; }
+/* Each cell is styled independently — they don't share a parent .module. */
+.reveal .schedule-grid .mod-top,
+.reveal .schedule-grid .mod-lessons,
+.reveal .schedule-grid .mod-bottom {
+  background: #ffffff;
+  border-left: 1px solid rgba(0, 103, 185, 0.3);
+  border-right: 1px solid rgba(0, 103, 185, 0.3);
+  padding: 0.55em 0.75em;
+  text-align: left;
+}
+.reveal .schedule-grid .mod-top {
+  border-top: 4px solid var(--usafa-blue);
+  border-bottom: 1px solid rgba(0, 103, 185, 0.2);
+  border-radius: 8px 8px 0 0;
+  padding-top: 0.7em;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.04);
+}
+.reveal .schedule-grid .mod-lessons {
+  border-bottom: 1px solid rgba(0, 103, 185, 0.2);
+  font-size: 0.68em;
+  color: var(--slide-muted);
+  font-variant-numeric: tabular-nums;
+}
+.reveal .schedule-grid .mod-bottom {
+  border-bottom: 1px solid rgba(0, 103, 185, 0.3);
+  border-radius: 0 0 8px 8px;
+  padding-bottom: 0.7em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.3em;
+  font-size: 0.6em;
+  color: var(--slide-ink);
+  line-height: 1.35;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.reveal .schedule-grid .mod-num {
+  font-size: 1.6em;
+  font-weight: 800;
+  color: var(--usafa-blue);
+  line-height: 1;
+  display: block;
+}
+.reveal .schedule-grid .mod-title {
+  font-size: 0.75em;
+  font-weight: 700;
+  color: var(--usafa-blue-dark);
+  line-height: 1.2;
+  display: block;
+  margin-top: 0.15em;
+}
+.reveal .schedule-grid .milestone {
+  display: inline-block;
+  background: rgba(176, 30, 36, 0.10);
+  color: var(--usafa-red);
+  border: 1px solid rgba(176, 30, 36, 0.35);
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1em;
+}
+
+/* QR code image + optional caption. Usage on any slide:
+     <figure class="qr">
+       <img src="/assets/.../foo-qr.png" alt="…">
+       <figcaption>Scan for …</figcaption>
+     </figure>
+   Add class "qr-corner" to float it into the top-right corner of the slide. */
+.reveal .qr {
+  display: inline-block;
+  margin: 0.5em auto;
+  text-align: center;
+  padding: 0.4em;
+  background: #fff;
+  border: 1px solid rgba(0, 103, 185, 0.25);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.reveal .qr img {
+  display: block;
+  width: 180px;
+  height: 180px;
+  max-height: 180px;
+  box-shadow: none;
+  border-radius: 0;
+  margin: 0 auto;
+}
+.reveal .qr figcaption {
+  font-size: 0.55em;
+  color: var(--slide-muted);
+  margin-top: 0.3em;
+  font-style: italic;
+}
+.reveal .qr.qr-corner {
+  position: absolute;
+  top: 70px;
+  right: 24px;
+  margin: 0;
+}
+.reveal .qr.qr-corner img { width: 130px; height: 130px; max-height: 130px; }
+
+/* Right-align variant — flows in normal document order but sticks to the
+   right edge. Safe against text overlap because it isn't taken out of flow. */
+.reveal .qr.qr-right {
+  float: right;
+  margin: 0 0 0.6em 1em;
+  shape-outside: margin-box;
+}
+.reveal .qr.qr-right img { width: 130px; height: 130px; max-height: 130px; }
+
+/* Corner cue: this slide has a live interactive on the L2 lesson page. */
+.reveal .viz-cue {
+  position: absolute;
+  right: 90px;      /* top-right, tucked left of the corner logo so they clear */
+  top: 18px;
+  margin: 0;
+  font-size: 0.4em;
+  font-weight: 600;
+  color: var(--slide-rule);
+  background: rgba(0, 48, 135, 0.06);
+  border: 1px solid rgba(0, 48, 135, 0.30);
+  border-radius: 999px;
+  padding: 0.28em 0.85em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* Handwriting-style annotation — for margin notes in USAFA red. */
+.reveal .ink {
+  font-family: "Caveat", "Comic Sans MS", "Bradley Hand", cursive;
+  color: var(--usafa-red);
+  font-weight: 700;
+  transform: rotate(-4deg);
+  display: inline-block;
+  font-size: 1.15em;
+  line-height: 1;
+}
+
+/* Slide-number pill styling override (reveal.js). */
+.reveal .slide-number {
+  background: transparent;
+  color: var(--slide-muted);
+  font-family: inherit;
+  font-size: 0.6em;
+}
+
+/* Print/PDF export — hide top-right logo watermark to avoid every-page repeat. */
+@media print {
+  body.reveal-viewport::before,
+  body.reveal-viewport::after { display: none; }
+}
+
+/* =====================================================================
+   Chalkboard / annotation toolbar — ported from USAFA-ECE/ece-495-ew's
+   dfec-reveal.css (interface only), recolored to the USAFA palette. The
+   markup is injected by deck-tools.js; behavior lives there too.
+   ===================================================================== */
+:root {
+  --deck-navy: var(--usafa-blue-dark);
+  --deck-blue: var(--usafa-blue);
+  --deck-rule: rgba(0, 48, 135, 0.25);
+  --deck-soft: rgba(0, 103, 185, 0.08);
+}
+
+/* Slide-number + progress bar to match the deck. */
+.reveal .progress { color: var(--usafa-blue); height: 3px; }
+
+/* ---- toolbar (bottom-left) + nav (bottom-right) ---- */
+.deck-tools, .deck-nav {
+  position: fixed; bottom: 10px; z-index: 40;
+  display: flex; align-items: center; gap: 6px;
+}
+.deck-tools { left: 12px; }
+.deck-nav   { right: 12px; }
+.deck-tools button, .deck-nav button {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 30px; padding: 0;
+  background: #fff; color: var(--deck-navy);
+  border: 1px solid var(--deck-rule); border-radius: 6px;
+  cursor: pointer; transition: background .12s, border-color .12s;
+  font: inherit;
+}
+.deck-tools button:hover, .deck-nav button:hover {
+  background: var(--deck-soft); border-color: var(--deck-blue);
+}
+.deck-tools button.on { background: var(--deck-navy); border-color: var(--deck-navy); color: #fff; }
+.deck-tools button svg, .deck-nav button svg { width: 17px; height: 17px; display: block; }
+.deck-tools .sep { width: 1px; height: 20px; background: var(--deck-rule); margin: 0 3px; }
+
+/* Nav arrows are the primary touch target now that swipe is off — size them
+   up so they're comfortable to tap on a tablet or phone. */
+.deck-nav button { width: 46px; height: 42px; }
+.deck-nav button svg { width: 22px; height: 22px; }
+
+/* ---- toolbar swatches (visible only while inking) ---- */
+.deck-tools .swatches { display: none; align-items: center; gap: 6px; margin: 0 2px; }
+.deck-tools.ink-on .swatches { display: inline-flex; }
+.deck-tools .swatch {
+  width: 22px; height: 22px; padding: 0;
+  border: 2px solid #fff; border-radius: 50%;
+  outline: 1px solid var(--deck-rule);
+  cursor: pointer;
+}
+.deck-tools .swatch.on { outline: 2px solid var(--deck-navy); }
+.deck-tools .swatch-eraser {
+  background: #fff; color: var(--deck-navy); border-radius: 6px;
+  width: 26px; height: 26px; display: inline-flex;
+  align-items: center; justify-content: center;
+}
+.deck-tools .swatch-eraser svg { width: 15px; height: 15px; }
+
+/* Board prev/next appear only in board mode. */
+.deck-tools .boardnav { display: none; }
+.deck-tools.board-on .boardnav {
+  display: inline-flex; width: 26px; height: 26px;
+  align-items: center; justify-content: center;
+  background: #fff; color: var(--deck-navy);
+  border: 1px solid var(--deck-rule); border-radius: 6px;
+  cursor: pointer; padding: 0;
+}
+.deck-tools .boardnav svg { width: 15px; height: 15px; }
+
+/* Our swatches replace the plugin's half-offscreen palette, and the board
+   prev/next buttons replace its edge handle (whose font-awesome chevrons were
+   never loaded — it rendered as an empty tab). */
+div.palette, div.boardhandle { display: none !important; }
+
+/* ---------------------------------------------------------------------
+   BUG FIX — the .overlay collision.
+   reveal 5 styles `.reveal > .overlay` as its frosted modal (dark wash +
+   backdrop-filter: blur(6px)); the chalkboard plugin reuses that class name
+   for its two full-screen canvas containers, so without this every slide sits
+   under a permanent 6px blur. Re-asserted inline in deck-tools.js on ready in
+   case a plugin update rebuilds the containers after this sheet parses.
+   --------------------------------------------------------------------- */
+.reveal > #notescanvas.overlay,
+.reveal > #chalkboard.overlay {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* We only use 2D transitions, so drop the 3D compositing reveal sets up for
+   convex/concave/zoom. A preserve-3d layer rasterizes once then GPU-scales,
+   softening text at any scale != 1 (i.e. when zoomed); flat lets the browser
+   re-rasterize at the true scale. */
+.reveal .slides,
+.reveal .slides section { transform-style: flat !important; }
+
+/* ---- chrome strip ----
+   Reserve a 56px band at the viewport bottom for the toolbar/nav by shrinking
+   .reveal, so reveal lays slides out ABOVE the band and no slide content can
+   ever sit under the controls. The print view keeps the full page. */
+html:not(.reveal-print):not(.print-pdf) .reveal { height: calc(100% - 56px) !important; }
+html:not(.reveal-print):not(.print-pdf) .reveal .slide-number { bottom: 8px; }
+
+/* Toolbar/nav are screen chrome — never print them. */
+@media print { .deck-tools, .deck-nav { display: none !important; } }
+.print-pdf .deck-tools, .print-pdf .deck-nav,
+.reveal-print .deck-tools, .reveal-print .deck-nav { display: none !important; }
+
+/* ---- print-view banner (screen only; never printed) ---- */
+.print-banner {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: var(--deck-navy); color: #fff;
+  font: 600 15px/1.4 "Source Sans Pro", "Segoe UI", sans-serif;
+  padding: 10px 16px; text-align: center;
+}
+.print-banner button {
+  margin-left: 12px; padding: 4px 14px; border: 1px solid rgba(255,255,255,.5);
+  border-radius: 6px; background: transparent; color: #fff; font: inherit; cursor: pointer;
+}
+.print-banner button:hover { background: rgba(255,255,255,.12); }
+@media print { .print-banner { display: none !important; } }
+
+/* =====================================================================
+   Two-column figure slide — text/equations left, a large figure right.
+   Use when a slide is text + one diagram: stacking the diagram under a
+   display equation starves it (it only gets the leftover height), which
+   reads tiny on a projector. A column of its own lets the figure fill the
+   slide height. Markup:
+
+     ## Heading
+     <div class="two-col"><div class="col-text">
+     …HTML prose + $$math$$…
+     </div><div class="col-fig">
+     <img …><small>caption</small>
+     </div></div>
+
+   Two rules, both load-bearing:
+   - Prose in .col-text must be HTML (<p>/<strong>/<em>), not markdown —
+     reveal's markdown plugin passes a raw-HTML block through UNPARSED, so
+     **bold** would render literally. Inline $…$ and display $$…$$ still
+     typeset (MathJax runs on the DOM afterward).
+   - No BLANK LINES between the opening and closing <div> — a blank line
+     terminates the HTML block, and marked resumes markdown parsing, which
+     strands the rest of the tags. Keep the whole block contiguous.
+   --------------------------------------------------------------------- */
+.reveal .two-col {
+  display: grid;
+  grid-template-columns: 1fr minmax(340px, 46%);
+  gap: 1.4em;
+  align-items: center;
+  width: 100%;
+}
+.reveal .two-col .col-text { min-width: 0; }   /* let long equations use the width */
+.reveal .two-col .col-text > :first-child { margin-top: 0; }
+.reveal .two-col .col-fig { min-width: 0; margin: 0; text-align: center; }
+/* width:100% (not just max-width) so a small-intrinsic SVG scales UP to fill
+   the column — max-* alone only shrinks. height:auto keeps aspect; max-height
+   clamps the tall/square ones so they can't outgrow the slide. Covers both
+   <img> figures and inline <svg> diagrams. */
+.reveal .two-col .col-fig img,
+.reveal .two-col .col-fig svg { width: 100%; height: auto; max-height: 600px; }
+
+/* Figure caption at body size (not <small>) — a diagram note that reads from
+   the back of the room. */
+.reveal .fig-note { text-align: center; color: var(--slide-muted); margin: 0.45em 0 0; }
+/* Inline-injected diagram files (see deck-tools.js inlineSVGs). */
+.reveal [data-inline-svg] { display: block; margin: 0 auto; }
+.reveal [data-inline-svg] > svg { width: 100%; height: auto; display: block; }
+/* Inline SVG diagrams inherit the deck font (that's the whole point of
+   inlining them) and never take the <img> card treatment. */
+.reveal .slides svg text { font-family: inherit; }
+.reveal .two-col .col-fig small,
+.reveal .two-col .col-fig figcaption { display: block; margin-top: 0.5em; }
+/* Figure-heavy variant — give the diagram the larger share. */
+.reveal .two-col.fig-wide { grid-template-columns: 1fr minmax(420px, 56%); }
+/* Figure-dominant — for dense diagrams that need to render large/legible. */
+.reveal .two-col.fig-xwide { grid-template-columns: 1fr minmax(500px, 66%); }

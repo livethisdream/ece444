@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, -apple-system, sans-serif" role="img" aria-label="Three line sources with the wavefronts of a plane wave leaving at 90, 60, and 0 degrees from the source axis. The wavefronts are one wavelength apart along the direction of travel and one wavelength over cos theta apart along the source, so the spatial frequency along the source is k cos theta.">
+<defs>
+<marker id="twArr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5b6573"/></marker>
+<marker id="twGrn" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3f7d34"/></marker>
+<marker id="twAmb" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a5a00"/></marker>
+<marker id="twBlu" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0067b9"/></marker>
+<clipPath id="p0"><rect x="6.0" y="20" width="228.0" height="200" rx="6"/></clipPath>
+<clipPath id="p1"><rect x="246.0" y="20" width="228.0" height="200" rx="6"/></clipPath>
+<clipPath id="p2"><rect x="486.0" y="20" width="228.0" height="200" rx="6"/></clipPath>
+</defs>
+<rect x="6.0" y="20" width="228.0" height="200" rx="6" fill="none" stroke="#cddce9" stroke-width="1"/>
+<g clip-path="url(#p0)">
+<line x1="-263.2" y1="-134.0" x2="-263.2" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-237.2" y1="-134.0" x2="-237.2" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-211.2" y1="-134.0" x2="-211.2" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-185.2" y1="-134.0" x2="-185.2" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-159.2" y1="-134.0" x2="-159.2" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-133.2" y1="-134.0" x2="-133.2" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-107.2" y1="-134.0" x2="-107.2" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-81.2" y1="-134.0" x2="-81.2" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-55.2" y1="-134.0" x2="-55.2" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-29.2" y1="-134.0" x2="-29.2" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-3.2" y1="-134.0" x2="-3.2" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="22.8" y1="-134.0" x2="22.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="48.8" y1="-134.0" x2="48.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="74.8" y1="-134.0" x2="74.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="100.8" y1="-134.0" x2="100.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="126.8" y1="-134.0" x2="126.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="152.8" y1="-134.0" x2="152.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="178.8" y1="-134.0" x2="178.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="204.8" y1="-134.0" x2="204.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="230.8" y1="-134.0" x2="230.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="256.8" y1="-134.0" x2="256.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="282.8" y1="-134.0" x2="282.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="308.8" y1="-134.0" x2="308.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="334.8" y1="-134.0" x2="334.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="360.8" y1="-134.0" x2="360.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="386.8" y1="-134.0" x2="386.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="412.8" y1="-134.0" x2="412.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="438.8" y1="-134.0" x2="438.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="464.8" y1="-134.0" x2="464.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+</g>
+<line x1="100.8" y1="206" x2="100.8" y2="46" stroke="#004a85" stroke-width="5" stroke-linecap="round"/>
+<line x1="100.8" y1="46" x2="100.8" y2="24" stroke="#5b6573" stroke-width="1.2" marker-end="url(#twArr)"/>
+<text x="108.8" y="32" font-size="12" fill="#5b6573">z</text>
+<line x1="100.8" y1="126.0" x2="178.8" y2="126.0" stroke="#3f7d34" stroke-width="2.2" marker-end="url(#twGrn)"/>
+<path d="M100.8 96.0 A30 30 0 0 1 130.8 126.0" fill="none" stroke="#5b6573" stroke-width="1.1"/>
+<text x="129.8" y="101.0" font-size="12.5" fill="#5b6573" text-anchor="middle">θ</text>
+<text x="120.0" y="238" font-size="12.5" font-weight="700" fill="#004a85" text-anchor="middle">broadside, θ = 90°</text>
+<text x="120.0" y="258" font-size="12" fill="#15202b" text-anchor="middle"><tspan>k</tspan><tspan dy="3" font-size="9.5">z</tspan><tspan dy="-3"> = 0: the whole source</tspan></text>
+<text x="120.0" y="275" font-size="12" fill="#15202b" text-anchor="middle">sits on one wavefront</text>
+<rect x="246.0" y="20" width="228.0" height="200" rx="6" fill="none" stroke="#cddce9" stroke-width="1"/>
+<g clip-path="url(#p1)">
+<line x1="-104.4" y1="82.8" x2="155.6" y2="533.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-81.9" y1="69.8" x2="178.1" y2="520.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-59.4" y1="56.8" x2="200.6" y2="507.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-36.9" y1="43.8" x2="223.1" y2="494.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="-14.4" y1="30.8" x2="245.6" y2="481.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="8.2" y1="17.8" x2="268.2" y2="468.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="30.7" y1="4.8" x2="290.7" y2="455.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="53.2" y1="-8.2" x2="313.2" y2="442.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="75.7" y1="-21.2" x2="335.7" y2="429.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="98.2" y1="-34.2" x2="358.2" y2="416.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="120.7" y1="-47.2" x2="380.7" y2="403.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="143.3" y1="-60.2" x2="403.3" y2="390.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="165.8" y1="-73.2" x2="425.8" y2="377.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="188.3" y1="-86.2" x2="448.3" y2="364.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="210.8" y1="-99.2" x2="470.8" y2="351.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="233.3" y1="-112.2" x2="493.3" y2="338.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="255.8" y1="-125.2" x2="515.8" y2="325.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="278.3" y1="-138.2" x2="538.3" y2="312.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="300.9" y1="-151.2" x2="560.9" y2="299.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="323.4" y1="-164.2" x2="583.4" y2="286.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="345.9" y1="-177.2" x2="605.9" y2="273.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="368.4" y1="-190.2" x2="628.4" y2="260.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="390.9" y1="-203.2" x2="650.9" y2="247.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="413.4" y1="-216.2" x2="673.4" y2="234.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="436.0" y1="-229.2" x2="696.0" y2="221.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="458.5" y1="-242.2" x2="718.5" y2="208.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="481.0" y1="-255.2" x2="741.0" y2="195.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="503.5" y1="-268.2" x2="763.5" y2="182.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="526.0" y1="-281.2" x2="786.0" y2="169.2" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+</g>
+<line x1="340.8" y1="206" x2="340.8" y2="46" stroke="#004a85" stroke-width="5" stroke-linecap="round"/>
+<line x1="340.8" y1="46" x2="340.8" y2="24" stroke="#5b6573" stroke-width="1.2" marker-end="url(#twArr)"/>
+<text x="348.8" y="32" font-size="12" fill="#5b6573">z</text>
+<line x1="340.8" y1="126.0" x2="408.3" y2="87.0" stroke="#3f7d34" stroke-width="2.2" marker-end="url(#twGrn)"/>
+<path d="M340.8 96.0 A30 30 0 0 1 366.8 111.0" fill="none" stroke="#5b6573" stroke-width="1.1"/>
+<text x="361.3" y="94.5" font-size="12.5" fill="#5b6573" text-anchor="middle">θ</text>
+<line x1="333.8" y1="178.0" x2="347.8" y2="178.0" stroke="#8a5a00" stroke-width="2"/>
+<line x1="333.8" y1="126.0" x2="347.8" y2="126.0" stroke="#8a5a00" stroke-width="2"/>
+<line x1="333.8" y1="74.0" x2="347.8" y2="74.0" stroke="#8a5a00" stroke-width="2"/>
+<line x1="324.8" y1="126.0" x2="324.8" y2="74.0" stroke="#8a5a00" stroke-width="1.4" marker-start="url(#twAmb)" marker-end="url(#twAmb)"/>
+<text x="318.8" y="104.0" font-size="12" font-weight="700" fill="#8a5a00" text-anchor="end">λ/cos θ</text>
+<line x1="387.9" y1="119.6" x2="410.4" y2="106.6" stroke="#0067b9" stroke-width="1.4" marker-start="url(#twBlu)" marker-end="url(#twBlu)"/>
+<text x="407.2" y="130.9" font-size="12" font-weight="700" fill="#0067b9" text-anchor="middle">λ</text>
+<text x="360.0" y="238" font-size="12.5" font-weight="700" fill="#004a85" text-anchor="middle">θ = 60°</text>
+<text x="360.0" y="258" font-size="12" fill="#15202b" text-anchor="middle"><tspan>k</tspan><tspan dy="3" font-size="9.5">z</tspan><tspan dy="-3"> = k cos 60° = k/2:</tspan></text>
+<text x="360.0" y="275" font-size="12" fill="#15202b" text-anchor="middle">one cycle every 2λ along the source</text>
+<rect x="486.0" y="20" width="228.0" height="200" rx="6" fill="none" stroke="#cddce9" stroke-width="1"/>
+<g clip-path="url(#p2)">
+<line x1="320.8" y1="490.0" x2="840.8" y2="490.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="464.0" x2="840.8" y2="464.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="438.0" x2="840.8" y2="438.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="412.0" x2="840.8" y2="412.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="386.0" x2="840.8" y2="386.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="360.0" x2="840.8" y2="360.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="334.0" x2="840.8" y2="334.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="308.0" x2="840.8" y2="308.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="282.0" x2="840.8" y2="282.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="256.0" x2="840.8" y2="256.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="230.0" x2="840.8" y2="230.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="204.0" x2="840.8" y2="204.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="178.0" x2="840.8" y2="178.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="152.0" x2="840.8" y2="152.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="126.0" x2="840.8" y2="126.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="100.0" x2="840.8" y2="100.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="74.0" x2="840.8" y2="74.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="48.0" x2="840.8" y2="48.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="22.0" x2="840.8" y2="22.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="-4.0" x2="840.8" y2="-4.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="-30.0" x2="840.8" y2="-30.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="-56.0" x2="840.8" y2="-56.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="-82.0" x2="840.8" y2="-82.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="-108.0" x2="840.8" y2="-108.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="-134.0" x2="840.8" y2="-134.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="-160.0" x2="840.8" y2="-160.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="-186.0" x2="840.8" y2="-186.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="-212.0" x2="840.8" y2="-212.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+<line x1="320.8" y1="-238.0" x2="840.8" y2="-238.0" stroke="#0067b9" stroke-width="1" stroke-opacity="0.45"/>
+</g>
+<line x1="580.8" y1="206" x2="580.8" y2="46" stroke="#004a85" stroke-width="5" stroke-linecap="round"/>
+<line x1="580.8" y1="46" x2="580.8" y2="24" stroke="#5b6573" stroke-width="1.2" marker-end="url(#twArr)"/>
+<text x="588.8" y="32" font-size="12" fill="#5b6573">z</text>
+<line x1="596.8" y1="126.0" x2="596.8" y2="48.0" stroke="#3f7d34" stroke-width="2.2" marker-end="url(#twGrn)"/>
+<line x1="573.8" y1="204.0" x2="587.8" y2="204.0" stroke="#8a5a00" stroke-width="2"/>
+<line x1="573.8" y1="178.0" x2="587.8" y2="178.0" stroke="#8a5a00" stroke-width="2"/>
+<line x1="573.8" y1="152.0" x2="587.8" y2="152.0" stroke="#8a5a00" stroke-width="2"/>
+<line x1="573.8" y1="126.0" x2="587.8" y2="126.0" stroke="#8a5a00" stroke-width="2"/>
+<line x1="573.8" y1="100.0" x2="587.8" y2="100.0" stroke="#8a5a00" stroke-width="2"/>
+<line x1="573.8" y1="74.0" x2="587.8" y2="74.0" stroke="#8a5a00" stroke-width="2"/>
+<line x1="573.8" y1="48.0" x2="587.8" y2="48.0" stroke="#8a5a00" stroke-width="2"/>
+<line x1="564.8" y1="126.0" x2="564.8" y2="100.0" stroke="#8a5a00" stroke-width="1.4" marker-start="url(#twAmb)" marker-end="url(#twAmb)"/>
+<text x="558.8" y="117.0" font-size="12" font-weight="700" fill="#8a5a00" text-anchor="end">λ</text>
+<text x="600.0" y="238" font-size="12.5" font-weight="700" fill="#004a85" text-anchor="middle">endfire, θ = 0°</text>
+<text x="600.0" y="258" font-size="12" fill="#15202b" text-anchor="middle"><tspan>k</tspan><tspan dy="3" font-size="9.5">z</tspan><tspan dy="-3"> = k:</tspan></text>
+<text x="600.0" y="275" font-size="12" fill="#15202b" text-anchor="middle">one cycle every λ along the source</text>
+<text x="360.0" y="296" font-size="11.5" fill="#5b6573" text-anchor="middle">blue: wavefronts, λ apart along the green direction of travel · amber: where they cross the source</text>
+</svg>

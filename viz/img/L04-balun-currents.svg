@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 250" font-family="Inter, system-ui, -apple-system, sans-serif">
+  <defs>
+    <marker id="an" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#004a85"/></marker>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b3213a"/></marker>
+  </defs>
+
+  <!-- ================= PANEL A: no balun ================= -->
+  <g>
+    <text x="150" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#004a85">Without a balun</text>
+    <!-- dipole arms -->
+    <line x1="40" y1="72" x2="142" y2="72" stroke="#004a85" stroke-width="4"/>
+    <line x1="158" y1="72" x2="260" y2="72" stroke="#004a85" stroke-width="4"/>
+    <circle cx="142" cy="72" r="3" fill="#004a85"/><circle cx="158" cy="72" r="3" fill="#004a85"/>
+    <!-- coax feed (shield) -->
+    <line x1="146" y1="72" x2="146" y2="208" stroke="#5b6573" stroke-width="2"/>
+    <line x1="154" y1="72" x2="154" y2="208" stroke="#5b6573" stroke-width="2"/>
+    <text x="150" y="228" text-anchor="middle" font-size="11" fill="#5b6573">coax feed</text>
+    <!-- arm currents (unequal = unbalanced) -->
+    <line x1="122" y1="60" x2="72" y2="60" stroke="#004a85" stroke-width="2" marker-end="url(#an)"/>
+    <line x1="178" y1="60" x2="214" y2="60" stroke="#004a85" stroke-width="2" marker-end="url(#an)"/>
+    <!-- common-mode current on outside of shield -->
+    <line x1="162" y1="98" x2="162" y2="188" stroke="#b3213a" stroke-width="2.5" marker-end="url(#ar)"/>
+    <text x="168" y="150" font-size="11" fill="#b3213a">shield current</text>
+    <text x="168" y="164" font-size="11" fill="#b3213a">(feed radiates)</text>
+  </g>
+
+  <!-- ================= PANEL B: 1:1 choke ================= -->
+  <g transform="translate(340,0)">
+    <text x="150" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#004a85">With a 1:1 choke balun</text>
+    <line x1="40" y1="72" x2="142" y2="72" stroke="#004a85" stroke-width="4"/>
+    <line x1="158" y1="72" x2="260" y2="72" stroke="#004a85" stroke-width="4"/>
+    <circle cx="142" cy="72" r="3" fill="#004a85"/><circle cx="158" cy="72" r="3" fill="#004a85"/>
+    <line x1="146" y1="72" x2="146" y2="208" stroke="#5b6573" stroke-width="2"/>
+    <line x1="154" y1="72" x2="154" y2="208" stroke="#5b6573" stroke-width="2"/>
+    <text x="150" y="228" text-anchor="middle" font-size="11" fill="#5b6573">coax feed</text>
+    <!-- balanced arm currents (equal) -->
+    <line x1="120" y1="60" x2="80" y2="60" stroke="#004a85" stroke-width="2" marker-end="url(#an)"/>
+    <line x1="180" y1="60" x2="220" y2="60" stroke="#004a85" stroke-width="2" marker-end="url(#an)"/>
+    <!-- ferrite choke over the coax -->
+    <rect x="137" y="92" width="26" height="28" rx="3" fill="#8a5a00"/>
+    <text x="150" y="110" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">choke</text>
+    <!-- shield current blocked -->
+    <line x1="162" y1="134" x2="162" y2="188" stroke="#b3213a" stroke-width="2.5" opacity="0.3"/>
+    <text x="168" y="158" font-size="11" fill="#1d7a4d">blocked &#10003;</text>
+  </g>
+</svg>

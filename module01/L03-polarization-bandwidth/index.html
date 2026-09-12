@@ -1,0 +1,1132 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L3 - Polarization and Bandwidth &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l3-polarization-and-bandwidth">
+<h1>L3 - Polarization and Bandwidth<a class="headerlink" href="#l3-polarization-and-bandwidth" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Polarization and Bandwidth</h1>
+<div class="title-rule"></div>
+<p>Polarization and bandwidth are the two most misquoted specs on a datasheet.</p>
+<p>Lesson 3 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-slides">
+<div class="wrap docutils container">
+<p class="rubric">Slides</p>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L03-polarization-bandwidth.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L03-polarization-bandwidth.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L03-polarization-bandwidth.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '3'">
+  <li>I can identify the polarization state of a plane wave (linear, circular, elliptical) from the amplitude and phase of its two orthogonal components.</li>
+  <li>I can compute the axial ratio of an elliptically polarized wave and explain what a "3 dB axial ratio" spec means for a circularly polarized antenna.</li>
+  <li>I can compute the polarization loss factor (PLF) between a transmit and receive antenna with mismatched polarizations.</li>
+  <li>I can define the impedance, pattern, and polarization bandwidths of an antenna and compute fractional bandwidth from the endpoint frequencies.</li>
+  <li>I can match common antenna families (patch, dipole, horn, log-periodic, spiral, Vivaldi) to their typical bandwidth range.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-we-were">
+<div class="wrap docutils container">
+<p class="rubric">Where we were</p>
+<p>Lesson 2 handed you the terms of a link budget — directivity, gain, effective
+aperture, Friis. Every one of them quietly assumed the two antennas were
+polarization matched and operating at a single frequency. Today you pay for
+both assumptions: <strong>polarization</strong> decides how much of an arriving wave an
+antenna can see at all, and <strong>bandwidth</strong> decides over what span of frequencies
+any of the datasheet numbers still hold. They are also the two most misquoted
+specs on an antenna datasheet, and the last part of this lesson prices each
+misquote in dB.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-1-polarization">
+<div class="wrap docutils container">
+<p class="rubric">Part 1: Polarization</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-polarization-is">
+<div class="wrap docutils container">
+<p class="rubric">What polarization is</p>
+<p>Fix a point in space and watch the tip of the electric field vector
+<span class="math notranslate nohighlight">\(\mathbf{E}(t)\)</span> trace a curve over one period. <strong>That curve is the
+polarization.</strong></p>
+<p>If the tip moves back and forth along a line, the wave is <strong>linearly
+polarized</strong>. If it traces a circle, the wave is <strong>circularly
+polarized</strong>. If it traces an ellipse (the general case), the wave is
+<strong>elliptically polarized</strong>. Those are the only three shapes on offer:</p>
+<p><img src="../../viz/img/L03-pol-states.svg"
+     alt="Three polarization states: the tip of the electric field traces a line, a circle, or an ellipse over one period at a fixed point"
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;"></p>
+<div class="depth docutils container">
+<p>Polarization matters because a receive antenna is only sensitive to the
+component of the incident <span class="math notranslate nohighlight">\(\mathbf{E}\)</span> that is aligned with its own
+polarization. Everything else is thrown away.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-building-any-polarization-from-two-linear-components">
+<div class="wrap docutils container">
+<p class="rubric">Building any polarization from two linear components</p>
+<p>You can write any plane wave propagating along <span class="math notranslate nohighlight">\(+\hat{z}\)</span> as the sum of
+two orthogonal linear components:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{E}(z, t)
+= \hat{x} E_{x} \cos(\omega t - k z)
++ \hat{y} E_{y} \cos(\omega t - k z + \delta).
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-three-numbers-fix-the-polarization-completely">
+<div class="wrap docutils container">
+<p class="rubric">Three numbers fix the polarization completely</p>
+<p>Three numbers fix the polarization completely: the amplitudes <span class="math notranslate nohighlight">\(E_{x}\)</span>
+and <span class="math notranslate nohighlight">\(E_{y}\)</span>, and the relative phase <span class="math notranslate nohighlight">\(\delta\)</span> between them.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(E_{x}\)</span>, <span class="math notranslate nohighlight">\(E_{y}\)</span></p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(\delta\)</span></p></th>
+<th class="head text-left"><p>Polarization</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(E_{y} = 0\)</span></p></td>
+<td class="text-center"><p>—</p></td>
+<td class="text-left"><p>Linear, along <span class="math notranslate nohighlight">\(\hat{x}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(E_{x} = 0\)</span></p></td>
+<td class="text-center"><p>—</p></td>
+<td class="text-left"><p>Linear, along <span class="math notranslate nohighlight">\(\hat{y}\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(E_{x} = E_{y}\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(0\)</span> or <span class="math notranslate nohighlight">\(180^{\circ}\)</span></p></td>
+<td class="text-left"><p>Linear, slant (45° or 135°)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(E_{x} = E_{y}\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-90^{\circ}\)</span></p></td>
+<td class="text-left"><p><strong>Right-hand</strong> circular (RHCP)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(E_{x} = E_{y}\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(+90^{\circ}\)</span></p></td>
+<td class="text-left"><p><strong>Left-hand</strong> circular (LHCP)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(E_{x} \ne E_{y}\)</span>, <span class="math notranslate nohighlight">\(\delta = \pm 90^{\circ}\)</span></p></td>
+<td class="text-center"><p></p></td>
+<td class="text-left"><p>Elliptical, axes on <span class="math notranslate nohighlight">\(\hat{x}\)</span> / <span class="math notranslate nohighlight">\(\hat{y}\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Anything else</p></td>
+<td class="text-center"><p></p></td>
+<td class="text-left"><p>Elliptical, tilted</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-right-or-left-hand">
+<div class="wrap docutils container">
+<p class="rubric">Right or left hand?</p>
+<p><strong>IEEE convention</strong> — point your right thumb along the direction of
+propagation. If the E-vector rotates in the direction your fingers
+curl, it’s right-hand polarized. Left-hand is the mirror image.</p>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-from-a-line-to-an-ellipse-to-a-circle">
+<div class="wrap docutils container">
+<p class="rubric">From a line to an ellipse to a circle</p>
+<div class="depth docutils container">
+<p>Move the sliders for <span class="math notranslate nohighlight">\(E_{x}\)</span>, <span class="math notranslate nohighlight">\(E_{y}\)</span>, and phase <span class="math notranslate nohighlight">\(\delta\)</span> (or hit a
+preset) and watch the E-vector trace at a fixed <span class="math notranslate nohighlight">\(z\)</span> change from a line
+to an ellipse to a circle. The two component waveforms below the trace
+show what each linear channel sees.</p>
+</div>
+<iframe src="../../viz/polarization-playground.html"
+        width="100%" height="522"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Polarization playground">
+</iframe>
+</div>
+</div>
+<div class="frame docutils container" id="frame-axial-ratio">
+<div class="wrap docutils container">
+<p class="rubric">Axial ratio</p>
+<p>For the general elliptical case, the axial ratio is the ratio of the
+major axis of the ellipse to the minor axis:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{AR} = \frac{|E_{\text{maj}}|}{|E_{\text{min}}|}, \qquad
+\text{AR} \ge 1.
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-polarization-ellipse">
+<div class="wrap docutils container">
+<p class="rubric">The polarization ellipse</p>
+<p>Those are the two lengths marked on the ellipse below, along with the
+tilt of the ellipse in the transverse plane:</p>
+<p><img src="../../viz/img/L03-axial-ratio.svg"
+     alt="The polarization ellipse with its major and minor axes and its tilt angle; the axial ratio is the ratio of the two axes"
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-a-cp-antenna-is-really-a-nearly-cp-antenna">
+<div class="wrap docutils container">
+<p class="rubric">A “CP antenna” is really a nearly-CP antenna</p>
+<p>In dB: <span class="math notranslate nohighlight">\(\text{AR}_{\text{dB}} = 20 \log_{10}(\text{AR})\)</span>.</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\text{AR} = 1\)</span> (0 dB) — pure <strong>circular</strong> polarization.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{AR} \to \infty\)</span> (<span class="math notranslate nohighlight">\(\infty\)</span> dB) — pure <strong>linear</strong> polarization.</p></li>
+<li><p>Everything else is elliptical, with <span class="math notranslate nohighlight">\(1 &lt; \text{AR} &lt; \infty\)</span>.</p></li>
+</ul>
+<p>A “CP antenna” is really a nearly-CP antenna. Real specs read something
+like <strong>“AR ≤ 3 dB across the operating band.”</strong> Read that carefully: it
+does <em>not</em> mean the antenna is never worse than 3 dB down. It means the
+power a linear antenna recovers <strong>swings over a 3 dB range</strong> as you
+rotate it — between <span class="math notranslate nohighlight">\(-1.8\)</span> and <span class="math notranslate nohighlight">\(-4.8\)</span> dB, rather than sitting at the
+flat <span class="math notranslate nohighlight">\(-3\)</span> dB an ideal circular wave would give. Part 3 derives those two
+numbers.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-axial-ratio-of-a-measured-wave">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — axial ratio of a measured wave</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — axial ratio of a measured wave</p>
+<p>You measure a wave traveling along <span class="math notranslate nohighlight">\(+\hat{z}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{E}(z, t) = \hat{x}\ 3 \cos(\omega t - k z)
++ \hat{y}\ \cos(\omega t - k z - 90^{\circ}).
+\]</div>
+<p>Read off the three numbers that decide everything: <span class="math notranslate nohighlight">\(E_{x} = 3\)</span>,
+<span class="math notranslate nohighlight">\(E_{y} = 1\)</span>, and <span class="math notranslate nohighlight">\(\delta = -90^{\circ}\)</span>. The phase is <span class="math notranslate nohighlight">\(-90^{\circ}\)</span>, so
+the wave is <strong>right-hand</strong> polarized. The amplitudes are unequal, so it
+is <strong>elliptical</strong> rather than circular, with the ellipse axes lying
+along <span class="math notranslate nohighlight">\(\hat{x}\)</span> and <span class="math notranslate nohighlight">\(\hat{y}\)</span> (the second-to-last row of the table
+above). The major axis is the larger amplitude and the minor axis the
+smaller:</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-right-hand-elliptical">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — right-hand elliptical</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — right-hand elliptical</p>
+<div class="math notranslate nohighlight">
+\[
+\text{AR} = \frac{3}{1} = 3,
+\qquad
+\text{AR}_{\text{dB}} = 20 \log_{10} 3 \approx 9.5\ \text{dB}.
+\]</div>
+<p>So the wave is right-hand elliptical — and it would miss an
+“AR ≤ 3 dB” circular spec badly. At 9.5 dB it is much closer to linear
+than to circular, which is exactly what you would guess from a 3:1
+amplitude imbalance.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-polarization-loss-factor-plf">
+<div class="wrap docutils container">
+<p class="rubric">Polarization loss factor (PLF)</p>
+<p>When a wave with polarization <span class="math notranslate nohighlight">\(\hat{\rho}_{\text{w}}\)</span> arrives at an
+antenna with polarization <span class="math notranslate nohighlight">\(\hat{\rho}_{\text{a}}\)</span>, the fraction of
+incident power the antenna captures is the <strong>polarization loss factor</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{PLF} = |\hat{\rho}_{\text{w}} \cdot \hat{\rho}_{\text{a}}^{*}|^{2}.
+\]</div>
+<p>The unit vectors are complex when either wave is not purely linear —
+that dot product hides the phase relationship between <span class="math notranslate nohighlight">\(E_{x}\)</span> and
+<span class="math notranslate nohighlight">\(E_{y}\)</span>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-plf-cheat-sheet">
+<div class="wrap docutils container">
+<p class="rubric">PLF cheat sheet</p>
+<p>Five cases you should know cold:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Wave</p></th>
+<th class="head text-left"><p>Antenna</p></th>
+<th class="head text-center"><p>PLF</p></th>
+<th class="head text-center"><p>PLF (dB)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Linear (<span class="math notranslate nohighlight">\(\hat{x}\)</span>)</p></td>
+<td class="text-left"><p>Linear (<span class="math notranslate nohighlight">\(\hat{x}\)</span>)</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>0 dB — co-polarized</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Linear (<span class="math notranslate nohighlight">\(\hat{x}\)</span>)</p></td>
+<td class="text-left"><p>Linear (<span class="math notranslate nohighlight">\(\hat{y}\)</span>)</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-\infty\)</span> dB — cross-polarized</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Linear (any)</p></td>
+<td class="text-left"><p>RHCP or LHCP</p></td>
+<td class="text-center"><p>0.5</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-3\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>RHCP</p></td>
+<td class="text-left"><p>RHCP</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>0 dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>RHCP</p></td>
+<td class="text-left"><p>LHCP</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-\infty\)</span> dB — sense mismatch</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Every row here assumes <em>perfect</em> circular polarization. Datasheets spec real “CP”
+hardware at AR ≤ 3 dB, which moves several of these numbers
+substantially; Part 3 prices the difference.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-two-linear-antennas-tilted-by-angle">
+<div class="wrap docutils container">
+<p class="rubric">Two linear antennas tilted by angle ψ</p>
+<p>For two linear antennas tilted by angle <span class="math notranslate nohighlight">\(\psi\)</span> relative to each
+other, <span class="math notranslate nohighlight">\(\text{PLF} = \cos^{2}\psi\)</span> — this is why aligning your
+handheld radio matters. (The tilt gets its own symbol <span class="math notranslate nohighlight">\(\psi\)</span> because
+<span class="math notranslate nohighlight">\(\theta\)</span> is already spoken for as the polar angle.)</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-polarization-loss-factor-against-tilt-angle">
+<div class="wrap docutils container">
+<p class="rubric">Polarization loss factor against tilt angle</p>
+<p>The curve is gentle near alignment and brutal near <span class="math notranslate nohighlight">\(90^{\circ}\)</span>:</p>
+<p><img src="../../viz/img/L03-plf-cos2.svg"
+     alt="Polarization loss factor against tilt angle between two linear antennas, falling as cosine squared from 1 at 0 degrees to 0 at 90 degrees, with the 0 dB, minus 3 dB, and minus infinity dB points marked"
+     style="max-width: 700px; width: 100%; display: block; margin: .25em auto;"></p>
+<div class="depth docutils container">
+<p>Thirty degrees of misalignment costs about a decibel; the last ten
+degrees before broadside costs everything.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-pricing-two-everyday-mismatches-gps-and-a-linear-whip">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — pricing two everyday mismatches (GPS and a linear whip)</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — pricing two everyday mismatches (GPS and a linear whip)</p>
+<p>A GPS satellite transmits RHCP; your receiver is a plain
+linear whip. This is the third row of the table — a linear antenna
+recovers half the power in any circular wave, whatever its orientation:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{PLF} = |\hat{\rho}_{\text{w}} \cdot \hat{\rho}_{\text{a}}^{*}|^{2}
+= 0.5,
+\qquad
+10 \log_{10}(0.5) = -3\ \text{dB}.
+\]</div>
+<p>Half the incident power is thrown away and no amount of turning the whip
+recovers it. That fixed 3 dB is the price of the rotation-immunity
+described in the next section.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-pricing-two-everyday-mismatches-two-linear-antennas">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — pricing two everyday mismatches (two linear antennas)</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — pricing two everyday mismatches (two linear antennas)</p>
+<p>Now put linear antennas on <em>both</em> ends: a base-station dipole is
+vertical, and the handheld talking to it is tilted <span class="math notranslate nohighlight">\(\psi = 30^{\circ}\)</span>
+off vertical. Here the <span class="math notranslate nohighlight">\(\cos^{2}\psi\)</span> rule applies:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{PLF} = \cos^{2}(30^{\circ}) = 0.75,
+\qquad
+10 \log_{10}(0.75) \approx -1.25\ \text{dB},
+\]</div>
+<p>a mild loss. Tilt the handheld all the way to horizontal and
+<span class="math notranslate nohighlight">\(\cos^{2}(90^{\circ}) = 0\)</span> — in principle the link dies completely. In
+practice it does not quite: multipath scatters some energy back into the
+orthogonal polarization, so a real cross-polarized null bottoms out
+somewhere around <span class="math notranslate nohighlight">\(-20\)</span> dB rather than at zero.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-the-e-vector-traces-a-helix-as-the-wave-propagates">
+<div class="wrap docutils container">
+<p class="rubric">The E-vector traces a helix as the wave propagates</p>
+<div class="depth docutils container">
+<p>The E-vector doesn’t just rotate at a point — it traces a <em>helix</em> as
+the wave propagates. Toggle RHCP / LHCP to see the corkscrew flip
+handedness. The blue and red shadows on the back walls are the
+component sinusoids <span class="math notranslate nohighlight">\(E_{x}(z, t)\)</span> and <span class="math notranslate nohighlight">\(E_{y}(z, t)\)</span>.</p>
+</div>
+<iframe src="../../viz/cp-helix.html"
+        width="100%" height="471"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Circular polarization helix">
+</iframe>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-satellite-and-gps-links-use-circular-polarization">
+<div class="wrap docutils container">
+<p class="rubric">Why satellite and GPS links use circular polarization</p>
+<p>Faraday rotation in the ionosphere rotates the plane of a linearly
+polarized wave by an unpredictable angle as it passes through — so a
+purely linear satellite downlink would fade in and out as ionospheric
+conditions changed. Circular polarization, by contrast, is invariant
+under rotation about the propagation axis (a rotated circle is still a
+circle), so CP dodges the problem entirely. Cost: a fixed 3 dB penalty
+when either end is only linear.</p>
+<p>The same argument applies whenever the receiver’s orientation isn’t
+fixed — cubesats tumble, handhelds rotate, aircraft bank.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-2-bandwidth">
+<div class="wrap docutils container">
+<p class="rubric">Part 2: Bandwidth</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-an-antenna-has-multiple-bandwidths">
+<div class="wrap docutils container">
+<p class="rubric">An antenna has multiple bandwidths</p>
+<p>An antenna has multiple bandwidths, one for each parameter you care
+about:</p>
+<ul class="simple">
+<li><p><strong>Impedance bandwidth</strong> — range of frequencies over which the
+antenna is well matched to its feed (usually VSWR ≤ 2, i.e.
+<span class="math notranslate nohighlight">\(|\Gamma| \le 1/3\)</span>, or return loss (RL) ≥ 9.5 dB). This is the most
+common definition and the one meant by an unqualified “bandwidth.”</p></li>
+<li><p><strong>Pattern bandwidth</strong> — range where the radiation pattern (gain,
+beamwidth, sidelobe level) stays within spec.</p></li>
+<li><p><strong>Polarization bandwidth</strong> — range where axial ratio stays below a
+threshold, typically 3 dB.</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-three-don-t-have-to-coincide">
+<div class="wrap docutils container">
+<p class="rubric">The three don’t have to coincide</p>
+<p>The three don’t have to coincide. You can match a patch antenna over
+a wider band than it produces good CP, so its polarization bandwidth
+is narrower than its impedance bandwidth. Stack the three bands against
+frequency and the antenna is only usable where all of them overlap:</p>
+<p><img src="../../viz/img/L03-bandwidth-intersection.svg"
+     alt="Three spec bands plotted against frequency — a wide impedance bandwidth, a narrower pattern bandwidth, and a narrower still axial-ratio bandwidth — with the usable band marked where all three overlap"
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-quote-the-widest-bar-and-you-have-quoted-the-impedance-bandwidth">
+<div class="wrap docutils container">
+<p class="rubric">Quote the widest bar and you have quoted the impedance bandwidth</p>
+<p>Quote the widest bar and you have quoted the impedance bandwidth. Quote
+the overlap and you have quoted something a system can actually use.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-fractional-and-ratio-bandwidth">
+<div class="wrap docutils container">
+<p class="rubric">Fractional and ratio bandwidth</p>
+<p>Report bandwidth as a <em>fraction</em> of the center frequency, not just Hz:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{FBW} = \frac{f_{H} - f_{L}}{f_{c}}, \qquad
+f_{c} = \frac{f_{H} + f_{L}}{2}.
+\]</div>
+<p>100 MHz means very different things at 500 MHz and at 50 GHz.</p>
+<p>For wideband antennas the more useful figure is the <strong>ratio bandwidth</strong> (RBW):</p>
+<div class="math notranslate nohighlight">
+\[
+\text{RBW} = \frac{f_{H}}{f_{L}}.
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-narrowband-broadband-ultra-wideband">
+<div class="wrap docutils container">
+<p class="rubric">Narrowband, broadband, ultra-wideband</p>
+<p>Rough categories:</p>
+<ul class="simple">
+<li><p><strong>Narrowband</strong> — FBW <span class="math notranslate nohighlight">\(\lesssim 5\%\)</span>. Resonant antennas: patches,
+small loops, dielectric resonator antennas.</p></li>
+<li><p><strong>Broadband</strong> — FBW <span class="math notranslate nohighlight">\(5\%\)</span>–<span class="math notranslate nohighlight">\(50\%\)</span>. Dipoles, slots, horns, most
+practical designs.</p></li>
+<li><p><strong>Ultra-wideband (UWB)</strong> — RBW <span class="math notranslate nohighlight">\(\ge 2{:}1\)</span>, which is the same bar as
+FBW <span class="math notranslate nohighlight">\(\ge 67\%\)</span> with the definitions above. Log-periodic, spiral,
+Vivaldi/TSA, biconical.</p></li>
+</ul>
+<p>That 2:1 bar is this course’s working definition of “ultra-wideband,” and
+it is a demanding one. The FCC’s regulatory definition is a separate and
+much looser test: a UWB emission is one whose fractional bandwidth is at
+least <span class="math notranslate nohighlight">\(0.20\)</span> <strong>or</strong> whose absolute bandwidth is at least 500 MHz. An
+antenna can satisfy the FCC and still be nowhere near 2:1.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-size-limits-bandwidth">
+<div class="wrap docutils container">
+<p class="rubric">Size limits bandwidth</p>
+<p>There is no free lunch. The <strong>Chu-Harrington bound</strong> ties minimum
+antenna Q to the smallest sphere that encloses the antenna:</p>
+<div class="math notranslate nohighlight">
+\[
+Q \gtrsim \frac{1}{(ka)^{3}} + \frac{1}{ka},
+\qquad
+\text{FBW} \approx \frac{1}{Q}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(a\)</span> is the sphere radius and <span class="math notranslate nohighlight">\(k = 2\pi/\lambda\)</span>. The bandwidth
+form is the <strong>half-power</strong> one: <span class="math notranslate nohighlight">\(\text{FBW} \approx 1/Q\)</span> is the fraction
+of the center frequency over which a single resonance stays within 3 dB.
+At the tighter bar we usually quote a match to, VSWR <span class="math notranslate nohighlight">\(\le s\)</span>, the same
+<span class="math notranslate nohighlight">\(Q\)</span> buys less band —
+<span class="math notranslate nohighlight">\(\text{FBW} \approx (s-1)/(Q\sqrt{s})\)</span>, or <span class="math notranslate nohighlight">\(\approx 0.71/Q\)</span> at
+<span class="math notranslate nohighlight">\(s = 2\)</span>. Same physics, a factor of about <span class="math notranslate nohighlight">\(1.4\)</span> apart, and worth
+knowing which one a datasheet has used.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-minimum-q-against-electrical-size">
+<div class="wrap docutils container">
+<p class="rubric">Minimum Q against electrical size</p>
+<p><img src="../../viz/img/L03-chu-q-vs-ka.svg"
+     alt="Minimum antenna Q against electrical size ka, rising steeply below ka equal to 1, with the corresponding approximate fractional bandwidth on the right axis"
+     style="max-width: 700px; width: 100%; display: block; margin: .25em auto;"></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-knee-sits-at-ka-1">
+<div class="wrap docutils container">
+<p class="rubric">The knee sits at ka = 1</p>
+<p>The knee sits at <span class="math notranslate nohighlight">\(ka = 1\)</span> — an antenna that just fills a sphere of
+radius <span class="math notranslate nohighlight">\(\lambda/2\pi\)</span>, where <span class="math notranslate nohighlight">\(Q \approx 2\)</span>. To the left of it the curve
+turns nearly vertical: that <span class="math notranslate nohighlight">\(1/(ka)^{3}\)</span> term means halving the size
+octuples the minimum <span class="math notranslate nohighlight">\(Q\)</span>. Small antennas (small <span class="math notranslate nohighlight">\(ka\)</span>) inevitably have
+high <span class="math notranslate nohighlight">\(Q\)</span> and narrow bandwidth.</p>
+<div class="depth docutils container">
+<p>This is
+why AM broadcast receivers use physically small ferrite-loaded loops
+and get by with narrow bandwidth, while a WiFi router’s antenna is
+already close to <span class="math notranslate nohighlight">\(\lambda/2\)</span> and can afford tens of percent bandwidth.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-you-can-beat-the-bound-but-only-by-adding-loss">
+<div class="wrap docutils container">
+<p class="rubric">You can beat the bound — but only by adding loss</p>
+<p>You <em>can</em> beat the bound — but only by adding <strong>loss</strong>. Resistive
+loading damps the resonance and widens the band, and the wasted power
+comes straight out of gain. The bound constrains the lossless case; it
+never promised you could not build a bad antenna with a wide match.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-resonant-antennas">
+<div class="wrap docutils container">
+<p class="rubric">Resonant antennas</p>
+<p>An antenna’s bandwidth depends less on its material than on what the
+current does when it reaches the end of the structure.</p>
+<p><strong>Resonant antennas.</strong> The current travels out along the structure,
+reflects off the open end, and travels back. Forward and reflected
+waves add to a <strong>standing wave</strong>, and the antenna radiates efficiently
+only when its length fits that standing-wave pattern — near
+<span class="math notranslate nohighlight">\(\ell \approx \lambda/2\)</span>. Move away in frequency and the pattern no
+longer fits: the input reactance climbs, the match collapses, and the
+band ends. One resonance buys one narrow band. Patches, half-wave
+dipoles, and slots all work this way.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-traveling-wave-and-self-scaling-antennas">
+<div class="wrap docutils container">
+<p class="rubric">Traveling-wave and self-scaling antennas</p>
+<p><strong>Traveling-wave antennas.</strong> Here the current is gone before it can
+come back — radiated away as it travels, or dumped into a resistive
+termination at the far end. With little or no reflected wave there is
+no standing wave and no sharp resonance, and with no resonance to fall
+out of, the useful band is wide. Vivaldi (tapered-slot) antennas,
+axial-mode helices, and terminated long-wire and rhombic antennas are
+the usual examples.</p>
+<p><strong>Self-scaling antennas.</strong> A third route to a wide band: build the
+structure as a scaled copy of itself, so that at every frequency <em>some</em>
+section of it is the right electrical size. That section is the active
+region, and it slides along the antenna as frequency changes.
+Log-periodics and spirals are the classic cases.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point">
+<div class="wrap docutils container">
+<p class="rubric">Key point</p>
+<div class="callout docutils container">
+<p>“Resonant” returns in L4 meaning something narrower — the frequency at
+which <span class="math notranslate nohighlight">\(X_{\text{in}} = 0\)</span> and the input impedance is purely real. The
+two senses connect: a resonant <em>structure</em> is one you operate at
+that frequency, which is exactly why it is narrowband.</p>
+</div>
+<p>Module 2 takes these families apart one at a time, starting with the
+simple resonant antennas in L7.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-bandwidth-by-antenna-type">
+<div class="wrap docutils container">
+<p class="rubric">Bandwidth by Antenna Type</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Antenna</p></th>
+<th class="head text-center"><p>Typical FBW</p></th>
+<th class="head text-left"><p>Application</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Patch (single element)</p></td>
+<td class="text-center"><p>1 – 5%</p></td>
+<td class="text-left"><p>GPS, cell handsets, tags</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Dipole (λ/2)</p></td>
+<td class="text-center"><p>8 – 15%</p></td>
+<td class="text-left"><p>Broadcast, generic</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Slot antenna</p></td>
+<td class="text-center"><p>5 – 10%</p></td>
+<td class="text-left"><p>Aircraft skins</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Horn (standard gain)</p></td>
+<td class="text-center"><p>30 – 50%</p></td>
+<td class="text-left"><p>Test ranges, feeds</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-bandwidth-by-antenna-type-the-wideband-families">
+<div class="wrap docutils container">
+<p class="rubric">Bandwidth by Antenna Type — the wideband families</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Antenna</p></th>
+<th class="head text-center"><p>Typical FBW</p></th>
+<th class="head text-left"><p>Application</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Log-periodic</p></td>
+<td class="text-center"><p>10:1 RBW</p></td>
+<td class="text-left"><p>Broadband probing</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Spiral</p></td>
+<td class="text-center"><p>10:1+</p></td>
+<td class="text-left"><p>Electronic warfare, DF</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Vivaldi / TSA</p></td>
+<td class="text-center"><p>10:1+</p></td>
+<td class="text-left"><p>UWB radar, phased arrays</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Biconical</p></td>
+<td class="text-center"><p>3:1+</p></td>
+<td class="text-left"><p>EMC testing</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="depth docutils container">
+<p>The rule of thumb, restated: <strong>resonant antennas are narrowband;
+traveling-wave and self-scaling antennas are wideband.</strong> Every row of
+the table is an instance of it — a patch has one resonant length and
+only works near it, while a log-periodic looks the same electrical size
+at every frequency in its band.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-3-reading-a-datasheet-the-two-most-misquoted-specs">
+<div class="wrap docutils container">
+<p class="rubric">Part 3: Reading a datasheet — the two most misquoted specs</p>
+<p>This lesson opened with a claim — that polarization and bandwidth are the
+two most misquoted specs on an antenna datasheet. Here is the evidence.
+None of what follows is a lie on the vendor’s part. Each is a defensible
+reading of a real measurement, which is precisely why these survive all
+the way to a design review.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-misquote-1-whose-right-hand">
+<div class="wrap docutils container">
+<p class="rubric">Misquote 1 — whose right hand?</p>
+<p>The handedness convention introduced above is the <strong>IEEE</strong> one: point
+your right thumb along the direction of propagation. There is a second
+convention in wide use.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Convention</p></th>
+<th class="head text-left"><p>Observer faces</p></th>
+<th class="head text-left"><p>Used by</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>IEEE</strong></p></td>
+<td class="text-left"><p><em>Along</em> propagation — the wave travels away from you</p></td>
+<td class="text-left"><p>Antenna engineering, radar, this course</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Optics / physics</strong></p></td>
+<td class="text-left"><p><em>Toward</em> the source — the wave comes at you</p></td>
+<td class="text-left"><p>Optics, remote sensing, some older European sources</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-same-physical-wave-opposite-name">
+<div class="wrap docutils container">
+<p class="rubric">Same physical wave, opposite name</p>
+<p>The two label the <em>same physical wave</em> with <em>opposite</em> handedness. A part
+sold as “RHCP” under the optics convention is IEEE <strong>LHCP</strong>. Order its
+mate on the strength of the label and you have designed in a sense
+mismatch — which, per the PLF table above, is the one polarization error
+that takes the whole link rather than a few dB of it.</p>
+<p>There is no clever fix, only a procedural one: on any CP datasheet,
+confirm which way the observer is facing before you commit to the other
+end of the link.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-misquote-2-circularly-polarized-at-what-axial-ratio">
+<div class="wrap docutils container">
+<p class="rubric">Misquote 2 — “circularly polarized” at what axial ratio?</p>
+<p>The PLF table above is the idealized one — it assumes perfect circular
+polarization, AR = 0 dB. Real hardware is sold as “circular” at
+AR ≤ 3 dB, and parts marketed as circular at 6 dB are not hard to find.
+It is worth knowing exactly what that costs.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-polarization-vector-of-a-real-cp-antenna">
+<div class="wrap docutils container">
+<p class="rubric">The polarization vector of a real CP antenna</p>
+<p>Work in the basis of the ellipse’s own major and minor axes. An antenna
+with axial ratio <span class="math notranslate nohighlight">\(A\)</span> (linear, <span class="math notranslate nohighlight">\(\ge 1\)</span>) has polarization unit vector</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\rho}_{\text{a}}
+= \frac{A \hat{u}_{\text{maj}} + j \hat{u}_{\text{min}}}{\sqrt{A^{2}+1}},
+\]</div>
+<div class="depth docutils container">
+<p>where the <span class="math notranslate nohighlight">\(+j\)</span> makes the minor-axis component lag the major-axis one,
+which under the IEEE convention of Part 1 is one specific sense — take
+it as left-hand here; only the <em>relative</em> sign of the two <span class="math notranslate nohighlight">\(j\)</span> terms
+matters for everything below.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-plf-as-a-function-of-orientation">
+<div class="wrap docutils container">
+<p class="rubric">PLF as a function of orientation</p>
+<p>A linearly polarized wave arriving at angle <span class="math notranslate nohighlight">\(\psi\)</span> from the major axis is
+<span class="math notranslate nohighlight">\(\hat{\rho}_{\text{w}} = \cos\psi \hat{u}_{\text{maj}} +
+\sin\psi \hat{u}_{\text{min}}\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[
+\text{PLF}(\psi)
+= |\hat{\rho}_{\text{w}} \cdot \hat{\rho}_{\text{a}}^{*}|^{2}
+= \frac{A^{2}\cos^{2}\psi + \sin^{2}\psi}{A^{2}+1}.
+\]</div>
+<p>This single expression contains three rows of the earlier table. Set
+<span class="math notranslate nohighlight">\(A = 1\)</span> (perfect CP) and it collapses to <span class="math notranslate nohighlight">\(1/2\)</span> for <em>every</em> <span class="math notranslate nohighlight">\(\psi\)</span> — the
+fixed <span class="math notranslate nohighlight">\(-3\)</span> dB, independent of orientation. Let <span class="math notranslate nohighlight">\(A \to \infty\)</span> (perfectly
+linear) and it becomes <span class="math notranslate nohighlight">\(\cos^{2}\psi\)</span>, the two-linear-antennas rule.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-captured-power-swings-between-two-limits">
+<div class="wrap docutils container">
+<p class="rubric">The captured power swings between two limits</p>
+<p>In between, the captured power swings with orientation between</p>
+<div class="math notranslate nohighlight">
+\[
+p_{\max} = \frac{A^{2}}{A^{2}+1}
+\qquad\text{and}\qquad
+p_{\min} = \frac{1}{A^{2}+1},
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-their-ratio-is-what-matters">
+<div class="wrap docutils container">
+<p class="rubric">Their ratio is what matters</p>
+<p>the powers in the major and minor axes respectively — note that
+<span class="math notranslate nohighlight">\(p_{\max} + p_{\min} = 1\)</span>, as it must be. Their ratio is what matters:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{p_{\max}}{p_{\min}} = A^{2}
+\qquad\Longrightarrow\qquad
+10\log_{10}\left(\frac{p_{\max}}{p_{\min}}\right)
+= 20\log_{10} A
+= \text{AR}_{\text{dB}}.
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point-2">
+<div class="wrap docutils container">
+<p class="rubric">Key point</p>
+<div class="callout docutils container">
+<p>The peak-to-null swing in received power, expressed in dB, <strong>equals the
+axial ratio in dB</strong>. A “3 dB CP” antenna does not cost a flat 3 dB
+against a linear antenna — it costs between 1.8 and 4.8 dB depending on
+an orientation you usually do not control.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-same-treatment-prices-the-other-idealization">
+<div class="wrap docutils container">
+<p class="rubric">The same treatment prices the other idealization</p>
+<p>The same treatment prices the <em>other</em> idealization. Two antennas of equal
+axial ratio, opposite sense, major axes aligned, gives
+<span class="math notranslate nohighlight">\(\hat{\rho}_{\text{b}} = (A \hat{u}_{\text{maj}} - j \hat{u}_{\text{min}})/\sqrt{A^{2}+1}\)</span>
+and therefore</p>
+<div class="math notranslate nohighlight">
+\[
+\text{PLF}_{\text{cross}}
+= \left| \frac{A^{2} - 1}{A^{2} + 1} \right|^{2}.
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-3-db-of-axial-ratio-actually-costs">
+<div class="wrap docutils container">
+<p class="rubric">What 3 dB of axial ratio actually costs</p>
+<p>At <span class="math notranslate nohighlight">\(A = 1\)</span> this is zero — the <span class="math notranslate nohighlight">\(-\infty\)</span> dB in the ideal table. At a real
+3 dB axial ratio it is <span class="math notranslate nohighlight">\(-9.6\)</span> dB. Collecting the numbers:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Actual AR</p></th>
+<th class="head text-center"><p>Loss to a linear antenna</p></th>
+<th class="head text-center"><p>Worst-case opposite-sense rejection</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>0 dB (ideal CP)</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-3.0\)</span> dB, flat</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-\infty\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>3 dB (the industry bar)</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-1.8\)</span> to <span class="math notranslate nohighlight">\(-4.8\)</span> dB</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-9.6\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>6 dB (still sold as “circular”)</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-1.0\)</span> to <span class="math notranslate nohighlight">\(-7.0\)</span> dB</p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(-4.5\)</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The lesson: the “infinite” cross-polarization rejection of opposite-sense
+CP is worth about 10 dB in practice, and at 6 dB axial ratio it is worth
+4.5 dB — essentially no isolation at all. Budget accordingly.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-misquote-3-4-bandwidth-of-what">
+<div class="wrap docutils container">
+<p class="rubric">Misquote 3 — “4% bandwidth” of what?</p>
+<p>Recall that an antenna has impedance, pattern, and polarization
+bandwidths, and that they need not coincide. A single quoted bandwidth
+figure is nearly always the <strong>impedance</strong> bandwidth — generally the
+<strong>widest</strong> of the three, and so the most flattering.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-usable-band-is-the-intersection">
+<div class="wrap docutils container">
+<p class="rubric">The usable band is the intersection</p>
+<p>Two further qualifications usually go unstated:</p>
+<ul class="simple">
+<li><p><strong>Threshold.</strong> “Impedance bandwidth” means nothing until you state the VSWR
+bar. The same antenna is wider at VSWR ≤ 3 than at ≤ 1.5.</p></li>
+<li><p><strong>Scan angle.</strong> Datasheets typically quote axial ratio <strong>at boresight
+only</strong>. It degrades off-axis, so a patch holding AR ≤ 3 dB on boresight
+may be well outside it at <span class="math notranslate nohighlight">\(\pm 45^{\circ}\)</span> — exactly where a wide-beam
+GPS or telemetry antenna has to work.</p></li>
+</ul>
+<p>The usable band is the <strong>intersection</strong> of all three bandwidths, over the
+scan angles you actually operate at. A CP patch matched over 4% may hold
+AR ≤ 3 dB over barely 1% of it, and only near boresight.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-how-to-read-the-spec-properly">
+<div class="wrap docutils container">
+<p class="rubric">How to read the spec properly</p>
+<div class="note admonition">
+<p class="admonition-title">How to read the spec properly</p>
+<p>“Bandwidth” is underspecified until you have said <em>which</em> bandwidth, <em>at
+what threshold</em>, and <em>over what scan angle</em>. Ask all three.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-polarization">
+<div class="wrap docutils container">
+<p class="rubric">Summary — polarization</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Polarization</p></td>
+<td class="text-left"><p>The curve the tip of <span class="math notranslate nohighlight">\(\mathbf{E}\)</span> traces at a fixed point</p></td>
+<td class="text-left"><p>Fixed by three numbers: <span class="math notranslate nohighlight">\(E_{x}\)</span>, <span class="math notranslate nohighlight">\(E_{y}\)</span>, <span class="math notranslate nohighlight">\(\delta\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\text{AR}\)</span></p></td>
+<td class="text-left"><p>Major axis over minor axis of the polarization ellipse</p></td>
+<td class="text-left"><p>0 dB = pure CP, <span class="math notranslate nohighlight">\(\infty\)</span> dB = pure linear; hardware sells at <span class="math notranslate nohighlight">\(\le 3\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\text{PLF}\)</span></p></td>
+<td class="text-left"><p>Fraction of incident power a mismatched polarization lets through</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\text{PLF} = \lvert\hat{\rho}_{\text{w}} \cdot \hat{\rho}_{\text{a}}^{*}\rvert^{2}\)</span>; <span class="math notranslate nohighlight">\(\cos^{2}\psi\)</span> for two linears</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-misquotes">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the misquotes</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>CP against a linear antenna</p></td>
+<td class="text-left"><p>Ideal CP is orientation-blind; real CP is not</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-3\)</span> dB flat at AR = 0 dB; <span class="math notranslate nohighlight">\(-1.8\)</span> to <span class="math notranslate nohighlight">\(-4.8\)</span> dB at AR = 3 dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Wrong circular sense</p></td>
+<td class="text-left"><p>The “infinite” cross-pol rejection is finite in hardware</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-9.6\)</span> dB at AR = 3 dB, <span class="math notranslate nohighlight">\(-4.5\)</span> dB at AR = 6 dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Handedness</p></td>
+<td class="text-left"><p>IEEE faces along propagation, optics faces the source</p></td>
+<td class="text-left"><p>Opposite labels for the same wave — confirm before you order the mate</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-bandwidth">
+<div class="wrap docutils container">
+<p class="rubric">Summary — bandwidth</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>The three bandwidths</p></td>
+<td class="text-left"><p>Impedance, pattern, polarization; the usable band is their intersection</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\text{FBW} = (f_{H} - f_{L})/f_{c}\)</span>, at VSWR <span class="math notranslate nohighlight">\(\le 2\)</span> unless stated</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Chu-Harrington bound</p></td>
+<td class="text-left"><p>Minimum <span class="math notranslate nohighlight">\(Q\)</span> set by the smallest enclosing sphere</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\text{FBW} \approx 1/Q\)</span> (half-power), <span class="math notranslate nohighlight">\(\approx 0.71/Q\)</span> at VSWR <span class="math notranslate nohighlight">\(\le 2\)</span>; knee at <span class="math notranslate nohighlight">\(ka = 1\)</span>, <span class="math notranslate nohighlight">\(Q \approx 2\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Antenna families</p></td>
+<td class="text-left"><p>Resonant narrow, traveling-wave and self-scaling wide</p></td>
+<td class="text-left"><p>Patch 1–5%, dipole 8–15%, horn 30–50%, spiral and Vivaldi 10:1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a href="../../practice/ECE444_L03_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a href="../../practice/ECE444_L03_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where this is going</p>
+<p>Lesson 4 takes the impedance side of the story apart. Bandwidth was
+defined here as the span over which the match holds; next lesson you see
+what sets that match in the first place — input impedance, <span class="math notranslate nohighlight">\(S_{11}\)</span>, feed
+lines, and baluns — and how the return-loss curve <em>defines</em> the impedance
+bandwidth we have been quoting. Everything narrowband about a resonant
+antenna shows up there as a reactance sweeping through zero.</p>
+<p>Polarization keeps coming back. In Module 3 an array inherits the
+polarization of its elements, so a linearly polarized element in a
+circularly polarized array is a mistake you pay for at the system level;
+in Module 4 radars exploit polarization deliberately, alternating H and V
+pulses to read a target’s scattering matrix. Before Lesson 4, read the
+assigned sections on <strong>input impedance, feed lines, and baluns</strong>, and
+come ready to say what a “50 Ω antenna” actually means and why a dipole
+fed by coax needs a balun.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module01/L03-polarization-bandwidth"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

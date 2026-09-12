@@ -1,0 +1,85 @@
+<svg viewBox="0 0 880 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two ways to trace an antenna pattern: on the left the beam is swept electronically past a fixed source; on the right the beam is held fixed and the source is carried around the array on an arc">
+<defs>
+<marker id="l23aGrey" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker>
+<marker id="l23aGrn" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1d7a4d"/></marker>
+<marker id="l23aRed" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>
+</defs>
+
+<!-- ============================ panel (a) ============================ -->
+<text x="200" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#004a85">(a) sweep the beam, source fixed</text>
+
+<!-- the commanded beam positions the sweep steps through -->
+<path d="M200 300 L69.4 176.1 Q79.7 156.6 100.7 149.9 Z" fill="#0067b9" opacity="0.10" stroke="#0067b9" stroke-width="1.1" stroke-dasharray="5 4"/>
+<path d="M200 300 L119.7 138.9 Q136.0 124.1 158.0 125.0 Z" fill="#0067b9" opacity="0.10" stroke="#0067b9" stroke-width="1.1" stroke-dasharray="5 4"/>
+<path d="M200 300 L242.0 125.0 Q264.0 124.1 280.3 138.9 Z" fill="#0067b9" opacity="0.10" stroke="#0067b9" stroke-width="1.1" stroke-dasharray="5 4"/>
+<path d="M200 300 L299.3 149.9 Q320.3 156.6 330.6 176.1 Z" fill="#0067b9" opacity="0.10" stroke="#0067b9" stroke-width="1.1" stroke-dasharray="5 4"/>
+<!-- the beam position that happens to hit the source -->
+<path d="M200 300 L179.6 121.2 Q200.0 112.8 220.4 121.2 Z" fill="#004a85" opacity="0.30"/>
+<path d="M200 300 L179.6 121.2 Q200.0 112.8 220.4 121.2 Z" fill="none" stroke="#004a85" stroke-width="1.8"/>
+
+<!-- the beam swings; the source does not -->
+<path d="M115.1 218 A118 118 0 0 1 284.9 218" fill="none" stroke="#5a5a5a" stroke-width="1.6" marker-start="url(#l23aGrey)" marker-end="url(#l23aGrey)"/>
+
+<!-- the source -->
+<circle cx="200" cy="78" r="8" fill="#b01e24"/>
+<text x="200" y="60" text-anchor="middle" font-size="13" font-weight="700" fill="#b01e24">HB100</text>
+
+<!-- the array -->
+<rect x="150" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="163" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="176" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="189" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="202" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="215" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="228" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="241" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<line x1="146" y1="312" x2="254" y2="312" stroke="#004a85" stroke-width="3.5" stroke-linecap="round"/>
+<text x="200" y="332" text-anchor="middle" font-size="12.5" fill="#004a85">8-element array</text>
+
+<text x="200" y="358" text-anchor="middle" font-size="13" fill="#1a1a1a">x-axis: commanded steer angle</text>
+
+<!-- divider -->
+<line x1="440" y1="24" x2="440" y2="348" stroke="#c7d2e0" stroke-width="1.4"/>
+
+<!-- ============================ panel (b) ============================ -->
+<text x="650" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#004a85">(b) hold the beam, move the source</text>
+
+<!-- the arc the source is carried along -->
+<path d="M450 300 A200 200 0 0 1 850 300" fill="none" stroke="#5a5a5a" stroke-width="1.4" stroke-dasharray="6 5"/>
+<path d="M842.3 244.9 A200 200 0 0 1 850 300" fill="none" stroke="#b01e24" stroke-width="2" marker-end="url(#l23aRed)"/>
+
+<!-- the fixed beam -->
+<path d="M650 300 L629.6 121.2 Q650.0 112.8 670.4 121.2 Z" fill="#004a85" opacity="0.30"/>
+<path d="M650 300 L629.6 121.2 Q650.0 112.8 670.4 121.2 Z" fill="none" stroke="#004a85" stroke-width="1.8"/>
+<text x="566" y="186" text-anchor="middle" font-size="12.5" fill="#004a85">beam held fixed</text>
+
+<!-- where the source has been, and where it is now -->
+<circle cx="476.8" cy="200" r="4" fill="#5a5a5a" opacity="0.5"/>
+<circle cx="550" cy="126.8" r="8" fill="#b01e24"/>
+<circle cx="750" cy="126.8" r="4" fill="#5a5a5a" opacity="0.5"/>
+<circle cx="823.2" cy="200" r="4" fill="#5a5a5a" opacity="0.5"/>
+<text x="536" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#b01e24">HB100</text>
+
+<!-- radius call-out -->
+<line x1="650" y1="300" x2="476.8" y2="200" stroke="#1d7a4d" stroke-width="1.4" marker-end="url(#l23aGrn)"/>
+<text x="548" y="278" text-anchor="middle" font-size="12.5" fill="#1d7a4d">about 1 m</text>
+
+<!-- arc end labels -->
+<text x="450" y="322" text-anchor="middle" font-size="12.5" fill="#5a5a5a">&#8722;90&#176;</text>
+<text x="650" y="70" text-anchor="middle" font-size="12.5" fill="#5a5a5a">0&#176;</text>
+<text x="850" y="322" text-anchor="middle" font-size="12.5" fill="#5a5a5a">+90&#176;</text>
+
+<!-- the array -->
+<rect x="600" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="613" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="626" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="639" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="652" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="665" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="678" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<rect x="691" y="296" width="9" height="12" rx="1.5" fill="#004a85"/>
+<line x1="596" y1="312" x2="704" y2="312" stroke="#004a85" stroke-width="3.5" stroke-linecap="round"/>
+<text x="650" y="332" text-anchor="middle" font-size="12.5" fill="#004a85">8-element array</text>
+
+<text x="650" y="358" text-anchor="middle" font-size="13" fill="#1a1a1a">x-axis: elapsed time</text>
+</svg>

@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L22 - Antenna Pattern Theory &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l22-antenna-pattern-theory">
+<h1>L22 - Antenna Pattern Theory<a class="headerlink" href="#l22-antenna-pattern-theory" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Antenna Pattern Theory</h1>
+<div class="title-rule"></div>
+<p>The array factor is not the antenna pattern.</p>
+<p>Lesson 22 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-2">
+<div class="wrap docutils container">
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L22-antenna-pattern-theory.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L22-antenna-pattern-theory.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L22-antenna-pattern-theory.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '6'">
+  <li>I can distinguish the array factor from the true antenna pattern and state what the element factor contributes.</li>
+  <li>I can apply pattern multiplication with a realistic patch element pattern to predict the full array pattern.</li>
+  <li>I can quantify scan loss — the element-pattern penalty for steering off broadside.</li>
+  <li>I can explain why measured sidelobe and backlobe structure departs from the array-factor prediction.</li>
+</ol>
+<div class="depth docutils container">
+<p>In Lesson 21 you measured the array factor and most of the numbers landed where
+theory said they would: a half-power beamwidth near <span class="math notranslate nohighlight">\(13^\circ\)</span>, a first null
+about <span class="math notranslate nohighlight">\(15^\circ\)</span> off the peak, and first sidelobes roughly 13 dB down. The parts
+that did not match are the subject of this lesson. Your steered peaks were a
+little low and a little short of the commanded angle, the sidelobes on the two
+sides of the beam were not the same height, and there was structure behind the
+array that the array factor says cannot exist. Each of those is the element
+pattern, the hardware, or the room showing up in the trace, and each of them is
+predictable.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-the-sweep-measures">
+<div class="wrap docutils container">
+<p class="rubric">What the sweep measures</p>
+<p>Every trace you have recorded on the PHASER is a <strong>received-power sweep</strong>: the
+software steps the commanded steer angle across the scan range, applies the
+phase ramp for each step, and records the power out of the beamformer while the
+HB100 source sits still. By reciprocity that trace follows the array’s pattern,
+but the x-axis is the commanded steer angle, not a measured arrival angle. What
+the array does with the incoming wave at each step is exactly what it would do
+to a transmitted wave, so the sweep is a legitimate way to read a pattern.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-pattern-is-a-product">
+<div class="wrap docutils container">
+<p class="rubric">The pattern is a product</p>
+<p>The quantity that sweep traces out is the full <strong>antenna pattern</strong>, and the
+array factor is only half of it. Lesson 16 established pattern multiplication
+for an array of identical elements,</p>
+<div class="math notranslate nohighlight">
+\[
+F(\theta) = EF(\theta)\ AF(\theta),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(AF(\theta)\)</span> carries the geometry and the phasing of the array and
+<span class="math notranslate nohighlight">\(EF(\theta)\)</span> carries the pattern of one element sitting in that array. Up to now
+we have compared measurements against <span class="math notranslate nohighlight">\(AF(\theta)\)</span> alone, and it held, because
+near broadside a patch radiates almost uniformly and <span class="math notranslate nohighlight">\(EF \approx 1\)</span> across the
+main lobe. The approximation fails as soon as you steer.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point">
+<div class="wrap docutils container">
+<p class="rubric">Key point</p>
+<div class="callout docutils container">
+<p>The array factor is not the antenna pattern. The array factor is what the
+element <em>positions and phases</em> contribute; the pattern is that product with the
+element’s own pattern. Everything the array factor gets wrong off broadside is
+the element factor.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-element-a-microstrip-patch">
+<div class="wrap docutils container">
+<p class="rubric">The element: a microstrip patch</p>
+<p>The eight radiators on the PHASER are <strong>microstrip patches</strong> over a continuous
+ground plane. A patch is a half-wavelength resonant cavity radiating from the
+two open edges, and the ground plane underneath it is large enough that almost
+nothing reaches the back. Two consequences follow, and both are visible in your
+data.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-ideal-element">
+<div class="wrap docutils container">
+<p class="rubric">The ideal element</p>
+<p>First, the element radiates into one hemisphere with a broad, smooth pattern
+whose peak is at broadside. Start with the <strong>ideal element</strong>, the one that
+collects exactly its share of the array’s aperture. Seen from an angle
+<span class="math notranslate nohighlight">\(\theta\)</span> off broadside, that share of aperture presents its projected area
+<span class="math notranslate nohighlight">\(A\cos\theta\)</span>, so the element gain follows the projected area:</p>
+<div class="math notranslate nohighlight">
+\[
+G_e(\theta) = G_e(0)\cos\theta \qquad (\text{power}),
+\]</div>
+<p>which is a field pattern of <span class="math notranslate nohighlight">\(\sqrt{\cos\theta}\)</span>. This is the
+<strong>projected-aperture rule</strong>, and it is the model the course uses for scan-loss
+numbers. It puts the element half-power points at <span class="math notranslate nohighlight">\(\pm 60^\circ\)</span> for a
+<span class="math notranslate nohighlight">\(120^\circ\)</span> beamwidth and gives an element directivity of <span class="math notranslate nohighlight">\(D_e = 4\)</span>, or
+6.0 dBi.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-a-real-patch-is-steeper">
+<div class="wrap docutils container">
+<p class="rubric">A real patch is steeper</p>
+<p>A real patch is steeper than the ideal element. Measured embedded elements roll
+off roughly as <span class="math notranslate nohighlight">\(\cos^{1.3}\theta\)</span> to <span class="math notranslate nohighlight">\(\cos^{1.5}\theta\)</span> in power, for
+beamwidths near <span class="math notranslate nohighlight">\(105^\circ\)</span> and directivities of 6.0 to 6.8 dBi. The practical
+consequence is one notch of extra loss at wide scan and nothing worth worrying
+about near broadside: the ideal rule and a <span class="math notranslate nohighlight">\(\cos^{1.4}\theta\)</span> element differ by
+0.3 dB at <span class="math notranslate nohighlight">\(30^\circ\)</span> and by about 1.2 dB at <span class="math notranslate nohighlight">\(60^\circ\)</span>. Use the ideal rule for
+predictions and expect measurements to sit between it and the steeper curve.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-element-pattern-ideal-vs-real">
+<div class="wrap docutils container">
+<p class="rubric">Element pattern: ideal vs. real</p>
+<p><img src="../../viz/img/L22-patch-element.svg"
+     alt="Ideal and steeper element power patterns over a ground plane, one hemisphere"
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-the-ground-plane-does">
+<div class="wrap docutils container">
+<p class="rubric">What the ground plane does</p>
+<p>Second, the ground plane removes the back hemisphere. That is why the PHASER
+scans over <span class="math notranslate nohighlight">\(\pm 90^\circ\)</span> and no further: there is no pattern behind the array
+to steer a beam into, and a commanded angle beyond <span class="math notranslate nohighlight">\(\pm 90^\circ\)</span> has no
+physical meaning for this aperture. It is also why any structure your sweep
+shows at large angles deserves suspicion. The pattern of a patch over a ground
+plane falls monotonically toward the horizon, so a bump at <span class="math notranslate nohighlight">\(\pm 80^\circ\)</span> is
+almost always energy arriving from a wall, a bench, or a person, not radiation
+out the back of the board.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-scan-loss">
+<div class="wrap docutils container">
+<p class="rubric">Scan loss</p>
+<p>Steering does not move the element pattern. The phase ramp moves the array
+factor, and the array factor then rides on a fixed element envelope. The array
+factor peaks at the commanded angle with a value of exactly 1, so the gain the
+array delivers in that direction is the element envelope evaluated there. The
+gain lost this way is called <strong>scan loss</strong>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-scan-loss-the-bookkeeping-step-1">
+<div class="wrap docutils container">
+<p class="rubric">Scan loss: the bookkeeping, step 1</p>
+<p>The bookkeeping is a sum in decibels. For <span class="math notranslate nohighlight">\(N\)</span> identical elements with uniform
+excitation, the array’s peak gain is the gain of one element times the number of
+elements, so</p>
+<div class="math notranslate nohighlight">
+\[
+G(\theta_0)\ [\text{dBi}] = G_e(\theta_0)\ [\text{dBi}] + 10\log_{10} N ,
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-scan-loss-the-bookkeeping-step-2">
+<div class="wrap docutils container">
+<p class="rubric">Scan loss: the bookkeeping, step 2</p>
+<p>and the element term carries the scan dependence. The projected-aperture rule is
+a power law, so it enters with a factor of ten:</p>
+<div class="math notranslate nohighlight">
+\[
+G_e(\theta_0) = G_e(0) + 10\log_{10}(\cos\theta_0) .
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-put-the-two-together-for-the-course-array">
+<div class="wrap docutils container">
+<p class="rubric">Put the two together for the course array</p>
+<p>Put the two together for the course array. The element contributes 6.0 dBi at
+broadside, the eight-element coherent sum contributes
+<span class="math notranslate nohighlight">\(10\log_{10} 8 = 9.0\ \text{dB}\)</span>, and the broadside gain is 15.0 dBi. Steer to
+<span class="math notranslate nohighlight">\(\theta_0 = 60^\circ\)</span> and the element term drops by
+<span class="math notranslate nohighlight">\(10\log_{10}(\cos 60^\circ) = -3.0\ \text{dB}\)</span>, leaving 12.0 dBi. The array
+gain term never changes, because the elements still add in phase; all of the
+loss is the element pattern.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-note-two-different-9-db-numbers">
+<div class="wrap docutils container">
+<p class="rubric">Note — two different 9 dB numbers</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This 9.0 dB of coherent array gain is not the 8.9 dB array-factor directivity
+from Lesson 20. That number measured the beam solid angle of the array factor
+alone, with isotropic elements; today’s <span class="math notranslate nohighlight">\(10\log_{10} N\)</span> counts the coherent
+sum over one real element. For elements that tile the aperture the two
+accountings agree to within 0.1 dB, which is why both appear in practice.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-steered-to-45">
+<div class="wrap docutils container">
+<p class="rubric">Worked example: steered to 45°</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — gain of the PHASER array steered to 45°</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>Work</p></th>
+<th class="head text-left"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Element gain, broadside</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(D_e = 4\)</span> for the ideal element</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(6.0\ \text{dBi}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Element penalty at <span class="math notranslate nohighlight">\(45^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(10\log_{10}(\cos 45^\circ)\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-1.5\ \text{dB}\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Array gain</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(10\log_{10} 8\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(+9.0\ \text{dB}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-steered-to-45-continued">
+<div class="wrap docutils container">
+<p class="rubric">Worked example: steered to 45°, continued</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — gain of the PHASER array steered to 45°, continued</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>Work</p></th>
+<th class="head text-left"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Steered peak gain</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(6.0 - 1.5 + 9.0\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.5\ \text{dBi}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Peak relative to broadside</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.5 - 15.0\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-1.5\ \text{dB}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A real patch element, steeper than the ideal, costs about 0.6 dB more at this
+angle, so a measured peak near <span class="math notranslate nohighlight">\(-2\)</span> dBc is the expected result.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-three-numbers-to-remember">
+<div class="wrap docutils container">
+<p class="rubric">Three numbers to remember</p>
+<p>Three numbers are worth memorizing, and they are the same three for any array
+built from aperture-like elements: steering to <span class="math notranslate nohighlight">\(30^\circ\)</span> costs 0.6 dB, to
+<span class="math notranslate nohighlight">\(45^\circ\)</span> costs 1.5 dB, and to <span class="math notranslate nohighlight">\(60^\circ\)</span> costs 3.0 dB. Lesson 20 gave you the
+other half of the story, <span class="math notranslate nohighlight">\(\theta_\text{HP} \approx 0.886\ \lambda/(Nd\cos\theta_0)\)</span>,
+so the array factor’s beam widens from <span class="math notranslate nohighlight">\(13.2^\circ\)</span> at broadside to <span class="math notranslate nohighlight">\(26.4^\circ\)</span>
+at <span class="math notranslate nohighlight">\(60^\circ\)</span>. Gain and beam shape degrade together: by <span class="math notranslate nohighlight">\(\pm 60^\circ\)</span> the array
+has lost 3 dB of gain for an ideal element, closer to 4 dB for a real patch, and
+half of its angular resolution. That is the origin of the
+<strong><span class="math notranslate nohighlight">\(\pm 60^\circ\)</span> practical scan limit</strong> quoted for patch arrays.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-beam-pulls-off-the-commanded-angle">
+<div class="wrap docutils container">
+<p class="rubric">The beam pulls off the commanded angle</p>
+<p>The beam shape degrades in a second way that the array factor alone does not
+predict. The envelope falls faster on the outboard side of the beam than on the
+inboard side, so the steered lobe becomes asymmetric, its peak pulls a few
+degrees toward broadside, and its measured half-power width comes out narrower
+than <span class="math notranslate nohighlight">\(0.886\ \lambda/(Nd\cos\theta_0)\)</span>. A <span class="math notranslate nohighlight">\(60^\circ\)</span> command on this array peaks
+at <span class="math notranslate nohighlight">\(56.8^\circ\)</span> with a <span class="math notranslate nohighlight">\(22.9^\circ\)</span> width, against the <span class="math notranslate nohighlight">\(26.4^\circ\)</span> the array
+factor predicts. The peak gain at that pulled-in peak is 0.2 dB better than the
+gain at the commanded angle, which is why scan loss is quoted at the command.</p>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-interactive-element-factor-times-array-factor">
+<div class="wrap docutils container">
+<p class="rubric">Interactive — element factor times array factor</p>
+<div class="depth docutils container">
+<p>The widget below multiplies the two curves for you. Set the element factor to
+isotropic and sweep the steer angle: the scan loss stays at 0 dB and the peak
+lands exactly on the commanded angle, which is the array factor you measured in
+Lesson 21. Switch to the ideal element and sweep again, and watch three things —
+the scan loss reading <span class="math notranslate nohighlight">\(-0.6\)</span>, <span class="math notranslate nohighlight">\(-1.5\)</span>, and <span class="math notranslate nohighlight">\(-3.0\)</span> dB at <span class="math notranslate nohighlight">\(30^\circ\)</span>, <span class="math notranslate nohighlight">\(45^\circ\)</span>,
+and <span class="math notranslate nohighlight">\(60^\circ\)</span>, the peak angle lagging the command, and the sidelobes on the far
+side of broadside dropping below their mirror images on the near side. The third
+setting is a real patch, steeper by about a decibel at wide scan.</p>
+</div>
+<iframe src="../../viz/element-pattern-multiplication.html"
+        width="100%" height="515"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Element factor times array factor for the eight-element course array">
+</iframe>
+</div>
+</div>
+<div class="frame docutils container" id="frame-note-why-the-inboard-sidelobe-reads-higher">
+<div class="wrap docutils container">
+<p class="rubric">Note — why the inboard sidelobe reads higher</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Sidelobe levels are quoted relative to the peak, and the element factor moves
+the peak. With the beam commanded to <span class="math notranslate nohighlight">\(30^\circ\)</span>, the array factor predicts
+<span class="math notranslate nohighlight">\(-12.8\)</span> dB for the first sidelobe on either side. The product puts the inboard
+sidelobe at <span class="math notranslate nohighlight">\(-12.2\)</span> dBc, higher than predicted, because the peak itself fell
+0.6 dB while that sidelobe sits near broadside where the envelope is flat. The
+outboard sidelobe at <span class="math notranslate nohighlight">\(59.6^\circ\)</span> lands at <span class="math notranslate nohighlight">\(-15.2\)</span> dBc. Nothing about the array
+factor changed; the reference did.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-else-separates-a-measured-pattern-from-the-prediction">
+<div class="wrap docutils container">
+<p class="rubric">What else separates a measured pattern from the prediction</p>
+<p>Pattern multiplication assumes every element has the same pattern and the same
+excitation. Four effects break that assumption, in roughly this order of size on
+an eight-element array.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-mutual-coupling">
+<div class="wrap docutils container">
+<p class="rubric">Mutual coupling</p>
+<p>Each patch is a few tenths of a wavelength from its
+neighbors, close enough that the field radiated by one element induces current
+on the others. The element therefore does not radiate the pattern it would in
+isolation, and it does not present the same input impedance either. The practical
+result is that the eight elements have slightly different embedded patterns and
+slightly different effective gains, which fills in nulls and raises far-out
+sidelobes by a decibel or two. Pattern multiplication uses one average element
+pattern for all eight and cannot represent the difference.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-edge-effects">
+<div class="wrap docutils container">
+<p class="rubric">Edge effects</p>
+<p>Coupling is not the same for every element, because the two
+end elements have a neighbor on one side only. On an eight-element array that is
+a quarter of the aperture behaving differently from the middle, which is enough
+to make the two halves of a measured pattern unequal even with a perfectly
+symmetric taper. Large arrays hide this; small ones do not.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-amplitude-and-phase-errors">
+<div class="wrap docutils container">
+<p class="rubric">Amplitude and phase errors</p>
+<p>The ADAR1000 sets phase in <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> steps
+and gain in finite steps, the cables and traces are not identical lengths, and
+the calibration is only as good as the day it was run. Random errors of a few
+degrees and a few tenths of a decibel raise the sidelobe floor and limit how
+deep a null can be made. Lesson 26 treats the quantization and squint parts of
+this quantitatively.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-measurement-environment">
+<div class="wrap docutils container">
+<p class="rubric">The measurement environment</p>
+<p>The lab is not an anechoic chamber. Energy
+reflects off benches, walls, and people, arrives at the array from directions
+the source is not in, and adds to whatever the pattern is doing there. The
+effect is largest where the true pattern is weakest, which is why far-out
+sidelobes and any apparent backlobe are the least trustworthy parts of a trace.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-range-must-be-long-enough">
+<div class="wrap docutils container">
+<p class="rubric">The range must be long enough</p>
+<p>The range also has to be long enough. From Module 1, the far-field distance is
+<span class="math notranslate nohighlight">\(r \ge 2D^2/\lambda\)</span> with <span class="math notranslate nohighlight">\(D\)</span> the largest aperture dimension; for the course
+array, <span class="math notranslate nohighlight">\(D = 98\ \text{mm}\)</span> between the outer element centers and
+<span class="math notranslate nohighlight">\(\lambda = 29.1\ \text{mm}\)</span> at 10.3 GHz, so</p>
+<div class="math notranslate nohighlight">
+\[
+r \ge \frac{2(0.098\ \text{m})^2}{0.0291\ \text{m}} = 0.66\ \text{m} .
+\]</div>
+<p>The 1 m separation used in the lab clears that with room to spare, so the
+curvature of the incoming wavefront costs less than the <span class="math notranslate nohighlight">\(22.5^\circ\)</span> of edge
+phase error the criterion allows.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-reading-a-real-trace">
+<div class="wrap docutils container">
+<p class="rubric">Reading a real trace</p>
+<p>Lesson 23 rotates the array mechanically in front of the source and records the
+true pattern, then compares it to the electronic sweep. Both traces should show
+the same main lobe, and both will disagree with the array-factor prediction in
+the same places. The figure below is what to expect for a beam commanded to
+<span class="math notranslate nohighlight">\(30^\circ\)</span>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-predicted-pattern-vs-what-a-measurement-should-show">
+<div class="wrap docutils container">
+<p class="rubric">Predicted pattern vs. what a measurement should show</p>
+<p><img src="../../viz/img/L22-measured-vs-predicted.svg"
+     alt="Predicted element-times-array pattern compared with the sweep a measurement is expected to produce"
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-three-zones-to-read">
+<div class="wrap docutils container">
+<p class="rubric">Three zones to read</p>
+<p>Read it in three zones. The main lobe and the first sidelobes on either side are
+where the prediction holds: peak angle within a couple of degrees,
+half-power width within a degree or two of theory, and first sidelobes within
+about 1 dB. The middle sidelobes are recognizable but not quantitative, since
+coupling and element differences have moved them around. Everything below about
+23 dB down is the sweep’s noise floor, and a null that reads <span class="math notranslate nohighlight">\(-24\)</span> dBc tells you
+only that the null is deeper than the floor.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-two-mechanical-effects-not-antenna-effects">
+<div class="wrap docutils container">
+<p class="rubric">Two mechanical effects, not antenna effects</p>
+<p>Two mechanical facts also show up. The sweep steps in <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> increments,
+so a peak or a null can only be reported to the nearest grid point, which is
+worth 1 to 3 degrees of apparent error in beamwidth all by itself. And when the
+array is rotated by hand, the angle axis is only as good as the protractor: a
+uniform offset of a degree or two shifts the whole trace sideways without
+changing its shape. A trace whose shape matches theory but whose peak sits at
+<span class="math notranslate nohighlight">\(31.8^\circ\)</span> for a <span class="math notranslate nohighlight">\(30^\circ\)</span> command is a fixture problem, not an antenna
+problem.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-pattern-and-element">
+<div class="wrap docutils container">
+<p class="rubric">Summary — pattern and element</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(F(\theta) = EF(\theta)\ AF(\theta)\)</span></p></td>
+<td class="text-left"><p>pattern multiplication</p></td>
+<td class="text-left"><p>the pattern is the product, never the array factor alone</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(G_e(\theta) = G_e(0)\cos\theta\)</span></p></td>
+<td class="text-left"><p>ideal element, projected-aperture rule</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(120^\circ\)</span> beamwidth, <span class="math notranslate nohighlight">\(D_e = 4\)</span> (6.0 dBi)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Ground plane</p></td>
+<td class="text-left"><p>removes the back hemisphere</p></td>
+<td class="text-left"><p>scan range <span class="math notranslate nohighlight">\(\pm 90^\circ\)</span>; a backlobe in the trace is the room</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-scan-loss-and-gain-bookkeeping">
+<div class="wrap docutils container">
+<p class="rubric">Summary — scan loss and gain bookkeeping</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Scan loss</p></td>
+<td class="text-left"><p>gain at the commanded angle, rel. broadside</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-0.6\)</span>, <span class="math notranslate nohighlight">\(-1.5\)</span>, <span class="math notranslate nohighlight">\(-3.0\)</span> dB at <span class="math notranslate nohighlight">\(30^\circ\)</span>, <span class="math notranslate nohighlight">\(45^\circ\)</span>, <span class="math notranslate nohighlight">\(60^\circ\)</span>; about 1 dB more for a real patch</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>dB bookkeeping</p></td>
+<td class="text-left"><p>element gain plus array gain</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(6.0 + 9.0 = 15.0\)</span> dBi at broadside</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Beam pulling</p></td>
+<td class="text-left"><p>product peak sits inboard of the command</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(56.8^\circ\)</span> measured for a <span class="math notranslate nohighlight">\(60^\circ\)</span> command</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-errors-and-the-range">
+<div class="wrap docutils container">
+<p class="rubric">Summary — errors and the range</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Coupling and edges</p></td>
+<td class="text-left"><p>elements are not identical in-array</p></td>
+<td class="text-left"><p>fills nulls, moves far sidelobes 1-2 dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(r \ge 2D^2/\lambda\)</span></p></td>
+<td class="text-left"><p>far-field distance, <span class="math notranslate nohighlight">\(D = 98\ \text{mm}\)</span></p></td>
+<td class="text-left"><p>0.66 m at 10.3 GHz; the 1 m range clears it</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Sweep noise floor</p></td>
+<td class="text-left"><p>where the prediction stops being testable</p></td>
+<td class="text-left"><p>about 23 dB below the peak</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a href="../../practice/ECE444_L22_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a href="../../practice/ECE444_L22_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where this is going</p>
+<p>Lesson 23 puts this to the test. You will measure the array’s pattern two ways —
+the electronic sweep you already know, and a mechanical rotation of the whole
+board in front of a fixed source — and compare both against an array-factor
+prediction and an element-times-array prediction. The scan loss, the peak
+pulling, and the asymmetric sidelobes in this lesson are the specific things
+that separate the two predictions, so bring the numbers with you.</p>
+<div class="depth docutils container">
+<p>After that, Lesson 24 stops treating the sidelobes as something to explain and
+starts treating them as something to design. Tapering the element amplitudes
+trades beamwidth and peak gain for sidelobe suppression, and the trade is
+quantitative. Before the next class, review your Lesson 21 measurement table and
+mark every place where a measured number sat outside the tolerance you expected,
+since those are the rows this lesson has now explained.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L22-antenna-pattern-theory"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

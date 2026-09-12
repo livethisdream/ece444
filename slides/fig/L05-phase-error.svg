@@ -1,0 +1,44 @@
+<svg viewBox="0 0 790 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A spherical wavefront from a distant point source arrives at an aperture of size D: the edge of the aperture is an extra path length delta beyond the wavefront that has just reached the centre">
+<defs>
+<marker id="pe5Red" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>
+<marker id="pe5Navy" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
+<marker id="pe5Grey" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker>
+</defs>
+
+<!-- rays from the source to the aperture -->
+<line x1="60" y1="155" x2="620" y2="50" stroke="#b9d2e5" stroke-width="1.3" stroke-dasharray="5 4"/>
+<line x1="60" y1="155" x2="620" y2="260" stroke="#b9d2e5" stroke-width="1.3" stroke-dasharray="5 4"/>
+<line x1="60" y1="155" x2="620" y2="155" stroke="#b9d2e5" stroke-width="1.3"/>
+
+<!-- spherical wavefronts marching out (curvature exaggerated) -->
+<path d="M356.9 50 A250 250 0 0 1 356.9 260" fill="none" stroke="#b01e24" stroke-width="2.2" opacity="0.28"/>
+<path d="M476.9 50 A250 250 0 0 1 476.9 260" fill="none" stroke="#b01e24" stroke-width="2.2" opacity="0.28"/>
+<path d="M596.9 50 A250 250 0 0 1 596.9 260" fill="none" stroke="#b01e24" stroke-width="2.6"/>
+<text x="330" y="40" text-anchor="middle" font-size="15" font-weight="700" fill="#b01e24">spherical wavefront</text>
+
+<!-- the source -->
+<circle cx="60" cy="155" r="6" fill="#004a85"/>
+<text x="60" y="184" text-anchor="middle" font-size="13" fill="#5a5a5a">point source</text>
+
+<!-- the aperture -->
+<line x1="620" y1="50" x2="620" y2="260" stroke="#004a85" stroke-width="7" stroke-linecap="round"/>
+<circle cx="620" cy="155" r="3.6" fill="#ffffff"/>
+<text x="620" y="284" text-anchor="middle" font-size="14" font-weight="700" fill="#004a85">aperture</text>
+<line x1="662" y1="50" x2="662" y2="260" stroke="#004a85" stroke-width="1.4" marker-start="url(#pe5Navy)" marker-end="url(#pe5Navy)"/>
+<text x="678" y="161" font-size="18" font-style="italic" fill="#004a85">D</text>
+
+<!-- the path error at the edge -->
+<line x1="597" y1="50" x2="620" y2="50" stroke="#b01e24" stroke-width="2" marker-start="url(#pe5Red)" marker-end="url(#pe5Red)"/>
+<text x="604" y="36" text-anchor="middle" font-size="18" font-style="italic" fill="#b01e24">&#916;</text>
+<text x="784" y="34" text-anchor="end" font-size="12.5" font-weight="700" fill="#b01e24">extra path to the edge</text>
+
+<!-- the tolerance, in words -->
+<text x="300" y="284" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d7a4d">flat enough when the edge lags the centre</text>
+<text x="300" y="302" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1d7a4d">by no more than 22.5 degrees of phase</text>
+
+<!-- range ruler -->
+<line x1="60" y1="326" x2="330" y2="326" stroke="#5a5a5a" stroke-width="1.3" marker-start="url(#pe5Grey)"/>
+<line x1="470" y1="326" x2="620" y2="326" stroke="#5a5a5a" stroke-width="1.3" marker-end="url(#pe5Grey)"/>
+<text x="400" y="331" text-anchor="middle" font-size="13" fill="#5a5a5a">distance r</text>
+<text x="784" y="331" text-anchor="end" font-size="12" fill="#5a5a5a">curvature exaggerated</text>
+</svg>

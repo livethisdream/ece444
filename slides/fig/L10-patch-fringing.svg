@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 340" role="img" aria-label="Side view of a microstrip patch: the cavity field points down at one open edge and up at the other, the fringing fields at the two edges have horizontal parts pointing the same way, and the antenna radiates broadside">
+<defs>
+<marker id="pf10" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
+<marker id="pf10b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0067b9"/></marker>
+<marker id="pf10r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8a5a00"/></marker>
+<marker id="pf10g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#3f7d34"/></marker>
+<pattern id="pf10h" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+  <line x1="0" y1="0" x2="0" y2="9" stroke="#004a85" stroke-width="1.4" opacity="0.5"/>
+</pattern>
+</defs>
+
+<!-- broadside -->
+<line x1="260" y1="120" x2="260" y2="52" stroke="#3f7d34" stroke-width="3" marker-end="url(#pf10g)"/>
+<text x="274" y="70" fill="#3f7d34" font-size="17" font-weight="700">broadside</text>
+
+<!-- the horizontal parts that add -->
+<line x1="98" y1="146" x2="152" y2="146" stroke="#8a5a00" stroke-width="3" marker-end="url(#pf10r)"/>
+<line x1="368" y1="146" x2="422" y2="146" stroke="#8a5a00" stroke-width="3" marker-end="url(#pf10r)"/>
+<text x="260" y="142" text-anchor="middle" fill="#8a5a00" font-size="16" font-weight="700">same direction</text>
+<text x="260" y="162" text-anchor="middle" fill="#8a5a00" font-size="16" font-weight="700">so they add</text>
+
+<!-- substrate -->
+<rect x="40" y="196" width="440" height="38" fill="rgba(0,103,185,0.07)" stroke="#cddce9" stroke-width="1.8"/>
+<text x="260" y="222" text-anchor="middle" fill="#5b6573" font-size="17" font-style="italic">&#949;<tspan font-size="12" dy="4">r</tspan></text>
+
+<!-- ground plane -->
+<line x1="40" y1="234" x2="480" y2="234" stroke="#004a85" stroke-width="4.5"/>
+<rect x="40" y="234" width="440" height="12" fill="url(#pf10h)"/>
+<text x="480" y="268" text-anchor="end" fill="#004a85" font-size="15" font-weight="700">ground plane</text>
+
+<!-- patch conductor -->
+<line x1="110" y1="196" x2="410" y2="196" stroke="#004a85" stroke-width="6.5" stroke-linecap="round"/>
+<text x="260" y="186" text-anchor="middle" fill="#004a85" font-size="15" font-weight="700">patch</text>
+
+<!-- the cavity standing wave: down at one edge, up at the other -->
+<line x1="142" y1="202" x2="142" y2="228" stroke="#0067b9" stroke-width="2.4" marker-end="url(#pf10b)"/>
+<line x1="172" y1="204" x2="172" y2="226" stroke="#0067b9" stroke-width="1.8" marker-end="url(#pf10b)" opacity="0.6"/>
+<line x1="378" y1="228" x2="378" y2="202" stroke="#0067b9" stroke-width="2.4" marker-end="url(#pf10b)"/>
+<line x1="348" y1="226" x2="348" y2="204" stroke="#0067b9" stroke-width="1.8" marker-end="url(#pf10b)" opacity="0.6"/>
+
+<!-- fringing arcs -->
+<path d="M108 193 C 68 178 52 216 62 234" fill="none" stroke="#b01e24" stroke-width="2.6"/>
+<path d="M108 188 C 52 164 30 216 44 244" fill="none" stroke="#b01e24" stroke-width="2" opacity="0.6"/>
+<path d="M412 193 C 452 178 468 216 458 234" fill="none" stroke="#b01e24" stroke-width="2.6"/>
+<path d="M412 188 C 468 164 490 216 476 244" fill="none" stroke="#b01e24" stroke-width="2" opacity="0.6"/>
+
+<!-- h dimension -->
+<line x1="88" y1="196" x2="88" y2="234" stroke="#004a85" stroke-width="1.6" marker-start="url(#pf10)" marker-end="url(#pf10)"/>
+<text x="78" y="218" text-anchor="end" fill="#004a85" font-size="20" font-weight="700" font-style="italic">h</text>
+
+<!-- slot callouts -->
+<text x="40" y="300" fill="#b01e24" font-size="16" font-weight="700">slot 1</text>
+<text x="480" y="300" text-anchor="end" fill="#b01e24" font-size="16" font-weight="700">slot 2</text>
+<line x1="62" y1="288" x2="62" y2="252" stroke="#b01e24" stroke-width="1.4" stroke-dasharray="3 3"/>
+<line x1="458" y1="288" x2="458" y2="252" stroke="#b01e24" stroke-width="1.4" stroke-dasharray="3 3"/>
+<text x="260" y="322" text-anchor="middle" fill="#b01e24" font-size="16" font-weight="700">the fringing fields are the radiators</text>
+</svg>

@@ -1,0 +1,27 @@
+<svg viewBox="20 40 432 158" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A receiving antenna in an incident field is equivalent to a Thevenin source V_oc with radiation resistance R_rad driving a conjugate-matched load equal to R_rad">
+<defs>
+<marker id="rcR" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>
+</defs>
+<line x1="34" y1="72" x2="34" y2="188" stroke="#b01e24" stroke-width="2.2" marker-start="url(#rcR)" marker-end="url(#rcR)"/>
+<line x1="60" y1="72" x2="60" y2="188" stroke="#b01e24" stroke-width="2.2" marker-start="url(#rcR)" marker-end="url(#rcR)"/>
+<line x1="86" y1="72" x2="86" y2="188" stroke="#b01e24" stroke-width="2.2" marker-start="url(#rcR)" marker-end="url(#rcR)"/>
+<text x="60" y="58" fill="#b01e24" font-size="18" font-weight="700" text-anchor="middle">E</text>
+<line x1="128" y1="74" x2="128" y2="122" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
+<line x1="128" y1="138" x2="128" y2="186" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
+<circle cx="128" cy="122" r="3.4" fill="#004a85"/>
+<circle cx="128" cy="138" r="3.4" fill="#004a85"/>
+<text x="176" y="140" fill="#5a5a5a" font-size="26" text-anchor="middle">≡</text>
+<circle cx="250" cy="130" r="22" fill="#ffffff" stroke="#004a85" stroke-width="2"/>
+<line x1="250" y1="118" x2="250" y2="126" stroke="#004a85" stroke-width="1.6"/>
+<line x1="246" y1="122" x2="254" y2="122" stroke="#004a85" stroke-width="1.6"/>
+<line x1="246" y1="138" x2="254" y2="138" stroke="#004a85" stroke-width="1.6"/>
+<text x="222" y="135" fill="#004a85" font-size="15" font-style="italic" text-anchor="end">V<tspan dy="4" font-size="11">oc</tspan></text>
+<path d="M250 108 L250 80 L305 80" fill="none" stroke="#004a85" stroke-width="1.6"/>
+<rect x="305" y="72" width="52" height="16" fill="#ffffff" stroke="#004a85" stroke-width="1.6"/>
+<text x="331" y="66" fill="#004a85" font-size="15" font-style="italic" text-anchor="middle">R<tspan dy="4" font-size="11">rad</tspan></text>
+<path d="M357 80 L410 80 L410 106" fill="none" stroke="#004a85" stroke-width="1.6"/>
+<rect x="402" y="106" width="16" height="48" fill="#ffffff" stroke="#004a85" stroke-width="1.6"/>
+<text x="394" y="130" fill="#004a85" font-size="15" font-style="italic" text-anchor="end">R<tspan dy="4" font-size="11">L</tspan><tspan dy="-4" font-size="15"> = R</tspan><tspan dy="4" font-size="11">rad</tspan></text>
+<text x="394" y="150" fill="#5a5a5a" font-size="11" text-anchor="end">conjugate match</text>
+<path d="M410 154 L410 180 L250 180 L250 152" fill="none" stroke="#004a85" stroke-width="1.6"/>
+</svg>

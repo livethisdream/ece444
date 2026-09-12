@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Array factor vs. measured sweep</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif;
+              color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:12px; box-sizing:border-box; }
+  canvas { display:block; width:100%; box-sizing:border-box; background:#fff;
+           border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge);
+              border-radius:6px; }
+  .controls .ctl { white-space:nowrap; font-size:12.5px; color:var(--ink3); font-weight:700;
+                   text-transform:uppercase; letter-spacing:0.05em; }
+  .controls .ctl .val { color:var(--navy); }
+  .controls select { font:600 12.5px/1.2 Inter,system-ui,sans-serif; color:var(--navy);
+                     background:#fff; border:1px solid var(--edge2); border-radius:4px;
+                     padding:6px 8px; max-width:100%; }
+  .controls label.tog { display:inline-flex; align-items:center; gap:7px; cursor:pointer;
+                        font-size:12.5px; font-weight:700; text-transform:uppercase;
+                        letter-spacing:0.05em; color:var(--ink3); }
+  .controls label.tog input { width:15px; height:15px; accent-color:#0067b9; cursor:pointer; }
+  .controls .note { color:var(--ink3); font-size:11.5px; font-weight:400;
+                    text-transform:none; letter-spacing:0; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvas above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.grn { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.grn .v { color:var(--grn); }
+  .ro.red { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.red .v { color:var(--red); }
+  .ro.amb { background:rgba(138,90,0,0.12); border-color:rgba(138,90,0,0.30); }
+  .ro.amb .v { color:var(--amber); }
+  .cap { font-size:11.5px; color:var(--ink3); line-height:1.5; margin:0; }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" aria-label="Array factor and measured beam sweep in decibels versus steer angle"></canvas>
+
+  <div class="controls">
+    <span class="ctl">Active elements</span>
+    <select id="preset" aria-label="Active elements">
+      <option value="8" selected>All 8 (Rx1-Rx8)</option>
+      <option value="4">Center 4 (Rx3-Rx6)</option>
+      <option value="2">Center 2 (Rx4, Rx5)</option>
+    </select>
+    <label class="tog"><input type="checkbox" id="meas"> Measurement effects</label>
+    <span class="note">2.8125&deg; sweep grid, &minus;23 dBc floor, receiver noise.</span>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">peak</span><span class="v" id="r-peak">&mdash;</span></div>
+    <div class="ro grn"><span class="k">HPBW</span><span class="v" id="r-hpbw">&mdash;</span></div>
+    <div class="ro red"><span class="k">FNBW</span><span class="v" id="r-fnbw">&mdash;</span></div>
+    <div class="ro amb"><span class="k">first SLL</span><span class="v" id="r-sll">&mdash;</span></div>
+  </div>
+
+  <p class="cap">Every number is read off the drawn trace, the way it is read off the
+     Rectangular tab &mdash; not from a formula.</p>
+</div>
+
+<script>
+'use strict';
+
+// ---------- array constants (PHASER at the workshop frequency) ----------
+const LAM = 29.1e-3;                 // 10.3 GHz
+const DEL = 14e-3;                   // element spacing
+const KD  = 2 * Math.PI * DEL / LAM; // k*d  = 3.0225 rad
+const NEL = 8;
+const STEP     = 2.8125;             // sweep step = ADAR1000 phase LSB, deg
+const FLOOR_DB = -23.0;              // noise floor, dB below the 8-element peak
+const LOOKS    = 20;                 // power averages the GUI takes per sweep step
+const SEED     = 6618;               // fixed noise realization, so readings repeat
+const YMIN = -40, YMAX = 3;
+
+const PRESETS = {
+  8: [1,1,1,1,1,1,1,1],
+  4: [0,0,1,1,1,1,0,0],
+  2: [0,0,0,1,1,0,0,0]
+};
+
+const state = { n: 8, meas: false };
+
+// ---------- honest element sum: normalized so the 8-element peak = 1 ----------
+function afComplex(thetaDeg, w) {
+  const s = Math.sin(thetaDeg * Math.PI / 180);
+  let re = 0, im = 0;
+  for (let n = 0; n < NEL; n++) {
+    if (!w[n]) continue;
+    const ph = KD * (n - (NEL - 1) / 2) * s;
+    re += Math.cos(ph); im += Math.sin(ph);
+  }
+  return [re / NEL, im / NEL];
+}
+
+// ---------- seeded noise, so the readouts read the same on every machine ----------
+function LCG(seed) {
+  let s = seed >>> 0;
+  return function () { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return (s + 0.5) / 4294967296; };
+}
+function gaussPair(rnd) {
+  const r = Math.sqrt(-2 * Math.log(rnd())), a = 2 * Math.PI * rnd();
+  return [r * Math.cos(a), r * Math.sin(a)];
+}
+
+function idealTrace(w) {
+  const xs = [], ys = [];
+  for (let t = -90; t <= 90.0001; t += 0.05) {
+    const [re, im] = afComplex(t, w);
+    xs.push(t); ys.push(10 * Math.log10(Math.max(re * re + im * im, 1e-9)));
+  }
+  return { xs: xs, ys: ys };
+}
+
+function measTrace(w) {
+  const rnd = LCG(SEED), sg = Math.sqrt(Math.pow(10, FLOOR_DB / 10) / 2);
+  const xs = [], ys = [];
+  const nSteps = Math.round(180 / STEP);
+  for (let i = 0; i <= nSteps; i++) {
+    const t = -90 + i * STEP;
+    const [re, im] = afComplex(t, w);
+    let acc = 0;
+    for (let k = 0; k < LOOKS; k++) {
+      const [g1, g2] = gaussPair(rnd);
+      acc += (re + g1 * sg) * (re + g1 * sg) + (im + g2 * sg) * (im + g2 * sg);
+    }
+    xs.push(t); ys.push(10 * Math.log10(Math.max(acc / LOOKS, 1e-12)));
+  }
+  return { xs: xs, ys: ys };
+}
+
+// ---------- read the metrics off whichever trace is drawn ----------
+function metrics(tr) {
+  const xs = tr.xs, ys = tr.ys;
+  let ip = 0;
+  for (let i = 1; i < ys.length; i++) if (ys[i] > ys[ip]) ip = i;
+  const pk = ys[ip];
+  const half = pk - 3.0103;
+
+  function cross(d) {                       // -3 dB crossing, interpolated in dB
+    let i = ip;
+    while (i + d >= 0 && i + d < ys.length) {
+      if (ys[i + d] <= half) {
+        const y0 = ys[i], y1 = ys[i + d];
+        const f = (y0 === y1) ? 0 : (y0 - half) / (y0 - y1);
+        return { ang: xs[i] + f * (xs[i + d] - xs[i]), idx: i };
+      }
+      i += d;
+    }
+    return null;
+  }
+  const L = cross(-1), R = cross(1);
+  const hpbw = (L && R) ? R.ang - L.ang : null;
+
+  function outward(d) {                     // first null, then first sidelobe
+    let i = ip;
+    while (i + d >= 0 && i + d < ys.length && ys[i + d] > half) i += d;
+    let got = false;
+    while (i + d > 0 && i + d < ys.length - 1) {
+      i += d;
+      if (ys[i] <= ys[i - 1] && ys[i] < ys[i + 1]) { got = true; break; }
+    }
+    if (!got || ys[i] > pk - 12) return { nullAng: null, nullDb: null, sllDb: null, sllAng: null };
+    const nullAng = xs[i], nullDb = ys[i];
+    let j = i, got2 = false;
+    while (j + d > 0 && j + d < ys.length - 1) {
+      j += d;
+      if (ys[j] >= ys[j - 1] && ys[j] > ys[j + 1]) { got2 = true; break; }
+    }
+    if (!got2 || ys[j] - nullDb < 4) return { nullAng: nullAng, nullDb: nullDb, sllDb: null, sllAng: null };
+    return { nullAng: nullAng, nullDb: nullDb, sllDb: ys[j] - pk, sllAng: xs[j] };
+  }
+  const a = outward(-1), b = outward(1);
+  const fnbw = (a.nullAng !== null && b.nullAng !== null) ? b.nullAng - a.nullAng : null;
+  const sl = [a, b].filter(function (o) { return o.sllDb !== null; });
+  sl.sort(function (p, q) { return q.sllDb - p.sllDb; });
+
+  return {
+    pk: pk, ipk: ip, hpbw: hpbw, half: half,
+    left: L ? L.ang : null, right: R ? R.ang : null,
+    fnbw: fnbw, nullL: a.nullAng, nullR: b.nullAng,
+    nullDb: (a.nullDb !== null && b.nullDb !== null) ? Math.max(a.nullDb, b.nullDb) : (a.nullDb !== null ? a.nullDb : b.nullDb),
+    sllDb: sl.length ? sl[0].sllDb : null,
+    sllAng: sl.length ? sl[0].sllAng : null
+  };
+}
+
+// ---------- canvas ----------
+const cv = document.getElementById('plot');
+const ctx = cv.getContext('2d');
+const SANS = "Inter, system-ui, -apple-system, sans-serif";
+function stext(s, x, y, px, color, align, bold, baseline) {
+  ctx.fillStyle = color;
+  ctx.font = (bold ? '700 ' : '') + px + 'px ' + SANS;
+  ctx.textAlign = align || 'left';
+  ctx.textBaseline = baseline || 'middle';
+  ctx.fillText(s, x, y);
+}
+
+let W = 0, H = 0, PAD = null;
+
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:430px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+function sizeCanvas() {
+  const cssW = cv.getBoundingClientRect().width || 700;
+  const cssH = SQ(Math.max(190, Math.min(250, Math.round(cssW * 0.34))));
+  cv.style.height = cssH + 'px';
+  const dpr = window.devicePixelRatio || 1;
+  cv.width  = Math.round(cssW * dpr);
+  cv.height = Math.round(cssH * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  W = cssW; H = cssH;
+  const narrow = cssW < 430;
+  PAD = { l: narrow ? 38 : 48, r: narrow ? 10 : 14, t: narrow ? 30 : 34, b: narrow ? 36 : 42 };
+}
+
+const X = t => PAD.l + (t + 90) / 180 * (W - PAD.l - PAD.r);
+const Y = d => PAD.t + (YMAX - d) / (YMAX - YMIN) * (H - PAD.t - PAD.b);
+
+function drawAll() {
+  sizeCanvas();
+  const w = PRESETS[state.n];
+  const ideal = idealTrace(w);
+  const meas  = state.meas ? measTrace(w) : null;
+  const m = metrics(meas || ideal);
+  const narrow = W < 430;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // --- grid ---
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = '#e6eef5';
+  for (let d = YMIN; d <= YMAX; d += 10) {
+    ctx.beginPath(); ctx.moveTo(PAD.l, Y(d)); ctx.lineTo(W - PAD.r, Y(d)); ctx.stroke();
+    stext(String(d), PAD.l - 6, Y(d), narrow ? 9.5 : 10.5, '#8792a2', 'right');
+  }
+  for (let t = -90; t <= 90; t += 30) {
+    ctx.beginPath(); ctx.moveTo(X(t), PAD.t); ctx.lineTo(X(t), H - PAD.b); ctx.stroke();
+    stext(String(t), X(t), H - PAD.b + 11, narrow ? 9.5 : 10.5, '#8792a2', 'center');
+  }
+  ctx.strokeStyle = '#9fb1c4';
+  ctx.strokeRect(PAD.l, PAD.t, W - PAD.l - PAD.r, H - PAD.t - PAD.b);
+
+  // axis titles: words and units in the sans font, the symbol in MathJax
+  const xl = H - PAD.b + (narrow ? 25 : 29);
+  const fs = narrow ? 10 : 11;
+  ctx.font = fs + 'px ' + SANS;
+  const w1 = ctx.measureText('Steer angle ').width;
+  const w2 = ctx.measureText('  (deg)').width;
+  const wt = MJ.width('\\theta', '#5b6573', fs);
+  const x0 = W / 2 - (w1 + wt + w2) / 2;
+  stext('Steer angle ', x0, xl, fs, '#5b6573', 'left');
+  MJ.draw(ctx, '\\theta', x0 + w1, xl, fs, '#5b6573', 'left');
+  stext('  (deg)', x0 + w1 + wt, xl, fs, '#5b6573', 'left');
+  ctx.save();
+  ctx.translate(narrow ? 11 : 13, (PAD.t + H - PAD.b) / 2);
+  ctx.rotate(-Math.PI / 2);
+  stext('Received power  (dB)', 0, 0, narrow ? 10 : 11, '#5b6573', 'center');
+  ctx.restore();
+
+  // --- noise floor line, only when it is part of the measurement ---
+  if (state.meas) {
+    ctx.save();
+    ctx.setLineDash([4, 4]); ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(138,90,0,0.55)';
+    ctx.beginPath(); ctx.moveTo(PAD.l, Y(FLOOR_DB)); ctx.lineTo(W - PAD.r, Y(FLOOR_DB)); ctx.stroke();
+    ctx.restore();
+    stext('noise floor', W - PAD.r - 10, Y(FLOOR_DB) + (narrow ? 8 : 9),
+          narrow ? 9 : 10, '#8a5a00', 'right');
+  }
+
+  // --- ideal array factor ---
+  ctx.beginPath();
+  ctx.lineWidth = state.meas ? 1.1 : 2.2;
+  ctx.strokeStyle = state.meas ? 'rgba(0,74,133,0.42)' : '#004a85';
+  let pen = false;
+  for (let i = 0; i < ideal.xs.length; i++) {
+    const d = ideal.ys[i];
+    if (d < YMIN - 2) { pen = false; continue; }
+    const px = X(ideal.xs[i]), py = Y(Math.max(d, YMIN - 1));
+    if (!pen) { ctx.moveTo(px, py); pen = true; } else ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+
+  // --- measured samples: steps + dots ---
+  if (meas) {
+    ctx.beginPath();
+    ctx.lineWidth = 2.4; ctx.strokeStyle = '#0067b9';
+    ctx.lineJoin = 'round';
+    for (let i = 0; i < meas.xs.length; i++) {
+      const px = X(meas.xs[i]), py = Y(Math.max(meas.ys[i], YMIN));
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.fillStyle = '#004a85';
+    for (let i = 0; i < meas.xs.length; i++) {
+      ctx.beginPath();
+      ctx.arc(X(meas.xs[i]), Y(Math.max(meas.ys[i], YMIN)), narrow ? 1.7 : 2.3, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+  }
+
+  // --- HPBW span at the -3 dB level ---
+  if (m.left !== null && m.right !== null) {
+    const y = Y(m.half);
+    ctx.strokeStyle = '#3f7d34'; ctx.fillStyle = '#3f7d34'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(X(m.left), y); ctx.lineTo(X(m.right), y); ctx.stroke();
+    [m.left, m.right].forEach(function (t) {
+      ctx.beginPath(); ctx.moveTo(X(t), y - 5); ctx.lineTo(X(t), y + 5); ctx.stroke();
+    });
+    stext('HPBW', X(m.right) + 7, y, narrow ? 9.5 : 10.5, '#3f7d34', 'left', true);
+  }
+
+  // --- FNBW span, drawn low so it does not collide with the main lobe ---
+  if (m.nullL !== null && m.nullR !== null) {
+    const y = Y(YMIN + 4.5);
+    ctx.strokeStyle = '#b01e24'; ctx.fillStyle = '#b01e24'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(X(m.nullL), y); ctx.lineTo(X(m.nullR), y); ctx.stroke();
+    [m.nullL, m.nullR].forEach(function (t) {
+      ctx.beginPath(); ctx.moveTo(X(t), y - 5); ctx.lineTo(X(t), y + 5); ctx.stroke();
+    });
+    stext('FNBW', (X(m.nullL) + X(m.nullR)) / 2, y - 10, narrow ? 9.5 : 10.5, '#b01e24', 'center', true);
+  }
+
+  // --- first sidelobe marker ---
+  if (m.sllDb !== null && m.sllAng !== null) {
+    const px = X(m.sllAng), py = Y(m.pk + m.sllDb);
+    ctx.strokeStyle = '#8a5a00'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(px, py, narrow ? 4 : 5, 0, 2 * Math.PI); ctx.stroke();
+    stext('1st SLL', px, py - (narrow ? 12 : 14), narrow ? 9.5 : 10.5, '#8a5a00', 'center', true);
+  }
+
+  // --- active-aperture strip, top-left inside the frame ---
+  const bx = PAD.l + 8, by = PAD.t + 9, bw = narrow ? 7 : 9, gap = narrow ? 3 : 4;
+  for (let n = 0; n < NEL; n++) {
+    const on = !!w[n];
+    ctx.fillStyle = on ? '#0067b9' : '#ffffff';
+    ctx.strokeStyle = on ? '#004a85' : '#b9d2e5';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.rect(bx + n * (bw + gap), by, bw, bw); ctx.fill(); ctx.stroke();
+  }
+  stext(state.n + ' of 8 active', bx + NEL * (bw + gap) + 6, by + bw / 2,
+        narrow ? 9.5 : 10.5, '#5b6573', 'left', true);
+
+  // --- readouts ---
+  const f1 = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1);
+  document.getElementById('r-peak').textContent = f1(m.pk) + ' dB';
+  document.getElementById('r-hpbw').textContent = m.hpbw === null ? '—' : m.hpbw.toFixed(1) + '°';
+  document.getElementById('r-fnbw').textContent = m.fnbw === null ? '—' : m.fnbw.toFixed(1) + '°';
+  document.getElementById('r-sll').textContent  = m.sllDb === null ? '—' : f1(m.sllDb) + ' dB';
+}
+
+// ---------- wiring ----------
+document.getElementById('preset').addEventListener('change', function (e) {
+  state.n = parseInt(e.target.value, 10); drawAll();
+});
+document.getElementById('meas').addEventListener('change', function (e) {
+  state.meas = e.target.checked; drawAll();
+});
+window.addEventListener('resize', drawAll);
+
+drawAll();
+MJ.setRedraw(drawAll);
+MJ.onReady(function () { drawAll(); });
+</script>
+</body>
+</html>

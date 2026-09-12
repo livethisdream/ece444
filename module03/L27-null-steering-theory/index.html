@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L27 - Null Steering Theory &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l27-null-steering-theory">
+<h1>L27 - Null Steering Theory<a class="headerlink" href="#l27-null-steering-theory" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Null Steering Theory</h1>
+<div class="title-rule"></div>
+<p>Today you break the pattern on purpose.</p>
+<p>Lesson 27 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-2">
+<div class="wrap docutils container">
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L27-null-steering-theory.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L27-null-steering-theory.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L27-null-steering-theory.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '9'">
+  <li>I can explain when a pattern null is worth more than main-lobe gain.</li>
+  <li>I can derive the weight-subtraction rule that places a null without moving the main beam.</li>
+  <li>I can compute the per-element gains and phases that place a null at a chosen angle on the PHASER.</li>
+  <li>I can predict the achievable null depth given phase and gain quantization.</li>
+</ol>
+<div class="depth docutils container">
+<p>Lesson 26 catalogued the three ways a steered pattern breaks on its own: grating lobes when the elements are too far apart, squint when the frequency moves off the design point, and quantization lobes when the phase shifter runs out of bits. Those were accidents, and the work was to avoid them. Today you break the pattern on purpose. You will place a deep null exactly where an interferer sits, keep the main beam pointed where it was, and lose a known amount of main-lobe gain doing it.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-1-when-a-null-is-worth-more-than-gain">
+<div class="wrap docutils container">
+<p class="rubric">Part 1: When a null is worth more than gain</p>
+<p>Every array so far has been judged by its main lobe. Peak gain, beamwidth, and scan loss all describe where the energy goes. That is the right measure when the only thing in the field of view is the target. It is the wrong measure when something else in the field of view is louder than the target.</p>
+<p>Consider the PHASER looking at a target on boresight, and a second transmitter at <span class="math notranslate nohighlight">\(+22.5^\circ\)</span> that is 10 dB stronger at the aperture. The array does not reject the interferer because it is off-axis; it rejects it by the pattern level in that direction, and the first sidelobe of a uniform 8-element array is only <span class="math notranslate nohighlight">\(-13\)</span> dB. The interferer therefore arrives at the beamformer output <span class="math notranslate nohighlight">\(10 - 13 = 3\)</span> dB below the target. A 3 dB margin is not a margin. Any fade, any target fluctuation, and the receiver is tracking the wrong signal.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-situation">
+<div class="wrap docutils container">
+<p class="rubric">The situation</p>
+<img src="../../viz/img/L27-jammer-sidelobe.svg" alt="Uniform 8-element pattern with a target at broadside and an interferer entering through the first sidelobe" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+</div>
+</div>
+<div class="frame docutils container" id="frame-two-ways-out">
+<div class="wrap docutils container">
+<p class="rubric">Two ways out</p>
+<p>There are two ways out. You can raise the target’s return by 20 dB, which for a radar means a hundredfold increase in transmit power, a much larger amplifier, and a much brighter signature for anyone listening. Or you can push the pattern level at <span class="math notranslate nohighlight">\(+22.5^\circ\)</span> down by 20 dB, which costs about 2 dB of main-lobe gain and a weight calculation the processor finishes in microseconds. The second option is why every modern radar and electronic-warfare receiver steers nulls.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-anything-loud-not-just-a-jammer">
+<div class="wrap docutils container">
+<p class="rubric">Anything loud, not just a jammer</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The military framing is the obvious one: a <strong>jammer</strong> deliberately parked in a sidelobe is the reason sidelobe-level specifications exist at all, and null steering is the countermeasure. The physics is the same for a co-channel base station, a radar altimeter on the next aircraft, or a strong multipath reflection off a hangar. Anything loud that is not where you are looking is handled the same way.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-control-we-have-not-used-yet">
+<div class="wrap docutils container">
+<p class="rubric">The control we have not used yet</p>
+<p>To place a null you need control the previous lessons did not use. Lesson 18 steered the beam with <strong>phase only</strong>, holding every element at full gain. Lesson 24 tapered the sidelobes with <strong>amplitude only</strong>, holding every element in phase. Null steering uses both at once, so from here on each element carries a <strong>complex weight</strong></p>
+<div class="math notranslate nohighlight">
+\[
+w_n = a_n e^{j\phi_n},
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(a_n\)</span> the element’s amplitude setting and <span class="math notranslate nohighlight">\(\phi_n\)</span> its phase setting. On the PHASER, <span class="math notranslate nohighlight">\(a_n\)</span> is the Element Gains slider for that channel and <span class="math notranslate nohighlight">\(\phi_n\)</span> is its Phase Control entry. The two ADAR1000s give you both knobs on all eight elements, which is exactly the degrees of freedom this lesson uses.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point">
+<div class="wrap docutils container">
+<p class="rubric">Key point</p>
+<div class="callout docutils container">
+<p>An array is judged by the ratio of what you want to what you do not want. When the interferer is stronger than the target, moving the pattern <em>down</em> at one angle helps more than moving it <em>up</em> at another.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-2-steering-vectors-are-the-language">
+<div class="wrap docutils container">
+<p class="rubric">Part 2: Steering vectors are the language</p>
+<p>Write the array response the way the elements see the world. A plane wave arriving from angle <span class="math notranslate nohighlight">\(\theta\)</span> reaches element <span class="math notranslate nohighlight">\(n\)</span> a distance <span class="math notranslate nohighlight">\(nd\sin\theta\)</span> earlier than it reaches element 0, so the signal at element <span class="math notranslate nohighlight">\(n\)</span> carries the extra phase <span class="math notranslate nohighlight">\(nkd\sin\theta\)</span>. Collect those factors into the <strong>steering vector</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{v}(\theta) = \left[\ 1,\ e^{jkd\sin\theta},\ e^{j2kd\sin\theta},\ \ldots,\ e^{j(N-1)kd\sin\theta}\ \right],
+\]</div>
+<p>whose <span class="math notranslate nohighlight">\(n\)</span>-th entry is <span class="math notranslate nohighlight">\(v_n(\theta) = e^{jnkd\sin\theta}\)</span>. The steering vector is not a property of the array’s settings. It is a property of the direction, and it says how a wave from that direction is spread in phase across the aperture.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-response-is-a-dot-product">
+<div class="wrap docutils container">
+<p class="rubric">The response is a dot product</p>
+<p>The beamformer forms one number from the eight element signals by weighting and summing them, so the array’s response to a wave from <span class="math notranslate nohighlight">\(\theta\)</span> is the dot product</p>
+<div class="math notranslate nohighlight">
+\[
+y(\theta) = \mathbf{w}^{T}\mathbf{v}(\theta) = \sum_{n=0}^{N-1} w_n\ e^{jnkd\sin\theta}.
+\]</div>
+<p>This is the array factor of Lesson 16 with the weights left general. Every pattern in Module 3 is one evaluation of this sum.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-beam-steering-rewritten">
+<div class="wrap docutils container">
+<p class="rubric">Beam steering, rewritten</p>
+<p>Now read the beam-steering result of Lesson 18 in this language. To point the beam at <span class="math notranslate nohighlight">\(\theta_0\)</span> you want all <span class="math notranslate nohighlight">\(N\)</span> terms of the sum to add in phase when <span class="math notranslate nohighlight">\(\theta = \theta_0\)</span>, which happens when each weight cancels its own steering-vector phase:</p>
+<div class="math notranslate nohighlight">
+\[
+w_n = e^{-jnkd\sin\theta_0}, \qquad \text{that is} \qquad \mathbf{w}_\text{d} = \mathbf{v}^{*}(\theta_0).
+\]</div>
+<p>The conjugate steering vector <em>is</em> the progressive phase ramp <span class="math notranslate nohighlight">\(\Delta\phi = kd\sin\theta_0\)</span> you have been programming into the ADAR1000s since L19. With <span class="math notranslate nohighlight">\(\mathbf{w}_\text{d}\)</span> applied, <span class="math notranslate nohighlight">\(y(\theta_0) = N\)</span> — every element contributes a unit phasor pointing the same way — and that is the peak of the pattern.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-two-conventions-both-course-wide">
+<div class="wrap docutils container">
+<p class="rubric">Two conventions, both course-wide</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Two conventions matter and both are course-wide. Angles <span class="math notranslate nohighlight">\(\theta\)</span> are measured from broadside, and the weight that steers to <span class="math notranslate nohighlight">\(\theta_0\)</span> carries <span class="math notranslate nohighlight">\(e^{-jnkd\sin\theta_0}\)</span>, the <em>negative</em> of the arrival phase. Getting the sign backwards puts the beam, or the null, at <span class="math notranslate nohighlight">\(-\theta_0\)</span>. On the PHASER that shows up as a notch on the wrong side of the sweep, which is the most common error in the L28 lab.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-3-deriving-the-weight-subtraction-rule">
+<div class="wrap docutils container">
+<p class="rubric">Part 3: Deriving the weight-subtraction rule</p>
+<p>Here is the problem stated exactly. You have the beam-steering weights <span class="math notranslate nohighlight">\(\mathbf{w}_\text{d} = \mathbf{v}^{*}(\theta_0)\)</span>, and you want a new weight vector <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> that satisfies two conditions at once:</p>
+<ol class="arabic simple">
+<li><p>the response at the interferer angle is zero, <span class="math notranslate nohighlight">\(\mathbf{w}^{T}\mathbf{v}(\theta_1) = 0\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{w}\)</span> stays as close to <span class="math notranslate nohighlight">\(\mathbf{w}_\text{d}\)</span> as possible, so the main beam does not move and does not lose more gain than it must.</p></li>
+</ol>
+<p>The first condition is one complex equation in eight complex unknowns, so there are many solutions. The second condition picks one.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-1-build-the-beam-that-points-at-the-interferer">
+<div class="wrap docutils container">
+<p class="rubric">Step 1 — build the beam that points at the interferer</p>
+<p>Define the second steering weight vector exactly as you defined the first, but aimed at <span class="math notranslate nohighlight">\(\theta_1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{w}_\text{n} = \mathbf{v}^{*}(\theta_1), \qquad w_{\text{n},n} = e^{-jnkd\sin\theta_1}.
+\]</div>
+<p>Applied on its own, <span class="math notranslate nohighlight">\(\mathbf{w}_\text{n}\)</span> would point a full-gain beam straight at the interferer. That is the opposite of what you want, and it is exactly the tool you need.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-2-subtract-some-of-it">
+<div class="wrap docutils container">
+<p class="rubric">Step 2 — subtract some of it</p>
+<p>Try a weight vector of the form</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\ \mathbf{w}_\text{n},
+\]</div>
+<p>with one complex number <span class="math notranslate nohighlight">\(r_\text{n}\)</span> still to be chosen. Any <span class="math notranslate nohighlight">\(r_\text{n}\)</span> leaves the main beam roughly in place, because you are subtracting a small multiple of a vector that points somewhere else. One particular <span class="math notranslate nohighlight">\(r_\text{n}\)</span> makes the response at <span class="math notranslate nohighlight">\(\theta_1\)</span> vanish.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-3-evaluate-the-response-at-the-interferer">
+<div class="wrap docutils container">
+<p class="rubric">Step 3 — evaluate the response at the interferer</p>
+<p>Substitute the trial weights into the response and use the dot product:</p>
+<div class="math notranslate nohighlight">
+\[
+y(\theta_1) = \mathbf{w}^{T}\mathbf{v}(\theta_1) = \mathbf{w}_\text{d}^{T}\mathbf{v}(\theta_1) - r_\text{n}\ \mathbf{w}_\text{n}^{T}\mathbf{v}(\theta_1).
+\]</div>
+<p>The second term is easy: <span class="math notranslate nohighlight">\(\mathbf{w}_\text{n}\)</span> was built to cancel the steering-vector phase at <span class="math notranslate nohighlight">\(\theta_1\)</span>, so <span class="math notranslate nohighlight">\(\mathbf{w}_\text{n}^{T}\mathbf{v}(\theta_1) = N\)</span>. Written with the conjugate transpose, <span class="math notranslate nohighlight">\(N = \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}\)</span>, since every entry of <span class="math notranslate nohighlight">\(\mathbf{w}_\text{n}\)</span> has unit magnitude. The first term is the desired beam’s own response toward the interferer, and the same conjugate bookkeeping turns it into <span class="math notranslate nohighlight">\(\mathbf{w}_\text{d}^{T}\mathbf{v}(\theta_1) = \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d}\)</span>.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-4-solve-for-r-n">
+<div class="wrap docutils container">
+<p class="rubric">Step 4 — solve for r_n</p>
+<p>Setting <span class="math notranslate nohighlight">\(y(\theta_1) = 0\)</span> gives <span class="math notranslate nohighlight">\(\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d} - r_\text{n}\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n} = 0\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[
+\boxed{\ \mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\ \mathbf{w}_\text{n}, \qquad r_\text{n} = \frac{\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d}}{\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}}\ }
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-step-5-verify-by-substitution">
+<div class="wrap docutils container">
+<p class="rubric">Step 5 — verify by substitution</p>
+<p>Put that <span class="math notranslate nohighlight">\(r_\text{n}\)</span> back in:</p>
+<div class="math notranslate nohighlight">
+\[
+y(\theta_1) = \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d} - \frac{\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d}}{\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}}\ \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n} = 0 .
+\]</div>
+<p>The null is exact, not approximate, and it takes one division, with no iteration and no optimizer.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-reading-r-n">
+<div class="wrap docutils container">
+<p class="rubric">Reading r_n</p>
+<p>The ratio <span class="math notranslate nohighlight">\(r_\text{n} = \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d}/\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}\)</span> is a <strong>projection</strong>: it measures how much of the null-direction beam is already contained in the desired beam. Subtracting <span class="math notranslate nohighlight">\(r_\text{n}\mathbf{w}_\text{n}\)</span> removes precisely that much and no more, which is why the main beam survives.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-reading-r-n-it-is-the-pattern-you-already-have">
+<div class="wrap docutils container">
+<p class="rubric">Reading r_n: it is the pattern you already have</p>
+<p>There is a second reading that is more useful at the board. Expand the numerator for a broadside beam, <span class="math notranslate nohighlight">\(\mathbf{w}_\text{d} = [1, 1, \ldots, 1]\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+r_\text{n} = \frac{1}{N}\sum_{n=0}^{N-1} e^{jnkd\sin\theta_1} = \frac{1}{N}\ y_\text{uniform}(\theta_1).
+\]</div>
+<p>The projection coefficient is the uniform array’s own normalized pattern evaluated at the null angle. If the interferer sits on a <span class="math notranslate nohighlight">\(-13\)</span> dB sidelobe, then <span class="math notranslate nohighlight">\(\vert r_\text{n}\vert = 0.22\)</span>. If it sits in the main lobe, <span class="math notranslate nohighlight">\(\vert r_\text{n}\vert\)</span> approaches 1 and you are subtracting nearly the whole beam. If it happens to sit in one of the array’s natural pattern nulls, <span class="math notranslate nohighlight">\(r_\text{n} = 0\)</span>, the rule returns <span class="math notranslate nohighlight">\(\mathbf{w} = \mathbf{w}_\text{d}\)</span> unchanged, and the null was already there for free.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-main-lobe-loss-versus-null-angle">
+<div class="wrap docutils container">
+<p class="rubric">Main-lobe loss versus null angle</p>
+<img src="../../viz/img/L27-cost-vs-angle.svg" alt="Main-lobe loss versus null angle for the 8-element array" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-weights-ride-a-circle">
+<div class="wrap docutils container">
+<p class="rubric">The weights ride a circle</p>
+<p>Geometrically, each element weight is the number 1 minus a phasor of length <span class="math notranslate nohighlight">\(\vert r_\text{n}\vert\)</span> that rotates by <span class="math notranslate nohighlight">\(kd\sin\theta_1\)</span> from element to element. The eight weight tips ride on a circle of radius <span class="math notranslate nohighlight">\(\vert r_\text{n}\vert\)</span> centered on the original weight, so the amplitudes spread between <span class="math notranslate nohighlight">\(1 - \vert r_\text{n}\vert\)</span> and <span class="math notranslate nohighlight">\(1 + \vert r_\text{n}\vert\)</span> and the phases wobble a few degrees either side of the ramp. A null is a small, structured perturbation of the beam you already had.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-4-the-phaser-example-end-to-end">
+<div class="wrap docutils container">
+<p class="rubric">Part 4: The PHASER example, end to end</p>
+<p>Take the course array — eight elements, <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span>, HB100 source at <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>, so <span class="math notranslate nohighlight">\(\lambda = 28.5\ \text{mm}\)</span> and <span class="math notranslate nohighlight">\(d/\lambda = 0.491\)</span>. Point the beam at broadside and null an interferer at <span class="math notranslate nohighlight">\(\theta_1 = +22.5^\circ\)</span>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — null at +22.5° from a broadside beam</p>
+<p><strong>Element-to-element phase at the null angle.</strong> With <span class="math notranslate nohighlight">\(kd = 2\pi(0.491) = 3.085\)</span> rad,</p>
+<div class="math notranslate nohighlight">
+\[
+\psi_1 = kd\sin\theta_1 = 3.085\ \sin 22.5^\circ = 1.181\ \text{rad} = 67.6^\circ .
+\]</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-continued-the-projection-coefficient">
+<div class="wrap docutils container">
+<p class="rubric">Worked example, continued — the projection coefficient</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example, continued</p>
+<p><strong>Projection coefficient.</strong> The beam is broadside, so <span class="math notranslate nohighlight">\(\mathbf{w}_\text{d}\)</span> is all ones and <span class="math notranslate nohighlight">\(r_\text{n}\)</span> is the uniform pattern at <span class="math notranslate nohighlight">\(22.5^\circ\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+r_\text{n} = \frac{1}{8}\sum_{n=0}^{7} e^{jn(67.6^\circ)} = 0.225\ \angle\ 56.7^\circ, \qquad 20\log_{10}(0.225) = -13.0\ \text{dB} .
+\]</div>
+<p>That <span class="math notranslate nohighlight">\(-13\)</span> dB is the first sidelobe level of the uniform 8-element array, which is what put the interferer in play in Part 1.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-continued-the-weights">
+<div class="wrap docutils container">
+<p class="rubric">Worked example, continued — the weights</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example, continued</p>
+<p><strong>Weights.</strong> Element by element, <span class="math notranslate nohighlight">\(w_n = 1 - (0.225\ \angle\ 56.7^\circ)\ e^{-jn(67.6^\circ)}\)</span>. The magnitudes run from <span class="math notranslate nohighlight">\(1 - 0.225\)</span> to <span class="math notranslate nohighlight">\(1 + 0.225\)</span>.</p>
+<p><strong>Convert to PHASER settings.</strong> The Element Gains sliders are percentages of full scale, so scale the largest weight to 100 % and enter the weight angles as phase offsets:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{gain}_n = \frac{100\ \vert w_n\vert}{\max_m \vert w_m\vert}\ \%, \qquad \phi_n = \angle w_n .
+\]</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-continued-the-gain-and-phase-table">
+<div class="wrap docutils container">
+<p class="rubric">Worked example, continued — the gain and phase table</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example, continued</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Element</p></th>
+<th class="head text-right"><p>1</p></th>
+<th class="head text-right"><p>2</p></th>
+<th class="head text-right"><p>3</p></th>
+<th class="head text-right"><p>4</p></th>
+<th class="head text-right"><p>5</p></th>
+<th class="head text-right"><p>6</p></th>
+<th class="head text-right"><p>7</p></th>
+<th class="head text-right"><p>8</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Gain (%)</p></td>
+<td class="text-right"><p>75</p></td>
+<td class="text-right"><p>65</p></td>
+<td class="text-right"><p>82</p></td>
+<td class="text-right"><p>100</p></td>
+<td class="text-right"><p>100</p></td>
+<td class="text-right"><p>82</p></td>
+<td class="text-right"><p>65</p></td>
+<td class="text-right"><p>75</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Phase (deg)</p></td>
+<td class="text-right"><p><span class="math notranslate nohighlight">\(-12.1\)</span></p></td>
+<td class="text-right"><p><span class="math notranslate nohighlight">\(+3.1\)</span></p></td>
+<td class="text-right"><p><span class="math notranslate nohighlight">\(+13.0\)</span></p></td>
+<td class="text-right"><p><span class="math notranslate nohighlight">\(+6.0\)</span></p></td>
+<td class="text-right"><p><span class="math notranslate nohighlight">\(-6.0\)</span></p></td>
+<td class="text-right"><p><span class="math notranslate nohighlight">\(-13.0\)</span></p></td>
+<td class="text-right"><p><span class="math notranslate nohighlight">\(-3.1\)</span></p></td>
+<td class="text-right"><p><span class="math notranslate nohighlight">\(+12.1\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-continued-the-result">
+<div class="wrap docutils container">
+<p class="rubric">Worked example, continued — the result</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example, continued</p>
+<p><strong>Result.</strong> The response at <span class="math notranslate nohighlight">\(+22.5^\circ\)</span> is exactly zero. The main beam stays at broadside and its peak drops 2.0 dB, of which 0.4 dB is the subtraction itself and the rest is the rescaling that keeps every gain at or below 100 %. The measured cost on the PHASER sweep is 1.8 dB.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-small-changes-easy-to-get-wrong">
+<div class="wrap docutils container">
+<p class="rubric">Small changes, easy to get wrong</p>
+<p>The gains are symmetric and the phases are antisymmetric, which is what a null placed to one side of a broadside beam always produces. Note how small the phase offsets are: the largest is 13 degrees. Null steering is not a large change to the array’s settings, and that is precisely why it is so easy to get wrong by a sign.</p>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-null-steering-on-the-8-element-phaser-array">
+<div class="wrap docutils container">
+<p class="rubric">Null steering on the 8-element PHASER array</p>
+<div class="depth docutils container">
+<p>The widget below applies the weight-subtraction rule to the course array and draws the result. Drag the null angle and watch three things: where the notch lands, how the eight element gains and phases redistribute, and how the main-lobe loss pill tracks <span class="math notranslate nohighlight">\(\vert r_\text{n}\vert\)</span> rather than the null angle itself. Then switch the weights from Ideal to PHASER, which rounds every phase to the ADAR1000’s <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> step and every gain to 1 %, and adds the beam sweep’s noise floor 23 dB below the uniform peak — the notch stops being infinite and settles at what the hardware can actually show you.</p>
+</div>
+<iframe src="../../viz/null-steering.html"
+        width="100%" height="437"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Null steering on the 8-element PHASER array: pattern, element weights, and null depth">
+</iframe>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-result">
+<div class="wrap docutils container">
+<p class="rubric">The result</p>
+<img src="../../viz/img/L27-pattern-null.svg" alt="Uniform pattern and null-steered pattern for the 8-element array, notch at +22.5 degrees" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-5-what-the-null-costs-and-what-limits-it">
+<div class="wrap docutils container">
+<p class="rubric">Part 5: What the null costs, and what limits it</p>
+<p><strong>The main-lobe loss is set by <span class="math notranslate nohighlight">\(\vert r_\text{n}\vert\)</span>.</strong> Before rescaling, the response in the look direction falls from <span class="math notranslate nohighlight">\(N\)</span> to <span class="math notranslate nohighlight">\(N(1 - \vert r_\text{n}\vert^2)\)</span>, a loss of <span class="math notranslate nohighlight">\(20\log_{10}(1 - \vert r_\text{n}\vert^2)\)</span> — 0.4 dB for the <span class="math notranslate nohighlight">\(22.5^\circ\)</span> example. Add the rescaling that keeps the largest gain at 100 % and the total loss at <span class="math notranslate nohighlight">\(\theta_0\)</span> comes to 2.0 dB.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-cost-climbs-as-the-null-moves-toward-the-beam">
+<div class="wrap docutils container">
+<p class="rubric">The cost climbs as the null moves toward the beam</p>
+<p>Walk the null in toward the beam and both terms grow: 2.9 dB at <span class="math notranslate nohighlight">\(\theta_1 = 10^\circ\)</span>, 5.6 dB at <span class="math notranslate nohighlight">\(7^\circ\)</span>, 8.2 dB at <span class="math notranslate nohighlight">\(5^\circ\)</span>. As <span class="math notranslate nohighlight">\(\theta_1\)</span> enters the main lobe <span class="math notranslate nohighlight">\(\vert r_\text{n}\vert \to 1\)</span>, the eight weights cancel one another, and what is left after rescaling is a split beam with a hole where the target used to be. A null inside the half-power beamwidth is not a null-steering problem, it is a resolution problem, and the answer is to move the beam or wait for the geometry to change.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-quantization-sets-a-floor-on-the-depth">
+<div class="wrap docutils container">
+<p class="rubric">Quantization sets a floor on the depth</p>
+<p>The weights above are exact real numbers, and the ADAR1000 accepts neither. Each element’s phase lands on a <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> grid and each gain on a 1 % grid, so each weight carries a small error <span class="math notranslate nohighlight">\(\delta w_n\)</span>. Those errors are independent, so at the null angle they add in RMS rather than coherently, and the residual response relative to the beam peak is</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\vert y(\theta_1)\vert}{N} \approx \frac{\epsilon_\text{rms}}{\sqrt{N}}, \qquad \epsilon_\text{rms} = \sqrt{\sigma_\phi^2 + \sigma_a^2},\ \ \sigma_\phi = \frac{\text{LSB}}{\sqrt{12}} .
+\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-halve-the-bits-lose-six-decibels-of-depth">
+<div class="wrap docutils container">
+<p class="rubric">Halve the bits, lose six decibels of depth</p>
+<p>With <span class="math notranslate nohighlight">\(\text{LSB} = 2.8125^\circ = 0.0491\)</span> rad and 1 % gain steps, <span class="math notranslate nohighlight">\(\epsilon_\text{rms} = 0.0145\)</span> and the estimate puts the floor about 46 dB below the peak — the RMS reading of the same result a direct numerical evaluation of the rounded weights gives, which is a residual of about <span class="math notranslate nohighlight">\(-48\)</span> dB at the designed angle. Take <span class="math notranslate nohighlight">\(\approx -48\)</span> dB as the number to quote and this estimate as where it comes from. That is the same <span class="math notranslate nohighlight">\(-6B\)</span> scale as the quantization sidelobes of Lesson 26, a few decibels deeper because the error is spread over eight elements. Halve the bits and the floor rises fast: a 3-bit phase shifter cannot hold a null deeper than about 22 dB.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-you-can-measure-is-shallower-still">
+<div class="wrap docutils container">
+<p class="rubric">What you can measure is shallower still</p>
+<p>The PHASER’s beam sweep has a noise floor about 23 dB below the uniform-taper peak, and the null-steered main lobe sits 2 dB below that reference, so nothing deeper than roughly 21 dB below the nulled peak can appear on the plot. The verified example measures a <span class="math notranslate nohighlight">\(-21.6\)</span> dBc notch, which is the floor, not the weights. Achievable notch depth on this hardware is 20 to 22 dB, and it is enough: the interferer that was 3 dB below the target in Part 1 ends up more than 10 dB below it.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-the-sweep-can-actually-show">
+<div class="wrap docutils container">
+<p class="rubric">What the sweep can actually show</p>
+<img src="../../viz/img/L27-quant-depth.svg" alt="Ideal versus quantized null pattern against the sweep noise floor" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+</div>
+</div>
+<div class="frame docutils container" id="frame-more-nulls-cost-more-degrees-of-freedom">
+<div class="wrap docutils container">
+<p class="rubric">More nulls cost more degrees of freedom</p>
+<p>An <span class="math notranslate nohighlight">\(N\)</span>-element array has <span class="math notranslate nohighlight">\(N\)</span> complex weights. One is spent holding the main beam, which leaves at most <span class="math notranslate nohighlight">\(N-1\)</span> independent nulls. The PHASER can therefore null up to seven directions at once, though long before that the pattern has been so heavily reshaped that the main lobe is barely recognizable. The procedure generalizes by subtracting one term per interferer and solving the resulting small system; the two-interferer case is the practical limit for an eight-element array.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-weights-are-static">
+<div class="wrap docutils container">
+<p class="rubric">The weights are static</p>
+<p>Every number in this lesson was computed from an angle you had to know in advance. If the interferer moves, the null stays where it was and someone has to recompute and reload eight gains and eight phases. That is the limitation the next lesson confronts.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point-2">
+<div class="wrap docutils container">
+<p class="rubric">Key point</p>
+<div class="callout docutils container">
+<p><span class="math notranslate nohighlight">\(r_\text{n}\)</span> is the whole story. It is the uniform pattern’s level at the null angle, and it tells you the main-lobe loss before you compute anything.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-steering-vectors-and-the-rule">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the steering vectors and the rule</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\mathbf{v}(\theta)\)</span></p></td>
+<td class="text-left"><p>steering vector, <span class="math notranslate nohighlight">\(v_n = e^{jnkd\sin\theta}\)</span></p></td>
+<td class="text-left"><p>the direction, not the setting</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\mathbf{w}_\text{d} = \mathbf{v}^{*}(\theta_0)\)</span></p></td>
+<td class="text-left"><p>beam-steering weights</p></td>
+<td class="text-left"><p>the L18 phase ramp, written as a vector</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\mathbf{w}_\text{n}\)</span></p></td>
+<td class="text-left"><p>weight-subtraction rule</p></td>
+<td class="text-left"><p>one division, exact null</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-cost-of-the-null">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the cost of the null</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(r_\text{n} = \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d} / \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}\)</span></p></td>
+<td class="text-left"><p>projection of the null beam on the desired beam</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(= \)</span> uniform pattern level at <span class="math notranslate nohighlight">\(\theta_1\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\vert r_\text{n}\vert\)</span> at a <span class="math notranslate nohighlight">\(-13\)</span> dB sidelobe</p></td>
+<td class="text-left"><p>cost driver</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.225\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Main-lobe loss, null at <span class="math notranslate nohighlight">\(+22.5^\circ\)</span></p></td>
+<td class="text-left"><p>price of the notch</p></td>
+<td class="text-left"><p>2.0 dB theory, 1.8 dB measured</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-phaser-numbers">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the PHASER numbers</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>PHASER settings, null at <span class="math notranslate nohighlight">\(+22.5^\circ\)</span></p></td>
+<td class="text-left"><p>gains, then phases</p></td>
+<td class="text-left"><p>75, 65, 82, 100, 100, 82, 65, 75 %</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Quantization floor</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\epsilon_\text{rms}/\sqrt{N}\)</span>, ADAR1000 LSBs</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx -48\)</span> dB (RMS estimate <span class="math notranslate nohighlight">\(-46\)</span> dB)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-what-limits-it">
+<div class="wrap docutils container">
+<p class="rubric">Summary — what limits it</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Measured notch</p></td>
+<td class="text-left"><p>limited by the sweep noise floor</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-21.6\)</span> dBc (20 to 22 dB)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Maximum nulls</p></td>
+<td class="text-left"><p>one weight holds the beam</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(N - 1 = 7\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a href="../../practice/ECE444_L27_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a href="../../practice/ECE444_L27_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where this is going</p>
+<p>Lesson 28 takes these weights to the bench. You will compute the gain and phase table for an interferer angle, type it into the Element Gains and Phase Control sections of the Phaser GUI, sweep the beam, and measure the notch you predicted. Then the lab does the thing this lesson cannot: instead of telling the array where the interferer is, it lets the array estimate the interference from the received data itself and compute its own weights. That is <strong>MVDR</strong>, the minimum-variance distortionless-response beamformer, and it needs the two digital channels rather than the analog element sums — the hybrid architecture of L17 finally earns its keep. Read the Digital Beam Forming section of the GUI inventory before class so the Mode, Snapshots, and Diagonal Load controls are not new to you.</p>
+<p>The Module 5 capstone is this lesson at full scale: hold a track on a moving target while a jammer of unknown strength sits somewhere in the sidelobes, and keep both the beam and the null where they belong as the geometry changes.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L27-null-steering-theory"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

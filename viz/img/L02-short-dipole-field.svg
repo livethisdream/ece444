@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 340" font-family="Inter,system-ui,sans-serif">
+<defs>
+<marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b3213a"/></marker>
+<marker id="ab2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0067b9"/></marker>
+</defs>
+<rect width="660" height="340" fill="#fff"/>
+<line x1="40" y1="50" x2="40" y2="290" stroke="#0067b9" stroke-width="2" opacity="0.45"/><line x1="70" y1="50" x2="70" y2="290" stroke="#0067b9" stroke-width="2" opacity="0.45"/><line x1="100" y1="50" x2="100" y2="290" stroke="#0067b9" stroke-width="2" opacity="0.45"/><line x1="130" y1="50" x2="130" y2="290" stroke="#0067b9" stroke-width="2" opacity="0.45"/><line x1="95" y1="210" x2="95" y2="130" stroke="#b3213a" stroke-width="2" marker-end="url(#ar2)"/>
+<text x="103" y="136" fill="#b3213a" font-size="15" font-weight="700">E</text>
+<line x1="34" y1="170" x2="150" y2="170" stroke="#0067b9" stroke-width="1.8" marker-end="url(#ab2)"/>
+<text x="40" y="310" fill="#5b6573" font-size="12.5">incident plane wave · S = E²/2η₀</text><line x1="330" y1="75" x2="330" y2="156" stroke="#004a85" stroke-width="4"/>
+<line x1="330" y1="184" x2="330" y2="265" stroke="#004a85" stroke-width="4"/>
+<circle cx="330" cy="156" r="3.5" fill="#004a85"/><circle cx="330" cy="184" r="3.5" fill="#004a85"/><line x1="450" y1="75" x2="450" y2="265" stroke="#5b6573" stroke-width="1.4"/>
+<line x1="445" y1="75" x2="455" y2="75" stroke="#5b6573" stroke-width="1.4"/>
+<line x1="445" y1="265" x2="455" y2="265" stroke="#5b6573" stroke-width="1.4"/>
+<line x1="334" y1="75" x2="450" y2="75" stroke="#5b6573" stroke-width="0.8" stroke-dasharray="3 3"/>
+<line x1="334" y1="265" x2="450" y2="265" stroke="#5b6573" stroke-width="0.8" stroke-dasharray="3 3"/>
+<text x="460" y="166" fill="#5b6573" font-size="14" font-weight="700">ℓ ≪ λ</text>
+<text x="460" y="184" fill="#5b6573" font-size="12">ℓₑ = ℓ</text><path d="M322 156 Q 300 170 322 184" fill="none" stroke="#b3213a" stroke-width="1.6" marker-end="url(#ar2)"/>
+<text x="292" y="175" fill="#b3213a" font-size="13.5" font-weight="700" text-anchor="end">V_oc = E·ℓ</text>
+<text x="330" y="34" fill="#15202b" font-size="15" font-weight="700" text-anchor="middle">Short dipole aligned with E</text>
+<text x="40" y="324" fill="#5b6573" font-size="12.5">R_r = 80π²(ℓ/λ)²  ·  directivity D = 1.5</text>
+</svg>

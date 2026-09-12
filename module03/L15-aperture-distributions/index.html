@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L15 - Aperture Distributions and Efficiency &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l15-aperture-distributions-and-efficiency">
+<h1>L15 - Aperture Distributions and Efficiency<a class="headerlink" href="#l15-aperture-distributions-and-efficiency" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Aperture Distributions and Efficiency</h1>
+<div class="title-rule"></div>
+<p>Change the distribution and you change the pattern.</p>
+<p>Lesson 15 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-2">
+<div class="wrap docutils container">
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L15-aperture-distributions.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L15-aperture-distributions.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L15-aperture-distributions.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '1'">
+  <li>I can explain how an aperture's field distribution determines its far-field pattern through the Fourier transform relationship.</li>
+  <li>I can compute the beamwidth and first sidelobe level of a uniform aperture from its dimensions.</li>
+  <li>I can calculate aperture efficiency for a given illumination and use it in the gain formula.</li>
+  <li>I can state the sidelobe, beamwidth, and efficiency trades that tapering the illumination involves.</li>
+  <li>I can predict how scaling an aperture in wavelengths changes its beamwidth and gain.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-we-were">
+<div class="wrap docutils container">
+<p class="rubric">Where we were</p>
+<p>In Lesson 14 you measured patterns: you turned an antenna in front of a source, recorded power against angle, and produced a main lobe, a set of sidelobes, and a beamwidth. Module 3 turns that around. From here on you are the one who decides where the lobes go, and the first design variable you get is the <strong>aperture distribution</strong> — the field across the opening that radiates. This lesson connects that distribution to the pattern it produces, puts numbers on the beamwidth and sidelobe level of the simplest case, and defines the efficiency that turns aperture area into gain. Those numbers carry straight into the array work that occupies the rest of the module.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-1-the-aperture-is-the-source">
+<div class="wrap docutils container">
+<p class="rubric">Part 1: The aperture is the source</p>
+<p>An <strong>aperture</strong> is the opening a wave leaves through: the mouth of a horn, the projected face of a reflector, the radiating surface of a patch, or the row of elements on the PHASER board. Whatever is behind it, the far field depends on only one thing — the tangential electric field across that opening, which is the <strong>aperture distribution</strong> <span class="math notranslate nohighlight">\(E_a\)</span>. Change the distribution and you change the pattern. Leave the distribution alone and no change behind the aperture can alter the far field.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-transform-relationship">
+<div class="wrap docutils container">
+<p class="rubric">The transform relationship</p>
+<p>Lesson 6 established the relationship. For a source confined to a region, the far field is the Fourier transform of the source distribution, and Module 1 carried that out for the line source. Take the one-dimensional aperture of length <span class="math notranslate nohighlight">\(L\)</span> lying along <span class="math notranslate nohighlight">\(x\)</span>, radiating into the half-space in front of it, and measure the angle <span class="math notranslate nohighlight">\(\theta\)</span> from broadside (the aperture normal). The <strong>space factor</strong> is</p>
+<div class="math notranslate nohighlight">
+\[S(\theta) = \int_{-L/2}^{L/2} E_a(x)\ e^{\ jkx\sin\theta}\ dx\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-transform-relationship-continued">
+<div class="wrap docutils container">
+<p class="rubric">The transform relationship, continued</p>
+<p>with <span class="math notranslate nohighlight">\(k = 2\pi/\lambda\)</span>. The exponent is the extra path from the element at <span class="math notranslate nohighlight">\(x\)</span> relative to the aperture center, converted to phase. That integral is a Fourier transform: the aperture coordinate <span class="math notranslate nohighlight">\(x\)</span> is the variable, and the transform variable is the <strong>space frequency</strong></p>
+<div class="math notranslate nohighlight">
+\[u = \frac{L}{\lambda}\sin\theta .\]</div>
+<p>Working in <span class="math notranslate nohighlight">\(u\)</span> instead of <span class="math notranslate nohighlight">\(\theta\)</span> is what makes the results in this lesson reusable. The shape of <span class="math notranslate nohighlight">\(\vert S\vert\)</span> against <span class="math notranslate nohighlight">\(u\)</span> depends only on the <em>shape</em> of the illumination. The aperture’s size in wavelengths, <span class="math notranslate nohighlight">\(L/\lambda\)</span>, sets how much angle each unit of <span class="math notranslate nohighlight">\(u\)</span> costs, and nothing else. That single split — shape sets the pattern in <span class="math notranslate nohighlight">\(u\)</span>, size sets the scale from <span class="math notranslate nohighlight">\(u\)</span> to degrees — is the organizing idea of this lesson and of the whole module.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-aperture-field-and-the-pattern-it-produces">
+<div class="wrap docutils container">
+<p class="rubric">The aperture field and the pattern it produces</p>
+<img src="../../viz/img/L15-aperture-to-pattern.svg" alt="Field across an aperture on the left and the far-field pattern it produces on the right" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+</div>
+</div>
+<div class="frame docutils container" id="frame-one-convention-note">
+<div class="wrap docutils container">
+<p class="rubric">One convention note</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Module 1 wrote the line-source pattern in the polar angle measured from the wire axis. Module 3 measures <span class="math notranslate nohighlight">\(\theta\)</span> from broadside instead, which is what every phased-array plot and every PHASER readout uses, so the space frequency here carries <span class="math notranslate nohighlight">\(\sin\theta\)</span> rather than <span class="math notranslate nohighlight">\(\cos\theta\)</span>. Lesson 16 makes that substitution explicit once; after that, broadside is <span class="math notranslate nohighlight">\(\theta = 0\)</span> everywhere in the module.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point">
+<div class="wrap docutils container">
+<p class="rubric">Key point</p>
+<div class="callout docutils container">
+<p>The far field is the Fourier transform of the aperture field. The <strong>shape</strong> of the illumination sets the sidelobe level, and the <strong>size</strong> of the aperture in wavelengths sets the beamwidth. Those two knobs are close to independent, and every aperture and array design in this course is an argument about how to set them.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-2-the-uniform-aperture">
+<div class="wrap docutils container">
+<p class="rubric">Part 2: The uniform aperture</p>
+<p>Start with the simplest illumination, a constant field <span class="math notranslate nohighlight">\(E_a(x) = E_0\)</span> across the whole opening. The integral is elementary:</p>
+<div class="math notranslate nohighlight">
+\[S(\theta) = E_0\int_{-L/2}^{L/2} e^{\ jkx\sin\theta}\ dx = E_0\ \frac{e^{\ jkx\sin\theta}}{jk\sin\theta}\Bigg|_{-L/2}^{L/2} = E_0 L\ \frac{\sin\left(\tfrac{1}{2}kL\sin\theta\right)}{\tfrac{1}{2}kL\sin\theta}.\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-derive-it-the-sinc">
+<div class="wrap docutils container">
+<p class="rubric">Derive it: the sinc</p>
+<p>With <span class="math notranslate nohighlight">\(k = 2\pi/\lambda\)</span> the argument is <span class="math notranslate nohighlight">\(\tfrac{1}{2}kL\sin\theta = \pi u\)</span>, so the normalized field pattern of a uniform aperture is a sinc function of the space frequency:</p>
+<div class="math notranslate nohighlight">
+\[\vert F(u)\vert = \left\vert \frac{\sin \pi u}{\pi u}\right\vert, \qquad u = \frac{L}{\lambda}\sin\theta .\]</div>
+<p>Three numbers fall out of that one line, and you should know all three.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-nulls">
+<div class="wrap docutils container">
+<p class="rubric">Nulls</p>
+<p><span class="math notranslate nohighlight">\(\sin\pi u\)</span> vanishes at <span class="math notranslate nohighlight">\(u = \pm 1, \pm 2, \pm 3, \dots\)</span>, so the first null sits at <span class="math notranslate nohighlight">\(\sin\theta = \lambda/L\)</span>. An aperture shorter than one wavelength has no null anywhere in real space, which is why a small aperture radiates broadly no matter how it is fed.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-beamwidth">
+<div class="wrap docutils container">
+<p class="rubric">Beamwidth</p>
+<p>Solving <span class="math notranslate nohighlight">\(\sin(\pi u)/(\pi u) = 1/\sqrt{2}\)</span> gives <span class="math notranslate nohighlight">\(\pi u = 1.3916\)</span>, so the half-power points sit at <span class="math notranslate nohighlight">\(u = \pm 0.4429\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[\theta_\text{HP} \approx 0.886\ \frac{\lambda}{L}\ \text{rad} = 50.8^\circ\ \frac{\lambda}{L}.\]</div>
+<p>The <span class="math notranslate nohighlight">\(0.886\)</span> is worth memorizing. It is the constant behind the array beamwidth formula in Lesson 20 and behind every beamwidth prediction you will make on the PHASER.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-first-sidelobe">
+<div class="wrap docutils container">
+<p class="rubric">First sidelobe</p>
+<p>The first sidelobe peaks near <span class="math notranslate nohighlight">\(u = 1.43\)</span>, where <span class="math notranslate nohighlight">\(\vert F\vert = 0.217\)</span>, or <span class="math notranslate nohighlight">\(-13.3\)</span> dB. Notice what is missing from that statement: <span class="math notranslate nohighlight">\(L\)</span>. Making a uniform aperture longer narrows the beam and raises the gain, and it leaves the first sidelobe exactly <span class="math notranslate nohighlight">\(13.3\)</span> dB below the peak. Sidelobes are set by the shape of the illumination, and the uniform shape is stuck at <span class="math notranslate nohighlight">\(-13.3\)</span> dB.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-uniform-aperture-pattern">
+<div class="wrap docutils container">
+<p class="rubric">The uniform aperture pattern</p>
+<img src="../../viz/img/L15-uniform-pattern.svg" alt="Uniform aperture pattern in decibels with half-power width, first null and first sidelobe marked" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-beamwidth-of-a-10-wavelength-aperture">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — beamwidth of a 10-wavelength aperture</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — beamwidth of a 10-wavelength aperture</p>
+<p>A uniformly illuminated aperture is <span class="math notranslate nohighlight">\(L = 10\lambda\)</span> long. Its half-power beamwidth is</p>
+<div class="math notranslate nohighlight">
+\[\theta_\text{HP} = 50.8^\circ \times \frac{\lambda}{10\lambda} = 5.08^\circ,\]</div>
+<p>its first nulls are at <span class="math notranslate nohighlight">\(\sin\theta = 0.1\)</span>, or <span class="math notranslate nohighlight">\(\theta = \pm 5.74^\circ\)</span>, and its first sidelobe is <span class="math notranslate nohighlight">\(13.3\)</span> dB down. At <span class="math notranslate nohighlight">\(10\ \text{GHz}\)</span> that aperture is <span class="math notranslate nohighlight">\(0.30\ \text{m}\)</span> long. At <span class="math notranslate nohighlight">\(3\ \text{GHz}\)</span> the same <span class="math notranslate nohighlight">\(0.30\ \text{m}\)</span> is only <span class="math notranslate nohighlight">\(3\lambda\)</span>, and the beam opens to <span class="math notranslate nohighlight">\(16.9^\circ\)</span>. The physical length did not change; the length in wavelengths did.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-rectangular-apertures">
+<div class="wrap docutils container">
+<p class="rubric">Rectangular apertures</p>
+<p>A <strong>rectangular aperture</strong> costs nothing extra when the illumination separates, <span class="math notranslate nohighlight">\(E_a(x,y) = E_x(x)E_y(y)\)</span>. The double integral factors, and the pattern in each principal plane is the line-source result for that dimension:</p>
+<div class="math notranslate nohighlight">
+\[\theta_{\text{HP},x} = 0.886\ \frac{\lambda}{L_x}, \qquad \theta_{\text{HP},y} = 0.886\ \frac{\lambda}{L_y}.\]</div>
+<p>A tall narrow aperture makes a wide flat beam, and a wide short aperture makes a narrow tall one. The long dimension always makes the narrow beam.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-circular-apertures">
+<div class="wrap docutils container">
+<p class="rubric">Circular apertures</p>
+<p>A <strong>circular aperture</strong> of diameter <span class="math notranslate nohighlight">\(D\)</span> does not separate, and its uniform-illumination transform is a Bessel function rather than a sinc. The results are quoted here and used as design numbers:</p>
+<div class="math notranslate nohighlight">
+\[\theta_\text{HP} = 1.02\ \frac{\lambda}{D} = 58.4^\circ\ \frac{\lambda}{D}, \qquad \text{first sidelobe} = -17.6\ \text{dB}.\]</div>
+<p>The circle is a little wider in beam than a square of the same width and a little better in sidelobes, and for the same reason: the edges of a circular aperture carry less of the total area than the edges of a rectangle, so the aperture is already mildly tapered as seen along any cut.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-3-aperture-efficiency">
+<div class="wrap docutils container">
+<p class="rubric">Part 3: Aperture efficiency</p>
+<p>Module 1 defined the effective aperture <span class="math notranslate nohighlight">\(A_e = G\lambda^2/4\pi\)</span> and left an obvious question hanging: how much of a real antenna’s physical area <span class="math notranslate nohighlight">\(A\)</span> actually counts? The answer is the <strong>aperture efficiency</strong> <span class="math notranslate nohighlight">\(\eta_\text{ap}\)</span>, defined so that</p>
+<div class="math notranslate nohighlight">
+\[A_e = \eta_\text{ap} A, \qquad G = \eta_\text{ap}\ \frac{4\pi A}{\lambda^2}.\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-aperture-efficiency-the-ratio">
+<div class="wrap docutils container">
+<p class="rubric">Aperture efficiency: the ratio</p>
+<p>To get <span class="math notranslate nohighlight">\(\eta_\text{ap}\)</span> from the illumination, compare two quantities. The boresight field is the <em>coherent</em> sum of everything on the aperture, <span class="math notranslate nohighlight">\(\int E_a\ da\)</span>, since at <span class="math notranslate nohighlight">\(\theta = 0\)</span> every point arrives in phase. The power the aperture must supply to produce that field is proportional to <span class="math notranslate nohighlight">\(\int \vert E_a\vert^2 da\)</span>. Directivity is the ratio of radiated intensity to average radiated power, and carrying that through gives</p>
+<div class="math notranslate nohighlight">
+\[D = \frac{4\pi}{\lambda^2}\ \frac{\left\vert \int E_a\ da \right\vert^2}{\int \vert E_a\vert^2\ da}, \qquad \eta_\text{ap} = \frac{D}{4\pi A/\lambda^2} = \frac{\left\vert \int E_a\ da\right\vert^2}{A \int \vert E_a\vert^2\ da}.\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-aperture-efficiency-the-ratio-continued">
+<div class="wrap docutils container">
+<p class="rubric">Aperture efficiency: the ratio, continued</p>
+<p>Read that ratio as <strong>coherent gain over available gain</strong>. The numerator rewards field that adds up in phase; the denominator is the power the aperture had to radiate. By the Cauchy-Schwarz inequality the ratio never exceeds one, and it equals one only when <span class="math notranslate nohighlight">\(E_a\)</span> has constant amplitude and constant phase over the whole aperture. Uniform illumination is the most efficient illumination there is, and every departure from it — a taper, a phase error, a piece of aperture with nothing on it — costs efficiency.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-efficiency-of-a-cosine-illumination">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — efficiency of a cosine illumination</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — efficiency of a cosine illumination</p>
+<p>Take <span class="math notranslate nohighlight">\(E_a(x) = \cos(\pi x/L)\)</span> over <span class="math notranslate nohighlight">\(-L/2 \le x \le L/2\)</span>, which is the illumination inside the mouth of a pyramidal horn in its broad dimension. Work in <span class="math notranslate nohighlight">\(\xi = x/L\)</span> so the aperture runs from <span class="math notranslate nohighlight">\(-1/2\)</span> to <span class="math notranslate nohighlight">\(1/2\)</span> and its length is <span class="math notranslate nohighlight">\(1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\int_{-1/2}^{1/2}\cos(\pi\xi)\ d\xi = \frac{2}{\pi}, \qquad \int_{-1/2}^{1/2}\cos^2(\pi\xi)\ d\xi = \frac{1}{2}.\]</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-efficiency-of-a-cosine-illumination-continued">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — efficiency of a cosine illumination, continued</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — efficiency of a cosine illumination, continued</p>
+<div class="math notranslate nohighlight">
+\[\eta_\text{ap} = \frac{(2/\pi)^2}{1 \times (1/2)} = \frac{8}{\pi^2} = 0.811 .\]</div>
+<p>The cosine-illuminated aperture delivers <span class="math notranslate nohighlight">\(81\%\)</span> of the gain its area could support, a loss of <span class="math notranslate nohighlight">\(0.9\)</span> dB. The same arithmetic gives <span class="math notranslate nohighlight">\(0.75\)</span> for a triangular illumination and <span class="math notranslate nohighlight">\(2/3\)</span> for <span class="math notranslate nohighlight">\(\cos^2\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-else-eats-aperture-efficiency">
+<div class="wrap docutils container">
+<p class="rubric">What else eats aperture efficiency</p>
+<p>Two cautions on using <span class="math notranslate nohighlight">\(\eta_\text{ap}\)</span> in practice. First, the amplitude taper is only one of its terms: a real reflector also loses to spillover past the rim, to phase error across the surface, to feed and strut blockage, and to cross-polarization, and <span class="math notranslate nohighlight">\(\eta_\text{ap}\)</span> as measured is the product of all of them. That is why a horn typically comes in near <span class="math notranslate nohighlight">\(0.5\)</span> and a well-designed reflector at <span class="math notranslate nohighlight">\(0.55\)</span> to <span class="math notranslate nohighlight">\(0.7\)</span>, even though the amplitude taper alone would predict <span class="math notranslate nohighlight">\(0.75\)</span> or better. Second, <span class="math notranslate nohighlight">\(\eta_\text{ap}\)</span> is not radiation efficiency. <span class="math notranslate nohighlight">\(\eta_\text{rad}\)</span> accounts for power turned into heat; <span class="math notranslate nohighlight">\(\eta_\text{ap}\)</span> accounts for power that radiates but does not end up on boresight.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point-2">
+<div class="wrap docutils container">
+<p class="rubric">Key point</p>
+<div class="callout docutils container">
+<p><span class="math notranslate nohighlight">\(G = \eta_\text{ap}\ 4\pi A/\lambda^2\)</span>. Area and wavelength set the ceiling, and the illumination decides how close to the ceiling you get. Use <span class="math notranslate nohighlight">\(\eta_\text{ap} \approx 0.5\)</span> for a horn and <span class="math notranslate nohighlight">\(0.55\)</span> to <span class="math notranslate nohighlight">\(0.7\)</span> for a good reflector when you have nothing better.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-4-what-tapering-does-to-the-pattern">
+<div class="wrap docutils container">
+<p class="rubric">Part 4: What tapering does to the pattern</p>
+<p><strong>Tapering</strong> means letting the illumination fall off toward the edges of the aperture instead of stopping abruptly. The uniform aperture’s <span class="math notranslate nohighlight">\(-13.3\)</span> dB sidelobes come from the sharp edge: the transform of a function with a step in it decays slowly. Round the edge off and the sidelobes fall away much faster. The outer part of the aperture no longer works at full strength, so the aperture behaves as though it were shorter and less complete than it is, the beam widens, and the gain falls.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-taper-trade">
+<div class="wrap docutils container">
+<p class="rubric">The taper trade</p>
+<p>Four illuminations cover most of the ground, and their numbers are the ones this course uses everywhere:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Illumination</p></th>
+<th class="head text-left"><p>First sidelobe</p></th>
+<th class="head text-left"><p>HPBW (<span class="math notranslate nohighlight">\(\times\ \lambda/L\)</span>)</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\eta_\text{ap}\)</span></p></th>
+<th class="head text-left"><p>Gain penalty</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Uniform</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-13.3\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.886\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(1.00\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Cosine</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-23\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(1.19\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.81\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-0.9\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Triangular</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-26.5\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(1.27\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.75\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-1.2\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Cosine<span class="math notranslate nohighlight">\(^2\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-31.5\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(1.44\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.667\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-1.8\)</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-the-taper-trade-costs">
+<div class="wrap docutils container">
+<p class="rubric">What the taper trade costs</p>
+<p>The table reads as one continuous trade. Going from uniform to <span class="math notranslate nohighlight">\(\cos^2\)</span> lowers the first sidelobe by <span class="math notranslate nohighlight">\(18\)</span> dB, widens the beam by <span class="math notranslate nohighlight">\(63\%\)</span>, and loses <span class="math notranslate nohighlight">\(1.8\)</span> dB of gain. There is no illumination that lowers sidelobes and narrows the beam at the same time, and knowing that saves a great deal of time in front of a specification. When a radar system needs low sidelobes to keep clutter and jamming out of the receiver, it gives up beamwidth and aperture size to get them.</p>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-interactive-shape-sets-sidelobe-and-beamwidth-length-only-rescales">
+<div class="wrap docutils container">
+<p class="rubric">Interactive — shape sets sidelobe and beamwidth; length only rescales</p>
+<div class="depth docutils container">
+<p>The widget below computes the pattern of each illumination directly from the aperture integral. Pick an illumination and watch three things: the sidelobe level and the half-power constant change together, while the aperture length slider moves the pattern in angle without touching either. Set the aperture to <span class="math notranslate nohighlight">\(2\lambda\)</span> and step through the illuminations to see the sidelobes leave visible space entirely, then set it to <span class="math notranslate nohighlight">\(20\lambda\)</span> and confirm that the first sidelobe of the uniform case is still exactly <span class="math notranslate nohighlight">\(13.3\)</span> dB down.</p>
+</div>
+<iframe src="../../viz/aperture-distribution.html"
+        width="100%" height="437"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Aperture illumination and the far-field pattern it produces">
+</iframe>
+</div>
+</div>
+<div class="frame docutils container" id="frame-four-illuminations-four-patterns">
+<div class="wrap docutils container">
+<p class="rubric">Four illuminations, four patterns</p>
+<img src="../../viz/img/L15-taper-comparison.svg" alt="Four aperture illuminations and the patterns they produce in decibels" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+</div>
+</div>
+<div class="frame docutils container" id="frame-an-array-is-a-sampled-aperture">
+<div class="wrap docutils container">
+<p class="rubric">An array is a sampled aperture</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An array is an aperture sampled at discrete points, so the same trade appears there with sums in place of integrals. The array version of aperture efficiency is the <strong>taper efficiency</strong> <span class="math notranslate nohighlight">\(\eta_t = (\sum a_n)^2 / (N\sum a_n^2)\)</span>, which is the identical ratio of coherent to available gain evaluated over <span class="math notranslate nohighlight">\(N\)</span> element amplitudes. Lessons 24 and 25 use it on the PHASER, where the Hann and Blackman presets are the discrete cousins of the <span class="math notranslate nohighlight">\(\cos\)</span> and <span class="math notranslate nohighlight">\(\cos^2\)</span> rows above.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-5-designing-in-wavelengths">
+<div class="wrap docutils container">
+<p class="rubric">Part 5: Designing in wavelengths</p>
+<p>Every result so far depends on <span class="math notranslate nohighlight">\(L/\lambda\)</span> and <span class="math notranslate nohighlight">\(A/\lambda^2\)</span>, never on <span class="math notranslate nohighlight">\(L\)</span> or <span class="math notranslate nohighlight">\(A\)</span> alone. That gives two scaling rules that let you size hardware before you know anything else:</p>
+<ul class="simple">
+<li><p>Beamwidth scales as <span class="math notranslate nohighlight">\(\lambda/L\)</span>. Double the aperture in wavelengths and the beam is half as wide.</p></li>
+<li><p>Gain scales as <span class="math notranslate nohighlight">\(A/\lambda^2\)</span>. Double both aperture dimensions in wavelengths and the gain rises by a factor of four, or <span class="math notranslate nohighlight">\(6\)</span> dB.</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-part-5-designing-in-wavelengths-continued">
+<div class="wrap docutils container">
+<p class="rubric">Part 5: Designing in wavelengths, continued</p>
+<p>Both rules apply whether you change the aperture or change the frequency. An antenna moved from <span class="math notranslate nohighlight">\(10\ \text{GHz}\)</span> to <span class="math notranslate nohighlight">\(20\ \text{GHz}\)</span> doubles its size in wavelengths, halves both beamwidths, and gains <span class="math notranslate nohighlight">\(6\)</span> dB, provided the feed keeps illuminating it the same way. That proviso matters on real hardware, since a feed horn’s illumination pattern is itself frequency-dependent, but the scaling is the right first estimate.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-sizing-an-x-band-aperture">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — sizing an X-band aperture</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — sizing an X-band aperture</p>
+<p>Size a rectangular aperture at <span class="math notranslate nohighlight">\(10\ \text{GHz}\)</span> for a <span class="math notranslate nohighlight">\(3^\circ\)</span> beam in azimuth, a <span class="math notranslate nohighlight">\(10^\circ\)</span> beam in elevation, and azimuth sidelobes no higher than <span class="math notranslate nohighlight">\(-20\)</span> dB. At <span class="math notranslate nohighlight">\(10\ \text{GHz}\)</span>, <span class="math notranslate nohighlight">\(\lambda = 3\times10^8/10^{10} = 0.03\ \text{m}\)</span>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>Work</p></th>
+<th class="head text-left"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Azimuth illumination</p></td>
+<td class="text-left"><p>uniform gives only <span class="math notranslate nohighlight">\(-13.3\)</span> dB; cosine gives <span class="math notranslate nohighlight">\(-23\)</span> dB</p></td>
+<td class="text-left"><p>cosine, constant <span class="math notranslate nohighlight">\(1.19\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Azimuth length</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(L_x = 1.19\lambda/\theta_\text{HP} = 1.19(0.03)/0.05236\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.68\ \text{m} = 22.7\lambda\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Elevation length</p></td>
+<td class="text-left"><p>uniform is fine; <span class="math notranslate nohighlight">\(L_y = 0.886(0.03)/0.1745\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.15\ \text{m} = 5.1\lambda\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-sizing-an-x-band-aperture-continued">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — sizing an X-band aperture, continued</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — sizing an X-band aperture, continued</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>Work</p></th>
+<th class="head text-left"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Aperture area</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(A = 0.68 \times 0.15\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.104\ \text{m}^2\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Aperture efficiency</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.81\)</span> in azimuth <span class="math notranslate nohighlight">\(\times\ 1.00\)</span> in elevation</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.81\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Gain</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(G = 0.81(4\pi)(0.104)/(0.03)^2 = 1174\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(30.7\ \text{dBi}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Far-field distance</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2D^2/\lambda = 2(0.68)^2/0.03\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(31\ \text{m}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-sizing-an-x-band-aperture-checking-the-design">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — sizing an X-band aperture, checking the design</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — sizing an X-band aperture, checking the design</p>
+<p>Check the gain against the pencil-beam estimate from Lesson 2: <span class="math notranslate nohighlight">\(41{,}253/(3 \times 10) = 1375\)</span>, or <span class="math notranslate nohighlight">\(31.4\ \text{dBi}\)</span>, is the lossless geometric bound, and the practical constant of <span class="math notranslate nohighlight">\(26{,}000\)</span> to <span class="math notranslate nohighlight">\(32{,}400\)</span> gives <span class="math notranslate nohighlight">\(29.4\)</span> to <span class="math notranslate nohighlight">\(30.3\)</span> dBi. The computed <span class="math notranslate nohighlight">\(30.7\)</span> dBi sits just above that band, which is the right place for an aperture whose only loss is a known amplitude taper. A real antenna with spillover and a feed in front of it would land inside it.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-sizing-an-x-band-aperture-cont">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — sizing an X-band aperture (cont.)</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — sizing an X-band aperture, checking the design (cont.)</p>
+<p>Two consequences worth carrying away. The <span class="math notranslate nohighlight">\(3^\circ\)</span> azimuth requirement is what made this antenna <span class="math notranslate nohighlight">\(0.68\ \text{m}\)</span> wide, and the sidelobe requirement made it <span class="math notranslate nohighlight">\(34\%\)</span> wider than a uniform aperture with the same beamwidth would have been. Also, a <span class="math notranslate nohighlight">\(31\ \text{m}\)</span> far-field distance means this antenna cannot be pattern-tested in any ordinary room, which is the same constraint you worked with in Lesson 14.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-gain-is-the-last-thing-you-compute">
+<div class="wrap docutils container">
+<p class="rubric">Gain is the last thing you compute</p>
+<p>Notice how the requirements mapped onto the aperture. The sidelobe specification chose the illumination, the illumination fixed the beamwidth constant, the beamwidth specification then fixed the length, and only after all of that did the gain come out. Gain is the last thing you compute for an aperture antenna, not the first thing you choose.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-the-aperture-to-pattern-relationship">
+<div class="wrap docutils container">
+<p class="rubric">Summary — the aperture-to-pattern relationship</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(E_a(x)\)</span></p></td>
+<td class="text-left"><p>aperture distribution, the field across the opening</p></td>
+<td class="text-left"><p>the pattern depends on nothing else</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(u = (L/\lambda)\sin\theta\)</span></p></td>
+<td class="text-left"><p>space frequency; pattern <span class="math notranslate nohighlight">\(=\)</span> Fourier transform of <span class="math notranslate nohighlight">\(E_a\)</span></p></td>
+<td class="text-left"><p>shape sets <span class="math notranslate nohighlight">\(u\)</span>-pattern, size sets the angle scale</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\vert F\vert = \vert\sin\pi u/\pi u\vert\)</span></p></td>
+<td class="text-left"><p>uniform line source or aperture</p></td>
+<td class="text-left"><p>nulls at integer <span class="math notranslate nohighlight">\(u\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-beamwidth-and-sidelobes">
+<div class="wrap docutils container">
+<p class="rubric">Summary — beamwidth and sidelobes</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_\text{HP}\)</span></p></td>
+<td class="text-left"><p>half-power beamwidth of a uniform aperture</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.886\ \lambda/L\)</span>, or <span class="math notranslate nohighlight">\(50.8^\circ\ \lambda/L\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>first sidelobe</p></td>
+<td class="text-left"><p>uniform aperture, any length</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-13.3\)</span> dB; circular uniform, <span class="math notranslate nohighlight">\(-17.6\)</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-efficiency-gain-and-the-trade">
+<div class="wrap docutils container">
+<p class="rubric">Summary — efficiency, gain, and the trade</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\eta_\text{ap}\)</span></p></td>
+<td class="text-left"><p>coherent gain over available gain</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(1.00\)</span> / <span class="math notranslate nohighlight">\(0.81\)</span> / <span class="math notranslate nohighlight">\(0.75\)</span> / <span class="math notranslate nohighlight">\(0.667\)</span> for uniform / cos / triangular / cos<span class="math notranslate nohighlight">\(^2\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(G = \eta_\text{ap}\ 4\pi A/\lambda^2\)</span></p></td>
+<td class="text-left"><p>gain of an aperture antenna</p></td>
+<td class="text-left"><p>horn <span class="math notranslate nohighlight">\(\approx 0.5\)</span>, good reflector <span class="math notranslate nohighlight">\(0.55\)</span> to <span class="math notranslate nohighlight">\(0.7\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>taper trade</p></td>
+<td class="text-left"><p>lower sidelobes cost beamwidth and gain</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-13.3 \to -31.5\)</span> dB costs <span class="math notranslate nohighlight">\(63\%\)</span> beamwidth and <span class="math notranslate nohighlight">\(1.8\)</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a href="../../practice/ECE444_L15_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a href="../../practice/ECE444_L15_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where this is going</p>
+<p>Lesson 16 samples the aperture. Replace the continuous illumination with <span class="math notranslate nohighlight">\(N\)</span> discrete elements spaced <span class="math notranslate nohighlight">\(d\)</span> apart, replace the integral with a sum, and the space factor becomes the <strong>array factor</strong> — the same Fourier relationship with the same beamwidth constant and the same sidelobe trade, now expressed in element weights you can change electronically. Pattern multiplication follows immediately: the full pattern is the element factor times the array factor. Everything in this lesson survives that step, which is why it is worth having the numbers cold before you get there.</p>
+<div class="depth docutils container">
+<p>The Fourier view carries the rest of the module. Steering the beam in Lesson 18 is a linear phase ramp across the aperture, which shifts the transform. Sidelobe control in Lesson 24 is the taper table applied to element amplitudes. Grating lobes in Lesson 26 are what happens when the sampling is too coarse. Before Lesson 16, be able to state the uniform-aperture beamwidth constant, its first sidelobe level, and the definition of aperture efficiency without looking them up. The midterm pattern-measurement project is due at Lesson 20, and the beamwidth and sidelobe numbers you predict for it come from this lesson.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L15-aperture-distributions"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

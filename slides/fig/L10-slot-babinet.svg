@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 330" role="img" aria-label="Babinet complement: a half-wave dipole beside a half-wave slot cut in a conducting sheet; the electric field runs along the wire but across the slot">
+<defs>
+<marker id="sb10" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>
+<marker id="sb10n" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3f7d34"/></marker>
+<pattern id="sb10h" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+  <line x1="0" y1="0" x2="0" y2="8" stroke="#004a85" stroke-width="1.3" opacity="0.35"/>
+</pattern>
+</defs>
+
+<!-- ======================= LEFT: the dipole ======================= -->
+<text x="118" y="30" text-anchor="middle" fill="#004a85" font-size="18" font-weight="700">dipole</text>
+<text x="118" y="52" text-anchor="middle" fill="#5b6573" font-size="14">metal in air</text>
+
+<rect x="110" y="82" width="16" height="76" rx="3" fill="#004a85"/>
+<rect x="110" y="176" width="16" height="76" rx="3" fill="#004a85"/>
+<circle cx="118" cy="167" r="6" fill="none" stroke="#8a5a00" stroke-width="2.6"/>
+<line x1="118" y1="158" x2="118" y2="161" stroke="#8a5a00" stroke-width="2.6"/>
+<line x1="118" y1="173" x2="118" y2="176" stroke="#8a5a00" stroke-width="2.6"/>
+<text x="136" y="196" fill="#8a5a00" font-size="14" font-weight="700">feed</text>
+
+<!-- E along the wire -->
+<line x1="70" y1="130" x2="70" y2="88" stroke="#b01e24" stroke-width="3" marker-end="url(#sb10)"/>
+<line x1="70" y1="204" x2="70" y2="246" stroke="#b01e24" stroke-width="3" marker-end="url(#sb10)"/>
+<text x="58" y="158" text-anchor="end" fill="#b01e24" font-size="17" font-weight="700">E along</text>
+<text x="58" y="178" text-anchor="end" fill="#b01e24" font-size="17" font-weight="700">the wire</text>
+
+<!-- ======================= MIDDLE ======================= -->
+<line x1="200" y1="167" x2="272" y2="167" stroke="#3f7d34" stroke-width="3" marker-start="url(#sb10n)" marker-end="url(#sb10n)"/>
+<text x="236" y="150" text-anchor="middle" fill="#3f7d34" font-size="16" font-weight="700">complement</text>
+<text x="236" y="190" text-anchor="middle" fill="#3f7d34" font-size="14">swap metal for air</text>
+
+<!-- ======================= RIGHT: the slot ======================= -->
+<text x="410" y="30" text-anchor="middle" fill="#004a85" font-size="18" font-weight="700">slot</text>
+<text x="410" y="52" text-anchor="middle" fill="#5b6573" font-size="14">air in metal</text>
+
+<rect x="310" y="68" width="200" height="198" fill="rgba(0,74,133,0.10)" stroke="#004a85" stroke-width="2"/>
+<rect x="310" y="68" width="200" height="198" fill="url(#sb10h)"/>
+<rect x="402" y="82" width="16" height="170" rx="3" fill="#ffffff" stroke="#004a85" stroke-width="1.6"/>
+
+<line x1="384" y1="167" x2="436" y2="167" stroke="#8a5a00" stroke-width="2.6"/>
+<circle cx="410" cy="167" r="6" fill="#fff" stroke="#8a5a00" stroke-width="2.6"/>
+<text x="374" y="196" text-anchor="end" fill="#8a5a00" font-size="14" font-weight="700">feed</text>
+
+<!-- E across the slot -->
+<line x1="386" y1="110" x2="434" y2="110" stroke="#b01e24" stroke-width="3" marker-end="url(#sb10)"/>
+<line x1="386" y1="224" x2="434" y2="224" stroke="#b01e24" stroke-width="3" marker-end="url(#sb10)"/>
+<text x="446" y="152" fill="#b01e24" font-size="17" font-weight="700">E across</text>
+<text x="446" y="172" fill="#b01e24" font-size="17" font-weight="700">the slot</text>
+
+<text x="510" y="290" text-anchor="end" fill="#5b6573" font-size="14">conducting sheet</text>
+
+<!-- bottom line -->
+<text x="280" y="320" text-anchor="middle" fill="#8a5a00" font-size="17" font-weight="700">Same pattern shape. Polarization turned ninety degrees.</text>
+</svg>

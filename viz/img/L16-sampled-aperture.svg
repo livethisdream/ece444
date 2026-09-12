@@ -1,0 +1,19 @@
+<svg viewBox="0 0 790 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A continuous uniform aperture of length L above, and below it the same length occupied by eight equally spaced elements carrying the same total excitation">
+<g style="font-family:inherit">
+<text x="30" y="34" font-size="13.5" font-weight="700" fill="#5a5a5a">Continuous aperture</text>
+<rect x="120" y="60" width="540" height="34" fill="#5a5a5a" opacity="0.30"/>
+<line x1="120" y1="60" x2="660" y2="60" stroke="#5a5a5a" stroke-width="2.4"/>
+<line x1="120" y1="94" x2="660" y2="94" stroke="#5a5a5a" stroke-width="1.2"/>
+<text x="30" y="196" font-size="13.5" font-weight="700" fill="#004a85">Sampled by N elements</text>
+<line x1="120.0" y1="255" x2="120.0" y2="205" stroke="#0067b9" stroke-width="2"/><line x1="197.1" y1="255" x2="197.1" y2="205" stroke="#0067b9" stroke-width="2"/><line x1="274.3" y1="255" x2="274.3" y2="205" stroke="#0067b9" stroke-width="2"/><line x1="351.4" y1="255" x2="351.4" y2="205" stroke="#0067b9" stroke-width="2"/><line x1="428.6" y1="255" x2="428.6" y2="205" stroke="#0067b9" stroke-width="2"/><line x1="505.7" y1="255" x2="505.7" y2="205" stroke="#0067b9" stroke-width="2"/><line x1="582.9" y1="255" x2="582.9" y2="205" stroke="#0067b9" stroke-width="2"/><line x1="660.0" y1="255" x2="660.0" y2="205" stroke="#0067b9" stroke-width="2"/>
+<line x1="120" y1="255" x2="660" y2="255" stroke="#c7d2e0" stroke-width="1.4"/>
+<circle cx="120.0" cy="255" r="10" fill="#004a85"/><circle cx="197.1" cy="255" r="10" fill="#004a85"/><circle cx="274.3" cy="255" r="10" fill="#004a85"/><circle cx="351.4" cy="255" r="10" fill="#004a85"/><circle cx="428.6" cy="255" r="10" fill="#004a85"/><circle cx="505.7" cy="255" r="10" fill="#004a85"/><circle cx="582.9" cy="255" r="10" fill="#004a85"/><circle cx="660.0" cy="255" r="10" fill="#004a85"/>
+<line x1="120" y1="295" x2="197.1" y2="295" stroke="#1a1a1a" stroke-width="1.2"/>
+<text x="158.6" y="313" font-size="15" font-weight="700" fill="#1a1a1a" text-anchor="middle">d</text>
+<line x1="120" y1="156" x2="660" y2="156" stroke="#b01e24" stroke-width="1.6"/>
+<line x1="120" y1="148" x2="120" y2="164" stroke="#b01e24" stroke-width="1.6"/>
+<line x1="660" y1="148" x2="660" y2="164" stroke="#b01e24" stroke-width="1.6"/>
+<text x="390.0" y="140" font-size="14" font-weight="700" fill="#b01e24" text-anchor="middle">same overall length</text>
+<text x="390.0" y="322" font-size="12.5" fill="#5a5a5a" text-anchor="middle">the length sets the beam width; the spacing sets what repeats</text>
+</g>
+</svg>

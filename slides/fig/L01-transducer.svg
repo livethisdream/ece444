@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 0 790 392" role="img" aria-label="An antenna as a transducer: a guided wave on a two-conductor line flares open at the antenna and leaves as spherical wavefronts in free space; the reverse arrow shows the same antenna receiving">
+<defs>
+<marker id="trN" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
+<marker id="trG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1d7a4d"/></marker>
+</defs>
+<g style="font-family:inherit">
+
+<!-- transmit direction -->
+<text x="410" y="16" fill="#004a85" font-size="17" font-weight="700" text-anchor="middle">transmit — guided wave becomes radiated wave</text>
+<line x1="120" y1="30" x2="700" y2="30" stroke="#004a85" stroke-width="2.2" marker-end="url(#trN)"/>
+
+<!-- radio / feed -->
+<rect x="16" y="140" width="72" height="60" rx="6" fill="#ffffff" stroke="#004a85" stroke-width="2"/>
+<text x="52" y="176" fill="#004a85" font-size="15" text-anchor="middle">radio</text>
+
+<!-- two-conductor line -->
+<line x1="88" y1="158" x2="332" y2="158" stroke="#004a85" stroke-width="4" stroke-linecap="round"/>
+<line x1="88" y1="182" x2="332" y2="182" stroke="#004a85" stroke-width="4" stroke-linecap="round"/>
+
+<!-- guided wave between the conductors -->
+<path d="M104 170 Q118 155 132 170 Q146 185 160 170 Q174 155 188 170 Q202 185 216 170 Q230 155 244 170 Q258 185 272 170 Q286 155 300 170 Q314 185 322 174" fill="none" stroke="#0067b9" stroke-width="2.4"/>
+
+<!-- flare: the antenna -->
+<line x1="332" y1="158" x2="440" y2="110" stroke="#004a85" stroke-width="4" stroke-linecap="round"/>
+<line x1="332" y1="182" x2="440" y2="230" stroke="#004a85" stroke-width="4" stroke-linecap="round"/>
+
+<!-- spherical wavefronts leaving the flare -->
+<g fill="none" stroke="#0067b9" stroke-width="2.4">
+<path d="M489.2,135.6 A60,60 0 0 1 489.2,204.4"/>
+<path d="M521.9,112.6 A100,100 0 0 1 521.9,227.4" opacity="0.88"/>
+<path d="M554.7,89.7 A140,140 0 0 1 554.7,250.3" opacity="0.76"/>
+<path d="M587.5,66.8 A180,180 0 0 1 587.5,273.2" opacity="0.64"/>
+<path d="M620.2,43.8 A220,220 0 0 1 620.2,296.2" opacity="0.52"/>
+</g>
+
+<!-- labels -->
+<text x="206" y="216" fill="#5a5a5a" font-size="16" text-anchor="middle">guided wave on the line</text>
+<text x="366" y="252" fill="#5a5a5a" font-size="16" text-anchor="middle">antenna</text>
+<text x="690" y="163" fill="#5a5a5a" font-size="16">radiated wave</text>
+<text x="690" y="185" fill="#5a5a5a" font-size="16">in free space</text>
+
+<!-- receive direction -->
+<line x1="700" y1="356" x2="120" y2="356" stroke="#1d7a4d" stroke-width="2.2" marker-end="url(#trG)"/>
+<text x="410" y="382" fill="#1d7a4d" font-size="17" font-weight="700" text-anchor="middle">receive — same antenna, same pattern, run backwards</text>
+
+</g>
+</svg>

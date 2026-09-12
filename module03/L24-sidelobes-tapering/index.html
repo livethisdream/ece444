@@ -1,0 +1,948 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L24 - Sidelobes and Tapering Theory &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l24-sidelobes-and-tapering-theory">
+<h1>L24 - Sidelobes and Tapering Theory<a class="headerlink" href="#l24-sidelobes-and-tapering-theory" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Sidelobes and Tapering Theory</h1>
+<div class="title-rule"></div>
+<p>Sidelobe level is set by the shape of the illumination, and shape is something you control.</p>
+<p>Lesson 24 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-2">
+<div class="wrap docutils container">
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L24-sidelobes-tapering.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L24-sidelobes-tapering.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L24-sidelobes-tapering.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '7'">
+  <li>I can explain why the uniform taper has the highest sidelobes and why every smoother taper trades beamwidth for them.</li>
+  <li>I can compare uniform, cosine-family, Chebyshev, and Taylor tapers by sidelobe level and beam broadening.</li>
+  <li>I can compute taper efficiency and the coherent peak drop for a discrete taper.</li>
+  <li>I can select a taper to meet a sidelobe specification and state its costs.</li>
+  <li>I can convert a taper's element amplitudes to the PHASER's per-element gain settings.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-we-were">
+<div class="wrap docutils container">
+<p class="rubric">Where we were</p>
+<p>In Lesson 23 you swept the PHASER’s pattern and wrote down its sidelobes: a pair
+about 13 dB below the peak at roughly <span class="math notranslate nohighlight">\(\pm 22^\circ\)</span>, then a ragged skirt out to
+the edges of visible space. Those sidelobes are not a defect in the array, and no
+amount of careful alignment will remove them. They are the direct consequence of
+driving all eight elements at the same amplitude, and you can trade them away for
+something else you value less. This lesson is how that trade works, what it
+costs, and how to pick a taper that meets a stated sidelobe specification.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-sidelobes-exist-the-fourier-reading">
+<div class="wrap docutils container">
+<p class="rubric">Why sidelobes exist: the Fourier reading</p>
+<p>Lesson 15 established the Fourier relationship between an aperture and its
+pattern: the far-field pattern is the transform of the aperture illumination, and
+the transform variable is the space frequency <span class="math notranslate nohighlight">\(k_z = k\sin\theta\)</span>. Read that
+relationship backwards and the sidelobes stop being mysterious. A uniformly
+illuminated aperture is a rectangle in space — full amplitude everywhere across
+the array, then nothing at all one element spacing beyond the ends. <strong>An abrupt
+edge is a discontinuity, and a discontinuity carries energy at every spatial
+frequency.</strong> The transform of a rectangle is a sinc, and a sinc has ripples that
+decay only as <span class="math notranslate nohighlight">\(1/u\)</span>. Those ripples are the sidelobes.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-sidelobes-exist-the-phasor-reading">
+<div class="wrap docutils container">
+<p class="rubric">Why sidelobes exist: the phasor reading</p>
+<p>The same statement in array language: the eight element voltages add in phase at
+broadside, and away from broadside they fall out of step. At the first null they
+cancel exactly. Just past that null they do not cancel — seven of the eight
+phasors still partially reinforce — and the residue is the first sidelobe. For
+the PHASER’s eight elements the residue is <span class="math notranslate nohighlight">\(-12.8\ \text{dB}\)</span> relative to the
+peak, which is the number your sweep measured. For a continuous uniform aperture
+the same argument gives <span class="math notranslate nohighlight">\(-13.3\ \text{dB}\)</span>. Both are properties of the <em>shape</em> of
+the illumination, not of its <em>size</em>: adding elements narrows the main lobe and
+moves the sidelobes inward, but it does not lower them.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-a-rectangular-illumination-beside-a-tapered-one">
+<div class="wrap docutils container">
+<p class="rubric">A rectangular illumination beside a tapered one</p>
+<p><img src="../../viz/img/L24-edge-fourier.svg"
+     alt="A rectangular aperture illumination beside a smoothly tapered one, with the pattern each produces"
+     style="max-width: 760px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-softening-the-edge-softens-the-pattern">
+<div class="wrap docutils container">
+<p class="rubric">Softening the edge softens the pattern</p>
+<p>Softening the edge softens the pattern. If the illumination approaches zero
+gradually instead of stopping dead, the high space-frequency content that fed the
+sidelobes is no longer there, and the sidelobes drop. That gradual reduction of
+element amplitude from the center of the array toward its ends is called an
+<strong>amplitude taper</strong>, and every one of the tapers below is a different rule for
+how fast to fall off.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-low-sidelobes-matter-to-a-system-engineer">
+<div class="wrap docutils container">
+<p class="rubric">Why low sidelobes matter to a system engineer</p>
+<div class="callout docutils container">
+<p>A sidelobe is a direction the antenna is listening to when you did not ask it
+to. A search radar at <span class="math notranslate nohighlight">\(-13\ \text{dB}\)</span> sidelobes sees ground clutter through
+those lobes at only one twentieth of its main-beam sensitivity, which is
+nowhere near enough when the clutter is 40 dB stronger than the target. A
+communications terminal with high sidelobes receives an adjacent satellite it
+was never pointed at, and transmits into one. A jammer off to the side does not
+need to be in your beam to deny it — it only needs to be in a sidelobe. Lesson
+27 attacks that last problem directly by placing a null on the jammer; tapering
+is the cheaper, non-adaptive answer that lowers <em>every</em> sidelobe at once.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-a-taper-is">
+<div class="wrap docutils container">
+<p class="rubric">What a taper is</p>
+<p>A taper is a set of element amplitudes <span class="math notranslate nohighlight">\(a_n\)</span>, <span class="math notranslate nohighlight">\(n = 1 \ldots N\)</span>, normalized so the
+largest is 1. Three families cover essentially all practical work, and they
+differ in what they optimize.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-cosine-on-pedestal">
+<div class="wrap docutils container">
+<p class="rubric">Cosine on pedestal</p>
+<p><strong>The cosine-on-pedestal family</strong> is defined by a shape rather than by a
+specification. Let <span class="math notranslate nohighlight">\(p\)</span> be position across the aperture normalized to its length,
+so <span class="math notranslate nohighlight">\(p\)</span> runs from <span class="math notranslate nohighlight">\(-1/2\)</span> to <span class="math notranslate nohighlight">\(+1/2\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[a(p) = P + (1 - P)\cos^2(\pi p),\]</div>
+<p>where the <strong>pedestal</strong> <span class="math notranslate nohighlight">\(P\)</span> is the amplitude left at the edges. Setting <span class="math notranslate nohighlight">\(P = 1\)</span>
+gives the uniform taper, <span class="math notranslate nohighlight">\(P = 0\)</span> gives the <strong>Hann</strong> taper (a full cosine-squared
+falling to zero), and <span class="math notranslate nohighlight">\(P = 0.08\)</span> gives the Hamming taper. The PHASER GUI’s Hann
+preset is exactly this shape sampled at the eight element positions and
+renormalized:</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-cosine-on-pedestal-sidelobe-and-beamwidth-by-pedestal">
+<div class="wrap docutils container">
+<p class="rubric">Cosine on pedestal — sidelobe and beamwidth by pedestal</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Pedestal <span class="math notranslate nohighlight">\(P\)</span></p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(a_n\)</span> (%)</p></th>
+<th class="head text-left"><p>First sidelobe</p></th>
+<th class="head text-left"><p>HPBW</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\eta_t\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>1.00 (uniform)</p></td>
+<td class="text-left"><p>100, 100, 100, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-12.8\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.2^\circ\)</span></p></td>
+<td class="text-left"><p>1.000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>0.50</p></td>
+<td class="text-left"><p>57, 72, 89, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-18.8\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(14.8^\circ\)</span></p></td>
+<td class="text-left"><p>0.959</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>0.25</p></td>
+<td class="text-left"><p>35, 57, 83, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-25.8\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(16.2^\circ\)</span></p></td>
+<td class="text-left"><p>0.884</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-cosine-on-pedestal-sidelobe-and-beamwidth-by-pedestal-continued">
+<div class="wrap docutils container">
+<p class="rubric">Cosine on pedestal — sidelobe and beamwidth by pedestal, continued</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Pedestal <span class="math notranslate nohighlight">\(P\)</span></p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(a_n\)</span> (%)</p></th>
+<th class="head text-left"><p>First sidelobe</p></th>
+<th class="head text-left"><p>HPBW</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\eta_t\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>0.08 (Hamming)</p></td>
+<td class="text-left"><p>19, 47, 79, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-33.0\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(17.9^\circ\)</span></p></td>
+<td class="text-left"><p>0.800</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>0.00 (Hann)</p></td>
+<td class="text-left"><p>12, 43, 77, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-31.8\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(19.1^\circ\)</span></p></td>
+<td class="text-left"><p>0.750</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Only the inner four values are listed; the taper is symmetric, so elements 5
+through 8 mirror elements 4 through 1.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-why-hamming-beats-hann-on-every-count">
+<div class="wrap docutils container">
+<p class="rubric">Why Hamming beats Hann on every count</p>
+<p>Read the table downward and the trade is already visible: every step toward a
+smoother edge lowers the sidelobes and widens the beam. Note also that Hamming
+beats Hann on all three counts. Leaving a small pedestal at the edge cancels
+the first sidelobe of the cosine term against the first sidelobe of the pedestal,
+which is why <span class="math notranslate nohighlight">\(P = 0.08\)</span> is a named taper and not an arbitrary choice.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-chebyshev-the-defining-property">
+<div class="wrap docutils container">
+<p class="rubric">Chebyshev — the defining property</p>
+<p><strong>The Chebyshev (Dolph) taper</strong> starts from the specification instead. You state
+the sidelobe level you want, and Dolph’s construction returns the amplitudes that
+achieve it with the narrowest possible main lobe. The defining property is
+<strong>equal ripple</strong>: every sidelobe in the pattern sits at exactly the design level,
+none higher and none lower. That is what makes it optimal. A taper whose far
+sidelobes fall below the specification is delivering suppression nobody asked
+for, and it widened the main lobe to get it.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-chebyshev-the-construction">
+<div class="wrap docutils container">
+<p class="rubric">Chebyshev — the construction</p>
+<p>The construction itself uses the Chebyshev polynomial <span class="math notranslate nohighlight">\(T_{N-1}\)</span>, whose ripples
+between <span class="math notranslate nohighlight">\(-1\)</span> and <span class="math notranslate nohighlight">\(+1\)</span> are the equal sidelobes and whose runaway growth beyond
+<span class="math notranslate nohighlight">\(x = 1\)</span> is the main lobe. For an eight-element array the amplitudes come from
+matching</p>
+<div class="math notranslate nohighlight">
+\[AF(\psi) = T_{7}\left(x_0 \cos\frac{\psi}{2}\right), \qquad x_0 = \cosh\left(\frac{\cosh^{-1} R}{7}\right),\]</div>
+<p>where <span class="math notranslate nohighlight">\(R = 10^{\text{SLL}/20}\)</span> is the voltage ratio between the peak and the
+sidelobes. You will not be asked to carry that expansion out by hand. The
+widget below does it numerically, and the results for the three designs you will
+use are in the next table.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-family-3-taylor">
+<div class="wrap docutils container">
+<p class="rubric">Family 3: Taylor</p>
+<p><strong>The Taylor taper</strong> is the one large radars are built with. A true Chebyshev design
+on a big aperture puts sharp spikes of current at the array edges, which is hard
+to build and gives up efficiency. Taylor’s design holds only the first
+<span class="math notranslate nohighlight">\(\bar{n} - 1\)</span> sidelobe pairs at the design level and lets the rest decay like a
+uniform aperture’s, which removes the edge spikes and costs almost nothing in
+beamwidth. The parameter <span class="math notranslate nohighlight">\(\bar{n}\)</span> is how many sidelobes you insist on
+controlling; <span class="math notranslate nohighlight">\(\bar{n} = 4\)</span> to <span class="math notranslate nohighlight">\(6\)</span> is typical.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-seven-tapers-on-eight-elements">
+<div class="wrap docutils container">
+<p class="rubric">Seven tapers on eight elements</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Taper (8 elements, <span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span>)</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(a_n\)</span> (%)</p></th>
+<th class="head text-left"><p>Highest sidelobe</p></th>
+<th class="head text-left"><p>HPBW</p></th>
+<th class="head text-left"><p>Broadening</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\eta_t\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Uniform</p></td>
+<td class="text-left"><p>100, 100, 100, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-12.8\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.2^\circ\)</span></p></td>
+<td class="text-left"><p>1.00</p></td>
+<td class="text-left"><p>1.000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Chebyshev <span class="math notranslate nohighlight">\(-20\)</span> dB</p></td>
+<td class="text-left"><p>58, 66, 88, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-20.0\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(14.8^\circ\)</span></p></td>
+<td class="text-left"><p>1.12</p></td>
+<td class="text-left"><p>0.956</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Chebyshev <span class="math notranslate nohighlight">\(-30\)</span> dB</p></td>
+<td class="text-left"><p>26, 52, 81, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-30.0\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(17.1^\circ\)</span></p></td>
+<td class="text-left"><p>1.30</p></td>
+<td class="text-left"><p>0.841</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Chebyshev <span class="math notranslate nohighlight">\(-40\)</span> dB</p></td>
+<td class="text-left"><p>15, 42, 76, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-40.0\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(18.8^\circ\)</span></p></td>
+<td class="text-left"><p>1.42</p></td>
+<td class="text-left"><p>0.761</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-seven-tapers-on-eight-elements-continued">
+<div class="wrap docutils container">
+<p class="rubric">Seven tapers on eight elements, continued</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Taper (8 elements, <span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span>)</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(a_n\)</span> (%)</p></th>
+<th class="head text-left"><p>Highest sidelobe</p></th>
+<th class="head text-left"><p>HPBW</p></th>
+<th class="head text-left"><p>Broadening</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\eta_t\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Taylor <span class="math notranslate nohighlight">\(-30\)</span> dB, <span class="math notranslate nohighlight">\(\bar{n} = 4\)</span></p></td>
+<td class="text-left"><p>29, 53, 82, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-28.3\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(16.8^\circ\)</span></p></td>
+<td class="text-left"><p>1.27</p></td>
+<td class="text-left"><p>0.853</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Hann</p></td>
+<td class="text-left"><p>12, 43, 77, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-31.8\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(19.1^\circ\)</span></p></td>
+<td class="text-left"><p>1.45</p></td>
+<td class="text-left"><p>0.750</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Blackman</p></td>
+<td class="text-left"><p>6, 27, 66, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-50.5\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(21.7^\circ\)</span></p></td>
+<td class="text-left"><p>1.64</p></td>
+<td class="text-left"><p>0.655</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-taylor-row-shows-both-sides-of-the-compromise">
+<div class="wrap docutils container">
+<p class="rubric">The Taylor row shows both sides of the compromise</p>
+<p>The Taylor row shows both sides of the compromise. On only eight elements the
+sampled Taylor distribution does not hold its sidelobes exactly on the design
+line — the highest one lands at <span class="math notranslate nohighlight">\(-28.3\ \text{dB}\)</span> rather than <span class="math notranslate nohighlight">\(-30\)</span> — but it
+gets a narrower beam and a higher efficiency than the Chebyshev design it is
+approximating. Sample a Taylor distribution on a 64-element array and the
+sidelobes land where they were designed to.</p>
+</div>
+</div>
+<div class="frame viz-frame docutils container" id="frame-five-tapers-on-the-eight-element-array">
+<div class="wrap docutils container">
+<p class="rubric">Five tapers on the eight-element array</p>
+<div class="depth docutils container">
+<p>Work through the widget before reading on. Step through the five tapers and
+watch three things at once: the bars redistribute amplitude away from the array
+edges, the main lobe widens, and the sidelobes drop. On the three Chebyshev
+settings, check that every sidelobe touches the dashed design line — that equal
+ripple is the whole point of the family, and it is what separates a Chebyshev
+design from a window function that happens to reach a similar level.</p>
+</div>
+<iframe src="../../viz/taper-explorer.html"
+        width="100%" height="438"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Element amplitudes, pattern, sidelobe level, beamwidth, taper efficiency and peak drop for five tapers on the eight-element PHASER array">
+</iframe>
+</div>
+</div>
+<div class="frame docutils container" id="frame-cost-1-the-beam-gets-wider">
+<div class="wrap docutils container">
+<p class="rubric">Cost 1: the beam gets wider</p>
+<p>Tapering has three separate costs, and two of them are routinely confused with
+each other.</p>
+<p><strong>Cost 1: the main lobe gets wider.</strong> The physical aperture is unchanged, but the
+<em>effective</em> aperture is smaller because the outer elements now contribute less.
+Beamwidth scales as <span class="math notranslate nohighlight">\(0.886\ \lambda/(N d)\)</span> for the uniform case, and a taper
+multiplies that by a <strong>beam broadening factor</strong> between about 1.1 and 1.7. The
+broadening column in the table above is that factor. Deeper sidelobes always cost
+more broadening, and the widget’s beamwidth readout is the direct measurement of
+it.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-cost-2-taper-efficiency-the-setup">
+<div class="wrap docutils container">
+<p class="rubric">Cost 2: taper efficiency — the setup</p>
+<p><strong>Cost 2: taper efficiency.</strong> Consider the array on receive, looking at a source
+on boresight. Every element sees the same signal with the same phase, so the
+beamformer output voltage is <span class="math notranslate nohighlight">\(\sum a_n\)</span> times the per-element signal voltage, and
+the output signal power goes as <span class="math notranslate nohighlight">\(\left(\sum a_n\right)^2\)</span>. Each channel also adds
+its own noise, independently of the others, so the noise powers add rather than
+the voltages, and the output noise goes as <span class="math notranslate nohighlight">\(\sum a_n^2\)</span>. The signal-to-noise
+ratio is therefore proportional to <span class="math notranslate nohighlight">\(\left(\sum a_n\right)^2 / \sum a_n^2\)</span>. For a
+uniform taper that ratio is <span class="math notranslate nohighlight">\(N^2/N = N\)</span>. Normalizing by the uniform case gives
+the <strong>taper efficiency</strong></p>
+<div class="math notranslate nohighlight">
+\[\eta_t = \frac{\left(\sum_{n} a_n\right)^2}{N \sum_{n} a_n^2}.\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-cost-2-taper-efficiency-the-result">
+<div class="wrap docutils container">
+<p class="rubric">Cost 2: taper efficiency — the result</p>
+<p>For a uniform taper that ratio is <span class="math notranslate nohighlight">\(N^2/N = N\)</span>. Normalizing by the uniform case gives
+the <strong>taper efficiency</strong></p>
+<div class="math notranslate nohighlight">
+\[\eta_t = \frac{\left(\sum_{n} a_n\right)^2}{N \sum_{n} a_n^2}.\]</div>
+<p>The same expression comes out of the transmit calculation, where the peak
+radiated intensity goes as <span class="math notranslate nohighlight">\(\left(\sum a_n\right)^2\)</span> and the total radiated power
+as <span class="math notranslate nohighlight">\(\sum a_n^2\)</span>, so <span class="math notranslate nohighlight">\(\eta_t\)</span> is equally the fraction of the uniform array’s
+directivity that the tapered array retains. It is a pure ratio, unchanged if you
+scale every <span class="math notranslate nohighlight">\(a_n\)</span> by the same factor, and it is always <span class="math notranslate nohighlight">\(\le 1\)</span> with equality only
+for the uniform taper.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-cost-3-the-peak-of-the-measured-trace-drops">
+<div class="wrap docutils container">
+<p class="rubric">Cost 3: the peak of the measured trace drops</p>
+<p><strong>Cost 3: the peak of the measured trace drops.</strong> This is a different number, and
+it is the one you will read off the screen next lesson. The GUI’s beam sweep
+plots received power against commanded steer angle, and it does not renormalize
+between runs. Setting six of the eight Element Gains sliders below 100% throws
+away signal voltage, and the peak of the tapered trace lands</p>
+<div class="math notranslate nohighlight">
+\[\text{peak drop} = 20\log_{10}\left(\frac{\sum_{n} a_n}{N}\right)\]</div>
+<p>below the uniform trace’s peak. This is a <strong>coherent voltage loss</strong>, not a
+directivity loss. The noise was attenuated along with the signal, so the array’s
+sensitivity did not fall by this much, but the plotted peak did.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point">
+<div class="wrap docutils container">
+<p class="rubric">Key point</p>
+<div class="callout docutils container">
+<p>The two dB numbers are related, and keeping them separate is the difference
+between reading a sweep correctly and misreading it:</p>
+<div class="math notranslate nohighlight">
+\[20\log_{10}\left(\frac{\sum a_n}{N}\right) = 10\log_{10}\eta_t + 10\log_{10}\left(\frac{\sum a_n^2}{N}\right).\]</div>
+<p>The first term on the right is the directivity you gave up. The second term is
+the average power gain of the eight channels — the signal you simply turned
+down.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-key-point-continued">
+<div class="wrap docutils container">
+<p class="rubric">Key point, continued</p>
+<div class="callout docutils container">
+<p>For the Hann preset the split is <span class="math notranslate nohighlight">\(-4.7 = -1.2 - 3.5\)</span> dB. Only <span class="math notranslate nohighlight">\(1.2\)</span> dB of
+that <span class="math notranslate nohighlight">\(4.7\)</span> dB is a loss of antenna performance; the remaining <span class="math notranslate nohighlight">\(3.5\)</span> dB would
+come straight back if the hardware let you scale all eight gains up by the same
+factor. It does not, because 100% is already full scale.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-designing-to-a-specification">
+<div class="wrap docutils container">
+<p class="rubric">Designing to a specification</p>
+<p>The design problem is stated the way a customer states it: hold the sidelobes
+below some level, and tell me what it costs. The procedure is short.</p>
+<ol class="arabic simple">
+<li><p>Pick the family. Use Chebyshev when the specification is a hard ceiling on
+every sidelobe and the array is small. Use Taylor when the array is large or
+the edge elements cannot be driven that hard. Use a cosine-on-pedestal window
+when you want a shape rather than a specification, or when the beamformer only
+offers named presets.</p></li>
+<li><p>Compute the amplitudes and normalize the largest to 1.</p></li>
+<li><p>Evaluate the three costs: broadening, <span class="math notranslate nohighlight">\(\eta_t\)</span>, and the peak drop.</p></li>
+<li><p>Check the result against the hardware’s amplitude resolution, because a taper
+the hardware cannot set is a taper you do not have.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-a-30-db-design-on-the-eight-element-array">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — a −30 dB design on the eight-element array</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — a <span class="math notranslate nohighlight">\(-30\)</span> dB design on the eight-element array</p>
+<p><strong>Specification.</strong> No sidelobe above <span class="math notranslate nohighlight">\(-30\ \text{dB}\)</span> relative to the peak, on
+<span class="math notranslate nohighlight">\(N = 8\)</span> elements at <span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span>, broadside.</p>
+<p><strong>Amplitudes.</strong> The voltage ratio is <span class="math notranslate nohighlight">\(R = 10^{30/20} = 31.62\)</span>, giving
+<span class="math notranslate nohighlight">\(x_0 = \cosh\left(\cosh^{-1}(31.62)/7\right) = 1.181\)</span>. Carrying out the Dolph
+construction and normalizing to the center pair gives</p>
+<div class="math notranslate nohighlight">
+\[a_n = 0.26,\ 0.52,\ 0.81,\ 1.00,\ 1.00,\ 0.81,\ 0.52,\ 0.26.\]</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-a-30-db-design-on-the-eight-element-array-continued">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — a −30 dB design on the eight-element array, continued</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — a <span class="math notranslate nohighlight">\(-30\)</span> dB design on the eight-element array, continued</p>
+<p><strong>Taper efficiency.</strong> With <span class="math notranslate nohighlight">\(\sum a_n = 5.18\)</span> and <span class="math notranslate nohighlight">\(\sum a_n^2 = 3.988\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\eta_t = \frac{(5.18)^2}{8 \times 3.988} = \frac{26.83}{31.91} = 0.841 = -0.75\ \text{dB}.\]</div>
+<p><strong>Peak drop on the trace.</strong></p>
+<div class="math notranslate nohighlight">
+\[20\log_{10}\left(\frac{5.18}{8}\right) = 20\log_{10}(0.648) = -3.8\ \text{dB}.\]</div>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-a-30-db-design-on-the-eight-element-array-continued-2">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — a −30 dB design on the eight-element array, continued</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — a <span class="math notranslate nohighlight">\(-30\)</span> dB design on the eight-element array, continued</p>
+<p><strong>Beamwidth.</strong> The pattern measures <span class="math notranslate nohighlight">\(17.1^\circ\)</span> at half power against
+<span class="math notranslate nohighlight">\(13.2^\circ\)</span> uniform, a broadening factor of 1.30.</p>
+<p><strong>Result.</strong> Sidelobes drop from <span class="math notranslate nohighlight">\(-12.8\)</span> to <span class="math notranslate nohighlight">\(-30\)</span> dB,
+a 17 dB improvement. The beam widens from <span class="math notranslate nohighlight">\(13.2^\circ\)</span> to <span class="math notranslate nohighlight">\(17.1^\circ\)</span>, the array
+loses <span class="math notranslate nohighlight">\(0.75\ \text{dB}\)</span> of directivity, and the displayed peak falls
+<span class="math notranslate nohighlight">\(3.8\ \text{dB}\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-worked-example-a-30-db-design-on-the-eight-element-array-continued-3">
+<div class="wrap docutils container">
+<p class="rubric">Worked example — a −30 dB design on the eight-element array, continued</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — a <span class="math notranslate nohighlight">\(-30\)</span> dB design on the eight-element array, continued</p>
+<p><strong>Compare against the obvious alternative.</strong> The Hann window reaches a similar
+<span class="math notranslate nohighlight">\(-31.8\ \text{dB}\)</span>, but its beam is <span class="math notranslate nohighlight">\(19.1^\circ\)</span> and its efficiency is 0.750.
+The Chebyshev design gets the same sidelobe suppression with a <span class="math notranslate nohighlight">\(2^\circ\)</span>
+narrower beam and <span class="math notranslate nohighlight">\(0.5\ \text{dB}\)</span> more directivity. That is Dolph optimality
+doing its job: for a stated sidelobe level, no other set of amplitudes gives a
+narrower main lobe.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-whole-design-space-on-one-curve">
+<div class="wrap docutils container">
+<p class="rubric">The whole design space, on one curve</p>
+<p><img src="../../viz/img/L24-sll-vs-cost.svg"
+     alt="Half-power beamwidth and taper efficiency of the eight-element Chebyshev family against design sidelobe level, with Hann, Blackman and Taylor marked"
+     style="max-width: 720px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-chebyshev-designs-run-the-curve">
+<div class="wrap docutils container">
+<p class="rubric">Chebyshev designs run the curve</p>
+<p>The curve is the whole design space for this array. Chebyshev designs run along
+it and the window functions sit above it, which is the geometric statement of
+Dolph optimality: Blackman reaches <span class="math notranslate nohighlight">\(-50\ \text{dB}\)</span> with a <span class="math notranslate nohighlight">\(21.7^\circ\)</span> beam,
+where the Chebyshev design at the same sidelobe level needs only <span class="math notranslate nohighlight">\(20.1^\circ\)</span>.
+The slope of the solid curve is the beamwidth a decibel of suppression takes. On
+eight elements the beam widens about <span class="math notranslate nohighlight">\(0.2^\circ\)</span> per decibel of suppression across the
+whole range, and the efficiency falls from 1.00 to 0.71 over the same span.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-stops-you-from-going-deeper">
+<div class="wrap docutils container">
+<p class="rubric">What stops you from going deeper</p>
+<p>What stops you from going deeper is not the curve but the hardware and the
+instrument. The <span class="math notranslate nohighlight">\(-50\ \text{dB}\)</span> design puts its outer elements at 9% of full
+scale, where the gain word’s 1% step is an 11% error on that element, and the
+sidelobes it was designed for will not survive that. The beam sweep’s noise floor
+sits about 23 dB below the uniform peak, so a design deeper than roughly
+<span class="math notranslate nohighlight">\(-20\ \text{dB}\)</span> relative to its own peak cannot be confirmed on this bench at
+all. Specifying <span class="math notranslate nohighlight">\(-50\ \text{dB}\)</span> when <span class="math notranslate nohighlight">\(-30\ \text{dB}\)</span> would do gains nothing you
+can measure and gives up beamwidth, directivity, and setting accuracy.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-loading-a-taper-into-the-phaser">
+<div class="wrap docutils container">
+<p class="rubric">Loading a taper into the PHASER</p>
+<p>The PHASER’s ADAR1000s set a gain as well as a phase on every element, and the
+course GUI exposes those as the <strong>Element Gains</strong> sliders Rx1 through Rx8, in
+percent of full scale. Converting a design to hardware settings is one line:</p>
+<div class="math notranslate nohighlight">
+\[\text{Rx}_n\ (\%) = 100 \times \frac{a_n}{\max a_n}.\]</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-two-limits-worth-knowing">
+<div class="wrap docutils container">
+<p class="rubric">Two limits worth knowing</p>
+<p>Normalize to the largest element, not to the sum, because the sliders cannot
+exceed 100%. For the worked example above you would enter 26, 52, 81, 100, 100,
+81, 52, 26 and turn on <strong>Enforce Symmetric Taper</strong> so a slip on one slider is
+mirrored rather than left as an asymmetry. Two limits are worth knowing before
+you type:</p>
+<ul class="simple">
+<li><p>The gain word resolves to about 1%, so the entered taper is quantized. Rounding
+the <span class="math notranslate nohighlight">\(-30\ \text{dB}\)</span> design to whole percent moves its highest sidelobe to
+<span class="math notranslate nohighlight">\(-29.9\ \text{dB}\)</span>, which is harmless. Trying to hold a <span class="math notranslate nohighlight">\(-50\ \text{dB}\)</span> design
+to 1% amplitude steps is not, and Lesson 26 makes the general version of that
+argument for phase.</p></li>
+<li><p>You can only go down. Every taper therefore costs peak signal on the trace, and
+the GUI’s Peak Array Gain readout will fall by the amount computed in Part 3.</p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-what-l25-will-measure">
+<div class="wrap docutils container">
+<p class="rubric">What L25 will measure</p>
+<p>The GUI ships four presets. Their gain lists and what the sweep reads for each
+are below; predict these numbers now, because next lesson you will measure them.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Preset</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(a_n\)</span> (%)</p></th>
+<th class="head text-left"><p>Theory HPBW</p></th>
+<th class="head text-left"><p>Measured HPBW</p></th>
+<th class="head text-left"><p>Peak drop</p></th>
+<th class="head text-left"><p>First sidelobe</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Uniform</p></td>
+<td class="text-left"><p>100, 100, 100, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.2^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.1^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-11\)</span> to <span class="math notranslate nohighlight">\(-13\)</span> dBc</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Hann</p></td>
+<td class="text-left"><p>12, 43, 77, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(19.1^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(19.5^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-4.7\)</span> dB</p></td>
+<td class="text-left"><p>below the noise floor</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Blackman</p></td>
+<td class="text-left"><p>6, 27, 66, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(21.7^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(23.1^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-6.1\)</span> dB</p></td>
+<td class="text-left"><p>below the noise floor</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Chebyshev</p></td>
+<td class="text-left"><p>4, 23, 62, 100</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(22.9^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(24.3^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-6.5\)</span> dB</p></td>
+<td class="text-left"><p>below the noise floor</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-two-things-in-that-table-need-explaining">
+<div class="wrap docutils container">
+<p class="rubric">Two things in that table need explaining</p>
+<p>Two things in that table need explaining. First, the measured beamwidths run one
+to two degrees wide of theory because the sweep steps the commanded angle by the
+phase LSB, <span class="math notranslate nohighlight">\(2.8125^\circ\)</span>, so the trace is sampled on a coarse grid and the
+half-power crossings are found late. Second, the sidelobe column says “below the
+noise floor” rather than giving a number. The sweep’s floor sits about 23 dB
+below the uniform peak, and every tapered preset here pushes its sidelobes under
+that. You will be able to state an upper bound on the sidelobes next lesson, not
+a value.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-a-note-on-the-gui-s-chebyshev-preset">
+<div class="wrap docutils container">
+<p class="rubric">A note on the GUI’s Chebyshev preset</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The GUI’s Chebyshev preset is not the <span class="math notranslate nohighlight">\(-30\ \text{dB}\)</span> design worked above. Its
+gain list of 4, 23, 62, 100 corresponds to a far more aggressive specification:
+the resulting pattern never rises above <span class="math notranslate nohighlight">\(-70\ \text{dB}\)</span> anywhere in visible
+space, so it has no sidelobe you could measure on any equipment in the lab.
+That is why the useful prediction for it is its beamwidth, <span class="math notranslate nohighlight">\(22.9^\circ\)</span> from
+theory against a measured <span class="math notranslate nohighlight">\(24.3^\circ\)</span>, and not its sidelobe level. It is a
+working example of the over-specification described in Part 4: the design is
+about 45 dB deeper than the instrument can show, and it costs a beam almost
+twice as wide as uniform.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-sidelobes-and-the-cosine-family">
+<div class="wrap docutils container">
+<p class="rubric">Summary — sidelobes and the cosine family</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Sidelobes</p></td>
+<td class="text-left"><p>Set by the <em>shape</em> of the illumination, not its size</p></td>
+<td class="text-left"><p>Uniform: <span class="math notranslate nohighlight">\(-12.8\)</span> dB for <span class="math notranslate nohighlight">\(N = 8\)</span>, <span class="math notranslate nohighlight">\(-13.3\)</span> dB continuous</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Amplitude taper <span class="math notranslate nohighlight">\(a_n\)</span></p></td>
+<td class="text-left"><p>Element amplitudes, normalized so <span class="math notranslate nohighlight">\(\max a_n = 1\)</span></p></td>
+<td class="text-left"><p>Softer edge <span class="math notranslate nohighlight">\(\rightarrow\)</span> lower sidelobes, wider beam</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Cosine on pedestal</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(a(p) = P + (1-P)\cos^2(\pi p)\)</span></p></td>
+<td class="text-left"><p>Hann (<span class="math notranslate nohighlight">\(P = 0\)</span>): <span class="math notranslate nohighlight">\(-31.8\)</span> dB, <span class="math notranslate nohighlight">\(19.1^\circ\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-chebyshev-taylor-and-broadening">
+<div class="wrap docutils container">
+<p class="rubric">Summary — Chebyshev, Taylor, and broadening</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Chebyshev (Dolph)</p></td>
+<td class="text-left"><p>Equal ripple; narrowest beam for a stated sidelobe level</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-30\)</span> dB on 8 elements: 26, 52, 81, 100 (%)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Taylor <span class="math notranslate nohighlight">\(\bar{n}\)</span></p></td>
+<td class="text-left"><p>Chebyshev’s buildable cousin; first <span class="math notranslate nohighlight">\(\bar{n}-1\)</span> lobes held, rest decay</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-30\)</span> dB, <span class="math notranslate nohighlight">\(\bar{n} = 4\)</span>: 29, 53, 82, 100 (%)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Beam broadening</p></td>
+<td class="text-left"><p>HPBW multiplier relative to uniform</p></td>
+<td class="text-left"><p>1.12 at <span class="math notranslate nohighlight">\(-20\)</span> dB, 1.30 at <span class="math notranslate nohighlight">\(-30\)</span> dB, 1.42 at <span class="math notranslate nohighlight">\(-40\)</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-summary-costs-and-hardware">
+<div class="wrap docutils container">
+<p class="rubric">Summary — costs and hardware</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Taper efficiency <span class="math notranslate nohighlight">\(\eta_t\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\((\sum a_n)^2 / (N \sum a_n^2)\)</span>; the directivity you keep</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-30\)</span> dB Chebyshev: <span class="math notranslate nohighlight">\(0.841\)</span>, i.e. <span class="math notranslate nohighlight">\(-0.75\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Peak drop</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(20\log_{10}(\sum a_n / N)\)</span>; the coherent loss on the trace</p></td>
+<td class="text-left"><p>Hann preset: <span class="math notranslate nohighlight">\(-4.7\)</span> dB, of which only <span class="math notranslate nohighlight">\(-1.2\)</span> dB is directivity</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>PHASER conversion</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\text{Rx}_n\ (\%) = 100\ a_n / \max a_n\)</span></p></td>
+<td class="text-left"><p>Sliders cap at 100%, resolve to about 1%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a href="../../practice/ECE444_L24_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a href="../../practice/ECE444_L24_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where this is going</p>
+<p>Next lesson you take these four presets to the bench. You will sweep each one,
+measure the beamwidth and the peak drop, and reconcile them against the
+predictions in the Part 5 table. You will also hand-enter the <span class="math notranslate nohighlight">\(-30\ \text{dB}\)</span>
+Chebyshev design from Part 4, which is not one of the presets, and confirm that a
+taper you computed yourself behaves the way the arithmetic said it would. Come
+with the Part 5 table copied into your lab notebook; the point of the exercise is
+the comparison, and it is much weaker if you write the predictions down after
+seeing the measurements.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going-continued">
+<div class="wrap docutils container">
+<p class="rubric">Where this is going, continued</p>
+<p>After that, Lesson 26 turns to the other three ways a real steered array departs
+from the ideal pattern — grating lobes, beam squint across the band, and phase
+quantization — none of which a taper fixes. Lesson 27 returns to sidelobes with a
+sharper tool: instead of lowering all of them, place a deep null on the one
+direction that is hurting you. The subject comes back for good in Module 4, where
+the clutter a radar competes with arrives almost entirely through the sidelobes,
+and the taper you choose sets how much of it you have to process away.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L24-sidelobes-tapering"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

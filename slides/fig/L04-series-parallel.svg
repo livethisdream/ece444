@@ -1,0 +1,213 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="670.880918pt" height="279.488139pt" viewBox="0 0 670.880918 279.488139" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-08-24T17:16:05.417088</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 279.488139 
+L 670.880918 279.488139 
+L 670.880918 0 
+L 0 0 
+L 0 279.488139 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="line2d_1">
+    <path d="M 125.797331 174.6 
+L 125.797331 162.1128 
+L 138.284531 162.1128 
+" clip-path="url(#p179b011d7a)" style="fill: none; stroke: #5a5a5a; stroke-linecap: square"/>
+   </g>
+   <g id="patch_2">
+    <path d="M 26.763464 174.6 
+Q 81.525114 174.6 133.379875 174.6 
+" style="fill: none; stroke: #004a85; stroke-width: 2.6; stroke-linecap: round"/>
+    <path d="M 126.179875 171 
+L 133.379875 174.6 
+L 126.179875 178.2 
+z
+" style="fill: #004a85; stroke: #004a85; stroke-width: 2.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 138.284531 172.601154 
+Q 138.284531 105.071366 138.284531 40.448467 
+" style="fill: none; stroke: #e67e22; stroke-width: 2.6; stroke-linecap: round"/>
+    <path d="M 134.684531 47.648467 
+L 138.284531 40.448467 
+L 141.884531 47.648467 
+z
+" style="fill: #e67e22; stroke: #e67e22; stroke-width: 2.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 26.030753 173.048878 
+Q 81.524742 105.068742 134.897675 39.686899 
+" style="fill: none; stroke: #1d7a4d; stroke-width: 3; stroke-linecap: round"/>
+    <path d="M 126.740018 43.354683 
+L 134.897675 39.686899 
+L 132.937308 48.413695 
+z
+" style="fill: #1d7a4d; stroke: #1d7a4d; stroke-width: 3; stroke-linecap: round"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; text-anchor: middle; fill: #004a85" x="81.524531" y="198.095803" transform="rotate(-0 81.524531 198.095803)">20 V across the resistor</text>
+   </g>
+   <g id="text_2">
+    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; fill: #e67e22" transform="translate(145.095731 94.253609)">24.5 V across</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; fill: #e67e22" transform="translate(145.095731 108.056754)">the reactance</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; fill: #e67e22" transform="translate(145.095731 121.859)">(no power)</text>
+   </g>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 12.5px; font-family:inherit; text-anchor: start; fill: #1d7a4d" x="33.278531" y="49.22251" transform="rotate(-0 33.278531 49.22251)">31.6 V total</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 11px; font-family:inherit; fill: #1a1a1a" transform="translate(24.764531 220.385755)">Drive 1 A through the branch. The resistor still burns 10 W —</text>
+    <text style="font-size: 11px; font-family:inherit; fill: #1a1a1a" transform="translate(24.764531 233.588763)">but the terminals now show 31.6 V instead of 20 V.</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_5">
+    <path d="M 355.496503 59.15016 
+L 400.906616 59.15016 
+L 400.906616 35.31096 
+L 355.496503 35.31096 
+L 355.496503 59.15016 
+z
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #004a85; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 425.125343 59.15016 
+L 470.535456 59.15016 
+L 470.535456 35.31096 
+L 425.125343 35.31096 
+L 425.125343 59.15016 
+z
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #e67e22; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 375.174218 214.10496 
+L 420.584331 214.10496 
+L 420.584331 190.26576 
+L 375.174218 190.26576 
+L 375.174218 214.10496 
+z
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #1d7a4d; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 441.775717 214.10496 
+L 487.18583 214.10496 
+L 487.18583 190.26576 
+L 441.775717 190.26576 
+L 441.775717 214.10496 
+z
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #e67e22; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 325.223094 47.23056 
+L 355.496503 47.23056 
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #1a1a1a; stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 400.906616 47.23056 
+L 425.125343 47.23056 
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #1a1a1a; stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_4">
+    <path d="M 470.535456 47.23056 
+L 494.754183 47.23056 
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #1a1a1a; stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_5">
+    <path d="M 325.223094 156.89088 
+L 397.879275 156.89088 
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #1a1a1a; stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_6">
+    <path d="M 397.879275 156.89088 
+L 397.879275 190.26576 
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #1a1a1a; stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_7">
+    <path d="M 397.879275 214.10496 
+L 397.879275 233.17632 
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #1a1a1a; stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_8">
+    <path d="M 397.879275 233.17632 
+L 464.480774 233.17632 
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #1a1a1a; stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_9">
+    <path d="M 464.480774 156.89088 
+L 464.480774 190.26576 
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #1a1a1a; stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_10">
+    <path d="M 464.480774 214.10496 
+L 464.480774 233.17632 
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #1a1a1a; stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_11">
+    <path d="M 397.879275 156.89088 
+L 494.754183 156.89088 
+" clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #1a1a1a; stroke-width: 1.6; stroke-linecap: square"/>
+   </g>
+   <g id="text_5">
+    <text style="font-weight: 700; font-size: 11px; font-family:inherit; text-anchor: middle; fill: #004a85" x="378.201559" y="50.087982" transform="rotate(-0 378.201559 50.087982)">20 Ω</text>
+   </g>
+   <g id="text_6">
+    <text style="font-weight: 700; font-size: 11px; font-family:inherit; text-anchor: middle; fill: #e67e22" x="447.830399" y="50.088412" transform="rotate(-0 447.830399 50.088412)">+j24.5</text>
+   </g>
+   <g id="text_7">
+    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; text-anchor: start; fill: #5a5a5a" x="325.223094" y="21.00744" transform="rotate(-0 325.223094 21.00744)">what is really there</text>
+   </g>
+   <g id="text_8">
+    <text style="font-weight: 700; font-size: 11px; font-family:inherit; text-anchor: middle; fill: #1d7a4d" x="397.879275" y="205.042782" transform="rotate(-0 397.879275 205.042782)">50 Ω</text>
+   </g>
+   <g id="text_9">
+    <text style="font-weight: 700; font-size: 11px; font-family:inherit; text-anchor: middle; fill: #e67e22" x="464.480774" y="205.043212" transform="rotate(-0 464.480774 205.043212)">−j40.8</text>
+   </g>
+   <g id="text_10">
+    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; text-anchor: start; fill: #5a5a5a" x="325.223094" y="130.66776" transform="rotate(-0 325.223094 130.66776)">what the source sees</text>
+   </g>
+   <g id="patch_9">
+    <path d="M 409.988638 73.068097 
+Q 409.988638 92.522878 409.988638 109.741591 
+" style="fill: none; stroke: #5a5a5a; stroke-width: 2; stroke-linecap: round"/>
+    <path d="M 413.988638 101.741591 
+L 409.988638 109.741591 
+L 405.988638 101.741591 
+z
+" style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="text_11">
+    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; text-anchor: start; fill: #5a5a5a" x="422.098002" y="95.512794" transform="rotate(-0 422.098002 95.512794)">identical at one frequency</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 11px; font-family:inherit; text-anchor: start; fill: #1a1a1a" x="313.113731" y="272.525561" transform="rotate(-0 313.113731 272.525561)">Cancel the −j40.8 with a shunt element and a clean 50 Ω is left.</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p179b011d7a">
+   <rect x="13.412531" y="4.32" width="238.392" height="238.392"/>
+  </clipPath>
+  <clipPath id="p35dc0427c4">
+   <rect x="307.059049" y="4.32" width="302.734087" height="238.392"/>
+  </clipPath>
+ </defs>
+</svg>

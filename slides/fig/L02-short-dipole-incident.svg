@@ -1,0 +1,22 @@
+<svg viewBox="0 0 440 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A short dipole aligned with the incident wave's E-field">
+<defs>
+<marker id="sdR" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>
+<marker id="sdG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker>
+</defs>
+<line x1="52" y1="70" x2="52" y2="232" stroke="#b01e24" stroke-width="2.4" marker-start="url(#sdR)" marker-end="url(#sdR)"/>
+<line x1="96" y1="70" x2="96" y2="232" stroke="#b01e24" stroke-width="2.4" marker-start="url(#sdR)" marker-end="url(#sdR)"/>
+<line x1="140" y1="70" x2="140" y2="232" stroke="#b01e24" stroke-width="2.4" marker-start="url(#sdR)" marker-end="url(#sdR)"/>
+<line x1="184" y1="70" x2="184" y2="232" stroke="#b01e24" stroke-width="2.4" marker-start="url(#sdR)" marker-end="url(#sdR)"/>
+<text x="118" y="52" fill="#b01e24" font-size="19" font-weight="700" text-anchor="middle">E</text>
+<line x1="44" y1="270" x2="214" y2="270" stroke="#5a5a5a" stroke-width="1.6" marker-end="url(#sdG)"/>
+<text x="50" y="262" fill="#5a5a5a" font-size="13">incident wave</text>
+<line x1="322" y1="74" x2="322" y2="142" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
+<line x1="322" y1="160" x2="322" y2="228" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
+<circle cx="322" cy="142" r="3.6" fill="#004a85"/>
+<circle cx="322" cy="160" r="3.6" fill="#004a85"/>
+<line x1="358" y1="74" x2="358" y2="228" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="353" y1="74" x2="363" y2="74" stroke="#5a5a5a" stroke-width="1.2"/>
+<line x1="353" y1="228" x2="363" y2="228" stroke="#5a5a5a" stroke-width="1.2"/>
+<text x="370" y="157" fill="#004a85" font-size="17" font-weight="700">&#8467;</text>
+<text x="322" y="252" fill="#5a5a5a" font-size="13" text-anchor="middle">dipole &#8741; E</text>
+</svg>

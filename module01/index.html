@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1 — Foundations of Electromagnetics and Antennas &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../_static/custom.css">
+<link rel="stylesheet" href="../_static/shell.css">
+<link rel="stylesheet" href="../_static/frames.css">
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L09-loop-monopole-antennas/index.html">L9 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L10-patch-slot-horn/index.html">L10 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L11-high-gain-antennas/index.html">L11 — High-Gain Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L12-pattern-measurement-theory/index.html">L12 — Pattern Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L13-measurement-lab-sparams/index.html">L13 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L14-measurement-lab-patterns/index.html">L14 — Measurement Lab 2 — Radiation Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="module-1-foundations-of-electromagnetics-and-antennas">
+<h1>Module 1 — Foundations of Electromagnetics and Antennas<a class="headerlink" href="#module-1-foundations-of-electromagnetics-and-antennas" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Module 01</div>
+<h1 class="frame-title">Foundations of Electromagnetics and Antennas</h1>
+<div class="title-rule"></div>
+<p>Ground the physics before you trust a pattern.</p>
+<p>Lessons 1–6 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-module-goes">
+<div class="wrap docutils container">
+<p class="rubric">Where This Module Goes</p>
+<p>We start with what an antenna is and why it matters, then trace the chain from
+Maxwell’s equations to the plane wave, define the headline antenna parameters —
+gain, directivity, effective aperture, beamwidth — and end with the radiation
+integrals.</p>
+<p>Those integrals are the machinery that turns a current distribution into a
+far-field pattern. <strong>Module 3 runs them backwards to design arrays</strong>, so the
+work here is the foundation the rest of the course stands on.</p>
+<div class="depth docutils container">
+<p>By the end of this module you can read a radiation pattern and predict how a
+real antenna will behave in a link — which is the difference between quoting a
+gain figure off a datasheet and knowing what it will do at range, in the
+polarization you actually have, at the distance you can actually stand.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives-1-1-1-3">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives 1.1-1.3</p>
+<ol class="lo-list" style="--module: '1'">
+  <li>I can explain what an antenna is, describe its role in a wireless system, and recognize common antenna types by sight.</li>
+  <li>I can define and calculate fundamental antenna properties — gain, directivity, effective aperture, beamwidth, and sidelobe level — apply the reciprocity principle that links an antenna's transmit and receive behavior, and use the Friis transmission equation to predict received power in a link.</li>
+  <li>I can determine the polarization of an antenna and describe the bandwidth characteristics of common antenna types.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives-1-4-1-6">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives 1.4-1.6</p>
+<ol class="lo-list" start="4" style="--module: '1'">
+  <li>I can calculate input impedance, feed considerations, and the role of baluns in an antenna feed system.</li>
+  <li>I can identify and distinguish the reactive near-field, radiating near-field, and far-field regions and calculate the boundaries for a given antenna.</li>
+  <li>I can set up and interpret the radiation integrals to derive the far-field pattern of a current distribution.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-1-3-what-an-antenna-is-and-how-we-describe-it">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 1-3: What an Antenna Is, and How We Describe It</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L01-course-intro/index.html">
+    <span class="mt-kind">Lesson 1</span>
+    <h4>Course Introduction</h4>
+    <p>What an antenna is, why antennas matter to the Air Force mission, and how ECE 444 is organized. Objective 1.1.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L02-antenna-properties/index.html">
+    <span class="mt-kind">Lesson 2</span>
+    <h4>Basic Properties and Terminology</h4>
+    <p>From Maxwell's equations to the plane wave; radiation intensity, directivity, gain, effective area, and pattern parameters. Objective 1.2.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L03-polarization-bandwidth/index.html">
+    <span class="mt-kind">Lesson 3</span>
+    <h4>Polarization and Bandwidth</h4>
+    <p>Linear, circular, and elliptical polarization; axial ratio and polarization loss; impedance / pattern / polarization bandwidth; Chu-Harrington. Objective 1.3.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-4-6-the-terminals-the-space-around-them-and-the-integral">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 4-6: The Terminals, the Space Around Them, and the Integral</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L04-impedance-feeding-baluns/index.html">
+    <span class="mt-kind">Lesson 4</span>
+    <h4>Impedance, Feeding, and Baluns</h4>
+    <p>Input impedance, feed-point matching, and the role of baluns in an antenna feed system. Objective 1.4.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L05-field-regions/index.html">
+    <span class="mt-kind">Lesson 5</span>
+    <h4>Field Regions</h4>
+    <p>Reactive near-field, radiating near-field, and far-field — boundaries and why they matter. Objective 1.5.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L06-radiation-integrals/index.html">
+    <span class="mt-kind">Lesson 6</span>
+    <h4>Radiation Integrals</h4>
+    <p>Setting up the radiation integrals to get the far-field pattern from a current distribution. Objective 1.6.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where This Is Going</p>
+<p><strong>Module 2</strong> takes these foundations to real antenna types — dipoles, loops,
+patches, horns — and to the bench, where you measure the numbers you have so
+far only calculated.</p>
+<p>The through-line: everything in Module 1 is about one antenna in isolation.
+From Module 3 onward, antennas start working in groups.</p>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module01"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../_static/shell.js"></script>
+<script src="../_static/frames.js"></script><script src="../_static/viz-autosize.js"></script>
+</body>
+</html>

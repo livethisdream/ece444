@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 236" role="img" aria-label="Line drawings of seven antennas to recognize on sight: half-wave dipole, monopole over a ground plane, microstrip patch, pyramidal horn, Yagi-Uda, spiral, and parabolic dish">
+<g style="font-family:inherit">
+
+<!-- 1. half-wave dipole (cx 80) -->
+<line x1="80" y1="42" x2="80" y2="101" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
+<line x1="80" y1="119" x2="80" y2="178" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
+<circle cx="80" cy="101" r="3.6" fill="#004a85"/>
+<circle cx="80" cy="119" r="3.6" fill="#004a85"/>
+<line x1="80" y1="101" x2="58" y2="101" stroke="#004a85" stroke-width="1.8"/>
+<line x1="80" y1="119" x2="58" y2="119" stroke="#004a85" stroke-width="1.8"/>
+<text x="80" y="210" fill="#5a5a5a" font-size="17" text-anchor="middle">dipole</text>
+
+<!-- 2. monopole over ground (cx 240) -->
+<line x1="240" y1="48" x2="240" y2="146" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
+<circle cx="240" cy="146" r="3.6" fill="#004a85"/>
+<line x1="184" y1="152" x2="296" y2="152" stroke="#004a85" stroke-width="4"/>
+<g stroke="#004a85" stroke-width="1.6">
+<line x1="190" y1="152" x2="182" y2="164"/>
+<line x1="204" y1="152" x2="196" y2="164"/>
+<line x1="218" y1="152" x2="210" y2="164"/>
+<line x1="232" y1="152" x2="224" y2="164"/>
+<line x1="254" y1="152" x2="246" y2="164"/>
+<line x1="268" y1="152" x2="260" y2="164"/>
+<line x1="282" y1="152" x2="274" y2="164"/>
+<line x1="296" y1="152" x2="288" y2="164"/>
+</g>
+<line x1="240" y1="152" x2="240" y2="176" stroke="#004a85" stroke-width="1.8"/>
+<circle cx="240" cy="176" r="3.2" fill="none" stroke="#004a85" stroke-width="1.8"/>
+<text x="240" y="210" fill="#5a5a5a" font-size="17" text-anchor="middle">monopole</text>
+
+<!-- 3. microstrip patch (cx 400) -->
+<rect x="338" y="52" width="124" height="112" rx="3" fill="rgba(0,103,185,0.06)" stroke="#cddce9" stroke-width="2"/>
+<rect x="362" y="72" width="76" height="54" rx="2" fill="rgba(0,103,185,0.16)" stroke="#004a85" stroke-width="2.4"/>
+<line x1="400" y1="126" x2="400" y2="164" stroke="#004a85" stroke-width="5"/>
+<line x1="338" y1="170" x2="462" y2="170" stroke="#004a85" stroke-width="3"/>
+<text x="400" y="210" fill="#5a5a5a" font-size="17" text-anchor="middle">patch</text>
+
+<!-- 4. pyramidal horn (cx 560) -->
+<rect x="498" y="94" width="38" height="32" fill="rgba(0,103,185,0.08)" stroke="#004a85" stroke-width="2.4"/>
+<path d="M536 94 L616 52 L616 168 L536 126 Z" fill="rgba(0,103,185,0.08)" stroke="#004a85" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M616 52 A11 58 0 0 1 616 168" fill="none" stroke="#004a85" stroke-width="2.4"/>
+<line x1="498" y1="110" x2="478" y2="110" stroke="#004a85" stroke-width="2"/>
+<text x="560" y="210" fill="#5a5a5a" font-size="17" text-anchor="middle">horn</text>
+
+<!-- 5. Yagi-Uda (cx 720) -->
+<line x1="664" y1="110" x2="782" y2="110" stroke="#004a85" stroke-width="3.4" stroke-linecap="round"/>
+<g stroke="#004a85" stroke-width="5" stroke-linecap="round">
+<line x1="670" y1="62" x2="670" y2="158"/>
+<line x1="692" y1="69" x2="692" y2="151"/>
+<line x1="714" y1="76" x2="714" y2="144"/>
+<line x1="734" y1="79" x2="734" y2="141"/>
+<line x1="754" y1="82" x2="754" y2="138"/>
+<line x1="774" y1="85" x2="774" y2="135"/>
+</g>
+<line x1="692" y1="110" x2="692" y2="176" stroke="#004a85" stroke-width="1.8"/>
+<text x="720" y="210" fill="#5a5a5a" font-size="17" text-anchor="middle">Yagi</text>
+
+<!-- 6. spiral (cx 880) -->
+<g fill="none" stroke="#004a85" stroke-width="4" stroke-linecap="round">
+<path d="M 885.0,108.0 L 885.5,108.8 L 885.9,109.7 L 886.2,110.7 L 886.2,111.9 L 886.0,113.1 L 885.7,114.3 L 885.1,115.5 L 884.2,116.7 L 883.2,117.7 L 881.9,118.6 L 880.4,119.4 L 878.8,119.9 L 877.0,120.2 L 875.1,120.2 L 873.2,119.9 L 871.2,119.2 L 869.3,118.3 L 867.5,117.1 L 865.9,115.5 L 864.4,113.7 L 863.2,111.6 L 862.3,109.2 L 861.7,106.7 L 861.5,104.1 L 861.7,101.3 L 862.3,98.6 L 863.3,95.9 L 864.7,93.3 L 866.6,90.8 L 868.8,88.6 L 871.4,86.7 L 874.3,85.2 L 877.5,84.0 L 880.9,83.3 L 884.4,83.1 L 888.0,83.4 L 891.6,84.2 L 895.1,85.6 L 898.5,87.5 L 901.6,89.9 L 904.4,92.8 L 906.8,96.1 L 908.8,99.8 L 910.2,103.8 L 911.1,108.0 L 911.3,112.4 L 911.0,116.9 L 910.0,121.3 L 908.3,125.7 L 906.0,129.8 L 903.1,133.7 L 899.6,137.1 L 895.7,140.1 L 891.2,142.5 L 886.4,144.3 L 881.3,145.4 L 876.0,145.8 L 870.7,145.5 L 865.3,144.3 L 860.1,142.4 L 855.2,139.8 L 850.6,136.4 L 846.4,132.4 L 842.8,127.8 L 839.9,122.6 L 837.7,117.0 L 836.3,111.1 L 835.7,104.9 L 836.0,98.6 L 837.2,92.4 L 839.3,86.3 L 842.2,80.5 L 846.0,75.1 L 850.5,70.3 L 855.8,66.0 L 861.6,62.5 L 868.0,59.9 L 874.8,58.1 L 881.8,57.3 L 888.9,57.4 L 896.0,58.6 L 903.0,60.8 L 909.7,64.0 L 915.9,68.1 L 921.6,73.1 L 926.5,78.9 L 930.6,85.5 L 933.8,92.6 L 936.0,100.1 L 937.2,108.0"/>
+<path d="M 875.0,108.0 L 874.5,107.2 L 874.1,106.3 L 873.8,105.3 L 873.8,104.1 L 874.0,102.9 L 874.3,101.7 L 874.9,100.5 L 875.8,99.3 L 876.8,98.3 L 878.1,97.4 L 879.6,96.6 L 881.2,96.1 L 883.0,95.8 L 884.9,95.8 L 886.8,96.1 L 888.8,96.8 L 890.7,97.7 L 892.5,98.9 L 894.1,100.5 L 895.6,102.3 L 896.8,104.4 L 897.7,106.8 L 898.3,109.3 L 898.5,111.9 L 898.3,114.7 L 897.7,117.4 L 896.7,120.1 L 895.3,122.7 L 893.4,125.2 L 891.2,127.4 L 888.6,129.3 L 885.7,130.8 L 882.5,132.0 L 879.1,132.7 L 875.6,132.9 L 872.0,132.6 L 868.4,131.8 L 864.9,130.4 L 861.5,128.5 L 858.4,126.1 L 855.6,123.2 L 853.2,119.9 L 851.2,116.2 L 849.8,112.2 L 848.9,108.0 L 848.7,103.6 L 849.0,99.1 L 850.0,94.7 L 851.7,90.3 L 854.0,86.2 L 856.9,82.3 L 860.4,78.9 L 864.3,75.9 L 868.8,73.5 L 873.6,71.7 L 878.7,70.6 L 884.0,70.2 L 889.3,70.5 L 894.7,71.7 L 899.9,73.6 L 904.8,76.2 L 909.4,79.6 L 913.6,83.6 L 917.2,88.2 L 920.1,93.4 L 922.3,99.0 L 923.7,104.9 L 924.3,111.1 L 924.0,117.4 L 922.8,123.6 L 920.7,129.7 L 917.8,135.5 L 914.0,140.9 L 909.5,145.7 L 904.2,150.0 L 898.4,153.5 L 892.0,156.1 L 885.2,157.9 L 878.2,158.7 L 871.1,158.6 L 864.0,157.4 L 857.0,155.2 L 850.3,152.0 L 844.1,147.9 L 838.4,142.9 L 833.5,137.1 L 829.4,130.5 L 826.2,123.4 L 824.0,115.9 L 822.8,108.0"/>
+</g>
+<circle cx="880" cy="108" r="3.2" fill="#004a85"/>
+<text x="880" y="210" fill="#5a5a5a" font-size="17" text-anchor="middle">spiral</text>
+
+<!-- 7. parabolic dish (cx 1040) -->
+<path d="M1012 48 Q1082 110 1012 172" fill="rgba(0,103,185,0.08)" stroke="#004a85" stroke-width="3.4" stroke-linejoin="round"/>
+<line x1="1012" y1="48" x2="1002" y2="110" stroke="#004a85" stroke-width="1.6"/>
+<line x1="1012" y1="172" x2="1002" y2="110" stroke="#004a85" stroke-width="1.6"/>
+<path d="M1002 96 L988 88 L988 132 L1002 124 Z" fill="rgba(0,103,185,0.16)" stroke="#004a85" stroke-width="2.2" stroke-linejoin="round"/>
+<line x1="1002" y1="110" x2="1046" y2="110" stroke="#004a85" stroke-width="1.4" stroke-dasharray="4 3"/>
+<text x="1030" y="210" fill="#5a5a5a" font-size="17" text-anchor="middle">parabolic dish</text>
+
+</g>
+</svg>

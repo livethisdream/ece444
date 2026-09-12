@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 330" role="img" aria-label="Segmentation rules for a wire dipole model: odd segment count with the source on the center segment, segment length short compared with a wavelength, and segment length long compared with the wire radius">
+<defs>
+<marker id="sgA" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
+<marker id="sgR" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>
+</defs>
+
+<!-- ===== whole dipole, horizontal, 11 segments ===== -->
+<text x="395" y="28" text-anchor="middle" fill="#004a85" font-size="15" font-weight="700">The model the solver actually sees</text>
+
+<line x1="130" y1="86" x2="130" y2="128" stroke="#004a85" stroke-width="1.1" stroke-dasharray="4 3"/>
+<line x1="660" y1="86" x2="660" y2="128" stroke="#004a85" stroke-width="1.1" stroke-dasharray="4 3"/>
+<line x1="130" y1="96" x2="660" y2="96" stroke="#004a85" stroke-width="1.6" marker-start="url(#sgA)" marker-end="url(#sgA)"/>
+<text x="395" y="86" text-anchor="middle" fill="#004a85" font-size="14" font-weight="700">total length, near a half wavelength</text>
+
+<rect x="130" y="136" width="530" height="16" fill="rgba(0,103,185,0.13)" stroke="#004a85" stroke-width="2"/>
+<g stroke="#004a85" stroke-width="1.4">
+  <line x1="178" y1="136" x2="178" y2="152"/><line x1="226" y1="136" x2="226" y2="152"/>
+  <line x1="274" y1="136" x2="274" y2="152"/><line x1="322" y1="136" x2="322" y2="152"/>
+  <line x1="370" y1="136" x2="370" y2="152"/><line x1="418" y1="136" x2="418" y2="152"/>
+  <line x1="466" y1="136" x2="466" y2="152"/><line x1="514" y1="136" x2="514" y2="152"/>
+  <line x1="562" y1="136" x2="562" y2="152"/><line x1="610" y1="136" x2="610" y2="152"/>
+</g>
+<rect x="370" y="136" width="48" height="16" fill="rgba(176,30,36,0.30)" stroke="#b01e24" stroke-width="2"/>
+<polyline points="394,152 394,178 448,192" fill="none" stroke="#b01e24" stroke-width="1.6"/>
+<text x="456" y="188" fill="#b01e24" font-size="14" font-weight="700">voltage source sits on ONE segment</text>
+<text x="456" y="206" fill="#b01e24" font-size="13">so use an odd count &#8212; the middle one is the feed</text>
+
+<!-- segment-length dimension on the left -->
+<line x1="178" y1="118" x2="226" y2="118" stroke="#004a85" stroke-width="1.4" marker-start="url(#sgA)" marker-end="url(#sgA)"/>
+<text x="202" y="110" text-anchor="middle" fill="#004a85" font-size="13" font-weight="700">segment</text>
+
+<!-- ===== zoom: radius vs segment length ===== -->
+<line x1="130" y1="152" x2="150" y2="248" stroke="#5a5a5a" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="178" y1="152" x2="330" y2="248" stroke="#5a5a5a" stroke-width="1" stroke-dasharray="3 3"/>
+
+<rect x="150" y="248" width="180" height="42" fill="rgba(0,103,185,0.13)" stroke="#004a85" stroke-width="2"/>
+<line x1="150" y1="248" x2="150" y2="290" stroke="#004a85" stroke-width="1.4"/>
+<line x1="330" y1="248" x2="330" y2="290" stroke="#004a85" stroke-width="1.4"/>
+<line x1="150" y1="306" x2="330" y2="306" stroke="#004a85" stroke-width="1.5" marker-start="url(#sgA)" marker-end="url(#sgA)"/>
+<text x="240" y="322" text-anchor="middle" fill="#004a85" font-size="13" font-weight="700">segment length</text>
+<line x1="128" y1="248" x2="128" y2="290" stroke="#b01e24" stroke-width="1.5" marker-start="url(#sgR)" marker-end="url(#sgR)"/>
+<text x="118" y="273" text-anchor="end" fill="#b01e24" font-size="13" font-weight="700">radius</text>
+
+<!-- ===== the three rules ===== -->
+<rect x="392" y="240" width="368" height="82" rx="7" fill="rgba(0,103,185,0.06)" stroke="#004a85" stroke-width="1.4"/>
+<text x="408" y="262" fill="#004a85" font-size="14" font-weight="700">Keep it honest</text>
+<text x="408" y="282" fill="#1a1a1a" font-size="13">&#8226; 10 to 20 segments per half wavelength</text>
+<text x="408" y="300" fill="#1a1a1a" font-size="13">&#8226; segment length under a twentieth of a wavelength</text>
+<text x="408" y="318" fill="#1a1a1a" font-size="13">&#8226; segment length at least eight times the wire radius</text>
+</svg>

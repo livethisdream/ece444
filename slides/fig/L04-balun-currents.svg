@@ -1,0 +1,59 @@
+<svg viewBox="0 0 700 265" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Coax feeding a dipole: without a balun the arm currents are unequal and a common-mode current flows on the outside of the shield; a choke balun blocks it and the arms carry equal and opposite currents">
+<defs>
+<marker id="bcN" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
+<marker id="bcR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>
+</defs>
+
+<!-- ============ without a balun ============ -->
+<g>
+<text x="150" y="26" fill="#004a85" font-size="16" font-weight="700" text-anchor="middle">Straight to coax</text>
+
+<line x1="40" y1="86" x2="142" y2="86" stroke="#004a85" stroke-width="4.5" stroke-linecap="round"/>
+<line x1="158" y1="86" x2="260" y2="86" stroke="#004a85" stroke-width="4.5" stroke-linecap="round"/>
+<circle cx="142" cy="86" r="3.6" fill="#004a85"/>
+<circle cx="158" cy="86" r="3.6" fill="#004a85"/>
+
+<!-- unequal arm currents -->
+<line x1="124" y1="68" x2="66" y2="68" stroke="#004a85" stroke-width="2.2" marker-end="url(#bcN)"/>
+<line x1="176" y1="68" x2="206" y2="68" stroke="#004a85" stroke-width="2.2" marker-end="url(#bcN)"/>
+<text x="150" y="52" fill="#5a5a5a" font-size="13" text-anchor="middle">unequal arm currents</text>
+
+<!-- coax -->
+<line x1="146" y1="86" x2="146" y2="212" stroke="#5a5a5a" stroke-width="2.2"/>
+<line x1="154" y1="86" x2="154" y2="212" stroke="#5a5a5a" stroke-width="2.2"/>
+<text x="150" y="234" fill="#5a5a5a" font-size="13" text-anchor="middle">coax feed</text>
+
+<!-- common-mode current on the outside of the shield -->
+<line x1="164" y1="108" x2="164" y2="196" stroke="#b01e24" stroke-width="2.6" marker-end="url(#bcR)"/>
+<text x="174" y="140" fill="#b01e24" font-size="13.5" font-weight="700">current on the</text>
+<text x="174" y="158" fill="#b01e24" font-size="13.5" font-weight="700">outside of the shield</text>
+<text x="174" y="180" fill="#b01e24" font-size="13">the feed line radiates</text>
+</g>
+
+<!-- ============ with a 1:1 choke balun ============ -->
+<g transform="translate(370,0)">
+<text x="150" y="26" fill="#004a85" font-size="16" font-weight="700" text-anchor="middle">With a 1:1 choke balun</text>
+
+<line x1="40" y1="86" x2="142" y2="86" stroke="#004a85" stroke-width="4.5" stroke-linecap="round"/>
+<line x1="158" y1="86" x2="260" y2="86" stroke="#004a85" stroke-width="4.5" stroke-linecap="round"/>
+<circle cx="142" cy="86" r="3.6" fill="#004a85"/>
+<circle cx="158" cy="86" r="3.6" fill="#004a85"/>
+
+<!-- balanced arm currents -->
+<line x1="124" y1="68" x2="78" y2="68" stroke="#004a85" stroke-width="2.2" marker-end="url(#bcN)"/>
+<line x1="176" y1="68" x2="222" y2="68" stroke="#004a85" stroke-width="2.2" marker-end="url(#bcN)"/>
+<text x="150" y="52" fill="#5a5a5a" font-size="13" text-anchor="middle">equal and opposite</text>
+
+<line x1="146" y1="86" x2="146" y2="212" stroke="#5a5a5a" stroke-width="2.2"/>
+<line x1="154" y1="86" x2="154" y2="212" stroke="#5a5a5a" stroke-width="2.2"/>
+<text x="150" y="234" fill="#5a5a5a" font-size="13" text-anchor="middle">coax feed</text>
+
+<!-- the choke -->
+<rect x="122" y="104" width="56" height="30" rx="3" fill="#e67e22"/>
+<text x="150" y="124" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">choke</text>
+
+<line x1="164" y1="150" x2="164" y2="196" stroke="#b01e24" stroke-width="2.6" opacity="0.25"/>
+<text x="176" y="160" fill="#1d7a4d" font-size="13.5" font-weight="700">shield current</text>
+<text x="176" y="178" fill="#1d7a4d" font-size="13.5" font-weight="700">choked off</text>
+</g>
+</svg>

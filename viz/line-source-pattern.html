@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Line-source current and its far-field pattern</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* Stacked below ~650px (phone); side by side above it -- halves the vertical
+     space the two canvases cost on any reader-width viewport. */
+  .canvases { display:flex; flex-direction:column; gap:10px; }
+  @media (min-width:650px) { .canvases { display:grid; grid-template-columns:1fr 1fr; gap:14px; } }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
+  select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
+  .chk { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink3); font-weight:600; flex:0 0 auto; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.sll { background:rgba(138,90,0,0.12); border-color:rgba(138,90,0,0.30); }
+  .ro.sll .v { color:var(--amber); }
+  .ro.hp  { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.hp  .v { color:var(--grn); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="canvases">
+    <canvas id="cur" aria-label="Current amplitude along the line source"></canvas>
+    <canvas id="pat" aria-label="Far-field pattern of the line source, shown as a polar cut and on a decibel scale against angle"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Distribution</label>
+      <select id="dist">
+        <option value="uni" selected>uniform</option>
+        <option value="cos">cosine taper</option>
+        <option value="cos2">cosine-squared</option>
+        <option value="tri">triangular</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label>Length \(L/\lambda\)</label>
+      <input type="range" id="len" min="0.5" max="10" step="0.1" value="4">
+      <span class="val" id="len-val">4.0</span>
+    </div>
+    <div class="ctl">
+      <label>Steer \(\theta_0\)</label>
+      <input type="range" id="th0" min="20" max="160" step="1" value="90">
+      <span class="val" id="th0-val">90&#176;</span>
+    </div>
+    <label class="chk"><input type="checkbox" id="ef"> &#215; element factor sin&#952;</label>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">peak</span><span class="v" id="p-peak">&#8212;</span></div>
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="p-hp">&#8212;</span></div>
+    <div class="ro sll"><span class="k">first sidelobe</span><span class="v" id="p-sll">&#8212;</span></div>
+    <div class="ro"><span class="k">\(0.886\,\lambda/L\)</span><span class="v" id="p-rot">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const FLOOR=-40;                                   // dB floor for both plots
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+
+const cvC=document.getElementById('cur'), ctxC=cvC.getContext('2d');
+const cvP=document.getElementById('pat'), ctxP=cvP.getContext('2d');
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const state={ dist:'uni', L:4.0, th0:90, ef:false };
+
+/* --------------------------- the current distribution --------------------------- */
+// t = z'/L in [-0.5, 0.5]
+function amp(t){
+  switch(state.dist){
+    case 'cos':  return Math.cos(Math.PI*t);
+    case 'cos2': return Math.pow(Math.cos(Math.PI*t),2);
+    case 'tri':  return 1-2*Math.abs(t);
+    default:     return 1;
+  }
+}
+
+/* ------------------------------ the radiation integral ------------------------------ */
+// N(theta) = integral I(z') exp(j k z' (cos th - cos th0)) dz', by trapezoid over NS+1
+// samples. The phase advances by a fixed step from sample to sample, so the exponential
+// is generated by repeated complex rotation rather than a trig call per sample.
+const NS=400;
+const AMP=new Float64Array(NS+1);
+function buildAmp(){
+  for(let i=0;i<=NS;i++){
+    const t=i/NS-0.5;
+    AMP[i]=amp(t)*((i===0||i===NS)?0.5:1);
+  }
+}
+function Nof(th){
+  const c=Math.cos(th)-Math.cos(state.th0*Math.PI/180);
+  const a=2*Math.PI*state.L*c;                     // total phase across the source
+  const d=a/NS, cd=Math.cos(d), sd=Math.sin(d);
+  let cr=Math.cos(-a/2), ci=Math.sin(-a/2);        // phase of the first sample
+  let re=0, im=0;
+  for(let i=0;i<=NS;i++){
+    const A=AMP[i];
+    re+=A*cr; im+=A*ci;
+    const nr=cr*cd-ci*sd; ci=cr*sd+ci*cd; cr=nr;
+  }
+  return Math.hypot(re,im)/NS;
+}
+function pattern(th){
+  const v=Nof(th);
+  return state.ef ? v*Math.abs(Math.sin(th)) : v;
+}
+
+// sweep once per redraw and reuse everywhere
+let SW=null;
+function sweep(){
+  const M=721, a=new Float64Array(M);
+  let mx=0;
+  for(let i=0;i<M;i++){ const v=pattern(i/(M-1)*Math.PI); a[i]=v; if(v>mx) mx=v; }
+  const db=new Float64Array(M);
+  for(let i=0;i<M;i++) db[i]=20*Math.log10(Math.max(a[i]/mx,1e-6));
+  SW={M:M, lin:a, db:db, max:mx};
+}
+const degOf=i=>i/(SW.M-1)*180;
+
+/* --------------------------------- readouts --------------------------------- */
+function metrics(){
+  const db=SW.db, M=SW.M;
+  let ip=0; for(let i=1;i<M;i++) if(db[i]>db[ip]) ip=i;
+
+  // walk out from the peak to the -3 dB points (linear interpolation on the way)
+  function cross(dir){
+    for(let i=ip; i>=0 && i<M; i+=dir){
+      if(db[i]<=-3){
+        const j=i-dir, f=(db[j]+3)/(db[j]-db[i]);
+        return degOf(j)+dir*f*(180/(M-1));
+      }
+    }
+    return null;
+  }
+  const lo=cross(-1), hi=cross(+1);
+  const hp=(lo!==null&&hi!==null)? hi-lo : null;
+
+  // first sidelobe: walking away from the peak, the first local maximum that occurs
+  // after the pattern has already dropped through a null
+  const scan=dir=>{
+    let dropped=false;
+    for(let i=ip+dir; i>=1 && i<M-1; i+=dir){
+      if(!dropped && db[i]<-15) dropped=true;
+      if(dropped && db[i]>=db[i-dir] && db[i]>=db[i+dir]) return db[i];
+    }
+    return null;
+  };
+  const s1=scan(1), s2=scan(-1);
+  let sll=null;
+  if(s1!==null||s2!==null) sll=Math.max(s1===null?-99:s1, s2===null?-99:s2);
+
+  return { peak:degOf(ip), hp:hp, sll:sll };
+}
+
+/* ------------------------------ current canvas ------------------------------ */
+function drawCur(){
+  const dpr=window.devicePixelRatio||1, w=cvC.width/(dpr*SCL), h=cvC.height/(dpr*SCL);
+  const ctx=ctxC; ctx.clearRect(0,0,w,h);
+  const mL=54, mR=16, mT=30, mB=26, pw=w-mL-mR, ph=h-mT-mB;
+  const xp=t=>mL+(t+0.5)*pw, yp=v=>mT+ph-v*ph;
+
+  stext(ctx,'current along the source', mL, mT-16, 11.5, cssv('--navy'),'left',true);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(mL,yp(0)); ctx.lineTo(mL+pw,yp(0)); ctx.stroke();
+
+  // filled amplitude profile
+  ctx.beginPath(); ctx.moveTo(xp(-0.5),yp(0));
+  for(let i=0;i<=200;i++){ const t=i/200-0.5; ctx.lineTo(xp(t),yp(Math.max(amp(t),0))); }
+  ctx.lineTo(xp(0.5),yp(0)); ctx.closePath();
+  ctx.fillStyle='rgba(0,103,185,0.16)'; ctx.fill();
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.2;
+  ctx.beginPath();
+  for(let i=0;i<=200;i++){ const t=i/200-0.5; const x=xp(t), y=yp(Math.max(amp(t),0)); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+  ctx.stroke();
+
+  // phase slope, drawn as the tilt of the excitation across the aperture
+  const dc=Math.cos(state.th0*Math.PI/180);
+  if(Math.abs(dc)>1e-6){
+    ctx.strokeStyle=cssv('--amber'); ctx.lineWidth=1.8; ctx.setLineDash([6,4]);
+    const tilt=Math.max(-1,Math.min(1,dc*state.L/4));
+    ctx.beginPath(); ctx.moveTo(xp(-0.5), yp(0.5-tilt*0.42)); ctx.lineTo(xp(0.5), yp(0.5+tilt*0.42)); ctx.stroke();
+    ctx.setLineDash([]);
+    stext(ctx,'phase slope', xp(0.5)-6, yp(0.5+tilt*0.42)-12, 11, cssv('--amber'),'end',true);
+  }
+
+  stext(ctx,'−L/2', xp(-0.5), yp(0)+14, 10.5, cssv('--ink3'),'center',false);
+  stext(ctx,'+L/2', xp(0.5),  yp(0)+14, 10.5, cssv('--ink3'),'center',false);
+  MJ.draw(ctx,"z'", mL+pw/2, yp(0)+16, 12, cssv('--ink3'),'center');
+  ctx.save(); ctx.translate(16, mT+ph/2); ctx.rotate(-Math.PI/2);
+  MJ.draw(ctx,'I(z\')', 0, 0, 12, cssv('--ink3'),'center'); ctx.restore();
+  // No legend block -- distribution, L, and steering angle are already shown
+  // in the controls row below (Neil's rule: don't restate in-graphic what
+  // the surrounding page already shows).
+}
+
+/* ------------------------------ pattern canvas ------------------------------ */
+function drawPat(){
+  const dpr=window.devicePixelRatio||1, w=cvP.width/(dpr*SCL), h=cvP.height/(dpr*SCL);
+  const ctx=ctxP; ctx.clearRect(0,0,w,h);
+  const split=Math.round(w*0.40);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(split,10); ctx.lineTo(split,h-10); ctx.stroke();
+  drawPolar(0,0,split,h);
+  drawRect(split,0,w-split,h);
+}
+
+function drawPolar(x0,y0,w,h){
+  const ctx=ctxP;
+  const cx=x0+w*0.5, cy=y0+h*0.50, R=Math.min(w*0.40, h*0.36);
+  stext(ctx,'polar cut', x0+12, y0+16, 11.5, cssv('--navy'),'left',true);
+
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let d=-30;d>=FLOOR;d-=10){ const r=R*(1-d/FLOOR);
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,7); ctx.stroke(); }
+  ctx.strokeStyle=cssv('--edge2');
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,7); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx,cy-R-8); ctx.lineTo(cx,cy+R+8); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx-R-8,cy); ctx.lineTo(cx+R+8,cy); ctx.stroke();
+  MJ.draw(ctx,'z',cx,cy-R-18,12,cssv('--ink3'),'center');
+  stext(ctx,'0°',   cx+9, cy-R-6, 10, cssv('--ink3'),'left',false);
+  stext(ctx,'90°',  cx+R+10, cy-8, 10, cssv('--ink3'),'left',false);
+  stext(ctx,'180°', cx+9, cy+R+8, 10, cssv('--ink3'),'left',false);
+
+  // the pattern, drawn on both sides of the axis (phi symmetric)
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.2;
+  for(const side of [1,-1]){
+    ctx.beginPath();
+    for(let i=0;i<SW.M;i++){
+      const th=i/(SW.M-1)*Math.PI;
+      const r=R*Math.max(0,1-SW.db[i]/FLOOR);
+      const x=cx+side*r*Math.sin(th), y=cy-r*Math.cos(th);
+      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    }
+    ctx.stroke();
+  }
+  stext(ctx, FLOOR+' dB', cx, cy+R+22, 10, cssv('--ink3'),'center',false);
+}
+
+function drawRect(x0,y0,w,h){
+  const ctx=ctxP;
+  const mL=x0+44, mR=14, mT=y0+22, mB=32;
+  const pw=w-(mL-x0)-mR, ph=h-(mT-y0)-mB;
+  const xp=d=>mL+d/180*pw, yp=v=>mT+(v/FLOOR)*ph;
+
+  stext(ctx,'pattern in dB', mL, y0+14, 11.5, cssv('--navy'),'left',true);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let d=0;d>=FLOOR;d-=10){ const y=yp(d);
+    ctx.beginPath(); ctx.moveTo(mL,y); ctx.lineTo(mL+pw,y); ctx.stroke();
+    stext(ctx,d.toString(), mL-8, y, 10.5, cssv('--ink3'),'right',false); }
+  for(let d=0;d<=180;d+=30){ const x=xp(d);
+    ctx.strokeStyle=cssv('--edge2'); ctx.beginPath(); ctx.moveTo(x,mT); ctx.lineTo(x,mT+ph); ctx.stroke();
+    stext(ctx,d+'°', x, mT+ph+13, 10.5, cssv('--ink3'),'center',false); }
+  ctx.strokeStyle=cssv('--edge'); ctx.strokeRect(mL,mT,pw,ph);
+
+  // -3 dB and first-sidelobe reference lines
+  const m=metrics();
+  ctx.strokeStyle='rgba(63,125,52,0.55)'; ctx.lineWidth=1.2; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(mL,yp(-3)); ctx.lineTo(mL+pw,yp(-3)); ctx.stroke();
+  if(m.sll!==null&&m.sll>FLOOR){
+    ctx.strokeStyle='rgba(138,90,0,0.6)';
+    ctx.beginPath(); ctx.moveTo(mL,yp(m.sll)); ctx.lineTo(mL+pw,yp(m.sll)); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.2; ctx.beginPath();
+  for(let i=0;i<SW.M;i++){
+    const x=xp(degOf(i)), y=yp(Math.max(SW.db[i],FLOOR));
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+  }
+  ctx.stroke();
+
+  MJ.draw(ctx,'\\theta', mL+pw/2, mT+ph+27, 12, cssv('--ink3'),'center');
+}
+
+/* --------------------------------- wiring --------------------------------- */
+function readouts(){
+  const m=metrics();
+  document.getElementById('p-peak').textContent=m.peak.toFixed(1)+'°';
+  document.getElementById('p-hp').textContent=(m.hp===null?'—':m.hp.toFixed(1)+'°');
+  document.getElementById('p-sll').textContent=(m.sll===null?'none':m.sll.toFixed(1)+' dB');
+  document.getElementById('p-rot').textContent=(0.886/state.L*180/Math.PI).toFixed(1)+'°';
+}
+
+function drawAll(){ buildAmp(); sweep(); drawCur(); drawPat(); readouts(); }
+
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=380;
+let SCL=1;
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(cvC);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:599px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+  const h1=SQ(Math.max(110, Math.min(w*0.17, 140))), h2=SQ(Math.max(230, Math.min(w*0.36, 300)));
+  setSize(cvC,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
+  ctxC.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+const distEl=document.getElementById('dist'), lenEl=document.getElementById('len'),
+      th0El=document.getElementById('th0'), efEl=document.getElementById('ef');
+distEl.addEventListener('change',()=>{ state.dist=distEl.value; drawAll(); });
+lenEl .addEventListener('input',()=>{ state.L=+lenEl.value; document.getElementById('len-val').textContent=state.L.toFixed(1); drawAll(); });
+th0El .addEventListener('input',()=>{ state.th0=+th0El.value; document.getElementById('th0-val').textContent=state.th0+'°'; drawAll(); });
+efEl  .addEventListener('change',()=>{ state.ef=efEl.checked; drawAll(); });
+
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>
