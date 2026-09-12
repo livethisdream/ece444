@@ -38,13 +38,13 @@ integral is physics. The sinusoid is a model. Today we replace the model.
 
 1. What the method of moments does
 2. NEC's world: wires, segments, and the rules that bound them
-3. Build and run a 915 MHz dipole in 4nec2
+3. Build and run a 915 MHz dipole in nec_lab
 4. Sweep for resonance, record impedance, pattern, gain
 5. Convergence, and the sanity checks that catch a broken model
 
 Note:
 This is a lab period. The briefing is the front half, and they should be in
-4nec2 by the midpoint. The deliverable is a comparison table with a paragraph
+the simulator by the midpoint. The deliverable is a comparison table with a paragraph
 for each row.
 
 ---
@@ -126,7 +126,7 @@ the thin-wire kernel does not describe your antenna.
 
 ## From currents to one impedance
 
-4nec2 drives **one segment** with a known voltage. The solve returns the current there, and Ohm's law finishes the job:
+NEC drives **one segment** with a known voltage. The solve returns the current there, and Ohm's law finishes the job:
 
 $$Z\_{\text{in}} = \frac{V\_{\text{feed}}}{I\_{\text{feed}}}$$
 
@@ -211,7 +211,7 @@ half a wavelength long.
 4. **Pattern:** full sphere first (for average gain), then the two principal cuts.
 5. **Trim:** shorten the wire until the reactance crosses zero. Record the length.
 
-**In 4nec2 you edit the NEC input file, run Calculate, and then read the pattern and sweep windows.**
+**In nec_lab you build or type the NEC input file, press Run these cards, and read the impedance, the cuts and the sweep on one page.**
 
 Note:
 Keep them off the optimizer today. Trimming by hand shows them how impedance

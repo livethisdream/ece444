@@ -100,7 +100,10 @@ lesson pages directly and have no separate sheet.
 
 - **ADALM-PHASER** (Analog Devices) — phased-array platform used in Modules 3–4 for beamforming and FMCW radar labs
 - **RTL-SDR / HackRF** — introductory software-defined radio for Lesson 1 demos
-- **Antenna simulation software** — 4nec2 (NEC-2), used in the L8 dipole simulation lab
+- **Antenna simulation software** — **nec_lab**, the course front end to NEC-2
+  (`scripts/nec_lab/` in the course repository). It runs in a browser, either
+  from a copy your instructor is serving or from your own machine, and needs no
+  installation beyond Python. 4nec2 runs the same input files if you prefer it.
 - **Vector network analyzer (VNA)** — used for impedance / S-parameter measurement labs
 - **Anechoic chamber** — used for pattern measurement labs
 
