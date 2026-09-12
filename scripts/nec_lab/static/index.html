@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ECE 444 nec_lab -- NEC-2 wire modeling</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <span class="course">ECE 444</span>
+  <h1>nec_lab &mdash; NEC-2 wire modeling</h1>
+  <span class="engine" id="engine">engine: checking&hellip;</span>
+</header>
+
+<main>
+  <div>
+    <section class="panel">
+      <h2>Antenna</h2>
+      <div class="row one">
+        <div><label for="atype">Type</label>
+             <select id="atype"></select></div>
+      </div>
+      <div class="typenote" id="typenote">&nbsp;</div>
+      <div id="params"></div>
+      <div class="row one">
+        <label class="check"><input type="checkbox" id="average" checked>
+          average power gain &mdash; the energy audit, from an added
+          <code>RP&nbsp;...1001</code> card</label>
+      </div>
+      <div class="derived" id="derived">&nbsp;</div>
+      <canvas id="geom" aria-label="The wire geometry, with the fed segment marked"></canvas>
+      <div class="row">
+        <button id="solve">Build &amp; solve</button>
+        <button id="trim" class="ghost">Trim to resonance</button>
+      </div>
+      <div class="row"><label for="floor">Plot floor (dB)</label>
+        <select id="floor"><option>-20</option><option selected>-30</option>
+                           <option>-40</option></select></div>
+      <div class="status" id="status">&nbsp;</div>
+    </section>
+
+    <section class="panel">
+      <h2>Segmentation rules</h2>
+      <ul class="rules" id="rules"><li><span class="detail">solve to check</span></li></ul>
+    </section>
+
+    <section class="panel">
+      <h2>Frequency sweep</h2>
+      <div class="row three">
+        <div><label for="fstart">Start</label><input type="number" id="fstart" value="800"></div>
+        <div><label for="fstop">Stop</label><input type="number" id="fstop" value="1000"></div>
+        <div><label for="fstep">Step</label><input type="number" id="fstep" value="5"></div>
+      </div>
+      <div class="row"><button id="sweep">Sweep</button>
+                       <button id="converge" class="ghost">Convergence</button></div>
+    </section>
+
+    <section class="panel">
+      <h2>Compare with a measurement</h2>
+      <div class="row one">
+        <div><label for="measured">Chamber CSV (angle + dB columns)</label>
+             <input type="file" id="measured" accept=".csv,.txt"></div>
+      </div>
+      <div class="row">
+        <div><label for="mcut">Cut</label><select id="mcut"></select></div>
+        <div><label for="rotate">Rotate (deg)</label>
+             <input type="number" id="rotate" value="0" step="1"></div>
+      </div>
+      <div class="row"><button id="clearmeas" class="ghost">Clear overlay</button></div>
+      <p class="note">Both traces are normalized to their own peak before they are
+      differenced &mdash; a simulated pattern is absolute dBi and a chamber cut is
+      raw S21 through cables and fixture, so nothing else puts them on one axis.
+      The difference is clamped at the plot floor, because a null one degree off
+      its predicted angle differences to tens of dB and means almost nothing.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Export</h2>
+      <div class="row"><button id="expat" class="ghost">Pattern CSV</button>
+                       <button id="exswp" class="ghost">Sweep CSV</button></div>
+      <p class="note">The pattern file drops straight onto a run in the chamber
+      app: its importer matches the <code>param</code>, <code>angle_deg</code>,
+      <code>freq_hz</code> and <code>gain_dbi</code> columns by name.</p>
+    </section>
+  </div>
+
+  <div>
+    <section class="panel">
+      <h2>Results</h2>
+      <div class="readouts">
+        <div class="ro" id="ro-z"><span class="k">Z in</span><span class="v">&mdash;</span></div>
+        <div class="ro" id="ro-vswr"><span class="k">VSWR 50</span><span class="v">&mdash;</span></div>
+        <div class="ro" id="ro-gain"><span class="k">peak gain</span><span class="v">&mdash;</span></div>
+        <div class="ro" id="ro-hpbw"><span class="k">HPBW</span><span class="v">&mdash;</span></div>
+        <div class="ro" id="ro-avg"><span class="k">avg pwr gain</span><span class="v">&mdash;</span></div>
+      </div>
+      <div class="plots">
+        <div class="cutwrap" id="cuts"></div>
+        <div>
+          <canvas id="sweep-plot" aria-label="Input resistance and reactance against frequency"></canvas>
+          <div class="legend">
+            <span><i style="background:var(--blue)"></i>R</span>
+            <span><i style="background:var(--red)"></i>X</span>
+            <span id="reslabel"></span>
+          </div>
+        </div>
+      </div>
+      <div class="status" id="compare">&nbsp;</div>
+    </section>
+
+    <section class="panel">
+      <h2>3D pattern</h2>
+      <div class="row three">
+        <div><label for="smode">Radius</label>
+             <select id="smode">
+               <option value="pow" selected>linear power</option>
+               <option value="field">linear field</option>
+               <option value="db">dB, floored</option>
+             </select></div>
+        <div><label for="sstep">Grid step (deg)</label>
+             <select id="sstep"><option>10</option><option selected>5</option>
+                                <option>2</option></select></div>
+        <div><label for="srange">Range (dB)</label>
+             <select id="srange"><option>20</option><option selected>30</option>
+                                 <option>40</option></select></div>
+      </div>
+      <div class="row"><button id="draw3d">Draw sphere</button></div>
+      <canvas id="sphere" aria-label="Gain over the whole sphere, as a surface whose radius is the gain in each direction"></canvas>
+      <div class="status" id="s3d">Drag to rotate, scroll to zoom.</div>
+      <div class="row"><button id="exsph" class="ghost">Sphere CSV</button></div>
+      <p class="note">The radius in each direction is the gain in that
+      direction and the color is the same number, always in dBi. <strong>The
+      radius scale changes the shape, not the pattern</strong>: linear power is
+      the donut from the lesson, and a dB radius inflates everything far from
+      the peak until a dipole looks nearly round &mdash; useful for reading
+      sidelobes, misleading about beam shape. The wire is drawn to scale at the
+      center, so the nulls along its axis are the ones you can see. This is one
+      more <code>RP</code> card than a cut &mdash; NEC has always computed the
+      sphere.</p>
+    </section>
+
+    <section class="panel" id="conv-panel" hidden>
+      <h2>Convergence</h2>
+      <table id="conv"></table>
+      <p class="note">Convergence means the answer stopped moving under
+      refinement. It is not the same claim as the answer being right.</p>
+    </section>
+
+    <section class="panel">
+      <h2>NEC input file <span class="badge" id="source">from the form</span></h2>
+      <div class="deckgrid">
+        <div>
+          <textarea class="deck" id="deck" spellcheck="false"
+                    aria-label="NEC input cards; edit and run them"></textarea>
+          <div class="row three">
+            <button id="rundeck">Run these cards</button>
+            <button id="resetdeck" class="ghost">Back to the form</button>
+            <button id="copy" class="ghost">Copy</button>
+          </div>
+          <div class="fieldhelp" id="fieldhelp">Hover any field to see what it means.</div>
+        </div>
+        <div>
+          <div class="gloss" id="gloss"></div>
+          <div class="errors" id="deckerrors"></div>
+        </div>
+      </div>
+      <p class="note">These cards are the actual interface to NEC, and they are
+      identical in 4nec2, xnec2c and this tool. Edit them here and press
+      <strong>Run these cards</strong>, or copy them into 4nec2. nec_lab reads
+      <code>CM CE GW GE GN EX FR RP XQ EN</code> &mdash; any number of wires,
+      any number of sources, and a perfect or real ground plane. Anything else
+      &mdash; a load, a transmission line, an arc &mdash; is refused by name,
+      because the rules, the energy audit and the studies on this page all
+      assume the structure is what those cards describe.</p>
+    </section>
+  </div>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

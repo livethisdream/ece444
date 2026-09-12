@@ -1,0 +1,25 @@
+# One command to serve the room:
+#
+#   docker compose -f scripts/nec_lab/docker-compose.yml up -d --build
+#
+# Then hand out the address. Nothing is installed at the student's end, which
+# is the whole point on a managed Windows PC.
+#
+# Two knobs, both optional:
+#   NEC_LAB_PORT        the port on the host. Set it to 80 and students type an
+#                       address with no port on the end.
+#   NEC_LAB_PUBLIC_URL  the address to print in the log. A container cannot
+#                       discover the host's name, so say what it is.
+#
+#   NEC_LAB_PORT=80 NEC_LAB_PUBLIC_URL=http://nec-lab.local/ \
+#     docker compose -f scripts/nec_lab/docker-compose.yml up -d --build
+services:
+  nec_lab:
+    build: .
+    image: nec_lab:latest
+    container_name: nec_lab
+    ports:
+      - "${NEC_LAB_PORT:-8444}:8444"
+    environment:
+      NEC_LAB_PUBLIC_URL: "${NEC_LAB_PUBLIC_URL:-}"
+    restart: unless-stopped
