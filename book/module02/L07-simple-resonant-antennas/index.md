@@ -1097,7 +1097,7 @@ showing up in your own hardware.
 
 ::::{frame} Where This Is Going
 :::{present}
-- **Lesson 8**: a solver computes the current instead of assuming it. Bring the 146 MHz numbers and grade it with them.
+- **Lesson 8**: the pattern computed numerically, with no current prescribed. Bring the 146 MHz numbers and grade it with them.
 - **Lesson 12**: a monopole and a loop from the same wire.
 - **Module 3**: the dipole becomes an element.
 :::
@@ -1105,14 +1105,15 @@ showing up in your own hardware.
 Lesson 8 puts this exact antenna into **nec_lab**, the course simulator, which
 acts as a front end to **NEC-2**, the Numerical Electromagnetics Code — a
 method-of-moments engine written in the 1970s and still the standard tool for
-wire antennas. Method of moments does the one thing this lesson could not:
-instead of assuming a current, it divides the wire into short segments and
-*solves* for the current on each one, by enforcing the boundary condition that
-the total tangential electric field must vanish on a perfect conductor. Once it
-has that current, it computes the pattern the same way we did today — by
-putting the current through the radiation integral. So the simulator is not
-doing different physics from this lesson. It is doing the same physics with the
-assumption removed, and that is exactly why comparing the two is informative.
+wire antennas. What it does is compute the radiation pattern numerically, which
+is the one thing this lesson could not do. It divides the wire into short
+segments, treats each as a small radiator whose pattern we already know, and
+adds those patterns up; the weights in that sum come from enforcing the
+boundary condition that the total tangential electric field must vanish on a
+perfect conductor, which also hands back the current on each segment along the
+way. So the simulator is not doing different physics from this lesson. It is
+running the same superposition without anyone having to prescribe the current
+first, and that is exactly why comparing the two is informative.
 
 In Lesson 8 you will model a wire, set its length, sweep the frequency, and
 read back impedance, VSWR, gain, and pattern — then compare each one against

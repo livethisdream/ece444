@@ -32,7 +32,7 @@ Lesson 8 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::{frame} Learning Objectives
 
 <ol class="lo-list lo-sublist" style="--module: '2'; --lo: '2'">
-  <li>I can explain what the method of moments does — discretize the wire, enforce the boundary condition, solve for the segment currents — and why the simulator then runs the same radiation integral you ran by hand.</li>
+  <li>I can explain why we compute a radiation pattern numerically, and how the method of moments does it — discretize the source, expand the current in basis functions, enforce the boundary condition, and sum the segment patterns.</li>
   <li>I can build a wire-dipole model with defensible segmentation and excitation, and run frequency sweeps and pattern computations.</li>
   <li>I can compare simulated impedance, resonant length, pattern, and gain against the analytical half-wave-dipole predictions and account for every difference.</li>
   <li>I can recognize when a simulation is misleading me — segmentation too coarse, wire radius unreasonable, source misplaced — and apply the standard convergence and energy checks.</li>
@@ -41,40 +41,97 @@ Lesson 8 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Where We Were
 :::{present}
-- Every number Lesson 7 gave you rests on one assumption: the current is a **sinusoid**.
-- Today a solver computes that current instead of assuming it.
-- Then you reconcile the two answers. **That reconciliation is the lab.**
+- Lesson 6: the pattern is the radiation integral over **whatever current sits on the source**.
+- Lesson 7: we prescribed that current, and the integral closed in a formula.
+- Both steps work for a handful of shapes.
 :::
 
-Lesson 7 supplied the current by assumption,
-$I(z) = I_m \sin\left(k\left(\frac{L}{2} - \vert z \vert\right)\right)$, and
-everything else followed from it — the pattern, the beamwidth, the
-$73 + j42.5\ \Omega$ at the terminals. A difference you can explain is worth
-more than an agreement you cannot, so the deliverable today is not a matching
-number. It is an account of every place the two answers part company.
+Nothing in the last two lessons claimed that a wire's current must be a
+sinusoid. Lesson 6 ran the same integral over an infinitesimal element, a
+uniform line source, and a sinusoidal standing wave, and compared the three
+patterns side by side; Lesson 7 used a triangular current for the short dipole
+and a sinusoid for the half-wave one. The pattern came out of the same
+machinery every time. What limits that machinery is not which current you
+pick, it is that you have to pick one at all and then evaluate the integral in
+closed form afterward. A fat wire, a bent wire, a wire over a ground plane, or
+an array whose elements couple will hand you neither a current you can write
+down nor an integral you can do.
 ::::
 
-::::{frame} What the Solver Does
+::::{frame} What We Are Actually After
 :::{present}
-The **method of moments** removes the assumption in three steps.
-
-1. **Discretize.** Chop the wire into $N$ segments, each carrying one unknown current.
-2. **Enforce.** $E_z^{\text{scattered}} = -E_z^{\text{source}}$, one equation per segment.
-3. **Solve.** One complex matrix solve.
+:class: callout
+The deliverable is the **radiation pattern** of an antenna nobody can solve on
+paper. The method of moments is how we get that pattern numerically. The
+currents it reports along the way are the means, not the end.
 :::
 
-You now have $N$ unknown numbers instead of an unknown function. The solver
-then evaluates the radiation integral from Lesson 6 over that numerical
-current rather than over an analytical one — the same integral you ran by
-hand, fed a current nobody guessed.
+Keep that straight and the rest of the lesson has a spine. Every rule you are
+about to meet — segments per wavelength, segment length against wire radius,
+where the source card goes — exists to protect a pattern computation, and the
+checks at the end of the lab are pattern checks. The currents are how the
+method gets there, and they are worth looking at because they are where a
+broken model shows itself first, but they are not the reason we run the solver.
+::::
+
+::::{frame} The Source Becomes N Small Radiators
+:::{present}
+- Radiation is **superposition** over the source. Take that literally.
+- Cut the source into $N$ segments, each a radiator you already know.
+- The pattern is their weighted sum; only the **weights** are unknown.
+:::
+:::{present}
+$$I(z) = \sum_{n=1}^{N} a_n\ f_n(z)$$
+
+- $f_n$: **basis** shapes you pick. $a_n$: the unknowns.
+:::
+
+This is the move that makes the problem finite. An unknown *function* on the
+wire becomes $N$ unknown *numbers*, and the pattern integral becomes a sum of
+$N$ elementary patterns with those numbers as coefficients:
+
+$$F(\theta) \;=\; \sum_{n=1}^{N} a_n\ F_n(\theta),$$
+
+where each $F_n$ is the pattern of one short segment carrying its basis shape —
+an object Lesson 6 already handed you. NEC's basis functions are a
+constant-plus-sine-plus-cosine triple on each segment, chosen so that current
+and slope match across the junctions, but the choice is a modeling decision
+rather than a physical claim. Nothing here asserts what the current *is*.
+::::
+
+::::{frame} Where the Weights Come From
+:::{present}
+- Total tangential field is zero on a conductor, on **every** segment.
+- $N$ equations, $N$ unknowns, one matrix solve.
+:::
+:::{present}
+$$E_z^{\text{scattered}} = -E_z^{\text{source}}$$
+
+- Out come the weights, and with them the **pattern**.
+- $Z_\text{in}$ comes from one weight, at the feed.
+:::
+
+The scattered field is the field the unknown segment currents produce, so
+every row of the matrix is a statement about how strongly one segment's
+current is felt at another — strongest on the diagonal, since a segment feels
+itself most. One row per segment makes the system square, and a laptop
+finishes it in milliseconds. Depending on which form of the integral equation
+you start from this is Pocklington's or Hallén's equation; we will not derive
+either. The result is what matters: a pattern computed without ever
+prescribing the current that produced it, which is exactly the step Lesson 7
+could not take. Today you reconcile that pattern, and the impedance that came
+with it, against the numbers you worked out by hand. A difference you can
+explain is worth more than an agreement you cannot, so the deliverable is not
+a matching number. It is an account of every place the two answers part
+company.
 ::::
 
 ::::{frame} A Simulator Knows No More Physics Than You Do
 :::{present}
 :class: callout
-It solves for the current you would otherwise have guessed, then computes the
-same integral you would have computed. Everything it reports is only as
-trustworthy as the segments, the wire radius, and the source you handed it.
+It runs the same superposition you would have run, over a source you described
+to it. Every pattern and every number it reports is only as trustworthy as the
+segments, the wire radius, and the source you handed it.
 :::
 
 That sentence is the reason this lesson spends as long on the rules bounding

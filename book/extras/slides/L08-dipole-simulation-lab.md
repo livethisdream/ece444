@@ -22,15 +22,18 @@ Fall 2026 · Dr. Neil Rogers
 
 ## Where we were
 
-- **L6:** the pattern is the radiation integral over the current, so a known $I(z)$ determines the pattern completely.
-- **L7:** we *assumed* the current was a sinusoid and got numbers: $73 + j42.5\ \Omega$, resonance near $0.47\lambda$, 2.15 dBi, 78° beamwidth.
-- Every one of those numbers rests on that one assumption.
+- **L6:** the pattern is the radiation integral over *whatever* current sits on the source — we ran it for three different distributions.
+- **L7:** we prescribed the current ourselves, triangular on the short dipole and sinusoidal on the half-wave one, and the integral closed in a formula.
+- Closed form needs a current you can write down **and** an integral you can do. A fat wire, a bent wire, or a coupled array gives you neither.
 
-**Today a computer solves for the current instead of assuming it, and you reconcile its answer with yours.**
+**Today we compute the pattern numerically instead, and you reconcile it with the one you got by hand.**
 
 Note:
-Ask up front: what part of L7 was a model, and what part was physics? The
-integral is physics. The sinusoid is a model. Today we replace the model.
+Head off the wrong takeaway: we are not here because the sinusoid was a lie. It
+is a very good model for a thin resonant wire, and L6 showed the machinery
+working on a uniform line source and an infinitesimal element too. The limit is
+structural — you have to prescribe a current at all, then integrate it in closed
+form — and that is what runs out on a real antenna.
 
 ---
 
@@ -65,12 +68,50 @@ period on an antenna whose answer we already know.
 
 ---
 
+## What we are actually after
+
+<div class="callout">
+The goal is the <strong>radiation pattern</strong> of an antenna nobody can solve on paper.<br>
+The method of moments is how we get that pattern numerically.<br>
+The currents it reports along the way are the <strong>means, not the end</strong>.
+</div>
+
+- Every rule in the next ten slides exists to protect a pattern computation.
+- The currents are worth watching because a broken model shows there first.
+
+Note:
+Say this out loud and the rest of the briefing has a spine. When they ask later
+why the segment rules matter, the answer is always the same: because the pattern
+is a sum over those segments.
+
+---
+
+## The source becomes N small radiators
+
+- L6 said radiation is **superposition** over the source. Take that literally.
+- Cut the source into $N$ short segments, each a small radiator whose pattern you already know.
+- The antenna's pattern is their weighted sum, and only the **weights** are unknown.
+
+$$F(\theta) = \sum_n a_n F_n(\theta) \quad\text{with}\quad I(z) = \sum_n a_n f_n(z)$$
+
+**The $f_n$ are basis functions, the shapes you choose. The $a_n$ are the unknowns.**
+
+Note:
+This is the whole idea, and it is worth a minute. An unknown function on the
+wire becomes N unknown numbers, and the pattern integral becomes a finite sum of
+elementary patterns they already computed in L6. NEC's basis is a
+constant-plus-sine-plus-cosine triple per segment so current and slope match
+across junctions — mention it, do not dwell. Emphasize that choosing a basis is
+a modeling decision, not a claim about what the current is.
+
+---
+
 ## What the method of moments does
 
 <div class="fig" data-inline-svg="./fig/L08-mom-pipeline.svg" style="max-width:790px; margin:0 auto;"></div>
 
 Note:
-Walk left to right. Steps 1 and 4 are bookkeeping around the integral they
+Walk left to right. Steps 1 and 4 are bookkeeping around the superposition they
 already know. Step 2 is the physics, and step 3 is linear algebra that a laptop
 finishes in milliseconds.
 
@@ -82,17 +123,18 @@ On a perfect conductor the total tangential field is zero. So along the wire:
 
 $$E_z^{\text{scattered}}(z) = -E_z^{\text{source}}(z)$$
 
-- The scattered field is produced by the unknown segment currents.
+- The scattered field is produced by the unknown segment weights.
 - There is one equation and one unknown per segment, so the system is square and solves in one step.
-- **No sinusoid is assumed anywhere in this process.** L7 assumed the current, while the solver computes it.
+- **Nothing here prescribes the current.** The weights come out of the boundary condition, and the pattern comes out of the weights.
 
 <div class="callout">
-The solver discretizes the wire, enforces the boundary condition, solves for the segment currents, and then integrates.
+Discretize the source, expand the current in basis functions, enforce the boundary condition, then sum the segment patterns.
 </div>
 
 Note:
 This is Pocklington's / Hallen's equation depending on the form. Do not derive
-it. The takeaway is that MoM turns an integral equation into a matrix.
+it. The takeaway is that MoM turns an integral equation into a matrix, and the
+matrix is only the road to the pattern.
 
 ---
 
@@ -293,8 +335,8 @@ out of a results window.
 
 <div class="callout">
 A simulator does not know more physics than you do.<br>
-It solves for the current you would have had to guess — <strong>then runs your integral.</strong><br>
-Everything it reports is only as good as the segments, the radius, and the source you gave it.
+It runs <strong>your superposition</strong>, over a source <strong>you</strong> described to it.<br>
+Every pattern and every number it reports is only as good as the segments, the radius, and the source you gave it.
 </div>
 
 Note:
@@ -314,4 +356,4 @@ average-gain check before they record anything.
 Note:
 Preview L12 briefly: perfect ground doubles the directivity and halves the
 impedance, and NEC's GN card is where that happens. Ask them to review the L7
-sinusoid assumption before that lesson.
+current distributions before that lesson.
