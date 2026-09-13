@@ -297,80 +297,22 @@ def _is_number(tok: str) -> bool:
     return True
 
 
-class ExecutableEngine:
-    """A NEC executable driven over files -- what a 4nec2 install already has.
+class DeckEngine:
+    """Everything that reads NEC's *output file*, independent of who wrote it.
 
-    The engine is found in this order: the `NEC_LAB_ENGINE` environment
-    variable, then PATH, then the usual 4nec2 install directories on Windows.
+    NEC-2 has one interface -- a deck in, an output file out -- so a subprocess
+    and a WebAssembly module differ in exactly one method. Splitting here means
+    the browser build inherits a parser that has been run against real output
+    since the first day of this tool, rather than getting a second one.
     """
 
-    name = "NEC executable"
+    name = "deck engine"
 
-    def __init__(self, exe: str | None = None):
-        self.exe = exe or self.find()
+    def _run_deck(self, deck: str) -> str:          # pragma: no cover
+        raise NotImplementedError
 
-    @staticmethod
-    def find() -> str | None:
-        env = os.environ.get("NEC_LAB_ENGINE")
-        if env and (Path(env).exists() or shutil.which(env)):
-            return env
-        for cand in _EXE_CANDIDATES:
-            found = shutil.which(cand)
-            if found:
-                return found
-        # Where 4nec2 actually lands. A managed machine often cannot write to
-        # Program Files, so a per-user install under the profile or LocalAppData
-        # is at least as likely as the documented location.
-        import os as _os
-
-        roots = [r"C:\4nec2", r"C:\Program Files\4nec2",
-                 r"C:\Program Files (x86)\4nec2", r"D:\4nec2"]
-        for var in ("USERPROFILE", "LOCALAPPDATA", "APPDATA", "PUBLIC"):
-            base = _os.environ.get(var)
-            if base:
-                roots += [str(Path(base) / "4nec2"),
-                          str(Path(base) / "Programs" / "4nec2")]
-        for root in roots:
-            d = Path(root)
-            if not d.is_dir():
-                continue
-            for cand in (d / "exe", d):
-                if cand.is_dir():
-                    for exe in sorted(cand.glob("nec2dxs*.exe")):
-                        return str(exe)
-        return None
-
-    def available(self) -> bool:
-        return bool(self.exe)
-
-    def describe(self) -> str:
-        return f"NEC executable ({self.exe})"
-
-    # ---- running -------------------------------------------------------
-
-    def _run_deck(self, deck: str) -> str:
-        if not self.exe:
-            raise EngineError(
-                "No NEC executable found. Install nec2c, or point NEC_LAB_ENGINE "
-                "at the nec2dxs executable inside your 4nec2 install.")
-        with tempfile.TemporaryDirectory(prefix="nec_lab_") as tmp:
-            inp = Path(tmp) / "model.nec"
-            out = Path(tmp) / "model.out"
-            inp.write_text(deck)
-            # nec2c takes -i/-o; the 4nec2 engines take the two paths
-            # positionally. Try the flags first and fall back, because the
-            # wrong form exits without writing an output file rather than
-            # complaining.
-            for argv in ([self.exe, f"-i{inp}", f"-o{out}"],
-                         [self.exe, str(inp), str(out)]):
-                try:
-                    subprocess.run(argv, capture_output=True, timeout=300,
-                                   check=False)
-                except (OSError, subprocess.TimeoutExpired) as exc:
-                    raise EngineError(f"{self.exe} would not run: {exc}") from exc
-                if out.exists() and out.stat().st_size:
-                    return out.read_text(errors="replace")
-            raise EngineError(f"{self.exe} produced no output file")
+    def describe(self) -> str:                      # pragma: no cover
+        return self.name
 
     # ---- parsing -------------------------------------------------------
 
@@ -507,6 +449,113 @@ class ExecutableEngine:
             raise EngineError(
                 f"asked for {sweep.n} frequencies, output carried {len(out)}")
         return out
+
+
+
+class ExecutableEngine(DeckEngine):
+    """A NEC executable driven over files -- what a 4nec2 install already has.
+
+    The engine is found in this order: the `NEC_LAB_ENGINE` environment
+    variable, then PATH, then the usual 4nec2 install directories on Windows.
+    """
+
+    name = "NEC executable"
+
+    def __init__(self, exe: str | None = None):
+        self.exe = exe or self.find()
+
+    @staticmethod
+    def find() -> str | None:
+        env = os.environ.get("NEC_LAB_ENGINE")
+        if env and (Path(env).exists() or shutil.which(env)):
+            return env
+        for cand in _EXE_CANDIDATES:
+            found = shutil.which(cand)
+            if found:
+                return found
+        # Where 4nec2 actually lands. A managed machine often cannot write to
+        # Program Files, so a per-user install under the profile or LocalAppData
+        # is at least as likely as the documented location.
+        import os as _os
+
+        roots = [r"C:\4nec2", r"C:\Program Files\4nec2",
+                 r"C:\Program Files (x86)\4nec2", r"D:\4nec2"]
+        for var in ("USERPROFILE", "LOCALAPPDATA", "APPDATA", "PUBLIC"):
+            base = _os.environ.get(var)
+            if base:
+                roots += [str(Path(base) / "4nec2"),
+                          str(Path(base) / "Programs" / "4nec2")]
+        for root in roots:
+            d = Path(root)
+            if not d.is_dir():
+                continue
+            for cand in (d / "exe", d):
+                if cand.is_dir():
+                    for exe in sorted(cand.glob("nec2dxs*.exe")):
+                        return str(exe)
+        return None
+
+    def available(self) -> bool:
+        return bool(self.exe)
+
+    def describe(self) -> str:
+        return f"NEC executable ({self.exe})"
+
+    # ---- running -------------------------------------------------------
+
+    def _run_deck(self, deck: str) -> str:
+        if not self.exe:
+            raise EngineError(
+                "No NEC executable found. Install nec2c, or point NEC_LAB_ENGINE "
+                "at the nec2dxs executable inside your 4nec2 install.")
+        with tempfile.TemporaryDirectory(prefix="nec_lab_") as tmp:
+            inp = Path(tmp) / "model.nec"
+            out = Path(tmp) / "model.out"
+            inp.write_text(deck)
+            # nec2c takes -i/-o; the 4nec2 engines take the two paths
+            # positionally. Try the flags first and fall back, because the
+            # wrong form exits without writing an output file rather than
+            # complaining.
+            for argv in ([self.exe, f"-i{inp}", f"-o{out}"],
+                         [self.exe, str(inp), str(out)]):
+                try:
+                    subprocess.run(argv, capture_output=True, timeout=300,
+                                   check=False)
+                except (OSError, subprocess.TimeoutExpired) as exc:
+                    raise EngineError(f"{self.exe} would not run: {exc}") from exc
+                if out.exists() and out.stat().st_size:
+                    return out.read_text(errors="replace")
+            raise EngineError(f"{self.exe} produced no output file")
+
+class WasmEngine(DeckEngine):
+    """NEC-2 compiled to WebAssembly, running in the page.
+
+    The module is loaded by the browser, not by Python, so this class is handed
+    a callable that takes deck text and returns NEC's output text. Everything
+    after that -- the parsing, the impedance, the cuts, the sphere -- is the
+    same code the subprocess backend uses, because it is the same output file.
+
+    That callable is JavaScript when this runs under Pyodide, and a plain
+    function when a test supplies one.
+    """
+
+    name = "NEC-2 (WebAssembly)"
+
+    def __init__(self, run_deck, label: str = "in this page"):
+        self._run = run_deck
+        self._label = label
+
+    def available(self) -> bool:
+        return self._run is not None
+
+    def describe(self) -> str:
+        return f"{self.name}, {self._label}"
+
+    def _run_deck(self, deck: str) -> str:
+        out = self._run(deck)
+        if out is None:
+            raise EngineError("the WebAssembly engine returned nothing")
+        return str(out)
 
 
 def pick_engine(prefer: str | None = None):

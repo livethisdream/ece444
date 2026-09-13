@@ -366,6 +366,36 @@ def run() -> int:
               f"{len(m_k.wires)} wires, {len(m_k.feeds)} feeds, "
               f"{m_k.ground.kind} ground")
 
+    print("\nevery endpoint answers")
+    # The page calls all of these, and a missing import in one of them is
+    # invisible until a student clicks. (One was: engine_info lost HALF_WAVE
+    # when the API moved out of the HTTP layer, and nothing here noticed.)
+    from .api import Api
+
+    bench = Api(engines[0])
+    deck = builders.build("dipole", {}).deck(requests=(E_PLANE,))
+    calls = {
+        "types": {}, "build": {"type": "yagi", "params": {"directors": 1}},
+        "solve": {"deck": deck}, "deck": {"deck": deck},
+        "sweep": {"deck": deck, "start_mhz": 900, "stop_mhz": 930, "step_mhz": 10},
+        "converge": {"deck": deck, "counts": [11, 21]},
+        "trim": {"deck": deck}, "sphere": {"deck": deck, "step_deg": 15},
+        "export/pattern": {"deck": deck}, "export/sweep": {"deck": deck},
+        "export/sphere": {"deck": deck, "step_deg": 15},
+    }
+    check("every route in the table is covered here",
+          set(calls) == set(Api.ROUTES), str(set(Api.ROUTES) ^ set(calls)))
+    for route, req in calls.items():
+        try:
+            out = bench.dispatch(route, req)
+            ok = isinstance(out, dict) and out.get("ok") is not False
+            detail = "" if ok else str(out.get("error", ""))[:60]
+        except Exception as exc:                      # noqa: BLE001
+            ok, detail = False, f"{type(exc).__name__}: {exc}"
+        check(f"/api/{route} answers", ok, detail)
+    check("/api/engine describes the engine",
+          "engine" in bench.engine_info({}))
+
     print("\nchamber interoperability")
     sol = engines[0].solve(model, (E_PLANE, H_PLANE))
     csv = export.pattern_csv(sol.cuts, provenance="selftest")
