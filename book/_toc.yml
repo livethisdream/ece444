@@ -38,18 +38,18 @@ parts:
         title: "L7 — Simple Resonant Antennas"
       - file: module02/L08-dipole-simulation-lab/index
         title: "L8 — Dipole Simulation Lab"
-      - file: module02/L09-loop-monopole-antennas/index
-        title: "L9 — Loop and Monopole Antennas"
-      - file: module02/L10-patch-slot-horn/index
-        title: "L10 — Patch, Slot, and Horn Antennas"
-      - file: module02/L11-high-gain-antennas/index
-        title: "L11 — High-Gain Antennas"
-      - file: module02/L12-pattern-measurement-theory/index
-        title: "L12 — Pattern Measurement Theory"
-      - file: module02/L13-measurement-lab-sparams/index
-        title: "L13 — Measurement Lab 1 — Impedance and S-parameters"
-      - file: module02/L14-measurement-lab-patterns/index
-        title: "L14 — Measurement Lab 2 — Radiation Patterns"
+      - file: module02/L09-pattern-measurement-theory/index
+        title: "L9 — Measurement Theory"
+      - file: module02/L10-measurement-lab-sparams/index
+        title: "L10 — Measurement Lab 1 — Impedance and S-parameters"
+      - file: module02/L11-measurement-lab-patterns/index
+        title: "L11 — Measurement Lab 2 — Radiation Patterns"
+      - file: module02/L12-loop-monopole-antennas/index
+        title: "L12 — Loop and Monopole Antennas"
+      - file: module02/L13-patch-slot-horn/index
+        title: "L13 — Patch, Slot, and Horn Antennas"
+      - file: module02/L14-high-gain-antennas/index
+        title: "L14 — High-Gain Antennas"
 
   - caption: Module 3 — Arrays and ADALM-PHASER Beamforming
     chapters:

@@ -6,7 +6,7 @@
 
 Antennas, Phased Arrays, and Radar Systems
 
-## Lesson 11 — High-Gain Antennas
+## Lesson 14 — High-Gain Antennas
 
 Fall 2026 · Dr. Neil Rogers
 
@@ -22,15 +22,15 @@ Fall 2026 · Dr. Neil Rogers
 
 ## Where we were
 
-- L10: patches, slots, horns — single elements, 6 to 20 dBi
+- L13: patches, slots, horns — single elements, 6 to 20 dBi
 - L6: beamwidth is set by aperture **size**, sidelobes by aperture **shape**
 - L2: Friis says the link budget lives or dies on $G_t G_r$
 - Every one of those antennas is one radiator
 
-**Today: how you get to 20, 30, 40 dBi — and the one idea behind all of it.**
+**Today: how you get to 20, 30, 40 dBi — and the one idea behind all of it. Last lesson of Module 2.**
 
 Note:
-Anchor on L10. Patch on a wall is fine for Wi-Fi. Ask: what closes a link to GEO at 36000 km? Nobody does it with a patch.
+Anchor on L13. Patch on a wall is fine for Wi-Fi. Ask: what closes a link to GEO at 36000 km? Nobody does it with a patch. Also flag that this is the last lesson putting new candidate antennas in front of them before the midterm is due at L20.
 
 ---
 
@@ -44,7 +44,7 @@ Anchor on L10. Patch on a wall is fine for Wi-Fi. Ask: what closes a link to GEO
 6. Choosing one, and defending it with numbers
 
 Note:
-Flag the midterm project up front — it is announced at the end of the hour and it is due at L20.
+Flag the midterm early. It was announced at L9 and is due at L20; today's item 6 is the reasoning their report has to show, so tell them to read the selection framework as a project decision rather than as a summary.
 
 ---
 
@@ -62,7 +62,7 @@ Flag the midterm project up front — it is announced at the end of the hour and
 | Array | buys the area one element at a time, phase set electronically |
 
 Note:
-Make them write this down. Everything else today is a corollary. If a student can only keep one sentence from L11, this is it.
+Make them write this down. Everything else today is a corollary. If a student can only keep one sentence from L14, this is it.
 
 ---
 
@@ -118,13 +118,13 @@ Home satellite-TV dish, Ku band, $\eta_{\text{ap}} = 0.65$.
 | Far field | $2D^2/\lambda = 2/0.025$ | 80 m |
 
 Note:
-Two takeaways. First: a dish you can carry gives 40 dBi. Second: its far field is 80 m — you cannot measure this thing in the lab, which is exactly L12's problem.
+Two takeaways. First: a dish you can carry gives 40 dBi. Second: its far field is 80 m — you cannot measure this thing in the lab, which is exactly L9's problem.
 
 ---
 
 ## Why a parabola
 
-<div class="fig" data-inline-svg="./fig/L11-parabola-geometry.svg" style="max-width:940px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L14-parabola-geometry.svg" style="max-width:940px; margin:0 auto;"></div>
 
 Note:
 Walk the ray. Feed radiates a sphere; the surface only rearranges phase, never adds power. Point at the aperture plane and say: this is where the antenna actually is.
@@ -170,7 +170,7 @@ f/D is the first number on any reflector data sheet. It tells the feed designer 
 
 ## Illumination: taper fights spillover
 
-<div class="fig" data-inline-svg="./fig/L11-illumination-taper.svg" style="max-width:860px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L14-illumination-taper.svg" style="max-width:860px; margin:0 auto;"></div>
 
 <div class="callout">
 <p>Rule of thumb: illuminate the rim about <strong>10 dB below center</strong>.</p>
@@ -233,7 +233,7 @@ Have them multiply it on their calculators. The point is that 0.65 is not a fudg
 
 ## The Yagi-Uda
 
-<div class="fig" data-inline-svg="./fig/L11-yagi.svg" style="max-width:980px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L14-yagi.svg" style="max-width:980px; margin:0 auto;"></div>
 
 Note:
 Exactly one element is connected. Everything else is a piece of metal in the near field. Students often assume every element is fed, so correct that here.
@@ -355,21 +355,18 @@ This is the payoff slide. The 20 dB of antenna gain is the difference between a 
 
 ---
 
-## Midterm Project — Antenna Pattern Measurement
+## Your midterm antenna
 
 <div class="callout">
-<p><strong>Introduced today, due at L20.</strong></p>
+<p><strong>Introduced at L9, due at L20.</strong> Today is the last lesson that puts new candidates in front of you.</p>
 </div>
 
-- **Design or select** an antenna
-- **Measure its pattern** with the techniques from L12–L14
-- **Report** gain, beamwidth, sidelobe levels, and polarization
-- Full requirements are in the project handout, distributed in class
-
-Start deciding now which antenna you want — the selection framework from this lesson is the reasoning your report has to show.
+- You have already measured a horn on the range in **L11**.
+- **Report** gain, beamwidth, sidelobe levels, and polarization — with an error budget.
+- The selection framework at the end of this hour is the reasoning your report has to show.
 
 Note:
-Hand out the packet here. Take questions on scope only; the details are in the handout.
+Take questions on scope; the details are in the handout they already have. Push them to name a candidate before they leave — the antennas from L12, L13, and today are all on the table.
 
 ---
 
@@ -388,11 +385,11 @@ Close the loop on the opening slide. If they leave with one sentence, this is th
 ## Where this is going
 
 - Every gain number today was a **claim** — 0.65 was an assumption, $70^\circ \lambda / D$ a rule of thumb
-- **L12:** pattern measurement theory — far-field ranges, gain comparison, three-antenna method
-- **L13–L14:** on the instruments, measuring S-parameters and patterns
-- **Module 3:** the third road, in full, with the PHASER
+- You already know how to test one: L9's theory, L10's analyzer, L11's range
+- **Module 2 closes here:** predict, simulate, measure, and state how much to believe
+- **L15 opens Module 3:** aperture size set the beamwidth — what set the sidelobe level?
 
-**Before you may write a gain on a data sheet, you have to measure it.**
+**Before you may write a gain on a data sheet, you have to measure it. You can.**
 
 Note:
-Tie the 80 m far-field number from the worked example straight into L12. That is the hook.
+Tie the 80 m far-field number from the worked example back to L9's compact range and near-field scanner — a dish you can carry under one arm that no ordinary room can test. Then hand them to L15: the answer to the sidelobe question is the illumination taper they met today at −10 dB, generalized.

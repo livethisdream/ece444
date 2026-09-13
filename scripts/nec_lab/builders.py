@@ -10,7 +10,7 @@ Each type carries a parameter spec so the page can render its form without
 knowing anything about antennas, and names the lesson it belongs to.
 
 What is here is what NEC-2 is: thin wires, and a ground plane. Patches, slots,
-horns and dishes (L10, and the reflector half of L11) are not thin-wire
+horns and dishes (L13, and the reflector half of L14) are not thin-wire
 problems and are deliberately absent rather than approximated badly -- see
 README.
 """
@@ -211,7 +211,7 @@ TYPES: tuple[AntennaType, ...] = (
         (FREQ, Param("length_lambda", "Length", 0.5, "lambda"), RADIUS, SEGMENTS),
         build_dipole),
     AntennaType(
-        "monopole", "Monopole over ground", "L9",
+        "monopole", "Monopole over ground", "L12",
         "Half a dipole, fed against its image in the ground plane.",
         (FREQ, Param("height_lambda", "Height", 0.236, "lambda"), RADIUS,
          SEGMENTS,
@@ -221,7 +221,7 @@ TYPES: tuple[AntennaType, ...] = (
                     "monopole stop working")),
         build_monopole),
     AntennaType(
-        "loop", "Loop", "L9",
+        "loop", "Loop", "L12",
         "A closed loop in the x-y plane, as a polygon of straight wires.",
         (FREQ, Param("circumference_lambda", "Circumference", 1.0, "lambda"),
          Param("sides", "Sides", 12, "count", step=1),
@@ -229,7 +229,7 @@ TYPES: tuple[AntennaType, ...] = (
          RADIUS),
         build_loop),
     AntennaType(
-        "yagi", "Yagi-Uda", "L11",
+        "yagi", "Yagi-Uda", "L14",
         "Driven element with a reflector behind and directors in front.",
         (FREQ, Param("directors", "Directors", 1, "count", step=1),
          Param("reflector_lambda", "Reflector length", 0.482, "lambda"),

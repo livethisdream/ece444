@@ -305,13 +305,13 @@ average-gain check before they record anything.
 
 ## Where this is going
 
-- **L9:** loops and monopoles. A monopole model needs a **ground plane**, which adds a new card and a new way for the model to go wrong.
+- **L12:** loops and monopoles. A monopole model needs a **ground plane**, which adds a new card and a new way for the model to go wrong.
 - **Module 3:** arrays. Every element you place is another wire, and segmentation rules apply to all of them at once.
 - The habit you build today — predict, simulate, reconcile — is the habit for every antenna in the course.
 
 **Always predict first, because a simulation you cannot argue with has taught you nothing.**
 
 Note:
-Preview L9 briefly: perfect ground doubles the directivity and halves the
+Preview L12 briefly: perfect ground doubles the directivity and halves the
 impedance, and NEC's GN card is where that happens. Ask them to review the L7
 sinusoid assumption before that lesson.

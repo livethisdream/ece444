@@ -84,12 +84,12 @@ LO 1.5's three sub-LOs get zero written reps though L05 is fully quantitative (b
 
 **F-11 · The only pattern-reading practice is an ungradeable find-your-own-datasheet task**
 `latex/ECE444_Practice_L02.tex:218–234` (Q5, all 5 parts)
-"Find a published pattern and annotate it" — answers antenna-dependent, key grades method only, no M2 set contains any such research item, and pattern reading recurs in the midterm project and L12/L14/L22–L25. Students get no calibrated feedback on the course's most-used skill.
+"Find a published pattern and annotate it" — answers antenna-dependent, key grades method only, no M2 set contains any such research item, and pattern reading recurs in the midterm project and L9/L11/L22–L25. Students get no calibrated feedback on the course's most-used skill.
 **Fix:** Move the datasheet hunt to the lesson page as an exercise; replace Q5 with a determinate problem against one supplied labeled plot (HPBW/FNBW/SLL/F-B read-offs), and add the same annotated plot as a worked example on the L2 page. *(PED-14, PRB-08.)*
 
 **F-12 · L03 keys demand antenna families the course hasn't taught — one contradicts the lesson's own table**
 `latex/ECE444_Practice_L03.tex:81–83` (Q4d) and `:101–103` (Q5c)
-Q5c's key answers with PIFA, chassis slot, stacked patch — none in the L03 "Bandwidth by Antenna Type" table (families are M2 L07–L11 content). Q4d's key names "a standard-gain horn or half-wave dipole" for FBW ≈ 10.3%, but the lesson's own table lists horns at 30–50% — a student answering from the taught table contradicts the key.
+Q5c's key answers with PIFA, chassis slot, stacked patch — none in the L03 "Bandwidth by Antenna Type" table (families are M2 L07 and L12–L14 content). Q4d's key names "a standard-gain horn or half-wave dipole" for FBW ≈ 10.3%, but the lesson's own table lists horns at 30–50% — a student answering from the taught table contradicts the key.
 **Fix:** Rewrite both keys from the taught table only (dipole 8–15% for Q4d, dropping the horn; broadband monopole/slot/Vivaldi/log-periodic for Q5c), listing PIFA/stacked patch as optional extras; require justification via the resonant/traveling-wave/self-scaling mechanism. *(PED-13, PRB-12, PRB-04.)*
 
 **F-13 · The L03 set is ~40% over the workload calibration and has zero answer boxes**
@@ -163,7 +163,7 @@ Maxwell → telegrapher's → wave equation → plane wave → Poynting → soli
 **Fix within one lesson:** restructure into 4–5 Parts (physics chain / power & pattern quantities / reciprocity + A_e / Friis), demote the Part-1 refresher to assigned pre-reading keeping only the plane-wave slide in class, and split the deck's radiation-intensity slide (F-33). *(PED-03, CON-24, GFX-12.)*
 
 **F-28 · L04 deck contains not one figure**
-16 slides, zero `data-inline-svg`, for the most drawable topics in M1 (λ/4 transformer, L-match, shield current, three balun types); M2's L07/L09 got 5–6 figures for comparable material. A balun lesson without a picture of current on the outside of the shield teaches nothing visual. Deck is also under the 18-slide floor.
+16 slides, zero `data-inline-svg`, for the most drawable topics in M1 (λ/4 transformer, L-match, shield current, three balun types); M2's L07/L12 got 5–6 figures for comparable material. A balun lesson without a picture of current on the outside of the shield teaches nothing visual. Deck is also under the 18-slide floor.
 **Fix:** Add ≥4 figures (`l04-zin-split`, `l04-quarter-wave`, `l04-lmatch`, `l04-balun-currents` — the last adapts `viz/img/balun-currents.svg`) and 2–4 content slides. Matches the existing ToDo to extend the SVG pipeline to L01/L04. *(GFX-02, CON-24.)*
 
 ## Majors — graphics and decks (6)
