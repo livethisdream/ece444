@@ -17,7 +17,32 @@ python scripts/nec_lab/run.py serve     # the GUI, at http://127.0.0.1:8444/
 Ordered by what it costs the student, lowest first. On a managed Windows PC the
 first path costs nothing at all.
 
-### 1. One shared copy, and a URL (nothing installed at the student's end)
+### 1. The course site (nothing installed, no server, no address to type)
+
+The simulator is published with the book at **`<site>/simulator/`** and linked
+from L8. It runs entirely in the browser: NEC-2 compiled to WebAssembly, and
+nec_lab's own Python under Pyodide -- not a port of it, the same files this
+directory holds and the selftest checks.
+
+About 6 MB on the first visit, cached afterwards, and it works offline once
+loaded. Numbers are identical to the local tool: the dipole comes back
+86.8 + j49.0 ohm and 2.18 dBi either way, because it is the same code over the
+same solver.
+
+Rebuild it with:
+
+```sh
+bash scripts/nec_lab/wasm/build.sh /some/work/dir          # NEC-2 -> wasm
+python scripts/nec_lab/wasm/assemble_site.py \
+    --pyodide <unpacked pyodide release> --nec2 <work>/out
+```
+
+The output lands in `book/extras/simulator/` and is **committed** -- Pyodide and
+the solver are vendored rather than pulled from a CDN, because this tool's whole
+point has been not depending on what a managed machine may reach. See
+`NOTICE.md` there for the GPL obligation the nec2c build carries.
+
+### 2. One shared copy, and a URL (nothing installed at the student's end)
 
 Run it on a machine you control and hand out the address. Students open a
 browser; that is the whole procedure.
@@ -110,7 +135,7 @@ Without Docker, `deploy/nec_lab.service` is the same thing as a systemd unit:
 port 80 through `CAP_NET_BIND_SERVICE` rather than root, `Restart=always`, and
 the header of the file carries the four commands that install it.
 
-### 2. Double-click, on the student's own machine
+### 3. Double-click, on the student's own machine
 
 Download the repository (**Code -> Download ZIP** on GitHub; no git needed),
 unzip, and double-click:
@@ -174,7 +199,7 @@ That is a Windows-side workaround for a WSL networking detail, not something
 nec_lab needs -- on the box that finally serves the class there is no NAT in
 the way.
 
-### 3. The command line
+### 4. The command line
 
 ```sh
 python scripts/nec_lab/run.py serve     # the GUI, at http://127.0.0.1:8444/
@@ -393,7 +418,9 @@ the *why* column empty, which is the part that is the student's to write.
 | `export.py` | chamber-shaped CSV, the sphere CSV, JSON, the comparison table |
 | `cli.py` | the command line |
 | `run.py` | launcher, so `run.py` works from any directory |
-| `serve.py` | the JSON API and static server behind the GUI |
+| `api.py` | every endpoint, with no transport under it -- both hosts call these |
+| `serve.py` | the HTTP wrapper for the local tool |
+| `wasm/` | the browser build: NEC-2 to WebAssembly, and the site assembler |
 | `static/` | the page: `index.html`, `app.js`, `style.css` |
 | `selftest.py` | the assertions against L7, L8, and the other engine |
 | `nec_lab.bat`, `nec_lab.command` | double-click launchers, Windows and macOS |

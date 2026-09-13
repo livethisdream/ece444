@@ -375,7 +375,7 @@ def run() -> int:
     bench = Api(engines[0])
     deck = builders.build("dipole", {}).deck(requests=(E_PLANE,))
     calls = {
-        "types": {}, "build": {"type": "yagi", "params": {"directors": 1}},
+        "engine": {}, "types": {}, "build": {"type": "yagi", "params": {"directors": 1}},
         "solve": {"deck": deck}, "deck": {"deck": deck},
         "sweep": {"deck": deck, "start_mhz": 900, "stop_mhz": 930, "step_mhz": 10},
         "converge": {"deck": deck, "counts": [11, 21]},

@@ -222,15 +222,25 @@ value, which is worth remembering when you model a monopole in Lesson 12.
 
 ::::{frame} Getting to the Tool
 :::{present}
-**nec_lab** runs in a browser, two ways — your instructor will say which:
+**nec_lab** runs in your browser:
 
-- **A shared copy.** Open the address given in class. Nothing to install.
-- **Your own copy.** `python scripts/nec_lab/run.py serve`, or double-click `nec_lab.bat` on Windows.
+- **On the course site.** Open <a href="../../simulator/" target="_blank" rel="noopener">Simulator</a>. Nothing to install.
+- **Or a copy your instructor is serving** — the address is given in class.
 :::
 
-Either way the page is the same, and so are your answers. The page has a form
+Every route runs the same tool and gives the same answers. The page has a form
 at the left and a **NEC input file** at the bottom right: the form writes that
 file, and the file is what NEC runs.
+
+:::{depth}
+The course-site version downloads about 6 MB the first time — NEC-2 and Python,
+both compiled for the browser — and is cached afterwards, so it opens at once
+and works with no network at all. Nothing you build there leaves your machine.
+
+You can also run it yourself from a clone of the course repository:
+`python scripts/nec_lab/run.py serve`, or double-click
+`scripts\nec_lab\nec_lab.bat` on Windows.
+:::
 
 :::{depth}
 Type the cards yourself at least once, because they are the real interface.
