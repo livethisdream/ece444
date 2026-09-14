@@ -23,6 +23,12 @@
   .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
   .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
   .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
+  .ctl-basis { flex:1 1 300px; }
+  .ctl select { font:inherit; font-size:12.5px; color:var(--navy); border:1px solid var(--edge2);
+                border-radius:4px; background:#fff; padding:2px 4px; }
+  .ctl .chk { display:inline-flex; align-items:center; gap:5px; text-transform:none; letter-spacing:0;
+              font-size:12px; font-weight:600; color:var(--ink3); white-space:nowrap; margin-left:auto; }
+  .ctl .chk input { margin:0; }
   /* Below 430px the controls bar cannot fit a label, a slider and a value on one
      line: .ctl's flex basis and the reserved .val column are both wider than the
      content box, so the bar pushes the document past the viewport and the whole
@@ -37,6 +43,14 @@
     .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
     .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
     .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
+    /* the basis row has no slider: keep label, select and checkbox on one line */
+    .ctl-basis { flex-wrap:nowrap; }
+    .ctl-basis label { order:0; }
+    .ctl-basis select { order:1; flex:0 1 auto; }
+    .ctl-basis .chk { order:2; }
+    /* the two complex readouts ("9.48 - j5.08 mA") overrun a 3-column cell at
+       14.5px bold; the 8ch floor and the size both have to give */
+    .readouts .ro .v { min-width:0; font-size:12px; }
   }
   /* Readouts as a row of instruments: equal-width cells on one grid, labels and
      values on shared baselines, edges flush with the canvases above. */
@@ -95,6 +109,14 @@
       <input type="range" id="len" min="0.30" max="0.70" step="0.005" value="0.50">
       <span class="val" id="len-val">0.500</span>
     </div>
+    <div class="ctl ctl-basis">
+      <label for="basis">Basis</label>
+      <select id="basis" aria-label="Basis function shape">
+        <option value="tri">triangle</option>
+        <option value="pws">sinusoidal (NEC)</option>
+      </select>
+      <label class="chk"><input type="checkbox" id="pieces"> show basis functions</label>
+    </div>
   </div>
 
   <div class="readouts">
@@ -147,17 +169,45 @@ function b3(x) {
   if (x >= 1) { const t = 2 - x; return t * t * t / 6; }
   return 2 / 3 - x * x + x * x * x / 2;
 }
+/* A basis: the shape f(z) one junction carries (unit peak, zero at the
+   neighboring junctions, width 2D), and its autocorrelation corr(u), which is
+   what a Galerkin matrix entry integrates against the kernel. Triangles have
+   the cubic B-spline in closed form; NEC's piecewise sinusoid,
+   sin(k(D-|z|))/sin(kD), is tabulated once per D. */
+const BASES = {
+  tri: { label: 'triangle',
+         make: D => ({ f: z => Math.max(0, 1 - Math.abs(z) / D), corr: u => D * b3(u / D) }) },
+  pws: { label: 'sinusoidal',
+         make: D => {
+           const f = z => (Math.abs(z) < D ? Math.sin(K * (D - Math.abs(z))) / Math.sin(K * D) : 0);
+           const M = 800, tab = new Float64Array(M + 1);
+           for (let i = 0; i <= M; i++) {
+             const u = -2 * D + 4 * D * i / M, P = 200; let acc = 0;
+             for (let j = 0; j <= P; j++) {
+               const z = -D + 2 * D * j / P, w = (j === 0 || j === P) ? 1 : (j % 2 ? 4 : 2);
+               acc += w * f(z) * f(z - u);
+             }
+             tab[i] = acc * (2 * D / P) / 3;
+           }
+           const corr = u => {
+             if (Math.abs(u) >= 2 * D) return 0;
+             const x = (u + 2 * D) / (4 * D) * M, i = Math.floor(x), t = x - i;
+             return tab[i] * (1 - t) + tab[Math.min(i + 1, M)] * t;
+           };
+           return { f: f, corr: corr };
+         } }
+};
 /* One Galerkin matrix entry for junction spacing d. The kernel spikes over a
    width ~a, so integrate in s with u = a*sinh(s): that packs quadrature points
    into the spike and leaves the smooth tail cheap. */
-function zterm(d, D, a, M) {
+function zterm(d, D, a, M, B) {
   const u1 = d - 2 * D, u2 = d + 2 * D;
   const s1 = Math.asinh(u1 / a), s2 = Math.asinh(u2 / a), h = (s2 - s1) / M;
   let re = 0, im = 0;
   for (let i = 0; i <= M; i++) {
     const s = s1 + i * h, w = (i === 0 || i === M) ? 1 : (i % 2 ? 4 : 2);
     const u = a * Math.sinh(s), jac = a * Math.cosh(s);
-    const g = D * b3((d - u) / D);
+    const g = B.corr(d - u);
     if (g === 0) continue;
     const kv = kern(u, a);
     re += w * g * kv[0] * jac; im += w * g * kv[1] * jac;
@@ -206,14 +256,14 @@ function solveLin(N, A, b) {
   }
   return x;
 }
-/* Solve one model: L in wavelengths, N segments (odd), radius a. */
+/* Solve one model: L in wavelengths, N segments (odd), radius a, basis kind. */
 const CACHE = new Map();
-function mom(L, N, a) {
-  const key = L.toFixed(4) + '/' + N;
+function mom(L, N, a, kind) {
+  const key = L.toFixed(4) + '/' + N + '/' + kind;
   if (CACHE.has(key)) return CACHE.get(key);
-  const D = L / N, NU = N - 1;
+  const D = L / N, NU = N - 1, B = BASES[kind].make(D);
   const row = [];
-  for (let p = 0; p < NU; p++) row.push(zterm(p * D, D, a, 320));
+  for (let p = 0; p < NU; p++) row.push(zterm(p * D, D, a, 320, B));
   const A = new Float64Array(2 * NU * NU);
   for (let m = 0; m < NU; m++) for (let n = 0; n < NU; n++) {
     const v = row[Math.abs(m - n)];
@@ -227,21 +277,21 @@ function mom(L, N, a) {
     const M = 120; let s = 0;
     for (let i = 0; i <= M; i++) {
       const z = lo + (hi - lo) * i / M, w = (i === 0 || i === M) ? 1 : (i % 2 ? 4 : 2);
-      s += w * (1 - Math.abs(z - zm) / D);
+      s += w * B.f(z - zm);
     }
     b[2 * m + 1] = we * (s * (hi - lo) / M / 3) / D;
   }
   const I = solveLin(NU, A, b);
-  let ir = 0, ii = 0;                             // I(0) from the two center triangles
+  let ir = 0, ii = 0;                             // I(0) from the two center pieces
   for (let m = 0; m < NU; m++) {
-    const t = 1 - Math.abs(zc(m)) / D;
+    const t = B.f(zc(m));
     if (t > 0) { ir += t * I[2 * m]; ii += t * I[2 * m + 1]; }
   }
   const den = ir * ir + ii * ii;
   /* The solve is driven by +1 V, so the physical feed current is -(ir + j ii)
      and Z = 1/I_feed exactly -- the division the readouts show. */
   const out = { R: -ir / den, X: ii / den, Ifr: -ir, Ifi: -ii,
-                I: I, D: D, NU: NU, z: m => zc(m), L: L, N: N };
+                I: I, D: D, NU: NU, z: m => zc(m), L: L, N: N, f: B.f, kind: kind };
   if (CACHE.size > 400) CACHE.clear();
   CACHE.set(key, out);
   return out;
@@ -249,13 +299,13 @@ function mom(L, N, a) {
 
 /* ------------------------------- state ------------------------------- */
 const LADDER = [5, 7, 9, 11, 13, 15, 19, 23, 27, 33, 41, 51, 61, 71, 81, 91, 101];
-const state = { N: 21, L: 0.50, sol: null, curve: null, drift: null, driftN: 5 };
+const state = { N: 21, L: 0.50, basis: 'tri', pieces: false, sol: null, curve: null, drift: null, driftN: 5 };
 
 function recompute(full) {
-  state.sol = mom(state.L, state.N, AWIRE);
-  if (full || !state.curve || Math.abs(state.curve.L - state.L) > 1e-9) {
-    const pts = LADDER.map(n => { const r = mom(state.L, n, AWIRE); return { n: n, R: r.R, X: r.X }; });
-    state.curve = { L: state.L, pts: pts };
+  state.sol = mom(state.L, state.N, AWIRE, state.basis);
+  if (full || !state.curve || Math.abs(state.curve.L - state.L) > 1e-9 || state.curve.basis !== state.basis) {
+    const pts = LADDER.map(n => { const r = mom(state.L, n, AWIRE, state.basis); return { n: n, R: r.R, X: r.X }; });
+    state.curve = { L: state.L, basis: state.basis, pts: pts };
   }
 }
 
@@ -268,7 +318,7 @@ const cvV = document.getElementById('conv'), ctxV = cvV.getContext('2d');
    the canvases just get a shorter design box. Shrinking the design height (not
    the bitmap) keeps text at full size and the composition undistorted. */
 var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:600px)') : null;
-function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.60) : h; }
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.52) : h; }
 function fit(cv, ctx, hCss) {
   const dpr = window.devicePixelRatio || 1;
   const w = cv.clientWidth || 900;
@@ -341,6 +391,40 @@ function drawCurrent() {
   /* MoM samples */
   let mmax = 0; const am = [];
   for (let n = 0; n < sol.NU; n++) { const v = Math.hypot(sol.I[2 * n], sol.I[2 * n + 1]); am.push(v); if (v > mmax) mmax = v; }
+  /* The current the solver actually produced is the sum of the pieces,
+     I(z) = sum_n I_n f_n(z - z_n): draw that sum as a curve through the
+     samples, and, on request, each weighted piece under it. The pieces are
+     one per junction, so the count is N - 1. */
+  const sumAt = z => {
+    let re = 0, im = 0;
+    for (let n = 0; n < sol.NU; n++) {
+      const t = sol.f(z - sol.z(n));
+      if (t > 0) { re += t * sol.I[2 * n]; im += t * sol.I[2 * n + 1]; }
+    }
+    return Math.hypot(re, im);
+  };
+  if (state.pieces) {
+    const S = 24;
+    for (let n = 0; n < sol.NU; n++) {
+      const zn = sol.z(n), feed = Math.abs(zn) < sol.D * 0.75;
+      ctx.fillStyle = feed ? 'rgba(176,30,36,0.10)' : 'rgba(0,103,185,0.08)';
+      ctx.strokeStyle = feed ? 'rgba(176,30,36,0.55)' : 'rgba(0,103,185,0.45)';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(px(zn - sol.D), y1);
+      for (let i = 0; i <= S; i++) {
+        const z = zn - sol.D + 2 * sol.D * i / S;
+        ctx.lineTo(px(z), py(am[n] * sol.f(z - zn) / mmax));
+      }
+      ctx.lineTo(px(zn + sol.D), y1); ctx.closePath(); ctx.fill(); ctx.stroke();
+    }
+  }
+  ctx.strokeStyle = '#004a85'; ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  for (let i = 0; i <= 400; i++) {
+    const z = -half + i / 400 * L, X = px(z), Y = py(sumAt(z) / mmax);
+    i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+  }
+  ctx.stroke();
   const dotR = sol.NU > 60 ? 1.9 : sol.NU > 30 ? 2.5 : 3.2;
   ctx.strokeStyle = 'rgba(0,103,185,0.30)'; ctx.lineWidth = 1;
   for (let n = 0; n < sol.NU; n++) {
@@ -356,7 +440,7 @@ function drawCurrent() {
   /* legend */
   const lx = x0 + 12, ly = y0 + 8;
   ctx.fillStyle = '#004a85'; ctx.beginPath(); ctx.arc(lx + 5, ly, 3.2, 0, 2 * Math.PI); ctx.fill();
-  stext(ctx, 'solved segment currents', lx + 14, ly, 12, '#15202b', 'left');
+  stext(ctx, 'solved current', lx + 14, ly, 12, '#15202b', 'left');
   ctx.strokeStyle = '#8a5a00'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
   ctx.beginPath(); ctx.moveTo(lx, ly + 17); ctx.lineTo(lx + 12, ly + 17); ctx.stroke(); ctx.setLineDash([]);
   stext(ctx, 'assumed sinusoid', lx + 18, ly + 17, 12, '#8a5a00', 'left');
@@ -458,7 +542,7 @@ function drawAll() {
   /* the same model at half the segment count, so "has it stopped moving?" has
      a number attached to it */
   const hN = (state.N >= 11) ? (2 * Math.round(state.N / 4) - 1) : 5;
-  const half = mom(state.L, hN, AWIRE);
+  const half = mom(state.L, hN, AWIRE, state.basis);
   state.drift = Math.hypot(sol.R - half.R, sol.X - half.X);
   state.driftN = hN;
 
@@ -477,8 +561,10 @@ function drawAll() {
 
 /* ------------------------------- wiring ------------------------------- */
 const elN = document.getElementById('nseg'), elL = document.getElementById('len');
+const elB = document.getElementById('basis'), elP = document.getElementById('pieces');
 function onInput(full) {
   state.N = Number(elN.value); state.L = Number(elL.value);
+  state.basis = elB.value; state.pieces = elP.checked;
   document.getElementById('nseg-val').textContent = state.N;
   document.getElementById('len-val').textContent = state.L.toFixed(3);
   recompute(full);
@@ -486,6 +572,8 @@ function onInput(full) {
 }
 elN.addEventListener('input', () => onInput(false));
 elL.addEventListener('input', () => onInput(true));
+elB.addEventListener('change', () => onInput(true));
+elP.addEventListener('change', () => onInput(false));
 window.addEventListener('resize', drawAll);
 MJ.setRedraw(drawAll);
 MJ.onReady(() => { MJ.typeset(document.body); drawAll(); });

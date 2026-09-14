@@ -305,6 +305,13 @@ iframe.viz {
 [data-mode="present"] .frame.cut .present li { max-width: 46ch; }
 [data-mode="present"] .frame.cut .present ul,
 [data-mode="present"] .frame.cut .present ol { margin: 0; padding-left: 1.1em; }
+/* A card listing (a NEC input file) inside a present block is set in the
+   present-mode type size, and at 390px a 38-character card runs 496px into a
+   343px column, clipping the radius off the end of the GW line. Nothing else in
+   a present block is monospace, so scale only that. */
+@media (max-width: 430px) {
+  [data-mode="present"] .frame.cut .present pre { font-size: .72em; }
+}
 [data-mode="present"] .frame.cut .present li + li { margin-top: .35em; }
 [data-mode="present"] .frame.cut .present table { font-size: var(--step-0); }
 [data-mode="present"] .frame.cut .present img { max-height: 58vh; width: auto; max-width: 100%; }
