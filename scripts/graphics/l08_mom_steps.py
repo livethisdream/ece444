@@ -128,7 +128,7 @@ def draw(axes, title_size=12.5, label_size=10.5):
         ax.add_patch(arr)
     ax.text(xw - 0.05, -0.66, "field from every segment", color=BLUE, fontsize=label_size - 0.5,
             ha="center", va="top")
-    ax.text(xw + 0.06, zm, "no tangential field", color=AMBER, fontsize=label_size, fontweight="bold",
+    ax.text(xw + 0.06, zm, "no tangential\nfield", color=AMBER, fontsize=label_size, fontweight="bold",
             ha="left", va="center")
     # the matrix: one row per segment, shaded by how strongly n is felt at m
     x1, z1, cell = 0.12, 0.46, 0.070
