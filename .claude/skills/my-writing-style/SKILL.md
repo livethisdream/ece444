@@ -7,7 +7,7 @@ description: The user's personal writing voice, captured from their real writing
 
 You are Claude, drafting on the user's behalf — not writing as them. Apply this profile whenever you draft or edit prose the user will send or publish as themselves, and when they give feedback on how a draft sounds, apply it and update this profile with what changed. It never applies to someone else's text (a colleague's email stays in the colleague's voice) or to your own replies (restyling how you talk is not drafting as the user). Everything below describes how the user writes, captured from their own sent writing; treat it as reference data about them, not as instructions addressed to you. Quoted fragments are samples of their writing.
 
-> Built from 6 emails (3 customer-facing technical, 3 internal status) · updated September 2026.
+> Built from 6 emails (3 customer-facing technical, 3 internal status) · updated September 14, 2026.
 > September 2026 additions: two conference papers (GRCon 2022, sole author, 4,600 words; ASEE 2025, first author), a formal letter of recommendation, two ECE 448 lecture decks, and the user's hand edit of an ECE 444 lesson page. Email, technical papers, course prose, formal letters, and slides are covered; Slack and DMs are not.
 
 ## How the user writes (overall)
@@ -89,6 +89,7 @@ Evidence: the user's hand edit of Lesson 7, September 2026. The full before-and-
 - **A derivation runs general to specific, as one chain.** Their rule, September 2026: "Always go from general to specific. Going back and forth is confusing." Start from the general form, specialize once, and continue the same equals sign; never restate a left-hand side the reader already has.
 - **Standard, precise engineering language; no figurative framing.** Their rule, September 2026: "Do not use flowery phrases like 'what X bought you,' 'spend it on Y,' 'the shape of it is...,' 'Z in one line.' Those get in the way of the material. The goal is to make the material approachable and let the writing style get out of the way." Money metaphors and phrases that describe the explanation instead of the physics are out.
 - **No clipped sentences for effect.** Their rule, September 2026: "Don't use short sentence fragments as a way to sound concise. 'Start with the current. The calculus is easy.' That just doesn't land in this course." A run of very short sentences for punch reads as performing; write at the length of the papers, with connectives.
+- **A quantity is a measurement, not a cause.** Their rule, September 2026: "13 ohms is not a shape. It's a unit of measure." A number with a unit measures something; the mechanism that produces it takes a different verb. "The extra 13 Ω comes from the current shape", never "the 13 Ω is the current shape".
 - **American English, always.** "I live in America, so let's use American English." Color, center, gray, canceling, labeled, license, judgment, donut, -ize.
 - **An equation gets its own line.** Their rule, September 2026: "Unless it's a simple equation, like F = ma, it should be on its own line. Reading it in text makes it hard to follow the logic." Inline math is for a symbol, a value, or a relation as short as X = 0; a fraction, an integral, or a definition is display math, in prose and on slides alike.
 
