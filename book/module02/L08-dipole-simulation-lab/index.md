@@ -32,7 +32,7 @@ Lesson 8 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::{frame} Learning Objectives
 
 <ol class="lo-list lo-sublist" style="--module: '2'; --lo: '2'">
-  <li>I can explain what the method of moments does — discretize the wire, expand the current in basis functions, enforce the boundary condition, and solve for the amplitudes — and why the simulator then runs the same radiation integral you ran by hand.</li>
+  <li>I can explain why we compute a radiation pattern numerically, and how the method of moments does it — discretize the source, expand the current in basis functions, enforce the boundary condition, and sum the segment patterns.</li>
   <li>I can build a wire-dipole model with defensible segmentation and excitation, and run frequency sweeps and pattern computations.</li>
   <li>I can compare simulated impedance, resonant length, pattern, and gain against the analytical half-wave-dipole predictions and account for every difference.</li>
   <li>I can recognize when a simulation is misleading me — segmentation too coarse, wire radius unreasonable, source misplaced — and apply the standard convergence and energy checks.</li>
@@ -41,87 +41,110 @@ Lesson 8 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Where We Were
 :::{present}
-| Quantity | Lesson 7 |
-| :-- | :-- |
-| $Z_{\text{in}}$ at $\lambda/2$ | $73 + j42.5\ \Omega$ |
-| Resonant length | $0.47$ to $0.48\ \lambda$, about $70\ \Omega$ |
-| Gain | $2.15\ \text{dBi}$ |
-| E-plane HPBW | $78^\circ$ |
-:::
-:::{present}
-- **Lesson 6**: the pattern is the radiation integral over the current.
-- **Lesson 7** assumed the current:
-
-$$I(z) = I_m \sin\left[k\left(\frac{L}{2} - \vert z \vert\right)\right]$$
-
-- Every number rests on it.
+- Lesson 6: the pattern is the radiation integral over **whatever current sits on the source**.
+- Lesson 7: we prescribed that current, and the integral closed in a formula.
+- Both steps work for a handful of shapes.
 :::
 
-Lesson 7 handed you a set of numbers for the half-wave dipole, and every one of
-them rests on a single assumption: that the current on the wire is a sinusoid.
-Today you hand the same antenna to a solver that computes the current instead of
-assuming it, and then you reconcile the two answers. That reconciliation is the
-point of the lab, because a difference you can explain is worth more than an
-agreement you cannot.
+Nothing in the last two lessons claimed that a wire's current must be a
+sinusoid. Lesson 6 ran the same integral over an infinitesimal element, a
+uniform line source, and a sinusoidal standing wave, and compared the three
+patterns side by side; Lesson 7 used a triangular current for the short dipole
+and a sinusoid for the half-wave one. The pattern came out of the same
+machinery every time. What limits that machinery is not which current you
+pick, it is that you have to pick one at all and then evaluate the integral in
+closed form afterward. A fat wire, a bent wire, a wire over a ground plane, or
+an array whose elements couple will hand you neither a current you can write
+down nor an integral you can do.
 ::::
 
-::::{frame} The Method of Moments
+::::{frame} What We Are Actually After
 :::{present}
-- **Discretize**: $N$ segments.
-- **Expand** the unknown current in $N$ known **basis functions** with unknown amplitudes:
-
-$$I(z) \approx \sum_{n=1}^{N} I_n\ f_n(z)$$
-
-- **Enforce** $E_{\text{tan}} = 0$ on the conductor: one equation per segment.
-- **Solve** the $N \times N$ system for the $I_n$, then run the radiation integral of Lesson 6.
+:class: callout
+The deliverable is the **radiation pattern** of an antenna nobody can solve on
+paper. The method of moments is how we get that pattern numerically. The
+currents it reports along the way are the means, not the end.
 :::
 
-Lesson 6 established the machinery: the far field is the radiation integral over
-the current distribution. Give the integral a current and it returns a pattern.
-Lesson 7 supplied the current by assumption,
-$I(z) = I_m \sin\left(k\left(\frac{L}{2} - \vert z \vert\right)\right)$, and
-everything else followed from it.
+Keep that straight and the rest of the lesson has a spine. Every rule you are
+about to meet — segments per wavelength, segment length against wire radius,
+where the source card goes — exists to protect a pattern computation, and the
+checks at the end of the lab are pattern checks. The currents are how the
+method gets there, and they are worth looking at because they are where a
+broken model shows itself first, but they are not the reason we run the solver.
+::::
 
-The **method of moments** (MoM) removes that assumption by solving for the
-current. We do not know $I(z)$, so we write it as a sum of $N$ known shapes,
-the **basis functions** $f_n(z)$, each one living on one short piece of the
-wire, with $N$ unknown amplitudes $I_n$:
+::::{frame} The Source Becomes N Small Radiators
+:::{present}
+- Radiation is **superposition** over the source. Take that literally.
+- Cut the source into $N$ segments, each a radiator you already know.
+- The pattern is their weighted sum; only the **weights** are unknown.
+:::
+:::{present}
+$$I(z) = \sum_{n=1}^{N} a_n\ f_n(z)$$
 
-$$I(z) \approx \sum_{n=1}^{N} I_n\ f_n(z)$$
+- $f_n$: **basis** shapes you pick. $a_n$: the unknowns.
+:::
+
+This is the move that makes the problem finite. An unknown *function* on the
+wire becomes $N$ unknown *numbers*, and the pattern integral becomes a sum of
+$N$ elementary patterns with those numbers as coefficients:
+
+$$F(\theta) \;=\; \sum_{n=1}^{N} a_n\ F_n(\theta),$$
+
+where each $F_n$ is the pattern of one short segment carrying its basis shape —
+an object Lesson 6 already handed you. NEC's basis functions are a
+constant-plus-sine-plus-cosine triple on each segment, chosen so that current
+and slope match across the junctions, but the choice is a modeling decision
+rather than a physical claim. Nothing here asserts what the current *is*.
 
 The choice of shape is the key decision. A pulse, constant across its segment,
 is the simplest, but it makes the current a staircase, and a staircase puts all
 of its charge in spikes at the steps, so the near field, and with it the
 reactance, comes out badly. A triangle, peaking at one segment junction and
 falling to zero at the next, keeps the current continuous and spreads the
-charge evenly. NEC uses a short piece of a sinusoid on each segment, which is
-what a standing wave looks like up close, so few segments are needed before
-the sum stops changing. The convergence widget below draws the pieces.
+charge evenly. NEC's piece of a sinusoid on each segment is what a standing
+wave looks like up close, so few segments are needed before the sum stops
+changing. The convergence widget below draws the pieces.
+::::
 
-With the shapes fixed, the physics is the boundary condition of a perfect
-conductor: the total tangential electric field on the wire is zero. The total
-field is the field of the source plus the field radiated by every one of the
-$N$ pieces of current, so requiring it to vanish on each segment gives $N$
-equations in the $N$ unknown amplitudes:
+::::{frame} Where the Weights Come From
+:::{present}
+- Total tangential field is zero on a conductor, on **every** segment.
+- $N$ equations, $N$ unknowns, one matrix solve.
+:::
+:::{present}
+$$E_z^{\text{scattered}} = -E_z^{\text{source}}$$
 
-$$E_z^{\text{scattered}}(z_m) = -E_z^{\text{source}}(z_m), \qquad m = 1, \ldots, N$$
+- Out come the weights, and with them the **pattern**.
+- $Z_\text{in}$ comes from one weight, at the feed.
+:::
 
-Each equation is one row of an $N \times N$ complex matrix whose entry
-$Z_{mn}$ is the field that basis function $n$ produces on segment $m$. One
-matrix solve returns every $I_n$, and the sum above is the current.
+The scattered field is the field the unknown segment currents produce, so
+every row of the matrix is a statement about how strongly one segment's
+current is felt at another — strongest on the diagonal, since a segment feels
+itself most. One row per segment makes the system square, and a laptop
+finishes it in milliseconds. Depending on which form of the integral equation
+you start from this is Pocklington's or Hallén's equation; we will not derive
+either. The result is what matters: a pattern computed without ever
+prescribing the current that produced it, which is exactly the step Lesson 7
+could not take. Today you reconcile that pattern, and the impedance that came
+with it, against the numbers you worked out by hand. A difference you can
+explain is worth more than an agreement you cannot, so the deliverable is not
+a matching number. It is an account of every place the two answers part
+company.
 ::::
 
 ::::{frame} Assumptions and Consequences
 :::{present}
 :class: callout
-A simulator knows no more physics than you do. It solves for the current
-instead of assuming it, then computes the same integral. Everything it reports
-is as good as the segments, the basis functions, the radius, and the source.
+A simulator knows no more physics than you do. It runs the same superposition
+you would run, over the source you described. Every pattern and number it
+reports is as good as the segments, the basis functions, the radius, and the
+source.
 :::
 
-The solver evaluates the radiation integral from Lesson 6 over that numerical
-current rather than over an analytical one. It sounds simple, but there are
-consequences to this approach: every number the simulator reports inherits
+It sounds simple, but there are consequences to this approach: every number the simulator reports inherits
 the choices in the model. The segments set how finely the current can vary,
 the basis functions set what shape it can take between the samples, the
 radius sets whether the thin-wire model describes the conductor at all, and
@@ -634,7 +657,7 @@ once you make the two models match.
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | Method of moments | discretize the wire, expand the current in basis functions, enforce $E_{\text{tan}} = 0$, solve for the amplitudes, then integrate | $N$ unknowns, one matrix solve |
-| Basis functions | the shapes the current is built from; NEC uses a piece of a sinusoid per segment | $I(z) \approx \sum I_n f_n(z)$ |
+| Basis functions | the shapes the current is built from; NEC uses a piece of a sinusoid per segment | $I(z) = \sum a_n f_n(z)$ |
 | $Z_{\text{in}} = V_{\text{feed}}/I_{\text{feed}}$ | terminal impedance from the one segment carrying the source | 1 V drive makes it $1/I_{\text{feed}}$ |
 | Segments $N$ | segmentation of the wire; odd, so a segment sits at the feed | 10–20 per half wavelength |
 | $\Delta$ against $\lambda$ | upper bound on segment length, set by phase change | $\Delta < \lambda/20$ |
