@@ -689,6 +689,11 @@ dip that has nothing to do with the element.
 - A **loop**: two resonances, often element plus feed.
 - The **whole trace rotating**: your reference plane moved.
 :::
+:::{present}
+<img src="../../viz/img/L09-smith-skills.svg"
+     alt="Four small Smith charts: a trace crossing the real axis left of center at resonance, a trace dipping inside the 0.316 circle, a trace with a loop from two resonances, and the same trace rotated by a longer cable to the calibration plane"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 You met the Smith chart in ECE 343 as a graphical impedance calculator. Today
 you only need to *read* one: it is the complex $\Gamma$ plane with a

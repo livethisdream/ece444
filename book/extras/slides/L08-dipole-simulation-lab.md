@@ -108,7 +108,7 @@ a modeling decision, not a claim about what the current is.
 
 ## What the method of moments does
 
-<div class="fig" data-inline-svg="./fig/L08-mom-pipeline.svg" style="max-width:790px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L08-mom-pipeline.svg" style="max-width:1100px; margin:0 auto;"></div>
 
 Note:
 Walk left to right. Steps 1 and 4 are bookkeeping around the superposition they
