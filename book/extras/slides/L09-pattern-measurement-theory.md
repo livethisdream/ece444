@@ -390,7 +390,7 @@ Demo the widget live: sweep R away from 50 and watch the dip get shallow while t
 
 ---
 
-## Smith chart, three reading skills
+## Smith chart, four reading skills
 
 You met the chart in ECE 343. You do not have to build one today — you have to **read** one.
 
@@ -398,6 +398,8 @@ You met the chart in ECE 343. You do not have to build one today — you have to
 - **Inside the small circle** → $\vert\Gamma\vert < 0.316$ → you are under $-10$ dB.
 - **A loop** → two resonances close together, or a resonance plus a feed structure.
 - **The whole trace spins** → your reference plane moved, not your antenna.
+
+<div class="fig" data-inline-svg="./fig/L09-smith-skills-row.svg" style="max-width:790px; margin:0 auto;"></div>
 
 Note:
 The last bullet is the diagnostic. If a student's trace rotates much further than the antenna alone would explain, ask what is between the cal plane and the antenna.

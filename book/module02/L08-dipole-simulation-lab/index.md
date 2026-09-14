@@ -135,6 +135,24 @@ a matching number. It is an account of every place the two answers part
 company.
 ::::
 
+::::{frame} The Method of Moments in Four Steps
+:::{present}
+<img src="../../viz/img/L08-mom-steps.svg"
+     alt="The method of moments in four steps on one dipole: the wire cut into segments, the current expanded in triangle shapes with unknown heights, the field of every segment totaling zero on one chosen segment as one row of a matrix, and the weighted segment patterns summing to the half-wave pattern"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+The same nine-segment dipole carries through all four panels. In the first,
+the wire is cut into segments and each segment is a small radiator whose
+pattern we already know from Lesson 6. In the second, the current is written
+as a sum of known shapes, one triangle per junction, and only their heights
+are unknown; the dashed line is the current they add up to. In the third, the
+field that every segment puts on one chosen segment must total zero, which is
+one row of the matrix: one row per segment, strongest on the diagonal because
+a segment feels itself most. In the fourth, the segment patterns, now
+weighted, add up to the pattern of the whole antenna.
+::::
+
 ::::{frame} Assumptions and Consequences
 :::{present}
 :class: callout
