@@ -139,9 +139,8 @@ company.
 :::{present}
 :class: callout
 A simulator knows no more physics than you do. It runs the same superposition
-you would run, over the source you described. Every pattern and number it
-reports is as good as the segments, the basis functions, the radius, and the
-source.
+you would run, over the source you described. Everything it reports is as
+good as the segments, the basis functions, the radius, and the source.
 :::
 
 It sounds simple, but there are consequences to this approach: every number the simulator reports inherits
