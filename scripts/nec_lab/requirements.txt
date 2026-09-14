@@ -1,0 +1,3 @@
+# Optional: the in-process NEC-2 kernel. Linux and macOS wheels only --
+# on Windows the tool uses the engine inside a 4nec2 install instead.
+PyNEC>=1.7

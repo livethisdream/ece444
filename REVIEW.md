@@ -49,9 +49,9 @@ Per lesson NN/slug:
    on demo slides; no equations inside figures; consistent nomenclature with
    lesson page (deck wins on conflicts).
 6. **Continuity**: opening hook references the actual previous lesson;
-   "Where this is going" points to the actual next one; L07/L09 sub-LO
-   numbering doesn't collide (L09 starts at 2.1.5); lab pages (L08, L13,
-   L14) carry Background -> Equipment/Setup -> Procedure -> Deliverables.
+   "Where this is going" points to the actual next one; L07/L12 sub-LO
+   numbering doesn't collide (L12 starts at 2.1.5); lab pages (L08, L10,
+   L11) carry Background -> Equipment/Setup -> Procedure -> Deliverables.
 
 ## C. Assessment (final deliverable; faculty repo)
 

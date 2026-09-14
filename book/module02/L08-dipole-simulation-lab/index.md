@@ -33,7 +33,7 @@ Lesson 8 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 <ol class="lo-list lo-sublist" style="--module: '2'; --lo: '2'">
   <li>I can explain what the method of moments does — discretize the wire, expand the current in basis functions, enforce the boundary condition, and solve for the amplitudes — and why the simulator then runs the same radiation integral you ran by hand.</li>
-  <li>I can build a wire-dipole model in 4nec2 with defensible segmentation and excitation, and run frequency sweeps and pattern computations.</li>
+  <li>I can build a wire-dipole model with defensible segmentation and excitation, and run frequency sweeps and pattern computations.</li>
   <li>I can compare simulated impedance, resonant length, pattern, and gain against the analytical half-wave-dipole predictions and account for every difference.</li>
   <li>I can recognize when a simulation is misleading me — segmentation too coarse, wire radius unreasonable, source misplaced — and apply the standard convergence and energy checks.</li>
 </ol>
@@ -129,18 +129,22 @@ the source sets the one segment the impedance is read from. The program
 checks none of them.
 ::::
 
-::::{frame} NEC and 4nec2
+::::{frame} NEC and Its Front Ends
 :::{present}
-- **NEC**, the Numerical Electromagnetics Code: Lawrence Livermore, 1970s.
-- It knows **thin wires**: straight segments with a length, a radius, and a position.
-- A dipole is one wire; a Yagi is several.
-- **4nec2** writes the input file and plots the results.
+- **NEC**: the Numerical Electromagnetics Code, 1970s.
+- It knows **thin wires**: segments with a length, a radius, and a position.
+- It reads **cards** from a text file; everything else is a front end.
+- Ours is **nec_lab**; in the field, 4nec2.
 :::
 
 NEC — *Numerical Electromagnetics Code*, written at Lawrence Livermore in the
 1970s and still the workhorse of wire-antenna modeling — is this method
-specialized to thin wires. 4nec2 is a free Windows front end that writes NEC's
-input file for you and plots what comes back.
+specialized to thin wires. It has no interface of its own: it reads a text
+file of cards and writes a text file of results, and every front end writes
+the same cards. Ours is **nec_lab**, written for this course and served from
+the course site; 4nec2 is the free Windows front end you will meet in the
+field. The cards do not move between versions the way menu items do, so the
+cards are what we teach.
 
 NEC does not know about antennas. It knows about **thin wires**: straight
 segments with a length, a radius, and a position. A dipole is one wire with a
@@ -162,7 +166,7 @@ $$Z_{\text{in}} = \frac{V_{\text{feed}}}{I_{\text{feed}}}$$
 A misplaced source corrupts the impedance and barely moves the pattern.
 :::
 
-4nec2 drives **one segment** with a 1 V source, and that segment is the antenna
+NEC drives **one segment** with a 1 V source, and that segment is the antenna
 terminal: there is no connector, no coaxial gap, and no balun in the model.
 The solve returns a whole vector of currents, one per segment, but the terminal
 impedance comes from exactly one entry in that vector. You applied a known
@@ -304,7 +308,8 @@ An average gain between 0.95 and 1.05 is acceptable. A value near 0.6 or 1.4
 means the model is wrong, and no other number in the output file can be trusted
 until it is fixed. Check the geometry, the segment-length limits, and the source
 placement before recording any results. The test is only valid over a complete
-sphere in free space; adding a ground plane changes the expected value.
+sphere in free space; adding a ground plane changes the expected value, which is
+worth remembering when you model a monopole in Lesson 12.
 ```
 ::::
 
@@ -356,24 +361,56 @@ current follows the same shape because the tips still force it to zero, and
 the assumed sinusoid tracks it.
 ::::
 
-::::{frame} Software Setup
+::::{frame} Getting to the Tool
 :::{present}
-- The NEC **input file** is a stack of two-letter **cards**.
-- Type the cards at least once: they are the interface, identical across every NEC front end.
-- Edit the file, run **Calculate**, and read the pattern and sweep windows.
+**nec_lab** runs in your browser:
+
+- **On the course site.** Open <a href="../../simulator/" target="_blank" rel="noopener">Simulator</a>. Nothing to install.
+- **Or a copy your instructor is serving** — the address is given in class.
 :::
 
-4nec2 is free and runs on the lab PCs. Everything below is a NEC **input file**,
-which is a stack of two-letter cards. 4nec2 can draw the geometry for you, but
-type the cards at least once: they are the actual interface, they are identical
-across every NEC front end you will meet, and they do not move between versions
-the way menu items do.
+Every route runs the same tool and gives the same answers. The page has a form
+at the left and a **NEC input file** at the bottom right: the form writes that
+file, and the file is what NEC runs.
+
+:::{depth}
+The course-site version downloads about 6 MB the first time — NEC-2 and Python,
+both compiled for the browser — and is cached afterwards, so it opens at once
+and works with no network at all. Nothing you build there leaves your machine.
+
+You can also run it yourself from a clone of the course repository:
+`python scripts/nec_lab/run.py serve`, or double-click
+`scripts\nec_lab\nec_lab.bat` on Windows.
+:::
+
+:::{depth}
+Type the cards yourself at least once, because they are the real interface.
+They are identical in nec_lab, 4nec2 and every other front end you will meet,
+and they do not move between versions the way menu items do. The **Copy**
+button under the deck puts the cards on your clipboard; they will run unchanged
+in 4nec2 if you would rather work there, or want to check one tool against the
+other.
+:::
 ::::
 
 ::::{frame} The NEC Input File
 :::{present}
+Four cards carry the model.
+
 ```text
-CM ECE 444 L8 half-wave dipole 915 MHz
+GW 1 21 0 0 -0.08197 0 0 0.08197 0.0005
+EX 0 1 11 0 1 0
+FR 0 1 0 0 915 0
+RP 0 181 1 1000 0 0 1 0
+```
+:::
+
+Choose **Dipole** in the antenna picker and press **Build & solve**, and the
+full deck is what appears. Read it before you read the plots, and type it out
+once by hand into the editor to prove you can:
+
+```text
+CM ECE 444 L8 -- half-wave dipole, 915 MHz
 CE
 GW 1 21 0 0 -0.08197 0 0 0.08197 0.0005
 GE 0
@@ -382,182 +419,129 @@ FR 0 1 0 0 915 0
 RP 0 181 1 1000 0 0 1 0
 EN
 ```
-:::
 
-Open 4nec2, choose to edit the input file, and enter the cards above.
+`CM` and `CE` open the comment block, `GE 0` closes the geometry in free space,
+and `EN` ends the deck.
+
+:::{depth}
+**Build & solve** runs what the form describes; **Run these cards** runs what is
+in the editor, which is how you run a deck you typed or changed yourself.
+Either way the answers land in the same places: $Z_{\text{in}}$, VSWR, peak
+gain, HPBW and the average power gain across the top, the pattern cuts below
+them, and the segmentation rules down the left. Beside the editor, every field
+of every card is labeled — hover one to see what it means.
+
+This handout names cards, not buttons. Cards are the part that does not change:
+if a control moves, or you end up in 4nec2 instead, the deck still says exactly
+what the model is.
+:::
 ::::
 
-::::{frame} The Cards: Geometry and Excitation
+::::{frame} Reading the Cards
 :::{present}
 | Card | What it says |
 | :-- | :-- |
-| `GW 1 21 ...` | wire tag 1, 21 segments, from $z = -81.97\ \text{mm}$ to $+81.97\ \text{mm}$, radius $0.5\ \text{mm}$ |
+| `GW` | wire 1, 21 segments, $\pm 81.97\ \text{mm}$, radius $0.5\ \text{mm}$ |
 | `GE 0` | free space |
-| `EX 0 1 11 0 1 0` | 1 V source on wire 1, segment 11 of 21 |
+| `EX` | 1 V source, segment 11 of 21 |
+| `FR` | one frequency, 915 MHz |
+| `RP` | $\theta$ swept, $1^\circ$ steps |
 :::
 
-Line by line: the `GW` card gives every coordinate in meters, so the wire runs
-from $z = -81.97\ \text{mm}$ to $+81.97\ \text{mm}$ with a radius of
-$0.5\ \text{mm}$; `GE 0` says the geometry is complete, in free space with no
-ground; and `EX 0 1 11 0 1 0` places a 1 V voltage source on wire 1, segment 11,
-the middle of 21.
+All coordinates are in meters. The wire lies along $z$, matching the course
+convention, so broadside is $\theta = 90^\circ$ and the pattern cut above is
+the E-plane.
 ::::
 
-::::{frame} The Cards: Frequency and Pattern
+::::{frame} When the Tool Disagrees With You
 :::{present}
-| Card | What it says |
-| :-- | :-- |
-| `FR 0 1 0 0 915 0` | one frequency, 915 MHz |
-| `RP 0 181 1 1000 ...` | E-plane cut, $\theta$ from $0^\circ$ to $180^\circ$ by $1^\circ$, $\phi = 0$ |
-
-- The wire lies along $z$, so broadside is $\theta = 90^\circ$.
+:class: callout
+The rules panel and the average-gain readout both warn you. **Neither stops a
+run.** NEC will solve a broken model and report the result with the same
+confidence it reports a good one.
 :::
 
-The wire lies along $z$, matching the course convention, so broadside is
-$\theta = 90^\circ$ and the pattern cut above is the E-plane.
-
-Run the model with the Calculate or Generate command, which 4nec2 offers on the
-toolbar and on the function keys, then read the results in the output-data and
-pattern windows. Impedance appears with the source data, and gain appears with
-the pattern.
-
-```{note}
-Menu wording drifts between 4nec2 versions, so this handout names the input
-cards rather than click paths. If you cannot find a control, the input file is
-always editable directly, and the run always produces the same output file.
-```
+That is the whole point of the segmentation rules: **you** are the check. The
+tool can tell you that a number looks wrong; it cannot tell you that a model
+describes the antenna you meant to build.
 ::::
 
-::::{frame} The Procedure
+::::{frame} Procedure — Predict, Then Run
 :::{present}
-1. Predict
-2. Segmentation math
-3. Baseline run
-4. Average gain
-5. Frequency sweep
-6. Trim to resonance
-7. Pattern cuts
-8. Convergence study
-
-**Write every prediction down before you run the case.**
+1. **Predict.** Lesson 7's $Z_{\text{in}}$, resonant length, gain, and HPBW.
+2. **Do the math.** $\Delta$ against $\lambda/20$ and $8a$, on paper.
+3. **Baseline run.** 915 MHz. Record the differences before changing anything.
 :::
 
-Work through these steps in order and record your results as you go. Write every
-prediction down before you run the corresponding case, because a prediction
-written after the fact teaches you nothing.
+A prediction written after the fact teaches you nothing, so step 1 is not
+optional and it is not a formality. Your reference numbers should not change
+once you see the simulated values.
 ::::
 
-::::{frame} Steps 1 and 2: Predict and Segment
+::::{frame} Procedure — Audit the Model
 :::{present}
-**Step 1: predict.** Write down Lesson 7's $Z_{\text{in}}$, resonant length,
-gain, and E-plane HPBW. They do not change afterward.
-:::
-:::{present}
-**Step 2: segmentation math.** Compute $\Delta$, check it against
-$\lambda/20$ and $8a$, and compute the refinement ceiling, on paper.
-:::
-
-Before running anything, write down what Lesson 7 says
-this antenna should do: $Z_{\text{in}}$, resonant length, gain in dBi, and
-E-plane HPBW. These are your reference numbers, and they should not change once
-you see the simulated values. Then compute $\Delta$, check it against
-$\lambda/20$ and $8a$, and compute your refinement ceiling. Do this on paper.
-::::
-
-::::{frame} Step 3: Baseline Run
-:::{present}
-- Run the input file at 915 MHz.
-- Record $Z_{\text{in}}$ and the gain.
-- Record the differences from your prediction before changing anything.
-:::
-
-Run the input file above at 915 MHz and record
-$Z_{\text{in}}$ and the gain. Compare both against your prediction immediately,
-and record the differences before you change anything in the model.
-::::
-
-::::{frame} Step 4: Average Gain
-:::{present}
-Request a full sphere with averaging on:
+4. Tick **average power gain**, or request a full sphere yourself:
 
 ```text
 RP 0 19 36 1001 0 0 10 10
 ```
 
-**If it is not close to $1.000$, stop and fix the model.**
+**If it is not close to 1.000, stop and fix the model.**
 :::
 
-Change the pattern request to a full sphere with the averaging flag on. That
-request sweeps $\theta$ from $0^\circ$ to $180^\circ$ in $10^\circ$ steps
-and $\phi$ from $0^\circ$ to $350^\circ$ in $10^\circ$ steps, and the final digit
-of the fourth field is what asks for the average gain. Record the value.
-**If it is not close to 1.000, stop and fix the model before continuing.**
+That request sweeps $\theta$ from $0^\circ$ to $180^\circ$ in $10^\circ$ steps
+and $\phi$ from $0^\circ$ to $350^\circ$ in $10^\circ$ steps, and the final
+digit of the fourth field is what asks for the average gain. Record the value —
+it is a deliverable, and it is the one number that licenses all the others.
 ::::
 
-::::{frame} Step 5: Frequency Sweep
+::::{frame} Procedure — Sweep, Then Trim
 :::{present}
-Sweep 800 to 1000 MHz in 5 MHz steps:
-
-```text
-FR 0 41 0 0 800 5
-```
-
-- Plot $R_{\text{in}}$ and $X_{\text{in}}$; read where $X_{\text{in}} = 0$.
-- The wire will not resonate at 915 MHz. By how much does it miss?
+5. `FR 0 41 0 0 800 5` sweeps 800 to 1000 MHz. Read off where $X_{\text{in}} = 0$.
+6. Hold 915 MHz and shorten the wire until $X_{\text{in}}$ crosses zero.
 :::
 
-Replace the `FR` card with the sweep above, which covers 800 to 1000 MHz in
-5 MHz steps. Plot $R_{\text{in}}$ and
-$X_{\text{in}}$ against frequency and read off the frequency where
-$X_{\text{in}} = 0$. A wire cut to $\lambda/2$ at 915 MHz will not resonate at
-915 MHz, so determine where it does resonate and by how much it misses.
-::::
+A wire cut to $\lambda/2$ at 915 MHz will not resonate at 915 MHz, so determine
+where it does and by how much it misses. Then record the resonant length as a
+fraction of $\lambda$ and the resistance there, keeping the segment count odd
+throughout and rechecking $\Delta$ against $8a$ after each change.
 
-::::{frame} Step 6: Trim to Resonance
-:::{present}
-- Hold 915 MHz. Shorten the `GW` end coordinates a millimeter or two at a time until $X_{\text{in}}$ crosses zero.
-- Record the resonant length as a fraction of $\lambda$, and $R_{\text{in}}$ there.
-- Keep $N$ odd. Recheck $\Delta > 8a$ after each change.
+:::{depth}
+**Trim to resonance** does this search for you, and you should not press it
+until you have done it by hand. Then press it: if your length and the tool's
+agree, you have learned something about both. If they do not, one of you missed
+the reactance crossing.
 :::
-
-Now hold the frequency at 915 MHz and shorten
-the wire instead. Change the `GW` end coordinates in steps of a millimeter or
-two until $X_{\text{in}}$ crosses zero. Record the resonant length as a fraction
-of $\lambda$ and the resistance there. Keep the segment count odd throughout,
-and recheck $\Delta$ against $8a$ after each change.
 ::::
 
-::::{frame} Step 7: Pattern Cuts
+::::{frame} Procedure — Cuts and Convergence
 :::{present}
-At the resonant length, take both principal cuts:
+7. At resonance take the E-plane cut and the H-plane cut:
 
 ```text
 RP 0 1 361 1000 90 0 0 1
 ```
 
-- Record peak gain, E-plane HPBW, and the null depth on the wire axis.
-- The H-plane cut should be a circle.
+8. Re-run at $N = 11$, 21, 41, 81 and tabulate $Z_{\text{in}}$ and gain.
 :::
 
-At the resonant length, take the E-plane cut
-($\phi = 0$, $\theta$ swept) and the H-plane cut ($\theta = 90^\circ$, $\phi$
-swept). The E-plane cut is the `RP` card in the input file above; the card
-above is the H-plane cut. Record the peak gain, the HPBW in the E-plane, and the
-depth of the nulls along the wire axis. Confirm that the H-plane cut is a circle
-to within a small fraction of a decibel.
+Record the peak gain, the E-plane HPBW, and the depth of the nulls along the
+wire axis, and confirm the H-plane cut is a circle to within a small fraction
+of a decibel. In the convergence study, identify both the point where the
+answer stops moving and the point where the $\Delta > 8a$ rule begins to bite.
 ::::
 
-::::{frame} Step 8: Convergence Study
+::::{frame} Keep the Pattern File
 :::{present}
-- Re-run the resonant model at $N = 11$, 21, 41, and 81 segments.
-- Tabulate $Z_{\text{in}}$ and gain for each.
-- Find where the answer stops moving, and where $\Delta > 8a$ begins to fail.
+- Press **Pattern CSV** and keep what it saves.
+- In Lesson 11 it drops straight onto your measured cut, on one plot.
+- This file is absolute **dBi**; a chamber measures raw $S_{21}$.
 :::
 
-Re-run the resonant model at $N = 11$, 21, 41,
-and 81 segments and tabulate $Z_{\text{in}}$ and gain for each. Identify the
-point where the answer stops moving, and the point where the $\Delta > 8a$ rule
-begins to bite.
+Comparing the two means normalizing each to its own peak, which compares
+*shape*. Comparing absolute levels is a gain-transfer measurement against a
+standard-gain horn — Lesson 9's material, not something a file can fix. Save it
+somewhere you will find it in three lessons' time.
 ::::
 
 ::::{frame} Deliverables
@@ -572,7 +556,7 @@ For your midterm antenna:
 
 Today's dipole is the rehearsal. The product of this lab is the **Analysis**
 section of the midterm project: the simulated prediction for the antenna you
-will put on the range in Lessons 13 and 14. The project handout governs what
+will put on the range in Lessons 10 and 11. The project handout governs what
 that section must contain; this is how to build it.
 
 1. **Pattern.** Predict the E-plane and H-plane cuts, and read the half-power
@@ -583,7 +567,7 @@ that section must contain; this is how to build it.
    convergence table so the reader knows the numbers have stopped moving.
 4. **Comparison.** Set the simulation beside your hand analysis and account
    for every difference. "Simulation error" is not an account of anything, so
-   name the mechanism. When the measurement comes in at Lesson 14 you will add
+   name the mechanism. When the measurement comes in at Lesson 11 you will add
    a third column.
 
 Build it the way you built the dipole today: predict by hand first, model the
@@ -670,20 +654,25 @@ once you make the two models match.
 
 ::::{frame} Where This Is Going
 :::{present}
-- **Lesson 9**: monopoles need a **ground plane**: a new card, and a new way for the model to be wrong.
-- **Module 3**: arrays are more wires, and the same rules apply to every element.
-- The habit is predict, simulate, reconcile.
+- You have predicted an antenna and simulated it. You have not **measured** it.
+- A simulation nobody has checked against hardware is a very confident opinion.
+- **Lesson 9** is the theory of checking; **L10 and L11** put you on the instruments.
 :::
 
-Lesson 9 returns to theory with loops and monopoles. The monopole is where your
-new NEC habits get their first real test, because a quarter-wave monopole is
-only half an antenna and the other half is the ground plane. NEC models ground
-with its own card, and getting that card wrong is a common way to produce a
-confident and completely incorrect monopole result, including an average gain
-that no longer has to equal one. Before Lesson 9, review your Lesson 7 notes on
-the sinusoidal current assumption, and be ready to state how a quarter-wave
-monopole over perfect ground relates to the half-wave dipole in both impedance
-and directivity.
+The dipole you modeled today is the antenna you will hang on the analyzer next
+week, so keep your predicted impedance and resonant length where you can find
+them. Lesson 9 also introduces the midterm project, an antenna pattern
+measurement due at Lesson 20 — the measurement block runs early for that
+reason.
+
+:::{depth}
+The remaining antenna families come back at Lessons 12 to 14 — loops and
+monopoles, then patches, slots and horns, then reflectors and Yagis. The
+monopole is where your new NEC habits get their first real test, because a
+quarter-wave monopole is only half an antenna and the other half is the ground
+plane. NEC models ground with its own card, and getting that card wrong is a
+common way to produce a confident and completely incorrect result, including an
+average gain that no longer has to equal one.
 
 Beyond that, Module 3 is built entirely on arrays, and an array is just more
 wires. The segmentation rules you applied to one dipole today apply to every
@@ -691,4 +680,5 @@ element at once, and the matrix you solved for 21 unknowns becomes a matrix for
 several hundred. The physics does not change and only the bookkeeping grows, so
 the habit of predicting before simulating matters more as the models get large
 enough that nobody can check the answer by eye.
+:::
 ::::

@@ -194,7 +194,7 @@ Engagement is capped at 10%; extra credit does not roll over.
 
 Two graded projects anchor the course:
 
-- **Midterm Project — Antenna Pattern Measurement.** Introduced at Lesson 11, due at Lesson 20. Students design and execute a pattern-measurement campaign on an antenna under test, reduce the data, and report gain, beamwidth, sidelobe level, and polarization behavior against expectations. Assessed as **Mastered / Not Yet Mastered** with resubmission opportunity.
+- **Midterm Project — Antenna Pattern Measurement.** Introduced at Lesson 9, due at Lesson 20. Students design and execute a pattern-measurement campaign on an antenna under test, reduce the data, and report gain, beamwidth, sidelobe level, and polarization behavior against expectations. Assessed as **Mastered / Not Yet Mastered** with resubmission opportunity.
 - **Final Project — Combined Beamforming + Radar.** Track a moving target while suppressing a static jammer using the ADALM-PHASER. Runs across Lessons 39–41 (Module 5). Graded using a **traditional rubric-based sliding scale**.
 
 ## Course policies
@@ -346,6 +346,6 @@ See the [materials page](materials.md).
 ## Software & hardware
 
 - ADALM-PHASER
-- Antenna simulation software _(TBD)_
+- Antenna simulation software — nec_lab (NEC-2), provided with the course
 - Vector network analyzer (VNA) — for measurement labs
 - Anechoic chamber — for pattern measurement labs
