@@ -128,7 +128,7 @@ def draw(axes, title_size=12.5, label_size=10.5):
         ax.add_patch(arr)
     ax.text(xw - 0.05, -0.66, "field from every segment", color=BLUE, fontsize=label_size - 0.5,
             ha="center", va="top")
-    ax.text(xw + 0.06, zm, "total is zero", color=AMBER, fontsize=label_size, fontweight="bold",
+    ax.text(xw + 0.06, zm, "no tangential field", color=AMBER, fontsize=label_size, fontweight="bold",
             ha="left", va="center")
     # the matrix: one row per segment, shaded by how strongly n is felt at m
     x1, z1, cell = 0.12, 0.46, 0.070
@@ -144,7 +144,7 @@ def draw(axes, title_size=12.5, label_size=10.5):
             fontsize=label_size - 0.5, ha="center", va="top")
     ax.text(x1 + N * cell + 0.03, z1 - (N - m - 0.5) * cell, "this\nrow", color=AMBER, fontsize=label_size - 0.5,
             fontweight="bold", ha="left", va="center")
-    frame(ax, "3. Net field on each segment: zero", title_size)
+    frame(ax, "3. Apply the boundary condition", title_size)
 
     # 4. sum the segment patterns
     ax = axes[3]
