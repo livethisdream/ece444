@@ -147,9 +147,10 @@ the wire is cut into segments and each segment is a small radiator whose
 pattern we already know from Lesson 6. In the second, the current is written
 as a sum of known shapes, one triangle per junction, and only their heights
 are unknown; the dashed line is the current they add up to. In the third, the
-field that every segment puts on one chosen segment must total zero, which is
-one row of the matrix: one row per segment, strongest on the diagonal because
-a segment feels itself most. In the fourth, the segment patterns, now
+fields that all the segments put on one chosen segment, together with the
+source field, must total zero on the metal, because a perfect conductor cannot
+hold a tangential field. That is one row of the matrix: one row per segment,
+strongest on the diagonal because a segment feels itself most. In the fourth, the segment patterns, now
 weighted, add up to the pattern of the whole antenna.
 ::::
 
