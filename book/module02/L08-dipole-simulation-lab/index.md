@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-Today we hand the same antenna to a solver that computes the current instead of assuming it.
+Today we compute the radiation pattern numerically, for an antenna nobody can solve on paper.
 
 Lesson 8 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
