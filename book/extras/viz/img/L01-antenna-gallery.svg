@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 236" role="img" aria-label="Line drawings of seven antennas to recognize on sight: half-wave dipole, monopole over a ground plane, microstrip patch, pyramidal horn, Yagi-Uda, spiral, and parabolic dish">
-<g style="font-family:inherit">
+<g style="font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
 
 <!-- 1. half-wave dipole (cx 80) -->
 <line x1="80" y1="42" x2="80" y2="101" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>

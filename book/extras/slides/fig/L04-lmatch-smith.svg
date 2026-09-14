@@ -1528,12 +1528,12 @@ L 258.195789 141.48
 " clip-path="url(#pf22611e727)" style="fill: none; stroke: #b9d2e5; stroke-width: 1.2; stroke-linecap: square"/>
    </g>
    <g id="text_1">
-    <text style="font-weight: 700; font-size: 11px; font-family:inherit; fill: #004a85" transform="translate(282.511579 114.465671)">series element walks a</text>
-    <text style="font-weight: 700; font-size: 11px; font-family:inherit; fill: #004a85" transform="translate(282.511579 127.668679)">constant-resistance circle</text>
+    <text style="font-weight: 700; font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #004a85" transform="translate(282.511579 114.465671)">series element walks a</text>
+    <text style="font-weight: 700; font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #004a85" transform="translate(282.511579 127.668679)">constant-resistance circle</text>
    </g>
    <g id="text_2">
-    <text style="font-weight: 700; font-size: 11px; font-family:inherit; fill: #1d7a4d" transform="translate(282.511579 170.391987)">shunt element walks a</text>
-    <text style="font-weight: 700; font-size: 11px; font-family:inherit; fill: #1d7a4d" transform="translate(282.511579 183.594995)">constant-conductance circle</text>
+    <text style="font-weight: 700; font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1d7a4d" transform="translate(282.511579 170.391987)">shunt element walks a</text>
+    <text style="font-weight: 700; font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1d7a4d" transform="translate(282.511579 183.594995)">constant-conductance circle</text>
    </g>
    <g id="line2d_18">
     <path d="M 92.136739 177.064082 
@@ -1643,7 +1643,7 @@ Q 74.706941 208.860301 76.686941 208.860301
 z
 " style="fill: #ffffff; opacity: 0.92"/>
     </g>
-    <text style="font-weight: 700; font-size: 11px; font-family:inherit; text-anchor: middle; fill: #b01e24" x="133.473582" y="204.237723" transform="rotate(-0 133.473582 204.237723)">start: the antenna</text>
+    <text style="font-weight: 700; font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #b01e24" x="133.473582" y="204.237723" transform="rotate(-0 133.473582 204.237723)">start: the antenna</text>
    </g>
    <g id="line2d_21">
     <defs>
@@ -1682,7 +1682,7 @@ Q 71.845979 70.498025 73.825979 70.498025
 z
 " style="fill: #ffffff; opacity: 0.92"/>
     </g>
-    <text style="font-weight: 700; font-size: 11px; font-family:inherit; text-anchor: middle; fill: #e67e22" x="149.658947" y="65.875447" transform="rotate(-0 149.658947 65.875447)">after the series inductor</text>
+    <text style="font-weight: 700; font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #e67e22" x="149.658947" y="65.875447" transform="rotate(-0 149.658947 65.875447)">after the series inductor</text>
    </g>
    <g id="line2d_22">
     <defs>
@@ -1721,7 +1721,7 @@ Q 127.174708 169.628851 129.154708 169.628851
 z
 " style="fill: #ffffff; opacity: 0.92"/>
     </g>
-    <text style="font-weight: 700; font-size: 11px; font-family:inherit; text-anchor: middle; fill: #1d7a4d" x="156.069474" y="165.006273" transform="rotate(-0 156.069474 165.006273)">matched</text>
+    <text style="font-weight: 700; font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1d7a4d" x="156.069474" y="165.006273" transform="rotate(-0 156.069474 165.006273)">matched</text>
    </g>
   </g>
  </g>

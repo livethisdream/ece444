@@ -1,5 +1,5 @@
 <svg viewBox="0 0 790 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A continuous uniform aperture of length L above, and below it the same length occupied by eight equally spaced elements carrying the same total excitation">
-<g style="font-family:inherit">
+<g style="font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
 <text x="30" y="34" font-size="13.5" font-weight="700" fill="#5a5a5a">Continuous aperture</text>
 <rect x="120" y="60" width="540" height="34" fill="#5a5a5a" opacity="0.30"/>
 <line x1="120" y1="60" x2="660" y2="60" stroke="#5a5a5a" stroke-width="2.4"/>

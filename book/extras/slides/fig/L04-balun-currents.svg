@@ -1,4 +1,4 @@
-<svg viewBox="0 0 700 265" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Coax feeding a dipole: without a balun the arm currents are unequal and a common-mode current flows on the outside of the shield; a choke balun blocks it and the arms carry equal and opposite currents">
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="0 0 700 265" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Coax feeding a dipole: without a balun the arm currents are unequal and a common-mode current flows on the outside of the shield; a choke balun blocks it and the arms carry equal and opposite currents">
 <defs>
 <marker id="bcN" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
 <marker id="bcR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker>

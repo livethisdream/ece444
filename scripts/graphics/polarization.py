@@ -25,6 +25,7 @@ from __future__ import annotations
 import math
 import re
 from pathlib import Path
+from svg_font_stack import apply_font_stack
 
 NAVY, BLUE, RED, GREEN, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
@@ -112,7 +113,7 @@ class Fig:
                f'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{aria}">\n'
                f'{defs()}\n' + "\n".join(self.body) + "\n</svg>\n")
         OUT.mkdir(parents=True, exist_ok=True)
-        (OUT / f"{name}.svg").write_text(svg, encoding="utf-8")
+        (OUT / f"{name}.svg").write_text(apply_font_stack(svg), encoding="utf-8")
         print(f"wrote {OUT / (name + '.svg')} (viewBox {vx:.0f} {vy:.0f} {vw:.0f} {vh:.0f})")
 
 

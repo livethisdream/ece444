@@ -32,6 +32,7 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from svg_font_stack import apply_font_stack
 from matplotlib.patches import FancyArrowPatch, Polygon, Rectangle
 
 NAVY, BLUE, RED, GREEN, AMBER, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5a5a5a"
@@ -159,18 +160,15 @@ def draw(axes, title_size=12.5, label_size=10.5):
 
 
 def export(fig, name: str, outs):
-    """Deck copies inherit the deck font (deck-tools.js inlines them). A copy
-    under viz/img is loaded through <img>, an isolated document that cannot
-    inherit anything, so it carries the page's sans stack explicitly."""
+    """Both copies carry the shared font stack: an <img> cannot inherit."""
     buf = io.StringIO()
     fig.savefig(buf, format="svg", transparent=True, bbox_inches="tight", pad_inches=0.04)
     plt.close(fig)
     s = buf.getvalue(); s = s[s.index("<svg"):]
+    s = apply_font_stack(s)
     for out in outs:
-        stack = "inherit" if out == FIG else "\'Source Sans Pro\', \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif"
-        t = re.sub(r"font-family:[^;}]*", "font-family:" + stack, s)
         out.mkdir(parents=True, exist_ok=True)
-        (out / f"{name}.svg").write_text(t, encoding="utf-8")
+        (out / f"{name}.svg").write_text(s, encoding="utf-8")
         print(f"wrote {out / (name + '.svg')}")
 
 

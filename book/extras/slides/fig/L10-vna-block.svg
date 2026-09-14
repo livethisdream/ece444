@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 320" role="img"
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 320" role="img"
      aria-label="Block diagram of a one-port vector network analyzer: a source, two directional couplers feeding a reference receiver and a test receiver, and a ratio block whose output is S11, connected through a cable to the antenna under test.">
   <defs>
     <marker id="l13a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">

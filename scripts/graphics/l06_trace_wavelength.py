@@ -17,6 +17,7 @@ This is a lesson-page figure (viz/img), so it may carry formulas.
 from __future__ import annotations
 import math
 from pathlib import Path
+from svg_font_stack import apply_font_stack
 
 OUT = Path(__file__).resolve().parents[2] / "book/extras/viz/img/L06-trace-wavelength.svg"
 NAVY, BLUE, GREEN, AMBER, INK, INK3, EDGE = "#004a85", "#0067b9", "#3f7d34", "#8a5a00", "#15202b", "#5b6573", "#cddce9"
@@ -107,7 +108,7 @@ def main() -> None:
         parts.append(panel(i, *PANELS[i]))
     parts.append(f'<text x="{W/2}" y="296" font-size="11.5" fill="{INK3}" text-anchor="middle">blue: wavefronts, λ apart along the green direction of travel · amber: where they cross the source</text>')
     parts.append('</svg>')
-    OUT.write_text("\n".join(parts) + "\n", encoding="utf-8")
+    OUT.write_text(apply_font_stack("\n".join(parts) + "\n"), encoding="utf-8")
     print("wrote", OUT)
 
 

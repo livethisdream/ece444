@@ -1,6 +1,6 @@
 <svg viewBox="0 0 790 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Eight element phasors added tip to tail in three cases: all aligned giving the largest sum, fanned out giving a shorter sum, and stepped by one eighth of a turn so the chain closes into a circle and the sum is zero">
 <defs><marker id="l16ph0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker><marker id="l16ph1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a5a00"/></marker><marker id="l16ph2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker></defs>
-<g style="font-family:inherit">
+<g style="font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
 <text x="395" y="26" font-size="13.5" fill="#5a5a5a" text-anchor="middle">Eight element phasors added tip to tail; the sum runs from the first tail to the last tip</text>
 <g>
 <rect x="10" y="46" width="244" height="250" rx="8" fill="#f5f9fc" stroke="#c7d2e0" stroke-width="1"/>

@@ -20,9 +20,9 @@
 <path d="M 180,200.3 L 225,200.3" stroke="#0067b9" stroke-width="1.6" marker-end="url(#ah)"/>
 <path d="M 180,225.4 L 225,225.4" stroke="#0067b9" stroke-width="1.6" marker-end="url(#ah)"/>
 <path d="M 486,46 L 434,95" stroke="#5a5a5a" stroke-width="1.2" marker-end="url(#ag)"/>
-<text x="203" y="290" font-family="inherit" font-size="15" fill="#0067b9" text-anchor="middle">field across the aperture</text>
-<text x="136" y="150" font-family="inherit" font-size="15" fill="#1a1a1a" text-anchor="middle" transform="rotate(-90 136 150)">aperture length</text>
-<text x="762" y="138" font-family="inherit" font-size="15" fill="#5a5a5a" text-anchor="end">boresight</text>
-<text x="600" y="290" font-family="inherit" font-size="15" fill="#004a85" text-anchor="middle">far-field pattern</text>
-<text x="482" y="50" font-family="inherit" font-size="15" fill="#5a5a5a" text-anchor="end">sidelobes</text>
+<text x="203" y="290" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#0067b9" text-anchor="middle">field across the aperture</text>
+<text x="136" y="150" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#1a1a1a" text-anchor="middle" transform="rotate(-90 136 150)">aperture length</text>
+<text x="762" y="138" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#5a5a5a" text-anchor="end">boresight</text>
+<text x="600" y="290" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#004a85" text-anchor="middle">far-field pattern</text>
+<text x="482" y="50" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#5a5a5a" text-anchor="end">sidelobes</text>
 </svg>

@@ -64,19 +64,19 @@ z
 " style="fill: #1d7a4d; stroke: #1d7a4d; stroke-width: 3; stroke-linecap: round"/>
    </g>
    <g id="text_1">
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; text-anchor: middle; fill: #004a85" x="81.524531" y="198.095803" transform="rotate(-0 81.524531 198.095803)">20 V across the resistor</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="81.524531" y="198.095803" transform="rotate(-0 81.524531 198.095803)">20 V across the resistor</text>
    </g>
    <g id="text_2">
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; fill: #e67e22" transform="translate(145.095731 94.253609)">24.5 V across</text>
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; fill: #e67e22" transform="translate(145.095731 108.056754)">the reactance</text>
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; fill: #e67e22" transform="translate(145.095731 121.859)">(no power)</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22" transform="translate(145.095731 94.253609)">24.5 V across</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22" transform="translate(145.095731 108.056754)">the reactance</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22" transform="translate(145.095731 121.859)">(no power)</text>
    </g>
    <g id="text_3">
-    <text style="font-weight: 700; font-size: 12.5px; font-family:inherit; text-anchor: start; fill: #1d7a4d" x="33.278531" y="49.22251" transform="rotate(-0 33.278531 49.22251)">31.6 V total</text>
+    <text style="font-weight: 700; font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #1d7a4d" x="33.278531" y="49.22251" transform="rotate(-0 33.278531 49.22251)">31.6 V total</text>
    </g>
    <g id="text_4">
-    <text style="font-size: 11px; font-family:inherit; fill: #1a1a1a" transform="translate(24.764531 220.385755)">Drive 1 A through the branch. The resistor still burns 10 W —</text>
-    <text style="font-size: 11px; font-family:inherit; fill: #1a1a1a" transform="translate(24.764531 233.588763)">but the terminals now show 31.6 V instead of 20 V.</text>
+    <text style="font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a" transform="translate(24.764531 220.385755)">Drive 1 A through the branch. The resistor still burns 10 W —</text>
+    <text style="font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1a1a1a" transform="translate(24.764531 233.588763)">but the terminals now show 31.6 V instead of 20 V.</text>
    </g>
   </g>
   <g id="axes_2">
@@ -167,22 +167,22 @@ L 494.754183 156.89088
 " clip-path="url(#p35dc0427c4)" style="fill: none; stroke: #1a1a1a; stroke-width: 1.6; stroke-linecap: square"/>
    </g>
    <g id="text_5">
-    <text style="font-weight: 700; font-size: 11px; font-family:inherit; text-anchor: middle; fill: #004a85" x="378.201559" y="50.087982" transform="rotate(-0 378.201559 50.087982)">20 Ω</text>
+    <text style="font-weight: 700; font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="378.201559" y="50.087982" transform="rotate(-0 378.201559 50.087982)">20 Ω</text>
    </g>
    <g id="text_6">
-    <text style="font-weight: 700; font-size: 11px; font-family:inherit; text-anchor: middle; fill: #e67e22" x="447.830399" y="50.088412" transform="rotate(-0 447.830399 50.088412)">+j24.5</text>
+    <text style="font-weight: 700; font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #e67e22" x="447.830399" y="50.088412" transform="rotate(-0 447.830399 50.088412)">+j24.5</text>
    </g>
    <g id="text_7">
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; text-anchor: start; fill: #5a5a5a" x="325.223094" y="21.00744" transform="rotate(-0 325.223094 21.00744)">what is really there</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #5a5a5a" x="325.223094" y="21.00744" transform="rotate(-0 325.223094 21.00744)">what is really there</text>
    </g>
    <g id="text_8">
-    <text style="font-weight: 700; font-size: 11px; font-family:inherit; text-anchor: middle; fill: #1d7a4d" x="397.879275" y="205.042782" transform="rotate(-0 397.879275 205.042782)">50 Ω</text>
+    <text style="font-weight: 700; font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1d7a4d" x="397.879275" y="205.042782" transform="rotate(-0 397.879275 205.042782)">50 Ω</text>
    </g>
    <g id="text_9">
-    <text style="font-weight: 700; font-size: 11px; font-family:inherit; text-anchor: middle; fill: #e67e22" x="464.480774" y="205.043212" transform="rotate(-0 464.480774 205.043212)">−j40.8</text>
+    <text style="font-weight: 700; font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #e67e22" x="464.480774" y="205.043212" transform="rotate(-0 464.480774 205.043212)">−j40.8</text>
    </g>
    <g id="text_10">
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; text-anchor: start; fill: #5a5a5a" x="325.223094" y="130.66776" transform="rotate(-0 325.223094 130.66776)">what the source sees</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #5a5a5a" x="325.223094" y="130.66776" transform="rotate(-0 325.223094 130.66776)">what the source sees</text>
    </g>
    <g id="patch_9">
     <path d="M 409.988638 73.068097 
@@ -195,10 +195,10 @@ z
 " style="fill: #5a5a5a; stroke: #5a5a5a; stroke-width: 2; stroke-linecap: round"/>
    </g>
    <g id="text_11">
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; text-anchor: start; fill: #5a5a5a" x="422.098002" y="95.512794" transform="rotate(-0 422.098002 95.512794)">identical at one frequency</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #5a5a5a" x="422.098002" y="95.512794" transform="rotate(-0 422.098002 95.512794)">identical at one frequency</text>
    </g>
    <g id="text_12">
-    <text style="font-size: 11px; font-family:inherit; text-anchor: start; fill: #1a1a1a" x="313.113731" y="272.525561" transform="rotate(-0 313.113731 272.525561)">Cancel the −j40.8 with a shunt element and a clean 50 Ω is left.</text>
+    <text style="font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #1a1a1a" x="313.113731" y="272.525561" transform="rotate(-0 313.113731 272.525561)">Cancel the −j40.8 with a shunt element and a clean 50 Ω is left.</text>
    </g>
   </g>
  </g>

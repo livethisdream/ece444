@@ -54,7 +54,7 @@ L 0 3.5
       </g>
      </g>
      <g id="text_1">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="55.757109" y="259.588953" transform="rotate(-0 55.757109 259.588953)">−90</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="55.757109" y="259.588953" transform="rotate(-0 55.757109 259.588953)">−90</text>
      </g>
     </g>
     <g id="xtick_2">
@@ -69,7 +69,7 @@ L 132.017109 4.32
       </g>
      </g>
      <g id="text_2">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="132.017109" y="259.588953" transform="rotate(-0 132.017109 259.588953)">−60</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="132.017109" y="259.588953" transform="rotate(-0 132.017109 259.588953)">−60</text>
      </g>
     </g>
     <g id="xtick_3">
@@ -84,7 +84,7 @@ L 208.277109 4.32
       </g>
      </g>
      <g id="text_3">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="208.277109" y="259.588953" transform="rotate(-0 208.277109 259.588953)">−30</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="208.277109" y="259.588953" transform="rotate(-0 208.277109 259.588953)">−30</text>
      </g>
     </g>
     <g id="xtick_4">
@@ -99,7 +99,7 @@ L 284.537109 4.32
       </g>
      </g>
      <g id="text_4">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="284.537109" y="259.588953" transform="rotate(-0 284.537109 259.588953)">0</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="284.537109" y="259.588953" transform="rotate(-0 284.537109 259.588953)">0</text>
      </g>
     </g>
     <g id="xtick_5">
@@ -114,7 +114,7 @@ L 360.797109 4.32
       </g>
      </g>
      <g id="text_5">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="360.797109" y="259.588953" transform="rotate(-0 360.797109 259.588953)">30</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="360.797109" y="259.588953" transform="rotate(-0 360.797109 259.588953)">30</text>
      </g>
     </g>
     <g id="xtick_6">
@@ -129,7 +129,7 @@ L 437.057109 4.32
       </g>
      </g>
      <g id="text_6">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="437.057109" y="259.588953" transform="rotate(-0 437.057109 259.588953)">60</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="437.057109" y="259.588953" transform="rotate(-0 437.057109 259.588953)">60</text>
      </g>
     </g>
     <g id="xtick_7">
@@ -144,11 +144,11 @@ L 513.317109 4.32
       </g>
      </g>
      <g id="text_7">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="513.317109" y="259.588953" transform="rotate(-0 513.317109 259.588953)">90</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="513.317109" y="259.588953" transform="rotate(-0 513.317109 259.588953)">90</text>
      </g>
     </g>
     <g id="text_8">
-     <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #1a1a1a" x="284.537109" y="276.589969" transform="rotate(-0 284.537109 276.589969)">Angle from broadside (deg)</text>
+     <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="284.537109" y="276.589969" transform="rotate(-0 284.537109 276.589969)">Angle from broadside (deg)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -169,7 +169,7 @@ L -3.5 0
       </g>
      </g>
      <g id="text_9">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: end; fill: #5a5a5a" x="48.757109" y="28.587558" transform="rotate(-0 48.757109 28.587558)">0</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #5a5a5a" x="48.757109" y="28.587558" transform="rotate(-0 48.757109 28.587558)">0</text>
      </g>
     </g>
     <g id="ytick_2">
@@ -184,7 +184,7 @@ L 513.317109 88.079351
       </g>
      </g>
      <g id="text_10">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: end; fill: #5a5a5a" x="48.757109" y="93.017828" transform="rotate(-0 48.757109 93.017828)">−10</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #5a5a5a" x="48.757109" y="93.017828" transform="rotate(-0 48.757109 93.017828)">−10</text>
      </g>
     </g>
     <g id="ytick_3">
@@ -199,7 +199,7 @@ L 513.317109 152.509622
       </g>
      </g>
      <g id="text_11">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: end; fill: #5a5a5a" x="48.757109" y="157.448098" transform="rotate(-0 48.757109 157.448098)">−20</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #5a5a5a" x="48.757109" y="157.448098" transform="rotate(-0 48.757109 157.448098)">−20</text>
      </g>
     </g>
     <g id="ytick_4">
@@ -214,11 +214,11 @@ L 513.317109 216.939892
       </g>
      </g>
      <g id="text_12">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: end; fill: #5a5a5a" x="48.757109" y="221.878368" transform="rotate(-0 48.757109 221.878368)">−30</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #5a5a5a" x="48.757109" y="221.878368" transform="rotate(-0 48.757109 221.878368)">−30</text>
      </g>
     </g>
     <g id="text_13">
-     <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #1a1a1a" x="14.197969" y="123.516" transform="rotate(-90 14.197969 123.516)">Relative power (dB)</text>
+     <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="14.197969" y="123.516" transform="rotate(-90 14.197969 123.516)">Relative power (dB)</text>
     </g>
    </g>
    <g id="line2d_23">
@@ -770,7 +770,7 @@ L 352.74793 60.963731
 " style="fill: none; stroke: #004a85; stroke-width: 1.1; stroke-linecap: round"/>
    </g>
    <g id="text_14">
-    <text style="font-size: 11.5px; font-family:inherit; text-anchor: start; fill: #004a85" x="157.437109" y="15.917449" transform="rotate(-0 157.437109 15.917449)">main lobe and first sidelobes agree</text>
+    <text style="font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #004a85" x="157.437109" y="15.917449" transform="rotate(-0 157.437109 15.917449)">main lobe and first sidelobes agree</text>
    </g>
    <g id="patch_8">
     <path d="M 457.587279 207.711657 
@@ -782,7 +782,7 @@ L 475.644408 182.305658
 " style="fill: none; stroke: #b01e24; stroke-width: 1.1; stroke-linecap: round"/>
    </g>
    <g id="text_15">
-    <text style="font-size: 11.5px; font-family:inherit; text-anchor: start; fill: #b01e24" x="401.469109" y="220.161405" transform="rotate(-0 401.469109 220.161405)">sweep noise floor</text>
+    <text style="font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #b01e24" x="401.469109" y="220.161405" transform="rotate(-0 401.469109 220.161405)">sweep noise floor</text>
    </g>
    <g id="legend_1">
     <g id="line2d_26">
@@ -792,7 +792,7 @@ L 100.628672 324.953827
 " style="fill: none; stroke: #004a85; stroke-width: 2.2; stroke-linecap: square"/>
     </g>
     <g id="text_16">
-     <text style="font-size: 12px; font-family:inherit; text-anchor: start; fill: #1a1a1a" x="110.228672" y="329.153827" transform="rotate(-0 110.228672 329.153827)">Predicted, element × array</text>
+     <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #1a1a1a" x="110.228672" y="329.153827" transform="rotate(-0 110.228672 329.153827)">Predicted, element × array</text>
     </g>
     <g id="line2d_27">
      <path d="M 296.823047 324.953827 
@@ -804,7 +804,7 @@ L 320.823047 324.953827
      </g>
     </g>
     <g id="text_17">
-     <text style="font-size: 12px; font-family:inherit; text-anchor: start; fill: #1a1a1a" x="330.423047" y="329.153827" transform="rotate(-0 330.423047 329.153827)">Expected measured sweep</text>
+     <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #1a1a1a" x="330.423047" y="329.153827" transform="rotate(-0 330.423047 329.153827)">Expected measured sweep</text>
     </g>
    </g>
   </g>

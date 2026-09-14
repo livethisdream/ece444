@@ -18,6 +18,7 @@ inherits the deck's Source Sans Pro.
 from __future__ import annotations
 import math
 from pathlib import Path
+from svg_font_stack import apply_font_stack
 
 OX, OY = 100.0, 210.0          # origin on the canvas
 L = 540.0                      # propagation length
@@ -129,7 +130,7 @@ def main() -> int:
 """
     out = Path(__file__).resolve().parents[2] / "book/extras/slides/fig/L02-poynting.svg"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(svg, encoding="utf-8")
+    out.write_text(apply_font_stack(svg), encoding="utf-8")
     print(f"wrote {out} (viewBox {vx:.0f} {vy:.0f} {vw:.0f} {vh:.0f})")
     return 0
 

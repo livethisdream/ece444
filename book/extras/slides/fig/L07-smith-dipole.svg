@@ -1176,7 +1176,7 @@ L 213.915209 174.206237
 " clip-path="url(#p4666af8668)" style="fill: none; stroke-dasharray: 7.5,6; stroke-dashoffset: 0; stroke: #e67e22; stroke-width: 1.5"/>
    </g>
    <g id="text_1">
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; text-anchor: end; fill: #e67e22" x="140.224059" y="139.990502" transform="rotate(-0 140.224059 139.990502)">2:1</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #e67e22" x="140.224059" y="139.990502" transform="rotate(-0 140.224059 139.990502)">2:1</text>
    </g>
    <g id="line2d_19">
     <path d="M 234.419146 174.206237 
@@ -1284,7 +1284,7 @@ L 234.419146 174.206237
 " clip-path="url(#p4666af8668)" style="fill: none; stroke-dasharray: 7.5,6; stroke-dashoffset: 0; stroke: #e67e22; stroke-width: 1.5"/>
    </g>
    <g id="text_2">
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; text-anchor: end; fill: #e67e22" x="125.727775" y="125.494219" transform="rotate(-0 125.727775 125.494219)">3:1</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #e67e22" x="125.727775" y="125.494219" transform="rotate(-0 125.727775 125.494219)">3:1</text>
    </g>
    <g id="patch_2">
     <path d="M 261.777698 92.895307 
@@ -1296,8 +1296,8 @@ L 211.022038 136.223926
 " style="fill: none; stroke: #b01e24; stroke-width: 1.3; stroke-linecap: round"/>
    </g>
    <g id="text_3">
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; fill: #b01e24" transform="translate(236.879618 71.826085)">exactly half</text>
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; fill: #b01e24" transform="translate(236.879618 85.629229)">a wavelength</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #b01e24" transform="translate(236.879618 71.826085)">exactly half</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #b01e24" transform="translate(236.879618 85.629229)">a wavelength</text>
    </g>
    <g id="patch_3">
     <path d="M 181.572656 244.940801 
@@ -1309,32 +1309,32 @@ L 188.390215 182.408405
 " style="fill: none; stroke: #1d7a4d; stroke-width: 1.3; stroke-linecap: round"/>
    </g>
    <g id="text_4">
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; fill: #1d7a4d" transform="translate(144.034103 258.822889)">trimmed to</text>
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; fill: #1d7a4d" transform="translate(146.804885 272.625135)">resonance</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1d7a4d" transform="translate(144.034103 258.822889)">trimmed to</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #1d7a4d" transform="translate(146.804885 272.625135)">resonance</text>
    </g>
    <g id="text_5">
-    <text style="font-size: 11px; font-family:inherit; text-anchor: end; fill: #5a5a5a" x="165.525917" y="186.255227" transform="rotate(-0 165.525917 186.255227)">matched</text>
+    <text style="font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #5a5a5a" x="165.525917" y="186.255227" transform="rotate(-0 165.525917 186.255227)">matched</text>
    </g>
    <g id="text_6">
-    <text style="font-size: 10.5px; font-family:inherit; text-anchor: start; fill: #5a5a5a" x="43.732531" y="166.82482" transform="rotate(-0 43.732531 166.82482)">short</text>
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #5a5a5a" x="43.732531" y="166.82482" transform="rotate(-0 43.732531 166.82482)">short</text>
    </g>
    <g id="text_7">
-    <text style="font-size: 10.5px; font-family:inherit; text-anchor: end; fill: #5a5a5a" x="302.082138" y="166.82482" transform="rotate(-0 302.082138 166.82482)">open</text>
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #5a5a5a" x="302.082138" y="166.82482" transform="rotate(-0 302.082138 166.82482)">open</text>
    </g>
    <g id="text_8">
-    <text style="font-weight: 700; font-size: 12px; font-family:inherit; text-anchor: middle; fill: #1a1a1a" x="172.907335" y="38.880253" transform="rotate(-0 172.907335 38.880253)">inductive</text>
+    <text style="font-weight: 700; font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="172.907335" y="38.880253" transform="rotate(-0 172.907335 38.880253)">inductive</text>
    </g>
    <g id="text_9">
-    <text style="font-weight: 700; font-size: 12px; font-family:inherit; text-anchor: middle; fill: #1a1a1a" x="172.907335" y="313.22293" transform="rotate(-0 172.907335 313.22293)">capacitive</text>
+    <text style="font-weight: 700; font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="172.907335" y="313.22293" transform="rotate(-0 172.907335 313.22293)">capacitive</text>
    </g>
    <g id="text_10">
-    <text style="font-size: 11px; font-family:inherit; text-anchor: start; fill: #0067b9" x="25.278988" y="314.453166" transform="rotate(-0 25.278988 314.453166)">shorter wire</text>
+    <text style="font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #0067b9" x="25.278988" y="314.453166" transform="rotate(-0 25.278988 314.453166)">shorter wire</text>
    </g>
    <g id="text_11">
-    <text style="font-size: 11px; font-family:inherit; text-anchor: end; fill: #0067b9" x="332.838043" y="314.453166" transform="rotate(-0 332.838043 314.453166)">longer wire</text>
+    <text style="font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #0067b9" x="332.838043" y="314.453166" transform="rotate(-0 332.838043 314.453166)">longer wire</text>
    </g>
    <g id="text_12">
-    <text style="font-size: 13.5px; font-family:inherit; text-anchor: middle; fill: #1a1a1a" x="179.058516" y="14.577891" transform="rotate(-0 179.058516 14.577891)">A dipole on the Smith chart, normalized to 50 ohms</text>
+    <text style="font-size: 13.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="179.058516" y="14.577891" transform="rotate(-0 179.058516 14.577891)">A dipole on the Smith chart, normalized to 50 ohms</text>
    </g>
    <g id="line2d_20">
     <path d="M 285.069901 216.482605 
