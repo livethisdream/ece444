@@ -294,8 +294,9 @@ touch the keyboard, and again for the trimmed length.
 Note:
 Do not let them "fix" the discrepancy, because explaining it is the deliverable.
 Both models put resonance near 0.475 lambda, so an exactly half-wave wire is
-about five percent long and inductive under either one. The thirteen ohms of
-resistance is the current shape near the tips and the feed, not the length.
+about five percent long and inductive under either one. The extra thirteen
+ohms of resistance comes from the current shape near the tips and the feed,
+not from the length.
 
 ---
 
@@ -307,9 +308,9 @@ resistance is the current shape near the tips and the feed, not the length.
 
 - The solved current differs from the sinusoid near the tips and the feed, and the impedance is read at the feed, so the resistance comes out near 86 Ω.
 - Both models resonate near 0.475 λ, so a wire cut to exactly $\lambda/2$ is about **5% long** under either one, which is why both call it inductive.
-- The resistance gap is the current shape, not the length, and trimming does not remove it.
+- The resistance gap comes from the current shape, not from the length, and trimming does not remove it.
 
-**The 13 Ω is the sinusoid's error at the feed, not a difference in length.**
+**The extra 13 Ω comes from the sinusoid's error at the feed, not from a difference in length.**
 
 Note:
 Push on this. The disagreement is not numerical error, and it is not two

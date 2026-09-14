@@ -631,10 +631,10 @@ $86\ \Omega$. Both models agree on where the wire resonates: the sinusoid at
 about $0.476\lambda$ for this radius, which is where Lesson 7's reactance
 curve crosses zero, and the solved current at about $0.473\lambda$. A wire cut
 to exactly $\lambda/2$ is therefore about 5% long under either model, which
-is why both call it inductive. The $13\ \Omega$ of resistance is the current
-shape, not the length; it is the same gap Lesson 7 noted between the model's
-$63\ \Omega$ and a real dipole's $70\ \Omega$ at resonance, and trimming
-does not remove it.
+is why both call it inductive. The extra $13\ \Omega$ of resistance comes
+from the difference in current shape, not from a difference in length; it is
+the same gap Lesson 7 noted between the model's $63\ \Omega$ and a real
+dipole's $70\ \Omega$ at resonance, and trimming does not remove it.
 
 The difference in current shape has a name, the **end effect**. The assumed
 sinusoid goes to zero at the wire tips with a clean slope, while the real

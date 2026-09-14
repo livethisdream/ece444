@@ -395,6 +395,21 @@ a hook. The hook is his, spoken. If the point is worth a line on the slide,
 the line carries the number or the mechanism; if it cannot, it goes to
 depth or is cut.
 
+### 24. A quantity is a measurement, not a cause
+
+> **Before:** The 13 Ω of resistance is the current shape, not the length.
+>
+> **After:** The extra 13 Ω of resistance comes from the difference in current
+> shape, not from a difference in length.
+
+Neil, 2026-09-14: "13 ohms is not a shape. It's a unit of measure." A number
+with a unit measures something; the physics that produces it is a different
+noun and takes a different verb. Write what the quantity *comes from*, *is
+caused by*, or *is set by*, never that it *is* the mechanism. The same holds
+for the reverse: a mechanism is not "13 Ω". Catch it by reading the sentence
+with the number replaced by "this quantity" and asking whether it still says
+something true.
+
 ## What he does *not* want changed
 
 His voice is direct, and that is deliberate. Do not soften it into hedged
