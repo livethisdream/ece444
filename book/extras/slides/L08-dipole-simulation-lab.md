@@ -293,8 +293,10 @@ touch the keyboard, and again for the trimmed length.
 
 Note:
 Do not let them "fix" the discrepancy, because explaining it is the deliverable.
-The sinusoid resonates at 0.486 lambda, and a real wire resonates shorter, so an
-exactly half-wave wire is already long and therefore inductive.
+Both models put resonance near 0.475 lambda, so an exactly half-wave wire is
+about five percent long and inductive under either one. The extra thirteen
+ohms of resistance comes from the current shape near the tips and the feed,
+not from the length.
 
 ---
 
@@ -304,15 +306,18 @@ exactly half-wave wire is already long and therefore inductive.
 73 + j42.5 &#937; is the impedance of a <em>sinusoid</em>, not of a <em>wire</em>.
 </div>
 
-- Finite radius stores energy near the wire, so resonance falls to about 0.473 λ.
-- A wire cut to exactly $\lambda/2$ is therefore already **5% long**, which makes it inductive and raises its resistance.
-- Trim to resonance and the two answers agree to a couple of ohms.
+- The solved current differs from the sinusoid near the tips and the feed, and the impedance is read at the feed, so the resistance comes out near 86 Ω.
+- Both models resonate near 0.475 λ, so a wire cut to exactly $\lambda/2$ is about **5% long** under either one, which is why both call it inductive.
+- The resistance gap comes from the current shape, not from the length, and trimming does not remove it.
 
-**The physics is the same in both cases, and only the length differs.**
+**The extra 13 Ω comes from the sinusoid's error at the feed, not from a difference in length.**
 
 Note:
-Push on this. The disagreement is not numerical error, because two different
-antennas are being compared. Trimming makes them the same antenna again.
+Push on this. The disagreement is not numerical error, and it is not two
+different antennas: it is the same wire under two current models. Lesson 7's
+own reactance curve puts the sinusoid's resonance at 0.476 lambda for this
+radius, and the solved current lands at 0.473. What differs is the current
+shape, and the impedance is read where the shapes differ most.
 
 ---
 
