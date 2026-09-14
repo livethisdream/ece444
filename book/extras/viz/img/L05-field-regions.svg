@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 0 660 430" font-family="Inter, system-ui, -apple-system, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 0 660 430" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
   <!-- viewBox starts at -20, not 0: the outer circle is cx=175 r=188,
        so it reaches x=-13 and was being clipped down its left side.
        -->

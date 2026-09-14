@@ -3388,7 +3388,7 @@ C 103.656862 74.010718 94.82306 72.253565 85.902517 72.253565
 " style="fill: none; stroke: #8a929c; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_1">
-    <text style="font-weight: 700; font-size: 12.5px; font-family:inherit; text-anchor: middle; fill: #1d7a4d" x="85.902517" y="233.915786" transform="rotate(-0 85.902517 233.915786)">2.15 dBi</text>
+    <text style="font-weight: 700; font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1d7a4d" x="85.902517" y="233.915786" transform="rotate(-0 85.902517 233.915786)">2.15 dBi</text>
    </g>
    <g id="patch_5">
     <path d="M 85.902517 199.997237 
@@ -3396,10 +3396,10 @@ Q 85.902517 140.182615 85.902517 80.367992
 " style="fill: none; opacity: 0.55; stroke: #5a5a5a; stroke-width: 2.4; stroke-linecap: round"/>
    </g>
    <g id="text_2">
-    <text style="font-size: 11px; font-family:inherit; fill: #5a5a5a" transform="translate(12.678281 151.734) rotate(-90)">wire</text>
+    <text style="font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a" transform="translate(12.678281 151.734) rotate(-90)">wire</text>
    </g>
    <g id="text_3">
-    <text style="font-weight: 700; font-size: 12.5px; font-family:inherit; text-anchor: middle; fill: #004a85" x="85.902517" y="62.253565" transform="rotate(-0 85.902517 62.253565)">half-wave</text>
+    <text style="font-weight: 700; font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="85.902517" y="62.253565" transform="rotate(-0 85.902517 62.253565)">half-wave</text>
    </g>
   </g>
   <g id="axes_2">
@@ -6741,7 +6741,7 @@ C 266.689905 74.010718 257.856103 72.253565 248.93556 72.253565
 " style="fill: none; stroke: #8a929c; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_4">
-    <text style="font-weight: 700; font-size: 12.5px; font-family:inherit; text-anchor: middle; fill: #1d7a4d" x="248.93556" y="233.915786" transform="rotate(-0 248.93556 233.915786)">3.82 dBi</text>
+    <text style="font-weight: 700; font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1d7a4d" x="248.93556" y="233.915786" transform="rotate(-0 248.93556 233.915786)">3.82 dBi</text>
    </g>
    <g id="patch_9">
     <path d="M 248.93556 199.997237 
@@ -6749,7 +6749,7 @@ Q 248.93556 140.182615 248.93556 80.367992
 " style="fill: none; opacity: 0.55; stroke: #5a5a5a; stroke-width: 2.4; stroke-linecap: round"/>
    </g>
    <g id="text_5">
-    <text style="font-weight: 700; font-size: 12.5px; font-family:inherit; text-anchor: middle; fill: #004a85" x="248.93556" y="62.253565" transform="rotate(-0 248.93556 62.253565)">full wave</text>
+    <text style="font-weight: 700; font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="248.93556" y="62.253565" transform="rotate(-0 248.93556 62.253565)">full wave</text>
    </g>
   </g>
   <g id="axes_3">
@@ -10211,7 +10211,7 @@ C 429.722948 74.010718 420.889147 72.253565 411.968604 72.253565
 " style="fill: none; stroke: #8a929c; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_6">
-    <text style="font-weight: 700; font-size: 12.5px; font-family:inherit; text-anchor: middle; fill: #1d7a4d" x="411.968604" y="233.915786" transform="rotate(-0 411.968604 233.915786)">5.16 dBi</text>
+    <text style="font-weight: 700; font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1d7a4d" x="411.968604" y="233.915786" transform="rotate(-0 411.968604 233.915786)">5.16 dBi</text>
    </g>
    <g id="patch_13">
     <path d="M 411.968604 199.997237 
@@ -10219,7 +10219,7 @@ Q 411.968604 140.182615 411.968604 80.367992
 " style="fill: none; opacity: 0.55; stroke: #5a5a5a; stroke-width: 2.4; stroke-linecap: round"/>
    </g>
    <g id="text_7">
-    <text style="font-weight: 700; font-size: 12.5px; font-family:inherit; text-anchor: middle; fill: #004a85" x="411.968604" y="62.253565" transform="rotate(-0 411.968604 62.253565)">1.25 wavelengths</text>
+    <text style="font-weight: 700; font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="411.968604" y="62.253565" transform="rotate(-0 411.968604 62.253565)">1.25 wavelengths</text>
    </g>
   </g>
   <g id="axes_4">
@@ -13716,7 +13716,7 @@ C 592.755992 74.010718 583.92219 72.253565 575.001647 72.253565
 " style="fill: none; stroke: #8a929c; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_8">
-    <text style="font-weight: 700; font-size: 12.5px; font-family:inherit; text-anchor: middle; fill: #1d7a4d" x="575.001647" y="233.915786" transform="rotate(-0 575.001647 233.915786)">3.48 dBi</text>
+    <text style="font-weight: 700; font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1d7a4d" x="575.001647" y="233.915786" transform="rotate(-0 575.001647 233.915786)">3.48 dBi</text>
    </g>
    <g id="patch_17">
     <path d="M 575.001647 199.997237 
@@ -13724,11 +13724,11 @@ Q 575.001647 140.182615 575.001647 80.367992
 " style="fill: none; opacity: 0.55; stroke: #5a5a5a; stroke-width: 2.4; stroke-linecap: round"/>
    </g>
    <g id="text_9">
-    <text style="font-weight: 700; font-size: 12.5px; font-family:inherit; text-anchor: middle; fill: #004a85" x="575.001647" y="62.253565" transform="rotate(-0 575.001647 62.253565)">1.5 wavelengths</text>
+    <text style="font-weight: 700; font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="575.001647" y="62.253565" transform="rotate(-0 575.001647 62.253565)">1.5 wavelengths</text>
    </g>
   </g>
   <g id="text_10">
-   <text style="font-size: 13.5px; font-family:inherit; text-anchor: middle; fill: #1a1a1a" x="320.372082" y="14.577891" transform="rotate(-0 320.372082 14.577891)">Pattern cut in the plane containing the wire (30 dB scale)</text>
+   <text style="font-size: 13.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="320.372082" y="14.577891" transform="rotate(-0 320.372082 14.577891)">Pattern cut in the plane containing the wire (30 dB scale)</text>
   </g>
  </g>
  <defs>

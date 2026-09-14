@@ -1,4 +1,4 @@
-<svg viewBox="0 0 780 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three ways to give a monopole a ground: a buried radial field, drooping quarter-wave radials, and a handheld counterpoise">
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="0 0 780 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three ways to give a monopole a ground: a buried radial field, drooping quarter-wave radials, and a handheld counterpoise">
 <line x1="264" y1="18" x2="264" y2="282" stroke="#dbe3ee" stroke-width="1"/>
 <line x1="520" y1="18" x2="520" y2="282" stroke="#dbe3ee" stroke-width="1"/>
 <text x="20" y="34" fill="#004a85" font-size="14.5" font-weight="700">Buried radial field</text>

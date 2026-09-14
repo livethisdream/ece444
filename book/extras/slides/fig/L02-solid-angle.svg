@@ -1,4 +1,4 @@
-<svg viewBox="64 88 232 232" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Solid angle: a cone of half-angle alpha subtends a surface patch of area A on a sphere of radius r">
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="64 88 232 232" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Solid angle: a cone of half-angle alpha subtends a surface patch of area A on a sphere of radius r">
 <circle cx="180" cy="205" r="110" fill="#eef3fb" stroke="#b8c9e8" stroke-width="1.5"/>
 <ellipse cx="180" cy="205" rx="110" ry="34" fill="none" stroke="#cdd8e8" stroke-width="1" stroke-dasharray="4 4"/>
 <polygon points="180,205 128.4,112.6 231.6,112.6" fill="#004a85" opacity="0.15"/>

@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An L network between a feed line and a complex load: a series element next to the load cancels its reactance, then a shunt element transforms the resistance">
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An L network between a feed line and a complex load: a series element next to the load cancels its reactance, then a shunt element transforms the resistance">
 
 <!-- source / feed line -->
 <circle cx="86" cy="125" r="24" fill="#ffffff" stroke="#004a85" stroke-width="2.2"/>

@@ -1653,10 +1653,10 @@ L 68.611304 126.578182
 " clip-path="url(#p8616de3202)" style="fill: none; stroke: #004a85; stroke-width: 2.2; stroke-linecap: square"/>
    </g>
    <g id="text_1">
-    <text style="font-size: 11.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="68.611304" y="233.672749" transform="rotate(-0 68.611304 233.672749)">0.1 wavelengths</text>
+    <text style="font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="68.611304" y="233.672749" transform="rotate(-0 68.611304 233.672749)">0.1 wavelengths</text>
    </g>
    <g id="text_2">
-    <text style="font-size: 11px; font-family:inherit; text-anchor: middle; fill: #b01e24" x="34.169534" y="124.470149" transform="rotate(-0 34.169534 124.470149)">feed</text>
+    <text style="font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #b01e24" x="34.169534" y="124.470149" transform="rotate(-0 34.169534 124.470149)">feed</text>
    </g>
    <g id="patch_2">
     <path d="M 40.756999 130.441173 
@@ -1668,7 +1668,7 @@ L 56.374854 133.994459
 " style="fill: none; stroke: #b01e24; stroke-width: 1.3; stroke-linecap: round"/>
    </g>
    <g id="text_3">
-    <text style="font-weight: 700; font-size: 13px; font-family:inherit; text-anchor: middle; fill: #004a85" x="68.611304" y="34.12" transform="rotate(-0 68.611304 34.12)">short</text>
+    <text style="font-weight: 700; font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="68.611304" y="34.12" transform="rotate(-0 68.611304 34.12)">short</text>
    </g>
    <g id="line2d_3">
     <path d="M 68.611304 131.923636 
@@ -3343,13 +3343,13 @@ L 222.910435 105.196364
 " clip-path="url(#p5eff3c3615)" style="fill: none; stroke: #004a85; stroke-width: 2.2; stroke-linecap: square"/>
    </g>
    <g id="text_4">
-    <text style="font-size: 11.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="222.910435" y="233.672749" transform="rotate(-0 222.910435 233.672749)">0.5 wavelengths</text>
+    <text style="font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="222.910435" y="233.672749" transform="rotate(-0 222.910435 233.672749)">0.5 wavelengths</text>
    </g>
    <g id="text_5">
-    <text style="font-weight: 700; font-size: 11.5px; font-family:inherit; text-anchor: end; fill: #004a85" x="283.757562" y="95.484577" transform="rotate(-0 283.757562 95.484577)">current</text>
+    <text style="font-weight: 700; font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #004a85" x="283.757562" y="95.484577" transform="rotate(-0 283.757562 95.484577)">current</text>
    </g>
    <g id="text_6">
-    <text style="font-weight: 700; font-size: 13px; font-family:inherit; text-anchor: middle; fill: #004a85" x="222.910435" y="34.12" transform="rotate(-0 222.910435 34.12)">half-wave</text>
+    <text style="font-weight: 700; font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="222.910435" y="34.12" transform="rotate(-0 222.910435 34.12)">half-wave</text>
    </g>
    <g id="line2d_6">
     <path d="M 222.910435 131.923636 
@@ -5039,10 +5039,10 @@ L 377.209565 78.469091
 " clip-path="url(#p3df2bda5ed)" style="fill: none; stroke: #004a85; stroke-width: 2.2; stroke-linecap: square"/>
    </g>
    <g id="text_7">
-    <text style="font-size: 11.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="377.209565" y="233.672749" transform="rotate(-0 377.209565 233.672749)">1 wavelength</text>
+    <text style="font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="377.209565" y="233.672749" transform="rotate(-0 377.209565 233.672749)">1 wavelength</text>
    </g>
    <g id="text_8">
-    <text style="font-weight: 700; font-size: 13px; font-family:inherit; text-anchor: middle; fill: #004a85" x="377.209565" y="34.12" transform="rotate(-0 377.209565 34.12)">full wave</text>
+    <text style="font-weight: 700; font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="377.209565" y="34.12" transform="rotate(-0 377.209565 34.12)">full wave</text>
    </g>
    <g id="line2d_9">
     <path d="M 377.209565 131.923636 
@@ -6758,14 +6758,14 @@ L 531.508696 51.741818
 " clip-path="url(#p0ddde204cc)" style="fill: none; stroke: #004a85; stroke-width: 2.2; stroke-linecap: square"/>
    </g>
    <g id="text_9">
-    <text style="font-size: 11.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="531.508696" y="233.672749" transform="rotate(-0 531.508696 233.672749)">1.5 wavelengths</text>
+    <text style="font-size: 11.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="531.508696" y="233.672749" transform="rotate(-0 531.508696 233.672749)">1.5 wavelengths</text>
    </g>
    <g id="text_10">
-    <text style="font-size: 11px; font-family:inherit; fill: #e67e22" transform="translate(469.513509 57.619984)">reversed</text>
-    <text style="font-size: 11px; font-family:inherit; fill: #e67e22" transform="translate(469.513509 70.822992)">phase</text>
+    <text style="font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22" transform="translate(469.513509 57.619984)">reversed</text>
+    <text style="font-size: 11px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22" transform="translate(469.513509 70.822992)">phase</text>
    </g>
    <g id="text_11">
-    <text style="font-weight: 700; font-size: 13px; font-family:inherit; text-anchor: middle; fill: #004a85" x="531.508696" y="34.12" transform="rotate(-0 531.508696 34.12)">1.5 wavelengths</text>
+    <text style="font-weight: 700; font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #004a85" x="531.508696" y="34.12" transform="rotate(-0 531.508696 34.12)">1.5 wavelengths</text>
    </g>
    <g id="line2d_12">
     <path d="M 531.508696 131.923636 
@@ -6776,7 +6776,7 @@ L 531.508696 51.741818
    </g>
   </g>
   <g id="text_12">
-   <text style="font-size: 14px; font-family:inherit; text-anchor: middle; fill: #1a1a1a" x="290.52" y="14.957812" transform="rotate(-0 290.52 14.957812)">Standing-wave current on a center-fed wire</text>
+   <text style="font-size: 14px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="290.52" y="14.957812" transform="rotate(-0 290.52 14.957812)">Standing-wave current on a center-fed wire</text>
   </g>
  </g>
  <defs>

@@ -30,6 +30,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from svg_font_stack import apply_font_stack
 
 NAVY, BLUE, RED, GREEN, AMBER, GRAY = (
     "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5a5a5a")
@@ -57,7 +58,7 @@ def finalize(fig, name: str) -> None:
     plt.close(fig)
     s = buf.getvalue()
     s = s[s.index("<svg"):]
-    s = re.sub(r"font-family:[^;}]*", "font-family:inherit", s)
+    s = apply_font_stack(s)
     (OUT / f"{name}.svg").write_text(s, encoding="utf-8")
     print(f"wrote {OUT / (name + '.svg')}")
 

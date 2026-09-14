@@ -17,6 +17,7 @@ Writes:
 from __future__ import annotations
 
 from pathlib import Path
+from svg_font_stack import apply_font_stack
 
 REPO = Path(__file__).resolve().parents[2]
 DECK = REPO / "book/extras/slides/fig"
@@ -266,8 +267,8 @@ def main():
     PAGE.mkdir(parents=True, exist_ok=True)
     for name, fn in (("L17-signal-chain", signal_chain),
                      ("L17-frequency-plan", frequency_plan)):
-        (DECK / f"{name}.svg").write_text(fn(False), encoding="utf-8")
-        (PAGE / f"{name}.svg").write_text(fn(True), encoding="utf-8")
+        (DECK / f"{name}.svg").write_text(apply_font_stack(fn(False)), encoding="utf-8")
+        (PAGE / f"{name}.svg").write_text(apply_font_stack(fn(True)), encoding="utf-8")
         print(f"wrote {name}.svg (deck + page)")
 
 

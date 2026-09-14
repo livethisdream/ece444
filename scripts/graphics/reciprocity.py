@@ -22,6 +22,7 @@ font-family, so injected inline it inherits the deck's Source Sans Pro.
 from __future__ import annotations
 import math
 from pathlib import Path
+from svg_font_stack import apply_font_stack
 
 R0 = 52.0
 XA, XB = 86.0, 384.0
@@ -90,7 +91,7 @@ def main() -> int:
            f'</defs>\n' + "\n".join(body) + "\n</svg>\n")
 
     out = Path(__file__).resolve().parents[2] / "book/extras/slides/fig/L02-reciprocity.svg"
-    out.write_text(svg, encoding="utf-8")
+    out.write_text(apply_font_stack(svg), encoding="utf-8")
     print(f"wrote {out} (viewBox {vx:.0f} {vy:.0f} {vw:.0f} {vh:.0f})")
     return 0
 

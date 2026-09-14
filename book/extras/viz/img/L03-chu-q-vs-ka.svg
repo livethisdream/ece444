@@ -71,10 +71,10 @@ L 3.5 0
        <!-- $\mathdefault{10^{-2}}$ -->
        <g style="fill: #5a5a5a" transform="translate(387.421016 52.086818)">
         <text>
-         <tspan x="0" y="-0.871625" style="font-size: 13px; font-family:inherit; fill: #5a5a5a">1</tspan>
-         <tspan x="8.270996" y="-0.871625" style="font-size: 13px; font-family:inherit; fill: #5a5a5a">0</tspan>
-         <tspan x="16.666406" y="-6.240625" style="font-size: 9.1px; font-family:inherit; fill: #5a5a5a">−</tspan>
-         <tspan x="24.291211" y="-6.240625" style="font-size: 9.1px; font-family:inherit; fill: #5a5a5a">2</tspan>
+         <tspan x="0" y="-0.871625" style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">1</tspan>
+         <tspan x="8.270996" y="-0.871625" style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">0</tspan>
+         <tspan x="16.666406" y="-6.240625" style="font-size: 9.1px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">−</tspan>
+         <tspan x="24.291211" y="-6.240625" style="font-size: 9.1px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">2</tspan>
         </text>
        </g>
       </g>
@@ -89,10 +89,10 @@ L 3.5 0
        <!-- $\mathdefault{10^{-1}}$ -->
        <g style="fill: #5a5a5a" transform="translate(387.421016 121.212294)">
         <text>
-         <tspan x="0" y="-0.991938" style="font-size: 13px; font-family:inherit; fill: #5a5a5a">1</tspan>
-         <tspan x="8.270996" y="-0.991938" style="font-size: 13px; font-family:inherit; fill: #5a5a5a">0</tspan>
-         <tspan x="16.666406" y="-6.360938" style="font-size: 9.1px; font-family:inherit; fill: #5a5a5a">−</tspan>
-         <tspan x="24.291211" y="-6.360938" style="font-size: 9.1px; font-family:inherit; fill: #5a5a5a">1</tspan>
+         <tspan x="0" y="-0.991938" style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">1</tspan>
+         <tspan x="8.270996" y="-0.991938" style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">0</tspan>
+         <tspan x="16.666406" y="-6.360938" style="font-size: 9.1px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">−</tspan>
+         <tspan x="24.291211" y="-6.360938" style="font-size: 9.1px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">1</tspan>
         </text>
        </g>
       </g>
@@ -107,9 +107,9 @@ L 3.5 0
        <!-- $\mathdefault{10^{0}}$ -->
        <g style="fill: #5a5a5a" transform="translate(387.421016 190.46777)">
         <text>
-         <tspan x="0" y="-0.871625" style="font-size: 13px; font-family:inherit; fill: #5a5a5a">1</tspan>
-         <tspan x="8.270996" y="-0.871625" style="font-size: 13px; font-family:inherit; fill: #5a5a5a">0</tspan>
-         <tspan x="16.666406" y="-6.240625" style="font-size: 9.1px; font-family:inherit; fill: #5a5a5a">0</tspan>
+         <tspan x="0" y="-0.871625" style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">1</tspan>
+         <tspan x="8.270996" y="-0.871625" style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">0</tspan>
+         <tspan x="16.666406" y="-6.240625" style="font-size: 9.1px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">0</tspan>
         </text>
        </g>
       </g>
@@ -295,7 +295,7 @@ L 2 0
       </g>
      </g>
      <g id="text_4">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #1a1a1a" x="431.848984" y="112.428" transform="rotate(-90 431.848984 112.428)">Approx. fractional bandwidth</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="431.848984" y="112.428" transform="rotate(-90 431.848984 112.428)">Approx. fractional bandwidth</text>
      </g>
     </g>
     <g id="patch_5">
@@ -322,7 +322,7 @@ L 0 3.5
       </g>
      </g>
      <g id="text_5">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="82.816221" y="237.412953" transform="rotate(-0 82.816221 237.412953)">0.2</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="82.816221" y="237.412953" transform="rotate(-0 82.816221 237.412953)">0.2</text>
      </g>
     </g>
     <g id="xtick_2">
@@ -337,7 +337,7 @@ L 183.513215 4.32
       </g>
      </g>
      <g id="text_6">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="183.513215" y="237.412953" transform="rotate(-0 183.513215 237.412953)">0.5</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="183.513215" y="237.412953" transform="rotate(-0 183.513215 237.412953)">0.5</text>
      </g>
     </g>
     <g id="xtick_3">
@@ -352,7 +352,7 @@ L 259.687551 4.32
       </g>
      </g>
      <g id="text_7">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="259.687551" y="237.412953" transform="rotate(-0 259.687551 237.412953)">1</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="259.687551" y="237.412953" transform="rotate(-0 259.687551 237.412953)">1</text>
      </g>
     </g>
     <g id="xtick_4">
@@ -367,7 +367,7 @@ L 335.861886 4.32
       </g>
      </g>
      <g id="text_8">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="335.861886" y="237.412953" transform="rotate(-0 335.861886 237.412953)">2</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="335.861886" y="237.412953" transform="rotate(-0 335.861886 237.412953)">2</text>
      </g>
     </g>
     <g id="xtick_5">
@@ -382,7 +382,7 @@ L 380.421016 4.32
       </g>
      </g>
      <g id="text_9">
-      <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="380.421016" y="237.412953" transform="rotate(-0 380.421016 237.412953)">3</text>
+      <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="380.421016" y="237.412953" transform="rotate(-0 380.421016 237.412953)">3</text>
      </g>
     </g>
     <g id="xtick_6">
@@ -433,7 +433,7 @@ L 0 2
      </g>
     </g>
     <g id="text_10">
-     <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #1a1a1a" x="215.811016" y="254.413969" transform="rotate(-0 215.811016 254.413969)">Electrical size  ka</text>
+     <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="215.811016" y="254.413969" transform="rotate(-0 215.811016 254.413969)">Electrical size  ka</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
@@ -457,9 +457,9 @@ L -3.5 0
       <!-- $\mathdefault{10^{0}}$ -->
       <g style="fill: #5a5a5a" transform="translate(21.321016 190.46777)">
        <text>
-        <tspan x="0" y="-0.871625" style="font-size: 13px; font-family:inherit; fill: #5a5a5a">1</tspan>
-        <tspan x="8.270996" y="-0.871625" style="font-size: 13px; font-family:inherit; fill: #5a5a5a">0</tspan>
-        <tspan x="16.666406" y="-6.240625" style="font-size: 9.1px; font-family:inherit; fill: #5a5a5a">0</tspan>
+        <tspan x="0" y="-0.871625" style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">1</tspan>
+        <tspan x="8.270996" y="-0.871625" style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">0</tspan>
+        <tspan x="16.666406" y="-6.240625" style="font-size: 9.1px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">0</tspan>
        </text>
       </g>
      </g>
@@ -479,9 +479,9 @@ L 380.421016 115.167294
       <!-- $\mathdefault{10^{1}}$ -->
       <g style="fill: #5a5a5a" transform="translate(21.321016 121.212294)">
        <text>
-        <tspan x="0" y="-0.991938" style="font-size: 13px; font-family:inherit; fill: #5a5a5a">1</tspan>
-        <tspan x="8.270996" y="-0.991938" style="font-size: 13px; font-family:inherit; fill: #5a5a5a">0</tspan>
-        <tspan x="16.666406" y="-6.360938" style="font-size: 9.1px; font-family:inherit; fill: #5a5a5a">1</tspan>
+        <tspan x="0" y="-0.991938" style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">1</tspan>
+        <tspan x="8.270996" y="-0.991938" style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">0</tspan>
+        <tspan x="16.666406" y="-6.360938" style="font-size: 9.1px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">1</tspan>
        </text>
       </g>
      </g>
@@ -501,9 +501,9 @@ L 380.421016 45.976818
       <!-- $\mathdefault{10^{2}}$ -->
       <g style="fill: #5a5a5a" transform="translate(21.321016 52.086818)">
        <text>
-        <tspan x="0" y="-0.871625" style="font-size: 13px; font-family:inherit; fill: #5a5a5a">1</tspan>
-        <tspan x="8.270996" y="-0.871625" style="font-size: 13px; font-family:inherit; fill: #5a5a5a">0</tspan>
-        <tspan x="16.666406" y="-6.240625" style="font-size: 9.1px; font-family:inherit; fill: #5a5a5a">2</tspan>
+        <tspan x="0" y="-0.871625" style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">1</tspan>
+        <tspan x="8.270996" y="-0.871625" style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">0</tspan>
+        <tspan x="16.666406" y="-6.240625" style="font-size: 9.1px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">2</tspan>
        </text>
       </g>
      </g>
@@ -696,7 +696,7 @@ L -2 0
      </g>
     </g>
     <g id="text_14">
-     <text style="font-size: 13px; font-family:inherit; text-anchor: middle; fill: #1a1a1a" x="14.197969" y="112.428" transform="rotate(-90 14.197969 112.428)">Minimum Q</text>
+     <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="14.197969" y="112.428" transform="rotate(-90 14.197969 112.428)">Minimum Q</text>
     </g>
    </g>
    <g id="line2d_77">
@@ -749,10 +749,10 @@ L 380.421016 214.204035
 " clip-path="url(#p3ac2204dbb)" style="fill: none; stroke: #004a85; stroke-width: 2.8; stroke-linecap: square"/>
    </g>
    <g id="text_15">
-    <text style="font-weight: 700; font-size: 12px; font-family:inherit; text-anchor: end; fill: #5a5a5a" x="257.467347" y="21.560815" transform="rotate(-0 257.467347 21.560815)">ka = 1</text>
+    <text style="font-weight: 700; font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #5a5a5a" x="257.467347" y="21.560815" transform="rotate(-0 257.467347 21.560815)">ka = 1</text>
    </g>
    <g id="text_16">
-    <text style="font-weight: 700; font-size: 12px; font-family:inherit; text-anchor: start; fill: #5a5a5a" x="61.675255" y="205.469349" transform="rotate(-0 61.675255 205.469349)">electrically small</text>
+    <text style="font-weight: 700; font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #5a5a5a" x="61.675255" y="205.469349" transform="rotate(-0 61.675255 205.469349)">electrically small</text>
    </g>
    <g id="patch_9">
     <path d="M 255.055417 164.617295 
@@ -764,8 +764,8 @@ L 251.48814 167.692687
 " style="fill: none; stroke: #e67e22; stroke-width: 1.2; stroke-linecap: round"/>
    </g>
    <g id="text_17">
-    <text style="font-weight: 700; font-size: 10.5px; font-family:inherit; fill: #e67e22" transform="translate(111.649093 175.647439)">ka = 1, Q ≈ 2</text>
-    <text style="font-weight: 700; font-size: 10.5px; font-family:inherit; fill: #e67e22" transform="translate(111.649093 188.25031)">practical small-antenna knee</text>
+    <text style="font-weight: 700; font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22" transform="translate(111.649093 175.647439)">ka = 1, Q ≈ 2</text>
+    <text style="font-weight: 700; font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #e67e22" transform="translate(111.649093 188.25031)">practical small-antenna knee</text>
    </g>
    <g id="line2d_79">
     <defs>
@@ -974,7 +974,7 @@ L 320.184973 33.495518
 " style="fill: none; stroke: #b01e24; stroke-width: 1.6; stroke-linecap: round"/>
     </g>
     <g id="text_18">
-     <text style="font-weight: 700; font-size: 13px; font-family:inherit; text-anchor: end; fill: #b01e24" x="309.39685" y="31.950748" transform="rotate(-0 309.39685 31.950748)">a</text>
+     <text style="font-weight: 700; font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #b01e24" x="309.39685" y="31.950748" transform="rotate(-0 309.39685 31.950748)">a</text>
     </g>
    </g>
   </g>

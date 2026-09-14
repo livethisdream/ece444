@@ -3,7 +3,7 @@
 <marker id="l16arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0067b9"/></marker>
 <marker id="l16grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker>
 </defs>
-<g style="font-family:inherit">
+<g style="font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
 
 <line x1="90" y1="300" x2="660" y2="300" stroke="#5a5a5a" stroke-width="1.2" stroke-dasharray="6 5"/>
 <text x="96" y="288" font-size="12.5" fill="#5a5a5a">array axis</text>

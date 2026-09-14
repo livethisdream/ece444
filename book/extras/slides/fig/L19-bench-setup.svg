@@ -240,43 +240,43 @@ L 322.706215 66.167122
 " clip-path="url(#p1934d8421c)" style="fill: none; stroke: #e67e22; stroke-linecap: square"/>
    </g>
    <g id="text_1">
-    <text style="font-size: 12.5px; font-family:inherit; text-anchor: middle; fill: #1a1a1a" x="160.903385" y="206.285124" transform="rotate(-0 160.903385 206.285124)">8-element array (d = 14 mm)</text>
+    <text style="font-size: 12.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="160.903385" y="206.285124" transform="rotate(-0 160.903385 206.285124)">8-element array (d = 14 mm)</text>
    </g>
    <g id="text_2">
-    <text style="font-size: 10.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="36.598628" y="110.131601" transform="rotate(-0 36.598628 110.131601)">-60</text>
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="36.598628" y="110.131601" transform="rotate(-0 36.598628 110.131601)">-60</text>
    </g>
    <g id="text_3">
-    <text style="font-size: 10.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="59.408976" y="80.404577" transform="rotate(-0 59.408976 80.404577)">-45</text>
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="59.408976" y="80.404577" transform="rotate(-0 59.408976 80.404577)">-45</text>
    </g>
    <g id="text_4">
-    <text style="font-size: 10.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="89.136" y="57.594229" transform="rotate(-0 89.136 57.594229)">-30</text>
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="89.136" y="57.594229" transform="rotate(-0 89.136 57.594229)">-30</text>
    </g>
    <g id="text_5">
-    <text style="font-size: 10.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="123.753853" y="43.255045" transform="rotate(-0 123.753853 43.255045)">-15</text>
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="123.753853" y="43.255045" transform="rotate(-0 123.753853 43.255045)">-15</text>
    </g>
    <g id="text_6">
-    <text style="font-size: 10.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="160.903385" y="38.364216" transform="rotate(-0 160.903385 38.364216)">0</text>
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="160.903385" y="38.364216" transform="rotate(-0 160.903385 38.364216)">0</text>
    </g>
    <g id="text_7">
-    <text style="font-size: 10.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="198.052917" y="43.255045" transform="rotate(-0 198.052917 43.255045)">15</text>
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="198.052917" y="43.255045" transform="rotate(-0 198.052917 43.255045)">15</text>
    </g>
    <g id="text_8">
-    <text style="font-size: 10.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="232.670769" y="57.594229" transform="rotate(-0 232.670769 57.594229)">30</text>
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="232.670769" y="57.594229" transform="rotate(-0 232.670769 57.594229)">30</text>
    </g>
    <g id="text_9">
-    <text style="font-size: 10.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="262.397793" y="80.404577" transform="rotate(-0 262.397793 80.404577)">45</text>
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="262.397793" y="80.404577" transform="rotate(-0 262.397793 80.404577)">45</text>
    </g>
    <g id="text_10">
-    <text style="font-size: 10.5px; font-family:inherit; text-anchor: middle; fill: #5a5a5a" x="285.208141" y="110.131601" transform="rotate(-0 285.208141 110.131601)">60</text>
+    <text style="font-size: 10.5px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="285.208141" y="110.131601" transform="rotate(-0 285.208141 110.131601)">60</text>
    </g>
    <g id="text_11">
-    <text style="font-size: 12px; font-family:inherit; text-anchor: middle; fill: #1d7a4d" x="160.903385" y="26.229557" transform="rotate(-0 160.903385 26.229557)">HB100 at boresight</text>
+    <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1d7a4d" x="160.903385" y="26.229557" transform="rotate(-0 160.903385 26.229557)">HB100 at boresight</text>
    </g>
    <g id="text_12">
-    <text style="font-size: 12px; font-family:inherit; text-anchor: start; fill: #e67e22" x="327.925662" y="69.284778" transform="rotate(-0 327.925662 69.284778)">HB100 moved to +30</text>
+    <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #e67e22" x="327.925662" y="69.284778" transform="rotate(-0 327.925662 69.284778)">HB100 moved to +30</text>
    </g>
    <g id="text_13">
-    <text style="font-size: 12px; font-family:inherit; text-anchor: end; fill: #1a1a1a" x="175.256862" y="122.265003" transform="rotate(-0 175.256862 122.265003)">1 m</text>
+    <text style="font-size: 12px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #1a1a1a" x="175.256862" y="122.265003" transform="rotate(-0 175.256862 122.265003)">1 m</text>
    </g>
   </g>
  </g>

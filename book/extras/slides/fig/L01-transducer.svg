@@ -3,7 +3,7 @@
 <marker id="trN" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
 <marker id="trG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1d7a4d"/></marker>
 </defs>
-<g style="font-family:inherit">
+<g style="font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
 
 <!-- transmit direction -->
 <text x="410" y="16" fill="#004a85" font-size="17" font-weight="700" text-anchor="middle">transmit — guided wave becomes radiated wave</text>

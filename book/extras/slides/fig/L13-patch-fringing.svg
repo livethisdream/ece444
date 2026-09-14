@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 340" role="img" aria-label="Side view of a microstrip patch: the cavity field points down at one open edge and up at the other, the fringing fields at the two edges have horizontal parts pointing the same way, and the antenna radiates broadside">
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 340" role="img" aria-label="Side view of a microstrip patch: the cavity field points down at one open edge and up at the other, the fringing fields at the two edges have horizontal parts pointing the same way, and the antenna radiates broadside">
 <defs>
 <marker id="pf10" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
 <marker id="pf10b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0067b9"/></marker>

@@ -24,6 +24,7 @@ from __future__ import annotations
 import io
 import re
 from pathlib import Path
+from svg_font_stack import apply_font_stack
 
 import matplotlib
 import numpy as np
@@ -69,7 +70,7 @@ def finalize(fig, name: str, also_img: bool = False) -> None:
     plt.close(fig)
     s = buf.getvalue()
     s = s[s.index("<svg"):]
-    s = re.sub(r"font-family:[^;}]*", "font-family:inherit", s)
+    s = apply_font_stack(s)
     for d in (FIG,) + ((IMG,) if also_img else ()):
         d.mkdir(parents=True, exist_ok=True)
         (d / f"{name}.svg").write_text(s, encoding="utf-8")

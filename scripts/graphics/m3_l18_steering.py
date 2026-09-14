@@ -19,6 +19,7 @@ import io
 import re
 import shutil
 from pathlib import Path
+from svg_font_stack import apply_font_stack
 
 import numpy as np
 import matplotlib
@@ -56,7 +57,7 @@ def finalize(fig, name: str, also_page: bool = False) -> None:
     plt.close(fig)
     s = buf.getvalue()
     s = s[s.index("<svg"):]
-    s = re.sub(r"font-family:[^;}]*", "font-family:inherit", s)
+    s = apply_font_stack(s)
     (FIG / f"{name}.svg").write_text(s, encoding="utf-8")
     print(f"wrote {FIG / (name + '.svg')}")
     if also_page:
