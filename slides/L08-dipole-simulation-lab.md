@@ -1,0 +1,410 @@
+<!-- .slide: class="title-slide" -->
+
+<div class="title-left">
+
+# ECE 444
+
+Antennas, Phased Arrays, and Radar Systems
+
+## Lesson 8 — Dipole Simulation Lab
+
+Fall 2026 · Dr. Neil Rogers
+
+</div>
+
+<div class="title-right">
+
+![USAFA](./img/01-course-intro/USAFA-logo.png)
+
+</div>
+
+---
+
+## Where we were
+
+- **L6:** the pattern is the radiation integral over *whatever* current sits on the source — we ran it for three different distributions.
+- **L7:** we prescribed the current ourselves, triangular on the short dipole and sinusoidal on the half-wave one, and the integral closed in a formula.
+- Closed form needs a current you can write down **and** an integral you can do. A fat wire, a bent wire, or a coupled array gives you neither.
+
+**Today we compute the pattern numerically instead, and you reconcile it with the one you got by hand.**
+
+Note:
+Head off the wrong takeaway: we are not here because the sinusoid was a lie. It
+is a very good model for a thin resonant wire, and L6 showed the machinery
+working on a uniform line source and an infinitesimal element too. The limit is
+structural — you have to prescribe a current at all, then integrate it in closed
+form — and that is what runs out on a real antenna.
+
+---
+
+## Today's plan
+
+1. What the method of moments does
+2. NEC's world: wires, segments, and the rules that bound them
+3. Build and run a 915 MHz dipole in nec_lab
+4. Sweep for resonance, record impedance, pattern, gain
+5. Convergence, and the sanity checks that catch a broken model
+
+Note:
+This is a lab period. The briefing is the front half, and they should be in
+the simulator by the midpoint. The deliverable is a comparison table with a paragraph
+for each row.
+
+---
+
+## Why simulate at all
+
+<div class="callout">
+Hand analysis gives you the <strong>shape</strong> of the answer. Simulation gives you the <strong>number</strong> for the antenna you actually built.
+</div>
+
+- Closed-form solutions exist for only a handful of antennas, and you will design more than a handful.
+- The dipole is the one case where you can check the tool against theory you already trust.
+- **A tool you have never checked against a known answer cannot be trusted on an unknown one.**
+
+Note:
+Emphasize the last bullet — this is the entire justification for spending a lab
+period on an antenna whose answer we already know.
+
+---
+
+## What we are actually after
+
+<div class="callout">
+The goal is the <strong>radiation pattern</strong> of an antenna nobody can solve on paper.<br>
+The method of moments is how we get that pattern numerically.<br>
+The currents it reports along the way are the <strong>means, not the end</strong>.
+</div>
+
+- Every rule in the slides ahead exists to protect a pattern computation.
+- The currents are worth watching because a broken model shows there first.
+
+Note:
+Say this out loud and the rest of the briefing has a spine. When they ask later
+why the segment rules matter, the answer is always the same: because the pattern
+is a sum over those segments.
+
+---
+
+## Three full-wave solvers
+
+| | FDTD | FEM | MoM |
+| :-- | :-- | :-- | :-- |
+| Meshes | the air | the air | the metal |
+| Solves | in time | one frequency | one frequency |
+| Unknowns | fields | fields | currents |
+| Boundary | absorbing box | absorbing box | built in |
+| Best for | broadband, mixed media | dielectrics, curved shapes | wires in free space |
+
+**All three solve Maxwell's equations with no approximation. They differ in what becomes an unknown.**
+
+Note:
+Full-wave is the category, not a method: it means no high-frequency
+approximation, which separates all three from the ray and physical-optics
+family in Module 3. FDTD fills a box of air with a grid and marches the fields
+in time, one run for every frequency, any material in any cell. FEM (HFSS)
+fills the same box with tetrahedra and solves at one frequency; the mesh can
+follow a curved dielectric. Both boxes have to end in an absorbing layer that
+you size and place. MoM (NEC) meshes only the metal: the unknowns are currents,
+and the field each current radiates into free space is a closed-form Green's
+function, so there is no air and no boundary.
+
+---
+
+## Why the method of moments for a wire
+
+- Nine segments make a $9\times9$ matrix. FDTD would mesh the air around it.
+- Free space is inside the Green's function: nothing to truncate, nothing to tune.
+- One frequency per solve is exactly the sweep in today's procedure.
+- The cost: a dense matrix, $N^2$ memory and $N^3$ time, and no natural place for a dielectric.
+
+**For a wire in air, NEC has been the right tool since 1981.**
+
+Note:
+Count what each solver carries for today's dipole. NEC at 81 segments is an
+81 by 81 matrix. An FDTD box several wavelengths across at a small fraction of
+a wavelength per cell is millions of unknowns before the wire is in it, plus a
+perfectly matched layer to keep the box edge from reflecting. The one-frequency
+solve sounds like a limitation until you notice that every question in the lab
+is asked at a frequency. The limits are real: dense MoM tops out around tens of
+thousands of unknowns, and a patch on a substrate or a wire in a lossy body is
+the signal to reach for HFSS or CST.
+
+---
+
+## The source becomes N small radiators
+
+- L6 said radiation is **superposition** over the source. Take that literally.
+- Cut the source into $N$ short segments, each a small radiator whose pattern you already know.
+- The antenna's pattern is their weighted sum, and only the **weights** are unknown.
+
+$$F(\theta) = \sum_n a_n F_n(\theta) \quad\text{with}\quad I(z) = \sum_n a_n f_n(z)$$
+
+**The $f_n$ are basis functions, the shapes you choose. The $a_n$ are the unknowns.**
+
+Note:
+This is the whole idea, and it is worth a minute. An unknown function on the
+wire becomes N unknown numbers, and the pattern integral becomes a finite sum of
+elementary patterns they already computed in L6. NEC's basis is a
+constant-plus-sine-plus-cosine triple per segment so current and slope match
+across junctions — mention it, do not dwell. Emphasize that choosing a basis is
+a modeling decision, not a claim about what the current is.
+
+---
+
+## What the method of moments does
+
+<div class="fig" data-inline-svg="./fig/L08-mom-pipeline.svg" style="max-width:1100px; margin:0 auto;"></div>
+
+Note:
+Walk left to right. Steps 1 and 4 are bookkeeping around the superposition they
+already know. Step 2 is the physics, and step 3 is linear algebra that a laptop
+finishes in milliseconds.
+
+---
+
+## The condition it enforces
+
+On a perfect conductor the total tangential field is zero. So along the wire:
+
+$$E_z^{\text{scattered}}(z) = -E_z^{\text{source}}(z)$$
+
+- The scattered field is produced by the unknown segment weights.
+- There is one equation and one unknown per segment, so the system is square and solves in one step.
+- **Nothing here prescribes the current.** The weights come out of the boundary condition, and the pattern comes out of the weights.
+
+<div class="callout">
+Discretize the source, expand the current in basis functions, enforce the boundary condition, then sum the segment patterns.
+</div>
+
+Note:
+This is Pocklington's / Hallen's equation depending on the form. Do not derive
+it. The takeaway is that MoM turns an integral equation into a matrix, and the
+matrix is only the road to the pattern.
+
+---
+
+## NEC's world is made of wires
+
+<div class="fig" data-inline-svg="./fig/L08-segment-rules.svg" style="max-width:790px; margin:0 auto;"></div>
+
+Note:
+NEC-2 knows two things: thin wires and surface patches. Everything you model in
+this course is wires. A "dipole" is one wire card with a segment count.
+
+---
+
+## The three segmentation rules
+
+| Rule | Why it exists | Violate it and… |
+| :-- | :-- | :-- |
+| 10–20 segments per half wavelength | resolve the current's curvature | pattern and gain smear |
+| Segment length $< \lambda/20$ | phase changes little across a segment | impedance drifts badly |
+| Segment length $> 8 \times$ radius | thin-wire kernel stays valid | numbers become fiction |
+| Odd segment count | puts a segment at the feed | source lands off-center |
+
+**Two of these rules pull against each other on a fat wire, and that tension is the design constraint.**
+
+Note:
+Point out the tension: refining the segmentation drives the segment length down
+toward 8a. On a thick wire you run out of room, which is NEC telling you that
+the thin-wire kernel does not describe your antenna.
+
+---
+
+## From currents to one impedance
+
+NEC drives **one segment** with a known voltage. The solve returns the current there, and Ohm's law finishes the job:
+
+$$Z\_{\text{in}} = \frac{V\_{\text{feed}}}{I\_{\text{feed}}}$$
+
+- With a 1 V source, the impedance is the reciprocal of the feed-segment current.
+- The other $N-1$ currents never enter this division; they set the **pattern**.
+
+<div class="callout">
+A misplaced source wrecks the impedance while barely moving the pattern.
+</div>
+
+Note:
+Say the division out loud: one volt divided by the feed current, in milliamps,
+gives tens of ohms. Point out that a source on the wrong segment reads a smaller
+current and reports a wildly wrong impedance, while the pattern hardly changes
+because the distribution as a whole hardly changed.
+
+---
+
+## Four ways a model misleads you
+
+| Symptom | Likely cause | Check |
+| :-- | :-- | :-- |
+| Gain drifts with segment count | too few segments | double N, re-run |
+| Impedance is wild or oscillates | segment shorter than 8 radii | lengthen segments |
+| Feed impedance looks nothing like theory | source on the wrong segment | odd count, center tag |
+| Average gain far from 1.0 | geometry or kernel error | fix before reading anything |
+
+<div class="callout">
+The simulator never reports that it is wrong. <strong>You</strong> have to ask.
+</div>
+
+Note:
+Have them write these four down. Most groups will hit at least two of them
+today.
+
+---
+
+## The Average Gain Test
+
+- Ask NEC for a **full sphere** of pattern points and it reports the **average power gain**.
+- For a lossless antenna in free space the answer must be **1.000** (0.0 dB), because all the power delivered has to leave as radiation.
+- A value between 0.95 and 1.05 is healthy. **A value like 0.6 or 1.4 means the model is broken**, and no other number in the file can be trusted.
+
+**The test is a conservation-of-energy audit that costs one extra run, so run it every time.**
+
+Note:
+Average gain is the cheapest error check in antenna modeling. If they take one
+habit away from this lab, it should be this one.
+
+---
+
+<!-- .slide: class="viz-cue-slide" -->
+
+## Convergence: what "converged" means
+
+<p class="viz-cue">↗ Interactive on the lesson page</p>
+
+| Segments | Input resistance | Input reactance |
+| :-- | :-- | :-- |
+| 5 | 79.9 Ω | +35.9 Ω |
+| 11 | 81.9 Ω | +43.9 Ω |
+| 21 | 83.4 Ω | +45.6 Ω |
+| 41 | 84.5 Ω | +46.5 Ω |
+| 81 | 85.4 Ω | +47.2 Ω |
+
+**Converged is not "matches theory" — it is "stops moving when I refine."**
+
+Note:
+Demo the widget live: drag the segment count from 5 to 101 at half-wave length
+and watch the curve flatten, then drag the length and show the plateau move.
+Point at the feed readouts while dragging, because only the feed current is
+changing. These numbers come from the lesson-page solver on a thin wire exactly
+half a wavelength long.
+
+---
+
+## Today's build
+
+1. **Geometry:** one wire, along z, centered at the origin, 163.9 mm long, 0.5 mm radius, 21 segments.
+2. **Excitation:** 1 V source on the center segment.
+3. **Frequency:** 915 MHz, then a sweep 800–1000 MHz.
+4. **Pattern:** full sphere first (for average gain), then the two principal cuts.
+5. **Trim:** shorten the wire until the reactance crosses zero. Record the length.
+
+**In nec_lab you build or type the NEC input file, press Run these cards, and read the impedance, the cuts and the sweep on one page.**
+
+Note:
+Keep them off the optimizer today. Trimming by hand shows them how impedance
+responds to length, and the optimizer hides that relationship.
+
+---
+
+## Worked example — segmentation arithmetic
+
+At 915 MHz, wavelength is 328 mm and a half wavelength is 164 mm.
+
+| Quantity | Work | Result |
+| :-- | :-- | :-- |
+| Segment count | 164 mm at 21 segments | 7.8 mm each |
+| Against $\lambda/20$ | 328/20 = 16.4 mm limit | 7.8 mm, passes |
+| Against 8 radii | 8 × 0.5 mm = 4 mm floor | 7.8 mm, passes |
+| Headroom to refine | 7.8 mm down to 4 mm | about 41 segments |
+
+**Above 41 segments this wire is too fat for the standard kernel, so the extra segments make the answer less accurate rather than more.**
+
+Note:
+This is the most useful calculation in the lab. Make them do it before they
+touch the keyboard, and again for the trimmed length.
+
+---
+
+## What you should find
+
+| Quantity | L7 hand analysis | Expect from NEC |
+| :-- | :-- | :-- |
+| Impedance at exactly $\lambda/2$ | $73 + j42.5\ \Omega$ | near $86 + j47\ \Omega$ |
+| Resonant length | 0.47–0.48 λ | about 0.473 λ |
+| Resistance at resonance | about 70 Ω | about 72 Ω |
+| Gain | 2.15 dBi | 2.1–2.2 dBi |
+
+**The gain and the resonant length agree, while the half-wave impedance does not, and explaining that gap is the assignment.**
+
+Note:
+Do not let them "fix" the discrepancy, because explaining it is the deliverable.
+Both models put resonance near 0.475 lambda, so an exactly half-wave wire is
+about five percent long and inductive under either one. The extra thirteen
+ohms of resistance comes from the current shape near the tips and the feed,
+not from the length.
+
+---
+
+## Why the half-wave number misses
+
+<div class="callout">
+73 + j42.5 &#937; is the impedance of a <em>sinusoid</em>, not of a <em>wire</em>.
+</div>
+
+- The solved current differs from the sinusoid near the tips and the feed, and the impedance is read at the feed, so the resistance comes out near 86 Ω.
+- Both models resonate near 0.475 λ, so a wire cut to exactly $\lambda/2$ is about **5% long** under either one, which is why both call it inductive.
+- The resistance gap comes from the current shape, not from the length, and trimming does not remove it.
+
+**The extra 13 Ω comes from the sinusoid's error at the feed, not from a difference in length.**
+
+Note:
+Push on this. The disagreement is not numerical error, and it is not two
+different antennas: it is the same wire under two current models. Lesson 7's
+own reactance curve puts the sinusoid's resonance at 0.476 lambda for this
+radius, and the solved current lands at 0.473. What differs is the current
+shape, and the impedance is read where the shapes differ most.
+
+---
+
+## Deliverables
+
+1. A **comparison table**: simulated vs analytical for impedance, resonant length, resistance at resonance, gain, and beamwidth — with percent difference on each row.
+2. **One paragraph per row** accounting for the difference. "Simulation error" is not an explanation.
+3. Your **convergence study**: impedance at 11, 21, 41, and 81 segments, and the segment count you would defend.
+4. The **average gain** figure from your full-sphere run.
+
+**Numbers without an account of why they differ earn no credit.**
+
+Note:
+The grading emphasis is on the paragraphs, because anyone can copy an impedance
+out of a results window.
+
+---
+
+## Key point
+
+<div class="callout">
+A simulator does not know more physics than you do.<br>
+It runs <strong>your superposition</strong>, over a source <strong>you</strong> described to it.<br>
+Every pattern and every number it reports is only as good as the segments, the radius, and the source you gave it.
+</div>
+
+Note:
+End the briefing here and let them build. Remind them once more to run the
+average-gain check before they record anything.
+
+---
+
+## Where this is going
+
+- **L12:** loops and monopoles. A monopole model needs a **ground plane**, which adds a new card and a new way for the model to go wrong.
+- **Module 3:** arrays. Every element you place is another wire, and segmentation rules apply to all of them at once.
+- The habit you build today — predict, simulate, reconcile — is the habit for every antenna in the course.
+
+**Always predict first, because a simulation you cannot argue with has taught you nothing.**
+
+Note:
+Preview L12 briefly: perfect ground doubles the directivity and halves the
+impedance, and NEC's GN card is where that happens. Ask them to review the L7
+current distributions before that lesson.

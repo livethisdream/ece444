@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Field-region explorer</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --react:#8a5a00; --rad:#0067b9; --far:#004a85; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* Stacked below ~650px (phone); side by side above it -- halves the vertical
+     space the two canvases cost on any reader-width viewport. */
+  .canvases { display:flex; flex-direction:column; gap:10px; }
+  @media (min-width:650px) { .canvases { display:grid; grid-template-columns:1fr 1fr; gap:14px; } }
+  .controls { display:grid; grid-template-columns:repeat(3,1fr); gap:9px 18px; align-items:center;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  @media (max-width:700px) { .controls { grid-template-columns:1fr; } }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:64px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:80px; accent-color:var(--mid); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.good { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.good .v { color:var(--grn); }
+  .ro.warn { background:rgba(138,90,0,0.12);  border-color:rgba(138,90,0,0.30); }
+  .ro.warn .v { color:var(--amber); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="canvases">
+    <canvas id="ruler" aria-label="Field regions on a distance axis"></canvas>
+    <canvas id="phase" aria-label="Spherical wavefront over the aperture and the phase error it produces"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl"><label>Size \(D\)</label><input type="range" id="d" min="0.05" max="3" step="0.05" value="1.2"><span class="val" id="d-val">1.20 m</span></div>
+    <div class="ctl"><label>Freq \(f\)</label><input type="range" id="f" min="0.3" max="30" step="0.1" value="10"><span class="val" id="f-val">10.0 GHz</span></div>
+    <div class="ctl"><label>Range \(r\)</label><input type="range" id="r" min="-1.6" max="0.8" step="0.01" value="0"><span class="val" id="r-val">—</span></div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">\(\lambda\)</span><span class="v" id="r-lam">—</span></div>
+    <div class="ro"><span class="k">reactive limit</span><span class="v" id="r-re">—</span></div>
+    <div class="ro"><span class="k">far-field limit</span><span class="v" id="r-ff">—</span></div>
+    <div class="ro"><span class="k">range \(r\)</span><span class="v" id="r-r">—</span></div>
+    <div class="ro"><span class="k">edge path \(\Delta\)</span><span class="v" id="r-del">—</span></div>
+    <div class="ro" id="ro-phi"><span class="k">phase error</span><span class="v" id="r-phi">—</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+
+const C=3e8;
+const CRIT=22.5;                    // pi/8 phase-error criterion, in degrees
+const cvR=document.getElementById('ruler'), ctxR=cvR.getContext('2d');
+const cvP=document.getElementById('phase'), ctxP=cvP.getContext('2d');
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const state={ D:1.2, f:10e9, mult:1.0 };   // mult = r / (2D^2/lambda)
+
+function fmt(r){ // meters, human
+  if(r>=1000) return (r/1000).toFixed(2)+' km';
+  if(r>=1) return r.toFixed(r<10?2:1)+' m';
+  if(r>=0.01) return (r*100).toFixed(1)+' cm';
+  return (r*1000).toFixed(1)+' mm';
+}
+function fmtSmall(x){ // path difference, always small
+  if(x>=0.01) return (x*100).toFixed(2)+' cm';
+  if(x>=1e-5) return (x*1000).toFixed(3)+' mm';
+  return (x*1e6).toFixed(1)+' µm';
+}
+function derived(){
+  const lam=C/state.f;
+  const rRe=0.62*Math.sqrt(state.D**3/lam);
+  const rFf=2*state.D**2/lam;
+  const r=state.mult*rFf;
+  // honest path difference from the source to the aperture edge vs its center
+  const del=Math.sqrt(r*r+(state.D/2)*(state.D/2))-r;
+  const phi=360*del/lam;
+  return {lam,rRe,rFf,r,del,phi};
+}
+
+const dEl=document.getElementById('d'), fEl=document.getElementById('f'), rEl=document.getElementById('r'),
+      dV=document.getElementById('d-val'), fV=document.getElementById('f-val'), rV=document.getElementById('r-val');
+dEl.addEventListener('input',()=>{ state.D=+dEl.value; dV.textContent=state.D.toFixed(2)+' m'; drawAll(); });
+fEl.addEventListener('input',()=>{ state.f=(+fEl.value)*1e9; fV.textContent=(+fEl.value).toFixed(1)+' GHz'; drawAll(); });
+rEl.addEventListener('input',()=>{ state.mult=Math.pow(10,+rEl.value); drawAll(); });
+
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=360;
+let SCL=1;
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(cvR);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL;
+/* Stacked below the canvases grid's breakpoint, so their heights ADD instead of
+   the row taking the tallest -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvases just get a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:649px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.46) : h; }
+  const h1=SQ(Math.max(132, Math.min(w*0.22, 170)));
+  const h2=SQ(Math.max(212, Math.min(w*0.34, 260)));
+  setSize(cvR,wCss,h1*SCL,dpr); setSize(cvP,wCss,h2*SCL,dpr);
+  ctxR.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); ctxP.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+/* ============================ panel 1: the ruler ============================ */
+function drawRuler(d){
+  const dpr=window.devicePixelRatio||1;
+  const w=cvR.width/(dpr*SCL), h=cvR.height/(dpr*SCL);
+  const ctx=ctxR;
+  ctx.clearRect(0,0,w,h);
+
+  const mL=46, mR=28, mT=52, sH=Math.max(30, h-mT-38);
+  const plotW=w-mL-mR, sY=mT;
+  const lo=Math.max(1e-4, Math.min(d.rRe/4, d.r/4)), hi=Math.max(d.rFf*4, d.r*1.6);
+  const l10=Math.log10, L0=l10(lo), L1=l10(hi);
+  const xFor=r=>mL + (l10(Math.max(r,lo))-L0)/(L1-L0)*plotW;
+  const xr=xFor(d.rRe), xf=xFor(d.rFf), xEnd=mL+plotW;
+
+  // region bands
+  ctx.fillStyle='rgba(138,90,0,0.16)'; ctx.fillRect(mL, sY, xr-mL, sH);
+  ctx.fillStyle='rgba(0,103,185,0.12)'; ctx.fillRect(xr, sY, xf-xr, sH);
+  ctx.fillStyle='rgba(0,74,133,0.06)'; ctx.fillRect(xf, sY, xEnd-xf, sH);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1; ctx.strokeRect(mL, sY, plotW, sH);
+
+  // boundary lines + labels above
+  function bound(x, color, tex, val){
+    ctx.strokeStyle=color; ctx.lineWidth=1.6; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(x, sY-14); ctx.lineTo(x, sY+sH+6); ctx.stroke(); ctx.setLineDash([]);
+    MJ.draw(ctx, tex, x, sY-30, 12, color, 'center');
+    stext(ctx, val, x, sY-16, 11, color, 'center', true);
+  }
+  // zone labels (sans, centered in each band)
+  stext(ctx,'reactive', (mL+xr)/2, sY+sH/2, 11.5, cssv('--react'),'center',true);
+  stext(ctx,'radiating near-field', (xr+xf)/2, sY+sH/2, 11.5, cssv('--rad'),'center',true);
+  stext(ctx,'far-field', (xf+xEnd)/2, sY+sH/2, 11.5, cssv('--far'),'center',true);
+
+  // log decade ticks
+  ctx.fillStyle=cssv('--ink3');
+  const d0=Math.ceil(L0), d1=Math.floor(L1);
+  for(let e=d0;e<=d1;e++){ const rv=Math.pow(10,e); const x=xFor(rv);
+    ctx.strokeStyle=cssv('--edge2'); ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(x, sY+sH); ctx.lineTo(x, sY+sH+5); ctx.stroke();
+    stext(ctx, fmt(rv), x, sY+sH+15, 10, cssv('--ink3'),'center',false);
+  }
+  // antenna marker at left
+  stext(ctx,'antenna', mL, sY+sH+15, 10, cssv('--ink3'),'left',false);
+
+  bound(xr, cssv('--react'), '0.62\\sqrt{D^3/\\lambda}', fmt(d.rRe));
+  bound(xf, cssv('--rad'), '2D^2/\\lambda', fmt(d.rFf));
+
+  // the observation range, the quantity the second panel is drawn at
+  const xo=Math.min(Math.max(xFor(d.r), mL), xEnd);
+  const okc = d.phi<=CRIT ? cssv('--grn') : cssv('--red');
+  ctx.strokeStyle=okc; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(xo, sY-4); ctx.lineTo(xo, sY+sH+4); ctx.stroke();
+  ctx.fillStyle=okc; ctx.beginPath();
+  ctx.moveTo(xo, sY-4); ctx.lineTo(xo-5, sY-12); ctx.lineTo(xo+5, sY-12); ctx.closePath(); ctx.fill();
+  // its label sits below the tick row, so it never collides with a boundary label
+  const rw=MJ.width('r',okc,12);
+  MJ.draw(ctx,'r', xo-4-rw/2, sY+sH+29, 12, okc, 'left');
+  stext(ctx, ' = '+fmt(d.r), xo-4+rw/2, sY+sH+29, 11, okc, 'left', true);
+}
+
+/* ================= panel 2: wavefront curvature and phase error ================= */
+function drawPhase(d){
+  const dpr=window.devicePixelRatio||1;
+  const w=cvP.width/(dpr*SCL), h=cvP.height/(dpr*SCL);
+  const ctx=ctxP;
+  ctx.clearRect(0,0,w,h);
+  const ok = d.phi<=CRIT;
+  const okc = ok ? cssv('--grn') : cssv('--red');
+
+  const split=Math.round(w*0.54);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(split, 10); ctx.lineTo(split, h-10); ctx.stroke();
+
+  /* ---- left: source, spherical wavefront, aperture, edge-vs-center path ----
+     No caption here -- the lesson prose already explains what this panel
+     shows (Neil's rule: don't restate in-graphic what the text says). */
+  const yc=h*0.58, xs=30, xa=split-64, ah=Math.min(52, h*0.32);
+
+  // aperture (the D-sized line the wave has to fill)
+  ctx.strokeStyle=cssv('--navy'); ctx.lineWidth=3.2; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(xa, yc-ah); ctx.lineTo(xa, yc+ah); ctx.stroke(); ctx.lineCap='butt';
+  MJ.draw(ctx,'D', xa+16, yc-ah-13, 12, cssv('--navy'),'left');
+  stext(ctx, state.D.toFixed(2)+' m', xa+16, yc, 11, cssv('--navy'),'left',true);
+  // aperture end ticks
+  ctx.strokeStyle=cssv('--navy'); ctx.lineWidth=1;
+  for(const s of [-1,1]){ ctx.beginPath(); ctx.moveTo(xa-5, yc+s*ah); ctx.lineTo(xa+5, yc+s*ah); ctx.stroke(); }
+
+  // point source and its two rays
+  ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1.1; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(xs, yc); ctx.lineTo(xa, yc); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=1.3;
+  for(const s of [-1,1]){ ctx.beginPath(); ctx.moveTo(xs, yc); ctx.lineTo(xa, yc+s*ah); ctx.stroke(); }
+  ctx.fillStyle=cssv('--red'); ctx.beginPath(); ctx.arc(xs, yc, 4.2, 0, 7); ctx.fill();
+  stext(ctx,'source', xs, yc+15, 10.5, cssv('--red'),'center',true);
+  MJ.draw(ctx,'r', (xs+xa)/2, yc-9, 12, cssv('--ink3'),'center');
+  stext(ctx, fmt(d.r), (xs+xa)/2, yc+11, 10.5, cssv('--ink3'),'center',false);
+
+  // wavefront: a parabola whose sag is drawn proportional to the real phase error
+  const sag=Math.max(1.0, Math.min(34, 26*d.phi/45));
+  ctx.strokeStyle=okc; ctx.lineWidth=2.2; ctx.beginPath();
+  for(let i=0;i<=60;i++){ const t=-1+2*i/60, y=yc+t*ah, x=xa-sag*t*t;
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+  ctx.stroke();
+  // the plane wavefront the far field assumes
+  ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1.2; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(xa, yc-ah-8); ctx.lineTo(xa, yc+ah+8); ctx.stroke(); ctx.setLineDash([]);
+
+  // the path difference at the edge
+  const ye=yc-ah;
+  ctx.strokeStyle=okc; ctx.fillStyle=okc; ctx.lineWidth=1.6;
+  ctx.beginPath(); ctx.moveTo(xa-sag, ye); ctx.lineTo(xa, ye); ctx.stroke();
+  for(const [x,dir] of [[xa-sag,-1],[xa,1]]){
+    ctx.beginPath(); ctx.moveTo(x, ye); ctx.lineTo(x-dir*4, ye-3.4); ctx.lineTo(x-dir*4, ye+3.4); ctx.closePath(); ctx.fill();
+  }
+  MJ.draw(ctx,'\\Delta', xa-sag/2, ye-22, 12, okc,'center');
+  stext(ctx, fmtSmall(d.del), xa-sag/2, ye-9, 10.5, okc,'center',true);
+
+  /* ---- right: the phase error straight across the aperture ----
+     No caption here either -- same reason as the left panel. Curvature is
+     drawn to scale with the phase error, not with r; that caveat lives in
+     the lesson prose now, not on the canvas. */
+  const mL=split+48, mR=18, mT=14, mB=34;
+  const pw=w-mL-mR, ph=h-mT-mB;
+  const top=Math.max(30, Math.min(360, d.phi*1.35));
+  const xp=y=>mL+pw*(y/(state.D/2)+1)/2;         // y in [-D/2, D/2]
+  const yp=v=>mT+ph*(1-v/top);
+
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  const stepDeg=top<=45?15:(top<=120?30:90);
+  for(let v=0; v<=top+1e-9; v+=stepDeg){ const y=yp(v);
+    ctx.beginPath(); ctx.moveTo(mL,y); ctx.lineTo(mL+pw,y); ctx.stroke();
+    stext(ctx, v.toFixed(0)+'°', mL-7, y, 10, cssv('--ink3'),'right',false); }
+  ctx.strokeStyle=cssv('--edge'); ctx.strokeRect(mL,mT,pw,ph);
+
+  // the pi/8 criterion
+  if(CRIT<=top){
+    ctx.strokeStyle=cssv('--grn'); ctx.lineWidth=1.4; ctx.setLineDash([5,4]);
+    ctx.beginPath(); ctx.moveTo(mL, yp(CRIT)); ctx.lineTo(mL+pw, yp(CRIT)); ctx.stroke(); ctx.setLineDash([]);
+    stext(ctx,'22.5° limit', mL+pw-4, yp(CRIT)-9, 10.5, cssv('--grn'),'right',true);
+  }
+
+  // phi(y) = 360 (sqrt(r^2 + y^2) - r) / lambda
+  ctx.strokeStyle=okc; ctx.lineWidth=2.3; ctx.beginPath();
+  for(let i=0;i<=120;i++){
+    const y=(-0.5+i/120)*state.D;
+    const v=360*(Math.sqrt(d.r*d.r+y*y)-d.r)/d.lam;
+    const px=xp(y), py=yp(Math.min(v,top));
+    i?ctx.lineTo(px,py):ctx.moveTo(px,py);
+  }
+  ctx.stroke();
+  ctx.fillStyle=okc;
+  for(const s of [-1,1]){ ctx.beginPath(); ctx.arc(xp(s*state.D/2), yp(Math.min(d.phi,top)), 3.6, 0, 7); ctx.fill(); }
+
+  stext(ctx,'center', xp(0), mT+ph+12, 10, cssv('--ink3'),'center',false);
+  stext(ctx,'edge', mL, mT+ph+12, 10, cssv('--ink3'),'left',false);
+  stext(ctx,'edge', mL+pw, mT+ph+12, 10, cssv('--ink3'),'right',false);
+  stext(ctx, ok?'inside the far field':'too close: the wave is still curved',
+        mL+pw/2, mT+ph+26, 11, okc,'center',true);
+}
+
+function readouts(d){
+  document.getElementById('r-lam').textContent=fmt(d.lam);
+  document.getElementById('r-re').textContent=fmt(d.rRe);
+  document.getElementById('r-ff').textContent=fmt(d.rFf);
+  document.getElementById('r-r').textContent=fmt(d.r)+' ('+state.mult.toFixed(2)+'×)';
+  document.getElementById('r-del').textContent=fmtSmall(d.del);
+  document.getElementById('r-phi').textContent=d.phi.toFixed(1)+'°';
+  const p=document.getElementById('ro-phi');
+  p.classList.toggle('good', d.phi<=CRIT);
+  p.classList.toggle('warn', d.phi>CRIT);
+  document.getElementById('r-val').textContent=fmt(d.r);
+}
+
+function drawAll(){ const d=derived(); drawRuler(d); drawPhase(d); readouts(d); }
+
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,506 @@
+/* ECE 444 -- the site shell.
+ *
+ * Everything the reading pages and the frame lessons hold in common: the
+ * palette, the type scale, the HUD, its popovers, and the jump overlay. Split
+ * out of frames.css when the shell went site-wide, so a reading page does not
+ * carry the scroll-snap and present-mode machinery it will never use.
+ *
+ * frames.css layers the frame-only rules on top of this. Load order is
+ * shell.css first.
+ */
+
+/* ---- tokens: complete light palette on bare :root ------------------- */
+:root {
+  --blue:        #0067b9;
+  --blue-dark:   #004a85;
+  --red:         #b01e24;
+  --ink:         #1a1a1a;
+  --muted:       #5a5a5a;
+  --ground:      #fafaf7;
+  --panel:       #ffffff;
+  --rule:        rgba(0, 74, 133, 0.16);
+  --rule-strong: rgba(0, 74, 133, 0.42);
+  --soft:        rgba(0, 103, 185, 0.07);
+  --soft-red:    rgba(176, 30, 36, 0.07);
+  --rail:        rgba(0, 74, 133, 0.13);
+  --shadow:      0 1px 2px rgba(0, 30, 60, .06), 0 8px 24px rgba(0, 30, 60, .05);
+  --fig-far:     #cddce9;
+  --fig-line:    #5a5a5a;
+
+  /* Table skin. custom.css styles the tables and used to hardcode these as
+     light-mode literals -- including `color:#000 !important` on every cell,
+     which went invisible the moment the palette flipped. Tokens instead. */
+  --tbl-head:     #0067b9;
+  --tbl-head-ink: #ffffff;
+  --tbl-stripe:   #f5f9fc;
+  --tbl-hover:    #f0f5fa;
+  --tbl-rule:     #b9d2e5;
+
+  --step--1: clamp(.82rem, .78rem + .18vw, .95rem);
+  --step-0:  clamp(1rem, .93rem + .34vw, 1.24rem);
+  --step-1:  clamp(1.2rem, 1.08rem + .6vw, 1.6rem);
+  --step-2:  clamp(1.6rem, 1.32rem + 1.4vw, 2.5rem);
+  --step-3:  clamp(2.1rem, 1.6rem + 2.5vw, 3.7rem);
+
+  --sans: "Source Sans Pro", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --math: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* system dark, unless an explicit light choice is stamped */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --blue:        #58a7e5;
+    --blue-dark:   #8cc4ee;
+    --red:         #e4737a;
+    --ink:         #e9eef4;
+    --muted:       #93a3b5;
+    --ground:      #0d1826;
+    --panel:       #14243a;
+    --rule:        rgba(140, 196, 238, 0.18);
+    --rule-strong: rgba(140, 196, 238, 0.45);
+    --soft:        rgba(88, 167, 229, 0.10);
+    --soft-red:    rgba(228, 115, 122, 0.10);
+    --rail:        rgba(140, 196, 238, 0.16);
+    --shadow:      0 1px 2px rgba(0, 0, 0, .35), 0 10px 30px rgba(0, 0, 0, .30);
+    --fig-far:     #1d3350;
+    --fig-line:    #93a3b5;
+    --tbl-head:     #17334f;
+    --tbl-head-ink: #cfe4f6;
+    --tbl-stripe:   rgba(140, 196, 238, 0.07);
+    --tbl-hover:    rgba(140, 196, 238, 0.13);
+    --tbl-rule:     rgba(140, 196, 238, 0.20);
+  }
+}
+/* explicit dark choice wins over a light OS */
+:root[data-theme="dark"] {
+  --blue:        #58a7e5;
+  --blue-dark:   #8cc4ee;
+  --red:         #e4737a;
+  --ink:         #e9eef4;
+  --muted:       #93a3b5;
+  --ground:      #0d1826;
+  --panel:       #14243a;
+  --rule:        rgba(140, 196, 238, 0.18);
+  --rule-strong: rgba(140, 196, 238, 0.45);
+  --soft:        rgba(88, 167, 229, 0.10);
+  --soft-red:    rgba(228, 115, 122, 0.10);
+  --rail:        rgba(140, 196, 238, 0.16);
+  --shadow:      0 1px 2px rgba(0, 0, 0, .35), 0 10px 30px rgba(0, 0, 0, .30);
+  --fig-far:     #1d3350;
+  --fig-line:    #93a3b5;
+  --tbl-head:     #17334f;
+  --tbl-head-ink: #cfe4f6;
+  --tbl-stripe:   rgba(140, 196, 238, 0.07);
+  --tbl-hover:    rgba(140, 196, 238, 0.13);
+  --tbl-rule:     rgba(140, 196, 238, 0.20);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The bd-article compatibility class on the shell containers brings
+   custom.css's `body, .bd-article { font-family: 'Inter' }` back with it, and
+   (0,1,0) beats a bare `body`. Reassert the shell's stack at matching
+   specificity -- Inter is not shipped any more, so leaving it in place means a
+   generic fallback. Goes when custom.css is rewritten. */
+.bd-article { font-family: var(--sans); }
+
+/* ---- type ----------------------------------------------------------- */
+.eyebrow {
+  font-size: var(--step--1);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+  margin: 0;
+}
+h1 {
+  font-size: var(--step-3);
+  line-height: 1.02;
+  letter-spacing: -.02em;
+  font-weight: 700;
+  color: var(--blue-dark);
+  margin: 0;
+  text-wrap: balance;
+}
+h2 {
+  font-size: var(--step-2);
+  line-height: 1.08;
+  letter-spacing: -.015em;
+  font-weight: 700;
+  color: var(--blue-dark);
+  margin: 0 0 .2em;
+  text-wrap: balance;
+  padding-bottom: .3em;
+  border-bottom: 2px solid var(--rule-strong);
+}
+p { margin: 0; max-width: 62ch; }
+.lede { font-size: var(--step-1); line-height: 1.35; max-width: 34ch; }
+strong { font-weight: 700; color: var(--blue-dark); }
+em.term { font-style: italic; color: var(--ink); }
+
+ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: .55em; max-width: 62ch; }
+li::marker { color: var(--blue); }
+
+
+/* ---- callout -------------------------------------------------------- */
+.callout {
+  background: var(--soft);
+  border-left: 4px solid var(--blue);
+  border-radius: 3px;
+  padding: clamp(.8rem, 2vh, 1.15rem) clamp(1rem, 2.4vw, 1.5rem);
+  display: flex; flex-direction: column; gap: .6em;
+}
+.callout p { max-width: 58ch; }
+
+/* ---- hand-set math -------------------------------------------------- */
+.eq {
+  font-family: var(--math);
+  font-size: clamp(1.05rem, .9rem + .7vw, 1.5rem);
+  line-height: 1.35;
+  text-align: center;
+  padding: clamp(.7rem, 2vh, 1.3rem) 0;
+  overflow-x: auto;
+  color: var(--ink);
+}
+.eq i, .var { font-style: italic; font-family: var(--math); }
+
+/* A fraction is ONE inline-block with two block children. Both children then
+   take the box width, so the rule spans the wider of numerator and
+   denominator -- not just the denominator, which is what a border on the
+   lower half gives you. Equal line-heights and mirrored padding put the rule
+   exactly at the box's vertical center, which is what makes
+   `vertical-align: middle` land it on the math axis, level with the `=`.
+   No magic offset. */
+.frac {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  margin: 0 .08em;
+}
+.frac > span { display: block; line-height: 1.2; padding-left: .22em; padding-right: .22em; }
+.frac > span:first-child { padding-bottom: .1em; border-bottom: 1px solid currentColor; }
+.frac > span:last-child  { padding-top: .1em; }
+
+/* parens around a fraction: centerd on the same axis, and kept out of the
+   line box so they do not stretch the row */
+.paren {
+  display: inline-block; vertical-align: middle;
+  font-size: 2.05em; line-height: .62; font-family: var(--math);
+  margin: 0 .02em;
+}
+sub, sup { font-size: .7em; line-height: 0; }
+sub { vertical-align: -.28em; }
+sup { vertical-align: .5em; }
+
+/* ---- table ---------------------------------------------------------- */
+.tablewrap { overflow-x: auto; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: clamp(.86rem, .8rem + .32vw, 1.06rem);
+  font-variant-numeric: tabular-nums;
+}
+caption {
+  text-align: left; color: var(--muted); font-size: var(--step--1);
+  padding-bottom: .5em;
+}
+th {
+  text-align: left; font-weight: 700; color: var(--blue-dark);
+  border-bottom: 2px solid var(--rule-strong);
+  padding: .45em .8em .45em 0;
+  font-size: var(--step--1); letter-spacing: .05em; text-transform: uppercase;
+}
+td { padding: .5em .8em .5em 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+td.res { font-weight: 700; color: var(--blue-dark); }
+td .m { font-family: var(--math); font-style: italic; }
+
+/* ---- figure --------------------------------------------------------- */
+figure { margin: 0; display: flex; flex-direction: column; gap: .6em; }
+figure svg { width: 100%; height: auto; max-height: 58vh; display: block; }
+figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
+.f-far   { fill: var(--fig-far); }
+.f-line  { fill: var(--fig-line); }
+.s-line  { stroke: var(--fig-line); }
+.f-blue  { fill: var(--blue); }
+.f-navy  { fill: var(--blue-dark); }
+.s-navy  { stroke: var(--blue-dark); }
+.f-red   { fill: var(--red); }
+.s-red   { stroke: var(--red); }
+.fig-t   { font-family: var(--sans); }
+
+/* ---- progress rail -------------------------------------------------- */
+.rail {
+  position: fixed; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--rail); z-index: 40; pointer-events: none;
+}
+.rail span {
+  display: block; width: 100%; background: var(--blue);
+  height: 0; transition: height .25s ease;
+}
+@media (prefers-reduced-motion: reduce) { .rail span { transition: none; } }
+
+/* ---- HUD ------------------------------------------------------------ */
+/* One pill, centerd in the window.
+
+   Three separately-pinned groups looked symmetric and were not: with
+   `space-between` the middle group is centerd between the other two, not in
+   the window, so it sat off center by exactly half the difference between the
+   outer groups' widths -- 16px on a 1280px desktop, and it moves whenever any
+   label changes. Spread across a wide window they also stopped reading as one
+   bar.
+
+   Centering one pill is immune to both. `translateX(-50%)` puts it dead center
+   at every width whatever it contains, so no label can ever knock it off, and
+   the pill is only as wide as its contents -- there is no gap to judge. The
+   groups survive as plain flex runs inside it, separated by a rule. */
+.hud {
+  position: fixed; z-index: 45;
+  left: 50%; transform: translateX(-50%);
+  bottom: clamp(.7rem, 2vh, 1.4rem);
+  /* max-content is load-bearing. A fixed element with `left` and no `right`
+     shrink-to-fits against what is left of the window -- here 50vw -- so the
+     bar wrapped onto two rows at every phone width while its contents needed
+     241px and 304px were available. */
+  width: max-content; max-width: calc(100vw - 1.4rem);
+  /* A grid, not a flex row, and this is the whole trick: `1fr auto 1fr` makes
+     the two outer columns EQUAL by definition, whatever is in them. Under
+     max-content sizing both settle at the wider one's width, so the middle
+     run sits at the pill's true center -- and stays there when `1/27` becomes
+     `12/27` or the site label changes. Flex can center the pill in the window
+     but cannot center a run inside the pill without measuring. */
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: center; column-gap: .55rem;
+  font-family: var(--mono); font-size: .74rem; color: var(--muted);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  border: 1px solid var(--rule); border-radius: 999px;
+  padding: .32rem .72rem; box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+}
+/* min-width:0 so a column can be narrower than its content rather than
+   pushing the pill past max-width at 320px. */
+.hud-group {
+  display: flex; align-items: center; justify-content: center;
+  gap: .55rem; min-width: 0;
+}
+/* Both rules belong to the MIDDLE run, one on each side. Hanging them off the
+   groups that follow a group put the second rule at the left edge of the
+   right-hand column instead of the right edge of the middle one -- the pill
+   was then symmetric in its columns and visibly not in its rules. Owned by the
+   middle run they cannot drift, and they disappear with it. */
+.hud-mid::before, .hud-mid::after {
+  content: ""; flex: none; width: 1px; height: .95em;
+  background: var(--rule-strong);
+}
+/* A reading page has nothing to put in the middle run, so the run IS the rule:
+   one line, dead center, with the site on its left and the contents on its
+   right. Two rules around a zero-width run would read as `ECE 444 || 34%`.
+   The template must emit that div with no whitespace inside it -- a text node
+   is enough to make `:empty` fail and both rules come back. */
+.hud-mid:empty::after { content: none; }
+.hud b { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* The counter doubles as the contents button, so it has to read as a value
+   and behave as a control: the number keeps the ink weight it had as plain
+   text, and the affordance shows up on hover and focus. */
+.hud button.counter { font: inherit; letter-spacing: 0; }
+.hud button.counter b { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+.hud button.counter:hover b { color: var(--blue-dark); }
+.hud button.counter[aria-pressed="true"] { color: var(--blue-dark); background: var(--soft); }
+.hud button.counter[aria-pressed="true"] b { color: var(--blue-dark); }
+/* The site button carries the site's name, so it keeps the mark's voice --
+   the same mono, the same wide tracking, the same blue. It is the only
+   colored thing in the bar, which is what makes the bar readable as "you are
+   here, and here is everything else". */
+/* Everything but the line-height: it inherits the bar's, because the site
+   button is alone in its group and a shorter button makes a shorter pill --
+   three pills of different heights read worse than the one lopsided pill this
+   replaced. */
+.hud button.site {
+  font-family: var(--mono); font-weight: 700; font-size: .74rem;
+  letter-spacing: .14em; color: var(--blue);
+}
+.hud button.site:hover { color: var(--blue-dark); background: var(--soft); }
+.hud button.site[aria-expanded="true"] { color: var(--blue-dark); background: var(--soft); }
+.hud button {
+  font: inherit; color: var(--muted); background: none; border: none;
+  cursor: pointer; padding: .1rem .3rem; border-radius: 4px; letter-spacing: .04em;
+}
+.hud button:hover { color: var(--ink); background: var(--soft); }
+.hud button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.hud button[aria-pressed="true"] { color: var(--red); background: var(--soft-red); font-weight: 700; }
+
+/* ---- HUD nav links --------------------------------------------------- */
+/* These are real links, so they arrive underlined and blue. Make them read
+   as part of the HUD. */
+/* ---- HUD popovers ---------------------------------------------------- */
+/* Children of .hud, which is fixed and so a containing block. Each panel is
+   placed under the button that opened it; shell.js sets `left` on open, and
+   the value here is only what a panel would show for the frame before that
+   runs. */
+.hud .pop {
+  position: absolute; bottom: calc(100% + .5rem); left: 0;
+  display: flex; flex-direction: column; gap: .1rem;
+  min-width: max-content; max-width: min(22rem, calc(100vw - 2rem));
+  padding: .3rem; border-radius: 12px;
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
+  border: 1px solid var(--rule); box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+}
+/* Load-bearing: the class above sets `display: flex`, which beats the UA
+   stylesheet's `[hidden] { display: none }` on specificity. Without this the
+   panels never close. */
+.hud .pop[hidden] { display: none; }
+
+/* The current site is a link to where you already are. It stays in the list --
+   dropping it would make the panel a list of elsewhere with no "here" -- but
+   it is lit rather than offered. */
+.hud .pop a[aria-current="page"] {
+  color: var(--blue-dark); background: var(--soft); font-weight: 700;
+}
+
+/* (0,2,1), because plain `.hud button` is (0,1,1) and would otherwise win --
+   the same trap that made .index-close span the whole viewport. */
+.hud .pop button, .hud .pop a {
+  font: inherit; color: var(--muted); background: none; border: none;
+  cursor: pointer; text-decoration: none; text-align: left; white-space: nowrap;
+  display: flex; align-items: center; justify-content: space-between; gap: 1.4rem;
+  padding: .4rem .55rem; border-radius: 7px; letter-spacing: .04em;
+}
+.hud .pop button:hover, .hud .pop a:hover { color: var(--ink); background: var(--soft); }
+.hud .pop button:focus-visible, .hud .pop a:focus-visible {
+  outline: 2px solid var(--blue); outline-offset: -2px;
+}
+.hud .pop button[aria-pressed="true"] {
+  color: var(--red); background: var(--soft-red); font-weight: 700;
+}
+.hud .pop-empty { padding: .4rem .55rem; color: var(--muted); opacity: .7; }
+/* A popover row that is a CHOICE, not an action: it stacks a short note under
+   the label and lights whichever one is in force. Without the lit state a
+   panel of options reads as a panel of buttons that do nothing. */
+.hud .pop button.choice {
+  flex-direction: column; align-items: flex-start; gap: .1rem;
+}
+.hud .pop-note {
+  font-size: .92em; opacity: .7; letter-spacing: 0; text-transform: none;
+  font-weight: 400; color: var(--muted);
+}
+.hud .pop button[aria-pressed="true"] {
+  color: var(--blue-dark); background: var(--soft); font-weight: 700;
+}
+.hud .pop button[aria-pressed="true"] .pop-note { color: var(--blue-dark); }
+.hud kbd {
+  font-family: var(--mono); font-size: .82em; color: var(--muted);
+  border: 1px solid var(--rule); border-radius: 3px; padding: 0 .3em;
+}
+/* A laser left running is invisible once the panel closes, so light the button
+   that opens it. */
+.hud button[data-active="true"] {
+  color: var(--red); background: var(--soft-red); font-weight: 700;
+}
+
+/* ---- HUD on a phone -------------------------------------------------- */
+/* Nothing is dropped -- the panels carry everything that does not fit. The
+   groups tighten and square off; they stay pinned left, center and right,
+   which is the whole point of splitting them. */
+@media (max-width: 46rem) {
+  .hud {
+    max-width: calc(100vw - 1rem);
+    column-gap: .3rem; padding: .34rem .4rem;
+  }
+  .hud-group { gap: .35rem; }
+}
+
+/* The intro's module cards and deliverable cards were authored for a scrolling
+   page. Stacked in a frame on a phone they run past the screen -- 761px into a
+   709px budget -- so they tighten up inside one. */
+@media (max-width: 44rem) {
+  .frame .block-card, .frame .deliverable-card { padding: .6rem .85rem; }
+  .frame .block-card h3, .frame .deliverable-card h3 { font-size: .98rem; }
+  .frame .block-card p, .frame .deliverable-card p { font-size: .84rem; line-height: 1.4; }
+  .frame .block-grid, .frame .deliverable-cards { gap: .45rem; }
+}
+
+/* ---- jump overlay: the shell's one navigational surface -------------- */
+/* The panel chrome is shared. The frame-numbered list inside it lives in
+   frames.css; the reading page's page-local TOC lives in page.css. */
+.index {
+  position: fixed; inset: 0; z-index: 70; display: none;
+  background: color-mix(in srgb, var(--ground) 94%, transparent);
+  backdrop-filter: blur(10px); overflow-y: auto;
+  padding: clamp(2rem, 6vh, 4rem) clamp(1.2rem, 5vw, 4rem);
+}
+.index.on { display: block; }
+/* `.index button` above is (0,1,1) and sets width:100% and display:flex, so
+   this needs the type selector too or the close button spans the viewport and
+   the glyph lands in the top-left corner. */
+.index button.index-close {
+  position: fixed; top: clamp(.6rem, 2vh, 1.2rem); right: clamp(.6rem, 3vw, 1.4rem);
+  z-index: 1; font: 400 1.5rem/1 var(--sans); cursor: pointer;
+  width: 2.2rem; height: 2.2rem; padding: 0; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--soft); border: 1px solid var(--rule); color: var(--muted);
+}
+.index button.index-close:hover { color: var(--ink); background: var(--soft); }
+.index button.index-close:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.index h2 { margin-bottom: .8em; }
+
+/* ---- jump overlay: this lesson + the whole course -------------------- */
+.index-cols {
+  display: grid; gap: clamp(1.2rem, 4vw, 3rem);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: start;
+  /* Flex item in .wrap: without this its automatic minimum is min-content,
+     which no amount of column sizing below can claw back. */
+  min-width: 0;
+}
+.index-cols > div { min-width: 0; }
+
+/* Side by side, the course goes on the left and this page on the right --
+   the whole course first, then where you are inside it.
+   The DOM keeps "this page" first, because that is the order a phone wants
+   when the two stack, and it is the order a screen reader should hear:
+   immediate context before the whole catalogue. So the swap is visual, and
+   only at the width where there are two columns to swap. */
+/* grid-row is load-bearing: with an explicit column and an automatic row,
+   auto-placement never backs up -- it put "this page" at row 1 column 2 and
+   then dropped the course to row 2 column 1, one under the other. */
+.index-cols > .index-here { grid-column: 2; grid-row: 1; }
+.index-cols > .index-toc  { grid-column: 1; grid-row: 1; }
+@media (max-width: 52rem) {
+  .index-cols { grid-template-columns: 1fr; }
+  /* One column: back to DOM order, this page on top. Row must go automatic
+     again or both would be pinned to the same row and overlap. */
+  .index-cols > .index-here, .index-cols > .index-toc {
+    grid-column: 1; grid-row: auto;
+  }
+}
+
+.index-toc ul { list-style: none; margin: 0; padding: 0; display: block; max-width: none; }
+.index-toc ul ul { padding-left: .9rem; margin: .15em 0 .5em; }
+.index-toc li { margin: 0; }
+.index-toc a {
+  display: block; padding: .3rem .5rem; border-radius: 4px;
+  color: var(--ink); text-decoration: none;
+  font-size: calc(var(--step-0) * .92); line-height: 1.3;
+}
+.index-toc a:hover { background: var(--soft); color: var(--blue-dark); }
+.index-toc a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.index-toc li.current > a, .index-toc a.current {
+  color: var(--blue-dark); font-weight: 700; background: var(--soft);
+}
+.index-toc .caption, .index-toc p.caption {
+  font-size: var(--step--1); letter-spacing: .1em; text-transform: uppercase;
+  font-weight: 700; color: var(--muted); margin: .9em 0 .2em; padding-left: .5rem;
+}

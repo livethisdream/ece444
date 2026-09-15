@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Steering predictor — PHASER beam sweep and element phases</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { box-sizing:border-box; width:100%; max-width:820px; margin:0 auto; padding:10px 10px 12px; }
+  canvas { display:block; width:100%; border:1px solid var(--edge); border-radius:6px; background:#fff; }
+
+  .rowhead { font-size:12px; color:var(--ink3); margin:10px 0 4px; }
+  .phaserow { display:flex; flex-wrap:wrap; gap:5px; }
+  .el { flex:1 1 78px; min-width:66px; box-sizing:border-box;
+        border:1px solid var(--edge); border-radius:6px; background:#fff;
+        padding:4px 5px; text-align:center; }
+  .el.wrapped { border-color:var(--edge2); background:#fdf6e8; }
+  .el b { display:block; font-size:10.5px; font-weight:600; color:var(--ink3);
+          letter-spacing:.02em; text-transform:uppercase; }
+  .el span { display:block; font-size:14px; font-weight:600; color:var(--navy);
+             font-variant-numeric:tabular-nums; }
+  .el.wrapped span { color:var(--amber); }
+
+  .controls { margin-top:10px; display:flex; flex-wrap:wrap; gap:10px 18px;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px;
+              padding:9px 11px; }
+  .ctl { flex:1 1 240px; display:flex; flex-wrap:wrap; align-items:center; gap:7px 9px; font-size:13px; }
+  .ctl label { flex:0 0 auto; color:var(--ink); }
+  .ctl input[type=range] { flex:1 1 90px; min-width:60px; accent-color:var(--mid); }
+  .ctl output { flex:0 0 auto; min-width:56px; text-align:right; font-weight:600;
+                color:var(--navy); font-variant-numeric:tabular-nums; }
+
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvas above. */
+  .readouts { margin-top:9px; display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .note { margin-top:9px; font-size:12px; color:var(--ink3); line-height:1.45; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <canvas id="cv"></canvas>
+
+  <div class="rowhead">Element phase the GUI will apply (wrapped into 0-360&deg;)</div>
+  <div class="phaserow" id="phaserow"></div>
+
+  <div class="controls" id="panel">
+    <div class="ctl">
+      <label for="f">HB100 frequency</label>
+      <input type="range" id="f" min="10.1" max="10.7" step="0.005" value="10.525">
+      <output id="fo">10.525 GHz</output>
+    </div>
+    <div class="ctl">
+      <label for="t">Steer angle \(\theta_0\)</label>
+      <input type="range" id="t" min="-60" max="60" step="1" value="30">
+      <output id="to">+30&deg;</output>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">&Delta;&phi; per element</span><span class="v" id="pdphi">88.4&deg;</span></div>
+    <div class="ro"><span class="k">element 8 phase</span><span class="v" id="pphi8">258.9&deg;</span></div>
+    <div class="ro"><span class="k">HPBW</span><span class="v" id="php">15.1&deg;</span></div>
+  </div>
+
+  <div class="note">N = 8, d = 14 mm. The trace is the array factor alone; the
+  measured sweep adds the \(\cos\theta_0\) scan loss and a noise floor near
+  &minus;23 dB.</div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var C = 3e8, N = 8, D = 0.014, LSB = 2.8125;
+  var XMIN = -80, XMAX = 80, YMIN = -40, YMAX = 2;
+
+  var cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+  var fIn = document.getElementById('f'), tIn = document.getElementById('t');
+  var fOut = document.getElementById('fo'), tOut = document.getElementById('to');
+  var row = document.getElementById('phaserow');
+  var pd = document.getElementById('pdphi'), p8 = document.getElementById('pphi8'),
+      ph = document.getElementById('php');
+
+  var NAVY = '#004a85', MID = '#0067b9', GRN = '#3f7d34', AMB = '#8a5a00',
+      INK = '#15202b', INK3 = '#5b6573', EDGE = '#cddce9', GRID = '#e6eef6';
+
+  function state() {
+    var f = parseFloat(fIn.value) * 1e9;
+    var lam = C / f;
+    return { f: f, lam: lam, dl: D / lam, t0: parseFloat(tIn.value) };
+  }
+
+  // normalized uniform array factor, magnitude, evaluated at a commanded
+  // steer angle ts while the source sits at t0.
+  function af(ts, t0, dl) {
+    var psi = 2 * Math.PI * dl * (Math.sin(ts * Math.PI / 180) - Math.sin(t0 * Math.PI / 180));
+    var den = N * Math.sin(psi / 2);
+    if (Math.abs(den) < 1e-9) return 1;
+    return Math.abs(Math.sin(N * psi / 2) / den);
+  }
+  function afdb(ts, t0, dl) {
+    return 20 * Math.log10(Math.max(af(ts, t0, dl), 1e-6));
+  }
+
+  // half-power beamwidth read off the trace: walk out from the peak in
+  // 0.002 deg steps until the array factor falls through -3.0103 dB.
+  function hpbw(t0, dl) {
+    var half = Math.SQRT1_2, step = 0.002, hi = t0, lo = t0, g = 90;
+    while (hi < g && af(hi, t0, dl) > half) hi += step;
+    while (lo > -g && af(lo, t0, dl) > half) lo -= step;
+    if (hi >= g || lo <= -g) return null;
+    return { lo: lo, hi: hi, w: hi - lo };
+  }
+
+  function phases(t0, dl) {
+    var dphi = 360 * dl * Math.sin(t0 * Math.PI / 180);
+    var out = [];
+    for (var n = 0; n < N; n++) {
+      var raw = n * dphi;
+      var wrapped = ((raw % 360) + 360) % 360;
+      out.push({ raw: raw, wrapped: wrapped, wrappedFlag: Math.abs(raw - wrapped) > 1e-9 });
+    }
+    return { dphi: dphi, el: out };
+  }
+
+  function fmtDeg(v, dp) { return (v >= 0 ? '' : '−') + Math.abs(v).toFixed(dp) + '°'; }
+
+  /* ---------- canvas ---------- */
+  var M = { l: 52, r: 14, t: 14, b: 36 };
+
+  function sizeCanvas() {
+    var w = cv.clientWidth || cv.parentNode.clientWidth || 700;
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:430px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; }
+    var h = SQ(Math.round(Math.max(180, Math.min(230, w * 0.32))));
+    cv.style.height = h + 'px';
+    var dpr = window.devicePixelRatio || 1;
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { w: w, h: h };
+  }
+
+  function drawAll() {
+    var s = state(), sz = sizeCanvas(), w = sz.w, h = sz.h;
+    var small = w < 470;
+    M.l = small ? 40 : 52; M.b = small ? 32 : 36;
+    var x0 = M.l, x1 = w - M.r, y0 = M.t, y1 = h - M.b;
+    var X = function (deg) { return x0 + (deg - XMIN) / (XMAX - XMIN) * (x1 - x0); };
+    var Y = function (db) { return y1 - (db - YMIN) / (YMAX - YMIN) * (y1 - y0); };
+
+    ctx.clearRect(0, 0, w, h);
+    ctx.font = (small ? 10 : 11.5) + "px 'Inter',system-ui,sans-serif";
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+
+    // grid
+    ctx.strokeStyle = GRID; ctx.lineWidth = 1;
+    var xt, db;
+    for (xt = XMIN; xt <= XMAX; xt += 20) {
+      ctx.beginPath(); ctx.moveTo(X(xt), y0); ctx.lineTo(X(xt), y1); ctx.stroke();
+    }
+    for (db = 0; db >= YMIN; db -= 10) {
+      ctx.beginPath(); ctx.moveTo(x0, Y(db)); ctx.lineTo(x1, Y(db)); ctx.stroke();
+    }
+
+    // frame
+    ctx.strokeStyle = EDGE; ctx.lineWidth = 1.2;
+    ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+
+    // tick labels
+    ctx.fillStyle = INK3; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    for (xt = XMIN; xt <= XMAX; xt += 20) {
+      if (small && (xt % 40 !== 0)) continue;
+      ctx.fillText(String(xt), X(xt), y1 + 5);
+    }
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    for (db = 0; db >= YMIN; db -= 10) ctx.fillText(String(db), x0 - 6, Y(db));
+
+    // axis titles
+    ctx.fillStyle = INK; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillText('commanded steer angle (deg)', (x0 + x1) / 2, h - 2);
+    ctx.save();
+    ctx.translate(small ? 11 : 13, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2);
+    ctx.textBaseline = 'top';
+    ctx.fillText('array factor (dB)', 0, 0);
+    ctx.restore();
+
+    // the -3 dB reference and the beamwidth span
+    var bw = hpbw(s.t0, s.dl);
+    ctx.save();
+    ctx.setLineDash([4, 4]); ctx.strokeStyle = GRN; ctx.lineWidth = 1.1;
+    ctx.beginPath(); ctx.moveTo(x0, Y(-3.0103)); ctx.lineTo(x1, Y(-3.0103)); ctx.stroke();
+    ctx.restore();
+    if (bw) {
+      ctx.strokeStyle = GRN; ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(X(bw.lo), Y(-3.0103)); ctx.lineTo(X(bw.hi), Y(-3.0103)); ctx.stroke();
+      [bw.lo, bw.hi].forEach(function (a) {
+        ctx.beginPath();
+        ctx.moveTo(X(a), Y(-3.0103) - 5); ctx.lineTo(X(a), Y(-3.0103) + 5); ctx.stroke();
+      });
+      ctx.fillStyle = GRN; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      ctx.fillText('HPBW ' + bw.w.toFixed(1) + '°', X((bw.lo + bw.hi) / 2), Y(-3.0103) + 7);
+    }
+
+    // trace
+    ctx.strokeStyle = NAVY; ctx.lineWidth = 2;
+    ctx.beginPath();
+    var px = Math.max(400, Math.round((x1 - x0) * 3)), i, a, v, started = false;
+    for (i = 0; i <= px; i++) {
+      a = XMIN + (XMAX - XMIN) * i / px;
+      v = Math.max(afdb(a, s.t0, s.dl), YMIN);
+      if (!started) { ctx.moveTo(X(a), Y(v)); started = true; } else ctx.lineTo(X(a), Y(v));
+    }
+    ctx.stroke();
+
+    // the sweep grid the GUI actually samples: multiples of the phase LSB
+    ctx.fillStyle = MID;
+    var nmax = Math.floor(XMAX / LSB);
+    for (i = -nmax; i <= nmax; i++) {
+      a = i * LSB;
+      v = afdb(a, s.t0, s.dl);
+      if (v < YMIN) continue;
+      ctx.beginPath(); ctx.arc(X(a), Y(v), small ? 1.8 : 2.4, 0, 2 * Math.PI); ctx.fill();
+    }
+
+    // peak marker and its label
+    ctx.fillStyle = NAVY;
+    ctx.beginPath();
+    ctx.moveTo(X(s.t0), Y(0) - 3);
+    ctx.lineTo(X(s.t0) - 5, Y(0) - 12);
+    ctx.lineTo(X(s.t0) + 5, Y(0) - 12);
+    ctx.closePath(); ctx.fill();
+    if (window.MJ && MJ.ready) MJ.draw(ctx, '\\theta_0', X(s.t0), Y(0) - 20, 13, NAVY, 'center');
+  }
+
+  /* ---------- readouts ---------- */
+  function drawReadouts() {
+    var s = state(), p = phases(s.t0, s.dl), bw = hpbw(s.t0, s.dl);
+    fOut.textContent = parseFloat(fIn.value).toFixed(3) + ' GHz';
+    tOut.textContent = (s.t0 > 0 ? '+' : '') + s.t0.toFixed(0) + '°';
+
+    var html = '';
+    for (var n = 0; n < N; n++) {
+      html += '<div class="el' + (p.el[n].wrappedFlag ? ' wrapped' : '') + '">' +
+              '<b>El ' + (n + 1) + '</b><span>' + p.el[n].wrapped.toFixed(1) + '°</span></div>';
+    }
+    row.innerHTML = html;
+
+    pd.textContent = fmtDeg(p.dphi, 1);
+    p8.textContent = p.el[7].wrapped.toFixed(1) + '°';
+    ph.textContent = bw ? bw.w.toFixed(1) + '°' : 'off scale';
+  }
+
+  function update() { drawReadouts(); drawAll(); }
+
+  fIn.addEventListener('input', update);
+  tIn.addEventListener('input', update);
+  window.addEventListener('resize', update);
+
+  if (window.MJ) {
+    MJ.setRedraw(drawAll);
+    MJ.onReady(function () { MJ.typeset(document.getElementById('app')); update(); });
+  }
+  update();
+})();
+</script>
+</body>
+</html>
