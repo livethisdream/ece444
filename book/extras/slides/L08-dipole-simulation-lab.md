@@ -76,13 +76,59 @@ The method of moments is how we get that pattern numerically.<br>
 The currents it reports along the way are the <strong>means, not the end</strong>.
 </div>
 
-- Every rule in the next ten slides exists to protect a pattern computation.
+- Every rule in the slides ahead exists to protect a pattern computation.
 - The currents are worth watching because a broken model shows there first.
 
 Note:
 Say this out loud and the rest of the briefing has a spine. When they ask later
 why the segment rules matter, the answer is always the same: because the pattern
 is a sum over those segments.
+
+---
+
+## Three full-wave solvers
+
+| | FDTD | FEM | MoM |
+| :-- | :-- | :-- | :-- |
+| Meshes | the air | the air | the metal |
+| Solves | in time | one frequency | one frequency |
+| Unknowns | fields | fields | currents |
+| Boundary | absorbing box | absorbing box | built in |
+| Best for | broadband, mixed media | dielectrics, curved shapes | wires in free space |
+
+**All three solve Maxwell's equations with no approximation. They differ in what becomes an unknown.**
+
+Note:
+Full-wave is the category, not a method: it means no high-frequency
+approximation, which separates all three from the ray and physical-optics
+family in Module 3. FDTD fills a box of air with a grid and marches the fields
+in time, one run for every frequency, any material in any cell. FEM (HFSS)
+fills the same box with tetrahedra and solves at one frequency; the mesh can
+follow a curved dielectric. Both boxes have to end in an absorbing layer that
+you size and place. MoM (NEC) meshes only the metal: the unknowns are currents,
+and the field each current radiates into free space is a closed-form Green's
+function, so there is no air and no boundary.
+
+---
+
+## Why the method of moments for a wire
+
+- Nine segments make a $9\times9$ matrix. FDTD would mesh the air around it.
+- Free space is inside the Green's function: nothing to truncate, nothing to tune.
+- One frequency per solve is exactly the sweep in today's procedure.
+- The cost: a dense matrix, $N^2$ memory and $N^3$ time, and no natural place for a dielectric.
+
+**For a wire in air, NEC has been the right tool since 1981.**
+
+Note:
+Count what each solver carries for today's dipole. NEC at 81 segments is an
+81 by 81 matrix. An FDTD box several wavelengths across at a small fraction of
+a wavelength per cell is millions of unknowns before the wire is in it, plus a
+perfectly matched layer to keep the box edge from reflecting. The one-frequency
+solve sounds like a limitation until you notice that every question in the lab
+is asked at a frequency. The limits are real: dense MoM tops out around tens of
+thousands of unknowns, and a patch on a substrate or a wire in a lossy body is
+the signal to reach for HFSS or CST.
 
 ---
 

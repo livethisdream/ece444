@@ -74,6 +74,71 @@ method gets there, and they are worth looking at because they are where a
 broken model shows itself first, but they are not the reason we run the solver.
 ::::
 
+::::{frame} Three Full-Wave Solvers
+:::{present}
+:class: tight
+| | FDTD | FEM | MoM |
+| :-- | :-- | :-- | :-- |
+| Meshes | the air | the air | the metal |
+| Solves | in time | one frequency | one frequency |
+| Unknowns | fields | fields | currents |
+| Boundary | absorbing box | absorbing box | built in |
+| Best for | broadband, mixed media | dielectrics, curved shapes | wires in free space |
+:::
+
+All three are **full-wave** solvers: they solve Maxwell's equations with no
+high-frequency approximation, which is what separates them from the ray and
+physical-optics methods you will meet in Module 3. They differ in what they
+turn into unknowns.
+
+The finite-difference time-domain method (FDTD) fills a box of air around the
+antenna with a grid, stores the fields at every cell, and marches them
+forward in time. One run gives every frequency at once, and any material can
+sit in any cell, which is why it is the method for broadband problems and
+for inhomogeneous media. The finite element method (FEM), the solver inside
+HFSS, fills the same box with a mesh of tetrahedra and solves for the fields
+at one frequency, on a mesh that can follow a curved dielectric closely. Both
+need the box to end somewhere, and the edge of the box has to absorb
+outgoing waves without reflecting them: a perfectly matched layer that you
+size and place.
+
+The method of moments (MoM), the solver inside NEC, meshes only the
+conductor. The unknowns are the currents on it, and the field each current
+radiates into free space is known in closed form, the Green's function, so
+there is no air to mesh and no boundary to absorb. The price is a dense
+matrix, because every segment couples to every other, and a dielectric has
+no natural place in it.
+::::
+
+::::{frame} Why MoM for a Wire
+:::{present}
+- Nine segments make a $9\times9$ matrix. FDTD meshes the air around it.
+- Free space is in the Green's function, nothing to tune.
+- One frequency per solve is the sweep you will run.
+- The cost: a dense matrix and no dielectrics.
+:::
+
+Count what each solver has to carry for the dipole you are about to build.
+NEC with nine segments stores a $9\times9$ matrix and solves it in
+microseconds, and at 81 segments the matrix is still only $81\times81$. An
+FDTD or FEM model of the same dipole has to fill a box of air several
+wavelengths across with cells a small fraction of a wavelength on a side,
+which is millions of unknowns before the wire is even in it, and then
+terminate the box in an absorbing layer thick enough and far enough away not
+to reflect. In free space the method of moments needs none of that: the field
+of a segment's current at any point is a closed-form expression, and radiation
+to infinity is built into it. Nothing is truncated and nothing is tuned.
+
+The solve is at one frequency, which sounds like a limitation until you look
+at the procedure below. Every question the lab asks is asked at a frequency,
+and the sweep is a loop over solves. The cost is real, though. The matrix is
+dense, so memory grows as $N^2$ and the solve time as $N^3$, which is why a
+dense MoM tops out around tens of thousands of unknowns where FDTD runs to
+billions of cells. And a dielectric has no natural place in it: a patch on a
+substrate, or a wire inside a lossy body, is the signal to reach for HFSS or
+CST. For a wire in air, NEC is the right tool, and it has been since 1981.
+::::
+
 ::::{frame} The Source Becomes N Small Radiators
 :::{present}
 - Radiation is **superposition** over the source. Take that literally.
@@ -232,43 +297,45 @@ segment corrupts the impedance badly while barely moving the pattern, because
 the pattern is an integral over a current distribution that hardly changed.
 ::::
 
-::::{frame} Segment Length Rules
+::::{frame} The Segmentation Rules
 :::{present}
-| Rule | Reason | Consequence of breaking it |
-| :-- | :-- | :-- |
-| 10–20 segments per half wavelength | resolve the curvature of the current | pattern and gain come out smeared |
-| $\Delta < \lambda/20$ | phase barely changes across a segment | impedance drifts with segmentation |
-| $\Delta > 8a$ | keeps the thin-wire kernel valid | impedance becomes numerically unreliable |
-:::
-
-Here $\Delta$ is the segment length and $a$ the wire radius. The thin-wire
-model treats each segment's current as a filament on the wire's axis and
-evaluates its field on the surface, a distance $a$ away. That describes a
-segment only when the segment is much longer than the radius. When $\Delta$
-falls below about $8a$ the segment is closer to a ring than to a piece of a
-line, the filament no longer describes it, and the matrix entries between
-neighboring segments become inaccurate.
-::::
-
-::::{frame} Segment Geometry Rules
-:::{present}
-| Rule | Reason | Consequence of breaking it |
-| :-- | :-- | :-- |
-| $2\pi a \ll \lambda$ | the wire is thin compared with a wavelength | NEC solves a filament, not your conductor |
-| Odd segment count | puts a segment at the center | the source lands off-center |
+| Rule | Broken |
+| :-- | :-- |
+| 10–20 segments per half wavelength | the pattern and gain smear |
+| $\Delta < \lambda/20$ | the impedance drifts |
+| $\Delta > 8a$ | the impedance becomes unreliable |
+| $2\pi a \ll \lambda$ | NEC solves a filament, not your conductor |
+| Odd segment count | source off-center |
 
 - Refining drives $\Delta$ toward $8a$.
 :::
 
-NEC models a wire as a single filament of axial current and enforces the
-boundary condition on the surface at radius $a$. That is the problem it solves.
-The problem we want solved is a conducting cylinder, whose surface current can
-vary around the circumference and can have a component around the wire near
-the ends. The two problems have the same answer only when the circumference is
-small compared with a wavelength, $2\pi a \ll \lambda$, because then nothing
-can vary around the wire within a wavelength and the surface current is the
-same as a filament on the axis. For a large-radius conductor NEC still returns
-a number, and it is the number for the filament, not for your antenna.
+Here $\Delta$ is the segment length and $a$ the wire radius. The first rule
+resolves the curvature of the current, and the pattern is an integral over
+that current, so a coarse mesh smears the pattern and the gain with it. The
+second keeps the phase nearly constant across a segment, which the basis
+functions assume; break it and the impedance drifts as you change the
+segmentation. The third is the thin-wire model's own limit. It treats each
+segment's current as a filament on the wire's axis and evaluates its field on
+the surface, a distance $a$ away, and that describes a segment only when the
+segment is much longer than the radius. When $\Delta$ falls below about $8a$
+the segment is closer to a ring than to a piece of a line, the filament no
+longer describes it, and the matrix entries between neighboring segments
+become inaccurate.
+
+The fourth rule is about the wire, not the segments. NEC models a wire as a
+single filament of axial current and enforces the boundary condition on the
+surface at radius $a$. That is the problem it solves. The problem we want
+solved is a conducting cylinder, whose surface current can vary around the
+circumference and can have a component around the wire near the ends. The
+two problems have the same answer only when the circumference is small
+compared with a wavelength, $2\pi a \ll \lambda$, because then nothing can
+vary around the wire within a wavelength and the surface current is the same
+as a filament on the axis. For a large-radius conductor NEC still returns a
+number, and it is the number for the filament, not for your antenna. The
+fifth rule is bookkeeping: an odd count puts a segment at the center, and the
+source card names a segment, so an even count lands the source half a
+segment off the feed.
 
 Notice that two of these rules pull against each other, because refining the
 mesh drives $\Delta$ down toward $8a$. On a wire whose radius is large relative
@@ -565,25 +632,20 @@ RP 0 1 361 1000 90 0 0 1
 ```
 
 8. Re-run at $N = 11$, 21, 41, 81 and tabulate $Z_{\text{in}}$ and gain.
+9. Press **Pattern CSV** and keep the file for Lesson 11.
 :::
 
 Record the peak gain, the E-plane HPBW, and the depth of the nulls along the
 wire axis, and confirm the H-plane cut is a circle to within a small fraction
 of a decibel. In the convergence study, identify both the point where the
 answer stops moving and the point where the $\Delta > 8a$ rule begins to bite.
-::::
 
-::::{frame} Keep the Pattern File
-:::{present}
-- Press **Pattern CSV** and keep what it saves.
-- In Lesson 11 it drops straight onto your measured cut, on one plot.
-- This file is absolute **dBi**; a chamber measures raw $S_{21}$.
-:::
-
-Comparing the two means normalizing each to its own peak, which compares
+The pattern file drops straight onto your measured cut in Lesson 11, on one
+plot. It is absolute **dBi**, and a chamber measures raw $S_{21}$, so
+comparing the two means normalizing each to its own peak, which compares
 *shape*. Comparing absolute levels is a gain-transfer measurement against a
-standard-gain horn — Lesson 9's material, not something a file can fix. Save it
-somewhere you will find it in three lessons' time.
+standard-gain horn, Lesson 9's material, not something a file can fix. Save
+it somewhere you will find it in three lessons' time.
 ::::
 
 ::::{frame} Deliverables

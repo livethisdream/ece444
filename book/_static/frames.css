@@ -311,6 +311,14 @@ iframe.viz {
    a present block is monospace, so scale only that. */
 @media (max-width: 430px) {
   [data-mode="present"] .frame.cut .present pre { font-size: .72em; }
+  /* A four-column table (L08's solver comparison) is 380px of content at the
+     present type size and the last column, the one the slide is about, goes
+     off the phone's screen. `:class: tight` on the present block scales just
+     that table down to fit the 343px column; a two- or three-column table
+     never needs it. */
+  [data-mode="present"] .frame.cut .present.tight table { font-size: .76em; }
+  [data-mode="present"] .frame.cut .present.tight th,
+  [data-mode="present"] .frame.cut .present.tight td { padding-left: .3em; padding-right: .3em; }
 }
 [data-mode="present"] .frame.cut .present li + li { margin-top: .35em; }
 [data-mode="present"] .frame.cut .present table { font-size: var(--step-0); }
