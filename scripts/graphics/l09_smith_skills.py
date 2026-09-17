@@ -3,8 +3,8 @@
 
 The frame "Four Smith-Chart Reading Skills" lists what a student has to see on
 an analyzer trace this semester: a crossing of the real axis (resonance), a
-dip inside the 0.316 circle (under -10 dB), a loop (two resonances), and a
-whole trace that has rotated (the reference plane moved). Each panel draws
+dip inside the VSWR = 2 circle (the course match bar), a loop (two
+resonances), and a whole trace that has rotated (the reference plane moved). Each panel draws
 one of those on the same chart, from a circuit that actually produces it:
 
   1. a series-resonant antenna, R = 30 ohm at resonance, so the crossing
@@ -44,7 +44,7 @@ plt.rcParams.update({"svg.fonttype": "none", "font.size": 12, "text.color": INK}
 
 Z0 = 50.0
 G = lambda z: (z - Z0) / (z + Z0)            # impedance in ohms -> reflection coefficient
-SPEC = 0.316                                  # |Gamma| for -10 dB
+SPEC = 1.0 / 3.0                              # |Gamma| at VSWR = 2, the course bar
 
 
 def mini_smith(ax):
@@ -104,7 +104,7 @@ def draw_panels(axes, title_size=12.5, label_size=10.5, ROW=False, captions=True
     cap(ax, "left of center: under 50 ohms" if not ROW else "under 50 ohms")
     ax.set_title("Crosses the real axis", color=NAVY, fontsize=title_size, fontweight="bold", pad=4)
 
-    # 2. dips inside the -10 dB circle
+    # 2. dips inside the VSWR = 2 circle
     ax = axes[1]; mini_smith(ax)
     th = np.linspace(0, 2 * np.pi, 200)
     ax.fill(SPEC * np.cos(th), SPEC * np.sin(th), color=GREEN, alpha=0.10, zorder=1)
@@ -113,9 +113,9 @@ def draw_panels(axes, title_size=12.5, label_size=10.5, ROW=False, captions=True
     trace(ax, np.where(inside, g, np.nan + 0j), color=GREEN, lw=3.0, z=4)
     arrowhead(ax, g, 120, "#9fb4c7")
     if captions:                       # the page's bullet beside the chart says this already
-        ax.text(0.0, SPEC + 0.10, "inside the 0.316 circle", color=GREEN, fontsize=label_size,
+        ax.text(0.0, SPEC + 0.10, "inside the VSWR = 2 circle", color=GREEN, fontsize=label_size,
                 fontweight="bold", ha="center", va="bottom", zorder=6)
-    cap(ax, "under 10 dB return loss while inside" if not ROW else "under 10 dB return loss")
+    cap(ax, "matched to VSWR 2 while inside" if not ROW else "matched to VSWR 2")
     ax.set_title("Inside the small circle", color=NAVY, fontsize=title_size, fontweight="bold", pad=4)
 
     # 3. a loop: two resonances close together

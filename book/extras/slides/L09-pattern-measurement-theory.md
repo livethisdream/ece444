@@ -361,37 +361,19 @@ Head off the double-subscript question before it is asked. S_mn is the general s
 
 ## Four names for the same number
 
-| Quantity | From $\Gamma$ | At $\vert\Gamma\vert = 0.316$ |
+| Quantity | From $\Gamma$ | At VSWR $= 2$ |
 | :-- | :-- | :-- |
-| $\vert S_{11}\vert$ (dB) | $20\log_{10}\vert\Gamma\vert$ | $-10.0$ |
-| Return loss (dB) | $-20\log_{10}\vert\Gamma\vert$ | $10.0$ |
-| VSWR (ratio) | $(1+\vert\Gamma\vert)/(1-\vert\Gamma\vert)$ | $1.92$ |
-| Power reflected (%) | $100\vert\Gamma\vert^2$ | $10$ |
+| $\vert S_{11}\vert$ (dB) | $20\log_{10}\vert\Gamma\vert$ | $-9.5$ |
+| Return loss (dB) | $-20\log_{10}\vert\Gamma\vert$ | $9.5$ |
+| VSWR (ratio) | $(1+\vert\Gamma\vert)/(1-\vert\Gamma\vert)$ | $2.00$ |
+| Power reflected (%) | $100\vert\Gamma\vert^2$ | $11$ |
 
 <div class="callout">
-All four re-dress one complex number. At $\vert\Gamma\vert = 0.316$, $10\%$ of the power comes back and <strong>$90\%$ reaches the antenna</strong>.
+All four re-dress one complex number. Our bar is <strong>VSWR $\le 2$</strong> — $\vert\Gamma\vert = 1/3$, and $11\%$ of the power comes back.
 </div>
 
 Note:
-Watch the units down the column, because they are not the same: the first two rows are decibels and differ only in sign, the third is a dimensionless ratio, and the fourth is a percentage of power. Say the last row out loud - |Gamma| is an amplitude ratio, so the power fraction is |Gamma| squared, and 0.316 squared is 0.10.
-
----
-
-## Where does "$-10$ dB" come from?
-
-Nothing physical happens at any value of $\vert\Gamma\vert$. **L3's rule stands: a bandwidth means nothing until you state the bar.**
-
-| Bar | $\vert\Gamma\vert$ | $\vert S_{11}\vert$ | VSWR | Reflected (%) | Mismatch loss |
-| :-- | :-- | :-- | :-- | :-- | :-- |
-| L4's rule of thumb | $1/3$ | $-9.5$ dB | $2.00$ | $11$ | $0.51$ dB |
-| The analyzer's round number | $0.316$ | $-10.0$ dB | $1.92$ | $10$ | $0.46$ dB |
-
-<div class="callout">
-Two statements of one bar. The case for it is the last column: <strong>under half a dB</strong> thrown away, below everything else in a link budget.
-</div>
-
-Note:
-This answers the question they will ask and we have been ducking. VSWR <= 2 is the older statement and the one L4 used; |S11| <= -10 dB is the same idea written for an instrument that plots decibels, and it is a hair tighter. Neither is handed down. Other bars exist for good reasons: a handset is often specified at -6 dB because a hand near it detunes it and the design has to survive that, and a high-power transmitter at VSWR <= 1.5 because reflected power comes back into the amplifier. This course quotes -10 dB and says so. What L3 forbids is quoting a bandwidth without naming the bar.
+Watch the units down the column, because they are not the same: the first two rows are decibels and differ only in sign, the third is a dimensionless ratio, and the fourth is a percentage of power. The bar is VSWR <= 2, from L4, and every bandwidth in this course is quoted against it - L3 is where that rule came from, that a bandwidth means nothing until you state the bar. The table is what they need when someone else's datasheet quotes return loss instead: convert it back to VSWR before comparing it to anything of ours.
 
 ---
 
@@ -401,7 +383,7 @@ $$Z_L = Z_0\ \frac{1+\Gamma}{1-\Gamma}, \qquad Z_0 = 50\ \Omega$$
 
 A marker reads $\Gamma = 0.28\ \angle{-140^\circ}$, so $Z_L = 30.6 - j11.9\ \Omega$:
 
-- $\vert\Gamma\vert = 0.28$ is $-11.1$ dB — it **clears the $-10$ dB bar**.
+- $\vert\Gamma\vert = 0.28$ is VSWR $1.78$ — it **clears the VSWR $\le 2$ bar**.
 - $R = 31\ \Omega$, against the $\approx 70\ \Omega$ a resonant dipole shows.
 - $X = -12\ \Omega$ is **capacitive**, so the element is electrically short.
 
@@ -488,7 +470,7 @@ Show that fix 2 is just the inverse of the equation on the previous slide - mult
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
 - **Dip** = a resonance. **Depth** = how well matched — not how well it radiates.
-- **Width at $-10$ dB** = the usable impedance bandwidth.
+- **Width at VSWR $\le 2$** = the usable impedance bandwidth.
 - Same event on the chart: the locus crosses the **real axis** and dives inside the $-10$ dB circle.
 
 <div class="fig" data-inline-svg="./fig/L10-three-views.svg" style="max-width:790px; margin:0.2em auto 0;"></div>
@@ -503,7 +485,7 @@ Demo the widget live: sweep R away from 50 and watch the dip get shallow while t
 You met the chart in ECE 343. You do not have to build one today — you have to **read** one.
 
 - **Crosses the real axis** → reactance is zero → resonance. Left of center means $R < 50\ \Omega$, right means $R > 50\ \Omega$.
-- **Inside the small circle** → $\vert\Gamma\vert < 0.316$ → you are under $-10$ dB.
+- **Inside the small circle** → $\vert\Gamma\vert < 1/3$ → you are under VSWR 2.
 - **A loop** → two resonances close together, or a resonance plus a feed structure.
 - **The whole trace spins** → your reference plane moved, not your antenna.
 

@@ -33,7 +33,7 @@ Lesson 10 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 <ol class="lo-list lo-sublist" style="--module: '2'; --lo: '6'">
   <li>I can set up a one-port sweep on a vector network analyzer, run a short-open-load calibration at the correct reference plane, and verify the calibration before I trust any reading.</li>
-  <li>I can measure an antenna's reflection versus frequency and read its resonance, its impedance at resonance, and its −10 dB impedance bandwidth off the trace and off the Smith chart.</li>
+  <li>I can measure an antenna's reflection versus frequency and read its resonance, its impedance at resonance, and its VSWR &le; 2 impedance bandwidth off the trace and off the Smith chart.</li>
   <li>I can compare a measured resonance against a $\lambda/2$ prediction and say, from the sign of the reactance, which way to trim the element.</li>
   <li>I can perturb an antenna's near-field environment one variable at a time and report what moved, in which direction, and by how much.</li>
 </ol>
@@ -77,7 +77,7 @@ an afternoon to discover afterwards.
         width="100%" height="549"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
-        title="An antenna resonance shown as an S11 dip in dB and as a Smith-chart locus, with linked marker, impedance, VSWR, and −10 dB bandwidth readouts.">
+        title="An antenna resonance shown as an S11 dip in dB and as a Smith-chart locus, with linked marker, impedance, VSWR, and VSWR-2 bandwidth readouts.">
 </iframe>
 :::
 
@@ -148,8 +148,14 @@ Connect it, set it on the foam, and take your hands off. Record:
 
 - the resonant frequency, as the dip **and** as the real-axis crossing,
 - $Z$ at resonance, from the marker,
-- both −10 dB crossing frequencies.
+- both VSWR $= 2$ crossing frequencies.
 :::
+
+The bandwidth bar is **VSWR $\le 2$**, the same bar Lesson 4 set and Lesson 9
+quoted. On the log-magnitude trace it sits at $-9.5$ dB, so the easiest thing
+to do is switch the display to VSWR format and read the two crossings where
+the trace passes 2. Quote the bandwidth in VSWR, never in decibels: Lesson 3's
+rule is that the number means nothing without the bar attached to it.
 
 Reading the resonance twice, once on each plot, is not busywork. The two
 readings disagree when something is wrong with the reference plane, and that
@@ -210,10 +216,10 @@ One page, at the start of Lesson 15:
 :::{depth}
 In detail:
 
-1. **An annotated $\vert S_{11}\vert$ plot.** Resonance marked, both −10 dB
-   crossings marked, axes labeled with units.
-2. **A results table**: $f_0$, $Z$ at resonance, −10 dB bandwidth in MHz and
-   in percent, for all three perturbation configurations.
+1. **An annotated $\vert S_{11}\vert$ plot.** Resonance marked, both
+   VSWR $= 2$ crossings marked, axes labeled with units.
+2. **A results table**: $f_0$, $Z$ at resonance, VSWR $\le 2$ bandwidth in MHz
+   and in percent, for all three perturbation configurations.
 3. **A Smith-chart screenshot** with the resonance point marked, and one
    sentence identifying it as the real-axis crossing.
 4. **A paragraph on the perturbation results.** What moved, in which
@@ -234,7 +240,7 @@ and the paragraph carries the largest share of the grade.
 | Calibrate | short, open, load at the cable end | cable then left alone |
 | Verify | reconnect the load | $\vert S_{11}\vert < -30$ dB, screenshotted |
 | Measure | dip *and* real-axis crossing | the two agree |
-| Bandwidth | width below −10 dB | 3 to 10% for a thin dipole |
+| Bandwidth | width where VSWR $\le 2$ | 3 to 10% for a thin dipole |
 | Perturb | free space, hand, bench | three complete rows |
 
 The sanity range in the bandwidth row is the one number worth memorizing: if

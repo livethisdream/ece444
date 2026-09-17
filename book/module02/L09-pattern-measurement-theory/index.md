@@ -761,17 +761,17 @@ the bench in Lesson 10.
 
 ::::{frame} Four Names for One Number
 :::{present}
-| Quantity | From $\Gamma$ | At $\vert\Gamma\vert = 0.316$ |
+| Quantity | From $\Gamma$ | At VSWR $= 2$ |
 | :-- | :-- | :-- |
-| $\vert S_{11}\vert$ (dB) | $20\log_{10}\vert\Gamma\vert$ | $-10.0$ |
-| Return loss (dB) | $-20\log_{10}\vert\Gamma\vert$ | $10.0$ |
-| VSWR | $(1 + \vert\Gamma\vert)/(1 - \vert\Gamma\vert)$ | $1.92$ |
-| Power reflected (%) | $100\vert\Gamma\vert^2$ | $10$ |
+| $\vert S_{11}\vert$ (dB) | $20\log_{10}\vert\Gamma\vert$ | $-9.5$ |
+| Return loss (dB) | $-20\log_{10}\vert\Gamma\vert$ | $9.5$ |
+| VSWR | $(1 + \vert\Gamma\vert)/(1 - \vert\Gamma\vert)$ | $2.00$ |
+| Power reflected (%) | $100\vert\Gamma\vert^2$ | $11$ |
 :::
 :::{present}
 :class: callout
-All four re-dress one complex number. $10\%$ of the power comes back, so
-$90\%$ reaches the antenna.
+All four re-dress one complex number. The course bar is **VSWR $\le 2$**,
+or $11\%$ of the power reflected.
 :::
 
 All four appear on instrument menus, and all four are computed from the single
@@ -782,33 +782,17 @@ the fourth is a percentage of power.
 
 The fourth row is the one to carry into a design conversation.
 $\vert\Gamma\vert$ is an amplitude ratio, so the fraction of power reflected
-is $\vert\Gamma\vert^2$, and at $\vert\Gamma\vert = 0.316$ that is exactly
-10%.
+is $\vert\Gamma\vert^2$, which at the course bar is 11%.
 
-Where the bar itself comes from is worth saying plainly, because nothing
-physical happens at any particular value of $\vert\Gamma\vert$. Lesson 3 gave
-the governing rule: an impedance bandwidth means nothing until you state the
-bar you measured it at. Two bars are in common use, and they are very nearly
-the same bar.
+**The course bar is VSWR $\le 2$**, from Lesson 4, and every bandwidth in
+this course is quoted against it. Lesson 3 is where that rule came from: an
+impedance bandwidth means nothing until you say what bar you measured it at.
+Say VSWR, every time.
 
-| Bar | $\vert\Gamma\vert$ | $\vert S_{11}\vert$ | VSWR | Power reflected (%) | Mismatch loss |
-| :-- | :-- | :-- | :-- | :-- | :-- |
-| Lesson 4's rule of thumb | $1/3$ | $-9.5$ dB | $2.00$ | $11$ | $0.51$ dB |
-| The analyzer's round number | $0.316$ | $-10.0$ dB | $1.92$ | $10$ | $0.46$ dB |
-
-**VSWR $\le 2$** is the older statement and the one Lesson 4 used.
-**$\vert S_{11}\vert \le -10$ dB** is the same idea written for an instrument
-that plots decibels, and it is very slightly tighter. The argument for either
-is the last column: the mismatch is throwing away under half a decibel, which
-is below the other terms in a link budget, so tightening the bar further buys
-nothing you can measure.
-
-Other bars exist for reasons that are just as good. A handset is often
-specified at $-6$ dB, because a hand near the antenna detunes it and the
-design has to survive that. A high-power transmitter is held to VSWR
-$\le 1.5$, because the reflected power comes back into the amplifier. This
-course quotes $-10$ dB and says so; what Lesson 3 forbids is quoting a
-bandwidth without naming the bar.
+The table above is what you need when somebody else does not. Datasheets and
+papers quote return loss, $\vert S_{11}\vert$, and VSWR interchangeably, and
+all three are the same measurement; convert whatever you are handed back to
+VSWR before you compare it to anything of ours.
 ::::
 
 ::::{frame} Impedance from the Ratio
@@ -818,7 +802,7 @@ $$Z_L = Z_0\ \frac{1 + \Gamma}{1 - \Gamma}, \qquad Z_0 = 50\ \Omega$$
 $$\Gamma = 0.28\ \angle{-140^\circ} \ \Longrightarrow\ Z_L = 30.6 - j11.9\ \Omega$$
 :::
 :::{present}
-- $\vert\Gamma\vert = 0.28$ is $-11.1$ dB: it clears the $-10$ dB bar.
+- $\vert\Gamma\vert = 0.28$ is VSWR $1.78$: it clears the VSWR $\le 2$ bar.
 - $R = 31\ \Omega$, against the $\approx 70\ \Omega$ a resonant dipole shows.
 - $X = -12\ \Omega$ is capacitive, so the element is short. Trim it **longer**.
 :::
@@ -829,8 +813,9 @@ convenient, because $\Gamma$ tells you whether the antenna is acceptable and
 $Z_L$ tells you what to do about it.
 
 Take the marker reading above one line at a time. The magnitude,
-$\vert\Gamma\vert = 0.28$, is $-11.1$ dB, so this antenna clears the $-10$ dB
-bar of the previous frame; on that number alone we would ship it. The real part of the impedance, $31\ \Omega$, is well under the
+$\vert\Gamma\vert = 0.28$, is a VSWR of $1.78$, so this antenna clears the
+VSWR $\le 2$ bar of the previous frame; on that number alone we would ship
+it. The real part of the impedance, $31\ \Omega$, is well under the
 $70\ \Omega$ or so a resonant dipole shows, which says some of the power
 reaching the antenna is going somewhere other than radiation — a lossy
 balun, a nearby conductor, or a poor ground. And the reactance is negative,
@@ -850,7 +835,7 @@ $$\Gamma = 0.28\left[\cos(-140^\circ) + j\sin(-140^\circ)\right] = -0.215 - j0.1
 
 Magnitude quantities come straight off $\vert\Gamma\vert = 0.28$:
 
-$$\vert S_{11}\vert = 20\log_{10}(0.28) = -11.1\ \text{dB}, \qquad \text{VSWR} = \frac{1.28}{0.72} = 1.78$$
+$\text{VSWR} = \frac{1.28}{0.72} = 1.78, \qquad \vert S_{11}\vert = 20\log_{10}(0.28) = -11.1\ \text{dB}$$
 
 Then the impedance:
 
@@ -859,10 +844,9 @@ $$Z_L = 50\ \frac{1 + \Gamma}{1 - \Gamma} = 50\ \frac{0.785 - j0.180}{1.215 + j0
 
 :::{depth}
 The same conversion is worth running on the textbook numbers. A perfect
-half-wave dipole at $73 + j42.5\ \Omega$ gives $\vert\Gamma\vert = 0.371$, or
-$-8.6$ dB, VSWR $2.18$ — it **fails both bars**. Shorten it to
-resonance, where it settles near $70\ \Omega$ real, and you get $-15.6$ dB and
-VSWR $1.40$. That $42.5\ \Omega$ of reactance is the entire difference between
+half-wave dipole at $73 + j42.5\ \Omega$ gives $\vert\Gamma\vert = 0.371$, a
+VSWR of $2.18$ — it **fails**. Shorten it to resonance, where it settles near
+$70\ \Omega$ real, and VSWR drops to $1.40$. That $42.5\ \Omega$ of reactance is the entire difference between
 a marginal antenna and a good one, and it is why nobody builds a dipole
 exactly $\lambda/2$ long.
 :::
@@ -975,7 +959,7 @@ exactly that reason.
 :::{present}
 - A **dip** marks a resonance.
 - The **depth** says how well matched it is, not how well it radiates.
-- The **width** below $-10$ dB is the impedance bandwidth.
+- The **width** where VSWR $\le 2$ is the impedance bandwidth.
 - Quote it in MHz *and* in percent.
 :::
 
@@ -985,25 +969,32 @@ and the same points are on the Smith chart on the right; the resonance is the
 dip on one plot and the real-axis crossing on the other, at the same
 frequency. Lesson 10 has you produce both of these for your own antenna.
 
+Read the bandwidth against **VSWR $\le 2$**, which is the bar from Lesson 4
+and the one every number in this course is quoted against. The trace above is
+plotted in decibels, where that bar lands at $-9.5$ dB; set the analyzer to
+VSWR format instead and the line is simply 2, which is the display to use in
+Lesson 10 when you measure your own.
+
 Fractional bandwidth is what lets us compare a 900 MHz antenna to a 2.4 GHz
 one, and it is the number with a sanity range attached: a thin-wire dipole
-lands between 3 and 10%. A trace bottoming out at $-19$ dB and crossing
-$-10$ dB at 878 and 922 MHz gives $\text{BW} = 44\ \text{MHz}$ on
-$f_0 = 900\ \text{MHz}$, or 4.9% — entirely believable. If you measure 1%,
-suspect the setup before the antenna; a resonant length of feed cable can
-manufacture a narrow dip that has nothing to do with the element.
+lands between 3 and 10%. The trace above bottoms out at VSWR $1.40$ and
+crosses VSWR 2 at 877 and 924 MHz, so
+$\text{BW} = 47\ \text{MHz}$ on $f_0 = 900\ \text{MHz}$, or 5.2% — entirely
+believable. If you measure 1%, suspect the setup before the antenna; a
+resonant length of feed cable can manufacture a narrow dip that has nothing
+to do with the element.
 ::::
 
 ::::{frame} Four Smith-Chart Reading Skills
 :::{present}
 - **Crosses the real axis**: resonance. Left of center is $R < 50\ \Omega$.
-- **Inside the 0.316 circle**: the $-10$ dB bar, drawn.
+- **Inside the VSWR $=2$ circle**: the match bar, drawn.
 - A **loop**: two resonances, often element plus feed.
 - The **whole trace rotating**: your reference plane moved.
 :::
 :::{present}
 <img src="../../viz/img/L09-smith-skills.svg"
-     alt="Four small Smith charts: a trace crossing the real axis left of center at resonance, a trace dipping inside the 0.316 circle, a trace with a loop from two resonances, and the same trace rotated by a longer cable to the calibration plane"
+     alt="Four small Smith charts: a trace crossing the real axis left of center at resonance, a trace dipping inside the VSWR = 2 circle, a trace with a loop from two resonances, and the same trace rotated by a longer cable to the calibration plane"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -1075,7 +1066,7 @@ preview of what neighbors in an array do to each other.
 | Three-antenna method | Gain with no calibrated standard | $G_A = \tfrac{1}{2}(M_{AB} + M_{AC} - M_{BC})$ |
 | $S_{11} = b_1/a_1$ | One-port scattering parameter | equals $\Gamma$ at the reference plane |
 | $Z_L = Z_0(1+\Gamma)/(1-\Gamma)$ | Impedance from reflection | sign of $X$ tells you short (−) or long (+) |
-| $\vert S_{11}\vert \le -10$ dB | The match bar this course quotes | $\vert\Gamma\vert \le 0.316$; VSWR $\le 1.92$; 90% of power in. Lesson 4's VSWR $\le 2$ is the same bar, a hair looser |
+| VSWR $\le 2$ | The match bar this course quotes, from Lesson 4 | $\vert\Gamma\vert \le 1/3$; $\vert S_{11}\vert \le -9.5$ dB; 11% of the power reflected |
 | Directivity, source match, tracking | The three one-port error terms | three unknowns, hence three SOL standards |
 | Reference plane | Where the standards were attached | line length past it = pure rotation on the chart |
 | Dynamic range | Peak level minus measured noise floor | bounds every extracted number |

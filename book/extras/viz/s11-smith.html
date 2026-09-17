@@ -111,7 +111,7 @@
     <div class="ro"><span class="k">\(Z\)</span><span class="v" id="pz">&ndash;</span></div>
     <div class="ro"><span class="k">\(\lvert S_{11}\rvert\)</span><span class="v" id="ps">&ndash;</span></div>
     <div class="ro"><span class="k">VSWR</span><span class="v" id="pv">&ndash;</span></div>
-    <div class="ro" id="pbwRo"><span class="k">BW (&minus;10 dB)</span><span class="v" id="pb">&ndash;</span></div>
+    <div class="ro" id="pbwRo"><span class="k">BW (VSWR &le; 2)</span><span class="v" id="pb">&ndash;</span></div>
   </div>
 
   <p class="hint">Drag or hover across either plot to move the marker &mdash; it tracks the same frequency on both.</p>
@@ -125,7 +125,10 @@
   var NS = 1201;                 // sweep points
   var SPAN_LO = 0.55, SPAN_HI = 1.45;   // sweep runs 0.55 f0 ... 1.45 f0
   var FLOOR = -40;               // dB floor
-  var G10 = Math.pow(10, -0.5);  // |Gamma| for -10 dB = 0.3162
+  // The course match bar is VSWR <= 2 (L4), so every bandwidth here is read
+  // against it. On this dB trace that lands at -9.54 dB.
+  var G_BAR = 1 / 3;                       // |Gamma| at VSWR = 2
+  var BAR_DB = 20 * Math.log(G_BAR) / Math.LN10;   // -9.54 dB
 
   var cvDb = document.getElementById('cvDb');
   var cvSm = document.getElementById('cvSm');
@@ -167,21 +170,21 @@
     state.bw = bandwidth(pts);
   }
 
-  // -10 dB band around the deepest point, edges by linear interpolation in dB
+  // VSWR <= 2 band around the deepest point, edges by linear interpolation in dB
   function bandwidth(pts) {
     var iMin = 0;
     for (var i = 1; i < pts.length; i++) if (pts[i].db < pts[iMin].db) iMin = i;
-    if (pts[iMin].db > -10) return null;
+    if (pts[iMin].db > BAR_DB) return null;
     var lo = null, hi = null, j;
     for (j = iMin; j > 0; j--) {
-      if (pts[j - 1].db > -10) {
-        var t1 = (-10 - pts[j - 1].db) / (pts[j].db - pts[j - 1].db);
+      if (pts[j - 1].db > BAR_DB) {
+        var t1 = (BAR_DB - pts[j - 1].db) / (pts[j].db - pts[j - 1].db);
         lo = pts[j - 1].f + t1 * (pts[j].f - pts[j - 1].f); break;
       }
     }
     for (j = iMin; j < pts.length - 1; j++) {
-      if (pts[j + 1].db > -10) {
-        var t2 = (-10 - pts[j].db) / (pts[j + 1].db - pts[j].db);
+      if (pts[j + 1].db > BAR_DB) {
+        var t2 = (BAR_DB - pts[j].db) / (pts[j + 1].db - pts[j].db);
         hi = pts[j].f + t2 * (pts[j + 1].f - pts[j].f); break;
       }
     }
@@ -230,7 +233,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; 
 
     ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
 
-    // shaded -10 dB band
+    // shaded VSWR <= 2 band
     if (state.bw) {
       ctx.fillStyle = 'rgba(63,125,52,0.11)';
       ctx.fillRect(fx(state.bw.lo), T, fx(state.bw.hi) - fx(state.bw.lo), ph);
@@ -247,9 +250,9 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; 
       line(ctx, fx(f), T, fx(f), T + ph, '#eef4f9', 1);
       txt(ctx, f.toFixed(0), fx(f), T + ph + 14, 11.5, '#5b6573', 'center');
     }
-    // -10 dB rule
-    line(ctx, L, dy(-10), L + pw, dy(-10), '#3f7d34', 1.6, [6, 4]);
-    txt(ctx, '−10 dB', L + pw - 4, dy(-10) - 11, 11.5, '#3f7d34', 'right', 600);
+    // the VSWR = 2 rule, drawn where it lands on a dB trace
+    line(ctx, L, dy(BAR_DB), L + pw, dy(BAR_DB), '#3f7d34', 1.6, [6, 4]);
+    txt(ctx, 'VSWR = 2', L + pw - 4, dy(BAR_DB) - 11, 11.5, '#3f7d34', 'right', 600);
 
     // curve
     ctx.save(); ctx.beginPath();
@@ -321,9 +324,9 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; 
     ctx.strokeStyle = '#7fa8c9'; ctx.lineWidth = 1.4;
     ctx.beginPath(); ctx.arc(cx, cy, Rp, 0, 6.2832); ctx.stroke();
 
-    // the -10 dB circle (|Gamma| = 0.316)
+    // the VSWR = 2 circle (|Gamma| = 1/3)
     ctx.save(); ctx.strokeStyle = '#3f7d34'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
-    ctx.beginPath(); ctx.arc(cx, cy, Rp * G10, 0, 6.2832); ctx.stroke(); ctx.restore();
+    ctx.beginPath(); ctx.arc(cx, cy, Rp * G_BAR, 0, 6.2832); ctx.stroke(); ctx.restore();
 
     // locus
     var sw = state.sweep;
@@ -352,10 +355,10 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; 
     /* The three annotations that live INSIDE the circle only have room while the
        chart is reasonably large. On a phone the panel is short, Rp collapses,
        and they pile onto the 50 ohm dot and each other. The chart, its marker
-       and the -10 dB circle itself all stay; only the words go, and the lesson
+       and the VSWR = 2 circle itself all stay; only the words go, and the lesson
        prose beside the frame already names what they said. */
     var roomy = Rp >= 76;
-    if (roomy) txt(ctx, '−10 dB circle', cx, cy - Rp * G10 - 11, 11, '#3f7d34', 'center', 600);
+    if (roomy) txt(ctx, 'VSWR = 2 circle', cx, cy - Rp * G_BAR - 11, 11, '#3f7d34', 'center', 600);
     if (MJ.ready && mp.m > 0.10) {
       var lx = (mx + cx) / 2, ly = (my + cy) / 2;
       MJ.draw(ctx, '\\Gamma', lx + 9, ly - 10, 15, '#8a5a00', 'left');
@@ -390,7 +393,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; 
     } else {
       els.pb.textContent = 'none';
       els.pbwRo.classList.add('warn');
-      els.pbwRo.title = 'the return loss never reaches −10 dB';
+      els.pbwRo.title = 'the trace never reaches VSWR 2';
     }
   }
 

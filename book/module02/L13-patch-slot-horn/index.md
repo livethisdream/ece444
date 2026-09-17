@@ -180,8 +180,8 @@ $$\text{BW} \approx 3.77\ \frac{\varepsilon_r-1}{\varepsilon_r^{2}}\ \frac{h}{\l
 
 A high-$Q$ cavity is a narrowband cavity, and a patch is a very high-$Q$
 cavity. Four times less area for two and a half times less bandwidth: neither
-choice is free, and the formula above is for VSWR $\le 2$, the same −10 dB
-convention you read off a trace in Lesson 10.
+choice is free, and the formula above is for VSWR $\le 2$, the same bar you
+read off a trace in Lesson 10.
 ::::
 
 ::::{frame} Substrate Against Size and Bandwidth
