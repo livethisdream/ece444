@@ -510,7 +510,7 @@ A lesson whose sub-LO start is not `.1` continues a shared objective: add
 onward). Your brief carries the exact sub-LO texts — use them verbatim.
 
 **L20 note:** the midterm project (Antenna Pattern Measurement, assigned at
-L14) is **due at L20**. L20's page and deck open by acknowledging the
+L9) is **due at L20**. L20's page and deck open by acknowledging the
 turn-in in one short paragraph/slide bullet before the lesson content; do
 not restate the project requirements.
 

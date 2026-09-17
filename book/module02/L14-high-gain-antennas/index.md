@@ -59,6 +59,11 @@ believe. Everything today is a gain claim you already know how to check.
 Everyone is building a **dipole**, and it is due **2 Oct, 2359**. Today is the
 last new material Module 2 puts in front of you.
 :::
+:::{present}
+:class: callout
+**Checkpoint, today.** $f_2$ chosen, $Z_a(f_2)$ predicted in NEC, L-network
+designed on paper.
+:::
 
 You measured a horn on the range in Lesson 11, and the dipole on your bench is
 the other end of the same scale. Everything today is a gain claim about an
