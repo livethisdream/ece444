@@ -1,9 +1,9 @@
 # Materials
 
 Everything you download or reference in this course lives on this page:
-textbooks, the equation sheet and charts, every practice set, and every lab
-sheet. Each lesson page links its own materials in place; this is the one
-place they are all together.
+textbooks, the equation sheet and charts, every practice set, every lab
+sheet, and the project packets. Each lesson page links its own materials in
+place; this is the one place they are all together.
 
 ## Textbooks & References
 
@@ -95,6 +95,16 @@ reading.
 
 The simulation labs (L8) and measurement labs (L10, L11) run from their
 lesson pages directly and have no separate sheet.
+
+## Projects
+
+Two graded projects anchor the course. Each has its own packet, and the packet
+is the authoritative statement of the requirements.
+
+| Project | Assigned | Due | Packet |
+| :-- | :-- | :-- | :-- |
+| Midterm — Antenna Pattern Measurement | L9 | 2 Oct, 2359 | <a href="projects/ECE444_Project_Midterm.pdf" target="_blank" rel="noopener">project description</a> |
+| Final — Combined Beamforming + Radar | L39 | end of term | packet follows with Module 5 |
 
 ## Hardware & Software
 
