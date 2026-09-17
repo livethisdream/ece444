@@ -270,8 +270,8 @@ array sees its neighbors as a mutual impedance — precisely the $S_{11}$ shift
 you produced with your hand today.
 
 :::{depth}
-The midterm project due at Lesson 20 asks you to design, build, tune, and
-defend an antenna. Tuning *is* this lab: measure, read the sign of the
+The midterm project, due 2 Oct, asks you to build, tune, and defend a
+dipole. Tuning *is* this lab: measure, read the sign of the
 reactance, trim, measure again. Calibration and Smith-chart fluency are the
 rate-limiting skills on that project, so practice both here, where the cost of
 a mistake is an afternoon rather than a week.

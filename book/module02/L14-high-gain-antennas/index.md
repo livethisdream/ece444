@@ -53,16 +53,23 @@ and measure it with a quantified statement of how much of the measurement to
 believe. Everything today is a gain claim you already know how to check.
 ::::
 
-::::{frame} Your Midterm Antenna
+::::{frame} Where the Midterm Stands
 :::{present}
 :class: callout
-The project was introduced at Lesson 9 and is **due at Lesson 20**. Today is
-the last lesson that puts new candidate antennas in front of you.
+Everyone is building a **dipole**, and it is due **2 Oct, 2359**. Today is the
+last new material Module 2 puts in front of you.
 :::
 
-You have already measured a horn on the range in Lesson 11. The selection
-framework at the end of this hour is exactly the reasoning your report will
-have to show, so read it as a project decision rather than as a summary.
+You measured a horn on the range in Lesson 11, and the dipole on your bench is
+the other end of the same scale. Everything today is a gain claim about an
+antenna tens of decibels above it, and that contrast is what makes the
+dipole's $2.15\ \text{dBi}$ a number rather than a disappointment: a gain
+figure only means something against a reference.
+
+The selection framework at the end of this hour is not a project decision —
+the project antenna is settled. Read it as what it is, the reasoning an
+engineer has to show when the antenna is *not* settled, which is most of the
+time.
 ::::
 
 ::::{frame} The One Idea
@@ -501,8 +508,8 @@ dish away and you are 13 dB under the noise.
 
 Module 2 closes with a complete loop: predict a pattern from geometry,
 simulate it, measure it, and state how much of the measurement to believe.
-Your midterm project is that loop run once more on an antenna of your own
-choosing, and the candidates are now all in front of you.
+Your midterm project is that loop run once more on the dipole, with your own
+measurements in place of somebody else's numbers.
 
 :::{depth}
 Lesson 15 opens Module 3 by going back to the beginning of that loop and

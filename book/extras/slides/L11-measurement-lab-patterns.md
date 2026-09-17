@@ -276,7 +276,7 @@ If they remember one sentence from this lab, this is it.
 
 ## Where this is going
 
-- This lab is the **dress rehearsal** for the midterm Antenna Pattern Measurement project, due at L20 — same range, same extraction, more antennas and no procedure handed to you.
+- This lab is the **dress rehearsal** for the midterm Antenna Pattern Measurement project, due 2 Oct — same range, same extraction, a written analysis and no procedure handed to you.
 - You now have nine lessons of bench access before it is due. That is why the measurement block runs here.
 - **L12 to L14** go back to antenna families: loops and monopoles, patches and horns, reflectors and Yagis. Every gain figure in them is now a claim you know how to check.
 

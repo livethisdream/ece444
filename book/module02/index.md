@@ -39,7 +39,7 @@ useful than either number on its own.
 ::::{frame} Measurement Comes Early
 The measurement block sits at Lessons 9–11, ahead of the remaining antenna
 families, because the midterm project is a pattern-measurement campaign and it
-is due at Lesson 20. Learning the range and the analyzer first buys you eleven
+is due 2 Oct. Learning the range and the analyzer first buys you eleven
 lessons of bench time instead of six.
 
 :::{depth}

@@ -30,7 +30,7 @@ Fall 2026 · Dr. Neil Rogers
 **Today: how you get to 20, 30, 40 dBi — and the one idea behind all of it. Last lesson of Module 2.**
 
 Note:
-Anchor on L13. Patch on a wall is fine for Wi-Fi. Ask: what closes a link to GEO at 36000 km? Nobody does it with a patch. Also flag that this is the last lesson putting new candidate antennas in front of them before the midterm is due at L20.
+Anchor on L13. Patch on a wall is fine for Wi-Fi. Ask: what closes a link to GEO at 36000 km? Nobody does it with a patch. Also flag that this is the last new material Module 2 puts in front of them before the midterm is due, 2 Oct at 2359.
 
 ---
 
@@ -44,7 +44,7 @@ Anchor on L13. Patch on a wall is fine for Wi-Fi. Ask: what closes a link to GEO
 6. Choosing one, and defending it with numbers
 
 Note:
-Flag the midterm early. It was announced at L9 and is due at L20; today's item 6 is the reasoning their report has to show, so tell them to read the selection framework as a project decision rather than as a summary.
+Flag the midterm early. It was announced at L9, everyone is building a dipole, and it is due 2 Oct at 2359. Item 6 is not a project decision any more - the antenna is settled - so introduce it as the reasoning an engineer shows when the antenna is still open, which is most of the time.
 
 ---
 
@@ -355,18 +355,18 @@ This is the payoff slide. The 20 dB of antenna gain is the difference between a 
 
 ---
 
-## Your midterm antenna
+## Where the midterm stands
 
 <div class="callout">
-<p><strong>Introduced at L9, due at L20.</strong> Today is the last lesson that puts new candidates in front of you.</p>
+<p>Everyone is building a <strong>dipole</strong>. Due <strong>2 Oct, 2359</strong>. Today is the last new material Module 2 puts in front of you.</p>
 </div>
 
-- You have already measured a horn on the range in **L11**.
-- **Report** gain, beamwidth, sidelobe levels, and polarization — with an error budget.
-- The selection framework at the end of this hour is the reasoning your report has to show.
+- You measured a horn on the range in **L11**; the dipole is the other end of the same scale.
+- A gain figure only means something against a reference, and today is the reference.
+- **Report** gain, beamwidth, sidelobe level, and polarization, with your measurements behind each one.
 
 Note:
-Take questions on scope; the details are in the handout they already have. Push them to name a candidate before they leave — the antennas from L12, L13, and today are all on the table.
+Take questions on scope; the details are in the handout they already have. The antenna is settled - everyone builds a dipole - so there is no candidate to name, and the selection framework later this hour is engineering reasoning in its own right rather than a project decision. Worth saying out loud why today matters to a dipole project: 2.15 dBi reads like a disappointment until you have spent an hour on antennas thirty decibels above it.
 
 ---
 

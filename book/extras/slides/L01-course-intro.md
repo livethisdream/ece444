@@ -198,7 +198,7 @@ If the antenna is wrong, nothing downstream can fix it.
 ## Two projects
 
 **Midterm** — Antenna Pattern Measurement
-- Introduced L14, due L20
+- Build a dipole and measure its pattern: introduced L9, due 2 Oct
 
 **Final** — Combined Beamforming + Radar
 - Track a moving target while suppressing a static jammer

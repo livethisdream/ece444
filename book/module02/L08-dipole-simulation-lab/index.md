@@ -765,9 +765,8 @@ once you make the two models match.
 
 The dipole you modeled today is the antenna you will hang on the analyzer next
 week, so keep your predicted impedance and resonant length where you can find
-them. Lesson 9 also introduces the midterm project, an antenna pattern
-measurement due at Lesson 20 — the measurement block runs early for that
-reason.
+them. Lesson 9 also introduces the midterm project, a pattern measurement on a
+dipole due 2 Oct — the measurement block runs early for that reason.
 
 :::{depth}
 The remaining antenna families come back at Lessons 12 to 14 — loops and

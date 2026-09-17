@@ -29,7 +29,7 @@ Fall 2026 · Dr. Neil Rogers
 **Today that boundary becomes the length of your range — and the midterm project goes out.**
 
 Note:
-Open with the project. It is announced at the end of the hour but flag it now: an antenna pattern measurement, due L20, and this lesson is the reason the procedure looks the way it does. The measurement block runs here, ahead of the remaining antenna families, so they have eleven lessons of bench time instead of six.
+Open with the project. It is announced at the end of the hour but flag it now: build a dipole and measure its pattern, due 2 Oct at 2359, and this lesson is the reason the procedure looks the way it does. The measurement block runs here, ahead of the remaining antenna families, so they have eleven lessons of bench time instead of six.
 
 ---
 

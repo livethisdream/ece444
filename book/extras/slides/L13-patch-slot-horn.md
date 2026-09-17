@@ -389,7 +389,7 @@ These three sentences are the takeaway. If students can say them back, the lesso
 
 ## Where this is going
 
-- **L14** — reflectors, Yagis, and arrays: how to get past 25 dBi, and the last new candidates for the midterm.
+- **L14** — reflectors, Yagis, and arrays: how to get past 25 dBi, and the close of Module 2.
 - **Module 3** — hundreds of patches, phased, steered. The PHASER's elements are exactly the antenna you sized today.
 
 <div class="callout">You have met the element. Next you build the <strong>array</strong>.</div>

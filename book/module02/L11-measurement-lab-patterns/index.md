@@ -366,9 +366,9 @@ discussion.
 
 ::::{frame} Where This Is Going
 :::{present}
-- This lab is the **dress rehearsal** for the midterm, due at Lesson 20.
+- This lab is the **dress rehearsal** for the midterm, due 2 Oct.
 - Same range, same extraction, same uncertainty discussion.
-- With more antennas, a written analysis, and no procedure handed to you.
+- With a written analysis, and no procedure handed to you.
 :::
 
 Mistakes made today carry no grade penalty; the same mistakes in the graded

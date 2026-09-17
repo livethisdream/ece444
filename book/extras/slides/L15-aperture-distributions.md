@@ -25,7 +25,7 @@ Fall 2026 · Dr. Neil Rogers
 - Lesson 11 closed the measurement work: you turned an antenna and recorded a pattern.
 - Module 1 gave us the radiation integral, $2D^2/\lambda$, and $A_e = G\lambda^2/4\pi$.
 - Lesson 6 showed the far field is the Fourier transform of the source distribution.
-- The midterm pattern-measurement project is due at Lesson 20.
+- The midterm pattern-measurement project is due 2 Oct.
 
 **Module 3 reverses the job. You now choose the pattern, and the aperture field is the knob.**
 

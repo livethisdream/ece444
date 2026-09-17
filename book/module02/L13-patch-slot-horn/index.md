@@ -426,8 +426,8 @@ The fuller comparison:
 - Three routes to a big electrical aperture, and what each one costs.
 :::
 
-Lesson 14 also closes Module 2, and it is your last chance to meet a candidate
-antenna for the midterm before you commit to one.
+Lesson 14 also closes Module 2, and it is the last new material before the
+midterm is due.
 
 :::{depth}
 The patch is the one you will keep using. Module 3 is built on the idea that a
