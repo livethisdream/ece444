@@ -66,24 +66,31 @@ range in Lesson 11.
 :::
 ::::
 
-::::{frame} The Measurement Problem, Inverted
+::::{frame} Two Measurements, One Question
 :::{present}
-- A pattern is **defined** by plane-wave illumination.
-- Nobody sells plane waves. A real source radiates a **spherical** one.
+- The **pattern**: turn the antenna in a plane wave. Lesson 11.
+- The **terminals**: sweep $S_{11}$ on a network analyzer. Lesson 10.
 :::
 :::{present}
 :class: callout
-A range is a **plane-wave simulator**. Every specification on it is a
-tolerance on the flatness of that fake wave.
+Nobody sells plane waves. A range simulates one, and its specifications are
+tolerances on that wave.
 :::
 
-Point a plane wave at the antenna from direction $(\theta,\phi)$, record what
-comes out of the terminals, and repeat for every direction. Reciprocity says
-the receive pattern equals the transmit pattern, so you may run the
-measurement in whichever direction is convenient — and everyone runs it in
-receive, because it is easier to move a receiver than a transmitter. That is
-also why the antenna under test is the end that rotates in Lesson 11: you
-would rather not run transmit power through a rotary joint.
+An antenna measurement is two measurements, and this lesson is the theory
+behind both. The radiated half asks what the antenna does in every direction,
+and it runs on a range. The terminal half asks how much of the power you
+deliver actually gets in, and it runs on a vector network analyzer. The
+question underneath them is the same: how much of what the instrument reports
+is the antenna, and how much is the setup around it.
+
+Take the pattern first. Point a plane wave at the antenna from direction
+$(\theta,\phi)$, record what comes out of the terminals, and repeat for every
+direction. Reciprocity says the receive pattern equals the transmit pattern,
+so we may run the measurement in whichever direction is convenient — and
+everyone runs it in receive, because it is easier to move a receiver than a
+transmitter. That is also why the antenna under test is the end that rotates
+in Lesson 11: you would rather not run transmit power through a rotary joint.
 
 The catch is the wave itself. What you can buy is a source antenna at a
 finite distance, and a finite distance means curvature.
@@ -229,29 +236,75 @@ main-beam width, sidelobes present, smooth. It is wrong only in the places you
 care about most.
 ::::
 
-::::{frame} Three Ways to Make the Plane Wave
+::::{frame} Four Ways to Make the Plane Wave
 :::{present}
-| Range type | Makes the wave by | Limited by |
-| :-- | :-- | :-- |
-| Outdoor | Brute distance | Weather, ground bounce |
-| Anechoic | Distance plus absorber | Still needs $2D^2/\lambda$ |
-| Compact | A reflector collimates | Edge diffraction |
-| Near-field | Transform, not distance | Phase, probe, time |
+<img src="../../viz/img/L09-range-types.svg"
+     alt="Four schematics: an elevated outdoor range with two towers and a ground bounce aimed under the antenna; an anechoic chamber lined with absorber around a quiet zone; a compact range where an offset reflector collimates the feed; and a near-field scanner sampling amplitude and phase on a grid and transforming to the far field."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
+- **Outdoor**: brute distance.
+- **Anechoic**: distance plus absorber.
+- **Compact**: a reflector collimates.
+- **Near-field**: a transform, not distance.
 :::
 
 The first three are **far-field ranges**: they physically deliver an
-approximate plane wave to the AUT. The fourth changes the question entirely.
+approximate plane wave to the AUT, so all three still owe the full
+$2D^2/\lambda$ or the optics that stand in for it. The fourth changes the
+question entirely.
+
+One thing holds each of them back, and the four have nothing to do with one
+another. Weather and the ground bounce limit an outdoor range. Absorber
+reflectivity limits a chamber, which is what the next two frames are about.
+Diffraction off the reflector's rim and feed spillover limit a compact range.
+Phase stability, the probe, and the hours the scan takes limit a near-field
+measurement.
 
 :::{depth}
-Distance costs nothing outdoors, so the oldest ranges are two towers, or a
-tower and a hillside. Two variants matter. An **elevated range** puts both
-antennas high enough, and uses directive-enough source antennas, that the
-ground bounce misses the AUT. A **ground-reflection range** does the opposite:
-it chooses the geometry so the direct and ground-reflected rays arrive *in
-phase* at the AUT, deliberately using the ground as part of the illumination.
-Both approaches work. Neither offers security, weather protection, or freedom
-from interference, which is why most modern measurement happens indoors.
+Distance is free outdoors, so the oldest ranges are two towers, or a tower and
+a hillside. Two variants matter. An **elevated range**, the one drawn above,
+puts both antennas high enough and uses a directive enough source that the
+specular ground bounce passes under the AUT. A **ground-reflection range**
+does the opposite: it chooses the geometry so the direct and ground-reflected
+rays arrive *in phase* at the AUT, deliberately using the ground as part of
+the illumination. Both approaches work. Neither offers security, weather
+protection, or freedom from interference, which is why most modern
+measurement happens indoors.
 :::
+::::
+
+::::{frame} Choosing a Range
+:::{present}
+| Range | Choose it when |
+| :-- | :-- |
+| Outdoor | The antenna is too big for a room |
+| Anechoic | $2D^2/\lambda$ fits indoors |
+| Compact | It does not |
+| Near-field | Nulls and low sidelobes |
+:::
+:::{present}
+:class: callout
+A far-field range fills nulls in, so a $-40$ dB sidelobe is near-field work.
+:::
+
+Compute $2D^2/\lambda$ first, because it decides the rest. A meter-class
+antenna at a few gigahertz needs tens of meters, which is an ordinary chamber
+and where most work belongs: the room is shielded, the schedule does not
+depend on the weather, and the quiet zone is a specified, measured number. An
+antenna too large for any room you can afford goes outdoors, where the
+distance is free and everything else is not.
+
+When the far-field distance is out of reach, there are two ways out and they
+suit different antennas. A **compact range** keeps the measurement in the
+time domain you are used to — turn the antenna, record the pattern — and
+suits a directive antenna whose quiet-zone requirement is a meter or two,
+because the reflector has to be roughly twice that. A **near-field scan**
+handles anything, including a low-gain antenna that needs full spherical
+coverage, and it is the only option when the sidelobes and nulls have to be
+right, since it never approximates the plane wave in the first place. What it
+costs is time and complexity: hours to days of scanning, a probe that has to
+be characterized, and phase stability throughout.
 ::::
 
 ::::{frame} What the Absorber Does
@@ -273,24 +326,43 @@ meter-long spikes on the walls. Which reflectivity level you need is set by
 the lowest signal you intend to believe, not by the main beam.
 ::::
 
-::::{frame} What −40 dB of Stray Field Buys You
+::::{frame} Stray Reflections and Sidelobe Error
 :::{present}
-| Measuring | Error a $-40$ dB stray adds |
-| :-- | :-- |
-| Main beam peak | $\pm 0.09$ dB |
-| A $-20$ dB sidelobe | $+0.8 / -0.9$ dB |
-| A $-30$ dB sidelobe | $+2.4 / -3.3$ dB |
+<img src="../../viz/img/L09-stray-ripple.svg"
+     alt="Left, a phasor diagram: a stray signal adds to the wanted signal at any phase, so the measured amplitude lies anywhere on a circle around the true value. Right, the resulting error interval in decibels at three true levels."
+     style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
 :class: callout
-A chamber that meets spec still puts **three decibels** on a sidelobe.
+A stray $40$ dB below the main beam is only $10$ dB below a $-30$ dB sidelobe.
+It adds in phase or against it, so that sidelobe reads anywhere from $2.4$ dB
+high to $3.3$ dB low.
 :::
 
-As the positioner turns, the stray reflection adds in and out of phase with
-the wanted signal, so the ripple it produces depends entirely on how strong
-that wanted signal is. Near the peak it is invisible. Thirty decibels down, it
-is most of your answer. Lesson 11 asks you to state a dynamic range next to
-every number you extract for exactly this reason.
+The reflectivity spec refers to the main beam, and the sidelobe we are trying
+to read is not the main beam. A $-40$ dB stray is a hundredth of
+the peak amplitude, which is nothing next to the peak and a third of the
+amplitude of a sidelobe thirty decibels down.
+
+That is where the pair of numbers in the table below comes from. The stray
+arrives with whatever phase the room's geometry gives it, and as the
+positioner turns, that phase runs through every value, so the measured
+amplitude lands anywhere on a circle of radius $s$ around the true amplitude
+$a$. The extremes are $a + s$ and $a - s$, and the two are not the same
+number of decibels because the decibel is a logarithm: the same amplitude
+ripple is always larger going down than going up.
+
+| True level | Stray is below it by | Reading runs from | to |
+| :-- | :-- | :-- | :-- |
+| Main beam, $0$ dB | $40$ dB | $+0.09$ dB | $-0.09$ dB |
+| Sidelobe, $-20$ dB | $20$ dB | $+0.83$ dB | $-0.92$ dB |
+| Sidelobe, $-30$ dB | $10$ dB | $+2.39$ dB | $-3.30$ dB |
+
+Read the bottom row as the working answer: a chamber that meets a good
+$-40$ dB specification still leaves a three-decibel uncertainty on a
+$-30$ dB sidelobe, and no care taken anywhere else in the setup recovers it.
+Lesson 11 asks you to state a dynamic range next to every number you extract
+for exactly this reason.
 ::::
 
 ::::{frame} The Quiet Zone
@@ -351,20 +423,53 @@ Lesson 6's relationship run in the other direction, and three practical
 consequences follow immediately from that fact alone.
 ::::
 
-::::{frame} Three Rules That Follow
+::::{frame} Three Rules for a Near-Field Scan
 :::{present}
-- **Phase is not optional.** Magnitude alone does not determine the transform.
-- **Sample at $\lambda/2$ or finer**, or the transform aliases.
-- **Scan far enough out**, or the pattern is truncated.
+- **Phase is not optional.** Magnitude does not determine a transform.
+- **Sample at $\lambda/2$ or finer**, or it aliases.
+- **Stand off 3 to 5 $\lambda$** from the aperture.
+:::
+:::{present}
+$$\theta_\text{max} = \arctan\frac{(L - D)/2}{d}$$
+
+Scan length $L$, aperture $D$, standoff $d$. Past $\theta_\text{max}$ the
+pattern is truncated.
 :::
 
-Phase is why a near-field range is built around a vector network analyzer and
-phase-stable cables, and why the probe position has to be known to a small
-fraction of a wavelength. Undersampling produces lobes in the far-field
-pattern that the antenna does not have.
+All three are rules for the scan itself, and each one comes straight out of
+the transform. Phase is why a near-field range is built around a vector
+network analyzer and phase-stable cables, and why the probe position has to
+be known to a small fraction of a wavelength. Sampling at $\lambda/2$ is the
+same Nyquist argument as Lesson 6's spatial spectrum: undersample, and the
+transform produces lobes in the far-field pattern that the antenna does not
+have.
 
-The middle rule is the same Nyquist argument as Lesson 6's spatial spectrum,
-and the third is why a planar scan says nothing whatever about back lobes.
+The third rule is the one with a number attached, and it answers "how far out
+is far enough" in two parts. The **standoff** $d$ is how far the probe sits
+in front of the aperture, and three to five wavelengths is the usual choice:
+far enough that the evanescent part of the reactive near field has died away
+and the probe is not loading the antenna, close enough that the scan plane
+does not have to be enormous.
+
+The **extent** $L$ is the other part, and it is what decides how much of the
+pattern you get. Energy leaving the aperture edge at angle $\theta$ lands on
+the scan plane a distance $d\tan\theta$ further out, so a plane of length $L$
+captures everything inside the $\theta_\text{max}$ above and nothing outside
+it. Past that angle the transform is working from data it does not have, and
+the pattern it returns is truncated rather than measured. Doubling the angle
+you want means roughly doubling the plane, which is why a planar scan is
+quoted with a valid angle beside it and why it says nothing whatever about
+back lobes.
+
+:::{depth}
+Worked example. A $0.6\ \text{m}$ aperture scanned at $d = 0.15\ \text{m}$
+with a $1.5\ \text{m}$ plane gives
+
+$$\theta_\text{max} = \arctan\frac{(1.5 - 0.6)/2}{0.15} = \arctan 3.0 = 71.6^\circ.$$
+
+Halve the plane to $1.0\ \text{m}$ and it falls to $53.1^\circ$. The pattern
+outside that cone is not measured, however clean the data inside it looks.
+:::
 
 :::{depth}
 One more step exists in a real near-field system: **probe compensation**. The
@@ -393,19 +498,40 @@ the number anyone is paying for.
 :::{present}
 $$G_\text{AUT} = G_\text{SGH} + \left( P_\text{AUT} - P_\text{SGH} \right)$$
 
-- Gain is absolute, so it needs a reference.
 - Record the AUT, swap in a **standard gain horn**, subtract.
 :::
 :::{present}
-:class: callout
-Everything you do not know cancels. The horn's calibration is the only
-absolute number in the room.
+- Transmit power, source gain, range, and cable loss are the **same in both**, so they subtract out.
+- The horn's calibrated gain, $\pm 0.3$ dB, sets the uncertainty on the answer.
 :::
 
-Write Friis for each measurement and the reason is immediate: every term but
+Write Friis for each measurement and the algebra is immediate: every term but
 the two gains appears identically in both, so the difference of the two
 received powers is the difference of the two gains. This is the method you
 will use in Lesson 11 and again for the midterm.
+
+The horn is the largest term in the result and the only absolute number in
+the setup. Its calibration certificate gives gain against frequency, usually
+good to two or three tenths of a decibel, and that uncertainty passes
+straight through to $G_\text{AUT}$ — there is no averaging it away, so
+measure at the frequency the certificate lists and interpolate carefully
+between listed points.
+
+What the subtraction removes is narrower than "everything we do not know". It
+removes the terms that are *identical in the two measurements*: transmit
+power, source gain, range, cable loss, and the room. Anything that changes
+between them stays in the answer. A cable bumped during the swap, a mount
+that does not put the two antennas in the same place, a polarization
+alignment redone by eye — each of those is a real gain error, and each is
+why Lesson 11 has you record the horn and the AUT back to back without
+touching anything else.
+
+None of this is an argument for leaving the setup uncharacterized. The
+three-antenna method on the next page measures absolute gain with no
+calibrated antenna at all, and that is how the horn's own certificate was
+produced. The absolute number matters because a link budget needs it: a
+$3\ \text{dB}$ gain error is a factor of two in received power and a factor of
+$\sqrt{2}$ in range.
 
 :::{depth}
 Worked example. At $9.4\ \text{GHz}$, a standard gain horn with a calibrated
@@ -468,97 +594,196 @@ removed, which is the only bookkeeping the three-antenna version adds.
 
 ::::{frame} Cuts, Planes, and Polarization
 :::{present}
-- A **great-circle cut** holds $\phi$ fixed and sweeps $\theta$.
-- The **E-plane** holds the aperture field; the **H-plane** is perpendicular.
+- A **great-circle cut** holds $\phi$ and sweeps $\theta$.
+- The **E-plane** contains boresight and the antenna's polarization; the **H-plane** is perpendicular.
 :::
 :::{present}
-- Run every cut twice: aligned is **co-pol**, turned $90^\circ$ is **cross-pol**.
-- Healthy linear antennas sit 20 to 30 dB down.
+- Aligned is **co-pol**; rotated $90^\circ$ is **cross-pol**. Run both.
+- Circular polarization has no E-plane. Use **axial ratio**.
 :::
 
 A complete pattern is a function on a sphere, and measuring the whole sphere
-finely is expensive, so you take slices. A **conical cut** does the opposite
+finely is expensive, so we take slices. A **conical cut** does the opposite
 of a great-circle one — holds $\theta$ fixed and sweeps $\phi$, tracing a ring
 at a constant angle off boresight — and is used for tracking antennas and for
 checking rotational symmetry. Two principal cuts fully describe a well-behaved
 pencil beam and say nothing at all about the diagonal planes, where the
 sidelobes of a rectangular aperture frequently sit.
 
-Cross-pol is the power the antenna radiates into the polarization it is
-supposed to reject, and it is worse off-axis than on, which is why it is
-quoted as a pattern rather than as a single number.
+The two principal planes are named for the antenna's polarization, not for
+anything about the range. The **E-plane** is the plane that contains boresight
+and the direction the antenna's electric field points: for a vertical dipole
+it is any vertical plane through the wire, and for a rectangular horn it is
+the plane through the narrow dimension. The **H-plane** contains boresight and
+is perpendicular to the E-plane, which is the same as saying it contains the
+magnetic field. Fix the polarization and the two planes are fixed with it.
+
+That definition needs the antenna to have one polarization direction, so it
+applies to a linearly polarized antenna and to nothing else. A circularly
+polarized antenna has a field that rotates once per RF cycle, so there is no
+plane holding **E**, and "E-plane" is meaningless for it. Measure two
+orthogonal great-circle cuts instead — commonly called the $\phi = 0^\circ$
+and $\phi = 90^\circ$ cuts, since there is nothing else to name them after —
+and quote **axial ratio** against angle in place of a cross-pol pattern.
+
+Cross-pol is the power a linearly polarized antenna radiates into the
+polarization it is supposed to reject. Measure it by rotating the source
+antenna $90^\circ$ about the line of sight and repeating the cut. It is worse
+off-axis than on, which is why it is quoted as a pattern rather than as a
+single number, and a well-built linear antenna sits 20 to 30 dB below its
+co-pol level on boresight.
 
 :::{depth}
-For a circularly polarized antenna there is a faster method. Spin the linear
-source continuously while sweeping the cut — **spinning linear** — and the
-recorded pattern comes back as a band rather than a line. The peak-to-trough
-width of that band, in dB, *is* the axial ratio from Lesson 3, and a perfectly
-circular antenna gives a band of zero width.
+For a circularly polarized antenna there is a faster method than two cuts.
+Spin the linear source continuously while sweeping the cut — **spinning
+linear** — and the recorded pattern comes back as a band rather than a line.
+The peak-to-trough width of that band, in dB, *is* the axial ratio from
+Lesson 3, and a perfectly circular antenna gives a band of zero width.
 :::
 ::::
 
-::::{frame} The Other Port: What a VNA Measures
+::::{frame} How Much of a Pattern Is Real
+:::{present}
+<img src="../../viz/img/L09-dynamic-range.svg"
+     alt="A measured antenna pattern drawn against the antenna's true pattern. The two agree through the main beam and the first sidelobes; below the receiver's forty-two decibel noise floor the measured trace flattens onto the floor, so the nulls read the floor rather than the antenna."
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
+- **Dynamic range** is the measured peak minus the measured noise floor.
+- Beamwidth sits $3$ dB down, far above it.
+- A null can never read below the floor, whatever the antenna does.
+:::
+
+The receiver adds its own noise to everything it records, so the trace is the
+true pattern **plus** a floor, added in power. Measure the peak, switch the
+source off and measure the floor, and the difference between them is your
+**dynamic range** — 42 dB in the figure above, and a number you have to
+measure rather than assume.
+
+Everything above that floor by a comfortable margin is the antenna. The main
+beam is at the top of the range, the half-power points are 3 dB down, and the
+first sidelobe of a uniform aperture is 13 dB down, so all three sit 29 dB or
+more clear of a 42 dB floor and none of them is in question. The nulls are
+the opposite case. A true null goes to $-\infty$, the floor does not, and the
+measured trace simply flattens onto the floor wherever the antenna's own
+level drops beneath it. The depth you read at a null is the depth of your
+receiver, not of your antenna.
+
+That is what "limited by our 42 dB dynamic range" means: the measurement
+cannot resolve anything more than 42 dB below the peak, so every number
+extracted from that region is a bound rather than a value. Write the bound.
+"At least 25 dB deep, limited by our 42 dB dynamic range" is a defensible
+sentence; "25 dB deep" claims something the instrument never showed you.
+
+This is the same argument as the stray-reflection frame earlier, arriving from
+the other direction: there an unwanted signal set the floor, here the receiver
+does, and in a real chamber measurement the higher of the two wins. Lesson 11
+asks you to measure your own floor with the source switched off, and then to
+say, row by row, which of your extracted numbers clears it and by how much.
+::::
+
+::::{frame} What a VNA Measures
+:::{present}
+$$S_{11} = \frac{b_1}{a_1} = \Gamma$$
+
+- The rest of the lesson is at the antenna's **terminals**.
+- An antenna is a **one-port** device: one connector, one wave out, one wave back.
+- Both subscripts are 1. There is no port 2 in this measurement.
+:::
 :::{present}
 <img src="../../slides/fig/L10-vna-block.svg"
      alt="Block diagram of a one-port VNA: source, two directional couplers feeding a reference and a test receiver, and a ratio block producing S11."
-     style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
-:::
-:::{present}
-$$S_{11} = \frac{b_1}{a_1} = \Gamma = \frac{Z_L - Z_0}{Z_L + Z_0}$$
-
-- Couplers sample the wave going out and the one coming back.
-- Both receivers record magnitude *and* phase.
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Everything so far measured the antenna from a distance; the rest of this
-lesson stands at its terminals. It is one port, one cable, and one complex
-number per frequency, and that number carries everything you have been
-predicting on paper since Lesson 4. Lesson 7 told you a half-wave dipole
-should sit near $73 + j42.5\ \Omega$ and resonate slightly short of
-$\lambda/2$; Lesson 10 is where that prediction meets a real piece of wire.
+lesson stands at its terminals. There is one connector, one cable, and one
+complex number per frequency, and that number carries everything we have been
+predicting on paper since Lesson 4. Lesson 7 told us a half-wave dipole should
+sit near $73 + j42.5\ \Omega$ and resonate slightly short of $\lambda/2$;
+Lesson 10 is where that prediction meets a real piece of wire.
 
-Because both samples come from the same source, anything the source does
-wrong — drift, ripple, amplifier gain variation — divides out of the ratio.
-That is why a pocket NanoVNA and a bench instrument costing a thousand times
-more agree on a well-calibrated one-port measurement to within a fraction of a
-dB. For a one-port device, and an antenna is a one-port device, that ratio
-*is* the reflection coefficient at the reference plane.
+The block diagram is the whole instrument. A source sweeps frequency, one
+directional coupler samples the wave going out, a second samples the wave
+coming back, two receivers record both in magnitude *and* phase, and the
+instrument divides one by the other. Because both samples come from the same
+source, anything the source does wrong — drift, ripple, amplifier gain
+variation — divides out of that ratio. That is why a pocket NanoVNA and a
+bench instrument a thousand times more expensive agree on a well-calibrated
+one-port measurement to within a fraction of a dB.
+
+An antenna has one connector, so it is a **one-port** device and the diagram
+has one port in it. The double subscript on $S_{11}$ is the general
+scattering-parameter convention, in which $S_{mn}$ is the wave leaving port
+$m$ for a wave incident on port $n$; with one port the only entry that exists
+is $S_{11}$, and it is the reflection at that port. A two-port measurement —
+$S_{21}$, insertion loss, a through standard — belongs to a filter or an
+amplifier, and to the pair of antennas in Lesson 11, not to the antenna on
+the bench in Lesson 10.
 ::::
 
 ::::{frame} Four Names for One Number
 :::{present}
 | Quantity | From $\Gamma$ | At $\vert\Gamma\vert = 0.316$ |
 | :-- | :-- | :-- |
-| $\vert S_{11}\vert$ dB | $20\log_{10}\vert\Gamma\vert$ | $-10.0$ dB |
-| Return loss | $-20\log_{10}\vert\Gamma\vert$ | $10.0$ dB |
+| $\vert S_{11}\vert$ (dB) | $20\log_{10}\vert\Gamma\vert$ | $-10.0$ |
+| Return loss (dB) | $-20\log_{10}\vert\Gamma\vert$ | $10.0$ |
 | VSWR | $(1 + \vert\Gamma\vert)/(1 - \vert\Gamma\vert)$ | $1.92$ |
-| Power reflected | $\vert\Gamma\vert^2$ | $10\%$ |
+| Power reflected (%) | $100\vert\Gamma\vert^2$ | $10$ |
 :::
 :::{present}
 :class: callout
-Keep the last row. −10 dB means **90% of the power gets in**.
+All four re-dress one complex number. $10\%$ of the power comes back, so
+$90\%$ reaches the antenna.
 :::
 
-All four appear on instrument menus, and all four are re-dresses of the single
-complex number the analyzer measured. Nothing else is being measured. The
-−10 dB convention from Lesson 4 is not arbitrary: it is the band over which at
-least 90% of the power you deliver actually reaches the antenna.
+All four appear on instrument menus, and all four are computed from the single
+complex number the analyzer measured. Nothing else is being measured. Watch
+the units, because they are not the same down the column: the first two rows
+are decibels and differ only in sign, the third is a dimensionless ratio, and
+the fourth is a percentage of power.
+
+The fourth row is the one to carry into a design conversation. $\vert\Gamma\vert$
+is an amplitude ratio, so the fraction of power reflected is
+$\vert\Gamma\vert^2$, and at the $-10$ dB match spec that is
+$0.316^2 = 0.10$. The $-10$ dB convention from Lesson 4 is not arbitrary: it
+is the band over which at least 90% of the power we deliver reaches the
+antenna, and 90% is where the remaining mismatch stops being the thing worth
+fixing.
 ::::
 
 ::::{frame} Impedance from the Ratio
 :::{present}
 $$Z_L = Z_0\ \frac{1 + \Gamma}{1 - \Gamma}, \qquad Z_0 = 50\ \Omega$$
 
-- Invert the bilinear relation and you have what the antenna presents.
-- The **sign of the reactance** is the actionable part: negative is capacitive, so the element is electrically short.
+$$\Gamma = 0.28\ \angle{-140^\circ} \ \Longrightarrow\ Z_L = 30.6 - j11.9\ \Omega$$
+:::
+:::{present}
+- $\vert\Gamma\vert = 0.28$ is $-11.1$ dB: it clears the $-10$ dB spec.
+- $R = 31\ \Omega$, against the $\approx 70\ \Omega$ a resonant dipole shows.
+- $X = -12\ \Omega$ is capacitive, so the element is short. Trim it **longer**.
 :::
 
-Read the physics, not the arithmetic. A marker reading
-$S_{11} = 0.28\ \angle-140^\circ$ works out to $30.6 - j11.9\ \Omega$: it
-passes the −10 dB spec, but the resistance is low against the $\sim 70\ \Omega$
-a resonant dipole should show, and the negative reactance says resonance sits
-above this frequency. The antenna wants to be trimmed *longer*. That single
-inference is most of what Lesson 10 asks you to do at the bench.
+$\Gamma$ and $Z_L$ carry the same information, and the formula above converts
+one to the other. The analyzer measures $\Gamma$ and displays $Z_L$, which is
+convenient, because $\Gamma$ tells you whether the antenna is acceptable and
+$Z_L$ tells you what to do about it.
+
+Take the marker reading above one line at a time. The magnitude,
+$\vert\Gamma\vert = 0.28$, is $-11.1$ dB, so this antenna clears the $-10$ dB
+match specification of the previous frame; on that number alone we would ship
+it. The real part of the impedance, $31\ \Omega$, is well under the
+$70\ \Omega$ or so a resonant dipole shows, which says some of the power
+reaching the antenna is going somewhere other than radiation — a lossy
+balun, a nearby conductor, or a poor ground. And the reactance is negative,
+$-12\ \Omega$, which is the actionable part.
+
+A negative reactance is capacitive, and a dipole is capacitive below its
+resonance and inductive above it. Reading $X < 0$ therefore means resonance
+sits *above* the frequency we are looking at, and the element is
+electrically short. Lengthening it moves resonance down toward the marker.
+That inference — sign of $X$, then which way to trim — is most of what
+Lesson 10 asks you to do at the bench.
 
 :::{depth}
 The arithmetic in full. Rectangular form first:
@@ -585,9 +810,10 @@ exactly $\lambda/2$ long.
 :::
 ::::
 
-::::{frame} Three Error Terms, Three Standards
+::::{frame} Calibration: Three Error Terms, Three Standards
 :::{present}
-- Three unknowns — **directivity**, **source match**, **tracking** — need three known standards.
+- Three unknowns — **directivity**, **source match**, **tracking** — need three knowns.
+- Short, open, and load at every frequency is a **SOL calibration**.
 :::
 :::{present}
 | Standard | $\Gamma$ | Pins down |
@@ -597,7 +823,9 @@ exactly $\lambda/2$ long.
 | Load | $0$ | the floor |
 :::
 
-Three error terms dominate a one-port measurement. **Directivity** is the
+**Calibration** is what this frame is about, and it is the first thing you do
+at the analyzer in Lesson 10. Three error terms dominate a one-port
+measurement. **Directivity** is the
 coupler leaking a little of the outgoing wave into the receiver that is
 supposed to see only the returning one, so the VNA reads a reflection even
 from a perfect load. **Source match** is the test port not being exactly
@@ -633,26 +861,41 @@ test whether you meant it to be or not.
 
 ::::{frame} The Pigtail Problem
 :::{present}
-$$\Delta\phi = 2\beta\ell = 2\ (360^\circ)\ \frac{\ell}{\lambda_g}$$
+$$\Gamma_\text{antenna} = \Gamma_\text{measured}\ e^{+j2\beta\ell},
+\qquad \Delta\phi = 2\beta\ell = 2\ (360^\circ)\ \frac{\ell}{\lambda_g}$$
 
 - 10 cm of RG-58 at 915 MHz rotates the trace $333^\circ$.
 - Loss is negligible, so the dB plot still looks right.
 :::
 :::{present}
-- **Fix 1**: calibrate at the antenna connector.
-- **Fix 2**: use port extension, which is phase-only.
+- **Fix 1**: calibrate **to** the antenna connector.
+- **Fix 2**: port extension applies that exponential. Phase only.
 :::
 
 With $\lambda_g = c\ v_f / f$, that pigtail is $0.46\lambda_g$ long — nearly a
-full rotation of the Smith chart, and the impedance you read off is not the
-antenna's in any useful sense. Port extension rotates the reference plane
-forward by a known length but cannot undo loss, and it cannot undo a real
-mismatch inside an adapter.
+full rotation of the Smith chart, and the impedance read off it is not the
+antenna's in any useful sense. The wave traverses the extra length twice, out
+and back, which is where the factor of two comes from.
 
-The wave traverses the extra length twice, out and back, which is where the
-factor of two comes from. At 990 MHz that same pigtail is exactly a half
-guided wavelength and the impedance repeats — the one frequency where the
-un-de-embedded reading happens to be correct, and a good illustration of why
+The equation above is the whole correction, and it is worth seeing rather than
+taking on faith. A lossless line of length $\ell$ multiplies a wave by
+$e^{-j\beta\ell}$ on the way out and again on the way back, so the reflection
+seen at the near end is the reflection at the far end times $e^{-j2\beta\ell}$:
+
+$$\Gamma_\text{measured} = \Gamma_\text{antenna}\ e^{-j2\beta\ell}.$$
+
+The magnitude of that factor is 1, so $\vert S_{11}\vert$ is untouched and the
+dB plot looks correct while the impedance is wrong. Multiply by the inverse,
+$e^{+j2\beta\ell}$, and the antenna's own $\Gamma$ comes back. **Port
+extension** is the instrument doing exactly that multiplication: you tell it
+$\ell$ (or let it find $\ell$ from an open), and it rotates every point in the
+sweep by $2\beta\ell$. Because the correction is a unit-magnitude phase term,
+it cannot undo loss and it cannot undo a real mismatch inside an adapter —
+those need the cal plane moved instead, which is Fix 1.
+
+At 990 MHz that same pigtail is exactly a half guided wavelength, $2\beta\ell$
+is a full $720^\circ$, and the impedance repeats — the one frequency where
+the uncorrected reading happens to be right, and a good illustration of why
 "it looked fine at one marker" is not a check.
 
 :::{depth}
@@ -665,21 +908,32 @@ exactly that reason.
 :::
 ::::
 
-::::{frame} Reading the Sweep
+::::{frame} Reading a VNA Sweep
+:::{present}
+<img src="../../slides/fig/L10-three-views.svg"
+     alt="The same antenna resonance shown two ways: a dip below minus ten decibels on a plot of the magnitude of S11 against frequency, with the minus-ten-decibel bandwidth marked, and the same sweep as a locus crossing the real axis inside the minus-ten-decibel circle on a Smith chart."
+     style="max-width: 660px; width: 100%; display: block; margin: 0 auto;">
+:::
 :::{present}
 - A **dip** marks a resonance.
 - The **depth** says how well matched it is, not how well it radiates.
-- The **width** below −10 dB is the impedance bandwidth.
+- The **width** below $-10$ dB is the impedance bandwidth.
 - Quote it in MHz *and* in percent.
 :::
 
-Fractional bandwidth is what lets you compare a 900 MHz antenna to a 2.4 GHz
+This is what the sweep looks like on the instrument, and it is one
+measurement drawn twice. $\vert S_{11}\vert$ against frequency is on the left
+and the same points are on the Smith chart on the right; the resonance is the
+dip on one plot and the real-axis crossing on the other, at the same
+frequency. Lesson 10 has you produce both of these for your own antenna.
+
+Fractional bandwidth is what lets us compare a 900 MHz antenna to a 2.4 GHz
 one, and it is the number with a sanity range attached: a thin-wire dipole
-lands between 3 and 10%. A trace bottoming out at $-19$ dB and crossing −10 dB
-at 878 and 922 MHz gives $\text{BW} = 44\ \text{MHz}$ on $f_0 = 900\ \text{MHz}$,
-or 4.9% — entirely believable. If you measure 1%, suspect the setup before you
-suspect the antenna; a resonant length of feed cable can manufacture a narrow
-dip that has nothing to do with the element.
+lands between 3 and 10%. A trace bottoming out at $-19$ dB and crossing
+$-10$ dB at 878 and 922 MHz gives $\text{BW} = 44\ \text{MHz}$ on
+$f_0 = 900\ \text{MHz}$, or 4.9% — entirely believable. If you measure 1%,
+suspect the setup before the antenna; a resonant length of feed cable can
+manufacture a narrow dip that has nothing to do with the element.
 ::::
 
 ::::{frame} Four Smith-Chart Reading Skills
@@ -723,13 +977,13 @@ that it came back out, and in which direction.
 ::::
 
 ::::{frame} The Environment Is Part of Your Antenna
-:::{present}
+:class: read-only
+
 | Perturbation | What you see | Why |
 | :-- | :-- | :-- |
 | A hand near it | $f_0$ down, dip shallower | tissue adds loss |
 | Flat on the bench | $f_0$ shifts, a loop | partial ground plane |
 | Near a wall | wiggles around the dip | energy returns |
-:::
 
 Lesson 5 defined the reactive near field as the region where energy is stored
 rather than radiated. Anything you put in that region becomes part of the
@@ -738,25 +992,6 @@ instrument error. It is a real change in input impedance, and the same physics
 reappears in Module 3 as **mutual impedance** between array elements — when
 you put your hand near a dipole in Lesson 10 you are running a one-element
 preview of what neighbors in an array do to each other.
-::::
-
-::::{frame} How Much of a Pattern Is Real
-:::{present}
-- Measured power is signal **plus** noise floor.
-- **Dynamic range** = peak minus floor.
-- Beamwidth is robust; **nulls measure your floor**.
-:::
-:::{present}
-:class: callout
-"At least 25 dB deep, limited by our 42 dB dynamic range" is defensible.
-"25 dB deep" is not.
-:::
-
-This is the same argument as the $-40$ dB stray-field table earlier, arriving
-from the other direction: there an unwanted signal set the floor, here the
-receiver does. Lesson 11 asks you to measure your own floor with the source
-switched off, and then to say, row by row, which of your extracted numbers
-clears it and by how much.
 ::::
 
 ::::{frame} Summary — The Far-Field Range
@@ -791,25 +1026,62 @@ clears it and by how much.
 ::::{frame} The Midterm Project
 :::{present}
 :class: callout
-**Midterm Project — Antenna Pattern Measurement.** Introduced today, due at
-Lesson 20. Measure an antenna's pattern and report gain, beamwidth, sidelobe
-level, and polarization with an error budget.
+**Midterm Project.** Build a dipole, measure its pattern, and report it with
+an **error budget**. Due at Lesson 20.
 :::
 :::{present}
-- Three error-budget lines, all named today: **range length**, **quiet zone**, **horn calibration**.
+- Everything since Lesson 1 lands here: the antenna, the model, the range, the analyzer.
+- **Six** error-budget lines, all from today.
 :::
 
-"I measured it" is not an engineering result. "I measured it, and here is what
-my range could and could not tell me" is, and that second sentence is what
-this lesson exists to let you write.
+Everyone builds the same antenna, a dipole, and that is deliberate. The
+project is not an antenna design exercise — Lesson 7 already gave you the
+design, Lesson 8 let you model it, and Lessons 10 and 11 will put it on the
+two instruments. Handing the whole class one known antenna means the pattern,
+the gain, and the impedance are all predictable before anyone measures
+anything, so the work of the project is the comparison and the uncertainty
+rather than the build. It also means thirty measurements of the same object,
+which makes disagreement between them worth talking about.
 
-Full requirements come in the project handout distributed in class. Start
-thinking now about which antenna you want to build. Lessons 10 and 11 are the
-dress rehearsal — same instruments, same extraction, same uncertainty
-discussion — and Lessons 12 to 14 will put several more antenna families in
-front of you, any of which is a defensible choice for the project. The
-selection framework at the end of Lesson 14 is the reasoning your report will
-have to show.
+Lesson 1 defined gain, beamwidth, and sidelobe level; Lesson 3 defined
+polarization; Lesson 5 gave the far-field boundary; Lesson 6 gave the
+integral; Lesson 7 solved the dipole; Lesson 8 modeled it. Today adds the
+instruments, and the project is where all of it has to agree — the hand
+calculation, the simulation, and two measurements — or where you have to say
+why it does not. That is the point of the deliverable: "I measured it" is not
+an engineering result, while "I measured it, here is what it should have been,
+and here is what my range could and could not tell me" is.
+
+Full requirements come in the project handout distributed in class. Lessons 10
+and 11 are the dress rehearsal — same antenna, same instruments, same
+extraction, same uncertainty discussion.
+::::
+
+::::{frame} The Error Budget
+:class: read-only
+
+Every line below came out of today, and every one of them is a number you can
+put a value on before you measure anything. The project asks for this table
+filled in for your own setup.
+
+| Line | Where it comes from | What it limits |
+| :-- | :-- | :-- |
+| Range length | $r$ against $2D^2/\lambda$ | Null depth and sidelobe level first, gain last |
+| Amplitude taper | Source beamwidth against $D/r$ | Apparent beamwidth and sidelobe level |
+| Quiet zone | Stray field level, and whether the AUT fits inside it | Every level below the main beam |
+| Horn calibration | The certificate, typically $\pm 0.3$ dB | Absolute gain, directly |
+| Dynamic range | Measured peak minus measured noise floor | Nulls, then deep sidelobes |
+| Polarization alignment | Angular error between source and AUT | Gain, as $20\log_{10}\cos\Delta$ |
+| Positioner accuracy | Angle readout against true angle | Beamwidth and null positions |
+
+The quiet zone deserves more attention than its one row suggests, because it
+is the line most often assumed rather than measured. It is specified as a
+volume, a level, and a band together — "1.2 m at $-45$ dB, 2 to 18 GHz" — and
+the AUT has to fit inside all three. An antenna that overhangs the quiet zone
+is being measured in a room, and the stray-reflection numbers from earlier in
+this lesson stop being a bound on your error and become an underestimate of
+it. Check the specification, check the antenna's largest dimension against it,
+and say in the report which one you were working inside.
 ::::
 
 ::::{frame} Practice
