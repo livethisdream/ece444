@@ -22,6 +22,14 @@
   --rule-strong: rgba(0, 74, 133, 0.42);
   --soft:        rgba(0, 103, 185, 0.07);
   --soft-red:    rgba(176, 30, 36, 0.07);
+
+  /* The course's practice accent, the amber the sidebar icons and the
+     material cards already use for problem sets. Was a literal #8a5a00 in
+     custom.css with a hand-written dark twin; a token instead, so anything
+     that wants it gets both modes for free. */
+  --accent-ink:  #8a5a00;
+  --accent-rule: rgba(138, 90, 0, 0.35);
+  --accent-soft: rgba(138, 90, 0, 0.09);
   --rail:        rgba(0, 74, 133, 0.13);
   --shadow:      0 1px 2px rgba(0, 30, 60, .06), 0 8px 24px rgba(0, 30, 60, .05);
   --fig-far:     #cddce9;
@@ -70,6 +78,9 @@
     --tbl-stripe:   rgba(140, 196, 238, 0.07);
     --tbl-hover:    rgba(140, 196, 238, 0.13);
     --tbl-rule:     rgba(140, 196, 238, 0.20);
+    --accent-ink:  #d9a04a;
+    --accent-rule: rgba(217, 160, 74, 0.38);
+    --accent-soft: rgba(217, 160, 74, 0.13);
   }
 }
 /* explicit dark choice wins over a light OS */
@@ -94,6 +105,9 @@
   --tbl-stripe:   rgba(140, 196, 238, 0.07);
   --tbl-hover:    rgba(140, 196, 238, 0.13);
   --tbl-rule:     rgba(140, 196, 238, 0.20);
+  --accent-ink:  #d9a04a;
+  --accent-rule: rgba(217, 160, 74, 0.38);
+  --accent-soft: rgba(217, 160, 74, 0.13);
 }
 
 * { box-sizing: border-box; }
@@ -239,6 +253,87 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
 .f-red   { fill: var(--red); }
 .s-red   { stroke: var(--red); }
 .fig-t   { font-family: var(--sans); }
+
+/* ---- document links -------------------------------------------------- */
+/* Practice sets, solutions, lab sheets and handouts are downloads, not prose
+   links. They shipped as raw <a> in the markdown with nothing styling them:
+   on a reading page that inherited `.page a`, but on a frame lesson -- where
+   most of them live -- nothing did, so they rendered in the user agent's own
+   #0000EE with an underline. Against the dark ground (#0d1826) that is very
+   nearly invisible, and it was never the site's look in either mode.
+
+   The shell already has a vocabulary for "go get this": the title frame's
+   CTA pills and the deck admonition's chips. A download link is the same
+   gesture, so it gets the same pill. Tokens only -- the dark palette on
+   :root then carries it with no second rule to keep in sync. */
+.doc-link {
+  /* A lined page for the problem set; `.doc-key` swaps in the checked one. */
+  --doc-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 15'%3E%3Cpath d='M7 0H1.6A1.6 1.6 0 0 0 0 1.6v11.8A1.6 1.6 0 0 0 1.6 15h8.8a1.6 1.6 0 0 0 1.6-1.6V5H8a1 1 0 0 1-1-1V0zm1.2.35V3.8h3.45L8.2.35zM2.9 7.6h6.2v1.2H2.9V7.6zm0 2.8h6.2v1.2H2.9v-1.2z'/%3E%3C/svg%3E");
+  display: inline-flex; align-items: center; gap: .5em;
+  padding: .38em .95em; border-radius: 999px;
+  font-size: var(--step--1); font-weight: 600; line-height: 1.35;
+  text-decoration: none; white-space: nowrap;
+  color: var(--blue-dark); background: var(--panel);
+  border: 1px solid var(--rule);
+  transition: color .12s ease, background .12s ease, border-color .12s ease;
+}
+
+/* The glyph is a mask rather than a background image so it inherits
+   `currentColor` and follows the link through hover and the dark palette.
+   A two-tone SVG would need a dark twin; this does not. */
+.doc-link::before {
+  content: ""; flex: none; width: .74em; height: .92em;
+  background: currentColor;
+  -webkit-mask: var(--doc-glyph) center / contain no-repeat;
+          mask: var(--doc-glyph) center / contain no-repeat;
+}
+.doc-link:hover {
+  color: var(--blue); background: var(--soft); border-color: var(--rule-strong);
+}
+.doc-link:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* The solutions half of the pair reads as the answer key, so it carries the
+   course's accent rather than its blue -- the same cue the sidebar and the
+   material cards already use for practice material. */
+.doc-link.doc-key {
+  color: var(--accent-ink); border-color: var(--accent-rule);
+  --doc-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 15'%3E%3Cpath d='M7 0H1.6A1.6 1.6 0 0 0 0 1.6v11.8A1.6 1.6 0 0 0 1.6 15h8.8a1.6 1.6 0 0 0 1.6-1.6V5H8a1 1 0 0 1-1-1V0zm1.2.35V3.8h3.45L8.2.35zM5.15 11.9 2.6 9.35l.88-.88 1.67 1.67 3.52-3.52.88.88-4.4 4.4z'/%3E%3C/svg%3E");
+}
+.doc-link.doc-key:hover {
+  color: var(--accent-ink); background: var(--accent-soft);
+  border-color: var(--accent-ink);
+}
+
+/* A row of them, not a bulleted list. `:class: doc-links` on the frame (or
+   on any container) turns the list it wraps into the row; the chips wrap to
+   the next line on a phone rather than overflowing the frame. */
+.doc-links ul, .doc-links ol {
+  list-style: none; margin: .1em 0 0; padding: 0; max-width: none;
+  /* `flex-direction` has to be said out loud: the bare `ul` rule above sets
+     column, and overriding only `display` leaves that in place -- the chips
+     then stack one per line with the row's gap between them, which looks
+     deliberate enough that it is easy to miss. */
+  display: flex; flex-flow: row wrap; align-items: center; gap: .55rem .6rem;
+}
+.doc-links li { margin: 0; }
+.doc-links li > p { margin: 0; }
+
+/* In a table cell the pill is the cell's whole content, so it drops the fill
+   and the border and keeps only the glyph and the color -- 82 bordered pills
+   down the materials page read as a form, not a list of downloads. The key
+   variant has to be named here too: `.doc-link.doc-key` outranks a bare
+   `td .doc-link`, and without it the solutions column keeps its border while
+   the problem-set column loses one. */
+td .doc-link, th .doc-link,
+td .doc-link.doc-key, th .doc-link.doc-key {
+  padding: .2em .6em; background: transparent; border-color: transparent;
+}
+td .doc-link:hover, th .doc-link:hover {
+  background: var(--soft); border-color: var(--rule);
+}
+td .doc-link.doc-key:hover, th .doc-link.doc-key:hover {
+  background: var(--accent-soft); border-color: var(--accent-rule);
+}
 
 /* ---- progress rail -------------------------------------------------- */
 .rail {
