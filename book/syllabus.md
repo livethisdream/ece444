@@ -348,4 +348,4 @@ See the [materials page](materials.md).
 - ADALM-PHASER
 - Antenna simulation software — nec_lab (NEC-2), provided with the course
 - Vector network analyzer (VNA) — the chamber's Copper Mountain analyzer, for both measurement labs
-- Anechoic chamber — the USAFA chamber and its browser dashboard, for the pattern measurement labs
+- Anechoic chamber — the USAFA chamber and its browser dashboard (calibration, VNA sweeps and impedance, pattern scans, Touchstone export), for the measurement labs

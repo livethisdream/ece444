@@ -34,6 +34,19 @@ L10 answered "does power get in?" Today answers "where does it go once it's in?"
 
 ---
 
+## Safety and good practice
+
+<div class="callout"><strong>The tower turns a real antenna on a real cable.</strong> Nobody inside during a scan, door closed, and <strong>STOP</strong> always reachable.</div>
+
+- Cable slack for the **whole grid**, and the axis in **non-continuous** mode.
+- Torque connectors; turn the nut, never the cable body.
+- Calibrate, **verify**, then measure. Log the sweep. Name every run.
+
+Note:
+Say this every period, and say why. Cable wind-up is the standing hazard and it is slow — it does not announce itself until the cable is tight, and continuous mode ignores the software limits entirely. Check the latched error line in the Turntable section while you are there. The RF is milliwatts and is not the hazard; the hazards are mechanical and electrostatic. Absorber is consumable: the pyramids shed if you brush them and a crushed tip is a permanently worse quiet zone, so nobody leans on the walls and nothing gets rested on the floor absorber. Device Emulation on the front panel is NOT simulation and does not inhibit the motor.
+
+---
+
 ## Today's plan
 
 1. Verify the range geometry before taking any data.
@@ -96,51 +109,38 @@ The chain is a loop, not a line. Ratioing against the source is why source drift
 ## The dashboard
 
 - **Settings sidebar**: VNA, Turntable, Simulation, Output.
-- **Tabs over the plots**: Pattern Measurement, VNA, Turntable, Logs.
+- **Tabs over the plots**: Pattern Measurement, VNA, Turntable, Sweep, Logs.
 - **Start scan** and **STOP** sit in the tab header — STOP is never a scroll away.
 
-<div class="callout">The badge top right reads <strong>HARDWARE</strong> or <strong>SIMULATED</strong>. Know which one you are looking at before you believe a number.</div>
+<div class="callout">The strip along the bottom says what you are talking to: <strong>hardware</strong> or <strong>simulated</strong>, <strong>cal</strong> or <strong>uncal</strong>, connected or not.</div>
 
 Note:
-Show them the page before anyone touches hardware. Point out that the service runs in simulation mode on their own laptop — `python chamber_service.py --sim`, frontend on 5173 — so the controls can be rehearsed the night before. What simulation will not tell them is anything about their antenna: it synthesizes an array-factor pattern. Rehearse the buttons there, not the physics.
-
----
-
-## Before you press start
-
-<div class="callout"><strong>The tower turns a real antenna on a real cable.</strong> Confirm the cable has slack for the whole grid, and that the axis is in non-continuous mode — continuous mode ignores the software limits.</div>
-
-- Nobody inside the chamber, door closed.
-- **STOP** preempts a move in progress.
-- Read the latched positioner error in the Turntable section first.
-
-Note:
-Cable wind-up is the standing hazard on this rig and it is slow — it does not announce itself until the cable is tight. Everything else in this lab can be redone in ten minutes; a torn cable ends the period for everyone. Say this every period.
+Show them the page before anyone touches hardware. One command brings up the service and the frontend on their own laptop — `./start.sh --sim` — so the controls can be rehearsed the night before. What simulation will not tell them is anything about their antenna: it synthesizes an array-factor pattern for a scan, and for a sweep it returns a mismatched load behind a line, which has no resonance in it anywhere. Rehearse the buttons there, not the physics. Sweep is L10's tab and they will use it twice today: peaking up, and the floor.
 
 ---
 
 ## Acquisition discipline
 
 1. **Set the sweep first.** Span, points, IF BW, power, $S_{21}$ — log all five. A calibration belongs to a sweep.
-2. **Check the CAL / UNCAL pill.** An uncalibrated run is data, never an accident.
-3. **Jog to the peak, then Define here as 0°.** Every number you extract is measured from it.
+2. **Check the cal / uncal pill.** An uncalibrated run is data, never an accident. A pattern wants the **2-port** calibration.
+3. **Jog, Sweep, read — then Define here as 0°.** Every number you extract is measured from it.
 4. **Step $\le$ HPBW/5.** For a 40° beam that is 8°; take 2° so the sidelobes resolve too.
 5. **Repeat one cut.** Two scans that disagree by 1 dB tell you your real uncertainty.
 
 Note:
-Order matters: the sweep, then the calibration, then the zero, then the grid. Changing the sweep afterwards leaves the instrument interpolating a correction across a span it never measured — the panel flags it and the log warns again. Name every run in the Output section; left empty it is stamped from the clock, which keeps runs apart and tells them nothing a week later.
+Order matters: the sweep, then the calibration, then the zero, then the grid. Changing the sweep afterwards leaves the instrument interpolating a correction across a span it never measured — the panel flags it and the log warns again. On step 3, be explicit that nothing shows a live trace while the tower is standing still: the VNA tab draws the last MEASURED angle, so peaking up is jog, capture, read, repeat, with the Sweep tab's marker parked on the frequency they care about. Two minutes of that is also their through check — a peak 20 dB down means a cable, a connector or a horn, and it is cheaper to find now than at angle 90 of 180. Name every run in the Output section; left empty it is stamped from the clock, which keeps runs apart and tells them nothing a week later.
 
 ---
 
 ## Measure your own floor
 
 - Unmate the AUT and terminate the cable in $50\ \Omega$.
-- Set **From** and **To** to the same angle — a one-angle run — and name it `floor`.
+- **Sweep** tab, **Capture: S11 + S21**. Press Sweep, then **Export**.
 
 <div class="callout">Two floors, and you get the higher one. The <strong>instrument</strong> floor is what you just measured. The <strong>chamber</strong> contributes the other, and it shows up as a back level that will not go deeper.</div>
 
 Note:
-With the AUT unmated nothing radiates, so the stray field has nothing to scatter — this run cannot see the chamber's contribution, only the receiver and the leakage. That is exactly L9's two-floor argument. Narrowing the IF bandwidth by a decade buys about 10 dB and costs sweep time on every angle; worth doing once as an experiment, and worth doing before they calibrate.
+With the AUT unmated nothing radiates, so the stray field has nothing to scatter — this capture cannot see the chamber's contribution, only the receiver and the leakage. That is exactly L9's two-floor argument. There is no S21-only capture, so the pair costs two sweeps and the S11 trace comes back as a free check that the termination is really a termination. Narrowing the IF bandwidth by a decade buys about 10 dB and costs sweep time on every angle; worth doing once as an experiment, and worth doing before they calibrate.
 
 ---
 

@@ -107,10 +107,12 @@ lesson pages directly and have no separate sheet.
 - **Vector network analyzer (VNA)** — the chamber's Copper Mountain analyzer, used
   for both measurement labs: reflection at one port in L10, transmission between
   the two horns in L11
-- **Anechoic chamber** — the USAFA chamber, with its browser **dashboard** for the
-  sweep, the turntable, the scan and the run files both labs reduce. The service
-  behind it runs against a simulator with no instruments attached, so the controls
-  can be rehearsed on your own machine before the period.
+- **Anechoic chamber** — the USAFA chamber, with its browser **dashboard**. One page
+  runs the calibration wizard (one-port or two-port), captures a VNA sweep with a
+  Smith chart and impedance, VSWR and return-loss readouts, runs a pattern scan on
+  the turntable, and exports Touchstone files and run data. It also runs against a
+  simulator with no instruments attached, so the controls can be rehearsed on your
+  own machine before the period.
 
 ## Additional Resources
 

@@ -52,6 +52,53 @@ with you. Today is procedure and reduction.
 :::
 ::::
 
+::::{frame} Safety and Good Practice
+:::{present}
+:class: callout
+**The tower turns a real antenna on a real cable.** Nobody inside during a
+scan, door closed, **STOP** reachable.
+:::
+:::{present}
+- Cable slack for the **whole grid**.
+- Torque connectors. Never twist the cable body.
+- Calibrate, **verify**, then measure.
+:::
+
+The RF here is milliwatts and is not the hazard; the hazards are mechanical
+and electrostatic. Take those two seriously and this rig is hard to hurt and
+hard to be hurt by.
+
+:::{depth}
+**Cable wind-up is the standing hazard**, and it is a slow one: it does not
+announce itself until the cable is tight, and by then something has to give.
+Confirm on the EMControl front panel that the axis is in **non-continuous**
+mode before any scan with a cable routed through the tower — continuous mode
+ignores the software limits entirely. Check the **latched error** line in the
+Turntable section while you are there; a fault the card is still holding from
+last period is worth knowing about before you commit 180 angles to it.
+*Device Emulation* on the front panel is **not** simulation and does not
+inhibit the motor.
+
+**Absorber is consumable and fragile.** The pyramids shed if you brush them
+and a crushed tip is a permanently worse quiet zone. Do not lean on the walls,
+do not rest tools or bags on the floor absorber, and route cables rather than
+laying them across it.
+
+**Connectors are the other thing you can quietly destroy.** Align before you
+turn, tighten with the wrench rather than by feel, and turn the *nut* and not
+the cable — a rotated center pin ruins the connector, and then the next
+connector it touches, which on this rig is the calibration module. Ground
+yourself before you touch a center pin. Never connect an analyzer port to
+anything that transmits: a receiver port is not built to be driven.
+
+**And the practice half.** Calibrate, verify, measure, in that order, and log
+the five sweep settings before you touch anything else. One variable at a
+time. Name every run and every file when you make it, not afterwards. Write
+down what you expect before you look — a prediction you committed to is the
+only way a surprise can teach you anything.
+:::
+::::
+
 ::::{frame} What You Are Doing Today
 :::{present}
 - Prove the range is long enough, with a tape measure.
@@ -107,31 +154,36 @@ it is why the file records both the angle asked for and the angle reported.
 :::
 :::{present}
 :class: callout
-The badge top right reads **HARDWARE** or **SIMULATED**. Know which one you
-are looking at.
+The strip along the bottom says what you are talking to: **hardware** or
+**simulated**, **cal** or **uncal**.
 :::
 
-Open the address given in class. The settings sidebar is four sections — **VNA**, **Turntable**,
-**Simulation**, **Output** — and the plots carry four tabs: Pattern
-Measurement, VNA, Turntable, Logs. Nothing else is needed to take a pattern.
+Open the address given in class. The settings sidebar is four sections —
+**VNA**, **Turntable**, **Simulation**, **Output** — and the plots carry five
+tabs: Pattern Measurement, VNA, Turntable, Sweep, Logs. A pattern needs the
+first and the last; **Sweep** is Lesson 10's tab, and you will use it twice
+today.
 
 :::{depth}
 You can have the whole dashboard on your own laptop before the period, with no
-instruments attached: run the service in simulation mode and open the frontend
-beside it.
+instruments attached — one command brings up the service and the frontend
+together:
 
 ```sh
-python chamber_service.py --sim
-npm run dev --prefix frontend      # http://localhost:5173
+./start.sh --sim
 ```
 
-The badge reads **SIMULATED** and the service synthesizes a plausible
+The badge reads **simulated** and the service synthesizes a plausible
 array-factor pattern — a main lobe, decaying sidelobes, nulls floored around
 $-45$ dB — and simulates the tower slewing at a believable rate, so live
 position, progress and the stop button all have something real to exercise.
-What it will not do is tell you anything about *your* antenna. Rehearse the
-controls there, not the physics. Half an hour in simulation is the difference
-between a period spent measuring and a period spent finding buttons.
+A simulated *sweep* is not a pattern at all: it returns a mismatched load
+behind a length of line, which draws the arc a real one does on the Smith
+chart and has no resonance in it anywhere.
+
+So rehearse the controls there, not the physics. Half an hour in simulation is
+the difference between a period spent measuring and a period spent finding
+buttons.
 :::
 ::::
 
@@ -188,25 +240,6 @@ and biases do not average out over repeated sweeps.
 :::
 ::::
 
-::::{frame} Before You Press Start
-:::{present}
-:class: callout
-The tower turns a real antenna on a real cable. **Confirm the cable has slack
-for the whole grid.**
-:::
-:::{present}
-- Nobody inside the chamber, door closed.
-- **STOP** preempts a move in progress.
-- Read the latched positioner error first.
-:::
-
-Confirm on the front panel that the axis is in non-continuous mode, because
-continuous mode ignores the software limits. Cable wind-up is the standing
-hazard on this rig and it is a slow one — it does not announce itself until
-the cable is tight. Everything else on this page can be redone in ten minutes;
-a torn cable ends the period for everyone.
-::::
-
 ::::{frame} Procedure — Set the Sweep
 :::{present}
 1. **VNA** section: start, stop, **Points**, **IF BW**, **Power**.
@@ -215,12 +248,14 @@ a torn cable ends the period for everyone.
 :::
 :::{present}
 :class: callout
-Read the **CAL / UNCAL** pill. An uncalibrated run is data, never an accident.
+Read the **cal / uncal** pill. An uncalibrated run is data, never an accident.
 :::
 
-The pill sits beside the scan button, and it is there because an uncalibrated
-run is never blocked. Setting the sweep is the first step because everything
-else depends on it: a calibration belongs to a sweep, and changing span, points, IF
+If you are calibrating today, the wizard's **Calibration** dropdown wants the
+**2-port** option: a pattern is a transmission measurement, and one-port
+correction would leave the through path uncorrected. Setting the sweep is the
+first step because everything else depends on it: a calibration belongs to a
+sweep, and changing span, points, IF
 bandwidth or power afterwards leaves the instrument interpolating a correction
 across a span it never measured. The panel says so when you do it — it flags
 the mismatch and the log warns again at the start of the run.
@@ -249,20 +284,31 @@ cable loss in your pattern.
 
 ::::{frame} Procedure — Peak Up and Define Zero
 :::{present}
-4. **Turntable** section: jog $\pm 1^\circ$ and $\pm 10^\circ$ until the received level peaks.
+4. Jog $\pm 1^\circ$ and $\pm 10^\circ$, taking a **Sweep** each time, until $\vert S_{21} \vert$ peaks.
 5. Press **Define here as 0°**.
 :::
 :::{present}
 :class: callout
 Every number you extract afterwards is measured from that zero. Set it once,
-before the grid, and do not touch it again.
+and do not touch it again.
 :::
 
-The VNA tab shows the sweep at the current angle while you jog, so peaking up
-is a matter of watching one trace rather than guessing from the tower. Peak on
-the frequency you care about, not on the broadest part of the band.
+Peak on the frequency you care about, not on the broadest part of the band:
+set the Sweep tab's **Marker** there and watch that one number as you jog.
 
 :::{depth}
+Nothing on this dashboard shows a live trace while the tower is standing
+still. The VNA tab draws the sweep at the last *measured* angle, which during
+a scan is a running picture and between scans is history — so peaking up is
+jog, capture, read, repeat. Capture **S11 + S21** while you do it and the
+same two sweeps tell you the antenna is still matched and the link is still
+there.
+
+That is also your through check. Two minutes of it before you start is worth
+the time: a peak 20 dB lower than last period means a cable, a connector or a
+horn, and finding that out now costs two minutes rather than the length of a
+180-angle scan.
+
 Defining zero does not move anything — it renames where the axis is standing.
 The run file records both the angle the software commanded and the angle the
 card reported, and the difference between those two columns is your
@@ -299,21 +345,26 @@ a $\pm 180^\circ$ cut taken as two halves has a seam in it.
 ::::{frame} Procedure — Measure Your Floor
 :::{present}
 8. Unmate the AUT and terminate the cable end in $50\ \Omega$.
-9. Run **one angle** with the same sweep. Name it `floor`.
+9. **Sweep** tab, **Capture: S11 + S21**. Press **Sweep**, and **Export** it.
 :::
 :::{present}
 :class: callout
-That run is the credibility of your whole data set. Take it before you scan.
+That capture is the credibility of your whole data set. Take it before you
+scan.
 :::
 
 Take it at the settings you are about to scan with, and not at whatever the
-panel happened to be holding. Setting **From** and **To** to the same angle
-gives a one-angle run — the
-angle-count hint will say so — and what it records is everything that reaches
-port 2 when the antenna is not connected: receiver noise, and whatever leaks
-around the chamber through the cables. That is your instrument floor.
+panel happened to be holding. What the $S_{21}$ trace records is everything
+that reaches port 2 when the antenna is not connected: receiver noise, and
+whatever leaks around the chamber through the cables. That is your instrument
+floor, and the exported file is the evidence of it.
 
 :::{depth}
+The capture menu has no $S_{21}$-only entry — the four options are all four,
+$S_{11}$ only, $S_{11} + S_{21}$, and $S_{22}$ only — so the pair costs two
+sweeps, and the second one hands you the terminated port's own reflection as a
+free check that the termination is actually a termination.
+
 There are two floors here and Lesson 9 named both. The instrument floor is the
 one you just measured. The chamber contributes the other, and you cannot
 measure it this way: with the AUT unmated nothing radiates, so the stray field
@@ -596,10 +647,10 @@ named cause is a better report than a 0.2 dB gap with no discussion.
 | :-- | :-- | :-- |
 | Check geometry | all three criteria, both antennas | the reference sizes the range |
 | Set the sweep | span, points, IF BW, power, $S_{21}$ | log all five before calibrating |
-| Check the pill | CAL or UNCAL, before the scan | an uncal run is data, not an accident |
+| Check the pill | cal or uncal, before the scan | an uncal run is data, not an accident |
 | Peak up | jog, then define here as $0^\circ$ | every number is measured from it |
 | Angle step | resolve beam *and* sidelobes | step $\le$ HPBW/5, use $2^\circ$ |
-| Floor | terminate port 2, one angle | 42 dB dynamic range on this rig |
+| Floor | terminate port 2, one capture | 42 dB dynamic range on this rig |
 | Normalize | dB down from the peak | never plot linear |
 | HPBW | interpolate the $-3$ dB crossings | robust, trust it first |
 | Gain | $G_{\text{ref}} + (P_{\text{AUT}} - P_{\text{ref}})$ | accuracy = reference + alignment |

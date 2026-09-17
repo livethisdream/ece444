@@ -33,16 +33,30 @@ Keep the briefing short. Everything on the theory side was covered last lesson, 
 
 ---
 
+## Safety and good practice
+
+<div class="callout">The RF is milliwatts. What you can wreck today is a <strong>connector</strong> or a <strong>calibration</strong>.</div>
+
+- Ground yourself before touching a center pin.
+- Torque the nut; never twist the cable body.
+- Nothing that transmits goes into an analyzer port.
+- Calibrate, **verify**, measure. In that order.
+
+Note:
+None of today's hazards are to them, which is exactly why they get skipped. Connector damage spreads: a rotated center pin ruins that connector and then the next one it mates with, which on this rig is a calibration module worth more than the antenna. The analyzer port is an input and is not built to be driven — no signal generators, no amplifier outputs. In the chamber, nobody leans on the absorber and nothing gets rested on the floor pyramids. The practice half is the part that shows up in the grade: log the sweep before calibrating, change one thing at a time, export and name every capture as you take it, and write down what you expect before you look.
+
+---
+
 ## Today's plan
 
 1. Ten minutes on the widget: read a resonance three ways before you read your own.
-2. Set the sweep on the dashboard, calibrate, **verify**.
-3. Record the antenna as a named run, and read four numbers out of the file.
+2. Set the sweep on the dashboard, calibrate one port, **verify**.
+3. Capture the antenna on the **Sweep** tab, and read four numbers off the marker.
 4. Compare against your $\lambda/2$ prediction, and commit to a trim direction.
-5. Perturb, one variable at a time.
+5. Perturb, one variable at a time, and export a file for each.
 
 Note:
-Budget: about fifteen minutes of briefing, then everyone on hardware. The perturbation step is the one they will remember, so protect time for it. Everything today goes through the chamber dashboard — same page they will live in next lesson, with only port 1 doing anything.
+Budget: about fifteen minutes of briefing, then everyone on hardware. The perturbation step is the one they will remember, so protect time for it. Everything today goes through the chamber dashboard's Sweep tab — same page they will live in next lesson, with only port 1 doing anything and the tower never moving.
 
 ---
 
@@ -67,10 +81,10 @@ This is L9's "four names for one number" made draggable. In twenty minutes they 
 - A supplied dipole or monopole with a known nominal resonance.
 - A foam block or non-metallic stand.
 
-Two tabs matter today: **VNA** for the live trace, **Logs** for what the service says it did.
+Two tabs matter today: **Sweep**, which captures without moving the tower, and **Logs**.
 
 Note:
-Same instrument as L11, same dashboard, only port 1 in use. The foam is not optional equipment — it is what lets them take their hands off the antenna while reading the screen, and L9 explained why that matters. The Pattern tab has nothing to draw for a one-angle run; do not let them go looking for a curve there.
+Same instrument as L11, same dashboard, only port 1 in use. The Sweep tab is the measurement this rig can make with nothing but an analyzer attached — the service will even run with no positioner, and says so. The foam is not optional equipment: it is what lets them take their hands off the antenna while reading the screen, and L9 explained why that matters. The Pattern and Turntable tabs have nothing to do with today; do not let them go looking for a curve there.
 
 ---
 
@@ -78,55 +92,72 @@ Same instrument as L11, same dashboard, only port 1 in use. The foam is not opti
 
 - **VNA** section: start and stop bracket the resonance by roughly $\pm 30\%$.
 - At least **401 points**. Log the IF bandwidth and power too.
-- **Parameter: S11** — one port, reflection only.
+- The **Parameter** dropdown is for scans — a capture chooses its own.
 
 Changing the sweep after calibration leaves the instrument interpolating a correction across a span it never measured.
 
 Note:
-The panel flags that mismatch and the log warns again at the start of the run, which is more warning than most instruments give you — but the right move is to fix the sweep first and leave it alone. The default 2–3 GHz, 101-point sweep is a 10 MHz grid: fine for a horn, useless across a 40 MHz dipole band.
+The panel flags that mismatch and the log warns again, which is more warning than most instruments give you — but the right move is to fix the sweep first and leave it alone. The default 2–3 GHz, 101-point sweep is a 10 MHz grid: fine for a horn, useless across a 40 MHz dipole band. Points also set how finely the marker can be placed, because it steps from one measured frequency to the next and not between them.
 
 ---
 
 ## Step 2 — Calibrate, then verify
 
-- **Calibrate…** opens a wizard. Choose the reference plane: **the cable ends**, not the front panel.
+- **Calibrate…** → **1-port, port 1**. Reference plane: **the cable ends**, not the front panel.
 - Acknowledge, run it, put the cable back. Then keep it still — flexing it changes its phase.
 
 <div class="callout">
-Verify: terminate the cable in $50\ \Omega$ and run one angle. $\vert S_{11}\vert$ below $-30$ dB across the band. <strong>Screenshot it.</strong>
+Verify: terminate the cable in $50\ \Omega$ and press <strong>Sweep</strong>. Return loss better than $30$ dB across the band. <strong>Screenshot it.</strong>
 </div>
 
 Note:
-The wizard asks which plane they calibrated because nothing in the data afterwards can tell, and the answer is written into the record. That dropdown is L9's reference-plane argument turned into a required field. The load verifies because it is a standard the calibration did not use to define itself. Watch the CAL / UNCAL pill: an uncalibrated run is valid data and is never blocked, but nobody should take one by accident.
+A one-port calibration corrects reflection on that port alone and needs only that one cable end on the module — the two-port option also corrects transmission, which is L11's problem, not today's. Pick one port and the wizard's checklist rewrites itself to match, so nobody is sent in to disconnect an antenna for no reason. The wizard asks which plane they calibrated because nothing in the data afterwards can tell, and the answer is written into the record and into every exported file. The load verifies because it is a standard the calibration did not use to define itself. Watch the cal / uncal pill in the bottom strip.
 
 ---
 
-## Step 3 — Record the antenna
+## Step 3 — Capture the antenna
 
 Connect it, set it on the foam, and take your hands off.
 
-- **Output**: name the run. `l10_freespace` beats a timestamp.
-- **Turntable**: set **From** and **To** to the same angle — the hint reads "1 angle".
-- **Start scan**, and watch the VNA tab.
+- **Sweep** tab, **Capture: S11 only**.
+- Press **Sweep**. The tower does not move.
+- The Smith chart and the magnitude plot fill in together.
 
-Every run writes `pattern.csv` and `meta.json` under `runs/`, and anything named comes back from **Stored runs**.
+One sweep per parameter, so asking for all four costs four times the wait and measures three things that are not there.
 
 Note:
-A one-angle run is a complete frequency sweep at a fixed position — that is all they need today. The meta file records the sweep, whether correction was on, and a copy of the calibration record, so a finished run keeps saying what it was taken against.
+A capture is not a scan and is not written to runs/ — it lives in the browser until they export it. That is deliberate: the service ships complex S-parameters and nothing else, and every derived number on the page is computed from them, so the payload stays a measurement rather than a measurement plus somebody's arithmetic. If they do ask for several parameters, STOP declines to start the next one rather than interrupting the sweep in flight.
 
 ---
 
 ## Step 4 — Four names for one number
 
-The file gives you $\Gamma$ at every frequency. Everything else is arithmetic:
+Park the **Marker** on a frequency and the readout gives all of it at once — $Z$, $\vert \Gamma \vert$, VSWR, return loss:
 
-$$\Gamma = \text{re} + j\ \text{im}, \qquad Z = Z_0 \frac{1 + \Gamma}{1 - \Gamma}, \qquad \text{VSWR} = \frac{1 + \vert \Gamma \vert}{1 - \vert \Gamma \vert}$$
+$$Z = Z_0 \frac{1 + \Gamma}{1 - \Gamma}, \qquad \text{VSWR} = \frac{1 + \vert \Gamma \vert}{1 - \vert \Gamma \vert}, \qquad \text{RL} = -20 \log_{10} \vert \Gamma \vert$$
 
-- Resonance: the dip in `mag_db`, **and** the reactance zero crossing.
-- Bandwidth: the two frequencies where VSWR $= 2$.
+- Resonance: the dip in dB, **and** the reactance through zero.
+- Bandwidth: step the marker to both VSWR $= 2$ frequencies.
+
+<div class="callout">The Smith chart is not a fifth quantity. It is the <strong>same complex number</strong>, plotted where you can see it.</div>
 
 Note:
-This is L9's "four names for one number" with their own hands instead of a marker readout. Plotting Gamma on the unit disk IS the Smith chart — the chart is a grid drawn over that disk, not a different measurement. Reading the resonance twice is not busywork: the two readings disagree when something is wrong with the reference plane, and that is the cheapest diagnostic they have.
+This is L9's "four names for one number" with the instrument doing the conversion. Two readings worth recognizing on sight: the readout says "open" where Gamma reaches +1, because the impedance there is unbounded rather than merely large; and it says VSWR infinity whenever |Gamma| is at or above 1, which a passive antenna cannot do — that is noise or a calibration that no longer matches the sweep, not a measurement. Reading the resonance twice is not busywork: the two disagree when something is wrong with the reference plane, and that is the cheapest diagnostic they have.
+
+---
+
+## The file is the record
+
+**Export** writes a Touchstone file — `.s1p` for one reflection parameter — and its header carries what a plot cannot:
+
+- hardware or **simulated**,
+- which parameters were actually measured,
+- the calibration, its ports, and its reference plane.
+
+Export every configuration before you change anything.
+
+Note:
+A trace on a screen is a measurement that cannot say what it was taken under. Two details in that header exist because of how easily a file lies: a single reflection parameter is written as .s1p rather than an .s2p with three columns zeroed — that file would claim a through path of exactly zero and an infinitely reflective second port, and a reader will plot those numbers happily — and a partial capture names in the header what was not measured. Touchstone 2-port column order is S11 S21 S12 S22, which is not the order anyone expects and is the usual source of transposed data.
 
 ---
 
@@ -162,7 +193,7 @@ Quote the bandwidth with the bar attached: VSWR <= 2, never "dB". On a log-magni
 
 ## Step 6 — Perturb, one variable at a time
 
-One named run each, same sweep, same calibration:
+One capture and one exported file each, same sweep, same calibration:
 
 - held clear, in free space,
 - with a hand 2–3 cm from the element,
@@ -171,7 +202,7 @@ One named run each, same sweep, same calibration:
 L9 predicted the direction of each shift. Your job is the **magnitude**.
 
 Note:
-Record all three fully. A configuration measured incompletely is one they have to set up again — and with named runs, one they can reload instead. This is also the one-element preview of mutual impedance in Module 3.
+Record all three fully. A configuration measured incompletely is one they have to set up again. Have them rename each file as they save it — l10_freespace.s1p, l10_hand.s1p, l10_bench.s1p — because the export stamps the clock into the filename, which keeps three captures apart and says nothing about which is which a week later. This is also the one-element preview of mutual impedance in Module 3.
 
 ---
 
@@ -194,13 +225,13 @@ Set the antenna down on the foam and take your hands off it. Say this twice duri
 
 - An annotated $\vert S_{11}\vert$ plot: resonance and both VSWR $= 2$ crossings marked.
 - A table: $f_0$, $Z$ at resonance, VSWR $\le 2$ bandwidth in MHz and in percent, all three configurations.
-- A Smith-chart plot of your measured $\Gamma$, with the resonance point marked.
+- A Smith chart with the marker on the resonance.
 - One paragraph on the perturbation results: what moved, which direction, and why.
 
 **One page, with units on every number. The paragraph carries the largest share of the grade.**
 
 Note:
-Tell them explicitly: a plot with no markers and no units is a screenshot, not a measurement. Quote the run name behind every figure and the reference plane they calibrated at. Due at the start of L15.
+Tell them explicitly: a plot with no markers and no units is a screenshot, not a measurement. The three exported files come in with it, and they state the reference plane they calibrated at. Due at the start of L15.
 
 ---
 
