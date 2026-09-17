@@ -303,8 +303,10 @@ Notice how the requirements mapped onto the aperture. The sidelobe specification
 ::::
 
 ::::{frame} Practice
-- <a href="../../practice/ECE444_L15_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a href="../../practice/ECE444_L15_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+:class: doc-links
+
+- <a class="doc-link" href="../../practice/ECE444_L15_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a class="doc-link doc-key" href="../../practice/ECE444_L15_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
 ::::{frame} Where this is going

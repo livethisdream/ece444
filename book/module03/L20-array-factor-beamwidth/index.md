@@ -291,8 +291,10 @@ The sweep is a discrete grid. The GUI steps the commanded angle by the phase-shi
 ::::
 
 ::::{frame} Practice
-- <a href="../../practice/ECE444_L20_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a href="../../practice/ECE444_L20_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+:class: doc-links
+
+- <a class="doc-link" href="../../practice/ECE444_L20_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a class="doc-link doc-key" href="../../practice/ECE444_L20_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
 ::::{frame} Where this is going
