@@ -334,23 +334,53 @@ the lowest signal you intend to believe, not by the main beam.
 :::
 :::{present}
 :class: callout
-A stray $40$ dB below the main beam is only $10$ dB below a $-30$ dB sidelobe.
-It adds in phase or against it, so that sidelobe reads anywhere from $2.4$ dB
-high to $3.3$ dB low.
+$-40$ dB is referenced to the **peak**. Against a $-30$ dB sidelobe the stray
+is only $10$ dB down — a **third** of it in amplitude — so the reading runs
+from $-27.6$ to $-33.3$ dB.
 :::
 
-The reflectivity spec refers to the main beam, and the sidelobe we are trying
-to read is not the main beam. A $-40$ dB stray is a hundredth of
-the peak amplitude, which is nothing next to the peak and a third of the
-amplitude of a sidelobe thirty decibels down.
+Every level in this lesson, the absorber's reflectivity included, is
+referenced to the main-beam peak. That is the step that makes these numbers
+surprising: the sidelobe we are trying to read is referenced to the same
+peak, so it is far closer to the stray than the two labels suggest.
 
-That is where the pair of numbers in the table below comes from. The stray
-arrives with whatever phase the room's geometry gives it, and as the
-positioner turns, that phase runs through every value, so the measured
-amplitude lands anywhere on a circle of radius $s$ around the true amplitude
-$a$. The extremes are $a + s$ and $a - s$, and the two are not the same
-number of decibels because the decibel is a logarithm: the same amplitude
-ripple is always larger going down than going up.
+Work it in amplitudes rather than decibels, because amplitudes are what add.
+A stray 40 dB below the peak has amplitude
+
+$$s = 10^{-40/20} = 0.0100,$$
+
+and a sidelobe 30 dB below the peak has amplitude
+
+$$a = 10^{-30/20} = 0.0316.$$
+
+So $s/a = 0.316$. The stray is a third of the sidelobe in amplitude, which is
+**10 dB below it, not 40**. As the positioner turns, the geometry runs the
+stray's phase through every value, the two add as vectors, and the measured
+amplitude sweeps the whole range from $a - s$ to $a + s$:
+
+$$a + s = 0.0416 = -27.6\ \text{dB}, \qquad a - s = 0.0216 = -33.3\ \text{dB}.$$
+
+Against a true level of $-30$ dB that is $+2.4$ dB at one extreme and
+$-3.3$ dB at the other, and **5.7 dB from trough to peak** of the ripple. The
+pair is asymmetric because the decibel is a logarithm: the same amplitude
+step is worth more decibels going down than going up.
+
+Nothing of the kind happens on the main beam, where $a = 1$ and $s = 0.01$,
+and the reading moves by $\pm 0.09$ dB. The error grows as the signal being
+read falls toward the stray, which is why the reflectivity you need is set by
+the lowest level you intend to believe.
+
+:::{depth}
+Run the argument backwards and it is a measurement rather than a warning. The
+peak-to-trough ripple of a wanted signal contaminated by a single stray is
+
+$$\text{ripple (dB)} = 20\log_{10}\frac{1 + r}{1 - r}, \qquad r = s/a,$$
+
+so recording the ripple gives $r$, and $r$ gives the stray level. That is
+exactly the free-space VSWR probe sweep the next frame describes: drag a
+probe through the volume, record the swing, and read off the stray field the
+quiet zone is delivering.
+:::
 
 | True level | Stray is below it by | Reading runs from | to |
 | :-- | :-- | :-- | :-- |
@@ -381,6 +411,13 @@ An antenna that overhangs the quiet zone is being measured in a room rather
 than in a chamber, and no amount of care with the rest of the setup recovers
 that. It is the first thing to check when a chamber measurement disagrees with
 a simulation for no reason you can name.
+
+The quiet zone is also the specification most often assumed rather than
+looked up. It is quoted as three things at once — a volume, a level, and a
+band — and an antenna can sit inside the volume while the measurement runs
+outside the band. Read all three off the chamber's documentation, measure the
+AUT's largest dimension against the first, and know which one you were working
+inside before you write down a sidelobe level.
 ::::
 
 ::::{frame} Compact Ranges
@@ -743,13 +780,35 @@ the units, because they are not the same down the column: the first two rows
 are decibels and differ only in sign, the third is a dimensionless ratio, and
 the fourth is a percentage of power.
 
-The fourth row is the one to carry into a design conversation. $\vert\Gamma\vert$
-is an amplitude ratio, so the fraction of power reflected is
-$\vert\Gamma\vert^2$, and at the $-10$ dB match spec that is
-$0.316^2 = 0.10$. The $-10$ dB convention from Lesson 4 is not arbitrary: it
-is the band over which at least 90% of the power we deliver reaches the
-antenna, and 90% is where the remaining mismatch stops being the thing worth
-fixing.
+The fourth row is the one to carry into a design conversation.
+$\vert\Gamma\vert$ is an amplitude ratio, so the fraction of power reflected
+is $\vert\Gamma\vert^2$, and at $\vert\Gamma\vert = 0.316$ that is exactly
+10%.
+
+Where the bar itself comes from is worth saying plainly, because nothing
+physical happens at any particular value of $\vert\Gamma\vert$. Lesson 3 gave
+the governing rule: an impedance bandwidth means nothing until you state the
+bar you measured it at. Two bars are in common use, and they are very nearly
+the same bar.
+
+| Bar | $\vert\Gamma\vert$ | $\vert S_{11}\vert$ | VSWR | Power reflected (%) | Mismatch loss |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| Lesson 4's rule of thumb | $1/3$ | $-9.5$ dB | $2.00$ | $11$ | $0.51$ dB |
+| The analyzer's round number | $0.316$ | $-10.0$ dB | $1.92$ | $10$ | $0.46$ dB |
+
+**VSWR $\le 2$** is the older statement and the one Lesson 4 used.
+**$\vert S_{11}\vert \le -10$ dB** is the same idea written for an instrument
+that plots decibels, and it is very slightly tighter. The argument for either
+is the last column: the mismatch is throwing away under half a decibel, which
+is below the other terms in a link budget, so tightening the bar further buys
+nothing you can measure.
+
+Other bars exist for reasons that are just as good. A handset is often
+specified at $-6$ dB, because a hand near the antenna detunes it and the
+design has to survive that. A high-power transmitter is held to VSWR
+$\le 1.5$, because the reflected power comes back into the amplifier. This
+course quotes $-10$ dB and says so; what Lesson 3 forbids is quoting a
+bandwidth without naming the bar.
 ::::
 
 ::::{frame} Impedance from the Ratio
@@ -759,7 +818,7 @@ $$Z_L = Z_0\ \frac{1 + \Gamma}{1 - \Gamma}, \qquad Z_0 = 50\ \Omega$$
 $$\Gamma = 0.28\ \angle{-140^\circ} \ \Longrightarrow\ Z_L = 30.6 - j11.9\ \Omega$$
 :::
 :::{present}
-- $\vert\Gamma\vert = 0.28$ is $-11.1$ dB: it clears the $-10$ dB spec.
+- $\vert\Gamma\vert = 0.28$ is $-11.1$ dB: it clears the $-10$ dB bar.
 - $R = 31\ \Omega$, against the $\approx 70\ \Omega$ a resonant dipole shows.
 - $X = -12\ \Omega$ is capacitive, so the element is short. Trim it **longer**.
 :::
@@ -771,8 +830,7 @@ $Z_L$ tells you what to do about it.
 
 Take the marker reading above one line at a time. The magnitude,
 $\vert\Gamma\vert = 0.28$, is $-11.1$ dB, so this antenna clears the $-10$ dB
-match specification of the previous frame; on that number alone we would ship
-it. The real part of the impedance, $31\ \Omega$, is well under the
+bar of the previous frame; on that number alone we would ship it. The real part of the impedance, $31\ \Omega$, is well under the
 $70\ \Omega$ or so a resonant dipole shows, which says some of the power
 reaching the antenna is going somewhere other than radiation — a lossy
 balun, a nearby conductor, or a poor ground. And the reactance is negative,
@@ -802,7 +860,7 @@ $$Z_L = 50\ \frac{1 + \Gamma}{1 - \Gamma} = 50\ \frac{0.785 - j0.180}{1.215 + j0
 :::{depth}
 The same conversion is worth running on the textbook numbers. A perfect
 half-wave dipole at $73 + j42.5\ \Omega$ gives $\vert\Gamma\vert = 0.371$, or
-$-8.6$ dB, VSWR $2.18$ — it **fails** the −10 dB test. Shorten it to
+$-8.6$ dB, VSWR $2.18$ — it **fails both bars**. Shorten it to
 resonance, where it settles near $70\ \Omega$ real, and you get $-15.6$ dB and
 VSWR $1.40$. That $42.5\ \Omega$ of reactance is the entire difference between
 a marginal antenna and a good one, and it is why nobody builds a dipole
@@ -939,7 +997,7 @@ manufacture a narrow dip that has nothing to do with the element.
 ::::{frame} Four Smith-Chart Reading Skills
 :::{present}
 - **Crosses the real axis**: resonance. Left of center is $R < 50\ \Omega$.
-- **Inside the 0.316 circle**: the −10 dB spec, drawn.
+- **Inside the 0.316 circle**: the $-10$ dB bar, drawn.
 - A **loop**: two resonances, often element plus feed.
 - The **whole trace rotating**: your reference plane moved.
 :::
@@ -1017,7 +1075,7 @@ preview of what neighbors in an array do to each other.
 | Three-antenna method | Gain with no calibrated standard | $G_A = \tfrac{1}{2}(M_{AB} + M_{AC} - M_{BC})$ |
 | $S_{11} = b_1/a_1$ | One-port scattering parameter | equals $\Gamma$ at the reference plane |
 | $Z_L = Z_0(1+\Gamma)/(1-\Gamma)$ | Impedance from reflection | sign of $X$ tells you short (−) or long (+) |
-| $\vert S_{11}\vert \le -10$ dB | The match spec | $\vert\Gamma\vert \le 0.316$; VSWR $\le 1.92$; 90% of power in |
+| $\vert S_{11}\vert \le -10$ dB | The match bar this course quotes | $\vert\Gamma\vert \le 0.316$; VSWR $\le 1.92$; 90% of power in. Lesson 4's VSWR $\le 2$ is the same bar, a hair looser |
 | Directivity, source match, tracking | The three one-port error terms | three unknowns, hence three SOL standards |
 | Reference plane | Where the standards were attached | line length past it = pure rotation on the chart |
 | Dynamic range | Peak level minus measured noise floor | bounds every extracted number |
@@ -1026,62 +1084,37 @@ preview of what neighbors in an array do to each other.
 ::::{frame} The Midterm Project
 :::{present}
 :class: callout
-**Midterm Project.** Build a dipole, measure its pattern, and report it with
-an **error budget**. Due at Lesson 20.
+**Midterm Project.** Build a dipole and measure its pattern.
+Due **2 Oct, 2359**.
 :::
 :::{present}
-- Everything since Lesson 1 lands here: the antenna, the model, the range, the analyzer.
-- **Six** error-budget lines, all from today.
+| Lessons | What it uses |
+| :-- | :-- |
+| L1-L3 | Gain, beamwidth, polarization |
+| L5-L6 | Far field, the radiation integral |
+| L7-L8 | The dipole, computed and modeled |
+| L9-L11 | The range and the analyzer |
 :::
 
 Everyone builds the same antenna, a dipole, and that is deliberate. The
 project is not an antenna design exercise — Lesson 7 already gave you the
-design, Lesson 8 let you model it, and Lessons 10 and 11 will put it on the
-two instruments. Handing the whole class one known antenna means the pattern,
-the gain, and the impedance are all predictable before anyone measures
-anything, so the work of the project is the comparison and the uncertainty
-rather than the build. It also means thirty measurements of the same object,
-which makes disagreement between them worth talking about.
+design, Lesson 8 let you model it, and Lessons 10 and 11 put it on the two
+instruments. Handing the whole class one known antenna means the pattern, the
+gain, and the impedance are all predictable before anyone measures anything,
+so the work of the project is the comparison rather than the build. It also
+means thirty measurements of the same object, which makes disagreement
+between them worth talking about.
 
-Lesson 1 defined gain, beamwidth, and sidelobe level; Lesson 3 defined
-polarization; Lesson 5 gave the far-field boundary; Lesson 6 gave the
-integral; Lesson 7 solved the dipole; Lesson 8 modeled it. Today adds the
-instruments, and the project is where all of it has to agree — the hand
-calculation, the simulation, and two measurements — or where you have to say
-why it does not. That is the point of the deliverable: "I measured it" is not
-an engineering result, while "I measured it, here is what it should have been,
-and here is what my range could and could not tell me" is.
+The table is the point of the project. Lesson 1 defined gain and beamwidth
+and Lesson 3 defined polarization, so the report quotes all three. Lesson 5
+set the far-field boundary and Lesson 6 gave the integral that produces the
+pattern, so you know what the pattern should look like before you measure it.
+Lesson 7 solved the dipole in closed form and Lesson 8 modeled it in NEC, so
+you have two independent predictions to compare against. Today gives the
+range and the analyzer, and Lessons 10 and 11 are the dress rehearsal on
+both. Nothing in the course so far is left out of it.
 
-Full requirements come in the project handout distributed in class. Lessons 10
-and 11 are the dress rehearsal — same antenna, same instruments, same
-extraction, same uncertainty discussion.
-::::
-
-::::{frame} The Error Budget
-:class: read-only
-
-Every line below came out of today, and every one of them is a number you can
-put a value on before you measure anything. The project asks for this table
-filled in for your own setup.
-
-| Line | Where it comes from | What it limits |
-| :-- | :-- | :-- |
-| Range length | $r$ against $2D^2/\lambda$ | Null depth and sidelobe level first, gain last |
-| Amplitude taper | Source beamwidth against $D/r$ | Apparent beamwidth and sidelobe level |
-| Quiet zone | Stray field level, and whether the AUT fits inside it | Every level below the main beam |
-| Horn calibration | The certificate, typically $\pm 0.3$ dB | Absolute gain, directly |
-| Dynamic range | Measured peak minus measured noise floor | Nulls, then deep sidelobes |
-| Polarization alignment | Angular error between source and AUT | Gain, as $20\log_{10}\cos\Delta$ |
-| Positioner accuracy | Angle readout against true angle | Beamwidth and null positions |
-
-The quiet zone deserves more attention than its one row suggests, because it
-is the line most often assumed rather than measured. It is specified as a
-volume, a level, and a band together — "1.2 m at $-45$ dB, 2 to 18 GHz" — and
-the AUT has to fit inside all three. An antenna that overhangs the quiet zone
-is being measured in a room, and the stray-reflection numbers from earlier in
-this lesson stop being a bound on your error and become an underestimate of
-it. Check the specification, check the antenna's largest dimension against it,
-and say in the report which one you were working inside.
+Full requirements come in the project handout distributed in class.
 ::::
 
 ::::{frame} Practice

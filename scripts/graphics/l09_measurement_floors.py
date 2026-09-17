@@ -86,30 +86,42 @@ def stray_ripple(stacked=False):
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9.6, 3.4),
                                        gridspec_kw={"width_ratios": [1.0, 1.5]})
 
-    # ---- panel 1: the phasor circle, drawn for the -30 dB sidelobe -------
+    # ---- panel 1: the amplitudes, for the -30 dB sidelobe ----------------
+    # Neil, 2026-09-17: "how do you get a 5.5dB swing from a -40dB stray field?
+    # I truly don't understand". The panel used to show the circle and the two
+    # dB errors and never the amplitudes, so the arithmetic looked like magic.
+    # It now carries every number: the stray is 0.0100, the sidelobe is 0.0316,
+    # and the sum and difference are what the two dB figures come from.
     lev = LEVELS[2]
     a = 1.0
     s = 10 ** ((STRAY_DB - lev) / 20)              # stray, relative to this signal
+    amp_a, amp_s = 10 ** (lev / 20), 10 ** (STRAY_DB / 20)
     ax1.add_patch(FancyArrowPatch((0, 0), (a, 0), arrowstyle="-|>", mutation_scale=14,
-                                  lw=2.4, color=NAVY, shrinkA=0, shrinkB=0, zorder=4))
-    ax1.text(a / 2, 0.09, "wanted signal", ha="center", color=NAVY,
-             fontsize=11, fontweight="bold")
+                                  lw=2.6, color=NAVY, shrinkA=0, shrinkB=0, zorder=4))
+    # anchored clear of the stray circle, whose left edge is at a - s
+    ax1.text(a - s - 0.03, 0.14, "sidelobe, −30 dB", ha="right", color=NAVY,
+             fontsize=11.5, fontweight="bold")
+    ax1.text(a - s - 0.03, -0.19, f"amplitude {amp_a:.4f}", ha="right", color=NAVY, fontsize=11)
     ax1.add_patch(Circle((a, 0), s, fill=False, ec=RED, lw=1.8, ls=(0, (5, 4)), zorder=3))
-    ang = 52
+    ang = 58
     ax1.add_patch(FancyArrowPatch((a, 0), (a + s * np.cos(np.radians(ang)), s * np.sin(np.radians(ang))),
-                                  arrowstyle="-|>", mutation_scale=12, lw=1.8, color=RED,
+                                  arrowstyle="-|>", mutation_scale=12, lw=2.0, color=RED,
                                   shrinkA=0, shrinkB=0, zorder=5))
-    ax1.text(a + s * 0.62, s * 0.92, "stray", color=RED, fontsize=11,
+    ax1.text(a + 0.08, 0.46, "stray, −40 dB", color=RED, fontsize=11.5,
              fontweight="bold", ha="left")
-    hi, lo = swing(lev)
-    for x, lab, ha in ((a + s, _m(hi) + " dB", "left"), (a - s, _m(lo) + " dB", "right")):
-        ax1.plot([x], [0], "o", ms=5.5, color=RED, zorder=6)
-        ax1.plot([x, x], [0, -0.30], color=RED, lw=1, ls=":", zorder=3)
-        ax1.text(x + (0.03 if ha == "left" else -0.03), -0.40, lab, color=RED,
-                 fontsize=11, ha=ha)
-    ax1.text(a, -0.66, "at a −30 dB sidelobe", color=GRAY, fontsize=10.5, ha="center")
-    ax1.set_xlim(-0.10, 1.62)
-    ax1.set_ylim(-0.78, 0.62)
+    ax1.text(a + 0.08, 0.31, f"amplitude {amp_s:.4f}", color=RED, fontsize=11, ha="left")
+    for x, amp, ha in ((a - s, amp_a - amp_s, "right"), (a + s, amp_a + amp_s, "left")):
+        db = 20 * np.log10(amp)
+        ax1.plot([x], [0], "o", ms=6, color=RED, zorder=6)
+        ax1.plot([x, x], [0, -0.34], color=RED, lw=1, ls=":", zorder=3)
+        dx = 0.03 if ha == "left" else -0.03
+        ax1.text(x + dx, -0.46, f"{amp:.4f}", color=RED, fontsize=11.5, ha=ha, fontweight="bold")
+        ax1.text(x + dx, -0.63, _m(db, "{:.1f}") + " dB", color=RED, fontsize=11, ha=ha)
+    ripple = 20 * np.log10((amp_a + amp_s) / (amp_a - amp_s))
+    ax1.text(a, -0.88, f"{ripple:.1f} dB peak to trough", color=INK, fontsize=11.5,
+             ha="center", fontweight="bold")
+    ax1.set_xlim(-0.14, 1.86)
+    ax1.set_ylim(-1.02, 0.70)
     ax1.set_aspect("equal")
     ax1.axis("off")
 
@@ -138,13 +150,13 @@ def stray_ripple(stacked=False):
 
     if stacked:
         fig.tight_layout(rect=(0, 0, 1, 0.93), h_pad=3.0)
-        fig.text(0.02, 0.975, "a −40 dB stray adds at any phase", color=NAVY,
+        fig.text(0.02, 0.975, "the amplitudes add, at any phase", color=NAVY,
                  fontsize=13, fontweight="bold", ha="left")
         fig.text(0.02, 0.500, "so the reading is an interval, not a number", color=NAVY,
                  fontsize=13, fontweight="bold", ha="left")
     else:
         fig.tight_layout(rect=(0, 0, 1, 0.90))
-        fig.text(0.015, 0.955, "a −40 dB stray adds at any phase", color=NAVY,
+        fig.text(0.015, 0.955, "the amplitudes add, at any phase", color=NAVY,
                  fontsize=12.5, fontweight="bold", ha="left")
         fig.text(0.44, 0.955, "so the reading is an interval, not a number", color=NAVY,
                  fontsize=12.5, fontweight="bold", ha="left")

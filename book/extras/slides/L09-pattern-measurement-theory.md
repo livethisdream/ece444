@@ -191,16 +191,16 @@ Carbon-loaded foam pyramids: the taper is a gradual impedance transition into a 
 
 ## Stray reflections and sidelobe error
 
-<div class="fig" data-inline-svg="./fig/L09-stray-ripple.svg" style="max-width:730px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L09-stray-ripple.svg" style="max-width:660px; margin:0 auto;"></div>
 
-The absorber spec refers to the **main beam**. A $-40$ dB stray is only **10 dB** below a $-30$ dB sidelobe, and it arrives at whatever phase the room gives it.
+Both levels are referenced to the **peak**, so a $-40$ dB stray is only **10 dB** below a $-30$ dB sidelobe. Amplitudes add: $0.0316 \pm 0.0100$ gives $0.0416$ and $0.0216$.
 
 <div class="callout">
-A chamber that meets a good $-40$ dB spec still leaves a $-30$ dB sidelobe reading anywhere from <strong>2.4 dB high to 3.3 dB low</strong>.
+A chamber meeting a good $-40$ dB spec still leaves a $-30$ dB sidelobe reading between $-27.6$ and $-33.3$ dB — a <strong>5.7 dB</strong> swing as the positioner turns.
 </div>
 
 Note:
-The two numbers are the two extremes of one interval, not two separate errors. The stray adds to the wanted signal either in phase or against it, giving a + s and a - s, and the decibel is a logarithm so the two are not symmetric: the same amplitude ripple is always worth more decibels going down than going up. Work the -30 dB row out loud: the wanted amplitude is 0.0316, the stray is 0.01, so the reading runs from 0.0416 to 0.0216, which is +2.4 and -3.3 dB. The chamber spec you need is set by the lowest level you intend to believe, not by the main beam.
+Do the arithmetic on the board, in amplitudes, because amplitudes are what add. A stray 40 dB below the peak is 10^(-40/20) = 0.0100. A sidelobe 30 dB below the peak is 10^(-30/20) = 0.0316. The ratio is 0.316, so the stray is a third of the sidelobe - 10 dB below it, not 40. As the positioner turns the geometry runs the stray's phase through every value, the two add as vectors, and the reading sweeps from 0.0216 to 0.0416, which is -33.3 to -27.6 dB. Against a true -30 that is +2.4 and -3.3, and 5.7 dB trough to peak. The pair is asymmetric because the decibel is a logarithm. On the main beam the same stray moves the reading by 0.09 dB and nobody notices; the error grows as the signal falls toward the stray. Run it backwards and it is a measurement: ripple = 20 log10[(1+r)/(1-r)] is how a quiet zone gets surveyed.
 
 ---
 
@@ -369,11 +369,29 @@ Head off the double-subscript question before it is asked. S_mn is the general s
 | Power reflected (%) | $100\vert\Gamma\vert^2$ | $10$ |
 
 <div class="callout">
-All four re-dress one complex number. At the $-10$ dB spec, $10\%$ of the power comes back and <strong>$90\%$ reaches the antenna</strong>.
+All four re-dress one complex number. At $\vert\Gamma\vert = 0.316$, $10\%$ of the power comes back and <strong>$90\%$ reaches the antenna</strong>.
 </div>
 
 Note:
-Watch the units down the column, because they are not the same: the first two rows are decibels and differ only in sign, the third is a dimensionless ratio, and the fourth is a percentage of power. Say the last row out loud - |Gamma| is an amplitude ratio, so the power fraction is |Gamma| squared, and 0.316 squared is 0.10. That is where the -10 dB convention comes from: 90% of the power we deliver reaches the antenna, and the rest stops being worth chasing.
+Watch the units down the column, because they are not the same: the first two rows are decibels and differ only in sign, the third is a dimensionless ratio, and the fourth is a percentage of power. Say the last row out loud - |Gamma| is an amplitude ratio, so the power fraction is |Gamma| squared, and 0.316 squared is 0.10.
+
+---
+
+## Where does "$-10$ dB" come from?
+
+Nothing physical happens at any value of $\vert\Gamma\vert$. **L3's rule stands: a bandwidth means nothing until you state the bar.**
+
+| Bar | $\vert\Gamma\vert$ | $\vert S_{11}\vert$ | VSWR | Reflected (%) | Mismatch loss |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| L4's rule of thumb | $1/3$ | $-9.5$ dB | $2.00$ | $11$ | $0.51$ dB |
+| The analyzer's round number | $0.316$ | $-10.0$ dB | $1.92$ | $10$ | $0.46$ dB |
+
+<div class="callout">
+Two statements of one bar. The case for it is the last column: <strong>under half a dB</strong> thrown away, below everything else in a link budget.
+</div>
+
+Note:
+This answers the question they will ask and we have been ducking. VSWR <= 2 is the older statement and the one L4 used; |S11| <= -10 dB is the same idea written for an instrument that plots decibels, and it is a hair tighter. Neither is handed down. Other bars exist for good reasons: a handset is often specified at -6 dB because a hand near it detunes it and the design has to survive that, and a high-power transmitter at VSWR <= 1.5 because reflected power comes back into the amplifier. This course quotes -10 dB and says so. What L3 forbids is quoting a bandwidth without naming the bar.
 
 ---
 
@@ -383,7 +401,7 @@ $$Z_L = Z_0\ \frac{1+\Gamma}{1-\Gamma}, \qquad Z_0 = 50\ \Omega$$
 
 A marker reads $\Gamma = 0.28\ \angle{-140^\circ}$, so $Z_L = 30.6 - j11.9\ \Omega$:
 
-- $\vert\Gamma\vert = 0.28$ is $-11.1$ dB — it **clears the $-10$ dB spec**.
+- $\vert\Gamma\vert = 0.28$ is $-11.1$ dB — it **clears the $-10$ dB bar**.
 - $R = 31\ \Omega$, against the $\approx 70\ \Omega$ a resonant dipole shows.
 - $X = -12\ \Omega$ is **capacitive**, so the element is electrically short.
 
@@ -543,22 +561,20 @@ Tie back to L5: the reactive near field is where energy is stored, not radiated.
 ## The midterm project
 
 <div class="callout">
-<strong>Build a dipole, measure its pattern</strong>, and report gain, beamwidth, sidelobe level, and polarization <strong>with an error budget</strong>. Due L20.
+<strong>Build a dipole and measure its pattern.</strong> Due <strong>2 Oct, 2359</strong>.
 </div>
 
-Everyone builds the same antenna, and everything since L1 lands on it: the definitions from L1–L3, the far-field boundary from L5, the radiation integral from L6, the dipole solution from L7, the model from L8, and both instruments from today.
+Everyone builds the same antenna, and nothing in the course so far is left out of it:
 
-| Error-budget line | Where it comes from |
+| Lessons | What the project uses |
 | :-- | :-- |
-| Range length | $r$ against $2D^2/\lambda$ |
-| Amplitude taper | Source beamwidth against $D/r$ |
-| Quiet zone | Stray field level, and whether the AUT fits inside it |
-| Horn calibration | The certificate, about $\pm 0.3$ dB |
-| Dynamic range | Measured peak minus measured floor |
-| Polarization alignment | Angular error between source and AUT |
+| L1–L3 | Gain, beamwidth, sidelobe level, polarization — the quantities you report |
+| L5–L6 | The far-field boundary, and the integral that produces the pattern |
+| L7–L8 | The dipole in closed form, and the same dipole in NEC |
+| L9–L11 | The range, the analyzer, and what each one can tell you |
 
 Note:
-Say why everyone builds the same antenna: the pattern, the gain and the impedance are all predictable before anyone measures anything, so the work of the project is the comparison and the uncertainty rather than the build. Thirty measurements of one known object also makes disagreement between them worth talking about. Six error-budget lines, not three, and every one of them came out of today. The quiet zone is the one most often assumed rather than measured - check the spec, check the antenna's largest dimension against it, and say in the report which one you were working inside. Full requirements are in the handout.
+Say why everyone builds the same antenna: the pattern, the gain and the impedance are all predictable before anyone measures anything, so the work of the project is the comparison rather than the build. Thirty measurements of one known object also makes disagreement between them worth talking about. Then walk the table, because it is the real point of the slide - L1 and L3 define what gets reported, L5 and L6 say what the pattern should look like before it is measured, L7 and L8 give two independent predictions to compare against, and today plus the two labs give the instruments. Full requirements are in the handout.
 
 ---
 
@@ -567,7 +583,7 @@ Say why everyone builds the same antenna: the pattern, the gain and the impedanc
 - **L10** puts an antenna on the analyzer: calibrate, verify, sweep, read the match.
 - **L11** puts one on the positioner: cut two planes, extract gain and beamwidth.
 - Both are procedure. The reasons are all here, so bring this lesson to the bench.
-- The **midterm project, due L20**, is the same work with no procedure handed to you.
+- The **midterm project, due 2 Oct**, is the same work with no procedure handed to you.
 
 Note:
 Send them out knowing that "I measured it" is not an engineering result, while "I measured it, here is what it should have been, and here is what my range could and could not tell me" is. The labs are the dress rehearsal: same antenna, same instruments, same extraction, same uncertainty discussion.
