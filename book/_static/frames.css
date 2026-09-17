@@ -167,6 +167,24 @@ kbd {
 }
 [data-mode="present"] .frame.open .depth .eq { padding: .3rem 0; }
 
+/* An ordinary link in a frame body. page.css has carried `.page a` since the
+   reading pages were split out; frames.css never had the matching rule, so
+   every inline link on a frame lesson -- the lab sheets, the materials
+   cross-references, the practice PDFs -- fell through to the user agent's
+   #0000EE underline. That is the wrong blue in light mode and all but
+   invisible on the dark ground. Mirror the reading page exactly: same token,
+   same offset, so a link reads the same on both shells.
+
+   The pills style themselves and are excluded by name: a bare `.frame a`
+   would outrank plain `.doc-link` on specificity (0,0,1,1 over 0,0,1,0) and
+   quietly repaint the chips. */
+.frame a:not(.doc-link):not(.cta):not(.more) {
+  color: var(--blue-dark);
+  text-underline-offset: .18em;
+}
+.frame a:not(.doc-link):not(.cta):not(.more):hover { color: var(--blue); }
+.frame a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
 .more {
   align-self: flex-start; font: inherit; font-size: var(--step--1);
   font-weight: 600; letter-spacing: .02em;

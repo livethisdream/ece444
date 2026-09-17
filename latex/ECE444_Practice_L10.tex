@@ -43,7 +43,8 @@ $Z_0 = 50$~\ohms throughout.
 			|\Gamma| &= \frac{\text{VSWR}-1}{\text{VSWR}+1} = \frac{1}{3} = 0.333 \\
 			|S_{11}| &= 20\ \mylog{0.333} = -9.5\db
 		}
-		It misses the $-10\db$ specification, but only just.
+		That is what the course bar, VSWR $\le 2$, looks like on a log-magnitude
+		trace: this antenna sits exactly on it.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -51,19 +52,20 @@ $Z_0 = 50$~\ohms throughout.
 		$|S_{11}|$ = \ansbox[1.3in]{$-9.5\db$}
 	\end{minipage}
 
-	\part Why is $-10\db$ the conventional acceptance level for an antenna match?
+	\part Why is VSWR $\le 2$ the course's acceptance bar for an antenna match?
 	Answer in terms of power, in one or two sentences.
 		\begin{solution}[0.9in]
-		At $-10\db$, $|\Gamma|^2 = 0.10$: exactly $10\%$ of the delivered power comes
-		back and $90\%$ goes into the antenna. Below that level the reflected power is
-		a small correction to the link budget, so making the match better buys very
-		little, while making it worse costs quickly.
+		At VSWR $= 2$, $|\Gamma| = 1/3$ and $|\Gamma|^2 = 1/9$: about $11\%$ of the
+		delivered power comes back and $89\%$ goes into the antenna. Below that bar the
+		reflected power is a small correction to the link budget, so a better match buys
+		very little, while a worse one costs quickly. On a dB trace the bar is the
+		$-9.5\db$ line; switch the analyzer to VSWR format and it is simply 2.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Lesson 7 predicted $Z_{\text{in}} = 73 + j42.5$~\ohms for an ideal half-wave
 		dipole. Compute $|\Gamma|$, $|S_{11}|$ in dB, and the VSWR. Does the textbook
-		dipole meet the $-10\db$ specification, and what one change fixes it?
+		dipole meet the VSWR $\le 2$ bar, and what one change fixes it?
 		\begin{solution}[1.5in]
 		\eq{
 			\Gamma &= \frac{23 + j42.5}{123 + j42.5} \\
@@ -130,13 +132,13 @@ $S_{11} = 0.33\ \angle 155\mydeg$.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Find $|S_{11}|$ in dB and the VSWR. Does this element meet the
-		$-10\db$ specification as measured?
+		VSWR $\le 2$ bar as measured?
 		\begin{solution}[1.1in]
 		\eq{
 			|S_{11}| &= 20\ \mylog{0.33} = -9.6\db \\
 			\text{VSWR} &= \frac{1.33}{0.67} = 1.99
 		}
-		No -- it misses the specification by $0.4\db$.
+		Yes -- by $0.01$. It passes with no margin worth quoting.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -153,10 +155,11 @@ $S_{11} = 0.33\ \angle 155\mydeg$.
 			\Gamma = \frac{26-50}{26+50} = -0.316 \quad\rightarrow\quad
 			|S_{11}| = -10.0\db, \qquad \text{VSWR} = 1.92
 		}
-		It lands \emph{exactly} on the specification with no margin at all. Trimming
-		only removes reactance; it cannot move the resistance. An element whose
-		radiation resistance sits far from $50$~\ohms needs a matching network or a
-		different feed arrangement, not a shorter piece of wire.
+		It passes, at VSWR $1.92$ -- but the perfect trim bought only $1.99 \to 1.92$.
+		Trimming removes reactance; it cannot move the resistance, and here the
+		resistance is what is left. An element whose radiation resistance sits far from
+		$50$~\ohms needs a matching network or a different feed arrangement, not a
+		shorter piece of wire.
 		\end{solution}
 
 \end{parts}
@@ -189,27 +192,27 @@ $|S_{11}|$ (dB) & $-3.8$ & $-6.5$ & $-8.8$ & $-12.4$ & $-17.7$ & $-19.4$ & $-17.
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Interpolate the two $-10\db$ crossings and report the impedance
-		bandwidth both in MHz and as a percentage.
+		\part Interpolate the two VSWR $= 2$ crossings -- the $-9.5\db$ line on this
+		trace -- and report the impedance bandwidth in MHz and as a percentage.
 		\begin{solution}[1.5in]
 		Lower crossing, between $880\ \mhz$ ($-8.8\db$) and $890\ \mhz$ ($-12.4\db$):
 		\eq{
-			f_1 = 880 + 10\ \frac{10-8.8}{12.4-8.8} = 883\ \mhz
+			f_1 = 880 + 10\ \frac{9.5-8.8}{12.4-8.8} = 882\ \mhz
 		}
 		Upper crossing, between $920\ \mhz$ ($-12.5\db$) and $930\ \mhz$ ($-9.0\db$):
 		\eq{
-			f_2 = 920 + 10\ \frac{12.5-10}{12.5-9.0} = 927\ \mhz
+			f_2 = 920 + 10\ \frac{12.5-9.5}{12.5-9.0} = 929\ \mhz
 		}
 		\eq{
-			\text{BW} = 927 - 883 = 44\ \mhz, \qquad
-			\frac{44}{905} = 4.8\%
+			\text{BW} = 929 - 882 = 47\ \mhz, \qquad
+			\frac{47}{905} = 5.2\%
 		}
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		BW = \ansbox[1.2in]{$44\ \mhz$} \\[8pt]
-		Fractional = \ansbox[1.2in]{$4.8\%$}
+		BW = \ansbox[1.2in]{$47\ \mhz$} \\[8pt]
+		Fractional = \ansbox[1.2in]{$5.2\%$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -234,7 +237,7 @@ $|S_{11}|$ (dB) & $-3.8$ & $-6.5$ & $-8.8$ & $-12.4$ & $-17.7$ & $-19.4$ & $-17.
 	\part A thin wire dipole typically shows $3$--$10\%$ impedance bandwidth. Does
 	this element fit the rule of thumb, and what physical change would widen it?
 		\begin{solution}[1.0in]
-		Yes: $4.8\%$ sits in the lower half of the usual $3$--$10\%$ range, which is
+		Yes: $5.2\%$ sits in the lower half of the usual $3$--$10\%$ range, which is
 		what a thin conductor gives. Bandwidth widens when the antenna's $Q$ drops, so
 		use a fatter conductor -- a thicker rod, a sleeve, a cage of wires, or a
 		biconical element -- which lowers the stored-to-radiated energy ratio.
@@ -346,8 +349,9 @@ number per frequency. This problem is about the questions that number cannot ans
 			L_B &= -10\ \mylog{1 - 0.126} = 0.58\db
 		}
 		Realized gains are $2.0 - 0.01 = 2.0\dbi$ and $5.0 - 0.58 = 4.4\dbi$.
-		\textbf{Antenna B wins by about $2.4\db$}, despite its much worse $S_{11}$.
-		Mismatch loss is small until $|S_{11}|$ gets much worse than $-10\db$.
+		\textbf{Antenna B wins by about $2.4\db$} despite failing the match bar --
+		$-9\db$ is VSWR $2.10$. Mismatch loss stays small well past VSWR $\le 2$;
+		the bar is a design discipline, not a cliff.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -357,7 +361,7 @@ number per frequency. This problem is about the questions that number cannot ans
 		Better: \ansbox[1.2in]{B}
 	\end{minipage}
 
-	\part During the lab you bring a hand within a few centimetres of the element
+	\part During the lab you bring a hand within a few centimeters of the element
 	and the dip moves. State which way the resonant frequency shifts, what happens
 	to the depth of the dip, and why neither effect is instrument error.
 		\begin{solution}[1.2in]
