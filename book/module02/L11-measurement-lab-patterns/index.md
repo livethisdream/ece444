@@ -52,51 +52,72 @@ with you. Today is procedure and reduction.
 :::
 ::::
 
-::::{frame} Safety and Good Practice
+::::{frame} What You Can Wreck
 :::{present}
 :class: callout
 **The tower turns a real antenna on a real cable.** Nobody inside during a
-scan, door closed, **STOP** reachable.
+scan.
 :::
 :::{present}
-- Cable slack for the **whole grid**.
-- Torque connectors. Never twist the cable body.
-- Calibrate, **verify**, then measure.
+| What | Cost | Ruined by |
+| :-- | :-- | :-- |
+| Absorber | \$750/sq ft | leaning, stacking |
+| VNA port | \$85k | cross-thread, over-torque, cable stress |
+| Horn | \$5k | dropping, wind-up |
+| Cable | \$1k | kinking, wind-up |
 :::
 
-The RF here is milliwatts and is not the hazard; the hazards are mechanical
-and electrostatic. Take those two seriously and this rig is hard to hurt and
-hard to be hurt by.
+A bad measurement costs you an afternoon; every row in that table costs the
+rig. Wind-up appears twice because it takes the cable and the horn together,
+and it is the failure this lab is most likely to cause.
 
 :::{depth}
-**Cable wind-up is the standing hazard**, and it is a slow one: it does not
-announce itself until the cable is tight, and by then something has to give.
-Confirm on the EMControl front panel that the axis is in **non-continuous**
-mode before any scan with a cable routed through the tower — continuous mode
-ignores the software limits entirely. Check the **latched error** line in the
-Turntable section while you are there; a fault the card is still holding from
-last period is worth knowing about before you commit 180 angles to it.
-*Device Emulation* on the front panel is **not** simulation and does not
-inhibit the motor.
+**Cable wind-up is the standing hazard, and it is slow.** It does not announce
+itself until the cable is tight, and then it takes the cable, or the horn, or
+both. **STOP** preempts a move in progress and is live whenever the page is
+connected, which is why it sits in the tab header and not three scrolls down a
+settings panel. Confirm on the EMControl front panel that the axis is in
+**non-continuous** mode before any scan with a cable routed through the tower —
+continuous mode ignores the software limits entirely. Check the **latched
+error** line in the Turntable section while you are there; a fault the card is
+still holding from last period is worth knowing about before you commit 180
+angles to it. *Device Emulation* on the front panel is **not** simulation and
+does not inhibit the motor.
 
-**Absorber is consumable and fragile.** The pyramids shed if you brush them
-and a crushed tip is a permanently worse quiet zone. Do not lean on the walls,
-do not rest tools or bags on the floor absorber, and route cables rather than
-laying them across it.
+**The port is the expensive one, and the damage spreads.** Start the threads by
+hand and square, tighten with the wrench rather than by feel, and turn the
+*nut* and not the cable body. A cross-threaded or over-torqued port is a bench
+repair on an eighty-five thousand dollar instrument, and the same damage
+transfers to the next connector it mates with — which on this rig is a
+calibration module. Side load at a connector is cable stress and is the slow
+version of the same failure, so nothing hangs off a port.
 
-**Connectors are the other thing you can quietly destroy.** Align before you
-turn, tighten with the wrench rather than by feel, and turn the *nut* and not
-the cable — a rotated center pin ruins the connector, and then the next
-connector it touches, which on this rig is the calibration module. Ground
-yourself before you touch a center pin. Never connect an analyzer port to
-anything that transmits: a receiver port is not built to be driven.
+**The horn is dropped and the cable is kinked** — neither wears out. Two hands
+on a horn, support its weight while you mate it, never hang it from its own
+connector; and for the cable, respect the bend radius, no tight coils, and
+nothing routed where somebody will stand on it.
 
-**And the practice half.** Calibrate, verify, measure, in that order, and log
-the five sweep settings before you touch anything else. One variable at a
-time. Name every run and every file when you make it, not afterwards. Write
-down what you expect before you look — a prediction you committed to is the
-only way a surprise can teach you anything.
+**The absorber is priced by the square foot.** The pyramids shed if you brush
+them and a crushed tip is a permanently worse quiet zone, so nobody leans on
+the walls and nothing gets rested on the floor pyramids. There is no repairing
+a tip; there is only buying more absorber.
+
+The RF, for the record, is milliwatts. Nothing in this chamber will hurt you.
+Everything in it can be hurt by you.
 :::
+::::
+
+::::{frame} Good Practice
+:::{present}
+- Set the sweep, calibrate, **verify**, then measure.
+- Log all five sweep settings first.
+- Change one thing at a time.
+- Name every run before you start it.
+:::
+
+And write down what you expect before you look. A prediction you committed to
+in writing is the only way a surprise can teach you anything; a prediction you
+made after seeing the answer is not a prediction.
 ::::
 
 ::::{frame} What You Are Doing Today

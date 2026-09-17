@@ -34,16 +34,35 @@ L10 answered "does power get in?" Today answers "where does it go once it's in?"
 
 ---
 
-## Safety and good practice
+## What you can wreck
 
-<div class="callout"><strong>The tower turns a real antenna on a real cable.</strong> Nobody inside during a scan, door closed, and <strong>STOP</strong> always reachable.</div>
+<div class="callout"><strong>The tower turns a real antenna on a real cable.</strong> Nobody inside during a scan, door closed, <strong>STOP</strong> always reachable.</div>
 
-- Cable slack for the **whole grid**, and the axis in **non-continuous** mode.
-- Torque connectors; turn the nut, never the cable body.
-- Calibrate, **verify**, then measure. Log the sweep. Name every run.
+| What | Cost | Ruined by |
+| :-- | :-- | :-- |
+| Absorber | \$750/sq ft | leaning, stacking |
+| VNA input port | \$85k | cross-thread, over-torque, cable stress |
+| Horn | \$5k | dropping, wind-up |
+| Test cable | \$1k | kinking, wind-up |
+
+A bad measurement costs an afternoon. **Every row there costs the rig.**
 
 Note:
-Say this every period, and say why. Cable wind-up is the standing hazard and it is slow — it does not announce itself until the cable is tight, and continuous mode ignores the software limits entirely. Check the latched error line in the Turntable section while you are there. The RF is milliwatts and is not the hazard; the hazards are mechanical and electrostatic. Absorber is consumable: the pyramids shed if you brush them and a crushed tip is a permanently worse quiet zone, so nobody leans on the walls and nothing gets rested on the floor absorber. Device Emulation on the front panel is NOT simulation and does not inhibit the motor.
+Say this every period, and say why. Wind-up appears twice because it takes the cable and the horn together: it does not announce itself until the cable is tight, and continuous mode ignores the software limits entirely — confirm non-continuous on the EMControl front panel, and check the latched error line while they are there. Device Emulation is NOT simulation and does not inhibit the motor. On the connector rows: threads started by hand and square, torque rather than feel, turn the nut and not the cable body, and nothing left hanging off a port. Two hands on a horn. Bend radius on cables. Absorber is priced by the square foot and a crushed tip is a permanently worse quiet zone. The RF, for the record, is milliwatts: nothing in that chamber will hurt them, and everything in it can be hurt by them.
+
+---
+
+## Good practice
+
+- Set the sweep, calibrate, **verify**, then measure.
+- Log all five sweep settings first.
+- Change one thing at a time.
+- Name every run before you start it.
+
+**Write down what you expect before you look.**
+
+Note:
+A prediction they committed to in writing is the only way a surprise can teach them anything. The naming one sounds trivial and is not: a run left unnamed is stamped from the clock, which keeps runs apart and tells them nothing a week later.
 
 ---
 

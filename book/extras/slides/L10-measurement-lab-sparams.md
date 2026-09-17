@@ -33,17 +33,33 @@ Keep the briefing short. Everything on the theory side was covered last lesson, 
 
 ---
 
-## Safety and good practice
+## What you can wreck
 
-<div class="callout">The RF is milliwatts. What you can wreck today is a <strong>connector</strong> or a <strong>calibration</strong>.</div>
+| What | Cost | Ruined by |
+| :-- | :-- | :-- |
+| Absorber | \$750/sq ft | leaning, stacking |
+| VNA port | \$85k | cross-thread, over-torque, cable stress |
+| Horn | \$5k | dropping |
+| Cable | \$1k | kinking |
 
-- Ground yourself before touching a center pin.
-- Torque the nut; never twist the cable body.
-- Nothing that transmits goes into an analyzer port.
-- Calibrate, **verify**, measure. In that order.
+<div class="callout">A bad measurement costs you an afternoon. <strong>Everything in that table costs the rig.</strong></div>
 
 Note:
-None of today's hazards are to them, which is exactly why they get skipped. Connector damage spreads: a rotated center pin ruins that connector and then the next one it mates with, which on this rig is a calibration module worth more than the antenna. The analyzer port is an input and is not built to be driven — no signal generators, no amplifier outputs. In the chamber, nobody leans on the absorber and nothing gets rested on the floor pyramids. The practice half is the part that shows up in the grade: log the sweep before calibrating, change one thing at a time, export and name every capture as you take it, and write down what you expect before you look.
+The RF is milliwatts and nothing here will hurt them, which is exactly why this gets skipped. Go through the mechanisms: start threads by hand and square, torque rather than feel, turn the nut and not the cable body — a cross-threaded or over-torqued port is a bench repair on an eighty-five thousand dollar instrument, and the damage transfers to the next connector it mates with, which on this rig is the calibration module. Nothing hangs off a port: side load is cable stress and is the slow version of the same failure. Two hands on a horn, and never hang it from its connector. Bend radius on cables, no tight coils, nothing where somebody will stand on it. And absorber is priced by the square foot — a crushed tip is a permanently worse quiet zone and there is no repairing one. Also: nothing that transmits goes into an analyzer port, and touch a grounded surface before touching a center pin.
+
+---
+
+## Good practice
+
+- Calibrate, **verify**, then measure. In that order.
+- Log the sweep settings before you calibrate.
+- Change one thing at a time.
+- Name and export every capture as you take it.
+
+**Write down what you expect before you look.**
+
+Note:
+A prediction they committed to in writing is the only way a surprise can teach them anything; a prediction made after seeing the answer is not a prediction. This is also the half that shows up in the grade.
 
 ---
 

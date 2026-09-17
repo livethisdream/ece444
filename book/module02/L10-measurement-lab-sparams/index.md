@@ -49,49 +49,63 @@ to write down.
 :::
 ::::
 
-::::{frame} Safety and Good Practice
+::::{frame} What You Can Wreck
 :::{present}
 :class: callout
-The RF is milliwatts. What you can wreck today is a **connector** or a
-**calibration**.
+A bad measurement costs you an afternoon. **Everything below costs the rig.**
 :::
 :::{present}
-- Ground yourself before touching a center pin.
-- Torque the nut; never twist the cable.
-- Calibrate, **verify**, measure. In that order.
+| What | Cost | Ruined by |
+| :-- | :-- | :-- |
+| Absorber | \$750/sq ft | leaning, stacking |
+| VNA port | \$85k | cross-thread, over-torque, cable stress |
+| Horn | \$5k | dropping |
+| Cable | \$1k | kinking |
 :::
 
-None of today's hazards are to you, which is exactly why they get skipped. The
-instrument is expensive, the calibration module more so per gram, and a
-measurement you cannot defend costs you the afternoon that produced it.
+The RF is milliwatts, so nothing here will hurt you. That is exactly why this
+frame exists: the cost of carelessness lands on the hardware rather than on
+you, and it lands in four figures before anyone notices.
 
 :::{depth}
-**Connectors first, because the damage spreads.** Align the connector before
-you turn anything, tighten with the wrench rather than by feel, and turn the
-*nut* and not the cable body — a rotated center pin ruins that connector, and
-then ruins the next one it mates with, which on this rig is a calibration
-module worth more than the antenna. Cap what you are not using. Do not force a
-connector that does not want to start.
+**The port is the expensive one, and the damage spreads.** Start the threads by
+hand and square, tighten with the wrench rather than by feel, and turn the
+*nut* and not the cable body. A cross-threaded or over-torqued port is a bench
+repair on an eighty-five thousand dollar instrument, and the same damage
+transfers to the next connector it mates with — which on this rig is a
+calibration module. Never leave a cable hanging off a port either: side load
+at the connector is cable stress, and it is the slow version of the same
+failure. Cap what you are not using, and touch a grounded surface before you
+touch a center pin.
 
-**Static, second.** Touch a grounded surface before you touch a center pin. An
-analyzer's front end is a receiver, and it is the cheapest thing in the room
-to destroy invisibly.
+**The horn is dropped, not worn out.** Two hands, support its weight while you
+mate it, and never hang it from its own connector.
 
-**Never put power into a port.** Nothing that transmits — a signal generator, a
-radio, an amplifier output — goes into an analyzer port. The port is an input,
-and it is not built to be driven.
+**The cable is kinked, not worn out.** Respect the bend radius, do not coil it
+tight, do not lay it where somebody will step on it, and do not pull it
+straight out of a tight bend.
 
-**In the chamber, mind the absorber.** The pyramids shed if you brush them and
-a crushed tip is a permanently worse quiet zone. Do not lean on the walls and
-do not rest tools on the floor absorber.
+**The absorber is priced by the square foot.** The pyramids shed if you brush
+them and a crushed tip is a permanently worse quiet zone, so nobody leans on
+the walls and nothing gets rested on the floor pyramids. There is no repairing
+a tip; there is only buying more absorber.
 
-**And the practice half**, which is the part that shows up in your grade.
-Calibrate, verify, measure, in that order. Log the sweep settings before you
-calibrate. Change one thing at a time. Export and name every capture as you
-take it, not afterwards. And write down what you expect before you look —
-a prediction you committed to is the only way a surprise can teach you
-anything.
+One more that costs nothing to avoid: nothing that transmits goes into an
+analyzer port. The port is an input, and it is not built to be driven.
 :::
+::::
+
+::::{frame} Good Practice
+:::{present}
+- Calibrate, **verify**, then measure. In that order.
+- Log the sweep settings before you calibrate.
+- Change one thing at a time.
+- Name and export every capture as you take it.
+:::
+
+And write down what you expect before you look. A prediction you committed to
+in writing is the only way a surprise can teach you anything; a prediction you
+made after seeing the answer is not a prediction.
 ::::
 
 ::::{frame} What You Are Doing Today
