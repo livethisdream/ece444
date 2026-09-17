@@ -104,8 +104,13 @@ lesson pages directly and have no separate sheet.
   (`scripts/nec_lab/` in the course repository). It runs in a browser, either
   from a copy your instructor is serving or from your own machine, and needs no
   installation beyond Python. 4nec2 runs the same input files if you prefer it.
-- **Vector network analyzer (VNA)** — used for impedance / S-parameter measurement labs
-- **Anechoic chamber** — used for pattern measurement labs
+- **Vector network analyzer (VNA)** — the chamber's Copper Mountain analyzer, used
+  for both measurement labs: reflection at one port in L10, transmission between
+  the two horns in L11
+- **Anechoic chamber** — the USAFA chamber, with its browser **dashboard** for the
+  sweep, the turntable, the scan and the run files both labs reduce. The service
+  behind it runs against a simulator with no instruments attached, so the controls
+  can be rehearsed on your own machine before the period.
 
 ## Additional Resources
 

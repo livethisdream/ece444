@@ -36,23 +36,23 @@ L10 answered "does power get in?" Today answers "where does it go once it's in?"
 
 ## Today's plan
 
-1. Build a valid range and verify it before taking data.
-2. Acquire two principal-plane cuts with disciplined settings.
+1. Verify the range geometry before taking any data.
+2. Scan two principal-plane cuts from the dashboard, with the settings logged.
 3. Reduce: normalize, plot, extract HPBW, sidelobe level, front-to-back.
 4. Gain by the comparison method; polarization by rotating the source.
 5. Decide which of your numbers are meaningful.
 
 Note:
-Item 5 is the judgment call; items 1 through 4 are procedure.
+Item 5 is the judgment call; items 1 through 4 are procedure. The rig is fixed and cabled today — one VNA, two horns, one turntable, one browser page driving all of it — so the variable that is left is their discipline.
 
 ---
 
-## The range you are building
+## The range you are measuring on
 
 <div class="fig" data-inline-svg="./fig/L11-range-setup.svg" style="max-width:960px; margin:0 auto;"></div>
 
 Note:
-Walk the room through it: transmitter, source antenna fixed, AUT on the rotator, receiver logging power per angle. Point at the floor bounce, which is the error source they will see.
+Walk the room through it: one VNA, port 1 out to the fixed source horn, port 2 back from the AUT on the turntable, absorber on every surface. The quantity recorded at each angle is S21 in dB. Point at the quiet zone, and at the stray field that sets the floor they will meet later in the period.
 
 ---
 
@@ -68,10 +68,12 @@ Today's AUT: a pyramidal horn, aperture $24 \times 17$ cm, at $f = 2.45$ GHz, so
 
 The **reference horn** is bigger: $D = 0.422$ m, so it needs **2.91 m**.
 
-Range set at **3.0 m** — which clears the reference by only 3%.
+At a **3.0 m** separation that clears the reference by only 3%.
+
+**Measure the chamber's separation yourself, and redo these with your number.**
 
 Note:
-D is the largest dimension, the 29.4 cm diagonal, not a side. Two things to draw out: for a small antenna the binding criterion is often $5D$, not $2D^2/\lambda$; and the reference sizes the range, so the gain comparison is the measurement standing closest to the edge of the far field. That 3% belongs in their report.
+D is the largest dimension, the 29.4 cm diagonal, not a side. The separation is a property of the chamber, not of their run, but it is theirs to measure once and write down — the worked numbers here are an example, not a datasheet. Two things to draw out: for a small antenna the binding criterion is often $5D$, not $2D^2/\lambda$; and the reference sizes the range, so the gain comparison is the measurement standing closest to the edge of the far field. That 3% belongs in their report.
 
 ---
 
@@ -79,28 +81,66 @@ D is the largest dimension, the 29.4 cm diagonal, not a side. Two things to draw
 
 | Stage | Job | Failure it causes |
 | :-- | :-- | :-- |
-| transmitter | one frequency, stable level | drift looks like pattern |
-| source antenna | clean known polarization | leaks cross-pol into co-pol |
-| AUT on rotator | one axis, centered on the phase center | tilted, off-center cut |
-| receiver | power per angle, logged | ambiguous or lost data |
+| VNA port 1 | one sweep, unchanged | a changed setting looks like pattern |
+| source horn | clean known polarization | leaks cross-pol into co-pol |
+| AUT on the turntable | one axis, centered on the phase center | tilted, off-center cut |
+| VNA port 2 | $S_{21}$ per angle, logged | ambiguous or lost data |
 
-The instructor's **Pluto-SDR transmit/receive tool** does the measure-rotate-record loop for you.
+One instrument is both ends. Every angle is **commanded, confirmed, then measured**.
 
 Note:
-Any hardware that gives you power at a known angle works: signal generator plus spectrum analyzer, or the SDR tool. The hardware choice does not change the measurement; the discipline does.
+The chain is a loop, not a line. Ratioing against the source is why source drift divides out — the same argument L9 made for the one-port measurement, now doing work on the range. The run file records both the commanded angle and the angle the card reported, so their positioning error is recoverable afterwards for free.
+
+---
+
+## The dashboard
+
+- **Settings sidebar**: VNA, Turntable, Simulation, Output.
+- **Tabs over the plots**: Pattern Measurement, VNA, Turntable, Logs.
+- **Start scan** and **STOP** sit in the tab header — STOP is never a scroll away.
+
+<div class="callout">The badge top right reads <strong>HARDWARE</strong> or <strong>SIMULATED</strong>. Know which one you are looking at before you believe a number.</div>
+
+Note:
+Show them the page before anyone touches hardware. Point out that the service runs in simulation mode on their own laptop — `python chamber_service.py --sim`, frontend on 5173 — so the controls can be rehearsed the night before. What simulation will not tell them is anything about their antenna: it synthesizes an array-factor pattern. Rehearse the buttons there, not the physics.
+
+---
+
+## Before you press start
+
+<div class="callout"><strong>The tower turns a real antenna on a real cable.</strong> Confirm the cable has slack for the whole grid, and that the axis is in non-continuous mode — continuous mode ignores the software limits.</div>
+
+- Nobody inside the chamber, door closed.
+- **STOP** preempts a move in progress.
+- Read the latched positioner error in the Turntable section first.
+
+Note:
+Cable wind-up is the standing hazard on this rig and it is slow — it does not announce itself until the cable is tight. Everything else in this lab can be redone in ten minutes; a torn cable ends the period for everyone. Say this every period.
 
 ---
 
 ## Acquisition discipline
 
-1. **One frequency, fixed.** Log it. Re-tuning mid-sweep invalidates the cut.
-2. **Find the peak first**, then set 0° there. A pattern referenced to the wrong angle is worthless.
-3. **Step $\le$ HPBW/5.** For a 40° beam that is 8°; take 2° so the sidelobes resolve too.
-4. **Record the floor**: source off, same settings, same integration.
-5. **Repeat one cut.** Two sweeps that disagree by 1 dB tell you your real uncertainty.
+1. **Set the sweep first.** Span, points, IF BW, power, $S_{21}$ — log all five. A calibration belongs to a sweep.
+2. **Check the CAL / UNCAL pill.** An uncalibrated run is data, never an accident.
+3. **Jog to the peak, then Define here as 0°.** Every number you extract is measured from it.
+4. **Step $\le$ HPBW/5.** For a 40° beam that is 8°; take 2° so the sidelobes resolve too.
+5. **Repeat one cut.** Two scans that disagree by 1 dB tell you your real uncertainty.
 
 Note:
-Step 4 determines which of the later numbers can be trusted.
+Order matters: the sweep, then the calibration, then the zero, then the grid. Changing the sweep afterwards leaves the instrument interpolating a correction across a span it never measured — the panel flags it and the log warns again. Name every run in the Output section; left empty it is stamped from the clock, which keeps runs apart and tells them nothing a week later.
+
+---
+
+## Measure your own floor
+
+- Unmate the AUT and terminate the cable in $50\ \Omega$.
+- Set **From** and **To** to the same angle — a one-angle run — and name it `floor`.
+
+<div class="callout">Two floors, and you get the higher one. The <strong>instrument</strong> floor is what you just measured. The <strong>chamber</strong> contributes the other, and it shows up as a back level that will not go deeper.</div>
+
+Note:
+With the AUT unmated nothing radiates, so the stray field has nothing to scatter — this run cannot see the chamber's contribution, only the receiver and the leakage. That is exactly L9's two-floor argument. Narrowing the IF bandwidth by a decade buys about 10 dB and costs sweep time on every angle; worth doing once as an experiment, and worth doing before they calibrate.
 
 ---
 
@@ -109,11 +149,12 @@ Step 4 determines which of the later numbers can be trusted.
 - Subtract the peak: every level becomes **dB down from the peak**, and the antenna's absolute level drops out.
 - Plot both ways: **polar dB** shows the shape, **rectangular dB** lets you read numbers off the axis.
 - Never plot pattern data on a linear scale — the sidelobes disappear at 5% of peak.
+- One scan holds **every frequency in the span**. The **Cut freq** selector replots it; label the one you used.
 
 <div class="callout">Normalized pattern shape and absolute gain are <strong>two separate measurements</strong>. The sweep gives shape; the comparison gives gain.</div>
 
 Note:
-Sidelobe level is always relative to the peak and is never quoted in dBm.
+Sidelobe level is always relative to the peak, and is never quoted as an absolute level.
 
 ---
 
@@ -134,14 +175,14 @@ Uniform illumination gives −13.3 dB, and a tapered illumination does better. A
 
 ## Worked example — extraction
 
-Peak $-35.6$ dBm at 0°, E-plane cut.
+Peak $\vert S_{21} \vert = -35.6$ dB at 0°, E-plane cut.
 
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
-| $-3$ dB level | $-35.6 - 3$ | $-38.6$ dBm |
+| $-3$ dB level | $-35.6 - 3$ | $-38.6$ dB |
 | crossings | $-19.8°$ and $+20.2°$ | HPBW $= 40.0°$ |
-| first sidelobe | $-51.4$ dBm measured | $-15.8$ dB |
-| back level | $-54.0$ dBm at 180° | F/B $= 18.4$ dB |
+| first sidelobe | $-51.4$ dB measured | $-15.8$ dB |
+| back level | $-54.0$ dB at 180° | F/B $= 18.4$ dB |
 
 Note:
 Everything in the middle column is subtraction. The engineering is in deciding whether the numbers are above the floor.
@@ -150,7 +191,7 @@ Everything in the middle column is subtraction. The engineering is in deciding w
 
 ## Gain by comparison
 
-Swap the AUT for a calibrated reference horn. **Change nothing else** — same range, same cables, same source, same alignment.
+Mount the reference horn in place of the AUT and scan again. **Change nothing else** — same sweep, same cables, same zero, same calibration.
 
 $$G_{AUT} = G_{ref} + \left( P_{AUT} - P_{ref} \right)$$
 
@@ -182,14 +223,27 @@ Ask why we rotate the source and not the AUT: rotating the AUT would also change
 
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
-| reference level | $-32.4$ dBm, $G_{ref} = 15.0$ dBi | — |
-| AUT level | $-35.6$ dBm | $\Delta = -3.2$ dB |
+| reference level | $-32.4$ dB, $G_{ref} = 15.0$ dBi | — |
+| AUT level | $-35.6$ dB | $\Delta = -3.2$ dB |
 | AUT gain | $15.0 - 3.2$ | $11.8$ dBi |
 | predicted | $\eta_{\text{ap}} = 0.5$ aperture formula | $12.3$ dBi |
-| cross-pol peak | $-59.9$ dBm | XPD $= 24.3$ dB |
+| cross-pol peak | $-59.9$ dB | XPD $= 24.3$ dB |
 
 Note:
 0.5 dB below prediction with a 0.5 dB reference tolerance is agreement, not a discrepancy. Say so in the report — and say why.
+
+---
+
+## Against the simulation
+
+Import the pattern CSV your solver wrote in **L8** into the **Simulation** section.
+
+- Both traces are normalized to their own peak, so dBi and $S_{21}$ dB compare.
+- **Rotate** takes out a known mount offset. The footer reports the **RMS deviation**.
+- The difference is clamped 30 dB below peak before it is taken.
+
+Note:
+First time in the course a predicted pattern and a measured one are on the same axes. The clamp matters more than it sounds: a null one degree off its predicted angle differences to tens of dB against a neighboring lobe, so un-clamped the RMS would report null alignment rather than pattern agreement. If the RMS comes back large, check Rotate before checking the physics.
 
 ---
 
@@ -240,27 +294,29 @@ Note:
 
 | Source | Signature | Size |
 | :-- | :-- | :-- |
-| floor/wall reflections | ripple riding on the pattern | $\pm 1$ dB |
-| cable flex on the rotator | drift between sweeps | 0.2 to 0.5 dB |
+| chamber stray field | back lobes fill in | sets your floor |
+| cable flex on the tower | drift between scans | 0.2 to 0.5 dB |
 | pointing misalignment | peak reads low, HPBW biased | 0.2 dB at HPBW/8 |
 | reference tolerance | fixed offset on every gain | 0.3 to 0.5 dB |
 
+A fifth, on any run the panel flags: a **calibration that does not match the sweep**.
+
 Note:
-Ripple is diagnostic: count the ripples per degree and you can back out the path-length difference of the reflection.
+Cable flex is the one this rig makes easy to check — repeat a cut untouched and difference the two. On the fifth: correction interpolated across a span it never measured is a plausible-looking answer of unknown quality, and "the dashboard warned me and I scanned anyway" is not a sentence anyone wants in a report.
 
 ---
 
 ## Deliverables
 
-1. Two **principal-plane cuts**, polar dB, normalized and annotated.
+1. Two **principal-plane cuts**, polar dB, normalized and annotated, with the cut frequency labeled.
 2. A table: HPBW, first sidelobe, front-to-back, gain, XPD — each with an uncertainty.
-3. Your measured **noise floor**, and a sentence per row saying whether that number clears it.
-4. Comparison against the predicted or datasheet values, with every discrepancy explained.
+3. Your measured **floor**, and a sentence per row saying whether that number clears it.
+4. Comparison against your L8 model, with the RMS deviation quoted and every discrepancy explained.
 
-<div class="callout">Every discrepancy larger than your uncertainty needs a <strong>named cause</strong>.</div>
+<div class="callout">Every discrepancy larger than your uncertainty needs a <strong>named cause</strong>. Quote the <strong>run name</strong> behind every figure.</div>
 
 Note:
-Item 4 carries most of the grade. A 2 dB gap with a named cause beats a 0.2 dB gap with no discussion.
+Item 4 carries most of the grade. A 2 dB gap with a named cause beats a 0.2 dB gap with no discussion. The calibration state and hardware-or-simulation mode are in each run's meta.json and nowhere else — a pattern alone cannot say what it was taken under.
 
 ---
 
@@ -276,8 +332,8 @@ If they remember one sentence from this lab, this is it.
 
 ## Where this is going
 
-- This lab is the **dress rehearsal** for the midterm Antenna Pattern Measurement project, due 2 Oct — same range, same extraction, a written analysis and no procedure handed to you.
-- You now have nine lessons of bench access before it is due. That is why the measurement block runs here.
+- This lab is the **dress rehearsal** for the midterm Antenna Pattern Measurement project, due 2 Oct — same chamber, same extraction, a written analysis and no procedure handed to you.
+- You now have nine lessons of chamber access before it is due. That is why the measurement block runs here.
 - **L12 to L14** go back to antenna families: loops and monopoles, patches and horns, reflectors and Yagis. Every gain figure in them is now a claim you know how to check.
 
 Note:

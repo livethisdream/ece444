@@ -95,10 +95,10 @@ $r = 3.0\ \m$.
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Reducing a measured cut.} The table below is one measured
-E-plane cut of an aperture antenna, in dBm at the receiver. The cut was
+E-plane cut of an aperture antenna, recorded as $|S_{21}|$ in dB. The cut was
 symmetric about $0\mydeg$ to within $0.3\db$, so only $\theta \ge 0$ is
-tabulated. With the source switched off and every other setting unchanged, the
-receiver read $-78.0\dbm$.
+tabulated. With the AUT unmated and its cable terminated in $50\ \ohms$, every
+other setting unchanged, the same sweep read $-78.0\db$.
 
 \begin{center}
 \small
@@ -125,8 +125,8 @@ $16\mydeg$ & $-52.6$ & $44\mydeg$ & $-70.6$ &             &         \\
 		\part Extract the half-power beamwidth. Interpolate between samples ---
 		do not snap to the nearest grid point.
 		\begin{solution}[1.3in]
-		The peak is $-35.6\dbm$, so the half-power level is $-38.6\dbm$. That
-		falls between $6\mydeg$ ($-38.3\dbm$) and $8\mydeg$ ($-41.4\dbm$):
+		The peak is $-35.6\db$, so the half-power level is $-38.6\db$. That
+		falls between $6\mydeg$ ($-38.3\db$) and $8\mydeg$ ($-41.4\db$):
 		\eq{
 			\theta_{-3} &= 6 + 2\lp\frac{38.6-38.3}{41.4-38.3}\rp
 			 = 6 + 2(0.097) = 6.19\mydeg \\
@@ -144,7 +144,7 @@ $16\mydeg$ & $-52.6$ & $44\mydeg$ & $-70.6$ &             &         \\
 		with the canonical value for a uniformly illuminated aperture.
 		\begin{solution}[1.3in]
 		The first null is near $14\mydeg$; the next lobe peaks at $20\mydeg$ with
-		$-48.7\dbm$:
+		$-48.7\db$:
 		\eq{
 			\text{SLL} = -48.7 - (-35.6) = -13.1\db
 		}
@@ -189,9 +189,9 @@ $16\mydeg$ & $-52.6$ & $44\mydeg$ & $-70.6$ &             &         \\
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Gain by comparison, and polarization.} On the range of
-Question 1 you record a peak of $-35.6\dbm$ with the AUT installed. You then
+Question 1 you record a peak of $-35.6\db$ with the AUT installed. You then
 swap in the calibrated reference horn ($G_{ref} = 15.0\dbi$), change nothing
-else, and record $-32.4\dbm$.
+else, and record $-32.4\db$.
 
 \begin{parts}
 
@@ -230,7 +230,7 @@ else, and record $-32.4\dbm$.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part You rotate the source antenna $90\mydeg$ about the range axis and
-		re-peak: the boresight level drops to $-59.9\dbm$. Compute the
+		re-peak: the boresight level drops to $-59.9\db$. Compute the
 		cross-polarization discrimination.
 		\begin{solution}[1.1in]
 		\eq{
@@ -272,8 +272,8 @@ else, and record $-32.4\dbm$.
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{What the noise floor is doing to your numbers.} A measured
-pattern reaches its peak at $-35.6\dbm$; with the source off, the receiver reads
-$-78.0\dbm$. Levels below are quoted relative to the peak.
+pattern reaches its peak at $-35.6\db$; the terminated floor run, taken at the
+same settings, reads $-78.0\db$. Levels below are quoted relative to the peak.
 
 \begin{parts}
 

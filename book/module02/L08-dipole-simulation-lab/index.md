@@ -641,9 +641,10 @@ of a decibel. In the convergence study, identify both the point where the
 answer stops moving and the point where the $\Delta > 8a$ rule begins to bite.
 
 The pattern file drops straight onto your measured cut in Lesson 11, on one
-plot. It is absolute **dBi**, and a chamber measures raw $S_{21}$, so
-comparing the two means normalizing each to its own peak, which compares
-*shape*. Comparing absolute levels is a gain-transfer measurement against a
+plot: the chamber dashboard's **Simulation** section imports it and overlays
+it on the live cut. It is absolute **dBi**, and a chamber measures raw
+$S_{21}$, so comparing the two means normalizing each to its own peak — which
+the dashboard does by default — and what that compares is *shape*. Comparing absolute levels is a gain-transfer measurement against a
 standard-gain horn, Lesson 9's material, not something a file can fix. Save
 it somewhere you will find it in three lessons' time.
 ::::

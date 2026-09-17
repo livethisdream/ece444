@@ -36,13 +36,13 @@ Keep the briefing short. Everything on the theory side was covered last lesson, 
 ## Today's plan
 
 1. Ten minutes on the widget: read a resonance three ways before you read your own.
-2. Set the sweep, calibrate, **verify**.
-3. Measure: resonance, impedance, $-10$ dB bandwidth.
+2. Set the sweep on the dashboard, calibrate, **verify**.
+3. Record the antenna as a named run, and read four numbers out of the file.
 4. Compare against your $\lambda/2$ prediction, and commit to a trim direction.
 5. Perturb, one variable at a time.
 
 Note:
-Budget: about fifteen minutes of briefing, then everyone on hardware. The perturbation step is the one they will remember, so protect time for it.
+Budget: about fifteen minutes of briefing, then everyone on hardware. The perturbation step is the one they will remember, so protect time for it. Everything today goes through the chamber dashboard — same page they will live in next lesson, with only port 1 doing anything.
 
 ---
 
@@ -59,60 +59,78 @@ This is L9's "four names for one number" made draggable. In twenty minutes they 
 
 ---
 
-## Equipment
+## The rig
 
-- A VNA — bench instrument or NanoVNA. Either works.
-- A calibration kit for your connector: short, open, $50\ \Omega$ load.
-- One test cable, and a torque wrench if the bench has one.
+- The chamber's VNA, driven from the **dashboard** in a browser.
+- One test cable on **port 1**, and a torque wrench if the bench has one.
+- The calibration module, for the **Calibrate…** wizard.
 - A supplied dipole or monopole with a known nominal resonance.
 - A foam block or non-metallic stand.
 
+Two tabs matter today: **VNA** for the live trace, **Logs** for what the service says it did.
+
 Note:
-The foam is not optional equipment. It is what lets them take their hands off the antenna while reading the screen, and L9 explained why that matters.
+Same instrument as L11, same dashboard, only port 1 in use. The foam is not optional equipment — it is what lets them take their hands off the antenna while reading the screen, and L9 explained why that matters. The Pattern tab has nothing to draw for a one-angle run; do not let them go looking for a curve there.
 
 ---
 
 ## Step 1 — Set the sweep
 
-- Bracket the expected resonance by roughly $\pm 30\%$.
-- At least **401 points**.
-- Write the settings down *before* you calibrate.
+- **VNA** section: start and stop bracket the resonance by roughly $\pm 30\%$.
+- At least **401 points**. Log the IF bandwidth and power too.
+- **Parameter: S11** — one port, reflection only.
 
-Changing the sweep after calibration invalidates the cal on some instruments and silently interpolates on others.
+Changing the sweep after calibration leaves the instrument interpolating a correction across a span it never measured.
 
 Note:
-Neither behavior is something you want to discover from your data. Fix the sweep first and leave it alone.
+The panel flags that mismatch and the log warns again at the start of the run, which is more warning than most instruments give you — but the right move is to fix the sweep first and leave it alone. The default 2–3 GHz, 101-point sweep is a 10 MHz grid: fine for a horn, useless across a 40 MHz dipole band.
 
 ---
 
 ## Step 2 — Calibrate, then verify
 
-- Short, open, and load at the **far end of the test cable**, not the front panel.
-- Then keep the cable still. Flexing it changes its phase.
+- **Calibrate…** opens a wizard. Choose the reference plane: **the cable ends**, not the front panel.
+- Acknowledge, run it, put the cable back. Then keep it still — flexing it changes its phase.
 
 <div class="callout">
-Reconnect the load: $\vert S_{11}\vert$ below $-30$ dB across the band. <strong>Screenshot it.</strong> If it fails, calibrate again.
+Verify: terminate the cable in $50\ \Omega$ and run one angle. $\vert S_{11}\vert$ below $-30$ dB across the band. <strong>Screenshot it.</strong>
 </div>
 
 Note:
-That screenshot is a deliverable and it is the evidence their data means anything. Common failure: they cal with one cable and measure with another. Calibrating at the front panel leaves the whole cable inside the device under test.
+The wizard asks which plane they calibrated because nothing in the data afterwards can tell, and the answer is written into the record. That dropdown is L9's reference-plane argument turned into a required field. The load verifies because it is a standard the calibration did not use to define itself. Watch the CAL / UNCAL pill: an uncalibrated run is valid data and is never blocked, but nobody should take one by accident.
 
 ---
 
-## Step 3 — Measure the antenna
+## Step 3 — Record the antenna
 
-Connect it, set it on the foam, and take your hands off. Record:
+Connect it, set it on the foam, and take your hands off.
 
-- the resonant frequency, as the **dip** and as the **real-axis crossing**,
-- $Z$ at resonance, from the marker,
-- both $-10$ dB crossing frequencies.
+- **Output**: name the run. `l10_freespace` beats a timestamp.
+- **Turntable**: set **From** and **To** to the same angle — the hint reads "1 angle".
+- **Start scan**, and watch the VNA tab.
+
+Every run writes `pattern.csv` and `meta.json` under `runs/`, and anything named comes back from **Stored runs**.
 
 Note:
-Reading the resonance twice is not busywork. The two readings disagree when something is wrong with the reference plane, and that disagreement is the cheapest diagnostic they have.
+A one-angle run is a complete frequency sweep at a fixed position — that is all they need today. The meta file records the sweep, whether correction was on, and a copy of the calibration record, so a finished run keeps saying what it was taken against.
 
 ---
 
-## Step 4 — Compare against prediction
+## Step 4 — Four names for one number
+
+The file gives you $\Gamma$ at every frequency. Everything else is arithmetic:
+
+$$\Gamma = \text{re} + j\ \text{im}, \qquad Z = Z_0 \frac{1 + \Gamma}{1 - \Gamma}, \qquad \text{VSWR} = \frac{1 + \vert \Gamma \vert}{1 - \vert \Gamma \vert}$$
+
+- Resonance: the dip in `mag_db`, **and** the reactance zero crossing.
+- Bandwidth: the two frequencies where VSWR $= 2$.
+
+Note:
+This is L9's "four names for one number" with their own hands instead of a marker readout. Plotting Gamma on the unit disk IS the Smith chart — the chart is a grid drawn over that disk, not a different measurement. Reading the resonance twice is not busywork: the two readings disagree when something is wrong with the reference plane, and that is the cheapest diagnostic they have.
+
+---
+
+## Step 5 — Compare against prediction
 
 - Is the measured resonance **above or below** a $\lambda/2$ calculation?
 - Which way would you trim the element?
@@ -127,7 +145,7 @@ Committing to an answer in writing before checking it is the whole point of the 
 
 ## Worked example — bandwidth
 
-A trace dips to $-19$ dB and crosses $-10$ dB at 878 MHz and 922 MHz.
+A trace dips to $-19$ dB and crosses VSWR $= 2$ at 878 MHz and 922 MHz.
 
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
@@ -138,13 +156,13 @@ A trace dips to $-19$ dB and crosses $-10$ dB at 878 MHz and 922 MHz.
 A thin wire dipole lands in the 3–10% range. A fatter conductor lowers $Q$ and widens the band, which is the same trade you saw in L3.
 
 Note:
-If their measured bandwidth is 1%, the antenna is probably not the problem — a resonant feed cable is. Fractional bandwidth is the number to compare across frequencies.
+Quote the bandwidth with the bar attached: VSWR <= 2, never "dB". On a log-magnitude trace that bar sits at −9.5 dB. If their measured bandwidth is 1%, the antenna is probably not the problem — a resonant feed cable is. Fractional bandwidth is the number to compare across frequencies.
 
 ---
 
-## Step 5 — Perturb, one variable at a time
+## Step 6 — Perturb, one variable at a time
 
-Repeat resonance, impedance, and bandwidth for three configurations:
+One named run each, same sweep, same calibration:
 
 - held clear, in free space,
 - with a hand 2–3 cm from the element,
@@ -153,34 +171,36 @@ Repeat resonance, impedance, and bandwidth for three configurations:
 L9 predicted the direction of each shift. Your job is the **magnitude**.
 
 Note:
-Record all three fully. A configuration measured incompletely is one they have to set up again. This is also the one-element preview of mutual impedance in Module 3.
+Record all three fully. A configuration measured incompletely is one they have to set up again — and with named runs, one they can reload instead. This is also the one-element preview of mutual impedance in Module 3.
 
 ---
 
-## Two failure modes
+## Three failure modes
 
 <div class="callout">
-Most bad lab data comes from two mistakes: <strong>calibrating with one cable and measuring with another</strong>, and <strong>gripping the coax at the feed point</strong> while you read the screen.
+<strong>Calibrating with one cable and measuring with another.</strong><br>
+<strong>Changing the sweep after you calibrated.</strong><br>
+<strong>Gripping the coax at the feed point</strong> while you read the screen.
 </div>
 
-The second is the cruel one: you have perturbed the very measurement you are recording, and the trace looks entirely plausible.
+The dashboard warns you about the first two. Nothing warns you about the third, and the trace looks entirely plausible.
 
 Note:
-Set the antenna down on the foam and take your hands off it. Say this twice during the period; they will still do it.
+Set the antenna down on the foam and take your hands off it. Say this twice during the period; they will still do it. The chamber helps: with the door shut you cannot hold the element and read the trace at the same time.
 
 ---
 
 ## What you turn in
 
-- An annotated $\vert S_{11}\vert$ plot: resonance and both $-10$ dB crossings marked.
-- A table: $f_0$, $Z$ at resonance, $-10$ dB bandwidth in MHz and in percent, all three configurations.
-- A Smith-chart screenshot with the resonance point marked.
+- An annotated $\vert S_{11}\vert$ plot: resonance and both VSWR $= 2$ crossings marked.
+- A table: $f_0$, $Z$ at resonance, VSWR $\le 2$ bandwidth in MHz and in percent, all three configurations.
+- A Smith-chart plot of your measured $\Gamma$, with the resonance point marked.
 - One paragraph on the perturbation results: what moved, which direction, and why.
 
 **One page, with units on every number. The paragraph carries the largest share of the grade.**
 
 Note:
-Tell them explicitly: a plot with no markers and no units is a screenshot, not a measurement. Due at the start of L15.
+Tell them explicitly: a plot with no markers and no units is a screenshot, not a measurement. Quote the run name behind every figure and the reference plane they calibrated at. Due at the start of L15.
 
 ---
 

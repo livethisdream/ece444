@@ -32,7 +32,7 @@ Lesson 10 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::{frame} Learning Objectives
 
 <ol class="lo-list lo-sublist" style="--module: '2'; --lo: '6'">
-  <li>I can set up a one-port sweep on a vector network analyzer, run a short-open-load calibration at the correct reference plane, and verify the calibration before I trust any reading.</li>
+  <li>I can set up a one-port sweep on a vector network analyzer, calibrate it at the correct reference plane, and verify the calibration before I trust any reading.</li>
   <li>I can measure an antenna's reflection versus frequency and read its resonance, its impedance at resonance, and its VSWR &le; 2 impedance bandwidth off the trace and off the Smith chart.</li>
   <li>I can compare a measured resonance against a $\lambda/2$ prediction and say, from the sign of the reactance, which way to trim the element.</li>
   <li>I can perturb an antenna's near-field environment one variable at a time and report what moved, in which direction, and by how much.</li>
@@ -51,9 +51,10 @@ to write down.
 
 ::::{frame} What You Are Doing Today
 :::{present}
-- Calibrate an analyzer, then prove the calibration is good.
-- Measure one antenna's resonance, impedance, and bandwidth.
-- Break it three ways on purpose and record what each does.
+- Calibrate from the dashboard, then prove the calibration is good.
+- Record one antenna's reflection across a band, as a named run.
+- Read resonance, impedance, and bandwidth out of the file.
+- Break it three ways and record what each does.
 :::
 
 Lesson 7 told you a half-wave dipole should sit near $73 + j42.5\ \Omega$ and
@@ -97,72 +98,144 @@ own trace, where the curve is noisier and nobody labels the resonance for you.
 :::
 ::::
 
-::::{frame} Equipment
+::::{frame} The Rig
 :::{present}
-- A VNA, bench or NanoVNA.
-- A cal kit: short, open, $50\ \Omega$ load.
-- One test cable, and a torque wrench.
-- A dipole with a known nominal resonance.
-- A foam block.
+- The chamber's VNA, driven from the **dashboard** in a browser.
+- One test cable, port 1, and a torque wrench.
+- The calibration module, for the **Calibrate…** wizard.
+- A dipole with a known nominal resonance, on a foam block.
 :::
 
-Either class of instrument works, and the steps below are written for both. A
-torque wrench is worth using if the bench has one: an under-tightened SMA
-connector is a slow, intermittent way to lose a calibration. The foam is
-not optional equipment — it is what lets you take your hands off the antenna
-while you read the screen, and Lesson 9 explained why that matters.
+The instrument is the same one Lesson 11 uses for patterns; today only port 1
+is doing anything. A torque wrench is worth using if the bench has one: an
+under-tightened SMA connector is a slow, intermittent way to lose a
+calibration.
+
+:::{depth}
+The foam is not optional equipment — it is what lets you take your hands off
+the antenna while you read the screen, and Lesson 9 explained why that
+matters. Standing the antenna in the chamber enforces the rule for you: with
+the door shut you cannot be holding the element and reading the trace at the
+same time, which is exactly the mistake this lab is trying to train out of
+you.
+
+Two tabs on the dashboard matter today and the rest do not. **VNA** shows the
+sweep at the current angle, which is where you watch the trace live.
+**Logs** is where the service says what it did, including any warning about
+the calibration. The Pattern tab is a polar plot of angle against level, and a
+one-angle run has nothing to draw there.
+:::
 ::::
 
 ::::{frame} Step 1 — Set the Sweep
 :::{present}
-- Bracket the expected resonance by roughly $\pm 30\%$.
-- At least **401 points**.
-- Write the settings down before you calibrate.
+1. **VNA** section: start and stop bracketing the expected resonance by $\pm 30\%$.
+2. **Points** at least 401. Log the IF bandwidth and power too.
+3. **Parameter: S11** — one port, reflection only.
 :::
 
-Changing the sweep after calibration invalidates the cal on some instruments
-and silently interpolates on others. Neither is something you want to discover
-from your data, so fix the sweep first and leave it alone.
+Changing the sweep after calibration leaves the instrument interpolating a
+correction across a span it never measured. The panel flags it and the log
+warns about it, which is more warning than most instruments give you — but the
+right move is to fix the sweep first and leave it alone.
+
+:::{depth}
+The default span is wide enough for a horn and wrong for your element: a
+101-point sweep across a gigahertz is a 10 MHz grid, and a thin dipole's whole
+VSWR $\le 2$ band can be 40 MHz. Four points across a resonance will not find
+its minimum and cannot give you a crossing frequency worth quoting. This is
+the one setting where the default will quietly cost you the measurement, so
+change it before you calibrate, not after.
+:::
 ::::
 
 ::::{frame} Step 2 — Calibrate, Then Verify
 :::{present}
-- Short, open, and load at the **far end of the cable**, not the front panel.
-- Then keep the cable still. Flexing it changes its phase.
+4. **Calibrate…**, and choose the reference plane: **the cable ends**, not the front panel.
+5. Acknowledge, run it, put the cable back.
 :::
 :::{present}
 :class: callout
-Reconnect the load: $\vert S_{11}\vert < -30$ dB across the band.
-**Screenshot it.**
+Verify: terminate the cable in $50\ \Omega$ and run one angle.
+$\vert S_{11}\vert < -30$ dB across the band. **Screenshot it.**
 :::
 
 That screenshot is a deliverable, and it is the evidence that your data means
-anything at all. Calibrating at the far end of the cable is what makes the
-reference plane sit where you want it; calibrating at the front panel leaves
-the whole cable inside your device under test.
+anything at all. Calibrating at the cable ends is what puts the reference
+plane where you want it; calibrating at the front panel leaves the whole cable
+inside your device under test.
+
+:::{depth}
+The wizard asks you which plane you calibrated because nothing in the data
+afterwards can tell. Lesson 9 made that argument on paper; the dropdown is the
+argument made unavoidable, and the answer is written into the record so that a
+run taken weeks later still says what it was referenced to. The **CAL /
+UNCAL** pill beside the scan button is the other half: an uncalibrated run is
+valid data and is never blocked, but it should not be possible to take one
+without noticing.
+
+Verifying against a load is the step that catches everything else — a cable
+swapped after the calibration, a loose connector, a sweep changed without
+meaning to. It works because the load is a standard the calibration did not
+use to define itself, so a good answer is evidence rather than arithmetic.
+:::
 ::::
 
-::::{frame} Step 3 — Measure the Antenna
+::::{frame} Step 3 — Record the Antenna
 :::{present}
-Connect it, set it on the foam, and take your hands off. Record:
-
-- the resonant frequency, as the dip **and** as the real-axis crossing,
-- $Z$ at resonance, from the marker,
-- both VSWR $= 2$ crossing frequencies.
+6. Connect it, set it on the foam, and take your hands off.
+7. **Output**: name the run. **Turntable**: set **From** and **To** to the same angle.
+8. **Start scan**, and watch the VNA tab.
 :::
 
-The bandwidth bar is **VSWR $\le 2$**, the same bar Lesson 4 set and Lesson 9
-quoted. On the log-magnitude trace it sits at $-9.5$ dB, so the easiest thing
-to do is switch the display to VSWR format and read the two crossings where
-the trace passes 2. Quote the bandwidth in VSWR, never in decibels: Lesson 3's
-rule is that the number means nothing without the bar attached to it.
+Setting the two angle fields equal gives a one-angle run — the hint under the
+grid will say so — and what it writes is a complete sweep of the reflection
+at a fixed position. Anything you name is in the **Stored runs** list
+afterwards, which is what makes three configurations comparable rather than
+three screenshots.
 
-Reading the resonance twice, once on each plot, is not busywork. The two
-readings disagree when something is wrong with the reference plane, and that
-disagreement is the cheapest diagnostic you have.
+:::{depth}
+Every run writes `pattern.csv` and `meta.json` under `runs/`. The CSV is long
+format, one row per angle and frequency, and the four columns that matter
+today are `freq_hz`, `re`, `im` and `mag_db`. The `meta.json` beside it
+records the sweep you used, whether error correction was on, and a copy of the
+calibration record — copied rather than referenced, because the next
+calibration overwrites the original and a finished run has to keep saying what
+it was taken against.
+:::
 ::::
 
-::::{frame} Step 4 — Compare Against Prediction
+::::{frame} Step 4 — Four Names for One Number
+:::{present}
+$$\Gamma = \text{re} + j\ \text{im}, \qquad
+Z = Z_0 \frac{1 + \Gamma}{1 - \Gamma}, \qquad
+\text{VSWR} = \frac{1 + \vert \Gamma \vert}{1 - \vert \Gamma \vert}$$
+
+- Resonance: the dip in `mag_db`, **and** the $\text{Im}\{Z\} = 0$ crossing.
+- Bandwidth: the two frequencies where VSWR $= 2$.
+:::
+
+The bar is **VSWR $\le 2$**, the same bar Lesson 4 set and Lesson 9 quoted.
+Quote the bandwidth in VSWR, never in decibels: Lesson 3's rule is that the
+number means nothing without the bar attached to it.
+
+:::{depth}
+This is Lesson 9's "four names for one number" done with your own hands
+instead of a marker readout. The file gives you $\Gamma$ as a complex number
+at every frequency; the log magnitude, the VSWR, the impedance and the
+Smith-chart position are four ways of writing it down, and three lines of
+Python turn any one into the others. Plotting $\Gamma$ on the unit disk *is*
+the Smith chart — the chart is a grid drawn over that disk, not a different
+measurement.
+
+Reading the resonance twice, once as the dip and once as the reactance
+crossing, is not busywork. The two readings disagree when something is wrong
+with the reference plane, and that disagreement is the cheapest diagnostic you
+have.
+:::
+::::
+
+::::{frame} Step 5 — Compare Against Prediction
 :::{present}
 - Is the measured resonance **above or below** a $\lambda/2$ calculation?
 - Which way would you trim the element?
@@ -175,9 +248,9 @@ electrically short, and it wants to be longer. Committing to an answer in
 writing before you check it is the whole point of the step.
 ::::
 
-::::{frame} Step 5 — Perturb, One Variable at a Time
+::::{frame} Step 6 — Perturb, One Variable at a Time
 :::{present}
-Repeat resonance, impedance, and bandwidth for three configurations:
+One named run each, same sweep, same calibration:
 
 - held clear, in free space,
 - with a hand 2 to 3 cm from the element,
@@ -188,17 +261,26 @@ One variable at a time, and record all three fully — you are producing the
 data for the table in your report, and a configuration you measured
 incompletely is one you will have to set up again. Lesson 9 predicted the
 direction of each shift; your job is the magnitude.
+
+:::{depth}
+Name them for what they are, not for the clock: `l10_freespace`, `l10_hand`,
+`l10_bench` costs four seconds each and is the difference between a reduction
+session and an archaeology session. Left empty, the run name is stamped from
+the date and time, which is enough to keep the runs apart and useless for
+telling you which is which a week later.
+:::
 ::::
 
-::::{frame} Two Failure Modes
+::::{frame} Three Failure Modes
 :::{present}
 :class: callout
-Most bad lab data comes from two mistakes: **calibrating with one cable and
-measuring with another**, and **gripping the coax at the feed point** while
-you read the screen.
+**Calibrating with one cable and measuring with another.**
+**Changing the sweep after you calibrated.**
+**Gripping the coax at the feed point** while you read the screen.
 :::
 
-The second one is the cruel one, because you have then perturbed the very
+The first two the dashboard can warn you about, and it does. The third one is
+the cruel one, because nothing warns you: you have perturbed the very
 measurement you are recording, and the trace looks entirely plausible. Set the
 antenna down on the foam stand and take your hands off it.
 ::::
@@ -207,9 +289,9 @@ antenna down on the foam stand and take your hands off it.
 :::{present}
 One page, at the start of Lesson 15:
 
-1. An annotated $\vert S_{11}\vert$ plot, resonance and both crossings marked.
+1. An annotated $\vert S_{11}\vert$ plot, both crossings marked.
 2. A results table for all three configurations.
-3. A Smith-chart screenshot with the resonance identified.
+3. A Smith-chart plot of $\Gamma$, resonance identified.
 4. A paragraph on the perturbations.
 :::
 
@@ -220,14 +302,15 @@ In detail:
    VSWR $= 2$ crossings marked, axes labeled with units.
 2. **A results table**: $f_0$, $Z$ at resonance, VSWR $\le 2$ bandwidth in MHz
    and in percent, for all three perturbation configurations.
-3. **A Smith-chart screenshot** with the resonance point marked, and one
-   sentence identifying it as the real-axis crossing.
+3. **A Smith-chart plot of your measured $\Gamma$**, with the resonance point
+   marked, and one sentence identifying it as the real-axis crossing.
 4. **A paragraph on the perturbation results.** What moved, in which
    direction, by how much, and why. Connect at least one observation to the
    near-field argument from Lesson 9.
 
-A plot with no markers and no units is a screenshot rather than a measurement,
-and the paragraph carries the largest share of the grade.
+Quote the run name behind every figure, and state the reference plane you
+calibrated at. A plot with no markers and no units is a screenshot rather than
+a measurement, and the paragraph carries the largest share of the grade.
 :::
 ::::
 
@@ -236,12 +319,13 @@ and the paragraph carries the largest share of the grade.
 
 | At the bench | What to do | What good looks like |
 | :-- | :-- | :-- |
-| Sweep | $\pm 30\%$ around resonance, $\ge 401$ points | settings written down |
-| Calibrate | short, open, load at the cable end | cable then left alone |
-| Verify | reconnect the load | $\vert S_{11}\vert < -30$ dB, screenshotted |
-| Measure | dip *and* real-axis crossing | the two agree |
+| Sweep | $\pm 30\%$ around resonance, $\ge 401$ points, $S_{11}$ | settings written down |
+| Calibrate | the wizard, at the cable ends | reference plane recorded |
+| Verify | $50\ \Omega$ load, one-angle run | $\vert S_{11}\vert < -30$ dB, screenshotted |
+| Record | one angle, named run | `pattern.csv` you can find again |
+| Resonance | dip *and* reactance crossing | the two agree |
 | Bandwidth | width where VSWR $\le 2$ | 3 to 10% for a thin dipole |
-| Perturb | free space, hand, bench | three complete rows |
+| Perturb | free space, hand, bench | three complete runs |
 
 The sanity range in the bandwidth row is the one number worth memorizing: if
 you measure 1%, suspect the setup before you suspect the antenna, because a
@@ -264,10 +348,11 @@ do with the element.
 :::
 
 A VNA cannot see radiation, only mismatch, so the efficiency question this lab
-leaves open is answered on the range next period. Further out the skills
-compound: Module 3 builds arrays from these elements, and every element in an
-array sees its neighbors as a mutual impedance — precisely the $S_{11}$ shift
-you produced with your hand today.
+leaves open is answered on the range next period — same instrument, same
+dashboard, the other port. Further out the skills compound: Module 3 builds
+arrays from these elements, and every element in an array sees its neighbors
+as a mutual impedance — precisely the $S_{11}$ shift you produced with your
+hand today.
 
 :::{depth}
 The midterm project, due 2 Oct, asks you to build a dipole, tune it, measure
