@@ -25,14 +25,14 @@ Fall 2026 · Dr. Neil Rogers
 - **L16** collapsed $N$ phasors into one closed form, $AF_N(\psi)$
 - **L18** put the steering phase into $\psi$; **L19** steered the real array
 - On the lab sweep the beam was about $13^\circ$ wide at boresight and visibly fatter at $45^\circ$
-- The **Antenna Pattern Measurement** midterm project is due today — turn it in at the start of class
+- Your **Antenna Pattern Measurement** project pulled those same numbers off a real antenna
 
 <div class="callout">
 <strong>Today: every number on that lab plot comes out of one function of one variable.</strong>
 </div>
 
 Note:
-Collect the midterm projects before starting. Remind them the quantities they pulled off a measured cut — half-power width, nulls, sidelobe level — are the quantities we compute today from theory.
+Remind them the quantities they pulled off a measured cut — half-power width, nulls, sidelobe level — are the quantities we compute today from theory.
 
 ---
 
