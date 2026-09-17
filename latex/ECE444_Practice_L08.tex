@@ -109,8 +109,8 @@ $Z_{\text{in}} = 86.9 + j46.2 \ohms$ and a peak gain of 2.17 dBi.
 		     \frac{46.2 - 42.5}{42.5} &= 0.087 \rightarrow 8.7\% }
 		The reactance agrees closely, while the resistance does not. Note also
 		that the simulated gain of 2.17 dBi differs from the predicted 2.15 dBi
-		by only 1\%, so the pattern quantities agree even though the impedance
-		does not.
+		by $0.02\db$ -- under half a percent in power -- so the pattern
+		quantities agree even though the impedance does not.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -191,14 +191,15 @@ at five segment counts:
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the largest segment count the $\Delta > 8a$ rule permits for
-		this wire. Which rows of the table violate it?
+		\part Find the largest \emph{odd} segment count the $\Delta > 8a$ rule
+		permits for this wire. Which rows of the table violate it?
 		\begin{solution}[1.1in]
 		\eq{ \Delta &= \frac{0.5\ \lambda}{N} > 8a = 0.008\ \lambda \\
 		     N &< \frac{0.5}{0.008} = 62.5 \rightarrow N_{\text{max}} = 61 }
-		The $N = 81$ row breaks the rule --- its segments are only about five
-		radii long --- so it sits outside the range where the standard thin-wire
-		kernel is trustworthy and should not be used as evidence of anything.
+		The rule alone allows 62; 61 also keeps a segment at the feed. The
+		$N = 81$ row breaks it --- its segments are only about five radii long ---
+		so it sits outside the range where the thin-wire kernel is trustworthy
+		and should not be used as evidence of anything.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -209,21 +210,20 @@ at five segment counts:
 	\part Which segment count would you defend for this model, and why? Your
 	answer must reference both the convergence trend and the kernel limit.
 		\begin{solution}[1.2in]
-		41 segments. Each further refinement moves $R_{\text{in}}$ by only about one
+		41 segments. Each further refinement moves $R_{\text{in}}$ by about one
 		percent, well below what you could measure on the bench, and
-		$\Delta = 0.0122\ \lambda$ clears the $0.008\ \lambda$ floor with room to
-		spare for a shorter trimmed wire. Going to 81 buys a percent of drift at
-		the cost of leaving the kernel's valid range.
+		$\Delta = 0.0122\ \lambda$ clears the $0.008\ \lambda$ floor with room for a
+		shorter trimmed wire. Going to 81 buys a percent of drift at the cost of
+		leaving the kernel's valid range.
 		\end{solution}
 
 	\part Explain in one or two sentences why gain converges at a lower segment
 	count than input impedance does.
 		\begin{solution}[0.9in]
-		Gain is an integral over the entire current, so errors in individual
-		segments partly cancel and the total settles quickly. Input impedance is
-		read from one segment --- the one carrying the source --- so it inherits
-		the full local error of the feed model, which itself changes every time
-		the segment length changes.
+		Gain is an integral over the entire current, so per-segment errors partly
+		cancel and the total settles quickly. Input impedance is read from one
+		segment --- the one carrying the source --- so it inherits that segment's
+		full local error, which changes every time the segment length does.
 		\end{solution}
 
 \end{parts}
