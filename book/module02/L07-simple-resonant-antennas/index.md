@@ -664,7 +664,7 @@ thicker. The next frame says why.
 - **End effect**: capacitance at the tips lets charge pile up past the metal.
 - **Wire thickness**: a thicker element has more end capacitance.
 - Both slow the wave on the wire.
-- Resonance lands near $0.475\lambda$ and $70\ \Omega$.
+- Resonance lands near $0.475\lambda$: $63\ \Omega$ modeled, $70\ \Omega$ measured.
 :::
 
 The reason is that the wire is electrically longer than it is physically.

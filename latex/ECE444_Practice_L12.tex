@@ -258,30 +258,32 @@ $R_{\text{ohmic}} = \lp C/2\pi b \rp R_s$ for a single turn.
 \question \textbf{The price of being small.} Stay with the single-turn loop of radius
 $a = 0.30\ \m$ at $14.2\ \mhz$ ($\eta_{\text{rad}} = 0.113$). The Chu limit from Lesson 3 gives the
 radiation quality factor of any antenna that fits inside a sphere of radius $a$ as
-$Q \gtrsim 1/(ka)^3 + 1/(ka)$, and the fractional bandwidth is roughly $1/Q$.
+$Q \gtrsim 1/(ka)^3 + 1/(ka)$. Lesson 3's fractional bandwidth is roughly $1/Q$ at
+the half-power points, or $0.71/Q$ at the course's VSWR $\le 2$ bar.
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute $ka$, the Chu $Q$, and the resulting bandwidth in kHz.
+		\part Compute $ka$, the Chu $Q$, and the resulting VSWR $\le 2$ bandwidth
+		in kHz.
 		\begin{solution}[1.4in]
 		\eq{ k &= \frac{2\pi}{21.1} = 0.297\ \text{rad/m}, \quad ka = 0.0892 \\
 		     Q &\gtrsim \frac{1}{(0.0892)^3} + \frac{1}{0.0892} = 1409 + 11 = 1420 \\
-		     \text{FBW} &\approx \frac{1}{Q} = 7.0\ee{-4} = 0.070\% \\
-		     \Delta f &= 0.00070 \lp 14.2\ \mhz \rp = 10\ \khz }
+		     \text{FBW} &\approx \frac{0.71}{Q} = 5.0\ee{-4} = 0.050\% \\
+		     \Delta f &= 0.00050 \lp 14.2\ \mhz \rp = 7.1\ \khz }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
 		$Q$ = \ansbox[1.2in]{$\approx 1420$}
 		\\[16pt]
-		$\Delta f$ = \ansbox[1.2in]{$10\ \khz$}
+		$\Delta f$ = \ansbox[1.2in]{$7.1\ \khz$}
 	\end{minipage}
 
 	\part A single-sideband voice channel needs about 3 kHz. Does the loop pass it, and what
 	does your answer imply about operating across a 350 kHz amateur band?
 		\begin{solution}[1.2in]
-		Yes. 10 kHz comfortably covers one 3 kHz voice channel, so the loop is usable on any
-		single frequency. Moving elsewhere in a 350 kHz band means retuning the loop capacitor,
+		Yes. 7.1 kHz covers one 3 kHz voice channel with room to spare, so the loop is usable on
+		any single frequency. Moving elsewhere in a 350 kHz band means retuning the loop capacitor,
 		because the match degrades within a channel or two. The size reduction is paid for in
 		retuning.
 		\end{solution}
@@ -291,7 +293,8 @@ $Q \gtrsim 1/(ka)^3 + 1/(ka)$, and the fractional bandwidth is roughly $1/Q$.
 		\begin{solution}[1.3in]
 		Loss lowers Q. The Chu number is the \emph{radiation} Q; the loaded Q is reduced
 		roughly in proportion to the efficiency, $Q_{\text{loaded}} \approx \eta_{\text{rad}} Q \approx
-		0.113(1420) \approx 160$, which widens the match to about $0.6\%$, or 90 kHz. It is
+		0.113(1420) \approx 160$, which widens the band to $0.71/160 = 0.44\%$, or 63 kHz --
+		nearly nine times the Chu estimate. It is
 		not good news: the extra bandwidth is bought by dissipating power in copper. A
 		$50\ \ohms$ resistor is matched at every frequency and radiates nothing at all.
 		\end{solution}
