@@ -322,65 +322,32 @@ level**.
 Absorber is carbon-loaded foam, cut into pyramids, and it is specified by
 reflectivity in dB. Performance scales with pyramid height *in wavelengths*,
 so low-frequency absorber gets enormous: a chamber rated to 200 MHz has
-meter-long spikes on the walls. Which reflectivity level you need is set by
-the lowest signal you intend to believe, not by the main beam.
-::::
+meter-long spikes on the walls.
 
-::::{frame} Stray Reflections and Sidelobe Error
-:::{present}
-<img src="../../viz/img/L09-stray-ripple.svg"
-     alt="Left, a phasor diagram: a stray signal adds to the wanted signal at any phase, so the measured amplitude lies anywhere on a circle around the true value. Right, the resulting error interval in decibels at three true levels."
-     style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
-:::
-:::{present}
-:class: callout
-$-40$ dB is referenced to the **peak**. Against a $-30$ dB sidelobe the stray
-is only $10$ dB down — a **third** of it in amplitude — so the reading runs
-from $-27.6$ to $-33.3$ dB.
-:::
+Which reflectivity level you need is set by the lowest signal you intend to
+believe, not by the main beam. A reflection 40 dB below the main beam is
+nothing next to the main beam and a great deal next to a sidelobe thirty
+decibels down, because both levels are referenced to the same peak.
 
-Every level in this lesson, the absorber's reflectivity included, is
-referenced to the main-beam peak. That is the step that makes these numbers
-surprising: the sidelobe we are trying to read is referenced to the same
-peak, so it is far closer to the stray than the two labels suggest.
-
-Work it in amplitudes rather than decibels, because amplitudes are what add.
-A stray 40 dB below the peak has amplitude
-
-$$s = 10^{-40/20} = 0.0100,$$
-
-and a sidelobe 30 dB below the peak has amplitude
-
-$$a = 10^{-30/20} = 0.0316.$$
-
-So $s/a = 0.316$. The stray is a third of the sidelobe in amplitude, which is
-**10 dB below it, not 40**. As the positioner turns, the geometry runs the
-stray's phase through every value, the two add as vectors, and the measured
-amplitude sweeps the whole range from $a - s$ to $a + s$:
+:::{depth}
+The arithmetic, for a reader who wants it. Work in amplitudes, because
+amplitudes are what add. A stray 40 dB below the peak has amplitude
+$s = 10^{-40/20} = 0.0100$, and a sidelobe 30 dB below the peak has amplitude
+$a = 10^{-30/20} = 0.0316$, so $s/a = 0.316$: the stray is a third of the
+sidelobe, 10 dB below it rather than 40. As the positioner turns, the
+geometry runs the stray's phase through every value and the two add as
+vectors, so the reading sweeps from $a - s$ to $a + s$:
 
 $$a + s = 0.0416 = -27.6\ \text{dB}, \qquad a - s = 0.0216 = -33.3\ \text{dB}.$$
 
+<img src="../../viz/img/L09-stray-ripple.svg"
+     alt="Left, a phasor diagram: a stray signal adds to the wanted signal at any phase, so the measured amplitude lies anywhere on a circle around the true value. Right, the resulting error interval in decibels at three true levels."
+     style="max-width: 460px; width: 100%; display: block; margin: 1em auto;">
+
 Against a true level of $-30$ dB that is $+2.4$ dB at one extreme and
-$-3.3$ dB at the other, and **5.7 dB from trough to peak** of the ripple. The
-pair is asymmetric because the decibel is a logarithm: the same amplitude
-step is worth more decibels going down than going up.
-
-Nothing of the kind happens on the main beam, where $a = 1$ and $s = 0.01$,
-and the reading moves by $\pm 0.09$ dB. The error grows as the signal being
-read falls toward the stray, which is why the reflectivity you need is set by
-the lowest level you intend to believe.
-
-:::{depth}
-Run the argument backwards and it is a measurement rather than a warning. The
-peak-to-trough ripple of a wanted signal contaminated by a single stray is
-
-$$\text{ripple (dB)} = 20\log_{10}\frac{1 + r}{1 - r}, \qquad r = s/a,$$
-
-so recording the ripple gives $r$, and $r$ gives the stray level. That is
-exactly the free-space VSWR probe sweep the next frame describes: drag a
-probe through the volume, record the swing, and read off the stray field the
-quiet zone is delivering.
-:::
+$-3.3$ dB at the other, 5.7 dB from trough to peak. The pair is asymmetric
+because the decibel is a logarithm. The same stray moves the main beam by
+$\pm 0.09$ dB, which nobody notices.
 
 | True level | Stray is below it by | Reading runs from | to |
 | :-- | :-- | :-- | :-- |
@@ -388,11 +355,15 @@ quiet zone is delivering.
 | Sidelobe, $-20$ dB | $20$ dB | $+0.83$ dB | $-0.92$ dB |
 | Sidelobe, $-30$ dB | $10$ dB | $+2.39$ dB | $-3.30$ dB |
 
-Read the bottom row as the working answer: a chamber that meets a good
-$-40$ dB specification still leaves a three-decibel uncertainty on a
-$-30$ dB sidelobe, and no care taken anywhere else in the setup recovers it.
-Lesson 11 asks you to state a dynamic range next to every number you extract
-for exactly this reason.
+Run the argument backwards and it stops being a warning and becomes a
+measurement. The peak-to-trough ripple of a wanted signal contaminated by a
+single stray is
+
+$$\text{ripple (dB)} = 20\log_{10}\frac{1 + r}{1 - r}, \qquad r = s/a,$$
+
+so recording the ripple gives $r$, and $r$ gives the stray level. That is the
+free-space VSWR probe sweep the next frame describes.
+:::
 ::::
 
 ::::{frame} The Quiet Zone
@@ -686,16 +657,20 @@ Lesson 3, and a perfectly circular antenna gives a band of zero width.
      style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- **Dynamic range** is the measured peak minus the measured noise floor.
-- Beamwidth sits $3$ dB down, far above it.
-- A null can never read below the floor, whatever the antenna does.
+- Two floors: the **chamber's** stray field and the **receiver's** noise.
+- Whichever is higher sets your **dynamic range**, peak minus floor.
+- A null can never read below it, whatever the antenna does.
 :::
 
-The receiver adds its own noise to everything it records, so the trace is the
-true pattern **plus** a floor, added in power. Measure the peak, switch the
-source off and measure the floor, and the difference between them is your
-**dynamic range** — 42 dB in the figure above, and a number you have to
-measure rather than assume.
+A pattern measurement has a floor, and it comes from two places. The chamber
+contributes one: the absorber's reflectivity is a stated level, and below it
+what you record is the room. The receiver contributes the other, its own
+noise, added in power to everything it records. Whichever is higher is the
+one you have, and on a good range it is usually the chamber.
+
+Either way the number is the same kind of number, and you measure it rather
+than assume it. Take the peak, switch the source off, take the floor, and
+their difference is your **dynamic range** — 42 dB in the figure above.
 
 Everything above that floor by a comfortable margin is the antenna. The main
 beam is at the top of the range, the half-power points are 3 dB down, and the
@@ -712,11 +687,11 @@ extracted from that region is a bound rather than a value. Write the bound.
 "At least 25 dB deep, limited by our 42 dB dynamic range" is a defensible
 sentence; "25 dB deep" claims something the instrument never showed you.
 
-This is the same argument as the stray-reflection frame earlier, arriving from
-the other direction: there an unwanted signal set the floor, here the receiver
-does, and in a real chamber measurement the higher of the two wins. Lesson 11
-asks you to measure your own floor with the source switched off, and then to
-say, row by row, which of your extracted numbers clears it and by how much.
+This is the payoff of the chamber specifications earlier in the lesson.
+Absorber reflectivity and the quiet-zone level are a floor quoted to you on
+paper; the receiver's noise is a floor you measure on the day. Lesson 11 asks
+you to measure yours with the source switched off, and then to say, row by
+row, which of your extracted numbers clears it and by how much.
 ::::
 
 ::::{frame} What a VNA Measures
@@ -1051,7 +1026,7 @@ preview of what neighbors in an array do to each other.
 | $r \ge 2D^2/\lambda$ | Minimum far-field range length | $22.5^\circ$ of edge phase error, written as a distance |
 | $\Delta\phi_{\max} = \pi D^2 / 4\lambda r$ | Quadratic phase error at the aperture edge | $\pi/8$ at the far-field distance |
 | Amplitude taper | Source pattern rolling off across the AUT | Under $0.25$ dB; source beamwidth 3-4× the subtended angle |
-| Absorber reflectivity | How much a wall reflects | $-40$ to $-50$ dB at normal incidence, worse at grazing |
+| Absorber reflectivity | The chamber's floor: how much a wall reflects | $-40$ to $-50$ dB at normal incidence, worse at grazing |
 | Quiet zone | Volume where the stray field meets spec | A size *and* a level; the AUT must fit inside |
 | Compact range | Reflector collimates a spherical wave up close | Quiet zone $\approx$ 50-60% of the reflector |
 | Near-field scan | Sample amplitude and phase close in, transform | Half-wavelength sampling; phase is mandatory |

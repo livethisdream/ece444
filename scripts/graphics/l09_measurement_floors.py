@@ -21,8 +21,7 @@ untouched, the sidelobe still clears the floor, and the nulls simply read the
 floor back.
 
     python3 scripts/graphics/l09_measurement_floors.py
-    -> book/extras/slides/fig/L09-stray-ripple.svg      (deck)
-       book/extras/viz/img/L09-stray-ripple.svg         (lesson page)
+    -> book/extras/viz/img/L09-stray-ripple.svg         (lesson page, depth)
        book/extras/slides/fig/L09-dynamic-range.svg     (deck)
        book/extras/viz/img/L09-dynamic-range.svg        (lesson page)
 """
@@ -219,12 +218,13 @@ def dynamic_range():
 
 
 def main():
-    (FIG / "L09-stray-ripple.svg").write_text(stray_ripple(), encoding="utf-8")
+    # Only the stacked page copy: the ripple arithmetic is depth on the
+    # absorber frame, not a slide, so nothing on the deck loads a wide one.
     (IMG / "L09-stray-ripple.svg").write_text(stray_ripple(stacked=True), encoding="utf-8")
     dr = dynamic_range()
     (FIG / "L09-dynamic-range.svg").write_text(dr, encoding="utf-8")
     (IMG / "L09-dynamic-range.svg").write_text(dr, encoding="utf-8")
-    print("wrote L09-stray-ripple (wide deck, stacked page) and L09-dynamic-range")
+    print("wrote L09-stray-ripple (stacked page copy) and L09-dynamic-range")
 
 
 if __name__ == "__main__":

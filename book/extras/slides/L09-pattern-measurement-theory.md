@@ -181,26 +181,11 @@ The decision tree is one number deep: work out 2D^2/lambda and see whether it fi
 - Taller in wavelengths is better, so low-frequency absorber gets enormous.
 
 <div class="callout">
-A chamber is never "no reflections". It is <strong>reflections below a stated level</strong>.
+A chamber is never "no reflections". It is <strong>reflections below a stated level</strong> — and that level is the floor under everything you measure in it.
 </div>
 
 Note:
-Carbon-loaded foam pyramids: the taper is a gradual impedance transition into a lossy medium, so the wave gets in without a reflection and then dies. The walls are not uniformly treated in a real chamber — the specular regions get the tall absorber, the rest gets shorter and cheaper stuff. Which level you need is set by the lowest signal you intend to believe, not by the main beam.
-
----
-
-## Stray reflections and sidelobe error
-
-<div class="fig" data-inline-svg="./fig/L09-stray-ripple.svg" style="max-width:660px; margin:0 auto;"></div>
-
-Both levels are referenced to the **peak**, so a $-40$ dB stray is only **10 dB** below a $-30$ dB sidelobe. Amplitudes add: $0.0316 \pm 0.0100$ gives $0.0416$ and $0.0216$.
-
-<div class="callout">
-A chamber meeting a good $-40$ dB spec still leaves a $-30$ dB sidelobe reading between $-27.6$ and $-33.3$ dB — a <strong>5.7 dB</strong> swing as the positioner turns.
-</div>
-
-Note:
-Do the arithmetic on the board, in amplitudes, because amplitudes are what add. A stray 40 dB below the peak is 10^(-40/20) = 0.0100. A sidelobe 30 dB below the peak is 10^(-30/20) = 0.0316. The ratio is 0.316, so the stray is a third of the sidelobe - 10 dB below it, not 40. As the positioner turns the geometry runs the stray's phase through every value, the two add as vectors, and the reading sweeps from 0.0216 to 0.0416, which is -33.3 to -27.6 dB. Against a true -30 that is +2.4 and -3.3, and 5.7 dB trough to peak. The pair is asymmetric because the decibel is a logarithm. On the main beam the same stray moves the reading by 0.09 dB and nobody notices; the error grows as the signal falls toward the stray. Run it backwards and it is a measurement: ripple = 20 log10[(1+r)/(1-r)] is how a quiet zone gets surveyed.
+Carbon-loaded foam pyramids: the taper is a gradual impedance transition into a lossy medium, so the wave gets in without a reflection and then dies. The walls are not uniformly treated in a real chamber - the specular regions get the tall absorber, the rest gets shorter and cheaper stuff. Which level you need is set by the lowest signal you intend to believe, not by the main beam, because both levels are referenced to the same peak: a reflection 40 dB down is nothing next to the main beam and a great deal next to a sidelobe 30 dB down. If they want the number, it is on the lesson page: the stray is then a third of the sidelobe in amplitude, so the reading swings +2.4 and -3.3 dB. Do not derive it here; the floor is the point, and it comes back at the end of the pattern half.
 
 ---
 
@@ -315,17 +300,17 @@ The principal planes are named for the antenna's polarization, not for anything 
 
 ## How much of a pattern is real
 
-<div class="fig" data-inline-svg="./fig/L09-dynamic-range.svg" style="max-width:660px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L09-dynamic-range.svg" style="max-width:680px; margin:0 auto;"></div>
 
-- **Dynamic range** = measured peak minus measured noise floor. Here, **42 dB**.
-- **Beamwidth** is 3 dB down and **nulls read the floor**, not the antenna.
+- Two floors — the **chamber's** stray field and the **receiver's** noise. The higher one wins.
+- **Dynamic range** = peak minus that floor. **Nulls read the floor**, not the antenna.
 
 <div class="callout">
 "At least 25 dB deep, limited by our 42 dB dynamic range" is defensible. "25 dB deep" is not.
 </div>
 
 Note:
-This closes the pattern half of the lesson, and it is the same argument as the stray-reflection slide arriving from the other direction: there an unwanted signal set the floor, here the receiver does, and in a real chamber the higher of the two wins. Read the figure left to right. The main beam, the half-power points and the 13 dB sidelobe all sit 29 dB or more clear of the floor, so none of them is in question. A true null goes to minus infinity and the floor does not, so the measured trace simply flattens onto the floor - the depth read at a null is the depth of the receiver. "Limited by our 42 dB dynamic range" means the measurement cannot resolve anything more than 42 dB below the peak, so numbers from that region are bounds, not values. L11 has them measure their own floor with the source off, then say row by row which numbers clear it.
+This closes the pattern half of the lesson, and it is where the chamber specifications from earlier get paid off. Absorber reflectivity and the quiet-zone level are a floor quoted to you on paper; the receiver's noise is a floor you measure on the day; whichever is higher is the one you have, and on a good range it is usually the chamber. Read the figure left to right. The main beam, the half-power points and the 13 dB sidelobe all sit 29 dB or more clear of the floor, so none of them is in question. A true null goes to minus infinity and the floor does not, so the measured trace simply flattens onto the floor - the depth read at a null is the depth of the receiver. "Limited by our 42 dB dynamic range" means the measurement cannot resolve anything more than 42 dB below the peak, so numbers from that region are bounds, not values. L11 has them measure their own floor with the source off, then say row by row which numbers clear it.
 
 ---
 
