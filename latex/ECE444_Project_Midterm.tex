@@ -1,0 +1,575 @@
+\documentclass{exam}
+
+\newif\ifprintselected   % required by exam_config's \ansbox
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Term, for the running header.
+\ifdefined\thisTermIn
+	\def\thisterm{\thisTermIn}
+\else
+	\def\thisterm{Fall 2026}
+\fi
+\def\thisclass{ECE 444}
+
+% The design frequency. Everyone builds the same antenna here.
+\def\fOne{915}
+
+% The second-frequency window. Cadets choose f2 inside [\fTwoLo, \fTwoHi] MHz
+% and at least \fTwoGuard\% away from \fOne, which puts the dipole between
+% roughly 0.42 and 0.55 wavelengths -- detuned enough that the match is real
+% work, not so far that a two-element L-network cannot reach it with the
+% stocked parts.
+%
+% THE UPPER AND LOWER BOUNDS ARE ALSO RANGE-EQUIPMENT BOUNDS. The window must
+% sit inside the usable band of the range's source/reference antenna. Confirm
+% that model's low-frequency limit before the project goes out and edit these
+% three numbers if it does not reach \fTwoLo.
+\def\fTwoLo{800}
+\def\fTwoHi{1050}
+\def\fTwoGuard{5}
+\def\fGuardLo{869}   % \fOne\ less \fTwoGuard\%, rounded
+\def\fGuardHi{961}   % \fOne\ plus \fTwoGuard\%, rounded
+
+% Due date and weight. Both are quoted from the syllabus -- change there first.
+\def\duedate{2 October, 2359}
+\def\projweight{30\%}
+\def\midweight{40\%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% END SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{myPackages_gr}
+\usepackage[hidelinks, linkcolor=red]{hyperref}
+\input{myShortcuts}
+\input{ece444_fonts}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\input{exam_config}
+\noprintanswers
+\printselectedfalse
+
+\renewcommand{\thesection}{\arabic{section}}
+\setcounter{secnumdepth}{2}
+
+% Requirement callout: the numbered things a report must contain. Kept visually
+% distinct from prose so a cadet can find every one of them on a second pass.
+\newcommand{\req}[1]{%
+	\par\vspace{2pt}%
+	\noindent\fbox{\begin{minipage}{0.97\linewidth}\vspace{1pt}#1\vspace{1pt}\end{minipage}}%
+	\par\vspace{4pt}}
+
+\firstpageheader{}{}{}
+\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Midterm Project}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+\firstpagefooter{}{}{}
+\runningfooter{}{}{}
+\runningheadrule
+
+\begin{document}
+\pagestyle{headandfoot}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% title block
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+USAF ACADEMY \\
+DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
+MIDTERM PROJECT (assigned Lesson 9) - Antenna Pattern Measurement \\
+\textbf{Project Description} \\
+\thisterm \\[4mm]
+\end{center}
+
+\fullwidth{\textbf{Due \duedate.} Individual. Worth \projweight\ of the
+course grade and \midweight\ of your midterm grade, scored on the
+\textbf{100-point rubric in Section 12}. There is no resubmission --- the
+grade you earn is the grade.}
+
+\vspace{2pt}
+
+\section{The assignment in one paragraph}
+
+Build a \fOne\ MHz wire dipole. Trim it until it resonates, and prove it did.
+Then choose a second frequency, leave the antenna exactly as it is, and build
+a matching network that presents 50 \ohms at that new frequency
+instead. Model the antenna in NEC at both frequencies. Take it into the
+chamber and measure its pattern at both frequencies, co-polarized and
+cross-polarized, against a reference antenna of known gain. Then write up what
+you predicted, what you measured, and what you make of the difference.
+
+You are not designing an antenna. Lesson 7 gave you the design and Lesson 8
+let you model it, so the pattern, the gain, and the impedance are all
+predictable before you measure anything. The work of this project is the
+comparison.
+
+\section{The engineering question}
+
+There are two ways to make an antenna present 50 \ohms at the
+connector, and this project makes you do both to the same piece of wire.
+
+At \fOne\ MHz you change the \emph{antenna}: you cut it until its own
+reactance vanishes. At your second frequency $f_2$ you change the
+\emph{network}: the antenna stays wrong and a pair of components hides it from
+the source. Both roads end at VSWR $\le$ 2 looking into the connector. They do
+not end at the same place anywhere else.
+
+\req{\textbf{Your report answers this question:} what did each method cost
+you, and what did the radiated pattern do about it? A VSWR reading at the
+connector is a statement about power accepted, not about power radiated or
+where it went. Your pattern measurements are how you tell the difference.}
+
+That question is the spine of the report. Everything below exists to give you
+the evidence to answer it.
+
+\section{What this project assesses}
+
+The project is where the Module 2 measurement objectives are demonstrated end
+to end:
+
+\begin{itemize}[nosep]
+	\item I can set up a one-port sweep, run an SOL calibration at the correct
+	      reference plane, and verify the calibration before I trust a reading.
+	\item I can read resonance, impedance, and VSWR $\le$ 2 bandwidth off a
+	      trace and off the Smith chart, and say from the sign of the reactance
+	      which way to trim.
+	\item I can verify a range geometry is valid for both antennas before I
+	      take data, using all three far-field criteria.
+	\item I can acquire principal-plane cuts and normalize, plot, and annotate
+	      them in dB down from the peak.
+	\item I can extract half-power beamwidth, first sidelobe level,
+	      front-to-back ratio, gain by comparison, and cross-polarization
+	      discrimination from measured data.
+	\item I can measure my own noise floor, state the resulting dynamic range,
+	      and say which of my numbers clears it and by how much.
+\end{itemize}
+
+\section{Phase 1 - Build the dipole}
+
+Predict before you cut. Lesson 7 gives the half-wave dipole's dimensions, its
+$73 + j42.5$ \ohms\ input impedance, and its 2.15 dBi directivity. Work out
+the numbers for \fOne\ MHz on paper first.
+
+Build it from wire and an SMA connector. The example antenna on the bench
+shows the feed construction: arms soldered to the center pin and to the body,
+a clean symmetric junction, arms straight and colinear. Make yours mechanically
+rigid --- an arm that moves when you move the coax makes every later
+measurement a different antenna.
+
+\req{\textbf{Required:} the predicted arm length and predicted $Z_{in}$ at
+\fOne\ MHz, computed \emph{before} the first cut, quoted in the report next to
+what you actually built.}
+
+Cut long. You can remove wire; you cannot put it back.
+
+\section{Phase 2 - Find and fix the resonance}
+
+Use the handheld VNA for this phase. It lives at the bench, it sweeps fast,
+and trimming is an iterative loop you will run several times.
+
+\begin{enumerate}[nosep]
+	\item Run a short-open-load calibration and verify it. State your reference
+	      plane --- the numbers mean nothing without it, and the length of cable
+	      past that plane is pure rotation on the chart.
+	\item Sweep the antenna. Find the frequency where the reactance crosses
+	      zero. That is the resonance, and it is almost certainly not \fOne\
+	      MHz on the first try.
+	\item Read the sign of the reactance at \fOne\ MHz and let it tell you
+	      which way to trim.
+	\item Trim, re-measure, repeat.
+\end{enumerate}
+
+\textbf{Log every iteration.} Arm length, resonant frequency, impedance at
+resonance, VSWR at \fOne\ MHz. You need four or five of these rows to make the
+trim history plot, and the plot is worth more than the final number: it shows
+a physical trend you can compare against the $\lambda/2$ prediction.
+
+\req{\textbf{The bar:} VSWR $\le$ 2 at \fOne\ MHz, measured, with the trace
+shown. Switch the analyzer to VSWR format at the bench so the limit line is
+simply 2.}
+
+Note what the textbook antenna does here. An ideal $\lambda/2$ dipole at
+$73 + j42.5$ \ohms\ on a 50 \ohms\ system is VSWR 2.18 --- it
+\emph{fails} this bar. Trimming to resonance is what passes it. Say in your
+report what your trimmed antenna's resistance came out to be and whether that
+is consistent with the 73 \ohms\ Lesson 7 derived.
+
+\section{Phase 3 - Build a balun}
+
+A coaxial cable is unbalanced and a dipole is balanced. Connect them directly
+and current that should have stayed on the inside of the shield flows back
+down its outside, which radiates. The thing you then measure in the chamber is
+not your dipole. It is your dipole plus a length of coax, and it will show up
+as a pattern that is tilted, asymmetric, and dependent on how the cable is
+routed that day.
+
+You will build a balun. Two constructions work at \fOne\ MHz; pick one.
+
+\textbf{Quarter-wave sleeve balun.} A conducting sleeve (copper tape over a
+tube, or thin brass tubing) coaxial with the feed line, shorted to the shield
+at the end away from the antenna and open at the feed end. Length is a quarter
+wavelength in air at \fOne\ MHz --- compute it. The shorted quarter wave
+presents a high impedance at the feed, which is what chokes the outside
+current.
+
+\textbf{Coiled-coax choke.} Wind several turns of the feed coax into a tight
+solenoid a few centimeters across, close to the feed point. The coil's
+inductance and its self-capacitance form a high impedance to common-mode
+current. It is quicker to build than a sleeve and its performance is less
+predictable, which is why the verification below matters.
+
+\req{\textbf{Required evidence that it works.} Measure the antenna's VSWR at
+\fOne\ MHz while you move, coil, and grip the feed line, with and without the
+balun. Report how much the reading swings in each case. A working balun makes
+the antenna's behavior stop depending on its cable. If you have chamber time
+for it, the stronger evidence is a pattern cut taken both ways.}
+
+Do not skip this and do not do it last. The balun is on the antenna for every
+measurement that follows, including the trim verification you may need to
+repeat once it is fitted.
+
+\section{Phase 4 - Detune, predict, and match}
+
+Now the second half of the engineering question.
+
+\subsection{Choose $f_2$}
+
+Pick any $f_2$ between \fTwoLo\ and \fTwoHi\ MHz that is at least
+\fTwoGuard\% away from \fOne\ MHz --- that is, outside \fGuardLo--\fGuardHi\
+MHz. Different cadets should pick different frequencies. Declare your choice
+at the Lesson 14 checkpoint.
+
+\subsection{Predict $Z_a(f_2)$ before you design anything}
+
+Model your antenna --- the one you actually built, at the length you actually
+trimmed it to --- in the course NEC simulator and read its input impedance at
+$f_2$. This prediction is the load your matching network is designed against.
+
+This ordering is not a formality. A matching network designed against a
+measured impedance is a fitting exercise; one designed against a prediction
+and then measured is an experiment. Do it in that order and report both
+numbers.
+
+\subsection{Design, build, verify}
+
+Use the L-network method from the Lesson 4 lab. Your network must absorb the
+antenna's own reactance at $f_2$ as well as transform its resistance, so work
+from the full complex $Z_a(f_2)$, not from its real part. Build it on the SMA
+proto board with discrete components; choose the nearest stocked values and
+report the difference between the values you designed and the values you
+soldered.
+
+Two elements should reach any $f_2$ in the allowed window. If yours will not,
+say why in the report before adding a third.
+
+Verify on the Copper Mountain VNA. This is your final, reportable impedance
+data, so calibrate carefully and state the reference plane again.
+
+\req{\textbf{The bar:} VSWR $\le$ 2 at $f_2$, measured on the Copper Mountain,
+with the trace shown and the VSWR $\le$ 2 bandwidth quoted. Compare that
+bandwidth against the resonant antenna's bandwidth at \fOne\ MHz. They will
+not be the same, and the difference is one of the costs the engineering
+question is asking about.}
+
+\subsection{Measure the same antenna on both instruments}
+
+Once the antenna is final, sweep it on \emph{both} the handheld and the Copper
+Mountain, calibrated to the same reference plane, over the same span. Overlay
+the two traces.
+
+They will not lie on top of each other. Report the disagreement --- where it is
+worst, how large it is, and what you think accounts for it. Two instruments
+disagreeing about one unchanged object is the most honest uncertainty estimate
+you will get in this course, and it is worth more than any figure you could
+quote from a data sheet.
+
+\section{Phase 5 - Simulate}
+
+Use the course NEC2 simulator. Model the antenna you built: your trimmed
+length, your wire diameter, your feed geometry.
+
+Produce, at both \fOne\ MHz and $f_2$:
+
+\begin{itemize}[nosep]
+	\item input impedance and VSWR referenced to 50 $\Omega$,
+	\item E-plane and H-plane pattern cuts,
+	\item directivity, and the gain if you model loss.
+\end{itemize}
+
+State your model's assumptions where they differ from the hardware: perfect
+conductor, no balun, no connector, no feed cable, free space rather than a
+chamber. Every one of those is a candidate explanation for a later
+disagreement, and a disagreement you predicted is worth far more than one you
+discovered.
+
+\section{Phase 6 - Measure the pattern}
+
+\subsection{Before you take data}
+
+Verify the range geometry using all three far-field criteria from Lesson 9,
+for \emph{both} the antenna under test and the reference antenna, at
+\emph{both} frequencies. State which criterion governs. A dipole is small
+compared to a wavelength, so $2D^2/\lambda$ is probably not the one that binds
+--- find out which is.
+
+\subsection{Measure your floor}
+
+Before the pattern, measure the floor: with the source off, or with the
+antennas cross-polarized and rotated away, record the level the receiver
+reports. Quote it in dB below your co-polarized peak. That number is your
+dynamic range, and it bounds every quantity you extract afterward.
+
+\req{\textbf{Draw the floor as a horizontal line on every pattern plot in your
+report.} A pattern measurement has a floor; the chamber contributes one and
+the receiver contributes the other, and whichever is higher is the one you
+have. Any number that lands within a few dB of it is a \emph{bound}, not a
+value, and must be quoted as ``$\le$'' in your tables.}
+
+\subsection{The cuts}
+
+At both \fOne\ MHz and $f_2$:
+
+\begin{itemize}[nosep]
+	\item E-plane cut, co-polarized,
+	\item H-plane cut, co-polarized,
+	\item both planes again, cross-polarized.
+\end{itemize}
+
+Keep the range, the cabling, and the source power identical between the co-
+and cross-polarized runs. If you change anything, you have changed the
+reference the two are compared against and the discrimination number is
+meaningless.
+
+\subsection{The reference antenna}
+
+Measure the reference antenna's own pattern as well. It is a five-minute swap
+and a five-minute sweep, and it buys you two things: a check that your range
+is behaving, since you know what that antenna's pattern should look like, and
+the received-power reference for gain by comparison.
+
+Gain by substitution: replace your antenna with the reference, change nothing
+else, and record the received power. Then
+%
+\eq{
+	G_{\text{AUT}} \lb \dbi \rb = G_{\text{ref}} \lb \dbi \rb
+	+ \lp P_{\text{AUT}} - P_{\text{ref}} \rp \lb \db \rb.
+}
+%
+Note the conditions this is valid under --- Lesson 9 lists them --- and say
+whether yours were met.
+
+\section{Phase 7 - Analysis}
+
+This is the part of the report that carries the grade.
+
+\subsection{Normalize honestly}
+
+The chamber gives you relative received power. NEC gives you absolute
+directivity. They are not the same quantity and you cannot simply plot them on
+one axis.
+
+\req{\textbf{State your normalization basis in the caption of every overlay.}
+The default: normalize the measured co-polarized cut to its own peak,
+normalize the simulated cut to its own peak, and plot both in dB down from
+peak. That comparison is about pattern \emph{shape} and it is honest. Absolute
+level is a separate claim, made separately, from the gain substitution
+measurement.}
+
+What you must not do is slide one curve against the other until they agree.
+Shape agreement and gain agreement are two different findings, and collapsing
+them into one plot hides whichever of them failed.
+
+\subsection{Extract the numbers}
+
+From the measured cuts, at both frequencies: half-power beamwidth in both
+planes, null depths and positions, first sidelobe level in dBc,
+front-to-back ratio, cross-polarization discrimination, and gain. For each,
+say whether it clears your floor.
+
+\subsection{Reconcile}
+
+Put prediction and measurement side by side and account for the differences.
+Lesson 7's closed form, your NEC model, and your chamber data are three
+independent statements about one antenna. Where they disagree, work out which
+one you believe and why.
+
+Candidate explanations you should be able to rule in or out: the feed cable
+and balun, chamber reflections and the quiet-zone limits, the range geometry,
+alignment and polarization error, the model's idealizations, connector and
+network loss at $f_2$, and your own repeatability.
+
+\req{\textbf{This is where the grade is won.} You are not required to make the
+numbers agree. You are required to know why they do not. A disagreement you
+have diagnosed is a result; a disagreement you have not mentioned is a
+missing result.}
+
+There is no error budget to fill in. The errors are there whether or not you
+tabulate them --- what the report needs is your reasoning about which of them
+is responsible for what you actually see.
+
+\section{The report}
+
+One typed technical report, submitted as a PDF, plus your data files. There is
+no page limit and no template: the structure is yours to choose, and choosing
+it is part of the work. Two pages will not do it.
+
+\textbf{Nothing handwritten.} Every figure is generated by software. Every
+axis is labeled with units. Every trace is in a legend. Every figure and table
+is numbered and has a caption that says what the reader should take from it.
+An uncaptioned instrument screenshot is not a figure.
+
+\subsection{Required figures}
+
+\begin{enumerate}[nosep]
+	\item Annotated photograph of the antenna as built, with dimensions and the
+	      balun visible.
+	\item Trim history: VSWR against frequency for each cut, on one set of
+	      axes, with the VSWR $=$ 2 line drawn.
+	\item Smith chart at $f_2$: the antenna unmatched and the antenna matched.
+	\item Matching network schematic, with designed and as-built component
+	      values.
+	\item Handheld and Copper Mountain traces of the final antenna, overlaid,
+	      same reference plane.
+	\item The NEC model geometry.
+	\item Simulated E- and H-plane patterns at both frequencies.
+	\item Measured co- and cross-polarized cuts, both planes, both
+	      frequencies, with the measured floor drawn on each.
+	\item Measured against simulated, overlaid, normalization basis stated in
+	      the caption.
+	\item The reference antenna's measured pattern.
+\end{enumerate}
+
+\subsection{Required tables}
+
+\begin{enumerate}[nosep]
+	\item \textbf{Predicted against measured.} Resonant frequency, input
+	      impedance, VSWR, VSWR $\le$ 2 bandwidth, half-power beamwidth in both
+	      planes, first sidelobe level, front-to-back ratio, cross-polarization
+	      discrimination, and gain --- with three columns: Lesson 7 closed
+	      form, NEC, and measured. Both frequencies.
+	\item \textbf{The match at $f_2$.} Predicted $Z_a(f_2)$, designed component
+	      values, as-built component values, achieved VSWR, achieved bandwidth.
+\end{enumerate}
+
+\subsection{Data files}
+
+Submit alongside the PDF, named so a reader can tell what each one is:
+Touchstone \texttt{.s1p} files from both analyzers, your pattern data as CSV,
+and your NEC input decks. Your data files must be your own measurements.
+
+\section{Grading}
+
+The project is scored out of 100 on the rubric below. Each row is worth the
+points shown, awarded on how completely and how well the work is done --- not
+as all-or-nothing. There is no resubmission, so read this section before you
+start, not after.
+
+\begin{center}
+\begin{tabular}{|p{4.6in}|c|}
+\hline
+\textbf{What is assessed} & \textbf{Points} \\
+\hline
+\textbf{Analysis and reconciliation.} Every disagreement between predicted and
+measured either explained or explicitly owned as unexplained, with the
+candidate causes ruled in or out. & 20 \\
+\hline
+\textbf{The two matches.} VSWR $\le$ 2 at \fOne\ MHz by trimming and at $f_2$
+by matching, both with traces shown --- or, if a bar was missed, a quantitative
+diagnosis of why. & 15 \\
+\hline
+\textbf{Pattern measurements.} Co- and cross-polarized cuts in both planes at
+both frequencies, with the measured floor stated as a number and drawn on the
+plots. & 15 \\
+\hline
+\textbf{Prediction before design.} The NEC prediction of $Z_a(f_2)$ presented,
+and presented as what the match was designed against. & 10 \\
+\hline
+\textbf{Gain by comparison.} The substitution measurement, the reference
+antenna's own pattern, and the validity conditions addressed. & 10 \\
+\hline
+\textbf{Report quality.} All required figures and tables present, typed,
+legible, captioned, axes labeled, with the data files. & 10 \\
+\hline
+\textbf{The balun.} Built, and evidence in the report that it does
+something. & 8 \\
+\hline
+\textbf{Instrument comparison.} Both analyzers' traces of the final antenna,
+overlaid at the same reference plane, with the disagreement discussed. & 7 \\
+\hline
+\textbf{Honest normalization.} Every overlay's comparison basis declared in
+its caption. & 5 \\
+\hline
+\textbf{Total} & \textbf{100} \\
+\hline
+\end{tabular}
+\end{center}
+
+Two things are worth saying plainly about that table. \textbf{Analysis is the
+largest single row}, larger than either measurement row, because a campaign
+you cannot interpret is not a result. And a report in which everything agrees,
+nothing is questioned, and no measurement appears to have surprised its author
+will lose most of those twenty points however clean the data is.
+
+Work that is missing entirely earns nothing for that row. Work that is present
+but thin --- a pattern plotted without its floor, a match verified but not
+explained --- earns part of it.
+
+\section{Checkpoints}
+
+These are not graded. They exist because the chamber is a shared resource and
+because a problem found at Lesson 11 is an afternoon, while the same problem
+found on 1 October is a failure.
+
+\begin{center}
+\begin{tabular}{|l|p{3.9in}|}
+\hline
+\textbf{By} & \textbf{You should have} \\
+\hline
+Lesson 11 & A trimmed dipole with a balun on it, VSWR $\le$ 2 at \fOne\ MHz,
+shown to the instructor. \\
+\hline
+Lesson 14 & $f_2$ declared, $Z_a(f_2)$ predicted in NEC, the L-network
+designed on paper. \\
+\hline
+Lesson 15 & Matching network built and verified on the Copper Mountain.
+Chamber time booked. \\
+\hline
+Lesson 17 & Chamber measurements complete, including the reference antenna. \\
+\hline
+\duedate & Report and data files submitted. \\
+\hline
+\end{tabular}
+\end{center}
+
+Chamber time is scheduled in pairs. \textbf{You may share a chamber session
+and help each other take data. The data reduction, the analysis, and the
+report are individual.} Two reports containing the same sentences are two
+reports that are not your own work.
+
+\section{Authorized resources}
+
+Authorized without restriction: the course site and every lesson, lab, and
+practice set in it; your own notes; the course textbook; the NEC2 simulator;
+Python and its scientific libraries for reduction and plotting; the
+instrument manuals; and your instructor.
+
+Discussion with classmates about method is encouraged. Sharing measured data,
+figures, or written text is not.
+
+\textbf{Generative AI use on this project is Level 3.} If you use it, include
+a documentation statement, as the syllabus requires on any assignment --- name
+the tool, what you used it for, and where it appears in your work.
+
+The litmus test from the syllabus applies here as it does everywhere else: you
+must be able to explain every step of what you submit.
+
+\vspace{6pt}
+\hrule
+\vspace{6pt}
+
+\begin{center}
+\textit{Questions about scope, equipment, or scheduling go to the instructor
+early. A question asked at Lesson 12 is free.}
+\end{center}
+
+\end{document}

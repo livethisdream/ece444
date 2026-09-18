@@ -38,7 +38,7 @@ Lesson 20 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Where we were
-The **Antenna Pattern Measurement** midterm project, assigned in Lesson 9, is due at the start of today's class. Turn in your report and the measured pattern files together. The quantities you extracted from a measured cut — the half-power width, the null positions, the sidelobe level referenced to the peak — are exactly the quantities this lesson computes from theory, so keep your project data at hand.
+The **Antenna Pattern Measurement** midterm project, assigned in Lesson 9, measured all of this from the other direction. The quantities you extracted from a measured cut — the half-power width, the null positions, the sidelobe level referenced to the peak — are exactly the quantities this lesson computes from theory, so keep your project data at hand.
 ::::
 
 ::::{frame} Where we were, continued
@@ -291,8 +291,10 @@ The sweep is a discrete grid. The GUI steps the commanded angle by the phase-shi
 ::::
 
 ::::{frame} Practice
-- <a href="../../practice/ECE444_L20_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a href="../../practice/ECE444_L20_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+:class: doc-links
+
+- <a class="doc-link" href="../../practice/ECE444_L20_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a class="doc-link doc-key" href="../../practice/ECE444_L20_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
 ::::{frame} Where this is going

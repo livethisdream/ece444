@@ -509,10 +509,12 @@ A lesson whose sub-LO start is not `.1` continues a shared objective: add
 `style="--module: '3'; --lo: '2'; counter-reset: lo 5"` renders 3.2.6
 onward). Your brief carries the exact sub-LO texts — use them verbatim.
 
-**L20 note:** the midterm project (Antenna Pattern Measurement, assigned at
-L14) is **due at L20**. L20's page and deck open by acknowledging the
-turn-in in one short paragraph/slide bullet before the lesson content; do
-not restate the project requirements.
+**L20 note:** the midterm project (Antenna Pattern Measurement) is assigned
+at L9 and due 2 Oct, 2359. **The due date lives in the syllabus and the
+project packet, and nowhere else** -- L20 opens by connecting the project's
+measured quantities to the theory in one short paragraph/slide bullet, and
+states neither a deadline nor a turn-in procedure. Do not restate the
+project requirements.
 
 Objective 3.8 covers **grating lobes, beam squint, and phase quantization**
 — the three ways a real steered array departs from the ideal pattern. All

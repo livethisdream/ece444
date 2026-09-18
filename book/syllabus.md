@@ -111,7 +111,7 @@ project-based evaluation. Four components make up your final grade:
 | :- | :-: | :- |
 | Learning Objective (LO) mastery | 30% | Percent of course LOs mastered, multiplied by 30% |
 | Engagement | 10% | Participation, preparation, practice, EI, and course engagement |
-| Midterm Project — Antenna Pattern Measurement | 30% | Mastered / Not Yet Mastered, with resubmission opportunity |
+| Midterm Project — Antenna Pattern Measurement | 30% | 100-point rubric, scored on the scale in the project packet |
 | Final Project — Combined Beamforming + Radar | 30% | Traditional rubric-based sliding-scale assessment |
 
 ### LO mastery assessment
@@ -131,17 +131,34 @@ contribution is:
 (30 / 33) × 30% = 27.3%
 ```
 
-### Midterm project mastery assessment
+### Midterm project assessment
 
-The Midterm Project is assessed as **Mastered** or **Not Yet Mastered**.
-You may **revise and resubmit** the Midterm Project after instructor feedback,
-unless no meaningful effort is evident (the assessment is blank, incomplete,
-or significantly late). In those cases, a retake may be earned by giving a
-**5-minute technical presentation** during class on a relevant, pre-approved
-topic.
+The Midterm Project is graded on a **100-point rubric**, published in the
+project packet and weighted toward analysis rather than data collection.
+**There is no resubmission** — the schedule does not allow a revision cycle
+between the due date and the end of the course, so the grade you earn is the
+grade.
 
-The bar is simple: I want you to *learn this material*, and I would rather you
-learn it late than not at all.
+Read the rubric before you start rather than after you finish. It is in the
+packet for exactly that reason, and the checkpoints exist so that a problem
+surfaces while there is still time to fix it.
+
+### Your midterm grade
+
+The four weights above are the **final** course grade. The **midterm grade**
+reported at the midpoint is computed from the three things you have actually
+done by then — the final project has not happened yet, so it carries no weight:
+
+| Component | Weight in the midterm grade |
+| :- | :-: |
+| Midterm Project — Antenna Pattern Measurement | 40% |
+| Engagement | 30% |
+| LO mastery, on the assessments given so far | 30% |
+
+Engagement and LO mastery count for more here than they do in the final grade,
+because at the midpoint they are most of the evidence there is. The midterm
+grade is a progress report, not a component of the final grade — nothing in
+this table is added to the table above.
 
 ### Final project assessment
 
@@ -194,7 +211,7 @@ Engagement is capped at 10%; extra credit does not roll over.
 
 Two graded projects anchor the course:
 
-- **Midterm Project — Antenna Pattern Measurement.** Introduced at Lesson 9, due **2 Oct, 2359**. Students build a dipole, execute a pattern-measurement campaign on it, reduce the data, and report gain, beamwidth, sidelobe level, and polarization behavior against expectations. Assessed as **Mastered / Not Yet Mastered** with resubmission opportunity.
+- **Midterm Project — Antenna Pattern Measurement.** Introduced at Lesson 9, due **2 Oct, 2359**. Students build a 915 MHz dipole and trim it to resonance, then match the same antenna to 50 ohms at a second frequency with a discrete network, simulate it, execute a pattern-measurement campaign on it at both frequencies, reduce the data, and report gain, beamwidth, sidelobe level, and polarization behavior against expectations. Graded on a **100-point rubric**, published in the project packet. No resubmission.
 - **Final Project — Combined Beamforming + Radar.** Track a moving target while suppressing a static jammer using the ADALM-PHASER. Runs across Lessons 39–41 (Module 5). Graded using a **traditional rubric-based sliding scale**.
 
 ## Course policies

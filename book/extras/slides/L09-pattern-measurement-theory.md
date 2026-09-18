@@ -528,7 +528,7 @@ Tie back to L5: the reactive near field is where energy is stored, not radiated.
 ## The midterm project
 
 <div class="callout">
-<strong>Build a dipole and measure its pattern.</strong> Due <strong>2 Oct, 2359</strong>.
+<strong>Build a dipole. Match it twice. Measure its pattern.</strong> Due <strong>2 Oct, 2359</strong>.
 </div>
 
 Everyone builds the same antenna, and nothing in the course so far is left out of it:
@@ -541,7 +541,7 @@ Everyone builds the same antenna, and nothing in the course so far is left out o
 | L9–L11 | The range, the analyzer, and what each one can tell you |
 
 Note:
-Say why everyone builds the same antenna: the pattern, the gain and the impedance are all predictable before anyone measures anything, so the work of the project is the comparison rather than the build. Thirty measurements of one known object also makes disagreement between them worth talking about. Then walk the table, because it is the real point of the slide - L1 and L3 define what gets reported, L5 and L6 say what the pattern should look like before it is measured, L7 and L8 give two independent predictions to compare against, and today plus the two labs give the instruments. Full requirements are in the handout.
+Say why everyone builds the same antenna: the pattern, the gain and the impedance are all predictable before anyone measures anything, so the work of the project is the comparison rather than the build. Ten independent measurements of one known object also makes disagreement between them worth talking about. Then walk the table, because it is the real point of the slide - L1 and L3 define what gets reported, L5 and L6 say what the pattern should look like before it is measured, L7 and L8 give two independent predictions to compare against, and today plus the two labs give the instruments. Full requirements are in the project description on the course site.
 
 ---
 
@@ -551,6 +551,7 @@ Say why everyone builds the same antenna: the pattern, the gain and the impedanc
 - **L11** puts one on the positioner: cut two planes, extract gain and beamwidth.
 - Both are procedure. The reasons are all here, so bring this lesson to the bench.
 - The **midterm project, due 2 Oct**, is the same work with no procedure handed to you.
+- <a href="../projects/ECE444_Project_Midterm.pdf" target="_blank" rel="noopener">**Project description (PDF)**</a> — read it tonight.
 
 Note:
 Send them out knowing that "I measured it" is not an engineering result, while "I measured it, here is what it should have been, and here is what my range could and could not tell me" is. The labs are the dress rehearsal: same antenna, same instruments, same extraction, same uncertainty discussion.

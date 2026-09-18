@@ -209,10 +209,10 @@ If the antenna is wrong, nothing downstream can fix it.
 
 - **Practice sets are your reps.** One per lesson, keyed to that lesson's objectives. Graded on a **genuine, documented attempt** — not on correctness. That is engagement credit (10% of the grade).
 - **LO mastery is 30%.** Every objective is scored **Mastered** or **Not Yet Mastered** on the module assessments; your score is the fraction you master.
-- **The midterm project is resubmittable.** Mastered / Not Yet Mastered, revise after feedback, turn it in again.
+- **The midterm project is graded on a rubric**, out of 100, no resubmission. It is 40% of your midterm grade.
 
 <div class="callout">
-I would rather you learn it <em>late</em> than not at all — so do the reps.
+On the objectives I would rather you learn it <em>late</em> than not at all — so do the reps. The project is the one thing with a single shot.
 </div>
 
 Note:

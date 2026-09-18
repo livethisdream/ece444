@@ -1050,7 +1050,7 @@ preview of what neighbors in an array do to each other.
 ::::{frame} The Midterm Project
 :::{present}
 :class: callout
-**Midterm Project.** Build a dipole and measure its pattern.
+Build a dipole. Match it twice. Measure its pattern.
 Due **2 Oct, 2359**.
 :::
 :::{present}
@@ -1068,8 +1068,8 @@ design, Lesson 8 let you model it, and Lessons 10 and 11 put it on the two
 instruments. Handing the whole class one known antenna means the pattern, the
 gain, and the impedance are all predictable before anyone measures anything,
 so the work of the project is the comparison rather than the build. It also
-means thirty measurements of the same object, which makes disagreement
-between them worth talking about.
+means ten independent measurements of the same object, which makes
+disagreement between them worth talking about.
 
 The table is the point of the project. Lesson 1 defined gain and beamwidth
 and Lesson 3 defined polarization, so the report quotes all three. Lesson 5
@@ -1080,14 +1080,14 @@ you have two independent predictions to compare against. Today gives the
 range and the analyzer, and Lessons 10 and 11 are the dress rehearsal on
 both. Nothing in the course so far is left out of it.
 
-Full requirements come in the project handout distributed in class.
+The full requirements are in the <a href="../../projects/ECE444_Project_Midterm.pdf" target="_blank" rel="noopener">project description (PDF)</a>.
 ::::
 
 ::::{frame} Practice
-:class: read-only
+:class: read-only doc-links
 
-- <a href="../../practice/ECE444_L09_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a href="../../practice/ECE444_L09_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+- <a class="doc-link" href="../../practice/ECE444_L09_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a class="doc-link doc-key" href="../../practice/ECE444_L09_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
 ::::{frame} Where This Is Going

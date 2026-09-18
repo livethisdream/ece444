@@ -88,8 +88,11 @@ body.chrome-away .hud { transform: translateX(-50%) translateY(160%); opacity: 0
 }
 .page :hover > a.headerlink, .page a.headerlink:focus-visible { opacity: .6; }
 
-.page a { color: var(--blue-dark); text-underline-offset: .18em; }
-.page a:hover { color: var(--blue); }
+/* The download pills style themselves. `.page a` would outrank a plain
+   `.doc-link` on specificity (0,0,1,1 over 0,0,1,0) and repaint them, so
+   they are excluded by name here the way frames.css excludes them. */
+.page a:not(.doc-link) { color: var(--blue-dark); text-underline-offset: .18em; }
+.page a:not(.doc-link):hover { color: var(--blue); }
 
 /* The theme's bootstrap was quietly supplying this. Without it a bare <img>
    renders at its intrinsic size -- L01 has one 4080px wide, which dragged the

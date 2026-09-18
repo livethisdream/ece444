@@ -364,6 +364,7 @@ This is the payoff slide. The 20 dB of antenna gain is the difference between a 
 - You measured a horn on the range in **L11**; the dipole is the other end of the same scale.
 - A gain figure only means something against a reference, and today is the reference.
 - **Report** gain, beamwidth, sidelobe level, and polarization, with your measurements behind each one.
+- **Checkpoint today:** $f_2$ chosen, $Z_a(f_2)$ predicted in NEC, L-network designed on paper.
 
 Note:
 Take questions on scope; the details are in the handout they already have. The antenna is settled - everyone builds a dipole - so there is no candidate to name, and the selection framework later this hour is engineering reasoning in its own right rather than a project decision. Worth saying out loud why today matters to a dipole project: 2.15 dBi reads like a disappointment until you have spent an hour on antennas thirty decibels above it.

@@ -403,9 +403,10 @@ costs in sidelobe level and null depth.
 ::::
 
 ::::{frame} Practice
+:class: doc-links
 
-- <a href="../../practice/ECE444_L18_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a href="../../practice/ECE444_L18_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+- <a class="doc-link" href="../../practice/ECE444_L18_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
+- <a class="doc-link doc-key" href="../../practice/ECE444_L18_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
 ::::{frame} Where this is going
