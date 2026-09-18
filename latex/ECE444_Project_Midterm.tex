@@ -35,6 +35,7 @@
 % Due date and weight. Both are quoted from the syllabus -- change there first.
 \def\duedate{2 October, 2359}
 \def\projweight{30\%}
+\def\midweight{40\%}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% END SET THESE IF VARIABLES
@@ -80,9 +81,10 @@ MIDTERM PROJECT (assigned Lesson 9) - Antenna Pattern Measurement \\
 \thisterm \\[4mm]
 \end{center}
 
-\fullwidth{\textbf{Due \duedate.} Individual. Worth \projweight\ of the course
-grade, assessed \textbf{Mastered / Not Yet Mastered}, with one resubmission
-after feedback.}
+\fullwidth{\textbf{Due \duedate.} Individual. Worth \projweight\ of the
+course grade and \midweight\ of your midterm grade, scored on the
+\textbf{100-point rubric in Section 12}. There is no resubmission --- the
+grade you earn is the grade.}
 
 \vspace{2pt}
 
@@ -396,7 +398,7 @@ and balun, chamber reflections and the quiet-zone limits, the range geometry,
 alignment and polarization error, the model's idealizations, connector and
 network loss at $f_2$, and your own repeatability.
 
-\req{\textbf{This is the mastery bar.} You are not required to make the
+\req{\textbf{This is where the grade is won.} You are not required to make the
 numbers agree. You are required to know why they do not. A disagreement you
 have diagnosed is a result; a disagreement you have not mentioned is a
 missing result.}
@@ -455,35 +457,62 @@ Submit alongside the PDF, named so a reader can tell what each one is:
 Touchstone \texttt{.s1p} files from both analyzers, your pattern data as CSV,
 and your NEC input decks. Your data files must be your own measurements.
 
-\section{Mastered / Not Yet Mastered}
+\section{Grading}
 
-Mastered requires all of the following.
+The project is scored out of 100 on the rubric below. Each row is worth the
+points shown, awarded on how completely and how well the work is done --- not
+as all-or-nothing. There is no resubmission, so read this section before you
+start, not after.
 
-\begin{enumerate}[nosep]
-	\item VSWR $\le$ 2 demonstrated at \fOne\ MHz by trimming and at $f_2$ by
-	      matching, both with traces shown --- or, if a bar was missed, a
-	      quantitative diagnosis of why.
-	\item A balun built, and evidence in the report that it does something.
-	\item The NEC prediction of $Z_a(f_2)$ presented, and presented as what the
-	      match was designed against.
-	\item Both instruments' traces of the final antenna, overlaid, with the
-	      disagreement discussed.
-	\item Co- and cross-polarized cuts in both planes at both frequencies, with
-	      the measured floor stated as a number and drawn on the plots.
-	\item Gain by comparison, with the reference antenna's own pattern
-	      measured, and the validity conditions addressed.
-	\item Every overlay's normalization basis declared.
-	\item Every disagreement between predicted and measured either explained or
-	      explicitly owned as unexplained.
-	\item All required figures and tables present, typed, legible, captioned,
-	      with data files.
-\end{enumerate}
+\begin{center}
+\begin{tabular}{|p{4.6in}|c|}
+\hline
+\textbf{What is assessed} & \textbf{Points} \\
+\hline
+\textbf{Analysis and reconciliation.} Every disagreement between predicted and
+measured either explained or explicitly owned as unexplained, with the
+candidate causes ruled in or out. & 20 \\
+\hline
+\textbf{The two matches.} VSWR $\le$ 2 at \fOne\ MHz by trimming and at $f_2$
+by matching, both with traces shown --- or, if a bar was missed, a quantitative
+diagnosis of why. & 15 \\
+\hline
+\textbf{Pattern measurements.} Co- and cross-polarized cuts in both planes at
+both frequencies, with the measured floor stated as a number and drawn on the
+plots. & 15 \\
+\hline
+\textbf{Prediction before design.} The NEC prediction of $Z_a(f_2)$ presented,
+and presented as what the match was designed against. & 10 \\
+\hline
+\textbf{Gain by comparison.} The substitution measurement, the reference
+antenna's own pattern, and the validity conditions addressed. & 10 \\
+\hline
+\textbf{Report quality.} All required figures and tables present, typed,
+legible, captioned, axes labeled, with the data files. & 10 \\
+\hline
+\textbf{The balun.} Built, and evidence in the report that it does
+something. & 8 \\
+\hline
+\textbf{Instrument comparison.} Both analyzers' traces of the final antenna,
+overlaid at the same reference plane, with the disagreement discussed. & 7 \\
+\hline
+\textbf{Honest normalization.} Every overlay's comparison basis declared in
+its caption. & 5 \\
+\hline
+\textbf{Total} & \textbf{100} \\
+\hline
+\end{tabular}
+\end{center}
 
-Not Yet Mastered is any required item missing --- and also a report in which
-everything agrees, nothing is questioned, and no measurement appears to have
-surprised its author.
+Two things are worth saying plainly about that table. \textbf{Analysis is the
+largest single row}, larger than either measurement row, because a campaign
+you cannot interpret is not a result. And a report in which everything agrees,
+nothing is questioned, and no measurement appears to have surprised its author
+will lose most of those twenty points however clean the data is.
 
-You may revise and resubmit once after feedback.
+Work that is missing entirely earns nothing for that row. Work that is present
+but thin --- a pattern plotted without its floor, a match verified but not
+explained --- earns part of it.
 
 \section{Checkpoints}
 
