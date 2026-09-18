@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Circular polarization — 3D helix</title>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --rh:#0067b9; --lh:#b3213a; --tip:#1d7a4d; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:grid; grid-template-columns: 1fr 250px; gap:14px; padding:14px; align-items:start; }
+  @media (max-width:640px) { .app { grid-template-columns: 1fr; } }
+  .side { display:flex; flex-direction:column; gap:9px; min-width:0; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:9px 18px; align-items:center;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:38px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:80px; accent-color:var(--mid); }
+  .seg { display:flex; width:100%; border:1px solid var(--edge2); border-radius:6px; overflow:hidden; background:#fff; }
+  .seg button { flex:1 1 0; font:600 12px/1.15 Inter,system-ui,sans-serif; padding:7px 6px; border:0;
+                background:#fff; color:var(--navy); cursor:pointer; }
+  .seg button + button { border-left:1px solid var(--edge2); }
+  .seg button[aria-pressed="true"] { background:var(--mid); color:#fff; }
+  .tgl { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; min-width:0; }
+  .tgl input { position:absolute; opacity:0; pointer-events:none; }
+  .tgl .sw { position:relative; flex:none; width:34px; height:19px; border-radius:999px;
+             background:#dfe8f1; border:1px solid var(--edge2); transition:background .15s, border-color .15s; }
+  .tgl .sw::after { content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; border-radius:50%;
+                    background:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.22); transition:transform .15s; }
+  .tgl input:checked + .sw { background:var(--mid); border-color:var(--mid); }
+  .tgl input:checked + .sw::after { transform:translateX(15px); }
+  .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
+  .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .tgl input:checked ~ .t { color:var(--navy); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(2, 1fr); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.sense { background:rgba(0,103,185,0.12); border-color:rgba(0,103,185,0.30); }
+  .ro.sense .v { color:var(--rh); }
+  .ro.sense.lh { background:rgba(179,33,58,0.10); border-color:rgba(179,33,58,0.28); }
+  .ro.sense.lh .v { color:var(--lh); }
+  .hint { margin:0; text-align:center; font-size:11.5px; color:var(--ink3); line-height:1.45; }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="c" aria-label="Circular polarization corkscrew propagating along z"></canvas>
+
+  <div class="side">
+    <div class="controls">
+      <div class="ctl">
+        <div class="seg" id="senseRow">
+          <button type="button" data-sense="rh" aria-pressed="true">RHCP</button>
+          <button type="button" data-sense="lh" aria-pressed="false">LHCP</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <label>Rotate view</label>
+        <input id="tilt" type="range" min="0" max="60" step="1" value="22">
+        <span class="val" id="tilt-v">22°</span>
+      </div>
+      <div class="ctl">
+        <label>Speed</label>
+        <input id="speed" type="range" min="0" max="2" step="0.05" value="1">
+        <span class="val" id="speed-v">1.0×</span>
+      </div>
+      <label class="tgl"><input id="showComp" type="checkbox" checked><span class="sw"></span><span class="t">x / y components</span></label>
+      <label class="tgl"><input id="run" type="checkbox" checked><span class="sw"></span><span class="t">Animate</span></label>
+    </div>
+
+    <div class="readouts">
+      <div class="ro sense" id="ro-sense"><span class="k">sense</span><span class="v" id="p-sense">RHCP</span></div>
+      <div class="ro"><span class="k">axial ratio</span><span class="v">1.00 (0 dB)</span></div>
+      <div class="ro"><span class="k">Ey vs Ex</span><span class="v" id="p-phase">—</span></div>
+      <div class="ro"><span class="k">tip angle, z = 0</span><span class="v" id="p-ang">—</span></div>
+      <div class="ro"><span class="k">one full turn</span><span class="v">every &#955;</span></div>
+    </div>
+
+    <p class="hint">Wave propagates in <b>+z</b>; the tip of the E-vector traces a helix.
+    Point your right thumb along +z &#8212; fingers curl the way RHCP turns.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  const cvs = document.getElementById('c');
+  const ctx = cvs.getContext('2d');
+
+  const DW = 640, DH = 340;          // design canvas, scaled to the container width
+
+  const senseRow = document.getElementById('senseRow');
+  const tiltEl   = document.getElementById('tilt');
+  const speedEl  = document.getElementById('speed');
+  const showComp = document.getElementById('showComp');
+  const runEl    = document.getElementById('run');
+  const tiltV    = document.getElementById('tilt-v');
+  const speedV   = document.getElementById('speed-v');
+
+  let sense = 'rh';  // 'rh' or 'lh'
+  let phase = 0;     // running time phase
+  let lastT = performance.now();
+  let lastPill = 0;
+
+  senseRow.addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    sense = btn.dataset.sense;
+    senseRow.querySelectorAll('button').forEach(b =>
+      b.setAttribute('aria-pressed', b.dataset.sense === sense ? 'true' : 'false'));
+  });
+
+  [tiltEl, speedEl].forEach(el => el.addEventListener('input', () => {
+    tiltV.textContent  = tiltEl.value + '°';
+    speedV.textContent = (+speedEl.value).toFixed(1) + '×';
+  }));
+
+  /* clientWidth, not getBoundingClientRect(): the rect includes the 1px border
+     on each side, so a bitmap sized from it is 2px wider than the box it is
+     painted into and the drawing comes out stretched horizontally. And with
+     box-sizing:border-box, style.height sets the OUTER height, so hand the
+     border back or the bitmap is 2px taller than its box. The scale has no
+     floor any more: below it the composition would be wider than the canvas
+     and the corkscrew would be clipped at both ends. */
+  function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+  function fit() {
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = cvWidth(cvs);
+    const sc = Math.min(cssW / DW, 0.95);
+    const cssH = DH * sc;
+    cvs.width  = Math.round(cssW * dpr);
+    cvs.height = Math.round(cssH * dpr);
+    cvs.style.height = cssH + 'px';
+    const bh = cvs.offsetHeight - cvs.clientHeight;
+    if (bh) cvs.style.height = (cssH + bh) + 'px';
+    const tx = (cssW - DW * sc) / 2;
+    ctx.setTransform(dpr * sc, 0, 0, dpr * sc, dpr * tx, 0);
+  }
+  window.addEventListener('resize', fit);
+
+  // Isometric-ish projection.  x_screen = x - z * cos(iso), y_screen = y - z * sin(iso).
+  function project(x, y, z, params) {
+    const {cx, cy, sx, sy, sz, isoCos, isoSin} = params;
+    const px = cx + x * sx + z * sz * isoCos;
+    const py = cy - y * sy + z * sz * isoSin;
+    return [px, py];
+  }
+
+  function draw() {
+    const W = DW, H = DH;
+    ctx.clearRect(0, 0, W, H);
+
+    const tiltDeg = +tiltEl.value;
+    const isoRad = tiltDeg * Math.PI / 180;
+
+    // z-axis runs left-to-right, tilted down.  The depth scale is trimmed and the
+    // origin dropped so the whole corkscrew stays inside the frame at any tilt.
+    const isoS = Math.sin(isoRad);
+    const sz = Math.min(44, (H - 142) / (10 * Math.max(isoS, 1e-3)));
+    const rise = 10 * sz * isoS;
+    const params = {
+      cx: 110,               // origin near left edge
+      cy: H / 2 + rise / 2,
+      sx: 46,                // x scale (perp axis 1)
+      sy: 46,                // y scale (perp axis 2)
+      sz: sz,                // z scale (into scene)
+      isoCos: Math.cos(isoRad * 0.6),
+      isoSin: -isoS,
+    };
+
+    // Frame: z-axis line + tick marks.
+    ctx.strokeStyle = '#c5cdd7';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 3]);
+    const [pz0x, pz0y] = project(0, 0, 0, params);
+    const [pz1x, pz1y] = project(0, 0, 10, params);
+    ctx.beginPath(); ctx.moveTo(pz0x, pz0y); ctx.lineTo(pz1x, pz1y); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // z-axis arrow head
+    ctx.strokeStyle = '#5b6573';
+    ctx.fillStyle = '#5b6573';
+    ctx.beginPath();
+    const dx = pz1x - pz0x, dy = pz1y - pz0y;
+    const L = Math.hypot(dx, dy);
+    const ux = dx / L, uy = dy / L;
+    const perpx = -uy, perpy = ux;
+    ctx.moveTo(pz1x, pz1y);
+    ctx.lineTo(pz1x - 10 * ux + 5 * perpx, pz1y - 10 * uy + 5 * perpy);
+    ctx.lineTo(pz1x - 10 * ux - 5 * perpx, pz1y - 10 * uy - 5 * perpy);
+    ctx.closePath();
+    ctx.fill();
+    ctx.font = '12px Inter, sans-serif';
+    ctx.fillStyle = '#5b6573';
+    ctx.fillText('+z (propagation)', pz1x + 6, pz1y + 4);
+
+    // x and y reference axes at origin.
+    ctx.strokeStyle = '#9aa4b0';
+    ctx.lineWidth = 1;
+    const [px0, py0] = project(0, 0, 0, params);
+    const [pxu, pyu] = project(1.5, 0, 0, params);
+    const [px2, py2] = project(0, 1.5, 0, params);
+    ctx.beginPath(); ctx.moveTo(px0, py0); ctx.lineTo(pxu, pyu); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px0, py0); ctx.lineTo(px2, py2); ctx.stroke();
+    ctx.font = '11px Inter, sans-serif';
+    ctx.fillStyle = '#5b6573';
+    ctx.fillText('x', pxu + 4, pyu + 4);
+    ctx.fillText('y', px2 - 4, py2 - 6);
+
+    // Advance phase unless paused.
+    const now = performance.now();
+    const dt = (now - lastT) / 1000;
+    lastT = now;
+    if (runEl.checked) {
+      phase += dt * 2.5 * +speedEl.value;
+    }
+
+    // Helix path.  angle = s (kz - wt): one rigid corkscrew of fixed handedness,
+    // translating along +z for either sense.
+    const senseSign = (sense === 'rh') ? -1 : +1;
+    const angAt = z => senseSign * (z * Math.PI * 0.9 - phase);
+    const zMax = 10, N = 260;
+
+    // Faint helix outline (all-of-space snapshot).
+    ctx.strokeStyle = (sense === 'rh') ? 'rgba(0,103,185,0.35)' : 'rgba(179,33,58,0.35)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let i = 0; i <= N; i++) {
+      const z = (i / N) * zMax;
+      const ang = angAt(z);
+      const x = Math.cos(ang);
+      const y = Math.sin(ang);
+      const [px, py] = project(x, y, z, params);
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Component "shadow" traces on the walls of the cube: x-vs-z at y=-1, y-vs-z at x=-1.
+    if (showComp.checked) {
+      // x-component on the y=-1.2 wall (bottom)
+      ctx.strokeStyle = 'rgba(0,103,185,0.55)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      for (let i = 0; i <= N; i++) {
+        const z = (i / N) * zMax;
+        const x = Math.cos(angAt(z));
+        const [px, py] = project(x, -1.2, z, params);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // y-component on the x=-1.2 wall (back)
+      ctx.strokeStyle = 'rgba(179,33,58,0.55)';
+      ctx.beginPath();
+      for (let i = 0; i <= N; i++) {
+        const z = (i / N) * zMax;
+        const y = Math.sin(angAt(z));
+        const [px, py] = project(-1.2, y, z, params);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    }
+
+    // Arrows at 13 z-positions showing the current E-vector.
+    ctx.lineWidth = 2.5;
+    const arrowN = 12;
+    for (let k = 0; k <= arrowN; k++) {
+      const z = (k / arrowN) * zMax;
+      const ang = angAt(z);
+      const x = Math.cos(ang);
+      const y = Math.sin(ang);
+      const [px, py] = project(0, 0, z, params);
+      const [qx, qy] = project(x, y, z, params);
+      const strong = (k === Math.floor(arrowN / 2));
+      ctx.strokeStyle = strong ? '#1d7a4d' :
+                        (sense === 'rh' ? '#0067b9' : '#b3213a');
+      ctx.beginPath();
+      ctx.moveTo(px, py); ctx.lineTo(qx, qy); ctx.stroke();
+      ctx.fillStyle = ctx.strokeStyle;
+      ctx.beginPath();
+      ctx.arc(qx, qy, strong ? 4 : 2.5, 0, 2 * Math.PI); ctx.fill();
+    }
+
+    // Legend in the top-left corner, clear of the +z arrow.
+    ctx.font = '700 12px Inter, sans-serif';
+    ctx.fillStyle = sense === 'rh' ? '#0067b9' : '#b3213a';
+    ctx.textAlign = 'left';
+    ctx.fillText(sense === 'rh' ? 'RHCP  (right hand)' : 'LHCP  (left hand)', 14, 20);
+    if (showComp.checked) {
+      ctx.fillStyle = '#5b6573';
+      ctx.font = '11px Inter, sans-serif';
+      ctx.fillText('Ex(t,z) — blue shadow', 14, 38);
+      ctx.fillText('Ey(t,z) — red shadow',  14, 53);
+    }
+
+    // ---- live readouts, refreshed ~10 times a second ----
+    if (now - lastPill > 100) {
+      lastPill = now;
+      const a0 = angAt(0);
+      let deg = (a0 * 180 / Math.PI) % 360; if (deg < 0) deg += 360;
+      document.getElementById('p-ang').textContent = deg.toFixed(0) + '°';
+      document.getElementById('p-sense').textContent = (sense === 'rh') ? 'RHCP' : 'LHCP';
+      document.getElementById('p-phase').textContent = (sense === 'rh') ? '−90° (lags)' : '+90° (leads)';
+      document.getElementById('ro-sense').classList.toggle('lh', sense === 'lh');
+    }
+  }
+
+  function tick() { draw(); requestAnimationFrame(tick); }
+  fit();
+  tick();
+})();
+</script>
+</body>
+</html>

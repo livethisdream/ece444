@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aperture distribution and its far-field pattern</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  *, *::before, *::after { box-sizing:border-box; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .canvases { display:grid; grid-template-columns:1fr; gap:10px; }
+  @media (min-width:600px) { .canvases { grid-template-columns:1fr 1fr; } }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(196px,1fr)); gap:9px 18px; align-items:center;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl label.mixed { text-transform:none; font-size:12.5px; letter-spacing:0; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:56px; accent-color:var(--mid); }
+  .ctl select { flex:1 1 auto; min-width:0; font:600 12.5px Inter,system-ui,sans-serif; color:var(--navy);
+                padding:5px 6px; background:#fff; border:1px solid var(--edge2); border-radius:6px; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.hp { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.hp .v { color:var(--grn); }
+  .ro.sl { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.sl .v { color:var(--amber); }
+  .hint { margin:0; text-align:center; font-size:11.5px; color:var(--ink3); line-height:1.45; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="canvases">
+    <canvas id="ap" aria-label="Field amplitude across the aperture"></canvas>
+    <canvas id="pat" aria-label="Far-field power pattern in decibels versus angle from broadside"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Illumination</label>
+      <select id="dist">
+        <option value="uniform" selected>Uniform</option>
+        <option value="cosine">Cosine</option>
+        <option value="triangular">Triangular</option>
+        <option value="cosine2">Cosine squared</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label class="mixed">Aperture \(L/\lambda\)</label>
+      <input type="range" id="len" min="2" max="20" step="0.5" value="10">
+      <span class="val" id="l-val">10.0</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="r-hp">&#8212;</span></div>
+    <div class="ro"><span class="k">HPBW constant</span><span class="v" id="r-k">&#8212;</span></div>
+    <div class="ro sl"><span class="k">first sidelobe</span><span class="v" id="r-sl">&#8212;</span></div>
+    <div class="ro"><span class="k">aperture eff.</span><span class="v" id="r-eta">&#8212;</span></div>
+  </div>
+
+  <p class="hint" id="hint">&#8212;</p>
+</div>
+
+<script>
+'use strict';
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const el = id => document.getElementById(id);
+const DEG = 180 / Math.PI;
+const FLOOR = -40;                       // dB floor on the pattern plot
+
+// ---------- aperture sampling and the aperture integral ----------
+const NS = 601;                          // samples across the aperture
+const XI = new Float64Array(NS);         // x / L, from -0.5 to +0.5
+for (let i = 0; i < NS; i++) XI[i] = -0.5 + i / (NS - 1);
+const DXI = 1 / (NS - 1);
+
+const SHAPES = {
+  uniform:    { name: 'Uniform',       f: () => 1 },
+  cosine:     { name: 'Cosine',        f: x => Math.cos(Math.PI * x) },
+  triangular: { name: 'Triangular',    f: x => 1 - 2 * Math.abs(x) },
+  cosine2:    { name: 'Cosine squared', f: x => Math.cos(Math.PI * x) ** 2 }
+};
+
+function amps(kind) {
+  const f = SHAPES[kind].f, a = new Float64Array(NS);
+  for (let i = 0; i < NS; i++) a[i] = f(XI[i]);
+  return a;
+}
+function trapz(v) {                      // integral over xi in [-0.5, 0.5]
+  let s = 0.5 * (v[0] + v[NS - 1]);
+  for (let i = 1; i < NS - 1; i++) s += v[i];
+  return s * DXI;
+}
+// |S(u)| normalized to 1 at u = 0, with u = (L/lambda) sin(theta)
+function sfMag(a, norm, u) {
+  const w = 2 * Math.PI * u;
+  let s = 0.5 * (a[0] * Math.cos(w * XI[0]) + a[NS - 1] * Math.cos(w * XI[NS - 1]));
+  for (let i = 1; i < NS - 1; i++) s += a[i] * Math.cos(w * XI[i]);
+  return Math.abs(s * DXI) / norm;
+}
+const dB = m => 20 * Math.log10(Math.max(m, 1e-6));
+
+// Everything that depends only on the shape lives in the space-frequency
+// variable u, so it is computed once per illumination and reused as the
+// aperture is resized.
+const cache = {};
+function shapeData(kind) {
+  if (cache[kind]) return cache[kind];
+  const a = amps(kind);
+  const norm = trapz(a);
+  const sq = new Float64Array(NS);
+  for (let i = 0; i < NS; i++) sq[i] = a[i] * a[i];
+  const eta = (norm * norm) / trapz(sq);          // area normalized to 1
+
+  // half-power point: bisect on the -3.0103 dB crossing of the main lobe
+  const g = u => dB(sfMag(a, norm, u)) + 3.0102999566;
+  let lo = 0, hi = 0.02;
+  while (g(hi) > 0 && hi < 4) hi += 0.02;
+  for (let k = 0; k < 60; k++) { const m = 0.5 * (lo + hi); if (g(m) > 0) lo = m; else hi = m; }
+  const uHalf = 0.5 * (lo + hi);
+
+  // first null, then the first sidelobe peak beyond it
+  const step = 0.002;
+  let uNull = null, prev = sfMag(a, norm, 0), prevU = 0;
+  for (let u = step; u < 8; u += step) {
+    const v = sfMag(a, norm, u);
+    if (v > prev && uNull === null) { uNull = prevU; break; }
+    prev = v; prevU = u;
+  }
+  let uSide = null, slDb = null;
+  if (uNull !== null) {
+    prev = sfMag(a, norm, uNull);
+    for (let u = uNull + step; u < 8; u += step) {
+      const v = sfMag(a, norm, u);
+      if (v < prev) { uSide = u - step; slDb = dB(prev); break; }
+      prev = v;
+    }
+  }
+  cache[kind] = { a, norm, eta, uHalf, uNull, uSide, slDb };
+  return cache[kind];
+}
+
+const state = { kind: 'uniform', L: 10 };
+
+// ---------- canvas plumbing ----------
+const apC = el('ap'), apX = apC.getContext('2d');
+const paC = el('pat'), paX = paC.getContext('2d');
+
+function fit(cv, ctx, hOf) {
+  const dpr = window.devicePixelRatio || 1;
+  const w = cv.getBoundingClientRect().width;
+  if (w <= 0) return 0;
+/* Narrow: the canvases stack (or the control and readout rows do), so the parts
+   ADD instead of sharing a row -- which puts the widget past the frame budget
+   and makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:599px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.58) : h; }
+  const h = SQ(hOf(w));
+  cv.width = Math.round(w * dpr);
+  cv.height = Math.round(h * dpr);
+  cv.style.height = h + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return w;
+}
+const apH = w => Math.max(112, Math.min(w * 0.25, 176));
+const paH = w => Math.max(232, Math.min(w * 0.52, 372));
+
+function words(ctx, txt, x, y, font, color, align, base) {
+  ctx.font = font; ctx.fillStyle = color;
+  ctx.textAlign = align || 'center'; ctx.textBaseline = base || 'middle';
+  ctx.fillText(txt, x, y);
+}
+
+// ---------- the aperture panel ----------
+function drawAperture() {
+  const w = fit(apC, apX, apH); if (!w) return;
+  const dpr = window.devicePixelRatio || 1;
+  const h = apC.height / dpr;
+  apX.clearRect(0, 0, w, h);
+  const mL = 54, mR = 22, mT = 16, mB = 30, pW = w - mL - mR, pH = h - mT - mB;
+  const d = shapeData(state.kind), a = d.a;
+
+  apX.strokeStyle = '#eef3f8'; apX.lineWidth = 1;
+  for (let k = 1; k < 4; k++) {
+    const x = mL + pW * k / 4;
+    apX.beginPath(); apX.moveTo(x, mT); apX.lineTo(x, mT + pH); apX.stroke();
+  }
+  apX.strokeStyle = '#cddce9'; apX.strokeRect(mL, mT, pW, pH);
+
+  const X = t => mL + (t + 0.5) * pW, Y = v => mT + (1 - v) * pH;
+  apX.beginPath();
+  apX.moveTo(X(-0.5), Y(0));
+  for (let i = 0; i < NS; i++) apX.lineTo(X(XI[i]), Y(a[i]));
+  apX.lineTo(X(0.5), Y(0)); apX.closePath();
+  apX.fillStyle = 'rgba(0,74,133,0.13)'; apX.fill();
+  apX.strokeStyle = cssVar('--navy'); apX.lineWidth = 2.4;
+  apX.beginPath();
+  for (let i = 0; i < NS; i++) i ? apX.lineTo(X(XI[i]), Y(a[i])) : apX.moveTo(X(XI[i]), Y(a[i]));
+  apX.stroke();
+
+  // axis ticks: position across the aperture, in wavelengths
+  const half = state.L / 2;
+  words(apX, '1.0', mL - 8, Y(1), '10px Inter,sans-serif', '#5b6573', 'right');
+  words(apX, '0', mL - 8, Y(0), '10px Inter,sans-serif', '#5b6573', 'right');
+  for (const t of [-0.5, -0.25, 0, 0.25, 0.5]) {
+    words(apX, (t * state.L).toFixed(1), X(t), mT + pH + 8,
+          '10px Inter,sans-serif', '#5b6573', 'center', 'top');
+  }
+  apX.save(); apX.translate(15, mT + pH / 2); apX.rotate(-Math.PI / 2);
+  words(apX, 'field amplitude', 0, 0, '600 11.5px Inter,sans-serif', '#3b4651');
+  apX.restore();
+  const lbl = 'position across the aperture  (';
+  apX.font = '600 11.5px Inter,sans-serif';
+  const wlab = apX.measureText(lbl + ' )').width + 9;
+  const x0 = mL + pW / 2 - wlab / 2;
+  words(apX, lbl, x0, mT + pH + 21, '600 11.5px Inter,sans-serif', '#3b4651', 'left');
+  const wl = apX.measureText(lbl).width;
+  const drew = MJ.draw(apX, '\\lambda', x0 + wl + 2, mT + pH + 21, 11, '#3b4651', 'left');
+  words(apX, drew ? ')' : 'λ)', x0 + wl + (drew || 0) + 3, mT + pH + 21,
+        '600 11.5px Inter,sans-serif', '#3b4651', 'left');
+  words(apX, SHAPES[state.kind].name + ' illumination', mL + pW - 6, mT + 11,
+        '700 11.5px Inter,sans-serif', cssVar('--navy'), 'right');
+}
+
+// ---------- the pattern panel ----------
+function drawPattern() {
+  const w = fit(paC, paX, paH); if (!w) return;
+  const dpr = window.devicePixelRatio || 1;
+  const h = paC.height / dpr;
+  paX.clearRect(0, 0, w, h);
+  const mL = 54, mR = 20, mT = 18, mB = 40, pW = w - mL - mR, pH = h - mT - mB;
+  const d = shapeData(state.kind);
+  const X = th => mL + (th + 90) / 180 * pW;          // theta in degrees
+  const Y = v => mT + (Math.min(0, Math.max(FLOOR, v)) / FLOOR) * pH;
+
+  paX.strokeStyle = '#eef3f8'; paX.lineWidth = 1;
+  for (let t = -60; t <= 60; t += 30) { paX.beginPath(); paX.moveTo(X(t), mT); paX.lineTo(X(t), mT + pH); paX.stroke(); }
+  for (let v = -10; v > FLOOR; v -= 10) { paX.beginPath(); paX.moveTo(mL, Y(v)); paX.lineTo(mL + pW, Y(v)); paX.stroke(); }
+  paX.strokeStyle = '#cddce9'; paX.strokeRect(mL, mT, pW, pH);
+
+  // the pattern itself
+  const M = 721;
+  paX.strokeStyle = cssVar('--navy'); paX.lineWidth = 2.3;
+  paX.beginPath();
+  for (let i = 0; i <= M; i++) {
+    const th = -90 + 180 * i / M;
+    const v = dB(sfMag(d.a, d.norm, state.L * Math.sin(th / DEG)));
+    const y = Y(v), x = X(th);
+    i ? paX.lineTo(x, y) : paX.moveTo(x, y);
+  }
+  paX.stroke();
+
+  // half-power markers
+  const sHalf = d.uHalf / state.L;
+  const thHalf = Math.asin(Math.min(1, sHalf)) * DEG;
+  const hpbw = 2 * thHalf;
+  paX.strokeStyle = cssVar('--grn'); paX.lineWidth = 2.6;
+  paX.beginPath(); paX.moveTo(X(-thHalf), Y(-3.01)); paX.lineTo(X(thHalf), Y(-3.01)); paX.stroke();
+  paX.lineWidth = 1; paX.setLineDash([3, 3]);
+  for (const s of [-1, 1]) {
+    paX.beginPath(); paX.moveTo(X(s * thHalf), Y(-3.01)); paX.lineTo(X(s * thHalf), Y(0)); paX.stroke();
+  }
+  paX.setLineDash([]);
+  words(paX, 'HPBW ' + hpbw.toFixed(1) + '°', X(thHalf) + 7, Y(-3.01),
+        '700 11.5px Inter,sans-serif', cssVar('--grn'), 'left');
+
+  // first sidelobe level
+  let slVisible = false;
+  if (d.slDb !== null) {
+    const y = Y(d.slDb);
+    paX.strokeStyle = cssVar('--amber'); paX.lineWidth = 1.4; paX.setLineDash([5, 4]);
+    paX.beginPath(); paX.moveTo(mL, y); paX.lineTo(mL + pW, y); paX.stroke();
+    paX.setLineDash([]);
+    slVisible = d.uSide !== null && d.uSide <= state.L;
+    words(paX, d.slDb.toFixed(1) + ' dB', mL + pW - 6, y - 9,
+          '700 11.5px Inter,sans-serif', cssVar('--amber'), 'right');
+  }
+  // first null
+  if (d.uNull !== null && d.uNull <= state.L) {
+    const thN = Math.asin(d.uNull / state.L) * DEG;
+    paX.strokeStyle = cssVar('--red'); paX.lineWidth = 1.6;
+    for (const s of [-1, 1]) {
+      paX.beginPath(); paX.moveTo(X(s * thN), mT + pH); paX.lineTo(X(s * thN), mT + pH - 9); paX.stroke();
+    }
+  }
+
+  // ticks and axis titles
+  for (let t = -90; t <= 90; t += 30) {
+    words(paX, t + '°', X(t), mT + pH + 7, '10px Inter,sans-serif', '#5b6573', 'center', 'top');
+  }
+  for (let v = 0; v >= FLOOR; v -= 10) {
+    words(paX, String(v), mL - 7, Y(v), '10px Inter,sans-serif', '#5b6573', 'right');
+  }
+  words(paX, 'angle from broadside', mL + pW / 2, mT + pH + 24,
+        '600 11.5px Inter,sans-serif', '#3b4651');
+  paX.save(); paX.translate(15, mT + pH / 2); paX.rotate(-Math.PI / 2);
+  words(paX, 'relative power  (dB)', 0, 0, '600 11.5px Inter,sans-serif', '#3b4651');
+  paX.restore();
+
+  return { hpbw: hpbw, slVisible: slVisible };
+}
+
+// ---------- readouts ----------
+function drawAll() {
+  drawAperture();
+  const r = drawPattern();
+  const d = shapeData(state.kind);
+  if (!r) return;
+  el('r-hp').textContent = r.hpbw.toFixed(1) + '°';
+  el('r-k').innerHTML = (2 * d.uHalf).toFixed(3) + ' &#955;/L';
+  el('r-sl').textContent = d.slDb === null ? 'none' : d.slDb.toFixed(1) + ' dB';
+  el('r-eta').textContent = d.eta.toFixed(3);
+  const hint = el('hint');
+  if (!r.slVisible) {
+    hint.innerHTML = 'At this aperture size the first sidelobe sits beyond &#177;90&#176;, '
+      + 'so it is off the plot. The level quoted is the one the illumination sets; '
+      + 'a longer aperture pulls it into view.';
+  } else {
+    hint.innerHTML = 'Half-power beamwidth = <b>' + (2 * d.uHalf).toFixed(3)
+      + '</b> &#215; &#955;/L. Change the illumination and the sidelobe level and the '
+      + 'beamwidth constant both move; change L/&#955; and only the angles do.';
+  }
+}
+
+el('dist').addEventListener('change', e => { state.kind = e.target.value; drawAll(); });
+el('dist').addEventListener('input', e => { state.kind = e.target.value; drawAll(); });
+el('len').addEventListener('input', e => {
+  state.L = parseFloat(e.target.value);
+  el('l-val').textContent = state.L.toFixed(1);
+  drawAll();
+});
+window.addEventListener('resize', drawAll);
+
+MJ.setRedraw(drawAll);
+MJ.onReady(() => { MJ.typeset(document.querySelector('.controls')); drawAll(); });
+drawAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radiation pattern features</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --pat:#0067b9; --hpbw:#1d7a4d; --fnbw:#8a5a00; --sll:#b3213a; --main:#004a85; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:9px 18px; align-items:center;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+  .ctl.full { grid-column:1/-1; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:34px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:80px; accent-color:var(--mid); }
+  .tgl { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; min-width:0; }
+  .tgl input { position:absolute; opacity:0; pointer-events:none; }
+  .tgl .sw { position:relative; flex:none; width:34px; height:19px; border-radius:999px;
+             background:#dfe8f1; border:1px solid var(--edge2); transition:background .15s, border-color .15s; }
+  .tgl .sw::after { content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; border-radius:50%;
+                    background:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.22); transition:transform .15s; }
+  .tgl input:checked + .sw { background:var(--on,var(--mid)); border-color:var(--on,var(--mid)); }
+  .tgl input:checked + .sw::after { transform:translateX(15px); }
+  .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
+  .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .tgl input:checked ~ .t { color:var(--on,var(--navy)); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.hp { background:rgba(29,122,77,0.12); border-color:rgba(29,122,77,0.30); }
+  .ro.hp .v { color:var(--hpbw); }
+  .ro.fn { background:rgba(138,90,0,0.12);  border-color:rgba(138,90,0,0.30); }
+  .ro.fn .v { color:var(--fnbw); }
+  .ro.sl { background:rgba(179,33,58,0.10); border-color:rgba(179,33,58,0.28); }
+  .ro.sl .v { color:var(--sll); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" width="1000" height="520" aria-label="Rectilinear pattern"></canvas>
+
+  <div class="controls">
+    <div class="ctl full">
+      <label>Aperture \(D/\lambda\)</label>
+      <input type="range" id="d-lambda" min="2" max="20" step="0.5" value="3">
+      <span class="val" id="d-lambda-val">3</span>
+    </div>
+    <label class="tgl" style="--on:var(--hpbw)"><input type="checkbox" data-key="hpbw" checked><span class="sw"></span><span class="t">HPBW</span></label>
+    <label class="tgl" style="--on:var(--fnbw)"><input type="checkbox" data-key="fnbw" checked><span class="sw"></span><span class="t">FNBW</span></label>
+    <label class="tgl" style="--on:var(--sll)"><input type="checkbox" data-key="sll" checked><span class="sw"></span><span class="t">Sidelobe level</span></label>
+    <label class="tgl" style="--on:var(--main)"><input type="checkbox" data-key="labels" checked><span class="sw"></span><span class="t">Lobe labels</span></label>
+  </div>
+
+  <div class="readouts">
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="r-hpbw">—</span></div>
+    <div class="ro fn"><span class="k">FNBW</span><span class="v" id="r-fnbw">—</span></div>
+    <div class="ro sl"><span class="k">sidelobe level</span><span class="v" id="r-sll">—</span></div>
+    <div class="ro"><span class="k">front-to-back</span><span class="v" id="r-fb">—</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ---- labels: MathJax for math, sans UI font for words/units ----
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const mtext=(ctx,tex,x,y,h,color,align)=>MJ.draw(ctx,tex,x,y,h,color,align);
+function stext(ctx,str,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(str,x,y); }
+function mixLabel(ctx,chunks,x,yc,h,color,align,bold){
+  const fpx=h-1, f=(bold?'700 ':'')+fpx+'px '+SANS;
+  let tot=0;
+  for(const c of chunks){ if(c.m) tot+=MJ.width(c.m,color,h); else { ctx.font=f; tot+=ctx.measureText(c.s).width; } }
+  let cx = align==='right'? x-tot : (align==='center'? x-tot/2 : x);
+  for(const c of chunks){
+    if(c.m){ MJ.draw(ctx,c.m,cx,yc,h,color,'left'); cx+=MJ.width(c.m,color,h); }
+    else { stext(ctx,c.s,cx,yc,fpx,color,'left',bold); ctx.font=f; cx+=ctx.measureText(c.s).width; }
+  }
+}
+
+const state = {
+  dLambda: 3,
+  scaleDb: 40,       // vertical range: 0 down to -scaleDb
+  show: { hpbw: true, fnbw: true, sll: true, labels: true }
+};
+
+// Pattern: sinc^2 aperture, normalized so peak = 0 dB
+function pattern_dB(thetaDeg, D) {
+  const theta = thetaDeg * Math.PI / 180;
+  const u = Math.PI * D * Math.sin(theta);
+  const F = (Math.abs(u) < 1e-9) ? 1 : Math.sin(u) / u;
+  const shape = F * F;
+  // suppress rear hemisphere slightly (real aperture has finite back radiation)
+  const rear = (Math.abs(thetaDeg) > 90) ? 0.001 : 1.0;
+  const g = Math.max(shape * rear, 1e-8);
+  return 10 * Math.log10(g);
+}
+
+// Extract feature values from the pattern
+function extractFeatures(D) {
+  // HPBW: find θ where pattern = -3 dB, θ > 0 (symmetric)
+  let hpbwHalf = 0;
+  for (let t = 0.01; t < 90; t += 0.01) {
+    if (pattern_dB(t, D) <= -3) { hpbwHalf = t; break; }
+  }
+  const hpbw = 2 * hpbwHalf;
+
+  // FNBW: first null on the +θ side.  For sinc^2, first null at π D sin θ = π, so sin θ = 1/D.
+  const firstNullDeg = (1 / D <= 1) ? Math.asin(1 / D) * 180 / Math.PI : 90;
+  const fnbw = 2 * firstNullDeg;
+
+  // Sidelobe level: sample past the first null, find max in [firstNull, 90°].
+  let sllDb = -100;
+  let sllTheta = null;
+  for (let t = firstNullDeg + 0.5; t < 90; t += 0.05) {
+    const v = pattern_dB(t, D);
+    if (v > sllDb) { sllDb = v; sllTheta = t; }
+  }
+
+  // Back lobe: max in [90, 180]
+  let backDb = -100, backTheta = 180;
+  for (let t = 90.5; t <= 180; t += 0.5) {
+    const v = pattern_dB(t, D);
+    if (v > backDb) { backDb = v; backTheta = t; }
+  }
+  // F/B ratio = 0 dB (main peak) minus backDb
+  const fbRatio = 0 - backDb;
+
+  return { hpbw, hpbwHalf, fnbw, firstNullDeg, sllDb, sllTheta, backDb, backTheta, fbRatio };
+}
+
+// ---- UI wiring ----
+const dLambdaSlider = document.getElementById('d-lambda');
+const dLambdaVal    = document.getElementById('d-lambda-val');
+dLambdaSlider.addEventListener('input', () => {
+  state.dLambda = parseFloat(dLambdaSlider.value);
+  dLambdaVal.textContent = state.dLambda;
+  draw();
+});
+
+document.querySelectorAll('.controls .tgl input').forEach(cb => {
+  cb.addEventListener('change', () => {
+    state.show[cb.dataset.key] = cb.checked;
+    draw();
+  });
+});
+
+// ---- Canvas + drawing ----
+const canvas = document.getElementById('plot');
+const ctx    = canvas.getContext('2d');
+
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=360;
+let SCL=1;
+function resizeCanvas() {
+  const dpr  = window.devicePixelRatio || 1;
+  const wCss = cvWidth(canvas);
+  SCL = Math.min(1, wCss / DESIGN_W);
+  const w = wCss / SCL;
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:430px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+  const h = SQ(Math.max(340, Math.min(w * 0.42, 430)));
+  setSize(canvas, wCss, h * SCL, dpr);
+  ctx.setTransform(dpr * SCL, 0, 0, dpr * SCL, 0, 0);
+  draw();
+}
+window.addEventListener('resize', resizeCanvas);
+
+function draw() {
+  const dpr = window.devicePixelRatio || 1;
+  const w   = canvas.width  / (dpr * SCL);
+  const h   = canvas.height / (dpr * SCL);
+  ctx.clearRect(0, 0, w, h);
+
+  // margins — mT is large to reserve a top annotation lane for the brackets
+  const mL = 54, mR = 22, mT = 74, mB = 46;
+  const plotW = w - mL - mR;
+  const plotH = h - mT - mB;
+
+  // θ maps to [mL, mL+plotW]; θ in [-180, 180]
+  // gain (dB) maps to [0, -scaleDb], top→bottom
+  const xFor = t  => mL + ((t + 180) / 360) * plotW;
+  const yFor = dB => {
+    const clipped = Math.max(Math.min(dB, 0), -state.scaleDb);
+    return mT + (Math.abs(clipped) / state.scaleDb) * plotH;
+  };
+
+  // ---- grid ----
+  ctx.strokeStyle = '#eaf0f6';
+  ctx.lineWidth = 1;
+  // vertical grid every 30°
+  for (let t = -180; t <= 180; t += 30) {
+    ctx.beginPath();
+    ctx.moveTo(xFor(t), mT);
+    ctx.lineTo(xFor(t), mT + plotH);
+    ctx.stroke();
+  }
+  // horizontal grid every 10 dB
+  for (let dB = 0; dB >= -state.scaleDb; dB -= 10) {
+    ctx.beginPath();
+    ctx.moveTo(mL,          yFor(dB));
+    ctx.lineTo(mL + plotW,  yFor(dB));
+    ctx.stroke();
+  }
+
+  // ---- axes + ticks ----
+  ctx.strokeStyle = '#cddce9';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(mL, mT, plotW, plotH);
+
+  ctx.fillStyle = '#5b6573';
+  ctx.font = '11px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for (let t = -180; t <= 180; t += 30) {
+    ctx.fillText(`${t}°`, xFor(t), mT + plotH + 4);
+  }
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  for (let dB = 0; dB >= -state.scaleDb; dB -= 10) {
+    ctx.fillText(`${dB}`, mL - 6, yFor(dB));
+  }
+
+  // Axis titles
+  mixLabel(ctx, [{m:'\\theta'},{s:' (angle from boresight)'}], mL + plotW / 2, mT + plotH + 24, 13, '#3b4651', 'center', false);
+  ctx.save();
+  ctx.translate(16, mT + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = '600 12px Inter, sans-serif';
+  ctx.fillStyle = '#3b4651';
+  ctx.fillText('Normalized gain (dB)', 0, 0);
+  ctx.restore();
+
+  // ---- features ----
+  const f = extractFeatures(state.dLambda);
+  const C = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+  const cMain = C('--main'), cHp = C('--hpbw'), cFn = C('--fnbw'), cSll = C('--sll');
+  const topY = mT + plotH;
+
+  // Boresight vertical (always shown), thin so it doesn't dominate
+  ctx.strokeStyle = cMain;
+  ctx.setLineDash([]);
+  ctx.lineWidth = 1.25;
+  ctx.beginPath();
+  ctx.moveTo(xFor(0), mT);
+  ctx.lineTo(xFor(0), topY);
+  ctx.stroke();
+
+  // Horizontal dimension bracket (arrowheads + end ticks + centered label),
+  // used in the reserved top lane so the beamwidths never crowd the curve.
+  function dimBracket(y, xa, xb, color, label) {
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 1.4;
+    ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(xa, y); ctx.lineTo(xb, y); ctx.stroke();
+    const hd = 4.5;
+    for (const [x, dir] of [[xa, -1], [xb, 1]]) {   // outward arrowheads
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x - dir * hd, y - hd * 0.85);
+      ctx.lineTo(x - dir * hd, y + hd * 0.85);
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.beginPath();
+    ctx.moveTo(xa, y - 4); ctx.lineTo(xa, y + 4);
+    ctx.moveTo(xb, y - 4); ctx.lineTo(xb, y + 4); ctx.stroke();
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.font = '700 11.5px Inter, sans-serif';
+    ctx.fillText(label, (xa + xb) / 2, y - 5);
+  }
+
+  // FNBW — outer bracket, higher lane, drop-lines to the nulls
+  if (state.show.fnbw && f.firstNullDeg < 89) {
+    const xa = xFor(-f.firstNullDeg), xb = xFor(f.firstNullDeg);
+    ctx.strokeStyle = cFn; ctx.setLineDash([2, 4]); ctx.lineWidth = 1.2;
+    for (const x of [xa, xb]) { ctx.beginPath(); ctx.moveTo(x, mT - 34); ctx.lineTo(x, topY); ctx.stroke(); }
+    ctx.setLineDash([]);
+    dimBracket(mT - 34, xa, xb, cFn, 'FNBW');
+  }
+
+  // HPBW — inner bracket, lower lane, plus the −3 dB level across the main lobe
+  if (state.show.hpbw) {
+    const xa = xFor(-f.hpbwHalf), xb = xFor(f.hpbwHalf);
+    ctx.strokeStyle = cHp; ctx.setLineDash([5, 3]); ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(xa, yFor(-3)); ctx.lineTo(xb, yFor(-3)); ctx.stroke();  // −3 dB segment
+    ctx.beginPath();                                                                    // drop-lines
+    for (const x of [xa, xb]) { ctx.moveTo(x, mT - 14); ctx.lineTo(x, yFor(-3)); }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    dimBracket(mT - 14, xa, xb, cHp, 'HPBW');
+    // −3 dB tag off to the left, at that level, in open space
+    ctx.fillStyle = cHp; ctx.font = '600 10.5px Inter, sans-serif';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText('−3 dB', xFor(-28), yFor(-3));
+  }
+
+  // SLL — dashed level line + peak dots + short tag at the open right end
+  if (state.show.sll && f.sllTheta !== null) {
+    ctx.strokeStyle = cSll; ctx.setLineDash([3, 3]); ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(mL, yFor(f.sllDb)); ctx.lineTo(mL + plotW, yFor(f.sllDb)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = cSll;
+    for (const s of [-1, 1]) { ctx.beginPath(); ctx.arc(xFor(s * f.sllTheta), yFor(f.sllDb), 3.5, 0, 2 * Math.PI); ctx.fill(); }
+    ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+    ctx.font = '700 11px Inter, sans-serif';
+    ctx.fillText('SLL', mL + plotW - 4, yFor(f.sllDb) - 4);
+  }
+
+  // Descriptive labels — each parked in an open region, with a leader where needed
+  if (state.show.labels) {
+    ctx.fillStyle = cMain;
+
+    // Main lobe — top of the lane, centered over the peak
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.font = '700 11.5px Inter, sans-serif';
+    ctx.fillText('Main lobe', xFor(0), mT - 54);
+
+    // boresight — rotated, riding the empty center column below the peak
+    ctx.save();
+    ctx.translate(xFor(0) - 4, mT + plotH * 0.72);
+    ctx.rotate(-Math.PI / 2);
+    mixLabel(ctx, [{s:'boresight ('},{m:'\\theta = 0^\\circ'},{s:')'}], 0, -5, 11, cMain, 'center', false);
+    ctx.restore();
+
+    // Sidelobe — short leader from the first +θ sidelobe peak to open space above-right
+    if (f.sllTheta !== null && f.sllDb > -state.scaleDb + 3) {
+      const px = xFor(f.sllTheta), py = yFor(f.sllDb);
+      const lx = xFor(f.sllTheta + 15), ly = yFor(f.sllDb + 7);
+      ctx.strokeStyle = cMain; ctx.lineWidth = 1; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(px, py - 4); ctx.lineTo(lx - 2, ly + 2); ctx.stroke();
+      ctx.fillStyle = cMain; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+      ctx.font = '700 11.5px Inter, sans-serif';
+      ctx.fillText('Sidelobe', lx, ly);
+    }
+
+    // Back lobe — anchored at the left −180° lobe, left-aligned so it can't clip
+    if (f.backDb > -state.scaleDb + 3) {
+      const px = xFor(-180), py = yFor(f.backDb);
+      ctx.strokeStyle = cMain; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(px + 3, py - 4); ctx.lineTo(px + 3, py); ctx.stroke();
+      ctx.fillStyle = cMain; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+      ctx.font = '700 11.5px Inter, sans-serif';
+      ctx.fillText('Back lobe', px + 6, py - 6);
+    }
+  }
+
+  // ---- pattern curve ----
+  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--pat').trim();
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  let started = false;
+  const step = 0.25;
+  for (let t = -180; t <= 180; t += step) {
+    const dB = pattern_dB(t, state.dLambda);
+    const x = xFor(t);
+    const y = yFor(dB);
+    if (!started) { ctx.moveTo(x, y); started = true; }
+    else          { ctx.lineTo(x, y); }
+  }
+  ctx.stroke();
+
+  // ---- update readout ----
+  document.getElementById('r-hpbw').textContent = `${f.hpbw.toFixed(1)}°`;
+  document.getElementById('r-fnbw').textContent = (f.firstNullDeg < 89) ? `${f.fnbw.toFixed(1)}°` : '—';
+  document.getElementById('r-sll').textContent  = (f.sllTheta !== null) ? `${f.sllDb.toFixed(1)} dB` : '—';
+  document.getElementById('r-fb').textContent   = `${f.fbRatio.toFixed(1)} dB`;
+}
+
+resizeCanvas();
+
+MJ.setRedraw(()=>draw());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>draw()); draw(); });
+</script>
+</body>
+</html>

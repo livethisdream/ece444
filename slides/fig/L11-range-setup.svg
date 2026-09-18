@@ -1,0 +1,40 @@
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 360" width="790" height="360" role="img" aria-label="The chamber range: a room lined with absorber on every surface, a fixed source horn on the left fed from the analyzer's port 1, the antenna under test on a turntable inside the quiet zone and cabled back to port 2, the direct path between them, a stray path absorbed by the lining, and one analyzer outside the chamber driven by the dashboard, recording S21 at every commanded angle.">
+<defs>
+<marker id="l11-navy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker>
+<marker id="l11-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a5a00"/></marker>
+</defs>
+<rect x="0" y="0" width="790" height="360" fill="#ffffff"/>
+<rect x="40" y="60" width="580" height="226" fill="#f5f9fc" stroke="#5b6573" stroke-width="2.4"/>
+<path d="M 40 60 L 50.0 72 L 60 60 Z M 40 286 L 50.0 274 L 60 286 Z M 60 60 L 70.0 72 L 80 60 Z M 60 286 L 70.0 274 L 80 286 Z M 80 60 L 90.0 72 L 100 60 Z M 80 286 L 90.0 274 L 100 286 Z M 100 60 L 110.0 72 L 120 60 Z M 100 286 L 110.0 274 L 120 286 Z M 120 60 L 130.0 72 L 140 60 Z M 120 286 L 130.0 274 L 140 286 Z M 140 60 L 150.0 72 L 160 60 Z M 140 286 L 150.0 274 L 160 286 Z M 160 60 L 170.0 72 L 180 60 Z M 160 286 L 170.0 274 L 180 286 Z M 180 60 L 190.0 72 L 200 60 Z M 180 286 L 190.0 274 L 200 286 Z M 200 60 L 210.0 72 L 220 60 Z M 200 286 L 210.0 274 L 220 286 Z M 220 60 L 230.0 72 L 240 60 Z M 220 286 L 230.0 274 L 240 286 Z M 240 60 L 250.0 72 L 260 60 Z M 240 286 L 250.0 274 L 260 286 Z M 260 60 L 270.0 72 L 280 60 Z M 260 286 L 270.0 274 L 280 286 Z M 280 60 L 290.0 72 L 300 60 Z M 280 286 L 290.0 274 L 300 286 Z M 300 60 L 310.0 72 L 320 60 Z M 300 286 L 310.0 274 L 320 286 Z M 320 60 L 330.0 72 L 340 60 Z M 320 286 L 330.0 274 L 340 286 Z M 340 60 L 350.0 72 L 360 60 Z M 340 286 L 350.0 274 L 360 286 Z M 360 60 L 370.0 72 L 380 60 Z M 360 286 L 370.0 274 L 380 286 Z M 380 60 L 390.0 72 L 400 60 Z M 380 286 L 390.0 274 L 400 286 Z M 400 60 L 410.0 72 L 420 60 Z M 400 286 L 410.0 274 L 420 286 Z M 420 60 L 430.0 72 L 440 60 Z M 420 286 L 430.0 274 L 440 286 Z M 440 60 L 450.0 72 L 460 60 Z M 440 286 L 450.0 274 L 460 286 Z M 460 60 L 470.0 72 L 480 60 Z M 460 286 L 470.0 274 L 480 286 Z M 480 60 L 490.0 72 L 500 60 Z M 480 286 L 490.0 274 L 500 286 Z M 500 60 L 510.0 72 L 520 60 Z M 500 286 L 510.0 274 L 520 286 Z M 520 60 L 530.0 72 L 540 60 Z M 520 286 L 530.0 274 L 540 286 Z M 540 60 L 550.0 72 L 560 60 Z M 540 286 L 550.0 274 L 560 286 Z M 560 60 L 570.0 72 L 580 60 Z M 560 286 L 570.0 274 L 580 286 Z M 580 60 L 590.0 72 L 600 60 Z M 580 286 L 590.0 274 L 600 286 Z M 600 60 L 610.0 72 L 620 60 Z M 600 286 L 610.0 274 L 620 286 Z M 40 60 L 52 70.0 L 40 80 Z M 620 60 L 608 70.0 L 620 80 Z M 40 80 L 52 90.0 L 40 100 Z M 620 80 L 608 90.0 L 620 100 Z M 40 100 L 52 110.0 L 40 120 Z M 620 100 L 608 110.0 L 620 120 Z M 40 120 L 52 130.0 L 40 140 Z M 620 120 L 608 130.0 L 620 140 Z M 40 140 L 52 150.0 L 40 160 Z M 620 140 L 608 150.0 L 620 160 Z M 40 160 L 52 170.0 L 40 180 Z M 620 160 L 608 170.0 L 620 180 Z M 40 180 L 52 190.0 L 40 200 Z M 620 180 L 608 190.0 L 620 200 Z M 40 200 L 52 210.0 L 40 220 Z M 620 200 L 608 210.0 L 620 220 Z M 40 220 L 52 230.0 L 40 240 Z M 620 220 L 608 230.0 L 620 240 Z M 40 240 L 52 250.0 L 40 260 Z M 620 240 L 608 250.0 L 620 260 Z M 40 260 L 52 270.0 L 40 280 Z M 620 260 L 608 270.0 L 620 280 Z" fill="#004a85" fill-opacity="0.32" stroke="none"/>
+<text x="330" y="44" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400" font-style="normal">absorber on every surface</text>
+<line x1="136" y1="168" x2="428" y2="168" stroke="#004a85" stroke-width="3" marker-end="url(#l11-navy)"/>
+<text x="282" y="156" font-size="13.5" fill="#004a85" text-anchor="middle" font-weight="700" font-style="normal">direct path</text>
+<text x="282" y="190" font-size="12" fill="#5b6573" text-anchor="middle" font-weight="400" font-style="normal">measure the separation</text>
+<path d="M 140 184 C 232 244 320 244 414 190" fill="none" stroke="#b01e24" stroke-width="1.8" stroke-dasharray="6 5"/>
+<text x="228" y="262" font-size="12" fill="#b01e24" text-anchor="middle" font-weight="400" font-style="normal">stray field: absorbed, not removed</text>
+<path d="M 92 168 L 111.8 168 L 136 142.0 L 136 194.0 L 111.8 168 Z" fill="#ffffff" stroke="#004a85" stroke-width="2" stroke-linejoin="round"/>
+<text x="114" y="118" font-size="13" fill="#004a85" text-anchor="middle" font-weight="600" font-style="normal">source horn</text>
+<text x="114" y="136" font-size="12" fill="#5b6573" text-anchor="middle" font-weight="400" font-style="normal">fixed, known pol.</text>
+<line x1="92" y1="168" x2="62" y2="168" stroke="#15202b" stroke-width="2.2"/>
+<circle cx="452" cy="168" r="66" fill="#1d7a4d" fill-opacity="0.10" stroke="#1d7a4d" stroke-width="1.6" stroke-dasharray="6 5"/>
+<text x="452" y="90" font-size="12.5" fill="#1d7a4d" text-anchor="middle" font-weight="600" font-style="normal">quiet zone</text>
+<path d="M 478 168 L 460.0 168 L 438 144.0 L 438 192.0 L 460.0 168 Z" fill="#ffffff" stroke="#004a85" stroke-width="2" stroke-linejoin="round"/>
+<text x="452" y="128" font-size="13" fill="#15202b" text-anchor="middle" font-weight="600" font-style="normal">AUT</text>
+<line x1="452" y1="192" x2="452" y2="220" stroke="#5b6573" stroke-width="3"/>
+<ellipse cx="452" cy="224" rx="46" ry="12" fill="#eaf2f9" stroke="#5b6573" stroke-width="2"/>
+<path d="M 414 238 A 46 15 0 0 0 490 238" fill="none" stroke="#8a5a00" stroke-width="2.2" marker-end="url(#l11-amber)"/>
+<text x="452" y="264" font-size="12.5" fill="#8a5a00" text-anchor="middle" font-weight="600" font-style="normal">turntable, commanded per angle</text>
+<line x1="478" y1="168" x2="600" y2="168" stroke="#15202b" stroke-width="2.2"/>
+<rect x="632" y="128" width="126" height="104" rx="7" fill="#ffffff" stroke="#004a85" stroke-width="2.4"/>
+<text x="695" y="152" font-size="14.5" fill="#004a85" text-anchor="middle" font-weight="700" font-style="normal">VNA</text>
+<rect x="648" y="162" width="94" height="34" fill="#eaf2f9" stroke="#b9d2e5" stroke-width="1.2"/>
+<path d="M 652 188 C 664 188 668 170 678 170 C 690 170 692 190 700 190 C 712 190 714 172 738 172" fill="none" stroke="#0067b9" stroke-width="1.8"/>
+<text x="695" y="214" font-size="11.5" fill="#5b6573" text-anchor="middle" font-weight="400" font-style="normal">port 1 out, port 2 in</text>
+<path d="M 632 176 L 614 176 L 614 168 L 600 168" fill="none" stroke="#15202b" stroke-width="2.2"/>
+<path d="M 632 190 L 626 190 L 626 330 L 62 330 L 62 168" fill="none" stroke="#15202b" stroke-width="2.2"/>
+<rect x="632" y="250" width="126" height="56" rx="7" fill="#f5f9fc" stroke="#5b6573" stroke-width="2"/>
+<text x="695" y="272" font-size="13" fill="#15202b" text-anchor="middle" font-weight="600" font-style="normal">dashboard</text>
+<text x="695" y="291" font-size="11.5" fill="#5b6573" text-anchor="middle" font-weight="400" font-style="normal">sweep, grid, run</text>
+<line x1="695" y1="232" x2="695" y2="250" stroke="#5b6573" stroke-width="1.8" stroke-dasharray="4 3"/>
+<text x="695" y="120" font-size="13" fill="#0067b9" text-anchor="middle" font-weight="600" font-style="normal">S21 per angle</text>
+</svg>

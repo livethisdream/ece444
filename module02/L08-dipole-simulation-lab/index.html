@@ -1,0 +1,1263 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L8 - Dipole Simulation Lab &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L10-measurement-lab-sparams/index.html">L10 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L11-measurement-lab-patterns/index.html">L11 — Measurement Lab 2 — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l8-dipole-simulation-lab">
+<h1>L8 - Dipole Simulation Lab<a class="headerlink" href="#l8-dipole-simulation-lab" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Dipole Simulation Lab</h1>
+<div class="title-rule"></div>
+<p>Today we compute the radiation pattern numerically, for an antenna nobody can solve on paper.</p>
+<p>Lesson 8 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-slides">
+<div class="wrap docutils container">
+<p class="rubric">Slides</p>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L08-dipole-simulation-lab.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L08-dipole-simulation-lab.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L08-dipole-simulation-lab.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '2'">
+  <li>I can explain why we compute a radiation pattern numerically, and how the method of moments does it — discretize the source, expand the current in basis functions, enforce the boundary condition, and sum the segment patterns.</li>
+  <li>I can build a wire-dipole model with defensible segmentation and excitation, and run frequency sweeps and pattern computations.</li>
+  <li>I can compare simulated impedance, resonant length, pattern, and gain against the analytical half-wave-dipole predictions and account for every difference.</li>
+  <li>I can recognize when a simulation is misleading me — segmentation too coarse, wire radius unreasonable, source misplaced — and apply the standard convergence and energy checks.</li>
+</ol>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-we-were">
+<div class="wrap docutils container">
+<p class="rubric">Where We Were</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Lesson 6: the pattern is the radiation integral over <strong>whatever current sits on the source</strong>.</p></li>
+<li><p>Lesson 7: we prescribed that current, and the integral closed in a formula.</p></li>
+<li><p>Both steps work for a handful of shapes.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Nothing in the last two lessons claimed that a wire’s current must be a
+sinusoid. Lesson 6 ran the same integral over an infinitesimal element, a
+uniform line source, and a sinusoidal standing wave, and compared the three
+patterns side by side; Lesson 7 used a triangular current for the short dipole
+and a sinusoid for the half-wave one. The pattern came out of the same
+machinery every time. What limits that machinery is not which current you
+pick, it is that you have to pick one at all and then evaluate the integral in
+closed form afterward. A fat wire, a bent wire, a wire over a ground plane, or
+an array whose elements couple will hand you neither a current you can write
+down nor an integral you can do.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-we-are-actually-after">
+<div class="wrap docutils container">
+<p class="rubric">What We Are Actually After</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p>The deliverable is the <strong>radiation pattern</strong> of an antenna nobody can solve on
+paper. The method of moments is how we get that pattern numerically. The
+currents it reports along the way are the means, not the end.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Keep that straight and the rest of the lesson has a spine. Every rule you are
+about to meet — segments per wavelength, segment length against wire radius,
+where the source card goes — exists to protect a pattern computation, and the
+checks at the end of the lab are pattern checks. The currents are how the
+method gets there, and they are worth looking at because they are where a
+broken model shows itself first, but they are not the reason we run the solver.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-three-full-wave-solvers">
+<div class="wrap docutils container">
+<p class="rubric">Three Full-Wave Solvers</p>
+<div class="stage docutils container">
+<div class="present tight docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-left"><p>FDTD</p></th>
+<th class="head text-left"><p>FEM</p></th>
+<th class="head text-left"><p>MoM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Meshes</p></td>
+<td class="text-left"><p>the air</p></td>
+<td class="text-left"><p>the air</p></td>
+<td class="text-left"><p>the metal</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Solves</p></td>
+<td class="text-left"><p>in time</p></td>
+<td class="text-left"><p>one frequency</p></td>
+<td class="text-left"><p>one frequency</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Unknowns</p></td>
+<td class="text-left"><p>fields</p></td>
+<td class="text-left"><p>fields</p></td>
+<td class="text-left"><p>currents</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Boundary</p></td>
+<td class="text-left"><p>absorbing box</p></td>
+<td class="text-left"><p>absorbing box</p></td>
+<td class="text-left"><p>built in</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Best for</p></td>
+<td class="text-left"><p>broadband, mixed media</p></td>
+<td class="text-left"><p>dielectrics, curved shapes</p></td>
+<td class="text-left"><p>wires in free space</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>All three are <strong>full-wave</strong> solvers: they solve Maxwell’s equations with no
+high-frequency approximation, which is what separates them from the ray and
+physical-optics methods you will meet in Module 3. They differ in what they
+turn into unknowns.</p>
+<p>The finite-difference time-domain method (FDTD) fills a box of air around the
+antenna with a grid, stores the fields at every cell, and marches them
+forward in time. One run gives every frequency at once, and any material can
+sit in any cell, which is why it is the method for broadband problems and
+for inhomogeneous media. The finite element method (FEM), the solver inside
+HFSS, fills the same box with a mesh of tetrahedra and solves for the fields
+at one frequency, on a mesh that can follow a curved dielectric closely. Both
+need the box to end somewhere, and the edge of the box has to absorb
+outgoing waves without reflecting them: a perfectly matched layer that you
+size and place.</p>
+<p>The method of moments (MoM), the solver inside NEC, meshes only the
+conductor. The unknowns are the currents on it, and the field each current
+radiates into free space is known in closed form, the Green’s function, so
+there is no air to mesh and no boundary to absorb. The price is a dense
+matrix, because every segment couples to every other, and a dielectric has
+no natural place in it.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-why-mom-for-a-wire">
+<div class="wrap docutils container">
+<p class="rubric">Why MoM for a Wire</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Nine segments make a <span class="math notranslate nohighlight">\(9\times9\)</span> matrix. FDTD meshes the air around it.</p></li>
+<li><p>Free space is in the Green’s function, nothing to tune.</p></li>
+<li><p>One frequency per solve is the sweep you will run.</p></li>
+<li><p>The cost: a dense matrix and no dielectrics.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Count what each solver has to carry for the dipole you are about to build.
+NEC with nine segments stores a <span class="math notranslate nohighlight">\(9\times9\)</span> matrix and solves it in
+microseconds, and at 81 segments the matrix is still only <span class="math notranslate nohighlight">\(81\times81\)</span>. An
+FDTD or FEM model of the same dipole has to fill a box of air several
+wavelengths across with cells a small fraction of a wavelength on a side,
+which is millions of unknowns before the wire is even in it, and then
+terminate the box in an absorbing layer thick enough and far enough away not
+to reflect. In free space the method of moments needs none of that: the field
+of a segment’s current at any point is a closed-form expression, and radiation
+to infinity is built into it. Nothing is truncated and nothing is tuned.</p>
+<p>The solve is at one frequency, which sounds like a limitation until you look
+at the procedure below. Every question the lab asks is asked at a frequency,
+and the sweep is a loop over solves. The cost is real, though. The matrix is
+dense, so memory grows as <span class="math notranslate nohighlight">\(N^2\)</span> and the solve time as <span class="math notranslate nohighlight">\(N^3\)</span>, which is why a
+dense MoM tops out around tens of thousands of unknowns where FDTD runs to
+billions of cells. And a dielectric has no natural place in it: a patch on a
+substrate, or a wire inside a lossy body, is the signal to reach for HFSS or
+CST. For a wire in air, NEC is the right tool, and it has been since 1981.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-source-becomes-n-small-radiators">
+<div class="wrap docutils container">
+<p class="rubric">The Source Becomes N Small Radiators</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Radiation is <strong>superposition</strong> over the source. Take that literally.</p></li>
+<li><p>Cut the source into <span class="math notranslate nohighlight">\(N\)</span> segments, each a radiator you already know.</p></li>
+<li><p>The pattern is their weighted sum; only the <strong>weights</strong> are unknown.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[I(z) = \sum_{n=1}^{N} a_n\ f_n(z)\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(f_n\)</span>: <strong>basis</strong> shapes you pick. <span class="math notranslate nohighlight">\(a_n\)</span>: the unknowns.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This is the move that makes the problem finite. An unknown <em>function</em> on the
+wire becomes <span class="math notranslate nohighlight">\(N\)</span> unknown <em>numbers</em>, and the pattern integral becomes a sum of
+<span class="math notranslate nohighlight">\(N\)</span> elementary patterns with those numbers as coefficients:</p>
+<div class="math notranslate nohighlight">
+\[F(\theta) \;=\; \sum_{n=1}^{N} a_n\ F_n(\theta),\]</div>
+<p>where each <span class="math notranslate nohighlight">\(F_n\)</span> is the pattern of one short segment carrying its basis shape —
+an object Lesson 6 already handed you. NEC’s basis functions are a
+constant-plus-sine-plus-cosine triple on each segment, chosen so that current
+and slope match across the junctions, but the choice is a modeling decision
+rather than a physical claim. Nothing here asserts what the current <em>is</em>.</p>
+<p>The choice of shape is the key decision. A pulse, constant across its segment,
+is the simplest, but it makes the current a staircase, and a staircase puts all
+of its charge in spikes at the steps, so the near field, and with it the
+reactance, comes out badly. A triangle, peaking at one segment junction and
+falling to zero at the next, keeps the current continuous and spreads the
+charge evenly. NEC’s piece of a sinusoid on each segment is what a standing
+wave looks like up close, so few segments are needed before the sum stops
+changing. The convergence widget below draws the pieces.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-the-weights-come-from">
+<div class="wrap docutils container">
+<p class="rubric">Where the Weights Come From</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Total tangential field is zero on a conductor, on <strong>every</strong> segment.</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> equations, <span class="math notranslate nohighlight">\(N\)</span> unknowns, one matrix solve.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[E_z^{\text{scattered}} = -E_z^{\text{source}}\]</div>
+<ul class="simple">
+<li><p>Out come the weights, and with them the <strong>pattern</strong>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(Z_\text{in}\)</span> comes from one weight, at the feed.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The scattered field is the field the unknown segment currents produce, so
+every row of the matrix is a statement about how strongly one segment’s
+current is felt at another — strongest on the diagonal, since a segment feels
+itself most. One row per segment makes the system square, and a laptop
+finishes it in milliseconds. Depending on which form of the integral equation
+you start from this is Pocklington’s or Hallén’s equation; we will not derive
+either. The result is what matters: a pattern computed without ever
+prescribing the current that produced it, which is exactly the step Lesson 7
+could not take. Today you reconcile that pattern, and the impedance that came
+with it, against the numbers you worked out by hand. A difference you can
+explain is worth more than an agreement you cannot, so the deliverable is not
+a matching number. It is an account of every place the two answers part
+company.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-method-of-moments-in-four-steps">
+<div class="wrap docutils container">
+<p class="rubric">The Method of Moments in Four Steps</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L08-mom-steps.svg"
+     alt="The method of moments in four steps on one dipole: the wire cut into segments, the current expanded in triangle shapes with unknown heights, the field of every segment totaling zero on one chosen segment as one row of a matrix, and the weighted segment patterns summing to the half-wave pattern"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The same nine-segment dipole carries through all four panels. In the first,
+the wire is cut into segments and each segment is a small radiator whose
+pattern we already know from Lesson 6. In the second, the current is written
+as a sum of known shapes, one triangle per junction, and only their heights
+are unknown; the dashed line is the current they add up to. In the third, the
+boundary condition of a perfect conductor, no tangential electric field on the
+metal, is applied to one chosen segment: the fields that all the segments put
+there, together with the source field, must total zero. That is one row of the
+matrix: one row per segment,
+strongest on the diagonal because a segment feels itself most. In the fourth, the segment patterns, now
+weighted, add up to the pattern of the whole antenna.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-assumptions-and-consequences">
+<div class="wrap docutils container">
+<p class="rubric">Assumptions and Consequences</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p>A simulator knows no more physics than you do. It runs the same superposition
+you would run, over the source you described. Everything it reports is as
+good as the segments, the basis functions, the radius, and the source.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>It sounds simple, but there are consequences to this approach: every number the simulator reports inherits
+the choices in the model. The segments set how finely the current can vary,
+the basis functions set what shape it can take between the samples, the
+radius sets whether the thin-wire model describes the conductor at all, and
+the source sets the one segment the impedance is read from. The program
+checks none of them.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-nec-and-its-front-ends">
+<div class="wrap docutils container">
+<p class="rubric">NEC and Its Front Ends</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>NEC</strong>: the Numerical Electromagnetics Code, 1970s.</p></li>
+<li><p>It knows <strong>thin wires</strong>: segments with a length, a radius, and a position.</p></li>
+<li><p>It reads <strong>cards</strong> from a text file; everything else is a front end.</p></li>
+<li><p>Ours is <strong>nec_lab</strong>; in the field, 4nec2.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>NEC — <em>Numerical Electromagnetics Code</em>, written at Lawrence Livermore in the
+1970s and still the workhorse of wire-antenna modeling — is this method
+specialized to thin wires. It has no interface of its own: it reads a text
+file of cards and writes a text file of results, and every front end writes
+the same cards. Ours is <strong>nec_lab</strong>, written for this course and served from
+the course site; 4nec2 is the free Windows front end you will meet in the
+field. The cards do not move between versions the way menu items do, so the
+cards are what we teach.</p>
+<p>NEC does not know about antennas. It knows about <strong>thin wires</strong>: straight
+segments with a length, a radius, and a position. A dipole is one wire with a
+segment count, and a Yagi is several wires. That simplicity makes NEC fast, but
+we have to follow some rules to avoid divergent results.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-finding-the-impedance-in-mom">
+<div class="wrap docutils container">
+<p class="rubric">Finding the Impedance in MoM</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>One segment</strong> carries the 1 V source and is the terminal.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[Z_{\text{in}} = \frac{V_{\text{feed}}}{I_{\text{feed}}}\]</div>
+<ul class="simple">
+<li><p>At 1 V, the impedance is the reciprocal of the feed current.</p></li>
+<li><p>The other currents set the <strong>pattern</strong>.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p>A misplaced source corrupts the impedance and barely moves the pattern.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>NEC drives <strong>one segment</strong> with a 1 V source, and that segment is the antenna
+terminal: there is no connector, no coaxial gap, and no balun in the model.
+The solve returns a whole vector of currents, one per segment, but the terminal
+impedance comes from exactly one entry in that vector. You applied a known
+voltage to the source segment, and the solver reports the current that flows
+there, so Ohm’s law finishes the job:</p>
+<div class="math notranslate nohighlight">
+\[Z_{\text{in}} = \frac{V_{\text{feed}}}{I_{\text{feed}}}\]</div>
+<p>With the customary <span class="math notranslate nohighlight">\(V_{\text{feed}} = 1\ \text{V}\)</span> excitation, the input
+impedance is simply the reciprocal of the feed-segment current, and its complex
+character carries straight through: a feed current lagging the applied voltage
+gives a positive reactance, which means an inductive terminal.</p>
+<p>There are three consequences to this approach. First, the impedance of the entire
+antenna comes from a single number in the solution, so it inherits whatever
+error that one segment carries. Second, the rest of the current distribution
+does not enter the terminal impedance at all; it sets the radiation pattern
+through the radiation integral. Third, those two facts together explain a
+failure mode you will meet later in the lab: a source placed on the wrong
+segment corrupts the impedance badly while barely moving the pattern, because
+the pattern is an integral over a current distribution that hardly changed.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-segmentation-rules">
+<div class="wrap docutils container">
+<p class="rubric">The Segmentation Rules</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Rule</p></th>
+<th class="head text-left"><p>Broken</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>10–20 segments per half wavelength</p></td>
+<td class="text-left"><p>the pattern and gain smear</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta &lt; \lambda/20\)</span></p></td>
+<td class="text-left"><p>the impedance drifts</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta &gt; 8a\)</span></p></td>
+<td class="text-left"><p>the impedance becomes unreliable</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(2\pi a \ll \lambda\)</span></p></td>
+<td class="text-left"><p>NEC solves a filament, not your conductor</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Odd segment count</p></td>
+<td class="text-left"><p>source off-center</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>Refining drives <span class="math notranslate nohighlight">\(\Delta\)</span> toward <span class="math notranslate nohighlight">\(8a\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Here <span class="math notranslate nohighlight">\(\Delta\)</span> is the segment length and <span class="math notranslate nohighlight">\(a\)</span> the wire radius. The first rule
+resolves the curvature of the current, and the pattern is an integral over
+that current, so a coarse mesh smears the pattern and the gain with it. The
+second keeps the phase nearly constant across a segment, which the basis
+functions assume; break it and the impedance drifts as you change the
+segmentation. The third is the thin-wire model’s own limit. It treats each
+segment’s current as a filament on the wire’s axis and evaluates its field on
+the surface, a distance <span class="math notranslate nohighlight">\(a\)</span> away, and that describes a segment only when the
+segment is much longer than the radius. When <span class="math notranslate nohighlight">\(\Delta\)</span> falls below about <span class="math notranslate nohighlight">\(8a\)</span>
+the segment is closer to a ring than to a piece of a line, the filament no
+longer describes it, and the matrix entries between neighboring segments
+become inaccurate.</p>
+<p>The fourth rule is about the wire, not the segments. NEC models a wire as a
+single filament of axial current and enforces the boundary condition on the
+surface at radius <span class="math notranslate nohighlight">\(a\)</span>. That is the problem it solves. The problem we want
+solved is a conducting cylinder, whose surface current can vary around the
+circumference and can have a component around the wire near the ends. The
+two problems have the same answer only when the circumference is small
+compared with a wavelength, <span class="math notranslate nohighlight">\(2\pi a \ll \lambda\)</span>, because then nothing can
+vary around the wire within a wavelength and the surface current is the same
+as a filament on the axis. For a large-radius conductor NEC still returns a
+number, and it is the number for the filament, not for your antenna. The
+fifth rule is bookkeeping: an odd count puts a segment at the center, and the
+source card names a segment, so an even count lands the source half a
+segment off the feed.</p>
+<p>Notice that two of these rules pull against each other, because refining the
+mesh drives <span class="math notranslate nohighlight">\(\Delta\)</span> down toward <span class="math notranslate nohighlight">\(8a\)</span>. On a wire whose radius is large relative
+to the segment length you eventually run out of room, and that limit is
+informative rather than annoying: the segments have reached the length the
+thin-wire model needs, and refining further describes your antenna worse, not
+better.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-segmentation-math-at-915-mhz">
+<div class="wrap docutils container">
+<p class="rubric">Segmentation Math at 915 MHz</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>Work</p></th>
+<th class="head text-left"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\lambda\)</span>, <span class="math notranslate nohighlight">\(\lambda/2\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(c/f\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(328\)</span>, <span class="math notranslate nohighlight">\(164\ \text{mm}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(164/21\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(7.8\ \text{mm}\)</span>, <span class="math notranslate nohighlight">\(0.024\lambda\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\lambda/20\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(328/20\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(16.4\ \text{mm} &gt; \Delta\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(8a\)</span>, <span class="math notranslate nohighlight">\(a = 0.5\ \text{mm}\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(8 \times 0.5\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(4.0\ \text{mm} &lt; \Delta\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Ceiling</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(164/4.0\)</span></p></td>
+<td class="text-left"><p>41 segments</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Above 41 segments, <span class="math notranslate nohighlight">\(\Delta &lt; 8a\)</span>: the segments are shorter than the thin-wire model allows.</strong></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — segmentation math for today’s dipole</p>
+<p>At <span class="math notranslate nohighlight">\(f = 915\ \text{MHz}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\lambda = \frac{3\times10^8}{915\times10^6} = 0.3279\ \text{m} = 328\ \text{mm}, \qquad \frac{\lambda}{2} = 164\ \text{mm}\]</div>
+<p>Take a wire of 1 mm diameter, so <span class="math notranslate nohighlight">\(a = 0.5\ \text{mm}\)</span>, and start with <span class="math notranslate nohighlight">\(N = 21\)</span>
+segments:</p>
+<div class="math notranslate nohighlight">
+\[\Delta = \frac{164\ \text{mm}}{21} = 7.8\ \text{mm} = 0.024\ \lambda\]</div>
+<p>Now check both bounds. The upper bound is <span class="math notranslate nohighlight">\(\lambda/20 = 16.4\ \text{mm}\)</span>, and
+<span class="math notranslate nohighlight">\(7.8\ \text{mm}\)</span> clears it with room to spare. The lower bound is
+<span class="math notranslate nohighlight">\(8a = 4.0\ \text{mm}\)</span>, and <span class="math notranslate nohighlight">\(7.8\ \text{mm}\)</span> clears that as well. The thin-wire
+condition also holds, since <span class="math notranslate nohighlight">\(2\pi a/\lambda = 0.0096\)</span>.</p>
+<p>How far can you refine? The segment length may fall to <span class="math notranslate nohighlight">\(4.0\ \text{mm}\)</span>, which
+corresponds to <span class="math notranslate nohighlight">\(164/4.0 \approx 41\)</span> segments. <strong>Past about 41 segments the
+segment length falls below <span class="math notranslate nohighlight">\(8a\)</span>: the wire’s radius is too large for the
+thin-wire model to describe segments that short, and the extra segments make
+the answer worse rather than better.</strong> That refinement ceiling is worth
+computing before you touch the keyboard.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-all-models-are-wrong-some-are-useful">
+<div class="wrap docutils container">
+<p class="rubric">All Models Are Wrong, Some Are Useful</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symptom</p></th>
+<th class="head text-left"><p>Likely cause</p></th>
+<th class="head text-left"><p>Check</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Gain drifts with <span class="math notranslate nohighlight">\(N\)</span></p></td>
+<td class="text-left"><p>too few segments</p></td>
+<td class="text-left"><p>double <span class="math notranslate nohighlight">\(N\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Impedance wild or oscillating</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta &lt; 8a\)</span></p></td>
+<td class="text-left"><p>lengthen segments</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Impedance far from theory</p></td>
+<td class="text-left"><p>misplaced source</p></td>
+<td class="text-left"><p>odd count, center segment</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Average gain not 1</p></td>
+<td class="text-left"><p>geometry or kernel error</p></td>
+<td class="text-left"><p>fix first</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The simulator does not report that it is wrong, so these four checks are the
+questions you have to ask it. Most groups meet at least two of these symptoms
+in a lab period, and the last row is the subject of the next frame.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-average-gain-test">
+<div class="wrap docutils container">
+<p class="rubric">The Average Gain Test</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A <strong>full-sphere</strong> pattern request reports the <strong>average power gain</strong>.</p></li>
+<li><p>Lossless, free space: it must be <span class="math notranslate nohighlight">\(1.000\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(0.95\)</span> to <span class="math notranslate nohighlight">\(1.05\)</span> is acceptable; <span class="math notranslate nohighlight">\(0.6\)</span> or <span class="math notranslate nohighlight">\(1.4\)</span> means the model is wrong. Fix it first.</p></li>
+<li><p>Valid only over a full sphere.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Ask NEC for a pattern over the <strong>full sphere</strong> and it will report the <strong>average
+power gain</strong>. For a lossless antenna in free space that number must be
+<span class="math notranslate nohighlight">\(1.000\)</span>, because every watt delivered to the terminals has to leave as
+radiation. This is a conservation-of-energy audit on your model, and it costs
+one extra run.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An average gain between 0.95 and 1.05 is acceptable. A value near 0.6 or 1.4
+means the model is wrong, and no other number in the output file can be trusted
+until it is fixed. Check the geometry, the segment-length limits, and the source
+placement before recording any results. The test is only valid over a complete
+sphere in free space; adding a ground plane changes the expected value, which is
+worth remembering when you model a monopole in Lesson 12.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-convergence">
+<div class="wrap docutils container">
+<p class="rubric">Convergence</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/mom-dipole.html"
+        width="100%" height="490"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Method-of-moments dipole: solved segment currents against the assumed sinusoid, the feed voltage and current that set the input impedance, and impedance versus segment count">
+</iframe>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The widget above runs a method-of-moments solve in your browser: a thin wire,
+a voltage source on the center segment, and your choice of basis function.
+Check <strong>show basis functions</strong> and the current is drawn as what it is, a sum
+of overlapping pieces, one per segment junction, each scaled by its solved
+amplitude; the dots are the amplitudes and the curve through them is the sum.
+Switch from triangles to sinusoidal pieces, NEC’s choice, and watch the
+convergence plot: the same answer arrives with fewer segments, because a piece
+of a sinusoid is already the shape the current wants to take.</p>
+<p>Drag the segment count up from 5 and watch two things at once. The current
+samples settle onto the sinusoid, staying close to it but never matching it
+exactly, and running largest near the wire ends where the sinusoid is least
+accurate. At the
+same time <span class="math notranslate nohighlight">\(Z_{\text{in}}\)</span> stops moving, and that plateau is what “converged”
+means: it does not mean the answer agrees with theory, only that refining the
+model no longer changes it. Watch the feed readouts as you drag, since
+<span class="math notranslate nohighlight">\(V_{\text{feed}}\)</span> is fixed while <span class="math notranslate nohighlight">\(I_{\text{feed}}\)</span> moves, and every change in
+<span class="math notranslate nohighlight">\(Z_{\text{in}}\)</span> comes from that one current — the red band on the wire plot,
+where the source sits. The dashed green references are
+Lesson 7’s <span class="math notranslate nohighlight">\(73\ \Omega\)</span> and <span class="math notranslate nohighlight">\(42.5\ \Omega\)</span>, drawn when the wire is exactly
+<span class="math notranslate nohighlight">\(\lambda/2\)</span> long, and the plateau lands near them rather than on them. The frame
+on why the half-wave number misses explains that gap.</p>
+<p>Now drag the length past <span class="math notranslate nohighlight">\(0.5\lambda\)</span> and the single hump splits into two.
+Nothing about the solver changed; that is the standing wave of Lesson 7. The
+current on each arm is a piece of a sinusoid that must be zero at the open
+tip, so its maximum sits a quarter wavelength in from that tip. On a half-wave
+dipole each arm is a quarter wavelength long and both maxima land on the feed,
+which is one hump. Lengthen the wire and each maximum stays a quarter
+wavelength from its tip, so the two move apart from the feed. By <span class="math notranslate nohighlight">\(0.7\lambda\)</span>,
+the end of the slider, they sit <span class="math notranslate nohighlight">\(0.1\lambda\)</span> either side of the feed with a dip
+between them, and at <span class="math notranslate nohighlight">\(L = \lambda\)</span> that dip would be a null. The solved
+current follows the same shape because the tips still force it to zero, and
+the assumed sinusoid tracks it.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-getting-to-the-tool">
+<div class="wrap docutils container">
+<p class="rubric">Getting to the Tool</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><strong>nec_lab</strong> runs in your browser:</p>
+<ul class="simple">
+<li><p><strong>On the course site.</strong> Open <a href="../../simulator/" target="_blank" rel="noopener">Simulator</a>. Nothing to install.</p></li>
+<li><p><strong>Or a copy your instructor is serving</strong> — the address is given in class.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Every route runs the same tool and gives the same answers. The page has a form
+at the left and a <strong>NEC input file</strong> at the bottom right: the form writes that
+file, and the file is what NEC runs.</p>
+</div>
+<div class="depth docutils container">
+<p>The course-site version downloads about 6 MB the first time — NEC-2 and Python,
+both compiled for the browser — and is cached afterwards, so it opens at once
+and works with no network at all. Nothing you build there leaves your machine.</p>
+<p>You can also run it yourself from a clone of the course repository:
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">scripts/nec_lab/run.py</span> <span class="pre">serve</span></code>, or double-click
+<code class="docutils literal notranslate"><span class="pre">scripts\nec_lab\nec_lab.bat</span></code> on Windows.</p>
+</div>
+<div class="depth docutils container">
+<p>Type the cards yourself at least once, because they are the real interface.
+They are identical in nec_lab, 4nec2 and every other front end you will meet,
+and they do not move between versions the way menu items do. The <strong>Copy</strong>
+button under the deck puts the cards on your clipboard; they will run unchanged
+in 4nec2 if you would rather work there, or want to check one tool against the
+other.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-nec-input-file">
+<div class="wrap docutils container">
+<p class="rubric">The NEC Input File</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>Four cards carry the model.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>GW 1 21 0 0 -0.08197 0 0 0.08197 0.0005
+EX 0 1 11 0 1 0
+FR 0 1 0 0 915 0
+RP 0 181 1 1000 0 0 1 0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Choose <strong>Dipole</strong> in the antenna picker and press <strong>Build &amp; solve</strong>, and the
+full deck is what appears. Read it before you read the plots, and type it out
+once by hand into the editor to prove you can:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CM ECE 444 L8 -- half-wave dipole, 915 MHz
+CE
+GW 1 21 0 0 -0.08197 0 0 0.08197 0.0005
+GE 0
+EX 0 1 11 0 1 0
+FR 0 1 0 0 915 0
+RP 0 181 1 1000 0 0 1 0
+EN
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">CM</span></code> and <code class="docutils literal notranslate"><span class="pre">CE</span></code> open the comment block, <code class="docutils literal notranslate"><span class="pre">GE</span> <span class="pre">0</span></code> closes the geometry in free space,
+and <code class="docutils literal notranslate"><span class="pre">EN</span></code> ends the deck.</p>
+</div>
+<div class="depth docutils container">
+<p><strong>Build &amp; solve</strong> runs what the form describes; <strong>Run these cards</strong> runs what is
+in the editor, which is how you run a deck you typed or changed yourself.
+Either way the answers land in the same places: <span class="math notranslate nohighlight">\(Z_{\text{in}}\)</span>, VSWR, peak
+gain, HPBW and the average power gain across the top, the pattern cuts below
+them, and the segmentation rules down the left. Beside the editor, every field
+of every card is labeled — hover one to see what it means.</p>
+<p>This handout names cards, not buttons. Cards are the part that does not change:
+if a control moves, or you end up in 4nec2 instead, the deck still says exactly
+what the model is.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-reading-the-cards">
+<div class="wrap docutils container">
+<p class="rubric">Reading the Cards</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Card</p></th>
+<th class="head text-left"><p>What it says</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">GW</span></code></p></td>
+<td class="text-left"><p>wire 1, 21 segments, <span class="math notranslate nohighlight">\(\pm 81.97\ \text{mm}\)</span>, radius <span class="math notranslate nohighlight">\(0.5\ \text{mm}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">GE</span> <span class="pre">0</span></code></p></td>
+<td class="text-left"><p>free space</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">EX</span></code></p></td>
+<td class="text-left"><p>1 V source, segment 11 of 21</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">FR</span></code></p></td>
+<td class="text-left"><p>one frequency, 915 MHz</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">RP</span></code></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\theta\)</span> swept, <span class="math notranslate nohighlight">\(1^\circ\)</span> steps</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>All coordinates are in meters. The wire lies along <span class="math notranslate nohighlight">\(z\)</span>, matching the course
+convention, so broadside is <span class="math notranslate nohighlight">\(\theta = 90^\circ\)</span> and the pattern cut above is
+the E-plane.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-when-the-tool-disagrees-with-you">
+<div class="wrap docutils container">
+<p class="rubric">When the Tool Disagrees With You</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p>The rules panel and the average-gain readout both warn you. <strong>Neither stops a
+run.</strong> NEC will solve a broken model and report the result with the same
+confidence it reports a good one.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>That is the whole point of the segmentation rules: <strong>you</strong> are the check. The
+tool can tell you that a number looks wrong; it cannot tell you that a model
+describes the antenna you meant to build.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-procedure-predict-then-run">
+<div class="wrap docutils container">
+<p class="rubric">Procedure — Predict, Then Run</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple">
+<li><p><strong>Predict.</strong> Lesson 7’s <span class="math notranslate nohighlight">\(Z_{\text{in}}\)</span>, resonant length, gain, and HPBW.</p></li>
+<li><p><strong>Do the math.</strong> <span class="math notranslate nohighlight">\(\Delta\)</span> against <span class="math notranslate nohighlight">\(\lambda/20\)</span> and <span class="math notranslate nohighlight">\(8a\)</span>, on paper.</p></li>
+<li><p><strong>Baseline run.</strong> 915 MHz. Record the differences before changing anything.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A prediction written after the fact teaches you nothing, so step 1 is not
+optional and it is not a formality. Your reference numbers should not change
+once you see the simulated values.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-procedure-audit-the-model">
+<div class="wrap docutils container">
+<p class="rubric">Procedure — Audit the Model</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="4">
+<li><p>Tick <strong>average power gain</strong>, or request a full sphere yourself:</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>RP 0 19 36 1001 0 0 10 10
+</pre></div>
+</div>
+<p><strong>If it is not close to 1.000, stop and fix the model.</strong></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>That request sweeps <span class="math notranslate nohighlight">\(\theta\)</span> from <span class="math notranslate nohighlight">\(0^\circ\)</span> to <span class="math notranslate nohighlight">\(180^\circ\)</span> in <span class="math notranslate nohighlight">\(10^\circ\)</span> steps
+and <span class="math notranslate nohighlight">\(\phi\)</span> from <span class="math notranslate nohighlight">\(0^\circ\)</span> to <span class="math notranslate nohighlight">\(350^\circ\)</span> in <span class="math notranslate nohighlight">\(10^\circ\)</span> steps, and the final
+digit of the fourth field is what asks for the average gain. Record the value —
+it is a deliverable, and it is the one number that licenses all the others.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-procedure-sweep-then-trim">
+<div class="wrap docutils container">
+<p class="rubric">Procedure — Sweep, Then Trim</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="5">
+<li><p><code class="docutils literal notranslate"><span class="pre">FR</span> <span class="pre">0</span> <span class="pre">41</span> <span class="pre">0</span> <span class="pre">0</span> <span class="pre">800</span> <span class="pre">5</span></code> sweeps 800 to 1000 MHz. Read off where <span class="math notranslate nohighlight">\(X_{\text{in}} = 0\)</span>.</p></li>
+<li><p>Hold 915 MHz and shorten the wire until <span class="math notranslate nohighlight">\(X_{\text{in}}\)</span> crosses zero.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A wire cut to <span class="math notranslate nohighlight">\(\lambda/2\)</span> at 915 MHz will not resonate at 915 MHz, so determine
+where it does and by how much it misses. Then record the resonant length as a
+fraction of <span class="math notranslate nohighlight">\(\lambda\)</span> and the resistance there, keeping the segment count odd
+throughout and rechecking <span class="math notranslate nohighlight">\(\Delta\)</span> against <span class="math notranslate nohighlight">\(8a\)</span> after each change.</p>
+</div>
+<div class="depth docutils container">
+<p><strong>Trim to resonance</strong> does this search for you, and you should not press it
+until you have done it by hand. Then press it: if your length and the tool’s
+agree, you have learned something about both. If they do not, one of you missed
+the reactance crossing.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-procedure-cuts-and-convergence">
+<div class="wrap docutils container">
+<p class="rubric">Procedure — Cuts and Convergence</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="7">
+<li><p>At resonance take the E-plane cut and the H-plane cut:</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>RP 0 1 361 1000 90 0 0 1
+</pre></div>
+</div>
+<ol class="arabic simple" start="8">
+<li><p>Re-run at <span class="math notranslate nohighlight">\(N = 11\)</span>, 21, 41, 81 and tabulate <span class="math notranslate nohighlight">\(Z_{\text{in}}\)</span> and gain.</p></li>
+<li><p>Press <strong>Pattern CSV</strong> and keep the file for Lesson 11.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Record the peak gain, the E-plane HPBW, and the depth of the nulls along the
+wire axis, and confirm the H-plane cut is a circle to within a small fraction
+of a decibel. In the convergence study, identify both the point where the
+answer stops moving and the point where the <span class="math notranslate nohighlight">\(\Delta &gt; 8a\)</span> rule begins to bite.</p>
+<p>The pattern file drops straight onto your measured cut in Lesson 11, on one
+plot: the chamber dashboard’s <strong>Simulation</strong> section imports it and overlays
+it on the live cut. It is absolute <strong>dBi</strong>, and a chamber measures raw
+<span class="math notranslate nohighlight">\(S_{21}\)</span>, so comparing the two means normalizing each to its own peak — which
+the dashboard does by default — and what that compares is <em>shape</em>. Comparing absolute levels is a gain-transfer measurement against a
+standard-gain horn, Lesson 9’s material, not something a file can fix. Save
+it somewhere you will find it in three lessons’ time.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-deliverables">
+<div class="wrap docutils container">
+<p class="rubric">Deliverables</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>For your midterm antenna:</p>
+<ol class="arabic simple">
+<li><p><strong>Pattern</strong>: E- and H-plane cuts, HPBW, sidelobes, gain.</p></li>
+<li><p><strong>Impedance</strong>: <span class="math notranslate nohighlight">\(Z_{\text{in}}\)</span> and VSWR across the band.</p></li>
+<li><p><strong>Checks</strong>: average gain, convergence table.</p></li>
+<li><p><strong>Comparison</strong> with hand analysis, every difference explained.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Today’s dipole is the rehearsal. The product of this lab is the <strong>Analysis</strong>
+section of the midterm project: the simulated prediction for the antenna you
+will put on the range in Lessons 10 and 11. The project handout governs what
+that section must contain; this is how to build it.</p>
+<ol class="arabic simple">
+<li><p><strong>Pattern.</strong> Predict the E-plane and H-plane cuts, and read the half-power
+beamwidth, the sidelobe level, and the gain from them.</p></li>
+<li><p><strong>Impedance.</strong> Predict <span class="math notranslate nohighlight">\(Z_{\text{in}}\)</span> and VSWR across the band you will
+measure, and the resonant frequency.</p></li>
+<li><p><strong>Checks.</strong> Run the average-gain test before recording anything, and show a
+convergence table so the reader knows the numbers have stopped moving.</p></li>
+<li><p><strong>Comparison.</strong> Set the simulation beside your hand analysis and account
+for every difference. “Simulation error” is not an account of anything, so
+name the mechanism. When the measurement comes in at Lesson 11 you will add
+a third column.</p></li>
+</ol>
+<p>Build it the way you built the dipole today: predict by hand first, model the
+antenna, check the model, then compare. The dipole comparison table below,
+filled in, is the worked example.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-comparison-table">
+<div class="wrap docutils container">
+<p class="rubric">The Comparison Table</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>L7</p></th>
+<th class="head text-left"><p>NEC</p></th>
+<th class="head text-left"><p>Diff.</p></th>
+<th class="head text-left"><p>Why</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(Z_{\text{in}}\)</span> at <span class="math notranslate nohighlight">\(\lambda/2\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(73 + j42.5\ \Omega\)</span></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Resonant length</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.47\text{–}0.48\ \lambda\)</span></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(R_{\text{in}}\)</span> at resonance</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx 70\ \Omega\)</span></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Gain</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2.15\ \text{dBi}\)</span></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>E-plane HPBW</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(78^\circ\)</span></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+<td class="text-left"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Four rows should land within a few percent. The first will not.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Four of those rows should land within a few percent. The first row will not, so
+the mechanism behind it is worth stating here rather than leaving you to
+discover it by accident.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-why-the-half-wave-number-misses">
+<div class="wrap docutils container">
+<p class="rubric">Why the Half-Wave Number Misses</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(73 + j42.5\ \Omega\)</span> is the impedance of a <strong>sinusoid</strong>, not a <strong>wire</strong>.</p></li>
+<li><p>Exactly <span class="math notranslate nohighlight">\(\lambda/2\)</span> is about 5% long: inductive, near <span class="math notranslate nohighlight">\(86 + j47\ \Omega\)</span>.</p></li>
+<li><p><strong>End effect</strong>: the tip current exceeds the sinusoid, raising the resistance.</p></li>
+<li><p>Trimmed, the two agree within a few ohms.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The number <span class="math notranslate nohighlight">\(73 + j42.5\ \Omega\)</span> is the impedance of the assumed <strong>sinusoid</strong>
+at exactly <span class="math notranslate nohighlight">\(\lambda/2\)</span>, not of the <strong>wire</strong>. The solved current differs from
+the sinusoid near the tips and at the feed, and the impedance is read at the
+feed, where that difference is largest, so the resistance comes out near
+<span class="math notranslate nohighlight">\(86\ \Omega\)</span>. Both models agree on where the wire resonates: the sinusoid at
+about <span class="math notranslate nohighlight">\(0.476\lambda\)</span> for this radius, which is where Lesson 7’s reactance
+curve crosses zero, and the solved current at about <span class="math notranslate nohighlight">\(0.473\lambda\)</span>. A wire cut
+to exactly <span class="math notranslate nohighlight">\(\lambda/2\)</span> is therefore about 5% long under either model, which
+is why both call it inductive. The extra <span class="math notranslate nohighlight">\(13\ \Omega\)</span> of resistance comes
+from the difference in current shape, not from a difference in length; it is
+the same gap Lesson 7 noted between the model’s <span class="math notranslate nohighlight">\(63\ \Omega\)</span> and a real
+dipole’s <span class="math notranslate nohighlight">\(70\ \Omega\)</span> at resonance, and trimming does not remove it.</p>
+<p>The difference in current shape has a name, the <strong>end effect</strong>. The assumed
+sinusoid goes to zero at the wire tips with a clean slope, while the real
+current approaches the tips more gradually because charge accumulates there.
+That larger current near the tips is visible in the convergence widget, and it
+is what raises the resistance and moves resonance slightly shorter.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A useful habit for the rest of the course is this: whenever a simulation and a
+hand calculation disagree, first ask whether the two are describing the same
+antenna. More often than not they are not, and the disagreement resolves itself
+once you make the two models match.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary">
+<div class="wrap docutils container">
+<p class="rubric">Summary</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Method of moments</p></td>
+<td class="text-left"><p>discretize the wire, expand the current in basis functions, enforce <span class="math notranslate nohighlight">\(E_{\text{tan}} = 0\)</span>, solve for the amplitudes, then integrate</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(N\)</span> unknowns, one matrix solve</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Basis functions</p></td>
+<td class="text-left"><p>the shapes the current is built from; NEC uses a piece of a sinusoid per segment</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(I(z) = \sum a_n f_n(z)\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(Z_{\text{in}} = V_{\text{feed}}/I_{\text{feed}}\)</span></p></td>
+<td class="text-left"><p>terminal impedance from the one segment carrying the source</p></td>
+<td class="text-left"><p>1 V drive makes it <span class="math notranslate nohighlight">\(1/I_{\text{feed}}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Segments <span class="math notranslate nohighlight">\(N\)</span></p></td>
+<td class="text-left"><p>segmentation of the wire; odd, so a segment sits at the feed</p></td>
+<td class="text-left"><p>10–20 per half wavelength</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta\)</span> against <span class="math notranslate nohighlight">\(\lambda\)</span></p></td>
+<td class="text-left"><p>upper bound on segment length, set by phase change</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta &lt; \lambda/20\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta\)</span> against <span class="math notranslate nohighlight">\(a\)</span></p></td>
+<td class="text-left"><p>lower bound on segment length, set by the thin-wire kernel</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta &gt; 8a\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Convergence</p></td>
+<td class="text-left"><p>the answer stops moving under refinement, which is not the same as matching theory</p></td>
+<td class="text-left"><p>change <span class="math notranslate nohighlight">\(&lt; 1\%\)</span> per doubling</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Average power gain</p></td>
+<td class="text-left"><p>conservation-of-energy audit on a lossless free-space model</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(1.000\)</span>, accept 0.95–1.05</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(Z_{\text{in}}\)</span> at exactly <span class="math notranslate nohighlight">\(\lambda/2\)</span></p></td>
+<td class="text-left"><p>inductive because the wire is about 5% long; the resistance is higher because the solved current is not the sinusoid</p></td>
+<td class="text-left"><p>near <span class="math notranslate nohighlight">\(86 + j47\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Resonant length and gain</p></td>
+<td class="text-left"><p>where <span class="math notranslate nohighlight">\(X_{\text{in}} = 0\)</span>, and the gain there</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx 0.473\lambda\)</span>, <span class="math notranslate nohighlight">\(2.15\ \text{dBi}\)</span>, <span class="math notranslate nohighlight">\(78^\circ\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../practice/ECE444_L08_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a class="doc-link doc-key" href="../../practice/ECE444_L08_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where This Is Going</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>You have predicted an antenna and simulated it. You have not <strong>measured</strong> it.</p></li>
+<li><p>A simulation nobody has checked against hardware is a very confident opinion.</p></li>
+<li><p><strong>Lesson 9</strong> is the theory of checking; <strong>L10 and L11</strong> put you on the instruments.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The dipole you modeled today is the antenna you will hang on the analyzer next
+week, so keep your predicted impedance and resonant length where you can find
+them. Lesson 9 also introduces the midterm project, a pattern measurement on a
+dipole due 2 Oct — the measurement block runs early for that reason.</p>
+</div>
+<div class="depth docutils container">
+<p>The remaining antenna families come back at Lessons 12 to 14 — loops and
+monopoles, then patches, slots and horns, then reflectors and Yagis. The
+monopole is where your new NEC habits get their first real test, because a
+quarter-wave monopole is only half an antenna and the other half is the ground
+plane. NEC models ground with its own card, and getting that card wrong is a
+common way to produce a confident and completely incorrect result, including an
+average gain that no longer has to equal one.</p>
+<p>Beyond that, Module 3 is built entirely on arrays, and an array is just more
+wires. The segmentation rules you applied to one dipole today apply to every
+element at once, and the matrix you solved for 21 unknowns becomes a matrix for
+several hundred. The physics does not change and only the bookkeeping grows, so
+the habit of predicting before simulating matters more as the models get large
+enough that nobody can check the answer by eye.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module02/L08-dipole-simulation-lab"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

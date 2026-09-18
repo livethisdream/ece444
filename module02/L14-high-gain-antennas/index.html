@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L14 - High-Gain Antennas &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L10-measurement-lab-sparams/index.html">L10 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L11-measurement-lab-patterns/index.html">L11 — Measurement Lab 2 — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l14-high-gain-antennas">
+<h1>L14 - High-Gain Antennas<a class="headerlink" href="#l14-high-gain-antennas" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">High-Gain Antennas</h1>
+<div class="title-rule"></div>
+<p>High gain means a large radiating area driven in phase.</p>
+<p>Lesson 14 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-slides">
+<div class="wrap docutils container">
+<p class="rubric">Slides</p>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L14-high-gain-antennas.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L14-high-gain-antennas.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L14-high-gain-antennas.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '4'">
+  <li>I can compute an aperture antenna's gain and beamwidth from its physical size, and explain why gain is fundamentally a statement about area.</li>
+  <li>I can explain how a parabolic reflector's equal-path geometry turns a spherical wave into a plane wave, and identify what f/D, feed illumination, blockage, and spillover do to aperture efficiency.</li>
+  <li>I can explain how a Yagi-Uda gets gain from parasitic elements, and how detuning the reflector and directors sets the phase that puts the beam endfire.</li>
+  <li>I can describe the array as the third road to high gain, and state why the next module is devoted to it.</li>
+  <li>I can select an appropriate high-gain antenna for a given application and defend the choice with numbers.</li>
+</ol>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-we-were">
+<div class="wrap docutils container">
+<p class="rubric">Where We Were</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Lesson 13 topped out at 20 dBi: a handheld, a hop across the airfield.</p></li>
+<li><p>Not a satellite at 36,000 km, or a target ten miles out.</p></li>
+<li><p>Today: 20, 30, and 40 dBi, and the one idea under all three.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This is the last lesson in Module 2, and it closes the loop the module opened
+with. You can now predict an antenna’s pattern from its geometry, simulate it,
+and measure it with a quantified statement of how much of the measurement to
+believe. Everything today is a gain claim you already know how to check.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-the-midterm-stands">
+<div class="wrap docutils container">
+<p class="rubric">Where the Midterm Stands</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p>Everyone is building a <strong>dipole</strong>, and it is due <strong>2 Oct, 2359</strong>. Today is the
+last new material Module 2 puts in front of you.</p>
+</div>
+<div class="present callout docutils container">
+<p><strong>Checkpoint, today.</strong> <span class="math notranslate nohighlight">\(f_2\)</span> chosen, <span class="math notranslate nohighlight">\(Z_a(f_2)\)</span> predicted in NEC, L-network
+designed on paper.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>You measured a horn on the range in Lesson 11, and the dipole on your bench is
+the other end of the same scale. Everything today is a gain claim about an
+antenna tens of decibels above it, and that contrast is what makes the
+dipole’s <span class="math notranslate nohighlight">\(2.15\ \text{dBi}\)</span> a number rather than a disappointment: a gain
+figure only means something against a reference.</p>
+<p>The selection framework at the end of this hour is not a project decision —
+the project antenna is settled. Read it as what it is, the reasoning an
+engineer has to show when the antenna is <em>not</em> settled, which is most of the
+time.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-one-idea">
+<div class="wrap docutils container">
+<p class="rubric">The One Idea</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}\]</div>
+<ul class="simple">
+<li><p><strong>High gain means a large radiating area driven in phase.</strong></p></li>
+<li><p>An aperture is not big in meters. It is big in <strong>wavelengths</strong>.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p>Reflectors, Yagis, and arrays are three ways to buy the same thing: effective
+area in units of <span class="math notranslate nohighlight">\(\lambda^2\)</span>.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Every high-gain antenna ever built is a different scheme for assembling a big,
+coherent aperture: a reflector borrows a mirror’s area, a Yagi borrows its
+neighbors’ currents, an array simply buys the area one element at a time.
+Read the physics before the algebra — <span class="math notranslate nohighlight">\(A/\lambda^2\)</span> counts how many square
+wavelengths the antenna spans, <span class="math notranslate nohighlight">\(\eta_{\text{ap}}\)</span> is the fraction of that area
+you actually manage to use, and <span class="math notranslate nohighlight">\(A_e = \eta_{\text{ap}}A = G\lambda^2/4\pi\)</span> is
+the number Friis cares about.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-circular-dish-shortcut">
+<div class="wrap docutils container">
+<p class="rubric">The Circular-Dish Shortcut</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[G = \eta_{\text{ap}}\left(\frac{\pi D}{\lambda}\right)^{2}\]</div>
+<ul class="simple">
+<li><p>Every doubling of <strong>diameter</strong> buys 6 dB.</p></li>
+<li><p>Every doubling of <strong>frequency</strong> buys 6 dB on the same dish.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>For a circular dish, <span class="math notranslate nohighlight">\(A = \pi D^2/4\)</span> and the aperture formula collapses to the
+one you should memorize. The second consequence is why the satellite industry
+keeps climbing in frequency: the dish on the roof gets better for free every
+time the band moves up, until the surface tolerance catches up with it.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-beamwidth-comes-from-the-same-size">
+<div class="wrap docutils container">
+<p class="rubric">Beamwidth Comes From the Same Size</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\theta_\text{HP} \approx 70^\circ\ \frac{\lambda}{D}\]</div>
+<ul class="simple">
+<li><p>Double the dish: the beam halves and the gain climbs 6 dB.</p></li>
+<li><p>Those are the same statement.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lesson 6 established the Fourier logic: a wider aperture is a narrower beam,
+and the beamwidth of an aperture of size <span class="math notranslate nohighlight">\(D\)</span> scales as <span class="math notranslate nohighlight">\(\lambda/D\)</span>. Power you
+no longer waste sideways is power you put on boresight.</p>
+</div>
+<div class="depth docutils container">
+<p>The <span class="math notranslate nohighlight">\(70^\circ\)</span> coefficient already assumes a tapered illumination. A perfectly
+uniform circular aperture gives <span class="math notranslate nohighlight">\(58^\circ\lambda/D\)</span> with <span class="math notranslate nohighlight">\(-17.6\)</span> dB sidelobes,
+but nobody illuminates a dish uniformly — you will see why two parts from now.
+Use <span class="math notranslate nohighlight">\(70^\circ\)</span> for design, and use the interactive below to build the reflex.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-gain-beamwidth-and-surface-error">
+<div class="wrap docutils container">
+<p class="rubric">Gain, Beamwidth, and Surface Error</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/reflector-gain.html"
+        width="100%" height="401"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Dish gain, beamwidth, and effective area versus diameter in wavelengths, with the Ruze surface-error penalty">
+</iframe>
+</div>
+</div>
+<div class="depth docutils container">
+<p>Drive the sliders and watch two numbers move together. Set <span class="math notranslate nohighlight">\(D/\lambda\)</span> and the
+dish redraws with a tick on the rim for every wavelength across it, while the
+beam cone narrows on the same canvas. Notice that gain climbs 6 dB per
+doubling of <span class="math notranslate nohighlight">\(D\)</span> while the beam halves — and then open the surface-error slider
+and watch the amber curve: hold the panel tolerance fixed and grow the dish,
+and surface error quietly caps how far you can push it.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-worked-example-a-1-m-dish-at-12-ghz">
+<div class="wrap docutils container">
+<p class="rubric">Worked Example — a 1 m Dish at 12 GHz</p>
+<p>A home satellite-TV dish, roughly 1 m across, receiving Ku band at 12 GHz.
+Take <span class="math notranslate nohighlight">\(\eta_{\text{ap}} = 0.65\)</span>.</p>
+<p><strong>Wavelength.</strong> <span class="math notranslate nohighlight">\(\lambda = c/f = (3\times10^{8})/(12\times10^{9}) = 0.025\ \text{m}\)</span>,
+so <span class="math notranslate nohighlight">\(D/\lambda = 40\)</span> and the dish is forty wavelengths across.</p>
+<p><strong>Gain.</strong> <span class="math notranslate nohighlight">\(G = 0.65\ (\pi \cdot 40)^{2} = 0.65 \cdot 15791 = 1.03\times10^{4}\)</span>,
+i.e. <span class="math notranslate nohighlight">\(10\log_{10}(1.03\times10^{4}) = 40.1\ \text{dBi}\)</span>.</p>
+<p><strong>Beamwidth.</strong> <span class="math notranslate nohighlight">\(\theta_\text{HP} \approx 70^\circ (0.025/1) = 1.75^\circ\)</span>. That
+is why a dish that drifts two degrees off the satellite goes dark.</p>
+<p><strong>Effective aperture.</strong> <span class="math notranslate nohighlight">\(A_e = \eta_{\text{ap}}A = 0.65 \cdot \pi(0.5)^2 = 0.51\ \text{m}^2\)</span>.</p>
+<p><strong>Sanity check on the far field.</strong> <span class="math notranslate nohighlight">\(2D^2/\lambda = 2(1)^2/0.025 = 80\ \text{m}\)</span>.
+You could not measure this antenna on the bench range you used in Lesson 11,
+and Lesson 9 told you why: it is the compact-range and near-field-scanning
+problem, in a dish you can carry under one arm.</p>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-parabolic-reflector">
+<div class="wrap docutils container">
+<p class="rubric">The Parabolic Reflector</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A reflector amplifies nothing.</p></li>
+<li><p>It takes the spherical wave a small feed already radiates and <strong>rearranges its phase</strong>.</p></li>
+<li><p>A large flat area then leaves the antenna in step.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L14-parabola-geometry.svg"
+     alt="Rays leaving the feed at the focus of a parabola reflect into a parallel beam, and every path from the focus to the aperture plane has the same length"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The parabola is the surface that does this exactly, and Lesson 9’s compact
+range is the same geometry used indoors — there the collimated wave is aimed
+across a chamber instead of at a satellite.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-equal-path-property">
+<div class="wrap docutils container">
+<p class="rubric">The Equal-Path Property</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\overline{FP} + \overline{PA} = (f + z_P) + (z_a - z_P) = f + z_a\]</div>
+<ul class="simple">
+<li><p>The <span class="math notranslate nohighlight">\(z_P\)</span> cancels.</p></li>
+<li><p><strong>Every ray, edge to center, takes the same path length.</strong></p></li>
+<li><p>One line of algebra is the entire reason parabolic reflectors exist.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Put the vertex at the origin with the axis along <span class="math notranslate nohighlight">\(z\)</span>, so the surface is
+<span class="math notranslate nohighlight">\(z = \rho^{2}/4f\)</span> and the focus sits at <span class="math notranslate nohighlight">\(z = f\)</span>. A parabola’s defining property
+is that the distance from the focus to a point <span class="math notranslate nohighlight">\(P\)</span> on the surface equals
+<span class="math notranslate nohighlight">\(f + z_P\)</span>; a ray from the focus to <span class="math notranslate nohighlight">\(P\)</span> then travels parallel to the axis to an
+aperture plane at <span class="math notranslate nohighlight">\(z = z_a\)</span>, covering a further <span class="math notranslate nohighlight">\(z_a - z_P\)</span>. Every point of
+the aperture plane is therefore in phase.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-f-d-sets-the-feed-s-job">
+<div class="wrap docutils container">
+<p class="rubric">f/D Sets the Feed’s Job</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(f/D\)</span></p></th>
+<th class="head text-left"><p>Edge half-angle</p></th>
+<th class="head text-left"><p>Character</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>0.25</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(90^\circ\)</span></p></td>
+<td class="text-left"><p>focus in the plane of the rim</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>0.35</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(71^\circ\)</span></p></td>
+<td class="text-left"><p>deep, needs a broad feed</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>0.50</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(53^\circ\)</span></p></td>
+<td class="text-left"><p>the common compromise</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>0.60</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(45^\circ\)</span></p></td>
+<td class="text-left"><p>shallow, feed on a long strut</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The half-angle to the rim satisfies <span class="math notranslate nohighlight">\(\tan(\theta_0/2) = 1/[4(f/D)]\)</span>.</p>
+</div>
+<div class="depth docutils container">
+<p>A deep dish (small <span class="math notranslate nohighlight">\(f/D\)</span>) shields the feed from ground noise but demands a
+feed with an almost hemispherical pattern. A shallow dish is easy to
+illuminate cleanly but puts the feed far out on a wobbly strut. Most
+prime-focus reflectors land between 0.3 and 0.6.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-the-efficiency-goes">
+<div class="wrap docutils container">
+<p class="rubric">Where the Efficiency Goes</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\eta_{\text{ap}} \approx 0.55\)</span> to <span class="math notranslate nohighlight">\(0.7\)</span> for a good reflector.</p></li>
+<li><p>The missing 30 to 45% is four unavoidable trades, not sloppiness.</p></li>
+<li><p>Knowing them separates picking a dish from designing one.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The first trade is the feed’s own pattern. Aim a narrow feed at the dish and
+the rim sits 20 dB down: you have paid for aperture you are not using, and the
+effective area shrinks. Widen the feed and the rim brightens — but now power
+sails past the rim entirely and is simply gone, and on receive that spilled
+beam is looking at warm ground instead of cold sky.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-10-db-rule">
+<div class="wrap docutils container">
+<p class="rubric">The 10 dB Rule</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L14-illumination-taper.svg"
+     alt="Three feed illuminations of the same dish: too narrow with a starved rim, about right with a ten decibel edge taper, and too wide with power spilling past the rim"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present callout docutils container">
+<p>Illuminate the rim about <strong>10 dB below the center</strong>. Taper loss and spillover
+pull opposite ways, and that is the optimum.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>It is the house rule of thumb for reflector feeds, and it is why a dish’s
+aperture distribution always looks like one of the tapers from Lesson 6 — with
+the sidelobe benefit that comes along for free. A uniform aperture gives
+<span class="math notranslate nohighlight">\(-13.3\)</span> dB, but a real dish runs closer to <span class="math notranslate nohighlight">\(-20\)</span> dB because of the taper.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-blockage-and-the-offset-feed">
+<div class="wrap docutils container">
+<p class="rubric">Blockage and the Offset Feed</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A prime-focus feed and its struts sit squarely in the beam.</p></li>
+<li><p>Blocking a diameter <span class="math notranslate nohighlight">\(d\)</span> costs roughly <span class="math notranslate nohighlight">\([1-(d/D)^2]^2\)</span> in gain, and raises sidelobes.</p></li>
+<li><p>An <strong>offset feed</strong> cuts the reflector off-axis so the feed sits outside the beam.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>On a 3 m dish a 15 cm feed is a rounding error. On a 45 cm consumer dish it is
+not, which is why the dish on the roof looks oval and has its arm hanging off
+the bottom: the reflector is a slice cut off-axis from a much larger imaginary
+paraboloid, giving zero blockage and cleaner sidelobes, and the tilted slice is
+what makes the panel look taller than it is wide.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-surface-accuracy-ruze-s-formula">
+<div class="wrap docutils container">
+<p class="rubric">Surface Accuracy — Ruze’s Formula</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[G = G_0\ e^{-(4\pi\sigma/\lambda)^{2}} \quad\Longrightarrow\quad \text{loss (dB)} = 685.8\left(\frac{\sigma}{\lambda}\right)^{2}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\lambda/50\)</span> RMS costs 0.27 dB. Negligible.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda/16\)</span> RMS costs 2.7 dB. Disqualifying.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Phase errors from a bumpy surface cost gain exponentially, and this course
+uses the result without deriving it. Note what it means for a fixed piece of
+hardware: a dish held to 0.5 mm RMS is essentially perfect at 6 GHz and has
+thrown away 1.7 dB by 30 GHz. Big dishes at short wavelengths are a machining
+problem, not an electromagnetics problem.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-efficiency-budget">
+<div class="wrap docutils container">
+<p class="rubric">The Efficiency Budget</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Loss term</p></th>
+<th class="head text-left"><p>Typical</p></th>
+<th class="head text-left"><p>Why</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Spillover</p></td>
+<td class="text-left"><p>0.90</p></td>
+<td class="text-left"><p>power past the rim</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Taper</p></td>
+<td class="text-left"><p>0.85</p></td>
+<td class="text-left"><p>rim darker than center</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Blockage</p></td>
+<td class="text-left"><p>0.95</p></td>
+<td class="text-left"><p>feed and struts</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Surface</p></td>
+<td class="text-left"><p>0.94</p></td>
+<td class="text-left"><p>Ruze</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Everything else</p></td>
+<td class="text-left"><p>0.97</p></td>
+<td class="text-left"><p>cross-pol, feed</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Product</strong></p></td>
+<td class="text-left"><p><strong>0.66</strong></p></td>
+<td class="text-left"><p>an ordinary reflector</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>That product is where the <span class="math notranslate nohighlight">\(\eta_{\text{ap}} \approx 0.65\)</span> you have been
+assuming actually comes from. It is an accounting result, not a constant of
+nature, and every row of it is a design decision someone made.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-yagi-uda">
+<div class="wrap docutils container">
+<p class="rubric">The Yagi-Uda</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L14-yagi.svg"
+     alt="Yagi-Uda antenna showing a slightly long reflector, the fed driven element, and a row of progressively shorter directors along a boom, with the main beam endfire"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The reflector buys area with a mirror. The Yagi buys it with <strong>the neighbors</strong>.</p></li>
+<li><p>Exactly one element is fed. The rest are <strong>parasitic</strong>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The driven element is a dipole near <span class="math notranslate nohighlight">\(0.47\lambda\)</span>. Every other element has no
+feed line and no source — just a rod that the driven element’s near field
+induces a current on. That induced current re-radiates, and the total pattern
+is the superposition of all of them. There is nothing new physically: this is
+Lesson 6’s radiation integral with several current filaments instead of one.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-detuning-sets-the-phase">
+<div class="wrap docutils container">
+<p class="rubric">Detuning Sets the Phase</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A dipole slightly <strong>long</strong> is inductive; its current <strong>lags</strong>.</p></li>
+<li><p>A dipole slightly <strong>short</strong> is capacitive; its current <strong>leads</strong>.</p></li>
+<li><p>Reflector behind, long. Directors ahead, progressively shorter.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The reflector runs about <span class="math notranslate nohighlight">\(0.5\lambda\)</span> and sits behind the driven element, so
+by the time its radiation reaches the front of the antenna it adds in phase,
+while behind the antenna the two tend to cancel. The directors run around
+<span class="math notranslate nohighlight">\(0.40\)</span> to <span class="math notranslate nohighlight">\(0.45\lambda\)</span> and lead by just enough that the whole structure passes
+a slow traveling wave forward.</p>
+</div>
+<div class="depth docutils container">
+<p>This course does not use mutual-impedance matrices. If you want the currents
+on the parasites exactly, you solve a coupled system with one row per
+element — that is what NEC did for you in Lesson 8. Here, the phenomenology is
+the point: long lags, short leads, and the beam goes toward the short end.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-boom-length-buys-the-gain">
+<div class="wrap docutils container">
+<p class="rubric">Boom Length Buys the Gain</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Elements</p></th>
+<th class="head text-left"><p>Boom</p></th>
+<th class="head text-left"><p>Gain</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>3</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.3\lambda\)</span></p></td>
+<td class="text-left"><p>7.5 dBi</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>6</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(1.0\lambda\)</span></p></td>
+<td class="text-left"><p>10 dBi</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>10</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2.2\lambda\)</span></p></td>
+<td class="text-left"><p>12.5 dBi</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>16</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(4.5\lambda\)</span></p></td>
+<td class="text-left"><p>14.5 dBi</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Roughly <strong>+3 dB per doubling of boom length</strong>.</p></li>
+<li><p>The boom, not the element count, buys the gain.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The result is an <strong>endfire</strong> beam, main lobe along the boom and away from the
+reflector, with a front-to-back ratio of 15 to 25 dB. One reflector is
+essentially all you get, because the first already sees very little field
+behind it. Stuffing more directors into the same boom does almost nothing.
+Practical single Yagis live between 8 and 15 dBi; beyond that you stack
+several and let the stack act as an array.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-bandwidth-is-what-you-pay">
+<div class="wrap docutils container">
+<p class="rubric">Bandwidth Is What You Pay</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Everything on a Yagi is a <strong>detuned resonator</strong>.</p></li>
+<li><p>A few percent off design and the phases drift and the pattern degrades.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>That is fine for a fixed-channel TV, amateur, or point-to-point link, which is
+where you find them, and a poor fit for anything wideband. It is also the
+easiest prediction in this lesson to check on the analyzer from Lesson 10.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-third-road-arrays">
+<div class="wrap docutils container">
+<p class="rubric">The Third Road: Arrays</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[G_\text{array} = 10\log_{10} N \quad \text{dB}\]</div>
+<ul class="simple">
+<li><p>Build the aperture from <span class="math notranslate nohighlight">\(N\)</span> small antennas, fed coherently.</p></li>
+<li><p>Sixteen patches buy 12 dB; sixty-four buy 18 dB.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The beam is <strong>not welded to the structure</strong>.</p></li>
+<li><p>Change each element’s phase and it moves, in microseconds.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>That capability is worth a module of its own, and it gets one. Module 3
+develops the array factor, pattern multiplication, beam steering, grating
+lobes, and tapering, and you will steer a real beam on the ADALM-PHASER
+hardware. For today, file the array alongside the reflector and the Yagi as
+the third road to the same destination: coherent area.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-choosing-five-questions">
+<div class="wrap docutils container">
+<p class="rubric">Choosing: Five Questions</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple">
+<li><p>How much gain do I <strong>actually</strong> need? Run the link budget first.</p></li>
+<li><p>What frequency?</p></li>
+<li><p>How much bandwidth?</p></li>
+<li><p>Does it have to move or steer?</p></li>
+<li><p>What are the cost, size, weight, and wind load?</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>In that order, those five settle almost every real selection. Gain you do not
+need costs money and pointing accuracy. Aperture antennas get small and cheap
+as <span class="math notranslate nohighlight">\(\lambda\)</span> shrinks while wire antennas get fragile. Reflectors and horns are
+broadband; Yagis and patch arrays are not. A dish steers mechanically and
+slowly, an array electronically and instantly, a Yagi mostly not at all. And a
+20 dBi antenna that cannot survive local wind and ice loading is not a usable
+answer.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-three-roads-side-by-side">
+<div class="wrap docutils container">
+<p class="rubric">Three Roads, Side by Side</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-left"><p>Reflector</p></th>
+<th class="head text-left"><p>Yagi</p></th>
+<th class="head text-left"><p>Array</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Gain</p></td>
+<td class="text-left"><p>25–60 dBi</p></td>
+<td class="text-left"><p>8–15 dBi</p></td>
+<td class="text-left"><p>15–40 dBi</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Bandwidth</p></td>
+<td class="text-left"><p>wide</p></td>
+<td class="text-left"><p>a few %</p></td>
+<td class="text-left"><p>moderate</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Steering</p></td>
+<td class="text-left"><p>mechanical</p></td>
+<td class="text-left"><p>fixed</p></td>
+<td class="text-left"><p>electronic</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Profile</p></td>
+<td class="text-left"><p>bulky</p></td>
+<td class="text-left"><p>long boom</p></td>
+<td class="text-left"><p>flat panel</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Cost driver</p></td>
+<td class="text-left"><p>surface</p></td>
+<td class="text-left"><p>almost none</p></td>
+<td class="text-left"><p>one chain per element</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-worked-selection-20-dbi-at-2-4-ghz">
+<div class="wrap docutils container">
+<p class="rubric">Worked Selection — 20 dBi at 2.4 GHz</p>
+<p>You need a 20 dBi ground-station antenna at 2.4 GHz for a cubesat downlink.
+<span class="math notranslate nohighlight">\(\lambda = 0.125\ \text{m}\)</span>, and <span class="math notranslate nohighlight">\(G = 20\ \text{dBi} = 100\)</span>.</p>
+<p><strong>Required effective aperture.</strong>
+<span class="math notranslate nohighlight">\(A_e = G\lambda^{2}/4\pi = 100(0.015625)/12.57 = 0.124\ \text{m}^{2}\)</span>. Every
+candidate has to deliver that much coherent area.</p>
+<p><strong>Dish.</strong> With <span class="math notranslate nohighlight">\(\eta_{\text{ap}} = 0.6\)</span>, <span class="math notranslate nohighlight">\(A = 0.124/0.6 = 0.207\ \text{m}^{2}\)</span>,
+so <span class="math notranslate nohighlight">\(D = 2\sqrt{A/\pi} = 0.51\ \text{m}\)</span>. Beamwidth
+<span class="math notranslate nohighlight">\(\theta_\text{HP} \approx 70^\circ(0.125/0.51) = 17^\circ\)</span>. A half-meter dish
+with a 17-degree beam is forgiving to point, cheap, and broadband, and no
+other candidate here matches it on all three.</p>
+<p><strong>Yagi.</strong> A single Yagi tops out near 15 dBi at a <span class="math notranslate nohighlight">\(4.5\lambda\)</span> (0.56 m) boom,
+so 20 dBi needs four stacked in a 2x2 bay:
+<span class="math notranslate nohighlight">\(15 + 10\log_{10}4 = 21\ \text{dBi}\)</span>. It works, but it is four booms, a phasing
+harness, and a narrow band.</p>
+<p><strong>Patch array.</strong> At <span class="math notranslate nohighlight">\(\lambda/2 = 6.25\ \text{cm}\)</span> spacing with
+<span class="math notranslate nohighlight">\(\eta_{\text{ap}} = 0.75\)</span>, a <span class="math notranslate nohighlight">\(7\times7\)</span> grid spans <span class="math notranslate nohighlight">\(0.44\ \text{m}\)</span> square,
+<span class="math notranslate nohighlight">\(A = 0.191\ \text{m}^{2}\)</span>, giving
+<span class="math notranslate nohighlight">\(G = 0.75(4\pi)(0.191)/0.015625 = 115 = 20.6\ \text{dBi}\)</span>. The panel is flat,
+presents low wind load, and can be made steerable later, at the price of a
+49-way feed network.</p>
+<p><strong>Decision.</strong> For a fixed ground station on a rotator, take the 0.51 m dish:
+fewest parts, widest band, lowest cost. Choose the patch array instead the
+moment you need a flat profile or electronic steering.</p>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-does-the-link-close">
+<div class="wrap docutils container">
+<p class="rubric">Does the Link Close?</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+L_\text{fs} &amp;= 20\log_{10}\!\left(\frac{4\pi R}{\lambda}\right) = 160.1\ \text{dB} \\
+P_r &amp;= 33.0 + 0 + 20 - 160.1 = -107.1\ \text{dBm}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Against a <span class="math notranslate nohighlight">\(-121\ \text{dBm}\)</span> noise floor, that is <strong>14 dB of margin</strong>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Cubesat at 1000 km, 2 W transmitter (33.0 dBm) into a 0 dBi antenna, our
+20 dBi dish on the ground, and a receiver noise floor of about
+<span class="math notranslate nohighlight">\(-121\ \text{dBm}\)</span> in a 100 kHz channel with a 3 dB noise figure. The link
+closes, and it closes <em>because</em> of the 20 dB the dish contributed. Take the
+dish away and you are 13 dB under the noise.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary">
+<div class="wrap docutils container">
+<p class="rubric">Summary</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Idea</p></th>
+<th class="head text-left"><p>What it says</p></th>
+<th class="head text-left"><p>Number to hold onto</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(G = \eta_{\text{ap}}4\pi A/\lambda^{2}\)</span></p></td>
+<td class="text-left"><p>gain is coherent area in square wavelengths</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\eta_{\text{ap}} \approx 0.55\)</span>–<span class="math notranslate nohighlight">\(0.7\)</span> for reflectors</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(G = \eta_{\text{ap}}(\pi D/\lambda)^{2}\)</span></p></td>
+<td class="text-left"><p>circular-dish shortcut</p></td>
+<td class="text-left"><p>+6 dB per doubling of <span class="math notranslate nohighlight">\(D\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_\text{HP} \approx 70^\circ\lambda/D\)</span></p></td>
+<td class="text-left"><p>beamwidth is set by size in wavelengths</p></td>
+<td class="text-left"><p>1 m at 12 GHz <span class="math notranslate nohighlight">\(\rightarrow 1.75^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(A_e = \eta_{\text{ap}}A = G\lambda^{2}/4\pi\)</span></p></td>
+<td class="text-left"><p>effective aperture — what Friis uses</p></td>
+<td class="text-left"><p>1 m dish at 12 GHz <span class="math notranslate nohighlight">\(\rightarrow 0.51\ \text{m}^2\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(f/D\)</span></p></td>
+<td class="text-left"><p>sets the edge angle the feed must cover</p></td>
+<td class="text-left"><p>0.3–0.6 typical; 0.5 <span class="math notranslate nohighlight">\(\rightarrow 53^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Edge taper</p></td>
+<td class="text-left"><p>spillover fights illumination taper</p></td>
+<td class="text-left"><p>rim about <span class="math notranslate nohighlight">\(-10\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Ruze, <span class="math notranslate nohighlight">\(685.8(\sigma/\lambda)^{2}\)</span> dB</p></td>
+<td class="text-left"><p>surface error costs gain exponentially</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\lambda/50 \rightarrow 0.27\)</span> dB; <span class="math notranslate nohighlight">\(\lambda/16 \rightarrow 2.7\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Yagi boom length</p></td>
+<td class="text-left"><p>boom, not element count, buys gain</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx +3\)</span> dB per doubling; 8–15 dBi</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(10\log_{10}N\)</span></p></td>
+<td class="text-left"><p>array gain over one element</p></td>
+<td class="text-left"><p>64 elements <span class="math notranslate nohighlight">\(\rightarrow\)</span> 18 dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../practice/ECE444_L14_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a class="doc-link doc-key" href="../../practice/ECE444_L14_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where This Is Going</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Every gain number today was a <strong>claim</strong>, and you already know how to test one.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\eta_{\text{ap}} = 0.65\)</span> was an assumption; <span class="math notranslate nohighlight">\(70^\circ\lambda/D\)</span> a rule of thumb.</p></li>
+<li><p>Module 2 ends here. <strong>Module 3</strong> takes the third road.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Module 2 closes with a complete loop: predict a pattern from geometry,
+simulate it, measure it, and state how much of the measurement to believe.
+Your midterm project is that loop run once more on the dipole, with your own
+measurements in place of somebody else’s numbers.</p>
+</div>
+<div class="depth docutils container">
+<p>Lesson 15 opens Module 3 by going back to the beginning of that loop and
+asking a sharper question. The aperture <em>size</em> set the beamwidth; what set the
+sidelobe level? The answer is the illumination across the aperture — the
+<span class="math notranslate nohighlight">\(-10\)</span> dB edge taper you met today, generalized — and choosing it deliberately
+is how every high-performance antenna and phased array is designed. When you
+get there, remember what an array is doing: assembling the same coherent
+aperture a dish assembles with a mirror, one element and one phase shifter at
+a time.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module02/L14-high-gain-antennas"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>
