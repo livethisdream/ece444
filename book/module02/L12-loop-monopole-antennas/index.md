@@ -151,8 +151,8 @@ D_{\text{mono}} &= 2(1.64) = 3.28 \ \rightarrow\ 5.15\ \text{dBi}
 :::
 :::{present}
 :class: callout
-The 3 dB is free the way a mirror gives free light. The power that went down
-now goes sideways.
+No power is created. The same beam fills half the sphere, so its peak is
+twice the average.
 :::
 ::::
 

@@ -152,7 +152,7 @@ $$D_{\text{mono}} = 2 D_{\text{dip}} = 2(1.64) = 3.28 \quad \rightarrow \quad 5.
 - Peak on the horizon, null straight up.
 
 <div class="callout">
-The 3 dB is free in the same sense a mirror gives you free light: nothing was created, the power simply stopped going the wrong way.
+No power is created. The same beam fills half the sphere, so its peak is twice the average.
 </div>
 
 Note:
