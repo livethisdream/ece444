@@ -347,13 +347,20 @@ depth the hardest number on that lab to defend.
 :::{present}
 $$R_r = 20\pi^2 \left(\frac{C}{\lambda}\right)^4 = 320\pi^4 \left(\frac{A}{\lambda^2}\right)^2 \ \Omega$$
 
-- Both forms punish small size severely.
-- **Halve the loop and $R_r$ drops by a factor of 16.**
+- Only $R_r$ radiates. The wire's $R_{\text{ohmic}}$ is in series and just heats.
+- Halve the loop: $R_r$ drops **16×**, the wire's loss only 2×.
+- At $C = 0.1\lambda$: 20 mΩ against 114 mΩ, **15% efficient**.
 :::
 
-The exponent is the whole point. A single-turn loop at $C = 0.1\lambda$ has a
-radiation resistance of about 20 milliohms — roughly the resistance of a short
-piece of the wire it is made from, which is exactly the problem.
+This is why we keep computing radiation resistance. The feed sees
+$R_r + R_{\text{ohmic}}$ in series, the same current flows through both, and
+the input power splits between them in proportion — the same
+$\eta_{\text{rad}} = R_r/(R_r + R_{\text{ohmic}})$ that decided the ground
+systems. A small loop's $R_r$ goes as $C^4$, but its loss only as $C$ for a
+given wire, so once the loop is small its efficiency falls roughly as $C^3$:
+halve a $0.1\lambda$ loop and you lose another 8.5 dB. At $C = 0.1\lambda$ the
+radiation resistance is already smaller than the loss of the copper the loop
+is made from, which is exactly the problem the next frame works through.
 ::::
 
 ::::{frame} Worked Example — a 30 MHz Loop

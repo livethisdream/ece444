@@ -268,7 +268,7 @@ $$R_r = 20\pi^2 \left(\frac{C}{\lambda}\right)^4 = 320\pi^4 \left(\frac{A}{\lamb
 - Compare: the half-wave dipole sits at $73\ \Omega$.
 
 <div class="callout">
-The problem is not the match. The radiation resistance is smaller than the loss resistance of the wire itself.
+The problem is not the match. At $C = 0.1\lambda$, 20 mΩ radiates against 114 mΩ of copper: 85% of the power heats the wire.
 </div>
 
 Note:
