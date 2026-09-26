@@ -388,18 +388,31 @@ $I = \sqrt{2P/R_{\text{total}}} = 38.7\ \text{A}$ peak in that loop, of which
 are built from thick copper tubing with welded joints and a vacuum capacitor.
 ::::
 
-::::{frame} Why Receive Loops Are Everywhere Anyway
+::::{frame} Low Efficiency, Same SNR
 :::{present}
-- On receive you are not fighting efficiency, you are fighting **noise**.
-- At HF and below, atmospheric noise dominates, so a lossy antenna still delivers a sky-limited signal-to-noise ratio.
-- $N$ turns: $R_r$ goes as $N^2$, loss only as $N$.
+- Loss cuts the signal **and** the sky noise by the same factor.
+- SNR holds until the sky noise falls to the receiver's floor.
+- At 1 MHz the sky is ~70 dB above $kT_0$: 40 dB of loss costs almost nothing.
 :::
 
-Receiving is a different economy entirely, and a loop that is a poor
-transmitter can be a good receiving antenna. Wrap those turns on a ferrite rod
-and the effective permeability multiplies the moment again. The bar behind the
-dial of an AM radio is a many-turn ferrite loop; its efficiency is very low,
-and at broadcast frequencies that costs nothing that matters.
+A transmitter pays for every watt that heats the wire. A receiver pays only in
+signal-to-noise ratio, and below about 30 MHz most of the noise does not come
+from the receiver at all: atmospheric and man-made noise arrive through the
+antenna along with the signal, tens of dB above the thermal floor $kT_0B$.
+Antenna loss scales both by the same $\eta_{	ext{rad}}$, so the ratio does not
+move. Throw away 40 dB and a residential 1 MHz noise level still lands about
+30 dB above $kT_0$, 20 dB over a receiver with a 10 dB noise figure, and the
+SNR drops by a few hundredths of a dB. That is why a loop that is a poor transmitter can be a good
+receiving antenna. It stops working at VHF and above, where the sky is quiet
+and the receiver's own noise sets the floor.
+
+Receive loops still help themselves where they can. $N$ turns raise $R_r$ as
+$N^2$ and the loss only as $N$; wind them on a ferrite rod and the effective
+permeability multiplies the moment again. The bar behind the dial of an AM
+radio is a many-turn ferrite loop, very inefficient, and at broadcast
+frequencies that costs nothing that matters. A shielded loop also rejects
+local electric-field noise, which makes it the standard tool for sniffing
+out interference.
 ::::
 
 ::::{frame} Grow It to One Wavelength

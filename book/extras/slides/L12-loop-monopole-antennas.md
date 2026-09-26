@@ -294,12 +294,12 @@ The 38.7 A is the number to emphasize. Transmitting loops need copper tube, weld
 
 ---
 
-## Why receive loops are everywhere anyway
+## Low efficiency, same SNR
 
-- On receive you are fighting **external noise**, not efficiency — below VHF the sky is far noisier than the receiver.
-- A lossy antenna still delivers a sky-noise-limited signal-to-noise ratio.
-- $N$ turns: $R_r$ goes as $N^2$, loss only as $N$.
-- Wind those turns on a **ferrite rod** and the effective permeability multiplies the moment again.
+- Loss cuts the signal **and** the sky noise by the same factor.
+- SNR holds until the sky noise falls to the receiver's floor.
+- At 1 MHz the sky is ~70 dB above $kT_0$: 40 dB of loss costs almost nothing.
+- Help it anyway: $N$ turns raise $R_r$ as $N^2$, loss only as $N$; a **ferrite rod** multiplies the moment again.
 
 <div class="callout">
 The bar behind the dial of an AM radio is a many-turn ferrite loop. Its efficiency is very low, and at broadcast frequencies that costs nothing that matters.
