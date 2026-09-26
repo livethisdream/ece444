@@ -236,6 +236,15 @@ Directivity only describes the shape of what gets out. This is the first place
 in the course where the two quantities separate far enough to matter, and it
 is worth holding onto: a datasheet that quotes directivity where you expected
 gain is not necessarily lying, but it is not answering your question either.
+
+The collapse costs gain through efficiency. The wire's own loss
+$R_{\text{ohmic}}$ does not care about the image, but $R_r$ does: a half-wave
+dipole's $73\ \Omega$ falls to about $6\ \Omega$ at $0.05\lambda$ and about
+$1\ \Omega$ at $0.01\lambda$. With $R_{\text{ohmic}} = 1\ \Omega$,
+$\eta_{\text{rad}} = R_r/(R_r + R_{\text{ohmic}})$ drops from 99% in free space
+to 85% and then 50%, and since $G = \eta_{\text{rad}} D$ the gain falls with
+it. A tiny $R_r$ also means a large feed current for any real radiated power,
+and a match up to 50 Ω that adds loss of its own.
 ::::
 
 ::::{frame} Real Ground Is Not a Mirror
