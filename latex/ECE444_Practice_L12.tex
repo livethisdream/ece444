@@ -60,12 +60,12 @@ Take the thin-wire half-wave dipole as $73 + j42.5\ \ohms$.
 		\begin{solution}[1.4in]
 		(1) \emph{Trim the whip} to about $0.24\lambda$ (roughly 59 cm). Shortening it a few
 		percent tunes out the $+j21.3\ \ohms$ of reactance and leaves about $36\ \ohms$ real,
-		so VSWR drops to $50/36 = 1.39$. The reactance, not the resistance, is what costs most
+		so VSWR drops to $50/36 = 1.39$. The reactance, not the resistance, accounts for most
 		of the mismatch.
 		(2) \emph{Droop the radials} of the ground plane down about $45\mydeg$. Tilting the
 		radials raises the base resistance from roughly $36\ \ohms$ toward $50\ \ohms$, giving
 		VSWR near 1.0 with no added components. This is why commercial ground-plane antennas
-		have sagging radials.
+		have drooping radials.
 		\end{solution}
 
 \end{parts}
@@ -199,8 +199,8 @@ $R_{\text{ohmic}} = \lp C/2\pi b \rp R_s$ for a single turn.
 		\eq{ \lambda &= \frac{3\ee{8}}{14.2\ee{6}} = 21.1\ \m \\
 		     C &= 2\pi a = 1.885\ \m \\
 		     C/\lambda &= 0.0892 }
-		Below the $0.1\lambda$ rule of thumb, so the current is essentially uniform around
-		the loop and it behaves as a magnetic dipole.
+		This is below the $0.1\lambda$ rule of thumb, so the current is nearly uniform around
+		the loop and the loop behaves as a magnetic dipole.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -229,7 +229,7 @@ $R_{\text{ohmic}} = \lp C/2\pi b \rp R_s$ for a single turn.
 		     \eta_{\text{rad}} &= \frac{R_r}{R_r + R_{\text{ohmic}}} = \frac{0.0125}{0.1105} = 0.113 \\
 		     10\mylog{0.113} &= -9.5\db \\
 		     G &= 1.76 - 9.5 = -7.7\dbi }
-		The loop's own copper burns nearly eight times what it radiates.
+		The loop's copper dissipates nearly eight times the power it radiates.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -242,7 +242,7 @@ $R_{\text{ohmic}} = \lp C/2\pi b \rp R_s$ for a single turn.
 	\part The same loop is a respectable receiving antenna at 14.2 MHz but a poor
 	transmitting one. Explain the difference in one or two sentences.
 		\begin{solution}[1.1in]
-		On transmit, 89\% of your power heats the wire, and the tiny radiation resistance
+		On transmit, 89\% of the input power heats the wire, and the tiny radiation resistance
 		forces enormous circulating current. On receive, what matters is signal-to-noise, and
 		below VHF the external atmospheric noise picked up by the antenna dominates the
 		receiver's own noise -- attenuating signal and sky noise together by 9.5 dB leaves the
@@ -273,9 +273,9 @@ $R_{\text{ohmic}} = \lp C/2\pi b \rp R_s$ for a single turn.
 		\begin{solution}[1.1in]
 		The vertical dipole radiates $E_\theta$ -- vertical polarization. The horizontal loop
 		is a magnetic dipole pointing straight up; its field is $E_\phi$, which lies parallel
-		to the ground at the horizon, so it radiates horizontal polarization. Same donut
-		pattern, orthogonal polarizations: cross them and the polarization loss factor from
-		Lesson 3 takes the link apart.
+		to the ground at the horizon, so it radiates horizontal polarization. The two share
+		the same donut pattern but have orthogonal polarizations, so pairing one with the
+		other drives the polarization loss factor from Lesson 3 toward zero and the link fails.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -285,7 +285,7 @@ $R_{\text{ohmic}} = \lp C/2\pi b \rp R_s$ for a single turn.
 		\eq{ R_r &= 20^2 \lp 0.0125 \rp = 5.00\ \ohms \\
 		     R_{\text{ohmic}} &= 20 \lp 0.098 \rp = 1.96\ \ohms \\
 		     \eta_{\text{rad}} &= \frac{5.00}{6.96} = 0.718 }
-		71.8\%, a loss of only $1.4\db$: gain $= 1.76 - 1.4 = 0.4\dbi$.
+		The efficiency is 71.8\%, a loss of only $1.4\db$, so the gain is $1.76 - 1.4 = 0.4\dbi$.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -301,7 +301,7 @@ $R_{\text{ohmic}} = \lp C/2\pi b \rp R_s$ for a single turn.
 		short of the ideal number. (2) Adding turns adds inductance and stored energy without
 		making the antenna electrically bigger, so the Q climbs and the usable bandwidth
 		shrinks -- and the tuning capacitor sees kilovolts. A resonant loop with
-		$C \approx 1\lambda$ solves all of it: about $100$ to $130\ \ohms$ of real,
+		$C \approx 1\lambda$ avoids both problems: about $100$ to $130\ \ohms$ of real,
 		radiating impedance and roughly 3.1 dBi, with its maximum along the axis instead of
 		in the plane.
 		\end{solution}
@@ -310,7 +310,7 @@ $R_{\text{ohmic}} = \lp C/2\pi b \rp R_s$ for a single turn.
 
 \newpage
 
-\question \textbf{The price of being small.} Stay with the single-turn loop of radius
+\question \textbf{The bandwidth of a small loop.} Stay with the single-turn loop of radius
 $a = 0.30\ \m$ at $14.2\ \mhz$ ($\eta_{\text{rad}} = 0.113$). The Chu limit from Lesson 3 gives the
 radiation quality factor of any antenna that fits inside a sphere of radius $a$ as
 $Q \gtrsim 1/(ka)^3 + 1/(ka)$. Lesson 3's fractional bandwidth is roughly $1/Q$ at
@@ -350,7 +350,7 @@ the half-power points, or $0.71/Q$ at the course's VSWR $\le 2$ bar.
 		roughly in proportion to the efficiency, $Q_{\text{loaded}} \approx \eta_{\text{rad}} Q \approx
 		0.113(1420) \approx 160$, which widens the band to $0.71/160 = 0.44\%$, or 63 kHz --
 		nearly nine times the Chu estimate. It is
-		not good news: the extra bandwidth is bought by dissipating power in copper. A
+		not good news: the extra bandwidth comes from dissipating power in copper. A
 		$50\ \ohms$ resistor is matched at every frequency and radiates nothing at all.
 		\end{solution}
 
