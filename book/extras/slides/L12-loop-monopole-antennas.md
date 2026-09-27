@@ -20,44 +20,44 @@ Fall 2026 · Dr. Neil Rogers
 
 ---
 
-## Where we were
+## Where We Were
 
 - **L7:** the half-wave dipole, $73 + j42.5\ \Omega$, 2.15 dBi, HPBW $78^\circ$.
-- **L8:** you built one in the simulator and watched those numbers appear.
-- **L9–L11:** you learned to *check* an antenna — match, pattern, gain, and how much to believe.
-- **L3:** small antennas pay for their size in bandwidth.
+- **L8:** we modeled one in the simulator and reproduced those numbers.
+- **L9–L11:** we measured an antenna's match, pattern, and gain.
+- **L3:** a smaller antenna has a narrower bandwidth.
 
-**Today: a mirror turns a dipole into a monopole, and a ring of current turns it into its magnetic twin.**
+Today, image theory turns a dipole into a monopole, and a small loop of current behaves as the dipole's magnetic dual.
 
 Note:
 Anchor everything on the dipole numbers from L7 — today is two variations on an antenna they already own. Ask what happens to a dipole if you saw it in half. Worth saying explicitly: from here on every impedance and gain figure is a claim they know how to test, and several of today's antennas are defensible midterm choices.
 
 ---
 
-## Today's plan
+## Today's Plan
 
 1. Image theory — the sign rule for a current over a conductor.
 2. The quarter-wave monopole: half the impedance, twice the directivity.
-3. What real ground does, and the hardware that fakes a ground plane.
+3. What real ground does, and the counterpoises that substitute for a ground plane.
 4. The electrically small loop as a magnetic dipole.
-5. The resonant loop, and why small costs bandwidth.
+5. The resonant loop, and the size-bandwidth limit.
 
 Note:
 Tell them parts 1-2 are the exam material and part 3 is what they will meet in the field.
 
 ---
 
-## A boundary condition you do not want to solve
+## Image Theory
 
-An antenna over a large perfect conductor: tangential $E$ must be zero everywhere on the plane.
+For an antenna over a large perfect conductor, tangential $E$ must be zero everywhere on the plane.
 
 **Image theory:** delete the conductor. Add a mirror source below the plane with the sign that cancels tangential $E$ where the plane used to be.
 
-- Same boundary condition satisfied, so **above the plane the fields are identical**.
-- Below the plane the answer is fiction — and there was no field down there anyway.
+- The same boundary condition is satisfied, so above the plane the fields are identical.
+- Below the plane the image solution has no physical meaning, and the true field there is zero.
 
 <div class="callout">
-The problem becomes two sources in free space with no conductor, and you already know how to add two sources.
+The problem becomes two sources in free space with no conductor, and we already know how to add two sources.
 </div>
 
 Note:
@@ -65,18 +65,18 @@ Emphasize uniqueness: satisfy the boundary condition any way you like and you ha
 
 ---
 
-## The sign rule
+## The Sign Rule
 
 <div class="fig" data-inline-svg="./fig/L12-image-theory.svg" style="max-width:760px; margin:0 auto;"></div>
 
-**Vertical (normal) currents image in phase. Horizontal (tangential) currents image reversed.**
+Vertical (normal) currents image in phase. Horizontal (tangential) currents image reversed.
 
 Note:
-Make them say it back. Then the consequence: a vertical antenna works sitting on the ground, a horizontal wire on the ground is a dummy load. Field-expedient antennas live or die on this slide.
+Make them say it back. Then the consequence: a vertical antenna works sitting on the ground, a horizontal wire on the ground is a dummy load. Field-expedient antennas depend on this slide.
 
 ---
 
-## Element plus image = a two-element array
+## Element and Image as a Two-Element Array
 
 The image sits at $-h$: the two paths differ by $2kh\cos\theta$. That is L6 pattern multiplication, with a free second element.
 
@@ -84,7 +84,7 @@ $$\vert F(\theta)\vert = \vert f_{\text{el}}(\theta)\vert \times 2\left\vert \co
 
 $$\vert F(\theta)\vert = \vert f_{\text{el}}(\theta)\vert \times 2\left\vert \sin(kh\cos\theta)\right\vert \quad \text{horizontal}$$
 
-At the horizon $\cos\theta = 0$: vertical gives 2, horizontal gives 0.
+At the horizon, where $\cos\theta = 0$, the vertical factor is 2 and the horizontal factor is 0.
 
 <div class="callout">
 Perfect ground puts a <strong>null on the horizon</strong> for horizontal polarization, at every height.
@@ -95,7 +95,7 @@ Only the upper hemisphere means anything. Point out that height cannot remove th
 
 ---
 
-## Height is the whole design variable
+## Height Above Ground
 
 | $h/\lambda$ | Vertical: $D$ | Vertical: radiated power | Horizontal: $D$ | Horizontal: radiated power |
 | :-- | :-- | :-- | :-- | :-- |
@@ -113,28 +113,28 @@ Demo live: vertical at h = 0.01 reads D = 3.28, peak on the horizon — that is 
 
 ---
 
-## Cut a dipole in half
+## The Quarter-Wave Monopole
 
 <div class="fig" data-inline-svg="./fig/L12-monopole-image.svg" style="max-width:760px; margin:0 auto;"></div>
 
 Keep the top half, drive it against the plane, and the image restores the bottom half.
 
 Note:
-The current distribution on the remaining metal is unchanged. Above the plane it is literally the same antenna.
+The current distribution on the remaining metal is unchanged. Above the plane it is the same antenna.
 
 ---
 
-## Impedance halves
+## Monopole Impedance
 
-Same feed current as the dipole. Half the structure, so half the voltage.
+The feed current matches the dipole's, but the structure is half as long, so the feed voltage is half.
 
 $$Z_{\text{in}}^{\text{mono}} = \tfrac{1}{2} Z_{\text{in}}^{\text{dip}} = \tfrac{1}{2}(73 + j42.5) = 36.5 + j21.3\ \Omega$$
 
-- Trim to resonance at $\approx 0.24\lambda$ and you get $\approx 36\ \Omega$ real.
-- Against $50\ \Omega$ that is VSWR 1.4 with no matching network at all.
+- Trimmed to resonance at $\approx 0.24\lambda$, the monopole is $\approx 36\ \Omega$ and purely real.
+- Against $50\ \Omega$ that is VSWR 1.4 with no matching network.
 
 <div class="callout">
-A monopole is the rare antenna that is <em>almost</em> matched to 50 &Omega; out of the box.
+A trimmed monopole is close to a 50 &Omega; match without a matching network.
 </div>
 
 Note:
@@ -142,14 +142,14 @@ Ask why the current is the same but the voltage is halved — the feed point onl
 
 ---
 
-## Directivity doubles
+## Monopole Directivity
 
-Same pattern shape, same peak intensity, but **no power goes downward** — so the same beam is packed into half the solid angle.
+The pattern shape and peak intensity are the dipole's, but no power goes downward, so the same beam fills half the solid angle.
 
 $$D_{\text{mono}} = 2 D_{\text{dip}} = 2(1.64) = 3.28 \quad \rightarrow \quad 5.15\ \text{dBi}$$
 
-- Elevation beam: the upper half of the dipole's $78^\circ$ beam.
-- Peak on the horizon, null straight up.
+- The elevation beam is the upper half of the dipole's $78^\circ$ beam.
+- The peak is on the horizon and the null is straight up.
 
 <div class="callout">
 No power is created. The same beam fills half the sphere, so its peak is twice the average.
@@ -160,7 +160,7 @@ Watch for the student who thinks the monopole radiates more total power. It radi
 
 ---
 
-## Dipole vs monopole
+## Dipole Versus Monopole
 
 | Quantity | Half-wave dipole | Quarter-wave monopole |
 | :-- | :-- | :-- |
@@ -175,7 +175,7 @@ This table is worth memorizing. Every number on the right is the left column div
 
 ---
 
-## Worked example — a 146 MHz whip
+## Worked Example: A 146 MHz Whip
 
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
@@ -186,18 +186,18 @@ This table is worth memorizing. Every number on the right is the left column div
 | Trimmed to $0.24\lambda$ | $50/36$ | VSWR $1.39$ |
 
 Note:
-Have them do the trim line themselves. Point out the reactance is what costs the match, not the resistance.
+Have them do the trim line themselves. Point out that the reactance, not the resistance, is what limits the match.
 
 ---
 
-## Making 36 ohms into 50 ohms
+## Matching the Monopole to 50 Ω
 
-- **Trim** the whip a few percent short — kills the $+j21.3\ \Omega$, leaves $\approx 36\ \Omega$ real.
-- **Droop the radials** about $45^\circ$ — raises the base impedance to roughly $50\ \Omega$.
-- Result: VSWR near 1.0 with zero added parts.
+- **Trimming** the whip a few percent short removes the $+j21.3\ \Omega$ and leaves $\approx 36\ \Omega$.
+- **Drooping the radials** about $45^\circ$ raises the base impedance to roughly $50\ \Omega$.
+- Together they give a VSWR near 1.0 with no added parts.
 
 <div class="callout">
-The sagging radials on a commercial ground-plane antenna are a matching network, not a manufacturing defect.
+The drooping radials on a commercial ground-plane antenna are its matching network.
 </div>
 
 Note:
@@ -205,22 +205,24 @@ Drooping radials also lift the pattern slightly. The impedance effect is the rea
 
 ---
 
-## Real ground is not a mirror
+## Real Ground
 
 <div class="fig" data-inline-svg="./fig/L12-ground-systems.svg" style="max-width:770px; margin:0 auto;"></div>
 
-Return current in dirt is loss in series with your feed: $\eta_{\text{rad}} = R_r/(R_r + R_g + R_{\text{ohmic}})$.
+Return current in the soil adds loss in series with the feed:
+
+$$\eta_{\text{rad}} = \frac{R_r}{R_r + R_g + R_{\text{ohmic}}}$$
 
 Note:
 120 buried quarter-wave radials is the FCC standard for AM broadcast. The radials do not radiate — they replace lossy soil with copper for the return current.
 
 ---
 
-## Three ways real ground bites
+## Effects of Real Ground
 
-1. **Loss resistance** in series with $R_r$ — brutal when $R_r$ is small, since a short whip may only have a few ohms.
-2. **Low-angle pattern damage** — real earth cannot support the grazing field, so the horizon lobe is eaten and the peak lifts a few degrees.
-3. **Finite planes** — a car roof is many wavelengths at 800 MHz and a hundredth of a wavelength at 30 MHz. Same roof, different antenna.
+1. **Loss resistance** in series with $R_r$ is significant when $R_r$ is small, since a short whip may have only a few ohms.
+2. **Low-angle pattern loss**: real earth cannot support the grazing field, so the horizon lobe is lost and the peak rises a few degrees.
+3. **Finite planes**: a car roof is several wavelengths across at 800 MHz but only about $0.15\lambda$ at 30 MHz, so the same roof is a very different ground.
 
 <div class="callout">
 With no ground plane available, build a <strong>counterpoise</strong>: drooped radials, a ground pour, a GPS ground disc, or, on a handheld, the case, the board, and your hand.
@@ -231,7 +233,7 @@ Handheld radios are tested against a phantom hand, because grip changes both imp
 
 ---
 
-## Same radome, three antennas
+## Same Radome, Three Antennas
 
 <div class="fig" data-inline-svg="./fig/L12-radome-lookalikes.svg" style="max-width:560px; margin:0 auto;"></div>
 
@@ -243,7 +245,7 @@ On a fiberglass mast a monopole's return current runs on the coax shield: the fe
 
 ---
 
-## The small loop: uniform current
+## The Small Loop
 
 <div class="fig" data-inline-svg="./fig/L12-loop-dipole-duality.svg" style="max-width:760px; margin:0 auto;"></div>
 
@@ -254,7 +256,7 @@ Uniform current is the defining assumption. It is what makes the loop a pure mag
 
 ---
 
-## The dual of the short dipole
+## Duality with the Short Dipole
 
 | | Short dipole | Small loop |
 | :-- | :-- | :-- |
@@ -264,23 +266,23 @@ Uniform current is the defining assumption. It is what makes the loop a pure mag
 | Directivity | 1.5 (1.76 dBi) | 1.5 (1.76 dBi) |
 | Null | along the wire | along the loop axis |
 
-**Same donut. Orthogonal polarization. Maximum in the plane of the loop.**
+The pattern is the same donut with orthogonal polarization, and the maximum is in the plane of the loop.
 
 Note:
 Most students expect the loop to radiate out of the hole. It does the opposite. This is the basis of direction finding: rotate for the null, because nulls are sharp and peaks are broad.
 
 ---
 
-## The fourth-power penalty on circumference
+## The Fourth-Power Penalty
 
 $$R_r = 20\pi^2 \left(\frac{C}{\lambda}\right)^4 = 320\pi^4 \left(\frac{A}{\lambda^2}\right)^2 \ \Omega$$
 
-- At $C = 0.1\lambda$: $R_r = 0.0197\ \Omega$. Twenty milliohms.
+- At $C = 0.1\lambda$, $R_r = 0.0197\ \Omega$, or about 20 mΩ.
 - Halve the loop and $R_r$ drops by a factor of **16**.
-- Compare: the half-wave dipole sits at $73\ \Omega$.
+- The half-wave dipole, for comparison, is $73\ \Omega$.
 
 <div class="callout">
-The problem is not the match. At $C = 0.1\lambda$, 20 mΩ radiates against 114 mΩ of copper: 85% of the power heats the wire.
+The problem is not the match. At $C = 0.1\lambda$, 20 mΩ of radiation resistance against 114 mΩ of copper loss sends 85% of the power into heat.
 </div>
 
 Note:
@@ -288,9 +290,9 @@ Have them compute Rr for C = 0.05 lambda in their heads: divide by 16, about 1.2
 
 ---
 
-## Worked example — a 30 MHz loop
+## Worked Example: A 30 MHz Loop
 
-Single turn, $C = 0.1\lambda$ at 30 MHz, 4 mm copper wire.
+The loop is a single turn of 4 mm copper wire with $C = 0.1\lambda$ at 30 MHz.
 
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
@@ -299,30 +301,30 @@ Single turn, $C = 0.1\lambda$ at 30 MHz, 4 mm copper wire.
 | Efficiency | $0.0197/(0.0197+0.114)$ | $14.8\%$, i.e. $-8.3$ dB |
 | Gain | $1.76 - 8.3$ | $-6.5\ \text{dBi}$ |
 
-For 100 W delivered you need 38.7 A peak — and 85 W of it heats the wire.
+Delivering 100 W takes 38.7 A peak, and 85 W of it heats the wire.
 
 Note:
 The 38.7 A is the number to emphasize. Transmitting loops need copper tube, welded joints and a vacuum capacitor for exactly this reason.
 
 ---
 
-## Low efficiency, same SNR
+## Low Efficiency, Same SNR
 
 - Loss cuts the signal **and** the sky noise by the same factor.
 - SNR holds until the sky noise falls to the receiver's floor.
-- At 1 MHz the sky is ~70 dB above $kT_0$: 40 dB of loss costs almost nothing.
-- Help it anyway: $N$ turns raise $R_r$ as $N^2$, loss only as $N$; a **ferrite rod** multiplies the moment again.
+- At 1 MHz, sky noise is 70 dB above $kT_0$; 40 dB of loss barely changes SNR.
+- Designs still raise the output: $N$ turns raise $R_r$ as $N^2$ and loss only as $N$, and a **ferrite rod** multiplies the moment again.
 
 <div class="callout">
-The bar behind the dial of an AM radio is a many-turn ferrite loop. Its efficiency is very low, and at broadcast frequencies that costs nothing that matters.
+The bar behind the dial of an AM radio is a many-turn ferrite loop. Its efficiency is very low, and at broadcast frequencies that loss does not reduce the SNR.
 </div>
 
 Note:
-Also mention loops reject local electric-field noise — a shielded loop is the standard tool for sniffing out interference.
+Also mention loops reject local electric-field noise — a shielded loop is the standard tool for locating interference.
 
 ---
 
-## Grow it to one wavelength
+## The Resonant Loop
 
 | | Small loop | Resonant loop |
 | :-- | :-- | :-- |
@@ -332,32 +334,32 @@ Also mention loops reject local electric-field noise — a shielded loop is the 
 | $R_{\text{in}}$ | milliohms | $100$ to $130\ \Omega$ |
 | Use | receive, direction finding | transmit element (quad) |
 
-**The pattern maximum moves to where the small loop had its null.**
+The pattern maximum moves to where the small loop had its null.
 
 Note:
 The quad element is exactly this. Directivity about 3.1 dBi, a bit under 1 dB over a dipole, and a clean 100-ohm-ish feed.
 
 ---
 
-## Small costs bandwidth — again
+## Small Antennas and the Chu Limit
 
 An antenna inside a sphere of radius $a$ stores far more near-field energy than it radiates each cycle. The Chu limit from L3:
 
 $$Q \gtrsim \frac{1}{(ka)^3} \qquad \text{fractional bandwidth} \approx \frac{1}{Q}$$
 
 - The 30 MHz loop: $ka = 0.1$, so $Q \approx 10^3$ and the match holds over roughly $0.1\%$ — about 30 kHz.
-- Retune every time you move across the band.
+- A magnetic loop must be retuned whenever the frequency moves across the band.
 
 Note:
 One sentence of theory, no derivation — they saw the Chu curve in L3. Make the closing point explicitly: loss is the only thing that broadens a small antenna, and it does so by dissipating the power you meant to radiate.
 
 ---
 
-## Key point
+## Key Points
 
 <div class="callout">
-<p>A monopole is a dipole plus a mirror: <strong>half the impedance, twice the directivity, one hemisphere</strong>.</p>
-<p>A small loop is a dipole with the fields swapped: same donut, orthogonal polarization, and a radiation resistance that dies as the <strong>fourth power</strong> of its circumference.</p>
+<p>A monopole is a dipole plus its image, with half the impedance, twice the directivity, and one hemisphere of coverage.</p>
+<p>A small loop is a dipole with the fields exchanged: the same donut, orthogonal polarization, and a radiation resistance that falls as the <strong>fourth power</strong> of its circumference.</p>
 </div>
 
 Note:
@@ -365,14 +367,14 @@ If they remember one slide, this is it. Both antennas are the dipole they alread
 
 ---
 
-## Where this is going
+## Where This Is Going
 
-- **L13:** patch, slot, and horn — the radiator becomes a surface or an opening. The patch is two slots over a ground plane, so you will use image theory again on day one.
+- **L13:** patch, slot, and horn — the radiator becomes a surface or an opening. The patch is two slots over a ground plane, so image theory applies there too.
 - **Module 3:** a monopole is an element plus one image; an array is an element plus many neighbors. Same element-factor-times-array-factor bookkeeping.
 - **L16:** when we do pattern multiplication properly, remember that today's height-above-ground curve was already a two-element array.
 
 <div class="callout">
-You now own the whole wire-antenna toolkit. Everything after this is aperture, array, or both.
+The wire antennas are now complete; the rest of the course covers apertures, arrays, or both.
 </div>
 
 Note:
