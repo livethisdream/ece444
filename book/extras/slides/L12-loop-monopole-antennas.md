@@ -152,7 +152,7 @@ $$D_{\text{mono}} = 2 D_{\text{dip}} = 2(1.64) = 3.28 \quad \rightarrow \quad 5.
 - Peak on the horizon, null straight up.
 
 <div class="callout">
-The 3 dB is free in the same sense a mirror gives you free light: nothing was created, the power simply stopped going the wrong way.
+No power is created. The same beam fills half the sphere, so its peak is twice the average.
 </div>
 
 Note:
@@ -268,7 +268,7 @@ $$R_r = 20\pi^2 \left(\frac{C}{\lambda}\right)^4 = 320\pi^4 \left(\frac{A}{\lamb
 - Compare: the half-wave dipole sits at $73\ \Omega$.
 
 <div class="callout">
-The problem is not the match. The radiation resistance is smaller than the loss resistance of the wire itself.
+The problem is not the match. At $C = 0.1\lambda$, 20 mΩ radiates against 114 mΩ of copper: 85% of the power heats the wire.
 </div>
 
 Note:
@@ -294,12 +294,12 @@ The 38.7 A is the number to emphasize. Transmitting loops need copper tube, weld
 
 ---
 
-## Why receive loops are everywhere anyway
+## Low efficiency, same SNR
 
-- On receive you are fighting **external noise**, not efficiency — below VHF the sky is far noisier than the receiver.
-- A lossy antenna still delivers a sky-noise-limited signal-to-noise ratio.
-- $N$ turns: $R_r$ goes as $N^2$, loss only as $N$.
-- Wind those turns on a **ferrite rod** and the effective permeability multiplies the moment again.
+- Loss cuts the signal **and** the sky noise by the same factor.
+- SNR holds until the sky noise falls to the receiver's floor.
+- At 1 MHz the sky is ~70 dB above $kT_0$: 40 dB of loss costs almost nothing.
+- Help it anyway: $N$ turns raise $R_r$ as $N^2$, loss only as $N$; a **ferrite rod** multiplies the moment again.
 
 <div class="callout">
 The bar behind the dial of an AM radio is a many-turn ferrite loop. Its efficiency is very low, and at broadcast frequencies that costs nothing that matters.

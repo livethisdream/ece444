@@ -151,8 +151,8 @@ D_{\text{mono}} &= 2(1.64) = 3.28 \ \rightarrow\ 5.15\ \text{dBi}
 :::
 :::{present}
 :class: callout
-The 3 dB is free the way a mirror gives free light. The power that went down
-now goes sideways.
+No power is created. The same beam fills half the sphere, so its peak is
+twice the average.
 :::
 ::::
 
@@ -236,6 +236,15 @@ Directivity only describes the shape of what gets out. This is the first place
 in the course where the two quantities separate far enough to matter, and it
 is worth holding onto: a datasheet that quotes directivity where you expected
 gain is not necessarily lying, but it is not answering your question either.
+
+The collapse costs gain through efficiency. The wire's own loss
+$R_{\text{ohmic}}$ does not care about the image, but $R_r$ does: a half-wave
+dipole's $73\ \Omega$ falls to about $6\ \Omega$ at $0.05\lambda$ and about
+$1\ \Omega$ at $0.01\lambda$. With $R_{\text{ohmic}} = 1\ \Omega$,
+$\eta_{\text{rad}} = R_r/(R_r + R_{\text{ohmic}})$ drops from 99% in free space
+to 85% and then 50%, and since $G = \eta_{\text{rad}} D$ the gain falls with
+it. A tiny $R_r$ also means a large feed current for any real radiated power,
+and a match up to 50 Ω that adds loss of its own.
 ::::
 
 ::::{frame} Real Ground Is Not a Mirror
@@ -338,13 +347,20 @@ depth the hardest number on that lab to defend.
 :::{present}
 $$R_r = 20\pi^2 \left(\frac{C}{\lambda}\right)^4 = 320\pi^4 \left(\frac{A}{\lambda^2}\right)^2 \ \Omega$$
 
-- Both forms punish small size severely.
-- **Halve the loop and $R_r$ drops by a factor of 16.**
+- Only $R_r$ radiates. The wire's $R_{\text{ohmic}}$ is in series and just heats.
+- Halve the loop: $R_r$ drops **16×**, the wire's loss only 2×.
+- At $C = 0.1\lambda$: 20 mΩ against 114 mΩ, **15% efficient**.
 :::
 
-The exponent is the whole point. A single-turn loop at $C = 0.1\lambda$ has a
-radiation resistance of about 20 milliohms — roughly the resistance of a short
-piece of the wire it is made from, which is exactly the problem.
+This is why we keep computing radiation resistance. The feed sees
+$R_r + R_{\text{ohmic}}$ in series, the same current flows through both, and
+the input power splits between them in proportion — the same
+$\eta_{\text{rad}} = R_r/(R_r + R_{\text{ohmic}})$ that decided the ground
+systems. A small loop's $R_r$ goes as $C^4$, but its loss only as $C$ for a
+given wire, so once the loop is small its efficiency falls roughly as $C^3$:
+halve a $0.1\lambda$ loop and you lose another 8.5 dB. At $C = 0.1\lambda$ the
+radiation resistance is already smaller than the loss of the copper the loop
+is made from, which is exactly the problem the next frame works through.
 ::::
 
 ::::{frame} Worked Example — a 30 MHz Loop
@@ -372,18 +388,31 @@ $I = \sqrt{2P/R_{\text{total}}} = 38.7\ \text{A}$ peak in that loop, of which
 are built from thick copper tubing with welded joints and a vacuum capacitor.
 ::::
 
-::::{frame} Why Receive Loops Are Everywhere Anyway
+::::{frame} Low Efficiency, Same SNR
 :::{present}
-- On receive you are not fighting efficiency, you are fighting **noise**.
-- At HF and below, atmospheric noise dominates, so a lossy antenna still delivers a sky-limited signal-to-noise ratio.
-- $N$ turns: $R_r$ goes as $N^2$, loss only as $N$.
+- Loss cuts the signal **and** the sky noise by the same factor.
+- SNR holds until the sky noise falls to the receiver's floor.
+- At 1 MHz the sky is ~70 dB above $kT_0$: 40 dB of loss costs almost nothing.
 :::
 
-Receiving is a different economy entirely, and a loop that is a poor
-transmitter can be a good receiving antenna. Wrap those turns on a ferrite rod
-and the effective permeability multiplies the moment again. The bar behind the
-dial of an AM radio is a many-turn ferrite loop; its efficiency is very low,
-and at broadcast frequencies that costs nothing that matters.
+A transmitter pays for every watt that heats the wire. A receiver pays only in
+signal-to-noise ratio, and below about 30 MHz most of the noise does not come
+from the receiver at all: atmospheric and man-made noise arrive through the
+antenna along with the signal, tens of dB above the thermal floor $kT_0B$.
+Antenna loss scales both by the same $\eta_{	ext{rad}}$, so the ratio does not
+move. Throw away 40 dB and a residential 1 MHz noise level still lands about
+30 dB above $kT_0$, 20 dB over a receiver with a 10 dB noise figure, and the
+SNR drops by a few hundredths of a dB. That is why a loop that is a poor transmitter can be a good
+receiving antenna. It stops working at VHF and above, where the sky is quiet
+and the receiver's own noise sets the floor.
+
+Receive loops still help themselves where they can. $N$ turns raise $R_r$ as
+$N^2$ and the loss only as $N$; wind them on a ferrite rod and the effective
+permeability multiplies the moment again. The bar behind the dial of an AM
+radio is a many-turn ferrite loop, very inefficient, and at broadcast
+frequencies that costs nothing that matters. A shielded loop also rejects
+local electric-field noise, which makes it the standard tool for sniffing
+out interference.
 ::::
 
 ::::{frame} Grow It to One Wavelength
