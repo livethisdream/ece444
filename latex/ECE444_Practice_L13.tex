@@ -113,7 +113,7 @@ $h = 0.813\ \text{mm}$, $\varepsilon_r = 3.55$).
 		\text{BW} &\approx 3.77\lp\frac{2.55}{12.60}\rp(0.00949)\lp\frac{28.41}{22.55}\rp \\
 		&= 3.77(0.2023)(0.00949)(1.260) = 0.0091
 		}
-		About $0.9\%$ --- roughly $32\ \text{MHz}$ of usable band.
+		The bandwidth is about $0.9\%$, or roughly $32\ \text{MHz}$.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -141,14 +141,14 @@ $h = 0.813\ \text{mm}$, $\varepsilon_r = 3.55$).
 		area $\div$ \ansbox[1.2in]{$2.6$}
 	\end{minipage}
 
-	\part Read the bandwidth formula: which single substrate parameter would you change to
-	\emph{buy} bandwidth without changing $\varepsilon_r$, and name one penalty that comes with it.
+	\part From the bandwidth formula, which single substrate parameter would you change to
+	increase the bandwidth without changing $\varepsilon_r$? Name one drawback of that change.
 		\begin{solution}[1.1in]
 		Increase the thickness $h$: bandwidth is directly proportional to $h/\lambda_0$. The penalties
 		are surface waves (power trapped in the substrate instead of radiated, so efficiency and
 		pattern quality drop), a larger probe or feed inductance that is harder to match, and a
-		thicker, heavier board. Above about $h = 0.05\lambda_0$ the closed forms above stop being
-		trustworthy at all.
+		thicker, heavier board. Above about $h = 0.05\lambda_0$ the closed forms above are no longer
+		accurate.
 		\end{solution}
 
 	\part You are given $8\ \text{mm} \times 8\ \text{mm}$ of board area for a $3.5\ \ghz$ element
@@ -158,9 +158,9 @@ $h = 0.813\ \text{mm}$, $\varepsilon_r = 3.55$).
 		No. Even the low-$\varepsilon_r$ option is far larger than $8\ \text{mm}$, and the only
 		substrate that fits the footprint ($\varepsilon_r = 10.2$, at $18\times13\ \text{mm}$) is still
 		too big \emph{and} delivers $0.43\%$, not $2\%$. Shrinking with permittivity and widening the
-		bandwidth pull in opposite directions on this element. Tell the lead the requirement needs a
-		different answer: a much thicker substrate, a stacked or aperture-coupled patch, or a
-		different element entirely --- not a tweak to this one.
+		bandwidth pull in opposite directions on this element. The systems lead should hear that the requirement
+		needs a different design: a much thicker substrate, a stacked or aperture-coupled patch, or a
+		different element entirely. Adjusting this design will not meet it.
 		\end{solution}
 
 \end{parts}
@@ -301,12 +301,12 @@ $\eta_{\text{ap}} = 0.5$ unless told otherwise.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{Mechanism and selection.} Answer in words. Full sentences.
+\question \textbf{Mechanism and selection.} Answer each part in complete sentences.
 
 \begin{parts}
 
 	\part A patch is mostly a flat sheet of copper over a ground plane, and a sheet of copper is
-	a terrible radiator. Explain what actually radiates, and why the two contributions add rather
+	a poor radiator. Explain what radiates, and why the two contributions add rather
 	than cancel in the broadside direction.
 		\begin{solution}[1.4in]
 		The cavity between the patch and the ground plane holds a half-wave standing wave, so the
@@ -335,10 +335,10 @@ $\eta_{\text{ap}} = 0.5$ unless told otherwise.
 	phased array for a $10\ \ghz$ radar demonstrator.
 		\begin{solution}[1.4in]
 		\textbf{(i)} Horn --- built to the optimum design and calibrated, so its gain is known to a
-		few tenths of a dB, which is exactly what a reference must be.
+		few tenths of a dB, which is the property a reference requires.
 		\textbf{(ii)} Slot --- it is flush with the skin, so it survives the aerodynamic and thermal
 		environment; cavity-backing makes it radiate outward only.
-		\textbf{(iii)} Patch --- planar, light, cheap, and reproducible, so hundreds of identical
+		\textbf{(iii)} Patch --- planar, light, inexpensive, and reproducible, so hundreds of identical
 		elements and their feed network etch in the same step.
 		\end{solution}
 
@@ -349,8 +349,8 @@ $\eta_{\text{ap}} = 0.5$ unless told otherwise.
 		magnitude beyond a plain element --- and thinning the requirement is not an option if the
 		waveform needs the band. Concrete fixes: go to a thick, low-$\varepsilon_r$ substrate;
 		stack a parasitic patch above the driven one; or feed through an aperture-coupled slot,
-		which adds a second resonance and typically buys $10$ to $20\%$. Each costs board
-		thickness, layers, or both; the bandwidth has to come from somewhere.
+		which adds a second resonance and typically reaches $10$ to $20\%$. Each fix adds board
+		thickness, layers, or both.
 		\end{solution}
 
 \end{parts}

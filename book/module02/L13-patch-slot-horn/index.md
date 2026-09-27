@@ -39,17 +39,17 @@ Lesson 13 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 
 :::{depth}
-Every antenna so far has been a wire. Lesson 7 gave you the resonant dipole,
-Lesson 12 bent it into a loop and grounded it into a monopole, and in all of
-it the current lived on a thin conductor you could point at. Today the antenna
-becomes a **surface**, a **hole**, and an **opening**. All three are things
-you can build into an airframe or bolt to a waveguide, and all three are read
-the same way: name the field in the aperture, and the pattern follows. That is
-the equivalence principle from Lesson 6, put to work.
+Every antenna so far has been a wire. Lesson 7 developed the resonant dipole,
+and Lesson 12 bent it into a loop and grounded it into a monopole; in each case
+the current flowed on a thin conductor. Today the antenna becomes a
+**surface**, a **hole**, and an **opening**. All three can be built into an
+airframe or bolted to a waveguide, and we analyze all three the same way: once
+we know the field in the aperture, the equivalence principle of Lesson 6 gives
+the pattern.
 
-One of the three you have already met on the bench. The standard-gain horn you
-compared against in Lesson 11 is the last antenna in this lesson, and by the
-end of the hour you will know why it was the thing worth trusting.
+We have already used one of the three on the bench. The standard-gain horn
+that served as the gain reference in Lesson 11 is the last antenna in this
+lesson, and we will see why its gain is known to a few tenths of a dB.
 :::
 ::::
 
@@ -57,14 +57,14 @@ end of the hour you will know why it was the thing worth trusting.
 :::{present}
 $$L \approx \frac{\lambda_d}{2}, \qquad \lambda_d = \frac{\lambda_0}{\sqrt{\varepsilon_{\text{eff}}}}$$
 
-- Copper rectangle $W \times L$ over a ground plane, one etch step.
-- Patch and ground are a cavity with two open ends.
-- **The edges are the antenna.** The flat top is a transmission line.
+- A $W \times L$ copper rectangle sits over a ground plane, made in one etch step.
+- The patch and the ground form a cavity with two open ends.
+- The edges are the antenna. The flat top is a transmission line.
 :::
 
 A **microstrip patch** sits on a substrate of thickness $h$ and relative
-permittivity $\varepsilon_r$, and it costs one etch step — which is most of
-the reason it is everywhere. Drive it and a half-wave standing wave sets up
+permittivity $\varepsilon_r$. It takes one etch step to make, which is the
+main reason it is so common. When we drive it, a half-wave standing wave forms
 between the two open edges, so it resonates when its length is about half a
 wavelength *in the dielectric*. The flat top of the patch is a poor radiator,
 because a sheet of metal a fraction of a wavelength above a ground plane is a
@@ -78,9 +78,9 @@ A patch radiates from **two slots**: the fringing fields at its open edges,
 driven in phase.
 :::
 :::{present}
-- Equal path length to broadside, so the beam is **always** broadside.
-- A broad hemisphere, back half suppressed.
-- **5 to 8 dBi** — remember 6.
+- Equal path lengths keep the beam broadside.
+- The ground plane suppresses the back hemisphere.
+- Directivity is 5 to 8 dBi, typically 6.
 :::
 
 Inside the cavity the electric field runs from patch to ground, and because it
@@ -92,23 +92,23 @@ while the horizontal parts point the same way and add.
 
 The two-slot model accounts for both the shape of the pattern and its
 direction. The H-plane beamwidth lands near $80^\circ$ and the E-plane stays
-broad, because two slots a third of a free-space wavelength apart cannot form
-a narrow beam.
+broad, because two slots about a quarter of a free-space wavelength apart
+cannot form a narrow beam.
 ::::
 
 ::::{frame} Feeding a Patch
 :::{present}
 - **Inset line**: slide the feed in through etched notches until it reads $50\ \Omega$.
-- **Coaxial probe**: a pin up through the ground plane, no feed radiation.
+- **Coaxial probe**: a pin through the ground plane; the feed does not radiate.
 - **Aperture coupling**: couple through a slot from a buried line.
 :::
 
-The patch edge is a few hundred ohms and the center is a virtual short, so
-matching is only a question of where you tap the standing wave. The inset is
-cheap and coplanar at the cost of a little feed radiation; the probe keeps the
-feed quiet but needs a drilled and soldered via; aperture coupling isolates
-the feed and widens the band at the cost of an extra layer. Same resonator
-each time — only the tap point changes.
+The patch edge presents a few hundred ohms and the center is a virtual short,
+so we match the patch by choosing where to tap the standing wave. The inset
+feed is inexpensive and coplanar, but the feed line radiates a little; the
+probe does not radiate but requires a drilled and soldered via; aperture
+coupling isolates the feed and widens the band but adds a layer. The resonator
+is the same in each case, and only the tap point changes.
 ::::
 
 ::::{frame} Sizing a Patch
@@ -123,17 +123,17 @@ L &= \frac{c}{2 f_r \sqrt{\varepsilon_{\text{eff}}}} - 2\Delta L
 :::
 :::{present}
 :class: callout
-That subtraction is not a rounding error. $\Delta L$ is a few percent of $L$,
-and a patch's whole bandwidth is one or two.
+$\Delta L$ is a few percent of $L$, more than a patch's whole bandwidth, so
+the correction is required.
 :::
 
-Etch the full $\lambda_d/2$ and the antenna resonates low by more than its own
-bandwidth. It will not work.
+A patch etched to the full $\lambda_d/2$ resonates below $f_r$ by more than
+its own bandwidth, so it is mismatched at the design frequency.
 
 :::{depth}
-The two intermediate closed forms, both Hammerstad curve fits to measured
-microstrip behavior rather than derivations — use them as design equations and
-check the result in a solver:
+The two intermediate closed forms are Hammerstad curve fits to measured
+microstrip behavior rather than derivations, so we use them as design equations
+and check the result in a solver:
 
 $$\begin{aligned}
 \varepsilon_{\text{eff}} &= \frac{\varepsilon_r+1}{2} + \frac{\varepsilon_r-1}{2}\left(1+\frac{12h}{W}\right)^{-1/2} \\
@@ -166,12 +166,12 @@ The design is a $37 \times 29\ \text{mm}$ rectangle of copper, which is the
 size of the Wi-Fi antenna in a typical laptop or access point.
 ::::
 
-::::{frame} The Price Is Bandwidth
+::::{frame} Patch Bandwidth
 :::{present}
 $$\text{BW} \approx 3.77\ \frac{\varepsilon_r-1}{\varepsilon_r^{2}}\ \frac{h}{\lambda_0}\ \frac{W}{L}$$
 
 - Bandwidth rises with $h/\lambda_0$ and falls with $\varepsilon_r$.
-- The substrate that shrinks your patch is the one that costs you band.
+- A higher $\varepsilon_r$ shrinks the patch and narrows its bandwidth.
 :::
 :::{present}
 - At 2.45 GHz on 1.6 mm: $\varepsilon_r = 2.2$ gives $48 \times 40$ mm at 1.5%.
@@ -179,9 +179,10 @@ $$\text{BW} \approx 3.77\ \frac{\varepsilon_r-1}{\varepsilon_r^{2}}\ \frac{h}{\l
 :::
 
 A high-$Q$ cavity is a narrowband cavity, and a patch is a very high-$Q$
-cavity. Four times less area for two and a half times less bandwidth: neither
-choice is free, and the formula above is for VSWR $\le 2$, the same bar you
-read off a trace in Lesson 10.
+cavity. Moving from $\varepsilon_r = 2.2$ to $10.2$ reduces the patch area by
+a factor of four and the bandwidth by a factor of two and a half. The formula
+gives the bandwidth for VSWR $\le 2$, the same bar we read off a trace in
+Lesson 10.
 ::::
 
 ::::{frame} Substrate Against Size and Bandwidth
@@ -197,12 +198,11 @@ read off a trace in Lesson 10.
 :::
 
 :::{depth}
-Drive the designer. Set a frequency, pick a substrate, and watch the patch
-redraw itself inside the fixed free-space half-wave box: the gap between the
-dashed box and the copper is exactly what the dielectric bought you. Walk
-$\varepsilon_r$ up the list and notice two things at once — the patch shrinks,
-and the bandwidth pill falls. Then push the thickness slider and watch the
-bandwidth come back. The patterns underneath are the two-slot model; note that
+Set a frequency and pick a substrate, and the designer redraws the patch
+inside the fixed free-space half-wave box: the gap between the dashed box and
+the copper is the size reduction the dielectric provides. As $\varepsilon_r$
+steps up the list, the patch shrinks and the bandwidth pill falls. Increasing
+the thickness restores the bandwidth. The patterns underneath are the two-slot model; note that
 no control moves the beam off broadside, because the two slots always add in
 phase along the normal. The red edges on the top view are the radiating slots;
 the "dielectric half-wave" figure compares the in-substrate half-wavelength to
@@ -212,40 +212,39 @@ the free-space one shown by the dashed box.
 
 ::::{frame} Why Patches Become Array Elements
 :::{present}
-- One patch is a 6 dBi element with a broad beam. That is not a radar.
-- Its value is being **one of hundreds**: flat, light, conformal, cheap, identical.
+- One patch is a 6 dBi element with a broad beam, too little gain for a radar.
+- Hundreds of patches etch in one step, each flat, light, conformal, and identical.
 :::
 
-That last word is the specification an array actually wants. The PHASER array
-you drive in Module 3 is a row of patch elements on a board, and in Lesson 16
-the patch pattern you just computed becomes the *element factor* that
-multiplies the array factor.
+Identical elements are what an array needs. The PHASER array we use in
+Module 3 is a row of patch elements on a board, and in Lesson 16 the patch
+pattern from this lesson becomes the *element factor* that multiplies the
+array factor.
 ::::
 
-::::{frame} The Slot: Cut the Metal, Not the Wire
+::::{frame} The Slot Antenna
 :::{present}
 $$Z_{\text{slot}}\ Z_{\text{dipole}} = \frac{\eta_0^{2}}{4}$$
 
-- A half-wave slit in a conducting sheet, driven across the middle.
-- The **complement** of a dipole: metal where the dipole is air.
-- Nothing protrudes, so it survives a supersonic airframe.
+- A slot is a half-wave slit in a conducting sheet, driven across the middle.
+- It is the **complement** of a dipole: metal where the dipole is air.
+- Nothing protrudes, so it can sit flush on a supersonic airframe.
 :::
 
-Complementary structures are linked by **Babinet's principle**, and that
-single relation carries every dipole result you already have over to the slot.
-Three consequences matter, and the third is the one most often gotten
-backwards.
+**Babinet's principle** relates complementary structures, and that one
+relation carries the dipole results of Lesson 7 over to the slot. Three
+consequences matter, and students most often get the third one backwards.
 ::::
 
-::::{frame} What Complementarity Buys
+::::{frame} Consequences of Complementarity
 :::{present}
-- **Impedance inverts.** A $73\ \Omega$ dipole becomes a $487\ \Omega$ slot.
-- **Reactance flips sign.** $73 + j42.5\ \Omega$ becomes $364 - j212\ \Omega$.
+- The **impedance** inverts: a $73\ \Omega$ dipole corresponds to a $487\ \Omega$ slot.
+- The **reactance** flips sign: $73 + j42.5\ \Omega$ becomes $364 - j212\ \Omega$.
 :::
 :::{present}
 :class: callout
-**Polarization rotates.** The slot's electric field runs *across* the cut, so
-a horizontal slot radiates a vertically polarized field.
+The **polarization** rotates: the slot's electric field runs *across* the
+cut, so a horizontal slot radiates a vertically polarized field.
 :::
 
 With $\eta_0 = 377\ \Omega$, $\eta_0^2/4 = 3.55\times10^{4}\ \Omega^2$, which
@@ -260,16 +259,16 @@ same electrical length its complementary dipole does.
 ::::{frame} Slots in Service
 :::{present}
 - **Cavity-backing** makes a slot one-sided and flush: the standard skin antenna.
-- It costs band: 10 to 20% open, a few percent backed.
+- Backing narrows the band from 10 to 20% to a few percent.
 - A **waveguide slot array** machines the amplitude taper into the wall.
 :::
 
-A slot in a sheet radiates on both sides, which is rarely what you want on an
-airframe. Boxing one side in gives a flush, one-sided, roughly hemispherical
-radiator.
+A slot in a sheet radiates on both sides, which is rarely acceptable on an
+airframe. Enclosing one side in a cavity gives a flush, one-sided, roughly
+hemispherical radiator.
 
-The other major application is the waveguide slot array. Cut a row of slots
-into the wall of a waveguide and each couples out a little of the guided
+The other major application is the waveguide slot array. A row of slots
+cut into the wall of a waveguide each couples out a little of the guided
 power: the spacing sets where the beam points, and the offset of each slot
 from the centerline sets how much power it takes. Marine and airborne
 surveillance radars are built this way, and the result is a ready-made
@@ -277,17 +276,17 @@ aperture distribution — the same taper theory Module 3 develops in Lesson 24,
 realized in the geometry of a machined wall.
 ::::
 
-::::{frame} The Horn: Give the Waveguide an Opening
+::::{frame} The Horn Antenna
 :::{present}
-- A cut-off waveguide is a fraction of a wavelength across and grossly mismatched.
-- **Flare it** and two things improve together: the mode expands, and the impedance transition becomes gradual.
-- The result is a big, well-illuminated **aperture**.
+- An open-ended waveguide is a fraction of a wavelength across and badly mismatched to free space.
+- Flaring the walls expands the mode and makes the impedance transition gradual.
+- The result is a large, well-illuminated **aperture**.
 :::
 
-A waveguide carries a single mode very efficiently and radiates it very
-badly — most of the power reflects at an open end. By the equivalence
-principle of Lesson 6 the flared opening is itself the source: replace it with
-its equivalent surface currents and integrate.
+A waveguide carries a single mode efficiently but radiates it poorly, because
+most of the power reflects at an open end. By the equivalence principle of
+Lesson 6 the flared opening is itself the source: we replace it with its
+equivalent surface currents and integrate.
 ::::
 
 ::::{frame} Gain Is Area in Square Wavelengths
@@ -295,13 +294,13 @@ its equivalent surface currents and integrate.
 $$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}$$
 
 - This is $A_e = G\lambda^2/4\pi$ from Lesson 2, read right to left.
-- Hold the horn fixed, double the frequency, gain climbs **6 dB**.
+- Doubling the frequency on a fixed horn raises the gain by **6 dB**.
 - Horns run $\eta_{\text{ap}} \approx 0.5$; good reflectors reach 0.55 to 0.7.
 :::
 
 $A$ is the physical aperture area and $\eta_{\text{ap}}$ is the fraction of it
-that works. Where that 0.5 comes from is the subject of the next two frames,
-and it is not a fudge factor.
+that contributes to the gain. The next two frames show that the horn's
+geometry sets the 0.5; it is not a fudge factor.
 ::::
 
 ::::{frame} Worked Example — an X-Band Horn
@@ -313,25 +312,25 @@ and $A = 0.030\ \text{m}^2$, so
 
 $$\frac{4\pi A}{\lambda^{2}} = \frac{4\pi(0.030)}{(0.030)^{2}} = 419, \qquad G = 0.5(419) = 209 = 23.2\ \text{dBi}$$
 
-Now check where its far field starts. The largest aperture dimension is the
+Next we find where its far field starts. The largest aperture dimension is the
 diagonal, $D = 25\ \text{cm}$, so
 
 $$r \ge \frac{2D^{2}}{\lambda} = \frac{2(0.25)^{2}}{0.030} = 4.2\ \text{m}$$
 
-A hand-sized horn already needs a four-meter range — the constraint that most
-often sets the layout of a measurement range, and the same arithmetic you ran
-on your own bench range in Lesson 11.
+Even a horn this small needs a $4.2\ \text{m}$ range. The far-field distance
+is the constraint that most often sets the layout of a measurement range, and
+it is the same calculation we ran for the bench range in Lesson 11.
 ::::
 
-::::{frame} Why the Flare Has to Be Gradual
+::::{frame} Phase Error in the Aperture
 :::{present}
-- The wave leaves on a **spherical** front. The aperture is **flat**.
+- The wave leaves the apex on a **spherical** front, but the aperture is **flat**.
 - The edge is farther from the apex, so its field arrives late.
-- That quadratic phase error costs beamwidth, nulls, and gain.
+- This quadratic phase error broadens the beam, fills the nulls, and reduces the gain.
 :::
 
 Making the horn longer for the same aperture flattens the wavefront and
-shrinks the error. This is the same accounting as the $2D^2/\lambda$ criterion
+reduces the error. This is the same reasoning as the $2D^2/\lambda$ criterion
 from Lesson 9, in a different geometry: there the curvature came from a source
 too close, here from an apex too near the mouth, and in both cases the
 tolerance is written as a fraction of a wavelength across the aperture.
@@ -339,31 +338,29 @@ tolerance is written as a fraction of a wavelength across the aperture.
 
 ::::{frame} The Optimum Horn
 :::{present}
-- Enlarge the aperture at fixed length and $\eta_{\text{ap}}$ falls.
-- Gain climbs, flattens, turns over. That peak is the **optimum horn**.
-- Edge error: $\lambda/4$ and $3\lambda/8$.
+- At fixed length, a larger aperture lowers $\eta_{\text{ap}}$, so gain peaks and then falls.
+- The peak is the **optimum horn**: edge phase error $\lambda/4$ (E), $3\lambda/8$ (H).
 :::
 :::{present}
 :class: callout
-Area sets the gain a horn can reach; phase error decides how much you get.
+Area sets a horn's maximum gain; phase error sets how much it reaches.
 :::
 
-Roughly half the aperture is given up in exchange for a horn short enough to
-be practical.
+At the optimum, $\eta_{\text{ap}} \approx 0.5$: the design gives up about half
+the aperture to keep the horn short enough to be practical.
 ::::
 
 ::::{frame} The Standard-Gain Horn
 :::{present}
-- A horn built to that optimum, measured at the factory, tabulated across its band.
-- It is not a good communication antenna. It is a **known** antenna.
-- That is the entire point.
+- It is a horn built to the optimum design, with gain measured at the factory and tabulated across its band.
+- Its value is not performance but a **known** gain.
 :::
 
-You used one in Lesson 11 without asking where its number came from: the horn
-whose $15.0\ \text{dBi}$ you subtracted to get your own antenna's gain. Its
-calibration was the only absolute number in the room, and it is good to a few
-tenths of a dB because a horn at the optimum design is the one aperture
-antenna whose efficiency is predictable enough to certify.
+We used one in Lesson 11 as the reference whose $15.0\ \text{dBi}$ we
+subtracted to find the gain of our own antenna. Its calibration was the only
+absolute gain in that measurement, and it is accurate to a few tenths of a dB
+because a horn at the optimum design is the one aperture antenna whose
+efficiency is predictable enough to certify.
 ::::
 
 ::::{frame} Choosing Among the Three
@@ -390,8 +387,8 @@ The fuller comparison:
 | Pattern | broadside hemisphere, always | dipole-like; one-sided if cavity-backed | directive pencil or fan beam |
 | Gain | 5–8 dBi | 2–5 dBi | 10–25 dBi |
 | Bandwidth | 1–5 % (thin substrate) | 10–20 %; a few % cavity-backed | an octave or more |
-| Power handling | low | moderate | high — it is waveguide |
-| Integration | printed, planar, arrays almost free | flush in an existing conducting skin | bulky, 3-D, needs a waveguide feed |
+| Power handling | low | moderate | high (waveguide-fed) |
+| Integration | printed, planar, arrays etched in one step | flush in an existing conducting skin | bulky, 3-D, needs a waveguide feed |
 | Typical uses | GPS, Wi-Fi, phased-array elements | aircraft and missile skins, waveguide slot arrays for marine radar | range references, reflector feeds, chamber sources |
 :::
 ::::
@@ -402,7 +399,7 @@ The fuller comparison:
 | Symbol / idea | Meaning | Number to keep |
 | :-- | :-- | :-- |
 | $L \approx \lambda_d/2$ | patch resonates as a half-wave cavity in the dielectric | shorten by $2\Delta L$ |
-| $\varepsilon_{\text{eff}}$ | permittivity the wave actually sees | between 1 and $\varepsilon_r$ |
+| $\varepsilon_{\text{eff}}$ | effective permittivity of the substrate and air | between 1 and $\varepsilon_r$ |
 | two-slot model | patch radiates from the two fringing edges, in phase | broadside, 5–8 dBi |
 | patch bandwidth | rises with $h/\lambda_0$, falls with $\varepsilon_r$ | 1–5 %, few % typical |
 | $Z_{\text{slot}} Z_{\text{dipole}} = \eta_0^2/4$ | Babinet complementarity | resonant slot $\approx 485\ \Omega$ |
@@ -423,17 +420,17 @@ The fuller comparison:
 :::{present}
 - Of the three, only the horn clears 10 dBi.
 - Lesson 14 goes after the rest: **reflectors, Yagis, and arrays**.
-- Three routes to a big electrical aperture, and what each one costs.
+- Each reaches a large electrical aperture by a different route, with different size and bandwidth.
 :::
 
 Lesson 14 also closes Module 2, and it is the last new material before the
 midterm is due.
 
 :::{depth}
-The patch is the one you will keep using. Module 3 is built on the idea that a
-hundred cheap, identical, low-gain elements beat one expensive high-gain one,
-because you can steer the hundred without moving anything. The element in that
-story is the antenna you sized today, and every number in the patch section
-comes back when its pattern becomes the element factor in Lesson 16.
+The patch is the one we will keep using. Module 3 builds on the idea that a
+hundred inexpensive, identical, low-gain elements can outperform one high-gain
+antenna, because we can steer the array electronically without moving
+anything. The element in that array is the patch we sized today, and its
+pattern becomes the element factor in Lesson 16.
 :::
 ::::
