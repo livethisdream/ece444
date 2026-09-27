@@ -1,7 +1,8 @@
 % !TEX root =./ECE444_Practice_main.tex
 %
 % L12 practice set (Loop and Monopole Antennas) -- image theory, the quarter-wave
-% monopole over real ground, the electrically small loop, and the size-bandwidth trade.
+% monopole over real ground, radome look-alikes (monopole vs. sleeve and folded dipole),
+% the electrically small loop, and the size-bandwidth trade.
 
 \fullwidth{\textbf{Learning Objective 2.1: } I can describe the radiation behavior of
 simple resonant antennas (isotropic radiator, half-wave dipole, monopole, loop) and
@@ -125,6 +126,60 @@ vertical.
 		horizontal polarization at \emph{every} height, which is exactly where the traffic is.
 		A vertical element gets the in-phase image for free, keeps its pattern maximum on the
 		horizon, and needs no height at all.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Same radome, three antennas.} A vendor ships a vertical antenna for
+$f = 450\ \mhz$ sealed in a fiberglass radome, with no datasheet. From the outside it
+could be a quarter-wave monopole, a sleeve dipole, or a folded dipole. You mount it on
+a wooden mast and run the $50\ \ohms$ coax straight down the mast.
+\begin{parts}
+
+	\part With the coax taped flat to the mast the analyzer reads a VSWR of 1.3. Re-route
+	the coax away from the mast, or grab it with your hand, and the VSWR jumps to 2.4.
+	Which of the three antennas is it most likely to be, and why does the cable change the
+	reading?
+		\begin{solution}[1.5in]
+		A monopole. Its other half is supposed to be a ground plane, and a wooden mast has
+		none, so the return current flows on the outside of the coax shield instead: the feed
+		line \emph{is} the counterpoise. Move the cable or touch it and you change the
+		counterpoise, which changes the impedance at the base and the pattern with it. A
+		sleeve dipole or a folded dipole carries both halves inside the radome and would barely
+		notice where the cable goes.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The same vendor sells a ``ground-independent'' model in an identical radome: a
+		folded dipole with a 4:1 balun in its base. Take a resonant half-wave dipole as
+		$73\ \ohms$, purely resistive. Find the impedance at the folded dipole's terminals,
+		the impedance the balun presents to the coax, and the VSWR on the $50\ \ohms$ line.
+		\begin{solution}[1.6in]
+		\eq{ R_{\text{fold}} &= 4R_r = 4(73) = 292\ \ohms \\
+		     R_{\text{coax}} &= \frac{292}{4} = 73\ \ohms \\
+		     \Gamma &= \frac{73 - 50}{73 + 50} = 0.187 \\
+		     \text{VSWR} &= \frac{1 + 0.187}{1 - 0.187} = 1.46 }
+		The fold quadruples the resistance and the balun divides it back down, so the coax
+		sees an ordinary dipole.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$R_{\text{fold}}$ = \ansbox[1.3in]{$292\ \ohms$} \\[8pt]
+		VSWR = \ansbox[1.3in]{$1.46$}
+	\end{minipage}
+
+	\part Keep the first antenna and the wooden mast. Give two changes, without replacing
+	the antenna, that make its VSWR stop depending on the cable.
+		\begin{solution}[1.5in]
+		(1) \emph{Give it a real counterpoise}: three or four quarter-wave radials at the base,
+		$\lambda/4 = 0.167\ \m$ at 450 MHz, drooped about $45^\circ$ to bring the impedance
+		toward $50\ \ohms$, or a metal plate at least about $\lambda/2$ across. (2) \emph{Choke
+		the feed line}: ferrite beads or a coiled-coax choke on the cable just below the base
+		put a high impedance in the path of the shield current, so the outside of the coax
+		stops acting as the antenna's lower half. Doing both is standard practice.
 		\end{solution}
 
 \end{parts}
