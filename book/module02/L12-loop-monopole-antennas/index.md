@@ -296,6 +296,43 @@ will return a number that does not describe the antenna you meant to build.
 :::
 ::::
 
+::::{frame} Same Radome, Three Antennas
+:::{present}
+<img src="../../viz/img/L12-radome-lookalikes.svg"
+     alt="Three identical radomes cut away: a monopole that needs a ground from its mount, a sleeve dipole whose sleeve is its lower half, and a folded dipole with both halves built in"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
+- A vertical in a plastic tube may be a monopole, a sleeve dipole, or a folded dipole.
+- Only the monopole takes its other half from the mount.
+- Read the datasheet, not the housing.
+:::
+
+They look alike, they are sold side by side, and the fiberglass hides the one
+difference that decides how to mount them. A **monopole's** other half is
+whatever it is bolted to. On a metal roof, or with its own radials, it works
+the way this lesson says. On a fiberglass mast or a wooden post there is no
+plane, so the return current finds the outside of the coax instead: the feed
+line becomes the counterpoise, and the pattern and VSWR start depending on how
+the cable is routed. That is Lesson 4's common-mode problem arriving from the
+other direction. A datasheet that says "ground plane required" is telling you
+it is a monopole.
+
+A **sleeve (coaxial) dipole** builds its lower half out of a quarter-wave metal
+tube around the feed coax, shorted to the shield at the top and open at the
+bottom. The sleeve is the dipole's lower arm, and because it is a shorted
+quarter-wave stub it also presents a high impedance to current on the outside
+of the line below it, so it chokes the feed line out of the antenna. It is a
+half-wave dipole near $73\ \Omega$ and does not care what it is mounted on.
+
+A **folded dipole** is a half-wave dipole with a second conductor joined to the
+first at both ends. The pattern is the dipole's and it needs no ground, but the
+feed sees about $4 	imes 73 pprox 290\ \Omega$ (Lesson 7), so a commercial
+one hides a 4:1 balun in its base (Lesson 4). Cut one in half over a plane and
+you have a **folded monopole**, about $146\ \Omega$, which is a monopole again
+and needs its ground like any other.
+::::
+
 ::::{frame} The Small Loop Is a Magnetic Dipole
 :::{present}
 - Circumference well under a wavelength — $C < 0.1\lambda$ is the usual line.
@@ -472,6 +509,7 @@ across a band.
 | $Z_{\text{in}}^{\text{mono}} = \tfrac{1}{2}Z_{\text{in}}^{\text{dipole}}$ | half the structure, half the voltage | $36.5 + j21.3\ \Omega$ |
 | $D_{\text{mono}} = 2D_{\text{dipole}}$ | same beam into half the solid angle | 3.28, or 5.15 dBi |
 | Radial system / counterpoise | a low-loss path for the return current | 120 buried radials; 4 drooped $\approx 50\ \Omega$ |
+| Radome look-alikes | only the monopole takes its other half from the mount | folded dipole $\approx 290\ \Omega$, folded monopole $\approx 146\ \Omega$ |
 | $\eta_{\text{rad}} = R_r/(R_r + R_g + R_{\text{ohmic}})$ | ground and copper loss compete with radiation | a few ohms matters when $R_r$ is small |
 | Small loop | magnetic dipole, null on the axis | $D = 1.5$ (1.76 dBi) |
 | $R_r = 20\pi^2 (C/\lambda)^4$ | fourth power in circumference | $0.02\ \Omega$ at $C = 0.1\lambda$ |

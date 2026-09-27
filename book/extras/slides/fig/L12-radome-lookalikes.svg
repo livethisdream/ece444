@@ -1,0 +1,34 @@
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="0 0 552 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three identical radomes cut away: a monopole that needs a ground from its mount, a sleeve dipole whose sleeve is its lower half, and a folded dipole with both halves built in">
+<line x1="184" y1="18" x2="184" y2="282" stroke="#dbe3ee" stroke-width="1"/>
+<line x1="368" y1="18" x2="368" y2="282" stroke="#dbe3ee" stroke-width="1"/>
+<text x="92" y="34" fill="#004a85" font-size="14.5" font-weight="700" text-anchor="middle">Monopole</text>
+<rect x="68" y="52" width="48" height="174" rx="22" fill="#eef3f8" stroke="#9aa9bb" stroke-width="2"/>
+<rect x="87" y="226" width="10" height="16" fill="#5a5a5a" opacity="0.55"/>
+<line x1="92" y1="216" x2="92" y2="64" stroke="#004a85" stroke-width="4" stroke-linecap="round"/>
+<line x1="92" y1="218" x2="92" y2="234" stroke="#5a5a5a" stroke-width="2" stroke-dasharray="4 3"/>
+<circle cx="92" cy="216" r="4.5" fill="#b01e24"/>
+<line x1="52" y1="230" x2="132" y2="230" stroke="#8a5a00" stroke-width="2.5" stroke-dasharray="6 5"/>
+<text x="104" y="250" fill="#8a5a00" font-size="12.5" text-anchor="start">ground?</text>
+<text x="92" y="266" fill="#5a5a5a" font-size="12.5" text-anchor="middle">other half: the mount</text>
+<text x="92" y="284" fill="#b01e24" font-size="12.5" font-weight="700" text-anchor="middle">needs a ground plane</text>
+<text x="276" y="34" fill="#004a85" font-size="14.5" font-weight="700" text-anchor="middle">Sleeve dipole</text>
+<rect x="252" y="52" width="48" height="174" rx="22" fill="#eef3f8" stroke="#9aa9bb" stroke-width="2"/>
+<rect x="271" y="226" width="10" height="16" fill="#5a5a5a" opacity="0.55"/>
+<line x1="276" y1="136" x2="276" y2="64" stroke="#004a85" stroke-width="4" stroke-linecap="round"/>
+<rect x="267" y="144" width="18" height="72" rx="2" fill="none" stroke="#0067b9" stroke-width="3"/>
+<line x1="276" y1="142" x2="276" y2="234" stroke="#5a5a5a" stroke-width="2" stroke-dasharray="4 3"/>
+<circle cx="276" cy="140" r="4.5" fill="#b01e24"/>
+<text x="306" y="184" fill="#0067b9" font-size="12.5" text-anchor="start">sleeve</text>
+<text x="276" y="266" fill="#5a5a5a" font-size="12.5" text-anchor="middle">other half: the sleeve</text>
+<text x="276" y="284" fill="#004a85" font-size="12.5" font-weight="700" text-anchor="middle">ground-independent</text>
+<text x="460" y="34" fill="#004a85" font-size="14.5" font-weight="700" text-anchor="middle">Folded dipole</text>
+<rect x="436" y="52" width="48" height="174" rx="22" fill="#eef3f8" stroke="#9aa9bb" stroke-width="2"/>
+<rect x="455" y="226" width="10" height="16" fill="#5a5a5a" opacity="0.55"/>
+<rect x="452" y="64" width="16" height="152" rx="8" fill="none" stroke="#004a85" stroke-width="3.5"/>
+<line x1="452" y1="135" x2="452" y2="145" stroke="#eef3f8" stroke-width="6"/>
+<polyline points="452,140 460,150 460,234" fill="none" stroke="#5a5a5a" stroke-width="2" stroke-dasharray="4 3"/>
+<circle cx="452" cy="140" r="4.5" fill="#b01e24"/>
+<text x="490" y="144" fill="#004a85" font-size="12.5" text-anchor="start">fold</text>
+<text x="460" y="266" fill="#5a5a5a" font-size="12.5" text-anchor="middle">other half: built in</text>
+<text x="460" y="284" fill="#004a85" font-size="12.5" font-weight="700" text-anchor="middle">ground-independent, 4× Z</text>
+</svg>

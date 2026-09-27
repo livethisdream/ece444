@@ -231,6 +231,18 @@ Handheld radios are tested against a phantom hand, because grip changes both imp
 
 ---
 
+## Same radome, three antennas
+
+<div class="fig" data-inline-svg="./fig/L12-radome-lookalikes.svg" style="max-width:560px; margin:0 auto;"></div>
+
+- A vertical in a plastic tube may be a monopole, a sleeve dipole, or a folded dipole.
+- Only the monopole takes its other half from the mount. Read the datasheet, not the housing.
+
+Note:
+On a fiberglass mast a monopole's return current runs on the coax shield: the feed line becomes the counterpoise, and pattern and VSWR follow the cable routing (L4 common mode, from the other side). The sleeve is a shorted quarter-wave stub, so it is both the lower arm and a choke. The folded dipole is about 290 ohms (L7) and ships with a 4:1 balun in the base (L4); a folded monopole is about 146 ohms and needs a ground again.
+
+---
+
 ## The small loop: uniform current
 
 <div class="fig" data-inline-svg="./fig/L12-loop-dipole-duality.svg" style="max-width:760px; margin:0 auto;"></div>
