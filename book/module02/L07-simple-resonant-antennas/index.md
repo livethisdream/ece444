@@ -825,6 +825,44 @@ depending on where you are standing. Lesson 4 gave you the fix: put a
 **balun** at the feed point.
 ::::
 
+::::{frame} The Folded Dipole
+:class: read-only
+
+- Two parallel half-wave conductors, joined at both ends, fed in the middle of one.
+- Same pattern as the half-wave dipole, but about $4 \times 73 \approx 290\ \Omega$ at the feed.
+- Usually fed from $75\ \Omega$ through Lesson 4's 4:1 half-wave balun.
+
+Bend a second half-wave wire alongside the first, close compared with a
+wavelength, join the two at both ends, and feed only one of them. You get a
+dipole with the same pattern and four times the input resistance, and it is
+common enough (FM and TV antennas, 300 Ω twin-lead, the driven element of many
+Yagis in Lesson 14, plenty of vertical base-station antennas) that you should know
+where the four comes from.
+
+Split the feed current into two modes. In the **antenna mode** the two
+conductors carry equal, in-phase currents (for equal diameters), so a feed
+current $I$ puts $2I$ on the structure, and the far field sees one half-wave
+dipole carrying $2I$. The feed supplies all of that power:
+
+$$\tfrac{1}{2} I^2 R_{\text{in}} = \tfrac{1}{2}(2I)^2 R_r
+\quad\Rightarrow\quad R_{\text{in}} = 4R_r \approx 4 \times 73 = 292\ \Omega$$
+
+In the **transmission-line mode** the currents are equal and opposite, so they
+do not radiate; each half of the fold is a two-wire line a quarter wave long,
+shorted at its far end, and at resonance that stub is an open circuit that
+draws nothing. Off resonance its reactance swings the opposite way to the
+dipole's and partly cancels it, which is why a folded dipole is somewhat
+broader-band than a plain one.
+
+The same argument gives $N^2$ for $N$ conductors, 9 times for three, and
+unequal diameters change the ratio, which makes the step-up a design knob for
+matching. The middle of the unfed conductor sits at zero RF voltage, so it can
+be bolted straight to a grounded boom or mast: a folded dipole is DC-grounded,
+which drains static and helps with lightning. Sealed in a radome, it looks
+exactly like a monopole or a sleeve dipole, and Lesson 12 takes up why that
+matters when you mount one.
+::::
+
 ::::{frame} Longer Dipoles Grow Lobes
 :::{present}
 <img src="../../viz/img/L07-dipole-patterns.svg"
