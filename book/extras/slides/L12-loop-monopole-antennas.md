@@ -265,7 +265,7 @@ On a fiberglass mast a monopole's return current runs on the coax shield: the fe
 Circumference $C \ll \lambda$ (rule of thumb $C < 0.1\lambda$), so the current is the same everywhere around the ring.
 
 Note:
-Uniform current is the defining assumption. It is what makes the loop a pure magnetic dipole and it is what fails at C near a wavelength.
+Uniform current is the defining assumption. It is what makes the loop a pure magnetic dipole and it is what fails at C near a wavelength. Tie m = IA to Biot-Savart: far out on the axis the static loop field is mu0 m over 2 pi z cubed, the same form as an electric dipole, so only the product I times A survives. Oscillating, the loop radiates like a short dipole of length kA, and putting that into 80 pi squared (dl over lambda) squared gives the fourth-power law.
 
 ---
 
