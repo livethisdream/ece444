@@ -129,7 +129,10 @@ image has the same sign as the source for a vertical current and the opposite
 sign for a horizontal one, and Euler's formula turns each sum into a single
 trigonometric function:
 
-$$e^{jx} + e^{-jx} = 2\cos x, \qquad e^{jx} - e^{-jx} = 2j\sin x$$
+$$\begin{aligned}
+e^{jx} + e^{-jx} &= 2\cos x \\
+e^{jx} - e^{-jx} &= 2j\sin x
+\end{aligned}$$
 
 The same result comes directly from the radiation vector of Lesson 6,
 
@@ -145,7 +148,10 @@ vertical current, $-1$ for a horizontal one). Shifting a current by $\pm h$
 along the axis multiplies its integral by $e^{\pm jkh\cos\theta}$ and changes
 nothing else, so
 
-$$\mathbf{N}(\theta) = \mathbf{N}_{\text{el}}(\theta)\left(e^{+jkh\cos\theta} + s\ e^{-jkh\cos\theta}\right) = \mathbf{N}_{\text{el}}(\theta)\ AF(\theta)$$
+$$\begin{aligned}
+\mathbf{N}(\theta) &= \mathbf{N}_{\text{el}}(\theta)\left(e^{+jkh\cos\theta} + s\ e^{-jkh\cos\theta}\right) \\
+&= \mathbf{N}_{\text{el}}(\theta)\ AF(\theta)
+\end{aligned}$$
 
 The radiation intensity goes as $\vert N_\theta\vert^2 + \vert N_\phi\vert^2$, and
 the scalar $AF$ multiplies both components, so the pattern is the element
@@ -228,8 +234,10 @@ so $\lambda/4 = 0.514\ \text{m}$ — a 51 cm whip.
 $50\ \Omega$,
 
 $$\begin{aligned}
-\Gamma &= \frac{Z_{\text{in}} - Z_0}{Z_{\text{in}} + Z_0} = \frac{-13.5 + j21.3}{86.5 + j21.3}, \qquad \vert\Gamma\vert = \frac{25.2}{89.1} = 0.283 \\
-\text{VSWR} &= \frac{1 + 0.283}{1 - 0.283} = 1.79, \qquad \text{return loss} = 11.0\ \text{dB}
+\Gamma &= \frac{Z_{\text{in}} - Z_0}{Z_{\text{in}} + Z_0} = \frac{-13.5 + j21.3}{86.5 + j21.3} \\
+\vert\Gamma\vert &= \frac{25.2}{89.1} = 0.283 \\
+\text{VSWR} &= \frac{1 + 0.283}{1 - 0.283} = 1.79 \\
+\text{return loss} &= 11.0\ \text{dB}
 \end{aligned}$$
 
 **Match after trimming.** Shorten the whip by about 4% to
@@ -388,6 +396,42 @@ current into the radiation integral from Lesson 6 gives the dual of the short
 dipole. A short dipole is an oscillating electric dipole moment; a small loop
 is a magnetic one, pointing along the loop axis by the right-hand rule, and the
 electric and magnetic fields exchange roles.
+
+The magnetic moment $m = IA$ comes from Biot–Savart, the same law behind the
+$1/r^2$ induction term of Lesson 5. For a DC current $I$ on a circular loop of
+radius $a$, the field on the loop axis at distance $z$ from its center is
+
+$$\begin{aligned}
+B_z(z) &= \frac{\mu_0 I a^2}{2\left(a^2 + z^2\right)^{3/2}} \\
+&\approx \frac{\mu_0 \left(I\pi a^2\right)}{2\pi z^3} = \frac{\mu_0\ m}{2\pi z^3}, \qquad z \gg a
+\end{aligned}$$
+
+Far from the loop, the current and the area appear only as the product
+$m = IA$. The loop's shape does not appear, and the field has the same $1/z^3$ form
+as the on-axis field of an electric dipole, $E_z = p/(2\pi\varepsilon_0 z^3)$,
+with $m$ in the role of $p$. That is why any small loop, circular or square,
+is characterized by its moment alone.
+
+Let the current oscillate and keep the loop small, and the same moment sets
+the radiated field. The far fields of the small loop and the short dipole
+from Lesson 6 are
+
+$$E_\phi = \frac{\eta_0 k^2 \left(I_0 A\right)\sin\theta}{4\pi r}\ e^{-jkr}$$
+
+$$E_\theta = \frac{j\eta_0 k \left(I_0\ dl\right)\sin\theta}{4\pi r}\ e^{-jkr}$$
+
+so a small loop radiates like a short dipole whose current moment $I_0\ dl$
+has magnitude $k I_0 A$. Putting $dl = kA$ into the short dipole's
+$R_r = 80\pi^2 (dl/\lambda)^2$ gives
+
+$$\begin{aligned}
+R_r &= 80\pi^2 \left(\frac{kA}{\lambda}\right)^2 \\
+&= 320\pi^4 \left(\frac{A}{\lambda^2}\right)^2 = 20\pi^2 \left(\frac{C}{\lambda}\right)^4
+\end{aligned}$$
+
+which is the fourth-power law in *The Fourth-Power Penalty* below. The fourth
+power comes from the area: $R_r$ goes as the square of the equivalent length
+$kA$, and the area of a loop grows as the square of its circumference.
 ::::
 
 ::::{frame} Short Dipole Against Small Loop
@@ -456,7 +500,10 @@ milliohms.
 $R_s = \sqrt{\pi f \mu_0/\sigma} = 1.43\ \text{m}\Omega$ per square, and the
 loop is $C/2\pi b = 79.6$ squares around:
 
-$$R_{\text{ohmic}} = \frac{C}{2\pi b} R_s = 79.6 \times 1.43\ \text{m}\Omega = 0.114\ \Omega$$
+$$\begin{aligned}
+R_{\text{ohmic}} &= \frac{C}{2\pi b} R_s \\
+&= 79.6 \times 1.43\ \text{m}\Omega = 0.114\ \Omega
+\end{aligned}$$
 
 **Efficiency.** $\eta_{\text{rad}} = 0.0197/(0.0197 + 0.114) = 0.148$, i.e.
 **14.8%**, a loss of 8.3 dB. Gain $= 1.76 - 8.3 = -6.5\ \text{dBi}$.
