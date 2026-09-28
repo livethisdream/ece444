@@ -282,6 +282,20 @@ Every page is chrome-free: no sidebar, no header, one centerd bar at the bottom
   pair.
 - Practice problems are labeled at the **2nd LO level**, one `LO 1.X` banner per
   set.
+- **Assessments do not hand students the formulas** (Neil, 2026-09-28: giving
+  the formula in the stem "makes the assessments easy enough for a high
+  schooler"). A question states the situation and the givens and asks for the
+  quantity; choosing the relation is part of what it tests. So no "using
+  $D = 4\pi U_\text{max}/P_\text{rad}$, find ...", no "recall that ...", no
+  "the Friis equation is ...", and no part that walks the student through the
+  chain step by step ("first find $\lambda$, then use it to ..."). Name the
+  *quantity* ("find the directivity in dBi"), never the equation that gets it.
+  Allowed: the numbers a student cannot be expected to know (a measured
+  pattern, a datasheet value, a physical constant), a definition the question
+  is not testing, and a pointer to the equation sheet, which is what students
+  already carry. The key still shows the full worked chain. Practice sets may
+  scaffold; assessments may not. Assessments live in the private
+  `ece444-faculty` repo, never here.
 
 ## Don'ts
 
