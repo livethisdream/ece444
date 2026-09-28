@@ -76,9 +76,22 @@ Make them say it back. Then the consequence: a vertical antenna works sitting on
 
 ---
 
+## Where the Phase Comes From
+
+<div class="fig" data-inline-svg="./fig/L12-image-paths.svg" style="max-width:520px; margin:0 auto;"></div>
+
+The source leads the wavefront by $h\cos\theta$ and the image lags by the same amount, so the two phases are $\pm kh\cos\theta$.
+
+$$AF(\theta) = e^{+jkh\cos\theta} \pm e^{-jkh\cos\theta}$$
+
+Note:
+The image's sign picks plus or minus: plus for a vertical current, minus for a horizontal one. This is the L6 two-element array with spacing 2h, so the phase difference between the paths is 2kh cos theta.
+
+---
+
 ## Element and Image as a Two-Element Array
 
-The image sits at $-h$: the two paths differ by $2kh\cos\theta$. That is L6 pattern multiplication, with a free second element.
+Euler's formula turns the sum into $2\cos(kh\cos\theta)$ for the vertical case and $2j\sin(kh\cos\theta)$ for the horizontal case, and the pattern is the element factor times it.
 
 $$\vert F(\theta)\vert = \vert f_{\text{el}}(\theta)\vert \times 2\left\vert \cos(kh\cos\theta)\right\vert \quad \text{vertical}$$
 
