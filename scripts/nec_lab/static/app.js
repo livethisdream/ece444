@@ -194,7 +194,12 @@ function dialsFor(cuts) {
       u = [1, 0, 0]; v = [0, 1, 0];
       right = '+x'; up = '+y'; name = 'x-y plane';
     }
-    if (!dials.has(key)) dials.set(key, { key, u, v, right, up, name, cuts: [] });
+    // The in-plane angle a measurement is read in: phi from +x on the
+    // turntable plane, theta from +z (toward `right`) on a vertical one.
+    const zero = cut.axis === 'theta' ? v : u, ninety = cut.axis === 'theta' ? u : v;
+    if (!dials.has(key)) {
+      dials.set(key, { key, u, v, zero, ninety, right, up, name, cuts: [] });
+    }
     dials.get(key).cuts.push(cut);
   });
   return [...dials.values()];
@@ -227,11 +232,31 @@ function renderCuts() {
       `<figure class="dial"><canvas id="dial${i}" aria-label="Pattern in the `
       + `${d.name}, gain in dB below the peak"></canvas><figcaption>`
       + `<b>${d.name}</b> &mdash; ${d.cuts.map((c) => c.name).join(' + ')}`
-      + `${d.key === 'phi' && currentMeasuredCut() ? ', with the measurement' : ''}`
+      + `${d.key === overlayKey(dials) && currentMeasuredCut() ? ', with the measurement' : ''}`
       + `</figcaption></figure>`).join('');
   }
   state.dials = dials;
+  fillOverlayPlanes(dials);
   drawCuts();
+}
+
+/* The chamber turntable measures whatever plane the antenna was mounted in,
+ * so the student says which dial the measurement belongs on. The choice
+ * survives a re-solve as long as the new model still has that plane. */
+function fillOverlayPlanes(dials) {
+  const sel = $('mplane');
+  const keep = sel.value;
+  sel.innerHTML = dials.map((d) =>
+    `<option value="${d.key}">${d.name} (${d.key === 'phi' ? 'phi from +x' : 'theta from +z'})</option>`).join('');
+  const def = dials.find((d) => d.key === 'phi') || dials[0];
+  sel.value = dials.some((d) => d.key === keep) ? keep : (def ? def.key : '');
+}
+
+function overlayKey(dials) {
+  const want = $('mplane').value;
+  const d = (dials || []).find((x) => x.key === want)
+    || (dials || []).find((x) => x.key === 'phi') || (dials || [])[0];
+  return d ? d.key : null;
 }
 
 function drawCuts() {
@@ -296,16 +321,17 @@ function drawDial(canvas, dial) {
     plot(pts, cutColor(k), 2);
   });
 
-  // The measurement is a turntable cut: it belongs on the x-y dial.
+  // The measurement goes on whichever plane the student picked.
   const meas = currentMeasuredCut();
-  if (meas && dial.key === 'phi') {
+  if (meas && dial.key === overlayKey(state.dials)) {
     const rot = parseFloat($('rotate').value) || 0;
     const mPeak = Math.max(...meas.values.filter(Number.isFinite));
     const pts = meas.angles.map((a, i) => {
       const g = Math.max(meas.values[i] - mPeak, -Math.abs(floorDb));
       const r = R * (g + Math.abs(floorDb)) / Math.abs(floorDb);
       const t = (a + rot) * Math.PI / 180;
-      return [cx + r * Math.cos(t), cy - r * Math.sin(t)];
+      const d = dial.zero.map((z, j) => z * Math.cos(t) + dial.ninety[j] * Math.sin(t));
+      return [cx + r * dot3(d, dial.u), cy - r * dot3(d, dial.v)];
     });
     plot(pts, css('--red'), 1.6);
   }
@@ -659,6 +685,27 @@ function sampleAt(angles, values, angleDeg, maxGapDeg = 10) {
   return below.v + (-below.d / gap) * (above.v - below.v);
 }
 
+const normalize = (vals) => {
+  const peak = Math.max(...vals.filter(Number.isFinite));
+  return vals.map((v) => v - peak);
+};
+
+/* Every simulated sample on a dial, re-read as the in-plane angle a
+ * measurement on that plane uses -- which joins the phi = 0 and phi = 180
+ * halves of a vertical plane into one trace a measurement can be sampled on. */
+function planeTrace(dial) {
+  const pts = [];
+  dial.cuts.forEach((cut) => {
+    for (let i = 0; i < cut.gain_dbi.length; i++) {
+      const d = direction(cut, i);
+      const a = Math.atan2(dot3(d, dial.ninety), dot3(d, dial.zero)) * 180 / Math.PI;
+      pts.push([a, cut.gain_dbi[i]]);
+    }
+  });
+  pts.sort((x, y) => x[0] - y[0]);
+  return { angle_deg: pts.map((p) => p[0]), gain_dbi: pts.map((p) => p[1]) };
+}
+
 function currentMeasuredCut() {
   if (!state.measured) return null;
   return state.measured.get($('mcut').value) || null;
@@ -668,7 +715,9 @@ function runCompare() {
   const meas = currentMeasuredCut();
   const el = $('compare');
   if (!meas || !state.solve) { el.textContent = ' '; return; }
-  const sim = state.solve.cuts.find((c) => c.axis === 'phi') || state.solve.cuts[0];
+  const dial = (state.dials || []).find((d) => d.key === overlayKey(state.dials));
+  if (!dial) { el.textContent = ' '; return; }
+  const sim = planeTrace(dial);
   const floor = parseFloat($('floor').value);
   const rot = parseFloat($('rotate').value) || 0;
   const simN = normalize(sim.gain_dbi), measN = normalize(meas.values);
@@ -682,7 +731,7 @@ function runCompare() {
     if (Math.abs(d) > Math.abs(worst)) { worst = d; at = meas.angles[i]; }
   }
   el.textContent = n
-    ? `measured vs ${sim.name}: RMS ${Math.sqrt(sumSq / n).toFixed(2)} dB, `
+    ? `measured vs ${dial.name}: RMS ${Math.sqrt(sumSq / n).toFixed(2)} dB, `
       + `worst ${worst.toFixed(2)} dB at ${at.toFixed(1)}°, over ${n} points `
       + `clamped at ${floor} dB`
     : 'no overlapping angles between the measurement and the simulated cut';
@@ -806,6 +855,7 @@ $('clearmeas').onclick = () => {
 };
 
 $('mcut').onchange = () => { renderCuts(); runCompare(); };
+$('mplane').onchange = () => { renderCuts(); runCompare(); };
 $('rotate').oninput = () => { renderCuts(); runCompare(); };
 $('floor').onchange = () => { renderCuts(); runCompare(); };
 window.addEventListener('resize', () => { drawCuts(); drawSweep(); drawGeometry(); });
