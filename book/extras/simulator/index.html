@@ -64,11 +64,17 @@
              <input type="file" id="measured" accept=".csv,.txt"></div>
       </div>
       <div class="row">
-        <div><label for="mcut">Cut</label><select id="mcut"></select></div>
+        <div><label for="mcut">Measured cut</label><select id="mcut"></select></div>
+        <div><label for="mplane">Overlay on</label><select id="mplane"></select></div>
+      </div>
+      <div class="row">
         <div><label for="rotate">Rotate (deg)</label>
              <input type="number" id="rotate" value="0" step="1"></div>
       </div>
       <div class="row"><button id="clearmeas" class="ghost">Clear overlay</button></div>
+      <p class="note">The measured angle is read as phi from +x on the x-y
+      plane and as theta from +z on a vertical plane, so pick the plane the
+      antenna was mounted to sweep; Rotate lines up the chamber's zero.</p>
       <p class="note">Both traces are normalized to their own peak before they are
       differenced &mdash; a simulated pattern is absolute dBi and a chamber cut is
       raw S21 through cables and fixture, so nothing else puts them on one axis.
