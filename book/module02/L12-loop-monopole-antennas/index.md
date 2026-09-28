@@ -131,12 +131,36 @@ trigonometric function:
 
 $$e^{jx} + e^{-jx} = 2\cos x, \qquad e^{jx} - e^{-jx} = 2j\sin x$$
 
-The pattern is the element factor times this array factor,
+The same result comes directly from the radiation vector of Lesson 6,
+
+$$\mathbf{N}(\theta,\phi) = \int_{V'}\mathbf{J}(\mathbf{r}')\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'$$
+
+Its phase factor is the path-length picture above: $\hat{\mathbf r}\cdot\mathbf{r}'$
+is how much closer to the observer a piece of current sits than the origin
+does, and for a point on the axis at $z' = \pm h$ it equals $\pm h\cos\theta$.
+For an element that is symmetric about its own center, as a dipole is, the
+total current is the element's current centered at $z = +h$ plus the same
+current centered at $z = -h$, multiplied by the image sign $s$ ($+1$ for a
+vertical current, $-1$ for a horizontal one). Shifting a current by $\pm h$
+along the axis multiplies its integral by $e^{\pm jkh\cos\theta}$ and changes
+nothing else, so
+
+$$\mathbf{N}(\theta) = \mathbf{N}_{\text{el}}(\theta)\left(e^{+jkh\cos\theta} + s\ e^{-jkh\cos\theta}\right) = \mathbf{N}_{\text{el}}(\theta)\ AF(\theta)$$
+
+The radiation intensity goes as $\vert N_\theta\vert^2 + \vert N_\phi\vert^2$, and
+the scalar $AF$ multiplies both components, so the pattern is the element
+factor times the array factor,
 
 $$\vert F(\theta)\vert = \vert f_{\text{el}}(\theta)\vert\ \vert AF(\theta)\vert$$
 
-which is the Lesson 6 result for two elements $2h$ apart: the phase
-difference between the two paths is $2kh\cos\theta$. Perfect ground always
+This is the Lesson 6 result for two elements $2h$ apart, with a phase
+difference of $2kh\cos\theta$ between the two paths. Directivity follows from
+
+$$D = \frac{4\pi U_\text{max}}{P_\text{rad}}$$
+
+with $P_\text{rad}$ integrated over the upper hemisphere only. The array factor changes both $U_\text{max}$ and
+$P_\text{rad}$, which is why a low horizontal wire can gain directivity while
+the power it radiates, and its $R_r$, fall. Perfect ground always
 nulls horizontal polarization along the ground. No amount of height removes
 that horizon null; height only sets the elevation of the first lobe.
 ::::
