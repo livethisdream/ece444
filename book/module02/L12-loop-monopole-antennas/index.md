@@ -101,25 +101,44 @@ well above the ground.
 
 ::::{frame} Element and Image as a Two-Element Array
 :::{present}
+<img src="../../viz/img/L12-image-paths.svg"
+     alt="A source at height h and its image at minus h radiate toward a distant observer at angle theta; measured from a wavefront through the old ground point, the source is ahead by h cos theta and the image is behind by h cos theta"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
 $$
-\vert F(\theta)\vert = \vert f_{\text{el}}(\theta)\vert \times
-\begin{cases}
-2\left\vert \cos(kh\cos\theta) \right\vert & \text{vertical} \\
-2\left\vert \sin(kh\cos\theta) \right\vert & \text{horizontal}
-\end{cases}
+\begin{aligned}
+AF(\theta) &= e^{+jkh\cos\theta} \pm e^{-jkh\cos\theta} \\
+&= 2\cos(kh\cos\theta) \quad \text{vert.} \\
+&= 2j\sin(kh\cos\theta) \quad \text{horiz.}
+\end{aligned}
 $$
 
-- At the horizon, where $\cos\theta = 0$, the vertical factor is 2 and the horizontal factor is zero.
-- Perfect ground always nulls horizontal polarization along the ground.
+- The source leads the wavefront by $h\cos\theta$; the image lags by the same amount.
+- The image's sign picks $+$ or $-$. At the horizon $\cos\theta = 0$, so only the vertical case radiates.
 :::
 
-With the image in place, this is the two-element array problem from
-Lesson 6, and the pattern is the element factor times a two-element array
-factor. With the element at height $h$ and its image at $-h$, the phase
-difference between the two paths is $2kh\cos\theta$, with $\theta$ measured
-from the vertical and only $0 \le \theta \le 90^\circ$ meaning anything. No
-amount of height removes the horizon null; height only sets the elevation of
-the first lobe.
+With the image in place, this is the two-element array problem from Lesson 6.
+We put the old ground point at the origin, the source at $z = +h$, and the
+image at $z = -h$, and measure $\theta$ from the vertical; only
+$0 \le \theta \le 90^\circ$ describes a real field. A distant observer sees
+parallel rays. Measured from a wavefront through the origin, the ray from the
+source is shorter by $h\cos\theta$ and the ray from the image is longer by the
+same amount, so their phases are $+kh\cos\theta$ and $-kh\cos\theta$. The
+image has the same sign as the source for a vertical current and the opposite
+sign for a horizontal one, and Euler's formula turns each sum into a single
+trigonometric function:
+
+$$e^{jx} + e^{-jx} = 2\cos x, \qquad e^{jx} - e^{-jx} = 2j\sin x$$
+
+The pattern is the element factor times this array factor,
+
+$$\vert F(\theta)\vert = \vert f_{\text{el}}(\theta)\vert\ \vert AF(\theta)\vert$$
+
+which is the Lesson 6 result for two elements $2h$ apart: the phase
+difference between the two paths is $2kh\cos\theta$. Perfect ground always
+nulls horizontal polarization along the ground. No amount of height removes
+that horizon null; height only sets the elevation of the first lobe.
 ::::
 
 ::::{frame} The Quarter-Wave Monopole
