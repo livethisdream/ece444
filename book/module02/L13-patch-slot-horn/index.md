@@ -423,6 +423,10 @@ same electrical length its complementary dipole does.
 
 ::::{frame} Slots in Service
 :::{present}
+<img src="../../viz/img/L13-slot-service.svg"
+     alt="Left: a cavity-backed slot in an aircraft skin, side view, radiating outward only. Right: a waveguide slot array, top view of the broad wall, with slots alternating sides of the centerline and offset more in the middle"
+     style="max-width: 720px; width: 100%; display: block; margin: 0 auto;">
+
 - **Cavity-backing** makes a slot one-sided and flush: the standard skin antenna.
 - Backing narrows the band from 10 to 20% to a few percent.
 - A **waveguide slot array** machines the amplitude taper into the wall.
@@ -443,6 +447,10 @@ realized in the geometry of a machined wall.
 
 ::::{frame} The Horn Antenna
 :::{present}
+<img src="../../viz/img/L13-horn-flare.svg"
+     alt="Left: an open-ended waveguide, where the incoming wave mostly reflects and only a little leaks out. Right: a horn, where the flare lets the wave expand gradually and flow out through a large opening"
+     style="max-width: 720px; width: 100%; display: block; margin: 0 auto;">
+
 - An open-ended waveguide is a fraction of a wavelength across and badly mismatched to free space.
 - Flaring the walls expands the mode and makes the impedance transition gradual.
 - The result is a large, well-illuminated **aperture**.
@@ -452,9 +460,20 @@ A waveguide carries a single mode efficiently but radiates it poorly, because
 most of the power reflects at an open end. By the equivalence principle of
 Lesson 6 the flared opening is itself the source: we replace it with its
 equivalent surface currents and integrate.
+
+This is the traveling-wave antenna of the lesson. Nothing in a horn sends the
+wave back: the flare widens slowly enough that the wave never meets an abrupt
+change, so it flows out through the mouth instead of reflecting. With no
+standing wave there is no sharp resonance, which is why a standard-gain horn
+covers an octave while a patch covers a few percent.
 ::::
 
 ::::{frame} Gain Is Area in Square Wavelengths
+:::{present}
+<img src="../../viz/img/L13-horn-squares.svg"
+     alt="The same 20 by 15 centimeter aperture tiled in square wavelengths: about 33 at 10 GHz and about 133 at 20 GHz"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 :::{present}
 $$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}$$
 
@@ -466,6 +485,13 @@ $$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}$$
 $A$ is the physical aperture area and $\eta_{\text{ap}}$ is the fraction of it
 that contributes to the gain. The next two frames show that the horn's
 geometry sets the 0.5; it is not a fudge factor.
+
+The figure makes the formula concrete. Tile the aperture in squares one
+wavelength on a side: the gain is proportional to how many squares fit. The
+X-band horn of the worked example below holds about 33 of them at
+$10\ \text{GHz}$. At $20\ \text{GHz}$ the wavelength halves, so four times
+as many squares fit in the same opening, and the gain rises by a factor of
+four, or 6 dB.
 ::::
 
 ::::{frame} Worked Example — an X-Band Horn
@@ -489,6 +515,11 @@ it is the same calculation we ran for the bench range in Lesson 11.
 
 ::::{frame} Phase Error in the Aperture
 :::{present}
+<img src="../../viz/img/L13-horn-phase.svg"
+     alt="Side view of a horn: the spherical front from the apex reaches the flat aperture first at the center and later at the edges, so the phase lag across the aperture is a parabola"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
 - The wave leaves the apex on a **spherical** front, but the aperture is **flat**.
 - The edge is farther from the apex, so its field arrives late.
 - This quadratic phase error broadens the beam, fills the nulls, and reduces the gain.
@@ -503,20 +534,35 @@ tolerance is written as a fraction of a wavelength across the aperture.
 
 ::::{frame} The Optimum Horn
 :::{present}
-- At fixed length, a larger aperture lowers $\eta_{\text{ap}}$, so gain peaks and then falls.
-- The peak is the **optimum horn**: edge phase error $\lambda/4$ (E), $3\lambda/8$ (H).
+<img src="../../viz/img/L13-horn-optimum.svg"
+     alt="Relative gain of a horn of fixed length against aperture width: without phase error it keeps rising; with it, it peaks where the edge lags a quarter wavelength in the E-plane and three eighths of a wavelength in the H-plane"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-:class: callout
-Area sets a horn's maximum gain; phase error sets how much it reaches.
+- At fixed length, a larger aperture lowers $\eta_{\text{ap}}$, so gain peaks and then falls.
+- The peak is the **optimum horn**: edge phase error $\lambda/4$ (E), $3\lambda/8$ (H).
+- Area sets the maximum gain; phase error sets how much is reached.
 :::
 
 At the optimum, $\eta_{\text{ap}} \approx 0.5$: the design gives up about half
 the aperture to keep the horn short enough to be practical.
+
+The curves are computed for a horn ten wavelengths long, one plane at a time.
+The E-plane field is uniform across the aperture, and its gain peaks when the
+edge lags the center by a quarter wavelength. The H-plane field follows the
+waveguide's cosine, which is weak at the edges, so the edges matter less and
+the peak comes later, at three eighths of a wavelength. At each peak the phase
+error costs about 22% of the gain in that plane, and the cosine taper costs
+another 19%; together, $0.78 \times 0.78 \times 0.81 \approx 0.5$, which is
+where the horn's aperture efficiency comes from.
 ::::
 
 ::::{frame} The Standard-Gain Horn
 :::{present}
+<img src="../../viz/img/L13-horn-comparison.svg"
+     alt="The gain-comparison measurement: the standard-gain horn, known to be 15.0 dBi, reads minus 40.0 dBm at the receive spot; the antenna under test, in the same spot, reads minus 52.9 dBm, so it is 12.9 dB lower: 2.1 dBi"
+     style="max-width: 680px; width: 100%; display: block; margin: 0 auto;">
+
 - It is a horn built to the optimum design, with gain measured at the factory and tabulated across its band.
 - Its value is not performance but a **known** gain.
 :::
@@ -526,6 +572,13 @@ subtracted to find the gain of our own antenna. Its calibration was the only
 absolute gain in that measurement, and it is accurate to a few tenths of a dB
 because a horn at the optimum design is the one aperture antenna whose
 efficiency is predictable enough to certify.
+
+The figure is the gain-comparison method. With the transmitter fixed, the
+horn and then the antenna under test occupy the same receive spot. Everything
+else in the link, the power, the range, the cable, is the same for both, so
+the difference in received power in dB is the difference in gain. A dipole
+that reads $12.9\ \text{dB}$ below a $15.0\ \text{dBi}$ horn is
+$2.1\ \text{dBi}$.
 ::::
 
 ::::{frame} Choosing Among the Three
