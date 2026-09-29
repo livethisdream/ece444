@@ -240,31 +240,6 @@ gives the bandwidth for VSWR $\le 2$, the same bar we read off a trace in
 Lesson 10.
 ::::
 
-::::{frame} Substrate Against Size and Bandwidth
-:class: viz-frame
-
-:::{present}
-<iframe src="../../viz/patch-designer.html"
-        width="100%" height="533"
-        style="border: 1px solid #cddce9; border-radius: 6px;"
-        loading="lazy"
-        title="Rectangular patch designer: substrate versus patch size, bandwidth, and the two-slot pattern">
-</iframe>
-:::
-
-:::{depth}
-Set a frequency and pick a substrate, and the designer redraws the patch
-inside the fixed free-space half-wave box: the gap between the dashed box and
-the copper is the size reduction the dielectric provides. As $\varepsilon_r$
-steps up the list, the patch shrinks and the bandwidth pill falls. Increasing
-the thickness restores the bandwidth. The patterns underneath are the two-slot model; note that
-no control moves the beam off broadside, because the two slots always add in
-phase along the normal. The red edges on the top view are the radiating slots;
-the "dielectric half-wave" figure compares the in-substrate half-wavelength to
-the free-space one shown by the dashed box.
-:::
-::::
-
 ::::{frame} Where to Tap the Standing Wave
 :::{present}
 <img src="../../viz/img/L13-patch-feed-position.svg"
@@ -332,6 +307,43 @@ plane, and crosses under the slot, and the field of the line couples up
 through the slot to the patch. Nothing touches the patch. The ground plane
 shields the feed network from the radiating side, and the slot's own
 resonance widens the band, but the design needs a second layer.
+::::
+
+::::{frame} The Patch Designer
+:class: viz-frame
+
+:::{present}
+<iframe src="../../viz/patch-designer.html"
+        width="100%" height="562"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Rectangular patch designer: the patch to scale with its feed point, VSWR against frequency, and the two-slot pattern">
+</iframe>
+:::
+
+:::{depth}
+Pick a frequency, a substrate, and a thickness, and the designer sizes the
+patch with the design set above. The top view is drawn to scale inside the
+dashed outline of the same patch built in air, so the difference between the
+two is the size reduction the substrate provides. The shading along the patch
+is the standing wave, strongest at the two radiating edges and zero at the
+center, and the inset feed reaches in to the $50\ \Omega$ point.
+
+The VSWR curve shows the bandwidth. Step $\varepsilon_r$ up the list and the
+dip narrows; increase the thickness and it widens again. The **length error**
+control etches the patch longer or shorter than the design. At $+5\%$, about
+the size of the $2\Delta L$ correction for the FR-4 design, the resonance
+moves below the band and the VSWR at the design frequency climbs past 5. That
+is why the length has to be right to a fraction of a percent.
+
+The patterns are the two-slot model. No control moves the beam off
+broadside, because the two radiating edges always add in phase along the
+normal. The model assumes an infinite ground plane, so the E-plane stays broad
+out to the horizon; a real, finite ground plane rolls it off and puts a few dB
+of radiation behind the board. The VSWR curve treats the patch near resonance
+as a parallel resonant circuit matched at its own resonant frequency, with its
+$Q$ set so that the VSWR $\le 2$ band equals the closed-form bandwidth.
+:::
 ::::
 
 ::::{frame} Why Patches Become Array Elements
