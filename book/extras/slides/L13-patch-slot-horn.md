@@ -216,13 +216,13 @@ Nothing on the aperture-coupled patch touches the patch: the feed line's field c
 
 ## Patches as Array Elements
 
-- One patch gives about $6$ dBi with a broad hemispherical beam, which is not enough gain for a radar.
-- A hundred patches on one board are printed in the same etch step, fed by printed lines, and steered by phase shifters.
-- The element is **flat, light, conformal, and identical to its neighbors** — which is exactly what an array needs.
+<div class="fig" data-inline-svg="./fig/L13-patch-array.svg" style="max-width:600px; margin:0 auto;"></div>
 
-<div class="callout">The <strong>PHASER</strong> array we use in Module 3 is a row of patch elements on a board.</div>
+- One patch gives about $6$ dBi with a broad beam, not enough gain for a radar.
+- Many identical patches etch in one step, and phase shifters steer their combined beam.
 
 Note:
+The PHASER array we use in Module 3 is a row of eight patches on a board, each behind its own phase shifter.
 Forward hook to L16 pattern multiplication: element factor equals the patch pattern from this lesson, space factor equals the array geometry from Module 3.
 
 ---
@@ -230,15 +230,16 @@ Forward hook to L16 pattern multiplication: element factor equals the patch patt
 ## The Slot Antenna
 
 <div class="two-col fig-xwide"><div class="col-text">
-<p>A slot is a $\lambda/2$ slit in a conducting sheet, driven across the middle.</p>
+<p>A slot is a $\lambda/2$ slit in a metal sheet, fed across the middle.</p>
 <p>It is the <strong>complement</strong> of a dipole: metal where the dipole is air, and air where the dipole is metal.</p>
-<p>It has no protrusion, adds no drag, and has nothing to shear off.</p>
+<p>Its ends are <strong>shorted</strong>, so the field across the gap is zero there and largest at the feed.</p>
+<p>It is flush: no protrusion, no drag.</p>
 </div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L13-slot-babinet.svg" style="max-width:680px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L13-slot-field.svg" style="max-width:600px; margin:0 auto;"></div>
 </div></div>
 
 Note:
-This is the antenna that can sit on a Mach-2 airframe, which motivates the whole section.
+This is the antenna that can sit on a Mach-2 airframe, which motivates the whole section. The slit is a short line shorted at both ends, the mirror of the patch's line open at both ends; the feed sits where the voltage is largest and the current smallest, which is why the impedance is high.
 
 ---
 

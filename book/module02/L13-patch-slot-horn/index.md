@@ -348,28 +348,57 @@ $Q$ set so that the VSWR $\le 2$ band equals the closed-form bandwidth.
 
 ::::{frame} Why Patches Become Array Elements
 :::{present}
+<img src="../../viz/img/L13-patch-array.svg"
+     alt="Left: one patch and its broad beam, about 6 dBi and fixed at broadside. Right: eight patches in a row on one board, half a wavelength apart, each behind its own phase shifter, forming a narrow beam steered 20 degrees off broadside"
+     style="max-width: 720px; width: 100%; display: block; margin: 0 auto;">
+
 - One patch is a 6 dBi element with a broad beam, too little gain for a radar.
-- Hundreds of patches etch in one step, each flat, light, conformal, and identical.
+- Many identical patches etch in one step, and phase shifters steer their combined beam.
 :::
 
-Identical elements are what an array needs. The PHASER array we use in
-Module 3 is a row of patch elements on a board, and in Lesson 16 the patch
-pattern from this lesson becomes the *element factor* that multiplies the
-array factor.
+Identical elements are what an array needs. The same etch step that makes
+one patch makes a whole row of them, along with the printed lines that feed
+them, and every element comes out flat, light, conformal, and the same as its
+neighbors. Put a phase shifter behind each element and the array's beam can be
+pointed electronically, with nothing on the board moving. The PHASER array we
+use in Module 3 is a row of eight patches, half a wavelength apart, each behind
+its own phase shifter. In Lesson 16 the patch pattern from this lesson becomes
+the *element factor* that multiplies the array factor, which is why the
+narrow array beam in the figure still sits inside the broad single-patch beam.
 ::::
 
 ::::{frame} The Slot Antenna
 :::{present}
+<img src="../../viz/img/L13-slot-field.svg"
+     alt="A dipole beside its complement, a slot in a conducting sheet: the dipole's current runs along the wire, largest at the feed and zero at the open ends; the slot's field runs across the gap, largest at the feed and zero at the shorted ends"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
 $$Z_{\text{slot}}\ Z_{\text{dipole}} = \frac{\eta_0^{2}}{4}$$
 
-- A slot is a half-wave slit in a conducting sheet, driven across the middle.
+- A slot is a half-wave slit in a metal sheet, fed at the middle.
 - It is the **complement** of a dipole: metal where the dipole is air.
-- Nothing protrudes, so it can sit flush on a supersonic airframe.
+- Its shorted ends force the field to zero; it peaks at the feed.
 :::
+
+A slot is the patch's idea turned around. The two edges of the slit are two
+conductors facing each other across a narrow gap, so the slit is a short
+transmission line, and the metal at each end of the slit shorts it. A wave
+launched at the feed reflects from both shorted ends, and when the slit is
+half a wavelength long the reflections reinforce and the slot resonates. A
+short forces the voltage to zero, so the field across the gap is zero at the
+two ends and largest at the center, where the feed is. That is the mirror of
+the dipole, whose open ends force the *current* to zero.
+
+It also explains the slot's high input impedance. The feed sits where the
+voltage across the gap is largest and the current is smallest, and the ratio
+of the two is large: a few hundred ohms. Babinet's principle puts a number on
+it.
 
 **Babinet's principle** relates complementary structures, and that one
 relation carries the dipole results of Lesson 7 over to the slot. Three
-consequences matter, and students most often get the third one backwards.
+consequences matter, and students most often get the third one backwards. The
+slot is also flush: nothing protrudes, so it can sit on a supersonic airframe.
 ::::
 
 ::::{frame} Consequences of Complementarity
