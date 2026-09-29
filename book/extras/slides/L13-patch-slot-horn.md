@@ -24,10 +24,10 @@ Fall 2026 · Dr. Neil Rogers
 
 - L7: the half-wave dipole — a resonant wire, $73 + j42.5\ \Omega$, $2.15$ dBi.
 - L12: loops and monopoles — bent and grounded, but still wire.
-- L6: the radiation integral does not depend on what carries the current, so an aperture with a known field is also a source.
+- L3: a resonant antenna reflects its wave into a standing wave and is narrowband; a traveling-wave antenna does not, and is wideband.
 - L11: the standard-gain horn, one of today's three, was the gain reference.
 
-Today the antenna becomes a surface, a hole, and an opening.
+Today: the patch and the slot are resonant antennas; the horn is a traveling-wave antenna.
 
 Note:
 Three lessons of wires, and every one of them sticks out of the airframe. Today's three sit flush or bolt to a waveguide.
@@ -52,15 +52,15 @@ Three antennas in one lesson. The organizing question every time: what physicall
 ## The Microstrip Patch
 
 <div class="two-col fig-wide"><div class="col-text">
-<p>A conductor of width <em>W</em> and length <em>L</em>, on a substrate of thickness <em>h</em> and permittivity <em>&epsilon;<sub>r</sub></em>, over a solid ground plane.</p>
-<p>Driven, it is a <strong>half-wave resonator</strong> in the dielectric: $L \approx \lambda_d/2$, with $\lambda_d = \lambda_0/\sqrt{\varepsilon_{\text{eff}}}$.</p>
-<p>The metal is a poor radiator. The edges are the antenna.</p>
+<p>A copper rectangle, <em>W</em> by <em>L</em>, on a substrate over a ground plane. Patch and ground are a short, wide <strong>microstrip line</strong>, and a transmission line does not radiate.</p>
+<p>The wave reflects from both <strong>open ends</strong> into a standing wave, which resonates at $L \approx \lambda_d/2$.</p>
+<p>At the open ends the field <strong>fringes</strong> out past the copper, and that field radiates.</p>
 </div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L13-patch-anatomy.svg" style="max-width:560px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L13-patch-standing-wave.svg" style="max-width:600px; margin:0 auto;"></div>
 </div></div>
 
 Note:
-Stress the direction bookkeeping: L sets the resonance, W sets the impedance and the H-plane beamwidth. Students mix them up constantly.
+Tie it to L3's resonant antenna: the wave reflects off the open end and comes back. Ask why a microstrip trace on a circuit board does not radiate; the same answer covers the middle of the patch. Then L sets the resonance, and W sets the impedance and the H-plane beamwidth.
 
 ---
 
@@ -79,9 +79,24 @@ Draw the standing wave on the board and let them find the sign flip themselves. 
 
 ---
 
+## Two Radiating Edges, Not Four
+
+<div class="two-col fig-wide"><div class="col-text">
+<p>Along each <strong>end</strong> the field is uniform, and both ends point the same way, so they add.</p>
+<p>Along each <strong>side</strong> the field reverses halfway, so the two halves cancel.</p>
+<p>The beam points broadside.</p>
+</div><div class="col-fig">
+<div class="fig" data-inline-svg="./fig/L13-patch-edges.svg" style="max-width:520px; margin:0 auto;"></div>
+</div></div>
+
+Note:
+The question someone always asks: a rectangle has four edges, so why two slots? Point at the side arrows: the standing wave runs along L, so each side sees the field swing from outward to inward. The side edges are the main source of cross-polarization.
+
+---
+
 ## Sizing a Patch: Width and Permittivity
 
-**1 — Width** (the half-power width choice, a compromise between efficiency and higher modes):
+**1 — Width.** $W$ sets the edge resistance and the efficiency; the formula is the standard compromise with higher-order modes:
 
 $$W = \frac{c}{2f_r}\sqrt{\frac{2}{\varepsilon_r+1}}$$
 
@@ -100,11 +115,11 @@ These are the Hammerstad closed forms. They are curve fits to measured microstri
 
 $$\frac{\Delta L}{h} = 0.412\ \frac{(\varepsilon_{\text{eff}}+0.3)(W/h+0.264)}{(\varepsilon_{\text{eff}}-0.258)(W/h+0.8)}$$
 
-**4 — Physical length.** Resonance requires an *electrical* length of $\lambda_d/2$, so the metal is cut short by $2\Delta L$:
+**4 — Physical length.** $L$ sets the frequency, and resonance requires an *electrical* length of $\lambda_d/2$, so the metal is cut short by $2\Delta L$:
 
 $$L = \frac{c}{2 f_r \sqrt{\varepsilon_{\text{eff}}}} - 2\Delta L$$
 
-<div class="callout">The fringing fields are why the metal must be cut <strong>short</strong> by $2\Delta L$.</div>
+<div class="callout">A 1% error in $L$ moves the resonance 1%, about a patch's whole bandwidth.</div>
 
 Note:
 Typical delta-L is a few percent of L. That is small, but it moves the resonance by more than a patch's whole bandwidth.
@@ -171,16 +186,31 @@ Demo live: hold f fixed, step epsilon_r up the list, and the drawing shrinks and
 
 ---
 
-## Feeding a Patch
+## Where to Tap the Standing Wave
 
-- **Inset microstrip line.** The edge is a few hundred ohms and the center is a short, so slide the feed in through a notch until the impedance reads $50\ \Omega$. It is inexpensive and coplanar, and the feed line radiates a little.
-- **Coaxial probe.** A pin through the ground plane reaches the same match point. It does not radiate, but it requires a drilled and soldered via.
-- **Aperture-coupled.** The feed line sits under a second ground plane and couples through a slot. This isolates the feed and widens the band, but adds a layer.
-
-<div class="callout">The resonator is the same in each case; the design choice is <strong>where to tap the standing wave</strong>.</div>
+<div class="two-col fig-wide"><div class="col-text">
+<p>The voltage between patch and ground is largest at the ends and zero at the center.</p>
+<p>So the input resistance falls from a few hundred ohms at the edge to zero at the center.</p>
+<p>Feed at the point where it reads $50\ \Omega$.</p>
+</div><div class="col-fig">
+<div class="fig" data-inline-svg="./fig/L13-patch-feed-position.svg" style="max-width:600px; margin:0 auto;"></div>
+</div></div>
 
 Note:
-Tie back to L4: this is the same impedance-matching problem, with the tap point as the variable instead of a transformer.
+Tie back to L4: this is the same impedance-matching problem, with the tap point as the variable instead of a transformer. The curve is the transmission-line model for the worked-example patch; substrate loss moves the real point a little toward the edge.
+
+---
+
+## Three Ways to Feed a Patch
+
+<div class="fig" data-inline-svg="./fig/L13-patch-feeds.svg" style="max-width:900px; margin:0 auto;"></div>
+
+- **Inset line.** Notches let a printed line reach the $50\ \Omega$ point. It is inexpensive, and the line radiates a little.
+- **Coaxial probe.** A pin from below the ground plane touches the patch at that point. It does not radiate, but needs a soldered via.
+- **Aperture coupling.** A line on a second board, below the ground plane, couples through a slot. It shields the feed and widens the band, but adds a layer.
+
+Note:
+Nothing on the aperture-coupled patch touches the patch: the feed line's field comes up through the slot. The ground plane is the shared middle layer between the two boards.
 
 ---
 

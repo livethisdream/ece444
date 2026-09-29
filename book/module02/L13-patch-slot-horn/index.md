@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-Today the antenna becomes a surface, a hole, and an opening.
+The patch and the slot are resonant antennas; the horn is a traveling-wave antenna.
 
 Lesson 13 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -39,76 +39,114 @@ Lesson 13 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 
 :::{depth}
-Every antenna so far has been a wire. Lesson 7 developed the resonant dipole,
-and Lesson 12 bent it into a loop and grounded it into a monopole; in each case
-the current flowed on a thin conductor. Today the antenna becomes a
-**surface**, a **hole**, and an **opening**. All three can be built into an
-airframe or bolted to a waveguide, and we analyze all three the same way: once
-we know the field in the aperture, the equivalence principle of Lesson 6 gives
-the pattern.
+Lesson 3 sorted antennas into two families by what happens when the wave
+reaches the end of the structure. In a **resonant** antenna it reflects, the
+outgoing and reflected waves form a standing wave, and the antenna works only
+near the frequency where that standing wave fits, so its band is narrow. In a
+**traveling-wave** antenna the wave leaves the structure instead of coming
+back, so there is no sharp resonance and the band is wide.
 
-We have already used one of the three on the bench. The standard-gain horn
-that served as the gain reference in Lesson 11 is the last antenna in this
-lesson, and we will see why its gain is known to a few tenths of a dB.
+The dipole of Lesson 7 and the loop and monopole of Lesson 12 are resonant
+wires. Today covers three antennas that are not wires. The **patch** and the
+**slot** are resonant, like the dipole, and both are narrowband. The **horn**
+is a traveling-wave antenna: the wave in a waveguide flows out through a
+flared opening without reflecting, and a standard-gain horn covers an octave.
+
+We have already used the horn on the bench. The standard-gain horn that
+served as the gain reference in Lesson 11 is the last antenna in this lesson,
+and we will see why its gain is known to a few tenths of a dB.
 :::
 ::::
 
-::::{frame} The Patch Is a Printed Half-Wave Cavity
+::::{frame} The Patch: A Half-Wave Line Open at Both Ends
 :::{present}
-$$L \approx \frac{\lambda_d}{2}, \qquad \lambda_d = \frac{\lambda_0}{\sqrt{\varepsilon_{\text{eff}}}}$$
-
-- A $W \times L$ copper rectangle sits over a ground plane, made in one etch step.
-- The patch and the ground form a cavity with two open ends.
-- The edges are the antenna. The flat top is a transmission line.
+<img src="../../viz/img/L13-patch-standing-wave.svg"
+     alt="Side view of a patch over a ground plane: a wave travels along the patch and reflects from each open end, so the field between patch and ground is a standing wave, largest at the ends and zero at the center, and it fringes out past the two ends"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
+- The patch and the ground plane are a short, wide microstrip line.
+- The wave reflects from both open ends and forms a standing wave.
+- Resonance: $L \approx \lambda_d/2$, half a wavelength in the substrate.
 :::
 
-A **microstrip patch** sits on a substrate of thickness $h$ and relative
-permittivity $\varepsilon_r$. It takes one etch step to make, which is the
-main reason it is so common. When we drive it, a half-wave standing wave forms
-between the two open edges, so it resonates when its length is about half a
-wavelength *in the dielectric*. The flat top of the patch is a poor radiator,
-because a sheet of metal a fraction of a wavelength above a ground plane is a
-transmission line rather than an antenna.
+A **microstrip patch** is a copper rectangle, $W$ wide and $L$ long, on a
+substrate of thickness $h$ and relative permittivity $\varepsilon_r$, with a
+solid ground plane on the back. It takes one etch step to make, which is the
+main reason it is so common.
+
+The easiest way to understand it is as a transmission line. The patch and the
+ground plane under it are two conductors carrying equal and opposite
+currents, exactly like a microstrip line on a circuit board, only much wider
+and much shorter. A transmission line does not radiate: the fields of the two
+opposite currents cancel at any distance large compared with the spacing $h$,
+which is why a coax or a microstrip trace can carry power without losing it
+to radiation. So the flat top of the patch does not radiate either.
+
+The line is open at both ends. Lesson 3's resonant antenna is the model: a
+wave launched along the patch reflects from the far open end, comes back,
+reflects from the near one, and the two directions add to a standing wave.
+When $L$ is half a wavelength *in the substrate*,
+
+$$\lambda_d = \frac{\lambda_0}{\sqrt{\varepsilon_{\text{eff}}}}$$
+
+the reflections reinforce and the patch resonates. The electric field between
+patch and ground is then largest at the two ends, pointing down at one and up
+at the other, and zero at the center. Textbooks often call this structure a
+**cavity**: the patch and the ground are its top and bottom walls, and the two
+ends are open.
+
+At an open end the field is not confined between the conductors. It
+**fringes** out past the edge of the copper into the space above the board,
+and that fringing field is what radiates. This is what "the edges are the
+antenna" means: the middle of the patch is a transmission line, and all of the
+radiation comes from the field that leaks out at the ends.
 ::::
 
-::::{frame} Why It Radiates: Two Slots
+::::{frame} Two Radiating Edges, Not Four
 :::{present}
-:class: callout
-A patch radiates from **two slots**: the fringing fields at its open edges,
-driven in phase.
+<img src="../../viz/img/L13-patch-edges.svg"
+     alt="Top view of a patch with the fringing field drawn on all four edges: uniform and pointing the same way along the two ends, reversing halfway along the two sides"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- Equal path lengths keep the beam broadside.
-- The ground plane suppresses the back hemisphere.
-- Directivity is 5 to 8 dBi, typically 6.
+- Along each end the field is uniform, and both ends point the same way, so they add.
+- Along each side the field reverses halfway, so the two halves cancel.
+- The beam points broadside, 5 to 8 dBi, typically 6.
 :::
 
-Inside the cavity the electric field runs from patch to ground, and because it
-is a half-wave standing wave it points down at one open edge and up at the
-other. At each open edge the field does not stop at the copper; it **fringes**
-out past it. Decompose each fringe into a vertical and a horizontal part: the
-vertical parts at the two edges are opposite and cancel in the far field,
-while the horizontal parts point the same way and add.
+A rectangle has four edges, and the field fringes past all of them. What
+decides whether an edge radiates is how the field varies *along* it.
+
+The standing wave runs along $L$. Along each of the two ends, which are $W$
+long, the field has the same strength and direction everywhere, so the whole
+edge radiates in phase, like a slot $W$ long. The two ends are called the
+**radiating edges**, and the patch is modeled as **two slots** a distance $L$
+apart.
+
+Along each of the two sides, which are $L$ long, the field follows the
+standing wave: outward near one end, zero at the middle, and inward near the
+other end. The two halves of each side are equal and opposite, so broadside
+their contributions cancel. These are the **non-radiating edges**. They are
+not perfectly silent off broadside, and they are the main source of the
+patch's cross-polarized radiation, but the pattern comes from the two ends.
+
+<img src="../../viz/img/L13-patch-fringing.svg"
+     alt="Side view of a patch: the field inside points down at one open edge and up at the other, and at each edge the fringing field curls out past the copper; the horizontal parts at the two edges point the same way and add toward broadside"
+     style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
+
+The side view shows why the two ends add even though the field between the
+plates points down at one end and up at the other. Decompose each fringing
+field into a vertical and a horizontal part: the vertical parts at the two
+ends are opposite and cancel in the far field, while the horizontal parts
+point the same way and add.
 
 The two-slot model accounts for both the shape of the pattern and its
-direction. The H-plane beamwidth lands near $80^\circ$ and the E-plane stays
+direction. The two slots are equidistant from any point straight overhead, so
+the beam always points broadside, and the ground plane suppresses the back
+hemisphere. The H-plane beamwidth lands near $80^\circ$ and the E-plane stays
 broad, because two slots about a quarter of a free-space wavelength apart
 cannot form a narrow beam.
-::::
-
-::::{frame} Feeding a Patch
-:::{present}
-- **Inset line**: slide the feed in through etched notches until it reads $50\ \Omega$.
-- **Coaxial probe**: a pin through the ground plane; the feed does not radiate.
-- **Aperture coupling**: couple through a slot from a buried line.
-:::
-
-The patch edge presents a few hundred ohms and the center is a virtual short,
-so we match the patch by choosing where to tap the standing wave. The inset
-feed is inexpensive and coplanar, but the feed line radiates a little; the
-probe does not radiate but requires a drilled and soldered via; aperture
-coupling isolates the feed and widens the band but adds a layer. The resonator
-is the same in each case, and only the tap point changes.
 ::::
 
 ::::{frame} Sizing a Patch
@@ -117,31 +155,48 @@ $$\begin{aligned}
 W &= \frac{c}{2 f_r}\sqrt{\frac{2}{\varepsilon_r+1}} \\
 L &= \frac{c}{2 f_r \sqrt{\varepsilon_{\text{eff}}}} - 2\Delta L
 \end{aligned}$$
-
-- $\varepsilon_{\text{eff}}$: part of the field is in air.
-- $\Delta L$: fringing makes the cavity look longer.
 :::
 :::{present}
-:class: callout
-$\Delta L$ is a few percent of $L$, more than a patch's whole bandwidth, so
-the correction is required.
+- $L$ sets the frequency: a 1% error in $L$ moves it 1%, about the whole bandwidth.
+- $W$ sets the edge resistance and the efficiency.
+- $\Delta L$ is the fringing correction; omitting it detunes the patch.
 :::
 
-A patch etched to the full $\lambda_d/2$ resonates below $f_r$ by more than
-its own bandwidth, so it is mismatched at the design frequency.
+The dimensions matter for three reasons.
+
+**The length sets the frequency.** The patch resonates when $L$ is half a
+wavelength in the substrate, so the resonant frequency is inversely
+proportional to $L$: a length 1% too long resonates 1% low. A patch's whole
+bandwidth is only one or two percent, so the length has to be right to a
+fraction of a percent. That is also why the fringing correction matters. The
+fringing field extends each end by $\Delta L$, which is a few percent of $L$,
+so a patch etched to the full $\lambda_d/2$ resonates below $f_r$ by more
+than its own bandwidth and is mismatched at the design frequency.
+
+**The width sets the impedance and the efficiency.** Each radiating edge is a
+slot $W$ long, and a longer slot radiates more easily, so a wider patch has a
+lower edge resistance and radiates more of its power before it is lost in the
+substrate. Too wide, and the patch can resonate across its width as well. The
+width formula is the standard compromise.
+
+**The overall size decides where the patch fits.** A patch on a
+high-permittivity substrate is smaller, which matters in a handset and
+matters more in an array, where the elements sit about half a free-space
+wavelength apart and each one has to fit in its cell. Shrinking the patch
+narrows its bandwidth, as the frames after the worked example show.
 
 :::{depth}
-The two intermediate closed forms are Hammerstad curve fits to measured
-microstrip behavior rather than derivations, so we use them as design equations
-and check the result in a solver:
+Here $\varepsilon_{\text{eff}}$ is the permittivity the wave actually
+sees: part of the field runs through the substrate and part through the air
+above it, so $\varepsilon_{\text{eff}}$ lies between 1 and
+$\varepsilon_r$. The two intermediate closed forms are Hammerstad curve fits
+to measured microstrip behavior rather than derivations, so we use them as
+design equations and check the result in a solver:
 
 $$\begin{aligned}
 \varepsilon_{\text{eff}} &= \frac{\varepsilon_r+1}{2} + \frac{\varepsilon_r-1}{2}\left(1+\frac{12h}{W}\right)^{-1/2} \\
 \frac{\Delta L}{h} &= 0.412\ \frac{(\varepsilon_{\text{eff}}+0.3)(W/h+0.264)}{(\varepsilon_{\text{eff}}-0.258)(W/h+0.8)}
 \end{aligned}$$
-
-The width formula is the standard compromise between radiation efficiency
-(wider is better) and exciting unwanted modes (narrower is better).
 :::
 ::::
 
@@ -185,28 +240,109 @@ gives the bandwidth for VSWR $\le 2$, the same bar we read off a trace in
 Lesson 10.
 ::::
 
-::::{frame} Substrate Against Size and Bandwidth
+::::{frame} Where to Tap the Standing Wave
+:::{present}
+<img src="../../viz/img/L13-patch-feed-position.svg"
+     alt="Input resistance of the 2.45 GHz FR-4 patch against feed position: about 320 ohms at the radiating edge, falling to zero at the center, and crossing 50 ohms 10.7 mm in from the edge"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
+- The voltage is largest at the ends and zero at the center.
+- So the input resistance falls from about $320\ \Omega$ at the edge to zero.
+- $50\ \Omega$ lies $10.7$ mm in from the edge of our design.
+:::
+
+Feeding a patch is an impedance-matching problem, and the standing wave
+solves it. At the radiating edge the voltage between patch and ground is at
+its maximum and the current is near zero, so the impedance is high: a few
+hundred ohms. At the center the voltage is zero and the current is at its
+maximum, so the impedance is zero, a virtual short. Between the two the input
+resistance follows
+
+$$R_{\text{in}}(y_0) = R_{\text{edge}}\cos^2\left(\frac{\pi y_0}{L}\right)$$
+
+where $y_0$ is the distance of the feed point in from the radiating edge.
+Somewhere between edge and center it passes through $50\ \Omega$, and that is
+where we connect the feed.
+
+For the $2.45\ \text{GHz}$ FR-4 design, the transmission-line model gives
+$R_{\text{edge}} \approx 320\ \Omega$ and puts the $50\ \Omega$ point
+$10.7\ \text{mm}$ in from the edge, a little over a third of the way to the
+center. Substrate loss lowers the edge resistance of a real FR-4 patch, so the
+measured point sits somewhat closer to the edge; a solver or a trim on the
+bench finds it.
+::::
+
+::::{frame} Three Ways to Feed a Patch
+:::{present}
+<img src="../../viz/img/L13-patch-feeds.svg"
+     alt="Three ways to feed a patch: an inset microstrip line that reaches into the patch through two notches; a coaxial probe whose pin comes up through the ground plane and the substrate; and aperture coupling, where a feed line on a second board below the ground plane couples through a slot in the ground plane"
+     style="max-width: 760px; width: 100%; display: block; margin: 0 auto;">
+
+- **Inset line**: notches let a printed line reach the $50\ \Omega$ point.
+- **Coaxial probe**: a pin from below touches the patch at that point.
+- **Aperture coupling**: a line on a second board couples through a ground-plane slot.
+:::
+
+All three feeds connect to the same resonator at, or near, the same
+$50\ \Omega$ point; they differ in how they get there.
+
+The **inset line** is printed in the same etch step as the patch. Two notches
+cut into the radiating edge let the microstrip line reach in to the
+$50\ \Omega$ point without touching the patch on either side. It is the
+least expensive feed and keeps everything on one side of the board, but the
+feed line is itself a conductor above the ground plane, and it radiates a
+little.
+
+The **coaxial probe** comes up from behind. The coax's outer conductor is
+soldered to the ground plane, and its center pin passes through a hole in the
+substrate and is soldered to the patch at the $50\ \Omega$ point. The feed
+is behind the ground plane, so it does not radiate, but every element needs a
+drilled and soldered connection.
+
+**Aperture coupling** uses two circuit boards. The patch sits on the top
+board. The ground plane is between the two boards and has a small slot cut in
+it under the patch. The feed line runs on the bottom board, below the ground
+plane, and crosses under the slot, and the field of the line couples up
+through the slot to the patch. Nothing touches the patch. The ground plane
+shields the feed network from the radiating side, and the slot's own
+resonance widens the band, but the design needs a second layer.
+::::
+
+::::{frame} The Patch Designer
 :class: viz-frame
 
 :::{present}
 <iframe src="../../viz/patch-designer.html"
-        width="100%" height="533"
+        width="100%" height="562"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
-        title="Rectangular patch designer: substrate versus patch size, bandwidth, and the two-slot pattern">
+        title="Rectangular patch designer: the patch to scale with its feed point, VSWR against frequency, and the two-slot pattern">
 </iframe>
 :::
 
 :::{depth}
-Set a frequency and pick a substrate, and the designer redraws the patch
-inside the fixed free-space half-wave box: the gap between the dashed box and
-the copper is the size reduction the dielectric provides. As $\varepsilon_r$
-steps up the list, the patch shrinks and the bandwidth pill falls. Increasing
-the thickness restores the bandwidth. The patterns underneath are the two-slot model; note that
-no control moves the beam off broadside, because the two slots always add in
-phase along the normal. The red edges on the top view are the radiating slots;
-the "dielectric half-wave" figure compares the in-substrate half-wavelength to
-the free-space one shown by the dashed box.
+Pick a frequency, a substrate, and a thickness, and the designer sizes the
+patch with the design set above. The top view is drawn to scale inside the
+dashed outline of the same patch built in air, so the difference between the
+two is the size reduction the substrate provides. The shading along the patch
+is the standing wave, strongest at the two radiating edges and zero at the
+center, and the inset feed reaches in to the $50\ \Omega$ point.
+
+The VSWR curve shows the bandwidth. Step $\varepsilon_r$ up the list and the
+dip narrows; increase the thickness and it widens again. The **length error**
+control etches the patch longer or shorter than the design. At $+5\%$, about
+the size of the $2\Delta L$ correction for the FR-4 design, the resonance
+moves below the band and the VSWR at the design frequency climbs past 5. That
+is why the length has to be right to a fraction of a percent.
+
+The patterns are the two-slot model. No control moves the beam off
+broadside, because the two radiating edges always add in phase along the
+normal. The model assumes an infinite ground plane, so the E-plane stays broad
+out to the horizon; a real, finite ground plane rolls it off and puts a few dB
+of radiation behind the board. The VSWR curve treats the patch near resonance
+as a parallel resonant circuit matched at its own resonant frequency, with its
+$Q$ set so that the VSWR $\le 2$ band equals the closed-form bandwidth.
 :::
 ::::
 
@@ -401,6 +537,7 @@ The fuller comparison:
 | $L \approx \lambda_d/2$ | patch resonates as a half-wave cavity in the dielectric | shorten by $2\Delta L$ |
 | $\varepsilon_{\text{eff}}$ | effective permittivity of the substrate and air | between 1 and $\varepsilon_r$ |
 | two-slot model | patch radiates from the two fringing edges, in phase | broadside, 5–8 dBi |
+| feed position | $R_{\text{in}}$ falls from $R_{\text{edge}}$ at the edge to 0 at the center | $50\ \Omega$ about a third of the way in |
 | patch bandwidth | rises with $h/\lambda_0$, falls with $\varepsilon_r$ | 1–5 %, few % typical |
 | $Z_{\text{slot}} Z_{\text{dipole}} = \eta_0^2/4$ | Babinet complementarity | resonant slot $\approx 485\ \Omega$ |
 | slot polarization | field runs across the cut, not along it | horizontal slot, vertical polarization |

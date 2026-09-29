@@ -1,0 +1,58 @@
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="0 0 870 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three ways to feed a patch: an inset microstrip line that reaches into the patch through two notches; a coaxial probe whose center pin comes up through the ground plane and the substrate to touch the patch; and aperture coupling, where a feed line on a second board below the ground plane couples to the patch through a slot in the ground plane">
+<defs><marker id="l13fd-ah-004a85" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker><marker id="l13fd-ah-b01e24" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker><marker id="l13fd-ah-5a5a5a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5a5a5a"/></marker></defs>
+<line x1="290" y1="16" x2="290" y2="284" stroke="#dbe3ee" stroke-width="1"/>
+<line x1="580" y1="16" x2="580" y2="284" stroke="#dbe3ee" stroke-width="1"/>
+<text x="145.0" y="36.0" fill="#004a85" font-size="22" font-weight="700" text-anchor="middle">Inset line</text>
+<text x="145.0" y="60.0" fill="#5a5a5a" font-size="17" text-anchor="middle">top view</text>
+<text x="435.0" y="36.0" fill="#004a85" font-size="22" font-weight="700" text-anchor="middle">Coaxial probe</text>
+<text x="435.0" y="60.0" fill="#5a5a5a" font-size="17" text-anchor="middle">side view</text>
+<text x="725.0" y="36.0" fill="#004a85" font-size="22" font-weight="700" text-anchor="middle">Aperture coupling</text>
+<text x="725.0" y="60.0" fill="#5a5a5a" font-size="17" text-anchor="middle">side view</text>
+<rect x="30" y="70" width="230" height="200" rx="4" fill="#eaf2f9" stroke="#b9d2e5"/>
+<path d="M60 84 H230 V204 H168.0 V152 H122.0 V204 H60 Z" fill="rgba(0,103,185,0.14)" stroke="#004a85" stroke-width="2.2"/>
+<rect x="138.0" y="152" width="14" height="118" fill="#0067b9"/>
+<circle cx="145.0" cy="152" r="5" fill="#b01e24"/>
+<line x1="244" y1="204" x2="244" y2="152" stroke="#004a85" stroke-width="1.4" marker-start="url(#l13fd-ah-004a85)" marker-end="url(#l13fd-ah-004a85)"/>
+<text x="238.0" y="142.0" fill="#004a85" font-size="18" font-weight="700" text-anchor="end">inset</text>
+<text x="129.0" y="252.0" fill="#0067b9" font-size="18" font-weight="700" text-anchor="end">feed line</text>
+<rect x="320" y="150" width="230" height="46" fill="#eaf2f9" stroke="#b9d2e5"/>
+<line x1="320" y1="196" x2="550" y2="196" stroke="#004a85" stroke-width="5"/>
+<line x1="326" y1="199" x2="317" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="340" y1="199" x2="331" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="354" y1="199" x2="345" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="368" y1="199" x2="359" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="382" y1="199" x2="373" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="396" y1="199" x2="387" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="410" y1="199" x2="401" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="424" y1="199" x2="415" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="438" y1="199" x2="429" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="452" y1="199" x2="443" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="466" y1="199" x2="457" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="480" y1="199" x2="471" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="494" y1="199" x2="485" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="508" y1="199" x2="499" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="522" y1="199" x2="513" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="536" y1="199" x2="527" y2="209" stroke="#b9d2e5" stroke-width="1.2"/>
+<line x1="350" y1="150" x2="520" y2="150" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
+<rect x="386" y="199" width="28" height="82" fill="#5a5a5a" opacity="0.35"/>
+<rect x="393" y="199" width="14" height="82" fill="#ffffff"/>
+<line x1="400" y1="150" x2="400" y2="278" stroke="#c9822b" stroke-width="4"/>
+<circle cx="400" cy="150" r="5" fill="#b01e24"/>
+<text x="435.0" y="134.0" fill="#004a85" font-size="18" font-weight="700" text-anchor="middle">patch</text>
+<text x="424.0" y="228.0" fill="#c9822b" font-size="18" font-weight="700" text-anchor="start">pin through</text>
+<text x="424.0" y="250.0" fill="#c9822b" font-size="18" font-weight="700" text-anchor="start">the board</text>
+<text x="424.0" y="276.0" fill="#5a5a5a" font-size="17" text-anchor="start">coax below</text>
+<rect x="610" y="118" width="230" height="50" fill="#eaf2f9" stroke="#b9d2e5"/>
+<rect x="610" y="168" width="230" height="50" fill="#f4f0e6" stroke="#dccfb2"/>
+<line x1="640" y1="118" x2="810" y2="118" stroke="#004a85" stroke-width="6" stroke-linecap="round"/>
+<line x1="610" y1="168" x2="713" y2="168" stroke="#004a85" stroke-width="5"/>
+<line x1="737" y1="168" x2="840" y2="168" stroke="#004a85" stroke-width="5"/>
+<line x1="650" y1="218" x2="780" y2="218" stroke="#0067b9" stroke-width="6" stroke-linecap="round"/>
+<line x1="725.0" y1="212.0" x2="725.0" y2="172.0" stroke="#b01e24" stroke-width="2.2" marker-end="url(#l13fd-ah-b01e24)"/>
+<line x1="725.0" y1="164.0" x2="725.0" y2="126.0" stroke="#b01e24" stroke-width="2.2" marker-end="url(#l13fd-ah-b01e24)"/>
+<text x="725.0" y="102.0" fill="#004a85" font-size="18" font-weight="700" text-anchor="middle">patch</text>
+<text x="614.0" y="160.0" fill="#004a85" font-size="17" font-weight="700" text-anchor="start">ground</text>
+<text x="739.0" y="160.0" fill="#b01e24" font-size="17" font-weight="700" text-anchor="start">slot</text>
+<text x="725.0" y="244.0" fill="#0067b9" font-size="17" font-weight="700" text-anchor="middle">feed line on a</text>
+<text x="725.0" y="266.0" fill="#0067b9" font-size="17" font-weight="700" text-anchor="middle">second board</text>
+</svg>
