@@ -516,21 +516,38 @@ are built from thick copper tubing with welded joints and a vacuum capacitor.
 
 ::::{frame} Low Efficiency, Same SNR
 :::{present}
-- Loss cuts the signal **and** the sky noise by the same factor.
-- SNR holds until the sky noise falls to the receiver's floor.
-- At 1 MHz, sky noise is 70 dB above $kT_0$; 40 dB of loss barely changes SNR.
+- Loss cuts the signal **and** the external noise by the same factor.
+- SNR holds until the external noise falls to the receiver's floor.
+- At 1 MHz, external noise is 70 dB above $kT_0$; 40 dB of loss barely changes SNR.
 :::
 
 In a transmitter, every watt that heats the wire is lost. A receiver is
-limited by signal-to-noise ratio instead, and below about 30 MHz most of the noise does not come
-from the receiver at all: atmospheric and man-made noise arrive through the
-antenna along with the signal, tens of dB above the thermal floor $kT_0B$.
-Antenna loss scales both by the same $\eta_{\text{rad}}$, so the ratio does not
-move. With 40 dB of loss, a residential 1 MHz noise level still lands about
-30 dB above $kT_0$, 20 dB over a receiver with a 10 dB noise figure, and the
-SNR drops by a few hundredths of a dB. That is why a loop that is a poor
-transmitter can be a good receiving antenna. It stops working at VHF and above, where the sky is quiet
-and the receiver's own noise sets the floor.
+limited by signal-to-noise ratio instead, and its noise has two sources. The
+receiver adds its own, set by its noise figure and referenced to the thermal
+floor $kT_0B$: the noise power a matched resistor delivers at
+$T_0 = 290\ \text{K}$ in a bandwidth $B$. The antenna delivers **external
+noise** along with the signal, at a power $kT_AB$ set by its **antenna
+temperature** $T_A$, the temperature of whatever the pattern sees, weighted by
+the pattern. External noise is the same kind of noise as $kT_0B$ at a
+different temperature. Below about 30 MHz, lightning noise propagated by the
+ionosphere and man-made noise from power lines and electronics make $T_A$
+very large: a residential site at 1 MHz measures about 72 dB above $kT_0B$
+(ITU-R P.372), or $T_A \approx 5\times10^9\ \text{K}$. A microwave antenna
+aimed at clear sky, by contrast, can see only 10 to 50 K.
+
+Antenna loss attenuates the external noise and the signal by the same factor
+and adds only a little thermal noise of its own, at the antenna's physical
+temperature:
+
+$$T_A' = \eta_{\text{rad}} T_A + \left(1 - \eta_{\text{rad}}\right) T_\text{phys}$$
+
+With 40 dB of loss, $\eta_{\text{rad}} = 10^{-4}$, the 1 MHz antenna still
+delivers $T_A' \approx 5\times10^5\ \text{K}$. That is about 32 dB above
+$T_0$ and about 23 dB over the $T_e = T_0(F - 1) \approx 2600\ \text{K}$ of a
+receiver with a 10 dB noise figure, so the SNR drops by a few hundredths of a
+dB. That is why a loop that is a poor transmitter can be a good receiving
+antenna. It stops working at VHF and above, where $T_A$ is low and the
+receiver's own noise sets the floor.
 
 Receive loops still use every available way to raise their output. $N$ turns raise $R_r$ as
 $N^2$ and the loss only as $N$; wind them on a ferrite rod and the effective
