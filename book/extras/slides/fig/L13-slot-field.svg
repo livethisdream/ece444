@@ -1,0 +1,44 @@
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A dipole beside its complement, a slot in a conducting sheet. On the dipole the current runs along the wire, largest at the center feed and zero at the open ends. On the slot the electric field runs across the gap, largest at the center feed and zero at the ends, where the metal shorts the gap">
+<defs><marker id="l13sl-ah-004a85" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker><marker id="l13sl-ah-0067b9" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0067b9"/></marker><marker id="l13sl-ah-b01e24" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker><marker id="l13sl-ah-3f7d34" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3f7d34"/></marker><marker id="l13sl-ah-8a5a00" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a5a00"/></marker></defs>
+<text x="140.0" y="30.0" fill="#004a85" font-size="23" font-weight="700" text-anchor="middle">Dipole</text>
+<text x="140.0" y="54.0" fill="#5a5a5a" font-size="19" text-anchor="middle">metal in air</text>
+<text x="440.0" y="30.0" fill="#004a85" font-size="23" font-weight="700" text-anchor="middle">Slot</text>
+<text x="440.0" y="54.0" fill="#5a5a5a" font-size="19" text-anchor="middle">air in metal</text>
+<rect x="114" y="92" width="12" height="106.0" rx="4" fill="#004a85"/>
+<rect x="114" y="212.0" width="12" height="106.0" rx="4" fill="#004a85"/>
+<circle cx="120" cy="205.0" r="6" fill="#fff" stroke="#8a5a00" stroke-width="2.4"/>
+<circle cx="142" cy="104.6" r="2.2" fill="#0067b9"/>
+<line x1="142.0" y1="135.2" x2="142.0" y2="124.2" stroke="#0067b9" stroke-width="2.7" marker-end="url(#l13sl-ah-0067b9)"/>
+<line x1="142.0" y1="163.2" x2="142.0" y2="146.4" stroke="#0067b9" stroke-width="2.966044443118978" marker-end="url(#l13sl-ah-0067b9)"/>
+<line x1="142.0" y1="190.2" x2="142.0" y2="169.6" stroke="#0067b9" stroke-width="3.1396926207859086" marker-end="url(#l13sl-ah-0067b9)"/>
+<line x1="142.0" y1="240.4" x2="142.0" y2="219.8" stroke="#0067b9" stroke-width="3.1396926207859086" marker-end="url(#l13sl-ah-0067b9)"/>
+<line x1="142.0" y1="263.6" x2="142.0" y2="246.8" stroke="#0067b9" stroke-width="2.966044443118978" marker-end="url(#l13sl-ah-0067b9)"/>
+<line x1="142.0" y1="285.8" x2="142.0" y2="274.8" stroke="#0067b9" stroke-width="2.7" marker-end="url(#l13sl-ah-0067b9)"/>
+<circle cx="142" cy="305.4" r="2.2" fill="#0067b9"/>
+<text x="160.0" y="98.0" fill="#5a5a5a" font-size="18" text-anchor="start">open end:</text>
+<text x="160.0" y="117.0" fill="#5a5a5a" font-size="18" text-anchor="start">current zero</text>
+<text x="160.0" y="210.0" fill="#0067b9" font-size="19" font-weight="700" text-anchor="start">current</text>
+<text x="160.0" y="230.0" fill="#0067b9" font-size="19" font-weight="700" text-anchor="start">along the wire</text>
+<text x="106.0" y="210.0" fill="#8a5a00" font-size="18" font-weight="700" text-anchor="end">feed</text>
+<line x1="258" y1="205.0" x2="318" y2="205.0" stroke="#3f7d34" stroke-width="3" marker-start="url(#l13sl-ah-3f7d34)" marker-end="url(#l13sl-ah-3f7d34)"/>
+<text x="288.0" y="191.0" fill="#3f7d34" font-size="18" font-weight="700" text-anchor="middle">complement</text>
+<defs><pattern id="l13sl-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="10" stroke="#b9d2e5" stroke-width="1.4"/></pattern></defs>
+<rect x="350" y="76" width="190" height="258" fill="#eaf2f9" stroke="#004a85" stroke-width="2"/>
+<rect x="350" y="76" width="190" height="258" fill="url(#l13sl-hatch)"/>
+<rect x="437.0" y="92" width="16" height="226" fill="#fff" stroke="#004a85" stroke-width="1.6"/>
+<circle cx="445.0" cy="104.6" r="2.2" fill="#b01e24"/>
+<line x1="429.5" y1="129.7" x2="460.5" y2="129.7" stroke="#b01e24" stroke-width="2.5999999999999996" marker-end="url(#l13sl-ah-b01e24)"/>
+<line x1="425.5" y1="154.8" x2="464.5" y2="154.8" stroke="#b01e24" stroke-width="2.9192533317427736" marker-end="url(#l13sl-ah-b01e24)"/>
+<line x1="422.9" y1="179.9" x2="467.1" y2="179.9" stroke="#b01e24" stroke-width="3.12763114494309" marker-end="url(#l13sl-ah-b01e24)"/>
+<line x1="422.9" y1="230.1" x2="467.1" y2="230.1" stroke="#b01e24" stroke-width="3.12763114494309" marker-end="url(#l13sl-ah-b01e24)"/>
+<line x1="425.5" y1="255.2" x2="464.5" y2="255.2" stroke="#b01e24" stroke-width="2.9192533317427736" marker-end="url(#l13sl-ah-b01e24)"/>
+<line x1="429.5" y1="280.3" x2="460.5" y2="280.3" stroke="#b01e24" stroke-width="2.5999999999999996" marker-end="url(#l13sl-ah-b01e24)"/>
+<circle cx="445.0" cy="305.4" r="2.2" fill="#b01e24"/>
+<line x1="423.0" y1="205.0" x2="467.0" y2="205.0" stroke="#8a5a00" stroke-width="2.6"/>
+<circle cx="445.0" cy="205.0" r="5.5" fill="#fff" stroke="#8a5a00" stroke-width="2.4"/>
+<text x="445.0" y="360.0" fill="#5a5a5a" font-size="18" text-anchor="middle">shorted ends: field zero</text>
+<text x="475.0" y="175.0" fill="#b01e24" font-size="19" font-weight="700" text-anchor="start">field</text>
+<text x="475.0" y="195.0" fill="#b01e24" font-size="19" font-weight="700" text-anchor="start">across</text>
+<text x="475.0" y="215.0" fill="#b01e24" font-size="19" font-weight="700" text-anchor="start">the gap</text>
+<text x="475.0" y="239.0" fill="#8a5a00" font-size="18" font-weight="700" text-anchor="start">feed</text>
+</svg>

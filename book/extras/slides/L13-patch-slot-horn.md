@@ -216,13 +216,13 @@ Nothing on the aperture-coupled patch touches the patch: the feed line's field c
 
 ## Patches as Array Elements
 
-- One patch gives about $6$ dBi with a broad hemispherical beam, which is not enough gain for a radar.
-- A hundred patches on one board are printed in the same etch step, fed by printed lines, and steered by phase shifters.
-- The element is **flat, light, conformal, and identical to its neighbors** — which is exactly what an array needs.
+<div class="fig" data-inline-svg="./fig/L13-patch-array.svg" style="max-width:600px; margin:0 auto;"></div>
 
-<div class="callout">The <strong>PHASER</strong> array we use in Module 3 is a row of patch elements on a board.</div>
+- One patch gives about $6$ dBi with a broad beam, not enough gain for a radar.
+- Many identical patches etch in one step, and phase shifters steer their combined beam.
 
 Note:
+The PHASER array we use in Module 3 is a row of eight patches on a board, each behind its own phase shifter.
 Forward hook to L16 pattern multiplication: element factor equals the patch pattern from this lesson, space factor equals the array geometry from Module 3.
 
 ---
@@ -230,15 +230,16 @@ Forward hook to L16 pattern multiplication: element factor equals the patch patt
 ## The Slot Antenna
 
 <div class="two-col fig-xwide"><div class="col-text">
-<p>A slot is a $\lambda/2$ slit in a conducting sheet, driven across the middle.</p>
+<p>A slot is a $\lambda/2$ slit in a metal sheet, fed across the middle.</p>
 <p>It is the <strong>complement</strong> of a dipole: metal where the dipole is air, and air where the dipole is metal.</p>
-<p>It has no protrusion, adds no drag, and has nothing to shear off.</p>
+<p>Its ends are <strong>shorted</strong>, so the field across the gap is zero there and largest at the feed.</p>
+<p>It is flush: no protrusion, no drag.</p>
 </div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L13-slot-babinet.svg" style="max-width:680px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L13-slot-field.svg" style="max-width:600px; margin:0 auto;"></div>
 </div></div>
 
 Note:
-This is the antenna that can sit on a Mach-2 airframe, which motivates the whole section.
+This is the antenna that can sit on a Mach-2 airframe, which motivates the whole section. The slit is a short line shorted at both ends, the mirror of the patch's line open at both ends; the feed sits where the voltage is largest and the current smallest, which is why the impedance is high.
 
 ---
 
@@ -289,44 +290,41 @@ Ask them to predict before you tell them. Many will guess wrong, which is what m
 
 ## Slots in Service
 
-- **Cavity-backed slot.** A slot radiates both ways. Enclosing one side in a cavity gives a one-sided, flush, hemispherical radiator, the standard airframe antenna, but narrows the bandwidth.
-- **Waveguide slot arrays.** Slots cut along a waveguide wall each couple out a little power. The spacing sets the beam direction and the offset sets the amplitude taper. Marine and airborne surveillance radars are built this way.
-- **Leaky-wave and skin apertures.** These appear on missiles, radomes, and any surface that cannot carry a protrusion.
+<div class="fig" data-inline-svg="./fig/L13-slot-service.svg" style="max-width:720px; margin:0 auto;"></div>
 
-<div class="callout">A slot array is a <strong>ready-made aperture distribution</strong> — Module 3's tapering theory, realized in the waveguide wall.</div>
+- **Cavity-backed slot.** A cavity behind the slot makes it one-sided and flush, the standard airframe antenna, but narrows the band.
+- **Waveguide slot array.** Each slot couples out a little power; its offset from the centerline sets how much, so the wall carries the taper.
 
 Note:
-Show a marine radar slotted-waveguide photo if you have one loaded. Then forward-point at L24 sidelobe tapering.
+Show a marine radar slotted-waveguide photo if you have one loaded. Leaky-wave and skin apertures appear on missiles, radomes, and any surface that cannot carry a protrusion. A slot array is a ready-made aperture distribution: Module 3's tapering theory, realized in the waveguide wall. Forward-point at L24 sidelobe tapering.
 
 ---
 
 ## The Horn Antenna
 
-<div class="two-col fig-xwide"><div class="col-text">
-<p>A waveguide carries one mode, but an open end barely radiates: the opening is a fraction of a wavelength and badly mismatched.</p>
-<p>Flaring the walls expands the mode and makes the impedance transition gradual. The result is a large, well-illuminated aperture.</p>
-<p>By L6's equivalence principle, that aperture field <em>is</em> the source.</p>
-</div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L13-horn-aperture.svg" style="max-width:660px; margin:0 auto;"></div>
-</div></div>
+<div class="fig" data-inline-svg="./fig/L13-horn-flare.svg" style="max-width:720px; margin:0 auto;"></div>
+
+- An open-ended waveguide is small and badly matched: most of the power reflects.
+- Flaring the walls makes the transition gradual, so the wave flows out through a large aperture.
+- By L6's equivalence principle, that aperture field *is* the source.
 
 Note:
-The horn is the cleanest physical realization of everything L6 set up. Say that explicitly; it justifies the vector-potential work after the fact.
+The horn is the lesson's traveling-wave antenna: nothing sends the wave back, so there is no sharp resonance and a standard-gain horn covers an octave. It is also the cleanest physical realization of everything L6 set up; say that explicitly.
 
 ---
 
 ## Aperture Gain
 
-$$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}$$
-
-- $A$ is the **physical** aperture; $\eta_{\text{ap}}$ is the fraction of it that contributes to the gain.
-- Horns run $\eta_{\text{ap}} \approx 0.5$. Good reflectors reach $0.55$ to $0.7$.
-- Gain is set by **area in square wavelengths**. Doubling the frequency at fixed size raises the gain by $6$ dB.
-
-<div class="callout">This is the same $A_e = G\lambda^2/4\pi$ from L2, read right to left.</div>
+<div class="two-col fig-wide"><div class="col-text">
+<p>$$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}$$</p>
+<p>Gain counts the <strong>square wavelengths</strong> in the aperture. Double the frequency and four times as many fit: $+6$ dB.</p>
+<p>Horns run $\eta_{\text{ap}} \approx 0.5$; good reflectors reach $0.55$ to $0.7$.</p>
+</div><div class="col-fig">
+<div class="fig" data-inline-svg="./fig/L13-horn-squares.svg" style="max-width:600px; margin:0 auto;"></div>
+</div></div>
 
 Note:
-The value is 0.5, not 0.9. Ask why a horn gives up half its aperture, and let the next two slides answer.
+This is the same A_e = G lambda^2 / 4 pi from L2, read right to left. The value is 0.5, not 0.9. Ask why a horn gives up half its aperture, and let the next two slides answer.
 
 ---
 
@@ -351,12 +349,13 @@ The far-field row is the one that constrains the lab: a hand-sized horn already 
 
 ## Phase Error in the Aperture
 
-- Energy leaves the flare on a **spherical** wavefront centered near the horn's virtual apex.
-- The aperture is **flat**, so the edge is farther from the apex than the center and its phase **lags**.
-- That quadratic phase error broadens the beam, fills the nulls, raises the sidelobes, and **reduces the gain**.
-- Longer horn, same aperture ⟹ flatter wavefront ⟹ smaller error.
-
-<div class="callout">Aperture area sets a horn's maximum gain; phase error sets how much of it the horn reaches.</div>
+<div class="two-col fig-wide"><div class="col-text">
+<p>The wave leaves the apex on a <strong>spherical</strong> front, but the aperture is <strong>flat</strong>.</p>
+<p>The edge is farther from the apex, so its phase <strong>lags</strong>: a parabola across the aperture.</p>
+<p>That error broadens the beam, fills the nulls, and <strong>reduces the gain</strong>. A longer horn reduces it.</p>
+</div><div class="col-fig">
+<div class="fig" data-inline-svg="./fig/L13-horn-phase.svg" style="max-width:620px; margin:0 auto;"></div>
+</div></div>
 
 Note:
 This is the same 22.5-degree tolerance as the far-field criterion in L5, applied to a different geometry.
@@ -365,27 +364,28 @@ This is the same 22.5-degree tolerance as the far-field criterion in L5, applied
 
 ## The Optimum Horn
 
-- Make the aperture bigger at fixed length: $4\pi A/\lambda^2$ rises, but $\eta_{\text{ap}}$ falls. Gain peaks and then **turns over**.
-- The **optimum horn** is that peak — the shortest horn for a given aperture whose edge phase error is still tolerable (roughly $\lambda/4$ in the E-plane, $3\lambda/8$ in the H-plane).
-- At the optimum, $\eta_{\text{ap}} \approx 0.5$, which is the source of the number.
-
-<div class="callout">The optimum design gives up about <strong>half the aperture</strong> to keep the horn short enough to be practical.</div>
+<div class="two-col fig-wide"><div class="col-text">
+<p>At fixed length, a bigger aperture adds area but more phase error. Gain peaks, then <strong>turns over</strong>.</p>
+<p>The peak is the <strong>optimum horn</strong>: the edge lags about $\lambda/4$ in the E-plane and $3\lambda/8$ in the H-plane.</p>
+<p>At the optimum, $\eta_{\text{ap}} \approx 0.5$.</p>
+</div><div class="col-fig">
+<div class="fig" data-inline-svg="./fig/L13-horn-optimum.svg" style="max-width:600px; margin:0 auto;"></div>
+</div></div>
 
 Note:
-The point to keep: aperture efficiency is not a fudge factor; it follows from a design choice with a peak.
+The point to keep: aperture efficiency is not a fudge factor; it follows from a design choice with a peak. The curves are computed for a horn ten wavelengths long. Phase error costs about 22% per plane at the peak and the H-plane cosine taper another 19%: 0.78 x 0.78 x 0.81 is about 0.5. The optimum gives up about half the aperture to keep the horn short enough to be practical.
 
 ---
 
 ## The Standard-Gain Horn
 
-- It is built to the optimum design and measured at the factory, with gain tabulated across the band to a few tenths of a dB.
-- Its value is not performance but a **known** gain.
-- It is the reference in the gain-comparison method: measure the unknown, measure the standard, take the ratio.
+<div class="fig" data-inline-svg="./fig/L13-horn-comparison.svg" style="max-width:700px; margin:0 auto;"></div>
 
-<div class="callout">In <strong>L11</strong> the standard-gain horn was the reference against which we measured every other antenna's gain.</div>
+- Built to the optimum design and calibrated at the factory to a few tenths of a dB.
+- In L11 it was the reference: same spot, swap antennas, and the dB difference in power is the dB difference in gain.
 
 Note:
-Point at the actual horn in the chamber if the deck is being run in the lab space.
+Point at the actual horn in the chamber if the deck is being run in the lab space. Its value is not performance but a known gain.
 
 ---
 
