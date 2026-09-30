@@ -323,9 +323,9 @@ The 38.7 A is the number to emphasize. Transmitting loops need copper tube, weld
 
 ## Low Efficiency, Same SNR
 
-- Loss cuts the signal **and** the sky noise by the same factor.
-- SNR holds until the sky noise falls to the receiver's floor.
-- At 1 MHz, sky noise is 70 dB above $kT_0$; 40 dB of loss barely changes SNR.
+- Loss cuts the signal **and** the external noise by the same factor.
+- SNR holds until the external noise falls to the receiver's floor.
+- At 1 MHz, external noise is 70 dB above $kT_0$; 40 dB of loss barely changes SNR.
 - Designs still raise the output: $N$ turns raise $R_r$ as $N^2$ and loss only as $N$, and a **ferrite rod** multiplies the moment again.
 
 <div class="callout">
@@ -334,6 +334,18 @@ The bar behind the dial of an AM radio is a many-turn ferrite loop. Its efficien
 
 Note:
 Also mention loops reject local electric-field noise — a shielded loop is the standard tool for locating interference.
+
+---
+
+## Why the Current Reverses
+
+<div class="fig" data-inline-svg="./fig/L12-resonant-loop.svg" style="max-width:620px; margin:0 auto;"></div>
+
+- At $C \approx 1\lambda$ the current is a standing wave, $I_0\cos(ks)$, with nulls a quarter of the way around.
+- It reverses halfway around, so the top and bottom currents point the same way and the loop stops circulating.
+
+Note:
+Walk the arrows: the reversal is measured around the loop, and on the far side the wire runs the other way, so the two flips cancel. The loop is now two parallel in-phase elements about lambda over pi apart. They add along the axis and partly cancel in the plane, which is why the maximum moves to the axis.
 
 ---
 
