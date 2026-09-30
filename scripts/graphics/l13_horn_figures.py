@@ -237,6 +237,73 @@ def horn_optimum() -> str:
     return s, sE, sH
 
 
+
+# ---------------------------------------------------------------- the optimum, in three horns
+def horn_three() -> str:
+    """Three horns with the same flare length (10 wavelengths, apex to mouth)
+    and mouths that are too narrow, optimum, and too wide. Under each, the
+    mouth split into strips whose contributions add head to tail (one half of
+    the mouth; the other half is its mirror), and a bar for the gain."""
+    Rl = 10.0
+    cases = (("Narrow mouth", 0.0625, "edge lags λ/16"),
+             ("Optimum", 0.25, "edge lags λ/4"),
+             ("Too wide", 0.75, "edge lags 3λ/4"))
+    gains = [rel_gain(math.sqrt(8 * Rl * sl), Rl, False)[0] for _, sl, _ in cases]
+    gbest = max(gains)
+    W, H = 900, 480
+    px_per_lam = 15.0
+    b = [markers(NAVY, RED, GRAY, GREEN)]
+    for x in (300, 600):
+        b.append(f'<line x1="{x}" y1="16" x2="{x}" y2="{H - 16}" stroke="{RULE}" stroke-width="1"/>')
+    base_step = None
+    for (title, sl, lag), g, cx in zip(cases, gains, (150, 450, 750)):
+        D = math.sqrt(8 * Rl * sl)                       # mouth width, wavelengths
+        b.append(text(cx, 36, title, NAVY, 27, "700"))
+        # --- horn, side view, mouth on the right; apex 10 wavelengths behind it
+        cy, mx = 128, cx + 110
+        R = Rl * px_per_lam
+        ax = mx - R
+        hm = D / 2 * px_per_lam
+        ht = 8
+        tx = ax + R * ht / hm
+        b.append(f'<path d="M{tx - 28:.1f} {cy - ht} H{tx:.1f} L{mx:.1f} {cy - hm:.1f} V{cy + hm:.1f} '
+                 f'L{tx:.1f} {cy + ht} H{tx - 28:.1f} Z" fill="{SUB}" stroke="{NAVY}" stroke-width="2.4" stroke-linejoin="round"/>')
+        half = math.degrees(math.asin(min(0.999, hm / R)))
+        b += arcs(ax, cy, (R,), half, RED, 2.4)
+        b.append(f'<circle cx="{ax:.1f}" cy="{cy}" r="3.5" fill="{GRAY}"/>')
+        if sl < 0.2:
+            b.append(text(ax, cy - 16, "apex", GRAY, 19))
+        dy = cy + 78
+        b.append(dim(ax, dy, mx, dy, GRAY, 1.3))
+        b.append(text((ax + mx) / 2, dy + 24, "same flare length", GRAY, 19))
+        b.append(text(cx, dy + 56, lag, RED, 23, "700"))
+        # --- phasor chain for one half of the mouth, strips of fixed physical width
+        n = max(2, round(D / 2 / 0.37))
+        step = 22
+        ox, oy = cx - 100, 386
+        x, y = ox, oy
+        b.append(f'<circle cx="{ox}" cy="{oy}" r="3" fill="{NAVY}"/>')
+        for k in range(n):
+            u = (k + 0.5) / n                            # position across the half mouth, 0..1
+            phi = 2 * math.pi * sl * u * u               # lag of this strip, in radians
+            nx, ny = x + step * math.cos(phi), y - step * math.sin(phi)
+            b.append(arrow(x, y, nx, ny, NAVY, 2.2))
+            x, y = nx, ny
+        b.append(arrow(ox, oy, x, y, RED, 3.2))
+        # --- gain bar, linear in gain, relative to the best
+        by, bl = 408, 190 * g / gbest
+        b.append(f'<rect x="{cx - 95}" y="{by}" width="{bl:.1f}" height="22" rx="3" fill="{GREEN if g == gbest else BLUE}" opacity="0.85"/>')
+        b.append(f'<rect x="{cx - 95}" y="{by}" width="190" height="22" rx="3" fill="none" stroke="{SUB_EDGE}"/>')
+        db = 10 * math.log10(g / gbest)
+        b.append(text(cx, by + 56, "highest gain" if g == gbest else f"{-db:.1f} dB lower", GREEN if g == gbest else NAVY, 24, "700"))
+    return svg(W, H, "Three horns with the same flare length and mouths too narrow, optimum, and too "
+               "wide. Their edges lag the center by a sixteenth, a quarter, and three quarters of a "
+               "wavelength. Under each, the strips of the mouth add as arrows head to tail, each turned "
+               "by its lag: the narrow mouth has few arrows in a straight line, the optimum has more "
+               "arrows that curve a little, and the too-wide mouth has so many that the chain curls back "
+               "and the total shrinks. The optimum has the highest gain; the narrow mouth is about 2 dB "
+               "lower and the wide one about 6 dB lower", b, "l13h3")
+
 # ---------------------------------------------------------------- gain comparison
 def mini_horn(x, y, s=1.0, facing=-1, color=NAVY) -> str:
     """A small horn at (x, y), mouth facing left (facing=-1) or right."""
@@ -338,6 +405,7 @@ def main() -> None:
         "L13-horn-optimum.svg": opt,
         "L13-horn-comparison.svg": horn_comparison(),
         "L13-slot-service.svg": slot_service(),
+        "L13-horn-three.svg": horn_three(),
     }
     for d in OUTS:
         for name, s in figs.items():

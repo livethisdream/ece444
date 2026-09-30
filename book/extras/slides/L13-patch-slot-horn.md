@@ -364,16 +364,13 @@ This is the same 22.5-degree tolerance as the far-field criterion in L5, applied
 
 ## The Optimum Horn
 
-<div class="two-col fig-wide"><div class="col-text">
-<p>At fixed length, a bigger aperture adds area but more phase error. Gain peaks, then <strong>turns over</strong>.</p>
-<p>The peak is the <strong>optimum horn</strong>: the edge lags about $\lambda/4$ in the E-plane and $3\lambda/8$ in the H-plane.</p>
-<p>At the optimum, $\eta_{\text{ap}} \approx 0.5$.</p>
-</div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L13-horn-optimum.svg" style="max-width:600px; margin:0 auto;"></div>
-</div></div>
+<div class="fig" data-inline-svg="./fig/L13-horn-three.svg" style="max-width:720px; margin:0 auto;"></div>
+
+- Same flare length, wider mouth: more area, but the edges lag more.
+- Past about $\lambda/4$ of edge lag, the edge strips cancel the center: gain falls.
 
 Note:
-The point to keep: aperture efficiency is not a fudge factor; it follows from a design choice with a peak. The curves are computed for a horn ten wavelengths long. Phase error costs about 22% per plane at the peak and the H-plane cosine taper another 19%: 0.78 x 0.78 x 0.81 is about 0.5. The optimum gives up about half the aperture to keep the horn short enough to be practical.
+Flare length is along the axis, apex to mouth. Each strip of the mouth adds an arrow turned by its lag; the red arrow is the total straight ahead. Narrow: few arrows, short total. Optimum: more arrows, still gaining. Too wide: the outer arrows point backward and the total shrinks. The optimum is the best width for a given length; a longer horn moves it wider and higher. The full curve (in the reading) peaks at lambda/4 in the E-plane and 3 lambda/8 in the H-plane; 0.78 x 0.78 x 0.81 is about 0.5, which is eta_ap.
 
 ---
 
