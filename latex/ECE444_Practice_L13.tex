@@ -145,7 +145,7 @@ $h = 0.813\ \text{mm}$, $\varepsilon_r = 3.55$).
 	increase the bandwidth without changing $\varepsilon_r$? Name one drawback of that change.
 		\begin{solution}[1.1in]
 		Increase the thickness $h$: bandwidth is directly proportional to $h/\lambda_0$. The penalties
-		are surface waves (power trapped in the substrate instead of radiated, so efficiency and
+		are surface waves (power guided along inside the substrate instead of radiated, so efficiency and
 		pattern quality drop), a larger probe or feed inductance that is harder to match, and a
 		thicker, heavier board. Above about $h = 0.05\lambda_0$ the closed forms above are no longer
 		accurate.
@@ -155,9 +155,8 @@ $h = 0.813\ \text{mm}$, $\varepsilon_r = 3.55$).
 	and told the link needs $2\%$ bandwidth. State whether a single patch on any of these
 	substrates can do the job, and what you would tell the systems lead.
 		\begin{solution}[1.2in]
-		No. Even the low-$\varepsilon_r$ option is far larger than $8\ \text{mm}$, and the only
-		substrate that fits the footprint ($\varepsilon_r = 10.2$, at $18\times13\ \text{mm}$) is still
-		too big \emph{and} delivers $0.43\%$, not $2\%$. Shrinking with permittivity and widening the
+		No. The smallest option, $\varepsilon_r = 10.2$, is still $18\times13\ \text{mm}$, more than
+		twice the footprint in each direction, and it delivers $0.43\%$, not $2\%$. Shrinking with permittivity and widening the
 		bandwidth pull in opposite directions on this element. The systems lead should hear that the requirement
 		needs a different design: a much thicker substrate, a stacked or aperture-coupled patch, or a
 		different element entirely. Adjusting this design will not meet it.
@@ -188,7 +187,7 @@ conducting sheet and fed across its middle.
 		\frac{\eta_0^{2}}{4} &= \frac{(377)^{2}}{4} = 3.553\times10^{4}\ \Omega^{2} \\
 		Z_{\text{slot}} &= \frac{3.553\times10^{4}}{73} = 487\ \Omega
 		}
-		This is the canonical ``about $485\ \Omega$'' resonant-slot value.
+		Texts that quote ``about $485\ \Omega$'' are rounding this same value.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -273,23 +272,23 @@ $\eta_{\text{ap}} = 0.5$ unless told otherwise.
 		\begin{solution}[1.1in]
 		\eq{
 		G &= 0.35(248) = 86.9 = 19.4\dbi \\
-		\Delta G &= 10\ \mylog{\frac{0.5}{0.35}} = 1.6\db
+		\Delta G &= 10\ \mylog{\frac{0.5}{0.35}} = 1.5\db
 		}
-		The physical area is unchanged, but the horn delivers $1.6$\db{} less gain, all of it lost to phase error.
+		The physical area is unchanged, but the horn delivers $1.5$\db{} less gain, all of it lost to phase error.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
 		$G$ = \ansbox[1.2in]{$19.4\dbi$}
 		\\[10pt]
-		loss = \ansbox[1.2in]{$1.6\db$}
+		loss = \ansbox[1.2in]{$1.5\db$}
 	\end{minipage}
 
 	\part Explain in two or three sentences why enlarging a horn's aperture at fixed flare length
 	eventually stops increasing its gain, and what the phrase ``optimum horn'' names.
 		\begin{solution}[1.2in]
 		The wave leaving the flare is spherical while the aperture is flat, so the aperture edge is
-		farther from the virtual apex than the center and its phase lags. Widening the aperture at
+		farther from the apex than the center and its phase lags. Widening the aperture at
 		fixed length raises $4\pi A/\lambda^{2}$ but steepens that quadratic phase error, so
 		$\eta_{\text{ap}}$ falls; past a point the efficiency loses faster than the area gains and the
 		curve turns over. The \emph{optimum horn} is that peak --- the shortest horn for a given

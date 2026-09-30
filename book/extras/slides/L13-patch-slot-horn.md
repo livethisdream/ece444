@@ -156,12 +156,12 @@ Have them hold a thumbnail up next to it. Then run the widget: swap FR-4 for alu
 | Cut | Pattern | Beamwidth |
 | :-- | :-- | :-- |
 | E-plane (across the two slots) | $\cos\!\left(\tfrac{k L_e}{2}\sin\theta\right)$ | very broad — the slots are only $\approx \lambda_0/4$ apart |
-| H-plane (along each slot) | $\cos\theta\ \operatorname{sinc}\!\left(\tfrac{k W}{2}\sin\theta\right)$ | $\approx 80^\circ$ |
+| H-plane (along each slot) | $\cos\theta\ \operatorname{sinc}\!\left(\tfrac{k W}{2}\sin\theta\right)$ | $82^\circ$ for the FR-4 design |
 
-Directivity is 5 to 8 dBi, typically 6.
+Directivity is 5 to 8 dBi; the FR-4 design integrates to 6.1 dBi.
 
 Note:
-Six dBi is the number to keep. A single patch is a low-gain element; the gain comes later, from putting hundreds of them in an array. Run the widget and slide epsilon_r: the beam never leaves broadside.
+Where the table comes from (derivation in the reading): each radiating edge carries the equivalent magnetic current M = -2 n x E_a, the 2 being the ground-plane image. Put it through L6's radiation integral with M in place of J: the integral along each edge is a sinc, the two edges are a two-element array factor cos Z, exactly like source and image in L12. Every factor is 1 at broadside. The E-plane array factor is still 0.51 at the horizon because the edges are only 0.25 wavelength apart. Six dBi is the number to keep. A single patch is a low-gain element; the gain comes later, from putting hundreds of them in an array. Run the widget and slide epsilon_r: the beam never leaves broadside.
 
 ---
 
@@ -182,6 +182,7 @@ $$\text{BW} \approx 3.77\ \frac{\varepsilon_r-1}{\varepsilon_r^{2}}\ \frac{h}{\l
 <div class="callout">High $\varepsilon_r$ shrinks the patch and <strong>reduces its bandwidth</strong>.</div>
 
 Note:
+Why narrowband, with L3's Q: stored energy over radiated power per radian. The cavity stores eps_r V^2 W L / 4h; the two edges radiate V^2 (G1 + G12). For the FR-4 patch that is Q = 65, and 1/(Q sqrt 2) = 1.09%, against 1.12% from the closed form. Stored energy grows as eps_r / h: thin, high-permittivity boards store a lot for what they radiate. Past about h = 0.05 lambda0, surface waves trapped in the slab eat the gain.
 Demo live: hold f fixed, step epsilon_r up the list, and the drawing shrinks and the bandwidth pill falls. Then increase h and the bandwidth recovers.
 
 ---
@@ -197,7 +198,7 @@ Demo live: hold f fixed, step epsilon_r up the list, and the drawing shrinks and
 </div></div>
 
 Note:
-Tie back to L4: this is the same impedance-matching problem, with the tap point as the variable instead of a transformer. The curve is the transmission-line model for the worked-example patch; substrate loss moves the real point a little toward the edge.
+Tie back to L4: this is the same impedance-matching problem, with the tap point as the variable instead of a transformer. The curve is voltage squared over twice the radiated power: R_edge = 1 / 2(G1 + G12) = 321 ohms, with the same edge conductances that set the bandwidth, and the local voltage V cos(pi y0 / L) gives the cos-squared. The curve is the transmission-line model for the worked-example patch; substrate loss moves the real point a little toward the edge.
 
 ---
 
@@ -254,24 +255,24 @@ $$Z_{\text{slot}}\ Z_{\text{dipole}} = \frac{\eta_0^{2}}{4}$$
 <div class="callout">That one relation carries the dipole results of L7 over to the slot.</div>
 
 Note:
-They spent L7 on the dipole; Babinet carries that work over to the slot without redoing it.
+They spent L7 on the dipole; Babinet carries that work over to the slot without redoing it. Where it comes from is duality: swap E for eta0 H and metal for air, and the slot's E has the shape of the dipole's H. The dipole's current links H on both sides of the sheet, the slot's voltage is taken across the gap on one side, so V_slot = (eta0 / 2) I_dipole and I_slot = (2 / eta0) V_dipole. Divide: eta0 squared over 4. The same swap is the polarization result: the dipole's H circles the wire, so the slot's E crosses the cut.
 
 ---
 
-## The 485 Ω Slot
+## The 487 Ω Slot
 
 $$\frac{\eta_0^{2}}{4} = \frac{(377)^2}{4} = 3.55\times10^{4}\ \Omega^2$$
 
 | Complementary dipole | Slot impedance |
 | :-- | :-- |
-| resonant, $73\ \Omega$ real | $\approx 487\ \Omega$ — quoted as **485** $\Omega$ |
+| resonant, $73\ \Omega$ real | $487\ \Omega$ |
 | $73 + j42.5\ \Omega$ | $364 - j212\ \Omega$ |
 
 - A resonant slot is a **near-$500\ \Omega$** load. Feeding it from $50\ \Omega$ needs a matching transformer.
 - The second row shows the sign flip: Babinet inverts the reactance too.
 
 Note:
-Make them do the second row on the board — complex division is where the relation becomes concrete.
+Make them do the second row on the board — complex division is where the relation becomes concrete. Texts that say 485 ohms are rounding the same 487.
 
 ---
 
@@ -311,7 +312,7 @@ Ask them to predict before you tell them. Many will guess wrong, which is what m
 - **Waveguide slot array.** Each slot couples out a little power; its offset from the centerline sets how much, so the wall carries the taper.
 
 Note:
-Show a marine radar slotted-waveguide photo if you have one loaded. Leaky-wave and skin apertures appear on missiles, radomes, and any surface that cannot carry a protrusion. A slot array is a ready-made aperture distribution: Module 3's tapering theory, realized in the waveguide wall. Forward-point at L24 sidelobe tapering.
+Show a marine radar slotted-waveguide photo if you have one loaded. Why the offset works: the TE10 current across the broad wall goes as sin(pi x / a) from the centerline, so a centered slot interrupts none of it and radiates nothing, and moving it out takes more. Slots half a guide wavelength apart see the field reversed, so they alternate sides to stay in phase. Leaky-wave and skin apertures appear on missiles, radomes, and any surface that cannot carry a protrusion. A slot array is a ready-made aperture distribution: Module 3's tapering theory, realized in the waveguide wall. Forward-point at L24 sidelobe tapering.
 
 ---
 
@@ -319,12 +320,12 @@ Show a marine radar slotted-waveguide photo if you have one loaded. Leaky-wave a
 
 <div class="fig" data-inline-svg="./fig/L13-horn-flare.svg" style="max-width:720px; margin:0 auto;"></div>
 
-- An open-ended waveguide is small and badly matched: most of the power reflects.
+- An open-ended waveguide radiates, but it is small: a broad beam and a few dBi.
 - Flaring the walls makes the transition gradual, so the wave flows out through a large aperture.
 - By L6's equivalence principle, that aperture field *is* the source.
 
 Note:
-The horn is the lesson's traveling-wave antenna: nothing sends the wave back, so there is no sharp resonance and a standard-gain horn covers an octave. It is also the cleanest physical realization of everything L6 set up; say that explicitly.
+The horn is the lesson's traveling-wave antenna: nothing sends the wave back, so there is no sharp resonance and a standard-gain horn covers its waveguide's whole band, 8.2 to 12.4 GHz for WR-90, about 40%. The limit is the waveguide's: ridged horns reach 1 to 18 GHz. The open guide is not badly matched: its TE10 wave impedance is 499 ohms at 10 GHz, so it reflects about 2%. Its problem is a quarter of a square wavelength of aperture. It is also the cleanest physical realization of everything L6 set up; say that explicitly.
 
 ---
 
@@ -339,7 +340,21 @@ The horn is the lesson's traveling-wave antenna: nothing sends the wave back, so
 </div></div>
 
 Note:
-This is the same A_e = G lambda^2 / 4 pi from L2, read right to left. The value is 0.5, not 0.9. Ask why a horn gives up half its aperture, and let the next two slides answer.
+The value is 0.5, not 0.9. Ask why a horn gives up half its aperture, and let the next slides answer. Receiving, this is L2's A_e = eta_ap A.
+
+---
+
+## Where $4\pi A/\lambda^2$ Comes From
+
+- Straight ahead, every phase factor in L6's integral is 1: the radiation vector is the **sum** of the aperture field.
+- The power is the plane-wave power through the opening.
+
+$$D = \frac{4\pi U_{\max}}{P_{\text{rad}}} = \frac{4\pi}{\lambda^2}\ \frac{\left\vert\int E_a\ dS\right\vert^2}{\int \vert E_a\vert^2\ dS}$$
+
+<div class="callout">Uniform and in phase, the fraction is exactly $A$. Taper and phase error shrink it: that ratio over $A$ <strong>is</strong> $\eta_{\text{ap}}$.</div>
+
+Note:
+Derivation in the reading, from M = -2 n x E_a and the radiation vector L. The cosine taper alone gives 8 / pi squared = 0.81, and the next two slides supply the phase-error part.
 
 ---
 
@@ -373,7 +388,7 @@ The far-field row is the one that constrains the lab: a hand-sized horn already 
 </div></div>
 
 Note:
-This is the same 22.5-degree tolerance as the far-field criterion in L5, applied to a different geometry.
+This is L5's geometry: the edge lag is D^2 / 8 l with the apex a flare length l behind the mouth, the same D^2 / 8r as the far-field criterion. The tolerance is not the same. The far-field criterion holds it to lambda/16 so a measurement does not distort the pattern; a horn accepts lambda/4 and more, because it trades the error against area.
 
 ---
 
@@ -385,7 +400,7 @@ This is the same 22.5-degree tolerance as the far-field criterion in L5, applied
 - Past about $\lambda/4$ of edge lag, the edge strips cancel the center: gain falls.
 
 Note:
-Flare length is along the axis, apex to mouth. Each strip of the mouth adds an arrow turned by its lag; the red arrow is the total straight ahead. Narrow: few arrows, short total. Optimum: more arrows, still gaining. Too wide: the outer arrows point backward and the total shrinks. The optimum is the best width for a given length; a longer horn moves it wider and higher. The full curve (in the reading) peaks at lambda/4 in the E-plane and 3 lambda/8 in the H-plane; 0.78 x 0.78 x 0.81 is about 0.5, which is eta_ap.
+Flare length is along the axis, apex to mouth. Each strip of the mouth adds an arrow turned by its lag; the red arrow is the total straight ahead. Narrow: few arrows, short total. Optimum: more arrows, still gaining. Too wide: the outer arrows point backward and the total shrinks. The optimum is the best width for a given length; a longer horn moves it wider and higher. The full curve (in the reading) peaks at 0.26 lambda in the E-plane and 0.40 lambda in the H-plane, the textbook lambda/4 and 3 lambda/8; 0.78 x 0.77 x 0.81 = 0.49, the phase-error costs times the 8 / pi squared cosine taper, which is eta_ap.
 
 ---
 
@@ -397,7 +412,7 @@ Flare length is along the axis, apex to mouth. Each strip of the mouth adds an a
 - In L11 it was the reference: same spot, swap antennas, and the dB difference in power is the dB difference in gain.
 
 Note:
-Point at the actual horn in the chamber if the deck is being run in the lab space. Its value is not performance but a known gain.
+Point at the actual horn in the chamber if the deck is being run in the lab space. Its value is not performance but a known gain. It is known because it can be calculated: the mouth carries the TE10 cosine with a known quadratic phase, nothing resonates, and the aperture-efficiency ratio follows from its measured dimensions.
 
 ---
 
@@ -407,7 +422,7 @@ Point at the actual horn in the chamber if the deck is being run in the lab spac
 | :-- | :-- | :-- | :-- |
 | Pattern | broadside hemisphere | dipole-like; one-sided if cavity-backed | directive pencil or fan beam |
 | Gain | $5$–$8$ dBi | $2$–$5$ dBi | $10$–$25$ dBi |
-| Bandwidth | $1$–$5\%$ | $10$–$20\%$; a few % backed | an octave or more |
+| Bandwidth | $1$–$5\%$ | $10$–$20\%$; a few % backed | about $40\%$, its waveguide band |
 | Power | low | moderate | high (waveguide-fed) |
 | Integration | printed, planar, arrays etched in one step | flush in an existing skin | bulky, needs a waveguide feed |
 

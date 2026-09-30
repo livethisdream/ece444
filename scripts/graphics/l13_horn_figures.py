@@ -2,8 +2,8 @@
 """Generate the L13 horn and slot-in-service figures as inline SVG.
 
 L13:
-  - L13-horn-flare       : an open-ended waveguide, where most of the power
-                           reflects, beside a horn, where the flare lets the
+  - L13-horn-flare       : an open-ended waveguide, which radiates a broad,
+                           low-gain beam, beside a horn, where the flare lets the
                            wave flow out through a large opening.
   - L13-horn-squares     : the same 20 x 15 cm aperture tiled in square
                            wavelengths at 10 and 20 GHz; four times as many
@@ -68,13 +68,13 @@ def horn_flare() -> str:
     x0, x1, hh = 30, 170, 28
     b.append(f'<rect x="{x0}" y="{cy - hh}" width="{x1 - x0}" height="{2 * hh}" fill="{SUB}" stroke="{NAVY}" stroke-width="3"/>')
     b.append(arrow(x0 + 14, cy - 8, x1 - 16, cy - 8, BLUE, 3))
-    b.append(arrow(x1 - 16, cy + 10, x0 + 30, cy + 10, RED, 5))
-    b += arcs(x1, cy, (22, 40), 55, GREEN, 1.6, 0.6)
+    b.append(arrow(x1 - 16, cy + 10, x1 - 58, cy + 10, RED, 1.6))
+    b += arcs(x1, cy, (22, 42, 62), 75, GREEN, 2.2)
     b.append(text(100, cy - 50, "in", BLUE, 18, "700"))
-    b.append(text(100, cy + 60, "most of it reflects", RED, 18, "700"))
-    b.append(text(236, cy - 58, "a little", GREEN, 17, "700"))
-    b.append(text(236, cy - 38, "leaks out", GREEN, 17, "700"))
-    b.append(text(150, 290, "a small opening, badly matched", GRAY, 17))
+    b.append(text(118, cy + 60, "a little reflects", RED, 18, "700"))
+    b.append(text(252, cy - 78, "a broad beam", GREEN, 17, "700"))
+    b.append(text(252, cy - 58, "spills out", GREEN, 17, "700"))
+    b.append(text(150, 290, "a small opening: a few dBi", GRAY, 17))
 
     # horn
     b.append(text(530, 32, "Horn", NAVY, 21, "700"))
@@ -93,8 +93,8 @@ def horn_flare() -> str:
     b.append(text(fx1 + 70, cy - 102, "the wave", GREEN, 18, "700"))
     b.append(text(fx1 + 70, cy - 80, "flows out", GREEN, 18, "700"))
     b.append(text(530, 290, "a gradual flare to a large opening", GRAY, 17))
-    return svg(W, H, "Left: an open-ended waveguide; the wave coming in mostly reflects at the small "
-               "opening and only a little leaks out. Right: a horn; the flare lets the wave expand "
+    return svg(W, H, "Left: an open-ended waveguide; only a little of the incoming wave reflects, and "
+               "the rest spills out of the small opening in a broad, low-gain beam. Right: a horn; the flare lets the wave expand "
                "gradually and flow out through a large opening", b, "l13hf")
 
 

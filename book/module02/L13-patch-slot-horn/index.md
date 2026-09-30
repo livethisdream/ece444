@@ -50,7 +50,8 @@ The dipole of Lesson 7 and the loop and monopole of Lesson 12 are resonant
 wires. Today covers three antennas that are not wires. The **patch** and the
 **slot** are resonant, like the dipole, and both are narrowband. The **horn**
 is a traveling-wave antenna: the wave in a waveguide flows out through a
-flared opening without reflecting, and a standard-gain horn covers an octave.
+flared opening without reflecting, and a standard-gain horn covers the whole
+band of its waveguide, about 40%.
 
 We have already used the horn on the bench. The standard-gain horn that
 served as the gain reference in Lesson 11 is the last antenna in this lesson,
@@ -144,9 +145,62 @@ point the same way and add.
 The two-slot model accounts for both the shape of the pattern and its
 direction. The two slots are equidistant from any point straight overhead, so
 the beam always points broadside, and the ground plane suppresses the back
-hemisphere. The H-plane beamwidth lands near $80^\circ$ and the E-plane stays
-broad, because two slots about a quarter of a free-space wavelength apart
-cannot form a narrow beam.
+hemisphere. Two slots about a quarter of a free-space wavelength apart cannot
+form a narrow beam, and the radiation integral of Lesson 6 puts numbers on
+that.
+
+Lesson 6 integrated a current on a wire. Here the source is a field in an
+opening, and the equivalence principle trades that field for an equivalent
+**magnetic** surface current. Over an opening in a ground plane, with
+$\hat{\mathbf n}$ the outward normal and $\mathbf{E}_a$ the field in the
+opening,
+
+$$\mathbf{M} = -2\ \hat{\mathbf n}\times\mathbf{E}_a$$
+
+where the 2 is the ground plane's image, as it was for the monopole in Lesson
+12. The magnetic current goes into the same integral $\mathbf{J}$ did, and its
+radiation vector is written $\mathbf{L}$:
+
+$$\begin{aligned}
+\mathbf{L}(\theta,\phi) &= \int_{S'}\mathbf{M}(\mathbf{r}')\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dS' \\
+U(\theta,\phi) &= \frac{k^2}{32\pi^2\eta_0}\left(\vert L_\theta\vert^2 + \vert L_\phi\vert^2\right)
+\end{aligned}$$
+
+which is Lesson 6's $U$ with $\mathbf{L}/\eta_0$ in place of $\mathbf{N}$.
+
+Put the patch in the $xy$-plane with its radiating edges along $y$, a
+distance $L_e = L + 2\Delta L \approx \lambda_d/2$ apart along $x$. The
+horizontal fringing field is $E_0\ \hat{\mathbf x}$ at both edges, over a
+strip $h$ wide and $W$ long, so each edge carries
+$\mathbf{M} = -2E_0\ \hat{\mathbf y}$. With
+$\hat{\mathbf r}\cdot\mathbf{r}' = x'\sin\theta\cos\phi + y'\sin\theta\sin\phi$,
+the integral along each edge gives a slot factor, and the two edges give a
+two-element array factor, as the source and its image did in Lesson 12:
+
+$$\begin{aligned}
+L_y &= -2E_0 h\int_{-W/2}^{W/2} e^{+jky'\sin\theta\sin\phi}\ dy' \\
+&\quad\times\left(e^{+jZ} + e^{-jZ}\right) \\
+&= -4E_0 hW\ \frac{\sin X}{X}\ \cos Z
+\end{aligned}$$
+
+with $X = \tfrac{kW}{2}\sin\theta\sin\phi$ and
+$Z = \tfrac{kL_e}{2}\sin\theta\cos\phi$. Projecting $\hat{\mathbf y}$ onto
+the far-field directions gives $L_\theta = L_y\cos\theta\sin\phi$ and
+$L_\phi = L_y\cos\phi$, so
+
+$$\begin{aligned}
+U(\theta,\phi) &\propto \left(\cos^2\phi + \cos^2\theta\sin^2\phi\right) \\
+&\quad\times\left(\frac{\sin X}{X}\right)^2\cos^2 Z
+\end{aligned}$$
+
+Every factor is 1 at $\theta = 0$, which is why the beam is broadside at every
+size. In the E-plane, $\phi = 0$, only $\cos^2 Z$ varies, and with
+$L_e = 0.25\lambda_0$ for the FR-4 design it is still 0.51 at the horizon: the
+E-plane never falls 3 dB above the ground plane. In the H-plane,
+$\phi = 90^\circ$, the pattern is $\cos^2\theta\ (\sin X/X)^2$, with a
+half-power beamwidth of $82^\circ$. Integrating $U$ over the upper hemisphere
+gives a directivity of 4.06, or $6.1$ dBi, which is the "typically 6"
+above.
 ::::
 
 ::::{frame} Sizing a Patch
@@ -238,6 +292,44 @@ cavity. Moving from $\varepsilon_r = 2.2$ to $10.2$ reduces the patch area by
 a factor of four and the bandwidth by a factor of two and a half. The formula
 gives the bandwidth for VSWR $\le 2$, the same bar we read off a trace in
 Lesson 10.
+
+"High-$Q$" is the quantity of Lesson 3: the energy stored in the resonator
+against the energy it radiates per radian of a cycle, and at VSWR $\le 2$ a
+single resonance holds over a fractional bandwidth of $1/(Q\sqrt2)$. Both
+halves of $Q$ can be read off the cavity. With a voltage $V$ between patch and
+ground at the two ends, the field there is $V/h$, the standing wave averages
+its square to half over the length, and at resonance the magnetic energy
+equals the electric:
+
+$$\begin{aligned}
+W_{\text{stored}} &= 2\cdot\frac{1}{4}\varepsilon_0\varepsilon_r\left(\frac{V}{h}\right)^2\frac{WLh}{2} \\
+&= \frac{\varepsilon_0\varepsilon_r V^2 WL}{4h}
+\end{aligned}$$
+
+Each radiating edge is a slot with $V$ across it. Integrating the slot's
+pattern over the half-space gives the power it radiates as
+$\tfrac12 V^2 G_1$, and for $W$ well under a wavelength its **radiation
+conductance** is $G_1 \approx W^2/90\lambda_0^2$. The two edges also couple,
+which adds a mutual conductance $G_{12}$; for the FR-4 design
+$G_1 = 0.97\ \text{mS}$ and $G_{12} = 0.59\ \text{mS}$. So
+
+$$\begin{aligned}
+P_{\text{rad}} &= V^2\left(G_1 + G_{12}\right) \\
+Q &= \frac{\omega W_{\text{stored}}}{P_{\text{rad}}} = \frac{\omega\varepsilon_0\varepsilon_r WL}{4h\left(G_1 + G_{12}\right)} \\
+&= 65
+\end{aligned}$$
+
+and $1/(65\sqrt2) = 1.09\%$, against $1.12\%$ from the closed form. The same
+calculation gives $1.57\%$ and $0.58\%$ for the other two boards. The closed
+form is this $Q$ fitted into one line, and the physics is in the fraction:
+the stored energy grows as $\varepsilon_r/h$, so a thin, high-permittivity
+board stores a lot of energy for what it radiates.
+
+Thickening the board is the direct way to widen the band, and it has a limit.
+Past about $h = 0.05\lambda_0$, a growing share of the power travels along the
+board as a **surface wave**, guided inside the dielectric slab the way light
+is guided in a fiber, until it scatters from the board's edge. That power is
+lost to the patch's beam.
 ::::
 
 ::::{frame} Where to Tap the Standing Wave
@@ -256,19 +348,25 @@ Feeding a patch is an impedance-matching problem, and the standing wave
 solves it. At the radiating edge the voltage between patch and ground is at
 its maximum and the current is near zero, so the impedance is high: a few
 hundred ohms. At the center the voltage is zero and the current is at its
-maximum, so the impedance is zero, a virtual short. Between the two the input
-resistance follows
+maximum, so the impedance is zero, a virtual short.
 
-$$R_{\text{in}}(y_0) = R_{\text{edge}}\cos^2\left(\frac{\pi y_0}{L}\right)$$
+Both numbers come from the standing wave and the power it radiates. The patch
+radiates $P_{\text{rad}} = V^2(G_1 + G_{12})$ from the bandwidth frame,
+whatever point feeds it, and a feed a distance $y_0$ in from the radiating
+edge sees the local voltage $V\cos(\pi y_0/L)$. A resistance is a voltage
+squared over twice the power it delivers, so
 
-where $y_0$ is the distance of the feed point in from the radiating edge.
+$$\begin{aligned}
+R_{\text{in}}(y_0) &= \frac{V^2\cos^2(\pi y_0/L)}{2P_{\text{rad}}} \\
+&= \frac{\cos^2(\pi y_0/L)}{2\left(G_1 + G_{12}\right)} \\
+&= R_{\text{edge}}\cos^2\left(\frac{\pi y_0}{L}\right)
+\end{aligned}$$
+
 Somewhere between edge and center it passes through $50\ \Omega$, and that is
-where we connect the feed.
-
-For the $2.45\ \text{GHz}$ FR-4 design, the transmission-line model gives
-$R_{\text{edge}} \approx 320\ \Omega$ and puts the $50\ \Omega$ point
-$10.7\ \text{mm}$ in from the edge, a little over a third of the way to the
-center. Substrate loss lowers the edge resistance of a real FR-4 patch, so the
+where we connect the feed. For the $2.45\ \text{GHz}$ FR-4 design,
+$G_1 + G_{12} = 1.56\ \text{mS}$ gives $R_{\text{edge}} = 321\ \Omega$, and
+$\cos^2(\pi y_0/L) = 50/321$ puts the feed $10.7\ \text{mm}$ in from the
+edge, 37% of the way to the center. Substrate loss lowers the edge resistance of a real FR-4 patch, so the
 measured point sits somewhat closer to the edge; a solver or a trim on the
 bench finds it.
 ::::
@@ -412,13 +510,39 @@ The **polarization** rotates: the slot's electric field runs *across* the
 cut, so a horizontal slot radiates a vertically polarized field.
 :::
 
-With $\eta_0 = 377\ \Omega$, $\eta_0^2/4 = 3.55\times10^{4}\ \Omega^2$, which
-is where the number quoted as "about 485 ohms" comes from. A low-impedance
+With $\eta_0 = 377\ \Omega$, $\eta_0^2/4 = 3.553\times10^{4}\ \Omega^2$, and
+the resonant slot is $3.553\times10^{4}/73 = 487\ \Omega$; texts that quote
+"about 485" are rounding the same result. A low-impedance
 dipole is a high-impedance slot, and feeding one from $50\ \Omega$ needs a
 matching transformer. Inverting a complex impedance flips the sign of its
 imaginary part, so an inductive dipole is a capacitive slot — but since the
 reactance crosses zero at the same length either way, a slot resonates at the
 same electrical length its complementary dipole does.
+
+Babinet's relation comes from duality. Maxwell's equations in free space keep
+their form if every $\mathbf{E}$ is replaced by $\eta_0\mathbf{H}$ and every
+$\mathbf{H}$ by $-\mathbf{E}/\eta_0$, and trading metal for air on the sheet
+trades the boundary conditions the same way. So on each side of the sheet the
+slot's electric field has the shape of the dipole's magnetic field. That is
+the polarization result: the dipole's $\mathbf{H}$ circles the wire, so the
+slot's $\mathbf{E}$ circles the slot's axis and crosses the cut.
+
+The impedance follows at the terminals. The dipole's current is
+$\oint\mathbf{H}\cdot d\mathbf{l}$ around the wire, half of it on each side of
+the sheet, and the dual of the half path above the sheet is the path across
+the slot, so the slot's voltage is $\eta_0$ times half the dipole's current.
+The same step in reverse gives the slot's current from the dipole's voltage:
+
+$$\begin{aligned}
+V_{\text{slot}} &= \frac{\eta_0}{2}\ I_{\text{dipole}} \\
+I_{\text{slot}} &= \frac{2}{\eta_0}\ V_{\text{dipole}} \\
+Z_{\text{slot}} &= \frac{V_{\text{slot}}}{I_{\text{slot}}} \\
+&= \frac{\eta_0^2}{4Z_{\text{dipole}}}
+\end{aligned}$$
+
+The two factors of 2 are the two sides of the sheet: the dipole's current
+links the magnetic field on both sides, while the slot's voltage is taken
+across the gap on one.
 ::::
 
 ::::{frame} What 487 Ω Means
@@ -490,7 +614,19 @@ hemispherical radiator.
 The other major application is the waveguide slot array. A row of slots
 cut into the wall of a waveguide each couples out a little of the guided
 power: the spacing sets where the beam points, and the offset of each slot
-from the centerline sets how much power it takes. Marine and airborne
+from the centerline sets how much power it takes.
+
+The offset works because of where the wall current runs. In a guide $a$ wide,
+the $\text{TE}_{10}$ mode's magnetic field along the guide varies as
+$\sin(\pi x/a)$, with $x$ measured from the centerline, and it drives a
+current across the broad wall with the same shape. A slot cut along the guide
+radiates only by interrupting that current, so a slot on the centerline,
+where the current is zero, takes no power, and moving it outward takes more.
+Adjacent slots sit half a guide wavelength apart, where the guide's field has
+reversed, so they alternate sides of the centerline to reverse it back and
+radiate in phase.
+
+Marine and airborne
 surveillance radars are built this way, and the result is a ready-made
 aperture distribution — the same taper theory Module 3 develops in Lesson 24,
 realized in the geometry of a machined wall.
@@ -502,21 +638,38 @@ realized in the geometry of a machined wall.
      alt="Left: an open-ended waveguide, where the incoming wave mostly reflects and only a little leaks out. Right: a horn, where the flare lets the wave expand gradually and flow out through a large opening"
      style="max-width: 720px; width: 100%; display: block; margin: 0 auto;">
 
-- An open-ended waveguide is a fraction of a wavelength across and badly mismatched to free space.
+- An open-ended waveguide radiates, but it is a fraction of a wavelength across: a broad beam, a few dBi.
 - Flaring the walls expands the mode and makes the impedance transition gradual.
 - The result is a large, well-illuminated **aperture**.
 :::
 
-A waveguide carries a single mode efficiently but radiates it poorly, because
-most of the power reflects at an open end. By the equivalence principle of
-Lesson 6 the flared opening is itself the source: we replace it with its
-equivalent surface currents and integrate.
+A waveguide carries a single mode efficiently, and an open end does radiate
+it, but poorly. The reflection is modest. At $10\ \text{GHz}$ the WR-90
+guide's $\text{TE}_{10}$ wave impedance is
+
+$$\begin{aligned}
+Z_{\text{TE}} &= \frac{\eta_0}{\sqrt{1 - (f_c/f)^2}} \\
+&= \frac{377}{\sqrt{1 - (6.56/10)^2}} = 499\ \Omega
+\end{aligned}$$
+
+and the step to $377\ \Omega$ reflects $\vert\Gamma\vert \approx 0.14$, about
+2% of the power; fringing at the rim moves the measured value somewhat. The
+real problem is size. The opening is $2.29 \times 1.02\ \text{cm}$, about a
+quarter of a square wavelength, so its beam is broad and its gain is only a
+few dBi. Flaring the walls grows the opening to many square wavelengths
+without an abrupt step anywhere. By the equivalence principle the flared
+opening is itself the source: we replace its field with the magnetic current
+$\mathbf{M}$ of the two-slot frame and integrate.
 
 This is the traveling-wave antenna of the lesson. Nothing in a horn sends the
 wave back: the flare widens slowly enough that the wave never meets an abrupt
 change, so it flows out through the mouth instead of reflecting. With no
 standing wave there is no sharp resonance, which is why a standard-gain horn
-covers an octave while a patch covers a few percent.
+covers its waveguide's whole band, $8.2$ to $12.4\ \text{GHz}$ for WR-90, or
+about 40%, while a patch covers a few percent. That limit belongs to the
+waveguide, not the horn: the guide carries a single mode only between its
+first two cutoffs, and horns built on ridged guides for EMC testing cover
+$1$ to $18\ \text{GHz}$.
 ::::
 
 ::::{frame} Gain Is Area in Square Wavelengths
@@ -528,7 +681,7 @@ covers an octave while a patch covers a few percent.
 :::{present}
 $$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}$$
 
-- This is $A_e = G\lambda^2/4\pi$ from Lesson 2, read right to left.
+- A uniform, in-phase aperture adds every part broadside: $\eta_{\text{ap}} = 1$.
 - Doubling the frequency on a fixed horn raises the gain by **6 dB**.
 - Horns run $\eta_{\text{ap}} \approx 0.5$; good reflectors reach 0.55 to 0.7.
 :::
@@ -536,6 +689,38 @@ $$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}$$
 $A$ is the physical aperture area and $\eta_{\text{ap}}$ is the fraction of it
 that contributes to the gain. The next two frames show that the horn's
 geometry sets the 0.5; it is not a fudge factor.
+
+The formula comes out of the radiation integral. Take an aperture of area $A$
+in a ground plane, with a field $E_a(x', y')\ \hat{\mathbf x}$ across it, so
+that $\mathbf{M} = -2\hat{\mathbf z}\times\mathbf{E}_a$ as in the two-slot
+frame. Straight ahead, at $\theta = 0$, every phase factor in $\mathbf{L}$ is
+1, so the radiation vector is simply the sum of the field. The power leaving
+is the power flowing through the opening, which for a wide aperture is a plane
+wave's:
+
+$$\begin{aligned}
+\vert\mathbf{L}\vert &= 2\left\vert\int_A E_a\ dS'\right\vert \\
+U_{\max} &= \frac{k^2}{8\pi^2\eta_0}\left\vert\int_A E_a\ dS'\right\vert^2 \\
+P_{\text{rad}} &= \frac{1}{2\eta_0}\int_A \vert E_a\vert^2\ dS'
+\end{aligned}$$
+
+and Lesson 2's directivity is their ratio:
+
+$$\begin{aligned}
+D &= \frac{4\pi U_{\max}}{P_{\text{rad}}} \\
+&= \frac{4\pi}{\lambda^2}\ \frac{\left\vert\int_A E_a\ dS'\right\vert^2}{\int_A \vert E_a\vert^2\ dS'}
+\end{aligned}$$
+
+For a uniform field in phase the fraction is exactly $A$, and
+$D = 4\pi A/\lambda^2$. Any taper or phase error shrinks the numerator
+relative to the denominator, so the fraction divided by $A$ is the aperture
+efficiency,
+
+$$\eta_{\text{ap}} = \frac{\left\vert\int_A E_a\ dS'\right\vert^2}{A\int_A \vert E_a\vert^2\ dS'} \le 1$$
+
+and a horn's walls lose so little that its gain is its directivity. Lesson
+2's $A_e = G\lambda^2/4\pi$ says the same thing from the receiving side:
+$A_e = \eta_{\text{ap}}A$.
 
 The figure makes the formula concrete. Tile the aperture in squares one
 wavelength on a side: the gain is proportional to how many squares fit. The
@@ -552,7 +737,10 @@ A pyramidal horn with a $20 \times 15\ \text{cm}$ aperture at
 $10\ \text{GHz}$, with $\eta_{\text{ap}} = 0.5$. Here $\lambda = 3.0\ \text{cm}$
 and $A = 0.030\ \text{m}^2$, so
 
-$$\frac{4\pi A}{\lambda^{2}} = \frac{4\pi(0.030)}{(0.030)^{2}} = 419, \qquad G = 0.5(419) = 209 = 23.2\ \text{dBi}$$
+$$\begin{aligned}
+\frac{4\pi A}{\lambda^{2}} &= \frac{4\pi(0.030)}{(0.030)^{2}} = 419 \\
+G &= 0.5(419) = 209 = 23.2\ \text{dBi}
+\end{aligned}$$
 
 Next we find where its far field starts. The largest aperture dimension is the
 diagonal, $D = 25\ \text{cm}$, so
@@ -577,10 +765,21 @@ it is the same calculation we ran for the bench range in Lesson 11.
 :::
 
 Making the horn longer for the same aperture flattens the wavefront and
-reduces the error. This is the same reasoning as the $2D^2/\lambda$ criterion
-from Lesson 9, in a different geometry: there the curvature came from a source
-too close, here from an apex too near the mouth, and in both cases the
-tolerance is written as a fraction of a wavelength across the aperture.
+reduces the error. The size of the lag is the geometry of Lesson 5. With the
+apex a flare length $\ell$ behind a mouth $D$ wide, the edge is
+$\sqrt{\ell^2 + (D/2)^2}$ from the apex, and for $D \ll \ell$
+
+$$\begin{aligned}
+\Delta &= \sqrt{\ell^2 + \left(\tfrac{D}{2}\right)^2} - \ell \\
+&\approx \frac{D^2}{8\ell}
+\end{aligned}$$
+
+which is Lesson 5's $\Delta = D^2/8r$, with the apex in place of a distant
+source. The far-field criterion holds $\Delta$ to $\lambda/16$ because a
+measurement must not distort the pattern. A horn accepts four times that and
+more, because it is trading the error against area, and the next frame shows
+where the trade balances. Setting $\Delta = \lambda/4$ gives the widest
+E-plane mouth for a given length, $D = \sqrt{2\lambda\ell}$.
 ::::
 
 ::::{frame} The Optimum Horn
@@ -619,16 +818,27 @@ the aperture to keep the horn short enough to be practical.
      style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
 
 The plot is the same effect computed continuously, for a horn with a flare
-length of ten wavelengths, widening the mouth in one plane at a time. The
-E-plane field is uniform across the aperture, and its gain peaks when the edge
-lags the center by a quarter wavelength. The H-plane field follows the
-waveguide's cosine, which is weak at the edges, so the edges matter less and
-the peak comes later, at three eighths of a wavelength. Past the peak the
-curve ripples as successive bands of the mouth alternately add and cancel. At
-each peak the phase error costs about 22% of the gain in that plane, and the
-cosine taper costs another 19%; together,
-$0.78 \times 0.78 \times 0.81 \approx 0.5$, which is where the horn's aperture
-efficiency comes from.
+length of ten wavelengths, widening the mouth in one plane at a time; it is
+the aperture-efficiency ratio of the gain frame, evaluated with the lag
+$D^2/8\ell$ across the mouth. The E-plane field is uniform across the
+aperture, and its gain peaks when the edge lags the center by $0.26\lambda$,
+the textbook $\lambda/4$. The H-plane field follows the waveguide's cosine,
+which is weak at the edges, so the edges matter less and the peak comes later,
+at $0.40\lambda$, which the textbook design rule rounds to $3\lambda/8$. Past
+the peak the curve ripples as successive bands of the mouth alternately add
+and cancel.
+
+At the peaks the phase error costs 22% of the gain in the E-plane and 23% in
+the H-plane. The cosine taper costs another 19%, from the same ratio with the
+phase error set aside:
+
+$$\begin{aligned}
+\eta_{\text{taper}} &= \frac{\left(\int_{-a/2}^{a/2}\cos\frac{\pi x}{a}\ dx\right)^2}{a\int_{-a/2}^{a/2}\cos^2\frac{\pi x}{a}\ dx} \\
+&= \frac{(2a/\pi)^2}{a^2/2} = \frac{8}{\pi^2} = 0.81
+\end{aligned}$$
+
+Together, $0.78 \times 0.77 \times 0.81 = 0.49$, which is where the horn's
+aperture efficiency of about 0.5 comes from.
 ::::
 
 ::::{frame} The Standard-Gain Horn
@@ -643,9 +853,13 @@ efficiency comes from.
 
 We used one in Lesson 11 as the reference whose $15.0\ \text{dBi}$ we
 subtracted to find the gain of our own antenna. Its calibration was the only
-absolute gain in that measurement, and it is accurate to a few tenths of a dB
-because a horn at the optimum design is the one aperture antenna whose
-efficiency is predictable enough to certify.
+absolute gain in that measurement, and it is accurate to a few tenths of a
+dB because a horn's gain can be calculated, not only measured. The field in
+its mouth is the waveguide's known $\text{TE}_{10}$ cosine with a known
+quadratic phase, so the aperture-efficiency ratio can be evaluated from the
+horn's measured dimensions, and nothing in it resonates, so no feed-point
+detail or trimmed length enters. Calculation and calibration agree to a few
+tenths of a dB.
 
 The figure is the gain-comparison method. With the transmitter fixed, the
 horn and then the antenna under test occupy the same receive spot. Everything
@@ -660,7 +874,7 @@ $2.1\ \text{dBi}$.
 | | Patch | Slot | Horn |
 | :-- | :-- | :-- | :-- |
 | Gain | 5–8 dBi | 2–5 dBi | 10–25 dBi |
-| Bandwidth | 1–5% | 10–20% | an octave |
+| Bandwidth | 1–5% | 10–20% | about 40% |
 | Power | low | moderate | high |
 | Integration | printed | flush in a skin | bulky, 3-D |
 :::
@@ -678,7 +892,7 @@ The fuller comparison:
 | What radiates | fringing fields at two edges | the field across a cut | a flared, illuminated opening |
 | Pattern | broadside hemisphere, always | dipole-like; one-sided if cavity-backed | directive pencil or fan beam |
 | Gain | 5–8 dBi | 2–5 dBi | 10–25 dBi |
-| Bandwidth | 1–5 % (thin substrate) | 10–20 %; a few % cavity-backed | an octave or more |
+| Bandwidth | 1–5 % (thin substrate) | 10–20 %; a few % cavity-backed | its waveguide's band, about 40 % |
 | Power handling | low | moderate | high (waveguide-fed) |
 | Integration | printed, planar, arrays etched in one step | flush in an existing conducting skin | bulky, 3-D, needs a waveguide feed |
 | Typical uses | GPS, Wi-Fi, phased-array elements | aircraft and missile skins, waveguide slot arrays for marine radar | range references, reflector feeds, chamber sources |
@@ -695,7 +909,7 @@ The fuller comparison:
 | two-slot model | patch radiates from the two fringing edges, in phase | broadside, 5–8 dBi |
 | feed position | $R_{\text{in}}$ falls from $R_{\text{edge}}$ at the edge to 0 at the center | $50\ \Omega$ about a third of the way in |
 | patch bandwidth | rises with $h/\lambda_0$, falls with $\varepsilon_r$ | 1–5 %, few % typical |
-| $Z_{\text{slot}} Z_{\text{dipole}} = \eta_0^2/4$ | Babinet complementarity | resonant slot $\approx 485\ \Omega$ |
+| $Z_{\text{slot}} Z_{\text{dipole}} = \eta_0^2/4$ | Babinet complementarity | resonant slot $487\ \Omega$ |
 | slot polarization | field runs across the cut, not along it | horizontal slot, vertical polarization |
 | $G = \eta_{\text{ap}} 4\pi A/\lambda^2$ | aperture gain | horns $\eta_{\text{ap}} \approx 0.5$ |
 | optimum horn | shortest horn whose edge phase error is tolerable | $\lambda/4$ E-plane, $3\lambda/8$ H-plane |
