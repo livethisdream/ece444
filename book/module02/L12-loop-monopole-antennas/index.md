@@ -560,10 +560,38 @@ interference.
 
 ::::{frame} The Resonant Loop
 :::{present}
-- At $C \approx 1\lambda$ the current **reverses** around the loop.
-- The pattern flips: maximum along the **axis**, where the small loop had its null.
-- $R_{\text{in}}$ rises to $100$–$130\ \Omega$, and the directivity is about 3.1 dBi.
+<img src="../../viz/img/L12-resonant-loop.svg"
+     alt="Current around a small loop is uniform and circulates; around a one-wavelength loop fed at the bottom it falls to zero a quarter of the way around and reverses, so the currents at the top and bottom point the same way"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
+:::{present}
+- At $C \approx 1\lambda$ the current is a standing wave that reverses halfway around.
+- The top and bottom currents point the same way, so the maximum moves to the **axis**.
+- $R_{\text{in}}$ is $100$–$130\ \Omega$; directivity is about 3.1 dBi.
+:::
+
+A small loop is too short for the current to change along it. At
+$C \approx 1\lambda$ the loop is long enough to hold a standing wave, the same
+one that sits on a dipole. Fed at one point, and measured along the wire from
+the feed, the current is approximately
+
+$$I(s) \approx I_0\cos(ks)$$
+
+It is maximum at the feed, zero a quarter wavelength away on either side, and
+$-I_0$ at the point opposite the feed. That sign is measured in the direction
+around the loop, and on the far side the wire itself runs the opposite way, so
+the two reversals cancel: the current at the top and the current at the bottom
+point the same way in space, and the loop no longer circulates.
+
+The loop then behaves like two parallel, in-phase current elements, the feed
+side and the far side, separated by the diameter $2a = \lambda/\pi \approx 0.32\lambda$.
+Along the loop axis an observer is equally far from both, and their fields add
+in phase. In the plane of the loop, along the line joining them, they are
+$2ka = 2$ rad out of phase and partly cancel, and each side also has its own
+null along its length. That puts the maximum on the axis, where the small loop
+had its null. A one-wavelength loop is close to two half-wave dipoles bent
+around and joined at their ends, which is why its input resistance is about
+100 to 130 Ω and nearly real at resonance.
 
 This loop transmits efficiently, with a directivity a little under 1 dB above
 a dipole's, and it is the element of the **quad** antenna. Only its size in
