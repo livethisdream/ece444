@@ -184,8 +184,63 @@ def patch_array() -> str:
                "off broadside by the phase shifters", b, "l13pa")
 
 
+# ---------------------------------------------------------------- slot feed position
+def slot_feed() -> tuple[str, float, float]:
+    """Input resistance of a resonant half-wave slot against feed position.
+    The field across the gap follows cos(2 pi x / lambda) from the center,
+    so R(x) = R_center cos^2(2 pi x / lambda); R_center from Babinet with the
+    73-ohm resonant dipole."""
+    r_c = 377.0 ** 2 / 4 / 73.0
+    x50 = math.acos(math.sqrt(50 / r_c)) / (2 * math.pi)
+    W, H = 600, 380
+    X0, X1, Y0, Y1 = 84, 560, 118, 318
+    xmax, rmax = 0.25, 500
+    px = lambda x: X0 + x / xmax * (X1 - X0)
+    py = lambda r: Y1 - r / rmax * (Y1 - Y0)
+    b = [markers(NAVY, RED, GRAY, BROWN)]
+    # half the slot above the plot, center at left, shorted end at right
+    sy = 64
+    b.append(f'<rect x="{X0 - 10}" y="{sy - 26}" width="{X1 - X0 + 34}" height="52" fill="{SUB}" stroke="{NAVY}" stroke-width="1.6"/>')
+    b.append(f'<rect x="{X0}" y="{sy - 7}" width="{X1 - X0}" height="14" fill="#fff" stroke="{NAVY}" stroke-width="1.4"/>')
+    for i in range(9):
+        x = xmax * (i + 0.5) / 9
+        a = math.cos(2 * math.pi * x)
+        h = 5 + 13 * a
+        if a > 0.15:
+            b.append(f'<line x1="{px(x):.1f}" y1="{sy - h:.1f}" x2="{px(x):.1f}" y2="{sy + h:.1f}" stroke="{RED}" stroke-width="2.2"/>')
+    b.append(f'<circle cx="{px(x50):.1f}" cy="{sy}" r="5.5" fill="#fff" stroke="{BROWN}" stroke-width="2.6"/>')
+    b.append(text(X0, sy - 34, "center", GRAY, 16, anchor="start"))
+    b.append(text(X1, sy - 34, "shorted end", GRAY, 16, anchor="end"))
+    b.append(text(px(x50) + 12, sy + 44, "50 Ω feed", BROWN, 17, "700", "start"))
+    # plot
+    for r in range(0, 501, 100):
+        b.append(f'<line x1="{X0}" y1="{py(r):.1f}" x2="{X1}" y2="{py(r):.1f}" stroke="{RULE}" stroke-width="1"/>')
+        b.append(text(X0 - 8, py(r) + 6, str(r), GRAY, 16, anchor="end"))
+    for x in (0, 0.05, 0.10, 0.15, 0.20, 0.25):
+        b.append(text(px(x), Y1 + 24, f"{x:.2f}", GRAY, 16))
+    b.append(f'<rect x="{X0}" y="{Y0}" width="{X1 - X0}" height="{Y1 - Y0}" fill="none" stroke="{SUB_EDGE}"/>')
+    pts = " ".join(f"{px(x):.1f},{py(r_c * math.cos(2 * math.pi * x) ** 2):.1f}"
+                   for x in [xmax * i / 200 for i in range(201)])
+    b.append(f'<polyline points="{pts}" fill="none" stroke="{NAVY}" stroke-width="3"/>')
+    b.append(f'<line x1="{X0}" y1="{py(50):.1f}" x2="{X1}" y2="{py(50):.1f}" stroke="{RED}" stroke-width="1.8" stroke-dasharray="7 5"/>')
+    b.append(f'<line x1="{px(x50):.1f}" y1="{sy + 8}" x2="{px(x50):.1f}" y2="{Y1}" stroke="{BROWN}" stroke-width="1.2" stroke-dasharray="3 3"/>')
+    b.append(f'<circle cx="{px(x50):.1f}" cy="{py(50):.1f}" r="5.5" fill="{RED}"/>')
+    b.append(f'<line x1="{px(0.012):.1f}" y1="{py(r_c) + 4:.1f}" x2="{px(0.125):.1f}" y2="{py(472):.1f}" stroke="{NAVY}" stroke-width="1.2"/>')
+    b.append(text(px(0.13), py(472) + 6, f"{r_c:.0f} Ω at the center", NAVY, 18, "700", "start"))
+    b.append(text(px(x50) - 20, py(50) - 22, f"50 Ω at {x50:.2f} λ", RED, 18, "700", "end"))
+    b.append(text((X0 + X1) / 2, Y1 + 50, "feed position from the center (wavelengths)", GRAY, 17))
+    b.append(text(22, (Y0 + Y1) / 2, "input resistance (Ω)", GRAY, 17, rot=-90))
+    s_ = svg(W, H, f"Half of a resonant slot, from its center to its shorted end, with the field across "
+             f"the gap largest at the center and zero at the end, above a plot of input resistance "
+             f"against feed position: {r_c:.0f} ohms at the center, falling to zero at the "
+             f"end and crossing 50 ohms {x50:.2f} wavelengths from the center", b, "l13sf")
+    return s_, r_c, x50
+
+
 def main() -> None:
-    figs = {"L13-slot-field.svg": slot_field(), "L13-patch-array.svg": patch_array()}
+    feed, r_c, x50 = slot_feed()
+    figs = {"L13-slot-field.svg": slot_field(), "L13-patch-array.svg": patch_array(),
+            "L13-slot-feed.svg": feed}
     for d in OUTS:
         for name, s in figs.items():
             p = d / name

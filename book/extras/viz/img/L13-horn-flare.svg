@@ -1,17 +1,18 @@
-<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Left: an open-ended waveguide; the wave coming in mostly reflects at the small opening and only a little leaks out. Right: a horn; the flare lets the wave expand gradually and flow out through a large opening">
+<svg font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Left: an open-ended waveguide; only a little of the incoming wave reflects, and the rest spills out of the small opening in a broad, low-gain beam. Right: a horn; the flare lets the wave expand gradually and flow out through a large opening">
 <defs><marker id="l13hf-ah-004a85" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#004a85"/></marker><marker id="l13hf-ah-0067b9" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0067b9"/></marker><marker id="l13hf-ah-b01e24" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b01e24"/></marker><marker id="l13hf-ah-3f7d34" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3f7d34"/></marker><marker id="l13hf-ah-8a5a00" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8a5a00"/></marker></defs>
 <line x1="300" y1="16" x2="300" y2="314" stroke="#dbe3ee" stroke-width="1"/>
 <text x="150.0" y="32.0" fill="#004a85" font-size="21" font-weight="700" text-anchor="middle">Open-ended waveguide</text>
 <rect x="30" y="142" width="140" height="56" fill="#eaf2f9" stroke="#004a85" stroke-width="3"/>
 <line x1="44.0" y1="162.0" x2="154.0" y2="162.0" stroke="#0067b9" stroke-width="3" marker-end="url(#l13hf-ah-0067b9)"/>
-<line x1="154.0" y1="180.0" x2="60.0" y2="180.0" stroke="#b01e24" stroke-width="5" marker-end="url(#l13hf-ah-b01e24)"/>
-<path d="M182.6 152.0 A 22 22 0 0 1 182.6 188.0" fill="none" stroke="#3f7d34" stroke-width="1.6" opacity="0.6"/>
-<path d="M192.9 137.2 A 40 40 0 0 1 192.9 202.8" fill="none" stroke="#3f7d34" stroke-width="1.6" opacity="0.6"/>
+<line x1="154.0" y1="180.0" x2="112.0" y2="180.0" stroke="#b01e24" stroke-width="1.6" marker-end="url(#l13hf-ah-b01e24)"/>
+<path d="M175.7 148.7 A 22 22 0 0 1 175.7 191.3" fill="none" stroke="#3f7d34" stroke-width="2.2" opacity="1.0"/>
+<path d="M180.9 129.4 A 42 42 0 0 1 180.9 210.6" fill="none" stroke="#3f7d34" stroke-width="2.2" opacity="1.0"/>
+<path d="M186.0 110.1 A 62 62 0 0 1 186.0 229.9" fill="none" stroke="#3f7d34" stroke-width="2.2" opacity="1.0"/>
 <text x="100.0" y="120.0" fill="#0067b9" font-size="18" font-weight="700" text-anchor="middle">in</text>
-<text x="100.0" y="230.0" fill="#b01e24" font-size="18" font-weight="700" text-anchor="middle">most of it reflects</text>
-<text x="236.0" y="112.0" fill="#3f7d34" font-size="17" font-weight="700" text-anchor="middle">a little</text>
-<text x="236.0" y="132.0" fill="#3f7d34" font-size="17" font-weight="700" text-anchor="middle">leaks out</text>
-<text x="150.0" y="290.0" fill="#5a5a5a" font-size="17" text-anchor="middle">a small opening, badly matched</text>
+<text x="118.0" y="230.0" fill="#b01e24" font-size="18" font-weight="700" text-anchor="middle">a little reflects</text>
+<text x="252.0" y="92.0" fill="#3f7d34" font-size="17" font-weight="700" text-anchor="middle">a broad beam</text>
+<text x="252.0" y="112.0" fill="#3f7d34" font-size="17" font-weight="700" text-anchor="middle">spills out</text>
+<text x="150.0" y="290.0" fill="#5a5a5a" font-size="17" text-anchor="middle">a small opening: a few dBi</text>
 <text x="530.0" y="32.0" fill="#004a85" font-size="21" font-weight="700" text-anchor="middle">Horn</text>
 <path d="M330 142 H410 L620 62 V278 L410 198 H330 Z" fill="#eaf2f9" stroke="#004a85" stroke-width="3" stroke-linejoin="round"/>
 <line x1="620" y1="62" x2="620" y2="278" stroke="#eaf2f9" stroke-width="3"/>
