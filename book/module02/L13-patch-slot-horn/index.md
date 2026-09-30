@@ -534,27 +534,50 @@ tolerance is written as a fraction of a wavelength across the aperture.
 
 ::::{frame} The Optimum Horn
 :::{present}
-<img src="../../viz/img/L13-horn-optimum.svg"
-     alt="Relative gain of a horn of fixed length against aperture width: without phase error it keeps rising; with it, it peaks where the edge lags a quarter wavelength in the E-plane and three eighths of a wavelength in the H-plane"
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L13-horn-three.svg"
+     alt="Three horns with the same flare length and mouths too narrow, optimum, and too wide, whose edges lag by a sixteenth, a quarter, and three quarters of a wavelength. Under each, the strips of the mouth add as arrows head to tail: few arrows in a line, more arrows curving a little, and a chain that curls back. The optimum has the highest gain; the narrow mouth is 2.1 dB lower and the wide one 5.7 dB lower"
+     style="max-width: 760px; width: 100%; display: block; margin: 0 auto;">
+
+- Same flare length, wider mouth: more area, more edge lag.
+- Past $\lambda/4$ of edge lag, the edge strips cancel the center.
 :::
-:::{present}
-- At fixed length, a larger aperture lowers $\eta_{\text{ap}}$, so gain peaks and then falls.
-- The peak is the **optimum horn**: edge phase error $\lambda/4$ (E), $3\lambda/8$ (H).
-- Area sets the maximum gain; phase error sets how much is reached.
-:::
+
+The **flare length** is the distance along the axis from the apex to the
+mouth. Hold it fixed and widen the mouth, and two things happen at once. The
+aperture grows, which raises the gain. But the edges of the mouth move farther
+from the apex than its center is, so the wave reaches them later, and that lag
+grows with the square of the width.
+
+The arrows show why the lag matters. Split the mouth into narrow strips; each
+strip contributes to the field straight ahead, and its contribution is turned
+by its lag. Adding the contributions head to tail gives the total. A narrow
+mouth has few strips, all nearly in step: a short, straight chain. The optimum
+mouth has more strips, and the outer ones turn by up to a quarter wavelength,
+so the chain bends but still gains length. Past that, the outer strips turn so
+far that they point backward, and adding them makes the total *shorter*: the
+extra area costs gain instead of adding it. The optimum horn is the widest
+mouth that still helps, at a given length. A longer horn flattens the
+wavefront, lowers the lag at every width, and moves the optimum to a wider
+mouth and a higher gain; the price is length.
 
 At the optimum, $\eta_{\text{ap}} \approx 0.5$: the design gives up about half
 the aperture to keep the horn short enough to be practical.
 
-The curves are computed for a horn ten wavelengths long, one plane at a time.
-The E-plane field is uniform across the aperture, and its gain peaks when the
-edge lags the center by a quarter wavelength. The H-plane field follows the
+<img src="../../viz/img/L13-horn-optimum.svg"
+     alt="Relative gain of a horn of fixed length against aperture width: without phase error it keeps rising; with it, it peaks where the edge lags a quarter wavelength in the E-plane and three eighths of a wavelength in the H-plane"
+     style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
+
+The plot is the same effect computed continuously, for a horn with a flare
+length of ten wavelengths, widening the mouth in one plane at a time. The
+E-plane field is uniform across the aperture, and its gain peaks when the edge
+lags the center by a quarter wavelength. The H-plane field follows the
 waveguide's cosine, which is weak at the edges, so the edges matter less and
-the peak comes later, at three eighths of a wavelength. At each peak the phase
-error costs about 22% of the gain in that plane, and the cosine taper costs
-another 19%; together, $0.78 \times 0.78 \times 0.81 \approx 0.5$, which is
-where the horn's aperture efficiency comes from.
+the peak comes later, at three eighths of a wavelength. Past the peak the
+curve ripples as successive bands of the mouth alternately add and cancel. At
+each peak the phase error costs about 22% of the gain in that plane, and the
+cosine taper costs another 19%; together,
+$0.78 \times 0.78 \times 0.81 \approx 0.5$, which is where the horn's aperture
+efficiency comes from.
 ::::
 
 ::::{frame} The Standard-Gain Horn
