@@ -275,6 +275,21 @@ Make them do the second row on the board — complex division is where the relat
 
 ---
 
+## What 487 Ω Means
+
+<div class="two-col fig-wide"><div class="col-text">
+<p>Center-fed on $50\ \Omega$: $\Gamma = 0.81$, VSWR 9.7, 66% of the power reflects.</p>
+<p>Move the feed toward a shorted end and the resistance falls: $50\ \Omega$ sits $0.20\lambda$ from the center.</p>
+<p>A waveguide slot needs no match: its offset sets its power.</p>
+</div><div class="col-fig">
+<div class="fig" data-inline-svg="./fig/L13-slot-feed.svg" style="max-width:600px; margin:0 auto;"></div>
+</div></div>
+
+Note:
+Same move as the patch inset, mirrored: the patch's resistance is set by voltage at an open end, the slot's falls toward a shorted end. Cavity backing roughly doubles the resistance (one-sided radiation). High resistance also means high gap voltage: 100 W into 487 ohms is about 310 V peak, which matters for airborne slots at altitude.
+
+---
+
 ## Slot Polarization
 
 - The dipole's **E** field runs **along the wire**.

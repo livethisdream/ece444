@@ -421,6 +421,57 @@ reactance crosses zero at the same length either way, a slot resonates at the
 same electrical length its complementary dipole does.
 ::::
 
+::::{frame} What 487 Ω Means
+:::{present}
+<img src="../../viz/img/L13-slot-feed.svg"
+     alt="Half of a resonant slot, from its center to its shorted end, above a plot of input resistance against feed position: 487 ohms at the center, falling to zero at the end and crossing 50 ohms 0.20 wavelengths from the center"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
+- Center-fed on $50\ \Omega$, a slot reflects 66% of its power: VSWR 9.7.
+- Feeding toward a shorted end lowers the resistance: $50\ \Omega$ is $0.20\lambda$ from center.
+- A waveguide slot needs no match: its offset sets its power.
+:::
+
+A center-fed resonant slot presents about $487\ \Omega$, and on a
+$50\ \Omega$ line that is a reflection coefficient of
+
+$$\Gamma = \frac{487 - 50}{487 + 50} = 0.81$$
+
+so 66% of the power reflects and the VSWR is 9.7. This is the short dipole's
+problem from Lesson 7 in the other direction: there the resistance was far too
+low, here it is far too high, and either way the slot must be matched before
+it is useful on coax.
+
+The usual match is the one the patch uses: move the feed. The field across the
+gap is largest at the center and falls to zero at the shorted ends, and the
+input resistance falls with the square of that field,
+
+$$R_{\text{in}}(x) = R_{\text{center}}\cos^2\left(\frac{2\pi x}{\lambda}\right)$$
+
+where $x$ is the distance of the feed from the center. The resistance crosses
+$50\ \Omega$ at $x = 0.20\lambda$, about $0.05\lambda$ from the shorted end.
+A quarter-wave transformer or a lumped matching network at the center feed
+works too.
+
+Two consequences follow for real installations. A cavity-backed slot radiates
+from one side only, so for the same gap voltage it radiates about half the
+power, and its resistance roughly doubles, toward $1\ \text{k}\Omega$ in the
+ideal case, which makes the match more important, not less. And a high
+resistance means a high voltage across the gap for a given power,
+
+$$V = \sqrt{2 P R}$$
+
+so $100\ \text{W}$ into $487\ \Omega$ puts about $310\ \text{V}$ peak across
+the slot, against $70\ \text{V}$ on a $50\ \Omega$ line. At altitude, where
+air breaks down at lower voltage, that sets a power limit on airborne slots.
+
+In a waveguide slot array none of this is a problem. Each slot is fed by the
+guide's own fields rather than by a coax, and its offset from the centerline
+sets how much of the guided power it takes, so there is nothing to match slot
+by slot.
+::::
+
 ::::{frame} Slots in Service
 :::{present}
 <img src="../../viz/img/L13-slot-service.svg"
