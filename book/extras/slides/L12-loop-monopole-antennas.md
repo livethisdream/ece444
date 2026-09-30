@@ -323,9 +323,9 @@ The 38.7 A is the number to emphasize. Transmitting loops need copper tube, weld
 
 ## Low Efficiency, Same SNR
 
-- Loss cuts the signal **and** the sky noise by the same factor.
-- SNR holds until the sky noise falls to the receiver's floor.
-- At 1 MHz, sky noise is 70 dB above $kT_0$; 40 dB of loss barely changes SNR.
+- Loss cuts the signal **and** the external noise by the same factor.
+- SNR holds until the external noise falls to the receiver's floor.
+- At 1 MHz, external noise is 70 dB above $kT_0$; 40 dB of loss barely changes SNR.
 - Designs still raise the output: $N$ turns raise $R_r$ as $N^2$ and loss only as $N$, and a **ferrite rod** multiplies the moment again.
 
 <div class="callout">
