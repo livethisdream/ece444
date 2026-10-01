@@ -74,6 +74,18 @@ never load on their own — vendor them from npm (`npm i reveal.js@5.1.0 mathjax
 into `book/_build/` and repoint the built HTML at the local copies. Every defect
 listed below was found that way and would have shipped otherwise.
 
+## Quality sweeps (manual)
+
+Two project skills audit one lesson at a time and stop for Neil's pick before
+editing anything. Run them on demand, not on every merge:
+
+- `/voice-sweep <NN>`: the page, deck, and practice set against `VOICE.md`.
+- `/why-sweep <NN>`: results stated without a mechanism, undefined jargon,
+  unrecomputed numbers, and missing links to earlier lessons.
+
+Run the voice sweep first on a lesson that has not had one. Each skill carries
+the pitfalls and the verification list from the L12-L14 sweeps.
+
 ## Gotchas that silently ship wrong
 
 These do not error. They produce a page or slide that looks fine to the build and
