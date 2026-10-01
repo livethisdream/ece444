@@ -111,23 +111,23 @@ surface penalty as $\text{loss (dB)} = 685.8\,(\sigma/\lambda)^2$.
 		aperture is not being used and the effective area shrinks. Widening the
 		feed brightens the rim but sends power straight past it, which is lost
 		entirely (and on receive replaces cold sky with 290\ K ground in the
-		spilled beam). The optimum is the familiar rule of thumb: illuminate the
+		spilled beam, raising the antenna temperature $T_A$ of L12). The optimum is the familiar rule of thumb: illuminate the
 		\textbf{rim about 10\db\ below the center}.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Compute the aperture efficiency from the four quoted factors,
-		before any surface error. Call it $\varepsilon_{ap,1}$.
+		before any surface error. Call it $\eta_{\text{ap},1}$.
 		\begin{solution}[1.1in]
 		\eq{
-			\varepsilon_{ap,1} &= (0.88)(0.86)(0.96)(0.98) \\
+			\eta_{\text{ap},1} &= (0.88)(0.86)(0.96)(0.98) \\
 			 &= 0.712
 		}
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\varepsilon_{ap,1}$ = \ansbox[1.3in]{$0.712$}
+		$\eta_{\text{ap},1}$ = \ansbox[1.3in]{$0.712$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -183,8 +183,8 @@ reflector behind it, and a row of directors in front along a boom.
 		Only the driven element is connected; the parasites carry currents
 		\emph{induced} by its near field, and the phase of that induced current
 		is set by the element's reactance. A slightly long element is inductive,
-		so its current lags; a slightly short element is capacitive, so its
-		current leads. Placing the lagging element behind and the leading
+		so its current lags the voltage induced on it; a slightly short element
+		is capacitive, so its current leads. Placing the lagging element behind and the leading
 		elements in front makes the re-radiated fields add in phase along the
 		boom in the forward direction and tend to cancel in the reverse
 		direction. The result is an endfire main lobe pointing away from the
@@ -204,26 +204,29 @@ reflector behind it, and a row of directors in front along a boom.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part A 6-element Yagi on a $1.0\lambda$ boom gives 10 dBi. Using the
-		rule of thumb of $+3\db$ per doubling of boom length, estimate the boom
-		needed for 16 dBi at 435\ \mhz. Then say whether you believe the
-		answer.
-		\begin{solution}[1.6in]
-		$16 - 10 = 6\db$, which is two doublings, so the rule of thumb predicts
-		a $4\lambda$ boom. At 435\ \mhz, $\lambda = 3\ee{8}/435\ee{6} = 0.69\ \m$:
+		\part A 6-element Yagi on a $1.0\lambda$ boom gives 10 dBi. An ideal
+		endfire line source gains $+3\db$ per doubling of its length; real
+		Yagis manage about $+2\db$. Estimate the boom needed for 16 dBi at
+		435\ \mhz\ both ways, and say which you believe.
+		\begin{solution}[1.9in]
+		$16 - 10 = 6\db$. At 435\ \mhz, $\lambda = 3\ee{8}/435\ee{6} = 0.69\ \m$.
 		\eq{
-			L = 4\lambda = 4\,(0.69) = 2.76\ \m
+			\text{ideal: } 6/3 &= 2 \text{ doublings}
+			\;\Rightarrow\; L = 4\lambda = 2.76\ \m \\
+			\text{real: } 6/2 &= 3 \text{ doublings}
+			\;\Rightarrow\; L = 8\lambda = 5.52\ \m
 		}
-		Do not believe it. The rule of thumb is optimistic past a few
-		wavelengths: published designs put a $4.5\lambda$ boom at about
-		14.5 dBi, not 16. Realistically you would either accept a much longer
-		boom with diminishing returns, or stack two 13\dbi\ Yagis and take the
+		Believe the longer one. The $+3\db$ is the endfire bound, directivity
+		proportional to $L$; real Yagis fall short of it because the current
+		dies away on the far directors, and published designs put a
+		$4.5\lambda$ boom at about 14.5 dBi, not 16. A 5.5\ \m\ boom is
+		unwieldy, so in practice you stack two 13\dbi\ Yagis and take the
 		$+3\db$ from the stack.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$L$ = \ansbox[1.3in]{$2.76\ \m$}
+		$L$ = \ansbox[1.3in]{$5.5\ \m$}
 	\end{minipage}
 
 	\part Yagis are narrowband --- a few percent. Explain why, and name one
@@ -293,7 +296,8 @@ are fixed (no steering), the site is windy, and the budget is small.
 		\begin{solution}[1.4in]
 		Take the dish. It is a single molded part 0.38\ \m\ across with one
 		feed, it is broadband, and its wind load at that size is modest; the
-		patch array needs 144 elements and a 144-way corporate feed network whose
+		patch array needs 144 elements and a 144-way corporate feed (a tree of
+		splitters to every element) whose
 		loss at 5.8\ \ghz\ is significant in both cost and dB. The array's
 		advantages --- flat profile and the option of electronic steering --- are
 		worth nothing
@@ -313,8 +317,9 @@ are fixed (no steering), the site is windy, and the budget is small.
 			\frac{2\theta}{9.6\mydeg} = \sqrt{0.1667} = 0.408 \\
 			\theta &= \frac{(0.408)(9.6\mydeg)}{2} = 1.96\mydeg
 		}
-		About $\pm2\mydeg$ --- comfortable for a rigid rooftop mount, which is
-		another argument for not buying more gain than the link needs.
+		About $\pm2\mydeg$, comfortable for a rigid mount. (The approximation
+		is a Gaussian beam, a parabola in dB, scaled to 3\db\ at
+		$\theta_{HP}/2$.)
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}

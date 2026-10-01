@@ -97,6 +97,27 @@ Read the physics before the algebra — $A/\lambda^2$ counts how many square
 wavelengths the antenna spans, $\eta_{\text{ap}}$ is the fraction of that area
 you actually manage to use, and $A_e = \eta_{\text{ap}}A = G\lambda^2/4\pi$ is
 the number Friis cares about.
+
+The formula is the one Lesson 13 derived for the horn, and nothing about it is
+specific to horns. Straight ahead of a flat aperture every phase factor in the
+radiation integral is 1, so the radiation vector is the plain sum of the
+aperture field $E_a$, and Lesson 2's directivity is
+
+$$\begin{aligned}
+D &= \frac{4\pi U_{\max}}{P_{\text{rad}}} \\
+&= \frac{4\pi}{\lambda^2}\ \frac{\left\vert\int_A E_a\ dS'\right\vert^2}{\int_A \vert E_a\vert^2\ dS'} \\
+&= \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^2}
+\end{aligned}$$
+
+with
+
+$$\eta_{\text{ap}} = \frac{\left\vert\int_A E_a\ dS'\right\vert^2}{A\int_A \vert E_a\vert^2\ dS'} \le 1$$
+
+A uniform, in-phase field makes the fraction exactly 1. Every loss term in
+this lesson is a way of making the numerator smaller than the denominator:
+a darker rim, a phase error from a bumpy surface, a patch of the aperture
+blocked by the feed. Hold on to this ratio; the next five frames each
+evaluate a piece of it.
 ::::
 
 ::::{frame} The Circular-Dish Shortcut
@@ -126,10 +147,43 @@ and the beamwidth of an aperture of size $D$ scales as $\lambda/D$. Power you
 no longer waste sideways is power you put on boresight.
 
 :::{depth}
-The $70^\circ$ coefficient already assumes a tapered illumination. A perfectly
-uniform circular aperture gives $58^\circ\lambda/D$ with $-17.6$ dB sidelobes,
-but nobody illuminates a dish uniformly — you will see why two parts from now.
-Use $70^\circ$ for design, and use the interactive below to build the reflex.
+The $70^\circ$ coefficient already assumes a tapered illumination. For a
+uniform circular aperture of diameter $D$, Lesson 6's radiation vector is the
+two-dimensional version of the line source's sinc: the integral of
+$e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}$ over a disk, which is
+
+$$\begin{aligned}
+\vert\mathbf{N}(\theta)\vert &\propto \left\vert\frac{2J_1(u)}{u}\right\vert \\
+u &= \frac{\pi D}{\lambda}\sin\theta
+\end{aligned}$$
+
+The half-power point is at $u = 1.616$, so the full beamwidth is
+
+$$\begin{aligned}
+\theta_\text{HP} &\approx 2\left(\frac{1.616}{\pi}\right)\frac{\lambda}{D} \\
+&= 1.029\ \frac{\lambda}{D}\ \text{rad} \\
+&= 59^\circ\ \frac{\lambda}{D}
+\end{aligned}$$
+
+with a first sidelobe at $-17.6$ dB. Nobody illuminates a dish uniformly,
+and you will see why two parts from now: a feed that lights the rim 11 dB
+below the center widens the beam to $67^\circ\lambda/D$ and pushes the
+sidelobes to $-25$ dB. Feeds that taper harder widen it further, so $70^\circ$
+is the round, slightly conservative design number. Use it for design, and use
+the interactive below to build the reflex.
+
+Eliminating $D$ between the gain formula and the beamwidth rule ties the two
+together:
+
+$$\begin{aligned}
+G\ \theta_\text{HP}^2 &\approx \eta_{\text{ap}}\ \pi^2\ (70^\circ)^2 \\
+&= 31{,}400\ \text{deg}^2
+\end{aligned}$$
+
+for $\eta_{\text{ap}} = 0.65$. That sits inside the 26,000 to 32,400 range
+Lesson 2 gave for the pencil-beam estimate $D \approx 41{,}253/\theta_1\theta_2$,
+which is the same statement from the pattern side: the narrower the beam, the
+higher the gain.
 :::
 ::::
 
@@ -172,7 +226,9 @@ is why a dish that drifts two degrees off the satellite goes dark.
 
 **Effective aperture.** $A_e = \eta_{\text{ap}}A = 0.65 \cdot \pi(0.5)^2 = 0.51\ \text{m}^2$.
 
-**Sanity check on the far field.** $2D^2/\lambda = 2(1)^2/0.025 = 80\ \text{m}$.
+**Sanity check on the far field.** Lesson 5's far-field boundary is the
+distance at which the path from the rim of a $D$-wide aperture is within
+$\lambda/16$ of the path from its center, $2D^2/\lambda = 2(1)^2/0.025 = 80\ \text{m}$.
 You could not measure this antenna on the bench range you used in Lesson 11,
 and Lesson 9 told you why: it is the compact-range and near-field-scanning
 problem, in a dish you can carry under one arm.
@@ -197,7 +253,10 @@ across a chamber instead of at a satellite.
 
 ::::{frame} The Equal-Path Property
 :::{present}
-$$\overline{FP} + \overline{PA} = (f + z_P) + (z_a - z_P) = f + z_a$$
+$$\begin{aligned}
+\overline{FP} + \overline{PA} &= (f + z_P) + (z_a - z_P) \\
+&= f + z_a
+\end{aligned}$$
 
 - The $z_P$ cancels.
 - **Every ray, edge to center, takes the same path length.**
@@ -205,9 +264,19 @@ $$\overline{FP} + \overline{PA} = (f + z_P) + (z_a - z_P) = f + z_a$$
 :::
 
 Put the vertex at the origin with the axis along $z$, so the surface is
-$z = \rho^{2}/4f$ and the focus sits at $z = f$. A parabola's defining property
-is that the distance from the focus to a point $P$ on the surface equals
-$f + z_P$; a ray from the focus to $P$ then travels parallel to the axis to an
+$z = \rho^{2}/4f$ and the focus sits at $z = f$. The distance from the focus
+to a point $P$ on the surface, at radius $\rho_P$ and height $z_P$, follows
+from Pythagoras and the surface equation $\rho_P^2 = 4fz_P$:
+
+$$\begin{aligned}
+\overline{FP}^{2} &= \rho_P^{2} + (z_P - f)^{2} \\
+&= 4fz_P + z_P^{2} - 2fz_P + f^{2} \\
+&= (z_P + f)^{2}
+\end{aligned}$$
+
+so $\overline{FP} = f + z_P$. That is the parabola's defining property: every
+point on it is as far from the focus as from the line $z = -f$ behind the
+vertex. A ray from the focus to $P$ then travels parallel to the axis to an
 aperture plane at $z = z_a$, covering a further $z_a - z_P$. Every point of
 the aperture plane is therefore in phase.
 ::::
@@ -222,7 +291,32 @@ the aperture plane is therefore in phase.
 | 0.60 | $45^\circ$ | shallow, feed on a long strut |
 :::
 
-The half-angle to the rim satisfies $\tan(\theta_0/2) = 1/[4(f/D)]$.
+The half-angle to the rim follows from the equal-path property. Measure a
+ray from the focus by its length $r$ and its angle $\theta'$ from the axis,
+pointing back toward the vertex. The point it reaches sits at height
+$z_P = f - r\cos\theta'$, and $\overline{FP} = f + z_P$ becomes
+
+$$\begin{aligned}
+r &= 2f - r\cos\theta' \\
+r &= \frac{2f}{1 + \cos\theta'}
+\end{aligned}$$
+
+The point's distance from the axis is then
+
+$$\begin{aligned}
+\rho &= r\sin\theta' \\
+&= \frac{2f\sin\theta'}{1 + \cos\theta'} \\
+&= 2f\tan\frac{\theta'}{2}
+\end{aligned}$$
+
+and the rim is where $\rho = D/2$:
+
+$$\tan\frac{\theta_0}{2} = \frac{D}{4f} = \frac{1}{4(f/D)}$$
+
+The same $r(\theta')$ says the rim is farther from the feed than the vertex
+is, by the factor $2/(1 + \cos\theta_0)$, so the rim is dimmer than the
+center even before the feed's own pattern rolls off. For $f/D = 0.5$ that
+spreading alone costs 1.9 dB at the rim.
 
 :::{depth}
 A deep dish (small $f/D$) shields the feed from ground noise but demands a
@@ -242,8 +336,12 @@ prime-focus reflectors land between 0.3 and 0.6.
 The first trade is the feed's own pattern. Aim a narrow feed at the dish and
 the rim sits 20 dB down: you have paid for aperture you are not using, and the
 effective area shrinks. Widen the feed and the rim brightens — but now power
-sails past the rim entirely and is simply gone, and on receive that spilled
-beam is looking at warm ground instead of cold sky.
+sails past the rim entirely and is simply gone. On receive the cost is
+double. Lesson 12's antenna temperature $T_A$ is the temperature of whatever
+the pattern sees, weighted by the pattern. The main beam of an earth-station
+dish sees sky at a few kelvin to a few tens of kelvin, but the spilled part of
+the feed pattern looks past the rim at ground near $290\ \text{K}$, and it
+raises $T_A$ and with it the noise $kT_AB$ the antenna delivers.
 ::::
 
 ::::{frame} The 10 dB Rule
@@ -260,8 +358,37 @@ pull opposite ways, and that is the optimum.
 
 It is the house rule of thumb for reflector feeds, and it is why a dish's
 aperture distribution always looks like one of the tapers from Lesson 6 — with
-the sidelobe benefit that comes along for free. A uniform aperture gives
-$-13.3$ dB, but a real dish runs closer to $-20$ dB because of the taper.
+the sidelobe benefit that comes along for free. A uniform circular aperture
+has its first sidelobe at $-17.6$ dB; a feed that follows the rule pushes it
+to about $-25$ dB.
+
+The optimum can be computed. Model the feed's power pattern as
+$\cos^n\theta'$ and sweep $n$. Two efficiencies pull against each other. The
+**spillover efficiency** is the fraction of the feed's power that lands on
+the dish at all,
+
+$$\eta_\text{s} = \frac{\int_0^{\theta_0}\cos^n\theta'\ \sin\theta'\ d\theta'}{\int_0^{\pi/2}\cos^n\theta'\ \sin\theta'\ d\theta'}$$
+
+and the **taper efficiency** $\eta_\text{t}$ is the ratio from the frame on
+the one idea,
+$\left\vert\int E_a\ dS'\right\vert^2/\left(A\int\vert E_a\vert^2\ dS'\right)$,
+with the aperture field set by the feed pattern and the $r(\theta')$
+spreading of the previous frame:
+
+$$E_a \propto \sqrt{\cos^n\theta'}\ \frac{1 + \cos\theta'}{2}$$
+
+A broad feed (small $n$) gives a nearly uniform aperture and $\eta_\text{t}$
+near 1, but spills. A narrow feed (large $n$) puts everything on the dish but
+leaves the rim dark. For $f/D = 0.5$ the product peaks at an edge taper of
+$10.7\ \text{dB}$, where $\eta_\text{s} = 0.92$, $\eta_\text{t} = 0.89$, and
+$\eta_\text{s}\eta_\text{t} = 0.82$.
+
+<img src="../../viz/img/L14-taper-spillover.svg"
+     alt="Spillover efficiency rises and taper efficiency falls as the rim gets darker; their product peaks at about 0.82 for an edge taper near 11 dB, for a dish with f over D of 0.5"
+     style="max-width: 640px; width: 100%; display: block; margin: 1em auto;">
+
+The peak is broad: anything from about 8 to 14 dB costs less than 0.03 of
+efficiency, which is why a rule of thumb is good enough.
 ::::
 
 ::::{frame} Blockage and the Offset Feed
@@ -276,19 +403,48 @@ not, which is why the dish on the roof looks oval and has its arm hanging off
 the bottom: the reflector is a slice cut off-axis from a much larger imaginary
 paraboloid, giving zero blockage and cleaner sidelobes, and the tilted slice is
 what makes the panel look taller than it is wide.
+
+The blockage factor is the aperture-efficiency ratio again. The feed still
+radiates the power aimed at the blocked disk of area $A_b$, so the denominator
+keeps all of $A$, but that power is scattered rather than added in phase on
+boresight, so the numerator loses the blocked area. For a uniform field,
+
+$$\begin{aligned}
+\frac{G}{G_0} &= \frac{(A - A_b)^2}{A^2} \\
+&= \left[1 - \left(\frac{d}{D}\right)^2\right]^2
+\end{aligned}$$
+
+A $15\ \text{cm}$ feed costs $0.02\ \text{dB}$ on a $3\ \text{m}$ dish and
+$1.0\ \text{dB}$ on a $45\ \text{cm}$ one.
 ::::
 
 ::::{frame} Surface Accuracy — Ruze's Formula
 :::{present}
-$$G = G_0\ e^{-(4\pi\sigma/\lambda)^{2}} \quad\Longrightarrow\quad \text{loss (dB)} = 685.8\left(\frac{\sigma}{\lambda}\right)^{2}$$
+$$\begin{aligned}
+G &= G_0\ e^{-(4\pi\sigma/\lambda)^{2}} \\
+\text{loss (dB)} &= 685.8\left(\frac{\sigma}{\lambda}\right)^{2}
+\end{aligned}$$
 
 - $\lambda/50$ RMS costs 0.27 dB. Negligible.
 - $\lambda/16$ RMS costs 2.7 dB. Disqualifying.
 :::
 
-Phase errors from a bumpy surface cost gain exponentially, and this course
-uses the result without deriving it. Note what it means for a fixed piece of
-hardware: a dish held to 0.5 mm RMS is essentially perfect at 6 GHz and has
+Phase errors from a bumpy surface cost gain exponentially, and the reason is
+short. A bump of height $\epsilon$ on a shallow dish lengthens the path in and
+back out by $2\epsilon$, a phase error $\delta = 2k\epsilon$, so an RMS surface
+error $\sigma$ is an RMS phase error $\delta_\text{rms} = 4\pi\sigma/\lambda$.
+In the aperture-efficiency ratio the magnitude of $E_a$ is unchanged, so the
+denominator is too, but the numerator now sums $e^{j\delta}$ over the
+aperture. For random, Gaussian-distributed errors that sum averages to
+$e^{-\delta_\text{rms}^2/2}$, and squaring it gives
+
+$$\begin{aligned}
+\frac{G}{G_0} &= e^{-\delta_\text{rms}^{2}} \\
+&= e^{-(4\pi\sigma/\lambda)^{2}}
+\end{aligned}$$
+
+In decibels the constant is $10\log_{10}(e)\ (4\pi)^2 = 685.8$. Note what it
+means for a fixed piece of hardware: a dish held to 0.5 mm RMS is essentially perfect at 6 GHz and has
 thrown away 1.7 dB by 30 GHz. Big dishes at short wavelengths are a machining
 problem, not an electromagnetics problem.
 ::::
@@ -307,7 +463,12 @@ problem, not an electromagnetics problem.
 
 That product is where the $\eta_{\text{ap}} \approx 0.65$ you have been
 assuming actually comes from. It is an accounting result, not a constant of
-nature, and every row of it is a design decision someone made.
+nature, and every row of it is a design decision someone made. The spillover
+and taper rows sit a little below the 0.92 and 0.89 of the 10 dB rule's
+optimum, because a real feed's pattern is not exactly $\cos^n\theta'$. The
+cross-polarization in "everything else" is power the dish radiates in the
+polarization orthogonal to the one you want, which Lesson 3 showed a matched
+receiver cannot collect.
 ::::
 
 ::::{frame} The Yagi-Uda
@@ -330,16 +491,42 @@ Lesson 6's radiation integral with several current filaments instead of one.
 
 ::::{frame} Detuning Sets the Phase
 :::{present}
-- A dipole slightly **long** is inductive; its current **lags**.
+- A dipole slightly **long** is inductive; its current **lags** its induced voltage.
 - A dipole slightly **short** is capacitive; its current **leads**.
 - Reflector behind, long. Directors ahead, progressively shorter.
 :::
 
-The reflector runs about $0.5\lambda$ and sits behind the driven element, so
-by the time its radiation reaches the front of the antenna it adds in phase,
-while behind the antenna the two tend to cancel. The directors run around
-$0.40$ to $0.45\lambda$ and lead by just enough that the whole structure passes
-a slow traveling wave forward.
+The lag and lead are Lesson 7's input impedance at work. A parasite is a
+dipole with no feed, driven by the voltage $V$ the driven element's field
+induces on it, so its current is $I = V/Z$ with $Z = R + jX$. Lesson 7 found
+$X = +42.5\ \Omega$ at exactly $\lambda/2$, with resonance a little shorter.
+Longer than resonance, $X > 0$ and the current lags $V$ by $\arctan(X/R)$;
+shorter, $X < 0$ and it leads.
+
+What phase the reflector needs comes from Lesson 6's radiation vector,
+$N_z = \int I(z')\ e^{+jkz'\cos\theta}\ dz'$, with the integral now a sum over
+two filaments: the driven element at $z = 0$ and the reflector a distance $d$
+behind it, carrying $I_2 = aI_1e^{j\alpha}$. Straight ahead ($\theta = 0$) and
+straight back ($\theta = \pi$),
+
+$$\begin{aligned}
+N_z(0) &\propto 1 + a\ e^{j(\alpha - kd)} \\
+N_z(\pi) &\propto 1 + a\ e^{j(\alpha + kd)}
+\end{aligned}$$
+
+The back lobe cancels when $\alpha + kd = \pi$. For a typical spacing
+$d = 0.2\lambda$, $kd = 72^\circ$, so the reflector's current must sit
+$108^\circ$ from the driven element's. The forward sum is then
+$\vert 1 + e^{j36^\circ}\vert = 1.90$ for $a = 1$, nearly the full 2. Part of
+that phase comes from the coupling, since a parasite's induced current
+re-radiates roughly in opposition to the field that drove it, and the
+detuning trims the rest. The reflector runs about $0.5\lambda$, and its added
+lag is what tips the balance toward canceling behind. The directors run
+around $0.40$ to $0.45\lambda$, and their detuning sets the phase lag from
+one director to the next at slightly more than the free-space $kd$. That is a
+**slow traveling wave**: a wave along the boom
+whose phase velocity is slightly less than the speed of light, which is what
+narrows an endfire beam below what in-step elements would give.
 
 :::{depth}
 This course does not use mutual-impedance matrices. If you want the currents
@@ -359,12 +546,40 @@ the point: long lags, short leads, and the beam goes toward the short end.
 | 16 | $4.5\lambda$ | 14.5 dBi |
 :::
 :::{present}
-- Roughly **+3 dB per doubling of boom length**.
+- About **+2 dB per boom doubling**; 3 is the ideal.
 - The boom, not the element count, buys the gain.
 :::
 
-The result is an **endfire** beam, main lobe along the boom and away from the
-reflector, with a front-to-back ratio of 15 to 25 dB. One reflector is
+The result is an **endfire** beam, main lobe along the boom (the line of the
+elements) and away from the reflector, rather than broadside to it. Its
+front-to-back ratio, Lesson 2's main-lobe peak over the lobe directly behind,
+is 15 to 25 dB.
+
+Why the boom sets the gain is Lesson 6's line source turned on its end. Put
+a current $I(z') = I_0e^{-jkz'}$ along a boom of length $L$, phased to
+travel forward at the speed of light. The radiation vector is the sinc of
+Lesson 6 with its argument shifted,
+
+$$\begin{aligned}
+N_z(\theta) &= \int_{-L/2}^{L/2} I_0\ e^{+jkz'(\cos\theta - 1)}\ dz' \\
+&\propto \frac{\sin u}{u} \\
+u &= \frac{kL}{2}\ (\cos\theta - 1) \approx -\frac{\pi L}{2\lambda}\ \theta^{2}
+\end{aligned}$$
+
+so the beam peaks at $\theta = 0$, along the boom. The half-power point
+$\vert u\vert = 1.39$ now falls at $\theta^2 \propto \lambda/L$, not
+$\theta \propto \lambda/L$ as it did broadside, and the beam is a cone, that
+narrow in every plane. Its solid angle goes as $\theta^2 \propto \lambda/L$,
+so the directivity is proportional to $L$: the exact result is
+$D \approx 4L/\lambda$, and a slow wave pushes it toward $7L/\lambda$. That
+is $+3$ dB per doubling of the boom, whatever the number of elements on it.
+
+Real Yagis fall short of that slope. The table climbs about $1.8$ dB per
+doubling: a short Yagi beats the line-source estimate ($7L/\lambda$ gives
+8.5 dBi at $1\lambda$ against the table's 10) because its elements are
+dipoles with gain of their own, and a long one falls behind it (15.0 dBi at
+$4.5\lambda$ against 14.5) because the current dies away on the far
+directors. One reflector is
 essentially all you get, because the first already sees very little field
 behind it. Stuffing more directors into the same boom does almost nothing.
 Practical single Yagis live between 8 and 15 dBi; beyond that you stack
@@ -399,6 +614,25 @@ develops the array factor, pattern multiplication, beam steering, grating
 lobes, and tapering, and you will steer a real beam on the ADALM-PHASER
 hardware. For today, file the array alongside the reflector and the Yagi as
 the third road to the same destination: coherent area.
+
+The $10\log_{10}N$ is the radiation vector once more. Fed in phase, $N$
+identical elements sum to $N$ times one element's radiation vector on
+boresight, as Lesson 12's element-and-image pair summed two:
+
+$$\begin{aligned}
+\mathbf{N}_\text{array}(0) &= N\ \mathbf{N}_\text{el}(0) \\
+U_{\max,\text{array}} &= N^2\ U_{\max,\text{el}} \\
+P_{\text{rad,array}} &= N\ P_{\text{rad,el}} \\
+D_\text{array} &= \frac{4\pi\ N^2\ U_{\max,\text{el}}}{N\ P_{\text{rad,el}}} \\
+&= N\ D_\text{el}
+\end{aligned}$$
+
+The third line is the catch. Total radiated power adds element by element
+only when the elements are far enough apart, about $\lambda/2$, that they do
+not share aperture; crowd them closer and their mutual coupling changes each
+one's radiated power. So the gain grows with $N$ only if the aperture grows
+with it, which is the one idea again: a $\lambda/2$ grid of $N$ elements has
+area $N\lambda^2/4$, and $4\pi(N\lambda^2/4)/\lambda^2 = N\pi$.
 ::::
 
 ::::{frame} Choosing: Five Questions
@@ -447,9 +681,9 @@ $\theta_\text{HP} \approx 70^\circ(0.125/0.51) = 17^\circ$. A half-meter dish
 with a 17-degree beam is forgiving to point, cheap, and broadband, and no
 other candidate here matches it on all three.
 
-**Yagi.** A single Yagi tops out near 15 dBi at a $4.5\lambda$ (0.56 m) boom,
-so 20 dBi needs four stacked in a 2x2 bay:
-$15 + 10\log_{10}4 = 21\ \text{dBi}$. It works, but it is four booms, a phasing
+**Yagi.** A single Yagi tops out near 14.5 dBi at a $4.5\lambda$ (0.56 m)
+boom, so 20 dBi needs four stacked in a 2x2 bay:
+$14.5 + 10\log_{10}4 = 20.5\ \text{dBi}$. It works, but it is four booms, a phasing
 harness, and a narrow band.
 
 **Patch array.** At $\lambda/2 = 6.25\ \text{cm}$ spacing with
@@ -467,18 +701,35 @@ moment you need a flat profile or electronic steering.
 ::::{frame} Does the Link Close?
 :::{present}
 $$\begin{aligned}
-L_\text{fs} &= 20\log_{10}\!\left(\frac{4\pi R}{\lambda}\right) = 160.1\ \text{dB} \\
-P_r &= 33.0 + 0 + 20 - 160.1 = -107.1\ \text{dBm}
+L_\text{fs} &= 20\log_{10}\!\left(\frac{4\pi R}{\lambda}\right) \\
+&= 160.0\ \text{dB} \\
+P_r &= 33.0 + 0 + 20 - 160.0 \\
+&= -107.0\ \text{dBm}
 \end{aligned}$$
 
 - Against a $-121\ \text{dBm}$ noise floor, that is **14 dB of margin**.
 :::
 
-Cubesat at 1000 km, 2 W transmitter (33.0 dBm) into a 0 dBi antenna, our
-20 dBi dish on the ground, and a receiver noise floor of about
-$-121\ \text{dBm}$ in a 100 kHz channel with a 3 dB noise figure. The link
-closes, and it closes *because* of the 20 dB the dish contributed. Take the
-dish away and you are 13 dB under the noise.
+Cubesat at 1000 km, 2 W transmitter (33.0 dBm) into a 0 dBi antenna, and
+our 20 dBi dish on the ground, at $\lambda = 0.125\ \text{m}$. The path loss
+is Lesson 2's Friis factor $(\lambda/4\pi R)^2$ in decibels, with
+$4\pi R/\lambda = 4\pi(10^6)/0.125 = 1.005\times10^{8}$.
+
+The noise floor is Lesson 12's $kT_AB$ with the reference temperature
+$T_0 = 290\ \text{K}$, which gives $kT_0 = -174\ \text{dBm/Hz}$, plus the
+receiver's noise figure:
+
+$$\begin{aligned}
+N &= kT_0 + 10\log_{10}B + \text{NF} \\
+&= -174 + 10\log_{10}(10^{5}) + 3 \\
+&= -121\ \text{dBm}
+\end{aligned}$$
+
+in a 100 kHz channel with a 3 dB noise figure. A dish pointed at cold sky
+sees a $T_A$ well below 290 K, so this floor is conservative. The link
+closes, and it closes *because* of the 20 dB the dish contributed. Swap the
+dish for a 0 dBi antenna and $P_r = -127.0\ \text{dBm}$, 6 dB under the
+noise.
 ::::
 
 ::::{frame} Summary
@@ -493,7 +744,7 @@ dish away and you are 13 dB under the noise.
 | $f/D$ | sets the edge angle the feed must cover | 0.3–0.6 typical; 0.5 $\rightarrow 53^\circ$ |
 | Edge taper | spillover fights illumination taper | rim about $-10$ dB |
 | Ruze, $685.8(\sigma/\lambda)^{2}$ dB | surface error costs gain exponentially | $\lambda/50 \rightarrow 0.27$ dB; $\lambda/16 \rightarrow 2.7$ dB |
-| Yagi boom length | boom, not element count, buys gain | $\approx +3$ dB per doubling; 8–15 dBi |
+| Yagi boom length | boom, not element count, buys gain | $\approx +2$ dB per doubling (3 ideal); 8–15 dBi |
 | $10\log_{10}N$ | array gain over one element | 64 elements $\rightarrow$ 18 dB |
 ::::
 
