@@ -76,7 +76,7 @@ listed below was found that way and would have shipped otherwise.
 
 ## Quality sweeps (manual)
 
-Two project skills audit one lesson at a time and stop for Neil's pick before
+Three project skills audit one lesson at a time and stop for Neil's pick before
 editing anything. Run them on demand, not on every merge:
 
 - `/voice-sweep <NN>`: the page, deck, and practice set against `VOICE.md`.
