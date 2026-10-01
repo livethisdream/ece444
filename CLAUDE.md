@@ -82,8 +82,11 @@ editing anything. Run them on demand, not on every merge:
 - `/voice-sweep <NN>`: the page, deck, and practice set against `VOICE.md`.
 - `/why-sweep <NN>`: results stated without a mechanism, undefined jargon,
   unrecomputed numbers, and missing links to earlier lessons.
+- `/illustration-sweep <NN>`: places a figure or an interactive widget would
+  explain more than the text does.
 
-Run the voice sweep first on a lesson that has not had one. Each skill carries
+Run them in that order on a lesson that has had none: voice, then why, then
+illustration. Each skill carries
 the pitfalls and the verification list from the L12-L14 sweeps.
 
 ## Gotchas that silently ship wrong
