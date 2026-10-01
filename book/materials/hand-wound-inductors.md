@@ -40,6 +40,13 @@ tune it.
 
 ## Pick a Starting Coil
 
+**If the lab has the pre-wound air-coil kit** (0.7 mm wire, 3.5 mm inside
+diameter, 1.5 to 7.5 turns), start from its **1.5-turn coil**: about 10-13 nH
+from stretched to close-wound, which covers the 850 MHz designs. The 2.5-turn
+coil, stretched, reaches about 20 nH for the higher-frequency designs. Treat
+these as estimates, trim the leads to 2 mm, and tune and measure it exactly as
+below. Otherwise, wind your own:
+
 Two turns on a 2.5-3.0 mm form covers most of the 8-16 nH range; stretch the
 coil to go lower, compress it to go higher. Wheeler's formula estimates it,
 with $D$ the mean diameter (form diameter plus one wire diameter), $\ell$ the
