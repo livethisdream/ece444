@@ -103,7 +103,7 @@ is the authoritative statement of the requirements.
 
 | Project | Assigned | Due | Packet |
 | :-- | :-- | :-- | :-- |
-| Midterm — Antenna Pattern Measurement | L9 | 2 Oct, 2359 | <a href="projects/ECE444_Project_Midterm.pdf" target="_blank" rel="noopener">project description</a> |
+| Midterm — Antenna Pattern Measurement | L9 | 2 Oct, 2359 | <a href="projects/ECE444_Project_Midterm.pdf" target="_blank" rel="noopener">project description</a> · [hand-wound inductor guide](materials/hand-wound-inductors.md) |
 | Final — Combined Beamforming + Radar | L39 | end of term | packet follows with Module 5 |
 
 ## Hardware & Software
