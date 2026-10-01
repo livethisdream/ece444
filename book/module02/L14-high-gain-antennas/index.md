@@ -59,11 +59,12 @@ $$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}$$
 
 - High gain means a large radiating **area** driven in **phase**.
 - An aperture is not big in meters. It is big in **wavelengths**.
+- Reflectors, Yagis, and arrays are three ways to build that area.
 :::
 :::{present}
-:class: callout
-Reflectors, Yagis, and arrays are three ways to build the same thing: effective
-area in units of $\lambda^2$.
+<img src="../../viz/img/L14-three-approaches.svg"
+     alt="A reflector, a Yagi-Uda, and an array side by side, each with the coherent aperture it builds shaded: a mirror, detuned neighbors, or electronics set the phase across it"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Every high-gain antenna ever built is a different scheme for assembling a big,
@@ -116,6 +117,11 @@ $$\theta_\text{HP} \approx 70^\circ\ \frac{\lambda}{D}$$
 
 - Double the dish: the beam halves and the gain climbs 6 dB.
 - Those are the same statement.
+:::
+:::{present}
+<img src="../../viz/img/L14-beam-patterns.svg"
+     alt="Patterns of a uniform circular aperture and of the 10 dB-rule feed's aperture against angle times D over wavelength: the taper widens the beam from 59 to 67 degrees and lowers the first sidelobe from minus 17.6 to minus 25.1 dB"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Lesson 6 established the Fourier logic: a wider aperture is a narrower beam,
@@ -316,6 +322,36 @@ prime-focus reflectors land between 0.3 and 0.6.
 :::
 ::::
 
+::::{frame} Dish and Feed
+:class: viz-frame
+
+:::{present}
+<iframe src="../../viz/feed-dish.html"
+        width="100%" height="425"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Dish and feed: the rim angle, edge taper, spillover, and taper efficiency as the dish depth and the feed pattern change">
+</iframe>
+:::
+
+:::{depth}
+The widget uses the same model as the 10 dB rule two frames on: a feed with
+power pattern $\cos^n\theta'$ at the focus of a dish with the chosen $f/D$.
+The left panel draws the dish to scale with the feed's pattern at the focus,
+shading the part that misses the rim; the right panel plots spillover, taper,
+and their product against edge taper for that $f/D$. Start at the default,
+$f/D = 0.5$ and $n = 4$: the rim sits at $53^\circ$, the edge is 10.8 dB
+down, and the product is 0.82. Narrow the feed and spillover falls while the
+taper efficiency falls with it; widen it and the reverse. Then change $f/D$
+and press the best-$n$ button: from $f/D = 0.4$ up, the best product stays near 0.82 at
+about an 11 dB edge taper, which is why the rule does not depend on the dish.
+Below about $f/D = 0.35$ the model's best product climbs higher, because its
+feed radiates nothing behind itself and a very broad feed then wastes almost
+nothing. Real feeds that broad do not exist, which is one reason deep dishes
+are uncommon.
+:::
+::::
+
 ::::{frame} Aperture Efficiency Losses
 :::{present}
 - $\eta_{\text{ap}} \approx 0.55$ to $0.7$ for a good reflector.
@@ -383,11 +419,16 @@ efficiency, which is why a rule of thumb is good enough.
 
 ::::{frame} Blockage and the Offset Feed
 :::{present}
-- A prime-focus feed and its struts sit squarely in the beam.
-- A blocked diameter $d$ lowers the gain by the factor shown and raises the sidelobes.
-- An **offset feed** cuts the reflector off-axis so the feed sits outside the beam.
+- A prime-focus feed and its struts sit in the beam.
+- A blocked diameter $d$ scales the gain by this factor and raises the sidelobes.
+- An **offset feed** moves the feed out of the beam.
 
 $$\left[1-\left(\frac{d}{D}\right)^2\right]^2$$
+:::
+:::{present}
+<img src="../../viz/img/L14-offset-feed.svg"
+     alt="Left: a prime-focus dish, where the feed at the focus sits in the outgoing beam and casts a shadow. Right: an offset reflector, a slice cut from one side of a larger parent paraboloid, so the feed sits outside the beam"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 On a 3 m dish a 15 cm feed is negligible. On a 45 cm consumer dish it is
@@ -420,6 +461,11 @@ G &= G_0\ e^{-(4\pi\sigma/\lambda)^{2}} \\
 - $\lambda/50$ RMS loses 0.27 dB, which is negligible.
 - $\lambda/16$ RMS loses 2.7 dB, which disqualifies the surface.
 :::
+:::{present}
+<img src="../../viz/img/L14-ruze.svg"
+     alt="Left: a bump in the reflector surface lengthens a ray's path by twice the bump depth, in and back out. Right: gain loss grows with the square of the RMS surface error, 0.27 dB at a fiftieth of a wavelength and 2.68 dB at a sixteenth"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 Phase errors from a bumpy surface reduce the gain exponentially. A bump of height $\epsilon$ on a shallow dish lengthens the path in and
 back out by $2\epsilon$, a phase error $\delta = 2k\epsilon$, so an RMS surface
@@ -450,6 +496,11 @@ problem, not an electromagnetics problem.
 | Surface | 0.94 | Ruze |
 | Everything else | 0.97 | cross-pol, feed |
 | **Product** | **0.66** | an ordinary reflector |
+:::
+:::{present}
+<img src="../../viz/img/L14-efficiency-budget.svg"
+     alt="The efficiency budget as a waterfall: spillover, taper, blockage, surface error, and the remaining losses take an ideal aperture from 1.00 to 0.66"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 That product is where the $\eta_{\text{ap}} \approx 0.65$ we have been
@@ -527,19 +578,51 @@ the point: long lags, short leads, and the beam goes toward the short end.
 :::
 ::::
 
+::::{frame} Two-Element Yagi
+:class: viz-frame
+
+:::{present}
+<iframe src="../../viz/yagi-two-element.html"
+        width="100%" height="451"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Two-element Yagi: phasor sums toward the front and back, and the resulting pattern, as the reflector's spacing, phase, and amplitude change">
+</iframe>
+:::
+
+:::{depth}
+The widget evaluates the two-filament radiation vector from the frame above,
+$1 + a\ e^{j(\alpha \mp kd)}$, straight ahead and straight back, and draws the
+full pattern in the plane of the boom. Start at the default, $d = 0.2\lambda$
+and $\alpha = 108^\circ$: the back sum closes to zero and the forward sum is
+1.90. Then move $\alpha$ and watch the null leave the back and the front lobe
+shrink. Shorten the spacing to $0.1\lambda$ and press *back null*: the
+cancelling phase moves to $144^\circ$, and the forward sum falls, because the
+two currents now nearly oppose each other in every direction. Lower $a$ and the
+null fills in, which is what a reflector cut too far from resonance does: its
+induced current is too weak to cancel the driven element.
+:::
+::::
+
 ::::{frame} Yagi Gain and Boom Length
 :::{present}
+<img src="../../viz/img/L14-yagi-boom.svg"
+     alt="Yagi gain against boom length on a doubling scale: typical designs climb about 1.8 dB per doubling, between the in-step and slow-wave endfire lines, which climb 3 dB per doubling"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
+- About **+2 dB per boom doubling**; 3 is the ideal.
+- The boom length, not the element count, sets the gain.
+:::
+
+The plotted points are typical published designs:
+
 | Elements | Boom | Gain |
 | :-- | :-- | :-- |
 | 3 | $0.3\lambda$ | 7.5 dBi |
 | 6 | $1.0\lambda$ | 10 dBi |
 | 10 | $2.2\lambda$ | 12.5 dBi |
 | 16 | $4.5\lambda$ | 14.5 dBi |
-:::
-:::{present}
-- About **+2 dB per boom doubling**; 3 is the ideal.
-- The boom length, not the element count, sets the gain.
-:::
 
 The result is an **endfire** beam, main lobe along the boom (the line of the
 elements) and away from the reflector, rather than broadside to it. Its
@@ -593,10 +676,12 @@ $$G_\text{array} = 10\log_{10} N \quad \text{dB}$$
 
 - Build the aperture from $N$ small antennas, fed coherently.
 - Sixteen patches add 12 dB; sixty-four add 18 dB.
+- Change each element's phase and the beam moves, in microseconds.
 :::
 :::{present}
-- The beam is not fixed to the structure.
-- Change each element's phase and it moves, in microseconds.
+<img src="../../viz/img/L13-patch-array.svg"
+     alt="Left: one patch and its broad beam, about 6 dBi and fixed at broadside. Right: eight patches in a row on one board, half a wavelength apart, each behind its own phase shifter, forming a narrow beam steered 20 degrees off broadside"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 That capability is worth a module of its own, and it gets one. Module 3
@@ -698,6 +783,11 @@ P_r &= 33.0 + 0 + 20 - 160.0 \\
 \end{aligned}$$
 
 - Against a $-121\ \text{dBm}$ noise floor, that is **14 dB of margin**.
+:::
+:::{present}
+<img src="../../viz/img/L14-link-budget.svg"
+     alt="Level diagram of the cubesat downlink: 33.0 dBm leaves the transmitter, 160.0 dB of free-space path loss takes it to minus 127.0 dBm, and the 20 dBi dish raises it to minus 107.0 dBm, 14 dB above the minus 121 dBm noise floor; without the dish the signal sits 6 dB under the noise"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Cubesat at 1000 km, 2 W transmitter (33.0 dBm) into a 0 dBi antenna, and

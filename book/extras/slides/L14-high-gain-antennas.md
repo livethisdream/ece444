@@ -55,14 +55,10 @@ Introduce item 6 as the reasoning an engineer shows when the antenna choice is s
 <p>The reflector, the Yagi, and the array are three ways to assemble the same coherent aperture.</p>
 </div>
 
-| Antenna | How it builds the area |
-| :-- | :-- |
-| Reflector | collects area with a mirror; geometry sets the phase |
-| Yagi-Uda | collects it from currents induced on parasitic elements; detuning sets the phase |
-| Array | adds the area one element at a time; electronics set the phase |
+<div class="fig" data-inline-svg="./fig/L14-three-approaches.svg" style="max-width:900px; margin:0 auto;"></div>
 
 Note:
-Have them write this down. Everything else today follows from it. If a student keeps one sentence from L14, it should be this one.
+A reflector collects area with a mirror and its geometry sets the phase; a Yagi collects it from currents induced on parasitic elements and detuning sets the phase; an array adds the area one element at a time and electronics set the phase. Have them write this down. Everything else today follows from it. If a student keeps one sentence from L14, it should be this one.
 
 ---
 
@@ -104,6 +100,18 @@ Note:
 Where the 59 comes from: a uniform disk's radiation vector is 2 J1(u)/u, u = (pi D / lambda) sin theta, the circular counterpart of L6's sinc. Half power at u = 1.616 gives 1.029 lambda/D rad = 59 degrees, with the first sidelobe at -17.6 dB. A feed at the 10 dB rule (11 dB edge taper) widens it to 67 degrees and lowers the sidelobes to -25 dB; 70 is the round design number. Eliminating D: G theta^2 = 31,400 deg^2 at eta 0.65, inside L2's 26,000 to 32,400 pencil-beam range.
 
 Demo the reflector-gain widget live. Sweep D/lambda from 3 to 300 so they see the beam cone narrow while the gain curve climbs. Then set the surface-error slider to lambda/16 and show the amber curve level off and fall.
+
+---
+
+## Uniform and Tapered Apertures
+
+<div class="fig" data-inline-svg="./fig/L14-beam-patterns.svg" style="max-width:860px; margin:0 auto;"></div>
+
+- The 10 dB-rule taper widens the beam from 59° to 67° times λ/D.
+- It lowers the first sidelobe from −17.6 dB to −25.1 dB.
+
+Note:
+Both curves come from the same radiation integral over the disk. The tapered one uses the aperture field a cos^4 feed produces on an f/D = 0.5 dish, the 10 dB-rule feed. Point out that the taper costs beamwidth and buys sidelobe level, which is the L15 trade in its first appearance.
 
 ---
 
@@ -154,6 +162,8 @@ Do this cancellation on the board. It is one of the few derivations in Module 2 
 
 ## f/D and the Feed
 
+<p class="viz-cue">↗ Interactive on the lesson page</p>
+
 $$\tan \left( \theta_0 / 2 \right) = \frac{1}{4 (f/D)}$$
 
 | $f/D$ | Edge half-angle | Character |
@@ -166,7 +176,7 @@ $$\tan \left( \theta_0 / 2 \right) = \frac{1}{4 (f/D)}$$
 A deep dish shields the feed from warm ground; a shallow dish is easier to illuminate cleanly.
 
 Note:
-f/D is the first number on any reflector data sheet. It tells the feed designer how much of the sky the feed must cover. Where the formula comes from: FP = f + z_P in polar form from the focus is r = 2f / (1 + cos theta'), so rho = r sin theta' = 2f tan(theta'/2), and the rim is at rho = D/2. The same r(theta') says the rim is farther from the feed than the vertex is, which puts the rim 1.9 dB below the center at f/D = 0.5 before the feed pattern rolls off at all.
+Demo the feed-dish widget: deepen the dish to f/D = 0.25 and show the rim angle open to 90 degrees, then narrow the feed and watch spillover fall while the taper efficiency falls with it. f/D is the first number on any reflector data sheet. It tells the feed designer how much of the sky the feed must cover. Where the formula comes from: FP = f + z_P in polar form from the focus is r = 2f / (1 + cos theta'), so rho = r sin theta' = 2f tan(theta'/2), and the rim is at rho = D/2. The same r(theta') says the rim is farther from the feed than the vertex is, which puts the rim 1.9 dB below the center at f/D = 0.5 before the feed pattern rolls off at all.
 
 ---
 
@@ -205,12 +215,19 @@ $$\left[ 1 - \left( \frac{d}{D} \right)^2 \right]^2$$
 - A 15 cm feed loses 0.02 dB on a 3 m dish and 1.0 dB on a 45 cm dish.
 - An **offset feed** uses a slice cut off-axis from a larger paraboloid.
 
-<div class="callout">
-<p>An offset feed gives zero blockage and lower sidelobes, and the tilted slice is why an offset dish looks taller than it is wide.</p>
-</div>
-
 Note:
 Most students have seen an offset dish on a roof. Connect the shape they already know to the blockage argument. Where the square comes from: in the aperture-efficiency ratio the feed still radiates the power aimed at the blocked disk, so the denominator keeps all of A, but that power does not add on boresight, so the numerator loses A_b. G/G0 = (A - A_b)^2 / A^2.
+
+---
+
+## Prime Focus and Offset Feed
+
+<div class="fig" data-inline-svg="./fig/L14-offset-feed.svg" style="max-width:860px; margin:0 auto;"></div>
+
+An offset feed gives zero blockage and lower sidelobes, and the tilted slice is why an offset dish looks taller than it is wide.
+
+Note:
+The offset reflector is a slice cut from one side of a larger parent paraboloid. It shares that paraboloid's focus, so the feed still sits at the focus, but the slice reflects the beam past it instead of through it.
 
 ---
 
@@ -231,6 +248,15 @@ The derivation is two lines if asked. A bump epsilon lengthens the path in and o
 
 ---
 
+## Surface Error and Gain
+
+<div class="fig" data-inline-svg="./fig/L14-ruze.svg" style="max-width:860px; margin:0 auto;"></div>
+
+Note:
+Left: a bump lengthens the path by twice its depth, in and back out, which is where the 4 pi sigma / lambda comes from. Right: the loss grows with the square of the RMS error, so halving the error cuts the loss by four.
+
+---
+
 ## The Efficiency Budget
 
 | Loss term | Typical | Why |
@@ -248,6 +274,15 @@ Have them multiply it on their calculators. The 0.65 is not an arbitrary factor;
 
 ---
 
+## The Efficiency Budget, Term by Term
+
+<div class="fig" data-inline-svg="./fig/L14-efficiency-budget.svg" style="max-width:860px; margin:0 auto;"></div>
+
+Note:
+Each bar multiplies the one before it. The two largest steps are spillover and taper, the pair the 10 dB rule trades against each other.
+
+---
+
 ## The Yagi-Uda
 
 <div class="fig" data-inline-svg="./fig/L14-yagi.svg" style="max-width:980px; margin:0 auto;"></div>
@@ -258,6 +293,8 @@ Exactly one element is connected. Every other element is a rod in the near field
 ---
 
 ## Parasitic Element Phasing
+
+<p class="viz-cue">↗ Interactive on the lesson page</p>
 
 - The **driven element**, about $0.47\lambda$ long, is the only one connected.
 - The **parasites** carry current *induced* by the driven element's near field.
@@ -270,7 +307,7 @@ Exactly one element is connected. Every other element is a rod in the near field
 </div>
 
 Note:
-This is L6's radiation integral with several filaments instead of one. This course does not use mutual-impedance matrices; NEC solved that system in L8. The lag is L7's impedance: I = V/Z, and past resonance X is positive, so the current lags the induced V by arctan(X/R). The phase the reflector needs: with the reflector d behind, the back lobe goes as 1 + a e^(j(alpha + kd)), so it cancels at alpha = 180 - kd. At d = 0.2 lambda that is 108 degrees, and the forward sum is |1 + e^(j36)| = 1.90 of a possible 2. A slow traveling wave means the phase lag per director is slightly more than the free-space kd, a wave along the boom slower than light, which narrows the endfire beam.
+Demo the two-element Yagi widget: at d = 0.2 lambda and alpha = 108 degrees the back sum closes to zero; move alpha and the null leaves the back. This is L6's radiation integral with several filaments instead of one. This course does not use mutual-impedance matrices; NEC solved that system in L8. The lag is L7's impedance: I = V/Z, and past resonance X is positive, so the current lags the induced V by arctan(X/R). The phase the reflector needs: with the reflector d behind, the back lobe goes as 1 + a e^(j(alpha + kd)), so it cancels at alpha = 180 - kd. At d = 0.2 lambda that is 108 degrees, and the forward sum is |1 + e^(j36)| = 1.90 of a possible 2. A slow traveling wave means the phase lag per director is slightly more than the free-space kd, a wave along the boom slower than light, which narrows the endfire beam.
 
 ---
 
@@ -293,6 +330,15 @@ A Yagi needs only one reflector; a second sees almost no field. Above 15 dBi, de
 
 ---
 
+## Yagi Gain Against the Endfire Lines
+
+<div class="fig" data-inline-svg="./fig/L14-yagi-boom.svg" style="max-width:860px; margin:0 auto;"></div>
+
+Note:
+The points are the table on the previous slide. The two lines are the endfire line source in step (4L/lambda) and with a slow wave (7L/lambda); both climb 3 dB per doubling. Real Yagis sit between them and climb about 1.8.
+
+---
+
 ## Arrays
 
 $$G_{\text{array}} = 10 \log_{10} N \quad \text{dB over one element}$$
@@ -308,6 +354,15 @@ $$G_{\text{array}} = 10 \log_{10} N \quad \text{dB over one element}$$
 
 Note:
 Introduce Module 3 here; the PHASER hardware is what they will use in the labs. Why 10 log N: on boresight N in-phase elements sum to N times one element's radiation vector, so U_max goes as N^2. Radiated power goes as N only if the elements are about lambda/2 apart and do not share aperture. N^2 over N is N. A lambda/2 grid of N elements has area N lambda^2/4, so the one idea gives the same result.
+
+---
+
+## Steering an Array
+
+<div class="fig" data-inline-svg="./fig/L13-patch-array.svg" style="max-width:860px; margin:0 auto;"></div>
+
+Note:
+This is the L13 figure: one patch and its broad, fixed beam, beside eight patches on a half-wavelength grid, each behind a phase shifter, steering a narrow beam 20 degrees. The steering is Module 3.
 
 ---
 
@@ -369,6 +424,15 @@ $$P_r = 33.0 + 0 + 20 - 160.0 = -107.0 \text{ dBm}$$
 
 Note:
 This is the key result. The 20 dB of antenna gain is the difference between a working downlink and no downlink. The -174 dBm/Hz is kT at the 290 K reference, L12's kT_A B with T_A = T_0. A dish looking at cold sky sees less, so the floor is conservative.
+
+---
+
+## The Link as a Level Diagram
+
+<div class="fig" data-inline-svg="./fig/L14-link-budget.svg" style="max-width:860px; margin:0 auto;"></div>
+
+Note:
+Read it left to right: 33.0 dBm out of the transmitter, 160.0 dB of path loss, 20 dB back from the dish, landing 14 dB above the noise floor. The gray dash is the same link with a 0 dBi antenna on the ground: 6 dB under the noise.
 
 ---
 
