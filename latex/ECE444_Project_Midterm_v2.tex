@@ -1,0 +1,136 @@
+\documentclass{exam}
+
+\newif\ifprintselected   % required by exam_config's \ansbox
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% v2 of the midterm packet, written for Fall 2027. One page on purpose: the
+% v1 packet (ECE444_Project_Midterm.tex, 8 pages) prescribed every step, and
+% real projects arrive with a goal and a deadline, not a procedure. The
+% decisions v1 made for the cadets (the match bar, which planes, the f2
+% window, the balun) are theirs to make and defend here.
+\ifdefined\thisTermIn
+	\def\thisterm{\thisTermIn}
+\else
+	\def\thisterm{Fall 2027}
+\fi
+\def\thisclass{ECE 444}
+
+\def\fOne{915}
+
+% Due date and weights. Both are quoted from the syllabus -- change there first.
+\def\duedate{Lesson 20, 2359}
+\def\projweight{30\%}
+\def\midweight{40\%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% END SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{myPackages_gr}
+\usepackage[hidelinks, linkcolor=red]{hyperref}
+\input{myShortcuts}
+\input{ece444_fonts}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+
+\input{exam_config}
+\noprintanswers
+\printselectedfalse
+
+% Compact run-in headings: \section's spacing alone pushed v2 onto a second page.
+\newcommand{\head}[1]{\par\vspace{6pt}{\large\bfseries #1}\par\vspace{-2pt}}
+
+\firstpageheader{}{}{}
+\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Midterm Project}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+\firstpagefooter{}{}{}
+\runningfooter{}{}{}
+\runningheadrule
+
+\begin{document}
+\pagestyle{headandfoot}
+
+\begin{center}
+USAF ACADEMY \\
+DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
+MIDTERM PROJECT (assigned Lesson 9) - Dipole Design, Matching, and Measurement \\
+\thisterm \\[2mm]
+\end{center}
+
+\textbf{Due \duedate.} Individual. Worth \projweight\ of the course grade and
+\midweight\ of your midterm grade. There is no resubmission.
+
+\head{The Assignment}
+
+Build a dipole, make it work at the frequency it was built for, then make the
+same antenna work at a frequency it was not built for. Measure what each
+approach does to the impedance and to the pattern, and write it up.
+
+\begin{enumerate}[nosep]
+	\item Design and build a dipole for \fOne\ MHz.
+	\item Tune it by trimming.
+	\item Characterize it with S-parameters and input impedance.
+	\item Measure its pattern in the chamber, co-polarized and cross-polarized.
+	\item Pick a different frequency and measure the antenna's impedance there.
+	      Leave the antenna as it is.
+	\item Design and build an L-network that matches it at that frequency.
+	\item Measure the matched antenna's S-parameters and its pattern, co-polarized
+	      and cross-polarized.
+	\item Model the antenna you built in 4NEC at both frequencies and compare the
+	      model against your measurements.
+	\item Write a report detailing your design, your process, and your analysis.
+\end{enumerate}
+
+\head{What Is Up to You}
+
+This description is short on purpose. Real projects arrive with a goal and a
+deadline, not a procedure, and most of the engineering is in the decisions the
+goal leaves open. What counts as ``tuned''? Which second frequency, and why that
+one? Which cuts, over what span, and how do you know your setup is not part of
+the measurement? Make those calls, write down why you made them, and defend
+them in the report. Lessons 4, 7, and 9--11 have the tools; deciding which ones
+apply is part of the work.
+
+Where a decision runs into the limits of our equipment (the chamber, the
+analyzers, the parts bin), ask me early. A question asked at Lesson 12 is free;
+the same question asked the night before it is due is not.
+
+\head{The Report}
+
+One typed technical report, submitted as a PDF, with your measured data files
+attached. There is no template and no page limit. Write it for an engineer who
+was not in the lab with you: what you designed and why, how you built and
+measured it, what you found, and what you make of it.
+
+Compare what you measured against your 4NEC model. You are not required to
+make the numbers agree, but you are required to know why they do not. A
+disagreement you have explained is a result; a disagreement you have not
+mentioned is a missing result.
+
+\head{Grading}
+
+\begin{center}
+\begin{tabular}{|p{4.9in}|c|}
+\hline
+\textbf{What is assessed} & \textbf{Points} \\
+\hline
+\textbf{Analysis.} Measured against the 4NEC model at both frequencies, with every
+disagreement explained or owned as unexplained. & 35 \\
+\hline
+\textbf{Measurements.} Impedance, S-parameters, and co- and cross-polarized
+patterns, before and after the match, taken so that a reader can trust them. & 25 \\
+\hline
+\textbf{Design decisions.} The dipole, the trim, the second frequency, and the
+network, each with its reasoning stated. & 20 \\
+\hline
+\textbf{Report quality.} Organized, typed, every figure captioned with labeled
+axes and units, data files included. & 20 \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Collaboration.} You may share chamber sessions and help each other take
+data. The design, the data reduction, the analysis, and the report are
+individual. Generative AI use is Level 3; document it as the syllabus requires.
+
+\end{document}
