@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The patch as a half-wave line</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:8px; padding:10px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:auto auto 1fr; gap:8px 16px; align-items:center;
+              padding:7px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  @media (max-width:520px) { .controls { grid-template-columns:auto auto; } .controls .ctl { grid-column:1 / -1; } }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; }
+  .ctl label { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-size:12px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:34px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:70px; accent-color:var(--mid); }
+  button { font:inherit; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;
+           color:var(--navy); background:#fff; border:1px solid var(--edge2); border-radius:5px; padding:4px 9px; cursor:pointer; white-space:nowrap; }
+  button:hover { background:#eef4fa; }
+  button:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="cv" aria-label="Side view of a patch: a wave launched at one end reflects from both open ends and builds a standing wave; the field between patch and ground and the fringing fields at the two ends are animated"></canvas>
+  <div class="controls">
+    <button id="play" type="button" aria-pressed="true">Pause</button>
+    <button id="again" type="button">Launch again</button>
+    <div class="ctl">
+      <label for="len">length \(L/(\lambda_d/2)\)</label>
+      <input type="range" id="len" min="0.70" max="1.30" step="0.05" value="1.00">
+      <span class="val" id="len-val">1.00</span>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+function stext(ctx, s, x, y, px, color, align, bold) {
+  ctx.fillStyle = color; ctx.font = (bold ? '700 ' : '') + px + 'px ' + SANS;
+  ctx.textAlign = align || 'left'; ctx.textBaseline = 'middle'; ctx.fillText(s, x, y);
+}
+
+/* The model. Distances in wavelengths in the substrate (lambda_d), time in
+   periods, so the wave moves one lambda_d per period. A wave launched at the
+   left end at t = 0 travels right, reflects from the open right end with
+   coefficient +R (open end: the voltage reflects with the same sign; R < 1
+   because each end radiates part of what reaches it), travels left, reflects
+   from the left end, and so on. Pass p starts at t = p*Lh from the end it
+   leaves, and reaches x after a further x (even p) or Lh - x (odd p). */
+const R = 0.8, NPASS = 120, SPEED = 0.45;      // reflection per end; periods per second
+const state = { ell: 1.0, t: 0, playing: true };
+const Lh = () => state.ell / 2;                  // patch length in lambda_d
+
+function passes(x, t) {           // instantaneous voltage, and the number of passes arrived at x
+  const L = Lh(); let v = 0, n = 0, a = 1;
+  for (let p = 0; p < NPASS; p++, a *= R) {
+    const start = p * L, d = (p % 2 === 0) ? x : L - x;
+    if (t < start + d) break;
+    v += a * Math.cos(2 * Math.PI * (t - start - d)); n = p + 1;
+  }
+  return [v, n];
+}
+function envelope(x, ell) {        // steady-state amplitude, phasor sum over every pass
+  const L = ell / 2; let re = 0, im = 0, a = 1;
+  for (let p = 0; p < NPASS; p++, a *= R) {
+    const ph = 2 * Math.PI * (p * L + ((p % 2 === 0) ? x : L - x));
+    re += a * Math.cos(ph); im -= a * Math.sin(ph);
+  }
+  return Math.hypot(re, im);
+}
+const NORM = envelope(0, 1.0);     // resonant edge amplitude: the scale of every drawing
+
+// ---- controls ----
+const playBtn = document.getElementById('play'), againBtn = document.getElementById('again');
+const lenEl = document.getElementById('len'), lenVal = document.getElementById('len-val');
+const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let visible = true, lastTs = null;
+function setPlaying(on) {
+  state.playing = on; playBtn.textContent = on ? 'Pause' : 'Play';
+  playBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  if (on) { lastTs = null; requestAnimationFrame(tick); }
+}
+playBtn.addEventListener('click', () => setPlaying(!state.playing));
+againBtn.addEventListener('click', () => { state.t = 0; draw(); });
+lenEl.addEventListener('input', () => {
+  state.ell = parseFloat(lenEl.value); lenVal.textContent = state.ell.toFixed(2);
+  state.t = 0; draw();
+});
+function tick(ts) {
+  if (!state.playing) return;
+  if (visible) {
+    if (lastTs === null) lastTs = ts;
+    state.t += Math.min(0.05, (ts - lastTs) / 1000) * SPEED;
+    draw();
+  }
+  lastTs = ts;
+  requestAnimationFrame(tick);
+}
+if ('IntersectionObserver' in window)
+  new IntersectionObserver(es => es.forEach(e => { visible = e.isIntersecting; lastTs = null; }),
+                           { threshold: 0.05 }).observe(document.getElementById('cv'));
+
+// ---- canvas sizing: the house pattern (see vswr-standing-wave.html) ----
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+function cvWidth(c) { return Math.max(240, c.clientWidth || Math.floor(c.getBoundingClientRect().width)); }
+function setSize(c, w, h, dpr) {
+  c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); c.style.height = h + 'px';
+  const bh = c.offsetHeight - c.clientHeight; if (bh) c.style.height = (h + bh) + 'px';
+}
+/* Two design widths: a phone gets a narrower composition rather than the
+   desktop one scaled down, which would take the labels below 10.5px. */
+const DESIGN_H = 330;
+let SCL = 1, NARROW = false;
+function fit() {
+  const dpr = window.devicePixelRatio || 1, wCss = cvWidth(cv);
+  NARROW = wCss < 520;
+  SCL = Math.min(1, wCss / (NARROW ? 320 : 520));
+  const w = wCss / SCL, h = NARROW ? 262 : Math.min(DESIGN_H, Math.max(300, w * 0.6));
+  setSize(cv, wCss, h * SCL, dpr);
+  ctx.setTransform(dpr * SCL, 0, 0, dpr * SCL, 0, 0);
+  draw();
+}
+window.addEventListener('resize', fit);
+
+function arrow(x1, y1, x2, y2, color, width, head) {
+  const len = Math.hypot(x2 - x1, y2 - y1); if (len < 1.5) return;
+  const hd = Math.min(head || 8, len * 0.6), ang = Math.atan2(y2 - y1, x2 - x1);
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = width; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(x1, y1);
+  ctx.lineTo(x2 - hd * 0.7 * Math.cos(ang), y2 - hd * 0.7 * Math.sin(ang)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - hd * Math.cos(ang - 0.42), y2 - hd * Math.sin(ang - 0.42));
+  ctx.lineTo(x2 - hd * Math.cos(ang + 0.42), y2 - hd * Math.sin(ang + 0.42));
+  ctx.closePath(); ctx.fill();
+}
+
+function draw() {
+  const dpr = window.devicePixelRatio || 1;
+  const w = cv.width / (dpr * SCL), h = cv.height / (dpr * SCL);
+  ctx.clearRect(0, 0, w, h);
+  const NAVY = cssVar('--navy'), MID = cssVar('--mid'), RED = cssVar('--red'), INK3 = cssVar('--ink3');
+
+  // The patch spans the same x range in both panels, so the curve sits over the field it describes.
+  // At the longest setting it fills the span; shorter patches are drawn shorter, to scale, centered.
+  const span = w - 2 * 78, xs = 78, Lmax = 0.65, L = Lh();
+  const X = x => w / 2 + ((x - L / 2) / Lmax) * span;
+  const x0 = X(0), x1 = X(L);
+
+  // ---- top panel: voltage between patch and ground along the patch ----
+  const pT = 26, pH = Math.round((h - 26) * 0.40), y0 = pT + pH / 2;
+  const Y = v => y0 - (v / NORM) * (pH / 2 - 4);
+  ctx.strokeStyle = '#eef3f8'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(x0, pT); ctx.lineTo(x1, pT); ctx.moveTo(x0, pT + pH); ctx.lineTo(x1, pT + pH); ctx.stroke();
+  ctx.strokeStyle = '#9fb6cc'; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
+  ctx.strokeStyle = '#cddce9'; ctx.beginPath(); ctx.moveTo(x0, pT); ctx.lineTo(x0, pT + pH); ctx.moveTo(x1, pT); ctx.lineTo(x1, pT + pH); ctx.stroke();
+  const N = 160;
+  ctx.setLineDash([5, 4]); ctx.strokeStyle = 'rgba(0,74,133,0.45)'; ctx.lineWidth = 1.3;   // steady-state envelope
+  for (const s of [1, -1]) {
+    ctx.beginPath();
+    for (let i = 0; i <= N; i++) { const x = L * i / N, yy = Y(s * envelope(x, state.ell)); i ? ctx.lineTo(X(x), yy) : ctx.moveTo(X(x), yy); }
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  let nMax = 0; const V = [];
+  for (let i = 0; i <= N; i++) { const [v, n] = passes(L * i / N, state.t); V.push(v); nMax = Math.max(nMax, n); }
+  ctx.strokeStyle = MID; ctx.lineWidth = 2.6; ctx.beginPath();
+  for (let i = 0; i <= N; i++) { const yy = Y(V[i]); i ? ctx.lineTo(X(L * i / N), yy) : ctx.moveTo(X(L * i / N), yy); }
+  ctx.stroke();
+  stext(ctx, NARROW ? 'patch-to-ground voltage' : 'voltage between patch and ground', 14, pT - 12, 12, INK3, 'left', true);
+  const refl = Math.max(0, nMax - 1);
+  stext(ctx, refl === 0 ? (NARROW ? 'launched' : 'launched at the left end') : (refl >= 16 ? 'standing wave' : refl + (refl === 1 ? ' reflection' : ' reflections')),
+        w - 14, pT - 12, 12, NAVY, 'right', true);
+
+  // ---- bottom panel: side view ----
+  const top = pT + pH + 62, gap = Math.max(46, h - top - 30), bot = top + gap;
+  ctx.fillStyle = '#eaf2f9'; ctx.fillRect(xs - 64, top, span + 128, gap);
+  ctx.strokeStyle = '#b9d2e5'; ctx.lineWidth = 1; ctx.strokeRect(xs - 64, top, span + 128, gap);
+  ctx.strokeStyle = NAVY; ctx.lineWidth = 5; ctx.lineCap = 'butt';
+  ctx.beginPath(); ctx.moveTo(xs - 64, bot); ctx.lineTo(xs + span + 64, bot); ctx.stroke();      // ground
+  ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(x0, top); ctx.lineTo(x1, top); ctx.stroke();     // patch
+  stext(ctx, NARROW ? 'ground' : 'ground plane', w - 14, bot + 15, 11.5, INK3, 'right', false);
+  stext(ctx, NARROW ? 'blue: field' : 'blue: electric field', 14, bot + 15, 11.5, MID, 'left', true);
+  stext(ctx, NARROW ? 'red: horizontal part' : 'red: its horizontal part', NARROW ? 96 : 152, bot + 15, 11.5, RED, 'left', true);
+
+  // field between the plates: arrow down = field from patch to ground
+  const K = 11, amax = gap / 2 - 5, ym = (top + bot) / 2;
+  for (let k = 0; k < K; k++) {
+    const x = L * (k + 0.5) / K, v = passes(x, state.t)[0] / NORM;
+    const a = Math.max(-1, Math.min(1, v)) * amax;
+    if (Math.abs(a) < 2) { ctx.fillStyle = MID; ctx.beginPath(); ctx.arc(X(x), ym, 1.8, 0, 2 * Math.PI); ctx.fill(); continue; }
+    arrow(X(x), ym - a, X(x), ym + a, MID, 1.6 + 1.4 * Math.abs(v), 7);
+  }
+
+  // fringing at the two open ends, and the horizontal part of each
+  const vL = passes(0, state.t)[0] / NORM, vR = passes(L, state.t)[0] / NORM;
+  const fr = Math.min(52, gap * 0.95);
+  function fringe(xe, out, v) {           // out = -1 at the left end, +1 at the right
+    const s = Math.max(-1, Math.min(1, v)); if (Math.abs(s) < 0.04) return;
+    ctx.globalAlpha = 0.25 + 0.75 * Math.abs(s);
+    // a quarter ellipse from the patch edge out past it and down to the ground plane
+    const pts = []; for (let i = 0; i <= 24; i++) { const th = (Math.PI / 2) * i / 24; pts.push([xe + out * fr * Math.sin(th), top + gap * (1 - Math.cos(th))]); }
+    if (s < 0) pts.reverse();             // field from ground up to the patch
+    ctx.strokeStyle = MID; ctx.lineWidth = 1.6 + 1.4 * Math.abs(s); ctx.beginPath();
+    pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.stroke();
+    const [bx, by] = pts[10], [ax, ay] = pts[14];       // arrowhead midway along the fringe
+    arrow(bx, by, ax, ay, MID, 1.6 + 1.4 * Math.abs(s), 10);
+    ctx.globalAlpha = 1;
+  }
+  fringe(x0, -1, vL); fringe(x1, 1, vR);
+  // Horizontal parts: at the left end the fringe points outward (left) when the
+  // patch is positive; at the right end it points right. So hL = -vL, hR = +vR,
+  // and on resonance vR = -vL makes them the same.
+  const hL = -vL, hR = vR, ha = 34, yh = top - 20;
+  arrow(x0, yh, x0 + hL * ha, yh, RED, 3.2, 10);
+  arrow(x1, yh, x1 + hR * ha, yh, RED, 3.2, 10);
+  // outside the ends, so they never meet the centered label between them
+  stext(ctx, 'open end', x0 - 6, top - 44, 11.5, NAVY, 'right', true);
+  stext(ctx, 'open end', x1 + 6, top - 44, 11.5, NAVY, 'left', true);
+  // their sum, which is what radiates straight up
+  const xc = (x0 + x1) / 2, sum = (hL + hR) / 2;
+  arrow(xc, yh, xc + sum * ha, yh, RED, 4.2, 11);
+  stext(ctx, 'sum of the', xc, top - 52, 11.5, RED, 'center', true);
+  stext(ctx, 'horizontal parts', xc, top - 38, 11.5, RED, 'center', true);
+}
+
+fit();
+if (reduce) setPlaying(false); else setPlaying(true);
+MJ.setRedraw(() => draw());
+MJ.onReady(() => { MJ.typeset(document.body).then(() => draw()); draw(); });
+</script>
+</body>
+</html>
