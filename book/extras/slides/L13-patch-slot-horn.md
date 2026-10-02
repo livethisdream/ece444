@@ -51,6 +51,8 @@ Three antennas in one lesson. The organizing question every time: what physicall
 
 ## The Microstrip Patch
 
+<p class="viz-cue">↗ Interactive on the lesson page</p>
+
 <div class="two-col fig-wide"><div class="col-text">
 <p>A copper rectangle, <em>W</em> by <em>L</em>, on a substrate over a ground plane. Patch and ground are a short, wide <strong>microstrip line</strong>, and a transmission line does not radiate.</p>
 <p>The wave reflects from both <strong>open ends</strong> into a standing wave, which resonates at $L \approx \lambda_d/2$.</p>
@@ -60,6 +62,7 @@ Three antennas in one lesson. The organizing question every time: what physicall
 </div></div>
 
 Note:
+Run the animation on the lesson page (patch-cavity): launch the wave, let it bounce until the standing wave forms, then set the length 10 to 20% off half a wavelength and launch again; the reflections fall out of step and the field settles far lower. The red arrows are the horizontal fringing parts, which set up the next slide.
 Tie it to L3's resonant antenna: the wave reflects off the open end and comes back. Ask why a microstrip trace on a circuit board does not radiate; the same answer covers the middle of the patch. Then L sets the resonance, and W sets the impedance and the H-plane beamwidth.
 
 ---

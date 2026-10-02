@@ -61,9 +61,12 @@ and we will see why its gain is known to a few tenths of a dB.
 
 ::::{frame} The Patch: A Half-Wave Line Open at Both Ends
 :::{present}
-<img src="../../viz/img/L13-patch-standing-wave.svg"
-     alt="Side view of a patch over a ground plane: a wave travels along the patch and reflects from each open end, so the field between patch and ground is a standing wave, largest at the ends and zero at the center, and it fringes out past the two ends"
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<iframe src="../../viz/patch-cavity.html"
+        width="100%" height="409"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Animated side view of a patch: a wave launched at one end reflects from both open ends and builds a standing wave, with the fringing fields at the ends and their horizontal parts">
+</iframe>
 :::
 :::{present}
 - The patch and the ground plane are a short, wide microstrip line.
@@ -97,11 +100,27 @@ at the other, and zero at the center. Textbooks often call this structure a
 **cavity**: the patch and the ground are its top and bottom walls, and the two
 ends are open.
 
+The animation runs that sequence. A wave is launched at the left end and
+travels right, and each open end sends it back with the same sign. After a
+dozen reflections they have built a standing wave: the field between the
+plates points down at one end and up at the other, and it nearly vanishes in
+the middle. The dashed curve is where the voltage settles. Set the length
+off $\lambda_d/2$ and launch again, and each returning wave arrives out of
+step with the one it meets, so the reflections partly cancel: $10\%$ off,
+the field at the ends settles a little under $60\%$ of its resonant value, and
+$20\%$ off, at about a third. That is resonance, and it is why the length sets
+the frequency. The animation lets each end radiate about a third of the power
+that reaches it, so the build-up is quick to watch; a real patch radiates far
+less per bounce, which is why its resonance is so much sharper.
+
 At an open end the field is not confined between the conductors. It
 **fringes** out past the edge of the copper into the space above the board,
 and that fringing field is what radiates. This is what "the edges are the
 antenna" means: the middle of the patch is a transmission line, and all of the
-radiation comes from the field that leaks out at the ends.
+radiation comes from the field that leaks out at the ends. The red arrows in
+the animation are the horizontal parts of the two fringing fields, which the
+next frame explains: on resonance they point the same way, and their sum is
+largest.
 ::::
 
 ::::{frame} Two Radiating Edges, Not Four
