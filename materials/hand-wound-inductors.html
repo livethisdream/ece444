@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hand-Wound Inductors for the Midterm L-Network &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="../_static/pygments.css"><link rel="stylesheet" href="../_static/custom.css">
+<link rel="stylesheet" href="../_static/shell.css">
+<link rel="stylesheet" href="../_static/page.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<script src="../_static/viz-autosize.js"></script>
+</head>
+<body data-search="../search.html">
+
+<div class="rail"><span id="railfill"></span></div>
+
+
+<div class="index" id="index" role="dialog" aria-label="Contents and search">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <form class="index-search" id="searchform" role="search" onsubmit="return false">
+      <input type="search" id="q" autocomplete="off" spellcheck="false"
+             placeholder="Search the course&hellip;" aria-label="Search the course">
+    </form>
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This page</h2>
+        <div class="index-pagetoc" id="pagetoc"><ul>
+<li><a class="reference internal" href="#">Hand-Wound Inductors for the Midterm L-Network</a><ul>
+<li><a class="reference internal" href="#why-wind-your-own">Why Wind Your Own</a></li>
+<li><a class="reference internal" href="#materials-and-tools">Materials and Tools</a></li>
+<li><a class="reference internal" href="#pick-a-starting-coil">Pick a Starting Coil</a></li>
+<li><a class="reference internal" href="#wind-it-and-mount-it">Wind It and Mount It</a></li>
+<li><a class="reference internal" href="#tune-it-on-the-vna">Tune It on the VNA</a></li>
+<li><a class="reference internal" href="#what-to-report">What to Report</a></li>
+<li><a class="reference internal" href="#if-you-also-need-a-1-4-pf-capacitor">If You Also Need a 1-4 pF Capacitor</a></li>
+</ul>
+</li>
+</ul>
+</div>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab 2 — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div><div class="hud-group hud-mid"></div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents and search (G)"><span id="pct">0%</span></button>
+  </div>
+</div><main class="page bd-article" id="page">
+<section class="tex2jax_ignore mathjax_ignore" id="hand-wound-inductors-for-the-midterm-l-network">
+<h1>Hand-Wound Inductors for the Midterm L-Network<a class="headerlink" href="#hand-wound-inductors-for-the-midterm-l-network" title="Permalink to this heading">#</a></h1>
+<p>A field guide for Phase 4 of the midterm project. <a class="reference internal" href="../materials.html"><span class="doc std std-doc">Back to Materials</span></a></p>
+<section id="why-wind-your-own">
+<h2>Why Wind Your Own<a class="headerlink" href="#why-wind-your-own" title="Permalink to this heading">#</a></h2>
+<p>At 800-1050 MHz your L-network inductor is about 5-20 nH, and the easiest way
+to get that is two or three turns of bare wire you wind yourself.</p>
+<ul class="simple">
+<li><p>The electronics-lab bins hold microhenry parts for audio and low-frequency
+work. Those are the wrong parts here: their leads alone add several nH, and
+many go self-resonant below 1 GHz.</p></li>
+<li><p>At these frequencies, about 1 mm of wire is about 1 nH. The coil and its
+leads are all part of the inductor.</p></li>
+<li><p>A hand-wound coil is tunable. Squeeze or spread the turns while the VNA is
+sweeping and watch the trace move. That is how RF technicians trim a match
+on real hardware.</p></li>
+</ul>
+<p>Start from your own design value. This guide gets you within about 20% of it
+on the first try, and the VNA does the rest. Everything here is leaded and
+through-hole friendly: no surface-mount soldering.</p>
+</section>
+<section id="materials-and-tools">
+<h2>Materials and Tools<a class="headerlink" href="#materials-and-tools" title="Permalink to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Item</p></th>
+<th class="head text-left"><p>What to use</p></th>
+<th class="head text-left"><p>Why</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Wire</p></td>
+<td class="text-left"><p>22 AWG (0.64 mm) solid copper; bare, tinned, or enameled</p></td>
+<td class="text-left"><p>Stiff enough to hold its shape, thin enough to bend tight</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Winding form</p></td>
+<td class="text-left"><p>Drill bit shank: 2.0 mm, 2.5 mm, or 3.0 mm (1/8 in. works too)</p></td>
+<td class="text-left"><p>Sets the coil diameter; the bit slides out cleanly</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Cutters, needle-nose pliers, tweezers</p></td>
+<td class="text-left"><p>Bench kit</p></td>
+<td class="text-left"><p>Trimming leads and setting turn spacing</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Fine sandpaper or a hobby knife</p></td>
+<td class="text-left"><p>Only for enameled wire</p></td>
+<td class="text-left"><p>Strip the enamel off the last 1-2 mm of each lead so it takes solder</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Calipers or a ruler with mm</p></td>
+<td class="text-left"><p>Bench kit</p></td>
+<td class="text-left"><p>Measure coil length and lead length; you will report both</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Soldering iron, fine tip</p></td>
+<td class="text-left"><p>Bench</p></td>
+<td class="text-left"><p>Short, clean joints; a solder blob adds capacitance</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Do not use stranded wire: the coil will not hold its spacing, and you cannot
+tune it.</p>
+</section>
+<section id="pick-a-starting-coil">
+<h2>Pick a Starting Coil<a class="headerlink" href="#pick-a-starting-coil" title="Permalink to this heading">#</a></h2>
+<p><strong>If the lab has the pre-wound air-coil kit</strong> (0.7 mm wire, 3.5 mm inside
+diameter, 1.5 to 7.5 turns), start from its <strong>1.5-turn coil</strong>: about 10-13 nH
+from stretched to close-wound, which covers the 850 MHz designs. The 2.5-turn
+coil, stretched, reaches about 20 nH for the higher-frequency designs. Treat
+these as estimates, trim the leads to 2 mm, and tune and measure it exactly as
+below. Otherwise, wind your own:</p>
+<p>Two turns on a 2.5-3.0 mm form covers most of the 8-16 nH range; stretch the
+coil to go lower, compress it to go higher. Wheeler’s formula estimates it,
+with <span class="math notranslate nohighlight">\(D\)</span> the mean diameter (form diameter plus one wire diameter), <span class="math notranslate nohighlight">\(\ell\)</span> the
+coil length, and <span class="math notranslate nohighlight">\(N\)</span> the number of turns, all lengths in inches:</p>
+<div class="math notranslate nohighlight">
+\[
+L\ [\mu\text{H}] = \frac{D^2 N^2}{18D + 40\ell}
+\]</div>
+<p>It is accurate to a few percent for coils longer than about <span class="math notranslate nohighlight">\(0.4D\)</span>. For the
+short coils here, treat it as a starting point within about 20%.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Form (mm)</p></th>
+<th class="head text-left"><p>Turns</p></th>
+<th class="head text-left"><p>Coil length (mm)</p></th>
+<th class="head text-left"><p>Coil only (nH)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>2.0</p></td>
+<td class="text-left"><p>2</p></td>
+<td class="text-left"><p>1.5</p></td>
+<td class="text-left"><p>10</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>2.0</p></td>
+<td class="text-left"><p>3</p></td>
+<td class="text-left"><p>3.0</p></td>
+<td class="text-left"><p>15</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>2.0</p></td>
+<td class="text-left"><p>3</p></td>
+<td class="text-left"><p>5.0</p></td>
+<td class="text-left"><p>10</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>2.5</p></td>
+<td class="text-left"><p>2</p></td>
+<td class="text-left"><p>1.5</p></td>
+<td class="text-left"><p>13</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>2.5</p></td>
+<td class="text-left"><p>2</p></td>
+<td class="text-left"><p>2.0</p></td>
+<td class="text-left"><p>11</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>2.5</p></td>
+<td class="text-left"><p>2</p></td>
+<td class="text-left"><p>3.0</p></td>
+<td class="text-left"><p>9</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>2.5</p></td>
+<td class="text-left"><p>3</p></td>
+<td class="text-left"><p>4.0</p></td>
+<td class="text-left"><p>16</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>3.0</p></td>
+<td class="text-left"><p>2</p></td>
+<td class="text-left"><p>2.0</p></td>
+<td class="text-left"><p>14</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>3.0</p></td>
+<td class="text-left"><p>2</p></td>
+<td class="text-left"><p>3.0</p></td>
+<td class="text-left"><p>11</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>3.0</p></td>
+<td class="text-left"><p>2</p></td>
+<td class="text-left"><p>4.0</p></td>
+<td class="text-left"><p>9</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>3.0</p></td>
+<td class="text-left"><p>3</p></td>
+<td class="text-left"><p>5.0</p></td>
+<td class="text-left"><p>18</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The table assumes 22 AWG wire. Coil length is measured from the center of the
+first turn to the center of the last.</p>
+<p><strong>Count the leads.</strong> Each lead adds about 0.8-1 nH per mm from the coil to the
+solder joint. Two 2 mm leads add about 3-4 nH, so aim the coil itself about
+that much below your design value.</p>
+<p><strong>Straight-wire option, for values under about 10 nH.</strong> A straight piece of
+22 AWG wire gives roughly 7 nH at 10 mm, 10 nH at 14 mm, and 12 nH at 16 mm.
+Run close to a ground plane, it reads somewhat lower. It is easier to build,
+but you can only tune it by cutting, so cut it long.</p>
+</section>
+<section id="wind-it-and-mount-it">
+<h2>Wind It and Mount It<a class="headerlink" href="#wind-it-and-mount-it" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Cut about 40 mm of wire. You need the extra length to hold onto while
+winding.</p></li>
+<li><p>Hold one end against the drill-bit shank with pliers and wrap the wire
+tightly around the bit for the number of turns you picked. Keep the turns
+snug to the bit.</p></li>
+<li><p>Slide the coil off the bit. Use tweezers to set the spacing so the coil
+length matches your table row, and measure it with calipers.</p></li>
+<li><p>Bend both leads straight out from the coil and trim each to 2 mm. Strip the
+enamel off each lead end if needed.</p></li>
+<li><p>Solder it in its spot on the SMA proto board, as close to the pads as you
+can. A series element goes in the signal path; a shunt element goes from the
+signal trace to ground, on whichever side of the series element your design
+puts it.</p></li>
+<li><p>Keep the coil at least 3 mm from other parts and mount it with its axis at
+right angles to any other coil. Coupling between coils and to the ground
+plane shifts the value.</p></li>
+<li><p>Write down the form diameter, turns, coil length, and lead lengths
+<strong>before</strong> you start tuning. That is your designed coil.</p></li>
+</ol>
+</section>
+<section id="tune-it-on-the-vna">
+<h2>Tune It on the VNA<a class="headerlink" href="#tune-it-on-the-vna" title="Permalink to this heading">#</a></h2>
+<p>Calibrate at the reference plane you will report, sweep across your <span class="math notranslate nohighlight">\(f_2\)</span> with
+the marker on <span class="math notranslate nohighlight">\(f_2\)</span>, and adjust one thing at a time.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>To do this</p></th>
+<th class="head text-left"><p>Do this to the coil</p></th>
+<th class="head text-left"><p>What happens</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Raise <span class="math notranslate nohighlight">\(L\)</span></p></td>
+<td class="text-left"><p>Squeeze the turns closer together</p></td>
+<td class="text-left"><p>Coil length drops, <span class="math notranslate nohighlight">\(L\)</span> rises</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Lower <span class="math notranslate nohighlight">\(L\)</span></p></td>
+<td class="text-left"><p>Spread the turns apart</p></td>
+<td class="text-left"><p>Coil length grows, <span class="math notranslate nohighlight">\(L\)</span> drops</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Make a big change</p></td>
+<td class="text-left"><p>Add or remove a turn, or change the form diameter</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(L\)</span> changes by about 1.5-2x</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Make a fine change</p></td>
+<td class="text-left"><p>Shorten a lead by 1 mm</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(L\)</span> drops by about 1 nH</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p><strong>On the Smith chart:</strong> a series inductor moves the point clockwise along a
+constant-resistance circle. A shunt inductor moves it counterclockwise along
+a constant-conductance circle. If the point moves the wrong way, you have the
+wrong element or the wrong position.</p></li>
+<li><p><strong>Read numbers from the marker readout</strong>, not the Smith-chart grid, until the
+chamber software update is installed.</p></li>
+<li><p>Push turns with a plastic tool or a wooden toothpick, not metal tweezers:
+anything metal near the coil detunes it while you are touching it.</p></li>
+<li><p>Stop at VSWR <span class="math notranslate nohighlight">\(\le 2\)</span> at <span class="math notranslate nohighlight">\(f_2\)</span>. Chasing a perfect 50 Ω by hand wastes chamber
+time; the bar is 2.</p></li>
+<li><p>Once you are done, put a small drop of hot glue or nail polish on the coil so
+the spacing does not move.</p></li>
+</ul>
+</section>
+<section id="what-to-report">
+<h2>What to Report<a class="headerlink" href="#what-to-report" title="Permalink to this heading">#</a></h2>
+<p>The project already asks for designed versus as-built values. For a
+hand-wound coil, the as-built value is something you <strong>measure</strong>, not a number
+printed on a part.</p>
+<ul class="simple">
+<li><p><strong>Designed:</strong> the <span class="math notranslate nohighlight">\(L\)</span> your network calculation called for, and the coil you
+picked from the table to hit it: form, turns, coil length, and leads.</p></li>
+<li><p><strong>As built:</strong> the final coil’s dimensions after tuning, and its measured
+inductance.</p></li>
+<li><p><strong>Measuring <span class="math notranslate nohighlight">\(L\)</span> directly (recommended):</strong> before the coil goes into the
+network, solder it from an SMA’s center pin to its ground with the same lead
+lengths, calibrated at that SMA’s reference plane. The marker reads
+<span class="math notranslate nohighlight">\(Z \approx jX\)</span>, so <span class="math notranslate nohighlight">\(L = X/(2\pi f)\)</span>.</p></li>
+<li><p><strong>Measuring <span class="math notranslate nohighlight">\(L\)</span> in place:</strong> for a series element, the change in reactance it
+causes is <span class="math notranslate nohighlight">\(X = 2\pi f L\)</span>. For a shunt element, the change in susceptance is
+<span class="math notranslate nohighlight">\(B = -1/(2\pi f L)\)</span>. Read both from the marker before and after the coil goes
+in.</p></li>
+<li><p>Re-sweep after gluing the coil. Glue changes the value slightly; report the
+final sweep.</p></li>
+<li><p>One sentence on the difference between the Wheeler estimate and your
+measurement, and what you think caused it: lead length, the board, the
+short-coil approximation.</p></li>
+</ul>
+</section>
+<section id="if-you-also-need-a-1-4-pf-capacitor">
+<h2>If You Also Need a 1-4 pF Capacitor<a class="headerlink" href="#if-you-also-need-a-1-4-pf-capacitor" title="Permalink to this heading">#</a></h2>
+<p>Make a twisted-wire “gimmick” capacitor. It covers 0.5-4 pF, needs no
+surface-mount work, and tunes the same way the coil does.</p>
+<ol class="arabic simple">
+<li><p>Twist two pieces of insulated or enameled wire (24-26 AWG) tightly together
+for about 5-8 cm.</p></li>
+<li><p>Solder one wire to each node of the capacitor’s position. Leave the far end
+of the twist open, with the two wires not touching.</p></li>
+<li><p>Expect very roughly 0.5 pF per cm of twist; it depends strongly on the wire
+and how tight the twist is. Measure it the same way as the coil: one wire to
+the SMA center pin and the other to ground, with <span class="math notranslate nohighlight">\(Z = -jX\)</span> and
+<span class="math notranslate nohighlight">\(C = 1/(2\pi f X)\)</span>.</p></li>
+<li><p>Tune by snipping the open end. A shorter twist means less capacitance, and
+you cannot add it back, so cut a few millimeters at a time.</p></li>
+</ol>
+<p>A bin ceramic disc capacitor is the wrong part. Its leads add enough
+inductance that a few-pF disc can be close to self-resonance at 1 GHz. Report
+a gimmick capacitor’s measured value as its as-built value, the same as the
+coil.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./materials"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../_static/shell.js"></script>
+<script src="../_static/page.js"></script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dipole on the Smith chart: how length moves the match</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
+  select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
+  /* Below 430px the controls bar cannot fit a label, a slider and a value on one
+     line: .ctl's flex basis and the reserved .val column are both wider than the
+     content box, so the bar pushes the document past the viewport and the whole
+     widget scrolls sideways on a phone. Stack each control instead -- label and
+     value share the first line, the input takes the second -- and let every part
+     shrink. Labels keep their natural width, so none of them squeeze. Nothing
+     here applies above 430px: the desktop layout is byte-for-byte unchanged. */
+  @media (max-width:430px) {
+    canvas { max-width:100%; }
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
+  }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.vs { background:rgba(138,90,0,0.10); border-color:rgba(138,90,0,0.30); }
+  .ro.vs .v { color:var(--amber); }
+  .ro.rs { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.rs .v { color:var(--grn); }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="sm" aria-label="Smith chart showing the input impedance of a dipole as its length changes, with constant standing-wave-ratio circles"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Total length \(L/\lambda\)</label>
+      <input type="range" id="len" min="0.30" max="0.70" step="0.005" value="0.5">
+      <span class="val" id="len-val">0.500</span>
+    </div>
+    <div class="ctl">
+      <label>Normalize to</label>
+      <select id="z0">
+        <option value="50" selected>50 &#937; line</option>
+        <option value="75">75 &#937; line</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">\(Z_{\text{in}}\) at the feed</span><span class="v" id="p-z">&#8212;</span></div>
+    <div class="ro"><span class="k">reflection \(\Gamma\)</span><span class="v" id="p-g">&#8212;</span></div>
+    <div class="ro vs"><span class="k">VSWR</span><span class="v" id="p-v">&#8212;</span></div>
+    <div class="ro rs"><span class="k">resonant length</span><span class="v" id="p-res">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const ETA=376.730313668, GAMMA=0.5772156649015329;
+const AWIRE=0.002;                       // wire radius in wavelengths -- matches dipole-explorer
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const cv=document.getElementById('sm'), ctx=cv.getContext('2d');
+const state={ L:0.5, Z0:50 };
+
+/* ===================== impedance: the SAME model as dipole-explorer =====================
+   Induced-EMF result for a thin center-fed dipole, referred to the current maximum, then
+   referred to the terminals by the sinusoidal-current transformation 1/sin^2(kL/2).
+   Anchor: L = 0.5 lambda gives 73.1 + j42.5 ohms, independent of wire radius. */
+function Si(x){
+  let t=x, s=x;
+  for(let n=1;n<70;n++){ t*= -x*x/((2*n)*(2*n+1)); s+= t/(2*n+1);
+    if(Math.abs(t)<1e-18*Math.abs(s)) break; }
+  return s;
+}
+function Ci(x){
+  let t=1, s=0;
+  for(let n=1;n<70;n++){ t*= -x*x/((2*n-1)*(2*n)); s+= t/(2*n);
+    if(Math.abs(t)<1e-18*(Math.abs(s)+1)) break; }
+  return GAMMA+Math.log(x)+s;
+}
+function zCurrentMax(Ll){
+  const k=2*Math.PI, kl=k*Ll;
+  const S1=Si(kl), C1=Ci(kl), S2=Si(2*kl), C2=Ci(2*kl), C3=Ci(2*k*AWIRE*AWIRE/Ll);
+  const R=(ETA/(2*Math.PI))*(GAMMA+Math.log(kl)-C1
+        +0.5*Math.sin(kl)*(S2-2*S1)
+        +0.5*Math.cos(kl)*(GAMMA+Math.log(kl/2)+C2-2*C1));
+  const X=(ETA/(4*Math.PI))*(2*S1+Math.cos(kl)*(2*S1-S2)-Math.sin(kl)*(2*C1-C2-C3));
+  return {R:R, X:X};
+}
+function zIn(Ll){
+  const z=zCurrentMax(Ll), s=Math.sin(Math.PI*Ll), f=1/(s*s);
+  return {R:z.R*f, X:z.X*f};
+}
+function resonantLength(){
+  let lo=0.30, hi=0.50;
+  if(zIn(lo).X>0 || zIn(hi).X<0) return null;
+  for(let i=0;i<60;i++){ const m=0.5*(lo+hi); if(zIn(m).X<0) lo=m; else hi=m; }
+  return 0.5*(lo+hi);
+}
+// reflection coefficient against the selected line impedance
+function refl(Ll){
+  const z=zIn(Ll), R=z.R, X=z.X, Z0=state.Z0;
+  const dr=R-Z0, di=X, nr=R+Z0, ni=X;
+  const den=nr*nr+ni*ni;
+  return { re:(dr*nr+di*ni)/den, im:(di*nr-dr*ni)/den, R:R, X:X };
+}
+
+/* ================================ the Smith chart ================================ */
+let CX=0, CY=0, RR=0;
+const px=g=>CX+g*RR, py=g=>CY-g*RR;
+
+function arcClipped(cx,cy,r,style,lw){
+  // draw a circle, clipped to the unit circle of the chart
+  ctx.save();
+  ctx.beginPath(); ctx.arc(CX,CY,RR,0,7); ctx.clip();
+  ctx.strokeStyle=style; ctx.lineWidth=lw;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,7); ctx.stroke();
+  ctx.restore();
+}
+
+function drawChart(){
+  const grid=cssv('--edge'), grid2=cssv('--edge2');
+
+  // constant-resistance circles: center r/(1+r), radius 1/(1+r)
+  for(const r of [0.2,0.5,1,2,5]){
+    const c=r/(1+r), rad=1/(1+r);
+    arcClipped(px(c),CY,rad*RR, r===1?grid2:grid, r===1?1.4:1);
+  }
+  // constant-reactance arcs: center (1, 1/x), radius |1/x|
+  for(const x of [0.2,0.5,1,2,5]){
+    for(const sgn of [1,-1]){
+      const cy=py(sgn/x), rad=RR/x;
+      arcClipped(px(1),cy,rad, Math.abs(x)===1?grid2:grid, Math.abs(x)===1?1.4:1);
+    }
+  }
+  // rim and real axis
+  ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.arc(CX,CY,RR,0,7); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(px(-1),CY); ctx.lineTo(px(1),CY); ctx.stroke();
+
+  // resistance labels along the real axis
+  for(const r of [0.2,0.5,2,5]){
+    const g=(r-1)/(r+1);
+    ctx.fillStyle=cssv('--ink3');
+    ctx.beginPath(); ctx.arc(px(g),CY,1.8,0,7); ctx.fill();
+    stext(ctx, (r*state.Z0).toFixed(0), px(g), CY+13, 9.5, cssv('--ink3'),'center',false);
+  }
+  stext(ctx,'ohms', px(1)-4, CY+13, 9.5, cssv('--ink3'),'right',false);
+  stext(ctx,'short',  px(-1)+4, CY-11, 10, cssv('--ink3'),'left',false);
+  stext(ctx,'open',   px(1)-4,  CY-11, 10, cssv('--ink3'),'right',false);
+  stext(ctx,'inductive  +jX', CX, py(1)-14, 10.5, cssv('--ink3'),'center',true);
+  stext(ctx,'capacitive  −jX', CX, py(-1)+14, 10.5, cssv('--ink3'),'center',true);
+  // the matched point -- a neutral cross, so the green dot stays unambiguously "resonant"
+  ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1.6;
+  ctx.beginPath(); ctx.moveTo(CX-5,CY); ctx.lineTo(CX+5,CY);
+  ctx.moveTo(CX,CY-5); ctx.lineTo(CX,CY+5); ctx.stroke();
+  stext(ctx,'matched', CX, CY-13, 10, cssv('--ink3'),'center',true);
+}
+
+function drawVswrCircles(){
+  ctx.setLineDash([5,4]);
+  for(const S of [2,3]){
+    const g=(S-1)/(S+1);
+    ctx.strokeStyle='rgba(138,90,0,0.62)'; ctx.lineWidth=1.4;
+    ctx.beginPath(); ctx.arc(CX,CY,g*RR,0,7); ctx.stroke();
+    stext(ctx, S+':1', CX-g*RR*0.707-5, CY-g*RR*0.707-5, 10.5, cssv('--amber'),'right',true);
+  }
+  ctx.setLineDash([]);
+}
+
+function drawLocus(){
+  const lo=+lenEl.min, hi=+lenEl.max;
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.4;
+  ctx.beginPath();
+  for(let i=0;i<=400;i++){
+    const L=lo+(hi-lo)*i/400, g=refl(L);
+    const x=px(g.re), y=py(g.im);
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+  }
+  ctx.stroke();
+
+  // end labels so the direction of travel is readable
+  const W=2*CX;
+  ctx.font='10px '+SANS;
+  for(const [gg,lab] of [[refl(lo),lo.toFixed(2)+'λ'],[refl(hi),hi.toFixed(2)+'λ']]){
+    const m=Math.hypot(gg.re,gg.im)||1, ux=gg.re/m, uy=gg.im/m;
+    const al=ux<0?'right':'left', tw=ctx.measureText(lab).width;
+    // these labels sit near the rim and get pushed outward, so on a narrow
+    // canvas they run off the edge and lose their last glyph -- clamp them in.
+    let x=px(gg.re)+ux*16;
+    x = al==='left' ? Math.min(x, W-4-tw) : Math.max(x, 4+tw);
+    stext(ctx, lab, x, py(gg.im)-uy*16, 10, cssv('--ink3'), al, false);
+  }
+
+  // the two landmarks
+  const res=resonantLength();
+  if(res!==null){
+    const g=refl(res);
+    ctx.fillStyle=cssv('--grn');
+    ctx.beginPath(); ctx.arc(px(g.re),py(g.im),4.6,0,7); ctx.fill();
+  }
+  const gh=refl(0.5);
+  ctx.fillStyle=cssv('--red');
+  ctx.beginPath(); ctx.arc(px(gh.re),py(gh.im),4.6,0,7); ctx.fill();
+  stext(ctx,'exactly λ/2', px(gh.re)+12, py(gh.im)-14, 10.5, cssv('--red'),'left',true);
+
+  // the live cursor
+  const g=refl(state.L);
+  ctx.strokeStyle=cssv('--navy'); ctx.lineWidth=2.2; ctx.fillStyle='#fff';
+  ctx.beginPath(); ctx.arc(px(g.re),py(g.im),6.4,0,7); ctx.fill(); ctx.stroke();
+}
+
+/* ---------------------------------------------------------------------------
+   A color key, not a caption. The lesson page names every element and states
+   what the real-axis crossing means; repeating that prose inside the canvas
+   both duplicated the page and squeezed the chart into the left 60% of the
+   frame. What stays here is the minimum a reader needs to map color ->
+   thing, laid out as a horizontal strip under the chart so it costs height,
+   not width. --------------------------------------------------------------- */
+const KEY=[[cssv('--edge2'),'dash','grid'],
+           [cssv('--amber'),'dash','VSWR 2:1, 3:1'],
+           [cssv('--mid'),  'line','locus'],
+           [cssv('--red'),  'dot', '\u03bb/2'],
+           [cssv('--grn'),  'dot', 'resonance']];
+const KEY_FS=11, KEY_ROW=17, KEY_GAP=16;
+
+// pack the key into as few centerd rows as the width allows
+function keyRows(w){
+  ctx.font=KEY_FS+'px '+SANS;
+  const avail=Math.max(60, w-20);
+  const rows=[]; let cur=[], cw=0;
+  for(const it of KEY){
+    const iw=(it[1]==='dot'?11:18)+5+ctx.measureText(it[2]).width;
+    const add=cur.length?KEY_GAP+iw:iw;
+    if(cur.length && cw+add>avail){ rows.push({items:cur,w:cw}); cur=[[it,iw]]; cw=iw; }
+    else { cur.push([it,iw]); cw+=add; }
+  }
+  if(cur.length) rows.push({items:cur,w:cw});
+  return rows;
+}
+const keyHeight=rows=>rows.length*KEY_ROW+8;
+
+function drawKey(rows,y0,w){
+  rows.forEach((row,ri)=>{
+    let x=(w-row.w)/2, y=y0+ri*KEY_ROW+KEY_ROW/2;
+    for(const [it,iw] of row.items){
+      ctx.strokeStyle=it[0]; ctx.fillStyle=it[0]; ctx.lineWidth=it[1]==='dash'?1.6:2.8;
+      if(it[1]==='dot'){
+        ctx.beginPath(); ctx.arc(x+5.5,y,4.2,0,7); ctx.fill();
+        stext(ctx,it[2], x+16, y, KEY_FS, cssv('--ink3'),'left',false);
+      } else {
+        if(it[1]==='dash') ctx.setLineDash([5,4]);
+        ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+18,y); ctx.stroke();
+        ctx.setLineDash([]);
+        stext(ctx,it[2], x+23, y, KEY_FS, cssv('--ink3'),'left',false);
+      }
+      x+=iw+KEY_GAP;
+    }
+  });
+}
+
+/* Geometry: the chart is a circle and gets the frame. PAD_SIDE/PAD_TOP/PAD_BOT
+   are only what the rim annotations need; the key strip takes the bottom. The
+   same RR is used for x and y, so the rim is a true circle at every width. */
+const PAD_SIDE=24, PAD_TOP=40, PAD_BOT=28, RR_MAX=150;
+
+function drawAll(){
+  const dpr=window.devicePixelRatio||1, w=cv.width/dpr, h=cv.height/dpr;
+  ctx.clearRect(0,0,w,h);
+  const rows=keyRows(w), kh=keyHeight(rows);
+  RR=Math.min((h-PAD_TOP-PAD_BOT-kh)/2, (w-2*PAD_SIDE)/2);
+  CX=w/2; CY=PAD_TOP+RR;
+  drawChart(); drawVswrCircles(); drawLocus();
+
+  // live state that belongs to the picture, parked in the corners the circle
+  // cannot reach: what the grid is normalized to, and what plane this is.
+  stext(ctx,'normalized to '+state.Z0+' \u03a9', 6, 11, 10.5, cssv('--ink3'),'left',false);
+  ctx.font='10.5px '+SANS;
+  const pw=ctx.measureText('plane').width;
+  stext(ctx,'plane', w-6, 11, 10.5, cssv('--ink3'),'right',false);
+  MJ.draw(ctx,'\\Gamma', w-10-pw, 11, 12.5, cssv('--ink3'),'right');
+
+  drawKey(rows, h-kh+2, w);
+  readouts();
+}
+
+function readouts(){
+  const g=refl(state.L);
+  const mag=Math.hypot(g.re,g.im), ang=Math.atan2(g.im,g.re)*180/Math.PI;
+  const v=mag>=0.999?Infinity:(1+mag)/(1-mag);
+  const res=resonantLength();
+  document.getElementById('p-z').textContent =
+      g.R.toFixed(1)+(g.X>=0?' + j':' − j')+Math.abs(g.X).toFixed(1)+' Ω';
+  document.getElementById('p-g').textContent = mag.toFixed(3)+' ∠ '+ang.toFixed(0)+'°';
+  document.getElementById('p-v').textContent = isFinite(v)?v.toFixed(2):'∞';
+  document.getElementById('p-res').textContent = res===null?'—':res.toFixed(3)+' λ';
+}
+
+/* Height follows the circle instead of a fixed aspect: take the radius the
+   width allows (capped), then ask for exactly the height that radius plus the
+   key strip needs. No dead band above or below. The internal width must equal
+   the CSS width -- clamping it to a floor wider than the element would scale x
+   and y differently and draw the rim as an ellipse on a phone. */
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  // clientWidth, not getBoundingClientRect(): the rect includes the 1px border
+  // on each side, so a bitmap sized from it is 2px wider than the box it is
+  // painted into and the rim comes out a fraction of a percent elliptical.
+  const w=Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
+  ctx.setTransform(1,0,0,1,0,0);
+  const kh=keyHeight(keyRows(w));
+  const rr=Math.min((w-2*PAD_SIDE)/2, RR_MAX);
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:430px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+  const h=SQ(Math.round(2*rr+PAD_TOP+PAD_BOT+kh));
+  cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr);
+  // border-box: style.height sets the OUTER height, so hand back the border or
+  // the bitmap is 2px taller than the box it paints into -- a vertical squash.
+  cv.style.height=h+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(h+bh)+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+const lenEl=document.getElementById('len'), z0El=document.getElementById('z0');
+lenEl.addEventListener('input',()=>{
+  state.L=+lenEl.value;
+  document.getElementById('len-val').textContent=state.L.toFixed(3);
+  drawAll();
+});
+z0El.addEventListener('change',()=>{ state.Z0=+z0El.value; drawAll(); });
+
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>

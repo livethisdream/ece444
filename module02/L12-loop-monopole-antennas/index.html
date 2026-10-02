@@ -1,0 +1,1050 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L12 - Loop and Monopole Antennas &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L10-measurement-lab-sparams/index.html">L10 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L11-measurement-lab-patterns/index.html">L11 — Measurement Lab 2 — Radiation Patterns</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l12-loop-and-monopole-antennas">
+<h1>L12 - Loop and Monopole Antennas<a class="headerlink" href="#l12-loop-and-monopole-antennas" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Loop and Monopole Antennas</h1>
+<div class="title-rule"></div>
+<p>Image theory turns a dipole into a monopole, and a small loop of current is the dipole’s magnetic dual.</p>
+<p>Lesson 12 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-slides">
+<div class="wrap docutils container">
+<p class="rubric">Slides</p>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L12-loop-monopole-antennas.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L12-loop-monopole-antennas.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L12-loop-monopole-antennas.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '1'; counter-reset: lo 4">
+  <li>I can apply image theory to build a quarter-wave monopole out of a half-wave dipole, and state its impedance, its directivity, and why it only radiates into a hemisphere.</li>
+  <li>I can explain what an imperfect ground does to a monopole, and why radial systems and counterpoises exist.</li>
+  <li>I can describe the electrically small loop as a magnetic dipole — its pattern, its very small radiation resistance, and why small loops are receiving and sensing antennas rather than efficient transmitters.</li>
+  <li>I can distinguish the electrically small loop from the resonant loop, and connect the limits on small antennas back to the bandwidth-size trade.</li>
+</ol>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-we-were">
+<div class="wrap docutils container">
+<p class="rubric">Where We Were</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Lessons 9 to 11 covered measuring an antenna’s match, pattern, and gain.</p></li>
+<li><p>Lessons 12 to 14 cover the remaining antenna families.</p></li>
+<li><p>Today we cover the <strong>monopole</strong> and the <strong>small loop</strong>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lesson 7 introduced two reference antennas: the isotropic radiator that gain
+is measured against, and the half-wave dipole at <span class="math notranslate nohighlight">\(73 + j42.5\ \Omega\)</span> and
+2.15 dBi. Lesson 8 modeled a dipole in a simulator, and Lessons 9 to 11
+measured antennas on an analyzer and on a range, so every impedance and gain
+figure from here on is one we know how to test.</p>
+<p>Today we add the other two wire antennas that are common in the field. The
+<strong>monopole</strong> stands on a ground plane; it is half a dipole and behaves like
+one. The <strong>small loop</strong> is the dipole’s magnetic dual and behaves very
+differently. Monopoles are mounted on vehicles, towers, and handheld radios,
+and small loops are the standard antenna for direction finding.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-image-theory-and-the-sign-rule">
+<div class="wrap docutils container">
+<p class="rubric">Image Theory and the Sign Rule</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A <strong>vertical</strong> current images <strong>in phase</strong> — the image points the same way.</p></li>
+<li><p>A <strong>horizontal</strong> current images <strong>out of phase</strong> — the image points the other way.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L12-image-theory.svg"
+     alt="A vertical current above a perfect conductor images in phase; a horizontal current images reversed"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>An antenna above a large, perfectly conducting plane is a
+boundary-value problem: the tangential electric field must vanish everywhere
+on the conductor. Solving that directly is difficult, and <strong>image theory</strong>
+avoids it. Delete the conductor, add a mirror-image source below
+where the plane used to be, and choose the image’s sign so that the tangential
+field cancels on the old boundary. The two sources together satisfy the same
+boundary condition, so above the plane they produce the identical field. Below
+the plane the pair produces a field that describes nothing physical, and there
+is no field there in any case because the conductor shorts it out.</p>
+</div>
+<div class="depth docutils container">
+<p>Image theory needs the plane to be a <strong>perfect conductor</strong> and, strictly,
+infinite. Neither holds in practice, and the frames on real ground below
+cover the consequences.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-vertical-and-horizontal-wires-near-ground">
+<div class="wrap docutils container">
+<p class="rubric">Vertical and Horizontal Wires Near Ground</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A vertical wire and its image <strong>add</strong>, however close to the plane you push it.</p></li>
+<li><p>A horizontal wire and its image <strong>subtract</strong>, and cancel exactly at zero height.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A vertical antenna works even when it sits directly on the ground, and a
+horizontal wire laid on the ground radiates almost nothing. That is why
+broadcast towers are vertical and why a field-expedient dipole has to be raised
+well above the ground.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-element-and-image-as-a-two-element-array">
+<div class="wrap docutils container">
+<p class="rubric">Element and Image as a Two-Element Array</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L12-image-paths.svg"
+     alt="A source at height h and its image at minus h radiate toward a distant observer at angle theta; measured from a wavefront through the old ground point, the source is ahead by h cos theta and the image is behind by h cos theta"
+     style="max-width: 460px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+AF(\theta) &amp;= e^{+jkh\cos\theta} \pm e^{-jkh\cos\theta} \\
+&amp;= 2\cos(kh\cos\theta) \quad \text{vert.} \\
+&amp;= 2j\sin(kh\cos\theta) \quad \text{horiz.}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>The source leads the wavefront by <span class="math notranslate nohighlight">\(h\cos\theta\)</span>; the image lags by the same amount.</p></li>
+<li><p>The image’s sign picks <span class="math notranslate nohighlight">\(+\)</span> or <span class="math notranslate nohighlight">\(-\)</span>. At the horizon <span class="math notranslate nohighlight">\(\cos\theta = 0\)</span>, so only the vertical case radiates.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>With the image in place, this is the two-element array problem from Lesson 6.
+We put the old ground point at the origin, the source at <span class="math notranslate nohighlight">\(z = +h\)</span>, and the
+image at <span class="math notranslate nohighlight">\(z = -h\)</span>, and measure <span class="math notranslate nohighlight">\(\theta\)</span> from the vertical; only
+<span class="math notranslate nohighlight">\(0 \le \theta \le 90^\circ\)</span> describes a real field. A distant observer sees
+parallel rays. Measured from a wavefront through the origin, the ray from the
+source is shorter by <span class="math notranslate nohighlight">\(h\cos\theta\)</span> and the ray from the image is longer by the
+same amount, so their phases are <span class="math notranslate nohighlight">\(+kh\cos\theta\)</span> and <span class="math notranslate nohighlight">\(-kh\cos\theta\)</span>. The
+image has the same sign as the source for a vertical current and the opposite
+sign for a horizontal one, and Euler’s formula turns each sum into a single
+trigonometric function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+e^{jx} + e^{-jx} &amp;= 2\cos x \\
+e^{jx} - e^{-jx} &amp;= 2j\sin x
+\end{aligned}\end{split}\]</div>
+<p>The same result comes directly from the radiation vector of Lesson 6,</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{N}(\theta,\phi) = \int_{V'}\mathbf{J}(\mathbf{r}')\ e^{+jk\hat{\mathbf r}\cdot\mathbf{r}'}\ dV'\]</div>
+<p>Its phase factor is the path-length picture above: <span class="math notranslate nohighlight">\(\hat{\mathbf r}\cdot\mathbf{r}'\)</span>
+is how much closer to the observer a piece of current sits than the origin
+does, and for a point on the axis at <span class="math notranslate nohighlight">\(z' = \pm h\)</span> it equals <span class="math notranslate nohighlight">\(\pm h\cos\theta\)</span>.
+For an element that is symmetric about its own center, as a dipole is, the
+total current is the element’s current centered at <span class="math notranslate nohighlight">\(z = +h\)</span> plus the same
+current centered at <span class="math notranslate nohighlight">\(z = -h\)</span>, multiplied by the image sign <span class="math notranslate nohighlight">\(s\)</span> (<span class="math notranslate nohighlight">\(+1\)</span> for a
+vertical current, <span class="math notranslate nohighlight">\(-1\)</span> for a horizontal one). Shifting a current by <span class="math notranslate nohighlight">\(\pm h\)</span>
+along the axis multiplies its integral by <span class="math notranslate nohighlight">\(e^{\pm jkh\cos\theta}\)</span> and changes
+nothing else, so</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\mathbf{N}(\theta) &amp;= \mathbf{N}_{\text{el}}(\theta)\left(e^{+jkh\cos\theta} + s\ e^{-jkh\cos\theta}\right) \\
+&amp;= \mathbf{N}_{\text{el}}(\theta)\ AF(\theta)
+\end{aligned}\end{split}\]</div>
+<p>The radiation intensity goes as <span class="math notranslate nohighlight">\(\vert N_\theta\vert^2 + \vert N_\phi\vert^2\)</span>, and
+the scalar <span class="math notranslate nohighlight">\(AF\)</span> multiplies both components, so the pattern is the element
+factor times the array factor,</p>
+<div class="math notranslate nohighlight">
+\[\vert F(\theta)\vert = \vert f_{\text{el}}(\theta)\vert\ \vert AF(\theta)\vert\]</div>
+<p>This is the Lesson 6 result for two elements <span class="math notranslate nohighlight">\(2h\)</span> apart, with a phase
+difference of <span class="math notranslate nohighlight">\(2kh\cos\theta\)</span> between the two paths. Directivity follows from</p>
+<div class="math notranslate nohighlight">
+\[D = \frac{4\pi U_\text{max}}{P_\text{rad}}\]</div>
+<p>with <span class="math notranslate nohighlight">\(P_\text{rad}\)</span> integrated over the upper hemisphere only. The array factor changes both <span class="math notranslate nohighlight">\(U_\text{max}\)</span> and
+<span class="math notranslate nohighlight">\(P_\text{rad}\)</span>, which is why a low horizontal wire can gain directivity while
+the power it radiates, and its <span class="math notranslate nohighlight">\(R_r\)</span>, fall. Perfect ground always
+nulls horizontal polarization along the ground. No amount of height removes
+that horizon null; height only sets the elevation of the first lobe.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-quarter-wave-monopole">
+<div class="wrap docutils container">
+<p class="rubric">The Quarter-Wave Monopole</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Cut a half-wave dipole in half, discard the bottom, and stand the top on a ground plane.</p></li>
+<li><p>The image restores the missing half, so the pattern shape and the current are unchanged.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L12-monopole-image.svg"
+     alt="A quarter-wave monopole over a ground plane radiates the upper half of the half-wave dipole pattern"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Drive the remaining quarter wavelength against the plane at its base and,
+above the plane, the fields are the fields of the full half-wave dipole. Two
+things change, and both follow from the geometry rather than from new physics.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-monopole-impedance-and-directivity">
+<div class="wrap docutils container">
+<p class="rubric">Monopole Impedance and Directivity</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+Z_{\text{in}}^{\text{mono}} &amp;= \tfrac{1}{2}(73 + j42.5) = 36.5 + j21.3\ \Omega \\
+D_{\text{mono}} &amp;= 2(1.64) = 3.28 \ \rightarrow\ 5.15\ \text{dBi}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Half the structure at the same current takes half the voltage.</p></li>
+<li><p>The same beam fills half the solid angle.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p>No power is created. The same beam fills half the sphere, so its peak is
+twice the average.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-dipole-against-monopole">
+<div class="wrap docutils container">
+<p class="rubric">Dipole Against Monopole</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>Half-wave dipole</p></th>
+<th class="head text-left"><p>Quarter-wave monopole</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Length</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.5\lambda\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.25\lambda\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(Z_{\text{in}}\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(73 + j42.5\ \Omega\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(36.5 + j21.3\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Trimmed</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.47\lambda\)</span>, <span class="math notranslate nohighlight">\(70\ \Omega\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.24\lambda\)</span>, <span class="math notranslate nohighlight">\(36\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Directivity</p></td>
+<td class="text-left"><p>2.15 dBi</p></td>
+<td class="text-left"><p>5.15 dBi</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Coverage</p></td>
+<td class="text-left"><p>all space</p></td>
+<td class="text-left"><p>upper hemisphere</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The elevation half-power beamwidth halves too, from <span class="math notranslate nohighlight">\(78^\circ\)</span> to <span class="math notranslate nohighlight">\(39^\circ\)</span>,
+because only the upper half of the same beam exists. A quarter-wave monopole
+over a good ground plane behaves as a half-wave dipole whose lower half is
+supplied by the image.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-worked-example-a-146-mhz-whip">
+<div class="wrap docutils container">
+<p class="rubric">Worked Example — a 146 MHz Whip</p>
+<p>We design a quarter-wave monopole for the middle of the 2 m band and check
+its match to <span class="math notranslate nohighlight">\(50\ \Omega\)</span>.</p>
+<p><strong>Length.</strong> <span class="math notranslate nohighlight">\(\lambda = c/f = (3\times10^8)/(146\times10^6) = 2.05\ \text{m}\)</span>,
+so <span class="math notranslate nohighlight">\(\lambda/4 = 0.514\ \text{m}\)</span> — a 51 cm whip.</p>
+<p><strong>Match as-built.</strong> With <span class="math notranslate nohighlight">\(Z_{\text{in}} = 36.5 + j21.3\ \Omega\)</span> against
+<span class="math notranslate nohighlight">\(50\ \Omega\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Gamma &amp;= \frac{Z_{\text{in}} - Z_0}{Z_{\text{in}} + Z_0} = \frac{-13.5 + j21.3}{86.5 + j21.3} \\
+\vert\Gamma\vert &amp;= \frac{25.2}{89.1} = 0.283 \\
+\text{VSWR} &amp;= \frac{1 + 0.283}{1 - 0.283} = 1.79 \\
+\text{return loss} &amp;= 11.0\ \text{dB}
+\end{aligned}\end{split}\]</div>
+<p><strong>Match after trimming.</strong> Shorten the whip by about 4% to
+<span class="math notranslate nohighlight">\(0.24\lambda = 49\ \text{cm}\)</span> to cancel the reactance. Now
+<span class="math notranslate nohighlight">\(Z_{\text{in}} \approx 36\ \Omega\)</span> real, and VSWR <span class="math notranslate nohighlight">\(= 50/36 = 1.39\)</span>.</p>
+<p><strong>Match after tilting the radials.</strong> Drooping four quarter-wave radials
+down about <span class="math notranslate nohighlight">\(45^\circ\)</span> raises the base impedance to roughly <span class="math notranslate nohighlight">\(50\ \Omega\)</span>, which
+gives a VSWR near 1.0 with no matching network. This is why commercial
+ground-plane antennas have drooping radials, and the Lesson 10 analyzer can
+confirm the prediction in a few minutes.</p>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-height-above-ground">
+<div class="wrap docutils container">
+<p class="rubric">Height Above Ground</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/image-theory.html"
+        width="100%" height="394"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="An antenna over a perfect ground plane, its image, and the resulting upper-half-space pattern">
+</iframe>
+</div>
+</div>
+<div class="depth docutils container">
+<p>Drag the height slider to compare the two rules. Start with the vertical
+element at the bottom of its range: the pattern is the monopole’s, the
+directivity readout shows 3.28, and the peak sits on the horizon. Then
+switch to the horizontal wire at the same height and look at the third pill —
+the directivity is <em>higher</em>, but the radiated power has collapsed by more than
+10 dB, because the image is canceling the source. Raise the horizontal wire
+and watch that power come back as the first lobe forms overhead.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-directivity-versus-gain">
+<div class="wrap docutils container">
+<p class="rubric">Directivity Versus Gain</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p>A horizontal wire at <span class="math notranslate nohighlight">\(0.05\lambda\)</span> has 9 dBi of directivity pointed straight
+up but radiates almost nothing, because the cancellation appears in the
+radiation resistance, not in the pattern.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Directivity describes only the shape of the radiated pattern. This is the
+first place in the course where directivity and gain separate far enough to
+matter, and a datasheet that quotes directivity where you expected
+gain is not necessarily lying, but it is not answering your question either.</p>
+<p>The collapse reduces gain through efficiency. The wire’s own loss
+<span class="math notranslate nohighlight">\(R_{\text{ohmic}}\)</span> does not depend on the image, but <span class="math notranslate nohighlight">\(R_r\)</span> does: a half-wave
+dipole’s <span class="math notranslate nohighlight">\(73\ \Omega\)</span> falls to about <span class="math notranslate nohighlight">\(6\ \Omega\)</span> at <span class="math notranslate nohighlight">\(0.05\lambda\)</span> and about
+<span class="math notranslate nohighlight">\(1\ \Omega\)</span> at <span class="math notranslate nohighlight">\(0.01\lambda\)</span>. With <span class="math notranslate nohighlight">\(R_{\text{ohmic}} = 1\ \Omega\)</span>,
+<span class="math notranslate nohighlight">\(\eta_{\text{rad}} = R_r/(R_r + R_{\text{ohmic}})\)</span> drops from 99% in free space
+to 85% and then 50%, and since <span class="math notranslate nohighlight">\(G = \eta_{\text{rad}} D\)</span> the gain falls with
+it. A tiny <span class="math notranslate nohighlight">\(R_r\)</span> also means a large feed current for any real radiated power,
+and a match up to 50 Ω that adds loss of its own.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-real-ground">
+<div class="wrap docutils container">
+<p class="rubric">Real Ground</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\eta_{\text{rad}} = \frac{R_r}{R_r + R_g + R_{\text{ohmic}}}\]</div>
+<ul class="simple">
+<li><p>Return current dissipates in the soil.</p></li>
+<li><p>With only <span class="math notranslate nohighlight">\(36.5\ \Omega\)</span> of <span class="math notranslate nohighlight">\(R_r\)</span>, a few ohms of ground loss is significant.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Real earth cannot support a grazing field, so the horizon lobe is lost.</p></li>
+<li><p>5.15 dBi is an upper bound.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Real ground is a lossy dielectric. The loss appears in series with the feed as
+a ground resistance <span class="math notranslate nohighlight">\(R_g\)</span>, which is why AM broadcast stations bury a <strong>radial
+system</strong> — the FCC standard is 120 buried wires, each a quarter wavelength
+long, fanning out from the tower base. The radials do not radiate. They
+intercept the return current in copper instead of in dirt. And because the
+reflection coefficient falls away near the horizon, the elevation angle at
+which the energy leaves is set by the ground, not by the antenna.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-ground-systems-and-counterpoises">
+<div class="wrap docutils container">
+<p class="rubric">Ground Systems and Counterpoises</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L12-ground-systems.svg"
+     alt="Three ways to give a monopole a ground: a buried radial field, drooping quarter-wave radials, and a handheld counterpoise"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A car roof is several wavelengths across at 800 MHz and works as a ground plane.</p></li>
+<li><p>At 30 MHz the same roof is about <span class="math notranslate nohighlight">\(0.15\lambda\)</span> across and works poorly.</p></li>
+<li><p>Without a ground plane, a <strong>counterpoise</strong> provides the return path.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Four drooping radials on a mast, a metal disc under a GPS patch, the ground
+pour on a circuit board are all counterpoises. On a handheld radio the
+counterpoise is the case, the board, and your hand, which is why gripping a
+handheld differently changes both its impedance and its pattern, and why
+handheld radios are tested against a phantom hand.</p>
+</div>
+<div class="depth docutils container">
+<p>When we model a monopole in the Lesson 8 simulator, the model needs an
+explicit ground: a perfect-conductor plane for the
+textbook answer, or a real-earth model with a conductivity and a permittivity
+for the realistic one. Feed the base segment against that plane. A monopole
+modeled in free space with no ground is a very short dipole, and the simulator
+will return a number that does not describe the antenna you meant to build.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-same-radome-three-antennas">
+<div class="wrap docutils container">
+<p class="rubric">Same Radome, Three Antennas</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L12-radome-lookalikes.svg"
+     alt="Three identical radomes cut away: a monopole that needs a ground from its mount, a sleeve dipole whose sleeve is its lower half, and a folded dipole with both halves built in"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A vertical in a plastic tube may be a monopole, a sleeve dipole, or a folded dipole.</p></li>
+<li><p>Only the monopole takes its other half from the mount.</p></li>
+<li><p>Read the datasheet, not the housing.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>They look alike, they are sold side by side, and the fiberglass hides the one
+difference that decides how to mount them. A <strong>monopole’s</strong> other half is
+whatever it is bolted to. On a metal roof, or with its own radials, it works
+the way this lesson says. On a fiberglass mast or a wooden post there is no
+plane, so the return current finds the outside of the coax instead: the feed
+line becomes the counterpoise, and the pattern and VSWR start depending on how
+the cable is routed. That is Lesson 4’s common-mode problem, seen from the
+antenna side. A datasheet that says “ground plane required” is telling you
+it is a monopole.</p>
+<p>A <strong>sleeve (coaxial) dipole</strong> builds its lower half out of a quarter-wave metal
+tube around the feed coax, shorted to the shield at the top and open at the
+bottom. The sleeve is the dipole’s lower arm, and because it is a shorted
+quarter-wave stub it also presents a high impedance to current on the outside
+of the line below it, so it chokes the feed line out of the antenna. It is a
+half-wave dipole near <span class="math notranslate nohighlight">\(73\ \Omega\)</span> and works the same on any mount.</p>
+<p>A <strong>folded dipole</strong> is a half-wave dipole with a second conductor joined to the
+first at both ends. The pattern is the dipole’s and it needs no ground, but the
+feed sees about <span class="math notranslate nohighlight">\(4 \times 73 \approx 290\ \Omega\)</span> (Lesson 7), so a commercial
+one includes a 4:1 balun in its base (Lesson 4). Cut one in half over a plane and
+you have a <strong>folded monopole</strong>, about <span class="math notranslate nohighlight">\(146\ \Omega\)</span>, which is a monopole again
+and needs its ground like any other.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-small-loop-is-a-magnetic-dipole">
+<div class="wrap docutils container">
+<p class="rubric">The Small Loop Is a Magnetic Dipole</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The circumference is well under a wavelength; <span class="math notranslate nohighlight">\(C &lt; 0.1\lambda\)</span> is the usual criterion.</p></li>
+<li><p>The current is <strong>uniform</strong> all the way around, in phase.</p></li>
+<li><p>The result is an oscillating magnetic moment <span class="math notranslate nohighlight">\(m = IA\)</span>, the exact dual of the short dipole.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Now change the current’s shape instead of its neighborhood. A small loop has
+too little electrical length for the current to vary, and putting that uniform
+current into the radiation integral from Lesson 6 gives the dual of the short
+dipole. A short dipole is an oscillating electric dipole moment; a small loop
+is a magnetic one, pointing along the loop axis by the right-hand rule, and the
+electric and magnetic fields exchange roles.</p>
+<p>The magnetic moment <span class="math notranslate nohighlight">\(m = IA\)</span> comes from Biot–Savart, the same law behind the
+<span class="math notranslate nohighlight">\(1/r^2\)</span> induction term of Lesson 5. For a DC current <span class="math notranslate nohighlight">\(I\)</span> on a circular loop of
+radius <span class="math notranslate nohighlight">\(a\)</span>, the field on the loop axis at distance <span class="math notranslate nohighlight">\(z\)</span> from its center is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+B_z(z) &amp;= \frac{\mu_0 I a^2}{2\left(a^2 + z^2\right)^{3/2}} \\
+&amp;\approx \frac{\mu_0 \left(I\pi a^2\right)}{2\pi z^3} = \frac{\mu_0\ m}{2\pi z^3}, \qquad z \gg a
+\end{aligned}\end{split}\]</div>
+<p>Far from the loop, the current and the area appear only as the product
+<span class="math notranslate nohighlight">\(m = IA\)</span>. The loop’s shape does not appear, and the field has the same <span class="math notranslate nohighlight">\(1/z^3\)</span> form
+as the on-axis field of an electric dipole, <span class="math notranslate nohighlight">\(E_z = p/(2\pi\varepsilon_0 z^3)\)</span>,
+with <span class="math notranslate nohighlight">\(m\)</span> in the role of <span class="math notranslate nohighlight">\(p\)</span>. That is why any small loop, circular or square,
+is characterized by its moment alone.</p>
+<p>Let the current oscillate and keep the loop small, and the same moment sets
+the radiated field. The far fields of the small loop and the short dipole
+from Lesson 6 are</p>
+<div class="math notranslate nohighlight">
+\[E_\phi = \frac{\eta_0 k^2 \left(I_0 A\right)\sin\theta}{4\pi r}\ e^{-jkr}\]</div>
+<div class="math notranslate nohighlight">
+\[E_\theta = \frac{j\eta_0 k \left(I_0\ dl\right)\sin\theta}{4\pi r}\ e^{-jkr}\]</div>
+<p>so a small loop radiates like a short dipole whose current moment <span class="math notranslate nohighlight">\(I_0\ dl\)</span>
+has magnitude <span class="math notranslate nohighlight">\(k I_0 A\)</span>. Putting <span class="math notranslate nohighlight">\(dl = kA\)</span> into the short dipole’s
+<span class="math notranslate nohighlight">\(R_r = 80\pi^2 (dl/\lambda)^2\)</span> gives</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+R_r &amp;= 80\pi^2 \left(\frac{kA}{\lambda}\right)^2 \\
+&amp;= 320\pi^4 \left(\frac{A}{\lambda^2}\right)^2 = 20\pi^2 \left(\frac{C}{\lambda}\right)^4
+\end{aligned}\end{split}\]</div>
+<p>which is the fourth-power law in <em>The Fourth-Power Penalty</em> below. The fourth
+power comes from the area: <span class="math notranslate nohighlight">\(R_r\)</span> goes as the square of the equivalent length
+<span class="math notranslate nohighlight">\(kA\)</span>, and the area of a loop grows as the square of its circumference.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-short-dipole-against-small-loop">
+<div class="wrap docutils container">
+<p class="rubric">Short Dipole Against Small Loop</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-left"><p>Short dipole</p></th>
+<th class="head text-left"><p>Small loop</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Source</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(I\)</span> along <span class="math notranslate nohighlight">\(\ell\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(I\)</span> around <span class="math notranslate nohighlight">\(A\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Far field</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(E_\theta\)</span>, <span class="math notranslate nohighlight">\(H_\phi\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(E_\phi\)</span>, <span class="math notranslate nohighlight">\(H_\theta\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Pattern</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\sin\theta\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\sin\theta\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Directivity</p></td>
+<td class="text-left"><p>1.76 dBi</p></td>
+<td class="text-left"><p>1.76 dBi</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Null</p></td>
+<td class="text-left"><p>along the wire</p></td>
+<td class="text-left"><p>along the axis</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(R_r\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(80\pi^2 (\ell/\lambda)^2\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(20\pi^2 (C/\lambda)^4\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-maximum-in-the-plane-null-through-the-hole">
+<div class="wrap docutils container">
+<p class="rubric">Maximum in the Plane, Null Through the Hole</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L12-loop-dipole-duality.svg"
+     alt="A small loop has the same donut pattern as a short dipole with the electric and magnetic fields interchanged"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The pattern is the same donut, with the polarization rotated <span class="math notranslate nohighlight">\(90^\circ\)</span>.</p></li>
+<li><p>The maximum is in the plane of the loop, and the null is along its axis.</p></li>
+<li><p>Direction finding uses that null.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The null placement is the opposite of what most people expect. You rotate the
+loop until the signal disappears, and the bearing is precise because a null is
+sharp while a pattern maximum is broad. We saw the same asymmetry in the
+measured patterns of Lesson 11, where null depth was the hardest number to
+measure reliably.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-fourth-power-penalty">
+<div class="wrap docutils container">
+<p class="rubric">The Fourth-Power Penalty</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[R_r = 20\pi^2 \left(\frac{C}{\lambda}\right)^4 = 320\pi^4 \left(\frac{A}{\lambda^2}\right)^2 \ \Omega\]</div>
+<ul class="simple">
+<li><p>Only <span class="math notranslate nohighlight">\(R_r\)</span> radiates; the wire’s <span class="math notranslate nohighlight">\(R_{\text{ohmic}}\)</span> is in series and dissipates heat.</p></li>
+<li><p>Halving the loop cuts <span class="math notranslate nohighlight">\(R_r\)</span> by 16 and the wire’s loss by only 2.</p></li>
+<li><p>At <span class="math notranslate nohighlight">\(C = 0.1\lambda\)</span>, 20 mΩ of <span class="math notranslate nohighlight">\(R_r\)</span> against 114 mΩ of loss gives 15% efficiency.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This is why we keep computing radiation resistance. The feed sees
+<span class="math notranslate nohighlight">\(R_r + R_{\text{ohmic}}\)</span> in series, the same current flows through both, and
+the input power splits between them in proportion — the same
+<span class="math notranslate nohighlight">\(\eta_{\text{rad}} = R_r/(R_r + R_{\text{ohmic}})\)</span> that decided the ground
+systems. A small loop’s <span class="math notranslate nohighlight">\(R_r\)</span> goes as <span class="math notranslate nohighlight">\(C^4\)</span>, but its loss only as <span class="math notranslate nohighlight">\(C\)</span> for a
+given wire, so once the loop is small its efficiency falls roughly as <span class="math notranslate nohighlight">\(C^3\)</span>:
+halving a <span class="math notranslate nohighlight">\(0.1\lambda\)</span> loop lowers the efficiency by another 8.5 dB. At <span class="math notranslate nohighlight">\(C = 0.1\lambda\)</span> the
+radiation resistance is already smaller than the loss of the copper the loop
+is made from, which is exactly the problem the next frame works through.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-worked-example-a-30-mhz-loop">
+<div class="wrap docutils container">
+<p class="rubric">Worked Example — a 30 MHz Loop</p>
+<p>A single-turn copper loop, <span class="math notranslate nohighlight">\(C = 0.1\lambda\)</span> at <span class="math notranslate nohighlight">\(f = 30\ \text{MHz}\)</span>
+(<span class="math notranslate nohighlight">\(\lambda = 10\ \text{m}\)</span>), made of 4 mm diameter wire (<span class="math notranslate nohighlight">\(b = 2\ \text{mm}\)</span>).
+Loop radius <span class="math notranslate nohighlight">\(a = C/2\pi = 0.159\ \text{m}\)</span>.</p>
+<p><strong>Radiation resistance.</strong> <span class="math notranslate nohighlight">\(R_r = 20\pi^2 (0.1)^4 = 0.0197\ \Omega\)</span> — 20
+milliohms.</p>
+<p><strong>Loss resistance.</strong> Copper surface resistance at 30 MHz is
+<span class="math notranslate nohighlight">\(R_s = \sqrt{\pi f \mu_0/\sigma} = 1.43\ \text{m}\Omega\)</span> per square, and the
+loop is <span class="math notranslate nohighlight">\(C/2\pi b = 79.6\)</span> squares around:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+R_{\text{ohmic}} &amp;= \frac{C}{2\pi b} R_s \\
+&amp;= 79.6 \times 1.43\ \text{m}\Omega = 0.114\ \Omega
+\end{aligned}\end{split}\]</div>
+<p><strong>Efficiency.</strong> <span class="math notranslate nohighlight">\(\eta_{\text{rad}} = 0.0197/(0.0197 + 0.114) = 0.148\)</span>, i.e.
+<strong>14.8%</strong>, a loss of 8.3 dB. Gain <span class="math notranslate nohighlight">\(= 1.76 - 8.3 = -6.5\ \text{dBi}\)</span>.</p>
+<p><strong>What that means at the feed.</strong> To deliver 100 W you need
+<span class="math notranslate nohighlight">\(I = \sqrt{2P/R_{\text{total}}} = 38.7\ \text{A}\)</span> peak in that loop, of which
+15 W radiates and 85 W heats the wire. This is why transmitting magnetic loops
+are built from thick copper tubing with welded joints and a vacuum capacitor.</p>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-low-efficiency-same-snr">
+<div class="wrap docutils container">
+<p class="rubric">Low Efficiency, Same SNR</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Loss cuts the signal <strong>and</strong> the external noise by the same factor.</p></li>
+<li><p>SNR holds until the external noise falls to the receiver’s floor.</p></li>
+<li><p>At 1 MHz, external noise is 70 dB above <span class="math notranslate nohighlight">\(kT_0\)</span>; 40 dB of loss barely changes SNR.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>In a transmitter, every watt that heats the wire is lost. A receiver is
+limited by signal-to-noise ratio instead, and its noise has two sources. The
+receiver adds its own, set by its noise figure and referenced to the thermal
+floor <span class="math notranslate nohighlight">\(kT_0B\)</span>: the noise power a matched resistor delivers at
+<span class="math notranslate nohighlight">\(T_0 = 290\ \text{K}\)</span> in a bandwidth <span class="math notranslate nohighlight">\(B\)</span>. The antenna delivers <strong>external
+noise</strong> along with the signal, at a power <span class="math notranslate nohighlight">\(kT_AB\)</span> set by its <strong>antenna
+temperature</strong> <span class="math notranslate nohighlight">\(T_A\)</span>, the temperature of whatever the pattern sees, weighted by
+the pattern. External noise is the same kind of noise as <span class="math notranslate nohighlight">\(kT_0B\)</span> at a
+different temperature. Below about 30 MHz, lightning noise propagated by the
+ionosphere and man-made noise from power lines and electronics make <span class="math notranslate nohighlight">\(T_A\)</span>
+very large: a residential site at 1 MHz measures about 72 dB above <span class="math notranslate nohighlight">\(kT_0B\)</span>
+(ITU-R P.372), or <span class="math notranslate nohighlight">\(T_A \approx 5\times10^9\ \text{K}\)</span>. A microwave antenna
+aimed at clear sky, by contrast, can see only 10 to 50 K.</p>
+<p>Antenna loss attenuates the external noise and the signal by the same factor
+and adds only a little thermal noise of its own, at the antenna’s physical
+temperature:</p>
+<div class="math notranslate nohighlight">
+\[T_A' = \eta_{\text{rad}} T_A + \left(1 - \eta_{\text{rad}}\right) T_\text{phys}\]</div>
+<p>With 40 dB of loss, <span class="math notranslate nohighlight">\(\eta_{\text{rad}} = 10^{-4}\)</span>, the 1 MHz antenna still
+delivers <span class="math notranslate nohighlight">\(T_A' \approx 5\times10^5\ \text{K}\)</span>. That is about 32 dB above
+<span class="math notranslate nohighlight">\(T_0\)</span> and about 23 dB over the <span class="math notranslate nohighlight">\(T_e = T_0(F - 1) \approx 2600\ \text{K}\)</span> of a
+receiver with a 10 dB noise figure, so the SNR drops by a few hundredths of a
+dB. That is why a loop that is a poor transmitter can be a good receiving
+antenna. It stops working at VHF and above, where <span class="math notranslate nohighlight">\(T_A\)</span> is low and the
+receiver’s own noise sets the floor.</p>
+<p>Receive loops still use every available way to raise their output. <span class="math notranslate nohighlight">\(N\)</span> turns raise <span class="math notranslate nohighlight">\(R_r\)</span> as
+<span class="math notranslate nohighlight">\(N^2\)</span> and the loss only as <span class="math notranslate nohighlight">\(N\)</span>; wind them on a ferrite rod and the effective
+permeability multiplies the moment again. The bar behind the dial of an AM
+radio is a many-turn ferrite loop; it is very inefficient, and at broadcast
+frequencies that loss does not reduce the SNR. A shielded loop also rejects
+local electric-field noise, which makes it the standard tool for locating
+interference.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-resonant-loop">
+<div class="wrap docutils container">
+<p class="rubric">The Resonant Loop</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L12-resonant-loop.svg"
+     alt="Current around a small loop is uniform and circulates; around a one-wavelength loop fed at the bottom it falls to zero a quarter of the way around and reverses, so the currents at the top and bottom point the same way"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>At <span class="math notranslate nohighlight">\(C \approx 1\lambda\)</span> the current is a standing wave that reverses halfway around.</p></li>
+<li><p>The top and bottom currents point the same way, so the maximum moves to the <strong>axis</strong>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(R_{\text{in}}\)</span> is <span class="math notranslate nohighlight">\(100\)</span>–<span class="math notranslate nohighlight">\(130\ \Omega\)</span>; directivity is about 3.1 dBi.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A small loop is too short for the current to change along it. At
+<span class="math notranslate nohighlight">\(C \approx 1\lambda\)</span> the loop is long enough to hold a standing wave, the same
+one that sits on a dipole. Fed at one point, and measured along the wire from
+the feed, the current is approximately</p>
+<div class="math notranslate nohighlight">
+\[I(s) \approx I_0\cos(ks)\]</div>
+<p>It is maximum at the feed, zero a quarter wavelength away on either side, and
+<span class="math notranslate nohighlight">\(-I_0\)</span> at the point opposite the feed. That sign is measured in the direction
+around the loop, and on the far side the wire itself runs the opposite way, so
+the two reversals cancel: the current at the top and the current at the bottom
+point the same way in space, and the loop no longer circulates.</p>
+<p>The loop then behaves like two parallel, in-phase current elements, the feed
+side and the far side, separated by the diameter <span class="math notranslate nohighlight">\(2a = \lambda/\pi \approx 0.32\lambda\)</span>.
+Along the loop axis an observer is equally far from both, and their fields add
+in phase. In the plane of the loop, along the line joining them, they are
+<span class="math notranslate nohighlight">\(2ka = 2\)</span> rad out of phase and partly cancel, and each side also has its own
+null along its length. That puts the maximum on the axis, where the small loop
+had its null. A one-wavelength loop is close to two half-wave dipoles bent
+around and joined at their ends, which is why its input resistance is about
+100 to 130 Ω and nearly real at resonance.</p>
+<p>This loop transmits efficiently, with a directivity a little under 1 dB above
+a dipole’s, and it is the element of the <strong>quad</strong> antenna. Only its size in
+wavelengths differs from the small loop, and electrical size is the variable
+that runs through this whole module.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-small-loop-against-resonant-loop">
+<div class="wrap docutils container">
+<p class="rubric">Small Loop Against Resonant Loop</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-left"><p>Small loop</p></th>
+<th class="head text-left"><p>Resonant loop</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Circumference</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(&lt; 0.1\lambda\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx 1\lambda\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Current</p></td>
+<td class="text-left"><p>uniform</p></td>
+<td class="text-left"><p>reverses</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Maximum</p></td>
+<td class="text-left"><p>in the plane</p></td>
+<td class="text-left"><p>along the axis</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(R_{\text{in}}\)</span></p></td>
+<td class="text-left"><p>milliohms</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(100\)</span>–<span class="math notranslate nohighlight">\(130\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Used for</p></td>
+<td class="text-left"><p>receiving, finding</p></td>
+<td class="text-left"><p>transmitting</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-small-antennas-and-the-chu-limit">
+<div class="wrap docutils container">
+<p class="rubric">Small Antennas and the Chu Limit</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[Q \gtrsim \frac{1}{(ka)^3}\]</div>
+<ul class="simple">
+<li><p>Shrinking an antenna drives <span class="math notranslate nohighlight">\(R_r\)</span> toward zero, which lowers <strong>efficiency</strong>.</p></li>
+<li><p>It also raises the ratio of stored to radiated energy, which narrows <strong>bandwidth</strong>.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p>Loss resistance widens a small antenna’s bandwidth only by dissipating power
+that would otherwise radiate.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The difference between the two columns of the previous table is the
+size-bandwidth trade from Lesson 3. An
+antenna that fits inside a sphere of radius <span class="math notranslate nohighlight">\(a\)</span> stores far more energy in its
+near field than it radiates each cycle, and the Chu limit puts a floor on the
+resulting quality factor, so the fractional bandwidth — roughly <span class="math notranslate nohighlight">\(1/Q\)</span> —
+collapses as the cube of the size. The 30 MHz loop above has <span class="math notranslate nohighlight">\(ka = 0.1\)</span>, so
+<span class="math notranslate nohighlight">\(Q \approx 10^3\)</span> and its matched bandwidth is on the order of 0.1%: about
+30 kHz at 30 MHz, which is why a magnetic loop must be retuned whenever the
+operating frequency moves across the band.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary">
+<div class="wrap docutils container">
+<p class="rubric">Summary</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it says</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Image theory</p></td>
+<td class="text-left"><p>vertical images in phase, horizontal reversed</p></td>
+<td class="text-left"><p>a horizontal wire on the ground radiates nothing</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(Z_{\text{in}}^{\text{mono}} = \tfrac{1}{2}Z_{\text{in}}^{\text{dipole}}\)</span></p></td>
+<td class="text-left"><p>half the structure, half the voltage</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(36.5 + j21.3\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(D_{\text{mono}} = 2D_{\text{dipole}}\)</span></p></td>
+<td class="text-left"><p>same beam into half the solid angle</p></td>
+<td class="text-left"><p>3.28, or 5.15 dBi</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Radial system / counterpoise</p></td>
+<td class="text-left"><p>a low-loss path for the return current</p></td>
+<td class="text-left"><p>120 buried radials; 4 drooped <span class="math notranslate nohighlight">\(\approx 50\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Radome look-alikes</p></td>
+<td class="text-left"><p>only the monopole takes its other half from the mount</p></td>
+<td class="text-left"><p>folded dipole <span class="math notranslate nohighlight">\(\approx 290\ \Omega\)</span>, folded monopole <span class="math notranslate nohighlight">\(\approx 146\ \Omega\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\eta_{\text{rad}} = R_r/(R_r + R_g + R_{\text{ohmic}})\)</span></p></td>
+<td class="text-left"><p>ground and copper loss compete with radiation</p></td>
+<td class="text-left"><p>a few ohms matters when <span class="math notranslate nohighlight">\(R_r\)</span> is small</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Small loop</p></td>
+<td class="text-left"><p>magnetic dipole, null on the axis</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(D = 1.5\)</span> (1.76 dBi)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(R_r = 20\pi^2 (C/\lambda)^4\)</span></p></td>
+<td class="text-left"><p>fourth power in circumference</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.02\ \Omega\)</span> at <span class="math notranslate nohighlight">\(C = 0.1\lambda\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Resonant loop, <span class="math notranslate nohighlight">\(C \approx 1\lambda\)</span></p></td>
+<td class="text-left"><p>current reverses, maximum moves to the axis</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(100\)</span>–<span class="math notranslate nohighlight">\(130\ \Omega\)</span>, <span class="math notranslate nohighlight">\(\approx 3.1\)</span> dBi</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Chu limit, <span class="math notranslate nohighlight">\(Q \gtrsim 1/(ka)^3\)</span></p></td>
+<td class="text-left"><p>small antennas store far more than they radiate</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(ka = 0.1 \rightarrow\)</span> about 0.1% bandwidth</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../practice/ECE444_L12_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a class="doc-link doc-key" href="../../practice/ECE444_L12_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where This Is Going</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The wire antennas are now covered: dipole, monopole, loop, and image theory.</p></li>
+<li><p>Lesson 13 moves to <strong>printed and aperture</strong> antennas: patch, slot, and horn.</p></li>
+<li><p>The radiating object becomes a surface or an opening.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The patch behaves much like two slots over a ground plane, and image theory
+explains why it works.</p>
+</div>
+<div class="depth docutils container">
+<p>The other thread from today runs into Module 3. A monopole is an element plus
+one image; an array is an element plus many neighbors, and the same
+element-factor-times-array-factor bookkeeping handles both. Pattern
+multiplication in Lesson 16 will be familiar, because the height-above-ground
+widget from today is a two-element array whose second element is the image.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module02/L12-loop-monopole-antennas"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

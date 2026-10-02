@@ -1,0 +1,1096 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L11 - Measurement Lab 2: Radiation Patterns &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L10-measurement-lab-sparams/index.html">L10 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L11 — Measurement Lab 2 — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l11-measurement-lab-2-radiation-patterns">
+<h1>L11 - Measurement Lab 2: Radiation Patterns<a class="headerlink" href="#l11-measurement-lab-2-radiation-patterns" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Measurement Lab 2: Radiation Patterns</h1>
+<div class="title-rule"></div>
+<p>You are measuring the same antenna, describing its other half.</p>
+<p>Lesson 11 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-slides">
+<div class="wrap docutils container">
+<p class="rubric">Slides</p>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L11-measurement-lab-patterns.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L11-measurement-lab-patterns.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L11-measurement-lab-patterns.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '7'">
+  <li>I can verify that a given range geometry is valid for both antennas before I take data, using all three far-field criteria.</li>
+  <li>I can acquire principal-plane pattern cuts and normalize, plot, and annotate them correctly in dB down from the peak.</li>
+  <li>I can extract half-power beamwidth, first sidelobe level, front-to-back ratio, gain by comparison, and cross-polarization discrimination from measured data.</li>
+  <li>I can measure my own noise floor, state the resulting dynamic range, and say which of my extracted numbers clears it and by how much.</li>
+</ol>
+<div class="depth docutils container">
+<p>Last period you stood at the terminals and asked whether power gets <em>into</em> the
+antenna. Today you walk into the chamber and ask where that power <em>goes</em>. You
+are measuring the same antenna and describing its other half, and the answer
+this time is not a single number but a curve: a beamwidth, a sidelobe
+structure, a back level, a polarization, and a hard limit on how much of that
+curve is real.</p>
+<p>Lesson 9 supplied the reasoning — reciprocity, the far-field criterion, gain
+by comparison, and why a noise floor bounds every number you extract. Bring it
+with you. Today is procedure and reduction.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-you-can-wreck">
+<div class="wrap docutils container">
+<p class="rubric">What You Can Wreck</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p><strong>The tower turns a real antenna on a real cable.</strong> Nobody inside during a
+scan.</p>
+</div>
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>What</p></th>
+<th class="head text-left"><p>Cost</p></th>
+<th class="head text-left"><p>Ruined by</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Absorber</p></td>
+<td class="text-left"><p>$750/sq ft</p></td>
+<td class="text-left"><p>leaning, stacking</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>VNA port</p></td>
+<td class="text-left"><p>$85k</p></td>
+<td class="text-left"><p>cross-thread, over-torque, cable stress</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Horn</p></td>
+<td class="text-left"><p>$5k</p></td>
+<td class="text-left"><p>dropping, wind-up</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Cable</p></td>
+<td class="text-left"><p>$1k</p></td>
+<td class="text-left"><p>kinking, wind-up</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A bad measurement costs you an afternoon; every row in that table costs the
+rig. Wind-up appears twice because it takes the cable and the horn together,
+and it is the failure this lab is most likely to cause.</p>
+</div>
+<div class="depth docutils container">
+<p><strong>Cable wind-up is the standing hazard, and it is slow.</strong> It does not announce
+itself until the cable is tight, and then it takes the cable, or the horn, or
+both. <strong>STOP</strong> preempts a move in progress and is live whenever the page is
+connected, which is why it sits in the tab header and not three scrolls down a
+settings panel. Confirm on the EMControl front panel that the axis is in
+<strong>non-continuous</strong> mode before any scan with a cable routed through the tower —
+continuous mode ignores the software limits entirely. Check the <strong>latched
+error</strong> line in the Turntable section while you are there; a fault the card is
+still holding from last period is worth knowing about before you commit 180
+angles to it. <em>Device Emulation</em> on the front panel is <strong>not</strong> simulation and
+does not inhibit the motor.</p>
+<p><strong>The port is the expensive one, and the damage spreads.</strong> Start the threads by
+hand and square, tighten with the wrench rather than by feel, and turn the
+<em>nut</em> and not the cable body. A cross-threaded or over-torqued port is a bench
+repair on an eighty-five thousand dollar instrument, and the same damage
+transfers to the next connector it mates with — which on this rig is a
+calibration module. Side load at a connector is cable stress and is the slow
+version of the same failure, so nothing hangs off a port.</p>
+<p><strong>The horn is dropped and the cable is kinked</strong> — neither wears out. Two hands
+on a horn, support its weight while you mate it, never hang it from its own
+connector; and for the cable, respect the bend radius, no tight coils, and
+nothing routed where somebody will stand on it.</p>
+<p><strong>The absorber is priced by the square foot.</strong> The pyramids shed if you brush
+them and a crushed tip is a permanently worse quiet zone, so nobody leans on
+the walls and nothing gets rested on the floor pyramids. There is no repairing
+a tip; there is only buying more absorber.</p>
+<p>The RF, for the record, is milliwatts. Nothing in this chamber will hurt you.
+Everything in it can be hurt by you.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-good-practice">
+<div class="wrap docutils container">
+<p class="rubric">Good Practice</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Set the sweep, calibrate, <strong>verify</strong>, then measure.</p></li>
+<li><p>Log all five sweep settings first.</p></li>
+<li><p>Change one thing at a time.</p></li>
+<li><p>Name every run before you start it.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>And write down what you expect before you look. A prediction you committed to
+in writing is the only way a surprise can teach you anything; a prediction you
+made after seeing the answer is not a prediction.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-you-are-doing-today">
+<div class="wrap docutils container">
+<p class="rubric">What You Are Doing Today</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Prove the range is long enough, with a tape measure.</p></li>
+<li><p>Scan two principal planes from the dashboard, then a cross-pol cut.</p></li>
+<li><p>Swap in the reference horn for gain.</p></li>
+<li><p>Measure your own floor and quote it against everything.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Reciprocity means it does not matter which end transmits, so the source horn
+transmits and the antenna under test receives — the AUT is the thing that
+rotates, and you would rather not run transmit power through a rotary joint.</p>
+</div>
+<div class="depth docutils container">
+<p>One instrument does both ends today. The chamber’s Copper Mountain VNA drives
+the source horn from port 1 and receives the AUT on port 2, so the quantity
+you record at every angle is <span class="math notranslate nohighlight">\(S_{21}\)</span> in dB: transmitted at one antenna,
+received at the other, ratioed against the source so the source’s own drift
+divides out. That is the same argument Lesson 9 made for trusting a ratioed
+measurement, now doing work on the range rather than at the connector.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-chain-and-its-failure-modes">
+<div class="wrap docutils container">
+<p class="rubric">The Chain and Its Failure Modes</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Stage</p></th>
+<th class="head text-left"><p>Must do</p></th>
+<th class="head text-left"><p>Goes wrong as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>VNA port 1</p></td>
+<td class="text-left"><p>one stable sweep</p></td>
+<td class="text-left"><p>a changed setting reads as pattern</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Source horn</p></td>
+<td class="text-left"><p>clean polarization</p></td>
+<td class="text-left"><p>leaks into your cross-pol</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Turntable</p></td>
+<td class="text-left"><p>one centered axis</p></td>
+<td class="text-left"><p>biased HPBW</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>VNA port 2</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(S_{21}\)</span> per angle</p></td>
+<td class="text-left"><p>unrecorded settings</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The rig is fixed today, which removes a variable Lesson 9 left open: there is
+one chain, it is cabled, and it is the same one every section uses. What is
+left to you is the discipline — the settings you choose, the zero you define,
+and whether you wrote any of it down.</p>
+</div>
+<div class="depth docutils container">
+<p>The chain is a loop rather than a line. The VNA is both the transmitter and
+the receiver, the two horns are the only things between its ports, and the
+positioner is a serial link the acquisition software drives in step with the
+sweep. Nothing in the chain is free-running: every angle is <em>commanded</em>, then
+<em>confirmed</em>, then measured. That is what makes the run file trustworthy, and
+it is why the file records both the angle asked for and the angle reported.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-chamber-and-the-dashboard">
+<div class="wrap docutils container">
+<p class="rubric">The Chamber and the Dashboard</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>One page drives the rig: <strong>sweep</strong>, <strong>turntable</strong>, <strong>scan</strong>.</p></li>
+<li><p><strong>Start scan</strong> and <strong>STOP</strong> sit in the tab header.</p></li>
+<li><p>Every run writes <code class="docutils literal notranslate"><span class="pre">pattern.csv</span></code> and <code class="docutils literal notranslate"><span class="pre">meta.json</span></code>.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p>The strip along the bottom says what you are talking to: <strong>hardware</strong> or
+<strong>simulated</strong>, <strong>cal</strong> or <strong>uncal</strong>.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Open the address given in class. The settings sidebar is four sections —
+<strong>VNA</strong>, <strong>Turntable</strong>, <strong>Simulation</strong>, <strong>Output</strong> — and the plots carry five
+tabs: Pattern Measurement, VNA, Turntable, Sweep, Logs. A pattern needs the
+first and the last; <strong>Sweep</strong> is Lesson 10’s tab, and you will use it twice
+today.</p>
+</div>
+<div class="depth docutils container">
+<p>You can have the whole dashboard on your own laptop before the period, with no
+instruments attached — one command brings up the service and the frontend
+together:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>./start.sh<span class="w"> </span>--sim
+</pre></div>
+</div>
+<p>The badge reads <strong>simulated</strong> and the service synthesizes a plausible
+array-factor pattern — a main lobe, decaying sidelobes, nulls floored around
+<span class="math notranslate nohighlight">\(-45\)</span> dB — and simulates the tower slewing at a believable rate, so live
+position, progress and the stop button all have something real to exercise.
+A simulated <em>sweep</em> is not a pattern at all: it returns a mismatched load
+behind a length of line, which draws the arc a real one does on the Smith
+chart and has no resonance in it anywhere.</p>
+<p>So rehearse the controls there, not the physics. Half an hour in simulation is
+the difference between a period spent measuring and a period spent finding
+buttons.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-chamber-range">
+<div class="wrap docutils container">
+<p class="rubric">The Chamber Range</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(f = 2.45\ \text{GHz}\)</span>, so <span class="math notranslate nohighlight">\(\lambda = 12.2\ \text{cm}\)</span>.</p></li>
+<li><p><strong>AUT</strong>: pyramidal horn, <span class="math notranslate nohighlight">\(24 \times 17\ \text{cm}\)</span>, on the tower.</p></li>
+<li><p><strong>Reference</strong>: standard-gain horn, <span class="math notranslate nohighlight">\(34 \times 25\ \text{cm}\)</span>, <span class="math notranslate nohighlight">\(G_{\text{ref}} = 15.0\ \text{dBi}\)</span>.</p></li>
+<li><p>Source fixed, AUT rotating, absorber everywhere else.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Measure the source-to-tower separation yourself with a tape and write it down;
+it is a property of the chamber, not of your run, and every geometry check
+below depends on it. The worked numbers that follow are for a <span class="math notranslate nohighlight">\(3.0\ \text{m}\)</span>
+range — redo them with the number you measured.</p>
+</div>
+<div class="depth docutils container">
+<p>The chamber does for you what the absorber block did on a bench range, and
+more of it: the specular floor, wall and ceiling bounces are all absorbed
+rather than aimed away, which is why the chamber’s contribution shows up in
+your data as a <em>floor</em> rather than as a ripple you can locate. It does not
+make the range longer. The far-field criteria below are geometry, and no
+amount of absorber changes them.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-is-the-range-far-enough">
+<div class="wrap docutils container">
+<p class="rubric">Is the Range Far Enough?</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+D_\text{AUT} &amp;= \sqrt{0.24^2 + 0.17^2} = 0.294\ \text{m} \\
+2D^2/\lambda &amp;= 1.41\ \text{m}, \quad 5D = 1.47\ \text{m}, \quad 10\lambda = 1.22\ \text{m}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Use the aperture <strong>diagonal</strong>, not a side.</p></li>
+<li><p>The binding criterion here is <span class="math notranslate nohighlight">\(5D\)</span>, not <span class="math notranslate nohighlight">\(2D^2/\lambda\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The <strong>reference</strong> horn is the bigger antenna: <span class="math notranslate nohighlight">\(D = 0.422\ \text{m}\)</span>, so it needs <span class="math notranslate nohighlight">\(2.91\ \text{m}\)</span>.</p></li>
+<li><p>At <span class="math notranslate nohighlight">\(3.0\ \text{m}\)</span> that clears by 3%.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Run all three criteria on both antennas, not just <span class="math notranslate nohighlight">\(2D^2/\lambda\)</span> on the AUT.
+For a physically small antenna the aperture-phase rule is often not the one
+that decides, and here it is not. The reference sizes the range, and a 3%
+margin is the correct statement of where you stand: the gain comparison is the
+measurement sitting closest to the edge of the far field, and that belongs in
+your report.</p>
+</div>
+<div class="depth docutils container">
+<p>Both antennas must be in each other’s far field, and both must see the same
+illumination. Set the heights with a tape, not by eye. A 5 cm height mismatch
+over a 3 m range is a 1° pointing error, which is small — but it is a <em>bias</em>,
+and biases do not average out over repeated sweeps.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-procedure-set-the-sweep">
+<div class="wrap docutils container">
+<p class="rubric">Procedure — Set the Sweep</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple">
+<li><p><strong>VNA</strong> section: start, stop, <strong>Points</strong>, <strong>IF BW</strong>, <strong>Power</strong>.</p></li>
+<li><p><strong>Parameter: S21</strong> — source on port 1, AUT on port 2.</p></li>
+<li><p>Log all five before anything else.</p></li>
+</ol>
+</div>
+<div class="present callout docutils container">
+<p>Read the <strong>cal / uncal</strong> pill. An uncalibrated run is data, never an accident.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>If you are calibrating today, the wizard’s <strong>Calibration</strong> dropdown wants the
+<strong>2-port</strong> option: a pattern is a transmission measurement, and one-port
+correction would leave the through path uncorrected. Setting the sweep is the
+first step because everything else depends on it: a calibration belongs to a
+sweep, and changing span, points, IF
+bandwidth or power afterwards leaves the instrument interpolating a correction
+across a span it never measured. The panel says so when you do it — it flags
+the mismatch and the log warns again at the start of the run.</p>
+</div>
+<div class="depth docutils container">
+<p>Two of those five numbers are yours to argue about. <strong>Points</strong> sets how finely
+you resolve frequency: 101 across <span class="math notranslate nohighlight">\(2\)</span> to <span class="math notranslate nohighlight">\(3\ \text{GHz}\)</span> is a 10 MHz grid,
+which is plenty for a horn and far too coarse for a narrowband element.
+<strong>IF bandwidth</strong> is the dynamic-range knob — narrowing it lowers the noise
+floor by about 10 dB per decade and costs you sweep time on every one of your
+angles, which is where a 72-angle run turns into a long one. Power is the
+other floor knob and the one with a limit: the amplifier chain and the
+receiver both have to stay linear.</p>
+<p>The <strong>Calibrate…</strong> button opens a wizard, not a calibration. Running one means
+somebody walks into the chamber, unmates the horn and the AUT from the cable
+ends, mates the calibration module across them, and comes back out — so the
+modal states the sweep it will calibrate at, asks <strong>which reference plane</strong>
+you are calibrating, takes an acknowledgement, and reminds you to put the
+antennas back. That dropdown is Lesson 9’s reference-plane argument turned
+into a required field: nothing in the data afterwards distinguishes the cable
+ends from the instrument’s front panel, and the difference is every dB of
+cable loss in your pattern.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-procedure-peak-up-and-define-zero">
+<div class="wrap docutils container">
+<p class="rubric">Procedure — Peak Up and Define Zero</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="4">
+<li><p>Jog <span class="math notranslate nohighlight">\(\pm 1^\circ\)</span> and <span class="math notranslate nohighlight">\(\pm 10^\circ\)</span>, taking a <strong>Sweep</strong> each time, until <span class="math notranslate nohighlight">\(\vert S_{21} \vert\)</span> peaks.</p></li>
+<li><p>Press <strong>Define here as 0°</strong>.</p></li>
+</ol>
+</div>
+<div class="present callout docutils container">
+<p>Every number you extract afterwards is measured from that zero. Set it once,
+and do not touch it again.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Peak on the frequency you care about, not on the broadest part of the band:
+set the Sweep tab’s <strong>Marker</strong> there and watch that one number as you jog.</p>
+</div>
+<div class="depth docutils container">
+<p>Nothing on this dashboard shows a live trace while the tower is standing
+still. The VNA tab draws the sweep at the last <em>measured</em> angle, which during
+a scan is a running picture and between scans is history — so peaking up is
+jog, capture, read, repeat. Capture <strong>S11 + S21</strong> while you do it and the
+same two sweeps tell you the antenna is still matched and the link is still
+there.</p>
+<p>That is also your through check. Two minutes of it before you start is worth
+the time: a peak 20 dB lower than last period means a cable, a connector or a
+horn, and finding that out now costs two minutes rather than the length of a
+180-angle scan.</p>
+<p>Defining zero does not move anything — it renames where the axis is standing.
+The run file records both the angle the software commanded and the angle the
+card reported, and the difference between those two columns is your
+positioning error, available afterwards without any extra work. If they
+disagree by more than a small fraction of your step size, say so in the report
+rather than quietly using the commanded column.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-procedure-the-angle-grid">
+<div class="wrap docutils container">
+<p class="rubric">Procedure — The Angle Grid</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="6">
+<li><p><strong>From</strong> <span class="math notranslate nohighlight">\(0^\circ\)</span>, <strong>To</strong> <span class="math notranslate nohighlight">\(355^\circ\)</span>, <strong>Step</strong> <span class="math notranslate nohighlight">\(2^\circ\)</span>.</p></li>
+<li><p>The hint under the grid reads back the angle count. Check it.</p></li>
+</ol>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Step <span class="math notranslate nohighlight">\(\le\)</span> HPBW/5 — but sidelobes are narrower than the beam.</p></li>
+<li><p>A <span class="math notranslate nohighlight">\(40^\circ\)</span> beam allows <span class="math notranslate nohighlight">\(8^\circ\)</span>. Take <span class="math notranslate nohighlight">\(2^\circ\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Coarse steps do not just add noise; they systematically miss peaks and nulls,
+and a sidelobe you stepped over is a sidelobe you cannot report. The cost is
+time: the axis spends far longer moving than the VNA spends sweeping, so the
+angle count, not the point count, is what sets the length of your period.</p>
+</div>
+<div class="depth docutils container">
+<p>A full circle asked for as 0 to 360 would measure the start angle twice, so
+the grid stops one step short — 0 to 355 in <span class="math notranslate nohighlight">\(5^\circ\)</span> is 72 angles, and 0 to
+358 in <span class="math notranslate nohighlight">\(2^\circ\)</span> is 180. Going all the way round is worth the time on this
+rig: the back half of the pattern is where the front-to-back ratio lives, and
+a <span class="math notranslate nohighlight">\(\pm 180^\circ\)</span> cut taken as two halves has a seam in it.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-procedure-measure-your-floor">
+<div class="wrap docutils container">
+<p class="rubric">Procedure — Measure Your Floor</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="8">
+<li><p>Unmate the AUT and terminate the cable end in <span class="math notranslate nohighlight">\(50\ \Omega\)</span>.</p></li>
+<li><p><strong>Sweep</strong> tab, <strong>Capture: S11 + S21</strong>. Press <strong>Sweep</strong>, and <strong>Export</strong> it.</p></li>
+</ol>
+</div>
+<div class="present callout docutils container">
+<p>That capture is the credibility of your whole data set. Take it before you
+scan.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Take it at the settings you are about to scan with, and not at whatever the
+panel happened to be holding. What the <span class="math notranslate nohighlight">\(S_{21}\)</span> trace records is everything
+that reaches port 2 when the antenna is not connected: receiver noise, and
+whatever leaks around the chamber through the cables. That is your instrument
+floor, and the exported file is the evidence of it.</p>
+</div>
+<div class="depth docutils container">
+<p>The capture menu has no <span class="math notranslate nohighlight">\(S_{21}\)</span>-only entry — the four options are all four,
+<span class="math notranslate nohighlight">\(S_{11}\)</span> only, <span class="math notranslate nohighlight">\(S_{11} + S_{21}\)</span>, and <span class="math notranslate nohighlight">\(S_{22}\)</span> only — so the pair costs two
+sweeps, and the second one hands you the terminated port’s own reflection as a
+free check that the termination is actually a termination.</p>
+<p>There are two floors here and Lesson 9 named both. The instrument floor is the
+one you just measured. The chamber contributes the other, and you cannot
+measure it this way: with the AUT unmated nothing radiates, so the stray field
+has nothing to scatter. It shows up instead in the back half of a real cut, as
+a level that will not go deeper no matter how much you narrow the IF
+bandwidth. Whichever of the two is higher is the one you actually have.</p>
+<p>Narrowing the IF bandwidth by a decade is the cheapest 10 dB in the building
+and is worth doing once as an experiment: take the floor run at two settings
+and watch it drop. Do it <em>before</em> you calibrate, because changing the IF
+bandwidth is exactly the change the calibration panel will warn you about.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-procedure-the-four-scans">
+<div class="wrap docutils container">
+<p class="rubric">Procedure — The Four Scans</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="10">
+<li><p><strong>E-plane cut.</strong> Name the run for what it is.</p></li>
+<li><p><strong>H-plane cut</strong>, by rotating both antennas <span class="math notranslate nohighlight">\(90^\circ\)</span>.</p></li>
+<li><p><strong>Repeat one cut.</strong> The disagreement <em>is</em> your repeatability.</p></li>
+<li><p><strong>Gain comparison</strong>: mount the reference horn. Change nothing else.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Two scans of the same cut that disagree by 1 dB have measured your uncertainty
+directly, which is far more reliable than propagating catalog tolerances. On
+step 13, “nothing else” means it: same sweep, same cables, same zero, same
+calibration.</p>
+</div>
+<div class="depth docutils container">
+<p>Name every run in the <strong>Output</strong> section before you start it. Left empty the
+service stamps the date and time, which is enough to keep the runs apart and
+useless for telling you which is which a week later. <code class="docutils literal notranslate"><span class="pre">l11_eplane_aut</span></code>,
+<code class="docutils literal notranslate"><span class="pre">l11_eplane_repeat</span></code>, <code class="docutils literal notranslate"><span class="pre">l11_hplane_aut</span></code>, <code class="docutils literal notranslate"><span class="pre">l11_ref_horn</span></code> costs you four seconds
+each and is the difference between a reduction session and an archaeology
+session. Anything in the <strong>Stored runs</strong> list reloads straight back into the
+plots, so a run you named is a run you can still use.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-procedure-polarization">
+<div class="wrap docutils container">
+<p class="rubric">Procedure — Polarization</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="14">
+<li><p>Reinstall the AUT and rotate the <strong>source</strong> <span class="math notranslate nohighlight">\(90^\circ\)</span> about the range axis. Re-scan.</p></li>
+</ol>
+</div>
+<div class="present callout docutils container">
+<p>Rotate the source, not the AUT. Rotating the AUT would change the cut plane
+and the polarization at once, and you could not separate the two.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>That scan is your cross-pol pattern, and it is the last acquisition of the
+period. Everything after this frame is reduction, and you can do it away from
+the chamber.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-reduction-one-scan-every-frequency">
+<div class="wrap docutils container">
+<p class="rubric">Reduction — One Scan, Every Frequency</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Each angle stores the <strong>whole sweep</strong>, not one number.</p></li>
+<li><p>The <strong>Cut freq</strong> selector replots the same run at any frequency in the span.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pattern.csv</span></code> is long format: angle, frequency, real, imaginary, dB, phase.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A pattern is a function of frequency, and this is where that stops being a
+sentence and starts being a slider. Step the cut frequency across the band and
+watch the beam narrow and the sidelobe structure move. Quote the frequency on
+every plot you produce; a cut without one is not a measurement of anything.</p>
+</div>
+<div class="depth docutils container">
+<p>The file gives you more than the dashboard plots. Both angle columns are
+there, so positioning error is recoverable; the real and imaginary parts are
+there, so phase is too, which matters in Module 3 when the thing you are
+measuring is an array and the interesting quantity is the phase across it.
+Reduce it in Python, one <code class="docutils literal notranslate"><span class="pre">csv</span></code> read and a reshape — the grid is
+angles <span class="math notranslate nohighlight">\(\times\)</span> frequencies and it is complete, with every angle present at
+every frequency.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-reduction-normalize-first">
+<div class="wrap docutils container">
+<p class="rubric">Reduction — Normalize First</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Subtract the peak from every sample.</p></li>
+<li><p>Cable loss, source gain, and range loss all drop out.</p></li>
+<li><p>Plot <strong>polar dB</strong> for shape, <strong>rectangular dB</strong> for values.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p>Never plot pattern data linear. A <span class="math notranslate nohighlight">\(-13\ \text{dB}\)</span> sidelobe is 5% of peak and
+disappears.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The dashboard’s <strong>Normalize</strong> toggle does this on screen for you. Do it again
+in your own reduction rather than trusting the screenshot, because the number
+you subtracted is one of the things your report has to state.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-reduction-four-numbers-from-the-shape">
+<div class="wrap docutils container">
+<p class="rubric">Reduction — Four Numbers from the Shape</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>Read it as</p></th>
+<th class="head text-left"><p>Sanity</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>HPBW</p></td>
+<td class="text-left"><p>the <span class="math notranslate nohighlight">\(-3\)</span> dB crossings</p></td>
+<td class="text-left"><p>vs. <span class="math notranslate nohighlight">\(26000/(\theta_E \theta_H)\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>First sidelobe</p></td>
+<td class="text-left"><p>first lobe past the null</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-13\)</span> to <span class="math notranslate nohighlight">\(-25\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Front-to-back</p></td>
+<td class="text-left"><p>peak minus <span class="math notranslate nohighlight">\(180^\circ\)</span></p></td>
+<td class="text-left"><p>15 to 25 dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Null depth</p></td>
+<td class="text-left"><p>minimum between lobes</p></td>
+<td class="text-left"><p>floor-limited</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Interpolate between samples for the <span class="math notranslate nohighlight">\(-3\ \text{dB}\)</span> crossings. Snapping to the
+nearest grid point throws away most of the precision your <span class="math notranslate nohighlight">\(2^\circ\)</span> step
+bought you.</p>
+</div>
+<div class="depth docutils container">
+<p>Worked example, one E-plane cut. The peak reads <span class="math notranslate nohighlight">\(-35.6\ \text{dB}\)</span> at
+<span class="math notranslate nohighlight">\(0^\circ\)</span>, so the <span class="math notranslate nohighlight">\(-3\ \text{dB}\)</span> level is <span class="math notranslate nohighlight">\(-38.6\ \text{dB}\)</span>. Interpolating
+between samples puts the crossings at <span class="math notranslate nohighlight">\(-19.8^\circ\)</span> and <span class="math notranslate nohighlight">\(+20.2^\circ\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\theta_\text{HP} = 20.2 - (-19.8) = 40.0^\circ\]</div>
+<p>The first sidelobe peaks at <span class="math notranslate nohighlight">\(-51.4\ \text{dB}\)</span>, and the level at <span class="math notranslate nohighlight">\(180^\circ\)</span>
+is <span class="math notranslate nohighlight">\(-54.0\ \text{dB}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\text{SLL} &amp;= -51.4 - (-35.6) = -15.8\ \text{dB} \\
+\text{F/B} &amp;= -35.6 - (-54.0) = 18.4\ \text{dB}
+\end{aligned}\end{split}\]</div>
+<p>Cross-check the beamwidths against the gain: with an H-plane HPBW of
+<span class="math notranslate nohighlight">\(42^\circ\)</span>, <span class="math notranslate nohighlight">\(26000/(40 \times 42) = 15.5\)</span>, or <span class="math notranslate nohighlight">\(11.9\ \text{dBi}\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-reduction-gain-and-xpd">
+<div class="wrap docutils container">
+<p class="rubric">Reduction — Gain and XPD</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+G_{\text{AUT}} &amp;= G_{\text{ref}} + \left( P_{\text{AUT}} - P_{\text{ref}} \right) = 15.0 - 3.2 = 11.8\ \text{dBi} \\
+\text{XPD} &amp;= -35.6 - (-59.9) = 24.3\ \text{dB}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Gain by comparison is one subtraction in dB.</p></li>
+<li><p>A healthy linear antenna gives 20 to 30 dB of XPD.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Both levels are peak <span class="math notranslate nohighlight">\(\vert S_{21}\vert\)</span> in dB at the same cut frequency, one
+run each, and everything the two runs have in common subtracts out. The
+aperture formula with <span class="math notranslate nohighlight">\(\eta_{\text{ap}} = 0.5\)</span> predicts <span class="math notranslate nohighlight">\(12.3\ \text{dBi}\)</span>, so
+the measurement is 0.5 dB low — and the reference horn’s own calibration is
+good to about 0.5 dB. That is <em>agreement</em>, and your report should state it as
+agreement rather than assign it a physical cause. Below about 15 dB of XPD,
+check the mount alignment before blaming the antenna.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-reduction-against-the-simulation">
+<div class="wrap docutils container">
+<p class="rubric">Reduction — Against the Simulation</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Simulation</strong> section: import the pattern CSV your solver wrote in Lesson 8.</p></li>
+<li><p>Both traces are normalized to their own peak, so dBi and <span class="math notranslate nohighlight">\(S_{21}\)</span> compare.</p></li>
+<li><p><strong>Rotate</strong> takes out a known mount offset. The footer reports <strong>RMS deviation</strong>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This is the first time in the course that a predicted pattern and a measured
+one are on the same axes, and the number in the footer is the whole argument
+of Module 2 in one readout. Import your own model, not somebody else’s.</p>
+</div>
+<div class="depth docutils container">
+<p>The comparison is clamped 30 dB below the peak before differencing, which
+matters more than it sounds. Nulls are where a model and a measurement
+disagree most and where the disagreement means least — a null one degree off
+its predicted angle differences to tens of dB against a neighboring lobe.
+Un-clamped, the RMS would report null alignment rather than pattern agreement.</p>
+<p>Parsing happens in the browser, so nothing is uploaded and the service never
+learns a comparison is running. If the RMS comes back large, check <strong>Rotate</strong>
+before you check the physics: a mount offset is a rigid shift of the whole
+curve and it is the most common reason a good model disagrees with a good
+measurement.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-how-much-of-your-pattern-is-real">
+<div class="wrap docutils container">
+<p class="rubric">How Much of Your Pattern Is Real</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/pattern-floor.html"
+        width="100%" height="488"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="A true radiation pattern compared with the same pattern measured through a receiver with a finite noise floor">
+</iframe>
+</div>
+</div>
+<div class="depth docutils container">
+<p>Work your own numbers first: a peak at <span class="math notranslate nohighlight">\(-35.6\ \text{dB}\)</span> against a floor of
+<span class="math notranslate nohighlight">\(-78\ \text{dB}\)</span> on the terminated run is a <strong>dynamic range of 42.4 dB</strong>. Any
+feature within a few dB of <span class="math notranslate nohighlight">\(-42.4\ \text{dB}\)</span> relative is a measurement of
+your receiver, not of your antenna.</p>
+<p>The widget makes the effect concrete. It takes a known pattern — a uniform
+<span class="math notranslate nohighlight">\(8\lambda\)</span> aperture, first sidelobe exactly <span class="math notranslate nohighlight">\(-13.3\ \text{dB}\)</span>, HPBW
+<span class="math notranslate nohighlight">\(6.3^\circ\)</span> — and “measures” it through a receiver with the dynamic range you
+choose. Drag the floor from <span class="math notranslate nohighlight">\(-45\ \text{dB}\)</span> up toward <span class="math notranslate nohighlight">\(-15\ \text{dB}\)</span> and
+watch the three readouts separately: the beamwidth barely moves, the first
+sidelobe creeps upward by about a dB as the noise adds to it, and the nulls
+stop dead at the floor. Each readout shows the measured figure against the
+true one, and the null cell reads true / measured in that order. Then switch
+averaging from 1 sweep to 16 and notice what averaging does and does not buy
+you.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-to-trust-in-order">
+<div class="wrap docutils container">
+<p class="rubric">What to Trust, in Order</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Beamwidth</strong> is measured 3 dB down, far above any practical floor. Trust it first.</p></li>
+<li><p><strong>Sidelobes</strong> are conditional. Quote the floor next to every one.</p></li>
+<li><p><strong>Nulls</strong> measure your floor. Report them as lower bounds.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A lobe 10 dB above the floor reads about 0.4 dB high; a lobe 3 dB above the
+floor reads 3 dB high and is nearly meaningless. Averaging smooths the fuzz —
+incoherent power averaging shrinks the <em>variance</em> like <span class="math notranslate nohighlight">\(1/N\)</span> — but it leaves
+the mean noise power exactly where it was. To lower the floor you need more
+power, a narrower IF bandwidth, or a quieter receiver.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-rest-of-the-uncertainty-budget">
+<div class="wrap docutils container">
+<p class="rubric">The Rest of the Uncertainty Budget</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Source</p></th>
+<th class="head text-left"><p>Looks like</p></th>
+<th class="head text-left"><p>Size</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Chamber stray field</p></td>
+<td class="text-left"><p>fills the back lobes</p></td>
+<td class="text-left"><p>sets the floor</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Cable flex</p></td>
+<td class="text-left"><p>drift between scans</p></td>
+<td class="text-left"><p>0.2 to 0.5 dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Misalignment</p></td>
+<td class="text-left"><p>peak low, HPBW biased</p></td>
+<td class="text-left"><p>0.2 dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Reference tolerance</p></td>
+<td class="text-left"><p>offset on every gain</p></td>
+<td class="text-left"><p>0.3 to 0.5 dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Each leaves a recognizable signature. Cable flex is the one this rig makes
+easy to check: repeat a cut without touching anything and difference the two,
+and what you see is drift plus noise and nothing else.</p>
+</div>
+<div class="depth docutils container">
+<p>A fifth entry belongs in the budget on any run the panel flags, and it is not
+a small one. A calibration is only meaningful at the sweep it was taken at,
+and a run set up at a different span, point count, IF bandwidth or power is
+flagged in the VNA section and warned about in the log. Correction
+interpolated across a span it never measured is a plausible-looking answer of
+unknown quality, and “the dashboard warned me and I scanned anyway” is not a
+sentence you want in a report.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-deliverables">
+<div class="wrap docutils container">
+<p class="rubric">Deliverables</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple">
+<li><p><strong>Two principal-plane cuts</strong>, polar dB, normalized, labeled.</p></li>
+<li><p><strong>An extracted table</strong>, with an uncertainty on every row.</p></li>
+<li><p><strong>Your floor</strong>, as a level and a dynamic range.</p></li>
+<li><p><strong>A comparison against prediction</strong>, discrepancies named.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth docutils container">
+<p>In detail:</p>
+<ol class="arabic simple">
+<li><p><strong>Two principal-plane cuts</strong> (E-plane and H-plane), plotted in polar dB,
+normalized to the peak, with the angle convention and the <strong>cut frequency</strong>
+labeled on each.</p></li>
+<li><p><strong>An extracted table</strong> — HPBW, first sidelobe level, front-to-back ratio,
+gain, XPD — with an <strong>uncertainty estimate on every row</strong>. Your repeated
+scan from step 12 is the basis for most of them.</p></li>
+<li><p><strong>Your measured floor</strong>, stated as a level and as a dynamic range, with one
+sentence per table row saying whether that number clears the floor and by
+how much.</p></li>
+<li><p><strong>A comparison against prediction</strong> — your Lesson 8 model overlaid, with
+the RMS deviation quoted, plus the aperture-formula gain and the
+<span class="math notranslate nohighlight">\(26000/(\theta_E \theta_H)\)</span> beamwidth cross-check — with every discrepancy
+larger than your uncertainty named and explained.</p></li>
+</ol>
+<p>Quote the <strong>run names</strong> for every figure, and state the calibration and mode
+your runs were taken under; both are written into each run’s <code class="docutils literal notranslate"><span class="pre">meta.json</span></code> and
+neither is recoverable afterwards from the pattern alone. A 2 dB gap with a
+named cause is a better report than a 0.2 dB gap with no discussion.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-the-range-card">
+<div class="wrap docutils container">
+<p class="rubric">The Range Card</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>At the chamber</p></th>
+<th class="head text-left"><p>What to do</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Check geometry</p></td>
+<td class="text-left"><p>all three criteria, both antennas</p></td>
+<td class="text-left"><p>the reference sizes the range</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Set the sweep</p></td>
+<td class="text-left"><p>span, points, IF BW, power, <span class="math notranslate nohighlight">\(S_{21}\)</span></p></td>
+<td class="text-left"><p>log all five before calibrating</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Check the pill</p></td>
+<td class="text-left"><p>cal or uncal, before the scan</p></td>
+<td class="text-left"><p>an uncal run is data, not an accident</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Peak up</p></td>
+<td class="text-left"><p>jog, then define here as <span class="math notranslate nohighlight">\(0^\circ\)</span></p></td>
+<td class="text-left"><p>every number is measured from it</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Angle step</p></td>
+<td class="text-left"><p>resolve beam <em>and</em> sidelobes</p></td>
+<td class="text-left"><p>step <span class="math notranslate nohighlight">\(\le\)</span> HPBW/5, use <span class="math notranslate nohighlight">\(2^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Floor</p></td>
+<td class="text-left"><p>terminate port 2, one capture</p></td>
+<td class="text-left"><p>42 dB dynamic range on this rig</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Normalize</p></td>
+<td class="text-left"><p>dB down from the peak</p></td>
+<td class="text-left"><p>never plot linear</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>HPBW</p></td>
+<td class="text-left"><p>interpolate the <span class="math notranslate nohighlight">\(-3\)</span> dB crossings</p></td>
+<td class="text-left"><p>robust, trust it first</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Gain</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(G_{\text{ref}} + (P_{\text{AUT}} - P_{\text{ref}})\)</span></p></td>
+<td class="text-left"><p>accuracy = reference + alignment</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>XPD</p></td>
+<td class="text-left"><p>co-pol minus cross-pol at boresight</p></td>
+<td class="text-left"><p>20 to 30 dB is healthy</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../practice/ECE444_L11_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a class="doc-link doc-key" href="../../practice/ECE444_L11_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where This Is Going</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>This lab is the <strong>dress rehearsal</strong> for the midterm, due 2 Oct.</p></li>
+<li><p>Same chamber, same extraction, same uncertainty discussion.</p></li>
+<li><p>With a written analysis, and no procedure handed to you.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Mistakes made today carry no grade penalty; the same mistakes in the graded
+project do. You now have nine lessons of chamber access before the project is
+due, which is the reason the measurement block was pulled forward to sit here.</p>
+</div>
+<div class="depth docutils container">
+<p>Lessons 12 to 14 go back to antenna families — loops and monopoles, patches
+and slots and horns, reflectors and Yagis — and every gain figure in them is
+now a claim you know how to check. Several of those antennas are defensible
+choices for your project, and you will be reading their published patterns
+with a measurer’s eye rather than a reader’s.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module02/L11-measurement-lab-patterns"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

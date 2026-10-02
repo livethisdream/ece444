@@ -1,0 +1,1581 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L9 - Measurement Theory &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L10-measurement-lab-sparams/index.html">L10 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L11-measurement-lab-patterns/index.html">L11 — Measurement Lab 2 — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module03/L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l9-measurement-theory">
+<h1>L9 - Measurement Theory<a class="headerlink" href="#l9-measurement-theory" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Measurement Theory</h1>
+<div class="title-rule"></div>
+<p>A range is a plane-wave simulator, and a VNA measures one number.</p>
+<p>Lesson 9 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-slides">
+<div class="wrap docutils container">
+<p class="rubric">Slides</p>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L09-pattern-measurement-theory.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L09-pattern-measurement-theory.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L09-pattern-measurement-theory.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '5'">
+  <li>I can state what a valid pattern measurement requires — plane-wave illumination across the antenna under test — and turn that requirement into a minimum range length.</li>
+  <li>I can describe the far-field range types — outdoor, anechoic chamber, and compact range — and explain what absorber reflectivity and quiet-zone specifications actually control.</li>
+  <li>I can explain how near-field scanning plus a transform substitutes for an impossibly long range, and why that transform is the same Fourier relationship that produced the pattern in the first place.</li>
+  <li>I can measure gain by the comparison method against a standard gain horn, define the standard pattern cuts and polarization measurements, and state the conditions under which each is valid.</li>
+</ol>
+<div class="depth docutils container">
+<p>Lessons 7 and 8 gave you an antenna and a model of it. Every pattern in this
+course so far came out of an integral; none of them came off an instrument.
+This lesson is the theory that the next two lab periods stand on, and it runs
+the whole problem backwards: instead of computing a far field, you have to
+<em>build</em> one, and every rule that follows is a tolerance on how well you built
+it.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives-continued">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives, continued</p>
+<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '6'">
+  <li>I can explain what a vector network analyzer measures — the ratio of the returning wave to the outgoing wave — and translate that ratio into reflection coefficient, impedance, return loss, and VSWR.</li>
+  <li>I can explain what a short-open-load calibration removes, why the reference plane decides what the numbers mean, and what a one-port measurement can never tell me.</li>
+  <li>I can state how a receiver's noise floor bounds every quantity extracted from a measured pattern.</li>
+</ol>
+<div class="depth docutils container">
+<p>Two of those objectives belong to the radiated side of the antenna and two to
+its terminals, and the lesson treats them as one subject on purpose. They are
+the same question asked at two ports: how much of what an instrument reports
+is the antenna, and how much is the setup around it. You will answer the
+terminal half on a network analyzer in Lesson 10 and the radiated half on the
+range in Lesson 11.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-two-measurements-one-question">
+<div class="wrap docutils container">
+<p class="rubric">Two Measurements, One Question</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The <strong>pattern</strong>: turn the antenna in a plane wave. Lesson 11.</p></li>
+<li><p>The <strong>terminals</strong>: sweep <span class="math notranslate nohighlight">\(S_{11}\)</span> on a network analyzer. Lesson 10.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p>Nobody sells plane waves. A range simulates one, and its specifications are
+tolerances on that wave.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>An antenna measurement is two measurements, and this lesson is the theory
+behind both. The radiated half asks what the antenna does in every direction,
+and it runs on a range. The terminal half asks how much of the power you
+deliver actually gets in, and it runs on a vector network analyzer. The
+question underneath them is the same: how much of what the instrument reports
+is the antenna, and how much is the setup around it.</p>
+<p>Take the pattern first. Point a plane wave at the antenna from direction
+<span class="math notranslate nohighlight">\((\theta,\phi)\)</span>, record what comes out of the terminals, and repeat for every
+direction. Reciprocity says the receive pattern equals the transmit pattern,
+so we may run the measurement in whichever direction is convenient — and
+everyone runs it in receive, because it is easier to move a receiver than a
+transmitter. That is also why the antenna under test is the end that rotates
+in Lesson 11: you would rather not run transmit power through a rotary joint.</p>
+<p>The catch is the wave itself. What you can buy is a source antenna at a
+finite distance, and a finite distance means curvature.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-two-tolerances-not-one">
+<div class="wrap docutils container">
+<p class="rubric">Two Tolerances, Not One</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Amplitude taper</strong> comes from the source antenna’s pattern.</p></li>
+<li><p><strong>Phase curvature</strong> comes from geometry, and sets the range length.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p>A range source is a <strong>modest-gain</strong> horn on purpose: its beamwidth must be
+three to four times the angle the AUT subtends.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A plane wave is flat in amplitude and flat in phase across the aperture, and a
+real range violates both. Keeping the two apart matters because the fixes are
+unrelated: amplitude taper is cured by choosing a different source antenna,
+and phase curvature only by moving the source farther away or abandoning the
+far-field range altogether.</p>
+<p>The usual amplitude specification is under <span class="math notranslate nohighlight">\(0.25\ \text{dB}\)</span> of taper edge to
+edge. Seen from the source, the AUT subtends roughly <span class="math notranslate nohighlight">\(D/r\)</span>. If the source pattern
+rolls off across that angle, the AUT is illuminated more strongly in the
+middle than at the edges, and an unintended amplitude taper is an amplitude
+taper all the same. Lesson 24 shows exactly what one does to a pattern: it
+broadens the main beam and lowers the sidelobes. Measure through a tapered
+illumination and you report an antenna better behaved than the one on the
+positioner.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-2d-comes-from">
+<div class="wrap docutils container">
+<p class="rubric">Where 2D²/λ Comes From</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Delta \ell &amp;\approx \frac{(D/2)^2}{2r} = \frac{D^2}{8r} \\
+\Delta\phi_{\max} &amp;= k\ \Delta \ell = \frac{\pi D^2}{4 \lambda r} \ \le\ \frac{\pi}{8} \\
+r &amp;\ge \frac{2D^2}{\lambda}
+\end{aligned}\end{split}\]</div>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The <span class="math notranslate nohighlight">\(\pi/8\)</span> is a <strong>decision</strong>, not a derivation.</p></li>
+<li><p>A <span class="math notranslate nohighlight">\(0.5\ \text{m}\)</span> dish at <span class="math notranslate nohighlight">\(10\ \text{GHz}\)</span> needs a 55-foot room.</p></li>
+<li><p>A <span class="math notranslate nohighlight">\(3\ \text{m}\)</span> terminal at <span class="math notranslate nohighlight">\(30\ \text{GHz}\)</span> needs <span class="math notranslate nohighlight">\(1800\ \text{m}\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Take a source a distance <span class="math notranslate nohighlight">\(r\)</span> away on boresight. The path to a point <span class="math notranslate nohighlight">\(x\)</span> off
+the aperture center is <span class="math notranslate nohighlight">\(\sqrt{r^2 + x^2} \approx r + x^2/2r\)</span>, so the extra path
+at the edge, where <span class="math notranslate nohighlight">\(x = D/2\)</span>, is <span class="math notranslate nohighlight">\(\Delta\ell\)</span> above. Multiply by
+<span class="math notranslate nohighlight">\(k = 2\pi/\lambda\)</span> to turn path into phase, then allow the edge to lag the
+center by at most an eighth of a wavelength. The criterion you have quoted
+since Lesson 5 is <span class="math notranslate nohighlight">\(22.5^\circ\)</span> of edge phase error, written as a distance, and
+every other far-field number in this course descends from that one tolerance.</p>
+<p>Nobody builds a 1.8 km anechoic chamber, and that is the reason compact ranges
+and near-field scanners exist. The first number is not exotic either:
+seventeen meters is an ordinary requirement for an ordinary antenna, and it is
+already a large and expensive room.</p>
+</div>
+<div class="depth docutils container">
+<p>The arithmetic, in full. For the reflector, <span class="math notranslate nohighlight">\(\lambda = c/f = 0.03\ \text{m}\)</span>
+and <span class="math notranslate nohighlight">\(D/\lambda = 16.7\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[r \ge \frac{2D^2}{\lambda} = \frac{2(0.5)^2}{0.03} = 16.7\ \text{m}.\]</div>
+<p>For the satellite terminal at <span class="math notranslate nohighlight">\(30\ \text{GHz}\)</span>, <span class="math notranslate nohighlight">\(\lambda = 0.01\ \text{m}\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[r \ge \frac{2(3)^2}{0.01} = 1800\ \text{m}.\]</div>
+</div>
+<div class="depth docutils container">
+<p>The <span class="math notranslate nohighlight">\(2D^2/\lambda\)</span> criterion assumes <span class="math notranslate nohighlight">\(D\)</span> is comfortably larger than <span class="math notranslate nohighlight">\(\lambda\)</span>.
+For a small antenna — a dipole, a patch — the far field is set instead by the
+<span class="math notranslate nohighlight">\(r \gg \lambda\)</span> condition from Lesson 5, usually taken as <span class="math notranslate nohighlight">\(r \ge 10\lambda\)</span>.
+Use whichever distance is larger. Lesson 11’s bench range is exactly this
+case, and there the binding criterion turns out to be neither of them.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-a-short-range-is-a-defocused-lens">
+<div class="wrap docutils container">
+<p class="rubric">A Short Range Is a Defocused Lens</p>
+<p>Suppose you build the range too short anyway. The quadratic phase error
+<span class="math notranslate nohighlight">\(\Delta\phi(x) = \pi x^2 / \lambda r\)</span> rides on the aperture illumination, and
+the measured pattern is the same radiation integral from Lesson 6 with that
+extra phase inside it:</p>
+<div class="math notranslate nohighlight">
+\[F_\text{meas}(\theta) \propto \int_{-D/2}^{D/2} E(x)\ e^{-j \pi x^2 / \lambda r}\ e^{+jkx\sin\theta}\ dx\]</div>
+<p>A quadratic phase across an aperture is a <strong>defocus</strong>, exactly like a lens at
+the wrong distance. What matters is not that the pattern degrades but <em>which</em>
+features degrade, and in what order.</p>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-the-nulls-fill-first">
+<div class="wrap docutils container">
+<p class="rubric">The Nulls Fill First</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/range-phase-error.html"
+        width="100%" height="507"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Quadratic phase error from a finite range length, and the pattern it produces compared with the true far-field pattern">
+</iframe>
+</div>
+</div>
+<div class="depth docutils container">
+<p>Slide the range in and watch. The left panel shows the phase error across the
+aperture against the <span class="math notranslate nohighlight">\(22.5^\circ\)</span> tolerance line; the right panel overlays the
+true far-field pattern (dashed) on what the range actually measures (solid).
+Notice that the nulls fill and the first sidelobe merges into a shoulder long
+before the main beam does anything at all — and that everything snaps clean
+right around <span class="math notranslate nohighlight">\(r = 2D^2/\lambda\)</span>, where the edge error reads exactly
+<span class="math notranslate nohighlight">\(22.5^\circ\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-2d-actually-delivers">
+<div class="wrap docutils container">
+<p class="rubric">What 2D²/λ Actually Delivers</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(r \div 2D^2/\lambda\)</span></p></th>
+<th class="head text-left"><p>Edge error</p></th>
+<th class="head text-left"><p>Null fills to</p></th>
+<th class="head text-left"><p>HPBW error</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>2</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(11.3^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-28\)</span> dB</p></td>
+<td class="text-left"><p>none</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>1</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(22.5^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-22\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(+0.3\%\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>1/2</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(45^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-16\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(+1.3\%\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>1/4</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(90^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-9.5\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(+6\%\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="present callout docutils container">
+<p>This is a <strong>main-beam and gain</strong> criterion, not a sidelobe one.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Read the top two rows carefully, because they state what the rule delivers.
+At <span class="math notranslate nohighlight">\(r = 2D^2/\lambda\)</span> you have not measured the true pattern. You have
+measured one whose first sidelobe reads <span class="math notranslate nohighlight">\(-12.9\)</span> dB instead of the textbook
+<span class="math notranslate nohighlight">\(-13.3\)</span> dB and whose nulls are twenty decibels shallow. What you <em>have</em>
+measured correctly is the main beam, the beamwidth, and the gain. If you need
+a <span class="math notranslate nohighlight">\(-40\)</span> dB sidelobe or a null depth you can defend, go to <span class="math notranslate nohighlight">\(5D^2/\lambda\)</span> or
+further, or stop using a far-field range altogether.</p>
+<p>This failure mode is dangerous because it is quiet. A pattern measured at a
+quarter of the far-field distance still looks like a pattern: about the right
+main-beam width, sidelobes present, smooth. It is wrong only in the places you
+care about most.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-four-ways-to-make-the-plane-wave">
+<div class="wrap docutils container">
+<p class="rubric">Four Ways to Make the Plane Wave</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L09-range-types.svg"
+     alt="Four schematics: an elevated outdoor range with two towers and a ground bounce aimed under the antenna; an anechoic chamber lined with absorber around a quiet zone; a compact range where an offset reflector collimates the feed; and a near-field scanner sampling amplitude and phase on a grid and transforming to the far field."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Outdoor</strong>: brute distance.</p></li>
+<li><p><strong>Anechoic</strong>: distance plus absorber.</p></li>
+<li><p><strong>Compact</strong>: a reflector collimates.</p></li>
+<li><p><strong>Near-field</strong>: a transform, not distance.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The first three are <strong>far-field ranges</strong>: they physically deliver an
+approximate plane wave to the AUT, so all three still owe the full
+<span class="math notranslate nohighlight">\(2D^2/\lambda\)</span> or the optics that stand in for it. The fourth changes the
+question entirely.</p>
+<p>One thing holds each of them back, and the four have nothing to do with one
+another. Weather and the ground bounce limit an outdoor range. Absorber
+reflectivity limits a chamber, which is what the next two frames are about.
+Diffraction off the reflector’s rim and feed spillover limit a compact range.
+Phase stability, the probe, and the hours the scan takes limit a near-field
+measurement.</p>
+</div>
+<div class="depth docutils container">
+<p>Distance is free outdoors, so the oldest ranges are two towers, or a tower and
+a hillside. Two variants matter. An <strong>elevated range</strong>, the one drawn above,
+puts both antennas high enough and uses a directive enough source that the
+specular ground bounce passes under the AUT. A <strong>ground-reflection range</strong>
+does the opposite: it chooses the geometry so the direct and ground-reflected
+rays arrive <em>in phase</em> at the AUT, deliberately using the ground as part of
+the illumination. Both approaches work. Neither offers security, weather
+protection, or freedom from interference, which is why most modern
+measurement happens indoors.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-choosing-a-range">
+<div class="wrap docutils container">
+<p class="rubric">Choosing a Range</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Range</p></th>
+<th class="head text-left"><p>Choose it when</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Outdoor</p></td>
+<td class="text-left"><p>The antenna is too big for a room</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Anechoic</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2D^2/\lambda\)</span> fits indoors</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Compact</p></td>
+<td class="text-left"><p>It does not</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Near-field</p></td>
+<td class="text-left"><p>Nulls and low sidelobes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="present callout docutils container">
+<p>A far-field range fills nulls in, so a <span class="math notranslate nohighlight">\(-40\)</span> dB sidelobe is near-field work.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Compute <span class="math notranslate nohighlight">\(2D^2/\lambda\)</span> first, because it decides the rest. A meter-class
+antenna at a few gigahertz needs tens of meters, which is an ordinary chamber
+and where most work belongs: the room is shielded, the schedule does not
+depend on the weather, and the quiet zone is a specified, measured number. An
+antenna too large for any room you can afford goes outdoors, where the
+distance is free and everything else is not.</p>
+<p>When the far-field distance is out of reach, there are two ways out and they
+suit different antennas. A <strong>compact range</strong> keeps the measurement in the
+time domain you are used to — turn the antenna, record the pattern — and
+suits a directive antenna whose quiet-zone requirement is a meter or two,
+because the reflector has to be roughly twice that. A <strong>near-field scan</strong>
+handles anything, including a low-gain antenna that needs full spherical
+coverage, and it is the only option when the sidelobes and nulls have to be
+right, since it never approximates the plane wave in the first place. What it
+costs is time and complexity: hours to days of scanning, a probe that has to
+be characterized, and phase stability throughout.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-the-absorber-does">
+<div class="wrap docutils container">
+<p class="rubric">What the Absorber Does</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Pyramids give a gradual transition into a lossy medium.</p></li>
+<li><p>Good absorber reaches <span class="math notranslate nohighlight">\(-40\)</span> to <span class="math notranslate nohighlight">\(-50\)</span> dB at <strong>normal</strong> incidence.</p></li>
+<li><p>It degrades at grazing incidence — the side walls.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p>A chamber is never “no reflections”. It is <strong>reflections below a stated
+level</strong>.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Absorber is carbon-loaded foam, cut into pyramids, and it is specified by
+reflectivity in dB. Performance scales with pyramid height <em>in wavelengths</em>,
+so low-frequency absorber gets enormous: a chamber rated to 200 MHz has
+meter-long spikes on the walls.</p>
+<p>Which reflectivity level you need is set by the lowest signal you intend to
+believe, not by the main beam. A reflection 40 dB below the main beam is
+nothing next to the main beam and a great deal next to a sidelobe thirty
+decibels down, because both levels are referenced to the same peak.</p>
+</div>
+<div class="depth docutils container">
+<p>The arithmetic, for a reader who wants it. Work in amplitudes, because
+amplitudes are what add. A stray 40 dB below the peak has amplitude
+<span class="math notranslate nohighlight">\(s = 10^{-40/20} = 0.0100\)</span>, and a sidelobe 30 dB below the peak has amplitude
+<span class="math notranslate nohighlight">\(a = 10^{-30/20} = 0.0316\)</span>, so <span class="math notranslate nohighlight">\(s/a = 0.316\)</span>: the stray is a third of the
+sidelobe, 10 dB below it rather than 40. As the positioner turns, the
+geometry runs the stray’s phase through every value and the two add as
+vectors, so the reading sweeps from <span class="math notranslate nohighlight">\(a - s\)</span> to <span class="math notranslate nohighlight">\(a + s\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[a + s = 0.0416 = -27.6\ \text{dB}, \qquad a - s = 0.0216 = -33.3\ \text{dB}.\]</div>
+<p><img src="../../viz/img/L09-stray-ripple.svg"
+     alt="Left, a phasor diagram: a stray signal adds to the wanted signal at any phase, so the measured amplitude lies anywhere on a circle around the true value. Right, the resulting error interval in decibels at three true levels."
+     style="max-width: 460px; width: 100%; display: block; margin: 1em auto;"></p>
+<p>Against a true level of <span class="math notranslate nohighlight">\(-30\)</span> dB that is <span class="math notranslate nohighlight">\(+2.4\)</span> dB at one extreme and
+<span class="math notranslate nohighlight">\(-3.3\)</span> dB at the other, 5.7 dB from trough to peak. The pair is asymmetric
+because the decibel is a logarithm. The same stray moves the main beam by
+<span class="math notranslate nohighlight">\(\pm 0.09\)</span> dB, which nobody notices.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>True level</p></th>
+<th class="head text-left"><p>Stray is below it by</p></th>
+<th class="head text-left"><p>Reading runs from</p></th>
+<th class="head text-left"><p>to</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Main beam, <span class="math notranslate nohighlight">\(0\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(40\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(+0.09\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-0.09\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Sidelobe, <span class="math notranslate nohighlight">\(-20\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(20\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(+0.83\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-0.92\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Sidelobe, <span class="math notranslate nohighlight">\(-30\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(10\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(+2.39\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-3.30\)</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Run the argument backwards and it stops being a warning and becomes a
+measurement. The peak-to-trough ripple of a wanted signal contaminated by a
+single stray is</p>
+<div class="math notranslate nohighlight">
+\[\text{ripple (dB)} = 20\log_{10}\frac{1 + r}{1 - r}, \qquad r = s/a,\]</div>
+<p>so recording the ripple gives <span class="math notranslate nohighlight">\(r\)</span>, and <span class="math notranslate nohighlight">\(r\)</span> gives the stray level. That is the
+free-space VSWR probe sweep the next frame describes.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-quiet-zone">
+<div class="wrap docutils container">
+<p class="rubric">The Quiet Zone</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The deliverable of a chamber is the <strong>quiet zone</strong>, not the room.</p></li>
+<li><p>Quoted as a size, a level, and a band: “1.2 m at <span class="math notranslate nohighlight">\(-45\)</span> dB, 2 to 18 GHz”.</p></li>
+<li><p><strong>The AUT must fit inside it.</strong></p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The quiet zone is a specified volume, usually a sphere or cylinder centered on
+the positioner, inside which the stray field is guaranteed below the
+reflectivity spec. It is measured rather than assumed, typically by dragging a
+probe through the volume and recording the ripple.</p>
+<p>An antenna that overhangs the quiet zone is being measured in a room rather
+than in a chamber, and no amount of care with the rest of the setup recovers
+that. It is the first thing to check when a chamber measurement disagrees with
+a simulation for no reason you can name.</p>
+<p>The quiet zone is also the specification most often assumed rather than
+looked up. It is quoted as three things at once — a volume, a level, and a
+band — and an antenna can sit inside the volume while the measurement runs
+outside the band. Read all three off the chamber’s documentation, measure the
+AUT’s largest dimension against the first, and know which one you were working
+inside before you write down a sidelobe level.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-compact-ranges">
+<div class="wrap docutils container">
+<p class="rubric">Compact Ranges</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A feed at a paraboloid’s focus: every path is one length, so the wave leaves flat.</p></li>
+<li><p>Optics instead of distance.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The quiet zone is <strong>50 to 60%</strong> of the reflector.</p></li>
+<li><p>Hard rims diffract, so edges are <strong>serrated</strong>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This is Lesson 14’s reflector geometry doing a different job. There the
+collimated wave was aimed at a satellite; here it only has to reach the far
+side of the chamber. Two costs come with it. A meter of quiet zone needs close
+to a two-meter reflector, built to a fraction of a wavelength — so the
+reflector is a precision instrument in its own right. And a hard edge acts as
+a line source sitting right inside your test volume, which is why the rims are
+shaped to scatter the edge contribution away from it.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-near-field-scanning">
+<div class="wrap docutils container">
+<p class="rubric">Near-Field Scanning</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The 1.8 km range is impossible, so change the measurement.</p></li>
+<li><p>Sample the <strong>complex</strong> field a few wavelengths out, then transform.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p>Lesson 6 proved this. The far field is the <strong>Fourier transform</strong> of the
+source, and transforms are invertible.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Put a small probe a few wavelengths in front of the antenna and record
+amplitude and phase at a grid of points on a surface. Because the field
+sampled on a surface enclosing the antenna determines the field everywhere
+outside it, that grid is enough.</p>
+<p>Near-field to far-field transformation is not a new physical principle. It is
+Lesson 6’s relationship run in the other direction, and three practical
+consequences follow immediately from that fact alone.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-three-rules-for-a-near-field-scan">
+<div class="wrap docutils container">
+<p class="rubric">Three Rules for a Near-Field Scan</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Phase is not optional.</strong> Magnitude does not determine a transform.</p></li>
+<li><p><strong>Sample at <span class="math notranslate nohighlight">\(\lambda/2\)</span> or finer</strong>, or it aliases.</p></li>
+<li><p><strong>Stand off 3 to 5 <span class="math notranslate nohighlight">\(\lambda\)</span></strong> from the aperture.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\theta_\text{max} = \arctan\frac{(L - D)/2}{d}\]</div>
+<p>Scan length <span class="math notranslate nohighlight">\(L\)</span>, aperture <span class="math notranslate nohighlight">\(D\)</span>, standoff <span class="math notranslate nohighlight">\(d\)</span>. Past <span class="math notranslate nohighlight">\(\theta_\text{max}\)</span> the
+pattern is truncated.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>All three are rules for the scan itself, and each one comes straight out of
+the transform. Phase is why a near-field range is built around a vector
+network analyzer and phase-stable cables, and why the probe position has to
+be known to a small fraction of a wavelength. Sampling at <span class="math notranslate nohighlight">\(\lambda/2\)</span> is the
+same Nyquist argument as Lesson 6’s spatial spectrum: undersample, and the
+transform produces lobes in the far-field pattern that the antenna does not
+have.</p>
+<p>The third rule is the one with a number attached, and it answers “how far out
+is far enough” in two parts. The <strong>standoff</strong> <span class="math notranslate nohighlight">\(d\)</span> is how far the probe sits
+in front of the aperture, and three to five wavelengths is the usual choice:
+far enough that the evanescent part of the reactive near field has died away
+and the probe is not loading the antenna, close enough that the scan plane
+does not have to be enormous.</p>
+<p>The <strong>extent</strong> <span class="math notranslate nohighlight">\(L\)</span> is the other part, and it is what decides how much of the
+pattern you get. Energy leaving the aperture edge at angle <span class="math notranslate nohighlight">\(\theta\)</span> lands on
+the scan plane a distance <span class="math notranslate nohighlight">\(d\tan\theta\)</span> further out, so a plane of length <span class="math notranslate nohighlight">\(L\)</span>
+captures everything inside the <span class="math notranslate nohighlight">\(\theta_\text{max}\)</span> above and nothing outside
+it. Past that angle the transform is working from data it does not have, and
+the pattern it returns is truncated rather than measured. Doubling the angle
+you want means roughly doubling the plane, which is why a planar scan is
+quoted with a valid angle beside it and why it says nothing whatever about
+back lobes.</p>
+</div>
+<div class="depth docutils container">
+<p>Worked example. A <span class="math notranslate nohighlight">\(0.6\ \text{m}\)</span> aperture scanned at <span class="math notranslate nohighlight">\(d = 0.15\ \text{m}\)</span>
+with a <span class="math notranslate nohighlight">\(1.5\ \text{m}\)</span> plane gives</p>
+<div class="math notranslate nohighlight">
+\[\theta_\text{max} = \arctan\frac{(1.5 - 0.6)/2}{0.15} = \arctan 3.0 = 71.6^\circ.\]</div>
+<p>Halve the plane to <span class="math notranslate nohighlight">\(1.0\ \text{m}\)</span> and it falls to <span class="math notranslate nohighlight">\(53.1^\circ\)</span>. The pattern
+outside that cone is not measured, however clean the data inside it looks.</p>
+</div>
+<div class="depth docutils container">
+<p>One more step exists in a real near-field system: <strong>probe compensation</strong>. The
+probe has its own pattern, and what it records is the true field weighted by
+that pattern. Dividing it back out is standard, well understood, and firmly
+beyond this course. Know that it happens; do not derive it.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-the-three-scan-surfaces">
+<div class="wrap docutils container">
+<p class="rubric">The Three Scan Surfaces</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Scan surface</p></th>
+<th class="head text-left"><p>Best suited to</p></th>
+<th class="head text-left"><p>Pattern coverage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Planar</p></td>
+<td class="text-left"><p>High-gain, directive antennas</p></td>
+<td class="text-left"><p>A forward cone, roughly <span class="math notranslate nohighlight">\(\pm 60^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Cylindrical</p></td>
+<td class="text-left"><p>Fan beams, sector antennas</p></td>
+<td class="text-left"><p>Full azimuth, limited elevation</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Spherical</p></td>
+<td class="text-left"><p>Low-gain antennas, anything</p></td>
+<td class="text-left"><p>The complete sphere</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The choice is a trade of time against coverage. A planar scan of a large
+reflector is a few hours; the spherical scan that would resolve its back lobes
+is a few days, and for a high-gain antenna those back lobes are usually not
+the number anyone is paying for.</p>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-gain-by-comparison">
+<div class="wrap docutils container">
+<p class="rubric">Gain by Comparison</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[G_\text{AUT} = G_\text{SGH} + \left( P_\text{AUT} - P_\text{SGH} \right)\]</div>
+<ul class="simple">
+<li><p>Record the AUT, swap in a <strong>standard gain horn</strong>, subtract.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Transmit power, source gain, range, and cable loss are the <strong>same in both</strong>, so they subtract out.</p></li>
+<li><p>The horn’s calibrated gain, <span class="math notranslate nohighlight">\(\pm 0.3\)</span> dB, sets the uncertainty on the answer.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Write Friis for each measurement and the algebra is immediate: every term but
+the two gains appears identically in both, so the difference of the two
+received powers is the difference of the two gains. This is the method you
+will use in Lesson 11 and again for the midterm.</p>
+<p>The horn is the largest term in the result and the only absolute number in
+the setup. Its calibration certificate gives gain against frequency, usually
+good to two or three tenths of a decibel, and that uncertainty passes
+straight through to <span class="math notranslate nohighlight">\(G_\text{AUT}\)</span> — there is no averaging it away, so
+measure at the frequency the certificate lists and interpolate carefully
+between listed points.</p>
+<p>What the subtraction removes is narrower than “everything we do not know”. It
+removes the terms that are <em>identical in the two measurements</em>: transmit
+power, source gain, range, cable loss, and the room. Anything that changes
+between them stays in the answer. A cable bumped during the swap, a mount
+that does not put the two antennas in the same place, a polarization
+alignment redone by eye — each of those is a real gain error, and each is
+why Lesson 11 has you record the horn and the AUT back to back without
+touching anything else.</p>
+<p>None of this is an argument for leaving the setup uncharacterized. The
+three-antenna method on the next page measures absolute gain with no
+calibrated antenna at all, and that is how the horn’s own certificate was
+produced. The absolute number matters because a link budget needs it: a
+<span class="math notranslate nohighlight">\(3\ \text{dB}\)</span> gain error is a factor of two in received power and a factor of
+<span class="math notranslate nohighlight">\(\sqrt{2}\)</span> in range.</p>
+</div>
+<div class="depth docutils container">
+<p>Worked example. At <span class="math notranslate nohighlight">\(9.4\ \text{GHz}\)</span>, a standard gain horn with a calibrated
+gain of <span class="math notranslate nohighlight">\(16.8\ \text{dBi}\)</span> receives <span class="math notranslate nohighlight">\(-38.6\ \text{dBm}\)</span>. Replacing it with the
+AUT, everything else untouched, gives <span class="math notranslate nohighlight">\(-33.1\ \text{dBm}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Delta P &amp;= -33.1 - (-38.6) = +5.5\ \text{dB} \\
+G_\text{AUT} &amp;= 16.8 + 5.5 = 22.3\ \text{dBi}
+\end{aligned}\end{split}\]</div>
+<p>The AUT collects 5.5 dB more power than the standard, so it has 5.5 dB more
+gain. That is the entire method.</p>
+</div>
+<div class="depth docutils container">
+<p>The conditions on validity are worth naming, because violating one silently
+biases the answer: same position, same polarization, same frequency, and both
+antennas either well matched or their mismatch losses corrected. If the AUT
+has a poor match, the power you measure is low for a reason that has nothing
+to do with gain — which is precisely why Lesson 10 comes before Lesson 11.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-when-no-standard-exists">
+<div class="wrap docutils container">
+<p class="rubric">When No Standard Exists</p>
+<div class="math notranslate nohighlight">
+\[\left( P_r - P_t \right)_{\text{dB}} = G_t + G_r + 20\log_{10}\!\left( \frac{\lambda}{4\pi R} \right)\]</div>
+<p>Working from Friis with no calibrated antenna at all, <strong>two identical
+antennas</strong> give <span class="math notranslate nohighlight">\(G_t = G_r = G\)</span>, so one measurement is enough. If the antennas
+are not identical, use <strong>three</strong> and measure all three pairs. Let <span class="math notranslate nohighlight">\(M_{AB}\)</span> be
+the measured pair sum with the path term already removed, so
+<span class="math notranslate nohighlight">\(M_{AB} = G_A + G_B\)</span>, and likewise for the other two. Three equations, three
+unknowns:</p>
+<div class="math notranslate nohighlight">
+\[G_A = \tfrac{1}{2}\left( M_{AB} + M_{AC} - M_{BC} \right)\]</div>
+<p>The standard gain horn itself had to be calibrated somehow, and this is how.
+No calibrated antenna appears anywhere in the three-antenna procedure, which
+is what makes it the primary standard rather than a convenience.</p>
+<div class="depth docutils container">
+<p>Worked example, two identical horns facing each other at <span class="math notranslate nohighlight">\(R = 20\ \text{m}\)</span>,
+at <span class="math notranslate nohighlight">\(6\ \text{GHz}\)</span> so <span class="math notranslate nohighlight">\(\lambda = 0.05\ \text{m}\)</span>. With <span class="math notranslate nohighlight">\(P_t = 0\ \text{dBm}\)</span>
+you measure <span class="math notranslate nohighlight">\(P_r = -40.0\ \text{dBm}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+20\log_{10}\!\left( \frac{\lambda}{4\pi R} \right) &amp;= 20\log_{10}(1.989\times10^{-4}) = -74.0\ \text{dB} \\
+2G &amp;= (P_r - P_t) - (-74.0) = -40.0 + 74.0 = 34.0\ \text{dB} \\
+G &amp;= 17.0\ \text{dBi}
+\end{aligned}\end{split}\]</div>
+<p>Check the range as well: for a horn of this gain, <span class="math notranslate nohighlight">\(D\)</span> is roughly
+<span class="math notranslate nohighlight">\(0.2\ \text{m}\)</span>, so <span class="math notranslate nohighlight">\(2D^2/\lambda = 1.6\ \text{m}\)</span>. Twenty meters is
+comfortably far field. In <span class="math notranslate nohighlight">\(M_{AB} = G_A + G_B\)</span> the path term has already been
+removed, which is the only bookkeeping the three-antenna version adds.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-cuts-planes-and-polarization">
+<div class="wrap docutils container">
+<p class="rubric">Cuts, Planes, and Polarization</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A <strong>great-circle cut</strong> holds <span class="math notranslate nohighlight">\(\phi\)</span> and sweeps <span class="math notranslate nohighlight">\(\theta\)</span>.</p></li>
+<li><p>The <strong>E-plane</strong> contains boresight and the antenna’s polarization; the <strong>H-plane</strong> is perpendicular.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Aligned is <strong>co-pol</strong>; rotated <span class="math notranslate nohighlight">\(90^\circ\)</span> is <strong>cross-pol</strong>. Run both.</p></li>
+<li><p>Circular polarization has no E-plane. Use <strong>axial ratio</strong>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A complete pattern is a function on a sphere, and measuring the whole sphere
+finely is expensive, so we take slices. A <strong>conical cut</strong> does the opposite
+of a great-circle one — holds <span class="math notranslate nohighlight">\(\theta\)</span> fixed and sweeps <span class="math notranslate nohighlight">\(\phi\)</span>, tracing a ring
+at a constant angle off boresight — and is used for tracking antennas and for
+checking rotational symmetry. Two principal cuts fully describe a well-behaved
+pencil beam and say nothing at all about the diagonal planes, where the
+sidelobes of a rectangular aperture frequently sit.</p>
+<p>The two principal planes are named for the antenna’s polarization, not for
+anything about the range. The <strong>E-plane</strong> is the plane that contains boresight
+and the direction the antenna’s electric field points: for a vertical dipole
+it is any vertical plane through the wire, and for a rectangular horn it is
+the plane through the narrow dimension. The <strong>H-plane</strong> contains boresight and
+is perpendicular to the E-plane, which is the same as saying it contains the
+magnetic field. Fix the polarization and the two planes are fixed with it.</p>
+<p>That definition needs the antenna to have one polarization direction, so it
+applies to a linearly polarized antenna and to nothing else. A circularly
+polarized antenna has a field that rotates once per RF cycle, so there is no
+plane holding <strong>E</strong>, and “E-plane” is meaningless for it. Measure two
+orthogonal great-circle cuts instead — commonly called the <span class="math notranslate nohighlight">\(\phi = 0^\circ\)</span>
+and <span class="math notranslate nohighlight">\(\phi = 90^\circ\)</span> cuts, since there is nothing else to name them after —
+and quote <strong>axial ratio</strong> against angle in place of a cross-pol pattern.</p>
+<p>Cross-pol is the power a linearly polarized antenna radiates into the
+polarization it is supposed to reject. Measure it by rotating the source
+antenna <span class="math notranslate nohighlight">\(90^\circ\)</span> about the line of sight and repeating the cut. It is worse
+off-axis than on, which is why it is quoted as a pattern rather than as a
+single number, and a well-built linear antenna sits 20 to 30 dB below its
+co-pol level on boresight.</p>
+</div>
+<div class="depth docutils container">
+<p>For a circularly polarized antenna there is a faster method than two cuts.
+Spin the linear source continuously while sweeping the cut — <strong>spinning
+linear</strong> — and the recorded pattern comes back as a band rather than a line.
+The peak-to-trough width of that band, in dB, <em>is</em> the axial ratio from
+Lesson 3, and a perfectly circular antenna gives a band of zero width.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-how-much-of-a-pattern-is-real">
+<div class="wrap docutils container">
+<p class="rubric">How Much of a Pattern Is Real</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L09-dynamic-range.svg"
+     alt="A measured antenna pattern drawn against the antenna's true pattern. The two agree through the main beam and the first sidelobes; below the receiver's forty-two decibel noise floor the measured trace flattens onto the floor, so the nulls read the floor rather than the antenna."
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Two floors: the <strong>chamber’s</strong> stray field and the <strong>receiver’s</strong> noise.</p></li>
+<li><p>Whichever is higher sets your <strong>dynamic range</strong>, peak minus floor.</p></li>
+<li><p>A null can never read below it, whatever the antenna does.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A pattern measurement has a floor, and it comes from two places. The chamber
+contributes one: the absorber’s reflectivity is a stated level, and below it
+what you record is the room. The receiver contributes the other, its own
+noise, added in power to everything it records. Whichever is higher is the
+one you have, and on a good range it is usually the chamber.</p>
+<p>Either way the number is the same kind of number, and you measure it rather
+than assume it. Take the peak, switch the source off, take the floor, and
+their difference is your <strong>dynamic range</strong> — 42 dB in the figure above.</p>
+<p>Everything above that floor by a comfortable margin is the antenna. The main
+beam is at the top of the range, the half-power points are 3 dB down, and the
+first sidelobe of a uniform aperture is 13 dB down, so all three sit 29 dB or
+more clear of a 42 dB floor and none of them is in question. The nulls are
+the opposite case. A true null goes to <span class="math notranslate nohighlight">\(-\infty\)</span>, the floor does not, and the
+measured trace simply flattens onto the floor wherever the antenna’s own
+level drops beneath it. The depth you read at a null is the depth of your
+receiver, not of your antenna.</p>
+<p>That is what “limited by our 42 dB dynamic range” means: the measurement
+cannot resolve anything more than 42 dB below the peak, so every number
+extracted from that region is a bound rather than a value. Write the bound.
+“At least 25 dB deep, limited by our 42 dB dynamic range” is a defensible
+sentence; “25 dB deep” claims something the instrument never showed you.</p>
+<p>This is the payoff of the chamber specifications earlier in the lesson.
+Absorber reflectivity and the quiet-zone level are a floor quoted to you on
+paper; the receiver’s noise is a floor you measure on the day. Lesson 11 asks
+you to measure yours with the source switched off, and then to say, row by
+row, which of your extracted numbers clears it and by how much.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-a-vna-measures">
+<div class="wrap docutils container">
+<p class="rubric">What a VNA Measures</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[S_{11} = \frac{b_1}{a_1} = \Gamma\]</div>
+<ul class="simple">
+<li><p>The rest of the lesson is at the antenna’s <strong>terminals</strong>.</p></li>
+<li><p>An antenna is a <strong>one-port</strong> device: one connector, one wave out, one wave back.</p></li>
+<li><p>Both subscripts are 1. There is no port 2 in this measurement.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../slides/fig/L10-vna-block.svg"
+     alt="Block diagram of a one-port VNA: source, two directional couplers feeding a reference and a test receiver, and a ratio block producing S11."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Everything so far measured the antenna from a distance; the rest of this
+lesson stands at its terminals. There is one connector, one cable, and one
+complex number per frequency, and that number carries everything we have been
+predicting on paper since Lesson 4. Lesson 7 told us a half-wave dipole should
+sit near <span class="math notranslate nohighlight">\(73 + j42.5\ \Omega\)</span> and resonate slightly short of <span class="math notranslate nohighlight">\(\lambda/2\)</span>;
+Lesson 10 is where that prediction meets a real piece of wire.</p>
+<p>The block diagram is the whole instrument. A source sweeps frequency, one
+directional coupler samples the wave going out, a second samples the wave
+coming back, two receivers record both in magnitude <em>and</em> phase, and the
+instrument divides one by the other. Because both samples come from the same
+source, anything the source does wrong — drift, ripple, amplifier gain
+variation — divides out of that ratio. That is why a pocket NanoVNA and a
+bench instrument a thousand times more expensive agree on a well-calibrated
+one-port measurement to within a fraction of a dB.</p>
+<p>An antenna has one connector, so it is a <strong>one-port</strong> device and the diagram
+has one port in it. The double subscript on <span class="math notranslate nohighlight">\(S_{11}\)</span> is the general
+scattering-parameter convention, in which <span class="math notranslate nohighlight">\(S_{mn}\)</span> is the wave leaving port
+<span class="math notranslate nohighlight">\(m\)</span> for a wave incident on port <span class="math notranslate nohighlight">\(n\)</span>; with one port the only entry that exists
+is <span class="math notranslate nohighlight">\(S_{11}\)</span>, and it is the reflection at that port. A two-port measurement —
+<span class="math notranslate nohighlight">\(S_{21}\)</span>, insertion loss, a through standard — belongs to a filter or an
+amplifier, and to the pair of antennas in Lesson 11, not to the antenna on
+the bench in Lesson 10.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-four-names-for-one-number">
+<div class="wrap docutils container">
+<p class="rubric">Four Names for One Number</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>From <span class="math notranslate nohighlight">\(\Gamma\)</span></p></th>
+<th class="head text-left"><p>At VSWR <span class="math notranslate nohighlight">\(= 2\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\vert S_{11}\vert\)</span> (dB)</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(20\log_{10}\vert\Gamma\vert\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-9.5\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Return loss (dB)</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-20\log_{10}\vert\Gamma\vert\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(9.5\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>VSWR</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\((1 + \vert\Gamma\vert)/(1 - \vert\Gamma\vert)\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2.00\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Power reflected (%)</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(100\vert\Gamma\vert^2\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(11\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="present callout docutils container">
+<p>All four re-dress one complex number. The course bar is <strong>VSWR <span class="math notranslate nohighlight">\(\le 2\)</span></strong>,
+or <span class="math notranslate nohighlight">\(11\%\)</span> of the power reflected.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>All four appear on instrument menus, and all four are computed from the single
+complex number the analyzer measured. Nothing else is being measured. Watch
+the units, because they are not the same down the column: the first two rows
+are decibels and differ only in sign, the third is a dimensionless ratio, and
+the fourth is a percentage of power.</p>
+<p>The fourth row is the one to carry into a design conversation.
+<span class="math notranslate nohighlight">\(\vert\Gamma\vert\)</span> is an amplitude ratio, so the fraction of power reflected
+is <span class="math notranslate nohighlight">\(\vert\Gamma\vert^2\)</span>, which at the course bar is 11%.</p>
+<p><strong>The course bar is VSWR <span class="math notranslate nohighlight">\(\le 2\)</span></strong>, from Lesson 4, and every bandwidth in
+this course is quoted against it. Lesson 3 is where that rule came from: an
+impedance bandwidth means nothing until you say what bar you measured it at.
+Say VSWR, every time.</p>
+<p>The table above is what you need when somebody else does not. Datasheets and
+papers quote return loss, <span class="math notranslate nohighlight">\(\vert S_{11}\vert\)</span>, and VSWR interchangeably, and
+all three are the same measurement; convert whatever you are handed back to
+VSWR before you compare it to anything of ours.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-impedance-from-the-ratio">
+<div class="wrap docutils container">
+<p class="rubric">Impedance from the Ratio</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[Z_L = Z_0\ \frac{1 + \Gamma}{1 - \Gamma}, \qquad Z_0 = 50\ \Omega\]</div>
+<div class="math notranslate nohighlight">
+\[\Gamma = 0.28\ \angle{-140^\circ} \ \Longrightarrow\ Z_L = 30.6 - j11.9\ \Omega\]</div>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\vert\Gamma\vert = 0.28\)</span> is VSWR <span class="math notranslate nohighlight">\(1.78\)</span>: it clears the VSWR <span class="math notranslate nohighlight">\(\le 2\)</span> bar.</p></li>
+<li><p><span class="math notranslate nohighlight">\(R = 31\ \Omega\)</span>, against the <span class="math notranslate nohighlight">\(\approx 70\ \Omega\)</span> a resonant dipole shows.</p></li>
+<li><p><span class="math notranslate nohighlight">\(X = -12\ \Omega\)</span> is capacitive, so the element is short. Trim it <strong>longer</strong>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><span class="math notranslate nohighlight">\(\Gamma\)</span> and <span class="math notranslate nohighlight">\(Z_L\)</span> carry the same information, and the formula above converts
+one to the other. The analyzer measures <span class="math notranslate nohighlight">\(\Gamma\)</span> and displays <span class="math notranslate nohighlight">\(Z_L\)</span>, which is
+convenient, because <span class="math notranslate nohighlight">\(\Gamma\)</span> tells you whether the antenna is acceptable and
+<span class="math notranslate nohighlight">\(Z_L\)</span> tells you what to do about it.</p>
+<p>Take the marker reading above one line at a time. The magnitude,
+<span class="math notranslate nohighlight">\(\vert\Gamma\vert = 0.28\)</span>, is a VSWR of <span class="math notranslate nohighlight">\(1.78\)</span>, so this antenna clears the
+VSWR <span class="math notranslate nohighlight">\(\le 2\)</span> bar of the previous frame; on that number alone we would ship
+it. The real part of the impedance, <span class="math notranslate nohighlight">\(31\ \Omega\)</span>, is well under the
+<span class="math notranslate nohighlight">\(70\ \Omega\)</span> or so a resonant dipole shows, which says some of the power
+reaching the antenna is going somewhere other than radiation — a lossy
+balun, a nearby conductor, or a poor ground. And the reactance is negative,
+<span class="math notranslate nohighlight">\(-12\ \Omega\)</span>, which is the actionable part.</p>
+<p>A negative reactance is capacitive, and a dipole is capacitive below its
+resonance and inductive above it. Reading <span class="math notranslate nohighlight">\(X &lt; 0\)</span> therefore means resonance
+sits <em>above</em> the frequency we are looking at, and the element is
+electrically short. Lengthening it moves resonance down toward the marker.
+That inference — sign of <span class="math notranslate nohighlight">\(X\)</span>, then which way to trim — is most of what
+Lesson 10 asks you to do at the bench.</p>
+</div>
+<div class="depth docutils container">
+<p>The arithmetic in full. Rectangular form first:</p>
+<div class="math notranslate nohighlight">
+\[\Gamma = 0.28\left[\cos(-140^\circ) + j\sin(-140^\circ)\right] = -0.215 - j0.180\]</div>
+<p>Magnitude quantities come straight off <span class="math notranslate nohighlight">\(\vert\Gamma\vert = 0.28\)</span>:</p>
+<p><span class="math notranslate nohighlight">\(\text{VSWR} = \frac{1.28}{0.72} = 1.78, \qquad \vert S_{11}\vert = 20\log_{10}(0.28) = -11.1\ \text{dB}\)</span>$</p>
+<p>Then the impedance:</p>
+<div class="math notranslate nohighlight">
+\[Z_L = 50\ \frac{1 + \Gamma}{1 - \Gamma} = 50\ \frac{0.785 - j0.180}{1.215 + j0.180} = 30.6 - j11.9\ \Omega\]</div>
+</div>
+<div class="depth docutils container">
+<p>The same conversion is worth running on the textbook numbers. A perfect
+half-wave dipole at <span class="math notranslate nohighlight">\(73 + j42.5\ \Omega\)</span> gives <span class="math notranslate nohighlight">\(\vert\Gamma\vert = 0.371\)</span>, a
+VSWR of <span class="math notranslate nohighlight">\(2.18\)</span> — it <strong>fails</strong>. Shorten it to resonance, where it settles near
+<span class="math notranslate nohighlight">\(70\ \Omega\)</span> real, and VSWR drops to <span class="math notranslate nohighlight">\(1.40\)</span>. That <span class="math notranslate nohighlight">\(42.5\ \Omega\)</span> of reactance is the entire difference between
+a marginal antenna and a good one, and it is why nobody builds a dipole
+exactly <span class="math notranslate nohighlight">\(\lambda/2\)</span> long.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-calibration-three-error-terms-three-standards">
+<div class="wrap docutils container">
+<p class="rubric">Calibration: Three Error Terms, Three Standards</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Three unknowns — <strong>directivity</strong>, <strong>source match</strong>, <strong>tracking</strong> — need three knowns.</p></li>
+<li><p>Short, open, and load at every frequency is a <strong>SOL calibration</strong>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Standard</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\Gamma\)</span></p></th>
+<th class="head text-left"><p>Pins down</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Short</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-1\)</span></p></td>
+<td class="text-left"><p>one extreme</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Open</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(+1\)</span></p></td>
+<td class="text-left"><p>the other</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Load</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td class="text-left"><p>the floor</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><strong>Calibration</strong> is what this frame is about, and it is the first thing you do
+at the analyzer in Lesson 10. Three error terms dominate a one-port
+measurement. <strong>Directivity</strong> is the
+coupler leaking a little of the outgoing wave into the receiver that is
+supposed to see only the returning one, so the VNA reads a reflection even
+from a perfect load. <strong>Source match</strong> is the test port not being exactly
+<span class="math notranslate nohighlight">\(50\ \Omega\)</span>, so energy the antenna sends back is partly re-reflected at the
+port and sent to the antenna again. <strong>Tracking</strong> is the reference path and the
+test path having different gain and different phase, both varying with
+frequency.</p>
+<p>Three unknowns need three knowns, and that is all a <strong>short-open-load</strong>
+calibration is. You measure all three, the instrument solves three equations
+at every point in the sweep, and from then on it subtracts its own error
+before showing you anything. Two-port work adds a <strong>through</strong> standard — hence
+SOLT — but a one-port antenna measurement needs only the three.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-reference-plane">
+<div class="wrap docutils container">
+<p class="rubric">The Reference Plane</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../slides/fig/L10-cal-planes.svg"
+     alt="Reference planes: A at the VNA port, B at the end of the test cable where SOL is performed, C at the antenna terminals. The pigtail between B and C rotates the measured phase."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present callout docutils container">
+<p>Calibration teaches the instrument <strong>where zero is</strong>, and zero is wherever you
+attached the standards.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Calibration does not make the instrument more accurate. The plane where you
+attached the standards becomes the plane where <span class="math notranslate nohighlight">\(S_{11} = 0\)</span> means “perfectly
+matched”, and everything on the far side of it is part of your device under
+test whether you meant it to be or not.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-pigtail-problem">
+<div class="wrap docutils container">
+<p class="rubric">The Pigtail Problem</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\Gamma_\text{antenna} = \Gamma_\text{measured}\ e^{+j2\beta\ell},
+\qquad \Delta\phi = 2\beta\ell = 2\ (360^\circ)\ \frac{\ell}{\lambda_g}\]</div>
+<ul class="simple">
+<li><p>10 cm of RG-58 at 915 MHz rotates the trace <span class="math notranslate nohighlight">\(333^\circ\)</span>.</p></li>
+<li><p>Loss is negligible, so the dB plot still looks right.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Fix 1</strong>: calibrate <strong>to</strong> the antenna connector.</p></li>
+<li><p><strong>Fix 2</strong>: port extension applies that exponential. Phase only.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>With <span class="math notranslate nohighlight">\(\lambda_g = c\ v_f / f\)</span>, that pigtail is <span class="math notranslate nohighlight">\(0.46\lambda_g\)</span> long — nearly a
+full rotation of the Smith chart, and the impedance read off it is not the
+antenna’s in any useful sense. The wave traverses the extra length twice, out
+and back, which is where the factor of two comes from.</p>
+<p>The equation above is the whole correction, and it is worth seeing rather than
+taking on faith. A lossless line of length <span class="math notranslate nohighlight">\(\ell\)</span> multiplies a wave by
+<span class="math notranslate nohighlight">\(e^{-j\beta\ell}\)</span> on the way out and again on the way back, so the reflection
+seen at the near end is the reflection at the far end times <span class="math notranslate nohighlight">\(e^{-j2\beta\ell}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\Gamma_\text{measured} = \Gamma_\text{antenna}\ e^{-j2\beta\ell}.\]</div>
+<p>The magnitude of that factor is 1, so <span class="math notranslate nohighlight">\(\vert S_{11}\vert\)</span> is untouched and the
+dB plot looks correct while the impedance is wrong. Multiply by the inverse,
+<span class="math notranslate nohighlight">\(e^{+j2\beta\ell}\)</span>, and the antenna’s own <span class="math notranslate nohighlight">\(\Gamma\)</span> comes back. <strong>Port
+extension</strong> is the instrument doing exactly that multiplication: you tell it
+<span class="math notranslate nohighlight">\(\ell\)</span> (or let it find <span class="math notranslate nohighlight">\(\ell\)</span> from an open), and it rotates every point in the
+sweep by <span class="math notranslate nohighlight">\(2\beta\ell\)</span>. Because the correction is a unit-magnitude phase term,
+it cannot undo loss and it cannot undo a real mismatch inside an adapter —
+those need the cal plane moved instead, which is Fix 1.</p>
+<p>At 990 MHz that same pigtail is exactly a half guided wavelength, <span class="math notranslate nohighlight">\(2\beta\ell\)</span>
+is a full <span class="math notranslate nohighlight">\(720^\circ\)</span>, and the impedance repeats — the one frequency where
+the uncorrected reading happens to be right, and a good illustration of why
+“it looked fine at one marker” is not a check.</p>
+</div>
+<div class="depth docutils container">
+<p>Always verify a calibration before you trust it. Reconnect the load standard
+and look: <span class="math notranslate nohighlight">\(\vert S_{11}\vert\)</span> should sit below <span class="math notranslate nohighlight">\(-30\)</span> dB across the whole
+sweep. If it does not, something moved, a connector is loose, or you swapped
+cables after calibrating. Re-do it. An unverified cal is an unmeasured
+antenna, and Lesson 10 makes the verification screenshot a deliverable for
+exactly that reason.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-reading-a-vna-sweep">
+<div class="wrap docutils container">
+<p class="rubric">Reading a VNA Sweep</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../slides/fig/L10-three-views.svg"
+     alt="The same antenna resonance shown two ways: a dip below minus ten decibels on a plot of the magnitude of S11 against frequency, with the minus-ten-decibel bandwidth marked, and the same sweep as a locus crossing the real axis inside the minus-ten-decibel circle on a Smith chart."
+     style="max-width: 660px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A <strong>dip</strong> marks a resonance.</p></li>
+<li><p>The <strong>depth</strong> says how well matched it is, not how well it radiates.</p></li>
+<li><p>The <strong>width</strong> where VSWR <span class="math notranslate nohighlight">\(\le 2\)</span> is the impedance bandwidth.</p></li>
+<li><p>Quote it in MHz <em>and</em> in percent.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This is what the sweep looks like on the instrument, and it is one
+measurement drawn twice. <span class="math notranslate nohighlight">\(\vert S_{11}\vert\)</span> against frequency is on the left
+and the same points are on the Smith chart on the right; the resonance is the
+dip on one plot and the real-axis crossing on the other, at the same
+frequency. Lesson 10 has you produce both of these for your own antenna.</p>
+<p>Read the bandwidth against <strong>VSWR <span class="math notranslate nohighlight">\(\le 2\)</span></strong>, which is the bar from Lesson 4
+and the one every number in this course is quoted against. The trace above is
+plotted in decibels, where that bar lands at <span class="math notranslate nohighlight">\(-9.5\)</span> dB; set the analyzer to
+VSWR format instead and the line is simply 2, which is the display to use in
+Lesson 10 when you measure your own.</p>
+<p>Fractional bandwidth is what lets us compare a 900 MHz antenna to a 2.4 GHz
+one, and it is the number with a sanity range attached: a thin-wire dipole
+lands between 3 and 10%. The trace above bottoms out at VSWR <span class="math notranslate nohighlight">\(1.40\)</span> and
+crosses VSWR 2 at 877 and 924 MHz, so
+<span class="math notranslate nohighlight">\(\text{BW} = 47\ \text{MHz}\)</span> on <span class="math notranslate nohighlight">\(f_0 = 900\ \text{MHz}\)</span>, or 5.2% — entirely
+believable. If you measure 1%, suspect the setup before the antenna; a
+resonant length of feed cable can manufacture a narrow dip that has nothing
+to do with the element.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-four-smith-chart-reading-skills">
+<div class="wrap docutils container">
+<p class="rubric">Four Smith-Chart Reading Skills</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Crosses the real axis</strong>: resonance. Left of center is <span class="math notranslate nohighlight">\(R &lt; 50\ \Omega\)</span>.</p></li>
+<li><p><strong>Inside the VSWR <span class="math notranslate nohighlight">\(=2\)</span> circle</strong>: the match bar, drawn.</p></li>
+<li><p>A <strong>loop</strong>: two resonances, often element plus feed.</p></li>
+<li><p>The <strong>whole trace rotating</strong>: your reference plane moved.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L09-smith-skills.svg"
+     alt="Four small Smith charts: a trace crossing the real axis left of center at resonance, a trace dipping inside the VSWR = 2 circle, a trace with a loop from two resonances, and the same trace rotated by a longer cable to the calibration plane"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>You met the Smith chart in ECE 343 as a graphical impedance calculator. Today
+you only need to <em>read</em> one: it is the complex <span class="math notranslate nohighlight">\(\Gamma\)</span> plane with a
+normalized-impedance grid on top, center <span class="math notranslate nohighlight">\(50\ \Omega\)</span>, left edge a short,
+right edge an open, upper half inductive and lower half capacitive. Those four
+skills cover almost everything you will see this semester, and you will
+rehearse them on a widget at the start of Lesson 10 before you read your own
+trace.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-one-port-cannot-tell-you">
+<div class="wrap docutils container">
+<p class="rubric">What One Port Cannot Tell You</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Solder a <span class="math notranslate nohighlight">\(50\ \Omega\)</span> resistor across the connector: VSWR <span class="math notranslate nohighlight">\(1.00\)</span>, marker dead center.</p></li>
+<li><p>A <strong>perfect</strong> match. It radiates <strong>nothing</strong>.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p><span class="math notranslate nohighlight">\(S_{11}\)</span> measures <strong>mismatch only</strong>. Efficiency needs a second, independent
+measurement.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This cuts both ways on the bench. A deep, wide dip is <em>necessary</em> for a good
+antenna, not <em>sufficient</em>, and an antenna with a mediocre <span class="math notranslate nohighlight">\(-8\)</span> dB match may
+still be the better radiator. It is also the reason the two labs come as a
+pair: Lesson 10 establishes that power went in, and only Lesson 11 establishes
+that it came back out, and in which direction.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-the-environment-is-part-of-your-antenna">
+<div class="wrap docutils container">
+<p class="rubric">The Environment Is Part of Your Antenna</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Perturbation</p></th>
+<th class="head text-left"><p>What you see</p></th>
+<th class="head text-left"><p>Why</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>A hand near it</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(f_0\)</span> down, dip shallower</p></td>
+<td class="text-left"><p>tissue adds loss</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Flat on the bench</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(f_0\)</span> shifts, a loop</p></td>
+<td class="text-left"><p>partial ground plane</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Near a wall</p></td>
+<td class="text-left"><p>wiggles around the dip</p></td>
+<td class="text-left"><p>energy returns</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Lesson 5 defined the reactive near field as the region where energy is stored
+rather than radiated. Anything you put in that region becomes part of the
+antenna, and the analyzer will tell you so immediately. None of this is
+instrument error. It is a real change in input impedance, and the same physics
+reappears in Module 3 as <strong>mutual impedance</strong> between array elements — when
+you put your hand near a dipole in Lesson 10 you are running a one-element
+preview of what neighbors in an array do to each other.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-the-far-field-range">
+<div class="wrap docutils container">
+<p class="rubric">Summary — The Far-Field Range</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>The number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(r \ge 2D^2/\lambda\)</span></p></td>
+<td class="text-left"><p>Minimum far-field range length</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(22.5^\circ\)</span> of edge phase error, written as a distance</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta\phi_{\max} = \pi D^2 / 4\lambda r\)</span></p></td>
+<td class="text-left"><p>Quadratic phase error at the aperture edge</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\pi/8\)</span> at the far-field distance</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Amplitude taper</p></td>
+<td class="text-left"><p>Source pattern rolling off across the AUT</p></td>
+<td class="text-left"><p>Under <span class="math notranslate nohighlight">\(0.25\)</span> dB; source beamwidth 3-4× the subtended angle</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Absorber reflectivity</p></td>
+<td class="text-left"><p>The chamber’s floor: how much a wall reflects</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-40\)</span> to <span class="math notranslate nohighlight">\(-50\)</span> dB at normal incidence, worse at grazing</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Quiet zone</p></td>
+<td class="text-left"><p>Volume where the stray field meets spec</p></td>
+<td class="text-left"><p>A size <em>and</em> a level; the AUT must fit inside</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Compact range</p></td>
+<td class="text-left"><p>Reflector collimates a spherical wave up close</p></td>
+<td class="text-left"><p>Quiet zone <span class="math notranslate nohighlight">\(\approx\)</span> 50-60% of the reflector</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Near-field scan</p></td>
+<td class="text-left"><p>Sample amplitude and phase close in, transform</p></td>
+<td class="text-left"><p>Half-wavelength sampling; phase is mandatory</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-gain-and-the-terminals">
+<div class="wrap docutils container">
+<p class="rubric">Summary — Gain and the Terminals</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>The number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Comparison method</p></td>
+<td class="text-left"><p>Gain by differencing against a standard</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(G_\text{AUT} = G_\text{SGH} + (P_\text{AUT} - P_\text{SGH})\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Three-antenna method</p></td>
+<td class="text-left"><p>Gain with no calibrated standard</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(G_A = \tfrac{1}{2}(M_{AB} + M_{AC} - M_{BC})\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(S_{11} = b_1/a_1\)</span></p></td>
+<td class="text-left"><p>One-port scattering parameter</p></td>
+<td class="text-left"><p>equals <span class="math notranslate nohighlight">\(\Gamma\)</span> at the reference plane</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(Z_L = Z_0(1+\Gamma)/(1-\Gamma)\)</span></p></td>
+<td class="text-left"><p>Impedance from reflection</p></td>
+<td class="text-left"><p>sign of <span class="math notranslate nohighlight">\(X\)</span> tells you short (−) or long (+)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>VSWR <span class="math notranslate nohighlight">\(\le 2\)</span></p></td>
+<td class="text-left"><p>The match bar this course quotes, from Lesson 4</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\vert\Gamma\vert \le 1/3\)</span>; <span class="math notranslate nohighlight">\(\vert S_{11}\vert \le -9.5\)</span> dB; 11% of the power reflected</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Directivity, source match, tracking</p></td>
+<td class="text-left"><p>The three one-port error terms</p></td>
+<td class="text-left"><p>three unknowns, hence three SOL standards</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Reference plane</p></td>
+<td class="text-left"><p>Where the standards were attached</p></td>
+<td class="text-left"><p>line length past it = pure rotation on the chart</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Dynamic range</p></td>
+<td class="text-left"><p>Peak level minus measured noise floor</p></td>
+<td class="text-left"><p>bounds every extracted number</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-midterm-project">
+<div class="wrap docutils container">
+<p class="rubric">The Midterm Project</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p>Build a dipole. Match it twice. Measure its pattern.
+Due <strong>2 Oct, 2359</strong>.</p>
+</div>
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Lessons</p></th>
+<th class="head text-left"><p>What it uses</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>L1-L3</p></td>
+<td class="text-left"><p>Gain, beamwidth, polarization</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>L5-L6</p></td>
+<td class="text-left"><p>Far field, the radiation integral</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>L7-L8</p></td>
+<td class="text-left"><p>The dipole, computed and modeled</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>L9-L11</p></td>
+<td class="text-left"><p>The range and the analyzer</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Everyone builds the same antenna, a dipole, and that is deliberate. The
+project is not an antenna design exercise — Lesson 7 already gave you the
+design, Lesson 8 let you model it, and Lessons 10 and 11 put it on the two
+instruments. Handing the whole class one known antenna means the pattern, the
+gain, and the impedance are all predictable before anyone measures anything,
+so the work of the project is the comparison rather than the build. It also
+means ten independent measurements of the same object, which makes
+disagreement between them worth talking about.</p>
+<p>The table is the point of the project. Lesson 1 defined gain and beamwidth
+and Lesson 3 defined polarization, so the report quotes all three. Lesson 5
+set the far-field boundary and Lesson 6 gave the integral that produces the
+pattern, so you know what the pattern should look like before you measure it.
+Lesson 7 solved the dipole in closed form and Lesson 8 modeled it in NEC, so
+you have two independent predictions to compare against. Today gives the
+range and the analyzer, and Lessons 10 and 11 are the dress rehearsal on
+both. Nothing in the course so far is left out of it.</p>
+<p>The full requirements are in the <a href="../../projects/ECE444_Project_Midterm.pdf" target="_blank" rel="noopener">project description (PDF)</a>.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../practice/ECE444_L09_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a class="doc-link doc-key" href="../../practice/ECE444_L09_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-this-is-going">
+<div class="wrap docutils container">
+<p class="rubric">Where This Is Going</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Lesson 10</strong> puts an antenna on the analyzer: calibrate, sweep, read the match.</p></li>
+<li><p><strong>Lesson 11</strong> puts one on the positioner: cut two planes, extract gain and beamwidth.</p></li>
+<li><p>Both lessons are procedure. The reasons are all here.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The next two periods are hands-on and deliberately thin on theory — you will
+be standing at an instrument, not at the board. Everything you need to justify
+what you do there has been said today, so bring this lesson with you: the
+range length you check with a tape in Lesson 11 is the <span class="math notranslate nohighlight">\(2D^2/\lambda\)</span> above,
+and the reference plane you calibrate at in Lesson 10 is the one drawn on the
+cal-plane figure.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module02/L09-pattern-measurement-theory"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

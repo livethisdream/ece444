@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#222"/>
+    </marker>
+    <marker id="arrow-rf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b23"/>
+    </marker>
+    <style>
+      .box { fill: #f6f6f6; stroke: #222; stroke-width: 1.5; }
+      .lbl { fill: #111; text-anchor: middle; }
+      .sub { fill: #555; text-anchor: middle; font-size: 11px; }
+      .wire { stroke: #222; stroke-width: 1.5; fill: none; }
+      .divider { stroke: #bbb; stroke-width: 1.5; fill: none; }
+      .rf { stroke: #b23; stroke-width: 1.5; fill: none; stroke-linecap: round; }
+    </style>
+  </defs>
+
+  <!-- Section brackets -->
+  <text class="sub" x="185" y="42" font-style="italic">Transmitter</text>
+  <line class="divider" x1="10"  y1="50" x2="360" y2="50"/>
+  <text class="sub" x="760" y="42" font-style="italic">Receiver</text>
+  <line class="divider" x1="610" y1="50" x2="950" y2="50"/>
+
+  <!-- RF Source -->
+  <rect class="box" x="10"  y="80" width="90" height="60" rx="4"/>
+  <text class="lbl" x="55"  y="108">RF Source</text>
+  <text class="sub" x="55"  y="126">oscillator</text>
+
+  <!-- Amp (PA) -->
+  <rect class="box" x="130" y="80" width="80" height="60" rx="4"/>
+  <text class="lbl" x="170" y="108">Amp</text>
+  <text class="sub" x="170" y="126">PA</text>
+
+  <!-- Transmission line -->
+  <rect class="box" x="240" y="80" width="120" height="60" rx="4"/>
+  <text class="lbl" x="300" y="105">Transmission</text>
+  <text class="lbl" x="300" y="122">Line</text>
+
+  <!-- Signal chain wires with arrows (TX side) -->
+  <line class="wire" x1="100" y1="110" x2="130" y2="110" marker-end="url(#arrow)"/>
+  <line class="wire" x1="210" y1="110" x2="240" y2="110" marker-end="url(#arrow)"/>
+
+  <!-- TX antenna: feed comes horizontal, bends up into vertical mast, radiates right -->
+  <line class="wire" x1="360" y1="110" x2="440" y2="110"/>
+  <line class="wire" x1="440" y1="110" x2="440" y2="78"/>
+  <circle cx="440" cy="76" r="2.5" fill="#222"/>
+  <path class="rf" d="M 440,70 A 6,6 0 0 1 440,82"/>
+  <path class="rf" d="M 440,64 A 12,12 0 0 1 440,88"/>
+  <path class="rf" d="M 440,58 A 18,18 0 0 1 440,94"/>
+  <text class="lbl" x="440" y="180">TX Antenna</text>
+
+  <!-- Channel: red arrow between antenna tips -->
+  <line class="rf" x1="462" y1="76" x2="628" y2="76" marker-end="url(#arrow-rf)"/>
+  <text class="lbl" x="545" y="68">Channel</text>
+  <text class="sub" x="545" y="94">free space</text>
+
+  <!-- RX antenna: mirror of TX, arcs face left -->
+  <line class="wire" x1="650" y1="110" x2="650" y2="78"/>
+  <circle cx="650" cy="76" r="2.5" fill="#222"/>
+  <path class="rf" d="M 650,70 A 6,6 0 0 0 650,82"/>
+  <path class="rf" d="M 650,64 A 12,12 0 0 0 650,88"/>
+  <path class="rf" d="M 650,58 A 18,18 0 0 0 650,94"/>
+  <text class="lbl" x="650" y="180">RX Antenna</text>
+  <line class="wire" x1="650" y1="110" x2="720" y2="110"/>
+
+  <!-- LNA -->
+  <rect class="box" x="720" y="80" width="80" height="60" rx="4"/>
+  <text class="lbl" x="760" y="108">LNA</text>
+  <text class="sub" x="760" y="126">low-noise amp</text>
+
+  <!-- Radio -->
+  <rect class="box" x="830" y="80" width="120" height="60" rx="4"/>
+  <text class="lbl" x="890" y="108">Radio</text>
+  <text class="sub" x="890" y="126">receiver</text>
+
+  <!-- Signal chain wire (RX side) -->
+  <line class="wire" x1="800" y1="110" x2="830" y2="110" marker-end="url(#arrow)"/>
+</svg>
