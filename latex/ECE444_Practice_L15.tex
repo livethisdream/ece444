@@ -11,8 +11,8 @@ is required (write \textbf{None} if you did not collaborate).}
 
 \begin{questions}
 
-\question \textbf{The uniform aperture.} A rectangular horn is fed so that the
-field across its $24$\ \text{cm} broad dimension is essentially constant in
+\question \textbf{The uniform aperture.} The feed of a rectangular horn makes
+the field across its $24$\ \text{cm} broad dimension essentially constant in
 amplitude and phase. It operates at $12\ \ghz$.
 
 \begin{parts}
@@ -26,7 +26,7 @@ amplitude and phase. It operates at $12\ \ghz$.
 		$e^{jkx\sinp{\theta}}$ across the opening. Written against $u$, the
 		pattern shape depends only on the \emph{shape} of the illumination, so
 		one curve serves every aperture with that illumination; the size
-		$L/\lambda$ only sets how many degrees each unit of $u$ costs.
+		$L/\lambda$ only sets how many degrees correspond to each unit of $u$.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -65,7 +65,7 @@ amplitude and phase. It operates at $12\ \ghz$.
 		relative to the peak. The normalized pattern $\sinp{\pi u}/(\pi u)$
 		contains no $L$ at all, so lengthening the aperture rescales the angle
 		axis (narrower beam, higher gain) without changing the height of any
-		lobe. Sidelobe level is set by the shape of the illumination, and the
+		lobe. The shape of the illumination sets the sidelobe level, and the
 		uniform shape is fixed at $-13.3\ \db$ regardless of size.
 		\end{solution}
 
@@ -74,7 +74,8 @@ amplitude and phase. It operates at $12\ \ghz$.
 \newpage
 
 \question \textbf{Aperture efficiency.} Aperture efficiency converts physical
-area into gain through $G = \eta_{\text{ap}}\ 4\pi A/\lambda^{2}$.
+area into gain:
+\[ G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}} \]
 
 \begin{parts}
 
@@ -86,7 +87,7 @@ area into gain through $G = \eta_{\text{ap}}\ 4\pi A/\lambda^{2}$.
 		     {A \int \left| E_a \right|^{2} da} }
 		The numerator is the coherent sum of the aperture field, which is what
 		arrives on boresight when every point adds in phase. The denominator is
-		the area times the power the aperture actually had to radiate. The ratio
+		the area times the power the aperture radiates. The ratio
 		is coherent gain over available gain, it never exceeds one, and it
 		reaches one only for constant amplitude and constant phase.
 		\end{solution}
@@ -134,7 +135,7 @@ area into gain through $G = \eta_{\text{ap}}\ 4\pi A/\lambda^{2}$.
 		The missing $23.5\ \text{cm}^{2}$ is area whose field still radiates but
 		does not contribute coherently on boresight, mostly because the horn's
 		flare puts a quadratic phase error across the mouth and because the
-		field tapers toward the edges. None of it is dissipated as heat, which
+		field tapers toward the edges. The horn dissipates none of it as heat, which
 		is why $\eta_{\text{ap}}$ is not radiation efficiency.
 		\end{solution}
 	\end{minipage}\hfill%
@@ -148,7 +149,7 @@ area into gain through $G = \eta_{\text{ap}}\ 4\pi A/\lambda^{2}$.
 \newpage
 
 \question \textbf{The taper trade.} A line aperture is $40\lambda$ long. The
-canonical taper table is reproduced here.
+table below gives the canonical taper values.
 
 \fullwidth{\centering\small
 \begin{tabular}{lcccc}
@@ -193,7 +194,7 @@ Cosine$^{2}$ & $-31.5\ \db$ & $1.44$  & $0.667$ \\
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the gain penalty in dB that this taper costs relative to
+		\part Find the gain penalty in dB of this taper relative to
 		uniform illumination on the same aperture.
 		\begin{solution}[1.0in]
 		\eq{ \Delta G = 10\ \mylog{0.75} = -1.25\ \db }
@@ -206,14 +207,14 @@ Cosine$^{2}$ & $-31.5\ \db$ & $1.44$  & $0.667$ \\
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Suppose the $1.27\mydeg$ beamwidth is also a requirement. How long
-		must the triangular-illuminated aperture be, and what has the sidelobe
-		requirement actually cost you? Answer with a number and one sentence.
+		must the triangular-illuminated aperture be, and how much longer is it
+		than the uniform aperture with the same beamwidth? Answer with a number
+		and one sentence.
 		\begin{solution}[1.4in]
 		\eq{ L^{\prime} = 40\lambda \times \frac{1.27}{0.886} = 57.3\lambda }
-		The aperture must be $43\%$ longer to hold the same beamwidth. Low
-		sidelobes are bought with aperture, not with cleverness: you either
-		accept a wider beam or you build a bigger antenna, and on a real
-		platform that length is usually the binding constraint.
+		The aperture must be $43\%$ longer to hold the same beamwidth. Lower
+		sidelobes require either a wider beam or a longer aperture, and on a
+		real platform the length is usually the binding constraint.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -227,8 +228,8 @@ Cosine$^{2}$ & $-31.5\ \db$ & $1.44$  & $0.667$ \\
 
 \question \textbf{Scaling a reflector.} A circular reflector of diameter
 $D = 1.2\ \m$ is uniformly illuminated to a good approximation and has an
-aperture efficiency of $0.60$ at $10\ \ghz$. Use $\theta_{\text{HP}} =
-58.4\mydeg\ \lambda/D$.
+aperture efficiency of $0.60$ at $10\ \ghz$. Use
+\[ \theta_{\text{HP}} = 58.4\mydeg\ \frac{\lambda}{D}. \]
 
 \begin{parts}
 
@@ -260,7 +261,7 @@ aperture efficiency of $0.60$ at $10\ \ghz$. Use $\theta_{\text{HP}} =
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part The same dish is used at $30\ \ghz$ with the same aperture
+		\part The same dish operates at $30\ \ghz$ with the same aperture
 		efficiency. Find the new beamwidth and the new gain.
 		\begin{solution}[1.4in]
 		Tripling the frequency triples $D/\lambda$:
@@ -279,8 +280,9 @@ aperture efficiency of $0.60$ at $10\ \ghz$. Use $\theta_{\text{HP}} =
 	where that gain came from, and name one practical reason a real reflector
 	will fall short of the predicted $49.3\ \dbi$ at $30\ \ghz$.
 		\begin{solution}[1.4in]
-		Gain is $\eta_{\text{ap}}4\pi A/\lambda^{2}$, so it depends on area
-		measured in square wavelengths. At $30\ \ghz$ the same $1.131\ \m^{2}$
+		Gain is
+		\eq{ G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}} }
+		so it depends on area measured in square wavelengths. At $30\ \ghz$ the same $1.131\ \m^{2}$
 		spans nine times as many square wavelengths, which is a factor of nine
 		or $9.5\ \db$. In practice the aperture efficiency will not hold: the
 		surface tolerance and the feed's own illumination taper both scale with

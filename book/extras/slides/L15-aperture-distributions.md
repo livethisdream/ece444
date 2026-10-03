@@ -20,14 +20,14 @@ Fall 2026 · Dr. Neil Rogers
 
 ---
 
-## Where we were
+## From Measurement to Design
 
 - Lesson 11 closed the measurement work: you turned an antenna and recorded a pattern.
-- Module 1 gave us the radiation integral, $2D^2/\lambda$, and $A_e = G\lambda^2/4\pi$.
+- Module 1 gave us the radiation integral, the far-field distance, and the effective aperture $A_e$.
 - Lesson 6 showed the far field is the Fourier transform of the source distribution.
 - The midterm pattern-measurement project is due 2 Oct.
 
-**Module 3 reverses the job. You now choose the pattern, and the aperture field is the knob.**
+In Module 3 we design the pattern, and the aperture distribution is the design variable.
 
 Note:
 Module two was about characterizing an antenna somebody handed you. Module three is
@@ -37,7 +37,7 @@ relationship into design numbers they can use without deriving anything.
 
 ---
 
-## Today's plan
+## Today's Plan
 
 1. The aperture distribution, and why it alone sets the far field.
 2. Derive the uniform aperture pattern, and read three numbers off it.
@@ -51,7 +51,7 @@ lesson of the course, including both labs on the PHASER.
 
 ---
 
-## The aperture is the source
+## The Aperture as Source
 
 An **aperture** is the opening the wave leaves through — a horn mouth, a reflector face, a row of patches. The far field depends on the tangential field across that opening and on nothing else.
 
@@ -66,7 +66,7 @@ the field they produce on the opening.
 
 ---
 
-## The transform relationship
+## The Transform Relationship
 
 For an aperture of length $L$ on the $x$ axis, with $\theta$ measured from broadside:
 
@@ -76,7 +76,7 @@ The exponent is the extra path from the point at $x$, turned into phase.
 
 Define the **space frequency** $u = (L/\lambda)\sin\theta$.
 
-<div class="callout"><strong>Shape</strong> of the illumination sets the pattern in <em>u</em>. <strong>Size</strong> in wavelengths sets how many degrees each unit of <em>u</em> costs.</div>
+<div class="callout"><strong>Shape</strong> of the illumination sets the pattern in <em>u</em>. <strong>Size</strong> in wavelengths sets how many degrees correspond to each unit of <em>u</em>.</div>
 
 Note:
 Derive this at the board if there is time — it is one line from the radiation integral
@@ -85,7 +85,7 @@ Write u on the board and leave it there for the rest of the hour.
 
 ---
 
-## One convention note
+## Angle Convention
 
 Module 1 measured the polar angle from the wire axis. Module 3 measures $\theta$ from **broadside**.
 
@@ -101,15 +101,13 @@ Balanis will find cosine theta and think one of the two is wrong.
 
 ---
 
-## Derive it: uniform illumination
+## Derivation: Uniform Illumination
 
-Constant field $E_a(x) = E_0$ across the whole opening:
+Let the field be constant, $E_a(x) = E_0$, across the whole opening. The integrand is then an exponential, so the integral is elementary:
 
 $$S(\theta) = E_0\int_{-L/2}^{L/2} e^{\ jkx\sin\theta}\ dx$$
 
-The integrand is an exponential, so the integral is elementary:
-
-$$S(\theta) = E_0\ \frac{e^{\ jkL\sin\theta/2} - e^{-jkL\sin\theta/2}}{jk\sin\theta}$$
+$$= E_0\ \frac{e^{\ jkL\sin\theta/2} - e^{-jkL\sin\theta/2}}{jk\sin\theta}$$
 
 Note:
 Do this one at the board. It is the only integral in the lesson and it takes thirty
@@ -117,31 +115,31 @@ seconds. Remind them the difference of two exponentials over two j is a sine.
 
 ---
 
-## Derive it: the sinc
+## Derivation: The Sinc Pattern
 
-Two exponentials over $2j$ make a sine:
+Two exponentials over $2j$ make a sine, so the chain continues:
 
-$$S(\theta) = E_0 L\ \frac{\sin\left(\tfrac{1}{2}kL\sin\theta\right)}{\tfrac{1}{2}kL\sin\theta}$$
+$$= E_0 L\ \frac{\sin\left(\tfrac{1}{2}kL\sin\theta\right)}{\tfrac{1}{2}kL\sin\theta}$$
 
 With $k = 2\pi/\lambda$ the argument is exactly $\pi u$:
 
 $$\vert F(u)\vert = \left\vert\frac{\sin \pi u}{\pi u}\right\vert \qquad u = \frac{L}{\lambda}\sin\theta$$
 
-<div class="callout">A uniformly illuminated aperture radiates a <strong>sinc</strong> pattern in space frequency. Everything else today is bookkeeping on this one line.</div>
+<div class="callout">A uniformly illuminated aperture radiates a <strong>sinc</strong> pattern in space frequency. The nulls, beamwidth, and first sidelobe all follow from this expression.</div>
 
 Note:
-Stress that the L came out front and the shape did not depend on it. That is the
-whole shape-versus-size split, visible in one equation.
+Stress that the L came out front and the shape did not depend on it. Size sets
+beamwidth and gain; shape alone sets the sidelobes.
 
 ---
 
-## Reading the sinc: nulls
+## Reading the Sinc: Nulls
 
 $\sin \pi u$ vanishes at $u = \pm 1, \pm 2, \pm 3, \dots$
 
 So the first null sits at $\sin\theta = \lambda/L$.
 
-An aperture shorter than a wavelength has **no null in real space** — it radiates broadly no matter how you feed it.
+An aperture shorter than a wavelength has no null in real space, so it radiates broadly however we feed it.
 
 Note:
 Ask them what happens when L over lambda drops below one. The first null needs a sine
@@ -149,9 +147,11 @@ greater than one, which does not exist. That is why small antennas are always br
 
 ---
 
-## Reading the sinc: beamwidth
+## Reading the Sinc: Beamwidth
 
-Solve $\sin(\pi u)/(\pi u) = 1/\sqrt{2}$:
+Solve for the half-power point:
+
+$$\frac{\sin \pi u}{\pi u} = \frac{1}{\sqrt{2}}$$
 
 $$\pi u = 1.3916 \qquad u = \pm 0.4429$$
 
@@ -165,23 +165,23 @@ it down. The array version is zero point eight eight six lambda over N d.
 
 ---
 
-## Reading the sinc: sidelobes
+## Reading the Sinc: Sidelobes
 
-First sidelobe peaks near $u = 1.43$, where $\vert F\vert = 0.217$.
+The first sidelobe peaks near $u = 1.43$, where $\vert F\vert = 0.217$.
 
 $$20\log_{10}(0.217) = -13.3\ \text{dB}$$
 
-Notice what is missing from that number: **$L$**.
+The first sidelobe level does not depend on $L$.
 
 A longer uniform aperture narrows the beam, raises the gain, and leaves the first sidelobe $13.3$ dB down.
 
 Note:
-This is the punchline of the first half. Size sets beamwidth and gain; shape sets
+This is the main result of the first half. Size sets beamwidth and gain; shape sets
 the sidelobes, and shape only. Say it twice.
 
 ---
 
-## The uniform aperture pattern
+## The Uniform Aperture Pattern
 
 <div class="fig" data-inline-svg="./fig/L15-uniform-pattern.svg" style="max-width:760px; margin:0 auto;"></div>
 
@@ -192,7 +192,7 @@ they doubled L. Answer: only the horizontal scale.
 
 ---
 
-## Worked example: a 10-wavelength aperture
+## Worked Example: A 10λ Aperture
 
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
@@ -202,7 +202,7 @@ they doubled L. Answer: only the horizontal scale.
 | Length at $10$ GHz | $10 \times 0.03\ \text{m}$ | $0.30$ m |
 | Same $0.30$ m at $3$ GHz | now only $3\lambda$ | $16.9^\circ$ beam |
 
-<div class="callout">The metal did not change. The size <strong>in wavelengths</strong> did.</div>
+<div class="callout">The same 0.30 m is 10λ at 10 GHz and 3λ at 3 GHz, so the beam widens from 5.08° to 16.9°.</div>
 
 Note:
 Last row is the one to dwell on. The same dish at a third of the frequency has a beam
@@ -210,13 +210,13 @@ more than three times wider. This is why radar goes up in frequency for resoluti
 
 ---
 
-## Rectangular and circular apertures
+## Rectangular and Circular Apertures
 
-**Rectangular**, separable illumination: the double integral factors.
+A **rectangular** aperture with separable illumination factors into two line sources:
 
 $$\theta_{\text{HP},x} = 0.886\ \frac{\lambda}{L_x} \qquad \theta_{\text{HP},y} = 0.886\ \frac{\lambda}{L_y}$$
 
-**Circular**, uniform, diameter $D$ — quoted, not derived:
+A uniform **circular** aperture of diameter $D$ gives a Bessel pattern; we quote the result:
 
 $$\theta_\text{HP} = 1.02\ \frac{\lambda}{D} = 58.4^\circ\ \frac{\lambda}{D} \qquad \text{first sidelobe } -17.6\ \text{dB}$$
 
@@ -227,9 +227,9 @@ makes the narrow beam; that trips people up every year.
 
 ---
 
-## How much of the area counts?
+## How Much of the Area Counts?
 
-Module 1 left this hanging: $A_e = G\lambda^2/4\pi$, but how much of the physical area $A$ is that?
+Module 1 defined the effective aperture $A_e$ but did not say how much of the physical area $A$ contributes to it.
 
 $$A_e = \eta_\text{ap} A \qquad G = \eta_\text{ap}\ \frac{4\pi A}{\lambda^2}$$
 
@@ -241,7 +241,7 @@ ever asking what fraction of the dish it represents. Today they find out.
 
 ---
 
-## Aperture efficiency: the ratio
+## Aperture Efficiency as a Ratio
 
 At boresight every point on the aperture arrives in phase, so the field is the **coherent** sum $\int E_a\ da$.
 
@@ -257,9 +257,9 @@ amplitude or phase across the aperture lowers the efficiency, and uniform is the
 
 ---
 
-## Worked example: cosine illumination
+## Worked Example: Cosine Illumination
 
-Horn mouth in its broad dimension, $E_a = \cos(\pi x/L)$. Work in $\xi = x/L$, aperture length $1$:
+A horn mouth carries $E_a = \cos(\pi x/L)$ across its broad dimension. Work in $\xi = x/L$, so the aperture length is $1$:
 
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
@@ -277,7 +277,7 @@ is usable.
 
 ---
 
-## What else eats aperture efficiency
+## Other Aperture-Efficiency Losses
 
 Amplitude taper is only one term. A real reflector also loses to:
 
@@ -286,7 +286,7 @@ Amplitude taper is only one term. A real reflector also loses to:
 - feed and strut blockage
 - cross-polarization
 
-<div class="callout">Horn $\approx 0.5$. Good reflector $0.55$ to $0.7$. And $\eta_\text{ap}$ is <strong>not</strong> radiation efficiency — nothing here turns into heat.</div>
+<div class="callout">A horn typically reaches $\eta_\text{ap} \approx 0.5$ and a good reflector $0.55$ to $0.7$. $\eta_\text{ap}$ is not radiation efficiency — none of these losses turns into heat.</div>
 
 Note:
 The measured aperture efficiency is the product of all of these. That is why a horn
@@ -295,19 +295,19 @@ one. Keep eta rad and eta ap separate in their heads.
 
 ---
 
-## The taper trade
+## The Taper Trade
 
 | Illumination | First sidelobe | HPBW $\times\ \lambda/L$ | $\eta_\text{ap}$ | Gain |
 | :-- | :-- | :-- | :-- | :-- |
 | Uniform | $-13.3$ dB | $0.886$ | $1.00$ | $0$ dB |
 | Cosine | $-23$ dB | $1.19$ | $0.81$ | $-0.9$ dB |
-| Triangular | $-26.5$ dB | $1.27$ | $0.75$ | $-1.2$ dB |
+| Triangular | $-26.5$ dB | $1.27$ | $0.75$ | $-1.25$ dB |
 | Cosine$^2$ | $-31.5$ dB | $1.44$ | $0.667$ | $-1.8$ dB |
 
-<div class="callout">Going from uniform to $\cos^2$ lowers the first sidelobe by <strong>18 dB</strong>, widens the beam by <strong>63%</strong>, and loses <strong>1.8 dB</strong> of gain. No illumination lowers sidelobes and narrows the beam at once.</div>
+<div class="callout">Going from uniform to $\cos^2$ lowers the first sidelobe by 18 dB, widens the beam by 63%, and loses 1.8 dB of gain. No illumination lowers sidelobes and narrows the beam at once.</div>
 
 Note:
-This table is the reason the lesson exists. Tell them it will be on every exam and in
+This table carries the main design numbers of the lesson. Tell them it will be on every exam and in
 both tapering labs. The physical story is the edge discontinuity: a step in the
 illumination transforms into slowly decaying sidelobes.
 
@@ -315,7 +315,7 @@ illumination transforms into slowly decaying sidelobes.
 
 <!-- .slide: class="viz-cue-slide" -->
 
-## Four illuminations, four patterns
+## Four Illuminations and Their Patterns
 
 <div class="fig" data-inline-svg="./fig/L15-taper-comparison.svg" style="max-width:690px; margin:0 auto;"></div>
 
@@ -325,11 +325,11 @@ Note:
 Demo live. Open the aperture-distribution widget, step through the four illuminations
 at ten wavelengths, and read the pills aloud — the sidelobe level and the beamwidth
 constant move together. Then drag the length slider and show that neither pill moves
-while the pattern squeezes in angle. That is shape versus size in one gesture.
+while the pattern squeezes in angle. Size sets beamwidth and gain; shape alone sets the sidelobes.
 
 ---
 
-## An array is a sampled aperture
+## Arrays as Sampled Apertures
 
 The same trade appears with sums in place of integrals.
 
@@ -346,14 +346,14 @@ taper efficiency, and that we will keep those straight when we get there.
 
 ---
 
-## Designing in wavelengths
+## Designing in Wavelengths
 
 Every result today depends on $L/\lambda$ and $A/\lambda^2$, never on $L$ or $A$ alone.
 
-- Beamwidth scales as $\lambda/L$. Double the aperture in wavelengths, halve the beam.
-- Gain scales as $A/\lambda^2$. Double both dimensions, gain up $6$ dB.
+- Beamwidth scales as $\lambda/L$. Doubling the aperture in wavelengths halves the beam.
+- Gain scales as $A/\lambda^2$. Doubling both dimensions raises the gain by $6$ dB.
 
-<div class="callout">Move an antenna from 10 to 20 GHz and it doubles in wavelengths: both beamwidths halve and gain rises <strong>6 dB</strong> — provided the feed still illuminates it the same way.</div>
+<div class="callout">Move an antenna from 10 to 20 GHz and it doubles in wavelengths: both beamwidths halve and gain rises 6 dB — provided the feed still illuminates it the same way.</div>
 
 Note:
 The proviso is real. A feed horn's own pattern changes with frequency, so the
@@ -362,7 +362,7 @@ right first estimate.
 
 ---
 
-## Worked example: sizing at X-band
+## Worked Example: Sizing at X-Band
 
 Spec: $3^\circ$ azimuth, $10^\circ$ elevation, azimuth sidelobes below $-20$ dB. At $10$ GHz, $\lambda = 0.03$ m.
 
@@ -380,7 +380,7 @@ Gain is the output of an aperture design, not an input.
 
 ---
 
-## Sanity-check the answer
+## Checking the Gain
 
 Pencil-beam estimate from Lesson 2:
 
@@ -390,7 +390,7 @@ Practical constant $26{,}000$ to $32{,}400$ gives $29.4$ to $30.3$ dBi.
 
 Our $30.7$ dBi sits just above that band — right for an aperture whose only loss is a known taper.
 
-Far field: $2D^2/\lambda = 2(0.68)^2/0.03 = 31$ m. This antenna cannot be tested in a room.
+Far field: $2D^2/\lambda = 2(0.68)^2/0.03 = 31$ m. A $31$ m far-field distance rules out pattern testing in an ordinary room.
 
 Note:
 Two takeaways. First, always cross-check an aperture gain against the pencil-beam
@@ -399,9 +399,9 @@ and why real ranges are expensive.
 
 ---
 
-## Key point
+## Key Point: Shape and Size
 
-<div class="callout">The far field is the <strong>Fourier transform</strong> of the aperture field. <strong>Size in wavelengths</strong> sets beamwidth and gain; <strong>shape of the illumination</strong> sets sidelobes and aperture efficiency. Every antenna and array design in this course is an argument about how to set those two.</div>
+<div class="callout">The far field is the <strong>Fourier transform</strong> of the aperture field. <strong>Size in wavelengths</strong> sets beamwidth and gain; <strong>shape of the illumination</strong> sets sidelobes and aperture efficiency. The two are nearly independent, and every antenna and array design in this course sets both.</div>
 
 Note:
 If they remember one slide from lesson fifteen, this is it. Ask them to state it back
@@ -409,13 +409,13 @@ before moving on.
 
 ---
 
-## Where this is going
+## Looking Ahead to Lesson 16
 
-**Lesson 16** samples the aperture: $N$ elements spaced $d$ apart, sum instead of integral, and the space factor becomes the **array factor**. Same $0.886$, same taper trade, now in weights you can change electronically.
+**Lesson 16** samples the aperture: $N$ elements spaced $d$ apart, sum instead of integral, and the space factor becomes the **array factor**. The $0.886$ constant and the taper trade carry over, now set by element weights that the hardware can change electronically.
 
 The Fourier view carries the whole module — steering is a phase ramp, tapering is the table above, grating lobes are undersampling.
 
-Before Lesson 16: know $0.886\ \lambda/L$, $-13.3$ dB, and the definition of $\eta_\text{ap}$ cold.
+Before Lesson 16, be able to state $0.886\ \lambda/L$, $-13.3$ dB, and the definition of $\eta_\text{ap}$ from memory.
 
 Note:
 Remind them the midterm pattern-measurement project is due at lesson twenty, and the
