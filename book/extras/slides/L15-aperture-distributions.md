@@ -98,6 +98,11 @@ Lesson 16 makes the substitution explicit once, and then we never revisit it.
 Note:
 Do not spend more than a minute here, but do say it out loud. Students who go read
 Balanis will find cosine theta and think one of the two is wrong.
+The symbol u also changes scale. Lesson six wrote the line source as sine u over u
+with u equal to k L over two times cosine theta, so its nulls sat at u equal to pi
+and its first sidelobe at 4.493. Today's u is that u divided by pi, with sine in place
+of cosine, so the nulls land on the integers and the first sidelobe at 1.430.
+Lesson fourteen's circular aperture keeps the pi: u equals pi D over lambda times sine theta.
 
 ---
 
@@ -125,9 +130,10 @@ With $k = 2\pi/\lambda$ the argument is exactly $\pi u$:
 
 $$\vert F(u)\vert = \left\vert\frac{\sin \pi u}{\pi u}\right\vert \qquad u = \frac{L}{\lambda}\sin\theta$$
 
-<div class="callout">A uniformly illuminated aperture radiates a <strong>sinc</strong> pattern in space frequency. The nulls, beamwidth, and first sidelobe all follow from this expression.</div>
+<div class="callout">A uniformly illuminated aperture radiates a <strong>sinc</strong> pattern in space frequency.</div>
 
 Note:
+The nulls, beamwidth, and first sidelobe all follow from this expression.
 Stress that the L came out front and the shape did not depend on it. Size sets
 beamwidth and gain; shape alone sets the sidelobes.
 
@@ -162,6 +168,11 @@ $$\theta_\text{HP} \approx 0.886\ \frac{\lambda}{L} \text{ rad} = 50.8^\circ\ \f
 Note:
 Point eight eight six is the single most reused number in the module. Have them write
 it down. The array version is zero point eight eight six lambda over N d.
+Where it comes from: the half-power points sit at sine theta equal to plus or minus
+0.4429 lambda over L, so the exact beamwidth is two times the arcsine of 0.4429 lambda
+over L. For a narrow beam the sine is the angle, which gives 0.886 lambda over L. The
+approximation is within one percent for L of two wavelengths or more; lesson six's
+two-wavelength source was 25.6 degrees exact against 25.4 approximate.
 
 ---
 
@@ -178,6 +189,8 @@ A longer uniform aperture narrows the beam, raises the gain, and leaves the firs
 Note:
 This is the main result of the first half. Size sets beamwidth and gain; shape sets
 the sidelobes, and shape only. Say it twice.
+The sidelobe peak is where the slope of the sinc is zero, which is where tangent of
+pi u equals pi u. The first root past the main lobe is u equal to 1.430.
 
 ---
 
@@ -216,44 +229,56 @@ A **rectangular** aperture with separable illumination factors into two line sou
 
 $$\theta_{\text{HP},x} = 0.886\ \frac{\lambda}{L_x} \qquad \theta_{\text{HP},y} = 0.886\ \frac{\lambda}{L_y}$$
 
-A uniform **circular** aperture of diameter $D$ gives a Bessel pattern; we quote the result:
+A uniform **circular** aperture of diameter $D$ gives a Bessel pattern (Lesson 14):
 
-$$\theta_\text{HP} = 1.02\ \frac{\lambda}{D} = 58.4^\circ\ \frac{\lambda}{D} \qquad \text{first sidelobe } -17.6\ \text{dB}$$
+$$\theta_\text{HP} = 1.029\ \frac{\lambda}{D} = 59^\circ\ \frac{\lambda}{D} \qquad \text{first sidelobe } -17.6\ \text{dB}$$
 
 Note:
 The circle does better on sidelobes because its edges carry less area than a
 rectangle's do — it is already mildly tapered along any cut. Long dimension always
 makes the narrow beam; that trips people up every year.
+The circle's numbers are lesson fourteen's: the disk integral is two J one of u over u,
+with u equal to pi D over lambda times sine theta, and its half-power point at u equal
+to 1.616 gives 1.029 lambda over D, or 59 degrees.
+A separable illumination also splits the aperture efficiency: both integrals factor,
+so eta ap equals eta x times eta y. The X-band example uses that.
 
 ---
 
 ## How Much of the Area Counts?
 
-Module 1 defined the effective aperture $A_e$ but did not say how much of the physical area $A$ contributes to it.
+Lesson 2 defined the **aperture efficiency** as the fraction of the physical area $A$ the antenna uses, $A_e = \eta_\text{ap} A$.
 
-$$A_e = \eta_\text{ap} A \qquad G = \eta_\text{ap}\ \frac{4\pi A}{\lambda^2}$$
+$$D = \eta_\text{ap}\ \frac{4\pi A}{\lambda^2} \qquad G = \eta_\text{rad} D$$
 
-$\eta_\text{ap}$ is the **aperture efficiency**, and the illumination decides it.
+Lesson 13 derived $\eta_\text{ap}$ from the aperture field. Today we evaluate it for four illuminations.
 
 Note:
-Remind them A sub e came from the Friis lesson and they have used it since without
-ever asking what fraction of the dish it represents. Today they find out.
+A sub e came from lesson two, and lessons thirteen and fourteen already used the
+ratio on the horn and the reflector. Horns and reflectors dissipate almost nothing,
+so eta rad is about one and gain equals directivity: G is about eta ap times four pi
+A over lambda squared.
 
 ---
 
 ## Aperture Efficiency as a Ratio
 
-At boresight every point on the aperture arrives in phase, so the field is the **coherent** sum $\int E_a\ da$.
+At boresight every point on the aperture arrives in phase, so the field is the **coherent** sum $\int E_a\ dS'$.
 
-The power you had to supply is proportional to $\int \vert E_a\vert^2 da$.
+The power you had to supply is proportional to $\int \vert E_a\vert^2 dS'$.
 
-$$D = \frac{4\pi}{\lambda^2}\ \frac{\left\vert \int E_a\ da \right\vert^2}{\int \vert E_a\vert^2\ da} \qquad \eta_\text{ap} = \frac{\left\vert \int E_a\ da\right\vert^2}{A \int \vert E_a\vert^2\ da}$$
+$$D = \frac{4\pi}{\lambda^2}\ \frac{\left\vert \int E_a\ dS' \right\vert^2}{\int \vert E_a\vert^2\ dS'} \qquad \eta_\text{ap} = \frac{\left\vert \int E_a\ dS'\right\vert^2}{A \int \vert E_a\vert^2\ dS'}$$
 
 <div class="callout">Read it as <strong>coherent gain over available gain</strong>. Cauchy-Schwarz caps it at one, reached only for constant amplitude <em>and</em> constant phase.</div>
 
 Note:
 Do not prove Cauchy-Schwarz. Do say what it means physically: any variation in
 amplitude or phase across the aperture lowers the efficiency, and uniform is the best there is.
+This is lesson thirteen's chain, in its notation. U max is k squared over eight pi
+squared eta naught times the coherent sum squared; P rad is one over two eta naught
+times the integral of the field magnitude squared. Four pi U max over P rad is the
+directivity on the slide. Evaluated with the amplitude alone, the ratio is lesson
+fourteen's taper efficiency, eta t.
 
 ---
 
@@ -265,7 +290,7 @@ A horn mouth carries $E_a = \cos(\pi x/L)$ across its broad dimension. Work in $
 | :-- | :-- | :-- |
 | Coherent sum | $\int \cos(\pi\xi)\ d\xi$ | $2/\pi$ |
 | Available | $\int \cos^2(\pi\xi)\ d\xi$ | $1/2$ |
-| Efficiency | $(2/\pi)^2 / (1 \times 1/2)$ | $8/\pi^2 = 0.811$ |
+| Taper efficiency | $(2/\pi)^2 / (1 \times 1/2)$ | $8/\pi^2 = 0.811$ |
 | Gain penalty | $10\log_{10}(0.811)$ | $-0.9$ dB |
 
 Same arithmetic gives $0.75$ for triangular and $2/3$ for $\cos^2$.
@@ -291,13 +316,16 @@ Amplitude taper is only one term. A real reflector also loses to:
 Note:
 The measured aperture efficiency is the product of all of these. That is why a horn
 comes in near one half even though its cosine taper alone predicts zero point eight
-one. Keep eta rad and eta ap separate in their heads.
+one: lesson thirteen found 0.78 times 0.77 times 0.81, or 0.49, with the first two
+factors from the flare's phase error. Lesson fourteen's efficiency budget took an
+ordinary reflector to 0.66 with a taper factor of 0.85 and spillover, eta s, of 0.90.
+Keep eta rad and eta ap separate in their heads.
 
 ---
 
 ## The Taper Trade
 
-| Illumination | First sidelobe | HPBW $\times\ \lambda/L$ | $\eta_\text{ap}$ | Gain |
+| Illumination | First sidelobe | HPBW $\times\ \lambda/L$ | $\eta_t$ | Gain |
 | :-- | :-- | :-- | :-- | :-- |
 | Uniform | $-13.3$ dB | $0.886$ | $1.00$ | $0$ dB |
 | Cosine | $-23$ dB | $1.19$ | $0.81$ | $-0.9$ dB |
@@ -337,7 +365,7 @@ $$\eta_t = \frac{\left(\sum a_n\right)^2}{N \sum a_n^2}$$
 
 That is the identical ratio of coherent to available gain, over $N$ element amplitudes.
 
-The PHASER's Hann and Blackman presets are the discrete cousins of the cosine and $\cos^2$ rows.
+The PHASER's Hann preset is the $\cos^2$ row sampled at the elements. Blackman tapers harder than any row.
 
 Note:
 Forward reference only. Lessons twenty-four and twenty-five do this on the hardware.
@@ -369,14 +397,16 @@ Spec: $3^\circ$ azimuth, $10^\circ$ elevation, azimuth sidelobes below $-20$ dB.
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
 | Illumination | uniform is $-13.3$ dB; cosine is $-23$ dB | cosine, $1.19$ |
-| Azimuth | $1.19(0.03)/0.05236$ | $0.68$ m $= 22.7\lambda$ |
-| Elevation | $0.886(0.03)/0.1745$ | $0.15$ m $= 5.1\lambda$ |
+| Azimuth | $1.19(0.03)/0.05236$ | $0.682$ m $= 22.7\lambda$ |
+| Elevation | $0.886(0.03)/0.1745$ | $0.152$ m $= 5.08\lambda$ |
 | Gain | $0.81\ (4\pi)(0.104)/(0.03)^2$ | $30.7$ dBi |
 
 Note:
 Walk the order deliberately. Sidelobe spec picks the illumination, illumination fixes
 the beamwidth constant, beamwidth spec fixes the length, and gain falls out last.
 Gain is the output of an aperture design, not an input.
+The area is 0.682 times 0.152, or 0.104 square meters. The efficiency is eta x times
+eta y, 0.81 for the cosine in azimuth times 1.00 for uniform in elevation.
 
 ---
 
@@ -390,18 +420,20 @@ Practical constant $26{,}000$ to $32{,}400$ gives $29.4$ to $30.3$ dBi.
 
 Our $30.7$ dBi sits just above that band — right for an aperture whose only loss is a known taper.
 
-Far field: $2D^2/\lambda = 2(0.68)^2/0.03 = 31$ m. A $31$ m far-field distance rules out pattern testing in an ordinary room.
+Far field: the largest dimension is the diagonal, $0.699$ m, so $2D^2/\lambda = 33$ m. A $33$ m far-field distance rules out pattern testing in an ordinary room.
 
 Note:
 Two takeaways. First, always cross-check an aperture gain against the pencil-beam
 number. Second, the far-field distance is why the midterm project uses small antennas
 and why real ranges are expensive.
+Lesson five defined D as the largest dimension, which for a rectangle is the diagonal:
+the square root of 0.682 squared plus 0.152 squared is 0.699 meters.
 
 ---
 
 ## Key Point: Shape and Size
 
-<div class="callout">The far field is the <strong>Fourier transform</strong> of the aperture field. <strong>Size in wavelengths</strong> sets beamwidth and gain; <strong>shape of the illumination</strong> sets sidelobes and aperture efficiency. The two are nearly independent, and every antenna and array design in this course sets both.</div>
+<div class="callout">The far field is the <strong>Fourier transform</strong> of the aperture field. <strong>Shape of the illumination</strong> sets the sidelobe level, the beamwidth constant, and the taper efficiency. <strong>Size in wavelengths</strong> scales the beamwidth and the gain and leaves the sidelobe level alone. Every antenna and array design in this course sets both.</div>
 
 Note:
 If they remember one slide from lesson fifteen, this is it. Ask them to state it back

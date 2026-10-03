@@ -82,6 +82,7 @@ Parallel workstream (started 2026-08-11): **deck-graphics modernization** — re
 
 # Status
 
+- **L15 voice and "why" sweeps** (2026-10-03, branch `ccr-aaa316af-ydwv6u`, PR #53): voice on page, deck, practice (titles to Title Case, §20 money words, §19 one S(θ) chain); why Batches A+B — links to L13's η_ap derivation, L14's η_t and 1.029 λ/D, L06's u, L05's largest dimension; corrected Q5(c) key (taper narrows the beam, 2.83°), Q5(d) 0.81→0.95, Hann = cos², circular 58.4°→59°, Q4 1.47°/0.491°, X-band far field 31→33 m, triangular −1.25 dB; practice PDFs rebuilt with lualatex (were pdfTeX). Present cut (44→≤30 beats) and illustration sweep next.
 - **L14 illustration sweep** (2026-10-01, branch `ccr-df990a0c-jbxky8`, first `/illustration-sweep` run): widgets `feed-dish` and `yagi-two-element`; seven figures from `l14_figures.py`; L13 patch-array reused on *Arrays*; 26/30 beats.
 - **L14 voice sweep** (2026-10-01, branch `ccr-df990a0c-jbxky8`, first `/voice-sweep` run): §2, 4, 9, 11-14, 18, 20, 21, 23, 24 on page, deck, and practice; "three roads" now "three approaches"; midterm frame and slide removed; deck titles to Title Case.
 - **L14 "why" sweep** (2026-10-01, branch `ccr-df990a0c-jbxky8`): all 11 gaps; derivations in read mode, new `L14-taper-spillover` figure; corrected 160.0 dB / 6 dB under the noise, 59° uniform, −17.6/−25 dB sidelobes, +2 dB per Yagi boom doubling, 20.5 dBi Yagi stack.

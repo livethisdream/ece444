@@ -67,19 +67,25 @@ Working in $u$ instead of $\theta$ is what makes the results in this lesson reus
 ::::{frame} Angle Convention
 ```{note}
 Module 1 wrote the line-source pattern in the polar angle measured from the wire axis. Module 3 measures $\theta$ from broadside instead, which is what every phased-array plot and every PHASER readout uses, so the space frequency here carries $\sin\theta$ rather than $\cos\theta$. Lesson 16 makes that substitution explicit once; after that, broadside is $\theta = 0$ everywhere in the module.
+
+The symbol $u$ also changes scale. Lesson 6 wrote the uniform line source as $\sin u/u$ with $u = (kL/2)\cos\theta$, so its nulls sat at $u = \pi$ and its first sidelobe at $u = 4.493$. The $u$ here is Lesson 6's $u$ divided by $\pi$, with $\sin\theta$ in place of $\cos\theta$, which puts the nulls at the integers and the first sidelobe at $u = 1.430$. Lesson 14's circular aperture keeps the $\pi$, $u = (\pi D/\lambda)\sin\theta$.
 ```
 ::::
 
 ::::{frame} Key Point: Shape and Size
 :::{callout}
-The far field is the Fourier transform of the aperture field. The **shape** of the illumination sets the sidelobe level, and the **size** of the aperture in wavelengths sets the beamwidth. The two are nearly independent, and every aperture and array design in this course sets both.
+The far field is the Fourier transform of the aperture field. The **shape** of the illumination sets the sidelobe level and the beamwidth constant. The **size** of the aperture in wavelengths scales that beamwidth in angle and leaves the sidelobe level alone. Every aperture and array design in this course sets both.
 :::
 ::::
 
 ::::{frame} Part 2: The Uniform Aperture
 Start with the simplest illumination, a constant field $E_a(x) = E_0$ across the whole opening. The integral is elementary:
 
-$$S(\theta) = E_0\int_{-L/2}^{L/2} e^{\ jkx\sin\theta}\ dx = E_0\ \frac{e^{\ jkx\sin\theta}}{jk\sin\theta}\Bigg|_{-L/2}^{L/2} = E_0 L\ \frac{\sin\left(\tfrac{1}{2}kL\sin\theta\right)}{\tfrac{1}{2}kL\sin\theta}.$$
+$$\begin{aligned}
+S(\theta) &= E_0\int_{-L/2}^{L/2} e^{\ jkx\sin\theta}\ dx \\
+&= E_0\ \frac{e^{\ jkx\sin\theta}}{jk\sin\theta}\Bigg|_{-L/2}^{L/2} \\
+&= E_0 L\ \frac{\sin\left(\tfrac{1}{2}kL\sin\theta\right)}{\tfrac{1}{2}kL\sin\theta}
+\end{aligned}$$
 ::::
 
 ::::{frame} Derivation: The Sinc Pattern
@@ -103,11 +109,22 @@ gives $\pi u = 1.3916$, so the half-power points sit at $u = \pm 0.4429$ and
 
 $$\theta_\text{HP} \approx 0.886\ \frac{\lambda}{L}\ \text{rad} = 50.8^\circ\ \frac{\lambda}{L}.$$
 
+:::{depth}
+The half-power points are at $\sin\theta = \pm 0.4429\ \lambda/L$. The beamwidth spans both points, and for a beam a few degrees wide the sine is the angle in radians:
+
+$$\begin{aligned}
+\theta_\text{HP} &= 2\arcsin\left(0.4429\ \frac{\lambda}{L}\right) \\
+&\approx 0.886\ \frac{\lambda}{L}\ \text{rad}
+\end{aligned}$$
+
+The small-angle step is good to within $1\%$ for $L \ge 2\lambda$. Lesson 6's $2\lambda$ line source gave $25.6^\circ$ exactly against $25.4^\circ$ from the approximation.
+:::
+
 The $0.886$ is worth memorizing. It is the constant behind the array beamwidth formula in Lesson 20 and behind every beamwidth prediction you will make on the PHASER.
 ::::
 
 ::::{frame} First Sidelobe
-The first sidelobe peaks near $u = 1.43$, where $\vert F\vert = 0.217$, or $-13.3$ dB. The first sidelobe level does not depend on $L$. Making a uniform aperture longer narrows the beam and raises the gain, and it leaves the first sidelobe exactly $13.3$ dB below the peak. The shape of the illumination sets the sidelobes, and the uniform shape fixes them at $-13.3$ dB.
+The first sidelobe peaks where the slope of $\sin\pi u/\pi u$ is zero, which happens where $\tan\pi u = \pi u$. The first root past the main lobe is $u = 1.430$, where $\vert F\vert = 0.217$, or $-13.3$ dB. The first sidelobe level does not depend on $L$. Making a uniform aperture longer narrows the beam and raises the gain, and it leaves the first sidelobe exactly $13.3$ dB below the peak. The shape of the illumination sets the sidelobes, and the uniform shape fixes them at $-13.3$ dB.
 ::::
 
 ::::{frame} The Uniform Aperture Pattern
@@ -128,37 +145,88 @@ its first nulls are at $\sin\theta = 0.1$, or $\theta = \pm 5.74^\circ$, and its
 ::::{frame} Rectangular Apertures
 A **rectangular aperture** is no harder to analyze when the illumination separates, $E_a(x,y) = E_x(x)E_y(y)$. The double integral factors, and the pattern in each principal plane is the line-source result for that dimension:
 
-$$\theta_{\text{HP},x} = 0.886\ \frac{\lambda}{L_x}, \qquad \theta_{\text{HP},y} = 0.886\ \frac{\lambda}{L_y}.$$
+$$\begin{aligned}
+\theta_{\text{HP},x} &= 0.886\ \frac{\lambda}{L_x} \\
+\theta_{\text{HP},y} &= 0.886\ \frac{\lambda}{L_y}
+\end{aligned}$$
 
 A tall narrow aperture makes a wide flat beam, and a wide short aperture makes a narrow tall one.
+
+:::{depth}
+The aperture efficiency of Part 3 factors the same way. Both integrals in its ratio split into an $x$ integral times a $y$ integral, so
+
+$$\eta_\text{ap} = \eta_x\ \eta_y$$
+
+where each factor is the line-source ratio for its own dimension.
+:::
 ::::
 
 ::::{frame} Circular Apertures
-A **circular aperture** of diameter $D$ does not separate, and its uniform-illumination transform is a Bessel function rather than a sinc. We quote the results here and use them as design numbers:
+A **circular aperture** of diameter $D$ does not separate. Lesson 14 integrated Lesson 6's radiation vector over a uniformly lit disk and found a Bessel function in place of the sinc:
 
-$$\theta_\text{HP} = 1.02\ \frac{\lambda}{D} = 58.4^\circ\ \frac{\lambda}{D}, \qquad \text{first sidelobe} = -17.6\ \text{dB}.$$
+$$\begin{aligned}
+\vert\mathbf{N}(\theta)\vert &\propto \left\vert\frac{2J_1(u)}{u}\right\vert \\
+u &= \frac{\pi D}{\lambda}\sin\theta
+\end{aligned}$$
+
+Its half-power beamwidth and first sidelobe are
+
+$$\begin{aligned}
+\theta_\text{HP} &\approx 1.029\ \frac{\lambda}{D}\ \text{rad} = 59^\circ\ \frac{\lambda}{D} \\
+\text{first sidelobe} &= -17.6\ \text{dB}
+\end{aligned}$$
+
+:::{depth}
+The half-power point is at $u = 1.616$, and the same small-angle step as the line source gives
+
+$$\theta_\text{HP} \approx 2\left(\frac{1.616}{\pi}\right)\frac{\lambda}{D} = 1.029\ \frac{\lambda}{D}.$$
 
 The circle is a little wider in beam than a square of the same width and a little better in sidelobes, and for the same reason: the edges of a circular aperture carry less of the total area than the edges of a rectangle, so the aperture is already mildly tapered as seen along any cut.
+:::
 ::::
 
 ::::{frame} Part 3: Aperture Efficiency
-Module 1 defined the effective aperture
+Lesson 2 defined the effective aperture and the **aperture efficiency** $\eta_\text{ap}$, the fraction of the physical area $A$ that the antenna uses:
 
-$$A_e = \frac{G\lambda^2}{4\pi}$$
+$$A_e = \frac{G\lambda^2}{4\pi} = \eta_\text{ap} A$$
 
-but did not say how much of a real antenna's physical area $A$ contributes to it. The answer is the **aperture efficiency** $\eta_\text{ap}$, defined so that
-
-$$A_e = \eta_\text{ap} A, \qquad G = \eta_\text{ap}\ \frac{4\pi A}{\lambda^2}.$$
+Lesson 13 derived $\eta_\text{ap}$ from the aperture field for the horn, and Lesson 14 used the same ratio for the reflector. This part restates that result and evaluates it for the illuminations the rest of the module uses.
 ::::
 
 ::::{frame} Aperture Efficiency as a Ratio
-To get $\eta_\text{ap}$ from the illumination, compare two quantities. The boresight field is the *coherent* sum of everything on the aperture, $\int E_a\ da$, since at $\theta = 0$ every point arrives in phase. The power the aperture must supply to produce that field is proportional to $\int \vert E_a\vert^2 da$. Directivity is the ratio of radiated intensity to average radiated power, and carrying that through gives
+Lesson 13 derived the directivity of an aperture from its field:
 
-$$D = \frac{4\pi}{\lambda^2}\ \frac{\left\vert \int E_a\ da \right\vert^2}{\int \vert E_a\vert^2\ da}, \qquad \eta_\text{ap} = \frac{D}{4\pi A/\lambda^2} = \frac{\left\vert \int E_a\ da\right\vert^2}{A \int \vert E_a\vert^2\ da}.$$
+$$\begin{aligned}
+\eta_\text{ap} &= \frac{\left\vert\int_A E_a\ dS'\right\vert^2}{A\int_A \vert E_a\vert^2\ dS'} \\
+D &= \eta_\text{ap}\ \frac{4\pi A}{\lambda^2}
+\end{aligned}$$
+
+:::{depth}
+The derivation compares two quantities. At $\theta = 0$ every phase factor in the radiation integral is 1, so the boresight field is the *coherent* sum of the aperture field, $\int_A E_a\ dS'$. The power leaving is the plane-wave power flowing through the opening. In Lesson 13's notation,
+
+$$\begin{aligned}
+U_{\max} &= \frac{k^2}{8\pi^2\eta_0}\left\vert\int_A E_a\ dS'\right\vert^2 \\
+P_{\text{rad}} &= \frac{1}{2\eta_0}\int_A \vert E_a\vert^2\ dS'
+\end{aligned}$$
+
+and Lesson 2's directivity is their ratio:
+
+$$\begin{aligned}
+D &= \frac{4\pi U_{\max}}{P_{\text{rad}}} \\
+&= \frac{4\pi}{\lambda^2}\ \frac{\left\vert\int_A E_a\ dS'\right\vert^2}{\int_A \vert E_a\vert^2\ dS'} \\
+&= \eta_\text{ap}\ \frac{4\pi A}{\lambda^2}
+\end{aligned}$$
+
+The chain gives directivity. Gain is $G = \eta_\text{rad} D$ (Lesson 2), and the walls of a horn and the surface of a reflector dissipate so little that $\eta_\text{rad} \approx 1$ (Lesson 13). For those antennas
+
+$$G \approx \eta_\text{ap}\ \frac{4\pi A}{\lambda^2}$$
+:::
 ::::
 
 ::::{frame} Aperture Efficiency as a Ratio, Continued
 Read that ratio as **coherent gain over available gain**. The numerator grows with field that adds in phase; the denominator is the power the aperture had to radiate. By the Cauchy-Schwarz inequality the ratio never exceeds one, and it equals one only when $E_a$ has constant amplitude and constant phase over the whole aperture. Uniform illumination is the most efficient illumination there is, and every departure from it — a taper, a phase error, a piece of aperture with nothing on it — lowers the efficiency.
+
+Evaluated with the amplitude of $E_a$ alone, the ratio is what Lesson 14 called the **taper efficiency** $\eta_t$ (Lesson 13 wrote $\eta_\text{taper}$). The worked example and the taper table below give $\eta_t$; an aperture with no other loss has $\eta_\text{ap} = \eta_t$.
 ::::
 
 ::::{frame} Worked example — efficiency of a cosine illumination
@@ -166,28 +234,31 @@ Read that ratio as **coherent gain over available gain**. The numerator grows wi
 :class: tip
 Take $E_a(x) = \cos(\pi x/L)$ over $-L/2 \le x \le L/2$, which is the illumination inside the mouth of a pyramidal horn in its broad dimension. Work in $\xi = x/L$ so the aperture runs from $-1/2$ to $1/2$ and its length is $1$:
 
-$$\int_{-1/2}^{1/2}\cos(\pi\xi)\ d\xi = \frac{2}{\pi}, \qquad \int_{-1/2}^{1/2}\cos^2(\pi\xi)\ d\xi = \frac{1}{2}.$$
+$$\begin{aligned}
+\int_{-1/2}^{1/2}\cos(\pi\xi)\ d\xi &= \frac{2}{\pi} \\
+\int_{-1/2}^{1/2}\cos^2(\pi\xi)\ d\xi &= \frac{1}{2}
+\end{aligned}$$
 :::
 ::::
 
 ::::{frame} Worked example — efficiency of a cosine illumination, continued
 :::{admonition} Worked example — efficiency of a cosine illumination, continued
 :class: tip
-$$\eta_\text{ap} = \frac{(2/\pi)^2}{1 \times (1/2)} = \frac{8}{\pi^2} = 0.811 .$$
+$$\eta_t = \frac{(2/\pi)^2}{1 \times (1/2)} = \frac{8}{\pi^2} = 0.811 .$$
 
 The cosine-illuminated aperture delivers $81\%$ of the gain its area could support, a loss of $0.9$ dB. The same arithmetic gives $0.75$ for a triangular illumination and $2/3$ for $\cos^2$.
 :::
 ::::
 
 ::::{frame} Other Aperture-Efficiency Losses
-Two cautions on using $\eta_\text{ap}$ in practice. First, the amplitude taper is only one of its terms: a real reflector also loses to spillover past the rim, to phase error across the surface, to feed and strut blockage, and to cross-polarization, and $\eta_\text{ap}$ as measured is the product of all of them. That is why a horn typically comes in near $0.5$ and a well-designed reflector at $0.55$ to $0.7$, even though the amplitude taper alone would predict $0.75$ or better. Second, $\eta_\text{ap}$ is not radiation efficiency. $\eta_\text{rad}$ accounts for power turned into heat; $\eta_\text{ap}$ accounts for power that radiates but does not end up on boresight.
+Two cautions on using $\eta_\text{ap}$ in practice. First, the taper efficiency $\eta_t$ is only one of its factors. A real reflector also loses to spillover past the rim (Lesson 14's $\eta_s$), to phase error across the surface, to feed and strut blockage, and to cross-polarization, and $\eta_\text{ap}$ as measured is the product of all of them. Lesson 14's efficiency budget took an ordinary reflector from $1.00$ to $0.66$ that way, with a taper factor of only $0.85$. A horn's cosine taper alone gives $0.81$, and Lesson 13 found the rest in the flare's phase error: $0.78 \times 0.77 \times 0.81 = 0.49$, which is why horns come in near $0.5$. Second, $\eta_\text{ap}$ is not radiation efficiency. $\eta_\text{rad}$ accounts for power turned into heat; $\eta_\text{ap}$ accounts for power that radiates but does not end up on boresight.
 ::::
 
 ::::{frame} Key Point: Gain From Area
 :::{callout}
 $$G = \eta_\text{ap}\ \frac{4\pi A}{\lambda^2}$$
 
-Area and wavelength set the ceiling, and the illumination decides how close the antenna comes to that ceiling. Use $\eta_\text{ap} \approx 0.5$ for a horn and $0.55$ to $0.7$ for a good reflector when no better value is available.
+For a low-loss aperture, $\eta_\text{rad} \approx 1$ and gain equals directivity. Area and wavelength set the ceiling, and the illumination decides how close the antenna comes to that ceiling. Use $\eta_\text{ap} \approx 0.5$ for a horn and $0.55$ to $0.7$ for a good reflector when no better value is available.
 :::
 ::::
 
@@ -198,7 +269,7 @@ Area and wavelength set the ceiling, and the illumination decides how close the 
 ::::{frame} The Taper Trade
 Four illuminations cover most of the ground, and their numbers are the ones this course uses everywhere:
 
-| Illumination | First sidelobe | HPBW ($\times\ \lambda/L$) | $\eta_\text{ap}$ | Gain penalty |
+| Illumination | First sidelobe | HPBW ($\times\ \lambda/L$) | $\eta_t$ | Gain penalty |
 | :-- | :-- | :-- | :-- | :-- |
 | Uniform | $-13.3$ dB | $0.886$ | $1.00$ | $0$ dB |
 | Cosine | $-23$ dB | $1.19$ | $0.81$ | $-0.9$ dB |
@@ -231,11 +302,11 @@ The widget below computes the pattern of each illumination directly from the ape
 
 ::::{frame} Arrays as Sampled Apertures
 ```{note}
-An array is an aperture sampled at discrete points, so the same trade appears there with sums in place of integrals. The array version of aperture efficiency is the **taper efficiency**
+An array is an aperture sampled at discrete points, so the same trade appears there with sums in place of integrals. The array version of the taper efficiency is the same $\eta_t$ with sums,
 
 $$\eta_t = \frac{\left(\sum a_n\right)^2}{N\sum a_n^2},$$
 
-which is the identical ratio of coherent to available gain evaluated over $N$ element amplitudes. Lessons 24 and 25 use it on the PHASER, where the Hann and Blackman presets are the discrete cousins of the $\cos$ and $\cos^2$ rows above.
+which is the identical ratio of coherent to available gain evaluated over $N$ element amplitudes. Lessons 24 and 25 use it on the PHASER. The Hann preset is the $\cos^2$ row above sampled at the element positions, and the Blackman preset tapers harder than any row in the table.
 ```
 ::::
 
@@ -258,8 +329,8 @@ Size a rectangular aperture at $10\ \text{GHz}$ for a $3^\circ$ beam in azimuth,
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
 | Azimuth illumination | uniform gives only $-13.3$ dB; cosine gives $-23$ dB | cosine, constant $1.19$ |
-| Azimuth length | $L_x = 1.19\lambda/\theta_\text{HP} = 1.19(0.03)/0.05236$ | $0.68\ \text{m} = 22.7\lambda$ |
-| Elevation length | uniform is fine; $L_y = 0.886(0.03)/0.1745$ | $0.15\ \text{m} = 5.1\lambda$ |
+| Azimuth length | $L_x = 1.19\lambda/\theta_\text{HP} = 1.19(0.03)/0.05236$ | $0.682\ \text{m} = 22.7\lambda$ |
+| Elevation length | uniform is fine; $L_y = 0.886(0.03)/0.1745$ | $0.152\ \text{m} = 5.08\lambda$ |
 :::
 ::::
 
@@ -268,10 +339,13 @@ Size a rectangular aperture at $10\ \text{GHz}$ for a $3^\circ$ beam in azimuth,
 :class: tip
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
-| Aperture area | $A = 0.68 \times 0.15$ | $0.104\ \text{m}^2$ |
-| Aperture efficiency | $0.81$ in azimuth $\times\ 1.00$ in elevation | $0.81$ |
-| Gain | $G = 0.81(4\pi)(0.104)/(0.03)^2 = 1174$ | $30.7\ \text{dBi}$ |
-| Far-field distance | $2D^2/\lambda = 2(0.68)^2/0.03$ | $31\ \text{m}$ |
+| Aperture area | $A = 0.682 \times 0.152$ | $0.104\ \text{m}^2$ |
+| Aperture efficiency | $\eta_x\eta_y = 0.81 \times 1.00$ | $0.81$ |
+| Gain | $G = 0.81(4\pi)(0.104)/(0.03)^2 = 1176$ | $30.7\ \text{dBi}$ |
+| Largest dimension | diagonal, $\sqrt{0.682^2 + 0.152^2}$ | $0.699\ \text{m}$ |
+| Far-field distance | $2D^2/\lambda = 2(0.699)^2/0.03$ | $33\ \text{m}$ |
+
+Lesson 5 defined $D$ in $2D^2/\lambda$ as the antenna's largest dimension, which for a rectangle is its diagonal.
 :::
 ::::
 
@@ -285,7 +359,7 @@ Check the gain against the pencil-beam estimate from Lesson 2: $41{,}253/(3 \tim
 ::::{frame} Worked Example: Consequences of the X-Band Design
 :::{admonition} Worked example — sizing an X-band aperture, checking the design (cont.)
 :class: tip
-The design has two further consequences. The $3^\circ$ azimuth requirement is what made this antenna $0.68\ \text{m}$ wide, and the sidelobe requirement made it $34\%$ wider than a uniform aperture with the same beamwidth would have been. Also, a $31\ \text{m}$ far-field distance means this antenna cannot be pattern-tested in any ordinary room, which is the compact-range and near-field-scanning problem from Lesson 9.
+The design has two further consequences. The $3^\circ$ azimuth requirement is what made this antenna $0.68\ \text{m}$ wide, and the sidelobe requirement made it $34\%$ wider than a uniform aperture with the same beamwidth would have been. Also, a $33\ \text{m}$ far-field distance means this antenna cannot be pattern-tested in any ordinary room, which is the compact-range and near-field-scanning problem from Lesson 9.
 :::
 ::::
 
@@ -305,14 +379,14 @@ Notice how the requirements mapped onto the aperture. The sidelobe specification
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | $\theta_\text{HP}$ | half-power beamwidth of a uniform aperture | $0.886\ \lambda/L$, or $50.8^\circ\ \lambda/L$ |
-| first sidelobe | uniform aperture, any length | $-13.3$ dB; circular uniform, $-17.6$ dB |
+| first sidelobe | uniform aperture, any length | $-13.3$ dB; circular uniform, $-17.6$ dB and $1.029\ \lambda/D$ |
 ::::
 
 ::::{frame} Summary: Efficiency, Gain, and the Trade
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| $\eta_\text{ap}$ | coherent gain over available gain | $1.00$ / $0.81$ / $0.75$ / $0.667$ for uniform / cos / triangular / cos$^2$ |
-| $G = \eta_\text{ap}\ 4\pi A/\lambda^2$ | gain of an aperture antenna | horn $\approx 0.5$, good reflector $0.55$ to $0.7$ |
+| $\eta_\text{ap}$, $\eta_t$ | coherent gain over available gain; $\eta_t$ is the amplitude-only part | $\eta_t = 1.00$ / $0.81$ / $0.75$ / $0.667$ for uniform / cos / triangular / cos$^2$ |
+| $G = \eta_\text{ap}\ 4\pi A/\lambda^2$ | gain of a low-loss aperture antenna ($\eta_\text{rad} \approx 1$) | horn $\approx 0.5$, good reflector $0.55$ to $0.7$ |
 | taper trade | lower sidelobes widen the beam and reduce gain | $-13.3 \to -31.5$ dB widens the beam $63\%$ and loses $1.8$ dB |
 ::::
 

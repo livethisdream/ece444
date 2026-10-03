@@ -73,8 +73,9 @@ amplitude and phase. It operates at $12\ \ghz$.
 
 \newpage
 
-\question \textbf{Aperture efficiency.} Aperture efficiency converts physical
-area into gain:
+\question \textbf{Aperture efficiency.} For a low-loss aperture antenna
+($\eta_{\text{rad}} \approx 1$), aperture efficiency converts physical area
+into gain:
 \[ G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}} \]
 
 \begin{parts}
@@ -83,8 +84,8 @@ area into gain:
 	field, and state in words what the numerator and the denominator each
 	represent.
 		\begin{solution}[1.3in]
-		\eq{ \eta_{\text{ap}} = \frac{\left| \int E_a\ da \right|^{2}}
-		     {A \int \left| E_a \right|^{2} da} }
+		\eq{ \eta_{\text{ap}} = \frac{\left| \int E_a\ dS^{\prime} \right|^{2}}
+		     {A \int \left| E_a \right|^{2} dS^{\prime}} }
 		The numerator is the coherent sum of the aperture field, which is what
 		arrives on boresight when every point adds in phase. The denominator is
 		the area times the power the aperture radiates. The ratio
@@ -154,7 +155,7 @@ table below gives the canonical taper values.
 \fullwidth{\centering\small
 \begin{tabular}{lcccc}
 \hline
-Illumination & First sidelobe & HPBW ($\times\ \lambda/L$) & $\eta_{\text{ap}}$ \\
+Illumination & First sidelobe & HPBW ($\times\ \lambda/L$) & $\eta_{t}$ \\
 \hline
 Uniform      & $-13.3\ \db$ & $0.886$ & $1.00$  \\
 Cosine       & $-23\ \db$   & $1.19$  & $0.81$  \\
@@ -206,7 +207,7 @@ Cosine$^{2}$ & $-31.5\ \db$ & $1.44$  & $0.667$ \\
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Suppose the $1.27\mydeg$ beamwidth is also a requirement. How long
+		\part Suppose the uniform beamwidth of part (a) is also a requirement. How long
 		must the triangular-illuminated aperture be, and how much longer is it
 		than the uniform aperture with the same beamwidth? Answer with a number
 		and one sentence.
@@ -227,9 +228,10 @@ Cosine$^{2}$ & $-31.5\ \db$ & $1.44$  & $0.667$ \\
 \newpage
 
 \question \textbf{Scaling a reflector.} A circular reflector of diameter
-$D = 1.2\ \m$ is uniformly illuminated to a good approximation and has an
-aperture efficiency of $0.60$ at $10\ \ghz$. Use
-\[ \theta_{\text{HP}} = 58.4\mydeg\ \frac{\lambda}{D}. \]
+$D = 1.2\ \m$ is lit nearly uniformly by a broad feed, so much of the feed's
+power spills past the rim; its measured aperture efficiency is $0.60$ at
+$10\ \ghz$. Use the uniform circular aperture of Lesson 14:
+\[ \theta_{\text{HP}} = 1.029\ \frac{\lambda}{D}. \]
 
 \begin{parts}
 
@@ -237,12 +239,13 @@ aperture efficiency of $0.60$ at $10\ \ghz$. Use
 		\part Find the half-power beamwidth at $10\ \ghz$.
 		\begin{solution}[1.1in]
 		\eq{ \lambda &= 0.03\ \m \\
-		     \theta_{\text{HP}} &= 58.4\mydeg \frac{0.03}{1.2} = 1.46\mydeg }
+		     \theta_{\text{HP}} &= 1.029\ \frac{0.03}{1.2} = 0.0257\ \text{rad}
+		     = 1.47\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$1.46\mydeg$}
+		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$1.47\mydeg$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -265,14 +268,14 @@ aperture efficiency of $0.60$ at $10\ \ghz$. Use
 		efficiency. Find the new beamwidth and the new gain.
 		\begin{solution}[1.4in]
 		Tripling the frequency triples $D/\lambda$:
-		\eq{ \theta_{\text{HP}} &= \frac{1.46\mydeg}{3} = 0.487\mydeg \\
+		\eq{ \theta_{\text{HP}} &= \frac{1.47\mydeg}{3} = 0.491\mydeg \\
 		     \Delta G &= 20\ \mylog{3} = 9.5\ \db \\
 		     G_{\text{dBi}} &= 39.8 + 9.5 = 49.3\ \dbi }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\theta_{\text{HP}}$ = \ansbox[1.2in]{$0.487\mydeg$} \\[8pt]
+		$\theta_{\text{HP}}$ = \ansbox[1.2in]{$0.491\mydeg$} \\[8pt]
 		$G$ = \ansbox[1.2in]{$49.3\ \dbi$}
 	\end{minipage}
 
@@ -284,10 +287,11 @@ aperture efficiency of $0.60$ at $10\ \ghz$. Use
 		\eq{ G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}} }
 		so it depends on area measured in square wavelengths. At $30\ \ghz$ the same $1.131\ \m^{2}$
 		spans nine times as many square wavelengths, which is a factor of nine
-		or $9.5\ \db$. In practice the aperture efficiency will not hold: the
-		surface tolerance and the feed's own illumination taper both scale with
-		wavelength, so a surface accurate enough at $10\ \ghz$ introduces
-		significant phase error at $30\ \ghz$ and $\eta_{\text{ap}}$ drops.
+		or $9.5\ \db$. In practice the aperture efficiency will not hold. The
+		surface error $\sigma$ is fixed in meters, and Lesson 14's Ruze loss is
+		$685.8(\sigma/\lambda)^{2}\ \db$, so tripling the frequency multiplies
+		it by nine: $\sigma = 0.6\ \text{mm}$ costs $0.27\ \db$ at $10\ \ghz$
+		and $2.5\ \db$ at $30\ \ghz$.
 		\end{solution}
 
 \end{parts}
@@ -334,16 +338,17 @@ sidelobes read $19\ \db$ below the peak.
 		\begin{solution}[1.4in]
 		The antenna explanation is that the illumination is not uniform. A
 		sidelobe between $-13.3\ \db$ and $-23\ \db$ is what a mild amplitude
-		taper produces, so the aperture is probably tapered somewhere between
-		uniform and cosine, and the beamwidth will be correspondingly wider than
-		the $3.01\mydeg$ predicted in part (b). The measurement explanation is
+		taper produces, somewhere between uniform and cosine. A taper moves the
+		first null out to about $u = 1.2$, so the measured nulls imply a longer
+		aperture, about $0.61\ \m$, and a beamwidth near $2.8\mydeg$, narrower
+		than part (b) predicted. The measurement explanation is
 		that the sidelobe was not resolved: too coarse an angular step, a range
 		shorter than $2D^{2}/\lambda$, or reflections from the room all fill in
 		nulls and can raise or lower a narrow sidelobe by several dB.
 		\end{solution}
 
 	\part The same antenna is later found to have $\eta_{\text{ap}} = 0.44$,
-	although its amplitude taper alone would predict about $0.81$. Name two
+	although its amplitude taper alone would predict about $0.95$. Name two
 	mechanisms that account for the difference, and state whether each one
 	belongs to aperture efficiency or to radiation efficiency.
 		\begin{solution}[1.5in]
