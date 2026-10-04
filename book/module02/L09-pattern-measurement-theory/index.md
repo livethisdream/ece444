@@ -650,6 +650,33 @@ Lesson 3, and a perfectly circular antenna gives a band of zero width.
 :::
 ::::
 
+::::{frame} Four Cuts of One Dipole
+:class: viz-frame
+
+:::{present}
+<iframe src="../../viz/pol-cuts.html"
+        width="100%" height="510"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="A half-wave dipole in 3-D with its pattern, the cut plane, and a probe horn: choose E-plane or H-plane and co-pol or cross-pol, or set the dipole mount and horn polarization as on a chamber turntable">
+</iframe>
+:::
+
+:::{depth}
+The cut and the polarization are two separate choices, and a dipole has four
+standard cuts, not two. Start in the antenna view. In the E-plane the field
+arrows lie in the cut plane; switch to the H-plane and they turn to point out
+of it, along the wire. The field direction is the same; the plane you sweep
+through is what changed. Now switch the probe to cross-pol in either plane
+and the trace drops to the leakage level, about 30 dB down. In the chamber
+view the turntable fixes the sweep plane, so the dipole's mount picks the
+cut: horizontal is the E-plane, vertical is the H-plane. Co-pol means the horn
+is parallel to the dipole. Roll the dipole to vertical and leave the horn
+horizontal, and you have measured the H-plane cross-pol cut, a weak circle
+near the floor, not the H-plane pattern.
+:::
+::::
+
 ::::{frame} How Much of a Pattern Is Real
 :::{present}
 <img src="../../viz/img/L09-dynamic-range.svg"
