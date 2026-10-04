@@ -413,6 +413,11 @@ directly, which is far more reliable than propagating catalog tolerances. On
 step 13, "nothing else" means it: same sweep, same cables, same zero, same
 calibration.
 
+On step 11, "both" matters as much as "nothing else" does on step 13. Roll
+only the AUT and the source is now crossed with it: the run you saved as the
+H-plane is the H-plane cross-pol cut, a weak, ragged circle near the floor.
+The four-cuts widget in Lesson 9 shows exactly this in its chamber view.
+
 :::{depth}
 Name every run in the **Output** section before you start it. Left empty the
 service stamps the date and time, which is enough to keep the runs apart and
