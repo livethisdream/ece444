@@ -168,7 +168,9 @@ const paC = el('pat'), paX = paC.getContext('2d');
 
 function fit(cv, ctx, hOf) {
   const dpr = window.devicePixelRatio || 1;
-  const w = cv.getBoundingClientRect().width;
+  // Size the bitmap to the content box: under border-box sizing the border
+  // sits inside the CSS width and height, so the outer box would skew it.
+  const w = cv.clientWidth || cv.getBoundingClientRect().width;
   if (w <= 0) return 0;
 /* Narrow: the canvases stack (or the control and readout rows do), so the parts
    ADD instead of sharing a row -- which puts the widget past the frame budget
@@ -181,11 +183,13 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.58) : h; 
   cv.width = Math.round(w * dpr);
   cv.height = Math.round(h * dpr);
   cv.style.height = h + 'px';
+  const bh = cv.offsetHeight - cv.clientHeight;
+  if (bh) cv.style.height = (h + bh) + 'px';
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   return w;
 }
 const apH = w => Math.max(112, Math.min(w * 0.25, 176));
-const paH = w => Math.max(232, Math.min(w * 0.52, 372));
+const paH = w => Math.max(226, Math.min(w * 0.52, 372));
 
 function words(ctx, txt, x, y, font, color, align, base) {
   ctx.font = font; ctx.fillStyle = color;
@@ -199,7 +203,7 @@ function drawAperture() {
   const dpr = window.devicePixelRatio || 1;
   const h = apC.height / dpr;
   apX.clearRect(0, 0, w, h);
-  const mL = 54, mR = 22, mT = 16, mB = 30, pW = w - mL - mR, pH = h - mT - mB;
+  const mL = 54, mR = 22, mT = 16, mB = 36, pW = w - mL - mR, pH = h - mT - mB;
   const d = shapeData(state.kind), a = d.a;
 
   apX.strokeStyle = '#eef3f8'; apX.lineWidth = 1;
@@ -229,18 +233,24 @@ function drawAperture() {
           '10px Inter,sans-serif', '#5b6573', 'center', 'top');
   }
   apX.save(); apX.translate(15, mT + pH / 2); apX.rotate(-Math.PI / 2);
-  words(apX, 'field amplitude', 0, 0, '600 11.5px Inter,sans-serif', '#3b4651');
+  // The phone canvas is too short for the full title; shorten it, and drop
+  // it rather than overprint the ticks when even the short one cannot fit.
+  apX.font = '600 11.5px Inter,sans-serif';
+  const ylab = ['field amplitude', 'amplitude'].find(t => apX.measureText(t).width <= h - 4);
+  if (ylab) words(apX, ylab, 0, 0, '600 11.5px Inter,sans-serif', '#3b4651');
   apX.restore();
   const lbl = 'position across the aperture  (';
   apX.font = '600 11.5px Inter,sans-serif';
   const wlab = apX.measureText(lbl + ' )').width + 9;
   const x0 = mL + pW / 2 - wlab / 2;
-  words(apX, lbl, x0, mT + pH + 21, '600 11.5px Inter,sans-serif', '#3b4651', 'left');
+  words(apX, lbl, x0, mT + pH + 28, '600 11.5px Inter,sans-serif', '#3b4651', 'left');
   const wl = apX.measureText(lbl).width;
-  const drew = MJ.draw(apX, '\\lambda', x0 + wl + 2, mT + pH + 21, 11, '#3b4651', 'left');
-  words(apX, drew ? ')' : 'λ)', x0 + wl + (drew || 0) + 3, mT + pH + 21,
+  const drew = MJ.draw(apX, '\\lambda', x0 + wl + 2, mT + pH + 28, 11, '#3b4651', 'left');
+  words(apX, drew ? ')' : 'λ)', x0 + wl + (drew || 0) + 3, mT + pH + 28,
         '600 11.5px Inter,sans-serif', '#3b4651', 'left');
-  words(apX, SHAPES[state.kind].name + ' illumination', mL + pW - 6, mT + 11,
+  // On a phone the plot is too short for the name to clear the curve, and
+  // the illumination menu already says it.
+  if (pH >= 40) words(apX, SHAPES[state.kind].name + ' illumination', mL + pW - 6, mT + 11,
         '700 11.5px Inter,sans-serif', cssVar('--navy'), 'right');
 }
 
