@@ -106,6 +106,20 @@ Lesson fourteen's circular aperture keeps the pi: u equals pi D over lambda time
 
 ---
 
+## One Shape, Three Sizes
+
+<div class="fig" data-inline-svg="./fig/L15-shape-vs-size.svg" style="max-width:500px; margin:0 auto;"></div>
+
+Note:
+Top panel: one sinc for every length. The aperture length only decides how far
+along the u axis real angles reach, out to u equal to L over lambda: two for a
+two-wavelength aperture, twenty for a twenty-wavelength one. Bottom panel: the same
+three apertures against angle. The beams are 25.6, 10.2, and 2.5 degrees wide, and
+every first sidelobe sits on the same minus 13.3 dB line. Shape sets the sidelobes;
+size sets the angle scale.
+
+---
+
 ## Derivation: Uniform Illumination
 
 Let the field be constant, $E_a(x) = E_0$, across the whole opening. The integrand is then an exponential, so the integral is elementary:
@@ -245,6 +259,22 @@ so eta ap equals eta x times eta y. The X-band example uses that.
 
 ---
 
+## Circle Against Square
+
+<div class="fig" data-inline-svg="./fig/L15-circle-vs-square.svg" style="max-width:820px; margin:0 auto;"></div>
+
+The circle's beam is $1.029$ against $0.886$, and its first sidelobe is $-17.6$ dB against $-13.3$ dB.
+
+Note:
+Both patterns are plotted against sine theta times the width in wavelengths, so the
+square's width and the circle's diameter are the same number. The inset is the
+reason for the difference: seen along one cut, the circle's area falls off toward
+the edges like the square root of one minus x squared. It is a mildly tapered
+aperture, so it trades a little beamwidth for lower sidelobes, the same trade the
+taper table makes on purpose.
+
+---
+
 ## How Much of the Area Counts?
 
 Lesson 2 defined the **aperture efficiency** as the fraction of the physical area $A$ the antenna uses, $A_e = \eta_\text{ap} A$.
@@ -302,6 +332,21 @@ is usable.
 
 ---
 
+## Coherent Sum and Available Power
+
+<div class="fig" data-inline-svg="./fig/L15-efficiency-ratio.svg" style="max-width:860px; margin:0 auto;"></div>
+
+The taper efficiency is the square of the left mean over the right mean: $(2/\pi)^2/(1/2) = 0.811$.
+
+Note:
+The left panel is the numerator: the field across the aperture, whose mean is the
+coherent sum, two over pi. The right panel is the denominator: the field squared,
+whose mean is the power the aperture radiates, one half. Uniform illumination
+would put both means at one. The taper pulls the field mean down faster than the
+power mean, and that is the 0.9 dB.
+
+---
+
 ## Other Aperture-Efficiency Losses
 
 Amplitude taper is only one term. A real reflector also loses to:
@@ -338,6 +383,20 @@ Note:
 This table carries the main design numbers of the lesson. Tell them it will be on every exam and in
 both tapering labs. The physical story is the edge discontinuity: a step in the
 illumination transforms into slowly decaying sidelobes.
+
+---
+
+## Sidelobe Against Beamwidth
+
+<div class="fig" data-inline-svg="./fig/L15-taper-trade.svg" style="max-width:700px; margin:0 auto;"></div>
+
+Every step toward lower sidelobes widens the beam and loses gain.
+
+Note:
+The same four rows as the table, as points. Read it left to right: each
+illumination buys lower sidelobes with a wider beam and a fraction of a dB of gain.
+There is no point below the line, which is the statement that no illumination
+lowers sidelobes and narrows the beam at once.
 
 ---
 

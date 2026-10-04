@@ -100,8 +100,13 @@ The symbol $u$ also changes scale. Lesson 6 wrote the uniform line source as $\s
 :class: callout
 The **shape** of the illumination sets the sidelobe level and the beamwidth constant. The **size** of the aperture in wavelengths scales that beamwidth in angle and leaves the sidelobe level alone.
 :::
+:::{present}
+<img src="../../viz/img/L15-shape-vs-size.svg" alt="Top: the uniform aperture pattern against space frequency u is one curve for every length, and apertures 2, 5, and 20 wavelengths long see it out to u = 2, 5, and 20. Bottom: the same three apertures against angle have beams 25.6, 10.2, and 2.5 degrees wide, and every first sidelobe sits at minus 13.3 dB" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 The far field is the Fourier transform of the aperture field, and every aperture and array design in this course sets both its shape and its size.
+
+The figure shows both halves of that statement for a uniform aperture. Against $u$ there is one pattern, and the aperture length only decides how much of it is visible: real angles reach $\vert u\vert = L/\lambda$, so a $2\lambda$ aperture sees out to $u = 2$ and a $20\lambda$ aperture out to $u = 20$. Against $\theta$ the same three apertures have beams $25.6^\circ$, $10.2^\circ$, and $2.5^\circ$ wide, and every one of them puts its first sidelobe at $-13.3$ dB.
 ::::
 
 ::::{frame} Part 2: The Uniform Aperture
@@ -230,6 +235,9 @@ $$\begin{gathered}
 \text{first sidelobe} = -17.6\ \text{dB}
 \end{gathered}$$
 :::
+:::{present}
+<img src="../../viz/img/L15-circle-vs-square.svg" alt="Uniform square and uniform circular apertures of the same width against sine of angle times width in wavelengths: the circle's half-power beam is 1.029 against 0.886 and its first sidelobe minus 17.6 dB against minus 13.3 dB; an inset shows that the circle, projected onto one cut, is already tapered toward its edges" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 :::{depth}
 The half-power point is at $u = 1.616$, and the same small-angle step as the line source gives
@@ -300,7 +308,9 @@ $$\begin{aligned}
 \end{aligned}$$
 
 - A horn's cosine illumination delivers $81\%$ of the gain its area could support, a $0.9$ dB loss.
-- Triangular illumination gives $0.75$, and $\cos^2$ gives $2/3$.
+:::
+:::{present}
+<img src="../../viz/img/L15-efficiency-ratio.svg" alt="Left: the cosine illumination across the aperture with its mean, 0.637, which is the coherent sum. Right: its square with mean 0.500, the available power. The taper efficiency is 0.637 squared over 0.500, or 0.811" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 :::{admonition} Worked example — efficiency of a cosine illumination
@@ -362,6 +372,8 @@ Four illuminations cover most of the ground, and their numbers are the ones this
 :::
 
 The table reads as one continuous trade. Going from uniform to $\cos^2$ lowers the first sidelobe by $18$ dB, widens the beam by $63\%$, and loses $1.8$ dB of gain. There is no illumination that lowers sidelobes and narrows the beam at the same time. When a radar system needs low sidelobes to keep clutter and jamming out of the receiver, it accepts a wider beam or a larger aperture to get them.
+
+<img src="../../viz/img/L15-taper-trade.svg" alt="The four illuminations plotted as first sidelobe against beamwidth constant: uniform at minus 13.3 dB and 0.886 with full gain, cosine at minus 23.0 dB and 1.189 with minus 0.91 dB of gain, triangular at minus 26.5 dB and 1.276 with minus 1.25 dB, and cosine squared at minus 31.5 dB and 1.441 with minus 1.76 dB. Every step to lower sidelobes widens the beam and loses gain" style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
 ::::
 
 ::::{frame} Illumination and Length
@@ -373,7 +385,7 @@ The widget below computes the pattern of each illumination directly from the ape
 
 :::{present}
 <iframe src="../../viz/aperture-distribution.html"
-        width="100%" height="437"
+        width="100%" height="433"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Aperture illumination and the far-field pattern it produces">
