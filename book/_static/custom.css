@@ -280,6 +280,13 @@ div.admonition.example-problem > *:not(.admonition-title) {
   color: var(--ink, #000000) !important;
   text-wrap: pretty;
 }
+/* Phone: the .85em gutters alone are ~70px of a 343px column. */
+@media (max-width: 480px) {
+  .bd-article table thead th,
+  .bd-article table tbody td { padding-left: .45em; padding-right: .45em; }
+  .bd-article table thead th:last-child,
+  .bd-article table tbody td:last-child { padding-right: 0; }
+}
 .bd-article table tbody tr:nth-child(even) {
   background-color: var(--tbl-stripe, #f5f9fc);
 }

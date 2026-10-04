@@ -261,7 +261,7 @@ Same length $L$, four ways to illuminate it:
 | :-- | :-: | :-: |
 | uniform | $-13.3$ dB | $0.886\ \lambda/L$ |
 | cosine | $-23$ dB | $1.19\ \lambda/L$ |
-| triangular | $-26.5$ dB | $1.27\ \lambda/L$ |
+| triangular | $-26.5$ dB | $1.28\ \lambda/L$ |
 | cosine² | $-31.5$ dB | $1.44\ \lambda/L$ |
 
 <div class="callout">

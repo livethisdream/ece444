@@ -235,7 +235,18 @@ th {
   padding: .45em .8em .45em 0;
   font-size: var(--step--1); letter-spacing: .05em; text-transform: uppercase;
 }
+/* The header's uppercase must not reach its math: MathJax draws glyphs as
+   text, so text-transform turned eta_t into a capital Eta and lambda into
+   Lambda in every header that carried a symbol. */
+th mjx-container { text-transform: none; letter-spacing: normal; }
 td { padding: .5em .8em .5em 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+/* A phone column is ~343px: five columns of padding, tracking, and an
+   uppercase header pushed the L15 taper table to 449px, its last column
+   off screen in present mode. Tighten the gutters and drop the tracking. */
+@media (max-width: 480px) {
+  th { letter-spacing: 0; padding-right: .45em; }
+  td { padding-right: .45em; }
+}
 tr:last-child td { border-bottom: none; }
 td.res { font-weight: 700; color: var(--blue-dark); }
 td .m { font-family: var(--math); font-style: italic; }

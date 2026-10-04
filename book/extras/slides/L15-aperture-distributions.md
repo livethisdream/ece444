@@ -85,6 +85,21 @@ Write u on the board and leave it there for the rest of the hour.
 
 ---
 
+## Path Difference Across the Aperture
+
+<div class="fig" data-inline-svg="./fig/L15-path-difference.svg" style="max-width:640px; margin:0 auto;"></div>
+
+Toward a far-field point at angle $\theta$, the rays from the center and from $x$ are parallel and differ in length by $x\sin\theta$.
+
+Note:
+This is where the exponent comes from. The far-field point is far enough away that
+the two rays are parallel. Drop a perpendicular from the point at x onto the ray
+from the center: the leftover piece of the center ray is x sine theta long, and
+multiplying by k turns that length into the phase k x sine theta. Integrating that
+phase against the aperture field is the Fourier transform on the previous slide.
+
+---
+
 ## Angle Convention
 
 Module 1 measured the polar angle from the wire axis. Module 3 measures $\theta$ from **broadside**.
@@ -259,6 +274,21 @@ so eta ap equals eta x times eta y. The X-band example uses that.
 
 ---
 
+## Rectangular Aperture and Its Beam
+
+<div class="fig" data-inline-svg="./fig/L15-rect-footprint.svg" style="max-width:780px; margin:0 auto;"></div>
+
+The long dimension makes the narrow beam: $0.682$ m gives $3^\circ$ in azimuth, and $0.152$ m gives $10^\circ$ in elevation.
+
+Note:
+This is the X-band aperture we size at the end of the hour, drawn to scale. The
+beam's footprint is the aperture turned ninety degrees: wide aperture, narrow beam
+in that plane. Students get this backwards every year, so point at each dimension
+and its beamwidth in turn. The contour is the half-power contour of the product of
+the two line-source patterns, cosine across and uniform up.
+
+---
+
 ## Circle Against Square
 
 <div class="fig" data-inline-svg="./fig/L15-circle-vs-square.svg" style="max-width:820px; margin:0 auto;"></div>
@@ -368,13 +398,43 @@ Keep eta rad and eta ap separate in their heads.
 
 ---
 
+## The Reflector Efficiency Budget
+
+<div class="fig" data-inline-svg="./fig/L14-efficiency-budget.svg" style="max-width:820px; margin:0 auto;"></div>
+
+Lesson 14's ordinary reflector: the taper factor is $0.85$, and the product of all five factors is $0.66$.
+
+Note:
+The same waterfall as lesson fourteen. Each bar multiplies the one before it:
+spillover 0.90, taper 0.85, blockage 0.95, surface 0.94, everything else 0.97. None
+of these is heat. The taper bar is the only one today's integrals compute; the rest
+come from the feed, the struts, and the surface.
+
+---
+
+## Edge Smoothness and Sidelobe Decay
+
+<div class="fig" data-inline-svg="./fig/L15-sidelobe-decay.svg" style="max-width:760px; margin:0 auto;"></div>
+
+A step at the edge gives sidelobes that fall $6$ dB per octave, a zero reached with a slope gives $12$ dB, and a zero reached with zero slope gives $18$ dB.
+
+Note:
+This is the physical reason tapering works. The axis is logarithmic in u, so each
+tick is an octave and each envelope is a straight line. The uniform illumination
+steps to zero at the edge and its sidelobes fall as one over u. The cosine reaches
+zero continuously but with a slope, one over u squared. Cosine squared arrives with
+zero slope too, one over u cubed. Each order of smoothness at the edge adds one
+power of u.
+
+---
+
 ## The Taper Trade
 
 | Illumination | First sidelobe | HPBW $\times\ \lambda/L$ | $\eta_t$ | Gain |
 | :-- | :-- | :-- | :-- | :-- |
 | Uniform | $-13.3$ dB | $0.886$ | $1.00$ | $0$ dB |
 | Cosine | $-23$ dB | $1.19$ | $0.81$ | $-0.9$ dB |
-| Triangular | $-26.5$ dB | $1.27$ | $0.75$ | $-1.25$ dB |
+| Triangular | $-26.5$ dB | $1.28$ | $0.75$ | $-1.25$ dB |
 | Cosine$^2$ | $-31.5$ dB | $1.44$ | $0.667$ | $-1.8$ dB |
 
 <div class="callout">Going from uniform to $\cos^2$ lowers the first sidelobe by 18 dB, widens the beam by 63%, and loses 1.8 dB of gain. No illumination lowers sidelobes and narrows the beam at once.</div>
@@ -426,6 +486,8 @@ That is the identical ratio of coherent to available gain, over $N$ element ampl
 
 The PHASER's Hann preset is the $\cos^2$ row sampled at the elements. Blackman tapers harder than any row.
 
+<div class="fig" data-inline-svg="./fig/L16-sampled-aperture.svg" style="max-width:560px; margin:0 auto;"></div>
+
 Note:
 Forward reference only. Lessons twenty-four and twenty-five do this on the hardware.
 Mention that the peak drop they will see on the plot is not the same number as the
@@ -446,6 +508,20 @@ Note:
 The proviso is real. A feed horn's own pattern changes with frequency, so the
 illumination taper on a reflector is not constant across a wide band. It is still the
 right first estimate.
+
+---
+
+## One Aperture Across Frequency
+
+<div class="fig" data-inline-svg="./fig/L15-frequency-scaling.svg" style="max-width:580px; margin:0 auto;"></div>
+
+The $0.30$ m aperture has a $17.0^\circ$ beam at $3$ GHz and a $5.08^\circ$ beam at $10$ GHz, and a $0.30$ m square gains $20.5$ dBi and $31.0$ dBi.
+
+Note:
+The ten-wavelength worked example, swept across frequency. The beamwidth uses the
+exact two arcsine of 0.4429 lambda over L, which gives 17.0 degrees at 3 gigahertz;
+the small-angle formula gives 16.9. The gain is for a uniform 0.30 meter square, four
+pi A over lambda squared, and it rises 6 dB for every doubling of frequency.
 
 ---
 
@@ -487,6 +563,21 @@ number. Second, the far-field distance is why the midterm project uses small ant
 and why real ranges are expensive.
 Lesson five defined D as the largest dimension, which for a rectangle is the diagonal:
 the square root of 0.682 squared plus 0.152 squared is 0.699 meters.
+
+---
+
+## The X-Band Design Chain
+
+<div class="fig" data-inline-svg="./fig/L15-xband-flow.svg" style="max-width:640px; margin:0 auto;"></div>
+
+The sidelobe specification picks the illumination, the beamwidth fixes each length, and the gain comes out last.
+
+Note:
+Read it left to right, row by row. Minus twenty dB rules out uniform, so azimuth is
+cosine with constant 1.19, and the 3 degree beam fixes 0.682 meters. Elevation has no
+sidelobe limit, so it stays uniform at 0.886, and 10 degrees fixes 0.152 meters. The
+area and the efficiency give 30.7 dBi, which lands just above the practical band and
+under the pencil-beam bound.
 
 ---
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""L15: the computed figures from the 2026-10-04 illustration sweep (Batch A).
+"""L15: the computed figures from the 2026-10-04 illustration sweep (Batches A-C).
 
 Every figure is labels only: no equations, so the same SVG serves the deck
 (book/extras/slides/fig) and the lesson page (book/extras/viz/img). The math
@@ -20,6 +20,21 @@ against the page.
   L15-efficiency-ratio   the cosine illumination and its mean, beside its
                          square and that mean: the two integrals in the taper
                          efficiency, 0.637 squared over 0.500 = 0.811
+  L15-rect-footprint     the X-band aperture (0.682 m by 0.152 m) to scale
+                         beside the half-power contour of its beam (3 by 10
+                         degrees): the long dimension makes the narrow beam
+  L15-xband-flow         the X-band design chain, sidelobe spec to illumination
+                         to length, elevation beam to length, area and
+                         efficiency to gain, and the gain against the
+                         pencil-beam bound and practical band
+  L15-sidelobe-decay     uniform, cosine, and cosine-squared patterns on a log
+                         u axis with their far-sidelobe envelopes, 1/u, 1/u^2,
+                         1/u^3: 6, 12, and 18 dB per octave
+  L15-path-difference    the 1-D aperture, the angle from broadside, and the
+                         extra path x sin(theta) to a far-field direction
+  L15-frequency-scaling  one 0.30 m uniform aperture from 1 to 20 GHz: exact
+                         half-power beamwidth and the area-limited gain of the
+                         0.30 m square, with 3 and 10 GHz marked
 
     python3 scripts/graphics/l15_figures.py
 """
@@ -339,8 +354,336 @@ def efficiency_ratio():
     return dict(mean_field=m1, mean_power=m2, eta=eta, two_over_pi=2 / np.pi)
 
 
+# ------------------------------------------------------- X-band design numbers
+# Rounded the way the page rounds them: the table's constants, lengths to the
+# millimeter, area to 0.001 square meter, efficiency to two places.
+XB = dict(f=10e9, az=3.0, el=10.0, sl_spec=-20.0)
+
+
+def xband():
+    lam = 3e8 / XB["f"]
+    rows = {r[0]: r for r in taper_numbers()}
+    k_cos = round(rows["cosine"][3], 2)                 # 1.19
+    k_uni = round(rows["uniform"][3], 3)                # 0.886
+    sl_cos = rows["cosine"][2]
+    Lx = k_cos * lam / np.radians(XB["az"])
+    Ly = k_uni * lam / np.radians(XB["el"])
+    A = round(round(Lx, 3) * round(Ly, 3), 3)
+    eta = round(rows["cosine"][4], 2) * round(rows["uniform"][4], 2)
+    G = eta * 4 * np.pi * A / lam ** 2
+    return dict(lam=lam, k_cos=k_cos, k_uni=k_uni, sl_cos=sl_cos, sl_uni=rows["uniform"][2],
+                Lx=Lx, Ly=Ly, A=A, eta=eta, G=G, G_dbi=10 * np.log10(G),
+                bound=10 * np.log10(41253 / (XB["az"] * XB["el"])),
+                band=(10 * np.log10(26000 / (XB["az"] * XB["el"])),
+                      10 * np.log10(32400 / (XB["az"] * XB["el"]))))
+
+
+def cos_field(u):
+    """Normalized cosine-illumination pattern, cos(pi u) / (1 - 4 u^2)."""
+    u = np.asarray(u, float)
+    out = np.empty_like(u)
+    near = np.abs(np.abs(u) - 0.5) < 1e-9
+    out[~near] = np.cos(np.pi * u[~near]) / (1 - 4 * u[~near] ** 2)
+    out[near] = np.pi / 4
+    return out
+
+
+def cos2_field(u):
+    """Normalized cosine-squared pattern, sinc(u) / (1 - u^2)."""
+    u = np.asarray(u, float)
+    out = np.empty_like(u)
+    near = np.abs(np.abs(u) - 1) < 1e-9
+    out[~near] = np.sinc(u[~near]) / (1 - u[~near] ** 2)
+    out[near] = 0.5
+    return out
+
+
+# --------------------------------------------------------- rectangle footprint
+def rect_footprint():
+    x = xband()
+    lam, Lx, Ly = x["lam"], round(x["Lx"], 3), round(x["Ly"], 3)
+    nx, ny = x["Lx"] / lam, x["Ly"] / lam      # wavelengths from the unrounded lengths
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(6.0, 2.9),
+                                 gridspec_kw=dict(width_ratios=[1.35, 1], wspace=0.32))
+    # left: the aperture to scale, in meters
+    ax.add_patch(plt.Rectangle((-Lx / 2, -Ly / 2), Lx, Ly, fc=SHADE, ec=NAVY, lw=2.0))
+    ax.annotate("", (Lx / 2, -Ly / 2 - 0.05), (-Lx / 2, -Ly / 2 - 0.05),
+                arrowprops=dict(arrowstyle="<|-|>", color=INK, lw=1.0, mutation_scale=9,
+                                shrinkA=0, shrinkB=0))
+    ax.text(0, -Ly / 2 - 0.075, f"{Lx:.3f} m = {nx:.1f}λ", color=INK, fontsize=10.5,
+            ha="center", va="top")
+    ax.annotate("", (Lx / 2 + 0.035, Ly / 2), (Lx / 2 + 0.035, -Ly / 2),
+                arrowprops=dict(arrowstyle="<|-|>", color=INK, lw=1.0, mutation_scale=9,
+                                shrinkA=0, shrinkB=0))
+    ax.text(Lx / 2 - 0.02, Ly / 2 + 0.03, f"{Ly:.3f} m = {ny:.2f}λ", color=INK,
+            fontsize=10.5, ha="right", va="bottom")
+    ax.text(0, 0, "cosine across, uniform up", color=NAVY, fontsize=10.5, ha="center",
+            va="center")
+    ax.set_xlim(-Lx / 2 - 0.02, Lx / 2 + 0.06)
+    ax.set_ylim(-Ly / 2 - 0.16, Ly / 2 + 0.14)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.set_title("aperture: wide and short", color=INK, fontsize=12, fontweight="bold")
+
+    # right: the half-power contour of the product pattern, in degrees
+    g = np.linspace(-8, 8, 801)
+    AZ, EL = np.meshgrid(g, g)
+    P = (np.abs(cos_field(Lx / lam * np.sin(np.radians(AZ))))
+         * np.abs(sinc_u(Ly / lam * np.sin(np.radians(EL)))))
+    bx.contourf(AZ, EL, P, levels=[2 ** -0.5, 1.01], colors=[SHADE])
+    bx.contour(AZ, EL, P, levels=[2 ** -0.5], colors=[NAVY], linewidths=2.0)
+    # the widths, measured from the cuts of the same pattern
+    w_az = 2 * brentq(lambda a: cos_field(np.array([Lx / lam * np.sin(np.radians(a))]))[0]
+                      - 2 ** -0.5, 1e-4, 8)
+    w_el = 2 * brentq(lambda a: sinc_u(np.array([Ly / lam * np.sin(np.radians(a))]))[0]
+                      - 2 ** -0.5, 1e-4, 8)
+    bx.text(w_az / 2 + 0.6, 0, f"{w_az:.1f}° wide", color=INK, fontsize=10.5,
+            ha="left", va="center")
+    bx.text(0, w_el / 2 + 0.4, f"{w_el:.1f}° tall", color=INK, fontsize=10.5,
+            ha="center", va="bottom")
+    bx.set_xlim(-8, 8)
+    bx.set_ylim(-8, 8)
+    bx.set_aspect("equal")
+    bx.set_xticks([-5, 0, 5])
+    bx.set_yticks([-5, 0, 5])
+    bx.set_xticklabels([_m(t, "{:.0f}") for t in (-5, 0, 5)])
+    bx.set_yticklabels([_m(t, "{:.0f}") for t in (-5, 0, 5)])
+    bx.set_xlabel("azimuth (degrees)")
+    bx.set_ylabel("elevation (degrees)")
+    bx.set_title("beam: narrow and tall", color=INK, fontsize=12, fontweight="bold")
+    clean(bx)
+    fig.subplots_adjust(left=0.02, right=0.98, top=0.88, bottom=0.17)
+    save(fig, "L15-rect-footprint",
+         f"Left: the X-band aperture to scale, {Lx:.3f} m wide and {Ly:.3f} m tall, cosine "
+         f"illumination across and uniform up. Right: the half-power contour of its beam, "
+         f"{w_az:.1f} degrees wide in azimuth and {w_el:.1f} degrees tall in elevation. The long "
+         f"dimension makes the narrow beam")
+    return dict(Lx=Lx, Ly=Ly, Lx_lam=nx, Ly_lam=ny, w_az=w_az, w_el=w_el)
+
+
+# ------------------------------------------------------------ X-band flow
+def xband_flow():
+    x = xband()
+    lam = x["lam"]
+    fig = plt.figure(figsize=(5.4, 3.9))
+    ax = fig.add_axes([0, 0.30, 1, 0.70])
+    ax.set_xlim(0, 102.6)
+    ax.set_ylim(0, 63)
+    ax.axis("off")
+    W, H = 28.5, 13
+    cols = [14.6, 50.6, 86.0]
+    BUS = 102.0                                # both lengths join here on the way to the area
+
+    def box(cx, cy, text, ec=NAVY, fc="white", bold=False):
+        ax.add_patch(plt.Rectangle((cx - W / 2, cy - H / 2), W, H, fc=fc, ec=ec, lw=1.6))
+        ax.text(cx, cy, text, color=INK, fontsize=10.5, ha="center", va="center",
+                linespacing=1.2, fontweight="bold" if bold else "normal")
+
+    def arrow(p, q):
+        ax.annotate("", q, p, arrowprops=dict(arrowstyle="-|>", color=GRAY, lw=1.4,
+                                              mutation_scale=12, shrinkA=0, shrinkB=0))
+
+    y_az, y_el, y_g = 51, 30, 8
+    box(cols[0], y_az, f"sidelobes below\n{_m(XB['sl_spec'], '{:.0f}')} dB in azimuth")
+    box(cols[1], y_az, f"cosine, {_m(x['sl_cos'], '{:.0f}')} dB\nconstant {x['k_cos']:.2f}")
+    box(cols[2], y_az, f"azimuth length\n{x['Lx']:.3f} m, {x['Lx']/lam:.1f}λ")
+    box(cols[0], y_el, "no elevation\nsidelobe limit")
+    box(cols[1], y_el, f"uniform, {_m(x['sl_uni'])} dB\nconstant {x['k_uni']:.3f}")
+    box(cols[2], y_el, f"elevation length\n{x['Ly']:.3f} m, {x['Ly']/lam:.2f}λ")
+    for y, beam in ((y_az, XB["az"]), (y_el, XB["el"])):
+        arrow((cols[0] + W / 2, y), (cols[1] - W / 2, y))
+        arrow((cols[1] + W / 2, y), (cols[2] - W / 2, y))
+        ax.plot([cols[2] + W / 2, BUS], [y, y], color=GRAY, lw=1.4)
+        # the beam requirement enters at the length box, written on top of it
+        ax.text(cols[2], y + H / 2 + 0.8, f"for a {beam:.0f}° beam", color=AMBER,
+                fontsize=10.5, ha="center", va="bottom", fontweight="bold")
+    box(cols[1], y_g, f"area {x['A']:.3f} m²\nefficiency {x['eta']:.2f}")
+    box(cols[0], y_g, f"gain\n{x['G_dbi']:.1f} dBi", ec=RED, fc=SHADE, bold=True)
+    ax.plot([BUS, BUS], [y_az, y_g], color=GRAY, lw=1.4)
+    arrow((BUS, y_g), (cols[1] + W / 2, y_g))
+    arrow((cols[1] - W / 2, y_g), (cols[0] + W / 2, y_g))
+
+    # the check: the gain on a dBi scale against the pencil-beam numbers
+    cx = fig.add_axes([0.06, 0.10, 0.80, 0.12])
+    lo, hi = x["band"]
+    cx.axvspan(lo, hi, ymin=0.15, ymax=0.85, color=SHADE, lw=0)
+    cx.text((lo + hi) / 2, 0.5, "practical band", color=NAVY, fontsize=10.5, ha="center",
+            va="center")
+    cx.axvline(x["bound"], ymin=0.1, ymax=0.9, color=GRAY, lw=1.8)
+    cx.text(x["bound"] + 0.04, 0.5, f"bound\n{x['bound']:.1f}", color=GRAY, fontsize=10.5,
+            ha="left", va="center", linespacing=1.1)
+    cx.plot([x["G_dbi"]], [0.5], "o", color=RED, ms=9, mec="white", mew=1.2, zorder=5)
+    cx.text(x["G_dbi"], 0.95, f"{x['G_dbi']:.1f}", color=RED, fontsize=10.5, ha="center",
+            va="bottom", fontweight="bold")
+    cx.set_xlim(29.0, 32.0)
+    cx.set_ylim(0, 1)
+    cx.set_yticks([])
+    cx.set_xticks([lo, hi, 31.0, 32.0])
+    cx.set_xticklabels([f"{lo:.1f}", f"{hi:.1f}", "31.0", "32.0"])
+    for side in ("top", "right", "left"):
+        cx.spines[side].set_visible(False)
+    cx.set_xlabel("gain (dBi)")
+    save(fig, "L15-xband-flow",
+         f"The X-band design chain. The azimuth sidelobe limit of {XB['sl_spec']:.0f} dB picks the "
+         f"cosine illumination, constant {x['k_cos']:.2f}, and the {XB['az']:.0f} degree beam then "
+         f"fixes the azimuth length at {x['Lx']:.3f} m. Elevation has no sidelobe limit, so it stays "
+         f"uniform, constant {x['k_uni']:.3f}, and the {XB['el']:.0f} degree beam fixes "
+         f"{x['Ly']:.3f} m. Area {x['A']:.3f} square meters at efficiency {x['eta']:.2f} gives "
+         f"{x['G_dbi']:.1f} dBi, just above the practical band of {lo:.1f} to {hi:.1f} dBi and "
+         f"below the {x['bound']:.1f} dBi pencil-beam bound")
+    return {k: (round(v, 4) if isinstance(v, float) else v) for k, v in x.items()}
+
+
+# ----------------------------------------------------------- sidelobe decay
+def sidelobe_decay():
+    u = np.geomspace(0.5, 16, 40001)
+    # closed forms, checked against the aperture integral
+    for name, a, _ in TAPERS:
+        f = {"uniform": sinc_u, "cosine": cos_field, "cosine²": cos2_field}.get(name)
+        if f is not None:
+            uu = np.array([0.3, 1.43, 2.6, 5.5])
+            assert np.allclose(np.abs(f(uu)), space_factor(a, uu), atol=2e-5), name
+    curves = [("uniform", sinc_u, lambda v: 1 / (np.pi * v), 6, NAVY),
+              ("cosine", cos_field, lambda v: 1 / (4 * v ** 2), 12, BLUE),
+              ("cosine²", cos2_field, lambda v: 1 / (np.pi * v ** 3), 18, RED)]
+    fig, ax = plt.subplots(figsize=(5.8, 3.4))
+    slopes = {}
+    ue = np.geomspace(2.0, 16, 50)
+    for name, f, env, rate, col in curves:
+        ax.plot(u, db(f(u)), color=col, lw=0.9, alpha=0.75)
+        ax.plot(ue, db(env(ue)), color=col, lw=2.2, ls=(0, (5, 3)))
+        slopes[name] = db(env(np.array([8.0])))[0] - db(env(np.array([16.0])))[0]
+        y_end = db(env(np.array([16.0])))[0]
+        ax.text(17.0, y_end, f"{name}\n{_m(-rate, '{:.0f}')} dB per octave", color=col,
+                fontsize=10.5, ha="left", va="center", fontweight="bold", linespacing=1.15,
+                clip_on=False)
+    ax.set_xscale("log", base=2)
+    ax.set_xlim(0.5, 16)
+    ax.set_xticks([0.5, 1, 2, 4, 8, 16])
+    ax.set_xticklabels(["0.5", "1", "2", "4", "8", "16"])
+    ax.minorticks_off()
+    ax.set_ylim(-90, 3)
+    ax.set_yticks([0, -20, -40, -60, -80])
+    ax.set_yticklabels(["0"] + [_m(t, "{:.0f}") for t in (-20, -40, -60, -80)])
+    ax.set_xlabel("space frequency u (each tick one octave)")
+    ax.set_ylabel("pattern (dB)")
+    clean(ax)
+    fig.subplots_adjust(left=0.12, right=0.70, top=0.97, bottom=0.15)
+    save(fig, "L15-sidelobe-decay",
+         "Uniform, cosine, and cosine-squared patterns against space frequency on a log scale, "
+         "each with the dashed envelope its sidelobes follow: the uniform sidelobes fall 6 dB per "
+         "octave, the cosine's 12, and the cosine-squared's 18")
+    return {k: round(v, 2) for k, v in slopes.items()}
+
+
+# ---------------------------------------------------------- path difference
+def path_difference():
+    th = np.radians(30)
+    L = 10.0
+    xp = 3.4                                   # the point at x, right of center
+    d = np.array([np.sin(th), np.cos(th)])     # direction to the far-field point
+    fig, ax = plt.subplots(figsize=(5.4, 3.4))
+    # the aperture
+    ax.add_patch(plt.Rectangle((-L / 2, -0.35), L, 0.35, fc=SHADE, ec=NAVY, lw=1.8))
+    ax.text(-L / 2, -0.6, "aperture", color=NAVY, fontsize=10.5, ha="left", va="top")
+    ax.plot([0], [0], "o", color=INK, ms=5, zorder=5)
+    ax.plot([xp], [0], "o", color=INK, ms=5, zorder=5)
+    ax.text(0, -0.6, "center", color=INK, fontsize=10.5, ha="center", va="top")
+    ax.annotate("", (xp, -1.55), (0, -1.55), arrowprops=dict(arrowstyle="<|-|>", color=INK,
+                lw=1.0, mutation_scale=9, shrinkA=0, shrinkB=0))
+    ax.text(xp / 2, -1.7, "x", color=INK, fontsize=12, ha="center", va="top", fontstyle="italic")
+    # broadside, and the rays to the far-field point
+    R = 6.2
+    ax.plot([0, 0], [0, R], color=GRAY, lw=1.0, ls=(0, (4, 3)))
+    ax.text(0, R + 0.15, "broadside", color=GRAY, fontsize=10.5, ha="center", va="bottom")
+    for p0 in (np.array([0.0, 0.0]), np.array([xp, 0.0])):
+        ax.annotate("", p0 + R * d, p0, arrowprops=dict(arrowstyle="-|>", color=BLUE, lw=1.6,
+                    mutation_scale=12, shrinkA=0, shrinkB=0))
+    ax.text(xp + R * d[0] + 0.1, R * d[1], "to the far field", color=BLUE, fontsize=10.5,
+            ha="left", va="center")
+    # angle from broadside at the center
+    arc = np.linspace(np.pi / 2, np.pi / 2 - th, 40)
+    ax.plot(1.6 * np.cos(arc), 1.6 * np.sin(arc), color=INK, lw=1.0)
+    mid = np.pi / 2 - th / 2
+    ax.text(1.95 * np.cos(mid), 1.95 * np.sin(mid), "θ", color=INK, fontsize=12.5,
+            ha="center", va="center", fontstyle="italic")
+    # the wavefront through x, and the extra path along the center ray
+    s = xp * np.sin(th)
+    foot = s * d
+    ax.plot([xp, foot[0]], [0, foot[1]], color=GRAY, lw=1.2, ls=(0, (2, 2)))
+    ax.plot([0, foot[0]], [0, foot[1]], color=RED, lw=4.0, solid_capstyle="butt", zorder=4)
+    nrm = np.array([-d[1], d[0]])              # left of the ray
+    lab = foot / 2 + 0.35 * nrm
+    ax.text(lab[0], lab[1], "extra path x sin θ\nextra phase k x sin θ", color=RED,
+            fontsize=10.5, ha="right", va="center", fontweight="bold", linespacing=1.25,
+            multialignment="right", bbox=BOX)
+    ax.set_xlim(-L / 2 - 0.2, L / 2 + 3.6)
+    ax.set_ylim(-2.3, R + 0.7)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    fig.subplots_adjust(left=0.01, right=0.99, top=0.99, bottom=0.01)
+    save(fig, "L15-path-difference",
+         "A one-dimensional aperture with its center and a point a distance x from the center. "
+         "Parallel rays leave both toward a far-field direction at angle theta from broadside, and "
+         "the ray from the center travels an extra x sine theta, which is a phase of k x sine theta")
+    return dict(theta_deg=30, x=xp, path=s)
+
+
+# --------------------------------------------------------- frequency scaling
+def frequency_scaling():
+    L = 0.30
+    uh = half_power(sinc_u)                    # 0.4429
+    f = np.linspace(1, 20, 1901)
+    lam = 3e8 / (f * 1e9)
+    hp_exact = np.degrees(2 * np.arcsin(uh * lam / L))
+    gain = 10 * np.log10(4 * np.pi * L ** 2 / lam ** 2)
+    fig, (ax, bx) = plt.subplots(2, 1, figsize=(5.4, 4.4), sharex=True,
+                                 gridspec_kw=dict(hspace=0.16))
+    ax.plot(f, hp_exact, color=NAVY, lw=2.4)
+    bx.plot(f, gain, color=RED, lw=2.4)
+    marks = {}
+    for f0 in (3, 10):
+        l0 = 3e8 / (f0 * 1e9)
+        h = np.degrees(2 * np.arcsin(uh * l0 / L))
+        hs = np.degrees(2 * uh * l0 / L)
+        g = 10 * np.log10(4 * np.pi * L ** 2 / l0 ** 2)
+        marks[f0] = (round(L / l0, 2), round(h, 2), round(hs, 2), round(g, 2))
+        ax.plot([f0], [h], "o", color=NAVY, ms=7, mec="white", mew=1.2, zorder=5)
+        bx.plot([f0], [g], "o", color=RED, ms=7, mec="white", mew=1.2, zorder=5)
+        hd = f"{h:.2f}" if h < 10 else f"{h:.1f}"
+        ax.text(f0 + 0.5, h + 1.5, f"{f0} GHz, {L/l0:.0f}λ: {hd}°", color=NAVY,
+                fontsize=10.5, ha="left", va="bottom", fontweight="bold", bbox=BOX)
+        bx.text(f0 + 0.5, g - 1.2, f"{g:.1f} dBi", color=RED, fontsize=10.5, ha="left",
+                va="top", fontweight="bold", bbox=BOX)
+    ax.set_ylim(0, 60)
+    ax.set_yticks([0, 20, 40, 60])
+    ax.set_ylabel("beamwidth (deg)")
+    ax.set_title("one 0.30 m uniform aperture", color=INK, fontsize=12, fontweight="bold",
+                 loc="left")
+    clean(ax)
+    bx.set_ylim(5, 45)
+    bx.set_yticks([10, 20, 30, 40])
+    bx.set_ylabel("gain, 0.30 m square (dBi)")
+    bx.set_xlim(1, 20)
+    bx.set_xticks([1, 3, 5, 10, 15, 20])
+    bx.set_xlabel("frequency (GHz)")
+    clean(bx)
+    fig.subplots_adjust(left=0.14, right=0.97, top=0.94, bottom=0.11)
+    save(fig, "L15-frequency-scaling",
+         f"One 0.30 m uniform aperture from 1 to 20 GHz. Top: the half-power beamwidth narrows "
+         f"from {hp_exact[0]:.0f} degrees at 1 GHz to {marks[3][1]:.1f} at 3 GHz and "
+         f"{marks[10][1]:.2f} at 10 GHz. Bottom: the gain of a uniform 0.30 m square rises 6 dB per doubling of "
+         f"frequency, {marks[3][3]:.1f} dBi at 3 GHz and {marks[10][3]:.1f} dBi at 10 GHz")
+    return marks
+
+
 if __name__ == "__main__":
     print("shape:", shape_vs_size())
     print("trade:", taper_trade())
     print("circle:", circle_vs_square())
     print("ratio:", efficiency_ratio())
+    print("footprint:", rect_footprint())
+    print("xband:", xband_flow())
+    print("decay:", sidelobe_decay())
+    print("path:", path_difference())
+    print("scaling:", frequency_scaling())

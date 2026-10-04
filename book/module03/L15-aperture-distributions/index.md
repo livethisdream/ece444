@@ -70,7 +70,11 @@ Lesson 6 established the relationship. For a source confined to a region, the fa
 $$S(\theta) = \int_{-L/2}^{L/2} E_a(x)\ e^{\ jkx\sin\theta}\ dx$$
 :::
 
-with $k = 2\pi/\lambda$. The exponent is the extra path from the element at $x$ relative to the aperture center, converted to phase. That integral is a Fourier transform: the aperture coordinate $x$ is the variable, and the transform variable is the **space frequency**
+with $k = 2\pi/\lambda$. The exponent is the extra path from the element at $x$ relative to the aperture center, converted to phase. Toward a far-field point at angle $\theta$, the rays from the center and from $x$ are parallel, and they differ in length by $x\sin\theta$, a phase of $kx\sin\theta$.
+
+<img src="../../viz/img/L15-path-difference.svg" alt="A one-dimensional aperture with its center and a point a distance x from it. Parallel rays leave both toward a far-field direction at angle theta from broadside, and the two paths differ by x sine theta, a phase of k x sine theta" style="max-width: 480px; width: 100%; display: block; margin: 1em auto;">
+
+That integral is a Fourier transform: the aperture coordinate $x$ is the variable, and the transform variable is the **space frequency**
 
 :::{present}
 $$u = \frac{L}{\lambda}\sin\theta$$
@@ -209,8 +213,13 @@ $$\begin{aligned}
 
 A tall narrow aperture makes a wide flat beam, and a wide short aperture makes a narrow tall one.
 :::
+:::{present}
+<img src="../../viz/img/L15-rect-footprint.svg" alt="Left: the X-band aperture to scale, 0.682 m wide and 0.152 m tall, cosine illumination across and uniform up. Right: the half-power contour of its beam, 3.0 degrees wide in azimuth and 10.0 degrees tall in elevation. The long dimension makes the narrow beam" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 :::{depth}
+The figure draws the aperture that the X-band worked example below arrives at, $0.682$ m by $0.152$ m at $10$ GHz. The $0.682$ m dimension makes the $3^\circ$ azimuth beam and the $0.152$ m dimension the $10^\circ$ elevation beam, so the beam's footprint is the aperture turned $90^\circ$.
+
 The aperture efficiency of Part 3 factors the same way. Both integrals in its ratio split into an $x$ integral times a $y$ integral, so
 
 $$\eta_\text{ap} = \eta_x\ \eta_y$$
@@ -334,6 +343,9 @@ The cosine-illuminated aperture delivers $81\%$ of the gain its area could suppo
 - Lesson 14's reflector came to $0.66$ with $\eta_t = 0.85$; a horn comes to $0.49$.
 - None of these losses is heat, so $\eta_\text{ap}$ is not $\eta_\text{rad}$.
 :::
+:::{present}
+<img src="../../viz/img/L14-efficiency-budget.svg" alt="Lesson 14's efficiency budget as a waterfall: spillover, taper, blockage, surface error, and the remaining losses take an ideal aperture from 1.00 to 0.66" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 Two cautions on using $\eta_\text{ap}$ in practice. First, the taper efficiency $\eta_t$ is only one of its factors. A real reflector also loses to spillover past the rim (Lesson 14's $\eta_s$), to phase error across the surface, to feed and strut blockage, and to cross-polarization, and $\eta_\text{ap}$ as measured is the product of all of them. Lesson 14's efficiency budget took an ordinary reflector from $1.00$ to $0.66$ that way, with a taper factor of only $0.85$. A horn's cosine taper alone gives $0.81$, and Lesson 13 found the rest in the flare's phase error: $0.78 \times 0.77 \times 0.81 = 0.49$, which is why horns come in near $0.5$. Second, $\eta_\text{ap}$ is not radiation efficiency. $\eta_\text{rad}$ accounts for power turned into heat; $\eta_\text{ap}$ accounts for power that radiates but does not end up on boresight.
 ::::
@@ -355,20 +367,25 @@ For a low-loss aperture, $\eta_\text{rad} \approx 1$ and gain equals directivity
 - The uniform aperture's sharp edge produces its $-13.3$ dB sidelobes; a rounded edge lowers them.
 - The outer aperture then works below full strength, so the beam widens and the gain falls.
 :::
+:::{present}
+<img src="../../viz/img/L15-sidelobe-decay.svg" alt="Uniform, cosine, and cosine-squared patterns against space frequency on a log scale, each with the dashed envelope its sidelobes follow: the uniform sidelobes fall 6 dB per octave, the cosine's 12, and the cosine-squared's 18" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 **Tapering** means letting the illumination fall off toward the edges of the aperture instead of stopping abruptly. The uniform aperture's $-13.3$ dB sidelobes come from the sharp edge: the transform of a function with a step in it decays slowly. Round the edge off and the sidelobes fall away much faster. The outer part of the aperture no longer works at full strength, so the aperture behaves as though it were shorter and less complete than it is, the beam widens, and the gain falls.
+
+The far sidelobes show how much the edge matters. Each level of smoothness at the edge, first the illumination itself and then its slope, adds one power of $u$ to the decay. The uniform illumination steps to zero, and its sidelobes fall as $1/u$, or $6$ dB per octave of $u$. The cosine reaches zero continuously but with a slope there, and its sidelobes fall as $1/u^2$, or $12$ dB per octave. The $\cos^2$ illumination arrives with zero slope as well, and its sidelobes fall as $1/u^3$, or $18$ dB per octave.
 ::::
 
 ::::{frame} The Taper Trade
 Four illuminations cover most of the ground, and their numbers are the ones this course uses everywhere:
 
 :::{present}
-| Illumination | First sidelobe | HPBW ($\times\ \lambda/L$) | $\eta_t$ | Gain penalty |
+| Taper | Sidelobe ($\text{dB}$) | HPBW ($\times\ \lambda/L$) | $\eta_t$ | $\Delta G$ ($\text{dB}$) |
 | :-- | :-- | :-- | :-- | :-- |
-| Uniform | $-13.3$ dB | $0.886$ | $1.00$ | $0$ dB |
-| Cosine | $-23$ dB | $1.19$ | $0.81$ | $-0.9$ dB |
-| Triangular | $-26.5$ dB | $1.27$ | $0.75$ | $-1.25$ dB |
-| Cosine$^2$ | $-31.5$ dB | $1.44$ | $0.667$ | $-1.8$ dB |
+| Uniform | $-13.3$ | $0.886$ | $1.00$ | $0$ |
+| Cosine | $-23$ | $1.19$ | $0.81$ | $-0.9$ |
+| Triangular | $-26.5$ | $1.28$ | $0.75$ | $-1.25$ |
+| Cosine$^2$ | $-31.5$ | $1.44$ | $0.667$ | $-1.8$ |
 :::
 
 The table reads as one continuous trade. Going from uniform to $\cos^2$ lowers the first sidelobe by $18$ dB, widens the beam by $63\%$, and loses $1.8$ dB of gain. There is no illumination that lowers sidelobes and narrows the beam at the same time. When a radar system needs low sidelobes to keep clutter and jamming out of the receiver, it accepts a wider beam or a larger aperture to get them.
@@ -419,6 +436,8 @@ $$\eta_t = \frac{\left(\sum a_n\right)^2}{N\sum a_n^2},$$
 
 which is the identical ratio of coherent to available gain evaluated over $N$ element amplitudes. Lessons 24 and 25 use it on the PHASER. The Hann preset is the $\cos^2$ row above sampled at the element positions, and the Blackman preset tapers harder than any row in the table.
 ```
+
+<img src="../../viz/img/L16-sampled-aperture.svg" alt="A continuous uniform aperture of length L above, and below it the same length occupied by eight equally spaced elements carrying the same total excitation" style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
 ::::
 
 ::::{frame} Part 5: Designing in Wavelengths
@@ -430,6 +449,10 @@ Every result so far depends on $L/\lambda$ and $A/\lambda^2$, never on $L$ or $A
 :::
 
 Both rules apply whether the aperture or the frequency changes. An antenna moved from $10\ \text{GHz}$ to $20\ \text{GHz}$ doubles its size in wavelengths, halves both beamwidths, and gains $6$ dB, provided the feed keeps illuminating it the same way. That proviso matters on real hardware, since a feed horn's illumination pattern is itself frequency-dependent, but the scaling is the right first estimate.
+
+The figure follows the $0.30$ m uniform aperture of the $10\lambda$ worked example from $1$ to $20$ GHz. Its beamwidth falls as $1/f$: the exact $2\arcsin(0.4429\ \lambda/L)$ gives $17.0^\circ$ at $3$ GHz, where the small-angle $50.8^\circ\ \lambda/L$ gives $16.9^\circ$, and $5.08^\circ$ at $10$ GHz. A uniform $0.30$ m square over the same band gains $6$ dB per doubling of frequency, from $20.5$ dBi at $3$ GHz to $31.0$ dBi at $10$ GHz.
+
+<img src="../../viz/img/L15-frequency-scaling.svg" alt="One 0.30 m uniform aperture from 1 to 20 GHz. Top: the half-power beamwidth narrows from 53 degrees at 1 GHz to 17.0 at 3 GHz and 5.08 at 10 GHz. Bottom: the gain of a uniform 0.30 m square rises 6 dB per doubling of frequency, 20.5 dBi at 3 GHz and 31.0 dBi at 10 GHz" style="max-width: 520px; width: 100%; display: block; margin: 1em auto;">
 ::::
 
 ::::{frame} Worked Example: Sizing an X-Band Aperture
@@ -479,6 +502,9 @@ The design has two further consequences. The $3^\circ$ azimuth requirement is wh
 :::{present}
 :class: callout
 The sidelobe specification chooses the illumination, the illumination fixes the beamwidth constant, and the beamwidth fixes the length. The gain comes out last: it is a design output, not a design input.
+:::
+:::{present}
+<img src="../../viz/img/L15-xband-flow.svg" alt="The X-band design chain. The azimuth sidelobe limit of minus 20 dB picks the cosine illumination, constant 1.19, and the 3 degree beam then fixes the azimuth length at 0.682 m. Elevation has no sidelobe limit, so it stays uniform, constant 0.886, and the 10 degree beam fixes 0.152 m. Area 0.104 square meters at efficiency 0.81 gives 30.7 dBi, just above the practical band of 29.4 to 30.3 dBi and below the 31.4 dBi pencil-beam bound" style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Notice how the requirements mapped onto the aperture. The sidelobe specification chose the illumination, the illumination fixed the beamwidth constant, the beamwidth specification then fixed the length, and only after all of that did the gain come out. For an aperture antenna, gain follows from the design; it is not a design input.
