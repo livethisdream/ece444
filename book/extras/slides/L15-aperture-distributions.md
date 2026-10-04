@@ -374,7 +374,7 @@ Keep eta rad and eta ap separate in their heads.
 | :-- | :-- | :-- | :-- | :-- |
 | Uniform | $-13.3$ dB | $0.886$ | $1.00$ | $0$ dB |
 | Cosine | $-23$ dB | $1.19$ | $0.81$ | $-0.9$ dB |
-| Triangular | $-26.5$ dB | $1.27$ | $0.75$ | $-1.25$ dB |
+| Triangular | $-26.5$ dB | $1.28$ | $0.75$ | $-1.25$ dB |
 | Cosine$^2$ | $-31.5$ dB | $1.44$ | $0.667$ | $-1.8$ dB |
 
 <div class="callout">Going from uniform to $\cos^2$ lowers the first sidelobe by 18 dB, widens the beam by 63%, and loses 1.8 dB of gain. No illumination lowers sidelobes and narrows the beam at once.</div>

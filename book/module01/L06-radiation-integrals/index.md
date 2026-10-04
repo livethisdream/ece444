@@ -860,7 +860,7 @@ statements have something to point at.
 | :-- | :-: | :-: |
 | Uniform | $-13.3$ dB | 0.886 |
 | Cosine | $-23$ dB | 1.19 |
-| Triangular | $-26.5$ dB | 1.27 |
+| Triangular | $-26.5$ dB | 1.28 |
 | Cosine² | $-31.5$ dB | 1.44 |
 
 Since the transform's high-frequency content comes from the *edges* of the

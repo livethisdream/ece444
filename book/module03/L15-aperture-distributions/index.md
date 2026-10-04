@@ -363,12 +363,12 @@ For a low-loss aperture, $\eta_\text{rad} \approx 1$ and gain equals directivity
 Four illuminations cover most of the ground, and their numbers are the ones this course uses everywhere:
 
 :::{present}
-| Illumination | First sidelobe | HPBW ($\times\ \lambda/L$) | $\eta_t$ | Gain penalty |
+| Taper | Sidelobe ($\text{dB}$) | HPBW ($\times\ \lambda/L$) | $\eta_t$ | $\Delta G$ ($\text{dB}$) |
 | :-- | :-- | :-- | :-- | :-- |
-| Uniform | $-13.3$ dB | $0.886$ | $1.00$ | $0$ dB |
-| Cosine | $-23$ dB | $1.19$ | $0.81$ | $-0.9$ dB |
-| Triangular | $-26.5$ dB | $1.27$ | $0.75$ | $-1.25$ dB |
-| Cosine$^2$ | $-31.5$ dB | $1.44$ | $0.667$ | $-1.8$ dB |
+| Uniform | $-13.3$ | $0.886$ | $1.00$ | $0$ |
+| Cosine | $-23$ | $1.19$ | $0.81$ | $-0.9$ |
+| Triangular | $-26.5$ | $1.28$ | $0.75$ | $-1.25$ |
+| Cosine$^2$ | $-31.5$ | $1.44$ | $0.667$ | $-1.8$ |
 :::
 
 The table reads as one continuous trade. Going from uniform to $\cos^2$ lowers the first sidelobe by $18$ dB, widens the beam by $63\%$, and loses $1.8$ dB of gain. There is no illumination that lowers sidelobes and narrows the beam at the same time. When a radar system needs low sidelobes to keep clutter and jamming out of the receiver, it accepts a wider beam or a larger aperture to get them.
