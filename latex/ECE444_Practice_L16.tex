@@ -23,7 +23,7 @@ measured from broadside.
 
 	\part Pattern multiplication lets you write the array pattern as one element
 	pattern times one sum. State the two conditions the elements must satisfy for
-	that factoring to be legal, and name the step in the derivation where each one
+	that factoring to be valid, and name the step in the derivation where each one
 	is used.
 		\begin{solution}[1.0in]
 		The elements must be \textbf{identical} and \textbf{identically oriented}.
@@ -55,8 +55,8 @@ measured from broadside.
 		\part Evaluate $\vert AF\vert$ at broadside and at $\theta = 30\mydeg$, and
 		give the $30\mydeg$ value in dB relative to the broadside peak.
 		\begin{solution}[1.3in]
-		Factor the sum: $AF = e^{j\psi}(2 + 2\cos\psi)$, so
-		$\vert AF\vert = 2 + 2\cos\psi$.
+		Factor the sum:
+		\eq{ AF &= e^{j\psi}(2 + 2\cos\psi) \quad\Longrightarrow\quad \vert AF\vert = 2 + 2\cos\psi }
 		\eq{ \theta = 0: \quad \psi &= 0, \qquad \vert AF\vert = 4 }
 		\eq{ \theta = 30\mydeg: \quad \psi &= \pi\sinp{30\mydeg} = 90\mydeg }
 		\eq{ \vert AF\vert &= 2 + 2\cos(90\mydeg) = 2 }
@@ -168,20 +168,22 @@ $AF_4 = -11.3\ \db$.
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Evaluate the element factor at the sidelobe angle in dB, and find the
-		first sidelobe level of the total pattern.
+		\part Evaluate the element factor at the sidelobe angle in dB, and use it to
+		estimate the first sidelobe level of the total pattern.
 		\begin{solution}[1.4in]
 		\eq{ EF(47.1\mydeg) &= \cosp{47.1\mydeg} = 0.681 }
 		\eq{ 20\mylog{0.681} &= -3.3\ \db }
 		Pattern multiplication is a product, so in dB the two levels add:
-		\eq{ \text{SLL} &= -11.3\ \db + (-3.3\ \db) = -14.6\ \db }
+		\eq{ \text{SLL} &\approx -11.3\ \db + (-3.3\ \db) = -14.6\ \db }
+		This is an estimate: the product peaks slightly closer to broadside, at
+		$44.2\mydeg$, where it is $-14.4\ \db$.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
 		$EF$ at $47.1\mydeg$ = \ansbox[1.1in]{$-3.3\ \db$}
 		\\[10pt]
-		Total SLL = \ansbox[1.1in]{$-14.6\ \db$}
+		Total SLL $\approx$ \ansbox[1.1in]{$-14.6\ \db$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -204,10 +206,10 @@ $AF_4 = -11.3\ \db$.
 	half-power beamwidth by almost nothing. Explain why, in terms of the shape of
 	$\cosp{\theta}$ near broadside.
 		\begin{solution}[1.2in]
-		$\cosp{\theta}$ is flat near $\theta = 0$: at the $\pm 6.3\mydeg$ half-power
-		edges of the four-element beam it is still $0.994$, or $-0.05\ \db$, so it
-		scales both the peak and the half-power points by the same amount and leaves
-		the width where it was. Out at $47\mydeg$ the cosine has fallen by
+		$\cosp{\theta}$ is flat near $\theta = 0$: at the $\pm 13.2\mydeg$ half-power
+		edges of the four-element beam it is still $0.974$, or $-0.23\ \db$, so it
+		scales the peak and the half-power points by nearly the same amount and the
+		width only narrows from $26.3\mydeg$ to $25.4\mydeg$. Out at $47\mydeg$ the cosine has fallen by
 		$3.3\ \db$, which is why the sidelobe moved. A directive element reshapes the
 		skirts of a pattern; the main lobe belongs to the array factor.
 		\end{solution}
