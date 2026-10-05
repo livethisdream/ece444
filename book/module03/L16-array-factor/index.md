@@ -167,6 +167,23 @@ The array factor is a sum of unit phasors, one per element, whose phases advance
 Read the three cases from left to right. At $\psi = 0$ every phasor points the same way and the sum is $N$, the largest it can be. As $\psi$ grows the chain fans out and the sum shortens. When the fan has turned through a full circle, $N\psi = 2\pi$, the chain closes on itself and the sum is exactly zero. That is the first null, and the closed form below locates it for every $N$.
 ::::
 
+::::{frame} Phasor Chain Explorer
+:class: viz-frame
+
+:::{depth}
+The left panel draws the $N$ element phasors tip to tail, with each one turned $\psi$ from the last, and the navy arrow is their sum. The phase is referenced to the array center, so the sum always lies along the horizontal axis and points left where the array factor is negative. The right panel is $\vert AF\vert$ against scan angle, with a marker at the current $\theta$. Start at broadside, where the chain is straight and the sum is $N$. Drag $\theta$ slowly: the chain curls, the sum shortens, and at $15.1^\circ$, where $\psi = 45^\circ$ and $N\psi = 360^\circ$, the chain closes into an octagon and the sum is zero. Keep going to $21.9^\circ$ to find the first sidelobe, $-12.8$ dB, where the chain has wound about one and a half turns.
+:::
+
+:::{present}
+<iframe src="../../viz/phasor-chain.html"
+        width="100%" height="451"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Phasor chain: the element phasors added tip to tail for a chosen scan angle, beside the array factor in decibels with a marker at that angle">
+</iframe>
+:::
+::::
+
 ::::{frame} Part 2: Uniform Excitation
 :::{present}
 $$\begin{aligned}
