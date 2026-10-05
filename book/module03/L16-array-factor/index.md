@@ -76,6 +76,11 @@ $$\begin{aligned}
 - Lesson 6's $k_z = k\cos\theta_{\text{polar}}$ becomes $k\sin\theta$.
 - Broadside moves from $\theta_{\text{polar}} = 90^\circ$ to $\theta = 0$.
 :::
+:::{present}
+<img src="../../viz/img/L16-scan-angle.svg"
+     alt="An array on a horizontal axis with broadside straight up. One ray leaves at 35 degrees from broadside; the scan angle is measured from broadside to the ray, and the Module 1 polar angle from the array axis to the same ray, 55 degrees"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 Module 3 measures the **scan angle** $\theta$ from **broadside**, the direction perpendicular to the array face, with $-90^\circ \le \theta \le +90^\circ$. Every PHASER plot, the GUI's angle axis, and the phased-array literature use this convention.
 
@@ -162,6 +167,23 @@ The array factor is a sum of unit phasors, one per element, whose phases advance
 Read the three cases from left to right. At $\psi = 0$ every phasor points the same way and the sum is $N$, the largest it can be. As $\psi$ grows the chain fans out and the sum shortens. When the fan has turned through a full circle, $N\psi = 2\pi$, the chain closes on itself and the sum is exactly zero. That is the first null, and the closed form below locates it for every $N$.
 ::::
 
+::::{frame} Phasor Chain Explorer
+:class: viz-frame
+
+:::{depth}
+The left panel draws the $N$ element phasors tip to tail, with each one turned $\psi$ from the last, and the navy arrow is their sum. The phase is referenced to the array center, so the sum always lies along the horizontal axis and points left where the array factor is negative. The right panel is $\vert AF\vert$ against scan angle, with a marker at the current $\theta$. Start at broadside, where the chain is straight and the sum is $N$. Drag $\theta$ slowly: the chain curls, the sum shortens, and at $15.1^\circ$, where $\psi = 45^\circ$ and $N\psi = 360^\circ$, the chain closes into an octagon and the sum is zero. Keep going to $21.9^\circ$ to find the first sidelobe, $-12.8$ dB, where the chain has wound about one and a half turns.
+:::
+
+:::{present}
+<iframe src="../../viz/phasor-chain.html"
+        width="100%" height="451"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Phasor chain: the element phasors added tip to tail for a chosen scan angle, beside the array factor in decibels with a marker at that angle">
+</iframe>
+:::
+::::
+
 ::::{frame} Part 2: Uniform Excitation
 :::{present}
 $$\begin{aligned}
@@ -213,14 +235,18 @@ AF_N &\approx \frac{1}{N\sin(3\pi/2N)} \\
 &\xrightarrow{\ \text{large } N\ } \frac{2}{3\pi} = 0.212
 \end{aligned}$$
 
-- One sidelobe between each pair of nulls, $N - 2$ per period; the first is the tallest.
+- $N - 2$ sidelobes per period, one between each pair of nulls; the first is tallest.
 - The first peaks near $N\psi/2 = 3\pi/2$, halfway between the first two nulls.
-- Exact level: $-13.3$ dB for large $N$, $-12.8$ dB at $N = 8$.
+:::
+:::{present}
+<img src="../../viz/img/L16-sidelobe-vs-n.svg"
+     alt="First sidelobe level against the number of elements from 3 to 32: the exact peak rises from minus 9.5 dB at N equals 3 through minus 11.3 dB at 4 and minus 12.8 dB at 8 toward the continuous line source's minus 13.3 dB, with the halfway-between-nulls estimate a fraction of a decibel lower throughout"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Between consecutive nulls the numerator swings back to $\pm 1$, so a sidelobe sits in each gap: $N - 2$ of them across one period. Their heights fall off as $1/\sin(\psi/2)$, so the tallest is the one nearest the main lobe. The numerator reaches its peak magnitude halfway between its first two zeros, at $N\psi/2 = 3\pi/2$, and evaluating $AF_N$ there gives $2/(3\pi) = 0.212$ for large $N$, or $-13.5$ dB.
 
-The denominator is still growing across that gap, so the true peak sits slightly closer to the main lobe, where the denominator is smaller. Locating it exactly gives $-13.3$ dB, which is the uniform line-source number from Lesson 6. At $N = 8$ the value is $-12.8$ dB. Uniform excitation leaves the first sidelobe about $13$ dB below the peak in a discrete array, as it did in the continuous aperture of Lesson 15, and Lesson 24 lowers it with a taper.
+The denominator is still growing across that gap, so the true peak sits slightly closer to the main lobe, where the denominator is smaller. Locating it exactly gives $-13.3$ dB, which is the uniform line-source number from Lesson 6. At $N = 8$ the value is $-12.8$ dB. The figure plots the exact level against $N$: a short array has a higher first sidelobe, and by $N = 16$ the level is within $0.2$ dB of the line source. The estimate runs a fraction of a decibel low at every $N$, for the reason above. Uniform excitation leaves the first sidelobe about $13$ dB below the peak in a discrete array, as it did in the continuous aperture of Lesson 15, and Lesson 24 lowers it with a taper.
 ::::
 
 ::::{frame} The Eight-Element Array Factor
@@ -292,6 +318,12 @@ The product's own peak sits slightly closer to broadside, at $44.2^\circ$, becau
 
 The element factor did two things: it pushed the sidelobes down, more so the farther off broadside they sit, and it deepened the null at $\pm 90^\circ$ that the array factor already had. It changed the main lobe very little, because $\cos\theta$ is flat near broadside: at the $\pm 13.2^\circ$ half-power edges of the array factor it is still $0.974$, or $-0.23$ dB, so the half-power width narrows only from $26.3^\circ$ to $25.4^\circ$.
 :::
+
+The figure zooms in on that sidelobe. Adding the two levels at the array factor's peak gives the amber point on the product curve; the product's own peak, in red, sits $3^\circ$ closer to broadside and $0.2$ dB higher, because the array factor is flat at its own peak while the element factor keeps rising toward broadside.
+
+<img src="../../viz/img/L16-four-dipole-zoom.svg"
+     alt="Zoom on the first sidelobe of four collinear short dipoles: the array factor peaks at minus 11.3 dB at 47.1 degrees, the dB-add estimate there is minus 14.6 dB, and the product of element and array factors peaks at minus 14.4 dB at 44.2 degrees"
+     style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
 ::::
 
 ::::{frame} Element Factor Times Array Factor
@@ -354,14 +386,35 @@ The width of the window alone does not produce a second beam. At $d = \lambda/2$
 :::
 ::::
 
+::::{frame} Visible Region Explorer
+:class: viz-frame
+
+:::{depth}
+The top panel plots $AF_N$ against $\psi$ over several periods and shades the window that real angles reach; the bottom panel is the same pattern against scan angle. Start at the PHASER, $d/\lambda = 0.481$, where the window spans $\pm 173^\circ$ and stops short of the repeats at $\pm 360^\circ$. Widen the spacing and watch the window grow until its edges reach $\pm 360^\circ$ at $d = \lambda$, and the repeats appear at $\pm 90^\circ$. Then return to $d/\lambda = 0.75$ and steer to $30^\circ$: the window slides without changing width, its left edge passes $-360^\circ$, and a grating lobe appears at $-56.4^\circ$.
+:::
+
+:::{present}
+<iframe src="../../viz/visible-region.html"
+        width="100%" height="541"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Visible region: the array factor against psi with the window real angles reach, and the same pattern against scan angle, for adjustable N, spacing, and steer angle">
+</iframe>
+:::
+::::
+
 ::::{frame} Grating Lobes
 :::{present}
 $$\sin\theta_g = \sin\theta_0 \pm \frac{m\lambda}{d}$$
 
 $$\boxed{\ d < \frac{\lambda}{1 + \vert\sin\theta_0\vert}\ }$$
 
-- At $\psi = 2\pi m$, $m = 1, 2, \ldots$, every element is back in phase with its neighbors.
-- Broadside: $d < \lambda$. Scanning to $\pm 90^\circ$: $d < \lambda/2$.
+- At $\psi = 2\pi m$ every element is back in phase with its neighbors.
+:::
+:::{present}
+<img src="../../viz/img/L16-grating-limit.svg"
+     alt="Largest grating-free spacing against the largest scan angle: 1.0 wavelength at broadside, 0.586 at 45 degrees, falling to 0.5 at 90 degrees, with the region above the curve shaded as grating lobe in view and the PHASER's 0.481-wavelength spacing drawn below the curve at every angle"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Grating lobes appear where $\psi$ is a nonzero multiple of $2\pi$. At $\psi = 2\pi$ the path difference between neighbors, less the applied phase step, is exactly one wavelength, so every term $e^{\ jn\psi} = e^{\ j2\pi n} = 1$ and the elements add in phase exactly as they do at the main lobe. That is why a grating lobe is full height.
@@ -374,7 +427,7 @@ $$\begin{aligned}
 d &< \frac{\lambda}{1 + \sin\theta_0}
 \end{aligned}$$
 
-A beam steered to negative $\theta_0$ gives the mirror image, so the criterion carries $\vert\sin\theta_0\vert$. At broadside it is $d < \lambda$. Scanning to $\pm 90^\circ$ tightens it to $d < \lambda/2$, which is where the familiar half-wavelength spacing comes from. Lesson 26 treats grating lobes in full, alongside beam squint and phase quantization; we use the criterion as stated until then.
+A beam steered to negative $\theta_0$ gives the mirror image, so the criterion carries $\vert\sin\theta_0\vert$. At broadside it is $d < \lambda$. Scanning to $\pm 90^\circ$ tightens it to $d < \lambda/2$, which is where the familiar half-wavelength spacing comes from. The figure plots the limit against the largest scan angle a design needs: a $\pm 45^\circ$ requirement allows $0.586\lambda$, and the PHASER's $0.481\lambda$ sits below the curve at every angle, so it can scan anywhere without a grating lobe. Lesson 26 treats grating lobes in full, alongside beam squint and phase quantization; we use the criterion as stated until then.
 
 ```{note}
 Element spacing is a two-sided trade. Too large and a grating lobe appears. Too small and the array is short for its element count, so the beam is wide and the elements couple strongly to each other (mutual coupling, Lesson 22). Most designs land between $0.4\lambda$ and $0.5\lambda$.
@@ -392,12 +445,18 @@ AF_N &= \frac{\sin(N\psi/2)}{N\sin(\psi/2)} \\
 - With $L = Nd$, $N\psi/2 = (kL/2)\sin\theta$: the sinc of Lessons 6 and 15.
 :::
 :::{present}
-<img src="../../viz/img/L16-sampled-aperture.svg"
-     alt="A continuous uniform aperture above, and below it the same overall length occupied by eight equally spaced elements"
+<img src="../../viz/img/L16-sinc-limit.svg"
+     alt="Array factors for 4, 8, and 32 elements plotted against distance from the main lobe in units of the line source's null spacing, over the line source's sinc pattern. All three match near the main lobe; the 4-element pattern repeats at full height 4 nulls out, the 8-element pattern 8 nulls out, and the 32-element pattern follows the sinc across the whole plot"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Near the main lobe and the first few sidelobes, $\psi$ is a small fraction of a period when $N$ is large, so the denominator $N\sin(\psi/2)$ is close to $N\psi/2$. The array factor then becomes $\sin u/u$ with $u = N\psi/2 = (kNd/2)\sin\theta$. With $L = Nd$ this is the $u = (kL/2)\cos\theta_{\text{polar}}$ of Lesson 6's uniform line source, written in scan angle. A uniform line source of length $L$ has a beamwidth $\approx 0.886\ \lambda/L$ and a first sidelobe of $-13.3$ dB, and a uniform array of $N$ elements spaced $d$ has a beamwidth $\approx 0.886\ \lambda/(Nd)$ and a first sidelobe near $-13$ dB. The array is that line source **sampled** every $d$.
+
+The figure shows where the approximation holds. Plotted against $u$, in units of the line source's null spacing, the 4-, 8-, and 32-element patterns all match the sinc near the main lobe. They part from it where $\psi$ is no longer small: an $N$-element array repeats its main lobe at full height $N$ nulls out, so the 4-element pattern returns at $u/\pi = 4$ and the 8-element one at $8$, while the 32-element pattern follows the sinc across the whole plot.
+
+<img src="../../viz/img/L16-sampled-aperture.svg"
+     alt="A continuous uniform aperture above, and below it the same overall length occupied by eight equally spaced elements"
+     style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
 ::::
 
 ::::{frame} What Each Parameter Controls
@@ -450,11 +509,20 @@ D &\approx \frac{2Nd}{\lambda} = 7.7 \\
 :::
 ::::
 
-::::{frame} Worked Example: The Course Array in the Lab
+::::{frame} The Measured Sweep
+:class: viz-frame
+
+:::{depth}
+Lesson 21 sweeps this beam past a fixed source. Expect a $13^\circ$ beam, a first null past $15^\circ$, and sidelobes 11 to 13 dB down. The widget below is the one Lesson 21 uses: pick the 8-element aperture, read the half-power width, first-null width, and first sidelobe off the ideal curve, then switch the measurement effects on. The $2.8125^\circ$ steer grid and the $-23$ dB noise floor fill in the nulls, and the first-null width moves from $30.1^\circ$ to $28.1^\circ$ because the grid no longer lands on the null.
+:::
+
 :::{present}
-- Lesson 21 sweeps this beam past a fixed source.
-- Expect a $13^\circ$ beam, a first null past $15^\circ$, and sidelobes 11 to 13 dB down.
-- The $2.8125^\circ$ steer grid and a $-23$ dB noise floor fill in the nulls.
+<iframe src="../../viz/af-measurement-compare.html"
+        width="100%" height="463"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Array factor against a simulated measured sweep, with the steer grid and the noise floor on a toggle">
+</iframe>
 :::
 
 :::{admonition} Worked example — what the Lesson 21 sweep will show

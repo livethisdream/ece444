@@ -108,6 +108,15 @@ This is the only slide in the course where both conventions are on the board at 
 
 ---
 
+## The Two Angle Conventions
+
+<div class="fig" data-inline-svg="./fig/L16-scan-angle.svg" style="max-width:680px; margin:0 auto;"></div>
+
+Note:
+One ray, two angles. The scan angle is measured from broadside, the polar angle from the array axis, and they add to ninety degrees. Here the ray is thirty-five degrees off broadside, which is fifty-five degrees in the Module 1 convention.
+
+---
+
 ## Extra Path Length
 
 A far-field observer sees the rays from every element as parallel.
@@ -193,8 +202,10 @@ Flag psi as the variable the rest of the module works in. It absorbs frequency, 
 
 <div class="fig" data-inline-svg="./fig/L16-phasor-sum.svg" style="max-width:740px; margin:0 auto;"></div>
 
+<p class="viz-cue">↗ Interactive on the lesson page</p>
+
 Note:
-Walk the three panels. All in phase, the sum equals N. Fan them out, and the chain bends and the sum shortens. Fan them by exactly one N-th of a turn each, and the chain closes into a polygon, so the sum is zero. That last picture is the first null.
+Walk the three panels. All in phase, the sum equals N. Fan them out, and the chain bends and the sum shortens. Fan them by exactly one N-th of a turn each, and the chain closes into a polygon, so the sum is zero. That last picture is the first null. Then demo the phasor-chain widget on the lesson page: drag theta slowly from zero and stop when the chain closes at fifteen point one degrees.
 
 ---
 
@@ -268,6 +279,15 @@ The first sidelobe sits about $-13$ dB down, the same level the uniform aperture
 
 Note:
 This is the result promised at the start. The exact peak sits a little inside three pi over two, toward the main lobe, because the denominator is still growing across the gap. A discrete uniform array and a continuous uniform aperture have the same first sidelobe, because in the many-element limit the array factor becomes the sinc. Uniform excitation leaves the first sidelobe about thirteen decibels down, whether the current is continuous or sampled.
+
+---
+
+## First Sidelobe Against N
+
+<div class="fig" data-inline-svg="./fig/L16-sidelobe-vs-n.svg" style="max-width:740px; margin:0 auto;"></div>
+
+Note:
+The exact first sidelobe rises toward minus thirteen point three as N grows: minus eleven point three at four elements, minus twelve point eight at eight, and within two tenths of a decibel of the line source by sixteen. The halfway-between-nulls estimate runs a little low at every N because the true peak sits slightly inside three pi over two.
 
 ---
 
@@ -357,6 +377,15 @@ Work the dB rows live. Adding the levels at forty-seven point one degrees is an 
 
 ---
 
+## The Four-Dipole Sidelobe
+
+<div class="fig" data-inline-svg="./fig/L16-four-dipole-zoom.svg" style="max-width:740px; margin:0 auto;"></div>
+
+Note:
+Adding decibels at the array factor's peak gives the amber point, minus fourteen point six. The product's own peak is the red point, three degrees closer to broadside and two tenths of a decibel higher, because the array factor is flat at its own peak while the element factor keeps rising toward broadside.
+
+---
+
 ## The Visible Region
 
 Real angles tie $\psi$ to a window. As $\theta$ sweeps $\pm 90^\circ$:
@@ -376,8 +405,10 @@ Two motions to keep separate. Changing the spacing changes the width of the wind
 
 <div class="fig" data-inline-svg="./fig/L16-visible-region.svg" style="max-width:730px; margin:0 auto;"></div>
 
+<p class="viz-cue">↗ Interactive on the lesson page</p>
+
 Note:
-Top panel is the PHASER: the window stops just short of the repeat. Bottom panel is one-wavelength spacing, where the repeat sits exactly at the edge of view. Ask what happens between those two cases and then at one point five wavelengths.
+Top panel is the PHASER: the window stops just short of the repeat. Bottom panel is one-wavelength spacing, where the repeat sits exactly at the edge of view. Ask what happens between those two cases and then at one point five wavelengths. Then demo the visible-region widget: widen the spacing and watch the window grow, then steer and watch it slide, and stop when a repeat crosses the window edge.
 
 ---
 
@@ -398,6 +429,15 @@ At psi equals two pi, every element is one whole wavelength farther than its nei
 
 ---
 
+## Spacing Limit Against Scan Angle
+
+<div class="fig" data-inline-svg="./fig/L16-grating-limit.svg" style="max-width:740px; margin:0 auto;"></div>
+
+Note:
+The curve is the grating-lobe criterion. One wavelength at broadside, point five eight six for a forty-five degree scan, half a wavelength for ninety. The PHASER's point four eight one sits under the curve everywhere, so it can scan anywhere without a grating lobe.
+
+---
+
 ## The Array as a Sampled Aperture
 
 $$AF_N = \frac{\sin(N\psi/2)}{N\sin(\psi/2)} \approx \frac{\sin(N\psi/2)}{N\psi/2}$$
@@ -415,6 +455,15 @@ Close the loop opened in slide four. Near the main lobe psi is small, so sine of
 
 ---
 
+## The Large-N Limit
+
+<div class="fig" data-inline-svg="./fig/L16-sinc-limit.svg" style="max-width:740px; margin:0 auto;"></div>
+
+Note:
+Plotted against u, the four, eight, and thirty-two element patterns all match the line-source sinc near the main lobe. They part where psi is no longer small: an N-element array repeats its main lobe N nulls out, so four elements repeat at four and eight at eight, while thirty-two follows the sinc across the whole plot.
+
+---
+
 ## Worked Example: The Course Array
 
 8 patches, $d = 14$ mm, $f = 10.3$ GHz, $\lambda = 29.1$ mm, $d/\lambda = 0.481$
@@ -428,7 +477,7 @@ Close the loop opened in slide four. Near the main lobe psi is small, so sine of
 | First sidelobe | $N = 8$ | $-12.8$ dB at $21.9^\circ$ |
 
 Note:
-These five numbers are the Lesson 21 expectation table. Tell them now that the measured sweep will read thirteen point one degrees for the beamwidth and eleven to thirteen decibels for the sidelobes, and that the two point eight degree sweep grid and the noise floor near minus twenty-three decibels account for the difference. Lesson 20 derives the directivity, seven point seven, or eight point nine decibels.
+These five numbers are the Lesson 21 expectation table. Tell them now that the measured sweep will read thirteen point one degrees for the beamwidth and eleven to thirteen decibels for the sidelobes, and that the two point eight degree sweep grid and the noise floor near minus twenty-three decibels account for the difference. Lesson 20 derives the directivity, seven point seven, or eight point nine decibels. The lesson page carries the Lesson 21 measured-sweep widget; toggle the measurement effects to show the nulls fill in.
 
 ---
 
