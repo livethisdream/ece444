@@ -839,6 +839,44 @@ where the trade balances. Setting $\Delta = \lambda/4$ gives the widest
 E-plane mouth for a given length, $D = \sqrt{2\lambda\ell}$.
 ::::
 
+::::{frame} The Horn's Pattern
+:::{present}
+<img src="../../viz/img/L13-horn-patterns.svg"
+     alt="E-plane and H-plane patterns of the 20 by 15 centimeter horn at 10 GHz, with and without the optimum horn's phase error. With it, the peak drops about 1 dB in each plane, the beam widens slightly, and the nulls fill in, leaving shoulders where the sidelobes were"
+     style="max-width: 680px; width: 100%; display: block; margin: 0 auto;">
+
+- The peak drops about 1 dB in each plane.
+- The first nulls fill to about −11 dB, and the beam widens 6 to 15%.
+- The H-plane's −23 dB sidelobes merge into a shoulder.
+:::
+
+These are the X-band horn's two principal-plane patterns, computed from the
+same aperture field as the working-squares figure: $5\lambda$ across in the
+E-plane with a uniform field and an edge lag of $\lambda/4$, and $6.67\lambda$
+across in the H-plane with the waveguide's cosine and a lag of $3\lambda/8$.
+Each pattern is the one-plane version of the aperture integral of the gain
+frame, the field summed across the mouth with the phase each point needs to
+reach a distant observer at angle $\theta$, times the obliquity factor
+$(1+\cos\theta)/2$. The dashed curves are the same mouth with no phase error,
+and both are scaled to that curve's peak.
+
+The three effects the previous frame named are all visible. The peak is
+0.97 dB lower in the E-plane and 1.0 dB lower in the H-plane, the phase
+efficiencies of 0.80 and 0.79 in decibels. The half-power beamwidth grows from
+$10.1^\circ$ to $10.7^\circ$ in the E-plane and to $11.6^\circ$ in the
+H-plane. The nulls fill, because a null needs the contributions across the
+mouth to cancel exactly, and the lagging edges no longer have the phase that
+cancellation requires: the first null, a true zero for the ideal mouth,
+rises to $-10.6\ \text{dB}$ in the E-plane and $-11.8\ \text{dB}$ in
+the H-plane.
+
+The dashed curves also show what the wall taper buys. The uniform E-plane has
+the familiar first sidelobe at $-13.4\ \text{dB}$; the cosine H-plane's is at
+$-23\ \text{dB}$, the price of its dim edge squares paid back in a cleaner
+pattern. The horn's phase error spends most of that, merging the H-plane
+sidelobes into a shoulder.
+::::
+
 ::::{frame} The Optimum Horn
 :::{present}
 <img src="../../viz/img/L13-horn-three.svg"

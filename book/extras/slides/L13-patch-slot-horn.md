@@ -396,6 +396,19 @@ This is L5's geometry: the edge lag is D^2 / 8 l with the apex a flare length l 
 
 ---
 
+## The Horn's Pattern
+
+<div class="fig" data-inline-svg="./fig/L13-horn-patterns.svg" style="max-width:720px; margin:0 auto;"></div>
+
+- The peak drops about 1 dB in each plane.
+- The first nulls fill to about −11 dB, and the beam widens 6 to 15%.
+- The H-plane's −23 dB sidelobes merge into a shoulder.
+
+Note:
+The X-band horn, computed from the same aperture model: 5 wavelengths uniform with a quarter-wave edge lag in the E-plane, 6.67 wavelengths cosine with three-eighths in the H-plane. Dashed is the same mouth with no phase error. A null needs exact cancellation across the mouth, and the lagging edges no longer supply it, so the nulls fill. The dashed H-plane also shows what the wall taper buys: -23 dB sidelobes against the uniform E-plane's -13.4. Beamwidth 10.1 to 10.7 degrees (E) and 11.6 (H).
+
+---
+
 ## The Optimum Horn
 
 <div class="fig" data-inline-svg="./fig/L13-horn-three.svg" style="max-width:720px; margin:0 auto;"></div>
