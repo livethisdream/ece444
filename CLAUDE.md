@@ -275,6 +275,11 @@ Every page is chrome-free: no sidebar, no header, one centerd bar at the bottom
   iframe's actual height and look. And **don't iframe a third-party page into a
   frame**: you control neither its height nor its internal scrolling, and it can
   404 in front of a class. Build the widget.
+- **The Interactives page is generated.** `book/interactives.md` lists every
+  widget a lesson iframes, read from the lessons themselves; after adding or
+  renaming one, re-run `python3 scripts/build_interactives.py`. A widget can
+  take a preset by query string (`pol-cuts.html?antenna=dipole&lock=1`), so a
+  lesson can embed the focused case of a tool the Interactives page shows whole.
 - **`viz-autosize.js` is what makes the iframe height right**, and BOTH
   `frame.html` and `page.html` must load it. A widget's height is not a
   constant -- the column is 688-790px on a desktop and ~343px in a frame on a

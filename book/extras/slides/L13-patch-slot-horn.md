@@ -332,18 +332,19 @@ The horn is the lesson's traveling-wave antenna: nothing sends the wave back, so
 
 ---
 
-## Aperture Gain
+## Gain Counts the Square Wavelengths That Work
 
 <div class="two-col fig-wide"><div class="col-text">
-<p>$$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}$$</p>
-<p>Gain counts the <strong>square wavelengths</strong> in the aperture. Double the frequency and four times as many fit: $+6$ dB.</p>
-<p>Horns run $\eta_{\text{ap}} \approx 0.5$; good reflectors reach $0.55$ to $0.7$.</p>
+<p>$$D \approx \frac{4\pi}{(\lambda/a)(\lambda/b)} = \frac{4\pi A}{\lambda^2}$$</p>
+<p>$$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^2}$$</p>
+<p>An $a \times b$ mouth makes a beam about $\lambda/a$ by $\lambda/b$: each square wavelength buys $4\pi$.</p>
+<p>A horn's walls and short flare leave 17 of 33 squares working: $\eta_{\text{ap}} \approx 0.5$.</p>
 </div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L13-horn-squares.svg" style="max-width:600px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L13-horn-working.svg" style="max-width:580px; margin:0 auto;"></div>
 </div></div>
 
 Note:
-The value is 0.5, not 0.9. Ask why a horn gives up half its aperture, and let the next slides answer. Receiving, this is L2's A_e = eta_ap A.
+Start from L2's pencil-beam rule: directivity is the sphere divided by the beam. A mouth a wide makes a beam about lambda/a wide, so the beam's solid angle is lambda^2/A and the sphere holds 4 pi A/lambda^2 of them. Then the figure: 33 square wavelengths in the 20 x 15 cm mouth at 10 GHz, but the waveguide's cosine leaves the wall squares dim and the late-arriving edges are turned out of step. With the optimum horn's lags the efficiency is 0.51: about 17 squares' worth does the work. Why a horn in particular: the TE10 field must be zero at the metal side walls, so the wall squares are dim (0.81), and nothing straightens the spherical front but more length (about 0.6). An array driven uniformly through phase shifters works every square, near 1; a dish removes the phase error by equal paths but its feed tapers and spills, 0.55 to 0.7. The next slides show where the lag comes from. Doubling the frequency fits four times the squares in the same mouth: +6 dB. Receiving, this is L2's A_e = eta_ap A.
 
 ---
 
@@ -392,6 +393,19 @@ The far-field row is the one that constrains the lab: a hand-sized horn already 
 
 Note:
 This is L5's geometry: the edge lag is D^2 / 8 l with the apex a flare length l behind the mouth, the same D^2 / 8r as the far-field criterion. The tolerance is not the same. The far-field criterion holds it to lambda/16 so a measurement does not distort the pattern; a horn accepts lambda/4 and more, because it trades the error against area.
+
+---
+
+## The Horn's Pattern
+
+<div class="fig" data-inline-svg="./fig/L13-horn-patterns.svg" style="max-width:720px; margin:0 auto;"></div>
+
+- The peak drops about 1 dB in each plane.
+- The first nulls fill to about −11 dB, and the beam widens 6 to 15%.
+- The H-plane's −23 dB sidelobes merge into a shoulder.
+
+Note:
+The X-band horn, computed from the same aperture model: 5 wavelengths uniform with a quarter-wave edge lag in the E-plane, 6.67 wavelengths cosine with three-eighths in the H-plane. Dashed is the same mouth with no phase error. A null needs exact cancellation across the mouth, and the lagging edges no longer supply it, so the nulls fill. The dashed H-plane also shows what the wall taper buys: -23 dB sidelobes against the uniform E-plane's -13.4. Beamwidth 10.1 to 10.7 degrees (E) and 11.6 (H).
 
 ---
 

@@ -8,6 +8,12 @@ L13:
   - L13-horn-squares     : the same 20 x 15 cm aperture tiled in square
                            wavelengths at 10 and 20 GHz; four times as many
                            squares is 6 dB more gain.
+  - L13-horn-working     : the X-band horn's 33 square wavelengths, and the
+                           same tiles shaded by field strength with a hand
+                           turned by phase lag: about 17 do the work.
+  - L13-horn-patterns    : the X-band horn's E- and H-plane patterns with and
+                           without the optimum horn's phase error: about 1 dB
+                           lower, slightly wider, nulls filled.
   - L13-horn-phase       : side view of a horn: the spherical front from the
                            apex meets the flat aperture late at the edges, and
                            the phase across the aperture is a parabola.
@@ -126,6 +132,129 @@ def horn_squares() -> str:
     b.append(text(357, 334, "4× the squares: 6 dB more gain", RED, 23, "700"))
     return svg(W, H, "The same 20 by 15 centimeter aperture tiled in square wavelengths: about 33 at "
                "10 GHz and about 133 at 20 GHz. Four times as many squares is 6 dB more gain", b, "l13hs")
+
+
+# ---------------------------------------------------------------- working squares
+def horn_working() -> str:
+    """The X-band horn's 20 x 15 cm mouth at 10 GHz tiled in square wavelengths
+    (33 of them), and the same tiles shaded by what each contributes: field
+    strength from the waveguide's cosine across the 20 cm (H-plane) side, and a
+    clock hand turned by the phase lag of the optimum horn, 3/8 wavelength at the
+    H-plane edges and 1/4 at the E-plane edges. Their aperture efficiency is
+    0.51, so about 17 of the 33 squares do the work."""
+    W, H = 580, 340
+    s = 36                                         # px per wavelength (3 cm)
+    nx, ny = 20 / 3, 15 / 3                        # mouth in wavelengths
+    aw, ah = nx * s, ny * s
+    y0 = 64
+    b = [markers(NAVY, RED)]
+
+    def tiles(x0, shaded):
+        out = [f'<rect x="{x0}" y="{y0}" width="{aw:.1f}" height="{ah:.1f}" fill="#ffffff" stroke="{NAVY}" stroke-width="2.6"/>']
+        # 6 2/3 columns, centered: a third of a column at each side wall, six whole ones between
+        cols, left = [1 / 3] + [1.0] * 6 + [1 / 3], 0.0
+        for wcol in cols:
+            for j in range(int(ny)):
+                tx, ty = x0 + left * s, y0 + j * s
+                u = (left + wcol / 2) / nx - 0.5       # -1/2 .. 1/2 across the 20 cm side
+                v = (j + 0.5) / ny - 0.5               # -1/2 .. 1/2 across the 15 cm side
+                if shaded:
+                    amp = math.cos(math.pi * u)
+                    out.append(f'<rect x="{tx:.1f}" y="{ty:.1f}" width="{wcol * s:.1f}" height="{s}" '
+                               f'fill="{BLUE}" fill-opacity="{0.08 + 0.72 * amp:.2f}" stroke="#ffffff" stroke-width="1.5"/>')
+                    if wcol < 1:                           # the slivers at the walls: shade only
+                        continue
+                    lag = 3 / 8 * (2 * u) ** 2 + 1 / 4 * (2 * v) ** 2      # in wavelengths
+                    a = 2 * math.pi * lag
+                    cx, cy, r = tx + wcol * s / 2, ty + s / 2, 0.36 * s
+                    hx, hy = cx + r * math.sin(a), cy - r * math.cos(a)
+                    out.append(f'<line x1="{cx:.1f}" y1="{cy:.1f}" x2="{hx:.1f}" y2="{hy:.1f}" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>')
+                    out.append(f'<line x1="{cx:.1f}" y1="{cy:.1f}" x2="{hx:.1f}" y2="{hy:.1f}" stroke="{NAVY}" stroke-width="2.4" stroke-linecap="round"/>')
+                    out.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="2.4" fill="{NAVY}"/>')
+                else:
+                    out.append(f'<rect x="{tx:.1f}" y="{ty:.1f}" width="{wcol * s:.1f}" height="{s}" '
+                               f'fill="{SUB}" stroke="{BLUE}" stroke-width="1" stroke-opacity="0.7"/>')
+            left += wcol
+        out.append(f'<rect x="{x0}" y="{y0}" width="{aw:.1f}" height="{ah:.1f}" fill="none" stroke="{NAVY}" stroke-width="2.6"/>')
+        return out
+
+    xl, xr = 14, W - 14 - aw
+    b += tiles(xl, False)
+    b += tiles(xr, True)
+    b.append(text(xl + aw / 2, 40, "33 squares", NAVY, 26, "700"))
+    b.append(text(xr + aw / 2, 40, "17 doing the work", RED, 26, "700"))
+    mid = (xl + aw + xr) / 2
+    b.append(arrow(mid - 22, y0 + ah / 2, mid + 22, y0 + ah / 2, NAVY, 3))
+    b.append(text(xl + aw / 2, y0 + ah + 36, "20 × 15 cm, 10 GHz", GRAY, 21))
+    b.append(text(xr + aw / 2, y0 + ah + 36, "dim: walls zero the field", GRAY, 21))
+    b.append(text(xr + aw / 2, y0 + ah + 64, "turned: edges arrive late", GRAY, 21))
+    return svg(W, H, "The X-band horn's 20 by 15 centimeter mouth at 10 GHz tiled in 33 square wavelengths, "
+               "and the same tiles shaded by what each contributes: strong in the middle and weak at the "
+               "side walls, with a clock hand on each tile turned by its phase lag, upright at the center and "
+               "turned most at the corners. About 17 of the 33 squares' worth does the work", b, "l13hw")
+
+
+# ---------------------------------------------------------------- horn patterns
+def plane_pattern(D: float, s: float, taper: bool, th: float, n: int = 1200) -> float:
+    """|far field| in one principal plane of an aperture D wavelengths wide whose
+    field is uniform or a cosine and lags s wavelengths at the edges, with the
+    (1 + cos)/2 obliquity factor."""
+    re = im = 0.0
+    k = 2 * math.pi
+    for i in range(n + 1):
+        u = -0.5 + i / n
+        w = 0.5 if i in (0, n) else 1.0
+        a = math.cos(math.pi * u) if taper else 1.0
+        ph = -2 * math.pi * s * (2 * u) ** 2 + k * D * u * math.sin(th)
+        re += w * a * math.cos(ph)
+        im += w * a * math.sin(ph)
+    return math.hypot(re, im) / n * (1 + math.cos(th)) / 2
+
+
+def horn_patterns() -> tuple[str, dict]:
+    """E- and H-plane patterns of the X-band horn (20 x 15 cm at 10 GHz: 6.67 by
+    5 wavelengths), with and without the optimum horn's phase error, each
+    normalized to its own no-phase-error peak."""
+    W, H = 720, 372
+    planes = (("E-plane", 5.0, 0.25, False), ("H-plane", 20 / 3, 0.375, True))
+    pw, ph_, gap, mL, mT = 288, 210, 62, 72, 50
+    lo, hi, ymin = -60, 60, -40
+    b = [markers(NAVY)]
+    stats = {}
+    for idx, (name, D, sl, tap) in enumerate(planes):
+        x0 = mL + idx * (pw + gap)
+        X = lambda d: x0 + (d - lo) / (hi - lo) * pw
+        Y = lambda v: mT + (0 - max(ymin, v)) / (0 - ymin) * ph_
+        for y in range(ymin, 1, 10):
+            b.append(f'<line x1="{x0}" y1="{Y(y):.1f}" x2="{x0 + pw}" y2="{Y(y):.1f}" stroke="{RULE}" stroke-width="1"/>')
+            if True:
+                b.append(text(x0 - 8, Y(y) + 7, str(y), GRAY, 20, anchor="end"))
+        for d in range(lo, hi + 1, 30):
+            b.append(text(X(d), mT + ph_ + 26, str(d), GRAY, 20))
+        b.append(f'<rect x="{x0}" y="{mT}" width="{pw}" height="{ph_}" fill="none" stroke="{SUB_EDGE}"/>')
+        degs = [lo + (hi - lo) * i / 480 for i in range(481)]
+        ref = plane_pattern(D, 0, tap, 0.0)
+        curves = {}
+        for key, ss in (("ideal", 0.0), ("horn", sl)):
+            curves[key] = [20 * math.log10(max(1e-9, plane_pattern(D, ss, tap, math.radians(d)) / ref)) for d in degs]
+        for key, col, wdt, dash in (("ideal", GRAY, 2.2, "6 4"), ("horn", NAVY, 3, "")):
+            pts = " ".join(f"{X(d):.1f},{Y(v):.1f}" for d, v in zip(degs, curves[key]))
+            da = f' stroke-dasharray="{dash}"' if dash else ""
+            b.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="{wdt}"{da} stroke-linejoin="round"/>')
+        b.append(text(x0 + pw / 2, mT - 18, name, NAVY, 26, "700"))
+        stats[name] = max(curves["horn"])
+    b.append(text(mL + pw + gap / 2, mT + ph_ + 56, "angle from boresight, degrees", GRAY, 21))
+    b.append(text(20, mT + ph_ / 2, "relative gain, dB", GRAY, 21, rot=-90))
+    # legend, centered under the axis label
+    lx, ly = mL + pw + gap / 2 - 190, H - 16
+    b.append(f'<line x1="{lx}" y1="{ly}" x2="{lx + 30}" y2="{ly}" stroke="{GRAY}" stroke-width="2.2" stroke-dasharray="6 4"/>')
+    b.append(text(lx + 38, ly + 7, "no phase error", GRAY, 21, anchor="start"))
+    b.append(f'<line x1="{lx + 210}" y1="{ly}" x2="{lx + 240}" y2="{ly}" stroke="{NAVY}" stroke-width="3"/>')
+    b.append(text(lx + 248, ly + 7, "optimum horn", NAVY, 21, "700", anchor="start"))
+    s = svg(W, H, "E-plane and H-plane patterns of the 20 by 15 centimeter horn at 10 GHz, with and without "
+            "the optimum horn's phase error. With it, the peak drops about 1 dB in each plane, the beam "
+            "widens slightly, and the nulls fill in, leaving shoulders where the sidelobes were", b, "l13hpt")
+    return s, stats
 
 
 # ---------------------------------------------------------------- phase error
@@ -401,6 +530,8 @@ def main() -> None:
     figs = {
         "L13-horn-flare.svg": horn_flare(),
         "L13-horn-squares.svg": horn_squares(),
+        "L13-horn-working.svg": horn_working(),
+        "L13-horn-patterns.svg": horn_patterns()[0],
         "L13-horn-phase.svg": horn_phase(),
         "L13-horn-optimum.svg": opt,
         "L13-horn-comparison.svg": horn_comparison(),

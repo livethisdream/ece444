@@ -691,23 +691,64 @@ first two cutoffs, and horns built on ridged guides for EMC testing cover
 $1$ to $18\ \text{GHz}$.
 ::::
 
-::::{frame} Gain Is Area in Square Wavelengths
+::::{frame} Gain Counts the Square Wavelengths That Work
 :::{present}
-<img src="../../viz/img/L13-horn-squares.svg"
-     alt="The same 20 by 15 centimeter aperture tiled in square wavelengths: about 33 at 10 GHz and about 133 at 20 GHz"
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L13-horn-working.svg"
+     alt="The X-band horn's 20 by 15 centimeter mouth at 10 GHz tiled in 33 square wavelengths, and the same tiles shaded by what each contributes: dim near the side walls, where the walls force the field to zero, and each tile carrying a clock hand turned by how late the wave reaches it, upright at the center and turned most near the corners. About 17 of the 33 squares' worth does the work"
+     style="max-width: 580px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-$$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}$$
+$$\begin{aligned}
+D &\approx \frac{4\pi}{\theta_1\theta_2} \\
+&\approx \frac{4\pi}{(\lambda/a)(\lambda/b)} = \frac{4\pi A}{\lambda^2} \\
+G &= \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^2}
+\end{aligned}$$
 
-- A uniform, in-phase aperture adds every part broadside: $\eta_{\text{ap}} = 1$.
-- Doubling the frequency on a fixed horn raises the gain by **6 dB**.
-- Horns run $\eta_{\text{ap}} \approx 0.5$; good reflectors reach 0.55 to 0.7.
+- A horn's walls and short flare leave 17 of 33 squares working: $\eta_{\text{ap}} \approx 0.5$.
 :::
 
-$A$ is the physical aperture area and $\eta_{\text{ap}}$ is the fraction of it
-that contributes to the gain. The next two frames show that the horn's
-geometry sets the 0.5; it is not a fudge factor.
+Why area gives gain comes from the beam it makes. Lesson 2's pencil-beam rule
+says directivity is the whole sphere, $4\pi$ steradians, divided by the beam's
+solid angle, $\theta_1\theta_2$. An opening $a$ wide makes a beam about
+$\lambda/a$ wide in that plane, as Lesson 2's beamwidth widget showed when
+we widened the aperture, so an $a \times b$ mouth makes a beam about
+$\lambda/a$ by $\lambda/b$. Its solid angle is $\lambda^2/ab = \lambda^2/A$,
+and the sphere holds $4\pi A/\lambda^2$ of them. Each square wavelength of
+mouth buys $4\pi$ in gain. Both steps are approximate: a uniform aperture's
+half-power beamwidth is $0.886\lambda/a$, and the pencil-beam rule overcounts
+a real pattern by about as much, so the two roughly cancel. The radiation
+integral below gives $4\pi A/\lambda^2$ exactly.
+
+That count assumes every square works equally hard, which takes a field of
+the same strength and the same phase across the whole mouth. A horn's does
+neither. The waveguide's field is a cosine across the wide side, strong in the
+middle and zero at the walls, so the squares near the walls are dim. And the
+wave reaches the edges late, so their contributions are turned out of step
+with the center's, as the next two frames show. $A$ is the physical aperture
+area, and $\eta_{\text{ap}}$ is the fraction of its squares that does the
+work. The figure counts them for the X-band horn of the worked example below:
+its $20 \times 15\ \text{cm}$ mouth holds $33$ square wavelengths at
+$10\ \text{GHz}$, and with the optimum horn's edge lags, $\lambda/4$ in the
+E-plane and $3\lambda/8$ in the H-plane, the efficiency is $0.51$, so about
+$17$ of them do the work. The horn's geometry sets the 0.5; it is not a fudge
+factor.
+
+Both losses are particular to the horn, and they come from what makes it a
+horn. The first is the walls. The mouth is fed by the waveguide's
+$\text{TE}_{10}$ mode, and a metal wall forces the electric field parallel to
+it to zero, so the field must fall to nothing at the two side walls. The
+squares beside them are dim however the horn is built, and that alone costs
+19%. The second is the flare. The wave spreads from the apex on a sphere and
+the mouth is flat, so the edges are reached late, and nothing in a horn
+straightens the front except more length. Other apertures avoid one or both.
+An array of identical elements, the patches of the Module 3 board, can drive
+every element with the same amplitude and set every phase with a phase
+shifter, so every square works and $\eta_{\text{ap}}$ approaches 1. A dish,
+in Lesson 14, makes the paths from its feed to its mouth equal, which removes
+the phase error, but its feed lights the rim weakly and spills some power past
+it, so reflectors land at 0.55 to 0.7. The horn pays both costs, the taper of
+the walls and the lag of the flare, and the optimum horn is the length at
+which the second stops being worth paying for.
 
 The formula comes out of the radiation integral. Take an aperture of area $A$
 in a ground plane, with a field $E_a(x', y')\ \hat{\mathbf x}$ across it, so
@@ -741,12 +782,9 @@ and a horn's walls lose so little that its gain is its directivity. Lesson
 2's $A_e = G\lambda^2/4\pi$ says the same thing from the receiving side:
 $A_e = \eta_{\text{ap}}A$.
 
-The figure makes the formula concrete. Tile the aperture in squares one
-wavelength on a side: the gain is proportional to how many squares fit. The
-X-band horn of the worked example below holds about 33 of them at
-$10\ \text{GHz}$. At $20\ \text{GHz}$ the wavelength halves, so four times
-as many squares fit in the same opening, and the gain rises by a factor of
-four, or 6 dB.
+Counting squares also gives the frequency scaling. At $20\ \text{GHz}$ the
+wavelength halves, so four times as many squares, $133$, fit in the same
+opening, and the gain of a fixed horn rises by a factor of four, or 6 dB.
 ::::
 
 ::::{frame} Worked Example — an X-Band Horn
@@ -799,6 +837,44 @@ measurement must not distort the pattern. A horn accepts four times that and
 more, because it is trading the error against area, and the next frame shows
 where the trade balances. Setting $\Delta = \lambda/4$ gives the widest
 E-plane mouth for a given length, $D = \sqrt{2\lambda\ell}$.
+::::
+
+::::{frame} The Horn's Pattern
+:::{present}
+<img src="../../viz/img/L13-horn-patterns.svg"
+     alt="E-plane and H-plane patterns of the 20 by 15 centimeter horn at 10 GHz, with and without the optimum horn's phase error. With it, the peak drops about 1 dB in each plane, the beam widens slightly, and the nulls fill in, leaving shoulders where the sidelobes were"
+     style="max-width: 680px; width: 100%; display: block; margin: 0 auto;">
+
+- The peak drops about 1 dB in each plane.
+- The first nulls fill to about −11 dB, and the beam widens 6 to 15%.
+- The H-plane's −23 dB sidelobes merge into a shoulder.
+:::
+
+These are the X-band horn's two principal-plane patterns, computed from the
+same aperture field as the working-squares figure: $5\lambda$ across in the
+E-plane with a uniform field and an edge lag of $\lambda/4$, and $6.67\lambda$
+across in the H-plane with the waveguide's cosine and a lag of $3\lambda/8$.
+Each pattern is the one-plane version of the aperture integral of the gain
+frame, the field summed across the mouth with the phase each point needs to
+reach a distant observer at angle $\theta$, times the obliquity factor
+$(1+\cos\theta)/2$. The dashed curves are the same mouth with no phase error,
+and both are scaled to that curve's peak.
+
+The three effects the previous frame named are all visible. The peak is
+0.97 dB lower in the E-plane and 1.0 dB lower in the H-plane, the phase
+efficiencies of 0.80 and 0.79 in decibels. The half-power beamwidth grows from
+$10.1^\circ$ to $10.7^\circ$ in the E-plane and to $11.6^\circ$ in the
+H-plane. The nulls fill, because a null needs the contributions across the
+mouth to cancel exactly, and the lagging edges no longer have the phase that
+cancellation requires: the first null, a true zero for the ideal mouth,
+rises to $-10.6\ \text{dB}$ in the E-plane and $-11.8\ \text{dB}$ in
+the H-plane.
+
+The dashed curves also show what the wall taper buys. The uniform E-plane has
+the familiar first sidelobe at $-13.4\ \text{dB}$; the cosine H-plane's is at
+$-23\ \text{dB}$, the price of its dim edge squares paid back in a cleaner
+pattern. The horn's phase error spends most of that, merging the H-plane
+sidelobes into a shoulder.
 ::::
 
 ::::{frame} The Optimum Horn
