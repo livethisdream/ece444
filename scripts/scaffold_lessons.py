@@ -303,6 +303,7 @@ def toc_yaml():
         "    chapters:",
         "      - file: syllabus",
         "      - file: materials",
+        "      - file: interactives",
     ]
     for mnum, m in MODULES.items():
         lines.append("")

@@ -650,15 +650,15 @@ Lesson 3, and a perfectly circular antenna gives a band of zero width.
 :::
 ::::
 
-::::{frame} Four Cuts, Four Antennas
+::::{frame} Four Cuts of One Dipole
 :class: viz-frame
 
 :::{present}
-<iframe src="../../viz/pol-cuts.html"
-        width="100%" height="538"
+<iframe src="../../viz/pol-cuts.html?antenna=dipole&lock=1"
+        width="100%" height="525"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
-        title="A dipole, small loop, patch, or horn in 3-D with its pattern, the cut plane, and a probe horn: choose E-plane or H-plane and co-pol or cross-pol, or set the antenna's mount and the horn's polarization as on a chamber turntable">
+        title="A half-wave dipole in 3-D with its pattern, the cut plane, and a probe horn: choose E-plane or H-plane and co-pol or cross-pol, or set the dipole mount and horn polarization as on a chamber turntable">
 </iframe>
 :::
 
@@ -668,22 +668,21 @@ standard cuts, not two. Start in the antenna view. In the E-plane the field
 arrows lie in the cut plane; switch to the H-plane and they turn to point out
 of it, along the wire. The field direction is the same; the plane you sweep
 through is what changed. Now switch the probe to cross-pol in either plane
-and the trace drops to the leakage level, about 30 dB down. In the chamber
+and the trace drops to the cross-pol level: about 30 dB down on boresight,
+climbing off-axis, and not the shape of the co-pol cut. An ideal dipole has
+no cross-pol at all in either principal plane, so what a range records there
+is the antenna's and the range's imperfections. In the chamber
 view the turntable fixes the sweep plane, so the dipole's mount picks the
 cut: horizontal is the E-plane, vertical is the H-plane. Co-pol means the horn
 is parallel to the dipole. Roll the dipole to vertical and leave the horn
-horizontal, and you have measured the H-plane cross-pol cut, a weak circle
-near the floor, not the H-plane pattern.
+horizontal, and you have measured the H-plane cross-pol cut, a weak trace
+that rises off-axis, not the H-plane pattern, which is a circle. The cut is
+set by the dipole's mount and the polarization by the horn; to measure the
+H-plane pattern, roll the horn with the dipole.
 
-Switch the antenna and the same four cuts apply to any linearly polarized
-antenna; what changes is which pattern lands in which plane. The small loop
-swaps the dipole's planes. Its E circles the loop's axis, so with the loop
-flat the E-plane is the horizontal one, where the loop is omnidirectional,
-and its figure-eight is in the H-plane. The patch and the horn point along a
-boresight, so both of their cuts are beams. The patch's E-plane stays broad
-all the way to the horizon over its ground plane, and the horn's two cuts are
-nearly the same width, because its mouth is wider in the H-plane, where the
-waveguide's cosine field spreads the beam back out.
+The same four cuts on a small loop, a patch, and a horn are on the
+[Interactives](../../interactives.md) page. The loop swaps the dipole's
+planes, and the patch and horn give two beams.
 :::
 ::::
 

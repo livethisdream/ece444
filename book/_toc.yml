@@ -10,6 +10,7 @@ parts:
     chapters:
       - file: syllabus
       - file: materials
+      - file: interactives
 
   - caption: Module 1 — Foundations of Electromagnetics and Antennas
     chapters:

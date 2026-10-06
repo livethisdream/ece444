@@ -58,7 +58,8 @@ def main():
     for f in info["iframes"]:
         if not f or f.startswith(("http://", "https://")):
             continue
-        if not ((ROOT / rel).parent / f).resolve().exists():
+        # a widget preset by query string (pol-cuts.html?antenna=dipole) is still one file
+        if not ((ROOT / rel).parent / f.split("?")[0].split("#")[0]).resolve().exists():
             bad.append(f"iframe target missing: {f}")
     if info["rawdd"]:
         bad.append(f"raw $$ visible in the article x{info['rawdd']}")

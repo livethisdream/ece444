@@ -23,6 +23,7 @@ moving target in your sights.
   <a class="cta" href="syllabus.html#course-schedule">Course schedule</a>
   <a class="cta" href="syllabus.html">Syllabus</a>
   <a class="cta" href="materials.html">Materials</a>
+  <a class="cta" href="interactives.html">Interactives</a>
 </div>
 ::::
 

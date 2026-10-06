@@ -99,13 +99,16 @@
   /* Four linearly polarized antennas, each described by its far-field E vector
      e(r) in its own frame (|e| is the field pattern, peak 1), plus the
      boresight b and the direction e0 that E points along at boresight. Every
-     cut and every turntable reading is computed from e(r), with 30 dB of
-     cross-pol leakage and a -40 dB floor so the cross-pol cuts show what a real
-     range shows instead of a blank plot.
+     cut and every turntable reading is computed from e(r). Cross-pol is a
+     typical measured one, not a scaled copy of co-pol: 30 dB down on boresight
+     and rising off-axis to about 17 dB down at 90 degrees, kappa(r) = 0.03 +
+     0.12 sin^2(angle from boresight), over a -40 dB floor. An ideal antenna has
+     none in its principal planes; what a range records there is the antenna's
+     and the range's imperfections, and they do not follow the co-pol pattern.
        E-plane = the plane through b and e0;  H-plane = the plane through b and b x e0.
      World axes are z-up; in the chamber the turntable spins about z with the
      source horn fixed on +x. */
-  const EPS = 0.0316, FLOOR = -40, R = 3, HX = 4.2, RD = 2.0;
+  const FLOOR = -40, R = 3, HX = 4.2, RD = 2.0;
   const cvs = document.getElementById('c'), ctx = cvs.getContext('2d');
   const pcv = document.getElementById('p'), pctx = pcv.getContext('2d');
   const el = id => document.getElementById(id);
@@ -157,9 +160,11 @@
   const M = () => MODELS[st.model];
   const nrm = () => cross(M().b, M().e0);                       // b x e0, completes the frame
   const dB = x => Math.max(FLOOR, 20*Math.log10(Math.max(x, 1e-4)));
-  // received amplitude: co-pol through the probe, plus 30 dB leakage of the orthogonal polarization
-  function recv(e, r, p) { const f = len(e); if (f < 1e-9) return 0; const eh = mul(e, 1/f), ch = cross(r, eh);
-    const t = dot(eh, p), u = dot(ch, p); return f*Math.sqrt(t*t + EPS*EPS*u*u); }
+  // cross-pol ratio, from the antenna's own frame: -30 dB on boresight, rising off-axis
+  const kappa = rl => { const c = dot(rl, M().b); return 0.03 + 0.12*(1 - c*c); };
+  // received amplitude: co-pol through the probe, plus the cross-pol component kappa*|e| along r x e
+  function recv(e, r, p, k) { const f = len(e); if (f < 1e-9) return 0; const eh = mul(e, 1/f), ch = cross(r, eh);
+    const t = dot(eh, p), u = dot(ch, p); return f*Math.sqrt(t*t + k*k*u*u); }
 
   // antenna view: the cut plane through b and e0 (E) or b and b x e0 (H); t = angle from boresight
   function plane() { return st.cut === 'E' ? [M().b, M().e0] : [M().b, nrm()]; }
@@ -183,8 +188,8 @@
   const hornPol = () => st.horn === 'h' ? Y : Z;
   function level(i) {
     const t = i*Math.PI/180;
-    if (st.mode === 'ant') { const g = antGeom(t); return recv(M().e(g.r), g.r, st.pol === 'co' ? g.co : cross(g.r, g.co)); }
-    return recv(eWorld(X, t), X, hornPol());
+    if (st.mode === 'ant') { const g = antGeom(t); return recv(M().e(g.r), g.r, st.pol === 'co' ? g.co : cross(g.r, g.co), kappa(g.r)); }
+    return recv(eWorld(X, t), X, hornPol(), kappa(toLocal(X, t)));
   }
   let pat = [];
   function rebuild() { pat = []; for (let i = 0; i < 360; i++) pat.push(level(i)); }
@@ -435,6 +440,11 @@
     readouts(); drawAll();
     requestAnimationFrame(tick);
   }
+  /* ?antenna=dipole|loop|patch|horn presets the antenna; &lock=1 hides the
+     selector, for a lesson that is about one antenna. */
+  const qs = new URLSearchParams(location.search), qa = qs.get('antenna');
+  if (qa && MODELS[qa]) { st.model = qa; modelEl.value = qa; }
+  if (qs.get('lock') === '1') modelEl.closest('.ctl').style.display = 'none';
   syncSelects(); rebuild(); fit();
   window.__polcuts = { st, rebuild, syncSelects, level };   // for the render checks
   MJ.setRedraw(drawAll);
