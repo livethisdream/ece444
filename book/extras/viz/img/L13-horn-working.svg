@@ -178,6 +178,6 @@
 <text x="446.0" y="40.0" fill="#b01e24" font-size="26" font-weight="700" text-anchor="middle">17 doing the work</text>
 <line x1="268.0" y1="154.0" x2="312.0" y2="154.0" stroke="#004a85" stroke-width="3" marker-end="url(#l13hw-ah-004a85)"/>
 <text x="134.0" y="280.0" fill="#5a5a5a" font-size="21" text-anchor="middle">20 × 15 cm, 10 GHz</text>
-<text x="446.0" y="280.0" fill="#5a5a5a" font-size="21" text-anchor="middle">shade: field strength</text>
-<text x="446.0" y="308.0" fill="#5a5a5a" font-size="21" text-anchor="middle">hand: lag (up = in step)</text>
+<text x="446.0" y="280.0" fill="#5a5a5a" font-size="21" text-anchor="middle">dim: walls zero the field</text>
+<text x="446.0" y="308.0" fill="#5a5a5a" font-size="21" text-anchor="middle">turned: edges arrive late</text>
 </svg>

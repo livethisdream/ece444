@@ -338,13 +338,13 @@ The horn is the lesson's traveling-wave antenna: nothing sends the wave back, so
 <p>$$D \approx \frac{4\pi}{(\lambda/a)(\lambda/b)} = \frac{4\pi A}{\lambda^2}$$</p>
 <p>$$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^2}$$</p>
 <p>An $a \times b$ mouth makes a beam about $\lambda/a$ by $\lambda/b$: each square wavelength buys $4\pi$.</p>
-<p>$\eta_{\text{ap}}$ is the share of squares that work: 17 of 33.</p>
+<p>A horn's walls and short flare leave 17 of 33 squares working: $\eta_{\text{ap}} \approx 0.5$.</p>
 </div><div class="col-fig">
 <div class="fig" data-inline-svg="./fig/L13-horn-working.svg" style="max-width:580px; margin:0 auto;"></div>
 </div></div>
 
 Note:
-Start from L2's pencil-beam rule: directivity is the sphere divided by the beam. A mouth a wide makes a beam about lambda/a wide, so the beam's solid angle is lambda^2/A and the sphere holds 4 pi A/lambda^2 of them. Then the figure: 33 square wavelengths in the 20 x 15 cm mouth at 10 GHz, but the waveguide's cosine leaves the wall squares dim and the late-arriving edges are turned out of step. With the optimum horn's lags the efficiency is 0.51: about 17 squares' worth does the work. The next slides show where the lag comes from. Doubling the frequency fits four times the squares in the same mouth: +6 dB. Receiving, this is L2's A_e = eta_ap A.
+Start from L2's pencil-beam rule: directivity is the sphere divided by the beam. A mouth a wide makes a beam about lambda/a wide, so the beam's solid angle is lambda^2/A and the sphere holds 4 pi A/lambda^2 of them. Then the figure: 33 square wavelengths in the 20 x 15 cm mouth at 10 GHz, but the waveguide's cosine leaves the wall squares dim and the late-arriving edges are turned out of step. With the optimum horn's lags the efficiency is 0.51: about 17 squares' worth does the work. Why a horn in particular: the TE10 field must be zero at the metal side walls, so the wall squares are dim (0.81), and nothing straightens the spherical front but more length (about 0.6). An array driven uniformly through phase shifters works every square, near 1; a dish removes the phase error by equal paths but its feed tapers and spills, 0.55 to 0.7. The next slides show where the lag comes from. Doubling the frequency fits four times the squares in the same mouth: +6 dB. Receiving, this is L2's A_e = eta_ap A.
 
 ---
 

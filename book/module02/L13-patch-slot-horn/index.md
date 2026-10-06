@@ -694,7 +694,7 @@ $1$ to $18\ \text{GHz}$.
 ::::{frame} Gain Counts the Square Wavelengths That Work
 :::{present}
 <img src="../../viz/img/L13-horn-working.svg"
-     alt="The X-band horn's 20 by 15 centimeter mouth at 10 GHz tiled in 33 square wavelengths, and the same tiles shaded by what each contributes: strong in the middle and weak at the side walls, with a clock hand on each tile turned by its phase lag, upright at the center and turned most near the corners. About 17 of the 33 squares' worth does the work"
+     alt="The X-band horn's 20 by 15 centimeter mouth at 10 GHz tiled in 33 square wavelengths, and the same tiles shaded by what each contributes: dim near the side walls, where the walls force the field to zero, and each tile carrying a clock hand turned by how late the wave reaches it, upright at the center and turned most near the corners. About 17 of the 33 squares' worth does the work"
      style="max-width: 580px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
@@ -704,7 +704,7 @@ D &\approx \frac{4\pi}{\theta_1\theta_2} \\
 G &= \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^2}
 \end{aligned}$$
 
-- $\eta_{\text{ap}}$ is the share of squares that work: 17 of 33 here.
+- A horn's walls and short flare leave 17 of 33 squares working: $\eta_{\text{ap}} \approx 0.5$.
 :::
 
 Why area gives gain comes from the beam it makes. Lesson 2's pencil-beam rule
@@ -732,6 +732,23 @@ $10\ \text{GHz}$, and with the optimum horn's edge lags, $\lambda/4$ in the
 E-plane and $3\lambda/8$ in the H-plane, the efficiency is $0.51$, so about
 $17$ of them do the work. The horn's geometry sets the 0.5; it is not a fudge
 factor.
+
+Both losses are particular to the horn, and they come from what makes it a
+horn. The first is the walls. The mouth is fed by the waveguide's
+$\text{TE}_{10}$ mode, and a metal wall forces the electric field parallel to
+it to zero, so the field must fall to nothing at the two side walls. The
+squares beside them are dim however the horn is built, and that alone costs
+19%. The second is the flare. The wave spreads from the apex on a sphere and
+the mouth is flat, so the edges are reached late, and nothing in a horn
+straightens the front except more length. Other apertures avoid one or both.
+An array of identical elements, the patches of the Module 3 board, can drive
+every element with the same amplitude and set every phase with a phase
+shifter, so every square works and $\eta_{\text{ap}}$ approaches 1. A dish,
+in Lesson 14, makes the paths from its feed to its mouth equal, which removes
+the phase error, but its feed lights the rim weakly and spills some power past
+it, so reflectors land at 0.55 to 0.7. The horn pays both costs, the taper of
+the walls and the lag of the flare, and the optimum horn is the length at
+which the second stops being worth paying for.
 
 The formula comes out of the radiation integral. Take an aperture of area $A$
 in a ground plane, with a field $E_a(x', y')\ \hat{\mathbf x}$ across it, so

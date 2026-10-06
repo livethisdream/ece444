@@ -183,8 +183,8 @@ def horn_working() -> str:
     mid = (xl + aw + xr) / 2
     b.append(arrow(mid - 22, y0 + ah / 2, mid + 22, y0 + ah / 2, NAVY, 3))
     b.append(text(xl + aw / 2, y0 + ah + 36, "20 × 15 cm, 10 GHz", GRAY, 21))
-    b.append(text(xr + aw / 2, y0 + ah + 36, "shade: field strength", GRAY, 21))
-    b.append(text(xr + aw / 2, y0 + ah + 64, "hand: lag (up = in step)", GRAY, 21))
+    b.append(text(xr + aw / 2, y0 + ah + 36, "dim: walls zero the field", GRAY, 21))
+    b.append(text(xr + aw / 2, y0 + ah + 64, "turned: edges arrive late", GRAY, 21))
     return svg(W, H, "The X-band horn's 20 by 15 centimeter mouth at 10 GHz tiled in 33 square wavelengths, "
                "and the same tiles shaded by what each contributes: strong in the middle and weak at the "
                "side walls, with a clock hand on each tile turned by its phase lag, upright at the center and "
