@@ -691,23 +691,47 @@ first two cutoffs, and horns built on ridged guides for EMC testing cover
 $1$ to $18\ \text{GHz}$.
 ::::
 
-::::{frame} Gain Is Area in Square Wavelengths
+::::{frame} Gain Counts the Square Wavelengths That Work
 :::{present}
-<img src="../../viz/img/L13-horn-squares.svg"
-     alt="The same 20 by 15 centimeter aperture tiled in square wavelengths: about 33 at 10 GHz and about 133 at 20 GHz"
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L13-horn-working.svg"
+     alt="The X-band horn's 20 by 15 centimeter mouth at 10 GHz tiled in 33 square wavelengths, and the same tiles shaded by what each contributes: strong in the middle and weak at the side walls, with a clock hand on each tile turned by its phase lag, upright at the center and turned most near the corners. About 17 of the 33 squares' worth does the work"
+     style="max-width: 580px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-$$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}$$
+$$\begin{aligned}
+D &\approx \frac{4\pi}{\theta_1\theta_2} \\
+&\approx \frac{4\pi}{(\lambda/a)(\lambda/b)} = \frac{4\pi A}{\lambda^2} \\
+G &= \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^2}
+\end{aligned}$$
 
-- A uniform, in-phase aperture adds every part broadside: $\eta_{\text{ap}} = 1$.
-- Doubling the frequency on a fixed horn raises the gain by **6 dB**.
-- Horns run $\eta_{\text{ap}} \approx 0.5$; good reflectors reach 0.55 to 0.7.
+- $\eta_{\text{ap}}$ is the share of squares that work: 17 of 33 here.
 :::
 
-$A$ is the physical aperture area and $\eta_{\text{ap}}$ is the fraction of it
-that contributes to the gain. The next two frames show that the horn's
-geometry sets the 0.5; it is not a fudge factor.
+Why area gives gain comes from the beam it makes. Lesson 2's pencil-beam rule
+says directivity is the whole sphere, $4\pi$ steradians, divided by the beam's
+solid angle, $\theta_1\theta_2$. An opening $a$ wide makes a beam about
+$\lambda/a$ wide in that plane, as Lesson 2's beamwidth widget showed when
+we widened the aperture, so an $a \times b$ mouth makes a beam about
+$\lambda/a$ by $\lambda/b$. Its solid angle is $\lambda^2/ab = \lambda^2/A$,
+and the sphere holds $4\pi A/\lambda^2$ of them. Each square wavelength of
+mouth buys $4\pi$ in gain. Both steps are approximate: a uniform aperture's
+half-power beamwidth is $0.886\lambda/a$, and the pencil-beam rule overcounts
+a real pattern by about as much, so the two roughly cancel. The radiation
+integral below gives $4\pi A/\lambda^2$ exactly.
+
+That count assumes every square works equally hard, which takes a field of
+the same strength and the same phase across the whole mouth. A horn's does
+neither. The waveguide's field is a cosine across the wide side, strong in the
+middle and zero at the walls, so the squares near the walls are dim. And the
+wave reaches the edges late, so their contributions are turned out of step
+with the center's, as the next two frames show. $A$ is the physical aperture
+area, and $\eta_{\text{ap}}$ is the fraction of its squares that does the
+work. The figure counts them for the X-band horn of the worked example below:
+its $20 \times 15\ \text{cm}$ mouth holds $33$ square wavelengths at
+$10\ \text{GHz}$, and with the optimum horn's edge lags, $\lambda/4$ in the
+E-plane and $3\lambda/8$ in the H-plane, the efficiency is $0.51$, so about
+$17$ of them do the work. The horn's geometry sets the 0.5; it is not a fudge
+factor.
 
 The formula comes out of the radiation integral. Take an aperture of area $A$
 in a ground plane, with a field $E_a(x', y')\ \hat{\mathbf x}$ across it, so
@@ -741,12 +765,9 @@ and a horn's walls lose so little that its gain is its directivity. Lesson
 2's $A_e = G\lambda^2/4\pi$ says the same thing from the receiving side:
 $A_e = \eta_{\text{ap}}A$.
 
-The figure makes the formula concrete. Tile the aperture in squares one
-wavelength on a side: the gain is proportional to how many squares fit. The
-X-band horn of the worked example below holds about 33 of them at
-$10\ \text{GHz}$. At $20\ \text{GHz}$ the wavelength halves, so four times
-as many squares fit in the same opening, and the gain rises by a factor of
-four, or 6 dB.
+Counting squares also gives the frequency scaling. At $20\ \text{GHz}$ the
+wavelength halves, so four times as many squares, $133$, fit in the same
+opening, and the gain of a fixed horn rises by a factor of four, or 6 dB.
 ::::
 
 ::::{frame} Worked Example — an X-Band Horn

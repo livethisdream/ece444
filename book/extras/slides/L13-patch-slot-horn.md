@@ -332,18 +332,19 @@ The horn is the lesson's traveling-wave antenna: nothing sends the wave back, so
 
 ---
 
-## Aperture Gain
+## Gain Counts the Square Wavelengths That Work
 
 <div class="two-col fig-wide"><div class="col-text">
-<p>$$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^{2}}$$</p>
-<p>Gain counts the <strong>square wavelengths</strong> in the aperture. Double the frequency and four times as many fit: $+6$ dB.</p>
-<p>Horns run $\eta_{\text{ap}} \approx 0.5$; good reflectors reach $0.55$ to $0.7$.</p>
+<p>$$D \approx \frac{4\pi}{(\lambda/a)(\lambda/b)} = \frac{4\pi A}{\lambda^2}$$</p>
+<p>$$G = \eta_{\text{ap}}\ \frac{4\pi A}{\lambda^2}$$</p>
+<p>An $a \times b$ mouth makes a beam about $\lambda/a$ by $\lambda/b$: each square wavelength buys $4\pi$.</p>
+<p>$\eta_{\text{ap}}$ is the share of squares that work: 17 of 33.</p>
 </div><div class="col-fig">
-<div class="fig" data-inline-svg="./fig/L13-horn-squares.svg" style="max-width:600px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L13-horn-working.svg" style="max-width:580px; margin:0 auto;"></div>
 </div></div>
 
 Note:
-The value is 0.5, not 0.9. Ask why a horn gives up half its aperture, and let the next slides answer. Receiving, this is L2's A_e = eta_ap A.
+Start from L2's pencil-beam rule: directivity is the sphere divided by the beam. A mouth a wide makes a beam about lambda/a wide, so the beam's solid angle is lambda^2/A and the sphere holds 4 pi A/lambda^2 of them. Then the figure: 33 square wavelengths in the 20 x 15 cm mouth at 10 GHz, but the waveguide's cosine leaves the wall squares dim and the late-arriving edges are turned out of step. With the optimum horn's lags the efficiency is 0.51: about 17 squares' worth does the work. The next slides show where the lag comes from. Doubling the frequency fits four times the squares in the same mouth: +6 dB. Receiving, this is L2's A_e = eta_ap A.
 
 ---
 
