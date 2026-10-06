@@ -650,15 +650,15 @@ Lesson 3, and a perfectly circular antenna gives a band of zero width.
 :::
 ::::
 
-::::{frame} Four Cuts of One Dipole
+::::{frame} Four Cuts, Four Antennas
 :class: viz-frame
 
 :::{present}
 <iframe src="../../viz/pol-cuts.html"
-        width="100%" height="510"
+        width="100%" height="538"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
-        title="A half-wave dipole in 3-D with its pattern, the cut plane, and a probe horn: choose E-plane or H-plane and co-pol or cross-pol, or set the dipole mount and horn polarization as on a chamber turntable">
+        title="A dipole, small loop, patch, or horn in 3-D with its pattern, the cut plane, and a probe horn: choose E-plane or H-plane and co-pol or cross-pol, or set the antenna's mount and the horn's polarization as on a chamber turntable">
 </iframe>
 :::
 
@@ -674,6 +674,16 @@ cut: horizontal is the E-plane, vertical is the H-plane. Co-pol means the horn
 is parallel to the dipole. Roll the dipole to vertical and leave the horn
 horizontal, and you have measured the H-plane cross-pol cut, a weak circle
 near the floor, not the H-plane pattern.
+
+Switch the antenna and the same four cuts apply to any linearly polarized
+antenna; what changes is which pattern lands in which plane. The small loop
+swaps the dipole's planes. Its E circles the loop's axis, so with the loop
+flat the E-plane is the horizontal one, where the loop is omnidirectional,
+and its figure-eight is in the H-plane. The patch and the horn point along a
+boresight, so both of their cuts are beams. The patch's E-plane stays broad
+all the way to the horizon over its ground plane, and the horn's two cuts are
+nearly the same width, because its mouth is wider in the H-plane, where the
+waveguide's cosine field spreads the beam back out.
 :::
 ::::
 
