@@ -11,7 +11,7 @@ is required (write \textbf{None} if you did not collaborate).}
 
 \begin{questions}
 
-\question \textbf{Walking the receive chain.} A wave from an X-band source arrives at
+\question \textbf{The Receive Chain.} A wave from an X-band source arrives at
 the PHASER's patch face and ends up as numbers in the Raspberry Pi.
 
 \begin{parts}
@@ -31,9 +31,11 @@ the PHASER's patch face and ends up as numbers in the Raspberry Pi.
 		LSB in degrees, and state what physically limits how finely you can steer the beam.
 		\begin{solution}[1.1in]
 		\eq{ \text{LSB} = \frac{360\mydeg}{2^{7}} = \frac{360\mydeg}{128} = 2.8125\mydeg }
-		The commanded phase is rounded to the nearest multiple of this step, so the applied
-		phase ramp -- and therefore the beam direction -- can only take discrete values.
-		The limit is the phase-shifter word length, not the software.
+		The software rounds only the steering ramp, and the chip sets the nearest of its 128
+		states, so the 7-bit word length sets the finest step. One LSB of ramp steers
+		$0.91\mydeg$, but each element rounds on its own, so the main effect is phase error
+		that raises the sidelobes (about $-42\db$ at 7 bits, Lesson 26), not a beam confined
+		to a grid.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -63,9 +65,9 @@ the PHASER's patch face and ends up as numbers in the Raspberry Pi.
 		\begin{solution}[1.2in]
 		\eq{ \lambda &= \frac{c}{f} = \frac{3\times10^{8}\ \text{m/s}}{10.525\times10^{9}\ \text{Hz}} = 0.0285\ \m = 28.5\ \text{mm} \\
 		     \frac{d}{\lambda} &= \frac{14\ \text{mm}}{28.5\ \text{mm}} = 0.491 }
-		Just under a half wavelength, which is the standard choice: close enough to
-		$\lambda/2$ for a full scan range, but never above it, so no grating lobe enters
-		visible space.
+		The spacing is just under half a wavelength, so Lesson 16's criterion
+		$d < \lambda/(1 + \lvert\sin\theta_0\rvert)$ holds at every scan angle. (At
+		$10.8\ \ghz$, $d/\lambda = 0.504$: a grating lobe past $79.8\mydeg$.)
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -79,9 +81,11 @@ the PHASER's patch face and ends up as numbers in the Raspberry Pi.
 
 \newpage
 
-\question \textbf{The frequency plan.} The PHASER mixes the received X-band signal down
-to a fixed $2.2\ \ghz$ IF using high-side injection, so $f_{\text{LO}} = f_{\text{RF}} +
-f_{\text{IF}}$. The ADF4159 and HMC735 VCO cover $12.2$ to $13.0\ \ghz$. The Pluto is
+\question \textbf{The Frequency Plan.} The PHASER's mixers multiply the received X-band
+signal by the board's own tone, the LO, and keep the difference of the two frequencies.
+The board sets the LO $2.2\ \ghz$ above the source, so that difference, the IF, is always
+$2.2\ \ghz$: $f_{\text{LO}} = f_{\text{RF}} + f_{\text{IF}}$. The ADF4159 and HMC735 VCO
+cover $12.2$ to $13.0\ \ghz$. The Pluto is
 tuned to $2.2\ \ghz$ and sampled at $3\ \text{MSPS}$.
 
 \begin{parts}
@@ -119,7 +123,7 @@ tuned to $2.2\ \ghz$ and sampled at $3\ \text{MSPS}$.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part A student skips \textbf{Find HB100}, so the software keeps the nominal LO of
-		$12.725\ \ghz$. The source in front of the array is actually at $10.30\ \ghz$. What
+		$12.725\ \ghz$. The source in front of the array is at $10.30\ \ghz$. What
 		IF does the mixer produce, and by how much does it miss $2.2\ \ghz$?
 		\begin{solution}[1.2in]
 		\eq{ f_{\text{IF}} &= f_{\text{LO}} - f_{\text{RF}} = 12.725 - 10.300 = 2.425\ \ghz \\
@@ -135,14 +139,14 @@ tuned to $2.2\ \ghz$ and sampled at $3\ \text{MSPS}$.
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the width of the baseband window the Pluto digitizes at $3\ \text{MSPS}$,
+		\part Find the width of the window the Pluto digitizes at $3\ \text{MSPS}$,
 		and say in one or two sentences what the student of part (c) sees on the FFT tab.
 		\begin{solution}[1.2in]
 		\eq{ \text{window} = f_s = 3\ \mhz \quad (\pm 1.5\ \mhz) }
 		The window is centered on the 2.2 GHz tuning. The offset of 225 MHz is 150 times
 		the half-width of that window, so the tone is far
 		outside it and nothing appears but the noise floor. An empty FFT with a powered,
-		correctly aimed source is a frequency error, not a hardware failure.
+		correctly aimed source points to a frequency error, not a hardware failure.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -154,7 +158,7 @@ tuned to $2.2\ \ghz$ and sampled at $3\ \text{MSPS}$.
 
 \newpage
 
-\question \textbf{Hybrid beamforming.} The PHASER has eight elements, eight RF phase
+\question \textbf{Hybrid Beamforming.} The PHASER has eight elements, eight RF phase
 shifters, and two receive channels into the SDR.
 
 \begin{parts}
@@ -163,17 +167,17 @@ shifters, and two receive channels into the SDR.
 	digitizing all eight elements and doing the phase shift in software?
 		\begin{solution}[1.2in]
 		An RF phase shifter and attenuator are small, cheap, and low-power, so eight of them
-		cost little. A full receive channel -- mixer, filter, ADC, and the data path to move
-		the samples -- is expensive in parts, board area, and power. Digitizing all eight
+		add little hardware. A full receive channel -- mixer, filter, ADC, and the data path
+		to move the samples -- requires far more parts, board area, and power. Digitizing all eight
 		elements would multiply the receiver hardware by four for a teaching board that
 		mostly needs one beam at a time.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part After the two 4:1 analog sums, how many independent complex weights can
-		software still apply, and what information has been destroyed?
+		software still apply, and what information does the analog sum destroy?
 		\begin{solution}[1.1in]
-		Two, one per digital channel. Once four elements are summed in the ADAR1000 their
+		Two, one per digital channel. Once the ADAR1000 sums four elements, their
 		individual amplitudes and phases no longer exist anywhere in the system; only the
 		single sum survives. Software can weight and combine the two subarray outputs, but
 		it cannot recover what any one element received.
@@ -184,8 +188,8 @@ shifters, and two receive channels into the SDR.
 		digital weights = \ansbox[1.0in]{$2$}
 	\end{minipage}
 
-	\part An adaptive nulling algorithm running on the digital channels can steer roughly
-	one null per available degree of freedom. State one capability the hybrid split keeps
+	\part An adaptive nulling algorithm running on $N$ digital channels can null about
+	$N - 1$ interferers while holding the look direction. State one capability the hybrid split keeps
 	and one it takes away, and say which of the two you would trade if the board's job were
 	to null several jammers at once.
 		\begin{solution}[1.4in]
@@ -200,7 +204,7 @@ shifters, and two receive channels into the SDR.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part How many ADC channels would a fully digital 8-element version need, and name
-		one practical cost besides part count.
+		one practical drawback besides part count.
 		\begin{solution}[1.0in]
 		Eight, one per element. Beyond the parts, the data rate off the board rises by a
 		factor of four, the power budget grows with the added mixers and converters, and
@@ -217,38 +221,40 @@ shifters, and two receive channels into the SDR.
 
 \newpage
 
-\question \textbf{Reading the bench.} Lab Preset 1 is loaded, the HB100 is at boresight
-about $1\ \m$ from the array, and the FFT tab is showing the baseband spectrum. The Pluto
+\question \textbf{Bench Diagnosis.} Lab Preset 1 is loaded, the HB100 is at boresight
+about $1\ \m$ from the array, and the FFT tab is showing the spectrum. The Pluto
 is tuned to $2.2\ \ghz$ and the LO is at $12.725\ \ghz$.
 
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part The FFT peak sits $1\ \mhz$ above the center of the window. Find the IF of the
-		received tone and the frequency of the source.
+		\part The FFT peak sits at $+1\ \mhz$ on the GUI's frequency axis. Find the
+		frequency of the source and the IF of the received tone.
 		\begin{solution}[1.3in]
-		\eq{ f_{\text{IF}} &= 2.200 + 0.001 = 2.201\ \ghz \\
-		     f_{\text{RF}} &= f_{\text{LO}} - f_{\text{IF}} = 12.725 - 2.201 = 10.524\ \ghz }
-		The source is 1 MHz below the nominal 10.525 GHz, which is ordinary for a
-		free-running HB100.
+		The mixer output is LO minus source, so a higher source lands lower; the GUI negates
+		its axis to undo that mirror, so $+1\ \mhz$ means the source is 1 MHz above the
+		10.525 GHz the LO was set for:
+		\eq{ f_{\text{RF}} &= 10.525 + 0.001 = 10.526\ \ghz \\
+		     f_{\text{IF}} &= f_{\text{LO}} - f_{\text{RF}} = 12.725 - 10.526 = 2.199\ \ghz }
+		The IF sits 1 MHz below 2.2 GHz: a higher RF gives a lower IF.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$f_{\text{IF}}$ = \ansbox[1.1in]{$2.201\ \ghz$}
+		$f_{\text{RF}}$ = \ansbox[1.1in]{$10.526\ \ghz$}
 		\\[10pt]
-		$f_{\text{RF}}$ = \ansbox[1.1in]{$10.524\ \ghz$}
+		$f_{\text{IF}}$ = \ansbox[1.1in]{$2.199\ \ghz$}
 	\end{minipage}
 
-	\part \textbf{Rx Gain} is raised from $10\db$ to $30\db$. Predict what happens to the
+	\part \textbf{Rx Gain} is raised from $10\db$ to $20\db$. Predict what happens to the
 	peak level, to the noise floor, and to the separation between them, and explain why.
 		\begin{solution}[1.3in]
-		Both the peak and the noise floor rise by close to 20 dB, and the separation between
-		them changes very little. The Rx Gain is applied inside the AD9361, well downstream
-		of the LNAs that already fixed how much noise accompanies the signal, so it amplifies
-		signal and noise together. The one exception is the low end: at $10\db$ the SDR's own
-		noise and quantization floor make a measurable contribution, so the separation is
-		slightly worse there than at $30\db$.
+		Both the peak and the noise floor rise by close to 10 dB, and the separation between
+		them changes very little. The SDR applies Rx Gain inside the AD9361, after the LNAs
+		have set the noise level that accompanies the signal, so it amplifies signal and
+		noise together; in the cascade, the SDR's own noise counts at the input divided by
+		all the gain ahead of it. If the peak rises by noticeably less than 10 dB, the
+		converter is near full scale and compressing, and the gain should come back down.
 		\end{solution}
 
 	\part A student reports no peak anywhere in the FFT. Give the first two checks you would
@@ -257,7 +263,7 @@ is tuned to $2.2\ \ghz$ and the LO is at $12.725\ \ghz$.
 		First, confirm the HB100 is powered and aimed at the array from about a meter --
 		this rules out having no signal to receive at all, which is the most common cause.
 		Second, run \textbf{Find HB100} and compare the result with the Signal Freq the GUI
-		is using -- this rules out a source sitting outside the 3 MHz baseband window
+		is using -- this rules out a source sitting outside the 3 MHz window
 		because the LO is set for the wrong frequency. Only after both pass is it worth
 		suspecting the array or the cabling.
 		\end{solution}
@@ -269,9 +275,12 @@ is tuned to $2.2\ \ghz$ and the LO is at $12.725\ \ghz$.
 		Either the received signal is too weak -- source too far away, misaimed, or its
 		battery low -- so the peak has come down toward a fixed floor; or the array has not
 		been calibrated, so the eight elements do not add coherently at broadside and the
-		main lobe never reaches full height. To separate them, move the source closer and
-		re-aim it: if the separation improves, it was signal level. If it does not, run
-		\textbf{Calibrate} and sweep again.
+		main lobe never reaches full height. To separate them, re-aim the source and check
+		its battery, then read the FFT peak in dBFS at \textbf{Rx Gain} 10 and compare it with
+		a working station at the same distance. (Moving the source closer is no test here:
+		at 1 m it is already near the 0.9 m far-field limit.) A low peak means signal level;
+		a normal peak with a poor sweep points to calibration, so run \textbf{Calibrate} and
+		sweep again.
 		\end{solution}
 
 \end{parts}
