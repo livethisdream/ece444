@@ -802,8 +802,7 @@ it, not to replace it.
   name the kit in the plain files on the card's FAT partition, boot,
   connect, get the kit onto Wi-Fi, and run `install.sh` to update the
   backend. The classroom Wi-Fi is the open (unencrypted) SSID
-  `AF_ACADEMY_GUSST` as Neil wrote it (verify the spelling on the kit;
-  it is likely GUEST). Two facts about open guest networks decide the
+  `AF_ACADEMY_GUEST` (spelling confirmed by Neil). Two facts about open guest networks decide the
   procedure's shape and must be checked on the golden kit before class:
   a captive portal would block `install.sh`'s reach to GitHub, and
   client isolation would stop a laptop reaching the Pi over Wi-Fi. So
