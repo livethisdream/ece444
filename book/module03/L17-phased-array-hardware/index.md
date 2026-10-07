@@ -136,6 +136,9 @@ divided by all the gain ahead of it.
 - Its 7-bit phase shifter sets the phase in $2.8125^\circ$ steps.
 - The GUI's eight element sliders write registers in these chips.
 :::
+:::{present}
+<img src="../../viz/img/L17-adar-align.svg" alt="Three panels. Four adjacent elements receive a wave from 20 degrees off broadside, each 60.5 degrees behind the last. After their phase shifters, with equal gains, the four line up. Their sum has amplitude 4, against 1.70 for the uncorrected sum." style="max-width: 100%; display: block; margin: 0 auto;">
+:::
 
 Two ADAR1000 chips do the beamforming. Each is a 4-channel
 analog beamformer: it applies a programmable phase and a programmable gain to
@@ -238,6 +241,9 @@ require four times the receiver hardware this board carries.
 - The ADAR1000s form the beam in analog inside each 4-element subarray, and software combines the two subarray outputs digitally.
 - Software sees two numbers, not eight, so Lesson 28's MVDR can null about one interferer.
 :::
+:::{present}
+<img src="../../viz/img/L17-hybrid-split.svg" alt="Three receive architectures for eight elements, side by side. All analog: 8 phase shifters summed into 1 receiver, no digital weights. The PHASER hybrid: 8 phase shifters summed four at a time into 2 receivers, then 2 digital weights. Fully digital: no phase shifters, 8 receivers, 8 digital weights. Shading marks the digital side of the ADC." style="max-width: 100%; display: block; margin: 0 auto;">
+:::
 
 The PHASER is a **hybrid beamformer**, between fully analog and fully digital.
 
@@ -277,7 +283,7 @@ The patch array is designed for X-band, roughly $10.0$ to $10.5\ \text{GHz}$.
 - A new source frequency changes the LO and nothing else.
 :::
 :::{present}
-<img src="../../viz/img/L17-frequency-plan.svg" alt="Frequency plan showing the 10.1 to 10.7 GHz spread of HB100 source frequencies, the 12.2 to 13.0 GHz LO tuning range, and the fixed 2.2 GHz IF" style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L17-frequency-plan.svg" alt="Frequency plan on two aligned axes. The LO tuning range, 12.2 to 13.0 GHz, sits above the RF axis, offset by the fixed 2.2 GHz IF, so its edges drop straight down onto the reachable RF band, 10.0 to 10.8 GHz, which encloses the 10.1 to 10.7 GHz spread of HB100 units." style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 :::{depth}
@@ -306,6 +312,9 @@ $10.8\ \text{GHz}$.
 :::{present}
 - The HB100's free-running dielectric resonator puts each unit anywhere from $10.1$ to $10.7\ \text{GHz}$, and it drifts with temperature.
 - That spread is 200 times the Pluto's $3\ \text{MHz}$ window, so **Find HB100** measures each unit before anything uses it.
+:::
+:::{present}
+<img src="../../viz/img/L17-hb100-spread.svg" alt="Two panels. Top: an axis from 10.0 to 10.8 GHz with the 10.1 to 10.7 GHz spread of HB100 units as a band, and the Pluto's 3 MHz window drawn to scale as a hairline at 10.525 GHz, one two-hundredth of the spread. Bottom: that window magnified, with one tone 1 MHz above Signal Freq standing about 30 dB over a flat noise floor." style="max-width: 100%; display: block; margin: 0 auto;">
 :::
 
 The source is an **HB100** Doppler module, a self-contained X-band transmitter
