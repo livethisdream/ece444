@@ -794,6 +794,32 @@ it, not to replace it.
   a single look — which is what a tracking radar needs, and where
   Module 4 begins.
 
+- **L17 is the station bring-up lab, from a flashed card** (Neil,
+  2026-10-07). Students receive a blank-slate PHASER kit and bring it up
+  themselves: flash the course's golden image (built once by the
+  instructor from a provisioned kit with `provision.sh --prepare-image`
+  and cloned, per `docs/golden-image.md` in the Phaser repo, PR #24),
+  name the kit in the plain files on the card's FAT partition, boot,
+  connect, get the kit onto Wi-Fi, and run `install.sh` to update the
+  backend. The classroom Wi-Fi is the open (unencrypted) SSID
+  `AF_ACADEMY_GUSST` as Neil wrote it (verify the spelling on the kit;
+  it is likely GUEST). Two facts about open guest networks decide the
+  procedure's shape and must be checked on the golden kit before class:
+  a captive portal would block `install.sh`'s reach to GitHub, and
+  client isolation would stop a laptop reaching the Pi over Wi-Fi. So
+  the procedure uses the **direct Ethernet cable** to the laptop for
+  ssh and the browser UI (the fixed alias 192.168.7.2 the setup branch
+  adds for exactly this; `phaser-NN.local` once mDNS works), and the
+  Wi-Fi only as the Pi's route to the internet. The Kuiper the branch
+  targets is bullseye-based with dhcpcd and wpa_supplicant; an open
+  network joins with `key_mgmt=NONE`, and the Wi-Fi country must be set
+  or the radio stays rfkill-blocked. Whether to bake the SSID into the
+  golden image so the kit joins on boot is the instructor's choice; the
+  page teaches the manual join either way. The image builder's
+  `--autoprovision` route (internet on first boot) is not used for the
+  class. Hardware dry run of Part A on a real kit is owed before the
+  lesson is taught; it cannot be executed in a container.
+
 - **The reveal.js decks are retired** (Neil, 2026-10-07, on the L17 pick
   list: "the new site format doesn't have decks. It's read and present
   mode"). A lesson's present mode *is* its deck. From this date no lesson
