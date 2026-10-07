@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-Today you meet the machine that provides it.
+The ADALM-PHASER sets the phase and gain of each of its eight elements.
 
 Lesson 17 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -38,72 +38,155 @@ Lesson 17 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 
 :::{depth}
-Lesson 16 built the array factor by assuming you can hand every element its
-own amplitude and phase, then add the results. That assumption is the whole
-of array theory, and satisfying it takes real hardware: eight phase
+Lesson 16 built the array factor by assuming we can hand every element its
+own amplitude and phase, then add the results. Every result in array theory
+rests on that assumption, and satisfying it takes real hardware: eight phase
 shifters, eight attenuators, a summing network, a downconverter, and a
-computer to command all of it. Today you meet the machine that provides it.
-This is the first hands-on session with the **ADALM-PHASER**, the 8-element
-X-band array the rest of Module 3 runs on. By the end of the period you will
-have found each block on the board, traced a $10.525\ \text{GHz}$ signal
-from a patch to a spectrum display, and moved two controls in the browser
-interface you will use in every lab that follows.
+computer to command all of it. Today we bring up that hardware in the first
+hands-on session with the **ADALM-PHASER**, the 8-element X-band array the
+rest of Module 3 runs on. By the end of the period you will have found each
+block on the board, traced a $10.525\ \text{GHz}$ signal from a patch to a
+spectrum display, and moved two controls in the browser interface you will
+use in every lab that follows.
 :::
 ::::
 
-::::{frame} The receive chain
+::::{frame} The Receive Chain
 The PHASER is a receive array. A source somewhere in front of it radiates, the
 eight patches capture the wave, and everything between the patches and the
 Raspberry Pi exists to turn eight microwave signals into two streams of
 numbers.
 ::::
 
-::::{frame} The ADALM-PHASER receive chain
+::::{frame} The ADALM-PHASER Receive Chain
 Follow the figure left to right.
 
 <img src="../../viz/img/L17-signal-chain.svg" alt="ADALM-PHASER receive signal chain from the patch array through the ADAR1000 beamformers, mixers, and Pluto SDR to the Raspberry Pi" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
 ::::
 
-::::{frame} The patches
+::::{frame} The Patches
 Eight microstrip patches sit in a horizontal row on the front
 face of the board, spaced $d = 14\ \text{mm}$ center to center. Each one is an
-antenna in its own right with its own element pattern. A wave arriving off
-broadside reaches them in sequence, so the eight signals differ in phase by the
-progressive amount Lesson 16 called $\Delta\phi$. That phase difference is the
-only information the array has about arrival angle, and preserving it is the
-job of everything downstream.
+antenna in its own right with its own element pattern, and the total pattern is
+that element pattern times the Lesson 16 array factor (pattern multiplication).
+A wave arriving off broadside reaches the patches in sequence, so element $n$
+differs from element 0 by the geometric phase $\Delta\phi_n = n\ kd\sin\theta$
+of Lesson 16. That phase difference is the only information the array has about
+arrival angle, and preserving it is the job of everything downstream.
 ::::
 
 ::::{frame} The LNAs
 An ADL8107 low-noise amplifier sits directly behind every patch,
 ahead of any phase shifting or combining. Gain placed first sets the receiver's
-noise figure, because every loss after it is divided by that gain when referred
-to the input. Phase shifters and power combiners are lossy, so the order here
-is deliberate.
+noise figure, because the noise each later stage adds is divided by that gain
+when referred to the input. Phase shifters and power combiners are lossy, so
+the order here is deliberate.
+
+:::{depth}
+The rule is the cascade noise figure. For a chain of stages with noise factors
+$F_1, F_2, F_3, \ldots$ and available gains $G_1, G_2, \ldots$, all as linear
+ratios rather than decibels, the noise factor of the whole chain is
+
+$$F = F_1 + \frac{F_2 - 1}{G_1} + \frac{F_3 - 1}{G_1 G_2} + \cdots$$
+
+Lesson 12 wrote a receiver's own noise as an equivalent input temperature,
+$T_e = T_0(F - 1)$ with $T_0 = 290\ \text{K}$. Substituting it stage by stage
+gives the same rule in temperatures,
+
+$$T_e = T_{e1} + \frac{T_{e2}}{G_1} + \frac{T_{e3}}{G_1 G_2} + \cdots$$
+
+so each stage's noise counts at the input divided by all the gain ahead of it.
+A passive lossy stage, such as a phase shifter and a combiner, has a noise
+factor equal to its loss.
+
+The numbers that follow are illustrative, not datasheet values: an LNA with a
+$2\ \text{dB}$ noise figure ($F_1 = 1.585$) and $20\ \text{dB}$ of gain
+($G_1 = 100$), followed by a beamformer stage with $10\ \text{dB}$ of loss and
+so a $10\ \text{dB}$ noise figure ($F_2 = 10$). With the LNA first,
+
+$$\begin{aligned}
+F &= F_1 + \frac{F_2 - 1}{G_1} \\
+  &= 1.585 + \frac{10 - 1}{100} \\
+  &= 1.675 \quad (2.24\ \text{dB}),
+\end{aligned}$$
+
+or $T_e = 196\ \text{K}$. With the lossy stage first, $G_1 = 0.1$ and
+
+$$\begin{aligned}
+F &= 10 + \frac{1.585 - 1}{0.1} \\
+  &= 15.85 \quad (12.0\ \text{dB}),
+\end{aligned}$$
+
+or $T_e \approx 4300\ \text{K}$. The same two parts in the other order lower
+the signal-to-noise ratio by $9.8\ \text{dB}$. The same rule explains step 5 of
+the procedure: the SDR is the last stage, so its own noise counts at the input
+divided by all the gain ahead of it.
+:::
 ::::
 
-::::{frame} The ADAR1000s
+::::{frame} The ADAR1000 Beamformers
 Two ADAR1000 chips do the beamforming. Each is a 4-channel
 analog beamformer: it applies a programmable phase and a programmable gain to
 each of its four inputs at RF, then sums the four into a single output. The
-phase is set in steps of $2.8125^\circ$, which is $360^\circ/2^7$ — a 7-bit
-phase shifter. The gain is what you will use as a taper in Lesson 25. When the
-GUI shows you eight element sliders, those sliders are writing registers in
-these two chips.
+phase is set in steps of
+
+$$\frac{360^\circ}{2^7} = 2.8125^\circ,$$
+
+which is a 7-bit phase shifter. We will use the gain as a taper in Lesson 25.
+When the GUI shows you eight element sliders, those sliders are writing
+registers in these two chips.
+
+:::{depth}
+On an angle scale, $kd = 360^\circ \times d/\lambda = 176.9^\circ$ at
+$10.525\ \text{GHz}$, so a progressive phase of one LSB steers the beam from
+broadside to
+
+$$\theta_0 = \arcsin\frac{2.8125^\circ}{176.9^\circ} = 0.91^\circ.$$
+
+That does not confine the beam to a $0.91^\circ$ grid. Each element's phase is
+rounded on its own, so the rounding error varies across the ramp; its main
+effect is a phase error that raises the sidelobes, which Lesson 26 measures.
+:::
 ::::
 
-::::{frame} The mixers and the LO
-Each ADAR1000 output goes into an LTC5548 mixer,
-where it is multiplied by a local oscillator generated by an ADF4159 PLL
-driving an HMC735 VCO. The mixer keeps the difference between the two, which
-lands at a fixed $2.2\ \text{GHz}$ intermediate frequency. Part 2 works the
-numbers.
+::::{frame} The Mixers and the LO
+Each ADAR1000 output goes into an LTC5548 mixer, where the mixer multiplies it
+by a local oscillator that an ADF4159 PLL and an HMC735 VCO generate. The mixer
+output contains the difference between the two frequencies, which lands at a
+fixed $2.2\ \text{GHz}$ intermediate frequency. The worked example below
+computes the LO for a $10.525\ \text{GHz}$ source.
+
+:::{depth}
+Multiplying two tones produces their difference and their sum:
+
+$$\cos a\ \cos b = \tfrac{1}{2}\left[\cos(a - b) + \cos(a + b)\right]$$
+
+For a $10.525\ \text{GHz}$ source and a $12.725\ \text{GHz}$ LO, the difference
+is the $2.2\ \text{GHz}$ IF and the sum is $23.25\ \text{GHz}$, which the IF
+filter after the mixer rejects. The phase-locked loop (PLL) is what makes the LO
+exact: it compares the voltage-controlled oscillator (VCO) against a crystal
+reference and corrects the VCO until the two agree, so the LO lands on the
+commanded frequency to within the crystal's accuracy.
+:::
 ::::
 
 ::::{frame} The Pluto
-An ADALM-Pluto — an AD9361 transceiver — digitizes the two IF
+An ADALM-Pluto, an AD9361 transceiver, digitizes the two IF
 channels. It is tuned to $2.2\ \text{GHz}$ and samples at 3 MSPS in the course
 GUI. It has two receive channels and produces two streams of complex samples.
+
+:::{depth}
+The AD9361 performs a second downconversion. Its own mixer, driven at the
+$2.2\ \text{GHz}$ `rx_lo`, moves the IF to $0\ \text{Hz}$, and it does so twice,
+with two copies of its LO $90^\circ$ apart, producing an in-phase output $I$ and a
+quadrature output $Q$. Together they form one complex sample $I + jQ$, and a
+complex signal can tell a tone above the center from a tone below it. The
+Nyquist argument of Lessons 6 and 9 says a real signal sampled at $f_s$ covers
+$0$ to $f_s/2$; a complex signal sampled at $f_s$ covers $-f_s/2$ to $+f_s/2$,
+a window $f_s$ wide. At $3\ \text{MSPS}$ that window runs from $-1.5$ to
+$+1.5\ \text{MHz}$ around $2.2\ \text{GHz}$, and it is the baseband window the
+FFT tab displays.
+:::
 ::::
 
 ::::{frame} The Raspberry Pi
@@ -114,74 +197,134 @@ interface. Everything you do in the lab arrives here as a command over a
 WebSocket.
 ::::
 
-::::{frame} Why the architecture splits where it does
-Count the phase shifters and count the analog-to-digital converters. There are
-eight phase shifters and two ADC channels. That ratio is the design decision.
+::::{frame} Eight Phase Shifters, Two ADC Channels
+Count the phase shifters and count the analog-to-digital converters. The board
+carries eight phase shifters but only two ADC channels, and the rest of the
+architecture follows from the decision to digitize at that 4:1 ratio.
 
 A phase shifter and an attenuator at RF are small, cheap, and low-power, so
-putting one behind each element costs little. A receive channel — mixer, filter,
-ADC, and the data plumbing to carry the samples away — is expensive in parts,
-in board area, and in power. Digitizing all eight elements would give software
-complete freedom to form any pattern it likes after the fact, and it would cost
-four times the receiver hardware this board carries.
+putting one behind each element adds little hardware. A receive channel — mixer,
+filter, ADC, and the data path that carries the samples away — requires far
+more parts, board area, and power. Digitizing all eight elements would give
+software complete freedom to form any pattern after the fact, and it would
+require four times the receiver hardware this board carries.
 ::::
 
-::::{frame} What the split decides
-The PHASER takes the middle road. It is a **hybrid beamformer**: the beam is
-formed in analog inside each 4-element subarray, and the two subarray outputs
-are combined digitally afterwards.
+::::{frame} The Hybrid Beamformer
+The PHASER is a **hybrid beamformer**, between fully analog and fully digital:
+the ADAR1000s form the beam in analog inside each 4-element subarray, and
+software combines the two subarray outputs digitally afterwards.
 
-| | Analog beamforming | Digital beamforming |
-| :-- | :-- | :-- |
-| Where on the PHASER | inside each ADAR1000, 4 elements | across the two subarray outputs |
-| Weights available | 8, one per element | 2, one per channel |
-| Receiver channels needed | 1 per subarray | 1 per channel |
-| Beams at once | one | as many as software can compute |
-::::
+| | PHASER analog | PHASER digital | Fully digital |
+| :-- | :-- | :-- | :-- |
+| Weights | 8, one per element | 2, one per subarray | 8, one per element |
+| Receiver channels | none | 2, one per subarray | 8, one per element |
+| Beams at once | one | several, from the same two subarray patterns | many, each independent |
 
-::::{frame} Key point
-:::{callout}
-The hybrid split decides what is possible later. Eight elements give you eight
-analog weights, so the array can steer, taper, and place a null anywhere you
-want it. But once the ADAR1000 sums its four elements, the individual element
-signals are gone, and software downstream sees two numbers, not eight. When you
-reach adaptive nulling in Lesson 28, the MVDR algorithm has exactly two digital
-degrees of freedom to work with, and that limit comes from this figure.
+:::{depth}
+Two digital channels can form more than one beam from one set of samples, but
+every such beam is a weighted sum of the same two subarray outputs, whose
+patterns the analog weights already fixed. None of them can point
+independently of the analog steer, which is what a fully digital array, with
+one ADC per element, can do.
 :::
 ::::
 
-::::{frame} The frequency plan
-The board receives X-band, roughly $10.0$ to $10.5\ \text{GHz}$. Nothing in the
-lab digitizes X-band. The mixers move the received signal down to a single
-fixed IF, and that IF is the only frequency the SDR ever tunes.
+::::{frame} The Eight-to-Two Hybrid Split
+:::{callout}
+The hybrid split fixes how many weights each later lab can use. Eight elements
+give us eight analog weights, so the array can steer, taper, and place a null
+anywhere we choose. But once the ADAR1000 sums its four elements, the
+individual element signals are gone, and software downstream sees two numbers,
+not eight. When we reach adaptive nulling in Lesson 28, the MVDR algorithm has
+exactly two digital degrees of freedom to work with, because the ADAR1000s sum
+the elements in analog before anything is digitized. One of those degrees of
+freedom holds the look direction, and $N$ channels can null about $N - 1$
+interferers, so this board can null about one.
+:::
 ::::
 
-::::{frame} The RF band, the LO band, and the fixed IF
-<img src="../../viz/img/L17-frequency-plan.svg" alt="Frequency plan showing the 10.1 to 10.7 GHz RF band, the 12.2 to 13.0 GHz LO band, and the fixed 2.2 GHz IF" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+::::{frame} The Frequency Plan
+The patch array is designed for X-band, roughly $10.0$ to $10.5\ \text{GHz}$.
+Nothing in the lab digitizes X-band. The mixers move the received signal down
+to a single fixed IF, and that IF is the only frequency the SDR ever tunes.
+
+:::{depth}
+Two different ranges appear in this lesson, and different hardware sets each.
+The design band, about $10.0$ to $10.5\ \text{GHz}$, is where the patch array
+is meant to operate. A single patch is matched over only a narrow band: Lesson
+13 put patch bandwidth at one or two percent, about $100$ to $205\ \text{MHz}$
+at $10.25\ \text{GHz}$, and outside that band the match degrades. The tuning
+coverage, $10.0$ to $10.8\ \text{GHz}$, is set by the LO's range, as the
+reachable-band frame below computes. The HB100 spread, $10.1$ to
+$10.7\ \text{GHz}$, is $5.8\%$ wide, so a unit near the top of it sits above
+the design band. The LO still places that unit's tone on the
+$2.2\ \text{GHz}$ IF; the patches are mismatched there, so the peak is weaker
+by the mismatch loss, but it does not disappear.
+:::
 ::::
 
-::::{frame} The HB100 source
+::::{frame} The RF Band, the LO Band, and the Fixed IF
+<img src="../../viz/img/L17-frequency-plan.svg" alt="Frequency plan showing the 10.1 to 10.7 GHz spread of HB100 source frequencies, the 12.2 to 13.0 GHz LO tuning range, and the fixed 2.2 GHz IF" style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+
+:::{depth}
+The RF bar is the spread of HB100 units, $10.1$ to $10.7\ \text{GHz}$, which
+needs LO settings from $12.3$ to $12.9\ \text{GHz}$. The LO bar is the VCO's
+full range, $12.2$ to $13.0\ \text{GHz}$, which reaches RF from $10.0$ to
+$10.8\ \text{GHz}$.
+:::
+::::
+
+::::{frame} The HB100 Source
 The source is an **HB100** Doppler module, a self-contained X-band transmitter
 about the size of a matchbox. Its nominal output is $10.525\ \text{GHz}$. The
-oscillator inside it is a free-running dielectric resonator, not a locked
-synthesizer, so the actual frequency of any particular unit is set by the
-mechanical dimensions of that resonator and drifts with temperature. Units land
-anywhere from about $10.1$ to $10.7\ \text{GHz}$. This is why the GUI has a
-**Find HB100** button: the software sweeps the LO, watches where the IF tone
-appears, and records the answer. The array cannot assume the source frequency,
-so it measures it.
+oscillator inside it is a free-running dielectric resonator oscillator (DRO),
+not a locked synthesizer. No reference corrects it, so the actual frequency of
+any particular unit is set by the mechanical dimensions of that resonator and
+drifts with temperature. Units land anywhere from about $10.1$ to
+$10.7\ \text{GHz}$. This is why the GUI has a **Find HB100** button: the
+software sweeps the LO, watches where the IF tone appears, and records the
+answer.
 ::::
 
-::::{frame} High-side injection and the IF
+::::{frame} High-Side Injection
 The LO comes from an ADF4159 PLL locking an HMC735 VCO, tunable over
 $12.2$ to $13.0\ \text{GHz}$. The mixers use **high-side injection**, meaning
 the LO sits above the RF rather than below it, so
 
 $$ f_{\text{LO}} = f_{\text{RF}} + f_{\text{IF}}, \qquad f_{\text{IF}} = 2.2\ \text{GHz}. $$
+
+Because $f_{\text{IF}} = f_{\text{LO}} - f_{\text{RF}}$, raising the RF by
+$\delta$ lowers the IF by $\delta$, so high-side mixing mirrors the spectrum.
+The GUI negates its FFT axis to undo the mirror, so a peak right of center
+means the source is above **Signal Freq**.
+
+:::{depth}
+For example, with the LO at $12.725\ \text{GHz}$, a source at
+$10.526\ \text{GHz}$ mixes to
+
+$$\begin{aligned}
+f_{\text{IF}} &= f_{\text{LO}} - f_{\text{RF}} \\
+  &= 12.725 - 10.526 \\
+  &= 2.199\ \text{GHz},
+\end{aligned}$$
+
+$1\ \text{MHz}$ below the Pluto's $2.2\ \text{GHz}$ center, so its raw
+baseband tone sits at $-1\ \text{MHz}$. The GUI flips the axis and plots it at
+$+1\ \text{MHz}$, the source's offset above $10.525\ \text{GHz}$.
+
+The HMC735 tunes $12.2$ to $13.0\ \text{GHz}$, so high-side injection is the
+plan this VCO supports; covering the same $10.0$ to $10.8\ \text{GHz}$ with
+low-side injection would take an LO of $7.8$ to $8.6\ \text{GHz}$. Either plan
+has an image, the other input frequency that mixes to the same IF. Here it is
+$f_{\text{LO}} + f_{\text{IF}} = 14.925\ \text{GHz}$ for the nominal source,
+$4.4\ \text{GHz}$ above it, where the patches are far outside their matched
+band.
+:::
 ::::
 
-::::{frame} Worked example — tracing the nominal source to the IF
-:::{admonition} Worked example — tracing the nominal source to the IF
+::::{frame} Worked Example: The Nominal Source
+:::{admonition} Worked Example: The Nominal Source
 :class: tip
 An HB100 measures $10.525\ \text{GHz}$. Where does the LO have to sit, and what
 does the Pluto see?
@@ -189,34 +332,48 @@ does the Pluto see?
 The IF is fixed at $2.2\ \text{GHz}$ by the filtering after the mixer, so the LO
 must sit that far above the signal:
 
-$$ f_{\text{LO}} = 10.525 + 2.200 = 12.725\ \text{GHz}. $$
+$$\begin{aligned}
+f_{\text{LO}} &= f_{\text{RF}} + f_{\text{IF}} \\
+  &= 10.525 + 2.200 \\
+  &= 12.725\ \text{GHz}.
+\end{aligned}$$
 
 That value is inside the $12.2$ to $13.0\ \text{GHz}$ VCO range, so it is
-reachable. The mixer output is
+reachable. The mixer difference, $12.725 - 10.525\ \text{GHz}$, lands on the
+$2.2\ \text{GHz}$ IF the Pluto is tuned to.
 :::
 ::::
 
-::::{frame} Worked example, continued
-:::{admonition} Worked example, continued
+::::{frame} Worked Example, Continued
+:::{admonition} Worked Example, Continued
 :class: tip
-$$ f_{\text{IF}} = f_{\text{LO}} - f_{\text{RF}} = 12.725 - 10.525 = 2.200\ \text{GHz}, $$
+The Pluto samples at 3 MSPS, which gives a window $3\ \text{MHz}$ wide,
+$\pm 1.5\ \text{MHz}$ around its $2.2\ \text{GHz}$ center. With the LO set from
+the **Find HB100** measurement, the tone lands near $0\ \text{MHz}$ on the FFT
+axis. A tone $1\ \text{MHz}$ off the tuned center still lands inside the window
+and shows up as a peak in the FFT display. A tone $200\ \text{MHz}$ off does not
+appear at all, which is what a wrong LO looks like on the screen.
+:::
 
-and the Pluto is tuned to $2.2\ \text{GHz}$ with a 3 MSPS sample rate, giving a
-3 MHz-wide window around that center. A tone $1\ \text{MHz}$ off the tuned
-center lands inside the window and shows up as a peak in the FFT display. A
-tone $200\ \text{MHz}$ off does not appear at all, which is what a wrong LO
-looks like on the screen.
+:::{depth}
+The backend sets the LO to the frequency **Find HB100** saved plus
+$2.2\ \text{GHz}$ and adds no deliberate offset, so on hardware the tone sits
+near the center of the window, off by whatever error remains in the measured
+frequency. The simulator is different: it fixes its tone at a set offset,
+described in the No Hardware frame below.
 :::
 ::::
 
-::::{frame} The reachable RF band
+::::{frame} The Reachable RF Band
 Run the arithmetic the other way to see the coverage the hardware has. With the
 LO limited to $12.2$ to $13.0\ \text{GHz}$ and the IF fixed at
 $2.2\ \text{GHz}$, the reachable RF band is $10.0$ to $10.8\ \text{GHz}$. Every
-HB100 you are likely to be handed falls inside it.
+HB100 you are likely to be handed falls inside it. This is the LO's tuning
+coverage, which is wider than the patches' $10.0$ to $10.5\ \text{GHz}$ design
+band.
 ::::
 
-::::{frame} Interactive — the PHASER signal chain
+::::{frame} Signal Chain Explorer
 :class: viz-frame
 
 :::{depth}
@@ -224,7 +381,8 @@ The widget below is the same chain as the figure, but you can click it. Select a
 block to see what it does and what frequency lives at that node, then drag the
 HB100 slider and watch the RF and LO labels move while the IF label does not.
 Notice that only one block changes its setting when the source frequency
-changes: the LO. That is the point of a fixed-IF plan.
+changes: the LO. With a fixed IF, the SDR tuning, the IF filtering, and the
+sample rate never change; only the LO retunes.
 :::
 
 <iframe src="../../viz/phaser-signal-chain.html"
@@ -235,7 +393,7 @@ changes: the LO. That is the point of a fixed-IF plan.
 </iframe>
 ::::
 
-::::{frame} The station
+::::{frame} The Station
 Each station has one kit:
 
 - the ADALM-PHASER board, with the Raspberry Pi and the ADALM-Pluto attached on the back
@@ -245,66 +403,94 @@ Each station has one kit:
 - a laptop on the lab network — the laptop only runs a browser
 ::::
 
-::::{frame} Bringing the station up
+::::{frame} Station Bring-Up
 1. Mount the PHASER on the tripod with the patch face vertical and the row of
    patches horizontal. The array steers in the plane of that row, so a board
    mounted on its side steers up and down and none of the lab works.
 2. Connect the board and the Pi supplies. Give the Pi about a minute to boot and
    start the service.
-3. On the laptop, browse to `http://phaser.local:8080`. The page connects over a
-   WebSocket and the plot area starts drawing. If the page loads but no data
-   arrives, the backend is not running yet — wait, then reload.
+3. On the laptop, browse to `http://phaser.local:8080`, or to the IP shown on
+   the station if `phaser.local` does not resolve. Wait for the pill at the
+   bottom right to change from **Checking...** to **Connected**. **Start** stays
+   disabled until the backend is ready.
+
+:::{depth}
+If the pill never reads **Connected**, turn on **Show Logs Tab** under **Plot
+Options** and read the **Logs** tab: a message such as "Start blocked until
+backend is ready" says the backend is still starting, and the page will
+connect on its own once it is up.
+:::
 ::::
 
-::::{frame} The Phaser GUI — Configuration
+::::{frame} The Phaser GUI: Configuration
 The interface has a **sidebar** of control sections on the left and a **plot
 area** with tabs on the right. You will use all of these over the next several
 lessons; today only a few matter.
 
 | Sidebar section | What lives there |
 | :-- | :-- |
-| Configuration | Signal Freq (GHz), Rx Gain (dB), Tx Gain (dB), Signal BW (MHz), Tx Mode, Calibrate |
+| Configuration | **Calibration** group: Calibrate, Find HB100, Reboot. Then Signal Freq (GHz), Signal BW (MHz), Rx Gain (dB), Tx Gain (dB), Tx Mode. **Connection** group: Simulator Mode, Backend URL (leave it empty) |
 ::::
 
-::::{frame} The Phaser GUI — Element Gains and Phase Control
+::::{frame} The Phaser GUI: Element Gains and Phase Control
 
 | Sidebar section | What lives there |
 | :-- | :-- |
-| Element Gains | Rx1–Rx8 sliders and the taper presets |
-| Phase Control | per-element phase offsets and Reset |
+| Element Gains | E1–E8 gain sliders (0–100%); Window Presets Rect, Cheb, Hann, Black; Aperture Presets 2-Elem, Sparse λ; Enforce Symmetric Taper |
+| Phase Control | E1–E8 phase offsets and Reset |
 ::::
 
-::::{frame} The Phaser GUI — Beam Steering, Quantization, and Digital Beam Forming
+::::{frame} The Phaser GUI: Beam Steering, Quantization, and Digital Beam Forming
 
 | Sidebar section | What lives there |
 | :-- | :-- |
-| Beam Steering | Steer Angle (deg) and Apply |
-| Quantization | Steer Resolution (deg), Phase Shift Bits |
-| Digital Beam Forming | Manual and MVDR modes for the two digital channels |
+| Beam Steering | Steer Angle (deg), Taper (Uniform, Chebyshev, Hann, Blackman), Apply |
+| Quantization | Steer Resolution (deg), Phase Shift Bits, Use Bits (ignore Steer Res) |
+| Digital Beam Forming | Mode for the two digital channels: Manual (Reset, Beam 0/1 Gain and Phase) or MVDR (Snapshots (K), Diagonal Load) |
 ::::
 
-::::{frame} The Phaser GUI — Plot Options and Lab Presets
+::::{frame} The Phaser GUI: Plot Options and Lab Presets
 
 | Sidebar section | What lives there |
 | :-- | :-- |
-| Plot Options | peak markers, squint info, monopulse traces |
-| Lab Presets | buttons 1 through 8, one per workshop lab |
+| Plot Options | Show Peak Gain Marker, Show Peak Angle Marker, Show Beam Squint Info, Show Logs Tab, Show Monopulse Delta Beam, Show Monopulse Error Function; X Min, X Max, Y Min, Y Max |
+| Lab Presets | buttons 1 Steering Angle through 8 Tracking, one per workshop lab |
 ::::
 
-::::{frame} The plot tabs
-The plot tabs are **Rectangular**, **Polar**, **FFT**, and **Tracking**.
-**Start** runs a beam sweep and **Freeze** holds a trace so you can compare
-against it. Today you work in the FFT tab, which shows the baseband spectrum of
-one receive channel rather than a beam pattern.
+::::{frame} The Plot Tabs
+The plot tabs are **Rectangular**, **Polar**, **FFT**, and **Tracking**, plus
+**Logs** when **Show Logs Tab** is on. **Start** runs the beam sweep, and
+nothing plots until you press it. Today you work in the FFT tab, which plots
+Amplitude (dBFS) against Frequency (MHz) for the two subarray outputs summed,
+taken at the steering angle where the sweep saw the strongest signal.
+
+:::{depth}
+The FFT tab refreshes once per sweep. **Freeze** stores up to three reference
+traces on the Rectangular and Polar tabs, and pressing and holding it clears
+them; it is unavailable on the FFT tab.
+:::
 ::::
 
 ::::{frame} Find HB100
-Two buttons need a word before you press anything.
+Two buttons, **Find HB100** and **Calibrate**, write calibration files on the
+Pi.
 
 **Find HB100** sweeps the LO until it locates the source and writes the measured
 frequency to a calibration file on the Pi. Run it once per source, at the start
 of the period, with the HB100 powered and pointed at the array. Every later
 calculation the software does uses that number.
+
+:::{depth}
+The steering phase is where the frequency enters. Lesson 18 derives the
+progressive phase
+
+$$\Delta\phi = kd\sin\theta_0, \qquad k = \frac{2\pi f}{c},$$
+
+so the same steering angle needs a different phase at a different frequency.
+For a $30^\circ$ steer the ramp is $84.9^\circ$ per element at
+$10.1\ \text{GHz}$ and $89.9^\circ$ at $10.7\ \text{GHz}$, and a ramp computed
+for the wrong frequency points the beam at the wrong angle.
+:::
 ::::
 
 ::::{frame} Calibrate
@@ -316,155 +502,281 @@ survives a reboot, so you normally run it once at the start of a lab period and
 leave it alone.
 ::::
 
-::::{frame} Both buttons take a few seconds
+::::{frame} Button Run Time
 :::{note}
-Both buttons write files on the Pi and both take some seconds to finish. Do not
-press them repeatedly while they run.
+Both buttons write files on the Pi and take some seconds to finish. Each opens a
+**Calibration** window that reports progress, and the button reads
+**Calibrating...** or **Scanning...** until it finishes. Wait for it, and do not
+press either button again while it runs; use **Cancel** only if it stalls.
+Leave **Reboot**, the third button beside them, alone. Do not press and hold the
+**Connected** pill either: holding it for two seconds shuts the Pi down.
 :::
 ::::
 
-::::{frame} Load the preset and place the source
+::::{frame} Preset and Source Placement
 Work through these in order and record what the numbered steps ask for.
 
-1. Press **Lab Preset 1 (Steering Angle)**. The GUI loads the workshop's initial
-   state and opens the FFT tab in Beam Sweep mode, with a uniform taper and the
-   beam commanded to broadside.
+1. Press **1 Steering Angle** under **Lab Presets**. The GUI loads the
+   workshop's initial state, with a uniform taper and the beam commanded to
+   broadside, and opens the FFT tab. Press **Start** to begin streaming.
 2. Power the HB100 and place it about $1\ \text{m}$ in front of the array at
    boresight, at the same height as the patch row, with its own patch face
    toward the board.
+
+:::{depth}
+One meter is the shortest far-field distance for this array. Lesson 5's
+far-field boundary, with the aperture $D = Nd = 8 \times 14\ \text{mm} = 112\ \text{mm}$
+and $\lambda = 28.5\ \text{mm}$, is
+
+$$\frac{2D^2}{\lambda} = \frac{2\ (0.112\ \text{m})^2}{0.0285\ \text{m}} = 0.88\ \text{m},$$
+
+so moving the source closer than about $0.9\ \text{m}$ raises the signal but
+curves the arriving wavefront enough to distort the patterns of later labs.
+:::
 ::::
 
-::::{frame} Find HB100 and read the peak
+::::{frame} Source Frequency and FFT Peak
 3. Press **Find HB100**. When it finishes, read the value it reports and write
    it down. Expect something within a few hundred MHz of
    $10.525\ \text{GHz}$.
 4. Look at the FFT tab. A single narrow peak should stand well above a flat
-   noise floor. Record the frequency at which the peak appears in the baseband
-   spectrum and how far above the floor it sits, in dB. The separation should be
+   noise floor, near $0\ \text{MHz}$. Record the frequency at which the peak
+   appears and how far above the floor it sits, in dB. The separation should be
    unambiguous — at least 20 dB with the source at $1\ \text{m}$. Less than that
    means the source is misaimed, too far away, or the LO is wrong.
-::::
 
-::::{frame} Vary the receive gain
-5. Change **Rx Gain** from its preset value down by 10 dB, then up by 10 dB.
-   Record the peak level and the noise floor level at each of the three
-   settings. Both move together, because this gain is applied inside the SDR,
-   long after the LNAs have already set how much noise is riding on the signal.
-   The separation between peak and floor therefore changes little. It does
-   shrink at the lowest gain setting, where the SDR's own noise starts to
-   contribute.
-::::
+:::{depth}
+Lesson 2's Friis equation, $P_r = P_t G_t G_r (\lambda/4\pi R)^2$, sets the
+peak. Doubling the distance lowers it by $20\log_{10}2 = 6.0\ \text{dB}$, and
+misaiming the HB100 lowers its $G_t$. On the receive side, Lesson 16's
+broadside directivity of the uniform array is
 
-::::{frame} Shift the tuned frequency
-6. Change **Signal Freq (GHz)** by $-0.0005\ \text{GHz}$, which is 500 kHz down,
-   and watch the peak. The GUI holds the IF fixed and moves the LO, so lowering
-   the assumed source frequency lowers the LO by the same amount and the
-   observed tone moves 500 kHz down in the baseband window. Record the shift and
-   check it against the arithmetic in Part 2. The whole window is only 3 MHz
-   wide at a 3 MSPS sample rate, so an error of more than about 1.5 MHz walks
-   the tone off the display entirely, which is what a bad **Find HB100** result
-   looks like. Return Signal Freq to the measured value before continuing.
-::::
+$$\begin{aligned}
+D &\approx \frac{2Nd}{\lambda} \\
+  &= \frac{2 \times 8 \times 14\ \text{mm}}{28.5\ \text{mm}} \\
+  &= 7.86 \quad (8.96\ \text{dB}),
+\end{aligned}$$
 
-::::{frame} Rotate the source
-7. Rotate the HB100 by hand to point away from the array, then back. The peak
-   drops and returns. This is a first look at the element pattern you will
-   measure properly in Lesson 23.
-::::
+and Lesson 2's effective aperture is
 
-::::{frame} No hardware?
-:::{admonition} No hardware?
-:class: tip
-The same procedure runs against the simulator. Start the backend with
+$$\begin{aligned}
+A_e &= \frac{D\lambda^2}{4\pi} \\
+  &= \frac{7.86\ (2.85\ \text{cm})^2}{4\pi} \\
+  &= 5.1\ \text{cm}^2.
+\end{aligned}$$
 
-```sh
-python phaser_headless.py --sim
-```
-
-and open `http://localhost:8080`. The sim synthesizes element-level IQ from a
-target at boresight, so steps 1, 4, 5, and 6 behave as described; the tone
-appears $1\ \text{MHz}$ above the center of the baseband window. Two steps have
-no simulated equivalent. Step 3 is unnecessary, because the simulated source is
-already at a known frequency, and step 7 cannot be done at all, because the
-simulated target is fixed at boresight and cannot be rotated.
+The floor in the FFT is the noise in one frequency bin, so the peak-to-floor
+separation also depends on the FFT length: a longer FFT narrows each bin,
+lowers the floor, and raises the separation with no change at the antenna.
 :::
 ::::
 
-::::{frame} Reading the code — tuning the SDR
+::::{frame} Receive Gain Steps
+5. Set **Rx Gain (dB)** to 10 and record the peak level and the noise floor
+   level, both in dBFS, decibels relative to the ADC's full-scale input. Repeat
+   at 0 and at 20. Both levels move together, because the SDR applies this gain
+   internally, long after the LNAs have already set the noise level that
+   accompanies the signal. The separation between peak and floor therefore
+   changes little. It can shrink at 0, where the SDR's own noise starts to
+   contribute, and at 20 the peak may rise by less than 10 dB because the
+   converter is near full scale and compressing.
+
+:::{depth}
+In cascade terms the SDR is the last stage, so its noise counts at the input
+divided by all the gain of the LNAs and the IF chain ahead of it. Turning Rx
+Gain down removes gain inside the AD9361 ahead of its own converter, so the
+converter's noise counts for more; turning it up pushes the peak toward
+$0\ \text{dBFS}$. The size of either effect depends on the AD9361's gain table
+and on this station's signal level, so the lab sheet asks for the trend, not a
+number. The Pi's start-up Rx Gain comes from its configuration file, not from
+the preset, which is why this step sets 10 explicitly.
+:::
+::::
+
+::::{frame} Tuned-Frequency Shift
+6. Lower **Signal Freq (GHz)** by $0.001\ \text{GHz}$, which is 1 MHz (one
+   click of the field's down arrow, or type the new value), press Enter, and
+   watch the peak. The GUI holds the IF fixed and moves the LO, so the peak
+   moves 1 MHz **up** the Frequency (MHz) axis: the GUI flips the axis so it
+   reads the source's offset from Signal Freq, and the source now sits 1 MHz
+   above it. Record the shift and check it against the worked example above.
+   The whole window is only 3 MHz wide at a 3 MSPS sample rate, so an error of
+   more than about 1.5 MHz moves the tone off the display entirely, which is
+   what a bad **Find HB100** result looks like. Press **Find HB100** again to
+   restore the measured frequency before continuing.
+
+:::{depth}
+On a kit whose GUI predates the fix to this field, typing a value updates only
+the browser; press **Stop** and then **Start** to send it to the Pi. Use the
+$0.001\ \text{GHz}$ step rather than a finer one: the field steps in
+$0.001\ \text{GHz}$ and shows three decimals, so retyping the displayed value
+can leave the LO up to $0.5\ \text{MHz}$ from the measured frequency, which is
+why the step restores it with **Find HB100**.
+:::
+::::
+
+::::{frame} Source Rotation
+7. Rotate the HB100 in place to point it away from the array, then back. The
+   peak drops and returns.
+
+:::{depth}
+Turning the source changes how much of its own radiation it aims at the array:
+the HB100's transmit pattern, the $G_t$ of the Lesson 2 Friis equation. The
+arrival angle at the PHASER stays at boresight, so the drop says nothing about
+the PHASER's element pattern. Measuring that pattern needs the arrival angle
+itself to change, which Lesson 23 does by carrying the source around the array
+on an arc.
+:::
+::::
+
+::::{frame} No Hardware?
+:::{admonition} No hardware?
+:class: tip
+Open [livethisdream.github.io/phaser](https://livethisdream.github.io/phaser/),
+the same dashboard with no install. At a station whose hardware has failed, add
+`?sim=1` to the station's URL or turn on **Simulator Mode** under
+**Configuration**. An orange **SIMULATION** pill marks simulated data.
+
+Steps 1 and 4 behave as described, except that the tone appears at
+$-1\ \text{MHz}$. Steps 5 and 6 do not: the simulator holds its tone at that
+fixed offset whatever Signal Freq says, and it does not model Rx Gain. Step 3
+runs a scripted scan, and step 7 cannot be done because the simulated source is
+fixed at boresight.
+:::
+
+:::{depth}
+The simulator places its tone $1\ \text{MHz}$ above the center of the raw
+baseband window, and the GUI's flipped axis plots it at $-1\ \text{MHz}$. With
+a checkout of the Phaser repository and Python, `python phaser_headless.py --sim`
+serves the same page at `http://localhost:8080`.
+:::
+::::
+
+::::{frame} Reading the Code: Tuning the SDR
 Everything the GUI does reaches the hardware as a `pyadi-iio` call. Three short
 excerpts from the course backend cover the parts you have just used.
 
 Tuning the SDR and setting its gain:
 
 ```python
-sdr = adi.ad9361(uri=ip)                     # the Pluto's AD9361 transceiver
-sdr.rx_enabled_channels = [0, 1]             # both subarray channels
-sdr.sample_rate = int(sample_rate)           # 3e6 in the GUI
-sdr.rx_lo = int(rx_lo)                       # 2.2e9 - the IF, never X-band
-sdr.rx_rf_bandwidth = int(sample_rate)
+sdr = adi.ad9361(uri=ip)
+sdr.sample_rate = int(sample_rate)
+sdr.rx_lo = int(rx_lo)
 sdr.gain_control_mode_chan0 = "manual"
-sdr.rx_hardwaregain_chan0 = int(rx_gain)     # the Rx Gain slider, in dB
+sdr.rx_hardwaregain_chan0 = int(rx_gain)
+```
+
+:::{depth}
+The full excerpt from `SDR_init`, with comments:
+
+```python
+sdr = adi.ad9361(uri=ip)                 # the Pluto's AD9361 transceiver
+sdr.rx_enabled_channels = [0, 1]         # both subarray channels (set via a fallback helper)
+sdr.sample_rate = int(sample_rate)       # 3e6 in the GUI
+sdr.rx_lo = int(rx_lo)                   # 2.2e9 - the IF, never X-band
+sdr.rx_rf_bandwidth = int(sample_rate)
+sdr.rx_buffer_size = int(buffer_size)    # 16384 samples
+sdr.gain_control_mode_chan0 = "manual"
+# Rx Gain (dB) at start-up; the slider later adds each channel's calibration trim
+sdr.rx_hardwaregain_chan0 = int(rx_gain)
 sdr.gain_control_mode_chan1 = "manual"
 sdr.rx_hardwaregain_chan1 = int(rx_gain)
 ```
+:::
 ::::
 
-::::{frame} What the tuning call does
+::::{frame} The SDR Tuning Call
 Line by line: `adi.ad9361` opens a connection to the transceiver at a network
 address, and the two enabled receive channels are the two subarray outputs. The
 sample rate fixes the width of the baseband window, and `rx_rf_bandwidth`
 matches the analog filter to it. `rx_lo` is the tuned frequency, and it is
 $2.2\ \text{GHz}$ every time — the SDR never learns what band the array is
-looking at. Automatic gain control is switched off deliberately, because a
-receiver that changes its own gain during a beam sweep produces a pattern
-measurement that means nothing. The manual gain is what the **Rx Gain** slider
-writes.
+looking at. The backend switches off automatic gain control, because a receiver
+that changes its own gain during a beam sweep scales each angle's sample by a
+different amount and distorts the measured pattern. When you move the **Rx
+Gain** slider, the backend writes its value plus each channel's calibration
+trim to the two manual gains.
 ::::
 
-::::{frame} The local oscillator, on its own chip
+::::{frame} The LO Synthesizer
 The LO is a separate device on the same board:
 
 ```python
 synth = adi.adf4159(rpi_ip)
-synth.frequency = int(lo_freq)               # 12.725e9 for a 10.525 GHz source
+synth.frequency = int(lo_freq / 4)   # 3.18125e9: the CN0566 divides by 4
 ```
+
+The ADF4159 register holds one quarter of the LO the mixer sees. The board
+divides the LO by 4 ahead of the PLL's input, so a $12.725\ \text{GHz}$ LO is
+written as $3.18125\ \text{GHz}$.
 ::::
 
-::::{frame} Reading the code — writing the phases
+::::{frame} Reading the Code: Writing the Phases
 Setting the array's phases:
 
 ```python
+for i in range(8):
+    element_id = i + 1
+    ramp = round(i * PhDelta / phase_step_size) * phase_step_size
+    q_phase = (ramp + phaseList[i]) % 360
+    array.elements[element_id].rx_phase = q_phase
+array.latch_rx_settings()
+```
+
+:::{depth}
+The full function from the backend, with its comments:
+
+```python
 def ADAR_set_Phase(array, PhDelta, phase_step_size, phaseList):
-    """ Set array phases for given steering angle/delta """
+    """Set array phases for a given steering delta."""
     for i in range(8):
         element_id = i + 1
-        base_phase = phaseList[i] + i * PhDelta
-        q_phase = round(base_phase / phase_step_size) * phase_step_size
-        q_phase = q_phase % 360
+        # Quantize the steering ramp; leave the offsets at full resolution.
+        ramp = round(i * PhDelta / phase_step_size) * phase_step_size
+        q_phase = (ramp + phaseList[i]) % 360
         array.elements[element_id].rx_phase = q_phase
+    # The rx_phase writes sit in SPI shadow registers until they are latched.
+    array.latch_rx_settings()   # nothing takes effect until this runs
 ```
+:::
 ::::
 
-::::{frame} What the phase-setting loop does
+::::{frame} The Phase-Setting Loop
 Here `array` is the `pyadi-iio` object that represents both ADAR1000s as one
 8-element array, so `array.elements[1]` through `array.elements[8]` reach the
-individual channels regardless of which chip they live on. `phaseList` holds the
-per-element calibration offsets measured by **Calibrate**. `PhDelta` is the
-progressive phase from element to element — the $\Delta\phi$ of Lesson 16 — so
-`i * PhDelta` builds the linear phase ramp across the aperture and the
-calibration offset is added on top. The next two lines are the hardware's
-limitation made explicit: the commanded phase is rounded to the nearest multiple
-of `phase_step_size`, which is $2.8125^\circ$, and wrapped into $0$ to
-$360^\circ$. Lesson 18 computes `PhDelta` from a steering angle, and Lesson 26
-studies what that rounding does to the pattern.
+individual channels regardless of which chip they live on. `phaseList` is your
+**Phase Control** offsets with the **Calibrate** corrections added. `PhDelta` is
+the progressive phase from element to element, the $\beta$ of Lesson 16, which
+Lesson 18 calls $\Delta\phi$, so `i * PhDelta` builds the linear phase ramp
+across the aperture. Only that ramp is rounded to `phase_step_size`, which is
+$2.8125^\circ$ at 7 bits; the offsets keep full resolution, and the loop wraps
+the sum into $0$ to $360^\circ$. The writes wait in shadow registers until
+`latch_rx_settings()` moves all eight into the live beam at once. Lesson 18
+computes `PhDelta` from a steering angle, and Lesson 26 studies what that
+rounding does to the pattern.
+
+:::{depth}
+The code adds `+i * PhDelta`, where Lesson 18 writes the applied phase as
+$\phi_n = -n\ \Delta\phi$. The two differ only in which side of broadside counts
+as a positive angle: reversing either the element numbering or the sign of the
+angle flips the sign of the ramp. The GUI's Steer Angle follows the backend's
+convention.
+:::
 ::::
 
-::::{frame} Writing the taper
+::::{frame} The Taper Call
 The matching call for the taper writes gains instead of phases:
 
 ```python
-array.elements[element_id].rx_gain = int(taper_list[i])
+array.elements[element_id].rx_gain = int(taper_list[i])   # 0-127
+array.elements[element_id].rx_attenuator = not bool(taper_list[i])
+array.latch_rx_settings()                                 # after the loop
 ```
+
+The register runs from 0 to 127. The backend scales the GUI's 0–100% slider by
+127/100 and by the gain calibration before it calls this, and a zero switches
+the element's attenuator in, so a nulled element is off rather than only
+turned down.
 ::::
 
 ::::{frame} Deliverables
@@ -481,30 +793,30 @@ Submit the following.
    | Is the LO inside 12.2–13.0 GHz? | |
 ::::
 
-::::{frame} Deliverables — the diagram and the FFT
+::::{frame} Deliverables: The Diagram and the FFT
 2. **A labeled block diagram.** Sketch the receive chain from patch to Pi and
    label every block with its name and the frequency present at that point. Mark
    where the analog summing happens and where the digital channels begin.
 
 3. **Your FFT observations** from steps 4, 5, and 6: peak frequency, peak level
    and noise floor at each of the three Rx Gain settings, and the shift in the
-   peak when Signal Freq moved by 500 kHz.
+   peak when Signal Freq moved by 1 MHz.
 ::::
 
-::::{frame} Deliverables — the write-up
-4. **Two written answers**, three or four sentences each.
+::::{frame} Deliverables: The Write-Up
+4. **Two written answers.** Answer each in three or four sentences.
 
-   - Why does the control software have to hunt for the HB100's frequency
-     instead of assuming $10.525\ \text{GHz}$?
+   - Why does the control software have to measure the HB100's frequency instead
+     of assuming $10.525\ \text{GHz}$?
    - The array has eight elements, but software sees only two digital channels.
      Explain where the other six went and name one measurement this rules out.
 ::::
 
-::::{frame} Lab sheet
+::::{frame} Lab Sheet
 The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">Lab sheet (PDF)</a>.
 ::::
 
-::::{frame} Summary — the array hardware
+::::{frame} Summary: The Array Hardware
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
@@ -512,14 +824,14 @@ The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_
 | ADAR1000 | 4-channel analog beamformer, phase and gain per element | two chips, four elements each, phase LSB $2.8125^\circ$ |
 ::::
 
-::::{frame} Summary — the hybrid split
+::::{frame} Summary: The Hybrid Split
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | Hybrid split | analog sum inside a subarray, digital across subarrays | 8 elements in, 2 digital channels out |
 ::::
 
-::::{frame} Summary — the source and the LO
+::::{frame} Summary: The Source and the LO
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
@@ -527,7 +839,7 @@ The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_
 | LO | ADF4159 PLL driving an HMC735 VCO | $12.2$ to $13.0\ \text{GHz}$, high-side |
 ::::
 
-::::{frame} Summary — the IF and the mixing rule
+::::{frame} Summary: The IF and the Mixing Rule
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
@@ -535,7 +847,7 @@ The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_
 | Frequency plan | high-side mixing rule | $f_{\text{LO}} = f_{\text{RF}} + 2.2\ \text{GHz}$ |
 ::::
 
-::::{frame} Summary — the receiver and interface
+::::{frame} Summary: The Receiver and Interface
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
@@ -550,21 +862,24 @@ The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_
 - <a class="doc-link doc-key" href="../../practice/ECE444_L17_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 ::::
 
-::::{frame} Where this is going
-You now have a machine that can put an arbitrary phase on each of eight
-elements, and you have not yet told it what phase to use. Lesson 18 supplies the
+::::{frame} Where This Is Going
+We now have a machine that can put an arbitrary phase on each of eight
+elements, and we have not yet told it what phase to use. Lesson 18 supplies the
 missing piece with a path-length argument: a wave arriving at angle $\theta_0$
 reaches consecutive elements $d\sin\theta_0$ apart in distance, and the phase
-ramp that compensates that delay is $\Delta\phi = kd\sin\theta_0$. That single
-expression turns a steering angle into the eight numbers `ADAR_set_Phase`
+ramp that compensates that delay is
+
+$$ \Delta\phi = kd\sin\theta_0. $$
+
+That expression turns a steering angle into the eight numbers `ADAR_set_Phase`
 writes. Lesson 19 brings you back to this station to steer the real beam with
-them and measure where it actually points.
+them and measure where it points.
 
 :::{depth}
 Before Lesson 18, review the array factor from Lesson 16 and be ready to state
-what $\psi$ is and why the pattern peaks when it is zero. It is worth keeping
-the deliverable block diagram from today somewhere you can find it; the same
-figure comes back in Lesson 28, when the two digital channels stop being a
-detail and become the constraint the whole lab works around.
+what $\psi$ is and why the pattern peaks when it is zero. Keep the deliverable
+block diagram from today somewhere you can find it; the same figure comes back
+in Lesson 28, where the two digital channels limit MVDR adaptive nulling to
+about one null.
 :::
 ::::

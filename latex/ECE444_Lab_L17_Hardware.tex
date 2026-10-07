@@ -50,6 +50,7 @@
 
 %% exam class customization
 \input{exam_config}
+\input{ece444_fonts}   % Barlow body text (needs lualatex)
 \printselectedfalse      % full worked solutions in the key, not answers-only
 \CorrectChoiceEmphasis{\color{red}}
 \SolutionEmphasis{\color{red}}
@@ -114,7 +115,7 @@ of the ADALM-PHASER and control it via SDR software.}
 
 This sheet is the turn-in document for the Lesson 17 lab. Fill in every box, and
 show the arithmetic where a box asks for a calculated value. The lab is a team
-assignment, so one sheet per team.
+assignment, so each team submits one sheet.
 
 \begin{questions}
 
@@ -141,17 +142,18 @@ Show the arithmetic for your measured frequency here.
 \begin{solutionorlines}[1.1in]
 For a nominal source at $10.525\ \ghz$, high-side injection puts the LO at
 \eq{
-	f_{\text{LO}} &= f_{\text{RF}} + f_{\text{IF}} = 10.525 + 2.200 = 12.725\ \ghz \\
-	f_{\text{IF}} &= f_{\text{LO}} - f_{\text{RF}} = 12.725 - 10.525 = 2.200\ \ghz
+	f_{\text{LO}} = f_{\text{RF}} + f_{\text{IF}} = 10.525 + 2.200 = 12.725\ \ghz
 }
 That LO sits inside the $12.2$ to $13.0\ \ghz$ VCO range, so the setting is
-reachable. Any measured frequency in $10.1$ to $10.7\ \ghz$ gives an LO inside
-the range, which is why the hardware covers every HB100 in the drawer.
+reachable, and the mixer difference, $12.725 - 10.525\ \ghz$, lands on the
+$2.2\ \ghz$ IF the Pluto is tuned to. Any measured frequency in $10.1$ to
+$10.7\ \ghz$ gives an LO inside the range, which is why the hardware covers every
+HB100 unit the lab issues.
 \end{solutionorlines}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\question \textbf{The labeled block diagram.} Sketch the receive chain from the
+\question \textbf{The Labeled Block Diagram.} Sketch the receive chain from the
 patches to the Raspberry Pi. Label every block with its name and with the
 frequency present at that point, mark where the analog summing happens, and mark
 where the two digital channels begin.
@@ -175,19 +177,25 @@ $1\ \m$ and record what the spectrum does as you change two controls.
 
 \begin{parts}
 
-	\part Where does the tone sit in the baseband window, and how far above the
-	noise floor is it at the preset Rx Gain?
+	\part Where does the tone sit on the FFT tab's frequency axis, and how far
+	above the noise floor is it?
 
 	\vspace{6pt}
 	\begin{center}
-	Peak offset = \ansbox[1.7in]{$\approx 1\ \mhz$} %
+	Peak offset = \ansbox[1.7in]{near $0\ \mhz$} %
 	Peak above floor = \ansbox[1.7in]{$\ge 20\db$}
 	\end{center}
 	\vspace{6pt}
 
-	\part Step \textbf{Rx Gain} down 10 dB and up 10 dB from its preset value and
-	record all three settings. Report the peak and floor levels in dBFS and the
-	separation between them in dB.
+	\begin{solution}
+	Find HB100 sets the LO to the measured frequency plus 2.2 GHz, so on hardware
+	the tone sits near 0 MHz, within about $\pm 1\ \mhz$. The simulator fixes its
+	tone 1 MHz from center, and the GUI's flipped axis shows it at $-1\ \mhz$.
+	\end{solution}
+
+	\part Set \textbf{Rx Gain (dB)} to 10 and record the peak and floor, then
+	repeat at 0 and at 20. Report the peak and floor levels in dBFS (decibels
+	relative to the ADC's full-scale input) and the separation between them in dB.
 
 	\vspace{4pt}
 	\begin{center}
@@ -195,48 +203,52 @@ $1\ \m$ and record what the spectrum does as you change two controls.
 	\begin{tabular}{| l | K{1.25in} | K{1.25in} | K{1.35in} |}
 	\hline
 	\textbf{Rx Gain} & \textbf{Peak (dBFS)} & \textbf{Floor (dBFS)} & \textbf{Separation (dB)} \\\hline\hline
-	Preset $-10$ dB & \kv{$10$ dB below the reference row} & \kv{$10$ dB below the reference row} & \kv{1--2 dB less than the reference row} \\\hline
-	Preset & \kv{reference} & \kv{reference} & \kv{$\ge 20$ dB} \\\hline
-	Preset $+10$ dB & \kv{$10$ dB above the reference row} & \kv{$10$ dB above the reference row} & \kv{$\ge 20$ dB} \\\hline
+	0 dB & \kv{about $10$ dB below the 10 dB row} & \kv{about $10$ dB below the 10 dB row} & \kv{same, or a few dB less} \\\hline
+	10 dB & \kv{reference} & \kv{reference} & \kv{$\ge 20$ dB} \\\hline
+	20 dB & \kv{up to $10$ dB above; less if compressed} & \kv{about $10$ dB above the 10 dB row} & \kv{same, or less if the peak compresses} \\\hline
 	\end{tabular}
 	\end{center}
 	\vspace{4pt}
 
 	\begin{solution}
-	Both levels move together with the slider, because this gain is applied
-	inside the SDR, long after the LNAs have set how much noise rides on the
-	signal. The separation therefore holds within a decibel or two across the
-	three settings. It shrinks at the lowest setting, where the SDR's own noise
-	starts to contribute. Any set of readings whose separation changes by more
-	than a few dB across the three rows points to a saturating or misaimed setup.
+	Both levels move together with the slider, because the SDR applies this gain
+	internally, long after the LNAs have already set the noise level that
+	accompanies the signal. The separation therefore holds roughly constant across
+	the three settings. It can shrink at 0 dB, where the SDR's own noise starts to
+	contribute, and at 20 dB the peak may rise by less than 10 dB because the
+	converter is near full scale and compressing. A separation that changes by much
+	more than a few dB across the three rows points to a saturating or misaimed setup.
 	\end{solution}
 
-	\part Change \textbf{Signal Freq (GHz)} by $-0.0005\ \ghz$ and record how far
-	the peak moves and in which direction.
+	\part Lower \textbf{Signal Freq (GHz)} by $0.001\ \ghz$ (one click of the
+	field's down arrow) and press Enter, then record how far the peak moves and in
+	which direction. (On an older kit, press \textbf{Stop} and then \textbf{Start}
+	to send the new value.)
 
 	\vspace{6pt}
 	\begin{center}
-	Peak shift = \ansbox[2.0in]{$-500\ \khz$}
+	Peak shift = \ansbox[2.0in]{$+1\ \mhz$ (up the axis)}
 	\end{center}
 	\vspace{6pt}
 
 	\begin{solutionorlines}[0.9in]
 	The GUI holds the IF fixed and moves the LO, so lowering the assumed source
-	frequency by 500 kHz lowers the LO by the same amount and the tone appears
-	500 kHz lower in the baseband window. The window is only 3 MHz wide at a
-	3 MSPS sample rate, so an error larger than about 1.5 MHz walks the tone off
-	the display, which is what a bad \textbf{Find HB100} result looks like.
+	frequency by 1 MHz lowers the LO by 1 MHz. The source has not moved, so its IF
+	drops by 1 MHz, and the GUI's flipped axis plots the peak 1 MHz higher: the
+	source now sits 1 MHz above Signal Freq. The window is only 3 MHz wide at
+	3 MSPS, so an error larger than about 1.5 MHz moves the tone off the display,
+	which is what a bad \textbf{Find HB100} result looks like.
 	\end{solutionorlines}
 
 \end{parts}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\question \textbf{Written answers.} Three or four sentences each.
+\question \textbf{Written answers.} Answer each in three or four sentences.
 
 \begin{parts}
 
-	\part Why does the control software have to hunt for the HB100's frequency
+	\part Why does the control software have to measure the HB100's frequency
 	instead of assuming $10.525\ \ghz$?
 
 	\begin{solutionorlines}[1.7in]
@@ -244,9 +256,11 @@ $1\ \m$ and record what the spectrum does as you change two controls.
 	synthesizer, so its output frequency is set by the mechanical dimensions of
 	that resonator and drifts with temperature. Units land anywhere from about
 	$10.1$ to $10.7\ \ghz$. Every LO setting and every steering phase the backend
-	computes depends on the actual frequency, so the software sweeps the LO,
-	watches where the IF tone appears, and records the answer instead of assuming
-	one.
+	computes depends on the actual frequency: an LO set for the wrong frequency
+	puts the tone outside the 3 MHz window, and the steering phase
+	$\Delta\phi = kd\sin\theta_0$ scales with frequency through $k = 2\pi f/c$. So
+	the software sweeps the LO, watches where the IF tone appears, and records the
+	answer instead of assuming one.
 	\end{solutionorlines}
 
 	\part The array has eight elements, but software sees only two digital
@@ -257,11 +271,13 @@ $1\ \m$ and record what the spectrum does as you change two controls.
 	Each ADAR1000 applies a phase and a gain to its four elements at RF and then
 	sums those four into a single output, so the individual element signals stop
 	existing before anything is digitized. Two subarray sums reach the Pluto, and
-	the eight per-element signals cannot be recovered from them. That rules out
-	any measurement that needs per-element data after the fact, such as forming
-	several independent beams from one set of samples, or running an adaptive
-	beamformer with more than one null. The MVDR run in Lesson 28 has exactly two
-	digital degrees of freedom for this reason.
+	software cannot recover the eight per-element signals from them. That rules
+	out any measurement that needs per-element data after the fact, such as forming
+	several independent beams from one set of samples (two channels can form more
+	than one beam, but each is a combination of the same two subarray patterns), or
+	running an adaptive beamformer with more than one null. The MVDR run in
+	Lesson 28 has exactly two digital degrees of freedom for this reason, and one of
+	them holds the look direction.
 	\end{solutionorlines}
 
 \end{parts}
