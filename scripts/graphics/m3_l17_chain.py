@@ -3,16 +3,20 @@
 
 Emits two copies of each figure - a deck copy (no equations, block names and
 frequencies only) and a lesson-page copy (plus the one line of mixing
-arithmetic). The signal chain has one geometry; the frequency plan has two,
-a present-column layout for the page and a wide one for its deck slide
+arithmetic). The signal chain has two geometries: the wide one, and a narrow
+one that the page serves through <picture> below 600 px, where the wide one's
+labels would render at 4.5-6 px. The frequency plan also has two, a
+present-column layout for the page and a wide one for its deck slide
 (FP_LAYOUT).
 
     python3 scripts/graphics/m3_l17_chain.py
 
 Writes:
     book/extras/slides/fig/L17-signal-chain.svg
+    book/extras/slides/fig/L17-signal-chain-narrow.svg
     book/extras/slides/fig/L17-frequency-plan.svg
     book/extras/viz/img/L17-signal-chain.svg
+    book/extras/viz/img/L17-signal-chain-narrow.svg
     book/extras/viz/img/L17-frequency-plan.svg
 """
 
@@ -325,10 +329,123 @@ def frequency_plan(page_copy: bool) -> str:
     return "\n".join(s)
 
 
+# --------------------------------------------------------------------------
+# Figure 1, narrow - the receive chain for a phone column
+# --------------------------------------------------------------------------
+
+# A phone's present column is 343 px. The wide layout is 800 units across, so
+# its 10.5-unit labels render at 4.5 px there. This layout is 420 units wide
+# with no label under NARROW_MIN units, so the smallest renders at
+# 13 x 343/420 = 10.6 px. Both subarrays run top to bottom side by side, the
+# way the patches sit on the board: patches, LNAs, ADAR1000, mixer, then the
+# Pluto and the Pi, with the LO between the two mixers.
+NARROW_MIN = 13
+
+
+def signal_chain_narrow(page_copy: bool) -> str:
+    W, H = 420, 418
+    S = 560 / W
+    out = []
+
+    def t(x, y, s_, size=NARROW_MIN, fill=INK, anchor="middle", weight="400"):
+        assert size >= NARROW_MIN, (s_, size)
+        out.append(txt(f"{x:.1f}", f"{y:.1f}", s_, size, fill, anchor, weight))
+
+    out.append(
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" '
+        f'width="{W * S:.0f}" height="{H * S:.0f}" role="img" '
+        f'aria-label="ADALM-PHASER receive signal chain from patches to Raspberry Pi">')
+    out.append(arrow_defs("n"))
+
+    # one header line: the RF, and on the page copy the LO arithmetic beside it
+    tail = ("LO = 10.525 + 2.2 = 12.725 GHz" if page_copy
+            else "8 in, 2 digital channels out")
+    t(12, 20, f"RF {F_RF} GHz", 13.5, NAVY, "start", "600")
+    t(W - 12, 20, tail, 13, INK3, "end")
+
+    cols = ((100, "A"), (320, "B"))           # subarray centers
+    pitch = 40
+    py0, ph, pw = 34, 16, 26                  # patches
+    ly0, lh, lw = 60, 16, 20                  # LNA triangles, apex down
+    ay0, ay1 = 90, 134                        # ADAR1000 boxes
+    my, mr = 170, 16                          # mixers
+    pl0, pl1 = 226, 282                       # Pluto
+    pi0, pi1, pix0, pix1 = 304, 350, 110, 310 # Pi
+    for cx, tag in cols:
+        xs = [cx + pitch * (k - 1.5) for k in range(4)]
+        for x in xs:
+            out.append(box(f"{x - pw / 2:.1f}", py0, pw, ph, fill="#ffffff", stroke=MID,
+                           sw=1.4, rx=3))
+            out.append(f'<rect x="{x - pw / 2 + 5:.1f}" y="{py0 + 4}" width="{pw - 10}" '
+                       f'height="{ph - 8}" fill="{EDGE2}" stroke="none"/>')
+            out.append(line(f"{x:.1f}", py0 + ph, f"{x:.1f}", ly0, MID, 1.4))
+            out.append(f'<path d="M {x - lw / 2:.1f} {ly0} L {x + lw / 2:.1f} {ly0} '
+                       f'L {x:.1f} {ly0 + lh} z" fill="#ffffff" stroke="{MID}" '
+                       f'stroke-width="1.4"/>')
+            out.append(line(f"{x:.1f}", ly0 + lh, f"{x:.1f}", ay0, MID, 1.4))
+        out.append(box(cx - 74, ay0, 148, ay1 - ay0, fill="#eef5fb", stroke=NAVY))
+        t(cx, ay0 + 19, f"ADAR1000 {tag}", 14, NAVY, weight="600")
+        t(cx, ay0 + 35, "phase + gain, 4:1 sum", 13, INK3)
+        out.append(line(cx, ay1, cx, my - mr, NAVY, 2.2, ' marker-end="url(#naN)"'))
+        out.append(f'<circle cx="{cx}" cy="{my}" r="{mr}" fill="#ffffff" '
+                   f'stroke="{INK}" stroke-width="1.6"/>')
+        k = mr * 0.55
+        out.append(line(cx - k, my - k, cx + k, my + k, INK, 1.5))
+        out.append(line(cx - k, my + k, cx + k, my - k, INK, 1.5))
+        out.append(line(cx, my + mr, cx, pl0 + 8, GRN, 2.2, ' marker-end="url(#naG)"'))
+    # labels in the gap between the subarrays, and beside the mixers
+    t(W / 2, py0 + 13, "patch ×8", 13, INK3)
+    t(W / 2, ly0 + 13, "LNA ×8", 13, INK3)
+    t(cols[0][0] - mr - 6, my + 4.5, "mixer", 13, INK3, "end")
+    t(cols[1][0] + mr + 6, my + 4.5, "mixer", 13, INK3, "start")
+    t(cols[0][0] - 8, my + mr + 23, f"IF {F_IF} GHz", 13, GRN, "end", "600")
+    t(cols[1][0] + 8, my + mr + 23, f"IF {F_IF} GHz", 13, GRN, "start", "600")
+
+    # the LO between the two mixers, feeding both
+    lo_x0, lo_x1, lo_y0, lo_y1 = 140, 280, my - 21, my + 21
+    out.append(box(lo_x0, lo_y0, lo_x1 - lo_x0, lo_y1 - lo_y0, fill="#fdf6e8", stroke=AMBER))
+    t(W / 2, my - 4, "ADF4159 + VCO", 13, AMBER, weight="600")
+    t(W / 2, my + 13, f"LO {F_LO:.3f} GHz", 13, AMBER)
+    out.append(line(lo_x0, my, cols[0][0] + mr, my, AMBER, 1.8, ' marker-end="url(#naA)"'))
+    out.append(line(lo_x1, my, cols[1][0] - mr, my, AMBER, 1.8, ' marker-end="url(#naA)"'))
+
+    # the Pluto, its two receive channels, and the Pi
+    out.append(box(26, pl0, 368, pl1 - pl0, fill=BG, stroke=NAVY))
+    for cx, name in ((cols[0][0], "Rx1"), (cols[1][0], "Rx2")):
+        out.append(box(cx - 31, pl0 + 8, 62, 26, fill="#ffffff", stroke=MID, sw=1.4, rx=4))
+        t(cx, pl0 + 26, name, 13, NAVY, weight="600")
+    t(W / 2, pl0 + 24, "ADALM-Pluto", 14, NAVY, weight="600")
+    t(W / 2, pl0 + 42, "AD9361 SDR", 13, INK3)
+    out.append(line(W / 2, pl1, W / 2, pi0 - 2, INK3, 2.0, ' marker-end="url(#naI)"'))
+    out.append(box(pix0, pi0, pix1 - pix0, pi1 - pi0, fill=BG, stroke=NAVY))
+    t(W / 2, pi0 + 20, "Raspberry Pi", 14, NAVY, weight="600")
+    t(W / 2, pi0 + 37, "control + browser UI", 13, INK3)
+
+    # SPI back to the beamformers, around the outside
+    bus = 362
+    out.append(f'<path d="M {pix0 + 40} {pi1} L {pix0 + 40} {bus} L 12 {bus} '
+               f'L 12 {(ay0 + ay1) / 2} L {cols[0][0] - 74} {(ay0 + ay1) / 2}" '
+               f'fill="none" stroke="{INK3}" stroke-width="1.3" stroke-dasharray="5 4" '
+               f'marker-end="url(#naI)"/>')
+    t(24, bus + 18, "SPI: phase and gain commands", 13, INK3, "start")
+
+    # key
+    ky = H - 10
+    for i, (color, label) in enumerate(((NAVY, "RF"), (AMBER, "LO"), (GRN, "IF"),
+                                        (INK3, "control"))):
+        kx = 18 + i * 100
+        out.append(line(kx, ky - 4.5, kx + 24, ky - 4.5, color, 2.6))
+        t(kx + 30, ky, label, 13, color, "start")
+
+    out.append("</svg>")
+    return "\n".join(out)
+
+
 def main():
     DECK.mkdir(parents=True, exist_ok=True)
     PAGE.mkdir(parents=True, exist_ok=True)
     for name, fn in (("L17-signal-chain", signal_chain),
+                     ("L17-signal-chain-narrow", signal_chain_narrow),
                      ("L17-frequency-plan", frequency_plan)):
         (DECK / f"{name}.svg").write_text(apply_font_stack(fn(False)), encoding="utf-8")
         (PAGE / f"{name}.svg").write_text(apply_font_stack(fn(True)), encoding="utf-8")

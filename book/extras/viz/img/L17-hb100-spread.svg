@@ -4,7 +4,7 @@
 <text x="73.0" y="70.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13.5" fill="#004a85" text-anchor="start" font-weight="700">HB100 units</text>
 <text x="73.0" y="85.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#004a85" text-anchor="start" font-weight="400">10.1 – 10.7 GHz</text>
 <rect x="238.63" y="46" width="1.23" height="50" fill="#8a5a00"/>
-<line x1="237.2" y1="44.0" x2="213.2" y2="26.0" stroke="#8a5a00" stroke-width="1.2" stroke-linecap="round"/>
+<line x1="237.0" y1="43.4" x2="213.2" y2="26.0" stroke="#5b6573" stroke-width="0.8" stroke-linecap="round" stroke-dasharray="2 2"/>
 <text x="209.2" y="24.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#8a5a00" text-anchor="end" font-weight="700">3 MHz window, to scale</text>
 <line x1="24.0" y1="96.0" x2="352.0" y2="96.0" stroke="#15202b" stroke-width="1.4" stroke-linecap="round"/>
 <line x1="24.0" y1="96.0" x2="24.0" y2="101.0" stroke="#5b6573" stroke-width="1.1" stroke-linecap="round"/>

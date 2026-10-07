@@ -11,6 +11,13 @@ column rather than a full page.
   L17-hb100-spread   : the 10.1-10.7 GHz HB100 unit-to-unit spread against the
                        Pluto's 3 MHz window drawn to scale, and a zoom on that
                        window with one tone at +1 MHz over a flat floor
+  L17-hs-mirror      : one tone through the LO-above-the-source mirror: the
+                       source 1 MHz above Signal Freq, LO minus source 1 MHz
+                       below 2.2 GHz, and the GUI's flipped axis putting it
+                       back at +1 MHz, with the simulator's tone ghosted
+  L17-part-a-network : Part A's two connections: laptop to Pi over the cable,
+                       Pi to GitHub over the guest Wi-Fi, and the laptop-to-Pi
+                       path through the access point crossed out
 
 Every plotted number is computed here, asserted, and printed for checking
 against the lesson text. Words and numbers only, no equations, so one SVG
@@ -29,9 +36,13 @@ Writes:
     book/extras/slides/fig/L17-hybrid-split.svg
     book/extras/slides/fig/L17-adar-align.svg
     book/extras/slides/fig/L17-hb100-spread.svg
+    book/extras/slides/fig/L17-hs-mirror.svg
+    book/extras/slides/fig/L17-part-a-network.svg
     book/extras/viz/img/L17-hybrid-split.svg
     book/extras/viz/img/L17-adar-align.svg
     book/extras/viz/img/L17-hb100-spread.svg
+    book/extras/viz/img/L17-hs-mirror.svg
+    book/extras/viz/img/L17-part-a-network.svg
 """
 
 from __future__ import annotations
@@ -60,6 +71,7 @@ THETA = 20.0            # arrival angle off broadside, degrees, for the figure
 F_NOM = 10.525          # GHz, HB100 nominal
 HB_LO, HB_HI = 10.1, 10.7   # GHz, HB100 unit-to-unit spread
 FS_MHZ = 3.0            # Pluto sample rate in the GUI, MSPS = window width, MHz
+F_IF = 2.2              # GHz, the fixed frequency the Pluto tunes
 
 
 # --------------------------------------------------------------------------
@@ -272,7 +284,7 @@ def adar_align() -> str:
             y = yb - amp * np.sin(2 * np.pi * x / period - lag)
             s.append(txt(x0 + 10, yb + 4.5, f"E{i + 1}", 13, INK3, anchor="start"))
             s.append(polyline(x0 + t0 + x, y, MID, 1.8))
-    s.append(txt(XS[0] + PW / 2, 170, f"{THETA:g}° arrival, {step_lbl}° step", 13, INK3))
+    s.append(txt(XS[0] + PW / 2, 170, f"{THETA:g}° off broadside, {step_lbl}° step", 13, INK3))
     s.append(txt(XS[1] + PW / 2, 170, "equal gains, aligned", 13, INK3))
 
     # bottom: (c) the sums
@@ -348,7 +360,9 @@ def hb100_spread() -> str:
     xw = gx(F_NOM)
     s.append(f'<rect x="{xw - win / 2:.2f}" y="46" width="{win:.2f}" height="{ay - 46}" '
              f'fill="{AMBER}"/>')
-    s.append(line(xw - 2, 44, xw - 26, 26, AMBER, 1.2))
+    # the leader is gray, thin and dashed, and stops short of the hairline, so
+    # the hairline does not read as the end of the leader
+    s.append(line(xw - 2.2, 43.4, xw - 26, 26, INK3, 0.8, ' stroke-dasharray="2 2"'))
     s.append(txt(xw - 30, 24, "3 MHz window, to scale", 13, AMBER, anchor="end",
                  weight="700"))
     s.append(line(gx0, ay, gx1, ay, INK, 1.4))
@@ -394,10 +408,133 @@ def hb100_spread() -> str:
     return "\n".join(s)
 
 
+# --------------------------------------------------------------------------
+# ILL-02 (closing re-check) - the mirror: LO minus source, and the GUI's flip
+# --------------------------------------------------------------------------
+
+def hs_mirror() -> str:
+    sig = 10.525                              # GHz, Signal Freq
+    src = 10.526                              # GHz, the source, 1 MHz above it
+    lo = round(sig + F_IF, 3)                 # GHz, the LO the software sets
+    out_ghz = round(lo - src, 3)              # the mixer's output, LO minus source
+    raw_mhz = round((out_ghz - F_IF) * 1e3, 3)
+    gui_mhz = -raw_mhz                        # the GUI flips its axis
+    sim_raw = 1.0                             # the simulator's fixed tone, raw
+    print(f"  mirror: LO {lo:.3f} - source {src:.3f} = {out_ghz:.3f} GHz, "
+          f"{raw_mhz:+g} MHz raw, {gui_mhz:+g} MHz on the GUI; sim {sim_raw:+g} raw, "
+          f"{-sim_raw:+g} plotted")
+    assert lo == 12.725 and out_ghz == 2.199, (lo, out_ghz)
+    assert raw_mhz == -1.0 and gui_mhz == 1.0, (raw_mhz, gui_mhz)
+
+    H = 302
+    s = [svg_open(H, "One tone through the mirror, in three strips 3 MHz wide. The "
+                  "source sits 1 MHz above Signal Freq, at 10.526 GHz. LO minus "
+                  "source, with the LO at 12.725 GHz, is 2.199 GHz, 1 MHz below the "
+                  "2.2 GHz center. The GUI flips its axis, so it plots the tone at "
+                  "plus 1 MHz. The simulator's tone, ghosted, sits at plus 1 MHz "
+                  "before the flip and minus 1 MHz after it.")]
+    ax0, ax1 = 60.0, 380.0
+    TONE_H = 28                               # tone height, units
+    xc = (ax0 + ax1) / 2
+    fx = lambda mhz: xc + mhz / (FS_MHZ / 2) * (ax1 - xc)   # noqa: E731
+
+    # faint guides at -1 and +1 MHz through all three strips
+    for v in (-1.0, 1.0):
+        s.append(line(fx(v), 34, fx(v), 278, EDGE2, 1.0, ' stroke-dasharray="2 3"'))
+
+    def tone(x, base, ghost=False, color=NAVY):
+        pts = f"{x - 6:.1f},{base:.1f} {x:.1f},{base - TONE_H:.1f} {x + 6:.1f},{base:.1f}"
+        if ghost:
+            return (f'<polygon points="{pts}" fill="none" stroke="{INK3}" '
+                    f'stroke-width="1.3" stroke-dasharray="3 2"/>')
+        return f'<polygon points="{pts}" fill="{color}" stroke="none"/>'
+
+    strips = (
+        # title, axis y, tick labels (-1, 0, +1), unit, real tone, ghost
+        ("Source", 80, ("10.524", "10.525", "10.526"), "GHz", +1.0, None),
+        (f"LO {MINUS} source, LO at {lo:.3f} GHz", 178,
+         ("2.199", "2.200", "2.201"), "GHz", raw_mhz, sim_raw),
+        ("What the GUI plots, axis flipped", 276,
+         (f"{MINUS}1", "0", "+1"), "MHz", gui_mhz, -sim_raw),
+    )
+    for title, ay, ticks, unit, real, ghost in strips:
+        s.append(txt(10, ay - 56, title, 13.5, NAVY, anchor="start", weight="700"))
+        s.append(line(ax0, ay, ax1, ay, INK, 1.4))
+        for v, lab in zip((-1.0, 0.0, 1.0), ticks):
+            s.append(line(fx(v), ay, fx(v), ay + 5, INK3, 1.1))
+            s.append(txt(fx(v), ay + 19, lab, 13, INK3))
+        s.append(txt(ax1 + 6, ay + 19, unit, 13, INK3, anchor="start"))
+        s.append(line(xc, ay - TONE_H - 2, xc, ay, INK3, 1.0, ' stroke-dasharray="4 3"'))
+        if ghost is not None:
+            s.append(tone(fx(ghost), ay, ghost=True))
+            s.append(txt(fx(ghost), ay - TONE_H - 6, "simulator", 13, INK3))
+        s.append(tone(fx(real), ay))
+    # labels on the real tone and the center line, strip by strip
+    s.append(txt(xc, 80 - TONE_H - 6, "Signal Freq", 13, INK3))
+    s.append(txt(fx(1.0), 80 - TONE_H - 6, "source", 13, NAVY, weight="700"))
+    s.append(txt(xc, 178 - TONE_H - 6, "SDR center", 13, INK3))
+    s.append(txt(fx(raw_mhz), 178 - TONE_H - 6, "tone", 13, NAVY, weight="700"))
+    s.append(txt(xc, 276 - TONE_H - 6, "center", 13, INK3))
+    s.append(txt(fx(gui_mhz), 276 - TONE_H - 6, "tone", 13, NAVY, weight="700"))
+    s.append("</svg>")
+    return "\n".join(s)
+
+
+# --------------------------------------------------------------------------
+# ILL-12 (closing re-check) - Part A's two connections
+# --------------------------------------------------------------------------
+
+def part_a_network() -> str:
+    H = 300
+    s = [svg_open(H, "Part A network. The laptop, at 192.168.7.1, reaches the Pi, at "
+                  "192.168.7.13, over the Ethernet cable, which carries ssh and the "
+                  "browser interface on port 8080. The Pi joins the AF_ACADEMY_GUEST "
+                  "Wi-Fi and reaches GitHub through it to run install.sh. A path from "
+                  "the laptop through the access point to the Pi is crossed out: the "
+                  "guest network can isolate its clients from each other."),
+         markers("pa", (("N", NAVY), ("G", GRN)))]
+
+    def node(x, y, w, h, title, sub, color=NAVY, fill=BG):
+        return (rect(x, y, w, h, fill, color, 1.6, 5)
+                + txt(x + w / 2, y + h / 2 - 3, title, 14, color, weight="700")
+                + txt(x + w / 2, y + h / 2 + 15, sub, 13, INK3))
+
+    s.append(node(8, 28, 132, 60, "Laptop", "192.168.7.1"))
+    s.append(node(280, 28, 132, 60, "Pi", "192.168.7.13"))
+    # the cable: ssh and the browser
+    s.append(line(140, 58, 280, 58, NAVY, 3.0))
+    s.append(txt(210, 49, "Ethernet cable", 13, NAVY, weight="700"))
+    s.append(txt(210, 76, "ssh, :8080", 13, NAVY))
+
+    # the access point and GitHub
+    s.append(node(110, 160, 170, 50, "Guest Wi-Fi", "AF_ACADEMY_GUEST", GRN, GRN_L))
+    s.append(node(272, 236, 140, 50, "GitHub", "install.sh", GRN, "#ffffff"))
+    s.append(f'<path d="M 346 88 V 185 H 284" fill="none" stroke="{GRN}" '
+             f'stroke-width="2" marker-end="url(#paG)"/>')
+    s.append(f'<path d="M 195 210 V 261 H 268" fill="none" stroke="{GRN}" '
+             f'stroke-width="2" marker-end="url(#paG)"/>')
+    s.append(txt(338, 126, "the Pi's internet", 13, GRN, anchor="end", weight="600"))
+
+    # laptop to the Pi through the access point: blocked
+    s.append(f'<path d="M 74 88 V 185 H 106" fill="none" stroke="{INK3}" '
+             f'stroke-width="1.6" stroke-dasharray="5 4"/>')
+    cx, cy, k = 74, 128, 9
+    s.append(line(cx - k, cy - k, cx + k, cy + k, AMBER, 3.0))
+    s.append(line(cx - k, cy + k, cx + k, cy - k, AMBER, 3.0))
+    s.append(txt(10, 236, "laptop to Pi over Wi-Fi:", 13, AMBER, anchor="start",
+                 weight="600"))
+    s.append(txt(10, 253, "the guest network may", 13, AMBER, anchor="start"))
+    s.append(txt(10, 270, "isolate its clients", 13, AMBER, anchor="start"))
+    s.append("</svg>")
+    return "\n".join(s)
+
+
 def main() -> None:
     write("L17-hybrid-split", hybrid_split())
     write("L17-adar-align", adar_align())
     write("L17-hb100-spread", hb100_spread())
+    write("L17-hs-mirror", hs_mirror())
+    write("L17-part-a-network", part_a_network())
 
 
 if __name__ == "__main__":
