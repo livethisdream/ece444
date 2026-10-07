@@ -94,23 +94,38 @@ Lab presets 5 and 6.
 
 ### B. ADI's *Phased Array Radar Workshop*, Python edition (40 pages)
 
-`docs/2025_Phaser_labs_Python.pdf` in the Phaser repo. The canonical lab
-sequence the GUI presets follow (`MODULE3_PROMPT.md` carries the lab-to-
-objective table). Private: read in-session, never copied into this repo.
-Already mined in August; re-read it only when re-executing a lab (§4).
+This is the "Python lab notebook" (resolved 2026-10-07: Neil attached it,
+and it is byte-identical to `docs/2025_Phaser_labs_Python.pdf` in the Phaser
+repo, the file the August build worked from; there is no `.ipynb` anywhere).
+It is the canonical lab sequence the GUI presets follow, with the FMCW,
+range-Doppler, MTI, and CFAR labs (pages 29 to 38) that are Module 4, and
+the frequency-plan appendix (page 39). Private: read in-session, never
+copied into this repo.
 
-### C. The Python lab notebook (not yet in hand)
+Beyond the deck it carries the *procedure* detail, and three things came
+out of reading it against the lessons and the GUI:
 
-Neil named it as a source but it was not attached, and there is no `.ipynb`
-in either repo. Expected uses once it arrives:
+| Workshop lab (page) | Procedure specifics | Lesson | Status |
+| :-- | :-- | :-- | :-- |
+| SDR and software control (7, 8) | run the minimal example; what it does in nine bullets (10.525 GHz in, 2.2 GHz IF, 30 MSPS, 20 MHz filter, 1024 samples, FFT); change the LO offset and re-run | L17 | have; the nine-bullet list is a good present frame |
+| Steering angle (9, 10) | HB100 at about 30° with a protractor on the Pi; find the steer angle that maximizes the FFT peak; then the Rectangular plot | L19 | have (protractor arc, 30° case). Note L18 quotes 86.6° per element at 10.3 GHz and L19 quotes 88.4° at 10.525 GHz; both are right for their frequency, and the why-sweep should say so in one line |
+| Array factor and beamwidth (11 to 13) | N = 8, 4, 2 record table | L21 | have |
+| Measuring the actual pattern (14, 15) | Signal vs Time mode, HB100 walked from −90° to +90°, broadside then 30°; "we cannot get angles from this, only lobe amplitudes" | L23 | have (Lab preset 7, the walk, "amplitudes survive, angles do not") |
+| Sidelobes and tapering (16) | Copy Plot A, try the presets, invent a symmetric taper | L25 | have |
+| Grating lobes (17, 18) | every 3rd element (42 mm) then every 4th (56 mm) | L26 theory; Lab preset 4 | have as theory and preset; **no course lab runs preset 4** |
+| Beam squint (19, 20) | HB100 at about 50°, Copy Plot A, Signal BW to 500 MHz, record the new peak; the note that the GUI moves the *calculated* frequency rather than the source | L26 theory; Lab preset 5 | **no course lab runs preset 5** |
+| Quantization sidelobes (21, 22) | Blackman, steer 15°, walk the HB100; Phase Shift Bits to 2 and walk again | L26 theory; Lab preset 6 | **no course lab runs preset 6** |
+| Null steering (23, 24) | Enable Null 1 on a sidelobe, rotate the HB100 | L28 | have |
+| Adaptive beamforming (25 to 27) | 2-element MVDR; the script is `Phaser_MVDR.py` from `github.com/jonkraft/PhaserExamples` (public) | L27, L28 | have; the public repo is a legitimate code source for the ≤ 15-line excerpt, alongside our backend |
+| Monopulse (28) | Blackman, Tracking mode, rotate the array | L28 | have |
 
-- L17's `pyadi-iio` excerpts (§M6: ≤ 15 lines, no invented attribute names).
-  Today's excerpts were written from the GUI backend; the notebook is a
-  second source to check them against.
-- The MVDR function and any covariance or steering-vector code for L27/L28.
-- Any procedure step or expected number that differs from the workshop PDF.
-
-Until it is attached, treat the GUI backend as the only code source.
+The gap: objective 3.8 (grating lobes, squint, quantization) is the one
+Module 3 objective with GUI presets and workshop procedures but no
+hands-on lesson. L26 is scheduled as theory and has no lab sheet. Options,
+for Neil to pick (§6): (a) add a short sim-runnable "see it" procedure to
+L26 for all three presets, no lab sheet; (b) fold presets 4 to 6 into the
+L25 lab sheet as a second part, since L25 already has the kit out; (c)
+leave 3.8 as practice-only, as it is now.
 
 ### D. The Phaser GUI, `livethisdream/phaser` at `main` (2026-10-06)
 
@@ -208,9 +223,11 @@ Done inside the lesson pass for each lab lesson, after steps 1 to 5:
 
 ## 6. Open questions for Neil
 
-1. **The Python lab notebook.** Attach it. Is it ADI's workshop in notebook
-   form, or your own? That decides whether it is a code source (§2C) or a
-   third copy of the lab sequence.
+1. **Objective 3.8 hands-on.** Lab presets 4 to 6 (grating lobes, squint,
+   quantization) have workshop procedures and no course lab. Pick (a), (b),
+   or (c) from §2B. Recommendation: (b), one extra part on the L25 sheet,
+   because the kit is already on the bench and each procedure is ten
+   minutes.
 2. **The rotating stand.** Will it be printed and in the classroom this
    term? L23 and L28 Procedure D change shape if so (§4.3).
 3. **The hosted simulator.** OK to point students at
