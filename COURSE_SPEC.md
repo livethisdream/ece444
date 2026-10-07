@@ -836,6 +836,21 @@ it, not to replace it.
   to "if present" when the first such lesson is authored. Nomenclature
   authority moves from "the decks" to the lesson pages' present blocks.
 
+- **Hardware limits stay out of the student story unless they change what
+  a student does** (Neil, 2026-10-07, on the L17 closing re-check, which
+  found the page saying both "the 12.2 to 13.0 GHz VCO reaches 10.0 to
+  10.8 GHz" and "the installer warns above 10.600 GHz": "they don't know
+  anything about the LO, why they need it, and they definitely don't care
+  about the issues we fixed a couple of weeks ago. Don't include it unless
+  it's valuable to the overall story and definitely don't include it just
+  because it bit us"). L17 keeps the nominal reachable band, 10.0 to
+  10.8 GHz, as the frequency-plan story; the measured LO ceiling
+  (`LO_USABLE_CEILING_HZ` = 12.80 GHz in `phaser_functions.py`) and the
+  installer's WARN lines are instructor-side and come off the page, the
+  practice key, and the lab key. The same test applies to every later
+  lesson: a bench quirk goes in `project/` notes or the faculty repo, not
+  in a lesson, unless the student has to act on it.
+
 - **Objective 3.8 is measured in Lab 8 (L25), Part 2** (Neil, 2026-10-07:
   "Go with option 1, add it to the L25 lab sheet"). L26 stays a theory
   lesson with no sheet of its own; the three GUI presets built for the
