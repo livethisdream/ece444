@@ -851,6 +851,21 @@ it, not to replace it.
   lesson: a bench quirk goes in `project/` notes or the faculty repo, not
   in a lesson, unless the student has to act on it.
 
+- **Students have not had the superheterodyne receiver** (Neil, 2026-10-07:
+  "they don't understand superhet architecture, because they won't learn
+  that until next semester"). L17 and every later lesson teach the mixer,
+  LO, and IF from scratch at the level the lab needs, as three ideas: the
+  SDR cannot digitize X-band, so the board moves the signal down; a mixer
+  multiplies the received signal by a tone the board generates (the LO)
+  and its useful output is at the difference frequency; the board sets the
+  LO 2.2 GHz above the source, so the difference is always 2.2 GHz and the
+  SDR only ever listens there. Receiver-course vocabulary ("superhet",
+  "injection", "image", "IF strip", "second downconversion") is not used;
+  a term the lab needs ("intermediate frequency", "baseband", "PLL") is
+  defined once in plain words at first use. The mirror (LO minus RF, which
+  the GUI's negated axis undoes) is taught only because Part B step 4
+  depends on it.
+
 - **Objective 3.8 is measured in Lab 8 (L25), Part 2** (Neil, 2026-10-07:
   "Go with option 1, add it to the L25 lab sheet"). L26 stays a theory
   lesson with no sheet of its own; the three GUI presets built for the
