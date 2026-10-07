@@ -563,15 +563,21 @@ runs the control software and talks to the chips over SPI / `pyadi-iio`.
 So the PHASER is a **hybrid beamformer**: analog beamforming inside each
 4-element subarray, digital beamforming across the two subarray outputs.
 
-**Frequency plan** (workshop appendix; canonical): the array receives
-X-band, 10.0–10.5 GHz. The lab source is an **HB100** Doppler module,
+**Frequency plan** (workshop appendix; canonical): the patch array's
+design band is X-band, 10.0–10.5 GHz; the LO-limited tuning coverage is
+10.0–10.8 GHz (a source above the design band still reaches the IF, with
+mismatch loss at the patches). The lab source is an **HB100** Doppler module,
 10.525 GHz nominal (a free-running DRO — anywhere in 10.1–10.7 GHz, which
-is why the software hunts for it). An ADF4159 PLL + HMC735 VCO generate a
+is why the software measures it with Find HB100). An ADF4159 PLL + HMC735 VCO generate a
 12.2–13.0 GHz LO; the LTC5548 mixers convert the received signal to a
 **2.2 GHz IF**, which the Pluto tunes directly (LO = RF + 2.2 GHz,
-high-side injection). Pluto sample rate 3 MSPS in the GUI (30 MSPS in
-ADI's standalone scripts); the sim places the received tone at a 1 MHz IF
-offset in the baseband spectrum. ADAR1000 phase LSB = **2.8125°** (128
+high-side injection, so the spectrum is inverted: a higher RF gives a lower
+IF). The GUI FFT axis is negated to undo that (displayed offset =
+f_RF − Signal Freq), so on hardware, after Find HB100, the tone sits near
+0 MHz. Pluto sample rate 3 MSPS in the GUI (30 MSPS in
+ADI's standalone scripts), a complex-baseband window of ±1.5 MHz; the sim
+places the received tone at a 1 MHz baseband offset, which the negated axis
+shows at −1 MHz. ADAR1000 phase LSB = **2.8125°** (128
 steps = 7 bits). At the workshop's 10.3 GHz, $\lambda = 29.1$ mm and
 $d/\lambda = 0.481$; at the HB100's 10.525 GHz, $\lambda = 28.5$ mm and
 $d/\lambda = 0.491$.
@@ -586,30 +592,54 @@ network at `http://phaser.local:8080`. Lab procedures are written against
 
 GUI inventory (use these exact names in procedures):
 
-- **Sidebar sections:** Configuration (Signal Freq (GHz), Rx Gain (dB),
-  Tx Gain (dB), Signal BW (MHz), Tx Mode, Calibrate), Element Gains
-  (Rx1–Rx8 sliders, Taper presets Uniform / Chebyshev / Hann / Blackman,
-  Aperture Presets 2-Elem / Sparse λ, Enforce Symmetric Taper), Phase
-  Control (per-element phase offsets, Reset), Beam Steering (Steer Angle
-  (deg), Apply), Quantization (Steer Resolution (deg), Phase Shift Bits,
+- **Sidebar sections:** Configuration (a **Calibration** group: Calibrate,
+  Find HB100, Reboot; then Signal Freq (GHz), Signal BW (MHz), Rx Gain (dB),
+  Tx Gain (dB), Tx Mode; then a **Connection** group: Simulator Mode,
+  Backend URL), Element Gains (E1–E8 gain sliders, 0–100 %, Window Presets
+  Rect / Cheb / Hann / Black, Aperture Presets 2-Elem / Sparse λ, Enforce
+  Symmetric Taper), Phase Control (E1–E8 phase offsets, Reset), Beam
+  Steering (Steer Angle (deg), Taper dropdown Uniform / Chebyshev / Hann /
+  Blackman, Apply), Quantization (Steer Resolution (deg), Phase Shift Bits,
   Use Bits (ignore Steer Res)), Digital Beam Forming (Mode: Manual / MVDR;
-  Manual: Beam 0/1 Gain and Phase; MVDR: Snapshots (K), Diagonal Load),
-  Plot Options (peak markers, squint info, monopulse delta/error), Lab
+  Manual: Reset, Beam 0/1 Gain and Phase; MVDR: Snapshots (K), Diagonal
+  Load), Plot Options (Show Peak Gain Marker, Show Peak Angle Marker, Show
+  Beam Squint Info, Show Logs Tab, Show Monopulse Delta Beam, Show
+  Monopulse Error Function; X Min / X Max / Y Min / Y Max), Lab
   Presets (buttons 1 Steering Angle, 2 Array Factor, 3 Tapering,
   4 Grating Lobes, 5 Beam Squint, 6 Quantization, 7 Antenna Pattern,
   8 Tracking).
-- **Plot tabs:** Rectangular, Polar, FFT, Tracking. **Start** runs the
-  beam sweep; **Freeze** holds up to 3 reference traces for comparison.
-  Readouts: Peak Array Gain (dB), Est. Angle (°).
+- **Plot tabs:** Rectangular, Polar, FFT, Tracking, and Logs (shown only
+  with Show Logs Tab). **Start** runs the beam sweep; Start is disabled
+  until the backend is ready, and nothing plots until Start. **Freeze**
+  stores up to 3 reference traces on the Rectangular and Polar tabs only
+  (disabled on FFT); press and hold to clear them. The FFT tab is the
+  spectrum of the two subarray outputs summed, at the sweep angle with the
+  strongest signal, Amplitude (dBFS) against Frequency (MHz).
+  Readouts: Peak Array Gain (dB), Est. Angle (°), Calc (GHz) and Meas (GHz)
+  (with Show Beam Squint Info), an orange SIMULATION pill in sim mode, and
+  the connection pill (Checking... / Connected / Disconnected -
+  Retrying...); holding the connection pill for two seconds shuts the Pi
+  down. Calibrate and Find HB100 open a Calibration dialog with progress
+  and a Cancel button; the buttons read Calibrating... / Scanning... while
+  they run.
 - **Lab presets** load the initial state for each workshop lab (aligned
   to ADI's *Phased Array Radar Workshop*); a lab procedure starts from its
-  preset button, then names only the controls the student changes.
-- **Simulation mode**: `python phaser_headless.py --sim` runs the whole
-  UI against physics-based stubs (HB100 target at boresight). Labs are
-  written for the real kit + HB100; where the sim behaves differently,
-  add a short "no hardware?" note. Sim limits: the target is fixed at
-  boresight (procedures that rotate the HB100 by hand have no sim
-  equivalent — say so); CW radar is not simulated.
+  preset button, then names only the controls the student changes. The
+  presets do not set Rx Gain (its start value comes from the Pi's
+  `config.py`), so a procedure that reads levels sets **Rx Gain (dB)**
+  explicitly; 10 dB is the reference (higher settings can compress).
+- **Simulation mode**: the no-hardware path, in order: the hosted
+  simulator at https://livethisdream.github.io/phaser/ (the same dashboard,
+  no install); `?sim=1` on the Pi's URL, or the **Simulator Mode** toggle,
+  when a station's hardware fails mid-lab; then `python
+  phaser_headless.py --sim` from a checkout, a development tool. An orange
+  SIMULATION pill marks simulated data. Labs are written for the real kit
+  + HB100; where the sim behaves differently, add a short "no hardware?"
+  note. Sim limits: the target is fixed at boresight (procedures that
+  rotate the HB100 by hand have no sim equivalent — say so); Rx Gain is
+  stored but not modeled; the tone is fixed at a 1 MHz baseband offset
+  (shown at −1 MHz on the negated axis) regardless of Signal Freq; CW radar
+  is not simulated; calibration runs are scripted.
 - **Instructor mode** (`?instructor=1`, sim only) adds a Simulator
   Interferer panel (angle, power rel. target) — a configurable jammer for
   nulling demos. Student-facing pages must NOT document instructor mode;
@@ -733,7 +763,12 @@ and mirror the course GUI's backend (e.g. setting `adar1000` phases,
 Pluto `rx_lo`, ADF4159 `frequency`); keep code excerpts short (≤ 15
 lines) and runnable in spirit — no invented attribute names. The course
 GUI is the deliverable interface; raw-Python excerpts exist to demystify
-it, not to replace it.
+it, not to replace it. Copy excerpts from the backend's current code, not
+from memory: ADF4159: `synth.frequency = int(lo_freq / 4)` (the CN0566
+divides the LO by 4 ahead of the PLL). ADAR1000: end every phase or gain
+write with `array.latch_rx_settings()`; only the steering ramp
+`i * PhDelta` is quantized, and `phaseList` arrives with calibration
+folded in.
 
 ## M7. Decisions added after the initial build (2026-08-23)
 
