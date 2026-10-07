@@ -55,14 +55,14 @@ use in every lab that follows.
 ::::
 
 ::::{frame} The ADALM-PHASER Receive Chain
-Follow the figure left to right.
-
 :::{present}
 <img src="../../viz/img/L17-signal-chain.svg" alt="ADALM-PHASER receive signal chain from the patch array through the ADAR1000 beamformers, mixers, and Pluto SDR to the Raspberry Pi" style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 
 - The PHASER is a receive array: eight patches capture the wave from a source in front of it.
 - Everything between the patches and the Raspberry Pi turns eight microwave signals into two streams of numbers.
 :::
+
+Follow the figure left to right.
 ::::
 
 ::::{frame} The Patches and the LNAs
@@ -275,8 +275,6 @@ interferers, so this board can null about one.
 ::::
 
 ::::{frame} The Frequency Plan
-The patch array is designed for X-band, roughly $10.0$ to $10.5\ \text{GHz}$.
-
 :::{present}
 - Nothing in the lab digitizes X-band.
 - The mixers move the received signal down to a single fixed $2.2\ \text{GHz}$ IF, the only frequency the SDR ever tunes.
@@ -285,6 +283,8 @@ The patch array is designed for X-band, roughly $10.0$ to $10.5\ \text{GHz}$.
 :::{present}
 <img src="../../viz/img/L17-frequency-plan.svg" alt="Frequency plan on two aligned axes. The LO tuning range, 12.2 to 13.0 GHz, sits above the RF axis, offset by the fixed 2.2 GHz IF, so its edges drop straight down onto the reachable RF band, 10.0 to 10.8 GHz, which encloses the 10.1 to 10.7 GHz spread of HB100 units." style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
+
+The patch array is designed for X-band, roughly $10.0$ to $10.5\ \text{GHz}$.
 
 :::{depth}
 Two different ranges appear in this lesson, and different hardware sets each.
@@ -329,10 +329,6 @@ answer.
 ::::
 
 ::::{frame} High-Side Injection
-The LO comes from an ADF4159 PLL locking an HMC735 VCO, tunable over
-$12.2$ to $13.0\ \text{GHz}$. The mixers use **high-side injection**, meaning
-the LO sits above the RF rather than below it.
-
 :::{present}
 With **high-side injection** the LO sits above the source, which mirrors the spectrum:
 
@@ -353,6 +349,10 @@ f_{\text{RF}} &= f_{\text{LO}} - f_{\text{IF}} \\
   &= 10.0 \text{ to } 10.8\ \text{GHz}
 \end{aligned}$$
 :::
+
+The LO comes from an ADF4159 PLL locking an HMC735 VCO, tunable over
+$12.2$ to $13.0\ \text{GHz}$. The mixers use **high-side injection**, meaning
+the LO sits above the RF rather than below it.
 
 Because $f_{\text{IF}} = f_{\text{LO}} - f_{\text{RF}}$, raising the RF by
 $\delta$ lowers the IF by $\delta$, so high-side mixing mirrors the spectrum.
@@ -621,17 +621,17 @@ reaches the same kit, but the fixed address works without it.
 ::::
 
 ::::{frame} Wi-Fi and the Software Update
-The classroom Wi-Fi is the open guest network `AF_ACADEMY_GUEST`. The commands
-below set the Wi-Fi country, add the network to
-`/etc/wpa_supplicant/wpa_supplicant.conf`, and tell the Wi-Fi client to reread
-that file. `sudo` asks for the same password, `analog`.
-
 :::{present}
 14. Run the three Wi-Fi commands in order.
 15. Run `ping -c 4 github.com` and expect four replies.
 16. Run the `install.sh` line and wait for `Installed.`
 17. Record the RF-chain lines the installer prints under `[6b/6]`.
 :::
+
+The classroom Wi-Fi is the open guest network `AF_ACADEMY_GUEST`. The commands
+below set the Wi-Fi country, add the network to
+`/etc/wpa_supplicant/wpa_supplicant.conf`, and tell the Wi-Fi client to reread
+that file. `sudo` asks for the same password, `analog`.
 
 ```bash
 sudo raspi-config nonint do_wifi_country US
@@ -780,6 +780,16 @@ them; it is unavailable on the FFT tab.
 ::::
 
 ::::{frame} Source Search and Array Calibration
+:::{present}
+19. Place the powered HB100 $1\ \text{m}$ out at boresight.
+20. Press **Find HB100** and record its frequency.
+21. Then press **Calibrate**.
+:::
+:::{present}
+:class: callout
+Let each button finish. Holding the **Connected** pill for two seconds shuts the Pi down.
+:::
+
 Two buttons, **Find HB100** and **Calibrate**, write calibration files on the
 Pi.
 
@@ -813,16 +823,6 @@ Both buttons write files on the Pi and take some seconds to finish. Each opens a
 **Calibrating...** or **Scanning...** until it finishes. Wait for it, and do not
 press either button again while it runs; use **Cancel** only if it stalls.
 Leave **Reboot**, the third button beside them, alone.
-:::
-
-:::{present}
-19. Place the powered HB100 $1\ \text{m}$ out at boresight.
-20. Press **Find HB100** and record its frequency.
-21. Then press **Calibrate**.
-:::
-:::{present}
-:class: callout
-Let each button finish. Holding the **Connected** pill for two seconds shuts the Pi down.
 :::
 
 Set the HB100 about $1\ \text{m}$ in front of the array, at the same height as
@@ -862,15 +862,15 @@ simulator covers Part B.
 ::::
 
 ::::{frame} Part B: First Measurements
-Part B runs on the kit you brought up in Part A. Work through these steps in
-order and record what each one asks for.
-
 :::{present}
 1. Press **1 Steering Angle** under **Lab Presets**, then press **Start**.
 2. Record the peak's frequency and height above the floor.
 
 Less than 20 dB of separation means a misaimed or distant source, or a wrong LO.
 :::
+
+Part B runs on the kit you brought up in Part A. Work through these steps in
+order and record what each one asks for.
 
 The preset loads the workshop's initial state, with a uniform taper and the
 beam commanded to broadside, and opens the FFT tab; **Start** begins streaming.
@@ -992,11 +992,6 @@ serves the same page at `http://localhost:8080`.
 ::::
 
 ::::{frame} Reading the Code: Tuning the SDR
-Everything the GUI does reaches the hardware as a `pyadi-iio` call. Three short
-excerpts from the course backend cover the parts you have just used.
-
-Tuning the SDR and setting its gain:
-
 :::{present}
 ```python
 sdr = adi.ad9361(uri=ip)
@@ -1009,6 +1004,11 @@ sdr.rx_hardwaregain_chan0 = int(rx_gain)
 - `rx_lo` is $2.2\ \text{GHz}$ every time, so the SDR never learns what band the array is looking at.
 - Automatic gain control is off, because a gain that changes during a sweep distorts the measured pattern.
 :::
+
+Everything the GUI does reaches the hardware as a `pyadi-iio` call. Three short
+excerpts from the course backend cover the parts you have just used.
+
+Tuning the SDR and setting its gain:
 
 :::{depth}
 The full excerpt from `SDR_init`, with comments:
@@ -1050,8 +1050,6 @@ written as $3.18125\ \text{GHz}$.
 ::::
 
 ::::{frame} Reading the Code: Writing the Phases
-Setting the array's phases:
-
 :::{present}
 ```python
 for i in range(8):
@@ -1066,6 +1064,8 @@ array.latch_rx_settings()
 - `i * PhDelta` is the linear phase ramp, and the loop rounds only the ramp to $2.8125^\circ$.
 - `latch_rx_settings()` moves all eight phases into the live beam at once.
 :::
+
+Setting the array's phases:
 
 :::{depth}
 The full function from the backend, with its comments:
