@@ -794,6 +794,20 @@ it, not to replace it.
   a single look — which is what a tracking radar needs, and where
   Module 4 begins.
 
+- **The reveal.js decks are retired** (Neil, 2026-10-07, on the L17 pick
+  list: "the new site format doesn't have decks. It's read and present
+  mode"). A lesson's present mode *is* its deck. From this date no lesson
+  work edits, mirrors into, or verifies a deck: the voice, why, and
+  illustration sweeps and the present cut apply to the page alone, and
+  "mirror it in the deck" steps in the three skills and in CLAUDE.md are
+  void. The deck files themselves (`book/extras/slides/L*.md` and `.html`),
+  the Slides frame with its three pill links on every frame page, the deck
+  gate in `scripts/verify/mech_check.sh`, and the "Don't delete a lesson's
+  reveal.js deck" rule in CLAUDE.md come out in one site-wide PR of their
+  own, not piecemeal; until that PR lands, existing decks stay where they
+  are, untouched and unmaintained. Nomenclature authority moves from "the
+  decks" to the lesson pages' present blocks.
+
 - **Objective 3.8 is measured in Lab 8 (L25), Part 2** (Neil, 2026-10-07:
   "Go with option 1, add it to the L25 lab sheet"). L26 stays a theory
   lesson with no sheet of its own; the three GUI presets built for the
