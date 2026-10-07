@@ -31,11 +31,11 @@ the PHASER's patch face and ends up as numbers in the Raspberry Pi.
 		LSB in degrees, and state what physically limits how finely you can steer the beam.
 		\begin{solution}[1.1in]
 		\eq{ \text{LSB} = \frac{360\mydeg}{2^{7}} = \frac{360\mydeg}{128} = 2.8125\mydeg }
-		The ADAR1000 rounds the commanded phase to the nearest multiple of this step. Near
-		broadside one LSB of ramp steers the beam by $\arcsin(2.8125\mydeg/176.9\mydeg) =
-		0.91\mydeg$, but each element rounds on its own, so the main effect is phase error
-		across the ramp, which raises the sidelobes (Lesson 26), not a beam confined to a
-		grid. The phase-shifter word length sets that limit, not the software.
+		The software rounds only the steering ramp, and the chip sets the nearest of its 128
+		states, so the 7-bit word length sets the finest step. One LSB of ramp steers
+		$0.91\mydeg$, but each element rounds on its own, so the main effect is phase error
+		that raises the sidelobes (about $-42\db$ at 7 bits, Lesson 26), not a beam confined
+		to a grid.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -65,10 +65,9 @@ the PHASER's patch face and ends up as numbers in the Raspberry Pi.
 		\begin{solution}[1.2in]
 		\eq{ \lambda &= \frac{c}{f} = \frac{3\times10^{8}\ \text{m/s}}{10.525\times10^{9}\ \text{Hz}} = 0.0285\ \m = 28.5\ \text{mm} \\
 		     \frac{d}{\lambda} &= \frac{14\ \text{mm}}{28.5\ \text{mm}} = 0.491 }
-		Just under a half wavelength. Lesson 16's criterion $d < \lambda/(1 + \lvert\sin\theta_0\rvert)$
-		holds at every scan angle once $d < \lambda/2$, so no grating lobe enters visible
-		space. (At the LO's $10.8\ \ghz$ limit, $d/\lambda = 0.504$, and a grating lobe
-		appears for steering past $79.3\mydeg$.)
+		The spacing is just under half a wavelength, so Lesson 16's criterion
+		$d < \lambda/(1 + \lvert\sin\theta_0\rvert)$ holds at every scan angle. (At
+		$10.8\ \ghz$, $d/\lambda = 0.504$: a grating lobe past $79.8\mydeg$.)
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -82,9 +81,11 @@ the PHASER's patch face and ends up as numbers in the Raspberry Pi.
 
 \newpage
 
-\question \textbf{The frequency plan.} The PHASER mixes the received X-band signal down
-to a fixed $2.2\ \ghz$ IF using high-side injection, so $f_{\text{LO}} = f_{\text{RF}} +
-f_{\text{IF}}$. The ADF4159 and HMC735 VCO cover $12.2$ to $13.0\ \ghz$. The Pluto is
+\question \textbf{The Frequency Plan.} The PHASER's mixers multiply the received X-band
+signal by the board's own tone, the LO, and keep the difference of the two frequencies.
+The board sets the LO $2.2\ \ghz$ above the source, so that difference, the IF, is always
+$2.2\ \ghz$: $f_{\text{LO}} = f_{\text{RF}} + f_{\text{IF}}$. The ADF4159 and HMC735 VCO
+cover $12.2$ to $13.0\ \ghz$. The Pluto is
 tuned to $2.2\ \ghz$ and sampled at $3\ \text{MSPS}$.
 
 \begin{parts}
@@ -122,7 +123,7 @@ tuned to $2.2\ \ghz$ and sampled at $3\ \text{MSPS}$.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part A student skips \textbf{Find HB100}, so the software keeps the nominal LO of
-		$12.725\ \ghz$. The source in front of the array is actually at $10.30\ \ghz$. What
+		$12.725\ \ghz$. The source in front of the array is at $10.30\ \ghz$. What
 		IF does the mixer produce, and by how much does it miss $2.2\ \ghz$?
 		\begin{solution}[1.2in]
 		\eq{ f_{\text{IF}} &= f_{\text{LO}} - f_{\text{RF}} = 12.725 - 10.300 = 2.425\ \ghz \\
@@ -138,14 +139,14 @@ tuned to $2.2\ \ghz$ and sampled at $3\ \text{MSPS}$.
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the width of the baseband window the Pluto digitizes at $3\ \text{MSPS}$,
+		\part Find the width of the window the Pluto digitizes at $3\ \text{MSPS}$,
 		and say in one or two sentences what the student of part (c) sees on the FFT tab.
 		\begin{solution}[1.2in]
 		\eq{ \text{window} = f_s = 3\ \mhz \quad (\pm 1.5\ \mhz) }
 		The window is centered on the 2.2 GHz tuning. The offset of 225 MHz is 150 times
 		the half-width of that window, so the tone is far
 		outside it and nothing appears but the noise floor. An empty FFT with a powered,
-		correctly aimed source is a frequency error, not a hardware failure.
+		correctly aimed source points to a frequency error, not a hardware failure.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -157,7 +158,7 @@ tuned to $2.2\ \ghz$ and sampled at $3\ \text{MSPS}$.
 
 \newpage
 
-\question \textbf{Hybrid beamforming.} The PHASER has eight elements, eight RF phase
+\question \textbf{Hybrid Beamforming.} The PHASER has eight elements, eight RF phase
 shifters, and two receive channels into the SDR.
 
 \begin{parts}
@@ -221,7 +222,7 @@ shifters, and two receive channels into the SDR.
 \newpage
 
 \question \textbf{Bench Diagnosis.} Lab Preset 1 is loaded, the HB100 is at boresight
-about $1\ \m$ from the array, and the FFT tab is showing the baseband spectrum. The Pluto
+about $1\ \m$ from the array, and the FFT tab is showing the spectrum. The Pluto
 is tuned to $2.2\ \ghz$ and the LO is at $12.725\ \ghz$.
 
 \begin{parts}
@@ -230,8 +231,9 @@ is tuned to $2.2\ \ghz$ and the LO is at $12.725\ \ghz$.
 		\part The FFT peak sits at $+1\ \mhz$ on the GUI's frequency axis. Find the
 		frequency of the source and the IF of the received tone.
 		\begin{solution}[1.3in]
-		The GUI negates its axis to undo the high-side inversion, so $+1\ \mhz$ means the
-		source is 1 MHz above the 10.525 GHz the LO was set for:
+		The mixer output is LO minus source, so a higher source lands lower; the GUI negates
+		its axis to undo that mirror, so $+1\ \mhz$ means the source is 1 MHz above the
+		10.525 GHz the LO was set for:
 		\eq{ f_{\text{RF}} &= 10.525 + 0.001 = 10.526\ \ghz \\
 		     f_{\text{IF}} &= f_{\text{LO}} - f_{\text{RF}} = 12.725 - 10.526 = 2.199\ \ghz }
 		The IF sits 1 MHz below 2.2 GHz: a higher RF gives a lower IF.
@@ -261,7 +263,7 @@ is tuned to $2.2\ \ghz$ and the LO is at $12.725\ \ghz$.
 		First, confirm the HB100 is powered and aimed at the array from about a meter --
 		this rules out having no signal to receive at all, which is the most common cause.
 		Second, run \textbf{Find HB100} and compare the result with the Signal Freq the GUI
-		is using -- this rules out a source sitting outside the 3 MHz baseband window
+		is using -- this rules out a source sitting outside the 3 MHz window
 		because the LO is set for the wrong frequency. Only after both pass is it worth
 		suspecting the array or the cabling.
 		\end{solution}
@@ -273,11 +275,12 @@ is tuned to $2.2\ \ghz$ and the LO is at $12.725\ \ghz$.
 		Either the received signal is too weak -- source too far away, misaimed, or its
 		battery low -- so the peak has come down toward a fixed floor; or the array has not
 		been calibrated, so the eight elements do not add coherently at broadside and the
-		main lobe never reaches full height. To separate them, move the source closer
-		(halving the distance raises the peak by 6 dB, but stay beyond about 0.9 m, the
-		far-field distance) and re-aim it: if the separation improves, it was signal level.
-		If it does not, run
-		\textbf{Calibrate} and sweep again.
+		main lobe never reaches full height. To separate them, re-aim the source and check
+		its battery, then read the FFT peak in dBFS at \textbf{Rx Gain} 10 and compare it with
+		a working station at the same distance. (Moving the source closer is no test here:
+		at 1 m it is already near the 0.9 m far-field limit.) A low peak means signal level;
+		a normal peak with a poor sweep points to calibration, so run \textbf{Calibrate} and
+		sweep again.
 		\end{solution}
 
 \end{parts}

@@ -124,7 +124,7 @@ one sheet.
 \fullwidth{\large\textbf{Part A: Bring Up Your PHASER}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The bring-up record.} Record what you set and what the kit
+\question \textbf{The Bring-Up Record.} Record what you set and what the kit
 reported as you brought it up. Copy the installer's lines exactly as it prints
 them under \texttt{[6b/6] Checking the RF chain...}.
 
@@ -142,7 +142,6 @@ Installer line \texttt{HB100} & \kv{the card's stored value, labeled \texttt{(ca
 Installer line \texttt{Rx\_freq} & \kv{$2.200$ GHz} \\\hline
 Installer line \texttt{LO} & \kv{HB100 $+ 2.200$ GHz, $12.725$ GHz for $10.525$ GHz} \\\hline
 Installer line \texttt{ADF4159} & \kv{LO$/4$, $3.1812$ GHz for a $12.725$ GHz LO} \\\hline
-Installer \texttt{WARN} or \texttt{OK} line(s) & \kv{WARN: a unit above $10.600$ GHz needs an LO past $12.80$ GHz} \\\hline
 Frequency \textbf{Find HB100} reported & \kv{your own, in $10.1$--$10.7\ \ghz$} \\\hline
 \end{tabular}
 \end{center}
@@ -152,15 +151,12 @@ The installer ran before \textbf{Find HB100}, so its \texttt{HB100} line reports
 whatever the card carried: the golden kit's measured source, labeled
 \texttt{(calibration.json)}, or the $10.525$ GHz default from \texttt{config.py}
 when the card held no calibration. That value generally differs from the
-\textbf{Find HB100} result, which measures this kit's own source. With the
-course's $2.2$ GHz IF, the installer always prints the range warning, because
-an HB100 at the $10.7$ GHz top of the range would need a $12.9$ GHz LO, above
-the $12.80$ GHz ceiling the Phaser developers measured receiving cleanly.
+\textbf{Find HB100} result, which measures this kit's own source.
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\question \textbf{The identity reset.} Every team flashed its card from the
+\question \textbf{The Identity Reset.} Every team flashed its card from the
 same golden image, and on its first boot each card regenerates its SSH host
 keys and its \texttt{/etc/machine-id} before the ssh server starts. Explain in
 three or four sentences why a cloned card must do this.
@@ -171,9 +167,12 @@ so without the reset every kit would present the same SSH host keys and the
 same machine-id. The host key is how ssh identifies the machine it reached;
 with identical keys a laptop's \texttt{known\_hosts} cannot tell the kits
 apart, and a key copied off one kit would impersonate all of them. The
-machine-id is what systemd-networkd derives its DHCP client identity from, so
-kits sharing one request the same lease on a shared network and take turns
-losing it, which looks like a Pi dropping off the network at random.
+machine-id is how the operating system's own services, such as the system
+journal and D-Bus, tell one installation from another, so kits sharing one are
+the same machine to them. (On an image whose network is run by systemd-networkd,
+the DHCP client identity comes from it too, and kits sharing one would fight
+over one lease; this kit's \texttt{dhcpcd} uses the adapter's hardware address
+instead, so full credit does not need the lease argument.)
 Regenerating both before ssh starts gives each kit its own identity, and the
 reboot that follows makes the new machine-id take effect, since the init system
 reads it only at boot.
@@ -184,10 +183,11 @@ reads it only at boot.
 \fullwidth{\large\textbf{Part B: First Measurements}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The frequency plan.} Copy the frequency \textbf{Find HB100}
-reported in Part A, then work the high-side mixing arithmetic that follows from
-it. The IF is fixed by the filtering after the
-mixer, so the LO is the only frequency that moves when the source moves.
+\question \textbf{The Frequency Plan.} Copy the frequency \textbf{Find HB100}
+reported in Part A, then work out where the LO must sit for it. The mixer's
+output is the LO minus the source, and the IF is a setting, $2.2\ \ghz$, chosen
+so that the LO's range covers every HB100; so the LO is the only frequency that
+moves when the source moves.
 
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
@@ -204,7 +204,7 @@ Is the LO inside $12.2$--$13.0\ \ghz$? & \kv{yes, for any HB100 in that band} \\
 Show the arithmetic for your measured frequency here.
 
 \begin{solutionorlines}[1.1in]
-For a nominal source at $10.525\ \ghz$, high-side injection puts the LO at
+For a nominal source at $10.525\ \ghz$, the LO sits $2.2\ \ghz$ above the source, at
 \eq{
 	f_{\text{LO}} = f_{\text{RF}} + f_{\text{IF}} = 10.525 + 2.200 = 12.725\ \ghz
 }
@@ -236,7 +236,7 @@ running the backend and serving the browser interface.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\question \textbf{FFT observations.} Work on the FFT tab with the source at
+\question \textbf{FFT Observations.} Work on the FFT tab with the source at
 $1\ \m$ and record what the spectrum does as you change two controls.
 
 \begin{parts}
@@ -267,7 +267,7 @@ $1\ \m$ and record what the spectrum does as you change two controls.
 	\begin{tabular}{| l | K{1.25in} | K{1.25in} | K{1.35in} |}
 	\hline
 	\textbf{Rx Gain} & \textbf{Peak (dBFS)} & \textbf{Floor (dBFS)} & \textbf{Separation (dB)} \\\hline\hline
-	0 dB & \kv{about $10$ dB below the 10 dB row} & \kv{about $10$ dB below the 10 dB row} & \kv{same, or a few dB less} \\\hline
+	0 dB & \kv{about $10$ dB below the 10 dB row} & \kv{up to $10$ dB below; less once the SDR's noise sets it} & \kv{same, or a few dB less} \\\hline
 	10 dB & \kv{reference} & \kv{reference} & \kv{$\ge 20$ dB} \\\hline
 	20 dB & \kv{up to $10$ dB above; less if compressed} & \kv{about $10$ dB above the 10 dB row} & \kv{same, or less if the peak compresses} \\\hline
 	\end{tabular}
@@ -284,10 +284,10 @@ $1\ \m$ and record what the spectrum does as you change two controls.
 	more than a few dB across the three rows points to a saturating or misaimed setup.
 	\end{solution}
 
-	\part Lower \textbf{Signal Freq (GHz)} by $0.001\ \ghz$ (one click of the
-	field's down arrow) and press Enter, then record how far the peak moves and in
-	which direction. (On an older kit, press \textbf{Stop} and then \textbf{Start}
-	to send the new value.)
+	\part Lower \textbf{Signal Freq (GHz)} by $0.001\ \ghz$: click the field's down
+	arrow once, or type the new value and press Enter. Record how far the peak moves
+	and in which direction. (If a typed value does not move the peak, press
+	\textbf{Stop} and then \textbf{Start}.)
 
 	\vspace{6pt}
 	\begin{center}
@@ -296,19 +296,18 @@ $1\ \m$ and record what the spectrum does as you change two controls.
 	\vspace{6pt}
 
 	\begin{solutionorlines}[0.9in]
-	The GUI holds the IF fixed and moves the LO, so lowering the assumed source
-	frequency by 1 MHz lowers the LO by 1 MHz. The source has not moved, so its IF
-	drops by 1 MHz, and the GUI's flipped axis plots the peak 1 MHz higher: the
-	source now sits 1 MHz above Signal Freq. The window is only 3 MHz wide at
-	3 MSPS, so an error larger than about 1.5 MHz moves the tone off the display,
-	which is what a bad \textbf{Find HB100} result looks like.
+	The LO follows Signal Freq, so it drops 1 MHz while the source stays put; LO
+	minus source drops 1 MHz, and the GUI's flipped axis plots the peak 1 MHz higher:
+	the source now sits 1 MHz above Signal Freq. An error over about 1.5 MHz moves
+	the tone out of the 3 MHz window, which is what a bad \textbf{Find HB100} result
+	looks like.
 	\end{solutionorlines}
 
 \end{parts}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\question \textbf{Written answers.} Answer each in three or four sentences.
+\question \textbf{Written Answers.} Answer each in three or four sentences.
 
 \begin{parts}
 
