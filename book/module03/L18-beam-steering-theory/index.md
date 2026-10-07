@@ -99,11 +99,16 @@ $$\Delta t = \frac{d\sin\theta_0}{c}.$$
 For the course array steered to $30^\circ$, that is $7\ \text{mm}$ of path and
 about $23\ \text{ps}$ of arrival-time difference per element.
 
-Now convert the delay of a sinusoid into a phase. A signal delayed by
-$\Delta t$ at frequency $f$ is retarded in phase by $\omega\Delta t$, so the
-element-to-element phase difference produced by the incoming wave is
+Now convert the time offset into a phase. A time offset of $\Delta t$ at
+frequency $f$ shifts a sinusoid's phase by $\omega\Delta t$, so the incoming
+wave produces an element-to-element phase difference of
 
 $$\Delta\phi = \omega\Delta t = \frac{2\pi f}{c}\ d\sin\theta_0 = kd\sin\theta_0 = 2\pi\frac{d}{\lambda}\sin\theta_0.$$
+
+Element $n$ receives the wave $n\ \Delta t$ before element 0, so its signal
+leads element 0's by $n\ \omega\Delta t = n\ \Delta\phi$. To line the eight
+signals up, the phase shifter on element $n$ delays it by that same
+$n\ \Delta\phi$.
 ::::
 
 ::::{frame} Reading the Progressive Phase
@@ -154,23 +159,32 @@ carries a frequency stamp.
 
 ::::{frame} Sign of the Compensating Ramp
 :::{present}
-$$\phi_n = -n\ \Delta\phi, \qquad n = 0, 1, \ldots, 7$$
+$$\phi_n = +n\ \Delta\phi, \qquad n = 0, 1, \ldots, 7$$
 
-- Geometry gives element $n$ a head start of $n\ \Delta\phi$; the beamformer gives it back.
-- Element 0 is the reference, at zero.
-- Flipping the sign of $\theta_0$ runs the ramp the other way.
+- Element $n$ leads element 0 by $n\ \Delta\phi$; the ADAR1000 delays it by that amount.
+- A positive ramp steers to $+\theta_0$, as the GUI's Steer Angle does.
+- Element 0 sits at zero; a negative $\theta_0$ runs the ramp downward.
 :::
 
-The array's own geometry gives element $n$ a head start of $n\ \Delta\phi$. To
-make all eight signals add in phase, the beamformer has to give that head start
-back, so the commanded phase is the negative of it:
+The array's own geometry gives element $n$ a phase lead of $n\ \Delta\phi$
+over element 0. To make all eight signals add in phase, the beamformer delays
+element $n$ by that same amount. The ADAR1000's phase setting is a delay, so
+the phase commanded to element $n$ is the lead itself:
 
-$$\phi_n = -n\ \Delta\phi, \qquad n = 0, 1, \ldots, 7.$$
+$$\phi_n = +n\ \Delta\phi, \qquad n = 0, 1, \ldots, 7.$$
 
-Element 0 is the reference and gets zero. Each element after it is one step
-further behind. Flipping the sign of $\theta_0$ flips the sign of $\Delta\phi$
-and runs the ramp the other way, which is how the same eight channels cover both
-sides of broadside.
+Element 0 is the reference and gets zero. Each element after it is delayed one
+step more. A positive ramp steers the beam to $+\theta_0$, which is the
+convention of the GUI's Steer Angle and of the backend code L17 read, which
+writes `i*PhDelta` to element `i`. Flipping the sign of $\theta_0$ flips the
+sign of $\Delta\phi$ and runs the ramp the other way, which is how the same
+eight channels cover both sides of broadside.
+
+L16 wrote the same steering as a complex weight, $a_n = \vert a_n\vert\ e^{-jn\beta}$
+with $\beta = \Delta\phi$. A delay of $n\ \Delta\phi$ multiplies element $n$'s
+signal by $e^{-jn\Delta\phi}$, so the weight carries a minus sign that the
+setting does not. That weight phase is the one place $-n\ \Delta\phi$ survives;
+every phase setting in this lesson and in the lab is $+n\ \Delta\phi$.
 ::::
 
 ::::{frame} The Course Array
@@ -201,11 +215,11 @@ $$\Delta\phi = 173.2^\circ \times \sin 30^\circ = 86.6^\circ$$
 
 | $n$ | 0 | 1 | 2 | 3 |
 | :-- | :-- | :-- | :-- | :-- |
-| set | 0 | 273.4 | 186.8 | 100.2 |
+| set | 0 | 86.6 | 173.2 | 259.8 |
 | **$n$** | **4** | **5** | **6** | **7** |
-| set | 13.6 | 287.0 | 200.4 | 113.8 |
+| set | 346.4 | 73.0 | 159.6 | 246.2 |
 
-- Whole turns wrap each $-n(86.6^\circ)$ into $0^\circ$ to $360^\circ$: $-433.0^\circ$ becomes $287.0^\circ$.
+- Whole turns wrap each $n(86.6^\circ)$ into $0^\circ$ to $360^\circ$: $433.0^\circ$ becomes $73.0^\circ$.
 :::
 
 :::{admonition} Worked example — the phase table for $\theta_0 = 30^\circ$
@@ -214,19 +228,20 @@ At $10.3\ \text{GHz}$ with $d = 14\ \text{mm}$:
 
 $$\Delta\phi = 173.2^\circ \times \sin 30^\circ = 173.2^\circ \times 0.500 = 86.6^\circ.$$
 
-Element $n$ is commanded to $-n(86.6^\circ)$. The ADAR1000 accepts a phase in
-$0^\circ$ to $360^\circ$, so each value is wrapped by adding whole turns until it
-lands in that range.
+Element $n$ is commanded to $n(86.6^\circ)$. The ADAR1000 accepts a phase in
+$0^\circ$ to $360^\circ$, so each value is wrapped by subtracting whole turns
+until it lands in that range.
 
 | $n$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| $\phi_n$ (ramp) | 0 | $-86.6$ | $-173.2$ | $-259.8$ | $-346.4$ | $-433.0$ | $-519.6$ | $-606.2$ |
-| turns added | 0 | $+360$ | $+360$ | $+360$ | $+360$ | $+720$ | $+720$ | $+720$ |
-| $\phi_n$ (set) | 0 | 273.4 | 186.8 | 100.2 | 13.6 | 287.0 | 200.4 | 113.8 |
+| $\phi_n$ (ramp) | 0 | 86.6 | 173.2 | 259.8 | 346.4 | 433.0 | 519.6 | 606.2 |
+| turns removed | 0 | 0 | 0 | 0 | 0 | $-360$ | $-360$ | $-360$ |
+| $\phi_n$ (set) | 0 | 86.6 | 173.2 | 259.8 | 346.4 | 73.0 | 159.6 | 246.2 |
 
-The bottom row is what goes into the hardware. It looks like a sawtooth rather
-than a ramp, and it is correct: a phase of $-433.0^\circ$ and a phase of
-$+287.0^\circ$ produce the same field from that element.
+The bottom row is what goes into the hardware. It climbs to element 4, drops
+back by a turn, and climbs again, a sawtooth rather than a single ramp, and it
+is correct: a phase of $433.0^\circ$ and a phase of $73.0^\circ$ produce the
+same field from that element.
 :::
 ::::
 
@@ -253,15 +268,15 @@ $$\begin{aligned}
 $$AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}$$
 :::
 :::{present}
-- Element $n$ adds its propagation phase and its commanded phase $-n\ \Delta\phi$.
-- L16's function is unchanged; only its argument has shifted.
+- Element $n$ arrives with phase $n\ kd\sin\theta$; its delay subtracts $n\ \Delta\phi$.
+- $\Delta\phi$ is L16's $\beta$: the function is unchanged, only its argument.
 - The peak at $\psi = 0$ now means $\sin\theta = \sin\theta_0$: the beam points at $\theta_0$.
 :::
 
 L16 built the array factor for a uniform line of $N$ elements with a progressive
-phase between them. With the ramp $\phi_n = -n\Delta\phi$ applied, element $n$
-contributes a propagation phase $n\ kd\sin\theta$ and a commanded phase
-$-n\ \Delta\phi$, so the array-factor argument becomes
+phase between them. With the ramp $\phi_n = n\ \Delta\phi$ set as a delay,
+element $n$ contributes a propagation phase $n\ kd\sin\theta$ and its delay
+takes away $n\ \Delta\phi$, so the array-factor argument becomes
 
 $$\psi = kd\sin\theta - \Delta\phi = kd\left(\sin\theta - \sin\theta_0\right),$$
 
@@ -405,13 +420,13 @@ and the pattern itself past that.
 
 The lab hands you the opposite problem. The GUI, or a data file, gives you eight
 phases, and you have to say where the beam is pointing. Everything you need is
-in $\phi_n = -n\Delta\phi$, run in reverse:
+in $\phi_n = n\ \Delta\phi$, run in reverse:
 
 :::{present}
 1. Difference neighboring elements: $\phi_{n+1} - \phi_n$.
 2. Unwrap. Add or subtract $360^\circ$ from any difference that disagrees with
    the others until all seven agree.
-3. That common step is $-\Delta\phi$.
+3. That common step is $\Delta\phi$.
 4. Solve for $\sin\theta_0$ and take the arcsine:
 
    $$\sin\theta_0 = \frac{\Delta\phi}{kd}$$
@@ -422,36 +437,42 @@ in $\phi_n = -n\Delta\phi$, run in reverse:
 :::{present}
 | $n$ | 0 | 1 | 2 | 3 |
 | :-- | :-- | :-- | :-- | :-- |
-| $\phi_n$ | 0 | 59.3 | 118.5 | 177.8 |
+| $\phi_n$ | 0 | 59.2 | 118.5 | 177.7 |
 | **$n$** | **4** | **5** | **6** | **7** |
-| $\phi_n$ | 237.0 | 296.3 | 355.6 | 54.8 |
+| $\phi_n$ | 237.0 | 296.2 | 355.4 | 54.7 |
 
 $$\begin{aligned}
-\sin\theta_0 &= \frac{-59.3^\circ}{173.2^\circ} = -0.342 \\
-\theta_0 &= -20.0^\circ
+\Delta\phi &= \frac{54.7^\circ + 360^\circ}{7} = 59.24^\circ \\
+\sin\theta_0 &= \frac{59.24^\circ}{173.2^\circ} = 0.342 \\
+\theta_0 &= +20.0^\circ
 \end{aligned}$$
 
-- Six steps of $+59.3^\circ$, then $-300.8^\circ$: $+59.3^\circ$ less a turn.
-- A rising ramp means $\Delta\phi = -59.3^\circ$: a negative steer angle.
+- Steps of $59.2^\circ$ to $59.3^\circ$, then $-300.7^\circ$, a step less a turn.
+- Rising ramp: positive $\Delta\phi$, positive steer angle.
 :::
 
 :::{admonition} Worked example — recovering the steer angle
 :class: tip
-An array is found holding these settings:
+The beamformer reports these settings:
 
 | $n$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| $\phi_n$ (deg) | 0 | 59.3 | 118.5 | 177.8 | 237.0 | 296.3 | 355.6 | 54.8 |
+| $\phi_n$ (deg) | 0 | 59.2 | 118.5 | 177.7 | 237.0 | 296.2 | 355.4 | 54.7 |
 
-The first six differences are all $+59.3^\circ$. The seventh is
-$54.8 - 355.6 = -300.8^\circ$, which is $+59.3^\circ$ once a full turn is
-restored, so the ramp is uniform with a step of $+59.3^\circ$ per element:
+The first six differences are $59.2^\circ$, $59.3^\circ$, $59.2^\circ$,
+$59.3^\circ$, $59.2^\circ$, and $59.2^\circ$. The seventh is
+$54.7 - 355.4 = -300.7^\circ$, which is $59.3^\circ$ once a full turn is
+restored. All seven agree to within the $0.1^\circ$ rounding of the table, so
+the ramp is uniform. The span of the whole array gives the step most
+precisely: element 7 sits at $54.7^\circ + 360^\circ = 414.7^\circ$ unwrapped,
+seven steps from element 0, so
 
-$$\Delta\phi = -59.3^\circ, \qquad \sin\theta_0 = \frac{-59.3^\circ}{173.2^\circ} = -0.342, \qquad \theta_0 = -20.0^\circ.$$
+$$\Delta\phi = \frac{414.7^\circ}{7} = 59.24^\circ, \qquad \sin\theta_0 = \frac{59.24^\circ}{173.2^\circ} = 0.342, \qquad \theta_0 = +20.0^\circ.$$
 
-The ramp rises with $n$ while the steer angle is negative, and that is the sign
-convention doing its job: the commanded phase is $-n\Delta\phi$, so a rising ramp
-means a negative $\Delta\phi$ and a beam on the negative side of broadside.
+The ramp rises with $n$ and the steer angle is positive, which follows from the
+sign convention: the commanded phase is $+n\ \Delta\phi$, so a rising ramp
+means a positive $\Delta\phi$ and a beam on the positive side of broadside, the
+side the GUI's Steer Angle calls positive.
 :::
 ::::
 
@@ -488,8 +509,8 @@ costs in sidelobe level and null depth.
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | $\Delta\phi = kd\sin\theta_0$ | progressive element-to-element phase | $173.2^\circ \times \sin\theta_0$ for the course array |
-| $\phi_n = -n\ \Delta\phi$ | commanded ramp, element $n$ | $86.6^\circ$ per element at $\theta_0 = 30^\circ$ |
-| wrapping | whole turns removed to fit $0^\circ$ to $360^\circ$ | $-433.0^\circ$ is set as $287.0^\circ$ |
+| $\phi_n = +n\ \Delta\phi$ | commanded ramp (a delay), element $n$ | $86.6^\circ$ per element at $\theta_0 = 30^\circ$ |
+| wrapping | whole turns removed to fit $0^\circ$ to $360^\circ$ | $433.0^\circ$ is set as $73.0^\circ$ |
 ::::
 
 ::::{frame} Summary: Steered Pattern
