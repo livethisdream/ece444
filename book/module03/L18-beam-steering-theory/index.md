@@ -53,16 +53,31 @@ array is pointing.
 ::::
 
 ::::{frame} Time Alignment
+:class: viz-frame
+
 :::{present}
+<iframe src="../../viz/steering-delay.html?lock=1"
+        width="100%" height="463"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="A plane wave crossing the eight-element array, the commanded delays that align it, and the two ADAR1000 sums">
+</iframe>
+:::
+
 - Eight elements in a row, $d = 14\ \text{mm}$ apart, with no phase applied.
 - A plane wave from $\theta_0$ off broadside reaches them one after another, not all at once.
 - Undoing those arrival differences makes all eight signals add in phase.
-:::
 
 Eight elements sit in a row with no phase applied, spaced
 $d = 14\ \text{mm}$ apart, and a plane wave arrives from an angle $\theta_0$
 measured from broadside. The wavefront reaches the element nearest the source
 first and each successive element later.
+
+The widget opens with the steer angle locked to the source, so the commanded
+delays line all eight signals up and each ADAR1000's four-element sum adds in
+phase with the other's. Clear the lock and move the steer angle away from the
+source: the delays no longer match the arrival times, the two chip sums part,
+and the total shrinks.
 ::::
 
 ::::{frame} Path, Time, and Phase
@@ -480,10 +495,6 @@ and the pattern itself past that.
 
 ::::{frame} The Inverse Problem
 
-The lab hands you the opposite problem. The GUI, or a data file, gives you eight
-phases, and you have to say where the beam is pointing. Everything you need is
-in $\phi_n = n\ \Delta\phi$, run in reverse:
-
 :::{present}
 1. Difference neighboring elements: $\phi_{n+1} - \phi_n$.
 2. Unwrap. Add or subtract $360^\circ$ from any difference that disagrees with
@@ -493,6 +504,10 @@ in $\phi_n = n\ \Delta\phi$, run in reverse:
 
    $$\sin\theta_0 = \frac{\Delta\phi}{kd}$$
 :::
+
+The lab hands you the opposite problem. The GUI, or a data file, gives you eight
+phases, and you have to say where the beam is pointing. Everything you need is
+in $\phi_n = n\ \Delta\phi$, run in reverse:
 ::::
 
 ::::{frame} Worked Example: Recovering the Steer Angle
