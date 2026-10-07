@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Time alignment: steering delays across the eight elements</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --c1:#0067b9; --c1l:#8db8e0; --c2:#3f7d34; --c2l:#a5cb9c; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:10px; }
+  canvas { display:block; box-sizing:border-box; width:100%; background:#fff;
+           border:1px solid var(--edge); border-radius:6px; }
+  /* Side by side above 650px; stacked, with a shorter design box, below. */
+  .cv2 { display:grid; grid-template-columns:1fr; gap:10px; }
+  @media (min-width:650px) { .cv2 { grid-template-columns:1fr 1fr; align-items:start; } }
+  /* One compact bar: source row (slider + play), steer row (slider + lock).
+     The two rows share one line above 650px. */
+  .controls { display:grid; grid-template-columns:1fr; gap:6px 20px; padding:7px 12px;
+              background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  @media (min-width:650px) { .controls { grid-template-columns:1fr 1fr; } }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; }
+  .ctl .k { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3);
+            font-weight:700; white-space:nowrap; }
+  .ctl .k mjx-container { text-transform:none; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; font-weight:600;
+              font-size:12.5px; min-width:34px; text-align:right; }
+  .ctl input[type=range] { flex:1 1 auto; min-width:50px; width:0; accent-color:var(--mid); }
+  .ctl input[type=range]:disabled { opacity:0.55; }
+  .play { flex:0 0 auto; font:700 10.5px 'Inter',system-ui,-apple-system,sans-serif; text-transform:uppercase;
+          letter-spacing:0.05em; color:var(--navy); background:#fff; border:1px solid var(--edge2);
+          border-radius:4px; padding:3px 7px; cursor:pointer; line-height:14px; min-width:52px; }
+  .play.on { background:var(--navy); color:#fff; border-color:var(--navy); }
+  .play:focus-visible { outline:2px solid var(--navy); outline-offset:2px; }
+  .lock { flex:0 0 auto; display:flex; align-items:center; gap:4px; cursor:pointer;
+          font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;
+          color:var(--ink3); white-space:nowrap; min-width:52px; }
+  .lock input { margin:0; accent-color:var(--navy); }
+  /* Four instruments: one row on a desktop, two by two on a phone. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0,1fr)); }
+  @media (max-width:559px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 6px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center; max-width:100%;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; text-transform:none; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; color:var(--navy); max-width:100%; overflow:hidden; }
+  .ro.al { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.al .v { color:var(--grn); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="cv2">
+    <canvas id="arr" aria-label="The eight-element array with a plane wavefront arriving from the source angle, and under each element a bar showing the delay commanded for the steer angle"></canvas>
+    <canvas id="chain" aria-label="The eight element phasors after the phase shifters, tip to tail, colored by ADAR1000 chip, with each chip's four-element sum and the total"></canvas>
+  </div>
+
+  <div class="controls" id="panel">
+    <div class="ctl">
+      <label class="k" for="ts">Source \(\theta_s\)</label>
+      <input type="range" id="ts" min="-60" max="60" step="1" value="30">
+      <span class="val" id="ts-val">+30°</span>
+      <button type="button" class="play" id="play" aria-label="Run the wavefront across the array">play</button>
+    </div>
+    <div class="ctl">
+      <label class="k" for="t0">Steer \(\theta_0\)</label>
+      <input type="range" id="t0" min="-60" max="60" step="1" value="30">
+      <span class="val" id="t0-val">+30°</span>
+      <label class="lock" title="Tie the steer angle to the source angle"><input type="checkbox" id="lock">lock</label>
+    </div>
+  </div>
+
+  <div class="readouts" id="readouts">
+    <div class="ro"><span class="k">\(\Delta t\) per element</span><span class="v" id="r-dt">&#8212;</span></div>
+    <div class="ro"><span class="k">\(\Delta\phi\) per element</span><span class="v" id="r-dphi">&#8212;</span></div>
+    <div class="ro" id="ro-sum"><span class="k">total sum</span><span class="v" id="r-sum">&#8212;</span></div>
+    <div class="ro" id="ro-db"><span class="k">relative to 8</span><span class="v" id="r-db">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  const SANS = "Inter, system-ui, -apple-system, sans-serif";
+  const el = id => document.getElementById(id);
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+  // ---- the course array (COURSE_SPEC M3) ------------------------------------
+  // Eight elements, d = 14 mm, at the workshop's 10.3 GHz. Everything below is
+  // computed from f, d and c with real pi: this is a lesson widget, not the
+  // GUI's legacy sweep (which uses a truncated 2*3.14159).
+  const N = 8, D_MM = 14, F_HZ = 10.3e9;
+  const C_MM_PS = 0.299792458;                    // c in mm per ps
+  const LAMBDA_MM = 299792458e3 / F_HZ;           // 29.11 mm
+  const KD_DEG = 360 * D_MM / LAMBDA_MM;          // kd = 173.16 deg (173.2 on the page)
+  const T_MAX = 60;                               // slider limit, deg
+  const rad = d => d * Math.PI / 180;
+  const deg = r => r * 180 / Math.PI;
+  const wrap180 = a => { a = ((a + 180) % 360 + 360) % 360 - 180; return a === -180 ? 180 : a; };
+
+  // ---- physics ---------------------------------------------------------------
+  // Hardware sign convention (COURSE_SPEC M4 "Steering sign"; L18 "Sign of the
+  // Compensating Ramp"): element n sits n*d to the right of element 0, so a
+  // wave from +theta_s reaches it n*d*sin(theta_s)/c EARLIER -- it leads. The
+  // ADAR1000 setting is a delay, +n*dphi with dphi = kd*sin(theta_0), which
+  // cancels that lead when theta_0 = theta_s.
+  //   Check, theta_0 = 30 deg: delays 0, 23.3, 46.7, 70.0, 93.4, 116.7, 140.1,
+  //   163.4 ps; dphi = 86.6 deg.
+  const dtPs = t0 => D_MM * Math.sin(rad(t0)) / C_MM_PS;      // delay step, ps
+  const dphiDeg = t0 => KD_DEG * Math.sin(rad(t0));           // = omega * dt
+  const arrivalPs = (n, ts) => -n * dtPs(ts);                 // relative to element 0
+  function delaysPs(t0) {                                     // commanded: n * dt
+    const out = [];
+    for (let n = 0; n < N; n++) out.push(n * dtPs(t0));
+    return out;
+  }
+  // What the bars draw. A negative theta_0 commands n*dt < 0, an ADVANCE; no
+  // line can advance a signal, so the bars add the one common delay that makes
+  // every entry non-negative (7|dt|, element 7 then sits at zero). A delay
+  // common to all eight changes no relative timing and no sum. For
+  // theta_0 >= 0 this is exactly n*dt.
+  function barDelaysPs(t0) {
+    const tau = delaysPs(t0), lo = Math.min(0, ...tau);
+    return tau.map(v => v - lo);
+  }
+  // Element n's phasor after its shifter: lead n*kd*sin(theta_s), delay
+  // n*dphi. psi = kd*(sin theta_s - sin theta_0) is the step between neighbors.
+  const psiDeg = (ts, t0) => KD_DEG * (Math.sin(rad(ts)) - Math.sin(rad(t0)));
+  function sums(ts, t0) {
+    const psi = rad(psiDeg(ts, t0));
+    const c = [[0, 0], [0, 0]];
+    for (let n = 0; n < N; n++) {
+      const k = n < 4 ? 0 : 1;                    // ADAR1000 #1: 0-3, #2: 4-7
+      c[k][0] += Math.cos(n * psi); c[k][1] += Math.sin(n * psi);
+    }
+    const tot = [c[0][0] + c[1][0], c[0][1] + c[1][1]];
+    const m1 = Math.hypot(...c[0]), m2 = Math.hypot(...c[1]), mt = Math.hypot(...tot);
+    const apart = Math.abs(wrap180(deg(Math.atan2(c[1][1], c[1][0]) - Math.atan2(c[0][1], c[0][0]))));
+    return { chip: [m1, m2], apart, total: mt, db: 20 * Math.log10(Math.max(mt, 1e-9) / N) };
+  }
+
+  // ---- self-test -------------------------------------------------------------
+  // The check values from the L18 widget brief, asserted against the same
+  // functions the drawing uses. Run: ?selftest=1 (logs to the console), or
+  // window.__steeringDelay.selfTest() from a harness.
+  //   theta_s = theta_0 = 30:      each chip 4, total 8, 0 dB
+  //   theta_s = 30, theta_0 = 20:  each chip 3.45, sub-sums 109 deg apart,
+  //                                total 3.99, -6.0 dB
+  //   theta_s = 30, theta_0 = 0:   total 0.34, -27.3 dB. The brief's -27.4
+  //                                comes from kd rounded to 173.2 deg; the
+  //                                exact kd is 173.16 deg and this case sits
+  //                                near a null, where 0.04 deg of kd moves the
+  //                                level a tenth of a dB. Both are asserted.
+  function selfTest() {
+    const out = [], fx = (v, n) => v.toFixed(n).replace('-', '−');
+    let ok = true;
+    const eq = (name, got, want) => {
+      const pass = got === want; ok = ok && pass;
+      out.push((pass ? 'PASS ' : 'FAIL ') + name + ': ' + got + (pass ? '' : ' (want ' + want + ')'));
+    };
+    eq('kd (deg)', fx(KD_DEG, 1), '173.2');
+    eq('dphi at 30 (deg)', fx(dphiDeg(30), 1), '86.6');
+    eq('delays at 30 (ps)', delaysPs(30).map(v => fx(v, 1)).join(', '),
+       '0.0, 23.3, 46.7, 70.0, 93.4, 116.7, 140.1, 163.4');
+    let s = sums(30, 30);
+    eq('30/30 chips', s.chip.map(v => fx(v, 2)).join(', '), '4.00, 4.00');
+    eq('30/30 total', fx(s.total, 2), '8.00');
+    eq('30/30 dB', fx(Math.abs(s.db) < 0.05 ? 0 : s.db, 1), '0.0');
+    s = sums(30, 20);
+    eq('30/20 chips', s.chip.map(v => fx(v, 2)).join(', '), '3.45, 3.45');
+    eq('30/20 sub-sums apart (deg)', fx(s.apart, 0), '109');
+    eq('30/20 total', fx(s.total, 2), '3.99');
+    eq('30/20 dB', fx(s.db, 1), '−6.0');
+    s = sums(30, 0);
+    eq('30/0 total', fx(s.total, 2), '0.34');
+    eq('30/0 dB', fx(s.db, 1), '−27.3');
+    const p = rad(173.2 * 0.5), r = Math.abs(Math.sin(N * p / 2) / Math.sin(p / 2));
+    eq('30/0 dB with kd rounded to 173.2', fx(20 * Math.log10(r / N), 1), '−27.4');
+    // The sign: a delay ramp for +theta_0 aligns a wave from +theta_s.
+    eq('lead + delay = 0 for every element at 30/30',
+       String(delaysPs(30).every((v, n) => Math.abs(arrivalPs(n, 30) + v) < 1e-9)), 'true');
+    return { ok, lines: out };
+  }
+
+  // ---- state and controls ----------------------------------------------------
+  const clampT = v => Math.max(-T_MAX, Math.min(T_MAX, Math.round(v)));
+  const state = { ts: 30, t0: 30, lock: false };
+  const qs = new URLSearchParams(location.search);
+  if (qs.has('ts') && isFinite(+qs.get('ts'))) state.ts = clampT(+qs.get('ts'));
+  if (qs.has('t0') && isFinite(+qs.get('t0'))) state.t0 = clampT(+qs.get('t0'));
+  if (qs.get('lock') === '1') { state.lock = true; state.t0 = state.ts; }
+
+  const sgn = (v, n) => {
+    const r = Math.abs(v) < 0.5 / Math.pow(10, n) ? 0 : v;
+    return (r > 0 ? '+' : r < 0 ? '−' : '') + Math.abs(r).toFixed(n);
+  };
+  function syncControls() {
+    el('ts').value = state.ts; el('t0').value = state.t0;
+    el('ts-val').textContent = sgn(state.ts, 0) + '°';
+    el('t0-val').textContent = sgn(state.t0, 0) + '°';
+    el('lock').checked = state.lock;
+    el('t0').disabled = state.lock;
+  }
+  el('ts').addEventListener('input', e => {
+    state.ts = clampT(+e.target.value);
+    if (state.lock) state.t0 = state.ts;
+    syncControls(); drawAll();
+  });
+  el('t0').addEventListener('input', e => {
+    state.t0 = clampT(+e.target.value); syncControls(); drawAll();
+  });
+  el('lock').addEventListener('change', e => {
+    state.lock = e.target.checked;
+    if (state.lock) state.t0 = state.ts;
+    syncControls(); drawAll();
+  });
+
+  // ---- animation: the wavefront crosses the array ----------------------------
+  // Simulation time t in ps, element 0's arrival at t = 0. Played slowed down
+  // by RATE; each run starts with the front above the drawing and ends, after
+  // a hold, once every element's delay has run out.
+  const RATE = 140;                               // ps of wave time per second
+  const HOLD_S = 0.9;
+  let anim = null;                                // { t, last, id }
+  function stopPlay() {
+    if (anim) cancelAnimationFrame(anim.id);
+    anim = null;
+    el('play').classList.remove('on'); el('play').textContent = 'play';
+    drawAll();
+  }
+  el('play').addEventListener('click', () => {
+    if (anim) { stopPlay(); return; }
+    el('play').classList.add('on'); el('play').textContent = 'pause';
+    anim = { t: null, last: performance.now(), id: 0 };
+    const step = now => {
+      if (!anim) return;
+      const dt = Math.min(0.1, (now - anim.last) / 1000); anim.last = now;
+      const span = runSpan();
+      if (anim.t === null) anim.t = span[0];
+      anim.t += RATE * dt;
+      if (anim.t > span[1] + RATE * HOLD_S) anim.t = span[0];
+      drawArray(); anim.id = requestAnimationFrame(step);
+    };
+    anim.id = requestAnimationFrame(step);
+  });
+
+  // ---- canvases ----------------------------------------------------------------
+  const arr = el('arr'), actx = arr.getContext('2d');
+  const chain = el('chain'), cctx = chain.getContext('2d');
+  const STACK = window.matchMedia ? window.matchMedia('(max-width:649px)') : null;
+  const stacked = () => !!(STACK && STACK.matches);
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  /* The bitmap follows the CSS box; the design HEIGHT shortens when the
+     canvases stack, and it feeds both the bitmap and the drawing, so a phone
+     gets the same composition in less height rather than a squashed one. */
+  function fit(cv, h) {
+    const dpr = window.devicePixelRatio || 1;
+    const w = Math.max(200, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width));
+    cv.style.height = h + 'px';
+    const bh = cv.offsetHeight - cv.clientHeight;
+    if (bh) cv.style.height = (h + bh) + 'px';
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    const ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    return { w, h };
+  }
+  function heights(wA) {
+    if (!stacked()) { const h = clamp(Math.round(wA * 0.86), 270, 318); return [h, h]; }
+    return [clamp(Math.round(wA * 0.6), 198, 226), clamp(Math.round(wA * 0.5), 168, 192)];
+  }
+  function txt(ctx, s, x, y, size, color, align, weight) {
+    ctx.fillStyle = color;
+    ctx.font = (weight ? weight + ' ' : '') + size + 'px ' + SANS;
+    ctx.textAlign = align || 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(s, x, y);
+  }
+  function arrow(ctx, x0, y0, x1, y1, col, lw, head) {
+    const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy);
+    if (L < 0.5) return;
+    const ux = dx / L, uy = dy / L, hl = Math.min(head, L * 0.45), hw = hl * 0.5;
+    const bx = x1 - ux * hl, by = y1 - uy * hl;
+    ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = lw; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(bx, by); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x1, y1);
+    ctx.lineTo(bx - uy * hw, by + ux * hw); ctx.lineTo(bx + uy * hw, by - ux * hw);
+    ctx.closePath(); ctx.fill();
+  }
+  // Liang-Barsky: the part of the infinite line P + u*D inside the box.
+  function clipLine(px, py, dx, dy, x0, y0, x1, y1) {
+    let u0 = -1e9, u1 = 1e9;
+    const tests = [[-dx, px - x0], [dx, x1 - px], [-dy, py - y0], [dy, y1 - py]];
+    for (const [p, q] of tests) {
+      if (Math.abs(p) < 1e-12) { if (q < 0) return null; continue; }
+      const r = q / p;
+      if (p < 0) u0 = Math.max(u0, r); else u1 = Math.min(u1, r);
+    }
+    return u0 > u1 ? null : [px + u0 * dx, py + u0 * dy, px + u1 * dx, py + u1 * dy];
+  }
+
+  // ---- left: the array, the wavefront, the delay bars -------------------------
+  let geo = null;                                 // the left panel's layout, for runSpan()
+  function arrayLayout(w, h) {
+    const mx = 12, pitch = (w - 2 * mx) / N, k = pitch / D_MM;      // px per mm
+    const vRow = 14, hdr = 15, vals = 15, bot = 5;
+    const Hb = Math.round(clamp(h * 0.22, 40, 68));                  // bar strip
+    const yArr = h - bot - vals - Hb - 3 - hdr - vRow / 2 - 4;      // element row center
+    return { w, h, mx, pitch, k, x0: mx + pitch / 2, yArr, T: 6, vRow,
+             yHdr: yArr + vRow / 2 + 4 + hdr / 2 + 1, yBar: yArr + vRow / 2 + 4 + hdr + 3,
+             Hb, yVal: yArr + vRow / 2 + 4 + hdr + 3 + Hb + vals / 2 + 1 };
+  }
+  // The sim-time window of one run: from the front entering the field to the
+  // last element's delay running out.
+  function runSpan() {
+    const g = geo; if (!g) return [0, 1];
+    const s = Math.sin(rad(state.ts)), c = Math.cos(rad(state.ts));
+    let smax = -1e9;
+    for (const X of [0, g.w]) for (const Y of [g.T, g.yArr]) {
+      smax = Math.max(smax, ((X - g.x0) * s + (g.yArr - Y) * c) / g.k);
+    }
+    const bars = barDelaysPs(state.t0);
+    let end = -1e9;
+    for (let n = 0; n < N; n++) end = Math.max(end, arrivalPs(n, state.ts) + bars[n]);
+    return [-smax / C_MM_PS - 15, end];
+  }
+  function drawArray() {
+    const [hA] = heights(arr.clientWidth || 300);
+    const { w, h } = fit(arr, hA);
+    const ctx = actx, g = geo = arrayLayout(w, h);
+    const ts = state.ts, t0 = state.t0;
+    const sS = Math.sin(rad(ts)), cS = Math.cos(rad(ts));
+    const X = n => g.x0 + n * g.pitch;
+    const playing = !!(anim && anim.t !== null);
+    const arrive = [];
+    for (let n = 0; n < N; n++) arrive.push(arrivalPs(n, ts));
+    const t = playing ? anim.t : Math.min(...arrive);  // paused: front at the first element
+    const AMBER = css('--amber'), NAVY = css('--navy'), INK3 = css('--ink3');
+    const col = n => n < 4 ? css('--c1') : css('--c2');
+    const colL = n => n < 4 ? css('--c1l') : css('--c2l');
+
+    // field: broadside, the two rays, the remaining paths, the front
+    const xc = X(3.5), yc = g.yArr - g.vRow / 2 - 2;
+    const fieldH = yc - g.T;
+    const Lr = Math.max(30, Math.min(fieldH - 18, (w / 2 - 30) / Math.sin(rad(T_MAX))));
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, w, g.yArr); ctx.clip();
+    ctx.strokeStyle = '#c4ccd6'; ctx.lineWidth = 1; ctx.setLineDash([2, 3]);
+    ctx.beginPath(); ctx.moveTo(xc, yc); ctx.lineTo(xc, yc - Lr); ctx.stroke();
+    // remaining path from each element, toward the source, up to the front
+    ctx.strokeStyle = '#9aa6b2';
+    for (let n = 0; n < N; n++) {
+      const Lmm = C_MM_PS * (arrive[n] - t);
+      if (Lmm <= 0.05) continue;
+      ctx.beginPath(); ctx.moveTo(X(n), g.yArr - g.vRow / 2);
+      ctx.lineTo(X(n) + g.k * Lmm * sS, g.yArr - g.vRow / 2 - g.k * Lmm * cS); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    // steer direction: dashed, navy
+    const ex0 = xc + Lr * Math.sin(rad(t0)), ey0 = yc - Lr * Math.cos(rad(t0));
+    ctx.strokeStyle = NAVY; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(xc, yc); ctx.lineTo(ex0, ey0); ctx.stroke();
+    ctx.setLineDash([]);
+    // arrival direction: from the source toward the array, amber
+    const exs = xc + Lr * sS, eys = yc - Lr * cS;
+    arrow(ctx, exs, eys, xc + 16 * sS, yc - 16 * cS, AMBER, 1.6, 8);
+    // the front: points p (mm, from element 0, y up) with p . s_hat = -c t
+    const fx = g.x0 - g.k * C_MM_PS * t * sS, fy = g.yArr - g.vRow / 2 + g.k * C_MM_PS * t * cS;
+    const seg = clipLine(fx, fy, cS, sS, 0, g.T - 4, w, g.yArr - g.vRow / 2);
+    if (seg) {
+      ctx.strokeStyle = AMBER; ctx.lineWidth = 2.6; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(seg[0], seg[1]); ctx.lineTo(seg[2], seg[3]); ctx.stroke();
+    }
+    ctx.restore();
+    // ray labels: the ray further right labels on its right, the other on its
+    // left, so the two never collide however close the angles get
+    const side = ts >= t0 ? 1 : -1;
+    const lab = (tex, ex, ey, sd, color) => {
+      const lw = (window.MJ && MJ.width(tex, color, 15)) || 14;
+      const x = clamp(ex + sd * (9 + lw / 2), lw / 2 + 3, w - lw / 2 - 3);
+      const y = Math.max(g.T + 8, ey);
+      if (!(window.MJ && MJ.ready)) return;
+      // a white card behind the symbol: the moving front crosses it
+      ctx.fillStyle = 'rgba(255,255,255,0.88)';
+      ctx.fillRect(x - lw / 2 - 2, y - 9, lw + 4, 18);
+      MJ.draw(ctx, tex, x, y, 15, color, 'center');
+    };
+    lab('\\theta_s', exs, eys, side, AMBER);
+    lab('\\theta_0', ex0, ey0, -side, NAVY);
+
+    // elements: filled once the front has reached them
+    const pw = Math.min(20, g.pitch * 0.56);
+    for (let n = 0; n < N; n++) {
+      const hit = !playing || t >= arrive[n] - 1e-6;
+      ctx.fillStyle = hit ? col(n) : '#fff'; ctx.strokeStyle = col(n); ctx.lineWidth = 1.3;
+      ctx.beginPath(); ctx.rect(X(n) - pw / 2, g.yArr - g.vRow / 2, pw, g.vRow); ctx.fill(); ctx.stroke();
+      txt(ctx, String(n), X(n), g.yArr + 0.5, 10.5, hit ? '#fff' : col(n), 'center', 700);
+    }
+
+    // delay bars: commanded delay, filling in real (slowed) time once hit
+    const bars = barDelaysPs(t0);
+    const TMAXPS = 7 * D_MM * Math.sin(rad(T_MAX)) / C_MM_PS;      // fixed scale, 283 ps
+    txt(ctx, 'delay (ps)', 4, g.yHdr, 11, INK3, 'left');
+    // One decimal while every value fits its column with a gap, measured in
+    // the bold weight a finished delay is drawn in; whole ps otherwise.
+    ctx.font = '700 10.5px ' + SANS;
+    let dec = 1;
+    for (const v of bars) if (ctx.measureText(v.toFixed(1)).width > g.pitch - 8) dec = 0;
+    const bw = Math.min(16, g.pitch * 0.42);
+    for (let n = 0; n < N; n++) {
+      const x = X(n);
+      ctx.fillStyle = '#eef3f8';
+      ctx.fillRect(x - bw / 2, g.yBar, bw, g.Hb);
+      const fill = playing ? clamp(t - arrive[n], 0, bars[n]) : bars[n];
+      const done = !playing || t >= arrive[n] + bars[n] - 1e-6;
+      const hh = g.Hb * fill / TMAXPS;
+      ctx.fillStyle = colL(n);
+      ctx.fillRect(x - bw / 2, g.yBar, bw, hh);
+      if (done) {
+        ctx.fillStyle = col(n);
+        ctx.fillRect(x - bw / 2 - 2, g.yBar + hh - 1, bw + 4, 2.4);
+      }
+      txt(ctx, bars[n].toFixed(dec), x, g.yVal, 10.5, done ? col(n) : INK3, 'center', done ? 700 : 400);
+    }
+  }
+
+  // ---- right: the phasor chain after the shifters ------------------------------
+  // Drawn with its phase referenced to the array center, as phasor-chain.html
+  // does: rotated by -(N-1)psi/2, which puts the total on the real axis and the
+  // two chip sums symmetric about it. The scale is fixed (the extents over
+  // every psi), so the picture never rescales as the sliders move.
+  const rotOf = psi => -(N - 1) * psi / 2;
+  function chainPts(psi) {
+    const rot = rotOf(psi), p = [[0, 0]];
+    let x = 0, y = 0;
+    for (let n = 0; n < N; n++) { x += Math.cos(n * psi + rot); y += Math.sin(n * psi + rot); p.push([x, y]); }
+    return p;
+  }
+  const EXT = (() => {
+    let xmin = 0, xmax = N, ymax = 0;
+    for (let i = 0; i <= 1440; i++) {
+      const pts = chainPts(-Math.PI + 2 * Math.PI * i / 1440);
+      for (const [x, y] of pts) { xmin = Math.min(xmin, x); xmax = Math.max(xmax, x); ymax = Math.max(ymax, Math.abs(y)); }
+    }
+    return { xmin, xmax, ymax };
+  })();
+  function drawChain() {
+    const [, hC] = heights(chain.clientWidth || 300);
+    const { w, h } = fit(chain, hC);
+    const ctx = cctx;
+    const s = sums(state.ts, state.t0);
+    const psi = rad(wrap180(psiDeg(state.ts, state.t0)));
+    const pts = chainPts(psi);
+    const C1 = css('--c1'), C2 = css('--c2'), C1L = css('--c1l'), C2L = css('--c2l');
+    const NAVY = css('--navy'), INK3 = css('--ink3'), INK = css('--ink');
+
+    // legend: two rows of two, words and numbers in the sans font
+    const lg = (x, y, color, label, value) => {
+      ctx.fillStyle = color; ctx.fillRect(x, y - 4, 9, 8);
+      txt(ctx, label, x + 13, y, 11, INK3, 'left');
+      ctx.font = '11px ' + SANS;
+      const lw = ctx.measureText(label).width;
+      txt(ctx, value, x + 13 + lw + 5, y, 11, color, 'left', 700);
+    };
+    const yL1 = 12, yL2 = 28, xR = Math.round(w / 2) + 2;
+    lg(8, yL1, C1, 'chip 1 (0–3)', s.chip[0].toFixed(2));
+    lg(xR, yL1, C2, 'chip 2 (4–7)', s.chip[1].toFixed(2));
+    lg(8, yL2, NAVY, 'total', s.total.toFixed(2));
+    txt(ctx, 'chips ' + s.apart.toFixed(0) + '° apart', xR, yL2, 11, INK3, 'left');
+
+    // the chain region
+    const top = 40, m = 12;
+    const spanX = EXT.xmax - EXT.xmin, spanY = 2 * EXT.ymax;
+    const sc = Math.min((w - 2 * m) / spanX, (h - top - m) / spanY);
+    const ox = (w - spanX * sc) / 2 - EXT.xmin * sc, oy = top + (h - top - m) / 2;
+    const PX = x => ox + x * sc, PY = y => oy - y * sc;
+    ctx.strokeStyle = '#e3eaf1'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(6, oy); ctx.lineTo(w - 6, oy); ctx.stroke();
+    ctx.strokeStyle = '#b8c2cd'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(PX(N), oy - 5); ctx.lineTo(PX(N), oy + 5); ctx.stroke();
+    // the aligned length, 8, labeled at its tick wherever the chain is not
+    const nearTick = pts.some(([x, y]) => Math.abs(PX(x) - PX(N)) < 12 && PY(y) > oy && PY(y) < oy + 22);
+    txt(ctx, '8', PX(N), nearTick ? oy - 12 : oy + 12, 11, '#8d97a3', 'center');
+
+    // total, then the chip sums, then the element phasors on top
+    arrow(ctx, PX(0), PY(0), PX(pts[N][0]), PY(pts[N][1]), NAVY, 4.6, 14);
+    arrow(ctx, PX(0), PY(0), PX(pts[4][0]), PY(pts[4][1]), C1, 2.6, 11);
+    arrow(ctx, PX(pts[4][0]), PY(pts[4][1]), PX(pts[N][0]), PY(pts[N][1]), C2, 2.6, 11);
+    const head = Math.max(5, Math.min(8, sc * 0.3));
+    for (let n = 0; n < N; n++) {
+      const [x0, y0] = pts[n], [x1, y1] = pts[n + 1];
+      arrow(ctx, PX(x0), PY(y0), PX(x1), PY(y1), n < 4 ? C1L : C2L, 1.6, head);
+    }
+    ctx.fillStyle = INK;
+    ctx.beginPath(); ctx.arc(PX(0), PY(0), 2.6, 0, 7); ctx.fill();
+  }
+
+  // ---- readouts and redraw -----------------------------------------------------
+  function readouts() {
+    const s = sums(state.ts, state.t0);
+    el('r-dt').textContent = sgn(dtPs(state.t0), 1) + ' ps';
+    el('r-dphi').textContent = sgn(dphiDeg(state.t0), 1) + '°';
+    el('r-sum').textContent = s.total.toFixed(2);
+    el('r-db').textContent = s.db < -40 ? '< −40 dB' : sgn(s.db, 1) + ' dB';
+    const al = s.total > N - 0.005;
+    el('ro-sum').classList.toggle('al', al); el('ro-db').classList.toggle('al', al);
+  }
+  function drawAll() { drawArray(); drawChain(); readouts(); }
+
+  window.__steeringDelay = { selfTest, sums, delaysPs, barDelaysPs, dtPs, dphiDeg, state,
+                             set: (ts, t0, lock) => { state.ts = ts; state.t0 = t0; state.lock = !!lock;
+                                                      if (lock) state.t0 = ts; syncControls(); drawAll(); } };
+  if (qs.get('selftest') === '1') {
+    const r = selfTest();
+    r.lines.forEach(l => console.log(l));
+    console.log(r.ok ? 'SELF-TEST PASS' : 'SELF-TEST FAIL');
+  }
+
+  window.addEventListener('resize', drawAll);
+  syncControls();
+  drawAll();
+  if (window.MJ) {
+    MJ.setRedraw(drawAll);
+    MJ.onReady(() => {
+      Promise.all([MJ.typeset(el('panel')), MJ.typeset(el('readouts'))]).then(drawAll);
+    });
+  }
+})();
+</script>
+</body>
+</html>

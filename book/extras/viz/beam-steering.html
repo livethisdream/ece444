@@ -15,8 +15,9 @@
   @media (min-width:660px) { .plots { grid-template-columns:1.3fr 1fr; align-items:start; } }
   canvas { display:block; width:100%; border:1px solid var(--edge); border-radius:6px; background:#fff; }
   .controls { box-sizing:border-box; background:var(--bg); border:1px solid var(--edge); border-radius:6px;
-              padding:9px 11px; display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center; }
-  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 260px; min-width:0; }
+              padding:9px 11px; display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; }
+  .ctl { display:flex; align-items:center; gap:6px; flex:0 1 auto; min-width:0; }
+  .ctl.grow { flex:1 1 230px; gap:8px; }
   .ctl label { font-size:13px; color:var(--ink3); white-space:nowrap; }
   .ctl input[type=range] { flex:1 1 90px; min-width:80px; accent-color:var(--navy); }
   .ctl select { font:inherit; font-size:13px; padding:2px 4px; border:1px solid var(--edge2);
@@ -50,16 +51,23 @@
   </div>
 
   <div class="controls" id="panel">
-    <div class="ctl">
+    <div class="ctl grow">
       <label for="t0">Steer angle \(\theta_0\)</label>
       <input type="range" id="t0" min="-60" max="60" step="1" value="30">
       <output id="t0v">+30°</output>
     </div>
     <div class="ctl">
-      <label for="mode">Element phases</label>
+      <label for="mode">Phases</label>
       <select id="mode">
-        <option value="wrap" selected>wrapped, 0 to 360°</option>
-        <option value="raw">unwrapped ramp</option>
+        <option value="wrap" selected>wrapped</option>
+        <option value="raw">unwrapped</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label for="xax">x axis</label>
+      <select id="xax">
+        <option value="angle" selected>angle</option>
+        <option value="sine">sine</option>
       </select>
     </div>
   </div>
@@ -92,7 +100,8 @@
 
   var pat = document.getElementById("pat"), ph = document.getElementById("ph");
   var pctx = pat.getContext("2d"), hctx = ph.getContext("2d");
-  var t0El = document.getElementById("t0"), modeEl = document.getElementById("mode");
+  var t0El = document.getElementById("t0"), modeEl = document.getElementById("mode"),
+      xaxEl = document.getElementById("xax");
   var t0vEl = document.getElementById("t0v");
   var pdphi = document.getElementById("pdphi"), phpbw = document.getElementById("phpbw"),
       ppeak = document.getElementById("ppeak");
@@ -165,6 +174,23 @@
     return out;
   }
 
+  // ---- presets from the query string ------------------------------------
+  // ?t0=<deg> opens at that steer angle (clamped to the slider), ?x=sine opens
+  // on the sine axis, ?phases=raw on the unwrapped ramp, and ?lock=1 fixes
+  // the steer angle so an embed shows exactly the case its prose discusses.
+  (function presets() {
+    var q;
+    try { q = new URLSearchParams(window.location.search); } catch (e) { return; }
+    var t = parseFloat(q.get("t0"));
+    if (isFinite(t)) {
+      var lo = parseFloat(t0El.min), hi = parseFloat(t0El.max);
+      t0El.value = String(Math.round(Math.min(hi, Math.max(lo, t))));
+    }
+    if (q.get("x") === "sine" || q.get("x") === "sin") xaxEl.value = "sine";
+    if (q.get("phases") === "raw") modeEl.value = "raw";
+    if (q.get("lock") === "1") t0El.disabled = true;
+  })();
+
   // ---- canvas plumbing --------------------------------------------------
   var dpr = 1;
 /* Narrow: the canvases and the control/readout rows stack, so the parts ADD
@@ -198,14 +224,22 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
   }
 
   // ---- pattern panel ----------------------------------------------------
-  function drawPattern(t0, w, h) {
+  // With the sine axis the steered lobe is the broadside lobe slid rigidly
+  // by sin(theta0): at theta0 = 30 deg the peak sits at 0.500 and the first
+  // nulls at 0.240 and 0.760, +/-0.260 either side, and the -3 dB width is
+  // the same 0.23 at every steer angle. Against angle the same lobe
+  // stretches as it moves (13.3 deg wide at broadside, 15.4 at 30).
+  function drawPattern(t0, sine, w, h) {
     var ctx = pctx;
     h = fit(pat, ctx, w, h);
     var small = w < 460;
-    var fs = small ? 10 : 12;
+    var fs = small ? 10.5 : 12;
     var L = small ? 40 : 50, R = small ? 10 : 14, T = 26, B = small ? 30 : 34;
     var pw = w - L - R, phh = h - T - B;
-    var X = function (a) { return L + (a + 90) / 180 * pw; };
+    // position of an ANGLE (deg) on whichever axis is showing
+    var X = sine
+      ? function (a) { return L + (Math.sin(rad(a)) + 1) / 2 * pw; }
+      : function (a) { return L + (a + 90) / 180 * pw; };
     var Y = function (db) { return T + (0 - db) / (0 - FLOOR) * phh; };
 
     // grid
@@ -214,11 +248,20 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
       ctx.beginPath(); ctx.moveTo(L, Y(db)); ctx.lineTo(L + pw, Y(db)); ctx.stroke();
       txt(ctx, db === 0 ? "0" : String(db), L - 6, Y(db), fs, INK3, "right");
     }
-    for (var a = -90; a <= 90; a += 30) {
-      ctx.beginPath(); ctx.moveTo(X(a), T); ctx.lineTo(X(a), T + phh); ctx.stroke();
-      txt(ctx, (a > 0 ? "+" : "") + a, X(a), T + phh + 12, fs, INK3, "center");
+    if (sine) {
+      [-1, -0.5, 0, 0.5, 1].forEach(function (u) {
+        var xu = L + (u + 1) / 2 * pw;
+        ctx.beginPath(); ctx.moveTo(xu, T); ctx.lineTo(xu, T + phh); ctx.stroke();
+        txt(ctx, u === 0 ? "0" : sgn(u, u % 1 ? 1 : 0), xu, T + phh + 12, fs, INK3, "center");
+      });
+    } else {
+      for (var a = -90; a <= 90; a += 30) {
+        ctx.beginPath(); ctx.moveTo(X(a), T); ctx.lineTo(X(a), T + phh); ctx.stroke();
+        txt(ctx, (a > 0 ? "+" : "") + a, X(a), T + phh + 12, fs, INK3, "center");
+      }
     }
-    txt(ctx, "scan angle (deg)", L + pw / 2, T + phh + (small ? 24 : 27), fs, INK3, "center");
+    txt(ctx, sine ? "sine of scan angle" : "scan angle (deg)", L + pw / 2,
+        T + phh + (small ? 24 : 27), fs, INK3, "center");
     ctx.save();
     ctx.translate(small ? 11 : 13, T + phh / 2); ctx.rotate(-Math.PI / 2);
     txt(ctx, "relative power (dB)", 0, 0, fs, INK3, "center");
@@ -234,7 +277,9 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
     function curve(t0v, color, lw) {
       ctx.beginPath();
       for (var i = 0; i <= 1200; i++) {
-        var th = -90 + 180 * i / 1200, y = Y(afDb(th, t0v));
+        // sample evenly along whichever axis is showing
+        var th = sine ? deg(Math.asin(-1 + 2 * i / 1200)) : -90 + 180 * i / 1200;
+        var y = Y(afDb(th, t0v));
         if (i === 0) ctx.moveTo(X(th), y); else ctx.lineTo(X(th), y);
       }
       ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.stroke();
@@ -268,7 +313,9 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
       ctx.moveTo(X(e[1]), y3 - 5); ctx.lineTo(X(e[1]), y3 + 5);
       ctx.moveTo(X(e[0]), y3); ctx.lineTo(X(e[1]), y3);
       ctx.stroke();
-      var wTxt = "−3 dB width " + fmt(e[1] - e[0], 1) + "°";
+      var wTxt = sine
+        ? "−3 dB width " + fmt(Math.sin(rad(e[1])) - Math.sin(rad(e[0])), 3)
+        : "−3 dB width " + fmt(e[1] - e[0], 1) + "°";
       ctx.font = fs + "px 'Inter',system-ui,-apple-system,sans-serif";
       var tw = ctx.measureText(wTxt).width;
       if (mx + mHalf > L + pw - 2 - tw - 4) {
@@ -295,7 +342,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
     var ctx = hctx;
     h = fit(ph, ctx, w, h);
     var small = w < 460;
-    var fs = small ? 10 : 12;
+    var fs = small ? 10.5 : 12;
     var R = small ? 10 : 14, T = 24, B = small ? 28 : 32;
     var phh = h - T - B;
     var p = phases(t0, wrapped), raw = phases(t0, false);
@@ -304,7 +351,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
     // the plot height, so a label never has to be pushed into a bar narrower
     // than the number -- which on a phone it is. Positive bars label above,
     // negative ones below; element 0 always sits at zero and labels above.
-    var lo, hi, need = 13 / phh;
+    var lo, hi, need = 18 / phh;
     if (wrapped) { lo = 0; hi = 360 / (1 - need); }
     else {
       lo = Math.min(0, Math.min.apply(null, p));
@@ -333,6 +380,12 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
     var L = Math.max(small ? 40 : 50, Math.ceil(tickW) + 6 + (small ? 17 : 20));
     var pw = w - L - R;
     var bw = Math.min(38, pw / N * 0.56);
+    // Bar values are 10.5 px at the least. Where the widest one would not fit
+    // its slot (the unwrapped ramp on a phone, -414.7 at -20 deg), the values
+    // drop their decimal rather than run into the neighbor's.
+    var vfs = small ? 10.5 : 11, slot = pw / N, dec = 1;
+    ctx.font = vfs + "px 'Inter',system-ui,-apple-system,sans-serif";
+    p.forEach(function (v) { if (ctx.measureText(num(v, 1)).width > slot - 4) dec = 0; });
     ctx.strokeStyle = EDGE; ctx.lineWidth = 1;
     ticks.forEach(function (v) {
       ctx.beginPath(); ctx.moveTo(L, Y(v)); ctx.lineTo(L + pw, Y(v)); ctx.stroke();
@@ -360,16 +413,16 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
       var above = p[i] >= 0;
       var ly = Math.min(Math.max(y1 + (above ? -9 : 9), T + 8), T + phh - 8);
       var inBar = ly > top + 1 && ly < top + hgt - 1;
-      txt(ctx, num(p[i], 1), cx, ly, small ? 9 : 11, inBar ? "#ffffff" : NAVY, "center");
+      txt(ctx, num(p[i], dec), cx, ly, vfs, inBar ? "#ffffff" : NAVY, "center");
       if (turns !== 0 && hgt > 26 && bw >= 26) {
         txt(ctx, (turns > 0 ? "+" : "−") + (360 * Math.abs(turns)),
-            cx, y0 + (p[i] < 0 ? 11 : -11), small ? 9 : 10, "#ffffff", "center");
+            cx, y0 + (p[i] < 0 ? 11 : -11), 10.5, "#ffffff", "center");
       }
       txt(ctx, String(i), cx, T + phh + 11, fs, INK3, "center");
     }
     txt(ctx, "element number", L + pw / 2, T + phh + (small ? 22 : 25), fs, INK3, "center");
     if (wrapped && !small) {
-      txt(ctx, "inside each bar: whole turns added", L + pw - 2, T - 12, fs, AMBER, "right");
+      txt(ctx, "inside each bar: the wrap applied", L + pw - 2, T - 12, fs, AMBER, "right");
     }
   }
 
@@ -377,6 +430,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
   function drawAll() {
     var t0 = parseFloat(t0El.value);
     var wrapped = modeEl.value === "wrap";
+    var sine = xaxEl.value === "sine";
     // Each canvas is sized from its own grid cell, not the whole .app: side
     // by side at wide widths, stacked (and shorter) on a phone.
     var wide = window.matchMedia("(min-width:660px)").matches;
@@ -384,7 +438,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
     var wPh = Math.max(200, Math.floor(ph.clientWidth));
     var hPat = wide ? 230 : 190;
     var hPh = wide ? 180 : 170;
-    drawPattern(t0, wPat, hPat);
+    drawPattern(t0, sine, wPat, hPat);
     drawPhases(t0, wrapped, wPh, hPh);
 
     t0vEl.textContent = sgn(t0, 0) + "°";
@@ -395,6 +449,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
 
   t0El.addEventListener("input", drawAll);
   modeEl.addEventListener("change", drawAll);
+  xaxEl.addEventListener("change", drawAll);
   window.addEventListener("resize", drawAll);
 
   drawAll();

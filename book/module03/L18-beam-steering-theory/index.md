@@ -53,16 +53,31 @@ array is pointing.
 ::::
 
 ::::{frame} Time Alignment
+:class: viz-frame
+
 :::{present}
+<iframe src="../../viz/steering-delay.html?lock=1"
+        width="100%" height="463"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="A plane wave crossing the eight-element array, the commanded delays that align it, and the two ADAR1000 sums">
+</iframe>
+:::
+
 - Eight elements in a row, $d = 14\ \text{mm}$ apart, with no phase applied.
 - A plane wave from $\theta_0$ off broadside reaches them one after another, not all at once.
 - Undoing those arrival differences makes all eight signals add in phase.
-:::
 
 Eight elements sit in a row with no phase applied, spaced
 $d = 14\ \text{mm}$ apart, and a plane wave arrives from an angle $\theta_0$
 measured from broadside. The wavefront reaches the element nearest the source
 first and each successive element later.
+
+The widget opens with the steer angle locked to the source, so the commanded
+delays line all eight signals up and each ADAR1000's four-element sum adds in
+phase with the other's. Clear the lock and move the steer angle away from the
+source: the delays no longer match the arrival times, the two chip sums part,
+and the total shrinks.
 ::::
 
 ::::{frame} Path, Time, and Phase
@@ -78,8 +93,8 @@ $$\begin{aligned}
 :::
 :::{present}
 <img src="../../viz/img/L18-path-difference.svg"
-     alt="Plane wave arriving off broadside; the extra path between adjacent elements"
-     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
+     alt="A plane wave arriving 30 degrees off broadside reaches element 2 first; the extra path to element 1 is half the spacing d"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Look at two neighboring elements. The wavefront that has just touched one of
@@ -233,6 +248,11 @@ $$\Delta\phi = 173.2^\circ \times \sin 30^\circ = 86.6^\circ$$
 
 - Whole turns wrap each $n(86.6^\circ)$ into $0^\circ$ to $360^\circ$: $433.0^\circ$ becomes $73.0^\circ$.
 :::
+:::{present}
+<img src="../../viz/img/L18-phase-ramp.svg"
+     alt="The 30-degree ramp rising from 0 to 606.2 degrees, and the wrapped settings the hardware is given, with one turn removed from elements 5 to 7"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 :::{admonition} Worked example — the phase table for $\theta_0 = 30^\circ$
 :class: tip
@@ -308,6 +328,11 @@ $$\sin\theta_{\text{null}} = \sin\theta_0 \pm \frac{m\lambda}{Nd}$$
 - At $30^\circ$, $\lambda/Nd = 0.260$: nulls at $13.9^\circ$ and $49.5^\circ$, $16.1^\circ$ and $19.5^\circ$ from the peak, wider toward endfire.
 - The upper $m = 2$ null would need $\sin\theta = 1.020$: no real angle.
 :::
+:::{present}
+<img src="../../viz/img/L18-sin-space.svg"
+     alt="The 30-degree pattern against angle, with nulls at 13.9 and 49.5 degrees, and against sine of angle, the broadside pattern slid 0.5 with nulls at 0.240 and 0.760"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 Every other feature of the pattern moves with it, but *rigidly in $\sin\theta$,
 not in $\theta$*. Plot the pattern against $\sin\theta$ and steering slides the
@@ -347,7 +372,9 @@ the visible region (L16, "Part 4: The Visible Region") entirely.
 Use the widget below to connect the two halves of the lesson. Drag the steer
 angle and watch the eight commanded phases and the main lobe move together, then
 switch the phase display between the wrapped values and the unwrapped ramp — the
-sawtooth is the same physics as the straight line. Set $\theta_0 = 30^\circ$ and
+sawtooth is the same physics as the straight line. Switch the x axis to sine and
+the lobe slides along it without changing shape, by $0.500$ at $30^\circ$, the
+rigid shift of the frame before. Set $\theta_0 = 30^\circ$ and
 check the bars against the worked table above: a positive steer angle gives a
 rising ramp. Then scan out toward $60^\circ$ and compare the $-3$ dB width
 printed on the pattern, which is read off the exact array factor, with the HPBW
@@ -445,6 +472,11 @@ use the scan loss above.
 
 - Exact width at $60^\circ$ is $30.5^\circ$: the rule reads narrow past $50^\circ$ of scan.
 :::
+:::{present}
+<img src="../../viz/img/L18-hpbw-vs-scan.svg"
+     alt="Half-power beamwidth against steer angle: the exact width and the 1/cos rule agree to about 50 degrees and part after it; scan loss falls to minus 3 dB at 60 degrees"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 Because the beam broadens and the peak gain falls as the array scans, designers
 specify a scanned array over a limited field of view: at $60^\circ$ the PHASER's
@@ -463,10 +495,6 @@ and the pattern itself past that.
 
 ::::{frame} The Inverse Problem
 
-The lab hands you the opposite problem. The GUI, or a data file, gives you eight
-phases, and you have to say where the beam is pointing. Everything you need is
-in $\phi_n = n\ \Delta\phi$, run in reverse:
-
 :::{present}
 1. Difference neighboring elements: $\phi_{n+1} - \phi_n$.
 2. Unwrap. Add or subtract $360^\circ$ from any difference that disagrees with
@@ -476,16 +504,14 @@ in $\phi_n = n\ \Delta\phi$, run in reverse:
 
    $$\sin\theta_0 = \frac{\Delta\phi}{kd}$$
 :::
+
+The lab hands you the opposite problem. The GUI, or a data file, gives you eight
+phases, and you have to say where the beam is pointing. Everything you need is
+in $\phi_n = n\ \Delta\phi$, run in reverse:
 ::::
 
 ::::{frame} Worked Example: Recovering the Steer Angle
 :::{present}
-| $n$ | 0 | 1 | 2 | 3 |
-| :-- | :-- | :-- | :-- | :-- |
-| $\phi_n$ | 0 | 59.2 | 118.5 | 177.7 |
-| **$n$** | **4** | **5** | **6** | **7** |
-| $\phi_n$ | 237.0 | 296.2 | 355.4 | 54.7 |
-
 $$\begin{aligned}
 \sin\theta_0 &= \frac{59.24^\circ}{173.2^\circ} = 0.342 \\
 \theta_0 &= +20.0^\circ
@@ -493,6 +519,11 @@ $$\begin{aligned}
 
 - Unwrapped, $\phi_7 = 414.7^\circ$: seven steps of $59.24^\circ$.
 - Rising ramp: positive $\Delta\phi$, positive steer angle.
+:::
+:::{present}
+<img src="../../viz/img/L18-inverse-unwrap.svg"
+     alt="The eight reported settings as bars, six steps of plus 59.2 or 59.3 degrees and one of minus 300.7, which a restored turn makes 414.7 for element 7: a rising ramp, steer angle plus 20.0 degrees"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 :::{admonition} Worked example — recovering the steer angle
