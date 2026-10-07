@@ -357,7 +357,7 @@ $26.4^\circ$ and the pattern $30.5^\circ$.
 
 :::{present}
 <iframe src="../../viz/beam-steering.html"
-        width="100%" height="426"
+        width="100%" height="427"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Steered pattern and per-element phase ramp for the 8-element course array">

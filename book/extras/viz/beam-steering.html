@@ -65,8 +65,8 @@
   </div>
 
   <div class="readouts" id="readouts">
-    <div class="ro"><span class="k">\(\Delta\phi\) per element</span><span class="v" id="pdphi">86.6°</span></div>
-    <div class="ro"><span class="k">HPBW</span><span class="v" id="phpbw">15.2°</span></div>
+    <div class="ro"><span class="k">\(\Delta\phi\) per element</span><span class="v" id="pdphi">+86.6°</span></div>
+    <div class="ro"><span class="k">HPBW (rule)</span><span class="v" id="phpbw">15.2°</span></div>
     <div class="ro"><span class="k">pattern peak</span><span class="v" id="ppeak">+30.0°</span></div>
   </div>
 
@@ -84,6 +84,7 @@
   var KD = 2 * Math.PI * DL;            // kd, radians
   var KD_DEG = 360 * DL;                // kd in degrees = phase step per unit sin
   var FLOOR = -40;
+  var HALF = 10 * Math.log10(0.5);      // half power, -3.01 dB: the exact width
 
   var NAVY = "#004a85", MID = "#0067b9", GRAY = "#9fb1c2", INK = "#15202b",
       INK3 = "#5b6573", EDGE = "#cddce9", RED = "#b01e24", GRN = "#3f7d34",
@@ -131,8 +132,8 @@
       var prev = pk, prevV = afDb(pk, t0Deg), th;
       for (th = pk + dir * 0.02; th >= -90 && th <= 90; th += dir * 0.02) {
         var v = afDb(th, t0Deg);
-        if (v <= -3) {
-          var f = (prevV - (-3)) / (prevV - v);
+        if (v <= HALF) {
+          var f = (prevV - HALF) / (prevV - v);
           out[i] = prev + f * (th - prev);
           break;
         }
@@ -155,7 +156,10 @@
   function phases(t0Deg, wrapped) {
     var dphi = KD_DEG * Math.sin(rad(t0Deg)), i, out = [];
     for (i = 0; i < N; i++) {
-      var raw = -i * dphi;
+      // The ADAR1000 setting is a phase DELAY that cancels element i's lead,
+      // so a beam at +theta0 is set as +i*dphi -- what the backend's
+      // ADAR_set_Phase writes and the GUI's Steer Angle means.
+      var raw = i * dphi;
       out.push(wrapped ? ((raw % 360) + 360) % 360 : raw);
     }
     return out;
@@ -170,6 +174,8 @@
    than the bitmap keeps text full size and the composition undistorted. */
 var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:659px)') : null;
 function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+  // Returns the height actually used, so the drawing and the bitmap shrink
+  // together on a phone (drawing at the unshrunk height clipped the axes).
   function fit(cv, ctx, w, h) {
     h = SQ(h);
     dpr = window.devicePixelRatio || 1;
@@ -178,6 +184,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
     cv.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
+    return h;
   }
   function txt(ctx, s, x, y, size, color, align, baseline) {
     ctx.fillStyle = color;
@@ -193,7 +200,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
   // ---- pattern panel ----------------------------------------------------
   function drawPattern(t0, w, h) {
     var ctx = pctx;
-    fit(pat, ctx, w, h);
+    h = fit(pat, ctx, w, h);
     var small = w < 460;
     var fs = small ? 10 : 12;
     var L = small ? 40 : 50, R = small ? 10 : 14, T = 26, B = small ? 30 : 34;
@@ -220,7 +227,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
     // half-power reference
     ctx.save();
     ctx.setLineDash([4, 4]); ctx.strokeStyle = GRN; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(L, Y(-3)); ctx.lineTo(L + pw, Y(-3)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(L, Y(HALF)); ctx.lineTo(L + pw, Y(HALF)); ctx.stroke();
     ctx.restore();
 
     // broadside reference pattern, then the steered one
@@ -246,17 +253,32 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
 
     // measured half-power span
     var pk = peakAngle(t0), e = halfPowerEdges(t0, pk);
+    // The title row holds three labels: "commanded beam" at the left, the
+    // width at the right, and theta0 over the marker, which moves. When the
+    // marker reaches the width label, the width moves to the left and the
+    // legend label is dropped rather than overprinted.
+    var mx = X(t0), mHalf = 10, showLegend = true;
+    ctx.font = fs + "px 'Inter',system-ui,-apple-system,sans-serif";
+    var legW = ctx.measureText("commanded beam").width;
     if (e[0] !== null && e[1] !== null) {
-      var y3 = Y(-3);
+      var y3 = Y(HALF);
       ctx.strokeStyle = GRN; ctx.lineWidth = 1.6;
       ctx.beginPath();
       ctx.moveTo(X(e[0]), y3 - 5); ctx.lineTo(X(e[0]), y3 + 5);
       ctx.moveTo(X(e[1]), y3 - 5); ctx.lineTo(X(e[1]), y3 + 5);
       ctx.moveTo(X(e[0]), y3); ctx.lineTo(X(e[1]), y3);
       ctx.stroke();
-      txt(ctx, "−3 dB width " + fmt(e[1] - e[0], 1) + "°",
-          L + pw - 2, T - 13, fs, GRN, "right");
+      var wTxt = "−3 dB width " + fmt(e[1] - e[0], 1) + "°";
+      ctx.font = fs + "px 'Inter',system-ui,-apple-system,sans-serif";
+      var tw = ctx.measureText(wTxt).width;
+      if (mx + mHalf > L + pw - 2 - tw - 4) {
+        txt(ctx, wTxt, L + 2, T - 13, fs, GRN, "left");
+        showLegend = false;
+      } else {
+        txt(ctx, wTxt, L + pw - 2, T - 13, fs, GRN, "right");
+      }
     }
+    if (mx - mHalf < L + 2 + legW + 4) showLegend = false;
 
     // commanded angle marker
     ctx.save();
@@ -265,30 +287,38 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
     ctx.restore();
     mj(ctx, "\\theta_0", X(t0), T - 13, 14, MID, "center");
 
-    txt(ctx, "commanded beam", L + 2, T - 13, fs, INK3, "left");
+    if (showLegend) txt(ctx, "commanded beam", L + 2, T - 13, fs, INK3, "left");
   }
 
   // ---- element-phase panel ---------------------------------------------
   function drawPhases(t0, wrapped, w, h) {
     var ctx = hctx;
-    fit(ph, ctx, w, h);
+    h = fit(ph, ctx, w, h);
     var small = w < 460;
     var fs = small ? 10 : 12;
-    var L = small ? 40 : 50, R = small ? 10 : 14, T = 24, B = small ? 28 : 32;
-    var pw = w - L - R, phh = h - T - B;
+    var R = small ? 10 : 14, T = 24, B = small ? 28 : 32;
+    var phh = h - T - B;
     var p = phases(t0, wrapped), raw = phases(t0, false);
 
-    var lo, hi;
-    if (wrapped) { lo = 0; hi = 360; }
+    // Leave room beyond the tallest bar for its value label, as a share of
+    // the plot height, so a label never has to be pushed into a bar narrower
+    // than the number -- which on a phone it is. Positive bars label above,
+    // negative ones below; element 0 always sits at zero and labels above.
+    var lo, hi, need = 13 / phh;
+    if (wrapped) { lo = 0; hi = 360 / (1 - need); }
     else {
       lo = Math.min(0, Math.min.apply(null, p));
       hi = Math.max(0, Math.max.apply(null, p));
-      var pad = Math.max(30, 0.08 * (hi - lo)); lo -= pad; hi += pad;
+      var span0 = Math.max(hi - lo, 1);
+      var room = Math.max(15, span0 * need / (1 - 2 * need));
+      if (lo < 0) lo -= room;
+      hi += room;
     }
     var Y = function (v) { return T + (hi - v) / (hi - lo) * phh; };
-    var bw = Math.min(38, pw / N * 0.56);
 
-    // axis ticks
+    // axis ticks; the left margin grows to fit the widest tick label (the
+    // unwrapped ramp runs to five characters), so the rotated axis title
+    // never sits on top of the numbers
     var ticks = wrapped ? [0, 90, 180, 270, 360] : [];
     if (!wrapped) {
       var stepT = 180;
@@ -297,10 +327,16 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
       var t = Math.ceil(lo / stepT) * stepT;
       for (; t <= hi; t += stepT) ticks.push(t);
     }
+    ctx.font = fs + "px 'Inter',system-ui,-apple-system,sans-serif";
+    var tickW = 0;
+    ticks.forEach(function (v) { tickW = Math.max(tickW, ctx.measureText(num(v, 0)).width); });
+    var L = Math.max(small ? 40 : 50, Math.ceil(tickW) + 6 + (small ? 17 : 20));
+    var pw = w - L - R;
+    var bw = Math.min(38, pw / N * 0.56);
     ctx.strokeStyle = EDGE; ctx.lineWidth = 1;
     ticks.forEach(function (v) {
       ctx.beginPath(); ctx.moveTo(L, Y(v)); ctx.lineTo(L + pw, Y(v)); ctx.stroke();
-      txt(ctx, String(Math.round(v)), L - 6, Y(v), fs, INK3, "right");
+      txt(ctx, num(v, 0), L - 6, Y(v), fs, INK3, "right");
     });
     ctx.strokeStyle = "#8a929c"; ctx.lineWidth = 1.1;
     ctx.beginPath(); ctx.moveTo(L, Y(0)); ctx.lineTo(L + pw, Y(0)); ctx.stroke();
@@ -325,7 +361,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
       var ly = Math.min(Math.max(y1 + (above ? -9 : 9), T + 8), T + phh - 8);
       var inBar = ly > top + 1 && ly < top + hgt - 1;
       txt(ctx, num(p[i], 1), cx, ly, small ? 9 : 11, inBar ? "#ffffff" : NAVY, "center");
-      if (turns !== 0 && hgt > 26) {
+      if (turns !== 0 && hgt > 26 && bw >= 26) {
         txt(ctx, (turns > 0 ? "+" : "−") + (360 * Math.abs(turns)),
             cx, y0 + (p[i] < 0 ? 11 : -11), small ? 9 : 10, "#ffffff", "center");
       }
@@ -347,12 +383,12 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
     var wPat = Math.max(200, Math.floor(pat.clientWidth));
     var wPh = Math.max(200, Math.floor(ph.clientWidth));
     var hPat = wide ? 230 : 190;
-    var hPh = wide ? 180 : 150;
+    var hPh = wide ? 180 : 170;
     drawPattern(t0, wPat, hPat);
     drawPhases(t0, wrapped, wPh, hPh);
 
     t0vEl.textContent = sgn(t0, 0) + "°";
-    pdphi.textContent = fmt(Math.abs(KD_DEG * Math.sin(rad(t0))), 1) + "°";
+    pdphi.textContent = sgn(KD_DEG * Math.sin(rad(t0)), 1) + "°";
     phpbw.textContent = fmt(hpbwRule(t0), 1) + "°";
     ppeak.textContent = sgn(peakAngle(t0), 1) + "°";
   }
