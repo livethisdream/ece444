@@ -371,10 +371,10 @@ $26.4^\circ$ and the pattern $30.5^\circ$.
 
 $$\begin{aligned}
 L_{\text{eff}} &= Nd\cos\theta_0 \\
-\theta_{\text{HP}}(\theta_0) &\approx \frac{0.886\ \lambda}{Nd\cos\theta_0}\ \text{rad} = \frac{\theta_{\text{HP}}(0)}{\cos\theta_0}
+\theta_{\text{HP}}(\theta_0) &\approx \frac{0.886\ \lambda}{Nd\cos\theta_0} = \frac{\theta_{\text{HP}}(0)}{\cos\theta_0}
 \end{aligned}$$
 
-- L15's uniform-aperture beamwidth with the projected length.
+- L15's uniform-aperture beamwidth, in radians, with the projected length.
 :::
 :::{present}
 <img src="../../viz/img/L18-broadening.svg"
@@ -443,7 +443,7 @@ use the scan loss above.
 | $45^\circ$ | 0.707 | $18.7^\circ$ | $-1.5$ dB |
 | $60^\circ$ | 0.500 | $26.4^\circ$ | $-3.0$ dB |
 
-- The $1/\cos\theta_0$ rule reads narrow past about $50^\circ$: $30.5^\circ$ exact at $60^\circ$.
+- Exact width at $60^\circ$ is $30.5^\circ$: the rule reads narrow past $50^\circ$ of scan.
 :::
 
 Because the beam broadens and the peak gain falls as the array scans, designers
@@ -597,7 +597,7 @@ reduces null depth.
 ::::{frame} Looking Ahead
 :::{present}
 - L19: steer the PHASER, sweep, and compare the measured peak and beamwidth with the prediction.
-- The lab redoes the $30^\circ$ table at the HB100's $10.525$ GHz: $88.4^\circ$ per element, E1 to E8.
+- The lab redoes the $30^\circ$ table at the HB100's $10.525\ \text{GHz}$: $88.4^\circ$ per element, E1 to E8.
 - L20-L26: beamwidth, tapering, grating lobes, squint, and quantization.
 :::
 
