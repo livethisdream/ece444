@@ -50,6 +50,7 @@
 
 %% exam class customization
 \input{exam_config}
+\input{ece444_fonts}   % Barlow body text (needs lualatex)
 \printselectedfalse      % full worked solutions in the key, not answers-only
 \CorrectChoiceEmphasis{\color{red}}
 \SolutionEmphasis{\color{red}}
@@ -249,6 +250,161 @@ and the sidelobe level, and adjust.
 	\end{solutionorlines}
 
 \end{parts}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\fullwidth{\textbf{Part 2 -- Learning Objective 3.8: } Observe the three ways a
+real steered array departs from the ideal pattern: grating lobes, beam squint,
+and phase quantization.}
+
+Lesson 26 derives all three. Today you measure them while the kit is on the
+bench, and you bring these numbers to Lesson 26, where each one is explained.
+Use the Signal Freq the GUI shows for $\lambda$ throughout (about 10.5 GHz,
+so $\lambda \approx 28.5$ mm).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Grating lobes.} Source at boresight, Enforce Symmetric Taper
+off. Lab preset 4 leaves Rx1, Rx4, and Rx7 on, so the active spacing is
+$d_\text{eff} = 3d = 42$ mm. Then set Rx4 and Rx7 to 0 and Rx5 to 100 for
+$d_\text{eff} = 4d = 56$ mm. A full-height lobe appears at every angle where
+$\sin\theta = m\lambda/d_\text{eff}$ has a real solution. Predict the angles
+before each sweep. The peak drop is read against the frozen uniform trace, and
+its calculated value follows from the number of elements still on.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{0.5in} | K{0.9in} | K{0.95in} | K{0.8in} | K{0.75in} | K{0.75in} |}
+\hline
+\textbf{Elements on} & $\boldsymbol{d_\text{eff}}$ & \textbf{Lobes calc} & \textbf{Lobes meas} & \textbf{Height vs $0\mydeg$ lobe} & \textbf{Drop calc} & \textbf{Drop meas} \\\hline\hline
+All eight & 14 mm & \kv{none} & \kv{none} & \kv{--} & \kv{$0$ dB} & \kv{$0$ dB} \\\hline
+Rx1, Rx4, Rx7 & 42 mm & \kv{$\pm 43\mydeg$} & \kv{$\pm 42$ to $\pm 43\mydeg$} & \kv{within 0.5 dB} & \kv{$-8.5$ dB} & \kv{$-8$ to $-9$ dB} \\\hline
+Rx1, Rx5 & 56 mm & \kv{$\pm 31\mydeg$ (and $\pm 90\mydeg$)} & \kv{$\pm 30$ to $\pm 33\mydeg$, both ends} & \kv{within 0.5 dB} & \kv{$-12.0$ dB} & \kv{$-11$ to $-12$ dB} \\\hline
+\end{tabular}
+\end{center}
+
+\begin{solution}
+At 10.525 GHz, $\lambda = 28.5$ mm. With all eight elements on,
+$\lambda/d = 2.03$, so $\sin\theta = \pm 2.03$ has no real solution and the
+only lobe is the main one. At 42 mm, $\lambda/d_\text{eff} = 0.678$ and
+$\theta = \sin^{-1}(0.678) = 42.7\mydeg$; the $m = 2$ solution would need
+$\sin\theta = 1.36$. At 56 mm, $\lambda/d_\text{eff} = 0.509$ gives
+$30.6\mydeg$, and $m = 2$ needs $\sin\theta = 1.02$, just past the horizon,
+so the trace rises to full height at the $\pm 90\mydeg$ ends without quite
+showing a peak. (At the workshop's 10.3 GHz the same arithmetic gives
+$44\mydeg$ and $31\mydeg$, which is why Lesson 26 quotes $\pm 44\mydeg$.)
+The peak drops are the coherent sums again: $20\mylog(3/8) = -8.5$ dB and
+$20\mylog(2/8) = -12.0$ dB. The sweep reads a decibel or so above those,
+because the noise adds to a weaker peak.
+\end{solution}
+
+In one sentence: every grating lobe stands as tall as the main lobe, and no
+sidelobe ever does. What is the difference between the two?
+
+\begin{solutionorlines}[1.0in]
+A grating lobe is a second direction in which every element's contribution
+adds in phase, so the array factor there is exactly its maximum, while a
+sidelobe is a partial cancellation that never reaches it.
+\end{solutionorlines}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Beam squint.} Move the HB100 to about $45\mydeg$ on the
+protractor arc and press the Uniform preset. Lab preset 5 loads Signal BW =
+500 MHz: the GUI computes the steering phases for a frequency 500 MHz below
+the Signal Freq and measures at the Signal Freq, which is what a signal at
+the edge of a 500 MHz band sees. Set Signal BW to 10 MHz, sweep, read Est.
+Angle, and press Freeze. Then set it back to 500 MHz and sweep again. The
+calculated shift comes from the squint relation in Lesson 26: a beam
+commanded to $\theta_0$ with its phases set at $f_0$ points at
+$\sin^{-1}\!\left[(f_0/f)\sin\theta_0\right]$ when observed at $f$.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{1.1in} | K{1.1in} | K{1.1in} |}
+\hline
+\textbf{Signal BW} & \textbf{Est. Angle meas} & \textbf{Shift calc} & \textbf{Shift meas} \\\hline\hline
+10 MHz & \kv{$\approx 45\mydeg$ (the source)} & \kv{$0.1\mydeg$} & \kv{--} \\\hline
+500 MHz & \kv{$\approx 48\mydeg$} & \kv{$+2.9\mydeg$} & \kv{$+2.5$ to $+3.5\mydeg$} \\\hline
+\end{tabular}
+\end{center}
+
+\begin{solution}
+With $f = 10.525$ GHz and $f_0 = 10.025$ GHz, a beam commanded to
+$45\mydeg$ points at $\sin^{-1}(0.9525 \times 0.707) = 42.3\mydeg$: the same
+phases are a shorter electrical delay at the higher frequency, so the beam
+leans back toward broadside. The sweep therefore finds the source only when it
+commands the angle whose squinted beam lands on $45\mydeg$,
+$\sin\theta_c = (f/f_0)\sin 45\mydeg = 0.742$, or $\theta_c = 47.9\mydeg$.
+The Est. Angle readout moves $+2.9\mydeg$ while the beam itself moved
+$-2.7\mydeg$; the two differ slightly because the squint is not symmetric in
+angle. At 10 MHz the same arithmetic gives $0.06\mydeg$, below the sweep grid.
+\end{solution}
+
+The source did not move between the two sweeps. In one sentence, what did?
+
+\begin{solutionorlines}[1.0in]
+The phase ramp was computed for 10.025 GHz, and at 10.525 GHz that ramp is a
+smaller fraction of a period per element, so every commanded beam points
+closer to broadside than its label says and the sweep has to command a
+larger angle to reach the source.
+\end{solutionorlines}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{Phase quantization.} Source back at boresight. Lab preset 6
+loads the Blackman taper, so every true sidelobe is below the floor and
+anything that appears is the phase shifter's doing. Turn \textbf{Use Bits}
+off, so the sweep keeps stepping the commanded angle by $2.8125\mydeg$ while
+the Phase Shift Bits slider coarsens the element phases. Sweep at 7, 4, 3, and
+2 bits. The Blackman main lobe is about $24\mydeg$ wide and its skirt reaches
+the floor near $\pm 35\mydeg$, so record the highest lobe \emph{beyond}
+$\pm 35\mydeg$ relative to the peak, and beside it the Lesson 26 rule of thumb
+for the quantization sidelobe level, $-6B$ dB.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| c | K{0.9in} | K{1.5in} | K{1.1in} |}
+\hline
+\textbf{Bits} $\boldsymbol{B}$ & \textbf{LSB calc} & \textbf{Highest lobe beyond $\pm 35\mydeg$, meas} & $\boldsymbol{-6B}$ \textbf{dB} \\\hline\hline
+7 & \kv{$2.8125\mydeg$} & \kv{below the noise floor} & \kv{$-42$ dB} \\\hline
+4 & \kv{$22.5\mydeg$} & \kv{$-15$ to $-21$ dBc, just above the floor} & \kv{$-24$ dB} \\\hline
+3 & \kv{$45\mydeg$} & \kv{$-12$ to $-15$ dBc} & \kv{$-18$ dB} \\\hline
+2 & \kv{$90\mydeg$} & \kv{$-8$ to $-10$ dBc} & \kv{$-12$ dB} \\\hline
+\end{tabular}
+\end{center}
+
+\begin{solution}
+The LSB is $360\mydeg/2^B$. At 7 bits the quantized ramp is within
+$1.4\mydeg$ of the ideal one everywhere, and the Blackman sidelobes stay under
+the floor, which is consistent with a $-42$ dB estimate. From 4 bits down the
+lobes come up out of the floor a few decibels at a time and sit 3 to 6 dB
+above the rule of thumb. The rule is a root-mean-square level for a large
+array in which the rounding errors scatter like noise; eight elements with a
+ramp rounded to $45\mydeg$ or $90\mydeg$ form a staircase whose error is
+periodic across the aperture, and a periodic error makes a few distinct lobes
+rather than a floor, so the highest of them stands above the RMS figure.
+Where the lobes land depends on the commanded angle: the sweep passes through
+every one, which is why it finds the worst cases.
+\end{solution}
+
+The rule of thumb puts the 7-bit lobes near $-42$ dB. In one sentence, why
+does that row have no number, and what is the deepest level this sweep could
+report for this taper?
+
+\begin{solutionorlines}[1.1in]
+The sweep's floor sits about 23 dB under the uniform peak, and the Blackman
+peak is itself 6 dB lower, so the floor is only 17 to 18 dB under this trace's
+peak; anything the rule predicts below that is not measurable here, and a
+number read from the grass would be the receiver's noise.
+\end{solutionorlines}
+
+Before you leave: Use Bits on, Phase Shift Bits 7, Signal BW 10 MHz, and the
+Uniform preset.
 
 \end{questions}
 

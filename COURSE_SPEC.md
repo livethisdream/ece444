@@ -793,3 +793,41 @@ it, not to replace it.
   array that can form sum and delta simultaneously can measure angle from
   a single look — which is what a tracking radar needs, and where
   Module 4 begins.
+
+- **Objective 3.8 is measured in Lab 8 (L25), Part 2** (Neil, 2026-10-07:
+  "Go with option 1, add it to the L25 lab sheet"). L26 stays a theory
+  lesson with no sheet of its own; the three GUI presets built for the
+  workshop's grating-lobe, beam-squint, and quantization labs (4, 5, 6) run
+  as a second part of the L25 lab while the kit is on the bench, *before*
+  the L26 theory. The framing is deliberate: students predict from the
+  relations the sheet scaffolds, measure, and bring the tables to L26,
+  which opens on their numbers. The sheet carries a second LO banner
+  (3.8) for that part; its page and deck mirror it as Steps (f) to (i).
+  Procedure facts the GUI forces: preset 4 does not clear **Enforce
+  Symmetric Taper**, so the step turns it off first (editing Rx4 with it
+  on mirrors onto Rx5); preset 5 loads Signal BW = 500 MHz at once, so the
+  step sets 10 MHz, sweeps, Freezes, then 500 MHz; preset 6 leaves **Use
+  Bits** on, under which a 2-bit sweep has six points and shows nothing,
+  so the step turns it off (the sweep then steps 2.8125° while the ramp is
+  still rounded to the LSB). The squint step has no simulator equivalent
+  (the sim source is fixed at boresight); the instructor demo is
+  `?instructor=1` with the interferer at 45°, +10 dB. Sim-verified
+  expectation numbers (10.525 GHz, $\lambda = 28.5$ mm):
+  every 3rd element → lobes $\pm 42.7°$ calc, $\pm 42$ to $43°$ measured,
+  equal height within 0.5 dB, peak drop $-8.5$ dB calc / $-8$ to $-9$
+  measured; every 4th → $\pm 30.6°$ and the $m=2$ shoulder at $\pm 90°$
+  ($\sin\theta = 1.02$), peak drop $-12.0$ / $-11$ to $-12$ dB; squint at
+  $45°$ with BW 500 MHz → Est. Angle moves $+2.9°$ calc, $+2.5$ to $+3.5°$
+  measured (the beam itself leans to $42.3°$); quantization with Blackman,
+  Use Bits off, highest lobe **beyond $\pm 35°$** (inside that is the
+  24°-wide Blackman main lobe and its skirt, which a student would
+  otherwise read as a lobe even at 7 bits): 7 bits below the floor, which
+  for this taper is only 17 to 18 dB under the peak; 4 bits $-15$ to $-21$
+  dBc; 3 bits $-12$ to $-15$ dBc; 2 bits $-8$ to $-10$ dBc. The $-6B$ dB
+  rule of thumb is quoted beside the measurement and the key explains the
+  3 to 6 dB gap (eight elements, periodic rounding error, a few distinct
+  lobes rather than an RMS floor). A static-beam check showed the lobe
+  level depends strongly on the commanded angle (at 15° and 30° the ideal
+  ramp is nearly a multiple of 45°, so 3 bits costs almost nothing); the
+  sweep passes through every commanded angle and reports the worst case.
+  Hardware validation still owed (project ToDo).

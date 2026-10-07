@@ -223,11 +223,12 @@ Done inside the lesson pass for each lab lesson, after steps 1 to 5:
 
 ## 6. Open questions for Neil
 
-1. **Objective 3.8 hands-on.** Lab presets 4 to 6 (grating lobes, squint,
-   quantization) have workshop procedures and no course lab. Pick (a), (b),
-   or (c) from §2B. Recommendation: (b), one extra part on the L25 sheet,
-   because the kit is already on the bench and each procedure is ten
-   minutes.
+1. **Objective 3.8 hands-on: decided** (Neil, 2026-10-07: "Go with option
+   1, add it to the L25 lab sheet"). Done the same day as Lab 8 Part 2,
+   Steps (f) to (i) on the L25 page and deck, three sheet questions, every
+   step executed against the simulator first; the numbers and the GUI
+   quirks it exposed are in `COURSE_SPEC.md` §M7. Note the ordering: L25
+   runs before L26, so the part is framed as measure-now, explain-in-L26.
 2. **The rotating stand.** Will it be printed and in the classroom this
    term? L23 and L28 Procedure D change shape if so (§4.3).
 3. **The hosted simulator.** OK to point students at
