@@ -820,19 +820,22 @@ it, not to replace it.
   class. Hardware dry run of Part A on a real kit is owed before the
   lesson is taught; it cannot be executed in a container.
 
-- **The reveal.js decks are retired** (Neil, 2026-10-07, on the L17 pick
-  list: "the new site format doesn't have decks. It's read and present
-  mode"). A lesson's present mode *is* its deck. From this date no lesson
-  work edits, mirrors into, or verifies a deck: the voice, why, and
-  illustration sweeps and the present cut apply to the page alone, and
-  "mirror it in the deck" steps in the three skills and in CLAUDE.md are
-  void. The deck files themselves (`book/extras/slides/L*.md` and `.html`),
-  the Slides frame with its three pill links on every frame page, the deck
-  gate in `scripts/verify/mech_check.sh`, and the "Don't delete a lesson's
-  reveal.js deck" rule in CLAUDE.md come out in one site-wide PR of their
-  own, not piecemeal; until that PR lands, existing decks stay where they
-  are, untouched and unmaintained. Nomenclature authority moves from "the
-  decks" to the lesson pages' present blocks.
+- **No new deck work; the existing decks stay as built** (Neil, 2026-10-07,
+  on the L17 pick list: "the new site format doesn't have decks. It's read
+  and present mode", then: "the point of the notes about the decks was to
+  keep what we had already built, not to keep building new decks. They
+  can print from the frame layout"). A lesson's present mode is its deck,
+  and printing comes from the frame layout (`check_print.py` gates one
+  sheet per frame). From this date no lesson work edits, mirrors into, or
+  verifies a deck: the voice, why, and illustration sweeps and the present
+  cut apply to the page alone, and the "mirror it in the deck" steps in the
+  three skills and in CLAUDE.md are void. The deck files already in
+  `book/extras/slides/` and the Slides frame that links them are kept,
+  untouched and unmaintained, as the record of what was built; nothing is
+  deleted. Lessons that never had a deck (Modules 4 and 5) will not get
+  one, so the deck gate in `scripts/verify/mech_check.sh` is to be relaxed
+  to "if present" when the first such lesson is authored. Nomenclature
+  authority moves from "the decks" to the lesson pages' present blocks.
 
 - **Objective 3.8 is measured in Lab 8 (L25), Part 2** (Neil, 2026-10-07:
   "Go with option 1, add it to the L25 lab sheet"). L26 stays a theory
