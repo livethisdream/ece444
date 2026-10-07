@@ -487,12 +487,11 @@ in $\phi_n = n\ \Delta\phi$, run in reverse:
 | $\phi_n$ | 237.0 | 296.2 | 355.4 | 54.7 |
 
 $$\begin{aligned}
-\Delta\phi &= \frac{54.7^\circ + 360^\circ}{7} = 59.24^\circ \\
 \sin\theta_0 &= \frac{59.24^\circ}{173.2^\circ} = 0.342 \\
 \theta_0 &= +20.0^\circ
 \end{aligned}$$
 
-- Steps of $59.2^\circ$ to $59.3^\circ$, then $-300.7^\circ$, a step less a turn.
+- Unwrapped, $\phi_7 = 414.7^\circ$: seven steps of $59.24^\circ$.
 - Rising ramp: positive $\Delta\phi$, positive steer angle.
 :::
 
