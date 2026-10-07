@@ -672,6 +672,9 @@ sweep actually reads and belong in lab expectation tables.
 - HPBW $\approx 0.886\ \lambda/(Nd\cos\theta_0)$ — the L06/L15 line-source
   constant with $L = Nd$; beam broadens as $1/\cos\theta_0$ off broadside.
   FNBW (broadside) $= 2\arcsin(\lambda/Nd)$.
+- **Steering sign** (2026-10-07): commanded phase $+n\Delta\phi$ (a delay cancelling element $n$'s lead) steers to
+  $+\theta_0$; the GUI's Steer Angle and `ADAR_set_Phase` agree; L16's weights $e^{-jn\beta}$ carry the minus sign.
+  At 30°, 10.3 GHz: 0, 86.6, 173.2, 259.8, 346.4, 73.0, 159.6, 246.2.
 - Broadside directivity of a uniform ULA: $D \approx 2Nd/\lambda$ (= 7.7
   → 8.9 dB for the PHASER's 8 elements).
 - **Grating lobes**: $\sin\theta_g = \sin\theta_0 \pm m\lambda/d$;
