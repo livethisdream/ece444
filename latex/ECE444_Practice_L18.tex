@@ -34,8 +34,8 @@ $f = 10.3\ \ghz$. A plane wave arrives $\theta_0 = 25\mydeg$ from broadside.
 		\part Compute the wavelength, the electrical spacing $d/\lambda$, and the
 		product $kd$ in degrees.
 		\begin{solution}[1.3in]
-		\eq{ \lambda &= \frac{c}{f} = \frac{3\times 10^8}{10.3\times 10^9} = 0.0291\ \m = 29.1\ \text{mm} \\
-		     \frac{d}{\lambda} &= \frac{14}{29.1} = 0.481 \\
+		\eq{ \lambda &= \frac{c}{f} = \frac{2.998\times 10^8}{10.3\times 10^9} = 0.02911\ \m = 29.11\ \text{mm} \\
+		     \frac{d}{\lambda} &= \frac{14}{29.11} = 0.481 \\
 		     kd &= 2\pi\lp 0.481\rp = 3.02\ \text{rad} = 173.2\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
@@ -61,7 +61,7 @@ $f = 10.3\ \ghz$. A plane wave arrives $\theta_0 = 25\mydeg$ from broadside.
 		\part Compute the arrival-time difference between neighboring elements at
 		this steer angle, in picoseconds.
 		\begin{solution}[1.1in]
-		\eq{ \Delta t &= \frac{d\sinp{\theta_0}}{c} = \frac{\lp 0.014\rp \lp 0.4226\rp}{3\times 10^8} \\
+		\eq{ \Delta t &= \frac{d\sinp{\theta_0}}{c} = \frac{\lp 0.014\rp \lp 0.4226\rp}{2.998\times 10^8} \\
 		     &= 1.97\times 10^{-11}\ \text{s} = 19.7\ \text{ps} }
 		\end{solution}
 	\end{minipage}\hfill%
@@ -74,7 +74,7 @@ $f = 10.3\ \ghz$. A plane wave arrives $\theta_0 = 25\mydeg$ from broadside.
 
 \newpage
 
-\question \textbf{The phase table.} The same array is commanded to
+\question \textbf{The phase table.} We command the same array to
 $\theta_0 = -40\mydeg$. Element 0 is the phase reference, and the ADAR1000 accepts
 a phase setting between $0\mydeg$ and $360\mydeg$.
 
@@ -94,30 +94,30 @@ a phase setting between $0\mydeg$ and $360\mydeg$.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Compute the commanded phase of element 5 from
-		$\phi_n = -n\Delta\phi$, before any wrapping.
+		$\phi_n = n\Delta\phi$, before any wrapping.
 		\begin{solution}[1.0in]
-		\eq{ \phi_5 &= -5\lp -111.3\mydeg\rp = +556.6\mydeg }
+		\eq{ \phi_5 &= 5\lp -111.3\mydeg\rp = -556.5\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\phi_5$ = \ansbox[1.3in]{$556.6\mydeg$}
+		$\phi_5$ = \ansbox[1.3in]{$-556.5\mydeg$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Give the value actually written to element 5, wrapped into
+		\part Give the value written to element 5 after wrapping into
 		$0\mydeg$ to $360\mydeg$.
 		\begin{solution}[1.0in]
-		\eq{ \phi_5 &= 556.6\mydeg - 360\mydeg = 196.6\mydeg }
-		One whole turn is removed.
+		\eq{ \phi_5 &= -556.5\mydeg + 720\mydeg = 163.5\mydeg }
+		Two whole turns are added.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\phi_5$ = \ansbox[1.3in]{$196.6\mydeg$}
+		$\phi_5$ = \ansbox[1.3in]{$163.5\mydeg$}
 	\end{minipage}
 
-	\part Wrapping changed the number by $360\mydeg$ and did not change the
+	\part Wrapping changed the number by two whole turns and did not change the
 	pattern. Explain why in one or two sentences, and state what information the
 	wrapped table no longer carries.
 		\begin{solution}[1.2in]
@@ -172,10 +172,10 @@ $kd = 173.2\mydeg$, and recall $\lambda/Nd = 29.1/112 = 0.260$.
 	physically and what the pattern looks like on that side of the beam.
 		\begin{solution}[1.2in]
 		No real angle has a sine greater than one, so that null lies outside
-		visible space and never appears in the pattern. The main lobe runs from
-		its peak out toward endfire without closing into a null, so the upper side
-		of the beam is a shoulder that stays well above the sidelobe floor rather
-		than a symmetric lobe edge. The beam is asymmetric about $50\mydeg$.
+		the visible region and never appears in the pattern. On that side the
+		main lobe falls without a null, all the way to $-19.0\ \db$ at $90\mydeg$,
+		and never rises again into a sidelobe. The beam is asymmetric about
+		$50\mydeg$ and has no sidelobe on its endfire side.
 		\end{solution}
 
 	\part Two commanded angles differ by $5\mydeg$ near broadside, and two others
@@ -186,21 +186,22 @@ $kd = 173.2\mydeg$, and recall $\lambda/Nd = 29.1/112 = 0.260$.
 		The pattern is rigid in $\sinp{\theta}$, and $\Delta\phi$ is proportional
 		to $\sinp{\theta_0}$, so a $5\mydeg$ move near broadside changes
 		$\sinp{\theta_0}$ much more than the same move near $60\mydeg$: the pair
-		near broadside needs the larger phase change. An array stepped in equal
+		near broadside needs the larger phase change: $0\mydeg$ to $5\mydeg$ needs
+		$15.1\mydeg$, while $55\mydeg$ to $60\mydeg$ needs only $8.1\mydeg$. An
+		array stepped in equal
 		increments of $\Delta\phi$ therefore takes small angular steps near
 		broadside and large ones near endfire, so a uniform search grid in angle
-		requires unequal phase steps, and the beam positions crowd together near
-		broadside if you step the phase uniformly instead.
+		requires unequal phase steps.
 		\end{solution}
 
 \end{parts}
 
 \newpage
 
-\question \textbf{Scanning costs beamwidth.} Continue with $N = 8$,
-$d = 14$\ \text{mm}, $\lambda = 29.1$\ \text{mm}. Use
+\question \textbf{Beam broadening and scan loss.} Use
 $\theta_{\text{HP}} \approx 0.886\lambda/\lp Nd\cosp{\theta_0}\rp$ and the broadside
-uniform-array directivity $D \approx 2Nd/\lambda$.
+uniform-array directivity $D \approx 2Nd/\lambda$, continuing with $N = 8$,
+$d = 14$\ \text{mm}, and $\lambda = 29.1$\ \text{mm}.
 
 \begin{parts}
 
@@ -239,11 +240,11 @@ uniform-array directivity $D \approx 2Nd/\lambda$.
 		\eq{ D\lp 0\rp &= \frac{2\lp 112\rp}{29.1} = 7.70 \rightarrow 10\mylog{7.70} = 8.9\ \dbi \\
 		     \Delta G &= 10\mylog{\cosp{55\mydeg}} \\
 		     &= 10\mylog{0.574} = -2.4\ \db }
-		This is \textbf{scan loss}. It is carried by the element pattern, not by the
-		array factor: the array factor of an isotropic-element array keeps
-		essentially the same directivity as it scans, and the projected-aperture
-		loss shows up in the pattern only when the element factor is included, which
-		is the subject of Lesson 22.
+		This is \textbf{scan loss}, carried by the element pattern. The array's
+		beam is a cone about its axis: steering shrinks the cone's circumference
+		by $\cosp{\theta_0}$ as the beam widens by $1/\cosp{\theta_0}$, so the
+		isotropic array factor keeps its directivity (7.8 at $55\mydeg$). Each
+		element's projected area shrinks as $\cosp{\theta}$ (Lesson 22).
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -259,9 +260,9 @@ uniform-array directivity $D \approx 2Nd/\lambda$.
 		\begin{solution}[1.4in]
 		\eq{ \cosp{\theta_0} &\ge \frac{13.2\mydeg}{20\mydeg} = 0.66 \\
 		     \theta_0 &\le \arccos\lp 0.66\rp = 48.7\mydeg }
-		Field of view is bought with aperture: covering a wider sector at this
-		beamwidth requires more elements, since only a longer array can afford the
-		$\cosp{\theta_0}$ loss in projected length.
+		A wider field of view at this beamwidth requires a longer aperture: only an
+		array with more elements keeps $\theta_{\text{HP}} \le 20\mydeg$ after its
+		projected length shrinks by $\cosp{\theta_0}$.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -294,47 +295,53 @@ $\phi_n$ (deg) & 0 & 260.7 & 161.4 & 62.1 & 322.8 & 223.5 & 124.2 & 24.9 \\
 		\eq{ \phi_2 - \phi_1 &= 161.4\mydeg - 260.7\mydeg = -99.3\mydeg \\
 		     \phi_1 - \phi_0 &= 260.7\mydeg \rightarrow 260.7\mydeg - 360\mydeg = -99.3\mydeg }
 		All seven differences reduce to $-99.3\mydeg$, and the ramp is
-		$\phi_n = -n\Delta\phi$, so $\Delta\phi = +99.3\mydeg$.
+		$\phi_n = n\Delta\phi$, so $\Delta\phi = -99.3\mydeg$.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\Delta\phi$ = \ansbox[1.3in]{$+99.3\mydeg$}
+		$\Delta\phi$ = \ansbox[1.3in]{$-99.3\mydeg$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Recover the commanded steer angle.
 		\begin{solution}[1.2in]
-		\eq{ \sinp{\theta_0} &= \frac{\Delta\phi}{kd} = \frac{99.3\mydeg}{173.2\mydeg} = 0.573 \\
-		     \theta_0 &= \arcsin\lp 0.573\rp = 35.0\mydeg }
+		\eq{ \sinp{\theta_0} &= \frac{\Delta\phi}{kd} = \frac{-99.3\mydeg}{173.2\mydeg} = -0.573 \\
+		     \theta_0 &= \arcsin\lp -0.573\rp = -35.0\mydeg }
+		A falling ramp means a negative $\Delta\phi$ and a beam on the negative
+		side of broadside.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\theta_0$ = \ansbox[1.3in]{$+35.0\mydeg$}
+		$\theta_0$ = \ansbox[1.3in]{$-35.0\mydeg$}
 	\end{minipage}
 
 	\part Suppose the seven differences had come out as $-99.3\mydeg$ for six of
 	them and $-84\mydeg$ for one. State two things that could produce that
 	result, and what you would check first.
 		\begin{solution}[1.3in]
-		The array is not carrying a single uniform steering ramp. Either one
-		element has a calibration or cabling offset added to its steering phase,
-		or that channel's phase was written incorrectly, for example a wrapped
-		value entered without its whole turn. A taper affects amplitude and not
-		phase, so it is not a candidate. Check the per-element calibration offsets
-		first, then re-read the register value for that one element and compare it
-		with the commanded value.
+		The array is not carrying a single uniform steering ramp, and where the
+		odd difference sits narrows the cause. An offset $\delta$ on an interior
+		element would spoil two adjacent differences, one by $+\delta$ and the
+		next by $-\delta$ (here $+15.3\mydeg$ and $-15.3\mydeg$). A single odd
+		difference therefore means either an offset on an end element (element 0
+		or 7), or, if it is $\phi_4 - \phi_3$, a phase error between the two
+		ADAR1000 subarray channels, which moves elements 4 to 7 together. A taper
+		affects amplitude and not phase, so it is not a candidate. Check which
+		difference is the odd one first: if it is $\phi_4 - \phi_3$, rerun
+		Calibrate; otherwise check the calibration offset of that end element.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part The ADAR1000 sets phase on a $2.8125\mydeg$ grid. Give the value
-		element 1 actually takes and the resulting error.
+		\part The ADAR1000 sets phase on a $2.8125\mydeg$ grid. Give the phase
+		element 1 takes on that grid and the resulting error.
 		\begin{solution}[1.3in]
 		\eq{ \frac{260.7\mydeg}{2.8125\mydeg} &= 92.69 \rightarrow 93\ \text{steps} \\
 		     \phi_1 &= 93\lp 2.8125\mydeg\rp = 261.6\mydeg }
 		The error is $+0.9\mydeg$, which is within half a step as expected. L26
-		works out what a grid of this size costs in sidelobe level and null depth.
+		computes how much a grid of this size raises the sidelobe level and
+		reduces null depth.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
