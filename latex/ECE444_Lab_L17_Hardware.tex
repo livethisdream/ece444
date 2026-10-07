@@ -113,16 +113,80 @@ of the ADALM-PHASER and control it via SDR software.}
 
 \vspace{2pt}
 
-This sheet is the turn-in document for the Lesson 17 lab. Fill in every box, and
-show the arithmetic where a box asks for a calculated value. The lab is a team
-assignment, so each team submits one sheet.
+This sheet is the turn-in document for the Lesson 17 lab. Part A records how
+your team brought its kit up from a blank card, and Part B records the first
+measurements on that kit. Fill in every box, and show the arithmetic where a box
+asks for a calculated value. The lab is a team assignment, so each team submits
+one sheet.
 
 \begin{questions}
 
+\fullwidth{\large\textbf{Part A: Bring Up Your PHASER}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The frequency plan.} Record the frequency the GUI reports for
-your HB100 after pressing \textbf{Find HB100}, then work the high-side mixing
-arithmetic that follows from it. The IF is fixed by the filtering after the
+\question \textbf{The bring-up record.} Record what you set and what the kit
+reported as you brought it up. Copy the installer's lines exactly as it prints
+them under \texttt{[6b/6] Checking the RF chain...}.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{3.3in} |}
+\hline
+\textbf{Item} & \textbf{Value} \\\hline\hline
+Team number NN & \kv{your own, such as 03} \\\hline
+Hostname in \texttt{phaser-hostname} & \kv{\texttt{phaser-NN}, such as \texttt{phaser-03}} \\\hline
+Fixed IP in \texttt{phaser-ip} & \kv{$192.168.7.(10 + \mathrm{NN})$/24, such as \texttt{192.168.7.13/24}} \\\hline
+Address you opened the UI at & \kv{\texttt{http://192.168.7.13:8080} for team 03} \\\hline
+Wi-Fi join: result of \texttt{ping -c 4 github.com} & \kv{four replies; or failed, reported to the instructor} \\\hline
+Installer line \texttt{HB100} & \kv{the card's stored value, labeled \texttt{(calibration.json)}, or $10.525000$ GHz from \texttt{config.py}} \\\hline
+Installer line \texttt{Rx\_freq} & \kv{$2.200$ GHz} \\\hline
+Installer line \texttt{LO} & \kv{HB100 $+ 2.200$ GHz, $12.725$ GHz for $10.525$ GHz} \\\hline
+Installer line \texttt{ADF4159} & \kv{LO$/4$, $3.1812$ GHz for a $12.725$ GHz LO} \\\hline
+Installer \texttt{WARN} or \texttt{OK} line(s) & \kv{WARN: a unit above $10.600$ GHz needs an LO past $12.80$ GHz} \\\hline
+Frequency \textbf{Find HB100} reported & \kv{your own, in $10.1$--$10.7\ \ghz$} \\\hline
+\end{tabular}
+\end{center}
+
+\begin{solution}
+The installer ran before \textbf{Find HB100}, so its \texttt{HB100} line reports
+whatever the card carried: the golden kit's measured source, labeled
+\texttt{(calibration.json)}, or the $10.525$ GHz default from \texttt{config.py}
+when the card held no calibration. That value generally differs from the
+\textbf{Find HB100} result, which measures this kit's own source. With the
+course's $2.2$ GHz IF, the installer always prints the range warning, because
+an HB100 at the $10.7$ GHz top of the range would need a $12.9$ GHz LO, above
+the $12.80$ GHz ceiling the Phaser developers measured receiving cleanly.
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{The identity reset.} Every team flashed its card from the
+same golden image, and on its first boot each card regenerates its SSH host
+keys and its \texttt{/etc/machine-id} before the ssh server starts. Explain in
+three or four sentences why a cloned card must do this.
+
+\begin{solutionorlines}[1.8in]
+A card flashed from the golden image is a byte-for-byte copy of the golden kit,
+so without the reset every kit would present the same SSH host keys and the
+same machine-id. The host key is how ssh identifies the machine it reached;
+with identical keys a laptop's \texttt{known\_hosts} cannot tell the kits
+apart, and a key copied off one kit would impersonate all of them. The
+machine-id is what systemd-networkd derives its DHCP client identity from, so
+kits sharing one request the same lease on a shared network and take turns
+losing it, which looks like a Pi dropping off the network at random.
+Regenerating both before ssh starts gives each kit its own identity, and the
+reboot that follows makes the new machine-id take effect, since the init system
+reads it only at boot.
+\end{solutionorlines}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\fullwidth{\large\textbf{Part B: First Measurements}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The frequency plan.} Copy the frequency \textbf{Find HB100}
+reported in Part A, then work the high-side mixing arithmetic that follows from
+it. The IF is fixed by the filtering after the
 mixer, so the LO is the only frequency that moves when the source moves.
 
 \begin{center}

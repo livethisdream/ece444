@@ -35,6 +35,7 @@ Lesson 17 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
   <li>I can explain the PHASER's hybrid beamforming architecture — analog within each 4-element subarray, digital across the two subarray outputs.</li>
   <li>I can bring up the Phaser GUI, find the microwave source, and control array gain and frequency from the browser.</li>
   <li>I can read the Python calls that set the array's phases and the SDR's tuning.</li>
+  <li>I can bring up a PHASER kit from a freshly flashed SD card and update its software.</li>
 </ol>
 
 :::{depth}
@@ -44,8 +45,8 @@ rests on that assumption, and satisfying it takes real hardware: eight phase
 shifters, eight attenuators, a summing network, a downconverter, and a
 computer to command all of it. Today we bring up that hardware in the first
 hands-on session with the **ADALM-PHASER**, the 8-element X-band array the
-rest of Module 3 runs on. By the end of the period you will have found each
-block on the board, traced a $10.525\ \text{GHz}$ signal from a patch to a
+rest of Module 3 runs on. By the end of the period you will have brought your
+kit up from a blank card, found each block on the board, traced a $10.525\ \text{GHz}$ signal from a patch to a
 spectrum display, and moved two controls in the browser interface you will
 use in every lab that follows.
 :::
@@ -118,8 +119,8 @@ F &= 10 + \frac{1.585 - 1}{0.1} \\
 \end{aligned}$$
 
 or $T_e \approx 4300\ \text{K}$. The same two parts in the other order lower
-the signal-to-noise ratio by $9.8\ \text{dB}$. The same rule explains step 5 of
-the procedure: the SDR is the last stage, so its own noise counts at the input
+the signal-to-noise ratio by $9.8\ \text{dB}$. The same rule explains step 3 of
+Part B: the SDR is the last stage, so its own noise counts at the input
 divided by all the gain ahead of it.
 :::
 ::::
@@ -393,32 +394,293 @@ sample rate never change; only the LO retunes.
 </iframe>
 ::::
 
-::::{frame} The Station
-Each station has one kit:
+::::{frame} Part A: Bring Up Your PHASER
+Each team starts today with a PHASER kit and a blank microSD card and brings the
+kit up itself: you flash the course image onto the card, name the kit, boot it,
+connect to it, update its software, and calibrate it. Part B then makes the
+first measurements on the kit you brought up.
+
+The laptop and the kit use two connections for two different jobs. A direct
+Ethernet cable from the laptop to the Pi carries ssh and the browser interface.
+The classroom Wi-Fi is only the Pi's route to the internet, which it needs for
+the software update.
+
+:::{depth}
+The cable is there because of how guest networks are run. A guest network can
+isolate its clients from one another, so a laptop and a Pi that have both
+joined the classroom Wi-Fi may be unable to reach each other even though each
+one reaches the internet. A cable between the two does not depend on the
+network's settings, so every step that talks to the Pi from the laptop uses the
+cable.
+:::
+::::
+
+::::{frame} What You Are Given
+Each team has one kit:
 
 - the ADALM-PHASER board, with the Raspberry Pi and the ADALM-Pluto attached on the back
 - an HB100 microwave source on its own small stand or battery holder
 - a USB-C supply for the board and a supply for the Pi
 - a camera tripod, for the board and for aiming the source
-- a laptop on the lab network — the laptop only runs a browser
+- a blank microSD card and an Ethernet cable
+- a laptop with Raspberry Pi Imager, a plain-text editor, and an ssh client
+
+The course image, `phaser-golden.img`, is on the course share at
+**[path to be added]**.
+
+:::{depth}
+The instructor builds the golden image once. The procedure, from the Phaser
+repository's `docs/golden-image.md`, is to provision one kit, verify that it
+calibrates and runs a lab, arm it for cloning with
+`provision.sh --prepare-image`, and copy its card to a file. Every card flashed
+from that file starts as a copy of the same working kit, with the operating
+system configured and the course software already installed, so you never run
+`provision.sh` or the card-preparation tools yourself.
+
+On Windows the ssh client is the OpenSSH Client, under Settings > Apps >
+Optional features; macOS and Linux include one.
+:::
 ::::
 
-::::{frame} Station Bring-Up
-1. Mount the PHASER on the tripod with the patch face vertical and the row of
-   patches horizontal. The array steers in the plane of that row, so a board
-   mounted on its side steers up and down and none of the lab works.
-2. Connect the board and the Pi supplies. Give the Pi about a minute to boot and
-   start the service.
-3. On the laptop, browse to `http://phaser.local:8080`, or to the IP shown on
-   the station if `phaser.local` does not resolve. Wait for the pill at the
-   bottom right to change from **Checking...** to **Connected**. **Start** stays
-   disabled until the backend is ready.
+::::{frame} Flash the Card
+1. Copy `phaser-golden.img` from the course share to the laptop.
+2. Put the blank microSD card in the laptop's card reader and open Raspberry Pi
+   Imager.
+3. For the operating system, choose **Use Custom** and select
+   `phaser-golden.img`. For the storage, choose the microSD card.
+4. Decline the OS customization settings when Imager offers them, then let it
+   write and verify the card.
+
+Imager erases whatever storage it writes to, so check that the storage you chose
+is the microSD card before you start the write.
+
+:::{depth}
+Imager's customization settings install their own first-boot script, through
+the same `systemd.run=` entry in the card's `cmdline.txt` that the Phaser setup
+tools use, and they can rename the kit and change its user and password. The
+golden image carries its own first-boot setup, described two frames ahead, so
+we leave Imager's turned off.
+:::
+::::
+
+::::{frame} Name the Kit
+Your instructor assigns your team a two-digit number, NN. The kit's name is
+`phaser-NN` and its fixed address is 192.168.7.(10 + NN), so team 03 is
+`phaser-03` at `192.168.7.13`. Team 03 appears in every example from here on;
+use your own number.
+
+5. Remove the card and put it back in, so the laptop opens its small FAT
+   partition, the one that holds `config.txt` and `cmdline.txt`.
+6. In a plain-text editor, open `phaser-hostname` on that partition and replace
+   its one line, `phaser`, with `phaser-03`.
+7. Open `phaser-ip` and replace its last line, `#192.168.7.2/24`, with
+   `192.168.7.13/24`, with no `#`. Save both files and eject the card.
+
+:::{depth}
+The two files sit on the FAT partition because it is the one part of the card
+that Windows and macOS can write without extra tools. `phaser-hostname` is read
+once, on the first boot. `phaser-ip` is read at every boot by
+`phaser-netalias`, which adds the address as an alias alongside whatever DHCP
+assigns. A line that starts with `#` is a comment, and the golden card ships
+that line commented out, so a kit you do not edit has no fixed address. Each
+kit gets its own name and address because kits that share either one collide
+on the network.
+
+Windows may offer to format the card's other partition, which it cannot read.
+Cancel that offer, because formatting it erases the image. In Notepad's Open
+dialog, choose All Files, because the two files have no extension.
+:::
+::::
+
+::::{frame} First Boot
+8. Mount the PHASER on the tripod with the patch face vertical and the row of
+   patches horizontal.
+9. Put the card in the Pi and connect the Ethernet cable from the Pi to the
+   laptop.
+10. Connect the board and the Pi supplies, and wait. The Pi reboots once by
+    itself during its first boot, and it does not answer until it has
+    restarted.
+
+The array steers in the plane of its row of patches, so a board mounted on its
+side steers up and down, and none of the lab works.
+::::
+
+::::{frame} The First-Boot Identity Reset
+Until its first boot, the card is a copy of the golden kit, including that kit's
+SSH host keys and its `/etc/machine-id`. A service the instructor armed,
+`phaser-firstboot`, runs before the ssh server starts. It:
+
+- sets the hostname from `phaser-hostname`
+- deletes the SSH host keys and generates new ones
+- regenerates `/etc/machine-id` and deletes stale DHCP leases
+- disables itself and reboots once
+
+:::{depth}
+Without the reset, every kit cloned from one image would be the same machine.
+The **host key** is how ssh identifies the machine it reached. With identical
+keys, the laptop's `known_hosts` file cannot tell the kits apart, and a key
+copied off one kit would impersonate all of them. The **machine-id** is the
+identifier systemd-networkd derives its DHCP client identity from, so two kits
+with the same one request the same lease on a shared network and take turns
+losing it, which looks like a Pi that drops off the network at random.
+
+The service runs before the ssh server, so the golden kit's keys are never
+offered to anyone. It reboots because the init system reads the machine-id only
+at boot. It records the time it ran in `/var/lib/phaser/firstboot-done`, and
+because that file exists, it never runs again on this card.
+:::
+::::
+
+::::{frame} The Cable Connection
+11. Give the laptop's wired Ethernet adapter the fixed address `192.168.7.1`,
+    subnet mask `255.255.255.0`, and no gateway.
+12. In a terminal, connect with `ssh analog@192.168.7.13`. Answer `yes` when ssh
+    asks whether to trust the kit's host key, and enter the password `analog`.
+13. Run `hostname`, which should print `phaser-03`, and `hostname -I`, which
+    should list `192.168.7.13`.
+
+:::{depth}
+Nothing on a direct cable hands out addresses, so the laptop needs one of its
+own on the same `/24` network as the kit's alias. The address `192.168.7.1`
+sits below every team's address, and each kit has its own cable, so every
+laptop can use it.
+
+`analog` is the user and the password that ADI's Kuiper image ships with, and
+the golden image keeps both unless your instructor says otherwise. The
+host-key question appears because the first-boot reset gave this kit new keys
+that the laptop has never seen. If ssh times out, the kit may still be in its
+first boot; wait and try again. Where mDNS resolves, `ssh analog@phaser-03.local`
+reaches the same kit, but the fixed address works without it.
+:::
+::::
+
+::::{frame} Join the Classroom Wi-Fi
+The classroom Wi-Fi is the open guest network `AF_ACADEMY_GUEST`. The commands
+below set the Wi-Fi country, add the network to
+`/etc/wpa_supplicant/wpa_supplicant.conf`, and tell the Wi-Fi client to reread
+that file. `sudo` asks for the same password, `analog`.
+
+14. Run the three commands in the ssh session, in order.
+
+```bash
+sudo raspi-config nonint do_wifi_country US
+sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null <<'EOF'
+
+network={
+    ssid="AF_ACADEMY_GUEST"
+    key_mgmt=NONE
+}
+EOF
+sudo wpa_cli -i wlan0 reconfigure
+```
+
+:::{depth}
+The Kuiper image on this kit is based on Raspberry Pi OS bullseye, where
+`wpa_supplicant` joins the Wi-Fi network and `dhcpcd` then requests an address
+on it. The Wi-Fi country is a regulatory setting: the channels a radio may use
+depend on where it is, so the operating system keeps the Wi-Fi radio blocked
+(rfkill) until a country is set. The network block names the network, and
+`key_mgmt=NONE` tells `wpa_supplicant` it has no password. `tee -a` appends the
+block with root privileges, which a plain `>>` redirection would not have.
+
+If the instructor added the network to the golden image, the block is already
+in the file. Check with `cat /etc/wpa_supplicant/wpa_supplicant.conf` first, and
+skip the `tee` command if `AF_ACADEMY_GUEST` appears there.
+:::
+::::
+
+::::{frame} The Internet Check
+15. Run `ping -c 4 github.com` in the ssh session. Four replies mean the Pi
+    reaches the internet over the Wi-Fi.
+
+If the ping fails, tell the instructor rather than going on to the update.
+
+:::{depth}
+Two things must hold on an open guest network for this step and the next to
+work, and the instructor checks both before class. The network must not put a
+captive portal, a sign-in or terms page, in front of a new client, because the
+Pi has no browser to click through one. It must also allow outbound HTTPS,
+because the installer downloads the Phaser software from GitHub over HTTPS.
+
+A failed ping does not stop the lab. The golden image already carries a working
+backend, so the kit can run Part B without the update, and the instructor can
+install the update from a local copy: `install.sh` installs from a directory on
+the Pi, with no download, when `PHASER_SRC` names that directory.
+:::
+::::
+
+::::{frame} The Software Update
+16. In the ssh session, run the second of the two lines below; the first is the
+    session you already have open. If `sudo` asks for a password, it is
+    `analog`.
+
+```bash
+ssh analog@192.168.7.13
+curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/install.sh | bash
+```
+
+The installer prints its steps, `[1/6]` through `[6/6]`, and ends with
+`Installed. Service is active and the UI answered HTTP 200.` and two addresses
+for the interface.
+
+:::{depth}
+`install.sh` runs on the Pi. It downloads the current Phaser software from
+GitHub, installs any missing Python packages, copies the backend into
+`/home/analog/pyadi-iio/examples/phaser/`, replaces the browser interface,
+updates the systemd unit if it has changed, restarts the `phaser-headless`
+service, and checks that the interface answers. It never overwrites the kit's
+`config.py`, and running it again is how you update a kit later.
+
+The second address it prints is the first one `hostname -I` lists, which may be
+the Pi's Wi-Fi address; use the fixed address instead. If the download fails
+with a certificate error, the Pi's clock may be wrong, because a Raspberry Pi
+has no battery-backed clock. The Phaser README's fix is
+`sudo date -s "$(curl -sI http://deb.debian.org/ | sed -n 's/^[Dd]ate: *//p')"`,
+after which you run the installer again.
+:::
+::::
+
+::::{frame} The RF-Chain Summary
+17. Record the lines the installer prints under `[6b/6] Checking the RF chain...`.
+
+| Line | What it reports |
+| :-- | :-- |
+| `HB100` | the source frequency stored on the card, from `calibration.json`, or 10.525 GHz from `config.py` if there is none |
+| `Rx_freq` | the IF, from `config.py`: 2.200 GHz |
+| `LO` | HB100 + Rx_freq |
+| `ADF4159` | LO / 4, the value written to the PLL |
+
+With the 2.2 GHz IF, expect a `WARN` line saying that a unit above 10.600 GHz
+needs an LO past 12.80 GHz.
+
+:::{depth}
+The installer prints this block because `config.py` belongs to the kit and is
+never overwritten, so the numbers that set the LO are the ones nobody reviews,
+and the backend has no way to detect a wrong LO at run time: the PLL accepts the
+write and reads it back. On a cloned card the `HB100` line reads the golden kit's source,
+not yours, which is why Find HB100 comes later in Part A.
+
+The `WARN` line concerns the whole HB100 range, not this kit. 12.80 GHz is the
+highest LO the Phaser developers measured receiving cleanly, on one kit, so
+with a 2.2 GHz IF a source above 10.600 GHz needs an LO above that. The
+installer never fails on it. Another `WARN` line, one that gives this kit's own
+LO, means your source is in that range; tell the instructor.
+:::
+::::
+
+::::{frame} Open the UI
+18. On the laptop, browse to `http://192.168.7.13:8080`. Wait for the pill at
+    the bottom right to change from **Checking...** to **Connected**. **Start**
+    stays disabled until the backend is ready.
+
+The browser reaches the Pi over the cable, at the same fixed address as ssh.
 
 :::{depth}
 If the pill never reads **Connected**, turn on **Show Logs Tab** under **Plot
 Options** and read the **Logs** tab: a message such as "Start blocked until
 backend is ready" says the backend is still starting, and the page will
-connect on its own once it is up.
+connect on its own once it is up. Where mDNS resolves,
+`http://phaser-03.local:8080` reaches the same interface.
 :::
 ::::
 
@@ -513,15 +775,10 @@ Leave **Reboot**, the third button beside them, alone. Do not press and hold the
 :::
 ::::
 
-::::{frame} Preset and Source Placement
-Work through these in order and record what the numbered steps ask for.
-
-1. Press **1 Steering Angle** under **Lab Presets**. The GUI loads the
-   workshop's initial state, with a uniform taper and the beam commanded to
-   broadside, and opens the FFT tab. Press **Start** to begin streaming.
-2. Power the HB100 and place it about $1\ \text{m}$ in front of the array at
-   boresight, at the same height as the patch row, with its own patch face
-   toward the board.
+::::{frame} Placing the Source
+19. Power the HB100 and place it about $1\ \text{m}$ in front of the array at
+    boresight, at the same height as the patch row, with its own patch face
+    toward the board.
 
 :::{depth}
 One meter is the shortest far-field distance for this array. Lesson 5's
@@ -535,11 +792,43 @@ curves the arriving wavefront enough to distort the patterns of later labs.
 :::
 ::::
 
-::::{frame} Source Frequency and FFT Peak
-3. Press **Find HB100**. When it finishes, read the value it reports and write
-   it down. Expect something within a few hundred MHz of
-   $10.525\ \text{GHz}$.
-4. Look at the FFT tab. A single narrow peak should stand well above a flat
+::::{frame} Source Search and Array Calibration
+20. Press **Find HB100**. When it finishes, record the frequency it reports.
+    Expect something within a few hundred MHz of $10.525\ \text{GHz}$.
+21. With the source still at boresight, press **Calibrate** and wait for it to
+    finish.
+
+Run Find HB100 first, because Calibrate reads the frequency that Find HB100
+stores.
+
+:::{depth}
+Both buttons write `calibration.json` on the Pi, which holds the HB100
+frequency and the per-element phase and gain corrections. A freshly flashed card
+carries the golden kit's copy of that file, which describes the golden kit's
+source and board rather than yours, and these two runs replace it.
+:::
+::::
+
+::::{frame} Part A Without a Kit
+:::{admonition} No hardware?
+:class: tip
+Part A has no simulated version, because every step acts on the card, the Pi,
+or the network. If your kit will not come up, tell the instructor. The hosted
+simulator covers Part B.
+:::
+::::
+
+::::{frame} Part B: First Measurements
+Part B runs on the kit you brought up in Part A. Work through these steps in
+order and record what each one asks for.
+
+1. Press **1 Steering Angle** under **Lab Presets**. The GUI loads the
+   workshop's initial state, with a uniform taper and the beam commanded to
+   broadside, and opens the FFT tab. Press **Start** to begin streaming.
+::::
+
+::::{frame} The FFT Peak
+2. Look at the FFT tab. A single narrow peak should stand well above a flat
    noise floor, near $0\ \text{MHz}$. Record the frequency at which the peak
    appears and how far above the floor it sits, in dB. The separation should be
    unambiguous — at least 20 dB with the source at $1\ \text{m}$. Less than that
@@ -572,7 +861,7 @@ lowers the floor, and raises the separation with no change at the antenna.
 ::::
 
 ::::{frame} Receive Gain Steps
-5. Set **Rx Gain (dB)** to 10 and record the peak level and the noise floor
+3. Set **Rx Gain (dB)** to 10 and record the peak level and the noise floor
    level, both in dBFS, decibels relative to the ADC's full-scale input. Repeat
    at 0 and at 20. Both levels move together, because the SDR applies this gain
    internally, long after the LNAs have already set the noise level that
@@ -594,7 +883,7 @@ the preset, which is why this step sets 10 explicitly.
 ::::
 
 ::::{frame} Tuned-Frequency Shift
-6. Lower **Signal Freq (GHz)** by $0.001\ \text{GHz}$, which is 1 MHz (one
+4. Lower **Signal Freq (GHz)** by $0.001\ \text{GHz}$, which is 1 MHz (one
    click of the field's down arrow, or type the new value), press Enter, and
    watch the peak. The GUI holds the IF fixed and moves the LO, so the peak
    moves 1 MHz **up** the Frequency (MHz) axis: the GUI flips the axis so it
@@ -616,7 +905,7 @@ why the step restores it with **Find HB100**.
 ::::
 
 ::::{frame} Source Rotation
-7. Rotate the HB100 in place to point it away from the array, then back. The
+5. Rotate the HB100 in place to point it away from the array, then back. The
    peak drops and returns.
 
 :::{depth}
@@ -629,7 +918,7 @@ on an arc.
 :::
 ::::
 
-::::{frame} No Hardware?
+::::{frame} Part B Without a Kit
 :::{admonition} No hardware?
 :class: tip
 Open [livethisdream.github.io/phaser](https://livethisdream.github.io/phaser/),
@@ -637,11 +926,11 @@ the same dashboard with no install. At a station whose hardware has failed, add
 `?sim=1` to the station's URL or turn on **Simulator Mode** under
 **Configuration**. An orange **SIMULATION** pill marks simulated data.
 
-Steps 1 and 4 behave as described, except that the tone appears at
-$-1\ \text{MHz}$. Steps 5 and 6 do not: the simulator holds its tone at that
-fixed offset whatever Signal Freq says, and it does not model Rx Gain. Step 3
-runs a scripted scan, and step 7 cannot be done because the simulated source is
-fixed at boresight.
+Steps 1 and 2 of Part B behave as described, except that the tone appears at
+$-1\ \text{MHz}$. Steps 3 and 4 do not: the simulator holds its tone at that
+fixed offset whatever Signal Freq says, and it does not model Rx Gain. Find
+HB100 and Calibrate run scripted scans, and step 5 cannot be done because the
+simulated source is fixed at boresight.
 :::
 
 :::{depth}
@@ -782,7 +1071,7 @@ turned down.
 ::::{frame} Deliverables
 Submit the following.
 
-1. **The measured HB100 frequency** from step 3, and the IF arithmetic that goes
+1. **The measured HB100 frequency** from Part A, and the IF arithmetic that goes
    with it. Fill in this table.
 
    | Quantity | Value |
@@ -798,7 +1087,7 @@ Submit the following.
    label every block with its name and the frequency present at that point. Mark
    where the analog summing happens and where the digital channels begin.
 
-3. **Your FFT observations** from steps 4, 5, and 6: peak frequency, peak level
+3. **Your FFT observations** from Part B steps 2, 3, and 4: peak frequency, peak level
    and noise floor at each of the three Rx Gain settings, and the shift in the
    peak when Signal Freq moved by 1 MHz.
 ::::
@@ -852,7 +1141,7 @@ The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | ADALM-Pluto | AD9361 SDR, two receive channels | 3 MSPS in the GUI, tuned to 2.2 GHz |
-| Phaser GUI | browser front end served by the Pi | `http://phaser.local:8080` |
+| Phaser GUI | browser front end served by the Pi | port 8080 at the kit's fixed address, such as `http://192.168.7.13:8080` |
 ::::
 
 ::::{frame} Practice

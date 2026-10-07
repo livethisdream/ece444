@@ -751,7 +751,10 @@ with "calculated" columns filled from theory, short written answers).
 Target 14–20 deck slides for labs. Every lab teaches against the
 expectation table: predict from theory first, measure second, reconcile
 third. Lab practice sets emphasize reading real sweeps: give students
-plausible measured numbers and ask what they indicate.
+plausible measured numbers and ask what they indicate. L17's lab has two
+parts: Part A brings the kit up from a freshly flashed card (flash, name,
+boot, connect by cable, join the Wi-Fi, run `install.sh`, then Find HB100
+and Calibrate), and Part B makes the first measurements on that kit.
 
 Deck title-slide image path and all other Module 2 rules apply unchanged.
 
