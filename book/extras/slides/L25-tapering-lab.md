@@ -134,7 +134,7 @@ discipline as reporting a limit rather than a value in any measurement.
 4. Lab preset **3 Tapering**, Rectangular plot tab
 5. Element Gains → **Enforce Symmetric Taper** on
 
-<div class="callout">The source does not move for the rest of the lab. Every number today is a comparison between tapers.</div>
+<div class="callout">The source does not move for all of Part 1. Every number there is a comparison between tapers.</div>
 
 Note:
 Simulation mode covers this lab completely — the sim target sits at boresight,
@@ -205,6 +205,87 @@ the switch off and one slider moved alone.
 
 ---
 
+## Part 2: the three departures no taper can fix
+
+- Part 1 measured the defect a taper fixes; L26 covers the three it cannot
+- The kit is out, so measure them now and bring the numbers to L26
+- Three steps, ten minutes each: predict, sweep, record
+
+<div class="callout">Use the Signal Freq the GUI shows: about 10.5 GHz, so λ ≈ 28.5 mm.</div>
+
+Note:
+This part runs before the theory on purpose. They see the three effects today
+with no explanation, and L26 opens on their own numbers. Keep the pace up:
+each step is one preset, one or two sweeps, one table row.
+
+---
+
+## Step (f): grating lobes
+
+- **Enforce Symmetric Taper off**, source at boresight, Lab preset **4**
+- Rx1, Rx4, Rx7 on: $d_\text{eff} = 42$ mm, lobes where $\sin\theta = m\lambda/d_\text{eff}$ is real
+- Then Rx1 and Rx5 only: $d_\text{eff} = 56$ mm
+
+| Elements on | Lobes calculated | Lobes measured | Peak drop |
+| :-- | :-- | :-- | :-- |
+| Rx1, Rx4, Rx7 | ±43° | ±42 to ±43° | −8 to −9 dB |
+| Rx1, Rx5 | ±31°, ±90° | ±30 to ±33°, both ends | −11 to −12 dB |
+
+Note:
+The symmetric-taper toggle must be off or editing Rx4 mirrors onto Rx5. All
+three lobes stand at the same height: that is the question on the sheet. At
+56 mm the m = 2 solution needs sin θ = 1.02, so the trace climbs to full
+height at both ends without a peak. Peak drops are 20 log(3/8) and
+20 log(2/8), the same coherent-sum arithmetic as Part 1.
+
+---
+
+## Step (g): beam squint
+
+- HB100 to about 45° on the arc, **Uniform**, Lab preset **5**
+- Signal BW 10 MHz: sweep, read **Est. Angle** (the source), **Freeze**
+- Signal BW 500 MHz: sweep again; the peak moves, the source did not
+
+| Signal BW | Est. Angle | Shift calc | Shift meas |
+| :-- | :-- | :-- | :-- |
+| 10 MHz | ≈ 45° | 0.1° | reference |
+| 500 MHz | ≈ 48° | +2.9° | +2.5 to +3.5° |
+
+Note:
+The BW setting computes the phases 500 MHz below the Signal Freq and measures
+at the Signal Freq, which is what the band edge sees. A beam commanded to 45°
+with phases set at 10.025 GHz points at 42.3° at 10.525 GHz, so the sweep has
+to command 47.9° to land on the source. No simulator equivalent: the sim
+source is fixed at boresight, where squint is zero. Instructor demo in sim:
+`?instructor=1`, interferer at 45° and +10 dB, and the interferer's lobe
+moves from 44° to 47°.
+
+---
+
+## Step (h): phase quantization
+
+- Source back at boresight, Lab preset **6** (Blackman: true sidelobes below the floor)
+- **Use Bits off**, so the sweep keeps its 2.8125° steps while the bits coarsen the phases
+- Sweep at 7, 4, 3, 2 bits; record the highest lobe **beyond ±35°** (inside that is the Blackman main lobe)
+
+| Bits | LSB | Highest lobe beyond ±35° | −6B dB |
+| :-- | :-- | :-- | :-- |
+| 7 | 2.8° | below the floor | −42 |
+| 4 | 22.5° | −15 to −21 dBc | −24 |
+| 3 | 45° | −12 to −15 dBc | −18 |
+| 2 | 90° | −8 to −10 dBc | −12 |
+
+Note:
+With Use Bits on, the preset's default, a 2-bit sweep has six points and shows
+nothing. Off, the ramp is still rounded to the LSB and the lobes rise from the
+floor as the bits come away, 3 to 6 dB above the rule of thumb: eight elements
+with a periodic rounding error make a few distinct lobes, not an RMS floor.
+The 7-bit row is the Part 1 floor lesson again, 17 to 18 dB under the
+Blackman peak. Restore before they leave: Use Bits on, 7 bits, BW 10 MHz,
+Uniform.
+
+---
+
 ## Working the Hann numbers
 
 | Quantity | Work | Result |
@@ -260,10 +341,13 @@ formula runs backwards as a diagnostic, which is why it is worth memorizing.
 2. Your custom taper: eight gain values, measured HPBW and sidelobe level
 3. Two written answers — why the sidelobes vanish but the beamwidth does not,
    and why the peak drop is not the directivity loss
+4. The three Part 2 tables, calculated columns filled before the sweep, one
+   sentence under each
 
 Note:
 Collect at the end of the period. The written answers are graded on the
-distinction, not on length.
+distinction, not on length. Part 2 is graded on the predictions and the
+observations, not on explanations; those come in L26.
 
 ---
 
@@ -279,13 +363,13 @@ radar range equation in L29, where using the wrong one costs 3 dB of range.
 
 ## Where this is going
 
-- L26: the pattern defects **no taper can fix**
+- L26 explains the three defects **no taper can fix**, the ones you just measured
 - Grating lobes — full-height copies of the beam, set by element spacing
 - Beam squint — the beam moves when the signal frequency drifts
-- Phase quantization — a sidelobe floor set by the shifter's bit count
+- Phase quantization — lobes and pointing jumps set by the shifter's bit count
 
-Bring today's Chebyshev sidelobe entry. Next lesson we turn on every third
-element and grating lobes appear at ±44° at full height.
+Bring your Part 2 tables and today's Chebyshev sidelobe entry. L26 opens on
+your numbers: buried sidelobes beside grating lobes at full height.
 
 Note:
 Read the L26 page before class. The contrast with today is the point: a taper

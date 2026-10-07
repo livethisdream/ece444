@@ -834,3 +834,113 @@ folded in.
   array that can form sum and delta simultaneously can measure angle from
   a single look — which is what a tracking radar needs, and where
   Module 4 begins.
+
+- **L17 is the station bring-up lab, from a flashed card** (Neil,
+  2026-10-07). Students receive a blank-slate PHASER kit and bring it up
+  themselves: flash the course's golden image (built once by the
+  instructor from a provisioned kit with `provision.sh --prepare-image`
+  and cloned, per `docs/golden-image.md` in the Phaser repo, PR #24),
+  name the kit in the plain files on the card's FAT partition, boot,
+  connect, get the kit onto Wi-Fi, and run `install.sh` to update the
+  backend. The classroom Wi-Fi is the open (unencrypted) SSID
+  `AF_ACADEMY_GUEST` (spelling confirmed by Neil). Two facts about open guest networks decide the
+  procedure's shape and must be checked on the golden kit before class:
+  a captive portal would block `install.sh`'s reach to GitHub, and
+  client isolation would stop a laptop reaching the Pi over Wi-Fi. So
+  the procedure uses the **direct Ethernet cable** to the laptop for
+  ssh and the browser UI (the fixed alias 192.168.7.2 the setup branch
+  adds for exactly this; `phaser-NN.local` once mDNS works), and the
+  Wi-Fi only as the Pi's route to the internet. The Kuiper the branch
+  targets is bullseye-based with dhcpcd and wpa_supplicant; an open
+  network joins with `key_mgmt=NONE`, and the Wi-Fi country must be set
+  or the radio stays rfkill-blocked. Whether to bake the SSID into the
+  golden image so the kit joins on boot is the instructor's choice; the
+  page teaches the manual join either way. The image builder's
+  `--autoprovision` route (internet on first boot) is not used for the
+  class. Hardware dry run of Part A on a real kit is owed before the
+  lesson is taught; it cannot be executed in a container.
+
+- **No new deck work; the existing decks stay as built** (Neil, 2026-10-07,
+  on the L17 pick list: "the new site format doesn't have decks. It's read
+  and present mode", then: "the point of the notes about the decks was to
+  keep what we had already built, not to keep building new decks. They
+  can print from the frame layout"). A lesson's present mode is its deck,
+  and printing comes from the frame layout (`check_print.py` gates one
+  sheet per frame). From this date no lesson work edits, mirrors into, or
+  verifies a deck: the voice, why, and illustration sweeps and the present
+  cut apply to the page alone, and the "mirror it in the deck" steps in the
+  three skills and in CLAUDE.md are void. The deck files already in
+  `book/extras/slides/` and the Slides frame that links them are kept,
+  untouched and unmaintained, as the record of what was built; nothing is
+  deleted. Lessons that never had a deck (Modules 4 and 5) will not get
+  one, so the deck gate in `scripts/verify/mech_check.sh` is to be relaxed
+  to "if present" when the first such lesson is authored. Nomenclature
+  authority moves from "the decks" to the lesson pages' present blocks.
+
+- **Hardware limits stay out of the student story unless they change what
+  a student does** (Neil, 2026-10-07, on the L17 closing re-check, which
+  found the page saying both "the 12.2 to 13.0 GHz VCO reaches 10.0 to
+  10.8 GHz" and "the installer warns above 10.600 GHz": "they don't know
+  anything about the LO, why they need it, and they definitely don't care
+  about the issues we fixed a couple of weeks ago. Don't include it unless
+  it's valuable to the overall story and definitely don't include it just
+  because it bit us"). L17 keeps the nominal reachable band, 10.0 to
+  10.8 GHz, as the frequency-plan story; the measured LO ceiling
+  (`LO_USABLE_CEILING_HZ` = 12.80 GHz in `phaser_functions.py`) and the
+  installer's WARN lines are instructor-side and come off the page, the
+  practice key, and the lab key. The same test applies to every later
+  lesson: a bench quirk goes in `project/` notes or the faculty repo, not
+  in a lesson, unless the student has to act on it.
+
+- **Students have not had the superheterodyne receiver** (Neil, 2026-10-07:
+  "they don't understand superhet architecture, because they won't learn
+  that until next semester"). L17 and every later lesson teach the mixer,
+  LO, and IF from scratch at the level the lab needs, as three ideas: the
+  SDR cannot digitize X-band, so the board moves the signal down; a mixer
+  multiplies the received signal by a tone the board generates (the LO)
+  and its useful output is at the difference frequency; the board sets the
+  LO 2.2 GHz above the source, so the difference is always 2.2 GHz and the
+  SDR only ever listens there. Receiver-course vocabulary ("superhet",
+  "injection", "image", "IF strip", "second downconversion") is not used;
+  a term the lab needs ("intermediate frequency", "baseband", "PLL") is
+  defined once in plain words at first use. The mirror (LO minus RF, which
+  the GUI's negated axis undoes) is taught only because Part B step 4
+  depends on it.
+
+- **Objective 3.8 is measured in Lab 8 (L25), Part 2** (Neil, 2026-10-07:
+  "Go with option 1, add it to the L25 lab sheet"). L26 stays a theory
+  lesson with no sheet of its own; the three GUI presets built for the
+  workshop's grating-lobe, beam-squint, and quantization labs (4, 5, 6) run
+  as a second part of the L25 lab while the kit is on the bench, *before*
+  the L26 theory. The framing is deliberate: students predict from the
+  relations the sheet scaffolds, measure, and bring the tables to L26,
+  which opens on their numbers. The sheet carries a second LO banner
+  (3.8) for that part; its page and deck mirror it as Steps (f) to (i).
+  Procedure facts the GUI forces: preset 4 does not clear **Enforce
+  Symmetric Taper**, so the step turns it off first (editing Rx4 with it
+  on mirrors onto Rx5); preset 5 loads Signal BW = 500 MHz at once, so the
+  step sets 10 MHz, sweeps, Freezes, then 500 MHz; preset 6 leaves **Use
+  Bits** on, under which a 2-bit sweep has six points and shows nothing,
+  so the step turns it off (the sweep then steps 2.8125° while the ramp is
+  still rounded to the LSB). The squint step has no simulator equivalent
+  (the sim source is fixed at boresight); the instructor demo is
+  `?instructor=1` with the interferer at 45°, +10 dB. Sim-verified
+  expectation numbers (10.525 GHz, $\lambda = 28.5$ mm):
+  every 3rd element → lobes $\pm 42.7°$ calc, $\pm 42$ to $43°$ measured,
+  equal height within 0.5 dB, peak drop $-8.5$ dB calc / $-8$ to $-9$
+  measured; every 4th → $\pm 30.6°$ and the $m=2$ shoulder at $\pm 90°$
+  ($\sin\theta = 1.02$), peak drop $-12.0$ / $-11$ to $-12$ dB; squint at
+  $45°$ with BW 500 MHz → Est. Angle moves $+2.9°$ calc, $+2.5$ to $+3.5°$
+  measured (the beam itself leans to $42.3°$); quantization with Blackman,
+  Use Bits off, highest lobe **beyond $\pm 35°$** (inside that is the
+  24°-wide Blackman main lobe and its skirt, which a student would
+  otherwise read as a lobe even at 7 bits): 7 bits below the floor, which
+  for this taper is only 17 to 18 dB under the peak; 4 bits $-15$ to $-21$
+  dBc; 3 bits $-12$ to $-15$ dBc; 2 bits $-8$ to $-10$ dBc. The $-6B$ dB
+  rule of thumb is quoted beside the measurement and the key explains the
+  3 to 6 dB gap (eight elements, periodic rounding error, a few distinct
+  lobes rather than an RMS floor). A static-beam check showed the lobe
+  level depends strongly on the commanded angle (at 15° and 30° the ideal
+  ramp is nearly a multiple of 45°, so 3 bits costs almost nothing); the
+  sweep passes through every commanded angle and reports the worst case.
+  Hardware validation still owed (project ToDo).

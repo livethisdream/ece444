@@ -39,6 +39,8 @@ Lesson 26 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 :::{depth}
 In the tapering lab you took control of the sidelobes with amplitude weights, and the pattern did what the theory said it would. Amplitude is now a solved problem. Three things are still capable of putting energy where you did not ask for it, and none of them are fixed by a taper: the **element spacing**, the **signal bandwidth**, and the **finite resolution of the phase shifters**. Each one produces a specific, predictable defect — a second full-height beam, a beam that walks with frequency, and a floor of sidelobes you cannot get below. This lesson gives you the number for each.
+You already measured all three at the end of Lab 8, with the kit on the bench
+and no explanation. Bring those tables: this lesson is the explanation.
 :::
 ::::
 
@@ -79,7 +81,7 @@ At broadside ($\theta_0 = 0$), the $m = 1$ solutions are
 
 $$\sin\theta_g = \pm 0.693 \quad \Longrightarrow \quad \theta_g = \pm 43.9^\circ.$$
 
-The $m = 2$ solutions need $\vert \sin\theta_g \vert = 1.386$, which is not a real angle, so there are exactly three full-height beams: $0^\circ$ and $\pm 44^\circ$.
+The $m = 2$ solutions need $\vert \sin\theta_g \vert = 1.386$, which is not a real angle, so there are exactly three full-height beams: $0^\circ$ and $\pm 44^\circ$. At the HB100's $10.525\ \text{GHz}$ the same arithmetic gives $\pm 42.7^\circ$, which is what your Lab 8 sweep read.
 :::
 ::::
 
@@ -152,7 +154,7 @@ Phases are set for $\theta_0 = 45^\circ$ at the HB100's $f_0 = 10.525\ \text{GHz
 
 $$\sin\theta = \frac{10.525}{10.025}\ \sin 45^\circ = 1.0499 \times 0.7071 = 0.7424 \quad \Longrightarrow \quad \theta = 47.9^\circ.$$
 
-The beam has squinted $\Delta\theta = +2.9^\circ$. The approximation gives $-(-0.0475)(1.000) = 0.0475\ \text{rad} = 2.7^\circ$, close enough for a budget.
+The beam has squinted $\Delta\theta = +2.9^\circ$. The approximation gives $-(-0.0475)(1.000) = 0.0475\ \text{rad} = 2.7^\circ$, close enough for a budget. This is the $+3^\circ$ your Lab 8 Est. Angle readout moved when the Signal BW went from 10 to 500 MHz: the GUI set the phases 500 MHz below the signal, so the sweep had to command $47.9^\circ$ to land on a source at $45^\circ$.
 :::
 ::::
 
