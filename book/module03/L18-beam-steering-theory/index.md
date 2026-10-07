@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-This lesson supplies the numbers.
+The phase each PHASER element needs to steer the beam to a commanded angle, and what the steered beam looks like.
 
 Lesson 18 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -41,9 +41,10 @@ Lesson 18 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 :::{depth}
 Lesson 17 put the PHASER in front of you: eight patch elements in a row, two
-ADAR1000 beamformer chips, and a phase control for every element in the Phase
-Control panel of the GUI. Turning those knobs moved the beam, but nothing so far
-has said what to set them to. This lesson supplies the numbers. We derive the
+ADAR1000 beamformer chips that set a phase on every element, and the backend
+code that writes the steering ramp `i*PhDelta` to them. In the GUI, Beam
+Steering's Steer Angle sets that ramp, and Phase Control adds per-element
+offsets on top of it. Nothing so far has said what the ramp should be. We derive the
 element-to-element phase from the arrival geometry, turn it into the eight
 settings the hardware accepts, predict what the steered pattern looks like, and
 then read the process backwards — given a set of phases, find the angle the
@@ -58,11 +59,10 @@ array is pointing.
 - Undoing those arrival differences makes all eight signals add in phase.
 :::
 
-Start with the array doing nothing at all. Eight elements sit in a row, spaced
+Eight elements sit in a row with no phase applied, spaced
 $d = 14\ \text{mm}$ apart, and a plane wave arrives from an angle $\theta_0$
-measured from broadside. The wave does not reach the eight elements at the same
-instant. It reaches the element nearest the source first and works its way
-across the row.
+measured from broadside. The wavefront reaches the element nearest the source
+first and each successive element later.
 ::::
 
 ::::{frame} Path, Time, and Phase
@@ -92,7 +92,8 @@ $$\text{extra path} = d\sin\theta_0.$$
 Element $n$ sits $n$ spacings from element 0, so its path runs
 $n\ d\sin\theta_0$ shorter — it sees the wave that much sooner.
 
-Divide by the speed of light and the geometry becomes timing:
+Dividing the path difference by the speed of light gives the arrival-time
+difference between neighbors:
 
 $$\Delta t = \frac{d\sin\theta_0}{c}.$$
 
@@ -116,7 +117,7 @@ $n\ \Delta\phi$.
 $$\Delta\phi = 2\pi\frac{d}{\lambda}\sin\theta_0$$
 
 - Broadside needs none: all phases at zero point the beam at $0^\circ$.
-- It follows $\sin\theta_0$, so $10^\circ$ more scan needs less phase near endfire than near broadside.
+- It follows $\sin\theta_0$: $0^\circ$ to $10^\circ$ needs $30.1^\circ$, $80^\circ$ to $90^\circ$ only $2.6^\circ$.
 - It scales with $d/\lambda$: a higher frequency needs more phase per element.
 :::
 
@@ -125,7 +126,9 @@ runs on. Read what it says. At broadside, $\sin\theta_0 = 0$ and no phase is
 needed, which is why the array points to $0^\circ$ with every phase set to zero.
 The phase grows with the *sine* of the steer angle rather than with the angle,
 so the same $10^\circ$ of extra scan needs much less added phase near endfire
-than it does near broadside. And the phase scales with the electrical spacing
+than it does near broadside: on the course array, steering from $0^\circ$ to
+$10^\circ$ takes $30.1^\circ$ of added phase per element, and steering from
+$80^\circ$ to $90^\circ$ takes $2.6^\circ$. And the phase scales with the electrical spacing
 $d/\lambda$: the same array asked to steer the same angle needs more phase per
 element as the frequency goes up.
 ::::
@@ -148,12 +151,12 @@ all follow from this one relation.
 
 ```{note}
 $\Delta t$ is a true delay and $\Delta\phi$ is a phase shift, and the two are
-equal at exactly one frequency — the one you used for $k$. A true time delay
+equal at exactly one frequency, the one used to compute $k$. A true time delay
 would steer the beam to $\theta_0$ at every frequency in the band; a phase
 shifter steers it to $\theta_0$ only at the design frequency and to a slightly
 different angle everywhere else. That difference has a name, beam squint, and
-L26 puts a number on it. For now, note that every phase you compute today
-carries a frequency stamp.
+L26 quantifies it. For now, every phase we compute today is correct only at
+that frequency.
 ```
 ::::
 
@@ -205,8 +208,17 @@ $d/\lambda = 0.481$, and
 
 $$kd = 2\pi(0.481) = 3.02\ \text{rad} = 173.2^\circ.$$
 
-That single number does most of the work: multiply it by $\sin\theta_0$ and you
-have $\Delta\phi$.
+Multiplying $kd$ by $\sin\theta_0$ gives $\Delta\phi$ for any steer angle on
+this array.
+
+The eight elements sit on two ADAR1000s, elements 0 to 3 on one and 4 to 7 on
+the other, and each chip sums its four into one channel; L17's "The Hybrid
+Beamformer" adds the two channels digitally. The ramp continues across the chip
+boundary, so $\phi_4 = 4\ \Delta\phi$ is set on the second chip. It steers the
+whole array only if the two subarray channels are phase-matched where they are
+summed. The GUI's Calibrate step measures each element's phase against its
+neighbor, including the element 3 and 4 pair that spans the two chips, so the
+mismatch between the subarrays is folded into the offsets of elements 4 to 7.
 ::::
 
 ::::{frame} Worked Example: Phase Table at 30°
@@ -282,9 +294,10 @@ $$\psi = kd\sin\theta - \Delta\phi = kd\left(\sin\theta - \sin\theta_0\right),$$
 
 $$AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}.$$
 
-The function did not change. Its argument did. The peak still sits where
-$\psi = 0$, and $\psi = 0$ now means $\sin\theta = \sin\theta_0$, so the main
-lobe points at the commanded angle.
+The $\Delta\phi$ here is the $\beta$ of L16's steering phase. The function is
+unchanged; only its argument has shifted. The peak still sits at $\psi = 0$,
+which now means $\sin\theta = \sin\theta_0$, so the main lobe points at the
+commanded angle.
 ::::
 
 ::::{frame} Rigid Shift in Sine Space
@@ -292,28 +305,39 @@ lobe points at the commanded angle.
 $$\sin\theta_{\text{null}} = \sin\theta_0 \pm \frac{m\lambda}{Nd}$$
 
 - Against $\sin\theta$ the pattern slides unchanged; against $\theta$ it stretches as it moves.
-- At $30^\circ$, $\lambda/Nd = 0.260$: nulls at $13.9^\circ$ and $49.5^\circ$, $16.1^\circ$ below the peak and $19.5^\circ$ above.
+- At $30^\circ$, $\lambda/Nd = 0.260$: nulls at $13.9^\circ$ and $49.5^\circ$, $16.1^\circ$ and $19.5^\circ$ from the peak, wider toward endfire.
 - The upper $m = 2$ null would need $\sin\theta = 1.020$: no real angle.
 :::
 
 Every other feature of the pattern moves with it, but *rigidly in $\sin\theta$,
 not in $\theta$*. Plot the pattern against $\sin\theta$ and steering slides the
 whole curve sideways without changing its shape. Plot it against $\theta$ and
-the same curve stretches as it moves, which is exactly the beam broadening of
-Part 4.
+the same curve stretches as it moves, which is the beam broadening derived in
+"Beam Broadening" below.
 
 The nulls follow the same substitution. $AF_N$ vanishes when $N\psi/2$ is a
 nonzero multiple of $\pi$, so
 
-$$\sin\theta_{\text{null}} = \sin\theta_0 \pm \frac{m\lambda}{Nd}, \qquad m = 1, 2, \ldots$$
+$$\sin\theta_{\text{null}} = \sin\theta_0 \pm \frac{m\lambda}{Nd}, \qquad m = 1, 2, \ldots,\ m \ne N, 2N, \ldots$$
+
+At a multiple of $N$ the numerator and the denominator vanish together, and that
+point is a grating lobe, not a null. L16's "Grating Lobes" puts the first one at
+$\sin\theta_g = \sin\theta_0 - \lambda/d$ and keeps it out of real space while
+$d < \lambda/(1 + \vert\sin\theta_0\vert)$. Steered to $30^\circ$, the course array
+would need $d > 19.4\ \text{mm}$ for one to appear, and a full $90^\circ$ scan
+needs only $d < 14.55\ \text{mm}$, so the PHASER's $14\ \text{mm}$ never shows
+one: at $30^\circ$ the lobe would sit at $\sin\theta = -1.58$.
 
 For the course array, $\lambda/Nd = 29.1/112 = 0.260$. Steered to $30^\circ$, the
 two nulls flanking the main lobe are at $\sin\theta = 0.240$ and
 $\sin\theta = 0.760$, or $13.9^\circ$ and $49.5^\circ$. They are no longer
 symmetric about the beam: the main lobe reaches $16.1^\circ$ below the peak and
-only $19.5^\circ$ above it. The $m = 2$ null on the upper side would need
-$\sin\theta = 1.020$, which no real angle satisfies, so that null has left
-visible space entirely.
+$19.5^\circ$ above it, wider toward endfire. The nulls are an equal step of
+$0.260$ apart in $\sin\theta$, and a fixed step in $\sin\theta$ is a larger
+step in $\theta$ where $\cos\theta$ is small, since
+$d\theta = d(\sin\theta)/\cos\theta$. The $m = 2$ null on the upper side would
+need $\sin\theta = 1.020$, which no real angle satisfies, so that null has left
+the visible region (L16, "Part 4: The Visible Region") entirely.
 ::::
 
 ::::{frame} Phase Ramp and Beam
@@ -324,8 +348,11 @@ Use the widget below to connect the two halves of the lesson. Drag the steer
 angle and watch the eight commanded phases and the main lobe move together, then
 switch the phase display between the wrapped values and the unwrapped ramp — the
 sawtooth is the same physics as the straight line. Set $\theta_0 = 30^\circ$ and
-check the bars against the worked table above, then compare the $-3$ dB width
-printed on the pattern with the HPBW pill as you scan out toward $60^\circ$.
+check the bars against the worked table above: a positive steer angle gives a
+rising ramp. Then scan out toward $60^\circ$ and compare the $-3$ dB width
+printed on the pattern, which is read off the exact array factor, with the HPBW
+readout, which is the $1/\cos\theta_0$ rule: at $60^\circ$ the rule gives
+$26.4^\circ$ and the pattern $30.5^\circ$.
 :::
 
 :::{present}
@@ -344,7 +371,7 @@ printed on the pattern with the HPBW pill as you scan out toward $60^\circ$.
 
 $$\begin{aligned}
 L_{\text{eff}} &= Nd\cos\theta_0 \\
-\theta_{\text{HP}}(\theta_0) &\approx \frac{0.886\ \lambda}{Nd\cos\theta_0} = \frac{\theta_{\text{HP}}(0)}{\cos\theta_0}
+\theta_{\text{HP}}(\theta_0) &\approx \frac{0.886\ \lambda}{Nd\cos\theta_0}\ \text{rad} = \frac{\theta_{\text{HP}}(0)}{\cos\theta_0}
 \end{aligned}$$
 
 - L15's uniform-aperture beamwidth with the projected length.
@@ -355,19 +382,28 @@ L_{\text{eff}} &= Nd\cos\theta_0 \\
      style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Steering widens the beam, and the reason is visible in the geometry rather than
-in the algebra. A source out at $\theta_0$ does not see the full physical length
-of the array. It sees the array's projection onto the plane perpendicular to its
-line of sight, and that projection is shorter by $\cos\theta_0$.
+Steering widens the beam because a source at $\theta_0$ sees the array's
+projection onto the plane perpendicular to its line of sight, which is shorter
+than the array by $\cos\theta_0$.
 
-The effective aperture length is therefore
+The length that matters is $Nd = 112\ \text{mm}$, not the $98\ \text{mm}$
+between the centers of the first and last elements. L16's "Part 5: The Array
+as a Sampled Aperture" treats the array as a line source sampled every $d$, so
+each element stands for a cell $d$ wide and the eight cells fill an equivalent
+aperture $Nd = 3.85\lambda$. Using $98\ \text{mm}$ would give $15.1^\circ$ at
+broadside instead of $13.2^\circ$, against $13.3^\circ$ read off the exact
+array factor. The effective aperture length is therefore
 
 $$L_{\text{eff}} = Nd\cos\theta_0.$$
 
-L15 gave the half-power beamwidth of a uniform aperture as
-$0.886\ \lambda/L$. Substituting the projected length,
+L15 gave the half-power beamwidth of a uniform aperture of length $L$ as
 
-$$\theta_{\text{HP}}(\theta_0) \approx \frac{0.886\ \lambda}{Nd\cos\theta_0} = \frac{\theta_{\text{HP}}(0)}{\cos\theta_0}.$$
+$$\theta_{\text{HP}} = 0.886\ \frac{\lambda}{L}\ \text{rad} = 50.8^\circ\ \frac{\lambda}{L},$$
+
+which for the course array at broadside is $0.886(29.1)/112 = 0.2302\ \text{rad} = 13.2^\circ$.
+Substituting the projected length,
+
+$$\theta_{\text{HP}}(\theta_0) \approx \frac{0.886\ \lambda}{Nd\cos\theta_0}\ \text{rad} = \frac{\theta_{\text{HP}}(0)}{\cos\theta_0}.$$
 ::::
 
 ::::{frame} Scan Loss
@@ -375,18 +411,27 @@ $$\theta_{\text{HP}}(\theta_0) \approx \frac{0.886\ \lambda}{Nd\cos\theta_0} = \
 $$\text{scan loss} = 10\log_{10}(\cos\theta_0)$$
 
 - The smaller projected aperture lowers the peak gain: $-3$ dB at $60^\circ$.
-- The array factor barely changes its directivity as it scans; the element pattern carries the loss.
+- The array factor's directivity holds near 7.7 as it scans; the element pattern carries the loss.
 - L22 works out the element factor and the scanned gain.
 :::
 
 The beam broadens as $1/\cos\theta_0$. The same projection argument sets the
 **scan loss** in gain: the aperture the array presents to a source at $\theta_0$
-is smaller by $\cos\theta_0$, so the peak gain drops by $10\log_{10}(\cos\theta_0)$.
-Note where that loss lives. The array factor by itself barely changes its
-directivity as it scans — it is the element pattern, which is not isotropic and
-rolls off away from its own boresight, that carries the projected-aperture loss.
-L22 works the element factor and the scanned gain out properly; for design
-estimates today, use $10\log_{10}(\cos\theta_0)$.
+is smaller by $\cos\theta_0$, so the peak gain drops by
+
+$$\text{scan loss} = 10\log_{10}(\cos\theta_0)\ \text{dB}.$$
+
+The array factor alone barely changes its directivity as it scans. For isotropic
+elements it computes to 7.70 at broadside, 7.70 at $30^\circ$, 7.78 at
+$45^\circ$, and 8.16 at $60^\circ$, a slight rise. A linear array's beam is a
+cone around the array axis, not a pencil. Steering tilts that cone toward the
+axis: its circumference shrinks as $\cos\theta_0$ while its width in $\theta$
+grows as $1/\cos\theta_0$, so the solid angle the beam fills, and with it the
+directivity, stays about the same. The element pattern, which is not isotropic
+and rolls off away from its own boresight, carries the projected-aperture loss:
+each element's cell presents a projected area that shrinks as $\cos\theta$.
+L22 derives the element factor and the scanned gain; for design estimates, we
+use the scan loss above.
 ::::
 
 ::::{frame} Broadening and Scan Loss Versus Angle
@@ -398,19 +443,19 @@ estimates today, use $10\log_{10}(\cos\theta_0)$.
 | $45^\circ$ | 0.707 | $18.7^\circ$ | $-1.5$ dB |
 | $60^\circ$ | 0.500 | $26.4^\circ$ | $-3.0$ dB |
 
-- The $1/\cos\theta_0$ rule reads narrow past about $50^\circ$: $30.4^\circ$ exact at $60^\circ$.
+- The $1/\cos\theta_0$ rule reads narrow past about $50^\circ$: $30.5^\circ$ exact at $60^\circ$.
 :::
 
-Those four numbers are worth carrying. They are why a scanned array is specified
-over a limited field of view: at $60^\circ$ the PHASER's beam is twice as wide as
-at broadside and its peak gain has dropped by $3\ \text{dB}$, and pushing further gains
-very little.
+Because the beam broadens and the peak gain falls as the array scans, designers
+specify a scanned array over a limited field of view: at $60^\circ$ the PHASER's
+beam is twice as wide as at broadside by the rule ($2.3$ times, exactly), its
+peak gain is $3\ \text{dB}$ lower, and scanning further adds little coverage.
 
 ```{note}
 The $1/\cos\theta_0$ rule is an approximation, and it reads slightly narrow at
 large scan angles. Measuring the $-3$ dB width directly off the array factor for
 this array gives $13.3^\circ$ at broadside and $19.1^\circ$ at $45^\circ$, both
-within a few tenths of the rule, but $30.4^\circ$ at $60^\circ$ against the
+within a few tenths of the rule, but $30.5^\circ$ at $60^\circ$ against the
 rule's $26.4^\circ$. Use the rule for design estimates out to about $50^\circ$
 and the pattern itself past that.
 ```
@@ -482,10 +527,16 @@ side the GUI's Steer Angle calls positive.
 - $\vert\Delta\phi/kd\vert > 1$: no real angle fits, so suspect an arithmetic or unit error.
 :::
 
-Two checks are worth building into the habit. If the seven differences cannot be
-made to agree, the array is not carrying a uniform steering ramp — it may have a
-per-element calibration offset in it, or the readout is not what you think it is.
-And if $\vert\Delta\phi/kd\vert$ comes out greater than 1, no real angle produces
+Two checks catch most errors. If the seven differences cannot be made to agree,
+the array is not carrying a uniform steering ramp: it may include a per-element
+calibration offset, or the readout may not reflect the commanded phases. Where
+the odd difference sits says which. An offset $\delta$ on an interior element
+spoils the two differences on either side of it, one by $+\delta$ and the next by
+$-\delta$. A single odd difference therefore points to an end element, 0 or 7,
+or to the step from element 3 to element 4, where the ramp crosses from one
+ADAR1000 to the other: a phase error between the two subarray channels moves
+elements 4 to 7 together, which is what the GUI's Calibrate step measures and
+removes. And if $\vert\Delta\phi/kd\vert$ comes out greater than 1, no real angle produces
 that ramp, which points at an arithmetic or unit error.
 ::::
 
@@ -494,13 +545,18 @@ that ramp, which points at an arithmetic or unit error.
 $$\text{LSB} = \frac{360^\circ}{2^7} = 2.8125^\circ$$
 
 - The ADAR1000's phase shifter has 7 bits, so every commanded phase rounds to this grid.
+- At $30^\circ$, the $86.6^\circ$ step is set as 31 steps, $87.19^\circ$.
 - L26 computes the effect on sidelobe level and null depth.
 :::
 
-One hardware limit belongs here before the lab. The ADAR1000's phase shifter has
-7 bits, so its smallest step is $360^\circ/128 = 2.8125^\circ$ and your
-$122.5^\circ$ is actually set as $123.75^\circ$; L26 works out what that grid
-costs in sidelobe level and null depth.
+The ADAR1000's phase shifter has 7 bits (L17, "The ADAR1000 Beamformers"), so
+its smallest step is $360^\circ/128 = 2.8125^\circ$ and every commanded phase
+lands on that grid. The $86.6^\circ$ step of the $30^\circ$ table is
+$30.79$ steps and is set as 31 steps, $87.19^\circ$. The backend rounds each
+element's unwrapped ramp value to the grid before wrapping, so the whole
+$30^\circ$ ramp is set as 0, 87.19, 174.38, 258.75, 345.94, 73.13, 160.31, and
+$247.50^\circ$. L26 computes how much that grid raises the sidelobe level and
+reduces null depth.
 ::::
 
 ::::{frame} Summary: Phase Ramp
@@ -541,26 +597,29 @@ costs in sidelobe level and null depth.
 
 ::::{frame} Looking Ahead
 :::{present}
-- L19: command a steer angle on the PHASER, sweep, and compare the measured peak with the prediction.
-- Bring the $\theta_0 = 30^\circ$ phase table and the HPBW table; the sweep measures beamwidth too.
+- L19: steer the PHASER, sweep, and compare the measured peak and beamwidth with the prediction.
+- The lab redoes the $30^\circ$ table at the HB100's $10.525$ GHz: $88.4^\circ$ per element, E1 to E8.
 - L20-L26: beamwidth, tapering, grating lobes, squint, and quantization.
 :::
 
-L19 puts this on the hardware. You will load the Beam Steering lab preset,
+L19 puts this on the hardware. You will load the Steering Angle lab preset,
 command a steer angle, sweep, and compare the measured peak against the angle you
-asked for — and the phase table you computed in Part 2 is literally the predicted
-column of the lab sheet. Bring it with you, along with the HPBW numbers from
-Part 4, because the sweep measures beamwidth as well as peak position and the
-comparison only means something if the prediction was written down first.
+asked for. The lab redoes this lesson's calculation at the HB100's
+$10.525\ \text{GHz}$, where $\lambda = 28.5\ \text{mm}$, $kd = 176.8^\circ$, and
+the $30^\circ$ beam needs $88.4^\circ$ per element; the GUI numbers the elements
+E1 to E8, so this lesson's $n = 0$ to 7 are E1 to E8. Bring this lesson's phase
+table and its HPBW table, because the sweep measures beamwidth as well as peak
+position and the comparison only means something if the prediction was written
+down first.
 
 :::{depth}
 Further out, the ideal steered pattern of this lesson starts to fray. L20 and
 L21 measure beamwidth against theory across element counts, L24 trades sidelobe
 level for beamwidth with a taper, and L26 collects the three ways a real steered
-array departs from today's result: grating lobes when the spacing is too wide,
+array departs from today's result: grating lobes when the spacing is too wide
+(L16's criterion, which the PHASER's $14\ \text{mm}$ meets at every angle),
 beam squint when the frequency moves off the one you designed for, and
 quantization when the ideal ramp has to land on the $2.8125^\circ$ grid. Read the
-L19 lab procedure before the next lesson and have your $\theta_0 = 30^\circ$
-phase table in hand when you walk in.
+L19 lab procedure before the next lesson.
 :::
 ::::
