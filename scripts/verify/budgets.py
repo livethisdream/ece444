@@ -36,8 +36,6 @@ BEAT_EXCEPTIONS = {
     "L14": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L15": (30, "cut under the 30-beat rule (2026-10); recut pending"),
     "L16": (30, "cut under the 30-beat rule (2026-10); recut pending"),
-    "L17": (30, "cut under the 30-beat rule (2026-10-07); recut next"),
-    "L18": (30, "cut under the 30-beat rule (2026-10-07); recut next"),
 }
 
 

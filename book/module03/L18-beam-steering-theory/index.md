@@ -548,6 +548,8 @@ side the GUI's Steer Angle calls positive.
 ::::
 
 ::::{frame} Two Sanity Checks
+:class: read-only
+
 :::{present}
 - Seven differences that cannot be made to agree: no uniform steering ramp. Look for a calibration offset or a bad readout.
 - $\vert\Delta\phi/kd\vert > 1$: no real angle fits, so suspect an arithmetic or unit error.
@@ -567,6 +569,8 @@ that ramp, which points at an arithmetic or unit error.
 ::::
 
 ::::{frame} Phase-Shifter Resolution
+:class: read-only
+
 :::{present}
 $$\text{LSB} = \frac{360^\circ}{2^7} = 2.8125^\circ$$
 

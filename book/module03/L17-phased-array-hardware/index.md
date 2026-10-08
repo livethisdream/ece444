@@ -563,6 +563,8 @@ Optional features; macOS and Linux include one.
 ::::
 
 ::::{frame} Flash the Card
+:class: read-only
+
 :::{present}
 1. Copy `phaser-golden.img` to the laptop.
 2. Insert the card.
@@ -590,6 +592,8 @@ we leave Imager's turned off.
 ::::
 
 ::::{frame} Name the Kit
+:class: read-only
+
 :::{present}
 Team NN's kit is `phaser-NN` at `192.168.7.(10 + NN)`; examples use team 03.
 
@@ -624,6 +628,8 @@ dialog, choose All Files, because the two files have no extension.
 ::::
 
 ::::{frame} First Boot
+:class: read-only
+
 :::{present}
 9. Mount the PHASER on the tripod, patch face vertical and patch row horizontal.
 10. Put the card in the Pi.
@@ -668,6 +674,8 @@ because that file exists, it never runs again on this card.
 ::::
 
 ::::{frame} The Cable Connection
+:class: read-only
+
 :::{present}
 13. Give the laptop's wired adapter `192.168.7.1`, mask `255.255.255.0`, and no gateway.
 14. Run `ssh analog@192.168.7.13`.
@@ -700,6 +708,8 @@ reaches the same kit, but the fixed address works without it.
 ::::
 
 ::::{frame} Wi-Fi and the Software Update
+:class: read-only
+
 :::{present}
 18. Check `wpa_supplicant.conf`, then run the Wi-Fi commands in order.
 19. Run `ping -c 4 github.com` and expect four replies.
@@ -804,6 +814,8 @@ not yours, which is why Find HB100 comes later in Part A.
 ::::
 
 ::::{frame} The Phaser GUI
+:class: read-only
+
 :::{present}
 22. Browse to `http://192.168.7.13:8080` and wait for the pill to read **Connected**.
 
@@ -852,6 +864,8 @@ them; it is unavailable on the FFT tab.
 ::::
 
 ::::{frame} Source Search and Array Calibration
+:class: read-only
+
 :::{present}
 23. Place the powered HB100 $1\ \text{m}$ out at boresight.
 24. Press **Find HB100** and record its frequency.
@@ -975,6 +989,8 @@ lowers the floor, and raises the separation with no change at the antenna.
 ::::
 
 ::::{frame} Receive Gain and Tuning
+:class: read-only
+
 :::{present}
 4. Record the peak and floor in dBFS at **Rx Gain (dB)** 10, 0, and 20.
 5. Lower **Signal Freq (GHz)** by $0.001\ \text{GHz}$.
@@ -1022,6 +1038,8 @@ why the step restores it with **Find HB100**.
 ::::
 
 ::::{frame} Source Rotation
+:class: read-only
+
 :::{present}
 8. Rotate the HB100 in place, away from the array and back; the peak drops and returns.
 :::
