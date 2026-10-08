@@ -31,11 +31,8 @@ Lesson 28 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '9'; counter-reset: lo 4">
-  <li>I can implement computed null-steering weights on the PHASER and measure the resulting notch.</li>
-  <li>I can place a boresight null by subtracting the two digital subarray channels.</li>
-  <li>I can run the MVDR adaptive beamformer and interpret the weights it chooses against an interferer.</li>
-  <li>I can compare manual null steering with adaptive beamforming and state where each wins.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 8">
+  <li>I can calculate null-steering weights and implement pattern nulls on the ADALM-PHASER.</li>
 </ol>
 
 :::{depth}

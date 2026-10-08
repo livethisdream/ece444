@@ -46,7 +46,7 @@ LO_TEXT = {
     "2.1": "I can describe the radiation behavior of simple resonant antennas (isotropic radiator, half-wave dipole, monopole, loop) and calculate their gain and impedance.",
     "2.2": "I can simulate a dipole antenna using an EM simulation tool and interpret the results against analytical predictions.",
     "2.3": "I can describe the radiation mechanism, pattern, and typical use cases for patch, slot, and horn antennas.",
-    "2.4": "I can describe how reflectors, Yagi-Uda antennas, and arrays achieve high gain, and select an appropriate high-gain antenna for a given application.",
+    "2.4": "I can describe how reflectors, Yagi-Uda antennas, and arrays achieve high gain, explain how a log-periodic antenna trades gain for bandwidth, and select an appropriate high-gain antenna for a given application.",
     "2.5": "I can explain the theory behind antenna pattern measurement, including anechoic chambers, near-field to far-field transformations, and standard gain horns.",
     "2.6": "I can measure the impedance and S-parameters of an antenna using a vector network analyzer and interpret the results.",
     "2.7": "I can measure the radiation pattern of an antenna and extract gain, beamwidth, sidelobe level, and polarization from the data.",

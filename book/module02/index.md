@@ -64,7 +64,7 @@ are claims you will want to check for your project report.
 ::::{frame} Learning Objectives 2.4-2.6
 
 <ol class="lo-list" start="4" style="--module: '2'">
-  <li>I can describe how reflectors, Yagi-Uda antennas, and arrays achieve high gain, and select an appropriate high-gain antenna for a given application.</li>
+  <li>I can describe how reflectors, Yagi-Uda antennas, and arrays achieve high gain, explain how a log-periodic antenna trades gain for bandwidth, and select an appropriate high-gain antenna for a given application.</li>
   <li>I can explain the theory behind antenna pattern measurement, including anechoic chambers, near-field to far-field transformations, and standard gain horns.</li>
   <li>I can measure the impedance and S-parameters of an antenna using a vector network analyzer and interpret the results.</li>
 </ol>

@@ -31,11 +31,8 @@ Lesson 8 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '2'">
-  <li>I can explain why we compute a radiation pattern numerically, and how the method of moments does it — discretize the source, expand the current in basis functions, enforce the boundary condition, and sum the segment patterns.</li>
-  <li>I can build a wire-dipole model with defensible segmentation and excitation, and run frequency sweeps and pattern computations.</li>
-  <li>I can compare simulated impedance, resonant length, pattern, and gain against the analytical half-wave-dipole predictions and account for every difference.</li>
-  <li>I can recognize when a simulation is misleading me — segmentation too coarse, wire radius unreasonable, source misplaced — and apply the standard convergence and energy checks.</li>
+<ol class="lo-list" style="--module: '2'; counter-reset: lo 1">
+  <li>I can simulate a dipole antenna using an EM simulation tool and interpret the results against analytical predictions.</li>
 </ol>
 ::::
 

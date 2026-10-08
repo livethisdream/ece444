@@ -31,12 +31,8 @@ Lesson 16 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '2'">
-  <li>I can derive the array factor of an arbitrary linear array by summing element phasors.</li>
-  <li>I can reduce the array factor of a uniform N-element array to its closed form and locate its main lobe, nulls, and sidelobes.</li>
-  <li>I can apply pattern multiplication to combine an element pattern with an array factor.</li>
-  <li>I can relate element spacing in wavelengths to the visible region and the onset of grating lobes.</li>
-  <li>I can connect the discrete array factor to the continuous line source of Lesson 6 as a sampled aperture.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 1">
+  <li>I can derive the array factor for an arbitrary linear array and apply pattern multiplication.</li>
 </ol>
 ::::
 

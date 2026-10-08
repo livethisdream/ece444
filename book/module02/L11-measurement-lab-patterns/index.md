@@ -31,11 +31,8 @@ Lesson 11 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '7'">
-  <li>I can verify that a given range geometry is valid for both antennas before I take data, using all three far-field criteria.</li>
-  <li>I can acquire principal-plane pattern cuts and normalize, plot, and annotate them correctly in dB down from the peak.</li>
-  <li>I can extract half-power beamwidth, first sidelobe level, front-to-back ratio, gain by comparison, and cross-polarization discrimination from measured data.</li>
-  <li>I can measure my own noise floor, state the resulting dynamic range, and say which of my extracted numbers clears it and by how much.</li>
+<ol class="lo-list" style="--module: '2'; counter-reset: lo 6">
+  <li>I can measure the radiation pattern of an antenna and extract gain, beamwidth, sidelobe level, and polarization from the data.</li>
 </ol>
 
 :::{depth}

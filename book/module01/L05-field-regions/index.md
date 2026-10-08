@@ -31,10 +31,8 @@ Lesson 5 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '5'">
-  <li>I can distinguish the reactive near-field, radiating near-field, and far-field regions by what the fields are actually doing in each.</li>
-  <li>I can calculate the boundaries between the three regions for a given antenna size and wavelength.</li>
-  <li>I can explain the phase-error criterion behind the far-field distance, and why you must measure an antenna in its far field.</li>
+<ol class="lo-list" style="--module: '1'; counter-reset: lo 4">
+  <li>I can identify and distinguish the reactive near-field, radiating near-field, and far-field regions and calculate the boundaries for a given antenna.</li>
 </ol>
 
 :::{depth}

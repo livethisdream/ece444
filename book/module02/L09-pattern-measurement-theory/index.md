@@ -31,11 +31,9 @@ Lesson 9 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '5'">
-  <li>I can state what a valid pattern measurement requires — plane-wave illumination across the antenna under test — and turn that requirement into a minimum range length.</li>
-  <li>I can describe the far-field range types — outdoor, anechoic chamber, and compact range — and explain what absorber reflectivity and quiet-zone specifications actually control.</li>
-  <li>I can explain how near-field scanning plus a transform substitutes for an impossibly long range, and why that transform is the same Fourier relationship that produced the pattern in the first place.</li>
-  <li>I can measure gain by the comparison method against a standard gain horn, define the standard pattern cuts and polarization measurements, and state the conditions under which each is valid.</li>
+<ol class="lo-list" style="--module: '2'; counter-reset: lo 4">
+  <li>I can explain the theory behind antenna pattern measurement, including anechoic chambers, near-field to far-field transformations, and standard gain horns.</li>
+  <li>I can measure the impedance and S-parameters of an antenna using a vector network analyzer and interpret the results.</li>
 </ol>
 
 :::{depth}
@@ -45,24 +43,13 @@ This lesson is the theory that the next two lab periods stand on, and it runs
 the whole problem backwards: instead of computing a far field, you have to
 *build* one, and every rule that follows is a tolerance on how well you built
 it.
-:::
-::::
 
-::::{frame} Learning Objectives, continued
-
-<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '6'">
-  <li>I can explain what a vector network analyzer measures — the ratio of the returning wave to the outgoing wave — and translate that ratio into reflection coefficient, impedance, return loss, and VSWR.</li>
-  <li>I can explain what a short-open-load calibration removes, why the reference plane decides what the numbers mean, and what a one-port measurement can never tell me.</li>
-  <li>I can state how a receiver's noise floor bounds every quantity extracted from a measured pattern.</li>
-</ol>
-
-:::{depth}
-Two of those objectives belong to the radiated side of the antenna and two to
-its terminals, and the lesson treats them as one subject on purpose. They are
-the same question asked at two ports: how much of what an instrument reports
-is the antenna, and how much is the setup around it. You will answer the
-terminal half on a network analyzer in Lesson 10 and the radiated half on the
-range in Lesson 11.
+The two objectives belong to the two sides of the antenna, the radiated side
+and its terminals, and the lesson treats them as one subject on purpose. They
+are the same question asked at two ports: how much of what an instrument
+reports is the antenna, and how much is the setup around it. You will answer
+the terminal half on a network analyzer in Lesson 10 and the radiated half on
+the range in Lesson 11.
 :::
 ::::
 

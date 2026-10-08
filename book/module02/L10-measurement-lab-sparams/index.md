@@ -31,11 +31,8 @@ Lesson 10 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '6'">
-  <li>I can set up a one-port sweep on a vector network analyzer, run a one-port calibration at the correct reference plane, and verify the calibration before I trust any reading.</li>
-  <li>I can measure an antenna's reflection versus frequency and read its resonance, its impedance at resonance, and its VSWR &le; 2 impedance bandwidth off the trace and off the Smith chart.</li>
-  <li>I can compare a measured resonance against a $\lambda/2$ prediction and say, from the sign of the reactance, which way to trim the element.</li>
-  <li>I can perturb an antenna's near-field environment one variable at a time and report what moved, in which direction, and by how much.</li>
+<ol class="lo-list" style="--module: '2'; counter-reset: lo 5">
+  <li>I can measure the impedance and S-parameters of an antenna using a vector network analyzer and interpret the results.</li>
 </ol>
 
 :::{depth}

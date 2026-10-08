@@ -31,13 +31,8 @@ Lesson 17 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '3'">
-  <li>I can identify each block of the ADALM-PHASER signal chain and state its role.</li>
-  <li>I can trace a received X-band signal through the frequency plan to the IF the SDR digitizes.</li>
-  <li>I can explain the PHASER's hybrid beamforming architecture — analog within each 4-element subarray, digital across the two subarray outputs.</li>
-  <li>I can bring up the Phaser GUI, find the microwave source, and control array gain and frequency from the browser.</li>
-  <li>I can read the Python calls that set the array's phases and the SDR's tuning.</li>
-  <li>I can bring up a PHASER kit from a freshly flashed SD card and update its software.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 2">
+  <li>I can identify the hardware architecture of the ADALM-PHASER and control it via SDR software.</li>
 </ol>
 
 :::{depth}

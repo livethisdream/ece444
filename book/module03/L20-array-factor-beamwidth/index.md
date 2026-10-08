@@ -29,11 +29,8 @@ Lesson 20 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '2'; counter-reset: lo 5">
-  <li>I can compute the half-power beamwidth of a steered uniform array.</li>
-  <li>I can compute the first-null beamwidth and locate every pattern null of a uniform array.</li>
-  <li>I can estimate the broadside directivity of a uniform linear array.</li>
-  <li>I can size an array — choose element count and spacing — to meet a beamwidth specification.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 1">
+  <li>I can derive the array factor for an arbitrary linear array and apply pattern multiplication.</li>
 </ol>
 ::::
 

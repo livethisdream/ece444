@@ -29,12 +29,8 @@ Lesson 26 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '8'">
-  <li>I can explain why thinning an array creates grating lobes and predict their angles from spacing and steer angle.</li>
-  <li>I can state and apply the spacing criterion that keeps grating lobes out of visible space over a scan range.</li>
-  <li>I can compute beam squint for a steered array operating away from its phase-set frequency.</li>
-  <li>I can compute the phase-quantization limits of a B-bit phase shifter — step size, pointing granularity, and quantization sidelobe level.</li>
-  <li>I can state the system impact of grating lobes, beam squint, and quantization on a radar or communications array.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 7">
+  <li>I can identify beam squint and quantization effects in a phased array and describe their impact on system performance.</li>
 </ol>
 
 :::{depth}

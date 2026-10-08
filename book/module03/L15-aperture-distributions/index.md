@@ -31,12 +31,8 @@ Lesson 15 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '1'">
-  <li>I can explain how an aperture's field distribution determines its far-field pattern through the Fourier transform relationship.</li>
-  <li>I can compute the beamwidth and first sidelobe level of a uniform aperture from its dimensions.</li>
-  <li>I can calculate aperture efficiency for a given illumination and use it in the gain formula.</li>
-  <li>I can state the sidelobe, beamwidth, and efficiency trades that tapering the illumination involves.</li>
-  <li>I can predict how scaling an aperture in wavelengths changes its beamwidth and gain.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 0">
+  <li>I can describe aperture distributions and calculate aperture efficiency for a given illumination.</li>
 </ol>
 ::::
 

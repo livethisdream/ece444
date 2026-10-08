@@ -29,11 +29,8 @@ Lesson 23 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '6'; counter-reset: lo 4">
-  <li>I can measure an antenna pattern by rotating a source around the array with the beam held fixed.</li>
-  <li>I can compare the mechanically measured pattern against the electrically swept trace and account for the differences.</li>
-  <li>I can extract sidelobe amplitudes from a measured pattern trace.</li>
-  <li>I can state the limits of a hand-rotation measurement and what an anechoic chamber provides.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 5">
+  <li>I can distinguish between array factor and true antenna pattern and account for element pattern effects.</li>
 </ol>
 
 :::{depth}

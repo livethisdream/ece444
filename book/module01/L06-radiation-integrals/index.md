@@ -32,11 +32,8 @@ Lesson 6 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '6'">
-  <li>I can explain the radiation integral as the sum of the spherical waves launched by every current element on the antenna, and state the recipe that takes a current distribution to a far-field pattern.</li>
-  <li>I can apply the far-field approximations to the exact integral — one for amplitude, a different one for phase — and show that the leftover phase error is exactly the far-field distance criterion from Lesson 5.</li>
-  <li>I can set up and evaluate the radiation integral for a given current distribution, and turn the resulting radiation vector into the far-field pattern.</li>
-  <li>I can recognize the current distribution and the far-field pattern as a Fourier transform pair, and predict how a change in the current changes the pattern.</li>
+<ol class="lo-list" style="--module: '1'; counter-reset: lo 5">
+  <li>I can set up and interpret the radiation integrals to derive the far-field pattern of a current distribution.</li>
 </ol>
 ::::
 

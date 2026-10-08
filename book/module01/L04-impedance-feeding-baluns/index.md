@@ -29,11 +29,8 @@ Lesson 4 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '4'">
-  <li>I can decompose an antenna's input impedance into radiation resistance, loss resistance, and reactance, and connect the radiation resistance to the power actually radiated.</li>
-  <li>I can compute the reflection coefficient and VSWR a feed line sees at the antenna terminals, and the resulting mismatch loss.</li>
-  <li>I can design a quarter-wave transformer — and read an L-match — to match a load to a feed line.</li>
-  <li>I can explain why a balanced antenna needs a balun when you feed it from unbalanced coax, and identify the common balun types and what each one does.</li>
+<ol class="lo-list" style="--module: '1'; counter-reset: lo 3">
+  <li>I can calculate input impedance, feed considerations, and the role of baluns in an antenna feed system.</li>
 </ol>
 ::::
 

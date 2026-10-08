@@ -39,9 +39,8 @@ Exact skeleton (keep the existing Slides admonition from the stub verbatim):
 
 ## Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '<X>'">
-  <li>I can ...</li>
-  ...
+<ol class="lo-list" style="--module: '2'; counter-reset: lo <X-1>">
+  <li>(course objective 2.<X>, verbatim from book/syllabus.md)</li>
 </ol>
 
 <one-paragraph hook connecting to the previous lesson and stating what this
@@ -65,11 +64,9 @@ lesson delivers>
 
 Rules:
 
-- LO markup: 3-level numbers render automatically (`2.<X>.n`). `<X>` is the
-  module objective number from your brief. If your brief says your lesson
-  *continues* a shared objective (L12 continues 2.1 after L07), add a counter
-  offset: `style="--module: '2'; --lo: '1'; counter-reset: lo 4"` starts at
-  2.1.5. Sub-LO text comes from your brief. **No math inside LO `<li>` items**
+- LO markup (superseded 2026-10-08, see CLAUDE.md): lessons quote the course
+  objective(s) they serve, two-level numbers only; the lesson-level sub-LOs
+  this spec originally asked for were removed course-wide. **No math inside LO `<li>` items**
   (raw HTML block — `$...$` is not processed there; if unavoidable use
   `\(...\)`).
 - 3-6 numbered Parts. Interleave: concept -> short derivation -> worked
@@ -504,10 +501,9 @@ in every LO block.
 | 27 | L27-null-steering-theory | Null Steering Theory | 3.9 | 3.9.1 | theory |
 | 28 | L28-null-steering-lab | Null Steering Lab | 3.9 | 3.9.5 | lab |
 
-A lesson whose sub-LO start is not `.1` continues a shared objective: add
-`counter-reset: lo <start-1>` to the `<ol>` style (e.g. L20:
-`style="--module: '3'; --lo: '2'; counter-reset: lo 5"` renders 3.2.6
-onward). Your brief carries the exact sub-LO texts — use them verbatim.
+The "Sub-LO start" column is historical: lesson-level sub-LOs were removed
+2026-10-08, and each lesson now quotes only its course objective (the Obj.
+column).
 
 **L20 note:** the midterm project (Antenna Pattern Measurement) is assigned
 at L9 and due 2 Oct, 2359. **The due date lives in the syllabus and the

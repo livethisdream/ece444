@@ -31,11 +31,8 @@ Lesson 22 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '6'">
-  <li>I can distinguish the array factor from the true antenna pattern and state what the element factor contributes.</li>
-  <li>I can apply pattern multiplication with a realistic patch element pattern to predict the full array pattern.</li>
-  <li>I can quantify scan loss — the element-pattern penalty for steering off broadside.</li>
-  <li>I can explain why measured sidelobe and backlobe structure departs from the array-factor prediction.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 5">
+  <li>I can distinguish between array factor and true antenna pattern and account for element pattern effects.</li>
 </ol>
 
 :::{depth}
