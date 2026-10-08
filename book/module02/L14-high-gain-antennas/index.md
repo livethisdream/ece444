@@ -169,7 +169,7 @@ higher the gain.
 :::
 ::::
 
-::::{frame} Gain, Beamwidth, and Surface Error
+::::{frame} Three Knobs on a Dish
 :class: viz-frame
 
 :::{present}
@@ -179,9 +179,20 @@ higher the gain.
         loading="lazy"
         title="Dish gain, beamwidth, and effective area versus diameter in wavelengths, with the Ruze surface-error penalty">
 </iframe>
+
+<p class="viz-note mathjax_process"><strong>Size</strong> \(D/\lambda\) moves gain and beam together. <strong>Efficiency</strong> and <strong>surface error</strong> only take gain away.</p>
 :::
 
 :::{depth}
+The widget is the two formulas above with one more factor. The three sliders
+are the three things a designer controls: how many wavelengths across the dish
+is, the aperture efficiency $\eta_{\text{ap}}$, and the RMS surface error
+$\sigma$. The readouts are what those buy: gain, beamwidth, effective area,
+and the gain the surface error costs. Only the size appears in both formulas,
+so it is the only slider that moves the beam. Surface error enters through
+Ruze's formula, five frames on; for now read it as a third tax on the gain,
+next to $\eta_{\text{ap}}$.
+
 Drive the sliders and watch two numbers move together. Set $D/\lambda$ and the
 dish redraws with a tick on the rim for every wavelength across it, while the
 beam cone narrows on the same canvas. Notice that gain climbs 6 dB per
@@ -249,14 +260,19 @@ across a chamber instead of at a satellite.
 
 ::::{frame} The Equal-Path Property
 :::{present}
+- A parabola: every point $P$ is as far from the focus as from a line $f$ behind the vertex.
+
 $$\begin{aligned}
 \overline{FP} + \overline{PA} &= (f + z_P) + (z_a - z_P) \\
 &= f + z_a
 \end{aligned}$$
 
-- The $z_P$ cancels.
-- **Every ray, edge to center, takes the same path length.**
-- One line of algebra is the entire reason parabolic reflectors exist.
+- No $z_P$ left: **every ray arrives in phase.**
+:::
+:::{present}
+<img src="../../viz/img/L14-equal-path.svg"
+     alt="A parabola with its focus F, a line a focal length behind its vertex, and the aperture plane in front. For two surface points P, the feed-to-surface leg equals the dashed run from P back to the line, so each ray's whole path equals the straight distance from the line to the aperture plane, the same for every ray"
+     style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Put the vertex at the origin with the axis along $z$, so the surface is
@@ -273,8 +289,12 @@ $$\begin{aligned}
 so $\overline{FP} = f + z_P$. That is the parabola's defining property: every
 point on it is as far from the focus as from the line $z = -f$ behind the
 vertex. A ray from the focus to $P$ then travels parallel to the axis to an
-aperture plane at $z = z_a$, covering a further $z_a - z_P$. Every point of
-the aperture plane is therefore in phase.
+aperture plane at $z = z_a$, covering a further $z_a - z_P$. The figure says
+the same thing without algebra: replace the leg $\overline{FP}$ with its equal,
+the dashed run from $P$ back to the line, and every ray's path becomes the
+straight distance from that line to the aperture plane. That distance does not
+depend on which ray you follow, so every point of the aperture plane is in
+phase.
 ::::
 
 ::::{frame} f/D and the Feed
@@ -322,36 +342,6 @@ prime-focus reflectors land between 0.3 and 0.6.
 :::
 ::::
 
-::::{frame} Dish and Feed
-:class: viz-frame
-
-:::{present}
-<iframe src="../../viz/feed-dish.html"
-        width="100%" height="425"
-        style="border: 1px solid #cddce9; border-radius: 6px;"
-        loading="lazy"
-        title="Dish and feed: the rim angle, edge taper, spillover, and taper efficiency as the dish depth and the feed pattern change">
-</iframe>
-:::
-
-:::{depth}
-The widget uses the same model as the 10 dB rule two frames on: a feed with
-power pattern $\cos^n\theta'$ at the focus of a dish with the chosen $f/D$.
-The left panel draws the dish to scale with the feed's pattern at the focus,
-shading the part that misses the rim; the right panel plots spillover, taper,
-and their product against edge taper for that $f/D$. Start at the default,
-$f/D = 0.5$ and $n = 4$: the rim sits at $53^\circ$, the edge is 10.8 dB
-down, and the product is 0.82. Narrow the feed and spillover falls while the
-taper efficiency falls with it; widen it and the reverse. Then change $f/D$
-and press the best-$n$ button: from $f/D = 0.4$ up, the best product stays near 0.82 at
-about an 11 dB edge taper, which is why the rule does not depend on the dish.
-Below about $f/D = 0.35$ the model's best product climbs higher, because its
-feed radiates nothing behind itself and a very broad feed then wastes almost
-nothing. Real feeds that broad do not exist, which is one reason deep dishes
-are uncommon.
-:::
-::::
-
 ::::{frame} Aperture Efficiency Losses
 :::{present}
 - $\eta_{\text{ap}} \approx 0.55$ to $0.7$ for a good reflector.
@@ -377,10 +367,17 @@ raises $T_A$ and with it the noise $kT_AB$ the antenna delivers.
      style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-:class: callout
-Illuminate the rim about **10 dB below the center**. Taper loss and spillover
-pull opposite ways, and their product peaks near 10 dB.
+$$G = \eta_\text{s}\ \eta_\text{t}\ \eta_\text{rest}\ \frac{4\pi A}{\lambda^2}$$
+
+- Narrow feed: dark rim, area wasted, $\eta_\text{t}$ falls.
+- Wide feed: power misses the dish, $\eta_\text{s}$ falls.
+- **The gain peaks with the rim about 10 dB below the center.**
 :::
+
+Spillover and taper are two of the factors inside $\eta_{\text{ap}}$, and
+nothing else in the gain formula depends on the feed, so their product *is*
+the gain, up to a constant: the edge taper that maximizes
+$\eta_\text{s}\eta_\text{t}$ is the edge taper that maximizes the dish's gain.
 
 It is the house rule of thumb for reflector feeds, and it is why a dish's
 aperture distribution always looks like one of the tapers from Lesson 6, with
@@ -399,7 +396,7 @@ and the **taper efficiency** $\eta_\text{t}$ is the ratio from the frame on
 the one idea,
 $\left\vert\int E_a\ dS'\right\vert^2/\left(A\int\vert E_a\vert^2\ dS'\right)$,
 with the aperture field set by the feed pattern and the $r(\theta')$
-spreading of the previous frame:
+spreading from the frame on $f/D$:
 
 $$E_a \propto \sqrt{\cos^n\theta'}\ \frac{1 + \cos\theta'}{2}$$
 
@@ -417,13 +414,51 @@ The peak is broad: anything from about 8 to 14 dB is within 0.03 of the best
 efficiency, which is why a rule of thumb is good enough.
 ::::
 
+::::{frame} Dish and Feed
+:class: viz-frame
+
+:::{present}
+<iframe src="../../viz/feed-dish.html"
+        width="100%" height="425"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Dish and feed: the rim angle, edge taper, spillover, and taper efficiency as the dish depth and the feed pattern change">
+</iframe>
+
+<p class="viz-note mathjax_process">Feed pattern \(\cos^n\theta'\): <strong>larger \(n\), narrower feed</strong>, darker rim, less spillover.</p>
+:::
+
+:::{depth}
+The widget uses the same model as the 10 dB rule: a feed with power pattern
+$\cos^n\theta'$ at the focus of a dish with the chosen $f/D$. The exponent
+$n$ is just a dial on the feed's beamwidth. At $n = 0$ the feed radiates
+equally into its whole forward hemisphere; at $n = 4$ it is $112^\circ$ wide
+at its $-10$ dB points, which the control reports beside the value; at
+$n = 20$ it is a narrow pencil.
+The left panel draws the dish to scale with the feed's pattern at the focus,
+shading the part that misses the rim; the right panel plots spillover, taper,
+and their product against edge taper for that $f/D$. Start at the default,
+$f/D = 0.5$ and $n = 4$: the rim sits at $53^\circ$, the edge is 10.8 dB
+down, and the product is 0.82. Narrow the feed and spillover falls while the
+taper efficiency falls with it; widen it and the reverse. Then change $f/D$
+and press the best-$n$ button: from $f/D = 0.4$ up, the best product stays near 0.82 at
+about an 11 dB edge taper, which is why the rule does not depend on the dish.
+Below about $f/D = 0.35$ the model's best product climbs higher, because its
+feed radiates nothing behind itself and a very broad feed then wastes almost
+nothing. Real feeds that broad do not exist, which is one reason deep dishes
+are uncommon.
+:::
+::::
+
 ::::{frame} Blockage and the Offset Feed
 :::{present}
-- A prime-focus feed and its struts sit in the beam.
-- A blocked diameter $d$ scales the gain by this factor and raises the sidelobes.
-- An **offset feed** moves the feed out of the beam.
+$$\begin{aligned}
+\frac{G}{G_0} &= \left(\frac{A - A_b}{A}\right)^2 \\
+&= \left[1-\left(\frac{d}{D}\right)^2\right]^2
+\end{aligned}$$
 
-$$\left[1-\left(\frac{d}{D}\right)^2\right]^2$$
+- The feed shadows $A_b$. The boresight field sums the rest; gain is its square.
+- An **offset feed** moves it out of the beam.
 :::
 :::{present}
 <img src="../../viz/img/L14-offset-feed.svg"
@@ -447,8 +482,11 @@ $$\begin{aligned}
 &= \left[1 - \left(\frac{d}{D}\right)^2\right]^2
 \end{aligned}$$
 
-A $15\ \text{cm}$ feed loses $0.02\ \text{dB}$ on a $3\ \text{m}$ dish and
-$1.0\ \text{dB}$ on a $45\ \text{cm}$ one.
+The square is the whole story: blocking a fraction $(d/D)^2$ of the area
+costs that fraction of the boresight *field*, and gain goes as field squared,
+while the power the feed pays for does not shrink at all. A $15\ \text{cm}$
+feed loses $0.02\ \text{dB}$ on a $3\ \text{m}$ dish and $1.0\ \text{dB}$ on
+a $45\ \text{cm}$ one.
 ::::
 
 ::::{frame} Surface Accuracy — Ruze's Formula
@@ -503,8 +541,10 @@ problem, not an electromagnetics problem.
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-That product is where the $\eta_{\text{ap}} \approx 0.65$ we have been
-assuming comes from. It is an accounting result, not a constant of
+In the figure, each blue bar is the efficiency left after that term and the
+red cap on it is what the term took away; each bar starts where the one
+before it ended, because the terms multiply. That product is where the
+$\eta_{\text{ap}} \approx 0.65$ we have been assuming comes from. It is an accounting result, not a constant of
 nature, and every row of it is a design decision someone made. The spillover
 and taper rows sit a little below the 0.92 and 0.89 of the 10 dB rule's
 optimum, because a real feed's pattern is not exactly $\cos^n\theta'$. The
@@ -520,8 +560,9 @@ receiver cannot collect.
      style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- A reflector collects area with a mirror. A Yagi collects it from currents induced on its neighbors.
-- Exactly one element is fed. The rest are **parasitic**.
+- Exactly one element is fed. The rest are **parasitic**: bare rods, no feed line.
+- The driven element's field induces currents on them, and they re-radiate.
+- Phased right, that re-radiation cancels behind and adds ahead: array gain from one cable.
 :::
 
 The driven element is a dipole near $0.47\lambda$. Every other element has no
@@ -529,52 +570,58 @@ feed line and no source — just a rod that the driven element's near field
 induces a current on. That induced current re-radiates, and the total pattern
 is the superposition of all of them. There is nothing new physically: this is
 Lesson 6's radiation integral with several current filaments instead of one.
+
+Why it matters is the cable. An array, at the end of this lesson, gets its gain
+by feeding every element and setting each one's phase with electronics. A Yagi
+gets most of that gain with one feed line and a row of rods, which is why it
+is on every rooftop. The price is that nothing sets a parasite's phase
+directly. The next three frames are about that: watching the parasites switch on,
+what phase they need, and how a rod with no feed line gets it.
 ::::
 
-::::{frame} Parasitic Element Phasing
+::::{frame} Switch On a Yagi
+:class: viz-frame
+
 :::{present}
-- A dipole slightly **long** is inductive; its current **lags** its induced voltage.
-- A dipole slightly **short** is capacitive; its current **leads**.
-- The long reflector sits behind; progressively shorter directors sit ahead.
+<iframe src="../../viz/yagi-turn-on.html"
+        width="100%" height="413"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="A Yagi switched on: the driven element's wave spreads out, each parasitic element starts radiating when that wave reaches it, and probes in front and behind record the field against time">
+</iframe>
+
+<p class="viz-note">The reflector fires as the driven wave passes it, so its own wave runs backward alongside, <strong>opposite in sign</strong>: the back probe never rings.</p>
 :::
 
-The lag and lead are Lesson 7's input impedance at work. A parasite is a
-dipole with no feed, driven by the voltage $V$ the driven element's field
-induces on it, so its current is $I = V/Z$ with $Z = R + jX$. Lesson 7 found
-$X = +42.5\ \Omega$ at exactly $\lambda/2$, with resonance a little shorter.
-Longer than resonance, $X > 0$ and the current lags $V$ by $\arctan(X/R)$;
-shorter, $X < 0$ and it leads.
-
-What phase the reflector needs comes from Lesson 6's radiation vector,
-$N_z = \int I(z')\ e^{+jkz'\cos\theta}\ dz'$, with the integral now a sum over
-two filaments: the driven element at $z = 0$ and the reflector a distance $d$
-behind it, carrying $I_2 = aI_1e^{j\alpha}$. Straight ahead ($\theta = 0$) and
-straight back ($\theta = \pi$),
-
-$$\begin{aligned}
-N_z(0) &\propto 1 + a\ e^{j(\alpha - kd)} \\
-N_z(\pi) &\propto 1 + a\ e^{j(\alpha + kd)}
-\end{aligned}$$
-
-The back lobe cancels when $\alpha + kd = \pi$. For a typical spacing
-$d = 0.2\lambda$, $kd = 72^\circ$, so the reflector's current must sit
-$108^\circ$ from the driven element's. The forward sum is then
-$\vert 1 + e^{j36^\circ}\vert = 1.90$ for $a = 1$, nearly the full 2. Part of
-that phase comes from the coupling, since a parasite's induced current
-re-radiates roughly in opposition to the field that drove it, and the
-detuning trims the rest. The reflector runs about $0.5\lambda$, and its added
-lag is what tips the balance toward canceling behind. The directors run
-around $0.40$ to $0.45\lambda$, and their detuning sets the phase lag from
-one director to the next at slightly more than the free-space $kd$. That is a
-**slow traveling wave**: a wave along the boom
-whose phase velocity is slightly less than the speed of light, which is what
-narrows an endfire beam below what in-step elements would give.
-
 :::{depth}
-This course does not use mutual-impedance matrices. To find the currents on
-the parasites exactly, we would solve a coupled system with one row per
-element — that is what NEC did in Lesson 8. Here, the phenomenology is
-the point: long lags, short leads, and the beam goes toward the short end.
+The animation is the Yagi in time rather than as a pattern. Seen from above,
+the elements stand out of the page, so each one is a dot and each radiates a
+circular wave; red is field one way, navy the other. At $t = 0$ only the
+driven element is on. A parasitic element is drawn hollow until the driven
+element's wavefront reaches it, because until then nothing has told it to
+do anything; from that moment it carries a current and radiates a wave of its
+own. The chart records the field at the two probes, about two
+wavelengths out in front and behind.
+
+Run it three ways. **Driven only**: both probes ring at the same amplitude,
+which is a dipole. **+ reflector**: the driven wave reaches the reflector
+$0.2$ of a period after switch-on, the reflector starts radiating, and its
+wave heads backward riding on top of the driven element's own, opposite in
+sign. The back probe hears both at once and they cancel, so it never rings.
+Toward the front the reflector's wave has $2d$ farther to go, arrives
+$0.4$ of a period later, and lifts the front probe from 1 to about 1.9, the
+two-element frame's number. **Full Yagi**: each director switches on as the
+wave reaches it and adds its wave in step going forward, so the front builds
+higher still while the back stays small.
+
+The currents here are prescribed, not solved: the reflector's at the
+$108^\circ$ back-null phase of the next frame, the directors' at a phase that
+trails the passing wave slightly, the slow wave of the phasing frame. A real
+parasite also takes a few cycles to ring up and is re-driven by its
+neighbors; NEC solves all of that at once, as Lesson 8 did. What the animation
+gets right is the order of events, which is the point: the parasites do
+nothing until the driven element's field reaches them, and everything they
+contribute is that field, re-radiated with a delay and a phase.
 :::
 ::::
 
@@ -588,30 +635,94 @@ the point: long lags, short leads, and the beam goes toward the short end.
         loading="lazy"
         title="Two-element Yagi: phasor sums toward the front and back, and the resulting pattern, as the reflector's spacing, phase, and amplitude change">
 </iframe>
+
+<p class="viz-note mathjax_process">Arrows: each element's field, added head to tail. A reflector \(0.2\lambda\) behind cancels the back when its current sits <strong>\(108^\circ\)</strong> off the driven one.</p>
 :::
 
 :::{depth}
-The widget evaluates the two-filament radiation vector from the frame above,
-$1 + a\ e^{j(\alpha \mp kd)}$, straight ahead and straight back, and draws the
-full pattern in the plane of the boom. Start at the default, $d = 0.2\lambda$
-and $\alpha = 108^\circ$: the back sum closes to zero and the forward sum is
-1.90. Then move $\alpha$ and watch the null leave the back and the front lobe
-shrink. Shorten the spacing to $0.1\lambda$ and press *back null*: the
-cancelling phase moves to $144^\circ$, and the forward sum falls, because the
-two currents now nearly oppose each other in every direction. Lower $a$ and the
-null fills in, which is what a reflector cut too far from resonance does: its
-induced current is too weak to cancel the driven element.
+A two-element Yagi is a driven dipole and one reflector a distance $d$ behind
+it. How to read the widget: the left panel adds the two elements' fields in
+two directions, drawn as arrows. The navy arrow is the driven element, always
+length 1 and pointing right. The amber arrow is the reflector's contribution,
+turned by the reflector's current phase $\alpha$ and by the extra trip $kd$
+its wave makes (or saves). The green arrow is the sum, and its length is how
+strong the antenna is in that direction: toward the front on the left, toward
+the back on the right. The right panel is the whole pattern seen from above,
+with the two elements as dots.
+
+The arrows come from Lesson 6's radiation vector,
+$N_z = \int I(z')\ e^{+jkz'\cos\theta}\ dz'$, with the integral now a sum over
+two filaments: the driven element at $z = 0$ and the reflector a distance $d$
+behind it, carrying $I_2 = aI_1e^{j\alpha}$. Straight ahead ($\theta = 0$) and
+straight back ($\theta = \pi$),
+
+$$\begin{aligned}
+N_z(0) &\propto 1 + a\ e^{j(\alpha - kd)} \\
+N_z(\pi) &\propto 1 + a\ e^{j(\alpha + kd)}
+\end{aligned}$$
+
+The back lobe cancels when $\alpha + kd = \pi$. For a typical spacing
+$d = 0.2\lambda$, $kd = 72^\circ$, so the reflector's current must sit
+$108^\circ$ from the driven element's. The forward sum is then
+$\vert 1 + e^{j36^\circ}\vert = 1.90$ for $a = 1$, nearly the full 2.
+
+Start the widget at the default, $d = 0.2\lambda$ and $\alpha = 108^\circ$:
+the back sum closes to zero and the forward sum is 1.90. Then move $\alpha$
+and watch the null leave the back and the front lobe shrink. Shorten the
+spacing to $0.1\lambda$ and press *back null*: the canceling phase moves to
+$144^\circ$, and the forward sum falls, because the two currents now nearly
+oppose each other in every direction. Lower $a$ and the null fills in, which
+is what a reflector cut too far from resonance does: its induced current is
+too weak to cancel the driven element.
+:::
+::::
+
+::::{frame} Parasitic Element Phasing
+:::{present}
+$$I = \frac{V}{Z} = \frac{V}{R + jX}$$
+
+- No cable sets a parasite's phase. Its **length** does, through the sign of $X$.
+- **Long**: $X > 0$, the current lags and nulls the back: a **reflector**.
+- **Short**: $X < 0$, the current leads and pulls the beam toward it: a **director**.
+:::
+
+The lag and lead are Lesson 7's input impedance at work. A parasite is a
+dipole with no feed, driven by the voltage $V$ the driven element's field
+induces on it, so its current is $I = V/Z$ with $Z = R + jX$. Lesson 7 found
+$X = +42.5\ \Omega$ at exactly $\lambda/2$, with resonance a little shorter.
+Longer than resonance, $X > 0$ and the current lags $V$ by $\arctan(X/R)$;
+shorter, $X < 0$ and it leads.
+
+Why that matters is the previous frame: the reflector has to carry its
+current $108^\circ$ from the driven element's, and a rod with no feed line has
+only one way to be told. Most of that phase comes from the coupling, since a
+parasite's induced current re-radiates roughly in opposition to the field that
+drove it, delayed by the trip across the gap. The detuning trims the rest.
+The reflector runs about $0.5\lambda$, and its added lag is what tips the
+balance toward canceling behind. The directors run around $0.40$ to
+$0.45\lambda$, and their detuning sets the phase lag from one director to the
+next at slightly more than the free-space $kd$. That is a **slow traveling
+wave**: a wave along the boom whose phase velocity is slightly less than the
+speed of light, which is what narrows an endfire beam below what elements
+phased at exactly light speed would give.
+
+:::{depth}
+This course does not use mutual-impedance matrices. To find the currents on
+the parasites exactly, we would solve a coupled system with one row per
+element — that is what NEC did in Lesson 8. Here, the phenomenology is
+the point: long lags, short leads, and the beam goes toward the short end.
 :::
 ::::
 
 ::::{frame} Yagi Gain and Boom Length
 :::{present}
 <img src="../../viz/img/L14-yagi-boom.svg"
-     alt="Yagi gain against boom length on a doubling scale: typical designs climb about 1.8 dB per doubling, between the in-step and slow-wave endfire lines, which climb 3 dB per doubling"
+     alt="Yagi gain against boom length on a doubling scale: typical designs climb about 1.8 dB each time the boom doubles, against two ideal endfire lines, one phased at light speed and one phased for best gain, which both climb 3 dB per doubling"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- About **+2 dB per boom doubling**; 3 is the ideal.
+- Each time the boom **doubles**, the gain climbs about **2 dB**.
+- An ideal endfire line would climb 3 dB: its gain is proportional to its length.
 - The boom length, not the element count, sets the gain.
 :::
 
@@ -647,6 +758,10 @@ narrow in every plane. Its solid angle goes as $\theta^2 \propto \lambda/L$,
 so the directivity is proportional to $L$: the exact result is
 $D \approx 4L/\lambda$, and a slow wave pushes it toward $7L/\lambda$. That
 is $+3$ dB per doubling of the boom, whatever the number of elements on it.
+Those are the figure's two ideal lines: the lower one is a current phased to
+travel at exactly light speed ($4L/\lambda$), the upper one the slightly slow
+wave of the previous frames ($7L/\lambda$). The horizontal axis doubles at
+every step, so a straight line on it means a fixed number of dB per doubling.
 
 Real Yagis fall short of that slope. The table climbs about $1.8$ dB per
 doubling: a short Yagi beats the line-source estimate ($7L/\lambda$ gives
@@ -837,22 +952,27 @@ noise.
 
 ::::{frame} Where This Is Going
 :::{present}
-- Every gain number today was a **claim**, and we already know how to test one.
-- $\eta_{\text{ap}} = 0.65$ was an assumption, and $70^\circ\lambda/D$ was a rule of thumb.
-- Module 2 ends here. **Module 3** develops the third approach, the array.
+- **L15:** illumination sets the sidelobes. Today's taper bought $-25$ dB for a 14% wider beam.
+- **L16:** an array samples that aperture, one element at a time.
+- **L19:** change each element's phase and the beam moves. You steer one.
+:::
+:::{present}
+<img src="../../viz/img/L14-beam-patterns.svg"
+     alt="Patterns of a uniform circular aperture and of the 10 dB-rule feed's aperture against angle times D over wavelength: the taper widens the beam from 59 to 67 degrees and lowers the first sidelobe from minus 17.6 to minus 25.1 dB"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Module 2 closes with a complete loop: predict a pattern from geometry,
-simulate it, measure it, and state how much of the measurement to believe.
+Today the illumination was a side effect: the feed's pattern set it, and the
+10 dB rule picked it for efficiency. The figure is what it did to the beam
+on the way, a first sidelobe pushed from $-17.6$ to $-25$ dB at the price of
+widening the beam from $59^\circ$ to $67^\circ\lambda/D$. Lesson 15 turns that
+around and asks which illumination to choose when the sidelobes are the
+requirement, and what each choice costs in beamwidth and efficiency.
 
-:::{depth}
-Lesson 15 opens Module 3 by going back to the beginning of that loop and
-asking a sharper question. The aperture *size* set the beamwidth; what set the
-sidelobe level? The answer is the illumination across the aperture — the
-$-10$ dB edge taper we met today, generalized — and choosing it deliberately
-is how engineers design every high-performance antenna and phased array. When
-we get there, remember what an array is doing: assembling the same coherent
-aperture a dish assembles with a mirror, one element and one phase shifter at
-a time.
-:::
+Lesson 16 builds the third approach from today. Sample that same aperture at
+discrete points, put an element at each, and the pattern becomes the array
+factor; the illumination becomes a set of element weights you can set
+yourself. By Lesson 19 those weights carry phase as well as amplitude, and the
+beam moves with nothing mechanical moving: you will steer the eight-element
+ADALM-PHASER across the bench and measure what it costs at each angle.
 ::::
