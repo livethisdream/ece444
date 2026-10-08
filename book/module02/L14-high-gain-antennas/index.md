@@ -906,22 +906,27 @@ noise.
 
 ::::{frame} Where This Is Going
 :::{present}
-- Every gain number today was a **claim**, and we already know how to test one.
-- $\eta_{\text{ap}} = 0.65$ was an assumption, and $70^\circ\lambda/D$ was a rule of thumb.
-- Module 2 ends here. **Module 3** develops the third approach, the array.
+- **L15:** illumination sets the sidelobes. Today's taper bought $-25$ dB for a 14% wider beam.
+- **L16:** an array samples that aperture, one element at a time.
+- **L19:** change each element's phase and the beam moves. You steer one.
+:::
+:::{present}
+<img src="../../viz/img/L14-beam-patterns.svg"
+     alt="Patterns of a uniform circular aperture and of the 10 dB-rule feed's aperture against angle times D over wavelength: the taper widens the beam from 59 to 67 degrees and lowers the first sidelobe from minus 17.6 to minus 25.1 dB"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Module 2 closes with a complete loop: predict a pattern from geometry,
-simulate it, measure it, and state how much of the measurement to believe.
+Today the illumination was a side effect: the feed's pattern set it, and the
+10 dB rule picked it for efficiency. The figure is what it did to the beam
+on the way, a first sidelobe pushed from $-17.6$ to $-25$ dB at the price of
+widening the beam from $59^\circ$ to $67^\circ\lambda/D$. Lesson 15 turns that
+around and asks which illumination to choose when the sidelobes are the
+requirement, and what each choice costs in beamwidth and efficiency.
 
-:::{depth}
-Lesson 15 opens Module 3 by going back to the beginning of that loop and
-asking a sharper question. The aperture *size* set the beamwidth; what set the
-sidelobe level? The answer is the illumination across the aperture — the
-$-10$ dB edge taper we met today, generalized — and choosing it deliberately
-is how engineers design every high-performance antenna and phased array. When
-we get there, remember what an array is doing: assembling the same coherent
-aperture a dish assembles with a mirror, one element and one phase shifter at
-a time.
-:::
+Lesson 16 builds the third approach from today. Sample that same aperture at
+discrete points, put an element at each, and the pattern becomes the array
+factor; the illumination becomes a set of element weights you can set
+yourself. By Lesson 19 those weights carry phase as well as amplitude, and the
+beam moves with nothing mechanical moving: you will steer the eight-element
+ADALM-PHASER across the bench and measure what it costs at each angle.
 ::::

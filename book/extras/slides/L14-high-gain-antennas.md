@@ -463,12 +463,11 @@ Close the loop on the opening slide. If they leave with one sentence, it should 
 
 ## Where This Is Going
 
-- Every gain number today was a **claim**: 0.65 was an assumption, and $70^\circ \lambda / D$ was a rule of thumb.
-- We already know how to test a claim: L9's theory, L10's analyzer, and L11's range.
-- **Module 2 closes here:** predict, simulate, measure, and state how much to believe.
-- **L15 opens Module 3:** aperture size set the beamwidth, so what sets the sidelobe level?
+- **L15:** the illumination sets the sidelobes. Today's 10 dB taper bought $-25$ dB for a beam 14% wider. Choose that trade on purpose.
+- **L16:** an array is that aperture sampled, one element at a time; the illumination becomes element weights you set.
+- **L19:** change each element's phase and the beam moves with nothing moving. You steer the eight-element PHASER.
 
-**A gain figure belongs on a data sheet only after someone has measured it, and you now know how.**
+<div class="fig" data-inline-svg="./fig/L14-beam-patterns.svg" style="max-width:640px; margin:0 auto;"></div>
 
 Note:
-Tie the 80 m far-field number from the worked example back to L9's compact range and near-field scanner: one person can carry this dish, and no ordinary room can test it. Then point them to L15: the answer to the sidelobe question is the illumination taper they met today at −10 dB, generalized.
+Point back at the figure from the beamwidth slide: the feed's taper was a side effect today, picked for efficiency. In L15 the sidelobe level is the requirement and the illumination is the design variable. L16 samples the aperture into an array factor, and by L19 they steer a real beam on the ADALM-PHASER.
