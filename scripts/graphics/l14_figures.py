@@ -22,6 +22,9 @@ lives in the lesson text.
                         with a legend for what is kept and what is lost
   L14-yagi-boom         the gain-versus-boom table against two ideal endfire
                         lines (4L and 7L over lambda), labeled in words
+  L14-log-periodic      a log-periodic dipole array at two frequencies: the
+                        few elements near half a wavelength radiate, and that
+                        active region slides along the boom with frequency
   L14-link-budget       the cubesat link as a level diagram, with the noise
                         floor, the 14 dB margin, and the no-dish case
 
@@ -432,6 +435,64 @@ def yagi_boom():
     return slope
 
 
+# ------------------------------------------------------------ log-periodic
+def log_periodic():
+    """The same LPDA drawn at a low and a high frequency.
+
+    Ten dipoles scaled by tau = 0.88 (longest 3.2 times the shortest), spaced
+    in proportion to their length. An element radiates strongly when its
+    length is within about 15% of half a wavelength; those are drawn in red
+    as the active region. Longer elements behind it are drawn as reflectors,
+    shorter ones ahead as directors, the Yagi's long-lags / short-leads rule.
+    Element heights are drawn at 0.75 scale so the two panels fit a slide.
+    """
+    tau, sigma, N = 0.88, 0.16, 10
+    L = tau ** np.arange(N)                       # element lengths, longest = 1
+    x = np.concatenate([[0], np.cumsum(2 * sigma * L[:-1])])
+    H = 1.0                                       # drawn height per unit length
+    fig, axs = plt.subplots(2, 1, figsize=(7.2, 5.0))
+    cases = [(0.86, "Low frequency: the long end radiates"),
+             (0.40, "High frequency: the short end radiates")]
+    for k, (ax, (half_lam, title)) in enumerate(zip(axs, cases)):
+        ax.axis("off")
+        ax.plot([x[0] - 0.05, x[-1] + 0.05], [0, 0], color=GRAY, lw=2.2, solid_capstyle="butt")
+        for a, b in zip(x[:-1], x[1:]):           # the feed line crosses over
+            m = (a + b) / 2
+            ax.plot([m - 0.025, m + 0.025], [-0.05, 0.05], color=GRAY, lw=1)
+            ax.plot([m - 0.025, m + 0.025], [0.05, -0.05], color=GRAY, lw=1)
+        act = np.abs(L / half_lam - 1) <= 0.15
+        for xi, li, a in zip(x, L, act):
+            c, lw = (RED, 3.4) if a else ((NAVY, 2) if li > half_lam else (BLUE, 2))
+            ax.plot([xi, xi], [-H * li / 2, H * li / 2], color=c, lw=lw, solid_capstyle="butt")
+        xa = x[act]
+        ax.add_patch(Rectangle((xa.min() - 0.08, -0.56), xa.max() - xa.min() + 0.16, 1.12,
+                               fc=RED, alpha=0.08, ec="none"))
+        ax.text(xa.mean(), -0.6, "active region:\nnear half a wavelength", color=RED,
+                fontsize=13, ha="center", va="top")
+        arrow(ax, (x[-1] + 0.2, 0), (x[-1] + 0.7, 0), color=RED, lw=2.4, ms=16)
+        ax.text(x[-1] + 0.45, 0.07, "beam", color=RED, fontsize=13, ha="center", va="bottom",
+                fontweight="bold")
+        ax.text(x[0] - 0.12, 0.66, title, color=INK, fontsize=14, fontweight="bold",
+                ha="left", va="bottom")
+        if k == 0:
+            ax.text(x[6], -0.6, "shorter: directors", color=BLUE, fontsize=13,
+                    ha="center", va="top")
+        else:
+            ax.text(x[2], -0.6, "longer: reflectors", color=NAVY, fontsize=13,
+                    ha="center", va="top")
+        ax.set_xlim(x[0] - 0.15, x[-1] + 0.8)
+        ax.set_ylim(-0.95, 0.85)
+    axs[0].text(x[-1] + 0.45, -0.2, "×: the feed line\ncrosses over\nbetween neighbors",
+                color=GRAY, fontsize=13, ha="center", va="top", style="italic")
+    fig.subplots_adjust(left=0.01, right=0.99, top=0.99, bottom=0.01, hspace=0.1)
+    save(fig, "L14-log-periodic",
+         "The same log-periodic dipole array, ten dipoles shrinking toward the front, drawn at "
+         "two frequencies. At the low frequency the few long elements near half a wavelength "
+         "radiate and the shorter ones ahead act as directors; at the high frequency the active "
+         "region has slid to the short end and the longer ones behind act as reflectors. The "
+         "beam points toward the short end both times")
+
+
 # ------------------------------------------------------------- link budget
 def link_budget():
     lam = 3e8 / 2.4e9
@@ -501,4 +562,5 @@ if __name__ == "__main__":
     ruze()
     print("budget product:", efficiency_budget())
     print("yagi slope:", yagi_boom())
+    log_periodic()
     print("link:", link_budget())

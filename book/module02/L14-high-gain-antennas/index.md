@@ -785,6 +785,56 @@ where Yagis appear, and a poor fit for anything wideband. It is also the
 easiest prediction in this lesson to check on the analyzer from Lesson 10.
 ::::
 
+::::{frame} Log-Periodic: A Broadband Yagi
+:::{present}
+- Dipoles scaled by a fixed ratio $\tau$, one feed line crossed between neighbors.
+- Only those near $\lambda/2$ radiate. Longer ones reflect; shorter ones direct.
+- Change frequency and that **active region slides**: 10:1 bandwidth, at 7–10 dBi.
+:::
+:::{present}
+<img src="../../viz/img/L14-log-periodic.svg"
+     alt="The same log-periodic dipole array, ten dipoles shrinking toward the front, drawn at two frequencies. At the low frequency the few long elements near half a wavelength radiate and the shorter ones ahead act as directors; at the high frequency the active region has slid to the short end and the longer ones behind act as reflectors. The beam points toward the short end both times"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+The Yagi's narrow band comes from having one set of lengths: every element
+is detuned by a fixed amount at one frequency only. The log-periodic dipole
+array keeps the Yagi's physics and gives up the single set of lengths. Each
+dipole is a fixed fraction $\tau$ (typically 0.8 to 0.95) of the one behind
+it, and so is its spacing. At any frequency, the two or three elements within
+roughly 15% of $\lambda/2$ carry almost all the current; that is the active
+region. The longer element just behind it is inductive and acts as a
+reflector, the shorter ones just ahead are capacitive and act as directors,
+exactly the rule from the phasing frame. Raise the frequency and a shorter
+group becomes the resonant one, so the active region slides toward the short
+end and the antenna looks electrically the same. The usable band runs roughly from
+where the longest element is about $\lambda/2$ to where the shortest is.
+
+:::{depth}
+The name is the scaling. Multiplying every dimension by $\tau$ maps the
+antenna onto itself shifted by one element, so its pattern and impedance at
+frequency $f$ repeat at $f/\tau$, $f/\tau^2$, and so on: periodic in
+$\log f$. Between those points the performance wobbles a little, and keeping
+$\tau$ close to 1 keeps the wobble small, at the price of more elements.
+
+Unlike a Yagi, every element is connected, to a two-wire line that runs down
+the boom and is crossed over between each pair of neighbors. The crossover
+adds $180^\circ$ to the line delay from one element to the next, and at the
+close spacings near the active region that progression points the beam toward
+the short end, where the feed sits. With an uncrossed line the active region
+would fire back into the long elements behind it and the pattern breaks up.
+
+The price is gain. At any one frequency only the active region, a few
+elements and a fraction of a wavelength of boom, is doing the work; the rest
+of the boom is idle until the frequency moves to it. A log-periodic therefore
+reaches about 7 to 10 dBi, roughly 3 dB below a Yagi on the same boom. That
+trade, bandwidth bought with boom that sits idle, is why Lesson 3 put the
+log-periodic in its frequency-independent column next to the spiral, and why
+it is the usual choice for wideband TV reception, EMC testing, and
+broadband measurement antennas.
+:::
+::::
+
 ::::{frame} Arrays
 :::{present}
 $$G_\text{array} = 10\log_{10} N \quad \text{dB}$$
@@ -940,6 +990,7 @@ noise.
 | Edge taper | spillover fights illumination taper | rim about $-10$ dB |
 | Ruze, $685.8(\sigma/\lambda)^{2}$ dB | surface error reduces gain exponentially | $\lambda/50 \rightarrow 0.27$ dB; $\lambda/16 \rightarrow 2.7$ dB |
 | Yagi boom length | boom length, not element count, sets gain | $\approx +2$ dB per doubling (3 ideal); 8–15 dBi |
+| Log-periodic | the active region slides with frequency | about 10:1 bandwidth at 7–10 dBi |
 | $10\log_{10}N$ | array gain over one element | 64 elements $\rightarrow$ 18 dB |
 ::::
 
