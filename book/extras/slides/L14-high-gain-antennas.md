@@ -354,6 +354,19 @@ The points are the table on the previous slide. The two lines are ideal endfire 
 
 ---
 
+## Log-Periodic: A Broadband Yagi
+
+<div class="fig" data-inline-svg="./fig/L14-log-periodic.svg" style="max-width:600px; margin:0 auto;"></div>
+
+- Dipoles scaled by a fixed ratio $\tau$; one feed line, crossed between neighbors.
+- Only the elements near $\lambda/2$ radiate. Longer ones reflect; shorter ones direct.
+- Change frequency and the **active region slides**: about 10:1 bandwidth, at 7–10 dBi.
+
+Note:
+The fix for the Yagi's narrow band. Scaling every dimension by tau maps the antenna onto itself shifted one element, so the performance repeats at f/tau, f/tau^2: periodic in log f, hence the name. The crossover adds 180 degrees per element, which points the beam at the short end where the feed is. The price is gain: only the active region works at any one frequency, so it is about 3 dB below a Yagi on the same boom. L3 listed it next to the spiral as frequency independent; this is why.
+
+---
+
 ## Arrays
 
 $$G_{\text{array}} = 10 \log_{10} N \quad \text{dB over one element}$$
