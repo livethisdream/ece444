@@ -29,11 +29,8 @@ Lesson 19 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '5'">
-  <li>I can configure the PHASER for a beam sweep and produce the gain-versus-steering-angle trace.</li>
-  <li>I can measure the steered beam's peak angle and compare it with the commanded angle.</li>
-  <li>I can verify the commanded element phase progression against theory.</li>
-  <li>I can identify and bound the main error sources between predicted and measured steered patterns.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 4">
+  <li>I can implement beam steering on the ADALM-PHASER and verify the steered pattern against theory.</li>
 </ol>
 ::::
 

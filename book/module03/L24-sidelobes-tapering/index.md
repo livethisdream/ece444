@@ -29,12 +29,8 @@ Lesson 24 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '7'">
-  <li>I can explain why the uniform taper has the highest sidelobes and why every smoother taper trades beamwidth for them.</li>
-  <li>I can compare uniform, cosine-family, Chebyshev, and Taylor tapers by sidelobe level and beam broadening.</li>
-  <li>I can compute taper efficiency and the coherent peak drop for a discrete taper.</li>
-  <li>I can select a taper to meet a sidelobe specification and state its costs.</li>
-  <li>I can convert a taper's element amplitudes to the PHASER's per-element gain settings.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 6">
+  <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
 </ol>
 ::::
 

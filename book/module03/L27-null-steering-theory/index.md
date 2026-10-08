@@ -30,11 +30,8 @@ Lesson 27 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '9'">
-  <li>I can explain when a pattern null is worth more than main-lobe gain.</li>
-  <li>I can derive the weight-subtraction rule that places a null without moving the main beam.</li>
-  <li>I can compute the per-element gains and phases that place a null at a chosen angle on the PHASER.</li>
-  <li>I can predict the achievable null depth given phase and gain quantization.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 8">
+  <li>I can calculate null-steering weights and implement pattern nulls on the ADALM-PHASER.</li>
 </ol>
 
 :::{depth}

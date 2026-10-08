@@ -29,19 +29,8 @@ Lesson 2 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '2'">
-  <li>I can trace the physics chain from Maxwell's equations → telegrapher's equations → the wave equation → the plane-wave solution, and identify the time and space dependencies in each.</li>
-  <li>I can explain why the far field of an antenna is a plane-wave-like transverse E-H pair falling off as 1/r.</li>
-  <li>I can define and compute the headline antenna parameters: radiation intensity, directivity, gain, effective aperture, beamwidth, boresight, main / side / back lobes.</li>
-</ol>
-::::
-
-::::{frame} Learning Objectives, continued
-
-<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '2'; counter-reset: lo 3">
-  <li>I can read a radiation pattern and pull out HPBW, FNBW, and sidelobe level.</li>
-  <li>I can state the reciprocity principle and explain why an antenna's pattern, gain, and impedance are the same whether it transmits or receives.</li>
-  <li>I can apply the Friis transmission equation — with EIRP and free-space path loss — to predict the received power in a link.</li>
+<ol class="lo-list" style="--module: '1'; counter-reset: lo 1">
+  <li>I can define and calculate fundamental antenna properties — gain, directivity, effective aperture, beamwidth, and sidelobe level — apply the reciprocity principle that links an antenna's transmit and receive behavior, and use the Friis transmission equation to predict received power in a link.</li>
 </ol>
 ::::
 

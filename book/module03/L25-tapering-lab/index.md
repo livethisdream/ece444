@@ -29,11 +29,8 @@ Lesson 25 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '7'; counter-reset: lo 5">
-  <li>I can apply amplitude tapers on the PHASER and measure the sidelobe and beamwidth changes.</li>
-  <li>I can distinguish the plotted peak drop from the directivity loss when a taper is applied.</li>
-  <li>I can verify a taper's predicted beam broadening against measurement.</li>
-  <li>I can design my own taper and evaluate it against the presets.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 6">
+  <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
 </ol>
 
 :::{depth}

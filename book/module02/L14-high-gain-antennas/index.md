@@ -31,12 +31,8 @@ Lesson 14 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '2'; --lo: '4'">
-  <li>I can compute an aperture antenna's gain and beamwidth from its physical size, and explain why gain is fundamentally a statement about area.</li>
-  <li>I can explain how a parabolic reflector's equal-path geometry turns a spherical wave into a plane wave, and identify what f/D, feed illumination, blockage, and spillover do to aperture efficiency.</li>
-  <li>I can explain how a Yagi-Uda gets gain from parasitic elements, and how detuning the reflector and directors sets the phase that puts the beam endfire.</li>
-  <li>I can describe the array as the third approach to high gain, and state why the next module is devoted to it.</li>
-  <li>I can select an appropriate high-gain antenna for a given application and defend the choice with numbers.</li>
+<ol class="lo-list" style="--module: '2'; counter-reset: lo 3">
+  <li>I can describe how reflectors, Yagi-Uda antennas, and arrays achieve high gain, explain how a log-periodic antenna trades gain for bandwidth, and select an appropriate high-gain antenna for a given application.</li>
 </ol>
 ::::
 

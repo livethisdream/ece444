@@ -28,12 +28,8 @@ Lesson 3 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Learning Objectives
-<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '3'">
-  <li>I can identify the polarization state of a plane wave (linear, circular, elliptical) from the amplitude and phase of its two orthogonal components.</li>
-  <li>I can compute the axial ratio of an elliptically polarized wave and explain what a "3 dB axial ratio" spec means for a circularly polarized antenna.</li>
-  <li>I can compute the polarization loss factor (PLF) between a transmit and receive antenna with mismatched polarizations.</li>
-  <li>I can define the impedance, pattern, and polarization bandwidths of an antenna and compute fractional bandwidth from the endpoint frequencies.</li>
-  <li>I can match common antenna families (patch, dipole, horn, log-periodic, spiral, Vivaldi) to their typical bandwidth range.</li>
+<ol class="lo-list" style="--module: '1'; counter-reset: lo 2">
+  <li>I can determine the polarization of an antenna and describe the bandwidth characteristics of common antenna types.</li>
 </ol>
 ::::
 

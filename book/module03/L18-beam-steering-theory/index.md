@@ -31,12 +31,8 @@ Lesson 18 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '4'">
-  <li>I can derive the progressive element-to-element phase required to steer a beam from the path-length difference.</li>
-  <li>I can compute the per-element phase settings for a commanded steer angle, including wrapping modulo 360 degrees.</li>
-  <li>I can predict the steered array pattern by shifting the array-factor argument.</li>
-  <li>I can quantify beam broadening with scan angle.</li>
-  <li>I can work the inverse problem: recover the steer angle from a set of element phases.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 3">
+  <li>I can calculate the phase weights required to steer a beam to a given angle and predict the resulting array pattern.</li>
 </ol>
 
 :::{depth}

@@ -29,11 +29,8 @@ Lesson 1 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '1'">
-  <li>I can state in plain language what an antenna is and what it does in a radio system.</li>
-  <li>I can explain why antennas matter across the Air Force mission set (comms, radar, EW, SATCOM, GPS).</li>
-  <li>I can identify the five modules of ECE 444 and how they build toward the final capstone.</li>
-  <li>I can recognize several real antennas by sight and connect their geometry to the job they do.</li>
+<ol class="lo-list" style="--module: '1'; counter-reset: lo 0">
+  <li>I can explain what an antenna is, describe its role in a wireless system, and recognize common antenna types by sight.</li>
 </ol>
 ::::
 

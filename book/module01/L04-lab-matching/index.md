@@ -23,12 +23,8 @@ Lesson 4 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '1'; --lo: '4'">
-  <li>I can calibrate a VNA to a defined reference plane and explain why every cable change invalidates the calibration.</li>
-  <li>I can measure the complex impedance of a load and read its position on the Smith chart.</li>
-  <li>I can design, build, and verify an L-network that matches a complex load to a 50 ohm line.</li>
-  <li>I can measure the bandwidth a match holds and connect it to the network's quality factor.</li>
-  <li>I can substitute the parts I can actually source for the ones I designed, predict what the substitution costs, and judge whether the result meets the specification.</li>
+<ol class="lo-list" style="--module: '1'; counter-reset: lo 3">
+  <li>I can calculate input impedance, feed considerations, and the role of baluns in an antenna feed system.</li>
 </ol>
 ::::
 

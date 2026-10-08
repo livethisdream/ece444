@@ -31,11 +31,8 @@ Lesson 21 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 ::::{frame} Learning Objectives
 
-<ol class="lo-list lo-sublist" style="--module: '3'; --lo: '2'; counter-reset: lo 9">
-  <li>I can measure half-power beamwidth, first-null beamwidth, and first sidelobe level from a beam-sweep trace.</li>
-  <li>I can compare measured beamwidths at eight, four, and two active elements against calculation.</li>
-  <li>I can explain why a measured sweep departs from the ideal array factor near its nulls and floor.</li>
-  <li>I can reduce an array's active aperture and predict the resulting pattern before measuring it.</li>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 1">
+  <li>I can derive the array factor for an arbitrary linear array and apply pattern multiplication.</li>
 </ol>
 
 :::{depth}

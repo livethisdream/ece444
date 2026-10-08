@@ -163,8 +163,8 @@ if python3 "$HERE/check_tables.py" "$page" "$REPO/book/extras/slides/$LNN.md"; t
 else
   bad "raw | inside \$..\$ splits a table cell (use \\vert)"
 fi
-grep -q 'lo-list lo-sublist' "$page" && grep -q -- "--module: '$MOD'" "$page" \
-  && ok "LO markup sublist + module $MOD" || bad "LO markup wrong for module $MOD"
+grep -q 'class="lo-list"' "$page" && grep -q -- "--module: '$MOD'" "$page" \
+  && ok "LO markup, course objective, module $MOD" || bad "LO markup wrong for module $MOD"
 grep -q "Learning Objective $MOD\." "$tex" && ok "practice LO banner" \
   || bad "practice LO banner missing (expected 'Learning Objective $MOD.x')"
 
