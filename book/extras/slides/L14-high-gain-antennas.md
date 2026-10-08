@@ -143,20 +143,30 @@ Walk the ray. The feed radiates a spherical wave; the surface only rearranges it
 
 ## The Equal-Path Property
 
-The surface is $z = \rho^2 / 4f$ with the focus at $z = f$. The distance from the focus to a surface point $P$ is $f + z_P$.
+- A parabola: every point $P$ is as far from the focus as from a line $f$ behind the vertex, so $\overline{FP} = f + z_P$.
+- From $P$ the ray runs straight to the aperture plane: $\overline{PA} = z_a - z_P$.
 
 $$\overline{FP} + \overline{PA} = (f + z_P) + (z_a - z_P) = f + z_a$$
 
-- The $z_P$ cancels, so every ray takes the same path length.
-- A spherical wave goes in, and a plane wave comes out with the whole aperture in phase.
-- One line of algebra is the entire reason reflectors exist.
+- No $z_P$ is left, so every ray arrives in phase: a plane wave over the whole aperture.
 
 <div class="callout">
 <p>A reflector does not amplify. It <em>rearranges phase</em> over a large area.</p>
 </div>
 
 Note:
+The next slide draws the same argument.
+
 Do this cancellation on the board. It is one of the few derivations in Module 2 that fits in a single line, so let them see it happen. If asked where FP = f + z_P comes from: Pythagoras gives FP^2 = rho^2 + (z_P - f)^2, and rho^2 = 4 f z_P makes it (z_P + f)^2. Every point on a parabola is as far from the focus as from the line z = -f.
+
+---
+
+## The Equal Path, Drawn
+
+<div class="fig" data-inline-svg="./fig/L14-equal-path.svg" style="max-width:700px; margin:0 auto;"></div>
+
+Note:
+Trace one ray. Its first leg, feed to surface, equals the dashed run from the same point back to the line behind the dish; that is what a parabola is. Swap the leg for its twin and the whole path is a straight line from that line to the aperture plane. Every ray's straight line is the same length, so every ray arrives in phase.
 
 ---
 
@@ -182,10 +192,10 @@ Demo the feed-dish widget: deepen the dish to f/D = 0.25 and show the rim angle 
 
 ## Illumination Taper and Spillover
 
-<div class="fig" data-inline-svg="./fig/L14-illumination-taper.svg" style="max-width:860px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L14-illumination-taper.svg" style="max-width:800px; margin:0 auto;"></div>
 
 <div class="callout">
-<p>Rule of thumb: illuminate the rim about <strong>10 dB below center</strong>.</p>
+<p>Spillover and taper both multiply the gain, which peaks with the rim about <strong>10 dB below center</strong>.</p>
 </div>
 
 Note:
@@ -195,9 +205,9 @@ Two losses that pull opposite ways have an optimum; the next slide computes it. 
 
 ## Why 10 dB
 
-<div class="fig" data-inline-svg="./fig/L14-taper-spillover.svg" style="max-width:860px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L14-taper-spillover.svg" style="max-width:740px; margin:0 auto;"></div>
 
-- The model uses f/D = 0.5 and sweeps the feed pattern from broad to narrow.
+- At f/D = 0.5, the feed pattern $\cos^n\theta'$ sweeps from broad (small $n$) to narrow; nothing else in the gain depends on the feed.
 - The product peaks at **0.82** for an **11 dB** edge taper, and anything from 8 to 14 dB is within 0.03.
 
 Note:
@@ -207,11 +217,10 @@ The feed power pattern is cos^n theta', with n swept. Spillover efficiency is th
 
 ## Blockage and the Offset Feed
 
-- A prime-focus feed and its struts sit **in the beam**.
-- A blocked diameter $d$ lowers the gain by the factor below and raises the sidelobes.
+$$\frac{G}{G_0} = \left( \frac{A - A_b}{A} \right)^2 = \left[ 1 - \left( \frac{d}{D} \right)^2 \right]^2$$
 
-$$\left[ 1 - \left( \frac{d}{D} \right)^2 \right]^2$$
-
+- A feed of diameter $d$ shadows area $A_b$; the boresight field sums only the rest.
+- Gain goes as that field squared, and the feed still pays for the blocked power.
 - A 15 cm feed loses 0.02 dB on a 3 m dish and 1.0 dB on a 45 cm dish.
 - An **offset feed** uses a slice cut off-axis from a larger paraboloid.
 
@@ -279,13 +288,17 @@ Have them multiply it on their calculators. The 0.65 is not an arbitrary factor;
 <div class="fig" data-inline-svg="./fig/L14-efficiency-budget.svg" style="max-width:860px; margin:0 auto;"></div>
 
 Note:
-Each bar multiplies the one before it. The two largest steps are spillover and taper, the pair the 10 dB rule trades against each other.
+Blue is the efficiency left after each term; the red cap is what that term took away. Each bar multiplies the one before it. The two largest steps are spillover and taper, the pair the 10 dB rule trades against each other.
 
 ---
 
 ## The Yagi-Uda
 
-<div class="fig" data-inline-svg="./fig/L14-yagi.svg" style="max-width:980px; margin:0 auto;"></div>
+<div class="fig" data-inline-svg="./fig/L14-yagi.svg" style="max-width:800px; margin:0 auto;"></div>
+
+<div class="callout">
+<p>One element fed, the rest bare rods. Phase their re-radiation right and you get array gain from <strong>one cable</strong>.</p>
+</div>
 
 Note:
 Exactly one element is connected. Every other element is a rod in the near field. Students often assume every element is fed, so correct that here.
@@ -296,10 +309,10 @@ Exactly one element is connected. Every other element is a rod in the near field
 
 <p class="viz-cue">↗ Interactive on the lesson page</p>
 
-- The **driven element**, about $0.47\lambda$ long, is the only one connected.
-- The **parasites** carry current *induced* by the driven element's near field.
-- A slightly **long** element is inductive, and its current **lags** its induced voltage; that is the reflector, behind.
-- A slightly **short** element is capacitive, and its current **leads**; those are the directors, in front.
+- No cable sets a parasite's phase: $I = V/Z = V/(R + jX)$, so its **length** does, through the sign of $X$.
+- The reflector needs its current $108^\circ$ from the driven element's to null the back ($d = 0.2\lambda$).
+- Slightly **long**: inductive, the current **lags**, and the back cancels. That is the reflector, behind.
+- Slightly **short**: capacitive, the current **leads**, and the beam tips toward it. Those are the directors.
 - The result is a slow traveling wave forward, an **endfire** beam, and 15–25 dB front-to-back.
 
 <div class="callout">
@@ -320,7 +333,7 @@ Demo the two-element Yagi widget: at d = 0.2 lambda and alpha = 108 degrees the 
 | 10 | $2.2\lambda$ | 12.5 dBi |
 | 16 | $4.5\lambda$ | 14.5 dBi |
 
-- Gain rises about **2 dB per doubling of the boom**; the endfire ideal is 3 dB.
+- Each time the boom **doubles**, the gain climbs about **2 dB**; an ideal endfire line climbs 3 dB, its gain proportional to its length.
 - More directors on the *same* boom add almost nothing.
 - Practical Yagis reach 8–15 dBi, with a bandwidth of a few percent.
 - They suit TV, amateur, and fixed point-to-point links, where the frequency does not change.
@@ -335,7 +348,7 @@ A Yagi needs only one reflector; a second sees almost no field. Above 15 dBi, de
 <div class="fig" data-inline-svg="./fig/L14-yagi-boom.svg" style="max-width:860px; margin:0 auto;"></div>
 
 Note:
-The points are the table on the previous slide. The two lines are the endfire line source in step (4L/lambda) and with a slow wave (7L/lambda); both climb 3 dB per doubling. Real Yagis sit between them and climb about 1.8.
+The points are the table on the previous slide. The two lines are ideal endfire line sources: one phased at exactly light speed (4L/lambda), one with the slightly slow wave that gives the most gain (7L/lambda); both climb 3 dB per doubling. Each step along the axis doubles the boom. Real Yagis sit between them and climb about 1.8.
 
 ---
 

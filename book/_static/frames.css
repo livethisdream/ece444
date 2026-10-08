@@ -375,6 +375,15 @@ iframe.viz {
   padding-top: clamp(1.8rem, 4vh, 3rem);
   padding-bottom: clamp(3rem, 6vh, 4.5rem);
 }
+/* `<p class="viz-note mathjax_process">` under a widget (the second class is
+   what lets MathJax into raw HTML on these pages): the one line that says how to read
+   it. A projector has room for it; a phone in present mode does not -- the
+   widget alone already takes the whole 660px a phone gives it -- so it is
+   dropped there and only there. Read mode always shows it. */
+[data-mode="present"] .frame.viz-frame .viz-note { font-size: var(--step-0); margin: 0; }
+@media (max-width: 430px) {
+  [data-mode="present"] .frame.viz-frame .viz-note { display: none; }
+}
 
 /* ---- print ------------------------------------------------------------ */
 /* `.deck` is a fixed-height scroll container so present mode can pin one

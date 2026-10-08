@@ -15,9 +15,13 @@ lives in the lesson text.
                         beside an offset slice of a parent paraboloid
   L14-ruze              a surface bump lengthens the path by twice its height;
                         loss against RMS error with lambda/50 and lambda/16
-  L14-efficiency-budget the efficiency budget as a waterfall, 1.00 to 0.66
-  L14-yagi-boom         the gain-versus-boom table against the in-step and
-                        slow-wave endfire lines (4L and 7L over lambda)
+  L14-equal-path        the equal-path property drawn: each feed-to-surface
+                        leg equals the run back to the line f behind the
+                        vertex, so every ray's total is one straight line
+  L14-efficiency-budget the efficiency budget as a waterfall, 1.00 to 0.66,
+                        with a legend for what is kept and what is lost
+  L14-yagi-boom         the gain-versus-boom table against two ideal endfire
+                        lines (4L and 7L over lambda), labeled in words
   L14-link-budget       the cubesat link as a level diagram, with the noise
                         floor, the 14 dB margin, and the no-dish case
 
@@ -239,6 +243,76 @@ def offset_feed():
          "parent paraboloid, so the feed at the shared focus sits outside the beam")
 
 
+# --------------------------------------------------------------- equal path
+def equal_path():
+    """The parabola's definition turns every ray's path into one straight line.
+
+    z runs left to right, the vertex at 0, the focus at f, the line z = -f
+    behind the vertex, the aperture plane at z_a. For each sample point P the
+    feed-to-surface leg FP is drawn solid, and its twin, the run from P back
+    to the line, dashed in the same color: the two are equal by definition.
+    The dashed twin plus the surface-to-aperture leg is then the straight
+    line from z = -f to z_a, whatever P is.
+    """
+    f, za, R = 1.0, 1.75, 2.0
+    fig, ax = plt.subplots(figsize=(8.4, 4.1))
+    ax.set_aspect("equal")
+    ax.axis("off")
+    rho = np.linspace(-R, R, 300)
+    ax.plot([-f - 0.1, za + 0.2], [0, 0], color=GRAY, lw=0.8, ls=(0, (6, 2, 1, 2)))
+    ax.plot([-f, -f], [-R - 0.15, R + 0.15], color=GRAY, lw=1.6)
+    ax.plot([za, za], [-R - 0.15, R + 0.15], color=GREEN, lw=1.6, ls=(0, (4, 3)))
+    ax.plot(rho ** 2 / (4 * f), rho, color=NAVY, lw=3)
+    for r, c in ((1.65, RED), (-0.8, AMBER)):
+        zp = r ** 2 / (4 * f)
+        ax.plot([f, zp], [0, r], color=c, lw=2.2)
+        ax.plot([-f, zp], [r, r], color=c, lw=2.2, ls=(0, (3, 2)))
+        ax.plot([zp, za], [r, r], color=GREEN, lw=2.2)
+        ax.plot(zp, r, "o", color=c, ms=6, zorder=5)
+    ax.plot(f, 0, "o", color=NAVY, ms=9, zorder=6)
+    ax.text(f + 0.06, -0.12, "F (feed)", color=NAVY, fontsize=11, ha="left", va="top",
+            fontweight="bold")
+    ax.text(1.65 ** 2 / 4 - 0.1, 1.65 + 0.08, "P", color=RED, fontsize=11, fontweight="bold",
+            ha="right", va="bottom", bbox=BOX)
+    ax.text(0.8 ** 2 / 4 - 0.1, -0.8 - 0.08, "P", color=AMBER, fontsize=11, fontweight="bold",
+            ha="right", va="top", bbox=BOX)
+    ax.text(-f - 0.08, R + 0.2, "a line f behind\nthe vertex", color=GRAY, fontsize=10.5,
+            ha="center", va="bottom")
+    ax.text(za, R + 0.2, "aperture\nplane", color=GREEN, fontsize=10.5, ha="center", va="bottom")
+    # the focal distance
+    yf = -R - 0.3
+    for z0 in (0, f):
+        ax.plot([z0, z0], [yf - 0.08, -0.12 if z0 == 0 else -0.5], color=GRAY, lw=0.7,
+                ls=(0, (1, 2)))
+    ax.annotate("", (0, yf), (f, yf),
+                arrowprops=dict(arrowstyle="<->", color=GRAY, lw=1, shrinkA=0, shrinkB=0))
+    ax.text(f / 2, yf + 0.06, "f", color=GRAY, fontsize=11, ha="center", va="bottom",
+            style="italic")
+    # every ray's total is the line-to-plane distance
+    yb = -R - 0.75
+    ax.annotate("", (-f, yb), (za, yb),
+                arrowprops=dict(arrowstyle="<->", color=INK, lw=1.2, shrinkA=0, shrinkB=0))
+    ax.text((za - f) / 2, yb - 0.1, "every ray's path: this one length", color=INK, fontsize=11,
+            ha="center", va="top", fontweight="bold")
+    # key, right of the drawing
+    kx, ky = za + 0.45, 1.3
+    rows = [(INK, "-", "feed to surface"),
+            (INK, (0, (3, 2)), "the same length, measured\nback to the line"),
+            (GREEN, "-", "surface to aperture plane")]
+    for i, (c, ls, t) in enumerate(rows):
+        y = ky - i * 0.85
+        ax.plot([kx, kx + 0.45], [y, y], color=c, lw=2.2, ls=ls)
+        ax.text(kx + 0.6, y, t, color=INK, fontsize=10.5, ha="left", va="center")
+    ax.set_xlim(-f - 0.6, kx + 2.9)
+    ax.set_ylim(yb - 0.55, R + 0.85)
+    fig.subplots_adjust(left=0.01, right=0.99, top=0.99, bottom=0.01)
+    save(fig, "L14-equal-path",
+         "A parabola with its focus F, a line a focal length behind its vertex, and the aperture "
+         "plane in front. For two surface points P, the feed-to-surface leg equals the dashed run "
+         "from P back to the line, so each ray's whole path equals the straight distance from "
+         "the line to the aperture plane, the same for every ray")
+
+
 # ---------------------------------------------------------------- Ruze
 def ruze():
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(9.4, 3.5), gridspec_kw={"width_ratios": [1, 1.25]})
@@ -303,13 +377,18 @@ def efficiency_budget():
     ax.set_xticks(range(len(terms) + 1))
     ax.set_xticklabels(["ideal"] + [t for t, _ in terms], fontsize=10.5)
     ax.set_ylim(0, 1.12)
+    ax.bar([-5], [0], color=SHADE, ec=NAVY, lw=1.2, label="efficiency left after this term")
+    ax.bar([-5], [0], color="#f3d6d7", ec=RED, lw=1.0, label="what this term takes away")
+    ax.set_xlim(-0.5, len(terms) + 0.5)
+    ax.legend(loc="upper right", frameon=False, fontsize=10.5, bbox_to_anchor=(1.0, 1.04))
     ax.set_ylabel("aperture efficiency")
     clean(ax, keep=("bottom",))
     ax.set_yticks([])
     fig.tight_layout()
     save(fig, "L14-efficiency-budget",
          f"The efficiency budget as a waterfall: spillover, taper, blockage, surface error, "
-         f"and the remaining losses take an ideal aperture from 1.00 to {level:.2f}")
+         f"and the remaining losses take an ideal aperture from 1.00 to {level:.2f}. Blue is the "
+         f"efficiency left after each term, red is what that term takes away")
     return level
 
 
@@ -326,13 +405,13 @@ def yagi_boom():
     ax.plot(Lf, icpt + slope * np.log2(Lf), color=AMBER, lw=1.4, alpha=0.8)
     ax.plot(boom, gain, "o", color=AMBER, ms=9, zorder=5, mec="white", mew=1.5)
     fit = lambda x: icpt + slope * np.log2(x)
-    ax.annotate("slow-wave endfire: +3 dB per doubling", (6.0, 10 * np.log10(42)), (0.27, 18.2),
+    ax.annotate("ideal line source, best phasing: +3 dB per doubling", (6.0, 10 * np.log10(42)), (0.27, 18.2),
                 color=NAVY, fontsize=10.5, ha="left", va="center",
                 arrowprops=dict(arrowstyle="->", color=NAVY, lw=1, shrinkB=3))
     ax.annotate(f"typical Yagis: +{slope:.1f} dB per doubling", (0.5, fit(0.5)), (0.27, 14.0),
                 color=AMBER, fontsize=10.5, ha="left", va="center",
                 arrowprops=dict(arrowstyle="->", color=AMBER, lw=1, shrinkB=4))
-    ax.annotate("in-step endfire", (6.0, 10 * np.log10(24)), (7.6, 9.0),
+    ax.annotate("ideal line source, phased at light speed:\nalso +3 dB per doubling", (6.0, 10 * np.log10(24)), (7.6, 4.6),
                 color=GRAY, fontsize=10.5, ha="right", va="center",
                 arrowprops=dict(arrowstyle="->", color=GRAY, lw=1, shrinkB=3))
     ax.set_xscale("log", base=2)
@@ -340,7 +419,7 @@ def yagi_boom():
     ax.set_xticklabels(["0.25", "0.5", "1", "2", "4", "8"])
     ax.set_xlim(0.25, 8)
     ax.set_ylim(0, 20)
-    ax.set_xlabel("boom length (wavelengths)")
+    ax.set_xlabel("boom length (wavelengths): each step right doubles the boom")
     ax.set_ylabel("gain (dBi)")
     clean(ax)
     ax.grid(color=RULE, lw=0.6)
@@ -348,8 +427,8 @@ def yagi_boom():
     fig.tight_layout()
     save(fig, "L14-yagi-boom",
          f"Yagi gain against boom length on a doubling scale: the typical designs climb about "
-         f"{slope:.1f} dB per doubling, between the in-step and slow-wave endfire lines, which "
-         f"climb 3 dB per doubling")
+         f"{slope:.1f} dB each time the boom doubles, against two ideal endfire lines, one phased at "
+         f"light speed and one phased for best gain, which both climb 3 dB per doubling")
     return slope
 
 
@@ -418,6 +497,7 @@ if __name__ == "__main__":
     three_approaches()
     print("beam:", beam_patterns())
     offset_feed()
+    equal_path()
     ruze()
     print("budget product:", efficiency_budget())
     print("yagi slope:", yagi_boom())
