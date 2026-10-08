@@ -294,6 +294,8 @@ Blue is the efficiency left after each term; the red cap is what that term took 
 
 ## The Yagi-Uda
 
+<p class="viz-cue">↗ Interactive on the lesson page</p>
+
 <div class="fig" data-inline-svg="./fig/L14-yagi.svg" style="max-width:800px; margin:0 auto;"></div>
 
 <div class="callout">
@@ -301,7 +303,7 @@ Blue is the efficiency left after each term; the red cap is what that term took 
 </div>
 
 Note:
-Exactly one element is connected. Every other element is a rod in the near field. Students often assume every element is fed, so correct that here.
+Demo the switch-on widget (yagi-turn-on): run driven only, then + reflector, and point at the back probe, which never rings because the reflector fires as the driven wave passes and its wave rides backward alongside, opposite in sign. Exactly one element is connected. Every other element is a rod in the near field. Students often assume every element is fed, so correct that here.
 
 ---
 

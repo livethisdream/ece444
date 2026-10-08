@@ -575,8 +575,54 @@ Why it matters is the cable. An array, at the end of this lesson, gets its gain
 by feeding every element and setting each one's phase with electronics. A Yagi
 gets most of that gain with one feed line and a row of rods, which is why it
 is on every rooftop. The price is that nothing sets a parasite's phase
-directly. The next two frames are about that: what phase the parasites need,
-and how a rod with no feed line gets it.
+directly. The next three frames are about that: watching the parasites switch on,
+what phase they need, and how a rod with no feed line gets it.
+::::
+
+::::{frame} Switch On a Yagi
+:class: viz-frame
+
+:::{present}
+<iframe src="../../viz/yagi-turn-on.html"
+        width="100%" height="413"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="A Yagi switched on: the driven element's wave spreads out, each parasitic element starts radiating when that wave reaches it, and probes in front and behind record the field against time">
+</iframe>
+
+<p class="viz-note">The reflector fires as the driven wave passes it, so its own wave runs backward alongside, <strong>opposite in sign</strong>: the back probe never rings.</p>
+:::
+
+:::{depth}
+The animation is the Yagi in time rather than as a pattern. Seen from above,
+the elements stand out of the page, so each one is a dot and each radiates a
+circular wave; red is field one way, navy the other. At $t = 0$ only the
+driven element is on. A parasitic element is drawn hollow until the driven
+element's wavefront reaches it, because until then nothing has told it to
+do anything; from that moment it carries a current and radiates a wave of its
+own. The chart records the field at the two probes, about two
+wavelengths out in front and behind.
+
+Run it three ways. **Driven only**: both probes ring at the same amplitude,
+which is a dipole. **+ reflector**: the driven wave reaches the reflector
+$0.2$ of a period after switch-on, the reflector starts radiating, and its
+wave heads backward riding on top of the driven element's own, opposite in
+sign. The back probe hears both at once and they cancel, so it never rings.
+Toward the front the reflector's wave has $2d$ farther to go, arrives
+$0.4$ of a period later, and lifts the front probe from 1 to about 1.9, the
+two-element frame's number. **Full Yagi**: each director switches on as the
+wave reaches it and adds its wave in step going forward, so the front builds
+higher still while the back stays small.
+
+The currents here are prescribed, not solved: the reflector's at the
+$108^\circ$ back-null phase of the next frame, the directors' at a phase that
+trails the passing wave slightly, the slow wave of the phasing frame. A real
+parasite also takes a few cycles to ring up and is re-driven by its
+neighbors; NEC solves all of that at once, as Lesson 8 did. What the animation
+gets right is the order of events, which is the point: the parasites do
+nothing until the driven element's field reaches them, and everything they
+contribute is that field, re-radiated with a delay and a phase.
+:::
 ::::
 
 ::::{frame} Two-Element Yagi
