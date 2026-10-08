@@ -169,8 +169,9 @@ this order, and `mech_check.sh` at the end of each:
 3. **`/why-sweep <NN>`**: mechanisms stated, jargon defined, numbers
    recomputed, links back to L15/L16 and Module 1.
 4. **Present cut** to the L07 shape: two to four bullets, a figure, an
-   equation chain, or a callout per frame; 40 words a frame, 30 present
-   frames a lesson; derivations as one aligned chain; a slide states the
+   equation chain, or a callout per frame; 40 words a frame, 20 present
+   frames a lesson (the budget in `scripts/verify/budgets.py`; 30 until
+   2026-10-08); derivations as one aligned chain; a slide states the
    point. `check_density.py` and `check_frames.py` gate it. L15 (44 to 29
    beats) and L16 (0 to 27) are the module's worked examples.
 5. **`/illustration-sweep <NN>`** with the deck's "take" figures as the

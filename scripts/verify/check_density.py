@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """How much a frame page puts on screen in present mode, from its source.
 
-Two budgets, both Neil's (2026-09-03): a present frame carries at most
-WORDS words, and a lesson has at most FRAMES present frames -- one 53-minute
-period. Measured on the lesson pages the day the rule was set, the median
+Two budgets, both Neil's, set in budgets.py (the one place to change them):
+a present frame carries at most WORDS words, and a lesson has at most its beat
+budget of present frames -- one 53-minute period. budgets.py records the
+history (30 beats on 2026-09-03, 20 on 2026-10-08) and the per-lesson
+exceptions. Measured on the lesson pages the day the rule was set, the median
 frame carried 55-93 words and the lessons ran 28-76 frames, so the whole
 site fails it. That is the point: this check is the gate for the re-cut, not
 a description of the site as it stands.
@@ -21,13 +23,14 @@ budget by convention -- three "I can" sentences are the lesson's contract and
 belong on screen whole.
 
 Exit status: a lesson that has opted in (any present block) FAILS when a
-frame is over WORDS or the lesson is over FRAMES. A lesson with no present
+frame is over WORDS or the lesson is over its beat budget. A lesson with no present
 block is reported and passes: it has not been cut yet, and failing every
 un-cut lesson would make the gate say nothing.
 
     check_density.py                 # every frame page, one line each
     check_density.py L05             # one lesson, frame by frame
     check_density.py --strict L05    # fail an un-cut lesson too
+    check_density.py --beats 24 L18  # try a different budget without editing budgets.py
 """
 import pathlib
 import re
@@ -36,8 +39,8 @@ import sys
 REPO = pathlib.Path(__file__).resolve().parents[2]
 BOOK = REPO / "book"
 
-WORDS = 40
-FRAMES = 30
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from budgets import WORDS, beat_budget  # noqa: E402
 
 _FRAME_OPEN = re.compile(r"^::::\{frame\}(.*)$", re.M)
 _OPT = re.compile(r"^:(\w[\w-]*):\s*(.*)$")
@@ -117,13 +120,14 @@ def measure(path):
     return rows
 
 
-def report(path, rows, verbose, strict):
+def report(path, rows, verbose, strict, beats=None):
     shown = [r for r in rows if r["shown"]]
     cut = [r for r in shown if r["kind"] == "cut"]
     opted = bool(cut)
     over = [r for r in shown if r["words"] > WORDS and not r.get("exempt")]
     legacy = [r for r in shown if r["kind"] == "legacy"]
     name = path.relative_to(BOOK).parts[1] if len(path.relative_to(BOOK).parts) > 2 else path.parent.name
+    FRAMES = beats if beats is not None else beat_budget(name)
     fail = (opted or strict) and (over or len(shown) > FRAMES)
     flag = "FAIL" if fail else ("ok  " if opted else "uncut")
     line = (f"{flag} {name:<34} beats {len(shown):>3}/{FRAMES}  cut {len(cut):>3}  "
@@ -142,6 +146,11 @@ def report(path, rows, verbose, strict):
 
 def main(argv):
     strict = "--strict" in argv
+    beats = None
+    if "--beats" in argv:
+        i = argv.index("--beats")
+        beats = int(argv[i + 1])
+        argv = argv[:i] + argv[i + 2:]
     args = [a for a in argv if not a.startswith("--")]
     want = args[0] if args else ""
     pages = sorted(p for p in BOOK.glob("module*/*/index.md")
@@ -151,7 +160,11 @@ def main(argv):
         return 1
     ok = True
     for p in pages:
-        ok = report(p, measure(p), verbose=bool(want), strict=strict) and ok
+        try:
+            ok = report(p, measure(p), verbose=bool(want), strict=strict, beats=beats) and ok
+        except BrokenPipeError:  # `| head` closed the pipe; the verdict still stands
+            sys.stderr.close()
+            return 0 if ok else 1
     return 0 if ok else 1
 
 
