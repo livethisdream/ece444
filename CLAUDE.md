@@ -203,7 +203,15 @@ landing page and the five module overviews are built the same way.
   per lesson (L07: the pattern and the radiation resistance, as their major
   steps; the details stay in the reading). Frame titles are Title Case noun
   phrases. Budgets:
-  **40 words a present frame, 30 present frames a lesson** (one period);
+  **40 words a present frame, 20 present frames a lesson** (one period;
+  Neil, 2026-10-08: "I can only get through 20 or so slides in a single
+  period", down from 30). The numbers live in **`scripts/verify/budgets.py`**,
+  the one place to change them, with their history and the per-lesson
+  exceptions (lessons cut under the old 30 stay listed there until recut);
+  `check_density.py --beats N <LNN>` tries another budget without editing it.
+  **In a lab lesson** only the frames presented before bench time count:
+  the step-by-step procedure frames are `:class: read-only`, because teams
+  follow them on their own laptops in read mode.
   `scripts/verify/check_density.py <LNN>` counts them from the source with
   no build, and `mech_check.sh` gates on it once a lesson carries any
   present block. Two present blocks in a row sit **side by side** in present

@@ -67,7 +67,7 @@ this lesson or a neighbor, before proposing new work.
 Report a table: rank, frame, what is missing, the proposal, and the type
 (widget, figure, computed figure, reuse). Name what is *not* worth
 illustrating, in one line. Note the present-beat budget (each new widget
-frame is a beat; 30 a lesson). Recommend a batching. **Then stop and wait for
+frame is a beat; the budget is in `scripts/verify/budgets.py`, 20 a lesson at present). Recommend a batching. **Then stop and wait for
 Neil.**
 
 ## Phase 2: build what Neil approved

@@ -873,6 +873,18 @@ folded in.
   to "if present" when the first such lesson is authored. Nomenclature
   authority moves from "the decks" to the lesson pages' present blocks.
 
+- **A lesson is 20 beats, and the number is a setting** (Neil, 2026-10-08:
+  "I can only get through 20 or so slides ('beats') in a single period",
+  then "let's make that a rule, but leave it flexible, in case we find we
+  need to change it"). The beat budget drops from 30 to 20; the word budget
+  stays 40. Both live in `scripts/verify/budgets.py`, which `check_density.py`
+  and `mech_check.sh` read, so changing the pace is a one-line edit there
+  plus a history line. Lessons cut under the 30-beat rule are listed as
+  exceptions in that file until they are recut, so their gates stay green;
+  L17 and L18 are recut first. In a lab lesson only the frames presented
+  before bench time count: the step-by-step procedure frames are read-only,
+  because teams follow them in read mode on their own laptops.
+
 - **Hardware limits stay out of the student story unless they change what
   a student does** (Neil, 2026-10-07, on the L17 closing re-check, which
   found the page saying both "the 12.2 to 13.0 GHz VCO reaches 10.0 to
