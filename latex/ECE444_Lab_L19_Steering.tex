@@ -50,6 +50,7 @@
 
 %% exam class customization
 \input{exam_config}
+\input{ece444_fonts}   % Barlow body text (needs lualatex)
 \printselectedfalse      % full worked solutions in the key, not answers-only
 \CorrectChoiceEmphasis{\color{red}}
 \SolutionEmphasis{\color{red}}
@@ -85,6 +86,7 @@
 
 \runningheadrule
 
+
 \begin{document}
 \pagestyle{headandfoot}   % exam class
 
@@ -97,7 +99,7 @@
 USAF ACADEMY \\
 DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
 LAB \#\labNum\ (Lesson 19) - Beam Steering Lab \\
-\textbf{Lab Sheet} \\
+\textbf{Lab Packet} \\
 \thisterm \\[4mm]
 \end{center}
 
@@ -113,48 +115,365 @@ ADALM-PHASER and verify the steered pattern against theory.}
 
 \vspace{2pt}
 
-This sheet is the turn-in document for the Lesson 19 lab. Record the source
-frequency the GUI reports before you start, fill in every box, and keep the
-prediction table from Lesson 18 beside you. The lab is a team assignment, so one
-sheet per team.
+This packet is Lab 5, in three parts. You complete \textbf{Part 1}
+on your own before the lab period: the predictions, and a rehearsal of the bench
+procedure on the hosted simulator. Your team fills in \textbf{Part 2} at the
+bench. You complete \textbf{Part 3} on your own before Lesson 20: you reconcile
+the measurements with the predictions and work three analysis problems.
+
+\textbf{Grading.} The packet counts toward your engagement grade. Parts 1 and 3
+are individual and are graded as a genuine, documented attempt; Part 2 holds
+your team's data, and every teammate records the same values in their own copy.
+
+The array is the PHASER's: $N = 8$ elements, E1 to E8, on a $d = 14\ \text{mm}$
+pitch. Use $c = 3.00\times 10^{8}\ \m/\text{s}$.
 
 \begin{questions}
 
+\fullwidth{\large\textbf{Part 1: Pre-Lab} \normalsize(individual, before the lab period)}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{Table A -- commanded against physical angle.} Place the source
-at each position on the arc, hunt for the commanded Steer Angle that maximizes
-the FFT amplitude, and record it. The last column expresses the difference in
-sweep grid steps, one step being the ADAR1000's $2.8125\mydeg$ phase LSB.
+\question \textbf{The prediction table.} Every phase in this lab depends on the
+source frequency. Use the HB100 frequency your kit reported in Lesson 17. If you
+did not record one, use the nominal $10.525\ \ghz$ and say so.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Record the frequency you are using, then find the wavelength, the
+		electrical spacing $d/\lambda$, and $kd$ in degrees.
+		\begin{solution}[1.5in]
+		The key uses the nominal $10.525\ \ghz$:
+		\eq{ \lambda &= \frac{c}{f} = \frac{3.00\times 10^{8}}{10.525\times 10^{9}} = 0.02850\ \m = 28.50\ \text{mm} \\
+		     \frac{d}{\lambda} &= \frac{14}{28.50} = 0.491 \\
+		     kd &= 360\mydeg\ \frac{d}{\lambda} = 176.8\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$f$ = \ansbox[1.3in]{$10.525\ \ghz$}\\[10pt]
+		$d/\lambda$ = \ansbox[1.3in]{$0.491$}\\[10pt]
+		$kd$ = \ansbox[1.3in]{$176.8\mydeg$}
+	\end{minipage}
+
+	\part Find the progressive phase $\Delta\phi$ that steers the beam to each
+	angle in the table.
+
+	\begin{center}
+	\renewcommand{\arraystretch}{1.25}
+	\begin{tabular}{| l | K{0.9in} | K{0.9in} | K{0.9in} | K{0.9in} |}
+	\hline
+	$\theta_0$ & $0\mydeg$ & $15\mydeg$ & $30\mydeg$ & $45\mydeg$ \\\hline
+	$\Delta\phi$ & \kv{$0.0\mydeg$} & \kv{$45.8\mydeg$} & \kv{$88.4\mydeg$} & \kv{$125.0\mydeg$} \\\hline
+	\end{tabular}
+	\end{center}
+
+		\begin{solution}[0.6in]
+		$\Delta\phi = kd\sinp{\theta_0} = 176.8\mydeg\sinp{\theta_0}$; at $30\mydeg$,
+		$176.8\mydeg \times 0.500 = 88.4\mydeg$.
+		\end{solution}
+
+	\newpage
+	\part Fill in the $30\mydeg$ ramp. Lesson 18 numbers the elements $n = 0$ to
+	7, so element E$(n+1)$ is set to $n\Delta\phi$. Give each value unwrapped, then
+	wrapped into $0\mydeg$ to $360\mydeg$, and name the first element that wraps.
+
+	\begin{center}
+	\small
+	\setlength{\tabcolsep}{4pt}
+	\renewcommand{\arraystretch}{1.25}
+	\begin{tabular}{| l | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} |}
+	\hline
+	\textbf{Element} & \textbf{E1} & \textbf{E2} & \textbf{E3} & \textbf{E4} & \textbf{E5} & \textbf{E6} & \textbf{E7} & \textbf{E8} \\\hline\hline
+	Unwrapped & \kv{$0.0$} & \kv{$88.4$} & \kv{$176.8$} & \kv{$265.2$} & \kv{$353.6$} & \kv{$442.0$} & \kv{$530.5$} & \kv{$618.9$} \\\hline
+	Wrapped & \kv{$0.0$} & \kv{$88.4$} & \kv{$176.8$} & \kv{$265.2$} & \kv{$353.6$} & \kv{$82.0$} & \kv{$170.5$} & \kv{$258.9$} \\\hline
+	\end{tabular}
+	\end{center}
+
+		\begin{solution}[0.6in]
+		E6 is the first to wrap: $5(88.41\mydeg) = 442.0\mydeg$, and
+		$442.0\mydeg - 360\mydeg = 82.0\mydeg$. Each entry comes from the unrounded
+		$88.41\mydeg$, so E8 is $7(88.41\mydeg) = 618.9\mydeg$.
+		\end{solution}
+
+	\part E6 carries $442.0\mydeg$ in one table and $82.0\mydeg$ in the other. In
+	two or three sentences, explain why both settings give the same pattern, and
+	state what the wrapped table no longer records.
+		\begin{solution}[1.2in]
+		A phase of $360\mydeg$ is one full cycle of the carrier, so the element's
+		weight $e^{-j\phi}$ is the same complex number for $442.0\mydeg$ and
+		$82.0\mydeg$, and every term of the array sum is unchanged. What the
+		wrapped table loses is the true delay: the unwrapped ramp is a delay in
+		seconds that is correct at every frequency, while the wrapped values
+		reproduce it only at the frequency used for $k$. That is why a wideband
+		array uses time-delay units instead of phase shifters alone.
+		\end{solution}
+
+\end{parts}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{What Phase Control will show.} At the bench you will type
+$30$ into \textbf{Steer Angle (deg)} and press \textbf{Apply}. The GUI computes
+$\Delta\phi$ from the Signal Freq on screen and writes $-n\Delta\phi$, rounded to
+a whole degree and \emph{not} wrapped, into the \textbf{Phase Control} boxes as
+per-element offsets. Write those offsets as $-n\Delta\phi_0$.
+
+\begin{parts}
+
+	\part Predict the eight values Phase Control will show after Apply $30$.
+
+	\begin{center}
+	\small
+	\setlength{\tabcolsep}{4pt}
+	\renewcommand{\arraystretch}{1.25}
+	\begin{tabular}{| l | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} |}
+	\hline
+	\textbf{Element} & \textbf{E1} & \textbf{E2} & \textbf{E3} & \textbf{E4} & \textbf{E5} & \textbf{E6} & \textbf{E7} & \textbf{E8} \\\hline\hline
+	Phase Control & \kv{$0$} & \kv{$-88$} & \kv{$-177$} & \kv{$-265$} & \kv{$-354$} & \kv{$-442$} & \kv{$-530$} & \kv{$-619$} \\\hline
+	\end{tabular}
+	\end{center}
+
+		\begin{solution}[0.5in]
+		Each value is $-n(88.41\mydeg)$ rounded to the nearest degree; E7 is
+		$-530.5\mydeg \rightarrow -530$. The GUI computes with
+		$c = 299792458\ \m/\text{s}$, a step of $88.47\mydeg$, so it shows $-531$
+		for E7: one element can differ by $1\mydeg$.
+		\end{solution}
+
+	\part During a beam sweep the backend adds its own ramp, $+n\Delta\phi_s$, to
+	whatever Phase Control holds, and the plot's x-axis is the angle that
+	$\Delta\phi_s$ alone would steer to. With the source at boresight and the
+	Apply $30$ offsets loaded, at which plotted angle does the total ramp vanish?
+	Use your answer to explain, in one or two sentences, why Apply writes the
+	ramp with a minus sign.
+		\begin{solution}[1.5in]
+		Element $n$ carries $n\Delta\phi_s - n\Delta\phi_0 = n(\Delta\phi_s - \Delta\phi_0)$.
+		A boresight source needs no ramp, so the array points at it when
+		$\Delta\phi_s = \Delta\phi_0$, which is the plotted angle $+30\mydeg$. The
+		minus sign is what makes a boresight source's trace peak at $+\theta_0$ on
+		the sweep plot. On their own, with no sweep ramp added, the offsets
+		$-n\Delta\phi_0$ would point the beam to $-30\mydeg$.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Reduce E6's Phase Control value modulo $360\mydeg$ and compare it with
+		E6's wrapped entry in Question 1(c).
+		\begin{solution}[1.0in]
+		\eq{ -442\mydeg + 720\mydeg = 278\mydeg = 360\mydeg - 82\mydeg }
+		It is the wrapped ramp value with the opposite sign, to the nearest degree.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		E6 = \ansbox[1.3in]{$278\mydeg$}
+	\end{minipage}
+
+\end{parts}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{The beam and the error budget.} Continue with your frequency
+from Question 1. The source sits on a protractor arc $1.00\ \m$ from the array.
+
+\begin{parts}
+
+	\part Use $\theta_{\text{HP}} \approx 0.886\lambda/(Nd\cos\theta_0)$ to predict
+	the half-power beamwidth, and $10\mylog{\cos\theta_0}$ to predict the drop in
+	peak level relative to broadside (the ideal-element scan loss).
+
+	\begin{center}
+	\renewcommand{\arraystretch}{1.25}
+	\begin{tabular}{| l | K{1.1in} | K{1.1in} | K{1.1in} |}
+	\hline
+	$\theta_0$ & $0\mydeg$ & $30\mydeg$ & $45\mydeg$ \\\hline
+	$\theta_{\text{HP}}$ & \kv{$12.9\mydeg$} & \kv{$14.9\mydeg$} & \kv{$18.3\mydeg$} \\\hline
+	Scan loss & \kv{$0$ dB} & \kv{$-0.6$ dB} & \kv{$-1.5$ dB} \\\hline
+	\end{tabular}
+	\end{center}
+
+		\begin{solution}[0.9in]
+		$0.886(28.50)/112 = 0.2255\ \text{rad} = 12.9\mydeg$ at broadside, divided
+		by $\cosp{\theta_0}$ off broadside. The exact array factor gives
+		$13.0\mydeg$, $15.1\mydeg$, and $18.7\mydeg$; the rule reads a few tenths
+		narrow. A real patch element rolls off faster than the ideal element, so
+		expect $-0.8$ to $-0.9$ dB at $30\mydeg$ on the kit.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Lab Preset 1 sweeps by stepping $\Delta\phi_s$ one phase-shifter LSB,
+		$2.8125\mydeg$, at a time. One step moves $\sin\theta$ by
+		$2.8125\mydeg/kd$. Find the angle step at $0\mydeg$ and at $30\mydeg$, and the
+		worst-case error of a peak read off this grid at $30\mydeg$.
+		\begin{solution}[1.5in]
+		\eq{ \Delta(\sin\theta) &= \frac{2.8125\mydeg}{176.8\mydeg} = 0.0159 \\
+		     \Delta\theta &= \frac{0.0159}{\cos\theta}\ \text{rad} = 0.91\mydeg \text{ at } 0\mydeg,\ 1.05\mydeg \text{ at } 30\mydeg }
+		The trace is sampled only at grid points, so the peak can be off by half a
+		step: $0.53\mydeg$ at $30\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		step at $0\mydeg$ = \ansbox[1.1in]{$0.91\mydeg$}\\[10pt]
+		step at $30\mydeg$ = \ansbox[1.1in]{$1.05\mydeg$}\\[10pt]
+		half step = \ansbox[1.1in]{$0.53\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part How far along the arc is one degree? If you can place the tripod to
+		within $25\ \text{mm}$, how large is the error in the reference angle?
+		\begin{solution}[1.1in]
+		\eq{ s &= R\ \theta_{\text{rad}} = (1000\ \text{mm})\frac{\pi}{180} = 17.5\ \text{mm per degree} \\
+		     \frac{25}{17.5} &= 1.4\mydeg }
+		The budget uses $1.5\mydeg$, which also covers centering the arc and pointing the module.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		per degree = \ansbox[1.1in]{$17.5\ \text{mm}$}\\[10pt]
+		aim error = \ansbox[1.1in]{$1.4\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A reflection from the bench arrives $20\ \db$ below the direct path,
+		an amplitude ratio of $0.1$. Find the largest and smallest total level it
+		can produce, in dB relative to the direct path alone.
+		\begin{solution}[1.0in]
+		\eq{ 20\mylog{1 + 0.1} &= +0.8\ \db \\ 20\mylog{1 - 0.1} &= -0.9\ \db }
+		Depending on its phase, the reflection puts that ripple on the main lobe,
+		which moves the apparent peak by up to about $1\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		largest = \ansbox[1.1in]{$+0.8\ \db$}\\[10pt]
+		smallest = \ansbox[1.1in]{$-0.9\ \db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Combine the three independent peak-angle errors at $30\mydeg$ (grid
+		half step, aim $1.5\mydeg$, multipath $1.0\mydeg$) as a root sum of
+		squares, $\sqrt{a^2 + b^2 + c^2}$. State a pass standard for the lab in
+		degrees, and name the term you could reduce most.
+		\begin{solution}[1.3in]
+		\eq{ \sqrt{0.53^2 + 1.5^2 + 1.0^2} = 1.9\mydeg }
+		A measured peak within $\pm 2\mydeg$ of the reference passes. The aim term
+		is the largest, and careful placement of the tripod reduces it; the grid
+		term is fixed by the 7-bit phase shifter.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		RSS = \ansbox[1.1in]{$1.9\mydeg$}\\[10pt]
+		pass = \ansbox[1.1in]{$\pm 2\mydeg$}
+	\end{minipage}
+
+\end{parts}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{Simulator rehearsal.} Open the hosted simulator at
+\url{https://livethisdream.github.io/phaser/}. It runs the bench GUI in your
+browser with nothing to install, and its source is fixed at boresight, so it can
+rehearse the commanded run of Part 2.
+
+\begin{enumerate}
+	\item Press \textbf{1 Steering Angle} under \textbf{Lab Presets}, then press
+	\textbf{Start}.
+	\item Open the \textbf{Rectangular} tab and turn on \textbf{Show Peak Angle
+	Marker} under \textbf{Plot Options}.
+	\item In \textbf{Beam Steering}, enter each angle in \textbf{Steer Angle (deg)}
+	and press \textbf{Apply}. Record \textbf{Est. Angle} and \textbf{Peak Array
+	Gain}, and the E2 and E8 boxes in \textbf{Phase Control}.
+	\item Press \textbf{Reset} under \textbf{Phase Control} and record the last row.
+\end{enumerate}
 
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{| l | K{1.5in} | K{1.3in} | K{1.5in} |}
+\begin{tabular}{| l | K{1.0in} | K{1.25in} | K{0.9in} | K{0.9in} |}
 \hline
-\textbf{Physical angle} & \textbf{Commanded angle at peak} & \textbf{Difference} & \textbf{Difference $/\ 2.8125\mydeg$} \\\hline\hline
-$0\mydeg$  & \kv{$0\mydeg \pm 2.8\mydeg$}  & \kv{$\le 2.8\mydeg$} & \kv{$\le 1$} \\\hline
-$30\mydeg$ & \kv{$30\mydeg \pm 2.8\mydeg$} & \kv{$\le 2.8\mydeg$} & \kv{$\le 1$} \\\hline
-$45\mydeg$ & \kv{$45\mydeg \pm 2.8\mydeg$} & \kv{$\le 2.8\mydeg$} & \kv{$\le 1$} \\\hline
+\textbf{Apply} & \textbf{Est. Angle} & \textbf{Peak Array Gain} & \textbf{E2} & \textbf{E8} \\\hline\hline
+$15$ & \kv{$14.7\mydeg$} & \kv{same in every row} & \kv{$-46$} & \kv{$-321$} \\\hline
+$30$ & \kv{$29.6\mydeg$} & \kv{same in every row} & \kv{$-88$} & \kv{$-619$} \\\hline
+$45$ & \kv{$45.7\mydeg$} & \kv{same in every row} & \kv{$-125$} & \kv{$-876$} \\\hline
+Reset & \kv{$0.0\mydeg$} & \kv{same in every row} & \kv{$0$} & \kv{$0$} \\\hline
 \end{tabular}
 \end{center}
 
 \begin{solution}
-There is no single right commanded angle here, because the physical angle set on
-the arc carries its own error. The standard is one grid step: each difference
-should be no larger than $2.8125\mydeg$, so the last column reads at most 1.
-Grid discretization alone allows half a step, $1.41\mydeg$; protractor and
-aiming error at $1\ \m$ adds about $1.5\mydeg$, HB100 drift adds a few tenths,
-and room multipath moves the apparent peak by up to about a degree. Added in
-quadrature those give a peak-angle uncertainty near $2.5\mydeg$. Agreement to
-$0.1\mydeg$ indicates an error in how the comparison was made rather than an
-unusually good measurement.
+Est. Angle lands on the sweep grid point nearest each Apply value ($14.75$,
+$29.55$, and $45.72\mydeg$), and noise can move it one grid step. Peak Array
+Gain does not change (about $-12$ dB in the simulator): the simulator has no
+element pattern, and in the commanded run the source stays on the elements'
+boresight in any case. The Phase Control values match Question 2(a) when the
+simulator's Signal Freq is $10.525\ \ghz$.
+\end{solution}
+
+In one sentence, where does the trace peak after Apply $30$, and why is that the
+angle Question 2(b) predicts?
+
+\begin{solutionorlines}[0.9in]
+The trace peaks at about $+30\mydeg$, because the sweep ramp cancels the
+$-n\Delta\phi_0$ offsets there and leaves the zero ramp a boresight source needs.
+\end{solutionorlines}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\fullwidth{\large\textbf{Part 2: Bench} \normalsize(team, in class)}
+
+Follow the procedure on the Lesson 19 page in read mode. Bring the kit up as in
+Lesson 17: the HB100 powered, $1\ \m$ out at boresight, then \textbf{Find HB100},
+then \textbf{Calibrate}. Load \textbf{1 Steering Angle}, set \textbf{Rx Gain
+(dB)} to 10, turn on \textbf{Show Peak Angle Marker}, press \textbf{Start}, and
+work on the \textbf{Rectangular} tab. Read each half-power beamwidth as the
+distance between the two angles where the trace is 3 dB below its own peak.
+
+\vspace{2pt}
+\begin{center}
+Signal Freq after Find HB100 = \ansbox[1.6in]{your kit's, $10.1$--$10.7\ \ghz$}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Table A: the physical run.} Phase Control at zero; move the
+source along the arc.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{1.05in} | K{1.05in} | K{1.05in} | K{1.4in} |}
+\hline
+\textbf{Source on arc} & \textbf{Est. Angle} & \textbf{Difference} & \textbf{HPBW} & \textbf{Peak Array Gain} \\\hline\hline
+$0\mydeg$  & \kv{$0\mydeg \pm 2\mydeg$}  & \kv{within $\pm 2\mydeg$} & \kv{$13\mydeg \pm 1\mydeg$} & \kv{reference} \\\hline
+$30\mydeg$ & \kv{$30\mydeg \pm 2\mydeg$} & \kv{within $\pm 2\mydeg$} & \kv{$15\mydeg \pm 1\mydeg$} & \kv{$0.6$ to $1.5$ dB lower} \\\hline
+$45\mydeg$ & \kv{$45\mydeg \pm 2\mydeg$} & \kv{within $\pm 2\mydeg$} & \kv{$19\mydeg \pm 1.5\mydeg$} & \kv{$1.5$ to $2.5$ dB lower} \\\hline
+\end{tabular}
+\end{center}
+
+\begin{solution}
+The difference is Est. Angle minus the arc angle, and the standard is the
+$\pm 2\mydeg$ of Question 3(e). The trace peaks at the source angle because the
+sweep's ramp matches the arrival ramp there. The peak level falls with the
+element pattern: $-0.6$ and $-1.5$ dB are the ideal-element bounds, and a
+patch element closer to $\cos^{1.3}\theta$ to $\cos^{1.5}\theta$ in power gives
+$-0.8$ to $-0.9$ dB at $30\mydeg$ and $-2.0$ to $-2.3$ dB at $45\mydeg$.
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{Table B -- phase check at $30\mydeg$.} With the peak command
-applied, read the eight per-element phases out of Phase Control and compare them
-against the wrapped ramp predicted in Lesson 18. At $\theta_0 = 30\mydeg$ the
-progressive phase is $\Delta\phi = 176.8\mydeg \sin 30\mydeg = 88.4\mydeg$. All
-values in the table are in degrees.
+\question \textbf{Table B: the commanded run.} Source back at boresight; Apply
+each Steer Angle.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{1.05in} | K{1.05in} | K{1.05in} | K{1.4in} |}
+\hline
+\textbf{Apply} & \textbf{Est. Angle} & \textbf{Difference} & \textbf{HPBW} & \textbf{Peak Array Gain} \\\hline\hline
+$15$ & \kv{$14.7\mydeg$, $\pm 1\mydeg$} & \kv{within $\pm 1\mydeg$} & \kv{$13.5\mydeg \pm 1\mydeg$} & \kv{same as Table A, $0\mydeg$} \\\hline
+$30$ & \kv{$29.6\mydeg$, $\pm 1\mydeg$} & \kv{within $\pm 1\mydeg$} & \kv{$15\mydeg \pm 1\mydeg$} & \kv{same as Table A, $0\mydeg$} \\\hline
+$45$ & \kv{$45.7\mydeg$, $\pm 1\mydeg$} & \kv{within $\pm 1\mydeg$} & \kv{$19\mydeg \pm 1.5\mydeg$} & \kv{same as Table A, $0\mydeg$} \\\hline
+\end{tabular}
+\end{center}
+
+With Apply $30$ loaded, read the eight Phase Control boxes. The prediction row is
+your Question 2(a).
 
 \begin{center}
 \small
@@ -162,96 +481,289 @@ values in the table are in degrees.
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{| l | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} |}
 \hline
-\textbf{Element} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} \\\hline\hline
-Predicted & \kv{$0.0$} & \kv{$88.4$} & \kv{$176.8$} & \kv{$265.2$} & \kv{$353.6$} & \kv{$82.0$} & \kv{$170.5$} & \kv{$258.9$} \\\hline
-Applied & \kv{$0.00$} & \kv{$87.19$} & \kv{$177.19$} & \kv{$264.38$} & \kv{$354.38$} & \kv{$81.56$} & \kv{$171.56$} & \kv{$258.75$} \\\hline
-Difference & \kv{$0.00$} & \kv{$1.21$} & \kv{$-0.39$} & \kv{$0.83$} & \kv{$-0.78$} & \kv{$0.44$} & \kv{$-1.06$} & \kv{$0.15$} \\\hline
-\end{tabular}
-\end{center}
-
-\vspace{2pt}
-\begin{center}
-Half an LSB = \ansbox[1.3in]{$1.41\mydeg$} %
-Is every difference smaller than that? \ansbox[1.0in]{yes}
-\end{center}
-\vspace{2pt}
-
-\begin{solution}
-The backend rounds each commanded phase to the nearest multiple of
-$2.8125\mydeg$ and wraps the result into $0$ to $360\mydeg$, so no element can
-miss its predicted value by more than half a step. Element 6 is the clearest
-check: the unwrapped ramp value $442.0\mydeg$ has to appear as $82.0\mydeg$, and
-the applied $81.56\mydeg$ is the nearest grid point to it. A difference larger
-than $1.41\mydeg$ on any element means the per-element calibration offsets are
-included in the reading, or the steer angle applied is not the one assumed here.
-\end{solution}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\question \textbf{Table C -- beamwidth.} Measure the half-power width of the
-frozen boresight trace and of the $30\mydeg$ trace by reading the angles where
-each trace falls 3 dB below its own peak, then record the peak-level difference
-between the two traces.
-
-\begin{center}
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{| l | K{1.9in} | K{1.6in} |}
-\hline
-\textbf{Quantity} & \textbf{Measured} & \textbf{Calculated} \\\hline\hline
-HPBW at $\theta_0 = 0\mydeg$ & \kv{$13.1\mydeg$, $\pm$ one grid step} & \kv{$13.0\mydeg$} \\\hline
-HPBW at $\theta_0 = 30\mydeg$ & \kv{$\approx 15\mydeg$, $\pm$ one grid step} & \kv{$15.1\mydeg$} \\\hline
-Peak level, $30\mydeg$ against $0\mydeg$ & \kv{$-0.5$ to $-1.5$ dB} & \kv{$-0.6$ dB} \\\hline
+\textbf{Element} & \textbf{E1} & \textbf{E2} & \textbf{E3} & \textbf{E4} & \textbf{E5} & \textbf{E6} & \textbf{E7} & \textbf{E8} \\\hline\hline
+Predicted & \kv{$0$} & \kv{$-88$} & \kv{$-177$} & \kv{$-265$} & \kv{$-354$} & \kv{$-442$} & \kv{$-530$} & \kv{$-619$} \\\hline
+Read back & \kv{$0$} & \kv{$-88$} & \kv{$-177$} & \kv{$-265$} & \kv{$-354$} & \kv{$-442$} & \kv{$-531$} & \kv{$-619$} \\\hline
+Difference & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$-1$} & \kv{$0$} \\\hline
 \end{tabular}
 \end{center}
 
 \begin{solution}
-The calculated column comes from the array factor for $N = 8$ at
-$d/\lambda = 0.491$. The steered beamwidth is the $1/\cos\theta_0$ broadening of
-Lesson 18, $13.0\mydeg / \cos 30\mydeg = 15.0\mydeg$, and the exact array factor
-gives $15.1\mydeg$. The peak drops because the array presents a projected
-aperture of $Nd\cos\theta_0$ instead of $Nd$, which is
-$10\mylog{\cos 30\mydeg} = -0.6$ dB for an ideal element; a real patch element
-rolls off faster and usually costs a few tenths more. Measured beamwidths are
-quoted to the nearest degree, because the sweep samples on a $2.8125\mydeg$ grid
-and the half-power crossings land between samples.
+Keyed at $10.525\ \ghz$. Est. Angle sits on the grid point nearest each Apply
+value, shifted by whatever offset Table A's $0\mydeg$ row shows, since the
+boresight source's own aim error carries into every commanded row. The peak does
+not drop, because the source stays on the elements' boresight. The read-back
+matches the prediction to within $1\mydeg$ on every element when Question 1 used
+the frequency Find HB100 reports today: the GUI computes with
+$c = 299792458\ \m/\text{s}$ rather than $3.00\times 10^8$, which moves E7 from
+$-530$ to $-531$; a different frequency gives differences that grow in proportion
+to $n$ (a $25\ \text{MHz}$ difference is $1.5\mydeg$ at E8).
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\question \textbf{Written answers.} Three or four sentences each.
+\fullwidth{\large\textbf{Part 3: Writeup} \normalsize(individual, before Lesson 20)}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Reconcile the measurements.} Answer each part in three or four
+sentences, using your team's numbers from Part 2 and your own predictions from
+Part 1.
 
 \begin{parts}
 
-	\part Why does the commanded angle at which the trace peaks move in steps of
-	about $2.8\mydeg$ rather than continuously, and what in the hardware sets that
-	step size?
-
-	\begin{solutionorlines}[2.0in]
-	The ADAR1000 phase shifter is a 7-bit device, so its smallest phase increment
-	is $360\mydeg / 2^7 = 2.8125\mydeg$. The sweep expresses that LSB as a
-	steering resolution and visits commanded angles on the same grid, so the trace
-	holds no information between grid points and the peak that is read is the grid
-	point nearest the true peak. The worst case error is half a step,
-	$1.41\mydeg$. No angle between two grid points can be commanded, so the peak
-	moves in steps rather than continuously.
+	\part Compare each Table A difference with the pass standard from
+	Question 3(e). For any row outside it, name the error source in your budget
+	most likely responsible, and say how you would check it.
+	\begin{solutionorlines}[1.5in]
+	Every row should sit within $\pm 2\mydeg$. A row outside it most often comes
+	from aim: the tripod off its mark, the arc not centered on the middle of the
+	array (a $10\ \text{mm}$ offset moves the reference about $0.5\mydeg$), or the
+	module not pointed back at the array. A shift common to all three rows points
+	at the $0\mydeg$ placement or at calibration; a single row that moves when
+	people step away from the arc points at multipath. The grid alone can
+	contribute only half a step, $0.46$ to $0.65\mydeg$.
 	\end{solutionorlines}
 
-	\part Explain why a plot of received power against commanded steer angle is a
-	picture of the array's pattern at all. Name the principle you are relying on,
-	and say what would change if the source were moving during the sweep.
-
-	\begin{solutionorlines}[2.3in]
-	The instrument holds the source still and steps the commanded angle across its
-	range, recording received power at each step. Reciprocity says the array's
-	receive pattern equals its transmit pattern, so the power received from a
-	fixed direction as the beam is steered traces out the same shape the array
-	would radiate. The x-axis is still the commanded angle and not a measured
-	arrival angle, and every point on the trace was produced by a different set of
-	element phases. If the source moved during the sweep, the received power would
-	change for two reasons at once, and the trace would no longer be a pattern:
-	the peak would appear at whatever command happened to coincide with the
-	source's closest approach to the beam.
+	\part Compare the $30\mydeg$ rows of Tables A and B: Est. Angle, HPBW, and Peak
+	Array Gain. Explain why the beamwidths agree but only the physical run loses
+	peak level.
+	\begin{solutionorlines}[1.8in]
+	Both traces have the same shape because the array factor depends only on
+	$\sin\theta - \sin\theta_0$ (Lesson 18): moving the source to $30\mydeg$ and
+	offsetting the ramp by $30\mydeg$ shift the same function to the same place,
+	so both widen to about $15\mydeg$. The sweep holds the element pattern fixed
+	at the source's direction, so the trace is the array factor scaled by
+	$EF(\theta_{\text{src}})$. In the physical run the source sits $30\mydeg$ off
+	the elements' boresight and every point drops by the element roll-off,
+	about $0.6$ to $0.9$ dB. In the commanded run the source stays at boresight,
+	$EF$ stays at its peak, and the peak level matches the $0\mydeg$ row.
 	\end{solutionorlines}
+
+	\part Compare the Phase Control read-back with your prediction. Explain the
+	sign in your own words, and account for any nonzero difference.
+	\begin{solutionorlines}[1.5in]
+	Apply writes $-n\Delta\phi_0$ so that the sweep's own $+n\Delta\phi_s$ ramp
+	cancels it at the plotted angle $\theta_0$, which is where a boresight source
+	then peaks; the offsets alone would point the beam to $-\theta_0$. The GUI
+	rounds to whole degrees and computes with $c = 299792458\ \m/\text{s}$, so a
+	prediction made at the same frequency with $c = 3.00\times 10^8$ matches to
+	within $1\mydeg$ (E7: $-530$ predicted, $-531$ shown). A difference that
+	grows with element number means the prediction used a different frequency
+	from the Signal Freq on screen.
+	\end{solutionorlines}
+
+	\part Compare each measured HPBW with its calculated value, and explain
+	why the lab quotes beamwidth to the nearest degree.
+	\begin{solutionorlines}[1.3in]
+	The measured widths should sit within about a degree of $13.0\mydeg$,
+	$15.1\mydeg$, and $18.7\mydeg$. The trace is sampled every $0.9$ to
+	$1.3\mydeg$, so each half-power crossing falls between two samples and is
+	read off a straight line drawn between them. That limits each crossing to a
+	fraction of a step, and the width to about a degree.
+	\end{solutionorlines}
+
+\end{parts}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{Reading a measured sweep.} Another team places the HB100 at
+$+30.0\mydeg$ on the arc with Phase Control at zero. The trace peaks at an Est.
+Angle of $28.5\mydeg$, its half-power crossings are at $20.5\mydeg$ and
+$35.8\mydeg$, its peak sits $0.7\ \db$ below the boresight trace, and its first
+sidelobes read $-11.8$ dB relative to its own peak.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the measured half-power beamwidth and compare it with the
+		$1/\cos\theta_0$ prediction from the $13.0\mydeg$ broadside value.
+		\begin{solution}[1.1in]
+		\eq{ \theta_{\text{HP,meas}} &= 35.8\mydeg - 20.5\mydeg = 15.3\mydeg \\
+		     \frac{13.0\mydeg}{\cosp{30\mydeg}} &= \frac{13.0\mydeg}{0.866} = 15.0\mydeg }
+		The measured width is $0.3\mydeg$ wider than predicted, well inside one
+		grid step ($1.05\mydeg$ near $30\mydeg$).
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_\text{HP}$ = \ansbox[1.3in]{$15.3\mydeg$}\\[10pt]
+		predicted = \ansbox[1.3in]{$15.0\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the difference between Est. Angle and the arc angle, and express
+		it in grid steps.
+		\begin{solution}[0.9in]
+		\eq{ \Delta\theta &= 28.5\mydeg - 30.0\mydeg = -1.5\mydeg \\
+		     \frac{1.5\mydeg}{1.05\mydeg} &= 1.4 \text{ grid steps} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		offset = \ansbox[1.3in]{$1.4$ steps}
+	\end{minipage}
+
+	\part The team reports the array as broken because the peak did not land on
+	$30\mydeg$. In two or three sentences, say whether the data support that
+	conclusion.
+		\begin{solution}[1.1in]
+		They do not. The $1.5\mydeg$ offset is more than the grid's half step can
+		produce, but it sits inside the $1.9\mydeg$ budget and the $\pm 2\mydeg$
+		standard, and the aim term alone is about $1.5\mydeg$. A fault in the array
+		would show as an offset in the $0\mydeg$ row as well, or as a beamwidth or
+		sidelobe level far from the prediction, and these read $15.3\mydeg$ and
+		$-11.8$ dB.
+		\end{solution}
+
+	\part The peak fell $0.7\ \db$, while the ideal-element bound is
+	$-0.6\ \db$. Give the most likely reason the measured drop is the larger, and
+	say whether you would expect the gap to grow or shrink at $50\mydeg$.
+		\begin{solution}[1.2in]
+		The bound assumes an element that accounts only for the foreshortened
+		cell, a $\cos\theta$ power pattern. A real patch rolls off faster, closer
+		to $\cos^{1.3}\theta$ to $\cos^{1.5}\theta$ in power, so the measured drop
+		is at least the bound. The gap grows with angle: at $50\mydeg$ the bound
+		is $-1.9\ \db$ and a $\cos^{1.3}$ to $\cos^{1.5}$ element gives $-2.5$ to
+		$-2.9\ \db$, a gap of $0.6$ to $1.0\ \db$ against $0.2$ to $0.3\ \db$ at
+		$30\mydeg$.
+		\end{solution}
+
+\end{parts}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{Working backwards from Phase Control.} A lab partner recorded
+the Phase Control boxes after an Apply but not the Steer Angle typed in. Signal
+Freq read $10.525\ \ghz$.
+
+\vspace{4pt}
+\begin{center}
+\begin{tabular}{l|cccccccc}
+Element & E1 & E2 & E3 & E4 & E5 & E6 & E7 & E8 \\ \hline
+Phase Control & $0$ & $-125$ & $-250$ & $-375$ & $-500$ & $-626$ & $-751$ & $-876$ \\
+\end{tabular}
+\end{center}
+\vspace{4pt}
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the element-to-element step. Explain why one difference is
+		$1\mydeg$ larger than the others, and use the span of the array to get the
+		step to a tenth of a degree.
+		\begin{solution}[1.4in]
+		The differences are $-125$, $-125$, $-125$, $-125$, $-126$, $-125$, and
+		$-125$. The GUI rounds each element to a whole degree, so the steps
+		alternate between the two integers nearest the true step. The span is
+		exact to half a degree:
+		\eq{ \Delta\phi = \frac{876\mydeg}{7} = 125.1\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		step = \ansbox[1.3in]{$-125.1\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Phase Control holds $-n\Delta\phi_0$. Find the Steer Angle that was
+		applied.
+		\begin{solution}[1.1in]
+		\eq{ \sinp{\theta_0} &= \frac{\Delta\phi_0}{kd} = \frac{125.1\mydeg}{176.8\mydeg} = 0.708 \\
+		     \theta_0 &= 45.0\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_0$ = \ansbox[1.3in]{$45.0\mydeg$}
+	\end{minipage}
+
+	\part With the source at boresight and these offsets loaded, where does the
+	swept trace peak? Where would the beam point if the backend stopped sweeping
+	and held only these offsets?
+		\begin{solution}[0.9in]
+		The trace peaks at $+45\mydeg$ (Est. Angle $45.7\mydeg$, the nearest grid
+		point). The offsets alone are a falling ramp, so they point the beam to
+		$-45\mydeg$.
+		\end{solution}
+
+	\part Had a data file stored these values wrapped into $0\mydeg$ to
+	$360\mydeg$, the step would also be consistent with
+	$125.1\mydeg - 360\mydeg = -234.9\mydeg$. Explain in one or two sentences why
+	we can discard that solution for this array.
+		\begin{solution}[1.1in]
+		It would need $\sin\theta_0 = 234.9/176.8 = 1.33$, which no real angle
+		satisfies. Because $kd = 176.8\mydeg$ is less than $180\mydeg$
+		($d < \lambda/2$), every wrapped ramp maps to one direction in visible
+		space; wider spacings are where the second solution becomes real, as the
+		grating lobes of Lesson 26.
+		\end{solution}
+
+\end{parts}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\question \textbf{Two frozen traces.} A team freezes the boresight trace of the
+physical run, then moves the source to $45\mydeg$ on the arc and sweeps again.
+The boresight trace is $13.1\mydeg$ wide at half power and sets the $0\ \db$
+reference. The new trace peaks at an Est. Angle of $45.7\mydeg$, is $18.9\mydeg$
+wide at half power, and its peak is $1.7\ \db$ below the boresight peak.
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Predict the half-power width at $45\mydeg$ from the measured
+		boresight width, and compare it with the measurement.
+		\begin{solution}[1.2in]
+		\eq{ \theta_\text{HP} \approx \frac{13.1\mydeg}{\cosp{45\mydeg}} = \frac{13.1\mydeg}{0.707} = 18.5\mydeg }
+		The trace reads $0.4\mydeg$ wider, inside one grid step ($1.3\mydeg$ near
+		$45\mydeg$). From the theory width, $12.9\mydeg$, the rule gives
+		$18.3\mydeg$, and the exact array factor gives $18.7\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_\text{HP}$ = \ansbox[1.3in]{$18.5\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Predict the peak drop from the ideal-element bound and compare it
+		with the measured $1.7\ \db$.
+		\begin{solution}[1.0in]
+		\eq{ \Delta G &= 10\mylog{\cosp{45\mydeg}} \\ &= 10\mylog{0.707} = -1.5\ \db }
+		The measured drop is $0.2\ \db$ deeper, consistent with a patch element
+		that rolls off faster than the ideal one.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta G$ = \ansbox[1.3in]{$-1.5\ \db$}
+	\end{minipage}
+
+	\part Name the geometric fact behind the wider beam, and the one behind the
+	lower peak.
+		\begin{solution}[1.2in]
+		The beam widens because a source at $45\mydeg$ sees the array's projected
+		length, $Nd\cosp{\theta_0}$, which is shorter than $Nd$. The peak drops
+		because each element's own cell presents a projected area that shrinks as
+		$\cosp{\theta}$, so the element pattern rolls off; the array factor's
+		directivity stays near 7.7 as it scans (Lesson 18, Scan Loss).
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A specification calls for a $13\mydeg$ beam held out to $45\mydeg$ of
+		scan. How many elements would the array need at the same
+		$14\ \text{mm}$ spacing? Name the hardware tradeoff of that choice in one
+		sentence.
+		\begin{solution}[1.2in]
+		The projected aperture at $45\mydeg$ must equal today's broadside aperture:
+		\eq{ N\cosp{45\mydeg} &= 8 \\ N &= \frac{8}{0.707} = 11.3 \rightarrow 12 \text{ elements} }
+		The tradeoff is hardware: twelve elements need twelve LNAs and phase
+		shifters and three ADAR1000 chips instead of two, and the larger array
+		still loses the same $1.5\ \db$ of scan loss.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$N$ = \ansbox[1.3in]{$12$ elements}
+	\end{minipage}
 
 \end{parts}
 

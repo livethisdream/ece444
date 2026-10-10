@@ -179,8 +179,16 @@ else
 fi
 
 # 7. practice links only once the PDFs exist
+# A lab pair whose practice problems folded into a lab packet (COURSE_SPEC M5,
+# piloted on L18/L19) links the packet's blank PDF as a doc-link instead. Only
+# that exact form counts, and only when the PDF it names is committed.
+packet="$(grep -oE 'class="doc-link" href="\.\./\.\./labs/ECE444_Lab_[A-Za-z0-9_]+_blank\.pdf"' "$page" \
+  | head -1 | sed -E 's|.*labs/||; s|"$||')"
 if grep -q "Practice_blank.pdf" "$page"; then
   [ -s "$b" ] && ok "practice linked and built" || bad "practice linked but PDFs missing"
+elif [ -n "$packet" ]; then
+  [ -s "$REPO/book/extras/labs/$packet" ] && ok "lab packet linked in place of practice ($packet)" \
+    || bad "lab packet $packet linked but not built"
 else
   bad "lesson page missing Practice links"
 fi

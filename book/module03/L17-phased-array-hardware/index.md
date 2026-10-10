@@ -1187,7 +1187,9 @@ rounding does to the pattern.
 :::{depth}
 The code adds `+i * PhDelta`, and Lesson 18 writes the ADAR1000 setting the
 same way, $\phi_n = +n\ \Delta\phi$, so the code and Lesson 18 agree: a rising
-ramp is a positive **Steer Angle**, and the GUI follows the same convention.
+ramp steers the beam to a positive angle, the side the sweep plot calls positive.
+The GUI's Beam Steering **Apply** writes the opposite ramp into Phase Control as
+offsets, for a reason Lesson 19 explains.
 :::
 
 The matching call for the taper writes gains instead of phases:
