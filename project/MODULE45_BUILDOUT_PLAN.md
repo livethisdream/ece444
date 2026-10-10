@@ -74,7 +74,7 @@ with a drift term): grid half-step 0.53° at 30°, arc and aim 1.5°, multipath
 reference**, how well each array's broadside is known in the room frame:
 1.0° (array edge on a taped heading line) gives √(0.53² + 1.0² + 1.0²) =
 1.5°; 1.5° gives 1.9°; 3.0° (by eye) gives 3.2°. The grid step is one
-2.8125° LSB over kd = 176.9°, 0.0159 in sin θ: 0.91° at 0°, 1.05° at 30°,
+2.8125° LSB over kd = 176.8°, 0.0159 in sin θ: 0.91° at 0°, 1.05° at 30°,
 1.29° at 45°. Keep the box field within ±30° of each kit's broadside.
 
 **A reference shot catches blunders; it does not shrink the budget.**
