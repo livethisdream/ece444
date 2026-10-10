@@ -630,15 +630,15 @@ This lesson's problems are the pre-lab for Lesson 19: Part 1 of the Lab 5 packet
 ::::{frame} Looking Ahead
 :::{present}
 - L19: steer the PHASER, sweep, and compare the measured peak and beamwidth with the prediction.
-- The lab redoes the $30^\circ$ table at the HB100's $10.525\ \text{GHz}$: $88.5^\circ$ per element, E1 to E8.
+- The lab redoes the $30^\circ$ table at the HB100's $10.525\ \text{GHz}$: $88.4^\circ$ per element, E1 to E8.
 - L20-L26: beamwidth, tapering, grating lobes, squint, and quantization.
 :::
 
 L19 puts this on the hardware. You will load the Steering Angle lab preset,
 steer the peak by moving the source and by applying a steer angle, sweep, and
 compare the measured peak against the prediction. The lab redoes this lesson's calculation at the HB100's
-$10.525\ \text{GHz}$, where $\lambda = 28.5\ \text{mm}$, $kd = 176.9^\circ$, and
-the $30^\circ$ beam needs $88.5^\circ$ per element; the GUI numbers the elements
+$10.525\ \text{GHz}$, where $\lambda = 28.5\ \text{mm}$, $kd = 176.8^\circ$, and
+the $30^\circ$ beam needs $88.4^\circ$ per element; the GUI numbers the elements
 E1 to E8, so this lesson's $n = 0$ to 7 are E1 to E8. Bring this lesson's phase
 table and its HPBW table, because the sweep measures beamwidth as well as peak
 position and the comparison only means something if the prediction was written

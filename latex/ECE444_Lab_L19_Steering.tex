@@ -126,7 +126,7 @@ are individual and are graded as a genuine, documented attempt; Part 2 holds
 your team's data, and every teammate records the same values in their own copy.
 
 The array is the PHASER's: $N = 8$ elements, E1 to E8, on a $d = 14\ \text{mm}$
-pitch. Use $c = 2.998\times 10^{8}\ \m/\text{s}$, the value the GUI uses.
+pitch. Use $c = 3.00\times 10^{8}\ \m/\text{s}$.
 
 \begin{questions}
 
@@ -144,16 +144,16 @@ did not record one, use the nominal $10.525\ \ghz$ and say so.
 		electrical spacing $d/\lambda$, and $kd$ in degrees.
 		\begin{solution}[1.5in]
 		The key uses the nominal $10.525\ \ghz$:
-		\eq{ \lambda &= \frac{c}{f} = \frac{2.998\times 10^{8}}{10.525\times 10^{9}} = 0.02848\ \m = 28.48\ \text{mm} \\
-		     \frac{d}{\lambda} &= \frac{14}{28.48} = 0.4915 \\
-		     kd &= 360\mydeg\ \frac{d}{\lambda} = 176.9\mydeg }
+		\eq{ \lambda &= \frac{c}{f} = \frac{3.00\times 10^{8}}{10.525\times 10^{9}} = 0.02850\ \m = 28.50\ \text{mm} \\
+		     \frac{d}{\lambda} &= \frac{14}{28.50} = 0.491 \\
+		     kd &= 360\mydeg\ \frac{d}{\lambda} = 176.8\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
 		$f$ = \ansbox[1.3in]{$10.525\ \ghz$}\\[10pt]
-		$d/\lambda$ = \ansbox[1.3in]{$0.4915$}\\[10pt]
-		$kd$ = \ansbox[1.3in]{$176.9\mydeg$}
+		$d/\lambda$ = \ansbox[1.3in]{$0.491$}\\[10pt]
+		$kd$ = \ansbox[1.3in]{$176.8\mydeg$}
 	\end{minipage}
 
 	\part Find the progressive phase $\Delta\phi$ that steers the beam to each
@@ -164,13 +164,13 @@ did not record one, use the nominal $10.525\ \ghz$ and say so.
 	\begin{tabular}{| l | K{0.9in} | K{0.9in} | K{0.9in} | K{0.9in} |}
 	\hline
 	$\theta_0$ & $0\mydeg$ & $15\mydeg$ & $30\mydeg$ & $45\mydeg$ \\\hline
-	$\Delta\phi$ & \kv{$0.0\mydeg$} & \kv{$45.8\mydeg$} & \kv{$88.5\mydeg$} & \kv{$125.1\mydeg$} \\\hline
+	$\Delta\phi$ & \kv{$0.0\mydeg$} & \kv{$45.8\mydeg$} & \kv{$88.4\mydeg$} & \kv{$125.0\mydeg$} \\\hline
 	\end{tabular}
 	\end{center}
 
 		\begin{solution}[0.6in]
-		$\Delta\phi = kd\sinp{\theta_0} = 176.9\mydeg\sinp{\theta_0}$; at $30\mydeg$,
-		$176.9\mydeg \times 0.500 = 88.5\mydeg$.
+		$\Delta\phi = kd\sinp{\theta_0} = 176.8\mydeg\sinp{\theta_0}$; at $30\mydeg$,
+		$176.8\mydeg \times 0.500 = 88.4\mydeg$.
 		\end{solution}
 
 	\newpage
@@ -185,24 +185,24 @@ did not record one, use the nominal $10.525\ \ghz$ and say so.
 	\begin{tabular}{| l | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} |}
 	\hline
 	\textbf{Element} & \textbf{E1} & \textbf{E2} & \textbf{E3} & \textbf{E4} & \textbf{E5} & \textbf{E6} & \textbf{E7} & \textbf{E8} \\\hline\hline
-	Unwrapped & \kv{$0.0$} & \kv{$88.5$} & \kv{$176.9$} & \kv{$265.4$} & \kv{$353.9$} & \kv{$442.4$} & \kv{$530.8$} & \kv{$619.3$} \\\hline
-	Wrapped & \kv{$0.0$} & \kv{$88.5$} & \kv{$176.9$} & \kv{$265.4$} & \kv{$353.9$} & \kv{$82.4$} & \kv{$170.8$} & \kv{$259.3$} \\\hline
+	Unwrapped & \kv{$0.0$} & \kv{$88.4$} & \kv{$176.8$} & \kv{$265.2$} & \kv{$353.6$} & \kv{$442.0$} & \kv{$530.5$} & \kv{$618.9$} \\\hline
+	Wrapped & \kv{$0.0$} & \kv{$88.4$} & \kv{$176.8$} & \kv{$265.2$} & \kv{$353.6$} & \kv{$82.0$} & \kv{$170.5$} & \kv{$258.9$} \\\hline
 	\end{tabular}
 	\end{center}
 
 		\begin{solution}[0.6in]
-		E6 is the first to wrap: $5(88.47\mydeg) = 442.4\mydeg$, and
-		$442.4\mydeg - 360\mydeg = 82.4\mydeg$. Each entry comes from the unrounded
-		$88.47\mydeg$, so E8 is $7(88.47\mydeg) = 619.3\mydeg$.
+		E6 is the first to wrap: $5(88.41\mydeg) = 442.0\mydeg$, and
+		$442.0\mydeg - 360\mydeg = 82.0\mydeg$. Each entry comes from the unrounded
+		$88.41\mydeg$, so E8 is $7(88.41\mydeg) = 618.9\mydeg$.
 		\end{solution}
 
-	\part E6 carries $442.4\mydeg$ in one table and $82.4\mydeg$ in the other. In
+	\part E6 carries $442.0\mydeg$ in one table and $82.0\mydeg$ in the other. In
 	two or three sentences, explain why both settings give the same pattern, and
 	state what the wrapped table no longer records.
 		\begin{solution}[1.2in]
 		A phase of $360\mydeg$ is one full cycle of the carrier, so the element's
-		weight $e^{-j\phi}$ is the same complex number for $442.4\mydeg$ and
-		$82.4\mydeg$, and every term of the array sum is unchanged. What the
+		weight $e^{-j\phi}$ is the same complex number for $442.0\mydeg$ and
+		$82.0\mydeg$, and every term of the array sum is unchanged. What the
 		wrapped table loses is the true delay: the unwrapped ramp is a delay in
 		seconds that is correct at every frequency, while the wrapped values
 		reproduce it only at the frequency used for $k$. That is why a wideband
@@ -230,13 +230,15 @@ per-element offsets. Write those offsets as $-n\Delta\phi_0$.
 	\begin{tabular}{| l | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} | K{0.48in} |}
 	\hline
 	\textbf{Element} & \textbf{E1} & \textbf{E2} & \textbf{E3} & \textbf{E4} & \textbf{E5} & \textbf{E6} & \textbf{E7} & \textbf{E8} \\\hline\hline
-	Phase Control & \kv{$0$} & \kv{$-88$} & \kv{$-177$} & \kv{$-265$} & \kv{$-354$} & \kv{$-442$} & \kv{$-531$} & \kv{$-619$} \\\hline
+	Phase Control & \kv{$0$} & \kv{$-88$} & \kv{$-177$} & \kv{$-265$} & \kv{$-354$} & \kv{$-442$} & \kv{$-530$} & \kv{$-619$} \\\hline
 	\end{tabular}
 	\end{center}
 
 		\begin{solution}[0.5in]
-		Each value is $-n(88.47\mydeg)$ rounded to the nearest degree; E7 is
-		$-530.8\mydeg \rightarrow -531$.
+		Each value is $-n(88.41\mydeg)$ rounded to the nearest degree; E7 is
+		$-530.5\mydeg \rightarrow -530$. The GUI computes with
+		$c = 299792458\ \m/\text{s}$, a step of $88.47\mydeg$, so it shows $-531$
+		for E7: one element can differ by $1\mydeg$.
 		\end{solution}
 
 	\part During a beam sweep the backend adds its own ramp, $+n\Delta\phi_s$, to
@@ -291,7 +293,7 @@ from Question 1. The source sits on a protractor arc $1.00\ \m$ from the array.
 	\end{center}
 
 		\begin{solution}[0.9in]
-		$0.886(28.48)/112 = 0.2253\ \text{rad} = 12.9\mydeg$ at broadside, divided
+		$0.886(28.50)/112 = 0.2255\ \text{rad} = 12.9\mydeg$ at broadside, divided
 		by $\cosp{\theta_0}$ off broadside. The exact array factor gives
 		$13.0\mydeg$, $15.1\mydeg$, and $18.7\mydeg$; the rule reads a few tenths
 		narrow. A real patch element rolls off faster than the ideal element, so
@@ -304,7 +306,7 @@ from Question 1. The source sits on a protractor arc $1.00\ \m$ from the array.
 		$2.8125\mydeg/kd$. Find the angle step at $0\mydeg$ and at $30\mydeg$, and the
 		worst-case error of a peak read off this grid at $30\mydeg$.
 		\begin{solution}[1.5in]
-		\eq{ \Delta(\sin\theta) &= \frac{2.8125\mydeg}{176.9\mydeg} = 0.0159 \\
+		\eq{ \Delta(\sin\theta) &= \frac{2.8125\mydeg}{176.8\mydeg} = 0.0159 \\
 		     \Delta\theta &= \frac{0.0159}{\cos\theta}\ \text{rad} = 0.91\mydeg \text{ at } 0\mydeg,\ 1.05\mydeg \text{ at } 30\mydeg }
 		The trace is sampled only at grid points, so the peak can be off by half a
 		step: $0.53\mydeg$ at $30\mydeg$.
@@ -480,9 +482,9 @@ your Question 2(a).
 \begin{tabular}{| l | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} |}
 \hline
 \textbf{Element} & \textbf{E1} & \textbf{E2} & \textbf{E3} & \textbf{E4} & \textbf{E5} & \textbf{E6} & \textbf{E7} & \textbf{E8} \\\hline\hline
-Predicted & \kv{$0$} & \kv{$-88$} & \kv{$-177$} & \kv{$-265$} & \kv{$-354$} & \kv{$-442$} & \kv{$-531$} & \kv{$-619$} \\\hline
+Predicted & \kv{$0$} & \kv{$-88$} & \kv{$-177$} & \kv{$-265$} & \kv{$-354$} & \kv{$-442$} & \kv{$-530$} & \kv{$-619$} \\\hline
 Read back & \kv{$0$} & \kv{$-88$} & \kv{$-177$} & \kv{$-265$} & \kv{$-354$} & \kv{$-442$} & \kv{$-531$} & \kv{$-619$} \\\hline
-Difference & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$0$} \\\hline
+Difference & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$0$} & \kv{$-1$} & \kv{$0$} \\\hline
 \end{tabular}
 \end{center}
 
@@ -491,8 +493,10 @@ Keyed at $10.525\ \ghz$. Est. Angle sits on the grid point nearest each Apply
 value, shifted by whatever offset Table A's $0\mydeg$ row shows, since the
 boresight source's own aim error carries into every commanded row. The peak does
 not drop, because the source stays on the elements' boresight. The read-back
-matches the prediction exactly when Question 1 used the frequency Find HB100
-reports today; a different frequency gives differences that grow in proportion
+matches the prediction to within $1\mydeg$ on every element when Question 1 used
+the frequency Find HB100 reports today: the GUI computes with
+$c = 299792458\ \m/\text{s}$ rather than $3.00\times 10^8$, which moves E7 from
+$-530$ to $-531$; a different frequency gives differences that grow in proportion
 to $n$ (a $25\ \text{MHz}$ difference is $1.5\mydeg$ at E8).
 \end{solution}
 
@@ -541,9 +545,9 @@ Part 1.
 	Apply writes $-n\Delta\phi_0$ so that the sweep's own $+n\Delta\phi_s$ ramp
 	cancels it at the plotted angle $\theta_0$, which is where a boresight source
 	then peaks; the offsets alone would point the beam to $-\theta_0$. The GUI
-	rounds to whole degrees, so a prediction made at the same frequency and
-	rounded the same way matches exactly, and an unrounded one differs by at most
-	$0.5\mydeg$. A difference that
+	rounds to whole degrees and computes with $c = 299792458\ \m/\text{s}$, so a
+	prediction made at the same frequency with $c = 3.00\times 10^8$ matches to
+	within $1\mydeg$ (E7: $-530$ predicted, $-531$ shown). A difference that
 	grows with element number means the prediction used a different frequency
 	from the Signal Freq on screen.
 	\end{solutionorlines}
@@ -663,7 +667,7 @@ Phase Control & $0$ & $-125$ & $-250$ & $-375$ & $-500$ & $-626$ & $-751$ & $-87
 		\part Phase Control holds $-n\Delta\phi_0$. Find the Steer Angle that was
 		applied.
 		\begin{solution}[1.1in]
-		\eq{ \sinp{\theta_0} &= \frac{\Delta\phi_0}{kd} = \frac{125.1\mydeg}{176.9\mydeg} = 0.707 \\
+		\eq{ \sinp{\theta_0} &= \frac{\Delta\phi_0}{kd} = \frac{125.1\mydeg}{176.8\mydeg} = 0.708 \\
 		     \theta_0 &= 45.0\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
@@ -686,8 +690,8 @@ Phase Control & $0$ & $-125$ & $-250$ & $-375$ & $-500$ & $-626$ & $-751$ & $-87
 	$125.1\mydeg - 360\mydeg = -234.9\mydeg$. Explain in one or two sentences why
 	we can discard that solution for this array.
 		\begin{solution}[1.1in]
-		It would need $\sin\theta_0 = 234.9/176.9 = 1.33$, which no real angle
-		satisfies. Because $kd = 176.9\mydeg$ is less than $180\mydeg$
+		It would need $\sin\theta_0 = 234.9/176.8 = 1.33$, which no real angle
+		satisfies. Because $kd = 176.8\mydeg$ is less than $180\mydeg$
 		($d < \lambda/2$), every wrapped ramp maps to one direction in visible
 		space; wider spacings are where the second solution becomes real, as the
 		grating lobes of Lesson 26.

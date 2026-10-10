@@ -691,8 +691,9 @@ sweep actually reads and belong in lab expectation tables.
   Beam Steering **Apply** is the ADI workshop's offset, not the steering ramp: it writes $-n\Delta\phi$, whole degrees,
   unwrapped, into Phase Control, so a boresight source's trace peaks at $+\theta_0$ (on its own the offset points the
   beam to $-\theta_0$). Phase Control after Apply 30 at 10.525 GHz: 0, −88, −177, −265, −354, −442, −531, −619;
-  at 10.3 GHz: 0, −87, −173, −260, −346, −433, −519, −606. The GUI uses $c = 299792458$ m/s, so at 10.525 GHz
-  $kd = 176.9°$ and the 30° step is 88.5° ($c = 3\times10^8$ gives 176.8° and 88.4°, and misses E7's read-back by 1°).
+  at 10.3 GHz: 0, −87, −173, −260, −346, −433, −519, −606. Course numbers use $c = 3\times10^8$ (176.8°, 88.4° at
+  10.525 GHz); the GUI uses $c = 299792458$ m/s (88.47°), so a $c = 3\times10^8$ prediction of the read-back can differ
+  by 1° on one element (E7: −530 predicted, −531 shown); at 10.3 GHz both give the row above.
 - Broadside directivity of a uniform ULA: $D \approx 2Nd/\lambda$ (= 7.7
   → 8.9 dB for the PHASER's 8 elements).
 - **Grating lobes**: $\sin\theta_g = \sin\theta_0 \pm m\lambda/d$;

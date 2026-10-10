@@ -58,31 +58,31 @@ your own before Lesson 20, reconciles those numbers with the predictions.
 $$\begin{aligned}
 \Delta\phi &= kd\sin\theta_0 \\
 &= 360^\circ\ \frac{d}{\lambda}\ \sin\theta_0 \\
-&= 176.9^\circ \sin\theta_0
+&= 176.8^\circ \sin\theta_0
 \end{aligned}$$
 
-- $N = 8$, $d = 14\ \text{mm}$, and $d/\lambda = 0.4915$ at $10.525\ \text{GHz}$.
+- $N = 8$, $d = 14\ \text{mm}$, and $d/\lambda = 0.491$ at $10.525\ \text{GHz}$.
 :::
 :::{present}
 | $\theta_0$ | $\sin\theta_0$ | $\Delta\phi$ |
 | :-- | :-- | :-- |
 | $0^\circ$ | 0.000 | $0.0^\circ$ |
 | $15^\circ$ | 0.259 | $45.8^\circ$ |
-| $30^\circ$ | 0.500 | $88.5^\circ$ |
-| $45^\circ$ | 0.707 | $125.1^\circ$ |
+| $30^\circ$ | 0.500 | $88.4^\circ$ |
+| $45^\circ$ | 0.707 | $125.0^\circ$ |
 :::
 
 The array is fixed: $N = 8$ elements, E1 to E8, on a $d = 14\ \text{mm}$ pitch.
 The source is an HB100 Doppler module at a nominal $10.525\ \text{GHz}$, so
-$\lambda = 28.48\ \text{mm}$ and $d/\lambda = 0.4915$, with
-$c = 2.998\times 10^8\ \text{m/s}$, the value the GUI uses. Steering to
+$\lambda = 28.5\ \text{mm}$ and $d/\lambda = 0.491$, with
+$c = 3.00\times 10^8\ \text{m/s}$. Steering to
 $\theta_0$ takes a **progressive phase** of
 
-$$\Delta\phi = kd\sin\theta_0 = 360^\circ\ \frac{d}{\lambda}\ \sin\theta_0 = 176.9^\circ\sin\theta_0.$$
+$$\Delta\phi = kd\sin\theta_0 = 360^\circ\ \frac{d}{\lambda}\ \sin\theta_0 = 176.8^\circ\sin\theta_0.$$
 
 Lesson 18 worked the same table at the workshop's $10.3\ \text{GHz}$, where
 $kd = 173.2^\circ$ and the $30^\circ$ step is $86.6^\circ$. At $10.525\ \text{GHz}$
-the step is $88.5^\circ$, and Part 1 of the packet redoes the table at the
+the step is $88.4^\circ$, and Part 1 of the packet redoes the table at the
 frequency your kit reported in Lesson 17, because every phase in the lab depends
 on it.
 ::::
@@ -91,11 +91,11 @@ on it.
 :::{present}
 | Element | E1 | E2 | E3 | E4 |
 | :-- | :-- | :-- | :-- | :-- |
-| Wrapped (°) | 0.0 | 88.5 | 176.9 | 265.4 |
+| Wrapped (°) | 0.0 | 88.4 | 176.8 | 265.2 |
 | **Element** | **E5** | **E6** | **E7** | **E8** |
-| Wrapped (°) | 353.9 | 82.4 | 170.8 | 259.3 |
+| Wrapped (°) | 353.6 | 82.0 | 170.5 | 258.9 |
 
-- The $30^\circ$ ramp; E6 to E8 wrap: $442.4^\circ$ becomes $82.4^\circ$.
+- The $30^\circ$ ramp; E6 to E8 wrap: $442.0^\circ$ becomes $82.0^\circ$.
 :::
 
 The phase shifters produce a value between $0^\circ$ and $360^\circ$, so element
@@ -107,10 +107,10 @@ that have wrapped:
 
 | Element | E1 | E2 | E3 | E4 | E5 | E6 | E7 | E8 |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| Unwrapped ramp | $0.0^\circ$ | $88.5^\circ$ | $176.9^\circ$ | $265.4^\circ$ | $353.9^\circ$ | $442.4^\circ$ | $530.8^\circ$ | $619.3^\circ$ |
-| Wrapped | $0.0^\circ$ | $88.5^\circ$ | $176.9^\circ$ | $265.4^\circ$ | $353.9^\circ$ | $82.4^\circ$ | $170.8^\circ$ | $259.3^\circ$ |
+| Unwrapped ramp | $0.0^\circ$ | $88.4^\circ$ | $176.8^\circ$ | $265.2^\circ$ | $353.6^\circ$ | $442.0^\circ$ | $530.5^\circ$ | $618.9^\circ$ |
+| Wrapped | $0.0^\circ$ | $88.4^\circ$ | $176.8^\circ$ | $265.2^\circ$ | $353.6^\circ$ | $82.0^\circ$ | $170.5^\circ$ | $258.9^\circ$ |
 
-Each entry is a multiple of the unrounded step, $88.47^\circ$.
+Each entry is a multiple of the unrounded step, $88.41^\circ$.
 ::::
 
 ::::{frame} The Beam-Sweep Trace
@@ -187,7 +187,7 @@ matches the $0^\circ$ trace. That difference is the measurement of scan loss
 :::
 :::{present}
 <img src="../../viz/img/L19-phase-ramp.svg"
-     alt="The 30-degree ramp at 10.525 GHz: the unwrapped ramp rising to 619.3 degrees, the wrapped settings, and the falling whole-degree offsets Phase Control shows after Apply 30, from 0 to minus 619"
+     alt="The 30-degree ramp at 10.525 GHz: the unwrapped ramp rising to 618.9 degrees, the wrapped settings, and the falling whole-degree offsets Phase Control shows after Apply 30, from 0 to minus 619"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -205,8 +205,12 @@ angle $+30^\circ$. Apply is therefore the offset that makes a boresight source
 look like a source at $+\theta_0$ on the sweep plot. On their own, with no sweep
 ramp added, the offsets would point the beam to $-30^\circ$. To compare the
 read-back with the wrapped ramp, reduce it modulo $360^\circ$: E6's
-$-442^\circ$ is $278^\circ$, which is $360^\circ - 82.4^\circ$ to the nearest
-degree.
+$-442^\circ$ is $278^\circ$, which is $360^\circ - 82.0^\circ$.
+
+The GUI computes $\Delta\phi$ with $c = 299792458\ \text{m/s}$, not the
+$3.00\times 10^8\ \text{m/s}$ of our prediction, so one element can differ by
+$1^\circ$ after rounding: our $-n(88.41^\circ)$ gives $-530$ for E7, and the GUI's
+$-n(88.47^\circ)$ gives $-531$.
 ::::
 
 ::::{frame} Predicted Sweep
@@ -215,16 +219,19 @@ degree.
 :::{depth}
 The widget below is the prediction tool for today's lab. Set the frequency to
 $10.525\ \text{GHz}$, or at the bench to the value **Find HB100** reports, and
-the angle to where you expect the peak, then read $\Delta\phi$, the eight phases,
-and the predicted half-power beamwidth. Two things to notice before the bench: the
-dots mark the angles the sweep samples, about $1^\circ$ apart near broadside and
-wider toward endfire, and the beam widens as the peak moves away from broadside
-while the sidelobe structure stretches with it.
+the knob to the source's angle on the arc, which is where the trace should peak.
+Then read $\Delta\phi$, the predicted half-power beamwidth, and the peak drop,
+and two rows of phases: the beam ramp $+n\Delta\phi$ wrapped to $0^\circ$ to
+$360^\circ$, and what Phase Control shows after Apply at the same angle, the
+falling whole-degree offsets. Two things to notice before the bench: the dots
+mark the angles the sweep samples, one $2.8125^\circ$ phase step apart, about
+$1^\circ$ near broadside and wider toward endfire; and the beam widens as the
+peak moves away from broadside while the sidelobe structure stretches with it.
 :::
 
 :::{present}
 <iframe src="../../viz/steering-predictor.html"
-        width="100%" height="488"
+        width="100%" height="538"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Predicted beam-sweep trace and element phases for the PHASER array">
@@ -344,7 +351,7 @@ would peak at $90^\circ$. Step 21 leaves the station at zero for the next team.
 :::
 
 The calculated column comes from the array factor for $N = 8$ at
-$d/\lambda = 0.4915$. The $1/\cos\theta_0$ broadening of Lesson 18 gives
+$d/\lambda = 0.491$. The $1/\cos\theta_0$ broadening of Lesson 18 gives
 $12.9^\circ/\cos 30^\circ = 14.9^\circ$ from the rule's broadside width, and the
 exact array factor gives $13.0^\circ$, $15.1^\circ$, and $18.7^\circ$. A sweep
 sampled about a degree apart reads each width to about a degree. dBc is dB
@@ -407,7 +414,7 @@ all three before the measurement.
 
 **Sweep grid.** With Use Bits on, the sweep steps the element phase one
 $2.8125^\circ$ LSB at a time. One step moves $\sin\theta$ by
-$2.8125^\circ/176.9^\circ = 0.0159$, which is $0.91^\circ$ of angle at broadside
+$2.8125^\circ/176.8^\circ = 0.0159$, which is $0.91^\circ$ of angle at broadside
 and $1.05^\circ$ at $30^\circ$, widening as $1/\cos\theta$. The trace holds no
 information between samples, so a peak read off it can be wrong by half a step,
 $0.53^\circ$ at $30^\circ$.
@@ -464,8 +471,8 @@ The Lab 5 packet is the turn-in document for the whole lab, in three parts:
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| $\Delta\phi = kd\sin\theta_0$ | progressive element phase for a beam at $\theta_0$ | $176.9^\circ\sin\theta_0$ at $10.525\ \text{GHz}$ |
-| Wrapped phase | $n\Delta\phi$ modulo $360^\circ$, what the shifter can produce | E8 at $30^\circ$: $259.3^\circ$ |
+| $\Delta\phi = kd\sin\theta_0$ | progressive element phase for a beam at $\theta_0$ | $176.8^\circ\sin\theta_0$ at $10.525\ \text{GHz}$ |
+| Wrapped phase | $n\Delta\phi$ modulo $360^\circ$, what the shifter can produce | E8 at $30^\circ$: $258.9^\circ$ |
 | Phase Control after Apply | $-n\Delta\phi$, whole degrees, unwrapped | E8 at $30^\circ$: $-619$ |
 ::::
 
