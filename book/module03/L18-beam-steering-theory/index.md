@@ -38,9 +38,8 @@ Lesson 18 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 :::{depth}
 Lesson 17 put the PHASER in front of you: eight patch elements in a row, two
 ADAR1000 beamformer chips that set a phase on every element, and the backend
-code that writes the steering ramp `i*PhDelta` to them. In the GUI, Beam
-Steering's Steer Angle sets that ramp, and Phase Control adds per-element
-offsets on top of it. Nothing so far has said what the ramp should be. We derive the
+code that writes the steering ramp `i*PhDelta` to them. In the GUI, the beam
+sweep sets that ramp, and Phase Control adds per-element offsets on top of it. Nothing so far has said what the ramp should be. We derive the
 element-to-element phase from the arrival geometry, turn it into the eight
 settings the hardware accepts, predict what the steered pattern looks like, and
 then read the process backwards — given a set of phases, find the angle the
@@ -176,7 +175,7 @@ that frequency.
 $$\phi_n = +n\ \Delta\phi, \qquad n = 0, 1, \ldots, 7$$
 
 - Element $n$ leads element 0 by $n\ \Delta\phi$; the ADAR1000 delays it by that amount.
-- A positive ramp steers to $+\theta_0$, as the GUI's Steer Angle does.
+- A positive ramp steers to $+\theta_0$, as the GUI's beam sweep does.
 - Element 0 sits at zero; a negative $\theta_0$ runs the ramp downward.
 :::
 
@@ -189,8 +188,10 @@ $$\phi_n = +n\ \Delta\phi, \qquad n = 0, 1, \ldots, 7.$$
 
 Element 0 is the reference and gets zero. Each element after it is delayed one
 step more. A positive ramp steers the beam to $+\theta_0$, which is the
-convention of the GUI's Steer Angle and of the backend code L17 read, which
-writes `i*PhDelta` to element `i`. Flipping the sign of $\theta_0$ flips the
+convention of the backend code L17 read, which writes `i*PhDelta` to element
+`i` at every step of the GUI's beam sweep. The GUI's Beam Steering **Apply** is
+a different control: it writes the opposite ramp into Phase Control as offsets,
+for a reason Lesson 19 explains. Flipping the sign of $\theta_0$ flips the
 sign of $\Delta\phi$ and runs the ramp the other way, which is how the same
 eight channels cover both sides of broadside.
 
@@ -543,7 +544,7 @@ $$\Delta\phi = \frac{414.7^\circ}{7} = 59.24^\circ, \qquad \sin\theta_0 = \frac{
 The ramp rises with $n$ and the steer angle is positive, which follows from the
 sign convention: the commanded phase is $+n\ \Delta\phi$, so a rising ramp
 means a positive $\Delta\phi$ and a beam on the positive side of broadside, the
-side the GUI's Steer Angle calls positive.
+side the GUI's sweep plot calls positive.
 :::
 ::::
 
@@ -621,22 +622,23 @@ reduces null depth.
 ::::{frame} Practice
 :class: read-only doc-links
 
-- <a class="doc-link" href="../../practice/ECE444_L18_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a class="doc-link doc-key" href="../../practice/ECE444_L18_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+This lesson's problems are the pre-lab for Lesson 19: Part 1 of the Lab 5 packet, completed on your own before the lab period.
+
+- <a class="doc-link" href="../../labs/ECE444_Lab_L19_Steering_blank.pdf" target="_blank" rel="noopener">Lab 5 packet, Part 1 (PDF)</a>
 ::::
 
 ::::{frame} Looking Ahead
 :::{present}
 - L19: steer the PHASER, sweep, and compare the measured peak and beamwidth with the prediction.
-- The lab redoes the $30^\circ$ table at the HB100's $10.525\ \text{GHz}$: $88.4^\circ$ per element, E1 to E8.
+- The lab redoes the $30^\circ$ table at the HB100's $10.525\ \text{GHz}$: $88.5^\circ$ per element, E1 to E8.
 - L20-L26: beamwidth, tapering, grating lobes, squint, and quantization.
 :::
 
 L19 puts this on the hardware. You will load the Steering Angle lab preset,
-command a steer angle, sweep, and compare the measured peak against the angle you
-asked for. The lab redoes this lesson's calculation at the HB100's
-$10.525\ \text{GHz}$, where $\lambda = 28.5\ \text{mm}$, $kd = 176.8^\circ$, and
-the $30^\circ$ beam needs $88.4^\circ$ per element; the GUI numbers the elements
+steer the peak by moving the source and by applying a steer angle, sweep, and
+compare the measured peak against the prediction. The lab redoes this lesson's calculation at the HB100's
+$10.525\ \text{GHz}$, where $\lambda = 28.5\ \text{mm}$, $kd = 176.9^\circ$, and
+the $30^\circ$ beam needs $88.5^\circ$ per element; the GUI numbers the elements
 E1 to E8, so this lesson's $n = 0$ to 7 are E1 to E8. Bring this lesson's phase
 table and its HPBW table, because the sweep measures beamwidth as well as peak
 position and the comparison only means something if the prediction was written
