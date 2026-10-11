@@ -1036,7 +1036,7 @@ folded in.
   of bench, not a period). The course stays 41 periods. Old to new:
   **L20** Fox Hunt Lab (new, objective 3.5, Lab 6, right after L19 while the
   bearing skill is a period old); L20 Array Factor and Beamwidth Theory →
-  **L21**, and the midterm-due tag in the syllabus moved with it; L21 Array
+  **L21** (the midterm-due tag was dropped: the midterm is done); L21 Array
   Factor Lab + L23 Antenna Pattern Lab → **L23 Array Factor and Pattern Lab**
   (objectives 3.2 and 3.6, Lab 7: one setup, Part A the electrical sweep at
   N = 8/4/2, Part B the walked source, one lab sheet
