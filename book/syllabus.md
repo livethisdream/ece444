@@ -261,11 +261,13 @@ generative AI tools is not allowed** unless explicitly permitted.
 
 ### 5. Collaboration
 
-**Collaboration (not copying)** on practice problems and assessments is highly
-encouraged, unless your instructor provides direction otherwise. A good litmus
-test: you must be able to **explain every step** on your submitted work.
-If you can't, it's copying, not collaboration. All help received on graded work
-must be documented per the documentation policy below.
+**Collaboration (not copying)** on practice problems is highly encouraged. A
+good litmus test: you must be able to **explain every step** on your submitted
+work. If you can't, it's copying, not collaboration. All help received on graded
+work must be documented per the documentation policy below.
+
+**Module assessments are individual work.** Do not work with or get help from
+anyone else, and use only the course materials.
 
 ### 6. Documentation
 
