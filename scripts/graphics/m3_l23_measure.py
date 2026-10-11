@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""L21 (Array Factor Lab) deck figures.
+"""L23 (Array Factor and Pattern Lab) Part A deck figures.
 
-  L21-read-the-trace     : one measured sweep with HPBW, FNBW and first SLL
+  L23-read-the-trace     : one measured sweep with HPBW, FNBW and first SLL
                            marked -- the three numbers the lab asks for
-  L21-ideal-vs-measured  : ideal N=8 array factor under the same sweep as the
+  L23-ideal-vs-measured  : ideal N=8 array factor under the same sweep as the
                            2.8125 deg sampled, noise-floored trace
-  L21-aperture-halving   : 8 / 4 / 2 active elements on one axis, showing the
+  L23-aperture-halving   : 8 / 4 / 2 active elements on one axis, showing the
                            beamwidth doubling and the ~6 dB peak step
 
 Physics matches book/extras/viz/af-measurement-compare.html exactly: same
@@ -13,8 +13,8 @@ element sum, same 2.8125 deg sweep grid, same -23 dBc floor, same seeded
 noise realization (LCG seed 6618, 20 power looks per step). Deck figures carry
 no equations -- the math lives in the slide text.
 
-    python3 scripts/graphics/m3_l21_measure.py
-    -> book/extras/slides/fig/L21-*.svg  (+ viz/img copies)
+    python3 scripts/graphics/m3_l23_measure.py
+    -> book/extras/slides/fig/L23-*.svg  (+ viz/img copies)
 """
 
 from __future__ import annotations
@@ -219,7 +219,7 @@ def read_the_trace() -> None:
     ax.text(m["peak_ang"] - 4, m["pk"] + 0.6, "peak", color=NAVY, fontsize=12,
             fontweight="bold", ha="right", va="bottom")
 
-    finalize(fig, "L21-read-the-trace", also_img=True)
+    finalize(fig, "L23-read-the-trace", also_img=True)
 
 
 def ideal_vs_measured() -> None:
@@ -245,7 +245,7 @@ def ideal_vs_measured() -> None:
                 arrowprops=dict(arrowstyle="->", color=AMBER, lw=1.3))
     ax.legend(loc="upper left", fontsize=11.5, handlelength=1.8)
 
-    finalize(fig, "L21-ideal-vs-measured", also_img=True)
+    finalize(fig, "L23-ideal-vs-measured", also_img=True)
 
 
 def aperture_halving() -> None:
@@ -285,7 +285,7 @@ def aperture_halving() -> None:
                for n in (8, 4, 2)]
     ax.legend(handles=handles, loc="lower left", fontsize=11.5, handlelength=1.8)
 
-    finalize(fig, "L21-aperture-halving", also_img=True)
+    finalize(fig, "L23-aperture-halving", also_img=True)
 
 
 if __name__ == "__main__":
