@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amplitude taper, sidelobe level and the cost of getting there</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .canvases { display:grid; grid-template-columns:1fr; gap:10px; }
+  @media (min-width:660px) { .canvases { grid-template-columns:1fr 1fr; align-items:start; } }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; min-width:0; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl select { flex:1 1 auto; min-width:120px; font:inherit; font-size:13px; color:var(--navy);
+                padding:3px 6px; border:1px solid var(--edge2); border-radius:4px; background:#fff; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; font-size:13px; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.sll { background:rgba(138,90,0,0.12);  border-color:rgba(138,90,0,0.30); }
+  .ro.sll .v { color:var(--amber); }
+  .ro.hp  { background:rgba(63,125,52,0.12); border-color:rgba(63,125,52,0.30); }
+  .ro.hp  .v { color:var(--grn); }
+  .ro.dr  { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
+  .ro.dr  .v { color:var(--red); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="canvases">
+    <canvas id="bars" aria-label="The eight element amplitudes of the selected taper, drawn as bars in percent of full gain"></canvas>
+    <canvas id="pat" aria-label="Array pattern of the selected taper in decibels against angle from broadside, with the uniform-taper pattern shown for reference"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Taper</label>
+      <select id="tap">
+        <option value="uniform">Uniform</option>
+        <option value="hann">Hann (cosine-squared)</option>
+        <option value="c20">Chebyshev &#8722;20 dB</option>
+        <option value="c30" selected>Chebyshev &#8722;30 dB</option>
+        <option value="c40">Chebyshev &#8722;40 dB</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label>Array</label>
+      <span class="val">\(N=8\), \(d/\lambda = 0.481\), broadside</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro sll"><span class="k">highest sidelobe</span><span class="v" id="p-sl">&#8212;</span></div>
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="p-hp">&#8212;</span></div>
+    <div class="ro"><span class="k">taper eff. \(\eta_t\)</span><span class="v" id="p-et">&#8212;</span></div>
+    <div class="ro dr"><span class="k">peak drop</span><span class="v" id="p-dr">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const FLOOR=-60, N=8, DL=0.481, DEG=180/Math.PI;
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const neg=x=>(Math.abs(x)<0.05?'0.0':x.toFixed(1)).replace('-','−');
+
+/* ------------------------------ the tapers --------------------------------
+   Uniform and Hann are closed form. The Chebyshev sets are Dolph designs,
+   computed here rather than tabulated: the array factor of an even-N
+   broadside array is
+       AF(psi) = 2 sum_{m=1..N/2} a_m cos((2m-1) psi/2),
+   and Dolph's choice makes that equal T_{N-1}(x0 cos(psi/2)) with
+   x0 = cosh(acosh(R)/(N-1)) and R the voltage sidelobe ratio. The cosines
+   are orthogonal over one period of psi, so each a_m comes straight out of a
+   Fourier quadrature. Every sidelobe then lands on the design level.        */
+function chebT(n,x){
+  if(Math.abs(x)<=1) return Math.cos(n*Math.acos(x));
+  const s=(x<0 && n%2)? -1 : 1;
+  return s*Math.cosh(n*Math.acosh(Math.abs(x)));
+}
+function dolph(sllDb){
+  const M=N/2, R=Math.pow(10,Math.abs(sllDb)/20);
+  const x0=Math.cosh(Math.acosh(R)/(N-1));
+  const K=4096, half=new Float64Array(M);
+  for(let i=0;i<K;i++){
+    const psi=2*Math.PI*i/K, f=chebT(N-1, x0*Math.cos(psi/2));
+    for(let m=1;m<=M;m++) half[m-1]+=f*Math.cos((2*m-1)*psi/2)/K;
+  }
+  const a=new Float64Array(N);
+  for(let m=0;m<M;m++){ a[M-1-m]=half[m]; a[M+m]=half[m]; }
+  const mx=Math.max.apply(null,Array.from(a));
+  return Array.from(a,v=>v/mx);
+}
+function hannTaper(){
+  // cos^2 across the aperture, sampled on the N+1 grid the PHASER preset uses
+  const a=[];
+  for(let n=0;n<N;n++){ const p=(n+1)/(N+1)-0.5; a.push(Math.cos(Math.PI*p)**2); }
+  const mx=Math.max.apply(null,a);
+  return a.map(v=>v/mx);
+}
+const TAPERS={
+  uniform:{name:'Uniform',            a:new Array(N).fill(1)},
+  hann:   {name:'Hann',               a:hannTaper()},
+  c20:    {name:'Chebyshev −20 dB', a:dolph(20)},
+  c30:    {name:'Chebyshev −30 dB', a:dolph(30)},
+  c40:    {name:'Chebyshev −40 dB', a:dolph(40)}
+};
+const UNIFORM=TAPERS.uniform.a;
+
+/* ------------------------------ the pattern -------------------------------
+   Broadside sum over the eight elements at n = -3.5 ... +3.5 element spacings,
+   normalized to the coherent peak sum(a). No small-angle shortcuts.          */
+const M=7201, degOf=i=>-90+i*180/(M-1);
+function sweep(a){
+  const s=a.reduce((p,q)=>p+q,0), db=new Float64Array(M);
+  for(let i=0;i<M;i++){
+    const psi=2*Math.PI*DL*Math.sin(degOf(i)/DEG);
+    let re=0, im=0;
+    for(let n=0;n<N;n++){ const ph=(n-(N-1)/2)*psi; re+=a[n]*Math.cos(ph); im+=a[n]*Math.sin(ph); }
+    db[i]=20*Math.log10(Math.max(Math.hypot(re,im)/s,1e-12));
+  }
+  return db;
+}
+function metrics(a){
+  const db=sweep(a);
+  let i0=0; for(let i=1;i<M;i++) if(db[i]>db[i0]) i0=i;
+  const step=180/(M-1);
+  const walk=dir=>{
+    for(let i=i0; i>=0 && i<M; i+=dir){
+      if(db[i]<=-3){ const j=i-dir, f=(db[j]+3)/(db[j]-db[i]); return degOf(j)+dir*f*step; }
+    }
+    return null;
+  };
+  const lo=walk(-1), hi=walk(1);
+  // highest local maximum outside the two nulls that bracket the main lobe
+  let nLo=null, nHi=null;
+  for(let i=1;i<M-1;i++){
+    if(db[i]<db[i-1] && db[i]<db[i+1]){
+      if(i<i0) nLo=degOf(i); else if(nHi===null) nHi=degOf(i);
+    }
+  }
+  let sll=null, slAt=null;
+  if(nLo!==null || nHi!==null){
+    const nA=(nLo===null)?-91:nLo, nB=(nHi===null)?91:nHi;
+    for(let i=1;i<M-1;i++){
+      const d=degOf(i);
+      if(d>nA && d<nB) continue;
+      if(db[i]>=db[i-1] && db[i]>=db[i+1] && (sll===null||db[i]>sll)){ sll=db[i]; slAt=d; }
+    }
+  }
+  const s=a.reduce((p,q)=>p+q,0), s2=a.reduce((p,q)=>p+q*q,0);
+  return { db:db, hpLo:lo, hpHi:hi, hp:(lo!==null&&hi!==null)?hi-lo:null,
+           sll:sll, slAt:slAt, eta:s*s/(N*s2), drop:20*Math.log10(s/N) };
+}
+
+/* -------------------------------- drawing --------------------------------- */
+const cvB=document.getElementById('bars'), cB=cvB.getContext('2d');
+const cvP=document.getElementById('pat'),  cP=cvP.getContext('2d');
+let key='c30', MET=metrics(TAPERS.c30.a), UNI=metrics(UNIFORM);
+
+function drawBars(){
+  const dpr=window.devicePixelRatio||1, w=cvB.width/dpr, h=cvB.height/dpr;
+  cB.clearRect(0,0,w,h);
+  const a=TAPERS[key].a;
+  const mL=44, mR=14, mT=42, mB=26, pw=w-mL-mR, ph=h-mT-mB;
+  const bw=Math.min(pw/N*0.56, 46);
+  const xc=n=>mL+pw*(n+0.5)/N, yb=v=>mT+ph*(1-v);
+
+  stext(cB, TAPERS[key].name+' — element gains entered in the GUI', mL, 13, 12, cssv('--navy'),'left',true);
+
+  cB.strokeStyle=cssv('--edge'); cB.lineWidth=1;
+  for(const v of [0,0.25,0.5,0.75,1]){
+    const y=yb(v);
+    cB.beginPath(); cB.moveTo(mL,y); cB.lineTo(mL+pw,y); cB.stroke();
+    stext(cB,(v*100)+'%', mL-8, y, 10.5, cssv('--ink3'),'right',false);
+  }
+  for(let n=0;n<N;n++){
+    const pct=a[n]*100, x=xc(n), y=yb(a[n]);
+    cB.fillStyle='rgba(0,103,185,0.85)';
+    cB.fillRect(x-bw/2, y, bw, mT+ph-y);
+    cB.strokeStyle=cssv('--navy'); cB.lineWidth=1;
+    cB.strokeRect(x-bw/2, y, bw, mT+ph-y);
+    stext(cB, pct.toFixed(0), x, y-9, 11.5, cssv('--navy'),'center',true);
+    stext(cB, 'Rx'+(n+1), x, mT+ph+13, 10.5, cssv('--ink3'),'center',false);
+  }
+  cB.strokeStyle=cssv('--edge2'); cB.lineWidth=1;
+  cB.beginPath(); cB.moveTo(mL,mT+ph); cB.lineTo(mL+pw,mT+ph); cB.stroke();
+}
+
+function drawPattern(){
+  const dpr=window.devicePixelRatio||1, w=cvP.width/dpr, h=cvP.height/dpr;
+  cP.clearRect(0,0,w,h);
+  const mL=50, mR=14, mT=44, mB=36, pw=w-mL-mR, ph=h-mT-mB;
+  const xp=d=>mL+(d+90)/180*pw, yp=v=>mT+(v/FLOOR)*ph;
+  const m=MET;
+
+  if(m.hpLo!==null && m.hpHi!==null){
+    cP.fillStyle='rgba(63,125,52,0.13)';
+    cP.fillRect(xp(m.hpLo), mT, xp(m.hpHi)-xp(m.hpLo), ph);
+  }
+
+  cP.strokeStyle=cssv('--edge'); cP.lineWidth=1;
+  for(let d=0;d>=FLOOR;d-=10){ const y=yp(d);
+    cP.beginPath(); cP.moveTo(mL,y); cP.lineTo(mL+pw,y); cP.stroke();
+    stext(cP,d.toString(), mL-8, y, 10.5, cssv('--ink3'),'right',false); }
+  cP.strokeStyle=cssv('--edge2');
+  for(let d=-90;d<=90;d+=30){ const x=xp(d);
+    cP.beginPath(); cP.moveTo(x,mT); cP.lineTo(x,mT+ph); cP.stroke();
+    stext(cP,d+'°', x, mT+ph+13, 10.5, cssv('--ink3'),'center',false); }
+  cP.strokeStyle=cssv('--edge'); cP.strokeRect(mL,mT,pw,ph);
+
+  // the uniform pattern, always in view as the thing every taper is traded against
+  if(key!=='uniform'){
+    cP.strokeStyle='rgba(91,101,115,0.55)'; cP.lineWidth=1.4; cP.setLineDash([4,3]);
+    cP.beginPath();
+    for(let i=0;i<M;i++){ const x=xp(degOf(i)), y=yp(Math.max(UNI.db[i],FLOOR)); i?cP.lineTo(x,y):cP.moveTo(x,y); }
+    cP.stroke(); cP.setLineDash([]);
+    stext(cP,'uniform, for reference', mL+pw-4, mT+12, 11, cssv('--ink3'),'right',false);
+  }
+
+  // the sidelobe level this taper actually delivers
+  if(m.sll!==null && m.sll>FLOOR){
+    cP.strokeStyle='rgba(138,90,0,0.70)'; cP.lineWidth=1.3; cP.setLineDash([5,3]);
+    cP.beginPath(); cP.moveTo(mL,yp(m.sll)); cP.lineTo(mL+pw,yp(m.sll)); cP.stroke();
+    cP.setLineDash([]);
+    stext(cP, neg(m.sll)+' dB', mL+4, yp(m.sll)-9, 11.5, cssv('--amber'),'left',true);
+  }
+
+  cP.strokeStyle=cssv('--mid'); cP.lineWidth=2.3; cP.beginPath();
+  for(let i=0;i<M;i++){ const x=xp(degOf(i)), y=yp(Math.max(m.db[i],FLOOR)); i?cP.lineTo(x,y):cP.moveTo(x,y); }
+  cP.stroke();
+
+  if(m.hp!==null){
+    const y=yp(-3), a=xp(m.hpLo), b=xp(m.hpHi);
+    cP.strokeStyle=cssv('--grn'); cP.lineWidth=1.8;
+    cP.beginPath(); cP.moveTo(a,y); cP.lineTo(b,y); cP.stroke();
+    for(const pr of [[a,1],[b,-1]]){
+      cP.beginPath(); cP.moveTo(pr[0],y); cP.lineTo(pr[0]+pr[1]*6,y-4); cP.lineTo(pr[0]+pr[1]*6,y+4);
+      cP.closePath(); cP.fillStyle=cssv('--grn'); cP.fill();
+    }
+  }
+
+  stext(cP, (m.hp===null?'wider than the visible region':m.hp.toFixed(1)+'° wide at half power'),
+        mL, mT-26, 12, cssv('--grn'),'left',true);
+  if(key!=='uniform') stext(cP, 'uniform is 13.3° wide with a −12.8 dB first sidelobe',
+        mL, mT-11, 11, cssv('--ink3'),'left',false);
+
+  stext(cP,'angle from broadside (deg)', mL+pw/2, mT+ph+28, 11.5, cssv('--ink3'),'center',false);
+  cP.save(); cP.translate(14, mT+ph/2); cP.rotate(-Math.PI/2);
+  stext(cP,'relative power (dB)', 0, 0, 11.5, cssv('--ink3'),'center',false); cP.restore();
+  MJ.draw(cP,'\\theta', xp(0), mT+ph-10, 13, cssv('--navy'),'center');
+}
+
+function readouts(){
+  const m=MET, set=(id,v)=>{ document.getElementById(id).textContent=v; };
+  set('p-sl', m.sll===null? 'none in view' : neg(m.sll)+' dB');
+  set('p-hp', m.hp===null? '> 180°' : m.hp.toFixed(1)+'°');
+  set('p-et', m.eta.toFixed(3)+' = '+neg(10*Math.log10(m.eta))+' dB');
+  set('p-dr', neg(m.drop)+' dB');
+}
+
+function drawAll(){ drawBars(); drawPattern(); readouts(); }
+
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wb=Math.round(cvB.getBoundingClientRect().width);
+  const wp=Math.round(cvP.getBoundingClientRect().width);
+/* Narrow: the canvases and the control/readout rows stack, so the parts ADD
+   instead of sharing a row -- which puts the widget past the frame budget and
+   makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:659px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+  const hb=SQ(Math.round(Math.min(Math.max(wb*(wb<460?0.44:0.30), 140), 225)));
+  const hp=SQ(Math.round(Math.min(wp*(wp<460?0.74:0.52), 400)));
+  for(const pr of [[cvB,cB,wb,hb],[cvP,cP,wp,hp]]){
+    pr[0].width=pr[2]*dpr; pr[0].height=pr[3]*dpr;
+    pr[0].style.height=pr[3]+'px';
+    pr[1].setTransform(dpr,0,0,dpr,0,0);
+  }
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+const sel=document.getElementById('tap');
+sel.addEventListener('change',()=>{ key=sel.value; MET=metrics(TAPERS[key].a); drawAll(); });
+
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>

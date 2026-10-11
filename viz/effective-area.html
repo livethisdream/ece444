@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Effective area vs frequency</title>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34;
+          --gain:#004a85; --ae:#b3213a; --marker:#8a5a00; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(196px,1fr)); gap:9px 18px; align-items:center;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl label.mixed { text-transform:none; font-size:12.5px; letter-spacing:0; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:56px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:56px; accent-color:var(--mid); }
+  .seg { display:flex; width:100%; border:1px solid var(--edge2); border-radius:6px; overflow:hidden; background:#fff; }
+  .seg button { flex:1 1 0; font:600 12px/1.15 Inter,system-ui,sans-serif; padding:7px 6px; border:0;
+                background:#fff; color:var(--navy); cursor:pointer; }
+  .seg button + button { border-left:1px solid var(--edge2); }
+  .seg button[aria-pressed="true"] { background:var(--navy); color:#fff; }
+  .hidden { display:none; }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.ae { background:rgba(179,33,58,0.10); border-color:rgba(179,33,58,0.28); }
+  .ro.ae .v { color:var(--ae); }
+  .hint { margin:0; text-align:center; font-size:11.5px; color:var(--ink3); line-height:1.45; }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" aria-label="Gain and effective area versus frequency"></canvas>
+
+  <div class="controls">
+    <div class="ctl">
+      <div class="seg" id="modes">
+        <button id="m-dish" type="button" aria-pressed="true">Physical dish</button>
+        <button id="m-gain" type="button" aria-pressed="false">Fixed gain</button>
+      </div>
+    </div>
+    <div class="ctl" id="ctl-dia">
+      <label>Dish D</label>
+      <input type="range" id="dia" min="0.3" max="3" step="0.1" value="1.2">
+      <span class="val" id="d-val">1.2 m</span>
+    </div>
+    <div class="ctl" id="ctl-eff">
+      <label class="mixed">&#949;<sub>ap</sub></label>
+      <input type="range" id="eff" min="30" max="80" step="1" value="60">
+      <span class="val" id="e-val">60 %</span>
+    </div>
+    <div class="ctl hidden" id="ctl-gain">
+      <label>Gain G</label>
+      <input type="range" id="gain" min="0" max="40" step="0.5" value="20">
+      <span class="val" id="g-val">20.0 dBi</span>
+    </div>
+    <div class="ctl">
+      <label>Freq f</label>
+      <input type="range" id="freq" min="1" max="30" step="0.5" value="10">
+      <span class="val" id="f-val">10.0 GHz</span>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">wavelength</span><span class="v" id="r-lam">—</span></div>
+    <div class="ro"><span class="k">gain</span><span class="v" id="r-gain">—</span></div>
+    <div class="ro ae"><span class="k">effective area A&#8337;</span><span class="v" id="r-ae">—</span></div>
+    <div class="ro"><span class="k" id="lbl-extra">physical area</span><span class="v" id="r-extra">—</span></div>
+  </div>
+
+  <p class="hint" id="explain">—</p>
+</div>
+
+<script>
+'use strict';
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C = 3e8;                       // m/s
+const FMIN = 1, FMAX = 30;           // GHz
+const state = { mode:'dish', D:1.2, eff:0.60, Gdbi:20, f:10 };
+
+// returns {G_dbi, Ae, Aphys|null} at frequency f (GHz) for current mode/params
+function model(fGHz) {
+  const lam = C / (fGHz * 1e9);
+  if (state.mode === 'dish') {
+    const Aphys = Math.PI * (state.D/2)**2;
+    const Ae = state.eff * Aphys;                 // constant with f
+    const Glin = 4*Math.PI*Ae / (lam*lam);
+    return { lam, G_dbi: 10*Math.log10(Glin), Ae, Aphys };
+  } else {
+    const Glin = Math.pow(10, state.Gdbi/10);     // constant with f
+    const Ae = lam*lam*Glin / (4*Math.PI);        // shrinks as λ²
+    return { lam, G_dbi: state.Gdbi, Ae, Aphys: null };
+  }
+}
+
+// ---- controls ----
+const el = id => document.getElementById(id);
+el('m-dish').addEventListener('click', ()=>setMode('dish'));
+el('m-gain').addEventListener('click', ()=>setMode('gain'));
+function setMode(m){
+  state.mode = m;
+  el('m-dish').setAttribute('aria-pressed', m==='dish' ? 'true' : 'false');
+  el('m-gain').setAttribute('aria-pressed', m==='gain' ? 'true' : 'false');
+  el('ctl-dia').classList.toggle('hidden', m!=='dish');
+  el('ctl-eff').classList.toggle('hidden', m!=='dish');
+  el('ctl-gain').classList.toggle('hidden', m!=='gain');
+  el('lbl-extra').innerHTML = (m==='dish') ? 'physical area' : 'A\u2091 at 1 GHz';
+  draw();
+}
+el('dia').addEventListener('input',e=>{state.D=parseFloat(e.target.value);el('d-val').textContent=state.D.toFixed(1)+' m';draw();});
+el('eff').addEventListener('input',e=>{state.eff=parseFloat(e.target.value)/100;el('e-val').textContent=e.target.value+' %';draw();});
+el('gain').addEventListener('input',e=>{state.Gdbi=parseFloat(e.target.value);el('g-val').textContent=state.Gdbi.toFixed(1)+' dBi';draw();});
+el('freq').addEventListener('input',e=>{state.f=parseFloat(e.target.value);el('f-val').textContent=state.f.toFixed(1)+' GHz';draw();});
+
+const canvas = el('plot'), ctx = canvas.getContext('2d');
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=360;
+let SCL=1;
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(canvas);
+  SCL=Math.min(1, wCss/DESIGN_W);
+/* Narrow: the canvases stack (or the control and readout rows do), so the parts
+   ADD instead of sharing a row -- which puts the widget past the frame budget
+   and makes it scroll inside its own iframe. Every curve and control stays; the
+   canvas just gets a shorter design box. Shrinking the design height rather
+   than the bitmap keeps text full size and the composition undistorted. */
+var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:430px)') : null;
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.58) : h; }
+  const w=wCss/SCL, h=SQ(Math.max(280,Math.min(w*0.40,380)));
+  setSize(canvas,wCss,h*SCL,dpr);
+  ctx.setTransform(dpr*SCL,0,0,dpr*SCL,0,0); draw();
+}
+window.addEventListener('resize',fit);
+
+function niceCeil(v){ const p=Math.pow(10,Math.floor(Math.log10(v))); const m=v/p;
+  return (m<=1?1:m<=2?2:m<=5?5:10)*p; }
+
+function draw(){
+  const dpr=window.devicePixelRatio||1, w=canvas.width/(dpr*SCL), h=canvas.height/(dpr*SCL);
+  ctx.clearRect(0,0,w,h);
+  const mL=52,mR=58,mT=28,mB=42, pW=w-mL-mR, pH=h-mT-mB;
+
+  // sample curves
+  const N=120, fs=[], gs=[], aes=[];
+  let aeMax=0, gMax=0;
+  for(let i=0;i<=N;i++){ const f=FMIN+(FMAX-FMIN)*i/N; const m=model(f);
+    fs.push(f); gs.push(m.G_dbi); aes.push(m.Ae); aeMax=Math.max(aeMax,m.Ae); gMax=Math.max(gMax,m.G_dbi); }
+  const G_AX = Math.max(30, Math.ceil((gMax+3)/10)*10);
+  const AE_AX = niceCeil(aeMax*1.1);
+
+  const xFor=f=>mL+((f-FMIN)/(FMAX-FMIN))*pW;
+  const yG=g=>mT+(1-g/G_AX)*pH;
+  const yA=a=>mT+(1-a/AE_AX)*pH;
+
+  // grid
+  ctx.strokeStyle='#eef3f8'; ctx.lineWidth=1;
+  for(let f=FMIN; f<=FMAX; f+=5){ ctx.beginPath(); ctx.moveTo(xFor(f),mT); ctx.lineTo(xFor(f),mT+pH); ctx.stroke(); }
+  ctx.strokeStyle='#cddce9'; ctx.strokeRect(mL,mT,pW,pH);
+
+  // left axis (gain) ticks
+  ctx.fillStyle=cssVar('--gain'); ctx.font='10px Inter,sans-serif'; ctx.textAlign='right'; ctx.textBaseline='middle';
+  for(let g=0; g<=G_AX; g+=10){ ctx.fillText(g.toFixed(0), mL-6, yG(g)); }
+  // right axis (Ae) ticks
+  ctx.fillStyle=cssVar('--ae'); ctx.textAlign='left';
+  for(let k=0;k<=4;k++){ const a=AE_AX*k/4; ctx.fillText(a.toFixed(a<1?2:1), mL+pW+6, yA(a)); }
+
+  // x ticks
+  ctx.fillStyle='#5b6573'; ctx.textAlign='center'; ctx.textBaseline='top';
+  for(let f=FMIN;f<=FMAX;f+=5){ ctx.fillText(f.toFixed(0), xFor(f), mT+pH+5); }
+  // axis titles
+  ctx.fillStyle='#3b4651'; ctx.font='600 12px Inter,sans-serif';
+  ctx.fillText('frequency f  (GHz)', mL+pW/2, mT+pH+22);
+  ctx.save(); ctx.translate(14,mT+pH/2); ctx.rotate(-Math.PI/2);
+  ctx.fillStyle=cssVar('--gain'); ctx.textAlign='center'; ctx.fillText('Gain (dBi)',0,0); ctx.restore();
+  ctx.save(); ctx.translate(w-14,mT+pH/2); ctx.rotate(Math.PI/2);
+  ctx.fillStyle=cssVar('--ae'); ctx.textAlign='center'; ctx.fillText('Aₑ  (m²)',0,0); ctx.restore();
+
+  // curves
+  const line=(vals,yf,col)=>{ ctx.strokeStyle=col; ctx.lineWidth=2.5; ctx.beginPath();
+    for(let i=0;i<=N;i++){ const x=xFor(fs[i]), y=yf(vals[i]); i?ctx.lineTo(x,y):ctx.moveTo(x,y);} ctx.stroke(); };
+  line(gs,yG,cssVar('--gain'));
+  line(aes,yA,cssVar('--ae'));
+
+  // current-frequency marker
+  const m=model(state.f);
+  ctx.strokeStyle=cssVar('--marker'); ctx.setLineDash([4,3]); ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(xFor(state.f),mT); ctx.lineTo(xFor(state.f),mT+pH); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle=cssVar('--gain'); ctx.beginPath(); ctx.arc(xFor(state.f),yG(m.G_dbi),4,0,7); ctx.fill();
+  ctx.fillStyle=cssVar('--ae');   ctx.beginPath(); ctx.arc(xFor(state.f),yA(m.Ae),4,0,7); ctx.fill();
+
+  // legend
+  ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.font='700 11.5px Inter,sans-serif';
+  ctx.fillStyle=cssVar('--gain'); ctx.fillRect(mL+8,mT+6,14,3); ctx.fillText('Gain',mL+26,mT+8);
+  ctx.fillStyle=cssVar('--ae');   ctx.fillRect(mL+8,mT+20,14,3); ctx.fillText('Effective area Aₑ',mL+26,mT+22);
+
+  updateReadout(m);
+}
+
+function updateReadout(m){
+  el('r-lam').textContent = (m.lam*100).toFixed(2)+' cm';
+  el('r-gain').textContent = m.G_dbi.toFixed(1)+' dBi';
+  el('r-ae').textContent = m.Ae.toFixed(3)+' m²';
+  if(state.mode==='dish'){
+    el('r-extra').textContent = m.Aphys.toFixed(3)+' m²';
+    el('explain').innerHTML =
+      'The dish’s <b>physical area is fixed</b>, so A<sub>e</sub> = ε·A<sub>phys</sub> '+
+      '<b>does not change</b> with f — but the same aperture spans many more λ² as f rises, so '+
+      '<b style="color:var(--gain)">gain climbs as f²</b>. That is why high-gain dishes are used up high.';
+  } else {
+    const ae1 = model(1).Ae;
+    el('r-extra').textContent = ae1.toFixed(3)+' m²';
+    el('explain').innerHTML =
+      'Here <b>gain is held fixed</b> (a scaled element, not a fixed dish). Then A<sub>e</sub> = (λ²/4π)G '+
+      '<b style="color:var(--ae)">shrinks as λ²</b> — higher f, smaller capture area for the same gain.';
+  }
+}
+
+fit();
+</script>
+</body>
+</html>

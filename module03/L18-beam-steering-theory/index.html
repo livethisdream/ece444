@@ -1,0 +1,1083 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L18 - Beam Steering Theory &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab 2 — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l18-beam-steering-theory">
+<h1>L18 - Beam Steering Theory<a class="headerlink" href="#l18-beam-steering-theory" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Beam Steering Theory</h1>
+<div class="title-rule"></div>
+<p>The phase each PHASER element needs to steer the beam to a commanded angle, and what the steered beam looks like.</p>
+<p>Lesson 18 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-slides">
+<div class="wrap docutils container">
+<p class="rubric">Slides</p>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L18-beam-steering-theory.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L18-beam-steering-theory.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L18-beam-steering-theory.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 3">
+  <li>I can calculate the phase weights required to steer a beam to a given angle and predict the resulting array pattern.</li>
+</ol>
+<div class="depth docutils container">
+<p>Lesson 17 put the PHASER in front of you: eight patch elements in a row, two
+ADAR1000 beamformer chips that set a phase on every element, and the backend
+code that writes the steering ramp <code class="docutils literal notranslate"><span class="pre">i*PhDelta</span></code> to them. In the GUI, Beam
+Steering’s Steer Angle sets that ramp, and Phase Control adds per-element
+offsets on top of it. Nothing so far has said what the ramp should be. We derive the
+element-to-element phase from the arrival geometry, turn it into the eight
+settings the hardware accepts, predict what the steered pattern looks like, and
+then read the process backwards — given a set of phases, find the angle the
+array is pointing.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-time-alignment">
+<div class="wrap docutils container">
+<p class="rubric">Time Alignment</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/steering-delay.html?lock=1"
+        width="100%" height="463"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="A plane wave crossing the eight-element array, the commanded delays that align it, and the two ADAR1000 sums">
+</iframe>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<ul class="simple">
+<li><p>Eight elements in a row, <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span> apart, with no phase applied.</p></li>
+<li><p>A plane wave from <span class="math notranslate nohighlight">\(\theta_0\)</span> off broadside reaches them one after another, not all at once.</p></li>
+<li><p>Undoing those arrival differences makes all eight signals add in phase.</p></li>
+</ul>
+<p>Eight elements sit in a row with no phase applied, spaced
+<span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span> apart, and a plane wave arrives from an angle <span class="math notranslate nohighlight">\(\theta_0\)</span>
+measured from broadside. The wavefront reaches the element nearest the source
+first and each successive element later.</p>
+<p>The widget opens with the steer angle locked to the source, so the commanded
+delays line all eight signals up and each ADAR1000’s four-element sum adds in
+phase with the other’s. Clear the lock and move the steer angle away from the
+source: the delays no longer match the arrival times, the two chip sums part,
+and the total shrinks.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-path-time-and-phase">
+<div class="wrap docutils container">
+<p class="rubric">Path, Time, and Phase</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Delta r &amp;= d\sin\theta_0 \\
+\Delta t &amp;= \frac{\Delta r}{c} = \frac{d\sin\theta_0}{c} \\
+\Delta\phi &amp;= \omega\ \Delta t = kd\sin\theta_0
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\Delta r\)</span> is the extra path between neighbors; element <span class="math notranslate nohighlight">\(n\)</span> sees <span class="math notranslate nohighlight">\(n\)</span> times each quantity.</p></li>
+<li><p>At <span class="math notranslate nohighlight">\(\theta_0 = 30^\circ\)</span>: <span class="math notranslate nohighlight">\(7\ \text{mm}\)</span> and about <span class="math notranslate nohighlight">\(23\ \text{ps}\)</span> per element.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-path-difference.svg"
+     alt="A plane wave arriving 30 degrees off broadside reaches element 2 first; the extra path to element 1 is half the spacing d"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Look at two neighboring elements. The wavefront that has just touched one of
+them still has to travel a short leg before it touches the other. That leg is
+one side of a right triangle whose hypotenuse is the element spacing <span class="math notranslate nohighlight">\(d\)</span> and
+whose angle at the element is <span class="math notranslate nohighlight">\(\theta_0\)</span>, so its length is</p>
+<div class="math notranslate nohighlight">
+\[\text{extra path} = d\sin\theta_0.\]</div>
+<p>Element <span class="math notranslate nohighlight">\(n\)</span> sits <span class="math notranslate nohighlight">\(n\)</span> spacings from element 0, so its path runs
+<span class="math notranslate nohighlight">\(n\ d\sin\theta_0\)</span> shorter — it sees the wave that much sooner.</p>
+<p>Dividing the path difference by the speed of light gives the arrival-time
+difference between neighbors:</p>
+<div class="math notranslate nohighlight">
+\[\Delta t = \frac{d\sin\theta_0}{c}.\]</div>
+<p>For the course array steered to <span class="math notranslate nohighlight">\(30^\circ\)</span>, that is <span class="math notranslate nohighlight">\(7\ \text{mm}\)</span> of path and
+about <span class="math notranslate nohighlight">\(23\ \text{ps}\)</span> of arrival-time difference per element.</p>
+<p>Now convert the time offset into a phase. A time offset of <span class="math notranslate nohighlight">\(\Delta t\)</span> at
+frequency <span class="math notranslate nohighlight">\(f\)</span> shifts a sinusoid’s phase by <span class="math notranslate nohighlight">\(\omega\Delta t\)</span>, so the incoming
+wave produces an element-to-element phase difference of</p>
+<div class="math notranslate nohighlight">
+\[\Delta\phi = \omega\Delta t = \frac{2\pi f}{c}\ d\sin\theta_0 = kd\sin\theta_0 = 2\pi\frac{d}{\lambda}\sin\theta_0.\]</div>
+<p>Element <span class="math notranslate nohighlight">\(n\)</span> receives the wave <span class="math notranslate nohighlight">\(n\ \Delta t\)</span> before element 0, so its signal
+leads element 0’s by <span class="math notranslate nohighlight">\(n\ \omega\Delta t = n\ \Delta\phi\)</span>. To line the eight
+signals up, the phase shifter on element <span class="math notranslate nohighlight">\(n\)</span> delays it by that same
+<span class="math notranslate nohighlight">\(n\ \Delta\phi\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-reading-the-progressive-phase">
+<div class="wrap docutils container">
+<p class="rubric">Reading the Progressive Phase</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\Delta\phi = 2\pi\frac{d}{\lambda}\sin\theta_0\]</div>
+<ul class="simple">
+<li><p>Broadside needs none: all phases at zero point the beam at <span class="math notranslate nohighlight">\(0^\circ\)</span>.</p></li>
+<li><p>It follows <span class="math notranslate nohighlight">\(\sin\theta_0\)</span>: <span class="math notranslate nohighlight">\(0^\circ\)</span> to <span class="math notranslate nohighlight">\(10^\circ\)</span> needs <span class="math notranslate nohighlight">\(30.1^\circ\)</span>, <span class="math notranslate nohighlight">\(80^\circ\)</span> to <span class="math notranslate nohighlight">\(90^\circ\)</span> only <span class="math notranslate nohighlight">\(2.6^\circ\)</span>.</p></li>
+<li><p>It scales with <span class="math notranslate nohighlight">\(d/\lambda\)</span>: a higher frequency needs more phase per element.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This is the <strong>progressive phase</strong>, and it is the equation the rest of Module 3
+runs on. Read what it says. At broadside, <span class="math notranslate nohighlight">\(\sin\theta_0 = 0\)</span> and no phase is
+needed, which is why the array points to <span class="math notranslate nohighlight">\(0^\circ\)</span> with every phase set to zero.
+The phase grows with the <em>sine</em> of the steer angle rather than with the angle,
+so the same <span class="math notranslate nohighlight">\(10^\circ\)</span> of extra scan needs much less added phase near endfire
+than it does near broadside: on the course array, steering from <span class="math notranslate nohighlight">\(0^\circ\)</span> to
+<span class="math notranslate nohighlight">\(10^\circ\)</span> takes <span class="math notranslate nohighlight">\(30.1^\circ\)</span> of added phase per element, and steering from
+<span class="math notranslate nohighlight">\(80^\circ\)</span> to <span class="math notranslate nohighlight">\(90^\circ\)</span> takes <span class="math notranslate nohighlight">\(2.6^\circ\)</span>. And the phase scales with the electrical spacing
+<span class="math notranslate nohighlight">\(d/\lambda\)</span>: the same array asked to steer the same angle needs more phase per
+element as the frequency goes up.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-key-point">
+<div class="wrap docutils container">
+<p class="rubric">Key Point</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p><span class="math notranslate nohighlight">\(\Delta\phi = kd\sin\theta_0\)</span> converts a geometric path difference into an
+electrical one. The phase table, the steered pattern, and the inverse problem
+all follow from this one relation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-single-frequency-validity">
+<div class="wrap docutils container">
+<p class="rubric">Single-Frequency Validity</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>A true time delay steers the beam to <span class="math notranslate nohighlight">\(\theta_0\)</span> at every frequency.</p></li>
+<li><p>A phase shift equals that delay at one frequency only, the one used for <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
+<li><p>Elsewhere the beam points slightly off <span class="math notranslate nohighlight">\(\theta_0\)</span>: beam squint, which L26 quantifies.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><span class="math notranslate nohighlight">\(\Delta t\)</span> is a true delay and <span class="math notranslate nohighlight">\(\Delta\phi\)</span> is a phase shift, and the two are
+equal at exactly one frequency, the one used to compute <span class="math notranslate nohighlight">\(k\)</span>. A true time delay
+would steer the beam to <span class="math notranslate nohighlight">\(\theta_0\)</span> at every frequency in the band; a phase
+shifter steers it to <span class="math notranslate nohighlight">\(\theta_0\)</span> only at the design frequency and to a slightly
+different angle everywhere else. That difference has a name, beam squint, and
+L26 quantifies it. For now, every phase we compute today is correct only at
+that frequency.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-sign-of-the-compensating-ramp">
+<div class="wrap docutils container">
+<p class="rubric">Sign of the Compensating Ramp</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\phi_n = +n\ \Delta\phi, \qquad n = 0, 1, \ldots, 7\]</div>
+<ul class="simple">
+<li><p>Element <span class="math notranslate nohighlight">\(n\)</span> leads element 0 by <span class="math notranslate nohighlight">\(n\ \Delta\phi\)</span>; the ADAR1000 delays it by that amount.</p></li>
+<li><p>A positive ramp steers to <span class="math notranslate nohighlight">\(+\theta_0\)</span>, as the GUI’s Steer Angle does.</p></li>
+<li><p>Element 0 sits at zero; a negative <span class="math notranslate nohighlight">\(\theta_0\)</span> runs the ramp downward.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The array’s own geometry gives element <span class="math notranslate nohighlight">\(n\)</span> a phase lead of <span class="math notranslate nohighlight">\(n\ \Delta\phi\)</span>
+over element 0. To make all eight signals add in phase, the beamformer delays
+element <span class="math notranslate nohighlight">\(n\)</span> by that same amount. The ADAR1000’s phase setting is a delay, so
+the phase commanded to element <span class="math notranslate nohighlight">\(n\)</span> is the lead itself:</p>
+<div class="math notranslate nohighlight">
+\[\phi_n = +n\ \Delta\phi, \qquad n = 0, 1, \ldots, 7.\]</div>
+<p>Element 0 is the reference and gets zero. Each element after it is delayed one
+step more. A positive ramp steers the beam to <span class="math notranslate nohighlight">\(+\theta_0\)</span>, which is the
+convention of the GUI’s Steer Angle and of the backend code L17 read, which
+writes <code class="docutils literal notranslate"><span class="pre">i*PhDelta</span></code> to element <code class="docutils literal notranslate"><span class="pre">i</span></code>. Flipping the sign of <span class="math notranslate nohighlight">\(\theta_0\)</span> flips the
+sign of <span class="math notranslate nohighlight">\(\Delta\phi\)</span> and runs the ramp the other way, which is how the same
+eight channels cover both sides of broadside.</p>
+<p>L16 wrote the same steering as a complex weight, <span class="math notranslate nohighlight">\(a_n = \vert a_n\vert\ e^{-jn\beta}\)</span>
+with <span class="math notranslate nohighlight">\(\beta = \Delta\phi\)</span>. A delay of <span class="math notranslate nohighlight">\(n\ \Delta\phi\)</span> multiplies element <span class="math notranslate nohighlight">\(n\)</span>’s
+signal by <span class="math notranslate nohighlight">\(e^{-jn\Delta\phi}\)</span>, so the weight carries a minus sign that the
+setting does not. That weight phase is the one place <span class="math notranslate nohighlight">\(-n\ \Delta\phi\)</span> survives;
+every phase setting in this lesson and in the lab is <span class="math notranslate nohighlight">\(+n\ \Delta\phi\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-course-array">
+<div class="wrap docutils container">
+<p class="rubric">The Course Array</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>At <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span> with <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span>: <span class="math notranslate nohighlight">\(\lambda = 29.1\ \text{mm}\)</span> and <span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span>.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+kd &amp;= 2\pi(0.481) \\
+&amp;= 3.02\ \text{rad} = 173.2^\circ \\
+\Delta\phi &amp;= 173.2^\circ \times \sin\theta_0
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>One number, <span class="math notranslate nohighlight">\(kd\)</span>, sets <span class="math notranslate nohighlight">\(\Delta\phi\)</span> for every steer angle on this array.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>For the course array at the workshop frequency, <span class="math notranslate nohighlight">\(\lambda = 29.1\ \text{mm}\)</span>,
+<span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[kd = 2\pi(0.481) = 3.02\ \text{rad} = 173.2^\circ.\]</div>
+<p>Multiplying <span class="math notranslate nohighlight">\(kd\)</span> by <span class="math notranslate nohighlight">\(\sin\theta_0\)</span> gives <span class="math notranslate nohighlight">\(\Delta\phi\)</span> for any steer angle on
+this array.</p>
+<p>The eight elements sit on two ADAR1000s, elements 0 to 3 on one and 4 to 7 on
+the other, and each chip sums its four into one channel; L17’s “The Hybrid
+Beamformer” adds the two channels digitally. The ramp continues across the chip
+boundary, so <span class="math notranslate nohighlight">\(\phi_4 = 4\ \Delta\phi\)</span> is set on the second chip. It steers the
+whole array only if the two subarray channels are phase-matched where they are
+summed. The GUI’s Calibrate step measures each element’s phase against its
+neighbor, including the element 3 and 4 pair that spans the two chips, so the
+mismatch between the subarrays is folded into the offsets of elements 4 to 7.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-worked-example-phase-table-at-30">
+<div class="wrap docutils container">
+<p class="rubric">Worked Example: Phase Table at 30°</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\Delta\phi = 173.2^\circ \times \sin 30^\circ = 86.6^\circ\]</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(n\)</span></p></th>
+<th class="head text-left"><p>0</p></th>
+<th class="head text-left"><p>1</p></th>
+<th class="head text-left"><p>2</p></th>
+<th class="head text-left"><p>3</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>set</p></td>
+<td class="text-left"><p>0</p></td>
+<td class="text-left"><p>86.6</p></td>
+<td class="text-left"><p>173.2</p></td>
+<td class="text-left"><p>259.8</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong><span class="math notranslate nohighlight">\(n\)</span></strong></p></td>
+<td class="text-left"><p><strong>4</strong></p></td>
+<td class="text-left"><p><strong>5</strong></p></td>
+<td class="text-left"><p><strong>6</strong></p></td>
+<td class="text-left"><p><strong>7</strong></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>set</p></td>
+<td class="text-left"><p>346.4</p></td>
+<td class="text-left"><p>73.0</p></td>
+<td class="text-left"><p>159.6</p></td>
+<td class="text-left"><p>246.2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>Whole turns wrap each <span class="math notranslate nohighlight">\(n(86.6^\circ)\)</span> into <span class="math notranslate nohighlight">\(0^\circ\)</span> to <span class="math notranslate nohighlight">\(360^\circ\)</span>: <span class="math notranslate nohighlight">\(433.0^\circ\)</span> becomes <span class="math notranslate nohighlight">\(73.0^\circ\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-phase-ramp.svg"
+     alt="The 30-degree ramp rising from 0 to 606.2 degrees, and the wrapped settings the hardware is given, with one turn removed from elements 5 to 7"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — the phase table for <span class="math notranslate nohighlight">\(\theta_0 = 30^\circ\)</span></p>
+<p>At <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span> with <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\Delta\phi = 173.2^\circ \times \sin 30^\circ = 173.2^\circ \times 0.500 = 86.6^\circ.\]</div>
+<p>Element <span class="math notranslate nohighlight">\(n\)</span> is commanded to <span class="math notranslate nohighlight">\(n(86.6^\circ)\)</span>. The ADAR1000 accepts a phase in
+<span class="math notranslate nohighlight">\(0^\circ\)</span> to <span class="math notranslate nohighlight">\(360^\circ\)</span>, so each value is wrapped by subtracting whole turns
+until it lands in that range.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(n\)</span></p></th>
+<th class="head text-left"><p>0</p></th>
+<th class="head text-left"><p>1</p></th>
+<th class="head text-left"><p>2</p></th>
+<th class="head text-left"><p>3</p></th>
+<th class="head text-left"><p>4</p></th>
+<th class="head text-left"><p>5</p></th>
+<th class="head text-left"><p>6</p></th>
+<th class="head text-left"><p>7</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\phi_n\)</span> (ramp)</p></td>
+<td class="text-left"><p>0</p></td>
+<td class="text-left"><p>86.6</p></td>
+<td class="text-left"><p>173.2</p></td>
+<td class="text-left"><p>259.8</p></td>
+<td class="text-left"><p>346.4</p></td>
+<td class="text-left"><p>433.0</p></td>
+<td class="text-left"><p>519.6</p></td>
+<td class="text-left"><p>606.2</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>turns removed</p></td>
+<td class="text-left"><p>0</p></td>
+<td class="text-left"><p>0</p></td>
+<td class="text-left"><p>0</p></td>
+<td class="text-left"><p>0</p></td>
+<td class="text-left"><p>0</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-360\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-360\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-360\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\phi_n\)</span> (set)</p></td>
+<td class="text-left"><p>0</p></td>
+<td class="text-left"><p>86.6</p></td>
+<td class="text-left"><p>173.2</p></td>
+<td class="text-left"><p>259.8</p></td>
+<td class="text-left"><p>346.4</p></td>
+<td class="text-left"><p>73.0</p></td>
+<td class="text-left"><p>159.6</p></td>
+<td class="text-left"><p>246.2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The bottom row is what goes into the hardware. It climbs to element 4, drops
+back by a turn, and climbs again, a sawtooth rather than a single ramp, and it
+is correct: a phase of <span class="math notranslate nohighlight">\(433.0^\circ\)</span> and a phase of <span class="math notranslate nohighlight">\(73.0^\circ\)</span> produce the
+same field from that element.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-phase-wrapping-and-true-delay">
+<div class="wrap docutils container">
+<p class="rubric">Phase Wrapping and True Delay</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>At one frequency, whole turns change nothing the array can detect.</p></li>
+<li><p>The wrapped table loses the record of the true delay.</p></li>
+<li><p>So wideband systems use time-delay units instead of, or alongside, phase shifters.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Wrapping discards whole turns, and at a single frequency nothing is lost by
+discarding them. The array cannot tell the difference. What the wrapped table
+does lose is the record of the true delay, which is the reason a wideband system
+uses time-delay units instead of, or alongside, phase shifters.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-steered-pattern">
+<div class="wrap docutils container">
+<p class="rubric">The Steered Pattern</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\psi &amp;= kd\sin\theta - \Delta\phi \\
+&amp;= kd\left(\sin\theta - \sin\theta_0\right)
+\end{aligned}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}\]</div>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Element <span class="math notranslate nohighlight">\(n\)</span> arrives with phase <span class="math notranslate nohighlight">\(n\ kd\sin\theta\)</span>; its delay subtracts <span class="math notranslate nohighlight">\(n\ \Delta\phi\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Delta\phi\)</span> is L16’s <span class="math notranslate nohighlight">\(\beta\)</span>: the function is unchanged, only its argument.</p></li>
+<li><p>The peak at <span class="math notranslate nohighlight">\(\psi = 0\)</span> now means <span class="math notranslate nohighlight">\(\sin\theta = \sin\theta_0\)</span>: the beam points at <span class="math notranslate nohighlight">\(\theta_0\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>L16 built the array factor for a uniform line of <span class="math notranslate nohighlight">\(N\)</span> elements with a progressive
+phase between them. With the ramp <span class="math notranslate nohighlight">\(\phi_n = n\ \Delta\phi\)</span> set as a delay,
+element <span class="math notranslate nohighlight">\(n\)</span> contributes a propagation phase <span class="math notranslate nohighlight">\(n\ kd\sin\theta\)</span> and its delay
+takes away <span class="math notranslate nohighlight">\(n\ \Delta\phi\)</span>, so the array-factor argument becomes</p>
+<div class="math notranslate nohighlight">
+\[\psi = kd\sin\theta - \Delta\phi = kd\left(\sin\theta - \sin\theta_0\right),\]</div>
+<div class="math notranslate nohighlight">
+\[AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}.\]</div>
+<p>The <span class="math notranslate nohighlight">\(\Delta\phi\)</span> here is the <span class="math notranslate nohighlight">\(\beta\)</span> of L16’s steering phase. The function is
+unchanged; only its argument has shifted. The peak still sits at <span class="math notranslate nohighlight">\(\psi = 0\)</span>,
+which now means <span class="math notranslate nohighlight">\(\sin\theta = \sin\theta_0\)</span>, so the main lobe points at the
+commanded angle.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-rigid-shift-in-sine-space">
+<div class="wrap docutils container">
+<p class="rubric">Rigid Shift in Sine Space</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\sin\theta_{\text{null}} = \sin\theta_0 \pm \frac{m\lambda}{Nd}\]</div>
+<ul class="simple">
+<li><p>Against <span class="math notranslate nohighlight">\(\sin\theta\)</span> the pattern slides unchanged; against <span class="math notranslate nohighlight">\(\theta\)</span> it stretches as it moves.</p></li>
+<li><p>At <span class="math notranslate nohighlight">\(30^\circ\)</span>, <span class="math notranslate nohighlight">\(\lambda/Nd = 0.260\)</span>: nulls at <span class="math notranslate nohighlight">\(13.9^\circ\)</span> and <span class="math notranslate nohighlight">\(49.5^\circ\)</span>, <span class="math notranslate nohighlight">\(16.1^\circ\)</span> and <span class="math notranslate nohighlight">\(19.5^\circ\)</span> from the peak, wider toward endfire.</p></li>
+<li><p>The upper <span class="math notranslate nohighlight">\(m = 2\)</span> null would need <span class="math notranslate nohighlight">\(\sin\theta = 1.020\)</span>: no real angle.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-sin-space.svg"
+     alt="The 30-degree pattern against angle, with nulls at 13.9 and 49.5 degrees, and against sine of angle, the broadside pattern slid 0.5 with nulls at 0.240 and 0.760"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Every other feature of the pattern moves with it, but <em>rigidly in <span class="math notranslate nohighlight">\(\sin\theta\)</span>,
+not in <span class="math notranslate nohighlight">\(\theta\)</span></em>. Plot the pattern against <span class="math notranslate nohighlight">\(\sin\theta\)</span> and steering slides the
+whole curve sideways without changing its shape. Plot it against <span class="math notranslate nohighlight">\(\theta\)</span> and
+the same curve stretches as it moves, which is the beam broadening derived in
+“Beam Broadening” below.</p>
+<p>The nulls follow the same substitution. <span class="math notranslate nohighlight">\(AF_N\)</span> vanishes when <span class="math notranslate nohighlight">\(N\psi/2\)</span> is a
+nonzero multiple of <span class="math notranslate nohighlight">\(\pi\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[\sin\theta_{\text{null}} = \sin\theta_0 \pm \frac{m\lambda}{Nd}, \qquad m = 1, 2, \ldots,\ m \ne N, 2N, \ldots\]</div>
+<p>At a multiple of <span class="math notranslate nohighlight">\(N\)</span> the numerator and the denominator vanish together, and that
+point is a grating lobe, not a null. L16’s “Grating Lobes” puts the first one at
+<span class="math notranslate nohighlight">\(\sin\theta_g = \sin\theta_0 - \lambda/d\)</span> and keeps it out of real space while
+<span class="math notranslate nohighlight">\(d &lt; \lambda/(1 + \vert\sin\theta_0\vert)\)</span>. Steered to <span class="math notranslate nohighlight">\(30^\circ\)</span>, the course array
+would need <span class="math notranslate nohighlight">\(d &gt; 19.4\ \text{mm}\)</span> for one to appear, and a full <span class="math notranslate nohighlight">\(90^\circ\)</span> scan
+needs only <span class="math notranslate nohighlight">\(d &lt; 14.55\ \text{mm}\)</span>, so the PHASER’s <span class="math notranslate nohighlight">\(14\ \text{mm}\)</span> never shows
+one: at <span class="math notranslate nohighlight">\(30^\circ\)</span> the lobe would sit at <span class="math notranslate nohighlight">\(\sin\theta = -1.58\)</span>.</p>
+<p>For the course array, <span class="math notranslate nohighlight">\(\lambda/Nd = 29.1/112 = 0.260\)</span>. Steered to <span class="math notranslate nohighlight">\(30^\circ\)</span>, the
+two nulls flanking the main lobe are at <span class="math notranslate nohighlight">\(\sin\theta = 0.240\)</span> and
+<span class="math notranslate nohighlight">\(\sin\theta = 0.760\)</span>, or <span class="math notranslate nohighlight">\(13.9^\circ\)</span> and <span class="math notranslate nohighlight">\(49.5^\circ\)</span>. They are no longer
+symmetric about the beam: the main lobe reaches <span class="math notranslate nohighlight">\(16.1^\circ\)</span> below the peak and
+<span class="math notranslate nohighlight">\(19.5^\circ\)</span> above it, wider toward endfire. The nulls are an equal step of
+<span class="math notranslate nohighlight">\(0.260\)</span> apart in <span class="math notranslate nohighlight">\(\sin\theta\)</span>, and a fixed step in <span class="math notranslate nohighlight">\(\sin\theta\)</span> is a larger
+step in <span class="math notranslate nohighlight">\(\theta\)</span> where <span class="math notranslate nohighlight">\(\cos\theta\)</span> is small, since
+<span class="math notranslate nohighlight">\(d\theta = d(\sin\theta)/\cos\theta\)</span>. The <span class="math notranslate nohighlight">\(m = 2\)</span> null on the upper side would
+need <span class="math notranslate nohighlight">\(\sin\theta = 1.020\)</span>, which no real angle satisfies, so that null has left
+the visible region (L16, “Part 4: The Visible Region”) entirely.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-phase-ramp-and-beam">
+<div class="wrap docutils container">
+<p class="rubric">Phase Ramp and Beam</p>
+<div class="depth docutils container">
+<p>Use the widget below to connect the two halves of the lesson. Drag the steer
+angle and watch the eight commanded phases and the main lobe move together, then
+switch the phase display between the wrapped values and the unwrapped ramp — the
+sawtooth is the same physics as the straight line. Switch the x axis to sine and
+the lobe slides along it without changing shape, by <span class="math notranslate nohighlight">\(0.500\)</span> at <span class="math notranslate nohighlight">\(30^\circ\)</span>, the
+rigid shift of the frame before. Set <span class="math notranslate nohighlight">\(\theta_0 = 30^\circ\)</span> and
+check the bars against the worked table above: a positive steer angle gives a
+rising ramp. Then scan out toward <span class="math notranslate nohighlight">\(60^\circ\)</span> and compare the <span class="math notranslate nohighlight">\(-3\)</span> dB width
+printed on the pattern, which is read off the exact array factor, with the HPBW
+readout, which is the <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span> rule: at <span class="math notranslate nohighlight">\(60^\circ\)</span> the rule gives
+<span class="math notranslate nohighlight">\(26.4^\circ\)</span> and the pattern <span class="math notranslate nohighlight">\(30.5^\circ\)</span>.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/beam-steering.html"
+        width="100%" height="427"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Steered pattern and per-element phase ramp for the 8-element course array">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-beam-broadening">
+<div class="wrap docutils container">
+<p class="rubric">Beam Broadening</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Steering widens the beam: a source at <span class="math notranslate nohighlight">\(\theta_0\)</span> sees the array’s projection, shorter by <span class="math notranslate nohighlight">\(\cos\theta_0\)</span>.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+L_{\text{eff}} &amp;= Nd\cos\theta_0 \\
+\theta_{\text{HP}}(\theta_0) &amp;\approx \frac{0.886\ \lambda}{Nd\cos\theta_0} = \frac{\theta_{\text{HP}}(0)}{\cos\theta_0}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>L15’s uniform-aperture beamwidth, in radians, with the projected length.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-broadening.svg"
+     alt="The array's projected length seen from an angle off broadside"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Steering widens the beam because a source at <span class="math notranslate nohighlight">\(\theta_0\)</span> sees the array’s
+projection onto the plane perpendicular to its line of sight, which is shorter
+than the array by <span class="math notranslate nohighlight">\(\cos\theta_0\)</span>.</p>
+<p>The length that matters is <span class="math notranslate nohighlight">\(Nd = 112\ \text{mm}\)</span>, not the <span class="math notranslate nohighlight">\(98\ \text{mm}\)</span>
+between the centers of the first and last elements. L16’s “Part 5: The Array
+as a Sampled Aperture” treats the array as a line source sampled every <span class="math notranslate nohighlight">\(d\)</span>, so
+each element stands for a cell <span class="math notranslate nohighlight">\(d\)</span> wide and the eight cells fill an equivalent
+aperture <span class="math notranslate nohighlight">\(Nd = 3.85\lambda\)</span>. Using <span class="math notranslate nohighlight">\(98\ \text{mm}\)</span> would give <span class="math notranslate nohighlight">\(15.1^\circ\)</span> at
+broadside instead of <span class="math notranslate nohighlight">\(13.2^\circ\)</span>, against <span class="math notranslate nohighlight">\(13.3^\circ\)</span> read off the exact
+array factor. The effective aperture length is therefore</p>
+<div class="math notranslate nohighlight">
+\[L_{\text{eff}} = Nd\cos\theta_0.\]</div>
+<p>L15 gave the half-power beamwidth of a uniform aperture of length <span class="math notranslate nohighlight">\(L\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[\theta_{\text{HP}} = 0.886\ \frac{\lambda}{L}\ \text{rad} = 50.8^\circ\ \frac{\lambda}{L},\]</div>
+<p>which for the course array at broadside is <span class="math notranslate nohighlight">\(0.886(29.1)/112 = 0.2302\ \text{rad} = 13.2^\circ\)</span>.
+Substituting the projected length,</p>
+<div class="math notranslate nohighlight">
+\[\theta_{\text{HP}}(\theta_0) \approx \frac{0.886\ \lambda}{Nd\cos\theta_0}\ \text{rad} = \frac{\theta_{\text{HP}}(0)}{\cos\theta_0}.\]</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-scan-loss">
+<div class="wrap docutils container">
+<p class="rubric">Scan Loss</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\text{scan loss} = 10\log_{10}(\cos\theta_0)\]</div>
+<ul class="simple">
+<li><p>The smaller projected aperture lowers the peak gain: <span class="math notranslate nohighlight">\(-3\)</span> dB at <span class="math notranslate nohighlight">\(60^\circ\)</span>.</p></li>
+<li><p>The array factor’s directivity holds near 7.7 as it scans; the element pattern carries the loss.</p></li>
+<li><p>L22 works out the element factor and the scanned gain.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The beam broadens as <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span>. The same projection argument sets the
+<strong>scan loss</strong> in gain: the aperture the array presents to a source at <span class="math notranslate nohighlight">\(\theta_0\)</span>
+is smaller by <span class="math notranslate nohighlight">\(\cos\theta_0\)</span>, so the peak gain drops by</p>
+<div class="math notranslate nohighlight">
+\[\text{scan loss} = 10\log_{10}(\cos\theta_0)\ \text{dB}.\]</div>
+<p>The array factor alone barely changes its directivity as it scans. For isotropic
+elements it computes to 7.70 at broadside, 7.70 at <span class="math notranslate nohighlight">\(30^\circ\)</span>, 7.78 at
+<span class="math notranslate nohighlight">\(45^\circ\)</span>, and 8.16 at <span class="math notranslate nohighlight">\(60^\circ\)</span>, a slight rise. A linear array’s beam is a
+cone around the array axis, not a pencil. Steering tilts that cone toward the
+axis: its circumference shrinks as <span class="math notranslate nohighlight">\(\cos\theta_0\)</span> while its width in <span class="math notranslate nohighlight">\(\theta\)</span>
+grows as <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span>, so the solid angle the beam fills, and with it the
+directivity, stays about the same. The element pattern, which is not isotropic
+and rolls off away from its own boresight, carries the projected-aperture loss:
+each element’s cell presents a projected area that shrinks as <span class="math notranslate nohighlight">\(\cos\theta\)</span>.
+L22 derives the element factor and the scanned gain; for design estimates, we
+use the scan loss above.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-broadening-and-scan-loss-versus-angle">
+<div class="wrap docutils container">
+<p class="rubric">Broadening and Scan Loss Versus Angle</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(\theta_0\)</span></p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\cos\theta_0\)</span></p></th>
+<th class="head text-left"><p>HPBW</p></th>
+<th class="head text-left"><p>Gain relative to broadside</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(0^\circ\)</span></p></td>
+<td class="text-left"><p>1.000</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.2^\circ\)</span></p></td>
+<td class="text-left"><p>reference</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(30^\circ\)</span></p></td>
+<td class="text-left"><p>0.866</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(15.2^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-0.6\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(45^\circ\)</span></p></td>
+<td class="text-left"><p>0.707</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(18.7^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-1.5\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(60^\circ\)</span></p></td>
+<td class="text-left"><p>0.500</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(26.4^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-3.0\)</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>Exact width at <span class="math notranslate nohighlight">\(60^\circ\)</span> is <span class="math notranslate nohighlight">\(30.5^\circ\)</span>: the rule reads narrow past <span class="math notranslate nohighlight">\(50^\circ\)</span> of scan.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-hpbw-vs-scan.svg"
+     alt="Half-power beamwidth against steer angle: the exact width and the 1/cos rule agree to about 50 degrees and part after it; scan loss falls to minus 3 dB at 60 degrees"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Because the beam broadens and the peak gain falls as the array scans, designers
+specify a scanned array over a limited field of view: at <span class="math notranslate nohighlight">\(60^\circ\)</span> the PHASER’s
+beam is twice as wide as at broadside by the rule (<span class="math notranslate nohighlight">\(2.3\)</span> times, exactly), its
+peak gain is <span class="math notranslate nohighlight">\(3\ \text{dB}\)</span> lower, and scanning further adds little coverage.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span> rule is an approximation, and it reads slightly narrow at
+large scan angles. Measuring the <span class="math notranslate nohighlight">\(-3\)</span> dB width directly off the array factor for
+this array gives <span class="math notranslate nohighlight">\(13.3^\circ\)</span> at broadside and <span class="math notranslate nohighlight">\(19.1^\circ\)</span> at <span class="math notranslate nohighlight">\(45^\circ\)</span>, both
+within a few tenths of the rule, but <span class="math notranslate nohighlight">\(30.5^\circ\)</span> at <span class="math notranslate nohighlight">\(60^\circ\)</span> against the
+rule’s <span class="math notranslate nohighlight">\(26.4^\circ\)</span>. Use the rule for design estimates out to about <span class="math notranslate nohighlight">\(50^\circ\)</span>
+and the pattern itself past that.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-inverse-problem">
+<div class="wrap docutils container">
+<p class="rubric">The Inverse Problem</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic">
+<li><p>Difference neighboring elements: <span class="math notranslate nohighlight">\(\phi_{n+1} - \phi_n\)</span>.</p></li>
+<li><p>Unwrap. Add or subtract <span class="math notranslate nohighlight">\(360^\circ\)</span> from any difference that disagrees with
+the others until all seven agree.</p></li>
+<li><p>That common step is <span class="math notranslate nohighlight">\(\Delta\phi\)</span>.</p></li>
+<li><p>Solve for <span class="math notranslate nohighlight">\(\sin\theta_0\)</span> and take the arcsine:</p>
+<div class="math notranslate nohighlight">
+\[\sin\theta_0 = \frac{\Delta\phi}{kd}\]</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The lab hands you the opposite problem. The GUI, or a data file, gives you eight
+phases, and you have to say where the beam is pointing. Everything you need is
+in <span class="math notranslate nohighlight">\(\phi_n = n\ \Delta\phi\)</span>, run in reverse:</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-worked-example-recovering-the-steer-angle">
+<div class="wrap docutils container">
+<p class="rubric">Worked Example: Recovering the Steer Angle</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\sin\theta_0 &amp;= \frac{59.24^\circ}{173.2^\circ} = 0.342 \\
+\theta_0 &amp;= +20.0^\circ
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Unwrapped, <span class="math notranslate nohighlight">\(\phi_7 = 414.7^\circ\)</span>: seven steps of <span class="math notranslate nohighlight">\(59.24^\circ\)</span>.</p></li>
+<li><p>Rising ramp: positive <span class="math notranslate nohighlight">\(\Delta\phi\)</span>, positive steer angle.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-inverse-unwrap.svg"
+     alt="The eight reported settings as bars, six steps of plus 59.2 or 59.3 degrees and one of minus 300.7, which a restored turn makes 414.7 for element 7: a rising ramp, steer angle plus 20.0 degrees"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — recovering the steer angle</p>
+<p>The beamformer reports these settings:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(n\)</span></p></th>
+<th class="head text-left"><p>0</p></th>
+<th class="head text-left"><p>1</p></th>
+<th class="head text-left"><p>2</p></th>
+<th class="head text-left"><p>3</p></th>
+<th class="head text-left"><p>4</p></th>
+<th class="head text-left"><p>5</p></th>
+<th class="head text-left"><p>6</p></th>
+<th class="head text-left"><p>7</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\phi_n\)</span> (deg)</p></td>
+<td class="text-left"><p>0</p></td>
+<td class="text-left"><p>59.2</p></td>
+<td class="text-left"><p>118.5</p></td>
+<td class="text-left"><p>177.7</p></td>
+<td class="text-left"><p>237.0</p></td>
+<td class="text-left"><p>296.2</p></td>
+<td class="text-left"><p>355.4</p></td>
+<td class="text-left"><p>54.7</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The first six differences are <span class="math notranslate nohighlight">\(59.2^\circ\)</span>, <span class="math notranslate nohighlight">\(59.3^\circ\)</span>, <span class="math notranslate nohighlight">\(59.2^\circ\)</span>,
+<span class="math notranslate nohighlight">\(59.3^\circ\)</span>, <span class="math notranslate nohighlight">\(59.2^\circ\)</span>, and <span class="math notranslate nohighlight">\(59.2^\circ\)</span>. The seventh is
+<span class="math notranslate nohighlight">\(54.7 - 355.4 = -300.7^\circ\)</span>, which is <span class="math notranslate nohighlight">\(59.3^\circ\)</span> once a full turn is
+restored. All seven agree to within the <span class="math notranslate nohighlight">\(0.1^\circ\)</span> rounding of the table, so
+the ramp is uniform. The span of the whole array gives the step most
+precisely: element 7 sits at <span class="math notranslate nohighlight">\(54.7^\circ + 360^\circ = 414.7^\circ\)</span> unwrapped,
+seven steps from element 0, so</p>
+<div class="math notranslate nohighlight">
+\[\Delta\phi = \frac{414.7^\circ}{7} = 59.24^\circ, \qquad \sin\theta_0 = \frac{59.24^\circ}{173.2^\circ} = 0.342, \qquad \theta_0 = +20.0^\circ.\]</div>
+<p>The ramp rises with <span class="math notranslate nohighlight">\(n\)</span> and the steer angle is positive, which follows from the
+sign convention: the commanded phase is <span class="math notranslate nohighlight">\(+n\ \Delta\phi\)</span>, so a rising ramp
+means a positive <span class="math notranslate nohighlight">\(\Delta\phi\)</span> and a beam on the positive side of broadside, the
+side the GUI’s Steer Angle calls positive.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-two-sanity-checks">
+<div class="wrap docutils container">
+<p class="rubric">Two Sanity Checks</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Seven differences that cannot be made to agree: no uniform steering ramp. Look for a calibration offset or a bad readout.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\vert\Delta\phi/kd\vert &gt; 1\)</span>: no real angle fits, so suspect an arithmetic or unit error.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Two checks catch most errors. If the seven differences cannot be made to agree,
+the array is not carrying a uniform steering ramp: it may include a per-element
+calibration offset, or the readout may not reflect the commanded phases. Where
+the odd difference sits says which. An offset <span class="math notranslate nohighlight">\(\delta\)</span> on an interior element
+spoils the two differences on either side of it, one by <span class="math notranslate nohighlight">\(+\delta\)</span> and the next by
+<span class="math notranslate nohighlight">\(-\delta\)</span>. A single odd difference therefore points to an end element, 0 or 7,
+or to the step from element 3 to element 4, where the ramp crosses from one
+ADAR1000 to the other: a phase error between the two subarray channels moves
+elements 4 to 7 together, which is what the GUI’s Calibrate step measures and
+removes. And if <span class="math notranslate nohighlight">\(\vert\Delta\phi/kd\vert\)</span> comes out greater than 1, no real angle produces
+that ramp, which points at an arithmetic or unit error.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-phase-shifter-resolution">
+<div class="wrap docutils container">
+<p class="rubric">Phase-Shifter Resolution</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\text{LSB} = \frac{360^\circ}{2^7} = 2.8125^\circ\]</div>
+<ul class="simple">
+<li><p>The ADAR1000’s phase shifter has 7 bits, so every commanded phase rounds to this grid.</p></li>
+<li><p>At <span class="math notranslate nohighlight">\(30^\circ\)</span>, the <span class="math notranslate nohighlight">\(86.6^\circ\)</span> step is set as 31 steps, <span class="math notranslate nohighlight">\(87.19^\circ\)</span>.</p></li>
+<li><p>L26 computes the effect on sidelobe level and null depth.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The ADAR1000’s phase shifter has 7 bits (L17, “The ADAR1000 Beamformers”), so
+its smallest step is <span class="math notranslate nohighlight">\(360^\circ/128 = 2.8125^\circ\)</span> and every commanded phase
+lands on that grid. The <span class="math notranslate nohighlight">\(86.6^\circ\)</span> step of the <span class="math notranslate nohighlight">\(30^\circ\)</span> table is
+<span class="math notranslate nohighlight">\(30.79\)</span> steps and is set as 31 steps, <span class="math notranslate nohighlight">\(87.19^\circ\)</span>. The backend rounds each
+element’s unwrapped ramp value to the grid before wrapping, so the whole
+<span class="math notranslate nohighlight">\(30^\circ\)</span> ramp is set as 0, 87.19, 174.38, 258.75, 345.94, 73.13, 160.31, and
+<span class="math notranslate nohighlight">\(247.50^\circ\)</span>. L26 computes how much that grid raises the sidelobe level and
+reduces null depth.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-phase-ramp">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Phase Ramp</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta\phi = kd\sin\theta_0\)</span></p></td>
+<td class="text-left"><p>progressive element-to-element phase</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(173.2^\circ \times \sin\theta_0\)</span> for the course array</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\phi_n = +n\ \Delta\phi\)</span></p></td>
+<td class="text-left"><p>commanded ramp (a delay), element <span class="math notranslate nohighlight">\(n\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(86.6^\circ\)</span> per element at <span class="math notranslate nohighlight">\(\theta_0 = 30^\circ\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>wrapping</p></td>
+<td class="text-left"><p>whole turns removed to fit <span class="math notranslate nohighlight">\(0^\circ\)</span> to <span class="math notranslate nohighlight">\(360^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(433.0^\circ\)</span> is set as <span class="math notranslate nohighlight">\(73.0^\circ\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-steered-pattern">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Steered Pattern</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\psi = kd(\sin\theta - \sin\theta_0)\)</span></p></td>
+<td class="text-left"><p>array-factor argument</p></td>
+<td class="text-left"><p>peak where <span class="math notranslate nohighlight">\(\psi = 0\)</span>, so <span class="math notranslate nohighlight">\(\theta = \theta_0\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\sin\theta_{\text{null}} = \sin\theta_0 \pm m\lambda/Nd\)</span></p></td>
+<td class="text-left"><p>null locations</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\lambda/Nd = 0.260\)</span>; nulls at <span class="math notranslate nohighlight">\(13.9^\circ\)</span> and <span class="math notranslate nohighlight">\(49.5^\circ\)</span> for <span class="math notranslate nohighlight">\(\theta_0 = 30^\circ\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-broadening-and-hardware">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Broadening and Hardware</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_{\text{HP}} \approx \theta_{\text{HP}}(0)/\cos\theta_0\)</span></p></td>
+<td class="text-left"><p>beam broadening</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.2^\circ \to 18.7^\circ\)</span> at <span class="math notranslate nohighlight">\(45^\circ\)</span>, <span class="math notranslate nohighlight">\(26.4^\circ\)</span> at <span class="math notranslate nohighlight">\(60^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>scan loss</p></td>
+<td class="text-left"><p>peak gain falls as <span class="math notranslate nohighlight">\(\cos\theta_0\)</span>, carried by the element pattern</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-3\)</span> dB at <span class="math notranslate nohighlight">\(\theta_0 = 60^\circ\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>LSB <span class="math notranslate nohighlight">\(= 360^\circ/2^B\)</span></p></td>
+<td class="text-left"><p>phase-shifter step</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2.8125^\circ\)</span> for the ADAR1000’s 7 bits</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../practice/ECE444_L18_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a class="doc-link doc-key" href="../../practice/ECE444_L18_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>L19: steer the PHASER, sweep, and compare the measured peak and beamwidth with the prediction.</p></li>
+<li><p>The lab redoes the <span class="math notranslate nohighlight">\(30^\circ\)</span> table at the HB100’s <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>: <span class="math notranslate nohighlight">\(88.4^\circ\)</span> per element, E1 to E8.</p></li>
+<li><p>L20-L26: beamwidth, tapering, grating lobes, squint, and quantization.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>L19 puts this on the hardware. You will load the Steering Angle lab preset,
+command a steer angle, sweep, and compare the measured peak against the angle you
+asked for. The lab redoes this lesson’s calculation at the HB100’s
+<span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>, where <span class="math notranslate nohighlight">\(\lambda = 28.5\ \text{mm}\)</span>, <span class="math notranslate nohighlight">\(kd = 176.8^\circ\)</span>, and
+the <span class="math notranslate nohighlight">\(30^\circ\)</span> beam needs <span class="math notranslate nohighlight">\(88.4^\circ\)</span> per element; the GUI numbers the elements
+E1 to E8, so this lesson’s <span class="math notranslate nohighlight">\(n = 0\)</span> to 7 are E1 to E8. Bring this lesson’s phase
+table and its HPBW table, because the sweep measures beamwidth as well as peak
+position and the comparison only means something if the prediction was written
+down first.</p>
+</div>
+<div class="depth docutils container">
+<p>Further out, the ideal steered pattern of this lesson starts to fray. L20 and
+L21 measure beamwidth against theory across element counts, L24 trades sidelobe
+level for beamwidth with a taper, and L26 collects the three ways a real steered
+array departs from today’s result: grating lobes when the spacing is too wide
+(L16’s criterion, which the PHASER’s <span class="math notranslate nohighlight">\(14\ \text{mm}\)</span> meets at every angle),
+beam squint when the frequency moves off the one you designed for, and
+quantization when the ideal ramp has to land on the <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> grid. Read the
+L19 lab procedure before the next lesson.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L18-beam-steering-theory"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E-plane and H-plane cuts, co-pol and cross-pol</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --efield:#0067b9; --hfield:#b3213a; --probe:#1d7a4d; --copper:#a8611f;
+          --amber:#8a5a00; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  /* Desktop: the 3-D scene and the polar cut side by side, controls and
+     readouts in full-width strips under them. Phone: the scene on top, then
+     the controls, then the polar plot beside a compact readout column. */
+  .app { display:grid; gap:10px 14px; padding:14px;
+         grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
+         grid-template-areas:"scene polar" "ctrl ctrl" "ro ro" "hint hint"; }
+  #c { grid-area:scene; touch-action:none; cursor:grab; }
+  #p { grid-area:polar; justify-self:center; }
+  .controls { grid-area:ctrl; }
+  .readouts { grid-area:ro; }
+  .hint { grid-area:hint; }
+  canvas { display:block; box-sizing:border-box; width:100%; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px 16px; align-items:center;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; min-width:0; }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:34px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:60px; accent-color:var(--mid); }
+  select { flex:1 1 auto; min-width:88px; font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
+  .pair { grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:6px 18px; min-width:0; }
+  .tgl { display:flex; align-items:center; gap:7px; cursor:pointer; user-select:none; min-width:0; }
+  .tgl input { position:absolute; opacity:0; pointer-events:none; }
+  .tgl .sw { position:relative; flex:none; width:30px; height:17px; border-radius:999px;
+             background:#dfe8f1; border:1px solid var(--edge2); transition:background .15s, border-color .15s; }
+  .tgl .sw::after { content:''; position:absolute; top:2px; left:2px; width:11px; height:11px; border-radius:50%;
+                    background:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.22); transition:transform .15s; }
+  .tgl input:checked + .sw { background:var(--mid); border-color:var(--mid); }
+  .tgl input:checked + .sw::after { transform:translateX(13px); }
+  .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
+  .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .tgl input:checked ~ .t { color:var(--navy); }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(4, minmax(0,1fr)); }
+  .ro { display:flex; flex-direction:column; align-items:center; gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  .ro .k { display:block; height:15px; line-height:15px; font-size:10.5px; font-weight:700; text-transform:uppercase;
+           letter-spacing:0.045em; color:var(--ink3); white-space:nowrap; overflow:hidden; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; color:var(--navy); }
+  .ro .v.co { color:var(--grn); } .ro .v.x { color:var(--amber); }
+  .hint { margin:0; text-align:center; font-size:12px; color:var(--ink3); line-height:1.45; min-height:35px; }
+  .hint b { color:var(--ink); }
+  .hint .warn { color:var(--amber); font-weight:700; }
+  @media (max-width:619px) {
+    .app { grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+           grid-template-areas:"scene scene" "ctrl ctrl" "polar ro" "hint hint"; }
+    .readouts { grid-template-columns:1fr; align-content:center; gap:6px; }
+    .ro { flex-direction:row; justify-content:space-between; padding:5px 8px; }
+    .ro .k { font-size:10px; } .ro .v { font-size:13px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="c" aria-label="An antenna (dipole, small loop, patch, or horn) with its pattern, the cut plane, field arrows, and a probe horn sweeping through the cut; drag to rotate the view"></canvas>
+  <canvas id="p" aria-label="Received level in dB against sweep angle for the current cut and probe polarization"></canvas>
+
+  <div class="controls">
+    <div class="ctl"><label for="model">Antenna</label>
+      <select id="model"><option value="dipole">Dipole</option><option value="loop">Loop</option><option value="patch">Patch</option><option value="horn">Horn</option></select></div>
+    <div class="ctl"><label for="view">View</label>
+      <select id="view"><option value="ant">Antenna</option><option value="ch">Chamber</option></select></div>
+    <div class="ctl"><label for="s1" id="s1l">Cut</label><select id="s1"></select></div>
+    <div class="ctl"><label for="s2" id="s2l">Probe</label><select id="s2"></select></div>
+    <div class="ctl"><label for="ang">Sweep</label>
+      <input id="ang" type="range" min="0" max="359" step="1" value="0"><span class="val" id="ang-v">0&#176;</span></div>
+    <div class="pair">
+      <label class="tgl"><input id="run" type="checkbox" checked><span class="sw"></span><span class="t">Play</span></label>
+      <label class="tgl"><input id="pat" type="checkbox" checked><span class="sw"></span><span class="t">Pattern</span></label>
+      <label class="tgl"><input id="showE" type="checkbox" checked><span class="sw"></span><span class="t">E</span></label>
+      <label class="tgl"><input id="showH" type="checkbox"><span class="sw"></span><span class="t">H</span></label>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro"><span class="k">Cut</span><span class="v" id="r-cut">&#8212;</span></div>
+    <div class="ro"><span class="k">Polarization</span><span class="v" id="r-pol">&#8212;</span></div>
+    <div class="ro"><span class="k" id="r-angk">Angle</span><span class="v" id="r-ang">&#8212;</span></div>
+    <div class="ro"><span class="k">Received</span><span class="v" id="r-db">&#8212;</span></div>
+  </div>
+  <p class="hint" id="hint"></p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  /* Four linearly polarized antennas, each described by its far-field E vector
+     e(r) in its own frame (|e| is the field pattern, peak 1), plus the
+     boresight b and the direction e0 that E points along at boresight. Every
+     cut and every turntable reading is computed from e(r). Cross-pol is a
+     typical measured one, not a scaled copy of co-pol: 30 dB down on boresight
+     and rising off-axis to about 17 dB down at 90 degrees, kappa(r) = 0.03 +
+     0.12 sin^2(angle from boresight), over a -40 dB floor. An ideal antenna has
+     none in its principal planes; what a range records there is the antenna's
+     and the range's imperfections, and they do not follow the co-pol pattern.
+       E-plane = the plane through b and e0;  H-plane = the plane through b and b x e0.
+     World axes are z-up; in the chamber the turntable spins about z with the
+     source horn fixed on +x. */
+  const FLOOR = -40, R = 3, HX = 4.2, RD = 2.0;
+  const cvs = document.getElementById('c'), ctx = cvs.getContext('2d');
+  const pcv = document.getElementById('p'), pctx = pcv.getContext('2d');
+  const el = id => document.getElementById(id);
+  const modelEl = el('model'), viewEl = el('view'), s1 = el('s1'), s2 = el('s2'), angEl = el('ang'), runEl = el('run');
+  const patEl = el('pat'), showE = el('showE'), showH = el('showH');
+  const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+  const C = { navy:'#004a85', e:'#0067b9', h:'#b3213a', probe:'#1d7a4d', copper:'#a8611f',
+              ink3:'#5b6573', grid:'#dbe3ec', marker:'#b01e24', metal:'rgba(91,101,115,0.75)' };
+
+  // ---------- vectors ----------
+  const v = (x, y, z) => [x, y, z];
+  const add = (a, b) => [a[0]+b[0], a[1]+b[1], a[2]+b[2]];
+  const mul = (a, k) => [a[0]*k, a[1]*k, a[2]*k];
+  const dot = (a, b) => a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+  const cross = (a, b) => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]];
+  const len = a => Math.hypot(a[0], a[1], a[2]);
+  const norm = a => { const L = len(a) || 1; return mul(a, 1/L); };
+  const sinc = x => Math.abs(x) < 1e-6 ? 1 : Math.sin(x)/x;
+  const X = v(1,0,0), Y = v(0,1,0), Z = v(0,0,1);
+
+  // ---------- the antennas ----------
+  const MODELS = {
+    // half-wave dipole along z: E along theta-hat, |e| = cos(pi/2 cos th)/sin th
+    dipole: { b:X, e0:Z, lat:[Math.PI/3, Math.PI/2, 2*Math.PI/3],
+      e(r) { const c = r[2], s = Math.sqrt(Math.max(0, 1 - c*c)); if (s < 1e-4) return v(0,0,0);
+             return mul(add(mul(r, c), mul(Z, -1)), Math.cos(Math.PI/2*c)/(s*s)); },
+      mount:['Horizontal','Vertical'] },
+    // small loop in the xy-plane: E along phi-hat, |e| = sin th  (z x r)
+    loop: { b:X, e0:Y, lat:[Math.PI/3, Math.PI/2, 2*Math.PI/3],
+      e(r) { return cross(Z, r); },
+      mount:['Flat','Upright'] },
+    // patch facing +z over a ground plane, E along x at broadside: two-slot model,
+    // E = (y x r) * sinc(kW/2 sin th sin ph) cos(kLe/2 sin th cos ph), W = 0.30, Le = 0.25 wavelength
+    patch: { b:Z, e0:X, lat:[Math.PI/6, Math.PI/3, Math.PI/2],
+      e(r) { if (r[2] < 0) return v(0,0,0);
+             return mul(cross(Y, r), sinc(0.30*Math.PI*r[1])*Math.cos(0.25*Math.PI*r[0])); },
+      mount:['E horizontal','E vertical'] },
+    // pyramidal horn facing +z, E along x: Huygens aperture 1.2 x 1.6 wavelengths,
+    // uniform across the E-plane (x) side, the waveguide's cosine across the H-plane (y) side
+    horn: { b:Z, e0:X, lat:[Math.PI/12, Math.PI/6, Math.PI/3],
+      e(r) { const c = r[2], s2 = r[0]*r[0] + r[1]*r[1];
+             let d = X; if (s2 > 1e-10) d = v((c*r[0]*r[0] + r[1]*r[1])/s2, (c - 1)*r[0]*r[1]/s2, -r[0]);
+             const yy = Math.PI*1.6*r[1], q = 1 - Math.pow(2*yy/Math.PI, 2);
+             const fh = Math.abs(q) < 1e-6 ? Math.PI/4 : Math.cos(yy)/q;
+             return mul(d, (1 + c)/2*sinc(Math.PI*1.2*r[0])*fh); },
+      mount:['E horizontal','E vertical'] }
+  };
+  const st = { model:'dipole', mode:'ant', cut:'E', pol:'co', mount:'h', horn:'h', ang:0, yaw:-1.05, el:0.36 };
+  const M = () => MODELS[st.model];
+  const nrm = () => cross(M().b, M().e0);                       // b x e0, completes the frame
+  const dB = x => Math.max(FLOOR, 20*Math.log10(Math.max(x, 1e-4)));
+  // cross-pol ratio, from the antenna's own frame: -30 dB on boresight, rising off-axis
+  const kappa = rl => { const c = dot(rl, M().b); return 0.03 + 0.12*(1 - c*c); };
+  // received amplitude: co-pol through the probe, plus the cross-pol component kappa*|e| along r x e
+  function recv(e, r, p, k) { const f = len(e); if (f < 1e-9) return 0; const eh = mul(e, 1/f), ch = cross(r, eh);
+    const t = dot(eh, p), u = dot(ch, p); return f*Math.sqrt(t*t + k*k*u*u); }
+
+  // antenna view: the cut plane through b and e0 (E) or b and b x e0 (H); t = angle from boresight
+  function plane() { return st.cut === 'E' ? [M().b, M().e0] : [M().b, nrm()]; }
+  function antGeom(t) {
+    const [u0, u1] = plane(), r = add(mul(u0, Math.cos(t)), mul(u1, Math.sin(t)));
+    const tang = add(mul(u0, -Math.sin(t)), mul(u1, Math.cos(t))), nor = cross(u0, u1);
+    return { r, tang, nor, co: st.cut === 'E' ? tang : nor };
+  }
+  // chamber: local -> world puts b on +x and e0 horizontal (+y) or vertical (+z), then the turntable yaws by t
+  function toWorld(a, t) {
+    const m = M(), n = nrm(), kb = dot(a, m.b), ke = dot(a, m.e0), kn = dot(a, n);
+    const w = st.mount === 'h' ? v(kb, ke, kn) : v(kb, -kn, ke);
+    const c = Math.cos(t), s = Math.sin(t); return v(c*w[0] - s*w[1], s*w[0] + c*w[1], w[2]);
+  }
+  function toLocal(w, t) {
+    const c = Math.cos(-t), s = Math.sin(-t), u = v(c*w[0] - s*w[1], s*w[0] + c*w[1], w[2]);
+    const m = M(), n = nrm(), [kb, ke, kn] = st.mount === 'h' ? [u[0], u[1], u[2]] : [u[0], u[2], -u[1]];
+    return add(add(mul(m.b, kb), mul(m.e0, ke)), mul(n, kn));
+  }
+  const eWorld = (rw, t) => toWorld(M().e(toLocal(rw, t)), t);
+  const hornPol = () => st.horn === 'h' ? Y : Z;
+  function level(i) {
+    const t = i*Math.PI/180;
+    if (st.mode === 'ant') { const g = antGeom(t); return recv(M().e(g.r), g.r, st.pol === 'co' ? g.co : cross(g.r, g.co), kappa(g.r)); }
+    return recv(eWorld(X, t), X, hornPol(), kappa(toLocal(X, t)));
+  }
+  let pat = [];
+  function rebuild() { pat = []; for (let i = 0; i < 360; i++) pat.push(level(i)); }
+
+  // ---------- controls ----------
+  function setOpts(sel, opts, val) { sel.innerHTML = opts.map(o => `<option value="${o[0]}">${o[1]}</option>`).join(''); sel.value = val; }
+  function syncSelects() {
+    if (st.mode === 'ant') {
+      el('s1l').textContent = 'Cut'; setOpts(s1, [['E','E-plane'],['H','H-plane']], st.cut);
+      el('s2l').textContent = 'Probe'; setOpts(s2, [['co','Co-pol'],['x','Cross-pol']], st.pol);
+    } else {
+      el('s1l').textContent = 'Mount'; setOpts(s1, [['h', M().mount[0]],['v', M().mount[1]]], st.mount);
+      el('s2l').textContent = 'Horn'; setOpts(s2, [['h','Horizontal'],['v','Vertical']], st.horn);
+    }
+  }
+  modelEl.addEventListener('change', () => { st.model = modelEl.value; syncSelects(); rebuild(); lastKey = ''; });
+  viewEl.addEventListener('change', () => { st.mode = viewEl.value; syncSelects(); rebuild(); });
+  s1.addEventListener('change', () => { st.mode === 'ant' ? st.cut = s1.value : st.mount = s1.value; rebuild(); });
+  s2.addEventListener('change', () => { st.mode === 'ant' ? st.pol = s2.value : st.horn = s2.value; rebuild(); });
+  angEl.addEventListener('input', () => { st.ang = +angEl.value; runEl.checked = false; });
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) runEl.checked = false;
+
+  // drag to rotate the 3-D view
+  let drag = null;
+  cvs.addEventListener('pointerdown', e => { drag = { x:e.clientX, y:e.clientY, yaw:st.yaw, el:st.el }; cvs.setPointerCapture(e.pointerId); cvs.style.cursor = 'grabbing'; });
+  cvs.addEventListener('pointermove', e => { if (!drag) return;
+    st.yaw = drag.yaw - (e.clientX - drag.x)*0.01;
+    st.el = Math.max(-0.2, Math.min(1.4, drag.el + (e.clientY - drag.y)*0.01)); });
+  const endDrag = () => { drag = null; cvs.style.cursor = 'grab'; };
+  cvs.addEventListener('pointerup', endDrag); cvs.addEventListener('pointercancel', endDrag);
+
+  // ---------- sizing ----------
+  /* clientWidth, not the bounding rect: the rect includes the border, and a
+     bitmap sized from it comes out stretched. style.height sets the outer
+     height under border-box, so hand the border back. */
+  let W3 = 0, H3 = 0, WP = 0;
+  function fitOne(cv, cssW, cssH) {
+    const dpr = window.devicePixelRatio || 1;
+    cv.width = Math.round(cssW*dpr); cv.height = Math.round(cssH*dpr);
+    cv.style.height = cssH + 'px';
+    const bh = cv.offsetHeight - cv.clientHeight; if (bh) cv.style.height = (cssH + bh) + 'px';
+    cv.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function fit() {
+    const stacked = window.innerWidth < 620;
+    /* The polar plot is square and capped at 280px, which keeps the widget
+       inside the 555px frame budget at the 790px column cap. */
+    pcv.style.width = '100%';
+    WP = Math.min(280, Math.max(120, pcv.clientWidth || 200));
+    pcv.style.width = WP + 'px';
+    W3 = Math.max(200, cvs.clientWidth || 300);
+    /* Stacked, the antenna selector adds a control row, so the scene gives up
+       the same height to keep the phone layout inside the 660px cap. */
+    H3 = stacked ? Math.round(W3*0.58) : Math.max(WP, Math.min(300, Math.round(W3*0.62)));
+    fitOne(cvs, W3, H3); fitOne(pcv, WP, WP);
+  }
+  window.addEventListener('resize', fit);
+
+  // ---------- 3-D drawing ----------
+  let cam;
+  function setCam() {
+    const cy = Math.cos(st.yaw), sy = Math.sin(st.yaw), ce = Math.cos(st.el), se = Math.sin(st.el);
+    const D = v(ce*cy, ce*sy, se), Rt = v(-sy, cy, 0), U = cross(D, Rt);
+    const ext = st.mode === 'ant' ? 4.1 : 5.0;
+    const s = Math.min(W3, H3)/(2*ext);
+    cam = { D, Rt, U, s, cx:W3/2 - (st.mode === 'ch' ? 0.45*s : 0), cy:H3/2 + 0.05*H3 };
+  }
+  const P = p => [cam.cx + cam.s*dot(p, cam.Rt), cam.cy - cam.s*dot(p, cam.U)];
+  function path3(pts, close) { ctx.beginPath(); pts.forEach((p, i) => { const q = P(p); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }); if (close) ctx.closePath(); }
+  function head(x0, y0, x1, y1, color, size) {
+    const dx = x1-x0, dy = y1-y0, L = Math.hypot(dx, dy); if (L < 2) return;
+    const ux = dx/L, uy = dy/L, px = -uy, py = ux;
+    ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(x1, y1);
+    ctx.lineTo(x1 - size*ux + size*0.46*px, y1 - size*uy + size*0.46*py);
+    ctx.lineTo(x1 - size*ux - size*0.46*px, y1 - size*uy - size*0.46*py); ctx.closePath(); ctx.fill();
+  }
+  function arrow3(o, d, ln, color, w, both) {
+    if (ln < 0.04) return;
+    const a = both ? add(o, mul(d, -ln/2)) : o, b = both ? add(o, mul(d, ln/2)) : add(o, mul(d, ln));
+    const [x0, y0] = P(a), [x1, y1] = P(b);
+    const hs = Math.max(6, Math.min(10, cam.s*0.2));
+    ctx.strokeStyle = color; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+    head(x0, y0, x1, y1, color, hs); if (both) head(x1, y1, x0, y0, color, hs);
+  }
+  function circle3(o, e1, e2, rad, n) { const pts = []; for (let i = 0; i <= n; i++) { const t = i/n*2*Math.PI; pts.push(add(o, add(mul(e1, rad*Math.cos(t)), mul(e2, rad*Math.sin(t))))); } return pts; }
+  function quad(T, pts, fill, stroke) { path3(pts.map(T), true); ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); }
+
+  // each antenna drawn from its own frame through T (local -> world)
+  function drawAntenna(T) {
+    const m = st.model;
+    ctx.lineCap = 'round';
+    if (m === 'dipole') {
+      const [a0x, a0y] = P(T(v(0,0,-1.2))), [a1x, a1y] = P(T(v(0,0,1.2)));
+      ctx.strokeStyle = C.copper; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(a0x, a0y); ctx.lineTo(a1x, a1y); ctx.stroke();
+    } else if (m === 'loop') {
+      path3(circle3(v(0,0,0), X, Y, 0.85, 64).map(T), false); ctx.strokeStyle = C.copper; ctx.lineWidth = 4; ctx.stroke();
+    } else if (m === 'patch') {
+      quad(T, [v(-1.1,-1.1,-0.12), v(1.1,-1.1,-0.12), v(1.1,1.1,-0.12), v(-1.1,1.1,-0.12)], 'rgba(91,101,115,0.18)', C.metal);
+      quad(T, [v(-0.5,-0.62,0), v(0.5,-0.62,0), v(0.5,0.62,0), v(-0.5,0.62,0)], 'rgba(168,97,31,0.55)', C.copper);
+    } else {
+      const th = [v(-0.16,-0.32,-1.4), v(0.16,-0.32,-1.4), v(0.16,0.32,-1.4), v(-0.16,0.32,-1.4)];
+      const mo = [v(-0.6,-0.8,0), v(0.6,-0.8,0), v(0.6,0.8,0), v(-0.6,0.8,0)];
+      for (let k = 0; k < 4; k++) quad(T, [th[k], th[(k+1)%4], mo[(k+1)%4], mo[k]], 'rgba(91,101,115,0.16)', C.metal);
+    }
+    ctx.lineCap = 'butt';
+    const [fx, fy] = P(T(v(0,0,0)));
+    if (m === 'dipole' || m === 'loop') { ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(fx, fy, 3, 0, 2*Math.PI); ctx.fill(); }
+  }
+
+  function drawScene() {
+    ctx.clearRect(0, 0, W3, H3);
+    setCam();
+    const ant = st.mode === 'ant', al = st.ang*Math.PI/180, m = M();
+    const T = ant ? (a => a) : (a => toWorld(a, al));
+
+    // cut plane
+    const pl = ant ? plane() : [X, Y];
+    const pr = ant ? R + 0.55 : HX + 0.35;
+    path3(circle3(v(0,0,0), pl[0], pl[1], pr, 72), true);
+    ctx.fillStyle = 'rgba(0,74,133,0.06)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(0,74,133,0.28)'; ctx.lineWidth = 1; ctx.stroke();
+
+    // 3-D field pattern as a wireframe about the antenna's z-axis
+    if (patEl.checked) {
+      ctx.strokeStyle = 'rgba(0,74,133,0.20)'; ctx.lineWidth = 1;
+      for (let k = 0; k < 6; k++) {
+        const ph = k*Math.PI/6, pts = [];
+        for (let i = 0; i <= 120; i++) { const th = i/120*2*Math.PI, r = v(Math.sin(th)*Math.cos(ph), Math.sin(th)*Math.sin(ph), Math.cos(th));
+          pts.push(T(mul(r, len(m.e(r))*RD))); }
+        path3(pts, false); ctx.stroke();
+      }
+      m.lat.forEach(th => { const pts = [];
+        for (let i = 0; i <= 64; i++) { const ph = i/64*2*Math.PI, r = v(Math.sin(th)*Math.cos(ph), Math.sin(th)*Math.sin(ph), Math.cos(th));
+          pts.push(T(mul(r, len(m.e(r))*RD))); }
+        path3(pts, false); ctx.stroke(); });
+    }
+
+    // measured pattern traced in the cut plane, radius linear in dB
+    ctx.strokeStyle = C.navy; ctx.lineWidth = 2; ctx.beginPath();
+    for (let i = 0; i <= 360; i++) {
+      const t = (i % 360)*Math.PI/180, rr = (ant ? R : 2.9)*Math.max(0.002, 1 + dB(pat[i % 360])/40);
+      const d = ant ? antGeom(t).r : v(Math.cos(al - t), Math.sin(al - t), 0);
+      const q = P(mul(d, rr)); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]);
+    }
+    ctx.stroke();
+
+    // field arrows around the ring: E = e(r), H along r x E
+    const N = 16, rr = ant ? R : 2.6;
+    for (let i = 0; i < N; i++) {
+      const b = i/N*2*Math.PI;
+      const r = ant ? antGeom(b).r : v(Math.cos(b), Math.sin(b), 0);
+      const e = ant ? m.e(r) : eWorld(r, al), f = len(e);
+      if (f < 1e-3) continue;
+      const o = mul(r, rr), eh = mul(e, 1/f);
+      if (showH.checked) arrow3(o, cross(r, eh), 0.7*f, C.h, 1.6, false);
+      if (showE.checked) arrow3(o, eh, 0.7*f, C.e, 1.6, false);
+    }
+
+    if (!ant) { // turntable column under the antenna
+      const [fx, fy] = P(v(0,0,0)), [bx, by] = P(v(0, 0, -2.2));
+      ctx.strokeStyle = '#b9c4cf'; ctx.lineWidth = 6;
+      ctx.beginPath(); ctx.moveTo(fx, fy + 4); ctx.lineTo(bx, by); ctx.stroke();
+      path3(circle3(v(0,0,-2.2), X, Y, 0.9, 40), true);
+      ctx.fillStyle = 'rgba(91,101,115,0.15)'; ctx.fill(); ctx.strokeStyle = '#b9c4cf'; ctx.lineWidth = 1; ctx.stroke();
+    }
+    drawAntenna(T);
+
+    // probe horn: square aperture facing the antenna, edges along e1/e2
+    let pos, rdir, e1, e2, p;
+    if (ant) { const g = antGeom(al); rdir = g.r; pos = mul(g.r, R + 0.45);
+      e1 = g.tang; e2 = g.nor; p = st.pol === 'co' ? g.co : cross(g.r, g.co); }
+    else { rdir = X; pos = v(HX, 0, 0); e1 = Y; e2 = Z; p = hornPol(); }
+    const hs = 0.38, apex = add(pos, mul(rdir, 0.85));
+    const corners = [[1,1],[1,-1],[-1,-1],[-1,1]].map(([i, j]) => add(pos, add(mul(e1, i*hs), mul(e2, j*hs))));
+    ctx.fillStyle = 'rgba(91,101,115,0.22)'; ctx.strokeStyle = 'rgba(91,101,115,0.75)'; ctx.lineWidth = 1;
+    for (let k = 0; k < 4; k++) { path3([apex, corners[k], corners[(k+1)%4]], true); ctx.fill(); ctx.stroke(); }
+    path3(corners, true); ctx.stroke();
+    if (!ant && showE.checked) { const e = eWorld(X, al), f = len(e); if (f > 1e-3) arrow3(v(HX - 0.95, 0, 0), mul(e, 1/f), 1.1*f, C.e, 2.6, true); }
+    arrow3(add(pos, mul(rdir, -0.04)), p, 1.15, C.probe, 3, true);
+
+    // legend
+    const lx = 10, ly = 14, row = 17;
+    [[C.e, '\\mathbf{E}'], [C.h, '\\mathbf{H}'], [C.probe, null], [C.navy, null]].forEach(([col, tex], i) => {
+      const y = ly + i*row; ctx.strokeStyle = col; ctx.lineWidth = i === 2 ? 3 : 2;
+      ctx.beginPath(); ctx.moveTo(lx, y); ctx.lineTo(lx + 16, y); ctx.stroke();
+      if (tex) MJ.draw(ctx, tex, lx + 22, y, 12.5, col, 'left');
+      else stext(i === 2 ? 'probe polarization' : 'measured cut (dB)', lx + 22, y, 10.5, col, 'left');
+    });
+    stext('drag to rotate', W3 - 8, H3 - 9, 10.5, '#8a93a0', 'right');
+  }
+  function stext(s, x, y, px, color, align) { ctx.fillStyle = color; ctx.font = px + 'px ' + SANS; ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.fillText(s, x, y); }
+
+  // ---------- polar plot ----------
+  function drawPolar() {
+    const g = pctx, Wd = WP, cx = Wd/2, cy = Wd/2, Rr = Wd/2 - (Wd < 200 ? 26 : 30);
+    g.clearRect(0, 0, Wd, Wd);
+    g.strokeStyle = C.grid; g.lineWidth = 1;
+    for (let d = 0; d >= -40; d -= 10) { g.beginPath(); g.arc(cx, cy, Math.max(0.5, Rr*(1 + d/40)), 0, 2*Math.PI); g.stroke(); }
+    for (let k = 0; k < 12; k++) { const t = k*Math.PI/6; g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + Rr*Math.sin(t), cy - Rr*Math.cos(t)); g.stroke(); }
+    g.font = '10.5px ' + SANS; g.fillStyle = C.ink3; g.textAlign = 'center'; g.textBaseline = 'middle';
+    [[0,'0°'],[90,'90°'],[180,'180°'],[270,'270°']].forEach(([a, s]) => { const t = a*Math.PI/180;
+      g.fillText(s, cx + (Rr + (a % 180 ? 15 : 9))*Math.sin(t), cy - (Rr + 9)*Math.cos(t)); });
+    if (Wd >= 170) { g.textAlign = 'left'; ['−10','−20','−30'].forEach((s, i) => g.fillText(s, cx + 3, cy - Rr*(1 - (i + 1)/4) + 7)); }
+    g.strokeStyle = C.navy; g.lineWidth = 2; g.beginPath();
+    for (let i = 0; i <= 360; i++) { const t = i*Math.PI/180, r = Rr*Math.max(0, 1 + dB(pat[i % 360])/40);
+      const x = cx + r*Math.sin(t), y = cy - r*Math.cos(t); i ? g.lineTo(x, y) : g.moveTo(x, y); }
+    g.stroke();
+    const t = st.ang*Math.PI/180, r = Rr*Math.max(0, 1 + dB(pat[st.ang])/40);
+    g.fillStyle = C.marker; g.beginPath(); g.arc(cx + r*Math.sin(t), cy - r*Math.cos(t), 4, 0, 2*Math.PI); g.fill();
+  }
+
+  // ---------- readouts ----------
+  const MOUNT_HINT = {
+    dipole: ['<b>Dipole horizontal:</b> the turntable plane contains the wire. ', '<b>Dipole vertical:</b> the turntable plane is perpendicular to the wire. '],
+    loop: ['<b>Loop flat:</b> E is horizontal, so the turntable plane is the E-plane. ', '<b>Loop upright:</b> E is vertical, so the turntable plane is the H-plane. '],
+    patch: ['<b>E horizontal:</b> the turntable plane is the E-plane. ', '<b>E vertical:</b> the turntable plane is the H-plane. '],
+    horn: ['<b>E horizontal:</b> the turntable plane is the E-plane. ', '<b>E vertical:</b> the turntable plane is the H-plane. ']
+  };
+  let lastKey = '';
+  function readouts() {
+    const ant = st.mode === 'ant';
+    const cut = ant ? st.cut : (st.mount === 'h' ? 'E' : 'H');
+    const co = ant ? st.pol === 'co' : st.mount === st.horn;
+    const key = [st.model, st.mode, cut, co, st.ang].join();
+    if (key === lastKey) return; lastKey = key;
+    el('r-cut').textContent = cut + '-plane';
+    const pv = el('r-pol'); pv.textContent = co ? 'Co-pol' : 'Cross-pol'; pv.className = 'v ' + (co ? 'co' : 'x');
+    el('r-angk').textContent = ant ? 'From boresight' : 'Turntable';
+    el('r-ang').textContent = st.ang + '°';
+    el('r-db').textContent = dB(pat[st.ang]).toFixed(1).replace('-', '−') + ' dB';
+    angEl.value = st.ang; el('ang-v').textContent = st.ang + '°';
+    let h;
+    if (ant) h = cut === 'E' ? '<b>E lies in the cut plane.</b> ' : '<b>E points out of the cut plane.</b> ';
+    else h = MOUNT_HINT[st.model][st.mount === 'h' ? 0 : 1];
+    if (ant) h += co ? 'The probe is parallel to E.' : 'The probe is turned 90° to E.';
+    else if (co) h += 'The horn is parallel to E.';
+    else if (st.mount === 'v') h += '<span class="warn">Antenna rolled, horn not:</span> this is H-plane cross-pol.';
+    else h += 'The horn is crossed with E.';
+    el('hint').innerHTML = h;
+  }
+
+  // ---------- loop ----------
+  let last = performance.now(), acc = 0;
+  function drawAll() { drawScene(); drawPolar(); }
+  function tick(now) {
+    const dt = Math.min(0.1, (now - last)/1000); last = now;
+    if (runEl.checked) { acc += dt*30; if (acc >= 1) { st.ang = (st.ang + Math.floor(acc)) % 360; acc %= 1; } }
+    readouts(); drawAll();
+    requestAnimationFrame(tick);
+  }
+  /* ?antenna=dipole|loop|patch|horn presets the antenna; &lock=1 hides the
+     selector, for a lesson that is about one antenna. */
+  const qs = new URLSearchParams(location.search), qa = qs.get('antenna');
+  if (qa && MODELS[qa]) { st.model = qa; modelEl.value = qa; }
+  if (qs.get('lock') === '1') modelEl.closest('.ctl').style.display = 'none';
+  syncSelects(); rebuild(); fit();
+  window.__polcuts = { st, rebuild, syncSelects, level };   // for the render checks
+  MJ.setRedraw(drawAll);
+  MJ.onReady(() => drawAll());
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L16 - The Array Factor and Pattern Multiplication &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab 1 — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab 2 — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering-theory/index.html">L18 — Beam Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-beam-steering-lab/index.html">L19 — Beam Steering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-array-factor-lab/index.html">L21 — Array Factor Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-antenna-pattern-theory/index.html">L22 — Antenna Pattern Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-antenna-pattern-lab/index.html">L23 — Antenna Pattern Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-sidelobes-tapering/index.html">L24 — Sidelobes and Tapering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L25-tapering-lab/index.html">L25 — Tapering Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L26-beam-squint-quantization/index.html">L26 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L27-null-steering-theory/index.html">L27 — Null Steering Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L28-null-steering-lab/index.html">L28 — Null Steering Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-radar-equation/index.html">L29 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-range-resolution-doppler/index.html">L30 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-radar-detection-theory/index.html">L31 — Radar Detection Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L32-fmcw-intro/index.html">L32 — Introduction to FMCW on Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L33-range-calculations-lab/index.html">L33 — Range Calculations Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L34-range-waterfall-lab/index.html">L34 — Range Waterfall Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L35-range-doppler-lab/index.html">L35 — Range-Doppler Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L36-mti-lab/index.html">L36 — Moving Target Indication (MTI) Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L37-cfar-theory/index.html">L37 — CFAR Processing Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L38-cfar-lab/index.html">L38 — CFAR Processing Lab</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 5 — Capstone Project</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/index.html">Module 5 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L39-final-project-kickoff/index.html">L39 — Final Project Kickoff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L40-array-optimization/index.html">L40 — Phase 1 — Array Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module05/L41-radar-integration/index.html">L41 — Phase 2 — Radar Integration and Demonstration</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l16-the-array-factor-and-pattern-multiplication">
+<h1>L16 - The Array Factor and Pattern Multiplication<a class="headerlink" href="#l16-the-array-factor-and-pattern-multiplication" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">The Array Factor and Pattern Multiplication</h1>
+<div class="title-rule"></div>
+<p>The sum of the element phasors collapses into one compact expression, the array factor.</p>
+<p>Lesson 16 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-slides">
+<div class="wrap docutils container">
+<p class="rubric">Slides</p>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L16-array-factor.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L16-array-factor.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L16-array-factor.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 1">
+  <li>I can derive the array factor for an arbitrary linear array and apply pattern multiplication.</li>
+</ol>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-from-apertures-to-elements">
+<div class="wrap docutils container">
+<p class="rubric">From Apertures to Elements</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>In Lesson 15’s continuous aperture, length set the beamwidth and taper set the sidelobes.</p></li>
+<li><p>The PHASER has 8 patches in a row, not a continuous aperture.</p></li>
+<li><p>Their phasor sum, the <strong>array factor</strong>, predicts every pattern this module measures.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lesson 15 treated an aperture as a continuous sheet of current and read its beamwidth from the aperture length and its sidelobes from the taper. Now we replace that continuous aperture with <span class="math notranslate nohighlight">\(N\)</span> discrete elements on a line, each fed its own copy of the signal. The far fields still add as phasors, so the same reasoning applies, and the sum collapses into one compact expression, the <strong>array factor</strong>, which predicts every feature you will measure on the PHASER for the rest of this module.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-part-1-the-linear-array">
+<div class="wrap docutils container">
+<p class="rubric">Part 1: The Linear Array</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N\)</span> identical elements on a line, spaced <span class="math notranslate nohighlight">\(d\)</span> apart.</p></li>
+<li><p>We feed element <span class="math notranslate nohighlight">\(n\)</span> the complex weight <span class="math notranslate nohighlight">\(a_n\)</span>.</p></li>
+<li><p>Every element radiates the same pattern; only the weights and the positions differ.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L16-array-geometry.svg"
+     alt="Five elements on a line radiating toward a direction tilted off broadside, with the extra path length of each element marked against a common equal-phase front"
+     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>We put <span class="math notranslate nohighlight">\(N\)</span> identical elements on a straight line, spaced a distance <span class="math notranslate nohighlight">\(d\)</span> apart, and feed element <span class="math notranslate nohighlight">\(n\)</span> a copy of the same signal with complex weight <span class="math notranslate nohighlight">\(a_n\)</span>. Every element radiates the same pattern; only the weights and the positions differ.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-scan-angle">
+<div class="wrap docutils container">
+<p class="rubric">The Scan Angle</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\theta_{\text{polar}} &amp;= 90^\circ - \theta \\
+\cos\theta_{\text{polar}} &amp;= \sin\theta
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Module 3 measures <span class="math notranslate nohighlight">\(\theta\)</span> from <strong>broadside</strong>, as the PHASER GUI does.</p></li>
+<li><p>Lesson 6’s <span class="math notranslate nohighlight">\(k_z = k\cos\theta_{\text{polar}}\)</span> becomes <span class="math notranslate nohighlight">\(k\sin\theta\)</span>.</p></li>
+<li><p>Broadside moves from <span class="math notranslate nohighlight">\(\theta_{\text{polar}} = 90^\circ\)</span> to <span class="math notranslate nohighlight">\(\theta = 0\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L16-scan-angle.svg"
+     alt="An array on a horizontal axis with broadside straight up. One ray leaves at 35 degrees from broadside; the scan angle is measured from broadside to the ray, and the Module 1 polar angle from the array axis to the same ray, 55 degrees"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Module 3 measures the <strong>scan angle</strong> <span class="math notranslate nohighlight">\(\theta\)</span> from <strong>broadside</strong>, the direction perpendicular to the array face, with <span class="math notranslate nohighlight">\(-90^\circ \le \theta \le +90^\circ\)</span>. Every PHASER plot, the GUI’s angle axis, and the phased-array literature use this convention.</p>
+<p>Module 1 measured the polar angle from the <span class="math notranslate nohighlight">\(+z\)</span> axis for a line source lying on <span class="math notranslate nohighlight">\(z\)</span>. The two are the same picture read from different reference directions, so the space frequency <span class="math notranslate nohighlight">\(k_z = k\cos\theta_{\text{polar}}\)</span> of Lesson 6 becomes <span class="math notranslate nohighlight">\(k\sin\theta\)</span> here. Broadside, which was <span class="math notranslate nohighlight">\(\theta_{\text{polar}} = 90^\circ\)</span>, is now <span class="math notranslate nohighlight">\(\theta = 0\)</span>. This is the only place in the course the two conventions are set side by side; from here on <span class="math notranslate nohighlight">\(\theta\)</span> means the scan angle.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-extra-path-length-and-phase">
+<div class="wrap docutils container">
+<p class="rubric">Extra Path Length and Phase</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Delta r_n &amp;= n\ d\sin\theta \\
+\Delta\phi_n &amp;= k\ \Delta r_n = n\ kd\sin\theta
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>The far-field rays are parallel, so only the projection of <span class="math notranslate nohighlight">\(nd\)</span> onto the look direction matters.</p></li>
+<li><p>Element <span class="math notranslate nohighlight">\(n\)</span> arrives carrying <span class="math notranslate nohighlight">\(a_n\ e^{\ +jn\ kd\sin\theta}\)</span> relative to element 0.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A far-field observer sees the array from a single direction, so the rays leaving the elements are parallel. Element <span class="math notranslate nohighlight">\(n\)</span> sits <span class="math notranslate nohighlight">\(nd\)</span> farther along the array axis than element 0, and along a ray heading off at angle <span class="math notranslate nohighlight">\(\theta\)</span> that position shortens the path to the observer by <span class="math notranslate nohighlight">\(\Delta r_n = n\ d\sin\theta\)</span>. The wavenumber <span class="math notranslate nohighlight">\(k = 2\pi/\lambda\)</span> converts distance to phase, so a path shorter by <span class="math notranslate nohighlight">\(\Delta r_n\)</span> is a phase lead of <span class="math notranslate nohighlight">\(k\ \Delta r_n\)</span>, and element <span class="math notranslate nohighlight">\(n\)</span> arrives at the observer carrying</p>
+<div class="math notranslate nohighlight">
+\[a_n\ e^{\ +jn\ kd\sin\theta}\]</div>
+<p>relative to element 0.</p>
+<p>The same path differences change the amplitude <span class="math notranslate nohighlight">\(1/r\)</span> by a negligible amount. The PHASER is <span class="math notranslate nohighlight">\(112\ \text{mm}\)</span> long, so its far field begins at <span class="math notranslate nohighlight">\(2D^2/\lambda = 0.86\ \text{m}\)</span> (Lesson 5). At a <span class="math notranslate nohighlight">\(30\ \text{m}\)</span> range, <span class="math notranslate nohighlight">\(112\ \text{mm}\)</span> of path changes <span class="math notranslate nohighlight">\(1/r\)</span> by less than <span class="math notranslate nohighlight">\(0.4\%\)</span>, but it spans <span class="math notranslate nohighlight">\(3.85\)</span> wavelengths, or nearly <span class="math notranslate nohighlight">\(1400^\circ\)</span> of phase. This is the parallel-ray approximation of Lesson 6: we keep the path difference in the phase and drop it from the amplitude.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-superposition">
+<div class="wrap docutils container">
+<p class="rubric">Superposition</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[E(\theta) = \underbrace{E_0(\theta)\frac{e^{-jkr}}{r}}_{\text{one element}}\ AF(\theta)\]</div>
+<div class="math notranslate nohighlight">
+\[AF(\theta) = \sum_{n=0}^{N-1} a_n\ e^{\ jn\ kd\sin\theta}\]</div>
+<ul class="simple">
+<li><p>Identical elements share <span class="math notranslate nohighlight">\(E_0(\theta)\)</span>, so it factors out, and the <strong>array factor</strong> depends only on the element count, positions, and weights.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The total far field is the sum of the element fields, and because every element has the same pattern, the common factor <span class="math notranslate nohighlight">\(E_0(\theta)\ e^{-jkr}/r\)</span> comes out in front of the sum. The <strong>array factor</strong> <span class="math notranslate nohighlight">\(AF(\theta)\)</span> is the sum that remains. It depends only on how many elements there are, where they sit, and what weights we feed them. It does not depend on the type of element.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-the-array-factor-from-the-radiation-vector">
+<div class="wrap docutils container">
+<p class="rubric">The Array Factor From the Radiation Vector</p>
+<p>Lesson 6 computed the far field of a <span class="math notranslate nohighlight">\(z\)</span>-directed current from its radiation vector,</p>
+<div class="math notranslate nohighlight">
+\[N_z = \int I(z')\ e^{+jkz'\cos\theta_{\text{polar}}}\ dz'\]</div>
+<p>An array is a current that exists only at the element positions. If we model element <span class="math notranslate nohighlight">\(n\)</span> as a point source of strength <span class="math notranslate nohighlight">\(a_n\)</span> at <span class="math notranslate nohighlight">\(z' = nd\)</span>, the current is <span class="math notranslate nohighlight">\(I(z') = \sum a_n\ \delta(z' - nd)\)</span>, and the integral picks out one term per element:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+N_z &amp;= \sum_{n=0}^{N-1} a_n \int \delta(z' - nd)\ e^{+jkz'\cos\theta_{\text{polar}}}\ dz' \\
+&amp;= \sum_{n=0}^{N-1} a_n\ e^{\ jn\ kd\cos\theta_{\text{polar}}} \\
+&amp;= \sum_{n=0}^{N-1} a_n\ e^{\ jn\ kd\sin\theta}
+\end{aligned}\end{split}\]</div>
+<p>The last line is <span class="math notranslate nohighlight">\(AF(\theta)\)</span>. The phasor sum and the radiation integral give the same result: the array factor is Lesson 6’s space factor for a current made of <span class="math notranslate nohighlight">\(N\)</span> point samples. A real element replaces each point source with its own pattern, which is the element factor.</p>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-steering-phase">
+<div class="wrap docutils container">
+<p class="rubric">Steering Phase</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[a_n = \vert a_n\vert\ e^{-jn\beta}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\psi &amp;= kd\sin\theta - \beta \\
+&amp;= kd\left(\sin\theta - \sin\theta_0\right)
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\beta = kd\sin\theta_0\)</span> steers the beam to <span class="math notranslate nohighlight">\(\theta_0\)</span>; Lesson 18 derives it.</p></li>
+<li><p>Today <span class="math notranslate nohighlight">\(\theta_0 = 0\)</span>, so <span class="math notranslate nohighlight">\(\psi = kd\sin\theta\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>If the weights carry a progressive phase <span class="math notranslate nohighlight">\(\beta\)</span> per element, that phase adds to the geometric term, and both collect into one argument <span class="math notranslate nohighlight">\(\psi\)</span>. The ramp <span class="math notranslate nohighlight">\(\beta = kd\sin\theta_0\)</span> steers the beam to <span class="math notranslate nohighlight">\(\theta_0\)</span>, and Lesson 18 derives it. For the rest of today <span class="math notranslate nohighlight">\(\theta_0 = 0\)</span> and <span class="math notranslate nohighlight">\(\psi = kd\sin\theta\)</span>, so every result below is the broadside case.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-key-point-a-sum-of-phasors">
+<div class="wrap docutils container">
+<p class="rubric">Key Point: A Sum of Phasors</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p>The array factor is a sum of unit phasors, one per element, whose phases advance by <span class="math notranslate nohighlight">\(\psi\)</span> from element to element. Every feature of the pattern comes from how those phasors line up.</p>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L16-phasor-sum.svg"
+     alt="Eight element phasors added tip to tail in three cases: all aligned, fanned out with a shorter sum, and stepped by one eighth of a turn so the chain closes and the sum is zero"
+     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Read the three cases from left to right. At <span class="math notranslate nohighlight">\(\psi = 0\)</span> every phasor points the same way and the sum is <span class="math notranslate nohighlight">\(N\)</span>, the largest it can be. As <span class="math notranslate nohighlight">\(\psi\)</span> grows the chain fans out and the sum shortens. When the fan has turned through a full circle, <span class="math notranslate nohighlight">\(N\psi = 2\pi\)</span>, the chain closes on itself and the sum is exactly zero. That is the first null, and the closed form below locates it for every <span class="math notranslate nohighlight">\(N\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-phasor-chain-explorer">
+<div class="wrap docutils container">
+<p class="rubric">Phasor Chain Explorer</p>
+<div class="depth docutils container">
+<p>The left panel draws the <span class="math notranslate nohighlight">\(N\)</span> element phasors tip to tail, with each one turned <span class="math notranslate nohighlight">\(\psi\)</span> from the last, and the navy arrow is their sum. The phase is referenced to the array center, so the sum always lies along the horizontal axis and points left where the array factor is negative. The right panel is <span class="math notranslate nohighlight">\(\vert AF\vert\)</span> against scan angle, with a marker at the current <span class="math notranslate nohighlight">\(\theta\)</span>. Start at broadside, where the chain is straight and the sum is <span class="math notranslate nohighlight">\(N\)</span>. Drag <span class="math notranslate nohighlight">\(\theta\)</span> slowly: the chain curls, the sum shortens, and at <span class="math notranslate nohighlight">\(15.1^\circ\)</span>, where <span class="math notranslate nohighlight">\(\psi = 45^\circ\)</span> and <span class="math notranslate nohighlight">\(N\psi = 360^\circ\)</span>, the chain closes into an octagon and the sum is zero. Keep going to <span class="math notranslate nohighlight">\(21.9^\circ\)</span> to find the first sidelobe, <span class="math notranslate nohighlight">\(-12.8\)</span> dB, where the chain has wound about one and a half turns.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/phasor-chain.html"
+        width="100%" height="451"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Phasor chain: the element phasors added tip to tail for a chosen scan angle, beside the array factor in decibels with a marker at that angle">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-part-2-uniform-excitation">
+<div class="wrap docutils container">
+<p class="rubric">Part 2: Uniform Excitation</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+AF &amp;= \sum_{n=0}^{N-1} e^{\ jn\psi} = \frac{1 - e^{\ jN\psi}}{1 - e^{\ j\psi}} \\
+&amp;= \frac{e^{\ jN\psi/2}\left(e^{-jN\psi/2} - e^{\ jN\psi/2}\right)}{e^{\ j\psi/2}\left(e^{-j\psi/2} - e^{\ j\psi/2}\right)} \\
+&amp;= e^{\ j(N-1)\psi/2}\ \frac{\sin(N\psi/2)}{\sin(\psi/2)}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>With every <span class="math notranslate nohighlight">\(a_n = 1\)</span>, the sum is a geometric series with ratio <span class="math notranslate nohighlight">\(e^{\ j\psi}\)</span>.</p></li>
+<li><p>Each bracket equals <span class="math notranslate nohighlight">\(-2j\sin(\cdot)\)</span>, and the <span class="math notranslate nohighlight">\(-2j\)</span> factors cancel.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Setting every weight to 1 turns the sum into a finite geometric series in <span class="math notranslate nohighlight">\(e^{\ j\psi}\)</span>. To close it, we factor half of each exponent out of the numerator and the denominator, which leaves a difference of conjugate exponentials in each bracket. Euler’s formula turns each bracket into <span class="math notranslate nohighlight">\(-2j\sin(\cdot)\)</span>, and the <span class="math notranslate nohighlight">\(-2j\)</span> factors cancel between top and bottom.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-closed-form">
+<div class="wrap docutils container">
+<p class="rubric">The Closed Form</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}\]</div>
+<div class="math notranslate nohighlight">
+\[\psi = kd\left(\sin\theta - \sin\theta_0\right)\]</div>
+<ul class="simple">
+<li><p>The leading exponential is the phase of the array center; referencing the phase to the center removes it.</p></li>
+<li><p>Dividing by <span class="math notranslate nohighlight">\(N\)</span> sets the peak to 1.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The leading exponential is the phase of the array’s center relative to element 0. If we reference the phase to the center instead, it disappears. Dividing by <span class="math notranslate nohighlight">\(N\)</span> normalizes the peak to 1. The main lobe, the nulls, and the sidelobes all follow from this expression.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-main-lobe-and-nulls">
+<div class="wrap docutils container">
+<p class="rubric">Main Lobe and Nulls</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\psi_m = \frac{2\pi m}{N}\]</div>
+<div class="math notranslate nohighlight">
+\[\sin\theta_m = \sin\theta_0 + \frac{m\lambda}{Nd}\]</div>
+<ul class="simple">
+<li><p>At <span class="math notranslate nohighlight">\(\psi = 0\)</span> the limit of <span class="math notranslate nohighlight">\(0/0\)</span> is 1, so the beam points at <span class="math notranslate nohighlight">\(\theta_0\)</span>.</p></li>
+<li><p>Nulls fall where the numerator vanishes and the denominator does not, <span class="math notranslate nohighlight">\(m = 1, \ldots, N-1\)</span>.</p></li>
+<li><p>The total length <span class="math notranslate nohighlight">\(Nd\)</span> sets the nulls, not <span class="math notranslate nohighlight">\(d\)</span> alone.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><strong>Main lobe.</strong> At <span class="math notranslate nohighlight">\(\psi = 0\)</span> both numerator and denominator vanish, and the limit is 1. The peak therefore sits where <span class="math notranslate nohighlight">\(\sin\theta = \sin\theta_0\)</span>, which at broadside is <span class="math notranslate nohighlight">\(\theta = 0\)</span>. The function is periodic in <span class="math notranslate nohighlight">\(\psi\)</span> with period <span class="math notranslate nohighlight">\(2\pi\)</span>, so the peak repeats every <span class="math notranslate nohighlight">\(2\pi\)</span>; Part 4 finds the spacing at which a repeat reaches a real angle.</p>
+<p><strong>Nulls.</strong> The numerator vanishes when <span class="math notranslate nohighlight">\(N\psi/2 = m\pi\)</span>, and the denominator is nonzero as long as <span class="math notranslate nohighlight">\(m\)</span> is not a multiple of <span class="math notranslate nohighlight">\(N\)</span>. The nulls depend on <span class="math notranslate nohighlight">\(N\)</span> and <span class="math notranslate nohighlight">\(d\)</span> only through the total length <span class="math notranslate nohighlight">\(Nd\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-sidelobes">
+<div class="wrap docutils container">
+<p class="rubric">Sidelobes</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+AF_N &amp;\approx \frac{1}{N\sin(3\pi/2N)} \\
+&amp;\xrightarrow{\ \text{large } N\ } \frac{2}{3\pi} = 0.212
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N - 2\)</span> sidelobes per period, one between each pair of nulls; the first is tallest.</p></li>
+<li><p>The first peaks near <span class="math notranslate nohighlight">\(N\psi/2 = 3\pi/2\)</span>, halfway between the first two nulls.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L16-sidelobe-vs-n.svg"
+     alt="First sidelobe level against the number of elements from 3 to 32: the exact peak rises from minus 9.5 dB at N equals 3 through minus 11.3 dB at 4 and minus 12.8 dB at 8 toward the continuous line source's minus 13.3 dB, with the halfway-between-nulls estimate a fraction of a decibel lower throughout"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Between consecutive nulls the numerator swings back to <span class="math notranslate nohighlight">\(\pm 1\)</span>, so a sidelobe sits in each gap: <span class="math notranslate nohighlight">\(N - 2\)</span> of them across one period. Their heights fall off as <span class="math notranslate nohighlight">\(1/\sin(\psi/2)\)</span>, so the tallest is the one nearest the main lobe. The numerator reaches its peak magnitude halfway between its first two zeros, at <span class="math notranslate nohighlight">\(N\psi/2 = 3\pi/2\)</span>, and evaluating <span class="math notranslate nohighlight">\(AF_N\)</span> there gives <span class="math notranslate nohighlight">\(2/(3\pi) = 0.212\)</span> for large <span class="math notranslate nohighlight">\(N\)</span>, or <span class="math notranslate nohighlight">\(-13.5\)</span> dB.</p>
+<p>The denominator is still growing across that gap, so the true peak sits slightly closer to the main lobe, where the denominator is smaller. Locating it exactly gives <span class="math notranslate nohighlight">\(-13.3\)</span> dB, which is the uniform line-source number from Lesson 6. At <span class="math notranslate nohighlight">\(N = 8\)</span> the value is <span class="math notranslate nohighlight">\(-12.8\)</span> dB. The figure plots the exact level against <span class="math notranslate nohighlight">\(N\)</span>: a short array has a higher first sidelobe, and by <span class="math notranslate nohighlight">\(N = 16\)</span> the level is within <span class="math notranslate nohighlight">\(0.2\)</span> dB of the line source. The estimate runs a fraction of a decibel low at every <span class="math notranslate nohighlight">\(N\)</span>, for the reason above. Uniform excitation leaves the first sidelobe about <span class="math notranslate nohighlight">\(13\)</span> dB below the peak in a discrete array, as it did in the continuous aperture of Lesson 15, and Lesson 24 lowers it with a taper.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-eight-element-array-factor">
+<div class="wrap docutils container">
+<p class="rubric">The Eight-Element Array Factor</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L16-af-anatomy.svg"
+     alt="Array factor of an eight-element uniform array in decibels versus scan angle, with the half-power width, first null, and first sidelobe marked"
+     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N = 8\)</span>, <span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span>: half-power width <span class="math notranslate nohighlight">\(13.2^\circ\)</span>, first null <span class="math notranslate nohighlight">\(15.1^\circ\)</span>, first sidelobe <span class="math notranslate nohighlight">\(-12.8\)</span> dB.</p></li>
+<li><p>Six sidelobes, <span class="math notranslate nohighlight">\(N - 2\)</span>, sit between the nulls.</p></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-reading-the-closed-form">
+<div class="wrap docutils container">
+<p class="rubric">Reading the Closed Form</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Feature</p></th>
+<th class="head text-left"><p>Uniform array</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Main-lobe peak</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\theta = \theta_0\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Null <span class="math notranslate nohighlight">\(m\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\sin\theta_m = \sin\theta_0 + m\lambda/Nd\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>First-null beamwidth</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2\arcsin(\lambda/Nd)\)</span> at broadside</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Half-power beamwidth</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx 0.886\ \lambda/(Nd\cos\theta_0)\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>First sidelobe</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-13\)</span> dB (<span class="math notranslate nohighlight">\(-12.8\)</span> dB at <span class="math notranslate nohighlight">\(N = 8\)</span>)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Sidelobe count</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(N - 2\)</span> per period</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The half-power row uses the line-source constant of Lessons 6 and 15 with <span class="math notranslate nohighlight">\(L = Nd\)</span>, and Lesson 20 derives it for the array, along with the <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span> broadening under steering. The constant is close but not exact for a short array: the PHASER’s exact half-power width is <span class="math notranslate nohighlight">\(13.3^\circ\)</span>, against <span class="math notranslate nohighlight">\(13.2^\circ\)</span> from <span class="math notranslate nohighlight">\(0.886\ \lambda/Nd\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-part-3-pattern-multiplication">
+<div class="wrap docutils container">
+<p class="rubric">Part 3: Pattern Multiplication</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\vert F(\theta)\vert = \underbrace{\vert EF(\theta)\vert}_{\text{one element}} \times \underbrace{\vert AF(\theta)\vert}_{\text{arrangement}}\]</div>
+<ul class="simple">
+<li><p>Requires <strong>identical, identically oriented</strong> elements, so <span class="math notranslate nohighlight">\(E_0(\theta)\)</span> factors out of the sum.</p></li>
+<li><p>In decibels the two patterns add.</p></li>
+<li><p>This is Lesson 6’s element factor times space factor, with a sum in place of the integral.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Nothing in Part 1 required the elements to be isotropic. It required them to be <strong>identical</strong> and <strong>identically oriented</strong>, which let <span class="math notranslate nohighlight">\(E_0(\theta)\)</span> come out of the sum. That factoring is pattern multiplication.</p>
+<p>The <strong>element factor</strong> <span class="math notranslate nohighlight">\(EF\)</span> is the pattern one element would produce by itself. The <strong>array factor</strong> <span class="math notranslate nohighlight">\(AF\)</span> is what the arrangement adds. Their product is the array’s pattern. In decibels the two curves add, which is why a log plot is the natural place to check the result.</p>
+<p>This is the Lesson 6 split, pattern equals element factor times space factor, with the continuous space factor replaced by a discrete sum. The element factor comes from the physics of the radiator; the array factor accounts for where the elements sit and how we feed them.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-worked-example-four-short-dipoles">
+<div class="wrap docutils container">
+<p class="rubric">Worked Example: Four Short Dipoles</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Four collinear short dipoles, <span class="math notranslate nohighlight">\(d = \lambda/2\)</span>, fed in phase; <span class="math notranslate nohighlight">\(EF = \cos\theta\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(AF_4\)</span> first sidelobe: <span class="math notranslate nohighlight">\(-11.3\)</span> dB at <span class="math notranslate nohighlight">\(47.1^\circ\)</span>, where the element adds <span class="math notranslate nohighlight">\(-3.3\)</span> dB.</p></li>
+<li><p>Total first sidelobe: <span class="math notranslate nohighlight">\(-14.4\)</span> dB at <span class="math notranslate nohighlight">\(44.2^\circ\)</span>. The main lobe narrows only from <span class="math notranslate nohighlight">\(26.3^\circ\)</span> to <span class="math notranslate nohighlight">\(25.4^\circ\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — four collinear short dipoles</p>
+<p>Four short dipoles lie end to end along the array axis, spaced <span class="math notranslate nohighlight">\(d = \lambda/2\)</span>, all fed in phase.</p>
+<p>Lesson 7’s short dipole radiates as <span class="math notranslate nohighlight">\(\sin\theta_{\text{polar}}\)</span>, which in scan angle is <span class="math notranslate nohighlight">\(EF(\theta) = \cos\theta\)</span>: a broad lobe at broadside and a null along the array axis at <span class="math notranslate nohighlight">\(\theta = \pm 90^\circ\)</span>.</p>
+<p>The array factor is <span class="math notranslate nohighlight">\(AF_4\)</span> with <span class="math notranslate nohighlight">\(\psi = \pi\sin\theta\)</span>. Its nulls fall at <span class="math notranslate nohighlight">\(\sin\theta_m = m/2\)</span>, that is <span class="math notranslate nohighlight">\(\pm 30^\circ\)</span> and <span class="math notranslate nohighlight">\(\pm 90^\circ\)</span>, and its first sidelobe is <span class="math notranslate nohighlight">\(-11.3\)</span> dB at <span class="math notranslate nohighlight">\(\theta = \pm 47.1^\circ\)</span>.</p>
+<p>At that angle the element factor is <span class="math notranslate nohighlight">\(\cos(47.1^\circ) = 0.681\)</span>, or <span class="math notranslate nohighlight">\(-3.3\)</span> dB. Adding the two levels in decibels estimates the total first sidelobe:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\text{SLL} &amp;\approx -11.3\ \text{dB} + (-3.3\ \text{dB}) \\
+&amp;= -14.6\ \text{dB}
+\end{aligned}\end{split}\]</div>
+<p>The product’s own peak sits slightly closer to broadside, at <span class="math notranslate nohighlight">\(44.2^\circ\)</span>, because the cosine is larger there, and its exact level is <span class="math notranslate nohighlight">\(-14.4\)</span> dB. The estimate is within <span class="math notranslate nohighlight">\(0.2\)</span> dB.</p>
+<p>The element factor did two things: it pushed the sidelobes down, more so the farther off broadside they sit, and it deepened the null at <span class="math notranslate nohighlight">\(\pm 90^\circ\)</span> that the array factor already had. It changed the main lobe very little, because <span class="math notranslate nohighlight">\(\cos\theta\)</span> is flat near broadside: at the <span class="math notranslate nohighlight">\(\pm 13.2^\circ\)</span> half-power edges of the array factor it is still <span class="math notranslate nohighlight">\(0.974\)</span>, or <span class="math notranslate nohighlight">\(-0.23\)</span> dB, so the half-power width narrows only from <span class="math notranslate nohighlight">\(26.3^\circ\)</span> to <span class="math notranslate nohighlight">\(25.4^\circ\)</span>.</p>
+</div>
+<p>The figure zooms in on that sidelobe. Adding the two levels at the array factor’s peak gives the amber point on the product curve; the product’s own peak, in red, sits <span class="math notranslate nohighlight">\(3^\circ\)</span> closer to broadside and <span class="math notranslate nohighlight">\(0.2\)</span> dB higher, because the array factor is flat at its own peak while the element factor keeps rising toward broadside.</p>
+<p><img src="../../viz/img/L16-four-dipole-zoom.svg"
+     alt="Zoom on the first sidelobe of four collinear short dipoles: the array factor peaks at minus 11.3 dB at 47.1 degrees, the dB-add estimate there is minus 14.6 dB, and the product of element and array factors peaks at minus 14.4 dB at 44.2 degrees"
+     style="max-width: 560px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-element-factor-times-array-factor">
+<div class="wrap docutils container">
+<p class="rubric">Element Factor Times Array Factor</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L16-pattern-multiplication.svg"
+     alt="Three panels in decibels: the cosine element factor, the four-element array factor, and their product"
+     style="max-width: 720px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The element factor lowers the wide-angle lobes.</p></li>
+<li><p>The array factor sets the main-lobe width.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>That last observation generalizes. A directive element reshapes the skirts of the pattern and suppresses whatever the array factor puts at wide angles, but the main lobe belongs to the array. The array factor sets the beamwidth, and the element and the array share the wide-angle behavior.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-array-factor-builder">
+<div class="wrap docutils container">
+<p class="rubric">Array Factor Builder</p>
+<div class="depth docutils container">
+<p>The widget below builds the array factor one control at a time. Start at the course array, <span class="math notranslate nohighlight">\(N = 8\)</span> and <span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span>, and confirm the readouts against the closed-form table: half-power width <span class="math notranslate nohighlight">\(13.2^\circ\)</span>, first null <span class="math notranslate nohighlight">\(15.1^\circ\)</span>, first sidelobe <span class="math notranslate nohighlight">\(-12.8\)</span> dB. Then sweep <span class="math notranslate nohighlight">\(N\)</span> and watch the beam narrow while the sidelobe level holds near <span class="math notranslate nohighlight">\(-13\)</span> dB, since <span class="math notranslate nohighlight">\(N\)</span> sets the width and the shape of the excitation sets the sidelobes. Switch the element factor on to see pattern multiplication: the dashed <span class="math notranslate nohighlight">\(\cos\theta\)</span> envelope pulls the outer lobes down and leaves the main lobe alone. Then push <span class="math notranslate nohighlight">\(d/\lambda\)</span> toward 1.5 and watch a second full-height beam move in from the edge; Part 4 explains it.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/array-factor-builder.html"
+        width="100%" height="507"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Array factor builder: pattern in dB versus scan angle for N elements at spacing d over lambda, with an optional cosine element factor">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-part-4-the-visible-region">
+<div class="wrap docutils container">
+<p class="rubric">Part 4: The Visible Region</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\psi_{\min} &amp;= kd\left(-1 - \sin\theta_0\right) \\
+\psi_{\max} &amp;= kd\left(+1 - \sin\theta_0\right)
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Real angles reach only <span class="math notranslate nohighlight">\(\psi_{\min}\)</span> to <span class="math notranslate nohighlight">\(\psi_{\max}\)</span>, the <strong>visible region</strong>.</p></li>
+<li><p>Its width is <span class="math notranslate nohighlight">\(2kd = 4\pi d/\lambda\)</span>; steering slides it without resizing it.</p></li>
+<li><p>A second peak at <span class="math notranslate nohighlight">\(\psi = \pm 2\pi\)</span> radiates once the window reaches it.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><span class="math notranslate nohighlight">\(AF_N(\psi)\)</span> repeats every <span class="math notranslate nohighlight">\(2\pi\)</span> in <span class="math notranslate nohighlight">\(\psi\)</span>, but <span class="math notranslate nohighlight">\(\psi\)</span> is not free: <span class="math notranslate nohighlight">\(\psi = kd(\sin\theta - \sin\theta_0)\)</span> ties it to a real angle. As <span class="math notranslate nohighlight">\(\theta\)</span> sweeps the visible half-space from <span class="math notranslate nohighlight">\(-90^\circ\)</span> to <span class="math notranslate nohighlight">\(+90^\circ\)</span>, <span class="math notranslate nohighlight">\(\sin\theta\)</span> covers <span class="math notranslate nohighlight">\(-1\)</span> to <span class="math notranslate nohighlight">\(+1\)</span>, and <span class="math notranslate nohighlight">\(\psi\)</span> covers a window of total width <span class="math notranslate nohighlight">\(2kd = 4\pi d/\lambda\)</span> that slides as we steer. That window is the <strong>visible region</strong>. Values of <span class="math notranslate nohighlight">\(\psi\)</span> outside it correspond to no real angle, so the array never radiates them.</p>
+<p>The width of the window alone does not produce a second beam. At <span class="math notranslate nohighlight">\(d = \lambda/2\)</span> the window is exactly one period wide, and at broadside it runs from <span class="math notranslate nohighlight">\(-\pi\)</span> to <span class="math notranslate nohighlight">\(+\pi\)</span>, between the repeats. A second copy of the main lobe appears only when an edge of the window reaches a repeat at <span class="math notranslate nohighlight">\(\psi = \pm 2\pi\)</span>. At broadside the edges sit at <span class="math notranslate nohighlight">\(\pm kd\)</span>, which reach <span class="math notranslate nohighlight">\(\pm 2\pi\)</span> when <span class="math notranslate nohighlight">\(d = \lambda\)</span>. A copy that enters is a <strong>grating lobe</strong>, and because <span class="math notranslate nohighlight">\(AF_N\)</span> is exactly periodic it is as tall as the main lobe and radiates as much power as the intended beam.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-visible-region-at-two-spacings">
+<div class="wrap docutils container">
+<p class="rubric">Visible Region at Two Spacings</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L16-visible-region.svg"
+     alt="Array factor versus its argument over three periods, with the visible window drawn for 0.481-wavelength spacing and for one-wavelength spacing"
+     style="max-width: 720px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+<div class="present docutils container">
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span>: the window ends at <span class="math notranslate nohighlight">\(\pm 173^\circ\)</span>, short of the repeats at <span class="math notranslate nohighlight">\(\pm 360^\circ\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(d = \lambda\)</span>: the edges reach <span class="math notranslate nohighlight">\(\pm 360^\circ\)</span>, and full-height lobes appear at <span class="math notranslate nohighlight">\(\pm 90^\circ\)</span>.</p></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-visible-region-explorer">
+<div class="wrap docutils container">
+<p class="rubric">Visible Region Explorer</p>
+<div class="depth docutils container">
+<p>The top panel plots <span class="math notranslate nohighlight">\(AF_N\)</span> against <span class="math notranslate nohighlight">\(\psi\)</span> over several periods and shades the window that real angles reach; the bottom panel is the same pattern against scan angle. Start at the PHASER, <span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span>, where the window spans <span class="math notranslate nohighlight">\(\pm 173^\circ\)</span> and stops short of the repeats at <span class="math notranslate nohighlight">\(\pm 360^\circ\)</span>. Widen the spacing and watch the window grow until its edges reach <span class="math notranslate nohighlight">\(\pm 360^\circ\)</span> at <span class="math notranslate nohighlight">\(d = \lambda\)</span>, and the repeats appear at <span class="math notranslate nohighlight">\(\pm 90^\circ\)</span>. Then return to <span class="math notranslate nohighlight">\(d/\lambda = 0.75\)</span> and steer to <span class="math notranslate nohighlight">\(30^\circ\)</span>: the window slides without changing width, its left edge passes <span class="math notranslate nohighlight">\(-360^\circ\)</span>, and a grating lobe appears at <span class="math notranslate nohighlight">\(-56.4^\circ\)</span>.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/visible-region.html"
+        width="100%" height="541"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Visible region: the array factor against psi with the window real angles reach, and the same pattern against scan angle, for adjustable N, spacing, and steer angle">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-grating-lobes">
+<div class="wrap docutils container">
+<p class="rubric">Grating Lobes</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\sin\theta_g = \sin\theta_0 \pm \frac{m\lambda}{d}\]</div>
+<div class="math notranslate nohighlight">
+\[\boxed{\ d &lt; \frac{\lambda}{1 + \vert\sin\theta_0\vert}\ }\]</div>
+<ul class="simple">
+<li><p>At <span class="math notranslate nohighlight">\(\psi = 2\pi m\)</span> every element is back in phase with its neighbors.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L16-grating-limit.svg"
+     alt="Largest grating-free spacing against the largest scan angle: 1.0 wavelength at broadside, 0.586 at 45 degrees, falling to 0.5 at 90 degrees, with the region above the curve shaded as grating lobe in view and the PHASER's 0.481-wavelength spacing drawn below the curve at every angle"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Grating lobes appear where <span class="math notranslate nohighlight">\(\psi\)</span> is a nonzero multiple of <span class="math notranslate nohighlight">\(2\pi\)</span>. At <span class="math notranslate nohighlight">\(\psi = 2\pi\)</span> the path difference between neighbors, less the applied phase step, is exactly one wavelength, so every term <span class="math notranslate nohighlight">\(e^{\ jn\psi} = e^{\ j2\pi n} = 1\)</span> and the elements add in phase exactly as they do at the main lobe. That is why a grating lobe is full height.</p>
+<p>The grating lobe nearest real space is <span class="math notranslate nohighlight">\(m = 1\)</span> on the side away from the steer. For <span class="math notranslate nohighlight">\(\theta_0 \ge 0\)</span> it sits at <span class="math notranslate nohighlight">\(\sin\theta_g = \sin\theta_0 - \lambda/d\)</span>, and it stays out of real space as long as <span class="math notranslate nohighlight">\(\sin\theta_g &lt; -1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\sin\theta_0 - \frac{\lambda}{d} &amp;&lt; -1 \\
+\frac{\lambda}{d} &amp;&gt; 1 + \sin\theta_0 \\
+d &amp;&lt; \frac{\lambda}{1 + \sin\theta_0}
+\end{aligned}\end{split}\]</div>
+<p>A beam steered to negative <span class="math notranslate nohighlight">\(\theta_0\)</span> gives the mirror image, so the criterion carries <span class="math notranslate nohighlight">\(\vert\sin\theta_0\vert\)</span>. At broadside it is <span class="math notranslate nohighlight">\(d &lt; \lambda\)</span>. Scanning to <span class="math notranslate nohighlight">\(\pm 90^\circ\)</span> tightens it to <span class="math notranslate nohighlight">\(d &lt; \lambda/2\)</span>, which is where the familiar half-wavelength spacing comes from. The figure plots the limit against the largest scan angle a design needs: a <span class="math notranslate nohighlight">\(\pm 45^\circ\)</span> requirement allows <span class="math notranslate nohighlight">\(0.586\lambda\)</span>, and the PHASER’s <span class="math notranslate nohighlight">\(0.481\lambda\)</span> sits below the curve at every angle, so it can scan anywhere without a grating lobe. Lesson 26 treats grating lobes in full, alongside beam squint and phase quantization; we use the criterion as stated until then.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Element spacing is a two-sided trade. Too large and a grating lobe appears. Too small and the array is short for its element count, so the beam is wide and the elements couple strongly to each other (mutual coupling, Lesson 22). Most designs land between <span class="math notranslate nohighlight">\(0.4\lambda\)</span> and <span class="math notranslate nohighlight">\(0.5\lambda\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-part-5-the-array-as-a-sampled-aperture">
+<div class="wrap docutils container">
+<p class="rubric">Part 5: The Array as a Sampled Aperture</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+AF_N &amp;= \frac{\sin(N\psi/2)}{N\sin(\psi/2)} \\
+&amp;\approx \frac{\sin(N\psi/2)}{N\psi/2}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Near the main lobe <span class="math notranslate nohighlight">\(\psi\)</span> is small, so <span class="math notranslate nohighlight">\(\sin(\psi/2) \approx \psi/2\)</span>.</p></li>
+<li><p>With <span class="math notranslate nohighlight">\(L = Nd\)</span>, <span class="math notranslate nohighlight">\(N\psi/2 = (kL/2)\sin\theta\)</span>: the sinc of Lessons 6 and 15.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L16-sinc-limit.svg"
+     alt="Array factors for 4, 8, and 32 elements plotted against distance from the main lobe in units of the line source's null spacing, over the line source's sinc pattern. All three match near the main lobe; the 4-element pattern repeats at full height 4 nulls out, the 8-element pattern 8 nulls out, and the 32-element pattern follows the sinc across the whole plot"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Near the main lobe and the first few sidelobes, <span class="math notranslate nohighlight">\(\psi\)</span> is a small fraction of a period when <span class="math notranslate nohighlight">\(N\)</span> is large, so the denominator <span class="math notranslate nohighlight">\(N\sin(\psi/2)\)</span> is close to <span class="math notranslate nohighlight">\(N\psi/2\)</span>. The array factor then becomes <span class="math notranslate nohighlight">\(\sin u/u\)</span> with <span class="math notranslate nohighlight">\(u = N\psi/2 = (kNd/2)\sin\theta\)</span>. With <span class="math notranslate nohighlight">\(L = Nd\)</span> this is the <span class="math notranslate nohighlight">\(u = (kL/2)\cos\theta_{\text{polar}}\)</span> of Lesson 6’s uniform line source, written in scan angle. A uniform line source of length <span class="math notranslate nohighlight">\(L\)</span> has a beamwidth <span class="math notranslate nohighlight">\(\approx 0.886\ \lambda/L\)</span> and a first sidelobe of <span class="math notranslate nohighlight">\(-13.3\)</span> dB, and a uniform array of <span class="math notranslate nohighlight">\(N\)</span> elements spaced <span class="math notranslate nohighlight">\(d\)</span> has a beamwidth <span class="math notranslate nohighlight">\(\approx 0.886\ \lambda/(Nd)\)</span> and a first sidelobe near <span class="math notranslate nohighlight">\(-13\)</span> dB. The array is that line source <strong>sampled</strong> every <span class="math notranslate nohighlight">\(d\)</span>.</p>
+<p>The figure shows where the approximation holds. Plotted against <span class="math notranslate nohighlight">\(u\)</span>, in units of the line source’s null spacing, the 4-, 8-, and 32-element patterns all match the sinc near the main lobe. They part from it where <span class="math notranslate nohighlight">\(\psi\)</span> is no longer small: an <span class="math notranslate nohighlight">\(N\)</span>-element array repeats its main lobe at full height <span class="math notranslate nohighlight">\(N\)</span> nulls out, so the 4-element pattern returns at <span class="math notranslate nohighlight">\(u/\pi = 4\)</span> and the 8-element one at <span class="math notranslate nohighlight">\(8\)</span>, while the 32-element pattern follows the sinc across the whole plot.</p>
+<p><img src="../../viz/img/L16-sampled-aperture.svg"
+     alt="A continuous uniform aperture above, and below it the same overall length occupied by eight equally spaced elements"
+     style="max-width: 560px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-each-parameter-controls">
+<div class="wrap docutils container">
+<p class="rubric">What Each Parameter Controls</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Total length</strong> <span class="math notranslate nohighlight">\(Nd\)</span> sets the beamwidth, whether 8 elements or 32 fill it.</p></li>
+<li><p>The <strong>excitation shape</strong> sets the sidelobes: <span class="math notranslate nohighlight">\(-13\)</span> dB for uniform. Lesson 24 tapers it.</p></li>
+<li><p>The <strong>spacing</strong> <span class="math notranslate nohighlight">\(d\)</span> decides whether a grating lobe reaches real space.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The sampled view assigns each parameter its job. Two arrays with the same <span class="math notranslate nohighlight">\(Nd\)</span> have nearly the same main lobe whether 8 elements or 32 fill that length. Uniform excitation gives about <span class="math notranslate nohighlight">\(-13\)</span> dB in the array exactly as in the aperture, and Lesson 24 tapers it.</p>
+<p>The spacing decides what repeats. The array samples the current only at multiples of <span class="math notranslate nohighlight">\(d\)</span>, so its phases <span class="math notranslate nohighlight">\(e^{\ jn\psi}\)</span> cannot distinguish <span class="math notranslate nohighlight">\(\psi\)</span> from <span class="math notranslate nohighlight">\(\psi + 2\pi\)</span>, and the pattern repeats with that period. This is the general rule that sampling a function makes its transform periodic. A continuous aperture has a contribution from every position, so no shift of <span class="math notranslate nohighlight">\(\psi\)</span> leaves all of them unchanged, and it has no grating lobes.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-worked-example-the-course-array">
+<div class="wrap docutils container">
+<p class="rubric">Worked Example: The Course Array</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(d = 14\)</span> mm at <span class="math notranslate nohighlight">\(10.3\)</span> GHz: <span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span> and <span class="math notranslate nohighlight">\(Nd = 3.85\lambda\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\psi\)</span> spans <span class="math notranslate nohighlight">\(\pm 173.2^\circ\)</span>, and <span class="math notranslate nohighlight">\(d &lt; \lambda/2\)</span>, so no grating lobe appears at any scan angle.</p></li>
+<li><p>Nulls at <span class="math notranslate nohighlight">\(\pm 15.1^\circ\)</span>, <span class="math notranslate nohighlight">\(\pm 31.3^\circ\)</span>, <span class="math notranslate nohighlight">\(\pm 51.2^\circ\)</span>; half-power width <span class="math notranslate nohighlight">\(13.2^\circ\)</span>; first sidelobe <span class="math notranslate nohighlight">\(-12.8\)</span> dB at <span class="math notranslate nohighlight">\(\pm 21.9^\circ\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — the course 8-element array</p>
+<p>The PHASER carries 8 patch elements spaced <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span>. At <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span>, <span class="math notranslate nohighlight">\(\lambda = 29.1\ \text{mm}\)</span>, so <span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span> and the array is <span class="math notranslate nohighlight">\(Nd = 112\ \text{mm} = 3.85\lambda\)</span> long.</p>
+<p><strong>Visible region.</strong> At broadside</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+kd &amp;= 2\pi(0.481) = 3.02\ \text{rad} \\
+&amp;= 173.2^\circ
+\end{aligned}\end{split}\]</div>
+<p>so <span class="math notranslate nohighlight">\(\psi\)</span> runs over <span class="math notranslate nohighlight">\(\pm 173.2^\circ\)</span>, a window just under one period wide whose edges stay well clear of the repeats at <span class="math notranslate nohighlight">\(\pm 360^\circ\)</span>. The window holds no grating lobe. Because <span class="math notranslate nohighlight">\(0.481 &lt; 0.5\)</span>, the spacing criterion <span class="math notranslate nohighlight">\(d &lt; \lambda/(1 + \vert\sin\theta_0\vert)\)</span> holds at every scan angle out to <span class="math notranslate nohighlight">\(\pm 90^\circ\)</span>.</p>
+<p><strong>Nulls.</strong> <span class="math notranslate nohighlight">\(\sin\theta_m = m\lambda/Nd = m/3.85\)</span>, giving <span class="math notranslate nohighlight">\(\pm 15.1^\circ\)</span>, <span class="math notranslate nohighlight">\(\pm 31.3^\circ\)</span>, and <span class="math notranslate nohighlight">\(\pm 51.2^\circ\)</span>. The <span class="math notranslate nohighlight">\(m = 4\)</span> null would need <span class="math notranslate nohighlight">\(\sin\theta = 1.04\)</span>, so it never reaches real space, and the array shows 6 sidelobes across the visible region.</p>
+<p><strong>Beam.</strong> The first-null and half-power beamwidths are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\text{FNBW} &amp;= 2\arcsin(1/3.85) = 30.1^\circ \\
+\text{HPBW} &amp;\approx 0.886\ \lambda/Nd = 13.2^\circ
+\end{aligned}\end{split}\]</div>
+<p>and the first sidelobe is <span class="math notranslate nohighlight">\(-12.8\)</span> dB at <span class="math notranslate nohighlight">\(\pm 21.9^\circ\)</span>. Lesson 20 derives the broadside directivity of a uniform array,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+D &amp;\approx \frac{2Nd}{\lambda} = 7.7 \\
+&amp;= 8.9\ \text{dB}
+\end{aligned}\end{split}\]</div>
+</div>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-the-measured-sweep">
+<div class="wrap docutils container">
+<p class="rubric">The Measured Sweep</p>
+<div class="depth docutils container">
+<p>Lesson 21 sweeps this beam past a fixed source. Expect a <span class="math notranslate nohighlight">\(13^\circ\)</span> beam, a first null past <span class="math notranslate nohighlight">\(15^\circ\)</span>, and sidelobes 11 to 13 dB down. The widget below is the one Lesson 21 uses: pick the 8-element aperture, read the half-power width, first-null width, and first sidelobe off the ideal curve, then switch the measurement effects on. The <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> steer grid and the <span class="math notranslate nohighlight">\(-23\)</span> dB noise floor fill in the nulls, and the first-null width moves from <span class="math notranslate nohighlight">\(30.1^\circ\)</span> to <span class="math notranslate nohighlight">\(28.1^\circ\)</span> because the grid no longer lands on the null.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/af-measurement-compare.html"
+        width="100%" height="463"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Array factor against a simulated measured sweep, with the steer grid and the noise floor on a toggle">
+</iframe>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — what the Lesson 21 sweep will show</p>
+<p>In Lesson 21 you will steer this array past a fixed source and record power against commanded angle. Expect a main lobe near <span class="math notranslate nohighlight">\(13^\circ\)</span> wide, a first null a little past <span class="math notranslate nohighlight">\(15^\circ\)</span>, and sidelobes 11 to 13 dB down. The measured beam reads <span class="math notranslate nohighlight">\(13.1^\circ\)</span>, and the nulls fill in: the sweep steps in <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> increments and the receiver’s noise floor sits about 23 dB below the peak, so a mathematical zero measures as a finite dip.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-the-array-factor-and-its-closed-form">
+<div class="wrap docutils container">
+<p class="rubric">Summary: The Array Factor and Its Closed Form</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Idea</p></th>
+<th class="head text-left"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Array factor</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(AF = \sum a_n e^{jn\psi}\)</span>, one term per element</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Argument</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\psi = kd(\sin\theta - \sin\theta_0)\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Visible region</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\pm 173^\circ\)</span> of <span class="math notranslate nohighlight">\(\psi\)</span> for the PHASER</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Uniform array</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\sin(N\psi/2)/(N\sin(\psi/2))\)</span>, peak 1</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Nulls</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\psi = 2\pi m/N\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>First sidelobe</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-13\)</span> dB (<span class="math notranslate nohighlight">\(-12.8\)</span> dB at <span class="math notranslate nohighlight">\(N = 8\)</span>)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Sidelobe count</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(N - 2\)</span> per period</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-multiplication-and-spacing">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Multiplication and Spacing</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Idea</p></th>
+<th class="head text-left"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Pattern multiplication</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\vert F\vert = \vert EF\vert \times \vert AF\vert\)</span>, identical elements only</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Grating-lobe criterion</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(d &lt; \lambda/(1 + \vert\sin\theta_0\vert)\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Scan to <span class="math notranslate nohighlight">\(90^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(d &lt; \lambda/2\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Beamwidth</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx 0.886\ \lambda/Nd\)</span>; <span class="math notranslate nohighlight">\(13.2^\circ\)</span> for the PHASER</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../practice/ECE444_L16_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a class="doc-link doc-key" href="../../practice/ECE444_L16_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Lesson 17: the ADAR1000 hardware that sets each <span class="math notranslate nohighlight">\(a_n\)</span> in gain and phase.</p></li>
+<li><p>Lesson 18: a progressive phase ramp steers the beam to <span class="math notranslate nohighlight">\(\theta_0\)</span>.</p></li>
+<li><p>Lessons 21, 25, and 28 measure this pattern, taper it, and place a null.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Today we assumed the feed: element <span class="math notranslate nohighlight">\(n\)</span> simply received weight <span class="math notranslate nohighlight">\(a_n\)</span>. Lesson 17 opens the hardware that produces those weights, the ADAR1000 beamformer chips, the per-element gain and phase controls, and the receive chain that turns eight elements into two digitized channels. Lesson 18 then sets the weights to a progressive phase ramp and steers the beam, which supplies the <span class="math notranslate nohighlight">\(\theta_0\)</span> that has gone unused in <span class="math notranslate nohighlight">\(\psi\)</span> all lesson.</p>
+<p>Every lab in this module measures some feature of today’s array factor. Lesson 21 measures the beamwidth, the nulls, and the sidelobe level of the uniform 8-element pattern. Lesson 25 changes the weights and watches the sidelobes drop. Lesson 28 places a null where you want one. Before the next lesson, be able to write <span class="math notranslate nohighlight">\(AF_N\)</span> from memory and locate its nulls, because every one of those labs starts by predicting from it.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L16-array-factor"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>
