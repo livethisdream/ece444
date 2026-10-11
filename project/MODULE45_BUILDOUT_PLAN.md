@@ -318,3 +318,30 @@ falls on, and with it the Phase C deadline, is unknown.
    now, with recorded data as the fallback.
 7. **Fox-hunt layout.** Boxes at least 0.75 m apart, on tables at array
    height, decoys weighted the same. Recommend as stated.
+
+## 7. Neil's answers (2026-10-11)
+
+1. **Placement: right after L19.** The bearing skill is a period old, not ten.
+   Lesson numbers equal teaching order (the 2026-09-12 Module 2 decision), so
+   the fox hunt becomes L20 and L20-L32 shift by one; old L33 and L34 merge
+   into one FMCW Range Lab so the course stays at 41. Pending Neil's go on the
+   renumber.
+2. **Objective: 3.5.**
+3. **Find the fox, write a report. Everyone has their own kit.** Each cadet
+   takes every bearing on their own kit, moving it between stations, and
+   writes an individual report naming the box. No class-combined fix. The
+   packet is pre-lab, bench, report, all individual.
+4. **Both GUI additions: yes.** Centroid angle beside Est. Angle, and a CSV
+   export on the Tracking tab (Phaser repo).
+5. **Final project: option A.** The jammer comes out for now; detect,
+   classify, track.
+6. **FMCW: build the radar mode in the course GUI, starting the week of
+   2026-10-12.**
+7. **Layout: random.** Numbered boxes inside a marked circle; every
+   measurement from outside it. Consequences for the packet: a cadet chooses
+   their own stations, so the pre-lab question becomes "pick stations on the
+   circle's edge that give a good crossing for any box inside it"; and a
+   random layout can put two boxes closer than 0.75 m, which §2.2 says fails
+   about 1 time in 10 at 0.5 m. Default: tick marks every 10° on the circle,
+   each station on a tick with its array aimed at the center, so a station's
+   position and heading are one number each.
