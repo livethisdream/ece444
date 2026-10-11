@@ -66,14 +66,14 @@ parts:
         title: "L18 — Beam Steering Theory"
       - file: module03/L19-beam-steering-lab/index
         title: "L19 — Beam Steering Lab"
-      - file: module03/L20-array-factor-beamwidth/index
-        title: "L20 — Array Factor and Beamwidth Theory"
-      - file: module03/L21-array-factor-lab/index
-        title: "L21 — Array Factor Lab"
+      - file: module03/L20-fox-hunt-lab/index
+        title: "L20 — Fox Hunt Lab"
+      - file: module03/L21-array-factor-beamwidth/index
+        title: "L21 — Array Factor and Beamwidth Theory"
       - file: module03/L22-antenna-pattern-theory/index
         title: "L22 — Antenna Pattern Theory"
-      - file: module03/L23-antenna-pattern-lab/index
-        title: "L23 — Antenna Pattern Lab"
+      - file: module03/L23-array-pattern-lab/index
+        title: "L23 — Array Factor and Pattern Lab"
       - file: module03/L24-sidelobes-tapering/index
         title: "L24 — Sidelobes and Tapering Theory"
       - file: module03/L25-tapering-lab/index
@@ -97,18 +97,18 @@ parts:
         title: "L31 — Radar Detection Theory"
       - file: module04/L32-fmcw-intro/index
         title: "L32 — Introduction to FMCW on Phaser"
-      - file: module04/L33-range-calculations-lab/index
-        title: "L33 — Range Calculations Lab"
-      - file: module04/L34-range-waterfall-lab/index
-        title: "L34 — Range Waterfall Lab"
-      - file: module04/L35-range-doppler-lab/index
-        title: "L35 — Range-Doppler Lab"
-      - file: module04/L36-mti-lab/index
-        title: "L36 — Moving Target Indication (MTI) Lab"
-      - file: module04/L37-cfar-theory/index
-        title: "L37 — CFAR Processing Theory"
-      - file: module04/L38-cfar-lab/index
-        title: "L38 — CFAR Processing Lab"
+      - file: module04/L33-fmcw-range-lab/index
+        title: "L33 — FMCW Range Lab"
+      - file: module04/L34-range-doppler-mti-lab/index
+        title: "L34 — Range-Doppler and MTI Lab"
+      - file: module04/L35-cfar-theory/index
+        title: "L35 — CFAR Processing Theory"
+      - file: module04/L36-cfar-lab/index
+        title: "L36 — CFAR Processing Lab"
+      - file: module04/L37-classification-tracking/index
+        title: "L37 — Classification and Tracking"
+      - file: module04/L38-radar-open-lab/index
+        title: "L38 — Radar Open Lab"
 
   - caption: Module 5 — Capstone Project
     chapters:
