@@ -125,7 +125,7 @@ the project.
   <a class="mt-card mt-lesson" href="L38-radar-open-lab/index.html">
     <span class="mt-kind">Lesson 38</span>
     <h4>Radar Open Lab</h4>
-    <p>Bench make-up for Module 4 and the first final-project work time. Objective 5.2.</p>
+    <p>Bench make-up for Module 4, and a rehearsal of the radar chain the final project uses. Objective 5.2.</p>
   </a>
 </div>
 ::::

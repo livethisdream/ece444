@@ -1047,8 +1047,8 @@ folded in.
   **L37 Classification and Tracking** (new, 5.2 and 5.3, quoted with
   `--module: '5'` though it sits in Module 4: the micro-Doppler and tracker
   theory the final project needs, which the entry above placed at the L39
-  kickoff); **L38 Radar Open Lab** (new, 5.2: Module 4 bench make-up and the
-  first final-project work time). L15 to L19, L22, L24 to L32, and L39 to L41
+  kickoff); **L38 Radar Open Lab** (new, 5.2: Module 4 bench make-up and a
+  rehearsal of the radar chain the final project uses, before the L39 kickoff). L15 to L19, L22, L24 to L32, and L39 to L41
   keep their numbers; L25 stays Lab 8 and L28 Lab 9. The Module 4 lab pairs
   are shells, so their merge is a retitle and a second objective. As in the
   Module 2 renumber, LO ids stay attached to content, so Module 4's last two

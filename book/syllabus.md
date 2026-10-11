@@ -354,7 +354,7 @@ Labs are marked **LAB**.
 35. CFAR Processing Theory
 36. CFAR Processing Lab **(LAB)**
 37. Classification and Tracking — micro-Doppler classification, range and angle tracking
-38. Radar Open Lab **(LAB)** — Module 4 make-up and final-project work time
+38. Radar Open Lab **(LAB)** — Module 4 make-up and a rehearsal of the radar chain
 
 ### Module 5: Capstone Project
 

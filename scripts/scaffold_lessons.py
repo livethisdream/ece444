@@ -173,7 +173,7 @@ LESSONS = [
     (4, 35, "L35-cfar-theory", "CFAR Processing Theory", ["4.7"], "Constant false-alarm-rate processing.", False),
     (4, 36, "L36-cfar-lab", "CFAR Processing Lab", ["4.7"], "Apply CFAR to radar data and evaluate detection performance.", False),
     (4, 37, "L37-classification-tracking", "Classification and Tracking", ["5.2", "5.3"], "Micro-Doppler classification and range and angle tracking: the theory the final project needs.", False),
-    (4, 38, "L38-radar-open-lab", "Radar Open Lab", ["5.2"], "Bench make-up for Module 4 and the first final-project work time.", False),
+    (4, 38, "L38-radar-open-lab", "Radar Open Lab", ["5.2"], "Bench make-up for Module 4, and a rehearsal of the radar chain the final project uses.", False),
 
     (5, 39, "L39-final-project-kickoff", "Final Project Kickoff", ["5.1"], "Capstone scenario, teams, and plan: detect, classify, and track a moving target.", False),
     (5, 40, "L40-array-optimization", "Phase 1 — Array Optimization", ["5.1"], "Choose steering and taper weights and evaluate detection performance.", False),

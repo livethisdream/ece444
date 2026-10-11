@@ -16,7 +16,7 @@
 ---
 
 An open bench period: make up any Module 4 lab the kit or the schedule cost
-you, then start the final project on the hardware.
+you, then run the radar chain the final project will use, end to end.
 
 ```{note}
 Lesson material is under construction. This shell maps to objective 5.2.
