@@ -333,10 +333,10 @@ Labs are marked **LAB**.
 17. Introduction to Phased Array Hardware — ADALM-PHASER, SDR control
 18. Beam Steering Theory
 19. Beam Steering Lab **(LAB)**
-20. Array Factor and Beamwidth Theory &nbsp; · &nbsp; **Midterm project due**
-21. Array Factor Lab **(LAB)**
+20. Fox Hunt Lab **(LAB)** — find the live HB100 by triangulating bearings
+21. Array Factor and Beamwidth Theory &nbsp; · &nbsp; **Midterm project due**
 22. Antenna Pattern Theory — true pattern vs. array factor
-23. Antenna Pattern Lab **(LAB)** — AUT measurement using Phaser
+23. Array Factor and Pattern Lab **(LAB)** — beamwidth vs. aperture, and the pattern measured by moving the source
 24. Sidelobes and Tapering Theory
 25. Tapering Lab **(LAB)**
 26. Beam Squint and Quantization
@@ -349,12 +349,12 @@ Labs are marked **LAB**.
 30. Range, Resolution, Doppler Effect, and Radar Types
 31. Radar Detection Theory — PD, FAR, dwell time
 32. Introduction to FMCW on Phaser
-33. Range Calculations Lab **(LAB)**
-34. Range Waterfall Lab **(LAB)**
-35. Range-Doppler Lab **(LAB)**
-36. Moving Target Indication (MTI) Lab **(LAB)**
-37. CFAR Processing Theory
-38. CFAR Processing Lab **(LAB)**
+33. FMCW Range Lab **(LAB)** — range calculations and the range waterfall
+34. Range-Doppler and MTI Lab **(LAB)**
+35. CFAR Processing Theory
+36. CFAR Processing Lab **(LAB)**
+37. Classification and Tracking — micro-Doppler classification, range and angle tracking
+38. Radar Open Lab **(LAB)** — Module 4 make-up and final-project work time
 
 ### Module 5: Capstone Project
 

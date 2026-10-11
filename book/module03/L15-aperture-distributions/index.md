@@ -164,10 +164,10 @@ The small-angle step is good to within $1\%$ for $L \ge 2\lambda$. Lesson 6's $2
 
 :::{present}
 - The half-power points sit at $u = \pm 0.4429$.
-- Memorize $0.886$: Lesson 20's array beamwidth and every PHASER beamwidth prediction use it.
+- Memorize $0.886$: Lesson 21's array beamwidth and every PHASER beamwidth prediction use it.
 :::
 
-The $0.886$ is worth memorizing. It is the constant behind the array beamwidth formula in Lesson 20 and behind every beamwidth prediction you will make on the PHASER.
+The $0.886$ is worth memorizing. It is the constant behind the array beamwidth formula in Lesson 21 and behind every beamwidth prediction you will make on the PHASER.
 ::::
 
 ::::{frame} First Sidelobe

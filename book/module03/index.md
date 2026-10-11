@@ -25,7 +25,7 @@ with the right phases and the beam points where you choose; feed them with the
 right amplitudes and you decide how much energy leaks into the sidelobes.
 
 This is the longest module in the course, and the most hands-on. **Every
-theory lesson is followed by a lab on the ADALM-PHASER**, so you never take
+theory lesson leads to a lab on the ADALM-PHASER**, so you never take
 the array factor on faith.
 
 :::{depth}
@@ -84,7 +84,7 @@ and say what each term does, the rest is arithmetic.
 </div>
 ::::
 
-::::{frame} Lessons 18-21: Steering the Beam, and Proving It
+::::{frame} Lessons 18-21: Steering the Beam, and Using It
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L18-beam-steering-theory/index.html">
@@ -97,15 +97,15 @@ and say what each term does, the rest is arithmetic.
     <h4>Beam Steering Lab</h4>
     <p>Implement beam steering on the PHASER and verify against theory. Objective 3.5.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L20-array-factor-beamwidth/index.html">
+  <a class="mt-card mt-lesson" href="L20-fox-hunt-lab/index.html">
     <span class="mt-kind">Lesson 20</span>
+    <h4>Fox Hunt Lab</h4>
+    <p>Find the one live HB100 among numbered boxes: bearings from stations outside a marked circle, triangulated on your own kit. Lab 6. Objective 3.5.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L21-array-factor-beamwidth/index.html">
+    <span class="mt-kind">Lesson 21</span>
     <h4>Array Factor and Beamwidth Theory</h4>
     <p>Array factor and beamwidth in depth. Midterm project due. Objective 3.2.</p>
-  </a>
-  <a class="mt-card mt-lesson" href="L21-array-factor-lab/index.html">
-    <span class="mt-kind">Lesson 21</span>
-    <h4>Array Factor Lab</h4>
-    <p>Measure the array factor on the PHASER. Objective 3.2.</p>
   </a>
 </div>
 ::::
@@ -118,10 +118,10 @@ and say what each term does, the rest is arithmetic.
     <h4>Antenna Pattern Theory</h4>
     <p>True antenna pattern vs. array factor; element-pattern effects. Objective 3.6.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L23-antenna-pattern-lab/index.html">
+  <a class="mt-card mt-lesson" href="L23-array-pattern-lab/index.html">
     <span class="mt-kind">Lesson 23</span>
-    <h4>Antenna Pattern Lab</h4>
-    <p>AUT pattern measurement using the PHASER. Objective 3.6.</p>
+    <h4>Array Factor and Pattern Lab</h4>
+    <p>Measure the array factor at 8, 4, and 2 elements, then walk the source around a fixed beam to see the element pattern. Lab 7. Objectives 3.2, 3.6.</p>
   </a>
   <a class="mt-card mt-lesson" href="L24-sidelobes-tapering/index.html">
     <span class="mt-kind">Lesson 24</span>

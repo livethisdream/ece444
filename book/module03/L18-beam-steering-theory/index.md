@@ -631,7 +631,7 @@ This lesson's problems are the pre-lab for Lesson 19: Part 1 of the Lab 5 packet
 :::{present}
 - L19: steer the PHASER, sweep, and compare the measured peak and beamwidth with the prediction.
 - The lab redoes the $30^\circ$ table at the HB100's $10.525\ \text{GHz}$: $88.4^\circ$ per element, E1 to E8.
-- L20-L26: beamwidth, tapering, grating lobes, squint, and quantization.
+- L21-L26: beamwidth, tapering, grating lobes, squint, and quantization.
 :::
 
 L19 puts this on the hardware. You will load the Steering Angle lab preset,
@@ -645,8 +645,8 @@ position and the comparison only means something if the prediction was written
 down first.
 
 :::{depth}
-Further out, the ideal steered pattern of this lesson starts to fray. L20 and
-L21 measure beamwidth against theory across element counts, L24 trades sidelobe
+Further out, the ideal steered pattern of this lesson starts to fray. L21 and
+L23 measure beamwidth against theory across element counts, L24 trades sidelobe
 level for beamwidth with a taper, and L26 collects the three ways a real steered
 array departs from today's result: grating lobes when the spacing is too wide
 (L16's criterion, which the PHASER's $14\ \text{mm}$ meets at every angle),
