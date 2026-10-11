@@ -134,7 +134,7 @@ quoted as the full $180^\circ$ of the scan range.
 
 ::::{frame} Reading a Sweep for What It Is
 :::{present}
-- Sampled: one $2.8125^\circ$ step, 65 points across $\pm 90^\circ$.
+- Sampled: 162 points, one $2.8125^\circ$ phase step apart, about $0.9^\circ$ of angle near broadside.
 - A floor about $23\ \text{dB}$ below the 8-element peak.
 - Nulls fall between samples and fill with noise.
 :::
@@ -150,10 +150,15 @@ stationary source and records the power at each step. By reciprocity that
 traces the array pattern, but three properties of the measurement are baked
 into every trace you will read.
 
-The sweep is sampled, not continuous. The default step is $2.8125^\circ$, the
-ADAR1000 phase LSB expressed as a steering resolution, so the trace is 65
-points across $\pm 90^\circ$ and a feature narrower than one step can fall
-between samples entirely. The trace has a floor. Receiver noise sits about
+The sweep is sampled, not continuous. With Use Bits on, as in every lab
+preset, the software steps the element-to-element phase one ADAR1000 LSB,
+$2.8125^\circ$, per point. One step moves $\sin\theta$ by
+$2.8125^\circ/173.2^\circ = 0.0162$ at $10.3\ \text{GHz}$, which is
+$0.93^\circ$ of angle at broadside and $1.32^\circ$ at $45^\circ$, widening as
+$1/\cos\theta$. A sweep is 162 points: 123 of them span $\pm 82^\circ$, and
+the other 39 ask for more phase than any real angle needs and plot at
+$\pm 90^\circ$. A feature narrower than one step can fall between samples
+entirely. The trace has a floor. Receiver noise sits about
 $23\ \text{dB}$ below the peak of the uniform 8-element beam, which is the
 usable dynamic range of the whole measurement. Anything the array factor puts
 below that line reads as noise instead. And the nulls are the first casualties
@@ -222,7 +227,7 @@ steering electronically.
 | x-axis | commanded steer angle | elapsed time (angle is where your hand was) |
 | What is measured | mostly the array factor | element factor $\times$ array factor |
 | Element factor | fixed, so it cancels out | included, and it shades the trace |
-| Angle accuracy | set by the phase LSB, $2.8125^\circ$ | set by how steadily you walk |
+| Angle accuracy | set by the $2.8125^\circ$ phase LSB, about $0.9^\circ$ near broadside | set by how steadily you walk |
 | Behind the array | never visited | visibly empty |
 
 Sweeping the beam holds the source at one physical angle, so the element factor
@@ -297,7 +302,7 @@ does not look right, fix that before going further, because everything below
 assumes a calibrated array.
 
 The preset sets a uniform taper across all eight elements, zero steering phase,
-and the default $2.8125^\circ$ steer resolution, and it opens the
+and Use Bits on, so the sweep steps one $2.8125^\circ$ phase LSB per point, and it opens the
 **Rectangular** tab in the beam-sweep plot. From here the procedure names only
 the controls you change.
 
@@ -404,18 +409,20 @@ of the measurement, and it is why the lab asks for the first sidelobe rather
 than the second or third.
 
 **Nulls read about $-19$ dBc instead of $-\infty$.** Two effects fill them, and
-it is worth keeping them separate. Grid straddle comes first: the 8-element
-null falls at $15.1^\circ$, but the sweep samples at multiples of
-$2.8125^\circ$, so the nearest sample is at $14.06^\circ$, where the array
-factor is already back up to $-23\ \text{dB}$. The floor then adds its own
-power on top. The measured FNBW comes out as $2 \times 14.06 = 28.1^\circ$
-rather than $30.1^\circ$, and the entire $2^\circ$ discrepancy is the sampling
-grid, not the array.
+it is worth keeping them separate. Grid straddle is the smaller one. The
+8-element null sits at a phase step of $360^\circ/8 = 45^\circ$, exactly 16
+LSBs, so with the source on boresight a sample lands on it at $15.1^\circ$. A
+source half a step off boresight, $0.47^\circ$, leaves the nearest sample at
+$-30\ \text{dB}$, still below the floor. The floor is what fills the null: it
+adds its own power to every sample near it. Reading each null at its lowest
+sample puts the measured FNBW between $30.1^\circ$ and $31.1^\circ$, within
+one step of the $30.1^\circ$ the array factor gives.
 
 **The first sidelobe reads $-11$ to $-13$ dBc.** The array factor puts it at
-$-12.8\ \text{dB}$ and $21.9^\circ$. The nearest sample at $22.5^\circ$ catches
-it within a tenth of a decibel, so grid straddle costs little here, but the
-floor adds power to a sidelobe that is only $10\ \text{dB}$ above it and noise
+$-12.8\ \text{dB}$ and $21.9^\circ$, a phase step of $64.7^\circ$. The sample
+at 23 LSBs, $64.69^\circ$, catches it within a hundredth of a decibel, so grid
+straddle costs nothing here, but the floor adds power to a sidelobe that is
+only $10\ \text{dB}$ above it and noise
 moves the reading a few tenths either way from sweep to sweep. A single number
 is not meaningful at this dynamic range; a range is.
 
@@ -740,7 +747,7 @@ The Lab 7 sheet is the turn-in document for both parts.
 | $\text{FNBW} = 2\arcsin(\lambda/Nd)$ | first-null beamwidth | $30^\circ$ at $N = 8$; no null when $\lambda/2d > 1$ |
 | First SLL, uniform | set by distribution shape, not size | $-12.8$ dB at $N = 8$, $-11.3$ dB at $N = 4$; measured $-11$ to $-13$ dBc |
 | $20\log_{10}(N_{\text{active}}/8)$ | peak drop from coherent voltage sum | $-6$ dB per halving of the aperture |
-| Sweep grid | steer step = ADAR1000 phase LSB | $2.8125^\circ$, 65 points across $\pm 90^\circ$ |
+| Sweep grid | one ADAR1000 phase LSB per point | $2.8125^\circ$ of phase, $0.93^\circ$ of angle at broadside; 162 points |
 | Dynamic range | peak of uniform beam above noise | $\approx 23$ dB; nulls read $\approx -19$ dBc |
 ::::
 

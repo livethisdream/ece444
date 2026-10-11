@@ -175,7 +175,7 @@ With $Nd/\lambda = 3.85$, the tooth spacing is $\lambda/Nd = 0.260$ in $\sin\the
 
 $\sin\theta = 0.260 \rightarrow 15.1^\circ$, $\quad 0.520 \rightarrow 31.3^\circ$, $\quad 0.780 \rightarrow 51.2^\circ$, $\quad 1.040 \rightarrow$ outside the visible region.
 
-So the eight-element array shows three nulls per side, not seven, and $\text{FNBW} = 2(15.1^\circ) = 30.1^\circ$. Steer the same array to $30^\circ$ and the first nulls land at $\sin\theta = 0.5 \pm 0.260$, which is $13.9^\circ$ and $49.4^\circ$. The beam is no longer symmetric about its own peak: the lower null sits $16.1^\circ$ below it and the upper null $19.4^\circ$ above, for a first-null beamwidth of $35.5^\circ$.
+So the eight-element array shows three nulls per side, not seven, and $\text{FNBW} = 2(15.1^\circ) = 30.1^\circ$. Steer the same array to $30^\circ$ and the first nulls land at $\sin\theta = 0.5 \pm 0.260$, which is $13.9^\circ$ and $49.5^\circ$. The beam is no longer symmetric about its own peak: the lower null sits $16.1^\circ$ below it and the upper null $19.5^\circ$ above, for a first-null beamwidth of $35.6^\circ$.
 :::
 
 The null-to-null width runs about $2.3$ times the half-power width for a uniform array. That ratio is worth remembering when you read a measured sweep, because the nulls are sharp features that a coarse angle grid can miss entirely, while the half-power points are easy to interpolate.
@@ -238,7 +238,7 @@ The eight elements are patches, not isotropic radiators, so the array's gain is 
 
 $$G_\text{total}\ [\text{dBi}] = G_\text{element}\ [\text{dBi}] + D_\text{array}\ [\text{dB}].$$
 
-Eight half-wave dipoles, at $2.15$ dBi each, would make an $11.1$ dBi array. The sum holds while the element pattern is close to flat across the main lobe, which is where its usefulness ends: Lesson 22 takes up what happens when it is not.
+Eight half-wave dipoles, at $2.15$ dBi each, would make an $11.0$ dBi array. The sum holds while the element pattern is close to flat across the main lobe, which is where its usefulness ends: Lesson 22 takes up what happens when it is not.
 :::
 ::::
 
@@ -342,15 +342,15 @@ Lesson 23 sweeps the PHASER with all eight elements on, then with the center fou
 ::::{frame} Three Details in the Prediction Table
 :::{present}
 - Two elements have no null or sidelobe ($\lambda/Nd > 1$); HPBW is $62^\circ$, not the formula's $53^\circ$.
-- The first sidelobe drifts: $-12.8$ dB at 8 elements, about $-11$ dB at 4.
-- The sweep's $2.8125^\circ$ grid puts measured widths $1^\circ$ to $3^\circ$ off.
+- The first sidelobe is $-12.8$ dB at 8 elements and $-11.3$ dB at 4.
+- Samples sit one $2.8125^\circ$ phase step apart: about $0.9^\circ$ near broadside.
 :::
 
 The two-element row has no null and no sidelobe. With $Nd$ under a wavelength, $\lambda/Nd$ exceeds $1$ and the first null falls outside the visible region, so the pattern is a single broad hump and the first-null beamwidth is quoted as $180^\circ$ by convention. Its half-power width is $62^\circ$, not the $53^\circ$ the small-angle formula returns, because a beam that wide breaks the approximation used to derive it.
 
 The first sidelobe drifts with element count. The $-13$ dB figure is the large-array limit; eight elements give $-12.8$ dB and four give about $-11$ dB. All three are far above the sweep's noise floor, which sits roughly $23$ dB below the uniform-taper peak.
 
-The sweep is a discrete grid. The GUI steps the commanded angle by the phase-shifter resolution, $2.8125^\circ$ by default, so measured widths land one to three degrees off the calculated ones — measured HPBW near $13.1^\circ$ and FNBW anywhere from $28^\circ$ to $30^\circ$ for the full array. That is the grid, not the physics, and it is not an error to explain away.
+The sweep is a discrete grid. With Use Bits on, as in every lab preset, the GUI steps the element-to-element phase one phase-shifter LSB, $2.8125^\circ$, per point. One step moves $\sin\theta$ by $2.8125^\circ/173.2^\circ = 0.0162$, which is $0.93^\circ$ of angle at broadside and $1.07^\circ$ at $30^\circ$, widening as $1/\cos\theta$. A half-power width read as the span between the outermost samples above $-3$ dB comes out short by up to one step: $12.1^\circ$ to $13.1^\circ$ for the full array, against $13.3^\circ$ from the pattern. Interpolating between the two samples that straddle each $-3$ dB crossing recovers the width to within $0.1^\circ$. The nulls are read at their lowest sample, which puts the measured FNBW between $30.1^\circ$ and $31.1^\circ$. That is the grid, not the physics, and it is not an error to explain away.
 ::::
 
 ::::{frame} Summary: Beamwidth
