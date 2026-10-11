@@ -36,7 +36,7 @@ By the end of this course, you will be able to:
 4. Analyze radar performance using the radar equation, detection theory, and
    FMCW signal processing (range, Doppler, CFAR).
 5. Integrate array beamforming and radar signal processing into a working
-   demonstration of tracking a moving target while suppressing a jammer.
+   demonstration that detects, classifies, and tracks a moving target.
 
 ## Learning objectives
 
@@ -97,9 +97,9 @@ Each LO is assessed at least once. LOs are assessed as **Mastered** or
 
 | LO | Description |
 | :-: | :- |
-| 5.1 | I can integrate beam-steering and null-steering weights to optimize array performance against a specified scenario. |
+| 5.1 | I can choose and justify array steering and taper weights to optimize detection performance for a specified scenario. |
 | 5.2 | I can integrate FMCW radar processing with a phased-array front-end to track a moving target. |
-| 5.3 | I can suppress a static jammer using null steering while maintaining detection of a moving target. |
+| 5.3 | I can classify a detected target from its micro-Doppler signature and report the classifier's accuracy. |
 | 5.4 | I can present system performance results and defend engineering trade-offs in a technical briefing. |
 
 ## Grading
@@ -218,7 +218,7 @@ Engagement is capped at 10%; extra credit does not roll over.
 Two graded projects anchor the course:
 
 - **Midterm Project — Antenna Pattern Measurement.** Introduced at Lesson 9, due **2 Oct, 2359**. Students build a 915 MHz dipole and trim it to resonance, then match the same antenna to 50 ohms at a second frequency with a discrete network, simulate it, execute a pattern-measurement campaign on it at both frequencies, reduce the data, and report gain, beamwidth, sidelobe level, and polarization behavior against expectations. Graded on a **100-point rubric**, published in the project packet. No resubmission.
-- **Final Project — Combined Beamforming + Radar.** Track a moving target while suppressing a static jammer using the ADALM-PHASER. Runs across Lessons 39–41 (Module 5). Graded using a **traditional rubric-based sliding scale**.
+- **Final Project — Combined Beamforming + Radar.** Detect, classify, and track a moving target using the ADALM-PHASER. Runs across Lessons 39–41 (Module 5). Graded using a **traditional rubric-based sliding scale**.
 
 ## Course policies
 
@@ -358,11 +358,11 @@ Labs are marked **LAB**.
 
 ### Module 5: Capstone Project
 
-**Scenario:** Track a moving target while suppressing a static jammer.
+**Scenario:** Detect, classify, and track a moving target.
 
 39. Final Project Kickoff
-40. Phase 1 — Array Optimization: design beam-steering weights, implement null-steering weights, evaluate array performance
-41. Phase 2 — Radar Integration and Demonstration: integrate FMCW radar processing, perform Doppler target tracking, overlay radar tracking results onto the optimized antenna array pattern
+40. Phase 1 — Array Optimization: choose steering and taper weights, evaluate detection performance
+41. Phase 2 — Radar Integration and Demonstration: integrate FMCW radar processing, classify the target from its micro-Doppler signature, track it, overlay radar tracking results onto the optimized antenna array pattern
 
 ## Textbooks & materials
 

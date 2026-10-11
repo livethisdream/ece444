@@ -130,7 +130,8 @@ module are the ones the capstone leans on hardest.
 
 ::::{frame} Where This Is Going
 **Module 5** puts the two halves of the course together. The array from Module
-3 points and nulls; the radar from Module 4 detects and tracks.
+3 points and tapers; the radar from Module 4 detects.
 
-Nothing new is introduced. The capstone is the integration.
+The capstone adds a classifier and a tracker on top, and the integration is
+the project.
 ::::

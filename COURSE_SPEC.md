@@ -1011,3 +1011,21 @@ folded in.
   the beam under 0.01°) and survives as a labeled L26 squint preview. Rx Gain
   10 dB as in L17. Hardware-day items: the + side of the arc (Lesson 18's
   convention says toward E8), scan loss on the kit, Rx Gain compression.
+- **Final project: detect, classify, track; the jammer is out for now**
+  (Neil, 2026-10-11, choosing option A of the Module 4-5 buildout plan:
+  "we can take out the jammer for now"). The capstone is one moving target
+  at a time on a taped course, detected with CFAR on range-Doppler,
+  classified from its micro-Doppler signature, and tracked in range and
+  angle (monopulse), then briefed. Objective wording, changed everywhere it
+  is quoted: **5.1** "I can choose and justify array steering and taper
+  weights to optimize detection performance for a specified scenario."
+  **5.3** "I can classify a detected target from its micro-Doppler
+  signature and report the classifier's accuracy." 5.2 and 5.4 unchanged.
+  **Course objective 5** now ends "...into a working demonstration that
+  detects, classifies, and tracks a moving target." Null steering stays
+  Module 3 teaching (L27, L28, objective 3.9); only the pointers that
+  promised the jammer back in the capstone came off those pages. The L01,
+  L27, L28, and L41 decks still mention the jammer and stay as built (see
+  "No new deck work" above). The new theory the project needs (the tracker,
+  the spectrogram features) arrives with the L39 kickoff, so the Module 4
+  and 5 overviews no longer say "nothing new".

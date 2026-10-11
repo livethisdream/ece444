@@ -396,6 +396,4 @@ $r_\text{n}$ is the whole story. It is the uniform pattern's level at the null a
 ::::{frame} Where this is going
 
 Lesson 28 takes these weights to the bench. You will compute the gain and phase table for an interferer angle, type it into the Element Gains and Phase Control sections of the Phaser GUI, sweep the beam, and measure the notch you predicted. Then the lab does the thing this lesson cannot: instead of telling the array where the interferer is, it lets the array estimate the interference from the received data itself and compute its own weights. That is **MVDR**, the minimum-variance distortionless-response beamformer, and it needs the two digital channels rather than the analog element sums — the hybrid architecture of L17 finally earns its keep. Read the Digital Beam Forming section of the GUI inventory before class so the Mode, Snapshots, and Diagonal Load controls are not new to you.
-
-The Module 5 capstone is this lesson at full scale: hold a track on a moving target while a jammer of unknown strength sits somewhere in the sidelobes, and keep both the beam and the null where they belong as the geometry changes.
 ::::

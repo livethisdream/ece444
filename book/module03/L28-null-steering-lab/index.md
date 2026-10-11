@@ -43,7 +43,7 @@ three procedures, in increasing order of how much the array does for itself — 
 static notch you compute yourself, a boresight null you get for free by
 subtracting the two digital channels, and an adaptive beamformer that finds its
 own null from the received data. The three together are the whole null-steering
-toolbox, and the last one is the capstone problem in miniature. The lesson closes
+toolbox. The lesson closes
 on that same difference beam put to a different use, measuring a target's angle
 from a single look, which is where Module 4 begins.
 :::
@@ -412,9 +412,8 @@ adaptive beamforming has both advantages at once; on the PHASER you can see
 precisely what the hybrid architecture costs, because the analog sums destroyed
 the per-element information before the algorithm ever saw it.
 
-Module 5's capstone is this lab with the target moving: track a maneuvering
-target with the sum and difference beams while an adaptive null holds a jammer
-down, which is procedures B and C running at the same time.
+The sum and difference beams come back in the Module 5 capstone, where
+monopulse tracks the angle of a moving target.
 
 ::::
 

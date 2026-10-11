@@ -63,7 +63,7 @@ moving target in your sights.
   <a class="block-card" href="module05/index.html">
     <span class="num">05</span>
     <h3>Capstone Project</h3>
-    <p>Track a moving target while nulling a static jammer — then defend your design in a technical briefing.</p>
+    <p>Detect, classify, and track a moving target — then defend your design in a technical briefing.</p>
     <footer>Lessons 39–41</footer>
   </a>
 </div>
@@ -76,7 +76,7 @@ moving target in your sights.
     <p class="d-eyebrow">Individual deliverable</p>
     <h3>Final Project</h3>
     <p class="d-weight"><span class="d-w-num">40%</span> of course grade</p>
-    <p class="d-due">Capstone Project: moving target, static jammer, technical briefing</p>
+    <p class="d-due">Capstone Project: detect, classify, and track a moving target; technical briefing</p>
     <a class="d-link" href="syllabus.html#grading">How mastery grading works →</a>
   </div>
   <div class="deliverable-card">
@@ -107,7 +107,7 @@ By the end of this course you should be able to:
 ::::{frame} Course Objectives 4-5
 
 4. Analyze radar performance using the radar equation, detection theory, and FMCW signal processing (range, Doppler, CFAR).
-5. Integrate array beamforming and radar signal processing into a working demonstration of tracking a moving target while suppressing a jammer.
+5. Integrate array beamforming and radar signal processing into a working demonstration that detects, classifies, and tracks a moving target.
 ::::
 
 ::::{frame} How This Course Is Graded
