@@ -786,9 +786,9 @@ problems fold into its lab packet, `latex/ECE444_Lab_L<NN>_<Short>.tex`,
 which has three parts: **Part 1, Pre-Lab** (individual, before the lab
 period: the predictions, plus a rehearsal of the commanded half of the
 procedure on the hosted simulator where the lab has one; it may scaffold like
-a practice set); **Part 2, Measurements** (the team's
-data, in class: measurement tables only, no prose questions; every teammate
-copies the same values); **Part 3, Writeup** (individual, after the lab:
+a practice set); **Part 2, Measurements** (each
+cadet's own data from their own kit, in class: measurement tables only, no
+prose questions); **Part 3, Writeup** (individual, after the lab:
 reconcile measured against predicted against the error budget, plus three or
 four analysis problems). **The packet is one submission** (Neil, 2026-10-11:
 "I don't want to be grading extra assignments"), turned in complete before the
@@ -932,7 +932,7 @@ folded in.
   exceptions in that file until they are recut, so their gates stay green;
   L17 and L18 are recut first. In a lab lesson only the frames presented
   before bench time count: the step-by-step procedure frames are read-only,
-  because teams follow them in read mode on their own laptops.
+  because cadets follow them in read mode on their own laptops.
 
 - **Hardware limits stay out of the student story unless they change what
   a student does** (Neil, 2026-10-07, on the L17 closing re-check, which
@@ -1024,6 +1024,10 @@ folded in.
   counts, a bring-up record and kit check, a block diagram and two bench
   diagnoses. The page now says only that the board shifts the signal to 2.2 GHz
   where the SDR listens; its LO, IF, and spectrum-mirror content came off.
+- **Every cadet has their own kit** (Neil, 2026-10-11). Lab measurements are
+  individual, not team data: Part 2 of a packet is the cadet's own kit, an
+  old-style lab sheet is one per cadet, and the L17 bring-up names the kit by
+  a kit number NN (`phaser-NN` at `192.168.7.(10 + NN)`), not a team number.
 - **Final project: detect, classify, track; the jammer is out for now**
   (Neil, 2026-10-11, choosing option A of the Module 4-5 buildout plan:
   "we can take out the jammer for now"). The capstone is one moving target

@@ -180,7 +180,7 @@ earn engagement points in the following ways:
   specific questions or a concept you want to work through.
 - **Lab packets.** A lab's packet has three parts: a pre-lab you do before the
   period (your predictions, and in some labs a rehearsal in the browser simulator), the data
-  your team records at the bench, and a writeup you do afterward (what you
+  you record on your own kit, and a writeup you do afterward (what you
   measured against what you predicted, and why they differ). Where a lab has a
   packet, it replaces the practice problems for that lab, and for the lesson
   before it when the pre-lab draws on that lesson. The packet is one submission, turned in complete after the lab and

@@ -355,14 +355,14 @@ change in the source, so the SDR's tuning and sample rate never change.
 
 ::::{frame} Part A: Bring Up Your PHASER
 :::{present}
-- Each team brings its kit up from a blank microSD card in six stages: flash, name, boot, connect, update, and calibrate.
+- Each cadet brings their own kit up from a blank microSD card in six stages: flash, name, boot, connect, update, and calibrate.
 - The Ethernet cable carries ssh and the browser; the Wi-Fi only connects the Pi to the internet.
 :::
 :::{present}
 <img src="../../viz/img/L17-part-a-network.svg" alt="Part A network. The laptop, at 192.168.7.1, reaches the Pi, at 192.168.7.13, over the Ethernet cable, which carries ssh and the browser interface on port 8080. The Pi joins the AF_ACADEMY_GUEST Wi-Fi and reaches GitHub through it to run install.sh. A path from the laptop through the Wi-Fi access point to the Pi is crossed out, because the guest network can isolate its clients from each other." style="max-width: 100%; display: block; margin: 0 auto;">
 :::
 
-Each team starts today with a PHASER kit and a blank microSD card and brings the
+Each cadet starts today with their own PHASER kit and a blank microSD card and brings the
 kit up itself: you flash the course image onto the card, name the kit, boot it,
 connect to it, update its software, and calibrate it. Part B then makes the
 first measurements on the kit you brought up.
@@ -381,7 +381,7 @@ network's settings, so every step that talks to the Pi from the laptop uses the
 cable.
 :::
 
-Each team has one kit:
+Each cadet has their own kit:
 
 - the ADALM-PHASER board, with the Raspberry Pi and the ADALM-Pluto attached on the back
 - an HB100 microwave source on its own small stand or battery holder
@@ -440,15 +440,15 @@ we leave Imager's turned off.
 :class: read-only
 
 :::{present}
-Team NN's kit is `phaser-NN` at `192.168.7.(10 + NN)`; examples use team 03.
+Kit NN is `phaser-NN` at `192.168.7.(10 + NN)`; examples use kit 03.
 
 6. Reinsert the card to open its FAT partition.
 7. In `phaser-hostname`, replace `phaser` with `phaser-03`.
 8. In `phaser-ip`, replace `#192.168.7.2/24` with `192.168.7.13/24`, then save and eject.
 :::
 
-Your instructor assigns your team a two-digit number, NN, so team 03 is
-`phaser-03` at `192.168.7.13`. Team 03 appears in every example from here on;
+Your instructor assigns your kit a two-digit number, NN, so kit 03 is
+`phaser-03` at `192.168.7.13`. Kit 03 appears in every example from here on;
 use your own number.
 
 The FAT partition is the small one that holds `config.txt` and `cmdline.txt`;
@@ -536,7 +536,7 @@ whether to trust the kit's host key.
 :::{depth}
 Nothing on a direct cable hands out addresses, so the laptop needs one of its
 own on the same `/24` network as the kit's alias. The address `192.168.7.1`
-sits below every team's address, and each kit has its own cable, so every
+sits below every kit's address, and each kit has its own cable, so every
 laptop can use it.
 
 The kit's fixed address exists only on its wired port, added once at boot,
@@ -996,8 +996,8 @@ turned down.
 
 The Lab 4 packet is one submission for the whole lab, turned in complete before Lesson 18. It has three parts:
 
-1. **Part 1, Pre-Lab** (individual, before the lab period): the receive chain in order, the phase shifter's step, the element and channel counts, and how a team number sets the kit's name and address.
-2. **Part 2, Measurements** (your team's data, recorded in class): the bring-up record from Part A, and the kit check from Part B, the FFT peak and the sweep with the source at boresight, moved, and back.
+1. **Part 1, Pre-Lab** (individual, before the lab period): the receive chain in order, the phase shifter's step, the element and channel counts, and how a kit number sets the kit's name and address.
+2. **Part 2, Measurements** (your own kit's data, recorded in class): the bring-up record from Part A, and the kit check from Part B, the FFT peak and the sweep with the source at boresight, moved, and back.
 3. **Part 3, Writeup** (individual, after the lab): a labeled block diagram, two bench diagnoses, and two written answers.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">Lab 4 packet (PDF)</a>

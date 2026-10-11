@@ -691,7 +691,7 @@ looked like.
 ::::{frame} Deliverables
 :class: read-only
 
-Submit the Lab 7 sheet, one per team, at the start of the next period.
+Submit the Lab 7 sheet, one per cadet, at the start of the next period.
 
 **Part A**
 

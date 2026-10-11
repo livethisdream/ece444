@@ -116,9 +116,9 @@ of the ADALM-PHASER and control it via SDR software.}
 
 This packet is Lab 4, in three parts, and you turn it in once, complete,
 before Lesson 18. Do \textbf{Part 1} on your own before the lab period: a few
-questions about the hardware you will bring up. \textbf{Part 2} is your team's
-record from the bench, in class: did the kit come up, and does it see the
-source; every teammate copies the same values into their own packet. Do
+questions about the hardware you will bring up. \textbf{Part 2} is your own
+record from your kit, in class: did it come up, and does it see the
+source. Do
 \textbf{Part 3} on your own after the lab: a block diagram of the kit, two
 bench diagnoses, and two short written answers.
 
@@ -197,16 +197,16 @@ PHASER's patches and ends up as numbers in the Raspberry Pi.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{The kit's name and address.} Your instructor assigns each
-team a two-digit number NN, and Part A of the procedure on the Lesson 17 page
+kit a two-digit number NN, and Part A of the procedure on the Lesson 17 page
 gives the kit the name \texttt{phaser-NN} and the fixed address
-$192.168.7.(10 + \mathrm{NN})$. Fill in the row for team 07, and your own row
+$192.168.7.(10 + \mathrm{NN})$. Fill in the row for kit 07, and your own row
 once you know your number.
 
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{| c | K{1.25in} | K{1.6in} | K{2.25in} |}
 \hline
-\textbf{Team} & \textbf{Kit name} & \textbf{Fixed address} & \textbf{GUI address} \\\hline\hline
+\textbf{Kit} & \textbf{Kit name} & \textbf{Fixed address} & \textbf{GUI address} \\\hline\hline
 07 & \kv{\texttt{phaser-07}} & \kv{\texttt{192.168.7.17}} & \kv{\texttt{http://192.168.7.17:8080}} \\\hline
 \rule{0pt}{0.24in} & & & \\\hline
 \end{tabular}
@@ -214,7 +214,7 @@ once you know your number.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\fullwidth{\large\textbf{Part 2: Measurements} \normalsize(team data, in class)}
+\fullwidth{\large\textbf{Part 2: Measurements} \normalsize(your kit, in class)}
 
 Follow the procedure on the Lesson 17 page in read mode, and record each value
 as the kit or the GUI reports it.
@@ -228,12 +228,12 @@ come up?
 \begin{tabular}{| l | K{3.1in} |}
 \hline
 \textbf{Item} & \textbf{Value} \\\hline\hline
-Team number NN & \kv{your own, such as 03} \\\hline
+Kit number NN & \kv{your own, such as 03} \\\hline
 What \texttt{hostname} prints & \kv{\texttt{phaser-NN}, such as \texttt{phaser-03}} \\\hline
 Fixed address in \texttt{hostname -I} & \kv{\texttt{192.168.7.(10 + NN)}, such as \texttt{192.168.7.13}} \\\hline
 Result of \texttt{ping -c 4 github.com} & \kv{four replies; or failed, reported to the instructor} \\\hline
 Last line \texttt{install.sh} printed & \kv{\texttt{Installed. Service is active ...}} \\\hline
-Address you opened the GUI at & \kv{\texttt{http://192.168.7.13:8080} for team 03} \\\hline
+Address you opened the GUI at & \kv{\texttt{http://192.168.7.13:8080} for kit 03} \\\hline
 What the connection pill reads & \kv{\textbf{Connected}} \\\hline
 Frequency \textbf{Find HB100} reported & \kv{your own, in $10.1$--$10.7\ \ghz$} \\\hline
 \textbf{Calibrate} ran to completion (yes or no) & \kv{yes} \\\hline
@@ -245,7 +245,7 @@ A ping that fails does not stop the lab: the golden image already carries a
 working backend, and the instructor can install the update from a local copy.
 Record ``skipped'' for the installer line in that case. The \textbf{Find HB100}
 result is this kit's own source, so it generally differs from the nominal
-$10.525\ \ghz$ and from other teams' values.
+$10.525\ \ghz$ and from your classmates' values.
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -323,11 +323,11 @@ ADAR1000s over SPI, and serves the browser interface.
 \end{solutionorbox}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{Bench diagnosis.} Two other teams ask for help with Part B.
+\question \textbf{Bench diagnosis.} Two classmates ask for help with Part B.
 
 \begin{parts}
 
-	\part The first team presses \textbf{Start} and sees no peak anywhere on the
+	\part The first presses \textbf{Start} and sees no peak anywhere on the
 	FFT tab. Give the first two checks you would make, in order, and say what
 	each one rules out.
 	\begin{solutionorlines}[1.5in]
@@ -339,7 +339,7 @@ ADAR1000s over SPI, and serves the browser interface.
 	after both pass is it worth suspecting the cables or the array.
 	\end{solutionorlines}
 
-	\part The second team's FFT tab shows a peak $25$ dB above the floor, but on
+	\part The second classmate's FFT tab shows a peak $25$ dB above the floor, but on
 	the Rectangular tab its sweep stands only $8$ dB above the sweep's floor,
 	against about $23$ dB on a working kit, and Est. Angle reads $11\mydeg$ with
 	the source at boresight. What would you check next, and why?
