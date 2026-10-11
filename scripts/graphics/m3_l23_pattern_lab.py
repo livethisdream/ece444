@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the L23 (Antenna Pattern Lab) deck data-plots as inline SVG.
+"""Generate the L23 (Array Factor and Pattern Lab) Part B deck data-plots as inline SVG.
 
 L23:
   - L23-time-vs-angle  : the same hand-rotation run plotted against elapsed

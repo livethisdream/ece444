@@ -490,12 +490,17 @@ The Lab 5 packet is the turn-in document for the whole lab, in three parts:
 
 ::::{frame} Looking Ahead
 :::{present}
-- Lesson 20 derives the trace's features: nulls, the $-12.8$ dB sidelobe, and the beamwidth.
-- Bring today's Tables A and B; the derivation starts from them.
+- Lesson 20 uses today's bearing skill: find the one live HB100 among numbered boxes.
+- Lesson 21 derives the trace's features: nulls, the $-12.8$ dB sidelobe, and the beamwidth.
+- Keep Tables A and B; that derivation starts from them.
 :::
 
+Lesson 20, the fox hunt, puts today's skill to work while it is fresh: the peak
+of the sweep is a bearing, and bearings from several stations cross at the
+source.
+
 Today we compared measured beamwidths and sidelobes with values from Lesson 16's
-closed form and Lesson 18's broadening rule. Lesson 20 takes the closed form
+closed form and Lesson 18's broadening rule. Lesson 21 takes the closed form
 
 $$AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}$$
 

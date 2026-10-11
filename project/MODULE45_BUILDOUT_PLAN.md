@@ -1,5 +1,7 @@
 # Modules 4 and 5 build-out plan: the fox hunt and the final project
 
+> **Numbering note (2026-10-11):** lesson numbers in this plan written before 2026-10-11 are pre-renumber. The schedule was renumbered that day (fox hunt at L20, old L20 → L21, old L21 + L23 → L23, old L33-L38 → L33-L36 plus new L37-L38); see `COURSE_SPEC.md` §M7, "Short labs merge".
+
 Written 2026-10-10 from Neil's two asks that day (a fox-hunt period, and a
 final project that is "still in flux, but I'm thinking target detection and
 classification and tracking using the phaser"), the Module 4 and 5 shells,

@@ -1,5 +1,7 @@
 # Module 3 build-out plan — from the existing materials to the site
 
+> **Numbering note (2026-10-11):** lesson numbers in this plan written before 2026-10-11 are pre-renumber. The schedule was renumbered that day (fox hunt at L20, old L20 → L21, old L21 + L23 → L23, old L33-L38 → L33-L36 plus new L37-L38); see `COURSE_SPEC.md` §M7, "Short labs merge".
+
 Written 2026-10-07 from Neil's ADI beamforming deck (97 slides, attached that
 day), the Phaser GUI repo at `main` (2026-10-06), and the state of
 `book/module03/`. This is the plan Neil asked for: what we have, what each

@@ -269,7 +269,7 @@ The denominator is still growing across that gap, so the true peak sits slightly
 | Sidelobe count | $N - 2$ per period |
 :::
 
-The half-power row uses the line-source constant of Lessons 6 and 15 with $L = Nd$, and Lesson 20 derives it for the array, along with the $1/\cos\theta_0$ broadening under steering. The constant is close but not exact for a short array: the PHASER's exact half-power width is $13.3^\circ$, against $13.2^\circ$ from $0.886\ \lambda/Nd$.
+The half-power row uses the line-source constant of Lessons 6 and 15 with $L = Nd$, and Lesson 21 derives it for the array, along with the $1/\cos\theta_0$ broadening under steering. The constant is close but not exact for a short array: the PHASER's exact half-power width is $13.3^\circ$, against $13.2^\circ$ from $0.886\ \lambda/Nd$.
 ::::
 
 ::::{frame} Part 3: Pattern Multiplication
@@ -496,7 +496,7 @@ $$\begin{aligned}
 \text{HPBW} &\approx 0.886\ \lambda/Nd = 13.2^\circ
 \end{aligned}$$
 
-and the first sidelobe is $-12.8$ dB at $\pm 21.9^\circ$. Lesson 20 derives the broadside directivity of a uniform array,
+and the first sidelobe is $-12.8$ dB at $\pm 21.9^\circ$. Lesson 21 derives the broadside directivity of a uniform array,
 
 $$\begin{aligned}
 D &\approx \frac{2Nd}{\lambda} = 7.7 \\
@@ -509,7 +509,7 @@ D &\approx \frac{2Nd}{\lambda} = 7.7 \\
 :class: viz-frame
 
 :::{depth}
-Lesson 21 sweeps this beam past a fixed source. Expect a $13^\circ$ beam, a first null past $15^\circ$, and sidelobes 11 to 13 dB down. The widget below is the one Lesson 21 uses: pick the 8-element aperture, read the half-power width, first-null width, and first sidelobe off the ideal curve, then switch the measurement effects on. The $2.8125^\circ$ steer grid and the $-23$ dB noise floor fill in the nulls, and the first-null width moves from $30.1^\circ$ to $28.1^\circ$ because the grid no longer lands on the null.
+Lesson 23 sweeps this beam past a fixed source. Expect a $13^\circ$ beam, a first null past $15^\circ$, and sidelobes 11 to 13 dB down. The widget below is the one Lesson 21 uses: pick the 8-element aperture, read the half-power width, first-null width, and first sidelobe off the ideal curve, then switch the measurement effects on. The $2.8125^\circ$ steer grid and the $-23$ dB noise floor fill in the nulls, and the first-null width moves from $30.1^\circ$ to $28.1^\circ$ because the grid no longer lands on the null.
 :::
 
 :::{present}
@@ -521,9 +521,9 @@ Lesson 21 sweeps this beam past a fixed source. Expect a $13^\circ$ beam, a firs
 </iframe>
 :::
 
-:::{admonition} Worked example — what the Lesson 21 sweep will show
+:::{admonition} Worked example — what the Lesson 23 sweep will show
 :class: tip
-In Lesson 21 you will steer this array past a fixed source and record power against commanded angle. Expect a main lobe near $13^\circ$ wide, a first null a little past $15^\circ$, and sidelobes 11 to 13 dB down. The measured beam reads $13.1^\circ$, and the nulls fill in: the sweep steps in $2.8125^\circ$ increments and the receiver's noise floor sits about 23 dB below the peak, so a mathematical zero measures as a finite dip.
+In Lesson 23 you will steer this array past a fixed source and record power against commanded angle. Expect a main lobe near $13^\circ$ wide, a first null a little past $15^\circ$, and sidelobes 11 to 13 dB down. The measured beam reads $13.1^\circ$, and the nulls fill in: the sweep steps in $2.8125^\circ$ increments and the receiver's noise floor sits about 23 dB below the peak, so a mathematical zero measures as a finite dip.
 :::
 ::::
 
@@ -563,10 +563,10 @@ In Lesson 21 you will steer this array past a fixed source and record power agai
 :::{present}
 - Lesson 17: the ADAR1000 hardware that sets each $a_n$ in gain and phase.
 - Lesson 18: a progressive phase ramp steers the beam to $\theta_0$.
-- Lessons 21, 25, and 28 measure this pattern, taper it, and place a null.
+- Lessons 23, 25, and 28 measure this pattern, taper it, and place a null.
 :::
 
 Today we assumed the feed: element $n$ simply received weight $a_n$. Lesson 17 opens the hardware that produces those weights, the ADAR1000 beamformer chips, the per-element gain and phase controls, and the receive chain that turns eight elements into two digitized channels. Lesson 18 then sets the weights to a progressive phase ramp and steers the beam, which supplies the $\theta_0$ that has gone unused in $\psi$ all lesson.
 
-Every lab in this module measures some feature of today's array factor. Lesson 21 measures the beamwidth, the nulls, and the sidelobe level of the uniform 8-element pattern. Lesson 25 changes the weights and watches the sidelobes drop. Lesson 28 places a null where you want one. Before the next lesson, be able to write $AF_N$ from memory and locate its nulls, because every one of those labs starts by predicting from it.
+Every lab in this module measures some feature of today's array factor. Lesson 23 measures the beamwidth, the nulls, and the sidelobe level of the uniform 8-element pattern. Lesson 25 changes the weights and watches the sidelobes drop. Lesson 28 places a null where you want one. Before the next lesson, be able to write $AF_N$ from memory and locate its nulls, because every one of those labs starts by predicting from it.
 ::::

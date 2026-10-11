@@ -491,10 +491,10 @@ in every LO block.
 | 17 | L17-phased-array-hardware | Introduction to Phased Array Hardware | 3.3 | 3.3.1 | lab |
 | 18 | L18-beam-steering-theory | Beam Steering Theory | 3.4 | 3.4.1 | theory |
 | 19 | L19-beam-steering-lab | Beam Steering Lab | 3.5 | 3.5.1 | lab |
-| 20 | L20-array-factor-beamwidth | Array Factor and Beamwidth Theory | 3.2 | 3.2.6 | theory |
-| 21 | L21-array-factor-lab | Array Factor Lab | 3.2 | 3.2.10 | lab |
+| 20 | L20-fox-hunt-lab | Fox Hunt Lab | 3.5 | -- | lab |
+| 21 | L21-array-factor-beamwidth | Array Factor and Beamwidth Theory | 3.2 | 3.2.6 | theory |
 | 22 | L22-antenna-pattern-theory | Antenna Pattern Theory | 3.6 | 3.6.1 | theory |
-| 23 | L23-antenna-pattern-lab | Antenna Pattern Lab | 3.6 | 3.6.5 | lab |
+| 23 | L23-array-pattern-lab | Array Factor and Pattern Lab | 3.2, 3.6 | 3.2.10, 3.6.5 | lab |
 | 24 | L24-sidelobes-tapering | Sidelobes and Tapering Theory | 3.7 | 3.7.1 | theory |
 | 25 | L25-tapering-lab | Tapering Lab | 3.7 | 3.7.6 | lab |
 | 26 | L26-beam-squint-quantization | Beam Squint and Quantization | 3.8 | 3.8.1 | theory |
@@ -503,11 +503,13 @@ in every LO block.
 
 The "Sub-LO start" column is historical: lesson-level sub-LOs were removed
 2026-10-08, and each lesson now quotes only its course objective (the Obj.
-column).
+column). The table is the 2026-10-11 numbering (see M7, "Short labs
+merge"): the fox hunt is new at L20, the old L20 theory lesson is L21, and the
+old L21 Array Factor Lab and L23 Antenna Pattern Lab are Parts A and B of L23.
 
-**L20 note:** the midterm project (Antenna Pattern Measurement) is assigned
+**L21 note:** the midterm project (Antenna Pattern Measurement) is assigned
 at L9 and due 2 Oct, 2359. **The due date lives in the syllabus and the
-project packet, and nowhere else** -- L20 opens by connecting the project's
+project packet, and nowhere else** -- L21 opens by connecting the project's
 measured quantities to the theory in one short paragraph/slide bullet, and
 states neither a deadline nor a turn-in procedure. Do not restate the
 project requirements.
@@ -762,7 +764,7 @@ sweep actually reads and belong in lab expectation tables.
   *digital* channels — the analog sums destroy the per-element
   information, which is exactly the hybrid-architecture lesson.
 
-## M5. Lab lesson pages (L17, L19, L21, L23, L25, L28)
+## M5. Lab lesson pages (L17, L19, L20, L23, L25, L28)
 
 Same skeleton as theory pages (Parts → Summary → Practice → Where this is
 going), with the Parts covering, in order: background/theory recap (1–2
@@ -836,7 +838,7 @@ folded in.
   cell clips overflow) — any comparison or unit lives in the value field.
   The `.k` label may hold a MathJax symbol; keep `.k` display:block, not
   flex, so the space between symbol and word survives.
-- **Lab sheets** (one per lab lesson: L17, L19, L21, L23, L25, L28): a
+- **Lab sheets** (one per lab lesson: L17, L19, L20, L23, L25, L28): a
   fillable turn-in document `latex/ECE444_Lab_L<NN>_<Short>.tex` on the
   `build_lab.sh` harness, exactly following `ECE444_Lab_L04_Matching.tex`
   (standalone document, `\iskey` switch, `\ansbox` fields and blank
@@ -1029,3 +1031,29 @@ folded in.
   "No new deck work" above). The new theory the project needs (the tracker,
   the spectrogram features) arrives with the L39 kickoff, so the Module 4
   and 5 overviews no longer say "nothing new".
+- **Short labs merge; the freed periods are reused; lesson numbers still equal
+  teaching order** (Neil, 2026-10-11: most ADI-style labs are 10 to 20 minutes
+  of bench, not a period). The course stays 41 periods. Old to new:
+  **L20** Fox Hunt Lab (new, objective 3.5, Lab 6, right after L19 while the
+  bearing skill is a period old); L20 Array Factor and Beamwidth Theory →
+  **L21** (the midterm-due tag was dropped: the midterm is done); L21 Array
+  Factor Lab + L23 Antenna Pattern Lab → **L23 Array Factor and Pattern Lab**
+  (objectives 3.2 and 3.6, Lab 7: one setup, Part A the electrical sweep at
+  N = 8/4/2, Part B the walked source, one lab sheet
+  `ECE444_Lab_L23_ArrayPattern.tex`, one practice set with both banners);
+  L33 Range Calculations Lab + L34 Range Waterfall Lab → **L33 FMCW Range Lab**
+  (4.2, 4.5); L35 Range-Doppler Lab + L36 MTI Lab → **L34 Range-Doppler and
+  MTI Lab** (4.5, 4.6); L37 CFAR Theory → **L35**; L38 CFAR Lab → **L36**;
+  **L37 Classification and Tracking** (new, 5.2 and 5.3, quoted with
+  `--module: '5'` though it sits in Module 4: the micro-Doppler and tracker
+  theory the final project needs, which the entry above placed at the L39
+  kickoff); **L38 Radar Open Lab** (new, 5.2: Module 4 bench make-up and a
+  rehearsal of the radar chain the final project uses, before the L39 kickoff). L15 to L19, L22, L24 to L32, and L39 to L41
+  keep their numbers; L25 stays Lab 8 and L28 Lab 9. The Module 4 lab pairs
+  are shells, so their merge is a retitle and a second objective. As in the
+  Module 2 renumber, LO ids stay attached to content, so Module 4's last two
+  lessons quote Module 5 objectives. The superseded lab sheets
+  (`ECE444_Lab_L21_ArrayFactor.tex`, `ECE444_Lab_L23_Pattern.tex`), their
+  blank PDFs, and their keys were deleted (Neil, 2026-10-11). Decks were renamed and retitled only;
+  a merged lesson's deck is the two old decks under one title slide, and
+  cross-references inside decks still carry the old numbers.

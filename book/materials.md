@@ -64,10 +64,9 @@ copy. The same links appear on each lesson page.
 | L17 — Introduction to Phased Array Hardware | <a class="doc-link" href="practice/ECE444_L17_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L17_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L18 — Beam Steering Theory | <a class="doc-link" href="practice/ECE444_L18_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L18_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L19 — Beam Steering Lab | <a class="doc-link" href="practice/ECE444_L19_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L19_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L20 — Array Factor and Beamwidth Theory | <a class="doc-link" href="practice/ECE444_L20_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L20_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L21 — Array Factor Lab | <a class="doc-link" href="practice/ECE444_L21_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L21_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L21 — Array Factor and Beamwidth Theory | <a class="doc-link" href="practice/ECE444_L21_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L21_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L22 — Antenna Pattern Theory | <a class="doc-link" href="practice/ECE444_L22_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L22_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L23 — Antenna Pattern Lab | <a class="doc-link" href="practice/ECE444_L23_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L23_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L23 — Array Factor and Pattern Lab | <a class="doc-link" href="practice/ECE444_L23_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L23_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L24 — Sidelobes and Tapering Theory | <a class="doc-link" href="practice/ECE444_L24_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L24_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L25 — Tapering Lab | <a class="doc-link" href="practice/ECE444_L25_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L25_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L26 — Beam Squint and Quantization | <a class="doc-link" href="practice/ECE444_L26_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L26_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
@@ -88,8 +87,7 @@ reading.
 | Matching Procedures (VNA + L-network) | L4 Lab | <a href="labs/ECE444_Lab_L04_Matching_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
 | Phased Array Hardware Bring-Up | L17 | <a href="labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
 | Beam Steering | L19 | <a href="labs/ECE444_Lab_L19_Steering_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
-| Array Factor | L21 | <a href="labs/ECE444_Lab_L21_ArrayFactor_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
-| Antenna Pattern | L23 | <a href="labs/ECE444_Lab_L23_Pattern_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
+| Array Factor and Pattern | L23 | <a href="labs/ECE444_Lab_L23_ArrayPattern_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
 | Tapering | L25 | <a href="labs/ECE444_Lab_L25_Tapering_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
 | Null Steering | L28 | <a href="labs/ECE444_Lab_L28_NullSteering_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
 

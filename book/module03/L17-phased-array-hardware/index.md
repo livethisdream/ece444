@@ -970,7 +970,7 @@ Lesson 2's Friis equation sets the peak,
 $$P_r = P_t G_t G_r \left(\frac{\lambda}{4\pi R}\right)^2;$$
 
 doubling the distance lowers it by $20\log_{10}2 = 6.0\ \text{dB}$, and
-misaiming the HB100 lowers its $G_t$. On the receive side, Lesson 20's
+misaiming the HB100 lowers its $G_t$. On the receive side, Lesson 21's
 broadside directivity of the uniform array is
 
 $$\begin{aligned}

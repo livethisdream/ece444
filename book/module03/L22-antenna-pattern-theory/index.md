@@ -36,8 +36,8 @@ Lesson 22 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 
 :::{depth}
-In Lesson 21 you measured the array factor and most of the numbers landed where
-theory said they would: a half-power beamwidth near $13^\circ$, a first null
+In Lesson 19 you measured the array's beam, and Lesson 21 showed that most of
+the numbers landed where the array factor said they would: a half-power beamwidth near $13^\circ$, a first null
 about $15^\circ$ off the peak, and first sidelobes roughly 13 dB down. The parts
 that did not match are the subject of this lesson. Your steered peaks were a
 little low and a little short of the commanded angle, the sidelobes on the two
@@ -202,7 +202,7 @@ loss is the element pattern.
 
 ```{note}
 This 9.0 dB of coherent array gain is not the 8.9 dB array-factor directivity
-from Lesson 20. That number measured the beam solid angle of the array factor
+from Lesson 21. That number measured the beam solid angle of the array factor
 alone, with isotropic elements; today's $10\log_{10} N$ counts the coherent
 sum over one real element. For elements that tile the aperture the two
 accountings agree to within 0.1 dB, which is why both appear in practice.
@@ -242,7 +242,7 @@ angle, so a measured peak near $-2$ dBc is the expected result.
 
 Three numbers are worth memorizing, and they are the same three for any array
 built from aperture-like elements: steering to $30^\circ$ costs 0.6 dB, to
-$45^\circ$ costs 1.5 dB, and to $60^\circ$ costs 3.0 dB. Lesson 20 gave you the
+$45^\circ$ costs 1.5 dB, and to $60^\circ$ costs 3.0 dB. Lesson 21 gave you the
 other half of the story, $\theta_\text{HP} \approx 0.886\ \lambda/(Nd\cos\theta_0)$,
 so the array factor's beam widens from $13.2^\circ$ at broadside to $26.4^\circ$
 at $60^\circ$. Gain and beam shape degrade together: by $\pm 60^\circ$ the array
@@ -272,7 +272,7 @@ gain at the commanded angle, which is why scan loss is quoted at the command.
 The widget below multiplies the two curves for you. Set the element factor to
 isotropic and sweep the steer angle: the scan loss stays at 0 dB and the peak
 lands exactly on the commanded angle, which is the array factor you measured in
-Lesson 21. Switch to the ideal element and sweep again, and watch three things —
+Lesson 19. Switch to the ideal element and sweep again, and watch three things —
 the scan loss reading $-0.6$, $-1.5$, and $-3.0$ dB at $30^\circ$, $45^\circ$,
 and $60^\circ$, the peak angle lagging the command, and the sidelobes on the far
 side of broadside dropping below their mirror images on the near side. The third
@@ -465,7 +465,7 @@ that separate the two predictions, so bring the numbers with you.
 After that, Lesson 24 stops treating the sidelobes as something to explain and
 starts treating them as something to design. Tapering the element amplitudes
 trades beamwidth and peak gain for sidelobe suppression, and the trade is
-quantitative. Before the next class, review your Lesson 21 measurement table and
+quantitative. Before the next class, review your Lesson 19 measurement tables and
 mark every place where a measured number sat outside the tolerance you expected,
 since those are the rows this lesson has now explained.
 :::

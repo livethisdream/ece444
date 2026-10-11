@@ -571,7 +571,7 @@ building a current distribution that realizes it.
 
 | Antenna consequence | Where we will use it |
 | :-- | :-- |
-| Longer aperture → **narrower beam** | L15, L20 |
+| Longer aperture → **narrower beam** | L15, L21 |
 | Smooth taper → **lower sidelobes**, wider beam | L15, L24, L25 |
 | Linear phase → the **beam steers** | L18, L19, L26 |
 | Element spacing → **grating lobes** | L16, L26 |

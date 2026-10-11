@@ -30,8 +30,10 @@ waterfall, range-Doppler, MTI, and CFAR — the same chain a fielded radar runs.
 :::{depth}
 Detection is a decision under noise, not a measurement. Probability of
 detection and false-alarm rate move together, and CFAR exists because the
-noise floor will not hold still. That is why the last two lessons of this
-module are the ones the capstone leans on hardest.
+noise floor will not hold still. That is why the CFAR lessons are the ones the
+capstone leans on hardest. The module then ends on what the capstone adds on
+top: the classification and tracking theory, and an open bench period to start
+the project.
 :::
 ::::
 
@@ -81,7 +83,7 @@ module are the ones the capstone leans on hardest.
 </div>
 ::::
 
-::::{frame} Lessons 32-35: FMCW Range and Doppler on the Bench
+::::{frame} Lessons 32-34: FMCW Range and Doppler on the Bench
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L32-fmcw-intro/index.html">
@@ -89,41 +91,41 @@ module are the ones the capstone leans on hardest.
     <h4>Introduction to FMCW on Phaser</h4>
     <p>FMCW operation and configuring an FMCW waveform on the PHASER. Objective 4.4.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L33-range-calculations-lab/index.html">
+  <a class="mt-card mt-lesson" href="L33-fmcw-range-lab/index.html">
     <span class="mt-kind">Lesson 33</span>
-    <h4>Range Calculations Lab</h4>
-    <p>Range calculations from FMCW data. Objective 4.2.</p>
+    <h4>FMCW Range Lab</h4>
+    <p>Range calculations and the range waterfall from FMCW data, one capture plotted two ways. Objectives 4.2, 4.5.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L34-range-waterfall-lab/index.html">
+  <a class="mt-card mt-lesson" href="L34-range-doppler-mti-lab/index.html">
     <span class="mt-kind">Lesson 34</span>
-    <h4>Range Waterfall Lab</h4>
-    <p>Produce a range-waterfall from FMCW data. Objective 4.5.</p>
-  </a>
-  <a class="mt-card mt-lesson" href="L35-range-doppler-lab/index.html">
-    <span class="mt-kind">Lesson 35</span>
-    <h4>Range-Doppler Lab</h4>
-    <p>Produce range-Doppler results from FMCW data. Objective 4.5.</p>
+    <h4>Range-Doppler and MTI Lab</h4>
+    <p>Range-Doppler results from FMCW data, then MTI processing to separate movers from clutter. Objectives 4.5, 4.6.</p>
   </a>
 </div>
 ::::
 
-::::{frame} Lessons 36-38: Separating Movers from Clutter
+::::{frame} Lessons 35-38: Detection, and Toward the Capstone
 
 <div class="module-toc">
-  <a class="mt-card mt-lesson" href="L36-mti-lab/index.html">
-    <span class="mt-kind">Lesson 36</span>
-    <h4>Moving Target Indication (MTI) Lab</h4>
-    <p>MTI processing to separate movers from clutter. Objective 4.6.</p>
-  </a>
-  <a class="mt-card mt-lesson" href="L37-cfar-theory/index.html">
-    <span class="mt-kind">Lesson 37</span>
+  <a class="mt-card mt-lesson" href="L35-cfar-theory/index.html">
+    <span class="mt-kind">Lesson 35</span>
     <h4>CFAR Processing Theory</h4>
     <p>Constant false-alarm-rate processing. Objective 4.7.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L38-cfar-lab/index.html">
-    <span class="mt-kind">Lesson 38</span>
+  <a class="mt-card mt-lesson" href="L36-cfar-lab/index.html">
+    <span class="mt-kind">Lesson 36</span>
     <h4>CFAR Processing Lab</h4>
     <p>Apply CFAR to radar data and evaluate detection performance. Objective 4.7.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L37-classification-tracking/index.html">
+    <span class="mt-kind">Lesson 37</span>
+    <h4>Classification and Tracking</h4>
+    <p>Micro-Doppler classification and range and angle tracking: the theory the final project needs. Objectives 5.2, 5.3.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L38-radar-open-lab/index.html">
+    <span class="mt-kind">Lesson 38</span>
+    <h4>Radar Open Lab</h4>
+    <p>Bench make-up for Module 4, and a rehearsal of the radar chain the final project uses. Objective 5.2.</p>
   </a>
 </div>
 ::::
@@ -132,6 +134,6 @@ module are the ones the capstone leans on hardest.
 **Module 5** puts the two halves of the course together. The array from Module
 3 points and tapers; the radar from Module 4 detects.
 
-The capstone adds a classifier and a tracker on top, and the integration is
-the project.
+Lesson 37 adds the theory of a classifier and a tracker on top, and the
+integration is the project.
 ::::
