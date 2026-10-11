@@ -334,7 +334,7 @@ Labs are marked **LAB**.
 18. Beam Steering Theory
 19. Beam Steering Lab **(LAB)**
 20. Fox Hunt Lab **(LAB)** — find the live HB100 by triangulating bearings
-21. Array Factor and Beamwidth Theory &nbsp; · &nbsp; **Midterm project due**
+21. Array Factor and Beamwidth Theory
 22. Antenna Pattern Theory — true pattern vs. array factor
 23. Array Factor and Pattern Lab **(LAB)** — beamwidth vs. aperture, and the pattern measured by moving the source
 24. Sidelobes and Tapering Theory

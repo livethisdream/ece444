@@ -1053,7 +1053,7 @@ folded in.
   are shells, so their merge is a retitle and a second objective. As in the
   Module 2 renumber, LO ids stay attached to content, so Module 4's last two
   lessons quote Module 5 objectives. The superseded lab sheets
-  (`ECE444_Lab_L21_ArrayFactor.tex`, `ECE444_Lab_L23_Pattern.tex`) and their
-  blank PDFs stay in the repo, unlinked. Decks were renamed and retitled only;
+  (`ECE444_Lab_L21_ArrayFactor.tex`, `ECE444_Lab_L23_Pattern.tex`), their
+  blank PDFs, and their keys were deleted (Neil, 2026-10-11). Decks were renamed and retitled only;
   a merged lesson's deck is the two old decks under one title slide, and
   cross-references inside decks still carry the old numbers.
