@@ -141,11 +141,15 @@ def signal_chain(page_copy: bool) -> str:
         s.append(line(lx + lw, y, ax, y, MID, 1.4))
 
     # column headers
-    s.append(txt(120, 26, f"RF {F_RF} GHz", 12, NAVY, weight="600"))
+    # The page copy names no LO, mixer, or IF: students have had no receiver
+    # course, and the page teaches the block only as a frequency converter
+    # (COURSE_SPEC M7). The deck copy is frozen as built.
+    s.append(txt(120, 26, (f"source {F_RF} GHz" if page_copy else f"RF {F_RF} GHz"),
+                 12, NAVY, weight="600"))
     s.append(txt(px + pw / 2, 48, "patch ×8", 11.5, INK3))
     s.append(txt(lx + lw / 2 + 2, 48, "LNA", 11.5, INK3))
-    s.append(txt(mxc, 48, "mixer", 11.5, INK3))
-    tail = ("LO = RF + IF = 10.525 + 2.2 = 12.725 GHz" if page_copy
+    s.append(txt(mxc, 48, "converter" if page_copy else "mixer", 11.5, INK3))
+    tail = ("shifted to 2.2 GHz, the frequency the SDR tunes" if page_copy
             else "8 elements in, 2 digital channels out")
     s.append(txt(W - 26, 26, tail, 12, INK3, anchor="end"))
 
@@ -164,12 +168,13 @@ def signal_chain(page_copy: bool) -> str:
         s.append(line(mxc - k, yr - k, mxc + k, yr + k, INK, 1.5))
         s.append(line(mxc - k, yr + k, mxc + k, yr - k, INK, 1.5))
 
-    # LO block feeding both mixers
-    s.append(box(lo_x, lo_y, lo_w, lo_h, fill="#fdf6e8", stroke=AMBER))
-    s.append(txt(lo_x + lo_w / 2, lo_y + 17, "ADF4159 + VCO", 12, AMBER, weight="600"))
-    s.append(txt(lo_x + lo_w / 2, lo_y + 32, f"LO {F_LO:.3f} GHz", 11, AMBER))
-    s.append(line(mxc, lo_y, mxc, ya + mr, AMBER, 1.8, ' marker-end="url(#aA)"'))
-    s.append(line(mxc, lo_y + lo_h, mxc, yb - mr, AMBER, 1.8, ' marker-end="url(#aA)"'))
+    # LO block feeding both mixers (deck copy only)
+    if not page_copy:
+        s.append(box(lo_x, lo_y, lo_w, lo_h, fill="#fdf6e8", stroke=AMBER))
+        s.append(txt(lo_x + lo_w / 2, lo_y + 17, "ADF4159 + VCO", 12, AMBER, weight="600"))
+        s.append(txt(lo_x + lo_w / 2, lo_y + 32, f"LO {F_LO:.3f} GHz", 11, AMBER))
+        s.append(line(mxc, lo_y, mxc, ya + mr, AMBER, 1.8, ' marker-end="url(#aA)"'))
+        s.append(line(mxc, lo_y + lo_h, mxc, yb - mr, AMBER, 1.8, ' marker-end="url(#aA)"'))
 
     # IF rails into the Pluto
     rx_h, rx_w = 26, 62
@@ -181,7 +186,8 @@ def signal_chain(page_copy: bool) -> str:
         s.append(box(pl_x + (pl_w - rx_w) / 2, yr - rx_h / 2, rx_w, rx_h,
                      fill="#ffffff", stroke=MID, sw=1.4, rx=4))
         s.append(txt(pl_x + pl_w / 2, yr + 4.5, name, 12, NAVY, weight="600"))
-        s.append(txt((mxc + mr + pl_x) / 2, yr - 12, f"IF {F_IF} GHz", 11, GRN,
+        s.append(txt((mxc + mr + pl_x) / 2, yr - 12,
+                     f"{F_IF} GHz" if page_copy else f"IF {F_IF} GHz", 11, GRN,
                      weight="600"))
 
     # Pi and the control bus back to the beamformers
@@ -199,8 +205,10 @@ def signal_chain(page_copy: bool) -> str:
 
     # key
     ky = H - 16
-    for i, (color, label) in enumerate(((NAVY, "RF"), (AMBER, "LO"), (GRN, "IF"),
-                                        (INK3, "control"))):
+    key = (((NAVY, f"{F_RF} GHz"), (GRN, f"{F_IF} GHz"), (INK3, "control"))
+           if page_copy else
+           ((NAVY, "RF"), (AMBER, "LO"), (GRN, "IF"), (INK3, "control")))
+    for i, (color, label) in enumerate(key):
         kx = 30 + i * 108
         s.append(line(kx, ky - 4, kx + 24, ky - 4, color, 2.6))
         s.append(txt(kx + 30, ky, label, 11.5, color, anchor="start"))
@@ -358,9 +366,10 @@ def signal_chain_narrow(page_copy: bool) -> str:
     out.append(arrow_defs("n"))
 
     # one header line: the RF, and on the page copy the LO arithmetic beside it
-    tail = ("LO = 10.525 + 2.2 = 12.725 GHz" if page_copy
+    tail = ("shifted to 2.2 GHz" if page_copy
             else "8 in, 2 digital channels out")
-    t(12, 20, f"RF {F_RF} GHz", 13.5, NAVY, "start", "600")
+    t(12, 20, f"source {F_RF} GHz" if page_copy else f"RF {F_RF} GHz",
+      13.5, NAVY, "start", "600")
     t(W - 12, 20, tail, 13, INK3, "end")
 
     cols = ((100, "A"), (320, "B"))           # subarray centers
@@ -396,18 +405,24 @@ def signal_chain_narrow(page_copy: bool) -> str:
     # labels in the gap between the subarrays, and beside the mixers
     t(W / 2, py0 + 13, "patch ×8", 13, INK3)
     t(W / 2, ly0 + 13, "LNA ×8", 13, INK3)
-    t(cols[0][0] - mr - 6, my + 4.5, "mixer", 13, INK3, "end")
-    t(cols[1][0] + mr + 6, my + 4.5, "mixer", 13, INK3, "start")
-    t(cols[0][0] - 8, my + mr + 23, f"IF {F_IF} GHz", 13, GRN, "end", "600")
-    t(cols[1][0] + 8, my + mr + 23, f"IF {F_IF} GHz", 13, GRN, "start", "600")
+    mix = "converter" if page_copy else "mixer"
+    ifl = f"{F_IF} GHz" if page_copy else f"IF {F_IF} GHz"
+    t(cols[0][0] - mr - 6, my + 4.5, mix, 13, INK3, "end")
+    t(cols[1][0] + mr + 6, my + 4.5, mix, 13, INK3, "start")
+    t(cols[0][0] - 8, my + mr + 23, ifl, 13, GRN, "end", "600")
+    t(cols[1][0] + 8, my + mr + 23, ifl, 13, GRN, "start", "600")
 
-    # the LO between the two mixers, feeding both
-    lo_x0, lo_x1, lo_y0, lo_y1 = 140, 280, my - 21, my + 21
-    out.append(box(lo_x0, lo_y0, lo_x1 - lo_x0, lo_y1 - lo_y0, fill="#fdf6e8", stroke=AMBER))
-    t(W / 2, my - 4, "ADF4159 + VCO", 13, AMBER, weight="600")
-    t(W / 2, my + 13, f"LO {F_LO:.3f} GHz", 13, AMBER)
-    out.append(line(lo_x0, my, cols[0][0] + mr, my, AMBER, 1.8, ' marker-end="url(#naA)"'))
-    out.append(line(lo_x1, my, cols[1][0] - mr, my, AMBER, 1.8, ' marker-end="url(#naA)"'))
+    # the LO between the two mixers, feeding both (deck copy only)
+    if not page_copy:
+        lo_x0, lo_x1, lo_y0, lo_y1 = 140, 280, my - 21, my + 21
+        out.append(box(lo_x0, lo_y0, lo_x1 - lo_x0, lo_y1 - lo_y0, fill="#fdf6e8",
+                       stroke=AMBER))
+        t(W / 2, my - 4, "ADF4159 + VCO", 13, AMBER, weight="600")
+        t(W / 2, my + 13, f"LO {F_LO:.3f} GHz", 13, AMBER)
+        out.append(line(lo_x0, my, cols[0][0] + mr, my, AMBER, 1.8,
+                        ' marker-end="url(#naA)"'))
+        out.append(line(lo_x1, my, cols[1][0] - mr, my, AMBER, 1.8,
+                        ' marker-end="url(#naA)"'))
 
     # the Pluto, its two receive channels, and the Pi
     out.append(box(26, pl0, 368, pl1 - pl0, fill=BG, stroke=NAVY))
@@ -431,9 +446,11 @@ def signal_chain_narrow(page_copy: bool) -> str:
 
     # key
     ky = H - 10
-    for i, (color, label) in enumerate(((NAVY, "RF"), (AMBER, "LO"), (GRN, "IF"),
-                                        (INK3, "control"))):
-        kx = 18 + i * 100
+    key = (((NAVY, f"{F_RF} GHz"), (GRN, f"{F_IF} GHz"), (INK3, "control"))
+           if page_copy else
+           ((NAVY, "RF"), (AMBER, "LO"), (GRN, "IF"), (INK3, "control")))
+    for i, (color, label) in enumerate(key):
+        kx = 18 + i * (130 if page_copy else 100)
         out.append(line(kx, ky - 4.5, kx + 24, ky - 4.5, color, 2.6))
         t(kx + 30, ky, label, 13, color, "start")
 

@@ -784,9 +784,9 @@ and Calibrate), and Part B makes the first measurements on that kit.
 **Lab packet structure** (piloted on L19, 2026-10-10). A lab's practice
 problems fold into its lab packet, `latex/ECE444_Lab_L<NN>_<Short>.tex`,
 which has three parts: **Part 1, Pre-Lab** (individual, before the lab
-period: the predictions, from the preceding theory lesson's problems, plus a
-rehearsal of the commanded half of the procedure on the hosted simulator;
-it may scaffold like a practice set); **Part 2, Measurements** (the team's
+period: the predictions, plus a rehearsal of the commanded half of the
+procedure on the hosted simulator where the lab has one; it may scaffold like
+a practice set); **Part 2, Measurements** (the team's
 data, in class: measurement tables only, no prose questions; every teammate
 copies the same values); **Part 3, Writeup** (individual, after the lab:
 reconcile measured against predicted against the error budget, plus three or
@@ -795,10 +795,13 @@ four analysis problems). **The packet is one submission** (Neil, 2026-10-11:
 next lesson, so one Gradescope assignment per lab. A short grading statement
 on the first page says the packet counts toward engagement and is graded as a
 genuine, documented attempt; timing is relative ("before Lesson 20"), never a
-date. The page replaces its Practice
-frame with a read-only **Lab Packet** frame that links the blank PDF and
-names the three parts; the preceding theory lesson's Practice frame points
-at Part 1 as its homework. The superseded practice sources and PDFs stay in
+date. The packet replaces the lab's practice
+problems, and the preceding lesson's too when the pre-lab draws on them (L19's
+does, from L18; L17's does not, so L16 keeps its practice set). The page
+replaces its Practice frame with a read-only **Lab Packet** frame that links
+the blank PDF and names the three parts; where the pre-lab draws on the
+preceding theory lesson, that lesson's Practice frame points at Part 1 as its
+homework. The superseded practice sources and PDFs stay in
 the repo, unlinked.
 
 Deck title-slide image path and all other Module 2 rules apply unchanged.
@@ -1016,6 +1019,11 @@ folded in.
   the beam under 0.01°) and survives as a labeled L26 squint preview. Rx Gain
   10 dB as in L17. Hardware-day items: the + side of the arc (Lesson 18's
   convention says toward E8), scan loss on the kit, Rx Gain compression.
+- **L17 is a single lab packet: "did you get it working" and "prove your kit
+  works"** (Neil, 2026-10-11). Lab 4 is short and practical: pre-lab hardware
+  counts, a bring-up record and kit check, a block diagram and two bench
+  diagnoses. The page now says only that the board shifts the signal to 2.2 GHz
+  where the SDR listens; its LO, IF, and spectrum-mirror content came off.
 - **Final project: detect, classify, track; the jammer is out for now**
   (Neil, 2026-10-11, choosing option A of the Module 4-5 buildout plan:
   "we can take out the jammer for now"). The capstone is one moving target

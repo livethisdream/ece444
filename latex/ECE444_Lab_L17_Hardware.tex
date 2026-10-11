@@ -86,6 +86,7 @@
 
 \runningheadrule
 
+
 \begin{document}
 \pagestyle{headandfoot}   % exam class
 
@@ -97,7 +98,7 @@
 USAF ACADEMY \\
 DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
 LAB \#\labNum\ (Lesson 17) - Introduction to Phased Array Hardware \\
-\textbf{Lab Sheet} \\
+\textbf{Lab Packet} \\
 \thisterm \\[4mm]
 \end{center}
 
@@ -113,201 +114,250 @@ of the ADALM-PHASER and control it via SDR software.}
 
 \vspace{2pt}
 
-This sheet is the turn-in document for the Lesson 17 lab. Part A records how
-your team brought its kit up from a blank card, and Part B records the first
-measurements on that kit. Fill in every box, and show the arithmetic where a box
-asks for a calculated value. The lab is a team assignment, so each team submits
-one sheet.
+This packet is Lab 4, in three parts, and you turn it in once, complete,
+before Lesson 18. Do \textbf{Part 1} on your own before the lab period: a few
+questions about the hardware you will bring up. \textbf{Part 2} is your team's
+record from the bench, in class: did the kit come up, and does it see the
+source; every teammate copies the same values into their own packet. Do
+\textbf{Part 3} on your own after the lab: a block diagram of the kit, two
+bench diagnoses, and two short written answers.
+
+\textbf{Grading.} One submission, counted toward your engagement grade and
+graded as a genuine, documented attempt.
 
 \begin{questions}
 
-\fullwidth{\large\textbf{Part A: Bring Up Your PHASER}}
+\fullwidth{\large\textbf{Part 1: Pre-Lab} \normalsize(individual, before the lab period)}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The Bring-Up Record.} Record what you set and what the kit
-reported as you brought it up. Copy the installer's lines exactly as it prints
-them under \texttt{[6b/6] Checking the RF chain...}.
+\question \textbf{The receive chain.} A wave from the HB100 reaches the
+PHASER's patches and ends up as numbers in the Raspberry Pi.
+
+\begin{parts}
+
+	\part Put these six blocks in the order the signal meets them, from one
+	patch to the Pi, and say in a few words what each one does: ADALM-Pluto,
+	ADAR1000, frequency converter, LNA, patch, Raspberry Pi.
+
+	\begin{center}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabular}{| c | K{1.35in} | K{3.4in} |}
+	\hline
+	\textbf{Order} & \textbf{Block} & \textbf{What it does} \\\hline\hline
+	1 & \kv{patch} & \kv{receives the wave; eight of them, $14$ mm apart} \\\hline
+	2 & \kv{LNA} & \kv{amplifies each element before any loss} \\\hline
+	3 & \kv{ADAR1000} & \kv{sets each element's phase and gain, sums four} \\\hline
+	4 & \kv{frequency converter} & \kv{shifts each sum from X-band down to $2.2\ \ghz$} \\\hline
+	5 & \kv{ADALM-Pluto} & \kv{digitizes the two channels} \\\hline
+	6 & \kv{Raspberry Pi} & \kv{commands the chips, reads the samples, serves the GUI} \\\hline
+	\end{tabular}
+	\end{center}
+
+	\begin{solution}
+	The LNA comes first because the noise each later stage adds counts at the
+	input divided by the gain ahead of it, and the phase shifters and the
+	summing network are lossy. The frequency converter is there because the
+	Pluto tunes no higher than $6\ \ghz$ and cannot digitize the $10\ \ghz$
+	signal directly.
+	\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The ADAR1000 sets each element's phase with a 7-bit phase shifter.
+		How many phase settings does it have, and how far apart are neighboring
+		settings in degrees?
+		\begin{solution}[0.9in]
+		\eq{ 2^{7} &= 128 \text{ settings} \\
+		     \frac{360\mydeg}{128} &= 2.8125\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		settings = \ansbox[1.1in]{$128$}\\[10pt]
+		step = \ansbox[1.1in]{$2.8125\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part How many elements feed one ADAR1000? How many signals leave the pair
+		of ADAR1000s after their sums, and so how many channels does the Pluto
+		digitize?
+		\begin{solution}[0.9in]
+		Each ADAR1000 takes four of the eight elements and sums them into one
+		output, so two signals leave the pair, one per 4-element subarray, and
+		the Pluto digitizes two channels.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		elements per chip = \ansbox[0.9in]{$4$}\\[10pt]
+		signals out = \ansbox[0.9in]{$2$}\\[10pt]
+		channels = \ansbox[0.9in]{$2$}
+	\end{minipage}
+
+\end{parts}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The kit's name and address.} Your instructor assigns each
+team a two-digit number NN, and Part A of the procedure on the Lesson 17 page
+gives the kit the name \texttt{phaser-NN} and the fixed address
+$192.168.7.(10 + \mathrm{NN})$. Fill in the row for team 07, and your own row
+once you know your number.
 
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{| l | K{3.3in} |}
+\begin{tabular}{| c | K{1.25in} | K{1.6in} | K{2.25in} |}
+\hline
+\textbf{Team} & \textbf{Kit name} & \textbf{Fixed address} & \textbf{GUI address} \\\hline\hline
+07 & \kv{\texttt{phaser-07}} & \kv{\texttt{192.168.7.17}} & \kv{\texttt{http://192.168.7.17:8080}} \\\hline
+\rule{0pt}{0.24in} & & & \\\hline
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\fullwidth{\large\textbf{Part 2: Measurements} \normalsize(team data, in class)}
+
+Follow the procedure on the Lesson 17 page in read mode, and record each value
+as the kit or the GUI reports it.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The bring-up record.} Part A of the procedure: did the kit
+come up?
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{3.1in} |}
 \hline
 \textbf{Item} & \textbf{Value} \\\hline\hline
 Team number NN & \kv{your own, such as 03} \\\hline
-Hostname in \texttt{phaser-hostname} & \kv{\texttt{phaser-NN}, such as \texttt{phaser-03}} \\\hline
-Fixed IP in \texttt{phaser-ip} & \kv{$192.168.7.(10 + \mathrm{NN})$/24, such as \texttt{192.168.7.13/24}} \\\hline
-Address you opened the UI at & \kv{\texttt{http://192.168.7.13:8080} for team 03} \\\hline
-Wi-Fi join: result of \texttt{ping -c 4 github.com} & \kv{four replies; or failed, reported to the instructor} \\\hline
-Installer line \texttt{HB100} & \kv{the card's stored value, labeled \texttt{(calibration.json)}, or $10.525000$ GHz from \texttt{config.py}} \\\hline
-Installer line \texttt{Rx\_freq} & \kv{$2.200$ GHz} \\\hline
-Installer line \texttt{LO} & \kv{HB100 $+ 2.200$ GHz, $12.725$ GHz for $10.525$ GHz} \\\hline
-Installer line \texttt{ADF4159} & \kv{LO$/4$, $3.1812$ GHz for a $12.725$ GHz LO} \\\hline
+What \texttt{hostname} prints & \kv{\texttt{phaser-NN}, such as \texttt{phaser-03}} \\\hline
+Fixed address in \texttt{hostname -I} & \kv{\texttt{192.168.7.(10 + NN)}, such as \texttt{192.168.7.13}} \\\hline
+Result of \texttt{ping -c 4 github.com} & \kv{four replies; or failed, reported to the instructor} \\\hline
+Last line \texttt{install.sh} printed & \kv{\texttt{Installed. Service is active ...}} \\\hline
+Address you opened the GUI at & \kv{\texttt{http://192.168.7.13:8080} for team 03} \\\hline
+What the connection pill reads & \kv{\textbf{Connected}} \\\hline
 Frequency \textbf{Find HB100} reported & \kv{your own, in $10.1$--$10.7\ \ghz$} \\\hline
+\textbf{Calibrate} ran to completion (yes or no) & \kv{yes} \\\hline
 \end{tabular}
 \end{center}
 
 \begin{solution}
-The installer ran before \textbf{Find HB100}, so its \texttt{HB100} line reports
-whatever the card carried: the golden kit's measured source, labeled
-\texttt{(calibration.json)}, or the $10.525$ GHz default from \texttt{config.py}
-when the card held no calibration. That value generally differs from the
-\textbf{Find HB100} result, which measures this kit's own source.
+A ping that fails does not stop the lab: the golden image already carries a
+working backend, and the instructor can install the update from a local copy.
+Record ``skipped'' for the installer line in that case. The \textbf{Find HB100}
+result is this kit's own source, so it generally differs from the nominal
+$10.525\ \ghz$ and from other teams' values.
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\question \textbf{The Identity Reset.} Every team flashed its card from the
-same golden image, and on its first boot each card regenerates its SSH host
-keys and its \texttt{/etc/machine-id} before the ssh server starts. Explain in
-three or four sentences why a cloned card must do this.
-
-\begin{solutionorlines}[1.8in]
-A card flashed from the golden image is a byte-for-byte copy of the golden kit,
-so without the reset every kit would present the same SSH host keys and the
-same machine-id. The host key is how ssh identifies the machine it reached;
-with identical keys a laptop's \texttt{known\_hosts} cannot tell the kits
-apart, and a key copied off one kit would impersonate all of them. The
-machine-id is how the operating system's own services, such as the system
-journal and D-Bus, tell one installation from another, so kits sharing one are
-the same machine to them. (On an image whose network is run by systemd-networkd,
-the DHCP client identity comes from it too, and kits sharing one would fight
-over one lease; this kit's \texttt{dhcpcd} uses the adapter's hardware address
-instead, so full credit does not need the lease argument.)
-Regenerating both before ssh starts gives each kit its own identity, and the
-reboot that follows makes the new machine-id take effect, since the init system
-reads it only at boot.
-\end{solutionorlines}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\fullwidth{\large\textbf{Part B: First Measurements}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The Frequency Plan.} Copy the frequency \textbf{Find HB100}
-reported in Part A, then work out where the LO must sit for it. The mixer's
-output is the LO minus the source, and the IF is a setting, $2.2\ \ghz$, chosen
-so that the LO's range covers every HB100; so the LO is the only frequency that
-moves when the source moves.
-
-\begin{center}
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{| l | K{2.4in} |}
-\hline
-\textbf{Quantity} & \textbf{Value} \\\hline\hline
-Measured HB100 frequency $f_{\text{RF}}$ & \kv{your own, in $10.1$--$10.7\ \ghz$} \\\hline
-Required LO frequency $f_{\text{LO}}$ & \kv{$f_{\text{RF}} + 2.2\ \ghz$} \\\hline
-Resulting IF $f_{\text{IF}}$ & \kv{$2.200\ \ghz$} \\\hline
-Is the LO inside $12.2$--$13.0\ \ghz$? & \kv{yes, for any HB100 in that band} \\\hline
-\end{tabular}
-\end{center}
-
-Show the arithmetic for your measured frequency here.
-
-\begin{solutionorlines}[1.1in]
-For a nominal source at $10.525\ \ghz$, the LO sits $2.2\ \ghz$ above the source, at
-\eq{
-	f_{\text{LO}} = f_{\text{RF}} + f_{\text{IF}} = 10.525 + 2.200 = 12.725\ \ghz
-}
-That LO sits inside the $12.2$ to $13.0\ \ghz$ VCO range, so the setting is
-reachable, and the mixer difference, $12.725 - 10.525\ \ghz$, lands on the
-$2.2\ \ghz$ IF the Pluto is tuned to. Any measured frequency in $10.1$ to
-$10.7\ \ghz$ gives an LO inside the range, which is why the hardware covers every
-HB100 unit the lab issues.
-\end{solutionorlines}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\question \textbf{The Labeled Block Diagram.} Sketch the receive chain from the
-patches to the Raspberry Pi. Label every block with its name and with the
-frequency present at that point, mark where the analog summing happens, and mark
-where the two digital channels begin.
-
-\begin{solutionorbox}[3.4in]
-Patches ($f_{\text{RF}}$, eight of them, $d = 14$ mm apart) $\rightarrow$ ADL8107
-LNA behind each patch ($f_{\text{RF}}$) $\rightarrow$ two ADAR1000 beamformers,
-four elements each, phase and gain per element, \textbf{analog summing happens
-here} ($f_{\text{RF}}$, two outputs) $\rightarrow$ two LTC5548 mixers driven by
-the ADF4159 PLL and HMC735 VCO at $f_{\text{LO}} = f_{\text{RF}} + 2.2\ \ghz$
-($12.2$ to $13.0\ \ghz$) $\rightarrow$ two IF channels at $2.2\ \ghz$
-$\rightarrow$ ADALM-Pluto (AD9361), tuned to $2.2\ \ghz$, sampling at 3 MSPS,
-\textbf{the digital channels begin here} $\rightarrow$ Raspberry Pi over USB,
-running the backend and serving the browser interface.
-\end{solutionorbox}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\question \textbf{FFT Observations.} Work on the FFT tab with the source at
-$1\ \m$ and record what the spectrum does as you change two controls.
+\question \textbf{The kit check.} Part B of the procedure: does the kit see
+the source, and does it follow the source when it moves? Load \textbf{1
+Steering Angle}, set \textbf{Rx Gain (dB)} to 10, and press \textbf{Start},
+with the HB100 $1\ \m$ out at boresight.
 
 \begin{parts}
 
-	\part Where does the tone sit on the FFT tab's frequency axis, and how far
-	above the noise floor is it?
+	\part The FFT tab.
 
-	\vspace{6pt}
-	\begin{center}
-	Peak offset = \ansbox[1.7in]{near $0\ \mhz$} %
-	Peak above floor = \ansbox[1.7in]{$\ge 20\db$}
-	\end{center}
-	\vspace{6pt}
-
-	\begin{solution}
-	Find HB100 sets the LO to the measured frequency plus 2.2 GHz, so on hardware
-	the tone sits near 0 MHz, within about $\pm 1\ \mhz$. The simulator fixes its
-	tone 1 MHz from center, and the GUI's flipped axis shows it at $-1\ \mhz$.
-	\end{solution}
-
-	\part Set \textbf{Rx Gain (dB)} to 10 and record the peak and floor, then
-	repeat at 0 and at 20. Report the peak and floor levels in dBFS (decibels
-	relative to the ADC's full-scale input) and the separation between them in dB.
-
-	\vspace{4pt}
 	\begin{center}
 	\renewcommand{\arraystretch}{1.25}
-	\begin{tabular}{| l | K{1.25in} | K{1.25in} | K{1.35in} |}
+	\begin{tabular}{| K{1.4in} | K{1.1in} | K{1.1in} | K{1.3in} |}
 	\hline
-	\textbf{Rx Gain} & \textbf{Peak (dBFS)} & \textbf{Floor (dBFS)} & \textbf{Separation (dB)} \\\hline\hline
-	0 dB & \kv{about $10$ dB below the 10 dB row} & \kv{up to $10$ dB below; less once the SDR's noise sets it} & \kv{same, or a few dB less} \\\hline
-	10 dB & \kv{reference} & \kv{reference} & \kv{$\ge 20$ dB} \\\hline
-	20 dB & \kv{up to $10$ dB above; less if compressed} & \kv{about $10$ dB above the 10 dB row} & \kv{same, or less if the peak compresses} \\\hline
+	\textbf{Peak position (MHz)} & \textbf{Peak (dBFS)} & \textbf{Floor (dBFS)} & \textbf{Separation (dB)} \\\hline\hline
+	\kv{near $0$, within $\pm 1$} & \kv{your own} & \kv{your own} & \kv{$\ge 20$} \\\hline
 	\end{tabular}
 	\end{center}
-	\vspace{4pt}
 
 	\begin{solution}
-	Both levels move together with the slider, because the SDR applies this gain
-	internally, long after the LNAs have already set the noise level that
-	accompanies the signal. The separation therefore holds roughly constant across
-	the three settings. It can shrink at 0 dB, where the SDR's own noise starts to
-	contribute, and at 20 dB the peak may rise by less than 10 dB because the
-	converter is near full scale and compressing. A separation that changes by much
-	more than a few dB across the three rows points to a saturating or misaimed setup.
+	With Signal Freq set by \textbf{Find HB100}, the tone sits near the center of
+	the $3\ \mhz$ window the FFT tab shows. A separation under $20$ dB at $1\ \m$
+	points to a misaimed or distant source, or a weak battery.
 	\end{solution}
 
-	\part Lower \textbf{Signal Freq (GHz)} by $0.001\ \ghz$: click the field's down
-	arrow once, or type the new value and press Enter. Record how far the peak moves
-	and in which direction. (If a typed value does not move the peak, press
-	\textbf{Stop} and then \textbf{Start}.)
+	\part The Rectangular tab, with \textbf{Show Peak Angle Marker} on. For the
+	second row, carry the HB100 to about $30\mydeg$ on one side, still
+	$1\ \m$ from the array and aimed at it, and circle the end of the array it
+	moved toward.
 
-	\vspace{6pt}
 	\begin{center}
-	Peak shift = \ansbox[2.0in]{$+1\ \mhz$ (up the axis)}
+	\renewcommand{\arraystretch}{1.25}
+	\begin{tabular}{| l | K{1.45in} | K{1.6in} |}
+	\hline
+	\textbf{Source} & \textbf{Est. Angle} & \textbf{Peak Array Gain (dB)} \\\hline\hline
+	At boresight & \kv{$0\mydeg \pm 2\mydeg$} & \kv{your own (reference)} \\\hline
+	About $30\mydeg$ toward \quad E1 \quad E8 & \kv{about $30\mydeg$ in size} & \kv{$0.5$ to $2$ dB below the first row} \\\hline
+	Back at boresight & \kv{within $2\mydeg$ of the first row} & \kv{within about $0.5$ dB of the first row} \\\hline
+	\end{tabular}
 	\end{center}
-	\vspace{6pt}
 
-	\begin{solutionorlines}[0.9in]
-	The LO follows Signal Freq, so it drops 1 MHz while the source stays put; LO
-	minus source drops 1 MHz, and the GUI's flipped axis plots the peak 1 MHz higher:
-	the source now sits 1 MHz above Signal Freq. An error over about 1.5 MHz moves
-	the tone out of the 3 MHz window, which is what a bad \textbf{Find HB100} result
-	looks like.
+	\begin{solution}
+	The trace peaks at the source's angle, so it follows the source when the
+	source moves and comes back when it returns. A source placed by eye sits
+	within a few degrees of $30\mydeg$, so anything from about $25\mydeg$ to
+	$35\mydeg$ is a working kit. The sign of the second row records which side
+	the GUI calls positive; Lesson 19 uses it. The peak drops a little off
+	boresight because each patch receives less from the side.
+	\end{solution}
+
+\end{parts}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\fullwidth{\large\textbf{Part 3: Writeup} \normalsize(individual, after the lab)}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The labeled block diagram.} Sketch the receive chain from the
+patches to the Raspberry Pi. Label every block with its name and with the
+frequency of the signal at that point, mark where the analog sum happens, and
+mark where the two digital channels begin.
+
+\begin{solutionorbox}[3.3in]
+Patches (eight, $d = 14$ mm apart, at the HB100 frequency, such as
+$10.525\ \ghz$) $\rightarrow$ ADL8107 LNA behind each patch (same frequency)
+$\rightarrow$ two ADAR1000 beamformers, four elements each, phase and gain per
+element, \textbf{the analog sum happens here} (same frequency, two outputs)
+$\rightarrow$ two LTC5548 frequency converters, which shift each sum down to
+$2.2\ \ghz$ $\rightarrow$ ADALM-Pluto (AD9361), listening at $2.2\ \ghz$ and
+sampling at 3 MSPS, \textbf{the two digital channels begin here}
+$\rightarrow$ Raspberry Pi over USB, which runs the backend, commands the
+ADAR1000s over SPI, and serves the browser interface.
+\end{solutionorbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Bench diagnosis.} Two other teams ask for help with Part B.
+
+\begin{parts}
+
+	\part The first team presses \textbf{Start} and sees no peak anywhere on the
+	FFT tab. Give the first two checks you would make, in order, and say what
+	each one rules out.
+	\begin{solutionorlines}[1.5in]
+	First, confirm that the HB100 is powered and aimed at the array from about
+	a meter; this rules out having no signal to receive, the most common cause.
+	Second, run \textbf{Find HB100} and compare its result with the Signal Freq
+	the GUI shows; this rules out the board listening at the wrong frequency,
+	which puts the tone outside the $3\ \mhz$ window the FFT tab displays. Only
+	after both pass is it worth suspecting the cables or the array.
+	\end{solutionorlines}
+
+	\part The second team's FFT tab shows a peak $25$ dB above the floor, but on
+	the Rectangular tab its sweep stands only $8$ dB above the sweep's floor,
+	against about $23$ dB on a working kit, and Est. Angle reads $11\mydeg$ with
+	the source at boresight. What would you check next, and why?
+	\begin{solutionorlines}[1.6in]
+	The FFT peak shows that the signal reaches the SDR at a normal level, so the
+	fault is in how the eight elements add. An uncalibrated array, from a
+	\textbf{Calibrate} that was skipped, interrupted, or run with the source off
+	boresight, leaves each element with its own phase error, so the elements do
+	not add in phase at broadside and the main lobe never reaches full height.
+	Check that Phase Control reads zero, then put the source back at boresight,
+	$1\ \m$ out, run \textbf{Calibrate}, wait for it to finish, and sweep again.
 	\end{solutionorlines}
 
 \end{parts}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\question \textbf{Written Answers.} Answer each in three or four sentences.
+\question \textbf{Written answers.} Answer each in three or four sentences.
 
 \begin{parts}
 
@@ -316,31 +366,31 @@ $1\ \m$ and record what the spectrum does as you change two controls.
 
 	\begin{solutionorlines}[1.7in]
 	The HB100's oscillator is a free-running dielectric resonator, not a locked
-	synthesizer, so its output frequency is set by the mechanical dimensions of
-	that resonator and drifts with temperature. Units land anywhere from about
-	$10.1$ to $10.7\ \ghz$. Every LO setting and every steering phase the backend
-	computes depends on the actual frequency: an LO set for the wrong frequency
-	puts the tone outside the 3 MHz window, and the steering phase
-	$\Delta\phi = kd\sin\theta_0$ scales with frequency through $k = 2\pi f/c$. So
-	the software sweeps the LO, watches where the IF tone appears, and records the
-	answer instead of assuming one.
+	synthesizer, so its frequency is set by the size of the resonator and
+	drifts with temperature; units land anywhere from about $10.1$ to
+	$10.7\ \ghz$. The board shifts the source down to $2.2\ \ghz$ by an amount
+	it computes from Signal Freq, and the SDR shows only a $3\ \mhz$ window
+	there, one two-hundredth of that spread, so a frequency that is wrong by
+	more than $1.5\ \mhz$ moves the tone off the display. The steering phase
+	each element needs also depends on the frequency, through $k = 2\pi f/c$.
+	So \textbf{Find HB100} measures the source and the software uses that
+	number everywhere.
 	\end{solutionorlines}
 
 	\part The array has eight elements, but software sees only two digital
-	channels. Explain where the other six went, and name one measurement this
-	rules out.
+	channels. Explain where the other six went, and name one thing this rules
+	out.
 
 	\begin{solutionorlines}[1.9in]
-	Each ADAR1000 applies a phase and a gain to its four elements at RF and then
-	sums those four into a single output, so the individual element signals stop
-	existing before anything is digitized. Two subarray sums reach the Pluto, and
-	software cannot recover the eight per-element signals from them. That rules
-	out any measurement that needs per-element data after the fact, such as forming
-	several independent beams from one set of samples (two channels can form more
-	than one beam, but each is a combination of the same two subarray patterns), or
-	running an adaptive beamformer with more than one null. The MVDR run in
-	Lesson 28 has exactly two digital degrees of freedom for this reason, and one of
-	them holds the look direction.
+	Each ADAR1000 applies a phase and a gain to its four elements and then sums
+	them into a single output, so the individual element signals stop existing
+	before anything is digitized. Two subarray sums reach the Pluto, and
+	software cannot recover the eight element signals from them. That rules out
+	anything that needs per-element data after the fact, such as forming
+	several independent beams from one set of samples, or an adaptive
+	beamformer that nulls more than one interferer. The MVDR run in Lesson 28
+	has exactly two digital degrees of freedom for this reason, and one of them
+	holds the look direction.
 	\end{solutionorlines}
 
 \end{parts}
