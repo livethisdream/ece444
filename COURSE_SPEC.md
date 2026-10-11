@@ -786,13 +786,16 @@ problems fold into its lab packet, `latex/ECE444_Lab_L<NN>_<Short>.tex`,
 which has three parts: **Part 1, Pre-Lab** (individual, before the lab
 period: the predictions, from the preceding theory lesson's problems, plus a
 rehearsal of the commanded half of the procedure on the hosted simulator;
-it may scaffold like a practice set); **Part 2, Bench** (team, in class:
-measurement tables only, no prose questions); **Part 3, Writeup**
-(individual, before the next lesson: reconcile measured against predicted
-against the error budget, plus three or four analysis problems). A short
-grading statement on the first page says the packet counts toward
-engagement, Parts 1 and 3 graded as a genuine, documented attempt; timing is
-relative ("before Lesson 20"), never a date. The page replaces its Practice
+it may scaffold like a practice set); **Part 2, Measurements** (the team's
+data, in class: measurement tables only, no prose questions; every teammate
+copies the same values); **Part 3, Writeup** (individual, after the lab:
+reconcile measured against predicted against the error budget, plus three or
+four analysis problems). **The packet is one submission** (Neil, 2026-10-11:
+"I don't want to be grading extra assignments"), turned in complete before the
+next lesson, so one Gradescope assignment per lab. A short grading statement
+on the first page says the packet counts toward engagement and is graded as a
+genuine, documented attempt; timing is relative ("before Lesson 20"), never a
+date. The page replaces its Practice
 frame with a read-only **Lab Packet** frame that links the blank PDF and
 names the three parts; the preceding theory lesson's Practice frame points
 at Part 1 as its homework. The superseded practice sources and PDFs stay in
