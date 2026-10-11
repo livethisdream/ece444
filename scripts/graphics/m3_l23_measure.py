@@ -4,17 +4,25 @@
   L23-read-the-trace     : one measured sweep with HPBW, FNBW and first SLL
                            marked -- the three numbers the lab asks for
   L23-ideal-vs-measured  : ideal N=8 array factor under the same sweep as the
-                           2.8125 deg sampled, noise-floored trace
+                           phase-step sampled, noise-floored trace
   L23-aperture-halving   : 8 / 4 / 2 active elements on one axis, showing the
                            beamwidth doubling and the ~6 dB peak step
 
 Physics matches book/extras/viz/af-measurement-compare.html exactly: same
-element sum, same 2.8125 deg sweep grid, same -23 dBc floor, same seeded
-noise realization (LCG seed 6618, 20 power looks per step). Deck figures carry
+element sum, same sweep grid, same -23 dBc floor, same seeded noise
+realization (LCG seed 6618, 20 power looks per step). Deck figures carry
 no equations -- the math lives in the slide text.
+
+The sweep grid is the GUI's with Use Bits on, which every lab preset sets: one
+2.8125 deg ADAR1000 phase LSB per point, so the samples are uniform in
+sin(theta) -- 2.8125/173.2 = 0.0162 apart at 10.3 GHz, 0.93 deg of angle at
+broadside -- not 2.8125 deg of angle apart. Phase steps past kd ask for no real
+angle (the GUI piles them at +/-90 deg) and are left out.
 
     python3 scripts/graphics/m3_l23_measure.py
     -> book/extras/slides/fig/L23-*.svg  (+ viz/img copies)
+    python3 scripts/graphics/m3_l23_measure.py --img-only
+    -> viz/img copies only (the deck is frozen; its figures are not rewritten)
 """
 
 from __future__ import annotations
@@ -38,6 +46,8 @@ IMG = ROOT / "book/extras/viz/img"
 
 LAM, DEL = 29.1e-3, 14e-3          # 10.3 GHz, PHASER element spacing
 KD = 2 * math.pi * DEL / LAM
+KD_DEG = math.degrees(KD)          # 173.2 deg of phase per unit sin(theta)
+IMG_ONLY = False                   # set by --img-only
 NEL, STEP, FLOOR_DB, LOOKS, SEED = 8, 2.8125, -23.0, 20, 6618
 YMIN, YMAX = -40.0, 3.0
 
@@ -62,8 +72,9 @@ def finalize(fig, name: str, also_img: bool = False) -> None:
     s = buf.getvalue()
     s = s[s.index("<svg"):]
     s = apply_font_stack(s)
-    (FIG / f"{name}.svg").write_text(s, encoding="utf-8")
-    print(f"wrote {FIG / (name + '.svg')}")
+    if not IMG_ONLY:
+        (FIG / f"{name}.svg").write_text(s, encoding="utf-8")
+        print(f"wrote {FIG / (name + '.svg')}")
     if also_img:
         (IMG / f"{name}.svg").write_text(s, encoding="utf-8")
         print(f"wrote {IMG / (name + '.svg')}")
@@ -109,7 +120,9 @@ class LCG:
 def meas_db(w):
     rng = LCG(SEED)
     sg = math.sqrt(10 ** (FLOOR_DB / 10) / 2)
-    t = np.array([-90.0 + i * STEP for i in range(int(round(180 / STEP)) + 1)])
+    n_max = int(math.floor(KD_DEG / STEP))
+    t = np.array([math.degrees(math.asin(i * STEP / KD_DEG))
+                  for i in range(-n_max, n_max + 1)])
     re, im = af_complex(t, w)
     out = []
     for k in range(len(t)):
@@ -138,27 +151,36 @@ def read_metrics(t, db):
         return None
 
     def outward(d):
+        # First null: the lowest sample once the trace is 12 dB down, accepted
+        # only when the trace then climbs 4 dB back out of it. A sample grid
+        # ~1 deg apart puts noise ripples on the main-lobe skirt, and a plain
+        # "first local minimum" stops on one of them.
         i = ip
         while 0 <= i + d < len(db) and db[i + d] > half:
             i += d
-        got = False
-        while 0 < i + d < len(db) - 1:
+        mi, found = None, False
+        while 0 <= i + d < len(db):
             i += d
-            if db[i] <= db[i - 1] and db[i] < db[i + 1]:
-                got = True
+            if mi is None or db[i] < db[mi]:
+                mi = i
+            if db[mi] <= pk - 12 and db[i] > db[mi] + 4:
+                found = True
                 break
-        if not got or db[i] > pk - 12:
+        if not found:
             return None, None, None
-        na, nd = t[i], db[i]
-        j, got2 = i, False
-        while 0 < j + d < len(db) - 1:
+        na, nd = t[mi], db[mi]
+        # First sidelobe: the highest sample past the null before the trace
+        # falls 4 dB from it, if it stands 4 dB clear of the null.
+        j, mx = mi, None
+        while 0 <= j + d < len(db):
             j += d
-            if db[j] >= db[j - 1] and db[j] > db[j + 1]:
-                got2 = True
+            if mx is None or db[j] > db[mx]:
+                mx = j
+            if db[j] < db[mx] - 4:
                 break
-        if not got2 or db[j] - nd < 4:
+        if mx is None or db[mx] - nd < 4 or mx in (0, len(db) - 1):
             return na, nd, None
-        return na, nd, (t[j], db[j])
+        return na, nd, (t[mx], db[mx])
 
     ln, ld, ls = outward(-1)
     rn, rd, rs = outward(1)
@@ -211,7 +233,10 @@ def read_the_trace() -> None:
     # first sidelobe
     sa, sd = m["sl"]
     ax.plot([sa], [sd], marker="o", ms=10, mfc="none", mec=AMBER, mew=1.8, zorder=4)
-    ax.annotate("first sidelobe", xy=(sa + 2.0, sd + 0.6), xytext=(sa + 16, sd + 8.5),
+    # label on the outside of whichever lobe the reader picked, clear of HPBW
+    side = 1 if sa > 0 else -1
+    ax.annotate("first sidelobe", xy=(sa + side * 2.0, sd + 0.6),
+                xytext=(sa + side * 16, sd + 8.5), ha="left" if side > 0 else "right",
                 color=AMBER, fontsize=12, fontweight="bold",
                 arrowprops=dict(arrowstyle="-", color=AMBER, lw=1.2))
     # peak
@@ -231,19 +256,21 @@ def ideal_vs_measured() -> None:
     fig, ax = plt.subplots(figsize=(7.4, 4.0))
     frame(ax, (-60, 60))
     ax.axhline(FLOOR_DB, color=AMBER, lw=1.2, ls=(0, (4, 4)))
-    ax.text(-57, FLOOR_DB - 1.4, "noise floor", color=AMBER, fontsize=11, va="top")
+    ax.text(34, FLOOR_DB - 1.4, "noise floor", color=AMBER, fontsize=11, va="top")
     ax.plot(ti, di, color=GRAY, lw=1.5, label="Array factor, 8 elements")
     ax.plot(tm, np.clip(dm, YMIN, None), color=BLUE, lw=2.2, marker="o", ms=3.6,
-            mfc=NAVY, mec=NAVY, label="Measured sweep, 2.8125° steps", zorder=3)
+            mfc=NAVY, mec=NAVY, label="Measured sweep, 2.8125° phase steps", zorder=3)
 
     # the two departures worth naming
-    ax.annotate("nulls fill in", xy=(15.5, -20.0), xytext=(27, -30.5),
+    m = read_metrics(tm, dm)
+    ax.annotate("nulls fill in", xy=(m["nr"] + 0.4, m["nulldb"] - 0.3), xytext=(27, -30.5),
                 color=RED, fontsize=12, fontweight="bold",
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.3))
     ax.annotate("outer lobes ride the floor", xy=(-56.5, -17.6), xytext=(-57, -33.0),
                 color=AMBER, fontsize=12, fontweight="bold",
                 arrowprops=dict(arrowstyle="->", color=AMBER, lw=1.3))
-    ax.legend(loc="upper left", fontsize=11.5, handlelength=1.8)
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2,
+              fontsize=11.5, handlelength=1.8)
 
     finalize(fig, "L23-ideal-vs-measured", also_img=True)
 
@@ -289,6 +316,8 @@ def aperture_halving() -> None:
 
 
 if __name__ == "__main__":
+    import sys
+    IMG_ONLY = "--img-only" in sys.argv[1:]
     FIG.mkdir(parents=True, exist_ok=True)
     IMG.mkdir(parents=True, exist_ok=True)
     read_the_trace()

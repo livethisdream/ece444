@@ -66,7 +66,7 @@
       <option value="2">Center 2 (Rx4, Rx5)</option>
     </select>
     <label class="tog"><input type="checkbox" id="meas"> Measurement effects</label>
-    <span class="note">2.8125&deg; sweep grid, &minus;23 dBc floor, receiver noise.</span>
+    <span class="note">2.8125&deg; phase-step grid, &minus;23 dBc floor, receiver noise.</span>
   </div>
 
   <div class="readouts">
@@ -88,7 +88,8 @@ const LAM = 29.1e-3;                 // 10.3 GHz
 const DEL = 14e-3;                   // element spacing
 const KD  = 2 * Math.PI * DEL / LAM; // k*d  = 3.0225 rad
 const NEL = 8;
-const STEP     = 2.8125;             // sweep step = ADAR1000 phase LSB, deg
+const STEP     = 2.8125;             // sweep step = ADAR1000 phase LSB, deg of phase
+const KD_DEG   = KD * 180 / Math.PI; // 173.2 deg of phase per unit sin(theta)
 const FLOOR_DB = -23.0;              // noise floor, dB below the 8-element peak
 const LOOKS    = 20;                 // power averages the GUI takes per sweep step
 const SEED     = 6618;               // fixed noise realization, so readings repeat
@@ -136,9 +137,14 @@ function idealTrace(w) {
 function measTrace(w) {
   const rnd = LCG(SEED), sg = Math.sqrt(Math.pow(10, FLOOR_DB / 10) / 2);
   const xs = [], ys = [];
-  const nSteps = Math.round(180 / STEP);
-  for (let i = 0; i <= nSteps; i++) {
-    const t = -90 + i * STEP;
+  // With Use Bits on (every lab preset) the GUI steps the element-to-element
+  // phase one LSB per point, so the samples are uniform in sin(theta), not in
+  // theta: 0.0162 apart at 10.3 GHz, 0.93 deg of angle at broadside, wider
+  // toward the edges. Phase steps past kd ask for no real angle; the GUI
+  // piles them at +/-90 deg, and they are left out here.
+  const nMax = Math.floor(KD_DEG / STEP);
+  for (let i = -nMax; i <= nMax; i++) {
+    const t = Math.asin(i * STEP / KD_DEG) * 180 / Math.PI;
     const [re, im] = afComplex(t, w);
     let acc = 0;
     for (let k = 0; k < LOOKS; k++) {
@@ -174,22 +180,31 @@ function metrics(tr) {
   const hpbw = (L && R) ? R.ang - L.ang : null;
 
   function outward(d) {                     // first null, then first sidelobe
+    // The null is the lowest sample once the trace is 12 dB down, accepted only
+    // when the trace climbs 4 dB back out of it: samples ~1 deg apart put noise
+    // ripples on the main-lobe skirt, and a plain first local minimum stops there.
+    const none = { nullAng: null, nullDb: null, sllDb: null, sllAng: null };
     let i = ip;
     while (i + d >= 0 && i + d < ys.length && ys[i + d] > half) i += d;
-    let got = false;
-    while (i + d > 0 && i + d < ys.length - 1) {
+    let mi = -1, found = false;
+    while (i + d >= 0 && i + d < ys.length) {
       i += d;
-      if (ys[i] <= ys[i - 1] && ys[i] < ys[i + 1]) { got = true; break; }
+      if (mi < 0 || ys[i] < ys[mi]) mi = i;
+      if (ys[mi] <= pk - 12 && ys[i] > ys[mi] + 4) { found = true; break; }
     }
-    if (!got || ys[i] > pk - 12) return { nullAng: null, nullDb: null, sllDb: null, sllAng: null };
-    const nullAng = xs[i], nullDb = ys[i];
-    let j = i, got2 = false;
-    while (j + d > 0 && j + d < ys.length - 1) {
+    if (!found) return none;
+    const nullAng = xs[mi], nullDb = ys[mi];
+    // The sidelobe is the highest sample past the null before the trace falls
+    // 4 dB from it, if it stands 4 dB clear of the null.
+    let j = mi, mx = -1;
+    while (j + d >= 0 && j + d < ys.length) {
       j += d;
-      if (ys[j] >= ys[j - 1] && ys[j] > ys[j + 1]) { got2 = true; break; }
+      if (mx < 0 || ys[j] > ys[mx]) mx = j;
+      if (ys[j] < ys[mx] - 4) break;
     }
-    if (!got2 || ys[j] - nullDb < 4) return { nullAng: nullAng, nullDb: nullDb, sllDb: null, sllAng: null };
-    return { nullAng: nullAng, nullDb: nullDb, sllDb: ys[j] - pk, sllAng: xs[j] };
+    if (mx < 0 || ys[mx] - nullDb < 4 || mx === 0 || mx === ys.length - 1)
+      return { nullAng: nullAng, nullDb: nullDb, sllDb: null, sllAng: null };
+    return { nullAng: nullAng, nullDb: nullDb, sllDb: ys[mx] - pk, sllAng: xs[mx] };
   }
   const a = outward(-1), b = outward(1);
   const fnbw = (a.nullAng !== null && b.nullAng !== null) ? b.nullAng - a.nullAng : null;
@@ -347,16 +362,32 @@ function drawAll() {
     stext('FNBW', (X(m.nullL) + X(m.nullR)) / 2, y - 10, narrow ? 9.5 : 10.5, '#b01e24', 'center', true);
   }
 
+  // --- active-aperture strip geometry (drawn below), top-left inside the frame ---
+  const bx = PAD.l + 8, by = PAD.t + 9, bw = narrow ? 7 : 9, gap = narrow ? 3 : 4;
+  const lf = narrow ? 9.5 : 10.5;
+  ctx.font = "700 " + lf + "px " + SANS;
+  const stripR = bx + NEL * (bw + gap) + 6 + ctx.measureText(state.n + ' of 8 active').width;
+  const stripB = by + bw + 4;
+
   // --- first sidelobe marker ---
   if (m.sllDb !== null && m.sllAng !== null) {
     const px = X(m.sllAng), py = Y(m.pk + m.sllDb);
     ctx.strokeStyle = '#8a5a00'; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.arc(px, py, narrow ? 4 : 5, 0, 2 * Math.PI); ctx.stroke();
-    stext('1st SLL', px, py - (narrow ? 12 : 14), narrow ? 9.5 : 10.5, '#8a5a00', 'center', true);
+    // The label sits above the marker unless that puts it on the aperture
+    // strip -- on a short canvas the first sidelobe reaches the strip's row --
+    // in which case it moves beside the marker, on the outside of the lobe,
+    // where the trace has already fallen away below it.
+    const hw = ctx.measureText('1st SLL').width / 2;
+    const ly = py - (narrow ? 12 : 14);
+    if (ly - lf / 2 < stripB && px - hw < stripR) {
+      const out = m.sllAng < 0 ? -1 : 1, off = narrow ? 7 : 9;
+      stext("1st SLL", px + out * off, py, lf, '#8a5a00', out < 0 ? 'right' : 'left', true);
+    } else {
+      stext("1st SLL", px, ly, lf, '#8a5a00', 'center', true);
+    }
   }
 
-  // --- active-aperture strip, top-left inside the frame ---
-  const bx = PAD.l + 8, by = PAD.t + 9, bw = narrow ? 7 : 9, gap = narrow ? 3 : 4;
   for (let n = 0; n < NEL; n++) {
     const on = !!w[n];
     ctx.fillStyle = on ? '#0067b9' : '#ffffff';
