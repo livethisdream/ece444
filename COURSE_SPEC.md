@@ -593,9 +593,12 @@ GUI inventory (use these exact names in procedures):
   Tx Gain (dB), Tx Mode; then a **Connection** group: Simulator Mode,
   Backend URL), Element Gains (E1–E8 gain sliders, 0–100 %, Window Presets
   Rect / Cheb / Hann / Black, Aperture Presets 2-Elem / Sparse λ, Enforce
-  Symmetric Taper), Phase Control (E1–E8 phase offsets, Reset), Beam
+  Symmetric Taper), Phase Control (E1–E8 phase offsets, Reset; the boxes
+  show the offsets unwrapped, the sliders stop at ±180), Beam
   Steering (Steer Angle (deg), Taper dropdown Uniform / Chebyshev / Hann /
-  Blackman, Apply), Quantization (Steer Resolution (deg), Phase Shift Bits,
+  Blackman, Apply; **Apply** overwrites Element Gains with that taper and
+  writes $-n\Delta\phi$, rounded to whole degrees and not wrapped, into
+  Phase Control, computed from the Signal Freq on screen), Quantization (Steer Resolution (deg), Phase Shift Bits,
   Use Bits (ignore Steer Res)), Digital Beam Forming (Mode: Manual / MVDR;
   Manual: Reset, Beam 0/1 Gain and Phase; MVDR: Snapshots (K), Diagonal
   Load), Plot Options (Show Peak Gain Marker, Show Peak Angle Marker, Show
@@ -624,6 +627,9 @@ GUI inventory (use these exact names in procedures):
   presets do not set Rx Gain (its start value comes from the Pi's
   `config.py`), so a procedure that reads levels sets **Rx Gain (dB)**
   explicitly; 10 dB is the reference (higher settings can compress).
+  Preset 1 (Steering Angle) loads a uniform taper, zeros Phase Control,
+  sets 7 bits with Use Bits on and Signal BW 10 MHz, and opens the FFT tab;
+  Signal Freq stays at the Find HB100 value.
 - **Simulation mode**: the no-hardware path, in order: the hosted
   simulator at https://livethisdream.github.io/phaser/ (the same dashboard,
   no install); `?sim=1` on the Pi's URL, or the **Simulator Mode** toggle,
@@ -632,8 +638,10 @@ GUI inventory (use these exact names in procedures):
   SIMULATION pill marks simulated data. Labs are written for the real kit
   + HB100; where the sim behaves differently, add a short "no hardware?"
   note. Sim limits: the target is fixed at boresight (procedures that
-  rotate the HB100 by hand have no sim equivalent — say so); Rx Gain is
-  stored but not modeled; the tone is fixed at a 1 MHz baseband offset
+  rotate the HB100 by hand have no sim equivalent — say so; Beam Steering
+  Apply $\theta_0$ emulates a source at $+\theta_0$ in the sweep, which is
+  how L19's commanded run works in the sim); there is no element pattern,
+  so scan loss reads 0.0 dB; Rx Gain is stored but not modeled; the tone is fixed at a 1 MHz baseband offset
   (shown at −1 MHz on the negated axis) regardless of Signal Freq; CW radar
   is not simulated; calibration runs are scripted.
 - **Instructor mode** (`?instructor=1`, sim only) adds a Simulator
@@ -641,20 +649,28 @@ GUI inventory (use these exact names in procedures):
   nulling demos. Student-facing pages must NOT document instructor mode;
   it may appear in speaker notes as an instructor demo cue.
 
-**Beam-sweep semantics** (get this right in prose): the Rectangular plot's
-"gain vs steering angle" trace is produced by *electronically sweeping the
-commanded steer angle* past a stationary source and recording received
-power at each step. By reciprocity this traces the array pattern — but the
-x-axis is the commanded steer angle, not a measured arrival angle. The
-sweep step equals the phase LSB expressed as a steering resolution
-(2.8125° default), so measured HPBW/FNBW read 1–3° off theory from grid
-discretization alone; noise floor sits ≈ 23 dB below the uniform-taper
-peak. The "Phase Shift Bits" slider couples the sweep grid to the LSB, so
-at 2 bits the trace itself goes coarse — that IS the quantization
-demonstration in sweep mode.
+**Beam-sweep semantics** (get this right in prose; amended 2026-10-10): the
+Rectangular plot's "gain vs steering angle" trace is produced by
+*electronically sweeping the beam* past a stationary source and recording
+received power at each step; the x-axis is the angle each step steers to,
+not a measured arrival angle. The array factor depends only on
+$\sin\theta - \sin\theta_0$, so the trace peaks at the source angle (L18),
+and because the element pattern is held at the source's direction, the
+sweep records the array factor scaled by $EF(\theta_\text{src})$, which is
+why a peak-level comparison between two source positions measures scan
+loss. With **Use Bits** on (every lab preset), the sweep steps the element
+phase one LSB at a time and derives the angle axis from it: about 0.91° of
+angle at broadside, 1.05° at 30°, 1.29° at 45° (widening as
+$1/\cos\theta$), so the worst grid error near broadside is about 0.5°;
+points past endfire pile up at ±90°. Steer Resolution drives the sweep only
+with Use Bits off. Phase Control offsets add to every step, so a procedure
+that sweeps a physically moved source resets Phase Control first. Noise
+floor sits ≈ 23 dB below the uniform-taper peak. With Use Bits off, the
+"Phase Shift Bits" slider coarsens the element phases while the sweep keeps
+its step — that IS the quantization demonstration in sweep mode (L25).
 
-## M4. Canonical Module 3 numbers (verified in simulation 2026-08-23;
-must match everywhere they appear)
+## M4. Canonical Module 3 numbers (verified in simulation 2026-08-23,
+except where marked hardware only; must match everywhere they appear)
 
 Theory values are exact; "measured" values are what the sim/hardware
 sweep actually reads and belong in lab expectation tables.
@@ -668,9 +684,16 @@ sweep actually reads and belong in lab expectation tables.
 - HPBW $\approx 0.886\ \lambda/(Nd\cos\theta_0)$ — the L06/L15 line-source
   constant with $L = Nd$; beam broadens as $1/\cos\theta_0$ off broadside.
   FNBW (broadside) $= 2\arcsin(\lambda/Nd)$.
-- **Steering sign** (2026-10-07): commanded phase $+n\Delta\phi$ (a delay cancelling element $n$'s lead) steers to
-  $+\theta_0$; the GUI's Steer Angle and `ADAR_set_Phase` agree; L16's weights $e^{-jn\beta}$ carry the minus sign.
+- **Steering sign** (2026-10-07, amended 2026-10-10): commanded phase $+n\Delta\phi$ (a delay cancelling element $n$'s lead) steers to
+  $+\theta_0$; the sweep ramp in `ADAR_set_Phase` is `+i * PhDelta`, and the Rectangular axis reads the source angle
+  when Phase Control is zero; L16's weights $e^{-jn\beta}$ carry the minus sign.
   At 30°, 10.3 GHz: 0, 86.6, 173.2, 259.8, 346.4, 73.0, 159.6, 246.2.
+  Beam Steering **Apply** is the ADI workshop's offset, not the steering ramp: it writes $-n\Delta\phi$, whole degrees,
+  unwrapped, into Phase Control, so a boresight source's trace peaks at $+\theta_0$ (on its own the offset points the
+  beam to $-\theta_0$). Phase Control after Apply 30 at 10.525 GHz: 0, −88, −177, −265, −354, −442, −531, −619;
+  at 10.3 GHz: 0, −87, −173, −260, −346, −433, −519, −606. Course numbers use $c = 3\times10^8$ (176.8°, 88.4° at
+  10.525 GHz); the GUI uses $c = 299792458$ m/s (88.47°), so a $c = 3\times10^8$ prediction of the read-back can differ
+  by 1° on one element (E7: −530 predicted, −531 shown); at 10.3 GHz both give the row above.
 - Broadside directivity of a uniform ULA: $D \approx 2Nd/\lambda$ (= 7.7
   → 8.9 dB for the PHASER's 8 elements).
 - **Grating lobes**: $\sin\theta_g = \sin\theta_0 \pm m\lambda/d$;
@@ -704,7 +727,8 @@ sweep actually reads and belong in lab expectation tables.
   $20\log_{10}(\sum a_n / N)$ — it is NOT the directivity loss, which is
   the taper efficiency $\eta_t$ (−1.2 dB for the Hann preset). L24/L25 must
   keep these two numbers distinct or students will misread the plot.
-- **Scan loss (canonical rule)**: peak *power* gain of the steered array
+- **Scan loss (canonical rule; hardware only, since the simulator has no
+  element pattern and reads 0.0 dB)**: peak *power* gain of the steered array
   falls as $\cos\theta_0$ — the projected-aperture rule: $-0.6$ dB at
   30°, $-1.5$ dB at 45°, $-3.0$ dB at 60° ($-2.4$ dB at 55°). This is the
   ideal-element bound; real patch elements are steeper (power
@@ -754,6 +778,23 @@ plausible measured numbers and ask what they indicate. L17's lab has two
 parts: Part A brings the kit up from a freshly flashed card (flash, name,
 boot, connect by cable, join the Wi-Fi, run `install.sh`, then Find HB100
 and Calibrate), and Part B makes the first measurements on that kit.
+
+**Lab packet structure** (piloted on L19, 2026-10-10). A lab's practice
+problems fold into its lab packet, `latex/ECE444_Lab_L<NN>_<Short>.tex`,
+which has three parts: **Part 1, Pre-Lab** (individual, before the lab
+period: the predictions, from the preceding theory lesson's problems, plus a
+rehearsal of the commanded half of the procedure on the hosted simulator;
+it may scaffold like a practice set); **Part 2, Bench** (team, in class:
+measurement tables only, no prose questions); **Part 3, Writeup**
+(individual, before the next lesson: reconcile measured against predicted
+against the error budget, plus three or four analysis problems). A short
+grading statement on the first page says the packet counts toward
+engagement, Parts 1 and 3 graded as a genuine, documented attempt; timing is
+relative ("before Lesson 20"), never a date. The page replaces its Practice
+frame with a read-only **Lab Packet** frame that links the blank PDF and
+names the three parts; the preceding theory lesson's Practice frame points
+at Part 1 as its homework. The superseded practice sources and PDFs stay in
+the repo, unlinked.
 
 Deck title-slide image path and all other Module 2 rules apply unchanged.
 
@@ -952,3 +993,21 @@ folded in.
   ramp is nearly a multiple of 45°, so 3 bits costs almost nothing); the
   sweep passes through every commanded angle and reports the worst case.
   Hardware validation still owed (project ToDo).
+
+- **Lab packets replace practice sets for a lab pair; L19 is the pilot**
+  (Neil, 2026-10-10: "each lab isn't a separate lesson, it's a homework or
+  practice session, which counts towards engagement"; kits never leave the
+  room, so bench time stays in class and everything either side of it is
+  homework). L18's and L19's practice problems moved into the Lab 5 packet
+  (M5's three-part structure). The L19 procedure teaches the GUI as it is:
+  a physical run (Phase Control reset, source at 0/30/45° on the arc, record
+  Est. Angle) and a commanded run (source at boresight, Apply 15/30/45, record
+  Est. Angle and the Phase Control read-back, $-n\Delta\phi$; see M4
+  Steering sign). The old hunt for the peak with Apply and the FFT tab is
+  gone: the FFT tab shows the sweep's strongest step, so its level does not
+  respond to Apply. The peak-angle budget is grid half step 0.53° at 30°,
+  aim 1.5°, multipath 1.0°, root sum of squares 1.9°, pass within ±2°; HB100
+  drift is out of it (a drift that keeps the tone in the 3 MHz window moves
+  the beam under 0.01°) and survives as a labeled L26 squint preview. Rx Gain
+  10 dB as in L17. Hardware-day items: the + side of the arc (Lesson 18's
+  convention says toward E8), scan loss on the kit, Rx Gain compression.
