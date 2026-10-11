@@ -66,9 +66,9 @@ LO_TEXT = {
     "4.5": "I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.",
     "4.6": "I can implement moving target indication (MTI) processing to distinguish moving targets from clutter.",
     "4.7": "I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance.",
-    "5.1": "I can integrate beam-steering and null-steering weights to optimize array performance against a specified scenario.",
+    "5.1": "I can choose and justify array steering and taper weights to optimize detection performance for a specified scenario.",
     "5.2": "I can integrate FMCW radar processing with a phased-array front-end to track a moving target.",
-    "5.3": "I can suppress a static jammer using null steering while maintaining detection of a moving target.",
+    "5.3": "I can classify a detected target from its micro-Doppler signature and report the classifier's accuracy.",
     "5.4": "I can present system performance results and defend engineering trade-offs in a technical briefing.",
 }
 
@@ -106,7 +106,7 @@ MODULES = {
         caption="Module 5 — Capstone Project",
         title="Module 5 — Capstone Project",
         los=["5.1", "5.2", "5.3", "5.4"],
-        synopsis="Capstone. Integrate beam steering, null steering, and FMCW radar into a working demo that tracks a moving target while suppressing a static jammer, and brief the results.",
+        synopsis="Capstone. Integrate beam steering, tapering, and FMCW radar into a working demo that detects, classifies, and tracks a moving target, and brief the results.",
         generate_index=False,  # hand-written frame page; the generator predates frames
     ),
 }
@@ -171,9 +171,9 @@ LESSONS = [
     (4, 37, "L37-cfar-theory", "CFAR Processing Theory", ["4.7"], "Constant false-alarm-rate processing.", False),
     (4, 38, "L38-cfar-lab", "CFAR Processing Lab", ["4.7"], "Apply CFAR to radar data and evaluate detection performance.", False),
 
-    (5, 39, "L39-final-project-kickoff", "Final Project Kickoff", ["5.1"], "Capstone scenario, teams, and plan: track a mover while suppressing a jammer.", False),
-    (5, 40, "L40-array-optimization", "Phase 1 — Array Optimization", ["5.1"], "Design beam-steering weights, implement null steering, and evaluate array performance.", False),
-    (5, 41, "L41-radar-integration", "Phase 2 — Radar Integration and Demonstration", ["5.2", "5.3", "5.4"], "Integrate FMCW + Doppler tracking, overlay tracks on the array pattern, and brief the results.", False),
+    (5, 39, "L39-final-project-kickoff", "Final Project Kickoff", ["5.1"], "Capstone scenario, teams, and plan: detect, classify, and track a moving target.", False),
+    (5, 40, "L40-array-optimization", "Phase 1 — Array Optimization", ["5.1"], "Choose steering and taper weights and evaluate detection performance.", False),
+    (5, 41, "L41-radar-integration", "Phase 2 — Radar Integration and Demonstration", ["5.2", "5.3", "5.4"], "Integrate FMCW detection, micro-Doppler classification, and tracking, overlay tracks on the array pattern, and brief the results.", False),
 ]
 
 

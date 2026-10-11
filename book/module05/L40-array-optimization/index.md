@@ -10,7 +10,7 @@
 ## Learning Objectives
 
 <ol class="lo-list" style="--module: '5'; counter-reset: lo 0;">
-  <li>I can integrate beam-steering and null-steering weights to optimize array performance against a specified scenario.</li>
+  <li>I can choose and justify array steering and taper weights to optimize detection performance for a specified scenario.</li>
 </ol>
 
 ---

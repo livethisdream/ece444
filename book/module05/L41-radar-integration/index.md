@@ -11,7 +11,7 @@
 
 <ol class="lo-list" style="--module: '5'; counter-reset: lo 1;">
   <li>I can integrate FMCW radar processing with a phased-array front-end to track a moving target.</li>
-  <li>I can suppress a static jammer using null steering while maintaining detection of a moving target.</li>
+  <li>I can classify a detected target from its micro-Doppler signature and report the classifier's accuracy.</li>
   <li>I can present system performance results and defend engineering trade-offs in a technical briefing.</li>
 </ol>
 
