@@ -178,8 +178,14 @@ earn engagement points in the following ways:
   a genuine, documented attempt. Correct or not, the work matters.
 - **Attending Extra Instruction (EI).** Book time with me and come prepared with
   specific questions or a concept you want to work through.
-- **Lab prep and lab writeup engagement.** Coming to lab prepared with a
-  pre-lab plan, and turning in a thoughtful writeup, both count.
+- **Lab packets.** A lab's packet has three parts: a pre-lab you do before the
+  period (your predictions, and a rehearsal in the browser simulator), the data
+  your team records at the bench, and a writeup you do afterward (what you
+  measured against what you predicted, and why they differ). Where a lab has a
+  packet, it replaces the practice problems for that lab and the lesson before
+  it, and the pre-lab and writeup are graded the same way: a genuine,
+  documented attempt. Lab packets are required. They are the first engagement
+  points you earn, and the other routes here add to them up to the cap.
 - **Research paper.** You may complete a research paper on a
   relevant, pre-approved topic — an antenna, array, or radar technology, a
   measurement technique, or a mission application. Must be in **IEEE format**,
@@ -261,11 +267,13 @@ generative AI tools is not allowed** unless explicitly permitted.
 
 ### 5. Collaboration
 
-**Collaboration (not copying)** on practice problems and assessments is highly
-encouraged, unless your instructor provides direction otherwise. A good litmus
-test: you must be able to **explain every step** on your submitted work.
-If you can't, it's copying, not collaboration. All help received on graded work
-must be documented per the documentation policy below.
+**Collaboration (not copying)** on practice problems is highly encouraged. A
+good litmus test: you must be able to **explain every step** on your submitted
+work. If you can't, it's copying, not collaboration. All help received on graded
+work must be documented per the documentation policy below.
+
+**Module assessments are individual work.** Do not work with or get help from
+anyone else, and use only the course materials.
 
 ### 6. Documentation
 
