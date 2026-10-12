@@ -150,6 +150,8 @@ project packet and the rubric.
 5. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
 6. **Module 4 and 5 build-out**, once the radar mode runs on hardware.
+7. **Integrator cleanup:** the syllabus schedule still lists Module 2 in its
+   pre-2026-09-12 order (the measurement labs as 13 and 14, not L10 and L11).
 
 ## 7. Open decisions (Neil)
 
