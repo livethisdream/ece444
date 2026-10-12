@@ -7,14 +7,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SET THESE IF VARIABLES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Lab Num -- Module 3's six lab periods follow L04 (Lab 1) and the two
-% Module 2 measurement labs, so L25 is Lab 8. Override with \def\labNumIn{}
-% if the course sequence renumbers.
-\ifdefined\labNumIn
-	\def\labNum{\labNumIn}
-\else
-	\def\labNum{8}
-\fi
+% Lab name -- labs are named by the lesson they belong to, never by a
+% sequential lab number (Neil, 2026-10-12): this is the L25 Lab.
+\def\labLesson{25}
 
 % is this the key or not?
 \ifdefined\iskey
@@ -74,12 +69,12 @@
 % need to print key on top if this is the key
 \ifkey
 	\firstpageheader{}{\color{red}{ KEY}}{}
-	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{L\labLesson\ Lab\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
 	\firstpagefooter{}{}{}
 	\runningfooter{}{}{}
 \else
 	\firstpageheader{}{}{}
-	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{L\labLesson\ Lab\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
 	\firstpagefooter{}{}{}
 	\runningfooter{}{}{}
 \fi
@@ -97,7 +92,7 @@
 \begin{center}
 USAF ACADEMY \\
 DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
-LAB \#\labNum\ (Lesson 25) - Tapering Lab \\
+LESSON \labLesson\ LAB - Tapering \\
 \textbf{Lab Sheet} \\
 \thisterm \\[4mm]
 \end{center}
@@ -116,7 +111,7 @@ Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.}
 
 This sheet is the turn-in document for the Lesson 25 lab. Predict each row
 before you sweep it, and keep the peak drop and the taper efficiency in separate
-columns throughout. The lab is a team assignment, so one sheet per team.
+columns throughout. The lab is individual: one sheet per cadet, from your own kit.
 
 \begin{questions}
 

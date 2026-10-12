@@ -103,12 +103,12 @@ are claims you will want to check for your project report.
   </a>
   <a class="mt-card mt-lesson" href="L10-measurement-lab-sparams/index.html">
     <span class="mt-kind">Lesson 10</span>
-    <h4>Measurement Lab 1 — Impedance and S-parameters</h4>
+    <h4>Measurement Lab — Impedance and S-parameters</h4>
     <p>Hands on the analyzer: calibrate, sweep, and reduce an antenna's impedance and bandwidth. Objective 2.6.</p>
   </a>
   <a class="mt-card mt-lesson" href="L11-measurement-lab-patterns/index.html">
     <span class="mt-kind">Lesson 11</span>
-    <h4>Measurement Lab 2 — Radiation Patterns</h4>
+    <h4>Measurement Lab — Radiation Patterns</h4>
     <p>Hands on the range: cut two planes, then extract gain, beamwidth, sidelobe level, and polarization. Objective 2.7.</p>
   </a>
 </div>

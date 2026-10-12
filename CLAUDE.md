@@ -210,7 +210,7 @@ landing page and the five module overviews are built the same way.
   exceptions (lessons cut under the old 30 stay listed there until recut);
   `check_density.py --beats N <LNN>` tries another budget without editing it.
   **In a lab lesson** only the frames presented before bench time count:
-  the step-by-step procedure frames are `:class: read-only`, because teams
+  the step-by-step procedure frames are `:class: read-only`, because cadets
   follow them on their own laptops in read mode.
   `scripts/verify/check_density.py <LNN>` counts them from the source with
   no build, and `mech_check.sh` gates on it once a lesson carries any

@@ -49,21 +49,21 @@ copy. The same links appear on each lesson page.
 | L7 — Simple Resonant Antennas | <a class="doc-link" href="practice/ECE444_L07_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L07_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L8 — Dipole Simulation Lab | <a class="doc-link" href="practice/ECE444_L08_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L08_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L9 — Measurement Theory | <a class="doc-link" href="practice/ECE444_L09_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L09_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L10 — Measurement Lab 1: Impedance and S-parameters | <a class="doc-link" href="practice/ECE444_L10_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L10_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L11 — Measurement Lab 2: Radiation Patterns | <a class="doc-link" href="practice/ECE444_L11_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L11_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L10 — Measurement Lab: Impedance and S-parameters | <a class="doc-link" href="practice/ECE444_L10_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L10_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L11 — Measurement Lab: Radiation Patterns | <a class="doc-link" href="practice/ECE444_L11_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L11_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L12 — Loop and Monopole Antennas | <a class="doc-link" href="practice/ECE444_L12_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L12_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L13 — Patch, Slot, and Horn Antennas | <a class="doc-link" href="practice/ECE444_L13_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L13_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L14 — High-Gain Antennas | <a class="doc-link" href="practice/ECE444_L14_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L14_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 
 ### Module 3: Arrays and ADALM-PHASER Beamforming
 
+L17, L18, and L19 have no separate problem set: their problems are in the
+L17 Lab and L19 Lab packets, listed under Lab Sheets below.
+
 | Lesson | Problem set | Solutions |
 | :-- | :-- | :-- |
 | L15 — Aperture Distributions and Efficiency | <a class="doc-link" href="practice/ECE444_L15_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L15_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L16 — The Array Factor and Pattern Multiplication | <a class="doc-link" href="practice/ECE444_L16_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L16_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L17 — Introduction to Phased Array Hardware | <a class="doc-link" href="practice/ECE444_L17_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L17_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L18 — Beam Steering Theory | <a class="doc-link" href="practice/ECE444_L18_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L18_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L19 — Beam Steering Lab | <a class="doc-link" href="practice/ECE444_L19_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L19_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L21 — Array Factor and Beamwidth Theory | <a class="doc-link" href="practice/ECE444_L21_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L21_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L22 — Antenna Pattern Theory | <a class="doc-link" href="practice/ECE444_L22_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L22_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L23 — Array Factor and Pattern Lab | <a class="doc-link" href="practice/ECE444_L23_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L23_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
@@ -85,8 +85,8 @@ reading.
 | Lab | Lesson | Sheet |
 | :-- | :-- | :-- |
 | Matching Procedures (VNA + L-network) | L4 Lab | <a href="labs/ECE444_Lab_L04_Matching_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
-| Phased Array Hardware Bring-Up | L17 | <a href="labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
-| Beam Steering | L19 | <a href="labs/ECE444_Lab_L19_Steering_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
+| Phased Array Hardware Bring-Up | L17 | <a href="labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">lab packet</a> |
+| Beam Steering | L19 | <a href="labs/ECE444_Lab_L19_Steering_blank.pdf" target="_blank" rel="noopener">lab packet</a> |
 | Array Factor and Pattern | L23 | <a href="labs/ECE444_Lab_L23_ArrayPattern_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
 | Tapering | L25 | <a href="labs/ECE444_Lab_L25_Tapering_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
 | Null Steering | L28 | <a href="labs/ECE444_Lab_L28_NullSteering_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |

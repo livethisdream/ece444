@@ -122,9 +122,9 @@ def svg_open(h, label):
             f'aria-label="{label}">')
 
 
-def write(name, svg):
+def write(name, svg, outs=OUTS):
     svg = apply_font_stack(svg)
-    for out in OUTS:
+    for out in outs:
         out.mkdir(parents=True, exist_ok=True)
         (out / f"{name}.svg").write_text(svg, encoding="utf-8")
     print(f"wrote {name}.svg (deck + page)")
@@ -134,7 +134,7 @@ def write(name, svg):
 # ILL-01 - the hybrid split
 # --------------------------------------------------------------------------
 
-def hybrid_split() -> str:
+def hybrid_split(rx_note: str = "Rx: mixer and ADC.") -> str:
     H = 232
     PW, GAP, X0 = 132, 8, 4
     TOP, BOT = 27, 153                       # diagram band
@@ -233,7 +233,7 @@ def hybrid_split() -> str:
                      weight="600"))
         s.append(txt(cx, 207, f"{n_w} digital weights", 13, AMBER, weight="600"))
 
-    s.append(txt(W / 2, H - 5, "Rx: mixer and ADC. Shaded: digital.", 13, INK3))
+    s.append(txt(W / 2, H - 5, f"{rx_note} Shaded: digital.", 13, INK3))
     s.append("</svg>")
     return "\n".join(s)
 
@@ -530,7 +530,10 @@ def part_a_network() -> str:
 
 
 def main() -> None:
-    write("L17-hybrid-split", hybrid_split())
+    # The deck copy is frozen as built; the page copy names no mixer, since
+    # students have had no receiver course (COURSE_SPEC M7).
+    write("L17-hybrid-split", hybrid_split(), OUTS[:1])
+    write("L17-hybrid-split", hybrid_split("Rx: frequency converter and ADC."), OUTS[1:])
     write("L17-adar-align", adar_align())
     write("L17-hb100-spread", hb100_spread())
     write("L17-hs-mirror", hs_mirror())

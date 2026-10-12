@@ -44,10 +44,10 @@ Lesson 19 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 :::
 
 In Lesson 18 we derived the steering law and used it to fill in a table of
-element phases for the PHASER's eight-element array. Lab 5's packet starts from
+element phases for the PHASER's eight-element array. The L19 Lab packet starts from
 that table: Part 1, the pre-lab you completed before class, redoes it at your
 HB100's frequency, predicts the beamwidths, and sizes the error budget. Today
-your team places the source at measured angles on a protractor arc, and also
+you place the source at measured angles on a protractor arc, and also
 commands the peak to the same angles from the GUI, and records where the trace
 peaks, how wide it is, and what the GUI writes into Phase Control. Part 3, on
 your own before Lesson 20, reconciles those numbers with the predictions.
@@ -270,7 +270,7 @@ source on the $+$ side, **Est. Angle** reads positive.
 :class: read-only
 
 :::{present}
-1. Browse to your kit's address from Lesson 17 (team 03: `http://192.168.7.13:8080`) and wait for the pill to read **Connected**.
+1. Browse to your kit's address from Lesson 17 (kit 03: `http://192.168.7.13:8080`) and wait for the pill to read **Connected**.
 2. Place the powered HB100 $1\ \text{m}$ out at $0^\circ$ on the arc, facing the array.
 3. Press **Find HB100** and record the Signal Freq it reports in the packet.
 4. Press **Calibrate** and wait for it to finish.
@@ -332,7 +332,7 @@ the negative side of the arc; move it across.
 Apply also rewrites **Element Gains** with the chosen taper, so leave it on
 Uniform. The offsets stay loaded until you press Reset, and they add to every
 sweep: with Apply $30$ still loaded and the source moved to $+30^\circ$, the trace
-would peak at $90^\circ$. Step 21 leaves the station at zero for the next team.
+would peak at $90^\circ$. Step 21 leaves the kit at zero for the next lab.
 ::::
 
 ::::{frame} Expected Numbers
@@ -457,13 +457,13 @@ $0.6^\circ$ farther out, and a $45^\circ$ beam $1.1^\circ$ farther.
 ::::{frame} Lab Packet
 :class: read-only doc-links
 
-The Lab 5 packet is one submission for the whole lab, turned in complete before Lesson 20. It has three parts:
+The L19 Lab packet is one submission for the whole lab, turned in complete before Lesson 20. It has three parts:
 
 1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it at the bench): the prediction table at your kit's frequency, what Phase Control will show, the beamwidths and the error budget, and a rehearsal of Run 2 on the hosted simulator.
-2. **Part 2, Measurements** (your team's data, recorded in class): Tables A and B, from Run 1 and Run 2.
+2. **Part 2, Measurements** (your own kit's data, recorded in class): Tables A and B, from Run 1 and Run 2.
 3. **Part 3, Writeup** (individual, after the lab): reconcile the measurements with the predictions, and three analysis problems.
 
-- <a class="doc-link" href="../../labs/ECE444_Lab_L19_Steering_blank.pdf" target="_blank" rel="noopener">Lab 5 packet (PDF)</a>
+- <a class="doc-link" href="../../labs/ECE444_Lab_L19_Steering_blank.pdf" target="_blank" rel="noopener">L19 Lab packet (PDF)</a>
 ::::
 
 ::::{frame} Summary: The Steering Law

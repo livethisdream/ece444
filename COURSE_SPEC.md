@@ -784,21 +784,24 @@ and Calibrate), and Part B makes the first measurements on that kit.
 **Lab packet structure** (piloted on L19, 2026-10-10). A lab's practice
 problems fold into its lab packet, `latex/ECE444_Lab_L<NN>_<Short>.tex`,
 which has three parts: **Part 1, Pre-Lab** (individual, before the lab
-period: the predictions, from the preceding theory lesson's problems, plus a
-rehearsal of the commanded half of the procedure on the hosted simulator;
-it may scaffold like a practice set); **Part 2, Measurements** (the team's
-data, in class: measurement tables only, no prose questions; every teammate
-copies the same values); **Part 3, Writeup** (individual, after the lab:
+period: the predictions, plus a rehearsal of the commanded half of the
+procedure on the hosted simulator where the lab has one; it may scaffold like
+a practice set); **Part 2, Measurements** (each
+cadet's own data from their own kit, in class: measurement tables only, no
+prose questions); **Part 3, Writeup** (individual, after the lab:
 reconcile measured against predicted against the error budget, plus three or
 four analysis problems). **The packet is one submission** (Neil, 2026-10-11:
 "I don't want to be grading extra assignments"), turned in complete before the
 next lesson, so one Gradescope assignment per lab. A short grading statement
 on the first page says the packet counts toward engagement and is graded as a
 genuine, documented attempt; timing is relative ("before Lesson 20"), never a
-date. The page replaces its Practice
-frame with a read-only **Lab Packet** frame that links the blank PDF and
-names the three parts; the preceding theory lesson's Practice frame points
-at Part 1 as its homework. The superseded practice sources and PDFs stay in
+date. The packet replaces the lab's practice
+problems, and the preceding lesson's too when the pre-lab draws on them (L19's
+does, from L18; L17's does not, so L16 keeps its practice set). The page
+replaces its Practice frame with a read-only **Lab Packet** frame that links
+the blank PDF and names the three parts; where the pre-lab draws on the
+preceding theory lesson, that lesson's Practice frame points at Part 1 as its
+homework. The superseded practice sources and PDFs stay in
 the repo, unlinked.
 
 Deck title-slide image path and all other Module 2 rules apply unchanged.
@@ -929,7 +932,7 @@ folded in.
   exceptions in that file until they are recut, so their gates stay green;
   L17 and L18 are recut first. In a lab lesson only the frames presented
   before bench time count: the step-by-step procedure frames are read-only,
-  because teams follow them in read mode on their own laptops.
+  because cadets follow them in read mode on their own laptops.
 
 - **Hardware limits stay out of the student story unless they change what
   a student does** (Neil, 2026-10-07, on the L17 closing re-check, which
@@ -1016,6 +1019,15 @@ folded in.
   the beam under 0.01°) and survives as a labeled L26 squint preview. Rx Gain
   10 dB as in L17. Hardware-day items: the + side of the arc (Lesson 18's
   convention says toward E8), scan loss on the kit, Rx Gain compression.
+- **L17 is a single lab packet: "did you get it working" and "prove your kit
+  works"** (Neil, 2026-10-11). Lab 4 is short and practical: pre-lab hardware
+  counts, a bring-up record and kit check, a block diagram and two bench
+  diagnoses. The page now says only that the board shifts the signal to 2.2 GHz
+  where the SDR listens; its LO, IF, and spectrum-mirror content came off.
+- **Every cadet has their own kit** (Neil, 2026-10-11). Lab measurements are
+  individual, not team data: Part 2 of a packet is the cadet's own kit, an
+  old-style lab sheet is one per cadet, and the L17 bring-up names the kit by
+  a kit number NN (`phaser-NN` at `192.168.7.(10 + NN)`), not a team number.
 - **Final project: detect, classify, track; the jammer is out for now**
   (Neil, 2026-10-11, choosing option A of the Module 4-5 buildout plan:
   "we can take out the jammer for now"). The capstone is one moving target
@@ -1060,3 +1072,12 @@ folded in.
   blank PDFs, and their keys were deleted (Neil, 2026-10-11). Decks were renamed and retitled only;
   a merged lesson's deck is the two old decks under one title slide, and
   cross-references inside decks still carry the old numbers.
+- **Labs are named by their lesson, never by a sequential lab number** (Neil,
+  2026-10-12: "the Lab 5 nomenclature makes it difficult to keep track of what
+  lesson it's assigned to"). The L04 matching lab is the L4 Lab; the Module 3
+  labs are the L17, L19, L20, L23, L25, and L28 Labs; the Module 2
+  measurement labs (L10, L11) drop their "1" and "2". A lab packet's running
+  header reads "L19 Lab" and its title block "LESSON 19 LAB - Beam Steering",
+  both from `\labLesson` in the source; the `\labNum` / `\labNumIn` sequence
+  is gone. Dated entries above keep the old numbers: Lab 4 = L17, Lab 5 =
+  L19, Lab 6 = L20, Lab 7 = L23, Lab 8 = L25, Lab 9 = L28. Decks unchanged.

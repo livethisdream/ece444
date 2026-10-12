@@ -2,14 +2,14 @@
 frame_view: true
 ---
 
-# L10 - Measurement Lab 1: Impedance and S-parameters
+# L10 - Measurement Lab: Impedance and S-parameters
 
 ::::{frame}
 :class: title-frame
 
 <div class="course-mark">ECE 444 · Fall 2026</div>
 
-<h1 class="frame-title">Measurement Lab 1: Impedance and S-parameters</h1>
+<h1 class="frame-title">Measurement Lab: Impedance and S-parameters</h1>
 
 <div class="title-rule"></div>
 

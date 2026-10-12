@@ -139,8 +139,8 @@ LESSONS = [
     # The measurement block runs before the remaining antenna families so that
     # the midterm project is in cadets' hands as early as the calendar allows.
     (2, 9, "L09-pattern-measurement-theory", "Measurement Theory", ["2.5", "2.6"], "All the measurement theory in one place: ranges and chambers, what a VNA measures and how it is calibrated, gain by comparison, and dynamic range. Midterm project introduced.", False),
-    (2, 10, "L10-measurement-lab-sparams", "Measurement Lab 1 — Impedance and S-parameters", ["2.6"], "Measure impedance and S-parameters on a vector network analyzer.", False),
-    (2, 11, "L11-measurement-lab-patterns", "Measurement Lab 2 — Radiation Patterns", ["2.7"], "Measure a radiation pattern and extract gain, beamwidth, sidelobe level, and polarization.", False),
+    (2, 10, "L10-measurement-lab-sparams", "Measurement Lab — Impedance and S-parameters", ["2.6"], "Measure impedance and S-parameters on a vector network analyzer.", False),
+    (2, 11, "L11-measurement-lab-patterns", "Measurement Lab — Radiation Patterns", ["2.7"], "Measure a radiation pattern and extract gain, beamwidth, sidelobe level, and polarization.", False),
     (2, 12, "L12-loop-monopole-antennas", "Loop and Monopole Antennas", ["2.1"], "Small loops and monopoles: radiation behavior, gain, and impedance.", False),
     (2, 13, "L13-patch-slot-horn", "Patch, Slot, and Horn Antennas", ["2.3"], "Radiation mechanism, pattern, and use cases for patch, slot, and horn antennas.", False),
     (2, 14, "L14-high-gain-antennas", "High-Gain Antennas", ["2.4"], "Reflectors, Yagi-Uda, and arrays — how they get gain.", False),
@@ -154,10 +154,10 @@ LESSONS = [
     # reused; lesson numbers still equal teaching order. The fox hunt follows
     # the steering lab while the bearing skill is fresh, the array-factor and
     # pattern labs share one bench period, and the Module 4 lab pairs merge.
-    (3, 20, "L20-fox-hunt-lab", "Fox Hunt Lab", ["3.5"], "Find the one live HB100 among numbered boxes: bearings from stations outside a marked circle, triangulated on your own kit. Lab 6.", False),
+    (3, 20, "L20-fox-hunt-lab", "Fox Hunt Lab", ["3.5"], "Find the one live HB100 among numbered boxes: bearings from stations outside a marked circle, triangulated on your own kit.", False),
     (3, 21, "L21-array-factor-beamwidth", "Array Factor and Beamwidth Theory", ["3.2"], "Array factor and beamwidth in depth. Midterm project due.", False),
     (3, 22, "L22-antenna-pattern-theory", "Antenna Pattern Theory", ["3.6"], "True antenna pattern vs. array factor; element-pattern effects.", False),
-    (3, 23, "L23-array-pattern-lab", "Array Factor and Pattern Lab", ["3.2", "3.6"], "Measure the array factor at 8, 4, and 2 elements, then walk the source around a fixed beam to see the element pattern. Lab 7.", False),
+    (3, 23, "L23-array-pattern-lab", "Array Factor and Pattern Lab", ["3.2", "3.6"], "Measure the array factor at 8, 4, and 2 elements, then walk the source around a fixed beam to see the element pattern.", False),
     (3, 24, "L24-sidelobes-tapering", "Sidelobes and Tapering Theory", ["3.7"], "Amplitude tapering (uniform, cosine, Chebyshev, Taylor) and the sidelobe trade-off.", False),
     (3, 25, "L25-tapering-lab", "Tapering Lab", ["3.7"], "Apply tapers on the PHASER and measure the sidelobe trade-off.", False),
     (3, 26, "L26-beam-squint-quantization", "Beam Squint and Quantization", ["3.8"], "Beam squint and phase-quantization effects on array performance.", False),
