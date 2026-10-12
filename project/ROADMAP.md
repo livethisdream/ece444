@@ -104,7 +104,7 @@ Status as of 2026-10-12. "Cut" means the lesson fits the 20-slide budget.
 | :-- | :-- | :-- | :-- | :-- |
 | L15 | Aperture Distributions and Efficiency | practice | cut 20/20, sweeps done | ready |
 | L16 | The Array Factor and Pattern Multiplication | practice | 29/20, sweeps done | cut |
-| L17 | Introduction to Phased Array Hardware | **L17 Lab** | packet built (PR #86), 14/20 | golden image + hardware dry run |
+| L17 | Introduction to Phased Array Hardware | **L17 Lab** | packet built, 14/20 | golden image + hardware dry run |
 | L18 | Beam Steering Theory | none (pre-lab of L19 Lab) | 20/20, sweeps done | ready |
 | L19 | Beam Steering Lab | **L19 Lab** | packet built, 13/20 | hardware-day checks |
 | L20 | Fox Hunt Lab | **L20 Lab** | placeholder | page + packet |
@@ -139,18 +139,15 @@ project packet and the rubric.
 
 ## 6. Work queue, in order
 
-1. **Merge the open structure PRs:** #85 (L19 Lab as one submission), then #86
-   (L17 Lab packet, individual kits, labs named by lesson) with
-   `ECE444-faculty` #20.
-2. **Before L17:** the golden card image and a hardware dry run on a real kit.
-3. **L20 Lab**, the fox hunt: page and packet. Plan in
+1. **Before L17:** the golden card image and a hardware dry run on a real kit.
+2. **L20 Lab**, the fox hunt: page and packet. Plan in
    `MODULE45_BUILDOUT_PLAN.md` §2 and §7.
-4. **Lesson passes in teaching order:** L16, then L21–L28, each before it is
+3. **Lesson passes in teaching order:** L16, then L21–L28, each before it is
    taught. A lab lesson's pass converts its sheet to a packet.
-5. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
+4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
-6. **Module 4 and 5 build-out**, once the radar mode runs on hardware.
-7. **Integrator cleanup:** the syllabus schedule still lists Module 2 in its
+5. **Module 4 and 5 build-out**, once the radar mode runs on hardware.
+6. **Integrator cleanup:** the syllabus schedule still lists Module 2 in its
    pre-2026-09-12 order (the measurement labs as 13 and 14, not L10 and L11).
 
 ## 7. Open decisions (Neil)

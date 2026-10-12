@@ -95,6 +95,9 @@
   // LO's 12.2-13.0 GHz range covers the 10.1-10.7 GHz HB100 spread
   // (any value from 2.1 to 2.3 GHz does; 2.2 is the center).
   var IF_GHZ = 2.2;
+  // ?plain=1: the lesson's view. Students have had no receiver course, so it
+  // names no LO, mixer, or IF: the converter block shifts X-band to 2.2 GHz.
+  var PLAIN = /[?&]plain=1(&|$)/.test(location.search);
   var FONT = "'Inter',system-ui,-apple-system,sans-serif";
 
   // band -> stroke/fill/accent
@@ -136,6 +139,22 @@
       desc:'The board’s own tone. An ADF4159 phase-locked loop holds an HMC735 VCO on the exact frequency the software asks for, somewhere in 12.2–13.0 GHz. '
          + 'It is set 2.2 GHz above the source, so retuning the array across X-band means retuning this block and nothing else.' }
   ];
+  if (PLAIN) {
+    BLOCKS = BLOCKS.filter(function (b) { return b.id !== 'lo'; });
+    BLOCKS.forEach(function (b) {
+      if (b.id === 'mix') {
+        b.name = 'Converter ×2'; b.title = 'Frequency converter';
+        b.desc = 'Each LTC5548 shifts one subarray output from X-band down to 2.2 GHz. '
+               + 'The board sets the size of the shift from Signal Freq, so the signal always comes out at 2.2 GHz, the only frequency the SDR downstream ever tunes.';
+      }
+      if (b.id === 'pi')
+        b.desc = 'The Pi runs the headless Python backend, writes phase and gain to the ADAR1000s over SPI, and tunes the Pluto and sets the frequency shift through pyadi-iio. '
+               + 'It also serves the browser interface you drive the lab from.';
+    });
+    document.querySelector('.ro.lo').style.display = 'none';
+    document.getElementById('pRF').previousElementSibling.textContent = 'Source';
+    document.getElementById('pIF').previousElementSibling.textContent = 'To SDR';
+  }
   var byId = {}; BLOCKS.forEach(function (b) { byId[b.id] = b; });
 
   var cv = document.getElementById('chain'), ctx = cv.getContext('2d');
@@ -156,6 +175,8 @@
   function nodeText(id) {
     if (id === 'patch' || id === 'lna' || id === 'adar')
       return 'Signal here: <b>' + fRF().toFixed(3) + ' GHz</b> at RF.';
+    if (id === 'mix' && PLAIN)
+      return 'In: <b>' + fRF().toFixed(3) + ' GHz</b>. Out: <b>2.200 GHz</b>, whatever the source frequency.';
     if (id === 'mix')
       return 'In: <b>' + fRF().toFixed(3) + ' GHz</b> RF and <b>' + fLO().toFixed(3)
            + ' GHz</b> LO. Out: <b>2.200 GHz</b> IF.';
@@ -180,12 +201,13 @@
       chain.forEach(function (b, i) {
         boxes[b.id] = { x: pad + i * (bw + g), y: y, w: bw, h: bh };
       });
+      if (!byId.lo) { layoutH = y + bh + 16; return 'row'; }
       var m = boxes.mix;
       boxes.lo = { x: m.x, y: y + bh + 48, w: bw, h: 44 };
       layoutH = boxes.lo.y + boxes.lo.h + 16;
       return 'row';
     }
-    var lw = 64, gap = 10;
+    var lw = PLAIN ? 0 : 64, gap = PLAIN ? 0 : 10;
     var cx = pad + lw + gap, cwid = W - pad - cx;
     /* The column stacks one block per row, so its height is the block count
        times the pitch -- the widest part of this widget's budget on a phone.
@@ -196,7 +218,7 @@
       boxes[b.id] = { x: cx, y: y0 + i * (h + vg), w: cwid, h: h };
     });
     var mm = boxes.mix;
-    boxes.lo = { x: pad, y: mm.y, w: lw, h: h };
+    if (byId.lo) boxes.lo = { x: pad, y: mm.y, w: lw, h: h };
     layoutH = y0 + chain.length * (h + vg) - vg + 12;
     return 'col';
   }
@@ -293,14 +315,16 @@
     }
     // LO into the mixer
     var lo = boxes.lo, mx = boxes.mix;
-    if (mode === 'row') arrow(lo.x + lo.w / 2, lo.y, mx.x + mx.w / 2, mx.y + mx.h + 2, C.amber);
+    if (!lo) { /* plain view: no LO block */ }
+    else if (mode === 'row') arrow(lo.x + lo.w / 2, lo.y, mx.x + mx.w / 2, mx.y + mx.h + 2, C.amber);
     else arrow(lo.x + lo.w, lo.y + lo.h / 2, mx.x - 2, mx.y + mx.h / 2, C.amber);
 
     BLOCKS.forEach(function (b) { drawBlock(b, mode); });
 
     // band key
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    var keys = [[C.navy, 'RF'], [C.amber, 'LO'], [C.grn, 'IF'], [C.ink3, 'digital']];
+    var keys = PLAIN ? [[C.navy, 'X-band'], [C.grn, '2.2 GHz'], [C.ink3, 'digital']]
+                     : [[C.navy, 'RF'], [C.amber, 'LO'], [C.grn, 'IF'], [C.ink3, 'digital']];
     if (mode === 'row') {
       var kx = 12, ky = 20;
       keys.forEach(function (k) {

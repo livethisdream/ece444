@@ -100,7 +100,7 @@ and say what each term does, the rest is arithmetic.
   <a class="mt-card mt-lesson" href="L20-fox-hunt-lab/index.html">
     <span class="mt-kind">Lesson 20</span>
     <h4>Fox Hunt Lab</h4>
-    <p>Find the one live HB100 among numbered boxes: bearings from stations outside a marked circle, triangulated on your own kit. Lab 6. Objective 3.5.</p>
+    <p>Find the one live HB100 among numbered boxes: bearings from stations outside a marked circle, triangulated on your own kit. Objective 3.5.</p>
   </a>
   <a class="mt-card mt-lesson" href="L21-array-factor-beamwidth/index.html">
     <span class="mt-kind">Lesson 21</span>
@@ -121,7 +121,7 @@ and say what each term does, the rest is arithmetic.
   <a class="mt-card mt-lesson" href="L23-array-pattern-lab/index.html">
     <span class="mt-kind">Lesson 23</span>
     <h4>Array Factor and Pattern Lab</h4>
-    <p>Measure the array factor at 8, 4, and 2 elements, then walk the source around a fixed beam to see the element pattern. Lab 7. Objectives 3.2, 3.6.</p>
+    <p>Measure the array factor at 8, 4, and 2 elements, then walk the source around a fixed beam to see the element pattern. Objectives 3.2, 3.6.</p>
   </a>
   <a class="mt-card mt-lesson" href="L24-sidelobes-tapering/index.html">
     <span class="mt-kind">Lesson 24</span>

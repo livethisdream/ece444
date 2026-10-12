@@ -2,14 +2,14 @@
 frame_view: true
 ---
 
-# L11 - Measurement Lab 2: Radiation Patterns
+# L11 - Measurement Lab: Radiation Patterns
 
 ::::{frame}
 :class: title-frame
 
 <div class="course-mark">ECE 444 · Fall 2026</div>
 
-<h1 class="frame-title">Measurement Lab 2: Radiation Patterns</h1>
+<h1 class="frame-title">Measurement Lab: Radiation Patterns</h1>
 
 <div class="title-rule"></div>
 

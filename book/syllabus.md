@@ -179,12 +179,12 @@ earn engagement points in the following ways:
 - **Attending Extra Instruction (EI).** Book time with me and come prepared with
   specific questions or a concept you want to work through.
 - **Lab packets.** A lab's packet has three parts: a pre-lab you do before the
-  period (your predictions, and a rehearsal in the browser simulator), the data
-  your team records at the bench, and a writeup you do afterward (what you
+  period (your predictions, and in some labs a rehearsal in the browser simulator), the data
+  you record on your own kit, and a writeup you do afterward (what you
   measured against what you predicted, and why they differ). Where a lab has a
-  packet, it replaces the practice problems for that lab and the lesson before
-  it, and the pre-lab and writeup are graded the same way: a genuine,
-  documented attempt. Lab packets are required. They are the first engagement
+  packet, it replaces the practice problems for that lab, and for the lesson
+  before it when the pre-lab draws on that lesson. The packet is one submission, turned in complete after the lab and
+  graded the same way: a genuine, documented attempt. Lab packets are required. They are the first engagement
   points you earn, and the other routes here add to them up to the cap.
 - **Research paper.** You may complete a research paper on a
   relevant, pre-approved topic — an antenna, array, or radar technology, a
@@ -323,8 +323,8 @@ Labs are marked **LAB**.
 10. Patch, Slot, and Horn Antennas
 11. High-Gain Antennas — reflectors, Yagi-Uda, arrays &nbsp; · &nbsp; **Midterm project introduced**
 12. Pattern Measurement Theory — anechoic chambers, near-field / far-field transformations, standard gain horns
-13. Measurement Lab Part 1 — Impedance and S-parameters **(LAB)**
-14. Measurement Lab Part 2 — Radiation Patterns **(LAB)**
+13. Measurement Lab — Impedance and S-parameters **(LAB)**
+14. Measurement Lab — Radiation Patterns **(LAB)**
 
 ### Module 3: Arrays and ADALM-PHASER Beamforming
 

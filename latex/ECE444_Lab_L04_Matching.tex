@@ -8,12 +8,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SET THESE IF VARIABLES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Lab Num
-\ifdefined\labNumIn
-	\def\labNum{\labNumIn}
-\else
-	\def\labNum{1}
-\fi
+% Lab name -- labs are named by the lesson they belong to, never by a
+% sequential lab number (Neil, 2026-10-12): this is the L4 Lab.
+\def\labLesson{4}
 
 % is this the key or not?
 \ifdefined\iskey
@@ -135,12 +132,12 @@
 % need to print key on top if this is the key
 \ifkey
 	\firstpageheader{}{\color{red}{ KEY}}{}
-	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{L\labLesson\ Lab\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
 	\firstpagefooter{}{}{}
 	\runningfooter{}{}{}
 \else
 	\firstpageheader{}{}{}
-	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{L\labLesson\ Lab\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
 	\firstpagefooter{}{}{}
 	\runningfooter{}{}{}
 \fi
@@ -157,7 +154,7 @@
 \begin{center}
 USAF ACADEMY \\
 DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
-LAB \#\labNum\ - Impedance Measurement and Matching Networks \\
+LESSON \labLesson\ LAB - Impedance Measurement and Matching Networks \\
 \thisterm \\[5mm]
 \end{center}
 
@@ -324,7 +321,7 @@ A full user's guide for the VNA is available \href{https://nanorfe.com/nanovna-v
 	\caption{Familiarization views of the nano VNA.}
 	\end{figure}
 
-We will use a VNA to measure S-parameters, which are essentially reflection and transmission coefficients. For a two-port network (which, in our case, are Channel 0 and Channel 1), we have 4 S-parameters: $S_{11}, S_{21}, S_{12}, \text{ and } S_{22}$. The subscripts represent the receiving port and the source port, so $S_{21}$ means the signal received at port 2 as a result of a source at port 1 -- this is the transmission coefficient from port 1 to port 2.
+We will use a VNA to measure S-parameters, which are essentially reflection and transmission coefficients. For a two-port network (which, in our case, are Channel 0 and Channel 1), we have 4 S-parameters: $S_{11}$, $S_{21}$, $S_{12}$, and $S_{22}$. The subscripts represent the receiving port and the source port, so $S_{21}$ means the signal received at port 2 as a result of a source at port 1 -- this is the transmission coefficient from port 1 to port 2.
 
 You can power these nano VNAs from the built-in battery or the micro-USB cable. To operate the VNA, turn on the device using the on/off slider on the left side of the device. Within a few seconds, you should see a display as shown in Figure \ref{fig:vnainit}. At first, the display will appear cluttered, because you are actually looking at several plots overlayed on one another. The labels for each trace are at the very top of the screen and the default quantities are as follows:
 

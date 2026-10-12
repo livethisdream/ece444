@@ -153,5 +153,5 @@
 <text x="350.0" y="173.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#0067b9" text-anchor="middle" font-weight="600">0 phase shifters</text>
 <text x="350.0" y="190.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#3f7d34" text-anchor="middle" font-weight="600">8 receivers</text>
 <text x="350.0" y="207.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#8a5a00" text-anchor="middle" font-weight="600">8 digital weights</text>
-<text x="210.0" y="227.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">Rx: mixer and ADC. Shaded: digital.</text>
+<text x="210.0" y="227.0" font-family="'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6573" text-anchor="middle" font-weight="400">Rx: frequency converter and ADC. Shaded: digital.</text>
 </svg>
