@@ -43,7 +43,7 @@ Lesson 23 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 :::{present}
 - **Part A:** sweep the beam past a fixed source at 8, 4, and 2 active elements.
 - **Part B:** hold the beam, walk the source around it, broadside then $30^\circ$.
-- One kit, one setup, one Lab 7 sheet.
+- One kit, one setup, one L23 Lab sheet.
 :::
 
 Lesson 21 ended with a table of predictions: what the PHASER's beam should
@@ -691,7 +691,7 @@ looked like.
 ::::{frame} Deliverables
 :class: read-only
 
-Submit the Lab 7 sheet, one per cadet, at the start of the next period.
+Submit the L23 Lab sheet, one per cadet, at the start of the next period.
 
 **Part A**
 
@@ -734,9 +734,9 @@ Submit the Lab 7 sheet, one per cadet, at the start of the next period.
 ::::{frame} Lab Sheet
 :class: read-only doc-links
 
-The Lab 7 sheet is the turn-in document for both parts.
+The L23 Lab sheet is the turn-in document for both parts.
 
-- <a class="doc-link" href="../../labs/ECE444_Lab_L23_ArrayPattern_blank.pdf" target="_blank" rel="noopener">Lab 7 sheet (PDF)</a>
+- <a class="doc-link" href="../../labs/ECE444_Lab_L23_ArrayPattern_blank.pdf" target="_blank" rel="noopener">L23 Lab sheet (PDF)</a>
 ::::
 
 ::::{frame} Practice

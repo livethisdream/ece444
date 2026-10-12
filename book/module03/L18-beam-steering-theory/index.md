@@ -622,9 +622,9 @@ reduces null depth.
 ::::{frame} Practice
 :class: read-only doc-links
 
-This lesson's problems are the pre-lab for Lesson 19: Part 1 of the Lab 5 packet, completed on your own before the lab period.
+This lesson's problems are the pre-lab for Lesson 19: Part 1 of the L19 Lab packet, completed on your own before the lab period.
 
-- <a class="doc-link" href="../../labs/ECE444_Lab_L19_Steering_blank.pdf" target="_blank" rel="noopener">Lab 5 packet, Part 1 (PDF)</a>
+- <a class="doc-link" href="../../labs/ECE444_Lab_L19_Steering_blank.pdf" target="_blank" rel="noopener">L19 Lab packet, Part 1 (PDF)</a>
 ::::
 
 ::::{frame} Looking Ahead

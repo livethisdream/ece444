@@ -323,8 +323,8 @@ Labs are marked **LAB**.
 10. Patch, Slot, and Horn Antennas
 11. High-Gain Antennas — reflectors, Yagi-Uda, arrays &nbsp; · &nbsp; **Midterm project introduced**
 12. Pattern Measurement Theory — anechoic chambers, near-field / far-field transformations, standard gain horns
-13. Measurement Lab Part 1 — Impedance and S-parameters **(LAB)**
-14. Measurement Lab Part 2 — Radiation Patterns **(LAB)**
+13. Measurement Lab — Impedance and S-parameters **(LAB)**
+14. Measurement Lab — Radiation Patterns **(LAB)**
 
 ### Module 3: Arrays and ADALM-PHASER Beamforming
 

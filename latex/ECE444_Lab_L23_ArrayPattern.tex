@@ -7,18 +7,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SET THESE IF VARIABLES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Lab Num -- Module 3's six lab periods follow L04 (Lab 1) and the two
-% Module 2 measurement labs, so L23 is Lab 7. Override with \def\labNumIn{}
-% if the course sequence renumbers.
+% Lab name -- labs are named by the lesson they belong to, never by a
+% sequential lab number (Neil, 2026-10-12): this is the L23 Lab.
+\def\labLesson{23}
 %
 % One sheet for both parts of the L23 lab (2026-10-11 renumber): Part A is the
 % former L21 Array Factor Lab sheet (objective 3.2), Part B the former L23
 % Antenna Pattern Lab sheet (objective 3.6).
-\ifdefined\labNumIn
-	\def\labNum{\labNumIn}
-\else
-	\def\labNum{7}
-\fi
 
 % is this the key or not?
 \ifdefined\iskey
@@ -78,12 +73,12 @@
 % need to print key on top if this is the key
 \ifkey
 	\firstpageheader{}{\color{red}{ KEY}}{}
-	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{L\labLesson\ Lab\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
 	\firstpagefooter{}{}{}
 	\runningfooter{}{}{}
 \else
 	\firstpageheader{}{}{}
-	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{L\labLesson\ Lab\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
 	\firstpagefooter{}{}{}
 	\runningfooter{}{}{}
 \fi
@@ -101,7 +96,7 @@
 \begin{center}
 USAF ACADEMY \\
 DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
-LAB \#\labNum\ (Lesson 23) - Array Factor and Pattern Lab \\
+LESSON \labLesson\ LAB - Array Factor and Pattern \\
 \textbf{Lab Sheet} \\
 \thisterm \\[4mm]
 \end{center}

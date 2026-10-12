@@ -49,8 +49,8 @@ copy. The same links appear on each lesson page.
 | L7 — Simple Resonant Antennas | <a class="doc-link" href="practice/ECE444_L07_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L07_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L8 — Dipole Simulation Lab | <a class="doc-link" href="practice/ECE444_L08_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L08_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L9 — Measurement Theory | <a class="doc-link" href="practice/ECE444_L09_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L09_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L10 — Measurement Lab 1: Impedance and S-parameters | <a class="doc-link" href="practice/ECE444_L10_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L10_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L11 — Measurement Lab 2: Radiation Patterns | <a class="doc-link" href="practice/ECE444_L11_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L11_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L10 — Measurement Lab: Impedance and S-parameters | <a class="doc-link" href="practice/ECE444_L10_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L10_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L11 — Measurement Lab: Radiation Patterns | <a class="doc-link" href="practice/ECE444_L11_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L11_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L12 — Loop and Monopole Antennas | <a class="doc-link" href="practice/ECE444_L12_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L12_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L13 — Patch, Slot, and Horn Antennas | <a class="doc-link" href="practice/ECE444_L13_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L13_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L14 — High-Gain Antennas | <a class="doc-link" href="practice/ECE444_L14_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L14_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
@@ -58,7 +58,7 @@ copy. The same links appear on each lesson page.
 ### Module 3: Arrays and ADALM-PHASER Beamforming
 
 L17, L18, and L19 have no separate problem set: their problems are in the
-Lab 4 and Lab 5 packets, listed under Labs below.
+L17 Lab and L19 Lab packets, listed under Lab Sheets below.
 
 | Lesson | Problem set | Solutions |
 | :-- | :-- | :-- |

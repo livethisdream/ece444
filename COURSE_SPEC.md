@@ -1072,3 +1072,12 @@ folded in.
   blank PDFs, and their keys were deleted (Neil, 2026-10-11). Decks were renamed and retitled only;
   a merged lesson's deck is the two old decks under one title slide, and
   cross-references inside decks still carry the old numbers.
+- **Labs are named by their lesson, never by a sequential lab number** (Neil,
+  2026-10-12: "the Lab 5 nomenclature makes it difficult to keep track of what
+  lesson it's assigned to"). The L04 matching lab is the L4 Lab; the Module 3
+  labs are the L17, L19, L20, L23, L25, and L28 Labs; the Module 2
+  measurement labs (L10, L11) drop their "1" and "2". A lab packet's running
+  header reads "L19 Lab" and its title block "LESSON 19 LAB - Beam Steering",
+  both from `\labLesson` in the source; the `\labNum` / `\labNumIn` sequence
+  is gone. Dated entries above keep the old numbers: Lab 4 = L17, Lab 5 =
+  L19, Lab 6 = L20, Lab 7 = L23, Lab 8 = L25, Lab 9 = L28. Decks unchanged.

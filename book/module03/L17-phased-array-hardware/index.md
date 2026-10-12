@@ -994,13 +994,13 @@ turned down.
 ::::{frame} Lab Packet
 :class: read-only doc-links
 
-The Lab 4 packet is one submission for the whole lab, turned in complete before Lesson 18. It has three parts:
+The L17 Lab packet is one submission for the whole lab, turned in complete before Lesson 18. It has three parts:
 
 1. **Part 1, Pre-Lab** (individual, before the lab period): the receive chain in order, the phase shifter's step, the element and channel counts, and how a kit number sets the kit's name and address.
 2. **Part 2, Measurements** (your own kit's data, recorded in class): the bring-up record from Part A, and the kit check from Part B, the FFT peak and the sweep with the source at boresight, moved, and back.
 3. **Part 3, Writeup** (individual, after the lab): a labeled block diagram, two bench diagnoses, and two written answers.
 
-- <a class="doc-link" href="../../labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">Lab 4 packet (PDF)</a>
+- <a class="doc-link" href="../../labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">L17 Lab packet (PDF)</a>
 ::::
 
 ::::{frame} Summary

@@ -43,7 +43,7 @@ Lesson 20 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 - Cross the bearings, name the box, and write an individual report.
 :::
 
-Lab 6 puts Lesson 19's skill to work while it is a period old. Every HB100 but
+The L20 Lab puts Lesson 19's skill to work while it is a period old. Every HB100 but
 one is switched off, and the live one sits in one of several numbered boxes
 placed at random inside a circle taped on the floor. Every measurement is taken
 from outside the circle. Each cadet carries their own kit to two or three
@@ -59,7 +59,7 @@ every cadet finds the fox from their own data and reports it on their own.
 
 ```{note}
 Lesson material is under construction. This shell maps to objective 3.5. The
-Lab 6 packet is coming: a pre-lab (the bearing error budget, the choice of
+L20 Lab packet is coming: a pre-lab (the bearing error budget, the choice of
 stations, and the triangulation script on a supplied bearing set), the bench
 measurements, and the report, all individual. The procedure frames and the
 packet arrive with it.

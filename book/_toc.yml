@@ -42,9 +42,9 @@ parts:
       - file: module02/L09-pattern-measurement-theory/index
         title: "L9 — Measurement Theory"
       - file: module02/L10-measurement-lab-sparams/index
-        title: "L10 — Measurement Lab 1 — Impedance and S-parameters"
+        title: "L10 — Measurement Lab — Impedance and S-parameters"
       - file: module02/L11-measurement-lab-patterns/index
-        title: "L11 — Measurement Lab 2 — Radiation Patterns"
+        title: "L11 — Measurement Lab — Radiation Patterns"
       - file: module02/L12-loop-monopole-antennas/index
         title: "L12 — Loop and Monopole Antennas"
       - file: module02/L13-patch-slot-horn/index

@@ -7,14 +7,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SET THESE IF VARIABLES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Lab Num -- Module 3's six lab periods follow L04 (Lab 1) and the two
-% Module 2 measurement labs, so L19 is Lab 5. Override with \def\labNumIn{}
-% if the course sequence renumbers.
-\ifdefined\labNumIn
-	\def\labNum{\labNumIn}
-\else
-	\def\labNum{5}
-\fi
+% Lab name -- labs are named by the lesson they belong to, never by a
+% sequential lab number (Neil, 2026-10-12): this is the L19 Lab.
+\def\labLesson{19}
 
 % is this the key or not?
 \ifdefined\iskey
@@ -74,12 +69,12 @@
 % need to print key on top if this is the key
 \ifkey
 	\firstpageheader{}{\color{red}{ KEY}}{}
-	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm }{L\labLesson\ Lab\hspace{1pt}\color{red}{ KEY}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
 	\firstpagefooter{}{}{}
 	\runningfooter{}{}{}
 \else
 	\firstpageheader{}{}{}
-	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Lab \#\labNum\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass \hspace{1pt} -- \thisterm }{L\labLesson\ Lab\hspace{1pt}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
 	\firstpagefooter{}{}{}
 	\runningfooter{}{}{}
 \fi
@@ -98,7 +93,7 @@
 \begin{center}
 USAF ACADEMY \\
 DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
-LAB \#\labNum\ (Lesson 19) - Beam Steering Lab \\
+LESSON \labLesson\ LAB - Beam Steering \\
 \textbf{Lab Packet} \\
 \thisterm \\[4mm]
 \end{center}
@@ -115,7 +110,7 @@ ADALM-PHASER and verify the steered pattern against theory.}
 
 \vspace{2pt}
 
-This packet is Lab 5, in three parts, and you turn it in once, complete,
+This packet is the L\labLesson\ Lab, in three parts, and you turn it in once, complete,
 before Lesson 20. Do \textbf{Part 1} on your own before the lab period: the
 predictions, and a rehearsal of the procedure on the hosted simulator. You need
 it at the bench. \textbf{Part 2} is your own measurements, from your own kit,
