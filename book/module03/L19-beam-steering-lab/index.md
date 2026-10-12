@@ -40,7 +40,7 @@ Lesson 19 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 :::{present}
 - Part 1, before today: the phase table, the beamwidths, and the error budget.
 - Part 2, today: two runs put the peak at $0^\circ$, $30^\circ$, and $45^\circ$.
-- Part 3, before Lesson 20: reconcile each measurement with its prediction.
+- Part 3, after the lab: reconcile each measurement with its prediction.
 :::
 
 In Lesson 18 we derived the steering law and used it to fill in a table of
@@ -457,11 +457,11 @@ $0.6^\circ$ farther out, and a $45^\circ$ beam $1.1^\circ$ farther.
 ::::{frame} Lab Packet
 :class: read-only doc-links
 
-The Lab 5 packet is the turn-in document for the whole lab, in three parts:
+The Lab 5 packet is one submission for the whole lab, turned in complete before Lesson 20. It has three parts:
 
-1. **Part 1, Pre-Lab** (individual, before the lab period): the prediction table at your kit's frequency, what Phase Control will show, the beamwidths and the error budget, and a rehearsal of Run 2 on the hosted simulator.
-2. **Part 2, Bench** (team, in class): Tables A and B, from Run 1 and Run 2.
-3. **Part 3, Writeup** (individual, before Lesson 20): reconcile the measurements with the predictions, and three analysis problems.
+1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it at the bench): the prediction table at your kit's frequency, what Phase Control will show, the beamwidths and the error budget, and a rehearsal of Run 2 on the hosted simulator.
+2. **Part 2, Measurements** (your team's data, recorded in class): Tables A and B, from Run 1 and Run 2.
+3. **Part 3, Writeup** (individual, after the lab): reconcile the measurements with the predictions, and three analysis problems.
 
 - <a class="doc-link" href="../../labs/ECE444_Lab_L19_Steering_blank.pdf" target="_blank" rel="noopener">Lab 5 packet (PDF)</a>
 ::::

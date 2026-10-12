@@ -183,8 +183,8 @@ earn engagement points in the following ways:
   your team records at the bench, and a writeup you do afterward (what you
   measured against what you predicted, and why they differ). Where a lab has a
   packet, it replaces the practice problems for that lab and the lesson before
-  it, and the pre-lab and writeup are graded the same way: a genuine,
-  documented attempt. Lab packets are required. They are the first engagement
+  it. The packet is one submission, turned in complete after the lab and
+  graded the same way: a genuine, documented attempt. Lab packets are required. They are the first engagement
   points you earn, and the other routes here add to them up to the cap.
 - **Research paper.** You may complete a research paper on a
   relevant, pre-approved topic — an antenna, array, or radar technology, a
