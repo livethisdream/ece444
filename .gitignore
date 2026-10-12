@@ -38,3 +38,17 @@ latex/*Assessment*.tex
 
 # vendored reveal.js + mathjax for the render harness
 scripts/verify/node_modules/
+
+# Instructor-only material. This remote is PUBLIC (github.com/livethisdream/ece444),
+# so these must never be committed. Kept in the working tree for convenience.
+*Grade_Breakdown*
+*_KEY.pdf
+*Comment Card*
+*Comment_Card*
+
+# NTFS alternate data streams leaking through WSL as pseudo-files.
+*:Zone.Identifier
+*:MSOAVINFO
+
+# Third-party installer binaries - not ours to redistribute, and repo bloat.
+4nec2/*.exe
