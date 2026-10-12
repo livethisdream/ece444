@@ -37,6 +37,8 @@ Lesson 15 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} From Measurement to Design
+:class: read-only
+
 :::{present}
 - Lesson 11 measured patterns; Module 3 designs them.
 - The design variable is the **aperture distribution**, the field across the radiating opening.
@@ -74,19 +76,14 @@ That integral is a Fourier transform: the aperture coordinate $x$ is the variabl
 
 :::{present}
 $$u = \frac{L}{\lambda}\sin\theta$$
-
-- $S(\theta)$ is the Fourier transform of $E_a(x)$, and the **space frequency** $u$ is its transform variable.
+:::
+:::{present}
+- $S(\theta)$ is the Fourier transform of $E_a(x)$ in the **space frequency** $u$.
 - The shape of $\vert S\vert$ against $u$ depends only on the shape of $E_a$.
+- $\theta$ runs from broadside, so $u$ carries $\sin\theta$ and nulls fall at integer $u$.
 :::
 
 Working in $u$ instead of $\theta$ is what makes the results in this lesson reusable. The shape of $\vert S\vert$ against $u$ depends only on the *shape* of the illumination. The aperture's size in wavelengths, $L/\lambda$, sets how many degrees correspond to each unit of $u$, and nothing else.
-::::
-
-::::{frame} Angle Convention
-:::{present}
-- Module 3 measures $\theta$ from **broadside**, as every phased-array plot and PHASER readout does, so $u$ carries $\sin\theta$, not $\cos\theta$.
-- This $u$ is Lesson 6's divided by $\pi$: nulls fall at the integers and the first sidelobe at $u = 1.430$.
-:::
 
 ```{note}
 Module 1 wrote the line-source pattern in the polar angle measured from the wire axis. Module 3 measures $\theta$ from broadside instead, which is what every phased-array plot and every PHASER readout uses, so the space frequency here carries $\sin\theta$ rather than $\cos\theta$. Lesson 16 makes that substitution explicit once; after that, broadside is $\theta = 0$ everywhere in the module.
@@ -129,26 +126,31 @@ $$\vert F(u)\vert = \left\vert \frac{\sin \pi u}{\pi u}\right\vert, \quad u = \f
 That expression gives three numbers we will use throughout the module: the null positions, the beamwidth, and the first sidelobe level.
 ::::
 
-::::{frame} Nulls
+::::{frame} Nulls and Beamwidth
 :::{present}
-- $\sin\pi u = 0$ at $u = \pm 1, \pm 2, \dots$, so the first null is at $\sin\theta = \lambda/L$.
-- An aperture shorter than $\lambda$ has no null in real space, so it radiates broadly however we feed it.
+$$\begin{aligned}
+\sin\pi u &= 0 \\
+\sin\theta_\text{null} &= \pm\frac{\lambda}{L},\ \pm\frac{2\lambda}{L},\ \dots
+\end{aligned}$$
+:::
+:::{present}
+- An aperture shorter than $\lambda$ has no null in real space, so it radiates broadly.
 :::
 
 $\sin\pi u$ vanishes at $u = \pm 1, \pm 2, \pm 3, \dots$, so the first null sits at $\sin\theta = \lambda/L$. An aperture shorter than one wavelength has no null anywhere in real space, which is why a small aperture radiates broadly however we feed it.
-::::
 
-::::{frame} Beamwidth
-Solving
+The beamwidth comes from the half-power points. Solving
 
-:::{present}
 $$\frac{\sin \pi u}{\pi u} = \frac{1}{\sqrt{2}}$$
-:::
 
 gives $\pi u = 1.3916$, so the half-power points sit at $u = \pm 0.4429$ and
 
 :::{present}
 $$\theta_\text{HP} \approx 0.886\ \frac{\lambda}{L}\ \text{rad} = 50.8^\circ\ \frac{\lambda}{L}.$$
+:::
+:::{present}
+- The half-power points sit at $u = \pm 0.4429$.
+- Memorize $0.886$: Lesson 21's array beamwidth and every PHASER beamwidth prediction use it.
 :::
 
 :::{depth}
@@ -160,11 +162,6 @@ $$\begin{aligned}
 \end{aligned}$$
 
 The small-angle step is good to within $1\%$ for $L \ge 2\lambda$. Lesson 6's $2\lambda$ line source gave $25.6^\circ$ exactly against $25.4^\circ$ from the approximation.
-:::
-
-:::{present}
-- The half-power points sit at $u = \pm 0.4429$.
-- Memorize $0.886$: Lesson 21's array beamwidth and every PHASER beamwidth prediction use it.
 :::
 
 The $0.886$ is worth memorizing. It is the constant behind the array beamwidth formula in Lesson 21 and behind every beamwidth prediction you will make on the PHASER.
@@ -198,7 +195,7 @@ its first nulls are at $\sin\theta = 0.1$, or $\theta = \pm 5.74^\circ$, and its
 :::
 ::::
 
-::::{frame} Rectangular Apertures
+::::{frame} Rectangular and Circular Apertures
 A **rectangular aperture** is no harder to analyze when the illumination separates, $E_a(x,y) = E_x(x)E_y(y)$. The double integral factors, and the pattern in each principal plane is the line-source result for that dimension:
 
 :::{present}
@@ -207,7 +204,8 @@ $$\begin{aligned}
 \theta_{\text{HP},y} &= 0.886\ \frac{\lambda}{L_y}
 \end{aligned}$$
 
-A tall narrow aperture makes a wide flat beam, and a wide short aperture makes a narrow tall one.
+- A tall narrow aperture makes a wide flat beam, and a wide short aperture makes a narrow tall one.
+- A uniform circle of diameter $D$: $\theta_\text{HP} \approx 1.029\ \lambda/D = 59^\circ\ \lambda/D$, first sidelobe $-17.6$ dB.
 :::
 :::{present}
 <img src="../../viz/img/L15-rect-footprint.svg" alt="Left: the X-band aperture to scale, 0.682 m wide and 0.152 m tall, cosine illumination across and uniform up. Right: the half-power contour of its beam, 3.0 degrees wide in azimuth and 10.0 degrees tall in elevation. The long dimension makes the narrow beam" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
@@ -222,12 +220,9 @@ $$\eta_\text{ap} = \eta_x\ \eta_y$$
 
 where each factor is the line-source ratio for its own dimension.
 :::
-::::
 
-::::{frame} Circular Apertures
 A **circular aperture** of diameter $D$ does not separate. Lesson 14 integrated Lesson 6's radiation vector over a uniformly lit disk and found a Bessel function in place of the sinc:
 
-:::{present}
 $$\begin{aligned}
 \vert\mathbf{N}(\theta)\vert &\propto \left\vert\frac{2J_1(u)}{u}\right\vert \\
 u &= \frac{\pi D}{\lambda}\sin\theta
@@ -239,31 +234,25 @@ $$\begin{gathered}
 \theta_\text{HP} \approx 1.029\ \frac{\lambda}{D}\ \text{rad} = 59^\circ\ \frac{\lambda}{D} \\
 \text{first sidelobe} = -17.6\ \text{dB}
 \end{gathered}$$
-:::
-:::{present}
-<img src="../../viz/img/L15-circle-vs-square.svg" alt="Uniform square and uniform circular apertures of the same width against sine of angle times width in wavelengths: the circle's half-power beam is 1.029 against 0.886 and its first sidelobe minus 17.6 dB against minus 13.3 dB; an inset shows that the circle, projected onto one cut, is already tapered toward its edges" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
-:::
 
-:::{depth}
+<img src="../../viz/img/L15-circle-vs-square.svg" alt="Uniform square and uniform circular apertures of the same width against sine of angle times width in wavelengths: the circle's half-power beam is 1.029 against 0.886 and its first sidelobe minus 17.6 dB against minus 13.3 dB; an inset shows that the circle, projected onto one cut, is already tapered toward its edges" style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
+
 The half-power point is at $u = 1.616$, and the same small-angle step as the line source gives
 
 $$\theta_\text{HP} \approx 2\left(\frac{1.616}{\pi}\right)\frac{\lambda}{D} = 1.029\ \frac{\lambda}{D}.$$
 
 The circle is a little wider in beam than a square of the same width and a little better in sidelobes, and for the same reason: the edges of a circular aperture carry less of the total area than the edges of a rectangle, so the aperture is already mildly tapered as seen along any cut.
-:::
 ::::
 
 ::::{frame} Part 3: Aperture Efficiency
-:::{present}
 Lesson 2 defined the effective aperture and the **aperture efficiency** $\eta_\text{ap}$, the fraction of the physical area $A$ that the antenna uses:
 
+:::{present}
 $$A_e = \frac{G\lambda^2}{4\pi} = \eta_\text{ap} A$$
 :::
 
 Lesson 13 derived $\eta_\text{ap}$ from the aperture field for the horn, and Lesson 14 used the same ratio for the reflector. This part restates that result and evaluates it for the illuminations the rest of the module uses.
-::::
 
-::::{frame} Aperture Efficiency as a Ratio
 Lesson 13 derived the directivity of an aperture from its field:
 
 :::{present}
@@ -272,6 +261,13 @@ $$\begin{aligned}
 D &= \eta_\text{ap}\ \frac{4\pi A}{\lambda^2}
 \end{aligned}$$
 :::
+
+:::{present}
+:class: callout
+The ratio is **coherent gain over available gain**. By the Cauchy-Schwarz inequality it never exceeds one, and it equals one only for constant amplitude and constant phase.
+:::
+
+Read that ratio as **coherent gain over available gain**. The numerator grows with field that adds in phase; the denominator is the power the aperture had to radiate. By the Cauchy-Schwarz inequality the ratio never exceeds one, and it equals one only when $E_a$ has constant amplitude and constant phase over the whole aperture. Uniform illumination is the most efficient illumination there is, and every departure from it — a taper, a phase error, a piece of aperture with nothing on it — lowers the efficiency.
 
 :::{depth}
 The derivation compares two quantities. At $\theta = 0$ every phase factor in the radiation integral is 1, so the boresight field is the *coherent* sum of the aperture field, $\int_A E_a\ dS'$. The power leaving is the plane-wave power flowing through the opening. In Lesson 13's notation,
@@ -293,13 +289,6 @@ The chain gives directivity. Gain is $G = \eta_\text{rad} D$ (Lesson 2), and the
 
 $$G \approx \eta_\text{ap}\ \frac{4\pi A}{\lambda^2}$$
 :::
-
-:::{present}
-:class: callout
-The ratio is **coherent gain over available gain**. By the Cauchy-Schwarz inequality it never exceeds one, and it equals one only for constant amplitude and constant phase.
-:::
-
-Read that ratio as **coherent gain over available gain**. The numerator grows with field that adds in phase; the denominator is the power the aperture had to radiate. By the Cauchy-Schwarz inequality the ratio never exceeds one, and it equals one only when $E_a$ has constant amplitude and constant phase over the whole aperture. Uniform illumination is the most efficient illumination there is, and every departure from it — a taper, a phase error, a piece of aperture with nothing on it — lowers the efficiency.
 
 Evaluated with the amplitude of $E_a$ alone, the ratio is what Lesson 14 called the **taper efficiency** $\eta_t$ (Lesson 13 wrote $\eta_\text{taper}$). The worked example and the taper table below give $\eta_t$; an aperture with no other loss has $\eta_\text{ap} = \eta_t$.
 ::::
@@ -334,6 +323,8 @@ The cosine-illuminated aperture delivers $81\%$ of the gain its area could suppo
 ::::
 
 ::::{frame} Other Aperture-Efficiency Losses
+:class: read-only
+
 :::{present}
 - $\eta_t$ is one factor of $\eta_\text{ap}$. Spillover, phase error, blockage, and cross-polarization multiply in.
 - Lesson 14's reflector came to $0.66$ with $\eta_t = 0.85$; a horn comes to $0.49$.
@@ -407,6 +398,8 @@ The widget below computes the pattern of each illumination directly from the ape
 ::::
 
 ::::{frame} Four Illuminations and Their Patterns
+:class: read-only
+
 :::{present}
 <img src="../../viz/img/L15-taper-comparison.svg" alt="Four aperture illuminations and the patterns they produce in decibels" style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
@@ -415,25 +408,6 @@ The widget below computes the pattern of each illumination directly from the ape
 - No illumination lowers sidelobes and narrows the beam at once.
 - A low-sidelobe radar accepts a wider beam or a larger aperture.
 :::
-::::
-
-::::{frame} Arrays as Sampled Apertures
-:::{present}
-$$\eta_t = \frac{\left(\sum a_n\right)^2}{N\sum a_n^2}$$
-
-- An array samples the aperture, so the same ratio applies with sums over $N$ element amplitudes.
-- The PHASER's Hann preset is the $\cos^2$ row sampled at the elements; Blackman tapers harder.
-:::
-
-```{note}
-An array is an aperture sampled at discrete points, so the same trade appears there with sums in place of integrals. The array version of the taper efficiency is the same $\eta_t$ with sums,
-
-$$\eta_t = \frac{\left(\sum a_n\right)^2}{N\sum a_n^2},$$
-
-which is the identical ratio of coherent to available gain evaluated over $N$ element amplitudes. Lessons 24 and 25 use it on the PHASER. The Hann preset is the $\cos^2$ row above sampled at the element positions, and the Blackman preset tapers harder than any row in the table.
-```
-
-<img src="../../viz/img/L16-sampled-aperture.svg" alt="A continuous uniform aperture of length L above, and below it the same length occupied by eight equally spaced elements carrying the same total excitation" style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
 ::::
 
 ::::{frame} Part 5: Designing in Wavelengths
@@ -479,22 +453,14 @@ Lesson 5 defined $D$ in $2D^2/\lambda$ as the antenna's largest dimension, which
 :::
 ::::
 
-::::{frame} Worked Example: Checking the X-Band Design
-:::{present}
-- The pencil-beam bound is $31.4$ dBi; the practical range is $29.4$ to $30.3$ dBi.
-- $30.7$ dBi sits just above that range because the only loss is the known taper.
-- The $33$ m far-field distance rules out an ordinary room.
-:::
-
+::::{frame} Gain as the Design Output
 :::{admonition} Worked example — sizing an X-band aperture, checking the design
 :class: tip
 Check the gain against the pencil-beam estimate from Lesson 2: $41{,}253/(3 \times 10) = 1375$, or $31.4\ \text{dBi}$, is the lossless geometric bound, and the practical constant of $26{,}000$ to $32{,}400$ gives $29.4$ to $30.3$ dBi. The computed $30.7$ dBi sits just above that band, which is the right place for an aperture whose only loss is a known amplitude taper. A real antenna with spillover and a feed in front of it would land inside it.
 
 The design has two further consequences. The $3^\circ$ azimuth requirement is what made this antenna $0.68\ \text{m}$ wide, and the sidelobe requirement made it $34\%$ wider than a uniform aperture with the same beamwidth would have been. Also, a $33\ \text{m}$ far-field distance means this antenna cannot be pattern-tested in any ordinary room, which is the compact-range and near-field-scanning problem from Lesson 9.
 :::
-::::
 
-::::{frame} Gain as the Design Output
 :::{present}
 :class: callout
 The sidelobe specification chooses the illumination, the illumination fixes the beamwidth constant, and the beamwidth fixes the length. The gain comes out last: it is a design output, not a design input.
@@ -544,12 +510,25 @@ Notice how the requirements mapped onto the aperture. The sidelobe specification
 
 ::::{frame} Looking Ahead to Lesson 16
 :::{present}
-- Lesson 16 replaces the integral with a sum over $N$ elements, and the space factor becomes the **array factor**.
+- Lesson 16 replaces the integral with a sum over $N$ elements: the **array factor**.
 - The $0.886$ constant and the taper trade carry over to element weights.
-- Know $0.886\ \lambda/L$, $-13.3$ dB, and $\eta_\text{ap}$ by then.
+- Taper efficiency becomes a sum; the PHASER's Hann preset is the $\cos^2$ row, sampled.
+:::
+:::{present}
+$$\eta_t = \frac{\left(\sum a_n\right)^2}{N\sum a_n^2}$$
 :::
 
 Lesson 16 samples the aperture. Replace the continuous illumination with $N$ discrete elements spaced $d$ apart, replace the integral with a sum, and the space factor becomes the **array factor** — the same Fourier relationship with the same beamwidth constant and the same sidelobe trade, now expressed in element weights you can change electronically. Pattern multiplication follows immediately: the full pattern is the element factor times the array factor. Everything in this lesson survives that step, so we need these numbers in hand before Lesson 16.
+
+```{note}
+An array is an aperture sampled at discrete points, so the same trade appears there with sums in place of integrals. The array version of the taper efficiency is the same $\eta_t$ with sums,
+
+$$\eta_t = \frac{\left(\sum a_n\right)^2}{N\sum a_n^2},$$
+
+which is the identical ratio of coherent to available gain evaluated over $N$ element amplitudes. Lessons 24 and 25 use it on the PHASER. The Hann preset is the $\cos^2$ row above sampled at the element positions, and the Blackman preset tapers harder than any row in the table.
+```
+
+<img src="../../viz/img/L16-sampled-aperture.svg" alt="A continuous uniform aperture of length L above, and below it the same length occupied by eight equally spaced elements carrying the same total excitation" style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
 
 :::{depth}
 The Fourier view carries the rest of the module. Steering the beam in Lesson 18 is a linear phase ramp across the aperture, which shifts the transform. Sidelobe control in Lesson 24 is the taper table applied to element amplitudes. Grating lobes in Lesson 26 are what happens when the sampling is too coarse. Before Lesson 16, be able to state the uniform-aperture beamwidth constant, its first sidelobe level, and the definition of aperture efficiency without looking them up. The midterm pattern-measurement project is due 2 Oct, and the beamwidth and sidelobe numbers you predict for it come from this lesson.
