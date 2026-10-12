@@ -5,10 +5,15 @@ Fall 2026). Jupyter Book under `book/`, reveal.js decks served alongside it,
 published to GitHub Pages on every push to `main`. 5 modules, 41 lessons; Module
 1 is written, Modules 2–5 are mostly shells.
 
-`project/ECE 444.md` is the running project note — status, decisions, and open
-ToDos. Read it before starting substantial work, and update its Status/ToDo
-sections when you finish. It is shared across concurrent sessions, so it is a
-conflict magnet: keep edits to it small and localized.
+**Read `project/ROADMAP.md` before any work.** It holds the plan, the settled
+rules, and **who may touch which files**. Work runs in parallel threads: one
+Integrator thread owns the roadmap, the course-wide files, and the merge
+order; a lesson thread edits only its own lesson's files and lists anything
+else it needs under "For the Integrator" in its PR body.
+
+`project/ECE444_PROJECT.md` is the running project note: status, decisions,
+and open ToDos. Read it before starting substantial work. Only the Integrator
+edits it; a lesson thread reports its status in its PR body instead.
 
 ## Layout
 
