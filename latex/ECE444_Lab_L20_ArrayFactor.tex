@@ -8,12 +8,11 @@
 %%% SET THESE IF VARIABLES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Lab name -- labs are named by the lesson they belong to, never by a
-% sequential lab number (Neil, 2026-10-12): this is the L23 Lab.
-\def\labLesson{23}
+% sequential lab number (Neil, 2026-10-12): this is the L20 Lab.
+\def\labLesson{20}
 %
-% One sheet for both parts of the L23 lab (2026-10-11 renumber): Part A is the
-% former L21 Array Factor Lab sheet (objective 3.2), Part B the former L23
-% Antenna Pattern Lab sheet (objective 3.6).
+% The L20 Lab sheet (objective 3.2): Part A of the former L23 Array Factor and
+% Pattern Lab sheet, split off 2026-10-13 when each lesson took its own lab.
 
 % is this the key or not?
 \ifdefined\iskey
@@ -96,7 +95,7 @@
 \begin{center}
 USAF ACADEMY \\
 DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
-LESSON \labLesson\ LAB - Array Factor and Pattern \\
+LESSON \labLesson\ LAB - Array Factor \\
 \textbf{Lab Sheet} \\
 \thisterm \\[4mm]
 \end{center}
@@ -108,14 +107,12 @@ LESSON \labLesson\ LAB - Array Factor and Pattern \\
 
 \vspace{4pt}
 
-This sheet is the turn-in document for both parts of the Lesson 23 lab. In
-Part A, fill the calculated columns before you sweep and the measured columns
-at the bench, so the prediction is on paper before the trace is on the screen.
-In Part B, report every lobe amplitude relative to the main-lobe peak, in dBc,
-and state the uncertainty next to any number read off a hand-walked trace. The
-lab is individual: one sheet per cadet, from your own kit.
+This sheet is the turn-in document for the L20 Lab. Fill the calculated
+columns before you sweep and the measured columns at the bench, so the
+prediction is on paper before the trace is on the screen. The lab is
+individual: one sheet per cadet, from your own kit.
 
-\fullwidth{\textbf{Part A -- Learning Objective 3.2: } I can derive the array factor for an arbitrary linear
+\fullwidth{\textbf{Learning Objective 3.2: } I can derive the array factor for an arbitrary linear
 array and apply pattern multiplication.}
 
 \begin{questions}
@@ -196,95 +193,6 @@ active count halves. The measured second step comes out nearer $5.5$ dB, because
 by then the peak is only about 11 dB above the noise floor and the reported power
 is the sum of signal power and noise power.
 \end{solutionorlines}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\fullwidth{\textbf{Part B -- Learning Objective 3.6: } I can distinguish between array factor
-and true antenna pattern and account for element pattern effects.}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The annotated trace.} Attach or sketch one screenshot of your
-best broadside run from the Tracking tab, with the main lobe and both first
-sidelobes labeled with their dBc values.
-
-\begin{solutionorbox}[3.7in]
-An acceptable trace shows one main lobe near the middle of the walk with a
-sidelobe on each side of it, and all three labeled with an amplitude relative to
-the main-lobe peak. The main lobe is $0$ dBc by definition, and the two
-sidelobes should land within a decibel or two of $-13$ dBc. The reader has to be
-able to tell which lobe each label belongs to, and to see that the values are
-differences from the peak rather than absolute dBFS numbers. A trace whose
-sidelobes read $-6$ or $-7$ dBc is not a uniform illumination, and it sends you
-back to Calibrate and to the element gain sliders.
-\end{solutionorbox}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\question \textbf{The amplitude comparison table.} Three lobes from the
-broadside run, each as an amplitude relative to the main-lobe peak. The
-mechanical column is your hand-walked trace, the electrical column is the
-Rectangular-tab sweep of step B4, and the calculated column comes from theory.
-
-\begin{center}
-\small
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{| l | K{1.1in} | K{1.15in} | K{1.05in} | K{1.15in} |}
-\hline
-\textbf{Lobe} & \textbf{Mechanical (dBc)} & \textbf{Electrical sweep (dBc)} & \textbf{Calculated (dBc)} & \textbf{Mechanical $-$ electrical} \\\hline\hline
-Main lobe & \kv{$0$ by definition} & \kv{$0$ by definition} & \kv{$0$} & \kv{$0$} \\\hline
-First sidelobe, left & \kv{$-11$ to $-15$} & \kv{$-11$ to $-13$} & \kv{$-13.1$} & \kv{$\le 2$ dB} \\\hline
-First sidelobe, right & \kv{$-11$ to $-15$} & \kv{$-11$ to $-13$} & \kv{$-13.1$} & \kv{$\le 2$ dB} \\\hline
-\end{tabular}
-\end{center}
-
-\begin{solution}
-The calculated $-13.1$ dBc is the $-12.8$ dB array-factor sidelobe of a uniform
-eight-element array plus about $0.3$ dB of element-pattern roll-off at the
-$\pm 22\mydeg$ where those sidelobes sit. A hand-walked trace in a classroom
-carries about $\pm 1$ dB of multipath ripple, so the mechanical column is
-accepted over a wider window than the electrical one. The two columns should
-agree within about 2 dB, and a larger gap usually means the radius changed
-during the walk, since received power goes as $1/r^2$ and a $10$ cm error at
-$1\ \m$ is worth about $0.8$ dB. The left and right readings need not match each
-other exactly; a spread of about a decibel between them is normal in a room.
-\end{solution}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\question \textbf{Written answers.} Three or four sentences each.
-
-\begin{parts}
-
-	\part Why do the lobe amplitudes survive a sloppy rotation while the lobe
-	angles do not? Refer to what the time axis does and does not record.
-
-	\begin{solutionorlines}[2.2in]
-	The plot records received amplitude against elapsed time, and the amplitude at
-	any instant is whatever the array collected from the direction the source
-	occupied at that instant. Walking unevenly changes when each direction is
-	visited, not how much power arrives from it, so every lobe keeps its height
-	and only its position and width on the plot change. The time axis records
-	nothing about where your hand was, so converting it to angle requires assuming
-	a constant speed you did not have. That is why the amplitudes are reportable
-	and the angles are not.
-	\end{solutionorlines}
-
-	\part Which of the four artifacts of the hand measurement does an anechoic chamber remove,
-	and which of them would still be present in a chamber measurement?
-
-	\begin{solutionorlines}[2.4in]
-	The absorber in an anechoic chamber removes the reflections, so the floor,
-	ceiling, and whiteboard paths disappear and the $\pm 1$ dB ripple riding on
-	the trace goes with them. The other three artifacts belong to the positioner
-	and the range geometry rather than to the room. A hand-held source walked
-	around a chamber would still have an uncalibrated angle axis, a radius that
-	varies with the operator's arm, and a separation that is only as good as the
-	tape measure. A range fixes those with a turntable and a shaft encoder, a
-	source bolted at a fixed distance, and a documented far-field separation.
-	\end{solutionorlines}
-
-\end{parts}
 
 \end{questions}
 
