@@ -498,10 +498,11 @@ This lesson has no lab of its own: the bench waits until Lesson 23 is done, and
 then the [L22–L23 Lab](../L22-L23-lab-tapering-squint/index.md) takes both
 lessons to the PHASER. In its Part 1 you take these four presets to the bench.
 You will sweep each one, measure the beamwidth and the peak drop, and reconcile
-them against the predictions in the Part 5 table. You will also hand-enter the
-$-30\ \text{dB}$ Chebyshev design from Part 4, which is not one of the presets,
-and confirm that a taper you computed yourself behaves the way the arithmetic
-said it would. Come with the Part 5 table copied into your lab notebook; the
+them against the predictions in the Part 5 table. Then you design a taper of
+your own: the $-30\ \text{dB}$ Chebyshev from Part 4, a mild taper that pulls
+only the end elements down, or anything else you can justify. Either way, you
+enter the weights by hand and confirm that a taper you computed yourself
+behaves the way the arithmetic said it would. Come with the Part 5 table copied into your lab notebook; the
 point of the exercise is the comparison, and it is much weaker if you write the
 predictions down after seeing the measurements.
 ::::
