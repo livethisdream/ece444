@@ -288,6 +288,25 @@ The **element factor** $EF$ is the pattern one element would produce by itself. 
 This is the Lesson 6 split, pattern equals element factor times space factor, with the continuous space factor replaced by a discrete sum. The element factor comes from the physics of the radiator; the array factor accounts for where the elements sit and how we feed them.
 ::::
 
+::::{frame} From Two Patterns to One
+:class: viz-frame
+
+:::{depth}
+The widget starts with two short dipoles $4\lambda$ apart. Near either one, the map shows that element's own figure-eight, because there its wave is much stronger than its partner's. The pair's far field does not begin until $2D^2/\lambda = 32\lambda$ (Lesson 5), well off the map. Out there the two fields still add, but the array factor $\vert 2\cos(\pi d\sin\theta/\lambda)\vert$ splits the pattern into nine lobes, $14.5^\circ$ apart near broadside. Averaged over a few degrees they give the amber curve, $2\vert EF\vert^2$: two antennas that each keep their own pattern and ignore each other.
+
+Press $\lambda/2$. The far field now starts half a wavelength out, and the lobes merge into one beam. At broadside the two fields arrive in phase, so the amplitude doubles and the power is 4 times one element's, where two independent antennas would give 2 times. The beam is the dipole's pattern multiplied by the array factor, which is the rule this part states.
+:::
+
+:::{present}
+<iframe src="../../viz/two-element-pair.html"
+        width="100%" height="480"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Two elements, far apart and close together: the field map around the pair and its far-field power pattern, with one element alone, the two powers added, and the two fields added">
+</iframe>
+:::
+::::
+
 ::::{frame} Worked Example: Four Short Dipoles
 :::{present}
 - Four collinear short dipoles, $d = \lambda/2$, fed in phase; $EF = \cos\theta$.
