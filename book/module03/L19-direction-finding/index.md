@@ -103,7 +103,7 @@ numbers above are from the Module 4-5 build-out plan.
 :class: read-only doc-links
 
 The bench half of this lesson is the L19 Lab, the fox hunt: find the one live
-HB100 among numbered boxes from bearings you take on your own kit.
+HB100 among numbered boxes from bearings you and a partner take on your two kits.
 
 - <a class="doc-link" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a>
 ::::

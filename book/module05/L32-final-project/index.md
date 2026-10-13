@@ -24,8 +24,9 @@ rather than as numbered lessons.
 
 ## Kickoff
 
-Capstone scenario, teams, and plan: detect, classify, and track a moving
-target. Objective 5.1.
+Capstone scenario and plan: detect, classify, and track a moving target. The
+project is individual: each cadet works on their own kit and briefs their own
+results. Objective 5.1.
 
 ## Phase 1 — Array Optimization
 

@@ -155,8 +155,8 @@ third bearing is the outlier check.
   the bearing lines, about 20 lines; never MATLAB): the fix, residuals, the
   box named, the error after the reveal, and the dominant budget term.
 
-Each team moves its own kit between stations, so every cadet has a fix from
-their own data. About 8 present beats; procedure frames read-only.
+Teams of two (Neil, 2026-10-13): each partner's kit at a different station,
+one packet per team. About 8 present beats; procedure frames read-only.
 Instructor-side only: every kit on **Tx Mode Disabled** and out of CW radar
 mode, decoy HB100s off, and the live one switched on behind a lid opened on
 every box.
@@ -335,10 +335,14 @@ falls on, and with it the Phase C deadline, is unknown.
    takes every bearing on their own kit, moving it between stations, and
    writes an individual report naming the box. No class-combined fix. The
    packet is pre-lab, bench, report, all individual.
+   **Superseded 2026-10-13: teams of two.** Each partner's kit sits at a
+   different station, so a team takes simultaneous bearings and turns in one
+   packet. Still no class-combined fix.
 4. **Both GUI additions: yes.** Centroid angle beside Est. Angle, and a CSV
    export on the Tracking tab (Phaser repo).
 5. **Final project: option A.** The jammer comes out for now; detect,
-   classify, track.
+   classify, track. **Individual** (Neil, 2026-10-13): each cadet on their own
+   kit.
 6. **FMCW: build the radar mode in the course GUI, starting the week of
    2026-10-12.**
 7. **Layout: random.** Numbered boxes inside a marked circle; every
