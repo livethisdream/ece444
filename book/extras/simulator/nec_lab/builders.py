@@ -173,7 +173,7 @@ def build_array(p: dict) -> Model:
 
     The phase shift per element is what steers it, and the impedances that come
     back differ element to element. That difference is mutual coupling, and it
-    is the gap between the array factor and the pattern NEC computes -- L22's
+    is the gap between the array factor and the pattern NEC computes -- L21's
     subject, in the one tool that can show both.
     """
     freq = _f(p, "freq_mhz", 915.0)
@@ -240,7 +240,7 @@ TYPES: tuple[AntennaType, ...] = (
          RADIUS, SEGMENTS),
         build_yagi),
     AntennaType(
-        "array", "Driven array", "L16-L22",
+        "array", "Driven array", "L16-L21",
         "Dipoles along y, each with its own source and its own phase.",
         (FREQ, Param("elements", "Elements", 4, "count", step=1),
          Param("spacing_lambda", "Spacing", 0.5, "lambda"),

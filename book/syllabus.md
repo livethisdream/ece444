@@ -218,7 +218,7 @@ Engagement is capped at 10%; extra credit does not roll over.
 Two graded projects anchor the course:
 
 - **Midterm Project — Antenna Pattern Measurement.** Introduced at Lesson 9, due **2 Oct, 2359**. Students build a 915 MHz dipole and trim it to resonance, then match the same antenna to 50 ohms at a second frequency with a discrete network, simulate it, execute a pattern-measurement campaign on it at both frequencies, reduce the data, and report gain, beamwidth, sidelobe level, and polarization behavior against expectations. Graded on a **100-point rubric**, published in the project packet. No resubmission.
-- **Final Project — Combined Beamforming + Radar.** Detect, classify, and track a moving target using the ADALM-PHASER. Runs across Lessons 39–41 (Module 5). Graded using a **traditional rubric-based sliding scale**.
+- **Final Project — Combined Beamforming + Radar.** Detect, classify, and track a moving target using the ADALM-PHASER. Kicked off in Lesson 32 (Module 5). Graded using a **traditional rubric-based sliding scale**.
 
 ## Course policies
 
@@ -303,66 +303,74 @@ include a documentation statement** as outlined in the Documentation policy.
 
 ## Schedule
 
-Lessons link to notes on the [course home](intro.md).
-Labs are marked **LAB**.
+Lessons are topics, not class periods: a lesson takes the time it takes, and
+its lab, where it has one, follows it on the bench. Project days and open-lab
+time are on the course calendar, not in this list. Lessons link to notes on the
+[course home](intro.md).
 
 ### Module 1: Foundations of Electromagnetics and Antennas
 
-1. Course Introduction — what an antenna is, why it matters to Air Force operators, course roadmap, SDR + acoustic-beam demos
-2. Basic Properties and Terminology — gain, directivity, effective area, beamwidth, boresight, lobes
-3. Polarization and Bandwidth
-4. Impedance, Feeding, and Baluns
-5. Field Regions — reactive near-field, radiating near-field, far-field
-6. Radiation Integrals
+- **L1** Course Introduction — what an antenna is, why it matters to Air Force operators, course roadmap, SDR + acoustic-beam demos
+- **L2** Basic Properties and Terminology — gain, directivity, effective area, beamwidth, boresight, lobes
+- **L3** Polarization and Bandwidth
+- **L4** Impedance, Feeding, and Baluns
+  - **L4 Lab** — Matching Procedures
+- **L5** Field Regions — reactive near-field, radiating near-field, far-field
+- **L6** Radiation Integrals
 
 ### Module 2: Antenna Types, Simulation, and Measurement
 
-7. Simple Resonant Antennas — isotropic radiators, half-wave dipoles
-8. Dipole Simulation Lab **(LAB)**
-9. Loop and Monopole Antennas
-10. Patch, Slot, and Horn Antennas
-11. High-Gain Antennas — reflectors, Yagi-Uda, arrays &nbsp; · &nbsp; **Midterm project introduced**
-12. Pattern Measurement Theory — anechoic chambers, near-field / far-field transformations, standard gain horns
-13. Measurement Lab — Impedance and S-parameters **(LAB)**
-14. Measurement Lab — Radiation Patterns **(LAB)**
+- **L7** Simple Resonant Antennas — isotropic radiators, half-wave dipoles
+- **L8** Dipole Simulation Lab **(LAB)**
+- **L9** Measurement Theory — anechoic chambers, near-field / far-field transformations, standard gain horns, the vector network analyzer &nbsp; · &nbsp; **Midterm project introduced**
+- **L10** Measurement Lab — Impedance and S-parameters **(LAB)**
+- **L11** Measurement Lab — Radiation Patterns **(LAB)**
+- **L12** Loop and Monopole Antennas
+- **L13** Patch, Slot, and Horn Antennas
+- **L14** High-Gain Antennas — reflectors, Yagi-Uda, arrays
 
 ### Module 3: Arrays and ADALM-PHASER Beamforming
 
-15. Aperture Distributions and Efficiency
-16. The Array Factor and Pattern Multiplication
-17. Introduction to Phased Array Hardware — ADALM-PHASER, SDR control
-18. Beam Steering Theory
-19. Beam Steering Lab **(LAB)**
-20. Fox Hunt Lab **(LAB)** — find the live HB100 by triangulating bearings
-21. Array Factor and Beamwidth Theory
-22. Antenna Pattern Theory — true pattern vs. array factor
-23. Array Factor and Pattern Lab **(LAB)** — beamwidth vs. aperture, and the pattern measured by moving the source
-24. Sidelobes and Tapering Theory
-25. Tapering Lab **(LAB)**
-26. Beam Squint and Quantization
-27. Null Steering Theory
-28. Null Steering Lab **(LAB)**
+- **L15** Aperture Distributions and Efficiency
+- **L16** The Array Factor and Pattern Multiplication
+- **L17** Introduction to Phased Array Hardware — ADALM-PHASER, SDR control
+  - **L17 Lab** — Phased Array Bring-Up
+- **L18** Beam Steering
+  - **L18 Lab** — Beam Steering
+- **L19** Direction Finding — bearings and triangulation
+  - **L19 Lab** — Fox Hunt: find the live HB100 by triangulating bearings
+- **L20** Array Factor and Beamwidth
+  - **L20 Lab** — Array Factor: beamwidth vs. aperture
+- **L21** Antenna Pattern — true pattern vs. array factor
+  - **L21 Lab** — Antenna Pattern: the pattern measured by moving the source
+- **L22** Sidelobes and Tapering
+  - **L22 Lab** — Tapering
+- **L23** Beam Squint and Quantization — grating lobes, squint, quantization
+  - **L23 Lab** — Grating Lobes, Squint, and Quantization
+- **L24** Null Steering
+  - **L24 Lab** — Null Steering
 
 ### Module 4: Radar Fundamentals and FMCW
 
-29. The Radar Equation, Path Loss, and Radar Cross Section (RCS)
-30. Range, Resolution, Doppler Effect, and Radar Types
-31. Radar Detection Theory — PD, FAR, dwell time
-32. Introduction to FMCW on Phaser
-33. FMCW Range Lab **(LAB)** — range calculations and the range waterfall
-34. Range-Doppler and MTI Lab **(LAB)**
-35. CFAR Processing Theory
-36. CFAR Processing Lab **(LAB)**
-37. Classification and Tracking — micro-Doppler classification, range and angle tracking
-38. Radar Open Lab **(LAB)** — Module 4 make-up and a rehearsal of the radar chain
+- **L25** The Radar Equation, Path Loss, and Radar Cross Section (RCS)
+- **L26** Range, Resolution, Doppler Effect, and Radar Types
+- **L27** Radar Detection — PD, FAR, dwell time
+- **L28** FMCW on the Phaser
+  - **L28 Lab** — FMCW Range: range calculations and the range waterfall
+- **L29** Range-Doppler and MTI
+  - **L29 Lab** — Range-Doppler and MTI
+- **L30** CFAR Processing
+  - **L30 Lab** — CFAR Processing
+- **L31** Classification and Tracking — micro-Doppler classification, range and angle tracking
+  - **L31 Lab** — Micro-Doppler Spectrogram
 
 ### Module 5: Capstone Project
 
 **Scenario:** Detect, classify, and track a moving target.
 
-39. Final Project Kickoff
-40. Phase 1 — Array Optimization: choose steering and taper weights, evaluate detection performance
-41. Phase 2 — Radar Integration and Demonstration: integrate FMCW radar processing, classify the target from its micro-Doppler signature, track it, overlay radar tracking results onto the optimized antenna array pattern
+- **L32** Final Project — the kickoff, then two phases:
+  - Phase 1 — Array Optimization: choose steering and taper weights, evaluate detection performance
+  - Phase 2 — Radar Integration and Demonstration: integrate FMCW radar processing, classify the target from its micro-Doppler signature, track it, overlay radar tracking results onto the optimized antenna array pattern
 
 ## Textbooks & materials
 

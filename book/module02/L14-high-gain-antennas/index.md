@@ -1001,7 +1001,7 @@ noise.
 :::{present}
 - **L15:** illumination sets the sidelobes. Today's taper bought $-25$ dB for a 14% wider beam.
 - **L16:** an array samples that aperture, one element at a time.
-- **L19:** change each element's phase and the beam moves. You steer one.
+- **L18:** change each element's phase and the beam moves. You steer one.
 :::
 :::{present}
 <img src="../../viz/img/L14-beam-patterns.svg"
@@ -1019,7 +1019,7 @@ requirement, and what each choice costs in beamwidth and efficiency.
 Lesson 16 builds the third approach from today. Sample that same aperture at
 discrete points, put an element at each, and the pattern becomes the array
 factor; the illumination becomes a set of element weights you can set
-yourself. By Lesson 19 those weights carry phase as well as amplitude, and the
+yourself. By Lesson 18 those weights carry phase as well as amplitude, and the
 beam moves with nothing mechanical moving: you will steer the eight-element
 ADALM-PHASER across the bench and measure what it costs at each angle.
 ::::

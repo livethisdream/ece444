@@ -2,7 +2,7 @@
 frame_view: true
 ---
 
-# L26 - Beam Squint and Quantization
+# L23 - Beam Squint and Quantization
 
 ::::{frame}
 :class: title-frame
@@ -15,7 +15,7 @@ frame_view: true
 
 This lesson gives you the number for each.
 
-Lesson 26 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+Lesson 23 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame}
@@ -35,8 +35,8 @@ Lesson 26 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 :::{depth}
 In the tapering lab you took control of the sidelobes with amplitude weights, and the pattern did what the theory said it would. Amplitude is now a solved problem. Three things are still capable of putting energy where you did not ask for it, and none of them are fixed by a taper: the **element spacing**, the **signal bandwidth**, and the **finite resolution of the phase shifters**. Each one produces a specific, predictable defect — a second full-height beam, a beam that walks with frequency, and a floor of sidelobes you cannot get below. This lesson gives you the number for each.
-You already measured all three at the end of the L25 Lab, with the kit on the bench
-and no explanation. Bring those tables: this lesson is the explanation.
+The L23 Lab then measures all three on your own kit, against the numbers this
+lesson derives.
 :::
 ::::
 
@@ -77,7 +77,7 @@ At broadside ($\theta_0 = 0$), the $m = 1$ solutions are
 
 $$\sin\theta_g = \pm 0.693 \quad \Longrightarrow \quad \theta_g = \pm 43.9^\circ.$$
 
-The $m = 2$ solutions need $\vert \sin\theta_g \vert = 1.386$, which is not a real angle, so there are exactly three full-height beams: $0^\circ$ and $\pm 44^\circ$. At the HB100's $10.525\ \text{GHz}$ the same arithmetic gives $\pm 42.7^\circ$, which is what your L25 Lab sweep read.
+The $m = 2$ solutions need $\vert \sin\theta_g \vert = 1.386$, which is not a real angle, so there are exactly three full-height beams: $0^\circ$ and $\pm 44^\circ$. At the HB100's $10.525\ \text{GHz}$ the same arithmetic gives $\pm 42.7^\circ$, which is what your L23 Lab sweep will read.
 :::
 ::::
 
@@ -150,7 +150,7 @@ Phases are set for $\theta_0 = 45^\circ$ at the HB100's $f_0 = 10.525\ \text{GHz
 
 $$\sin\theta = \frac{10.525}{10.025}\ \sin 45^\circ = 1.0499 \times 0.7071 = 0.7424 \quad \Longrightarrow \quad \theta = 47.9^\circ.$$
 
-The beam has squinted $\Delta\theta = +2.9^\circ$. The approximation gives $-(-0.0475)(1.000) = 0.0475\ \text{rad} = 2.7^\circ$, close enough for a budget. This is the $+3^\circ$ your L25 Lab Est. Angle readout moved when the Signal BW went from 10 to 500 MHz: the GUI set the phases 500 MHz below the signal, so the sweep had to command $47.9^\circ$ to land on a source at $45^\circ$.
+The beam has squinted $\Delta\theta = +2.9^\circ$. The approximation gives $-(-0.0475)(1.000) = 0.0475\ \text{rad} = 2.7^\circ$, close enough for a budget. This is the $+3^\circ$ your Est. Angle readout will move in the L23 Lab when the Signal BW goes from 10 to 500 MHz: the GUI sets the phases 500 MHz below the signal, so the sweep has to command $47.9^\circ$ to land on a source at $45^\circ$.
 :::
 ::::
 
@@ -288,7 +288,7 @@ Dither is the low-cost fix. If the rounding error is the same sawtooth on every 
 ::::
 
 ::::{frame} Where this is going
-Lesson 27 turns pattern control up a notch. So far you have shaped the beam and the sidelobes as a whole; next you will place a null at a chosen angle on purpose, which is what an array does when a jammer or an interfering transmitter sits somewhere you know about. The weights come from subtracting one steering vector from another, and the arithmetic is short.
+The L23 Lab measures all three of today's departures on your own kit. Lesson 24 then turns pattern control up a notch. So far you have shaped the beam and the sidelobes as a whole; next you will place a null at a chosen angle on purpose, which is what an array does when a jammer or an interfering transmitter sits somewhere you know about. The weights come from subtracting one steering vector from another, and the arithmetic is short.
 
-Both of today's floors come back with it. Quantization moves the notch slightly off its commanded angle without filling it, and the sweep's noise floor decides how much of the notch you can see, which is why the measured depth in Lesson 28 stops near $21$ dB while the designed null is far deeper. Before Lesson 27, be able to state the LSB of a $B$-bit shifter and the pointing step it implies on the course array, and review the complex element weights $w_n$ from Lesson 24 — the null-steering result is written entirely in that notation.
+Both of today's floors come back with it. Quantization moves the notch slightly off its commanded angle without filling it, and the sweep's noise floor decides how much of the notch you can see, which is why the measured depth in the L24 Lab stops near $21$ dB while the designed null is far deeper. Before Lesson 24, be able to state the LSB of a $B$-bit shifter and the pointing step it implies on the course array, and review the complex element weights $w_n$ from Lesson 22 — the null-steering result is written entirely in that notation.
 ::::

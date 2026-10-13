@@ -2,20 +2,20 @@
 frame_view: true
 ---
 
-# L21 - Array Factor and Beamwidth Theory
+# L20 - Array Factor and Beamwidth
 
 ::::{frame}
 :class: title-frame
 
 <div class="course-mark">ECE 444 · Fall 2026</div>
 
-<h1 class="frame-title">Array Factor and Beamwidth Theory</h1>
+<h1 class="frame-title">Array Factor and Beamwidth</h1>
 
 <div class="title-rule"></div>
 
 Beamwidth is set by the aperture measured in wavelengths, $Nd/\lambda$, and by nothing else.
 
-Lesson 21 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+Lesson 20 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Slides
@@ -43,14 +43,14 @@ AF_N(\psi) &= \frac{\sin(N\psi/2)}{N\ \sin(\psi/2)} \\
 \psi &= kd(\sin\theta - \sin\theta_0)
 \end{aligned}$$
 
-- In L19 the beam measured about $13^\circ$ at boresight and wider at $45^\circ$; this function produces both.
+- The L18 Lab beam measured about $13^\circ$ at boresight and wider at $45^\circ$; this function produces both.
 - The peak sits at $\psi = 0$, which is $\theta = \theta_0$.
 - The midterm project measured the same widths, nulls, and sidelobes from a pattern cut.
 :::
 
 The **Antenna Pattern Measurement** midterm project, assigned in Lesson 9, measured all of this from the other direction. The quantities you extracted from a measured cut — the half-power width, the null positions, the sidelobe level referenced to the peak — are exactly the quantities this lesson computes from theory, so keep your project data at hand.
 
-In Lesson 19 you steered the array across the room and watched the beam widen as it went. The main lobe was about 13° across at boresight and noticeably fatter at 45°, and the pattern sat on a floor of sidelobes that moved with the beam. Lesson 16 gave you the closed form that produces all of that. Today you extract numbers from it: the half-power beamwidth of a steered array, the angle of every null, the directivity, and the design step that runs the whole thing backwards — given a beamwidth specification, how large does the array have to be.
+In the L18 Lab you steered the array across the room and watched the beam widen as it went. The main lobe was about 13° across at boresight and noticeably fatter at 45°, and the pattern sat on a floor of sidelobes that moved with the beam. Lesson 16 gave you the closed form that produces all of that. Today you extract numbers from it: the half-power beamwidth of a steered array, the angle of every null, the directivity, and the design step that runs the whole thing backwards — given a beamwidth specification, how large does the array have to be.
 
 Lesson 16 summed $N$ equal-amplitude elements with a progressive phase and collapsed the geometric series into the **normalized uniform array factor**
 
@@ -140,14 +140,14 @@ $$\begin{aligned}
 
 - Nulls are equally spaced in $\sin\theta$, every $\lambda/Nd$, not in $\theta$.
 - A null exists only where $\lvert\sin\theta\rvert \le 1$; FNBW is the broadside $m = 1$ pair.
-- At $m = N$ the denominator vanishes too: a grating lobe (L26), not a null.
+- At $m = N$ the denominator vanishes too: a grating lobe (L23), not a null.
 :::
 
 A null is a zero of the numerator that is not also a zero of the denominator. The numerator vanishes when
 
 $$\frac{N\psi}{2} = m\pi \quad\Longrightarrow\quad \psi = \frac{2\pi m}{N}, \qquad m = 1, 2, 3, \ldots$$
 
-except when $m$ is a multiple of $N$, because then $\sin(\psi/2)$ vanishes as well and the ratio returns to unity. Those are the main lobe and its repeats, the **grating lobes** of Lesson 26, not nulls. Converting through $\psi = kd(\sin\theta - \sin\theta_0)$:
+except when $m$ is a multiple of $N$, because then $\sin(\psi/2)$ vanishes as well and the ratio returns to unity. Those are the main lobe and its repeats, the **grating lobes** of Lesson 23, not nulls. Converting through $\psi = kd(\sin\theta - \sin\theta_0)$:
 
 $$\sin\theta = \sin\theta_0 \pm \frac{m\lambda}{Nd}.$$
 
@@ -185,11 +185,11 @@ The null-to-null width runs about $2.3$ times the half-power width for a uniform
 :::{present}
 :class: callout
 
-Beamwidth and null positions scale with $Nd/\lambda$; the sidelobe level does not. A uniform array holds its first sidelobe near $-13$ dB at 8 elements or 800. L24's taper lowers it and widens the beam.
+Beamwidth and null positions scale with $Nd/\lambda$; the sidelobe level does not. A uniform array holds its first sidelobe near $-13$ dB at 8 elements or 800. L22's taper lowers it and widens the beam.
 :::
 
 ```{note}
-Beamwidth and null positions both scale with $Nd/\lambda$; the sidelobe level does not. A uniform array holds its first sidelobe at about $-13$ dB whether it has 8 elements or 800. Lesson 24 changes that number by changing the amplitude distribution, and it costs beamwidth to do it.
+Beamwidth and null positions both scale with $Nd/\lambda$; the sidelobe level does not. A uniform array holds its first sidelobe at about $-13$ dB whether it has 8 elements or 800. Lesson 22 changes that number by changing the amplitude distribution, and it costs beamwidth to do it.
 ```
 ::::
 
@@ -227,7 +227,7 @@ $$D \approx 2(8)(0.481) = 7.7 = 8.9\ \text{dB}$$
 $$G_\text{total} = G_\text{element} + D_\text{array}$$
 
 - The center four alone give $5.9$ dB, $3$ dB less, and twice the beamwidth.
-- Pattern multiplication adds in dB while the element pattern is flat across the main lobe (L22).
+- Pattern multiplication adds in dB while the element pattern is flat across the main lobe (L21).
 :::
 
 :::{admonition} Worked example — directivity of the course array
@@ -238,7 +238,7 @@ The eight elements are patches, not isotropic radiators, so the array's gain is 
 
 $$G_\text{total}\ [\text{dBi}] = G_\text{element}\ [\text{dBi}] + D_\text{array}\ [\text{dB}].$$
 
-Eight half-wave dipoles, at $2.15$ dBi each, would make an $11.0$ dBi array. The sum holds while the element pattern is close to flat across the main lobe, which is where its usefulness ends: Lesson 22 takes up what happens when it is not.
+Eight half-wave dipoles, at $2.15$ dBi each, would make an $11.0$ dBi array. The sum holds while the element pattern is close to flat across the main lobe, which is where its usefulness ends: Lesson 21 takes up what happens when it is not.
 :::
 ::::
 
@@ -246,11 +246,11 @@ Eight half-wave dipoles, at $2.15$ dBi each, would make an $11.0$ dBi array. The
 :::{present}
 :class: callout
 
-Steering barely changes the array factor's directivity. The beam is a cone about the array axis: its wall thickens by $1/\cos\theta_0$ and its circumference shrinks by $\cos\theta_0$. The scan loss measured on hardware comes from the element pattern (L22).
+Steering barely changes the array factor's directivity. The beam is a cone about the array axis: its wall thickens by $1/\cos\theta_0$ and its circumference shrinks by $\cos\theta_0$. The scan loss measured on hardware comes from the element pattern (L21).
 :::
 
 ```{note}
-The array-factor directivity of a linear array barely changes as you steer, even though the beam visibly widens. The main lobe of a linear array is a cone about the array axis; steering off broadside thickens the cone wall by $1/\cos\theta_0$ and shrinks its circumference by $\cos\theta_0$, leaving the solid angle nearly unchanged. The scan loss you measure on real hardware comes from the element pattern, not from the array factor, which is why the PHASER loses gain toward the edges of its scan volume. That is Lesson 22's subject.
+The array-factor directivity of a linear array barely changes as you steer, even though the beam visibly widens. The main lobe of a linear array is a cone about the array axis; steering off broadside thickens the cone wall by $1/\cos\theta_0$ and shrinks its circumference by $\cos\theta_0$, leaving the solid angle nearly unchanged. The scan loss you measure on real hardware comes from the element pattern, not from the array factor, which is why the PHASER loses gain toward the edges of its scan volume. That is Lesson 21's subject.
 ```
 ::::
 
@@ -260,7 +260,7 @@ The array-factor directivity of a linear array barely changes as you steer, even
 
    $$Nd = \frac{0.886\ \lambda}{\theta_\text{HP}\ \cos\theta_{0,\text{max}}}$$
 
-2. **Scan volume sets the spacing** (L26):
+2. **Scan volume sets the spacing** (L23):
 
    $$d < \frac{\lambda}{1 + \lvert\sin\theta_0\rvert_\text{max}}$$
 
@@ -270,7 +270,7 @@ The array-factor directivity of a linear array barely changes as you steer, even
 Every result so far runs backwards. A radar or communications requirement arrives as a beamwidth and a scan volume, and the array falls out of it in three steps.
 
 1. **Beamwidth sets the aperture.** Invert the half-power formula: $Nd = 0.886\lambda/\theta_\text{HP}$, with $\theta_\text{HP}$ in radians. If the specification has to hold across a scan volume, divide by $\cos\theta_0$ at the widest scan angle, because that is where the beam is fattest.
-2. **Scan volume sets the spacing.** Grating lobes stay out of visible space as long as $d < \lambda/(1 + \lvert\sin\theta_0\rvert_\text{max})$, derived in Lesson 26. At $d = \lambda/2$ the criterion is satisfied for any scan angle, which is why half-wavelength spacing is the default.
+2. **Scan volume sets the spacing.** Grating lobes stay out of visible space as long as $d < \lambda/(1 + \lvert\sin\theta_0\rvert_\text{max})$, derived in Lesson 23. At $d = \lambda/2$ the criterion is satisfied for any scan angle, which is why half-wavelength spacing is the default.
 3. **The element count is what is left.** $N = Nd/d$, rounded up. Every element is an antenna, a phase shifter, an amplifier and a control line, so this is the number that sets the cost of the array.
 ::::
 
@@ -321,7 +321,7 @@ The last $45^\circ$ of scan volume is what added the eight extra channels. Wheth
 :::
 ::::
 
-::::{frame} Predictions for Lesson 23
+::::{frame} Predictions for the L20 Lab
 :::{present}
 | Elements | $Nd/\lambda$ | HPBW | FNBW | Sidelobe |
 | :-- | :-- | :-- | :-- | :-- |
@@ -336,7 +336,7 @@ The last $45^\circ$ of scan volume is what added the eight extra channels. Wheth
 | Center 4 | $56\ \text{mm} = 1.92\ \lambda$ | $27^\circ$ | $62^\circ$ | $-11$ dB |
 | Center 2 | $28\ \text{mm} = 0.96\ \lambda$ | $62^\circ$ | $180^\circ$ by convention | none |
 
-Lesson 23 sweeps the PHASER with all eight elements on, then with the center four, then with the center pair, and measures the beamwidth each time. Predict first, measure second, reconcile third. Every number in the table comes from this lesson, and three details in it are worth stating before the lab rather than after.
+The L20 Lab sweeps the PHASER with all eight elements on, then with the center four, then with the center pair, and measures the beamwidth each time. Predict first, measure second, reconcile third. Every number in the table comes from this lesson, and three details in it are worth stating before the lab rather than after.
 ::::
 
 ::::{frame} Three Details in the Prediction Table
@@ -392,11 +392,11 @@ The sweep is a discrete grid. With Use Bits on, as in every lab preset, the GUI 
 
 ::::{frame} Looking Ahead
 :::{present}
-- L22: real patches have their own pattern, and the array pattern is element pattern times array factor.
-- L23: sweep 8, 4, and 2 elements against the prediction table; bring the calculated column filled in.
+- The L20 Lab: sweep 8, 4, and 2 elements against the prediction table; bring the calculated column filled in.
+- L21: real patches have their own pattern, and the array pattern is element pattern times array factor.
 :::
 
-Lesson 22 addresses what the array factor leaves out. Every result in this lesson treats the elements as isotropic points, which is why the directivity came out independent of scan angle and why the pattern in the widget is the same at $60^\circ$ as at boresight. Real patches have their own pattern, it rolls off toward the edges of the scan volume, and the full array pattern is the product of the two. That product is where the array's measured gain, its usable scan range, and its cross-polarization all come from.
+Lesson 21 addresses what the array factor leaves out. Every result in this lesson treats the elements as isotropic points, which is why the directivity came out independent of scan angle and why the pattern in the widget is the same at $60^\circ$ as at boresight. Real patches have their own pattern, it rolls off toward the edges of the scan volume, and the full array pattern is the product of the two. That product is where the array's measured gain, its usable scan range, and its cross-polarization all come from.
 
-Lesson 23 puts the prediction table above in front of the hardware, with Lesson 22's element pattern beside it. You will load the Array Factor preset, sweep the full array, then drop to four elements and two, and compare measured beamwidths against the numbers you calculated today. Bring the calculated column filled in; a measurement you cannot predict within a couple of degrees is a measurement you cannot use to find a fault later. Read the prediction table and the Lesson 23 procedure before class.
+The L20 Lab puts the prediction table above in front of the hardware. You will load the Array Factor preset, sweep the full array, then drop to four elements and two, and compare measured beamwidths against the numbers you calculated today. Bring the calculated column filled in; a measurement you cannot predict within a couple of degrees is a measurement you cannot use to find a fault later. Read the prediction table and the L20 Lab procedure before you go to the bench.
 ::::

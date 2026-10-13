@@ -1,4 +1,4 @@
-# L33 - FMCW Range Lab
+# L28 Lab — FMCW Range
 
 :::{admonition} Slides
 :class: slides

@@ -1,4 +1,4 @@
-# L32 - Introduction to FMCW on Phaser
+# L28 - FMCW on the Phaser
 
 :::{admonition} Slides
 :class: slides

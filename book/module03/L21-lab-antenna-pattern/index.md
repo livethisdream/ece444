@@ -96,10 +96,10 @@ steering electronically.
 Sweeping the beam holds the source at one physical angle, so the element factor
 contributes the same constant to every point on the trace and drops out of the
 shape. Moving the source changes the physical angle at every instant, so the
-element pattern rides on top of the array factor exactly as Lesson 22 described.
+element pattern rides on top of the array factor exactly as Lesson 21 described.
 ::::
 
-::::{frame} What Lesson 22 Says You Will See
+::::{frame} What Lesson 21 Says You Will See
 :::{present}
 :class: callout
 - **Scan loss:** a $30^\circ$ beam peaks $0.6\ \text{dB}$ below broadside.
@@ -138,7 +138,7 @@ electrical sweep of step B4.
 
 Mark the arc before you touch the hardware. Measure $1\ \text{m}$ from
 the face of the array, tape a mark on the floor at $-90^\circ$, $0^\circ$, and
-$+90^\circ$, and add marks every $30^\circ$ if you have time. Lesson 22 put the
+$+90^\circ$, and add marks every $30^\circ$ if you have time. Lesson 21 put the
 far-field boundary of this aperture at $0.66\ \text{m}$, so a $1\ \text{m}$ radius
 is far enough out that the pattern has settled, and walking it consistently is
 what makes the amplitudes comparable from run to run.
@@ -369,7 +369,7 @@ they add to the direct signal in and out of phase as you walk, which is the sour
 of the $\pm 1\ \text{dB}$ ripple you saw riding on the trace. An anechoic chamber
 lines every surface with absorber so only the direct path survives.
 
-**Guaranteed far field.** You taped the arc at $1\ \text{m}$ against Lesson 22's
+**Guaranteed far field.** You taped the arc at $1\ \text{m}$ against Lesson 21's
 $0.66\ \text{m}$ criterion, held to whatever tolerance a hand-held source allows.
 A range fixes the separation once, documents it, and the far-field condition is
 then a documented property of the facility rather than of the operator.
@@ -430,7 +430,7 @@ The L21 Lab sheet is the turn-in document.
 | Mechanical cut | source walked around a fixed beam | x-axis is time, angle is physical |
 | Scan loss | projected aperture falls off as $\cos\theta_0$ | $-0.6$ dB at $30^\circ$ |
 | Sidelobe asymmetry | element factor shades the outer lobe | $-12.2$ vs $-15.2$ dBc at $30^\circ$ |
-| Far-field radius | $r \ge 2D^2/\lambda$ from Lesson 22 | $0.66\ \text{m}$; walk the arc at $1\ \text{m}$ |
+| Far-field radius | $r \ge 2D^2/\lambda$ from Lesson 21 | $0.66\ \text{m}$; walk the arc at $1\ \text{m}$ |
 | Classroom multipath | direct path plus room reflections | about $\pm 1\ \text{dB}$ of ripple |
 | Hand wobble | radius and speed both vary | about $\pm 0.5\ \text{dB}$ on the peak |
 ::::
@@ -438,18 +438,18 @@ The L21 Lab sheet is the turn-in document.
 ::::{frame} Looking Ahead
 :::{present}
 - Uniform illumination fixed the first sidelobes at $-13$ dBc today.
-- Lesson 24 makes that number a design choice: taper the Element Gains.
+- Lesson 22 makes that number a design choice: taper the Element Gains.
 - Lower sidelobes cost beamwidth and peak gain.
 :::
 
 You now have a measured $-13$ dBc sitting in your lab notebook, and so far it has
-been a fact about uniform illumination rather than a choice. Lesson 24 turns it
+been a fact about uniform illumination rather than a choice. Lesson 22 turns it
 into a design variable. Feeding the eight elements unequally — more power in the
 middle, less at the edges — pushes the sidelobes down, and the Element Gains
 sliders you have been leaving at 100% are how you do it on this hardware.
 
 A taper that lowers the first sidelobes by $10\ \text{dB}$ widens the main lobe
-and lowers the peak gain, and Lesson 24 derives exactly how much of each. Before
+and lowers the peak gain, and Lesson 22 derives exactly how much of each. Before
 the next period, look back at your broadside trace and decide how much
 beamwidth you would give up to put those first sidelobes at $-25$ dBc, then
 check your guess against the numbers.

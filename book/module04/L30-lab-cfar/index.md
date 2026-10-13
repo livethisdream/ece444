@@ -1,4 +1,4 @@
-# L36 - CFAR Processing Lab
+# L30 Lab — CFAR Processing
 
 :::{admonition} Slides
 :class: slides

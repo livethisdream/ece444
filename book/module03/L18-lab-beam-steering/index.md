@@ -2,20 +2,20 @@
 frame_view: true
 ---
 
-# L19 - Beam Steering Lab
+# L18 Lab — Beam Steering
 
 ::::{frame}
 :class: title-frame
 
 <div class="course-mark">ECE 444 · Fall 2026</div>
 
-<h1 class="frame-title">Beam Steering Lab</h1>
+<h1 class="frame-title">Beam Steering</h1>
 
 <div class="title-rule"></div>
 
 Two runs put the PHASER's peak at $30^\circ$: move the source, or apply a steer angle.
 
-Lesson 19 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+L18 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Slides
@@ -44,13 +44,13 @@ Lesson 19 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 :::
 
 In Lesson 18 we derived the steering law and used it to fill in a table of
-element phases for the PHASER's eight-element array. The L19 Lab packet starts from
+element phases for the PHASER's eight-element array. The L18 Lab packet starts from
 that table: Part 1, the pre-lab you completed before class, redoes it at your
 HB100's frequency, predicts the beamwidths, and sizes the error budget. Today
 you place the source at measured angles on a protractor arc, and also
 commands the peak to the same angles from the GUI, and records where the trace
 peaks, how wide it is, and what the GUI writes into Phase Control. Part 3, on
-your own before Lesson 20, reconciles those numbers with the predictions.
+your own before Lesson 19, reconciles those numbers with the predictions.
 ::::
 
 ::::{frame} Part 1: The Steering Prediction
@@ -365,7 +365,7 @@ $$\Delta G = 10\log_{10}(\cos 30^\circ) = -0.6\ \text{dB},$$
 
 and $-1.5\ \text{dB}$ at $45^\circ$. A patch element rolls off faster, closer to
 $\cos^{1.3}\theta$ to $\cos^{1.5}\theta$ in power, so expect $-0.8$ to
-$-0.9\ \text{dB}$ at $30^\circ$; Lesson 22 derives the element pattern. The
+$-0.9\ \text{dB}$ at $30^\circ$; Lesson 21 derives the element pattern. The
 commanded run keeps the source on the elements' boresight, so its peak does not
 drop. The peak-drop rows are hardware measurements: the simulator has no element
 pattern and reads $0.0\ \text{dB}$ in both runs.
@@ -448,7 +448,7 @@ Freq, and the SDR sees only a $3\ \text{MHz}$ window. A source that drifts far
 enough to steer the beam measurably leaves the window and the tone disappears;
 **Find HB100** finds it again. A drift that keeps the tone in view, under
 $1.5\ \text{MHz}$, moves the beam by less than $0.01^\circ$. The arithmetic is
-worth seeing once as a preview of Lesson 26's beam squint: phases set for
+worth seeing once as a preview of Lesson 23's beam squint: phases set for
 $10.525\ \text{GHz}$ and observed at $10.325\ \text{GHz}$ point a $30^\circ$ beam
 $0.6^\circ$ farther out, and a $45^\circ$ beam $1.1^\circ$ farther.
 :::
@@ -457,13 +457,13 @@ $0.6^\circ$ farther out, and a $45^\circ$ beam $1.1^\circ$ farther.
 ::::{frame} Lab Packet
 :class: read-only doc-links
 
-The L19 Lab packet is one submission for the whole lab, turned in complete before Lesson 20. It has three parts:
+The L18 Lab packet is one submission for the whole lab, turned in complete before Lesson 19. It has three parts:
 
 1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it at the bench): the prediction table at your kit's frequency, what Phase Control will show, the beamwidths and the error budget, and a rehearsal of Run 2 on the hosted simulator.
 2. **Part 2, Measurements** (your own kit's data, recorded in class): Tables A and B, from Run 1 and Run 2.
 3. **Part 3, Writeup** (individual, after the lab): reconcile the measurements with the predictions, and three analysis problems.
 
-- <a class="doc-link" href="../../labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">L19 Lab packet (PDF)</a>
+- <a class="doc-link" href="../../labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">L18 Lab packet (PDF)</a>
 ::::
 
 ::::{frame} Summary: The Steering Law
@@ -490,17 +490,17 @@ The L19 Lab packet is one submission for the whole lab, turned in complete befor
 
 ::::{frame} Looking Ahead
 :::{present}
-- Lesson 20 uses today's bearing skill: find the one live HB100 among numbered boxes.
-- Lesson 21 derives the trace's features: nulls, the $-12.8$ dB sidelobe, and the beamwidth.
+- The L19 Lab uses today's bearing skill: find the live HB100 among numbered boxes.
+- Lesson 20 derives the trace's features: nulls, the $-12.8$ dB sidelobe, and the beamwidth.
 - Keep Tables A and B; that derivation starts from them.
 :::
 
-Lesson 20, the fox hunt, puts today's skill to work while it is fresh: the peak
+Lesson 19 and the fox hunt put today's skill to work while it is fresh: the peak
 of the sweep is a bearing, and bearings from several stations cross at the
 source.
 
 Today we compared measured beamwidths and sidelobes with values from Lesson 16's
-closed form and Lesson 18's broadening rule. Lesson 21 takes the closed form
+closed form and Lesson 18's broadening rule. Lesson 20 takes the closed form
 
 $$AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}$$
 

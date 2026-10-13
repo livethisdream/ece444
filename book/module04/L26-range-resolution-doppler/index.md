@@ -1,4 +1,4 @@
-# L30 - Range, Resolution, and Doppler
+# L26 - Range, Resolution, and Doppler
 
 :::{admonition} Slides
 :class: slides

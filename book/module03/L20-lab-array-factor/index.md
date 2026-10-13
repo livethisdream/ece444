@@ -71,14 +71,14 @@ $$\theta_{\text{HP}} \approx \frac{0.886\ \lambda}{Nd}, \qquad
 The PHASER is an 8-element linear array with element spacing $d = 14\ \text{mm}$.
 At the workshop frequency of $10.3\ \text{GHz}$ the wavelength is
 $\lambda = 29.1\ \text{mm}$, so $d/\lambda = 0.481$ and the full aperture is
-$Nd = 112\ \text{mm}$, just under four wavelengths. Two results from Lesson 21
+$Nd = 112\ \text{mm}$, just under four wavelengths. Two results from Lesson 20
 set every number you are about to measure: the half-power beamwidth and the
 first-null beamwidth above. Both depend on the array only through $Nd$, the
 **active aperture**. Turning off elements at the ends of the row shortens $Nd$
 without changing $d$, and that is the whole experiment: halve the aperture,
 watch the beam double.
 
-The expectation table is Lesson 21's, restated as the prediction column you
+The expectation table is Lesson 20's, restated as the prediction column you
 will fill in against: 8 is Rx1-Rx8, 4 is Rx3-Rx6, and 2 is Rx4 and Rx5. Note
 that the sidelobe entries are not all the same number. The familiar
 $-13\ \text{dB}$ figure is the large-$N$ limit of the uniform array factor. An

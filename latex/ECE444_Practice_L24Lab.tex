@@ -1,6 +1,6 @@
 % !TEX root =./ECE444_Practice_main.tex
 %
-% L28 practice set (Null Steering Lab) -- converting computed weights into
+% L24 Lab practice set (Null Steering) -- converting computed weights into
 % PHASER settings, reading a null-steered sweep, quantization limits on null
 % depth, a two-channel MVDR solve by hand, and choosing between the two.
 
@@ -224,7 +224,7 @@ by the beamformer is $R = \sigma^2 I + P\,u u^T$.
 
 \begin{parts}
 
-	\begin{minipage}[t]{0.58\linewidth}
+	\begin{minipage}[t]{0.61\linewidth}
 		\part Build $R$.
 		\begin{solution}[1.1in]
 		\eq{ u u^T = \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}, \qquad
@@ -233,7 +233,7 @@ by the beamformer is $R = \sigma^2 I + P\,u u^T$.
 		       = \begin{bmatrix} 10 & 9 \\ 9 & 10 \end{bmatrix} }
 		\end{solution}
 	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
+	\begin{minipage}[t]{0.35\linewidth}
 		\raggedleft \vspace{12pt}
 		$R$ = \ansbox[1.4in]{$\begin{bmatrix} 10 & 9 \\ 9 & 10 \end{bmatrix}$}
 	\end{minipage}
@@ -314,7 +314,7 @@ by the beamformer is $R = \sigma^2 I + P\,u u^T$.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part A requirement calls for a $33$\db notch on a board whose coarse 3-bit
-		phase shifters hold a null only to about $21$\db (Lesson 27). Taking roughly
+		phase shifters hold a null only to about $21$\db (Lesson 24). Taking roughly
 		$6$\db of improvement per added bit, how many phase bits are needed?
 		\begin{solution}[1.1in]
 		\eq{ 33\db - 21\db = 12\db \quad \Rightarrow \quad

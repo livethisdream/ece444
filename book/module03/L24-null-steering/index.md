@@ -2,20 +2,20 @@
 frame_view: true
 ---
 
-# L27 - Null Steering Theory
+# L24 - Null Steering
 
 ::::{frame}
 :class: title-frame
 
 <div class="course-mark">ECE 444 · Fall 2026</div>
 
-<h1 class="frame-title">Null Steering Theory</h1>
+<h1 class="frame-title">Null Steering</h1>
 
 <div class="title-rule"></div>
 
 Today you break the pattern on purpose.
 
-Lesson 27 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+Lesson 24 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame}
@@ -35,7 +35,7 @@ Lesson 27 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 
 :::{depth}
-Lesson 26 catalogued the three ways a steered pattern breaks on its own: grating lobes when the elements are too far apart, squint when the frequency moves off the design point, and quantization lobes when the phase shifter runs out of bits. Those were accidents, and the work was to avoid them. Today you break the pattern on purpose. You will place a deep null exactly where an interferer sits, keep the main beam pointed where it was, and lose a known amount of main-lobe gain doing it.
+Lesson 23 catalogued the three ways a steered pattern breaks on its own: grating lobes when the elements are too far apart, squint when the frequency moves off the design point, and quantization lobes when the phase shifter runs out of bits. Those were accidents, and the work was to avoid them. Today you break the pattern on purpose. You will place a deep null exactly where an interferer sits, keep the main beam pointed where it was, and lose a known amount of main-lobe gain doing it.
 :::
 ::::
 
@@ -65,7 +65,7 @@ The military framing is the obvious one: a **jammer** deliberately parked in a s
 
 ::::{frame} The control we have not used yet
 
-To place a null you need control the previous lessons did not use. Lesson 18 steered the beam with **phase only**, holding every element at full gain. Lesson 24 tapered the sidelobes with **amplitude only**, holding every element in phase. Null steering uses both at once, so from here on each element carries a **complex weight**
+To place a null you need control the previous lessons did not use. Lesson 18 steered the beam with **phase only**, holding every element at full gain. Lesson 22 tapered the sidelobes with **amplitude only**, holding every element in phase. Null steering uses both at once, so from here on each element carries a **complex weight**
 
 $$
 w_n = a_n e^{j\phi_n},
@@ -111,13 +111,13 @@ $$
 w_n = e^{-jnkd\sin\theta_0}, \qquad \text{that is} \qquad \mathbf{w}_\text{d} = \mathbf{v}^{*}(\theta_0).
 $$
 
-The conjugate steering vector *is* the progressive phase ramp $\Delta\phi = kd\sin\theta_0$ you have been programming into the ADAR1000s since L19. With $\mathbf{w}_\text{d}$ applied, $y(\theta_0) = N$ — every element contributes a unit phasor pointing the same way — and that is the peak of the pattern.
+The conjugate steering vector *is* the progressive phase ramp $\Delta\phi = kd\sin\theta_0$ you have been programming into the ADAR1000s since the L18 Lab. With $\mathbf{w}_\text{d}$ applied, $y(\theta_0) = N$ — every element contributes a unit phasor pointing the same way — and that is the peak of the pattern.
 ::::
 
 ::::{frame} Two conventions, both course-wide
 
 :::{note}
-Two conventions matter and both are course-wide. Angles $\theta$ are measured from broadside, and the weight that steers to $\theta_0$ carries $e^{-jnkd\sin\theta_0}$, the *negative* of the arrival phase. Getting the sign backwards puts the beam, or the null, at $-\theta_0$. On the PHASER that shows up as a notch on the wrong side of the sweep, which is the most common error in the L28 lab.
+Two conventions matter and both are course-wide. Angles $\theta$ are measured from broadside, and the weight that steers to $\theta_0$ carries $e^{-jnkd\sin\theta_0}$, the *negative* of the arrival phase. Getting the sign backwards puts the beam, or the null, at $-\theta_0$. On the PHASER that shows up as a notch on the wrong side of the sweep, which is the most common error in the L24 Lab.
 :::
 ::::
 
@@ -322,7 +322,7 @@ $$
 
 ::::{frame} Halve the bits, lose six decibels of depth
 
-With $\text{LSB} = 2.8125^\circ = 0.0491$ rad and 1 % gain steps, $\epsilon_\text{rms} = 0.0145$ and the estimate puts the floor about 46 dB below the peak — the RMS reading of the same result a direct numerical evaluation of the rounded weights gives, which is a residual of about $-48$ dB at the designed angle. Take $\approx -48$ dB as the number to quote and this estimate as where it comes from. That is the same $-6B$ scale as the quantization sidelobes of Lesson 26, a few decibels deeper because the error is spread over eight elements. Halve the bits and the floor rises fast: a 3-bit phase shifter cannot hold a null deeper than about 22 dB.
+With $\text{LSB} = 2.8125^\circ = 0.0491$ rad and 1 % gain steps, $\epsilon_\text{rms} = 0.0145$ and the estimate puts the floor about 46 dB below the peak — the RMS reading of the same result a direct numerical evaluation of the rounded weights gives, which is a residual of about $-48$ dB at the designed angle. Take $\approx -48$ dB as the number to quote and this estimate as where it comes from. That is the same $-6B$ scale as the quantization sidelobes of Lesson 23, a few decibels deeper because the error is spread over eight elements. Halve the bits and the floor rises fast: a 3-bit phase shifter cannot hold a null deeper than about 22 dB.
 ::::
 
 ::::{frame} What you can measure is shallower still
@@ -395,5 +395,5 @@ $r_\text{n}$ is the whole story. It is the uniform pattern's level at the null a
 
 ::::{frame} Where this is going
 
-Lesson 28 takes these weights to the bench. You will compute the gain and phase table for an interferer angle, type it into the Element Gains and Phase Control sections of the Phaser GUI, sweep the beam, and measure the notch you predicted. Then the lab does the thing this lesson cannot: instead of telling the array where the interferer is, it lets the array estimate the interference from the received data itself and compute its own weights. That is **MVDR**, the minimum-variance distortionless-response beamformer, and it needs the two digital channels rather than the analog element sums — the hybrid architecture of L17 finally earns its keep. Read the Digital Beam Forming section of the GUI inventory before class so the Mode, Snapshots, and Diagonal Load controls are not new to you.
+The L24 Lab takes these weights to the bench. You will compute the gain and phase table for an interferer angle, type it into the Element Gains and Phase Control sections of the Phaser GUI, sweep the beam, and measure the notch you predicted. Then the lab does the thing this lesson cannot: instead of telling the array where the interferer is, it lets the array estimate the interference from the received data itself and compute its own weights. That is **MVDR**, the minimum-variance distortionless-response beamformer, and it needs the two digital channels rather than the analog element sums — the hybrid architecture of L17 finally earns its keep. Read the Digital Beam Forming section of the GUI inventory before class so the Mode, Snapshots, and Diagonal Load controls are not new to you.
 ::::

@@ -2,20 +2,20 @@
 frame_view: true
 ---
 
-# L24 - Sidelobes and Tapering Theory
+# L22 - Sidelobes and Tapering
 
 ::::{frame}
 :class: title-frame
 
 <div class="course-mark">ECE 444 · Fall 2026</div>
 
-<h1 class="frame-title">Sidelobes and Tapering Theory</h1>
+<h1 class="frame-title">Sidelobes and Tapering</h1>
 
 <div class="title-rule"></div>
 
 Sidelobe level is set by the shape of the illumination, and shape is something you control.
 
-Lesson 24 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+Lesson 22 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame}
@@ -35,7 +35,7 @@ Lesson 24 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Where we were
-In Lesson 23 you swept the PHASER's pattern and wrote down its sidelobes: a pair
+In the L20 Lab you swept the PHASER's pattern and wrote down its sidelobes: a pair
 about 13 dB below the peak at roughly $\pm 22^\circ$, then a ragged skirt out to
 the edges of visible space. Those sidelobes are not a defect in the array, and no
 amount of careful alignment will remove them. They are the direct consequence of
@@ -270,7 +270,7 @@ for the uniform taper.
 
 ::::{frame} Cost 3: the peak of the measured trace drops
 **Cost 3: the peak of the measured trace drops.** This is a different number, and
-it is the one you will read off the screen next lesson. The GUI's beam sweep
+it is the one you will read off the screen in the L22 Lab. The GUI's beam sweep
 plots received power against commanded steer angle, and it does not renormalize
 between runs. Setting six of the eight Element Gains sliders below 100% throws
 away signal voltage, and the peak of the tapered trace lands
@@ -416,15 +416,15 @@ you type:
 - The gain word resolves to about 1%, so the entered taper is quantized. Rounding
   the $-30\ \text{dB}$ design to whole percent moves its highest sidelobe to
   $-29.9\ \text{dB}$, which is harmless. Trying to hold a $-50\ \text{dB}$ design
-  to 1% amplitude steps is not, and Lesson 26 makes the general version of that
+  to 1% amplitude steps is not, and Lesson 23 makes the general version of that
   argument for phase.
 - You can only go down. Every taper therefore costs peak signal on the trace, and
   the GUI's Peak Array Gain readout will fall by the amount computed in Part 3.
 ::::
 
-::::{frame} What L25 will measure
+::::{frame} What the lab measures
 The GUI ships four presets. Their gain lists and what the sweep reads for each
-are below; predict these numbers now, because next lesson you will measure them.
+are below; predict these numbers now, because the L22 Lab measures them.
 
 | Preset | $a_n$ (%) | Theory HPBW | Measured HPBW | Peak drop | First sidelobe |
 | :-- | :-- | :-- | :-- | :-- | :-- |
@@ -441,7 +441,7 @@ phase LSB, $2.8125^\circ$, so the trace is sampled on a coarse grid and the
 half-power crossings are found late. Second, the sidelobe column says "below the
 noise floor" rather than giving a number. The sweep's floor sits about 23 dB
 below the uniform peak, and every tapered preset here pushes its sidelobes under
-that. You will be able to state an upper bound on the sidelobes next lesson, not
+that. You will be able to state an upper bound on the sidelobes in the L22 Lab, not
 a value.
 ::::
 
@@ -494,7 +494,7 @@ twice as wide as uniform.
 ::::
 
 ::::{frame} Where this is going
-Next lesson you take these four presets to the bench. You will sweep each one,
+In the L22 Lab you take these four presets to the bench. You will sweep each one,
 measure the beamwidth and the peak drop, and reconcile them against the
 predictions in the Part 5 table. You will also hand-enter the $-30\ \text{dB}$
 Chebyshev design from Part 4, which is not one of the presets, and confirm that a
@@ -505,9 +505,9 @@ seeing the measurements.
 ::::
 
 ::::{frame} Where this is going, continued
-After that, Lesson 26 turns to the other three ways a real steered array departs
+After that, Lesson 23 turns to the other three ways a real steered array departs
 from the ideal pattern — grating lobes, beam squint across the band, and phase
-quantization — none of which a taper fixes. Lesson 27 returns to sidelobes with a
+quantization — none of which a taper fixes. Lesson 24 returns to sidelobes with a
 sharper tool: instead of lowering all of them, place a deep null on the one
 direction that is hurting you. The subject comes back for good in Module 4, where
 the clutter a radar competes with arrives almost entirely through the sidelobes,

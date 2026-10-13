@@ -484,7 +484,7 @@ Lesson 2's Friis equation sets the peak,
 $$P_r = P_t G_t G_r \left(\frac{\lambda}{4\pi R}\right)^2;$$
 
 doubling the distance lowers it by $20\log_{10}2 = 6.0\ \text{dB}$, and
-misaiming the HB100 lowers its $G_t$. On the receive side, Lesson 21's
+misaiming the HB100 lowers its $G_t$. On the receive side, Lesson 20's
 broadside directivity of the uniform array is
 
 $$\begin{aligned}
@@ -523,7 +523,7 @@ array's centerline and still $1\ \text{m}$ from the array. The peak should
 move with it, to about $30^\circ$, and drop by a dB or so, because each patch
 receives less from the side. Returned to boresight, the trace comes back to
 where it started. The sign of the moved reading records which side the GUI
-calls positive, which Lesson 19 uses.
+calls positive, which the L18 Lab uses.
 
 :::{depth}
 On a working kit the sweep's floor sits about 23 dB below the uniform-taper
@@ -531,7 +531,7 @@ peak. A normal FFT peak with a sweep that stands well short of that, or that
 peaks far from $0^\circ$ with the source at boresight, points to the
 calibration rather than the signal: check that Phase Control reads zero, then
 put the source back at boresight and run **Calibrate** again. Lesson 18
-derives why the sweep peaks at the source, and Lesson 19 measures it on a
+derives why the sweep peaks at the source, and the L18 Lab measures it on a
 protractor arc.
 :::
 

@@ -151,7 +151,7 @@ By the end of this course you will have designed, measured, and steered real ant
 
 ::::{frame} Course roadmap
 
-Five modules, forty-one lessons, culminating in an integrated beamforming + radar capstone:
+Five modules, thirty-two lessons, culminating in an integrated beamforming + radar capstone:
 
 | Module | Focus |
 | :-: | :- |

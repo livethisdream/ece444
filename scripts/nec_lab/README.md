@@ -243,7 +243,7 @@ up where the builder left off by editing the cards.
 | Monopole over ground | L12 | half a dipole fed against its image; perfect or real ground |
 | Loop | L12 | a closed loop as a polygon, because NEC-2 has no curve |
 | Yagi-Uda | L14 | driven element, reflector, N directors; the parasitic array |
-| Driven array | L16-L22 | dipoles with a source each and a phase per element |
+| Driven array | L16-L21 | dipoles with a source each and a phase per element |
 
 Adding a type is a Python change in `builders.py` and nothing in the page
 needs to know: the form is rendered from the catalog the service serves.
@@ -262,7 +262,7 @@ what the numbers mean:
   the dipole keeps the handout's card exactly.
 - **Every element of a driven array reports its own impedance**, and they
   differ. That difference is mutual coupling, and it is the gap between the
-  array factor and the pattern NEC computes -- which is L22's subject.
+  array factor and the pattern NEC computes -- which is L21's subject.
 
 ### What NEC-2 cannot do
 

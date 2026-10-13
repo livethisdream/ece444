@@ -152,7 +152,7 @@ chip sets the phase in steps of
 $$\frac{360^\circ}{2^7} = 2.8125^\circ,$$
 
 the step size of a 7-bit phase shifter. We will use the gain as a taper in
-Lesson 25. When the GUI shows you eight element sliders, those sliders are
+the L22 Lab. When the GUI shows you eight element sliders, those sliders are
 writing registers in these two chips.
 
 In the figure, a wave from $20^\circ$ off broadside reaches each element
@@ -186,7 +186,7 @@ $$\theta_0 = \arcsin\frac{2.8125^\circ}{176.9^\circ} = 0.91^\circ.$$
 
 That does not confine the beam to a $0.91^\circ$ grid. Each element's phase is
 rounded on its own, so the rounding error varies across the ramp; its main
-effect is a phase error that raises the sidelobes, which Lesson 26 computes:
+effect is a phase error that raises the sidelobes, which Lesson 23 computes:
 about $-42\ \text{dB}$ at 7 bits, far below the sweep's 23 dB floor.
 :::
 ::::
@@ -234,7 +234,7 @@ a WebSocket.
 :::{present}
 - Analog inside each 4-element subarray, digital across the two subarray outputs.
 - A receiver costs far more than a phase shifter, so 8 shifters feed 2 receivers.
-- Software sees two numbers, so Lesson 28's MVDR can null about one interferer.
+- Software sees two numbers, so the L24 Lab's MVDR can null about one interferer.
 :::
 :::{present}
 <img src="../../viz/img/L17-hybrid-split.svg" alt="Three receive architectures for eight elements, side by side. All analog: 8 phase shifters summed into 1 receiver, no digital weights. The PHASER hybrid: 8 phase shifters summed four at a time into 2 receivers, then 2 digital weights. Fully digital: no phase shifters, 8 receivers, 8 digital weights. Shading marks the digital side of the ADC." style="max-width: 100%; display: block; margin: 0 auto;">
@@ -276,7 +276,7 @@ The hybrid split fixes how many weights each later lab can use. Eight elements
 give us eight analog weights, so the array can steer, taper, and place a null
 anywhere we choose. But once the ADAR1000 sums its four elements, the
 individual element signals are gone, and software downstream sees two numbers,
-not eight. When we reach adaptive nulling in Lesson 28, the MVDR algorithm has
+not eight. When we reach adaptive nulling in the L24 Lab, the MVDR algorithm has
 exactly two digital degrees of freedom to work with, because the ADAR1000s sum
 the elements in analog before anything is digitized. One of those degrees of
 freedom holds the look direction, and $N$ channels can null about $N - 1$
@@ -441,7 +441,7 @@ which follows the GUI's **Phase Shift Bits** and is $2.8125^\circ$ at 7 bits;
 it adds the offsets unrounded and wraps the sum into $0$ to $360^\circ$, and the
 chip then sets the nearest of its 128 phase states. The writes wait in shadow registers until
 `latch_rx_settings()` moves all eight into the live beam at once. Lesson 18
-computes `PhDelta` from a steering angle, and Lesson 26 studies what that
+computes `PhDelta` from a steering angle, and Lesson 23 studies what that
 rounding does to the pattern.
 
 :::{depth}
@@ -449,7 +449,7 @@ The code adds `+i * PhDelta`, and Lesson 18 writes the ADAR1000 setting the
 same way, $\phi_n = +n\ \Delta\phi$, so the code and Lesson 18 agree: a rising
 ramp steers the beam to a positive angle, the side the sweep plot calls positive.
 The GUI's Beam Steering **Apply** writes the opposite ramp into Phase Control as
-offsets, for a reason Lesson 19 explains.
+offsets, for a reason the L18 Lab explains.
 :::
 
 The matching call for the taper writes gains instead of phases:
@@ -499,8 +499,8 @@ procedure; the packet is one submission, turned in complete before Lesson 18.
 
 $$\Delta\phi = kd\sin\theta_0$$
 
-- **Lesson 19** steers the real beam at this station and measures where it points.
-- In **Lesson 28** the two digital channels limit MVDR to about one null.
+- The **L18 Lab** steers the real beam at this station and measures where it points.
+- In the **L24 Lab** the two digital channels limit MVDR to about one null.
 :::
 
 We now have a machine that can put an arbitrary phase on each of eight
@@ -512,14 +512,14 @@ ramp that compensates that delay is
 $$ \Delta\phi = kd\sin\theta_0. $$
 
 That expression turns a steering angle into the eight numbers `ADAR_set_Phase`
-writes. Lesson 19 brings you back to this station to steer the real beam with
+writes. The L18 Lab brings you back to this station to steer the real beam with
 them and measure where it points.
 
 :::{depth}
 Before Lesson 18, review the array factor from Lesson 16 and be ready to state
 what $\psi$ is and why the pattern peaks when it is zero. Keep the block
-diagram from Part 3 of today's packet somewhere you can find it; the same figure comes back
-in Lesson 28, where the two digital channels limit MVDR adaptive nulling to
+diagram from Part 3 of the L17 Lab packet somewhere you can find it; the same figure comes back
+in the L24 Lab, where the two digital channels limit MVDR adaptive nulling to
 about one null.
 :::
 ::::

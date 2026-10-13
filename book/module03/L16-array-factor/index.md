@@ -242,7 +242,7 @@ AF_N &\approx \frac{1}{N\sin(3\pi/2N)} \\
 
 Between consecutive nulls the numerator swings back to $\pm 1$, so a sidelobe sits in each gap: $N - 2$ of them across one period. Their heights fall off as $1/\sin(\psi/2)$, so the tallest is the one nearest the main lobe. The numerator reaches its peak magnitude halfway between its first two zeros, at $N\psi/2 = 3\pi/2$, and evaluating $AF_N$ there gives $2/(3\pi) = 0.212$ for large $N$, or $-13.5$ dB.
 
-The denominator is still growing across that gap, so the true peak sits slightly closer to the main lobe, where the denominator is smaller. Locating it exactly gives $-13.3$ dB, which is the uniform line-source number from Lesson 6. At $N = 8$ the value is $-12.8$ dB. The figure plots the exact level against $N$: a short array has a higher first sidelobe, and by $N = 16$ the level is within $0.2$ dB of the line source. The estimate runs a fraction of a decibel low at every $N$, for the reason above. Uniform excitation leaves the first sidelobe about $13$ dB below the peak in a discrete array, as it did in the continuous aperture of Lesson 15, and Lesson 24 lowers it with a taper.
+The denominator is still growing across that gap, so the true peak sits slightly closer to the main lobe, where the denominator is smaller. Locating it exactly gives $-13.3$ dB, which is the uniform line-source number from Lesson 6. At $N = 8$ the value is $-12.8$ dB. The figure plots the exact level against $N$: a short array has a higher first sidelobe, and by $N = 16$ the level is within $0.2$ dB of the line source. The estimate runs a fraction of a decibel low at every $N$, for the reason above. Uniform excitation leaves the first sidelobe about $13$ dB below the peak in a discrete array, as it did in the continuous aperture of Lesson 15, and Lesson 22 lowers it with a taper.
 ::::
 
 ::::{frame} The Eight-Element Array Factor
@@ -269,7 +269,7 @@ The denominator is still growing across that gap, so the true peak sits slightly
 | Sidelobe count | $N - 2$ per period |
 :::
 
-The half-power row uses the line-source constant of Lessons 6 and 15 with $L = Nd$, and Lesson 21 derives it for the array, along with the $1/\cos\theta_0$ broadening under steering. The constant is close but not exact for a short array: the PHASER's exact half-power width is $13.3^\circ$, against $13.2^\circ$ from $0.886\ \lambda/Nd$.
+The half-power row uses the line-source constant of Lessons 6 and 15 with $L = Nd$, and Lesson 20 derives it for the array, along with the $1/\cos\theta_0$ broadening under steering. The constant is close but not exact for a short array: the PHASER's exact half-power width is $13.3^\circ$, against $13.2^\circ$ from $0.886\ \lambda/Nd$.
 ::::
 
 ::::{frame} Part 3: Pattern Multiplication
@@ -423,10 +423,10 @@ $$\begin{aligned}
 d &< \frac{\lambda}{1 + \sin\theta_0}
 \end{aligned}$$
 
-A beam steered to negative $\theta_0$ gives the mirror image, so the criterion carries $\vert\sin\theta_0\vert$. At broadside it is $d < \lambda$. Scanning to $\pm 90^\circ$ tightens it to $d < \lambda/2$, which is where the familiar half-wavelength spacing comes from. The figure plots the limit against the largest scan angle a design needs: a $\pm 45^\circ$ requirement allows $0.586\lambda$, and the PHASER's $0.481\lambda$ sits below the curve at every angle, so it can scan anywhere without a grating lobe. Lesson 26 treats grating lobes in full, alongside beam squint and phase quantization; we use the criterion as stated until then.
+A beam steered to negative $\theta_0$ gives the mirror image, so the criterion carries $\vert\sin\theta_0\vert$. At broadside it is $d < \lambda$. Scanning to $\pm 90^\circ$ tightens it to $d < \lambda/2$, which is where the familiar half-wavelength spacing comes from. The figure plots the limit against the largest scan angle a design needs: a $\pm 45^\circ$ requirement allows $0.586\lambda$, and the PHASER's $0.481\lambda$ sits below the curve at every angle, so it can scan anywhere without a grating lobe. Lesson 23 treats grating lobes in full, alongside beam squint and phase quantization; we use the criterion as stated until then.
 
 ```{note}
-Element spacing is a two-sided trade. Too large and a grating lobe appears. Too small and the array is short for its element count, so the beam is wide and the elements couple strongly to each other (mutual coupling, Lesson 22). Most designs land between $0.4\lambda$ and $0.5\lambda$.
+Element spacing is a two-sided trade. Too large and a grating lobe appears. Too small and the array is short for its element count, so the beam is wide and the elements couple strongly to each other (mutual coupling, Lesson 21). Most designs land between $0.4\lambda$ and $0.5\lambda$.
 ```
 ::::
 
@@ -458,11 +458,11 @@ The figure shows where the approximation holds. Plotted against $u$, in units of
 ::::{frame} What Each Parameter Controls
 :::{present}
 - **Total length** $Nd$ sets the beamwidth, whether 8 elements or 32 fill it.
-- The **excitation shape** sets the sidelobes: $-13$ dB for uniform. Lesson 24 tapers it.
+- The **excitation shape** sets the sidelobes: $-13$ dB for uniform. Lesson 22 tapers it.
 - The **spacing** $d$ decides whether a grating lobe reaches real space.
 :::
 
-The sampled view assigns each parameter its job. Two arrays with the same $Nd$ have nearly the same main lobe whether 8 elements or 32 fill that length. Uniform excitation gives about $-13$ dB in the array exactly as in the aperture, and Lesson 24 tapers it.
+The sampled view assigns each parameter its job. Two arrays with the same $Nd$ have nearly the same main lobe whether 8 elements or 32 fill that length. Uniform excitation gives about $-13$ dB in the array exactly as in the aperture, and Lesson 22 tapers it.
 
 The spacing decides what repeats. The array samples the current only at multiples of $d$, so its phases $e^{\ jn\psi}$ cannot distinguish $\psi$ from $\psi + 2\pi$, and the pattern repeats with that period. This is the general rule that sampling a function makes its transform periodic. A continuous aperture has a contribution from every position, so no shift of $\psi$ leaves all of them unchanged, and it has no grating lobes.
 ::::
@@ -496,7 +496,7 @@ $$\begin{aligned}
 \text{HPBW} &\approx 0.886\ \lambda/Nd = 13.2^\circ
 \end{aligned}$$
 
-and the first sidelobe is $-12.8$ dB at $\pm 21.9^\circ$. Lesson 21 derives the broadside directivity of a uniform array,
+and the first sidelobe is $-12.8$ dB at $\pm 21.9^\circ$. Lesson 20 derives the broadside directivity of a uniform array,
 
 $$\begin{aligned}
 D &\approx \frac{2Nd}{\lambda} = 7.7 \\
@@ -509,7 +509,7 @@ D &\approx \frac{2Nd}{\lambda} = 7.7 \\
 :class: viz-frame
 
 :::{depth}
-Lesson 23 sweeps this beam past a fixed source. Expect a $13^\circ$ beam, a first null past $15^\circ$, and sidelobes 11 to 13 dB down. The widget below is the one Lesson 21 uses: pick the 8-element aperture, read the half-power width, first-null width, and first sidelobe off the ideal curve, then switch the measurement effects on. The $2.8125^\circ$ steer grid and the $-23$ dB noise floor fill in the nulls, and the first-null width moves from $30.1^\circ$ to $28.1^\circ$ because the grid no longer lands on the null.
+The L20 Lab sweeps this beam past a fixed source. Expect a $13^\circ$ beam, a first null past $15^\circ$, and sidelobes 11 to 13 dB down. The widget below is the one the L20 Lab uses: pick the 8-element aperture, read the half-power width, first-null width, and first sidelobe off the ideal curve, then switch the measurement effects on. The $2.8125^\circ$ steer grid and the $-23$ dB noise floor fill in the nulls, and the first-null width moves from $30.1^\circ$ to $28.1^\circ$ because the grid no longer lands on the null.
 :::
 
 :::{present}
@@ -521,9 +521,9 @@ Lesson 23 sweeps this beam past a fixed source. Expect a $13^\circ$ beam, a firs
 </iframe>
 :::
 
-:::{admonition} Worked example — what the Lesson 23 sweep will show
+:::{admonition} Worked example — what the L20 Lab sweep will show
 :class: tip
-In Lesson 23 you will steer this array past a fixed source and record power against commanded angle. Expect a main lobe near $13^\circ$ wide, a first null a little past $15^\circ$, and sidelobes 11 to 13 dB down. The measured beam reads $13.1^\circ$, and the nulls fill in: the sweep steps in $2.8125^\circ$ increments and the receiver's noise floor sits about 23 dB below the peak, so a mathematical zero measures as a finite dip.
+In the L20 Lab you will steer this array past a fixed source and record power against commanded angle. Expect a main lobe near $13^\circ$ wide, a first null a little past $15^\circ$, and sidelobes 11 to 13 dB down. The measured beam reads $13.1^\circ$, and the nulls fill in: the sweep steps in $2.8125^\circ$ increments and the receiver's noise floor sits about 23 dB below the peak, so a mathematical zero measures as a finite dip.
 :::
 ::::
 
@@ -563,10 +563,10 @@ In Lesson 23 you will steer this array past a fixed source and record power agai
 :::{present}
 - Lesson 17: the ADAR1000 hardware that sets each $a_n$ in gain and phase.
 - Lesson 18: a progressive phase ramp steers the beam to $\theta_0$.
-- Lessons 23, 25, and 28 measure this pattern, taper it, and place a null.
+- The L20, L22, and L24 Labs measure this pattern, taper it, and place a null.
 :::
 
 Today we assumed the feed: element $n$ simply received weight $a_n$. Lesson 17 opens the hardware that produces those weights, the ADAR1000 beamformer chips, the per-element gain and phase controls, and the receive chain that turns eight elements into two digitized channels. Lesson 18 then sets the weights to a progressive phase ramp and steers the beam, which supplies the $\theta_0$ that has gone unused in $\psi$ all lesson.
 
-Every lab in this module measures some feature of today's array factor. Lesson 23 measures the beamwidth, the nulls, and the sidelobe level of the uniform 8-element pattern. Lesson 25 changes the weights and watches the sidelobes drop. Lesson 28 places a null where you want one. Before the next lesson, be able to write $AF_N$ from memory and locate its nulls, because every one of those labs starts by predicting from it.
+Every lab in this module measures some feature of today's array factor. The L20 Lab measures the beamwidth, the nulls, and the sidelobe level of the uniform 8-element pattern. The L22 Lab changes the weights and watches the sidelobes drop. The L24 Lab places a null where you want one. Before the next lesson, be able to write $AF_N$ from memory and locate its nulls, because every one of those labs starts by predicting from it.
 ::::

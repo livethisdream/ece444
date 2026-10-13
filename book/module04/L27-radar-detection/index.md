@@ -1,4 +1,4 @@
-# L31 - Radar Detection Theory
+# L27 - Radar Detection
 
 :::{admonition} Slides
 :class: slides

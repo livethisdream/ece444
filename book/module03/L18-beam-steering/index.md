@@ -2,14 +2,14 @@
 frame_view: true
 ---
 
-# L18 - Beam Steering Theory
+# L18 - Beam Steering
 
 ::::{frame}
 :class: title-frame
 
 <div class="course-mark">ECE 444 · Fall 2026</div>
 
-<h1 class="frame-title">Beam Steering Theory</h1>
+<h1 class="frame-title">Beam Steering</h1>
 
 <div class="title-rule"></div>
 
@@ -156,7 +156,7 @@ all follow from this one relation.
 :::{present}
 - A true time delay steers the beam to $\theta_0$ at every frequency.
 - A phase shift equals that delay at one frequency only, the one used for $k$.
-- Elsewhere the beam points slightly off $\theta_0$: beam squint, which L26 quantifies.
+- Elsewhere the beam points slightly off $\theta_0$: beam squint, which L23 quantifies.
 :::
 
 ```{note}
@@ -165,7 +165,7 @@ equal at exactly one frequency, the one used to compute $k$. A true time delay
 would steer the beam to $\theta_0$ at every frequency in the band; a phase
 shifter steers it to $\theta_0$ only at the design frequency and to a slightly
 different angle everywhere else. That difference has a name, beam squint, and
-L26 quantifies it. For now, every phase we compute today is correct only at
+L23 quantifies it. For now, every phase we compute today is correct only at
 that frequency.
 ```
 ::::
@@ -191,7 +191,7 @@ step more. A positive ramp steers the beam to $+\theta_0$, which is the
 convention of the backend code L17 read, which writes `i*PhDelta` to element
 `i` at every step of the GUI's beam sweep. The GUI's Beam Steering **Apply** is
 a different control: it writes the opposite ramp into Phase Control as offsets,
-for a reason Lesson 19 explains. Flipping the sign of $\theta_0$ flips the
+for a reason the L18 Lab explains. Flipping the sign of $\theta_0$ flips the
 sign of $\Delta\phi$ and runs the ramp the other way, which is how the same
 eight channels cover both sides of broadside.
 
@@ -436,7 +436,7 @@ $$\text{scan loss} = 10\log_{10}(\cos\theta_0)$$
 
 - The smaller projected aperture lowers the peak gain: $-3$ dB at $60^\circ$.
 - The array factor's directivity holds near 7.7 as it scans; the element pattern carries the loss.
-- L22 works out the element factor and the scanned gain.
+- L21 works out the element factor and the scanned gain.
 :::
 
 The beam broadens as $1/\cos\theta_0$. The same projection argument sets the
@@ -454,7 +454,7 @@ grows as $1/\cos\theta_0$, so the solid angle the beam fills, and with it the
 directivity, stays about the same. The element pattern, which is not isotropic
 and rolls off away from its own boresight, carries the projected-aperture loss:
 each element's cell presents a projected area that shrinks as $\cos\theta$.
-L22 derives the element factor and the scanned gain; for design estimates, we
+L21 derives the element factor and the scanned gain; for design estimates, we
 use the scan loss above.
 ::::
 
@@ -577,7 +577,7 @@ $$\text{LSB} = \frac{360^\circ}{2^7} = 2.8125^\circ$$
 
 - The ADAR1000's phase shifter has 7 bits, so every commanded phase rounds to this grid.
 - At $30^\circ$, the $86.6^\circ$ step is set as 31 steps, $87.19^\circ$.
-- L26 computes the effect on sidelobe level and null depth.
+- L23 computes the effect on sidelobe level and null depth.
 :::
 
 The ADAR1000's phase shifter has 7 bits (L17, "The ADAR1000 Beamformers"), so
@@ -586,7 +586,7 @@ lands on that grid. The $86.6^\circ$ step of the $30^\circ$ table is
 $30.79$ steps and is set as 31 steps, $87.19^\circ$. The backend rounds each
 element's unwrapped ramp value to the grid before wrapping, so the whole
 $30^\circ$ ramp is set as 0, 87.19, 174.38, 258.75, 345.94, 73.13, 160.31, and
-$247.50^\circ$. L26 computes how much that grid raises the sidelobe level and
+$247.50^\circ$. L23 computes how much that grid raises the sidelobe level and
 reduces null depth.
 ::::
 
@@ -622,19 +622,19 @@ reduces null depth.
 ::::{frame} Practice
 :class: read-only doc-links
 
-This lesson's problems are the pre-lab for Lesson 19: Part 1 of the L19 Lab packet, completed on your own before the lab period.
+This lesson's problems are the pre-lab for the L18 Lab: Part 1 of its packet, completed on your own before the lab period.
 
-- <a class="doc-link" href="../../labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">L19 Lab packet, Part 1 (PDF)</a>
+- <a class="doc-link" href="../../labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">L18 Lab packet, Part 1 (PDF)</a>
 ::::
 
 ::::{frame} Looking Ahead
 :::{present}
-- L19: steer the PHASER, sweep, and compare the measured peak and beamwidth with the prediction.
+- The L18 Lab: steer the PHASER, sweep, and compare the peak and beamwidth with the prediction.
 - The lab redoes the $30^\circ$ table at the HB100's $10.525\ \text{GHz}$: $88.4^\circ$ per element, E1 to E8.
-- L21-L26: beamwidth, tapering, grating lobes, squint, and quantization.
+- L20-L23: beamwidth, tapering, grating lobes, squint, and quantization.
 :::
 
-L19 puts this on the hardware. You will load the Steering Angle lab preset,
+The L18 Lab puts this on the hardware. You will load the Steering Angle lab preset,
 steer the peak by moving the source and by applying a steer angle, sweep, and
 compare the measured peak against the prediction. The lab redoes this lesson's calculation at the HB100's
 $10.525\ \text{GHz}$, where $\lambda = 28.5\ \text{mm}$, $kd = 176.8^\circ$, and
@@ -645,13 +645,13 @@ position and the comparison only means something if the prediction was written
 down first.
 
 :::{depth}
-Further out, the ideal steered pattern of this lesson starts to fray. L21 and
-L23 measure beamwidth against theory across element counts, L24 trades sidelobe
-level for beamwidth with a taper, and L26 collects the three ways a real steered
+Further out, the ideal steered pattern of this lesson starts to fray. L20 and
+its lab measure beamwidth against theory across element counts, L22 trades sidelobe
+level for beamwidth with a taper, and L23 collects the three ways a real steered
 array departs from today's result: grating lobes when the spacing is too wide
 (L16's criterion, which the PHASER's $14\ \text{mm}$ meets at every angle),
 beam squint when the frequency moves off the one you designed for, and
 quantization when the ideal ramp has to land on the $2.8125^\circ$ grid. Read the
-L19 lab procedure before the next lesson.
+L18 Lab procedure before you go to the bench.
 :::
 ::::

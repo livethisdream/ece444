@@ -2,20 +2,20 @@
 frame_view: true
 ---
 
-# L28 - Null Steering Lab
+# L24 Lab — Null Steering
 
 ::::{frame}
 :class: title-frame
 
 <div class="course-mark">ECE 444 · Fall 2026</div>
 
-<h1 class="frame-title">Null Steering Lab</h1>
+<h1 class="frame-title">Null Steering</h1>
 
 <div class="title-rule"></div>
 
 Today you type those numbers into the array and find out what the hardware gives back.
 
-Lesson 28 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+L24 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame}
@@ -36,7 +36,7 @@ Lesson 28 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 
 :::{depth}
-Lesson 27 ended with a weight vector on paper: eight complex numbers that hold the
+Lesson 24 ended with a weight vector on paper: eight complex numbers that hold the
 beam on the target and put a pattern null on the jammer. Today you type those
 numbers into the array and find out what the hardware gives back. You will run
 three procedures, in increasing order of how much the array does for itself — a
@@ -50,9 +50,9 @@ from a single look, which is where Module 4 begins.
 
 ::::
 
-::::{frame} Part 1: What Lesson 27 computed
+::::{frame} Part 1: What Lesson 24 computed
 
-The **weight-subtraction** result from Lesson 27 is one line. Start from the
+The **weight-subtraction** result from Lesson 24 is one line. Start from the
 weights that steer the beam where you want it, $w_d$, and the weights that would
 steer it at the interferer, $w_n$, and remove the part of the first that points
 along the second:
@@ -195,7 +195,7 @@ top of it. Every measurement below is a comparison against a frozen trace.
 
 Three numbers come off this plot. The sidelobe at $+22.5^\circ$ has dropped from
 $-12.8$ dBc to about $-21.6$ dBc, a change of roughly $9$ dB at that angle. The
-main lobe has lost about $1.8$ dB to the subtraction, which matches Lesson 27's
+main lobe has lost about $1.8$ dB to the subtraction, which matches Lesson 24's
 cost curve for a null this close to the beam. And the rest of
 the pattern has moved: the sidelobes on the far side are one to two decibels
 different from the reference, because the subtraction reshaped the whole aperture
@@ -205,9 +205,9 @@ distribution, not just one angle.
 
 ::::{frame} Why the notch stops
 
-Now ask why the notch stopped at $-21.6$ dBc when the arithmetic in Lesson 27
+Now ask why the notch stopped at $-21.6$ dBc when the arithmetic in Lesson 24
 predicted a true zero. The obvious suspect is the hardware resolution named in
-Lesson 26:
+Lesson 23:
 
 - The phase shifter has a $2.8125^\circ$ LSB, so a commanded $+13.0^\circ$ is
   applied as $+14.06^\circ$.
@@ -586,7 +586,7 @@ The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_
 
 ::::{frame} Where this is going
 
-Module 4 begins radar. Lesson 29 derives the radar range equation and asks the
+Module 4 begins radar. Lesson 25 derives the radar range equation and asks the
 question this module never had to: how much power comes back from a target that
 does not transmit anything of its own. Everything Module 3 built — beamwidth,
 sidelobes, scan loss, steering — becomes the antenna terms in that equation, and
@@ -595,12 +595,12 @@ the array you have been sweeping becomes the front end of a radar.
 :::{depth}
 You have already been through the door. The monopulse pair in Part 7 measures a
 target's angle from a single look, which is what a radar needs in order to track
-something that moves, and Lesson 29 puts a power budget behind that measurement:
+something that moves, and Lesson 25 puts a power budget behind that measurement:
 how much energy has to leave the antenna for the echo to be detectable at all.
 The error function you watched cross zero is the angle channel of the tracking
 loop; the range equation supplies the signal that feeds it.
 
-Read the radar range equation section of the text before Lesson 29, and bring
+Read the radar range equation section of the text before Lesson 25, and bring
 your Part 7 numbers. The slope of the error curve near boresight is the quantity
 that sets how finely a tracking radar can measure angle, and Module 4 returns to
 it as soon as the power budget is in place.

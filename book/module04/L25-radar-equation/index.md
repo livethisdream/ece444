@@ -1,4 +1,4 @@
-# L29 - The Radar Equation, Path Loss, and RCS
+# L25 - The Radar Equation, Path Loss, and RCS
 
 :::{admonition} Slides
 :class: slides

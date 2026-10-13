@@ -16,7 +16,7 @@ frame_view: true
 
 Point the beam without moving the antenna.
 
-Lessons 15–28 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+Lessons 15–24 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Where This Module Goes
@@ -24,9 +24,9 @@ An array is many small antennas behaving as one large one. Feed the elements
 with the right phases and the beam points where you choose; feed them with the
 right amplitudes and you decide how much energy leaks into the sidelobes.
 
-This is the longest module in the course, and the most hands-on. **Every
-theory lesson leads to a lab on the ADALM-PHASER**, so you never take
-the array factor on faith.
+This is the longest module in the course, and the most hands-on. **Almost
+every lesson has its own lab on the ADALM-PHASER**, done right after it, so you
+never take the array factor on faith.
 
 :::{depth}
 The through-line is one equation — the array factor — met four times: derived,
@@ -81,78 +81,104 @@ and say what each term does, the rest is arithmetic.
     <h4>Introduction to Phased Array Hardware</h4>
     <p>ADALM-PHASER architecture and SDR control. Objective 3.3.</p>
   </a>
+  <a class="mt-card mt-practice mt-lab" href="L17-lab-bring-up/index.html">
+    <span class="mt-kind">L17 Lab</span>
+    <h4>Phased Array Bring-Up</h4>
+    <p>Bring your own kit up from a blank card, then prove it works.</p>
+  </a>
 </div>
 ::::
 
-::::{frame} Lessons 18-21: Steering the Beam, and Using It
+::::{frame} Lessons 18-19: Steering the Beam, and Using It
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L18-beam-steering/index.html">
     <span class="mt-kind">Lesson 18</span>
-    <h4>Beam Steering Theory</h4>
+    <h4>Beam Steering</h4>
     <p>Phase weights to steer a beam and the resulting array pattern. Objective 3.4.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L18-lab-beam-steering/index.html">
+  <a class="mt-card mt-practice mt-lab" href="L18-lab-beam-steering/index.html">
+    <span class="mt-kind">L18 Lab</span>
+    <h4>Beam Steering</h4>
+    <p>Steer the peak two ways on the PHASER and check it against theory. Objective 3.5.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L19-direction-finding/index.html">
     <span class="mt-kind">Lesson 19</span>
-    <h4>Beam Steering Lab</h4>
-    <p>Implement beam steering on the PHASER and verify against theory. Objective 3.5.</p>
+    <h4>Direction Finding</h4>
+    <p>Bearings from the beam sweep, crossed from known stations. Objective 3.5.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L19-lab-fox-hunt/index.html">
-    <span class="mt-kind">Lesson 20</span>
-    <h4>Fox Hunt Lab</h4>
-    <p>Find the one live HB100 among numbered boxes: bearings from stations outside a marked circle, triangulated on your own kit. Objective 3.5.</p>
-  </a>
-  <a class="mt-card mt-lesson" href="L20-array-factor-beamwidth/index.html">
-    <span class="mt-kind">Lesson 21</span>
-    <h4>Array Factor and Beamwidth Theory</h4>
-    <p>Array factor and beamwidth in depth. Midterm project due. Objective 3.2.</p>
+  <a class="mt-card mt-practice mt-lab" href="L19-lab-fox-hunt/index.html">
+    <span class="mt-kind">L19 Lab</span>
+    <h4>Fox Hunt</h4>
+    <p>Find the one live HB100 among numbered boxes from your own bearings.</p>
   </a>
 </div>
 ::::
 
-::::{frame} Lessons 22-25: The Real Pattern, and Shaping It
+::::{frame} Lessons 20-21: The Beam, and the Real Pattern
 
 <div class="module-toc">
+  <a class="mt-card mt-lesson" href="L20-array-factor-beamwidth/index.html">
+    <span class="mt-kind">Lesson 20</span>
+    <h4>Array Factor and Beamwidth</h4>
+    <p>Array factor and beamwidth in depth. Objective 3.2.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L20-lab-array-factor/index.html">
+    <span class="mt-kind">L20 Lab</span>
+    <h4>Array Factor</h4>
+    <p>Measure the array factor at 8, 4, and 2 active elements.</p>
+  </a>
   <a class="mt-card mt-lesson" href="L21-antenna-pattern/index.html">
-    <span class="mt-kind">Lesson 22</span>
-    <h4>Antenna Pattern Theory</h4>
+    <span class="mt-kind">Lesson 21</span>
+    <h4>Antenna Pattern</h4>
     <p>True antenna pattern vs. array factor; element-pattern effects. Objective 3.6.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L20-lab-array-factor/index.html">
-    <span class="mt-kind">Lesson 23</span>
-    <h4>Array Factor and Pattern Lab</h4>
-    <p>Measure the array factor at 8, 4, and 2 elements, then walk the source around a fixed beam to see the element pattern. Objectives 3.2, 3.6.</p>
-  </a>
-  <a class="mt-card mt-lesson" href="L22-sidelobes-tapering/index.html">
-    <span class="mt-kind">Lesson 24</span>
-    <h4>Sidelobes and Tapering Theory</h4>
-    <p>Amplitude tapering (uniform, cosine, Chebyshev, Taylor) and the sidelobe trade-off. Objective 3.7.</p>
-  </a>
-  <a class="mt-card mt-lesson" href="L22-lab-tapering/index.html">
-    <span class="mt-kind">Lesson 25</span>
-    <h4>Tapering Lab</h4>
-    <p>Apply tapers on the PHASER and measure the sidelobe trade-off. Objective 3.7.</p>
+  <a class="mt-card mt-practice mt-lab" href="L21-lab-antenna-pattern/index.html">
+    <span class="mt-kind">L21 Lab</span>
+    <h4>Antenna Pattern</h4>
+    <p>Walk the source around a fixed beam to see the element pattern.</p>
   </a>
 </div>
 ::::
 
-::::{frame} Lessons 26-28: Where Arrays Misbehave, and Nulling
+::::{frame} Lessons 22-23: Shaping the Pattern, and Where It Misbehaves
 
 <div class="module-toc">
-  <a class="mt-card mt-lesson" href="L23-beam-squint-quantization/index.html">
-    <span class="mt-kind">Lesson 26</span>
-    <h4>Beam Squint and Quantization</h4>
-    <p>Beam squint and phase-quantization effects on array performance. Objective 3.8.</p>
+  <a class="mt-card mt-lesson" href="L22-sidelobes-tapering/index.html">
+    <span class="mt-kind">Lesson 22</span>
+    <h4>Sidelobes and Tapering</h4>
+    <p>Amplitude tapering (uniform, cosine, Chebyshev, Taylor) and the sidelobe trade-off. Objective 3.7.</p>
   </a>
+  <a class="mt-card mt-practice mt-lab" href="L22-lab-tapering/index.html">
+    <span class="mt-kind">L22 Lab</span>
+    <h4>Tapering</h4>
+    <p>Apply tapers on the PHASER and measure the sidelobe trade-off.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L23-beam-squint-quantization/index.html">
+    <span class="mt-kind">Lesson 23</span>
+    <h4>Beam Squint and Quantization</h4>
+    <p>Grating lobes, beam squint, and phase quantization. Objective 3.8.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L23-lab-squint-quantization/index.html">
+    <span class="mt-kind">L23 Lab</span>
+    <h4>Grating Lobes, Squint, and Quantization</h4>
+    <p>Measure the three departures no taper can fix.</p>
+  </a>
+</div>
+::::
+
+::::{frame} Lesson 24: Nulling
+
+<div class="module-toc">
   <a class="mt-card mt-lesson" href="L24-null-steering/index.html">
-    <span class="mt-kind">Lesson 27</span>
-    <h4>Null Steering Theory</h4>
+    <span class="mt-kind">Lesson 24</span>
+    <h4>Null Steering</h4>
     <p>Null-steering weights and pattern nulls. Objective 3.9.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L24-lab-null-steering/index.html">
-    <span class="mt-kind">Lesson 28</span>
-    <h4>Null Steering Lab</h4>
-    <p>Implement pattern nulls on the PHASER. Objective 3.9.</p>
+  <a class="mt-card mt-practice mt-lab" href="L24-lab-null-steering/index.html">
+    <span class="mt-kind">L24 Lab</span>
+    <h4>Null Steering</h4>
+    <p>Implement pattern nulls on the PHASER.</p>
   </a>
 </div>
 ::::

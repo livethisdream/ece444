@@ -1,4 +1,4 @@
-# L35 - CFAR Processing Theory
+# L30 - CFAR Processing
 
 :::{admonition} Slides
 :class: slides
