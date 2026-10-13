@@ -6,7 +6,7 @@
 
 Antennas, Phased Arrays, and Radar Systems
 
-## Lesson 41 — Phase 2 — Radar Integration and Demonstration
+## Lesson 29 — Range-Doppler and MTI
 
 Fall 2026 · Dr. Neil Rogers
 
@@ -24,9 +24,8 @@ Fall 2026 · Dr. Neil Rogers
 
 By the end of this lesson, you will be able to:
 
-- I can integrate FMCW radar processing with a phased-array front-end to track a moving target.
-- I can suppress a static jammer using null steering while maintaining detection of a moving target.
-- I can present system performance results and defend engineering trade-offs in a technical briefing.
+- I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.
+- I can implement moving target indication (MTI) processing to distinguish moving targets from clutter.
 
 Note:
 Shell deck — outline to be filled in.

@@ -1,4 +1,4 @@
-# L34 - Range-Doppler and MTI Lab
+# L29 Lab — Range-Doppler and MTI
 
 :::{admonition} Slides
 :class: slides

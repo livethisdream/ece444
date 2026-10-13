@@ -6,7 +6,7 @@
 
 Antennas, Phased Arrays, and Radar Systems
 
-## Lesson 40 — Phase 1 — Array Optimization
+## Lesson 19 — Direction Finding
 
 Fall 2026 · Dr. Neil Rogers
 
@@ -24,7 +24,7 @@ Fall 2026 · Dr. Neil Rogers
 
 By the end of this lesson, you will be able to:
 
-- I can integrate beam-steering and null-steering weights to optimize array performance against a specified scenario.
+- I can implement beam steering on the ADALM-PHASER and verify the steered pattern against theory.
 
 Note:
 Shell deck — outline to be filled in.

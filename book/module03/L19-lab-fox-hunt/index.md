@@ -2,20 +2,20 @@
 frame_view: true
 ---
 
-# L20 - Fox Hunt Lab
+# L19 Lab — Fox Hunt
 
 ::::{frame}
 :class: title-frame
 
 <div class="course-mark">ECE 444 · Fall 2026</div>
 
-<h1 class="frame-title">Fox Hunt Lab</h1>
+<h1 class="frame-title">Fox Hunt</h1>
 
 <div class="title-rule"></div>
 
 One HB100 is on. Find its box from bearings you take yourself.
 
-Lesson 20 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+L19 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Slides
@@ -43,12 +43,12 @@ Lesson 20 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 - Cross the bearings, name the box, and write an individual report.
 :::
 
-The L20 Lab puts Lesson 19's skill to work while it is a period old. Every HB100 but
+The L19 Lab puts Lesson 19's triangulation and the L18 Lab's bearing to work. Every HB100 but
 one is switched off, and the live one sits in one of several numbered boxes
 placed at random inside a circle taped on the floor. Every measurement is taken
 from outside the circle. Each cadet carries their own kit to two or three
 stations on the circle's edge, aims the array at the center, and reads the
-source's bearing off the beam sweep's **Est. Angle**, exactly as in Lesson 19.
+source's bearing off the beam sweep's **Est. Angle**, exactly as in the L18 Lab.
 Bearings from known stations cross at the source; a short Python script turns
 them into a fix, and the fix names the box. There is no class-combined answer:
 every cadet finds the fox from their own data and reports it on their own.
@@ -59,7 +59,7 @@ every cadet finds the fox from their own data and reports it on their own.
 
 ```{note}
 Lesson material is under construction. This shell maps to objective 3.5. The
-L20 Lab packet is coming: a pre-lab (the bearing error budget, the choice of
+L19 Lab packet is coming: a pre-lab (the bearing error budget, the choice of
 stations, and the triangulation script on a supplied bearing set), the bench
 measurements, and the report, all individual. The procedure frames and the
 packet arrive with it.
