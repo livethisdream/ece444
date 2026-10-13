@@ -80,8 +80,13 @@ That is the one shared file it may change.
   the same budget.
 - **Every cadet has their own kit.** Kits never leave the room, so bench time
   is in class and homework is everything either side of it. Lab measurements
-  are individual.
+  are individual, with one exception: the **L19 Lab fox hunt runs in teams of
+  two**, one packet per team, measured from anywhere outside the keep-out zone
+  (no stations). The **final project is individual** (Neil, 2026-10-13).
 - **Labs are named by lesson**: "L17 Lab", "L18 Lab", never a running lab number.
+  One lab serves two lessons: the **L22–L23 Lab** (tapering, then grating
+  lobes, squint, and quantization) runs after L23 and hangs off it
+  (Neil, 2026-10-13); L22 has no lab of its own.
 - **A lab is one packet, one submission, one Gradescope assignment.**
   - *Part 1, Pre-Lab*: individual, before the period.
   - *Part 2, Measurements*: your own kit, in class.
@@ -89,6 +94,10 @@ That is the one shared file it may change.
   - The packet replaces the lab's own practice set, and its lesson's when the
     pre-lab draws on it. It counts toward engagement as a genuine,
     documented attempt.
+  - **A lab's problems are the lab** (Neil, 2026-10-13: "shouldn't we just
+    call them labs?"). No new `LNNLab` practice sets. The existing ones (L20,
+    L21, L22 for the L22–L23 Lab, L24) fold into their packet's Pre-Lab and
+    Writeup in that lab's lesson pass, and then come off the site.
 - **Objectives** are the syllabus's two-level course objectives, quoted word for
   word.
 - **No receiver-course vocabulary** for cadets (mixer, LO, IF, VCO,
@@ -121,9 +130,8 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L21 | Antenna Pattern | practice | 37/20 | cut + sweeps |
 | L21 Lab | Antenna Pattern | **L21 Lab** (old-style sheet) + practice | 12/20 | convert to packet |
 | L22 | Sidelobes and Tapering | practice | 46/20 | cut + sweeps |
-| L22 Lab | Tapering | **L22 Lab** (old-style sheet) + practice | 34/20 | cut + sweeps + packet |
 | L23 | Beam Squint and Quantization | practice | 40/20 | cut + sweeps |
-| L23 Lab | Grating Lobes, Squint, and Quantization | **L23 Lab** (old-style sheet) | 16/20, uncut | cut + packet |
+| L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** (old-style sheet) + practice | 46/20, uncut | cut + sweeps + packet |
 | L24 | Null Steering | practice | 46/20 | cut + sweeps |
 | L24 Lab | Null Steering | **L24 Lab** (old-style sheet) + practice | 51/20 | cut + sweeps + packet |
 
@@ -146,8 +154,8 @@ the Phaser app, which starts the week of 2026-10-12.
 
 **Module 5: final project (L32).** One lesson, the kickoff and the two phases;
 project days are calendar, not lessons. Detect, classify, and track one moving
-target; the jammer is out (option A of `MODULE45_BUILDOUT_PLAN.md`). Needs the
-project packet and the rubric.
+target; the jammer is out (option A of `MODULE45_BUILDOUT_PLAN.md`). Individual,
+each cadet on their own kit. Needs the project packet and the rubric.
 
 ## 6. Work queue, in order
 
@@ -165,8 +173,8 @@ project packet and the rubric.
 
 ## 7. Open decisions (Neil)
 
-- **Gradescope.** One assignment per lab: the L17, L18, L19, L20, L21, L22,
-  L23, and L24 Labs. Retire the L17 and L18 practice entries and the old L19
+- **Gradescope.** One assignment per lab: the L17, L18, L19, L20, L21,
+  L22–L23, and L24 Labs. Retire the L17 and L18 practice entries and the old L19
   (Beam Steering Lab) one. Neil sets this
   up; nothing in the repo tracks it.
 - **L23's practice set covers grating lobes**, which objective 3.8's wording

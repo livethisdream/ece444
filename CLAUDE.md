@@ -29,7 +29,7 @@ edits it; a lesson thread reports its status in its PR body instead.
 | `book/extras/viz/*.html` | interactive widgets, iframed from lesson pages |
 | `book/extras/viz/img/*.svg` | lesson-page figures |
 | `book/extras/practice/*.pdf` | **committed** practice PDFs — what the site actually serves |
-| `latex/ECE444_Practice_L<NN>.tex` | practice source; `_main.tex` is the harness; a lab's own set is `L<NN>Lab` |
+| `latex/ECE444_Practice_L<NN>.tex` | practice source; `_main.tex` is the harness; a lab's old `L<NN>Lab` set folds into its packet; make no new ones |
 | `book/_templates/` | the shell: `frame.html`, `page.html`, `_sitenav.html` |
 | `book/_static/shell.*` | palette, type, the bottom bar, the index overlay — every page |
 | `book/_static/frames.*` | frame lessons only; `page.*` reading pages only |

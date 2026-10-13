@@ -105,7 +105,7 @@ and say what each term does, the rest is arithmetic.
   <a class="mt-card mt-lesson" href="L19-direction-finding/index.html">
     <span class="mt-kind">Lesson 19</span>
     <h4>Direction Finding</h4>
-    <p>Bearings from the beam sweep, crossed from known stations. Objective 3.5.</p>
+    <p>Bearings from the beam sweep, crossed from known positions. Objective 3.5.</p>
   </a>
   <a class="mt-card mt-practice mt-lab" href="L19-lab-fox-hunt/index.html">
     <span class="mt-kind">L19 Lab</span>
@@ -149,20 +149,15 @@ and say what each term does, the rest is arithmetic.
     <h4>Sidelobes and Tapering</h4>
     <p>Amplitude tapering (uniform, cosine, Chebyshev, Taylor) and the sidelobe trade-off. Objective 3.7.</p>
   </a>
-  <a class="mt-card mt-practice mt-lab" href="L22-lab-tapering/index.html">
-    <span class="mt-kind">L22 Lab</span>
-    <h4>Tapering</h4>
-    <p>Apply tapers on the PHASER and measure the sidelobe trade-off.</p>
-  </a>
   <a class="mt-card mt-lesson" href="L23-beam-squint-quantization/index.html">
     <span class="mt-kind">Lesson 23</span>
     <h4>Beam Squint and Quantization</h4>
     <p>Grating lobes, beam squint, and phase quantization. Objective 3.8.</p>
   </a>
-  <a class="mt-card mt-practice mt-lab" href="L23-lab-squint-quantization/index.html">
-    <span class="mt-kind">L23 Lab</span>
-    <h4>Grating Lobes, Squint, and Quantization</h4>
-    <p>Measure the three departures no taper can fix.</p>
+  <a class="mt-card mt-practice mt-lab" href="L22-L23-lab-tapering-squint/index.html">
+    <span class="mt-kind">L22–L23 Lab</span>
+    <h4>Tapering, Squint, and Quantization</h4>
+    <p>Measure the taper trade-off, then the three departures no taper can fix.</p>
   </a>
 </div>
 ::::

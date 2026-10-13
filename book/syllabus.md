@@ -344,9 +344,8 @@ time are on the course calendar, not in this list. Lessons link to notes on the
 - **L21** Antenna Pattern — true pattern vs. array factor
   - **L21 Lab** — Antenna Pattern: the pattern measured by moving the source
 - **L22** Sidelobes and Tapering
-  - **L22 Lab** — Tapering
 - **L23** Beam Squint and Quantization — grating lobes, squint, quantization
-  - **L23 Lab** — Grating Lobes, Squint, and Quantization
+  - **L22–L23 Lab** — Tapering, Squint, and Quantization: one lab for both lessons, after Lesson 23
 - **L24** Null Steering
   - **L24 Lab** — Null Steering
 

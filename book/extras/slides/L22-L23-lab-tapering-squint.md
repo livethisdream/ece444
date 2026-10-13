@@ -6,7 +6,7 @@
 
 Antennas, Phased Arrays, and Radar Systems
 
-## L22 Lab — Tapering
+## L22–L23 Lab — Tapering, Squint, and Quantization
 
 Fall 2026 · Dr. Neil Rogers
 

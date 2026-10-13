@@ -124,8 +124,9 @@ LABS = [
     (3, "L19-direction-finding", "L19-lab-fox-hunt", "L19 Lab — Fox Hunt"),
     (3, "L20-array-factor-beamwidth", "L20-lab-array-factor", "L20 Lab — Array Factor"),
     (3, "L21-antenna-pattern", "L21-lab-antenna-pattern", "L21 Lab — Antenna Pattern"),
-    (3, "L22-sidelobes-tapering", "L22-lab-tapering", "L22 Lab — Tapering"),
-    (3, "L23-beam-squint-quantization", "L23-lab-squint-quantization", "L23 Lab — Grating Lobes, Squint, and Quantization"),
+    # One lab for L22 and L23 (Neil, 2026-10-13): it runs after Lesson 23, so it
+    # hangs off L23. Part 1 is tapering (3.7), Part 2 the three departures (3.8).
+    (3, "L23-beam-squint-quantization", "L22-L23-lab-tapering-squint", "L22–L23 Lab — Tapering, Squint, and Quantization"),
     (3, "L24-null-steering", "L24-lab-null-steering", "L24 Lab — Null Steering"),
     (4, "L28-fmcw", "L28-lab-fmcw-range", "L28 Lab — FMCW Range"),
     (4, "L29-range-doppler-mti", "L29-lab-range-doppler-mti", "L29 Lab — Range-Doppler and MTI"),
@@ -167,7 +168,7 @@ LESSONS = [
     # belongs to its lesson ("do the lesson in the time it takes, then do the
     # lab"). Labs are child pages in LABS below; project days and open-lab
     # slack are calendar, not lessons. Modules 1-2 keep their numbers.
-    (3, 19, "L19-direction-finding", "Direction Finding", ["3.5"], "Bearings from the beam sweep, crossed from known stations: triangulation and how the crossing angle sets the error.", False),
+    (3, 19, "L19-direction-finding", "Direction Finding", ["3.5"], "Bearings from the beam sweep, crossed from known positions: triangulation and how the crossing angle sets the error.", False),
     (3, 20, "L20-array-factor-beamwidth", "Array Factor and Beamwidth", ["3.2"], "Array factor and beamwidth in depth.", False),
     (3, 21, "L21-antenna-pattern", "Antenna Pattern", ["3.6"], "True antenna pattern vs. array factor; element-pattern effects.", False),
     (3, 22, "L22-sidelobes-tapering", "Sidelobes and Tapering", ["3.7"], "Amplitude tapering (uniform, cosine, Chebyshev, Taylor) and the sidelobe trade-off.", False),

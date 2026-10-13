@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""L22 Lab (Tapering) deck figures.
+"""L22–L23 Lab (tapering, Part 1) deck figures.
 
   - L22-taper-traces  : the four preset sweeps as the GUI draws them
                         (2.8125 deg grid, -23 dBc floor, light noise)

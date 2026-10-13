@@ -270,7 +270,7 @@ for the uniform taper.
 
 ::::{frame} Cost 3: the peak of the measured trace drops
 **Cost 3: the peak of the measured trace drops.** This is a different number, and
-it is the one you will read off the screen in the L22 Lab. The GUI's beam sweep
+it is the one you will read off the screen in the L22–L23 Lab. The GUI's beam sweep
 plots received power against commanded steer angle, and it does not renormalize
 between runs. Setting six of the eight Element Gains sliders below 100% throws
 away signal voltage, and the peak of the tapered trace lands
@@ -424,7 +424,7 @@ you type:
 
 ::::{frame} What the lab measures
 The GUI ships four presets. Their gain lists and what the sweep reads for each
-are below; predict these numbers now, because the L22 Lab measures them.
+are below; predict these numbers now, because the L22–L23 Lab measures them.
 
 | Preset | $a_n$ (%) | Theory HPBW | Measured HPBW | Peak drop | First sidelobe |
 | :-- | :-- | :-- | :-- | :-- | :-- |
@@ -441,8 +441,8 @@ phase LSB, $2.8125^\circ$, so the trace is sampled on a coarse grid and the
 half-power crossings are found late. Second, the sidelobe column says "below the
 noise floor" rather than giving a number. The sweep's floor sits about 23 dB
 below the uniform peak, and every tapered preset here pushes its sidelobes under
-that. You will be able to state an upper bound on the sidelobes in the L22 Lab, not
-a value.
+that. You will be able to state an upper bound on the sidelobes in the L22–L23 Lab,
+not a value.
 ::::
 
 ::::{frame} A note on the GUI's Chebyshev preset
@@ -494,22 +494,25 @@ twice as wide as uniform.
 ::::
 
 ::::{frame} Where this is going
-In the L22 Lab you take these four presets to the bench. You will sweep each one,
-measure the beamwidth and the peak drop, and reconcile them against the
-predictions in the Part 5 table. You will also hand-enter the $-30\ \text{dB}$
-Chebyshev design from Part 4, which is not one of the presets, and confirm that a
-taper you computed yourself behaves the way the arithmetic said it would. Come
-with the Part 5 table copied into your lab notebook; the point of the exercise is
-the comparison, and it is much weaker if you write the predictions down after
-seeing the measurements.
+This lesson has no lab of its own: the bench waits until Lesson 23 is done, and
+then the [L22–L23 Lab](../L22-L23-lab-tapering-squint/index.md) takes both
+lessons to the PHASER. In its Part 1 you take these four presets to the bench.
+You will sweep each one, measure the beamwidth and the peak drop, and reconcile
+them against the predictions in the Part 5 table. You will also hand-enter the
+$-30\ \text{dB}$ Chebyshev design from Part 4, which is not one of the presets,
+and confirm that a taper you computed yourself behaves the way the arithmetic
+said it would. Come with the Part 5 table copied into your lab notebook; the
+point of the exercise is the comparison, and it is much weaker if you write the
+predictions down after seeing the measurements.
 ::::
 
 ::::{frame} Where this is going, continued
-After that, Lesson 23 turns to the other three ways a real steered array departs
-from the ideal pattern — grating lobes, beam squint across the band, and phase
-quantization — none of which a taper fixes. Lesson 24 returns to sidelobes with a
-sharper tool: instead of lowering all of them, place a deep null on the one
-direction that is hurting you. The subject comes back for good in Module 4, where
-the clutter a radar competes with arrives almost entirely through the sidelobes,
-and the taper you choose sets how much of it you have to process away.
+Lesson 23 turns to the other three ways a real steered array departs from the
+ideal pattern — grating lobes, beam squint across the band, and phase
+quantization — none of which a taper fixes, and Part 2 of the same lab measures
+them. Lesson 24 returns to sidelobes with a sharper tool: instead of lowering
+all of them, place a deep null on the one direction that is hurting you. The
+subject comes back for good in Module 4, where the clutter a radar competes with
+arrives almost entirely through the sidelobes, and the taper you choose sets how
+much of it you have to process away.
 ::::

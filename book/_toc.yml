@@ -82,12 +82,10 @@ parts:
         title: "L21 Lab — Antenna Pattern"
       - file: module03/L22-sidelobes-tapering/index
         title: "L22 — Sidelobes and Tapering"
-      - file: module03/L22-lab-tapering/index
-        title: "L22 Lab — Tapering"
       - file: module03/L23-beam-squint-quantization/index
         title: "L23 — Beam Squint and Quantization"
-      - file: module03/L23-lab-squint-quantization/index
-        title: "L23 Lab — Grating Lobes, Squint, and Quantization"
+      - file: module03/L22-L23-lab-tapering-squint/index
+        title: "L22–L23 Lab — Tapering, Squint, and Quantization"
       - file: module03/L24-null-steering/index
         title: "L24 — Null Steering"
       - file: module03/L24-lab-null-steering/index

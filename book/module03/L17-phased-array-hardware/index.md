@@ -152,7 +152,7 @@ chip sets the phase in steps of
 $$\frac{360^\circ}{2^7} = 2.8125^\circ,$$
 
 the step size of a 7-bit phase shifter. We will use the gain as a taper in
-the L22 Lab. When the GUI shows you eight element sliders, those sliders are
+the L22–L23 Lab. When the GUI shows you eight element sliders, those sliders are
 writing registers in these two chips.
 
 In the figure, a wave from $20^\circ$ off broadside reaches each element

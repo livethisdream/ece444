@@ -500,9 +500,8 @@ in every LO block.
 | 21 | L21-antenna-pattern | Antenna Pattern | 3.6 | 3.6.1 | lesson |
 | 21 Lab | L21-lab-antenna-pattern | L21 Lab — Antenna Pattern | 3.6 | 3.6.5 | lab |
 | 22 | L22-sidelobes-tapering | Sidelobes and Tapering | 3.7 | 3.7.1 | lesson |
-| 22 Lab | L22-lab-tapering | L22 Lab — Tapering | 3.7 | 3.7.6 | lab |
 | 23 | L23-beam-squint-quantization | Beam Squint and Quantization | 3.8 | 3.8.1 | lesson |
-| 23 Lab | L23-lab-squint-quantization | L23 Lab — Grating Lobes, Squint, and Quantization | 3.8 | -- | lab |
+| 22–23 Lab | L22-L23-lab-tapering-squint | L22–L23 Lab — Tapering, Squint, and Quantization | 3.7, 3.8 | 3.7.6 | lab |
 | 24 | L24-null-steering | Null Steering | 3.9 | 3.9.1 | lesson |
 | 24 Lab | L24-lab-null-steering | L24 Lab — Null Steering | 3.9 | 3.9.5 | lab |
 
@@ -511,7 +510,8 @@ The "Sub-LO start" column is historical: lesson-level sub-LOs were removed
 column). The table is the 2026-10-13 numbering (see M7, "Lessons own their
 labs"): a lesson is a topic, not a class period, and each lab is a child page
 of its lesson, `LNN-lab-<slug>`, titled "LNN Lab — <Topic>", with no lesson
-number of its own. Every lesson is theory now, so no title says "Theory" or
+number of its own. The one exception is the **L22–L23 Lab**, a single lab for
+both lessons that runs after L23 and hangs off it. Every lesson is theory now, so no title says "Theory" or
 "Lab".
 
 **L20 note:** the midterm project (Antenna Pattern Measurement) is assigned
@@ -523,7 +523,7 @@ project requirements.
 
 Objective 3.8 covers **grating lobes, beam squint, and phase quantization**
 — the three ways a real steered array departs from the ideal pattern. All
-three live in L23, and the L23 Lab measures them.
+three live in L23, and Part 2 of the L22–L23 Lab measures them.
 
 ## M2. Array notation (Module 3 course-wide; decks are source of truth)
 
@@ -676,7 +676,7 @@ with Use Bits off. Phase Control offsets add to every step, so a procedure
 that sweeps a physically moved source resets Phase Control first. Noise
 floor sits ≈ 23 dB below the uniform-taper peak. With Use Bits off, the
 "Phase Shift Bits" slider coarsens the element phases while the sweep keeps
-its step — that IS the quantization demonstration in sweep mode (the L23 Lab).
+its step — that IS the quantization demonstration in sweep mode (the L22–L23 Lab, Part 2).
 
 ## M4. Canonical Module 3 numbers (verified in simulation 2026-08-23,
 except where marked hardware only; must match everywhere they appear)
@@ -771,7 +771,7 @@ sweep actually reads and belong in lab expectation tables.
   *digital* channels — the analog sums destroy the per-element
   information, which is exactly the hybrid-architecture lesson.
 
-## M5. Lab pages (the L17, L18, L19, L20, L21, L22, L23, and L24 Labs)
+## M5. Lab pages (the L17, L18, L19, L20, L21, L22–L23, and L24 Labs)
 
 A lab is a child page of its lesson (2026-10-13): `book/moduleMM/LNN-lab-<slug>/`,
 titled "LNN Lab — <Topic>", listed in `LABS` in `scripts/scaffold_lessons.py`
@@ -1041,6 +1041,9 @@ folded in.
   individual, not team data: Part 2 of a packet is the cadet's own kit, an
   old-style lab sheet is one per cadet, and the L17 bring-up names the kit by
   a kit number NN (`phaser-NN` at `192.168.7.(10 + NN)`), not a team number.
+  One exception (Neil, 2026-10-13): the L19 Lab fox hunt runs in teams of
+  two, each partner's kit placed anywhere outside the keep-out zone, one
+  packet per team. The final project is individual.
 - **Final project: detect, classify, track; the jammer is out for now**
   (Neil, 2026-10-11, choosing option A of the Module 4-5 buildout plan:
   "we can take out the jammer for now"). The capstone is one moving target
@@ -1136,3 +1139,18 @@ folded in.
   not run through `mech_check.sh` (as the L4 Lab never was);
   `check_density.py` measures each against its lesson's budget. Dated entries
   above keep the old numbers; cross-references inside decks still carry them.
+- **One lab for L22 and L23** (Neil, 2026-10-13: "L22_L23 Lab"). The L22 Lab
+  (tapering) and the L23 Lab (grating lobes, squint, quantization) rejoin as
+  the **L22–L23 Lab — Tapering, Squint, and Quantization**,
+  `L22-L23-lab-tapering-squint`, a child page of L23 in `LABS`, run after
+  Lesson 23. Part 1 is tapering, steps (a)-(e), objective 3.7; Part 2 is the
+  three departures, steps (f)-(i), objective 3.8, and keeps the split's
+  "Lesson 23 derived" wording, since the bench now follows both lessons. L22
+  has no lab of its own. One sheet, `ECE444_Lab_L22_L23_TaperSquint`: title
+  block "LESSON 22--23 LAB", running header "L22--L23 Lab", both objective
+  banners; it replaces `ECE444_Lab_L22_Tapering` and
+  `ECE444_Lab_L23_SquintQuant`. The deck `L22-lab-tapering` is renamed
+  `L22-L23-lab-tapering-squint`, title slide retitled; it always carried both
+  parts. The lab's practice set stays `ECE444_Practice_L22Lab` (Part 1
+  material), its header now "L22–L23 Lab Practice". The page is measured
+  against L22's beat budget by prefix.

@@ -18,6 +18,9 @@ History
             is "L18"), as the L04 lab always did, so it is measured against
             its lesson's budget; it is a procedure page and is not run through
             mech_check.sh. No exception needed rekeying: L16 kept its number.
+2026-10-13  The L22 and L23 labs became one, L22-L23-lab-tapering-squint
+            (Neil). By prefix it is measured against L22's budget; neither
+            lab had an exception, so none was merged.
 """
 
 # Words a present frame may show (the LO frame is exempt).
