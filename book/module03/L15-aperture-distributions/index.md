@@ -150,7 +150,7 @@ $$\theta_\text{HP} \approx 0.886\ \frac{\lambda}{L}\ \text{rad} = 50.8^\circ\ \f
 :::
 :::{present}
 - The half-power points sit at $u = \pm 0.4429$.
-- Memorize $0.886$: Lesson 21's array beamwidth and every PHASER beamwidth prediction use it.
+- Memorize $0.886$: Lesson 20's array beamwidth and every PHASER beamwidth prediction use it.
 :::
 
 :::{depth}
@@ -164,7 +164,7 @@ $$\begin{aligned}
 The small-angle step is good to within $1\%$ for $L \ge 2\lambda$. Lesson 6's $2\lambda$ line source gave $25.6^\circ$ exactly against $25.4^\circ$ from the approximation.
 :::
 
-The $0.886$ is worth memorizing. It is the constant behind the array beamwidth formula in Lesson 21 and behind every beamwidth prediction you will make on the PHASER.
+The $0.886$ is worth memorizing. It is the constant behind the array beamwidth formula in Lesson 20 and behind every beamwidth prediction you will make on the PHASER.
 ::::
 
 ::::{frame} First Sidelobe
@@ -525,12 +525,12 @@ An array is an aperture sampled at discrete points, so the same trade appears th
 
 $$\eta_t = \frac{\left(\sum a_n\right)^2}{N\sum a_n^2},$$
 
-which is the identical ratio of coherent to available gain evaluated over $N$ element amplitudes. Lessons 24 and 25 use it on the PHASER. The Hann preset is the $\cos^2$ row above sampled at the element positions, and the Blackman preset tapers harder than any row in the table.
+which is the identical ratio of coherent to available gain evaluated over $N$ element amplitudes. Lesson 22 and its lab use it on the PHASER. The Hann preset is the $\cos^2$ row above sampled at the element positions, and the Blackman preset tapers harder than any row in the table.
 ```
 
 <img src="../../viz/img/L16-sampled-aperture.svg" alt="A continuous uniform aperture of length L above, and below it the same length occupied by eight equally spaced elements carrying the same total excitation" style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
 
 :::{depth}
-The Fourier view carries the rest of the module. Steering the beam in Lesson 18 is a linear phase ramp across the aperture, which shifts the transform. Sidelobe control in Lesson 24 is the taper table applied to element amplitudes. Grating lobes in Lesson 26 are what happens when the sampling is too coarse. Before Lesson 16, be able to state the uniform-aperture beamwidth constant, its first sidelobe level, and the definition of aperture efficiency without looking them up. The midterm pattern-measurement project is due 2 Oct, and the beamwidth and sidelobe numbers you predict for it come from this lesson.
+The Fourier view carries the rest of the module. Steering the beam in Lesson 18 is a linear phase ramp across the aperture, which shifts the transform. Sidelobe control in Lesson 22 is the taper table applied to element amplitudes. Grating lobes in Lesson 23 are what happens when the sampling is too coarse. Before Lesson 16, be able to state the uniform-aperture beamwidth constant, its first sidelobe level, and the definition of aperture efficiency without looking them up. The midterm pattern-measurement project is due 2 Oct, and the beamwidth and sidelobe numbers you predict for it come from this lesson.
 :::
 ::::

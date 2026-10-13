@@ -16,7 +16,7 @@ frame_view: true
 
 Detect it. Classify it. Track it. Defend the design.
 
-Lessons 39–41 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
+Lesson 32 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Where This Module Goes
@@ -54,23 +54,13 @@ briefing.
 </ol>
 ::::
 
-::::{frame} Lessons 39-41: The Capstone
+::::{frame} Lesson 32: The Capstone
 
 <div class="module-toc">
-  <a class="mt-card mt-lesson" href="L39-final-project-kickoff/index.html">
-    <span class="mt-kind">Lesson 39</span>
-    <h4>Final Project Kickoff</h4>
-    <p>Capstone scenario, teams, and plan: detect, classify, and track a moving target. Objective 5.1.</p>
-  </a>
-  <a class="mt-card mt-lesson" href="L40-array-optimization/index.html">
-    <span class="mt-kind">Lesson 40</span>
-    <h4>Phase 1 — Array Optimization</h4>
-    <p>Choose steering and taper weights and evaluate detection performance. Objective 5.1.</p>
-  </a>
-  <a class="mt-card mt-lesson" href="L41-radar-integration/index.html">
-    <span class="mt-kind">Lesson 41</span>
-    <h4>Phase 2 — Radar Integration and Demonstration</h4>
-    <p>Integrate FMCW detection, micro-Doppler classification, and tracking, overlay tracks on the array pattern, and brief the results. Objectives 5.2, 5.3, 5.4.</p>
+  <a class="mt-card mt-lesson" href="L32-final-project/index.html">
+    <span class="mt-kind">Lesson 32</span>
+    <h4>Final Project</h4>
+    <p>The kickoff, then Phase 1 (array optimization) and Phase 2 (radar integration and demonstration), and the briefing: detect, classify, and track a moving target. Objectives 5.1-5.4.</p>
   </a>
 </div>
 ::::

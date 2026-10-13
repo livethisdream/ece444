@@ -1,5 +1,7 @@
 # Modules 4 and 5 build-out plan: the fox hunt and the final project
 
+> **Numbering note (2026-10-13):** lessons became topics and every lab a child page of its lesson; Modules 3-5 were renumbered (L19 lab → L18 Lab, fox hunt → L19, L21-L28 → L20-L24 and their labs, Module 4 → L25-L31, Module 5 → L32). This plan keeps the numbers it was written with; see `COURSE_SPEC.md` §M7, "Lessons own their labs".
+
 > **Numbering note (2026-10-11):** lesson numbers in this plan written before 2026-10-11 are pre-renumber. The schedule was renumbered that day (fox hunt at L20, old L20 → L21, old L21 + L23 → L23, old L33-L38 → L33-L36 plus new L37-L38); see `COURSE_SPEC.md` §M7, "Short labs merge".
 
 Written 2026-10-10 from Neil's two asks that day (a fox-hunt period, and a
@@ -153,8 +155,8 @@ third bearing is the outlier check.
   the bearing lines, about 20 lines; never MATLAB): the fix, residuals, the
   box named, the error after the reveal, and the dominant budget term.
 
-Each team moves its own kit between stations, so every cadet has a fix from
-their own data. About 8 present beats; procedure frames read-only.
+Teams of two (Neil, 2026-10-13): each partner's kit at a different station,
+one packet per team. About 8 present beats; procedure frames read-only.
 Instructor-side only: every kit on **Tx Mode Disabled** and out of CW radar
 mode, decoy HB100s off, and the live one switched on behind a lid opened on
 every box.
@@ -333,10 +335,18 @@ falls on, and with it the Phase C deadline, is unknown.
    takes every bearing on their own kit, moving it between stations, and
    writes an individual report naming the box. No class-combined fix. The
    packet is pre-lab, bench, report, all individual.
+   **Superseded 2026-10-13: teams of two.** Each partner's kit sits at a
+   different station, so a team takes simultaneous bearings and turns in one
+   packet. Still no class-combined fix.
+   **No stations either** (Neil, 2026-10-13): cadets measure from wherever
+   they like outside the marked keep-out zone, recording each kit's position
+   and heading. Simplicity over specification; this replaces the tick-mark
+   stations in item 7.
 4. **Both GUI additions: yes.** Centroid angle beside Est. Angle, and a CSV
    export on the Tracking tab (Phaser repo).
 5. **Final project: option A.** The jammer comes out for now; detect,
-   classify, track.
+   classify, track. **Individual** (Neil, 2026-10-13): each cadet on their own
+   kit.
 6. **FMCW: build the radar mode in the course GUI, starting the week of
    2026-10-12.**
 7. **Layout: random.** Numbered boxes inside a marked circle; every

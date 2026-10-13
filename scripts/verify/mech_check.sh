@@ -4,6 +4,10 @@
 #   scripts/verify/mech_check.sh <NN> <slug>
 #   e.g. scripts/verify/mech_check.sh 07 simple-resonant-antennas
 #
+# Lessons only. A lab child page (LNN-lab-<slug>, 2026-10-13) is a procedure
+# page with no deck or practice gate of its own, as the L04 lab never had one;
+# check_density.py and check_frames.py still measure it.
+#
 # Everything here is scripted because it is decidable: files present, LaTeX
 # compiles, every problem has a solution, decks and widgets render. Substance
 # -- physics, derivations, difficulty -- is not checked here and never should

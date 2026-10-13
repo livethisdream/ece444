@@ -571,10 +571,10 @@ building a current distribution that realizes it.
 
 | Antenna consequence | Where we will use it |
 | :-- | :-- |
-| Longer aperture → **narrower beam** | L15, L21 |
-| Smooth taper → **lower sidelobes**, wider beam | L15, L24, L25 |
-| Linear phase → the **beam steers** | L18, L19, L26 |
-| Element spacing → **grating lobes** | L16, L26 |
+| Longer aperture → **narrower beam** | L15, L20 |
+| Smooth taper → **lower sidelobes**, wider beam | L15, L22 |
+| Linear phase → the **beam steers** | L18, L23 |
+| Element spacing → **grating lobes** | L16, L23 |
 | Element × comb → **pattern multiplication** | L16 |
 ::::
 
@@ -870,7 +870,7 @@ main beam, and no distribution gives both.
 The ranking is the thing to carry forward: uniform is narrowest and worst on
 sidelobes, cosine² is widest and best, and everything useful in between is a
 Taylor or Chebyshev compromise. This table is a preview. **Lesson 15** derives
-it for apertures and **Lesson 24** turns it into a design procedure for arrays.
+it for apertures and **Lesson 22** turns it into a design procedure for arrays.
 ::::
 
 ::::{frame} The Half-Wave Dipole

@@ -104,7 +104,7 @@ The usual amplitude specification is under $0.25\ \text{dB}$ of taper edge to
 edge. Seen from the source, the AUT subtends roughly $D/r$. If the source pattern
 rolls off across that angle, the AUT is illuminated more strongly in the
 middle than at the edges, and an unintended amplitude taper is an amplitude
-taper all the same. Lesson 24 shows exactly what one does to a pattern: it
+taper all the same. Lesson 22 shows exactly what one does to a pattern: it
 broadens the main beam and lowers the sidelobes. Measure through a tapered
 illumination and you report an antenna better behaved than the one on the
 positioner.

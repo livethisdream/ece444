@@ -644,7 +644,7 @@ radiate in phase.
 
 Marine and airborne
 surveillance radars are built this way, and the result is a ready-made
-aperture distribution — the same taper theory Module 3 develops in Lesson 24,
+aperture distribution — the same taper theory Module 3 develops in Lesson 22,
 realized in the geometry of a machined wall.
 ::::
 

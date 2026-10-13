@@ -2,8 +2,11 @@
 
 Course site for **ECE 444, Antennas, Phased Arrays, and Radar Systems** (USAFA,
 Fall 2026). Jupyter Book under `book/`, reveal.js decks served alongside it,
-published to GitHub Pages on every push to `main`. 5 modules, 41 lessons; Module
-1 is written, Modules 2–5 are mostly shells.
+published to GitHub Pages on every push to `main`. 5 modules, 32 lessons; Module
+1 is written, Modules 2–5 are mostly shells. Lessons are topics, not class
+periods (Neil, 2026-10-13): from Module 3 on, a lesson's lab is a child page of
+that lesson, `LNN-lab-<slug>`, named "LNN Lab" and carrying no lesson number of
+its own (`LABS` in `scripts/scaffold_lessons.py`).
 
 **Read `project/ROADMAP.md` before any work.** It holds the plan, the settled
 rules, and **who may touch which files**. Work runs in parallel threads: one
@@ -20,12 +23,13 @@ edits it; a lesson thread reports its status in its PR body instead.
 | Path | What |
 | :-- | :-- |
 | `book/moduleNN/<slug>/index.md` | the lesson page (MyST markdown) |
+| `book/moduleNN/LNN-lab-<slug>/index.md` | a lesson's lab, a child page listed after it in the TOC |
 | `book/extras/slides/<slug>.md` | the reveal.js deck; `.html` wrapper is generated |
 | `book/extras/slides/fig/*.svg` | deck figures, inlined at load by `deck-tools.js` |
 | `book/extras/viz/*.html` | interactive widgets, iframed from lesson pages |
 | `book/extras/viz/img/*.svg` | lesson-page figures |
 | `book/extras/practice/*.pdf` | **committed** practice PDFs — what the site actually serves |
-| `latex/ECE444_Practice_L<NN>.tex` | practice source; `_main.tex` is the harness |
+| `latex/ECE444_Practice_L<NN>.tex` | practice source; `_main.tex` is the harness; a lab's old `L<NN>Lab` set folds into its packet; make no new ones |
 | `book/_templates/` | the shell: `frame.html`, `page.html`, `_sitenav.html` |
 | `book/_static/shell.*` | palette, type, the bottom bar, the index overlay — every page |
 | `book/_static/frames.*` | frame lessons only; `page.*` reading pages only |
@@ -214,7 +218,7 @@ landing page and the five module overviews are built the same way.
   the one place to change them, with their history and the per-lesson
   exceptions (lessons cut under the old 30 stay listed there until recut);
   `check_density.py --beats N <LNN>` tries another budget without editing it.
-  **In a lab lesson** only the frames presented before bench time count:
+  **On a lab page** only the frames presented before bench time count:
   the step-by-step procedure frames are `:class: read-only`, because cadets
   follow them on their own laptops in read mode.
   `scripts/verify/check_density.py <LNN>` counts them from the source with
@@ -262,7 +266,8 @@ Every page is chrome-free: no sidebar, no header, one centerd bar at the bottom
 ## Conventions
 
 - **Per-lesson bundle** = lesson page + deck + practice set + solutions
-  (+ lab packet for lab lessons) + interactives where they earn their place.
+  (+ the lab page and its packet, where the lesson has a lab) + interactives
+  where they earn their place.
 - **Learning objectives are the course objectives only** (Neil, 2026-10-08:
   the lesson-level 3rd tier was "too granular and too wordy"; assessments and
   practice sets are keyed at the 2nd level anyway). A lesson's objectives

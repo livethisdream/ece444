@@ -3,6 +3,7 @@
 # worked solutions) and the blank student copy (work space reserved).
 #
 #   ./build_practice.sh [LESSON]        # LESSON defaults to 03
+#   ./build_practice.sh 20Lab           # a lab's own set: header "L20 Lab Practice"
 #
 # Content lives in ECE444_Practice_L<LESSON>.tex; the harness is
 # ECE444_Practice_main.tex. Runs lualatex twice per version for \numpages. lualatex, not pdflatex:
@@ -11,12 +12,19 @@ set -euo pipefail
 cd "$(dirname "$0")"
 LES="${1:-03}"
 
+# A lab's own practice set (2026-10-13: labs are child pages of their lesson)
+# is "<NN>Lab": file ECE444_Practice_L<NN>Lab.tex, header "L<NN> Lab Practice".
+LABEL=""
+if [[ "$LES" =~ ^([0-9]+)Lab$ ]]; then
+	LABEL="\\def\\practiceLabelIn{L${BASH_REMATCH[1]} Lab}"
+fi
+
 build() {                       # build <iskey:0|1> <suffix>
 	local iskey="$1" suffix="$2"
 	local job="ECE444_L${LES}_Practice_${suffix}"
 	for _ in 1 2; do
 		lualatex -interaction=nonstopmode -halt-on-error -jobname="$job" \
-			"\\def\\lessonNumIn{${LES}}\\def\\iskey{${iskey}}\\input{ECE444_Practice_main}" >/dev/null
+			"${LABEL}\\def\\lessonNumIn{${LES}}\\def\\iskey{${iskey}}\\input{ECE444_Practice_main}" >/dev/null
 	done
 	echo "wrote ${job}.pdf"
 }

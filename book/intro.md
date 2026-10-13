@@ -15,7 +15,7 @@ frame_view: true
 
 From Maxwell's equations to a working radar.
 
-Five modules, 41 lessons, and a capstone that puts hardware in your hands and a
+Five modules, 32 lessons, and a capstone that puts hardware in your hands and a
 moving target in your sights.
 
 <div class="hero-cta">
@@ -46,7 +46,7 @@ moving target in your sights.
     <span class="num">03</span>
     <h3>Arrays &amp; ADALM-PHASER Beamforming</h3>
     <p>Steer a beam, taper the sidelobes, and null a jammer — on real hardware you configure yourself.</p>
-    <footer>Lessons 15–28</footer>
+    <footer>Lessons 15–24</footer>
   </a>
 </div>
 ::::
@@ -58,13 +58,13 @@ moving target in your sights.
     <span class="num">04</span>
     <h3>Radar Fundamentals &amp; FMCW</h3>
     <p>Send it, receive it, and find your target: range, Doppler, MTI, and CFAR processing on the ADALM-PHASER.</p>
-    <footer>Lessons 29–38</footer>
+    <footer>Lessons 25–31</footer>
   </a>
   <a class="block-card" href="module05/index.html">
     <span class="num">05</span>
     <h3>Capstone Project</h3>
     <p>Detect, classify, and track a moving target — then defend your design in a technical briefing.</p>
-    <footer>Lessons 39–41</footer>
+    <footer>Lesson 32</footer>
   </a>
 </div>
 ::::

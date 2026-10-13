@@ -1,729 +1,375 @@
 % !TEX root =./ECE444_Practice_main.tex
 %
-% L23 practice set (Array Factor and Pattern Lab), in two parts that follow the
-% lab's two parts. Part A (objective 3.2; the former L21 Array Factor Lab set,
-% merged 2026-10-11): reading HPBW, FNBW and sidelobe level off a PHASER beam
-% sweep, predicting a reduced aperture before measuring it, and reconciling a
-% measured sidelobe against the array-factor value. Part B (objective 3.6; the
-% former L23 Antenna Pattern Lab set): reading a hand-rotated pattern trace:
-% dBc extraction, why a time axis cannot be calibrated to angle, scan loss and
-% sidelobe asymmetry, far-field radius, and what a chamber removes.
+% L23 practice set (Beam Squint and Quantization) -- grating lobes, the spacing
+% criterion, beam squint across a band, and B-bit phase quantization on the
+% 8-element ADALM-PHASER row.
 
-\fullwidth{\textbf{Part A -- Learning Objective 3.2: } I can derive the array factor for an arbitrary linear
-array and apply pattern multiplication.
+\fullwidth{\textbf{Learning Objective 3.8: } I can identify beam squint and quantization effects in
+a phased array and describe their impact on system performance.
 \\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
 is required (write \textbf{None} if you did not collaborate).}
 
 \begin{questions}
 
-\question \textbf{Reading a sweep.} A lab group sweeps the PHASER with all eight
-elements active and a source at boresight. Working at $10.3\ \ghz$ with element
-spacing $d = 14\ \text{mm}$, they record the trace below. The sweep step is
-$2.8125\mydeg$ and the peak reads $-4.1$ dBFS.
-
-\begin{center}
-\begin{tabular}{r|rrrrrrrrrr}
-$\theta$ (\mydeg) & $0.0$ & $2.8$ & $5.6$ & $8.4$ & $11.3$ & $14.1$ & $16.9$ & $19.7$ & $22.5$ & $25.3$ \\ \hline
-Power (dBFS) & $-4.1$ & $-4.6$ & $-6.2$ & $-9.1$ & $-14.3$ & $-24.1$ & $-22.0$ & $-17.4$ & $-16.6$ & $-18.1$ \\
-\end{tabular}
-\end{center}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Where the array factor repeats.} The ADALM-PHASER carries 8 patch
+elements on a $14\ \text{mm}$ pitch. In a thinning demonstration only every third element
+is fed, so the fed elements sit $42\ \text{mm}$ apart. Work at the array design center,
+$10.3\ \ghz$, where $\lambda = 29.1\ \text{mm}$.
 
 \begin{parts}
 
+	\part In one or two sentences, explain why a grating lobe reaches the same height as
+	the main lobe, while a sidelobe does not.
+		\begin{solution}[1.2in]
+		At a grating-lobe angle the path-length difference between neighboring elements is
+		a whole wavelength rather than zero, so every element contribution arrives in phase
+		exactly as it does at the commanded angle. The array cannot distinguish the two
+		directions, and the summation reaches its maximum value $N$ in both. A sidelobe is a
+		partial cancellation of that same summation, so it is always below the peak.
+		\end{solution}
+
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Using linear interpolation between the two samples that bracket the
-		half-power level, find the half-power beamwidth. The trace is symmetric
-		about $0\mydeg$.
+		\part With the beam at broadside, find every grating-lobe angle in visible space.
 		\begin{solution}[1.3in]
-		Half power is $3$ dB below the peak, so the level is
-		$-4.1 - 3.0 = -7.1$ dBFS. That falls between the samples at $5.6\mydeg$
-		($-6.2$) and $8.4\mydeg$ ($-9.1$).
-		\eq{ \theta_{-3} &= 5.6 + 2.8\lp\frac{7.1-6.2}{9.1-6.2}\rp = 5.6 + 2.8(0.31) = 6.5\mydeg }
-		The trace is symmetric, so the beamwidth is twice this.
-		\eq{ \theta_{\text{HP}} = 2(6.5) = 12.9\mydeg }
-		Theory gives $13.2\mydeg$, so the sweep reads about three tenths of a
-		degree narrow.
+		\eq{ \sin\theta_g &= \sin\theta_0 \pm m\frac{\lambda}{d} = 0 \pm m\frac{29.1}{42} \\
+		     &= \pm 0.693 m }
+		For $m=1$, $\theta_g = \arcsin(\pm 0.693) = \pm 43.9\mydeg$. For $m=2$ the required
+		sine is $\pm 1.386$, which is not a real angle, so the pattern has three full-height
+		beams and no more.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$12.9\mydeg$}
+		$\theta_g$ = \ansbox[1.5in]{$\pm 43.9\mydeg$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the first-null beamwidth as the sweep reports it, and compare it
-		with $\text{FNBW} = 2\arcsin\lp\lambda/Nd\rp$.
+		\part Now steer the beam to $\theta_0 = +20\mydeg$. Find every grating lobe that
+		remains in visible space.
 		\begin{solution}[1.4in]
-		The deepest sample between the main lobe and the sidelobe is $-24.1$ dBFS
-		at $14.1\mydeg$, so the sweep reports
-		\eq{ \text{FNBW}_{\text{meas}} = 2(14.1) = 28.2\mydeg }
-		With $\lambda = 29.1\ \text{mm}$ and $Nd = 8(14) = 112\ \text{mm}$,
-		\eq{ \text{FNBW} &= 2\arcsin\lp\frac{29.1}{112}\rp = 2\arcsin(0.2598) \\ &= 2(15.1\mydeg) = 30.1\mydeg }
-		The measured value is $1.9\mydeg$ narrow because the true null at
-		$15.1\mydeg$ falls between the samples at $14.1\mydeg$ and $16.9\mydeg$.
-		The sweep can only report a null at an angle it actually visited.
+		\eq{ \sin\theta_g &= \sinp{20\mydeg} \pm 0.693 = 0.342 \pm 0.693 }
+		The plus sign gives $1.035$, which is outside $[-1,1]$, so that lobe has left visible
+		space. The minus sign gives $-0.351$, so
+		\eq{ \theta_g = \arcsin(-0.351) = -20.5\mydeg }
+		Steering the main beam to $+20\mydeg$ pushed one grating lobe past the horizon and
+		pulled the other in from $-43.9\mydeg$ to $-20.5\mydeg$. Grating lobes move
+		uniformly in $\sin\theta$, not in degrees.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\text{FNBW}_{\text{meas}}$ = \ansbox[1.3in]{$28.2\mydeg$}
-		\\[10pt]
-		$\text{FNBW}_{\text{calc}}$ = \ansbox[1.3in]{$30.1\mydeg$}
+		$\theta_g$ = \ansbox[1.5in]{$-20.5\mydeg$}
+	\end{minipage}
+
+	\part A classmate proposes applying a Hann taper to remove the extra beams. Explain in
+	one or two sentences why that does not work.
+		\begin{solution}[1.2in]
+		A taper controls the sidelobe skirts that surround a single beam by smoothing the
+		aperture illumination. A grating lobe is a second main beam produced by the element
+		spacing, and it is present with any amplitude distribution, including a uniform one.
+		The taper lowers the sidelobes around both beams equally and leaves both peaks at
+		full height. The only cure is closer element spacing.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Choosing the element spacing.} An X-band linear array is being laid out.
+Use $c = 3\times10^8\ \m/\text{s}$ throughout.
+
+\begin{parts}
+
+	\part State the criterion that keeps grating lobes out of visible space over a scan
+	range $\pm\theta_0$, and explain why half-wavelength spacing is the usual default.
+		\begin{solution}[1.3in]
+		The criterion is
+		\eq{ d < \frac{\lambda}{1 + \left|\sin\theta_0\right|} }
+		Taking the scan range to its limit, $\theta_0 \rightarrow 90\mydeg$, gives
+		$d < \lambda/2$. A half-wavelength lattice therefore has no grating lobe at any
+		commandable scan angle, so it is the spacing that removes the question entirely
+		rather than tying the array to one scan sector.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The array must scan to $\pm 60\mydeg$ and operate up to $10.5\ \ghz$. Find the
+		largest usable element spacing in millimeters.
+		\begin{solution}[1.3in]
+		Use the highest frequency, where $\lambda$ is shortest and the criterion is tightest:
+		\eq{ \lambda = \frac{3\times10^8}{10.5\times10^9} = 28.6\ \text{mm} }
+		\eq{ d < \frac{28.6}{1 + \sinp{60\mydeg}} = \frac{28.6}{1.866} = 15.3\ \text{mm} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$d_{\max}$ = \ansbox[1.4in]{$15.3\ \text{mm}$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the first sidelobe level relative to the peak, in dBc.
+		\part A competing layout uses $d = 20\ \text{mm}$. At $10.5\ \ghz$, how far off
+		broadside can that array scan before a grating lobe enters visible space?
+		\begin{solution}[1.3in]
+		\eq{ \frac{\lambda}{d} = \frac{28.6}{20} = 1.429 }
+		\eq{ 1 + \left|\sin\theta_0\right| < 1.429 \quad \Rightarrow \quad
+		     \left|\sin\theta_0\right| < 0.429 }
+		\eq{ \theta_0 < \arcsin(0.429) = 25.4\mydeg }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_{0,\max}$ = \ansbox[1.4in]{$25.4\mydeg$}
+	\end{minipage}
+
+	\part The PHASER uses $d = 14\ \text{mm}$. State its scan limit from the same criterion,
+	and give one sentence on what the design gives up by choosing a spacing this tight.
+		\begin{solution}[1.3in]
+		At $10.5\ \ghz$, $\lambda/d = 28.6/14 = 2.04$, so the criterion requires
+		$1 + \left|\sin\theta_0\right| < 2.04$, which every real angle satisfies. The array
+		has no grating lobe at any scan angle in its band.
+
+		What it gives up is aperture. With the element count fixed at 8, tighter spacing
+		means a shorter array, $L = Nd = 112\ \text{mm}$ instead of $160\ \text{mm}$ at
+		$20\ \text{mm}$ pitch, so the beam is wider and the directivity lower. For a fixed
+		element count, wide scan coverage and a narrow beam pull in opposite directions.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Beam squint across a band.} An 8-element array with $d = 14\ \text{mm}$
+operates from $10.0$ to $10.5\ \ghz$. The beam-steering computer sets the element phases
+for $\theta_0 = 45\mydeg$ at the band center, $f_0 = 10.25\ \ghz$. Use
+$c = 3\times10^8\ \m/\text{s}$.
+
+\begin{parts}
+
+	\part Explain in one or two sentences why a broadside beam does not squint at all.
 		\begin{solution}[1.1in]
-		The tallest sample beyond the null is $-16.6$ dBFS at $22.5\mydeg$.
-		Relative to the peak,
-		\eq{ \text{SLL} = -16.6 - (-4.1) = -12.5\ \text{dBc} }
-		which is within a few tenths of the $-12.8$ dB the array factor gives
-		for eight uniform elements.
+		At broadside the commanded phase ramp is zero, because every element is equidistant
+		from a source on boresight. Squint arises when a fixed phase ramp is interpreted at a
+		different wavenumber, and scaling a ramp of zero still gives zero. The condition
+		$\sin\theta = (f_0/f)\sin\theta_0$ returns $\theta = 0$ for any frequency.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the beam angle at the low band edge, $10.0\ \ghz$.
+		\begin{solution}[1.3in]
+		\eq{ \sin\theta &= \frac{f_0}{f}\sinp{45\mydeg}
+		     = \frac{10.25}{10.00}(0.7071) \\
+		     &= 1.025(0.7071) = 0.7248 }
+		\eq{ \theta = \arcsin(0.7248) = 46.5\mydeg }
+		The beam has squinted $+1.5\mydeg$ toward the horizon.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		SLL = \ansbox[1.3in]{$-12.5$ dBc}
+		$\theta$ = \ansbox[1.4in]{$46.5\mydeg$}
 	\end{minipage}
 
-	\part No sample in the sweep reads below about $-24$ dBFS, which is $20$ dB
-	below the peak, yet the noise floor on this kit is $23$ dB below the peak.
-	Explain in one or two sentences why the deepest sample sits $3$ dB above the
-	floor rather than on it.
-		\begin{solution}[1.3in]
-		The receiver reports signal power plus noise power. At the sample nearest
-		the null the array factor has fallen to about $-23$ dB, which is the floor
-		level itself, so the two contributions are equal and their sum is $3$ dB
-		above either one. A measured null depth is therefore a statement about the
-		dynamic range of the measurement rather than about the array.
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the beam angle at the high band edge, $10.5\ \ghz$, and state the total
+		angular walk of the beam across the band.
+		\begin{solution}[1.4in]
+		\eq{ \sin\theta &= \frac{10.25}{10.50}(0.7071) = 0.9762(0.7071) = 0.6903 }
+		\eq{ \theta = \arcsin(0.6903) = 43.6\mydeg }
+		The total walk from one band edge to the other is
+		\eq{ 46.5\mydeg - 43.6\mydeg = 2.9\mydeg }
 		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		walk = \ansbox[1.4in]{$2.9\mydeg$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The half-power beamwidth of this array at $45\mydeg$ is
+		$\theta_\text{HP} \approx 0.886\lambda/(Nd\cosp{\theta_0})$. Express the walk from
+		part (c) as a fraction of a beamwidth, and recommend a fix if the requirement were
+		to hold the walk under 2\% of a beamwidth.
+		\begin{solution}[1.5in]
+		At $10.25\ \ghz$, $\lambda = 29.3\ \text{mm}$ and $Nd = 112\ \text{mm}$:
+		\eq{ \theta_\text{HP} &= \frac{0.886(29.3)}{112\cosp{45\mydeg}}
+		     = \frac{25.9}{79.2} = 0.327\ \text{rad} = 18.8\mydeg }
+		\eq{ \frac{2.9\mydeg}{18.8\mydeg} = 0.15 }
+		The beam walks about 15\% of a beamwidth, which costs a few tenths of a decibel at
+		the aimpoint and is usually acceptable for a narrowband link. Holding it under 2\%
+		is a factor of seven, and no phase setting achieves it because the walk is fixed by
+		the fractional bandwidth and $\tanp{\theta_0}$. The fix is to steer with true time
+		delay instead of phase, at the element or at the subarray level, so that the delay
+		compensates the path difference itself and every frequency in the band points the
+		same way.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		walk / $\theta_\text{HP}$ = \ansbox[1.2in]{$0.15$}
+	\end{minipage}
 
 \end{parts}
 
 \newpage
-
-\question \textbf{Predict before you measure.} The same array is reconfigured by
-setting some element gains to zero. The spacing $d = 14\ \text{mm}$ and the
-frequency $10.3\ \ghz$ do not change, so $\lambda = 29.1\ \text{mm}$ throughout.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{What the phase shifter can actually do.} The ADAR1000 beamformer on the
+PHASER uses a $B$-bit phase shifter. Work at the HB100 source frequency,
+$10.525\ \ghz$, where $\lambda = 28.5\ \text{mm}$ and $d/\lambda = 0.491$.
 
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Rx1, Rx2, Rx7 and Rx8 are set to zero, leaving Rx3 through Rx6
-		active --- four adjacent elements. Predict the half-power beamwidth from
-		$\theta_{\text{HP}} \approx 0.886\lambda/(Nd)$.
-		\begin{solution}[1.2in]
-		Four active elements span $Nd = 4(14) = 56\ \text{mm}$.
-		\eq{ \theta_{\text{HP}} \approx \frac{0.886(29.1)}{56} = 0.4604\ \text{rad} = 26.4\mydeg }
-		Solving the array factor exactly gives $27.4\mydeg$; the small-angle step
-		inside the $0.886$ rule costs about a degree at this beamwidth.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$\approx 26\text{-}27\mydeg$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Now only Rx3, Rx4 and Rx5 are left on --- three adjacent elements.
-		Predict the half-power beamwidth and the first-null beamwidth.
-		\begin{solution}[1.4in]
-		Three adjacent elements span $Nd = 3(14) = 42\ \text{mm}$.
-		\eq{ \theta_{\text{HP}} \approx \frac{0.886(29.1)}{42} = 0.6138\ \text{rad} = 35.2\mydeg }
-		\eq{ \text{FNBW} &= 2\arcsin\lp\frac{29.1}{42}\rp = 2\arcsin(0.6929) \\ &= 2(43.8\mydeg) = 87.7\mydeg }
-		The beam is wide enough that the $0.886$ rule is starting to under-predict;
-		expect the sweep to read closer to $37\mydeg$.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$\approx 35\mydeg$}
-		\\[10pt]
-		FNBW = \ansbox[1.3in]{$87.7\mydeg$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part By how many dB should the peak of the three-element sweep sit below
-		the peak of the full eight-element sweep, if every element gain that is
-		still on remains at 100\%?
+		\part Find the phase step (LSB) for $B = 6$ and for the ADAR1000's $B = 7$.
 		\begin{solution}[1.1in]
-		At boresight the element signals add in voltage, so the peak field is
-		proportional to the number of active elements.
-		\eq{ \Delta = 20\mylog{\frac{3}{8}} = 20\mylog{0.375} = -8.5\ \db }
+		\eq{ \text{LSB} = \frac{360\mydeg}{2^B} }
+		\eq{ B = 6: \quad \frac{360\mydeg}{64} = 5.625\mydeg }
+		\eq{ B = 7: \quad \frac{360\mydeg}{128} = 2.8125\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\Delta$ = \ansbox[1.3in]{$-8.5\ \db$}
-	\end{minipage}
-
-	\part A student proposes reaching the same $35\mydeg$ beamwidth by leaving all
-	eight elements on and turning every gain down to $37.5\%$. Explain in one or
-	two sentences why that does not work.
-		\begin{solution}[1.2in]
-		Beamwidth is set by the active aperture $Nd$, not by how much gain the
-		elements are given. Turning all eight gains down uniformly keeps the
-		aperture at $112\ \text{mm}$, so the beam stays at about $13\mydeg$ and
-		only the peak level drops. To widen the beam the aperture itself has to
-		shrink.
-		\end{solution}
-
-\end{parts}
-
-\newpage
-
-\question \textbf{Reconciling a sidelobe.} A second group measures the first
-sidelobe of the full eight-element array at $-11.5$ dBc, while the array factor
-for $N = 8$ predicts $-12.8$ dB. Their noise floor sits at $-23$ dBc and the
-sweep step is $2.8125\mydeg$.
-
-\begin{parts}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part The floor adds noise power to the sidelobe power the receiver
-		reports. Treating the two as uncorrelated, compute the level the sweep
-		should report for a true $-12.8$ dB sidelobe sitting on a $-23$ dBc
-		floor.
-		\begin{solution}[1.4in]
-		Convert both to power ratios and add.
-		\eq{ p_{\text{sig}} = 10^{-12.8/10} = 0.0525, \qquad p_{\text{n}} = 10^{-23/10} = 0.0050 }
-		\eq{ p_{\text{tot}} = 0.0525 + 0.0050 = 0.0575 }
-		\eq{ \text{SLL} = 10\mylog{0.0575} = -12.4\ \text{dBc} }
-		The floor alone accounts for about $0.4$ dB of lift.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		SLL = \ansbox[1.3in]{$-12.4$ dBc}
+		$B=6$: \ansbox[1.1in]{$5.625\mydeg$} \\[10pt]
+		$B=7$: \ansbox[1.1in]{$2.8125\mydeg$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Their peak reading is also affected. The peak is $23$ dB above the
-		floor by definition. By how much does the floor lift the peak reading, and
-		which way does that push the reported sidelobe level in dBc?
-		\begin{solution}[1.3in]
-		Normalize the peak signal power to 1.
-		\eq{ p_{\text{tot}} &= 1 + 0.0050 = 1.0050 \\ 10\mylog{1.0050} &= +0.02\ \db }
-		The peak lifts by only about $0.02$ dB, which is negligible. Because the
-		sidelobe lifts by $0.4$ dB and the peak barely moves, the ratio of the
-		two moves \emph{up}, making the reported sidelobe look higher than the
-		array factor predicts.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		peak lift = \ansbox[1.3in]{$+0.02\ \db$}
-	\end{minipage}
-
-	\part The floor explains $0.4$ dB of the $1.3$ dB discrepancy. Name two
-	other contributions that plausibly make up the rest, and say for each whether
-	it would move the reading up or down.
+		\part With $B = 7$, find the pointing step near broadside and at
+		$\theta_0 = 60\mydeg$.
 		\begin{solution}[1.5in]
-		First, run-to-run noise on the sidelobe sample itself. The sidelobe is only
-		about $10$ dB above the floor, so a single sweep reading scatters a few
-		tenths of a decibel in either direction. Second, residual amplitude and
-		phase errors across the eight elements after calibration. These break the
-		uniform distribution slightly and raise the sidelobes, so that contribution
-		moves the reading up. Grid straddle is a third contribution, but it moves
-		the reading \emph{down} and by very little here, since the sidelobe peak at
-		$21.9\mydeg$ is caught by the sample at $22.5\mydeg$ to within
-		$0.05$ dB.
+		The inter-element phase is $\Delta\phi = 360\mydeg (d/\lambda)\sin\theta_0$, so a
+		change of one LSB moves $\sin\theta_0$ by
+		\eq{ \Delta(\sin\theta_0) = \frac{\text{LSB}}{360\mydeg (d/\lambda)}
+		     = \frac{2.8125}{360(0.491)} = 0.0159 }
+		Near broadside $\sin\theta_0 \approx \theta_0$ in radians, so
+		\eq{ \Delta\theta_0 = 0.0159\ \text{rad} = 0.91\mydeg }
+		Off broadside divide by $\cos\theta_0$:
+		\eq{ \Delta\theta_0 = \frac{0.0159}{\cosp{60\mydeg}} = 0.0318\ \text{rad}
+		     = 1.82\mydeg }
+		Both are small next to the array's $13.2\mydeg$ beamwidth.
 		\end{solution}
-
-\end{parts}
-
-\newpage
-
-\question \textbf{The two-element case.} With only Rx4 and Rx5 active the array
-has two elements at $d = 14\ \text{mm}$, and at $10.3\ \ghz$ the array factor is
-$AF = \cosp{\psi/2}$ with $\psi = kd\sinp{\theta}$.
-
-\begin{parts}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		broadside: \ansbox[1.1in]{$0.91\mydeg$} \\[10pt]
+		at $60\mydeg$: \ansbox[1.1in]{$1.82\mydeg$}
+	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the half-power beamwidth exactly, without using the
-		$0.886\lambda/(Nd)$ rule.
+		\part Use the rule of thumb $\text{QSLL} \approx -6B\ \db$ for $B = 3$ and $B = 7$,
+		and state which sidelobe mechanism dominates in each case for a uniform 8-element
+		array.
 		\begin{solution}[1.4in]
-		Set the array factor to $1/\sqrt{2}$.
-		\eq{ \cosp{\psi/2} = \frac{1}{\sqrt{2}} \quad\Rightarrow\quad \frac{\psi}{2} = \frac{\pi}{4} \quad\Rightarrow\quad \psi = \frac{\pi}{2} }
-		With $\psi = kd\sinp{\theta}$ and $kd = 2\pi d/\lambda$,
-		\eq{ \sinp{\theta} = \frac{\pi/2}{2\pi d/\lambda} = \frac{\lambda}{4d} = \frac{29.1}{4(14)} = 0.5196 }
-		\eq{ \theta = 31.3\mydeg \quad\Rightarrow\quad \theta_{\text{HP}} = 62.6\mydeg }
+		\eq{ B = 3: \quad \text{QSLL} \approx -18\ \db }
+		\eq{ B = 7: \quad \text{QSLL} \approx -42\ \db }
+		A uniform 8-element array has its own first sidelobe at about $-13\ \text{dB}$. At three
+		bits the quantization lobes are already below that, and at seven bits they are far
+		below it, so in both cases the ordinary sidelobe structure of the uniform
+		illumination dominates. Quantization only takes over below about two bits, where the
+		rule predicts $-12\ \db$ and the array's own sidelobes are no longer the largest
+		feature.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$62.6\mydeg$}
+		$B=3$: \ansbox[1.1in]{$-18\ \db$} \\[10pt]
+		$B=7$: \ansbox[1.1in]{$-42\ \db$}
 	\end{minipage}
 
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Show that the $0.886\lambda/(Nd)$ rule fails here, and state the
-		percentage error it makes.
-		\begin{solution}[1.2in]
-		\eq{ \theta_{\text{HP}} \approx \frac{0.886(29.1)}{28} = 0.9208\ \text{rad} = 52.8\mydeg }
-		\eq{ \text{error} = \frac{52.8 - 62.6}{62.6} = -15.7\% }
-		The rule assumes the half-power point is at a small enough angle that
-		$\sinp{\theta} \approx \theta$. At $31\mydeg$ that is no longer true.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		error = \ansbox[1.3in]{$-15.7\%$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Evaluate $\lambda/2d$ and use it to explain why the lab table lists
-		the first-null beamwidth of this array as $180\mydeg$.
-		\begin{solution}[1.3in]
-		The first null of $\cosp{\psi/2}$ needs $\psi = \pi$, which requires
-		\eq{ \sinp{\theta} = \frac{\lambda}{2d} = \frac{29.1}{2(14)} = 1.039 }
-		No real angle has a sine greater than 1, so the null lies outside visible
-		space and no null appears anywhere in the $\pm 90\mydeg$ scan. With no
-		null to measure, the beamwidth between first nulls is quoted as the full
-		$180\mydeg$ scan range by convention.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\lambda/2d$ = \ansbox[1.3in]{$1.039$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part How far below its own peak does this two-element pattern fall at
-		$\theta = 90\mydeg$? Compare that with the $23$ dB of dynamic range the
-		sweep has above the noise floor at eight elements, and say what the trace
-		will look like near the edges of the scan.
+	\part A classmate argues that because the phase shifter resolves only $2.8125\mydeg$, a
+	pattern null on the PHASER can never be driven deeper than the $21\ \text{dB}$ a sweep
+	shows. Explain in two or three sentences why that reasoning is wrong, and state what
+	does set the measured depth.
 		\begin{solution}[1.5in]
-		At $\theta = 90\mydeg$, $\sinp{\theta} = 1$ and
-		$\psi = 2\pi(14)/29.1 = 3.023$ rad, so
-		\eq{ \vert AF \vert &= \cosp{1.511} = 0.0597 \\ 20\mylog{0.0597} &= -24.5\ \db }
-		The two-element peak is itself $12$ dB below the eight-element peak, so
-		it clears the floor by only about $11$ dB. The pattern needs
-		$24.5$ dB of range to reach endfire and the measurement has $11$ dB,
-		so the trace flattens into the noise well before $\pm 90\mydeg$ and the
-		outer part of the roll-off is not visible.
+		Rounding the null weights onto the $2.8125\mydeg$ phase grid, with gain steps of about
+		1\%, still produces a notch near $-48\ \text{dB}$ at the angle the weights were
+		designed for. Quantization displaces the notch by a fraction of a degree from its
+		commanded angle rather than filling it in, so it is a pointing error and not a depth
+		limit.
+
+		What caps the measurement is the receiver. The beam sweep's noise floor sits about
+		$23\ \db$ below the uniform-taper peak, and the null weights give up roughly
+		$2\ \db$ of main-lobe gain, leaving about $21\ \db$ of usable dynamic range. The
+		pattern goes deeper than that; the sweep cannot follow it down.
 		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		drop at $90\mydeg$ = \ansbox[1.3in]{$-24.5\ \db$}
-	\end{minipage}
 
 \end{parts}
 
 \newpage
-
-\question \textbf{Design judgment.} Your section is asked to demonstrate a
-$20\mydeg$ beam on the PHASER at $10.3\ \ghz$, using only the Element Gains
-controls.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{Reading a sweep and sizing a design.} Each part below reports something
+a student measured on the PHASER, or asks for a design decision. The array is 8 elements
+on a $14\ \text{mm}$ pitch unless stated otherwise.
 
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part How many adjacent elements must be active to give a half-power
-		beamwidth closest to $20\mydeg$? Give the aperture and the resulting
-		beamwidth.
+		\part A broadside sweep against the HB100 at $10.525\ \ghz$
+		($\lambda = 28.5\ \text{mm}$) shows three peaks of equal height, at $0\mydeg$ and
+		$\pm 42\mydeg$. What effective element spacing does that indicate, and how were the
+		elements fed?
 		\begin{solution}[1.4in]
-		Solve the beamwidth rule for the aperture.
-		\eq{ Nd = \frac{0.886\lambda}{\theta_{\text{HP}}} = \frac{0.886(29.1)}{20\mydeg(\pi/180)} = \frac{25.78}{0.3491} = 73.8\ \text{mm} }
-		\eq{ N = \frac{73.8}{14} = 5.3 }
-		Element counts are integers, so take $N = 5$: $Nd = 70\ \text{mm}$ and
-		\eq{ \theta_{\text{HP}} \approx \frac{0.886(29.1)}{70} = 0.3683\ \text{rad} = 21.1\mydeg }
-		Six elements would give $17.6\mydeg$, which is further from the target.
+		\eq{ \sin\theta_g = \frac{\lambda}{d} \quad \Rightarrow \quad
+		     d = \frac{\lambda}{\sinp{42\mydeg}} = \frac{28.5}{0.669} = 42.6\ \text{mm} }
+		That is three times the $14\ \text{mm}$ pitch, so every third element was fed and the
+		other five were switched off. Equal peak heights confirm grating lobes rather than
+		sidelobes.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$N$ = \ansbox[1.3in]{$5$ elements}
-		\\[10pt]
-		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$21.1\mydeg$}
+		$d_\text{eff}$ = \ansbox[1.4in]{$42.6\ \text{mm}$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part What does this cost in peak received level compared with the full
-		eight-element array, and how much dynamic range is left above the noise
-		floor?
+		\part The array is commanded to $+45\mydeg$ with phases set at $10.525\ \ghz$, but
+		the sweep peaks at $+47.9\mydeg$ with the source running at $10.025\ \ghz$. Name the
+		effect and confirm the measurement.
 		\begin{solution}[1.3in]
-		\eq{ \Delta = 20\mylog{\frac{5}{8}} = 20\mylog{0.625} = -4.1\ \db }
-		The floor does not move, so the range above it drops from about $23$ dB
-		to
-		\eq{ 23 - 4.1 = 18.9\ \db }
-		The first sidelobe of a five-element uniform array is near $-12$ dB,
-		which still clears the floor comfortably.
+		This is beam squint: the phase ramp was computed at one frequency and the signal
+		arrived at another.
+		\eq{ \sin\theta &= \frac{10.525}{10.025}\sinp{45\mydeg}
+		     = 1.0499(0.7071) = 0.7424 }
+		\eq{ \theta = \arcsin(0.7424) = 47.9\mydeg }
+		The measurement matches the prediction, so nothing is wrong with the array.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\Delta$ = \ansbox[1.3in]{$-4.1\ \db$}
-		\\[10pt]
-		range = \ansbox[1.3in]{$18.9\ \db$}
+		$\theta$ = \ansbox[1.4in]{$47.9\mydeg$}
 	\end{minipage}
 
-	\part A classmate suggests instead applying a Hann taper to all eight
-	elements, since that also widens the beam to about $19.5\mydeg$. State one
-	advantage and one disadvantage of the taper against switching elements off,
-	and say which you would choose for a demonstration whose purpose is to show
-	that beamwidth depends on aperture.
+	\part At $B = 2$ the sweep shows a lobe near $-55\mydeg$ about $7\ \db$ below the peak,
+	while the rule of thumb predicts $-12\ \text{dB}$. Explain the discrepancy in one or two
+	sentences.
+		\begin{solution}[1.2in]
+		The $-6B$ figure is an RMS estimate derived for a large aperture, where the staircase
+		phase error repeats over many periods and the resulting lobes average out to the
+		predicted level. An 8-element array holds only a couple of periods of that sawtooth,
+		so individual lobes scatter several decibels either side of the estimate. The rule
+		gives the expected level, not a bound on any single lobe.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A new array must scan to $\pm 50\mydeg$ over $10.0$ to $10.5\ \ghz$ and hold
+		every sidelobe below $-25\ \text{dB}$. State the maximum element spacing and the minimum
+		number of phase bits, and say which of the three defects the bandwidth requirement
+		drives.
 		\begin{solution}[1.6in]
-		The taper keeps the full $112\ \text{mm}$ aperture and pushes the
-		sidelobes below the noise floor, so the trace is cleaner and the main lobe
-		is the only thing on the plot. Its disadvantage for this purpose is that
-		it widens the beam by changing the shape of the amplitude distribution,
-		not by changing the aperture, so it demonstrates the opposite of the
-		intended point. It also costs about $4.7$ dB of peak, which is no better
-		than the five-element case. For a demonstration about aperture, switch
-		elements off: the beamwidth and the aperture then move together and the
-		claim is visible in one control.
-		\end{solution}
-
-\end{parts}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\fullwidth{\textbf{Part B -- Learning Objective 3.6: } I can distinguish between array factor
-and true antenna pattern and account for element pattern effects.}
-\question \textbf{Reading dBc off a Tracking-tab trace.} A cadet walks an HB100
-around the PHASER on a $1\ \m$ arc with the beam held at broadside and records the
-Signal vs Time trace. The three lobe peaks read $-18.4\ \text{dBFS}$ (main lobe),
-$-31.2\ \text{dBFS}$ (left first sidelobe), and $-29.9\ \text{dBFS}$ (right first
-sidelobe).
-
-\begin{parts}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Convert both sidelobe readings to dBc.
-		\begin{solution}[1.1in]
-		A dBc value is the lobe peak referred to the main-lobe peak, so subtract:
-		\eq{ L_{\text{left}} &= -31.2 - (-18.4) = -12.8\ \text{dBc} \\
-		     L_{\text{right}} &= -29.9 - (-18.4) = -11.5\ \text{dBc} }
+		Spacing, evaluated at the top of the band where $\lambda = 28.6\ \text{mm}$:
+		\eq{ d < \frac{28.6}{1 + \sinp{50\mydeg}} = \frac{28.6}{1.766} = 16.2\ \text{mm} }
+		Bits, from the quantization sidelobe rule:
+		\eq{ -6B < -25 \quad \Rightarrow \quad B > 4.2 \quad \Rightarrow \quad B = 5 }
+		The ADAR1000's seven bits clear this with margin. The bandwidth requirement drives
+		beam squint: the band is 4.9\% wide, so at $50\mydeg$ the beam walks roughly
+		$(0.024)\tanp{50\mydeg} = 0.029\ \text{rad} = 1.6\mydeg$ either side of center. That
+		is a small fraction of the beamwidth here, so phase steering is adequate; a wider
+		band or a wider scan would force true time delay.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$L_{\text{left}}$ = \ansbox[1.25in]{$-12.8$ dBc}
-		\\[12pt]
-		$L_{\text{right}}$ = \ansbox[1.25in]{$-11.5$ dBc}
+		$d_{\max}$ = \ansbox[1.2in]{$16.2\ \text{mm}$} \\[10pt]
+		$B_{\min}$ = \ansbox[1.2in]{$5$ bits}
 	\end{minipage}
-
-	\part The cadet's partner raises \textbf{Rx Gain} by $6\ \db$ and repeats the
-	walk. State what happens to the three dBFS readings and what happens to the
-	two dBc values, and explain why the two answers differ.
-		\begin{solution}[1.3in]
-		All three dBFS readings rise by about $6\ \db$ as well, because the gain change
-		multiplies every received sample by the same factor. The dBc values do not
-		change, because each one is a difference between two readings taken through
-		the same gain setting and the common term cancels in the subtraction. This
-		is why a pattern is reported as a ratio to its own peak: the result does not
-		depend on the receiver's absolute scale, which is not calibrated here anyway.
-		\end{solution}
-
-	\part A uniform 8-element array has its first sidelobes at $-13$ dBc. Comment
-	on the pair measured above: is this array uniformly illuminated, and what
-	accounts for the $1.3\ \db$ spread between the two sides?
-		\begin{solution}[1.4in]
-		Both readings straddle $-13$ dBc within about a decibel and a half, which is
-		consistent with uniform illumination measured in a room. A tapered
-		illumination would put the sidelobes at least $17\ \db$ down, and a badly
-		calibrated array would show a much larger imbalance. The $1.3\ \db$ spread
-		between left and right comes from the measurement rather than the array:
-		classroom multipath adds roughly $\pm 1\ \db$ of ripple, and the walking speed
-		and radius were not identical on the two halves of the arc. The array factor
-		of a symmetric uniform array is symmetric at broadside, so the asymmetry has
-		no home in the physics of the array itself.
-		\end{solution}
-
-\end{parts}
-
-\newpage
-
-\question \textbf{Why the time axis is not an angle axis.} The same trace runs from
-$t = 0.00\ \text{s}$, when the source was at $-90\mydeg$, to $t = 7.40\ \text{s}$,
-when it reached $+90\mydeg$. The main-lobe peak lands at $t = 3.10\ \text{s}$. The
-beam was commanded to broadside.
-
-\begin{parts}
-
-	\part Explain why the lobe \emph{amplitudes} on this trace are usable while the
-	lobe \emph{angles} are not.
-		\begin{solution}[1.5in]
-		The amplitude recorded at any instant is the pattern evaluated at whatever
-		angle the source occupied at that instant, and that value does not depend on
-		how fast the source was moving. Walking slowly through a lobe spends more
-		samples on it and draws it wider on the plot, but the height each sample
-		reaches is unchanged. The angle, in contrast, is never recorded at all. The
-		x-axis stores elapsed time, and recovering angle from time requires knowing
-		the walking speed at every instant, which nothing in the measurement captures.
-		\end{solution}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Assume a constant walking speed and convert the main-lobe time to an
-		angle. Compare it against the commanded beam angle and state the error.
-		\begin{solution}[1.2in]
-		A constant speed maps time linearly onto the $180\mydeg$ swept:
-		\eq{ \theta &= -90\mydeg + 180\mydeg \lp \frac{3.10}{7.40} \rp \\
-		            &= -90\mydeg + 75.4\mydeg = -14.6\mydeg }
-		The beam was commanded to $0\mydeg$, so the linear map is in error by
-		$14.6\mydeg$.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\theta$ = \ansbox[1.25in]{$-14.6\mydeg$}
-		\\[12pt]
-		error = \ansbox[1.25in]{$14.6\mydeg$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part The true half-power beamwidth is $13.1\mydeg$. If the hand moves as
-		much as $30\%$ faster or slower than its average while crossing the main
-		lobe, give the range of beamwidths a constant-speed conversion would report.
-		\begin{solution}[1.2in]
-		A hand moving $30\%$ fast spends $1/1.30$ of the expected time in the lobe,
-		and a constant-speed map converts that shortened interval into a narrower
-		angle. A hand moving $30\%$ slow does the opposite:
-		\eq{ \theta_{\text{fast}} &= \frac{13.1\mydeg}{1.30} = 10.1\mydeg \\
-		     \theta_{\text{slow}} &= \frac{13.1\mydeg}{0.70} = 18.7\mydeg }
-		The reported beamwidth spans nearly a factor of two on a pattern that never
-		changed.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		range = \ansbox[1.4in]{$10.1\mydeg$ to $18.7\mydeg$}
-	\end{minipage}
-
-	\part Name the piece of range hardware that removes this error and state what
-	it records that the hand walk does not.
-		\begin{solution}[1.2in]
-		A turntable with a shaft encoder. The turntable carries the antenna through a
-		commanded rotation, and the encoder tags every recorded sample with the
-		angular position it was taken at, typically to a small fraction of a degree.
-		The measurement then stores angle directly instead of inferring it from time,
-		so no assumption about rotation speed is needed and a non-uniform rotation
-		costs nothing.
-		\end{solution}
-
-\end{parts}
-
-\newpage
-
-\question \textbf{Scan loss and sidelobe asymmetry.} The projected-aperture rule
-puts the peak power gain of a steered array at $\cos\theta_0$ relative to broadside.
-
-\begin{parts}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the predicted peak drop at steer angles of $30\mydeg$,
-		$45\mydeg$, and $60\mydeg$.
-		\begin{solution}[1.3in]
-		The rule applies to power, so the drop in dB is $10\mylog{\cos\theta_0}$:
-		\eq{ 30\mydeg&: \ 10\mylog{0.866} = -0.6\ \db \\
-		     45\mydeg&: \ 10\mylog{0.707} = -1.5\ \db \\
-		     60\mydeg&: \ 10\mylog{0.500} = -3.0\ \db }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$30\mydeg$ = \ansbox[1.1in]{$-0.6\ \db$}
-		\\[10pt]
-		$45\mydeg$ = \ansbox[1.1in]{$-1.5\ \db$}
-		\\[10pt]
-		$60\mydeg$ = \ansbox[1.1in]{$-3.0\ \db$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part A broadside walk peaks at $-18.4\ \text{dBFS}$ and a $30\mydeg$ walk
-		peaks at $-19.3\ \text{dBFS}$. Give the measured scan loss, and state whether
-		one pair of walks resolves it given $\pm 0.5\ \db$ of run-to-run scatter.
-		\begin{solution}[1.3in]
-		\eq{ \Delta = -19.3 - (-18.4) = -0.9\ \db }
-		The measured $0.9\ \db$ sits $0.3\ \db$ from the predicted value of $0.6\ \db$ and well inside
-		the $\pm 0.5\ \db$ scatter of a hand walk. One pair of runs is therefore
-		consistent with the prediction but does not resolve it: the same pair of
-		numbers would also be consistent with a scan loss anywhere between about
-		$0.4$ and $1.4\ \db$ of scan loss. Averaging several walks at each steer angle narrows the
-		scatter enough to make the comparison worth reporting.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\Delta$ = \ansbox[1.25in]{$-0.9\ \db$}
-	\end{minipage}
-
-	\part The measured $30\mydeg$ trace shows first sidelobes of $-12.2$ dBc on the
-	low-angle side and $-15.2$ dBc on the high-angle side. Explain why they are
-	unequal, given that the array factor alone would make them equal.
-		\begin{solution}[1.4in]
-		The array factor of a uniformly excited array is a function of
-		$\sin\theta - \sin\theta_0$, so its sidelobes are equal in that variable and
-		the two first sidelobes of a steered beam carry the same array-factor height.
-		The radiated pattern is the array factor multiplied by the element factor,
-		and the element factor falls off monotonically away from broadside. The
-		high-angle sidelobe near $+59\mydeg$ therefore sits where the element pattern
-		is much weaker than at the low-angle sidelobe near $+8\mydeg$, and the
-		element factor pulls it down by the difference. Asymmetry in a steered
-		pattern is evidence of the element factor, not of a fault in the array.
-		\end{solution}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Real patch elements follow a power pattern nearer
-		$\cos^{1.4}\theta$ than $\cos\theta$. Recompute the $60\mydeg$ scan loss and
-		state how much worse it is than the ideal-element bound.
-		\begin{solution}[1.2in]
-		\eq{ 10\mylog{\cos^{1.4} 60\mydeg} &= 14\mylog{0.500} \\ &= -4.2\ \db }
-		That is $1.2\ \db$ worse than the $-3.0\ \db$ ideal-element bound. The
-		$\cos\theta$ rule is a best case set by the projected aperture alone; a real
-		element's own pattern adds to it, and a link budget that scans to $60\mydeg$
-		should carry the larger number.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		loss = \ansbox[1.25in]{$-4.2\ \db$}
-	\end{minipage}
-
-\end{parts}
-
-\newpage
-
-\question \textbf{How far out is far enough.} The PHASER's 8 elements are spaced
-$14\ \text{mm}$ apart, so the aperture spans $D = 98\ \text{mm}$ between the outer
-element centers. The HB100 runs at $10.525\ \ghz$.
-
-\begin{parts}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the far-field distance for this aperture and state whether the
-		$1\ \m$ arc used in lab is far enough.
-		\begin{solution}[1.3in]
-		\eq{ \lambda &= \frac{3\times 10^8}{10.525\times 10^9} = 0.0285\ \m \\
-		     r &\ge \frac{2D^2}{\lambda} = \frac{2(0.098)^2}{0.0285} = 0.67\ \m }
-		The $1\ \m$ arc is comfortably outside the $0.67\ \m$ boundary, so the pattern has settled
-		into its far-field shape everywhere along the walk.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$r$ = \ansbox[1.25in]{$0.67\ \m$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part A Ku-band panel with a $0.200\ \m$ aperture is to be measured at
-		$15.0\ \ghz$. Find its far-field distance.
-		\begin{solution}[1.2in]
-		\eq{ \lambda &= \frac{3\times 10^8}{15.0\times 10^9} = 0.0200\ \m \\
-		     r &\ge \frac{2(0.200)^2}{0.0200} = 4.00\ \m }
-		Doubling the aperture and halving the wavelength pushes the requirement out
-		by a factor of eight.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$r$ = \ansbox[1.25in]{$4.00\ \m$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part The Ku-band panel is measured on the same $1.0\ \m$ classroom arc anyway.
-		Find the phase error across the aperture edge and compare it against the
-		$22.5\mydeg$ tolerance behind the far-field criterion.
-		\begin{solution}[1.3in]
-		The extra path to the aperture edge relative to its center is
-		$\Delta \approx D^2/8r$, and the phase error is $360\mydeg\Delta/\lambda$:
-		\eq{ \Delta &= \frac{(0.200)^2}{8(1.0)} = 0.005\ \m \\
-		     \Delta\phi &= \frac{360\mydeg (0.005)}{0.0200} = 90\mydeg }
-		That is four times the $22.5\mydeg$ the criterion allows.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\Delta\phi$ = \ansbox[1.25in]{$90\mydeg$}
-	\end{minipage}
-
-	\part Describe what a $90\mydeg$ edge phase error does to the measured pattern,
-	and say which pattern feature it corrupts worst.
-		\begin{solution}[1.4in]
-		The edges of the aperture arrive out of phase with the center, so the
-		measurement no longer sees a plane wave and the aperture is effectively
-		defocused. The main lobe broadens and its peak drops, but the damage is worst
-		in the nulls and the sidelobes: the cancellation that produces a deep null
-		depends on precise phase alignment across the aperture, so the nulls fill in
-		and the sidelobes read several decibels high. A sidelobe level measured this
-		way is pessimistic, and a null depth measured this way is meaningless.
-		\end{solution}
-
-\end{parts}
-
-\newpage
-
-\question \textbf{Classroom against chamber.} The lab trace carries about
-$\pm 1\ \db$ of ripple from room reflections adding to the direct path.
-
-\begin{parts}
-
-	\part List which of the four hand-measurement artifacts from the lab an
-	anechoic chamber removes, and which one it does not remove by itself.
-		\begin{solution}[1.5in]
-		A chamber removes the reflection artifact directly: absorber on every surface
-		leaves only the direct path, so the ripple disappears. A chamber's fixtures
-		also remove the angle error and the amplitude instability, because the
-		antenna sits on an encoded turntable and the source is bolted at a fixed
-		range rather than carried. The far-field condition is not removed by the
-		absorber at all; it is a geometric requirement on the separation distance,
-		and a chamber satisfies it only if the chamber is long enough for the
-		aperture and frequency being measured. A large antenna in a short chamber has
-		the same problem as a large antenna in a classroom.
-		\end{solution}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part A single reflected path of relative amplitude $\rho$ adds to a direct
-		path of amplitude $1$. Find the $\rho$ that produces a $+1\ \db$ peak in the
-		received amplitude, and express it in dB.
-		\begin{solution}[1.3in]
-		The two paths add in phase at the ripple peak:
-		\eq{ 20\mylog{1+\rho} &= 1.0\ \db \\
-		     1+\rho &= 10^{0.05} = 1.122 \\
-		     \rho &= 0.122 \ \rightarrow \ -18.3\ \db }
-		A reflection only $18\ \db$ below the direct path is enough to move the
-		reading by a decibel, which is why room reflections matter at levels that
-		sound negligible.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\rho$ = \ansbox[1.25in]{$0.122 = -18.3\ \db$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part The main-lobe peak and the sidelobe peak each carry their own
-		$\pm 1\ \db$ of ripple. Give the worst-case uncertainty on a sidelobe level
-		reported in dBc, and give the range a true $-13$ dBc sidelobe could read.
-		\begin{solution}[1.2in]
-		A dBc value is a difference of two readings, and in the worst case the two
-		errors have opposite signs and add:
-		\eq{ \pm 1\ \db + \pm 1\ \db = \pm 2\ \db }
-		A true $-13$ dBc sidelobe can therefore be reported anywhere from $-11$ to
-		$-15$ dBc without anything being wrong with the array.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		uncertainty = \ansbox[1.1in]{$\pm 2\ \db$}
-		\\[12pt]
-		range = \ansbox[1.25in]{$-11$ to $-15$ dBc}
-	\end{minipage}
-
-	\part A customer requires written proof that this array's sidelobes are below
-	$-25$ dBc. State whether the classroom measurement can support that claim, and
-	give the two reasons that decide it.
-		\begin{solution}[1.4in]
-		It cannot. The first reason is the uncertainty computed above: a $\pm 2\ \db$
-		window on every dBc reading cannot certify a level that must sit below a
-		specific number, because a measured $-26$ dBc could be a true $-24$ dBc. The
-		second reason is dynamic range. The electrical sweep's noise floor sits about
-		$23\ \db$ below the peak, so a $-25$ dBc sidelobe is buried in the floor and
-		there is nothing to read. Both problems are what a chamber and a calibrated
-		receiver are for, and the claim needs a range measurement.
-		\end{solution}
 
 \end{parts}
 

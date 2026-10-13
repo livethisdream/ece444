@@ -112,11 +112,26 @@ MODULES = {
 }
 
 # ---- Lab manifest: labs that hang off a lesson without taking a lesson number.
+# Every lab in Modules 3-4 is one of these (2026-10-13): a lab is the bench
+# half of its lesson, named "LNN Lab", and has no period number of its own.
 # (module, anchor_lesson_slug, lab_slug, toc_title). The TOC lists each one
 # directly after its anchor lesson. Lab pages are hand-written -- the scaffolder
 # only places them in the TOC, it does not generate them.
 LABS = [
     (1, "L04-impedance-feeding-baluns", "L04-lab-matching", "L4 Lab — Matching Procedures"),
+    (3, "L17-phased-array-hardware", "L17-lab-bring-up", "L17 Lab — Phased Array Bring-Up"),
+    (3, "L18-beam-steering", "L18-lab-beam-steering", "L18 Lab — Beam Steering"),
+    (3, "L19-direction-finding", "L19-lab-fox-hunt", "L19 Lab — Fox Hunt"),
+    (3, "L20-array-factor-beamwidth", "L20-lab-array-factor", "L20 Lab — Array Factor"),
+    (3, "L21-antenna-pattern", "L21-lab-antenna-pattern", "L21 Lab — Antenna Pattern"),
+    # One lab for L22 and L23 (Neil, 2026-10-13): it runs after Lesson 23, so it
+    # hangs off L23. Part 1 is tapering (3.7), Part 2 the three departures (3.8).
+    (3, "L23-beam-squint-quantization", "L22-L23-lab-tapering-squint", "L22–L23 Lab — Tapering, Squint, and Quantization"),
+    (3, "L24-null-steering", "L24-lab-null-steering", "L24 Lab — Null Steering"),
+    (4, "L28-fmcw", "L28-lab-fmcw-range", "L28 Lab — FMCW Range"),
+    (4, "L29-range-doppler-mti", "L29-lab-range-doppler-mti", "L29 Lab — Range-Doppler and MTI"),
+    (4, "L30-cfar", "L30-lab-cfar", "L30 Lab — CFAR Processing"),
+    (4, "L31-classification-tracking", "L31-lab-spectrogram", "L31 Lab — Micro-Doppler Spectrogram"),
 ]
 
 # Extra pages that sit after a lesson in the TOC but are NOT scaffolded --
@@ -148,36 +163,27 @@ LESSONS = [
     (3, 15, "L15-aperture-distributions", "Aperture Distributions and Efficiency", ["3.1"], "Aperture distributions and aperture efficiency for a given illumination.", False),
     (3, 16, "L16-array-factor", "The Array Factor and Pattern Multiplication", ["3.2"], "Array factor for a linear array and pattern multiplication.", False),
     (3, 17, "L17-phased-array-hardware", "Introduction to Phased Array Hardware", ["3.3"], "ADALM-PHASER architecture and SDR control.", False),
-    (3, 18, "L18-beam-steering-theory", "Beam Steering Theory", ["3.4"], "Phase weights to steer a beam and the resulting array pattern.", False),
-    (3, 19, "L19-beam-steering-lab", "Beam Steering Lab", ["3.5"], "Implement beam steering on the PHASER and verify against theory.", False),
-    # 2026-10-11 (Neil): short ADI-style labs merge and the freed periods are
-    # reused; lesson numbers still equal teaching order. The fox hunt follows
-    # the steering lab while the bearing skill is fresh, the array-factor and
-    # pattern labs share one bench period, and the Module 4 lab pairs merge.
-    (3, 20, "L20-fox-hunt-lab", "Fox Hunt Lab", ["3.5"], "Find the one live HB100 among numbered boxes: bearings from stations outside a marked circle, triangulated on your own kit.", False),
-    (3, 21, "L21-array-factor-beamwidth", "Array Factor and Beamwidth Theory", ["3.2"], "Array factor and beamwidth in depth. Midterm project due.", False),
-    (3, 22, "L22-antenna-pattern-theory", "Antenna Pattern Theory", ["3.6"], "True antenna pattern vs. array factor; element-pattern effects.", False),
-    (3, 23, "L23-array-pattern-lab", "Array Factor and Pattern Lab", ["3.2", "3.6"], "Measure the array factor at 8, 4, and 2 elements, then walk the source around a fixed beam to see the element pattern.", False),
-    (3, 24, "L24-sidelobes-tapering", "Sidelobes and Tapering Theory", ["3.7"], "Amplitude tapering (uniform, cosine, Chebyshev, Taylor) and the sidelobe trade-off.", False),
-    (3, 25, "L25-tapering-lab", "Tapering Lab", ["3.7"], "Apply tapers on the PHASER and measure the sidelobe trade-off.", False),
-    (3, 26, "L26-beam-squint-quantization", "Beam Squint and Quantization", ["3.8"], "Beam squint and phase-quantization effects on array performance.", False),
-    (3, 27, "L27-null-steering-theory", "Null Steering Theory", ["3.9"], "Null-steering weights and pattern nulls.", False),
-    (3, 28, "L28-null-steering-lab", "Null Steering Lab", ["3.9"], "Implement pattern nulls on the PHASER.", False),
+    (3, 18, "L18-beam-steering", "Beam Steering", ["3.4"], "Phase weights to steer a beam and the resulting array pattern.", False),
+    # 2026-10-13 (Neil): lessons are topics, not class periods, and every lab
+    # belongs to its lesson ("do the lesson in the time it takes, then do the
+    # lab"). Labs are child pages in LABS below; project days and open-lab
+    # slack are calendar, not lessons. Modules 1-2 keep their numbers.
+    (3, 19, "L19-direction-finding", "Direction Finding", ["3.5"], "Bearings from the beam sweep, crossed from known positions: triangulation and how the crossing angle sets the error.", False),
+    (3, 20, "L20-array-factor-beamwidth", "Array Factor and Beamwidth", ["3.2"], "Array factor and beamwidth in depth.", False),
+    (3, 21, "L21-antenna-pattern", "Antenna Pattern", ["3.6"], "True antenna pattern vs. array factor; element-pattern effects.", False),
+    (3, 22, "L22-sidelobes-tapering", "Sidelobes and Tapering", ["3.7"], "Amplitude tapering (uniform, cosine, Chebyshev, Taylor) and the sidelobe trade-off.", False),
+    (3, 23, "L23-beam-squint-quantization", "Beam Squint and Quantization", ["3.8"], "Grating lobes, beam squint, and phase-quantization effects on array performance.", False),
+    (3, 24, "L24-null-steering", "Null Steering", ["3.9"], "Null-steering weights and pattern nulls.", False),
 
-    (4, 29, "L29-radar-equation", "The Radar Equation, Path Loss, and RCS", ["4.1"], "Radar equation, path loss, and radar cross section.", False),
-    (4, 30, "L30-range-resolution-doppler", "Range, Resolution, and Doppler", ["4.2"], "Range resolution, unambiguous range, Doppler shift, and radar types.", False),
-    (4, 31, "L31-radar-detection-theory", "Radar Detection Theory", ["4.3"], "Detection theory: probability of detection, false-alarm rate, and dwell time under noise.", False),
-    (4, 32, "L32-fmcw-intro", "Introduction to FMCW on Phaser", ["4.4"], "FMCW operation and configuring an FMCW waveform on the PHASER.", False),
-    (4, 33, "L33-fmcw-range-lab", "FMCW Range Lab", ["4.2", "4.5"], "Range calculations and the range waterfall from FMCW data, one capture plotted two ways.", False),
-    (4, 34, "L34-range-doppler-mti-lab", "Range-Doppler and MTI Lab", ["4.5", "4.6"], "Range-Doppler results from FMCW data, then MTI processing to separate movers from clutter.", False),
-    (4, 35, "L35-cfar-theory", "CFAR Processing Theory", ["4.7"], "Constant false-alarm-rate processing.", False),
-    (4, 36, "L36-cfar-lab", "CFAR Processing Lab", ["4.7"], "Apply CFAR to radar data and evaluate detection performance.", False),
-    (4, 37, "L37-classification-tracking", "Classification and Tracking", ["5.2", "5.3"], "Micro-Doppler classification and range and angle tracking: the theory the final project needs.", False),
-    (4, 38, "L38-radar-open-lab", "Radar Open Lab", ["5.2"], "Bench make-up for Module 4, and a rehearsal of the radar chain the final project uses.", False),
+    (4, 25, "L25-radar-equation", "The Radar Equation, Path Loss, and RCS", ["4.1"], "Radar equation, path loss, and radar cross section.", False),
+    (4, 26, "L26-range-resolution-doppler", "Range, Resolution, and Doppler", ["4.2"], "Range resolution, unambiguous range, Doppler shift, and radar types.", False),
+    (4, 27, "L27-radar-detection", "Radar Detection", ["4.3"], "Detection theory: probability of detection, false-alarm rate, and dwell time under noise.", False),
+    (4, 28, "L28-fmcw", "FMCW on the Phaser", ["4.4"], "FMCW operation and configuring an FMCW waveform on the PHASER.", False),
+    (4, 29, "L29-range-doppler-mti", "Range-Doppler and MTI", ["4.5", "4.6"], "Range-Doppler processing of a burst of chirps, and MTI to separate movers from clutter.", False),
+    (4, 30, "L30-cfar", "CFAR Processing", ["4.7"], "Constant false-alarm-rate processing.", False),
+    (4, 31, "L31-classification-tracking", "Classification and Tracking", ["5.2", "5.3"], "Micro-Doppler classification and range and angle tracking: the theory the final project needs.", False),
 
-    (5, 39, "L39-final-project-kickoff", "Final Project Kickoff", ["5.1"], "Capstone scenario, teams, and plan: detect, classify, and track a moving target.", False),
-    (5, 40, "L40-array-optimization", "Phase 1 — Array Optimization", ["5.1"], "Choose steering and taper weights and evaluate detection performance.", False),
-    (5, 41, "L41-radar-integration", "Phase 2 — Radar Integration and Demonstration", ["5.2", "5.3", "5.4"], "Integrate FMCW detection, micro-Doppler classification, and tracking, overlay tracks on the array pattern, and brief the results.", False),
+    (5, 32, "L32-final-project", "Final Project", ["5.1", "5.2", "5.3", "5.4"], "Detect, classify, and track a moving target: the kickoff, then array optimization and radar integration, and the briefing.", False),
 ]
 
 
