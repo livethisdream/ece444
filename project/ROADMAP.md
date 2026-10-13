@@ -4,7 +4,7 @@ The plan for Modules 3–5 and the rules every working thread follows. **Read
 this before starting any work.** The Integrator thread maintains this file. If
 something you need is not here, ask Neil or the Integrator rather than guessing.
 
-Last updated 2026-10-12.
+Last updated 2026-10-13.
 
 ## 1. Who does what
 
@@ -27,9 +27,9 @@ A lesson thread for lesson NN may edit **only**:
 
 | What | Path |
 | :-- | :-- |
-| the lesson page | `book/moduleMM/LNN-*/index.md` |
-| its practice set | `latex/ECE444_Practice_LNN.tex` and `book/extras/practice/ECE444_LNN_Practice_*.pdf` |
-| its lab packet (lab lessons) | `latex/ECE444_Lab_LNN_*.tex` and `book/extras/labs/ECE444_Lab_LNN_*_blank.pdf` |
+| the lesson page and its lab page | `book/moduleMM/LNN-*/index.md` (the lab is `LNN-lab-*`) |
+| its practice set, and its lab's | `latex/ECE444_Practice_LNN.tex` (`_LNNLab.tex`) and `book/extras/practice/ECE444_LNN_Practice_*.pdf` (`LNNLab`) |
+| its lab packet or sheet | `latex/ECE444_Lab_LNN_*.tex` and `book/extras/labs/ECE444_Lab_LNN_*_blank.pdf` |
 | its figures | `book/extras/viz/img/LNN-*.svg` and its generator `scripts/graphics/*lNN*` |
 | a widget used **only** by this lesson | `book/extras/viz/<widget>.html` |
 | its own budget exception | its line in `scripts/verify/budgets.py`, removed when the lesson is cut |
@@ -71,18 +71,23 @@ That is the one shared file it may change.
 
 ## 4. Rules that are settled
 
-- **One period is 20 slides** in present mode, 40 words a slide
-  (`scripts/verify/budgets.py`).
+- **Lessons are topics, not periods** (Neil, 2026-10-13: "do the lesson in the
+  time it takes, then do the lab"). A lab is a child page of its lesson,
+  `LNN-lab-<slug>`, titled "LNN Lab — <Topic>", never a lesson of its own.
+  Project days and open-lab time are calendar. Modules 1-2 keep their numbers.
+- **A lesson page is at most 20 slides** in present mode, 40 words a slide
+  (`scripts/verify/budgets.py`); a lab page's pre-bench frames count against
+  the same budget.
 - **Every cadet has their own kit.** Kits never leave the room, so bench time
   is in class and homework is everything either side of it. Lab measurements
   are individual.
-- **Labs are named by lesson**: "L17 Lab", "L19 Lab", never a running lab number.
+- **Labs are named by lesson**: "L17 Lab", "L18 Lab", never a running lab number.
 - **A lab is one packet, one submission, one Gradescope assignment.**
   - *Part 1, Pre-Lab*: individual, before the period.
   - *Part 2, Measurements*: your own kit, in class.
   - *Part 3, Writeup*: after the lab.
-  - The packet replaces the lab's own practice set, and the preceding lesson's
-    when the pre-lab draws on it. It counts toward engagement as a genuine,
+  - The packet replaces the lab's own practice set, and its lesson's when the
+    pre-lab draws on it. It counts toward engagement as a genuine,
     documented attempt.
 - **Objectives** are the syllabus's two-level course objectives, quoted word for
   word.
@@ -95,67 +100,76 @@ That is the one shared file it may change.
 
 ## 5. Schedule and status
 
-Status as of 2026-10-12. "Cut" means the lesson fits the 20-slide budget.
-"Sweeps" means the voice, why, and illustration passes.
+Status as of 2026-10-13. "Cut" means the page fits the 20-slide budget.
+"Sweeps" means the voice, why, and illustration passes. Lessons are topics,
+not periods; each lab follows its lesson on the bench and is listed under it.
 
-**Module 3: phased arrays (L15–L28)**
+**Module 3: phased arrays (L15–L24)**
 
 | Lesson | Title | Homework | Status | Next |
 | :-- | :-- | :-- | :-- | :-- |
 | L15 | Aperture Distributions and Efficiency | practice | cut 20/20, sweeps done | ready |
 | L16 | The Array Factor and Pattern Multiplication | practice | 29/20, sweeps done | cut |
-| L17 | Introduction to Phased Array Hardware | **L17 Lab** | packet built, 14/20 | golden image + hardware dry run |
-| L18 | Beam Steering Theory | none (pre-lab of L19 Lab) | 20/20, sweeps done | ready |
-| L19 | Beam Steering Lab | **L19 Lab** | packet built, 13/20 | hardware-day checks |
-| L20 | Fox Hunt Lab | **L20 Lab** | placeholder | page + packet |
-| L21 | Array Factor and Beamwidth Theory | practice | cut 18/20 | sweeps |
-| L22 | Antenna Pattern Theory | practice | 37/20 | cut + sweeps |
-| L23 | Array Factor and Pattern Lab | **L23 Lab** (old-style sheet) + practice | merged, 18/20 | convert to packet; widget label overlaps at phone width |
-| L24 | Sidelobes and Tapering Theory | practice | 46/20 | cut + sweeps |
-| L25 | Tapering Lab | **L25 Lab** (old-style sheet) + practice | 46/20 | cut + sweeps + packet |
-| L26 | Beam Squint and Quantization | practice | 40/20 | cut + sweeps |
-| L27 | Null Steering Theory | practice | 46/20 | cut + sweeps |
-| L28 | Null Steering Lab | **L28 Lab** (old-style sheet) + practice | 51/20 | cut + sweeps + packet |
+| L17 | Introduction to Phased Array Hardware | none (L17 Lab packet) | 12/20 | ready |
+| L17 Lab | Phased Array Bring-Up | **L17 Lab** packet | packet built, 4/20 | golden image + hardware dry run |
+| L18 | Beam Steering | none (pre-lab of the L18 Lab) | 20/20, sweeps done | ready |
+| L18 Lab | Beam Steering | **L18 Lab** packet | packet built, 13/20 | hardware-day checks |
+| L19 | Direction Finding | none yet | shell, 5/20 | page + problems |
+| L19 Lab | Fox Hunt | **L19 Lab** packet | placeholder | page + packet |
+| L20 | Array Factor and Beamwidth | practice | cut 18/20 | sweeps |
+| L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20 | convert to packet; widget label overlaps at phone width (from the merged lab) |
+| L21 | Antenna Pattern | practice | 37/20 | cut + sweeps |
+| L21 Lab | Antenna Pattern | **L21 Lab** (old-style sheet) + practice | 12/20 | convert to packet |
+| L22 | Sidelobes and Tapering | practice | 46/20 | cut + sweeps |
+| L22 Lab | Tapering | **L22 Lab** (old-style sheet) + practice | 34/20 | cut + sweeps + packet |
+| L23 | Beam Squint and Quantization | practice | 40/20 | cut + sweeps |
+| L23 Lab | Grating Lobes, Squint, and Quantization | **L23 Lab** (old-style sheet) | 16/20, uncut | cut + packet |
+| L24 | Null Steering | practice | 46/20 | cut + sweeps |
+| L24 Lab | Null Steering | **L24 Lab** (old-style sheet) + practice | 51/20 | cut + sweeps + packet |
 
-**Module 4: radar (L29–L38).** Placeholder pages. They need the FMCW mode in
+**Module 4: radar (L25–L31).** Placeholder pages. They need the FMCW mode in
 the Phaser app, which starts the week of 2026-10-12.
 
 | Lesson | Title |
 | :-- | :-- |
-| L29 | The Radar Equation, Path Loss, and RCS |
-| L30 | Range, Resolution, and Doppler (adds micro-Doppler) |
-| L31 | Radar Detection Theory |
-| L32 | Introduction to FMCW on Phaser |
-| L33 | FMCW Range Lab (range and waterfall) |
-| L34 | Range-Doppler and MTI Lab (adds the spectrogram) |
-| L35 | CFAR Processing Theory |
-| L36 | CFAR Processing Lab |
-| L37 | Classification and Tracking |
-| L38 | Radar Open Lab (make-up, radar-chain rehearsal) |
+| L25 | The Radar Equation, Path Loss, and RCS |
+| L26 | Range, Resolution, and Doppler (adds micro-Doppler) |
+| L27 | Radar Detection |
+| L28 | FMCW on the Phaser |
+| L28 Lab | FMCW Range (range and waterfall) |
+| L29 | Range-Doppler and MTI |
+| L29 Lab | Range-Doppler and MTI (adds the spectrogram) |
+| L30 | CFAR Processing |
+| L30 Lab | CFAR Processing |
+| L31 | Classification and Tracking |
+| L31 Lab | Micro-Doppler Spectrogram |
 
-**Module 5: final project (L39–L41).** Detect, classify, and track one moving
+**Module 5: final project (L32).** One lesson, the kickoff and the two phases;
+project days are calendar, not lessons. Detect, classify, and track one moving
 target; the jammer is out (option A of `MODULE45_BUILDOUT_PLAN.md`). Needs the
 project packet and the rubric.
 
 ## 6. Work queue, in order
 
 1. **Before L17:** the golden card image and a hardware dry run on a real kit.
-2. **L20 Lab**, the fox hunt: page and packet. Plan in
-   `MODULE45_BUILDOUT_PLAN.md` §2 and §7.
-3. **Lesson passes in teaching order:** L16, then L21–L28, each before it is
-   taught. A lab lesson's pass converts its sheet to a packet.
+2. **L19**, direction finding, and the **L19 Lab**, the fox hunt: page and
+   packet. Plan in `MODULE45_BUILDOUT_PLAN.md` §2 and §7.
+3. **Lesson passes in teaching order:** L16, then L20–L24 with their labs,
+   each before it is taught. A lesson's pass converts its lab's sheet to a
+   packet.
 4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
 5. **Module 4 and 5 build-out**, once the radar mode runs on hardware.
-6. **Integrator cleanup:** the syllabus schedule still lists Module 2 in its
-   pre-2026-09-12 order (the measurement labs as 13 and 14, not L10 and L11).
+6. **Faculty repo:** rename and split the lab keys to the 2026-10-13 numbers
+   (see the project note's Status line for that date).
 
 ## 7. Open decisions (Neil)
 
-- **Gradescope.** One assignment per lab: L17 Lab, L19 Lab, L20 Lab, L23 Lab,
-  L25 Lab, L28 Lab. Retire the L17, L18 and L19 practice entries. Neil sets this
+- **Gradescope.** One assignment per lab: the L17, L18, L19, L20, L21, L22,
+  L23, and L24 Labs. Retire the L17 and L18 practice entries and the old L19
+  (Beam Steering Lab) one. Neil sets this
   up; nothing in the repo tracks it.
-- **L26's practice set covers grating lobes**, which objective 3.8's wording
+- **L23's practice set covers grating lobes**, which objective 3.8's wording
   does not mention.
 - **Image-build homework:** does each kit get a second card, and do cadets have
   Python on their laptops?

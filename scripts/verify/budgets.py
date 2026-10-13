@@ -12,6 +12,12 @@ History
             single period"). WORDS unchanged. Lab lessons count only the frames
             presented before bench time; their step-by-step procedure frames
             are `:class: read-only`, since teams follow them in read mode.
+2026-10-13  Lessons are topics, not periods (Neil): from Module 3 on a lab is a
+            child page of its lesson, LNN-lab-<slug>. The budgets apply per
+            page. A lab page matches its lesson's key by prefix (L18-lab-...
+            is "L18"), as the L04 lab always did, so it is measured against
+            its lesson's budget; it is a procedure page and is not run through
+            mech_check.sh. No exception needed rekeying: L16 kept its number.
 """
 
 # Words a present frame may show (the LO frame is exempt).
@@ -39,7 +45,7 @@ BEAT_EXCEPTIONS = {
 
 
 def beat_budget(lesson):
-    """The beat budget for a lesson directory name such as 'L18-beam-steering-theory'."""
+    """The beat budget for a page directory name such as 'L18-beam-steering' or 'L18-lab-beam-steering'."""
     for prefix, (n, _why) in BEAT_EXCEPTIONS.items():
         if lesson.startswith(prefix + "-") or lesson == prefix:
             return n

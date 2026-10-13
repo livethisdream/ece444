@@ -88,13 +88,14 @@ Rules:
 
 - Figure naming: every figure file is prefixed by its owning lesson,
   `L<NN>-<name>.svg`, in both `book/extras/slides/fig/` and
-  `book/extras/viz/img/` — 41 lessons share these two flat directories.
+  `book/extras/viz/img/` — 32 lessons and their labs share these two flat
+  directories, and a lab's figures take its lesson's number.
 - Static figures (if any) go in `book/extras/viz/img/<name>.svg`, embedded
   with `<img src="../../viz/img/<name>.svg" ... style="max-width: 700px;
   width: 100%; display: block; margin: 1em auto;">`.
 - Cross-reference lessons as "Lesson 5" / "L5" prose (no links needed).
   Reference forward hooks (Module 3 arrays, L16 pattern multiplication,
-  L29 radar equation) where they genuinely land.
+  L25 radar equation) where they genuinely land.
 
 ## 3. Deck (reveal.js markdown)
 
@@ -351,7 +352,7 @@ stay bare ($\eta_0$, $A_e$, $G_t$, $G_r$).
 - Speed of light $3\times10^8$ m/s; "far-field criterion" $2D^2/\lambda$ with
   the $\pi/8$ (22.5°) phase-error tolerance behind it.
 - Friis (L2): $P_r = P_t G_t G_r (\lambda/4\pi R)^2$. Radar range equation is
-  deferred to L29 — preview only, never derived in Module 2.
+  deferred to L25 — preview only, never derived in Module 2.
 - CP against a linear antenna at AR = 3 dB: received power swings over a 3 dB
   range with orientation, $-1.8$ to $-4.8$ dB (never "capped at 3 dB"); worst
   case against the wrong circular sense at AR = 3 dB: $-9.6$ dB.
@@ -474,7 +475,7 @@ assumptions made, ambiguities. Never lesson content.
 
 ---
 
-# MODULE 3 ADDENDUM — Arrays and ADALM-PHASER Beamforming (L15–L28)
+# MODULE 3 ADDENDUM — Arrays and ADALM-PHASER Beamforming (L15–L24)
 
 This addendum extends the contract above to Module 3. Where the two conflict
 on module-specific details (module number, lesson list, platform), this
@@ -486,37 +487,43 @@ in every LO block.
 
 | NN | Slug | Title | Obj. | Sub-LO start | Kind |
 | :-- | :-- | :-- | :-- | :-- | :-- |
-| 15 | L15-aperture-distributions | Aperture Distributions and Efficiency | 3.1 | 3.1.1 | theory |
-| 16 | L16-array-factor | The Array Factor and Pattern Multiplication | 3.2 | 3.2.1 | theory |
-| 17 | L17-phased-array-hardware | Introduction to Phased Array Hardware | 3.3 | 3.3.1 | lab |
-| 18 | L18-beam-steering-theory | Beam Steering Theory | 3.4 | 3.4.1 | theory |
-| 19 | L19-beam-steering-lab | Beam Steering Lab | 3.5 | 3.5.1 | lab |
-| 20 | L20-fox-hunt-lab | Fox Hunt Lab | 3.5 | -- | lab |
-| 21 | L21-array-factor-beamwidth | Array Factor and Beamwidth Theory | 3.2 | 3.2.6 | theory |
-| 22 | L22-antenna-pattern-theory | Antenna Pattern Theory | 3.6 | 3.6.1 | theory |
-| 23 | L23-array-pattern-lab | Array Factor and Pattern Lab | 3.2, 3.6 | 3.2.10, 3.6.5 | lab |
-| 24 | L24-sidelobes-tapering | Sidelobes and Tapering Theory | 3.7 | 3.7.1 | theory |
-| 25 | L25-tapering-lab | Tapering Lab | 3.7 | 3.7.6 | lab |
-| 26 | L26-beam-squint-quantization | Beam Squint and Quantization | 3.8 | 3.8.1 | theory |
-| 27 | L27-null-steering-theory | Null Steering Theory | 3.9 | 3.9.1 | theory |
-| 28 | L28-null-steering-lab | Null Steering Lab | 3.9 | 3.9.5 | lab |
+| 15 | L15-aperture-distributions | Aperture Distributions and Efficiency | 3.1 | 3.1.1 | lesson |
+| 16 | L16-array-factor | The Array Factor and Pattern Multiplication | 3.2 | 3.2.1 | lesson |
+| 17 | L17-phased-array-hardware | Introduction to Phased Array Hardware | 3.3 | 3.3.1 | lesson |
+| 17 Lab | L17-lab-bring-up | L17 Lab — Phased Array Bring-Up | 3.3 | -- | lab |
+| 18 | L18-beam-steering | Beam Steering | 3.4 | 3.4.1 | lesson |
+| 18 Lab | L18-lab-beam-steering | L18 Lab — Beam Steering | 3.5 | 3.5.1 | lab |
+| 19 | L19-direction-finding | Direction Finding | 3.5 | -- | lesson (shell) |
+| 19 Lab | L19-lab-fox-hunt | L19 Lab — Fox Hunt | 3.5 | -- | lab (shell) |
+| 20 | L20-array-factor-beamwidth | Array Factor and Beamwidth | 3.2 | 3.2.6 | lesson |
+| 20 Lab | L20-lab-array-factor | L20 Lab — Array Factor | 3.2 | 3.2.10 | lab |
+| 21 | L21-antenna-pattern | Antenna Pattern | 3.6 | 3.6.1 | lesson |
+| 21 Lab | L21-lab-antenna-pattern | L21 Lab — Antenna Pattern | 3.6 | 3.6.5 | lab |
+| 22 | L22-sidelobes-tapering | Sidelobes and Tapering | 3.7 | 3.7.1 | lesson |
+| 22 Lab | L22-lab-tapering | L22 Lab — Tapering | 3.7 | 3.7.6 | lab |
+| 23 | L23-beam-squint-quantization | Beam Squint and Quantization | 3.8 | 3.8.1 | lesson |
+| 23 Lab | L23-lab-squint-quantization | L23 Lab — Grating Lobes, Squint, and Quantization | 3.8 | -- | lab |
+| 24 | L24-null-steering | Null Steering | 3.9 | 3.9.1 | lesson |
+| 24 Lab | L24-lab-null-steering | L24 Lab — Null Steering | 3.9 | 3.9.5 | lab |
 
 The "Sub-LO start" column is historical: lesson-level sub-LOs were removed
 2026-10-08, and each lesson now quotes only its course objective (the Obj.
-column). The table is the 2026-10-11 numbering (see M7, "Short labs
-merge"): the fox hunt is new at L20, the old L20 theory lesson is L21, and the
-old L21 Array Factor Lab and L23 Antenna Pattern Lab are Parts A and B of L23.
+column). The table is the 2026-10-13 numbering (see M7, "Lessons own their
+labs"): a lesson is a topic, not a class period, and each lab is a child page
+of its lesson, `LNN-lab-<slug>`, titled "LNN Lab — <Topic>", with no lesson
+number of its own. Every lesson is theory now, so no title says "Theory" or
+"Lab".
 
-**L21 note:** the midterm project (Antenna Pattern Measurement) is assigned
+**L20 note:** the midterm project (Antenna Pattern Measurement) is assigned
 at L9 and due 2 Oct, 2359. **The due date lives in the syllabus and the
-project packet, and nowhere else** -- L21 opens by connecting the project's
+project packet, and nowhere else** -- L20 opens by connecting the project's
 measured quantities to the theory in one short paragraph/slide bullet, and
 states neither a deadline nor a turn-in procedure. Do not restate the
 project requirements.
 
 Objective 3.8 covers **grating lobes, beam squint, and phase quantization**
 — the three ways a real steered array departs from the ideal pattern. All
-three live in L26.
+three live in L23, and the L23 Lab measures them.
 
 ## M2. Array notation (Module 3 course-wide; decks are source of truth)
 
@@ -542,7 +549,7 @@ other lesson revisits it.
 
 Derivations are **shown, not asserted**: the array factor (phasor
 superposition → closed form, L16), the steering phase (path-length
-argument, L18), and the taper trade (L24) are each derived step by step,
+argument, L18), and the taper trade (L22) are each derived step by step,
 one step per slide on the deck, with speaker notes that support deriving
 it live at the board.
 
@@ -642,7 +649,7 @@ GUI inventory (use these exact names in procedures):
   note. Sim limits: the target is fixed at boresight (procedures that
   rotate the HB100 by hand have no sim equivalent — say so; Beam Steering
   Apply $\theta_0$ emulates a source at $+\theta_0$ in the sweep, which is
-  how L19's commanded run works in the sim); there is no element pattern,
+  how the L18 Lab's commanded run works in the sim); there is no element pattern,
   so scan loss reads 0.0 dB; Rx Gain is stored but not modeled; the tone is fixed at a 1 MHz baseband offset
   (shown at −1 MHz on the negated axis) regardless of Signal Freq; CW radar
   is not simulated; calibration runs are scripted.
@@ -669,7 +676,7 @@ with Use Bits off. Phase Control offsets add to every step, so a procedure
 that sweeps a physically moved source resets Phase Control first. Noise
 floor sits ≈ 23 dB below the uniform-taper peak. With Use Bits off, the
 "Phase Shift Bits" slider coarsens the element phases while the sweep keeps
-its step — that IS the quantization demonstration in sweep mode (L25).
+its step — that IS the quantization demonstration in sweep mode (the L23 Lab).
 
 ## M4. Canonical Module 3 numbers (verified in simulation 2026-08-23,
 except where marked hardware only; must match everywhere they appear)
@@ -727,14 +734,14 @@ sweep actually reads and belong in lab expectation tables.
   down) — lab tables should say "below the noise floor", not quote a
   number. **Peak drop on the plot** is the coherent receive-voltage loss
   $20\log_{10}(\sum a_n / N)$ — it is NOT the directivity loss, which is
-  the taper efficiency $\eta_t$ (−1.2 dB for the Hann preset). L24/L25 must
+  the taper efficiency $\eta_t$ (−1.2 dB for the Hann preset). L22 and its lab must
   keep these two numbers distinct or students will misread the plot.
 - **Scan loss (canonical rule; hardware only, since the simulator has no
   element pattern and reads 0.0 dB)**: peak *power* gain of the steered array
   falls as $\cos\theta_0$ — the projected-aperture rule: $-0.6$ dB at
   30°, $-1.5$ dB at 45°, $-3.0$ dB at 60° ($-2.4$ dB at 55°). This is the
   ideal-element bound; real patch elements are steeper (power
-  $\cos^{1.3\text{-}1.5}\theta$), which L22 states as the caveat. Do not
+  $\cos^{1.3\text{-}1.5}\theta$), which L21 states as the caveat. Do not
   use a $\cos\theta$ *field* pattern ($-6$ dB at 60°) as the canonical
   element model.
 - **Continuous apertures (L15)** reuse the L06 table verbatim: uniform
@@ -764,10 +771,15 @@ sweep actually reads and belong in lab expectation tables.
   *digital* channels — the analog sums destroy the per-element
   information, which is exactly the hybrid-architecture lesson.
 
-## M5. Lab lesson pages (L17, L19, L20, L23, L25, L28)
+## M5. Lab pages (the L17, L18, L19, L20, L21, L22, L23, and L24 Labs)
 
-Same skeleton as theory pages (Parts → Summary → Practice → Where this is
-going), with the Parts covering, in order: background/theory recap (1–2
+A lab is a child page of its lesson (2026-10-13): `book/moduleMM/LNN-lab-<slug>/`,
+titled "LNN Lab — <Topic>", listed in `LABS` in `scripts/scaffold_lessons.py`
+so the TOC places it right after its lesson, and taught right after it. It has
+no lesson number, no deck requirement, and is not run through `mech_check.sh`
+(as the L4 Lab never was); `check_density.py` measures it against its lesson's
+beat budget. The lesson page links its lab. Same skeleton as theory pages
+(Parts → Summary → Practice → Where this is going), with the Parts covering, in order: background/theory recap (1–2
 Parts), equipment and setup (one Part: kit, HB100, GUI bring-up, the lab
 preset to load), procedure (one Part: numbered steps, each naming the
 exact control and the expected observation with numbers from §M4), and
@@ -776,7 +788,7 @@ with "calculated" columns filled from theory, short written answers).
 Target 14–20 deck slides for labs. Every lab teaches against the
 expectation table: predict from theory first, measure second, reconcile
 third. Lab practice sets emphasize reading real sweeps: give students
-plausible measured numbers and ask what they indicate. L17's lab has two
+plausible measured numbers and ask what they indicate. The L17 Lab has two
 parts: Part A brings the kit up from a freshly flashed card (flash, name,
 boot, connect by cable, join the Wi-Fi, run `install.sh`, then Find HB100
 and Calibrate), and Part B makes the first measurements on that kit.
@@ -794,14 +806,15 @@ four analysis problems). **The packet is one submission** (Neil, 2026-10-11:
 "I don't want to be grading extra assignments"), turned in complete before the
 next lesson, so one Gradescope assignment per lab. A short grading statement
 on the first page says the packet counts toward engagement and is graded as a
-genuine, documented attempt; timing is relative ("before Lesson 20"), never a
+genuine, documented attempt; timing is relative ("before Lesson 19"), never a
 date. The packet replaces the lab's practice
-problems, and the preceding lesson's too when the pre-lab draws on them (L19's
-does, from L18; L17's does not, so L16 keeps its practice set). The page
+problems, and its lesson's too when the pre-lab draws on them (the L18 Lab's
+does, from L18; the L17 Lab's does not, so L16 keeps its practice set). The lab page
 replaces its Practice frame with a read-only **Lab Packet** frame that links
 the blank PDF and names the three parts; where the pre-lab draws on the
-preceding theory lesson, that lesson's Practice frame points at Part 1 as its
-homework. The superseded practice sources and PDFs stay in
+lesson, the lesson's Practice frame points at Part 1 as its homework. Until a
+lab is converted to a packet, its own practice set stays on the lab page,
+named `ECE444_Practice_L<NN>Lab.tex` (header "L<NN> Lab Practice"). The superseded practice sources and PDFs stay in
 the repo, unlinked.
 
 Deck title-slide image path and all other Module 2 rules apply unchanged.
@@ -1081,3 +1094,45 @@ folded in.
   both from `\labLesson` in the source; the `\labNum` / `\labNumIn` sequence
   is gone. Dated entries above keep the old numbers: Lab 4 = L17, Lab 5 =
   L19, Lab 6 = L20, Lab 7 = L23, Lab 8 = L25, Lab 9 = L28. Decks unchanged.
+- **Lessons own their labs; lessons are topics, not periods** (Neil,
+  2026-10-13: "Each Lesson has a lab, but our lessons don't tie to individual
+  class periods. So, we don't need 'lessons' for the labs ... The rhythm is,
+  do the lesson in the time it takes, then do the lab."). Labs stop being
+  lessons and become child pages of their lesson, `LNN-lab-<slug>`, titled
+  "LNN Lab — <Topic>" and listed in `LABS`; project days and open-lab slack
+  are calendar, not lessons; every lesson is theory, so "Theory" and "Lab" leave
+  the lesson titles. Modules 1 and 2 keep their numbers. The course is 32
+  lessons (6 + 8 + 10 + 7 + 1). Old to new, Module 3: L15-L17 unchanged, with
+  L17's bring-up and kit-check procedure moved to the **L17 Lab** (packet
+  `ECE444_Lab_L17_Hardware` unchanged); L18 Beam Steering Theory → **L18 Beam
+  Steering**, and L19 Beam Steering Lab → **L18 Lab** (packet
+  `ECE444_Lab_L18_Steering`); L20 Fox Hunt Lab → **L19 Direction Finding**
+  (new shell: bearings, triangulation, crossing error) with the fox hunt as the
+  **L19 Lab**; L21 → **L20 Array Factor and Beamwidth**, with Part A of the
+  merged L23 lab as the **L20 Lab** (sheet `ECE444_Lab_L20_ArrayFactor`,
+  objective 3.2); L22 → **L21 Antenna Pattern**, with Part B as the **L21 Lab**
+  (sheet `ECE444_Lab_L21_Pattern`, 3.6); L24 → **L22 Sidelobes and Tapering**,
+  with Part 1 of the old L25 Tapering Lab as the **L22 Lab** (sheet
+  `ECE444_Lab_L22_Tapering`, 3.7); L26 → **L23 Beam Squint and Quantization**,
+  with Part 2 of the old tapering lab as the **L23 Lab** (grating lobes,
+  squint, quantization; sheet `ECE444_Lab_L23_SquintQuant`, 3.8), which fixes
+  the order: the bench work now follows the lesson that derives it; L27 →
+  **L24 Null Steering**, L28 → **L24 Lab** (sheet
+  `ECE444_Lab_L24_NullSteering`). Module 4: L29-L31 → **L25-L27** (L31 is now
+  "Radar Detection"); L32 → **L28 FMCW on the Phaser**, L33 → **L28 Lab**
+  (FMCW Range); L34 → **L29 Range-Doppler and MTI** (new lesson shell, 4.5 and
+  4.6) with the old shell as the **L29 Lab**; L35 → **L30 CFAR Processing**,
+  L36 → **L30 Lab**; L37 → **L31 Classification and Tracking** (5.2, 5.3)
+  with a new **L31 Lab — Micro-Doppler Spectrogram** shell (5.3); L38 Radar
+  Open Lab removed. Module 5: L39-L41 → **L32 Final Project** (5.1-5.4), the
+  kickoff and both phases as sections; the L40 and L41 shells are removed.
+  A lab's own practice set (until the lab becomes a packet) is
+  `ECE444_Practice_L<NN>Lab.tex`: L18Lab (old L19), L20Lab and L21Lab (the two
+  banners of the old L23 set), L22Lab (old L25), L24Lab (old L28). Figures
+  take the new number (old L19-phase-ramp became L18-phase-control, since L18
+  already had a phase-ramp). Decks were renamed and retitled only; the merged
+  L23 deck split back at its seam into the two pre-merge decks, and the L32
+  deck is the three Module 5 shell decks under one title slide. Lab pages are
+  not run through `mech_check.sh` (as the L4 Lab never was);
+  `check_density.py` measures each against its lesson's budget. Dated entries
+  above keep the old numbers; cross-references inside decks still carry them.
