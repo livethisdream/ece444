@@ -57,7 +57,7 @@ briefing.
 ::::{frame} Lessons 39-41: The Capstone
 
 <div class="module-toc">
-  <a class="mt-card mt-lesson" href="L39-final-project-kickoff/index.html">
+  <a class="mt-card mt-lesson" href="L32-final-project/index.html">
     <span class="mt-kind">Lesson 39</span>
     <h4>Final Project Kickoff</h4>
     <p>Capstone scenario, teams, and plan: detect, classify, and track a moving target. Objective 5.1.</p>

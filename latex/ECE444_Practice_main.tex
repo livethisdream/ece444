@@ -20,6 +20,15 @@
 	\def\lessonNum{03}
 \fi
 
+% Header label: "L20" for a lesson's set; "L20 Lab" for a lab's own set, whose
+% lessonNum is "20Lab" (file ECE444_Practice_L20Lab.tex). build_practice.sh
+% passes \practiceLabelIn for those.
+\ifdefined\practiceLabelIn
+	\def\practiceLabel{\practiceLabelIn}
+\else
+	\def\practiceLabel{L\lessonNum}
+\fi
+
 % Solutions (key) or blank student copy?  Default builds SOLUTIONS.
 \ifdefined\iskey
 	\ifnum\iskey=1 \keytrue \else \keyfalse \fi
@@ -61,11 +70,11 @@
 \ifkey \printanswers \else \noprintanswers \fi
 
 \ifkey
-	\firstpageheader{\thisclass\hspace{1pt} -- \thisterm}{L\lessonNum\hspace{1pt} Practice \hspace{1pt} \color{red}{ SOLUTIONS}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
-	\runningheader{\thisclass\hspace{1pt} -- \thisterm}{L\lessonNum\hspace{1pt} Practice \hspace{1pt} \color{red}{ SOLUTIONS}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpageheader{\thisclass\hspace{1pt} -- \thisterm}{\practiceLabel\hspace{1pt} Practice \hspace{1pt} \color{red}{ SOLUTIONS}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm}{\practiceLabel\hspace{1pt} Practice \hspace{1pt} \color{red}{ SOLUTIONS}}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
 \else
-	\firstpageheader{\thisclass\hspace{1pt} -- \thisterm}{L\lessonNum\hspace{1pt} Practice}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
-	\runningheader{\thisclass\hspace{1pt} -- \thisterm}{L\lessonNum\hspace{1pt} Practice}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\firstpageheader{\thisclass\hspace{1pt} -- \thisterm}{\practiceLabel\hspace{1pt} Practice}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+	\runningheader{\thisclass\hspace{1pt} -- \thisterm}{\practiceLabel\hspace{1pt} Practice}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
 \fi
 \firstpagefooter{}{}{}
 \runningfooter{}{}{}

@@ -87,22 +87,22 @@ and say what each term does, the rest is arithmetic.
 ::::{frame} Lessons 18-21: Steering the Beam, and Using It
 
 <div class="module-toc">
-  <a class="mt-card mt-lesson" href="L18-beam-steering-theory/index.html">
+  <a class="mt-card mt-lesson" href="L18-beam-steering/index.html">
     <span class="mt-kind">Lesson 18</span>
     <h4>Beam Steering Theory</h4>
     <p>Phase weights to steer a beam and the resulting array pattern. Objective 3.4.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L19-beam-steering-lab/index.html">
+  <a class="mt-card mt-lesson" href="L18-lab-beam-steering/index.html">
     <span class="mt-kind">Lesson 19</span>
     <h4>Beam Steering Lab</h4>
     <p>Implement beam steering on the PHASER and verify against theory. Objective 3.5.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L20-fox-hunt-lab/index.html">
+  <a class="mt-card mt-lesson" href="L19-lab-fox-hunt/index.html">
     <span class="mt-kind">Lesson 20</span>
     <h4>Fox Hunt Lab</h4>
     <p>Find the one live HB100 among numbered boxes: bearings from stations outside a marked circle, triangulated on your own kit. Objective 3.5.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L21-array-factor-beamwidth/index.html">
+  <a class="mt-card mt-lesson" href="L20-array-factor-beamwidth/index.html">
     <span class="mt-kind">Lesson 21</span>
     <h4>Array Factor and Beamwidth Theory</h4>
     <p>Array factor and beamwidth in depth. Midterm project due. Objective 3.2.</p>
@@ -113,22 +113,22 @@ and say what each term does, the rest is arithmetic.
 ::::{frame} Lessons 22-25: The Real Pattern, and Shaping It
 
 <div class="module-toc">
-  <a class="mt-card mt-lesson" href="L22-antenna-pattern-theory/index.html">
+  <a class="mt-card mt-lesson" href="L21-antenna-pattern/index.html">
     <span class="mt-kind">Lesson 22</span>
     <h4>Antenna Pattern Theory</h4>
     <p>True antenna pattern vs. array factor; element-pattern effects. Objective 3.6.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L23-array-pattern-lab/index.html">
+  <a class="mt-card mt-lesson" href="L20-lab-array-factor/index.html">
     <span class="mt-kind">Lesson 23</span>
     <h4>Array Factor and Pattern Lab</h4>
     <p>Measure the array factor at 8, 4, and 2 elements, then walk the source around a fixed beam to see the element pattern. Objectives 3.2, 3.6.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L24-sidelobes-tapering/index.html">
+  <a class="mt-card mt-lesson" href="L22-sidelobes-tapering/index.html">
     <span class="mt-kind">Lesson 24</span>
     <h4>Sidelobes and Tapering Theory</h4>
     <p>Amplitude tapering (uniform, cosine, Chebyshev, Taylor) and the sidelobe trade-off. Objective 3.7.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L25-tapering-lab/index.html">
+  <a class="mt-card mt-lesson" href="L22-lab-tapering/index.html">
     <span class="mt-kind">Lesson 25</span>
     <h4>Tapering Lab</h4>
     <p>Apply tapers on the PHASER and measure the sidelobe trade-off. Objective 3.7.</p>
@@ -139,17 +139,17 @@ and say what each term does, the rest is arithmetic.
 ::::{frame} Lessons 26-28: Where Arrays Misbehave, and Nulling
 
 <div class="module-toc">
-  <a class="mt-card mt-lesson" href="L26-beam-squint-quantization/index.html">
+  <a class="mt-card mt-lesson" href="L23-beam-squint-quantization/index.html">
     <span class="mt-kind">Lesson 26</span>
     <h4>Beam Squint and Quantization</h4>
     <p>Beam squint and phase-quantization effects on array performance. Objective 3.8.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L27-null-steering-theory/index.html">
+  <a class="mt-card mt-lesson" href="L24-null-steering/index.html">
     <span class="mt-kind">Lesson 27</span>
     <h4>Null Steering Theory</h4>
     <p>Null-steering weights and pattern nulls. Objective 3.9.</p>
   </a>
-  <a class="mt-card mt-lesson" href="L28-null-steering-lab/index.html">
+  <a class="mt-card mt-lesson" href="L24-lab-null-steering/index.html">
     <span class="mt-kind">Lesson 28</span>
     <h4>Null Steering Lab</h4>
     <p>Implement pattern nulls on the PHASER. Objective 3.9.</p>

@@ -1,331 +1,331 @@
 % !TEX root =./ECE444_Practice_main.tex
 %
-% L22 practice set (Antenna Pattern Theory) -- pattern multiplication with a
-% patch element factor, scan loss bookkeeping, and reading a measured trace.
+% L24 practice set (Sidelobes and Tapering Theory) -- why an untapered aperture
+% has sidelobes, the cosine/Chebyshev/Taylor families, the three costs of a
+% taper, and converting a design to PHASER element gains.
 
-\fullwidth{\textbf{Learning Objective 3.6: } I can distinguish between array factor and true
-antenna pattern and account for element pattern effects.
+\fullwidth{\textbf{Learning Objective 3.7: } I can apply amplitude tapering
+(uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the
+pattern trade-off.
 \\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
 is required (write \textbf{None} if you did not collaborate).}
 
 \begin{questions}
 
-\question \textbf{The gain budget of the course array.} The ADALM-PHASER
-carries $N = 8$ microstrip patch elements spaced $d = 14$ \text{mm} apart. At the
-workshop frequency of $10.3\ \ghz$ the wavelength is $29.1$ \text{mm}. Model each
-element as an ideal element that captures its share of the aperture, so its
-\emph{power} pattern follows the projected-aperture rule
-$G_e(\theta) = G_e(0)\cosp{\theta}$ with a broadside element gain of $6.0$ dBi.
+\question \textbf{Where sidelobes come from, and why a system cares.}
+The PHASER's eight elements are driven at equal amplitude and spaced
+$d = 14\text{ mm}$, which is $d/\lambda = 0.481$ at $10.3\ \ghz$. Its measured
+first sidelobe sits $12.8\db$ below the peak.
 \begin{parts}
-	\part In one or two sentences, state the difference between the array factor
-		and the antenna pattern, and say what the element factor contributes to
-		the product.
-		\begin{solution}[1.2in]
-		The array factor is the contribution of the element positions and their
-		relative phases alone; it is what a set of isotropic radiators at those
-		positions would produce. The antenna pattern is the array factor
-		multiplied by the element factor, which is the pattern of one element in
-		the array. The element factor supplies the shape of a single radiator --
-		here a broad hemispherical lobe peaked at broadside -- and it sets an
-		envelope that the steered array factor cannot exceed.
-		\end{solution}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the broadside peak gain of the array from the element gain
-			and the array gain.
-		\begin{solution}[1.1in]
-		The eight elements add coherently, so the array gain is
-		\eq{ G_{\text{array}} = 10\mylog{8} = 9.0\db }
-		and the total broadside gain is
-		\eq{ G(0\mydeg) = 6.0\dbi + 9.0\db = 15.0\dbi }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$G(0\mydeg)$ = \ansbox[1.3in]{$15.0\dbi$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part The beam is steered to $\theta_0 = 45\mydeg$. Compute the element
-			factor penalty in decibels at that angle.
-		\begin{solution}[1.1in]
-		The projected-aperture rule is stated in power, so the penalty uses
-		ten times the logarithm:
-		\eq{ 10\mylog{\cosp{45\mydeg}} = 10\mylog{0.707} = -1.5\db }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\Delta G$ = \ansbox[1.3in]{$-1.5\db$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the peak gain of the array steered to $45\mydeg$.
-		\begin{solution}[1.1in]
-		Only the element term depends on the steer angle; the array gain of
-		$9.0\db$ is unchanged because the elements still add in phase.
-		\eq{ G(45\mydeg) &= 6.0\dbi - 1.5\db + 9.0\db \\ &= 13.5\dbi }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$G(45\mydeg)$ = \ansbox[1.3in]{$13.5\dbi$}
-	\end{minipage}
-\end{parts}
-
-\newpage
-
-\question \textbf{Scan loss and the practical scan limit.} Use the same array
-and the same ideal element. Recall from L21 that the array
-factor's half-power beamwidth off broadside is
-$\theta_{\text{HP}} \approx 0.886\lambda/(Nd\cosp{\theta_0})$, which is
-$13.2\mydeg$ at broadside for this array.
-\begin{parts}
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the element factor penalty at $\theta_0 = 30\mydeg$.
-		\begin{solution}[1.0in]
-		\eq{ 10\mylog{\cosp{30\mydeg}} = 10\mylog{0.866} = -0.6\db }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\Delta G$ = \ansbox[1.3in]{$-0.6\db$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the element factor penalty at $\theta_0 = 60\mydeg$.
-		\begin{solution}[1.0in]
-		\eq{ 10\mylog{\cosp{60\mydeg}} = 10\mylog{0.500} = -3.0\db }
-		This is the ideal-element bound. A real patch rolls off faster, roughly
-		as $\cosp{\theta}^{1.4}$ in power, and measures about $-4.2$ dB at the
-		same angle.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\Delta G$ = \ansbox[1.3in]{$-3.0\db$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the array factor half-power beamwidth at
-			$\theta_0 = 60\mydeg$.
-		\begin{solution}[1.1in]
-		\eq{ \theta_{\text{HP}} = \frac{13.2\mydeg}{\cosp{60\mydeg}}
-			= \frac{13.2\mydeg}{0.500} = 26.4\mydeg }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$26.4\mydeg$}
-	\end{minipage}
-
-	\part A radar engineer specifies this array for coverage over
-		$\pm 75\mydeg$. Using your numbers from parts (a) through (c), write
-		two sentences explaining the trade the engineer is accepting, and state
-		why $\pm 60\mydeg$ is the usual limit quoted for patch arrays.
+	\part In two or three sentences, explain why a uniformly illuminated aperture
+	has sidelobes at all. Use the Fourier relationship between the aperture
+	illumination and the far-field pattern in your answer.
 		\begin{solution}[1.4in]
-		At $60\mydeg$ the beam has already lost $3\db$ of gain for an ideal element,
-		closer to $4\db$ for a real patch, and the array factor's beam has doubled
-		in width from $13.2\mydeg$ to $26.4\mydeg$, so the same target returns
-		less power and is located less precisely. Pushing to $75\mydeg$ costs
-		about $5.9\db$ and widens the beam to nearly $51\mydeg$, so the coverage
-		at the edge of the scan is worth much less than the coverage at broadside.
-		The $\pm 60\mydeg$ limit is where both penalties are still tolerable;
-		beyond it the gain falls faster than the added coverage is worth.
-		\end{solution}
-\end{parts}
-
-\newpage
-
-\question \textbf{Reading a steered sweep.} A student steers the array to
-$\theta_0 = 30\mydeg$ and records the rectangular sweep. The peak reads
-$-0.6\db$ relative to the broadside peak and sits at $29.6\mydeg$. The first
-sidelobe on the broadside side of the beam reads $-12.2$ dBc and the first
-sidelobe on the outboard side reads $-15.2$ dBc. Uniform array factor theory
-predicts $-12.8$ dBc for both.
-\begin{parts}
-	\part Explain in one or two sentences why the measured peak sits at
-		$29.6\mydeg$ rather than at the commanded $30\mydeg$.
-		\begin{solution}[1.2in]
-		The element factor falls monotonically away from broadside, so the
-		product of the array factor and the element factor is largest slightly
-		inboard of the array factor's own peak. The beam is pulled toward
-		broadside. The effect grows with steer angle: a $60\mydeg$ command on
-		this array peaks near $56.8\mydeg$.
-		\end{solution}
-
-	\part Explain why the two first sidelobes differ by $3$ dB when the
-		array factor predicts that they are equal.
-		\begin{solution}[1.2in]
-		Sidelobe levels are quoted relative to the peak of the same trace, and
-		the element factor multiplies each lobe by a different amount. The
-		inboard lobe near $7\mydeg$ sits where the element pattern is
-		essentially flat, so it is unchanged, while the peak it is referenced to
-		fell by $0.6\text{ dB}$; that lobe therefore reads about half a decibel
-		\emph{higher} than theory. The outboard lobe near $60\mydeg$ is
-		attenuated $3.0\db$ by the element pattern, so it reads well below
-		theory.
+		The far-field pattern is the Fourier transform of the aperture
+		illumination, with the transform variable being the space frequency
+		$k\sinp{\theta}$. Uniform illumination is a rectangle: full amplitude
+		across the array and nothing beyond the ends. That abrupt edge is a
+		discontinuity, and a discontinuity contains energy at every spatial
+		frequency, so the transform cannot fall off quickly. The transform of a
+		rectangle is a sinc function, whose ripples decay only as $1/u$, and
+		those ripples are the sidelobes.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Express the inboard sidelobe level relative to the array's
-			\emph{broadside} peak rather than relative to the steered peak.
-		\begin{solution}[1.1in]
-		The steered peak is $0.6\db$ below the broadside peak, so
-		\eq{ -12.2\db - 0.6\db = -12.8\db }
-		relative to broadside. Referenced this way the lobe matches the array
-		factor prediction exactly, which shows that nothing about the sidelobe
-		changed -- only the reference did.
+		\part The array is rebuilt with $N = 16$ elements at the same spacing,
+		still uniformly driven. Compute the new half-power beamwidth from
+		$\theta_\text{HP} \approx 0.886\lambda/(Nd)$, and state what happens to the
+		first sidelobe level.
+		\begin{solution}[1.3in]
+		\eq{ \theta_\text{HP} &\approx \frac{0.886}{16 \times 0.481} = 0.1151
+		\text{ rad} = 6.6\mydeg }
+		The first sidelobe does not move: it stays near $-13\db$. Doubling the
+		aperture halves the beamwidth, but sidelobe level is set by the
+		\emph{shape} of the illumination, not by its size, and the shape is still
+		uniform.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		Level = \ansbox[1.3in]{$-12.8\db$}
-	\end{minipage}
-
-	\part The same student rotates the array by hand and repeats the
-		measurement. The new trace has the same shape but every feature is
-		shifted $1.8\mydeg$ in the same direction. State whether this is an
-		antenna effect or a measurement effect, and give the reason.
-		\begin{solution}[1.2in]
-		It is a measurement effect. A uniform shift of every feature by the same
-		amount, with no change in shape, is a fixture or protractor offset in the
-		angle axis. An antenna effect such as beam pulling changes the peak and
-		the sidelobes by different amounts and therefore changes the shape of the
-		trace, not just its position.
-		\end{solution}
-\end{parts}
-
-\newpage
-
-\question \textbf{The element and its ground plane.} Take the ideal element
-power pattern to be $\cosp{\theta}$ over the front hemisphere and zero behind the
-ground plane.
-\begin{parts}
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Find the half-power beamwidth of this element.
-		\begin{solution}[1.1in]
-		The pattern is stated in power, so half power is where
-		\eq{ \cosp{\theta} = 0.5 \quad \rightarrow \quad \theta = 60\mydeg }
-		and the full beamwidth is twice that, $120\mydeg$. A real patch is
-		steeper and measures nearer $105\mydeg$.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\theta_{\text{HP}}$ = \ansbox[1.3in]{$120\mydeg$}
+		$\theta_\text{HP}$ = \ansbox[1.3in]{$6.6\mydeg$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the directivity of this element, in dBi, integrating over
-			the upper hemisphere only.
+		\part A search radar looks at a target on boresight while ground clutter
+		$40\db$ stronger than the target return arrives through the $-12.8\db$
+		first sidelobe. Compute the clutter-to-target ratio at the beamformer
+		output, then find the sidelobe level that would put the clutter $3\db$
+		\emph{below} the target.
 		\begin{solution}[1.4in]
-		The beam solid angle is
-		\eq{ \Omega_A &= \int_0^{2\pi}\!\!\int_0^{\pi/2}
-			\cosp{\theta} \sin\theta \ d\theta \ d\phi \\
-			&= 2\pi \lb \frac{\sin^2\theta}{2} \rb_0^{\pi/2} = \pi }
-		so
-		\eq{ D_e = \frac{4\pi}{\Omega_A} = \frac{4\pi}{\pi} = 4
-			= 6.0\dbi }
-		A real patch measures 6.0 to 6.8 dBi, since it is steeper than the ideal
-		element, the ground plane is finite, and the element is loaded by its
-		neighbors.
+		The target enters on the main beam at $0\db$ of pattern gain and the
+		clutter enters $12.8\db$ down, so the antenna gives the target a
+		$12.8\db$ advantage:
+		\eq{ C/T &= 40 - 12.8 = 27.2\db \text{ (clutter above target)} }
+		To land at $C/T = -3\db$ the pattern must supply $43\db$ of
+		discrimination:
+		\eq{ \text{SLL} &= -(40 + 3) = -43\db }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$D_e$ = \ansbox[1.3in]{$4$ ($6.0$ dBi)}
+		$C/T$ = \ansbox[1.2in]{$27.2\db$}
+		\\[10pt]
+		SLL = \ansbox[1.2in]{$-43\db$}
+	\end{minipage}
+\end{parts}
+
+\newpage
+
+\question \textbf{The Hann preset by the numbers.}
+The PHASER GUI's Hann preset sets the eight Element Gains to
+$12, 43, 77, 100, 100, 77, 43, 12$ percent. Work in normalized amplitudes
+$a_n$ of $0.12$, $0.43$, $0.77$, $1.00$, $1.00$, $0.77$, $0.43$, $0.12$.
+\begin{parts}
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute $\sum a_n$ and $\sum a_n^2$.
+		\begin{solution}[1.3in]
+		The taper is symmetric, so sum the inner four and double:
+		\eq{ \sum a_n &= 2\lp 0.12 + 0.43 + 0.77 + 1.00 \rp = 2\lp 2.32 \rp = 4.64 \\
+		\sum a_n^2 &= 2\lp 0.0144 + 0.1849 + 0.5929 + 1.0000 \rp = 3.584 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\sum a_n$ = \ansbox[1.1in]{$4.64$}
+		\\[10pt]
+		$\sum a_n^2$ = \ansbox[1.1in]{$3.584$}
 	\end{minipage}
 
-	\part A sweep shows a lobe at $-20$ dBc near $\theta = 82\mydeg$. Explain
-		what this feature is, and why it cannot be radiation out the back of the
-		array.
-		\begin{solution}[1.2in]
-		The ground plane removes the back hemisphere, and the front-hemisphere
-		element pattern falls monotonically toward the horizon, so the antenna
-		itself cannot produce a lobe there. The feature is energy arriving from
-		a reflection -- a wall, a bench, or a person -- reaching the array from a
-		direction the source is not in. Moving the fixture or the reflector
-		changes the feature, which is the test that identifies it.
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the taper efficiency $\eta_t = \lp\sum a_n\rp^2 / \lp N \sum a_n^2 \rp$
+		as a ratio and in decibels.
+		\begin{solution}[1.3in]
+		\eq{ \eta_t &= \frac{\lp 4.64 \rp^2}{8 \times 3.584} = \frac{21.53}{28.67}
+		= 0.751 \\
+		10\mylog{0.751} &= -1.24\db }
 		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\eta_t$ = \ansbox[1.5in]{$0.751 = -1.2\db$}
+	\end{minipage}
 
-	\part The projected-aperture rule is a model. State one angular range where
-		you would trust a prediction made with it to about a decibel, and one
-		where you would not, and give the reason.
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute how far the peak of the measured sweep falls below the
+		uniform-taper trace.
 		\begin{solution}[1.2in]
-		Inside about $\pm 30\mydeg$ the prediction is good to a few tenths of a
-		decibel, because real embedded elements roll off between
-		$\cosp{\theta}$ and $\cosp{\theta}^{1.5}$ in power and the choices
-		barely differ there. Past about $\pm 60\mydeg$ that same spread is worth
-		more than a decibel -- the ideal rule gives $-3.0\db$ where a real patch
-		gives about $-4.2\db$ -- and mutual coupling makes each element's
-		embedded pattern differ from the average, so a single-element model
-		should not be trusted to a decibel at wide scan.
+		\eq{ \text{peak drop} &= 20\mylog{\frac{\sum a_n}{N}}
+		= 20\mylog{\frac{4.64}{8}} \\
+		&= 20\mylog{0.580} = -4.7\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		peak drop = \ansbox[1.3in]{$-4.7\db$}
+	\end{minipage}
+
+	\part Parts (b) and (c) are both decibel losses, and they are not equal. In
+	two or three sentences, say what each one measures and which of the two is
+	the loss of directivity.
+		\begin{solution}[1.5in]
+		The taper efficiency in part (b) is the fraction of the uniform array's
+		directivity that the tapered array keeps, so $-1.2\db$ is the loss of
+		antenna performance. The peak drop in part (c) is a coherent
+		receive-voltage loss: six of the eight channels were attenuated, so the
+		plotted peak fell, but the channel noise was attenuated along with the
+		signal. The difference,
+		$-4.7 - \lp -1.2 \rp = -3.5\db$, is gain that was simply turned down and
+		would return if the sliders could be scaled back up past $100\%$.
 		\end{solution}
 \end{parts}
 
 \newpage
 
-\question \textbf{Range, environment, and what a measurement can resolve.} The
-course array measures $D = 98$ \text{mm} between the centers of its outer
-elements. The lab source is placed $1.0\ \m$ from the array face.
+\question \textbf{A Chebyshev design to specification.}
+A customer specifies that no sidelobe may exceed $-25\db$ relative to the peak,
+on the eight-element array at $d/\lambda = 0.481$. The uniform reference is
+$\theta_\text{HP} = 13.2\mydeg$.
 \begin{parts}
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the far-field distance for this array at $10.3\ \ghz$
-			($\lambda = 29.1$ \text{mm}), and state whether the lab range
-			qualifies.
-		\begin{solution}[1.2in]
-		\eq{ r \ge \frac{2D^2}{\lambda}
-			= \frac{2\lp0.098\ \m\rp^2}{0.0291\ \m} = 0.66\ \m }
-		The $1.0\ \m$ lab range is comfortably beyond this, so the incoming
-		wavefront is flat enough that the edge-to-center phase error stays under
-		the $22.5\mydeg$ the criterion allows.
+		\part Compute the voltage ratio $R$ and the Chebyshev stretch factor
+		$x_0 = \cosh\lp \cosh^{-1}(R)/(N-1) \rp$.
+		\begin{solution}[1.4in]
+		\eq{ R &= 10^{25/20} = 10^{1.25} = 17.78 \\
+		\cosh^{-1}(17.78) &= 3.571 \\
+		x_0 &= \cosh\lp \frac{3.571}{7} \rp = \cosh\lp 0.5101 \rp \\
+		&= 1.133 }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$r$ = \ansbox[1.3in]{$0.66\ \m$}
+		$R$ = \ansbox[1.1in]{$17.78$}
+		\\[10pt]
+		$x_0$ = \ansbox[1.1in]{$1.133$}
+	\end{minipage}
+
+	The Dolph expansion for this $x_0$ returns element amplitudes of
+	$38, 58, 84, 100, 100, 84, 58, 38$ percent.
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the taper efficiency and the peak drop for this design.
+		\begin{solution}[1.5in]
+		\eq{ \sum a_n &= 2\lp 0.38 + 0.58 + 0.84 + 1.00 \rp = 5.60 \\
+		\sum a_n^2 &= 2\lp 0.1444 + 0.3364 + 0.7056 + 1 \rp \\
+		&= 4.373 \\
+		\eta_t &= \frac{\lp 5.60 \rp^2}{8 \times 4.373} = \frac{31.36}{34.98}
+		= 0.896 = -0.48\db \\
+		\text{peak drop} &= 20\mylog{\frac{5.60}{8}} \\
+		&= 20\mylog{0.700} = -3.1\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\eta_t$ = \ansbox[1.4in]{$0.896 = -0.48\db$}
+		\\[10pt]
+		peak drop = \ansbox[1.2in]{$-3.1\db$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part A larger array is to be measured on the same $1.0\ \m$ range at
-			$10.3\ \ghz$. Find the largest aperture dimension that still satisfies
-			the far-field criterion.
-		\begin{solution}[1.2in]
-		Solve the criterion for $D$:
-		\eq{ D = \sqrt{\frac{r\lambda}{2}}
-			= \sqrt{\frac{\lp1.0\ \m\rp\lp0.0291\ \m\rp}{2}} = 0.121\ \m }
-		so an aperture larger than about $121$ \text{mm} needs a longer range or
-		a near-field correction.
+		\part This design has a beam broadening factor of $1.20$. Compute its
+		half-power beamwidth.
+		\begin{solution}[1.1in]
+		\eq{ \theta_\text{HP} &= 1.20 \times 13.2\mydeg = 15.8\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$D$ = \ansbox[1.3in]{$121$ \text{mm}}
+		$\theta_\text{HP}$ = \ansbox[1.2in]{$15.8\mydeg$}
 	\end{minipage}
 
-	\part The GUI sweeps the commanded steer angle in $2.8125\mydeg$ steps.
-		Explain how that step size alone can make a measured half-power beamwidth
-		differ from theory by one to three degrees.
-		\begin{solution}[1.2in]
-		The trace exists only at grid points, so each half-power crossing is
-		reported at the nearest step rather than at its true angle. Each of the
-		two crossings can be off by up to half a step, and the beamwidth is the
-		difference between them, so the reported width can be off by roughly a
-		full step in either direction before any antenna effect is involved.
+	\part State the price of this design for the customer in one sentence, then
+	explain in one or two more why a Chebyshev design beats a Hann window that
+	reaches a similar sidelobe level.
+		\begin{solution}[1.6in]
+		Sidelobes drop from $-12.8\db$ to $-25\db$, and the cost is a beam
+		$2.6\mydeg$ wider, $0.48\db$ of directivity, and a $3.1\db$ lower peak on
+		the displayed trace. The Chebyshev design is optimal in the sense that no
+		other set of amplitudes reaches $-25\db$ with a narrower main lobe,
+		because it holds every sidelobe exactly at the specification. A Hann
+		window pushes its far sidelobes well below $-25\db$, which is suppression
+		the specification never asked for, and it paid for that suppression in
+		beamwidth it did not need to spend.
+		\end{solution}
+\end{parts}
+
+\newpage
+
+\question \textbf{Reading a tapered sweep.}
+A student loads an unknown taper into the GUI and runs a beam sweep against the
+HB100. Compared with the uniform trace taken a minute earlier, the peak is
+$3.8\db$ lower, the half-power beamwidth reads $17.5\mydeg$, and no sidelobe is
+visible above the sweep's noise floor, which sits $23\db$ below the
+\emph{uniform} peak.
+\begin{parts}
+	\part Which of the designs from this lesson is the student most likely
+	using? Give the two measurements that identify it.
+		\begin{solution}[1.3in]
+		The $-30\db$ Chebyshev design, whose element gains are
+		$26, 52, 81, 100, 100, 81, 52, 26$ percent. It predicts a peak drop of
+		$-3.8\db$ and a half-power beamwidth of $17.1\mydeg$, and the measured
+		$-3.8\db$ and $17.5\mydeg$ match both within the sweep's angular
+		resolution. The Hann preset would have dropped the peak $4.7\db$ and
+		widened the beam to about $19.5\mydeg$.
 		\end{solution}
 
-	\part Name two things you can change about the measurement setup, not the
-		antenna, to make the far-out sidelobes of a trace more trustworthy.
-		\begin{solution}[1.2in]
-		Reduce what the environment contributes: place absorber on the bench and
-		on nearby reflecting surfaces, keep people and equipment out of the path,
-		and raise the array and source to the same height away from large flat
-		surfaces. Repeat the measurement with the whole fixture moved or rotated;
-		features that move with the room are environmental, and features that
-		stay with the array are the antenna. Increasing the source power raises
-		the trace above the sweep noise floor, which is what limits any reading
-		more than about 23 dB below the peak.
+	\begin{minipage}[t]{0.58\linewidth}
+		\part How much directivity did the array lose? The design has
+		$\sum a_n = 5.18$ and $\sum a_n^2 = 3.988$.
+		\begin{solution}[1.3in]
+		\eq{ \eta_t &= \frac{\lp 5.18 \rp^2}{8 \times 3.988} = \frac{26.83}{31.91}
+		= 0.841 \\
+		10\mylog{0.841} &= -0.75\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		loss = \ansbox[1.2in]{$-0.75\db$}
+	\end{minipage}
+
+	\part The student writes in the lab notebook that the array lost $3.8\db$ of
+	gain. Correct that statement in two sentences.
+		\begin{solution}[1.4in]
+		The array lost $0.75\db$ of directivity, which is the taper efficiency
+		computed in part (b). The remaining $3.0\db$ of the drop is signal that
+		six attenuated channels never delivered to the summing node, and the
+		noise from those channels was attenuated by the same factor, so the
+		sensitivity of the array did not fall by $3.8\db$.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part State the tightest upper bound the student can honestly put on this
+		taper's sidelobe level, expressed relative to the taper's own peak.
+		\begin{solution}[1.3in]
+		The floor sits $23\db$ below the uniform peak, and this taper's peak is
+		itself $3.8\db$ below the uniform peak, so relative to its own peak the
+		floor is only
+		\eq{ 23 - 3.8 &= 19.2\db \text{ down} }
+		The sidelobes are therefore below $-19\db$ relative to the tapered peak.
+		The theoretical value is $-30\db$, but the measurement cannot confirm
+		anything deeper than the floor allows.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		SLL $<$ \ansbox[1.3in]{$-19.2\db$}
+	\end{minipage}
+\end{parts}
+
+\newpage
+
+\question \textbf{Design judgment on eight elements.}
+A program office asks for $-50\db$ sidelobes from the eight-element PHASER
+array. The Chebyshev design that meets it has element amplitudes
+$9$, $35$, $72$, $100$, $100$, $72$, $35$, $9$ percent, a beam broadening factor of $1.51$,
+and $\eta_t = 0.710$.
+\begin{parts}
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the half-power beamwidth and the peak drop for this design,
+		using $13.2\mydeg$ as the uniform reference.
+		\begin{solution}[1.4in]
+		\eq{ \sum a_n &= 2\lp 0.09 + 0.35 + 0.72 + 1.00 \rp = 4.32 \\
+		\theta_\text{HP} &= 1.51 \times 13.2\mydeg = 19.9\mydeg \\
+		\text{peak drop} &= 20\mylog{\frac{4.32}{8}} \\
+		&= 20\mylog{0.540} = -5.3\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\theta_\text{HP}$ = \ansbox[1.2in]{$19.9\mydeg$}
+		\\[10pt]
+		peak drop = \ansbox[1.2in]{$-5.3\db$}
+	\end{minipage}
+
+	\part The ADAR1000 sets each element gain to a resolution of about one
+	percent of full scale. Explain in two or three sentences why that resolution
+	threatens a $-50\db$ design more than it threatens a $-25\db$ design.
+		\begin{solution}[1.6in]
+		A sidelobe at $-50\db$ is a residue about three parts in a thousand of
+		the peak, so it survives only if the eight amplitudes hold their designed
+		ratios to better than that. The outermost elements of this design sit at
+		$9\%$, where a one-percent step is an eleven-percent error on that
+		element, which is two orders of magnitude larger than the residue the
+		design is trying to preserve. The $-25\db$ design keeps its smallest
+		element at $38\%$, where the same step is under three percent, so its
+		sidelobes move by a fraction of a decibel instead of being swamped.
+		\end{solution}
+
+	\part Recommend what to do about the program office's request. Your answer
+	must name the specification you would propose instead and give the reason in
+	terms of what the hardware can show.
+		\begin{solution}[1.7in]
+		Propose $-30\db$ rather than $-50\db$. The beam sweep's noise floor is
+		about $23\db$ below the uniform peak, so a $-30\db$ design is already
+		below anything this instrument can measure, and a $-50\db$ design cannot
+		be verified on the bench at all. The deeper specification also costs
+		$3\mydeg$ more beamwidth and roughly $0.7\db$ more directivity than the
+		$-30\db$ design, and its edge elements are too small to set accurately.
+		If the office needs suppression in one specific direction rather than
+		everywhere, the correct tool is a steered null, not a deeper taper.
 		\end{solution}
 \end{parts}
 

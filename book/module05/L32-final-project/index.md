@@ -1,0 +1,20 @@
+# L39 - Final Project Kickoff
+
+:::{admonition} Slides
+:class: slides
+<a href="../../slides/L32-final-project.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L32-final-project.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L32-final-project.md" target="_blank" rel="noopener">raw markdown slides</a>
+:::
+
+## Learning Objectives
+
+<ol class="lo-list" style="--module: '5'; counter-reset: lo 0;">
+  <li>I can choose and justify array steering and taper weights to optimize detection performance for a specified scenario.</li>
+</ol>
+
+---
+
+```{note}
+Lesson material is under construction. This shell maps to objective 5.1.
+```

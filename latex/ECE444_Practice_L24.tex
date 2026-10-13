@@ -1,332 +1,330 @@
 % !TEX root =./ECE444_Practice_main.tex
 %
-% L24 practice set (Sidelobes and Tapering Theory) -- why an untapered aperture
-% has sidelobes, the cosine/Chebyshev/Taylor families, the three costs of a
-% taper, and converting a design to PHASER element gains.
+% L27 practice set (Null Steering Theory) -- steering vectors, the weight-subtraction
+% rule, the PHASER gain/phase table, and the quantization limit on null depth.
 
-\fullwidth{\textbf{Learning Objective 3.7: } I can apply amplitude tapering
-(uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the
-pattern trade-off.
+\fullwidth{\textbf{Learning Objective 3.9: } I can calculate null-steering weights and implement
+pattern nulls on the ADALM-PHASER.
 \\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
 is required (write \textbf{None} if you did not collaborate).}
 
 \begin{questions}
 
-\question \textbf{Where sidelobes come from, and why a system cares.}
-The PHASER's eight elements are driven at equal amplitude and spaced
-$d = 14\text{ mm}$, which is $d/\lambda = 0.481$ at $10.3\ \ghz$. Its measured
-first sidelobe sits $12.8\db$ below the peak.
+\question \textbf{Why a null beats gain.} The PHASER views a target on boresight while an
+interferer sits at $+22.5\mydeg$. At the aperture the interferer is $10\db$ stronger than the
+target. The array is uniformly weighted and steered broadside, so its pattern level at
+$+22.5\mydeg$ is the first sidelobe level, $-13\db$ relative to the peak.
+
 \begin{parts}
-	\part In two or three sentences, explain why a uniformly illuminated aperture
-	has sidelobes at all. Use the Fourier relationship between the aperture
-	illumination and the far-field pattern in your answer.
-		\begin{solution}[1.4in]
-		The far-field pattern is the Fourier transform of the aperture
-		illumination, with the transform variable being the space frequency
-		$k\sinp{\theta}$. Uniform illumination is a rectangle: full amplitude
-		across the array and nothing beyond the ends. That abrupt edge is a
-		discontinuity, and a discontinuity contains energy at every spatial
-		frequency, so the transform cannot fall off quickly. The transform of a
-		rectangle is a sinc function, whose ripples decay only as $1/u$, and
-		those ripples are the sidelobes.
-		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part The array is rebuilt with $N = 16$ elements at the same spacing,
-		still uniformly driven. Compute the new half-power beamwidth from
-		$\theta_\text{HP} \approx 0.886\lambda/(Nd)$, and state what happens to the
-		first sidelobe level.
-		\begin{solution}[1.3in]
-		\eq{ \theta_\text{HP} &\approx \frac{0.886}{16 \times 0.481} = 0.1151
-		\text{ rad} = 6.6\mydeg }
-		The first sidelobe does not move: it stays near $-13\db$. Doubling the
-		aperture halves the beamwidth, but sidelobe level is set by the
-		\emph{shape} of the illumination, not by its size, and the shape is still
-		uniform.
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\theta_\text{HP}$ = \ansbox[1.3in]{$6.6\mydeg$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part A search radar looks at a target on boresight while ground clutter
-		$40\db$ stronger than the target return arrives through the $-12.8\db$
-		first sidelobe. Compute the clutter-to-target ratio at the beamformer
-		output, then find the sidelobe level that would put the clutter $3\db$
-		\emph{below} the target.
-		\begin{solution}[1.4in]
-		The target enters on the main beam at $0\db$ of pattern gain and the
-		clutter enters $12.8\db$ down, so the antenna gives the target a
-		$12.8\db$ advantage:
-		\eq{ C/T &= 40 - 12.8 = 27.2\db \text{ (clutter above target)} }
-		To land at $C/T = -3\db$ the pattern must supply $43\db$ of
-		discrimination:
-		\eq{ \text{SLL} &= -(40 + 3) = -43\db }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$C/T$ = \ansbox[1.2in]{$27.2\db$}
-		\\[10pt]
-		SLL = \ansbox[1.2in]{$-43\db$}
-	\end{minipage}
-\end{parts}
-
-\newpage
-
-\question \textbf{The Hann preset by the numbers.}
-The PHASER GUI's Hann preset sets the eight Element Gains to
-$12, 43, 77, 100, 100, 77, 43, 12$ percent. Work in normalized amplitudes
-$a_n$ of $0.12$, $0.43$, $0.77$, $1.00$, $1.00$, $0.77$, $0.43$, $0.12$.
-\begin{parts}
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute $\sum a_n$ and $\sum a_n^2$.
-		\begin{solution}[1.3in]
-		The taper is symmetric, so sum the inner four and double:
-		\eq{ \sum a_n &= 2\lp 0.12 + 0.43 + 0.77 + 1.00 \rp = 2\lp 2.32 \rp = 4.64 \\
-		\sum a_n^2 &= 2\lp 0.0144 + 0.1849 + 0.5929 + 1.0000 \rp = 3.584 }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\sum a_n$ = \ansbox[1.1in]{$4.64$}
-		\\[10pt]
-		$\sum a_n^2$ = \ansbox[1.1in]{$3.584$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the taper efficiency $\eta_t = \lp\sum a_n\rp^2 / \lp N \sum a_n^2 \rp$
-		as a ratio and in decibels.
-		\begin{solution}[1.3in]
-		\eq{ \eta_t &= \frac{\lp 4.64 \rp^2}{8 \times 3.584} = \frac{21.53}{28.67}
-		= 0.751 \\
-		10\mylog{0.751} &= -1.24\db }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\eta_t$ = \ansbox[1.5in]{$0.751 = -1.2\db$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute how far the peak of the measured sweep falls below the
-		uniform-taper trace.
-		\begin{solution}[1.2in]
-		\eq{ \text{peak drop} &= 20\mylog{\frac{\sum a_n}{N}}
-		= 20\mylog{\frac{4.64}{8}} \\
-		&= 20\mylog{0.580} = -4.7\db }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		peak drop = \ansbox[1.3in]{$-4.7\db$}
-	\end{minipage}
-
-	\part Parts (b) and (c) are both decibel losses, and they are not equal. In
-	two or three sentences, say what each one measures and which of the two is
-	the loss of directivity.
-		\begin{solution}[1.5in]
-		The taper efficiency in part (b) is the fraction of the uniform array's
-		directivity that the tapered array keeps, so $-1.2\db$ is the loss of
-		antenna performance. The peak drop in part (c) is a coherent
-		receive-voltage loss: six of the eight channels were attenuated, so the
-		plotted peak fell, but the channel noise was attenuated along with the
-		signal. The difference,
-		$-4.7 - \lp -1.2 \rp = -3.5\db$, is gain that was simply turned down and
-		would return if the sliders could be scaled back up past $100\%$.
-		\end{solution}
-\end{parts}
-
-\newpage
-
-\question \textbf{A Chebyshev design to specification.}
-A customer specifies that no sidelobe may exceed $-25\db$ relative to the peak,
-on the eight-element array at $d/\lambda = 0.481$. The uniform reference is
-$\theta_\text{HP} = 13.2\mydeg$.
-\begin{parts}
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the voltage ratio $R$ and the Chebyshev stretch factor
-		$x_0 = \cosh\lp \cosh^{-1}(R)/(N-1) \rp$.
-		\begin{solution}[1.4in]
-		\eq{ R &= 10^{25/20} = 10^{1.25} = 17.78 \\
-		\cosh^{-1}(17.78) &= 3.571 \\
-		x_0 &= \cosh\lp \frac{3.571}{7} \rp = \cosh\lp 0.5101 \rp \\
-		&= 1.133 }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$R$ = \ansbox[1.1in]{$17.78$}
-		\\[10pt]
-		$x_0$ = \ansbox[1.1in]{$1.133$}
-	\end{minipage}
-
-	The Dolph expansion for this $x_0$ returns element amplitudes of
-	$38, 58, 84, 100, 100, 84, 58, 38$ percent.
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the taper efficiency and the peak drop for this design.
-		\begin{solution}[1.5in]
-		\eq{ \sum a_n &= 2\lp 0.38 + 0.58 + 0.84 + 1.00 \rp = 5.60 \\
-		\sum a_n^2 &= 2\lp 0.1444 + 0.3364 + 0.7056 + 1 \rp \\
-		&= 4.373 \\
-		\eta_t &= \frac{\lp 5.60 \rp^2}{8 \times 4.373} = \frac{31.36}{34.98}
-		= 0.896 = -0.48\db \\
-		\text{peak drop} &= 20\mylog{\frac{5.60}{8}} \\
-		&= 20\mylog{0.700} = -3.1\db }
-		\end{solution}
-	\end{minipage}\hfill%
-	\begin{minipage}[t]{0.37\linewidth}
-		\raggedleft \vspace{12pt}
-		$\eta_t$ = \ansbox[1.4in]{$0.896 = -0.48\db$}
-		\\[10pt]
-		peak drop = \ansbox[1.2in]{$-3.1\db$}
-	\end{minipage}
-
-	\begin{minipage}[t]{0.58\linewidth}
-		\part This design has a beam broadening factor of $1.20$. Compute its
-		half-power beamwidth.
+		\part Compute the signal-to-interference ratio at the beamformer output.
 		\begin{solution}[1.1in]
-		\eq{ \theta_\text{HP} &= 1.20 \times 13.2\mydeg = 15.8\mydeg }
+		The target sits at the pattern peak and the interferer is attenuated by the
+		sidelobe level, so both are referred to the same peak:
+		\eq{ \text{SIR} &= 0\db - \lp 10\db - 13\db \rp \\ &= 3\db }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\theta_\text{HP}$ = \ansbox[1.2in]{$15.8\mydeg$}
+		SIR = \ansbox[1.3in]{$3\db$}
 	\end{minipage}
 
-	\part State the price of this design for the customer in one sentence, then
-	explain in one or two more why a Chebyshev design beats a Hann window that
-	reaches a similar sidelobe level.
-		\begin{solution}[1.6in]
-		Sidelobes drop from $-12.8\db$ to $-25\db$, and the cost is a beam
-		$2.6\mydeg$ wider, $0.48\db$ of directivity, and a $3.1\db$ lower peak on
-		the displayed trace. The Chebyshev design is optimal in the sense that no
-		other set of amplitudes reaches $-25\db$ with a narrower main lobe,
-		because it holds every sidelobe exactly at the specification. A Hann
-		window pushes its far sidelobes well below $-25\db$, which is suppression
-		the specification never asked for, and it paid for that suppression in
-		beamwidth it did not need to spend.
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Null steering replaces the sidelobe at $+22.5\mydeg$ with a notch measured at
+		$-21.6\db$ relative to the new main-lobe peak. Recompute the SIR.
+		\begin{solution}[1.1in]
+		Both quantities are again referred to the pattern peak, so the $1.8\db$ the main lobe
+		loses cancels in the ratio:
+		\eq{ \text{SIR} &= 0\db - \lp 10\db - 21.6\db \rp \\ &= 11.6\db }
+		The null buys $8.6\db$ of margin.
 		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		SIR = \ansbox[1.3in]{$11.6\db$}
+	\end{minipage}
+
+	\part The same $8.6\db$ of margin could be bought by raising the transmit power. State
+	what that costs on a radar, in one or two sentences, and say which fix you would specify.
+		\begin{solution}[1.3in]
+		A radar echo scales with transmit power, so $8.6\db$ more margin requires about
+		$7.2$ times the transmit power, with the amplifier, prime power, cooling, and
+		transmitted signature that go with it. The interferer is unaffected by any of that.
+		Null steering buys the same margin by recomputing sixteen numbers and costs about
+		$2\db$ of main-lobe gain, so the null is the fix to specify whenever the interferer
+		angle is known.
+		\end{solution}
+
+	\part The interferer is at $+22.5\mydeg$ and the target is on boresight. Explain why the
+	array does not reject the interferer simply because it is off axis.
+		\begin{solution}[1.1in]
+		An array rejects a direction only by the pattern level it presents in that direction.
+		Being off axis is not enough; the interferer arrives through whatever sidelobe covers
+		$+22.5\mydeg$, and for a uniform eight-element array that sidelobe is only $13\db$
+		down.
+		\end{solution}
+
 \end{parts}
 
 \newpage
 
-\question \textbf{Reading a tapered sweep.}
-A student loads an unknown taper into the GUI and runs a beam sweep against the
-HB100. Compared with the uniform trace taken a minute earlier, the peak is
-$3.8\db$ lower, the half-power beamwidth reads $17.5\mydeg$, and no sidelobe is
-visible above the sweep's noise floor, which sits $23\db$ below the
-\emph{uniform} peak.
+\question \textbf{Steering vectors.} The PHASER array has $N = 8$ elements at
+$d = 14\ \text{mm}$, receiving the HB100 tone at $10.525\ \ghz$ so that $d/\lambda = 0.491$
+and $kd = 3.085$ rad. The steering vector for arrival angle $\theta$ has entries
+$v_n(\theta) = e^{jnkd\sinp{\theta}}$, and the beamformer response is
+$y(\theta) = \sum_n w_n v_n(\theta)$.
+
 \begin{parts}
-	\part Which of the designs from this lesson is the student most likely
-	using? Give the two measurements that identify it.
-		\begin{solution}[1.3in]
-		The $-30\db$ Chebyshev design, whose element gains are
-		$26, 52, 81, 100, 100, 81, 52, 26$ percent. It predicts a peak drop of
-		$-3.8\db$ and a half-power beamwidth of $17.1\mydeg$, and the measured
-		$-3.8\db$ and $17.5\mydeg$ match both within the sweep's angular
-		resolution. The Hann preset would have dropped the peak $4.7\db$ and
-		widened the beam to about $19.5\mydeg$.
+
+	\part In one or two sentences, state what $\vec{v}(\theta)$ describes and what it does
+	\emph{not} depend on.
+		\begin{solution}[1.0in]
+		The steering vector describes how a plane wave from direction $\theta$ is spread in
+		phase across the aperture: element $n$ leads element $0$ by $nkd\sinp{\theta}$. It is
+		a property of the arrival direction and the array geometry only, and does not depend
+		on the gains and phases loaded into the beamformer.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part How much directivity did the array lose? The design has
-		$\sum a_n = 5.18$ and $\sum a_n^2 = 3.988$.
-		\begin{solution}[1.3in]
-		\eq{ \eta_t &= \frac{\lp 5.18 \rp^2}{8 \times 3.988} = \frac{26.83}{31.91}
-		= 0.841 \\
-		10\mylog{0.841} &= -0.75\db }
+		\part Compute the element-to-element phase for a commanded beam at
+		$\theta_0 = 30\mydeg$.
+		\begin{solution}[1.0in]
+		\eq{ \Delta\phi &= kd\sinp{\theta_0} = 3.085\lp 0.500 \rp \\ &= 1.543\ \text{rad}
+		= 88.4\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		loss = \ansbox[1.2in]{$-0.75\db$}
+		$\Delta\phi$ = \ansbox[1.3in]{$88.4\mydeg$}
 	\end{minipage}
 
-	\part The student writes in the lab notebook that the array lost $3.8\db$ of
-	gain. Correct that statement in two sentences.
-		\begin{solution}[1.4in]
-		The array lost $0.75\db$ of directivity, which is the taper efficiency
-		computed in part (b). The remaining $3.0\db$ of the drop is signal that
-		six attenuated channels never delivered to the summing node, and the
-		noise from those channels was attenuated by the same factor, so the
-		sensitivity of the array did not fall by $3.8\db$.
-		\end{solution}
-
 	\begin{minipage}[t]{0.58\linewidth}
-		\part State the tightest upper bound the student can honestly put on this
-		taper's sidelobe level, expressed relative to the taper's own peak.
-		\begin{solution}[1.3in]
-		The floor sits $23\db$ below the uniform peak, and this taper's peak is
-		itself $3.8\db$ below the uniform peak, so relative to its own peak the
-		floor is only
-		\eq{ 23 - 3.8 &= 19.2\db \text{ down} }
-		The sidelobes are therefore below $-19\db$ relative to the tapered peak.
-		The theoretical value is $-30\db$, but the measurement cannot confirm
-		anything deeper than the floor allows.
+		\part Write the weight $w_3$ (the fourth element, $n = 3$) that steers the beam to
+		$30\mydeg$, as a magnitude and an angle.
+		\begin{solution}[1.1in]
+		Beam steering uses the conjugate steering vector, $w_n = e^{-jnkd\sinp{\theta_0}}$,
+		so every element runs at full gain and element $n$ is retarded by $n\Delta\phi$:
+		\eq{ w_3 = e^{-j3(88.4\mydeg)} = 1\ \angle -265.2\mydeg = 1\ \angle +94.8\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		SLL $<$ \ansbox[1.3in]{$-19.2\db$}
+		$w_3$ = \ansbox[1.3in]{$1\ \angle +94.8\mydeg$}
 	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part With those weights loaded, evaluate $y(30\mydeg)$ and express the result in dB
+		relative to one element.
+		\begin{solution}[1.1in]
+		Each term becomes $e^{-jnkd\sinp{\theta_0}}e^{+jnkd\sinp{\theta_0}} = 1$, so the eight
+		phasors add in phase:
+		\eq{ y(30\mydeg) &= \sum_{n=0}^{7} 1 = 8 \\
+		20\mylog{8} &= 18.1\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$y$ = \ansbox[1.3in]{$8$ ($18.1\db$)}
+	\end{minipage}
+
 \end{parts}
 
 \newpage
 
-\question \textbf{Design judgment on eight elements.}
-A program office asks for $-50\db$ sidelobes from the eight-element PHASER
-array. The Chebyshev design that meets it has element amplitudes
-$9$, $35$, $72$, $100$, $100$, $72$, $35$, $9$ percent, a beam broadening factor of $1.51$,
-and $\eta_t = 0.710$.
+\question \textbf{Weight subtraction by hand.} A four-element array with $d = \lambda/2$
+(so $kd = 180\mydeg$) is steered broadside, giving $\vec{w}_\text{d} = [1, 1, 1, 1]$. An
+interferer appears at $\theta_1 = 45\mydeg$. Use the weight-subtraction rule
+$\vec{w} = \vec{w}_\text{d} - r_\text{n}\vec{w}_\text{n}$ with
+$r_\text{n} = \vec{w}_\text{n}^{H}\vec{w}_\text{d} / \vec{w}_\text{n}^{H}\vec{w}_\text{n}$.
+
 \begin{parts}
+
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the half-power beamwidth and the peak drop for this design,
-		using $13.2\mydeg$ as the uniform reference.
-		\begin{solution}[1.4in]
-		\eq{ \sum a_n &= 2\lp 0.09 + 0.35 + 0.72 + 1.00 \rp = 4.32 \\
-		\theta_\text{HP} &= 1.51 \times 13.2\mydeg = 19.9\mydeg \\
-		\text{peak drop} &= 20\mylog{\frac{4.32}{8}} \\
-		&= 20\mylog{0.540} = -5.3\db }
+		\part Compute the element-to-element phase $\psi_1 = kd\sinp{\theta_1}$ at the
+		interferer angle.
+		\begin{solution}[1.0in]
+		\eq{ \psi_1 &= 180\mydeg \times \sinp{45\mydeg} \\ &= 180\mydeg (0.7071)
+		= 127.3\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$\theta_\text{HP}$ = \ansbox[1.2in]{$19.9\mydeg$}
-		\\[10pt]
-		peak drop = \ansbox[1.2in]{$-5.3\db$}
+		$\psi_1$ = \ansbox[1.3in]{$127.3\mydeg$}
 	\end{minipage}
 
-	\part The ADAR1000 sets each element gain to a resolution of about one
-	percent of full scale. Explain in two or three sentences why that resolution
-	threatens a $-50\db$ design more than it threatens a $-25\db$ design.
-		\begin{solution}[1.6in]
-		A sidelobe at $-50\db$ is a residue about three parts in a thousand of
-		the peak, so it survives only if the eight amplitudes hold their designed
-		ratios to better than that. The outermost elements of this design sit at
-		$9\%$, where a one-percent step is an eleven-percent error on that
-		element, which is two orders of magnitude larger than the residue the
-		design is trying to preserve. The $-25\db$ design keeps its smallest
-		element at $38\%$, where the same step is under three percent, so its
-		sidelobes move by a fraction of a decibel instead of being swamped.
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Evaluate $r_\text{n}$. For a broadside beam it reduces to the normalized
+		uniform array factor at $\theta_1$, $r_\text{n} = e^{j(N-1)\psi_1/2}\ \sinp{N\psi_1/2}/\lp N\sinp{\psi_1/2} \rp$.
+		\begin{solution}[1.2in]
+		With $N = 4$ and $\psi_1 = 127.3\mydeg$:
+		\eq{ \frac{\sinp{2\psi_1}}{4\sinp{\psi_1/2}} &= \frac{\sinp{254.6\mydeg}}
+		{4\sinp{63.6\mydeg}} = \frac{-0.964}{3.585} = -0.269 \\
+		r_\text{n} &= (-0.269)\ e^{j190.9\mydeg} = 0.269\ \angle 10.9\mydeg }
+		The magnitude $0.269$ is $-11.4\db$, which is the uniform four-element pattern level
+		at $45\mydeg$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$r_\text{n}$ = \ansbox[1.3in]{$0.269\ \angle 10.9\mydeg$}
+	\end{minipage}
+
+	\part Compute the four weights $w_n = 1 - r_\text{n}e^{-jn\psi_1}$ and convert them to
+	PHASER-style settings: element gains as percentages of the largest, and phases in degrees.
+		\begin{solution}[1.9in]
+		The subtracted phasor has magnitude $0.269$ and angle $10.9\mydeg - n(127.3\mydeg)$:
+		\eq{ w_0 &= 1 - 0.269\angle 10.9\mydeg = 0.736 - j0.051 = 0.738\ \angle -4.0\mydeg \\
+		w_1 &= 1 - 0.269\angle -116.4\mydeg = 1.119 + j0.241 = 1.145\ \angle +12.2\mydeg \\
+		w_2 &= 1 - 0.269\angle -243.7\mydeg = 1.119 - j0.241 = 1.145\ \angle -12.2\mydeg \\
+		w_3 &= 1 - 0.269\angle -371.0\mydeg = 0.736 + j0.051 = 0.738\ \angle +4.0\mydeg }
+		Scaling the largest magnitude to 100\%, the settings are
+		\eq{ \text{gains} &= 64, 100, 100, 64\ \text{percent} \\
+		\text{phases} &= -4.0\mydeg,\ +12.2\mydeg,\ -12.2\mydeg,\ +4.0\mydeg }
+		The gains are symmetric and the phases antisymmetric, as they must be
+		for a single null placed off a broadside beam.
 		\end{solution}
 
-	\part Recommend what to do about the program office's request. Your answer
-	must name the specification you would propose instead and give the reason in
-	terms of what the hardware can show.
-		\begin{solution}[1.7in]
-		Propose $-30\db$ rather than $-50\db$. The beam sweep's noise floor is
-		about $23\db$ below the uniform peak, so a $-30\db$ design is already
-		below anything this instrument can measure, and a $-50\db$ design cannot
-		be verified on the bench at all. The deeper specification also costs
-		$3\mydeg$ more beamwidth and roughly $0.7\db$ more directivity than the
-		$-30\db$ design, and its edge elements are too small to set accurately.
-		If the office needs suppression in one specific direction rather than
-		everywhere, the correct tool is a steered null, not a deeper taper.
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the loss in the look direction after the weights are rescaled so the
+		largest element sits at 100\% gain.
+		\begin{solution}[1.2in]
+		At broadside every steering-vector entry is 1, so the response is the plain sum of
+		the weights, and the rescaling divides by the largest magnitude:
+		\eq{ \sum_n w_n &= 3.711, \qquad \max_n \vert w_n \vert = 1.145 \\
+		\text{loss} &= 20\mylog{\frac{3.711}{1.145 \times 4}} = -1.8\db }
 		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		loss = \ansbox[1.3in]{$1.8\db$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{What the null costs.} Return to the eight-element PHASER array
+($kd = 3.085$ rad, broadside beam). Before the weights are rescaled, the response in the
+look direction falls from $N$ to $N\lp 1 - \vert r_\text{n} \vert^2 \rp$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part An interferer sits at $\theta_1 = 10\mydeg$, where the uniform pattern level is
+		$-8.0\db$. Compute the loss in the look direction before rescaling.
+		\begin{solution}[1.1in]
+		A level of $-8.0\db$ means $\vert r_\text{n} \vert = 10^{-8.0/20} = 0.398$:
+		\eq{ \text{loss} &= 20\mylog{1 - (0.398)^2} \\ &= 20\mylog{0.842} = -1.5\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		loss = \ansbox[1.3in]{$1.5\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A second interferer sits at $\theta_1 = 30\mydeg$, where the uniform pattern
+		level is $-33.9\db$. Compute the loss and comment on the result in one sentence.
+		\begin{solution}[1.2in]
+		Here $\vert r_\text{n} \vert = 10^{-33.9/20} = 0.020$:
+		\eq{ \text{loss} = 20\mylog{1 - (0.020)^2} = -0.004\db }
+		The interferer is already sitting in one of the array's natural pattern nulls, so
+		the rule subtracts almost nothing and the null is free.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		loss = \ansbox[1.3in]{$\approx 0\db$}
+	\end{minipage}
+
+	\part The PHASER's half-power beamwidth is $13.1\mydeg$. A student asks the array to null
+	an interferer at $\theta_1 = 3\mydeg$, where $\vert r_\text{n} \vert = 0.93$. Explain what
+	the resulting pattern looks like and what the student should do instead.
+		\begin{solution}[1.3in]
+		With $\vert r_\text{n} \vert = 0.93$ the rule subtracts almost the entire beam. The
+		eight weights very nearly cancel, and after rescaling what remains is a split pattern
+		with a hole where the target used to be; the look-direction gain falls by more than
+		$12\db$ relative to the uniform array. An interferer inside the half-power beamwidth cannot be separated from the
+		target by weighting, so the student should steer the beam to a different angle or
+		wait for the geometry to change.
+		\end{solution}
+
+	\part Explain, in one or two sentences, why $\vert r_\text{n} \vert$ is worth computing
+	before any weights are calculated.
+		\begin{solution}[1.0in]
+		$\vert r_\text{n} \vert$ is the level of the pattern you already have at the null
+		angle, and it sets the main-lobe loss. Reading it off the existing pattern tells you
+		whether the null is cheap or ruinous before any weight arithmetic is done.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{How deep can the null be?} Each ADAR1000 phase setting lands on a
+$2.8125\mydeg$ grid and each gain on a 1\% grid, so each weight carries an independent error.
+The errors add in RMS at the null angle, giving a residual response
+$\vert y(\theta_1)\vert / N \approx \epsilon_\text{rms}/\sqrt{N}$ with
+$\epsilon_\text{rms} = \sqrt{\sigma_\phi^2 + \sigma_a^2}$ and
+$\sigma_\phi = \text{LSB}/\sqrt{12}$ in radians.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the quantization-limited null depth for the eight-element PHASER with
+		its 7-bit phase shifters.
+		\begin{solution}[1.3in]
+		\eq{ \sigma_\phi &= \frac{2.8125\mydeg}{\sqrt{12}} = 0.812\mydeg = 0.0142\ \text{rad}
+		\\ \sigma_a &= \frac{0.01}{\sqrt{12}} = 0.0029 \\
+		\epsilon_\text{rms} &= \sqrt{0.0142^2 + 0.0029^2} = 0.0145 \\
+		\text{depth} &= 20\mylog{\frac{0.0145}{\sqrt{8}}} = -45.8\db }
+		This RMS estimate is consistent with the course number: evaluating the rounded
+		weights numerically leaves a residual of about $-48$\db at the designed angle.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		depth = \ansbox[1.3in]{$-45.8\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Repeat for a 3-bit phase shifter, ignoring the gain error. Compare your answer
+		with the $-6B$ rule of thumb from L26.
+		\begin{solution}[1.3in]
+		A 3-bit part has $\text{LSB} = 360\mydeg/8 = 45\mydeg$:
+		\eq{ \sigma_\phi &= \frac{45\mydeg}{\sqrt{12}} = 13.0\mydeg = 0.227\ \text{rad} \\
+		\text{depth} &= 20\mylog{\frac{0.227}{\sqrt{8}}} = -21.9\db }
+		The $-6B$ rule predicts $-18\db$ for three bits, so the null floor lands a few
+		decibels deeper because the error is averaged over eight elements.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		depth = \ansbox[1.3in]{$-21.9\db$}
+	\end{minipage}
+
+	\part The PHASER carries 7-bit phase shifters, yet the lab sweep measures a notch of only
+	$-21.6\db$ relative to the peak. Explain the discrepancy, given that the sweep's noise
+	floor sits $23\db$ below the uniform-taper peak and the null-steered main lobe sits
+	$2\db$ below that same reference.
+		\begin{solution}[1.3in]
+		The weights are good to about $-48\db$ (the RMS estimate above reads $-46\db$),
+		so quantization is not what the plot is
+		showing. The sweep cannot display anything below its own noise floor, which is
+		$23\db$ below the uniform peak. Measured against the null-steered main lobe, which is
+		$2\db$ lower, that floor is about $21\db$ down, and $-21.6\db$ is the floor rather
+		than the null. Deeper nulls exist in the weights but cannot be seen without lowering
+		the noise floor.
+		\end{solution}
+
+	\part State the maximum number of independent nulls an eight-element array can place and
+	explain the counting in one sentence.
+		\begin{solution}[1.0in]
+		Seven. The array has eight complex weights, one of which is spent holding the main
+		beam in the look direction, leaving $N - 1 = 7$ degrees of freedom for nulls.
+		\end{solution}
+
 \end{parts}
 
 \vspace{1.5em}

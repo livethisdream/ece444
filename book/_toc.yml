@@ -62,61 +62,67 @@ parts:
         title: "L16 — The Array Factor and Pattern Multiplication"
       - file: module03/L17-phased-array-hardware/index
         title: "L17 — Introduction to Phased Array Hardware"
-      - file: module03/L18-beam-steering-theory/index
-        title: "L18 — Beam Steering Theory"
-      - file: module03/L19-beam-steering-lab/index
-        title: "L19 — Beam Steering Lab"
-      - file: module03/L20-fox-hunt-lab/index
-        title: "L20 — Fox Hunt Lab"
-      - file: module03/L21-array-factor-beamwidth/index
-        title: "L21 — Array Factor and Beamwidth Theory"
-      - file: module03/L22-antenna-pattern-theory/index
-        title: "L22 — Antenna Pattern Theory"
-      - file: module03/L23-array-pattern-lab/index
-        title: "L23 — Array Factor and Pattern Lab"
-      - file: module03/L24-sidelobes-tapering/index
-        title: "L24 — Sidelobes and Tapering Theory"
-      - file: module03/L25-tapering-lab/index
-        title: "L25 — Tapering Lab"
-      - file: module03/L26-beam-squint-quantization/index
-        title: "L26 — Beam Squint and Quantization"
-      - file: module03/L27-null-steering-theory/index
-        title: "L27 — Null Steering Theory"
-      - file: module03/L28-null-steering-lab/index
-        title: "L28 — Null Steering Lab"
+      - file: module03/L17-lab-bring-up/index
+        title: "L17 Lab — Phased Array Bring-Up"
+      - file: module03/L18-beam-steering/index
+        title: "L18 — Beam Steering"
+      - file: module03/L18-lab-beam-steering/index
+        title: "L18 Lab — Beam Steering"
+      - file: module03/L19-direction-finding/index
+        title: "L19 — Direction Finding"
+      - file: module03/L19-lab-fox-hunt/index
+        title: "L19 Lab — Fox Hunt"
+      - file: module03/L20-array-factor-beamwidth/index
+        title: "L20 — Array Factor and Beamwidth"
+      - file: module03/L20-lab-array-factor/index
+        title: "L20 Lab — Array Factor"
+      - file: module03/L21-antenna-pattern/index
+        title: "L21 — Antenna Pattern"
+      - file: module03/L21-lab-antenna-pattern/index
+        title: "L21 Lab — Antenna Pattern"
+      - file: module03/L22-sidelobes-tapering/index
+        title: "L22 — Sidelobes and Tapering"
+      - file: module03/L22-lab-tapering/index
+        title: "L22 Lab — Tapering"
+      - file: module03/L23-beam-squint-quantization/index
+        title: "L23 — Beam Squint and Quantization"
+      - file: module03/L23-lab-squint-quantization/index
+        title: "L23 Lab — Grating Lobes, Squint, and Quantization"
+      - file: module03/L24-null-steering/index
+        title: "L24 — Null Steering"
+      - file: module03/L24-lab-null-steering/index
+        title: "L24 Lab — Null Steering"
 
   - caption: Module 4 — Radar Fundamentals and FMCW
     chapters:
       - file: module04/index
         title: Module 4 overview
-      - file: module04/L29-radar-equation/index
-        title: "L29 — The Radar Equation, Path Loss, and RCS"
-      - file: module04/L30-range-resolution-doppler/index
-        title: "L30 — Range, Resolution, and Doppler"
-      - file: module04/L31-radar-detection-theory/index
-        title: "L31 — Radar Detection Theory"
-      - file: module04/L32-fmcw-intro/index
-        title: "L32 — Introduction to FMCW on Phaser"
-      - file: module04/L33-fmcw-range-lab/index
-        title: "L33 — FMCW Range Lab"
-      - file: module04/L34-range-doppler-mti-lab/index
-        title: "L34 — Range-Doppler and MTI Lab"
-      - file: module04/L35-cfar-theory/index
-        title: "L35 — CFAR Processing Theory"
-      - file: module04/L36-cfar-lab/index
-        title: "L36 — CFAR Processing Lab"
-      - file: module04/L37-classification-tracking/index
-        title: "L37 — Classification and Tracking"
-      - file: module04/L38-radar-open-lab/index
-        title: "L38 — Radar Open Lab"
+      - file: module04/L25-radar-equation/index
+        title: "L25 — The Radar Equation, Path Loss, and RCS"
+      - file: module04/L26-range-resolution-doppler/index
+        title: "L26 — Range, Resolution, and Doppler"
+      - file: module04/L27-radar-detection/index
+        title: "L27 — Radar Detection"
+      - file: module04/L28-fmcw/index
+        title: "L28 — FMCW on the Phaser"
+      - file: module04/L28-lab-fmcw-range/index
+        title: "L28 Lab — FMCW Range"
+      - file: module04/L29-range-doppler-mti/index
+        title: "L29 — Range-Doppler and MTI"
+      - file: module04/L29-lab-range-doppler-mti/index
+        title: "L29 Lab — Range-Doppler and MTI"
+      - file: module04/L30-cfar/index
+        title: "L30 — CFAR Processing"
+      - file: module04/L30-lab-cfar/index
+        title: "L30 Lab — CFAR Processing"
+      - file: module04/L31-classification-tracking/index
+        title: "L31 — Classification and Tracking"
+      - file: module04/L31-lab-spectrogram/index
+        title: "L31 Lab — Micro-Doppler Spectrogram"
 
   - caption: Module 5 — Capstone Project
     chapters:
       - file: module05/index
         title: Module 5 overview
-      - file: module05/L39-final-project-kickoff/index
-        title: "L39 — Final Project Kickoff"
-      - file: module05/L40-array-optimization/index
-        title: "L40 — Phase 1 — Array Optimization"
-      - file: module05/L41-radar-integration/index
-        title: "L41 — Phase 2 — Radar Integration and Demonstration"
+      - file: module05/L32-final-project/index
+        title: "L32 — Final Project"
