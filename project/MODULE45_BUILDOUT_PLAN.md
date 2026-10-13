@@ -338,6 +338,10 @@ falls on, and with it the Phase C deadline, is unknown.
    **Superseded 2026-10-13: teams of two.** Each partner's kit sits at a
    different station, so a team takes simultaneous bearings and turns in one
    packet. Still no class-combined fix.
+   **No stations either** (Neil, 2026-10-13): cadets measure from wherever
+   they like outside the marked keep-out zone, recording each kit's position
+   and heading. Simplicity over specification; this replaces the tick-mark
+   stations in item 7.
 4. **Both GUI additions: yes.** Centroid angle beside Est. Angle, and a CSV
    export on the Tracking tab (Phaser repo).
 5. **Final project: option A.** The jammer comes out for now; detect,

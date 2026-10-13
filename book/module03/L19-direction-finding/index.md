@@ -55,7 +55,7 @@ $1/\cos\theta$, so the source is best kept within $\pm 30^\circ$ of broadside.
 
 ::::{frame} Triangulation
 :::{present}
-- Each bearing from a known station is a line on the floor plan.
+- Each bearing from a known position is a line on the floor plan.
 - Two lines cross at the source; three give an outlier check.
 - A least-squares fix is about 20 lines of Python.
 :::
@@ -83,8 +83,8 @@ Each bearing error $\sigma$ moves its line sideways by the cross-range
 $R\tan\sigma$: $0.10\ \text{m}$ at $3\ \text{m}$ and $0.14\ \text{m}$ at
 $4\ \text{m}$ for $\sigma = 2^\circ$. Two lines that cross steeply pin the
 source in both directions; two that cross at a shallow angle $\gamma$ leave an
-error ellipse whose long axis grows as $1/\sin\gamma$. Choosing stations is
-therefore part of the measurement: spread them around the source, and keep
+error ellipse whose long axis grows as $1/\sin\gamma$. Choosing where to stand
+is therefore part of the measurement: spread the kits around the source, and keep
 every box at the array's height, since a horizontal line array measures the
 cone angle and a source below it reads a smaller bearing.
 ::::
