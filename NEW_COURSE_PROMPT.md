@@ -2,7 +2,7 @@
 
 Use this once per course. Fill in the block below, then copy everything below
 the line into a new Claude Code session that has **this repo attached
-read-only** and the **new course repo attached with push access**. One session
+read-only** and the **course's repos attached with push access**. One session
 per course; do not bootstrap both in one thread.
 
 Decided 2026-10-14 (Neil): each course gets **its own repo and its own GitHub
@@ -10,14 +10,30 @@ Pages site**. The ece444 shell is copied once, pinned to the ece444 commit it
 came from, and later shell fixes are synced across deliberately, never edited
 in two places.
 
+**Repo naming** (Neil, 2026-10-14): the public site repo is named by the
+course number alone, so every site is at `livethisdream.github.io/eceNNN/`:
+`ece444`, `ece448`, `ece343`. The private repo is that course's faculty repo.
+Never rename a public site repo, because Pages does not redirect the old URL.
+
+The two courses start from different places:
+
+| | ECE 448 | ECE 343 |
+| :-- | :-- | :-- |
+| Title | Software Defined Radios | Intro to Electromagnetics |
+| Public site | `ece448` **exists**: an August Jupyter Book on the old theme, with L01 written, `deploy.yml`, and `project/ECE448_PROJECT.md` | `ece343` **does not exist yet** |
+| Faculty | `ECE448-faculty`: Beamer lessons, Pluto material | `ece343-faculty`: the 2023 sources, grades, and HW |
+| Other sources | none | `ece343-site` (private): the Spring 2025 sources, which are newer than the faculty repo's |
+| Mode | **upgrade** in place (step 4a) | **new** |
+
 ```text
 COURSE        = ECE 448                 # or ECE 343
-TITLE         = <full catalog title>
+TITLE         = Software Defined Radios # or Intro to Electromagnetics
 TERM          = Spring 2027
-REPO          = livethisdream/ece448    # public, serves the site
-FACULTY_REPO  = livethisdream/ECE448-faculty   # private: assessments, keys
-SOURCES       = <where the existing material is: uploads, OneDrive paths,
-                 an old repo, a syllabus PDF>
+MODE          = upgrade                 # or new
+REPO          = livethisdream/ece448    # or ece343: public, serves the site
+FACULTY_REPO  = livethisdream/ECE448-faculty   # or ece343-faculty
+SOURCES       = <the faculty repo, plus ece343-site for 343, plus any uploads
+                 or OneDrive paths>
 LABS          = <hardware or software the labs run on, or "none">
 ```
 
@@ -73,11 +89,24 @@ words where he gave them.
 
 ## 3. The repos
 
-Creating repos, enabling Pages, and granting access are Neil's to do, unless he
-tells you to do them yourself. Ask him to create `REPO` (public) and
-`FACULTY_REPO` (private), and to turn on GitHub Pages from Actions on `REPO`.
-Then attach both with `add_repo`, plus `livethisdream/latex-tools` (private,
-the house LaTeX macros), and clone them.
+Creating, renaming, or archiving repos, enabling Pages, and granting access are
+Neil's to do, unless he tells you to do them yourself. For a **new** course, ask
+him to create `REPO` (public) and to turn on GitHub Pages from Actions on it.
+Attach `REPO`, `FACULTY_REPO`, any source repo, and `livethisdream/latex-tools`
+(private, the house LaTeX macros) with `add_repo`, then clone them.
+
+**Sources stay private.** The source repos hold Beamer decks, solutions,
+grades, and MATLAB scripts. Copy nothing from them into `REPO` wholesale.
+Content reaches the public site only as lessons are authored, one checked file
+at a time. A figure is published only once you have confirmed it is not part of
+a solution. MATLAB is read for reference and ported to Python, never shipped.
+
+**ECE 343 only:** `ece343-site` and `ece343-faculty` overlap, and
+`ece343-site` holds the newer (Spring 2025) versions. With Neil's go, merge
+`ece343-site` into `ece343-faculty` on a branch, keeping both terms where they
+differ (`diff -rq` the two first), and open a PR there. Neil archives
+`ece343-site` once it merges. Until then, read the 2025 material from
+`ece343-site`.
 
 Work on a branch, `claude/bootstrap`, and open one PR. Do not merge it.
 
@@ -113,6 +142,27 @@ Copy from ece444 `main` and write down the commit you copied from (step 7).
 or PDF; `project/` notes other than the roadmap's structure; anything about the
 ADALM-PHASER, the kits, or `latex-tools` content. Do not copy anything from
 `ECE444-faculty`.
+
+### 4a. Upgrading an existing site (ECE 448)
+
+`ece448` already has a Jupyter Book, but it predates the shell: theme chrome,
+`custom.css`, and a `legacy-slides/` folder, with no `_ext/` and no frame
+lessons. Upgrade it in place on the branch:
+
+- Read its `project/ECE448_PROJECT.md` first. Its decisions stand unless they
+  conflict with this prompt: the `figures/` folder at the repo root, the
+  faculty repo nested at `faculty/<semester>/` behind `/faculty/` in
+  `.gitignore`, and authoring lessons as they are taught. Raise any conflict
+  with Neil. Its "Spring 2026" is stale; the course runs {TERM}.
+- Bring in the shell from step 4 over the old theme files, and keep
+  `figures/`, `requirements.txt`, and the existing `deploy.yml` unless the
+  ece444 versions are needed (diff them).
+- **Keep L01.** Convert it to a frame lesson. Its words, its bio photos, and
+  its deck stay; the structure changes. `check_parity.py` against a build of
+  the current `main` should list L01 and the pages you meant to rewrite, and
+  nothing else.
+- Move the project note's open items into the new `project/ROADMAP.md`, and
+  keep the note itself as `project/ECE448_PROJECT.md`.
 
 ## 5. Make it {COURSE}, and only where a reader sees it
 
