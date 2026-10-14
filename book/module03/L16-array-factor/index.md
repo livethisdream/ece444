@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-The sum of the element phasors collapses into one compact expression, the array factor.
+The sum of the element phasors reduces to one compact expression, the array factor.
 
 Lesson 16 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -43,12 +43,12 @@ Lesson 16 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 - Their phasor sum, the **array factor**, predicts every pattern this module measures.
 :::
 
-Lesson 15 treated an aperture as a continuous sheet of current and read its beamwidth from the aperture length and its sidelobes from the taper. Now we replace that continuous aperture with $N$ discrete elements on a line, each fed its own copy of the signal. The far fields still add as phasors, so the same reasoning applies, and the sum collapses into one compact expression, the **array factor**, which predicts every feature you will measure on the PHASER for the rest of this module.
+Lesson 15 treated an aperture as a continuous sheet of current and read its beamwidth from the aperture length and its sidelobes from the taper. Now we replace that continuous aperture with $N$ discrete elements on a line, each fed its own copy of the signal. The far fields still add as phasors, so the same reasoning applies, and the sum reduces to one compact expression, the **array factor**, which predicts every feature you will measure on the PHASER for the rest of this module.
 ::::
 
 ::::{frame} Part 1: The Linear Array
 :::{present}
-- $N$ identical elements on a line, spaced $d$ apart.
+- The array has $N$ identical elements on a line, spaced $d$ apart.
 - We feed element $n$ the complex weight $a_n$.
 - Every element radiates the same pattern; only the weights and the positions differ.
 :::
@@ -80,7 +80,7 @@ $$\begin{aligned}
 
 Module 3 measures the **scan angle** $\theta$ from **broadside**, the direction perpendicular to the array face, with $-90^\circ \le \theta \le +90^\circ$. Every PHASER plot, the GUI's angle axis, and the phased-array literature use this convention.
 
-Module 1 measured the polar angle from the $+z$ axis for a line source lying on $z$. The two are the same picture read from different reference directions, so the space frequency $k_z = k\cos\theta_{\text{polar}}$ of Lesson 6 becomes $k\sin\theta$ here. Broadside, which was $\theta_{\text{polar}} = 90^\circ$, is now $\theta = 0$. This is the only place in the course the two conventions are set side by side; from here on $\theta$ means the scan angle.
+Module 1 measured the polar angle from the $+z$ axis for a line source lying on $z$. The two are the same picture read from different reference directions, so the space frequency $k_z = k\cos\theta_{\text{polar}}$ of Lesson 6 becomes $k\sin\theta$ here. Broadside, which was $\theta_{\text{polar}} = 90^\circ$, is now $\theta = 0$. This is the only place in the course where we set the two conventions side by side; from here on $\theta$ means the scan angle.
 ::::
 
 ::::{frame} Extra Path Length and Phase
@@ -122,7 +122,11 @@ Lesson 6 computed the far field of a $z$-directed current from its radiation vec
 
 $$N_z = \int I(z')\ e^{+jkz'\cos\theta_{\text{polar}}}\ dz'$$
 
-An array is a current that exists only at the element positions. If we model element $n$ as a point source of strength $a_n$ at $z' = nd$, the current is $I(z') = \sum a_n\ \delta(z' - nd)$, and the integral picks out one term per element:
+An array is a current that exists only at the element positions. If we model element $n$ as a point source of strength $a_n$ at $z' = nd$, the current is
+
+$$I(z') = \sum_{n=0}^{N-1} a_n\ \delta(z' - nd)$$
+
+and the integral picks out one term per element:
 
 $$\begin{aligned}
 N_z &= \sum_{n=0}^{N-1} a_n \int \delta(z' - nd)\ e^{+jkz'\cos\theta_{\text{polar}}}\ dz' \\
@@ -167,7 +171,7 @@ Read the three cases from left to right. At $\psi = 0$ every phasor points the s
 :class: viz-frame
 
 :::{depth}
-The left panel draws the $N$ element phasors tip to tail, with each one turned $\psi$ from the last, and the navy arrow is their sum. The phase is referenced to the array center, so the sum always lies along the horizontal axis and points left where the array factor is negative. The right panel is $\vert AF\vert$ against scan angle, with a marker at the current $\theta$. Start at broadside, where the chain is straight and the sum is $N$. Drag $\theta$ slowly: the chain curls, the sum shortens, and at $15.1^\circ$, where $\psi = 45^\circ$ and $N\psi = 360^\circ$, the chain closes into an octagon and the sum is zero. Keep going to $21.9^\circ$ to find the first sidelobe, $-12.8$ dB, where the chain has wound about one and a half turns.
+The left panel draws the $N$ element phasors tip to tail, with each one turned $\psi$ from the last, and the navy arrow is their sum. The widget references the phase to the array center, so the sum always lies along the horizontal axis and points left where the array factor is negative. The right panel is $\vert AF\vert$ against scan angle, with a marker at the current $\theta$. Start at broadside, where the chain is straight and the sum is $N$. Drag $\theta$ slowly: the chain curls, the sum shortens, and at $15.1^\circ$, where $\psi = 45^\circ$ and $N\psi = 360^\circ$, the chain closes into an octagon and the sum is zero. Keep going to $21.9^\circ$ to find the first sidelobe, $-12.8$ dB, where the chain has wound about one and a half turns.
 :::
 
 :::{present}
@@ -231,7 +235,7 @@ AF_N &\approx \frac{1}{N\sin(3\pi/2N)} \\
 &\xrightarrow{\ \text{large } N\ } \frac{2}{3\pi} = 0.212
 \end{aligned}$$
 
-- $N - 2$ sidelobes per period, one between each pair of nulls; the first is tallest.
+- There are $N - 2$ sidelobes per period, one between each pair of nulls, and the first is the tallest.
 - The first peaks near $N\psi/2 = 3\pi/2$, halfway between the first two nulls.
 :::
 :::{present}
@@ -252,7 +256,7 @@ The denominator is still growing across that gap, so the true peak sits slightly
      style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- $N = 8$, $d/\lambda = 0.481$: half-power width $13.2^\circ$, first null $15.1^\circ$, first sidelobe $-12.8$ dB.
+- At $N = 8$ and $d/\lambda = 0.481$, the half-power width is $13.2^\circ$, the first null is at $15.1^\circ$, and the first sidelobe is $-12.8$ dB.
 - Six sidelobes, $N - 2$, sit between the nulls.
 :::
 ::::
@@ -276,7 +280,7 @@ The half-power row uses the line-source constant of Lessons 6 and 15 with $L = N
 :::{present}
 $$\vert F(\theta)\vert = \underbrace{\vert EF(\theta)\vert}_{\text{one element}} \times \underbrace{\vert AF(\theta)\vert}_{\text{arrangement}}$$
 
-- Requires **identical, identically oriented** elements, so $E_0(\theta)$ factors out of the sum.
+- It requires **identical, identically oriented** elements, so $E_0(\theta)$ factors out of the sum.
 - In decibels the two patterns add.
 - This is Lesson 6's element factor times space factor, with a sum in place of the integral.
 :::
@@ -292,9 +296,21 @@ This is the Lesson 6 split, pattern equals element factor times space factor, wi
 :class: viz-frame
 
 :::{depth}
-The widget starts with two short dipoles $4\lambda$ apart. Near either one, the map shows that element's own figure-eight, because there its wave is much stronger than its partner's. The pair's far field does not begin until $2D^2/\lambda = 32\lambda$ (Lesson 5), well off the map. Out there the two fields still add, but the array factor $\vert 2\cos(\pi d\sin\theta/\lambda)\vert$ splits the pattern into nine lobes, $14.5^\circ$ apart near broadside. Averaged over a few degrees they give the amber curve, $2\vert EF\vert^2$: two antennas that each keep their own pattern and ignore each other.
+This is Lesson 6's two sources ("Two Sources in Space"), now with real elements and a wide spacing. The widget starts with two short dipoles $4\lambda$ apart. Close to either one, its own $1/r$ wave is much stronger than its partner's, so the map shows that element's own figure-eight. Farther out the two waves overlap and interfere, and the fringes on the map are the far-field lobes forming. They stop changing shape with distance only at the pair's far-field distance, $2D^2/\lambda = 32\lambda$ (Lesson 5), well off the map.
 
-Press $\lambda/2$. The far field now starts half a wavelength out, and the lobes merge into one beam. At broadside the two fields arrive in phase, so the amplitude doubles and the power is 4 times one element's, where two independent antennas would give 2 times. The beam is the dipole's pattern multiplied by the array factor, which is the rule this part states.
+The far-field pattern obeys pattern multiplication at any spacing: the power is $\vert EF\vert^2 \vert AF\vert^2$, with
+
+$$\vert AF(\theta)\vert = \left\vert 2\cos\left(\frac{\pi d\sin\theta}{\lambda}\right)\right\vert$$
+
+Its peaks fall where $\sin\theta = m\lambda/d$. At $d = 4\lambda$ that gives $m = 0, \pm 1, \ldots, \pm 4$, nine lobes $14.5^\circ$ apart near broadside, with the outer pair shrunk by the dipole's null along the array axis. The power of the sum is
+
+$$\vert E_1 + E_2\vert^2 = \vert E_1\vert^2 + \vert E_2\vert^2 + 2\ \text{Re}\left(E_1 E_2^*\right)$$
+
+and the cross term changes sign from each lobe to the next null. Averaged over one lobe spacing, about $15^\circ$, it cancels and leaves the amber curve, $2\vert EF\vert^2$, which is what two independent antennas give, each radiating its own pattern.
+
+Press "far apart" to move them $10\lambda$ apart. The map widens, each figure-eight stands clear of the other near its own element, and the fringes between them grow faint. In the far field the lobes are now only $5.7^\circ$ apart near broadside, too fine for a receiver with any spread in angle or frequency to follow, and their average is the same amber curve. Far enough apart, the pair behaves as two independent antennas.
+
+Press $\lambda/2$. Now $\sin\theta = m\lambda/d$ has only the $m = 0$ solution, so one lobe fits in real space and the pattern is a single beam. At broadside the two fields arrive in phase, so the amplitude doubles and the power is 4 times one element's, where two independent antennas would give 2 times. The pair does not create that power. It moves it from the angles where the fields cancel into the beam, which is what directivity measures.
 :::
 
 :::{present}
@@ -309,9 +325,9 @@ Press $\lambda/2$. The far field now starts half a wavelength out, and the lobes
 
 ::::{frame} Worked Example: Four Short Dipoles
 :::{present}
-- Four collinear short dipoles, $d = \lambda/2$, fed in phase; $EF = \cos\theta$.
-- $AF_4$ first sidelobe: $-11.3$ dB at $47.1^\circ$, where the element adds $-3.3$ dB.
-- Total first sidelobe: $-14.4$ dB at $44.2^\circ$. The main lobe narrows only from $26.3^\circ$ to $25.4^\circ$.
+- Four short dipoles sit $\lambda/2$ apart, with $EF = \cos\theta$.
+- The first sidelobe of $AF_4$ is $-11.3$ dB at $47.1^\circ$, where the element adds $-3.3$ dB.
+- The total is $-14.4$ dB at $44.2^\circ$; the main lobe narrows from $26.3^\circ$ to $25.4^\circ$.
 :::
 
 :::{admonition} Worked example — four collinear short dipoles
@@ -352,7 +368,7 @@ The figure zooms in on that sidelobe. Adding the two levels at the array factor'
 - The array factor sets the main-lobe width.
 :::
 
-That last observation generalizes. A directive element reshapes the skirts of the pattern and suppresses whatever the array factor puts at wide angles, but the main lobe belongs to the array. The array factor sets the beamwidth, and the element and the array share the wide-angle behavior.
+That last observation generalizes. A directive element reshapes the skirts of the pattern and suppresses whatever the array factor puts at wide angles, but the array factor sets the main lobe. It sets the beamwidth, and the element and the array share the wide-angle behavior.
 ::::
 
 ::::{frame} Array Factor Builder
@@ -384,7 +400,7 @@ $$\begin{aligned}
 - A second peak at $\psi = \pm 2\pi$ radiates once the window reaches it.
 :::
 
-$AF_N(\psi)$ repeats every $2\pi$ in $\psi$, but $\psi$ is not free: $\psi = kd(\sin\theta - \sin\theta_0)$ ties it to a real angle. As $\theta$ sweeps the visible half-space from $-90^\circ$ to $+90^\circ$, $\sin\theta$ covers $-1$ to $+1$, and $\psi$ covers a window of total width $2kd = 4\pi d/\lambda$ that slides as we steer. That window is the **visible region**. Values of $\psi$ outside it correspond to no real angle, so the array never radiates them.
+$AF_N(\psi)$ repeats every $2\pi$ in $\psi$, but $\psi$ is not free: $\psi = kd(\sin\theta - \sin\theta_0)$ ties it to a real angle. As $\theta$ sweeps the visible half-space from $-90^\circ$ to $+90^\circ$, $\sin\theta$ covers $-1$ to $+1$, and $\psi$ covers a window of total width $2kd = 4\pi d/\lambda$ that slides as we steer. That window is the **visible region**, Lesson 6's window $-k \le k_z \le +k$ written in $\psi$. Values of $\psi$ outside it correspond to no real angle, so the array never radiates them.
 
 The width of the window alone does not produce a second beam. At $d = \lambda/2$ the window is exactly one period wide, and at broadside it runs from $-\pi$ to $+\pi$, between the repeats. A second copy of the main lobe appears only when an edge of the window reaches a repeat at $\psi = \pm 2\pi$. At broadside the edges sit at $\pm kd$, which reach $\pm 2\pi$ when $d = \lambda$. A copy that enters is a **grating lobe**, and because $AF_N$ is exactly periodic it is as tall as the main lobe and radiates as much power as the intended beam.
 ::::
@@ -396,8 +412,8 @@ The width of the window alone does not produce a second beam. At $d = \lambda/2$
      style="max-width: 720px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- $d/\lambda = 0.481$: the window ends at $\pm 173^\circ$, short of the repeats at $\pm 360^\circ$.
-- $d = \lambda$: the edges reach $\pm 360^\circ$, and full-height lobes appear at $\pm 90^\circ$.
+- At $d/\lambda = 0.481$ the window ends at $\pm 173^\circ$, short of the repeats at $\pm 360^\circ$.
+- At $d = \lambda$ the edges reach $\pm 360^\circ$, and full-height lobes appear at $\pm 90^\circ$.
 :::
 ::::
 
@@ -457,7 +473,7 @@ AF_N &= \frac{\sin(N\psi/2)}{N\sin(\psi/2)} \\
 \end{aligned}$$
 
 - Near the main lobe $\psi$ is small, so $\sin(\psi/2) \approx \psi/2$.
-- With $L = Nd$, $N\psi/2 = (kL/2)\sin\theta$: the sinc of Lessons 6 and 15.
+- With $L = Nd$, $N\psi/2 = (kL/2)\sin\theta$, which is the sinc of Lessons 6 and 15.
 :::
 :::{present}
 <img src="../../viz/img/L16-sinc-limit.svg"
@@ -465,7 +481,14 @@ AF_N &= \frac{\sin(N\psi/2)}{N\sin(\psi/2)} \\
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Near the main lobe and the first few sidelobes, $\psi$ is a small fraction of a period when $N$ is large, so the denominator $N\sin(\psi/2)$ is close to $N\psi/2$. The array factor then becomes $\sin u/u$ with $u = N\psi/2 = (kNd/2)\sin\theta$. With $L = Nd$ this is the $u = (kL/2)\cos\theta_{\text{polar}}$ of Lesson 6's uniform line source, written in scan angle. A uniform line source of length $L$ has a beamwidth $\approx 0.886\ \lambda/L$ and a first sidelobe of $-13.3$ dB, and a uniform array of $N$ elements spaced $d$ has a beamwidth $\approx 0.886\ \lambda/(Nd)$ and a first sidelobe near $-13$ dB. The array is that line source **sampled** every $d$.
+Near the main lobe and the first few sidelobes, $\psi$ is a small fraction of a period when $N$ is large, so the denominator $N\sin(\psi/2)$ is close to $N\psi/2$. The array factor then becomes $\sin u/u$, with
+
+$$\begin{aligned}
+u &= \frac{N\psi}{2} = \frac{kNd}{2}\sin\theta \\
+&= \frac{kL}{2}\cos\theta_{\text{polar}}
+\end{aligned}$$
+
+for $L = Nd$. That is the $u$ of Lesson 6's uniform line source, written in scan angle. A uniform line source of length $L$ has a beamwidth $\approx 0.886\ \lambda/L$ and a first sidelobe of $-13.3$ dB, and a uniform array of $N$ elements spaced $d$ has a beamwidth $\approx 0.886\ \lambda/(Nd)$ and a first sidelobe near $-13$ dB. The array is that line source **sampled** every $d$.
 
 The figure shows where the approximation holds. Plotted against $u$, in units of the line source's null spacing, the 4-, 8-, and 32-element patterns all match the sinc near the main lobe. They part from it where $\psi$ is no longer small: an $N$-element array repeats its main lobe at full height $N$ nulls out, so the 4-element pattern returns at $u/\pi = 4$ and the 8-element one at $8$, while the 32-element pattern follows the sinc across the whole plot.
 
@@ -483,14 +506,14 @@ The figure shows where the approximation holds. Plotted against $u$, in units of
 
 The sampled view assigns each parameter its job. Two arrays with the same $Nd$ have nearly the same main lobe whether 8 elements or 32 fill that length. Uniform excitation gives about $-13$ dB in the array exactly as in the aperture, and Lesson 22 tapers it.
 
-The spacing decides what repeats. The array samples the current only at multiples of $d$, so its phases $e^{\ jn\psi}$ cannot distinguish $\psi$ from $\psi + 2\pi$, and the pattern repeats with that period. This is the general rule that sampling a function makes its transform periodic. A continuous aperture has a contribution from every position, so no shift of $\psi$ leaves all of them unchanged, and it has no grating lobes.
+The spacing decides what repeats. The array samples the current only at multiples of $d$, so its phases $e^{\ jn\psi}$ cannot distinguish $\psi$ from $\psi + 2\pi$, and the pattern repeats with that period. Lesson 6 showed that the pattern is the Fourier transform of the current ("The Radiation Integral as a Fourier Transform"), and sampling a function makes its transform periodic. A continuous aperture has a contribution from every position, so no shift of $\psi$ leaves all of them unchanged, and it has no grating lobes.
 ::::
 
 ::::{frame} Worked Example: The Course Array
 :::{present}
-- $d = 14$ mm at $10.3$ GHz: $d/\lambda = 0.481$ and $Nd = 3.85\lambda$.
-- $\psi$ spans $\pm 173.2^\circ$, and $d < \lambda/2$, so no grating lobe appears at any scan angle.
-- Nulls at $\pm 15.1^\circ$, $\pm 31.3^\circ$, $\pm 51.2^\circ$; half-power width $13.2^\circ$; first sidelobe $-12.8$ dB at $\pm 21.9^\circ$.
+- At $10.3$ GHz, $d = 14$ mm is $0.481\lambda$, and $Nd = 3.85\lambda$.
+- $\psi$ spans $\pm 173.2^\circ$, and $d < \lambda/2$ rules out grating lobes.
+- Nulls fall at $\pm 15.1^\circ$, $\pm 31.3^\circ$, and $\pm 51.2^\circ$; the half-power width is $13.2^\circ$ and the first sidelobe $-12.8$ dB.
 :::
 
 :::{admonition} Worked example — the course 8-element array
@@ -580,12 +603,12 @@ In the L20 Lab you will steer this array past a fixed source and record power ag
 
 ::::{frame} Looking Ahead
 :::{present}
-- Lesson 17: the ADAR1000 hardware that sets each $a_n$ in gain and phase.
-- Lesson 18: a progressive phase ramp steers the beam to $\theta_0$.
-- The L20, L22, and L24 Labs measure this pattern, taper it, and place a null.
+- Lesson 17 covers the ADAR1000 hardware that sets each $a_n$ in gain and phase.
+- Lesson 18 steers the beam to $\theta_0$ with a phase ramp.
+- The L20, L22–L23, and L24 Labs measure this pattern, taper it, and place a null.
 :::
 
 Today we assumed the feed: element $n$ simply received weight $a_n$. Lesson 17 opens the hardware that produces those weights, the ADAR1000 beamformer chips, the per-element gain and phase controls, and the receive chain that turns eight elements into two digitized channels. Lesson 18 then sets the weights to a progressive phase ramp and steers the beam, which supplies the $\theta_0$ that has gone unused in $\psi$ all lesson.
 
-Every lab in this module measures some feature of today's array factor. The L20 Lab measures the beamwidth, the nulls, and the sidelobe level of the uniform 8-element pattern. The L22 Lab changes the weights and watches the sidelobes drop. The L24 Lab places a null where you want one. Before the next lesson, be able to write $AF_N$ from memory and locate its nulls, because every one of those labs starts by predicting from it.
+Every lab in this module measures some feature of today's array factor. The L20 Lab measures the beamwidth, the nulls, and the sidelobe level of the uniform 8-element pattern. The L22–L23 Lab changes the weights and watches the sidelobes drop. The L24 Lab places a null where you want one. Before the next lesson, be able to write $AF_N$ from memory and locate its nulls, because every one of those labs starts by predicting from it.
 ::::
