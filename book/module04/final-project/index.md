@@ -36,7 +36,7 @@ one account of the system.
 
 ## When things are due
 
-The lab packets come due one at a time, starting around class period 32, in
+The lab packets come due one at a time, starting at class period 32, in
 the order you run the labs; each packet gives its own date. **The report is
 due at class period 41**, the last class of the term. Period numbers are the
 course calendar's class meetings, not the lesson numbers on this site.

@@ -102,7 +102,7 @@ That is the one shared file it may change.
     be a restatement of them. Each packet ends by naming what the cadet
     carries into the report. Extra credit: a unique extension, proposed and
     approved in advance. **Due dates** (Neil, 2026-10-15): the
-    packets come due in sequence from about class period 32, and the report
+    packets come due in sequence from class period 32, and the report
     at class period 41. Periods are calendar meetings, not site lesson
     numbers; each packet states its own date.
   - **The L28–L31 Labs build on each other.** Each lab pass writes its packet
