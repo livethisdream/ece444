@@ -183,6 +183,6 @@ and say what each term does, the rest is arithmetic.
 a radar: send a chirp, listen for the echo, and work out how far away the
 target is and how fast it is moving.
 
-The steering and tapering you learn in this module are the array choices the
-capstone asks you to make and defend.
+The steering and tapering you learn in this module point and shape the
+radar's beam.
 ::::

@@ -2,8 +2,9 @@
 
 Course site for **ECE 444, Antennas, Phased Arrays, and Radar Systems** (USAFA,
 Fall 2026). Jupyter Book under `book/`, reveal.js decks served alongside it,
-published to GitHub Pages on every push to `main`. 5 modules, 32 lessons; Module
-1 is written, Modules 2–5 are mostly shells. Lessons are topics, not class
+published to GitHub Pages on every push to `main`. 4 modules, 31 lessons; the
+final project is the L28–L31 Labs graded together (Neil, 2026-10-15; Module 5
+folded into Module 4). Lessons are topics, not class
 periods (Neil, 2026-10-13): from Module 3 on, a lesson's lab is a child page of
 that lesson, `LNN-lab-<slug>`, named "LNN Lab" and carrying no lesson number of
 its own (`LABS` in `scripts/scaffold_lessons.py`).

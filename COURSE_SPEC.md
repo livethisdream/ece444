@@ -1154,3 +1154,28 @@ folded in.
   parts. The lab's practice set stays `ECE444_Practice_L22Lab` (Part 1
   material), its header now "L22–L23 Lab Practice". The page is measured
   against L22's beat budget by prefix.
+
+- **Module 5 folds into Module 4; the final project is the L28-L31 Labs**
+  (Neil, 2026-10-15: "given the time constraints, I think the final project
+  could be as easy as doing the labs associated with L28-L31 ... the
+  accumulation of their lab reports would be what I grade"; "Module 5
+  essentially goes away. Module 4 now includes the final project"). Four
+  modules, 31 lessons. The L32 kickoff page, the Module 5 index, and the empty
+  L32 deck are removed. Objectives: **5.2 → 4.8** and **5.3 → 4.9**, wording
+  unchanged, quoted with `--module: '4'` on L31 (offset 7) and the L31 Lab
+  (offset 8); **5.1 and 5.4 are dropped**, so the course has 31 objectives.
+  Course objective 5 is gone; course objective 4 now ends "...and apply it on
+  the ADALM-PHASER to detect, classify, and track a moving target." The final
+  project is the four Module 4 lab reports, equal weight, 30% of the course
+  grade, each on a rubric with a sliding scale published with its packet, and
+  individual. **Engagement credit comes from the Module 3 lab packets only**;
+  the Module 4 packets are graded for quality, not attempt, and are never
+  double-counted. **The four labs build on each other**: the L29 Lab starts
+  from the cadet's own L28 range code, the L30 Lab runs CFAR on their L29
+  maps, the L31 Lab classifies what their L30 detector found; each packet says
+  what to carry forward. A new reading page, `module04/final-project`
+  ("Final Project — Radar Lab Portfolio"), sits after the L31 Lab via
+  `EXTRA_PAGES`. The capstone design (option A of `MODULE45_BUILDOUT_PLAN.md`,
+  its rubric, the D0-D4 scaffolding, and a two-target extension) is parked in
+  `project/FINAL_PROJECT_CAPSTONE.md` for a future offering. The decks are
+  frozen, so the L01 and L31 decks still say Module 5 and objectives 5.2/5.3.

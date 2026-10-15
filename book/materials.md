@@ -99,13 +99,14 @@ lesson pages directly and have no separate sheet.
 
 ## Projects
 
-Two graded projects anchor the course. Each has its own packet, and the packet
-is the authoritative statement of the requirements.
+Two graded projects anchor the course. The midterm has its own packet; the
+final project is the four Module 4 lab packets. Either way, the packet is the
+authoritative statement of the requirements.
 
 | Project | Assigned | Due | Packet |
 | :-- | :-- | :-- | :-- |
 | Midterm — Antenna Pattern Measurement | L9 | 2 Oct, 2359 | <a href="projects/ECE444_Project_Midterm.pdf" target="_blank" rel="noopener">project description</a> · [hand-wound inductor guide](materials/hand-wound-inductors.md) |
-| Final — Combined Beamforming + Radar | L32 | end of term | packet follows with Module 5 |
+| Final — Radar Lab Portfolio | L28 Lab | with the L31 Lab | the L28–L31 Lab packets, as each lab is built · [final project page](module04/final-project/index.md) |
 
 ## Hardware & Software
 

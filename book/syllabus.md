@@ -20,8 +20,8 @@ Fall 2026
 This course progresses from fundamental electromagnetics and antenna theory
 through antenna measurement, phased-array beamforming with the ADALM-PHASER
 platform, and FMCW radar concepts. Students combine theory and hands-on
-laboratories culminating in a capstone project integrating beamforming and
-radar signal processing.
+laboratories culminating in a final project that builds a radar processing
+chain on the ADALM-PHASER, one lab at a time.
 
 ## Course Objectives
 
@@ -34,9 +34,8 @@ By the end of this course, you will be able to:
 3. Apply phased-array theory (array factor, beam steering, tapering, null
    steering) using the ADALM-PHASER platform.
 4. Analyze radar performance using the radar equation, detection theory, and
-   FMCW signal processing (range, Doppler, CFAR).
-5. Integrate array beamforming and radar signal processing into a working
-   demonstration that detects, classifies, and tracks a moving target.
+   FMCW signal processing (range, Doppler, CFAR), and apply it on the
+   ADALM-PHASER to detect, classify, and track a moving target.
 
 ## Learning objectives
 
@@ -92,15 +91,8 @@ Each LO is assessed at least once. LOs are assessed as **Mastered** or
 | 4.5 | I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results. |
 | 4.6 | I can implement moving target indication (MTI) processing to distinguish moving targets from clutter. |
 | 4.7 | I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance. |
-
-### Module 5: Capstone Project
-
-| LO | Description |
-| :-: | :- |
-| 5.1 | I can choose and justify array steering and taper weights to optimize detection performance for a specified scenario. |
-| 5.2 | I can integrate FMCW radar processing with a phased-array front-end to track a moving target. |
-| 5.3 | I can classify a detected target from its micro-Doppler signature and report the classifier's accuracy. |
-| 5.4 | I can present system performance results and defend engineering trade-offs in a technical briefing. |
+| 4.8 | I can integrate FMCW radar processing with a phased-array front-end to track a moving target. |
+| 4.9 | I can classify a detected target from its micro-Doppler signature and report the classifier's accuracy. |
 
 ## Grading
 
@@ -112,7 +104,7 @@ project-based evaluation. Four components make up your final grade:
 | Learning Objective (LO) mastery | 30% | Percent of course LOs mastered, multiplied by 30% |
 | Engagement | 10% | Participation, preparation, practice, EI, and course engagement |
 | Midterm Project — Antenna Pattern Measurement | 30% | 100-point rubric, scored on the scale in the project packet |
-| Final Project — Combined Beamforming + Radar | 30% | Traditional rubric-based sliding-scale assessment |
+| Final Project — Radar Lab Portfolio (the L28–L31 Labs) | 30% | Rubric-based sliding scale, one rubric per lab report |
 
 ### LO mastery assessment
 
@@ -124,11 +116,11 @@ calculated as:
 LO Mastery contribution = (LOs mastered / total course LOs) × 30%
 ```
 
-For example, if a cadet masters 30 of 33 course LOs, the LO Mastery
+For example, if a cadet masters 28 of 31 course LOs, the LO Mastery
 contribution is:
 
 ```text
-(30 / 33) × 30% = 27.3%
+(28 / 31) × 30% = 27.1%
 ```
 
 ### Midterm project assessment
@@ -162,10 +154,15 @@ this table is added to the table above.
 
 ### Final project assessment
 
-The Final Project is graded using a **traditional rubric-based sliding scale**.
-This is intentional: the final capstone evaluates system integration, technical
-execution, engineering trade-offs, demonstration quality, radar/beamforming
-performance, and technical communication across a range of performance levels.
+The Final Project is the four Module 4 labs, the **L28, L29, L30, and L31
+Labs**, graded together. Each lab is one stage of a single radar processing
+chain on your own kit (range, range-Doppler and MTI, CFAR, then
+classification), and each starts from your code and data from the one before.
+The four lab reports count equally, and each is graded on a **rubric with a
+sliding scale**, published with its lab packet. The rubric is intentional:
+these labs evaluate technical execution, radar performance, and technical
+communication across a range of performance levels, not just a genuine
+attempt. See the [final project page](module04/final-project/index.md).
 
 ### Engagement credits (EC)
 
@@ -178,14 +175,16 @@ earn engagement points in the following ways:
   a genuine, documented attempt. Correct or not, the work matters.
 - **Attending Extra Instruction (EI).** Book time with me and come prepared with
   specific questions or a concept you want to work through.
-- **Lab packets.** A lab's packet has three parts: a pre-lab you do before the
+- **Lab packets (Module 3).** A lab's packet has three parts: a pre-lab you do before the
   period (your predictions, and in some labs a rehearsal in the browser simulator), the data
   you record on your own kit, and a writeup you do afterward (what you
   measured against what you predicted, and why they differ). Where a lab has a
   packet, it replaces the practice problems for that lab, and for the lesson
   before it when the pre-lab draws on that lesson. The packet is one submission, turned in complete after the lab and
   graded the same way: a genuine, documented attempt. Lab packets are required. They are the first engagement
-  points you earn, and the other routes here add to them up to the cap.
+  points you earn, and the other routes here add to them up to the cap. The
+  Module 4 labs (L28–L31) are not engagement: they are the final project, and
+  are graded on a rubric instead.
 - **Research paper.** You may complete a research paper on a
   relevant, pre-approved topic — an antenna, array, or radar technology, a
   measurement technique, or a mission application. Must be in **IEEE format**,
@@ -218,7 +217,7 @@ Engagement is capped at 10%; extra credit does not roll over.
 Two graded projects anchor the course:
 
 - **Midterm Project — Antenna Pattern Measurement.** Introduced at Lesson 9, due **2 Oct, 2359**. Students build a 915 MHz dipole and trim it to resonance, then match the same antenna to 50 ohms at a second frequency with a discrete network, simulate it, execute a pattern-measurement campaign on it at both frequencies, reduce the data, and report gain, beamwidth, sidelobe level, and polarization behavior against expectations. Graded on a **100-point rubric**, published in the project packet. No resubmission.
-- **Final Project — Combined Beamforming + Radar.** Detect, classify, and track a moving target using the ADALM-PHASER. Kicked off in Lesson 32 (Module 5). Graded using a **traditional rubric-based sliding scale**.
+- **Final Project — Radar Lab Portfolio.** The L28–L31 Labs, graded together: build a radar processing chain on the ADALM-PHASER one stage at a time, from an FMCW capture to a detected, classified target. Individual. Each lab report is graded on a **rubric with a sliding scale**, published with its lab packet.
 
 ## Course policies
 
@@ -351,6 +350,8 @@ time are on the course calendar, not in this list. Lessons link to notes on the
 
 ### Module 4: Radar Fundamentals and FMCW
 
+The L28–L31 Labs are the final project, graded together.
+
 - **L25** The Radar Equation, Path Loss, and Radar Cross Section (RCS)
 - **L26** Range, Resolution, Doppler Effect, and Radar Types
 - **L27** Radar Detection — PD, FAR, dwell time
@@ -362,14 +363,6 @@ time are on the course calendar, not in this list. Lessons link to notes on the
   - **L30 Lab** — CFAR Processing
 - **L31** Classification and Tracking — micro-Doppler classification, range and angle tracking
   - **L31 Lab** — Micro-Doppler Spectrogram
-
-### Module 5: Capstone Project
-
-**Scenario:** Detect, classify, and track a moving target.
-
-- **L32** Final Project — the kickoff, then two phases:
-  - Phase 1 — Array Optimization: choose steering and taper weights, evaluate detection performance
-  - Phase 2 — Radar Integration and Demonstration: integrate FMCW radar processing, classify the target from its micro-Doppler signature, track it, overlay radar tracking results onto the optimized antenna array pattern
 
 ## Textbooks & materials
 

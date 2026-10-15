@@ -412,8 +412,8 @@ adaptive beamforming has both advantages at once; on the PHASER you can see
 precisely what the hybrid architecture costs, because the analog sums destroyed
 the per-element information before the algorithm ever saw it.
 
-The sum and difference beams come back in the Module 5 capstone, where
-monopulse tracks the angle of a moving target.
+The sum and difference beams come back in Lesson 31, where monopulse
+tracks the angle of a moving target.
 
 ::::
 

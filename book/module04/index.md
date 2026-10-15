@@ -26,13 +26,15 @@ you can tell about the thing that sent it back.
 
 Then it gets real: **FMCW on the PHASER**, processed into range, a range
 waterfall, range-Doppler, MTI, and CFAR — the same chain a fielded radar runs.
+You build that chain one lab at a time, and **the four labs are the final
+project**.
 
 :::{depth}
 Detection is a decision under noise, not a measurement. Probability of
 detection and false-alarm rate move together, and CFAR exists because the
-noise floor will not hold still. That is why the CFAR lessons are the ones the
-capstone leans on hardest. The module then ends on what the capstone adds on
-top: the classification and tracking theory, and its spectrogram lab.
+noise floor will not hold still. The module then ends on what a radar does
+with a detection once it has one: classify it from its micro-Doppler
+signature, and track it in range and angle.
 :::
 ::::
 
@@ -54,10 +56,12 @@ top: the classification and tracking theory, and its spectrogram lab.
 </ol>
 ::::
 
-::::{frame} Learning Objective 4.7
+::::{frame} Learning Objectives 4.7-4.9
 
 <ol class="lo-list" start="7" style="--module: '4'">
   <li>I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance.</li>
+  <li>I can integrate FMCW radar processing with a phased-array front-end to track a moving target.</li>
+  <li>I can classify a detected target from its micro-Doppler signature and report the classifier's accuracy.</li>
 </ol>
 ::::
 
@@ -108,7 +112,7 @@ top: the classification and tracking theory, and its spectrogram lab.
 </div>
 ::::
 
-::::{frame} Lessons 30-31: Detection, and Toward the Capstone
+::::{frame} Lessons 30-31: Detect, Classify, and Track
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="L30-cfar/index.html">
@@ -124,20 +128,26 @@ top: the classification and tracking theory, and its spectrogram lab.
   <a class="mt-card mt-lesson" href="L31-classification-tracking/index.html">
     <span class="mt-kind">Lesson 31</span>
     <h4>Classification and Tracking</h4>
-    <p>Micro-Doppler classification and range and angle tracking: the theory the final project needs. Objectives 5.2, 5.3.</p>
+    <p>Micro-Doppler classification and range and angle tracking. Objectives 4.8, 4.9.</p>
   </a>
   <a class="mt-card mt-practice mt-lab" href="L31-lab-spectrogram/index.html">
     <span class="mt-kind">L31 Lab</span>
     <h4>Micro-Doppler Spectrogram</h4>
-    <p>Record a moving target's spectrogram and classify it. Objective 5.3.</p>
+    <p>Record a moving target's spectrogram and classify it. Objective 4.9.</p>
   </a>
 </div>
 ::::
 
-::::{frame} Where This Is Going
-**Module 5** puts the two halves of the course together. The array from Module
-3 points and tapers; the radar from Module 4 detects.
+::::{frame} The Final Project
+- **The L28-L31 Labs are the final project**, 30% of the course grade.
+- One radar chain, a stage per lab: range, range-Doppler and MTI, CFAR, classification.
+- Each lab starts from your code and data from the one before.
 
-Lesson 31 adds the theory of a classifier and a tracker on top, and the
-integration is the project.
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="final-project/index.html">
+    <span class="mt-kind">Final Project</span>
+    <h4>Radar Lab Portfolio</h4>
+    <p>What is graded, how the four labs build on each other, and how they are scored.</p>
+  </a>
+</div>
 ::::

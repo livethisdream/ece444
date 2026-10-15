@@ -151,7 +151,7 @@ By the end of this course you will have designed, measured, and steered real ant
 
 ::::{frame} Course roadmap
 
-Five modules, thirty-two lessons, culminating in an integrated beamforming + radar capstone:
+Four modules, thirty-one lessons, culminating in a radar final project on the ADALM-PHASER:
 
 | Module | Focus |
 | :-: | :- |
@@ -159,7 +159,6 @@ Five modules, thirty-two lessons, culminating in an integrated beamforming + rad
 | 2 | Antenna Types, Simulation, and Measurement |
 | 3 | Arrays and ADALM-PHASER Beamforming |
 | 4 | Radar Fundamentals and FMCW |
-| 5 | Capstone Project |
 
 See the [syllabus](../../syllabus.md) for the full schedule and both project descriptions.
 ::::

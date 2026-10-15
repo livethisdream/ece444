@@ -1,10 +1,10 @@
 # ECE 444 roadmap and working rules
 
-The plan for Modules 3–5 and the rules every working thread follows. **Read
+The plan for Modules 3–4 and the rules every working thread follows. **Read
 this before starting any work.** The Integrator thread maintains this file. If
 something you need is not here, ask Neil or the Integrator rather than guessing.
 
-Last updated 2026-10-13.
+Last updated 2026-10-15.
 
 ## 1. Who does what
 
@@ -92,8 +92,16 @@ That is the one shared file it may change.
   - *Part 2, Measurements*: your own kit, in class.
   - *Part 3, Writeup*: after the lab.
   - The packet replaces the lab's own practice set, and its lesson's when the
-    pre-lab draws on it. It counts toward engagement as a genuine,
-    documented attempt.
+    pre-lab draws on it. A **Module 3** packet counts toward engagement as a
+    genuine, documented attempt.
+  - **The Module 4 packets (L28–L31 Labs) are the final project** (Neil,
+    2026-10-15), graded on a rubric with a sliding scale, equal weight, 30%
+    of the course. They are not engagement credit: nothing is counted twice.
+    Each packet carries its own rubric.
+  - **The L28–L31 Labs build on each other.** Each lab pass writes its packet
+    to start from the cadet's own code and data from the lab before (L29 from
+    the L28 range code, L30 runs CFAR on the L29 maps, L31 classifies the L30
+    detections) and says what to keep for the next one.
   - **A lab's problems are the lab** (Neil, 2026-10-13: "shouldn't we just
     call them labs?"). No new `LNNLab` practice sets. The existing ones (L20,
     L21, L22 for the L22–L23 Lab, L24) fold into their packet's Pre-Lab and
@@ -105,7 +113,10 @@ That is the one shared file it may change.
 - **Assessments** never hand students the formula. They live in
   `ECE444-faculty` only.
 - **Python only, never MATLAB.** American spelling. No thin spaces.
-- **The midterm is done.** Nothing in Modules 3–5 refers to its due date.
+- **The midterm is done.** Nothing in Modules 3–4 refers to its due date.
+- **There is no Module 5** (Neil, 2026-10-15). Objectives 5.2 and 5.3 are now
+  4.8 and 4.9; 5.1 and 5.4 are dropped. The capstone is parked in
+  `project/FINAL_PROJECT_CAPSTONE.md`.
 
 ## 5. Schedule and status
 
@@ -135,8 +146,10 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L24 | Null Steering | practice | 46/20 | cut + sweeps |
 | L24 Lab | Null Steering | **L24 Lab** (old-style sheet) + practice | 51/20 | cut + sweeps + packet |
 
-**Module 4: radar (L25–L31).** Placeholder pages. They need the FMCW mode in
-the Phaser app, which starts the week of 2026-10-12.
+**Module 4: radar (L25–L31) and the final project.** Placeholder pages. They
+need the FMCW mode in the Phaser app (Neil is building it, with the lab
+packets). The L28–L31 Labs are the final project, so each needs a packet with
+its rubric and a recorded-data fallback in case a bench FMCW capture fails.
 
 | Lesson | Title |
 | :-- | :-- |
@@ -151,11 +164,7 @@ the Phaser app, which starts the week of 2026-10-12.
 | L30 Lab | CFAR Processing |
 | L31 | Classification and Tracking |
 | L31 Lab | Micro-Doppler Spectrogram |
-
-**Module 5: final project (L32).** One lesson, the kickoff and the two phases;
-project days are calendar, not lessons. Detect, classify, and track one moving
-target; the jammer is out (option A of `MODULE45_BUILDOUT_PLAN.md`). Individual,
-each cadet on their own kit. Needs the project packet and the rubric.
+| Final Project | Radar Lab Portfolio: the L28–L31 Labs, graded together (`module04/final-project`) |
 
 ## 6. Work queue, in order
 
@@ -167,7 +176,9 @@ each cadet on their own kit. Needs the project packet and the rubric.
    packet.
 4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
-5. **Module 4 and 5 build-out**, once the radar mode runs on hardware.
+5. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
+   taught in class, then the L28–L31 Labs as the final project, each packet
+   with its rubric and built to start from the lab before it.
 6. **Faculty repo:** rename and split the lab keys to the 2026-10-13 numbers
    (see the project note's Status line for that date).
 
