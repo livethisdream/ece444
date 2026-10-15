@@ -32,24 +32,27 @@ came up, and that it works.
 :::
 ::::
 
-::::{frame} Part A: Bring Up Your PHASER
+::::{frame} Part A: Build Your PHASER
 :::{present}
-- Each cadet brings their own kit up from a blank microSD card in six stages: flash, name, boot, connect, update, and calibrate.
+- Each cadet builds their own kit from a stock Linux image: flash, connect, set the clock, join the Wi-Fi, provision, calibrate.
 - The Ethernet cable carries ssh and the browser; the Wi-Fi only connects the Pi to the internet.
 :::
 :::{present}
-<img src="../../viz/img/L17-part-a-network.svg" alt="Part A network. The laptop, at 192.168.7.1, reaches the Pi, at 192.168.7.13, over the Ethernet cable, which carries ssh and the browser interface on port 8080. The Pi joins the AF_ACADEMY_GUEST Wi-Fi and reaches GitHub through it to run install.sh. A path from the laptop through the Wi-Fi access point to the Pi is crossed out, because the guest network can isolate its clients from each other." style="max-width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L17-part-a-network.svg" alt="Part A network. The laptop and the Pi, named phaser-03.local, each give themselves an address on the Ethernet cable, which carries ssh and the browser interface on port 8080. The Pi joins the AF_ACADEMY_GUEST Wi-Fi and reaches GitHub through it to run provision.sh. A path from the laptop through the Wi-Fi access point to the Pi is crossed out, because the guest network can isolate its clients from each other." style="max-width: 100%; display: block; margin: 0 auto;">
 :::
 
-Each cadet starts today with their own PHASER kit and a blank microSD card and brings the
-kit up itself: you flash the course image onto the card, name the kit, boot it,
-connect to it, update its software, and calibrate it. Part B then makes the
-first measurements on the kit you brought up.
+Each cadet starts with their own PHASER kit and a microSD card and builds the
+kit up from the operating system: you flash ADI's stock Kuiper Linux image onto
+the card, connect to the Pi over a cable, set its clock, put it on the Wi-Fi,
+run the Phaser provisioning script, and calibrate the array. These are the
+steps that bring up any embedded Linux device, and each one fails in a way
+that teaches you something about the device. Part B then makes the first
+measurements on the kit you built.
 
 The laptop and the kit use two connections for two different jobs. A direct
 Ethernet cable from the laptop to the Pi carries ssh and the browser interface.
-The classroom Wi-Fi is only the Pi's route to the internet, which it needs for
-the software update.
+The classroom Wi-Fi is only the Pi's route to the internet, which it needs to
+download the Phaser software.
 
 :::{depth}
 The cable is there because of how guest networks are run. A guest network can
@@ -64,190 +67,141 @@ Each cadet has their own kit:
 
 - the ADALM-PHASER board, with the Raspberry Pi and the ADALM-Pluto attached on the back
 - an HB100 microwave source on its own small stand or battery holder
-- a USB-C supply for the board and a supply for the Pi
+- one USB-C supply, for the PHASER board, which powers the Pi too
 - a camera tripod, for the board and for aiming the source
-- a blank microSD card and an Ethernet cable
-- a laptop with Raspberry Pi Imager, a plain-text editor, and an ssh client
+- a 32 GB microSD card and an Ethernet cable
+- a laptop with balenaEtcher and an ssh client
 
-The course image, `phaser-golden.img`, is on the course share at
-**[path to be added]**.
+Your instructor assigns your kit a two-digit number, NN. Kit NN is named
+`phaser-NN`, and kit 03 appears in every example from here on; use your own
+number.
 
 :::{depth}
-The instructor builds the golden image once. The procedure, from the Phaser
-repository's `docs/golden-image.md`, is to provision one kit, verify that it
-calibrates and runs a lab, arm it for cloning with
-`provision.sh --prepare-image`, and copy its card to a file. Every card flashed
-from that file starts as a copy of the same working kit, with the operating
-system configured and the course software already installed, so you never run
-`provision.sh` or the card-preparation tools yourself.
-
 On Windows the ssh client is the OpenSSH Client, under Settings > Apps >
 Optional features; macOS and Linux include one.
+
+The instructor also keeps fallback cards, copies of one finished kit. A
+fallback card gets a kit running when a build cannot be finished in the
+period; it is named for your kit before it goes in, and it still needs Steps
+19 to 22, because the calibration it carries belongs to the instructor's kit.
 :::
 ::::
 
-::::{frame} Flash the Card
+::::{frame} Before Class: Flash the Card
 :class: read-only
 
 :::{present}
-1. Copy `phaser-golden.img` to the laptop.
-2. Insert the card.
-3. In Raspberry Pi Imager, choose **Use Custom** and the image.
-4. Choose the microSD card as storage, not a laptop drive.
-5. Decline customization, then write and verify.
+1. Install [balenaEtcher](https://etcher.balena.io).
+2. Download [Kuiper 2021_R2](https://swdownloads.analog.com/cse/kuiper/image_2023-04-02-ADI-Kuiper-full.zip), `image_2023-04-02-ADI-Kuiper-full.zip`.
+3. Format the card: right-click it in File Explorer, **Format...**, **FAT32**, **Start**.
+4. In Etcher, **Flash from file**, the `.zip`, the card, **Flash!**
+5. Cancel any offer from Windows to format the card afterward.
+:::
+:::{present}
+:class: callout
+
+Format the card first. Etcher can fail on an unformatted card, and it fails
+only after about 10 minutes of writing.
 :::
 
-The image is on the course share, and the card goes in the laptop's card
-reader. **Use Custom** is the last entry in Imager's
-**Choose OS** list. Imager
-offers its OS customization settings before it writes the card, and it
-verifies the card after writing it.
+Do this part at home before the period: it needs only your laptop and the
+card. Etcher reads the `.zip` as it is, with no unzipping, and the write and
+its verification take about 15 to 20 minutes. Leave the card in until Etcher
+says the flash is complete.
 
-Imager erases whatever storage it writes to, so check that the storage you chose
-is the microSD card before you start the write.
+Use exactly this release. Kuiper 2021_R2 is the one the Phaser software is
+tested on, and it is based on Debian 11, bullseye; the later Kuiper releases
+change the parts of the system the provisioning script and the Wi-Fi steps
+rely on.
 
 :::{depth}
-Imager's customization settings install their own first-boot script, through
-the same `systemd.run=` entry in the card's `cmdline.txt` that the Phaser setup
-tools use, and they can rename the kit and change its user and password. The
-golden image carries its own first-boot setup, described two frames ahead, so
-we leave Imager's turned off.
+Etcher writes the whole card, so whatever was on it is gone; check that the
+target it shows is the microSD card and not a laptop drive before you press
+**Flash!** After the write, the card holds two partitions: a small FAT one that
+holds the boot files, which Windows can read, and a Linux one, which it cannot.
+That is why Windows offers to format part of the card, and formatting it would
+erase the image.
+
+The card's 32 GB is the reason for the FAT32 in Step 3: Windows offers FAT32
+only on cards of 32 GB or less.
 :::
 ::::
 
-::::{frame} Name the Kit
+::::{frame} Power On and First Contact
 :class: read-only
 
 :::{present}
-Kit NN is `phaser-NN` at `192.168.7.(10 + NN)`; examples use kit 03.
-
-6. Reinsert the card to open its FAT partition.
-7. In `phaser-hostname`, replace `phaser` with `phaser-03`.
-8. In `phaser-ip`, replace `#192.168.7.2/24` with `192.168.7.13/24`, then save and eject.
+6. Mount the PHASER on the tripod, patch face vertical and patch row horizontal.
+7. Put the card in the Pi, check that the Pluto's USB cable runs to the Pi, and run the Ethernet cable to the laptop.
+8. Plug the USB-C supply into the port on the PHASER board beside the SMA cable, and wait 1 to 2 minutes.
+9. Run `ssh analog@analog.local`, answer `yes`, and enter the password `analog`.
 :::
-
-Your instructor assigns your kit a two-digit number, NN, so kit 03 is
-`phaser-03` at `192.168.7.13`. Kit 03 appears in every example from here on;
-use your own number.
-
-The FAT partition is the small one that holds `config.txt` and `cmdline.txt`;
-leave those two alone. Edit `phaser-hostname` and `phaser-ip` in a plain-text
-editor. `phaser-hostname` holds one line, and
-in `phaser-ip` you replace the last line and leave out the `#`.
-
-:::{depth}
-The two files sit on the FAT partition because it is the one part of the card
-that Windows and macOS can write without extra tools. `phaser-hostname` is read
-once, on the first boot. `phaser-ip` is read at every boot by
-`phaser-netalias`, which adds the address as an alias alongside whatever DHCP
-assigns, on the wired port only and once per boot. A line that starts with `#` is a comment, and the golden card ships
-that line commented out, so a kit you do not edit has no fixed address. Each
-kit gets its own name and address because kits that share either one collide
-on the network.
-
-Windows may offer to format the card's other partition, which it cannot read.
-Cancel that offer, because formatting it erases the image. In Notepad's Open
-dialog, choose All Files, because the two files have no extension.
-:::
-::::
-
-::::{frame} First Boot
-:class: read-only
-
 :::{present}
-9. Mount the PHASER on the tripod, patch face vertical and patch row horizontal.
-10. Put the card in the Pi.
-11. Run the Ethernet cable to the laptop.
-12. Connect both supplies and wait through one automatic reboot.
+:class: callout
+
+Power the kit only through the PHASER's USB-C port, never the Pi's own.
 :::
 
-The two supplies in step 12 are the board's and the Pi's. The Pi reboots once
-by itself during its first boot, and it does not answer until it has
-restarted.
+`analog` is the name, the user, and the password that ADI's Kuiper image ships
+with. The `yes` answers ssh's question about whether to trust the kit's host
+key, which it has never seen. If ssh says it cannot resolve `analog.local`,
+wait another minute and try again.
 
 The array steers in the plane of its row of patches, so a board mounted on its
 side steers in elevation, while every later lab sweeps the beam in azimuth.
 
-Until its first boot, the card is a copy of the golden kit, including that kit's
-SSH host keys and its `/etc/machine-id`. A service the instructor armed,
-`phaser-firstboot`, runs before the ssh server starts. It:
-
-- sets the hostname from `phaser-hostname`
-- deletes the SSH host keys and generates new ones
-- regenerates `/etc/machine-id` and deletes stale DHCP leases
-- disables itself and reboots once
-
 :::{depth}
-Without the reset, every kit cloned from one image would be the same machine.
-The **host key** is how ssh identifies the machine it reached. With identical
-keys, the laptop's `known_hosts` file cannot tell the kits apart, and a key
-copied off one kit would impersonate all of them. The **machine-id** is the
-identifier the operating system's own services use to tell one installation
-from another; the system journal and D-Bus both key on it. On an image whose
-network is run by systemd-networkd, the DHCP client identity comes from it too,
-so two kits with the same one would request the same lease and take turns
-losing it. This kit's `dhcpcd` identifies itself by the adapter's hardware
-address instead, so here the reset keeps each kit a distinct machine rather
-than saving its lease.
+Nothing on a bare cable hands out addresses. After about a minute of asking,
+the Pi and the laptop each give themselves a link-local address, one in
+`169.254.x.x` that only the cable can carry, and the laptop finds the Pi by
+name with multicast DNS, the `.local` lookup. That is why a direct cable works
+with no setup on either end, and why the first minute after power-on shows
+nothing. On the instructor's kit, `hostname -I` showed exactly one address at this
+point, `169.254.210.227`.
 
-The service runs before the ssh server, so the golden kit's keys are never
-offered to anyone. It reboots because the init system reads the machine-id only
-at boot. It records the time it ran in `/var/lib/phaser/firstboot-done`, and
-because that file exists, it never runs again on this card.
+The PHASER board supplies the Pi through its own connector, and powering the
+Pi directly bypasses the board's supply. Unplugging the kit while Linux is
+running can also corrupt the card; see the last frame of Part A for the safe
+way to power down.
 :::
 ::::
 
-::::{frame} The Cable Connection
+::::{frame} Set the Clock
 :class: read-only
 
 :::{present}
-13. Give the laptop's wired adapter `192.168.7.1`, mask `255.255.255.0`, and no gateway.
-14. Run `ssh analog@192.168.7.13`.
-15. Answer `yes`.
-16. Enter the password `analog`.
-17. Check that `hostname` prints `phaser-03` and `hostname -I` lists `192.168.7.13`.
+10. Seed the clock from a web server, then check it:
+
+```bash
+sudo date -s "$(curl -sI http://deb.debian.org/ | sed -n 's/^[Dd]ate: *//p')"
+date
+```
 :::
 
-The address in step 13 goes on the laptop's wired Ethernet adapter, and step
-14 runs in a terminal. The `yes` in step 15 answers ssh's question about
-whether to trust the kit's host key.
+`sudo` asks for the password, `analog`. The `date` that comes back should be
+today's date and time; the server reports it in GMT, and the Pi shows it in its
+own time zone.
 
 :::{depth}
-Nothing on a direct cable hands out addresses, so the laptop needs one of its
-own on the same `/24` network as the kit's alias. The address `192.168.7.1`
-sits below every kit's address, and each kit has its own cable, so every
-laptop can use it.
+A Raspberry Pi has no battery-backed clock, and Kuiper ships with no network
+time client, so a fresh card boots believing it is the day the image was made,
+in April 2023. Every secure download that follows checks the server's
+certificate against today's date, and a certificate is only valid between two
+dates, so a wrong clock makes the download fail with a certificate error
+before any software arrives. The provisioning script installs a time client
+and fixes the clock for good, but it has to be downloaded first.
 
-The kit's fixed address exists only on its wired port, added once at boot,
-which is why the cable goes in before the power (steps 11 and 12). If you
-unplug the cable and plug it back in later, power-cycle the kit.
-
-`analog` is the user and the password that ADI's Kuiper image ships with, and
-the golden image keeps both unless your instructor says otherwise. The
-host-key question appears because the first-boot reset gave this kit new keys
-that the laptop has never seen. If ssh times out, the kit may still be in its
-first boot; wait and try again. Where mDNS resolves, `ssh analog@phaser-03.local`
-reaches the same kit, but the fixed address works without it.
+The command breaks that circle with a plain, unencrypted request, which no
+certificate guards: `curl -sI` fetches only the headers of a Debian web page,
+`sed` keeps the line that begins `Date:`, and `date -s` sets the clock to it.
 :::
 ::::
 
-::::{frame} Wi-Fi and the Software Update
+::::{frame} Join the Wi-Fi
 :class: read-only
 
 :::{present}
-18. Check `wpa_supplicant.conf`, then run the Wi-Fi commands in order.
-19. Run `ping -c 4 github.com` and expect four replies.
-20. Run the `install.sh` line and wait for `Installed.`
-:::
-
-The classroom Wi-Fi is the open guest network `AF_ACADEMY_GUEST`. If the
-instructor added the network to the golden image, it is already in the file:
-run `cat /etc/wpa_supplicant/wpa_supplicant.conf` first, and skip the `tee`
-command if `AF_ACADEMY_GUEST` appears.
-
-The commands below set the Wi-Fi country, add the network to
-`/etc/wpa_supplicant/wpa_supplicant.conf`, and tell the Wi-Fi client to reread
-that file. `sudo` asks for the same password, `analog`.
+11. Set the Wi-Fi country and add the classroom network:
 
 ```bash
 sudo raspi-config nonint do_wifi_country US
@@ -258,87 +212,125 @@ network={
     key_mgmt=NONE
 }
 EOF
-sudo wpa_cli -i wlan0 reconfigure
 ```
 
-:::{depth}
-The Kuiper image on this kit is based on Raspberry Pi OS bullseye, where
-`wpa_supplicant` joins the Wi-Fi network and `dhcpcd` then requests an address
-on it. The Wi-Fi country is a regulatory setting: the channels a radio may use
-depend on where it is, so the operating system keeps the Wi-Fi radio blocked
-(rfkill) until a country is set. The network block names the network, and
-`key_mgmt=NONE` tells `wpa_supplicant` it has no password. `tee -a` appends the
-block with root privileges, which a plain `>>` redirection would not have.
+12. Run `sudo reboot`, wait a minute, and ssh in again as in Step 9.
+13. Run `ping -c 4 github.com` and expect four replies.
 :::
 
-Four replies mean the Pi reaches the internet over the Wi-Fi.
-
-If the ping fails, tell the instructor rather than going on to the update.
+The classroom Wi-Fi is the open guest network `AF_ACADEMY_GUEST`. The reboot in
+Step 12 is not optional: on the instructor's kit, asking the Wi-Fi client to reread
+its settings without a reboot left it offline, and the ping failed until the
+Pi restarted. If the ping fails after the reboot, tell the instructor.
 
 :::{depth}
-Two things must hold on an open guest network for this step and the next to
-work, and the instructor checks both before class. The network must not put a
-captive portal, a sign-in or terms page, in front of a new client, because the
-Pi has no browser to click through one. It must also allow outbound HTTPS,
-because the installer downloads the Phaser software from GitHub over HTTPS.
+Kuiper 2021_R2 is based on Raspberry Pi OS bullseye, where `wpa_supplicant`
+joins the Wi-Fi network and `dhcpcd` then requests an address on it. The Wi-Fi
+country is a regulatory setting: the channels a radio may use depend on where
+it is, so the operating system keeps the Wi-Fi radio blocked (rfkill) until a
+country is set. The network block names the network, and `key_mgmt=NONE` tells
+`wpa_supplicant` it has no password. `tee -a` appends the block with root
+privileges, which a plain `>>` redirection would not have.
 
-A failed ping does not stop the lab. The golden image already carries a working
-backend, so the kit can run Part B without the update, and the instructor can
-install the update from a local copy: `install.sh` installs from a directory on
-the Pi, with no download, when `PHASER_SRC` names that directory.
+Two things must hold on an open guest network for this step and the next, and
+the instructor checks both before class. The network must not put a captive
+portal, a sign-in or terms page, in front of a new client, because the Pi has
+no browser to click through one. It must also allow outbound HTTPS, because the
+provisioning script downloads the Phaser software from GitHub.
 :::
+::::
 
-In the ssh session from step 14, run the installer. If `sudo` asks for a
-password, it is `analog`.
+::::{frame} Provision the Kit
+:class: read-only
+
+:::{present}
+14. Run the provisioning script, with your kit's name:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/scripts/provision.sh | bash -s -- --hostname phaser-03
 ```
 
-The installer prints its steps, `[1/6]` through `[6/6]`, and ends with
-`Installed. Service is active and the UI answered HTTP 200.` and two addresses
-for the interface.
-
-:::{depth}
-`install.sh` runs on the Pi. It downloads the current Phaser software from
-GitHub, installs any missing Python packages, copies the backend into
-`/home/analog/pyadi-iio/examples/phaser/`, replaces the browser interface,
-updates the systemd unit if it has changed, restarts the `phaser-headless`
-service, and checks that the interface answers. It never overwrites the kit's
-`config.py`, and running it again is how you update a kit later.
-
-The second address it prints is the first one `hostname -I` lists, which may be
-the Pi's Wi-Fi address; use the fixed address instead. If the download fails
-with a certificate error, the Pi's clock may be wrong, because a Raspberry Pi
-has no battery-backed clock. The Phaser README's fix is
-`sudo date -s "$(curl -sI http://deb.debian.org/ | sed -n 's/^[Dd]ate: *//p')"`,
-after which you run the installer again.
+15. Wait for `Provisioned.`, then run `sudo reboot`.
+16. Run `ssh analog@phaser-03.local`, answer `yes`, and check that `hostname` prints `phaser-03`.
 :::
 
-The lines the installer prints along the way are for the instructor; Part 2
-of the lab packet records only its last line.
+The script prints its steps, `[1/8]` through `[8/8]`, and takes tens of
+minutes; step `[7/8]`, which builds the Python library that talks to the
+board, is the long one and can sit quiet for minutes. Leave it running.
+
+The `-s --` in Step 14 matters. Without the `-s`, bash takes `--hostname` for
+the name of a script file and stops with `bash: --hostname: No such file or
+directory`.
+
+:::{depth}
+`provision.sh` turns a stock Kuiper card into a PHASER kit. In order, it
+checks the machine, installs a time client and fixes the clock for good,
+installs the system packages, adds the PHASER board's device-tree overlay to
+the boot configuration, sets the hostname, installs the plumbing that lets the
+Pi talk to the Pluto over USB, builds pyadi-iio, ADI's Python library for the
+board, and finally runs `install.sh`, which installs the Phaser backend and the
+browser interface as a service that starts at every boot.
+
+The reboot in Step 15 is what makes the board appear. The device-tree overlay
+is read only at boot, and it is the file that tells Linux which chips sit on
+the board's bus; until the Pi restarts with it, the operating system does not
+know the phase shifters exist. The new hostname also takes effect at boot.
+
+Every kit needs its own name because every kit also joins the same Wi-Fi.
+Twenty kits all calling themselves `phaser.local` collide on multicast DNS,
+and the losers rename themselves `phaser-2`, `phaser-3`, and so on, so a name
+you type can reach someone else's kit or none at all.
+
+The `yes` in Step 16 appears again because the laptop has never seen a kit
+named `phaser-03` before. Running the installer again later is how a kit is
+updated:
+`curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/install.sh | bash`.
+:::
+::::
+
+::::{frame} Check the Service
+:class: read-only
+
+:::{present}
+17. Run `journalctl -u phaser-headless -n 30` and look for the banner `ADI Phaser Beamforming Backend` with no `No device found` after it.
+18. Browse to `http://phaser-03.local:8080` and wait for the pill to read **Connected**.
+:::
+
+The backend runs as a service named `phaser-headless`, and its log is the
+first place to look when anything is wrong. A healthy start prints the banner,
+then lines such as `Initializing SDR...` and `Connecting to SDR at
+ip:192.168.2.1...`, and keeps going.
+
+`Exception: No device found` after `Connecting to SDR` means the Pi cannot see
+the Pluto. Check its USB cable to the Pi; the service retries every few
+seconds and comes up on its own once the Pluto appears.
+
+:::{depth}
+The log is a better check than `systemctl is-active phaser-headless`. A service
+that fails at start-up is restarted by systemd every five seconds, and between
+failures it reads `active`; on the instructor's kit it had restarted 83 times while
+the status still said `active`. The backend also starts the hardware before the
+web server, so a missing Pluto shows up in the browser only as a page that
+refuses to connect. `192.168.2.1` is the Pluto's own address on the USB link
+between it and the Pi.
+:::
 ::::
 
 ::::{frame} The Phaser GUI
 :class: read-only
 
 :::{present}
-21. Browse to `http://192.168.7.13:8080` and wait for the pill to read **Connected**.
-
-Today you need four sidebar controls, **Find HB100**, **Calibrate**, **Signal Freq**, and **Rx Gain**, and the **FFT** tab.
+Today you need five sidebar controls, **Find HB100**, **Characterize IF**, **Calibrate Phaser**, **Signal Freq**, and **Rx Gain**, and the **FFT** tab.
 :::
 
 The pill sits at the bottom right and changes from **Checking...** to
 **Connected**. **Start** stays disabled until the backend is ready.
 
-The browser reaches the Pi over the cable, at the same fixed address as ssh.
-
 :::{depth}
 If the pill never reads **Connected**, turn on **Show Logs Tab** under **Plot
 Options** and read the **Logs** tab: a message such as "Start blocked until
 backend is ready" says the backend is still starting, and the page will
-connect on its own once it is up. Where mDNS resolves,
-`http://phaser-03.local:8080` reaches the same interface.
+connect on its own once it is up.
 :::
 
 The interface has a **sidebar** of control sections on the left and a **plot
@@ -347,7 +339,7 @@ lessons; today only a few matter.
 
 | Sidebar section | What lives there |
 | :-- | :-- |
-| Configuration | **Calibration** group: Calibrate, Find HB100, Reboot. Then Signal Freq (GHz), Signal BW (MHz), Rx Gain (dB), Tx Gain (dB), Tx Mode. **Connection** group: Simulator Mode, Backend URL (leave it empty) |
+| Configuration | **Calibration** group: Calibrate Phaser, Find HB100, Characterize IF, Reboot. Then Signal Freq (GHz), Signal BW (MHz), Rx Gain (dB), Tx Gain (dB), Tx Mode. **Connection** group: Simulator Mode, Backend URL (leave it empty) |
 | Element Gains | E1–E8 gain sliders (0–100%); Window Presets Rect, Cheb, Hann, Black; Aperture Presets 2-Elem, Sparse λ; Enforce Symmetric Taper |
 | Phase Control | E1–E8 phase offsets and Reset |
 | Beam Steering | Steer Angle (deg), Taper (Uniform, Chebyshev, Hann, Blackman), Apply |
@@ -369,22 +361,25 @@ them; it is unavailable on the FFT tab.
 :::
 ::::
 
-::::{frame} Source Search and Array Calibration
+::::{frame} Find, Characterize, Calibrate
 :class: read-only
 
 :::{present}
-22. Place the powered HB100 $1\ \text{m}$ out at boresight.
-23. Press **Find HB100** and record its frequency.
-24. Then press **Calibrate**.
+19. Place the powered HB100 $1\ \text{m}$ out at boresight.
+20. Press **Find HB100** and record its frequency.
+21. Press **Characterize IF** and record the IF it chooses.
+22. Press **Calibrate Phaser**.
 :::
 :::{present}
 :class: callout
 
-Let each button finish. Holding the **Connected** pill for two seconds shuts the Pi down.
+In this order, each after the last succeeds. Let each button finish.
 :::
 
 Set the HB100 about $1\ \text{m}$ in front of the array, at the same height as
-the patch row, with its own patch face toward the board.
+the patch row, with its own patch face toward the board. Each button opens a
+**Calibration** window that reports progress; wait for it, and do not press
+another button while it runs. Leave **Reboot** alone.
 
 :::{depth}
 One meter is the shortest far-field distance for this array. Lesson 5's
@@ -397,17 +392,41 @@ so moving the source closer than about $0.9\ \text{m}$ raises the signal but
 curves the arriving wavefront enough to distort the patterns of later labs.
 :::
 
-Run Find HB100 first, because Calibrate reads the frequency that Find HB100
-stores.
+**Find HB100** sweeps the band for the source and records its frequency; expect
+a value within a few hundred MHz of $10.525\ \text{GHz}$, since every HB100
+sits somewhere different. Before it saves anything it checks the answer: it
+retunes $4\ \text{MHz}$ to each side and confirms the tone stays at the same
+frequency, which a real source does and a signal made inside the receiver does
+not.
 
-**Find HB100** searches the band until it locates the source and writes the measured
-frequency to a calibration file on the Pi. Run it once per source, at the start
-of the period, with the HB100 powered and pointed at the array. Every later
-calculation the software does uses that number.
+**Characterize IF** finds the intermediate frequency this kit receives
+cleanly at, the frequency the board converts the $10\ \text{GHz}$ signal down
+to before the Pluto digitizes it. It sweeps the IF against the source it just
+found and picks the middle of the range that works.
+
+**Calibrate Phaser** measures the per-element gain and phase offsets of the
+array itself, the small differences between the eight channels caused by trace
+lengths and part tolerances, and stores them so that zero commanded phase
+across the array produces a broadside beam. Leave the source at boresight
+while it runs. It first checks that the array is hearing the source at all, by
+switching every element off and on; with no difference between the two, it
+stops and says so rather than calibrating against nothing.
 
 :::{depth}
-The steering phase is where the frequency enters. Lesson 18 derives the
-progressive phase
+Each step needs the one before it. Characterizing the IF needs a tone at a
+known frequency, and calibrating needs the kit tuned to the source at an IF it
+can hear. On the instructor's kit, calibration first ran at the IF that ships in
+the configuration file, $2.2\ \text{GHz}$, and heard nothing: on/off contrast
+$0.93\ \text{dB}$. That kit receives cleanly only from $1.2$ to
+$2.175\ \text{GHz}$, while a second kit works at $2.2\ \text{GHz}$; the usable
+IF differs by about $200\ \text{MHz}$ between two kits built alike, which is
+why every kit measures its own. At the IF it measured, $1.69\ \text{GHz}$,
+the same calibration ran to completion with $32.7\ \text{dB}$ of contrast.
+On a kit that has never been characterized, **Calibrate Phaser** runs the
+characterization first, or stops and says so.
+
+The frequency matters downstream because the steering phase depends on it.
+Lesson 18 derives the progressive phase
 
 $$\Delta\phi = kd\sin\theta_0, \qquad k = \frac{2\pi f}{c},$$
 
@@ -415,32 +434,10 @@ so the same steering angle needs a different phase at a different frequency.
 For a $30^\circ$ steer the ramp is $84.9^\circ$ per element at
 $10.1\ \text{GHz}$ and $89.9^\circ$ at $10.7\ \text{GHz}$, and a ramp computed
 for the wrong frequency points the beam at the wrong angle.
-:::
 
-**Calibrate** measures the per-element gain and phase offsets of the array
-itself — the small differences between the eight channels caused by trace
-lengths and part tolerances — and stores them so that zero commanded phase
-across the array produces a broadside beam. The stored calibration survives a
-reboot, so you normally run it once at the start of a lab period and leave it
-alone.
-
-:::{note}
-Both buttons write files on the Pi and take some seconds to finish. Each opens a
-**Calibration** window that reports progress, and the button reads
-**Calibrating...** or **Scanning...** until it finishes. Wait for it, and do not
-press either button again while it runs; use **Cancel** only if it stalls.
-Leave **Reboot**, the third button beside them, alone.
-:::
-
-Expect **Find HB100** to report a frequency within a few hundred MHz of
-$10.525\ \text{GHz}$. Leave the source at boresight while **Calibrate** runs, and
-wait for it to finish.
-
-:::{depth}
-Both buttons write `calibration.json` on the Pi, which holds the HB100
-frequency and the per-element phase and gain corrections. A freshly flashed card
-carries the golden kit's copy of that file, which describes the golden kit's
-source and board rather than yours, and these two runs replace it.
+All three results are stored in `calibration.json` on the Pi and survive a
+reboot, so a kit is calibrated once and stays calibrated until it is moved to
+a different source.
 :::
 
 :::{admonition} No hardware?
@@ -449,6 +446,38 @@ source and board rather than yours, and these two runs replace it.
 Part A has no simulated version, because every step acts on the card, the Pi,
 or the network. If your kit will not come up, tell the instructor. The hosted
 simulator covers Part B.
+:::
+::::
+
+::::{frame} Power Down and Troubleshooting
+:class: read-only
+
+:::{present}
+23. To power down, press the button on the back of the PHASER, or hold the **Connected** pill for two seconds; wait until the lights go out, then unplug the USB-C.
+:::
+
+One or two red power lights may stay on after shutdown; those are fine.
+Pulling the plug while Linux is running can corrupt the card, and a corrupted
+card means flashing it again. A software reboot, `sudo reboot`, shuts down
+cleanly and is always safe.
+
+| What you see | What it means | What to do |
+| :-- | :-- | :-- |
+| Etcher fails about 10 minutes in | the card was not formatted | format it FAT32 and flash again |
+| `curl` reports a certificate error | the Pi's clock is wrong | Step 10, then try again |
+| `ping` fails | the Wi-Fi has not come up | `sudo reboot`, then ping again; then the instructor |
+| `bash: --hostname: No such file or directory` | the `-s` is missing | Step 14 exactly as written |
+| `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` | this laptop has met another card under the same name | `ssh-keygen -R phaser-03.local`, then ssh again and answer `yes` |
+| the page refuses to connect | the backend is not running | Step 17; `No device found` means the Pluto's USB cable |
+| **Calibrate Phaser** stops: no signal is reaching the array | the source, its frequency, or the IF | check the HB100 is on and aimed, then Steps 20 to 22 in order |
+
+:::{depth}
+The host-key warning is ssh doing its job. A host key identifies the machine,
+not the name, so a re-flashed card, a fallback card, or a classmate's kit that
+answers to a name this laptop has seen before presents a key the laptop does
+not recognize, and ssh refuses rather than risk talking to an impostor.
+`ssh-keygen -R` removes the old key from the laptop's `known_hosts` file, and
+the next connection asks about the new one.
 :::
 ::::
 
@@ -530,7 +559,7 @@ On a working kit the sweep's floor sits about 23 dB below the uniform-taper
 peak. A normal FFT peak with a sweep that stands well short of that, or that
 peaks far from $0^\circ$ with the source at boresight, points to the
 calibration rather than the signal: check that Phase Control reads zero, then
-put the source back at boresight and run **Calibrate** again. Lesson 18
+put the source back at boresight and run **Calibrate Phaser** again. Lesson 18
 derives why the sweep peaks at the source, and the L18 Lab measures it on a
 protractor arc.
 :::
@@ -561,7 +590,7 @@ With a checkout of the Phaser repository and Python,
 
 The L17 Lab packet is one submission for the whole lab, turned in complete before Lesson 18. It has three parts:
 
-1. **Part 1, Pre-Lab** (individual, before the lab period): the receive chain in order, the phase shifter's step, the element and channel counts, and how a kit number sets the kit's name and address.
+1. **Part 1, Pre-Lab** (individual, before the lab period): the receive chain in order, the phase shifter's step, the element and channel counts, and how a kit number sets the kit's name.
 2. **Part 2, Measurements** (your own kit's data, recorded in class): the bring-up record from Part A, and the kit check from Part B, the FFT peak and the sweep with the source at boresight, moved, and back.
 3. **Part 3, Writeup** (individual, after the lab): a labeled block diagram, two bench diagnoses, and two written answers.
 

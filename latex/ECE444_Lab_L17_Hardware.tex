@@ -191,18 +191,18 @@ PHASER's patches and ends up as numbers in the Raspberry Pi.
 \end{parts}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The kit's name and address.} Your instructor assigns each
-kit a two-digit number NN, and Part A of the procedure on the L17 Lab page
-gives the kit the name \texttt{phaser-NN} and the fixed address
-$192.168.7.(10 + \mathrm{NN})$. Fill in the row for kit 07, and your own row
-once you know your number.
+\question \textbf{The kit's name.} Your instructor assigns each kit a
+two-digit number NN, and Part A of the procedure on the L17 Lab page gives the
+kit the name \texttt{phaser-NN} when it is provisioned. The laptop reaches the
+kit by that name over the Ethernet cable. Fill in the row for kit 07, and your
+own row once you know your number.
 
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{| c | K{1.25in} | K{1.6in} | K{2.25in} |}
+\begin{tabular}{| c | K{1.1in} | K{2.05in} | K{2.15in} |}
 \hline
-\textbf{Kit} & \textbf{Kit name} & \textbf{Fixed address} & \textbf{GUI address} \\\hline\hline
-07 & \kv{\texttt{phaser-07}} & \kv{\texttt{192.168.7.17}} & \kv{\texttt{http://192.168.7.17:8080}} \\\hline
+\textbf{Kit} & \textbf{Kit name} & \textbf{ssh command} & \textbf{GUI address} \\\hline\hline
+07 & \kv{\texttt{phaser-07}} & \kv{\texttt{ssh analog@phaser-07.local}} & \kv{\texttt{http://phaser-07.local:8080}} \\\hline
 \rule{0pt}{0.24in} & & & \\\hline
 \end{tabular}
 \end{center}
@@ -224,23 +224,25 @@ come up?
 \hline
 \textbf{Item} & \textbf{Value} \\\hline\hline
 Kit number NN & \kv{your own, such as 03} \\\hline
+Date the Pi printed after Step 10 & \kv{today's date} \\\hline
+Result of \texttt{ping -c 4 github.com} & \kv{four replies} \\\hline
+Last line \texttt{provision.sh} printed & \kv{\texttt{Provisioned.}, then its summary} \\\hline
 What \texttt{hostname} prints & \kv{\texttt{phaser-NN}, such as \texttt{phaser-03}} \\\hline
-Fixed address in \texttt{hostname -I} & \kv{\texttt{192.168.7.(10 + NN)}, such as \texttt{192.168.7.13}} \\\hline
-Result of \texttt{ping -c 4 github.com} & \kv{four replies; or failed, reported to the instructor} \\\hline
-Last line \texttt{install.sh} printed & \kv{\texttt{Installed. Service is active ...}} \\\hline
-Address you opened the GUI at & \kv{\texttt{http://192.168.7.13:8080} for kit 03} \\\hline
 What the connection pill reads & \kv{\textbf{Connected}} \\\hline
 Frequency \textbf{Find HB100} reported & \kv{your own, in $10.1$--$10.7\ \ghz$} \\\hline
-\textbf{Calibrate} ran to completion (yes or no) & \kv{yes} \\\hline
+IF \textbf{Characterize IF} chose & \kv{your own, near $1.7\ \ghz$} \\\hline
+\textbf{Calibrate Phaser} ran to completion (yes or no) & \kv{yes} \\\hline
 \end{tabular}
 \end{center}
 
 \begin{solution}
-A ping that fails does not stop the lab: the golden image already carries a
-working backend, and the instructor can install the update from a local copy.
-Record ``skipped'' for the installer line in that case. The \textbf{Find HB100}
-result is this kit's own source, so it generally differs from the nominal
-$10.525\ \ghz$ and from your classmates' values.
+Before Step 10 the Pi believes it is April 2023, the day the image was made,
+so any date other than today's means the clock step did not take. A failed
+ping is reported to the instructor rather than worked around; the instructor
+has fallback cards. The \textbf{Find HB100} result is this kit's own source,
+so it generally differs from the nominal $10.525\ \ghz$ and from your
+classmates' values, and the IF differs from kit to kit as well: the instructor's kit
+chose $1.69\ \ghz$.
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -341,11 +343,11 @@ ADAR1000s over SPI, and serves the browser interface.
 	\begin{solutionorlines}[1.6in]
 	The FFT peak shows that the signal reaches the SDR at a normal level, so the
 	fault is in how the eight elements add. An uncalibrated array, from a
-	\textbf{Calibrate} that was skipped, interrupted, or run with the source off
+	\textbf{Calibrate Phaser} that was skipped, interrupted, or run with the source off
 	boresight, leaves each element with its own phase error, so the elements do
 	not add in phase at broadside and the main lobe never reaches full height.
 	Check that Phase Control reads zero, then put the source back at boresight,
-	$1\ \m$ out, run \textbf{Calibrate}, wait for it to finish, and sweep again.
+	$1\ \m$ out, run \textbf{Calibrate Phaser}, wait for it to finish, and sweep again.
 	\end{solutionorlines}
 
 \end{parts}
