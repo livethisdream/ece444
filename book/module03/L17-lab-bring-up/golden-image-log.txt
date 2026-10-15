@@ -1,0 +1,245 @@
+L17 LAB — GOLDEN KIT BUILD AND DRY RUN: CAPTURE LOG AND HANDOFF
+(markdown in a .txt so Sphinx does not build it; working notes, not a page)
+Started 2026-10-15 in a cloud session; continued in a local session on Neil's laptop.
+
+==========================================================================
+HANDOFF: WHERE THINGS STAND (2026-10-15 ~12:05 MDT)
+==========================================================================
+
+The kit
+- Golden kit `phaser-00`, reached from the laptop as `ssh analog@phaser-00.local`
+  (password `analog`) over the direct Ethernet cable (link-local 169.254.210.227);
+  also on AF_ACADEMY_GUEST at 10.192.43.192. GUI: http://phaser-00.local:8080
+- Stock Kuiper 2021_R2 (image_2023-04-02-ADI-Kuiper-full.zip), Kuiper 11.2
+  bullseye, kernel 5.10.63-v7l+, armv7l. Provisioned with provision.sh.
+- Installed backend is the TEST BRANCH `claude/hb100-stale-buffer`
+  (livethisdream/phaser#29), via
+  `curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/install.sh | PHASER_REF=claude/hb100-stale-buffer bash`
+  Re-run plain install.sh (main) after #29 merges and BEFORE imaging.
+- pylibiio pinned by hand to 0.25 (the fix in livethisdream/phaser#28).
+- HB100 at 1 m boresight measures 10.40760 GHz; Find HB100 PASSES and has saved it.
+
+Open problem: Calibrate fails
+- Preflight "array contrast": all elements on -75.8 dBFS, all off -75.8 dBFS
+  (0.03 dB contrast, needs 6 dB) -> no tone in the window at all.
+- Find HB100 sees the same tone at ~-20 dBFS. Main difference: Find HB100 tunes
+  the Pluto rx_lo to 2.0 GHz (board LO 12.41 GHz); Calibrate uses
+  config.Rx_freq = 2.2 GHz via CN0566.SDR_init (board LO 12.61 GHz).
+- Hypothesis: LO ceiling on this board below 12.61 GHz (commit 1835117 measured
+  the ceiling near 12.85 GHz on another kit). If so, the fix is a lower Rx_freq
+  in the kit's config.py (1835117 argues for 1.9 GHz on coverage grounds).
+- One 12:04 attempt also hit "ERROR: READ LINE: -32 / Broken pipe" and retried.
+- NEXT: run cal_probe.py (below) with the GUI idle. It steps Rx_freq 1.9-2.3 GHz
+  under Calibrate's own setup and measures elements on vs off.
+- Also suspected, not measured: phase cal's _capture_peak_dbfs reads right after
+  set_chan_phase with no buffer flush, so the first of its averages may be stale
+  (same stale-buffer bug #29 fixed in the HB100 search).
+
+After Calibrate passes (rest of the dry run)
+1. Lab Presets > 1 Steering Angle, Rx Gain 10, Start. FFT peak vs floor (page
+   expects >= 20 dB). Note: service log showed Rx_gain 1 at startup; confirm 10 sticks.
+2. Rectangular tab, Show Peak Angle Marker: Est. Angle at boresight, at ~30 deg
+   (0.5 m to the side, 1 m out), and back.
+3. Golden image: comment `phaser-ip` back out if it was edited; run
+   `curl -fsSL .../scripts/provision.sh | bash -s -- --prepare-image --skip-gui --no-reboot`;
+   shut down with the PHASER button; image the card (Etcher cannot save a card to
+   a file: WSL `dd` + `pishrink` recommended, since 32 GB cards differ in size).
+4. Flash one fallback card from the image; test `ssh analog@phaser-NN.local` over
+   the cable on a clone (no laptop static IP).
+
+Open PRs (livethisdream/phaser)
+- #28 provision.sh: pin pylibiio<1 on libiio 0.x. CI green.
+- #29 Find HB100: destroy RX buffer after retune; use the radio's real sample
+  rate (30.72 MSPS with LTE20_MHz.ftr). CI green; confirmed on phaser-00.
+- Not yet filed: docs/golden-image.md and README must seed the clock before the
+  provision.sh curl; consider starting the HTTP server before hardware init so a
+  missing Pluto shows on the page; Find HB100's failure text says "1.5-2 m" while
+  the lab page says 1 m.
+
+cal_probe.py (paste on the Pi as ~/cal_probe.py, run `python3 ~/cal_probe.py`)
+-----------------------------------------------------------------------------
+# Where is the HB100 under Calibrate's settings? Run on the Pi, kit idle.
+import os, sys, time, numpy as np
+os.chdir("/home/analog/pyadi-iio/examples/phaser")
+sys.path.insert(0, os.getcwd())
+import config
+from phaser_functions import spec_est, load_hb100_cal
+from adi import ad9361
+from adi.cn0566 import CN0566
+
+F = load_hb100_cal()
+print(f"stored HB100 {F/1e9:.6f} GHz   config Rx_freq {config.Rx_freq/1e9:.3f} GHz")
+p = CN0566(uri="ip:localhost"); s = ad9361(uri="ip:192.168.2.1"); p.sdr = s
+time.sleep(0.5); p.configure(device_mode="rx")
+p.SDR_init(30000000, config.Tx_freq, config.Rx_freq, 6, -6, 1024)
+s.tx_hardwaregain_chan0 = s.tx_hardwaregain_chan1 = -88
+p.freq_dev_range = 0; p.freq_dev_time = 0; p.powerdown = 0; p.ramp_mode = "disabled"
+for i in range(8): p.set_chan_gain(i, 127, apply_cal=False); p.set_chan_phase(i, 0, apply_cal=False)
+fs = int(s.sample_rate)
+print(f"fs {fs}")
+print("  Rx_freq_GHz   LO_GHz   peak_dBFS  peak_offset_MHz   all_off_dBFS")
+for rx in (1.9e9, 2.0e9, 2.1e9, 2.2e9, 2.3e9):
+    s.rx_lo = int(rx)
+    p.frequency = (int(F) + int(rx)) // 4
+    def grab():
+        time.sleep(0.05); s.rx_destroy_buffer(); d = s.rx()
+        a, fr = spec_est(d[0] + d[1], fs, ref=2 ** 11, plot=False)
+        a, fr = np.fft.fftshift(a), np.fft.fftshift(fr)
+        k = int(np.argmax(a)); return a[k], fr[k]
+    on, off_hz = grab()
+    for i in range(8): p.set_chan_gain(i, 0, apply_cal=False)
+    off, _ = grab()
+    for i in range(8): p.set_chan_gain(i, 127, apply_cal=False)
+    print(f"    {rx/1e9:.2f}       {(F+rx)/1e9:.4f}    {on:7.1f}      {off_hz/1e6:+7.3f}        {off:7.1f}")
+-----------------------------------------------------------------------------
+Read it: tone (peak well above -75 dBFS, off column >= 10 dB lower) at low
+Rx_freq and gone at 2.2 -> LO ceiling, lower Rx_freq. Gone everywhere -> look at
+how Calibrate configures the radio (CN0566.SDR_init, DDS, gains).
+
+==========================================================================
+DECISIONS MADE DURING THE BUILD (Neil, 2026-10-15)
+==========================================================================
+- CADETS BAKE THEIR OWN KIT from stock Kuiper, "as a means to learn how to set
+  up an embedded system". This runbook IS the new Part A. Golden-image cards
+  are the instructor's FALLBACKS.
+- balenaEtcher is the flasher everywhere (replaces Raspberry Pi Imager on the
+  page). Format the card FAT32 first (right-click > Format..., FAT32; class
+  cards are 32 GB): Etcher can fail on an unformatted card ~10 min in.
+- Kuiper 2021_R2 exactly:
+  https://swdownloads.analog.com/cse/kuiper/image_2023-04-02-ADI-Kuiper-full.zip
+  Etcher takes the .zip directly. Flash took ~17 min.
+- Golden image bakes AF_ACADEMY_GUEST in; the manual join stays documented.
+- Kits are reached by unique mDNS name `phaser-NN.local` over the cable; the
+  laptop static-IP (192.168.7.x) step becomes a fallback. Golden kit = phaser-00.
+- SAFETY: power ONLY through the USB-C port on the PHASER board next to the SMA
+  cable, never the Pi directly. Never pull power without a clean shutdown: the
+  push button on the back of the PHASER or the GUI shutdown; wait until the LEDs
+  go off (one or two red power LEDs may stay lit), then unplug. Software reboots
+  (`sudo reboot`) are clean.
+
+==========================================================================
+CADET-PAGE CHANGES COLLECTED SO FAR
+==========================================================================
+- Kit list: one USB-C supply (PHASER board), not a board supply + a Pi supply.
+- First Boot: power via PHASER USB-C callout; shutdown-before-unplug callout.
+- Pre-boot hardware check: Pluto USB cable runs to the Pi.
+- First contact: `ssh analog@analog.local` over the bare cable works (link-local
+  + mDNS), give it 1-2 min after power-on.
+- Clock BEFORE any https download:
+  sudo date -s "$(curl -sI http://deb.debian.org/ | sed -n 's/^[Dd]ate: *//p')"
+- Wi-Fi: set country, append the key_mgmt=NONE block, then `sudo reboot`
+  (wpa_cli reconfigure alone did not bring it up); then ping.
+- Provision with a name: `curl -fsSL .../provision.sh | bash -s -- --hostname phaser-NN`
+  (the `-s` matters: without it bash says "--hostname: No such file or directory").
+  Until #28 merges: `sudo python3 -m pip install "pylibiio==0.25"` first.
+- Host-key warning after a re-flash or card swap: `ssh-keygen -R phaser-NN.local`.
+- Health check is `journalctl -u phaser-headless -n 30`, not `systemctl is-active`
+  (a crash loop reads "active" between restarts). "No device found" = Pluto cable.
+- Find HB100 must pass before Calibrate.
+- Pre-lab homework candidate: install Etcher, format, flash Kuiper (17 min).
+- Lab packet Part A record table and pre-lab questions follow the new Part A.
+
+==========================================================================
+CHRONOLOGICAL LOG (raw)
+==========================================================================
+## Log
+
+### 1a. Which Kuiper (asked 2026-10-15)
+- Neither repo pins a version. provision.sh assumes bullseye: /boot, dhcpcd, wpa_supplicant.
+- ADI CN0566 quick start: Phaser software tested on Kuiper "2021_R2" (released spring 2023),
+  https://swdownloads.analog.com/cse/kuiper/image_2023-04-02-ADI-Kuiper-full.zip
+- EngineerZone: upstream Phaser setup fails on Kuiper 2023_R2. Newer Kuiper releases (github.com/analogdevicesinc/kuiper/releases) are bookworm-era — avoid.
+- TODO: record the image's SHA-256, `cat /etc/os-release`, and `uname -a` from the golden kit.
+
+## Golden image runbook (Neil's steps, as performed)
+1. Download balenaEtcher (https://etcher.balena.io). Make sure the microSD card is formatted and blank.
+   - WHY (Neil, 2026-10-15, observed): Etcher can fail on a card that has not been formatted first, and it fails only after ~10 min of writing. Format first; this is required, not a nicety.
+   - HOW: Windows File Explorer, right-click the card > Format..., File system FAT32, Start. Class cards are 32 GB (Neil), so FAT32 is offered.
+2. Download Kuiper 2021_R2: https://swdownloads.analog.com/cse/kuiper/image_2023-04-02-ADI-Kuiper-full.zip
+   - Open: Etcher here vs Raspberry Pi Imager on the cadet "Flash the Card" frame — align?
+   - DECIDED (Neil): balenaEtcher is the flasher for the Kuiper card AND for every class copy of the golden image.
+3. Flash the Kuiper .zip to the formatted card with Etcher: ~17 min (Neil, 2026-10-15). Etcher took the .zip directly, no unzip (Neil). Still to confirm: validation pass included in the 17 min?
+   - Open: capturing the golden card TO A FILE on Windows. Etcher's "Clone drive" copies card-to-card, not card-to-file. Options: Win32 Disk Imager "Read", or WSL dd + pishrink.
+4. (next) First boot of stock Kuiper and first contact. Stock: hostname `analog`, user/password analog/analog, /boot. Test: direct cable, both sides fall back to link-local (169.254.x.x), `ssh analog@analog.local` from Windows. Record how long until it answers.
+
+## KEY SAFETY POINTS (Neil, 2026-10-15)
+- DO NOT POWER THE PI DIRECTLY. Power the kit only through the USB-C connector on the PHASER board, next to the SMA cable.
+- Never pull power without a clean shutdown first. Shutdown = the push button on the back of the PHASER, or the GUI shutdown (hold the Connected pill 2 s). Press, wait until the LEDs go off (a couple of red ones may stay lit; those are power indicators and are fine) (Neil), then pull USB-C. Unplugging with no shutdown risks corrupting the card. Software reboots (`sudo reboot`, first-boot auto reboot) are clean and fine.
+- Page conflicts: kit list says "a USB-C supply for the board and a supply for the Pi"; First Boot step 12 says "Connect both supplies"; Cable Connection depth says "power-cycle the kit". All must change.
+
+4. First boot of stock Kuiper, powered via PHASER USB-C. `ssh analog@analog.local` works from Windows PowerShell (Neil). [confirm: over the direct cable, no router?] [time to answer?]
+5. (next) Record version: `cat /etc/os-release; uname -a; hostname -I`. Then join AF_ACADEMY_GUEST (same commands as the cadet page) and `ping -c 4 github.com`, because provision.sh downloads from GitHub.
+   - VERSION (golden kit, stock): Kuiper GNU/Linux 11.2 (bullseye), ID=raspbian; kernel 5.10.63-v7l+ #1 SMP Fri Mar 10 16:35:58 UTC 2023, armv7l (32-bit). Matches image_2023-04-02-ADI-Kuiper-full.zip.
+   - `hostname -I` = 169.254.210.227 only: link-local over the direct cable; mDNS (analog.local) resolved from Windows. CONFIRMS: direct cable + link-local + mDNS reaches the Pi with no laptop IP config.
+   - IDEA for cadet page: `ssh analog@phaser-NN.local` over the cable may make the laptop static-IP step (192.168.7.1) a fallback instead of a required step. Test on a cloned card.
+5b. Wi-Fi join (country US, AF_ACADEMY_GUEST block, wpa_cli reconfigure): ping FAILED until a reboot (`sudo reboot`) (Neil). After reboot: ping github.com OK (Neil) => AF_ACADEMY_GUEST passes ICMP+DNS from a new client; no captive portal blocked it. [ping error text before reboot?]
+   - Likely cause: radio was rfkill-blocked until the country was set; reconfigure alone did not bring wlan0 up / start DHCP on it. Reboot applies everything.
+   - CADET PAGE: Wi-Fi frame needs a reboot step (sudo reboot, clean) — OR bake the network into the golden image so clones join on first boot (recommended; this card now carries it).
+6. (next) provision.sh: curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/scripts/provision.sh | bash   (record [1/8]..[8/8], WARNs, total time; HTTPS to GitHub test)
+   - DECIDED (Neil): Option 2 for the golden image (Wi-Fi baked in). BUT the manual join + `sudo reboot` + ping stays documented as a full step for anyone baking their own image.
+6. provision.sh: the curl from raw.githubusercontent.com FAILS on a stock card because the clock is wrong (no RTC, no NTP client in Kuiper) -> TLS cert check fails (Neil). Chicken-and-egg: provision.sh's step 2 fixes the clock, but you can't download provision.sh first.
+   - FIX: seed the clock over plain HTTP first (Phaser README):
+     sudo date -s "$(curl -sI http://deb.debian.org/ | sed -n 's/^[Dd]ate: *//p')"
+   - PHASER REPO NOTE: docs/golden-image.md step 1 and README quick start should put this line before the provision.sh curl.
+   - Date fix worked; provision.sh then downloaded and is running (Neil). [curl error text still wanted] [provision start time]
+
+## DECISION (Neil, 2026-10-15): CADETS BAKE THEIR OWN
+Cadets build their own kit from stock Kuiper, "as a means to learn how to set up an embedded system." This runbook IS Part A.
+- Golden image (Wi-Fi baked in) = the FALLBACK cards (Neil's word), not the cadet path.
+- Cadet naming: `curl ... provision.sh | bash -s -- --hostname phaser-NN` (provision.sh step 5), and phaser-ip on the FAT partition for the fixed address.
+- Proposal: Etcher download + format + flash Kuiper (17 min) = Part 1 Pre-Lab homework (needs only laptop + card; kits never leave the room). In class: first contact, clock, Wi-Fi + reboot, provision, reboot, verify, Find HB100, Calibrate.
+- Lab packet (latex/ECE444_Lab_L17_Hardware.tex) Part A record table + pre-lab questions must follow.
+6 (cont). provision.sh [7/8] FAILED: "installed pyadi-iio, but adi.CN0566 still does not import." (Neil, 2026-10-15)
+   - pip resolved pyadi-iio main's `pylibiio >= 0.25` to pylibiio 1.0 (wheel dated 2026-10-05, ten days ago) and uninstalled Kuiper's 0.23.1.
+   - CONFIRMED (traceback): iio/__init__.py line 365 raises "libiio version 1.x required, found version 0". pylibiio 1.0 needs libiio v1; Kuiper 2021_R2 ships libiio 0.x.
+   - Proposed fix: sudo python3 -m pip install "pylibiio==0.25"; re-check import; re-run provision.sh (step 7 then skips).
+   - PHASER REPO NOTE: provision.sh must pin pylibiio<1 on Kuiper 2021_R2 (new upstream release broke a fresh build).
+7. After provision + reboot (hostname now `phaser`): `ssh analog@phaser.local` from PowerShell -> "WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!" ... "Offending ECDSA key in C:\Users\NRogers/.ssh/known_hosts:20" ... "Host key verification failed." (Neil)
+   - Cause: laptop's known_hosts already held a key for phaser.local from a different (earlier) kit/card. New card = new host keys.
+   - FIX: `ssh-keygen -R phaser.local` (PowerShell, OpenSSH ships it), then ssh again and answer `yes`.
+   - CADET PAGE: needed whenever a cadet re-flashes, swaps to a fallback golden card, or reuses a laptop that has seen another kit under the same name/IP. Teach it as an embedded-systems lesson: host keys identify the machine, not the name.
+   - provision.sh finished [8/8] after the pylibiio==0.25 workaround (Neil). Reboot -> hostname `phaser`. `ssh-keygen -R phaser.local` cleared the warning; ssh in OK.
+8. (next) Verify the golden kit: GUI at http://phaser.local:8080 -> Connected; Find HB100; Calibrate; Lab preset 1 + Start; FFT peak. Then decide the fixed-IP question.
+- DECIDED (Neil): cadets reach the kit by mDNS name over the cable, not the fixed 192.168.7.x alias. Laptop static-IP step drops (fallback only).
+  - Flag: all kits also join AF_ACADEMY_GUEST; identical names "phaser" collide on mDNS (avahi renames to phaser-2, ...), provision.sh usage warns of this. Recommend unique phaser-NN via `provision.sh --hostname phaser-NN`. [confirm with Neil]
+9. Rename via provision: `... | bash -- --hostname phaser-01` FAILED: "bash: --hostname: No such file or directory" + "curl: (23) Failure writing output". Needs `bash -s -- --hostname phaser-01` (-s = read the script from stdin; without it bash treats --hostname as a script file). SLIDE: show the exact line, call out `-s`.
+   - With `bash -s --`: provision done, `[5/8]` renamed, `sudo reboot`, `ssh analog@phaser-00.local` works (Neil). Golden kit = phaser-00? [confirm 00 vs 01]
+- DECIDED (implicitly, Neil): unique names phaser-NN.local.
+8a. Golden kit check: phaser-headless active; hostname phaser-00; addresses 169.254.210.227 (cable, link-local) + 10.192.43.192 (AF_ACADEMY_GUEST DHCP). Golden kit = phaser-00.
+8b. Browser: "phaser-00.local refused to connect" (Neil). Server binds 0.0.0.0:8080 (phaser_headless.py:1417), so suspect missing :8080 or browser auto-upgrading to https. [diagnosing]
+   - On Pi: `curl -sI http://localhost:8080` empty; nothing listening on 8080/8765, yet systemctl says active. phaser_headless.py runs _init_hardware() (Pluto at ip:192.168.2.1, ADAR at ip:localhost, 3 retries) BEFORE starting the HTTP/WS threads, so a hung or retrying hardware init = active service, no web UI. -> need journalctl.
+   - PHASER REPO NOTE (candidate): start the HTTP server before hardware init, so the UI can at least show the failure.
+   - Test-NetConnection phaser-00.local -Port 8080: ping OK (IPv6 link-local fe80::... and 169.254.210.227 on "Ethernet 8"), TCP 8080 FAILED on both. Confirms network fine, nothing listening on the Pi.
+   - ROOT CAUSE (journal): service crash-loops (restart counter 83). "Connecting to SDR at ip:192.168.2.1... Exception: No device found" from adi.ad9361 -> the Pluto is not reachable. `lsusb | grep analog|pluto|0456` = nothing -> Pi does not see the Pluto on USB at all.
+   - /sys/bus/iio/devices: iio:device0..4 + trigger -> the PHASER board's own devices (ADAR1000s, ADF4159, etc.) enumerated, so the device-tree overlay from provision.sh works.
+   - `systemctl is-active` said "active" only because it caught a restart window. SLIDE: check with `journalctl -u phaser-headless -n 30`, not is-active.
+   - Suspects: Pluto USB cable unplugged / in the Pluto's power-only micro-USB port instead of the data (OTG) port / Pluto not powered.
+   - FIXED: Pluto USB was unplugged (Neil). Plugged in -> service came up -> GUI loads at http://phaser-00.local:8080.
+   - CADET PAGE: add "Pluto USB cable to the Pi" to the hardware check before first boot; troubleshooting row "page refuses to connect" -> journalctl, look for "No device found" -> Pluto cable.
+8c. (next) Find HB100 / Calibrate / preset 1 + Start / FFT peak vs floor.
+8c. Find HB100 FAILED (Neil). [message?]
+   - Note: phaser_find_hb100_headless.py's failure text says HB100 "roughly 1.5-2 m away"; lab page says 1 m. Reconcile.
+   - Find HB100 log: peak 10.417656 GHz, SNR 74.5 dB; LO-shift confirm at +4 MHz -> 10.416617 GHz, error 1.039 MHz > CONFIRM_TOLERANCE_HZ 1.0 MHz -> "generated inside the receiver" -> FAILED, nothing saved.
+   - Read: a real spur keeps its baseband offset, so its error would be ~= the shift (4 MHz). 1.04 MHz is not that. With 74.5 dB SNR this is the HB100, and the 1 MHz is most likely DRO warm-up drift between the sweep (11:39:31) and the confirm (11:39:39). Tolerance 1 MHz is tight for an HB100.
+   - Try: let the HB100 warm up a few minutes, run again.
+   - PHASER REPO candidate: CONFIRM_TOLERANCE_HZ 1 MHz -> ~2 MHz (half the 4 MHz shift still rejects spurs); and the failure message should not call a 1 MHz miss "inside the receiver".
+   - Neil: HB100 was warm; suspects the LO-shift check added at GRCon. CONFIRMED in history: 5dbebb2 (2026-09-23) added confirm_with_lo_shift (+/-4 MHz, 1 MHz tolerance) and spur rejection; 0306a22 relaxed the step gate the same day. Running a probe of observed frequency vs LO shift to tell drift vs scale error vs offset.
+   - lo_probe (2 MHz steps, 50 ms settle): tone sits at 10.40959 GHz +/- 30 kHz (1 bin) at every shift -4..+6, both reps. So the HB100 is real and stable, LO arithmetic is right, and the SWEEP CANDIDATE (10.417656) was 8.06 MHz wrong. The confirm check correctly rejected it.
+   - The two bad rows are both the FIRST capture after a big LO jump (rep 1 after setup: 10.40758, -20 dBFS; rep 2 after +6 -> -6, a 12 MHz jump: -83.5 dBFS = nothing). Small steps fine, big jumps not -> LO not settled within the 50 ms sleep + 1 discarded buffer in _capture. The 10 MHz sweep steps and the jump to the confirm point are both "big".
+   - Filter LTE20_MHz.ftr not found in probe (cwd ~), sample rate stayed 30 MSPS; in the real script cwd is the install dir. Side issue.
+   - Next: settle-time probe.
+   - settle_probe: error independent of settle time (0.05/0.2/1.0 s identical) but depends on where the LO was parked BEFORE: park -10 -> +7.8 MHz, park +10 -> -11.7 MHz, park +/-300 -> nothing. Fits exactly: each capture returns the PREVIOUS LO position's data (one stale buffer survives the single discard in _capture), with the axis also scaled by 30/30.72.
+   - SECOND BUG: LTE20_MHz.ftr sets sample_rate to 30.72 MSPS (printed 30719999), but spec_est uses SAMPLE_RATE = 30e6 -> 2.4% frequency-axis error.
+   - Model reproduces the failed run: sweep candidate = c_N + 0.9766*(T - c_{N-1}) -> 10.4177 for T ~ 10.4078. True HB100 ~ 10.4077 GHz (probe1's 10.40959 was itself 2 MHz stale).
+   - Probably also explains the GRCon "stored 10.475 vs actual 10.447" symptom (wrong-step mapping).
+   - Testing fix candidates: destroy buffer after retune vs discard 2; use actual sdr.sample_rate.
+   - fix_probe: rx_destroy_buffer + real fs -> tone 10.407610-10.407640 GHz from every jump (+/-10, +/-300 MHz), both shifts, within 20 kHz. discard-2 = garbage. (Segfault at exit of the probe, teardown only.)
+   - TRUE HB100 (golden kit's source) = 10.40762 GHz.
+   - FIX: livethisdream/phaser#29 (branch claude/hb100-stale-buffer): _capture destroys the RX buffer after retune + uses my_sdr.sample_rate. Regression test fails 9/9 on old code.
+   - Follow-up candidate: phase cal (_capture_peak_dbfs) likely reads one stale buffer after each set_chan_phase.
+   - To test on the kit before merge: PHASER_REF=claude/hb100-stale-buffer install.sh, then Find HB100.
+8d. With PHASER_REF=claude/hb100-stale-buffer installed: Find HB100 PASSES (12:03): peak 10.407600 GHz, SNR 76.6 dB, 2 LO steps; LO +4 -> err 0.050 MHz, LO -4 -> err 0.010 MHz; saved 10407600000 Hz. Fix #29 confirmed on hardware.
+   - A Calibrate run at 12:02:47 (before this Find HB100) FAILED its preflight, pointing at a wrong stored HB100 frequency (>1.5 MHz error puts the tone outside the window). Expected: it ran against the old stored value. Re-run Calibrate now.
+   - CADET PAGE: order matters — Find HB100 must succeed before Calibrate.
+8e. Calibrate FAILED twice (12:02 and 12:04, the second with the correct stored 10.4076 GHz): array contrast 0.39 / 0.03 dB, both on and off ~ -75.8 dBFS, i.e. no tone at all in the window. 12:04 attempt 1 also hit "READ LINE: -32 / Broken pipe" and retried.
+   - Difference from Find HB100 (which sees the tone at ~-20 dBFS): cal uses config.Rx_freq = 2.2 GHz (LO 12.6076 GHz) via CN0566.SDR_init; Find HB100 uses rx_lo 2.0 GHz (LO 12.41 GHz). Suspect the LO ceiling (1835117 measured ~12.85 GHz on one kit; may be lower on this one). Probing Rx_freq 1.9-2.3.
