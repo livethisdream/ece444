@@ -118,4 +118,4 @@ parts:
       - file: module04/L31-lab-spectrogram/index
         title: "L31 Lab — Micro-Doppler Spectrogram"
       - file: module04/final-project/index
-        title: "Final Project — Radar Lab Portfolio"
+        title: "Final Project — Radar Systems Report"

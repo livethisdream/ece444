@@ -63,8 +63,8 @@ and a moving target in your sights.
   <a class="block-card" href="module04/final-project/index.html">
     <span class="num">FP</span>
     <h3>Final Project</h3>
-    <p>The L28–L31 Labs: one radar chain, a stage per lab, from an FMCW capture to a detected, classified target.</p>
-    <footer>L28–L31 Labs</footer>
+    <p>One report, in your own words, on the radar you build in the L28–L31 Labs, from an FMCW capture to a detected, classified target.</p>
+    <footer>Built on the L28–L31 Labs</footer>
   </a>
 </div>
 ::::
@@ -76,7 +76,7 @@ and a moving target in your sights.
     <p class="d-eyebrow">Individual deliverable</p>
     <h3>Final Project</h3>
     <p class="d-weight"><span class="d-w-num">40%</span> of course grade</p>
-    <p class="d-due">Radar lab portfolio: the L28–L31 Labs, one radar chain built a stage at a time</p>
+    <p class="d-due">Radar systems report, in your own words, built on the L28–L31 Labs</p>
     <a class="d-link" href="syllabus.html#grading">How mastery grading works →</a>
   </div>
   <div class="deliverable-card">

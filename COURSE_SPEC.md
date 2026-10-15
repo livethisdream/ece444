@@ -1179,3 +1179,19 @@ folded in.
   its rubric, the D0-D4 scaffolding, and a two-target extension) is parked in
   `project/FINAL_PROJECT_CAPSTONE.md` for a future offering. The decks are
   frozen, so the L01 and L31 decks still say Module 5 and objectives 5.2/5.3.
+- **The final project is one report; the L28-L31 Labs are its scaffolding**
+  (Neil, 2026-10-15, amending the entry above: "the final project is a single
+  report that combines the results of those labs ... an exploration of radar
+  hardware and processing, presented in their words. We can keep the lab
+  reports, but I don't want them to think the lab reports (fill-in-the-blank)
+  are sufficient"; "the labs become the scaffolding themselves"). The report
+  is 30% of the course on one rubric with a sliding scale, published with the
+  L28 Lab packet, weighted toward explaining results over reporting them. The
+  four lab packets are checked and returned with feedback; they are not graded
+  as the project and not engagement, and text lifted from them earns nothing
+  in the report. Each packet should end by naming what the cadet carries into
+  the report. **Extra credit** for a unique extension (a new target, an own
+  processing stage, a second mover, a measurement the labs left out), proposed
+  in one paragraph and approved in advance, written up as its own section;
+  its size is Neil's call. The reading page is retitled "Final Project —
+  Radar Systems Report".

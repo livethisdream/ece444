@@ -94,10 +94,14 @@ That is the one shared file it may change.
   - The packet replaces the lab's own practice set, and its lesson's when the
     pre-lab draws on it. A **Module 3** packet counts toward engagement as a
     genuine, documented attempt.
-  - **The Module 4 packets (L28–L31 Labs) are the final project** (Neil,
-    2026-10-15), graded on a rubric with a sliding scale, equal weight, 30%
-    of the course. They are not engagement credit: nothing is counted twice.
-    Each packet carries its own rubric.
+  - **The Module 4 packets (L28–L31 Labs) are the scaffolding for the final
+    project** (Neil, 2026-10-15): one report, in the cadet's own words, on
+    the radar hardware and processing, 30% of the course on one rubric with a
+    sliding scale. Packets are checked and returned with feedback; they are
+    neither engagement credit nor the project itself, and the report must not
+    be a restatement of them. Each packet ends by naming what the cadet
+    carries into the report. Extra credit: a unique extension, proposed and
+    approved in advance.
   - **The L28–L31 Labs build on each other.** Each lab pass writes its packet
     to start from the cadet's own code and data from the lab before (L29 from
     the L28 range code, L30 runs CFAR on the L29 maps, L31 classifies the L30
@@ -148,8 +152,9 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 
 **Module 4: radar (L25–L31) and the final project.** Placeholder pages. They
 need the FMCW mode in the Phaser app (Neil is building it, with the lab
-packets). The L28–L31 Labs are the final project, so each needs a packet with
-its rubric and a recorded-data fallback in case a bench FMCW capture fails.
+packets). The L28–L31 Labs scaffold the final project report, so each needs a packet
+and a recorded-data fallback in case a bench FMCW capture fails; the report
+needs its rubric, published with the L28 Lab packet.
 
 | Lesson | Title |
 | :-- | :-- |
@@ -164,7 +169,7 @@ its rubric and a recorded-data fallback in case a bench FMCW capture fails.
 | L30 Lab | CFAR Processing |
 | L31 | Classification and Tracking |
 | L31 Lab | Micro-Doppler Spectrogram |
-| Final Project | Radar Lab Portfolio: the L28–L31 Labs, graded together (`module04/final-project`) |
+| Final Project | Radar Systems Report: one report on the L28–L31 Labs, in the cadet's words (`module04/final-project`) |
 
 ## 6. Work queue, in order
 
@@ -177,8 +182,8 @@ its rubric and a recorded-data fallback in case a bench FMCW capture fails.
 4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
 5. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
-   taught in class, then the L28–L31 Labs as the final project, each packet
-   with its rubric and built to start from the lab before it.
+   taught in class, then the L28–L31 Labs as the final project's scaffolding,
+   each packet built to start from the lab before it, plus the report rubric.
 6. **Faculty repo:** rename and split the lab keys to the 2026-10-13 numbers
    (see the project note's Status line for that date).
 

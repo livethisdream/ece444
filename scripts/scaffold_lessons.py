@@ -99,7 +99,7 @@ MODULES = {
         caption="Module 4 — Radar Fundamentals and FMCW",
         title="Module 4 — Radar Fundamentals and FMCW",
         los=["4.1", "4.2", "4.3", "4.4", "4.5", "4.6", "4.7", "4.8", "4.9"],
-        synopsis="From antennas to radar. The radar equation, range/Doppler/resolution, detection theory, and FMCW processing on the PHASER — range, range-Doppler, MTI, CFAR, and classifying and tracking what it finds. The L28-L31 Labs together are the final project.",
+        synopsis="From antennas to radar. The radar equation, range/Doppler/resolution, detection theory, and FMCW processing on the PHASER — range, range-Doppler, MTI, CFAR, and classifying and tracking what it finds. The L28-L31 Labs are the scaffolding for the final project report.",
         generate_index=False,  # hand-written frame page; the generator predates frames
     ),
 }
@@ -131,9 +131,9 @@ LABS = [
 # they are hand-authored and this list only places them in the nav.
 #   (module, after-slug, slug, title)
 EXTRA_PAGES = [
-    # The final project is the L28-L31 Labs graded together (Neil, 2026-10-15);
-    # this page says so and sits after the last of them.
-    (4, "L31-classification-tracking", "final-project", "Final Project — Radar Lab Portfolio"),
+    # The final project is one report built on the L28-L31 Labs (Neil,
+    # 2026-10-15); this page says so and sits after the last of them.
+    (4, "L31-classification-tracking", "final-project", "Final Project — Radar Systems Report"),
 ]
 
 # ---- Lesson manifest: (module, num, slug, title, [lo_ids], synopsis, has_practice)

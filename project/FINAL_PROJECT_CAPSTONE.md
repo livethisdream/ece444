@@ -2,7 +2,7 @@
 
 **Status: parked (Neil, 2026-10-15).** Fall 2026 runs out of calendar before a
 separate capstone fits, so Module 5 folded into Module 4 and the final project
-became the L28-L31 Labs graded together (see `COURSE_SPEC.md` §M7, "Module 5
+became one report scaffolded by the L28-L31 Labs (see `COURSE_SPEC.md` §M7, "Module 5
 folds into Module 4"). Neil wants this design kept for future offerings. It is
 the plan as it stood on 2026-10-15: option A of `MODULE45_BUILDOUT_PLAN.md`
 §3.2, plus the scaffolding and the multi-target extension discussed that day.

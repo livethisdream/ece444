@@ -20,8 +20,8 @@ Fall 2026
 This course progresses from fundamental electromagnetics and antenna theory
 through antenna measurement, phased-array beamforming with the ADALM-PHASER
 platform, and FMCW radar concepts. Students combine theory and hands-on
-laboratories culminating in a final project that builds a radar processing
-chain on the ADALM-PHASER, one lab at a time.
+laboratories culminating in a final project: a report, in the cadet's own
+words, on a radar processing chain built on the ADALM-PHASER one lab at a time.
 
 ## Course Objectives
 
@@ -104,7 +104,7 @@ project-based evaluation. Four components make up your final grade:
 | Learning Objective (LO) mastery | 30% | Percent of course LOs mastered, multiplied by 30% |
 | Engagement | 10% | Participation, preparation, practice, EI, and course engagement |
 | Midterm Project — Antenna Pattern Measurement | 30% | 100-point rubric, scored on the scale in the project packet |
-| Final Project — Radar Lab Portfolio (the L28–L31 Labs) | 30% | Rubric-based sliding scale, one rubric per lab report |
+| Final Project — Radar Systems Report | 30% | Rubric-based sliding scale |
 
 ### LO mastery assessment
 
@@ -154,15 +154,18 @@ this table is added to the table above.
 
 ### Final project assessment
 
-The Final Project is the four Module 4 labs, the **L28, L29, L30, and L31
-Labs**, graded together. Each lab is one stage of a single radar processing
+The Final Project is **one report, in your own words**, on the radar
+hardware and processing you built in Module 4. The **L28, L29, L30, and L31
+Labs** are its scaffolding: each is one stage of a single radar processing
 chain on your own kit (range, range-Doppler and MTI, CFAR, then
-classification), and each starts from your code and data from the one before.
-The four lab reports count equally, and each is graded on a **rubric with a
-sliding scale**, published with its lab packet. The rubric is intentional:
-these labs evaluate technical execution, radar performance, and technical
-communication across a range of performance levels, not just a genuine
-attempt. See the [final project page](module04/final-project/index.md).
+classification), and each hands you the results a section of the report is
+built on. The lab packets are checked and returned with feedback, but they
+are not the final project, and text lifted from them earns nothing in the
+report. The report is graded on a **rubric with a sliding scale**, published
+with the L28 Lab packet, that rewards explaining why the results came out as
+they did over reporting them. A unique extension, proposed and approved in
+advance, can earn extra credit. See the
+[final project page](module04/final-project/index.md).
 
 ### Engagement credits (EC)
 
@@ -183,8 +186,8 @@ earn engagement points in the following ways:
   before it when the pre-lab draws on that lesson. The packet is one submission, turned in complete after the lab and
   graded the same way: a genuine, documented attempt. Lab packets are required. They are the first engagement
   points you earn, and the other routes here add to them up to the cap. The
-  Module 4 labs (L28–L31) are not engagement: they are the final project, and
-  are graded on a rubric instead.
+  Module 4 lab packets (L28–L31) are not engagement: they are the scaffolding
+  for the final project report.
 - **Research paper.** You may complete a research paper on a
   relevant, pre-approved topic — an antenna, array, or radar technology, a
   measurement technique, or a mission application. Must be in **IEEE format**,
@@ -217,7 +220,7 @@ Engagement is capped at 10%; extra credit does not roll over.
 Two graded projects anchor the course:
 
 - **Midterm Project — Antenna Pattern Measurement.** Introduced at Lesson 9, due **2 Oct, 2359**. Students build a 915 MHz dipole and trim it to resonance, then match the same antenna to 50 ohms at a second frequency with a discrete network, simulate it, execute a pattern-measurement campaign on it at both frequencies, reduce the data, and report gain, beamwidth, sidelobe level, and polarization behavior against expectations. Graded on a **100-point rubric**, published in the project packet. No resubmission.
-- **Final Project — Radar Lab Portfolio.** The L28–L31 Labs, graded together: build a radar processing chain on the ADALM-PHASER one stage at a time, from an FMCW capture to a detected, classified target. Individual. Each lab report is graded on a **rubric with a sliding scale**, published with its lab packet.
+- **Final Project — Radar Systems Report.** One report, in your own words, exploring the radar hardware and processing chain you build on the ADALM-PHASER in the L28–L31 Labs, from an FMCW capture to a detected, classified target. The labs are the scaffolding; the lab packets alone are not the project. Individual. Graded on a **rubric with a sliding scale**; extra credit for an approved unique extension.
 
 ## Course policies
 
@@ -350,7 +353,7 @@ time are on the course calendar, not in this list. Lessons link to notes on the
 
 ### Module 4: Radar Fundamentals and FMCW
 
-The L28–L31 Labs are the final project, graded together.
+The L28–L31 Labs are the scaffolding for the final project, a report on the radar they build.
 
 - **L25** The Radar Equation, Path Loss, and Radar Cross Section (RCS)
 - **L26** Range, Resolution, Doppler Effect, and Radar Types

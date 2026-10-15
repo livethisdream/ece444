@@ -26,8 +26,8 @@ you can tell about the thing that sent it back.
 
 Then it gets real: **FMCW on the PHASER**, processed into range, a range
 waterfall, range-Doppler, MTI, and CFAR — the same chain a fielded radar runs.
-You build that chain one lab at a time, and **the four labs are the final
-project**.
+You build that chain one lab at a time, and then explain it in **the final
+project, a report in your own words**.
 
 :::{depth}
 Detection is a decision under noise, not a measurement. Probability of
@@ -139,15 +139,15 @@ signature, and track it in range and angle.
 ::::
 
 ::::{frame} The Final Project
-- **The L28-L31 Labs are the final project**, 30% of the course grade.
-- One radar chain, a stage per lab: range, range-Doppler and MTI, CFAR, classification.
-- Each lab starts from your code and data from the one before.
+- **One report, in your own words**, on the radar you built: 30% of the course grade.
+- The L28-L31 Labs are the scaffolding: range, range-Doppler and MTI, CFAR, classification.
+- The lab packets alone are not the project. Extra credit for an approved extension.
 
 <div class="module-toc">
   <a class="mt-card mt-lesson" href="final-project/index.html">
     <span class="mt-kind">Final Project</span>
-    <h4>Radar Lab Portfolio</h4>
-    <p>What is graded, how the four labs build on each other, and how they are scored.</p>
+    <h4>Radar Systems Report</h4>
+    <p>What the report covers, how the four labs feed it, how it is graded, and extra credit.</p>
   </a>
 </div>
 ::::

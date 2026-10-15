@@ -1,34 +1,57 @@
-# Final Project — Radar Lab Portfolio
+# Final Project — Radar Systems Report
 
-The final project is the four Module 4 labs, taken together. Each one is a
-stage of a single radar processing chain on your own ADALM-PHASER, and by the
-end of the L31 Lab that chain takes a raw FMCW capture all the way to a
-detected, classified target.
+The final project is **one report, in your own words**, on the radar you built
+in Module 4: what the ADALM-PHASER hardware does, what each processing stage
+does to the signal, and what your own measurements show. It is an exploration
+of radar hardware and processing, written by someone who has run every stage
+of it on a real kit.
+
+## The labs are the scaffolding
+
+The L28–L31 Labs are the steps toward the report. Each one is a stage of a
+single radar processing chain on your own kit, and each one hands you the
+results, plots, and code that a section of the report is built on.
+
+| Lab | Stage of the chain | What it gives your report | Objectives |
+| :-- | :-- | :-- | :-: |
+| [L28 Lab — FMCW Range](../L28-lab-fmcw-range/index.md) | range, and the range waterfall, from one FMCW capture | how a chirp becomes a range measurement, and the resolution you actually got | 4.2, 4.5 |
+| [L29 Lab — Range-Doppler and MTI](../L29-lab-range-doppler-mti/index.md) | the range-Doppler map, then MTI | how velocity is measured, and what MTI removes and why | 4.5, 4.6 |
+| [L30 Lab — CFAR Processing](../L30-lab-cfar/index.md) | CFAR detections on your range-Doppler maps | how a detection is declared, and what set your false alarms | 4.7 |
+| [L31 Lab — Micro-Doppler Spectrogram](../L31-lab-spectrogram/index.md) | classifying a detected target from its spectrogram | what told your targets apart, and how often it was right | 4.9 |
+
+Each lab starts from the one before it: your L29 processing begins with your
+own L28 range code, the L30 Lab runs CFAR on your L29 maps, and the L31 Lab
+classifies what your L30 detector found. Keep your code, data, and plots from
+every lab.
+
+## The lab packets are not the report
+
+Turn in each lab packet as you finish the lab; it is checked and returned with
+feedback so that problems surface while there is time to fix them. But a
+stack of completed packets is **not** a final project. The packets answer the
+questions the packet asks; the report explains the radar. Text and answers
+lifted from your packets earn nothing in the report. What earns credit is
+your explanation of why the results came out as they did, tied together into
+one account of the system.
 
 ## What is graded
 
-| Lab | Stage of the chain | Objectives |
-| :-- | :-- | :-: |
-| [L28 Lab — FMCW Range](../L28-lab-fmcw-range/index.md) | range, and the range waterfall, from one FMCW capture | 4.2, 4.5 |
-| [L29 Lab — Range-Doppler and MTI](../L29-lab-range-doppler-mti/index.md) | the range-Doppler map, then MTI to separate movers from clutter | 4.5, 4.6 |
-| [L30 Lab — CFAR Processing](../L30-lab-cfar/index.md) | CFAR detections on your range-Doppler maps | 4.7 |
-| [L31 Lab — Micro-Doppler Spectrogram](../L31-lab-spectrogram/index.md) | classify a detected target from its micro-Doppler signature | 4.9 |
+The report is **30% of your course grade**, graded on a **rubric with a
+sliding scale**. The rubric is published with the L28 Lab packet, so read
+it before you start, not after you finish. It rewards understanding over
+results: a range resolution you can explain earns more than one you merely
+report.
 
-Together the four lab reports are **30% of your course grade**, in equal
-parts. Each is graded on a **rubric with a sliding scale**, published with its
-lab packet, so read it before the lab, not after. These reports are graded on
-quality; they are not engagement credit, which comes from the Module 3 lab
-packets.
+## Extra credit
 
-## One chain, built a stage at a time
-
-Each lab starts from the one before it. Your L29 processing begins with your
-own L28 range code, the L30 Lab runs CFAR on your L29 maps, and the L31 Lab
-classifies the targets your L30 detector found. Keep your code and your data
-from every lab; the next one needs them.
+Do something with the radar that the labs did not ask for, and do it well:
+a new kind of target, a processing stage of your own in Python, a second
+moving target, a measurement the labs left out. Propose it to me in one
+paragraph and get it approved **before** you start. Extra credit is earned by
+the quality of the work, written up as its own section of the report.
 
 ## Individual work
 
 The final project is individual: your own kit, your own code, and your own
-reports. Collaboration follows the [syllabus policy](../../syllabus.md):
+report. Collaboration follows the [syllabus policy](../../syllabus.md):
 discuss freely, but you must be able to explain every step you submit.
