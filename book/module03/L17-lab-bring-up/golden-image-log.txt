@@ -243,3 +243,34 @@ Cadets build their own kit from stock Kuiper, "as a means to learn how to set up
    - CADET PAGE: order matters — Find HB100 must succeed before Calibrate.
 8e. Calibrate FAILED twice (12:02 and 12:04, the second with the correct stored 10.4076 GHz): array contrast 0.39 / 0.03 dB, both on and off ~ -75.8 dBFS, i.e. no tone at all in the window. 12:04 attempt 1 also hit "READ LINE: -32 / Broken pipe" and retried.
    - Difference from Find HB100 (which sees the tone at ~-20 dBFS): cal uses config.Rx_freq = 2.2 GHz (LO 12.6076 GHz) via CN0566.SDR_init; Find HB100 uses rx_lo 2.0 GHz (LO 12.41 GHz). Suspect the LO ceiling (1835117 measured ~12.85 GHz on one kit; may be lower on this one). Probing Rx_freq 1.9-2.3.
+
+==========================================================================
+RESOLVED IN THE PHASER REPO (Neil's local session, 2026-10-15)
+==========================================================================
+- #29 merged: Find HB100 reads a fresh buffer after each retune and uses the
+  radio's real sample rate (30.72 MSPS). Two hardware passes on phaser-00:
+  10.407600 and 10.407630 GHz, shift errors <= 0.05 MHz.
+- #30 merged (02f4a0e): the Calibrate failure was the IF, not the LO. phaser-00
+  is deaf at config.Rx_freq = 2.2 GHz; kit "phaser" hears fine there. The usable
+  IF differs ~200 MHz between kits, so it is now MEASURED per kit by
+  phaser_characterize_headless.py (sweeps the IF against the known HB100, takes
+  the middle of the clean run) and stored in calibration.json.
+  phaser-00: clean 1.200-2.175 GHz, chose 1.690 GHz; Calibrate contrast
+  0.93 dB -> 32.68 dB, runs to completion, gain trims 0.886-1.0.
+- Phase-cal scatter (element 8 spans 104 deg over five runs) is the argmax
+  estimator, not stale buffers; left as is.
+- STILL OPEN: #28 (provision.sh pins pylibiio<1) is NOT merged. Until it is,
+  every fresh Kuiper build fails at [7/8].
+
+NEW ORDER OF OPERATIONS (cadet Part A, after provision + reboot)
+  1. Find HB100                (GUI button)
+  2. Characterize the IF       `cd ~/pyadi-iio/examples/phaser && python3 phaser_characterize_headless.py`
+                               once per kit, HB100 aimed at the array
+  3. Calibrate                 (GUI button)
+
+GOLDEN IMAGE CAVEAT
+- calibration.json carries the kit's HB100 frequency, measured IF and cal
+  trims. A fallback card cloned from phaser-00 boots with phaser-00's values,
+  which are wrong for any other kit (IF differs ~200 MHz between units). A
+  cadet on a fallback card must still run Find HB100, characterize, Calibrate.
+  Consider clearing calibration.json before --prepare-image.
