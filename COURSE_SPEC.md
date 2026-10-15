@@ -1195,3 +1195,9 @@ folded in.
   in one paragraph and approved in advance, written up as its own section;
   its size is Neil's call. The reading page is retitled "Final Project —
   Radar Systems Report".
+  **Due dates** (Neil, same day: "Due date: let's say lesson 41 ... start
+  setting due dates for the final deliverables around lesson 30 for the
+  labs"): the report is due at class period 41, the last of the term's 41
+  periods; the lab packets come due in sequence from about period 30. "Lesson"
+  there is the calendar's class meeting, not a site lesson number (the site
+  stops at L31), so pages say "class period".

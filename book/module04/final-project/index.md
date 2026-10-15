@@ -34,6 +34,13 @@ lifted from your packets earn nothing in the report. What earns credit is
 your explanation of why the results came out as they did, tied together into
 one account of the system.
 
+## When things are due
+
+The lab packets come due one at a time, starting around class period 30, in
+the order you run the labs; each packet gives its own date. **The report is
+due at class period 41**, the last class of the term. Period numbers are the
+course calendar's class meetings, not the lesson numbers on this site.
+
 ## What is graded
 
 The report is **30% of your course grade**, graded on a **rubric with a
