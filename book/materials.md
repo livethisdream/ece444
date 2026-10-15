@@ -106,7 +106,7 @@ authoritative statement of the requirements.
 | Project | Assigned | Due | Packet |
 | :-- | :-- | :-- | :-- |
 | Midterm — Antenna Pattern Measurement | L9 | 2 Oct, 2359 | <a href="projects/ECE444_Project_Midterm.pdf" target="_blank" rel="noopener">project description</a> · [hand-wound inductor guide](materials/hand-wound-inductors.md) |
-| Final — Radar Systems Report | L28 Lab | class period 41 (lab packets from about period 30) | rubric with the L28 Lab packet · [final project page](module04/final-project/index.md) |
+| Final — Radar Systems Report | L28 Lab | class period 41 (lab packets from about period 32) | rubric with the L28 Lab packet · [final project page](module04/final-project/index.md) |
 
 ## Hardware & Software
 

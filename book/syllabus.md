@@ -161,7 +161,7 @@ chain on your own kit (range, range-Doppler and MTI, CFAR, then
 classification), and each hands you the results a section of the report is
 built on. The lab packets are checked and returned with feedback, but they
 are not the final project, and text lifted from them earns nothing in the
-report. The lab packets come due one at a time from around class period 30, and
+report. The lab packets come due one at a time from around class period 32, and
 **the report is due at class period 41**, the last class of the term. The
 report is graded on a **rubric with a sliding scale**, published
 with the L28 Lab packet, that rewards explaining why the results came out as
@@ -222,7 +222,7 @@ Engagement is capped at 10%; extra credit does not roll over.
 Two graded projects anchor the course:
 
 - **Midterm Project — Antenna Pattern Measurement.** Introduced at Lesson 9, due **2 Oct, 2359**. Students build a 915 MHz dipole and trim it to resonance, then match the same antenna to 50 ohms at a second frequency with a discrete network, simulate it, execute a pattern-measurement campaign on it at both frequencies, reduce the data, and report gain, beamwidth, sidelobe level, and polarization behavior against expectations. Graded on a **100-point rubric**, published in the project packet. No resubmission.
-- **Final Project — Radar Systems Report.** One report, in your own words, exploring the radar hardware and processing chain you build on the ADALM-PHASER in the L28–L31 Labs, from an FMCW capture to a detected, classified target. The labs are the scaffolding; the lab packets alone are not the project. Individual. Lab packets due from around class period 30; **report due at class period 41**. Graded on a **rubric with a sliding scale**; extra credit for an approved unique extension.
+- **Final Project — Radar Systems Report.** One report, in your own words, exploring the radar hardware and processing chain you build on the ADALM-PHASER in the L28–L31 Labs, from an FMCW capture to a detected, classified target. The labs are the scaffolding; the lab packets alone are not the project. Individual. Lab packets due from around class period 32; **report due at class period 41**. Graded on a **rubric with a sliding scale**; extra credit for an approved unique extension.
 
 ## Course policies
 
