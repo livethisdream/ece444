@@ -87,32 +87,43 @@ period; it is named for your kit before it goes in, and it still needs Steps
 :::
 ::::
 
-::::{frame} Before Class: Flash the Card
-:class: read-only
-
+::::{frame} Before Class: Download
 :::{present}
 1. Install [balenaEtcher](https://etcher.balena.io).
-2. Download [Kuiper 2021_R2](https://swdownloads.analog.com/cse/kuiper/image_2023-04-02-ADI-Kuiper-full.zip), `image_2023-04-02-ADI-Kuiper-full.zip`.
-3. Format the card: right-click it in File Explorer, **Format...**, **FAT32**, **Start**.
-4. In Etcher, **Flash from file**, the `.zip`, the card, **Flash!**
-5. Cancel any offer from Windows to format the card afterward.
+2. Download [Kuiper 2021_R2](https://swdownloads.analog.com/cse/kuiper/image_2023-04-02-ADI-Kuiper-full.zip), ADI's Linux image for the Pi.
 :::
 :::{present}
 :class: callout
 
-Format the card first. Etcher can fail on an unformatted card, and it fails
-only after about 10 minutes of writing.
+Use exactly this release. Later Kuiper releases break the provisioning script.
 :::
 
-Do this part at home before the period: it needs only your laptop and the
-card. Etcher reads the `.zip` as it is, with no unzipping, and the write and
-its verification take about 15 to 20 minutes. Leave the card in until Etcher
-says the flash is complete.
+Do Steps 1 to 5 at home before the period: they need only your laptop and the
+card. The file is `image_2023-04-02-ADI-Kuiper-full.zip`, and Etcher reads the
+`.zip` as it is, with no unzipping.
 
-Use exactly this release. Kuiper 2021_R2 is the one the Phaser software is
-tested on, and it is based on Debian 11, bullseye; the later Kuiper releases
-change the parts of the system the provisioning script and the Wi-Fi steps
-rely on.
+:::{depth}
+Kuiper 2021_R2 is the release the Phaser software is tested on, and it is based
+on Debian 11, bullseye. The later Kuiper releases move to a newer Debian that
+changes the parts of the system the provisioning script and the Wi-Fi steps
+rely on: where the boot files live and which program manages the network.
+:::
+::::
+
+::::{frame} Before Class: Format and Flash
+:::{present}
+3. Format the card **FAT32**: right-click it, **Format...**, **Start**.
+4. Etcher: **Flash from file**, the `.zip`, the card, **Flash!**
+5. Cancel any Windows offer to format it afterward.
+:::
+:::{present}
+:class: callout
+
+Format first, or Etcher can fail 10 minutes in.
+:::
+
+The write and its verification take about 15 to 20 minutes. Leave the card in
+until Etcher says the flash is complete.
 
 :::{depth}
 Etcher writes the whole card, so whatever was on it is gone; check that the
@@ -127,38 +138,24 @@ only on cards of 32 GB or less.
 :::
 ::::
 
-::::{frame} Power On and First Contact
-:class: read-only
-
+::::{frame} Assemble and Power On
 :::{present}
-6. Mount the PHASER on the tripod, patch face vertical and patch row horizontal.
-7. Put the card in the Pi, check that the Pluto's USB cable runs to the Pi, and run the Ethernet cable to the laptop.
-8. Plug the USB-C supply into the port on the PHASER board beside the SMA cable, and wait 1 to 2 minutes.
-9. Run `ssh analog@analog.local`, answer `yes`, and enter the password `analog`.
+6. Mount the PHASER on the tripod.
+7. Card in the Pi; Pluto USB to the Pi; Ethernet to the laptop.
+8. USB-C supply into the PHASER, by the SMA cable.
 :::
 :::{present}
 :class: callout
 
-Power the kit only through the PHASER's USB-C port, never the Pi's own.
+Power only through the PHASER's USB-C, never the Pi's.
 :::
 
-`analog` is the name, the user, and the password that ADI's Kuiper image ships
-with. The `yes` answers ssh's question about whether to trust the kit's host
-key, which it has never seen. If ssh says it cannot resolve `analog.local`,
-wait another minute and try again.
-
-The array steers in the plane of its row of patches, so a board mounted on its
-side steers in elevation, while every later lab sweeps the beam in azimuth.
+Mount the board with its patch face vertical
+and its row of patches horizontal: the array steers in the plane of that row,
+so a board mounted on its side steers in elevation, while every later lab
+sweeps the beam in azimuth.
 
 :::{depth}
-Nothing on a bare cable hands out addresses. After about a minute of asking,
-the Pi and the laptop each give themselves a link-local address, one in
-`169.254.x.x` that only the cable can carry, and the laptop finds the Pi by
-name with multicast DNS, the `.local` lookup. That is why a direct cable works
-with no setup on either end, and why the first minute after power-on shows
-nothing. On the instructor's kit, `hostname -I` showed exactly one address at this
-point, `169.254.210.227`.
-
 The PHASER board supplies the Pi through its own connector, and powering the
 Pi directly bypasses the board's supply. Unplugging the kit while Linux is
 running can also corrupt the card; see the last frame of Part A for the safe
@@ -166,8 +163,39 @@ way to power down.
 :::
 ::::
 
+::::{frame} First Contact
+:::{present}
+9. Wait 1 to 2 minutes, then:
+
+```bash
+ssh analog@analog.local
+```
+
+Answer `yes`; the password is `analog`.
+:::
+:::{present}
+:class: callout
+
+No router, no setup: the laptop and the Pi find each other over the bare cable.
+:::
+
+`analog` is the name, the user, and the password that ADI's Kuiper image ships
+with. The `yes` answers ssh's question about whether to trust the kit's host
+key, which it has never seen. If ssh says it cannot resolve `analog.local`,
+wait another minute and try again.
+
+:::{depth}
+Nothing on a bare cable hands out addresses. After about a minute of asking,
+the Pi and the laptop each give themselves a link-local address, one in
+`169.254.x.x` that only the cable can carry, and the laptop finds the Pi by
+name with multicast DNS, the `.local` lookup. That is why a direct cable works
+with no setup on either end, and why the first minute after power-on shows
+nothing. On the instructor's kit, `hostname -I` showed exactly one address at
+this point, `169.254.210.227`.
+:::
+::::
+
 ::::{frame} Set the Clock
-:class: read-only
 
 :::{present}
 10. Seed the clock from a web server, then check it:
@@ -198,7 +226,6 @@ certificate guards: `curl -sI` fetches only the headers of a Debian web page,
 ::::
 
 ::::{frame} Join the Wi-Fi
-:class: read-only
 
 :::{present}
 11. Set the Wi-Fi country and add the classroom network:
@@ -241,7 +268,6 @@ provisioning script downloads the Phaser software from GitHub.
 ::::
 
 ::::{frame} Provision the Kit
-:class: read-only
 
 :::{present}
 14. Run the provisioning script, with your kit's name:
@@ -289,7 +315,6 @@ updated:
 ::::
 
 ::::{frame} Check the Service
-:class: read-only
 
 :::{present}
 17. Run `journalctl -u phaser-headless -n 30` and look for the banner `ADI Phaser Beamforming Backend` with no `No device found` after it.
@@ -317,7 +342,6 @@ between it and the Pi.
 ::::
 
 ::::{frame} The Phaser GUI
-:class: read-only
 
 :::{present}
 Today you need five sidebar controls, **Find HB100**, **Characterize IF**, **Calibrate Phaser**, **Signal Freq**, and **Rx Gain**, and the **FFT** tab.
@@ -362,7 +386,6 @@ them; it is unavailable on the FFT tab.
 ::::
 
 ::::{frame} Find, Characterize, Calibrate
-:class: read-only
 
 :::{present}
 19. Place the powered HB100 $1\ \text{m}$ out at boresight.
@@ -373,7 +396,7 @@ them; it is unavailable on the FFT tab.
 :::{present}
 :class: callout
 
-In this order, each after the last succeeds. Let each button finish.
+In order. Let each one finish before the next.
 :::
 
 Set the HB100 about $1\ \text{m}$ in front of the array, at the same height as
@@ -450,7 +473,6 @@ simulator covers Part B.
 ::::
 
 ::::{frame} Power Down and Troubleshooting
-:class: read-only
 
 :::{present}
 23. To power down, press the button on the back of the PHASER, or hold the **Connected** pill for two seconds; wait until the lights go out, then unplug the USB-C.
@@ -531,21 +553,24 @@ lowers the floor, and raises the separation with no change at the antenna.
 :::
 ::::
 
-::::{frame} The Sweep Follows the Source
-:class: read-only
-
+::::{frame} The Sweep at Boresight
 :::{present}
-4. Open the **Rectangular** tab and turn on **Show Peak Angle Marker** under **Plot Options**.
+4. Open the **Rectangular** tab; turn on **Show Peak Angle Marker** under **Plot Options**.
 5. Record **Est. Angle** and **Peak Array Gain** with the source at boresight.
-6. Carry the HB100 to about $30^\circ$ on one side, still $1\ \text{m}$ out and aimed at the array. Record both again, and which end of the array, E1 or E8, it moved toward.
-7. Return the HB100 to boresight and record both once more.
+
+Expect Est. Angle within $2^\circ$ of $0^\circ$.
 :::
 
 The Rectangular tab plots the beam sweep: the backend steers the beam across
 the field of view one phase step at a time and records the received power at
-each step, so the trace peaks where the beam points at the source. With the
-source at boresight, Est. Angle should read within about $2^\circ$ of
-$0^\circ$.
+each step, so the trace peaks where the beam points at the source.
+::::
+
+::::{frame} The Sweep Follows the Source
+:::{present}
+6. Carry the HB100 to about $30^\circ$ on one side, still $1\ \text{m}$ out and aimed at the array. Record both again, and which end, E1 or E8, it moved toward.
+7. Return it to boresight and record both once more.
+:::
 
 The source sits at $30^\circ$ when it is $0.5\ \text{m}$ to one side of the
 array's centerline and still $1\ \text{m}$ from the array. The peak should
@@ -575,7 +600,7 @@ the same dashboard with no install. At a station whose hardware has failed, add
 Steps 1 to 5 of Part B behave as described, except that the tone appears at
 $-1\ \text{MHz}$ and the simulator does not model Rx Gain. Steps 6 and 7
 cannot be done, because the simulated source is fixed at boresight. Find
-HB100 and Calibrate run scripted scans.
+HB100 and Calibrate Phaser run scripted scans.
 :::
 
 :::{depth}
