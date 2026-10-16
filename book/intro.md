@@ -15,8 +15,8 @@ frame_view: true
 
 From Maxwell's equations to a working radar.
 
-Five modules, 32 lessons, and a capstone that puts hardware in your hands and a
-moving target in your sights.
+Four modules, 31 lessons, and a final project that puts hardware in your hands
+and a moving target in your sights.
 
 <div class="hero-cta">
   <a class="cta cta-primary" href="module01/index.html">Start Module 1 →</a>
@@ -51,7 +51,7 @@ moving target in your sights.
 </div>
 ::::
 
-::::{frame} Modules 4-5: Give It Something to Look For
+::::{frame} Module 4: Give It Something to Look For
 
 <div class="block-grid">
   <a class="block-card" href="module04/index.html">
@@ -60,11 +60,11 @@ moving target in your sights.
     <p>Send it, receive it, and find your target: range, Doppler, MTI, and CFAR processing on the ADALM-PHASER.</p>
     <footer>Lessons 25–31</footer>
   </a>
-  <a class="block-card" href="module05/index.html">
-    <span class="num">05</span>
-    <h3>Capstone Project</h3>
-    <p>Detect, classify, and track a moving target — then defend your design in a technical briefing.</p>
-    <footer>Lesson 32</footer>
+  <a class="block-card" href="module04/final-project/index.html">
+    <span class="num">FP</span>
+    <h3>Final Project</h3>
+    <p>One report, in your own words, on the radar you build in the L28–L31 Labs, from an FMCW capture to a detected, classified target.</p>
+    <footer>Built on the L28–L31 Labs</footer>
   </a>
 </div>
 ::::
@@ -73,24 +73,31 @@ moving target in your sights.
 
 <div class="deliverable-cards">
   <div class="deliverable-card">
-    <p class="d-eyebrow">Individual deliverable</p>
-    <h3>Final Project</h3>
-    <p class="d-weight"><span class="d-w-num">40%</span> of course grade</p>
-    <p class="d-due">Capstone Project: detect, classify, and track a moving target; technical briefing</p>
-    <a class="d-link" href="syllabus.html#grading">How mastery grading works →</a>
+    <p class="d-eyebrow">Module assessments</p>
+    <h3>LO Mastery</h3>
+    <p class="d-weight"><span class="d-w-num">30%</span> of course grade</p>
+    <p class="d-due">Each learning objective scored Mastered or Not Yet Mastered</p>
+    <a class="d-link" href="syllabus.html#lo-mastery-assessment">How mastery grading works →</a>
   </div>
   <div class="deliverable-card">
     <p class="d-eyebrow">Individual deliverable</p>
     <h3>Midterm Project</h3>
-    <p class="d-weight"><span class="d-w-num">35%</span> of course grade</p>
+    <p class="d-weight"><span class="d-w-num">30%</span> of course grade</p>
     <p class="d-due">Antenna pattern measurement · introduced <strong>Lesson 9</strong>, due <strong>2 Oct, 2359</strong></p>
-    <a class="d-link" href="syllabus.html#grading">How mastery grading works →</a>
+    <a class="d-link" href="syllabus.html#midterm-project-assessment">How it is graded →</a>
+  </div>
+  <div class="deliverable-card">
+    <p class="d-eyebrow">Individual deliverable</p>
+    <h3>Final Project</h3>
+    <p class="d-weight"><span class="d-w-num">30%</span> of course grade</p>
+    <p class="d-due">Radar systems report, in your own words, built on the L28–L31 Labs · due <strong>class period 41</strong></p>
+    <a class="d-link" href="syllabus.html#final-project-assessment">How it is graded →</a>
   </div>
   <div class="deliverable-card">
     <p class="d-eyebrow">Ongoing</p>
     <h3>Engagement</h3>
-    <p class="d-weight"><span class="d-w-num">25%</span> of course grade</p>
-    <p class="d-due">Practice problems, EI, lab prep, and course-improvement contributions</p>
+    <p class="d-weight"><span class="d-w-num">10%</span> of course grade</p>
+    <p class="d-due">Module 3 lab packets, practice problems, EI, and course-improvement contributions</p>
     <a class="d-link" href="syllabus.html#engagement-credits-ec">Ways to earn engagement →</a>
   </div>
 </div>
@@ -104,10 +111,9 @@ By the end of this course you should be able to:
 3. Apply phased-array theory — array factor, beam steering, tapering, null steering — using the ADALM-PHASER platform.
 ::::
 
-::::{frame} Course Objectives 4-5
+::::{frame} Course Objective 4
 
-4. Analyze radar performance using the radar equation, detection theory, and FMCW signal processing (range, Doppler, CFAR).
-5. Integrate array beamforming and radar signal processing into a working demonstration that detects, classifies, and tracks a moving target.
+4. Analyze radar performance using the radar equation, detection theory, and FMCW signal processing (range, Doppler, CFAR), and apply it on the ADALM-PHASER to detect, classify, and track a moving target.
 ::::
 
 ::::{frame} How This Course Is Graded

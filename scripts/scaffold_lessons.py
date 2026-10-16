@@ -66,10 +66,10 @@ LO_TEXT = {
     "4.5": "I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.",
     "4.6": "I can implement moving target indication (MTI) processing to distinguish moving targets from clutter.",
     "4.7": "I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance.",
-    "5.1": "I can choose and justify array steering and taper weights to optimize detection performance for a specified scenario.",
-    "5.2": "I can integrate FMCW radar processing with a phased-array front-end to track a moving target.",
-    "5.3": "I can classify a detected target from its micro-Doppler signature and report the classifier's accuracy.",
-    "5.4": "I can present system performance results and defend engineering trade-offs in a technical briefing.",
+    # 4.8 and 4.9 were 5.2 and 5.3 until Module 5 folded into Module 4
+    # (Neil, 2026-10-15); 5.1 and 5.4 went with the capstone.
+    "4.8": "I can integrate FMCW radar processing with a phased-array front-end to track a moving target.",
+    "4.9": "I can classify a detected target from its micro-Doppler signature and report the classifier's accuracy.",
 }
 
 # ---- Module metadata -------------------------------------------------------
@@ -98,15 +98,8 @@ MODULES = {
     4: dict(
         caption="Module 4 — Radar Fundamentals and FMCW",
         title="Module 4 — Radar Fundamentals and FMCW",
-        los=["4.1", "4.2", "4.3", "4.4", "4.5", "4.6", "4.7"],
-        synopsis="From antennas to radar. The radar equation, range/Doppler/resolution, detection theory, and FMCW processing on the PHASER — range, range-Doppler, MTI, and CFAR.",
-        generate_index=False,  # hand-written frame page; the generator predates frames
-    ),
-    5: dict(
-        caption="Module 5 — Capstone Project",
-        title="Module 5 — Capstone Project",
-        los=["5.1", "5.2", "5.3", "5.4"],
-        synopsis="Capstone. Integrate beam steering, tapering, and FMCW radar into a working demo that detects, classifies, and tracks a moving target, and brief the results.",
+        los=["4.1", "4.2", "4.3", "4.4", "4.5", "4.6", "4.7", "4.8", "4.9"],
+        synopsis="From antennas to radar. The radar equation, range/Doppler/resolution, detection theory, and FMCW processing on the PHASER — range, range-Doppler, MTI, CFAR, and classifying and tracking what it finds. The L28-L31 Labs are the scaffolding for the final project report.",
         generate_index=False,  # hand-written frame page; the generator predates frames
     ),
 }
@@ -138,6 +131,9 @@ LABS = [
 # they are hand-authored and this list only places them in the nav.
 #   (module, after-slug, slug, title)
 EXTRA_PAGES = [
+    # The final project is one report built on the L28-L31 Labs (Neil,
+    # 2026-10-15); this page says so and sits after the last of them.
+    (4, "L31-classification-tracking", "final-project", "Final Project — Radar Systems Report"),
 ]
 
 # ---- Lesson manifest: (module, num, slug, title, [lo_ids], synopsis, has_practice)
@@ -181,9 +177,8 @@ LESSONS = [
     (4, 28, "L28-fmcw", "FMCW on the Phaser", ["4.4"], "FMCW operation and configuring an FMCW waveform on the PHASER.", False),
     (4, 29, "L29-range-doppler-mti", "Range-Doppler and MTI", ["4.5", "4.6"], "Range-Doppler processing of a burst of chirps, and MTI to separate movers from clutter.", False),
     (4, 30, "L30-cfar", "CFAR Processing", ["4.7"], "Constant false-alarm-rate processing.", False),
-    (4, 31, "L31-classification-tracking", "Classification and Tracking", ["5.2", "5.3"], "Micro-Doppler classification and range and angle tracking: the theory the final project needs.", False),
+    (4, 31, "L31-classification-tracking", "Classification and Tracking", ["4.8", "4.9"], "Micro-Doppler classification and range and angle tracking.", False),
 
-    (5, 32, "L32-final-project", "Final Project", ["5.1", "5.2", "5.3", "5.4"], "Detect, classify, and track a moving target: the kickoff, then array optimization and radar integration, and the briefing.", False),
 ]
 
 

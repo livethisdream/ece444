@@ -117,10 +117,5 @@ parts:
         title: "L31 — Classification and Tracking"
       - file: module04/L31-lab-spectrogram/index
         title: "L31 Lab — Micro-Doppler Spectrogram"
-
-  - caption: Module 5 — Capstone Project
-    chapters:
-      - file: module05/index
-        title: Module 5 overview
-      - file: module05/L32-final-project/index
-        title: "L32 — Final Project"
+      - file: module04/final-project/index
+        title: "Final Project — Radar Systems Report"

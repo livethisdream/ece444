@@ -1,5 +1,7 @@
 # Modules 4 and 5 build-out plan: the fox hunt and the final project
 
+> **Final project note (2026-10-15):** Module 5 folded into Module 4 and the final project became one report scaffolded by the L28-L31 Labs. The capstone in §3 is parked for a future offering, with its scaffolding, in `project/FINAL_PROJECT_CAPSTONE.md`; see `COURSE_SPEC.md` §M7.
+
 > **Numbering note (2026-10-13):** lessons became topics and every lab a child page of its lesson; Modules 3-5 were renumbered (L19 lab → L18 Lab, fox hunt → L19, L21-L28 → L20-L24 and their labs, Module 4 → L25-L31, Module 5 → L32). This plan keeps the numbers it was written with; see `COURSE_SPEC.md` §M7, "Lessons own their labs".
 
 > **Numbering note (2026-10-11):** lesson numbers in this plan written before 2026-10-11 are pre-renumber. The schedule was renumbered that day (fox hunt at L20, old L20 → L21, old L21 + L23 → L23, old L33-L38 → L33-L36 plus new L37-L38); see `COURSE_SPEC.md` §M7, "Short labs merge".
