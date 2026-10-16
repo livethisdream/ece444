@@ -48,9 +48,9 @@ Lesson 15 treated an aperture as a continuous sheet of current and read its beam
 
 ::::{frame} Part 1: The Linear Array
 :::{present}
-- The array has $N$ identical elements on a line, spaced $d$ apart.
-- We feed element $n$ the complex weight $a_n$.
+- The array has $N$ identical elements spaced $d$ apart, with weights $a_n$.
 - Every element radiates the same pattern; only the weights and the positions differ.
+- We measure the scan angle $\theta$ from **broadside**, as the PHASER GUI does.
 :::
 :::{present}
 <img src="../../viz/img/L16-array-geometry.svg"
@@ -62,6 +62,8 @@ We put $N$ identical elements on a straight line, spaced a distance $d$ apart, a
 ::::
 
 ::::{frame} The Scan Angle
+:class: read-only
+
 :::{present}
 $$\begin{aligned}
 \theta_{\text{polar}} &= 90^\circ - \theta \\
@@ -108,8 +110,10 @@ The same path differences change the amplitude $1/r$ by a negligible amount. The
 $$E(\theta) = \underbrace{E_0(\theta)\frac{e^{-jkr}}{r}}_{\text{one element}}\ AF(\theta)$$
 
 $$AF(\theta) = \sum_{n=0}^{N-1} a_n\ e^{\ jn\ kd\sin\theta}$$
-
-- Identical elements share $E_0(\theta)$, so it factors out, and the **array factor** depends only on the element count, positions, and weights.
+:::
+:::{present}
+- Identical elements share $E_0(\theta)$, so it factors out and leaves the **array factor**.
+- A phase step per element replaces $kd\sin\theta$ with $\psi = kd(\sin\theta - \sin\theta_0)$; Lesson 18 steers with it, and today $\theta_0 = 0$.
 :::
 
 The total far field is the sum of the element fields, and because every element has the same pattern, the common factor $E_0(\theta)\ e^{-jkr}/r$ comes out in front of the sum. The **array factor** $AF(\theta)$ is the sum that remains. It depends only on how many elements there are, where they sit, and what weights we feed them. It does not depend on the type of element.
@@ -138,6 +142,8 @@ The last line is $AF(\theta)$. The phasor sum and the radiation integral give th
 ::::
 
 ::::{frame} Steering Phase
+:class: read-only
+
 :::{present}
 $$a_n = \vert a_n\vert\ e^{-jn\beta}$$
 
@@ -154,6 +160,8 @@ If the weights carry a progressive phase $\beta$ per element, that phase adds to
 ::::
 
 ::::{frame} Key Point: A Sum of Phasors
+:class: read-only
+
 :::{present}
 :class: callout
 The array factor is a sum of unit phasors, one per element, whose phases advance by $\psi$ from element to element. Every feature of the pattern comes from how those phasors line up.
@@ -191,23 +199,14 @@ AF &= \sum_{n=0}^{N-1} e^{\ jn\psi} = \frac{1 - e^{\ jN\psi}}{1 - e^{\ j\psi}} \
 &= \frac{e^{\ jN\psi/2}\left(e^{-jN\psi/2} - e^{\ jN\psi/2}\right)}{e^{\ j\psi/2}\left(e^{-j\psi/2} - e^{\ j\psi/2}\right)} \\
 &= e^{\ j(N-1)\psi/2}\ \frac{\sin(N\psi/2)}{\sin(\psi/2)}
 \end{aligned}$$
-
-- With every $a_n = 1$, the sum is a geometric series with ratio $e^{\ j\psi}$.
-- Each bracket equals $-2j\sin(\cdot)$, and the $-2j$ factors cancel.
 :::
-
-Setting every weight to 1 turns the sum into a finite geometric series in $e^{\ j\psi}$. To close it, we factor half of each exponent out of the numerator and the denominator, which leaves a difference of conjugate exponentials in each bracket. Euler's formula turns each bracket into $-2j\sin(\cdot)$, and the $-2j$ factors cancel between top and bottom.
-::::
-
-::::{frame} The Closed Form
 :::{present}
 $$AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}$$
 
-$$\psi = kd\left(\sin\theta - \sin\theta_0\right)$$
-
-- The leading exponential is the phase of the array center; referencing the phase to the center removes it.
-- Dividing by $N$ sets the peak to 1.
+- Referencing the phase to the array center and dividing by $N$ gives $AF_N$, whose peak is 1.
 :::
+
+Setting every weight to 1 turns the sum into a finite geometric series in $e^{\ j\psi}$. To close it, we factor half of each exponent out of the numerator and the denominator, which leaves a difference of conjugate exponentials in each bracket. Euler's formula turns each bracket into $-2j\sin(\cdot)$, and the $-2j$ factors cancel between top and bottom.
 
 The leading exponential is the phase of the array's center relative to element 0. If we reference the phase to the center instead, it disappears. Dividing by $N$ normalizes the peak to 1. The main lobe, the nulls, and the sidelobes all follow from this expression.
 ::::
@@ -249,18 +248,6 @@ Between consecutive nulls the numerator swings back to $\pm 1$, so a sidelobe si
 The denominator is still growing across that gap, so the true peak sits slightly closer to the main lobe, where the denominator is smaller. Locating it exactly gives $-13.3$ dB, which is the uniform line-source number from Lesson 6. At $N = 8$ the value is $-12.8$ dB. The figure plots the exact level against $N$: a short array has a higher first sidelobe, and by $N = 16$ the level is within $0.2$ dB of the line source. The estimate runs a fraction of a decibel low at every $N$, for the reason above. Uniform excitation leaves the first sidelobe about $13$ dB below the peak in a discrete array, as it did in the continuous aperture of Lesson 15, and Lesson 22 lowers it with a taper.
 ::::
 
-::::{frame} The Eight-Element Array Factor
-:::{present}
-<img src="../../viz/img/L16-af-anatomy.svg"
-     alt="Array factor of an eight-element uniform array in decibels versus scan angle, with the half-power width, first null, and first sidelobe marked"
-     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
-:::
-:::{present}
-- At $N = 8$ and $d/\lambda = 0.481$, the half-power width is $13.2^\circ$, the first null is at $15.1^\circ$, and the first sidelobe is $-12.8$ dB.
-- Six sidelobes, $N - 2$, sit between the nulls.
-:::
-::::
-
 ::::{frame} Reading the Closed Form
 :::{present}
 | Feature | Uniform array |
@@ -272,6 +259,13 @@ The denominator is still growing across that gap, so the true peak sits slightly
 | First sidelobe | $-13$ dB ($-12.8$ dB at $N = 8$) |
 | Sidelobe count | $N - 2$ per period |
 :::
+:::{present}
+<img src="../../viz/img/L16-af-anatomy.svg"
+     alt="Array factor of an eight-element uniform array in decibels versus scan angle, with the half-power width, first null, and first sidelobe marked"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
+
+The figure marks the three features on the PHASER's own array, $N = 8$ and $d/\lambda = 0.481$: a half-power width of $13.2^\circ$, a first null at $15.1^\circ$, and a first sidelobe at $-12.8$ dB, with six sidelobes, $N - 2$, between the nulls.
 
 The half-power row uses the line-source constant of Lessons 6 and 15 with $L = Nd$, and Lesson 20 derives it for the array, along with the $1/\cos\theta_0$ broadening under steering. The constant is close but not exact for a short array: the PHASER's exact half-power width is $13.3^\circ$, against $13.2^\circ$ from $0.886\ \lambda/Nd$.
 ::::
@@ -329,6 +323,11 @@ Press $\lambda/2$. Now $\sin\theta = m\lambda/d$ has only the $m = 0$ solution, 
 - The first sidelobe of $AF_4$ is $-11.3$ dB at $47.1^\circ$, where the element adds $-3.3$ dB.
 - The total is $-14.4$ dB at $44.2^\circ$; the main lobe narrows from $26.3^\circ$ to $25.4^\circ$.
 :::
+:::{present}
+<img src="../../viz/img/L16-pattern-multiplication.svg"
+     alt="Three panels in decibels: the cosine element factor, the four-element array factor, and their product"
+     style="max-width: 720px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 :::{admonition} Worked example — four collinear short dipoles
 :class: tip
@@ -355,20 +354,8 @@ The figure zooms in on that sidelobe. Adding the two levels at the array factor'
 <img src="../../viz/img/L16-four-dipole-zoom.svg"
      alt="Zoom on the first sidelobe of four collinear short dipoles: the array factor peaks at minus 11.3 dB at 47.1 degrees, the dB-add estimate there is minus 14.6 dB, and the product of element and array factors peaks at minus 14.4 dB at 44.2 degrees"
      style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
-::::
 
-::::{frame} Element Factor Times Array Factor
-:::{present}
-<img src="../../viz/img/L16-pattern-multiplication.svg"
-     alt="Three panels in decibels: the cosine element factor, the four-element array factor, and their product"
-     style="max-width: 720px; width: 100%; display: block; margin: 0 auto;">
-:::
-:::{present}
-- The element factor lowers the wide-angle lobes.
-- The array factor sets the main-lobe width.
-:::
-
-That last observation generalizes. A directive element reshapes the skirts of the pattern and suppresses whatever the array factor puts at wide angles, but the array factor sets the main lobe. It sets the beamwidth, and the element and the array share the wide-angle behavior.
+The three-panel figure shows the general rule. A directive element reshapes the skirts of the pattern and suppresses whatever the array factor puts at wide angles, but the array factor sets the main lobe. It sets the beamwidth, and the element and the array share the wide-angle behavior.
 ::::
 
 ::::{frame} Array Factor Builder
@@ -406,6 +393,8 @@ The width of the window alone does not produce a second beam. At $d = \lambda/2$
 ::::
 
 ::::{frame} Visible Region at Two Spacings
+:class: read-only
+
 :::{present}
 <img src="../../viz/img/L16-visible-region.svg"
      alt="Array factor versus its argument over three periods, with the visible window drawn for 0.481-wavelength spacing and for one-wavelength spacing"
@@ -467,19 +456,20 @@ Element spacing is a two-sided trade. Too large and a grating lobe appears. Too 
 
 ::::{frame} Part 5: The Array as a Sampled Aperture
 :::{present}
-$$\begin{aligned}
-AF_N &= \frac{\sin(N\psi/2)}{N\sin(\psi/2)} \\
-&\approx \frac{\sin(N\psi/2)}{N\psi/2}
-\end{aligned}$$
-
-- Near the main lobe $\psi$ is small, so $\sin(\psi/2) \approx \psi/2$.
-- With $L = Nd$, $N\psi/2 = (kL/2)\sin\theta$, which is the sinc of Lessons 6 and 15.
+- The array is a line source of length $Nd$, **sampled** every $d$, and $Nd$ sets the beamwidth.
+- The **excitation shape** sets the sidelobes, $-13$ dB for uniform.
+- The **spacing** $d$ decides whether a grating lobe reaches real space.
 :::
 :::{present}
 <img src="../../viz/img/L16-sinc-limit.svg"
      alt="Array factors for 4, 8, and 32 elements plotted against distance from the main lobe in units of the line source's null spacing, over the line source's sinc pattern. All three match near the main lobe; the 4-element pattern repeats at full height 4 nulls out, the 8-element pattern 8 nulls out, and the 32-element pattern follows the sinc across the whole plot"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
+
+$$\begin{aligned}
+AF_N &= \frac{\sin(N\psi/2)}{N\sin(\psi/2)} \\
+&\approx \frac{\sin(N\psi/2)}{N\psi/2}
+\end{aligned}$$
 
 Near the main lobe and the first few sidelobes, $\psi$ is a small fraction of a period when $N$ is large, so the denominator $N\sin(\psi/2)$ is close to $N\psi/2$. The array factor then becomes $\sin u/u$, with
 
@@ -495,14 +485,6 @@ The figure shows where the approximation holds. Plotted against $u$, in units of
 <img src="../../viz/img/L16-sampled-aperture.svg"
      alt="A continuous uniform aperture above, and below it the same overall length occupied by eight equally spaced elements"
      style="max-width: 560px; width: 100%; display: block; margin: 1em auto;">
-::::
-
-::::{frame} What Each Parameter Controls
-:::{present}
-- **Total length** $Nd$ sets the beamwidth, whether 8 elements or 32 fill it.
-- The **excitation shape** sets the sidelobes: $-13$ dB for uniform. Lesson 22 tapers it.
-- The **spacing** $d$ decides whether a grating lobe reaches real space.
-:::
 
 The sampled view assigns each parameter its job. Two arrays with the same $Nd$ have nearly the same main lobe whether 8 elements or 32 fill that length. Uniform excitation gives about $-13$ dB in the array exactly as in the aperture, and Lesson 22 tapers it.
 
@@ -510,6 +492,8 @@ The spacing decides what repeats. The array samples the current only at multiple
 ::::
 
 ::::{frame} Worked Example: The Course Array
+:class: read-only
+
 :::{present}
 - At $10.3$ GHz, $d = 14$ mm is $0.481\lambda$, and $Nd = 3.85\lambda$.
 - $\psi$ spans $\pm 173.2^\circ$, and $d < \lambda/2$ rules out grating lobes.
@@ -548,7 +532,7 @@ D &\approx \frac{2Nd}{\lambda} = 7.7 \\
 ::::
 
 ::::{frame} The Measured Sweep
-:class: viz-frame
+:class: viz-frame read-only
 
 :::{depth}
 The L20 Lab sweeps this beam past a fixed source. Expect a $13^\circ$ beam, a first null past $15^\circ$, and sidelobes 11 to 13 dB down. The widget below is the one the L20 Lab uses: pick the 8-element aperture, read the half-power width, first-null width, and first sidelobe off the ideal curve, then switch the measurement effects on. The $2.8125^\circ$ steer grid and the $-23$ dB noise floor fill in the nulls, and the first-null width moves from $30.1^\circ$ to $28.1^\circ$ because the grid no longer lands on the null.
