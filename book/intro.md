@@ -73,24 +73,31 @@ and a moving target in your sights.
 
 <div class="deliverable-cards">
   <div class="deliverable-card">
-    <p class="d-eyebrow">Individual deliverable</p>
-    <h3>Final Project</h3>
-    <p class="d-weight"><span class="d-w-num">40%</span> of course grade</p>
-    <p class="d-due">Radar systems report, in your own words, built on the L28–L31 Labs</p>
-    <a class="d-link" href="syllabus.html#grading">How mastery grading works →</a>
+    <p class="d-eyebrow">Module assessments</p>
+    <h3>LO Mastery</h3>
+    <p class="d-weight"><span class="d-w-num">30%</span> of course grade</p>
+    <p class="d-due">Each learning objective scored Mastered or Not Yet Mastered</p>
+    <a class="d-link" href="syllabus.html#lo-mastery-assessment">How mastery grading works →</a>
   </div>
   <div class="deliverable-card">
     <p class="d-eyebrow">Individual deliverable</p>
     <h3>Midterm Project</h3>
-    <p class="d-weight"><span class="d-w-num">35%</span> of course grade</p>
+    <p class="d-weight"><span class="d-w-num">30%</span> of course grade</p>
     <p class="d-due">Antenna pattern measurement · introduced <strong>Lesson 9</strong>, due <strong>2 Oct, 2359</strong></p>
-    <a class="d-link" href="syllabus.html#grading">How mastery grading works →</a>
+    <a class="d-link" href="syllabus.html#midterm-project-assessment">How it is graded →</a>
+  </div>
+  <div class="deliverable-card">
+    <p class="d-eyebrow">Individual deliverable</p>
+    <h3>Final Project</h3>
+    <p class="d-weight"><span class="d-w-num">30%</span> of course grade</p>
+    <p class="d-due">Radar systems report, in your own words, built on the L28–L31 Labs · due <strong>class period 41</strong></p>
+    <a class="d-link" href="syllabus.html#final-project-assessment">How it is graded →</a>
   </div>
   <div class="deliverable-card">
     <p class="d-eyebrow">Ongoing</p>
     <h3>Engagement</h3>
-    <p class="d-weight"><span class="d-w-num">25%</span> of course grade</p>
-    <p class="d-due">Practice problems, EI, lab prep, and course-improvement contributions</p>
+    <p class="d-weight"><span class="d-w-num">10%</span> of course grade</p>
+    <p class="d-due">Module 3 lab packets, practice problems, EI, and course-improvement contributions</p>
     <a class="d-link" href="syllabus.html#engagement-credits-ec">Ways to earn engagement →</a>
   </div>
 </div>
