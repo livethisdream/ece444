@@ -14,19 +14,19 @@ is required (write \textbf{None} if you did not collaborate).}
 %========================================================== Q1
 \question \textbf{Building the sum.} Three isotropic elements sit on a line at
 $z = 0$, $z = d$, and $z = 2d$ with $d = \lambda/2$. They are fed in phase with
-amplitude weights $a_0 = 1$, $a_1 = 2$, $a_2 = 1$. Scan angle $\theta$ is
-measured from broadside.
+amplitude weights $a_0 = 1$, $a_1 = 2$, $a_2 = 1$. We measure the scan angle
+$\theta$ from broadside.
 
 \begin{parts}
 
 	\part Pattern multiplication lets you write the array pattern as one element
 	pattern times one sum. State the two conditions the elements must satisfy for
-	that factoring to be valid, and name the step in the derivation where each one
-	is used.
+	that factoring to be valid, and name the step in the derivation that uses each
+	one.
 		\begin{solution}[1.0in]
 		The elements must be \textbf{identical} and \textbf{identically oriented}.
-		Both are used at the superposition step: only if every element carries the
-		same $E_0(\theta)$ can that factor be pulled outside the sum. If the elements
+		The superposition step uses both: only if every element carries the
+		same $E_0(\theta)$ can we pull that factor outside the sum. If the elements
 		differ, or one is rotated, each term keeps its own pattern.
 		\end{solution}
 
@@ -75,7 +75,7 @@ measured from broadside.
 		The path lengths differ by at most the array length, $112\ \text{mm}$, which
 		against a $30\ \m$ range changes $1/r$ by about $0.4\%$. That same
 		$112\ \text{mm}$ is nearly four wavelengths at X-band, so it changes the phase
-		by up to $1400\mydeg$. The pattern is built entirely from phase.
+		by up to $1400\mydeg$, so the pattern depends on the phase differences alone.
 		\end{solution}
 
 \end{parts}
@@ -143,7 +143,7 @@ $f = 10.3\ \ghz$.
 	\end{minipage}
 
 	\part A uniform array of $N$ elements has $N-2$ sidelobes in one period of
-	$\psi$. Count the sidelobes that are actually visible for this array, and
+	$\psi$. Count the sidelobes that fall in the visible region for this array, and
 	explain the count using your answer to part (a).
 		\begin{solution}[1.2in]
 		With $N = 8$ there are six sidelobes per period, three on each side of the
@@ -201,20 +201,20 @@ $AF_4 = -11.3\ \db$.
 	\end{minipage}
 
 	\part The element factor changed the sidelobe by $3.3\ \db$ but changed the
-	half-power beamwidth by almost nothing. Explain why, in terms of the shape of
-	$\cosp{\theta}$ near broadside.
+	half-power beamwidth by almost nothing. Explain why, in terms of how
+	$\cosp{\theta}$ varies near broadside.
 		\begin{solution}[1.2in]
 		$\cosp{\theta}$ is flat near $\theta = 0$: at the $\pm 13.2\mydeg$ half-power
 		edges of the four-element beam it is still $0.974$, or $-0.23\ \db$, so it
 		scales the peak and the half-power points by nearly the same amount and the
 		width only narrows from $26.3\mydeg$ to $25.4\mydeg$. Out at $47\mydeg$ the cosine has fallen by
 		$3.3\ \db$, which is why the sidelobe moved. A directive element reshapes the
-		skirts of a pattern; the main lobe belongs to the array factor.
+		skirts of a pattern; the array factor sets the main lobe.
 		\end{solution}
 
 	\part A colleague proposes fixing a beam that is too wide by replacing the
 	short dipoles with more directive elements, keeping $N$ and $d$ the same. Say
-	whether that works and what it would actually change.
+	whether that works and what it would change instead.
 		\begin{solution}[1.2in]
 		It does not fix the beamwidth. The main lobe is set by the array factor,
 		whose width follows the total length $Nd$; a more directive element is nearly
@@ -230,8 +230,9 @@ $AF_4 = -11.3\ \db$.
 %========================================================== Q4
 \question \textbf{Spacing, the visible region, and grating lobes.} A uniform
 linear array is steered to $\theta_0$ by a progressive phase, so
-$\psi = kd(\sinp{\theta} - \sinp{\theta_0})$ and grating lobes appear wherever
-$\sinp{\theta_g} = \sinp{\theta_0} \pm m\lambda/d$.
+\eq{ \psi &= kd(\sinp{\theta} - \sinp{\theta_0}) }
+and grating lobes appear wherever
+\eq{ \sinp{\theta_g} &= \sinp{\theta_0} \pm \frac{m\lambda}{d} }
 
 \begin{parts}
 
@@ -258,8 +259,8 @@ $\sinp{\theta_g} = \sinp{\theta_0} \pm m\lambda/d$.
 		lobe that is present.
 		\begin{solution}[1.5in]
 		\eq{ d_{\max} &= \frac{\lambda}{1 + \vert\sinp{30\mydeg}\vert} = \frac{\lambda}{1.5} = 0.667\lambda }
-		$0.75\lambda > 0.667\lambda$, so the criterion is violated and a grating lobe
-		is in view.
+		$0.75\lambda > 0.667\lambda$, so the spacing violates the criterion and a grating
+		lobe is in view.
 		\eq{ \sinp{\theta_g} &= 0.5 - \frac{1}{0.75} = 0.5 - 1.333 = -0.833 }
 		\eq{ \theta_g &= -56.4\mydeg }
 		The $+$ branch gives $1.833$, which is not a real angle.
@@ -312,7 +313,7 @@ $\sinp{\theta_g} = \sinp{\theta_0} \pm m\lambda/d$.
 \newpage
 %========================================================== Q5
 \question \textbf{The array as a sampled aperture.} Two unsteered uniform arrays
-are proposed for the same job. Array A has $N = 8$ elements at $d = \lambda/2$.
+are candidates for the same job. Array A has $N = 8$ elements at $d = \lambda/2$.
 Array B has $N = 4$ elements at $d = \lambda$.
 
 \begin{parts}
@@ -352,15 +353,15 @@ Array B has $N = 4$ elements at $d = \lambda$.
 
 	\part Array B uses half the elements for the same beamwidth. State which array
 	you would build and why, and say what happens to Array B's pattern the moment
-	it is steered off broadside.
+	we steer it off broadside.
 		\begin{solution}[1.4in]
 		Build Array A. Both have the same main lobe because both have the same
 		length $Nd$, but Array B radiates a full-strength grating lobe at
 		$\pm 90\mydeg$ at broadside, and steering slides that lobe into the forward
 		half-space while the intended beam moves the other way --- so power and
-		receive sensitivity go where they were not commanded. Saving four channels leaves the array
-		unable to steer at all. Element count is what provides grating-lobe
-		headroom; length is what sets the beamwidth.
+		receive sensitivity go away from the commanded direction. Using four fewer channels leaves the
+		array unable to steer at all. At a fixed length, the element count sets the
+		spacing and with it the grating lobes; the length sets the beamwidth.
 		\end{solution}
 
 \end{parts}

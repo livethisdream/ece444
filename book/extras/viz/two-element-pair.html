@@ -66,7 +66,7 @@
   <div class="controls">
     <div class="ctl">
       <label for="d">Spacing \(d/\lambda\)</label>
-      <input type="range" id="d" min="0.25" max="6" step="0.05" value="4">
+      <input type="range" id="d" min="0.25" max="12" step="0.05" value="4">
       <span class="val" id="d-val">4.00</span>
     </div>
     <div class="sel">
@@ -85,7 +85,7 @@
   <div class="readouts">
     <div class="ro"><span class="k">lobes in front</span><span class="v" id="r-lobes">&#8212;</span></div>
     <div class="ro"><span class="k">main lobe width</span><span class="v" id="r-bw">&#8212;</span></div>
-    <div class="ro"><span class="k">far field from</span><span class="v" id="r-ff">&#8212;</span></div>
+    <div class="ro"><span class="k">\(2D^2/\lambda\)</span><span class="v" id="r-ff">&#8212;</span></div>
   </div>
   <p class="state" id="r-state">&#8212;</p>
 </div>
@@ -96,7 +96,9 @@ const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).tri
 function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
 const GRAY='#8b95a3';
 const state={ d:4, el:'dip', anim:false };
-const SPAN=7;                       // half-width of the map, in wavelengths
+// half-width of the map, in wavelengths: 7 until the elements need more room,
+// then wide enough to keep about 4 wavelengths of field outside each one
+function span(){ return Math.max(7, Math.ceil(state.d/2+4)); }
 
 /* ---- far field. theta is the scan angle from broadside, as in the lesson.
    The two elements sit on the x axis, so the array factor of the pair is
@@ -149,7 +151,7 @@ function drawMap(now){
   const { cols, rows, cell, C, S } = grid;
   const img=tctx.createImageData(cols,rows), px=img.data;
   const wt=state.anim ? ((now-t0)/1000)*2*Math.PI*0.45 : 0;
-  const cw=Math.cos(wt), sw=Math.sin(wt), norm=0.7;
+  const cw=Math.cos(wt), sw=Math.sin(wt), norm=1.0;
   const A=[0,74,133], B=[176,110,20];
   for(let o=0;o<cols*rows;o++){
     let v = state.anim ? (C[o]*cw - S[o]*sw)/norm : Math.hypot(C[o],S[o])/norm;
@@ -176,7 +178,7 @@ function drawMap(now){
     mctx.fillStyle=cssv('--red'); mctx.beginPath(); mctx.arc(x,oy,4.2,0,7); mctx.fill();
     mctx.strokeStyle='#fff'; mctx.lineWidth=1.5; mctx.stroke();
   }
-  tag(mctx,'±'+SPAN+' λ', MW-6, MH-12, 'right');
+  tag(mctx,'±'+span()+' λ', MW-6, MH-12, 'right');
   tag(mctx,'broadside ↑', 6, 12, 'left');
 }
 
@@ -192,7 +194,7 @@ function drawPol(){
   const w=PW, h=PH, ctx=pctx;
   ctx.clearRect(0,0,w,h);
   const lab=10.5, cx=w/2, cy=h-18;
-  const R=Math.max(40, Math.min(w/2-30, cy-22));
+  const R=Math.max(40, Math.min(w/2-40, cy-22));
   const at=(th,v)=>[cx+Math.sin(th)*R*v/4, cy-Math.cos(th)*R*v/4];
   // rings at 1, 2, 3, 4 times one element's peak
   ctx.lineWidth=1;
@@ -203,7 +205,7 @@ function drawPol(){
   for(let a=-90;a<=90;a+=30){
     const th=a*Math.PI/180;
     ctx.strokeStyle='#e1eaf2'; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(...at(th,4)); ctx.stroke();
-    const [x,y]=[cx+Math.sin(th)*(R+12), cy-Math.cos(th)*(R+10)];
+    const [x,y]=[cx+Math.sin(th)*(R+7), cy-Math.cos(th)*(R+10)];
     stext(ctx, a+'°', x, Math.min(y, cy), lab, cssv('--ink3'), a<0?'right':(a>0?'left':'center'));
   }
   ctx.beginPath(); ctx.moveTo(cx-R-2,cy); ctx.lineTo(cx+R+2,cy); ctx.strokeStyle='#b9d2e5'; ctx.stroke();
@@ -217,8 +219,10 @@ function drawPol(){
     ctx.stroke(); ctx.setLineDash([]);
   }
   curve(ef2, GRAY, 1.6, [4,3]);
-  curve(th=>2*ef2(th), cssv('--amber'), 1.8, [6,4]);
   curve(pair, cssv('--navy'), 2.2);
+  // the power sum goes on top: at wide spacing the lobes are a dense comb and
+  // the amber curve through its middle is the point of the picture
+  curve(th=>2*ef2(th), cssv('--amber'), 2.2, [6,4]);
   stext(ctx,'far field', 8, 11, lab, cssv('--ink3'),'left',false);
 }
 
@@ -228,7 +232,13 @@ function readouts(){
   for(let i=0;i<=n;i++) v.push(pair(-Math.PI/2+Math.PI*i/n));
   const peak=v[n/2];
   let lobes=0;
-  for(let i=1;i<n;i++) if(v[i]>v[i-1] && v[i]>=v[i+1] && v[i]>1e-3*peak) lobes++;
+  // a lobe is a local maximum above 5% of the peak, counting one that peaks
+  // at the +-90 deg edge (isotropic elements put full-height lobes there)
+  const top=Math.max(...v);
+  for(let i=0;i<=n;i++){
+    const l=i>0?v[i-1]:-1, r=i<n?v[i+1]:-1;
+    if(v[i]>l && v[i]>=r && v[i]>0.05*top) lobes++;
+  }
   // half-power width of the broadside lobe
   let j=n/2; while(j<n && v[j]>=peak/2) j++;
   const bw = j>=n ? null : 2*(j-n/2)*180/n;
@@ -237,7 +247,7 @@ function readouts(){
   const ff=2*state.d*state.d;
   document.getElementById('r-ff').textContent=(ff<10?ff.toFixed(1):ff.toFixed(0))+' λ';
   const st=document.getElementById('r-state');
-  if(lobes>=5){ st.className='state hot'; st.textContent='far apart: lobes too fine to resolve; on average, each its own pattern'; }
+  if(lobes>=5){ st.className='state hot'; st.textContent='far apart: averaged over a lobe, each element keeps its own pattern'; }
   else if(lobes===1){ st.className='state ok'; st.textContent='close together: one beam, 4× one element at broadside'; }
   else { st.className='state'; st.textContent='the fields add: 4× at broadside, 0 at the nulls'; }
 }
@@ -256,7 +266,7 @@ function fit(){
   const ph=stacked ? Math.round(Math.min(pw*0.5+36, 180)) : mh;
   setSize(map,mw,mh,dpr); mctx.setTransform(dpr,0,0,dpr,0,0);
   setSize(pol,pw,ph,dpr); pctx.setTransform(dpr,0,0,dpr,0,0);
-  MW=mw; MH=mh; PW=pw; PH=ph; pxPerL=(MW/2)/SPAN;
+  MW=mw; MH=mh; PW=pw; PH=ph; pxPerL=(MW/2)/span();
   drawAll();
 }
 function drawAll(){ drawMap(performance.now()); drawPol(); readouts(); }
@@ -270,16 +280,16 @@ function loop(now){
   requestAnimationFrame(loop);
 }
 const dEl=document.getElementById('d'), elEl=document.getElementById('el'), animEl=document.getElementById('anim');
-function setD(d){ state.d=d; dEl.value=d; document.getElementById('d-val').textContent=d.toFixed(2); drawAll(); }
+function setD(d){ state.d=d; dEl.value=d; document.getElementById('d-val').textContent=d.toFixed(2); pxPerL=(MW/2)/span(); drawAll(); }
 dEl.addEventListener('input',()=>setD(+dEl.value));
 elEl.addEventListener('change',()=>{ state.el=elEl.value; drawAll(); });
 animEl.addEventListener('change',()=>{ state.anim=animEl.checked; drawAll(); });
-document.getElementById('far').addEventListener('click',()=>setD(4));
+document.getElementById('far').addEventListener('click',()=>setD(10));
 document.getElementById('half').addEventListener('click',()=>setD(0.5));
 // a preset by query string: ?d=0.5&el=iso
 (function(){
   const q=new URLSearchParams(location.search);
-  if(q.has('d')){ const d=Math.min(6,Math.max(0.25,+q.get('d'))); if(isFinite(d)) state.d=d; }
+  if(q.has('d')){ const d=Math.min(12,Math.max(0.25,+q.get('d'))); if(isFinite(d)) state.d=d; }
   if(q.get('el')==='iso'||q.get('el')==='dip'){ state.el=q.get('el'); }
   dEl.value=state.d; elEl.value=state.el;
   document.getElementById('d-val').textContent=state.d.toFixed(2);
