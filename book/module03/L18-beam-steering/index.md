@@ -202,6 +202,32 @@ setting does not. That weight phase is the one place $-n\ \Delta\phi$ survives;
 every phase setting in this lesson and in the lab is $+n\ \Delta\phi$.
 ::::
 
+::::{frame} Phase Swings the Fringes
+:class: viz-frame
+
+:::{depth}
+This is the two-element pair from L16 with a phase setting on the right-hand
+element. The spacing is $\lambda/2$ and the elements are isotropic, so at
+$\Delta\phi = 0^\circ$ the two fields add at broadside and cancel along the
+array axis. Sweep the phase. Delaying the right element by $\Delta\phi$ holds
+back the wave that reaches the right side first, so the fringes swing toward it
+and the beam lands where $\sin\theta_0 = \Delta\phi/kd$: $30^\circ$ at
+$\Delta\phi = 90^\circ$ and $90^\circ$ at $180^\circ$. A negative setting
+swings it the other way. Widen the spacing to $2\lambda$ and every lobe swings
+together, grating lobes included: the phase moves the whole interference
+pattern, which is the rigid shift in sine space later in this lesson.
+:::
+
+:::{present}
+<iframe src="../../viz/two-element-pair.html?d=0.5&el=iso&phase=1&sweep=1"
+        width="100%" height="510"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Two elements with a phase setting on one: the field map and far-field pattern as the phase sweeps and the beam swings">
+</iframe>
+:::
+::::
+
 ::::{frame} The Phaser Kit (CN0566)
 :::{present}
 - At $10.3\ \text{GHz}$ with $d = 14\ \text{mm}$: $\lambda = 29.1\ \text{mm}$ and $d/\lambda = 0.481$.
