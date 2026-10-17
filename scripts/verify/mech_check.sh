@@ -32,6 +32,15 @@ NN="$1"; SLUG="$2"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(cd "$HERE/../.." && pwd)"
 LNN="L${NN}-${SLUG}"
+
+# A lab page has no deck, practice set, or required widget, so the lesson gate
+# below would report those as failures. Say so instead of failing.
+case "$SLUG" in
+  lab-*)
+    echo "$LNN is a lab page; mech_check is for lessons. Run" >&2
+    echo "  scripts/verify/check_density.py L$NN and scripts/verify/check_frames.py L$NN" >&2
+    exit 2 ;;
+esac
 : "${TEXINPUTS:=}"
 export TEXINPUTS
 

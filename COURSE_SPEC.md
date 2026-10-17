@@ -88,7 +88,7 @@ Rules:
 
 - Figure naming: every figure file is prefixed by its owning lesson,
   `L<NN>-<name>.svg`, in both `book/extras/slides/fig/` and
-  `book/extras/viz/img/` — 32 lessons and their labs share these two flat
+  `book/extras/viz/img/` — 31 lessons and their labs share these two flat
   directories, and a lab's figures take its lesson's number.
 - Static figures (if any) go in `book/extras/viz/img/<name>.svg`, embedded
   with `<img src="../../viz/img/<name>.svg" ... style="max-width: 700px;

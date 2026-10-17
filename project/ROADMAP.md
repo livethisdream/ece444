@@ -4,7 +4,7 @@ The plan for Modules 3–4 and the rules every working thread follows. **Read
 this before starting any work.** The Integrator thread maintains this file. If
 something you need is not here, ask Neil or the Integrator rather than guessing.
 
-Last updated 2026-10-15.
+Last updated 2026-10-17.
 
 ## 1. Who does what
 
@@ -127,7 +127,7 @@ That is the one shared file it may change.
 
 ## 5. Schedule and status
 
-Status as of 2026-10-13. "Cut" means the page fits the 20-slide budget.
+Status as of 2026-10-17. "Cut" means the page fits the 20-slide budget.
 "Sweeps" means the voice, why, and illustration passes. Lessons are topics,
 not periods; each lab follows its lesson on the bench and is listed under it.
 
@@ -135,14 +135,14 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 
 | Lesson | Title | Homework | Status | Next |
 | :-- | :-- | :-- | :-- | :-- |
-| L15 | Aperture Distributions and Efficiency | practice | cut 20/20, sweeps done | ready |
-| L16 | The Array Factor and Pattern Multiplication | practice | 29/20, sweeps done | cut |
+| L15 | Aperture Distributions and Efficiency | practice | cut 20/20, sweeps done; opening reworked (#91) | trim frame 6, "Key Point: Shape and Size", 8 px over on a phone |
+| L16 | The Array Factor and Pattern Multiplication | practice | cut 20/20, sweeps done, two-element widget (#92, #93, #98) | ready |
 | L17 | Introduction to Phased Array Hardware | none (L17 Lab packet) | 12/20 | ready |
-| L17 Lab | Phased Array Bring-Up | **L17 Lab** packet | packet built, 4/20 | golden image + hardware dry run |
+| L17 Lab | Phased Array Bring-Up | **L17 Lab** packet | cadets build their own kit from stock Kuiper, 17/20 (#96, #97) | hardware dry run |
 | L18 | Beam Steering | none (pre-lab of the L18 Lab) | 20/20, sweeps done | ready |
 | L18 Lab | Beam Steering | **L18 Lab** packet | packet built, 13/20 | hardware-day checks |
 | L19 | Direction Finding | none yet | shell, 5/20 | page + problems |
-| L19 Lab | Fox Hunt | **L19 Lab** packet | placeholder | page + packet |
+| L19 Lab | Fox Hunt | **L19 Lab** packet | placeholder | Neil is adding the fox hunt |
 | L20 | Array Factor and Beamwidth | practice | cut 18/20 | sweeps |
 | L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20 | convert to packet; widget label overlaps at phone width (from the merged lab) |
 | L21 | Antenna Pattern | practice | 37/20 | cut + sweeps |
@@ -176,10 +176,10 @@ needs its rubric, published with the L28 Lab packet.
 
 ## 6. Work queue, in order
 
-1. **Before L17:** the golden card image and a hardware dry run on a real kit.
-2. **L19**, direction finding, and the **L19 Lab**, the fox hunt: page and
-   packet. Plan in `MODULE45_BUILDOUT_PLAN.md` §2 and §7.
-3. **Lesson passes in teaching order:** L16, then L20–L24 with their labs,
+1. **Before L17:** a hardware dry run of the stock-Kuiper bring-up on a real kit.
+2. **L19**, direction finding: page and problems. The **L19 Lab**, the fox
+   hunt, is Neil's (2026-10-17). Plan in `MODULE45_BUILDOUT_PLAN.md` §2 and §7.
+3. **Lesson passes in teaching order:** L20–L24 with their labs,
    each before it is taught. A lesson's pass converts its lab's sheet to a
    packet.
 4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
@@ -187,8 +187,6 @@ needs its rubric, published with the L28 Lab packet.
 5. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
    taught in class, then the L28–L31 Labs as the final project's scaffolding,
    each packet built to start from the lab before it, plus the report rubric.
-6. **Faculty repo:** rename and split the lab keys to the 2026-10-13 numbers
-   (see the project note's Status line for that date).
 
 ## 7. Open decisions (Neil)
 
@@ -199,7 +197,11 @@ needs its rubric, published with the L28 Lab packet.
 - **L23's practice set covers grating lobes**, which objective 3.8's wording
   does not mention.
 - **Image-build homework:** does each kit get a second card, and do cadets have
-  Python on their laptops?
+  Python on their laptops? The L17 Lab rewrite (#96) has cadets build their own
+  card in class, which may settle this.
+- **Frozen decks.** #91 edited the L15 deck to drop the stale midterm date.
+  Keep the decks frozen, or allow edits that keep a deck in step with its
+  lesson?
 
 ## 8. Hardware-day checklist
 
