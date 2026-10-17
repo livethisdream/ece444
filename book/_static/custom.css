@@ -521,30 +521,26 @@ nav .theme-switch-button {
 @media (max-width: 560px) {
   .bd-article .block-grid { grid-template-columns: 1fr; }
 }
+/* Rounded cards, matching the umbrella site: a soft rule and the shell's
+   layered shadow instead of a navy top bar; hover tints and firms the rule. */
 .bd-article .block-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 16px 18px 14px;
-  background: #fff;
-  border: 1px solid var(--tps-rule, #d8e2ec);
-  border-radius: 8px;
+  padding: 16px 26px 14px;
+  background: var(--panel, #fff);
+  border: 1px solid var(--rule, #d8e2ec);
+  border-radius: 28px;
+  box-shadow: var(--shadow, none);
   color: var(--ink, #15202b) !important;
   text-decoration: none !important;
-  transition: border-color 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
-}
-.bd-article .block-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: #00205B;
-  border-radius: 8px 8px 0 0;
+  transition: border-color 0.12s ease, background 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
 }
 .bd-article .block-card:hover {
-  border-color: #1f6098;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 32, 91, 0.08);
+  border-color: var(--rule-strong, #1f6098);
+  background: var(--soft, #f5f9fc);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 30, 60, .07), 0 14px 32px rgba(0, 30, 60, .09);
 }
 .bd-article .block-card .num {
   font-family: 'JetBrains Mono', 'Menlo', monospace;
