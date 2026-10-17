@@ -50,6 +50,7 @@
   .state { margin:0; text-align:center; font-size:12px; font-weight:700; color:var(--ink3); min-height:15px; }
   .state.ok { color:var(--grn); }
   .state.hot { color:var(--amber); }
+  [hidden] { display:none !important; }
 </style>
 </head>
 <body>
@@ -76,7 +77,13 @@
         <option value="iso">isotropic</option>
       </select>
     </div>
+    <div class="ctl" id="ph-ctl" hidden>
+      <label for="ph">Phase \(\Delta\phi\)</label>
+      <input type="range" id="ph" min="-180" max="180" step="1" value="0">
+      <span class="val" id="ph-val">0°</span>
+    </div>
     <label class="chk"><input type="checkbox" id="anim"> animate</label>
+    <label class="chk" id="sweep-chk" hidden><input type="checkbox" id="sweep"> sweep phase</label>
     <div class="btns">
       <button id="far" type="button">far apart</button>
       <button id="half" type="button">&#955;/2</button>
@@ -95,10 +102,14 @@ const SANS='Inter, system-ui, -apple-system, sans-serif';
 const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
 const GRAY='#8b95a3';
-const state={ d:4, el:'dip', anim:false };
+// ph: the phase setting on the right-hand element, in degrees, a delay as on
+// the ADAR1000 (L18). Iframed, the control shows only with ?phase=1; L16 leaves it at 0.
+const state={ d:4, el:'dip', anim:false, ph:0, phase:false, sweep:false };
 // half-width of the map, in wavelengths: 7 until the elements need more room,
 // then wide enough to keep about 4 wavelengths of field outside each one
-function span(){ return Math.max(7, Math.ceil(state.d/2+4)); }
+// (4 with the phase control on, where the pair is usually close and the
+// interest is the fringes swinging, not the far field)
+function span(){ return state.phase ? Math.max(4, Math.ceil(state.d/2+3)) : Math.max(7, Math.ceil(state.d/2+4)); }
 
 /* ---- far field. theta is the scan angle from broadside, as in the lesson.
    The two elements sit on the x axis, so the array factor of the pair is
@@ -108,7 +119,9 @@ function span(){ return Math.max(7, Math.ceil(state.d/2+4)); }
    multiples of one element's peak power, so the fields-add peak is 4 and the
    powers-add curve, two elements that ignore each other, is 2|EF|^2. */
 function ef2(th){ return state.el==='dip' ? Math.cos(th)**2 : 1; }
-function af2(th){ const c=Math.cos(Math.PI*state.d*Math.sin(th)); return 4*c*c; }
+// with the right-hand element delayed by ph, the two fields line up where
+// kd sin(theta) = ph, so |AF| = |2 cos((kd sin(theta) - ph)/2)|
+function af2(th){ const c=Math.cos(Math.PI*state.d*Math.sin(th)-state.ph*Math.PI/360); return 4*c*c; }
 function pair(th){ return ef2(th)*af2(th); }
 
 /* ---- the map: every element a spherical wave, 1/r, cut by the plane of the
@@ -125,17 +138,17 @@ let grid={ key:'' };
 function computeField(){
   const cell=Math.max(2.2, MH/100);
   const cols=Math.ceil(MW/cell), rows=Math.ceil(MH/cell);
-  const key=[MW,MH,state.d,state.el].join('|');
+  const key=[MW,MH,state.d,state.el,state.ph].join('|');
   if(grid.key===key) return;
   const C=new Float32Array(cols*rows), S=new Float32Array(cols*rows), k=2*Math.PI;
-  const xs=[-state.d/2, state.d/2];
+  const xs=[-state.d/2, state.d/2], phs=[0, state.ph*Math.PI/180];
   for(let r=0;r<rows;r++){
     const y=-((r+0.5)*cell-MH/2)/pxPerL;
     for(let c=0;c<cols;c++){
       const x=((c+0.5)*cell-MW/2)/pxPerL;
       let re=0, im=0;
-      for(const x0 of xs){
-        const rr=Math.hypot(x-x0,y)+0.08, p=-k*rr;
+      for(let e=0;e<2;e++){
+        const x0=xs[e], rr=Math.hypot(x-x0,y)+0.08, p=-k*rr-phs[e];
         // element factor seen from this element: cos of the angle off broadside
         const a=(1/rr)*(state.el==='dip' ? Math.abs(y)/rr : 1);
         re+=a*Math.cos(p); im+=a*Math.sin(p);
@@ -178,13 +191,19 @@ function drawMap(now){
     mctx.fillStyle=cssv('--red'); mctx.beginPath(); mctx.arc(x,oy,4.2,0,7); mctx.fill();
     mctx.strokeStyle='#fff'; mctx.lineWidth=1.5; mctx.stroke();
   }
+  // each element's phase setting, under it, when the phase control is on;
+  // dropped when the elements sit too close for two cards
+  if(state.phase && state.d*pxPerL>58){
+    tag(mctx,'0°', ox-state.d/2*pxPerL, oy+16, 'center');
+    tag(mctx,Math.round(state.ph)+'°', ox+state.d/2*pxPerL, oy+16, 'center');
+  }
   tag(mctx,'±'+span()+' λ', MW-6, MH-12, 'right');
   tag(mctx,'broadside ↑', 6, 12, 'left');
 }
 
 // a small label on a white card, legible over the field map
 function tag(ctx,s,x,y,align){
-  ctx.font='10.5px '+SANS; const tw=ctx.measureText(s).width, x0=align==='right'?x-tw-6:x;
+  ctx.font='10.5px '+SANS; const tw=ctx.measureText(s).width, x0=align==='right'?x-tw-6:(align==='center'?x-tw/2-3:x);
   ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fillRect(x0,y-8,tw+6,16);
   stext(ctx,s,x0+3,y,10.5,cssv('--ink3'),'left',false);
 }
@@ -239,15 +258,35 @@ function readouts(){
     const l=i>0?v[i-1]:-1, r=i<n?v[i+1]:-1;
     if(v[i]>l && v[i]>=r && v[i]>0.05*top) lobes++;
   }
-  // half-power width of the broadside lobe
-  let j=n/2; while(j<n && v[j]>=peak/2) j++;
-  const bw = j>=n ? null : 2*(j-n/2)*180/n;
   document.getElementById('r-lobes').textContent=lobes;
-  document.getElementById('r-bw').textContent= bw===null ? '> 180°' : bw.toFixed(1)+'°';
+  if(state.phase){
+    // the steered beam: the lobe at sin(theta0) = ph/(kd), the m = 0 one
+    // (at wide spacing the others are as tall). Climb from that angle to the
+    // lobe's actual peak, which a short dipole's pattern pulls slightly inward.
+    const u=state.ph/(360*state.d), out=document.getElementById('r-bw');
+    if(Math.abs(u)>1){ out.textContent='none'; }
+    else {
+      let im=Math.round((Math.asin(u)/Math.PI+0.5)*n);
+      for(;;){ if(im<n && v[im+1]>v[im]) im++; else if(im>0 && v[im-1]>v[im]) im--; else break; }
+      const a=-90+180*im/n;
+      out.textContent=(a>0.05?'+':'')+a.toFixed(1)+'°';
+    }
+  } else {
+    // half-power width of the broadside lobe
+    let j=n/2; while(j<n && v[j]>=peak/2) j++;
+    const bw = j>=n ? null : 2*(j-n/2)*180/n;
+    document.getElementById('r-bw').textContent= bw===null ? '> 180°' : bw.toFixed(1)+'°';
+  }
   const ff=2*state.d*state.d;
   document.getElementById('r-ff').textContent=(ff<10?ff.toFixed(1):ff.toFixed(0))+' λ';
   const st=document.getElementById('r-state');
-  if(lobes>=5){ st.className='state hot'; st.textContent='far apart: averaged over a lobe, each element keeps its own pattern'; }
+  if(state.phase){
+    st.className='state';
+    st.textContent = Math.abs(state.ph)<0.5 ? 'equal phases: the fields line up at broadside'
+      : state.ph>0 ? 'right element delayed: the beam turns toward it'
+      : 'right element ahead: the beam turns away from it';
+  }
+  else if(lobes>=5){ st.className='state hot'; st.textContent='far apart: averaged over a lobe, each element keeps its own pattern'; }
   else if(lobes===1){ st.className='state ok'; st.textContent='close together: one beam, 4× one element at broadside'; }
   else { st.className='state'; st.textContent='the fields add: 4× at broadside, 0 at the nulls'; }
 }
@@ -262,7 +301,7 @@ const STACK=window.matchMedia ? window.matchMedia('(max-width:619px)') : null;
 function fit(){
   const dpr=window.devicePixelRatio||1, stacked=STACK && STACK.matches;
   const mw=Math.max(200, map.clientWidth), pw=Math.max(200, pol.clientWidth);
-  const mh=stacked ? Math.round(Math.min(mw*0.5, 190)) : Math.round(Math.min(mw*0.78, 300));
+  const mh=stacked ? Math.round(Math.min(mw*0.5, state.phase ? 180 : 190)) : Math.round(Math.min(mw*0.78, 300));
   const ph=stacked ? Math.round(Math.min(pw*0.5+36, 180)) : mh;
   setSize(map,mw,mh,dpr); mctx.setTransform(dpr,0,0,dpr,0,0);
   setSize(pol,pw,ph,dpr); pctx.setTransform(dpr,0,0,dpr,0,0);
@@ -275,8 +314,12 @@ let last=0, visible=true;
 if('IntersectionObserver' in window){
   new IntersectionObserver(es=>{ es.forEach(e=>{ visible=e.isIntersecting; }); }, {threshold:0.05}).observe(map);
 }
+// the phase sweep: a triangle wave from -180 to +180 deg and back, 10 s a cycle
+let s0=0;
+function sweepPh(now){ const u=((now-s0)/10000)%1; return Math.round(u<0.5 ? -180+720*u : 540-720*u); }
 function loop(now){
-  if(state.anim && visible && !document.hidden && now-last>50){ last=now; drawMap(now); }
+  if(state.sweep && visible && !document.hidden && now-last>50){ last=now; setPh(sweepPh(now)); }
+  else if(state.anim && visible && !document.hidden && now-last>50){ last=now; drawMap(now); }
   requestAnimationFrame(loop);
 }
 const dEl=document.getElementById('d'), elEl=document.getElementById('el'), animEl=document.getElementById('anim');
@@ -284,17 +327,39 @@ function setD(d){ state.d=d; dEl.value=d; document.getElementById('d-val').textC
 dEl.addEventListener('input',()=>setD(+dEl.value));
 elEl.addEventListener('change',()=>{ state.el=elEl.value; drawAll(); });
 animEl.addEventListener('change',()=>{ state.anim=animEl.checked; drawAll(); });
+const phEl=document.getElementById('ph'), sweepEl=document.getElementById('sweep');
+function setPh(p){ state.ph=p; phEl.value=p; document.getElementById('ph-val').textContent=Math.round(p)+'°'; drawAll(); }
+phEl.addEventListener('input',()=>{ state.sweep=false; sweepEl.checked=false; setPh(+phEl.value); });
+sweepEl.addEventListener('change',()=>{
+  state.sweep=sweepEl.checked;
+  // start the sweep from wherever the slider is, on the rising half
+  if(state.sweep) s0=performance.now()-(state.ph+180)/720*10000;
+});
 document.getElementById('far').addEventListener('click',()=>setD(10));
 document.getElementById('half').addEventListener('click',()=>setD(0.5));
-// a preset by query string: ?d=0.5&el=iso
+// a preset by query string: ?d=0.5&el=iso, and ?phase=1&ph=90 for L18's
+// phase control (sweep=1 starts it sweeping)
 (function(){
   const q=new URLSearchParams(location.search);
   if(q.has('d')){ const d=Math.min(12,Math.max(0.25,+q.get('d'))); if(isFinite(d)) state.d=d; }
   if(q.get('el')==='iso'||q.get('el')==='dip'){ state.el=q.get('el'); }
+  // opened on its own (the Interactives page's Open link) it is the whole
+  // tool, phase control included; iframed, it shows only on ?phase=1
+  let alone=false; try { alone = window.self===window.top; } catch(e){}
+  if(q.get('phase')==='1' || alone){
+    state.phase=true;
+    document.getElementById('ph-ctl').hidden=false;
+    document.getElementById('sweep-chk').hidden=false;
+    document.querySelector('#r-bw').previousElementSibling.textContent='main beam at';
+    if(q.has('ph')){ const p=Math.min(180,Math.max(-180,+q.get('ph'))); if(isFinite(p)) state.ph=p; }
+    if(q.get('sweep')==='1'){ state.sweep=true; document.getElementById('sweep').checked=true; }
+  }
   dEl.value=state.d; elEl.value=state.el;
+  document.getElementById('ph').value=state.ph; document.getElementById('ph-val').textContent=Math.round(state.ph)+'°';
   document.getElementById('d-val').textContent=state.d.toFixed(2);
 })();
-if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){ state.anim=false; animEl.checked=false; }
+if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){ state.anim=false; animEl.checked=false; state.sweep=false; document.getElementById('sweep').checked=false; }
+if(state.sweep) s0=performance.now()-(state.ph+180)/720*10000;
 fit();
 requestAnimationFrame(loop);
 MJ.setRedraw(drawAll);

@@ -21,6 +21,8 @@ History
 2026-10-13  The L22 and L23 labs became one, L22-L23-lab-tapering-squint
             (Neil). By prefix it is measured against L22's budget; neither
             lab had an exception, so none was merged.
+2026-10-17  L18 allowed 21 (Neil): the phase-sweep widget frame was added on
+            top of a lesson already cut to 20.
 """
 
 # Words a present frame may show (the LO frame is exempt).
@@ -43,6 +45,7 @@ BEAT_EXCEPTIONS = {
     "L12": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L13": (30, "cut under the 30-beat rule (2026-09); recut pending"),
     "L14": (30, "cut under the 30-beat rule (2026-09); recut pending"),
+    "L18": (21, "phase-sweep widget frame added after the 20-beat cut (Neil, 2026-10-17)"),
 }
 
 
