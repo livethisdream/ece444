@@ -90,6 +90,7 @@ sphinx:
     # on a page nobody forgives a 404 in.
     ece444_site_nav:
       - {label: "Home",     url: "https://livethisdream.github.io/"}
+      - {label: "ECE 343",  url: "https://livethisdream.github.io/ece343/intro.html"}
       - {label: "ECE 444",  here: true}
       - {label: "ECE 448",  url: "https://livethisdream.github.io/ece448/intro.html"}
       - {label: "Projects", url: "https://livethisdream.github.io/projects"}
