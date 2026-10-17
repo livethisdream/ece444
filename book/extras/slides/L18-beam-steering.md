@@ -139,7 +139,7 @@ this lesson and grating lobes in L26.
 
 ---
 
-## One frequency only
+## Time delay versus phase delay
 
 $\Delta t$ is a **delay**. $\Delta\phi$ is a **phase shift**, and it equals that
 delay at exactly one frequency.

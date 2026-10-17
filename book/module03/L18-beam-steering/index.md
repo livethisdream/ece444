@@ -152,7 +152,7 @@ all follow from this one relation.
 :::
 ::::
 
-::::{frame} Single-Frequency Validity
+::::{frame} Time Delay Versus Phase Delay
 :::{present}
 - A true time delay steers the beam to $\theta_0$ at every frequency.
 - A phase shift equals that delay at one frequency only, the one used for $k$.
