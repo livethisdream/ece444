@@ -202,7 +202,7 @@ setting does not. That weight phase is the one place $-n\ \Delta\phi$ survives;
 every phase setting in this lesson and in the lab is $+n\ \Delta\phi$.
 ::::
 
-::::{frame} The Course Array
+::::{frame} The Phaser Kit (CN0566)
 :::{present}
 - At $10.3\ \text{GHz}$ with $d = 14\ \text{mm}$: $\lambda = 29.1\ \text{mm}$ and $d/\lambda = 0.481$.
 

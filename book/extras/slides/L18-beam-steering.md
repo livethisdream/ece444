@@ -176,7 +176,7 @@ the arrival difference, so it is the negative of it.
 
 ---
 
-## The course array
+## The Phaser Kit (CN0566)
 
 Eight elements, $d = 14\ \text{mm}$, working at $10.3\ \text{GHz}$:
 
