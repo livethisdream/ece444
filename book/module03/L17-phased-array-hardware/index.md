@@ -331,6 +331,144 @@ mismatch loss, but the peak does not disappear.
 :::
 ::::
 
+::::{frame} Uncalibrated Channels
+:::{present}
+- Trace lengths and part tolerances give each channel its own gain and phase.
+- In this example, zero commanded phase points the beam to $+6.0^\circ$ and raises the sidelobes from $-12.8$ to $-7.8\ \text{dB}$.
+- **Calibrate** measures the offsets and removes them.
+:::
+:::{present}
+<img src="../../viz/img/L17-cal-patterns.svg" alt="Array factor of the eight elements with every commanded phase at zero, in dB from each pattern's peak, from -90 to +90 degrees. Uncalibrated, the beam points to +6.0 degrees and the highest sidelobe is -7.8 dB. Calibrated, the beam is at broadside and the highest sidelobe is -12.8 dB." style="max-width: 100%; display: block; margin: 0 auto;">
+:::
+
+Lesson 16 assumed that every element receives the weight we command and
+nothing else. On a real board each of the eight channels adds its own gain
+and phase before the sum. The traces from the patches to the ADAR1000s are
+not all the same length, and every millimeter of trace delays the signal by a
+fraction of a cycle at $10.5\ \text{GHz}$. The LNAs and the ADAR1000 channels
+also differ from part to part in gain and in phase, within their datasheet
+tolerances. None of these offsets is large on its own, but the array factor
+adds eight phasors, and a phasor that arrives rotated or shortened no longer
+adds in line with the rest.
+
+The figure uses one example set of offsets: gains spread over
+$2.2\ \text{dB}$, and phases that drift from element 1 to element 8 with
+scatter on top. With every commanded phase at zero, the drift acts as a
+small steering ramp, so the beam points to $+6.0^\circ$ instead of
+broadside, and the scatter fills in the nulls and raises the highest
+sidelobe from $-12.8$ to $-7.8\ \text{dB}$. Lesson 23 computes the same
+effect for the small, known phase errors of a 7-bit phase shifter; here the
+errors are larger, and they are unknown until we measure them.
+
+:::{depth}
+The offsets are a property of the board, so we measure them once and then
+correct every later command. **Calibrate** stores one gain trim and one phase
+correction per element. The phase corrections are the `phaseList` that
+`ADAR_set_Phase` adds to the steering ramp (Reading the Code, below), and the
+gain trims scale every taper before it reaches the `rx_gain` registers. A
+commanded phase of zero then produces equal phases at the summing point,
+which is the condition Lesson 16 assumed. The offsets drift slowly with
+temperature and change whenever a cable or the source frequency changes, so
+the L17 Lab runs Calibrate after Find HB100, at the frequency the source
+actually transmits.
+:::
+::::
+
+::::{frame} The Calibrate Button
+:::{present}
+- Gain: Calibrate measures each element alone at full gain and trims all to the weakest.
+- Phase: it sweeps one element of each pair through $360^\circ$, tracing $\vert 1 + e^{j\delta}\vert$.
+- A $20^\circ$ error loses $0.13\ \text{dB}$, so Calibrate fits the whole curve.
+:::
+:::{present}
+<img src="../../viz/img/L17-cal-pair.svg" alt="The sum of two elements in dB against the phase of the swept element, from -180 to +180 degrees. It peaks at 0 degrees and falls to a deep null at plus and minus 180. The band within 0.2 dB of the peak is shaded and spans 49 degrees; 20 degrees off the peak, the sum is 0.13 dB down." style="max-width: 100%; display: block; margin: 0 auto;">
+:::
+
+Calibrate runs in three steps, in `phaser_functions.py` on the Pi. It first
+matches the levels of the two digital channels. The gain step then turns on
+one element at a time, at full gain, with the other seven off, and records
+the peak each one produces. The weakest element becomes the reference, and
+Calibrate trims every other element down to it, because the ADAR1000's gain
+setting can only attenuate. The chip cannot raise a channel already at full
+gain to match a stronger one.
+
+The phase step works along the array in adjacent pairs: (1, 2), (2, 3), and
+so on to (7, 8). With only the pair on, it holds the left element at the
+correction it has already found and sweeps the right element's phase from
+$-180^\circ$ to $+180^\circ$ in $2.8125^\circ$ steps, recording the summed
+signal at each step. Two elements of equal gain, with a phase difference
+$\delta$ between them at the summing point, add to
+
+$$\vert 1 + e^{j\delta}\vert = 2\left\vert\cos\frac{\delta}{2}\right\vert,$$
+
+which is the two-element array factor of
+<a href="../L16-array-factor/index.html#frame-from-two-patterns-to-one">Lesson 16</a>,
+swept here by the phase shifter instead of by the arrival angle. The sum
+peaks where the swept element's setting cancels the pair's phase offset, and
+that setting becomes the right element's correction.
+
+:::{depth}
+The peak of that curve is flat. The loss at a phase error $\delta$ is
+
+$$\begin{aligned}
+L &= -20\log_{10}\left\vert\cos\frac{\delta}{2}\right\vert \\
+  &= -20\log_{10}\left(\cos 10^\circ\right) \\
+  &= 0.13\ \text{dB}
+\end{aligned}$$
+
+at $\delta = 20^\circ$, and every setting within $24.5^\circ$ of the peak
+reads within $0.2\ \text{dB}$ of it. Captures vary by a few tenths of a
+decibel from one to the next, so the highest sample in a noisy sweep can sit
+tens of degrees from the true peak. Each pair also starts from the
+correction found for the pair before it, so an error in one pair carries
+into every element after it. The original routine kept the highest sample.
+Five runs of it on one kit, phaser-00, on a healthy bench, returned element
+8 corrections of $+8.4^\circ$, $+30.9^\circ$, $+50.6^\circ$, $+95.6^\circ$, and
+$+112.5^\circ$, a spread of $104^\circ$.
+
+The current routine fits the whole curve instead. The response is a known
+curve shifted by the unknown offset $\phi_0$, symmetric about its peak, so
+its first Fourier coefficient,
+
+$$c_1 = \sum_k r(\phi_k)\ e^{j\phi_k},$$
+
+points in the direction $\phi_0$, and the correction is the angle of
+$c_1$. Every sample contributes to that sum, including the steep flanks and
+the null, where a few degrees of phase change the signal by several
+decibels. The phase information sits there, not at the peak. A constant
+floor under the curve adds nothing to $c_1$, so the fit does not need to know
+where the noise floor is.
+:::
+::::
+
+::::{frame} Calibration Explorer
+:class: viz-frame
+
+:::{depth}
+The widget runs the Calibrate algorithm on the example board from the
+figures, in simulation. **1 Gain** measures each element alone and trims the
+rest down to the weakest. **2 Phase** sweeps the seven pairs and plots the
+samples against $\delta$; the right panel shows each element's remaining
+phase error for five runs with fresh noise. Switch the estimator to
+**highest sample** and the runs spread apart down the array, by about
+$100^\circ$ at element 8 with $0.3\ \text{dB}$ of noise, as on phaser-00;
+switch back to **fit the curve** and they collapse to a few degrees. Move the
+noise slider to see how much measurement scatter each estimator tolerates.
+**3 Pattern** applies the gain trims and the run's phase corrections and
+moves the pattern from before calibration to after it, with the eight
+phasors at broadside straightening into one line.
+:::
+
+:::{present}
+<iframe src="../../viz/array-calibration.html"
+        width="100%" height="478"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Animated calibration of the eight-element array: gain trims to the weakest element, the pair phase sweeps with an argmax or curve-fit estimator, and the pattern before and after">
+</iframe>
+:::
+::::
+
 ::::{frame} Signal Chain Explorer
 :class: viz-frame
 
@@ -488,6 +626,7 @@ procedure; the packet is one submission, turned in complete before Lesson 18.
 | Frequency converter | shifts each subarray sum from X-band down to where the SDR listens | $2.2\ \text{GHz}$, for any source from 10.0 to 10.8 GHz |
 | HB100 | free-running DRO source, not a synthesizer | $10.525\ \text{GHz}$ nominal, found anywhere in 10.1–10.7 GHz |
 | Find HB100 | measures the source's frequency and sets Signal Freq | run once per source, before Calibrate |
+| Calibrate | measures each channel's gain and phase offset and removes them | gains trimmed to the weakest; phases fit to each pair's $360^\circ$ sweep |
 | ADALM-Pluto | AD9361 SDR, two receive channels | 3 MSPS in the GUI, a 3 MHz window at 2.2 GHz |
 | Beam sweep | received power against steered angle, source fixed | peaks at the source; floor about 23 dB down |
 | Phaser GUI | browser front end served by the Pi | port 8080 at the kit's fixed address, such as `http://192.168.7.13:8080` |
