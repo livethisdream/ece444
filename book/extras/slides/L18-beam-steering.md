@@ -164,15 +164,16 @@ number on it: half a gigahertz at forty-five degrees costs about three degrees.
 
 The wave reaches high-numbered elements **early**, so we hold them back.
 
-$$\phi_n = -n\ \Delta\phi \quad (n = 0, 1, \ldots, 7)$$
+$$\phi_n = +n\ \Delta\phi \quad (n = 0, 1, \ldots, 7)$$
 
 - Element 0 is the reference and gets zero.
-- Each element after it is one more step behind.
+- The ADAR1000's setting is a delay: element $n$ is delayed by its lead, $n\ \Delta\phi$.
 - Flip the sign of $\theta_0$ and the ramp runs the other way.
 
 Note:
-Sign errors here are the single most common lab defect. The ramp compensates
-the arrival difference, so it is the negative of it.
+Sign errors here are the single most common lab defect. The setting is a
+delay, so the commanded phase is the lead itself, plus n delta-phi. The minus
+sign lives only in L16's complex weight, e to the minus j n beta.
 
 ---
 
@@ -207,13 +208,13 @@ the sawtooth looks nothing like a ramp — that is the point of the next slide.
 
 ## Wrapping
 
-The ADAR1000 accepts $0^\circ$ to $360^\circ$. A phase of $-433^\circ$ and a phase
-of $+287^\circ$ are the same setting.
+The ADAR1000 accepts $0^\circ$ to $360^\circ$. A phase of $433^\circ$ and a phase
+of $73^\circ$ are the same setting.
 
 | $n$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| ramp | 0 | $-86.6$ | $-173.2$ | $-259.8$ | $-346.4$ | $-433.0$ | $-519.6$ | $-606.2$ |
-| set | 0 | 273.4 | 186.8 | 100.2 | 13.6 | 287.0 | 200.4 | 113.8 |
+| ramp | 0 | 86.6 | 173.2 | 259.8 | 346.4 | 433.0 | 519.6 | 606.2 |
+| set | 0 | 86.6 | 173.2 | 259.8 | 346.4 | 73.0 | 159.6 | 246.2 |
 
 <div class="callout">
 Wrapping changes the number, not the beam. Nothing is lost — <em>at this
@@ -353,8 +354,8 @@ lobes widen from left to right across the plot.
 | Quantity | Work | Result |
 | :-- | :-- | :-- |
 | $\Delta\phi$ | $173.2^\circ \times 0.707$ | $122.5^\circ$ |
-| $\phi_3$ | $-3 \times 122.5^\circ$ | $-367.5^\circ \to 352.5^\circ$ |
-| $\phi_7$ | $-7 \times 122.5^\circ$ | $-857.5^\circ \to 222.5^\circ$ |
+| $\phi_3$ | $3 \times 122.5^\circ$ | $367.5^\circ \to 7.5^\circ$ |
+| $\phi_7$ | $7 \times 122.5^\circ$ | $857.5^\circ \to 137.5^\circ$ |
 | HPBW | $13.2^\circ / 0.707$ | $18.7^\circ$ |
 
 Note:
@@ -370,7 +371,7 @@ recipe backwards.
 
 1. Difference neighboring elements: $\phi_{n+1} - \phi_n$.
 2. Unwrap — add or subtract $360^\circ$ until the steps agree.
-3. That common step is $-\Delta\phi$.
+3. That common step is $\Delta\phi$.
 4. Solve $\sin\theta_0 = \Delta\phi / kd$.
 
 Note:
@@ -418,7 +419,7 @@ the null-depth measurement to back it up.
 
 <div class="callout">
 <strong>One equation runs the module:</strong> $\Delta\phi = kd\sin\theta_0$.
-Set element <em>n</em> to $-n\Delta\phi$, wrap it into $0$ to $360^\circ$, and the
+Set element <em>n</em> to $+n\Delta\phi$, wrap it into $0$ to $360^\circ$, and the
 pattern shifts to $\sin\theta_0$ in sine space — broadened by $1/\cos\theta_0$.
 </div>
 
