@@ -19,7 +19,13 @@ Four modules, 31 lessons, and a final project that puts hardware in your hands
 and a moving target in your sights.
 
 <div class="hero-cta">
-  <a class="cta cta-primary" href="module01/index.html">Start Module 1 →</a>
+  <a class="cta cta-primary" href="module01/index.html">Module 1</a>
+  <a class="cta cta-primary" href="module02/index.html">Module 2</a>
+  <a class="cta cta-primary" href="module03/index.html">Module 3</a>
+  <a class="cta cta-primary" href="module04/index.html">Module 4</a>
+</div>
+
+<div class="hero-cta">
   <a class="cta" href="syllabus.html#course-schedule">Course schedule</a>
   <a class="cta" href="syllabus.html">Syllabus</a>
   <a class="cta" href="materials.html">Materials</a>
