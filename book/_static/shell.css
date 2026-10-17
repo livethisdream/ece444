@@ -122,6 +122,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Mobile browsers paint a gray rectangle over whatever was tapped, square
+   corners and all, which looks broken on the pills and cards. Every control
+   here already answers a tap with its own hover or active state, and keyboard
+   focus keeps its :focus-visible ring, so the rectangle goes site-wide. */
+a, button, summary, [role="button"] { -webkit-tap-highlight-color: transparent; }
+
 /* The bd-article compatibility class on the shell containers brings
    custom.css's `body, .bd-article { font-family: 'Inter' }` back with it, and
    (0,1,0) beats a bare `body`. Reassert the shell's stack at matching

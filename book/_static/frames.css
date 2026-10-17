@@ -87,6 +87,8 @@ body.pointing .deck { touch-action: none; }
 .title-frame .hero-cta .cta:hover {
   border-color: var(--rule-strong); background: var(--soft);
 }
+.title-frame .hero-cta .cta:active { background: var(--soft); border-color: var(--rule-strong); }
+.title-frame .hero-cta .cta-primary:active { background: var(--blue); border-color: var(--blue); }
 .title-frame .hero-cta .cta:focus-visible {
   outline: 2px solid var(--blue); outline-offset: 2px;
 }
