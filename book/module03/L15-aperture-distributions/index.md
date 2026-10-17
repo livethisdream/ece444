@@ -36,16 +36,17 @@ Lesson 15 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 </ol>
 ::::
 
-::::{frame} From Measurement to Design
-:class: read-only
+::::{frame} Why Return to Apertures?
 
 :::{present}
-- Lesson 11 measured patterns; Module 3 designs them.
-- The design variable is the **aperture distribution**, the field across the radiating opening.
-- Today we put numbers on the beamwidth, the sidelobe level, and the aperture efficiency.
+- Lessons 6, 13, and 14 found the beamwidth and sidelobes of a wire, a horn, and a dish.
+- Each result depends only on the aperture field $E_a$, whatever produces it.
+- A phased array sets $E_a$ with its element weights.
 :::
 
-In Lesson 11 you measured patterns: you turned an antenna in front of a source, recorded power against angle, and produced a main lobe, a set of sidelobes, and a beamwidth. Module 3 turns that around. From here on we decide where the lobes go, and the first design variable is the **aperture distribution** — the field across the opening that radiates. This lesson connects that distribution to the pattern it produces, puts numbers on the beamwidth and sidelobe level of the simplest case, and defines the efficiency that turns aperture area into gain. Those numbers carry straight into the array work that occupies the rest of the module.
+In Lesson 6 we derived the pattern of a line source, and in Lessons 13 and 14 we found the beamwidth, sidelobe level, and aperture efficiency of a horn and a reflector. Each of those results was worked out for a particular antenna, but none of them depends on the antenna. The far field depends only on the field across the radiating opening, the **aperture distribution** $E_a$, so the same relationships hold for any aperture. This lesson collects them in a form that applies to every aperture: the shape of $E_a$ sets the sidelobe level and the efficiency, and the aperture's length in wavelengths sets the beamwidth.
+
+That generalization is what we need for the rest of Module 3. A horn or a reflector fixes its aperture distribution with metal. A phased array sets it with the amplitude and phase of each element, so we can choose the distribution we want. Lesson 15 tells us which distribution produces which pattern, and Lessons 16 through 22 show how the PHASER's element weights produce that distribution.
 ::::
 
 ::::{frame} Part 1: The Aperture as Source
@@ -294,6 +295,8 @@ Evaluated with the amplitude of $E_a$ alone, the ratio is what Lesson 14 called 
 ::::
 
 ::::{frame} Worked Example: Efficiency of a Cosine Illumination
+:class: read-only
+
 :::{present}
 $$\begin{aligned}
 \eta_t &= \frac{\left(\int_{-1/2}^{1/2}\cos(\pi\xi)\ d\xi\right)^2}{1 \times \int_{-1/2}^{1/2}\cos^2(\pi\xi)\ d\xi} \\

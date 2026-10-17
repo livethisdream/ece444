@@ -20,20 +20,19 @@ Fall 2026 · Dr. Neil Rogers
 
 ---
 
-## From Measurement to Design
+## Why Return to Apertures?
 
-- Lesson 11 closed the measurement work: you turned an antenna and recorded a pattern.
-- Module 1 gave us the radiation integral, the far-field distance, and the effective aperture $A_e$.
-- Lesson 6 showed the far field is the Fourier transform of the source distribution.
-- The midterm pattern-measurement project is due 2 Oct.
-
-In Module 3 we design the pattern, and the aperture distribution is the design variable.
+- Lessons 6, 13, and 14 found the beamwidth and sidelobes of a wire, a horn, and a dish.
+- Each result depends only on the aperture field $E_a$, whatever produces it.
+- A phased array sets $E_a$ with its element weights.
 
 Note:
-Module two was about characterizing an antenna somebody handed you. Module three is
-about designing the pattern you want. Everything in this module comes out of one
-relationship they already met in lesson six, so today is about turning that
-relationship into design numbers they can use without deriving anything.
+Each of those earlier results was worked out for a particular antenna, but
+none of them depends on the antenna. The far field depends only on the field
+across the opening, so the same relationships hold for any aperture. A horn or
+a dish fixes that field with metal. A phased array sets it with the amplitude
+and phase of each element. Today tells us which distribution produces which
+pattern; Lessons 16 through 22 show how the PHASER's weights produce it.
 
 ---
 
