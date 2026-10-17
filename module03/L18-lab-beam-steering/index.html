@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L18 Lab — Beam Steering &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css">
+<link rel="stylesheet" href="../../_static/shell.css">
+<link rel="stylesheet" href="../../_static/frames.css">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-lab-fmcw-range/index.html">L28 Lab — FMCW Range</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-lab-range-doppler-mti/index.html">L29 Lab — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-lab-cfar/index.html">L30 Lab — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-lab-spectrogram/index.html">L31 Lab — Micro-Doppler Spectrogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l18-lab-beam-steering">
+<h1>L18 Lab — Beam Steering<a class="headerlink" href="#l18-lab-beam-steering" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Beam Steering</h1>
+<div class="title-rule"></div>
+<p>Two runs put the PHASER’s peak at <span class="math notranslate nohighlight">\(30^\circ\)</span>: move the source, or apply a steer angle.</p>
+<p>L18 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-slides">
+<div class="wrap docutils container">
+<p class="rubric">Slides</p>
+<div class="slides admonition">
+<p class="admonition-title">Slides</p>
+<p><a href="../../slides/L18-lab-beam-steering.html" target="_blank" rel="noopener">html slides</a>
+<a href="../../slides/L18-lab-beam-steering.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
+<a href="../../slides/L18-lab-beam-steering.md" target="_blank" rel="noopener">raw markdown slides</a></p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 4">
+  <li>I can implement beam steering on the ADALM-PHASER and verify the steered pattern against theory.</li>
+</ol>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-from-prediction-to-measurement">
+<div class="wrap docutils container">
+<p class="rubric">From Prediction to Measurement</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Part 1, before today: the phase table, the beamwidths, and the error budget.</p></li>
+<li><p>Part 2, today: two runs put the peak at <span class="math notranslate nohighlight">\(0^\circ\)</span>, <span class="math notranslate nohighlight">\(30^\circ\)</span>, and <span class="math notranslate nohighlight">\(45^\circ\)</span>.</p></li>
+<li><p>Part 3, after the lab: reconcile each measurement with its prediction.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>In Lesson 18 we derived the steering law and used it to fill in a table of
+element phases for the PHASER’s eight-element array. The L18 Lab packet starts from
+that table: Part 1, the pre-lab you completed before class, redoes it at your
+HB100’s frequency, predicts the beamwidths, and sizes the error budget. Today
+you place the source at measured angles on a protractor arc, and also
+commands the peak to the same angles from the GUI, and records where the trace
+peaks, how wide it is, and what the GUI writes into Phase Control. Part 3, on
+your own before Lesson 19, reconciles those numbers with the predictions.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-part-1-the-steering-prediction">
+<div class="wrap docutils container">
+<p class="rubric">Part 1: The Steering Prediction</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Delta\phi &amp;= kd\sin\theta_0 \\
+&amp;= 360^\circ\ \frac{d}{\lambda}\ \sin\theta_0 \\
+&amp;= 176.8^\circ \sin\theta_0
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N = 8\)</span>, <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span>, and <span class="math notranslate nohighlight">\(d/\lambda = 0.491\)</span> at <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><span class="math notranslate nohighlight">\(\theta_0\)</span></p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\sin\theta_0\)</span></p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\Delta\phi\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(0^\circ\)</span></p></td>
+<td class="text-left"><p>0.000</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.0^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(15^\circ\)</span></p></td>
+<td class="text-left"><p>0.259</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(45.8^\circ\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(30^\circ\)</span></p></td>
+<td class="text-left"><p>0.500</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(88.4^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(45^\circ\)</span></p></td>
+<td class="text-left"><p>0.707</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(125.0^\circ\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The array is fixed: <span class="math notranslate nohighlight">\(N = 8\)</span> elements, E1 to E8, on a <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span> pitch.
+The source is an HB100 Doppler module at a nominal <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>, so
+<span class="math notranslate nohighlight">\(\lambda = 28.5\ \text{mm}\)</span> and <span class="math notranslate nohighlight">\(d/\lambda = 0.491\)</span>, with
+<span class="math notranslate nohighlight">\(c = 3.00\times 10^8\ \text{m/s}\)</span>. Steering to
+<span class="math notranslate nohighlight">\(\theta_0\)</span> takes a <strong>progressive phase</strong> of</p>
+<div class="math notranslate nohighlight">
+\[\Delta\phi = kd\sin\theta_0 = 360^\circ\ \frac{d}{\lambda}\ \sin\theta_0 = 176.8^\circ\sin\theta_0.\]</div>
+<p>Lesson 18 worked the same table at the workshop’s <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span>, where
+<span class="math notranslate nohighlight">\(kd = 173.2^\circ\)</span> and the <span class="math notranslate nohighlight">\(30^\circ\)</span> step is <span class="math notranslate nohighlight">\(86.6^\circ\)</span>. At <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>
+the step is <span class="math notranslate nohighlight">\(88.4^\circ\)</span>, and Part 1 of the packet redoes the table at the
+frequency your kit reported in Lesson 17, because every phase in the lab depends
+on it.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-wrapped-element-phases">
+<div class="wrap docutils container">
+<p class="rubric">Wrapped Element Phases</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Element</p></th>
+<th class="head text-left"><p>E1</p></th>
+<th class="head text-left"><p>E2</p></th>
+<th class="head text-left"><p>E3</p></th>
+<th class="head text-left"><p>E4</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Wrapped (°)</p></td>
+<td class="text-left"><p>0.0</p></td>
+<td class="text-left"><p>88.4</p></td>
+<td class="text-left"><p>176.8</p></td>
+<td class="text-left"><p>265.2</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Element</strong></p></td>
+<td class="text-left"><p><strong>E5</strong></p></td>
+<td class="text-left"><p><strong>E6</strong></p></td>
+<td class="text-left"><p><strong>E7</strong></p></td>
+<td class="text-left"><p><strong>E8</strong></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Wrapped (°)</p></td>
+<td class="text-left"><p>353.6</p></td>
+<td class="text-left"><p>82.0</p></td>
+<td class="text-left"><p>170.5</p></td>
+<td class="text-left"><p>258.9</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>The <span class="math notranslate nohighlight">\(30^\circ\)</span> ramp; E6 to E8 wrap: <span class="math notranslate nohighlight">\(442.0^\circ\)</span> becomes <span class="math notranslate nohighlight">\(82.0^\circ\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The phase shifters produce a value between <span class="math notranslate nohighlight">\(0^\circ\)</span> and <span class="math notranslate nohighlight">\(360^\circ\)</span>, so element
+E<span class="math notranslate nohighlight">\((n+1)\)</span>, which is element <span class="math notranslate nohighlight">\(n\)</span> in Lesson 18’s numbering, gets <span class="math notranslate nohighlight">\(n\Delta\phi\)</span>
+<strong>wrapped</strong> modulo <span class="math notranslate nohighlight">\(360^\circ\)</span>. Wrapping changes nothing physically at one
+frequency, because a phase shift of <span class="math notranslate nohighlight">\(360^\circ\)</span> is no phase shift at all. For
+<span class="math notranslate nohighlight">\(\theta_0 = 30^\circ\)</span> the eight values are these, and E6 through E8 are the ones
+that have wrapped:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Element</p></th>
+<th class="head text-left"><p>E1</p></th>
+<th class="head text-left"><p>E2</p></th>
+<th class="head text-left"><p>E3</p></th>
+<th class="head text-left"><p>E4</p></th>
+<th class="head text-left"><p>E5</p></th>
+<th class="head text-left"><p>E6</p></th>
+<th class="head text-left"><p>E7</p></th>
+<th class="head text-left"><p>E8</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Unwrapped ramp</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.0^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(88.4^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(176.8^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(265.2^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(353.6^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(442.0^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(530.5^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(618.9^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Wrapped</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.0^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(88.4^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(176.8^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(265.2^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(353.6^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(82.0^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(170.5^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(258.9^\circ\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Each entry is a multiple of the unrounded step, <span class="math notranslate nohighlight">\(88.41^\circ\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-beam-sweep-trace">
+<div class="wrap docutils container">
+<p class="rubric">The Beam-Sweep Trace</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The sweep steps the beam past a fixed source and plots power against steered angle.</p></li>
+<li><p>The array factor depends on <span class="math notranslate nohighlight">\(\sin\theta - \sin\theta_0\)</span>: the trace peaks at the source.</p></li>
+<li><p>It records the array factor, scaled by the element pattern at the source.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-two-ways.svg"
+     alt="Two ways to measure a pattern. Left: the array turns past a fixed HB100, recording element pattern times array factor. Right: the array stays fixed and the beam is swept electronically past the source, recording the array factor at the source's element-pattern level."
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The x-axis of the PHASER’s Rectangular plot is the angle the sweep steers to, not
+a measured arrival angle. With Lab Preset 1 loaded, the instrument steps the
+element-to-element phase one phase-shifter LSB, <span class="math notranslate nohighlight">\(2.8125^\circ\)</span>, at a time, and
+plots each step at the angle that phase steers to; the steps past endfire collect
+at <span class="math notranslate nohighlight">\(\pm 90^\circ\)</span>, which is why the edges of the trace look crowded.</p>
+<p>The trace is a picture of the pattern because of Lesson 18’s “The Steered
+Pattern”: the array factor depends only on <span class="math notranslate nohighlight">\(\sin\theta - \sin\theta_0\)</span>, and its
+magnitude is even, so power received from a source at <span class="math notranslate nohighlight">\(\theta_{\text{src}}\)</span> as
+the beam steps across <span class="math notranslate nohighlight">\(\theta_0\)</span> traces the same curve as the pattern of a beam
+steered at the source. It peaks where the steered angle equals the source angle.</p>
+<p>Rotating the array in front of a fixed source would record a different quantity.
+Turning the array moves the source across the element pattern as well, so the
+rotation records the element pattern times the array factor (Lesson 16). The
+sweep holds the element pattern fixed at the source’s direction, so it records the
+array factor alone, scaled by the element pattern’s value there. That scale factor
+is what a peak-level comparison between two source positions measures. Every
+point of the sweep also uses a different set of element phases, so the
+beamformer’s own errors, phase quantization and gain imbalance, shape the trace.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-two-ways-to-steer-the-peak">
+<div class="wrap docutils container">
+<p class="rubric">Two Ways to Steer the Peak</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Physical run:</strong> Phase Control at zero; the source moves to <span class="math notranslate nohighlight">\(30^\circ\)</span>.</p></li>
+<li><p><strong>Commanded run:</strong> the source stays at boresight; <strong>Apply</strong> <span class="math notranslate nohighlight">\(30\)</span>.</p></li>
+<li><p>Both peak near <span class="math notranslate nohighlight">\(30^\circ\)</span>, equally wide; only the physical run loses peak level.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-sweep-compare.svg"
+     alt="Two beam-sweep traces: the boresight trace peaking at 0 degrees and 13.0 degrees wide, and the 30-degree trace peaking near 30 degrees, 15.1 degrees wide and 0.6 dB lower"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The bench puts the peak at the same angles two ways. In the physical run, Phase
+Control holds zero, the sweep’s own ramp is the only steering, and the trace peaks
+at the source’s angle on the arc. In the commanded run, the source stays at
+boresight and <strong>Apply</strong> in the Beam Steering section loads per-element offsets
+that shift the trace: Apply <span class="math notranslate nohighlight">\(30\)</span> puts a boresight source’s peak at <span class="math notranslate nohighlight">\(+30^\circ\)</span>.</p>
+<p>The two traces have the same width, because both shift the same function of
+<span class="math notranslate nohighlight">\(\sin\theta - \sin\theta_0\)</span> to the same place. Their peak levels differ. In the
+physical run the source sits <span class="math notranslate nohighlight">\(30^\circ\)</span> off each element’s own boresight, and the
+element pattern lowers the whole trace by its roll-off at <span class="math notranslate nohighlight">\(30^\circ\)</span>. In the
+commanded run the source never leaves the elements’ boresight, so the peak level
+matches the <span class="math notranslate nohighlight">\(0^\circ\)</span> trace. That difference is the measurement of scan loss
+(Lesson 18, “Scan Loss”).</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-sign-in-phase-control">
+<div class="wrap docutils container">
+<p class="rubric">The Sign in Phase Control</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Element</p></th>
+<th class="head text-left"><p>E1</p></th>
+<th class="head text-left"><p>E2</p></th>
+<th class="head text-left"><p>E3</p></th>
+<th class="head text-left"><p>E4</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Phase Control</p></td>
+<td class="text-left"><p>0</p></td>
+<td class="text-left"><p>−88</p></td>
+<td class="text-left"><p>−177</p></td>
+<td class="text-left"><p>−265</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Element</strong></p></td>
+<td class="text-left"><p><strong>E5</strong></p></td>
+<td class="text-left"><p><strong>E6</strong></p></td>
+<td class="text-left"><p><strong>E7</strong></p></td>
+<td class="text-left"><p><strong>E8</strong></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Phase Control</p></td>
+<td class="text-left"><p>−354</p></td>
+<td class="text-left"><p>−442</p></td>
+<td class="text-left"><p>−531</p></td>
+<td class="text-left"><p>−619</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>Apply <span class="math notranslate nohighlight">\(30\)</span> writes <span class="math notranslate nohighlight">\(-n\Delta\phi\)</span>, whole degrees, unwrapped.</p></li>
+<li><p>The sweep adds <span class="math notranslate nohighlight">\(+n\Delta\phi_s\)</span>; the sum vanishes at <span class="math notranslate nohighlight">\(+30^\circ\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-phase-control.svg"
+     alt="The 30-degree ramp at 10.525 GHz: the unwrapped ramp rising to 618.9 degrees, the wrapped settings, and the falling whole-degree offsets Phase Control shows after Apply 30, from 0 to minus 619"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>When you type <span class="math notranslate nohighlight">\(30\)</span> into <strong>Steer Angle (deg)</strong> and press <strong>Apply</strong>, the GUI
+computes <span class="math notranslate nohighlight">\(\Delta\phi\)</span> from the Signal Freq on screen and writes <span class="math notranslate nohighlight">\(-n\Delta\phi\)</span> into
+the Phase Control boxes, rounded to whole degrees and not wrapped. At
+<span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span> the boxes read 0, −88, −177, −265, −354, −442, −531, and
+−619. The sliders beside the boxes stop at <span class="math notranslate nohighlight">\(\pm 180^\circ\)</span>; read the boxes.</p>
+<p>The minus sign is deliberate. During a sweep the backend adds its own ramp,
+<span class="math notranslate nohighlight">\(+n\Delta\phi_s\)</span>, to whatever Phase Control holds, so element <span class="math notranslate nohighlight">\(n\)</span> carries
+<span class="math notranslate nohighlight">\(n(\Delta\phi_s - \Delta\phi_0)\)</span>. A boresight source needs no ramp at all, so the
+array points at it where <span class="math notranslate nohighlight">\(\Delta\phi_s = \Delta\phi_0\)</span>, which is the plotted
+angle <span class="math notranslate nohighlight">\(+30^\circ\)</span>. Apply is therefore the offset that makes a boresight source
+look like a source at <span class="math notranslate nohighlight">\(+\theta_0\)</span> on the sweep plot. On their own, with no sweep
+ramp added, the offsets would point the beam to <span class="math notranslate nohighlight">\(-30^\circ\)</span>. To compare the
+read-back with the wrapped ramp, reduce it modulo <span class="math notranslate nohighlight">\(360^\circ\)</span>: E6’s
+<span class="math notranslate nohighlight">\(-442^\circ\)</span> is <span class="math notranslate nohighlight">\(278^\circ\)</span>, which is <span class="math notranslate nohighlight">\(360^\circ - 82.0^\circ\)</span>.</p>
+<p>The GUI computes <span class="math notranslate nohighlight">\(\Delta\phi\)</span> with <span class="math notranslate nohighlight">\(c = 299792458\ \text{m/s}\)</span>, not the
+<span class="math notranslate nohighlight">\(3.00\times 10^8\ \text{m/s}\)</span> of our prediction, so one element can differ by
+<span class="math notranslate nohighlight">\(1^\circ\)</span> after rounding: our <span class="math notranslate nohighlight">\(-n(88.41^\circ)\)</span> gives <span class="math notranslate nohighlight">\(-530\)</span> for E7, and the GUI’s
+<span class="math notranslate nohighlight">\(-n(88.47^\circ)\)</span> gives <span class="math notranslate nohighlight">\(-531\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-predicted-sweep">
+<div class="wrap docutils container">
+<p class="rubric">Predicted Sweep</p>
+<div class="depth docutils container">
+<p>The widget below is the prediction tool for today’s lab. Set the frequency to
+<span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>, or at the bench to the value <strong>Find HB100</strong> reports, and
+the knob to the source’s angle on the arc, which is where the trace should peak.
+Then read <span class="math notranslate nohighlight">\(\Delta\phi\)</span>, the predicted half-power beamwidth, and the peak drop,
+and two rows of phases: the beam ramp <span class="math notranslate nohighlight">\(+n\Delta\phi\)</span> wrapped to <span class="math notranslate nohighlight">\(0^\circ\)</span> to
+<span class="math notranslate nohighlight">\(360^\circ\)</span>, and what Phase Control shows after Apply at the same angle, the
+falling whole-degree offsets. Two things to notice before the bench: the dots
+mark the angles the sweep samples, one <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> phase step apart, about
+<span class="math notranslate nohighlight">\(1^\circ\)</span> near broadside and wider toward endfire; and the beam widens as the
+peak moves away from broadside while the sidelobe structure stretches with it.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/steering-predictor.html"
+        width="100%" height="538"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Predicted beam-sweep trace and element phases for the PHASER array">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-part-2-equipment-and-setup">
+<div class="wrap docutils container">
+<p class="rubric">Part 2: Equipment and Setup</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The kit on its stand, cabled to your laptop as in Lesson 17.</p></li>
+<li><p>The HB100 on a tripod, <span class="math notranslate nohighlight">\(1\ \text{m}\)</span> out, at patch-row height.</p></li>
+<li><p>A protractor arc centered on the array; <span class="math notranslate nohighlight">\(+\theta\)</span> is toward E8.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-bench-setup.svg"
+     alt="Bench geometry from above: the eight-element array, a 1 m protractor arc centered between E4 and E5, and the HB100 positions at 0, 30, and 45 degrees on the plus side, toward E8; confirm the plus side with Est. Angle"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>You need the ADALM-PHASER kit on its stand, connected to your laptop by the
+Ethernet cable as in Lesson 17; the HB100 on a tripod about <span class="math notranslate nohighlight">\(1\ \text{m}\)</span> from the
+array face, at the height of the patch row; and a protractor arc of
+<span class="math notranslate nohighlight">\(1\ \text{m}\)</span> radius centered under the middle of the array, between E4 and E5.</p>
+<p>One meter is Lesson 17’s far-field distance for this array,
+<span class="math notranslate nohighlight">\(2D^2/\lambda = 0.88\ \text{m}\)</span> with <span class="math notranslate nohighlight">\(D = Nd = 112\ \text{mm}\)</span>. Center the arc on
+the array, not on the board’s edge: an arc centered <span class="math notranslate nohighlight">\(10\ \text{mm}\)</span> off the middle
+of the array shifts the reference angle by about <span class="math notranslate nohighlight">\(0.5^\circ\)</span>.</p>
+<p>Lesson 18’s sign convention puts <span class="math notranslate nohighlight">\(+\theta\)</span> on the E8 end of the array, the end the
+wave reaches first. Confirm it on your kit before you record anything: with the
+source on the <span class="math notranslate nohighlight">\(+\)</span> side, <strong>Est. Angle</strong> reads positive.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-bring-up-the-kit">
+<div class="wrap docutils container">
+<p class="rubric">Bring Up the Kit</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple">
+<li><p>Browse to your kit’s address from Lesson 17 (kit 03: <code class="docutils literal notranslate"><span class="pre">http://192.168.7.13:8080</span></code>) and wait for the pill to read <strong>Connected</strong>.</p></li>
+<li><p>Place the powered HB100 <span class="math notranslate nohighlight">\(1\ \text{m}\)</span> out at <span class="math notranslate nohighlight">\(0^\circ\)</span> on the arc, facing the array.</p></li>
+<li><p>Press <strong>Find HB100</strong> and record the Signal Freq it reports in the packet.</p></li>
+<li><p>Press <strong>Calibrate</strong> and wait for it to finish.</p></li>
+<li><p>Press <strong>1 Steering Angle</strong> under <strong>Lab Presets</strong>.</p></li>
+<li><p>Set <strong>Rx Gain (dB)</strong> to 10.</p></li>
+<li><p>Turn on <strong>Show Peak Angle Marker</strong> under <strong>Plot Options</strong>.</p></li>
+<li><p>Press <strong>Start</strong>, and check the <strong>FFT</strong> tab for one tone near <span class="math notranslate nohighlight">\(0\ \text{MHz}\)</span>, at least <span class="math notranslate nohighlight">\(20\ \text{dB}\)</span> above the floor.</p></li>
+<li><p>Open the <strong>Rectangular</strong> tab.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>This is Lesson 17’s order, for the same reason: <strong>Calibrate</strong> reads the frequency
+that <strong>Find HB100</strong> stores, and it needs the source at boresight while it runs,
+or it bakes a steering ramp into the calibration offsets. The pill sits at the
+bottom right and changes from <strong>Checking…</strong> to <strong>Connected</strong>; <strong>Start</strong> stays
+grayed out until the backend is ready, and nothing plots until you press it.</p>
+<p>The preset loads a uniform taper on E1 to E8, zeros Phase Control, sets 7 phase
+bits with <strong>Use Bits</strong> on and <strong>Signal BW</strong> at <span class="math notranslate nohighlight">\(10\ \text{MHz}\)</span>, and opens the FFT
+tab. It leaves <strong>Signal Freq</strong> at the value Find HB100 stored, and it does not set
+<strong>Rx Gain (dB)</strong>; the Pi starts at 30 dB, where Lesson 17 measured the receiver
+compressing, so step 6 sets the 10 dB reference.</p>
+<p>On the FFT tab, one narrow tone stands well above the noise near <span class="math notranslate nohighlight">\(0\ \text{MHz}\)</span>,
+within about <span class="math notranslate nohighlight">\(\pm 1\ \text{MHz}\)</span>. If it is buried, re-aim the HB100 or press
+<strong>Find HB100</strong> again.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-run-1-move-the-source">
+<div class="wrap docutils container">
+<p class="rubric">Run 1: Move the Source</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="10">
+<li><p>Press <strong>Reset</strong> under <strong>Phase Control</strong>.</p></li>
+<li><p>With the source at <span class="math notranslate nohighlight">\(0^\circ\)</span>, record <strong>Est. Angle</strong>, <strong>Peak Array Gain</strong>, and the half-power beamwidth in Table A.</p></li>
+<li><p>Press <strong>Freeze</strong> to hold the boresight trace.</p></li>
+<li><p>Move the HB100 along the arc to <span class="math notranslate nohighlight">\(+30^\circ\)</span>, still <span class="math notranslate nohighlight">\(1\ \text{m}\)</span> out and facing the array.</p></li>
+<li><p>Record the <span class="math notranslate nohighlight">\(30^\circ\)</span> row of Table A.</p></li>
+<li><p>Move the HB100 to <span class="math notranslate nohighlight">\(+45^\circ\)</span> and record the last row.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Read the half-power beamwidth as the distance between the two angles where the
+trace falls <span class="math notranslate nohighlight">\(3\ \text{dB}\)</span> below its own peak. The sweep runs continuously and
+the button now reads <strong>Stop</strong>, so leave it running: the trace redraws on its own
+after you move the source. If Est. Angle reads near <span class="math notranslate nohighlight">\(-30^\circ\)</span>, the source is on
+the negative side of the arc; move it across.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only cut docutils container" id="frame-run-2-apply-the-steer-angle">
+<div class="wrap docutils container">
+<p class="rubric">Run 2: Apply the Steer Angle</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="16">
+<li><p>Move the HB100 back to <span class="math notranslate nohighlight">\(0^\circ\)</span> on the arc.</p></li>
+<li><p>In <strong>Beam Steering</strong>, leave <strong>Taper</strong> on Uniform, enter 15 in <strong>Steer Angle (deg)</strong>, and press <strong>Apply</strong>.</p></li>
+<li><p>Record <strong>Est. Angle</strong>, <strong>Peak Array Gain</strong>, and the beamwidth in Table B.</p></li>
+<li><p>Repeat for 30, and copy the eight <strong>Phase Control</strong> boxes into Table B.</p></li>
+<li><p>Repeat for 45.</p></li>
+<li><p>Press <strong>Reset</strong> under <strong>Phase Control</strong> before you leave the station.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Apply also rewrites <strong>Element Gains</strong> with the chosen taper, so leave it on
+Uniform. The offsets stay loaded until you press Reset, and they add to every
+sweep: with Apply <span class="math notranslate nohighlight">\(30\)</span> still loaded and the source moved to <span class="math notranslate nohighlight">\(+30^\circ\)</span>, the trace
+would peak at <span class="math notranslate nohighlight">\(90^\circ\)</span>. Step 21 leaves the kit at zero for the next lab.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-expected-numbers">
+<div class="wrap docutils container">
+<p class="rubric">Expected Numbers</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Quantity</p></th>
+<th class="head text-left"><p>Calculated</p></th>
+<th class="head text-left"><p>Expect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>HPBW at <span class="math notranslate nohighlight">\(0^\circ\)</span>, <span class="math notranslate nohighlight">\(30^\circ\)</span>, <span class="math notranslate nohighlight">\(45^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.0^\circ\)</span>, <span class="math notranslate nohighlight">\(15.1^\circ\)</span>, <span class="math notranslate nohighlight">\(18.7^\circ\)</span></p></td>
+<td class="text-left"><p>each <span class="math notranslate nohighlight">\(\pm 1^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Peak drop, source at <span class="math notranslate nohighlight">\(30^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-0.6\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-0.6\)</span> to <span class="math notranslate nohighlight">\(-1.5\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Peak drop, Apply <span class="math notranslate nohighlight">\(30\)</span></p></td>
+<td class="text-left"><p>0 dB</p></td>
+<td class="text-left"><p>0 dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>First sidelobe</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-12.8\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-11\)</span> to <span class="math notranslate nohighlight">\(-13\)</span> dBc</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-expected-sweep.svg"
+     alt="The expected Rectangular-tab traces for a source at 0 and at 30 degrees, sampled about 1 degree apart, with the 13.0 and 15.1 degree half-power spans, the 0.6 dB lower peak at 30 degrees, and the first sidelobes 12.8 dB down"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The calculated column comes from the array factor for <span class="math notranslate nohighlight">\(N = 8\)</span> at
+<span class="math notranslate nohighlight">\(d/\lambda = 0.491\)</span>. The <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span> broadening of Lesson 18 gives
+<span class="math notranslate nohighlight">\(12.9^\circ/\cos 30^\circ = 14.9^\circ\)</span> from the rule’s broadside width, and the
+exact array factor gives <span class="math notranslate nohighlight">\(13.0^\circ\)</span>, <span class="math notranslate nohighlight">\(15.1^\circ\)</span>, and <span class="math notranslate nohighlight">\(18.7^\circ\)</span>. A sweep
+sampled about a degree apart reads each width to about a degree. dBc is dB
+relative to the main-lobe peak; the sweep’s floor sits about <span class="math notranslate nohighlight">\(23\ \text{dB}\)</span> below
+the peak, and the first sidelobes come up out of it at <span class="math notranslate nohighlight">\(-11\)</span> to <span class="math notranslate nohighlight">\(-13\)</span> dBc.</p>
+<p>The peak drop is the element pattern’s roll-off, the scan loss of Lesson 18. Its
+ideal-element bound is</p>
+<div class="math notranslate nohighlight">
+\[\Delta G = 10\log_{10}(\cos 30^\circ) = -0.6\ \text{dB},\]</div>
+<p>and <span class="math notranslate nohighlight">\(-1.5\ \text{dB}\)</span> at <span class="math notranslate nohighlight">\(45^\circ\)</span>. A patch element rolls off faster, closer to
+<span class="math notranslate nohighlight">\(\cos^{1.3}\theta\)</span> to <span class="math notranslate nohighlight">\(\cos^{1.5}\theta\)</span> in power, so expect <span class="math notranslate nohighlight">\(-0.8\)</span> to
+<span class="math notranslate nohighlight">\(-0.9\ \text{dB}\)</span> at <span class="math notranslate nohighlight">\(30^\circ\)</span>; Lesson 21 derives the element pattern. The
+commanded run keeps the source on the elements’ boresight, so its peak does not
+drop. The peak-drop rows are hardware measurements: the simulator has no element
+pattern and reads <span class="math notranslate nohighlight">\(0.0\ \text{dB}\)</span> in both runs.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-no-hardware">
+<div class="wrap docutils container">
+<p class="rubric">No Hardware?</p>
+<div class="tip admonition">
+<p class="admonition-title">No hardware?</p>
+<p>Open the hosted simulator at
+<a class="reference external" href="https://livethisdream.github.io/phaser/">livethisdream.github.io/phaser</a>, the
+same dashboard with nothing to install. At a station whose hardware has failed,
+add <code class="docutils literal notranslate"><span class="pre">?sim=1</span></code> to the station’s URL or turn on <strong>Simulator Mode</strong> under
+<strong>Configuration</strong>; an orange <strong>SIMULATION</strong> pill marks simulated data. With a
+checkout of the Phaser repository, <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">phaser_headless.py</span> <span class="pre">--sim</span></code> serves the
+same page at <code class="docutils literal notranslate"><span class="pre">http://localhost:8080</span></code>.</p>
+<p>The simulated source is fixed at boresight, so Run 1’s moves have no simulated
+version. Run 2 works as written, and it is the rehearsal in Part 1 of the packet:
+Apply <span class="math notranslate nohighlight">\(30\)</span> gives the trace a source at <span class="math notranslate nohighlight">\(+30^\circ\)</span> would, with <strong>Est. Angle</strong>
+<span class="math notranslate nohighlight">\(29.6^\circ\)</span> and a <span class="math notranslate nohighlight">\(15^\circ\)</span> beamwidth, and Phase Control shows the same
+offsets as the hardware. The simulator has no element pattern, so <strong>Peak Array
+Gain</strong> does not drop; it does not model <strong>Rx Gain (dB)</strong>; its tone sits at
+<span class="math notranslate nohighlight">\(-1\ \text{MHz}\)</span>; and <strong>Find HB100</strong> and <strong>Calibrate</strong> run scripted scans.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-part-3-the-peak-angle-error-budget">
+<div class="wrap docutils container">
+<p class="rubric">Part 3: The Peak-Angle Error Budget</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Sweep grid, half a step at <span class="math notranslate nohighlight">\(30^\circ\)</span>: <span class="math notranslate nohighlight">\(0.53^\circ\)</span>.</p></li>
+<li><p>Arc placement and aim: <span class="math notranslate nohighlight">\(1.5^\circ\)</span>.</p></li>
+<li><p>Room multipath: <span class="math notranslate nohighlight">\(1.0^\circ\)</span>.</p></li>
+<li><p>Root sum of squares <span class="math notranslate nohighlight">\(1.9^\circ\)</span>: a peak within <span class="math notranslate nohighlight">\(\pm 2^\circ\)</span> passes.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L18-error-budget.svg"
+     alt="Bar chart of the peak-angle error sources at 30 degrees in degrees: sweep grid 0.53, arc placement and aim 1.5, multipath 1.0, and their root sum of squares 1.9"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The measured peak angle will not equal the arc angle exactly, and the
+beamwidths will not equal <span class="math notranslate nohighlight">\(13.0^\circ\)</span> and <span class="math notranslate nohighlight">\(15.1^\circ\)</span> exactly. Three
+independent effects account for the difference, and Part 1 of the packet sized
+all three before the measurement.</p>
+<p><strong>Sweep grid.</strong> With Use Bits on, the sweep steps the element phase one
+<span class="math notranslate nohighlight">\(2.8125^\circ\)</span> LSB at a time. One step moves <span class="math notranslate nohighlight">\(\sin\theta\)</span> by
+<span class="math notranslate nohighlight">\(2.8125^\circ/176.8^\circ = 0.0159\)</span>, which is <span class="math notranslate nohighlight">\(0.91^\circ\)</span> of angle at broadside
+and <span class="math notranslate nohighlight">\(1.05^\circ\)</span> at <span class="math notranslate nohighlight">\(30^\circ\)</span>, widening as <span class="math notranslate nohighlight">\(1/\cos\theta\)</span>. The trace holds no
+information between samples, so a peak read off it can be wrong by half a step,
+<span class="math notranslate nohighlight">\(0.53^\circ\)</span> at <span class="math notranslate nohighlight">\(30^\circ\)</span>.</p>
+<p><strong>Arc placement and aim.</strong> At <span class="math notranslate nohighlight">\(1\ \text{m}\)</span>, one degree of arc is
+<span class="math notranslate nohighlight">\(17.5\ \text{mm}\)</span>, so a tripod placed by eye to within <span class="math notranslate nohighlight">\(25\ \text{mm}\)</span> gives a
+<span class="math notranslate nohighlight">\(1.4^\circ\)</span> error in the reference angle; centering the arc and pointing the
+module bring the budget figure to <span class="math notranslate nohighlight">\(1.5^\circ\)</span>. This error is in the reference,
+not in the array.</p>
+<p><strong>Multipath.</strong> The bench, the walls, and the people nearby return copies of the
+tone. A reflection <span class="math notranslate nohighlight">\(20\ \text{dB}\)</span> below the direct path has an amplitude ratio of
+0.1, so, depending on its phase, it raises or lowers the level by</p>
+<div class="math notranslate nohighlight">
+\[20\log_{10}(1 \pm 0.1) = +0.8\ \text{dB}\ \text{or}\ -0.9\ \text{dB},\]</div>
+<p>a ripple on the main lobe that moves the apparent peak by up to about a degree.
+Absorber behind the array and a clear arc both reduce it.</p>
+<p>Because the three are independent, they combine as a root sum of squares:</p>
+<div class="math notranslate nohighlight">
+\[\sqrt{0.53^2 + 1.5^2 + 1.0^2} = 1.9^\circ.\]</div>
+<p>A peak within <span class="math notranslate nohighlight">\(\pm 2^\circ\)</span> of the reference meets the standard, and agreement to
+<span class="math notranslate nohighlight">\(0.1^\circ\)</span> would point to a mistake in the comparison rather than an unusually
+good measurement.</p>
+</div>
+<div class="depth docutils container">
+<p><strong>Why HB100 drift is not in the budget.</strong> The GUI sets the receiver from Signal
+Freq, and the SDR sees only a <span class="math notranslate nohighlight">\(3\ \text{MHz}\)</span> window. A source that drifts far
+enough to steer the beam measurably leaves the window and the tone disappears;
+<strong>Find HB100</strong> finds it again. A drift that keeps the tone in view, under
+<span class="math notranslate nohighlight">\(1.5\ \text{MHz}\)</span>, moves the beam by less than <span class="math notranslate nohighlight">\(0.01^\circ\)</span>. The arithmetic is
+worth seeing once as a preview of Lesson 23’s beam squint: phases set for
+<span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span> and observed at <span class="math notranslate nohighlight">\(10.325\ \text{GHz}\)</span> point a <span class="math notranslate nohighlight">\(30^\circ\)</span> beam
+<span class="math notranslate nohighlight">\(0.6^\circ\)</span> farther out, and a <span class="math notranslate nohighlight">\(45^\circ\)</span> beam <span class="math notranslate nohighlight">\(1.1^\circ\)</span> farther.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-lab-packet">
+<div class="wrap docutils container">
+<p class="rubric">Lab Packet</p>
+<p>The L18 Lab packet is one submission for the whole lab, turned in complete before Lesson 19. It has three parts:</p>
+<ol class="arabic simple">
+<li><p><strong>Part 1, Pre-Lab</strong> (individual, before the lab period, because you need it at the bench): the prediction table at your kit’s frequency, what Phase Control will show, the beamwidths and the error budget, and a rehearsal of Run 2 on the hosted simulator.</p></li>
+<li><p><strong>Part 2, Measurements</strong> (your own kit’s data, recorded in class): Tables A and B, from Run 1 and Run 2.</p></li>
+<li><p><strong>Part 3, Writeup</strong> (individual, after the lab): reconcile the measurements with the predictions, and three analysis problems.</p></li>
+</ol>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">L18 Lab packet (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-the-steering-law">
+<div class="wrap docutils container">
+<p class="rubric">Summary: The Steering Law</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta\phi = kd\sin\theta_0\)</span></p></td>
+<td class="text-left"><p>progressive element phase for a beam at <span class="math notranslate nohighlight">\(\theta_0\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(176.8^\circ\sin\theta_0\)</span> at <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Wrapped phase</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(n\Delta\phi\)</span> modulo <span class="math notranslate nohighlight">\(360^\circ\)</span>, what the shifter can produce</p></td>
+<td class="text-left"><p>E8 at <span class="math notranslate nohighlight">\(30^\circ\)</span>: <span class="math notranslate nohighlight">\(258.9^\circ\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Phase Control after Apply</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-n\Delta\phi\)</span>, whole degrees, unwrapped</p></td>
+<td class="text-left"><p>E8 at <span class="math notranslate nohighlight">\(30^\circ\)</span>: <span class="math notranslate nohighlight">\(-619\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-the-trace">
+<div class="wrap docutils container">
+<p class="rubric">Summary: The Trace</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Beam-sweep trace</p></td>
+<td class="text-left"><p>power against steered angle, source fixed</p></td>
+<td class="text-left"><p>peaks at the source angle, or at the Apply angle for a boresight source</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Sweep grid</p></td>
+<td class="text-left"><p>one <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> phase LSB per step</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.91^\circ\)</span> at <span class="math notranslate nohighlight">\(0^\circ\)</span>, <span class="math notranslate nohighlight">\(1.05^\circ\)</span> at <span class="math notranslate nohighlight">\(30^\circ\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>HPBW</p></td>
+<td class="text-left"><p>half-power width, broadens off broadside</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.0^\circ\)</span> at <span class="math notranslate nohighlight">\(0^\circ\)</span>, <span class="math notranslate nohighlight">\(15.1^\circ\)</span> at <span class="math notranslate nohighlight">\(30^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Scan loss</p></td>
+<td class="text-left"><p>element-pattern roll-off, physical run only</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-0.6\ \text{dB}\)</span> bound at <span class="math notranslate nohighlight">\(30^\circ\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Peak-angle budget</p></td>
+<td class="text-left"><p>grid, aim, multipath, root sum of squares</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(1.9^\circ\)</span>; pass within <span class="math notranslate nohighlight">\(\pm 2^\circ\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The L19 Lab uses today’s bearing skill: find the live HB100 among numbered boxes.</p></li>
+<li><p>Lesson 20 derives the trace’s features: nulls, the <span class="math notranslate nohighlight">\(-12.8\)</span> dB sidelobe, and the beamwidth.</p></li>
+<li><p>Keep Tables A and B; that derivation starts from them.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lesson 19 and the fox hunt put today’s skill to work while it is fresh: the peak
+of the sweep is a bearing, and bearings from several stations cross at the
+source.</p>
+<p>Today we compared measured beamwidths and sidelobes with values from Lesson 16’s
+closed form and Lesson 18’s broadening rule. Lesson 20 takes the closed form</p>
+<div class="math notranslate nohighlight">
+\[AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}\]</div>
+<p>and extracts every feature of the trace you just recorded from it: where the
+nulls fall, why the first sidelobe sits <span class="math notranslate nohighlight">\(12.8\ \text{dB}\)</span> down, how the beamwidth
+follows</p>
+<div class="math notranslate nohighlight">
+\[\theta_{\text{HP}} \approx \frac{0.886\ \lambda}{Nd\cos\theta_0},\]</div>
+<p>and what changes when elements are switched off. Bring today’s traces to that
+lesson; the derivation is easier to trust with the measurement in front of you.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L18-lab-beam-steering"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js"></script>
+<script src="../../_static/frames.js"></script><script src="../../_static/viz-autosize.js"></script>
+</body>
+</html>
