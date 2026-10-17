@@ -276,13 +276,14 @@ same field from that element.
 
 ::::{frame} Phase Wrapping and True Delay
 :::{present}
-- At one frequency, whole turns change nothing the array can detect.
+- At one frequency, $360^\circ$ is the same as $0^\circ$: $433.0^\circ$ and $73.0^\circ$ steer the same beam.
 - The wrapped table loses the record of the true delay.
 - So wideband systems use time-delay units instead of, or alongside, phase shifters.
 :::
 
-Wrapping discards whole turns, and at a single frequency nothing is lost by
-discarding them. The array cannot tell the difference. What the wrapped table
+Wrapping discards whole turns. At a single frequency a phase of $360^\circ$ is
+the same as $0^\circ$, so nothing is lost: element 5 set to $73.0^\circ$ radiates
+exactly as it would at $433.0^\circ$. What the wrapped table
 does lose is the record of the true delay, which is the reason a wideband system
 uses time-delay units instead of, or alongside, phase shifters.
 ::::
