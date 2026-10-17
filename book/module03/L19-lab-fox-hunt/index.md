@@ -43,15 +43,19 @@ L19 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 - Cross the bearings, name the box, and write one report per team.
 :::
 
-The L19 Lab puts Lesson 19's triangulation and the L18 Lab's bearing to work. Every HB100 but
-one is switched off, and the live one sits in one of several numbered boxes
+The L19 Lab puts Lesson 19 on the bench: a bearing from the peak of the beam
+sweep, converted to the room's frame with the kit's heading, and bearings from
+two or more places crossed into a fix. Every HB100 but one is switched off, so
+the sweep sees a single source, and the live one sits in one of several numbered boxes
 placed at random inside a keep-out zone marked on the floor. You work in a team
 of two with both of your kits, and you can measure from wherever you like as
 long as you stay outside the zone. Note where each kit sits and which way its
-array faces, then read the source's bearing off the beam sweep's
-**Est. Angle**, exactly as in the L18 Lab. Bearings from known positions cross
-at the source; a short Python script turns them into a fix, and the fix names
-the box. There is no class-combined answer: each team finds the fox from its
+array faces, then read the source's angle off the beam sweep's
+**Est. Angle**, exactly as in the L18 Lab, and add the heading to get the room
+bearing. A short Python script solves for the point closest to all of the
+bearing lines, and the box nearest that fix is your answer. Plan where to stand
+before the period: the crossing angle between your two bearings sets the error
+of the fix as much as the instrument does. There is no class-combined answer: each team finds the fox from its
 own two kits and turns in one report.
 ::::
 
