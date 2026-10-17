@@ -539,6 +539,7 @@ td .doc-link.doc-key:hover, th .doc-link.doc-key:hover {
    709px budget -- so they tighten up inside one. */
 @media (max-width: 44rem) {
   .frame .block-card, .frame .deliverable-card { padding: .6rem .85rem; }
+  .frame .block-card { padding: .6rem 1.2rem; border-radius: 22px; }
   .frame .block-card h3, .frame .deliverable-card h3 { font-size: .98rem; }
   .frame .block-card p, .frame .deliverable-card p { font-size: .84rem; line-height: 1.4; }
   .frame .block-grid, .frame .deliverable-cards { gap: .45rem; }
