@@ -191,7 +191,7 @@
     /* Space advances a frame, which would otherwise swallow the activation of
        whichever popover button has focus. Let the button have those two keys;
        every other shortcut still works with a panel open. */
-    if ((e.key === ' ' || e.key === 'Enter') && t && t.closest && t.closest('.pop')) return;
+    if ((e.key === ' ' || e.key === 'Enter') && t && t.closest && t.closest('.pop, .pop-anchor')) return;
     switch (e.key) {
       case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ':
         e.preventDefault(); go(idx + 1); break;

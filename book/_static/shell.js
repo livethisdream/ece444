@@ -34,7 +34,7 @@
         if (on) {
           place(btn, panel);
           onOpen.forEach(function (fn) { fn(); });
-          (panel.querySelector('button, a') || btn).focus();
+          (panel.querySelector('button, a') || btn).focus({ preventScroll: true });
         }
       },
       isOpen: function () { return !panel.hidden; }
@@ -58,6 +58,13 @@
     x = Math.min(x, window.innerWidth - w - EDGE);
     x = Math.max(x, EDGE);
     panel.style.left = (x - bar.left) + 'px';                 /* back to the bar */
+    /* A panel that drops down (data-drop) opens above its button instead
+       when the window has no room for it below. */
+    if (panel.hasAttribute('data-drop')) {
+      panel.classList.remove('up');
+      var r = panel.getBoundingClientRect(), top = btn.getBoundingClientRect().top;
+      if (r.bottom > window.innerHeight - EDGE && top > r.height + EDGE) panel.classList.add('up');
+    }
   }
 
   function closePops(except) {
@@ -75,11 +82,14 @@
      no-op on a build with no siblings. */
   popover('btnSite', 'sitepop');
 
+  /* The landing page's Modules menu. */
+  popover('btnModules', 'modpop');
+
   /* A tap anywhere off the bar dismisses whatever is open. */
   document.addEventListener('pointerdown', function (e) {
     if (!anyPopOpen()) return;
     var t = e.target;
-    if (!t || !t.closest || !t.closest('.hud')) closePops();
+    if (!t || !t.closest || !t.closest('.hud, .pop-anchor')) closePops();
   });
 
   /* Whatever the page uses to retract its chrome applies here as well. */
