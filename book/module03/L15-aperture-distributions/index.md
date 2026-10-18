@@ -30,10 +30,14 @@ Lesson 15 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Learning Objectives
+:class: here-15
 
 <ol class="lo-list" style="--module: '3'; counter-reset: lo 0">
   <li>I can describe aperture distributions and calculate aperture efficiency for a given illumination.</li>
 </ol>
+
+```{include} ../../_snippets/m3-strip.md
+```
 ::::
 
 ::::{frame} Why Return to Apertures?

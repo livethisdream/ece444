@@ -177,10 +177,8 @@ body.pointing .deck { touch-action: none; }
 .lane-map .lm-chip b { font-family: var(--mono); font-weight: 600; color: var(--blue-dark); }
 .lane-map .lm-chip.lm-phase { border-top-color: var(--lm-phase); }
 .lane-map .lm-chip.lm-both {
-  border-top: 4px solid transparent;
-  border-image: linear-gradient(90deg, var(--lm-amp) 50%, var(--lm-phase) 50%) 1;
-  border-image-slice: 4 0 0 0; border-image-width: 4px 0 0 0;
-  border-radius: 0 0 8px 8px;
+  border-top: 1px solid var(--rule); padding-top: calc(.55rem + 3px);
+  background: linear-gradient(90deg, var(--lm-amp) 50%, var(--lm-phase) 50%) top / 100% 4px no-repeat, var(--panel);
 }
 .lane-map .lm-chip:hover { background: var(--soft); border-color: var(--rule-strong); }
 .lane-map .lm-chip:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
@@ -202,6 +200,57 @@ body.pointing .deck { touch-action: none; }
     padding: .3rem .45rem;
   }
   .lane-map .lm-lab { margin-top: 0; }
+}
+
+/* ---- lane strip: Module 3's "you are here" ---------------------------- */
+/* One row of the ten Module 3 lessons, colored by lane like the overview's
+   lane map; the lesson whose objectives frame includes it lights up its own
+   chip through the frame's here-NN class. */
+.lane-strip {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .3rem;
+  margin-top: clamp(.8rem, 2.5vh, 1.6rem);
+  font-size: var(--step--1);
+}
+.lane-strip .ls-label {
+  font-family: var(--mono); font-size: .8em; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted); margin-right: .3rem;
+}
+.lane-strip .ls-chip {
+  min-width: 2.1rem; padding: .25rem .35rem; border-radius: 6px; text-align: center;
+  font-family: var(--mono); font-size: .85em; font-weight: 600; text-decoration: none;
+  color: var(--muted); background: var(--panel); border: 1px solid var(--rule);
+  border-top: 3px solid var(--blue);
+}
+.lane-strip .ls-chip.ls-phase { border-top-color: var(--accent-ink); }
+.lane-strip .ls-chip.ls-both {
+  border-top: 1px solid var(--rule); padding-top: calc(.25rem + 2px);
+  background: linear-gradient(90deg, var(--blue) 50%, var(--accent-ink) 50%) top / 100% 3px no-repeat, var(--panel);
+}
+.lane-strip .ls-chip:hover { color: var(--blue-dark); background: var(--soft); }
+.lane-strip .ls-key { margin-left: auto; font-size: .8em; color: var(--muted); }
+.lane-strip .ls-key i {
+  display: inline-block; width: .8em; height: .3em; margin: 0 .25em 0 .5em;
+  vertical-align: middle; background: var(--blue);
+}
+.lane-strip .ls-key i.ls-phase { background: var(--accent-ink); }
+.lane-strip .ls-key i.ls-both { background: linear-gradient(90deg, var(--blue) 50%, var(--accent-ink) 50%); }
+.here-15 .ls-chip[data-n="15"],
+.here-16 .ls-chip[data-n="16"],
+.here-17 .ls-chip[data-n="17"],
+.here-18 .ls-chip[data-n="18"],
+.here-19 .ls-chip[data-n="19"],
+.here-20 .ls-chip[data-n="20"],
+.here-21 .ls-chip[data-n="21"],
+.here-22 .ls-chip[data-n="22"],
+.here-23 .ls-chip[data-n="23"],
+.here-24 .ls-chip[data-n="24"] {
+  color: var(--panel); background: var(--blue-dark); border-color: var(--blue-dark);
+  transform: translateY(-1px); box-shadow: var(--shadow);
+}
+@media (max-width: 620px) {
+  .lane-strip .ls-label { flex: 0 0 100%; margin: 0 0 .1rem; }
+  .lane-strip .ls-chip { min-width: 0; flex: 1 1 0; padding: .2rem .1rem; }
+  .lane-strip .ls-key { margin-left: 0; flex: 0 0 100%; }
 }
 
 .title-frame .wrap { gap: clamp(1rem, 3vh, 2rem); }
@@ -284,12 +333,12 @@ kbd {
 
    The pills style themselves and are excluded by name: a bare `.frame a`
    would outrank plain `.doc-link` on specificity (0,0,1,1 over 0,0,1,0) and
-   quietly repaint the chips. */
-.frame a:not(.doc-link):not(.cta):not(.more):not(.mod-link) {
+   quietly repaint the chips (the lane map's and lane strip's included). */
+.frame a:not(.doc-link):not(.cta):not(.more):not(.mod-link):not(.lm-chip):not(.ls-chip) {
   color: var(--blue-dark);
   text-underline-offset: .18em;
 }
-.frame a:not(.doc-link):not(.cta):not(.more):not(.mod-link):hover { color: var(--blue); }
+.frame a:not(.doc-link):not(.cta):not(.more):not(.mod-link):not(.lm-chip):not(.ls-chip):hover { color: var(--blue); }
 .frame a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
 .more {
