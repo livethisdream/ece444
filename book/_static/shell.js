@@ -34,7 +34,7 @@
         if (on) {
           place(btn, panel);
           onOpen.forEach(function (fn) { fn(); });
-          (panel.querySelector('button, a') || btn).focus();
+          (panel.querySelector('button, a') || btn).focus({ preventScroll: true });
         }
       },
       isOpen: function () { return !panel.hidden; }
