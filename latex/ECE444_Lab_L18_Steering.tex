@@ -408,10 +408,10 @@ simulator's Signal Freq is $10.525\ \ghz$.
 In one sentence, where does the trace peak after Apply $30$, and why is that the
 angle Question 2(b) predicts?
 
-\begin{solutionorlines}[0.9in]
+\begin{solution}[0.9in]
 The trace peaks at about $+30\mydeg$, because the sweep ramp cancels the
 $-n\Delta\phi_0$ offsets there and leaves the zero ramp a boresight source needs.
-\end{solutionorlines}
+\end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
@@ -510,7 +510,7 @@ Part 1.
 	\part Compare each Table A difference with the pass standard from
 	Question 3(e). For any row outside it, name the error source in your budget
 	most likely responsible, and say how you would check it.
-	\begin{solutionorlines}[1.5in]
+	\begin{solution}[1.5in]
 	Every row should sit within $\pm 2\mydeg$. A row outside it most often comes
 	from aim: the tripod off its mark, the arc not centered on the middle of the
 	array (a $10\ \text{mm}$ offset moves the reference about $0.5\mydeg$), or the
@@ -518,12 +518,12 @@ Part 1.
 	at the $0\mydeg$ placement or at calibration; a single row that moves when
 	people step away from the arc points at multipath. The grid alone can
 	contribute only half a step, $0.46$ to $0.65\mydeg$.
-	\end{solutionorlines}
+	\end{solution}
 
 	\part Compare the $30\mydeg$ rows of Tables A and B: Est. Angle, HPBW, and Peak
 	Array Gain. Explain why the beamwidths agree but only the physical run loses
 	peak level.
-	\begin{solutionorlines}[1.8in]
+	\begin{solution}[1.8in]
 	Both traces have the same shape because the array factor depends only on
 	$\sin\theta - \sin\theta_0$ (Lesson 18): moving the source to $30\mydeg$ and
 	offsetting the ramp by $30\mydeg$ shift the same function to the same place,
@@ -533,11 +533,11 @@ Part 1.
 	the elements' boresight and every point drops by the element roll-off,
 	about $0.6$ to $0.9$ dB. In the commanded run the source stays at boresight,
 	$EF$ stays at its peak, and the peak level matches the $0\mydeg$ row.
-	\end{solutionorlines}
+	\end{solution}
 
 	\part Compare the Phase Control read-back with your prediction. Explain the
 	sign in your own words, and account for any nonzero difference.
-	\begin{solutionorlines}[1.5in]
+	\begin{solution}[1.5in]
 	Apply writes $-n\Delta\phi_0$ so that the sweep's own $+n\Delta\phi_s$ ramp
 	cancels it at the plotted angle $\theta_0$, which is where a boresight source
 	then peaks; the offsets alone would point the beam to $-\theta_0$. The GUI
@@ -546,17 +546,17 @@ Part 1.
 	within $1\mydeg$ (E7: $-530$ predicted, $-531$ shown). A difference that
 	grows with element number means the prediction used a different frequency
 	from the Signal Freq on screen.
-	\end{solutionorlines}
+	\end{solution}
 
 	\part Compare each measured HPBW with its calculated value, and explain
 	why the lab quotes beamwidth to the nearest degree.
-	\begin{solutionorlines}[1.3in]
+	\begin{solution}[1.3in]
 	The measured widths should sit within about a degree of $13.0\mydeg$,
 	$15.1\mydeg$, and $18.7\mydeg$. The trace is sampled every $0.9$ to
 	$1.3\mydeg$, so each half-power crossing falls between two samples and is
 	read off a straight line drawn between them. That limits each crossing to a
 	fraction of a step, and the width to about a degree.
-	\end{solutionorlines}
+	\end{solution}
 
 \end{parts}
 
@@ -631,14 +631,16 @@ sidelobes read $-11.8$ dB relative to its own peak.
 the Phase Control boxes after an Apply but not the Steer Angle typed in. Signal
 Freq read $10.525\ \ghz$.
 
-\vspace{4pt}
 \begin{center}
-\begin{tabular}{l|cccccccc}
-Element & E1 & E2 & E3 & E4 & E5 & E6 & E7 & E8 \\ \hline
-Phase Control & $0$ & $-125$ & $-250$ & $-375$ & $-500$ & $-626$ & $-751$ & $-876$ \\
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{| l | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} |}
+\hline
+\textbf{Element} & \textbf{E1} & \textbf{E2} & \textbf{E3} & \textbf{E4} & \textbf{E5} & \textbf{E6} & \textbf{E7} & \textbf{E8} \\\hline\hline
+Phase Control & $0$ & $-125$ & $-250$ & $-375$ & $-500$ & $-626$ & $-751$ & $-876$ \\\hline
 \end{tabular}
 \end{center}
-\vspace{4pt}
 
 \begin{parts}
 
@@ -764,8 +766,5 @@ wide at half power, and its peak is $1.7\ \db$ below the boresight peak.
 \end{parts}
 
 \end{questions}
-
-\vspace{1.0em}
-\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
 
 \end{document}
