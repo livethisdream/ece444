@@ -113,8 +113,10 @@ ADALM-PHASER and verify the steered pattern against theory.}
 \vspace{2pt}
 
 One HB100 in the room is on, inside one of five numbered boxes placed inside a
-keep-out circle marked on the floor. You and a partner find it from bearings
-taken on your two kits. This packet is the L\labLesson\ Lab, in three parts, and
+keep-out circle marked on the floor. Every box faces the same way, toward an arc
+marked on the floor in front of the circle, because an HB100 radiates forward and
+very little behind it. You and a partner find the live box from bearings taken on
+your two kits from positions inside that arc. This packet is the L\labLesson\ Lab, in three parts, and
 your team turns in one copy, complete, before Lesson 20. Both partners work
 \textbf{Part 1} before the lab period: the error budget, a plan for where to
 stand, and the triangulation script, tested on a supplied set of bearings. You
@@ -201,8 +203,10 @@ ADAR1000 LSB, $360\mydeg/2^7 = 2.8125\mydeg$, at a time.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \question \textbf{Where to stand.} The keep-out circle has a radius of
-$1.5\ \m$; your room's may differ, and the instructor gives the actual value at
-the start of the period. Take $\sigma_\beta = 2\mydeg$ in this question.
+$1.5\ \m$, and the boxes face the room's $-y$ direction, so every kit position
+must lie within $\pm 60\mydeg$ of the $-y$ axis as seen from the center mark.
+Your room's radius may differ; the instructor gives the actual value at the
+start of the period. Take $\sigma_\beta = 2\mydeg$ in this question.
 
 \begin{parts}
 
@@ -258,17 +262,19 @@ the start of the period. Take $\sigma_\beta = 2\mydeg$ in this question.
 
 	\part Sketch the circle and mark where your team plans to put its two kits
 	and the second position each kit will move to, so that the team takes four
-	bearings. Choose positions that keep every box inside $\pm 30\mydeg$ and give
-	a crossing near $90\mydeg$ for a box anywhere in the circle. Label each
+	bearings. Choose positions inside the $\pm 60\mydeg$ arc that keep every box
+	within $\pm 30\mydeg$ of broadside and give steep crossings for a box anywhere
+	in the circle. Label each
 	position with its distance from the center and its direction in room angles.
 
 	\begin{solution}[2.4in]
-	One good plan: kit A at $(-3.5, 0)$ and $(-2.5, -2.5)\ \m$, kit B at
-	$(0, -3.5)$ and $(2.5, -2.5)\ \m$, each aimed at the center. The four
-	positions span $135\mydeg$ around the circle, so any two of them cross between
-	$45\mydeg$ and $135\mydeg$, every position is at least $3.5\ \m$ out, and the
-	widest box sits $25\mydeg$ off broadside. Any plan with the kits at least
-	$2a$ out and spread over about $90\mydeg$ or more meets the brief.
+	One good plan uses the full arc: kit A at $(-3.0, -1.8)$ and $(-1.2, -3.3)\ \m$,
+	kit B at $(1.2, -3.3)$ and $(3.0, -1.8)\ \m$, each $3.5\ \m$ out and aimed at
+	the center. The positions sit at $211\mydeg$, $250\mydeg$, $290\mydeg$, and
+	$329\mydeg$ from the center, so the outer pair crosses at about $120\mydeg$ and
+	neighbors at about $40\mydeg$, and the widest box sits $25\mydeg$ off
+	broadside. Any plan with the kits at least $2a$ out and spread across most of
+	the arc meets the brief.
 	\end{solution}
 
 	\part The five boxes are at least $0.75\ \m$ apart, and your team names the
@@ -293,18 +299,18 @@ the positions $\mathbf p_i$ of the kits and their room bearings $\beta_i$ and
 returns the least-squares fix and each bearing's residual. Lesson 19's "Many
 Bearings: Least Squares" gives the normal equations. Use numpy; do not use
 MATLAB. Test it on this practice set from an earlier class, in which each kit
-aimed its broadside at the center mark and positive Est. Angle was
-counterclockwise:
+stood inside the arc, aimed its broadside at the center mark, and read positive
+Est. Angle counterclockwise:
 
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{| c | c | c | c | K{0.9in} |}
 \hline
 \textbf{Bearing} & \textbf{Position (m)} & \textbf{Heading $h$} & \textbf{Est. Angle} & \textbf{Room bearing $\beta$} \\\hline\hline
-1 & $(-3.5,\ 0.0)$ & $0\mydeg$   & $+6.6\mydeg$ & \kv{$6.6\mydeg$} \\\hline
-2 & $(-2.5,\ -2.5)$ & $45\mydeg$  & $-2.7\mydeg$ & \kv{$42.3\mydeg$} \\\hline
-3 & $(0.0,\ -3.5)$ & $90\mydeg$  & $-9.9\mydeg$ & \kv{$80.1\mydeg$} \\\hline
-4 & $(2.5,\ -2.5)$ & $135\mydeg$ & $-3.8\mydeg$ & \kv{$131.2\mydeg$} \\\hline
+1 & $(-3.0,\ -1.8)$ & $31.0\mydeg$  & $+1.4\mydeg$  & \kv{$32.4\mydeg$} \\\hline
+2 & $(-1.2,\ -3.3)$ & $70.0\mydeg$  & $-6.7\mydeg$  & \kv{$63.3\mydeg$} \\\hline
+3 & $(1.2,\ -3.3)$  & $110.0\mydeg$ & $-12.0\mydeg$ & \kv{$98.0\mydeg$} \\\hline
+4 & $(3.0,\ -1.8)$  & $149.0\mydeg$ & $-3.5\mydeg$  & \kv{$145.5\mydeg$} \\\hline
 \end{tabular}
 
 \vspace{6pt}
@@ -322,7 +328,7 @@ Boxes: \textbf{1} $(-0.9,\ 0.6)$, \textbf{2} $(-0.2,\ -0.8)$,
 	\begin{tabular}{| l | K{1.0in} | K{0.75in} | K{0.75in} | K{0.75in} | K{0.75in} |}
 	\hline
 	 & \textbf{Fix (m)} & $e_1$ & $e_2$ & $e_3$ & $e_4$ \\\hline
-	All four & \kv{$(0.45,\ 0.23)$} & \kv{$-0.23$} & \kv{$0.03$} & \kv{$0.20$} & \kv{$-0.25$} \\\hline
+	All four & \kv{$(0.51,\ 0.18)$} & \kv{$-0.21$} & \kv{$0.04$} & \kv{$0.20$} & \kv{$-0.22$} \\\hline
 	\end{tabular}
 	\end{center}
 
@@ -340,8 +346,8 @@ def fix(p, beta_deg):
     x = np.linalg.solve(n.T @ n, n.T @ c)          # normal equations
     return x, n @ x - c                            # fix, signed residuals
 
-p = np.array([[-3.5, 0.0], [-2.5, -2.5], [0.0, -3.5], [2.5, -2.5]])
-beta = np.array([0, 45, 90, 135]) + np.array([6.6, -2.7, -9.9, -3.8])
+p = np.array([[-3.0, -1.8], [-1.2, -3.3], [1.2, -3.3], [3.0, -1.8]])
+beta = np.array([31.0, 70.0, 110.0, 149.0]) + np.array([1.4, -6.7, -12.0, -3.5])
 x, e = fix(p, beta)
 \end{lstlisting}
 		The signs of the residuals depend on the normal's direction; their sizes
@@ -358,13 +364,13 @@ x, e = fix(p, beta)
 	\begin{tabular}{| l | K{1.0in} | K{0.75in} | K{0.75in} | K{0.75in} |}
 	\hline
 	 & \textbf{Fix (m)} & \multicolumn{3}{c|}{\textbf{Residuals of the three kept}} \\\hline
-	Outlier dropped & \kv{$(0.71,\ 0.47)$} & \kv{$-0.02$} & \kv{$0.03$} & \kv{$-0.02$} \\\hline
+	Outlier dropped & \kv{$(0.68,\ 0.51)$} & \kv{$-0.02$} & \kv{$0.03$} & \kv{$-0.02$} \\\hline
 	\end{tabular}
 	\end{center}
 
 		\begin{solution}[1.3in]
-		Bearing 4 has the largest residual, $0.25\ \m$, about twice its
-		$0.12\ \m$ cross-range error; bearings 1 and 3 are also large because
+		Bearing 4 has the largest residual, $0.22\ \m$, twice its
+		$0.11\ \m$ cross-range error; bearings 1 and 3 are also large because
 		least squares spreads one bad line's error over the others. Dropping
 		bearing 4 leaves residuals of $0.02$ to $0.03\ \m$, well inside the budget,
 		which confirms it. Bearing 4 read $8\mydeg$ high, which is the size of
@@ -374,11 +380,10 @@ x, e = fix(p, beta)
 	\part Name the box from each fix, and give each fix's distance to that box.
 
 	\begin{solution}[0.9in]
-	Both fixes are nearest box 3, $(0.6, 0.4)$: $0.23\ \m$ away with all four
-	bearings and $0.13\ \m$ away with the outlier dropped. The next nearest box is
-	$0.86\ \m$ from the first fix and $0.95\ \m$ from the second. The outlier did not change the answer here,
-	but it doubled the miss, and with boxes $0.75\ \m$ apart that is the
-	difference between a margin and a guess.
+	Both fixes are nearest box 3, $(0.6, 0.4)$: $0.24\ \m$ away with all four
+	bearings and $0.14\ \m$ away with the outlier dropped. The next nearest box is
+	$0.79\ \m$ from the first fix and $0.90\ \m$ from the second. The outlier did
+	not change the answer here, but it nearly doubled the miss.
 	\end{solution}
 
 \end{parts}
@@ -391,14 +396,19 @@ Follow the procedure on the L\labLesson\ Lab page in read mode. Bring each kit u
 in the L18 Lab, with your own HB100 at boresight for \textbf{Find HB100} and
 \textbf{Calibrate}. Load \textbf{1 Steering Angle}, set \textbf{Rx Gain (dB)} as
 the page says, and press \textbf{Start}. Your own HB100 stays on only for the
-reference shot; switch it off and disconnect its power when the instructor
-starts the hunt.
+reference shot. Then switch it off, disconnect its power, and, once the
+instructor starts the hunt, press \textbf{Find HB100} again so the kit tunes to
+the fox. Every HB100 runs at a slightly different frequency, and the receiver
+sees only a few megahertz around the one it is tuned to, so a kit still tuned to
+your own HB100 does not see the fox at all. Keep the calibration from
+bring-up.
 
 \vspace{2pt}
 \begin{center}
 Keep-out radius = \ansbox[1.1in]{given in class}\\[8pt]
-Signal Freq, kit A = \ansbox[1.3in]{$10.1$--$10.7\ \ghz$} \hspace{0.3in}
-kit B = \ansbox[1.3in]{$10.1$--$10.7\ \ghz$}
+Own HB100, kit A = \ansbox[1.2in]{$10.1$--$10.7\ \ghz$} \hspace{0.2in}
+kit B = \ansbox[1.2in]{$10.1$--$10.7\ \ghz$}\\[8pt]
+Fox, after re-tune = \ansbox[1.2in]{one value, both kits}
 \end{center}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -426,8 +436,8 @@ not aimed where you think.
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The hunt.} At each position, aim the kit's broadside at the
-center mark, measure the position from the center mark along the room's taped
+\question \textbf{The hunt.} At each position inside the arc, aim the kit's
+broadside at the center mark, measure the position from the center mark along the room's taped
 axes, and read Est. Angle on ten consecutive sweeps from the \textbf{Tracking}
 tab. Record the mean, the spread (largest minus smallest), and the room bearing
 $\beta = h + s\ \bar\theta_\text{est}$, where $h$ is the direction from the kit
