@@ -22,9 +22,9 @@
     none of them, but the module overviews are built from exactly those, and
     without this they render as bare underlined links. Loaded FIRST so the
     shell and frames win on type, palette and .callout. -#}
-<link rel="stylesheet" href="{{ pathto('_static/custom.css', 1) }}">
-<link rel="stylesheet" href="{{ pathto('_static/shell.css', 1) }}">
-<link rel="stylesheet" href="{{ pathto('_static/frames.css', 1) }}">
+<link rel="stylesheet" href="{{ asset('_static/custom.css') }}">
+<link rel="stylesheet" href="{{ asset('_static/shell.css') }}">
+<link rel="stylesheet" href="{{ asset('_static/frames.css') }}">
 {#- script_files has already been filtered to MathJax by _ext/frames.py --
     including its inline config, which has no filename to match on here.
     js_tag() is required: pathto() on a _JavaScript object renders None. -#}
@@ -130,8 +130,8 @@
 {{ body }}
 </main>
 
-<script src="{{ pathto('_static/shell.js', 1) }}"></script>
-<script src="{{ pathto('_static/frames.js', 1) }}"></script>
+<script src="{{ asset('_static/shell.js') }}"></script>
+<script src="{{ asset('_static/frames.js') }}"></script>
 {#- viz-autosize sizes each widget iframe to its content. Reading pages have
     always loaded it; frame pages never did, so every widget iframe on a frame
     lesson stayed pinned to the one hardcoded height in the markup -- correct at
@@ -141,6 +141,6 @@
     (check_widget caps height at 555 wide / 660 narrow): without that, giving
     the iframe its true height trades an inner scrollbar for a frame whose
     bottom is simply gone in present mode. -#}
-<script src="{{ pathto('_static/viz-autosize.js', 1) }}"></script>
+<script src="{{ asset('_static/viz-autosize.js') }}"></script>
 </body>
 </html>

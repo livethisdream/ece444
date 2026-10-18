@@ -33,9 +33,9 @@
     longer here -- `body { font-family: Inter }` among them, a face the site
     stopped shipping when the theme went. Loading it ahead of the shell keeps
     its components and lets the shell win on type and color. -#}
-<link rel="stylesheet" href="{{ pathto('_static/custom.css', 1) }}">
-<link rel="stylesheet" href="{{ pathto('_static/shell.css', 1) }}">
-<link rel="stylesheet" href="{{ pathto('_static/page.css', 1) }}">
+<link rel="stylesheet" href="{{ asset('_static/custom.css') }}">
+<link rel="stylesheet" href="{{ asset('_static/shell.css') }}">
+<link rel="stylesheet" href="{{ asset('_static/page.css') }}">
 {#- script_files has already been filtered to MathJax by _ext/frames.py --
     including its inline config, which has no filename to match on here. -#}
 {%- for js in script_files %}
@@ -124,7 +124,7 @@
 </nav>
 {%- endif %}
 
-<script src="{{ pathto('_static/shell.js', 1) }}"></script>
-<script src="{{ pathto('_static/page.js', 1) }}"></script>
+<script src="{{ asset('_static/shell.js') }}"></script>
+<script src="{{ asset('_static/page.js') }}"></script>
 </body>
 </html>

@@ -11,6 +11,8 @@ prev/next links, which is how a chrome-free page still offers navigation.
 
 See project/FRAMES_ARCHITECTURE.md for the design and what is still open.
 """
+import hashlib
+import pathlib
 import re
 
 from docutils import nodes
@@ -326,6 +328,32 @@ def choose_template(app, pagename, templatename, context, doctree):
     return "page.html"
 
 
+_ASSET_V = {}
+
+
+def add_asset_helper(app, pagename, templatename, context, doctree):
+    """`asset('_static/x.css')` in a template: the link plus a content hash.
+
+    The shell's stylesheets and scripts are linked by bare name, so a browser
+    that cached last week's frames.css kept it under this week's HTML -- the
+    Modules menu shipped looking broken on phones for exactly that reason.
+    A `?v=` that changes when the file does makes every change load at once.
+    """
+    pathto = context["pathto"]
+
+    def asset(name):
+        if name not in _ASSET_V:
+            src = pathlib.Path(app.srcdir) / name
+            try:
+                _ASSET_V[name] = hashlib.sha1(src.read_bytes()).hexdigest()[:10]
+            except OSError:
+                _ASSET_V[name] = ""
+        v = _ASSET_V[name]
+        return pathto(name, 1) + (f"?v={v}" if v else "")
+
+    context["asset"] = asset
+
+
 def add_template_dir(app, config=None):
     """Append, never replace.
 
@@ -354,5 +382,6 @@ def setup(app):
     app.add_directive("depth", DepthDirective)
     app.add_directive("present", PresentDirective)
     app.add_directive("callout", CalloutDirective)
+    app.connect("html-page-context", add_asset_helper)
     app.connect("html-page-context", choose_template)
     return {"version": "0.1", "parallel_read_safe": True}
