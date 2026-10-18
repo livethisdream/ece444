@@ -143,6 +143,67 @@ body.pointing .deck { touch-action: none; }
 .mod-pop a.mod-link:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
 .mod-n { flex: none; min-width: 1.7em; font-family: var(--mono); font-weight: 500; color: var(--muted); }
 
+/* ---- lane map: Module 3's roadmap ------------------------------------ */
+/* Lessons placed by what they teach -- amplitude, phase, or both -- in
+   teaching order. Each chip carries --lane (1-3) and --n (its order). On a
+   laptop the lanes are rows and the lessons run left to right; on a phone
+   the grid transposes, lessons down and lanes across, so no chip is
+   narrower than its title. The colors are the shell's own tokens: blue for
+   amplitude, the amber accent for phase, and both for both. */
+.lane-map {
+  --lm-amp: var(--blue); --lm-phase: var(--accent-ink);
+  display: grid; gap: .45rem .4rem;
+  grid-template-columns: 6.5rem repeat(10, minmax(0, 1fr));
+  align-items: stretch;
+}
+.lane-map .lm-lane {
+  grid-row: var(--lane); grid-column: 1;
+  display: flex; flex-direction: column; justify-content: center;
+  font-weight: 700; font-size: var(--step--1); line-height: 1.2;
+}
+.lane-map .lm-lane small { font-weight: 400; color: var(--muted); font-size: .85em; }
+.lane-map .lm-lane.lm-amp   { color: var(--lm-amp); }
+.lane-map .lm-lane.lm-phase { color: var(--lm-phase); }
+.lane-map .lm-lane.lm-both  { color: var(--ink); }
+.lane-map .lm-chip {
+  grid-row: var(--lane); grid-column: calc(var(--n) + 1);
+  display: flex; flex-direction: column; gap: .15rem;
+  padding: .55rem .5rem .45rem; border-radius: 8px;
+  background: var(--panel); border: 1px solid var(--rule);
+  border-top: 4px solid var(--lm-amp);
+  font-size: .8rem; line-height: 1.2; color: var(--ink); text-decoration: none;
+  hyphens: auto;
+}
+.lane-map .lm-chip b { font-family: var(--mono); font-weight: 600; color: var(--blue-dark); }
+.lane-map .lm-chip.lm-phase { border-top-color: var(--lm-phase); }
+.lane-map .lm-chip.lm-both {
+  border-top: 4px solid transparent;
+  border-image: linear-gradient(90deg, var(--lm-amp) 50%, var(--lm-phase) 50%) 1;
+  border-image-slice: 4 0 0 0; border-image-width: 4px 0 0 0;
+  border-radius: 0 0 8px 8px;
+}
+.lane-map .lm-chip:hover { background: var(--soft); border-color: var(--rule-strong); }
+.lane-map .lm-chip:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.lane-map .lm-lab {
+  margin-top: auto; font-size: .72rem; font-weight: 600; color: var(--muted);
+}
+@media (max-width: 620px) {
+  /* A phone groups by lane instead: each lane's header, then its lessons
+     two to a row, still in teaching order. Ten rows of one chip each would
+     not fit one screen. */
+  .lane-map { display: flex; flex-wrap: wrap; gap: .3rem .35rem; }
+  .lane-map .lm-lane {
+    order: calc(var(--lane) * 100); flex: 0 0 100%;
+    flex-direction: row; justify-content: flex-start; align-items: baseline; gap: .4rem; margin-top: .35rem;
+  }
+  .lane-map .lm-chip {
+    order: calc(var(--lane) * 100 + var(--n)); flex: 0 0 calc(50% - .2rem);
+    flex-direction: row; flex-wrap: wrap; align-items: baseline; column-gap: .35rem;
+    padding: .3rem .45rem;
+  }
+  .lane-map .lm-lab { margin-top: 0; }
+}
+
 .title-frame .wrap { gap: clamp(1rem, 3vh, 2rem); }
 .course-mark {
   font-family: var(--mono); font-size: var(--step--1);
