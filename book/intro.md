@@ -21,7 +21,7 @@ and a moving target in your sights.
 <div class="hero-pills">
 <div class="hero-cta hero-grid" style="--cols: 5; --cols-phone: 3">
   <div class="pop-anchor">
-    <button class="cta cta-primary cta-menu" id="btnModules" type="button" aria-expanded="false" aria-controls="modpop">Modules</button>
+    <button class="cta cta-menu" id="btnModules" type="button" aria-expanded="false" aria-controls="modpop">Modules</button>
     <div class="mod-pop" id="modpop" role="group" aria-label="Modules" data-drop hidden>
       <a class="mod-link" href="module01/index.html"><span class="mod-n">01</span>Foundations of Electromagnetics and Antennas</a>
       <a class="mod-link" href="module02/index.html"><span class="mod-n">02</span>Antenna Types, Simulation &amp; Measurement</a>
