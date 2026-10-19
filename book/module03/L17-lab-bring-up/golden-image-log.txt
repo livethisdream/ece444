@@ -286,3 +286,5 @@ SECOND WALKTHROUGH, START TO FINISH (Neil, 2026-10-19)
    Imager details (Neil): Raspberry Pi Imager v2.0.0; the button is "Custom OS";
    no OS-customization prompt for a custom image (that is only for Raspberry Pi
    OS); write + verify took under 15 minutes.
+2. Card flashed; eject, into the Pi on the PHASER, power up (Neil). Matches
+   Steps 6-8. [Imager's "safe to remove" message / eject wording?]
