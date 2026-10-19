@@ -215,24 +215,29 @@ else.
 
 ::::{frame} First Contact
 :::{present}
-9. Wait 1 to 2 minutes, then:
+9. Open PowerShell, wait a couple of minutes, then:
 
 ```bash
 ssh analog@analog.local
 ```
 
-Answer `yes`; the password is `analog`.
+Type `yes` to the fingerprint question; the password is `analog`.
 :::
 :::{present}
 :class: callout
 
-No router, no setup: the laptop and the Pi find each other over the bare cable.
+"Host identification has changed"? Run `ssh-keygen -R analog.local`, then try again.
 :::
 
 `analog` is the name, the user, and the password that ADI's Kuiper image ships
-with. The `yes` answers ssh's question about whether to trust the kit's host
-key, which it has never seen. If ssh says it cannot resolve `analog.local`,
-wait another minute and try again.
+with. The fingerprint question asks whether to trust the kit's host key, which
+this laptop has never seen. If ssh says it cannot resolve `analog.local`, wait
+another minute and try again. The laptop and the Pi find each other over the
+bare cable with no router and no setup on either end.
+
+Every freshly flashed card answers to `analog.local` with new host keys, so a
+laptop that has met an earlier card under that name refuses the new one until
+`ssh-keygen -R` removes the old key.
 
 :::{depth}
 Nothing on a bare cable hands out addresses. After about a minute of asking,
@@ -539,7 +544,7 @@ cleanly and is always safe.
 | `curl` reports a certificate error | the Pi's clock is wrong | Step 10, then try again |
 | `ping` fails | the Wi-Fi has not come up | `sudo reboot`, then ping again; then the instructor |
 | `bash: --hostname: No such file or directory` | the `-s` is missing | Step 14 exactly as written |
-| `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` | this laptop has met another card under the same name | `ssh-keygen -R phaser-03.local`, then ssh again and answer `yes` |
+| `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` | this laptop has met another card under the same name | `ssh-keygen -R` and the name you used (`analog.local` or `phaser-03.local`), then ssh again and answer `yes` |
 | the page refuses to connect | the backend is not running | Step 17; `No device found` means the Pluto's USB cable |
 | **Calibrate Phaser** stops: no signal is reaching the array | the source is off or misaimed, or a step was skipped | check the HB100 is on and aimed, then Steps 20 to 22 in order |
 
