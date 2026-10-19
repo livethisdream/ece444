@@ -87,6 +87,55 @@ period; it is named for your kit before it goes in, and it still needs Steps
 :::
 ::::
 
+::::{frame} Kit Care
+:::{present}
+**Do**
+
+- Power only through the PHASER's USB-C.
+- Shut down before you unplug.
+- Hold the board by its edges.
+- Tighten SMA connectors by hand.
+:::
+:::{present}
+**Don't**
+
+- Pull power or the card while Linux runs.
+- Touch the patches.
+- Remove a kit without permission.
+:::
+
+The kit is yours for the semester, and every lab after this one runs on it.
+These rules keep it working.
+
+:::{depth}
+Use the 5 V, 3 A supply in the kit, plugged into the PHASER's USB-C input,
+labeled P16. The PHASER board powers the Pi and the Pluto through its own
+connectors, and a supply plugged into the Pi bypasses the board's supply.
+
+Linux writes to the card while it runs, so pulling the power or the card
+mid-write can corrupt it, and a corrupted card means flashing it again. Shut
+down with the button on the back of the PHASER, or by holding the
+**Connected** pill for two seconds, and wait until the lights go out before
+you unplug (Step 23).
+
+The amplifiers behind the patches and the ADAR1000 beamformers are
+static-sensitive parts. Touch a grounded metal surface before you handle the
+board, and hold it by its edges. Keep fingers and objects off the patch face:
+anything on a patch changes its match, and pressure can damage it.
+
+An SMA connector needs only finger tightness. A wrench, or a connector started
+at an angle, can strip the threads or break the connector off the board.
+Support every cable so its weight does not hang on the board's connectors.
+
+If the kit stops responding, run `sudo reboot` first, then re-run the
+provisioning script (Step 14), which repairs the installation without
+erasing the card. Flash a new card only when the instructor tells you to.
+
+Kits stay in the classroom. Ask the instructor before you take one anywhere
+else.
+:::
+::::
+
 ::::{frame} Before Class: Download
 :::{present}
 1. Install [Raspberry Pi Imager](https://www.raspberrypi.com/software/) 2.0.
@@ -164,55 +213,6 @@ way to power down.
 :::
 ::::
 
-::::{frame} Kit Care
-:::{present}
-**Do**
-
-- Power only through the PHASER's USB-C.
-- Shut down before you unplug.
-- Hold the board by its edges.
-- Tighten SMA connectors by hand.
-:::
-:::{present}
-**Don't**
-
-- Pull power or the card while Linux runs.
-- Touch the patches.
-- Remove a kit without permission.
-:::
-
-The kit is yours for the semester, and every lab after this one runs on it.
-These rules keep it working.
-
-:::{depth}
-Use the 5 V, 3 A supply in the kit, plugged into the PHASER's USB-C input,
-labeled P16. The PHASER board powers the Pi and the Pluto through its own
-connectors, and a supply plugged into the Pi bypasses the board's supply.
-
-Linux writes to the card while it runs, so pulling the power or the card
-mid-write can corrupt it, and a corrupted card means flashing it again. Shut
-down with the button on the back of the PHASER, or by holding the
-**Connected** pill for two seconds, and wait until the lights go out before
-you unplug (Step 23).
-
-The amplifiers behind the patches and the ADAR1000 beamformers are
-static-sensitive parts. Touch a grounded metal surface before you handle the
-board, and hold it by its edges. Keep fingers and objects off the patch face:
-anything on a patch changes its match, and pressure can damage it.
-
-An SMA connector needs only finger tightness. A wrench, or a connector started
-at an angle, can strip the threads or break the connector off the board.
-Support every cable so its weight does not hang on the board's connectors.
-
-If the kit stops responding, run `sudo reboot` first, then re-run the
-provisioning script (Step 14), which repairs the installation without
-erasing the card. Flash a new card only when the instructor tells you to.
-
-Kits stay in the classroom. Ask the instructor before you take one anywhere
-else.
-:::
-::::
-
 ::::{frame} First Contact
 :::{present}
 9. Open PowerShell, wait a couple of minutes, then:
@@ -232,8 +232,7 @@ Type `yes` to the fingerprint question; the password is `analog`.
 `analog` is the name, the user, and the password that ADI's Kuiper image ships
 with. The fingerprint question asks whether to trust the kit's host key, which
 this laptop has never seen. If ssh says it cannot resolve `analog.local`, wait
-another minute and try again. The laptop and the Pi find each other over the
-bare cable with no router and no setup on either end.
+another minute and try again.
 
 Every freshly flashed card answers to `analog.local` with new host keys, so a
 laptop that has met an earlier card under that name refuses the new one until

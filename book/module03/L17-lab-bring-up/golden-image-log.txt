@@ -292,3 +292,5 @@ SECOND WALKTHROUGH, START TO FINISH (Neil, 2026-10-19)
    `ssh analog@analog.local`, password analog; may get the fingerprint question,
    answer yes; if "host identification has changed", `ssh-keygen -R analog.local`
    and try again. Page: Step 9 + callout updated; troubleshooting row generalized.
+4. Kit Care frame moved ahead of Before Class: Download (Neil).
+5. Removed the 'No router, no setup' line from First Contact (Neil: unnecessary).
