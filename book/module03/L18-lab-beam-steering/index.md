@@ -147,6 +147,34 @@ point of the sweep also uses a different set of element phases, so the
 beamformer's own errors, phase quantization and gain imbalance, shape the trace.
 ::::
 
+::::{frame} The Sweep, Step by Step
+:class: viz-frame
+
+:::{depth}
+This is the sweep the PHASER runs, slowed down. Each step adds one phase-shifter
+LSB, $2.8125^\circ$, to the element-to-element phase $\Delta\phi_s$ and writes
+the ramp $+n\ \Delta\phi_s$ to the eight channels. The left panel shows the
+beam that ramp makes and, in the inset, the eight element signals from the
+HB100 added tip to tail: each one turned $kd\sin\theta_{\text{src}} -
+\Delta\phi_s$ from the last. The instrument plots the power of that sum at the
+angle the ramp steers to, $\sin\theta_0 = \Delta\phi_s/kd$, which is the
+right panel. Away from the source the chain curls up and the point lands in a
+sidelobe or on the noise floor; as the beam reaches the source the chain
+straightens and the trace climbs to its peak, at the source's angle. Move the
+source and the peak follows it, lower by the element pattern at its new angle; press
+**step** to walk the sweep one LSB at a time.
+:::
+
+:::{present}
+<iframe src="../../viz/sweep-trace.html"
+        width="100%" height="441"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="The beam-sweep trace built one phase step at a time: the beam swinging past the HB100, the eight element signals summed, and each step's power plotted at the angle it steers to">
+</iframe>
+:::
+::::
+
 ::::{frame} Two Ways to Steer the Peak
 :::{present}
 - **Physical run:** Phase Control at zero; the source moves to $30^\circ$.
