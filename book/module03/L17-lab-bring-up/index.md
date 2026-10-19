@@ -249,10 +249,52 @@ this point, `169.254.210.227`.
 :::
 ::::
 
+::::{frame} Join the Wi-Fi
+
+:::{present}
+10. Set the Wi-Fi country and add the classroom network:
+
+```bash
+sudo raspi-config nonint do_wifi_country US
+sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null <<'EOF'
+
+network={
+    ssid="AF_ACADEMY_GUEST"
+    key_mgmt=NONE
+}
+EOF
+```
+
+11. Run `sudo reboot`, wait a minute, and ssh in again as in Step 9.
+12. Run `ping -c 4 github.com` and expect four replies.
+:::
+
+The classroom Wi-Fi is the open guest network `AF_ACADEMY_GUEST`. The reboot in
+Step 11 is not optional: on the instructor's kit, asking the Wi-Fi client to reread
+its settings without a reboot left it offline, and the ping failed until the
+Pi restarted. If the ping fails after the reboot, tell the instructor.
+
+:::{depth}
+Kuiper 2021_R2 is based on Raspberry Pi OS bullseye, where `wpa_supplicant`
+joins the Wi-Fi network and `dhcpcd` then requests an address on it. The Wi-Fi
+country is a regulatory setting: the channels a radio may use depend on where
+it is, so the operating system keeps the Wi-Fi radio blocked (rfkill) until a
+country is set. The network block names the network, and `key_mgmt=NONE` tells
+`wpa_supplicant` it has no password. `tee -a` appends the block with root
+privileges, which a plain `>>` redirection would not have.
+
+Two things must hold on an open guest network for this step and for provisioning, and
+the instructor checks both before class. The network must not put a captive
+portal, a sign-in or terms page, in front of a new client, because the Pi has
+no browser to click through one. It must also allow outbound HTTPS, because the
+provisioning script downloads the Phaser software from GitHub.
+:::
+::::
+
 ::::{frame} Set the Clock
 
 :::{present}
-10. Seed the clock from a web server, then check it:
+13. Seed the clock from a web server, then check it:
 
 ```bash
 sudo date -s "$(curl -sI http://deb.debian.org/ | sed -n 's/^[Dd]ate: *//p')"
@@ -260,6 +302,7 @@ date
 ```
 :::
 
+The clock comes from a web server, so it waits until the Pi is on the Wi-Fi.
 `sudo` asks for the password, `analog`. The `date` that comes back should be
 today's date and time; the server reports it in GMT, and the Pi shows it in its
 own time zone.
@@ -276,48 +319,6 @@ and fixes the clock for good, but it has to be downloaded first.
 The command breaks that circle with a plain, unencrypted request, which no
 certificate guards: `curl -sI` fetches only the headers of a Debian web page,
 `sed` keeps the line that begins `Date:`, and `date -s` sets the clock to it.
-:::
-::::
-
-::::{frame} Join the Wi-Fi
-
-:::{present}
-11. Set the Wi-Fi country and add the classroom network:
-
-```bash
-sudo raspi-config nonint do_wifi_country US
-sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null <<'EOF'
-
-network={
-    ssid="AF_ACADEMY_GUEST"
-    key_mgmt=NONE
-}
-EOF
-```
-
-12. Run `sudo reboot`, wait a minute, and ssh in again as in Step 9.
-13. Run `ping -c 4 github.com` and expect four replies.
-:::
-
-The classroom Wi-Fi is the open guest network `AF_ACADEMY_GUEST`. The reboot in
-Step 12 is not optional: on the instructor's kit, asking the Wi-Fi client to reread
-its settings without a reboot left it offline, and the ping failed until the
-Pi restarted. If the ping fails after the reboot, tell the instructor.
-
-:::{depth}
-Kuiper 2021_R2 is based on Raspberry Pi OS bullseye, where `wpa_supplicant`
-joins the Wi-Fi network and `dhcpcd` then requests an address on it. The Wi-Fi
-country is a regulatory setting: the channels a radio may use depend on where
-it is, so the operating system keeps the Wi-Fi radio blocked (rfkill) until a
-country is set. The network block names the network, and `key_mgmt=NONE` tells
-`wpa_supplicant` it has no password. `tee -a` appends the block with root
-privileges, which a plain `>>` redirection would not have.
-
-Two things must hold on an open guest network for this step and the next, and
-the instructor checks both before class. The network must not put a captive
-portal, a sign-in or terms page, in front of a new client, because the Pi has
-no browser to click through one. It must also allow outbound HTTPS, because the
-provisioning script downloads the Phaser software from GitHub.
 :::
 ::::
 
@@ -540,7 +541,7 @@ cleanly and is always safe.
 | What you see | What it means | What to do |
 | :-- | :-- | :-- |
 | Imager reports a write or verify error | the card or the card reader | reinsert the card and write again, then try another card |
-| `curl` reports a certificate error | the Pi's clock is wrong | Step 10, then try again |
+| `curl` reports a certificate error | the Pi's clock is wrong | Step 13, then try again |
 | `ping` fails | the Wi-Fi has not come up | `sudo reboot`, then ping again; then the instructor |
 | `bash: --hostname: No such file or directory` | the `-s` is missing | Step 14 exactly as written |
 | `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` | this laptop has met another card under the same name | `ssh-keygen -R` and the name you used (`analog.local` or `phaser-03.local`), then ssh again and answer `yes` |

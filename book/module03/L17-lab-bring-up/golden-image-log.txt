@@ -294,3 +294,4 @@ SECOND WALKTHROUGH, START TO FINISH (Neil, 2026-10-19)
    and try again. Page: Step 9 + callout updated; troubleshooting row generalized.
 4. Kit Care frame moved ahead of Before Class: Download (Neil).
 5. Removed the 'No router, no setup' line from First Contact (Neil: unnecessary).
+6. Order fixed (Neil): join the Wi-Fi before setting the clock; the clock seed needs the internet. Wi-Fi is now Steps 10-12, clock Step 13; packet row and troubleshooting row follow.
