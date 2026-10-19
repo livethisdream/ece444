@@ -207,12 +207,20 @@ AF &= \sum_{n=0}^{N-1} e^{\ jn\psi} = \frac{1 - e^{\ jN\psi}}{1 - e^{\ j\psi}} \
 :::{present}
 $$AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}$$
 
-- Referencing the phase to the array center and dividing by $N$ gives $AF_N$, whose peak is 1.
+- $\vert e^{\ j(N-1)\psi/2}\vert = 1$: it is the phase of the array's center, so $\vert AF\vert$ never sees it.
+- Dividing by $N$ sets the peak to 1.
 :::
 
 Setting every weight to 1 turns the sum into a finite geometric series in $e^{\ j\psi}$. To close it, we factor half of each exponent out of the numerator and the denominator, which leaves a difference of conjugate exponentials in each bracket. Euler's formula turns each bracket into $-2j\sin(\cdot)$, and the $-2j$ factors cancel between top and bottom.
 
-The leading exponential is the phase of the array's center relative to element 0. If we reference the phase to the center instead, it disappears. Dividing by $N$ normalizes the peak to 1. The main lobe, the nulls, and the sidelobes all follow from this expression.
+The leading factor $e^{\ j(N-1)\psi/2}$ has magnitude 1, so it changes the phase of $AF$ and never its size. It comes from where we put the phase reference. We measured every element's phase from element 0, at one end of the array. The center of the array sits $(N-1)d/2$ from element 0, and $(N-1)\psi/2$ is exactly the phase that point carries. Pulling that phase out of every term counts each element from the center instead:
+
+$$\begin{aligned}
+AF &= e^{\ j(N-1)\psi/2} \sum_{n=0}^{N-1} e^{\ j\left(n - \frac{N-1}{2}\right)\psi} \\
+&= e^{\ j(N-1)\psi/2}\ \frac{\sin(N\psi/2)}{\sin(\psi/2)}
+\end{aligned}$$
+
+The centered sum pairs each element with its mirror image across the center, and each pair adds to $e^{\ jm\psi} + e^{-jm\psi} = 2\cos(m\psi)$, so the sum is real: it is the ratio of sines. Measured from the center, the leading factor is simply absent. Measured from element 0, it is there, but the pattern is $\vert AF\vert$ and $\vert e^{\ j(N-1)\psi/2}\vert = 1$, so it drops out either way. Dividing by $N$ then normalizes the peak to 1. The main lobe, the nulls, and the sidelobes all follow from this expression.
 ::::
 
 ::::{frame} Main Lobe and Nulls
