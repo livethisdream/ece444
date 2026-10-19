@@ -297,3 +297,13 @@ SECOND WALKTHROUGH, START TO FINISH (Neil, 2026-10-19)
 6. Order fixed (Neil): join the Wi-Fi before setting the clock; the clock seed needs the internet. Wi-Fi is now Steps 10-12, clock Step 13; packet row and troubleshooting row follow.
 7. Wi-Fi up and clock synced in the new order (Neil); provisioning running. [reboot still needed for Wi-Fi?] [provision time, [7/8] passes with the pylibiio pin?]
 8. Assemble: card, Pluto USB and Ethernet are three separate steps (Neil). Part A renumbered: power 10, first contact 11, Wi-Fi 12-14, clock 15, provision 16-18, service 19-20, find/characterize/calibrate 21-24, power down 25.
+9. Provision finished (Neil): "Provisioned.", hostname phaser-00, clock 10:29 MDT, "NTP: no",
+   overlay merged. [6b/6] RF-chain check: HB100 10.525 (no cal yet), IF 2.200 (config,
+   unverified), LO 12.725, ADF4159 3.1812; two WARNs: not characterized / IF at or above
+   2.20 GHz where a kit was deaf. New install box tells the order: Find HB100 ->
+   Characterize IF -> Calibrate (UI or CLI). Page: provision frame now says the WARNs and
+   the pre-reboot "HTTP 000" are expected.
+   PHASER REPO NOTES: (a) install.sh prints "Service is active and the UI answered
+   HTTP 000000" -- a failed check reported as success, and the code doubled; (b) "NTP: no"
+   after provisioning -- check timedatectl after reboot; if the time client is not
+   enabled, the clock is lost at every power-off.

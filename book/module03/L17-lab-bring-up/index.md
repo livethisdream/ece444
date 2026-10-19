@@ -341,6 +341,12 @@ The script prints its steps, `[1/8]` through `[8/8]`, and takes tens of
 minutes; step `[7/8]`, which builds the Python library that talks to the
 board, is the long one and can sit quiet for minutes. Leave it running.
 
+Near the end it prints two `WARN` lines saying the unit has not been
+characterized, and a box listing Find HB100, Characterize IF, and Calibrate.
+Both are expected on a new kit: Steps 22 to 24 do exactly that. Before the
+reboot the board has not appeared yet, so the interface check there reads
+`HTTP 000`; the reboot in Step 17 fixes it.
+
 The `-s --` in Step 16 matters. Without the `-s`, bash takes `--hostname` for
 the name of a script file and stops with `bash: --hostname: No such file or
 directory`.
