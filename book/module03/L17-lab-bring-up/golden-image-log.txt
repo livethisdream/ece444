@@ -274,3 +274,12 @@ GOLDEN IMAGE CAVEAT
   which are wrong for any other kit (IF differs ~200 MHz between units). A
   cadet on a fallback card must still run Find HB100, characterize, Calibrate.
   Consider clearing calibration.json before --prepare-image.
+
+==========================================================================
+SECOND WALKTHROUGH, START TO FINISH (Neil, 2026-10-19)
+==========================================================================
+1. Flash: balenaEtcher is not working; switched to Raspberry Pi Imager.
+   Imager: choose Raspberry Pi 4; scroll to the bottom, Custom OS; navigate to
+   the (unzipped) Kuiper folder; choose the .img; choose the SD card; agree to
+   erasing and writing; wait. No FAT32 pre-format step with Imager.
+   Page: Steps 1-5 rewritten for Imager (numbering unchanged).

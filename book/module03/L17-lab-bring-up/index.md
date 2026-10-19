@@ -70,7 +70,7 @@ Each cadet has their own kit:
 - one USB-C supply, for the PHASER board, which powers the Pi too
 - a camera tripod, for the board and for aiming the source
 - a 32 GB microSD card and an Ethernet cable
-- a laptop with balenaEtcher and an ssh client
+- a laptop with Raspberry Pi Imager and an ssh client
 
 Your instructor assigns your kit a two-digit number, NN. Kit NN is named
 `phaser-NN`, and kit 03 appears in every example from here on; use your own
@@ -89,8 +89,8 @@ period; it is named for your kit before it goes in, and it still needs Steps
 
 ::::{frame} Before Class: Download
 :::{present}
-1. Install [balenaEtcher](https://etcher.balena.io).
-2. Download [Kuiper 2021_R2](https://swdownloads.analog.com/cse/kuiper/image_2023-04-02-ADI-Kuiper-full.zip), ADI's Linux image for the Pi.
+1. Install [Raspberry Pi Imager](https://www.raspberrypi.com/software/).
+2. Download [Kuiper 2021_R2](https://swdownloads.analog.com/cse/kuiper/image_2023-04-02-ADI-Kuiper-full.zip), ADI's Linux image for the Pi, and unzip it.
 :::
 :::{present}
 :class: callout
@@ -99,8 +99,9 @@ Use exactly this release. Later Kuiper releases break the provisioning script.
 :::
 
 Do Steps 1 to 5 at home before the period: they need only your laptop and the
-card. The file is `image_2023-04-02-ADI-Kuiper-full.zip`, and Etcher reads the
-`.zip` as it is, with no unzipping.
+card. The download is `image_2023-04-02-ADI-Kuiper-full.zip`; right-click it
+and choose **Extract All**, which leaves a Kuiper folder holding the `.img`
+file that Imager writes.
 
 :::{depth}
 Kuiper 2021_R2 is the release the Phaser software is tested on, and it is based
@@ -110,31 +111,32 @@ rely on: where the boot files live and which program manages the network.
 :::
 ::::
 
-::::{frame} Before Class: Format and Flash
+::::{frame} Before Class: Flash the Card
 :::{present}
-3. Format the card **FAT32**: right-click it, **Format...**, **Start**.
-4. Etcher: **Flash from file**, the `.zip`, the card, **Flash!**
-5. Cancel any Windows offer to format it afterward.
+3. In Imager, choose **Raspberry Pi 4**.
+4. OS: scroll to the bottom, **Custom OS**, the Kuiper `.img`.
+5. Choose the microSD card, agree to erase, and wait.
 :::
 :::{present}
 :class: callout
 
-Format first, or Etcher can fail 10 minutes in.
+Imager erases the storage you pick: check it is the card.
 :::
 
-The write and its verification take about 15 to 20 minutes. Leave the card in
-until Etcher says the flash is complete.
+The write and its verification take several minutes. Leave the card in until
+Imager says the write is complete, and cancel any offer from Windows to format
+the card afterward.
 
 :::{depth}
-Etcher writes the whole card, so whatever was on it is gone; check that the
-target it shows is the microSD card and not a laptop drive before you press
-**Flash!** After the write, the card holds two partitions: a small FAT one that
-holds the boot files, which Windows can read, and a Linux one, which it cannot.
-That is why Windows offers to format part of the card, and formatting it would
-erase the image.
+If Imager asks whether to apply OS customization settings, decline. Those
+settings install their own first-boot script and can change the user and
+password that every later step relies on; the provisioning script in Step 14
+names the kit instead.
 
-The card's 32 GB is the reason for the FAT32 in Step 3: Windows offers FAT32
-only on cards of 32 GB or less.
+After the write, the card holds two partitions: a small FAT one that holds the
+boot files, which Windows can read, and a Linux one, which it cannot. That is
+why Windows offers to format part of the card, and formatting it would erase
+the image.
 :::
 ::::
 
@@ -534,7 +536,7 @@ cleanly and is always safe.
 
 | What you see | What it means | What to do |
 | :-- | :-- | :-- |
-| Etcher fails about 10 minutes in | the card was not formatted | format it FAT32 and flash again |
+| Imager reports a write or verify error | the card or the card reader | reinsert the card and write again, then try another card |
 | `curl` reports a certificate error | the Pi's clock is wrong | Step 10, then try again |
 | `ping` fails | the Wi-Fi has not come up | `sudo reboot`, then ping again; then the instructor |
 | `bash: --hostname: No such file or directory` | the `-s` is missing | Step 14 exactly as written |
