@@ -93,7 +93,7 @@ $$\begin{aligned}
 \end{aligned}$$
 
 - The far-field rays are parallel, so only the projection of $nd$ onto the look direction matters.
-- $\psi = kd\sin\theta$ is the phase step between neighbors: $0$ at broadside, $\pm kd$ at endfire.
+- $\psi = kd\sin\theta$ is the **inter-element phase**, neighbor to neighbor: $0$ at broadside, $\pm kd$ at endfire.
 - Element $n$ arrives carrying $a_n\ e^{\ jn\psi}$.
 :::
 
@@ -103,7 +103,7 @@ $$a_n\ e^{\ +jn\ kd\sin\theta}$$
 
 relative to element 0.
 
-Every term carries the same step per element, $kd\sin\theta$, so we give it a name: $\psi = kd\sin\theta$, the phase by which each element leads its neighbor as seen from direction $\theta$. It is the only way the angle enters the sum. Each direction gives one value of $\psi$: broadside, $\theta = 0$, gives $\psi = 0$, where every element arrives in phase, and endfire, $\theta = \pm 90^\circ$, gives the largest step, $\psi = \pm kd$. For the PHASER, $kd = 173^\circ$. The rest of the lesson works in $\psi$ and converts back to $\theta$ through this one relation.
+Every term carries the same step per element, $kd\sin\theta$, so we give it a name: $\psi = kd\sin\theta$ is the **inter-element phase**, the phase by which each element leads its neighbor as seen from direction $\theta$. It is not the progressive phase $\beta$ that the phase shifters apply, and not the ADAR1000's $2.8125^\circ$ phase step; it is what the observer sees, the geometry less any applied $\beta$. It is the only way the angle enters the sum. Each direction gives one value of $\psi$: broadside, $\theta = 0$, gives $\psi = 0$, where every element arrives in phase, and endfire, $\theta = \pm 90^\circ$, gives the largest step, $\psi = \pm kd$. For the PHASER, $kd = 173^\circ$. The rest of the lesson works in $\psi$ and converts back to $\theta$ through this one relation.
 
 The same path differences change the amplitude $1/r$ by a negligible amount. The PHASER is $112\ \text{mm}$ long, so its far field begins at $2D^2/\lambda = 0.86\ \text{m}$ (Lesson 5). At a $30\ \text{m}$ range, $112\ \text{mm}$ of path changes $1/r$ by less than $0.4\%$, but it spans $3.85$ wavelengths, or nearly $1400^\circ$ of phase. This is the parallel-ray approximation of Lesson 6: we keep the path difference in the phase and drop it from the amplitude.
 ::::
@@ -118,7 +118,7 @@ AF(\theta) &= \sum_{n=0}^{N-1} a_n\ e^{\ jn\psi} \\[8pt]
 :::
 :::{present}
 - Identical elements share $E_0(\theta)$, so it factors out and leaves the **array factor**: Lesson 6's space factor $S(\theta)$, with a sum in place of the integral.
-- Steering subtracts a fixed step from $\psi$: $\psi = kd(\sin\theta - \sin\theta_0)$ (Lesson 18). Today $\theta_0 = 0$.
+- Steering subtracts the progressive phase from $\psi$: $\psi = kd(\sin\theta - \sin\theta_0)$ (Lesson 18). Today $\theta_0 = 0$.
 :::
 
 The total far field is the sum of the element fields, and because every element has the same pattern, the common factor $E_0(\theta)\ e^{-jkr}/r$ comes out in front of the sum. The **array factor** $AF(\theta)$ is the sum that remains. It depends only on how many elements there are, where they sit, and what weights we feed them. It does not depend on the type of element.
@@ -163,7 +163,7 @@ $$\begin{aligned}
 - Today $\theta_0 = 0$, so $\psi = kd\sin\theta$.
 :::
 
-If the weights carry a progressive phase $\beta$ per element, that phase adds to the geometric term, and both collect into one argument $\psi$. The ramp $\beta = kd\sin\theta_0$ steers the beam to $\theta_0$, and Lesson 18 derives it. For the rest of today $\theta_0 = 0$ and $\psi = kd\sin\theta$, so every result below is the broadside case.
+If the weights carry a progressive phase $\beta$ per element, that phase adds to the geometric term, and both collect into the inter-element phase $\psi$. The ramp $\beta = kd\sin\theta_0$ steers the beam to $\theta_0$, and Lesson 18 derives it. For the rest of today $\theta_0 = 0$ and $\psi = kd\sin\theta$, so every result below is the broadside case.
 ::::
 
 ::::{frame} Key Point: A Sum of Phasors
@@ -453,7 +453,7 @@ $$\boxed{\ d < \frac{\lambda}{1 + \vert\sin\theta_0\vert}\ }$$
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Grating lobes appear where $\psi$ is a nonzero multiple of $2\pi$. At $\psi = 2\pi$ the path difference between neighbors, less the applied phase step, is exactly one wavelength, so every term $e^{\ jn\psi} = e^{\ j2\pi n} = 1$ and the elements add in phase exactly as they do at the main lobe. That is why a grating lobe is full height.
+Grating lobes appear where $\psi$ is a nonzero multiple of $2\pi$. At $\psi = 2\pi$ the path difference between neighbors, less the applied progressive phase, is exactly one wavelength, so every term $e^{\ jn\psi} = e^{\ j2\pi n} = 1$ and the elements add in phase exactly as they do at the main lobe. That is why a grating lobe is full height.
 
 The grating lobe nearest real space is $m = 1$ on the side away from the steer. For $\theta_0 \ge 0$ it sits at $\sin\theta_g = \sin\theta_0 - \lambda/d$, and it stays out of real space as long as $\sin\theta_g < -1$:
 
@@ -575,7 +575,7 @@ In the L20 Lab you will steer this array past a fixed source and record power ag
 | Idea | Result |
 | :-- | :-- |
 | Array factor | $AF = \sum a_n e^{jn\psi}$, one term per element |
-| Argument | $\psi = kd(\sin\theta - \sin\theta_0)$ |
+| Inter-element phase | $\psi = kd(\sin\theta - \sin\theta_0)$ |
 | Visible region | $\pm 173^\circ$ of $\psi$ for the PHASER |
 | Uniform array | $\sin(N\psi/2)/(N\sin(\psi/2))$, peak 1 |
 | Nulls | $\psi = 2\pi m/N$ |
