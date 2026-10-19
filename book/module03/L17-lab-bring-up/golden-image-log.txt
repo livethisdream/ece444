@@ -308,3 +308,4 @@ SECOND WALKTHROUGH, START TO FINISH (Neil, 2026-10-19)
    after provisioning -- check timedatectl after reboot; if the time client is not
    enabled, the clock is lost at every power-off.
 10. Examples now read phaser-NN, NN = the kit's unique number (Neil); figure label too.
+11. Reprovision with phaser#43 (Neil): [3/8] installed systemd-timesyncd (+systemd deb11u1->u8) and reported 'time sync: systemd-timesyncd running'. The time client fix works on hardware.
