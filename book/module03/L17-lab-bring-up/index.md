@@ -89,7 +89,7 @@ period; it is named for your kit before it goes in, and it still needs Steps
 
 ::::{frame} Before Class: Download
 :::{present}
-1. Install [Raspberry Pi Imager](https://www.raspberrypi.com/software/).
+1. Install [Raspberry Pi Imager](https://www.raspberrypi.com/software/) 2.0.
 2. Download [Kuiper 2021_R2](https://swdownloads.analog.com/cse/kuiper/image_2023-04-02-ADI-Kuiper-full.zip), ADI's Linux image for the Pi, and unzip it.
 :::
 :::{present}
@@ -123,15 +123,14 @@ rely on: where the boot files live and which program manages the network.
 Imager erases the storage you pick: check it is the card.
 :::
 
-The write and its verification take several minutes. Leave the card in until
+The write and its verification take under 15 minutes. Leave the card in until
 Imager says the write is complete, and cancel any offer from Windows to format
 the card afterward.
 
 :::{depth}
-If Imager asks whether to apply OS customization settings, decline. Those
-settings install their own first-boot script and can change the user and
-password that every later step relies on; the provisioning script in Step 14
-names the kit instead.
+Imager offers no OS customization for a custom image, only for Raspberry Pi
+OS, so nothing on the card changes the user and password that every later step
+relies on; the provisioning script in Step 14 names the kit instead.
 
 After the write, the card holds two partitions: a small FAT one that holds the
 boot files, which Windows can read, and a Linux one, which it cannot. That is

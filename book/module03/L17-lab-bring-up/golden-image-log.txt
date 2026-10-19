@@ -283,3 +283,6 @@ SECOND WALKTHROUGH, START TO FINISH (Neil, 2026-10-19)
    the (unzipped) Kuiper folder; choose the .img; choose the SD card; agree to
    erasing and writing; wait. No FAT32 pre-format step with Imager.
    Page: Steps 1-5 rewritten for Imager (numbering unchanged).
+   Imager details (Neil): Raspberry Pi Imager v2.0.0; the button is "Custom OS";
+   no OS-customization prompt for a custom image (that is only for Raspberry Pi
+   OS); write + verify took under 15 minutes.
