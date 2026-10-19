@@ -89,11 +89,12 @@ Module 1 measured the polar angle from the $+z$ axis for a line source lying on 
 :::{present}
 $$\begin{aligned}
 \Delta r_n &= n\ d\sin\theta \\
-\Delta\phi_n &= k\ \Delta r_n = n\ kd\sin\theta
+\Delta\phi_n &= k\ \Delta r_n = n\ \underbrace{kd\sin\theta}_{\psi}
 \end{aligned}$$
 
 - The far-field rays are parallel, so only the projection of $nd$ onto the look direction matters.
-- Element $n$ arrives carrying $a_n\ e^{\ +jn\ kd\sin\theta}$ relative to element 0.
+- $\psi = kd\sin\theta$ is the phase step between neighbors: $0$ at broadside, $\pm kd$ at endfire.
+- Element $n$ arrives carrying $a_n\ e^{\ jn\psi}$.
 :::
 
 A far-field observer sees the array from a single direction, so the rays leaving the elements are parallel. Element $n$ sits $nd$ farther along the array axis than element 0, and along a ray heading off at angle $\theta$ that position shortens the path to the observer by $\Delta r_n = n\ d\sin\theta$. The wavenumber $k = 2\pi/\lambda$ converts distance to phase, so a path shorter by $\Delta r_n$ is a phase lead of $k\ \Delta r_n$, and element $n$ arrives at the observer carrying
@@ -102,6 +103,8 @@ $$a_n\ e^{\ +jn\ kd\sin\theta}$$
 
 relative to element 0.
 
+Every term carries the same step per element, $kd\sin\theta$, so we give it a name: $\psi = kd\sin\theta$, the phase by which each element leads its neighbor as seen from direction $\theta$. It is the only way the angle enters the sum. Each direction gives one value of $\psi$: broadside, $\theta = 0$, gives $\psi = 0$, where every element arrives in phase, and endfire, $\theta = \pm 90^\circ$, gives the largest step, $\psi = \pm kd$. For the PHASER, $kd = 173^\circ$. The rest of the lesson works in $\psi$ and converts back to $\theta$ through this one relation.
+
 The same path differences change the amplitude $1/r$ by a negligible amount. The PHASER is $112\ \text{mm}$ long, so its far field begins at $2D^2/\lambda = 0.86\ \text{m}$ (Lesson 5). At a $30\ \text{m}$ range, $112\ \text{mm}$ of path changes $1/r$ by less than $0.4\%$, but it spans $3.85$ wavelengths, or nearly $1400^\circ$ of phase. This is the parallel-ray approximation of Lesson 6: we keep the path difference in the phase and drop it from the amplitude.
 ::::
 
@@ -109,13 +112,13 @@ The same path differences change the amplitude $1/r$ by a negligible amount. The
 :::{present}
 $$\begin{aligned}
 E(\theta) &= \underbrace{E_0(\theta)\frac{e^{-jkr}}{r}}_{\text{one element}}\ AF(\theta) \\[8pt]
-AF(\theta) &= \sum_{n=0}^{N-1} a_n\ e^{\ jn\ kd\sin\theta} \\[8pt]
+AF(\theta) &= \sum_{n=0}^{N-1} a_n\ e^{\ jn\psi} \\[8pt]
 \vert F(\theta)\vert &\propto \vert E_0(\theta)\vert\ \vert AF(\theta)\vert
 \end{aligned}$$
 :::
 :::{present}
 - Identical elements share $E_0(\theta)$, so it factors out and leaves the **array factor**: Lesson 6's space factor $S(\theta)$, with a sum in place of the integral.
-- Steering replaces $kd\sin\theta$ with $\psi = kd(\sin\theta - \sin\theta_0)$ (Lesson 18); today $\theta_0 = 0$.
+- Steering subtracts a fixed step from $\psi$: $\psi = kd(\sin\theta - \sin\theta_0)$ (Lesson 18). Today $\theta_0 = 0$.
 :::
 
 The total far field is the sum of the element fields, and because every element has the same pattern, the common factor $E_0(\theta)\ e^{-jkr}/r$ comes out in front of the sum. The **array factor** $AF(\theta)$ is the sum that remains. It depends only on how many elements there are, where they sit, and what weights we feed them. It does not depend on the type of element.
@@ -225,9 +228,10 @@ The centered sum pairs each element with its mirror image across the center, and
 
 ::::{frame} Main Lobe and Nulls
 :::{present}
-$$\psi_m = \frac{2\pi m}{N}$$
-
-$$\sin\theta_m = \sin\theta_0 + \frac{m\lambda}{Nd}$$
+$$\begin{aligned}
+\psi_m &= \frac{2\pi m}{N} = kd\left(\sin\theta_m - \sin\theta_0\right) \\
+\sin\theta_m &= \sin\theta_0 + \frac{m\lambda}{Nd}
+\end{aligned}$$
 
 - At $\psi = 0$ the limit of $0/0$ is 1, so the beam points at $\theta_0$.
 - Nulls fall where the numerator vanishes and the denominator does not, $m = 1, \ldots, N-1$.
