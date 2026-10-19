@@ -83,7 +83,7 @@ Optional features; macOS and Linux include one.
 The instructor also keeps fallback cards, copies of one finished kit. A
 fallback card gets a kit running when a build cannot be finished in the
 period; it is named for your kit before it goes in, and it still needs Steps
-19 to 22, because the calibration it carries belongs to the instructor's kit.
+21 to 24, because the calibration it carries belongs to the instructor's kit.
 :::
 ::::
 
@@ -116,7 +116,7 @@ Linux writes to the card while it runs, so pulling the power or the card
 mid-write can corrupt it, and a corrupted card means flashing it again. Shut
 down with the button on the back of the PHASER, or by holding the
 **Connected** pill for two seconds, and wait until the lights go out before
-you unplug (Step 23).
+you unplug (Step 25).
 
 The amplifiers behind the patches and the ADAR1000 beamformers are
 static-sensitive parts. Touch a grounded metal surface before you handle the
@@ -128,7 +128,7 @@ at an angle, can strip the threads or break the connector off the board.
 Support every cable so its weight does not hang on the board's connectors.
 
 If the kit stops responding, run `sudo reboot` first, then re-run the
-provisioning script (Step 14), which repairs the installation without
+provisioning script (Step 16), which repairs the installation without
 erasing the card. Flash a new card only when the instructor tells you to.
 
 Kits stay in the classroom. Ask the instructor before you take one anywhere
@@ -179,7 +179,7 @@ the card afterward.
 :::{depth}
 Imager offers no OS customization for a custom image, only for Raspberry Pi
 OS, so nothing on the card changes the user and password that every later step
-relies on; the provisioning script in Step 14 names the kit instead.
+relies on; the provisioning script in Step 16 names the kit instead.
 
 After the write, the card holds two partitions: a small FAT one that holds the
 boot files, which Windows can read, and a Linux one, which it cannot. That is
@@ -191,8 +191,10 @@ the image.
 ::::{frame} Assemble and Power On
 :::{present}
 6. Mount the PHASER on the tripod.
-7. Card in the Pi; Pluto USB to the Pi; Ethernet to the laptop.
-8. USB-C supply into the PHASER, by the SMA cable.
+7. Card in the Pi.
+8. Pluto USB to the Pi.
+9. Ethernet to the laptop.
+10. USB-C into the PHASER, by the SMA.
 :::
 :::{present}
 :class: callout
@@ -215,7 +217,7 @@ way to power down.
 
 ::::{frame} First Contact
 :::{present}
-9. Open PowerShell, wait a couple of minutes, then:
+11. Open PowerShell, wait a couple of minutes, then:
 
 ```bash
 ssh analog@analog.local
@@ -252,7 +254,7 @@ this point, `169.254.210.227`.
 ::::{frame} Join the Wi-Fi
 
 :::{present}
-10. Set the Wi-Fi country and add the classroom network:
+12. Set the Wi-Fi country and add the classroom network:
 
 ```bash
 sudo raspi-config nonint do_wifi_country US
@@ -265,12 +267,12 @@ network={
 EOF
 ```
 
-11. Run `sudo reboot`, wait a minute, and ssh in again as in Step 9.
-12. Run `ping -c 4 github.com` and expect four replies.
+13. Run `sudo reboot`, wait a minute, and ssh in again as in Step 11.
+14. Run `ping -c 4 github.com` and expect four replies.
 :::
 
 The classroom Wi-Fi is the open guest network `AF_ACADEMY_GUEST`. The reboot in
-Step 11 is not optional: on the instructor's kit, asking the Wi-Fi client to reread
+Step 13 is not optional: on the instructor's kit, asking the Wi-Fi client to reread
 its settings without a reboot left it offline, and the ping failed until the
 Pi restarted. If the ping fails after the reboot, tell the instructor.
 
@@ -294,7 +296,7 @@ provisioning script downloads the Phaser software from GitHub.
 ::::{frame} Set the Clock
 
 :::{present}
-13. Seed the clock from a web server, then check it:
+15. Seed the clock from a web server, then check it:
 
 ```bash
 sudo date -s "$(curl -sI http://deb.debian.org/ | sed -n 's/^[Dd]ate: *//p')"
@@ -325,21 +327,21 @@ certificate guards: `curl -sI` fetches only the headers of a Debian web page,
 ::::{frame} Provision the Kit
 
 :::{present}
-14. Run the provisioning script, with your kit's name:
+16. Run the provisioning script, with your kit's name:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/scripts/provision.sh | bash -s -- --hostname phaser-03
 ```
 
-15. Wait for `Provisioned.`, then run `sudo reboot`.
-16. Run `ssh analog@phaser-03.local`, answer `yes`, and check that `hostname` prints `phaser-03`.
+17. Wait for `Provisioned.`, then run `sudo reboot`.
+18. Run `ssh analog@phaser-03.local`, answer `yes`, and check that `hostname` prints `phaser-03`.
 :::
 
 The script prints its steps, `[1/8]` through `[8/8]`, and takes tens of
 minutes; step `[7/8]`, which builds the Python library that talks to the
 board, is the long one and can sit quiet for minutes. Leave it running.
 
-The `-s --` in Step 14 matters. Without the `-s`, bash takes `--hostname` for
+The `-s --` in Step 16 matters. Without the `-s`, bash takes `--hostname` for
 the name of a script file and stops with `bash: --hostname: No such file or
 directory`.
 
@@ -352,7 +354,7 @@ Pi talk to the Pluto over USB, builds pyadi-iio, ADI's Python library for the
 board, and finally runs `install.sh`, which installs the Phaser backend and the
 browser interface as a service that starts at every boot.
 
-The reboot in Step 15 is what makes the board appear. The device-tree overlay
+The reboot in Step 17 is what makes the board appear. The device-tree overlay
 is read only at boot, and it is the file that tells Linux which chips sit on
 the board's bus; until the Pi restarts with it, the operating system does not
 know the phase shifters exist. The new hostname also takes effect at boot.
@@ -362,7 +364,7 @@ Twenty kits all calling themselves `phaser.local` collide on multicast DNS,
 and the losers rename themselves `phaser-2`, `phaser-3`, and so on, so a name
 you type can reach someone else's kit or none at all.
 
-The `yes` in Step 16 appears again because the laptop has never seen a kit
+The `yes` in Step 18 appears again because the laptop has never seen a kit
 named `phaser-03` before. Running the installer again later is how a kit is
 updated:
 `curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/install.sh | bash`.
@@ -372,8 +374,8 @@ updated:
 ::::{frame} Check the Service
 
 :::{present}
-17. Run `journalctl -u phaser-headless -n 30` and look for the banner `ADI Phaser Beamforming Backend` with no `No device found` after it.
-18. Browse to `http://phaser-03.local:8080` and wait for the pill to read **Connected**.
+19. Run `journalctl -u phaser-headless -n 30` and look for the banner `ADI Phaser Beamforming Backend` with no `No device found` after it.
+20. Browse to `http://phaser-03.local:8080` and wait for the pill to read **Connected**.
 :::
 
 The backend runs as a service named `phaser-headless`, and its log is the
@@ -443,10 +445,10 @@ them; it is unavailable on the FFT tab.
 ::::{frame} Find, Characterize, Calibrate
 
 :::{present}
-19. Place the powered HB100 $1\ \text{m}$ out at boresight.
-20. Press **Find HB100** and record its frequency.
-21. Press **Characterize IF** and record the IF it chooses.
-22. Press **Calibrate Phaser**.
+21. Place the powered HB100 $1\ \text{m}$ out at boresight.
+22. Press **Find HB100** and record its frequency.
+23. Press **Characterize IF** and record the IF it chooses.
+24. Press **Calibrate Phaser**.
 :::
 :::{present}
 :class: callout
@@ -530,7 +532,7 @@ simulator covers Part B.
 ::::{frame} Power Down and Troubleshooting
 
 :::{present}
-23. To power down, press the button on the back of the PHASER, or hold the **Connected** pill for two seconds; wait until the lights go out, then unplug the USB-C.
+25. To power down, press the button on the back of the PHASER, or hold the **Connected** pill for two seconds; wait until the lights go out, then unplug the USB-C.
 :::
 
 One or two red power lights may stay on after shutdown; those are fine.
@@ -541,12 +543,12 @@ cleanly and is always safe.
 | What you see | What it means | What to do |
 | :-- | :-- | :-- |
 | Imager reports a write or verify error | the card or the card reader | reinsert the card and write again, then try another card |
-| `curl` reports a certificate error | the Pi's clock is wrong | Step 13, then try again |
+| `curl` reports a certificate error | the Pi's clock is wrong | Step 15, then try again |
 | `ping` fails | the Wi-Fi has not come up | `sudo reboot`, then ping again; then the instructor |
-| `bash: --hostname: No such file or directory` | the `-s` is missing | Step 14 exactly as written |
+| `bash: --hostname: No such file or directory` | the `-s` is missing | Step 16 exactly as written |
 | `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` | this laptop has met another card under the same name | `ssh-keygen -R` and the name you used (`analog.local` or `phaser-03.local`), then ssh again and answer `yes` |
-| the page refuses to connect | the backend is not running | Step 17; `No device found` means the Pluto's USB cable |
-| **Calibrate Phaser** stops: no signal is reaching the array | the source is off or misaimed, or a step was skipped | check the HB100 is on and aimed, then Steps 20 to 22 in order |
+| the page refuses to connect | the backend is not running | Step 19; `No device found` means the Pluto's USB cable |
+| **Calibrate Phaser** stops: no signal is reaching the array | the source is off or misaimed, or a step was skipped | check the HB100 is on and aimed, then Steps 22 to 24 in order |
 
 :::{depth}
 The host-key warning is ssh doing its job. A host key identifies the machine,
