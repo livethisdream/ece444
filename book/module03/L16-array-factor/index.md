@@ -107,16 +107,20 @@ The same path differences change the amplitude $1/r$ by a negligible amount. The
 
 ::::{frame} Superposition
 :::{present}
-$$E(\theta) = \underbrace{E_0(\theta)\frac{e^{-jkr}}{r}}_{\text{one element}}\ AF(\theta)$$
-
-$$AF(\theta) = \sum_{n=0}^{N-1} a_n\ e^{\ jn\ kd\sin\theta}$$
+$$\begin{aligned}
+E(\theta) &= \underbrace{E_0(\theta)\frac{e^{-jkr}}{r}}_{\text{one element}}\ AF(\theta) \\[8pt]
+AF(\theta) &= \sum_{n=0}^{N-1} a_n\ e^{\ jn\ kd\sin\theta} \\[8pt]
+\vert F(\theta)\vert &\propto \vert E_0(\theta)\vert\ \vert AF(\theta)\vert
+\end{aligned}$$
 :::
 :::{present}
-- Identical elements share $E_0(\theta)$, so it factors out and leaves the **array factor**.
-- A phase step per element replaces $kd\sin\theta$ with $\psi = kd(\sin\theta - \sin\theta_0)$; Lesson 18 steers with it, and today $\theta_0 = 0$.
+- Identical elements share $E_0(\theta)$, so it factors out and leaves the **array factor**: Lesson 6's space factor $S(\theta)$, with a sum in place of the integral.
+- Steering replaces $kd\sin\theta$ with $\psi = kd(\sin\theta - \sin\theta_0)$ (Lesson 18); today $\theta_0 = 0$.
 :::
 
 The total far field is the sum of the element fields, and because every element has the same pattern, the common factor $E_0(\theta)\ e^{-jkr}/r$ comes out in front of the sum. The **array factor** $AF(\theta)$ is the sum that remains. It depends only on how many elements there are, where they sit, and what weights we feed them. It does not depend on the type of element.
+
+The array factor is the discrete form of the **space factor** $S(\theta)$ of Lessons 6 and 15. There the current, or the aperture field, was continuous, and $S(\theta)$ was its integral weighted by $e^{\ jkx\sin\theta}$. Here the current exists only at $N$ points, so the integral becomes a sum over the elements. The normalized pattern $\vert F(\theta)\vert$ is $\vert E\vert$ divided by its peak, and the $1/r$ and $e^{-jkr}$ drop out of it, so $\vert F\vert$ is the element's own pattern times $\vert AF\vert$. That is Lesson 6's element factor times space factor, and Part 3 names the element's part $EF$.
 ::::
 
 ::::{frame} The Array Factor From the Radiation Vector
