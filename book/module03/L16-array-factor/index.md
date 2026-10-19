@@ -107,16 +107,20 @@ The same path differences change the amplitude $1/r$ by a negligible amount. The
 
 ::::{frame} Superposition
 :::{present}
-$$E(\theta) = \underbrace{E_0(\theta)\frac{e^{-jkr}}{r}}_{\text{one element}}\ AF(\theta)$$
-
-$$AF(\theta) = \sum_{n=0}^{N-1} a_n\ e^{\ jn\ kd\sin\theta}$$
+$$\begin{aligned}
+E(\theta) &= \underbrace{E_0(\theta)\frac{e^{-jkr}}{r}}_{\text{one element}}\ AF(\theta) \\[8pt]
+AF(\theta) &= \sum_{n=0}^{N-1} a_n\ e^{\ jn\ kd\sin\theta} \\[8pt]
+\vert F(\theta)\vert &\propto \vert E_0(\theta)\vert\ \vert AF(\theta)\vert
+\end{aligned}$$
 :::
 :::{present}
-- Identical elements share $E_0(\theta)$, so it factors out and leaves the **array factor**.
-- A phase step per element replaces $kd\sin\theta$ with $\psi = kd(\sin\theta - \sin\theta_0)$; Lesson 18 steers with it, and today $\theta_0 = 0$.
+- Identical elements share $E_0(\theta)$, so it factors out and leaves the **array factor**: Lesson 6's space factor $S(\theta)$, with a sum in place of the integral.
+- Steering replaces $kd\sin\theta$ with $\psi = kd(\sin\theta - \sin\theta_0)$ (Lesson 18); today $\theta_0 = 0$.
 :::
 
 The total far field is the sum of the element fields, and because every element has the same pattern, the common factor $E_0(\theta)\ e^{-jkr}/r$ comes out in front of the sum. The **array factor** $AF(\theta)$ is the sum that remains. It depends only on how many elements there are, where they sit, and what weights we feed them. It does not depend on the type of element.
+
+The array factor is the discrete form of the **space factor** $S(\theta)$ of Lessons 6 and 15. There the current, or the aperture field, was continuous, and $S(\theta)$ was its integral weighted by $e^{\ jkx\sin\theta}$. Here the current exists only at $N$ points, so the integral becomes a sum over the elements. The normalized pattern $\vert F(\theta)\vert$ is $\vert E\vert$ divided by its peak, and the $1/r$ and $e^{-jkr}$ drop out of it, so $\vert F\vert$ is the element's own pattern times $\vert AF\vert$. That is Lesson 6's element factor times space factor, and Part 3 names the element's part $EF$.
 ::::
 
 ::::{frame} The Array Factor From the Radiation Vector
@@ -203,12 +207,20 @@ AF &= \sum_{n=0}^{N-1} e^{\ jn\psi} = \frac{1 - e^{\ jN\psi}}{1 - e^{\ j\psi}} \
 :::{present}
 $$AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}$$
 
-- Referencing the phase to the array center and dividing by $N$ gives $AF_N$, whose peak is 1.
+- $\vert e^{\ j(N-1)\psi/2}\vert = 1$: it is the phase of the array's center, so $\vert AF\vert$ never sees it.
+- Dividing by $N$ sets the peak to 1.
 :::
 
 Setting every weight to 1 turns the sum into a finite geometric series in $e^{\ j\psi}$. To close it, we factor half of each exponent out of the numerator and the denominator, which leaves a difference of conjugate exponentials in each bracket. Euler's formula turns each bracket into $-2j\sin(\cdot)$, and the $-2j$ factors cancel between top and bottom.
 
-The leading exponential is the phase of the array's center relative to element 0. If we reference the phase to the center instead, it disappears. Dividing by $N$ normalizes the peak to 1. The main lobe, the nulls, and the sidelobes all follow from this expression.
+The leading factor $e^{\ j(N-1)\psi/2}$ has magnitude 1, so it changes the phase of $AF$ and never its size. It comes from where we put the phase reference. We measured every element's phase from element 0, at one end of the array. The center of the array sits $(N-1)d/2$ from element 0, and $(N-1)\psi/2$ is exactly the phase that point carries. Pulling that phase out of every term counts each element from the center instead:
+
+$$\begin{aligned}
+AF &= e^{\ j(N-1)\psi/2} \sum_{n=0}^{N-1} e^{\ j\left(n - \frac{N-1}{2}\right)\psi} \\
+&= e^{\ j(N-1)\psi/2}\ \frac{\sin(N\psi/2)}{\sin(\psi/2)}
+\end{aligned}$$
+
+The centered sum pairs each element with its mirror image across the center, and each pair adds to $e^{\ jm\psi} + e^{-jm\psi} = 2\cos(m\psi)$, so the sum is real: it is the ratio of sines. Measured from the center, the leading factor is simply absent. Measured from element 0, it is there, but the pattern is $\vert AF\vert$ and $\vert e^{\ j(N-1)\psi/2}\vert = 1$, so it drops out either way. Dividing by $N$ then normalizes the peak to 1. The main lobe, the nulls, and the sidelobes all follow from this expression.
 ::::
 
 ::::{frame} Main Lobe and Nulls
