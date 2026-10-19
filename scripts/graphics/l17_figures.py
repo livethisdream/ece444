@@ -486,7 +486,7 @@ def hs_mirror() -> str:
 
 def part_a_network() -> str:
     H = 300
-    s = [svg_open(H, "Part A network. The laptop and the Pi, named phaser-03.local, "
+    s = [svg_open(H, "Part A network. The laptop and the Pi, named phaser-NN.local, "
                   "each give themselves an address on the Ethernet cable, which carries "
                   "ssh and the browser interface on port 8080. The Pi joins the "
                   "AF_ACADEMY_GUEST Wi-Fi and reaches GitHub through it to run "
@@ -501,7 +501,7 @@ def part_a_network() -> str:
                 + txt(x + w / 2, y + h / 2 + 15, sub, 13, INK3))
 
     s.append(node(8, 28, 132, 60, "Laptop", "169.254.x.x"))
-    s.append(node(280, 28, 132, 60, "Pi", "phaser-03.local"))
+    s.append(node(280, 28, 132, 60, "Pi", "phaser-NN.local"))
     # the cable: ssh and the browser
     s.append(line(140, 58, 280, 58, NAVY, 3.0))
     s.append(txt(210, 49, "Ethernet cable", 13, NAVY, weight="700"))

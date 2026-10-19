@@ -307,3 +307,4 @@ SECOND WALKTHROUGH, START TO FINISH (Neil, 2026-10-19)
    HTTP 000000" -- a failed check reported as success, and the code doubled; (b) "NTP: no"
    after provisioning -- check timedatectl after reboot; if the time client is not
    enabled, the clock is lost at every power-off.
+10. Examples now read phaser-NN, NN = the kit's unique number (Neil); figure label too.

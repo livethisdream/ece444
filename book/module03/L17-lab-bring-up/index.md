@@ -38,7 +38,7 @@ came up, and that it works.
 - The Ethernet cable carries ssh and the browser; the Wi-Fi only connects the Pi to the internet.
 :::
 :::{present}
-<img src="../../viz/img/L17-part-a-network.svg" alt="Part A network. The laptop and the Pi, named phaser-03.local, each give themselves an address on the Ethernet cable, which carries ssh and the browser interface on port 8080. The Pi joins the AF_ACADEMY_GUEST Wi-Fi and reaches GitHub through it to run provision.sh. A path from the laptop through the Wi-Fi access point to the Pi is crossed out, because the guest network can isolate its clients from each other." style="max-width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L17-part-a-network.svg" alt="Part A network. The laptop and the Pi, named phaser-NN.local, each give themselves an address on the Ethernet cable, which carries ssh and the browser interface on port 8080. The Pi joins the AF_ACADEMY_GUEST Wi-Fi and reaches GitHub through it to run provision.sh. A path from the laptop through the Wi-Fi access point to the Pi is crossed out, because the guest network can isolate its clients from each other." style="max-width: 100%; display: block; margin: 0 auto;">
 :::
 
 Each cadet starts with their own PHASER kit and a microSD card and builds the
@@ -72,9 +72,9 @@ Each cadet has their own kit:
 - a 32 GB microSD card and an Ethernet cable
 - a laptop with Raspberry Pi Imager and an ssh client
 
-Your instructor assigns your kit a two-digit number, NN. Kit NN is named
-`phaser-NN`, and kit 03 appears in every example from here on; use your own
-number.
+Your instructor assigns your kit a unique two-digit number, NN, and your kit
+is named `phaser-NN`. Wherever a step shows `phaser-NN`, type your own number
+in place of NN: kit 7 is `phaser-07`.
 
 :::{depth}
 On Windows the ssh client is the OpenSSH Client, under Settings > Apps >
@@ -330,11 +330,11 @@ certificate guards: `curl -sI` fetches only the headers of a Debian web page,
 16. Run the provisioning script, with your kit's name:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/scripts/provision.sh | bash -s -- --hostname phaser-03
+curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/scripts/provision.sh | bash -s -- --hostname phaser-NN
 ```
 
 17. Wait for `Provisioned.`, then run `sudo reboot`.
-18. Run `ssh analog@phaser-03.local`, answer `yes`, and check that `hostname` prints `phaser-03`.
+18. Run `ssh analog@phaser-NN.local`, answer `yes`, and check that `hostname` prints `phaser-NN`.
 :::
 
 The script prints its steps, `[1/8]` through `[8/8]`, and takes tens of
@@ -371,7 +371,7 @@ and the losers rename themselves `phaser-2`, `phaser-3`, and so on, so a name
 you type can reach someone else's kit or none at all.
 
 The `yes` in Step 18 appears again because the laptop has never seen a kit
-named `phaser-03` before. Running the installer again later is how a kit is
+named `phaser-NN` before. Running the installer again later is how a kit is
 updated:
 `curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/install.sh | bash`.
 :::
@@ -381,7 +381,7 @@ updated:
 
 :::{present}
 19. Run `journalctl -u phaser-headless -n 30` and look for the banner `ADI Phaser Beamforming Backend` with no `No device found` after it.
-20. Browse to `http://phaser-03.local:8080` and wait for the pill to read **Connected**.
+20. Browse to `http://phaser-NN.local:8080` and wait for the pill to read **Connected**.
 :::
 
 The backend runs as a service named `phaser-headless`, and its log is the
@@ -552,7 +552,7 @@ cleanly and is always safe.
 | `curl` reports a certificate error | the Pi's clock is wrong | Step 15, then try again |
 | `ping` fails | the Wi-Fi has not come up | `sudo reboot`, then ping again; then the instructor |
 | `bash: --hostname: No such file or directory` | the `-s` is missing | Step 16 exactly as written |
-| `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` | this laptop has met another card under the same name | `ssh-keygen -R` and the name you used (`analog.local` or `phaser-03.local`), then ssh again and answer `yes` |
+| `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` | this laptop has met another card under the same name | `ssh-keygen -R` and the name you used (`analog.local` or `phaser-NN.local`), then ssh again and answer `yes` |
 | the page refuses to connect | the backend is not running | Step 19; `No device found` means the Pluto's USB cable |
 | **Calibrate Phaser** stops: no signal is reaching the array | the source is off or misaimed, or a step was skipped | check the HB100 is on and aimed, then Steps 22 to 24 in order |
 
