@@ -30,10 +30,14 @@ Lesson 18 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Learning Objectives
+:class: here-18
 
 <ol class="lo-list" style="--module: '3'; counter-reset: lo 3">
   <li>I can calculate the phase weights required to steer a beam to a given angle and predict the resulting array pattern.</li>
 </ol>
+
+```{include} ../../_snippets/m3-strip.md
+```
 
 :::{depth}
 Lesson 17 put the PHASER in front of you: eight patch elements in a row, two

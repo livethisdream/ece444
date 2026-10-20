@@ -28,10 +28,14 @@ Lesson 22 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Learning Objectives
+:class: here-22
 
 <ol class="lo-list" style="--module: '3'; counter-reset: lo 6">
   <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
 </ol>
+
+```{include} ../../_snippets/m3-strip.md
+```
 ::::
 
 ::::{frame} Where we were

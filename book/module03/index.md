@@ -20,9 +20,16 @@ Lessons 15–24 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Where This Module Goes
+:::{present}
+:class: callout
+
+**Amplitude shapes the beam: its sidelobes and beamwidth. Phase steers it.**
+:::
+
 An array is many small antennas behaving as one large one. Feed the elements
 with the right phases and the beam points where you choose; feed them with the
-right amplitudes and you decide how much energy leaks into the sidelobes.
+right amplitudes and you decide how wide the beam is and how much energy leaks
+into the sidelobes.
 
 This is the longest module in the course, and the most hands-on. **Almost
 every lesson has its own lab on the ADALM-PHASER**, done right after it, so you
@@ -33,6 +40,37 @@ The through-line is one equation — the array factor — met four times: derive
 steered, tapered, and nulled. Each time it is the same sum over elements with
 different weights. If you leave this module able to write that sum from memory
 and say what each term does, the rest is arithmetic.
+:::
+::::
+
+::::{frame} The Module 3 Roadmap
+
+<div class="lane-map" role="list" aria-label="Lessons 15 to 24 by what they teach: amplitude, phase, or both">
+  <span class="lm-lane lm-amp" style="--lane: 1">Amplitude<small>shapes the beam</small></span>
+  <span class="lm-lane lm-phase" style="--lane: 2">Phase<small>steers it</small></span>
+  <span class="lm-lane lm-both" style="--lane: 3">Both<small>the full weight</small></span>
+  <a class="lm-chip lm-amp" style="--lane: 1; --n: 1" href="L15-aperture-distributions/index.html"><b>L15</b> Apertures</a>
+  <a class="lm-chip lm-amp" style="--lane: 1; --n: 2" href="L16-array-factor/index.html"><b>L16</b> Array Factor</a>
+  <a class="lm-chip lm-both" style="--lane: 3; --n: 3" href="L17-phased-array-hardware/index.html"><b>L17</b> Hardware and Calibration<span class="lm-lab">Lab</span></a>
+  <a class="lm-chip lm-phase" style="--lane: 2; --n: 4" href="L18-beam-steering/index.html"><b>L18</b> Beam Steering<span class="lm-lab">Lab</span></a>
+  <a class="lm-chip lm-phase" style="--lane: 2; --n: 5" href="L19-direction-finding/index.html"><b>L19</b> Direction Finding<span class="lm-lab">Lab</span></a>
+  <a class="lm-chip lm-amp" style="--lane: 1; --n: 6" href="L20-array-factor-beamwidth/index.html"><b>L20</b> Beamwidth<span class="lm-lab">Lab</span></a>
+  <a class="lm-chip lm-both" style="--lane: 3; --n: 7" href="L21-antenna-pattern/index.html"><b>L21</b> Antenna Pattern<span class="lm-lab">Lab</span></a>
+  <a class="lm-chip lm-amp" style="--lane: 1; --n: 8" href="L22-sidelobes-tapering/index.html"><b>L22</b> Tapering</a>
+  <a class="lm-chip lm-phase" style="--lane: 2; --n: 9" href="L23-beam-squint-quantization/index.html"><b>L23</b> Squint and Quantization<span class="lm-lab">L22–L23 Lab</span></a>
+  <a class="lm-chip lm-both" style="--lane: 3; --n: 10" href="L24-null-steering/index.html"><b>L24</b> Nulling<span class="lm-lab">Lab</span></a>
+</div>
+
+:::{depth}
+Every lesson in this module turns one of two knobs on each element. Lessons 15,
+16, 20, and 22 work the amplitude: how the illumination across the aperture
+sets the beamwidth and the sidelobe level, and what a taper trades for lower
+sidelobes. Lessons 18, 19, and 23 work the phase: the progressive phase that
+points the beam, the bearing it lets you measure, and what goes wrong when the
+phase is only right at one frequency or comes in coarse steps. Lessons 17, 21,
+and 24 need both. Calibration corrects each channel's gain and phase, the
+measured pattern carries the element's own pattern on top of the array
+factor, and a null is placed with complex weights.
 :::
 ::::
 

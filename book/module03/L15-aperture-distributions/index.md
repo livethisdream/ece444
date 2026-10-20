@@ -30,18 +30,26 @@ Lesson 15 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Learning Objectives
+:class: here-15
 
 <ol class="lo-list" style="--module: '3'; counter-reset: lo 0">
   <li>I can describe aperture distributions and calculate aperture efficiency for a given illumination.</li>
 </ol>
+
+```{include} ../../_snippets/m3-strip.md
+```
 ::::
 
 ::::{frame} Why Return to Apertures?
 
 :::{present}
-- Lessons 6, 13, and 14 found the beamwidth and sidelobes of a wire, a horn, and a dish.
-- Each result depends only on the aperture field $E_a$, whatever produces it.
-- A phased array sets $E_a$ with its element weights.
+- Lessons 6, 13, and 14 found the beamwidth and sidelobes of a wire, a horn, a dish.
+- Each depends only on the aperture field $E_a$, which an array sets element by element.
+:::
+:::{present}
+:class: callout
+
+**Amplitude shapes the beam; phase steers it.**
 :::
 
 In Lesson 6 we derived the pattern of a line source, and in Lessons 13 and 14 we found the beamwidth, sidelobe level, and aperture efficiency of a horn and a reflector. Each of those results was worked out for a particular antenna, but none of them depends on the antenna. The far field depends only on the field across the radiating opening, the **aperture distribution** $E_a$, so the same relationships hold for any aperture. This lesson collects them in a form that applies to every aperture: the shape of $E_a$ sets the sidelobe level and the efficiency, and the aperture's length in wavelengths sets the beamwidth.
@@ -96,7 +104,7 @@ The symbol $u$ also changes scale. Lesson 6 wrote the uniform line source as $\s
 ::::{frame} Key Point: Shape and Size
 :::{present}
 :class: callout
-The **shape** of the illumination sets the sidelobe level and the beamwidth constant. The **size** of the aperture in wavelengths scales that beamwidth in angle and leaves the sidelobe level alone.
+The **shape** of the illumination sets the sidelobe level and the beamwidth constant. The **size** in wavelengths scales the beamwidth and leaves the sidelobes alone.
 :::
 :::{present}
 <img src="../../viz/img/L15-shape-vs-size.svg" alt="Top: the uniform aperture pattern against space frequency u is one curve for every length, and apertures 2, 5, and 20 wavelengths long see it out to u = 2, 5, and 20. Bottom: the same three apertures against angle have beams 25.6, 10.2, and 2.5 degrees wide, and every first sidelobe sits at minus 13.3 dB" style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">

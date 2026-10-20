@@ -224,7 +224,7 @@ come up?
 \hline
 \textbf{Item} & \textbf{Value} \\\hline\hline
 Kit number NN & \kv{your own, such as 03} \\\hline
-Date the Pi printed after Step 10 & \kv{today's date} \\\hline
+Date the Pi printed after Step 15 & \kv{today's date} \\\hline
 Result of \texttt{ping -c 4 github.com} & \kv{four replies} \\\hline
 Last line \texttt{provision.sh} printed & \kv{\texttt{Provisioned.}, then its summary} \\\hline
 What \texttt{hostname} prints & \kv{\texttt{phaser-NN}, such as \texttt{phaser-03}} \\\hline
@@ -236,7 +236,7 @@ IF \textbf{Characterize IF} chose & \kv{your own, near $1.7\ \ghz$} \\\hline
 \end{center}
 
 \begin{solution}
-Before Step 10 the Pi believes it is April 2023, the day the image was made,
+Before Step 15 the Pi believes it is April 2023, the day the image was made,
 so any date other than today's means the clock step did not take. A failed
 ping is reported to the instructor rather than worked around; the instructor
 has fallback cards. The \textbf{Find HB100} result is this kit's own source,
@@ -247,9 +247,16 @@ chose $1.69\ \ghz$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{The kit check.} Part B of the procedure: does the kit see
-the source, and does it follow the source when it moves? Load \textbf{1
-Steering Angle}, set \textbf{Rx Gain (dB)} to 10, and press \textbf{Start},
-with the HB100 $1\ \m$ out at boresight.
+the source, and does it follow the source when it moves? Open the \textbf{Lab Presets} section, load
+\textbf{1 Steering Angle}, and press \textbf{Start}, with the HB100 about $1\ \m$ out at
+boresight, then set \textbf{Rx Gain (dB)} so the FFT peak reads
+$-10 \pm 3$ dBFS. The level is the reference, not the gain: the gain that
+reaches it depends on your source and your distance.
+
+\begin{center}
+Rx Gain used = \ansbox[1.1in]{your own} \qquad
+distance = \ansbox[1.1in]{about $1\ \m$}
+\end{center}
 
 \begin{parts}
 
@@ -260,20 +267,22 @@ with the HB100 $1\ \m$ out at boresight.
 	\begin{tabular}{| K{1.4in} | K{1.1in} | K{1.1in} | K{1.3in} |}
 	\hline
 	\textbf{Peak position (MHz)} & \textbf{Peak (dBFS)} & \textbf{Floor (dBFS)} & \textbf{Separation (dB)} \\\hline\hline
-	\kv{near $0$, within $\pm 1$} & \kv{your own} & \kv{your own} & \kv{$\ge 20$} \\\hline
+	\kv{near $0$, within $\pm 1$} & \kv{$-10 \pm 3$} & \kv{your own} & \kv{$\ge 20$} \\\hline
 	\end{tabular}
 	\end{center}
 
 	\begin{solution}
 	With Signal Freq set by \textbf{Find HB100}, the tone sits near the center of
 	the $3\ \mhz$ window the FFT tab shows. A separation under $20$ dB at $1\ \m$
-	points to a misaimed or distant source, or a weak battery.
+	points to a misaimed or distant source, or a weak battery. The two channels
+	add in phase, so the Sum clips near $+6$ dBFS; $-10$ dBFS leaves about
+	16 dB of headroom, and a flat-topped main lobe means the gain is too high.
 	\end{solution}
 
 	\part The Rectangular tab, with \textbf{Show Peak Angle Marker} on. For the
-	second row, carry the HB100 to about $30\mydeg$ on one side, still
-	$1\ \m$ from the array and aimed at it, and circle the end of the array it
-	moved toward.
+	second row, carry the HB100 to about $30\mydeg$ on one side, at the same
+	distance from the array and aimed at it, and circle the end of the array it
+	moved toward. Facing the patches, E1 is the element on your right.
 
 	\begin{center}
 	\renewcommand{\arraystretch}{1.25}
@@ -281,7 +290,7 @@ with the HB100 $1\ \m$ out at boresight.
 	\hline
 	\textbf{Source} & \textbf{Est. Angle} & \textbf{Peak Array Gain (dB)} \\\hline\hline
 	At boresight & \kv{$0\mydeg \pm 2\mydeg$} & \kv{your own (reference)} \\\hline
-	About $30\mydeg$ toward \quad E1 \quad E8 & \kv{about $30\mydeg$ in size} & \kv{$0.5$ to $2$ dB below the first row} \\\hline
+	About $30\mydeg$ toward \quad E1 \quad E8 & \kv{about $30\mydeg$ in size} & \kv{a few tenths of a dB to $1$ dB below the first row} \\\hline
 	Back at boresight & \kv{within $2\mydeg$ of the first row} & \kv{within about $0.5$ dB of the first row} \\\hline
 	\end{tabular}
 	\end{center}
@@ -291,8 +300,12 @@ with the HB100 $1\ \m$ out at boresight.
 	source moves and comes back when it returns. A source placed by eye sits
 	within a few degrees of $30\mydeg$, so anything from about $25\mydeg$ to
 	$35\mydeg$ is a working kit. The sign of the second row records which side
-	the GUI calls positive; the L18 Lab uses it. The peak drops a little off
-	boresight because each patch receives less from the side.
+	the GUI calls positive; the L18 Lab uses it. The L18 Lab puts $+\theta$ on
+	the E8 end, on your left as you face the patches, so a source moved toward
+	E1 reads near $-30\mydeg$. The peak drops a little off boresight because
+	each patch receives less from the side. At $1\ \m$ that drop reads only a few
+	tenths of a dB, less than the $0.6$ to $0.9$ dB theory predicts, which is why
+	the L18 Lab takes its scan-loss levels at $1.2\ \m$ or more.
 	\end{solution}
 
 \end{parts}

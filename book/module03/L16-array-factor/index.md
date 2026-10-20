@@ -89,11 +89,12 @@ Module 1 measured the polar angle from the $+z$ axis for a line source lying on 
 :::{present}
 $$\begin{aligned}
 \Delta r_n &= n\ d\sin\theta \\
-\Delta\phi_n &= k\ \Delta r_n = n\ kd\sin\theta
+\Delta\phi_n &= k\ \Delta r_n = n\ \underbrace{kd\sin\theta}_{\psi}
 \end{aligned}$$
 
 - The far-field rays are parallel, so only the projection of $nd$ onto the look direction matters.
-- Element $n$ arrives carrying $a_n\ e^{\ +jn\ kd\sin\theta}$ relative to element 0.
+- $\psi = kd\sin\theta$ is the **inter-element phase**, neighbor to neighbor: $0$ at broadside, $\pm kd$ at endfire.
+- Element $n$ arrives carrying $a_n\ e^{\ jn\psi}$.
 :::
 
 A far-field observer sees the array from a single direction, so the rays leaving the elements are parallel. Element $n$ sits $nd$ farther along the array axis than element 0, and along a ray heading off at angle $\theta$ that position shortens the path to the observer by $\Delta r_n = n\ d\sin\theta$. The wavenumber $k = 2\pi/\lambda$ converts distance to phase, so a path shorter by $\Delta r_n$ is a phase lead of $k\ \Delta r_n$, and element $n$ arrives at the observer carrying
@@ -102,21 +103,27 @@ $$a_n\ e^{\ +jn\ kd\sin\theta}$$
 
 relative to element 0.
 
+Every term carries the same step per element, $kd\sin\theta$, so we give it a name: $\psi = kd\sin\theta$ is the **inter-element phase**, the phase by which each element leads its neighbor as seen from direction $\theta$. It is not the progressive phase $\beta$ that the phase shifters apply, and not the ADAR1000's $2.8125^\circ$ phase step; it is what the observer sees, the geometry less any applied $\beta$. It is the only way the angle enters the sum. Each direction gives one value of $\psi$: broadside, $\theta = 0$, gives $\psi = 0$, where every element arrives in phase, and endfire, $\theta = \pm 90^\circ$, gives the largest step, $\psi = \pm kd$. For the PHASER, $kd = 173^\circ$. The rest of the lesson works in $\psi$ and converts back to $\theta$ through this one relation.
+
 The same path differences change the amplitude $1/r$ by a negligible amount. The PHASER is $112\ \text{mm}$ long, so its far field begins at $2D^2/\lambda = 0.86\ \text{m}$ (Lesson 5). At a $30\ \text{m}$ range, $112\ \text{mm}$ of path changes $1/r$ by less than $0.4\%$, but it spans $3.85$ wavelengths, or nearly $1400^\circ$ of phase. This is the parallel-ray approximation of Lesson 6: we keep the path difference in the phase and drop it from the amplitude.
 ::::
 
 ::::{frame} Superposition
 :::{present}
-$$E(\theta) = \underbrace{E_0(\theta)\frac{e^{-jkr}}{r}}_{\text{one element}}\ AF(\theta)$$
-
-$$AF(\theta) = \sum_{n=0}^{N-1} a_n\ e^{\ jn\ kd\sin\theta}$$
+$$\begin{aligned}
+E(\theta) &= \underbrace{E_0(\theta)\frac{e^{-jkr}}{r}}_{\text{one element}}\ AF(\theta) \\[8pt]
+AF(\theta) &= \sum_{n=0}^{N-1} a_n\ e^{\ jn\psi} \\[8pt]
+\vert F(\theta)\vert &\propto \vert E_0(\theta)\vert\ \vert AF(\theta)\vert
+\end{aligned}$$
 :::
 :::{present}
-- Identical elements share $E_0(\theta)$, so it factors out and leaves the **array factor**.
-- A phase step per element replaces $kd\sin\theta$ with $\psi = kd(\sin\theta - \sin\theta_0)$; Lesson 18 steers with it, and today $\theta_0 = 0$.
+- Identical elements share $E_0(\theta)$, so it factors out and leaves the **array factor**: Lesson 6's space factor $S(\theta)$, with a sum in place of the integral.
+- Steering subtracts the progressive phase from $\psi$: $\psi = kd(\sin\theta - \sin\theta_0)$ (Lesson 18). Today $\theta_0 = 0$.
 :::
 
 The total far field is the sum of the element fields, and because every element has the same pattern, the common factor $E_0(\theta)\ e^{-jkr}/r$ comes out in front of the sum. The **array factor** $AF(\theta)$ is the sum that remains. It depends only on how many elements there are, where they sit, and what weights we feed them. It does not depend on the type of element.
+
+The array factor is the discrete form of the **space factor** $S(\theta)$ of Lessons 6 and 15. There the current, or the aperture field, was continuous, and $S(\theta)$ was its integral weighted by $e^{\ jkx\sin\theta}$. Here the current exists only at $N$ points, so the integral becomes a sum over the elements. The normalized pattern $\vert F(\theta)\vert$ is $\vert E\vert$ divided by its peak, and the $1/r$ and $e^{-jkr}$ drop out of it, so $\vert F\vert$ is the element's own pattern times $\vert AF\vert$. That is Lesson 6's element factor times space factor, and Part 3 names the element's part $EF$.
 ::::
 
 ::::{frame} The Array Factor From the Radiation Vector
@@ -156,7 +163,7 @@ $$\begin{aligned}
 - Today $\theta_0 = 0$, so $\psi = kd\sin\theta$.
 :::
 
-If the weights carry a progressive phase $\beta$ per element, that phase adds to the geometric term, and both collect into one argument $\psi$. The ramp $\beta = kd\sin\theta_0$ steers the beam to $\theta_0$, and Lesson 18 derives it. For the rest of today $\theta_0 = 0$ and $\psi = kd\sin\theta$, so every result below is the broadside case.
+If the weights carry a progressive phase $\beta$ per element, that phase adds to the geometric term, and both collect into the inter-element phase $\psi$. The ramp $\beta = kd\sin\theta_0$ steers the beam to $\theta_0$, and Lesson 18 derives it. For the rest of today $\theta_0 = 0$ and $\psi = kd\sin\theta$, so every result below is the broadside case.
 ::::
 
 ::::{frame} Key Point: A Sum of Phasors
@@ -203,19 +210,28 @@ AF &= \sum_{n=0}^{N-1} e^{\ jn\psi} = \frac{1 - e^{\ jN\psi}}{1 - e^{\ j\psi}} \
 :::{present}
 $$AF_N(\psi) = \frac{\sin(N\psi/2)}{N\sin(\psi/2)}$$
 
-- Referencing the phase to the array center and dividing by $N$ gives $AF_N$, whose peak is 1.
+- $\vert e^{\ j(N-1)\psi/2}\vert = 1$: it is the phase of the array's center, so $\vert AF\vert$ never sees it.
+- Dividing by $N$ sets the peak to 1.
 :::
 
 Setting every weight to 1 turns the sum into a finite geometric series in $e^{\ j\psi}$. To close it, we factor half of each exponent out of the numerator and the denominator, which leaves a difference of conjugate exponentials in each bracket. Euler's formula turns each bracket into $-2j\sin(\cdot)$, and the $-2j$ factors cancel between top and bottom.
 
-The leading exponential is the phase of the array's center relative to element 0. If we reference the phase to the center instead, it disappears. Dividing by $N$ normalizes the peak to 1. The main lobe, the nulls, and the sidelobes all follow from this expression.
+The leading factor $e^{\ j(N-1)\psi/2}$ has magnitude 1, so it changes the phase of $AF$ and never its size. It comes from where we put the phase reference. We measured every element's phase from element 0, at one end of the array. The center of the array sits $(N-1)d/2$ from element 0, and $(N-1)\psi/2$ is exactly the phase that point carries. Pulling that phase out of every term counts each element from the center instead:
+
+$$\begin{aligned}
+AF &= e^{\ j(N-1)\psi/2} \sum_{n=0}^{N-1} e^{\ j\left(n - \frac{N-1}{2}\right)\psi} \\
+&= e^{\ j(N-1)\psi/2}\ \frac{\sin(N\psi/2)}{\sin(\psi/2)}
+\end{aligned}$$
+
+The centered sum pairs each element with its mirror image across the center, and each pair adds to $e^{\ jm\psi} + e^{-jm\psi} = 2\cos(m\psi)$, so the sum is real: it is the ratio of sines. Measured from the center, the leading factor is simply absent. Measured from element 0, it is there, but the pattern is $\vert AF\vert$ and $\vert e^{\ j(N-1)\psi/2}\vert = 1$, so it drops out either way. Dividing by $N$ then normalizes the peak to 1. The main lobe, the nulls, and the sidelobes all follow from this expression.
 ::::
 
 ::::{frame} Main Lobe and Nulls
 :::{present}
-$$\psi_m = \frac{2\pi m}{N}$$
-
-$$\sin\theta_m = \sin\theta_0 + \frac{m\lambda}{Nd}$$
+$$\begin{aligned}
+\psi_m &= \frac{2\pi m}{N} = kd\left(\sin\theta_m - \sin\theta_0\right) \\
+\sin\theta_m &= \sin\theta_0 + \frac{m\lambda}{Nd}
+\end{aligned}$$
 
 - At $\psi = 0$ the limit of $0/0$ is 1, so the beam points at $\theta_0$.
 - Nulls fall where the numerator vanishes and the denominator does not, $m = 1, \ldots, N-1$.
@@ -437,7 +453,7 @@ $$\boxed{\ d < \frac{\lambda}{1 + \vert\sin\theta_0\vert}\ }$$
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-Grating lobes appear where $\psi$ is a nonzero multiple of $2\pi$. At $\psi = 2\pi$ the path difference between neighbors, less the applied phase step, is exactly one wavelength, so every term $e^{\ jn\psi} = e^{\ j2\pi n} = 1$ and the elements add in phase exactly as they do at the main lobe. That is why a grating lobe is full height.
+Grating lobes appear where $\psi$ is a nonzero multiple of $2\pi$. At $\psi = 2\pi$ the path difference between neighbors, less the applied progressive phase, is exactly one wavelength, so every term $e^{\ jn\psi} = e^{\ j2\pi n} = 1$ and the elements add in phase exactly as they do at the main lobe. That is why a grating lobe is full height.
 
 The grating lobe nearest real space is $m = 1$ on the side away from the steer. For $\theta_0 \ge 0$ it sits at $\sin\theta_g = \sin\theta_0 - \lambda/d$, and it stays out of real space as long as $\sin\theta_g < -1$:
 
@@ -559,7 +575,7 @@ In the L20 Lab you will steer this array past a fixed source and record power ag
 | Idea | Result |
 | :-- | :-- |
 | Array factor | $AF = \sum a_n e^{jn\psi}$, one term per element |
-| Argument | $\psi = kd(\sin\theta - \sin\theta_0)$ |
+| Inter-element phase | $\psi = kd(\sin\theta - \sin\theta_0)$ |
 | Visible region | $\pm 173^\circ$ of $\psi$ for the PHASER |
 | Uniform array | $\sin(N\psi/2)/(N\sin(\psi/2))$, peak 1 |
 | Nulls | $\psi = 2\pi m/N$ |

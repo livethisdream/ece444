@@ -374,8 +374,8 @@ browser with nothing to install, and its source is fixed at boresight, so it can
 rehearse the commanded run of Part 2 (Run 2).
 
 \begin{enumerate}
-	\item Press \textbf{1 Steering Angle} under \textbf{Lab Presets}, then press
-	\textbf{Start}.
+	\item Open the \textbf{Lab Presets} section, press \textbf{1 Steering Angle},
+	then press \textbf{Start}.
 	\item Open the \textbf{Rectangular} tab and turn on \textbf{Show Peak Angle
 	Marker} under \textbf{Plot Options}.
 	\item In \textbf{Beam Steering}, enter each angle in \textbf{Steer Angle (deg)}
@@ -419,10 +419,18 @@ $-n\Delta\phi_0$ offsets there and leaves the zero ramp a boresight source needs
 
 Follow the procedure on the L18 Lab page in read mode. Bring the kit up as in
 the L17 Lab: the HB100 powered, $1\ \m$ out at boresight, then \textbf{Find HB100},
-then \textbf{Calibrate}. Load \textbf{1 Steering Angle}, set \textbf{Rx Gain
-(dB)} to 10, turn on \textbf{Show Peak Angle Marker}, press \textbf{Start}, and
-work on the \textbf{Rectangular} tab. Read each half-power beamwidth as the
-distance between the two angles where the trace is 3 dB below its own peak.
+then \textbf{Calibrate}. Open the \textbf{Lab Presets} section and load
+\textbf{1 Steering Angle}, set \textbf{Rx Gain (dB)} for an FFT peak of
+$-10 \pm 3$ dBFS as in the L17 Lab, turn on \textbf{Show Peak Angle Marker},
+press \textbf{Start}, and work on the \textbf{Rectangular} tab. Read each
+half-power beamwidth as the distance between the two angles where the trace is
+3 dB below its own peak. Facing the patches, E1 is on your right and E8 on your
+left, and $+\theta$ is toward E8.
+
+Take the angles and beamwidths on the $1\ \m$ arc. Take the Peak Array Gain
+column of Table A at $1.2\ \m$ (4 ft) or more, on the same three lines: at
+$1\ \m$ the scan-loss drop reads smaller than theory. If the room forces you
+closer, record the distance you used and say so in Part 3.
 
 \vspace{2pt}
 \begin{center}
@@ -439,9 +447,15 @@ source along the arc.
 \hline
 \textbf{Source on arc} & \textbf{Est. Angle} & \textbf{Difference} & \textbf{HPBW} & \textbf{Peak Array Gain} \\\hline\hline
 $0\mydeg$  & \kv{$0\mydeg \pm 2\mydeg$}  & \kv{within $\pm 2\mydeg$} & \kv{$13\mydeg \pm 1\mydeg$} & \kv{reference} \\\hline
-$30\mydeg$ & \kv{$30\mydeg \pm 2\mydeg$} & \kv{within $\pm 2\mydeg$} & \kv{$15\mydeg \pm 1\mydeg$} & \kv{$0.6$ to $1.5$ dB lower} \\\hline
-$45\mydeg$ & \kv{$45\mydeg \pm 2\mydeg$} & \kv{within $\pm 2\mydeg$} & \kv{$19\mydeg \pm 1.5\mydeg$} & \kv{$1.5$ to $2.5$ dB lower} \\\hline
+$30\mydeg$ & \kv{$30\mydeg \pm 2\mydeg$} & \kv{within $\pm 2\mydeg$} & \kv{$15\mydeg \pm 1\mydeg$} & \kv{$0.6$ to $0.9$ dB lower} \\\hline
+$45\mydeg$ & \kv{$45\mydeg \pm 2\mydeg$} & \kv{within $\pm 2\mydeg$} & \kv{$19\mydeg \pm 1.5\mydeg$} & \kv{$1$ to $2.3$ dB lower} \\\hline
 \end{tabular}
+\end{center}
+
+At $45\mydeg$, if Est. Angle jumps to about $-90\mydeg$, record the main lobe's angle read off the trace.
+
+\begin{center}
+Distance for the Peak Array Gain column = \ansbox[1.3in]{$1.2\ \m$ or more}
 \end{center}
 
 \begin{solution}
@@ -450,7 +464,12 @@ $\pm 2\mydeg$ of Question 3(e). The trace peaks at the source angle because the
 sweep's ramp matches the arrival ramp there. The peak level falls with the
 element pattern: $-0.6$ and $-1.5$ dB are the ideal-element bounds, and a
 patch element closer to $\cos^{1.3}\theta$ to $\cos^{1.5}\theta$ in power gives
-$-0.8$ to $-0.9$ dB at $30\mydeg$ and $-2.0$ to $-2.3$ dB at $45\mydeg$.
+$-0.8$ to $-0.9$ dB at $30\mydeg$ and $-2.0$ to $-2.3$ dB at $45\mydeg$. Those
+hold at $1.2\ \m$ or more, where the dry run read $-0.7$ dB at $30\mydeg$; at
+$1\ \m$ it read only $-0.2$ to $-0.4$ dB, and a cadet who had to work that close
+should report the smaller drop, not force agreement. The $45\mydeg$ row is
+limited by reflections at any distance: the dry run read $-1.0$ dB, less than
+even the ideal bound.
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -467,6 +486,8 @@ $30$ & \kv{$29.6\mydeg$, $\pm 1\mydeg$} & \kv{within $\pm 1\mydeg$} & \kv{$15\my
 $45$ & \kv{$45.7\mydeg$, $\pm 1\mydeg$} & \kv{within $\pm 1\mydeg$} & \kv{$19\mydeg \pm 1.5\mydeg$} & \kv{same as Table A, $0\mydeg$} \\\hline
 \end{tabular}
 \end{center}
+
+At $45$, if Est. Angle jumps to about $-90\mydeg$, record the main lobe's angle read off the trace.
 
 With Apply $30$ loaded, read the eight Phase Control boxes. The prediction row is
 your Question 2(a).
@@ -522,7 +543,8 @@ Part 1.
 
 	\part Compare the $30\mydeg$ rows of Tables A and B: Est. Angle, HPBW, and Peak
 	Array Gain. Explain why the beamwidths agree but only the physical run loses
-	peak level.
+	peak level. State the distance at which you took Table A's levels, and if it
+	was under $1.2\ \m$, say how that affects the comparison.
 	\begin{solution}[1.8in]
 	Both traces have the same shape because the array factor depends only on
 	$\sin\theta - \sin\theta_0$ (Lesson 18): moving the source to $30\mydeg$ and
@@ -532,7 +554,10 @@ Part 1.
 	$EF(\theta_{\text{src}})$. In the physical run the source sits $30\mydeg$ off
 	the elements' boresight and every point drops by the element roll-off,
 	about $0.6$ to $0.9$ dB. In the commanded run the source stays at boresight,
-	$EF$ stays at its peak, and the peak level matches the $0\mydeg$ row.
+	$EF$ stays at its peak, and the peak level matches the $0\mydeg$ row. At
+	$1.2\ \m$ or more the drop should land near that range (the dry run read
+	$-0.7$ dB); a level taken at $1\ \m$ comes out smaller, a few tenths of a dB,
+	and a good answer reports that rather than forcing agreement.
 	\end{solution}
 
 	\part Compare the Phase Control read-back with your prediction. Explain the

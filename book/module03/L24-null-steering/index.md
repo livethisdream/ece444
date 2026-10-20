@@ -29,10 +29,14 @@ Lesson 24 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
 ::::{frame} Learning Objectives
+:class: here-24
 
 <ol class="lo-list" style="--module: '3'; counter-reset: lo 8">
   <li>I can calculate null-steering weights and implement pattern nulls on the ADALM-PHASER.</li>
 </ol>
+
+```{include} ../../_snippets/m3-strip.md
+```
 
 :::{depth}
 Lesson 23 catalogued the three ways a steered pattern breaks on its own: grating lobes when the elements are too far apart, squint when the frequency moves off the design point, and quantization lobes when the phase shifter runs out of bits. Those were accidents, and the work was to avoid them. Today you break the pattern on purpose. You will place a deep null exactly where an interferer sits, keep the main beam pointed where it was, and lose a known amount of main-lobe gain doing it.
