@@ -16,6 +16,7 @@ execute:
 # each lesson's Practice section), not as HTML pages. The source .md are kept on
 # disk but excluded from the build so they don't render or appear in the nav.
 exclude_patterns:
+  - "_snippets/**"
   - "**/practice.md"
   - "**/practice-solutions.md"
 
