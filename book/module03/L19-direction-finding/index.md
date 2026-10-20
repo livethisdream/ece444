@@ -440,18 +440,18 @@ that depends on the angle between them.
 ::::
 
 ::::{frame} How the Crossing Angle Sets the Error
+:class: viz-frame
+
 :::{present}
-| Kits $4\ \text{m}$ out, $\sigma_\beta = 2^\circ$ | RMS fix error |
-| :-- | :-- |
-| 2 kits, $90^\circ$ crossing | $0.20\ \text{m}$ |
-| 2 kits, $30^\circ$ | $0.40\ \text{m}$ |
-| 2 kits, $15^\circ$ | $0.76\ \text{m}$ |
-| 3 kits over $120^\circ$ | $0.16\ \text{m}$ |
-:::
-:::{present}
-<img src="../../viz/img/L19-crossing.svg"
-     alt="Two bearing lines with their one-sigma strips crossing at 90 degrees, with a circular error ellipse, and at 30 degrees, with an ellipse stretched along the bisector"
-     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+<iframe src="../../viz/df-fix.html"
+        width="100%" height="464"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="A direction-finding fix: drag two to four kits around a keep-out circle with a hidden source, and watch the least-squares fix, its error ellipse, and each bearing's residual">
+</iframe>
+
+- A shallow crossing stretches the error region as $1/\sin\gamma$: $0.20\ \text{m}$ at $90^\circ$, $0.76\ \text{m}$ at $15^\circ$.
+- A reflection drags the fix, and only a third bearing shows it.
 :::
 
 Where the two strips overlap is where the source can be. When the lines cross
@@ -467,12 +467,42 @@ $$\sigma_\text{fix} = \frac{\sqrt{2}\ \delta_\perp}{\sin\gamma},$$
 so a $15^\circ$ crossing is almost four times worse than a $90^\circ$ one with
 the same bearings.
 
+| Kits $4\ \text{m}$ out, $\sigma_\beta = 2^\circ$ | RMS fix error |
+| :-- | :-- |
+| 2 kits, $90^\circ$ crossing | $0.20\ \text{m}$ |
+| 2 kits, $30^\circ$ | $0.40\ \text{m}$ |
+| 2 kits, $15^\circ$ | $0.76\ \text{m}$ |
+| 3 kits over $120^\circ$ | $0.16\ \text{m}$ |
+
 The numbers in the table come from the least-squares fix. Each bearing
 contributes $\hat{\mathbf n}\hat{\mathbf n}^{\mathsf T}/\delta_\perp^2$ to the
 information matrix, the inverse of that sum is the covariance of the fix, and
 the RMS error is the square root of its trace. A third kit helps less by adding
 a measurement than by guaranteeing that at least two of the three lines cross
 steeply: three kits spread over $120^\circ$ do better than the best pair.
+
+The widget is a room seen from above, with the keep-out circle and a source
+hidden somewhere inside it. Each kit draws its measured bearing, the true
+bearing plus an error drawn with the $\sigma_\beta$ you set, and a shaded
+wedge of $\pm\sigma_\beta$. The cross is the least-squares fix and the
+ellipse around it is its one-sigma error region. Drag the kits and watch the
+ellipse: it stays round while the crossing angle $\gamma$ is near $90^\circ$
+and stretches along the bisector as $\gamma$ closes. To reproduce a row of the
+table, tick **reveal**, set $\sigma_\beta$ to $2^\circ$, and drag the kits
+onto the $4\ \text{m}$ ring, where they snap at $5^\circ$ steps around the
+source. The RMS beside the fix error is the table's number. The fix error
+itself is one draw of the bearing errors; press **new bearings** a few times
+and it scatters about the RMS. With the source hidden, the crossing angles and
+the RMS come from the measured bearings, as they would in the room.
+
+Tick **reflection** to bend kit A's bearing by $10^\circ$, the size of error
+a reflection makes when it takes over the peak. With two kits the fix moves
+about $0.7\ \text{m}$ and both residuals stay at zero, because two lines
+always meet. With three, A and C both miss the fix by about twice their own
+$R_i\tan\sigma_\beta$ and turn red: the residuals show that a bearing is bad,
+but with three lines they rise and fall together and cannot say which. A
+fourth kit separates them, and only A's residual stands out. That is the check
+in "Residuals and Outliers" below.
 ::::
 
 ::::{frame} Choosing Where to Measure
