@@ -247,8 +247,8 @@ chose $1.69\ \ghz$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{The kit check.} Part B of the procedure: does the kit see
-the source, and does it follow the source when it moves? Load \textbf{1
-Steering Angle} and press \textbf{Start}, with the HB100 about $1\ \m$ out at
+the source, and does it follow the source when it moves? Open the \textbf{Lab Presets} section, load
+\textbf{1 Steering Angle}, and press \textbf{Start}, with the HB100 about $1\ \m$ out at
 boresight, then set \textbf{Rx Gain (dB)} so the FFT peak reads
 $-10 \pm 3$ dBFS. The level is the reference, not the gain: the gain that
 reaches it depends on your source and your distance.
@@ -282,7 +282,7 @@ distance = \ansbox[1.1in]{about $1\ \m$}
 	\part The Rectangular tab, with \textbf{Show Peak Angle Marker} on. For the
 	second row, carry the HB100 to about $30\mydeg$ on one side, at the same
 	distance from the array and aimed at it, and circle the end of the array it
-	moved toward.
+	moved toward. Facing the patches, E1 is the element on your right.
 
 	\begin{center}
 	\renewcommand{\arraystretch}{1.25}
@@ -290,7 +290,7 @@ distance = \ansbox[1.1in]{about $1\ \m$}
 	\hline
 	\textbf{Source} & \textbf{Est. Angle} & \textbf{Peak Array Gain (dB)} \\\hline\hline
 	At boresight & \kv{$0\mydeg \pm 2\mydeg$} & \kv{your own (reference)} \\\hline
-	About $30\mydeg$ toward \quad E1 \quad E8 & \kv{about $30\mydeg$ in size} & \kv{$0.5$ to $2$ dB below the first row} \\\hline
+	About $30\mydeg$ toward \quad E1 \quad E8 & \kv{about $30\mydeg$ in size} & \kv{a few tenths of a dB to $1$ dB below the first row} \\\hline
 	Back at boresight & \kv{within $2\mydeg$ of the first row} & \kv{within about $0.5$ dB of the first row} \\\hline
 	\end{tabular}
 	\end{center}
@@ -300,8 +300,12 @@ distance = \ansbox[1.1in]{about $1\ \m$}
 	source moves and comes back when it returns. A source placed by eye sits
 	within a few degrees of $30\mydeg$, so anything from about $25\mydeg$ to
 	$35\mydeg$ is a working kit. The sign of the second row records which side
-	the GUI calls positive; the L18 Lab uses it. The peak drops a little off
-	boresight because each patch receives less from the side.
+	the GUI calls positive; the L18 Lab uses it. The L18 Lab puts $+\theta$ on
+	the E8 end, on your left as you face the patches, so a source moved toward
+	E1 reads near $-30\mydeg$. The peak drops a little off boresight because
+	each patch receives less from the side. At $1\ \m$ that drop reads only a few
+	tenths of a dB, less than the $0.6$ to $0.9$ dB theory predicts, which is why
+	the L18 Lab takes its scan-loss levels at $1.2\ \m$ or more.
 	\end{solution}
 
 \end{parts}

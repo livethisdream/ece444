@@ -205,7 +205,9 @@ Power only through the PHASER's USB-C, never the Pi's.
 Mount the board with its patch face vertical
 and its row of patches horizontal: the array steers in the plane of that row,
 so a board mounted on its side steers in elevation, while every later lab
-sweeps the beam in azimuth.
+sweeps the beam in azimuth. Looking at the front of the array, the patch face,
+E1 is the element at the right end of the row and E8 the one at the left end.
+Step 6 of Part B asks which of the two the source moved toward.
 
 :::{depth}
 The PHASER board supplies the Pi through its own connector, and powering the
@@ -435,6 +437,10 @@ lessons; today only a few matter.
 | Plot Options | Show Peak Gain Marker, Show Peak Angle Marker, Show Beam Squint Info, Show Logs Tab, Show Monopulse Delta Beam, Show Monopulse Error Function; X Min, X Max, Y Min, Y Max |
 | Lab Presets | buttons 1 Steering Angle through 8 Tracking, one per workshop lab |
 
+Each sidebar section opens and closes when you click its header, and only
+**Configuration** starts open. A closed section hides its controls, so open
+**Lab Presets** before you look for a preset button.
+
 The plot tabs are **Rectangular**, **Polar**, **FFT**, and **Tracking**, plus
 **Logs** when **Show Logs Tab** is on. **Start** runs the beam sweep, and
 nothing plots until you press it. Today you work in the FFT tab, which plots
@@ -476,6 +482,14 @@ $$\frac{2D^2}{\lambda} = \frac{2\ (0.112\ \text{m})^2}{0.0285\ \text{m}} = 0.88\
 
 so moving the source closer than about $0.9\ \text{m}$ raises the signal but
 curves the arriving wavefront enough to distort the patterns of later labs.
+
+One meter clears that boundary, so the angles and beamwidths measured there
+are the far-field values. It clears it by only 12%, though, which is marginal
+for comparing peak levels between two source positions, a difference of under
+a dB. On the instructor's kit, the drop with the source moved to $30^\circ$
+read only 0.2 to 0.4 dB at $1\ \text{m}$ and 0.7 dB at $1.2\ \text{m}$,
+against a predicted 0.6 to 0.9 dB, so the L18 Lab takes its scan-loss levels
+at $1.2\ \text{m}$ (4 ft) or more.
 :::
 
 **Find HB100** sweeps the band for the source and records its frequency; expect
@@ -568,11 +582,11 @@ the next connection asks about the new one.
 
 ::::{frame} Part B: First Measurements
 :::{present}
-1. Press **1 Steering Angle** (**Lab Presets**), then **Start**.
-2. Set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$ dBFS; record it.
+1. Open the **Lab Presets** section, press **1 Steering Angle**, then **Start**.
+2. Set **Rx Gain** for a $-10 \pm 3$ dBFS FFT peak; record it.
 3. Record the peak's position, level, and floor.
 
-Expect at least 20 dB between peak and floor.
+Expect 20 dB or more above the floor.
 :::
 
 Part B runs on the kit you brought up in Part A and records the observations
@@ -641,17 +655,22 @@ each step, so the trace peaks where the beam points at the source.
 
 ::::{frame} The Sweep Follows the Source
 :::{present}
-6. Carry the HB100 to about $30^\circ$ on one side, same distance, aimed at the array. Record both again, and which end, E1 or E8, it moved toward.
-7. Return it to boresight and record both once more.
+6. Carry the HB100 $30^\circ$ to one side, same distance, facing the array. Record both, and which end, E1 or E8, it moved toward. Facing the patches, E1 is on your right.
+7. Return it to boresight; record both again.
 :::
 
 The source sits at $30^\circ$ when it is $0.5\ \text{m}$ to one side of the
 array's centerline and still $1\ \text{m}$ from the array; keep the distance
 you used at boresight, whatever it is, so the level change is the pattern's. The peak should
-move with it, to about $30^\circ$, and drop by a dB or so, because each patch
-receives less from the side. Returned to boresight, the trace comes back to
-where it started. The sign of the moved reading records which side the GUI
-calls positive, which the L18 Lab uses.
+move with it, to about $30^\circ$, and drop slightly, because each patch
+receives less from the side. At $1\ \text{m}$ that drop reads only a few tenths
+of a dB, less than theory predicts; the L18 Lab measures it at $1.2\ \text{m}$.
+Returned to boresight, the trace comes back to where it started.
+
+The sign of the moved reading records which side the GUI calls positive, which
+the L18 Lab uses. Looking at the patch face, E1 is at the right end of the row
+and E8 at the left. The L18 Lab puts $+\theta$ on the E8 end, to your left as
+you face the patches, so a source moved toward E1 should read near $-30^\circ$.
 
 :::{depth}
 On a working kit the sweep's floor sits about 23 dB below the uniform-taper
