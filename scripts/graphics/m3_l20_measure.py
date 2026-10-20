@@ -5,10 +5,12 @@
                            marked -- the three numbers the lab asks for
   L20-ideal-vs-measured  : ideal N=8 array factor under the same sweep as the
                            phase-step sampled, noise-floored trace
-  L20-aperture-halving   : 8 / 4 / 2 active elements on one axis, showing the
-                           beamwidth doubling and the ~6 dB peak step
+  L20-aperture-halving   : ideal 8 / 4 / 2 element array factors at the dry
+                           run's 10.408 GHz, with the dry run's measured peaks:
+                           the beam doubles, the peak steps 6.0 dB ideally and
+                           5.1 and 4.8 dB measured (viz/img only)
 
-Physics matches book/extras/viz/af-measurement-compare.html exactly: same
+The first two match book/extras/viz/af-measurement-compare.html exactly: same
 element sum, same sweep grid, same -23 dBc floor, same seeded noise
 realization (LCG seed 6618, 20 power looks per step). Deck figures carry
 no equations -- the math lives in the slide text.
@@ -275,44 +277,68 @@ def ideal_vs_measured() -> None:
     finalize(fig, "L20-ideal-vs-measured", also_img=True)
 
 
+# The dry run (phaser-00, 2026-10-19, review/M3_LAB_DRYRUN.md): Find HB100 read
+# 10.408 GHz, and the three peaks read -5.25, -10.4 and -15.1 dBFS, steps of
+# 5.1 and 4.8 dB against the voltage sum's 6.0 and 6.0. The cause of the
+# shortfall is not known, so this figure shows the ideal array factor and the
+# measured peaks side by side and claims nothing about why they differ.
+DRY_F = 10.408e9
+DRY_STEPS = (5.1, 4.8)             # measured, 8 -> 4 and 4 -> 2
+
+
 def aperture_halving() -> None:
-    """Halve the aperture twice: beam doubles, peak steps down about 6 dB."""
+    """Ideal 8 / 4 / 2 element array factors at the dry run's frequency, with
+    the dry run's measured peak levels: the beam doubles, the peak steps 6.0 dB
+    ideally and about 5 dB measured.
+
+    Written to viz/img only. The deck is frozen and keeps its own copy, the
+    earlier simulated version, under slides/fig.
+    """
+    kd = 2 * math.pi * DEL / (3.00e8 / DRY_F)
+    t = np.arange(-90.0, 90.0 + 1e-9, 0.05)
+    s = np.sin(np.deg2rad(t))
+
+    def af_db(w):
+        re = sum(np.cos(kd * (n - 3.5) * s) for n in range(NEL) if w[n])
+        im = sum(np.sin(kd * (n - 3.5) * s) for n in range(NEL) if w[n])
+        return 10 * np.log10(np.maximum((re / NEL) ** 2 + (im / NEL) ** 2, 1e-9))
+
     fig, ax = plt.subplots(figsize=(7.4, 4.0))
     frame(ax)
-    ax.axhline(FLOOR_DB, color=AMBER, lw=1.1, ls=(0, (4, 4)))
-    ax.text(-86, FLOOR_DB - 1.4, "noise floor", color=AMBER, fontsize=11, va="top")
-
-    styles = {8: (NAVY, 2.4, "8 elements"), 4: (BLUE, 2.1, "4 elements (Rx3-Rx6)"),
-              2: (GREEN, 2.0, "2 elements (Rx4, Rx5)")}
+    styles = {8: (NAVY, 2.4, "8 elements (E1–E8)"), 4: (BLUE, 2.1, "4 elements (E3–E6)"),
+              2: (GREEN, 2.0, "2 elements (E4, E5)")}
     for n in (8, 4, 2):
         color, lw, lab = styles[n]
-        t, db = meas_db(PRESETS[n])
-        m = read_metrics(t, db)
-        ax.plot(t, np.clip(db, YMIN, None), color=color, lw=lw, marker="o", ms=2.6,
-                mfc=color, mec=color, label=lab)
-        ax.plot([m["peak_ang"]], [m["pk"]], marker="_", ms=16, mew=2.4, color=color)
+        ax.plot(t, np.clip(af_db(PRESETS[n]), YMIN, None), color=color, lw=lw, label=lab)
 
-    # peak-step annotation: 8 -> 4 -> 2
-    peaks = []
-    for n in (8, 4, 2):
-        t, db = meas_db(PRESETS[n])
-        peaks.append(read_metrics(t, db)["pk"])
-    for pk_, xr in zip(peaks, (74, 74, 86)):
-        ax.plot([0, xr], [pk_, pk_], color="#9fb1c4", lw=0.9, ls=(0, (3, 3)), zorder=1)
-    ax.annotate("", xy=(74, peaks[1]), xytext=(74, peaks[0]),
-                arrowprops=dict(arrowstyle="<->", color=RED, lw=1.5))
-    ax.text(71, (peaks[0] + peaks[1]) / 2, f"{peaks[0] - peaks[1]:.1f} dB", color=RED,
-            fontsize=12, fontweight="bold", va="center", ha="right")
-    ax.annotate("", xy=(86, peaks[2]), xytext=(86, peaks[1]),
-                arrowprops=dict(arrowstyle="<->", color=RED, lw=1.5))
-    ax.text(83, (peaks[1] + peaks[2]) / 2, f"{peaks[1] - peaks[2]:.1f} dB", color=RED,
-            fontsize=12, fontweight="bold", va="center", ha="right")
+    ideal = [20 * math.log10(n / 8) for n in (8, 4, 2)]
+    meas = [0.0, -DRY_STEPS[0], -DRY_STEPS[0] - DRY_STEPS[1]]
+    ax.plot([0, 0, 0], meas, ls="none", marker="o", ms=8, mfc="white", mec=RED, mew=2.0,
+            zorder=5, label="measured peak")
 
-    handles = [plt.Line2D([], [], color=styles[n][0], lw=styles[n][1], label=styles[n][2])
-               for n in (8, 4, 2)]
-    ax.legend(handles=handles, loc="lower left", fontsize=11.5, handlelength=1.8)
+    def ladder(x, levels, color, head):
+        for y in levels:
+            ax.plot([x - 3, x + 3], [y, y], color=color, lw=1.4)
+        for a, b in zip(levels[:-1], levels[1:]):
+            ax.annotate("", xy=(x, b), xytext=(x, a),
+                        arrowprops=dict(arrowstyle="<->", color=color, lw=1.4,
+                                        shrinkA=0, shrinkB=0))
+            ax.text(x - 4.5, (a + b) / 2, f"{a - b:.1f} dB", color=color, fontsize=11.5,
+                    fontweight="bold", va="center", ha="right")
+        ax.text(x, 1.2, head, color=color, fontsize=11.5, fontweight="bold",
+                ha="center", va="bottom")
 
-    finalize(fig, "L20-aperture-halving", also_img=True)
+    ladder(60, ideal, GRAY, "ideal")
+    ladder(84, meas, RED, "measured")
+    ax.legend(loc="upper left", fontsize=11, handlelength=1.8, borderaxespad=0.3)
+
+    buf = io.StringIO()
+    fig.savefig(buf, format="svg", transparent=True, bbox_inches="tight", pad_inches=0.06)
+    plt.close(fig)
+    out = buf.getvalue()
+    out = apply_font_stack(out[out.index("<svg"):])
+    (IMG / "L20-aperture-halving.svg").write_text(out, encoding="utf-8")
+    print(f"wrote {IMG / 'L20-aperture-halving.svg'}")
 
 
 if __name__ == "__main__":
@@ -323,7 +349,8 @@ if __name__ == "__main__":
     read_the_trace()
     ideal_vs_measured()
     aperture_halving()
-    # print what the figures assert, so the prose can be checked against them
+    # print what the first two figures assert (the widget's model), so the
+    # prose can be checked against them
     for n in (8, 4, 2):
         t, db = meas_db(PRESETS[n])
         m = read_metrics(t, db)

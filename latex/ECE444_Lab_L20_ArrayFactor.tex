@@ -60,6 +60,8 @@
 % the KEY. Fixed-width centered columns keep the blank cells writable.
 \newcolumntype{K}[1]{>{\centering\arraybackslash}p{#1}}
 \newcommand{\kv}[1]{\ifkey{\color{red}#1}\fi\rule[-0.10in]{0pt}{0.34in}}
+% A fixed (printed) cell, on the same baseline as the fillable ones.
+\newcommand{\fv}[1]{#1\rule[-0.10in]{0pt}{0.34in}}
 
 % print the answers if this is the key
 \ifkey
@@ -109,89 +111,161 @@ LESSON \labLesson\ LAB - Array Factor \\
 
 This sheet is the turn-in document for the L20 Lab. Fill the calculated
 columns before you sweep and the measured columns at the bench, so the
-prediction is on paper before the trace is on the screen. The lab is
-individual: one sheet per cadet, from your own kit.
+prediction is on paper before the trace is on the screen. Compute every
+prediction at your own HB100's Signal Freq: use the one your kit reported in the
+L18 Lab, and recompute if \textbf{Find HB100} reports a frequency more than
+50 MHz from it at the bench. The lab is individual: one sheet per cadet, from
+your own kit.
 
 \fullwidth{\textbf{Learning Objective 3.2: } I can derive the array factor for an arbitrary linear
 array and apply pattern multiplication.}
 
+The array is the PHASER's: $N = 8$ elements, E1 to E8, on a $d = 14$ mm pitch.
+Use $c = 3.00\times 10^{8}\ \m/\text{s}$.
+
 \begin{questions}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The measurement table.} One row per aperture, at
-$10.3\ \ghz$ with $d = 14$ mm. Report each trace's peak level, and the step from the
-eight-element peak beside it, and report each sidelobe level relative to that trace's own
-peak.
+\question \textbf{Your kit's settings.} Record the Signal Freq that \textbf{Find
+HB100} reports and the Rx Gain (dB) that puts the FFT peak at $-10 \pm 3$ dBFS.
+Leave the gain there for all three sweeps. Then find the wavelength, the
+electrical spacing, and $kd$ at your Signal Freq.
+
+\begin{center}
+Signal Freq = \ansbox[1.1in]{$10.3\ \ghz$} \hspace{0.25in}
+Rx Gain = \ansbox[1.1in]{as set} \\[10pt]
+$\lambda$ = \ansbox[1.1in]{$29.1$ mm} \hspace{0.25in}
+$d/\lambda$ = \ansbox[1.1in]{$0.481$} \hspace{0.25in}
+$kd$ = \ansbox[1.1in]{$173.2\mydeg$}
+\end{center}
+
+\begin{solution}
+This key works one nominal frequency, $10.3\ \ghz$, the one the L20 Lab page
+uses for its worked example. Accept each cadet's own Signal Freq, anywhere in
+the HB100's $10.1$ to $10.7\ \ghz$ range, and check the arithmetic from it.
+\eq{ \lambda &= \frac{c}{f} = \frac{3.00\times 10^{8}}{10.3\times 10^{9}} = 0.0291\ \m = 29.1\ \text{mm} \\
+     \frac{d}{\lambda} &= \frac{14}{29.1} = 0.481 \\
+     kd &= 360\mydeg\ \frac{d}{\lambda} = 173.2\mydeg }
+The dry-run kit (phaser-00, 2026-10-19) read $10.408\ \ghz$, where
+$\lambda = 28.82$ mm, $d/\lambda = 0.486$, and $kd = 174.9\mydeg$. Its L20 sweeps
+ran at Rx Gain $1$ dB with the source about $1.2$ m out; $10$ dB drove the peak
+over full scale at $1$ m.
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\question \textbf{The measurement table.} One row per aperture. Fill the
+calculated columns at your Signal Freq. Report each trace's peak level and its
+step from the eight-element peak, and report each sidelobe level relative to that
+trace's own peak.
 
 \begin{center}
 \small
-\setlength{\tabcolsep}{4pt}
+\setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{| l | K{0.72in} | K{0.62in} | K{0.62in} | K{0.85in} | K{0.62in} | K{0.85in} |}
+\begin{tabular}{| l | K{0.56in} | K{0.62in} | K{0.56in} | K{0.56in} | K{0.62in} | K{0.56in} | K{0.86in} |}
 \hline
-\textbf{Active elements} & \textbf{Peak (dBFS)} & \textbf{HPBW meas} & \textbf{HPBW calc} & \textbf{FNBW meas} & \textbf{FNBW calc} & \textbf{First SLL} \\\hline\hline
-8 (Rx1-Rx8) & \kv{reference} & \kv{$13.1\mydeg$} & \kv{$13\mydeg$} & \kv{$28.1\mydeg$} & \kv{$30.1\mydeg$} & \kv{$-11$ to $-13$ dBc} \\\hline
-4 (Rx3-Rx6) & \kv{$-6.0$ dB rel.} & \kv{$29\mydeg$} & \kv{$27\mydeg$} & \kv{$60$ to $62\mydeg$} & \kv{$62\mydeg$} & \kv{$-10$ to $-12$ dBc} \\\hline
-2 (Rx4, Rx5) & \kv{$-11.5$ dB rel.} & \kv{$65\mydeg$} & \kv{$62\mydeg$} & \kv{no null in the scan} & \kv{$180\mydeg$} & \kv{none} \\\hline
+\textbf{Active} & \textbf{Peak (dBFS)} & \textbf{Step from 8 (dB)} & \textbf{HPBW meas} & \textbf{HPBW calc} & \textbf{FNBW meas} & \textbf{FNBW calc} & \textbf{First SLL (dBc)} \\\hline\hline
+8 (E1--E8) & \kv{$-5.25$} & \fv{reference} & \kv{$13.4\mydeg$} & \kv{$13.3\mydeg$} & \kv{$29.8\mydeg$} & \kv{$30.1\mydeg$} & \kv{$-12.5$ to $-14.0$} \\\hline
+4 (E3--E6) & \kv{$-10.4$} & \kv{$-5.1$} & \kv{$27.4\mydeg$} & \kv{$27.4\mydeg$} & \kv{$\approx 67\mydeg$} & \kv{$62.6\mydeg$} & \kv{$-12$ to $-14$} \\\hline
+2 (E4, E5) & \kv{$-15.1$} & \kv{$-9.9$} & \kv{$\approx 56\mydeg$} & \kv{$62.6\mydeg$} & \kv{no null} & \fv{$180\mydeg$} & \fv{none} \\\hline
 \end{tabular}
 \end{center}
 
 \begin{solution}
-The calculated column uses $\theta_{\text{HP}} \approx 0.886\lambda/(Nd)$ and
-$\text{FNBW} = 2\arcsin(\lambda/Nd)$ with $\lambda = 29.1$ mm and $d = 14$ mm.
-The two-element entries are the exceptions: the $62\mydeg$ comes from solving
-$\cos(\psi/2) = 1/\sqrt{2}$ directly, and the $180\mydeg$ is a convention,
-because a null there needs $\sin\theta = \lambda/2d = 1.04$ and no real angle
-satisfies that.
+The calculated columns are at the nominal $10.3\ \ghz$, from the exact array
+factor; the $0.886\lambda/(Nd)$ rule gives $13.2\mydeg$ and $26.4\mydeg$ for the
+first two rows, and either is acceptable there. The first-null column uses
+$\text{FNBW} = 2\arcsin(\lambda/Nd)$. The two-element entries are the
+exceptions: the $62.6\mydeg$ comes from solving $\cos(\psi/2) = 1/\sqrt{2}$
+directly, and the $180\mydeg$ is a convention, because a null there needs
+$\sin\theta = \lambda/2d = 1.04$ and no real angle satisfies that. Accept the
+cadet's own frequency: at $10.408\ \ghz$ the same columns read $13.2\mydeg$,
+$27.1\mydeg$, $61.9\mydeg$ and $29.8\mydeg$, $62.0\mydeg$.
 
-Three measured deviations are expected, and each has a number attached. The
-eight-element FNBW reads $28.1\mydeg$ rather than $30.1\mydeg$ because the true
-null at $15.1\mydeg$ falls between grid samples and the nearest sample sits at
-$14.06\mydeg$. The first step in peak level is very close to the $6.0$ dB the
-voltage sum predicts, and the second is nearer $5.5$ dB, because with only two
-elements on the peak sits about 11 dB above the floor and the reported power
-includes the noise, which lifts the reading by roughly $0.3$ dB. The
-four-element sidelobe reads high for the same reason, since the floor is then
-only about 17 dB below that trace's peak. Sidelobe entries are reported as a
-range and not as a single number at this dynamic range. In simulation the three
-sweeps read $13.1\mydeg$, $29.1\mydeg$, and $65.4\mydeg$.
+The measured cells are the dry run's, on phaser-00 at $10.408\ \ghz$, Rx Gain
+$1$ dB, source about $1.2$ m out:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{| l | c | c | c |}
+\hline
+\textbf{Active} & \textbf{HPBW meas / pred} & \textbf{FNBW meas / pred} & \textbf{Peak step meas / ideal} \\\hline
+8 & $13.4\mydeg$ / $13.2\mydeg$ & $29.8\mydeg$ / $29.8\mydeg$ & reference \\\hline
+4 & $27.4\mydeg$ / $27.1\mydeg$ & $\approx 67\mydeg$ / $62.0\mydeg$ & $-5.1$ / $-6.0$ dB \\\hline
+2 & $\approx 56\mydeg$ ($52$--$58\mydeg$) / $61.9\mydeg$ & none / $180\mydeg$ by convention & $-9.9$ / $-12.0$ dB \\\hline
+\end{tabular}
+\end{center}
+
+\textbf{What to grade.} The beamwidths: they should double at each halving. Look
+for an eight- and a four-element HPBW within about $1\mydeg$ of the cadet's own
+calculated values. The two-element HPBW reads narrow and scattered (the dry run
+read $52$ to $58\mydeg$ against $61.9\mydeg$), so accept anything within about
+$6\mydeg$ below the calculated value and give credit for a reported spread.
+The four-element FNBW reads wide when one null fills to the floor, about
+$-23$ dBc; the dry run read about $67\mydeg$. Sidelobes are a range, not a single
+number.
+
+Do not grade the peak steps against $6$ dB. The bench reads about $5 \pm 1$ dB per
+halving (the dry run read $5.1$ and $4.8$ dB) and the cause is not yet known.
+Absolute dBFS values depend on the Rx Gain the cadet set and are not graded. In
+simulation the three sweeps read $13.1\mydeg$, $29.1\mydeg$, and $65.4\mydeg$ at
+$10.525\ \ghz$, and the peak steps sit at the ideal $6.0$ dB.
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \question \textbf{Written answer 1.} Explain why the first-null beamwidth of the
 two-element array is quoted as $180\mydeg$ rather than measured. Name the
 condition on $\lambda/2d$ that decides whether a null exists in visible space,
-and evaluate it for $d = 14$ mm at $10.3\ \ghz$.
+and evaluate it for $d = 14$ mm at your Signal Freq.
 
 \begin{solutionorlines}[2.6in]
 For two elements the array factor is $\cos(\psi/2)$ with $\psi = kd\sin\theta$,
 so the first null needs $\psi = \pi$, which is $\sin\theta = \lambda/2d$. A null
 exists in visible space only when $\lambda/2d \le 1$, that is when
-$d \ge \lambda/2$. At $10.3\ \ghz$ the wavelength is $29.1$ mm, so
+$d \ge \lambda/2$. At the nominal $10.3\ \ghz$ the wavelength is $29.1$ mm, so
 \eq{ \frac{\lambda}{2d} = \frac{29.1}{2(14)} = \frac{29.1}{28} = 1.04 > 1 }
 and no real angle satisfies the condition. The null exists in the mathematics
 but falls outside the range of angles the array can see, so the pattern has no
 null anywhere in the scan and the beamwidth between first nulls is quoted as the
-full $180\mydeg$ of the scan range.
+full $180\mydeg$ of the scan range. The condition holds at every frequency below
+$c/2d = 10.71\ \ghz$, so every HB100 gives the same answer: $\lambda/2d = 1.03$
+at $10.408\ \ghz$ and $1.02$ at $10.525\ \ghz$.
 \end{solutionorlines}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{Written answer 2.} The gain of each patch element is the same
-whether the other seven elements are on or off, and the amplifier behind each
-element is unchanged. Explain why the peak of the sweep nonetheless drops by
-about 6 dB every time you halve the number of active elements.
+\question \textbf{Written answer 2.} At boresight the element signals add in
+voltage, which predicts a fixed peak step every time you halve the number of
+active elements. State the predicted step at four and at two elements, and
+compare your two measured steps with it. Leakage through the elements set to 0
+and receiver compression were tested on the dry-run kit and ruled out as the main
+cause of any shortfall. Propose one other possible cause, and describe a
+measurement on your kit that would test it.
 
-\begin{solutionorlines}[2.4in]
-At boresight the element signals arrive in phase, so the beamformer adds them as
-voltages rather than as powers. Eight equal in-phase signals give eight times the
-voltage of one, four give four times, and the plotted peak follows
+\begin{solutionorlines}[2.8in]
+Eight equal in-phase signals give eight times the voltage of one, four give four
+times, and the plotted peak follows
 \eq{ 20\mylog{\frac{N_{\text{active}}}{8}} = -6.0 \text{ dB at } N = 4,
 \qquad -12.0 \text{ dB at } N = 2 }
-Nothing about the individual element changed. What changed is how many copies of
-the same signal are being summed, and the summed voltage halves each time the
-active count halves. The measured second step comes out nearer $5.5$ dB, because
-by then the peak is only about 11 dB above the noise floor and the reported power
-is the sum of signal power and noise power.
+so the ideal step is $6.0$ dB per halving. The dry-run kit read $5.1$ and
+$4.8$ dB; expect cadets to report about $5 \pm 1$ dB per halving.
+
+The cause is not yet known, so grade the proposal, not a match to an answer.
+Give credit for any cause that the cadet ties to a measurement that could
+confirm or rule it out. For reference, the dry run ruled out leakage (with all
+eight gains at 0 the peak fell $33.5$ dB below the full array, enough for at most
+$0.5$ dB of the shortfall) and compression (lowering every gain from 100 to 50
+made the shortfall grow from $2.2$ to $3.4$ dB, where compression would have
+shrunk it). Two candidates are still open, and either is a good answer:
+\begin{itemize}
+	\item The single-element and small-aperture readings read high. Peak Array
+	Gain takes the highest of 162 noisy samples, and a nearly flat trace has many
+	samples near its top. Test: compare the median of one element's sweep with its
+	maximum.
+	\item Channel phase or gain shifts with the gain setting, so the signals stop
+	adding fully in phase away from the setting used at calibration. Test: measure
+	each channel's phase at gains 100 and 50.
+\end{itemize}
 \end{solutionorlines}
 
 \end{questions}

@@ -105,7 +105,7 @@ frequency $10.3\ \ghz$ do not change, so $\lambda = 29.1\ \text{mm}$ throughout.
 \begin{parts}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Rx1, Rx2, Rx7 and Rx8 are set to zero, leaving Rx3 through Rx6
+		\part E1, E2, E7, and E8 are set to zero, leaving E3 through E6
 		active --- four adjacent elements. Predict the half-power beamwidth from
 		$\theta_{\text{HP}} \approx 0.886\lambda/(Nd)$.
 		\begin{solution}[1.2in]
@@ -121,7 +121,7 @@ frequency $10.3\ \ghz$ do not change, so $\lambda = 29.1\ \text{mm}$ throughout.
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Now only Rx3, Rx4 and Rx5 are left on --- three adjacent elements.
+		\part Now only E3, E4, and E5 are left on --- three adjacent elements.
 		Predict the half-power beamwidth and the first-null beamwidth.
 		\begin{solution}[1.4in]
 		Three adjacent elements span $Nd = 3(14) = 42\ \text{mm}$.
@@ -146,6 +146,8 @@ frequency $10.3\ \ghz$ do not change, so $\lambda = 29.1\ \text{mm}$ throughout.
 		At boresight the element signals add in voltage, so the peak field is
 		proportional to the number of active elements.
 		\eq{ \Delta = 20\mylog{\frac{3}{8}} = 20\mylog{0.375} = -8.5\ \db }
+		This is the ideal voltage sum. In the L20 Lab the bench read about
+		$5$ dB per halving rather than $6$, for reasons not yet known.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -230,7 +232,7 @@ sweep step is $2.8125\mydeg$.
 
 \newpage
 
-\question \textbf{The two-element case.} With only Rx4 and Rx5 active the array
+\question \textbf{The two-element case.} With only E4 and E5 active the array
 has two elements at $d = 14\ \text{mm}$, and at $10.3\ \ghz$ the array factor is
 $AF = \cosp{\psi/2}$ with $\psi = kd\sinp{\theta}$.
 
@@ -286,23 +288,26 @@ $AF = \cosp{\psi/2}$ with $\psi = kd\sinp{\theta}$.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part How far below its own peak does this two-element pattern fall at
-		$\theta = 90\mydeg$? Compare that with the $23$ dB of dynamic range the
-		sweep has above the noise floor at eight elements, and say what the trace
-		will look like near the edges of the scan.
-		\begin{solution}[1.5in]
+		$\theta = 90\mydeg$? On one kit whose HB100 ran at $10.408\ \ghz$, the
+		two-element trace fell about $27$ dB from its peak toward the edges of the
+		scan. Repeat the calculation at that frequency and say what the
+		comparison tells you about the edges of that trace.
+		\begin{solution}[1.6in]
 		At $\theta = 90\mydeg$, $\sinp{\theta} = 1$ and
 		$\psi = 2\pi(14)/29.1 = 3.023$ rad, so
 		\eq{ \vert AF \vert &= \cosp{1.511} = 0.0597 \\ 20\mylog{0.0597} &= -24.5\ \db }
-		The two-element peak is itself $12$ dB below the eight-element peak, so
-		it clears the floor by only about $11$ dB. The pattern needs
-		$24.5$ dB of range to reach endfire and the measurement has $11$ dB,
-		so the trace flattens into the noise well before $\pm 90\mydeg$ and the
-		outer part of the roll-off is not visible.
+		At $10.408\ \ghz$, $\lambda = 28.82$ mm and $\psi = 2\pi(14)/28.82 = 3.052$ rad, so
+		\eq{ 20\mylog{\cosp{1.526}} = 20\mylog{0.0446} = -27.0\ \db }
+		The kit's $27$ dB fall matches the array factor's own roll-off toward
+		endfire, so the edges of that trace follow the pattern rather than a
+		floor.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
 		drop at $90\mydeg$ = \ansbox[1.3in]{$-24.5\ \db$}
+		\\[10pt]
+		at $10.408\ \ghz$ = \ansbox[1.0in]{$-27.0\ \db$}
 	\end{minipage}
 
 \end{parts}
@@ -336,23 +341,22 @@ controls.
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part What does this cost in peak received level compared with the full
-		eight-element array, and how much dynamic range is left above the noise
-		floor?
+		\part By how many dB does the voltage sum put this aperture's peak below
+		the full eight-element peak? Can the sweep still read the first sidelobe,
+		if the nulls fill to about $-23$ dBc of the trace's own peak?
 		\begin{solution}[1.3in]
 		\eq{ \Delta = 20\mylog{\frac{5}{8}} = 20\mylog{0.625} = -4.1\ \db }
-		The floor does not move, so the range above it drops from about $23$ dB
-		to
-		\eq{ 23 - 4.1 = 18.9\ \db }
-		The first sidelobe of a five-element uniform array is near $-12$ dB,
-		which still clears the floor comfortably.
+		This is the ideal step; in the L20 Lab the bench read about $5$ dB per
+		halving rather than $6$, for reasons not yet known. The first sidelobe of
+		a five-element uniform array is at $-12.0$ dB, about $11$ dB above
+		nulls that fill to $-23$ dBc, so the sweep can still read it.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
 		$\Delta$ = \ansbox[1.3in]{$-4.1\ \db$}
 		\\[10pt]
-		range = \ansbox[1.3in]{$18.9\ \db$}
+		SLL = \ansbox[1.3in]{$-12.0\ \db$}
 	\end{minipage}
 
 	\part A classmate suggests instead applying a Hann taper to all eight
