@@ -248,8 +248,15 @@ chose $1.69\ \ghz$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{The kit check.} Part B of the procedure: does the kit see
 the source, and does it follow the source when it moves? Load \textbf{1
-Steering Angle}, set \textbf{Rx Gain (dB)} to 10, and press \textbf{Start},
-with the HB100 $1\ \m$ out at boresight.
+Steering Angle} and press \textbf{Start}, with the HB100 about $1\ \m$ out at
+boresight, then set \textbf{Rx Gain (dB)} so the FFT peak reads
+$-10 \pm 3$ dBFS. The level is the reference, not the gain: the gain that
+reaches it depends on your source and your distance.
+
+\begin{center}
+Rx Gain used = \ansbox[1.1in]{your own} \qquad
+distance = \ansbox[1.1in]{about $1\ \m$}
+\end{center}
 
 \begin{parts}
 
@@ -260,19 +267,21 @@ with the HB100 $1\ \m$ out at boresight.
 	\begin{tabular}{| K{1.4in} | K{1.1in} | K{1.1in} | K{1.3in} |}
 	\hline
 	\textbf{Peak position (MHz)} & \textbf{Peak (dBFS)} & \textbf{Floor (dBFS)} & \textbf{Separation (dB)} \\\hline\hline
-	\kv{near $0$, within $\pm 1$} & \kv{your own} & \kv{your own} & \kv{$\ge 20$} \\\hline
+	\kv{near $0$, within $\pm 1$} & \kv{$-10 \pm 3$} & \kv{your own} & \kv{$\ge 20$} \\\hline
 	\end{tabular}
 	\end{center}
 
 	\begin{solution}
 	With Signal Freq set by \textbf{Find HB100}, the tone sits near the center of
 	the $3\ \mhz$ window the FFT tab shows. A separation under $20$ dB at $1\ \m$
-	points to a misaimed or distant source, or a weak battery.
+	points to a misaimed or distant source, or a weak battery. The two channels
+	add in phase, so the Sum clips near $+6$ dBFS; $-10$ dBFS leaves about
+	16 dB of headroom, and a flat-topped main lobe means the gain is too high.
 	\end{solution}
 
 	\part The Rectangular tab, with \textbf{Show Peak Angle Marker} on. For the
-	second row, carry the HB100 to about $30\mydeg$ on one side, still
-	$1\ \m$ from the array and aimed at it, and circle the end of the array it
+	second row, carry the HB100 to about $30\mydeg$ on one side, at the same
+	distance from the array and aimed at it, and circle the end of the array it
 	moved toward.
 
 	\begin{center}

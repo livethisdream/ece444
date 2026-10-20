@@ -303,7 +303,7 @@ source on the $+$ side, **Est. Angle** reads positive.
 3. Press **Find HB100** and record the Signal Freq it reports in the packet.
 4. Press **Calibrate** and wait for it to finish.
 5. Press **1 Steering Angle** under **Lab Presets**.
-6. Set **Rx Gain (dB)** to 10.
+6. Set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$ dBFS, as in the L17 Lab.
 7. Turn on **Show Peak Angle Marker** under **Plot Options**.
 8. Press **Start**, and check the **FFT** tab for one tone near $0\ \text{MHz}$, at least $20\ \text{dB}$ above the floor.
 9. Open the **Rectangular** tab.
@@ -319,7 +319,10 @@ The preset loads a uniform taper on E1 to E8, zeros Phase Control, sets 7 phase
 bits with **Use Bits** on and **Signal BW** at $10\ \text{MHz}$, and opens the FFT
 tab. It leaves **Signal Freq** at the value Find HB100 stored, and it does not set
 **Rx Gain (dB)**; the Pi starts at 30 dB, where Lesson 17 measured the receiver
-compressing, so step 6 sets the 10 dB reference.
+compressing. Step 6 sets the L17 Lab's level reference, not a fixed gain: the
+gain that reaches $-10$ dBFS depends on your source and on where on the bench
+your $1\ \text{m}$ really is. A main lobe with a flat top means the receiver
+has clipped; turn the gain down.
 
 On the FFT tab, one narrow tone stands well above the noise near $0\ \text{MHz}$,
 within about $\pm 1\ \text{MHz}$. If it is buried, re-aim the HB100 or press

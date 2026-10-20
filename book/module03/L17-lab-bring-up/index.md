@@ -568,9 +568,9 @@ the next connection asks about the new one.
 
 ::::{frame} Part B: First Measurements
 :::{present}
-1. Press **1 Steering Angle** under **Lab Presets**.
-2. Set **Rx Gain (dB)** to 10 and press **Start**.
-3. Record the FFT peak's position, its level, and the floor, in dBFS.
+1. Press **1 Steering Angle** (**Lab Presets**), then **Start**.
+2. Set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$ dBFS; record it.
+3. Record the peak's position, level, and floor.
 
 Expect at least 20 dB between peak and floor.
 :::
@@ -581,10 +581,20 @@ in order.
 
 The preset loads the workshop's initial state, with a uniform taper, Phase
 Control at zero, and the beam commanded to broadside, and opens the FFT tab;
-**Start** begins the sweep. The presets do not set Rx Gain, whose start-up
-value comes from the Pi's configuration file, so step 2 sets the 10 dB that
-every later lab uses as its reference. dBFS is decibels relative to the ADC's
-full-scale input.
+**Start** begins the sweep. dBFS is decibels relative to the ADC's
+full-scale input. The presets do not set Rx Gain, whose start-up value, 30 dB,
+comes from the Pi's configuration file and is far too much for a source a
+meter away.
+
+Step 2 sets a level, not a gain, and every later lab starts from the same
+$-10$ dBFS. The gain that gets there depends on how far out the HB100 is, how
+well it is aimed, and its battery, and no two benches put it at exactly
+$1\ \text{m}$; a fixed gain that suits one kit clips the next. The two
+channels add in phase, so the Sum clips near $+6$ dBFS, and $-10$ dBFS leaves
+about 16 dB of headroom below that while staying far above the floor. A
+main lobe with a flat top on the Rectangular tab means the receiver has
+clipped: turn the gain down. If the peak still reads above $-7$ dBFS at
+0 dB, move the HB100 back a little and note the distance in the packet.
 
 In the FFT tab, a single narrow peak should stand well above a flat noise
 floor, near $0\ \text{MHz}$, and its separation from the floor, in dB, should
@@ -631,12 +641,13 @@ each step, so the trace peaks where the beam points at the source.
 
 ::::{frame} The Sweep Follows the Source
 :::{present}
-6. Carry the HB100 to about $30^\circ$ on one side, still $1\ \text{m}$ out and aimed at the array. Record both again, and which end, E1 or E8, it moved toward.
+6. Carry the HB100 to about $30^\circ$ on one side, same distance, aimed at the array. Record both again, and which end, E1 or E8, it moved toward.
 7. Return it to boresight and record both once more.
 :::
 
 The source sits at $30^\circ$ when it is $0.5\ \text{m}$ to one side of the
-array's centerline and still $1\ \text{m}$ from the array. The peak should
+array's centerline and still $1\ \text{m}$ from the array; keep the distance
+you used at boresight, whatever it is, so the level change is the pattern's. The peak should
 move with it, to about $30^\circ$, and drop by a dB or so, because each patch
 receives less from the side. Returned to boresight, the trace comes back to
 where it started. The sign of the moved reading records which side the GUI
