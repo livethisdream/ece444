@@ -1,6 +1,6 @@
-# Module 3 Lab Dry Run — L17, L18, L20 Findings
+# Module 3 Lab Dry Run — L17, L18, L19, L20 Findings
 
-**Date:** 2026-10-19 · **Kit:** phaser-00 · **Run by:** Neil, with Claude driving the GUI
+**Dates:** 2026-10-19 (L17, L18, L20), 2026-10-23 (L19) · **Kit:** phaser-00 · **Run by:** Neil, with Claude driving the GUI
 **Living copy:** [Claude Doc](https://claude.ai/code/artifact/40002b11-6a90-42f7-a618-01f13506ae67)
 
 ## Summary
@@ -8,8 +8,8 @@
 The L17, L18 and L20 labs work on phaser-00. Beam position, beamwidth, nulls
 and sidelobes all match theory to within a degree or a dB. Absolute
 peak-level comparisons do not: they come out 1 to 3 dB short of theory, and
-the cause is not yet known. L19 was skipped because it is still under
-construction.
+the cause is not yet known. L19 ran as a single-kit desk rehearsal and led
+to a redesign of its layout as a firing range.
 
 - **Steering and shape:** verified. Physical and commanded steering track the source, and HPBW matches the array factor within 0.5° at 8 and 4 elements.
 - **Scan loss:** about −0.7 dB at 30° and −1.0 dB at 45°, measured at about 4 ft. The 30° point matches theory.
@@ -79,6 +79,51 @@ The 30° point matches theory. The 45° point shows less loss than even the
 ideal bound, which points to multipath or HB100 aim. At 1 m the measured drop
 was only 0.2 to 0.4 dB, so 1 m is too close for this measurement.
 
+## L19: Fox Hunt (single-kit rehearsal)
+
+L19 was rehearsed with one kit and the HB100 at a known spot, the origin. It
+tested the method, not a blind hunt. The kit was aimed at the HB100 by eye at
+each of four positions. Rx Gain was 1 dB and the FFT peak −12.4 dBFS.
+
+Reference shot: with the source to the right of broadside, seen from behind
+the array, Est. Angle read +17.3° (ten readings, 1° spread), so s = −1 on this
+kit. Positive Est. Angle is clockwise from above, and E8 is on the right as
+seen from behind the array.
+
+Frame: y along the HB100's boresight, +x to the right seen from behind the
+HB100.
+
+| Position | Kit (x, y) | Range | Est. Angle | Bearing β = h − θ̄ | Peak Array Gain | Line misses HB100 by |
+| :-- | :-- | :-- | :-- | :-- | :-- | :-- |
+| 1 | (0, 63") | 1.60 m | +2.75° | −92.8° | −6.6 dB | 7.7 cm |
+| 2 | (−23", 52") | 1.44 m | +2.66° | −68.8° | −6.8 dB | 6.7 cm |
+| 3 | (+23", 52") | 1.44 m | −3.67° | −110.2° | −13.5 dB | 9.2 cm |
+| 4 | (40", 28"), hand-held | 1.24 m | +16.2° | −161.2° | −29.0 dB | 35 cm |
+
+- **Fix, tripod positions 1–3:** (−0.02, −0.21) m, 21 cm from the HB100, which meets the lab's ~0.2 m expectation. Almost all of the error is in depth, because all three positions look in from one side.
+- **All four positions:** (−0.03, +0.23) m. Bearing 4 is the bad one, but leave-one-out could not tell it from bearing 3 (6.2 vs 6.5 cm). With one bad line among four, residuals alone don't always identify it.
+- **Aiming by eye is the dominant error.** Readings changed sign between mirrored positions (+2.7° and −3.7°), so it is not a fixed instrument bias. Hand-holding at position 4 gave 16°, far past the 1.9° budget.
+- **The HB100's level depends on which way it faces.** Mirrored positions 2 and 3, at the same range, differed by 6.7 dB.
+
+**Outcome: L19 redesigned as a firing range.** The kits sit on a taped line,
+square to it, broadside straight downrange, and move along station marks.
+With every station sharing one heading, the per-station aiming error is gone.
+Bearings give the fix; Peak Array Gain ranks the boxes nearest it. Sizing
+from a Monte Carlo (2.5° bearings, 1 in 7 off by 10°, HB100 aimed ±20° at
+the line):
+
+| Layout | Box field | Stations | Right box | Median fix error |
+| :-- | :-- | :-- | :-- | :-- |
+| 2.0 m line | 1.5 m wide, 1.0–2.0 m deep | 7 | 90% | 0.15 m |
+| **3.0 m line (chosen)** | **2.0 m wide, 1.0–2.0 m deep** | **7** | **93%** | **0.16 m** |
+| 4.0 m line | 3.0 m wide, 1.0–2.0 m deep | 7 | 96% | 0.16 m |
+
+The chosen layout fits in about 3 m × 2.5 m. The revised procedure is in
+`book/module03/L19-lab-fox-hunt/index.md`. Students write the solver in Part 1
+from `book/extras/labs/foxhunt_starter.py`, which reads the files and leaves the
+four solving functions to them. The reference solution is kept in
+`ECE444-faculty`, not here.
+
 ## L20: Array Factor
 
 Beamwidth tracks the active aperture as predicted. The peak steps between
@@ -137,7 +182,9 @@ relative to each trace's own peak, so they are not affected by this.
 - [ ] **L18:** take the scan-loss positions at 4 ft or more rather than 1 m. Expect about −0.7 dB at 30° and treat 45° as multipath-limited.
 - [ ] **L18, L20:** tell students to recompute predictions at their kit's Find HB100 frequency (10.408 GHz here), not 10.525 or 10.3 GHz.
 - [ ] **L20:** expect peak steps of about 5 ± 1 dB per halving rather than 6, grade on beamwidths, and revise the noise-floor explanation in "What the Three Traces Show".
-- [ ] **L19:** write the procedure and packet (still a shell).
+- [x] **L19:** procedure rewritten for the firing range (this branch).
+- [ ] **L19:** the packet (`latex/ECE444_Lab_L19_FoxHunt.tex`) still describes the keep-out circle; rebuild it for the firing range.
+- [ ] **L19:** add a stand for every kit to the equipment list; hand-holding breaks the bearing budget.
 
 ## Open Questions
 
