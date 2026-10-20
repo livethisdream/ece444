@@ -274,3 +274,40 @@ GOLDEN IMAGE CAVEAT
   which are wrong for any other kit (IF differs ~200 MHz between units). A
   cadet on a fallback card must still run Find HB100, characterize, Calibrate.
   Consider clearing calibration.json before --prepare-image.
+
+==========================================================================
+SECOND WALKTHROUGH, START TO FINISH (Neil, 2026-10-19)
+==========================================================================
+1. Flash: balenaEtcher is not working; switched to Raspberry Pi Imager.
+   Imager: choose Raspberry Pi 4; scroll to the bottom, Custom OS; navigate to
+   the (unzipped) Kuiper folder; choose the .img; choose the SD card; agree to
+   erasing and writing; wait. No FAT32 pre-format step with Imager.
+   Page: Steps 1-5 rewritten for Imager (numbering unchanged).
+   Imager details (Neil): Raspberry Pi Imager v2.0.0; the button is "Custom OS";
+   no OS-customization prompt for a custom image (that is only for Raspberry Pi
+   OS); write + verify took under 15 minutes.
+2. Card flashed; eject, into the Pi on the PHASER, power up (Neil). Matches
+   Steps 6-8. [Imager's "safe to remove" message / eject wording?]
+3. First contact (Neil): power on, open PowerShell, wait a couple of minutes,
+   `ssh analog@analog.local`, password analog; may get the fingerprint question,
+   answer yes; if "host identification has changed", `ssh-keygen -R analog.local`
+   and try again. Page: Step 9 + callout updated; troubleshooting row generalized.
+4. Kit Care frame moved ahead of Before Class: Download (Neil).
+5. Removed the 'No router, no setup' line from First Contact (Neil: unnecessary).
+6. Order fixed (Neil): join the Wi-Fi before setting the clock; the clock seed needs the internet. Wi-Fi is now Steps 10-12, clock Step 13; packet row and troubleshooting row follow.
+7. Wi-Fi up and clock synced in the new order (Neil); provisioning running. [reboot still needed for Wi-Fi?] [provision time, [7/8] passes with the pylibiio pin?]
+8. Assemble: card, Pluto USB and Ethernet are three separate steps (Neil). Part A renumbered: power 10, first contact 11, Wi-Fi 12-14, clock 15, provision 16-18, service 19-20, find/characterize/calibrate 21-24, power down 25.
+9. Provision finished (Neil): "Provisioned.", hostname phaser-00, clock 10:29 MDT, "NTP: no",
+   overlay merged. [6b/6] RF-chain check: HB100 10.525 (no cal yet), IF 2.200 (config,
+   unverified), LO 12.725, ADF4159 3.1812; two WARNs: not characterized / IF at or above
+   2.20 GHz where a kit was deaf. New install box tells the order: Find HB100 ->
+   Characterize IF -> Calibrate (UI or CLI). Page: provision frame now says the WARNs and
+   the pre-reboot "HTTP 000" are expected.
+   PHASER REPO NOTES: (a) install.sh prints "Service is active and the UI answered
+   HTTP 000000" -- a failed check reported as success, and the code doubled; (b) "NTP: no"
+   after provisioning -- check timedatectl after reboot; if the time client is not
+   enabled, the clock is lost at every power-off.
+10. Examples now read phaser-NN, NN = the kit's unique number (Neil); figure label too.
+11. Reprovision with phaser#43 (Neil): [3/8] installed systemd-timesyncd (+systemd deb11u1->u8) and reported 'time sync: systemd-timesyncd running'. The time client fix works on hardware.
+12. Reprovision summary (Neil): UI answered HTTP 200 (board already up from an earlier boot, so the 'not answering' branch was not exercised); clock line 'sync: systemd-timesyncd, synchronized: yes'. Page: the not-answering note now says 'may'.
+13. Find HB100 FAILED on the fresh card (Neil): searched at config.Rx_freq 2.2 GHz (unverified) -- phaser-00 is deaf there -- found a spur at 10.68 GHz, LO-shift error 13.9 MHz. Chicken-and-egg: no HB100 freq -> Characterize IF can't start. Fix: livethisdream/phaser#44 (search at the 1.7 GHz bootstrap IF until characterised).
