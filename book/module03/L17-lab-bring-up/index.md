@@ -567,7 +567,8 @@ cleanly and is always safe.
 | `ping` fails | the Wi-Fi has not come up | `sudo reboot`, then ping again; then the instructor |
 | `bash: --hostname: No such file or directory` | the `-s` is missing | Step 16 exactly as written |
 | `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` | this laptop has met another card under the same name | `ssh-keygen -R` and the name you used (`analog.local` or `phaser-NN.local`), then ssh again and answer `yes` |
-| the page refuses to connect | the backend is not running | Step 19; `No device found` means the Pluto's USB cable |
+| the page shows **Pluto not found** | the Pluto's USB cable to the Pi is unplugged, the most common miss in this lab | plug it in (Step 8); the page reconnects on its own |
+| the page refuses to connect | the address is missing `:8080`, or the backend is not running | Step 20's address exactly; then Step 19, where `No device found` again means the Pluto's USB cable |
 | **Calibrate Phaser** stops: no signal is reaching the array | the source is off or misaimed, or a step was skipped | check the HB100 is on and aimed, then Steps 22 to 24 in order |
 
 :::{depth}
