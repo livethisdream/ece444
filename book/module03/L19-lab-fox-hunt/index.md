@@ -39,7 +39,7 @@ L19 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::{frame} What Happens This Period
 :::{present}
 - One HB100 is on, inside one of five numbered boxes in a keep-out circle.
-- Teams of two, two kits, four bearings from the marked arc.
+- Teams of two, two kits, four bearings from anywhere outside the circle.
 - Cross the bearings, name the box, and turn in one packet per team.
 :::
 
@@ -48,16 +48,14 @@ sweep, converted to the room's frame with the kit's heading, and bearings from
 several places crossed into a fix. Every HB100 but one is switched off, so the
 sweep sees a single source, and the live one sits in one of five numbered boxes
 placed at random inside a keep-out circle marked on the floor. Every box holds
-an HB100, powered or not, so weight gives nothing away, and every box faces the
-same way. An HB100 is a small patch array over a ground plane: it radiates in a
-beam roughly $80^\circ$ wide and very little behind it. So you measure only from
-an arc marked in front of the boxes, within $\pm 60^\circ$ of the direction they
-face.
+an HB100, powered or not, so weight gives nothing away.
 
 You work in a team of two with both of your kits. Each kit takes a bearing from
 one position, then moves and takes a second, so the team has four bearings: two
-to cross and two to check them. You choose the positions, as long as you stay
-inside the arc and outside the circle. Your Part 1 script turns the four bearings into a fix in
+to cross and two to check them. You choose the positions, anywhere outside the
+circle. An HB100 radiates mainly forward, so a kit behind or well off the side
+of the live box may see a weak tone or none; if you cannot find the tone from a
+position, move. Your Part 1 script turns the four bearings into a fix in
 class, you name the box before the instructor opens them, and Part 3 compares
 your fix with the box that was live.
 ::::
@@ -66,7 +64,7 @@ your fix with the box that was live.
 :::{present}
 - Bearing budget: $1.9^\circ$ with the heading aimed by eye, $1.5^\circ$ taped.
 - Stand at least twice the circle's radius out: every box within $\pm 30^\circ$.
-- Spread four positions across the arc so bearings cross steeply.
+- Spread four positions around the circle so bearings cross steeply.
 - A tested script: fix, residuals, outlier.
 :::
 
@@ -83,8 +81,10 @@ $\sin^{-1}(a/D)$ off broadside, so keeping every box within $\pm 30^\circ$ needs
 $$D \ge \frac{a}{\sin 30^\circ} = 2a,$$
 
 $3\ \text{m}$ for a $1.5\ \text{m}$ circle. Closer is better for cross-range
-error, so stand near that distance, and spread the four positions across the
-arc: at its two ends, the outer pair crosses at about $120^\circ$.
+error, so stand near that distance, and spread the four positions around the
+circle. Two positions a quarter of the way around from each other see a central
+box along lines that cross near $90^\circ$; two opposite each other see it along
+nearly the same line, and their bearings barely cross.
 The script is the one you test in Part 1 on a supplied set of four bearings,
 one of them a reflection; bring it on your laptop.
 ::::
@@ -94,7 +94,6 @@ one of them a reflection; bring it on your laptop.
 - Origin at the center mark; $x$ and $y$ along the taped axes.
 - Room angles counterclockwise from $+x$, seen from above.
 - Aim broadside at the center: the heading is $h = \text{atan2}(-y, -x)$.
-- Stand inside the marked arc, where the boxes face.
 :::
 
 Every bearing has to be in one frame before the bearings can cross. The
@@ -110,11 +109,6 @@ straightedge held square to the board, through the center mark. Broadside then
 points from the kit toward the origin, so its room angle follows from the
 position you measured, $h = \text{atan2}(-y, -x)$, and you do not need a separate
 angle measurement. Sighting by eye holds this to about $1.5^\circ$.
-
-The boxes face one direction, and a second line on the floor marks the arc in
-front of them where kits may stand. Outside that arc a kit sees the fox's weak
-back lobe, and its bearing is as likely to come from a reflection as from the
-box.
 ::::
 
 ::::{frame} From Est. Angle to Room Bearing
@@ -209,7 +203,7 @@ something else. Keep the calibration from bring-up.
 :class: read-only
 
 :::{present}
-11. Set each kit at its first planned position, on a table, inside the arc.
+11. Set each kit at its first planned position, on a table, outside the circle.
 12. Aim broadside at the center mark, and measure the position along the taped axes.
 13. Open the **Tracking** tab and record ten consecutive Est. Angle readings and **Peak Array Gain**.
 14. Move each kit to its second position and repeat steps 12 and 13.
@@ -220,7 +214,8 @@ Stay out of the lines of sight while the other kit is reading: a person near the
 path between a kit and the boxes reflects enough to move its peak. If Est. Angle
 falls outside $\pm 30^\circ$, the position is too close or aimed too far off;
 move it and measure again. If the tone is weak at your distance, raise
-**Rx Gain (dB)** to 20.
+**Rx Gain (dB)** to 20. If there is still no tone, the live box may face away
+from you: move the kit around the circle and look again.
 ::::
 
 ::::{frame} The Call and the Reveal
@@ -230,7 +225,7 @@ move it and measure again. If the tone is weak at your distance, raise
 16. Run your Part 1 script on the four bearings and record the fix and the residuals.
 17. If one residual is far larger than the rest, drop it and solve again.
 18. Name the box nearest the fix and tell the instructor before the boxes are opened.
-19. Record the live box after the reveal, then press **Stop** and leave each kit at its station.
+19. Record the live box after the reveal, then press **Stop** and leave each kit where it is.
 :::
 
 The fix is your team's call, made in class from your own data; there is no

@@ -113,10 +113,8 @@ ADALM-PHASER and verify the steered pattern against theory.}
 \vspace{2pt}
 
 One HB100 in the room is on, inside one of five numbered boxes placed inside a
-keep-out circle marked on the floor. Every box faces the same way, toward an arc
-marked on the floor in front of the circle, because an HB100 radiates forward and
-very little behind it. You and a partner find the live box from bearings taken on
-your two kits from positions inside that arc. This packet is the L\labLesson\ Lab, in three parts, and
+keep-out circle marked on the floor. You and a partner find the live box from
+bearings taken on your two kits from anywhere outside that circle. This packet is the L\labLesson\ Lab, in three parts, and
 your team turns in one copy, complete, before Lesson 20. Both partners work
 \textbf{Part 1} before the lab period: the error budget, a plan for where to
 stand, and the triangulation script, tested on a supplied set of bearings. You
@@ -203,9 +201,7 @@ ADAR1000 LSB, $360\mydeg/2^7 = 2.8125\mydeg$, at a time.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \question \textbf{Where to stand.} The keep-out circle has a radius of
-$1.5\ \m$, and the boxes face the room's $-y$ direction, so every kit position
-must lie within $\pm 60\mydeg$ of the $-y$ axis as seen from the center mark.
-Your room's radius may differ; the instructor gives the actual value at the
+$1.5\ \m$, and you may take bearings from anywhere outside it. Your room's radius may differ; the instructor gives the actual value at the
 start of the period. Take $\sigma_\beta = 2\mydeg$ in this question.
 
 \begin{parts}
@@ -262,19 +258,22 @@ start of the period. Take $\sigma_\beta = 2\mydeg$ in this question.
 
 	\part Sketch the circle and mark where your team plans to put its two kits
 	and the second position each kit will move to, so that the team takes four
-	bearings. Choose positions inside the $\pm 60\mydeg$ arc that keep every box
+	bearings. Choose positions outside the circle that keep every box
 	within $\pm 30\mydeg$ of broadside and give steep crossings for a box anywhere
 	in the circle. Label each
 	position with its distance from the center and its direction in room angles.
 
 	\begin{solution}[2.4in]
-	One good plan uses the full arc: kit A at $(-3.0, -1.8)$ and $(-1.2, -3.3)\ \m$,
+	One good plan spreads the four positions over a third of the circle. Kit A
+	stands at $(-3.0, -1.8)$ and $(-1.2, -3.3)\ \m$, and
 	kit B at $(1.2, -3.3)$ and $(3.0, -1.8)\ \m$, each $3.5\ \m$ out and aimed at
 	the center. The positions sit at $211\mydeg$, $250\mydeg$, $290\mydeg$, and
 	$329\mydeg$ from the center, so the outer pair crosses at about $120\mydeg$ and
 	neighbors at about $40\mydeg$, and the widest box sits $25\mydeg$ off
-	broadside. Any plan with the kits at least $2a$ out and spread across most of
-	the arc meets the brief.
+	broadside. Any plan with the kits at least $2a$ out and spread around the
+	circle so that some pair sits $60\mydeg$ to $120\mydeg$ apart meets the brief.
+	Two positions opposite each other see a central box along nearly one line, so
+	that pair barely crosses.
 	\end{solution}
 
 	\part The five boxes are at least $0.75\ \m$ apart, and your team names the
@@ -299,7 +298,7 @@ the positions $\mathbf p_i$ of the kits and their room bearings $\beta_i$ and
 returns the least-squares fix and each bearing's residual. Lesson 19's "Many
 Bearings: Least Squares" gives the normal equations. Use numpy; do not use
 MATLAB. Test it on this practice set from an earlier class, in which each kit
-stood inside the arc, aimed its broadside at the center mark, and read positive
+stood outside the keep-out circle, aimed its broadside at the center mark, and read positive
 Est. Angle counterclockwise:
 
 \begin{center}
@@ -328,7 +327,7 @@ Boxes: \textbf{1} $(-0.9,\ 0.6)$, \textbf{2} $(-0.2,\ -0.8)$,
 	\begin{tabular}{| l | K{1.0in} | K{0.75in} | K{0.75in} | K{0.75in} | K{0.75in} |}
 	\hline
 	 & \textbf{Fix (m)} & $e_1$ & $e_2$ & $e_3$ & $e_4$ \\\hline
-	All four & \kv{$(0.51,\ 0.18)$} & \kv{$-0.21$} & \kv{$0.04$} & \kv{$0.20$} & \kv{$-0.22$} \\\hline
+	All four & \kv{$(0.51,\ 0.18)$} & \kv{$-0.20$} & \kv{$0.04$} & \kv{$0.20$} & \kv{$-0.22$} \\\hline
 	\end{tabular}
 	\end{center}
 
@@ -401,7 +400,9 @@ instructor starts the hunt, press \textbf{Find HB100} again so the kit tunes to
 the fox. Every HB100 runs at a slightly different frequency, and the receiver
 sees only a few megahertz around the one it is tuned to, so a kit still tuned to
 your own HB100 does not see the fox at all. Keep the calibration from
-bring-up.
+bring-up. An HB100 radiates mainly forward, so a kit behind or well off the side
+of the live box may see a weak tone or none; if you cannot find the tone from a
+position, move.
 
 \vspace{2pt}
 \begin{center}
@@ -436,7 +437,7 @@ not aimed where you think.
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The hunt.} At each position inside the arc, aim the kit's
+\question \textbf{The hunt.} At each position outside the keep-out circle, aim the kit's
 broadside at the center mark, measure the position from the center mark along the room's taped
 axes, and read Est. Angle on ten consecutive sweeps from the \textbf{Tracking}
 tab. Record the mean, the spread (largest minus smallest), and the room bearing
