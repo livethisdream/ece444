@@ -12,7 +12,8 @@ is required (write \textbf{None} if you did not collaborate).}
 \begin{questions}
 
 \question \textbf{Beamwidth of the course array.} The ADALM-PHASER array has $N = 8$
-patch elements on $d = 14\ \text{mm}$ centers and operates at $10.3\ \ghz$. Use
+patch elements on $d = 14\ \text{mm}$ centers. For this problem, the source is at
+$10.3\ \ghz$. Use
 $\theta_\text{HP} \approx 0.886\lambda / \lp N d \cos\theta_0 \rp$ throughout.
 \begin{parts}
 
@@ -236,16 +237,16 @@ requires a half-power beamwidth of $2.0\mydeg$ and must steer to $\pm 60\mydeg$.
 		\end{solution}
 
 	\part The beamwidth requirement must hold across the whole scan volume, not just
-	at broadside. State the aperture this actually demands and the resulting element
+	at broadside. State the aperture this demands and the resulting element
 	count at $d = \lambda/2$.
 		\begin{solution}[1.1in]
 		The beam is widest at the edge of the volume, so size for $\theta_0 =
 		60\mydeg$:
 		\eq{ Nd = \frac{762}{\cosp{60\mydeg}} = 1524\ \text{mm} = 50.8\lambda,
 		     \qquad N = \frac{1524}{15} = 102 }
-		The last $60\mydeg$ of scan doubles the array. Whether that is worth paying
-		for is a system question, and it has to be asked before the aperture is
-		fixed.
+		The last $60\mydeg$ of scan doubles the array. Whether the extra elements
+		are worth their cost is a system question, and we settle it before we fix
+		the aperture.
 		\end{solution}
 
 \end{parts}
@@ -287,10 +288,10 @@ sidelobe at $-11.5$ dBc.
 	8-element array gives $-12.8$ dBc. Is this evidence of a fault? Answer in one or
 	two sentences.
 		\begin{solution}[1.1in]
-		No. A uniform array's first sidelobe is expected between $-11$ and
-		$-13\ $dBc on this hardware once element-to-element amplitude and phase
-		errors, the coarse sweep grid, and the finite noise floor are included, and
-		$-11.5$ dBc sits inside that band. A sidelobe several decibels high, or a
+		No. On this hardware we expect a uniform array's first sidelobe between
+		$-11$ and $-13\ $dBc once we include element-to-element amplitude and phase
+		errors, the coarse sweep grid, and the finite noise floor, and $-11.5$ dBc
+		sits inside that band. A sidelobe several decibels high, or a
 		main lobe that is not at the commanded angle, would be evidence of a fault.
 		\end{solution}
 
