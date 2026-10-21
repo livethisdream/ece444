@@ -116,7 +116,10 @@ That is the one shared file it may change.
 - **Objectives** are the syllabus's two-level course objectives, quoted word for
   word.
 - **No receiver-course vocabulary** for cadets (mixer, LO, IF, VCO,
-  superhet). Hardware limits stay out of the student story.
+  superhet). Hardware limits stay out of the student story. One exception
+  (Neil, 2026-10-21): **IF characterization** is a necessary step, so a lab
+  may name the GUI's Characterize IF button and the IF it measures, with
+  the IF defined once in plain words at first use.
 - **Assessments** never hand students the formula. They live in
   `ECE444-faculty` only.
 - **Python only, never MATLAB.** American spelling. No thin spaces.
