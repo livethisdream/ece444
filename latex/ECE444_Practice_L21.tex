@@ -127,11 +127,12 @@ $13.2\mydeg$ at broadside for this array.
 		At $60\mydeg$ the beam has already lost $3\db$ of gain for an ideal element,
 		closer to $4\db$ for a real patch, and the array factor's beam has doubled
 		in width from $13.2\mydeg$ to $26.4\mydeg$, so the same target returns
-		less power and is located less precisely. Pushing to $75\mydeg$ costs
-		about $5.9\db$ and widens the beam to nearly $51\mydeg$, so the coverage
-		at the edge of the scan is worth much less than the coverage at broadside.
-		The $\pm 60\mydeg$ limit is where both penalties are still tolerable;
-		beyond it the gain falls faster than the added coverage is worth.
+		less power and is located less precisely. Pushing to $75\mydeg$ loses
+		about $5.9\db$ and widens the beam to nearly $51\mydeg$, so a target at
+		the edge of the scan is detected at shorter range and located far less
+		precisely than one at broadside. The $\pm 60\mydeg$ limit is where both
+		penalties are still tolerable; beyond it the gain falls faster than the
+		coverage grows.
 		\end{solution}
 \end{parts}
 
@@ -183,14 +184,14 @@ predicts $-12.8$ dBc for both.
 		Level = \ansbox[1.3in]{$-12.8\db$}
 	\end{minipage}
 
-	\part The same student rotates the array by hand and repeats the
-		measurement. The new trace has the same shape but every feature is
+	\part The same student holds the beam fixed, carries the source around
+		the array by hand, and repeats the measurement. The new trace has the same shape but every feature is
 		shifted $1.8\mydeg$ in the same direction. State whether this is an
 		antenna effect or a measurement effect, and give the reason.
 		\begin{solution}[1.2in]
 		It is a measurement effect. A uniform shift of every feature by the same
-		amount, with no change in shape, is a fixture or protractor offset in the
-		angle axis. An antenna effect such as beam pulling changes the peak and
+		amount, with no change in shape, is an offset in the angle axis, from the
+		taped marks or from where the source sat at boresight. An antenna effect such as beam pulling changes the peak and
 		the sidelobes by different amounts and therefore changes the shape of the
 		trace, not just its position.
 		\end{solution}
@@ -227,9 +228,10 @@ ground plane.
 		so
 		\eq{ D_e = \frac{4\pi}{\Omega_A} = \frac{4\pi}{\pi} = 4
 			= 6.0\dbi }
-		A real patch measures 6.0 to 6.8 dBi, since it is steeper than the ideal
-		element, the ground plane is finite, and the element is loaded by its
-		neighbors.
+		A real patch rolls off as $\cosp{\theta}^{n}$ with $n$ near 1.3 to 1.5;
+		the same integral gives $D_e = 2(n+1)$, or 6.6 to 7.0 dBi. The steeper
+		element concentrates its power toward broadside, so its directivity is
+		higher even though its gain at wide angles is lower.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -256,8 +258,8 @@ ground plane.
 		Inside about $\pm 30\mydeg$ the prediction is good to a few tenths of a
 		decibel, because real embedded elements roll off between
 		$\cosp{\theta}$ and $\cosp{\theta}^{1.5}$ in power and the choices
-		barely differ there. Past about $\pm 60\mydeg$ that same spread is worth
-		more than a decibel -- the ideal rule gives $-3.0\db$ where a real patch
+		barely differ there. Past about $\pm 60\mydeg$ that same spread exceeds
+		a decibel -- the ideal rule gives $-3.0\db$ where a real patch
 		gives about $-4.2\db$ -- and mutual coupling makes each element's
 		embedded pattern differ from the average, so a single-element model
 		should not be trusted to a decibel at wide scan.
@@ -268,7 +270,7 @@ ground plane.
 
 \question \textbf{Range, environment, and what a measurement can resolve.} The
 course array measures $D = 98$ \text{mm} between the centers of its outer
-elements. The lab source is placed $1.0\ \m$ from the array face.
+elements. You place the lab source $1.2\ \m$ from the array face.
 \begin{parts}
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Compute the far-field distance for this array at $10.3\ \ghz$
@@ -277,7 +279,7 @@ elements. The lab source is placed $1.0\ \m$ from the array face.
 		\begin{solution}[1.2in]
 		\eq{ r \ge \frac{2D^2}{\lambda}
 			= \frac{2\lp0.098\ \m\rp^2}{0.0291\ \m} = 0.66\ \m }
-		The $1.0\ \m$ lab range is comfortably beyond this, so the incoming
+		The $1.2\ \m$ lab range is comfortably beyond this, so the incoming
 		wavefront is flat enough that the edge-to-center phase error stays under
 		the $22.5\mydeg$ the criterion allows.
 		\end{solution}
@@ -288,31 +290,32 @@ elements. The lab source is placed $1.0\ \m$ from the array face.
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part A larger array is to be measured on the same $1.0\ \m$ range at
+		\part You need to measure a larger array on the same $1.2\ \m$ range at
 			$10.3\ \ghz$. Find the largest aperture dimension that still satisfies
 			the far-field criterion.
 		\begin{solution}[1.2in]
 		Solve the criterion for $D$:
 		\eq{ D = \sqrt{\frac{r\lambda}{2}}
-			= \sqrt{\frac{\lp1.0\ \m\rp\lp0.0291\ \m\rp}{2}} = 0.121\ \m }
-		so an aperture larger than about $121$ \text{mm} needs a longer range or
+			= \sqrt{\frac{\lp1.2\ \m\rp\lp0.0291\ \m\rp}{2}} = 0.132\ \m }
+		so an aperture larger than about $132$ \text{mm} needs a longer range or
 		a near-field correction.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		$D$ = \ansbox[1.3in]{$121$ \text{mm}}
+		$D$ = \ansbox[1.3in]{$132$ \text{mm}}
 	\end{minipage}
 
-	\part The GUI sweeps the commanded steer angle in $2.8125\mydeg$ steps.
+	\part The GUI sweeps the beam by stepping the element-to-element phase one
+		$2.8125\mydeg$ LSB per point, about $0.93\mydeg$ of angle near broadside.
 		Explain how that step size alone can make a measured half-power beamwidth
-		differ from theory by one to three degrees.
+		differ from theory by up to about one degree.
 		\begin{solution}[1.2in]
 		The trace exists only at grid points, so each half-power crossing is
 		reported at the nearest step rather than at its true angle. Each of the
 		two crossings can be off by up to half a step, and the beamwidth is the
-		difference between them, so the reported width can be off by roughly a
-		full step in either direction before any antenna effect is involved.
+		difference between them, so the reported width can be off by up to a full
+		step, about $1\mydeg$, before any antenna effect is involved.
 		\end{solution}
 
 	\part Name two things you can change about the measurement setup, not the
