@@ -4,7 +4,7 @@ The plan for Modules 3–4 and the rules every working thread follows. **Read
 this before starting any work.** The Integrator thread maintains this file. If
 something you need is not here, ask Neil or the Integrator rather than guessing.
 
-Last updated 2026-10-17.
+Last updated 2026-10-21.
 
 ## 1. Who does what
 
@@ -127,7 +127,7 @@ That is the one shared file it may change.
 
 ## 5. Schedule and status
 
-Status as of 2026-10-17. "Cut" means the page fits the 20-slide budget.
+Status as of 2026-10-21. "Cut" means the page fits the 20-slide budget.
 "Sweeps" means the voice, why, and illustration passes. Lessons are topics,
 not periods; each lab follows its lesson on the bench and is listed under it.
 
@@ -135,18 +135,18 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 
 | Lesson | Title | Homework | Status | Next |
 | :-- | :-- | :-- | :-- | :-- |
-| L15 | Aperture Distributions and Efficiency | practice | cut 20/20, sweeps done; opening reworked (#91) | trim frame 6, "Key Point: Shape and Size", 8 px over on a phone |
+| L15 | Aperture Distributions and Efficiency | practice | cut 20/20, sweeps done; tagline callout and "you are here" strip (#109) | ready |
 | L16 | The Array Factor and Pattern Multiplication | practice | cut 20/20, sweeps done, two-element widget (#92, #93, #98) | ready |
-| L17 | Introduction to Phased Array Hardware | none (L17 Lab packet) | 12/20 | ready |
-| L17 Lab | Phased Array Bring-Up | **L17 Lab** packet | cadets build their own kit from stock Kuiper, 17/20 (#96, #97) | hardware dry run |
+| L17 | Introduction to Phased Array Hardware | none (L17 Lab packet) | 15/20; calibration frames and Calibrate widget (#105) | ready |
+| L17 Lab | Phased Array Bring-Up | **L17 Lab** packet | 18/20; hardware dry run 2026-10-19 on phaser-00, fixes merged (#118, #121) | ready |
 | L18 | Beam Steering | none (pre-lab of the L18 Lab) | 20/20, sweeps done | ready |
-| L18 Lab | Beam Steering | **L18 Lab** packet | packet built, 13/20 | hardware-day checks |
-| L19 | Direction Finding | none yet | shell, 5/20 | page + problems |
-| L19 Lab | Fox Hunt | **L19 Lab** packet | placeholder | Neil is adding the fox hunt |
-| L20 | Array Factor and Beamwidth | practice | cut 18/20 | sweeps |
-| L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20 | convert to packet; widget label overlaps at phone width (from the merged lab) |
-| L21 | Antenna Pattern | practice | 37/20 | cut + sweeps |
-| L21 Lab | Antenna Pattern | **L21 Lab** (old-style sheet) + practice | 12/20 | convert to packet |
+| L18 Lab | Beam Steering | **L18 Lab** packet | 14/21; dry run 2026-10-19, fixes merged (#110, #121): E1 side, 45° marker, scan loss at 1.2 m | ready |
+| L19 | Direction Finding | none (L19 Lab packet) | rewritten (#103), 19/20, fix widget (#123) | sweeps |
+| L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | built (#114): teams of two, anywhere outside the keep-out circle, 8/20 | hardware-day checks |
+| L20 | Array Factor and Beamwidth | practice | cut 18/20 | sweeps (thread started 2026-10-21) |
+| L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | convert to packet |
+| L21 | Antenna Pattern | practice | 37/20 | cut + sweeps (thread started 2026-10-21) |
+| L21 Lab | Antenna Pattern | **L21 Lab** (old-style sheet) + practice | 12/20 | convert to packet (same thread) |
 | L22 | Sidelobes and Tapering | practice | 46/20 | cut + sweeps |
 | L23 | Beam Squint and Quantization | practice | 40/20 | cut + sweeps |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** (old-style sheet) + practice | 46/20, uncut | cut + sweeps + packet |
@@ -176,12 +176,18 @@ needs its rubric, published with the L28 Lab packet.
 
 ## 6. Work queue, in order
 
-1. **Before L17:** a hardware dry run of the stock-Kuiper bring-up on a real kit.
-2. **L19**, direction finding: page and problems. The **L19 Lab**, the fox
-   hunt, is Neil's (2026-10-17). Plan in `MODULE45_BUILDOUT_PLAN.md` §2 and §7.
-3. **Lesson passes in teaching order:** L20–L24 with their labs,
+1. **Lesson passes in teaching order:** L20 (sweeps) and L21 (cut, sweeps,
+   lab packet) are running; then L22–L24 with the L22–L23 and L24 Labs,
    each before it is taught. A lesson's pass converts its lab's sheet to a
-   packet.
+   packet and folds in the dry-run lessons (`review/M3_LAB_DRYRUN.md`):
+   set the level to −10 dBFS, compute at the kit's own Find HB100
+   frequency, open Lab Presets first, E1 on the right facing the patches,
+   level comparisons at 1.2 m or more.
+2. **L19 sweeps** (voice, why, illustration) on the rewritten lesson.
+3. **Phaser, open from the dry run:** why array peaks read 1–3 dB under the
+   in-phase sum of single elements; whether each channel's phase moves with
+   its gain setting; whether recalibrating with the source exactly at
+   boresight removes the +1–2° offset.
 4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
 5. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
