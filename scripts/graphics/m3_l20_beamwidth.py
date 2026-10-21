@@ -38,7 +38,7 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "book/extras/slides/fig"
 OUT2 = ROOT / "book/extras/viz/img"
 
-LAM = 3e8 / 10.3e9 * 1000.0      # mm, the workshop's 10.3 GHz
+LAM = 3e8 / 10.3e9 * 1000.0      # mm, the worked example's 10.3 GHz
 DEL = 14.0 / LAM                 # PHASER element spacing in wavelengths
 
 plt.rcParams.update({
@@ -132,7 +132,7 @@ def beamwidth_anatomy() -> None:
                 bbox=dict(boxstyle="round,pad=0.18", fc=SLIDE_BG, ec="none", alpha=0.92),
                 arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.2))
 
-    ax.text(-88, 11.0, "8 elements, half-wavelength spacing, broadside",
+    ax.text(-88, 11.0, "8 elements, d = 0.481 wavelength, broadside",
             color=GRAY, fontsize=12, ha="left", va="top")
     finalize(fig, "L20-beamwidth-anatomy")
 

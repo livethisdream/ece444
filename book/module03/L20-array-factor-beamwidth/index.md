@@ -74,7 +74,7 @@ Near the peak, $\psi$ is small, so $\sin(\psi/2) \approx \psi/2$ and
 
 $$AF_N \approx \frac{\sin(N\psi/2)}{N\psi/2} = \frac{\sin u}{u}, \qquad u \equiv \frac{N\psi}{2}.$$
 
-That is the same $\sin u / u$ we found in Lesson 6 for a uniform line source, and the reason is physical: an $N$-element uniform array with spacing $d$ is a **sampled aperture** of length $L = Nd$. Near the peak, where the sampling is too fine to matter, the array's pattern matches the continuous aperture's.
+That is the same $\sin u / u$ we found in Lesson 6 for a uniform line source, and the reason is physical: an $N$-element uniform array with spacing $d$ is a **sampled aperture** of length $L = Nd$. Near the peak, where the sampling is too fine to matter, the array's pattern matches the continuous aperture's. The length is $Nd$ rather than the $(N-1)d$ between the end elements because each element accounts for one spacing $d$ of aperture, the sampled line source of Lesson 16.
 ::::
 
 ::::{frame} Half-Power Beamwidth
@@ -122,7 +122,7 @@ The aperture measured in wavelengths, $Nd/\lambda$, sets the beamwidth. The cons
      style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 
 - $N = 8$, $d = 14\ \text{mm}$, worked at $10.3\ \text{GHz}$: $Nd = 3.85\ \lambda$.
-- Broadside $13.2^\circ$; steered to $45^\circ$, $18.7^\circ$.
+- Broadside $13.2^\circ$; steered to $30^\circ$, $15.2^\circ$.
 - At $60^\circ$ the rule gives $26.4^\circ$ and the pattern $30.5^\circ$: a wide-scanned beam is always wider than the rule.
 :::
 
@@ -131,6 +131,8 @@ The aperture measured in wavelengths, $Nd/\lambda$, sets the beamwidth. The cons
 The course array has $N = 8$ patches on $d = 14\ \text{mm}$ centers. We work this example at $10.3\ \text{GHz}$; your kit's **Find HB100** frequency will differ, and the L20 Lab has you recompute at it. At $10.3\ \text{GHz}$, $\lambda = 29.1\ \text{mm}$, so $d/\lambda = 0.481$ and the aperture is $Nd = 112\ \text{mm} = 3.85\ \lambda$.
 
 Broadside: $\theta_\text{HP} = 0.886/3.85 = 0.230\ \text{rad} = 13.2^\circ$.
+
+Steered to $30^\circ$: $13.2^\circ/\cos 30^\circ = 15.2^\circ$, against $15.4^\circ$ from the pattern.
 
 Steered to $45^\circ$: $13.2^\circ/\cos 45^\circ = 18.7^\circ$.
 
@@ -225,7 +227,7 @@ Written in that last form, the result carries over to other spacings: for any un
 
 $$D \approx \frac{2Nd}{\lambda} = \frac{2L}{\lambda},$$
 
-which is the uniform line-source directivity from Lesson 15 with $L = Nd$ — the same sampled-aperture argument that produced the $0.886$. Directivity grows linearly with aperture in wavelengths. Doubling the element count at fixed spacing doubles $D$ and adds $3$ dB, and it does so by halving the beamwidth, not by making any element radiate harder.
+which is the long uniform line-source directivity from Lesson 6 with $L = Nd$ — the same sampled-aperture argument that produced the $0.886$. Directivity grows linearly with aperture in wavelengths. Doubling the element count at fixed spacing doubles $D$ and adds $3$ dB, and it does so by halving the beamwidth, not by making any element radiate harder.
 ::::
 
 ::::{frame} Directivity of the Course Array
@@ -240,7 +242,9 @@ $$G_\text{total} = G_\text{element} + D_\text{array}$$
 
 :::{admonition} Worked example — directivity of the course array
 :class: tip
-$D \approx 2(8)(0.481) = 7.7$, or $10\log_{10}(7.7) = 8.9$ dB. Turning off four elements to leave the center four gives $D \approx 3.85 = 5.9$ dB, exactly $3$ dB less, and doubles the beamwidth from $13.2^\circ$ to $27^\circ$.
+$D \approx 2(8)(0.481) = 7.7$, or $10\log_{10}(7.7) = 8.9$ dB. Turning off four elements to leave the center four gives $D \approx 3.85 = 5.9$ dB, exactly $3$ dB less, and doubles the beamwidth from $13.2^\circ$ to $26.4^\circ$ by the formula ($27.4^\circ$ solved exactly).
+
+That $3$ dB is the drop in directivity, and the L20 Lab measures a different quantity, the received peak. On receive, the array adds the element voltages in phase, so the peak voltage is proportional to $N$ and the peak power to $N^2$. Halving the active elements therefore drops the ideal received peak by $6$ dB: $3$ dB because half the elements collect half the power, and $3$ dB because the beam's directivity halves. The dry-run kit read $5.1$ and $4.8$ dB per halving, so expect about $5 \pm 1$ dB on your own kit. The cause of the shortfall is still open, and it does not touch the beamwidths, which the lab grades.
 
 The eight elements are patches, not isotropic radiators, so the array's gain is the element gain plus the array gain. Pattern multiplication becomes addition in dB:
 
@@ -258,7 +262,7 @@ Steering barely changes the array factor's directivity. The beam is a cone about
 :::
 
 ```{note}
-The array-factor directivity of a linear array barely changes as you steer, even though the beam visibly widens. The main lobe of a linear array is a cone about the array axis; steering off broadside thickens the cone wall by $1/\cos\theta_0$ and shrinks its circumference by $\cos\theta_0$, leaving the solid angle nearly unchanged. The scan loss you measure on real hardware comes from the element pattern, not from the array factor, which is why the PHASER loses gain toward the edges of its scan volume. That is Lesson 21's subject.
+The array-factor directivity of a linear array barely changes as you steer, even though the beam visibly widens. The main lobe of a linear array is a cone about the array axis; steering off broadside thickens the cone wall by $1/\cos\theta_0$ and shrinks its circumference by $\cos\theta_0$, leaving the solid angle nearly unchanged. For the course array the array-factor directivity is $8.86$ dB at broadside, $8.91$ dB at $45^\circ$, and $9.12$ dB at $60^\circ$. The scan loss you measure on real hardware comes from the element pattern, not from the array factor, which is why the PHASER loses gain toward the edges of its scan volume. That is Lesson 21's subject.
 ```
 ::::
 
@@ -341,28 +345,30 @@ The last $45^\circ$ of scan volume is what added the eight extra channels. Wheth
 :::{present}
 | Elements | $Nd/\lambda$ | HPBW | FNBW | Sidelobe |
 | :-- | :-- | :-- | :-- | :-- |
-| 8 | 3.85 | $13.2^\circ$ | $30.1^\circ$ | $-13$ dB |
-| Center 4 | 1.92 | $27^\circ$ | $62^\circ$ | $-11$ dB |
-| Center 2 | 0.96 | $62^\circ$ | $180^\circ$ | none |
+| 8 | 3.85 | $13.3^\circ$ | $30.1^\circ$ | $-13$ dB |
+| Center 4 | 1.92 | $27.4^\circ$ | $63^\circ$ | $-11$ dB |
+| Center 2 | 0.96 | $63^\circ$ | $180^\circ$ | none |
 :::
 
 | Configuration | Aperture $Nd$ | HPBW | FNBW | First sidelobe |
 | :-- | :-- | :-- | :-- | :-- |
-| 8 elements | $112\ \text{mm} = 3.85\ \lambda$ | $13.2^\circ$ | $30.1^\circ$ | $-13$ dB |
-| Center 4 | $56\ \text{mm} = 1.92\ \lambda$ | $27^\circ$ | $62^\circ$ | $-11$ dB |
-| Center 2 | $28\ \text{mm} = 0.96\ \lambda$ | $62^\circ$ | $180^\circ$ by convention | none |
+| 8 elements | $112\ \text{mm} = 3.85\ \lambda$ | $13.3^\circ$ | $30.1^\circ$ | $-13$ dB |
+| Center 4 | $56\ \text{mm} = 1.92\ \lambda$ | $27.4^\circ$ | $63^\circ$ | $-11$ dB |
+| Center 2 | $28\ \text{mm} = 0.96\ \lambda$ | $63^\circ$ | $180^\circ$ by convention | none |
+
+The HPBW column is the half-power width of the array factor solved exactly, the same values the L20 Lab uses. The $0.886$ rule gives $13.2^\circ$, $26.4^\circ$, and $52.8^\circ$, and it falls further short as the array gets smaller. All values are at $10.3\ \text{GHz}$; recompute them at your kit's **Find HB100** frequency.
 
 The L20 Lab sweeps the PHASER with all eight elements on, then with the center four, then with the center pair, and measures the beamwidth each time. Predict first, measure second, reconcile third. Every number in the table comes from this lesson, and three details in it are worth stating before the lab rather than after.
 ::::
 
 ::::{frame} Three Details in the Prediction Table
 :::{present}
-- Two elements have no null or sidelobe ($\lambda/Nd > 1$); HPBW is $62^\circ$, not the formula's $53^\circ$.
+- Two elements have no null or sidelobe ($\lambda/Nd > 1$); HPBW is $63^\circ$, not the formula's $53^\circ$.
 - The first sidelobe is $-12.8$ dB at 8 elements and $-11.3$ dB at 4.
 - Samples sit one $2.8125^\circ$ phase step apart: about $0.9^\circ$ near broadside.
 :::
 
-The two-element row has no null and no sidelobe. With $Nd$ under a wavelength, $\lambda/Nd$ exceeds $1$ and the first null falls outside the visible region, so the pattern is a single broad hump and we quote the first-null beamwidth as $180^\circ$ by convention. Its half-power width is $62^\circ$, not the $53^\circ$ the small-angle formula returns, because a beam that wide breaks the approximation used to derive it.
+The two-element row has no null and no sidelobe. With $Nd$ under a wavelength, $\lambda/Nd$ exceeds $1$ and the first null falls outside the visible region, so the pattern is a single broad hump and we quote the first-null beamwidth as $180^\circ$ by convention. Its half-power width is $62.6^\circ$, not the $52.8^\circ$ the small-angle formula returns, because a beam that wide breaks the approximation used to derive it.
 
 The first sidelobe drifts with element count. The $-13$ dB figure is the large-array limit; eight elements give $-12.8$ dB and four give about $-11$ dB. All three are far above the sweep's noise floor, which sits roughly $23$ dB below the uniform-taper peak.
 
