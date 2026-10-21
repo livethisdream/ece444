@@ -54,7 +54,10 @@ In the L18 Lab you steered the array across the room and watched the beam widen 
 
 Lesson 16 summed $N$ equal-amplitude elements with a progressive phase and collapsed the geometric series into the **normalized uniform array factor**
 
-$$AF_N(\psi) = \frac{\sin(N\psi/2)}{N\ \sin(\psi/2)}, \qquad \psi = kd(\sin\theta - \sin\theta_0).$$
+$$\begin{aligned}
+AF_N(\psi) &= \frac{\sin(N\psi/2)}{N\ \sin(\psi/2)}, \\
+\psi &= kd(\sin\theta - \sin\theta_0).
+\end{aligned}$$
 
 Everything about the shape of the pattern is in that one function of $\psi$. The array's physical parameters enter only through the map from angle to $\psi$, and the beam peak is wherever $\psi = 0$, which is $\theta = \theta_0$.
 ::::
@@ -72,7 +75,10 @@ AF_N &\approx \frac{\sin(N\psi/2)}{N\psi/2} \\
 
 Near the peak, $\psi$ is small, so $\sin(\psi/2) \approx \psi/2$ and
 
-$$AF_N \approx \frac{\sin(N\psi/2)}{N\psi/2} = \frac{\sin u}{u}, \qquad u \equiv \frac{N\psi}{2}.$$
+$$\begin{aligned}
+AF_N &\approx \frac{\sin(N\psi/2)}{N\psi/2} = \frac{\sin u}{u}, \\
+u &\equiv \frac{N\psi}{2}.
+\end{aligned}$$
 
 That is the same $\sin u / u$ we found in Lesson 6 for a uniform line source, and the reason is physical: an $N$-element uniform array with spacing $d$ is a **sampled aperture** of length $L = Nd$. Near the peak, where the sampling is too fine to matter, the array's pattern matches the continuous aperture's. The length is $Nd$ rather than the $(N-1)d$ between the end elements because each element accounts for one spacing $d$ of aperture, the sampled line source of Lesson 16.
 ::::
@@ -113,6 +119,12 @@ $$\theta_\text{HP} \approx \frac{0.886\ \lambda}{Nd\ \cos\theta_0}.$$
 :::{callout}
 The aperture measured in wavelengths, $Nd/\lambda$, sets the beamwidth. The constant $0.886$ is the uniform line-source constant from Lesson 6 and Lesson 15, unchanged, because a uniform array of length $Nd$ is that line source sampled at $N$ points. Steering off broadside foreshortens the aperture as seen from the beam direction, and the beam widens by $1/\cos\theta_0$.
 :::
+
+<img src="../../viz/img/L18-broadening.svg"
+     alt="An array of length Nd seen from a direction theta0 off broadside: its projected length normal to that direction is shorter by cos theta0"
+     style="max-width: 420px; width: 100%; display: block; margin: 0 auto;">
+
+The figure is Lesson 18's: seen from the beam direction, the array's projected length is $Nd\cos\theta_0$.
 ::::
 
 ::::{frame} Scan Broadening of the Course Array
@@ -148,14 +160,20 @@ $$\begin{aligned}
 \text{FNBW} &= 2\arcsin\!\left(\frac{\lambda}{Nd}\right)
 \end{aligned}$$
 
-- Nulls are equally spaced in $\sin\theta$, every $\lambda/Nd$, not in $\theta$.
-- A null exists only where $\lvert\sin\theta\rvert \le 1$; FNBW is the broadside $m = 1$ pair.
-- At $m = N$ the denominator vanishes too, which gives a grating lobe (L23), not a null.
+- Nulls fall every $\lambda/Nd$ in $\sin\theta$, and only where $\lvert\sin\theta\rvert \le 1$.
+:::
+:::{present}
+<img src="../../viz/img/L20-null-comb.svg"
+     alt="The broadside eight-element pattern plotted twice. Against the sine of the angle, the nulls are evenly spaced every 0.260 and the fourth, at 1.04, falls in the shaded region with no real angle. Against angle, the same three nulls land at 15.1, 31.3 and 51.2 degrees, spreading apart toward the horizon"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 A null is a zero of the numerator that is not also a zero of the denominator. The numerator vanishes when
 
-$$\frac{N\psi}{2} = m\pi \quad\Longrightarrow\quad \psi = \frac{2\pi m}{N}, \qquad m = 1, 2, 3, \ldots$$
+$$\begin{aligned}
+\frac{N\psi}{2} &= m\pi, \qquad m = 1, 2, 3, \ldots \\
+\psi &= \frac{2\pi m}{N}
+\end{aligned}$$
 
 except when $m$ is a multiple of $N$, because then $\sin(\psi/2)$ vanishes as well and the ratio returns to unity. Those are the main lobe and its repeats, the **grating lobes** of Lesson 23, not nulls. Converting through $\psi = kd(\sin\theta - \sin\theta_0)$:
 
@@ -246,9 +264,18 @@ $D \approx 2(8)(0.481) = 7.7$, or $10\log_{10}(7.7) = 8.9$ dB. Turning off four 
 
 That $3$ dB is the drop in directivity, and the L20 Lab measures a different quantity, the received peak. On receive, the array adds the element voltages in phase, so the peak voltage is proportional to $N$ and the peak power to $N^2$. Halving the active elements therefore drops the ideal received peak by $6$ dB: $3$ dB because half the elements collect half the power, and $3$ dB because the beam's directivity halves. The dry-run kit read $5.1$ and $4.8$ dB per halving, so expect about $5 \pm 1$ dB on your own kit. The cause of the shortfall is still open, and it does not touch the beamwidths, which the lab grades.
 
+<img src="../../viz/img/L20-aperture-halving.svg"
+     alt="Ideal array factors for 8, 4, and 2 active elements at 10.408 GHz, with the dry run's measured peaks: the beam doubles in width at each halving, and the peak steps 6.0 dB ideally against 5.1 and 4.8 dB measured"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+
+The figure is the L20 Lab's, drawn at the dry-run kit's $10.408\ \text{GHz}$.
+
 The eight elements are patches, not isotropic radiators, so the array's gain is the element gain plus the array gain. Pattern multiplication becomes addition in dB:
 
-$$G_\text{total}\ [\text{dBi}] = G_\text{element}\ [\text{dBi}] + D_\text{array}\ [\text{dB}].$$
+$$\begin{aligned}
+G_\text{total}\ [\text{dBi}] &= G_\text{element}\ [\text{dBi}] \\
+&\quad + D_\text{array}\ [\text{dB}].
+\end{aligned}$$
 
 Eight half-wave dipoles, at $2.15$ dBi each, would make an $11.0$ dBi array. The sum holds while the element pattern is close to flat across the main lobe, and Lesson 21 takes up the case where it is not.
 :::
@@ -259,6 +286,11 @@ Eight half-wave dipoles, at $2.15$ dBi each, would make an $11.0$ dBi array. The
 :class: callout
 
 Steering barely changes the array factor's directivity. The beam is a cone about the array axis: its wall thickens by $1/\cos\theta_0$ and its circumference shrinks by $\cos\theta_0$. The scan loss measured on hardware comes from the element pattern (L21).
+:::
+:::{present}
+<img src="../../viz/img/L20-steering-cone.svg"
+     alt="The main lobe of a linear array drawn as a band of directions around the array axis. At broadside it is a full ring 13.3 degrees thick with directivity 8.86 dB; steered to 60 degrees it is a cone 30.5 degrees thick with half the circumference and directivity 9.12 dB"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 ```{note}
@@ -311,9 +343,9 @@ The widget below runs the first two steps in reverse so you can see them. Set $N
 :::
 ::::
 
-::::{frame} Worked Example: A 5° Pencil Beam
+::::{frame} A 5° Pencil Beam
 :::{present}
-Specification: $\theta_\text{HP} \le 5^\circ$ at $10\ \text{GHz}$, scan to $\pm 45^\circ$.
+Goal: $\theta_\text{HP} \le 5^\circ$ at $10\ \text{GHz}$, scan $\pm 45^\circ$.
 
 | Step | Result |
 | :-- | :-- |
@@ -321,6 +353,11 @@ Specification: $\theta_\text{HP} \le 5^\circ$ at $10\ \text{GHz}$, scan to $\pm 
 | Spacing for $\pm 45^\circ$ | $d = \lambda/2 = 15\ \text{mm}$ |
 | Count | $N = 21$: $4.8^\circ$ broadside, $6.8^\circ$ at $45^\circ$ |
 | $5^\circ$ held at $45^\circ$ | $N = 29$: $43.5\ \text{cm}$, $14.6$ dB |
+:::
+:::{present}
+<img src="../../viz/img/L20-aperture-vs-beamwidth.svg"
+     alt="Half-power beamwidth against aperture length in wavelengths on log axes, at broadside and steered to 45 degrees, with the eight-element PHASER at 3.9 wavelengths and 13.2 degrees and the 5 degree target reached at 10.2 wavelengths"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 :::{admonition} Worked example — a 5° pencil beam at X-band
