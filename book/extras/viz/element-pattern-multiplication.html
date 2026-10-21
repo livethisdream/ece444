@@ -139,7 +139,7 @@
    canvas just gets a shorter design box. Shrinking the design height rather
    than the bitmap keeps text full size and the composition undistorted. */
 var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:430px)') : null;
-function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.58) : h; }
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.54) : h; }
     var plotH = SQ(Math.round(Math.min(210, Math.max(140, w * 0.30))));
     var h = T + plotH + B;
     var dpr = window.devicePixelRatio || 1;
@@ -178,11 +178,12 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.58) : h; 
     ];
     ctx.font = '12.5px Inter, system-ui, sans-serif';
     ctx.textBaseline = 'middle';
-    var y = G.y1 + 51, i, seg = 22, gap = 7;
+    // rows sit 16px apart from y1 + 44, so the last one ends inside B = 36 + 16*rows
+    var y = G.y1 + 44, i, seg = 22, gap = 7;
     if (G.narrow) {
       ctx.textAlign = 'left';
       for (i = 0; i < items.length; i++) {
-        var yy = y + i * 18;
+        var yy = y + i * 16;
         ctx.save(); ctx.strokeStyle = items[i].c; ctx.lineWidth = items[i].w;
         ctx.setLineDash(items[i].dash);
         ctx.beginPath(); ctx.moveTo(G.x0, yy); ctx.lineTo(G.x0 + seg, yy); ctx.stroke(); ctx.restore();
@@ -238,7 +239,8 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.58) : h; 
     ctx.translate(G.narrow ? 11 : 14, (G.y0 + G.y1) / 2);
     ctx.rotate(-Math.PI / 2);
     ctx.textBaseline = 'middle';
-    ctx.fillText('Relative power (dB)', 0, 0);
+    // the short plot on a phone has no room for the full rotated title
+    ctx.fillText(G.y1 - G.y0 < 120 ? 'Power (dB)' : 'Relative power (dB)', 0, 0);
     ctx.restore();
 
     // commanded steer angle

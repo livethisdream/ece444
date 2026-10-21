@@ -18,7 +18,8 @@ The array factor is not the antenna pattern.
 Lesson 21 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame}
+::::{frame} Slides
+:class: read-only
 
 :::{admonition} Slides
 :class: slides
@@ -49,7 +50,20 @@ predictable.
 
 ::::
 
-::::{frame} What the sweep measures
+::::{frame} The Pattern Is a Product
+:::{present}
+$$
+F(\theta) = EF(\theta)\ AF(\theta)
+$$
+
+- $AF$: element positions and phases. $EF$: one element's own pattern.
+- Near broadside a patch is nearly uniform, $EF \approx 1$, so $AF$ alone held.
+:::
+:::{present}
+:class: callout
+
+Everything the array factor gets wrong off broadside is the element factor.
+:::
 
 Every trace you have recorded on the PHASER is a **received-power sweep**: the
 software steps the commanded steer angle across the scan range, applies the
@@ -58,10 +72,6 @@ HB100 source sits still. By reciprocity that trace follows the array's pattern,
 but the x-axis is the commanded steer angle, not a measured arrival angle. What
 the array does with the incoming wave at each step is exactly what it would do
 to a transmitted wave, so the sweep is a legitimate way to read a pattern.
-
-::::
-
-::::{frame} The pattern is a product
 
 The quantity that sweep traces out is the full **antenna pattern**, and the
 array factor is only half of it. Lesson 16 established pattern multiplication
@@ -77,10 +87,6 @@ we have compared measurements against $AF(\theta)$ alone, and it held, because
 near broadside a patch radiates almost uniformly and $EF \approx 1$ across the
 main lobe. The approximation fails as soon as you steer.
 
-::::
-
-::::{frame} Key point
-
 :::{callout}
 The array factor is not the antenna pattern. The array factor is what the
 element *positions and phases* contribute; the pattern is that product with the
@@ -90,17 +96,24 @@ the element factor.
 
 ::::
 
-::::{frame} The element: a microstrip patch
+::::{frame} The Ideal Element
+:::{present}
+$$
+\begin{aligned}
+A_\text{proj} &= A\cos\theta \\
+G_e(\theta) &= G_e(0)\cos\theta \qquad (\text{power})
+\end{aligned}
+$$
+
+- Field pattern $\sqrt{\cos\theta}$; half power at $\pm 60^\circ$, a $120^\circ$ beam.
+- $D_e = 4$, or 6.0 dBi: the course's scan-loss model.
+:::
 
 The eight radiators on the PHASER are **microstrip patches** over a continuous
 ground plane. A patch is a half-wavelength resonant cavity radiating from the
 two open edges, and the ground plane underneath it is large enough that almost
 nothing reaches the back. Two consequences follow, and both are visible in your
 data.
-
-::::
-
-::::{frame} The ideal element
 
 First, the element radiates into one hemisphere with a broad, smooth pattern
 whose peak is at broadside. Start with the **ideal element**, the one that
@@ -120,7 +133,15 @@ $120^\circ$ beamwidth and gives an element directivity of $D_e = 4$, or
 
 ::::
 
-::::{frame} A real patch is steeper
+::::{frame} A Real Patch Is Steeper
+:::{present}
+<img src="../../viz/img/L21-patch-element.svg"
+     alt="Ideal and steeper element power patterns over a ground plane, one hemisphere"
+     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
+
+- Measured patches: $\cos^{1.3}\theta$ to $\cos^{1.5}\theta$, about $105^\circ$.
+- Versus ideal: 0.3 dB more loss at $30^\circ$, 1.2 dB at $60^\circ$.
+:::
 
 A real patch is steeper than the ideal element. Measured embedded elements roll
 off roughly as $\cos^{1.3}\theta$ to $\cos^{1.5}\theta$ in power, for
@@ -132,15 +153,12 @@ predictions and expect measurements to sit between it and the steeper curve.
 
 ::::
 
-::::{frame} Element pattern: ideal vs. real
-
-<img src="../../viz/img/L21-patch-element.svg"
-     alt="Ideal and steeper element power patterns over a ground plane, one hemisphere"
-     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
-
-::::
-
-::::{frame} What the ground plane does
+::::{frame} The Ground Plane Removes the Back
+:::{present}
+- No pattern behind the board, so the scan stops at $\pm 90^\circ$.
+- The patch pattern falls steadily toward the horizon.
+- A bump at $\pm 80^\circ$ is a wall, a bench, or a person.
+:::
 
 Second, the ground plane removes the back hemisphere. That is why the PHASER
 scans over $\pm 90^\circ$ and no further: there is no pattern behind the array
@@ -153,7 +171,12 @@ out the back of the board.
 
 ::::
 
-::::{frame} Scan loss
+::::{frame} Scan Loss
+:::{present}
+- The phase ramp moves the array factor; the element envelope stays put.
+- $AF = 1$ at the commanded angle, so the delivered gain is the envelope there.
+- The gain lost is **scan loss**.
+:::
 
 Steering does not move the element pattern. The phase ramp moves the array
 factor, and the array factor then rides on a fixed element envelope. The array
@@ -163,7 +186,18 @@ gain lost this way is called **scan loss**.
 
 ::::
 
-::::{frame} Scan loss: the bookkeeping, step 1
+::::{frame} Gain Bookkeeping
+:::{present}
+$$
+\begin{aligned}
+G(\theta_0) &= G_e(\theta_0) + 10\log_{10} N \\
+&= G_e(0) + 10\log_{10}(\cos\theta_0) + 10\log_{10} N
+\end{aligned}
+$$
+
+- All in dB; uniform excitation, $N$ identical elements.
+- Only the element term depends on scan.
+:::
 
 The bookkeeping is a sum in decibels. For $N$ identical elements with uniform
 excitation, the array's peak gain is the gain of one element times the number of
@@ -172,10 +206,6 @@ elements, so
 $$
 G(\theta_0)\ [\text{dBi}] = G_e(\theta_0)\ [\text{dBi}] + 10\log_{10} N ,
 $$
-
-::::
-
-::::{frame} Scan loss: the bookkeeping, step 2
 
 and the element term carries the scan dependence. The projected-aperture rule is
 a power law, so it enters with a factor of ten:
@@ -186,7 +216,16 @@ $$
 
 ::::
 
-::::{frame} Put the two together for the course array
+::::{frame} The Course Array at 60°
+:::{present}
+| Term | Broadside | Steered to $60^\circ$ |
+| :-- | :-- | :-- |
+| Element | 6.0 dBi | $6.0 - 3.0 = 3.0$ dBi |
+| Array, $10\log_{10} 8$ | 9.0 dB | 9.0 dB |
+| Total | 15.0 dBi | 12.0 dBi |
+
+- Elements still add in phase; all the loss is the element.
+:::
 
 Put the two together for the course array. The element contributes 6.0 dBi at
 broadside, the eight-element coherent sum contributes
@@ -195,10 +234,6 @@ $\theta_0 = 60^\circ$ and the element term drops by
 $10\log_{10}(\cos 60^\circ) = -3.0\ \text{dB}$, leaving 12.0 dBi. The array
 gain term never changes, because the elements still add in phase; all of the
 loss is the element pattern.
-
-::::
-
-::::{frame} Note — two different 9 dB numbers
 
 ```{note}
 This 9.0 dB of coherent array gain is not the 8.9 dB array-factor directivity
@@ -210,7 +245,16 @@ accountings agree to within 0.1 dB, which is why both appear in practice.
 
 ::::
 
-::::{frame} Worked example: steered to 45°
+::::{frame} Worked Example: Steered to 45°
+:::{present}
+| Quantity | Work | Result |
+| :-- | :-- | :-- |
+| Element, broadside | $D_e = 4$ | 6.0 dBi |
+| Element penalty | $10\log_{10}(\cos 45^\circ)$ | $-1.5$ dB |
+| Array gain | $10\log_{10} 8$ | $+9.0$ dB |
+| Steered peak | $6.0 - 1.5 + 9.0$ | 13.5 dBi |
+| Relative to broadside | $13.5 - 15.0$ | $-1.5$ dB |
+:::
 
 :::{admonition} Worked example — gain of the PHASER array steered to 45°
 :class: tip
@@ -219,16 +263,6 @@ accountings agree to within 0.1 dB, which is why both appear in practice.
 | Element gain, broadside | $D_e = 4$ for the ideal element | $6.0\ \text{dBi}$ |
 | Element penalty at $45^\circ$ | $10\log_{10}(\cos 45^\circ)$ | $-1.5\ \text{dB}$ |
 | Array gain | $10\log_{10} 8$ | $+9.0\ \text{dB}$ |
-:::
-
-::::
-
-::::{frame} Worked example: steered to 45°, continued
-
-:::{admonition} Worked example — gain of the PHASER array steered to 45°, continued
-:class: tip
-| Quantity | Work | Result |
-| :-- | :-- | :-- |
 | Steered peak gain | $6.0 - 1.5 + 9.0$ | $13.5\ \text{dBi}$ |
 | Peak relative to broadside | $13.5 - 15.0$ | $-1.5\ \text{dB}$ |
 
@@ -238,7 +272,12 @@ angle, so a measured peak near $-2$ dBc is the expected result.
 
 ::::
 
-::::{frame} Three numbers to remember
+::::{frame} Three Numbers to Remember
+:::{present}
+:class: callout
+
+Steering to $30^\circ$, $45^\circ$, $60^\circ$ costs 0.6, 1.5, 3.0 dB. At $60^\circ$ the beam also doubles, $13.2^\circ$ to $26.4^\circ$: the origin of the $\pm 60^\circ$ practical scan limit.
+:::
 
 Three numbers are worth memorizing, and they are the same three for any array
 built from aperture-like elements: steering to $30^\circ$ costs 0.6 dB, to
@@ -252,7 +291,12 @@ half of its angular resolution. That is the origin of the
 
 ::::
 
-::::{frame} The beam pulls off the commanded angle
+::::{frame} The Beam Pulls Inboard
+:::{present}
+- The envelope falls faster on the outboard side, so the lobe tilts toward broadside.
+- Commanded $60^\circ$: peak at $56.8^\circ$, width $22.9^\circ$ against the $26.4^\circ$ rule.
+- Scan loss is quoted at the command.
+:::
 
 The beam shape degrades in a second way that the array factor alone does not
 predict. The envelope falls faster on the outboard side of the beam than on the
@@ -265,7 +309,7 @@ gain at the commanded angle, which is why scan loss is quoted at the command.
 
 ::::
 
-::::{frame} Interactive — element factor times array factor
+::::{frame} Element Times Array
 :class: viz-frame
 
 :::{depth}
@@ -279,16 +323,23 @@ side of broadside dropping below their mirror images on the near side. The third
 setting is a real patch, steeper by about a decibel at wide scan.
 :::
 
+:::{present}
 <iframe src="../../viz/element-pattern-multiplication.html"
-        width="100%" height="515"
+        width="100%" height="517"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
         title="Element factor times array factor for the eight-element course array">
 </iframe>
+:::
 
 ::::
 
-::::{frame} Note — why the inboard sidelobe reads higher
+::::{frame} The Inboard Sidelobe Reads Higher
+:::{present}
+- Commanded $30^\circ$: the array factor says $-12.8$ dB on both sides.
+- Inboard reads $-12.2$ dBc: the peak fell 0.6 dB, the sidelobe did not.
+- Outboard, at $59.6^\circ$: $-15.2$ dBc.
+:::
 
 ```{note}
 Sidelobe levels are quoted relative to the peak, and the element factor moves
@@ -302,17 +353,22 @@ factor changed; the reference did.
 
 ::::
 
-::::{frame} What else separates a measured pattern from the prediction
+::::{frame} Four Effects Multiplication Misses
+:::{present}
+| Effect | Result |
+| :-- | :-- |
+| Mutual coupling | fills nulls, shifts far sidelobes 1-2 dB |
+| Edge elements | two halves of the pattern differ |
+| Phase and gain errors | raise the sidelobe floor, limit null depth |
+| The room | false lobes where the pattern is weak |
+:::
 
 Pattern multiplication assumes every element has the same pattern and the same
 excitation. Four effects break that assumption, in roughly this order of size on
 an eight-element array.
 
-::::
 
-::::{frame} Mutual coupling
-
-Each patch is a few tenths of a wavelength from its
+**Mutual coupling.** Each patch is a few tenths of a wavelength from its
 neighbors, close enough that the field radiated by one element induces current
 on the others. The element therefore does not radiate the pattern it would in
 isolation, and it does not present the same input impedance either. The practical
@@ -321,32 +377,23 @@ slightly different effective gains, which fills in nulls and raises far-out
 sidelobes by a decibel or two. Pattern multiplication uses one average element
 pattern for all eight and cannot represent the difference.
 
-::::
 
-::::{frame} Edge effects
-
-Coupling is not the same for every element, because the two
+**Edge effects.** Coupling is not the same for every element, because the two
 end elements have a neighbor on one side only. On an eight-element array that is
 a quarter of the aperture behaving differently from the middle, which is enough
 to make the two halves of a measured pattern unequal even with a perfectly
 symmetric taper. Large arrays hide this; small ones do not.
 
-::::
 
-::::{frame} Amplitude and phase errors
-
-The ADAR1000 sets phase in $2.8125^\circ$ steps
+**Amplitude and phase errors.** The ADAR1000 sets phase in $2.8125^\circ$ steps
 and gain in finite steps, the cables and traces are not identical lengths, and
 the calibration is only as good as the day it was run. Random errors of a few
 degrees and a few tenths of a decibel raise the sidelobe floor and limit how
 deep a null can be made. Lesson 23 treats the quantization and squint parts of
 this quantitatively.
 
-::::
 
-::::{frame} The measurement environment
-
-The lab is not an anechoic chamber. Energy
+**The measurement environment.** The lab is not an anechoic chamber. Energy
 reflects off benches, walls, and people, arrives at the array from directions
 the source is not in, and adds to whatever the pattern is doing there. The
 effect is largest where the true pattern is weakest, which is why far-out
@@ -354,7 +401,15 @@ sidelobes and any apparent backlobe are the least trustworthy parts of a trace.
 
 ::::
 
-::::{frame} The range must be long enough
+::::{frame} The Range Must Be Long Enough
+:::{present}
+$$
+r \ge \frac{2D^2}{\lambda} = \frac{2(0.098\ \text{m})^2}{0.0291\ \text{m}} = 0.66\ \text{m}
+$$
+
+- $D = 98$ mm between the outer element centers, at 10.3 GHz.
+- Level comparisons, such as scan loss, need 1.2 m or more.
+:::
 
 The range also has to be long enough. From Module 1, the far-field distance is
 $r \ge 2D^2/\lambda$ with $D$ the largest aperture dimension; for the course
@@ -367,11 +422,22 @@ $$
 
 The 1 m separation used in the lab clears that with room to spare, so the
 curvature of the incoming wavefront costs less than the $22.5^\circ$ of edge
-phase error the criterion allows.
+phase error the criterion allows. Clearing the far field is not the same as
+reading levels cleanly, though: in the Module 3 dry run a 1 m range showed
+only 0.2 to 0.4 dB of scan loss at $30^\circ$ and $45^\circ$, while about
+1.2 m gave $-0.7$ dB at $30^\circ$, on the prediction. Take any level
+comparison at 1.2 m or more.
 
 ::::
 
-::::{frame} Reading a real trace
+::::{frame} Predicted vs. Measured
+:::{present}
+<img src="../../viz/img/L21-measured-vs-predicted.svg"
+     alt="Predicted element-times-array pattern compared with the sweep a measurement is expected to produce"
+     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
+
+- Commanded $30^\circ$. Main lobe and first sidelobes match; the rest drifts.
+:::
 
 The L21 Lab rotates the array mechanically in front of the source and records the
 true pattern, then compares it to the electronic sweep. Both traces should show
@@ -381,15 +447,14 @@ $30^\circ$.
 
 ::::
 
-::::{frame} Predicted pattern vs. what a measurement should show
-
-<img src="../../viz/img/L21-measured-vs-predicted.svg"
-     alt="Predicted element-times-array pattern compared with the sweep a measurement is expected to produce"
-     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
-
-::::
-
-::::{frame} Three zones to read
+::::{frame} Three Zones to Read
+:::{present}
+| Zone | What to expect |
+| :-- | :-- |
+| Main lobe, first sidelobes | peak within $2^\circ$, sidelobes within 1 dB |
+| Middle sidelobes | recognizable, not quantitative |
+| Below about $-23$ dBc | noise floor; a null only reads "deeper" |
+:::
 
 Read it in three zones. The main lobe and the first sidelobes on either side are
 where the prediction holds: peak angle within a couple of degrees,
@@ -401,7 +466,12 @@ only that the null is deeper than the floor.
 
 ::::
 
-::::{frame} Two mechanical effects, not antenna effects
+::::{frame} Grid Steps and Protractor Offsets
+:::{present}
+- Sweep steps of $2.8125^\circ$: 1 to 3 degrees of apparent beamwidth error.
+- A protractor offset slides the whole trace without changing its shape.
+- Right shape, peak at $31.8^\circ$ for $30^\circ$: the fixture, not the antenna.
+:::
 
 Two mechanical facts also show up. The sweep steps in $2.8125^\circ$ increments,
 so a peak or a null can only be reported to the nearest grid point, which is
@@ -414,7 +484,8 @@ problem.
 
 ::::
 
-::::{frame} Summary — pattern and element
+::::{frame} Summary: Pattern and Element
+:class: read-only
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
@@ -424,7 +495,8 @@ problem.
 
 ::::
 
-::::{frame} Summary — scan loss and gain bookkeeping
+::::{frame} Summary: Scan Loss and Gain Bookkeeping
+:class: read-only
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
@@ -434,25 +506,31 @@ problem.
 
 ::::
 
-::::{frame} Summary — errors and the range
+::::{frame} Summary: Errors and the Range
+:class: read-only
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | Coupling and edges | elements are not identical in-array | fills nulls, moves far sidelobes 1-2 dB |
-| $r \ge 2D^2/\lambda$ | far-field distance, $D = 98\ \text{mm}$ | 0.66 m at 10.3 GHz; the 1 m range clears it |
+| $r \ge 2D^2/\lambda$ | far-field distance, $D = 98\ \text{mm}$ | 0.66 m at 10.3 GHz; level comparisons need 1.2 m |
 | Sweep noise floor | where the prediction stops being testable | about 23 dB below the peak |
 
 ::::
 
 ::::{frame} Practice
-:class: doc-links
+:class: read-only doc-links
 
 - <a class="doc-link" href="../../practice/ECE444_L21_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
 - <a class="doc-link doc-key" href="../../practice/ECE444_L21_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
 
 ::::
 
-::::{frame} Where this is going
+::::{frame} Looking Ahead
+:::{present}
+- The L21 Lab: measure the pattern two ways, electronic sweep and hand rotation.
+- Compare both to $AF$ alone and to $EF \cdot AF$; bring today's numbers.
+- L22: design the sidelobes with a taper.
+:::
 
 The L21 Lab puts this to the test. You will measure the array's pattern two ways —
 the electronic sweep you already know, and a mechanical rotation of the whole
