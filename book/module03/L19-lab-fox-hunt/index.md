@@ -163,7 +163,7 @@ again.
 2. Place your own powered HB100 $1\ \text{m}$ out at boresight, facing the array.
 3. Press **Find HB100** and record the Signal Freq in the packet.
 4. Press **Calibrate** and wait for it to finish.
-5. Press **1 Steering Angle** under **Lab Presets**, and set **Rx Gain (dB)** to 10.
+5. Open the **Lab Presets** section, press **1 Steering Angle**, and set **Rx Gain (dB)** for an FFT peak of $-10 \pm 3$ dBFS; record it.
 6. Press **Start**, and check the **FFT** tab for one tone near $0\ \text{MHz}$, at least $20\ \text{dB}$ above the floor.
 :::
 
@@ -213,8 +213,9 @@ something else. Keep the calibration from bring-up.
 Stay out of the lines of sight while the other kit is reading: a person near the
 path between a kit and the boxes reflects enough to move its peak. If Est. Angle
 falls outside $\pm 30^\circ$, the position is too close or aimed too far off;
-move it and measure again. If the tone is weak at your distance, raise
-**Rx Gain (dB)** to 20. If there is still no tone, the live box may face away
+move it and measure again. The fox is farther away than your own HB100 was, so
+its tone is weaker: raise **Rx Gain (dB)** until its FFT peak is back near
+$-10$ dBFS, and record the new setting. If there is still no tone, the live box may face away
 from you: move the kit around the circle and look again.
 ::::
 
