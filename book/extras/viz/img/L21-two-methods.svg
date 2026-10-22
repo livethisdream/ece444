@@ -62,7 +62,7 @@
 
 <!-- radius call-out -->
 <line x1="650" y1="300" x2="476.8" y2="200" stroke="#1d7a4d" stroke-width="1.4" marker-end="url(#l23aGrn)"/>
-<text x="548" y="278" text-anchor="middle" font-size="12.5" fill="#1d7a4d">about 1 m</text>
+<text x="548" y="278" text-anchor="middle" font-size="12.5" fill="#1d7a4d">about 1.2 m</text>
 
 <!-- arc end labels -->
 <text x="450" y="322" text-anchor="middle" font-size="12.5" fill="#5a5a5a">&#8722;90&#176;</text>
