@@ -12,7 +12,8 @@ is required (write \textbf{None} if you did not collaborate).}
 \begin{questions}
 
 \question \textbf{Beamwidth of the course array.} The ADALM-PHASER array has $N = 8$
-patch elements on $d = 14\ \text{mm}$ centers and operates at $10.3\ \ghz$. Use
+patch elements on $d = 14\ \text{mm}$ centers. For this problem, the source is at
+$10.3\ \ghz$. Use
 $\theta_\text{HP} \approx 0.886\lambda / \lp N d \cos\theta_0 \rp$ throughout.
 \begin{parts}
 
@@ -236,16 +237,16 @@ requires a half-power beamwidth of $2.0\mydeg$ and must steer to $\pm 60\mydeg$.
 		\end{solution}
 
 	\part The beamwidth requirement must hold across the whole scan volume, not just
-	at broadside. State the aperture this actually demands and the resulting element
+	at broadside. State the aperture this demands and the resulting element
 	count at $d = \lambda/2$.
 		\begin{solution}[1.1in]
 		The beam is widest at the edge of the volume, so size for $\theta_0 =
 		60\mydeg$:
 		\eq{ Nd = \frac{762}{\cosp{60\mydeg}} = 1524\ \text{mm} = 50.8\lambda,
 		     \qquad N = \frac{1524}{15} = 102 }
-		The last $60\mydeg$ of scan doubles the array. Whether that is worth paying
-		for is a system question, and it has to be asked before the aperture is
-		fixed.
+		The last $60\mydeg$ of scan doubles the array. Whether the extra elements
+		are worth their cost is a system question, and we settle it before we fix
+		the aperture.
 		\end{solution}
 
 \end{parts}
@@ -253,7 +254,7 @@ requires a half-power beamwidth of $2.0\mydeg$ and must steer to $\pm 60\mydeg$.
 \newpage
 \question \textbf{Reading a measured sweep.} A student sweeps the course array at
 $10.3\ \ghz$ ($\lambda = 29.1\ \text{mm}$) with the GUI and records a main lobe
-$13.1\mydeg$ wide at half power, a null-to-null width of $28.5\mydeg$, and a first
+$13.1\mydeg$ wide at half power, a null-to-null width of $31.0\mydeg$, and a first
 sidelobe at $-11.5$ dBc.
 \begin{parts}
 
@@ -272,31 +273,33 @@ sidelobe at $-11.5$ dBc.
 	\end{minipage}
 
 	\part Theory puts the first-null beamwidth at $30.1\mydeg$ and the student
-	measured $28.5\mydeg$. The sweep steps the commanded angle by the phase-shifter
-	resolution of $2.8125\mydeg$. Explain the discrepancy in one or two sentences.
-		\begin{solution}[1.1in]
-		The sweep samples the pattern every $2.8125\mydeg$, so the recorded trace
-		almost never lands on the exact null angle of $15.1\mydeg$. Nulls are narrow,
-		sharp features, so the apparent null position moves to the nearest grid point
-		and the measured null-to-null width reads one to three degrees off. The
-		half-power points sit on a gentle slope and interpolate far more reliably,
-		which is why beamwidth is quoted at half power.
+	measured $31.0\mydeg$. The sweep steps the element-to-element phase by the
+	phase-shifter resolution of $2.8125\mydeg$ per point. Explain the discrepancy in
+	one or two sentences.
+		\begin{solution}[1.3in]
+		One phase step moves $\sin\theta$ by $2.8125\mydeg/\lp 360\mydeg \times
+		0.481 \rp = 0.0162$, which is $0.93\mydeg$ of angle near broadside. The
+		recorded trace almost never lands on the exact null at $15.1\mydeg$, and
+		reading each null at its lowest sample places it up to one step outside the
+		true null, so the measured width falls between $30.1\mydeg$ and about
+		$31.1\mydeg$. The $0.9\mydeg$ difference comes from the sampling grid, not
+		from the array.
 		\end{solution}
 
 	\part The measured first sidelobe is $-11.5$ dBc, while theory for a uniform
 	8-element array gives $-12.8$ dBc. Is this evidence of a fault? Answer in one or
 	two sentences.
 		\begin{solution}[1.1in]
-		No. A uniform array's first sidelobe is expected between $-11$ and
-		$-13\ $dBc on this hardware once element-to-element amplitude and phase
-		errors, the coarse sweep grid, and the finite noise floor are included, and
-		$-11.5$ dBc sits inside that band. A sidelobe several decibels high, or a
+		No. On this hardware we expect a uniform array's first sidelobe between
+		$-11$ and $-13\ $dBc once we include element-to-element amplitude and phase
+		errors, the coarse sweep grid, and the finite noise floor, and $-11.5$ dBc
+		sits inside that band. A sidelobe several decibels high, or a
 		main lobe that is not at the commanded angle, would be evidence of a fault.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part A second sweep, taken after a lab partner changed the element gains,
-		shows a main lobe $27\mydeg$ wide with no visible sidelobes above the noise
+		\part A second sweep on the same kit, with a different set of element gains
+		loaded, shows a main lobe $27\mydeg$ wide with no visible sidelobes above the noise
 		floor. State which aperture configuration this is and what it implies about
 		the number of active elements.
 		\begin{solution}[1.2in]
