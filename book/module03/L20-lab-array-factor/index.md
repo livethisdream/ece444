@@ -491,7 +491,7 @@ Submit the L20 Lab sheet, one per cadet, at the start of the next period.
    columns, at your Signal Freq, filled in before you measured and the
    measured columns filled in at the bench.
 
-   | Active elements | Peak (dBFS) | Step from 8 (dB) | HPBW meas | HPBW calc | FNBW meas | FNBW calc | First SLL |
+   | Active elements | Peak (dBFS) | Change from $N = 8$ (dB) | HPBW meas | HPBW calc | FNBW meas | FNBW calc | First SLL |
    | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
    | 8 (E1 to E8) | | reference | | | | | |
    | 4 (E3 to E6) | | | | | | | |
