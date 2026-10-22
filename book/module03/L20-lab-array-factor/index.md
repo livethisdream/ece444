@@ -39,35 +39,39 @@ L20 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::{frame} Halve the Aperture, Double the Beam
 :::{present}
 - Sweep the beam past a fixed source at 8, 4, and 2 active elements.
-- Lesson 20's table predicts every number before you measure it.
-- One kit, one setup, one L20 Lab sheet.
+- You predict every number at your own Signal Freq before you measure it.
+- One kit, four sweeps, one L20 Lab packet.
 :::
 
-Lesson 20 ended with a table of predictions: what the PHASER's beam should
-look like at eight, four, and two active elements. Today that table goes to
-the bench. You sweep the array three times, shrinking the active aperture by
-half between sweeps, and read the half-power beamwidth, the first-null
-beamwidth, and the first sidelobe level off each trace. The predictions are
-already written down, so the work is the third step: reconciling what the plot
-shows with what the array factor says. Most of the differences have a known
+Lesson 20 derived the beamwidth and sidelobe results this lab tests. Today
+they go to the bench. You sweep the array three times, shrinking the active
+aperture by half between sweeps, and read the half-power beamwidth, the
+first-null beamwidth, and the first sidelobe level off each trace. A fourth
+sweep leaves only the two end elements on, which tests the array factor on a
+configuration that is not a contiguous block. You compute
+the predictions before the period, at your own kit's frequency, so the work at
+the bench is the third step: reconciling what the plot shows with what the
+array factor says. Most of the differences have a known
 cause. One of them, the size of the peak step between apertures, does not yet,
 and the lab records it as an open measurement.
 ::::
 
 ::::{frame} Beamwidth Follows the Aperture
 :::{present}
-$$\theta_{\text{HP}} \approx \frac{0.886\ \lambda}{Nd}, \qquad
-\text{FNBW} = 2\arcsin\!\left(\frac{\lambda}{Nd}\right)$$
+$$\begin{aligned}
+\theta_{\text{HP}} &\approx \frac{0.886\ \lambda}{Nd} \\
+\text{FNBW} &= 2\arcsin\!\left(\frac{\lambda}{Nd}\right)
+\end{aligned}$$
 
 - Halve the active aperture $Nd$, and both beamwidths double.
-- Values at $10.3\ \text{GHz}$; yours will differ.
+- Compute both at your own Signal Freq in Part 1.
 :::
 :::{present}
-| Active | $Nd$ | HPBW | FNBW | First SLL |
-| :-- | :-- | :-- | :-- | :-- |
-| 8 | $112\ \text{mm}$ | $13.3^\circ$ | $30.1^\circ$ | $-12.8$ dB |
-| 4 | $56\ \text{mm}$ | $27.4^\circ$ | $62.6^\circ$ | $-11.3$ dB |
-| 2 | $28\ \text{mm}$ | $62.6^\circ$ | $180^\circ$ | none |
+| Active | $Nd$ | First SLL |
+| :-- | :-- | :-- |
+| 8 | $112\ \text{mm}$ | $-12.8$ dB |
+| 4 | $56\ \text{mm}$ | $-11.3$ dB |
+| 2 | $28\ \text{mm}$ | yours to find |
 :::
 
 The PHASER is an 8-element linear array with element spacing $d = 14\ \text{mm}$.
@@ -78,25 +82,25 @@ at its own frequency, somewhere between $10.1$ and $10.7\ \text{GHz}$, so your
 numbers will differ: you will press **Find HB100** at the bench, record the
 Signal Freq it reports, and compute $\lambda$, $d/\lambda$, $kd$, and every
 prediction at that frequency. The kit in the dry run read $10.408\ \text{GHz}$,
-where $\lambda = 28.82\ \text{mm}$ and the two-element HPBW is $61.9^\circ$
-rather than $62.6^\circ$.
+where $\lambda = 28.82\ \text{mm}$.
 
 Two results from Lesson 20 set every number you are about to measure: the
 half-power beamwidth and the first-null beamwidth above. Both depend on the
 array only through $Nd$, the **active aperture**. Turning off elements at the
 ends of the row shortens $Nd$ without changing $d$, and that is the whole
-experiment: halve the aperture, watch the beam double. The table gives the
-exact array-factor solutions. The $0.886$ rule returns $13.2^\circ$ and
-$26.4^\circ$ for the first two rows, within a degree of them.
+experiment: halve the aperture, watch the beam double. The $0.886$ rule
+carries a small-angle approximation, so check at each aperture whether the beam
+is narrow enough for it, and solve the array factor's half-power point directly
+where it is not.
 
-The table restates Lesson 20's predictions to one decimal place, and it is the
-pattern for the calculated column you will fill in at your own frequency: 8 is
-E1 to E8, 4 is E3 to E6, and 2 is E4 and E5. Note
-that the sidelobe entries are not all the same number. The familiar
-$-13\ \text{dB}$ figure is the large-$N$ limit of the uniform array factor. An
-8-element array lands at $-12.8\ \text{dB}$, close enough to call
-$-13\ \text{dB}$, but a 4-element array reaches only $-11.3\ \text{dB}$, and a
-2-element array has no sidelobe at all.
+The table lists the three apertures you will sweep: 8 is E1 to E8, 4 is E3
+to E6, and 2 is E4 and E5. The beamwidth columns on
+Part 1 of the packet are yours to compute at your own frequency. Note that the
+sidelobe entries are not the same number. The familiar $-13\ \text{dB}$ figure
+is the large-$N$ limit of the uniform array factor. An 8-element array lands at
+$-12.8\ \text{dB}$, close enough to call $-13\ \text{dB}$, but a 4-element
+array reaches only $-11.3\ \text{dB}$. The two-element entry is yours to work
+out from its array factor.
 
 :::{callout}
 Beamwidth is set by the active aperture $Nd$, not by the element count on its
@@ -109,31 +113,47 @@ only through the small-$N$ correction.
 
 ::::{frame} Two Entries That Need Care
 :::{present}
-$$\cos\frac{\psi}{2} = \frac{1}{\sqrt{2}} \quad\Longrightarrow\quad \sin\theta = \frac{\lambda}{4d} = 0.520 \quad\Longrightarrow\quad \text{HPBW} = 62.6^\circ$$
+$$AF_2 = \cos\frac{\psi}{2}, \qquad \psi = kd\sin\theta$$
 
-- At $N = 2$ the $0.886$ rule gives $53^\circ$; its small-angle step fails.
-- The first null needs $\sin\theta = \lambda/2d = 1.04$: outside visible space, so FNBW is $180^\circ$.
-- Values at $10.3\ \text{GHz}$.
+- At $N = 2$, check the $0.886$ rule's small-angle step before using it.
+- Find the first null, $\psi = \pi$, and check whether it lands at a real angle.
 :::
 
-Two entries in that table need a word of explanation before you go to the
-bench. The $62.6^\circ$ at $N = 2$ does not come from the $0.886\ \lambda/(Nd)$
-rule, which returns $52.8^\circ$ there. That rule carries a small-angle step
-inside it, and a beam this wide violates it. For two elements the array factor
-is just $\cos(\psi/2)$ with $\psi = kd\sin\theta$, so the half-power point
-solves $\cos(\psi/2) = 1/\sqrt{2}$ directly: $\psi = \pi/2$, so
-$\sin\theta = \lambda/4d = 0.520$ at $10.3\ \text{GHz}$ and
-$\theta = 31.3^\circ$, which doubles to $62.6^\circ$.
+Two entries in the table need care before you go to the bench, and both are in
+the two-element row. The $0.886\ \lambda/(Nd)$ rule carries a small-angle step
+inside it, and the wider the beam, the worse that step gets. Decide whether a
+two-element beam is narrow enough for it. For two elements the array factor is
+just $\cos(\psi/2)$ with $\psi = kd\sin\theta$, so you can also solve its
+half-power point directly at your own Signal Freq.
 
-The $180^\circ$ in the FNBW column is a convention rather than a
-measurement. The first null of $\cos(\psi/2)$ needs
-$\sin\theta = \lambda/2d$, which is $1.04$ at $10.3\ \text{GHz}$, and no real
-angle satisfies that. The null exists in the mathematics but falls outside
-visible space, so the pattern has no null anywhere you can steer, and the
-beamwidth between first nulls is quoted as the full $180^\circ$ of the scan
-range. The condition $\lambda/2d > 1$ holds at every frequency below
-$c/2d = 10.71\ \text{GHz}$, so it holds for your HB100 too; evaluate it at your
-own Signal Freq for the lab sheet.
+The first-null beamwidth and the first sidelobe come from the same function.
+The first null of $\cos(\psi/2)$ needs $\psi = \pi$, which is
+$\sin\theta = \lambda/2d$. Evaluate that at your own Signal Freq and decide
+whether a real angle satisfies it. Part 1 of the packet asks you to explain
+what you entered for the two-element FNBW and first sidelobe, and why.
+::::
+
+::::{frame} Two Elements, Far Apart
+:::{present}
+$$\begin{aligned}
+AF &= \cos\frac{\psi}{2} \\
+\psi &= kD\sin\theta \\
+D &= 7d = 98\ \text{mm}
+\end{aligned}$$
+
+- E1 and E8: the same two-element array factor, seven times the spacing.
+- In Part 1, predict every full-height lobe and the main-lobe width.
+:::
+
+The fourth sweep leaves only E1 and E8 on. It is still a two-element array, so
+its array factor is the same $\cos(\psi/2)$ as the E4 and E5 pair, with the
+spacing $D = 98\ \text{mm}$ in place of $d$. That one change tests the
+derivation on an array that is not a contiguous block, which is what "an
+arbitrary linear array" in the objective asks for. Work out where
+$\psi = 2\pi m$ lands in visible space, and how wide the lobe at $0^\circ$ is,
+before you sweep. Compare both with the E4 and E5 row: the two pairs add the
+same two voltages, so their peaks should agree, and their beams should not.
+Lesson 23 names what you will see.
 ::::
 
 ::::{frame} Reading a Sweep for What It Is
@@ -167,7 +187,7 @@ following the array factor about $23\ \text{dB}$ below the peak of the uniform
 beam, and anything the array factor puts below that line reads as the floor
 instead. The floor is not one fixed level for every trace. In the dry run the
 four-element nulls filled to about $-23$ dBc of their own, lower peak, while
-the two-element trace, which has no nulls, fell about $27\ \text{dB}$ from its
+the two-element trace fell about $27\ \text{dB}$ from its
 peak toward the edges of the scan. And the nulls are the first casualties of
 both effects together: a true null is infinitely deep and infinitely narrow,
 so the grid usually misses its bottom, and even a sample that lands on it
@@ -181,12 +201,10 @@ reads the floor.
 The widget below draws the array factor for each of the three apertures, then
 adds those three measurement effects on a toggle. Set the aperture, read HPBW,
 FNBW, and first sidelobe level off the ideal curve, then switch measurement
-effects on and read the same three numbers again from the sampled trace. Watch
-the FNBW pill in particular: at eight elements it holds at $30.1^\circ$ when
-the grid appears, because the null sits exactly 16 phase steps out and a sample
-lands on it, and at two elements it reports a dash because there is no null to
-find. The HPBW pill is the one that moves, and it moves more as the aperture
-shrinks. The widget holds its floor $23\ \text{dB}$ below the eight-element
+effects on and read the same three numbers again from the sampled trace. The
+eight-element FNBW pill holds when the grid appears, because the null sits
+exactly 16 phase steps out and a sample lands on it. The HPBW pill is the one
+that moves, and it moves more as the aperture shrinks. The widget holds its floor $23\ \text{dB}$ below the eight-element
 peak at every aperture, which leaves its two-element peak only about
 $11\ \text{dB}$ above the floor. The dry-run kit's two-element trace sat about
 $27\ \text{dB}$ above its floor, so read the widget's smaller apertures for how
@@ -231,7 +249,7 @@ whole trace along the angle axis.
 1. Browse to your kit's address from Lesson 17 and wait for the pill to read
    **Connected**.
 2. With the HB100 at boresight, press **Find HB100** and record the Signal Freq
-   it reports on the lab sheet.
+   it reports in Part 2 of the packet.
 3. Press **Calibrate** and wait for it to finish, with the HB100 still at
    boresight.
 4. Press **2 Array Factor** under **Lab Presets**. Expand the section first;
@@ -252,7 +270,7 @@ source, its battery, and its distance. In the dry run, $10\ \text{dB}$ drove
 the peak over full scale at $1\ \text{m}$, and the L20 sweeps ran at
 $1\ \text{dB}$ with the source about $1.2\ \text{m}$ out. A main lobe with a flat top on the Rectangular tab means the
 receiver has clipped: turn the gain down. Leave the gain where Step 5 set it
-for all three sweeps, so the three peaks compare against each other.
+for all four sweeps, so the peaks compare against each other.
 
 Calibrate starts the per-element gains and phases from a matched state. An
 uncalibrated array has amplitude and phase errors spread across the row, which
@@ -270,15 +288,15 @@ the controls you change.
 The HB100 is a free-running DRO and drifts across $10.1$ to $10.7\ \text{GHz}$
 with temperature. The GUI hunts for the tone, so a drift of tens of megahertz
 between sweeps does not affect this lab. Moving the source does,
-because all three traces are compared against each other at the end.
+because all four traces are compared against each other at the end.
 ```
 ::::
 
-::::{frame} Procedure: Steps A1 to A3
+::::{frame} Procedure: Steps A1 to A4
 :class: read-only
 
 Each step names the control you touch and the observation you should get. Fill
-the measurement table on the lab sheet as you go, and predict before you measure at
+Tables A and B in Part 2 of the packet as you go, and predict before you measure at
 every aperture change.
 
 **Step A1 - Sweep the full array.** With all eight Element Gains at 100, press
@@ -287,55 +305,61 @@ single main lobe at $0^\circ$ and three or four sidelobe pairs on each side.
 Press **Freeze** to hold it as a reference trace. Read the Peak Array Gain
 readout and record it. Hover along the trace to read the angles where it falls
 $3\ \text{dB}$ below the peak, and record the difference as the measured HPBW.
-Expect it within a degree of your calculated value, about $13^\circ$. Then
+Expect it within a degree of your calculated value. Then
 find the two minima that bracket the main lobe and record the difference as
-FNBW; expect about $30^\circ$. Finally read the height of the tallest sidelobe
+FNBW, and compare it with your calculated value. Finally read the height of the tallest sidelobe
 relative to the peak, near $\pm 22^\circ$, and record it as the first SLL.
 Expect $-11$ to $-14\ \text{dBc}$.
 
 **Step A2 - Halve the aperture.** In **Element Gains**, set E1, E2, E7, and
 E8 to 0, leaving E3 through E6 at 100. Before pressing anything, check your
-prediction: four active elements over $56\ \text{mm}$ of aperture give about
-$27^\circ$ HPBW and $62^\circ$ FNBW at your Signal Freq. The voltage sum
+calculated row for four active elements over $56\ \text{mm}$ of aperture. The voltage sum
 puts the peak $6.0\ \text{dB}$ below the eight-element peak; expect the bench
 to read about $5 \pm 1\ \text{dB}$. Press **Start**, then **Freeze**. Read
 the same four numbers. The main lobe is now roughly twice as wide and the
 sidelobe structure has thinned out to one pair near $\pm 50^\circ$. A null
 that fills to the floor reads wide: in the dry run one of the four-element
-nulls filled to about $-23$ dBc and the FNBW read about $67^\circ$ against
-$62.0^\circ$.
+nulls filled to about $-23$ dBc and the FNBW read about $5^\circ$ wider than
+the array factor gives.
 
 **Step A3 - Halve it again.** Set every element to 0 except E4 and E5.
-Predict first: two elements over $28\ \text{mm}$ give a beam of about
-$62^\circ$ and no visible null. The voltage sum puts the peak
+Check your calculated two-element row first. The voltage sum puts the peak
 $12.0\ \text{dB}$ below the eight-element peak; expect the bench to read
-about $10 \pm 2\ \text{dB}$. Press **Start**, then **Freeze**. The trace is
-now a single broad hump with no sidelobes and no null anywhere in the scan. It
-falls about $27\ \text{dB}$ toward $\pm 80^\circ$, which is the two-element
-array factor's own roll-off toward endfire: at $10.408\ \text{GHz}$ the array
-factor reaches $-27.0\ \text{dB}$ at $90^\circ$.
+about $10 \pm 2\ \text{dB}$. Press **Start**, then **Freeze**, and read the
+same four numbers. The trace falls about $27\ \text{dB}$ toward $\pm 80^\circ$,
+which is the two-element array factor's own roll-off toward endfire, not a
+fault.
+
+**Step A4 - Spread the pair.** Set E4 and E5 to 0 and E1 and E8 to 100, so
+only the end elements are on. Check your Part 1 Question 3 first. Press
+**Start**, then **Freeze**. Read the peak, the half-power width and the
+first-null width of the lobe at $0^\circ$, and the angle and level of every
+full-height lobe, into Table B.
 ::::
 
-::::{frame} Procedure: Steps A4 and A5
+::::{frame} Procedure: Steps A5 and A6
 :class: read-only
 
-**Step A4 - Compare the three frozen traces.** All three are on the plot
+**Step A5 - Compare the frozen traces.** The three uniform apertures are on the plot
 together now. Two trends should be visible without measuring anything. The
 beamwidth doubles at each halving, because $Nd$ halves and both beamwidth
 formulas scale as $1/Nd$. This is the measurement to trust, and it is the one
-the lab sheet grades. The peak steps down at each halving, because the elements
+the packet grades. The peak steps down at each halving, because the elements
 add in voltage at boresight: eight equal signals in phase give eight times the
 voltage of one, four give four times, and the ideal steps are
 
-$$20\log_{10}\!\left(\frac{N_{\text{active}}}{8}\right)
-= -6.0\ \text{dB at } N = 4, \qquad -12.0\ \text{dB at } N = 2$$
+$$\begin{aligned}
+\Delta P &= 20\log_{10}\!\left(\frac{N_{\text{active}}}{8}\right) \\
+&= -6.0\ \text{dB} \quad (N = 4) \\
+&= -12.0\ \text{dB} \quad (N = 2)
+\end{aligned}$$
 
 The bench reads less than that. Expect about $5 \pm 1\ \text{dB}$ per
 halving: the dry-run kit read $5.1$ and $4.8\ \text{dB}$. Record both of your
-steps from the Peak Array Gain readings; Written answer 2 on the lab sheet
-asks about the difference.
+steps from the Peak Array Gain readings; Part 3 of the packet asks about the
+difference.
 
-**Step A5 - Restore the array.** Set all eight Element Gains back to 100,
+**Step A6 - Restore the array.** Set all eight Element Gains back to 100,
 so the next lab starts from a full uniform aperture.
 ::::
 
@@ -366,23 +390,24 @@ accounts for at most $0.5\ \text{dB}$: with all eight gains at 0 the peak fell
 $33.5\ \text{dB}$ below the full array. Receiver compression is ruled out
 too: lowering every element gain from 100 to 50 lowered the signal, and the
 shortfall grew, where compression would have made it shrink. The remaining candidates are
-still being measured, and Written answer 2 on the lab sheet asks you to
+still being measured, and Part 3 of the packet asks you to
 propose one with a test that would check it.
 
 None of this touches the shape measurements. HPBW, FNBW, and sidelobe level are
 all read relative to each trace's own peak, so an error in the peak level does
-not move them. The dry-run kit's numbers, against predictions computed at its
-own $10.408\ \text{GHz}$:
+not move them. The dry-run kit's eight- and four-element beamwidths landed
+within half a degree of the array factor at its own $10.408\ \text{GHz}$; its
+sidelobes and peak steps:
 
-| Active | HPBW meas / pred | FNBW meas / pred | First SLL meas / pred | Peak step meas / ideal |
-| :-- | :-- | :-- | :-- | :-- |
-| 8 (E1 to E8) | $13.4^\circ$ / $13.2^\circ$ | $29.8^\circ$ / $29.8^\circ$ | $-12.5$ to $-14.0$ / $-12.8$ dB | reference |
-| 4 (E3 to E6) | $27.4^\circ$ / $27.1^\circ$ | about $67^\circ$ / $62.0^\circ$ | $-12$ to $-14$ / $-11.3$ dB | $-5.1$ / $-6.0$ dB |
-| 2 (E4, E5) | about $56^\circ$ ($52$ to $58^\circ$) / $61.9^\circ$ | none / $180^\circ$ by convention | none | $-9.9$ / $-12.0$ dB |
+| Active | First SLL meas / pred | Peak step meas / ideal |
+| :-- | :-- | :-- |
+| 8 (E1 to E8) | $-12.5$ to $-14.0$ / $-12.8$ dB | reference |
+| 4 (E3 to E6) | $-12$ to $-14$ / $-11.3$ dB | $-5.1$ / $-6.0$ dB |
+| 2 (E4, E5) | Part 1 | $-9.9$ / $-12.0$ dB |
 
-The two-element HPBW is the one shape entry that does not agree. It read about
-$56^\circ$, with a spread from $52$ to $58^\circ$, against $61.9^\circ$
-predicted, so record it with its spread rather than as a match.
+The two-element HPBW is the one shape entry that does not agree. The dry-run
+kit read it about $6^\circ$ narrower than the array factor, with a spread of
+about $\pm 3^\circ$, so record it with its spread rather than as a match.
 ::::
 
 ::::{frame} Where the Sweep Leaves the Array Factor
@@ -391,7 +416,7 @@ predicted, so record it with its spread rather than as a match.
 | :-- | :-- | :-- |
 | Floor | none | about $-23$ dBc |
 | Nulls | $-\infty$ | $\approx -23$ dBc, the floor |
-| FNBW, $N = 8$, $10.3\ \text{GHz}$ | $30.1^\circ$ | $30.1^\circ$ to $31.1^\circ$ |
+| FNBW | from the nulls | up to one step ($\approx 1^\circ$) wider |
 | First SLL | $-12.8$ dB | $-11$ to $-14$ dBc |
 :::
 
@@ -408,14 +433,13 @@ than the second or third.
 **Nulls read about $-23$ dBc instead of $-\infty$.** Two effects fill them, and
 it is worth keeping them separate. Grid straddle is the smaller one. The
 8-element null sits at a phase step of $360^\circ/8 = 45^\circ$, exactly 16
-LSBs, so with the source on boresight a sample lands on it at $15.1^\circ$. A
+LSBs, so with the source on boresight a sample lands on it. A
 source half a step off boresight, $0.47^\circ$, leaves the nearest sample at
 $-30\ \text{dB}$, still below the floor. The floor is what fills the null: it
 adds its own power to every sample near it. Reading each null at its lowest
-sample puts the measured FNBW between $30.1^\circ$ and $31.1^\circ$ at
-$10.3\ \text{GHz}$, within one step of the $30.1^\circ$ the array factor
-gives. The dry-run kit read $29.8^\circ$ at $10.408\ \text{GHz}$, where the
-array factor gives $29.8^\circ$.
+sample puts the measured FNBW up to one step, about $1^\circ$, wider than the
+array factor's value. The dry-run kit's eight-element FNBW matched the array
+factor to within $0.1^\circ$.
 
 **The first sidelobe reads $-11$ to $-14$ dBc.** The array factor puts it at
 $-12.8\ \text{dB}$ and $21.9^\circ$, a phase step of $64.7^\circ$. The sample
@@ -429,8 +453,8 @@ meaningful at this dynamic range; a range is.
 
 The half-power readings get less certain as the aperture shrinks. At eight
 and four elements the dry-run kit's HPBW landed within half a degree of the
-array factor. At two elements it read about $56^\circ$, between $52$ and
-$58^\circ$, against $61.9^\circ$. The two-element pattern is flat near its
+array factor. At two elements it read about $6^\circ$ narrower, with a spread
+of about $\pm 3^\circ$. The two-element pattern is flat near its
 half-power points: at $10.408\ \text{GHz}$ it falls only about
 $0.2\ \text{dB}$ per degree there, against about $1\ \text{dB}$ per degree
 for eight elements. An error of $0.6\ \text{dB}$ in the level you read the
@@ -451,9 +475,13 @@ agreement within several degrees, not within one.
 Suppose you turn off only E1 and E8, leaving six elements over
 $Nd = 6 \times 14 = 84\ \text{mm}$. Work it at $10.3\ \text{GHz}$, where
 $\lambda = 29.1\ \text{mm}$; at the bench you would use your own Signal Freq.
-The beamwidth scales as $1/Nd$, so from the eight-element value,
+The $0.886$ rule gives
 
-$$\theta_{\text{HP}} \approx 13.3^\circ \times \frac{112}{84} = 17.7^\circ$$
+$$\begin{aligned}
+\theta_{\text{HP}} &\approx \frac{0.886\ \lambda}{Nd} \\
+&= \frac{0.886\ (29.1)}{84}\ \text{rad} \\
+&= 17.6^\circ
+\end{aligned}$$
 
 and the first-null beamwidth is
 $2\arcsin(29.1/84) = 2 \times 20.27^\circ = 40.5^\circ$. Solving the
@@ -473,9 +501,7 @@ degree or two of $17.9^\circ$.
 Run `python phaser_headless.py --sim` and open the same URL. The lab reproduces
 step for step in simulation, because the simulated source already sits at
 boresight and nothing in the procedure requires moving it. Its Signal Freq is
-$10.525\ \text{GHz}$, so compute the calculated columns there. The sim's
-sweep reads $13.1^\circ$, $29.1^\circ$, and $65.4^\circ$ for the three
-apertures. It adds the element signals exactly in voltage, so its peak steps
+$10.525\ \text{GHz}$, so compute the calculated columns there. It adds the element signals exactly in voltage, so its peak steps
 come out at the ideal $6.0\ \text{dB}$ rather than the bench's $5\ \text{dB}$,
 and it does not model **Rx Gain (dB)**. Record those as your measured column
 and reconcile them against the calculated column exactly as you would on the
@@ -483,48 +509,16 @@ bench.
 ```
 ::::
 
-::::{frame} Deliverables
-:class: read-only
-
-Submit the L20 Lab sheet, one per cadet, at the start of the next period.
-
-1. **Your kit's settings.** The Signal Freq that **Find HB100** reported and
-   the Rx Gain (dB) you set at bring-up, with $\lambda$, $d/\lambda$, and
-   $kd$ at that Signal Freq.
-2. **The measurement table.** One row per aperture, with the calculated
-   columns, at your Signal Freq, filled in before you measured and the
-   measured columns filled in at the bench.
-
-   | Active elements | Peak (dBFS) | Step from 8 (dB) | HPBW meas | HPBW calc | FNBW meas | FNBW calc | First SLL |
-   | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-   | 8 (E1 to E8) | | reference | | | | | |
-   | 4 (E3 to E6) | | | | | | | |
-   | 2 (E4, E5) | | | | | | $180^\circ$ | none |
-
-3. **Written answer 1.** Explain why the first-null beamwidth of the two-element
-   array is quoted as $180^\circ$ rather than measured. Name the condition on
-   $\lambda/2d$ that decides whether a null exists in visible space, and
-   evaluate it for $d = 14\ \text{mm}$ at your Signal Freq.
-4. **Written answer 2.** The voltage sum predicts a peak step of
-   $6.0\ \text{dB}$ per halving. Compare your two measured steps with it.
-   Leakage through the elements set to 0 and receiver compression were ruled
-   out on the dry-run kit; propose one other possible cause of a shortfall, and
-   describe a measurement on your kit that would test it.
-::::
-
-::::{frame} Lab Sheet
+::::{frame} Lab Packet
 :class: read-only doc-links
 
-The L20 Lab sheet is the turn-in document.
+The L20 Lab packet is one submission for the whole lab, turned in complete before Lesson 21. It replaces the old lab sheet and the L20 Lab problem set. It has three parts:
 
-- <a class="doc-link" href="../../labs/ECE444_Lab_L20_ArrayFactor_blank.pdf" target="_blank" rel="noopener">L20 Lab sheet (PDF)</a>
-::::
+1. **Part 1, Pre-Lab** (individual, before the lab period, because you need it at the bench): your kit's frequency, the prediction table for the three uniform apertures, the array factor and lobe angles for E1 and E8, and a rehearsal of the E1 and E8 sweep on the hosted simulator.
+2. **Part 2, Measurements** (your own kit's data, recorded in class): Table A, one row per sweep, and Table B, the E1 and E8 lobes.
+3. **Part 3, Writeup** (individual, after the lab): reconcile the measurements with the predictions, and three analysis problems.
 
-::::{frame} Practice
-:class: read-only doc-links
-
-- <a class="doc-link" href="../../practice/ECE444_L20Lab_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a class="doc-link doc-key" href="../../practice/ECE444_L20Lab_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
+- <a class="doc-link" href="../../labs/ECE444_Lab_L20_ArrayFactor_blank.pdf" target="_blank" rel="noopener">L20 Lab packet (PDF)</a>
 ::::
 
 ::::{frame} Summary: The Array Factor on the Bench
@@ -533,9 +527,10 @@ The L20 Lab sheet is the turn-in document.
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | $Nd$ | active aperture; sets both beamwidths | $112\ \text{mm}$ at $N = 8$, $d = 14\ \text{mm}$ |
-| $\theta_{\text{HP}} \approx 0.886\ \lambda/Nd$ | half-power beamwidth, broadside | $13.3^\circ$, $27.4^\circ$, $62.6^\circ$ for $N = 8, 4, 2$ at $10.3\ \text{GHz}$, solved exactly; the rule fails at $N = 2$ |
-| $\text{FNBW} = 2\arcsin(\lambda/Nd)$ | first-null beamwidth | $30.1^\circ$ at $N = 8$, $10.3\ \text{GHz}$; no null when $\lambda/2d > 1$, below $10.71\ \text{GHz}$ |
+| $\theta_{\text{HP}} \approx 0.886\ \lambda/Nd$ | half-power beamwidth, broadside | compute at your Signal Freq; check the small-angle step at each aperture |
+| $\text{FNBW} = 2\arcsin(\lambda/Nd)$ | first-null beamwidth | compute at your Signal Freq; a null needs a real angle |
 | First SLL, uniform | set by distribution shape, not size | $-12.8$ dB at $N = 8$, $-11.3$ dB at $N = 4$; measured $-11$ to $-14$ dBc |
+| Two elements $D$ apart | span sets the lobe width; $D > \lambda$ repeats the lobe | compute for E1 and E8 in Part 1 |
 | $20\log_{10}(N_{\text{active}}/8)$ | ideal peak drop from the coherent voltage sum | $-6.0$ dB per halving; the bench reads about $5 \pm 1$ dB, cause open |
 | Sweep grid | one ADAR1000 phase LSB per point | $2.8125^\circ$ of phase, $0.93^\circ$ of angle at broadside at $10.3\ \text{GHz}$; 162 points |
 | Dynamic range | a trace's peak above its floor | $\approx 23$ dB; nulls read the floor, $\approx -23$ dBc |
