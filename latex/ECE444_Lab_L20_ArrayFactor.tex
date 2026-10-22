@@ -167,7 +167,7 @@ trace's own peak.
 \textbf{Active} & \textbf{Peak (dBFS)} & \textbf{Step from 8 (dB)} & \textbf{HPBW meas} & \textbf{HPBW calc} & \textbf{FNBW meas} & \textbf{FNBW calc} & \textbf{First SLL (dBc)} \\\hline\hline
 8 (E1--E8) & \kv{$-5.25$} & \fv{reference} & \kv{$13.4\mydeg$} & \kv{$13.3\mydeg$} & \kv{$29.8\mydeg$} & \kv{$30.1\mydeg$} & \kv{$-12.5$ to $-14.0$} \\\hline
 4 (E3--E6) & \kv{$-10.4$} & \kv{$-5.1$} & \kv{$27.4\mydeg$} & \kv{$27.4\mydeg$} & \kv{$\approx 67\mydeg$} & \kv{$62.6\mydeg$} & \kv{$-12$ to $-14$} \\\hline
-2 (E4, E5) & \kv{$-15.1$} & \kv{$-9.9$} & \kv{$\approx 56\mydeg$} & \kv{$62.6\mydeg$} & \kv{no null} & \fv{$180\mydeg$} & \fv{none} \\\hline
+2 (E4, E5) & \kv{$-15.1$} & \kv{$-9.9$} & \kv{$\approx 56\mydeg$} & \kv{$62.6\mydeg$} & \kv{no null} & \kv{$180\mydeg$} & \kv{none} \\\hline
 \end{tabular}
 \end{center}
 
@@ -214,10 +214,10 @@ $10.525\ \ghz$, and the peak steps sit at the ideal $6.0$ dB.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\question \textbf{Written answer 1.} Explain why the first-null beamwidth of the
-two-element array is quoted as $180\mydeg$ rather than measured. Name the
-condition on $\lambda/2d$ that decides whether a null exists in visible space,
-and evaluate it for $d = 14$ mm at your Signal Freq.
+\question \textbf{Written answer 1.} Explain what you entered for the
+two-element FNBW and first SLL calculated values, and why. Name the condition
+on $\lambda/2d$ that decides whether a null exists in visible space, and
+evaluate it for $d = 14$ mm at your Signal Freq.
 
 \begin{solutionorlines}[2.6in]
 For two elements the array factor is $\cos(\psi/2)$ with $\psi = kd\sin\theta$,
@@ -228,7 +228,9 @@ $d \ge \lambda/2$. At the nominal $10.3\ \ghz$ the wavelength is $29.1$ mm, so
 and no real angle satisfies the condition. The null exists in the mathematics
 but falls outside the range of angles the array can see, so the pattern has no
 null anywhere in the scan and the beamwidth between first nulls is quoted as the
-full $180\mydeg$ of the scan range. The condition holds at every frequency below
+full $180\mydeg$ of the scan range. With no null there is no sidelobe either:
+$\cos(\psi/2)$ falls monotonically from the peak to the edge of visible space,
+so the first SLL entry is ``none.'' The condition holds at every frequency below
 $c/2d = 10.71\ \ghz$, so every HB100 gives the same answer: $\lambda/2d = 1.03$
 at $10.408\ \ghz$ and $1.02$ at $10.525\ \ghz$.
 \end{solutionorlines}
