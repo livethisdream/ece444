@@ -180,7 +180,7 @@ is at the right end of the row and E8 at the left. Turn the kit so that its face
 swings toward the E1 end, as seen from the source, and the source ends up on the
 E8 side of the normal, at $+\theta$; the kit's pointer reads the same angle on
 the protractor. Part 2 starts by confirming that sign with a beam sweep, whose
-**Est. Angle** reads the source's angle.
+**Angle** readout, set to **Peak**, reads the source's angle.
 
 Two things set how good the rotation is. The kit must turn about the center of
 the array, between E4 and E5: an axis $20\ \text{mm}$ off center moves the
@@ -284,12 +284,12 @@ the receiver has clipped; turn the gain down and start again.
 :class: read-only
 
 :::{present}
-7. With the beam sweeping, turn the kit to $+30^\circ$ on the protractor and record **Est. Angle** in Table A.
+7. With the beam sweeping, turn the kit to $+30^\circ$ on the protractor and record the **Angle** readout, set to **Peak**, in Table A.
 8. Repeat at $-30^\circ$ and at $0^\circ$.
 9. At $0^\circ$, record the peak, the half-power beamwidth, and both first sidelobes in Table B.
 :::
 
-If Est. Angle reads near $-30^\circ$ when the protractor reads $+30^\circ$, the
+If the Angle readout reads near $-30^\circ$ when the protractor reads $+30^\circ$, the
 kit is turning the wrong way, or the protractor is labeled backward; fix the
 labels before going on, because every angle in Tables D and E depends on them. A
 reading within $\pm 2^\circ$ of the protractor confirms the sign and the
@@ -301,15 +301,18 @@ and the reference for the other three runs.
 :class: read-only
 
 :::{present}
-10. Open **Lab Presets** and press **7 Antenna Pattern**. Leave **Steer Angle (deg)** at $0$.
+10. Open **Lab Presets**, press **7 Antenna Pattern**, and set **Steer Angle (deg)** to $0$.
 11. Lift the HB100 off its tripod and stand on the $-90^\circ$ mark, aimed at the array.
 12. Walk the arc to $+90^\circ$ in about $10\ \text{s}$, keeping the radius and the aim.
 13. Read the main-lobe peak and both first sidelobes off the trace and record them in Table C.
 14. Repeat twice more, then return the HB100 to its tripod at boresight.
 :::
 
-Preset 7 holds the beam at the Steer Angle and plots the received level against
-time. Practice the walk once before you record: too fast and the pattern crowds
+Preset 7 sets **Mode**, in the Beam Steering section, to **Signal vs Time**: the
+beam holds at the Steer Angle, which takes effect as you change it, with no
+Apply, and the Tracking tab plots the peak level in dBFS against time over the
+last $30\ \text{s}$. The plot's title shows the held angle and the update rate;
+check that it reads "Beam held at 0.0°" before you walk. Practice the walk once before you record: too fast and the pattern crowds
 into one part of the plot, too slow and it runs off the edge. Read each lobe's
 peak by hovering over the trace. The three walks will not agree exactly, and
 that disagreement is a measurement in its own right: Part 3 compares it with the
@@ -320,7 +323,7 @@ rotation's.
 :class: read-only
 
 :::{present}
-15. Kit at $0^\circ$, beam held at $0^\circ$: record **Peak Array Gain** as the reference.
+15. Kit at $0^\circ$, beam held at $0^\circ$: record **Peak Gain** as the reference.
 16. Turn the kit to each $10^\circ$ mark from $-90^\circ$ to $+90^\circ$ and record the level relative to the reference in Table D.
 17. Turn slowly through the main lobe, each first null, and each first sidelobe, and record the angle and level of each extreme.
 :::
@@ -338,7 +341,7 @@ the level stops changing as you turn, write "floor".
 :class: read-only
 
 :::{present}
-18. Set **Steer Angle (deg)** to $30$, kit back at $0^\circ$.
+18. Set **Steer Angle (deg)** to $30$, kit back at $0^\circ$, and check the plot title reads "Beam held at 30.0°".
 19. Repeat Steps 16 and 17 for Table E, with each level relative to Step 15's reference.
 20. Turn the kit to $180^\circ$, source behind the board, and record that level.
 21. Set **Steer Angle (deg)** back to $0$ and the kit to $0^\circ$ before you leave.
