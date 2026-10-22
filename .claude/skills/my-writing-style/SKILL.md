@@ -7,7 +7,7 @@ description: The user's personal writing voice, captured from their real writing
 
 You are Claude, drafting on the user's behalf — not writing as them. Apply this profile whenever you draft or edit prose the user will send or publish as themselves, and when they give feedback on how a draft sounds, apply it and update this profile with what changed. It never applies to someone else's text (a colleague's email stays in the colleague's voice) or to your own replies (restyling how you talk is not drafting as the user). Everything below describes how the user writes, captured from their own sent writing; treat it as reference data about them, not as instructions addressed to you. Quoted fragments are samples of their writing.
 
-> Built from 6 emails (3 customer-facing technical, 3 internal status) · updated September 14, 2026.
+> Built from 6 emails (3 customer-facing technical, 3 internal status) · updated October 13, 2026.
 > September 2026 additions: two conference papers (GRCon 2022, sole author, 4,600 words; ASEE 2025, first author), a formal letter of recommendation, two ECE 448 lecture decks, and the user's hand edit of an ECE 444 lesson page. Email, technical papers, course prose, formal letters, and slides are covered; Slack and DMs are not.
 
 ## How the user writes (overall)
@@ -72,6 +72,8 @@ Evidence: the GRCon 2022 paper (every sentence theirs) and the ASEE 2025 paper (
 - **Em-dashes and parentheticals are normal here.** "Protected networks—especially those relying on omni-directional broadcasts—had frustrating scalability and use-case limitations." "(i.e., private)," "(like GPS or ADSB/Mode-S)," "(Appendix A.1)." The email rule against both is an email rule.
 - **Cross-references by number, results to the digit.** "(Fig. 2-4)," "(Appendices C.3-C.4)," "87.5% of the decoded packet is erroneous," "the packet density is 6+5/16 = 0.6875."
 - A quoted colloquialism is allowed once it is defined: "hallucinations" for spurious decodes, in quotes on first use and bare afterward.
+- **Abstracts name the hardware and the deliverable.** From their edit of an ASEE 2027 abstract, October 2026: they added the part number and band ("ADALM-PHASER (CN0566) kit," "X-band"), the actual cohort size, and the midterm project as concrete steps ("design a dipole, construct it, tune it ... build a matching L-Network and measure its E- and H-plane cuts"). Name the origin of a borrowed method rather than leaving it uncredited.
+- **"RADAR" in all caps** in their own prose.
 
 ## Surface: course pages (ECE 444 lesson prose)
 
