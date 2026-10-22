@@ -71,7 +71,6 @@ old-style sheet keeps its own practice set, listed under its lesson.
 | L20 — Array Factor and Beamwidth | <a class="doc-link" href="practice/ECE444_L20_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L20_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L20 Lab — Array Factor | <a class="doc-link" href="practice/ECE444_L20Lab_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L20Lab_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L21 — Antenna Pattern | <a class="doc-link" href="practice/ECE444_L21_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L21_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
-| L21 Lab — Antenna Pattern | <a class="doc-link" href="practice/ECE444_L21Lab_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L21Lab_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L22 — Sidelobes and Tapering | <a class="doc-link" href="practice/ECE444_L22_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L22_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L23 — Beam Squint and Quantization | <a class="doc-link" href="practice/ECE444_L23_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L23_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
 | L22–L23 Lab — Tapering, Squint, and Quantization | <a class="doc-link" href="practice/ECE444_L22Lab_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L22Lab_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
@@ -93,8 +92,8 @@ reading.
 | Phased Array Bring-Up | L17 Lab | <a href="labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">lab packet</a> |
 | Beam Steering | L18 Lab | <a href="labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">lab packet</a> |
 | Fox Hunt (teams of two) | L19 Lab | <a href="labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">lab packet</a> |
-| Array Factor | L20 Lab | <a href="labs/ECE444_Lab_L20_ArrayFactor_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
-| Antenna Pattern | L21 Lab | <a href="labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
+| Array Factor | L20 Lab | <a href="labs/ECE444_Lab_L20_ArrayFactor_blank.pdf" target="_blank" rel="noopener">lab packet</a> |
+| Antenna Pattern | L21 Lab | <a href="labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">lab packet</a> |
 | Tapering, Squint, and Quantization | L22–L23 Lab | <a href="labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
 | Null Steering | L24 Lab | <a href="labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
 

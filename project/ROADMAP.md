@@ -130,7 +130,7 @@ That is the one shared file it may change.
 
 ## 5. Schedule and status
 
-Status as of 2026-10-21. "Cut" means the page fits the 20-slide budget.
+Status as of 2026-10-22. "Cut" means the page fits the 20-slide budget.
 "Sweeps" means the voice, why, and illustration passes. Lessons are topics,
 not periods; each lab follows its lesson on the bench and is listed under it.
 
@@ -146,10 +146,10 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L18 Lab | Beam Steering | **L18 Lab** packet | 14/21; dry run 2026-10-19, fixes merged (#110, #121): E1 side, 45° marker, scan loss at 1.2 m | ready |
 | L19 | Direction Finding | none (L19 Lab packet) | rewritten (#103), 19/20, fix widget (#123) | sweeps |
 | L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | built (#114): teams of two, anywhere outside the keep-out circle, 8/20 | hardware-day checks |
-| L20 | Array Factor and Beamwidth | practice | cut 18/20 | sweeps (thread started 2026-10-21) |
+| L20 | Array Factor and Beamwidth | practice | 18/20, sweeps done (#128) | ready |
 | L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | convert to packet |
-| L21 | Antenna Pattern | practice | 37/20 | cut + sweeps (thread started 2026-10-21) |
-| L21 Lab | Antenna Pattern | **L21 Lab** (old-style sheet) + practice | 12/20 | convert to packet (same thread) |
+| L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
+| L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m | 13/20 (#127); merged before its dry run | **hardware dry run** |
 | L22 | Sidelobes and Tapering | practice | 46/20 | cut + sweeps |
 | L23 | Beam Squint and Quantization | practice | 40/20 | cut + sweeps |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** (old-style sheet) + practice | 46/20, uncut | cut + sweeps + packet |
@@ -179,21 +179,29 @@ needs its rubric, published with the L28 Lab packet.
 
 ## 6. Work queue, in order
 
-1. **Lesson passes in teaching order:** L20 (sweeps) and L21 (cut, sweeps,
-   lab packet) are running; then L22–L24 with the L22–L23 and L24 Labs,
-   each before it is taught. A lesson's pass converts its lab's sheet to a
+1. **Lesson passes in teaching order:** L22–L24 with the L22–L23 and L24
+   Labs, each before it is taught. A lesson's pass converts its lab's sheet to a
    packet and folds in the dry-run lessons (`review/M3_LAB_DRYRUN.md`):
    set the level to −10 dBFS, compute at the kit's own Find HB100
    frequency, open Lab Presets first, E1 on the right facing the patches,
-   level comparisons at 1.2 m or more.
-2. **L19 sweeps** (voice, why, illustration) on the rewritten lesson.
-3. **Phaser, open from the dry run:** why array peaks read 1–3 dB under the
+   level comparisons at 1.2 m or more. Two Phaser changes ride along:
+   the readouts are now **Angle** (Peak/Centroid) and **Peak Gain**, not
+   "Est. Angle" and "Peak Array Gain" (still stale in the L17–L20 Labs, L19,
+   L22, L23, and the L22–L23 Lab), and preset 6 Quantization now holds the
+   beam at 15° with Blackman for a Signal vs Time walk (phaser #48).
+2. **L21 Lab dry run** on a kit updated to phaser #48: a held +30° beam
+   peaks with the source on the E8 side, the Tracking update rate resolves
+   the lobes on a 10 s walk, the floor with the beam held, the coarse marks
+   and scan loss at 1.2 m, and whether the kit turns to 180° with its
+   cables on.
+3. **L19 sweeps** (voice, why, illustration) on the rewritten lesson.
+4. **Phaser, open from the dry run:** why array peaks read 1–3 dB under the
    in-phase sum of single elements; whether each channel's phase moves with
    its gain setting; whether recalibrating with the source exactly at
    boresight removes the +1–2° offset.
-4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
+5. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
-5. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
+6. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
    taught in class, then the L28–L31 Labs as the final project's scaffolding,
    each packet built to start from the lab before it, plus the report rubric.
 
