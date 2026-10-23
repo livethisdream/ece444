@@ -28,6 +28,7 @@ edits it; a lesson thread reports its status in its PR body instead.
 | `book/extras/viz/img/*.svg` | lesson-page figures |
 | `book/extras/practice/*.pdf` | **committed** practice PDFs — what the site actually serves |
 | `latex/ECE444_Practice_L<NN>.tex` | practice source; `_main.tex` is the harness; a lab's old `L<NN>Lab` set folds into its packet; make no new ones |
+| `book/extras/labs/*_blank.pdf` | committed blank lab packets; their **sources and keys are in the private `ECE444-faculty`** (the `.tex` holds the solutions), built there by its `build_lab.sh` |
 | `book/_templates/` | the shell: `frame.html`, `page.html`, `_sitenav.html` |
 | `book/_static/shell.*` | palette, type, the bottom bar, the index overlay — every page |
 | `book/_static/frames.*` | frame lessons only; `page.*` reading pages only |
@@ -302,6 +303,11 @@ Every page is chrome-free: no sidebar, no header, one centerd bar at the bottom
   pair.
 - Practice problems are labeled at the **2nd LO level**, one `LO 1.X` banner per
   set.
+- **Lab packet sources live in `ECE444-faculty`** (Neil, 2026-10-23: "Lab
+  solutions should live in faculty"). A packet's `.tex` carries its solution
+  blocks inline, so it never goes in this public repo; only its blank PDF
+  does. Attach `ECE444-faculty` to edit or build one. Practice sets are
+  different: their SOLUTIONS PDFs are published on purpose.
 - **Assessments do not hand students the formulas** (Neil, 2026-09-28: giving
   the formula in the stem "makes the assessments easy enough for a high
   schooler"). A question states the situation and the givens and asks for the

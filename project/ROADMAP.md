@@ -29,11 +29,11 @@ A lesson thread for lesson NN may edit **only**:
 | :-- | :-- |
 | the lesson page and its lab page | `book/moduleMM/LNN-*/index.md` (the lab is `LNN-lab-*`) |
 | its practice set, and its lab's | `latex/ECE444_Practice_LNN.tex` (`_LNNLab.tex`) and `book/extras/practice/ECE444_LNN_Practice_*.pdf` (`LNNLab`) |
-| its lab packet or sheet | `latex/ECE444_Lab_LNN_*.tex` and `book/extras/labs/ECE444_Lab_LNN_*_blank.pdf` |
+| its lab packet | source `ECE444_Lab_LNN_*.tex` in `ECE444-faculty` (it holds the answers; Neil, 2026-10-23), and the blank `book/extras/labs/ECE444_Lab_LNN_*_blank.pdf` here |
 | its figures | `book/extras/viz/img/LNN-*.svg` and its generator `scripts/graphics/*lNN*` |
 | a widget used **only** by this lesson | `book/extras/viz/<widget>.html` |
 | its own budget exception | its line in `scripts/verify/budgets.py`, removed when the lesson is cut |
-| its lab key | `lab-keys/ECE444_Lab_LNN_*_KEY.pdf` in `ECE444-faculty` |
+| its lab key | `lab-keys/ECE444_Lab_LNN_*_KEY.pdf` in `ECE444-faculty`, written there by its `build_lab.sh` |
 
 Everything else belongs to the Integrator. A lesson thread that needs any of
 these changed lists the change under **"For the Integrator"** in its PR body
