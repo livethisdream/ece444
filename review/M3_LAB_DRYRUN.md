@@ -183,7 +183,8 @@ relative to each trace's own peak, so they are not affected by this.
 - [ ] **L18, L20:** tell students to recompute predictions at their kit's Find HB100 frequency (10.408 GHz here), not 10.525 or 10.3 GHz.
 - [ ] **L20:** expect peak steps of about 5 ± 1 dB per halving rather than 6, grade on beamwidths, and revise the noise-floor explanation in "What the Three Traces Show".
 - [x] **L19:** procedure rewritten for the firing range (this branch).
-- [ ] **L19:** the packet (`latex/ECE444_Lab_L19_FoxHunt.tex`) still describes the keep-out circle; rebuild it for the firing range.
+- [x] **L19:** packet source (`latex/ECE444_Lab_L19_FoxHunt.tex`) rewritten for the firing range.
+- [ ] **L19:** rebuild `book/extras/labs/ECE444_Lab_L19_FoxHunt_blank.pdf` and the KEY PDF with the real house macros.
 - [ ] **L19:** add a stand for every kit to the equipment list; hand-holding breaks the bearing budget.
 
 ## Open Questions
