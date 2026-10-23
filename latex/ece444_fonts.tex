@@ -3,13 +3,14 @@
 % Body text is Barlow (SIL OFL; the faces and the license are in
 % latex/fonts/Barlow/). Barlow is not in TeX Live, so it is loaded as an
 % OpenType face through fontspec -- which means the document must be built
-% with lualatex, not pdflatex. build_practice.sh and build_lab.sh both do.
+% with lualatex, not pdflatex. build_practice.sh and build_project.sh do; the
+% lab packets build in ECE444-faculty from its vendored copy of this file.
 %
 % Compiling with pdflatex anyway is not an error: the guard below falls back
 % to the LaTeX default so the source still compiles under any engine and can
 % be syntax-checked. The resulting PDF just is not the one we ship.
 %
-% Paths are relative to latex/, which is where both build scripts run
+% Paths are relative to latex/, which is where the build scripts run
 % (each does cd "$(dirname "$0")"). Loading by path rather than by installed
 % family name means no system font install and no fontconfig, so a fresh
 % clone builds a byte-comparable PDF anywhere.

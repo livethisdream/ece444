@@ -151,7 +151,7 @@ shows where the source is.
 :class: callout
 The sweep tries every phase ramp the hardware can set. The ramp that cancels
 the arrival ramp gives the largest sum, so the steer angle at the peak is the
-bearing. The GUI reports that angle as **Est. Angle**.
+bearing: the GUI's **Angle** readout, set to **Peak**.
 :::
 ::::
 
@@ -196,7 +196,7 @@ $$\begin{aligned}
 \end{aligned}$$
 
 - $0.91^\circ$ at broadside, $1.05^\circ$ at $30^\circ$, $1.29^\circ$ at $45^\circ$.
-- Est. Angle is off by up to half a step: $0.53^\circ$ at $30^\circ$.
+- The Angle readout is off by up to half a step: $0.53^\circ$ at $30^\circ$.
 :::
 :::{present}
 <img src="../../viz/img/L19-sweep-grid.svg"
@@ -212,10 +212,10 @@ by a fixed $0.0159$ in $\sin\theta$. The same step in $\sin\theta$ is a larger s
 in angle away from broadside, because $\delta\theta = \delta(\sin\theta)/\cos\theta$,
 the same stretching that broadens the steered beam in L18.
 
-Est. Angle is the steer angle of the largest sample, so it can only land on
+The Angle readout is the steer angle of the largest sample, so it can only land on
 the grid. Unless the source happens to sit on a grid point, the reported angle
 is the nearest one, off by up to half a step. In the figure the source is at
-$30.0^\circ$ and Est. Angle reads $29.5^\circ$. This is one reason to keep the
+$30.0^\circ$ and Angle reads $29.5^\circ$. This is one reason to keep the
 source within about $\pm 30^\circ$ of broadside: the grid step, the beamwidth,
 and the scan loss all grow with $1/\cos\theta$ beyond that.
 ::::
@@ -269,7 +269,7 @@ $6\ \text{dB}$ down.
 A reflection more than about $20^\circ$ away forms its own lobe and moves the
 main peak much less. It becomes dangerous if someone stands between the kit
 and the source: the direct lobe drops, the reflection's lobe is now the
-largest, and Est. Angle reports the direction of the whiteboard. A bearing
+largest, and Angle reports the direction of the whiteboard. A bearing
 that disagrees with the others by several degrees is most often this.
 ::::
 
@@ -286,10 +286,10 @@ $$\beta = h + \theta_\text{est}$$
 | **total** | root sum of squares | $1.5^\circ$ |
 :::
 
-Est. Angle measures the angle from the array's broadside, which is wherever
+The Angle readout measures the angle from the array's broadside, which is wherever
 the kit happens to face. To draw the bearing on a floor plan we need it in the room's
 frame. Measure angles counterclockwise from a fixed room axis, seen from above.
-If broadside points along heading $h$ and positive Est. Angle is the
+If broadside points along heading $h$ and positive Angle is the
 counterclockwise side, the room bearing is
 
 $$\beta = h + \theta_\text{est}.$$
@@ -356,7 +356,7 @@ r_A &= 4\ \frac{\sin 55.2^\circ}{\sin 67.4^\circ} = 3.56\ \text{m} \\
 :class: tip
 Kit A sits at the room origin with its broadside at $h_A = 60^\circ$; kit B
 sits $b = 4\ \text{m}$ along the room's $x$ axis with $h_B = 120^\circ$. A
-reads Est. Angle $-2.6^\circ$ and B reads $+4.8^\circ$, so the room bearings are
+reads Angle $-2.6^\circ$ and B reads $+4.8^\circ$, so the room bearings are
 
 $$\beta_A = 60^\circ - 2.6^\circ = 57.4^\circ, \qquad \beta_B = 120^\circ + 4.8^\circ = 124.8^\circ.$$
 
@@ -372,7 +372,7 @@ and the fix is $3.56\ \text{m}$ out along A's bearing:
 $$\mathbf x = r_A(\cos\beta_A,\ \sin\beta_A) = (1.92,\ 3.00)\ \text{m}.$$
 
 The box was at $(2.00,\ 3.00)\ \text{m}$, where the true bearings are
-$56.3^\circ$ and $123.7^\circ$. Each Est. Angle read about $1.1^\circ$ high,
+$56.3^\circ$ and $123.7^\circ$. Each Angle reading was about $1.1^\circ$ high,
 inside the $1.5^\circ$ budget, and the fix lands $0.08\ \text{m}$ from the box.
 :::
 ::::
@@ -562,10 +562,10 @@ check themselves.
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | $\psi = kd(\sin\theta_s - \sin\theta_0)$ | residual phase step after steering to $\theta_0$ | sum peaks where $\theta_0 = \theta_s$ |
-| Est. Angle | steer angle of the largest sample in the sweep | on a grid $0.0159$ apart in $\sin\theta$ |
+| Angle | steer angle of the largest sample in the sweep | on a grid $0.0159$ apart in $\sin\theta$ |
 | $\theta_\text{HP}$ | sets resolution of two sources, not accuracy for one | $12.9^\circ$ at broadside |
 | $\sin\theta_\text{meas} = \sin(\text{az})\cos(\text{el})$ | the cone angle a line array measures | $29.0^\circ$ for $30^\circ$ at $14^\circ$ down |
-| $\beta = h + \theta_\text{est}$ | room bearing from heading and Est. Angle | $\sigma_\beta \approx 1.5^\circ$ with a taped heading |
+| $\beta = h + \theta_\text{est}$ | room bearing from heading and Angle | $\sigma_\beta \approx 1.5^\circ$ with a taped heading |
 ::::
 
 ::::{frame} Summary: Locating the Source
@@ -591,14 +591,14 @@ HB100 among numbered boxes from bearings you and a partner take on your two kits
 
 ::::{frame} Looking Ahead
 :::{present}
-- The L19 Lab: two kits, bearings from wherever you choose outside the keep-out zone, one fix, one box.
-- Bring the error budget and a plan for where to stand.
+- The L19 Lab: one kit on a taped firing line, a bearing from each station, one fix.
+- Bring the error budget, a station plan, and your script.
 - L20-L24 return to the pattern itself: beamwidth, tapering, squint, and nulls.
 :::
 
 In the L19 Lab you and a partner find the one live HB100 among several
 numbered boxes. You choose where to put your kits, record each kit's position
-and heading, read Est. Angle off the beam sweep, convert it to a room bearing,
+and heading, read Angle off the beam sweep, convert it to a room bearing,
 and solve for the fix. Come with this lesson's error budget and a plan for
 where to stand that gives a steep crossing for any box in the zone.
 

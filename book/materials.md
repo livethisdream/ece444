@@ -114,7 +114,6 @@ authoritative statement of the requirements.
 ## Hardware & Software
 
 - **ADALM-PHASER** (Analog Devices) — phased-array platform used in Modules 3–4 for beamforming and FMCW radar labs
-- **RTL-SDR / HackRF** — introductory software-defined radio for Lesson 1 demos
 - **Antenna simulation software** — **nec_lab**, the course front end to NEC-2
   (`scripts/nec_lab/` in the course repository). It runs in a browser, either
   from a copy your instructor is serving or from your own machine, and needs no
@@ -128,6 +127,9 @@ authoritative statement of the requirements.
   the turntable, and exports Touchstone files and run data. It also runs against a
   simulator with no instruments attached, so the controls can be rehearsed on your
   own machine before the period.
+
+## Additional Resources
+
 - **Makerspace 3D printers** — the LulzBot TAZ Workhorse+ printers in the ECE
   Makerspace.
   <a href="handouts/Makerspace_3D_Printing_Training.pdf" target="_blank" rel="noopener">3D printing training (PDF, 18 slides)</a>
@@ -135,7 +137,3 @@ authoritative statement of the requirements.
   slicing and naming your `.gcode`, loading filament, and sending a job to the
   printer. By Vanessa Rosario, DFEC, 6 February 2025. The printer password is
   given when you complete the training with Ms. Rosario.
-
-## Additional Resources
-
-_TBD — application notes, videos, and links will be added here as they are pulled into lessons._
