@@ -54,6 +54,21 @@ crossing is your call. Peak Gain plays a smaller part: when two boxes sit
 close to the crossing, the pattern of levels along the line says which one fits.
 ::::
 
+::::{frame} The Hunt in Five Steps
+:::{present}
+<picture>
+<source media="(max-width: 600px)" srcset="../../viz/img/L19-lab-sequence-narrow.svg">
+<img src="../../viz/img/L19-lab-sequence.svg" alt="The L19 Lab in five steps, each a top view of the firing range. 1, bring up: your own HB100 at boresight, then Find HB100 and Calibrate. 2, reference shot: a source toward the plus-x end sets the sign s of Angle. 3, walk the line: with the fox on, read Angle and Peak Gain at each station mark. 4, fix: the bearings cross at a box, which is your call. 5, reveal: the instructor names the live box, and Part 3 reconciles." style="max-width: 100%; display: block; margin: 0 auto;">
+</picture>
+:::
+
+Steps 1 and 2 happen before the fox goes on: the bring-up on your own HB100,
+then the reference shot that fixes which end of the tape positive Angle points
+to. Steps 3 and 4 are the hunt: the same measurement at every station mark,
+then the fix. Step 5 is the instructor's, and Part 3 of the packet starts
+from it.
+::::
+
 ::::{frame} The Range
 :::{present}
 | Element | Size |

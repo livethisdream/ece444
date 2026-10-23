@@ -271,7 +271,7 @@ peak moves away from broadside while the sidelobe structure stretches with it.
 :::
 :::{present}
 <img src="../../viz/img/L18-bench-setup.svg"
-     alt="Bench geometry from above: the eight-element array, a 1 m protractor arc centered between E4 and E5, and the HB100 positions at 0, 30, and 45 degrees on the plus side, toward E8, filled on the 1 m arc for the angle readings and hollow 1.2 m out on the same lines for the scan-loss levels; confirm the plus side with Est. Angle"
+     alt="Bench geometry from above: the eight-element array, a 1 m protractor arc centered between E4 and E5, and the HB100 positions at 0, 30, and 45 degrees on the plus side, toward E8, filled on the 1 m arc for the angle readings and hollow 1.2 m out on the same lines for the scan-loss levels; confirm the plus side with the Angle readout"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -292,7 +292,7 @@ wave reaches first. Looking at the front of the array, the patch face, E1 is at
 the right end of the row and E8 at the left, as in the L17 Lab, so $+\theta$ is
 to your left as you face the patches. In the figure, which looks down on the
 bench from above, that puts E8 on the right. Confirm the sign on your kit before
-you record anything: with the source on the $+$ side, **Est. Angle** reads
+you record anything: with the source on the $+$ side, **Angle** reads
 positive.
 ::::
 
@@ -336,17 +336,17 @@ within about $\pm 1\ \text{MHz}$. If it is buried, re-aim the HB100 or press
 
 :::{present}
 10. Press **Reset** under **Phase Control**.
-11. With the source at $0^\circ$, record **Est. Angle** and the half-power beamwidth in Table A.
+11. With the source at $0^\circ$, record **Angle** and the half-power beamwidth in Table A.
 12. Press **Freeze** to hold the boresight trace.
 13. Move the HB100 along the arc to $+30^\circ$, still $1\ \text{m}$ out and facing the array, and record the same two.
-14. Move it to $+45^\circ$ and record the same two. If **Est. Angle** jumps to about $-90^\circ$, read the main lobe's angle off the trace and record that.
-15. Move the HB100 straight out to $1.2\ \text{m}$ (4 ft) or more on the $+45^\circ$ line and record **Peak Array Gain**; repeat on the $+30^\circ$ and $0^\circ$ lines at the same distance.
+14. Move it to $+45^\circ$ and record the same two. If **Angle** jumps to about $-90^\circ$, read the main lobe's angle off the trace and record that.
+15. Move the HB100 straight out to $1.2\ \text{m}$ (4 ft) or more on the $+45^\circ$ line and record **Peak Gain**; repeat on the $+30^\circ$ and $0^\circ$ lines at the same distance.
 :::
 
 Read the half-power beamwidth as the distance between the two angles where the
 trace falls $3\ \text{dB}$ below its own peak. The sweep runs continuously and
 the button now reads **Stop**, so leave it running: the trace redraws on its own
-after you move the source. If Est. Angle reads near $-30^\circ$, the source is on
+after you move the source. If Angle reads near $-30^\circ$, the source is on
 the negative side of the arc; move it across.
 
 At $45^\circ$ the GUI's peak readout can jump to about $-90^\circ$, because the
@@ -383,9 +383,9 @@ same kit read $-1.0$ dB there, less than even the ideal $-1.5$ dB.
 :::{present}
 16. Move the HB100 back to $0^\circ$ on the arc.
 17. In **Beam Steering**, leave **Taper** on Uniform, enter 15 in **Steer Angle (deg)**, and press **Apply**.
-18. Record **Est. Angle**, **Peak Array Gain**, and the beamwidth in Table B.
+18. Record **Angle**, **Peak Gain**, and the beamwidth in Table B.
 19. Repeat for 30, and copy the eight **Phase Control** boxes into Table B.
-20. Repeat for 45; if **Est. Angle** jumps to about $-90^\circ$, record the main lobe's angle off the trace, as in Step 14.
+20. Repeat for 45; if **Angle** jumps to about $-90^\circ$, record the main lobe's angle off the trace, as in Step 14.
 21. Press **Reset** under **Phase Control** before you leave the station.
 :::
 
@@ -452,7 +452,7 @@ same page at `http://localhost:8080`.
 
 The simulated source is fixed at boresight, so Run 1's moves have no simulated
 version. Run 2 works as written, and it is the rehearsal in Part 1 of the packet:
-Apply $30$ gives the trace a source at $+30^\circ$ would, with **Est. Angle**
+Apply $30$ gives the trace a source at $+30^\circ$ would, with **Angle**
 $29.6^\circ$ and a $15^\circ$ beamwidth, and Phase Control shows the same
 offsets as the hardware. The simulator has no element pattern, so **Peak Array
 Gain** does not drop; it does not model **Rx Gain (dB)**; its tone sits at
