@@ -44,8 +44,8 @@ fi
 # so the build dies on import until the standard-imghdr backport is installed.
 # The scripts/verify render checks drive headless chromium through the Python
 # playwright package (the browser itself is preinstalled; never `playwright
-# install`), and check_frames/check_deck load reveal.js and MathJax from
-# scripts/verify/node_modules, which is gitignored.
+# install`), and they load MathJax from scripts/verify/node_modules, which is
+# gitignored.
 if ! python3 -c 'import imghdr' 2>/dev/null; then
   log "installing standard-imghdr (Python 3.13+)"
   pip install --quiet --disable-pip-version-check standard-imghdr
@@ -55,7 +55,7 @@ if ! python3 -c 'import playwright' 2>/dev/null; then
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 pip install --quiet --disable-pip-version-check playwright
 fi
 if [ ! -d "$CLAUDE_PROJECT_DIR/scripts/verify/node_modules" ] && command -v npm >/dev/null 2>&1; then
-  log "installing reveal.js and MathJax into scripts/verify/node_modules"
+  log "installing MathJax into scripts/verify/node_modules"
   (cd "$CLAUDE_PROJECT_DIR/scripts/verify" && npm ci --silent --no-audit --no-fund) || log "npm ci failed; check_frames needs it"
 fi
 

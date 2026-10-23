@@ -1,7 +1,7 @@
 """Shared plumbing for the ECE 444 render-verification harness.
 
 The CDNs (jsdelivr, Google Fonts) are blocked in the course containers, so
-reveal.js and MathJax never load on their own. Every checker serves the target
+MathJax never loads on its own. Every checker serves the target
 over HTTP and reroutes CDN requests to the vendored npm copies under
 scripts/verify/node_modules — run `npm install` in this directory once per
 container before using any of them.
@@ -28,11 +28,11 @@ CONTENT_TYPES = {
 
 
 def require_vendored():
-    """Fail loudly rather than silently rendering a deck with no MathJax."""
+    """Fail loudly rather than silently rendering a page with no MathJax."""
     if not NM.exists():
         raise SystemExit(
             f"FAIL: {NM} is missing. The CDNs are blocked in this container, so "
-            f"reveal.js and MathJax must be vendored.\n"
+            f"MathJax must be vendored.\n"
             f"Run: cd {HERE} && npm install"
         )
 
@@ -76,7 +76,7 @@ def launch(playwright):
 def make_cdn_router(missing=None):
     """Route jsdelivr to node_modules and stub out Google Fonts.
 
-    Version pins are stripped: reveal.js@5.1.0/dist/x -> node_modules/reveal.js/dist/x
+    Version pins are stripped: mathjax@3/es5/x -> node_modules/mathjax/es5/x
     """
 
     def route(r):

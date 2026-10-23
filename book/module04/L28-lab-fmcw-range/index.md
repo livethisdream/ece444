@@ -1,12 +1,5 @@
 # L28 Lab — FMCW Range
 
-:::{admonition} Slides
-:class: slides
-<a href="../../slides/L28-lab-fmcw-range.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L28-lab-fmcw-range.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L28-lab-fmcw-range.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
-
 ## Learning Objectives
 
 <ol class="lo-list" style="--module: '4'; counter-reset: lo 1;">

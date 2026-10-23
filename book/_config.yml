@@ -47,10 +47,10 @@ sphinx:
   local_extensions:
     frames: _ext
   config:
-    # Reveal.js decks live under book/extras/slides/ and must survive the
-    # Sphinx build with their /slides/ URL prefix intact. html_extra_path
+    # Widgets, practice PDFs, and lab packets live under book/extras/ and must
+    # survive the Sphinx build with their URL prefixes intact. html_extra_path
     # copies the *contents* of listed dirs into the build root, so wrapping
-    # them in extras/ preserves the prefix as extras/slides/... -> slides/...
+    # them in extras/ preserves the prefix as extras/viz/... -> viz/...
     html_extra_path: ["extras"]
 
     # MathJax config lifted verbatim from ece215-book/book/_config.yml:

@@ -1,11 +1,10 @@
 # ECE 444 — working notes for Claude
 
 Course site for **ECE 444, Antennas, Phased Arrays, and Radar Systems** (USAFA,
-Fall 2026). Jupyter Book under `book/`, reveal.js decks served alongside it,
-published to GitHub Pages on every push to `main`. 4 modules, 31 lessons; the
-final project is one report in the cadets' own words, scaffolded by the L28–L31
-Labs (Neil, 2026-10-15; Module 5 folded into Module 4). Lessons are topics, not class
-periods (Neil, 2026-10-13): from Module 3 on, a lesson's lab is a child page of
+Fall 2026). Jupyter Book under `book/`, published to GitHub Pages on every push
+to `main`. 4 modules, 31 lessons; the final project is one report in the
+cadets' own words, scaffolded by the L28–L31 Labs (Neil, 2026-10-15; Module 5
+folded into Module 4). Lessons are topics, not class periods (Neil, 2026-10-13): from Module 3 on, a lesson's lab is a child page of
 that lesson, `LNN-lab-<slug>`, named "LNN Lab" and carrying no lesson number of
 its own (`LABS` in `scripts/scaffold_lessons.py`).
 
@@ -25,8 +24,6 @@ edits it; a lesson thread reports its status in its PR body instead.
 | :-- | :-- |
 | `book/moduleNN/<slug>/index.md` | the lesson page (MyST markdown) |
 | `book/moduleNN/LNN-lab-<slug>/index.md` | a lesson's lab, a child page listed after it in the TOC |
-| `book/extras/slides/<slug>.md` | the reveal.js deck; `.html` wrapper is generated |
-| `book/extras/slides/fig/*.svg` | deck figures, inlined at load by `deck-tools.js` |
 | `book/extras/viz/*.html` | interactive widgets, iframed from lesson pages |
 | `book/extras/viz/img/*.svg` | lesson-page figures |
 | `book/extras/practice/*.pdf` | **committed** practice PDFs — what the site actually serves |
@@ -35,7 +32,7 @@ edits it; a lesson thread reports its status in its PR body instead.
 | `book/_static/shell.*` | palette, type, the bottom bar, the index overlay — every page |
 | `book/_static/frames.*` | frame lessons only; `page.*` reading pages only |
 | `book/_ext/frames.py` | the `:::{frame}` directives, and which template a page gets |
-| `scripts/` | deck HTML generator, lesson scaffolder, figure generators |
+| `scripts/` | lesson scaffolder, interactives index, figure generators |
 
 ## Build and verify
 
@@ -79,9 +76,9 @@ pages you meant to rewrite will be listed — that is the point; the list should
 be exactly the pages you touched.
 
 **Verify by rendering, not by reading.** Headless chromium is available. The CDNs
-(jsdelivr, Google Fonts) are blocked in these containers, so reveal.js and MathJax
-never load on their own — vendor them from npm (`npm i reveal.js@5.1.0 mathjax@3`)
-into `book/_build/` and repoint the built HTML at the local copies. Every defect
+(jsdelivr, Google Fonts) are blocked in these containers, so MathJax never
+loads on its own — the render checks vendor it from npm (`scripts/verify`,
+`npm install`) and reroute the CDN to the local copy. Every defect
 listed below was found that way and would have shipped otherwise.
 
 ## Quality sweeps (manual)
@@ -89,7 +86,7 @@ listed below was found that way and would have shipped otherwise.
 Three project skills audit one lesson at a time and stop for Neil's pick before
 editing anything. Run them on demand, not on every merge:
 
-- `/voice-sweep <NN>`: the page, deck, and practice set against `VOICE.md`.
+- `/voice-sweep <NN>`: the page and practice set against `VOICE.md`.
 - `/why-sweep <NN>`: results stated without a mechanism, undefined jargon,
   unrecomputed numbers, and missing links to earlier lessons.
 - `/illustration-sweep <NN>`: places a figure or an interactive widget would
@@ -101,7 +98,7 @@ the pitfalls and the verification list from the L12-L14 sweeps.
 
 ## Gotchas that silently ship wrong
 
-These do not error. They produce a page or slide that looks fine to the build and
+These do not error. They produce a page or frame that looks fine to the build and
 wrong to a reader.
 
 **Lesson pages (MyST)**
@@ -114,33 +111,10 @@ wrong to a reader.
   in tables: `$\vert F(\theta)\vert$`, never `$|F(\theta)|$`.
 - Use `\ ` for spacing, not `\,` or `\;` — matches every existing page.
 
-**Decks (reveal.js + marked)**
-
-The markdown parser mangles LaTeX in four specific ways:
-
-- `\<punct>` escapes inside `$…$` are eaten. Use `\lbrace`/`\rbrace`; drop
-  `\,`/`\;`. Word macros (`\quad`, `\text{ }`) are safe.
-- `}_{…}` reads as `_italic_` and the underscores vanish, rendering a raw `$$`.
-  Escape as `}\_{` in markdown regions. Inside a raw-HTML block (`two-col`) do
-  the **opposite** — marked passes it through, so write a plain `_`.
-- Inside a multi-line `$$…$$`, no continuation line may start with `+`, `-`, or
-  `*` — markdown reads a list bullet, splits the `$$` pair, and the slide shows a
-  raw `$$`. Put the operator at the end of the previous line, or keep each `$$`
-  on one line (simplest, and what L06 does).
-- MyST is immune to all of this, so the *same equation* can render on the lesson
-  page and break on the slide. Check the deck itself.
-- **A `---` needs a blank line above *and* below** to separate slides. The
-  wrapper's `data-separator` regex requires both; miss either and the `---`
-  renders as an `<hr>` (or, with nothing blank above it, promotes the line
-  before it to an `<h2>`), the two slides merge, and the first one's speaker
-  notes appear on screen. It then reads as a too-tall slide rather than a dead
-  separator — L04 shipped two merged pairs measuring 1235px and 1710px. Run
-  `scripts/verify/check_separators.py` before trimming any slide for height.
-
 **Frame lessons (`frame_view: true`)**
 
 A frame lesson is an ordinary MyST page whose body is `:::{frame}` directives —
-the lesson page and its deck merged into one document, one full-viewport frame
+the lesson page and its slides in one document, one full-viewport frame
 per beat. `book/module01/L05-field-regions/` is the worked example; the
 landing page and the five module overviews are built the same way.
 
@@ -151,7 +125,7 @@ landing page and the five module overviews are built the same way.
 - **Fence lengths nest.** The frame is `::::`, anything inside it — `callout`,
   `depth`, `note` — is `:::`. Same-length fences close the outer block early
   and the rest of the frame lands outside it.
-- **Every frame must fit one screen in present mode.** This is the deck's
+- **Every frame must fit one screen in present mode.** This is the old decks'
   "slide too tall" defect in a new place: nothing errors, the build is happy,
   and the bottom of the frame is simply gone when you present it. Five such
   frames sat on L05a for weeks. `scripts/verify/check_frames.py <LNN>` measures
@@ -242,8 +216,6 @@ landing page and the five module overviews are built the same way.
   `@media (prefers-color-scheme: dark)` block that mirrors every such rule
   under `html:not([data-theme="light"])`; add a dark rule in both places or
   it ships as a light card with light text on a phone in dark mode.
-- MyST is immune to the whole `marked` gotcha class above — Sphinx renders the
-  math once. The raw-HTML rule still bites: no `$…$` inside a raw `<ol><li>`.
 
 **The shell**
 
@@ -262,11 +234,11 @@ Every page is chrome-free: no sidebar, no header, one centerd bar at the bottom
 
 - A change touching only `book/extras/**` leaves Sphinx with no out-of-date
   target: it prints "no targets are out of date", skips copying extra files, and
-  serves the *previous* deck. Always `jupyter-book build book/ --all`.
+  serves the *previous* widget or PDF. Always `jupyter-book build book/ --all`.
 
 ## Conventions
 
-- **Per-lesson bundle** = lesson page + deck + practice set + solutions
+- **Per-lesson bundle** = lesson page + practice set + solutions
   (+ the lab page and its packet, where the lesson has a lab) + interactives
   where they earn their place.
 - **Learning objectives are the course objectives only** (Neil, 2026-10-08:
@@ -279,14 +251,17 @@ Every page is chrome-free: no sidebar, no header, one centerd bar at the bottom
   repeat it. Change an objective's wording in the syllabus, the module index,
   every lesson that quotes it, `scripts/scaffold_lessons.py`, and the practice
   banner together. The `.lo-sublist` CSS is still in `custom.css` but unused.
-- **The decks are the source of truth for nomenclature.** Reconcile lesson pages
-  to the decks, not the other way round.
+- **Slides are the frame lesson itself** (Neil, 2026-10-23: the reveal.js
+  decks were retired). Present mode is the lecture; printing from present
+  mode is the slide handout, one frame a sheet with the depth and read-only
+  frames left off (`frames.css` `@media print`, checked by
+  `check_print.py`); printing from read mode is the whole lesson. Each frame
+  lesson carries a read-only "Printing" frame that says so. There is no
+  separate deck to keep in step, edit, or check.
 - **Figures are native inline SVG**, generated by committed scripts in
-  `scripts/graphics/` where they are data plots. Deck figures carry **no
-  equations** — put the math in the slide text so it inherits the deck font.
-  Lesson-page copies live in `viz/img/` and may include formulas. **Every
+  `scripts/graphics/` where they are data plots, written to `viz/img/`. **Every
   figure SVG carries the explicit font stack from
-  `scripts/graphics/svg_font_stack.py`**, in both trees: a page loads its copy
+  `scripts/graphics/svg_font_stack.py`**: a page loads its copy
   through `<img>`, an isolated document with nothing to inherit from, so
   `font-family: inherit` (and no font-family at all) renders there in the
   browser's serif. Generators call `apply_font_stack()` before writing; a
@@ -358,18 +333,12 @@ Every page is chrome-free: no sidebar, no header, one centerd bar at the bottom
   build diverges from the real one by 2–4% of pixels, with the error accumulating
   into visibly different vertical placement down each page, so the set would not
   match its siblings in front of students. Real macros or no PDF.
-- **Don't delete a lesson's reveal.js deck when it becomes a frame page.**
-  Course decision (2026-08-29): the decks stay while the frame view is still
-  being proven in front of real classes. A frame lesson and its deck are a
-  parallel pair on purpose — `mech_check.sh` still requires the deck `.md` and
-  `.html` for every lesson, and still render-checks it. Revisit only when Neil
-  says the decks are no longer needed.
-- **Don't switch the decks to Beamer.** reveal.js is a deliberate choice — the
-  course is demo-heavy and the decks integrate with the interactive widgets.
+- **Don't bring back separate slide decks** (reveal.js, Beamer, or
+  PowerPoint). The frame lesson is the slides (see Conventions).
 - **Don't link a practice PDF that has not been built yet.** Add the Practice
   section to a lesson page only once the PDFs exist under `book/extras/practice/`.
-- Don't delete the older rasters under `book/extras/slides/img/` or
-  `book/extras/viz/img/` — some are still referenced by lesson pages.
+- Don't delete the older rasters under `book/extras/viz/img/` — some are still
+  referenced by lesson pages.
 
 ## Note for Neil's own machine
 

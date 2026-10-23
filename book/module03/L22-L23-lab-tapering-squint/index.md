@@ -18,13 +18,11 @@ Lesson 22's taper table and Lesson 23's three departures go to the bench.
 L22–L23 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame}
-:::{admonition} Slides
-:class: slides
-<a href="../../slides/L22-L23-lab-tapering-squint.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L22-L23-lab-tapering-squint.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L22-L23-lab-tapering-squint.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
+::::{frame} Printing
+:class: read-only
+
+To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.
 ::::
 
 

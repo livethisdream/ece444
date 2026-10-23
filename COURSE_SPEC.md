@@ -4,6 +4,10 @@ This is the ONLY reference you get about the existing course. Do NOT read the
 Module 1 lesson files, decks, or practice sources — everything you need to be
 consistent with them is here. Follow it exactly.
 
+> **The reveal.js decks were retired on 2026-10-23** (see the dated entry in
+> the Module 3 addendum). Every deck rule below is history: there is no deck
+> to write, mirror into, or check. A frame lesson is its own slides.
+
 Course: ECE 444, *Antennas, Phased Arrays, and Radar Systems*, USAFA, Fall
 2026, Dr. Neil Rogers. **Undergraduate** level: derivations are shown but kept
 short; intuition and design numbers outrank rigor; every equation earns its
@@ -934,6 +938,18 @@ folded in.
   one, so the deck gate in `scripts/verify/mech_check.sh` is to be relaxed
   to "if present" when the first such lesson is authored. Nomenclature
   authority moves from "the decks" to the lesson pages' present blocks.
+
+- **The decks are deleted** (Neil, 2026-10-23: "Independent slide decks have
+  been out for a while now"). The 10-07 rule above kept the deck files as a
+  record; it was never carried into `CLAUDE.md`, the three sweep skills, or
+  `mech_check.sh`, so threads kept reading and "freezing" decks. Now
+  `book/extras/slides/`, `make_deck_html.py`, `check_deck.py` and
+  `check_separators.py` are gone, the deck gate is gone, and each lesson's
+  Slides frame is a read-only Printing frame. Printing from present mode is
+  the slide handout (title and present blocks, one frame a sheet), from read
+  mode the whole lesson; `check_print.py` checks both. Every deck rule in this
+  spec (§1's deck rows, §3, the deck gotchas, deck figures, "decks are the
+  source of truth") is history.
 
 - **A lesson is 20 beats, and the number is a setting** (Neil, 2026-10-08:
   "I can only get through 20 or so slides ('beats') in a single period",

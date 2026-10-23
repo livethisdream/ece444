@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Scaffold material + slide-deck shells for every ECE 444 lesson.
+"""Scaffold lesson shells for every ECE 444 lesson.
 
 For each lesson in the manifest that does not already exist, this writes:
-  book/moduleNN/<slug>/index.md     material shell (title, Slides admonition, LO list)
-  book/extras/slides/<slug>.md      reveal.js deck (title slide + LO slide + outline stub)
-  book/extras/slides/<slug>.html    generated via make_deck_html.TEMPLATE
+  book/moduleNN/<slug>/index.md     material shell (title, LO list)
 
-It also rewrites book/_toc.yml from the manifest. Existing lesson index.md /
-slide .md files are left UNTOUCHED unless --force is passed, so hand-written
+The reveal.js decks it used to write alongside were retired on 2026-10-23;
+a frame lesson printed from present mode is the slide handout now.
+
+It also rewrites book/_toc.yml from the manifest. Existing lesson index.md
+files are left UNTOUCHED unless --force is passed, so hand-written
 content (L1-L3, and any lesson you have since filled in) is safe to re-run
 over. Every module landing page is now a hand-written frame page, so none of
 them is generated -- the generator below still emits the pre-frame shape, and
@@ -29,11 +30,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 BOOK = REPO / "book"
-SLIDES = BOOK / "extras" / "slides"
-sys.path.insert(0, str(REPO / "scripts"))
-import make_deck_html as mdh  # noqa: E402  (TEMPLATE reused for the deck wrapper)
 
-COURSE = "ECE 444"
 
 # ---- Learning objectives, verbatim from the syllabus -----------------------
 LO_TEXT = {
@@ -192,13 +189,6 @@ def lesson_index_md(num, title, lo_ids, slug):
     lo_items = "\n".join(f"  <li>{LO_TEXT[i]}</li>" for i in lo_ids)
     return f"""# L{num} - {title}
 
-:::{{admonition}} Slides
-:class: slides
-<a href="../../slides/{slug}.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/{slug}.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/{slug}.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
-
 ## Learning outcomes
 
 By the end of this lesson, you will be able to:
@@ -214,49 +204,6 @@ Lesson material is under construction. This shell maps to {obj_label(lo_ids)}.
 ```
 """
 
-
-def lesson_slide_md(num, title, lo_ids):
-    lo_bullets = "\n".join(f"- {LO_TEXT[i]}" for i in lo_ids)
-    return f"""<!-- .slide: class="title-slide" -->
-
-<div class="title-left">
-
-# ECE 444
-
-Antennas, Phased Arrays, and Radar Systems
-
-## Lesson {num} — {title}
-
-Fall 2026 · Dr. Neil Rogers
-
-</div>
-
-<div class="title-right">
-
-![USAFA](./img/01-course-intro/USAFA-logo.png)
-
-</div>
-
----
-
-## Learning outcomes
-
-By the end of this lesson, you will be able to:
-
-{lo_bullets}
-
-Note:
-Shell deck — outline to be filled in.
-
----
-
-## Outline
-
-1. _Coming soon._
-
-Note:
-Placeholder. Build the lecture flow here.
-"""
 
 
 def module_index_md(mnum):
@@ -343,24 +290,15 @@ def write(path: Path, content: str, force: bool, dry: bool, kind: str):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--force", action="store_true", help="overwrite existing lesson/slide shells")
+    ap.add_argument("--force", action="store_true", help="overwrite existing lesson shells")
     ap.add_argument("--dry-run", action="store_true", help="print actions, write nothing")
     args = ap.parse_args()
     force, dry = args.force, args.dry_run
 
-    print("== Lesson shells (index.md + slide .md + .html) ==")
+    print("== Lesson shells (index.md) ==")
     for (mnum, num, slug, title, lo_ids, _syn, _hp) in LESSONS:
         idx = BOOK / f"module{mnum:02d}" / slug / "index.md"
         write(idx, lesson_index_md(num, title, lo_ids, slug), force, dry, "index")
-        smd = SLIDES / f"{slug}.md"
-        wrote_md = write(smd, lesson_slide_md(num, title, lo_ids), force, dry, "slide-md")
-        shtml = SLIDES / f"{slug}.html"
-        # Always (re)generate the html wrapper when we wrote the deck, or if it's missing.
-        if wrote_md or not shtml.exists() or force:
-            html = mdh.TEMPLATE.format(slug=slug, title=f"L{num} - {title}", course=COURSE)
-            print(f"  write slide-html: {shtml.relative_to(REPO)}")
-            if not dry:
-                shtml.write_text(html, encoding="utf-8")
 
     print("== Module landing pages ==")
     for mnum, m in MODULES.items():

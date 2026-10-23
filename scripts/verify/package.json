@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "mathjax": "^3.2.2",
-    "reveal.js": "^5.1.0"
+    "mathjax": "^3.2.2"
   }
 }

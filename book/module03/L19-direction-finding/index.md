@@ -18,15 +18,11 @@ How an array measures the direction a signal comes from, and how bearings from k
 Lesson 19 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame} Slides
+::::{frame} Printing
 :class: read-only
 
-:::{admonition} Slides
-:class: slides
-<a href="../../slides/L19-direction-finding.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L19-direction-finding.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L19-direction-finding.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
+To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.
 ::::
 
 ::::{frame} Learning Objectives

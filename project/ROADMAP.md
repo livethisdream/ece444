@@ -48,8 +48,9 @@ and does not make it:
 - lesson numbers, titles, objectives, lab names, the schedule
 - assessments in `ECE444-faculty`
 
-The reveal.js decks are frozen. Nobody edits them (renames by the Integrator
-excepted).
+There are no separate slide decks (Neil, 2026-10-23: the reveal.js decks were
+retired). A frame lesson is its own slides; printing it from present mode is
+the slide handout. Don't create, cite, or mirror changes into a deck.
 
 `book/interactives.md` is generated. A lesson thread that adds or renames a
 widget re-runs `python3 scripts/build_interactives.py` and commits the result.
@@ -218,9 +219,6 @@ needs its rubric, published with the L28 Lab packet.
 - **Image-build homework:** does each kit get a second card, and do cadets have
   Python on their laptops? The L17 Lab rewrite (#96) has cadets build their own
   card in class, which may settle this.
-- **Frozen decks.** #91 edited the L15 deck to drop the stale midterm date.
-  Keep the decks frozen, or allow edits that keep a deck in step with its
-  lesson?
 
 ## 8. Hardware-day checklist
 

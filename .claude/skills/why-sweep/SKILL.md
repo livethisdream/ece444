@@ -1,6 +1,6 @@
 ---
 name: why-sweep
-description: Audit one lesson (page, deck, practice set) for results stated without saying where they come from, rank the gaps, stop for Neil's pick, then fix the approved ones. Manual only -- run as /why-sweep <NN>.
+description: Audit one lesson (page and practice set) for results stated without saying where they come from, rank the gaps, stop for Neil's pick, then fix the approved ones. Manual only -- run as /why-sweep <NN>.
 argument-hint: <lesson number, e.g. 15>
 disable-model-invocation: true
 ---
@@ -24,8 +24,7 @@ Read `project/ECE444_PROJECT.md` Status for anything recent on this lesson.
 
 ## Phase 1: audit, then stop
 
-Read the lesson page (`book/module*/L<NN>-*/index.md`), its deck
-(`book/extras/slides/L<NN>-*.md`), and the practice source
+Read the lesson page (`book/module*/L<NN>-*/index.md`) and the practice source
 (`latex/ECE444_Practice_L<NN>.tex`) in full. List the gaps, ranked by student
 impact. Look for:
 
@@ -59,8 +58,8 @@ One PR per approved batch.
 
 - The derivation goes in read mode: prose outside the present blocks (the
   extension wraps it into depth), or a `:::{depth}` block.
-- Present blocks stay at 40 words or fewer. Move at most one short chain onto
-  the slide.
+- Present blocks stay at 40 words or fewer. Move at most one short chain into
+  a present block.
 - Use the notation of the lesson being linked to, and name that lesson.
 - Run derivations general to specific as one chain aligned on `=`. Every
   non-trivial equation gets its own display line. Split a long equation onto
@@ -72,18 +71,11 @@ One PR per approved batch.
 **Figures**
 
 If a figure earns its place, write a generator in `scripts/graphics/` that
-writes to both `book/extras/viz/img/` and `book/extras/slides/fig/` and calls
+writes to `book/extras/viz/img/` and calls
 `apply_font_stack()` (`scripts/graphics/l14_taper_spillover.py` is a short
 model). Place labels from the data, not at fixed offsets. Screenshot it with
 chromium (`executable_path="/opt/pw-browsers/chromium"`) and fix every label
-collision before using it. The deck copy carries no equations.
-
-**Deck**
-
-Mirror every change in the deck, as a new slide or a speaker note, and follow
-the marked gotchas in `CLAUDE.md`: no `\,` or `\;`, `}\_{` in markdown regions,
-no `$$` continuation line starting with `+`, `-`, or `*`, and a blank line
-above and below every `---`. Notes are plain text; write math there in words.
+collision before using it.
 
 **Practice set**
 
@@ -116,9 +108,7 @@ TEXINPUTS=/workspace/latex-tools/tex/latex//: \
   scripts/verify/mech_check.sh <NN> <slug>         # 0 failures
 scripts/verify/check_density.py L<NN>              # none over 40 words
 scripts/verify/check_frames.py L<NN>               # every frame fits
-scripts/verify/check_deck.py L<NN>-<slug>
 scripts/verify/check_page.py module0M/L<NN>-<slug>/index.html
-scripts/verify/check_separators.py L<NN>-<slug>
 scripts/verify/check_parity.py <baseline>          # lists only this lesson
 ```
 
