@@ -298,7 +298,7 @@ every aperture change.
 **Step A1 - Sweep the full array.** With all eight Element Gains at 100, press
 **Start**. The sweep runs across $\pm 90^\circ$ and settles into a trace with a
 single main lobe at $0^\circ$ and three or four sidelobe pairs on each side.
-Press **Freeze** to hold it as a reference trace. Read the Peak Array Gain
+Press **Freeze** to hold it as a reference trace. Read the Peak Gain
 readout and record it. Hover along the trace to read the angles where it falls
 $3\ \text{dB}$ below the peak, and record the difference as the measured HPBW.
 Expect it within a degree of your calculated value. Then
@@ -352,7 +352,7 @@ $$\begin{aligned}
 
 The bench reads less than that. Expect about $5 \pm 1\ \text{dB}$ per
 halving: the dry-run kit read $5.1$ and $4.8\ \text{dB}$. Record both of your
-steps from the Peak Array Gain readings; Part 3 of the packet asks about the
+steps from the Peak Gain readings; Part 3 of the packet asks about the
 difference.
 
 **Step A6 - Restore the array.** Set all eight Element Gains back to 100,

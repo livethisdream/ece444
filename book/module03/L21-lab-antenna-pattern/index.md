@@ -290,7 +290,7 @@ kit is turning the wrong way, or the protractor is labeled backward; fix the
 labels before going on, because every angle in Tables D and E depends on them. A
 reading within $\pm 2^\circ$ of the protractor confirms the sign and the
 centering. Table B is the array factor, the trace you measured in the L20 Lab,
-and the reference for the other three runs.
+and the reference for the other two runs.
 ::::
 
 ::::{frame} Run 2: Walk It by Hand
@@ -315,39 +315,41 @@ that disagreement is a measurement in its own right: Part 3 compares it with the
 rotation's.
 ::::
 
-::::{frame} Run 3: Turn the Kit, Beam at 0°
+::::{frame} Run 3: Turn the Kit, Both Beams in One Pass
 :class: read-only
 
 :::{present}
-15. Kit at $0^\circ$, beam held at $0^\circ$: record **Peak Gain** as the reference.
-16. Turn the kit to each $10^\circ$ mark from $-90^\circ$ to $+90^\circ$ and record the level relative to the reference in Table D.
-17. Turn slowly through the main lobe, each first null, and each first sidelobe, and record the angle and level of each extreme.
+15. Press **1 Steering Angle** so the beam sweeps again, kit at $0^\circ$. Hover over the trace at $0^\circ$ steer and record that level as the reference.
+16. Turn the kit to each $10^\circ$ mark from $-90^\circ$ to $+90^\circ$. At each, record the **Angle** readout, the trace at $0^\circ$ (Table D), and the trace at the sample nearest $30^\circ$ (Table E), both relative to Step 15.
+17. Turn slowly through each lobe and null of both beams and record the angle and level of each extreme.
+18. Turn the kit to $180^\circ$, source behind the board, and record the trace nearest $30^\circ$ in Table E.
+19. Turn the kit back to $0^\circ$ before you leave.
 :::
+
+Each point of a beam sweep is the beam held at that steer angle for an
+instant, so one sweep at one kit position reads both held beams at once: the
+sample at $0^\circ$ is the beam at broadside, and the sample nearest $30^\circ$
+($29.8^\circ$ near $10.44\ \text{GHz}$, on the $2.8125^\circ$ phase grid) is the
+beam at $30^\circ$. One rotation pass therefore fills both tables.
+
+The sweep also says where the source really is. Record the Angle readout at
+every stop and plot both tables against it, not against the protractor mark:
+in the dry run the kit slid about $5^\circ$ on its protractor during the pass,
+and the readout caught it. Beyond about $\pm 70^\circ$, or near a null of the
+element pattern, the readout can wander; there, use the mark.
 
 Turn the kit by its base, not by the board, so the array stays centered over
 the protractor, and keep the cables slack enough to follow it. The $10^\circ$
-marks sketch the pattern; they cannot give the sidelobe levels, because a
-sidelobe peaks between marks and the marks at $\pm 30^\circ$ and $\pm 50^\circ$
-sit almost on nulls. Turning slowly through a lobe while you watch the level and
-recording its highest reading is how an antenna range finds a lobe peak. Where
-the level stops changing as you turn, write "floor".
-::::
+marks sketch the patterns; they cannot give the sidelobe levels, because a
+sidelobe peaks between marks. Turning slowly through a lobe while you watch the
+level and recording its highest reading is how an antenna range finds a lobe
+peak. Where the level stops changing as you turn, write "floor".
 
-::::{frame} Run 4: Turn the Kit, Beam at 30°
-:class: read-only
-
-:::{present}
-18. Set **Steer Angle (deg)** to $30$, kit back at $0^\circ$, and check the plot title reads "Beam held at 30.0°".
-19. Repeat Steps 16 and 17 for Table E, with each level relative to Step 15's reference.
-20. Turn the kit to $180^\circ$, source behind the board, and record that level.
-21. Set **Steer Angle (deg)** back to $0$ and the kit to $0^\circ$ before you leave.
-:::
-
-Referring Table E to Run 3's reference makes the scan loss read directly: the
-main lobe's level is the drop in peak gain. Take the main-lobe peak twice, a few
-minutes apart, if you have time; a drop that repeats is a measurement, and one
-that does not is a reflection. At $180^\circ$ the patches face away from the
-source and the ground plane sits between them.
+Referring Table E to the broadside reference makes the scan loss read
+directly: the $30^\circ$ beam's main-lobe level is the drop in peak gain. Take
+it twice, a few minutes apart, if you have time; a drop that repeats is a
+measurement, and one that does not is a reflection. At $180^\circ$ the patches
+face away from the source and the ground plane sits between them.
 ::::
 
 ::::{frame} Worked Example: Reading dBc off a Trace
@@ -392,8 +394,9 @@ The rotation is a paper version of an antenna range, and comparing the two
 shows what the classroom still leaves in your data.
 
 **Angle.** A range turns the antenna on a turntable with a shaft encoder, so
-every sample carries its angle to a fraction of a degree. Your protractor reads
-to about a degree, which the walk's time axis cannot.
+every sample carries its angle to a fraction of a degree. Your sweep's Angle
+readout gives each stop's angle to about a degree, which the walk's time axis
+cannot.
 
 **Distance.** A range bolts the source at a fixed distance. So does the
 rotation; the walk does not.
