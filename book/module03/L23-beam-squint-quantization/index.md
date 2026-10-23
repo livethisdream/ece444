@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-This lesson gives you the number for each.
+Grating lobes, beam squint, and phase quantization, each with a number to design against.
 
 Lesson 23 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -36,7 +36,7 @@ with room for notes. Print from read mode for the whole lesson.
 ```
 
 :::{depth}
-In Lesson 22 you took control of the sidelobes with amplitude weights. Amplitude is now a solved problem. Three things are still capable of putting energy where you did not ask for it, and none of them are fixed by a taper: the **element spacing**, the **signal bandwidth**, and the **finite resolution of the phase shifters**. Each one produces a specific, predictable defect — a second full-height beam, a beam that walks with frequency, and a floor of sidelobes you cannot get below. This lesson gives you the number for each.
+In Lesson 22 we controlled the sidelobes with amplitude weights. Three things can still put energy where we did not ask for it, and a taper fixes none of them: the **element spacing**, the **signal bandwidth**, and the **finite resolution of the phase shifters**. Each one produces a specific, predictable defect — a second full-height beam, a beam that moves with frequency, and a floor of sidelobes you cannot get below. This lesson gives you the number for each.
 The L22–L23 Lab then measures all three on your own kit, against the numbers this
 lesson derives, after its Part 1 has measured Lesson 22's tapers.
 :::
@@ -66,7 +66,7 @@ $$AF_N(\psi) = \frac{\sin(N\psi/2)}{N \sin(\psi/2)}.$$
 
 Replace $\psi$ by $\psi + 2\pi$ and both sines flip sign together, so $\vert AF_N \vert$ is unchanged. The array factor is **periodic in $\psi$ with period $2\pi$**. The main lobe is the peak at $\psi = 0$, and the same peak reappears at $\psi = \pm 2\pi, \pm 4\pi, \ldots$ — every one of them a full-height beam.
 
-Whether you ever see those repeats depends on how much of the $\psi$ axis the real angles $-90^\circ \le \theta \le +90^\circ$ reach. That span is called **visible space**, and its width is set by the spacing: as $\sin\theta$ runs from $-1$ to $+1$, $\psi$ runs over a window of total width $2kd = 4\pi d/\lambda$. Widen $d$ and you drag more periods of the array factor into view. A repeat that lands inside visible space is a **grating lobe**.
+Whether we ever see those repeats depends on how much of the $\psi$ axis the real angles $-90^\circ \le \theta \le +90^\circ$ reach. We call that span **visible space**, and the spacing sets its width: as $\sin\theta$ runs from $-1$ to $+1$, $\psi$ runs over a window of total width $2kd = 4\pi d/\lambda$. Widening $d$ brings more periods of the array factor into visible space. A repeat that lands inside visible space is a **grating lobe**.
 ::::
 
 ::::{frame} The Grating Condition
@@ -75,13 +75,13 @@ $$
 \sin\theta_g = \sin\theta_0 \pm m\ \frac{\lambda}{d}
 $$
 
-- Integer $m \ge 1$.
+- $m$ is any positive integer.
 - Any solution with $\vert\sin\theta_g\vert \le 1$ is a real beam.
 :::
 :::{present}
 :class: callout
 
-At $\theta_g$ every element is back in phase. A grating lobe is a second main beam, **full height**, and no taper touches it.
+At $\theta_g$ every element is back in phase. A grating lobe is a second main beam, **full height**, and no taper lowers it.
 :::
 
 Set $\psi = 2\pi m$ and solve:
@@ -91,7 +91,7 @@ $$kd\ (\sin\theta_g - \sin\theta_0) = 2\pi m \quad \Longrightarrow \quad \boxed{
 for integer $m = 1, 2, \ldots$ Any solution with $\vert \sin\theta_g \vert \le 1$ is a real angle, and the array radiates a second beam there.
 
 :::{callout}
-A grating lobe is not a sidelobe. At $\theta_g$ every element is back in phase — one full wavelength of path difference per element instead of zero — so the grating lobe is **exactly as tall as the main lobe**. Tapering does not touch it, because the taper controls the sidelobe skirts of one beam and this is a second beam.
+A grating lobe is not a sidelobe. At $\theta_g$ every element is back in phase — one full wavelength of path difference per element instead of zero — so the grating lobe is **exactly as tall as the main lobe**. Tapering does not reduce it, because the taper controls the sidelobe skirts of one beam and this is a second beam.
 :::
 ::::
 
@@ -100,7 +100,7 @@ A grating lobe is not a sidelobe. At $\theta_g$ every element is back in phase �
 - Feed every third patch: $d = 42$ mm, $\lambda/d = 0.693$ at $10.3$ GHz.
 - Grating lobes at $\pm 43.9^\circ$: three full-height beams.
 - Every fourth patch: $d = 56$ mm, lobes at $\pm 31.3^\circ$.
-- Wide aperture, few elements: a narrow beam, but ambiguous.
+- A wide aperture with few elements gives a narrow but ambiguous beam.
 :::
 
 :::{admonition} Worked example — thinning the PHASER row
@@ -113,7 +113,7 @@ $$\sin\theta_g = \pm 0.693 \quad \Longrightarrow \quad \theta_g = \pm 43.9^\circ
 
 The $m = 2$ solutions need $\vert \sin\theta_g \vert = 1.386$, which is not a real angle, so there are exactly three full-height beams: $0^\circ$ and $\pm 44^\circ$. At the HB100's $10.525\ \text{GHz}$ the same arithmetic gives $\pm 42.7^\circ$, which is what your L22–L23 Lab sweep will read.
 
-Feed every fourth element instead ($56\ \text{mm}$, $\lambda/d = 0.520$) and the pair moves in to $\pm 31.3^\circ$, with the $m = 2$ repeat pressing right up against the horizon — the pattern comes back to within a fraction of a dB of full height at $\pm 90^\circ$.
+Feed every fourth element instead ($56\ \text{mm}$, $\lambda/d = 0.520$) and the pair moves in to $\pm 31.3^\circ$, with the $m = 2$ repeat just past the horizon, at $\sin\theta = \pm 1.04$ — the pattern comes back to within a fraction of a dB of full height at $\pm 90^\circ$.
 :::
 
 Thinning has two effects. The three fed elements still span an $84\ \text{mm}$ aperture, so the main beam stays narrow, but with three elements instead of eight the array collects less signal and the pattern between the beams is poorly controlled. The narrow beam of a large aperture with the ambiguity of a sparse one is the classic thinned-array trade.
@@ -129,14 +129,14 @@ $$
 - Any angle: $d < \lambda/2$, the default in every scanning array.
 :::
 
-You want no grating lobe anywhere in visible space, for every angle you intend to scan to. The dangerous solution is the one closest to the horizon on the far side of the beam. For a beam steered to positive $\theta_0$, that is $m = 1$ with the minus sign, and pushing it past the horizon requires
+We want no grating lobe anywhere in visible space, for every angle we intend to scan to. The dangerous solution is the one closest to the horizon on the far side of the beam. For a beam steered to positive $\theta_0$, that is $m = 1$ with the minus sign, and pushing it past the horizon requires
 
 $$\sin\theta_0 - \frac{\lambda}{d} < -1 \quad \Longrightarrow \quad \boxed{\ d < \frac{\lambda}{1 + \vert \sin\theta_0 \vert}\ }$$
 
-Read the physics: the wider you intend to scan, the closer together the elements must be. Broadside operation tolerates $d < \lambda$. Scanning to $\pm 45^\circ$ demands $d < 0.586\lambda$, and $\pm 60^\circ$ demands $d < 0.536\lambda$. Take the criterion to its limit, $\theta_0 \to 90^\circ$, and you get $d < \lambda/2$ — which is why **half-wavelength spacing is the default in every scanning array**. It is grating-lobe-free at any scan angle you can command.
+The wider we intend to scan, the closer together the elements must be. Broadside operation tolerates $d < \lambda$. Scanning to $\pm 45^\circ$ demands $d < 0.586\lambda$, and $\pm 60^\circ$ demands $d < 0.536\lambda$. Take the criterion to its limit, $\theta_0 \to 90^\circ$, and you get $d < \lambda/2$ — which is why **half-wavelength spacing is the default in every scanning array**. It is grating-lobe-free at any scan angle we can command.
 
 ```{note}
-Grating lobes are not always a defect. Interferometers and sparse radio-astronomy arrays use them on purpose, resolving fine detail with a small number of widely spaced elements and removing the ambiguity by other means. The rule is that grating lobes must be *chosen*, not discovered after the array is built.
+Grating lobes are not always a defect. Interferometers and sparse radio-astronomy arrays use them on purpose, resolving fine detail with a small number of widely spaced elements and removing the ambiguity by other means. A designer can choose grating lobes; they should never be found after the array is built.
 ```
 ::::
 
@@ -151,7 +151,7 @@ Grating lobes are not always a defect. Interferometers and sparse radio-astronom
 :class: tip
 Use the highest frequency the array is specified for, $10.5\ \text{GHz}$, because $\lambda$ is shortest there and the criterion is tightest: $\lambda = 28.6\ \text{mm}$, so $\lambda/d = 28.6/14 = 2.04$.
 
-The criterion requires $1 + \vert\sin\theta_0\vert < \lambda/d = 2.04$, or $\vert\sin\theta_0\vert < 1.04$. Every real angle satisfies that, so the array has **no grating lobe at any scan angle in its band**. That margin is not an accident: the $14\ \text{mm}$ pitch is $0.49\lambda$ at the band edge, deliberately just inside the half-wavelength rule.
+The criterion requires $1 + \vert\sin\theta_0\vert < \lambda/d = 2.04$, or $\vert\sin\theta_0\vert < 1.04$. Every real angle satisfies that, so the array has **no grating lobe at any scan angle in its band**. The $14\ \text{mm}$ pitch is $0.49\lambda$ at the band edge, chosen to sit just inside the half-wavelength rule.
 :::
 ::::
 
@@ -168,7 +168,7 @@ $$
 - A signal at another frequency adds in phase at another angle.
 :::
 
-A phase shifter is set once, in degrees. The angle that setting steers to is not fixed, because the phase a given path length produces depends on frequency.
+The beam-steering computer sets each phase shifter once, in degrees. The angle that setting steers to is not fixed, because the phase a given path length produces depends on frequency.
 
 Suppose the beam-steering computer sets element $n$ to a lag of $n\ k_0 d \sin\theta_0$, computed at the design frequency $f_0$ where $k_0 = 2\pi/\lambda_0$. Now a signal arrives at some other frequency $f$ in the band. The elements add in phase toward whatever angle $\theta$ makes the arrival phase cancel the applied lag:
 
@@ -188,17 +188,17 @@ $$
 - Zero at broadside, fastest at wide scan.
 :::
 
-so the beam actually points at
+so the beam points at
 
 $$\boxed{\ \Delta\theta = \arcsin\!\left(\frac{f_0}{f}\sin\theta_0\right) - \theta_0\ }$$
 
-away from where it was commanded.
+away from the commanded angle.
 
-This is **beam squint**. Note what it does and does not depend on. It does not depend on $N$ or on $d$ — the phase ramp and the path lengths scale together, and only the ratio $f_0/f$ survives. It vanishes at broadside, where the ramp is zero and there is nothing to scale. For small fractional offsets $\delta = (f - f_0)/f_0$, expanding the arcsine gives the form worth remembering:
+This is **beam squint**. It does not depend on $N$ or on $d$ — the phase ramp and the path lengths scale together, and only the ratio $f_0/f$ survives. It vanishes at broadside, where the ramp is zero and there is nothing to scale. For small fractional offsets $\delta = (f - f_0)/f_0$, expanding the arcsine gives the small-offset form:
 
 $$\Delta\theta \approx -\delta\ \tan\theta_0 \quad \text{(radians).}$$
 
-The beam walks toward the horizon as the frequency drops, and it walks fastest when you are already scanned far off broadside.
+The beam moves toward the horizon as the frequency drops, and it moves fastest when the beam is already far off broadside.
 ::::
 
 ::::{frame} Worked Example: Squint on the PHASER
@@ -216,7 +216,7 @@ $$\sin\theta = \frac{10.525}{10.025}\ \sin 45^\circ = 1.0499 \times 0.7071 = 0.7
 
 The beam has squinted $\Delta\theta = +2.9^\circ$. The approximation gives $-(-0.0475)(1.000) = 0.0475\ \text{rad} = 2.7^\circ$, close enough for a budget. This is the $+3^\circ$ your **Angle** readout will move in the L22–L23 Lab when the Signal BW goes from 10 to 500 MHz: the GUI sets the phases 500 MHz below the signal, so the sweep has to command $47.9^\circ$ to land on a source at $45^\circ$.
 
-At $45^\circ$ the beam is about $18^\circ$ wide, so $2.9^\circ$ of squint costs only $0.25\ \text{dB}$ at the aimpoint. Push the offset to $1\ \text{GHz}$ and the squint reaches $6.4^\circ$, roughly a third of a beamwidth, and the loss grows to $1.0\ \text{dB}$.
+At $45^\circ$ the beam is about $18^\circ$ wide, so $2.9^\circ$ of squint loses only $0.25\ \text{dB}$ at the aimpoint. At a $1\ \text{GHz}$ offset the squint reaches $6.4^\circ$, roughly a third of a beamwidth, and the loss grows to $1.0\ \text{dB}$.
 :::
 ::::
 
@@ -226,10 +226,10 @@ At $45^\circ$ the beam is about $18^\circ$ wide, so $2.9^\circ$ of squint costs 
 - **Communications**: gain falls at the band edges, a tilt across the channel.
 :::
 
-Two systems care about this for different reasons. A **wideband radar** transmits a pulse whose spectrum is the bandwidth; each frequency component in that pulse points somewhere slightly different, so the compressed pulse is smeared in angle and the effective beam is broadened and depointed. A **communications link** running a modulated carrier loses gain at the band edges relative to the center, which shows up as amplitude tilt across the channel rather than as an angle error.
+Squint affects two kinds of system differently. A **wideband radar** transmits a pulse whose spectrum is the bandwidth; each frequency component in that pulse points somewhere slightly different, so the compressed pulse is spread in angle and the effective beam is broadened and depointed. A **communications link** running a modulated carrier loses gain at the band edges relative to the center, which shows up as amplitude tilt across the channel rather than as an angle error.
 ::::
 
-::::{frame} The Cure Is Time, Not Phase
+::::{frame} True Time Delay
 :::{present}
 $$
 \tau_n = \frac{n\ d \sin\theta_0}{c}
@@ -257,7 +257,7 @@ The ADAR1000 does not accept an arbitrary phase. It has a $B$-bit phase shifter,
 $$\text{LSB} = \frac{360^\circ}{2^B}.$$
 
 The ADAR1000 uses $B = 7$, giving 128 states and an LSB of $2.8125^\circ$.
-Everything the beamformer commands gets rounded to that grid, with two separate
+The ADAR1000 rounds every commanded phase to that grid, which has two
 consequences.
 ::::
 
@@ -294,9 +294,9 @@ A real controller does better than a uniform quantized increment. It computes th
 
 $$\text{QSLL} \approx -6B\ \text{dB},$$
 
-so 2 bits puts a lobe near $-12$ dB, 3 bits near $-18$ dB, and the ADAR1000's 7 bits near $-42$ dB. Treat this as an RMS estimate for a large array. On an aperture as short as eight elements there are only a couple of sawtooth periods, individual lobes scatter several dB either side of the rule, and for $B \ge 3$ they drop below the array's own $-13$ dB sidelobes and stop mattering.
+so 2 bits puts a lobe near $-12$ dB, 3 bits near $-18$ dB, and the ADAR1000's 7 bits near $-42$ dB. Treat this as an RMS estimate for a large array. On an aperture as short as eight elements there are only a couple of sawtooth periods, individual lobes scatter several dB either side of the rule, and for $B \ge 3$ they drop below the array's own $-13$ dB sidelobes and no longer set the sidelobe level.
 
-More bits buy two different things. They buy finer pointing, which scales as the LSB, and they buy a lower sidelobe floor, which scales as $6$ dB per bit. Seven bits is the standard choice because it puts the quantization floor far below every other error in the array.
+More bits improve two things: finer pointing, which scales as the LSB, and a lower sidelobe floor, which scales as $6$ dB per bit. Seven bits is the standard choice because it puts the quantization floor far below every other error in the array.
 ::::
 
 ::::{frame} Dither
@@ -306,24 +306,24 @@ More bits buy two different things. They buy finer pointing, which scales as the
 - The same error spreads over many angles: a lower peak lobe, no new hardware.
 :::
 
-Dither is the low-cost fix. If the rounding error is the same sawtooth on every beam position, it radiates coherently into one lobe. Adding a small known phase offset per element before rounding breaks the periodicity, which spreads the same total error energy over many angles instead of concentrating it in one, lowering the peak quantization lobe at no hardware cost.
+Dither lowers the peak quantization lobe without new hardware. If the rounding error is the same sawtooth on every beam position, it radiates coherently into one lobe. Adding a small known phase offset per element before rounding breaks the periodicity, which spreads the same total error energy over many angles instead of concentrating it in one.
 ::::
 
 ::::{frame} Two Floors
 :::{present}
 :class: callout
 
-- **Quantization**: a $-6B$ dB sidelobe floor, yet a $-48$ dB null.
-- **The sweep's noise floor**: about $23$ dB below the peak, so a measured null stops near $20$ to $22$ dB.
-- A shallow measured null is the second floor.
+- **Quantization** sets a $-6B$ dB sidelobe floor and still allows a $-48$ dB null.
+- **The noise floor** sits $23$ dB below the peak, so a measured null stops near $21$ dB.
+- A shallow measured null comes from the noise floor.
 :::
 
-One thing quantization does *not* set is how deep a null can go. It is tempting to assume that a cancellation is only as good as the phase resolution behind it, but the weights that place a null are not fighting the LSB: rounding them to a $2.8125^\circ$ grid with 1% gain steps still produces a notch near $-48$ dB at the angle it was designed for. What rounding does instead is move the notch a fraction of a degree off its commanded angle, which is a pointing effect, not a depth effect.
+One thing quantization does *not* set is how deep a null can go. It is tempting to assume that a cancellation is only as good as the phase resolution behind it, but the LSB does not limit the null weights: rounding them to a $2.8125^\circ$ grid with 1% gain steps still produces a notch near $-48$ dB at the angle it was designed for. What rounding does instead is move the notch a fraction of a degree off its commanded angle, which is a pointing effect, not a depth effect.
 
-The measured limit comes from the receiver. A beam sweep on the PHASER has a noise floor about $23$ dB below the uniform-taper peak, and the weights that create a null cost roughly $2$ dB of main-lobe gain, so nothing deeper than about $21$ dB below the new peak can be seen at all. That is why the nulls measured in the next two lessons land at $20$ to $22$ dB: the pattern goes further down than that, and the sweep cannot follow it.
+The measured limit comes from the receiver. A beam sweep on the PHASER has a noise floor about $23$ dB below the uniform-taper peak, and the weights that create a null reduce the main-lobe gain by about $2$ dB, so the sweep cannot show anything deeper than about $21$ dB below the new peak. That is why the nulls measured in the next two lessons land at $20$ to $22$ dB: the pattern goes further down than that, and the sweep cannot follow it.
 
 :::{callout}
-Separate the two floors. **Quantization** sets a sidelobe floor at roughly $-6B$ dB and a pointing granularity of about one LSB, and on the course array it still allows a $-48$ dB null. The **noise floor** of the measurement sets what you can observe: on the PHASER sweep it sits about $23$ dB below the uniform-taper peak, and once the null weights cost roughly $2$ dB of main lobe the deepest observable notch is $20$ to $22$ dB. A shallow measured null usually means the second limit, not the first.
+Separate the two floors. **Quantization** sets a sidelobe floor at roughly $-6B$ dB and a pointing granularity of about one LSB, and on the course array it still allows a $-48$ dB null. The **noise floor** of the measurement sets what you can observe: on the PHASER sweep it sits about $23$ dB below the uniform-taper peak, and once the null weights reduce the main lobe by about $2$ dB the deepest observable notch is $20$ to $22$ dB. A shallow measured null usually means the second limit, not the first.
 :::
 ::::
 
@@ -354,7 +354,7 @@ The widget below runs the same array-factor calculation for all three effects on
 | Quantization lobe | $-6B$ dB | More bits, dither |
 :::
 
-The three failures look different on a sweep and they are fixed in different places in the design.
+The three failures look different on a sweep and a designer fixes each one in a different place.
 
 | Phenomenon | Cause | Predict it with | Design cure |
 | :-- | :-- | :-- | :-- |
@@ -381,7 +381,7 @@ The three failures look different on a sweep and they are fixed in different pla
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | $\Delta\theta = \arcsin((f_0/f)\sin\theta_0) - \theta_0$ | Beam squint when the signal is off the phase-set frequency | $500\ \text{MHz}$ at $45^\circ$ gives $+2.9^\circ$ |
-| $\Delta\theta \approx -(\Delta f/f_0)\tan\theta_0$ | Squint in one line, for a budget | Zero at broadside, worst at wide scan |
+| $\Delta\theta \approx -(\Delta f/f_0)\tan\theta_0$ | Small-offset squint, for a budget | Zero at broadside, worst at wide scan |
 | True time delay | Delays the signal instead of rotating its phase | Removes squint at all offsets |
 ::::
 
@@ -409,7 +409,7 @@ The three failures look different on a sweep and they are fixed in different pla
 - Bring the LSB of a $B$-bit shifter, its pointing step, and the weights $w_n$.
 :::
 
-Part 2 of the [L22–L23 Lab](../L22-L23-lab-tapering-squint/index.md) measures all three of today's departures on your own kit. Lesson 24 then turns pattern control up a notch. So far you have shaped the beam and the sidelobes as a whole; next you will place a null at a chosen angle on purpose, which is what an array does when a jammer or an interfering transmitter sits somewhere you know about. The weights come from subtracting one steering vector from another, and the arithmetic is short.
+Part 2 of the [L22–L23 Lab](../L22-L23-lab-tapering-squint/index.md) measures all three of today's departures on your own kit. Lesson 24 then extends pattern control from the whole beam to one chosen angle. So far you have shaped the beam and the sidelobes as a whole; next you will place a null at a chosen angle on purpose, which is what an array does when a jammer or an interfering transmitter sits somewhere you know about. The weights come from subtracting one steering vector from another, and the arithmetic is short.
 
-Both of today's floors come back with it. Quantization moves the notch slightly off its commanded angle without filling it, and the sweep's noise floor decides how much of the notch you can see, which is why the measured depth in the L24 Lab stops near $21$ dB while the designed null is far deeper. Before Lesson 24, be able to state the LSB of a $B$-bit shifter and the pointing step it implies on the course array, and review the complex element weights $w_n$ from Lesson 22 — the null-steering result is written entirely in that notation.
+Both of today's floors appear again in L24. Quantization moves the notch slightly off its commanded angle without filling it, and the sweep's noise floor decides how much of the notch you can see, which is why the measured depth in the L24 Lab stops near $21$ dB while the designed null is far deeper. Before Lesson 24, be able to state the LSB of a $B$-bit shifter and the pointing step it implies on the course array, and review the complex element weights $w_n$ from Lesson 22 — the null-steering result is written entirely in that notation.
 ::::
