@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
-"""Generate the L24 (null steering) deck/page figures as inline SVG.
+"""Generate the L24 (null steering) lesson-page figures as inline SVG.
 
   - L24-jammer-sidelobe   : uniform N=8 pattern, target at broadside, jammer
                             arriving through the first sidelobe at +22.5 deg
-  - L24-weight-phasors    : per-element phasor construction w = 1 - r*wn
   - L24-pattern-null      : uniform (thin) vs null-steered (bold), notch marked
   - L24-cost-vs-angle     : |r| and main-lobe loss vs null angle
   - L24-quant-depth       : ideal vs quantized weights against the sweep floor
 
 Array is the PHASER's: N = 8, d = 14 mm, 10.525 GHz -> d/lambda = 0.491.
-Deck figures carry no equations (house rule); numbers and short words only.
+The figures carry no equations (house rule); numbers and short words only.
 
     python3 scripts/graphics/m3_l24_nulls.py
-    -> book/extras/slides/fig/L24-*.svg  (+ two copies in book/extras/viz/img/)
+    -> book/extras/viz/img/L24-*.svg
 """
 
 from __future__ import annotations
@@ -30,8 +29,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "book/extras/slides/fig"
-OUT_PAGE = ROOT / "book/extras/viz/img"
+OUT = ROOT / "book/extras/viz/img"
 
 N = 8
 DL = 0.491                      # d / lambda at 10.525 GHz
@@ -52,7 +50,7 @@ plt.rcParams.update({
 })
 
 
-def finalize(fig, name: str, also_page: bool = False) -> None:
+def finalize(fig, name: str) -> None:
     buf = io.StringIO()
     fig.savefig(buf, format="svg", transparent=True, bbox_inches="tight", pad_inches=0.06)
     plt.close(fig)
@@ -61,10 +59,6 @@ def finalize(fig, name: str, also_page: bool = False) -> None:
     s = apply_font_stack(s)
     (OUT / f"{name}.svg").write_text(s, encoding="utf-8")
     print(f"wrote {OUT / (name + '.svg')}")
-    if also_page:
-        OUT_PAGE.mkdir(parents=True, exist_ok=True)
-        (OUT_PAGE / f"{name}.svg").write_text(s, encoding="utf-8")
-        print(f"wrote {OUT_PAGE / (name + '.svg')}")
 
 
 # ---------------------------------------------------------------- array maths
@@ -126,42 +120,10 @@ def jammer_sidelobe() -> None:
     ax.annotate("jammer  -13 dB", xy=(22.5, -13.0), xytext=(38, -6),
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.6), color=RED, fontsize=13)
     ax.axhline(-13.0, color=RED, lw=0.9, ls=(0, (4, 4)))
-    finalize(fig, "L24-jammer-sidelobe", also_page=True)
+    finalize(fig, "L24-jammer-sidelobe")
 
 
 # ------------------------------------------------------------------ figure 2
-def weight_phasors() -> None:
-    """The weights are 1 minus a rotating vector: their tips ride a circle."""
-    fig, axes = plt.subplots(1, 2, figsize=(9.6, 4.6))
-    for ax, t1 in zip(axes, (22.5, 7.0)):
-        w, r = null_weights(t1)
-        ax.set_aspect("equal")
-        ax.axis("off")
-        ax.set_xlim(-0.35, 1.95)
-        ax.set_ylim(-1.05, 1.45)
-        ax.plot([-0.3, 1.9], [0, 0], color=RULE, lw=0.9)
-        ax.plot([0, 0], [-0.95, 0.95], color=RULE, lw=0.9)
-        th = np.linspace(0, 2 * np.pi, 400)
-        ax.plot(1 + abs(r) * np.cos(th), abs(r) * np.sin(th), color=RED, lw=1.4, ls=(0, (5, 4)))
-        ax.annotate("", xy=(1, 0), xytext=(0, 0),
-                    arrowprops=dict(arrowstyle="->", color=GRAY, lw=2.0))
-        for n in range(N):
-            ax.annotate("", xy=(w[n].real, w[n].imag), xytext=(0, 0),
-                        arrowprops=dict(arrowstyle="->", color=NAVY, lw=1.7))
-            ax.plot([w[n].real], [w[n].imag], "o", color=NAVY, ms=4.5)
-        ax.text(1 + abs(r) + 0.07, 0.0, f"radius {abs(r):.2f}", color=RED,
-                ha="left", va="center", fontsize=12.5)
-        ax.text(0.8, -1.02, f"null at {t1:g} deg", color=INK, ha="center", fontsize=13.5)
-    axes[0].annotate("steering weight", xy=(0.88, 0.015), xytext=(0.15, 1.30),
-                     arrowprops=dict(arrowstyle="->", color=GRAY, lw=1.3),
-                     color=GRAY, fontsize=12.5)
-    axes[1].annotate("eight element weights", xy=(0.72, 0.62), xytext=(0.05, 1.30),
-                     arrowprops=dict(arrowstyle="->", color=NAVY, lw=1.3),
-                     color=NAVY, fontsize=12.5)
-    finalize(fig, "L24-weight-phasors")
-
-
-# ------------------------------------------------------------------ figure 3
 def pattern_null() -> None:
     w, r = null_weights(22.5)
     ws = w / np.abs(w).max()
@@ -177,10 +139,10 @@ def pattern_null() -> None:
     ax.annotate(f"main lobe {loss:.1f} dB", xy=(0, loss), xytext=(-86, -9),
                 arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.5), color=ORANGE, fontsize=12.5)
     ax.legend(loc="lower center", fontsize=12, bbox_to_anchor=(0.5, -0.42), ncol=2)
-    finalize(fig, "L24-pattern-null", also_page=True)
+    finalize(fig, "L24-pattern-null")
 
 
-# ------------------------------------------------------------------ figure 4
+# ------------------------------------------------------------------ figure 3
 def cost_vs_angle() -> None:
     """Loss in the look direction (broadside) as the null is walked in."""
     def look_loss(a: float) -> float:
@@ -206,10 +168,10 @@ def cost_vs_angle() -> None:
         y = look_loss(a)
         ax.plot([a], [y], "o", color=ORANGE, ms=7)
         ax.annotate(txt, xy=(a, y), xytext=(a + dx, y + 0.8), color=ORANGE, fontsize=11.5)
-    finalize(fig, "L24-cost-vs-angle", also_page=True)
+    finalize(fig, "L24-cost-vs-angle")
 
 
-# ------------------------------------------------------------------ figure 5
+# ------------------------------------------------------------------ figure 4
 def quant_depth() -> None:
     w, r = null_weights(22.5)
     ws = w / np.abs(w).max()
@@ -233,13 +195,12 @@ def quant_depth() -> None:
     ax.annotate(f"{-depth:.0f} dB notch", xy=(22.5, depth), xytext=(27, -12),
                 arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.5), color=ORANGE, fontsize=12.5)
     ax.legend(loc="lower left", fontsize=12)
-    finalize(fig, "L24-quant-depth", also_page=True)
+    finalize(fig, "L24-quant-depth")
 
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     jammer_sidelobe()
-    weight_phasors()
     pattern_null()
     cost_vs_angle()
     quant_depth()

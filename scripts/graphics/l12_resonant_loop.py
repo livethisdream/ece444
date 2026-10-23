@@ -13,8 +13,7 @@ L12:
 Labels only; the current distribution itself is in the lesson text.
 
     python scripts/graphics/l12_resonant_loop.py
-    -> writes book/extras/slides/fig/L12-resonant-loop.svg
-              book/extras/viz/img/L12-resonant-loop.svg
+    -> writes book/extras/viz/img/L12-resonant-loop.svg
 """
 
 from __future__ import annotations
@@ -25,7 +24,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, RED, GRAY = "#004a85", "#0067b9", "#b01e24", "#5a5a5a"
 RULE, WIRE = "#dbe3ee", "#9aa9bb"
 ROOT = Path(__file__).resolve().parents[2]
-OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
+OUT = ROOT / "book/extras/viz/img"
 
 W, H = 560, 300
 R = 82
@@ -95,10 +94,9 @@ def build() -> str:
 
 def main() -> None:
     svg = build()
-    for d in OUTS:
-        f = d / "L12-resonant-loop.svg"
-        f.write_text(svg)
-        print("wrote", f.relative_to(ROOT))
+    f = OUT / "L12-resonant-loop.svg"
+    f.write_text(svg)
+    print("wrote", f.relative_to(ROOT))
 
 
 if __name__ == "__main__":

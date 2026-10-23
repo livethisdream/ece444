@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the L21 Lab (Antenna Pattern) deck data-plots as inline SVG.
+"""Generate the L21 Lab (Antenna Pattern) data plots as inline SVG.
 
 L21:
   - L21-time-vs-angle  : the same hand-rotation run plotted against elapsed
@@ -14,12 +14,11 @@ Pattern model: N = 8 uniform array, d = 14 mm, HB100 at 10.525 GHz
 -- the projected-aperture scan-loss canon. Broadside first sidelobe lands at
 -13.1 dBc; the 30 deg steered peak sits 0.6 dB down.
 
-Exported as SVG with live <text> (svg.fonttype='none'), then font-family is
-rewritten to 'inherit' so the injected figure picks up the deck's Source Sans
-Pro. Transparent background, USAFA palette, no baked formulas.
+Exported as SVG with live <text> (svg.fonttype='none') carrying the shared
+font stack. Transparent background, USAFA palette, no baked formulas.
 
     python3 scripts/graphics/m3_l21_pattern_lab.py
-    -> writes book/extras/slides/fig/{L21-time-vs-angle,L21-steer-compare}.svg
+    -> writes book/extras/viz/img/{L21-time-vs-angle,L21-steer-compare}.svg
 """
 
 from __future__ import annotations
@@ -35,7 +34,7 @@ from svg_font_stack import apply_font_stack
 
 NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
-OUT = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
+OUT = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 
 C = 3.0e8
 FREQ = 10.525e9          # HB100 nominal

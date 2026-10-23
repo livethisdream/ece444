@@ -1,20 +1,15 @@
 #!/usr/bin/env python3
 """L17 figures: the ADALM-PHASER receive chain and its frequency plan.
 
-Emits two copies of each figure - a deck copy (no equations, block names and
-frequencies only) and a lesson-page copy (plus the one line of mixing
-arithmetic). The signal chain has two geometries: the wide one, and a narrow
-one that the page serves through <picture> below 600 px, where the wide one's
-labels would render at 4.5-6 px. The frequency plan also has two, a
-present-column layout for the page and a wide one for its deck slide
-(FP_LAYOUT).
+Lesson-page figures: block names and frequencies, plus the one line of
+mixing arithmetic. The signal chain has two geometries: the wide one, and a
+narrow one that the page serves through <picture> below 600 px, where the
+wide one's labels would render at 4.5-6 px. The frequency plan is laid out
+for a present column (FP_LAYOUT).
 
     python3 scripts/graphics/m3_l17_chain.py
 
 Writes:
-    book/extras/slides/fig/L17-signal-chain.svg
-    book/extras/slides/fig/L17-signal-chain-narrow.svg
-    book/extras/slides/fig/L17-frequency-plan.svg
     book/extras/viz/img/L17-signal-chain.svg
     book/extras/viz/img/L17-signal-chain-narrow.svg
     book/extras/viz/img/L17-frequency-plan.svg
@@ -26,7 +21,6 @@ from pathlib import Path
 from svg_font_stack import apply_font_stack
 
 REPO = Path(__file__).resolve().parents[2]
-DECK = REPO / "book/extras/slides/fig"
 PAGE = REPO / "book/extras/viz/img"
 
 NAVY = "#004a85"
@@ -73,9 +67,9 @@ def line(x1, y1, x2, y2, stroke=NAVY, sw=1.6, extra=""):
 
 
 def arrow_defs(prefix=""):
-    """Arrowhead markers. A deck inlines every figure into one document, where
-    a second marker with the same id resolves to the first, so a figure that
-    shares a deck with another passes its own prefix."""
+    """Arrowhead markers. If two figures are inlined into one document, a
+    second marker with the same id resolves to the first, so a figure that
+    may share a document with another passes its own prefix."""
     out = ["<defs>"]
     for name, color in (("aN", NAVY), ("aA", AMBER), ("aG", GRN), ("aI", INK3)):
         out.append(
@@ -91,14 +85,13 @@ def arrow_defs(prefix=""):
 # Figure 1 - the receive chain
 # --------------------------------------------------------------------------
 
-def signal_chain(page_copy: bool) -> str:
+def signal_chain() -> str:
     W, H = 800, 400
     ys = [72 + 34 * i for i in range(8)]           # element centers
     px, pw, ph = 26, 32, 22                        # patch rects
     lx, lw, lh = 84, 26, 20                        # LNA triangles
     ax, aw = 132, 86                               # ADAR boxes
     mxc, mr = 300, 16                              # mixer circles
-    lo_x, lo_w, lo_y, lo_h = 246, 108, 170, 42     # LO block
     pl_x, pl_w = 388, 132                          # Pluto
     pi_x, pi_w, pi_y, pi_h = 566, 196, 160, 62     # Pi
     top_a, bot_a = ys[0] - 20, ys[3] + 16
@@ -141,17 +134,15 @@ def signal_chain(page_copy: bool) -> str:
         s.append(line(lx + lw, y, ax, y, MID, 1.4))
 
     # column headers
-    # The page copy names no LO, mixer, or IF: students have had no receiver
+    # The figure names no LO, mixer, or IF: students have had no receiver
     # course, and the page teaches the block only as a frequency converter
-    # (COURSE_SPEC M7). The deck copy is frozen as built.
-    s.append(txt(120, 26, (f"source {F_RF} GHz" if page_copy else f"RF {F_RF} GHz"),
-                 12, NAVY, weight="600"))
+    # (COURSE_SPEC M7).
+    s.append(txt(120, 26, f"source {F_RF} GHz", 12, NAVY, weight="600"))
     s.append(txt(px + pw / 2, 48, "patch ×8", 11.5, INK3))
     s.append(txt(lx + lw / 2 + 2, 48, "LNA", 11.5, INK3))
-    s.append(txt(mxc, 48, "converter" if page_copy else "mixer", 11.5, INK3))
-    tail = ("shifted to 2.2 GHz, the frequency the SDR tunes" if page_copy
-            else "8 elements in, 2 digital channels out")
-    s.append(txt(W - 26, 26, tail, 12, INK3, anchor="end"))
+    s.append(txt(mxc, 48, "converter", 11.5, INK3))
+    s.append(txt(W - 26, 26, "shifted to 2.2 GHz, the frequency the SDR tunes", 12,
+                 INK3, anchor="end"))
 
     # subarray rails into the mixers
     for top, bot, yr in ((top_a, bot_a, ya), (top_b, bot_b, yb)):
@@ -168,14 +159,6 @@ def signal_chain(page_copy: bool) -> str:
         s.append(line(mxc - k, yr - k, mxc + k, yr + k, INK, 1.5))
         s.append(line(mxc - k, yr + k, mxc + k, yr - k, INK, 1.5))
 
-    # LO block feeding both mixers (deck copy only)
-    if not page_copy:
-        s.append(box(lo_x, lo_y, lo_w, lo_h, fill="#fdf6e8", stroke=AMBER))
-        s.append(txt(lo_x + lo_w / 2, lo_y + 17, "ADF4159 + VCO", 12, AMBER, weight="600"))
-        s.append(txt(lo_x + lo_w / 2, lo_y + 32, f"LO {F_LO:.3f} GHz", 11, AMBER))
-        s.append(line(mxc, lo_y, mxc, ya + mr, AMBER, 1.8, ' marker-end="url(#aA)"'))
-        s.append(line(mxc, lo_y + lo_h, mxc, yb - mr, AMBER, 1.8, ' marker-end="url(#aA)"'))
-
     # IF rails into the Pluto
     rx_h, rx_w = 26, 62
     s.append(box(pl_x, top_a - 4, pl_w, bot_b - top_a + 8, fill=BG, stroke=NAVY))
@@ -186,8 +169,7 @@ def signal_chain(page_copy: bool) -> str:
         s.append(box(pl_x + (pl_w - rx_w) / 2, yr - rx_h / 2, rx_w, rx_h,
                      fill="#ffffff", stroke=MID, sw=1.4, rx=4))
         s.append(txt(pl_x + pl_w / 2, yr + 4.5, name, 12, NAVY, weight="600"))
-        s.append(txt((mxc + mr + pl_x) / 2, yr - 12,
-                     f"{F_IF} GHz" if page_copy else f"IF {F_IF} GHz", 11, GRN,
+        s.append(txt((mxc + mr + pl_x) / 2, yr - 12, f"{F_IF} GHz", 11, GRN,
                      weight="600"))
 
     # Pi and the control bus back to the beamformers
@@ -205,9 +187,7 @@ def signal_chain(page_copy: bool) -> str:
 
     # key
     ky = H - 16
-    key = (((NAVY, f"{F_RF} GHz"), (GRN, f"{F_IF} GHz"), (INK3, "control"))
-           if page_copy else
-           ((NAVY, "RF"), (AMBER, "LO"), (GRN, "IF"), (INK3, "control")))
+    key = ((NAVY, f"{F_RF} GHz"), (GRN, f"{F_IF} GHz"), (INK3, "control"))
     for i, (color, label) in enumerate(key):
         kx = 30 + i * 108
         s.append(line(kx, ky - 4, kx + 24, ky - 4, color, 2.6))
@@ -221,28 +201,21 @@ def signal_chain(page_copy: bool) -> str:
 # Figure 2 - the frequency plan: the LO band projected down onto the RF axis
 # --------------------------------------------------------------------------
 
-# Two layouts of one drawing. The page copy sits in a present column (477 px
-# at 1280x800, 343 px on a phone): viewBox 420 wide with 13-unit labels, so
-# 10.6 px on a phone and larger everywhere else. The deck copy is inlined at
-# up to 790 px on a slide whose height budget is 700 px, so it keeps the wide,
-# short aspect the slide was laid out for, with larger labels.
-FP_LAYOUT = {
-    True: dict(W=420, H=300, px=560, X0=30, X1=400, fs=13, fb=13.5, lo_ax=38,
-               lo_bot=80, br_y=168, hb_top=196, rf_ax=238, if_y=124, tick=(10, 19),
-               line2=16, row_x=8),
-    False: dict(W=800, H=300, px=800, X0=64, X1=772, fs=15, fb=16, lo_ax=40,
-                lo_bot=88, br_y=166, hb_top=196, rf_ax=246, if_y=124, tick=(11, 22),
-                line2=19, row_x=12),
-}
+# The figure sits in a present column (477 px at 1280x800, 343 px on a
+# phone): viewBox 420 wide with 13-unit labels, so 10.6 px on a phone and
+# larger everywhere else.
+FP_LAYOUT = dict(W=420, H=300, px=560, X0=30, X1=400, fs=13, fb=13.5, lo_ax=38,
+                 lo_bot=80, br_y=168, hb_top=196, rf_ax=238, if_y=124, tick=(10, 19),
+                 line2=16, row_x=8)
 
 
-def frequency_plan(page_copy: bool) -> str:
+def frequency_plan() -> str:
     """Two axes, LO above and RF below, offset by the IF so that every LO sits
     directly above the RF it receives. The LO band's edges then drop straight
     down onto the RF axis as the reachable band, and the HB100 spread sits
     inside it. The fixed IF is the vertical arrow from the nominal source's LO
     down to the source."""
-    g = FP_LAYOUT[page_copy]
+    g = FP_LAYOUT
     W, H, X0, X1, fs, fb = g["W"], g["H"], g["X0"], g["X1"], g["fs"], g["fb"]
     S = g["px"] / W
     RF0, RF1 = 9.9, 11.0                           # RF axis span, GHz
@@ -330,8 +303,7 @@ def frequency_plan(page_copy: bool) -> str:
     s.append(t(lx, g["if_y"], f"IF {F_IF} GHz", fb, GRN, anc, "700"))
     s.append(t(lx, g["if_y"] + l2, "fixed", fs, GRN, anc))
 
-    tail = (f"IF = LO − RF = {F_LO:.3f} − {F_RF} = {F_IF:.3f} GHz" if page_copy
-            else f"the Pluto only ever tunes {F_IF} GHz")
+    tail = f"IF = LO − RF = {F_LO:.3f} − {F_RF} = {F_IF:.3f} GHz"
     s.append(t(W / 2, H - 10, tail, fs, INK3))
     s.append("</svg>")
     return "\n".join(s)
@@ -346,11 +318,11 @@ def frequency_plan(page_copy: bool) -> str:
 # with no label under NARROW_MIN units, so the smallest renders at
 # 13 x 343/420 = 10.6 px. Both subarrays run top to bottom side by side, the
 # way the patches sit on the board: patches, LNAs, ADAR1000, mixer, then the
-# Pluto and the Pi, with the LO between the two mixers.
+# Pluto and the Pi.
 NARROW_MIN = 13
 
 
-def signal_chain_narrow(page_copy: bool) -> str:
+def signal_chain_narrow() -> str:
     W, H = 420, 418
     S = 560 / W
     out = []
@@ -365,12 +337,9 @@ def signal_chain_narrow(page_copy: bool) -> str:
         f'aria-label="ADALM-PHASER receive signal chain from patches to Raspberry Pi">')
     out.append(arrow_defs("n"))
 
-    # one header line: the RF, and on the page copy the LO arithmetic beside it
-    tail = ("shifted to 2.2 GHz" if page_copy
-            else "8 in, 2 digital channels out")
-    t(12, 20, f"source {F_RF} GHz" if page_copy else f"RF {F_RF} GHz",
-      13.5, NAVY, "start", "600")
-    t(W - 12, 20, tail, 13, INK3, "end")
+    # one header line: the source, and the shift to the SDR's frequency beside it
+    t(12, 20, f"source {F_RF} GHz", 13.5, NAVY, "start", "600")
+    t(W - 12, 20, "shifted to 2.2 GHz", 13, INK3, "end")
 
     cols = ((100, "A"), (320, "B"))           # subarray centers
     pitch = 40
@@ -405,24 +374,12 @@ def signal_chain_narrow(page_copy: bool) -> str:
     # labels in the gap between the subarrays, and beside the mixers
     t(W / 2, py0 + 13, "patch ×8", 13, INK3)
     t(W / 2, ly0 + 13, "LNA ×8", 13, INK3)
-    mix = "converter" if page_copy else "mixer"
-    ifl = f"{F_IF} GHz" if page_copy else f"IF {F_IF} GHz"
+    mix = "converter"
+    ifl = f"{F_IF} GHz"
     t(cols[0][0] - mr - 6, my + 4.5, mix, 13, INK3, "end")
     t(cols[1][0] + mr + 6, my + 4.5, mix, 13, INK3, "start")
     t(cols[0][0] - 8, my + mr + 23, ifl, 13, GRN, "end", "600")
     t(cols[1][0] + 8, my + mr + 23, ifl, 13, GRN, "start", "600")
-
-    # the LO between the two mixers, feeding both (deck copy only)
-    if not page_copy:
-        lo_x0, lo_x1, lo_y0, lo_y1 = 140, 280, my - 21, my + 21
-        out.append(box(lo_x0, lo_y0, lo_x1 - lo_x0, lo_y1 - lo_y0, fill="#fdf6e8",
-                       stroke=AMBER))
-        t(W / 2, my - 4, "ADF4159 + VCO", 13, AMBER, weight="600")
-        t(W / 2, my + 13, f"LO {F_LO:.3f} GHz", 13, AMBER)
-        out.append(line(lo_x0, my, cols[0][0] + mr, my, AMBER, 1.8,
-                        ' marker-end="url(#naA)"'))
-        out.append(line(lo_x1, my, cols[1][0] - mr, my, AMBER, 1.8,
-                        ' marker-end="url(#naA)"'))
 
     # the Pluto, its two receive channels, and the Pi
     out.append(box(26, pl0, 368, pl1 - pl0, fill=BG, stroke=NAVY))
@@ -446,11 +403,9 @@ def signal_chain_narrow(page_copy: bool) -> str:
 
     # key
     ky = H - 10
-    key = (((NAVY, f"{F_RF} GHz"), (GRN, f"{F_IF} GHz"), (INK3, "control"))
-           if page_copy else
-           ((NAVY, "RF"), (AMBER, "LO"), (GRN, "IF"), (INK3, "control")))
+    key = ((NAVY, f"{F_RF} GHz"), (GRN, f"{F_IF} GHz"), (INK3, "control"))
     for i, (color, label) in enumerate(key):
-        kx = 18 + i * (130 if page_copy else 100)
+        kx = 18 + i * 130
         out.append(line(kx, ky - 4.5, kx + 24, ky - 4.5, color, 2.6))
         t(kx + 30, ky, label, 13, color, "start")
 
@@ -459,14 +414,12 @@ def signal_chain_narrow(page_copy: bool) -> str:
 
 
 def main():
-    DECK.mkdir(parents=True, exist_ok=True)
     PAGE.mkdir(parents=True, exist_ok=True)
     for name, fn in (("L17-signal-chain", signal_chain),
                      ("L17-signal-chain-narrow", signal_chain_narrow),
                      ("L17-frequency-plan", frequency_plan)):
-        (DECK / f"{name}.svg").write_text(apply_font_stack(fn(False)), encoding="utf-8")
-        (PAGE / f"{name}.svg").write_text(apply_font_stack(fn(True)), encoding="utf-8")
-        print(f"wrote {name}.svg (deck + page)")
+        (PAGE / f"{name}.svg").write_text(apply_font_stack(fn()), encoding="utf-8")
+        print(f"wrote {name}.svg")
 
 
 if __name__ == "__main__":

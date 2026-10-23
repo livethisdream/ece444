@@ -15,12 +15,10 @@ L13:
                       the eight-element array factor (half-wave spacing,
                       steered 20 degrees) times the same element pattern.
 
-Schematics are not to scale. No formulas (deck figure rule), so the lesson-page
-copies are the same files.
+Schematics are not to scale, and carry no formulas.
 
     python scripts/graphics/l13_slot_array_figures.py
-    -> writes book/extras/slides/fig/L13-{slot-field,patch-array}.svg
-              book/extras/viz/img/L13-{slot-field,patch-array}.svg
+    -> writes book/extras/viz/img/L13-{slot-field,patch-array,slot-feed}.svg
 """
 
 from __future__ import annotations
@@ -28,7 +26,7 @@ import cmath
 import math
 from pathlib import Path
 from l13_patch_figures import (NAVY, BLUE, RED, GRAY, BROWN, RULE, SUB, SUB_EDGE,
-                               ROOT, OUTS, text, arrow, markers, svg)
+                               ROOT, OUT, text, arrow, markers, svg)
 
 GREEN = "#3f7d34"
 
@@ -241,11 +239,10 @@ def main() -> None:
     feed, r_c, x50 = slot_feed()
     figs = {"L13-slot-field.svg": slot_field(), "L13-patch-array.svg": patch_array(),
             "L13-slot-feed.svg": feed}
-    for d in OUTS:
-        for name, s in figs.items():
-            p = d / name
-            p.write_text(s)
-            print("wrote", p.relative_to(ROOT))
+    for name, s in figs.items():
+        p = OUT / name
+        p.write_text(s)
+        print("wrote", p.relative_to(ROOT))
 
 
 if __name__ == "__main__":

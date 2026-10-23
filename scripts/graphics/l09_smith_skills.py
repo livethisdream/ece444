@@ -15,14 +15,11 @@ one of those on the same chart, from a circuit that actually produces it:
   4. panel 1's trace and a copy rotated by 70 degrees, the same antenna seen
      through 35 electrical degrees of extra line.
 
-Two layouts from one drawing: a 2x2 grid for the lesson page and a 1x4 strip
-for the deck. Deck figures carry no equations, so the labels are words and
-plain numbers.
+Laid out as a 2x2 grid for the lesson page. The labels are words and plain
+numbers; the figure carries no equations.
 
     python3 scripts/graphics/l09_smith_skills.py
-    -> book/extras/slides/fig/L09-smith-skills.svg        (2x2, lesson page)
-       book/extras/slides/fig/L09-smith-skills-row.svg    (1x4, deck)
-       book/extras/viz/img/L09-smith-skills.svg           (2x2 copy)
+    -> book/extras/viz/img/L09-smith-skills.svg           (2x2, lesson page)
 """
 
 from __future__ import annotations
@@ -38,7 +35,7 @@ from matplotlib.patches import FancyArrowPatch
 NAVY, BLUE, RED, GREEN, AMBER, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5a5a5a"
 INK, RULE, RIM = "#1a1a1a", "#c7d2e0", "#7fa8c9"
 ROOT = Path(__file__).resolve().parents[2]
-FIG, IMG = ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"
+IMG = ROOT / "book/extras/viz/img"
 
 plt.rcParams.update({"svg.fonttype": "none", "font.size": 12, "text.color": INK})
 
@@ -90,8 +87,8 @@ def arrowhead(ax, g, i, color, size=16):
                 arrowprops=dict(arrowstyle="-|>", color=color, lw=0, mutation_scale=size), zorder=5)
 
 
-def draw_panels(axes, title_size=12.5, label_size=10.5, ROW=False, captions=True):
-    cap = lambda ax, text: ax.text(0.0, -0.98, text, color=GRAY, fontsize=label_size - 0.5, ha="center", va="top") if captions else None
+def draw_panels(axes, title_size=12.5, label_size=10.5):
+    # no captions under the charts: the page's bullets beside the figure say it
     f = np.linspace(0.84, 1.16, 500)
 
     # 1. crosses the real axis, left of center
@@ -101,7 +98,6 @@ def draw_panels(axes, title_size=12.5, label_size=10.5, ROW=False, captions=True
                                           markeredgecolor="white", markeredgewidth=1.2)
     ax.text(g[k].real - 0.06, g[k].imag - 0.19, "resonance", color=RED, fontsize=label_size,
             fontweight="bold", ha="center", va="top", zorder=6)
-    cap(ax, "left of center: under 50 ohms" if not ROW else "under 50 ohms")
     ax.set_title("Crosses the real axis", color=NAVY, fontsize=title_size, fontweight="bold", pad=4)
 
     # 2. dips inside the VSWR = 2 circle
@@ -112,17 +108,12 @@ def draw_panels(axes, title_size=12.5, label_size=10.5, ROW=False, captions=True
     trace(ax, g, color="#9fb4c7", lw=2.0, z=3)
     trace(ax, np.where(inside, g, np.nan + 0j), color=GREEN, lw=3.0, z=4)
     arrowhead(ax, g, 120, "#9fb4c7")
-    if captions:                       # the page's bullet beside the chart says this already
-        ax.text(0.0, SPEC + 0.10, "inside the VSWR = 2 circle", color=GREEN, fontsize=label_size,
-                fontweight="bold", ha="center", va="bottom", zorder=6)
-    cap(ax, "matched to VSWR 2 while inside" if not ROW else "matched to VSWR 2")
     ax.set_title("Inside the small circle", color=NAVY, fontsize=title_size, fontweight="bold", pad=4)
 
     # 3. a loop: two resonances close together
     ax = axes[2]; mini_smith(ax)
     fl = np.linspace(0.80, 1.24, 700)
     g = G(with_feed(fl)); trace(ax, g); arrowhead(ax, g, 150, NAVY)
-    cap(ax, "two resonances: element plus feed" if not ROW else "element plus feed")
     ax.set_title("A loop", color=NAVY, fontsize=title_size, fontweight="bold", pad=4)
 
     # 4. the whole trace rotated: the reference plane moved
@@ -135,35 +126,28 @@ def draw_panels(axes, title_size=12.5, label_size=10.5, ROW=False, captions=True
     ax.plot(r0 * np.cos(arc), r0 * np.sin(arc), color=AMBER, lw=1.2, ls=(0, (2, 2)), zorder=5)
     ax.annotate("", xy=(rot[k].real, rot[k].imag), xytext=(r0 * np.cos(arc[-8]), r0 * np.sin(arc[-8])),
                 arrowprops=dict(arrowstyle="-|>", color=AMBER, lw=0, mutation_scale=14), zorder=6)
-    cap(ax, "same antenna, longer cable to the cal plane" if not ROW else "longer cable to the cal plane")
     ax.set_title("The whole trace rotates", color=NAVY, fontsize=title_size, fontweight="bold", pad=4)
 
 
-def export(fig, name: str, outs):
-    """Both copies carry the shared font stack: an <img> cannot inherit."""
+def export(fig, name: str, out: Path):
+    """The copy carries the shared font stack: an <img> cannot inherit."""
     buf = io.StringIO()
     fig.savefig(buf, format="svg", transparent=True, bbox_inches="tight", pad_inches=0.04)
     plt.close(fig)
     s = buf.getvalue(); s = s[s.index("<svg"):]
     s = apply_font_stack(s)
-    for out in outs:
-        out.mkdir(parents=True, exist_ok=True)
-        (out / f"{name}.svg").write_text(s, encoding="utf-8")
-        print(f"wrote {out / (name + '.svg')}")
+    out.mkdir(parents=True, exist_ok=True)
+    (out / f"{name}.svg").write_text(s, encoding="utf-8")
+    print(f"wrote {out / (name + '.svg')}")
 
 
 def main() -> int:
     # wider than tall on purpose: beside four bullets on a phone the frame
     # has about 290px of height to give this figure, and a square 2x2 does not fit
     fig, axes = plt.subplots(2, 2, figsize=(7.4, 5.6))
-    draw_panels(axes.ravel(), title_size=15, label_size=12, captions=False)
+    draw_panels(axes.ravel(), title_size=15, label_size=12)
     fig.subplots_adjust(wspace=0.02, hspace=0.02)
-    export(fig, "L09-smith-skills", [FIG, IMG])
-
-    fig, axes = plt.subplots(1, 4, figsize=(13.0, 3.9))
-    draw_panels(axes, title_size=13, label_size=10.5, ROW=True)
-    fig.subplots_adjust(wspace=0.08)
-    export(fig, "L09-smith-skills-row", [FIG])
+    export(fig, "L09-smith-skills", IMG)
     return 0
 
 

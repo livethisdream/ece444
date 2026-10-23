@@ -17,12 +17,11 @@ from step to step.
      condition of a perfect conductor: no tangential field on the metal);
   4. the segment donuts, now weighted, and the half-wave pattern they sum to.
 
-Two layouts from one drawing: a 1x4 strip for the deck and a 2x2 grid for
-the lesson page. Deck figures carry no equations, so the labels are words.
+Laid out as a 2x2 grid for the lesson page. The labels are words; the
+figure carries no equations.
 
     python3 scripts/graphics/l08_mom_steps.py
-    -> book/extras/slides/fig/L08-mom-pipeline.svg     (1x4, deck)
-       book/extras/viz/img/L08-mom-steps.svg           (2x2, lesson page)
+    -> book/extras/viz/img/L08-mom-steps.svg           (2x2, lesson page)
 """
 
 from __future__ import annotations
@@ -38,7 +37,7 @@ from matplotlib.patches import FancyArrowPatch, Polygon, Rectangle
 NAVY, BLUE, RED, GREEN, AMBER, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
-FIG, IMG = ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"
+IMG = ROOT / "book/extras/viz/img"
 
 plt.rcParams.update({"svg.fonttype": "none", "font.size": 12, "text.color": INK})
 
@@ -159,29 +158,23 @@ def draw(axes, title_size=12.5, label_size=10.5):
     frame(ax, "4. Sum the patterns", title_size)
 
 
-def export(fig, name: str, outs):
-    """Both copies carry the shared font stack: an <img> cannot inherit."""
+def export(fig, name: str, out: Path):
+    """The copy carries the shared font stack: an <img> cannot inherit."""
     buf = io.StringIO()
     fig.savefig(buf, format="svg", transparent=True, bbox_inches="tight", pad_inches=0.04)
     plt.close(fig)
     s = buf.getvalue(); s = s[s.index("<svg"):]
     s = apply_font_stack(s)
-    for out in outs:
-        out.mkdir(parents=True, exist_ok=True)
-        (out / f"{name}.svg").write_text(s, encoding="utf-8")
-        print(f"wrote {out / (name + '.svg')}")
+    out.mkdir(parents=True, exist_ok=True)
+    (out / f"{name}.svg").write_text(s, encoding="utf-8")
+    print(f"wrote {out / (name + '.svg')}")
 
 
 def main() -> int:
-    fig, axes = plt.subplots(1, 4, figsize=(13.0, 4.0))
-    draw(axes, title_size=11.5, label_size=10.5)
-    fig.subplots_adjust(wspace=0.12)
-    export(fig, "L08-mom-pipeline", [FIG])
-
     fig, axes = plt.subplots(2, 2, figsize=(7.4, 7.4))
     draw(axes.ravel(), title_size=15, label_size=12)
     fig.subplots_adjust(wspace=0.04, hspace=0.14)
-    export(fig, "L08-mom-steps", [IMG])
+    export(fig, "L08-mom-steps", IMG)
     return 0
 
 

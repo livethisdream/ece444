@@ -13,8 +13,7 @@ quarter wave is 4 cm on FR-4 at 1 GHz but 25 m of coax at 2 MHz).
 Plotted as S11 in dB, which is what the NanoVNA shows in the matching lab.
 
     python3 scripts/graphics/l04_match_compare.py
-    -> book/extras/slides/fig/L04-match-compare.svg
-       book/extras/viz/img/L04-match-compare.svg
+    -> book/extras/viz/img/L04-match-compare.svg
 """
 
 from __future__ import annotations
@@ -29,7 +28,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
-OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
+OUT = ROOT / "book/extras/viz/img"
 
 plt.rcParams.update({
     "svg.fonttype": "none",
@@ -110,10 +109,9 @@ def main() -> int:
     s = buf.getvalue()
     s = s[s.index("<svg"):]
     s = apply_font_stack(s)
-    for out in OUTS:
-        out.mkdir(parents=True, exist_ok=True)
-        (out / "L04-match-compare.svg").write_text(s, encoding="utf-8")
-        print(f"wrote {out / 'L04-match-compare.svg'}")
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / "L04-match-compare.svg").write_text(s, encoding="utf-8")
+    print(f"wrote {OUT / 'L04-match-compare.svg'}")
 
     for name, fn in (("L-match", g_lmatch), ("cancel + quarter-wave", g_quarter)):
         lo, hi = band(fn, fs)

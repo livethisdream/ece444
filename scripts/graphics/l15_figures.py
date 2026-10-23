@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """L15: the computed figures from the 2026-10-04 illustration sweep (Batches A-C).
 
-Every figure is labels only: no equations, so the same SVG serves the deck
-(book/extras/slides/fig) and the lesson page (book/extras/viz/img). The math
-lives in the lesson text. Every plotted number is computed here from the
+Every figure is labels only, no equations, written to the lesson page's
+book/extras/viz/img. The math lives in the lesson text. Every plotted number is computed here from the
 aperture integral or its closed form, and printed so it can be checked
 against the page.
 
@@ -54,7 +53,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, RED, GREEN, AMBER, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5b6573"
 INK, RULE, SHADE = "#15202b", "#c7d2e0", "#dbe8f4"
 ROOT = Path(__file__).resolve().parents[2]
-OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
+OUT = ROOT / "book/extras/viz/img"
 
 plt.rcParams.update({"svg.fonttype": "none", "font.size": 11.5, "text.color": INK,
                      "axes.edgecolor": GRAY, "axes.labelcolor": INK,
@@ -82,8 +81,7 @@ def save(fig, name, alt):
     s = s[s.index("<svg"):]
     s = re.sub(r'<svg([^>]*)>', lambda m: f'<svg{m.group(1)} role="img" aria-label="{alt}">', s, count=1)
     s = apply_font_stack(s)
-    for d in OUTS:
-        (d / f"{name}.svg").write_text(s)
+    (OUT / f"{name}.svg").write_text(s)
     print("wrote", name)
 
 

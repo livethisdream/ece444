@@ -7,12 +7,10 @@ L12:
                             dipole inside. Same housing, three antennas, and
                             only the first needs a ground from its mount.
 
-Schematic, not to scale. No formulas (deck figure rule), so the lesson-page
-copy is the same file.
+Schematic, not to scale, and no formulas.
 
     python scripts/graphics/l12_radome_lookalikes.py
-    -> writes book/extras/slides/fig/L12-radome-lookalikes.svg
-              book/extras/viz/img/L12-radome-lookalikes.svg
+    -> writes book/extras/viz/img/L12-radome-lookalikes.svg
 """
 
 from __future__ import annotations
@@ -22,7 +20,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, RED, GRAY, BROWN = "#004a85", "#0067b9", "#b01e24", "#5a5a5a", "#8a5a00"
 RULE, DOME, DOME_EDGE = "#dbe3ee", "#eef3f8", "#9aa9bb"
 ROOT = Path(__file__).resolve().parents[2]
-OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
+OUT = ROOT / "book/extras/viz/img"
 
 W, H = 552, 300
 CX = (92, 276, 460)             # panel centers; compact so it reads beside bullets
@@ -113,10 +111,9 @@ def build() -> str:
 
 def main() -> None:
     svg = build()
-    for d in OUTS:
-        p = d / "L12-radome-lookalikes.svg"
-        p.write_text(svg)
-        print("wrote", p.relative_to(ROOT))
+    p = OUT / "L12-radome-lookalikes.svg"
+    p.write_text(svg)
+    print("wrote", p.relative_to(ROOT))
 
 
 if __name__ == "__main__":
