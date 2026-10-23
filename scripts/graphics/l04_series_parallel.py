@@ -12,11 +12,10 @@ R_p / R_s = |Z|^2 / R_s^2 = 1 + Q^2.
 Left panel: the voltage phasors as a right triangle.
 Right panel: the two circuits a source cannot tell apart.
 
-Deck figures carry no equations -- labels are words and plain numbers.
+The figure carries no equations -- labels are words and plain numbers.
 
     python3 scripts/graphics/l04_series_parallel.py
-    -> book/extras/slides/fig/L04-series-parallel.svg
-       book/extras/viz/img/L04-series-parallel.svg
+    -> book/extras/viz/img/L04-series-parallel.svg
 """
 
 from __future__ import annotations
@@ -31,7 +30,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
-OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
+OUT = ROOT / "book/extras/viz/img"
 
 plt.rcParams.update({"svg.fonttype": "none", "font.size": 13, "text.color": INK})
 
@@ -111,10 +110,9 @@ def main() -> int:
     s = buf.getvalue()
     s = s[s.index("<svg"):]
     s = apply_font_stack(s)
-    for out in OUTS:
-        out.mkdir(parents=True, exist_ok=True)
-        (out / "L04-series-parallel.svg").write_text(s, encoding="utf-8")
-        print(f"wrote {out / 'L04-series-parallel.svg'}")
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / "L04-series-parallel.svg").write_text(s, encoding="utf-8")
+    print(f"wrote {OUT / 'L04-series-parallel.svg'}")
 
     Zm = np.hypot(RS, XS)
     print(f"\ncheck: |Z| = {Zm:.2f} = sqrt(20*50) = {np.sqrt(20*50):.2f}")

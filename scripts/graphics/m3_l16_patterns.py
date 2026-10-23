@@ -15,11 +15,11 @@ Line drawings (hand-written SVG):
                               and at the first null
   L16-sampled-aperture      : continuous aperture vs the same length sampled
 
-All figures carry numbers and words only -- no equations (house rule: the math
-lives in the slide text so it inherits the deck font).
+All figures carry numbers and words only -- no equations; the math lives in
+the lesson text.
 
     python3 scripts/graphics/m3_l16_patterns.py
-    -> book/extras/slides/fig/L16-*.svg  and  book/extras/viz/img/L16-*.svg
+    -> book/extras/viz/img/L16-*.svg
 """
 
 from __future__ import annotations
@@ -40,7 +40,7 @@ GREEN, AMBER, GRAY = "#1d7a4d", "#8a5a00", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 
 ROOT = Path(__file__).resolve().parents[2]
-OUTS = (ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img")
+OUT = ROOT / "book/extras/viz/img"
 
 plt.rcParams.update(
     {
@@ -61,10 +61,9 @@ DB_FLOOR = -40.0
 
 def write(name: str, svg: str) -> None:
     svg = apply_font_stack(svg)
-    for out in OUTS:
-        out.mkdir(parents=True, exist_ok=True)
-        (out / f"{name}.svg").write_text(svg, encoding="utf-8")
-    print(f"wrote {name}.svg -> {', '.join(str(o) for o in OUTS)}")
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / f"{name}.svg").write_text(svg, encoding="utf-8")
+    print(f"wrote {name}.svg -> {OUT}")
 
 
 def finalize(fig, name: str) -> None:

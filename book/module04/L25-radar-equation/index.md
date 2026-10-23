@@ -1,12 +1,5 @@
 # L25 - The Radar Equation, Path Loss, and RCS
 
-:::{admonition} Slides
-:class: slides
-<a href="../../slides/L25-radar-equation.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L25-radar-equation.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L25-radar-equation.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
-
 ## Learning Objectives
 
 <ol class="lo-list" style="--module: '4'; counter-reset: lo 0;">

@@ -29,8 +29,7 @@ L13:
   - L13-slot-service     : a cavity-backed slot in a skin, and a waveguide slot
                            array with its slots offset from the centerline.
 
-Schematics are not to scale. No formulas (deck figure rule), so the lesson-page
-copies are the same files.
+Schematics are not to scale, and carry no formulas.
 
     python scripts/graphics/l13_horn_figures.py
 """
@@ -40,7 +39,7 @@ import cmath
 import math
 from pathlib import Path
 from l13_patch_figures import (NAVY, BLUE, RED, GRAY, BROWN, RULE, SUB, SUB_EDGE,
-                               ROOT, OUTS, text, arrow, markers, svg, ground)
+                               ROOT, OUT, text, arrow, markers, svg, ground)
 
 GREEN = "#3f7d34"
 METAL = "#dfe7f0"
@@ -538,11 +537,10 @@ def main() -> None:
         "L13-slot-service.svg": slot_service(),
         "L13-horn-three.svg": horn_three(),
     }
-    for d in OUTS:
-        for name, s in figs.items():
-            p = d / name
-            p.write_text(s)
-            print("wrote", p.relative_to(ROOT))
+    for name, s in figs.items():
+        p = OUT / name
+        p.write_text(s)
+        print("wrote", p.relative_to(ROOT))
     print(f"optimum edge phase error: E-plane {sE:.3f} wavelengths, H-plane {sH:.3f} wavelengths")
 
 

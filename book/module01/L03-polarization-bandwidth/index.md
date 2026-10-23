@@ -18,13 +18,11 @@ Polarization and bandwidth are the two most misquoted specs on a datasheet.
 Lesson 3 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame} Slides
-:::{admonition} Slides
-:class: slides
-<a href="../../slides/L03-polarization-bandwidth.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L03-polarization-bandwidth.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L03-polarization-bandwidth.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
+::::{frame} Printing
+:class: read-only
+
+To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.
 ::::
 
 ::::{frame} Learning Objectives

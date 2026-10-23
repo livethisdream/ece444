@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """L14: why the reflector feed's edge taper lands near 10 dB.
 
-The 10 dB rule was asserted on the page and the deck. This draws where it
+The 10 dB rule was asserted on the page. This draws where it
 comes from. A prime-focus dish with f/D = 0.5 (rim at 53.1 degrees from the
 feed) is fed by a cos^n(theta') pattern, and n is swept:
 
@@ -17,8 +17,7 @@ Their product peaks at an edge taper of about 10 to 11 dB, at about 0.82.
 Labels only; the formulas are in the lesson text.
 
     python3 scripts/graphics/l14_taper_spillover.py
-    -> book/extras/slides/fig/L14-taper-spillover.svg   (deck)
-       book/extras/viz/img/L14-taper-spillover.svg      (lesson page, depth)
+    -> book/extras/viz/img/L14-taper-spillover.svg      (lesson page, depth)
 """
 
 from __future__ import annotations
@@ -34,7 +33,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, AMBER, GRAY = "#004a85", "#0067b9", "#8a5a00", "#5b6573"
 INK, RULE = "#15202b", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
-OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
+OUT = ROOT / "book/extras/viz/img"
 
 plt.rcParams.update({"svg.fonttype": "none", "font.size": 11, "text.color": INK,
                      "axes.edgecolor": GRAY, "axes.labelcolor": INK,
@@ -112,6 +111,5 @@ def build():
 
 if __name__ == "__main__":
     svg, e, s, t, p = build()
-    for d in OUTS:
-        (d / "L14-taper-spillover.svg").write_text(svg)
+    (OUT / "L14-taper-spillover.svg").write_text(svg)
     print(f"optimum: edge taper {e:.1f} dB, spillover {s:.3f}, taper {t:.3f}, product {p:.3f}")

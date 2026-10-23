@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the L15 aperture-distribution deck figures as inline SVG.
+"""Generate the L15 aperture-distribution figures as inline SVG.
 
 L15:
   - L15-uniform-pattern    : uniform aperture space factor in dB against the
@@ -11,14 +11,13 @@ L15:
                              -40 dB floor (the static fallback for the
                              aperture-distribution widget)
 
-Same export convention as scripts/graphics/plots.py: SVG with live <text>
-(svg.fonttype='none'), font-family rewritten to 'inherit' so the injected
-figure picks up the deck font, transparent background, USAFA palette, and
-**no baked equations** (deck figures carry words and numbers only).
+SVG with live <text> (svg.fonttype='none') carrying the shared font stack,
+transparent background, USAFA palette, and **no baked equations** (words and
+numbers only).
 
     python3 scripts/graphics/m3_l15_apertures.py
-    -> writes book/extras/slides/fig/{L15-uniform-pattern,L15-taper-comparison}.svg
-       and copies both to book/extras/viz/img/ for the lesson page.
+    -> writes book/extras/viz/img/{L15-uniform-pattern,L15-taper-comparison,
+       L15-aperture-to-pattern}.svg for the lesson page.
 
 Patterns are computed from the aperture integral (trapezoid over the aperture),
 not sketched; the marked numbers are the course canonical values.
@@ -28,7 +27,6 @@ from __future__ import annotations
 
 import io
 import re
-import shutil
 from pathlib import Path
 from svg_font_stack import apply_font_stack
 
@@ -44,8 +42,7 @@ NAVY, BLUE, RED, GREEN, ORANGE, GRAY = (
 INK, RULE = "#1a1a1a", "#c7d2e0"
 SLIDE_BG = "#fafaf7"
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "book/extras/slides/fig"
-PAGE = ROOT / "book/extras/viz/img"
+OUT = ROOT / "book/extras/viz/img"
 
 plt.rcParams.update({
     "svg.fonttype": "none",
@@ -87,9 +84,7 @@ def finalize(fig, name: str) -> None:
     s = s[s.index("<svg"):]
     s = apply_font_stack(s)
     (OUT / f"{name}.svg").write_text(s, encoding="utf-8")
-    PAGE.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(OUT / f"{name}.svg", PAGE / f"{name}.svg")
-    print(f"wrote {OUT / (name + '.svg')} (+ page copy)")
+    print(f"wrote {OUT / (name + '.svg')}")
 
 
 def uniform_pattern() -> None:
@@ -276,10 +271,7 @@ def geometry_schematic() -> None:
     svg = "\n".join(parts)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "L15-aperture-to-pattern.svg").write_text(svg, encoding="utf-8")
-    PAGE.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(OUT / "L15-aperture-to-pattern.svg",
-                    PAGE / "L15-aperture-to-pattern.svg")
-    print(f"wrote {OUT / 'L15-aperture-to-pattern.svg'} (+ page copy)")
+    print(f"wrote {OUT / 'L15-aperture-to-pattern.svg'}")
 
 
 if __name__ == "__main__":

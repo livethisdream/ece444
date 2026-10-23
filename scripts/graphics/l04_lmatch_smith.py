@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """L04: the L-match drawn as two moves on the Smith chart.
 
-The worked example on the deck and the lesson page is a 20 - j15 ohm antenna on
+The worked example on the lesson page is a 20 - j15 ohm antenna on
 a 50 ohm line. Normalized, z_L = 0.4 - j0.3. The two design moves are:
 
   1. series inductor  -> walk clockwise along the constant-RESISTANCE circle
@@ -10,13 +10,12 @@ a 50 ohm line. Normalized, z_L = 0.4 - j0.3. The two design moves are:
   2. shunt capacitor  -> walk along that constant-CONDUCTANCE circle into the
      center. The susceptance added is 1.225/50 S, i.e. 3.9 pF at 1 GHz.
 
-Those are the same numbers the algebra gives, which is the point of the slide.
+Those are the same numbers the algebra gives, which is the point of the figure.
 
-Deck figures carry no equations -- labels here are words and plain numbers only.
+The figure carries no equations -- labels here are words and plain numbers only.
 
     python3 scripts/graphics/l04_lmatch_smith.py
-    -> book/extras/slides/fig/L04-lmatch-smith.svg
-       book/extras/viz/img/L04-lmatch-smith.svg
+    -> book/extras/viz/img/L04-lmatch-smith.svg
 """
 
 from __future__ import annotations
@@ -31,7 +30,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
-OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
+OUT = ROOT / "book/extras/viz/img"
 
 plt.rcParams.update({
     "svg.fonttype": "none",
@@ -119,12 +118,11 @@ def main() -> int:
     s = buf.getvalue()
     s = s[s.index("<svg"):]
     s = apply_font_stack(s)
-    for out in OUTS:
-        out.mkdir(parents=True, exist_ok=True)
-        (out / "L04-lmatch-smith.svg").write_text(s, encoding="utf-8")
-        print(f"wrote {out / 'L04-lmatch-smith.svg'}")
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / "L04-lmatch-smith.svg").write_text(s, encoding="utf-8")
+    print(f"wrote {OUT / 'L04-lmatch-smith.svg'}")
 
-    # echo the numbers the slide quotes, so the figure and the text cannot drift
+    # echo the numbers the lesson quotes, so the figure and the text cannot drift
     print(f"\ncheck: series reactance = {(x1 - x0) * Z0:+.1f} ohms "
           f"-> L = {(x1 - x0) * Z0 / (2 * np.pi * 1e9) * 1e9:.1f} nH at 1 GHz")
     print(f"       shunt susceptance = {-y_mid.imag / Z0:.5f} S "

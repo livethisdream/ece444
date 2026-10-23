@@ -5,11 +5,11 @@
 #   e.g. scripts/verify/mech_check.sh 07 simple-resonant-antennas
 #
 # Lessons only. A lab child page (LNN-lab-<slug>, 2026-10-13) is a procedure
-# page with no deck or practice gate of its own, as the L04 lab never had one;
+# page with no practice gate of its own, as the L04 lab never had one;
 # check_density.py and check_frames.py still measure it.
 #
 # Everything here is scripted because it is decidable: files present, LaTeX
-# compiles, every problem has a solution, decks and widgets render. Substance
+# compiles, every problem has a solution, frames and widgets render. Substance
 # -- physics, derivations, difficulty -- is not checked here and never should
 # be; that is the orchestrator's job (REVIEW.md section B).
 #
@@ -33,7 +33,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(cd "$HERE/../.." && pwd)"
 LNN="L${NN}-${SLUG}"
 
-# A lab page has no deck, practice set, or required widget, so the lesson gate
+# A lab page has no practice set or required widget, so the lesson gate
 # below would report those as failures. Say so instead of failing.
 case "$SLUG" in
   lab-*)
@@ -63,8 +63,6 @@ MOD="$(basename "$(dirname "$(dirname "$page")")" | sed 's/^module0*//')"
 # 1. files exist, page is not a stub
 [ -s "$page" ] && ! grep -q "under construction" "$page" \
   && ok "lesson page non-stub (module $MOD)" || bad "lesson page missing/stub"
-[ -s "$REPO/book/extras/slides/$LNN.md" ] && ok "deck md" || bad "deck md missing"
-[ -s "$REPO/book/extras/slides/$LNN.html" ] && ok "deck html" || bad "deck html missing"
 tex="$REPO/latex/ECE444_Practice_L$NN.tex"
 [ -s "$tex" ] && ok "practice tex" || bad "practice tex missing"
 b="$REPO/book/extras/practice/ECE444_L${NN}_Practice_blank.pdf"
@@ -109,25 +107,8 @@ ps=$(pdfinfo "$s" 2>/dev/null | awk '/^Pages/{print $2}')
 [ -n "$ps" ] && [ "$ps" -ge "$pb" ] && ok "pages: blank=$pb solutions=$ps" \
   || bad "pagecount odd: blank=$pb sol=$ps"
 
-# 3a. deck separators -- must run before the render check, because a dead
-# separator merges two slides and then shows up as a bogus "slide too tall"
-# rather than as what it is.
-if sep=$(python3 "$HERE/check_separators.py" "$LNN" 2>&1); then
-  ok "deck separators: all '---' live"
-else
-  bad "deck separators: $(echo "$sep" | grep -c 'line ') dead -- two slides are merged"
-  echo "$sep" | grep '  line ' | sed 's/^/        /'
-fi
-
-# 3b. deck render
-if python3 "$HERE/check_deck.py" "$LNN" >"/tmp/mc_deck_$NN.log" 2>&1; then
-  ok "deck render: $(grep -m1 -E '^[A-Za-z0-9._-]+: [0-9]+ slides' "/tmp/mc_deck_$NN.log")"
-else
-  bad "deck render (see /tmp/mc_deck_$NN.log)"
-fi
-
-# 3c. frame budget -- only for a lesson that has opted into the frame view.
-# A frame taller than the viewport is the deck's "slide too tall" defect in a
+# 3a. frame budget -- only for a lesson that has opted into the frame view.
+# A frame taller than the viewport is the old decks' "slide too tall" defect in a
 # new place: the build is happy and the bottom of the frame is simply gone when
 # you present it. It has shipped that way before, so it is a gate, not a sweep.
 if grep -qE '^frame_view:' "$page"; then
@@ -141,7 +122,7 @@ else
   ok "not a frame page (no frame_view in front matter)"
 fi
 
-# 3d. present-mode density -- what the class sees, counted from the source.
+# 3b. present-mode density -- what the class sees, counted from the source.
 # Forty words a frame and thirty frames a lesson (Neil, 2026-09-03). A lesson
 # that has not been cut yet (no :::{present} block) is reported, not failed:
 # the gate bites once the lesson opts in. Static, so it costs nothing.
@@ -165,13 +146,10 @@ for w in $widgets; do
 done
 
 # 5. greps for the gotchas that ship silently
-files="$page $REPO/book/extras/slides/$LNN.md $tex"
+files="$page $tex"
 grep -lP '\x{2009}' $files 2>/dev/null | grep -q . \
   && bad "U+2009 thin space found" || ok "no thin spaces"
-grep -nE '\\[,;]' "$REPO/book/extras/slides/$LNN.md" 2>/dev/null \
-  | grep -v '\\lbrace\|\\rbrace' | head -3 | grep -q . \
-  && bad "deck has \\, or \; in math" || ok "deck free of \\, \;"
-if python3 "$HERE/check_tables.py" "$page" "$REPO/book/extras/slides/$LNN.md"; then
+if python3 "$HERE/check_tables.py" "$page"; then
   ok "no | inside table math"
 else
   bad "raw | inside \$..\$ splits a table cell (use \\vert)"
@@ -183,10 +161,10 @@ grep -q "Learning Objective $MOD\." "$tex" && ok "practice LO banner" \
 
 # 6. voice self-check (VOICE.md) -- self-praise words, never in course prose
 if grep -nEi '\b(honest|genuinely|rigorous|no hand-waving|is the price)\b' \
-     "$page" "$REPO/book/extras/slides/$LNN.md" 2>/dev/null | head -5 | grep -q .; then
+     "$page" 2>/dev/null | head -5 | grep -q .; then
   bad "VOICE.md: self-vouching wording found"
   grep -nEi '\b(honest|genuinely|rigorous|no hand-waving|is the price)\b' \
-    "$page" "$REPO/book/extras/slides/$LNN.md" 2>/dev/null | head -5 | sed 's/^/          /'
+    "$page" 2>/dev/null | head -5 | sed 's/^/          /'
 else
   ok "VOICE.md: no self-vouching wording"
 fi

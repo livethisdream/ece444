@@ -1,24 +1,16 @@
 #!/usr/bin/env python3
-"""Generate the L03 polarization diagrams for the deck.
+"""Generate the L03 polarization diagrams for the lesson page.
 
-Four native SVGs, drawn to the deck's palette with live <text> that carries no
-font-family, so injected inline (deck-tools.js) they inherit Source Sans Pro:
+Native SVGs in the house palette, with live <text> carrying the shared font
+stack:
 
   - pol-states       : the three states as E-tip loci (line / circle / ellipse)
-  - pol-construction : two linear components + relative phase -> resultant trace
-  - handedness       : IEEE right/left hand, viewed along the propagation axis
   - axial-ratio      : the polarization ellipse, major/minor axes, tilt angle
 
-No equations are baked in — those live in the slide text. Labels only.
+No equations are baked in — those live in the lesson text. Labels only.
 
     python scripts/graphics/polarization.py
-    -> writes book/extras/slides/fig/{L03-pol-states,L03-pol-construction,L03-handedness,
-                                      L03-axial-ratio}.svg
-
-Handedness note: the figure is drawn from the *temporal* IEEE definition (how E
-rotates at a fixed point, looking along the direction of propagation), NOT the
-fixed-time spatial helix — the two have opposite screw sense, and the temporal
-one is what the convention and the slide actually state.
+    -> writes book/extras/viz/img/{L03-pol-states,L03-axial-ratio}.svg
 """
 
 from __future__ import annotations
@@ -29,7 +21,7 @@ from svg_font_stack import apply_font_stack
 
 NAVY, BLUE, RED, GREEN, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
-OUT = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
+OUT = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 
 MARKERS = {"navy": NAVY, "blue": BLUE, "red": RED, "gray": GRAY, "ink": INK, "green": GREEN}
 TAU = 2 * math.pi
@@ -50,7 +42,7 @@ def d_of(pts, close: bool = False) -> str:
 
 class Fig:
     """Element accumulator that tracks a bounding box, so every figure ships a
-    tight viewBox and scales to whatever column the slide gives it."""
+    tight viewBox and scales to whatever column the page gives it."""
 
     def __init__(self) -> None:
         self.body: list[str] = []
@@ -154,7 +146,7 @@ def pol_states() -> None:
             f.add(f'<path d="{d_of(pts, True)}" fill="{BLUE}" fill-opacity="0.08" '
                   f'stroke="{BLUE}" stroke-width="2.6"/>', *pts)
             # opacity encodes time (faint = earlier), so the arrows and the arc
-            # must agree; both run counter-clockwise, as pol-construction does
+            # must agree; both run counter-clockwise
             for t_deg, op in ((25.0, 0.28), (85.0, 0.5), (145.0, 1.0)):
                 t = math.radians(t_deg)
                 u, v = R * math.cos(t), R * b * math.sin(t)
@@ -173,103 +165,7 @@ def pol_states() -> None:
 
 
 # --------------------------------------------------------------------------
-# 2. Two linear components + relative phase -> any polarization
-# --------------------------------------------------------------------------
-def pol_construction() -> None:
-    f = Fig()
-    AX, AY = 1.0, 0.72              # component amplitudes
-    DELTA = math.radians(-60.0)     # relative phase of Ey
-    W, AMP = 268.0, 34.0            # waveform box width, amplitude in px
-    x0, y0 = 0.0, 66.0              # waveform origin (y0 = zero line)
-
-    # --- component waveforms, one period plus a little ---
-    f.add(f'<line x1="{x0}" y1="{y0}" x2="{x0 + W:.1f}" y2="{y0}" '
-          f'stroke="{RULE}" stroke-width="1.2"/>', (x0, y0), (x0 + W, y0))
-    f.text(x0 + W + 8, y0 + 5, "ωt", GRAY, 13, "start")
-
-    for amp, phase, color, key in ((AX, 0.0, BLUE, "blue"), (AY, DELTA, RED, "red")):
-        pts = [(x0 + W * i / 240, y0 - AMP * amp * math.cos(TAU * (1.15 * i / 240) + phase))
-               for i in range(241)]
-        f.add(f'<path d="{d_of(pts)}" fill="none" stroke="{color}" stroke-width="2.4"/>', *pts)
-
-    f.text(x0 + 6, y0 - AMP * AX - 10, "E<tspan font-size=\"10\" dy=\"4\">x</tspan>",
-           BLUE, 15, "start", "700")
-    # Ey peaks a fraction -DELTA/2pi of a period after Ex
-    t_ey = (-DELTA / TAU) / 1.15
-    f.text(x0 + W * t_ey + 6, y0 - AMP * AY - 10,
-           "E<tspan font-size=\"10\" dy=\"4\">y</tspan>", RED, 15, "start", "700")
-
-    # --- the relative phase, marked between the two peaks ---
-    y_d = y0 - AMP - 30
-    f.add(f'<line x1="{x0:.1f}" y1="{y_d:.1f}" x2="{x0 + W * t_ey:.1f}" y2="{y_d:.1f}" '
-          f'stroke="{GRAY}" stroke-width="1.8" marker-start="url(#ar-gray)" '
-          f'marker-end="url(#ar-gray)"/>', (x0, y_d), (x0 + W * t_ey, y_d))
-    for x_tick in (x0, x0 + W * t_ey):
-        f.add(f'<line x1="{x_tick:.1f}" y1="{y_d:.1f}" x2="{x_tick:.1f}" y2="{y0 - AMP * 0.55:.1f}" '
-              f'stroke="{RULE}" stroke-width="1.1" stroke-dasharray="3 3"/>',
-              (x_tick, y_d), (x_tick, y0))
-    f.text(x0 + W * t_ey / 2, y_d - 8, "δ", GRAY, 16, "middle", "700")
-
-    # --- resultant locus ---
-    cx, cy, S = x0 + W / 2, y0 + 152.0, 52.0
-    f.axes(cx, cy, S + 20)
-    pts = [(cx + S * AX * math.cos(TAU * i / 96),
-            cy - S * AY * math.cos(TAU * i / 96 + DELTA)) for i in range(97)]
-    f.add(f'<path d="{d_of(pts, True)}" fill="{BLUE}" fill-opacity="0.08" '
-          f'stroke="{NAVY}" stroke-width="2.6"/>', *pts)
-    t = TAU * 0.07
-    f.vec(cx, cy, S * AX * math.cos(t), S * AY * math.cos(t + DELTA), "navy", 2.6)
-    # With Ey lagging Ex (DELTA < 0) this locus is traced counter-clockwise:
-    # at wt=0 the tip is at (1, 0.36) and moves to (0.87, 0.62). Placed upper-left
-    # so it clears the y-axis label and the wt=0 E-vector.
-    f.arc_arrow(cx, cy, S + 8, 55, 125, "gray", 1.8, ccw=True)
-    f.text(cx, cy + S + 52, "resultant trace", NAVY, 15, "middle", "700")
-
-    f.write("L03-pol-construction",
-            "Two orthogonal linear components with a relative phase delta combine "
-            "into an elliptical resultant trace")
-
-
-# --------------------------------------------------------------------------
-# 3. IEEE handedness, viewed along the propagation direction
-# --------------------------------------------------------------------------
-def handedness() -> None:
-    f = Fig()
-    R, cy = 50.0, 108.0
-    # thumb along propagation (into the page) -> right-hand fingers curl
-    # clockwise from the reader's side; left-hand is the mirror image
-    panels = [(108.0, "Right-hand", [160.0, 70.0, -20.0], False),
-              (326.0, "Left-hand", [20.0, 110.0, 200.0], True)]
-
-    for cx, name, angles, ccw in panels:
-        f.add(f'<circle cx="{cx}" cy="{cy}" r="{R}" fill="none" stroke="{RULE}" '
-              f'stroke-width="1.4"/>', (cx - R, cy - R), (cx + R, cy + R))
-        # propagation into the page
-        f.add(f'<circle cx="{cx}" cy="{cy}" r="8" fill="none" stroke="{GRAY}" stroke-width="1.6"/>'
-              f'<line x1="{cx - 5.7:.1f}" y1="{cy - 5.7:.1f}" x2="{cx + 5.7:.1f}" '
-              f'y2="{cy + 5.7:.1f}" stroke="{GRAY}" stroke-width="1.6"/>'
-              f'<line x1="{cx - 5.7:.1f}" y1="{cy + 5.7:.1f}" x2="{cx + 5.7:.1f}" '
-              f'y2="{cy - 5.7:.1f}" stroke="{GRAY}" stroke-width="1.6"/>')
-
-        for a_deg, op, lab in zip(angles, (0.3, 0.58, 1.0), ("t₁", "t₂", "t₃")):
-            a = math.radians(a_deg)
-            f.vec(cx, cy, R * math.cos(a), R * math.sin(a), "navy", 2.6, op, gap=11.0)
-            f.text(cx + (R + 15) * math.cos(a), cy - (R + 15) * math.sin(a) + 5,
-                   lab, NAVY, 13.5, "middle", "700", opacity=op)
-
-        span = (135.0, 45.0) if not ccw else (45.0, 135.0)
-        f.arc_arrow(cx, cy, R + 32, span[0], span[1], "red", 2.2, ccw=ccw)
-        f.text(cx, cy + R + 34, name, NAVY, 16, "middle", "700")
-
-    f.text((108.0 + 326.0) / 2, cy + R + 58,
-           "viewed looking along the propagation direction", GRAY, 13.5)
-    f.write("L03-handedness",
-            "IEEE handedness: looking along the propagation direction, the E-vector of a "
-            "right-hand polarized wave rotates clockwise and a left-hand wave counter-clockwise")
-
-
-# --------------------------------------------------------------------------
-# 4. The polarization ellipse: major/minor axes and tilt
+# 2. The polarization ellipse: major/minor axes and tilt
 # --------------------------------------------------------------------------
 def axial_ratio() -> None:
     f = Fig()
@@ -317,8 +213,6 @@ def axial_ratio() -> None:
 
 def main() -> int:
     pol_states()
-    pol_construction()
-    handedness()
     axial_ratio()
     return 0
 

@@ -18,15 +18,11 @@ Today you type those numbers into the array and find out what the hardware gives
 L24 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame}
+::::{frame} Printing
+:class: read-only
 
-:::{admonition} Slides
-:class: slides
-<a href="../../slides/L24-lab-null-steering.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L24-lab-null-steering.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L24-lab-null-steering.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
-
+To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.
 ::::
 
 ::::{frame} Learning Objectives

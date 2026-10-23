@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""A frame page and a reading page must both print as more than one sheet.
+"""A frame page and a reading page must both print as more than one sheet,
+and a frame page printed from present mode must be a slide-only handout.
 
 `.deck` is a fixed-height scroll container so present mode can pin one frame
 per viewport -- exactly what `@media print` saw before frames.css carried a
@@ -42,6 +43,21 @@ SKIP_RELATIVE = {"index.html"}
 # page" -- it may legitimately fit on one sheet, so it is rendered and counted
 # but not held to the >1-page requirement.
 LONG_TEXT_CHARS = 5000
+
+# A frame page printed from present mode is the slide handout that replaced
+# the reveal.js decks' ?print-pdf (2026-10-23): title and present blocks only,
+# one frame a sheet. Nothing of the depth and no read-only frame may reach the
+# paper, or the handout is the whole lesson again.
+HANDOUT = """() => {
+  document.documentElement.setAttribute('data-mode', 'present');
+  const shown = el => getComputedStyle(el).display !== 'none' && el.getClientRects().length > 0;
+  const frames = [...document.querySelectorAll('.frame')];
+  return {
+    slides: frames.filter(f => !f.classList.contains('read-only')).length,
+    depth: [...document.querySelectorAll('.frame .depth')].filter(shown).length,
+    readOnly: frames.filter(f => f.classList.contains('read-only') && shown(f)).length,
+  };
+}"""
 
 CLASSIFY = """() => {
   const deck = document.getElementById('deck');
@@ -110,6 +126,22 @@ def main():
                                f"page(s) -- the deck is still clipped to one viewport")
                 elif n > 1 and pdf_pages == 1:
                     bad.append(f"{rel}: {n} frames printed as a single page")
+
+                # the slide handout: same page, printed from present mode
+                page.emulate_media(media="print")
+                h = page.evaluate(HANDOUT)
+                handout_pages = pdf_page_count(page.pdf(print_background=True))
+                # back to no emulation, not "screen": page.pdf() honors an
+                # emulated screen media and would print every later page as
+                # one clipped viewport
+                page.emulate_media(media=None)
+                if h["depth"] or h["readOnly"]:
+                    bad.append(f"{rel}: present-mode print shows {h['depth']} depth block(s) "
+                               f"and {h['readOnly']} read-only frame(s) -- the handout "
+                               f"is printing the reading page")
+                elif handout_pages < h["slides"]:
+                    bad.append(f"{rel}: {h['slides']} slides but the handout printed "
+                               f"{handout_pages} page(s)")
             else:
                 if info["textLen"] < LONG_TEXT_CHARS:
                     skipped_short += 1
@@ -133,7 +165,8 @@ def main():
         for b in bad:
             print("  " + b)
         return 1
-    print("every frame page breaks one sheet per frame; every long reading page spans sheets")
+    print("every frame page breaks one sheet per frame in read mode and prints a slide-only "
+          "handout in present mode; every long reading page spans sheets")
     return 0
 
 

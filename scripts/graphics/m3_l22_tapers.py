@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
-"""Generate the L22 (Sidelobes and Tapering) deck figures as inline SVG.
+"""Generate the L22 (Sidelobes and Tapering) figures as inline SVG.
 
   - L22-edge-fourier   : aperture illumination (sharp vs smooth edge) and the
                          pattern each one produces -- why sidelobes exist
-  - L22-taper-shapes   : the 8 element amplitudes for four tapers, as stems
-  - L22-taper-patterns : uniform / Chebyshev -30 dB / Hann patterns on one axis
   - L22-sll-vs-cost    : the Dolph trade curve -- HPBW and taper efficiency
                          against design sidelobe level, named tapers marked
 
 Every number here is computed from the same formulas the lesson page and the
 taper-explorer widget use: N = 8, d/lambda = 0.481 (10.3 GHz, d = 14 mm).
-Deck figures carry no equations -- words, numbers and axis labels only.
+The figures carry no equations -- words, numbers and axis labels only.
 
     python3 scripts/graphics/m3_l22_tapers.py
-    -> book/extras/slides/fig/L22-*.svg
+    -> book/extras/viz/img/{L22-edge-fourier,L22-sll-vs-cost}.svg
 """
 
 from __future__ import annotations
@@ -27,7 +25,7 @@ from svg_font_stack import apply_font_stack
 
 NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
-OUT = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
+OUT = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 
 N, DL = 8, 0.481
 
@@ -178,65 +176,6 @@ def edge_fourier() -> None:
     finalize(fig, "L22-edge-fourier")
 
 
-def taper_shapes() -> None:
-    """Four tapers as element-amplitude stems, at the numbers a student types
-    into the Element Gains column."""
-    sets = [("Uniform", np.ones(N), NAVY),
-            ("Chebyshev −30 dB", dolph(30), GREEN),
-            ("Hann", hann(), ORANGE),
-            ("Blackman", BLACKMAN, RED)]
-    fig, axes = plt.subplots(2, 2, figsize=(9.4, 5.4), sharey=True, sharex=True)
-    axes = axes.ravel()
-    x = np.arange(1, N + 1)
-    for ax, (name, a, col) in zip(axes, sets):
-        pct = np.round(a * 100).astype(int)
-        ax.vlines(x, 0, pct, color=col, lw=3.4)
-        ax.plot(x, pct, "o", color=col, ms=7)
-        for xi, v in zip(x, pct):
-            ax.text(xi, v + 5, str(v), color=col, fontsize=11, ha="center",
-                    va="bottom", fontweight="bold")
-        ax.set_title(name, color=col, fontsize=13.5, fontweight="bold", pad=6)
-        ax.set_xlim(0.4, N + 0.6); ax.set_ylim(0, 126)
-        ax.set_xticks(x); ax.set_xticklabels([str(i) for i in x], fontsize=10)
-        ax.grid(color=RULE, linewidth=0.8, axis="y")
-        for sp in ("top", "right"):
-            ax.spines[sp].set_visible(False)
-    for ax in axes[2:]:
-        ax.set_xlabel("Element")
-    for ax in (axes[0], axes[2]):
-        ax.set_ylabel("Element gain  (%)")
-        ax.set_yticks([0, 25, 50, 75, 100])
-    fig.subplots_adjust(hspace=0.34, wspace=0.14)
-    finalize(fig, "L22-taper-shapes")
-
-
-def taper_patterns() -> None:
-    """The same three tapers as patterns, with the equal-ripple floor of the
-    Chebyshev design visible against the decaying uniform sidelobes."""
-    fig, ax = plt.subplots(figsize=(8.6, 4.2))
-    for name, a, col, lw in [("Uniform", np.ones(N), NAVY, 2.4),
-                             ("Chebyshev −30 dB", dolph(30), GREEN, 2.2),
-                             ("Hann", hann(), ORANGE, 2.2)]:
-        ax.plot(TH, pattern_db(a), color=col, lw=lw,
-                label=f"{name}   {hpbw(a):.1f}° wide")
-    ax.set_xlim(-90, 90); ax.set_ylim(-60, 4)
-    ax.set_xticks(range(-90, 91, 15))
-    ax.set_xlabel("Angle from broadside  (deg)")
-    ax.set_ylabel("Relative power  (dB)")
-    ax.grid(color=RULE, linewidth=0.8)
-    for sp in ("top", "right"):
-        ax.spines[sp].set_visible(False)
-    ax.axhline(-30, color=GREEN, lw=1.1, ls=(0, (4, 3)))
-    ax.axhline(-12.8, color=NAVY, lw=1.1, ls=(0, (4, 3)))
-    ax.text(-88, -11.4, "−12.8 dB", color=NAVY, fontsize=11.5, fontweight="bold",
-            ha="left", va="bottom")
-    ax.text(-88, -28.6, "−30 dB", color=GREEN, fontsize=11.5, fontweight="bold",
-            ha="left", va="bottom")
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.30), ncol=3,
-              fontsize=11.5, handlelength=1.6, columnspacing=1.5)
-    finalize(fig, "L22-taper-patterns")
-
-
 def sll_vs_cost() -> None:
     """What a deeper sidelobe specification costs, along the Dolph family."""
     sll = np.linspace(15.0, 55.0, 240)
@@ -296,7 +235,7 @@ def report() -> None:
 
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
-    edge_fourier(); taper_shapes(); taper_patterns(); sll_vs_cost()
+    edge_fourier(); sll_vs_cost()
     report()
     return 0
 

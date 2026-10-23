@@ -22,7 +22,6 @@ floor back.
 
     python3 scripts/graphics/l09_measurement_floors.py
     -> book/extras/viz/img/L09-stray-ripple.svg         (lesson page, depth)
-       book/extras/slides/fig/L09-dynamic-range.svg     (deck)
        book/extras/viz/img/L09-dynamic-range.svg        (lesson page)
 """
 
@@ -40,7 +39,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, RED, GREEN, AMBER, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5b6573"
 INK, RULE = "#15202b", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
-FIG, IMG = ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"
+IMG = ROOT / "book/extras/viz/img"
 
 plt.rcParams.update({"svg.fonttype": "none", "font.size": 11, "text.color": INK,
                      "axes.edgecolor": GRAY, "axes.labelcolor": INK,
@@ -74,16 +73,12 @@ def swing(level_db, stray_db=STRAY_DB):
     return 20 * np.log10((a + s) / a), 20 * np.log10((a - s) / a)
 
 
-def stray_ripple(stacked=False):
-    """`stacked` draws the two panels one above the other, for the lesson page,
-    where the figure sits in half a frame and a 3:1 strip sets its type too
-    small to read. The deck gets the wide version."""
-    if stacked:
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6.4, 5.5),
-                                       gridspec_kw={"height_ratios": [0.78, 1.0]})
-    else:
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9.6, 3.4),
-                                       gridspec_kw={"width_ratios": [1.0, 1.5]})
+def stray_ripple():
+    """The two panels one above the other, for the lesson page, where the
+    figure sits in half a frame and a 3:1 strip sets its type too small to
+    read."""
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6.4, 5.5),
+                                   gridspec_kw={"height_ratios": [0.78, 1.0]})
 
     # ---- panel 1: the amplitudes, for the -30 dB sidelobe ----------------
     # Neil, 2026-09-17: "how do you get a 5.5dB swing from a -40dB stray field?
@@ -147,18 +142,11 @@ def stray_ripple(stacked=False):
     ax2.grid(axis="x", color=RULE, lw=0.7)
     ax2.set_axisbelow(True)
 
-    if stacked:
-        fig.tight_layout(rect=(0, 0, 1, 0.93), h_pad=3.0)
-        fig.text(0.02, 0.975, "the amplitudes add, at any phase", color=NAVY,
-                 fontsize=13, fontweight="bold", ha="left")
-        fig.text(0.02, 0.500, "so the reading is an interval, not a number", color=NAVY,
-                 fontsize=13, fontweight="bold", ha="left")
-    else:
-        fig.tight_layout(rect=(0, 0, 1, 0.90))
-        fig.text(0.015, 0.955, "the amplitudes add, at any phase", color=NAVY,
-                 fontsize=12.5, fontweight="bold", ha="left")
-        fig.text(0.44, 0.955, "so the reading is an interval, not a number", color=NAVY,
-                 fontsize=12.5, fontweight="bold", ha="left")
+    fig.tight_layout(rect=(0, 0, 1, 0.93), h_pad=3.0)
+    fig.text(0.02, 0.975, "the amplitudes add, at any phase", color=NAVY,
+             fontsize=13, fontweight="bold", ha="left")
+    fig.text(0.02, 0.500, "so the reading is an interval, not a number", color=NAVY,
+             fontsize=13, fontweight="bold", ha="left")
     return _svg(fig, "Left: a phasor diagram in which a stray signal forty decibels below "
                      "the main beam adds to a sidelobe thirty decibels down at any phase, so "
                      "the measured amplitude lies anywhere on a circle around the true value, "
@@ -218,13 +206,9 @@ def dynamic_range():
 
 
 def main():
-    # Only the stacked page copy: the ripple arithmetic is depth on the
-    # absorber frame, not a slide, so nothing on the deck loads a wide one.
-    (IMG / "L09-stray-ripple.svg").write_text(stray_ripple(stacked=True), encoding="utf-8")
-    dr = dynamic_range()
-    (FIG / "L09-dynamic-range.svg").write_text(dr, encoding="utf-8")
-    (IMG / "L09-dynamic-range.svg").write_text(dr, encoding="utf-8")
-    print("wrote L09-stray-ripple (stacked page copy) and L09-dynamic-range")
+    (IMG / "L09-stray-ripple.svg").write_text(stray_ripple(), encoding="utf-8")
+    (IMG / "L09-dynamic-range.svg").write_text(dynamic_range(), encoding="utf-8")
+    print("wrote L09-stray-ripple and L09-dynamic-range")
 
 
 if __name__ == "__main__":

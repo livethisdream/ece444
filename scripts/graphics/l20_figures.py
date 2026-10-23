@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""L20 illustration-sweep figures (lesson page only; the deck is frozen).
+"""L20 illustration-sweep figures (lesson page).
 
   L20-null-comb.svg       the broadside course-array pattern on a sin(theta)
                           axis, where the nulls are a comb with teeth every

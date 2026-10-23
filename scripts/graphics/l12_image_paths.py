@@ -12,8 +12,7 @@ L12:
 Labels only (h, theta, h cos theta); the array factor itself is in the text.
 
     python scripts/graphics/l12_image_paths.py
-    -> writes book/extras/slides/fig/L12-image-paths.svg
-              book/extras/viz/img/L12-image-paths.svg
+    -> writes book/extras/viz/img/L12-image-paths.svg
 """
 
 from __future__ import annotations
@@ -24,7 +23,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, RED, GRAY = "#004a85", "#0067b9", "#b01e24", "#5a5a5a"
 RULE = "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
-OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
+OUT = ROOT / "book/extras/viz/img"
 
 W, H = 560, 324
 OX, OY = 200, 200            # old ground point (origin)
@@ -105,10 +104,9 @@ def build() -> str:
 
 def main() -> None:
     svg = build()
-    for d in OUTS:
-        f = d / "L12-image-paths.svg"
-        f.write_text(svg)
-        print("wrote", f.relative_to(ROOT))
+    f = OUT / "L12-image-paths.svg"
+    f.write_text(svg)
+    print("wrote", f.relative_to(ROOT))
 
 
 if __name__ == "__main__":

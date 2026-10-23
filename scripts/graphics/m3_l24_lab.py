@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the L24 Lab (null steering) deck/page figures as inline SVG.
+"""Generate the L24 Lab (null steering) lesson-page figures as inline SVG.
 
   - L24-element-settings : the eight gain percentages and phase offsets that
                            the course example asks students to type into the
@@ -9,17 +9,15 @@
                            measurement noise floor that sets the notch reading
   - L24-delta-beam       : two-channel sum vs difference (Beam 1 Phase = 180),
                            boresight null and the twin peaks near +/-11 deg
-  - L24-mvdr-vs-manual   : two-channel manual vs MVDR response against an
-                           interferer -- the static fallback for the widget
   - L24-monopulse        : sum and delta together, and the signed error function
                            their ratio produces across boresight
 
 Array is the PHASER's: N = 8, d = 14 mm, 10.525 GHz -> d/lambda = 0.491, with
 the two ADAR1000 subarrays (elements 1-4 and 5-8) forming the digital pair.
-Deck figures carry no equations (house rule); numbers and short words only.
+The figures carry no equations (house rule); numbers and short words only.
 
     python3 scripts/graphics/m3_l24_lab.py
-    -> book/extras/slides/fig/L24-*.svg  (+ two copies in book/extras/viz/img/)
+    -> book/extras/viz/img/L24-*.svg
 """
 
 from __future__ import annotations
@@ -38,8 +36,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "book/extras/slides/fig"
-OUT_PAGE = ROOT / "book/extras/viz/img"
+OUT = ROOT / "book/extras/viz/img"
 
 N = 8
 DL = 0.491                       # d / lambda at 10.525 GHz
@@ -61,7 +58,7 @@ plt.rcParams.update({
 })
 
 
-def finalize(fig, name: str, also_page: bool = False) -> None:
+def finalize(fig, name: str) -> None:
     buf = io.StringIO()
     fig.savefig(buf, format="svg", transparent=True, bbox_inches="tight", pad_inches=0.06)
     plt.close(fig)
@@ -70,10 +67,6 @@ def finalize(fig, name: str, also_page: bool = False) -> None:
     s = apply_font_stack(s)
     (OUT / f"{name}.svg").write_text(s, encoding="utf-8")
     print(f"wrote {OUT / (name + '.svg')}")
-    if also_page:
-        OUT_PAGE.mkdir(parents=True, exist_ok=True)
-        (OUT_PAGE / f"{name}.svg").write_text(s, encoding="utf-8")
-        print(f"wrote {OUT_PAGE / (name + '.svg')}")
 
 
 # ---------------------------------------------------------------- array maths
@@ -152,7 +145,7 @@ def element_settings() -> None:
     a2.set_axisbelow(True)
 
     fig.tight_layout()
-    finalize(fig, "L24-element-settings", also_page=True)
+    finalize(fig, "L24-element-settings")
 
 
 # ------------------------------------------------------------------ figure 2
@@ -184,7 +177,7 @@ def sweep_notch() -> None:
                 arrowprops=dict(arrowstyle="->", color=GRAY, linewidth=1.2))
     ax.legend(loc="lower left", fontsize=11.5, ncol=1)
     fig.tight_layout()
-    finalize(fig, "L24-sweep-notch", also_page=True)
+    finalize(fig, "L24-sweep-notch")
 
 
 # ------------------------------------------------------------------ figure 3
@@ -213,60 +206,10 @@ def delta_beam() -> None:
                 arrowprops=dict(arrowstyle="->", color=RED, linewidth=1.3))
     ax.legend(loc="lower left", fontsize=11.5)
     fig.tight_layout()
-    finalize(fig, "L24-delta-beam", also_page=True)
+    finalize(fig, "L24-delta-beam")
 
 
 # ------------------------------------------------------------------ figure 4
-def mvdr_vs_manual() -> None:
-    """Two-channel manual vs MVDR against a 10 dB interferer (widget fallback)."""
-    ti, pi_db = 20.0, 10.0
-    m = np.arange(4)
-
-    def gsub(u):
-        return np.exp(1j * np.outer(np.atleast_1d(u), m)).sum(axis=1)
-
-    def chan(theta):
-        u = KD * np.sin(np.deg2rad(np.atleast_1d(theta)))
-        return np.stack([gsub(u), gsub(u) * np.exp(1j * 4 * u)], axis=-1)
-
-    sv, vi = chan(0.0)[0], chan(ti)[0]
-    P = 10 ** (pi_db / 10)
-    R = 1e-3 * np.eye(2) + np.outer(sv, sv.conj()) + P * np.outer(vi, vi.conj())
-    R = R + 1e-3 * np.trace(R).real / 2 * np.eye(2)
-    Ri = np.linalg.inv(R)
-    wv = Ri @ sv / (np.conj(sv) @ Ri @ sv)
-    wm = np.array([1.0, 1.0]) / np.sqrt(2)
-    wv = wv / np.linalg.norm(wv)
-
-    th = np.linspace(-60, 60, 4001)
-    A = chan(th)
-    ref = np.abs(chan(0.0)[0] @ np.conj(wm))
-    pm = with_floor(20 * np.log10(np.abs(A @ np.conj(wm)) / ref), -30)
-    pv = with_floor(20 * np.log10(np.abs(A @ np.conj(wv)) / ref), -30)
-
-    fig, ax = plt.subplots(figsize=(8.6, 4.0))
-    _axes(ax, ymin=-39)
-    ax.set_xlabel("angle from broadside (deg)")
-    ax.plot(th, pm, color=GRAY, linewidth=1.4, label="manual  (both channels added)")
-    ax.plot(th, pv, color=NAVY, linewidth=2.6, label="MVDR")
-    ax.axvline(ti, color=ORANGE, linewidth=1.4, linestyle=(0, (5, 4)))
-    ax.text(ti + 1.5, 1.2, "interferer", fontsize=11.5, color=ORANGE)
-    ax.annotate("17 dB lower here", xy=(ti + 0.3, -29.4),
-                xytext=(27, -23.0), fontsize=12, color=RED,
-                arrowprops=dict(arrowstyle="->", color=RED, linewidth=1.3))
-    ax.annotate("look direction held", xy=(0, pv[np.argmin(np.abs(th))]),
-                xytext=(-58, -13.0), fontsize=12, color=GREEN,
-                arrowprops=dict(arrowstyle="->", color=GREEN, linewidth=1.3))
-    ax.legend(loc="lower left", fontsize=11.5)
-    fig.tight_layout()
-    finalize(fig, "L24-mvdr-vs-manual")
-
-    d_supp = pm[np.argmin(np.abs(th - ti))] - pv[np.argmin(np.abs(th - ti))]
-    d_look = pv[np.argmin(np.abs(th))] - pm[np.argmin(np.abs(th))]
-    print(f"  [check] suppression {d_supp:.1f} dB, look-direction change {d_look:.2f} dB")
-
-
-# ------------------------------------------------------------------ figure 5
 def monopulse() -> None:
     """Sum and delta together, and the error function their ratio produces."""
     th = np.linspace(-20, 20, 4001)
@@ -321,7 +264,7 @@ def monopulse() -> None:
                 arrowprops=dict(arrowstyle="->", color=RED, linewidth=1.2))
 
     fig.tight_layout()
-    finalize(fig, "L24-monopulse", also_page=True)
+    finalize(fig, "L24-monopulse")
 
 
 
@@ -330,7 +273,6 @@ def main() -> None:
     element_settings()
     sweep_notch()
     delta_beam()
-    mvdr_vs_manual()
     monopulse()
 
 

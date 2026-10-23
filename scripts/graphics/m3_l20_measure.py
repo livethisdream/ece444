@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""L20 Lab (Array Factor) deck figures.
+"""L20 Lab (Array Factor) figures.
 
   L20-read-the-trace     : one measured sweep with HPBW, FNBW and first SLL
                            marked -- the three numbers the lab asks for
@@ -8,12 +8,12 @@
   L20-aperture-halving   : ideal 8 / 4 / 2 element array factors at the dry
                            run's 10.408 GHz, with the dry run's measured peaks:
                            the beam doubles, the peak steps 6.0 dB ideally and
-                           5.1 and 4.8 dB measured (viz/img only)
+                           5.1 and 4.8 dB measured
 
 The first two match book/extras/viz/af-measurement-compare.html exactly: same
 element sum, same sweep grid, same -23 dBc floor, same seeded noise
-realization (LCG seed 6618, 20 power looks per step). Deck figures carry
-no equations -- the math lives in the slide text.
+realization (LCG seed 6618, 20 power looks per step). The figures carry
+no equations -- the math lives in the lesson text.
 
 The sweep grid is the GUI's with Use Bits on, which every lab preset sets: one
 2.8125 deg ADAR1000 phase LSB per point, so the samples are uniform in
@@ -22,9 +22,7 @@ broadside -- not 2.8125 deg of angle apart. Phase steps past kd ask for no real
 angle (the GUI piles them at +/-90 deg) and are left out.
 
     python3 scripts/graphics/m3_l20_measure.py
-    -> book/extras/slides/fig/L20-*.svg  (+ viz/img copies)
-    python3 scripts/graphics/m3_l20_measure.py --img-only
-    -> viz/img copies only (the deck is frozen; its figures are not rewritten)
+    -> book/extras/viz/img/L20-*.svg
 """
 
 from __future__ import annotations
@@ -43,13 +41,11 @@ import numpy as np
 NAVY, BLUE, RED, GREEN, AMBER, GRAY = "#004a85", "#0067b9", "#b01e24", "#3f7d34", "#8a5a00", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
-FIG = ROOT / "book/extras/slides/fig"
 IMG = ROOT / "book/extras/viz/img"
 
 LAM, DEL = 29.1e-3, 14e-3          # 10.3 GHz, PHASER element spacing
 KD = 2 * math.pi * DEL / LAM
 KD_DEG = math.degrees(KD)          # 173.2 deg of phase per unit sin(theta)
-IMG_ONLY = False                   # set by --img-only
 NEL, STEP, FLOOR_DB, LOOKS, SEED = 8, 2.8125, -23.0, 20, 6618
 YMIN, YMAX = -40.0, 3.0
 
@@ -67,19 +63,15 @@ plt.rcParams.update({
 PRESETS = {8: [1] * 8, 4: [0, 0, 1, 1, 1, 1, 0, 0], 2: [0, 0, 0, 1, 1, 0, 0, 0]}
 
 
-def finalize(fig, name: str, also_img: bool = False) -> None:
+def finalize(fig, name: str) -> None:
     buf = io.StringIO()
     fig.savefig(buf, format="svg", transparent=True, bbox_inches="tight", pad_inches=0.06)
     plt.close(fig)
     s = buf.getvalue()
     s = s[s.index("<svg"):]
     s = apply_font_stack(s)
-    if not IMG_ONLY:
-        (FIG / f"{name}.svg").write_text(s, encoding="utf-8")
-        print(f"wrote {FIG / (name + '.svg')}")
-    if also_img:
-        (IMG / f"{name}.svg").write_text(s, encoding="utf-8")
-        print(f"wrote {IMG / (name + '.svg')}")
+    (IMG / f"{name}.svg").write_text(s, encoding="utf-8")
+    print(f"wrote {IMG / (name + '.svg')}")
 
 
 # ---------------------------------------------------------------- array model
@@ -246,7 +238,7 @@ def read_the_trace() -> None:
     ax.text(m["peak_ang"] - 4, m["pk"] + 0.6, "peak", color=NAVY, fontsize=12,
             fontweight="bold", ha="right", va="bottom")
 
-    finalize(fig, "L20-read-the-trace", also_img=True)
+    finalize(fig, "L20-read-the-trace")
 
 
 def ideal_vs_measured() -> None:
@@ -274,7 +266,7 @@ def ideal_vs_measured() -> None:
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2,
               fontsize=11.5, handlelength=1.8)
 
-    finalize(fig, "L20-ideal-vs-measured", also_img=True)
+    finalize(fig, "L20-ideal-vs-measured")
 
 
 # The dry run (phaser-00, 2026-10-19, review/M3_LAB_DRYRUN.md): Find HB100 read
@@ -290,9 +282,6 @@ def aperture_halving() -> None:
     """Ideal 8 / 4 / 2 element array factors at the dry run's frequency, with
     the dry run's measured peak levels: the beam doubles, the peak steps 6.0 dB
     ideally and about 5 dB measured.
-
-    Written to viz/img only. The deck is frozen and keeps its own copy, the
-    earlier simulated version, under slides/fig.
     """
     kd = 2 * math.pi * DEL / (3.00e8 / DRY_F)
     t = np.arange(-90.0, 90.0 + 1e-9, 0.05)
@@ -342,9 +331,6 @@ def aperture_halving() -> None:
 
 
 if __name__ == "__main__":
-    import sys
-    IMG_ONLY = "--img-only" in sys.argv[1:]
-    FIG.mkdir(parents=True, exist_ok=True)
     IMG.mkdir(parents=True, exist_ok=True)
     read_the_trace()
     ideal_vs_measured()
