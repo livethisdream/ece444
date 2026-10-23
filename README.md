@@ -18,7 +18,7 @@ Conventions and the traps that ship silently wrong live in
 | `book/extras/practice/*.pdf` | built practice PDFs — **committed**; what the site serves |
 | `book/extras/labs/*.pdf` | built lab packets (blank copies only) |
 | `book/extras/handouts/*` | printable reference sheets (Smith charts) |
-| `latex/` | practice and lab sources, and their build scripts |
+| `latex/` | practice sources and their build scripts (lab packet sources are in `ECE444-faculty`) |
 | `latex/fonts/Barlow/` | the body font, vendored (SIL OFL) — loaded by path, no install |
 | `scripts/` | lesson scaffolder, interactives index, figure generators |
 | `scripts/verify/` | headless-chromium render checks — see its own README |
@@ -105,16 +105,20 @@ different vertical placement down the page. Real macros or no PDF.
 
 ## Rebuild a lab packet
 
-Same toolchain, different script. Labs are standalone documents (no shared
-harness), and only the **blank** copy is published — the KEY is a graded
-deliverable, so `latex/.gitignore` keeps all `latex/*.pdf` out of git:
+Lab packet **sources live in the private `ECE444-faculty` repo**, not here
+(Neil, 2026-10-23): each `ECE444_Lab_*.tex` carries its solution blocks
+inline, so the source is an answer key. Clone both repos side by side and build
+from the faculty one; its `build_lab.sh` files the KEY under `lab-keys/` there
+and moves only the **blank** copy into this repo's `book/extras/labs/`, which
+you commit here:
 
 ```sh
-TEXINPUTS=/workspace/latex-tools/tex/latex//: bash latex/build_lab.sh L04_Matching
+cd ../ECE444-faculty   # ECE444_REPO points at this repo if it is not ../ece444
+TEXINPUTS=/workspace/latex-tools/tex/latex//: bash build_lab.sh L04_Matching
 ```
 
-Photographs live in `latex/figures/` and are detected with `\IfFileExists`, so
-the packet compiles either way — with the photos if present, with labeled
+The L04 photographs stay here in `latex/figures/` (photos, not answers) and are
+detected with `\IfFileExists`, so the packet compiles either way — with the photos if present, with labeled
 placeholder boxes if not. Size them with `width=`, never `scale=`: `scale=` is
 tied to the pixel dimensions of whatever image was there when you tuned it, and
 a replacement silently runs off the margin. Store photos at print resolution
