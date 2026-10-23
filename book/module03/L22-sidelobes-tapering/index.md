@@ -55,19 +55,25 @@ it changes, and how to pick a taper that meets a stated sidelobe specification.
 :::
 :::{present}
 - The pattern is the transform of the illumination (L15).
-- A hard edge transforms to a sinc: ripples decay only as $1/u$.
+- A hard edge transforms to L15's sinc, whose ripples decay only as $1/(\pi u)$.
 - A soft edge removes the high space frequencies, and the sidelobes drop.
 :::
 
 Lesson 15 established the Fourier relationship between an aperture and its
 pattern: the far-field pattern is the transform of the aperture illumination, and
-the transform variable is the space frequency $k_z = k\sin\theta$. Read that
-relationship backwards and it explains the sidelobes. A uniformly
+the transform variable is the space frequency
+
+$$u = \frac{L}{\lambda}\sin\theta .$$
+
+Read that relationship backwards and it explains the sidelobes. A uniformly
 illuminated aperture is a rectangle in space — full amplitude everywhere across
 the array, then nothing at all one element spacing beyond the ends. An abrupt
 edge is a discontinuity, and a discontinuity carries energy at every spatial
-frequency. The transform of a rectangle is a sinc, and a sinc has ripples that
-decay only as $1/u$. Those ripples are the sidelobes.
+frequency. The transform of a rectangle is Lesson 15's sinc,
+
+$$\vert F(u)\vert = \left\vert \frac{\sin \pi u}{\pi u}\right\vert ,$$
+
+whose ripples fall off only as $1/(\pi u)$. Those ripples are the sidelobes.
 
 Softening the edge softens the pattern. If the illumination approaches zero
 gradually instead of stopping abruptly, the high space-frequency content that fed the
@@ -89,15 +95,31 @@ how fast to fall off.
 Amplitude shapes the beam (sidelobes, beamwidth). Phase steers it.
 :::
 
-The same statement in array language: the eight element voltages add in phase at
-broadside, and away from broadside they fall out of step. At the first null they
-cancel exactly. Just past that null they do not cancel — seven of the eight
-phasors still partially reinforce — and the residue is the first sidelobe. For
-the PHASER's eight elements the residue is $-12.8\ \text{dB}$ relative to the
-peak, which is the number your sweep measured. For a continuous uniform aperture
-the same argument gives $-13.3\ \text{dB}$. Both are properties of the *shape* of
-the illumination, not of its *size*: adding elements narrows the main lobe and
-moves the sidelobes inward, but it does not lower them.
+The same statement in array language uses Lesson 16's chain of phasors: the
+eight element voltages drawn tip to tail, each turned the inter-element phase
+$\psi$ from the last. At broadside the chain is straight. At the first null it
+has turned through one full circle, $N\psi = 2\pi$, and closes into an octagon.
+Past the null it keeps winding, and near one and a half turns, $N\psi = 3\pi$,
+the extra half turn does not close: that leftover arc is the first sidelobe.
+The length of a chain of $N$ unit phasors is
+
+$$
+\begin{aligned}
+\vert AF\vert &= \left\vert \frac{\sin(N\psi/2)}{\sin(\psi/2)} \right\vert \\
+\frac{\vert AF\vert}{N} &\approx \frac{1}{N\sin(3\pi/2N)}
+\end{aligned}
+$$
+
+with the second line evaluated at $N\psi = 3\pi$.
+
+For $N = 8$ that is $0.225$, or $-13.0\ \text{dB}$; the exact peak, $-12.8\ \text{dB}$
+at $21.9^\circ$, sits slightly short of $3\pi$. As $N$ grows, $N\sin(3\pi/2N)$
+approaches $3\pi/2$, and the estimate approaches $2/(3\pi) = 0.212$, or
+$-13.5\ \text{dB}$, close to the continuous aperture's $-13.3\ \text{dB}$. The
+element count enters only through that slow limit, so the sidelobe level is a
+property of the *shape* of the illumination, not of its *size*: adding elements
+narrows the main lobe and moves the sidelobes inward, and lowers them only from
+$-12.8$ toward $-13.3\ \text{dB}$.
 
 ::::
 
@@ -124,8 +146,9 @@ is the cheaper, non-adaptive answer that lowers *every* sidelobe at once.
 
 ::::{frame} Cosine on Pedestal
 :::{present}
-$$a(p) = P + (1 - P)\cos^2(\pi p), \qquad -\tfrac{1}{2} \le p \le \tfrac{1}{2}$$
+$$a(p) = P + (1 - P)\cos^2(\pi p)$$
 
+- Position $p$ runs from $-1/2$ to $+1/2$ across the aperture.
 - Pedestal $P$: the amplitude left at the edges.
 - $P = 1$ uniform, $P = 0.08$ Hamming, $P = 0$ Hann.
 :::
@@ -207,15 +230,47 @@ none higher and none lower. That is what makes it optimal. A taper whose far
 sidelobes fall below the specification is providing suppression the
 specification did not require, and it widened the main lobe to get it.
 
-The construction itself uses the Chebyshev polynomial $T_{N-1}$, whose ripples
+The construction uses the Chebyshev polynomial $T_{N-1}$, whose ripples
 between $-1$ and $+1$ are the equal sidelobes and whose rapid growth beyond
 $x = 1$ is the main lobe. For an eight-element array the amplitudes come from
-matching
+matching the array factor to $T_7$, as in the equations above, where
+$R = 10^{\text{SLL}/20}$ is the voltage ratio between the peak and the
+sidelobes.
 
-$$AF(\psi) = T_{7}\left(x_0 \cos\frac{\psi}{2}\right), \qquad x_0 = \cosh\left(\frac{\cosh^{-1} R}{7}\right),$$
+A polynomial appears because of Lesson 16's array factor. Referencing the phase
+to the array center changes only the phase of $AF$, and puts the eight elements
+at $\pm\psi/2$, $\pm 3\psi/2$, $\pm 5\psi/2$, and $\pm 7\psi/2$. A symmetric
+taper pairs them:
 
-where $R = 10^{\text{SLL}/20}$ is the voltage ratio between the peak and the
-sidelobes. We will not carry that expansion out by hand. The
+$$
+\begin{aligned}
+AF(\psi) &= \sum_{n} a_n\ e^{\ jn\psi} \\
+&= 2\sum_{m=1}^{4} a_m \cos\left(\frac{(2m-1)\psi}{2}\right).
+\end{aligned}
+$$
+
+Each $\cos((2m-1)\psi/2)$ is a polynomial of degree $2m-1$ in $\cos(\psi/2)$
+(the multiple-angle identities), so the array factor is an odd polynomial of
+degree 7 in $\cos(\psi/2)$, and the four amplitudes $a_m$ are its four
+coefficients. Choosing a taper is choosing that polynomial. Of all polynomials
+of degree 7 that stay between $-1$ and $+1$ for $\vert x\vert \le 1$, $T_7$
+grows fastest beyond $x = 1$. Holding the sidelobe region inside $\pm 1$ fixes
+every sidelobe at $1/R$ of the peak; growing fastest means the pattern reaches
+its peak $R$ at the smallest $x_0$, which pulls the first null in toward
+broadside and gives the narrowest main lobe. Any other set of amplitudes either
+lets a sidelobe rise above the specification or reaches the peak more slowly
+and widens the beam.
+
+<img src="../../viz/img/L22-cheb-map.svg"
+     alt="The minus 30 dB Chebyshev polynomial T7 in decibels against x: seven equal ripples at minus 30 dB for x between minus 1 and 1, the main lobe rising to its peak at x0 equals 1.181, and the stretch from 0.07 to 1.181 that visible space covers"
+     style="max-width: 720px; width: 100%; display: block; margin: 1em auto;">
+
+The substitution $x = x_0\cos(\psi/2)$ puts broadside, $\psi = 0$, at $x_0$ and
+endfire, $\psi = kd = 173^\circ$, at $x_0\cos(86.5^\circ) = 0.07$. Visible space
+covers only that stretch of $x$, so the PHASER sees the main lobe and the three
+ripples to its left, each at exactly $-30\ \text{dB}$.
+
+We will not carry the expansion out by hand. The
 widget below does it numerically, and the results for the three designs we will
 use are in the next table.
 
@@ -235,6 +290,15 @@ $\bar{n} - 1$ sidelobe pairs at the design level and lets the rest decay like a
 uniform aperture's, which removes the edge spikes and widens the beam very little.
 The parameter $\bar{n}$ is how many sidelobes the design holds at the
 specified level; $\bar{n} = 4$ to $6$ is typical.
+
+The edge spikes follow from the Fourier reading at the start of the lesson. A
+step at the aperture edge produces ripples that fall off as $1/(\pi u)$. A
+Chebyshev pattern holds every sidelobe at the same level all the way out, so its
+ripples do not fall off at all, and an illumination whose transform never decays
+needs something sharper than a step at each edge: an impulse. On a large array
+that impulse appears as edge elements driven harder than their neighbors.
+Letting the far sidelobes decay like a uniform aperture's, as Taylor does, puts a
+plain step back at the edge and removes the spike.
 
 ::::
 
@@ -268,10 +332,14 @@ named by their design level in dB. The amplitudes and the beam broadening factor
 
 The Taylor row shows both sides of the compromise. On only eight elements the
 sampled Taylor distribution does not hold its sidelobes exactly on the design
-line — the highest one lands at $-28.3\ \text{dB}$ rather than $-30$ — but it
-gets a narrower beam and a higher efficiency than the Chebyshev design it is
-approximating. Sample a Taylor distribution on a 64-element array and the
-sidelobes land where they were designed to.
+line — the highest one lands at $-28.3\ \text{dB}$ rather than $-30$. Its beam
+and efficiency, $16.8^\circ$ and 0.853, beat the $-30\ \text{dB}$ Chebyshev row
+only because it stops short of $-30\ \text{dB}$. A Chebyshev design for the same
+$-28.3\ \text{dB}$ gives $16.7^\circ$ and 0.859, better on both counts, as Dolph
+optimality requires. On eight elements Taylor gains nothing over Chebyshev; its
+advantage is on a large aperture, where it avoids the edge spikes. Sample a
+Taylor distribution on a 64-element array and the sidelobes land where they were
+designed to.
 
 ::::
 
@@ -308,14 +376,17 @@ with each other.
 
 **First, the main lobe gets wider.** The physical aperture is unchanged, but the
 *effective* aperture is smaller because the outer elements now contribute less.
-For the uniform case the beamwidth scales as
+For the uniform case the beamwidth follows Lesson 20's rule,
 
 $$\theta_\text{HP} \approx 0.886\ \frac{\lambda}{N d},$$
 
 and a taper multiplies that by a **beam broadening factor** between about 1.1 and 1.7. The
 broadening column in the table above is that factor. Deeper sidelobes always need
 more broadening, and the widget's beamwidth readout is the direct measurement of
-it.
+it. The uniform $13.2^\circ$ in the tables is the rule's value; the exact
+eight-element pattern gives $13.3^\circ$. Every other beamwidth in the tables
+comes from its exact pattern, so each broadening factor, taken against the
+rule's $13.2^\circ$, reads about 1% high.
 
 ::::
 
@@ -345,9 +416,16 @@ $$\eta_t = \frac{\left(\sum_{n} a_n\right)^2}{N \sum_{n} a_n^2}.$$
 The same expression comes out of the transmit calculation, where the peak
 radiated intensity goes as $\left(\sum a_n\right)^2$ and the total radiated power
 as $\sum a_n^2$, so $\eta_t$ is equally the fraction of the uniform array's
-directivity that the tapered array retains. It is a pure ratio, unchanged if we
-scale every $a_n$ by the same factor, and it is always $\le 1$ with equality only
-for the uniform taper.
+directivity, in Lesson 2's sense, that the tapered array retains. It is a pure
+ratio, unchanged if we scale every $a_n$ by the same factor. By the
+Cauchy-Schwarz inequality, as in Lesson 15, it never exceeds one, and it equals
+one only for the uniform taper.
+
+This is Lesson 15's taper efficiency, sampled. Lesson 15 wrote $\eta_t$ as the
+squared integral of the aperture amplitude over the aperture length times the
+integral of its square; the sums here replace those integrals at the eight
+element positions. Lesson 15's continuous cosine aperture gives 0.811, and the
+eight-element Hann taper gives 0.750.
 
 ::::
 
@@ -396,7 +474,13 @@ Only 1.2 dB of Hann's 4.7 dB drop is lost antenna performance.
 The two dB numbers are related, and keeping them separate is the difference
 between reading a sweep correctly and misreading it:
 
-$$20\log_{10}\left(\frac{\sum a_n}{N}\right) = 10\log_{10}\eta_t + 10\log_{10}\left(\frac{\sum a_n^2}{N}\right).$$
+$$
+\begin{aligned}
+\text{peak drop} &= 20\log_{10}\left(\frac{\sum a_n}{N}\right) \\
+&= 10\log_{10}\eta_t \\
+&\quad + 10\log_{10}\left(\frac{\sum a_n^2}{N}\right).
+\end{aligned}
+$$
 
 The first term on the right is the directivity we gave up. The second term is
 the average power gain of the eight channels — the signal we simply turned
@@ -450,22 +534,39 @@ $N = 8$ elements at $d/\lambda = 0.481$, broadside.
 $$
 \begin{aligned}
 R &= 10^{30/20} = 31.62 \\
-x_0 &= \cosh\left(\frac{\cosh^{-1}(31.62)}{7}\right) = 1.181.
+x_0 &= \cosh\left(\frac{\cosh^{-1}(31.62)}{7}\right) \\
+&= 1.181.
 \end{aligned}
 $$
 
 Carrying out the Dolph
 construction and normalizing to the center pair gives
 
-$$a_n = 0.26,\ 0.52,\ 0.81,\ 1.00,\ 1.00,\ 0.81,\ 0.52,\ 0.26.$$
+$$
+\begin{aligned}
+a_n &= 0.26,\ 0.52,\ 0.81,\ 1.00, \\
+&\quad\ 1.00,\ 0.81,\ 0.52,\ 0.26.
+\end{aligned}
+$$
 
 **Taper efficiency.** With $\sum a_n = 5.18$ and $\sum a_n^2 = 3.988$,
 
-$$\eta_t = \frac{(5.18)^2}{8 \times 3.988} = \frac{26.83}{31.91} = 0.841 = -0.75\ \text{dB}.$$
+$$
+\begin{aligned}
+\eta_t &= \frac{(5.18)^2}{8 \times 3.988} = \frac{26.83}{31.91} \\
+&= 0.841 = -0.75\ \text{dB}.
+\end{aligned}
+$$
 
 **Peak drop on the trace.**
 
-$$20\log_{10}\left(\frac{5.18}{8}\right) = 20\log_{10}(0.648) = -3.8\ \text{dB}.$$
+$$
+\begin{aligned}
+\text{peak drop} &= 20\log_{10}\left(\frac{5.18}{8}\right) \\
+&= 20\log_{10}(0.648) \\
+&= -3.8\ \text{dB}.
+\end{aligned}
+$$
 
 **Beamwidth.** The pattern measures $17.1^\circ$ at half power against
 $13.2^\circ$ uniform, a broadening factor of 1.30.
@@ -500,7 +601,7 @@ narrower main lobe.
 The curve is the whole design space for this array. Chebyshev designs run along
 it and the window functions sit above it, which is the geometric statement of
 Dolph optimality: Blackman reaches $-50\ \text{dB}$ with a $21.7^\circ$ beam,
-where the Chebyshev design at the same sidelobe level needs only $20.1^\circ$.
+where the Chebyshev design at the same sidelobe level needs only $20.2^\circ$.
 The slope of the solid curve is the beamwidth a decibel of suppression takes. On
 eight elements the beam widens about $0.2^\circ$ per decibel of suppression across the
 whole range, and the efficiency falls from 1.00 to 0.71 over the same span.
@@ -549,12 +650,12 @@ $-30\ \text{dB}$ would do gains nothing we can measure and gives up beamwidth, d
 
 ::::{frame} The Four GUI Presets
 :::{present}
-| Preset | Theory HPBW | Measured HPBW | Peak drop (dB) |
-| :-- | :-- | :-- | :-- |
-| Uniform | $13.2^\circ$ | $13.1^\circ$ | $0$ |
-| Hann | $19.1^\circ$ | $19.5^\circ$ | $-4.7$ |
-| Blackman | $21.7^\circ$ | $23.1^\circ$ | $-6.1$ |
-| Chebyshev | $22.9^\circ$ | $24.3^\circ$ | $-6.5$ |
+| Preset | Predicted HPBW | Peak drop (dB) |
+| :-- | :-- | :-- |
+| Uniform | $13.2^\circ$ | $0$ |
+| Hann | $19.1^\circ$ | $-4.7$ |
+| Blackman | $21.7^\circ$ | $-6.1$ |
+| Chebyshev | $22.9^\circ$ | $-6.5$ |
 :::
 :::{present}
 :class: callout
@@ -562,35 +663,35 @@ $-30\ \text{dB}$ would do gains nothing we can measure and gives up beamwidth, d
 Tapered sidelobes sink below the sweep's noise floor, 23 dB down.
 :::
 
-The GUI ships four presets. Their gain lists and what the sweep reads for each
-are below; predict these numbers now, because the L22–L23 Lab measures them.
+The GUI ships four presets. Their gain lists and what theory predicts for each
+are below; copy these predictions down now, because the L22–L23 Lab measures them.
 
 | Preset | $a_n$ (%) | First sidelobe |
 | :-- | :-- | :-- |
 | Uniform | 100, 100, 100, 100 | $-11$ to $-13$ dBc |
 | Hann | 12, 43, 77, 100 | below the noise floor |
 | Blackman | 6, 27, 66, 100 | below the noise floor |
-| Chebyshev | 4, 23, 62, 100 | below the noise floor |
+| Chebyshev | 4, 23, 62, 100 | none in visible space |
 
-Two things in that table need explaining. First, the measured beamwidths run one
-to two degrees wide of theory because the sweep steps the commanded angle by the
-phase LSB, $2.8125^\circ$, so the sweep samples the trace on a coarse grid and
-finds the half-power crossings late. Second, the sidelobe column says "below the
-noise floor" rather than giving a number. The sweep's floor sits about 23 dB
+Two things matter when the lab compares a sweep against this table. First, the
+sweep steps one $2.8125^\circ$ phase LSB per point, which is about $0.9^\circ$
+of angle near broadside (L20 Lab), so a measured beamwidth reads to about a
+degree. Second, the sidelobe column says "below the noise floor" rather than
+giving a number. The sweep's floor sits about 23 dB
 below the uniform peak, and every tapered preset here pushes its sidelobes under
 that. You will be able to state an upper bound on the sidelobes in the L22–L23 Lab,
 not a value.
 
 ```{note}
 The GUI's Chebyshev preset is not the $-30\ \text{dB}$ design worked above. Its
-gain list of 4, 23, 62, 100 corresponds to a far more aggressive specification:
-the resulting pattern never rises above $-70\ \text{dB}$ anywhere in visible
-space, so it has no sidelobe you could measure on any equipment in the lab.
-That is why the useful prediction for it is its beamwidth, $22.9^\circ$ from
-theory against a measured $24.3^\circ$, and not its sidelobe level. It is a
-working example of the over-specification described under Loading a Taper into
-the PHASER: the design is about 45 dB deeper than the instrument can show, and
-it widens the beam to almost twice uniform.
+gain list of 4, 23, 62, 100 matches a Dolph design for about $-100\ \text{dB}$,
+and rounding that design to whole percent fills in its nulls: the pattern has no
+null and no sidelobe anywhere in visible space. Its main lobe falls steadily,
+through $-48\ \text{dB}$ at $50^\circ$, to $-70\ \text{dB}$ at endfire. With no
+sidelobe to measure, the useful prediction for it is its beamwidth, $22.9^\circ$,
+1.73 times uniform. It is a working example of the over-specification described
+under Loading a Taper into the PHASER: a design far deeper than the instrument
+can show, which widens the beam by 73%.
 ```
 
 ::::

@@ -5,13 +5,16 @@
                          pattern each one produces -- why sidelobes exist
   - L22-sll-vs-cost    : the Dolph trade curve -- HPBW and taper efficiency
                          against design sidelobe level, named tapers marked
+  - L22-cheb-map       : the -30 dB Chebyshev polynomial T_7(x) in dB, with
+                         the equal-ripple sidelobe region, the main lobe up to
+                         x0, and the stretch of x that visible space covers
 
 Every number here is computed from the same formulas the lesson page and the
 taper-explorer widget use: N = 8, d/lambda = 0.481 (10.3 GHz, d = 14 mm).
 The figures carry no equations -- words, numbers and axis labels only.
 
     python3 scripts/graphics/m3_l22_tapers.py
-    -> book/extras/viz/img/{L22-edge-fourier,L22-sll-vs-cost}.svg
+    -> book/extras/viz/img/{L22-edge-fourier,L22-sll-vs-cost,L22-cheb-map}.svg
 """
 
 from __future__ import annotations
@@ -221,6 +224,44 @@ def sll_vs_cost() -> None:
     finalize(fig, "L22-sll-vs-cost")
 
 
+def cheb_map(sll_db: float = 30.0) -> None:
+    """Why equal ripple: T_7 stays within +-1 for |x| <= 1 (every sidelobe at
+    the design level) and grows fastest beyond it (the main lobe, up to x0)."""
+    R = 10 ** (sll_db / 20.0)
+    x0 = np.cosh(np.arccosh(R) / (N - 1))
+    xv = x0 * np.cos(np.pi * DL)               # x at endfire: psi = kd
+    x = np.linspace(-1.0, x0, 6001)
+    db = 20 * np.log10(np.maximum(np.abs(cheb_T(N - 1, x)), 1e-4)) - 20 * np.log10(R)
+
+    fig, ax = plt.subplots(figsize=(8.4, 4.0))
+    ymin, ymax = -62, 6
+    ax.axvspan(-1.0, 1.0, color=RULE, alpha=0.35, lw=0)
+    ax.axvspan(xv, x0, ymin=0, ymax=0.045, color=BLUE, alpha=0.9, lw=0)
+    ax.axhline(-sll_db, color=RED, lw=1.4, ls=(0, (5, 3)))
+    ax.plot(x, db, color=NAVY, lw=2.4)
+    ax.plot([x0], [0], "o", color=NAVY, ms=7, zorder=5)
+    ax.set_xlim(-1.0, x0 + 0.02); ax.set_ylim(ymin, ymax)
+    ax.set_xlabel("x"); ax.set_ylabel("Pattern  (dB)")
+    ax.grid(color=RULE, linewidth=0.8)
+    for sp in ("top", "right"):
+        ax.spines[sp].set_visible(False)
+
+    # labels placed from the data: each sits in a gap the curve leaves
+    nulls = np.cos((2 * np.arange(N - 1) + 1) * np.pi / (2 * (N - 1))) * 1.0
+    gap = sorted(z for z in nulls if xv < z < 1)[:1]
+    vis_x = (xv + gap[0]) / 2 if gap else (xv + x0) / 2
+    box = dict(facecolor="white", edgecolor="none", pad=1.5)
+    ax.text(-0.5, -sll_db + 2.0, f"every sidelobe at −{sll_db:.0f} dB", color=RED,
+            ha="center", va="bottom", fontsize=11.5, fontweight="bold")
+    ax.text(-0.5, -sll_db + 9.0, "|x| ≤ 1: sidelobe region", color=GRAY,
+            ha="center", va="bottom", fontsize=11)
+    ax.text(x0 - 0.07, -3.0, f"main lobe, peak at x₀ = {x0:.3f}", color=NAVY,
+            ha="right", va="center", fontsize=11.5, fontweight="bold")
+    ax.text(vis_x, ymin + 0.06 * (ymax - ymin), "visible space", color=BLUE,
+            ha="center", va="bottom", fontsize=11, fontweight="bold", bbox=box)
+    finalize(fig, "L22-cheb-map")
+
+
 def report() -> None:
     rows = [("Uniform", np.ones(N)), ("Chebyshev −20 dB", dolph(20)),
             ("Chebyshev −30 dB", dolph(30)), ("Chebyshev −40 dB", dolph(40)),
@@ -235,7 +276,7 @@ def report() -> None:
 
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
-    edge_fourier(); sll_vs_cost()
+    edge_fourier(); sll_vs_cost(); cheb_map()
     report()
     return 0
 
