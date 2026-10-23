@@ -42,24 +42,24 @@ Lesson 22 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 
 :::{depth}
 In the L20 Lab you swept the PHASER's pattern and wrote down its sidelobes: a pair
-about 13 dB below the peak at roughly $\pm 22^\circ$, then a ragged skirt out to
+about 13 dB below the peak at roughly $\pm 22^\circ$, then smaller sidelobes out to
 the edges of visible space. Those sidelobes are not a defect in the array, and no
 amount of careful alignment will remove them. They are the direct consequence of
-driving all eight elements at the same amplitude, and you can trade them away for
-something else you value less. This lesson is how that trade works, what it
-costs, and how to pick a taper that meets a stated sidelobe specification.
+driving all eight elements at the same amplitude, and we can lower them by
+giving up beamwidth and directivity. This lesson shows how that trade works, what
+it changes, and how to pick a taper that meets a stated sidelobe specification.
 :::
 
 ::::
 
-::::{frame} Sharp Edges Make Sidelobes
+::::{frame} Abrupt Edges and Sidelobes
 :::{present}
 <img src="../../viz/img/L22-edge-fourier.svg"
      alt="A rectangular aperture illumination beside a smoothly tapered one, with the pattern each produces"
      style="max-width: 760px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- Pattern = transform of the illumination (L15).
+- The pattern is the transform of the illumination (L15).
 - A hard edge transforms to a sinc: ripples decay only as $1/u$.
 - A soft edge removes the high space frequencies, and the sidelobes drop.
 :::
@@ -67,23 +67,23 @@ costs, and how to pick a taper that meets a stated sidelobe specification.
 Lesson 15 established the Fourier relationship between an aperture and its
 pattern: the far-field pattern is the transform of the aperture illumination, and
 the transform variable is the space frequency $k_z = k\sin\theta$. Read that
-relationship backwards and the sidelobes stop being mysterious. A uniformly
+relationship backwards and it explains the sidelobes. A uniformly
 illuminated aperture is a rectangle in space — full amplitude everywhere across
-the array, then nothing at all one element spacing beyond the ends. **An abrupt
+the array, then nothing at all one element spacing beyond the ends. An abrupt
 edge is a discontinuity, and a discontinuity carries energy at every spatial
-frequency.** The transform of a rectangle is a sinc, and a sinc has ripples that
+frequency. The transform of a rectangle is a sinc, and a sinc has ripples that
 decay only as $1/u$. Those ripples are the sidelobes.
 
 Softening the edge softens the pattern. If the illumination approaches zero
-gradually instead of stopping dead, the high space-frequency content that fed the
-sidelobes is no longer there, and the sidelobes drop. That gradual reduction of
-element amplitude from the center of the array toward its ends is called an
+gradually instead of stopping abruptly, the high space-frequency content that fed the
+sidelobes is no longer there, and the sidelobes drop. We call that gradual reduction of
+element amplitude from the center of the array toward its ends an
 **amplitude taper**, and every one of the tapers below is a different rule for
 how fast to fall off.
 
 ::::
 
-::::{frame} Shape Sets Sidelobes, Not Size
+::::{frame} Sidelobe Level and Illumination Shape
 :::{present}
 - Uniform first sidelobe: $-12.8$ dB at $N = 8$, $-13.3$ dB continuous.
 - More elements narrow the main lobe; the sidelobes stay as high.
@@ -139,7 +139,7 @@ A taper is a set of element amplitudes $a_n$, $n = 1 \ldots N$, normalized so th
 largest is 1. Three families cover essentially all practical work, and they
 differ in what they optimize.
 
-**The cosine-on-pedestal family** is defined by a shape rather than by a
+**The cosine-on-pedestal family** starts from a shape rather than from a
 specification. Let $p$ be position across the aperture normalized to its length,
 so $p$ runs from $-1/2$ to $+1/2$. Then
 
@@ -153,7 +153,7 @@ renormalized, as the last row of the table in the next frame shows.
 
 ::::
 
-::::{frame} Less Pedestal, Lower Sidelobes, Wider Beam
+::::{frame} Sidelobes and Beamwidth by Pedestal
 :::{present}
 | Pedestal $P$ | First sidelobe (dB) | HPBW | $\eta_t$ |
 | :-- | :-- | :-- | :-- |
@@ -209,19 +209,19 @@ the sidelobe level you want, and Dolph's construction returns the amplitudes tha
 achieve it with the narrowest possible main lobe. The defining property is
 **equal ripple**: every sidelobe in the pattern sits at exactly the design level,
 none higher and none lower. That is what makes it optimal. A taper whose far
-sidelobes fall below the specification is delivering suppression nobody asked
-for, and it widened the main lobe to get it.
+sidelobes fall below the specification is providing suppression the
+specification did not require, and it widened the main lobe to get it.
 
 The construction itself uses the Chebyshev polynomial $T_{N-1}$, whose ripples
-between $-1$ and $+1$ are the equal sidelobes and whose runaway growth beyond
+between $-1$ and $+1$ are the equal sidelobes and whose rapid growth beyond
 $x = 1$ is the main lobe. For an eight-element array the amplitudes come from
 matching
 
 $$AF(\psi) = T_{7}\left(x_0 \cos\frac{\psi}{2}\right), \qquad x_0 = \cosh\left(\frac{\cosh^{-1} R}{7}\right),$$
 
 where $R = 10^{\text{SLL}/20}$ is the voltage ratio between the peak and the
-sidelobes. You will not be asked to carry that expansion out by hand. The
-widget below does it numerically, and the results for the three designs you will
+sidelobes. We will not carry that expansion out by hand. The
+widget below does it numerically, and the results for the three designs we will
 use are in the next table.
 
 ::::
@@ -230,16 +230,16 @@ use are in the next table.
 :::{present}
 - Chebyshev on a big aperture spikes current at the edges.
 - Taylor holds the first $\bar{n} - 1$ sidelobe pairs at the design level; the rest decay.
-- No edge spikes, almost no beamwidth cost; $\bar{n} = 4$ to $6$.
+- It removes the edge spikes and barely widens the beam; $\bar{n} = 4$ to $6$.
 :::
 
 **The Taylor taper** is the one large radars are built with. A true Chebyshev design
 on a big aperture puts sharp spikes of current at the array edges, which is hard
 to build and gives up efficiency. Taylor's design holds only the first
 $\bar{n} - 1$ sidelobe pairs at the design level and lets the rest decay like a
-uniform aperture's, which removes the edge spikes and costs almost nothing in
-beamwidth. The parameter $\bar{n}$ is how many sidelobes you insist on
-controlling; $\bar{n} = 4$ to $6$ is typical.
+uniform aperture's, which removes the edge spikes and widens the beam very little.
+The parameter $\bar{n}$ is how many sidelobes the design holds at the
+specified level; $\bar{n} = 4$ to $6$ is typical.
 
 ::::
 
@@ -300,27 +300,31 @@ design from a window function that happens to reach a similar level.
 </iframe>
 ::::
 
-::::{frame} Cost 1: A Wider Beam
+::::{frame} Beam Broadening
 :::{present}
 - Outer elements contribute less, so the effective aperture shrinks.
-- Uniform HPBW $\approx 0.886\ \lambda/(N d)$; a taper multiplies it by 1.1 to 1.7.
-- Deeper sidelobes always cost more broadening.
+$$\theta_\text{HP} \approx 0.886\ \frac{\lambda}{N d} \times (\text{broadening, } 1.1 \text{ to } 1.7)$$
+
+- Deeper sidelobes always need more broadening.
 :::
 
-Tapering has three separate costs, and two of them are routinely confused with
-each other.
+Tapering has three separate consequences, and two of them are routinely confused
+with each other.
 
-**Cost 1: the main lobe gets wider.** The physical aperture is unchanged, but the
+**First, the main lobe gets wider.** The physical aperture is unchanged, but the
 *effective* aperture is smaller because the outer elements now contribute less.
-Beamwidth scales as $0.886\ \lambda/(N d)$ for the uniform case, and a taper
-multiplies that by a **beam broadening factor** between about 1.1 and 1.7. The
-broadening column in the table above is that factor. Deeper sidelobes always cost
+For the uniform case the beamwidth scales as
+
+$$\theta_\text{HP} \approx 0.886\ \frac{\lambda}{N d},$$
+
+and a taper multiplies that by a **beam broadening factor** between about 1.1 and 1.7. The
+broadening column in the table above is that factor. Deeper sidelobes always need
 more broadening, and the widget's beamwidth readout is the direct measurement of
 it.
 
 ::::
 
-::::{frame} Cost 2: Taper Efficiency
+::::{frame} Taper Efficiency
 :::{present}
 $$\eta_t = \frac{\left(\sum_{n} a_n\right)^2}{N \sum_{n} a_n^2} \le 1$$
 
@@ -328,14 +332,17 @@ $$\eta_t = \frac{\left(\sum_{n} a_n\right)^2}{N \sum_{n} a_n^2} \le 1$$
 - The fraction of uniform directivity (and SNR) the taper keeps.
 :::
 
-**Cost 2: taper efficiency.** Consider the array on receive, looking at a source
+**Second, the taper efficiency falls.** Consider the array on receive, looking at a source
 on boresight. Every element sees the same signal with the same phase, so the
 beamformer output voltage is $\sum a_n$ times the per-element signal voltage, and
 the output signal power goes as $\left(\sum a_n\right)^2$. Each channel also adds
 its own noise, independently of the others, so the noise powers add rather than
 the voltages, and the output noise goes as $\sum a_n^2$. The signal-to-noise
-ratio is therefore proportional to $\left(\sum a_n\right)^2 / \sum a_n^2$. For a
-uniform taper that ratio is $N^2/N = N$. Normalizing by the uniform case gives
+ratio is therefore proportional to
+
+$$\frac{\left(\sum a_n\right)^2}{\sum a_n^2}.$$
+
+For a uniform taper that ratio is $N^2/N = N$. Normalizing by the uniform case gives
 the **taper efficiency**
 
 $$\eta_t = \frac{\left(\sum_{n} a_n\right)^2}{N \sum_{n} a_n^2}.$$
@@ -343,13 +350,13 @@ $$\eta_t = \frac{\left(\sum_{n} a_n\right)^2}{N \sum_{n} a_n^2}.$$
 The same expression comes out of the transmit calculation, where the peak
 radiated intensity goes as $\left(\sum a_n\right)^2$ and the total radiated power
 as $\sum a_n^2$, so $\eta_t$ is equally the fraction of the uniform array's
-directivity that the tapered array retains. It is a pure ratio, unchanged if you
+directivity that the tapered array retains. It is a pure ratio, unchanged if we
 scale every $a_n$ by the same factor, and it is always $\le 1$ with equality only
 for the uniform taper.
 
 ::::
 
-::::{frame} Cost 3: The Trace's Peak Drops
+::::{frame} Peak Drop on the Trace
 :::{present}
 $$\text{peak drop} = 20\log_{10}\left(\frac{\sum_{n} a_n}{N}\right)$$
 
@@ -357,21 +364,21 @@ $$\text{peak drop} = 20\log_{10}\left(\frac{\sum_{n} a_n}{N}\right)$$
 - A coherent voltage loss: noise fell too, so sensitivity fell less.
 :::
 
-**Cost 3: the peak of the measured trace drops.** This is a different number, and
+**Third, the peak of the measured trace drops.** This is a different number, and
 it is the one you will read off the screen in the L22–L23 Lab. The GUI's beam sweep
 plots received power against commanded steer angle, and it does not renormalize
-between runs. Setting six of the eight Element Gains sliders below 100% throws
-away signal voltage, and the peak of the tapered trace lands
+between runs. Setting six of the eight Element Gains sliders below 100% reduces
+the signal voltage, and the peak of the tapered trace lands
 
 $$\text{peak drop} = 20\log_{10}\left(\frac{\sum_{n} a_n}{N}\right)$$
 
 below the uniform trace's peak. This is a **coherent voltage loss**, not a
-directivity loss. The noise was attenuated along with the signal, so the array's
+directivity loss. The sliders attenuate the noise along with the signal, so the array's
 sensitivity did not fall by this much, but the plotted peak did.
 
 ::::
 
-::::{frame} Two dB Numbers, Kept Apart
+::::{frame} Peak Drop Versus Directivity Loss
 :::{present}
 $$
 \begin{aligned}
@@ -381,7 +388,7 @@ $$
 \end{aligned}
 $$
 
-- Directivity given up, plus signal simply turned down.
+- The first term is lost directivity; the second is signal turned down.
 - Hann preset: $-4.7 = -1.2 - 3.5$ dB.
 :::
 :::{present}
@@ -396,8 +403,8 @@ between reading a sweep correctly and misreading it:
 
 $$20\log_{10}\left(\frac{\sum a_n}{N}\right) = 10\log_{10}\eta_t + 10\log_{10}\left(\frac{\sum a_n^2}{N}\right).$$
 
-The first term on the right is the directivity you gave up. The second term is
-the average power gain of the eight channels — the signal you simply turned
+The first term on the right is the directivity we gave up. The second term is
+the average power gain of the eight channels — the signal we simply turned
 down.
 :::
 
@@ -422,29 +429,37 @@ factor. It does not, because 100% is already full scale.
 :::{present}
 :class: callout
 
-Same suppression, a $2^\circ$ narrower beam, 0.5 dB more directivity.
+Chebyshev matches Hann's suppression with a $2^\circ$ narrower beam and 0.5 dB more directivity.
 :::
 
 The design problem is stated the way a customer states it: hold the sidelobes
-below some level, and tell me what it costs. The procedure is short.
+below some level, and tell me what it does to the beam. The procedure is short.
 
 1. Pick the family. Use Chebyshev when the specification is a hard ceiling on
    every sidelobe and the array is small. Use Taylor when the array is large or
    the edge elements cannot be driven that hard. Use a cosine-on-pedestal window
-   when you want a shape rather than a specification, or when the beamformer only
+   when the designer wants a shape rather than a specification, or when the beamformer only
    offers named presets.
 2. Compute the amplitudes and normalize the largest to 1.
-3. Evaluate the three costs: broadening, $\eta_t$, and the peak drop.
-4. Check the result against the hardware's amplitude resolution, because a taper
-   the hardware cannot set is a taper you do not have.
+3. Evaluate broadening, $\eta_t$, and the peak drop.
+4. Check the result against the hardware's amplitude resolution, because the hardware
+   can only set amplitudes to about 1%.
 
 :::{admonition} Worked example — a $-30$ dB design on the eight-element array
 :class: tip
 **Specification.** No sidelobe above $-30\ \text{dB}$ relative to the peak, on
 $N = 8$ elements at $d/\lambda = 0.481$, broadside.
 
-**Amplitudes.** The voltage ratio is $R = 10^{30/20} = 31.62$, giving
-$x_0 = \cosh\left(\cosh^{-1}(31.62)/7\right) = 1.181$. Carrying out the Dolph
+**Amplitudes.** The voltage ratio and the Chebyshev stretch factor are
+
+$$
+\begin{aligned}
+R &= 10^{30/20} = 31.62 \\
+x_0 &= \cosh\left(\frac{\cosh^{-1}(31.62)}{7}\right) = 1.181.
+\end{aligned}
+$$
+
+Carrying out the Dolph
 construction and normalizing to the center pair gives
 
 $$a_n = 0.26,\ 0.52,\ 0.81,\ 1.00,\ 1.00,\ 0.81,\ 0.52,\ 0.26.$$
@@ -468,8 +483,8 @@ $3.8\ \text{dB}$.
 **Compare against the obvious alternative.** The Hann window reaches a similar
 $-31.8\ \text{dB}$, but its beam is $19.1^\circ$ and its efficiency is 0.750.
 The Chebyshev design gets the same sidelobe suppression with a $2^\circ$
-narrower beam and $0.5\ \text{dB}$ more directivity. That is Dolph optimality
-doing its job: for a stated sidelobe level, no other set of amplitudes gives a
+narrower beam and $0.5\ \text{dB}$ more directivity. This result is Dolph optimality:
+for a stated sidelobe level, no other set of amplitudes gives a
 narrower main lobe.
 :::
 
@@ -523,21 +538,21 @@ you type:
   $-29.9\ \text{dB}$, which is harmless. Trying to hold a $-50\ \text{dB}$ design
   to 1% amplitude steps is not, and Lesson 23 makes the general version of that
   argument for phase.
-- You can only go down. Every taper therefore costs peak signal on the trace, and
-  the GUI's Peak Gain readout will fall by the amount computed in Cost 3.
+- You can only go down. Every taper therefore lowers the peak signal on the trace, and
+  the GUI's Peak Gain readout will fall by the amount computed under Peak Drop
+  on the Trace.
 
-What stops you from going deeper is not the curve but the hardware and the
+What limits a deeper design is not the curve but the hardware and the
 instrument. The $-50\ \text{dB}$ design puts its outer elements at 9% of full
 scale, where the gain word's 1% step is an 11% error on that element, and the
 sidelobes it was designed for will not survive that. The beam sweep's noise floor
-sits about 23 dB below the uniform peak, so a design deeper than roughly
-$-20\ \text{dB}$ relative to its own peak cannot be confirmed on this bench at
-all. Specifying $-50\ \text{dB}$ when $-30\ \text{dB}$ would do gains nothing you
-can measure and gives up beamwidth, directivity, and setting accuracy.
+sits about 23 dB below the uniform peak, so this bench cannot confirm a design deeper than roughly
+$-20\ \text{dB}$ relative to its own peak. Specifying $-50\ \text{dB}$ when
+$-30\ \text{dB}$ would do gains nothing we can measure and gives up beamwidth, directivity, and setting accuracy.
 
 ::::
 
-::::{frame} Predict the Four Presets
+::::{frame} The Four GUI Presets
 :::{present}
 | Preset | Theory HPBW | Measured HPBW | Peak drop (dB) |
 | :-- | :-- | :-- | :-- |
@@ -564,8 +579,8 @@ are below; predict these numbers now, because the L22–L23 Lab measures them.
 
 Two things in that table need explaining. First, the measured beamwidths run one
 to two degrees wide of theory because the sweep steps the commanded angle by the
-phase LSB, $2.8125^\circ$, so the trace is sampled on a coarse grid and the
-half-power crossings are found late. Second, the sidelobe column says "below the
+phase LSB, $2.8125^\circ$, so the sweep samples the trace on a coarse grid and
+finds the half-power crossings late. Second, the sidelobe column says "below the
 noise floor" rather than giving a number. The sweep's floor sits about 23 dB
 below the uniform peak, and every tapered preset here pushes its sidelobes under
 that. You will be able to state an upper bound on the sidelobes in the L22–L23 Lab,
@@ -580,7 +595,7 @@ That is why the useful prediction for it is its beamwidth, $22.9^\circ$ from
 theory against a measured $24.3^\circ$, and not its sidelobe level. It is a
 working example of the over-specification described under Loading a Taper into
 the PHASER: the design is about 45 dB deeper than the instrument can show, and
-it costs a beam almost twice as wide as uniform.
+it widens the beam to almost twice uniform.
 ```
 
 ::::
@@ -621,12 +636,12 @@ This lesson has no lab of its own: the bench waits until Lesson 23 is done, and
 then the [L22–L23 Lab](../L22-L23-lab-tapering-squint/index.md) takes both
 lessons to the PHASER. In its Part 1 you take these four presets to the bench.
 You will sweep each one, measure the beamwidth and the peak drop, and reconcile
-them against the predictions in the Predict the Four Presets table. Then you
+them against the predictions in The Four GUI Presets table. Then you
 design a taper of your own: the $-30\ \text{dB}$ Chebyshev from the worked
 example, a mild taper that pulls only the end elements down, or anything else
 you can justify. Either way, you enter the weights by hand and confirm that a
 taper you computed yourself behaves the way the arithmetic said it would. Come
-with the Predict the Four Presets table copied into your lab notebook; the
+with The Four GUI Presets table copied into your lab notebook; the
 point of the exercise is the comparison, and it is much weaker if you write the
 predictions down after seeing the measurements.
 
@@ -634,9 +649,9 @@ Lesson 23 turns to the other three ways a real steered array departs from the
 ideal pattern — grating lobes, beam squint across the band, and phase
 quantization — none of which a taper fixes, and Part 2 of the same lab measures
 them. Lesson 24 returns to sidelobes with a sharper tool: instead of lowering
-all of them, place a deep null on the one direction that is hurting you. The
+all of them, place a deep null on the one direction that carries the interference. The
 subject comes back for good in Module 4, where the clutter a radar competes with
 arrives almost entirely through the sidelobes, and the taper you choose sets how
-much of it you have to process away.
+much of it you have to remove in processing.
 
 ::::
