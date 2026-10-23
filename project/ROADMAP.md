@@ -29,11 +29,11 @@ A lesson thread for lesson NN may edit **only**:
 | :-- | :-- |
 | the lesson page and its lab page | `book/moduleMM/LNN-*/index.md` (the lab is `LNN-lab-*`) |
 | its practice set, and its lab's | `latex/ECE444_Practice_LNN.tex` (`_LNNLab.tex`) and `book/extras/practice/ECE444_LNN_Practice_*.pdf` (`LNNLab`) |
-| its lab packet or sheet | `latex/ECE444_Lab_LNN_*.tex` and `book/extras/labs/ECE444_Lab_LNN_*_blank.pdf` |
+| its lab packet | source `ECE444_Lab_LNN_*.tex` in `ECE444-faculty` (it holds the answers; Neil, 2026-10-23), and the blank `book/extras/labs/ECE444_Lab_LNN_*_blank.pdf` here |
 | its figures | `book/extras/viz/img/LNN-*.svg` and its generator `scripts/graphics/*lNN*` |
 | a widget used **only** by this lesson | `book/extras/viz/<widget>.html` |
 | its own budget exception | its line in `scripts/verify/budgets.py`, removed when the lesson is cut |
-| its lab key | `lab-keys/ECE444_Lab_LNN_*_KEY.pdf` in `ECE444-faculty` |
+| its lab key | `lab-keys/ECE444_Lab_LNN_*_KEY.pdf` in `ECE444-faculty`, written there by its `build_lab.sh` |
 
 Everything else belongs to the Integrator. A lesson thread that needs any of
 these changed lists the change under **"For the Integrator"** in its PR body
@@ -150,7 +150,7 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L20 | Array Factor and Beamwidth | practice | 18/20, sweeps done (#128) | ready |
 | L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | convert to packet |
 | L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
-| L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m | 13/20 (#127); merged before its dry run | **hardware dry run** |
+| L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23 | **walk dry run** (needs `install.sh`) |
 | L22 | Sidelobes and Tapering | practice | cut 20/20, voice sweep done (#132) | why + illustration sweeps |
 | L23 | Beam Squint and Quantization | practice | cut 20/20 (#131, open) | sweeps |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** (old-style sheet) + practice | 46/20, uncut | cut + sweeps + packet |
@@ -189,19 +189,40 @@ needs its rubric, published with the L28 Lab packet.
    frequency, open Lab Presets first, E1 on the right facing the patches,
    level comparisons at 1.2 m or more. Two Phaser changes ride along:
    the readouts are now **Angle** (Peak/Centroid) and **Peak Gain**, not
-   "Est. Angle" and "Peak Array Gain" (still stale in the L17–L20 Labs, L19,
-   L22, L23, and the L22–L23 Lab), and preset 6 Quantization now holds the
-   beam at 15° with Blackman for a Signal vs Time walk (phaser #48).
-2. **L21 Lab dry run** on a kit updated to phaser #48: a held +30° beam
-   peaks with the source on the E8 side, the Tracking update rate resolves
-   the lobes on a 10 s walk, the floor with the beam held, the coarse marks
-   and scan loss at 1.2 m, and whether the kit turns to 180° with its
-   cables on.
+   "Est. Angle" and "Peak Array Gain" (still stale in L22, L23, and the
+   L22–L23 Lab), and preset 6 Quantization now holds the beam at 15° with
+   Blackman for a Signal vs Time walk (phaser #48). The second dry run
+   (`review/M3_LAB_DRYRUN_2026-10-23.md`, all of L17–L24) adds, for the
+   remaining passes:
+   - **L22–L23 Lab** (sent to the L23 thread): taper predictions stay linear
+     in slider % (the gain-slider fix makes that true; say so in one line);
+     custom-taper hint at ends near 25%; recalibrate if the uniform
+     sidelobes look lopsided; check Signal BW before step (g); Angle shifts
+     several degrees at 4 bits and below; keep ±40° clear of walls.
+   - **L24 Lab**: notches and nulls reach −40 to −50 dB, so the
+     "floor-limited at −21 dB" explanation goes; Procedure D sets a uniform
+     taper and resets Beam 1 Phase until preset 8 does; Procedure C runs at
+     +20° only, against Neil's software interferer, with the expected
+     suppression filled in from his first run, and its "No hardware?" note
+     updated.
+2. **L21 Lab walk** on a kit updated to phaser #48. The rotation ran on
+   2026-10-23 and confirmed scan loss (−0.9 dB at 33°), the sidelobe
+   asymmetry (3.4 dB) and the first null (14.9°); it is now one pass read
+   from the beam sweep. Still owed: the Signal vs Time walk, its Tracking
+   update rate on a 10 s walk, and the floor with the beam held.
 3. **L19 sweeps** (voice, why, illustration) on the rewritten lesson.
-4. **Phaser, open from the dry run:** why array peaks read 1–3 dB under the
-   in-phase sum of single elements; whether each channel's phase moves with
-   its gain setting; whether recalibrating with the source exactly at
-   boresight removes the +1–2° offset.
+4. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
+   with a measured lookup table (amplitude goes as (%/100)^0.68 today, the
+   ADAR1000 register response; Neil, 2026-10-23: fix it in software, not in
+   the labs); inject a simulated interferer into the real receive samples
+   for L24 Procedure C (Neil's); preset 8 loads uniform and resets Beam 1
+   Phase; Signal BW and Rx Gain survive Calibrate, Find HB100 and the Rect
+   preset; restart the sweep after Find HB100; check the simulator's MVDR,
+   which also nulls the target at ±20°. Open from the dry run: why array
+   peaks read 1–3 dB under the in-phase sum of single elements even with
+   elements fully on or off; whether each channel's phase moves with its
+   gain setting; whether recalibrating with the source exactly at boresight
+   removes the +1–2° offset.
 5. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
 6. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
@@ -221,6 +242,15 @@ needs its rubric, published with the L28 Lab packet.
   card in class, which may settle this.
 
 ## 8. Hardware-day checklist
+
+Before class, on every kit and bench (from the 2026-10-23 dry run):
+
+- re-run `install.sh`, so the dashboard has Signal vs Time (L21 walk) and
+  Tracking (L24 Procedure D), and later the gain-slider fix and interferer
+- a stand at box height (L19) and the kit clamped or keyed to its
+  protractor (L21; the dry-run kit slid 5°)
+- ±40° either side of broadside clear of walls and people, the HB100 at
+  least 1.2 m out (a wall put a false lobe 9 dB below the peak)
 
 Things only a real kit can settle:
 

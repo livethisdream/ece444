@@ -650,9 +650,9 @@ lowers the floor, and raises the separation with no change at the antenna.
 ::::{frame} The Sweep at Boresight
 :::{present}
 4. Open the **Rectangular** tab; turn on **Show Peak Angle Marker** under **Plot Options**.
-5. Record **Est. Angle** and **Peak Array Gain** with the source at boresight.
+5. Record the **Angle** readout, set to **Peak**, and **Peak Gain** with the source at boresight.
 
-Expect Est. Angle within $2^\circ$ of $0^\circ$.
+Expect Angle within $2^\circ$ of $0^\circ$.
 :::
 
 The Rectangular tab plots the beam sweep: the backend steers the beam across

@@ -798,7 +798,8 @@ boot, connect by cable, join the Wi-Fi, run `install.sh`, then Find HB100
 and Calibrate), and Part B makes the first measurements on that kit.
 
 **Lab packet structure** (piloted on L19, 2026-10-10). A lab's practice
-problems fold into its lab packet, `latex/ECE444_Lab_L<NN>_<Short>.tex`,
+problems fold into its lab packet, `ECE444_Lab_L<NN>_<Short>.tex` (in
+`ECE444-faculty` since 2026-10-23, since the source holds the solutions),
 which has three parts: **Part 1, Pre-Lab** (individual, before the lab
 period: the predictions, plus a rehearsal of the commanded half of the
 procedure on the hosted simulator where the lab has one; it may scaffold like
@@ -862,8 +863,8 @@ folded in.
   The `.k` label may hold a MathJax symbol; keep `.k` display:block, not
   flex, so the space between symbol and word survives.
 - **Lab sheets** (one per lab lesson: L17, L19, L20, L23, L25, L28): a
-  fillable turn-in document `latex/ECE444_Lab_L<NN>_<Short>.tex` on the
-  `build_lab.sh` harness, exactly following `ECE444_Lab_L04_Matching.tex`
+  fillable turn-in document `ECE444_Lab_L<NN>_<Short>.tex` on the
+  `build_lab.sh` harness (both in `ECE444-faculty` since 2026-10-23), exactly following `ECE444_Lab_L04_Matching.tex`
   (standalone document, `\iskey` switch, `\ansbox` fields and blank
   measurement tables). Content mirrors the lab lesson's Deliverables part:
   the prediction/measurement tables with calculated columns left blank,
