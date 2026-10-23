@@ -591,8 +591,8 @@ HB100 among numbered boxes from bearings you and a partner take on your two kits
 
 ::::{frame} Looking Ahead
 :::{present}
-- The L19 Lab: two kits, bearings from wherever you choose outside the keep-out zone, one fix, one box.
-- Bring the error budget and a plan for where to stand.
+- The L19 Lab: one kit on a taped firing line, a bearing from each station, one fix.
+- Bring the error budget, a station plan, and your script.
 - L20-L24 return to the pattern itself: beamwidth, tapering, squint, and nulls.
 :::
 

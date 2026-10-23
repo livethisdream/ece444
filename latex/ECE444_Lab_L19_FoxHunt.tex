@@ -129,7 +129,7 @@ engagement grade and graded as a genuine, documented attempt.
 The array is the PHASER's: $N = 8$ elements, E1 to E8, on a $d = 14\ \text{mm}$
 pitch. Use $c = 3.00\times 10^{8}\ \m/\text{s}$ and the HB100's nominal
 $10.525\ \ghz$. The range frame puts $x$ along the tape, with station 0 at its
-middle, and $y$ straight downrange. Every Est. Angle $\theta$ in this packet
+middle, and $y$ straight downrange. Every Angle $\theta$ in this packet
 has your reference-shot sign applied, so a positive angle points toward the
 $+x$ end of the tape, and a bearing from station $x_i$ is the line
 \eq{ x = x_i + y\tanp{\theta_i}. }
@@ -139,21 +139,21 @@ $+x$ end of the tape, and a bearing from station $x_i$ is the line
 \fullwidth{\large\textbf{Part 1: Pre-Lab} \normalsize(before the lab period)}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The bearing error budget.} Est. Angle is the steer angle of the
+\question \textbf{The bearing error budget.} The \textbf{Angle} readout, set to Peak, is the steer angle of the
 largest sample in the beam sweep, and the sweep steps the progressive phase one
 ADAR1000 LSB, $360\mydeg/2^7 = 2.8125\mydeg$, at a time.
 
 \begin{parts}
 
 	\part Find $kd$ in degrees, the sweep's step in $\sin\theta$, and the step in
-	angle at each Est. Angle in the table. Then give the largest error the grid
+	angle at each Angle in the table. Then give the largest error the grid
 	alone can cause at each angle.
 
 	\begin{center}
 	\renewcommand{\arraystretch}{1.25}
 	\begin{tabular}{| l | K{1.1in} | K{1.1in} | K{1.1in} |}
 	\hline
-	Est. Angle & $0\mydeg$ & $30\mydeg$ & $45\mydeg$ \\\hline
+	Angle & $0\mydeg$ & $30\mydeg$ & $45\mydeg$ \\\hline
 	Grid step & \kv{$0.91\mydeg$} & \kv{$1.05\mydeg$} & \kv{$1.29\mydeg$} \\\hline
 	Largest grid error & \kv{$0.46\mydeg$} & \kv{$0.53\mydeg$} & \kv{$0.64\mydeg$} \\\hline
 	\end{tabular}
@@ -164,7 +164,7 @@ ADAR1000 LSB, $360\mydeg/2^7 = 2.8125\mydeg$, at a time.
 		     kd = 360\mydeg\ \frac{14}{28.50} = 176.8\mydeg \\
 		     \delta(\sin\theta) &= \frac{2.8125\mydeg}{176.8\mydeg} = 0.0159, \qquad
 		     \delta\theta = \frac{0.0159}{\cosp{\theta}}\ \text{rad} }
-		The step widens as $1/\cos\theta$, and Est. Angle can miss the source by
+		The step widens as $1/\cos\theta$, and Angle can miss the source by
 		half a step.
 		\end{solution}
 
@@ -191,7 +191,7 @@ ADAR1000 LSB, $360\mydeg/2^7 = 2.8125\mydeg$, at a time.
 
 	\part A teammate sets the kit on the floor, $0.75\ \m$ below the boxes, at a
 	station $2\ \m$ from a box that is $30\mydeg$ off broadside in azimuth. What
-	does Est. Angle read, and which way does the error always pull?
+	does Angle read, and which way does the error always pull?
 
 	\begin{solution}[1.2in]
 	The box is $\tan^{-1}(0.75/2) = 20.6\mydeg$ above the array's plane. A line
@@ -299,7 +299,7 @@ box. Test it on this practice set from an earlier class, recorded at one Rx Gain
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{| c | c | c | c |}
 \hline
-\textbf{Station $x_i$ (m)} & \textbf{Est. Angle $\theta_i$} & \textbf{Peak Array Gain} & \textbf{Use?} \\\hline\hline
+\textbf{Station $x_i$ (m)} & \textbf{Angle $\theta_i$} & \textbf{Peak Gain} & \textbf{Use?} \\\hline\hline
 $-1.5$ & $+52.9\mydeg$ & $-18.4$ dB & \kv{no} \\\hline
 $-1.0$ & $+42.9\mydeg$ & $-17.3$ dB & \kv{yes} \\\hline
 $-0.5$ & $+41.9\mydeg$ & $-14.3$ dB & \kv{yes} \\\hline
@@ -392,7 +392,7 @@ Boxes: \textbf{1} $(-0.75,\ 1.20)$, \textbf{2} $(0.00,\ 1.00)$,
 	\end{center}
 
 		\begin{solution}[0.9in]
-		The crossing angle is the difference of the two Est. Angles, since every
+		The crossing angle is the difference of the two Angle readings, since every
 		station shares one heading. The wide pair lands three times closer, and
 		almost all of the narrow pair's miss is in depth, as Question 2(b) predicts.
 		\end{solution}
@@ -421,20 +421,20 @@ Rx Gain for the hunt = \ansbox[1.2in]{one value, all stations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Reference shot.} Put the kit on station 0, squared to the tape.
 Place your own HB100 $1\ \m$ downrange and $0.5\ \m$ toward the $+x$ end of the
-tape, facing the kit, and record Est. Angle. If it reads positive, $s = +1$; if
-negative, $s = -1$. Multiply every Est. Angle you record today by $s$.
+tape, facing the kit, and record Angle. If it reads positive, $s = +1$; if
+negative, $s = -1$. Multiply every Angle you record today by $s$.
 
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{| K{1.6in} | K{1.0in} |}
 \hline
-\textbf{Est. Angle, source toward $+x$} & \textbf{$s$} \\\hline\hline
+\textbf{Angle, source toward $+x$} & \textbf{$s$} \\\hline\hline
 \kv{about $\pm 27\mydeg$} & \kv{$\pm 1$} \\\hline
 \end{tabular}
 \end{center}
 
 \begin{solution}
-$\tan^{-1}(0.5/1.0) = 26.6\mydeg$. The L18 Lab put positive Est. Angle on the E8
+$\tan^{-1}(0.5/1.0) = 26.6\mydeg$. The L18 Lab put positive Angle on the E8
 end of the array, so $s$ depends only on which way round the board sits on its
 stand. A reading more than $5\mydeg$ from $26.6\mydeg$ in size means the kit is
 not square to the tape or the source is not where you think.
@@ -442,9 +442,9 @@ not square to the tape or the source is not where you think.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{The hunt.} At each station, square the kit to the tape with the
-middle of the array on the mark, and read Est. Angle on ten consecutive sweeps
+middle of the array on the mark, and read Angle on ten consecutive sweeps
 from the \textbf{Tracking} tab. Record $s$ times the mean, the spread (largest
-minus smallest), and Peak Array Gain. Write ``none'' for a station with no clear
+minus smallest), and Peak Gain. Write ``none'' for a station with no clear
 tone. Ends first.
 
 \begin{center}
@@ -452,7 +452,7 @@ tone. Ends first.
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{| c | K{1.1in} | K{0.8in} | K{1.0in} | K{0.7in} |}
 \hline
-\textbf{Station $x_i$ (m)} & \textbf{$s\,\bar\theta_i$} & \textbf{Spread} & \textbf{Peak Array Gain} & \textbf{Use?} \\\hline\hline
+\textbf{Station $x_i$ (m)} & \textbf{$s\,\bar\theta_i$} & \textbf{Spread} & \textbf{Peak Gain} & \textbf{Use?} \\\hline\hline
 $-1.5$ & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
 $-1.0$ & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
 $-0.5$ & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
@@ -546,7 +546,7 @@ from Part 2 and your predictions from Part 1.
 	so it cannot tell you which case you are in.
 	\end{solution}
 
-	\part In two or three sentences, explain why Peak Array Gain can help choose
+	\part In two or three sentences, explain why Peak Gain can help choose
 	between two boxes but cannot give the fox's range on its own.
 	\begin{solution}[1.3in]
 	The level depends on range, but also on which way the fox faces, on

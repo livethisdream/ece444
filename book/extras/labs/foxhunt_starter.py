@@ -6,7 +6,7 @@ functions marked TODO are yours to write in Part 1 of the packet.
 
 Frame: x runs along the firing line (the tape), y runs straight downrange.
 Every kit sits on the line (y = 0) with broadside pointed downrange (+y).
-theta is Est. Angle with your reference-shot sign applied, so that a
+theta is Angle with your reference-shot sign applied, so that a
 positive angle points toward the +x end of the tape.
 
 Usage:
@@ -50,7 +50,7 @@ def rank_boxes(fix, boxes):
 
 
 def amplitude_check(stations, box_xy):
-    """Score how well the Peak Array Gain readings fit a source at box_xy.
+    """Score how well the Peak Gain readings fit a source at box_xy.
 
     Smaller is a better fit. Used only to choose between two boxes that
     sit about equally close to the fix.
