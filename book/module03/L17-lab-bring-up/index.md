@@ -69,6 +69,7 @@ Each cadet has their own kit:
 - an HB100 microwave source on its own small stand or battery holder
 - one USB-C supply, for the PHASER board, which powers the Pi too
 - a camera tripod, for the board and for aiming the source
+- a 3D-printed rotating stand under the tripod: print the STL files in `common/` and `tripod/` from [hardware/stand-simple/stl](https://github.com/livethisdream/phaser/tree/main/hardware/stand-simple/stl)
 - a 32 GB microSD card and an Ethernet cable
 - a laptop with Raspberry Pi Imager and an ssh client
 
@@ -79,6 +80,11 @@ in place of NN: kit 7 is `phaser-07`.
 :::{depth}
 On Windows the ssh client is the OpenSSH Client, under Settings > Apps >
 Optional features; macOS and Linux include one.
+
+The stand's [README](https://github.com/livethisdream/phaser/tree/main/hardware/stand-simple)
+has the print settings: PETG if you can, no supports, and the platter printed
+upside down. It turns the tripod on the array's own center, so the source can
+stay put while the board rotates, and its engraved scale reads the angle.
 
 The instructor also keeps fallback cards, copies of one finished kit. A
 fallback card gets a kit running when a build cannot be finished in the
