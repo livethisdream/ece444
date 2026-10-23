@@ -130,7 +130,7 @@ That is the one shared file it may change.
 
 ## 5. Schedule and status
 
-Status as of 2026-10-22. "Cut" means the page fits the 20-slide budget.
+Status as of 2026-10-23. "Cut" means the page fits the 20-slide budget.
 "Sweeps" means the voice, why, and illustration passes. Lessons are topics,
 not periods; each lab follows its lesson on the bench and is listed under it.
 
@@ -150,8 +150,8 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | convert to packet |
 | L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
 | L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m | 13/20 (#127); merged before its dry run | **hardware dry run** |
-| L22 | Sidelobes and Tapering | practice | 46/20 | cut + sweeps |
-| L23 | Beam Squint and Quantization | practice | 40/20 | cut + sweeps |
+| L22 | Sidelobes and Tapering | practice | cut 20/20, voice sweep done (#132) | why + illustration sweeps |
+| L23 | Beam Squint and Quantization | practice | cut 20/20 (#131, open) | sweeps |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** (old-style sheet) + practice | 46/20, uncut | cut + sweeps + packet |
 | L24 | Null Steering | practice | 46/20 | cut + sweeps |
 | L24 Lab | Null Steering | **L24 Lab** (old-style sheet) + practice | 51/20 | cut + sweeps + packet |
@@ -180,7 +180,9 @@ needs its rubric, published with the L28 Lab packet.
 ## 6. Work queue, in order
 
 1. **Lesson passes in teaching order:** L22–L24 with the L22–L23 and L24
-   Labs, each before it is taught. A lesson's pass converts its lab's sheet to a
+   Labs, each before it is taught. The three sweeps are user-invoked only:
+   Neil types `/voice-sweep NN` (then why, then illustration) in the lesson
+   thread's own session; a thread cannot start them or replay them by hand. A lesson's pass converts its lab's sheet to a
    packet and folds in the dry-run lessons (`review/M3_LAB_DRYRUN.md`):
    set the level to −10 dBFS, compute at the kit's own Find HB100
    frequency, open Lab Presets first, E1 on the right facing the patches,
