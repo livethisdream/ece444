@@ -1,8 +1,8 @@
 % !TEX root =./ECE444_Practice_main.tex
 %
 % L22 practice set (Sidelobes and Tapering) -- why an untapered aperture
-% has sidelobes, the cosine/Chebyshev/Taylor families, the three costs of a
-% taper, and converting a design to PHASER element gains.
+% has sidelobes, the cosine/Chebyshev/Taylor families, the three consequences
+% of a taper, and converting a design to PHASER element gains.
 
 \fullwidth{\textbf{Learning Objective 3.7: } I can apply amplitude tapering
 (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the
@@ -13,8 +13,8 @@ is required (write \textbf{None} if you did not collaborate).}
 \begin{questions}
 
 \question \textbf{Where sidelobes come from, and why a system cares.}
-The PHASER's eight elements are driven at equal amplitude and spaced
-$d = 14\text{ mm}$, which is $d/\lambda = 0.481$ at $10.3\ \ghz$. Its measured
+The PHASER drives its eight elements at equal amplitude, spaced
+$d = 14\text{ mm}$ apart, which is $d/\lambda = 0.481$ at $10.3\ \ghz$. Its measured
 first sidelobe sits $12.8\db$ below the peak.
 \begin{parts}
 	\part In two or three sentences, explain why a uniformly illuminated aperture
@@ -97,7 +97,8 @@ $a_n$ of $0.12$, $0.43$, $0.77$, $1.00$, $1.00$, $0.77$, $0.43$, $0.12$.
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part Compute the taper efficiency $\eta_t = \lp\sum a_n\rp^2 / \lp N \sum a_n^2 \rp$
+		\part Compute the taper efficiency
+		\eq{ \eta_t &= \frac{\lp\sum a_n\rp^2}{N \sum a_n^2} }
 		as a ratio and in decibels.
 		\begin{solution}[1.3in]
 		\eq{ \eta_t &= \frac{\lp 4.64 \rp^2}{8 \times 3.584} = \frac{21.53}{28.67}
@@ -131,8 +132,8 @@ $a_n$ of $0.12$, $0.43$, $0.77$, $1.00$, $1.00$, $0.77$, $0.43$, $0.12$.
 		The taper efficiency in part (b) is the fraction of the uniform array's
 		directivity that the tapered array keeps, so $-1.2\db$ is the loss of
 		antenna performance. The peak drop in part (c) is a coherent
-		receive-voltage loss: six of the eight channels were attenuated, so the
-		plotted peak fell, but the channel noise was attenuated along with the
+		receive-voltage loss: the taper attenuates six of the eight channels, so
+		the plotted peak fell, but it attenuates their noise along with the
 		signal. The difference,
 		$-4.7 - \lp -1.2 \rp = -3.5\db$, is gain that was simply turned down and
 		would return if the sliders could be scaled back up past $100\%$.
@@ -148,7 +149,7 @@ $\theta_\text{HP} = 13.2\mydeg$.
 \begin{parts}
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Compute the voltage ratio $R$ and the Chebyshev stretch factor
-		$x_0 = \cosh\lp \cosh^{-1}(R)/(N-1) \rp$.
+		\eq{ x_0 &= \cosh\lp \frac{\cosh^{-1}(R)}{N-1} \rp. }
 		\begin{solution}[1.4in]
 		\eq{ R &= 10^{25/20} = 10^{1.25} = 17.78 \\
 		\cosh^{-1}(17.78) &= 3.571 \\
@@ -197,18 +198,18 @@ $\theta_\text{HP} = 13.2\mydeg$.
 		$\theta_\text{HP}$ = \ansbox[1.2in]{$15.8\mydeg$}
 	\end{minipage}
 
-	\part State the price of this design for the customer in one sentence, then
+	\part State what this design gives up for the customer in one sentence, then
 	explain in one or two more why a Chebyshev design beats a Hann window that
 	reaches a similar sidelobe level.
 		\begin{solution}[1.6in]
-		Sidelobes drop from $-12.8\db$ to $-25\db$, and the cost is a beam
+		Sidelobes drop from $-12.8\db$ to $-25\db$, and the design gives up a beam
 		$2.6\mydeg$ wider, $0.48\db$ of directivity, and a $3.1\db$ lower peak on
 		the displayed trace. The Chebyshev design is optimal in the sense that no
 		other set of amplitudes reaches $-25\db$ with a narrower main lobe,
 		because it holds every sidelobe exactly at the specification. A Hann
 		window pushes its far sidelobes well below $-25\db$, which is suppression
-		the specification never asked for, and it paid for that suppression in
-		beamwidth it did not need to spend.
+		the specification never asked for, and it widened the main lobe to get
+		that suppression.
 		\end{solution}
 \end{parts}
 
@@ -257,7 +258,7 @@ visible above the sweep's noise floor, which sits $23\db$ below the
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part State the tightest upper bound the student can honestly put on this
+		\part State the tightest upper bound the student can put on this
 		taper's sidelobe level, expressed relative to the taper's own peak.
 		\begin{solution}[1.3in]
 		The floor sits $23\db$ below the uniform peak, and this taper's peak is
@@ -320,9 +321,9 @@ and $\eta_t = 0.710$.
 		\begin{solution}[1.7in]
 		Propose $-30\db$ rather than $-50\db$. The beam sweep's noise floor is
 		about $23\db$ below the uniform peak, so a $-30\db$ design is already
-		below anything this instrument can measure, and a $-50\db$ design cannot
-		be verified on the bench at all. The deeper specification also costs
-		$3\mydeg$ more beamwidth and roughly $0.7\db$ more directivity than the
+		below anything this instrument can measure, and the bench cannot verify
+		a $-50\db$ design at all. The deeper specification also widens the beam
+		$3\mydeg$ more and loses roughly $0.7\db$ more directivity than the
 		$-30\db$ design, and its edge elements are too small to set accurately.
 		If the office needs suppression in one specific direction rather than
 		everywhere, the correct tool is a steered null, not a deeper taper.
