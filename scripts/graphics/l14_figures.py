@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """L14: the static figures from the 2026-10-01 illustration sweep.
 
-Every figure is labels only: no equations, so the same SVG serves the deck
-(book/extras/slides/fig) and the lesson page (book/extras/viz/img). The math
-lives in the lesson text.
+Every figure is labels only, no equations, written to the lesson page's
+book/extras/viz/img. The math lives in the lesson text.
 
   L14-three-approaches  reflector, Yagi, and array, each with the coherent
                         aperture it builds shaded
@@ -46,7 +45,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, RED, GREEN, AMBER, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5b6573"
 INK, RULE, SHADE = "#15202b", "#c7d2e0", "#dbe8f4"
 ROOT = Path(__file__).resolve().parents[2]
-OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
+OUT = ROOT / "book/extras/viz/img"
 
 plt.rcParams.update({"svg.fonttype": "none", "font.size": 11, "text.color": INK,
                      "axes.edgecolor": GRAY, "axes.labelcolor": INK,
@@ -67,8 +66,7 @@ def save(fig, name, alt):
     s = s[s.index("<svg"):]
     s = re.sub(r'<svg([^>]*)>', lambda m: f'<svg{m.group(1)} role="img" aria-label="{alt}">', s, count=1)
     s = apply_font_stack(s)
-    for d in OUTS:
-        (d / f"{name}.svg").write_text(s)
+    (OUT / f"{name}.svg").write_text(s)
     print("wrote", name)
 
 
@@ -444,7 +442,7 @@ def log_periodic():
     length is within about 15% of half a wavelength; those are drawn in red
     as the active region. Longer elements behind it are drawn as reflectors,
     shorter ones ahead as directors, the Yagi's long-lags / short-leads rule.
-    Element heights are drawn at 0.75 scale so the two panels fit a slide.
+    Element heights are drawn at 0.75 scale so the two panels fit a frame.
     """
     tau, sigma, N = 0.88, 0.16, 10
     L = tau ** np.arange(N)                       # element lengths, longest = 1

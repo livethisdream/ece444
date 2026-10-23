@@ -1,6 +1,6 @@
 ---
 name: voice-sweep
-description: Audit one lesson (page, deck, practice set) against VOICE.md, list the violations by section, stop for Neil's go-ahead, then fix them. Manual only -- run as /voice-sweep <NN>.
+description: Audit one lesson (page and practice set) against VOICE.md, list the violations by section, stop for Neil's go-ahead, then fix them. Manual only -- run as /voice-sweep <NN>.
 argument-hint: <lesson number, e.g. 15>
 disable-model-invocation: true
 ---
@@ -27,11 +27,11 @@ the rules that matter most are the ones added most recently.
 
 ## Phase 1: audit, then stop
 
-Read the lesson page, deck, and practice source in full. Then run the
+Read the lesson page and practice source in full. Then run the
 mechanical pass:
 
 ```sh
-F="book/module*/L<NN>-*/index.md book/extras/slides/L<NN>-*.md latex/ECE444_Practice_L<NN>.tex"
+F="book/module*/L<NN>-*/index.md latex/ECE444_Practice_L<NN>.tex"
 grep -niE 'honest|genuinely|truly|rigorous|hand-wav|is the price|dear reader' $F
 grep -nE '\b(is|are|was|were|be|been) +\w+(ed|en)\b' $F        # passive tells
 grep -niE '\b(buy|buys|bought|pay|pays|price|cost|costs|spend|cheap|free lunch|for free)\b' $F
@@ -50,12 +50,12 @@ Then read for what no grep finds, by `VOICE.md` section:
   verb.
 - §11: kicker sentences ("That is not a radar.").
 - §12: "you" where the lesson's own reasoning should be "we".
-- §13: frame and slide titles that are not Title Case noun phrases.
+- §13: frame titles that are not Title Case noun phrases.
 - §14: bold on a claim rather than a term.
 - §18, §19: inline non-trivial equations; derivations that restate a
   left-hand side.
 - §20: figurative framing and money metaphors.
-- §23: a present block or slide that teases the point instead of stating it.
+- §23: a present block that teases the point instead of stating it.
 - §24: a quantity described as a cause.
 
 Report one table: location, section, the offending text (short), and the
@@ -70,8 +70,6 @@ proposed rewrite. Group by section. **Then stop and wait for Neil.**
   equations and a wrong number this way.
 - Renaming a frame title changes its `#frame-<slug>` anchor. Grep the book for
   links to the old anchor and update them.
-- Mirror each change in the deck; deck slide titles go to Title Case too.
-  Follow the marked gotchas in `CLAUDE.md`.
 - Present blocks stay at 40 words or fewer; a sentence rewrite usually adds
   words, so rerun `check_density` after.
 - Run the `VOICE.md` self-check on your own new text before reporting.

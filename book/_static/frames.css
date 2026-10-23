@@ -583,18 +583,28 @@ iframe.viz {
     break-after: page;
   }
 
-  /* Print has no mode toggle, so it always renders as read mode: the depth
-     is the rest of the lesson, not an aside collapsed behind a button,
-     whichever mode the screen happened to be in. */
-  .depth {
+  /* Print follows the mode the screen is in. Read mode prints the whole
+     lesson: the depth is the rest of the lesson, not an aside collapsed
+     behind a button. Present mode prints the slide handout the reveal.js
+     decks used to give: each frame's title and present blocks, one frame a
+     sheet, with the depth and the read-only frames left off exactly as the
+     screen rules above leave them off. */
+  html:not([data-mode="present"]) .depth {
     display: flex !important;
     border-left: none !important;
     padding-left: 0 !important;
   }
   /* "More detail +" is a screen affordance for revealing the depth above --
      on paper the depth is already there, so the button would just be a
-     button that does nothing. */
+     button that does nothing. In the present-mode handout the depth is
+     left off on purpose, so the button has nothing to open either. */
   .more { display: none !important; }
+  [data-mode="present"] .frame.open .depth { display: none !important; }
+  /* A letter sheet is narrower than a laptop, so a table beside its bullets
+     loses its last column to the scroller. On paper there is nothing to
+     scroll: stack a stage that holds a table, and let the table show whole. */
+  [data-mode="present"] .frame.cut .stage:has(table) { grid-template-columns: 1fr !important; }
+  .frame .pst-scrollable-table-container { overflow: visible !important; }
 
   /* Screen-only chrome: the bottom bar and its panels, the progress rail,
      the jump overlay, and the presenter's laser and spotlight. None of it

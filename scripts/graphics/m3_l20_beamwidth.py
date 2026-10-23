@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the L20 (Array Factor and Beamwidth) deck figures as SVG.
+"""Generate the L20 (Array Factor and Beamwidth) figures as SVG.
 
 L20:
   - L20-beamwidth-anatomy   : N = 8, d = 0.481 lambda uniform array, broadside,
@@ -11,13 +11,12 @@ L20:
                               broadside and 45-degree scan, with the PHASER
                               array and a 5-degree design target marked
 
-Same export convention as scripts/graphics/l06_patterns.py: SVG with live
-<text> (svg.fonttype='none'), font-family rewritten to 'inherit' so the
-injected figure picks up the deck font, transparent background, USAFA palette,
-and no baked equations (deck figures carry words and numbers only).
+SVG with live <text> (svg.fonttype='none') carrying the shared font stack,
+transparent background, USAFA palette, and no baked equations (words and
+numbers only).
 
     python3 scripts/graphics/m3_l20_beamwidth.py
-    -> writes book/extras/slides/fig/L20-*.svg  (and copies to viz/img/)
+    -> writes book/extras/viz/img/L20-*.svg
 
 Patterns are the closed-form uniform array factor, not measured data.
 """
@@ -35,8 +34,7 @@ NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d
 INK, RULE = "#1a1a1a", "#c7d2e0"
 SLIDE_BG = "#fafaf7"
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "book/extras/slides/fig"
-OUT2 = ROOT / "book/extras/viz/img"
+OUT = ROOT / "book/extras/viz/img"
 
 LAM = 3e8 / 10.3e9 * 1000.0      # mm, the worked example's 10.3 GHz
 DEL = 14.0 / LAM                 # PHASER element spacing in wavelengths
@@ -60,10 +58,9 @@ def finalize(fig, name: str) -> None:
     s = buf.getvalue()
     s = s[s.index("<svg"):]
     s = apply_font_stack(s)
-    for dest in (OUT, OUT2):
-        dest.mkdir(parents=True, exist_ok=True)
-        (dest / f"{name}.svg").write_text(s, encoding="utf-8")
-    print(f"wrote {name}.svg -> {OUT}, {OUT2}")
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / f"{name}.svg").write_text(s, encoding="utf-8")
+    print(f"wrote {name}.svg -> {OUT}")
 
 
 def af_db(N, dl, deg, th0=0.0, floor=-40.0):

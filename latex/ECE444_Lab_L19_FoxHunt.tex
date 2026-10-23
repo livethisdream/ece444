@@ -112,45 +112,48 @@ ADALM-PHASER and verify the steered pattern against theory.}
 
 \vspace{2pt}
 
-One HB100 in the room is on, inside one of five numbered boxes placed inside a
-keep-out circle marked on the floor. You and a partner find the live box from
-bearings taken on your two kits from anywhere outside that circle. This packet is the L\labLesson\ Lab, in three parts, and
-your team turns in one copy, complete, before Lesson 20. Both partners work
-\textbf{Part 1} before the lab period: the error budget, a plan for where to
-stand, and the triangulation script, tested on a supplied set of bearings. You
-need all three at the bench. \textbf{Part 2} is your team's measurements,
-recorded in class. \textbf{Part 3}, after the lab, turns the measurements into a
-fix and compares it with the box the instructor reveals.
+One HB100 is on, inside one of five numbered boxes downrange of a taped firing
+line. Your team moves its kit along the line, stopping at station marks every
+$0.5\ \m$ with the kit squared to the tape and broadside pointed straight
+downrange, and finds the live box from the bearings and levels it reads. This
+packet is the L\labLesson\ Lab, in three parts, and your team turns in one copy,
+complete, before Lesson 20. \textbf{Part 1}, before the lab period, is the error
+budget, a station plan, and your fox-hunt script, tested on a supplied set of
+readings; you need all three at the bench. \textbf{Part 2} is your team's
+measurements, recorded in class. \textbf{Part 3}, after the lab, compares your
+fix with the box the instructor reveals.
 
-\textbf{Grading.} One submission per team, counted toward both partners'
-engagement grades and graded as a genuine, documented attempt.
+\textbf{Grading.} One submission per team, counted toward every partner's
+engagement grade and graded as a genuine, documented attempt.
 
 The array is the PHASER's: $N = 8$ elements, E1 to E8, on a $d = 14\ \text{mm}$
 pitch. Use $c = 3.00\times 10^{8}\ \m/\text{s}$ and the HB100's nominal
-$10.525\ \ghz$. Room angles are measured counterclockwise from the room's
-$+x$ axis, seen from above, and the origin is the center mark of the keep-out
-circle.
+$10.525\ \ghz$. The range frame puts $x$ along the tape, with station 0 at its
+middle, and $y$ straight downrange. Every Angle $\theta$ in this packet
+has your reference-shot sign applied, so a positive angle points toward the
+$+x$ end of the tape, and a bearing from station $x_i$ is the line
+\eq{ x = x_i + y\tanp{\theta_i}. }
 
 \begin{questions}
 
-\fullwidth{\large\textbf{Part 1: Pre-Lab} \normalsize(both partners, before the lab period)}
+\fullwidth{\large\textbf{Part 1: Pre-Lab} \normalsize(before the lab period)}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The bearing error budget.} Est. Angle is the steer angle of the
+\question \textbf{The bearing error budget.} The \textbf{Angle} readout, set to Peak, is the steer angle of the
 largest sample in the beam sweep, and the sweep steps the progressive phase one
 ADAR1000 LSB, $360\mydeg/2^7 = 2.8125\mydeg$, at a time.
 
 \begin{parts}
 
 	\part Find $kd$ in degrees, the sweep's step in $\sin\theta$, and the step in
-	angle at each Est. Angle in the table. Then give the largest error the grid
+	angle at each Angle in the table. Then give the largest error the grid
 	alone can cause at each angle.
 
 	\begin{center}
 	\renewcommand{\arraystretch}{1.25}
 	\begin{tabular}{| l | K{1.1in} | K{1.1in} | K{1.1in} |}
 	\hline
-	Est. Angle & $0\mydeg$ & $30\mydeg$ & $45\mydeg$ \\\hline
+	Angle & $0\mydeg$ & $30\mydeg$ & $45\mydeg$ \\\hline
 	Grid step & \kv{$0.91\mydeg$} & \kv{$1.05\mydeg$} & \kv{$1.29\mydeg$} \\\hline
 	Largest grid error & \kv{$0.46\mydeg$} & \kv{$0.53\mydeg$} & \kv{$0.64\mydeg$} \\\hline
 	\end{tabular}
@@ -161,229 +164,238 @@ ADAR1000 LSB, $360\mydeg/2^7 = 2.8125\mydeg$, at a time.
 		     kd = 360\mydeg\ \frac{14}{28.50} = 176.8\mydeg \\
 		     \delta(\sin\theta) &= \frac{2.8125\mydeg}{176.8\mydeg} = 0.0159, \qquad
 		     \delta\theta = \frac{0.0159}{\cosp{\theta}}\ \text{rad} }
-		The step widens as $1/\cos\theta$, and Est. Angle can miss the source by
+		The step widens as $1/\cos\theta$, and Angle can miss the source by
 		half a step.
 		\end{solution}
 
-	\part You will aim each kit's broadside at the circle's center mark by eye,
-	which holds the heading to about $1.5\mydeg$. Take $1.0\mydeg$ for multipath
-	and $0.2\mydeg$ for noise. Combine these with the grid term at $30\mydeg$ to
-	find the bearing uncertainty $\sigma_\beta$. Then repeat with the heading set
-	carefully to $1.0\mydeg$.
+	\part On the range, every kit is squared to the tape with a straightedge,
+	which holds its heading to about $1.0\mydeg$. Take $1.0\mydeg$ for
+	multipath and $0.2\mydeg$ for noise. Combine these with the grid term at
+	$30\mydeg$ to find the bearing uncertainty $\sigma_\beta$. Then repeat for a
+	kit aimed at a point by eye, which holds the heading only to about
+	$1.5\mydeg$.
 
 	\begin{center}
-	$\sigma_\beta$ (heading $1.5\mydeg$) = \ansbox[1.1in]{$1.9\mydeg$}
+	$\sigma_\beta$ (squared to tape) = \ansbox[1.1in]{$1.5\mydeg$}
 	\hspace{0.4in}
-	$\sigma_\beta$ (heading $1.0\mydeg$) = \ansbox[1.1in]{$1.5\mydeg$}
+	$\sigma_\beta$ (aimed by eye) = \ansbox[1.1in]{$1.9\mydeg$}
 	\end{center}
 
 		\begin{solution}[1.0in]
 		The terms are independent, so they add as a root sum of squares:
-		\eq{ \sigma_\beta &= \sqrt{0.53^2 + 1.5^2 + 1.0^2 + 0.2^2} = 1.9\mydeg \\
-		     &= \sqrt{0.53^2 + 1.0^2 + 1.0^2 + 0.2^2} = 1.5\mydeg }
-		The heading is the largest term in both, so it is where care pays off.
+		\eq{ \sigma_\beta &= \sqrt{0.53^2 + 1.0^2 + 1.0^2 + 0.2^2} = 1.5\mydeg \\
+		     &= \sqrt{0.53^2 + 1.5^2 + 1.0^2 + 0.2^2} = 1.9\mydeg }
+		Squaring to one tape also makes much of the heading error common to every
+		station, which rotates all the lines together instead of scattering them.
 		\end{solution}
 
-	\part A teammate sets a kit on the floor, $0.75\ \m$ below the boxes, and
-	$3\ \m$ from a box that is $30\mydeg$ off broadside in azimuth. What does Est.
-	Angle read, and which way does the error always pull?
+	\part A teammate sets the kit on the floor, $0.75\ \m$ below the boxes, at a
+	station $2\ \m$ from a box that is $30\mydeg$ off broadside in azimuth. What
+	does Angle read, and which way does the error always pull?
 
 	\begin{solution}[1.2in]
-	The box is $\tan^{-1}(0.75/3) = 14.0\mydeg$ above the array's plane. A line
+	The box is $\tan^{-1}(0.75/2) = 20.6\mydeg$ above the array's plane. A line
 	array measures the cone angle:
-	\eq{ \sin\theta_\text{meas} = \sinp{30\mydeg}\cosp{14.0\mydeg} = 0.485, \qquad \theta_\text{meas} = 29.0\mydeg }
+	\eq{ \sin\theta_\text{meas} = \sinp{30\mydeg}\cosp{20.6\mydeg} = 0.468, \qquad \theta_\text{meas} = 27.9\mydeg }
 	The error always pulls the reading toward broadside, since $\cos(\text{el}) \le 1$.
-	Keep the kits on tables at the boxes' height.
+	Keep the kit on a stand or table at the boxes' height.
 	\end{solution}
 
 \end{parts}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\question \textbf{Where to stand.} The keep-out circle has a radius of
-$1.5\ \m$, and you may take bearings from anywhere outside it. Your room's radius may differ; the instructor gives the actual value at the
-start of the period. Take $\sigma_\beta = 2\mydeg$ in this question.
+\question \textbf{The range.} The firing line is $3.0\ \m$ of tape with stations
+at $x = -1.5, -1.0, \ldots, +1.5\ \m$. The box field is $2.0\ \m$ wide,
+centered on station 0, and runs from $1.0$ to $2.0\ \m$ downrange; the boxes are
+at least $0.75\ \m$ apart. Take $\sigma_\beta = 1.5\mydeg$ in this question.
 
 \begin{parts}
 
-	\part Find the cross-range error of one bearing line at $3$, $4$, and
-	$5\ \m$ from the source.
+	\part Find the across-range error of one bearing line at each depth.
 
 	\begin{center}
 	\renewcommand{\arraystretch}{1.25}
 	\begin{tabular}{| l | K{1.1in} | K{1.1in} | K{1.1in} |}
 	\hline
-	Range & $3\ \m$ & $4\ \m$ & $5\ \m$ \\\hline
-	Cross-range error & \kv{$0.10\ \m$} & \kv{$0.14\ \m$} & \kv{$0.17\ \m$} \\\hline
+	Depth $y$ & $1.0\ \m$ & $1.5\ \m$ & $2.0\ \m$ \\\hline
+	Across-range error & \kv{$0.03\ \m$} & \kv{$0.04\ \m$} & \kv{$0.05\ \m$} \\\hline
 	\end{tabular}
 	\end{center}
 
 		\begin{solution}[0.5in]
-		$\delta_\perp = R\tanp{\sigma_\beta}$; at $4\ \m$, $4\tanp{2\mydeg} = 0.14\ \m$.
+		$\delta_x = y\tanp{\sigma_\beta}$; at $2.0\ \m$, $2.0\tanp{1.5\mydeg} = 0.05\ \m$.
 		\end{solution}
 
-	\part Two kits $4\ \m$ from the source see it along bearings that cross at
-	angle $\gamma$. Find the RMS error of the two-bearing fix at each crossing
-	angle.
+	\part Every bearing on a firing line looks downrange, so depth is the weak
+	direction. Two stations a baseline $B$ apart fix a box at depth $y$ in depth
+	to about $y^2\sigma_\beta/B$, with $\sigma_\beta$ in radians. Find the depth
+	error for a box $2.0\ \m$ out at each baseline.
 
 	\begin{center}
 	\renewcommand{\arraystretch}{1.25}
 	\begin{tabular}{| l | K{1.1in} | K{1.1in} | K{1.1in} |}
 	\hline
-	$\gamma$ & $90\mydeg$ & $30\mydeg$ & $15\mydeg$ \\\hline
-	RMS fix error & \kv{$0.20\ \m$} & \kv{$0.40\ \m$} & \kv{$0.76\ \m$} \\\hline
+	Baseline $B$ & $0.5\ \m$ & $1.0\ \m$ & $2.0\ \m$ \\\hline
+	Depth error & \kv{$0.21\ \m$} & \kv{$0.10\ \m$} & \kv{$0.05\ \m$} \\\hline
 	\end{tabular}
 	\end{center}
 
-		\begin{solution}[0.6in]
-		$\sigma_\text{fix} = \sqrt{2}\ \delta_\perp/\sin\gamma$ with
-		$\delta_\perp = 0.14\ \m$: $0.20$, $0.40$, and $0.76\ \m$.
+		\begin{solution}[0.7in]
+		$\sigma_\beta = 1.5\mydeg = 0.0262\ \text{rad}$, so
+		$y^2\sigma_\beta = 4(0.0262) = 0.105\ \m^2$, divided by $B$. Two
+		neighboring stations fix depth four times worse than two stations
+		$2\ \m$ apart.
 		\end{solution}
 
-	\part Every box must stay within $\pm 30\mydeg$ of each kit's broadside. A kit
-	stands a distance $D$ from the center mark with its broadside aimed at the
-	center. Find the smallest $D$ for which the whole circle stays within
-	$\pm 30\mydeg$ of broadside.
+	\part Bearings past $\pm 45\mydeg$ are poor: the beam is wide and the plot's
+	edge can capture the peak marker. A box sits at the field's corner,
+	$x = +1.0\ \m$. List the stations that see it within $\pm 45\mydeg$ of
+	broadside when it is $1.0\ \m$ out and when it is $2.0\ \m$ out, and say
+	why the tape runs $0.5\ \m$ past the field at each end.
 
-	\begin{center}
-	$D_\text{min}$ = \ansbox[1.1in]{$3.0\ \m$}
-	\end{center}
-
-		\begin{solution}[1.0in]
-		The circle's edge is seen at its widest where the line of sight is
-		tangent to it, at an angle $\sin^{-1}(a/D)$ from the line to the center.
-		Setting that to $30\mydeg$ gives
-		\eq{ D_\text{min} = \frac{a}{\sinp{30\mydeg}} = 2a = 3.0\ \m }
-		\end{solution}
-
-	\part Sketch the circle and mark where your team plans to put its two kits
-	and the second position each kit will move to, so that the team takes four
-	bearings. Choose positions outside the circle that keep every box
-	within $\pm 30\mydeg$ of broadside and give steep crossings for a box anywhere
-	in the circle. Label each
-	position with its distance from the center and its direction in room angles.
-
-	\begin{solution}[2.4in]
-	One good plan spreads the four positions over a third of the circle. Kit A
-	stands at $(-3.0, -1.8)$ and $(-1.2, -3.3)\ \m$, and
-	kit B at $(1.2, -3.3)$ and $(3.0, -1.8)\ \m$, each $3.5\ \m$ out and aimed at
-	the center. The positions sit at $211\mydeg$, $250\mydeg$, $290\mydeg$, and
-	$329\mydeg$ from the center, so the outer pair crosses at about $120\mydeg$ and
-	neighbors at about $40\mydeg$, and the widest box sits $25\mydeg$ off
-	broadside. Any plan with the kits at least $2a$ out and spread around the
-	circle so that some pair sits $60\mydeg$ to $120\mydeg$ apart meets the brief.
-	Two positions opposite each other see a central box along nearly one line, so
-	that pair barely crosses.
+	\begin{solution}[1.3in]
+	A station sees the box within $\pm 45\mydeg$ when $|1.0 - x_i| \le y$.
+	At $1.0\ \m$ out: stations $0$, $+0.5$, $+1.0$, $+1.5$. At $2.0\ \m$ out:
+	$-1.0$ through $+1.5$, six stations. Without the station at $+1.5$, a near
+	corner box would have only three useful stations and a short baseline.
 	\end{solution}
 
-	\part The five boxes are at least $0.75\ \m$ apart, and your team names the
-	box nearest its fix. A fix closer to a wrong box than to the right one has to
-	miss by at least half the spacing. Express half the spacing in units of the
-	per-axis error, $0.14\ \m$, of a $90\mydeg$ crossing, and say in one sentence
-	whether naming the wrong box should be common.
+	\part Write your station plan: the order in which you will visit the
+	stations, and which two you take first. Give one sentence of reasoning.
 
 	\begin{solution}[0.9in]
-	$0.375/0.14 = 2.7$ standard deviations. A miss that large along the line to
-	the nearest neighbor happens well under 1\% of the time, so a team that keeps
-	its crossing steep and its budget near $2\mydeg$ should name the right box;
-	a simulation of a row of boxes gives 99\% at this spacing.
+	Take the two end stations that hear the fox first, since they set the
+	baseline and the depth error, then fill in the middle. If time runs short, the
+	ends alone already give a good fix; two middle stations do not.
+	\end{solution}
+
+	\part Half the box spacing is $0.375\ \m$. Compare it with the depth error of
+	a $2.0\ \m$ baseline for the deepest box, and say in one sentence whether
+	naming the wrong box should be common.
+
+	\begin{solution}[0.9in]
+	$0.375/0.05 = 7.5$ standard deviations in depth, and more across range. With
+	several good bearings, naming the wrong box is rare; a simulation of this
+	range with a $2.5\mydeg$ budget, one bad bearing in seven, and a loosely aimed
+	fox still names the right box about $93\%$ of the time. What goes wrong in
+	practice is one bad bearing left in the solution.
 	\end{solution}
 
 \end{parts}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\question \textbf{The triangulation script.} Write a Python function that takes
-the positions $\mathbf p_i$ of the kits and their room bearings $\beta_i$ and
-returns the least-squares fix and each bearing's residual. Lesson 19's "Many
-Bearings: Least Squares" gives the normal equations. Use numpy; do not use
-MATLAB. Test it on this practice set from an earlier class, in which each kit
-stood outside the keep-out circle, aimed its broadside at the center mark, and read positive
-Est. Angle counterclockwise:
+\question \textbf{Your fox-hunt script.} Download \texttt{foxhunt\_starter.py}
+from the L\labLesson\ Lab page. It reads \texttt{stations.csv} and
+\texttt{boxes.csv} and prints the results; write its four functions in Python
+with numpy. \texttt{solve} returns the least-squares fix and each station's
+residual (Lesson 19, ``Many Bearings: Least Squares''); \texttt{drop\_worst}
+finds the one station that disagrees with the rest; \texttt{rank\_boxes}
+orders the boxes; and \texttt{amplitude\_check} scores how well the levels fit a
+box. Test it on this practice set from an earlier class, recorded at one Rx Gain:
 
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{| c | c | c | c | K{0.9in} |}
+\begin{tabular}{| c | c | c | c |}
 \hline
-\textbf{Bearing} & \textbf{Position (m)} & \textbf{Heading $h$} & \textbf{Est. Angle} & \textbf{Room bearing $\beta$} \\\hline\hline
-1 & $(-3.0,\ -1.8)$ & $31.0\mydeg$  & $+1.4\mydeg$  & \kv{$32.4\mydeg$} \\\hline
-2 & $(-1.2,\ -3.3)$ & $70.0\mydeg$  & $-6.7\mydeg$  & \kv{$63.3\mydeg$} \\\hline
-3 & $(1.2,\ -3.3)$  & $110.0\mydeg$ & $-12.0\mydeg$ & \kv{$98.0\mydeg$} \\\hline
-4 & $(3.0,\ -1.8)$  & $149.0\mydeg$ & $-3.5\mydeg$  & \kv{$145.5\mydeg$} \\\hline
+\textbf{Station $x_i$ (m)} & \textbf{Angle $\theta_i$} & \textbf{Peak Gain} & \textbf{Use?} \\\hline\hline
+$-1.5$ & $+52.9\mydeg$ & $-18.4$ dB & \kv{no} \\\hline
+$-1.0$ & $+42.9\mydeg$ & $-17.3$ dB & \kv{yes} \\\hline
+$-0.5$ & $+41.9\mydeg$ & $-14.3$ dB & \kv{yes} \\\hline
+$0.0$  & $+18.6\mydeg$ & $-13.1$ dB & \kv{yes} \\\hline
+$+0.5$ & $+2.9\mydeg$  & $-11.6$ dB & \kv{yes} \\\hline
+$+1.0$ & $-16.5\mydeg$ & $-12.9$ dB & \kv{yes} \\\hline
+$+1.5$ & $-30.4\mydeg$ & $-14.0$ dB & \kv{yes} \\\hline
 \end{tabular}
 
 \vspace{6pt}
-Boxes: \textbf{1} $(-0.9,\ 0.6)$, \textbf{2} $(-0.2,\ -0.8)$,
-\textbf{3} $(0.6,\ 0.4)$, \textbf{4} $(0.0,\ 1.1)$, \textbf{5} $(0.9,\ -0.5)$ m
+Boxes: \textbf{1} $(-0.75,\ 1.20)$, \textbf{2} $(0.00,\ 1.00)$,
+\textbf{3} $(0.55,\ 1.60)$, \textbf{4} $(-0.40,\ 1.90)$, \textbf{5} $(1.00,\ 0.90)$ m
 \end{center}
 
 \begin{parts}
 
-	\part Fill in the room bearings, run your function on all four, and record
-	the fix and the four residuals. Attach your code.
+	\part Mark in the table which stations you use, and say why you left any out.
 
-	\begin{center}
-	\renewcommand{\arraystretch}{1.25}
-	\begin{tabular}{| l | K{1.0in} | K{0.75in} | K{0.75in} | K{0.75in} | K{0.75in} |}
-	\hline
-	 & \textbf{Fix (m)} & $e_1$ & $e_2$ & $e_3$ & $e_4$ \\\hline
-	All four & \kv{$(0.51,\ 0.18)$} & \kv{$-0.20$} & \kv{$0.04$} & \kv{$0.20$} & \kv{$-0.22$} \\\hline
-	\end{tabular}
-	\end{center}
-
-		\begin{solution}
-		$\beta = h + \theta_\text{est}$. One version of the function:
-\begin{lstlisting}[language=Python]
-import numpy as np
-
-def fix(p, beta_deg):
-    """Least-squares crossing of bearing lines.
-    p: (K, 2) kit positions in m; beta_deg: (K,) room bearings in deg."""
-    b = np.radians(beta_deg)
-    n = np.column_stack([-np.sin(b), np.cos(b)])  # unit normal to each line
-    c = np.sum(n * p, axis=1)                      # n . p for each line
-    x = np.linalg.solve(n.T @ n, n.T @ c)          # normal equations
-    return x, n @ x - c                            # fix, signed residuals
-
-p = np.array([[-3.0, -1.8], [-1.2, -3.3], [1.2, -3.3], [3.0, -1.8]])
-beta = np.array([31.0, 70.0, 110.0, 149.0]) + np.array([1.4, -6.7, -12.0, -3.5])
-x, e = fix(p, beta)
-\end{lstlisting}
-		The signs of the residuals depend on the normal's direction; their sizes
-		are what matter.
-		\end{solution}
-
-	\part Each bearing is about $4\ \m$ from the fix, so a good bearing should
-	leave a residual near $4\tanp{2\mydeg} = 0.14\ \m$. Which bearing is the
-	outlier? Drop it, solve again with the other three, and record the new fix and
-	residuals.
-
-	\begin{center}
-	\renewcommand{\arraystretch}{1.25}
-	\begin{tabular}{| l | K{1.0in} | K{0.75in} | K{0.75in} | K{0.75in} |}
-	\hline
-	 & \textbf{Fix (m)} & \multicolumn{3}{c|}{\textbf{Residuals of the three kept}} \\\hline
-	Outlier dropped & \kv{$(0.68,\ 0.51)$} & \kv{$-0.02$} & \kv{$0.03$} & \kv{$-0.02$} \\\hline
-	\end{tabular}
-	\end{center}
-
-		\begin{solution}[1.3in]
-		Bearing 4 has the largest residual, $0.22\ \m$, twice its
-		$0.11\ \m$ cross-range error; bearings 1 and 3 are also large because
-		least squares spreads one bad line's error over the others. Dropping
-		bearing 4 leaves residuals of $0.02$ to $0.03\ \m$, well inside the budget,
-		which confirms it. Bearing 4 read $8\mydeg$ high, which is the size of
-		error a reflection off a nearby surface produces.
-		\end{solution}
-
-	\part Name the box from each fix, and give each fix's distance to that box.
-
-	\begin{solution}[0.9in]
-	Both fixes are nearest box 3, $(0.6, 0.4)$: $0.24\ \m$ away with all four
-	bearings and $0.14\ \m$ away with the outlier dropped. The next nearest box is
-	$0.79\ \m$ from the first fix and $0.90\ \m$ from the second. The outlier did
-	not change the answer here, but it nearly doubled the miss.
+	\begin{solution}[0.6in]
+	Station $-1.5$ reads $52.9\mydeg$, past the $\pm 45\mydeg$ limit, so it is
+	left out. The other six are inside it.
 	\end{solution}
+
+	\part Run \texttt{solve} on the stations you kept and record the fix and the
+	residuals. Attach your code.
+
+	\begin{center}
+	\renewcommand{\arraystretch}{1.25}
+	\begin{tabular}{| K{0.95in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} | K{0.55in} |}
+	\hline
+	\textbf{Fix (m)} & $-1.0$ & $-0.5$ & $0.0$ & $+0.5$ & $+1.0$ & $+1.5$ \\\hline
+	\kv{$(0.58,\ 1.49)$} & \kv{$0.14$} & \kv{$-0.20$} & \kv{$0.07$} & \kv{$0.00$} & \kv{$0.02$} & \kv{$-0.04$} \\\hline
+	\end{tabular}
+	\end{center}
+
+		\begin{solution}[0.8in]
+		Each station gives one equation in $(x, y)$,
+		$x\cosp{\theta_i} - y\sinp{\theta_i} = x_i\cosp{\theta_i}$, scaled so the
+		residual is each line's perpendicular distance from the fix. The signs
+		depend on how the normal is chosen; the sizes are what matter.
+		\end{solution}
+
+	\part A good bearing here should leave a residual of a few centimeters, about
+	$R\tanp{1.5\mydeg}$ at its range. Which station is the outlier? Run
+	\texttt{drop\_worst}, and record the new fix and the largest residual left.
+
+	\begin{center}
+	\renewcommand{\arraystretch}{1.25}
+	\begin{tabular}{| l | K{1.0in} | K{1.0in} | K{1.2in} |}
+	\hline
+	 & \textbf{Station dropped} & \textbf{Fix (m)} & \textbf{Largest residual left} \\\hline
+	Outlier dropped & \kv{$-0.5$} & \kv{$(0.54,\ 1.63)$} & \kv{$0.04\ \m$} \\\hline
+	\end{tabular}
+	\end{center}
+
+		\begin{solution}[1.2in]
+		Station $-0.5$ has the largest residual, $0.20\ \m$, and its neighbor at
+		$-1.0$ is also large because least squares spreads one bad line's error
+		over the others. Dropping $-0.5$ leaves residuals of $0.04\ \m$ or less,
+		which confirms it. That station read about $8\mydeg$ high, the size of
+		error a reflection produces.
+		\end{solution}
+
+	\part Name the box from each fix and give its distance. Then compare the
+	amplitude scores of the two nearest boxes. Does the level pattern agree
+	with the bearings?
+
+	\begin{solution}[1.2in]
+	Both fixes are nearest box 3, $(0.55, 1.60)$: $0.11\ \m$ away with six
+	stations and $0.03\ \m$ with the outlier dropped. The next nearest box is
+	$0.73\ \m$ or more from either fix. An amplitude check that fits out the
+	overall level and compares $1/R^2$ spreading with a patch roll-off near
+	$\cos^{1.2}\theta$ fits box 3 within about $0.4\ \text{dB}$ RMS and every
+	other box at $2.7\ \text{dB}$ or worse, so the levels agree. Scores depend on
+	the model chosen; what counts is the ranking.
+	\end{solution}
+
+	\part The live box was box 3. Solve again with only the two end stations you
+	kept ($-1.0$ and $+1.5$), then with only stations $0.0$ and $+0.5$. Record
+	each fix, its distance from box 3, and the crossing angle of the pair.
+
+	\begin{center}
+	\renewcommand{\arraystretch}{1.25}
+	\begin{tabular}{| l | K{1.0in} | K{1.0in} | K{1.0in} |}
+	\hline
+	\textbf{Pair} & \textbf{Fix (m)} & \textbf{To box 3} & \textbf{Crossing} \\\hline\hline
+	$-1.0$ and $+1.5$ & \kv{$(0.53,\ 1.65)$} & \kv{$0.05\ \m$} & \kv{$73\mydeg$} \\\hline
+	$0.0$ and $+0.5$ & \kv{$(0.59,\ 1.75)$} & \kv{$0.15\ \m$} & \kv{$16\mydeg$} \\\hline
+	\end{tabular}
+	\end{center}
+
+		\begin{solution}[0.9in]
+		The crossing angle is the difference of the two Angle readings, since every
+		station shares one heading. The wide pair lands three times closer, and
+		almost all of the narrow pair's miss is in depth, as Question 2(b) predicts.
+		\end{solution}
 
 \end{parts}
 
@@ -391,91 +403,84 @@ x, e = fix(p, beta)
 \newpage
 \fullwidth{\large\textbf{Part 2: Measurements} \normalsize(your team, in class)}
 
-Follow the procedure on the L\labLesson\ Lab page in read mode. Bring each kit up as
-in the L18 Lab, with your own HB100 at boresight for \textbf{Find HB100} and
-\textbf{Calibrate}. Load \textbf{1 Steering Angle}, set \textbf{Rx Gain (dB)} as
-the page says, and press \textbf{Start}. Your own HB100 stays on only for the
-reference shot. Then switch it off, disconnect its power, and, once the
-instructor starts the hunt, press \textbf{Find HB100} again so the kit tunes to
-the fox. Every HB100 runs at a slightly different frequency, and the receiver
-sees only a few megahertz around the one it is tuned to, so a kit still tuned to
-your own HB100 does not see the fox at all. Keep the calibration from
-bring-up. An HB100 radiates mainly forward, so a kit behind or well off the side
-of the live box may see a weak tone or none; if you cannot find the tone from a
-position, move.
+Follow the procedure on the L\labLesson\ Lab page in read mode. Bring the kit up
+as in the L18 Lab, with your own HB100 at boresight for \textbf{Find HB100} and
+\textbf{Calibrate}, and set \textbf{Rx Gain (dB)} as the page says. Your own
+HB100 stays on only for the reference shot. Then switch it off, disconnect its
+power, and, once the instructor starts the hunt, press \textbf{Find HB100}
+again so the kit tunes to the fox. Keep the calibration from bring-up. Once the
+hunt starts, do not change Rx Gain.
 
 \vspace{2pt}
 \begin{center}
-Keep-out radius = \ansbox[1.1in]{given in class}\\[8pt]
-Own HB100, kit A = \ansbox[1.2in]{$10.1$--$10.7\ \ghz$} \hspace{0.2in}
-kit B = \ansbox[1.2in]{$10.1$--$10.7\ \ghz$}\\[8pt]
-Fox, after re-tune = \ansbox[1.2in]{one value, both kits}
+Own HB100 = \ansbox[1.2in]{$10.1$--$10.7\ \ghz$} \hspace{0.2in}
+Fox, after re-tune = \ansbox[1.2in]{one value}\\[8pt]
+Rx Gain for the hunt = \ansbox[1.2in]{one value, all stations}
 \end{center}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{Reference shot.} Before the hunt, each partner places their own
-HB100 $2\ \m$ in front of their kit and about $20\mydeg$ to the left of broadside,
-as seen from behind the array looking out along broadside. Record Est. Angle.
-If it reads positive, positive Est. Angle is counterclockwise on your kit and
-$s = +1$; if negative, $s = -1$.
+\question \textbf{Reference shot.} Put the kit on station 0, squared to the tape.
+Place your own HB100 $1\ \m$ downrange and $0.5\ \m$ toward the $+x$ end of the
+tape, facing the kit, and record Angle. If it reads positive, $s = +1$; if
+negative, $s = -1$. Multiply every Angle you record today by $s$.
 
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{| l | K{1.3in} | K{1.0in} |}
+\begin{tabular}{| K{1.6in} | K{1.0in} |}
 \hline
-\textbf{Kit} & \textbf{Est. Angle, source left} & \textbf{$s$} \\\hline\hline
-A & \kv{about $\pm 20\mydeg$} & \kv{$\pm 1$} \\\hline
-B & \kv{about $\pm 20\mydeg$} & \kv{$\pm 1$} \\\hline
+\textbf{Angle, source toward $+x$} & \textbf{$s$} \\\hline\hline
+\kv{about $\pm 27\mydeg$} & \kv{$\pm 1$} \\\hline
 \end{tabular}
 \end{center}
 
 \begin{solution}
-The L18 Lab put positive Est. Angle on the E8 end of the array, so $s$ depends
-only on which way round the kit sits on its table. A reading near $20\mydeg$ in
-size also checks the heading: one off by more than $5\mydeg$ means the kit is
-not aimed where you think.
+$\tan^{-1}(0.5/1.0) = 26.6\mydeg$. The L18 Lab put positive Angle on the E8
+end of the array, so $s$ depends only on which way round the board sits on its
+stand. A reading more than $5\mydeg$ from $26.6\mydeg$ in size means the kit is
+not square to the tape or the source is not where you think.
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The hunt.} At each position outside the keep-out circle, aim the kit's
-broadside at the center mark, measure the position from the center mark along the room's taped
-axes, and read Est. Angle on ten consecutive sweeps from the \textbf{Tracking}
-tab. Record the mean, the spread (largest minus smallest), and the room bearing
-$\beta = h + s\ \bar\theta_\text{est}$, where $h$ is the direction from the kit
-to the center.
+\question \textbf{The hunt.} At each station, square the kit to the tape with the
+middle of the array on the mark, and read Angle on ten consecutive sweeps
+from the \textbf{Tracking} tab. Record $s$ times the mean, the spread (largest
+minus smallest), and Peak Gain. Write ``none'' for a station with no clear
+tone. Ends first.
 
 \begin{center}
 \small
-\setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{| c | c | K{1.0in} | K{0.6in} | K{0.75in} | K{0.6in} | K{0.75in} | K{0.75in} |}
+\begin{tabular}{| c | K{1.1in} | K{0.8in} | K{1.0in} | K{0.7in} |}
 \hline
-\textbf{\#} & \textbf{Kit} & \textbf{Position (m)} & \textbf{$h$} & \textbf{Mean Est.} & \textbf{Spread} & \textbf{Peak Gain} & \textbf{$\beta$} \\\hline\hline
-1 & A & \kv{} & \kv{} & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
-2 & B & \kv{} & \kv{} & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
-3 & A & \kv{} & \kv{} & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
-4 & B & \kv{} & \kv{} & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
+\textbf{Station $x_i$ (m)} & \textbf{$s\,\bar\theta_i$} & \textbf{Spread} & \textbf{Peak Gain} & \textbf{Use?} \\\hline\hline
+$-1.5$ & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
+$-1.0$ & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
+$-0.5$ & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
+$0.0$  & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
+$+0.5$ & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
+$+1.0$ & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
+$+1.5$ & \kv{} & \kv{$\lesssim 2\mydeg$} & \kv{} & \kv{} \\\hline
 \end{tabular}
 \end{center}
 
 \begin{solution}
-Every row depends on the room. Check that each mean is within $\pm 30\mydeg$,
-that the spread is a degree or two (a spread near $5\mydeg$ suggests the
-receiver is near full scale; lower Rx Gain), and that $h$ follows from the
-position: $h = \text{atan2}(-y, -x)$ for a kit aimed at the center.
+Every row depends on the room. Check that each angle used is within
+$\pm 45\mydeg$, that the spread is a degree or two (near $5\mydeg$ suggests the
+receiver is near full scale), and that the angles fall steadily from one end of
+the line to the other, as they must for one source downrange.
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{The call.} Run your Part 1 script on the four bearings in class,
-before the reveal. Record the fix, the largest residual, the box you name, and,
-after the instructor opens the boxes, the box that was live.
+\question \textbf{The call.} Run your Part 1 script on your stations in class,
+before the reveal. Record the fix, the largest residual, any station dropped, the
+box you name, and, after the instructor opens the boxes, the box that was live.
 
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{| K{1.2in} | K{1.2in} | K{1.0in} | K{1.0in} |}
+\begin{tabular}{| K{1.1in} | K{1.0in} | K{0.9in} | K{0.9in} | K{0.9in} |}
 \hline
-\textbf{Fix (m)} & \textbf{Largest residual} & \textbf{Box named} & \textbf{Live box} \\\hline\hline
-\kv{} & \kv{$\lesssim 0.3\ \m$} & \kv{} & \kv{} \\\hline
+\textbf{Fix (m)} & \textbf{Largest residual} & \textbf{Dropped} & \textbf{Box named} & \textbf{Live box} \\\hline\hline
+\kv{} & \kv{$\lesssim 0.15\ \m$} & \kv{} & \kv{} & \kv{} \\\hline
 \end{tabular}
 \end{center}
 
@@ -484,74 +489,72 @@ after the instructor opens the boxes, the box that was live.
 \fullwidth{\large\textbf{Part 3: Writeup} \normalsize(your team, after the lab)}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{Reconcile the fix.} The instructor posts the live box's measured
-position after the period. Answer each part in three or four sentences, using
-your numbers from Part 2 and your predictions from Part 1.
+\question \textbf{Reconcile the fix.} The live box's measured position is posted
+after the period. Answer each part in three or four sentences, using your numbers
+from Part 2 and your predictions from Part 1.
 
 \begin{parts}
 
-	\part Give the distance from your fix to the live box, and compare it with the
-	RMS fix error you predicted for your geometry in Question 2. Is the miss
-	consistent with your budget?
+	\part Give the distance from your fix to the live box, split into its
+	across-range and depth parts. Compare each with your Question 2 predictions.
 	\begin{solution}[1.5in]
-	With kits $3.5$ to $4\ \m$ out and a crossing near $90\mydeg$, the predicted
-	RMS error is about $0.2\ \m$ at $\sigma_\beta = 2\mydeg$. A miss up to about
-	twice that is consistent. A larger miss points at one bad bearing or at a
-	systematic error common to a kit: a wrong $s$, a heading off by several
-	degrees, or a kit below the boxes.
+	With a long baseline the miss should be a few centimeters across range and
+	somewhat more in depth, together $0.15$ to $0.2\ \m$ or less. A depth miss
+	much larger than across range means the baseline was short or the end
+	stations were dropped; a large across-range miss points at a wrong $s$, a kit
+	not squared to the tape, or a kit below the boxes.
 	\end{solution}
 
-	\part Use the live box's position to find the true bearing from each of your
-	four positions, and the error of each measured bearing. Which term of your
-	error budget best explains the largest one?
+	\part Use the live box's position to find the true angle from each station,
+	$\tan^{-1}\left((x_\text{box} - x_i)/y_\text{box}\right)$, and the error of
+	each measured angle. Which term of your error budget best explains the largest
+	one?
 	\begin{solution}[1.8in]
-	Each true bearing is $\text{atan2}(y_\text{box} - y_i,\ x_\text{box} - x_i)$.
-	Errors of $1$ to $3\mydeg$ are within the budget, and the heading is the
-	usual dominant term. An error that is the same sign and size at both of one
-	kit's positions points at that kit's heading or its $s$; one large error at a
-	single position points at a reflection, especially if that position's Peak
-	Array Gain was low or the spread was large.
+	Errors of $1$ to $2\mydeg$ are within the budget. Errors that share one
+	sign and size at every station point at the heading common to all of them,
+	the kit not square to the tape. One large error at a single station points at
+	a reflection, especially if that station's spread was large or its level out
+	of line with its neighbors.
 	\end{solution}
 
-	\part If your residuals flagged an outlier, say whether dropping it moved the
-	fix toward the live box or away from it, and what in the room you think caused
-	it. If no residual stood out, say what that tells you about the four
-	bearings.
+	\part If your script dropped a station, say whether dropping it moved the fix
+	toward the live box, and what in the room you think caused it. If it dropped
+	none, say what that tells you about your bearings.
 	\begin{solution}[1.5in]
 	A real outlier is confirmed when dropping it shrinks the other residuals and
 	moves the fix toward the box. Whiteboards, metal cabinets, and people standing
 	near a line of sight are the usual causes. If every residual stayed near
-	$R_i\tanp{\sigma_\beta}$, the four bearings agree within the budget and the
-	least-squares fix is the best estimate the data allow.
+	$R_i\tanp{\sigma_\beta}$, the bearings agree within the budget.
 	\end{solution}
 
 \end{parts}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\question \textbf{Changing the geometry.} Run your script on your own bearings
-again, using only bearings 1 and 2, then only 3 and 4, then only 1 and 3.
+\question \textbf{Baseline and amplitude.}
 
 \begin{parts}
 
-	\part Record the three two-bearing fixes and the crossing angle of each pair.
-	Which pair landed closest to the live box, and is that the pair with the
-	steepest crossing?
-	\begin{solution}[2.0in]
-	The crossing angle of a pair is the difference of its two room bearings. The
-	pair with the crossing nearest $90\mydeg$ usually lands closest, since its
-	error is $\sqrt{2}\ \delta_\perp/\sin\gamma$. A shallow pair that happens to
-	land close has errors that happened to cancel along its long axis; the
-	residual-free two-bearing fix cannot tell you which case you are in.
+	\part Solve your own data again with only your two end stations, then with
+	only two neighboring stations near the middle. Record both fixes and their
+	distances to the live box. Does the result match Question 2(b)?
+	\begin{solution}[1.8in]
+	The end pair should land close, with most of any miss in depth; the
+	neighboring pair should miss mostly in depth, by several times more, roughly
+	in the ratio of the two baselines. A neighboring pair that happens to land
+	close has errors that happened to cancel; a two-station fix has no residuals,
+	so it cannot tell you which case you are in.
 	\end{solution}
 
-	\part In two or three sentences, explain why a two-bearing fix can never
-	reveal its own bad bearing, and why your team took four.
+	\part In two or three sentences, explain why Peak Gain can help choose
+	between two boxes but cannot give the fox's range on its own.
 	\begin{solution}[1.3in]
-	Two lines always cross at exactly one point, so every two-bearing fix has
-	zero residuals whether the bearings are good or bad. Only a third line can
-	disagree with the first two. Four bearings let the team drop one and still
-	keep a check on the remaining three.
+	The level depends on range, but also on which way the fox faces, on
+	reflections, and on the receiver's gain, none of which you know well enough
+	to turn one level into a distance. Comparing the pattern of levels along the
+	line, with the overall level fitted out, removes the unknown gain and much of
+	the fox's aim, so the shape can still separate two candidates that the
+	bearings place about equally close.
 	\end{solution}
 
 \end{parts}

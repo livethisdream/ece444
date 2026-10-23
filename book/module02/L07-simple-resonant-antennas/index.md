@@ -18,15 +18,11 @@ Today we extend the math to real hardware.
 Lesson 7 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame} Slides
+::::{frame} Printing
 :class: read-only
 
-:::{admonition} Slides
-:class: slides
-<a href="../../slides/L07-simple-resonant-antennas.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L07-simple-resonant-antennas.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L07-simple-resonant-antennas.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
+To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.
 ::::
 
 ::::{frame} Learning Objectives

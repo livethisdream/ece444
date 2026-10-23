@@ -11,10 +11,7 @@
   - L18-two-ways        : rotating the array versus sweeping the command
   - L18-error-budget    : the three error sources at 30 deg and their RSS
 
-Every figure goes to book/extras/viz/img/ (the lesson page) only. The reveal.js
-decks are frozen (2026-10-10), so this script does not touch the deck's own
-copies in book/extras/slides/fig/L18-*.svg; those were written by the previous
-version of this file (see git history) and stay byte-identical.
+Every figure goes to book/extras/viz/img/ (the lesson page).
 
 The page figures sit in a present block beside text: about 477 px wide at a
 1280 laptop and 343 px on a phone. They are drawn about 420 units wide with no

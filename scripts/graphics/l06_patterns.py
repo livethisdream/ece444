@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the L06 radiation-pattern deck figures as inline SVG.
+"""Generate the L06 radiation-pattern figures as inline SVG.
 
 L06:
   - L06-line-source-sinc  : uniform line source (L = 6 lambda) power pattern,
@@ -8,13 +8,12 @@ L06:
                             (infinitesimal dipole, half-wave dipole, uniform
                             line source L = 2 lambda), normalized, dB to -30
 
-Same export convention as scripts/graphics/plots.py: SVG with live <text>
-(svg.fonttype='none'), font-family rewritten to 'inherit' so the injected
-figure picks up the deck font, transparent background, USAFA palette, and
-**no baked equations** (deck figures carry words and numbers only).
+SVG with live <text> (svg.fonttype='none') carrying the shared font stack,
+transparent background, USAFA palette, and **no baked equations** (words and
+numbers only).
 
     python scripts/graphics/l06_patterns.py
-    -> writes book/extras/slides/fig/{L06-line-source-sinc,L06-three-patterns}.svg
+    -> writes book/extras/viz/img/{L06-line-source-sinc,L06-three-patterns}.svg
 
 Illustrative patterns computed from the closed forms in the lesson, not
 measured data.
@@ -31,8 +30,8 @@ from svg_font_stack import apply_font_stack
 
 NAVY, BLUE, RED, GREEN, ORANGE, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a"
 INK, RULE = "#1a1a1a", "#c7d2e0"
-SLIDE_BG = "#fafaf7"          # deck --slide-bg, for label knock-outs over a curve
-OUT = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
+SLIDE_BG = "#fafaf7"          # the old deck --slide-bg, for label knock-outs over a curve
+OUT = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 
 plt.rcParams.update({
     "svg.fonttype": "none",
@@ -64,7 +63,7 @@ def _db(x: np.ndarray, floor: float = -30.0) -> np.ndarray:
 def line_source_sinc() -> None:
     """Uniform line source, L = 6 lambda, plotted against angle off broadside.
 
-    Carries the three numbers the slide quotes: first null at lambda/L, HPBW
+    Carries the three numbers the lesson quotes: first null at lambda/L, HPBW
     from 0.886 lambda/L, and the -13.3 dB first sidelobe that never moves."""
     LL = 6.0                                          # length in wavelengths
     g = np.linspace(-np.deg2rad(35), np.deg2rad(35), 6001)   # angle off broadside

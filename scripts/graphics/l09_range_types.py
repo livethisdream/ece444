@@ -11,12 +11,10 @@ differs -- how the plane wave gets made -- is what the eye lands on.
 Words in the panels are labels, not captions; the selection guidance is on
 the frame beside the figure.
 
-Two layouts from one set of drawings: a 1x4 strip for the deck and a 2x2 for
-the lesson page, where the column is narrower.
+Laid out 2x2 for the lesson page, where the column is narrow.
 
     python3 scripts/graphics/l09_range_types.py
-    -> book/extras/slides/fig/L09-range-types.svg     (1x4, deck)
-       book/extras/viz/img/L09-range-types.svg        (2x2, lesson page)
+    -> book/extras/viz/img/L09-range-types.svg        (2x2, lesson page)
 """
 
 from __future__ import annotations
@@ -27,10 +25,10 @@ NAVY, BLUE, RED, GREEN, AMBER, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d"
 INK, RULE, WASH, PANEL = "#15202b", "#b9d2e5", "#eaf2f9", "#f5f9fc"
 
 ROOT = Path(__file__).resolve().parents[2]
-FIG, IMG = ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"
+IMG = ROOT / "book/extras/viz/img"
 
-# Every panel is drawn in its own 0..240 x 0..185 box and placed with a
-# translate, so the two layouts share one drawing apiece.
+# Every panel is drawn in its own 0..240 x 0..185 box and placed in the grid
+# with a translate.
 PW, PH = 240, 185
 
 
@@ -195,9 +193,8 @@ def compose(cols, rows, scale=1.0):
 
 
 def main():
-    (FIG / "L09-range-types.svg").write_text(compose(4, 1), encoding="utf-8")
     (IMG / "L09-range-types.svg").write_text(compose(2, 2), encoding="utf-8")
-    print("wrote L09-range-types.svg (1x4 deck, 2x2 page)")
+    print("wrote L09-range-types.svg (2x2 page)")
 
 
 if __name__ == "__main__":

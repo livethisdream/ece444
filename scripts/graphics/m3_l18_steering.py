@@ -7,11 +7,9 @@
   - L18-broadening        : projected aperture Nd cos(theta0)
   - L18-hpbw-vs-scan      : HPBW against theta0, 1/cos rule vs exact, and scan loss
   - L18-inverse-unwrap    : the inverse example's eight settings, unwrapped to +20 deg
-  - L18-steered-patterns  : N=8 array steered to 0/30/45/60 deg (deck widget fallback)
 
-Every figure is written to the deck tree (book/extras/slides/fig/); the ones the
-lesson page shows are copied to book/extras/viz/img/. None carries an equation:
-symbols, numbers, and short words only, so one file serves both trees.
+Every figure is written to the lesson page's book/extras/viz/img/. None carries
+an equation: symbols, numbers, and short words only.
 
 The page figures sit in a present block beside text: about 477 px wide at a
 1280 laptop and 343 px on a phone. They are drawn about 420 units wide with no
@@ -28,7 +26,6 @@ from __future__ import annotations
 
 import io
 import re
-import shutil
 from pathlib import Path
 from svg_font_stack import apply_font_stack
 
@@ -41,7 +38,6 @@ import matplotlib.pyplot as plt  # noqa: E402
 NAVY, BLUE, RED, GREEN, AMBER, GRAY = "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#8a5a00", "#5a5a5a"
 INK, RULE, LIGHT = "#1a1a1a", "#c7d2e0", "#9fb1c2"
 
-FIG = Path(__file__).resolve().parents[2] / "book/extras/slides/fig"
 IMG = Path(__file__).resolve().parents[2] / "book/extras/viz/img"
 
 # Course array at the workshop frequency: d = 14 mm, lambda = 29.1 mm (10.3 GHz).
@@ -72,7 +68,7 @@ plt.rcParams.update(
 )
 
 
-def check_text(name: str, svg: str, page: bool) -> None:
+def check_text(name: str, svg: str) -> None:
     """Every label on a page figure is 10.5 px or more at a 343 px column."""
     vb = re.search(r'viewBox="0 0 ([\d.]+) ([\d.]+)"', svg)
     w = float(vb.group(1))
@@ -80,11 +76,10 @@ def check_text(name: str, svg: str, page: bool) -> None:
     smallest = min(sizes) * PHONE_COL / w
     print(f"   {name}: viewBox {w:.0f} x {float(vb.group(2)):.0f}, smallest text "
           f"{min(sizes):.1f} units = {smallest:.1f} px at a {PHONE_COL:.0f} px column")
-    if page:
-        assert smallest >= PX_MIN - 0.05, f"{name}: {smallest:.2f} px text on a phone"
+    assert smallest >= PX_MIN - 0.05, f"{name}: {smallest:.2f} px text on a phone"
 
 
-def finalize(fig, name: str, also_page: bool = False) -> None:
+def finalize(fig, name: str) -> None:
     buf = io.StringIO()
     fig.savefig(buf, format="svg", transparent=True, bbox_inches="tight", pad_inches=0.06,
                 metadata={"Date": None})
@@ -92,12 +87,9 @@ def finalize(fig, name: str, also_page: bool = False) -> None:
     s = buf.getvalue()
     s = s[s.index("<svg"):]
     s = apply_font_stack(s)
-    (FIG / f"{name}.svg").write_text(s, encoding="utf-8")
-    print(f"wrote {FIG / (name + '.svg')}")
-    check_text(name, s, also_page)
-    if also_page:
-        shutil.copyfile(FIG / f"{name}.svg", IMG / f"{name}.svg")
-        print(f"wrote {IMG / (name + '.svg')}")
+    (IMG / f"{name}.svg").write_text(s, encoding="utf-8")
+    print(f"wrote {IMG / (name + '.svg')}")
+    check_text(name, s)
 
 
 def af(theta_deg, t0_deg):
@@ -232,7 +224,7 @@ def path_difference() -> None:
 
     ax.set_xlim(-0.45, 4.05)
     ax.set_ylim(-0.42, 1.9)
-    finalize(fig, "L18-path-difference", also_page=True)
+    finalize(fig, "L18-path-difference")
 
 
 # --------------------------------------------------------------------------- 2
@@ -276,7 +268,7 @@ def phase_ramp() -> None:
         a.set_xlim(-0.6, 7.6)
         a.set_xlabel("element number")
         clean(a)
-    finalize(fig, "L18-phase-ramp", also_page=True)
+    finalize(fig, "L18-phase-ramp")
 
 
 # --------------------------------------------------------------------------- 3
@@ -345,7 +337,7 @@ def sin_space() -> None:
         a.set_yticks([-40, -20, 0])
         a.grid(True, axis="y", color=RULE, lw=0.7, alpha=0.7)
         clean(a)
-    finalize(fig, "L18-sin-space", also_page=True)
+    finalize(fig, "L18-sin-space")
 
 
 # --------------------------------------------------------------------------- 4
@@ -401,7 +393,7 @@ def broadening() -> None:
 
     ax.set_xlim(-1.0, L + 3.4)
     ax.set_ylim(-1.6, 5.0)
-    finalize(fig, "L18-broadening", also_page=True)
+    finalize(fig, "L18-broadening")
 
 
 # --------------------------------------------------------------------------- 5
@@ -468,7 +460,7 @@ def hpbw_vs_scan() -> None:
     xl = 20.0
     ax2.text(xl, float(np.interp(xl, t, l_t)) - 0.3, "scan loss", color=AMBER, fontsize=13,
              ha="center", va="top")
-    finalize(fig, "L18-hpbw-vs-scan", also_page=True)
+    finalize(fig, "L18-hpbw-vs-scan")
 
 
 # --------------------------------------------------------------------------- 6
@@ -537,32 +529,10 @@ def inverse_unwrap() -> None:
     for side in ("left", "top", "right"):
         ax.spines[side].set_visible(False)
     ax.spines["bottom"].set_position(("data", 0))
-    finalize(fig, "L18-inverse-unwrap", also_page=True)
-
-
-# --------------------------------------------------------------------------- 7
-def steered_patterns() -> None:
-    """Static fallback for the widget: four commanded angles on one axis."""
-    th = np.linspace(-90, 90, 6001)
-    fig, ax = plt.subplots(figsize=(8.6, 4.1))
-    for t0, c, lw in ((0, GRAY, 1.6), (30, BLUE, 1.7), (45, NAVY, 1.9), (60, AMBER, 1.9)):
-        ax.plot(th, af_db(th, t0), color=c, lw=lw, label=f"{t0}°")
-    ax.axhline(-3, color=GREEN, lw=1.0, ls="--")
-    ax.text(88, -2.6, "half power", color=GREEN, fontsize=11, ha="right", va="bottom")
-    ax.set_xlim(-90, 90)
-    ax.set_ylim(-40, 2)
-    ax.set_xticks([-90, -60, -30, 0, 30, 60, 90])
-    ax.set_xlabel("scan angle (deg)")
-    ax.set_ylabel("relative power (dB)")
-    ax.grid(True, color=RULE, lw=0.7, alpha=0.7)
-    clean(ax)
-    ax.legend(loc="upper left", fontsize=11, title="commanded", title_fontsize=11)
-    fig.tight_layout()
-    finalize(fig, "L18-steered-patterns")
+    finalize(fig, "L18-inverse-unwrap")
 
 
 if __name__ == "__main__":
-    FIG.mkdir(parents=True, exist_ok=True)
     IMG.mkdir(parents=True, exist_ok=True)
     path_difference()
     phase_ramp()
@@ -570,4 +540,3 @@ if __name__ == "__main__":
     broadening()
     hpbw_vs_scan()
     inverse_unwrap()
-    steered_patterns()

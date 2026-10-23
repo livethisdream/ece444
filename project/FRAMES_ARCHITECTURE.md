@@ -16,6 +16,8 @@ retire its reveal.js deck. They are a parallel pair while the frame view is
 proven in front of real classes, and `mech_check.sh` still requires and
 render-checks the deck for every lesson. This is the "keep it until I'm sure I
 don't need it" call, not a permanent answer.
+**Superseded 2026-10-23** (Neil): the decks are deleted. The frame lesson is
+the slides; printing it from present mode is the slide handout.
 
 The question this answers: if a lesson's deck and its page become one
 scroll-frame document, where does the source live and what generates what?

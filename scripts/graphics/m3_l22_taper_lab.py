@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""L22–L23 Lab (tapering, Part 1) deck figures.
+"""L22–L23 Lab (tapering, Part 1) figures.
 
   - L22-taper-traces  : the four preset sweeps as the GUI draws them
                         (2.8125 deg grid, -23 dBc floor, light noise)
-  - L22-gain-bars     : the four presets' element-gain bars
   - L22-two-numbers   : plotted peak drop vs directivity loss, Hann preset
   - L22-custom-target : a mild custom taper against the design target
 
@@ -12,11 +11,11 @@ isotropic elements. Traces are the array factor sampled on the sweep grid,
 normalized to the uniform-taper peak, with the noise floor and a small
 amount of trace noise added so the figures read like measurements.
 
-No equations in any figure (deck rule) -- axis labels, legends and short
-value tags only.
+No equations in any figure -- axis labels, legends and short value tags
+only.
 
     python3 scripts/graphics/m3_l22_taper_lab.py
-    -> book/extras/slides/fig/L22-*.svg  and  book/extras/viz/img/L22-*.svg
+    -> book/extras/viz/img/L22-*.svg
 """
 
 from __future__ import annotations
@@ -36,7 +35,6 @@ NAVY, BLUE, RED, GREEN, ORANGE, GRAY = (
     "#004a85", "#0067b9", "#b01e24", "#1d7a4d", "#e67e22", "#5a5a5a")
 INK, RULE = "#1a1a1a", "#c7d2e0"
 ROOT = Path(__file__).resolve().parents[2]
-FIG = ROOT / "book/extras/slides/fig"
 IMG = ROOT / "book/extras/viz/img"
 
 DL = 0.481          # d / lambda at 10.3 GHz, d = 14 mm
@@ -64,17 +62,16 @@ plt.rcParams.update({
 })
 
 
-def finalize(fig, name: str, also_img: bool = False) -> None:
+def finalize(fig, name: str) -> None:
     buf = io.StringIO()
     fig.savefig(buf, format="svg", transparent=True, bbox_inches="tight", pad_inches=0.06)
     plt.close(fig)
     s = buf.getvalue()
     s = s[s.index("<svg"):]
     s = apply_font_stack(s)
-    for d in (FIG,) + ((IMG,) if also_img else ()):
-        d.mkdir(parents=True, exist_ok=True)
-        (d / f"{name}.svg").write_text(s, encoding="utf-8")
-        print(f"wrote {d / (name + '.svg')}")
+    IMG.mkdir(parents=True, exist_ok=True)
+    (IMG / f"{name}.svg").write_text(s, encoding="utf-8")
+    print(f"wrote {IMG / (name + '.svg')}")
 
 
 def af(gains, theta_deg):
@@ -115,25 +112,7 @@ def taper_traces() -> None:
     for sp in ("top", "right"):
         ax.spines[sp].set_visible(False)
     ax.legend(loc="upper right", fontsize=12, handlelength=1.6)
-    finalize(fig, "L22-taper-traces", also_img=True)
-
-
-def gain_bars() -> None:
-    fig, axes = plt.subplots(1, 4, figsize=(9.4, 2.5), sharey=True)
-    x = np.arange(1, NEL + 1)
-    for ax, (name, g) in zip(axes, PRESETS.items()):
-        ax.bar(x, g, color=COLORS[name], width=0.72)
-        ax.set_title(name, fontsize=13, color=INK, pad=6)
-        ax.set_ylim(0, 112)
-        ax.set_xticks([1, 4, 8])
-        ax.set_xlabel("Element", fontsize=11.5)
-        ax.grid(axis="y", color=RULE, linewidth=0.8)
-        ax.set_axisbelow(True)
-        for sp in ("top", "right"):
-            ax.spines[sp].set_visible(False)
-    axes[0].set_ylabel("Gain  (%)", fontsize=12)
-    fig.subplots_adjust(wspace=0.18)
-    finalize(fig, "L22-gain-bars")
+    finalize(fig, "L22-taper-traces")
 
 
 def two_numbers() -> None:
@@ -161,7 +140,7 @@ def two_numbers() -> None:
                 arrowprops=dict(arrowstyle="<->", color=RED, lw=1.5))
     ax.text(-2.95, 0.40, "3.5 dB", color=RED, ha="center", va="bottom",
             fontsize=12.5, fontweight="bold")
-    finalize(fig, "L22-two-numbers", also_img=True)
+    finalize(fig, "L22-two-numbers")
 
 
 def custom_target() -> None:
@@ -185,11 +164,10 @@ def custom_target() -> None:
         ax.spines[sp].set_visible(False)
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.24), ncol=4,
               fontsize=11.5, handlelength=1.7, columnspacing=1.4)
-    finalize(fig, "L22-custom-target", also_img=True)
+    finalize(fig, "L22-custom-target")
 
 
 if __name__ == "__main__":
     taper_traces()
-    gain_bars()
     two_numbers()
     custom_target()

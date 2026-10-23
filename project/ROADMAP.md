@@ -48,8 +48,9 @@ and does not make it:
 - lesson numbers, titles, objectives, lab names, the schedule
 - assessments in `ECE444-faculty`
 
-The reveal.js decks are frozen. Nobody edits them (renames by the Integrator
-excepted).
+There are no separate slide decks (Neil, 2026-10-23: the reveal.js decks were
+retired). A frame lesson is its own slides; printing it from present mode is
+the slide handout. Don't create, cite, or mirror changes into a deck.
 
 `book/interactives.md` is generated. A lesson thread that adds or renames a
 widget re-runs `python3 scripts/build_interactives.py` and commits the result.
@@ -81,8 +82,8 @@ That is the one shared file it may change.
 - **Every cadet has their own kit.** Kits never leave the room, so bench time
   is in class and homework is everything either side of it. Lab measurements
   are individual, with one exception: the **L19 Lab fox hunt runs in teams of
-  two**, one packet per team, measured from anywhere outside the keep-out zone
-  (no stations). The **final project is individual** (Neil, 2026-10-13).
+  two**, one packet per team, run as a firing range (2026-10-23): one kit per
+  team on a taped firing line, bearings from its station marks. The **final project is individual** (Neil, 2026-10-13).
 - **Labs are named by lesson**: "L17 Lab", "L18 Lab", never a running lab number.
   One lab serves two lessons: the **L22–L23 Lab** (tapering, then grating
   lobes, squint, and quantization) runs after L23 and hangs off it
@@ -130,7 +131,7 @@ That is the one shared file it may change.
 
 ## 5. Schedule and status
 
-Status as of 2026-10-22. "Cut" means the page fits the 20-slide budget.
+Status as of 2026-10-23. "Cut" means the page fits the 20-slide budget.
 "Sweeps" means the voice, why, and illustration passes. Lessons are topics,
 not periods; each lab follows its lesson on the bench and is listed under it.
 
@@ -145,13 +146,13 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L18 | Beam Steering | none (pre-lab of the L18 Lab) | 20/20, sweeps done | ready |
 | L18 Lab | Beam Steering | **L18 Lab** packet | 14/21; dry run 2026-10-19, fixes merged (#110, #121): E1 side, 45° marker, scan loss at 1.2 m | ready |
 | L19 | Direction Finding | none (L19 Lab packet) | rewritten (#103), 19/20, fix widget (#123) | sweeps |
-| L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | built (#114): teams of two, anywhere outside the keep-out circle, 8/20 | hardware-day checks |
+| L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | firing range: 3.0 m line, 7 stations, 2.0 m × 1.0–2.0 m box field; starter script; 8/20 | hardware-day checks |
 | L20 | Array Factor and Beamwidth | practice | 18/20, sweeps done (#128) | ready |
 | L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | convert to packet |
 | L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
 | L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m | 13/20 (#127); merged before its dry run | **hardware dry run** |
-| L22 | Sidelobes and Tapering | practice | 46/20 | cut + sweeps |
-| L23 | Beam Squint and Quantization | practice | 40/20 | cut + sweeps |
+| L22 | Sidelobes and Tapering | practice | cut 20/20, voice sweep done (#132) | why + illustration sweeps |
+| L23 | Beam Squint and Quantization | practice | cut 20/20 (#131, open) | sweeps |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** (old-style sheet) + practice | 46/20, uncut | cut + sweeps + packet |
 | L24 | Null Steering | practice | 46/20 | cut + sweeps |
 | L24 Lab | Null Steering | **L24 Lab** (old-style sheet) + practice | 51/20 | cut + sweeps + packet |
@@ -180,7 +181,9 @@ needs its rubric, published with the L28 Lab packet.
 ## 6. Work queue, in order
 
 1. **Lesson passes in teaching order:** L22–L24 with the L22–L23 and L24
-   Labs, each before it is taught. A lesson's pass converts its lab's sheet to a
+   Labs, each before it is taught. The three sweeps are user-invoked only:
+   Neil types `/voice-sweep NN` (then why, then illustration) in the lesson
+   thread's own session; a thread cannot start them or replay them by hand. A lesson's pass converts its lab's sheet to a
    packet and folds in the dry-run lessons (`review/M3_LAB_DRYRUN.md`):
    set the level to −10 dBFS, compute at the kit's own Find HB100
    frequency, open Lab Presets first, E1 on the right facing the patches,
@@ -216,9 +219,6 @@ needs its rubric, published with the L28 Lab packet.
 - **Image-build homework:** does each kit get a second card, and do cadets have
   Python on their laptops? The L17 Lab rewrite (#96) has cadets build their own
   card in class, which may settle this.
-- **Frozen decks.** #91 edited the L15 deck to drop the stale midterm date.
-  Keep the decks frozen, or allow edits that keep a deck in step with its
-  lesson?
 
 ## 8. Hardware-day checklist
 

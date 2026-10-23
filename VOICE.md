@@ -1,7 +1,7 @@
 # ECE 444 — voice guide
 
 The course's prose voice, captured from Neil's own review corrections. Read
-this before writing any lesson page, deck, practice set, or assessment.
+this before writing any lesson page, practice set, or assessment.
 `COURSE_SPEC.md` §9 states the rules; this file is the calibration set — the
 actual before-and-after pairs, so the target is concrete rather than abstract.
 

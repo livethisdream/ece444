@@ -1,6 +1,6 @@
 ---
 name: illustration-sweep
-description: Audit one lesson (page, deck, practice set) for places a figure or an interactive widget would explain more than the text does, rank them, stop for Neil's pick, then build the approved ones. Manual only -- run as /illustration-sweep <NN>.
+description: Audit one lesson (page and practice set) for places a figure or an interactive widget would explain more than the text does, rank them, stop for Neil's pick, then build the approved ones. Manual only -- run as /illustration-sweep <NN>.
 argument-hint: <lesson number, e.g. 15>
 disable-model-invocation: true
 ---
@@ -73,9 +73,8 @@ Neil.**
 ## Phase 2: build what Neil approved
 
 **Figures.** One generator per lesson, `scripts/graphics/l<NN>_figures.py`,
-writing every figure to both `book/extras/slides/fig/` and
-`book/extras/viz/img/` through `apply_font_stack()`. Labels only, no
-equations, so one SVG serves both trees. Compute every plotted number in the
+writing every figure to `book/extras/viz/img/` through
+`apply_font_stack()`. Compute every plotted number in the
 generator, and check it against the lesson text before you place it; a
 figure that disagrees with the prose is worse than none. Place labels from
 the data or in empty regions, never at offsets that happen to work today.
@@ -90,7 +89,7 @@ parallel by subagents, one file each, while you do the figures.
 660px at 320-430px, no overflow at 320, no console errors, no blank canvas.
 Set the iframe `height` to what it reports.
 
-**Screenshot everything** before it goes in: each figure at deck width, each
+**Screenshot everything** before it goes in: each figure at 390 and 1280, each
 widget at 755 and 390 in at least two states including an extreme one. Fix
 every collision, clipped label, overprint, and wrong sign ("−6 dB under the
 noise" is a double negative). Fonts never below 10.5px.
@@ -106,12 +105,6 @@ noise" is a double negative). Fonts never below 10.5px.
 - A widget gets its own `:class: viz-frame` frame, with a title short enough
   to sit on one line at 390px, the iframe in a present block, and a depth
   paragraph that tells the reader what to try.
-- Mirror each one in the deck: a figure as
-  `<div class="fig" data-inline-svg="./fig/<name>.svg" ...>` on its slide or a
-  new slide; a widget as a `<p class="viz-cue">↗ Interactive on the lesson
-  page</p>` cue on the related slide, with a speaker note saying what to demo.
-  Follow the marked gotchas in `CLAUDE.md`, and rerun `check_deck` for slide
-  height after every figure you add.
 
 ## Verify before pushing
 

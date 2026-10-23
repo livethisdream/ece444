@@ -8,8 +8,7 @@ of the array normal, at +theta, and the kit's pointer reads +theta on the
 protractor.
 
     python3 scripts/graphics/m3_l21_rotation_setup.py
-    -> writes book/extras/viz/img/L21-rotation-setup.svg (page copy only;
-       the decks are frozen)
+    -> writes book/extras/viz/img/L21-rotation-setup.svg
 """
 
 from __future__ import annotations

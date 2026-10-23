@@ -18,15 +18,11 @@ How an array measures the direction a signal comes from, and how bearings from k
 Lesson 19 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame} Slides
+::::{frame} Printing
 :class: read-only
 
-:::{admonition} Slides
-:class: slides
-<a href="../../slides/L19-direction-finding.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L19-direction-finding.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L19-direction-finding.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
+To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.
 ::::
 
 ::::{frame} Learning Objectives
@@ -595,8 +591,8 @@ HB100 among numbered boxes from bearings you and a partner take on your two kits
 
 ::::{frame} Looking Ahead
 :::{present}
-- The L19 Lab: two kits, bearings from wherever you choose outside the keep-out zone, one fix, one box.
-- Bring the error budget and a plan for where to stand.
+- The L19 Lab: one kit on a taped firing line, a bearing from each station, one fix.
+- Bring the error budget, a station plan, and your script.
 - L20-L24 return to the pattern itself: beamwidth, tapering, squint, and nulls.
 :::
 

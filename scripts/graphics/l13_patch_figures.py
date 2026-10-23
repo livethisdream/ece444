@@ -16,12 +16,10 @@ L13:
   - L13-patch-feed-position : input resistance against feed position for the
                               lesson's 2.45 GHz FR-4 design, computed below.
 
-Schematics are not to scale. No formulas (deck figure rule), so the lesson-page
-copies are the same files.
+Schematics are not to scale, and carry no formulas.
 
     python scripts/graphics/l13_patch_figures.py
-    -> writes book/extras/slides/fig/L13-patch-*.svg
-              book/extras/viz/img/L13-patch-*.svg
+    -> writes book/extras/viz/img/L13-patch-*.svg
 """
 
 from __future__ import annotations
@@ -32,7 +30,7 @@ from svg_font_stack import apply_font_stack
 NAVY, BLUE, RED, GRAY, BROWN = "#004a85", "#0067b9", "#b01e24", "#5a5a5a", "#8a5a00"
 RULE, SUB, SUB_EDGE, COPPER = "#dbe3ee", "#eaf2f9", "#b9d2e5", "#c9822b"
 ROOT = Path(__file__).resolve().parents[2]
-OUTS = [ROOT / "book/extras/slides/fig", ROOT / "book/extras/viz/img"]
+OUT = ROOT / "book/extras/viz/img"
 
 # The lesson's worked example: 2.45 GHz on FR-4, h = 1.6 mm.
 F0, W_MM, L_MM = 2.45e9, 37.3, 28.8
@@ -59,9 +57,9 @@ def markers(*colors) -> str:
 
 
 def svg(w, h, label, body, prefix) -> str:
-    """Marker ids are unique per figure: a deck inlines every figure into one
-    document, and a repeated id resolves to the first copy, which may sit on a
-    hidden slide, and then the arrowheads vanish."""
+    """Marker ids are unique per figure: if two figures are ever inlined into
+    one document, a repeated id resolves to the first copy, which may sit in a
+    hidden element, and then the arrowheads vanish."""
     head = (f'<svg viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" role="img" '
             f'aria-label="{label}">')
     out = "\n".join([head, *body, "</svg>"])
@@ -315,11 +313,10 @@ def main() -> None:
         "L13-patch-feeds.svg": feeds(),
         "L13-patch-feed-position.svg": fp,
     }
-    for d in OUTS:
-        for name, s in figs.items():
-            p = d / name
-            p.write_text(s)
-            print("wrote", p.relative_to(ROOT))
+    for name, s in figs.items():
+        p = OUT / name
+        p.write_text(s)
+        print("wrote", p.relative_to(ROOT))
     print(f"edge resistance {r_edge:.0f} ohm, 50 ohm point {y50:.2f} mm from the edge")
 
 

@@ -1,12 +1,5 @@
 # L29 Lab — Range-Doppler and MTI
 
-:::{admonition} Slides
-:class: slides
-<a href="../../slides/L29-lab-range-doppler-mti.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L29-lab-range-doppler-mti.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L29-lab-range-doppler-mti.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
-
 ## Learning Objectives
 
 <ol class="lo-list" style="--module: '4'; counter-reset: lo 4;">

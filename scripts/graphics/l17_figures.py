@@ -20,9 +20,9 @@ column rather than a full page.
                        path through the access point crossed out
 
 Every plotted number is computed here, asserted, and printed for checking
-against the lesson text. Words and numbers only, no equations, so one SVG
-serves both the deck and the page. (The fourth L17 figure, the frequency
-plan, lives with the signal chain in m3_l17_chain.py.)
+against the lesson text. Words and numbers only, no equations. (The fourth
+L17 figure, the frequency plan, lives with the signal chain in
+m3_l17_chain.py.)
 
 Sizing: a present column is 477 px wide at 1280x800 and 343 px at 390x844.
 The viewBox is 420 units wide and the smallest label is 13 units, so the
@@ -33,11 +33,6 @@ always fills its column.
     python3 scripts/graphics/l17_figures.py
 
 Writes:
-    book/extras/slides/fig/L17-hybrid-split.svg
-    book/extras/slides/fig/L17-adar-align.svg
-    book/extras/slides/fig/L17-hb100-spread.svg
-    book/extras/slides/fig/L17-hs-mirror.svg
-    book/extras/slides/fig/L17-part-a-network.svg
     book/extras/viz/img/L17-hybrid-split.svg
     book/extras/viz/img/L17-adar-align.svg
     book/extras/viz/img/L17-hb100-spread.svg
@@ -55,7 +50,7 @@ from m3_l17_chain import AMBER, BG, EDGE2, FONT, GRN, INK, INK3, MID, NAVY
 from svg_font_stack import apply_font_stack
 
 REPO = Path(__file__).resolve().parents[2]
-OUTS = (REPO / "book/extras/slides/fig", REPO / "book/extras/viz/img")
+OUT = REPO / "book/extras/viz/img"
 
 W = 420                 # viewBox width, drawn for a present column
 SCALE = 560 / W         # intrinsic size: wider than any column, so it fills
@@ -122,19 +117,18 @@ def svg_open(h, label):
             f'aria-label="{label}">')
 
 
-def write(name, svg, outs=OUTS):
+def write(name, svg):
     svg = apply_font_stack(svg)
-    for out in outs:
-        out.mkdir(parents=True, exist_ok=True)
-        (out / f"{name}.svg").write_text(svg, encoding="utf-8")
-    print(f"wrote {name}.svg (deck + page)")
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / f"{name}.svg").write_text(svg, encoding="utf-8")
+    print(f"wrote {name}.svg")
 
 
 # --------------------------------------------------------------------------
 # ILL-01 - the hybrid split
 # --------------------------------------------------------------------------
 
-def hybrid_split(rx_note: str = "Rx: mixer and ADC.") -> str:
+def hybrid_split(rx_note: str = "Rx: frequency converter and ADC.") -> str:
     H = 232
     PW, GAP, X0 = 132, 8, 4
     TOP, BOT = 27, 153                       # diagram band
@@ -531,15 +525,13 @@ def part_a_network() -> str:
 
 
 def main() -> None:
-    # The deck copy is frozen as built; the page copy names no mixer, since
-    # students have had no receiver course (COURSE_SPEC M7).
-    write("L17-hybrid-split", hybrid_split(), OUTS[:1])
-    write("L17-hybrid-split", hybrid_split("Rx: frequency converter and ADC."), OUTS[1:])
+    # The note names no mixer, since students have had no receiver course
+    # (COURSE_SPEC M7).
+    write("L17-hybrid-split", hybrid_split())
     write("L17-adar-align", adar_align())
     write("L17-hb100-spread", hb100_spread())
     write("L17-hs-mirror", hs_mirror())
-    # Page only: the deck copy is frozen as built, and the deck never used it.
-    write("L17-part-a-network", part_a_network(), OUTS[1:])
+    write("L17-part-a-network", part_a_network())
 
 
 if __name__ == "__main__":

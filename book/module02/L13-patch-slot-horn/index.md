@@ -18,15 +18,11 @@ The patch and the slot are resonant antennas; the horn is a traveling-wave anten
 Lesson 13 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame} Slides
+::::{frame} Printing
 :class: read-only
 
-:::{admonition} Slides
-:class: slides
-<a href="../../slides/L13-patch-slot-horn.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L13-patch-slot-horn.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L13-patch-slot-horn.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
+To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.
 ::::
 
 ::::{frame} Learning Objectives

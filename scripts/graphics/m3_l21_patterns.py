@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
-"""Generate the L21 (Antenna Pattern) deck figures as inline SVG.
+"""Generate the L21 (Antenna Pattern) lesson-page figures as inline SVG.
 
-  - L21-pattern-multiplication : AF, element factor, and their product at a
-                                 45 deg steer, N=8, d/lambda = 0.481
   - L21-patch-element          : ideal and steeper element power patterns over
                                  a ground plane, one hemisphere, HPBW marked
-  - L21-scan-loss              : gain relative to broadside and array-factor
-                                 HPBW vs commanded steer angle
   - L21-measured-vs-predicted  : predicted product pattern against the trace
                                  the L21 Lab sweep is expected to produce
 
-Exported with live <text> (svg.fonttype='none'), font-family rewritten to
-'inherit' so the injected figure picks up the deck's Source Sans Pro.
-Transparent background, USAFA palette, no equations baked into the artwork.
+Exported with live <text> (svg.fonttype='none') carrying the shared font
+stack. Transparent background, USAFA palette, no equations baked into the
+artwork.
 
     python3 scripts/graphics/m3_l21_patterns.py
-    -> writes book/extras/slides/fig/L21-*.svg
+    -> writes book/extras/viz/img/L21-{patch-element,measured-vs-predicted}.svg
 
 Illustrative patterns computed from the course array's parameters; the
 "measured" trace is a synthesized expectation, not recorded data.
@@ -37,10 +33,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 NAVY, BLUE, RED, GREEN = "#004a85", "#0067b9", "#b01e24", "#1d7a4d"
 ORANGE, GRAY, INK, RULE = "#e67e22", "#5a5a5a", "#1a1a1a", "#c7d2e0"
 REPO = Path(__file__).resolve().parents[2]
-OUT = REPO / "book/extras/slides/fig"
-# Lesson-page copies of the two figures the page embeds directly.
-PAGE_FIGS = ("L21-patch-element", "L21-measured-vs-predicted")
-OUT_PAGE = REPO / "book/extras/viz/img"
+OUT = REPO / "book/extras/viz/img"
 
 # Course array (ADALM-PHASER at the workshop frequency)
 N, D_MM, LAM_MM = 8, 14.0, 29.1
@@ -71,10 +64,6 @@ def finalize(fig, name: str) -> None:
     s = apply_font_stack(s)
     (OUT / f"{name}.svg").write_text(s, encoding="utf-8")
     print(f"wrote {OUT / (name + '.svg')}")
-    if name in PAGE_FIGS:
-        OUT_PAGE.mkdir(parents=True, exist_ok=True)
-        (OUT_PAGE / f"{name}.svg").write_text(s, encoding="utf-8")
-        print(f"wrote {OUT_PAGE / (name + '.svg')}")
 
 
 def af(theta_deg: np.ndarray, t0_deg: float) -> np.ndarray:
@@ -99,26 +88,6 @@ def ef(theta_deg: np.ndarray, p: float = P_IDEAL) -> np.ndarray:
 
 def db(x: np.ndarray) -> np.ndarray:
     return 20 * np.log10(np.clip(np.abs(x), 1e-6, None))
-
-
-def pattern_multiplication() -> None:
-    th = np.linspace(-90, 90, 6001)
-    a, e = af(th, 45.0), ef(th)
-    fig, ax = plt.subplots(figsize=(8.2, 4.3))
-    ax.plot(th, db(e), color=ORANGE, lw=1.8, ls=(0, (6, 4)), label="Element factor")
-    ax.plot(th, db(a), color=BLUE, lw=1.1, label="Array factor")
-    ax.plot(th, db(a * e), color=NAVY, lw=2.6, label="Element × array")
-    ax.set_xlim(-90, 90)
-    ax.set_ylim(FLOOR, 3)
-    ax.set_xticks(range(-90, 91, 30))
-    ax.set_yticks([0, -10, -20, -30, -40])
-    ax.grid(color=RULE, lw=0.7)
-    ax.set_xlabel("Angle from broadside (deg)")
-    ax.set_ylabel("Relative power (dB)")
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.42), ncol=3, fontsize=12)
-    ax.axvline(45, color=GRAY, lw=1.0, ls=(0, (2, 3)))
-    ax.text(43.5, 1.6, "commanded 45°", fontsize=11.5, color=GRAY, ha="right")
-    finalize(fig, "L21-pattern-multiplication")
 
 
 def patch_element() -> None:
@@ -169,41 +138,6 @@ def patch_element() -> None:
     finalize(fig, "L21-patch-element")
 
 
-def scan_loss() -> None:
-    t0 = np.linspace(0, 65, 261)
-    ideal = 10 * P_IDEAL * np.log10(np.cos(np.radians(t0)))
-    patch = 10 * P_PATCH * np.log10(np.cos(np.radians(t0)))
-    hpbw_af = np.degrees(0.886 * LAM_MM / (N * D_MM * np.cos(np.radians(t0))))
-
-    fig, ax = plt.subplots(figsize=(8.0, 4.2))
-    ax.fill_between(t0, ideal, patch, color=ORANGE, alpha=0.12)
-    ax.plot(t0, ideal, color=NAVY, lw=2.6, label="Ideal element")
-    ax.plot(t0, patch, color=ORANGE, lw=1.8, ls=(0, (6, 4)), label="Real patch, steeper")
-    ax.set_xlim(0, 65)
-    ax.set_ylim(-6, 0.5)
-    ax.set_xticks(range(0, 66, 15))
-    ax.set_xlabel("Commanded steer angle (deg)")
-    ax.set_ylabel("Gain rel. broadside (dB)", color=NAVY)
-    ax.tick_params(axis="y", colors=NAVY)
-    ax.grid(color=RULE, lw=0.7)
-    for t, txt in [(30, "-0.6 dB"), (45, "-1.5 dB"), (60, "-3.0 dB")]:
-        y = ideal[np.argmin(np.abs(t0 - t))]
-        ax.plot([t], [y], "o", color=NAVY, ms=7)
-        ax.annotate(txt, xy=(t, y), xytext=(t - 14, y - 0.75), fontsize=12, color=NAVY)
-    ax2 = ax.twinx()
-    ax2.plot(t0, hpbw_af, color=GREEN, lw=2.0, ls=(0, (2, 3)),
-             label="Beamwidth, array factor")
-    ax2.set_ylim(10, 34)
-    ax2.set_ylabel("Half-power beamwidth (deg)", color=GREEN)
-    ax2.tick_params(axis="y", colors=GREEN)
-    ax2.spines["right"].set_color(GREEN)
-    h1, l1 = ax.get_legend_handles_labels()
-    h2, l2 = ax2.get_legend_handles_labels()
-    ax.legend(h1 + h2, l1 + l2, loc="lower center", bbox_to_anchor=(0.5, -0.46),
-              ncol=3, fontsize=11.5)
-    finalize(fig, "L21-scan-loss")
-
-
 def measured_vs_predicted() -> None:
     th = np.linspace(-90, 90, 6001)
     pred = db(ef(th, P_IDEAL) * af(th, 30.0))
@@ -238,7 +172,5 @@ def measured_vs_predicted() -> None:
 
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
-    pattern_multiplication()
     patch_element()
-    scan_loss()
     measured_vs_predicted()

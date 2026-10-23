@@ -18,15 +18,11 @@ A range is a plane-wave simulator, and a VNA measures one number.
 Lesson 9 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame} Slides
+::::{frame} Printing
 :class: read-only
 
-:::{admonition} Slides
-:class: slides
-<a href="../../slides/L09-pattern-measurement-theory.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L09-pattern-measurement-theory.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L09-pattern-measurement-theory.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
+To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.
 ::::
 
 ::::{frame} Learning Objectives
@@ -726,7 +722,7 @@ $$S_{11} = \frac{b_1}{a_1} = \Gamma$$
 - Both subscripts are 1. There is no port 2 in this measurement.
 :::
 :::{present}
-<img src="../../slides/fig/L10-vna-block.svg"
+<img src="../../viz/img/L10-vna-block.svg"
      alt="Block diagram of a one-port VNA: source, two directional couplers feeding a reference and a test receiver, and a ratio block producing S11."
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
@@ -883,7 +879,7 @@ SOLT — but a one-port antenna measurement needs only the three.
 
 ::::{frame} The Reference Plane
 :::{present}
-<img src="../../slides/fig/L10-cal-planes.svg"
+<img src="../../viz/img/L10-cal-planes.svg"
      alt="Reference planes: A at the VNA port, B at the end of the test cable where SOL is performed, C at the antenna terminals. The pigtail between B and C rotates the measured phase."
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
@@ -950,7 +946,7 @@ exactly that reason.
 
 ::::{frame} Reading a VNA Sweep
 :::{present}
-<img src="../../slides/fig/L10-three-views.svg"
+<img src="../../viz/img/L10-three-views.svg"
      alt="The same antenna resonance shown two ways: a dip below minus ten decibels on a plot of the magnitude of S11 against frequency, with the minus-ten-decibel bandwidth marked, and the same sweep as a locus crossing the real axis inside the minus-ten-decibel circle on a Smith chart."
      style="max-width: 660px; width: 100%; display: block; margin: 0 auto;">
 :::

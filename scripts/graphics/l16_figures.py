@@ -12,11 +12,10 @@
                           in the common variable u = N psi / 2
 
 Every plotted number is computed here and printed for checking against the
-lesson text. Words and numbers only, no equations, so one SVG serves both the
-deck and the page.
+lesson text. Words and numbers only, no equations.
 
     python3 scripts/graphics/l16_figures.py
-    -> book/extras/slides/fig/L16-*.svg  and  book/extras/viz/img/L16-*.svg
+    -> book/extras/viz/img/L16-*.svg
 """
 
 from __future__ import annotations

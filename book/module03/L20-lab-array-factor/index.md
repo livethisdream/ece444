@@ -18,15 +18,11 @@ Halve the active aperture and watch the beam double.
 L20 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
 
-::::{frame} Slides
+::::{frame} Printing
 :class: read-only
 
-:::{admonition} Slides
-:class: slides
-<a href="../../slides/L20-lab-array-factor.html" target="_blank" rel="noopener">html slides</a>
-<a href="../../slides/L20-lab-array-factor.html?print-pdf" target="_blank" rel="noopener">pdf slides</a>
-<a href="../../slides/L20-lab-array-factor.md" target="_blank" rel="noopener">raw markdown slides</a>
-:::
+To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.
 ::::
 
 ::::{frame} Learning Objectives

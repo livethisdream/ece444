@@ -18,8 +18,7 @@ book/extras/viz/array-calibration.html uses the same numbers (GAIN_DB,
 PHASE_DEG); change them in both places.
 
 Every plotted number is computed here, asserted, and printed for checking
-against the lesson text. Lesson-page copies only: the decks are frozen, so
-nothing is written to book/extras/slides/fig/.
+against the lesson text.
 
     python3 scripts/graphics/l17_calibration.py
 
@@ -32,10 +31,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from l17_figures import OUTS, W, line, polyline, rect, svg_open, txt, write
+from l17_figures import W, line, polyline, rect, svg_open, txt, write
 from m3_l17_chain import AMBER, BG, EDGE2, INK3, NAVY
-
-PAGE = OUTS[1:]          # book/extras/viz/img only
 
 D_LAM = 0.491            # d / lambda at 10.525 GHz (COURSE_SPEC M3)
 N = 8
@@ -154,8 +151,8 @@ def cal_pair() -> str:
 
 
 def main() -> None:
-    write("L17-cal-patterns", cal_patterns(), PAGE)
-    write("L17-cal-pair", cal_pair(), PAGE)
+    write("L17-cal-patterns", cal_patterns())
+    write("L17-cal-pair", cal_pair())
 
 
 if __name__ == "__main__":

@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
-"""One font declaration for every figure SVG, in both trees.
+"""One font declaration for every figure SVG.
 
-A deck figure is inlined by deck-tools.js and inherits the deck's Source Sans
-Pro, so for a long time the generators wrote `font-family:inherit`. A lesson
-page loads the same file through <img>, and an <img> is an isolated document:
+A deck figure used to be inlined by deck-tools.js and inherit the deck's
+Source Sans Pro, so for a long time the generators wrote `font-family:inherit`.
+A lesson page loads its file through <img>, and an <img> is an isolated document:
 nothing is there to inherit from, so `inherit` falls to the browser's default
 serif, and a hand-authored SVG with no font-family at all does the same.
 Found on 2026-09-14 on the L08 and L09 figures; every earlier page copy had
 it too.
 
-The fix is the same explicit stack everywhere. It names the deck's face first,
-so an inlined deck figure looks exactly as it did, and it names the system
-sans faces a browser can reach from inside an <img>.
+The fix is the same explicit stack everywhere. It names the old deck face
+first, and then the system sans faces a browser can reach from inside an
+<img>. (The reveal.js decks are retired; book/extras/viz/img is the one tree.)
 
 Two uses:
 
     from svg_font_stack import apply_font_stack     # in a generator, on the
     s = apply_font_stack(s)                          # SVG text before writing
 
-    python3 scripts/graphics/svg_font_stack.py      # sweep both trees in place
+    python3 scripts/graphics/svg_font_stack.py      # sweep viz/img in place
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ from pathlib import Path
 FONT_STACK = "'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
 
 ROOT = Path(__file__).resolve().parents[2]
-TREES = (ROOT / "book/extras/viz/img", ROOT / "book/extras/slides/fig")
+TREES = (ROOT / "book/extras/viz/img",)
 
 _STYLE = re.compile(r"font-family\s*:\s*[^;}\"]+")          # inside style="..." or <style>
 _ATTR = re.compile(r'font-family="[^"]*"')                  # the attribute form
