@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dipole explorer: how length shapes current, pattern and impedance</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --amber:#8a5a00; --red:#b01e24; --grn:#3f7d34; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:14px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  /* Three independent canvases side by side, not two stacked (one of which was
+     already an internal two-up split) -- the row height becomes the tallest of
+     the three instead of their sum, which is the single biggest lever here.
+     Below 600px there isn't room for three useful columns, so stack. */
+  .cv3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  @media (max-width:600px) { .cv3 { grid-template-columns:1fr; } }
+  .controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 240px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:52px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:110px; }
+  select { font:inherit; font-size:12.5px; padding:3px 6px; border-radius:5px; border:1px solid var(--edge2); background:#fff; color:var(--navy); font-weight:600; }
+  /* Below 430px the controls bar cannot fit a label, a slider and a value on one
+     line: .ctl's flex basis and the reserved .val column are both wider than the
+     content box, so the bar pushes the document past the viewport and the whole
+     widget scrolls sideways on a phone. Stack each control instead -- label and
+     value share the first line, the input takes the second -- and let every part
+     shrink. Labels keep their natural width, so none of them squeeze. Nothing
+     here applies above 430px: the desktop layout is byte-for-byte unchanged. */
+  @media (max-width:430px) {
+    canvas { max-width:100%; }
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:4px; }
+    .ctl label { order:1; flex:0 0 auto; }
+    .ctl .val { order:2; flex:0 0 auto; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+    .ctl select { order:3; flex:1 1 100%; min-width:0; max-width:100%; }
+  }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvases above. Explicit
+     column counts, not auto-fit -- auto-fit's per-track minimum left a 4-across
+     row with one cell orphaned onto its own line at these widths. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(5, minmax(0,1fr)); }
+  @media (max-width:620px) { .readouts { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+  /* Never one column: a readout stacked one cell per line is the cheapest
+     100-150px a widget can waste on a phone. Three across still fit a 390
+     phone; at 320 they overflow by 3px, so drop to two there. */
+  @media (max-width:360px) { .readouts { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.hp  { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
+  .ro.hp  .v { color:var(--grn); }
+  .ro.rx  { background:rgba(138,90,0,0.10);  border-color:rgba(138,90,0,0.30); }
+  .ro.rx  .v { color:var(--amber); }
+  .ro.res { background:rgba(176,30,36,0.09); border-color:rgba(176,30,36,0.28); }
+  .ro.res .v { color:var(--red); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="cv3">
+    <canvas id="wire" aria-label="Standing-wave current amplitude along a center-fed dipole"></canvas>
+    <canvas id="polar" aria-label="Polar cut of the dipole pattern, in decibels over isotropic"></canvas>
+    <canvas id="rect" aria-label="Dipole gain plotted against angle from the wire axis, referenced to isotropic"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Total length \(L/\lambda\)</label>
+      <input type="range" id="len" min="0.05" max="1.5" step="0.01" value="0.5">
+      <span class="val" id="len-val">0.50</span>
+    </div>
+    <div class="ctl">
+      <label>Wire</label>
+      <select id="rad">
+        <option value="0.0005">thin (radius = 0.0005&#955;)</option>
+        <option value="0.002" selected>ordinary (radius = 0.002&#955;)</option>
+        <option value="0.008">fat (radius = 0.008&#955;)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="readouts">
+    <div class="ro hp"><span class="k">HPBW</span><span class="v" id="p-hp">&#8212;</span></div>
+    <div class="ro"><span class="k">directivity</span><span class="v" id="p-d">&#8212;</span></div>
+    <div class="ro"><span class="k">\(R\) at \(I_{\max}\)</span><span class="v" id="p-r">&#8212;</span></div>
+    <div class="ro rx"><span class="k">\(X\) at \(I_{\max}\)</span><span class="v" id="p-x">&#8212;</span></div>
+    <div class="ro res"><span class="k">resonant \(L\)</span><span class="v" id="p-res">&#8212;</span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const ETA=376.730313668, GAMMA=0.5772156649015329;
+const DBTOP=6, DBFLOOR=-20;                        // absolute dBi window, both plots
+function stext(ctx,s,x,y,px,color,align,bold){ ctx.fillStyle=color; ctx.font=(bold?'700 ':'')+px+'px '+SANS; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(s,x,y); }
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const cvW=document.getElementById('wire'), ctxW=cvW.getContext('2d');
+const cvPolar=document.getElementById('polar'), ctxPolar=cvPolar.getContext('2d');
+const cvRect=document.getElementById('rect'),   ctxRect=cvRect.getContext('2d');
+
+const state={ L:0.50, a:0.002 };
+
+/* ============================ the physics ============================
+   Sinusoidal current on a center-fed wire of total length L (wavelengths):
+       I(z) = Im sin(k(L/2 - |z|))
+   Its far field is the radiation integral of that current (Lesson 6):
+       |F(th)| = |cos(pi L cos th) - cos(pi L)| / sin th
+   Directivity comes from integrating |F|^2 over the sphere; R and X at the
+   current maximum come from the induced-EMF result, which needs the sine
+   and cosine integrals. Nothing here is sketched. */
+
+function Si(x){                                   // power series, plenty for x < 20
+  let t=x, s=x;
+  for(let n=1;n<70;n++){
+    t*= -x*x/((2*n)*(2*n+1));
+    s+= t/(2*n+1);
+    if(Math.abs(t)<1e-18*Math.abs(s)) break;
+  }
+  return s;
+}
+function Ci(x){
+  let t=1, s=0;
+  for(let n=1;n<70;n++){
+    t*= -x*x/((2*n-1)*(2*n));
+    s+= t/(2*n);
+    if(Math.abs(t)<1e-18*(Math.abs(s)+1)) break;
+  }
+  return GAMMA+Math.log(x)+s;
+}
+
+// R and X referred to the current maximum, for total length Ll and radius aa
+// (both in wavelengths). Sanity anchors: Ll=0.5 -> 73.1 + j42.5 ohms.
+function impedance(Ll,aa){
+  const k=2*Math.PI, kl=k*Ll;
+  const S1=Si(kl), C1=Ci(kl), S2=Si(2*kl), C2=Ci(2*kl), C3=Ci(2*k*aa*aa/Ll);
+  const R=(ETA/(2*Math.PI))*(GAMMA+Math.log(kl)-C1
+        +0.5*Math.sin(kl)*(S2-2*S1)
+        +0.5*Math.cos(kl)*(GAMMA+Math.log(kl/2)+C2-2*C1));
+  const X=(ETA/(4*Math.PI))*(2*S1+Math.cos(kl)*(2*S1-S2)-Math.sin(kl)*(2*C1-C2-C3));
+  return {R:R, X:X};
+}
+
+// shortest length below half a wavelength at which X crosses zero
+function resonantLength(aa){
+  let lo=0.30, hi=0.50;
+  if(impedance(lo,aa).X>0 || impedance(hi,aa).X<0) return null;
+  for(let i=0;i<60;i++){
+    const m=0.5*(lo+hi);
+    if(impedance(m,aa).X<0) lo=m; else hi=m;
+  }
+  return 0.5*(lo+hi);
+}
+
+function Fmag(th,Ll){
+  const s=Math.sin(th);
+  if(Math.abs(s)<1e-9) return 0;
+  return Math.abs((Math.cos(Math.PI*Ll*Math.cos(th))-Math.cos(Math.PI*Ll))/s);
+}
+
+/* one sweep per redraw, reused by both panels and the readouts */
+let SW=null;
+function sweep(){
+  const M=1441, U=new Float64Array(M), th=new Float64Array(M);
+  let umax=0, ipk=0;
+  for(let i=0;i<M;i++){
+    th[i]=i/(M-1)*Math.PI;
+    const f=Fmag(th[i],state.L); U[i]=f*f;
+    if(U[i]>umax){ umax=U[i]; ipk=i; }
+  }
+  // P = integral |F|^2 sin(th) dth  (trapezoid), D = 2 Umax / P
+  const dt=Math.PI/(M-1);
+  let P=0;
+  for(let i=0;i<M-1;i++) P+=0.5*(U[i]*Math.sin(th[i])+U[i+1]*Math.sin(th[i+1]))*dt;
+  const D=2*umax/P;
+
+  // absolute pattern in dBi: 10 log10( D * U/Umax )
+  const dbi=new Float64Array(M);
+  for(let i=0;i<M;i++) dbi[i]=10*Math.log10(Math.max(D*U[i]/umax,1e-9));
+
+  // HPBW: walk out from the peak to the half-power points
+  const half=umax/2;
+  function cross(dir){
+    for(let i=ipk;i>=0&&i<M;i+=dir){
+      if(U[i]<=half){
+        const j=i-dir, f=(U[j]-half)/(U[j]-U[i]);
+        return th[j]+dir*f*dt;
+      }
+    }
+    return null;
+  }
+  const lo=cross(-1), hi=cross(1);
+  const hp=(lo===null||hi===null)?null:(hi-lo)*180/Math.PI;
+  SW={M:M, th:th, dbi:dbi, D:D, ipk:ipk, hp:hp, lo:lo, hi:hi,
+      pk:th[ipk]*180/Math.PI};
+}
+
+/* ========================= the wire and its current ========================= */
+function drawWire(){
+  const dpr=window.devicePixelRatio||1, w=cvW.width/(dpr*SCL), h=cvW.height/(dpr*SCL);
+  const ctx=ctxW; ctx.clearRect(0,0,w,h);
+  /* mT clears the title: the axis label sits at 42% of the width, which is
+     inside a left-aligned title at every width the widget is served at. */
+  const cx=w*0.42, mT=32, mB=22, half=(h-mT-mB)/2, cy=mT+half;
+
+  stext(ctx,'current standing wave on the wire', 14, 14, 11.5, cssv('--navy'),'left',true);
+
+  const span=half*(state.L/1.5);   // 1.5 wavelengths fills the panel
+
+  // I(z) = sin(k(L/2 - |z|)), drawn sideways off the wire
+  const AMP=w*0.24, NP=400;
+  const Iof=t=>Math.sin(2*Math.PI*state.L*(0.5-Math.abs(t)));   // t = z/L in [-0.5,0.5]
+  ctx.beginPath(); ctx.moveTo(cx,cy-span);
+  for(let i=0;i<=NP;i++){ const t=i/NP-0.5; ctx.lineTo(cx+AMP*Iof(t), cy-span+2*span*(i/NP)); }
+  ctx.lineTo(cx,cy+span); ctx.closePath();
+  ctx.fillStyle='rgba(0,103,185,0.16)'; ctx.fill();
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.4;
+  ctx.beginPath();
+  for(let i=0;i<=NP;i++){ const t=i/NP-0.5; const x=cx+AMP*Iof(t), y=cy-span+2*span*(i/NP); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+  ctx.stroke();
+
+  // the wire itself, on top of its own current so it stays visible
+  ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=3.4; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(cx,cy-span); ctx.lineTo(cx,cy+span); ctx.stroke();
+  ctx.lineCap='butt';
+
+  // the zero line, so a phase reversal is visible as a crossing
+  ctx.strokeStyle=cssv('--edge2'); ctx.lineWidth=1; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(cx,cy-half-2); ctx.lineTo(cx,cy+half+2); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // feed point
+  ctx.fillStyle=cssv('--red');
+  ctx.beginPath(); ctx.arc(cx,cy,4.2,0,7); ctx.fill();
+  stext(ctx,'feed', cx-10, cy, 11, cssv('--red'),'right',true);
+
+  // current maximum: |I| peaks where k(L/2-|z|) is nearest 90 degrees
+  let tm=0, best=-1;
+  for(let i=0;i<=NP;i++){ const t=i/NP-0.5, v=Math.abs(Iof(t)); if(v>best){best=v; tm=t;} }
+  const ym=cy-span+2*span*(tm+0.5), xm=cx+AMP*Iof(tm);
+  ctx.strokeStyle=cssv('--grn'); ctx.lineWidth=1.6; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(cx,ym); ctx.lineTo(xm,ym); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle=cssv('--grn'); ctx.beginPath(); ctx.arc(xm,ym,4,0,7); ctx.fill();
+  stext(ctx,'current maximum', xm+9, ym, 11, cssv('--grn'),'left',true);
+
+  // the phase-reversal count is what turns into extra lobes
+  let rev=0;
+  for(let i=1;i<=NP;i++){ const a=Iof(i/NP-0.5-1/NP), b=Iof(i/NP-0.5); if(a*b<0) rev++; }
+  const rx=14;
+  stext(ctx,'length = '+state.L.toFixed(2)+' wavelengths', rx, h-34, 11.5, cssv('--ink3'),'left',false);
+  stext(ctx, rev===0 ? 'the whole wire is in phase'
+                     : rev+(rev===1?' phase reversal':' phase reversals')+' along the wire',
+        rx, h-16, 11.5, rev===0?cssv('--ink3'):cssv('--amber'),'left', rev>0);
+  MJ.draw(ctx,'z', cx, mT-6, 12, cssv('--ink3'),'center');
+}
+
+/* ============================ the pattern panels ============================
+   Two independent canvases now (own column each), not one canvas split
+   internally in two -- see the .cv3 comment above for why. */
+function drawPolarPanel(){
+  const dpr=window.devicePixelRatio||1, w=cvPolar.width/(dpr*SCL), h=cvPolar.height/(dpr*SCL);
+  ctxPolar.clearRect(0,0,w,h);
+  drawPolar(ctxPolar,w,h);
+}
+function drawRectPanel(){
+  const dpr=window.devicePixelRatio||1, w=cvRect.width/(dpr*SCL), h=cvRect.height/(dpr*SCL);
+  ctxRect.clearRect(0,0,w,h);
+  drawRect(ctxRect,w,h);
+}
+
+const radOf=(db,R)=>R*Math.max(0,(Math.max(db,DBFLOOR)-DBFLOOR)/(DBTOP-DBFLOOR));
+
+function drawPolar(ctx,w,h){
+  const x0=0, y0=0;
+  const cx=x0+w*0.52, cy=y0+h*0.52, R=Math.min(w*0.40,h*0.40);
+  stext(ctx,'polar cut, dB over isotropic', x0+12, y0+14, 11.5, cssv('--navy'),'left',true);
+
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let d=DBFLOOR+5; d<=DBTOP-5; d+=5){ ctx.beginPath(); ctx.arc(cx,cy,radOf(d,R),0,7); ctx.stroke(); }
+  ctx.strokeStyle=cssv('--edge2');
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,7); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx,cy-R-9); ctx.lineTo(cx,cy+R+9); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx-R-9,cy); ctx.lineTo(cx+R+9,cy); ctx.stroke();
+
+  // the isotropic reference: a perfect circle at 0 dBi
+  ctx.strokeStyle=cssv('--red'); ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.arc(cx,cy,radOf(0,R),0,7); ctx.stroke(); ctx.setLineDash([]);
+  stext(ctx,'isotropic, 0 dBi', cx, cy+radOf(0,R)+11, 10.5, cssv('--red'),'center',true);
+
+  // the wire, along z
+  ctx.strokeStyle='rgba(91,101,115,0.55)'; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(cx,cy-R*0.30); ctx.lineTo(cx,cy+R*0.30); ctx.stroke();
+  MJ.draw(ctx,'z', cx, cy-R-19, 12, cssv('--ink3'),'center');
+  stext(ctx,'0°',   cx+8,    cy-R-6, 10, cssv('--ink3'),'left',false);
+  stext(ctx,'90°',  cx+R+11, cy-8,   10, cssv('--ink3'),'left',false);
+  stext(ctx,'180°', cx+8,    cy+R+8, 10, cssv('--ink3'),'left',false);
+
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.3;
+  for(const side of [1,-1]){
+    ctx.beginPath();
+    let started=false;
+    for(let i=0;i<SW.M;i++){
+      const r=radOf(SW.dbi[i],R), t=SW.th[i];
+      const x=cx+side*r*Math.sin(t), y=cy-r*Math.cos(t);
+      started?ctx.lineTo(x,y):(ctx.moveTo(x,y),started=true);
+    }
+    ctx.stroke();
+  }
+  stext(ctx, DBFLOOR+' dBi at the center', x0+12, y0+h-12, 10, cssv('--ink3'),'left',false);
+}
+
+function drawRect(ctx,w,h){
+  const x0=0, y0=0;
+  const mL=x0+46, mR=16, mT=y0+26, mB=34;
+  const pw=w-(mL-x0)-mR, ph=h-(mT-y0)-mB;
+  const xp=d=>mL+d/180*pw, yp=v=>mT+ph*(DBTOP-v)/(DBTOP-DBFLOOR);
+
+  stext(ctx,'gain against angle from the wire', mL, y0+14, 11.5, cssv('--navy'),'left',true);
+  ctx.strokeStyle=cssv('--edge'); ctx.lineWidth=1;
+  for(let d=DBTOP-1; d>=DBFLOOR; d-=5){ const y=yp(d);
+    ctx.beginPath(); ctx.moveTo(mL,y); ctx.lineTo(mL+pw,y); ctx.stroke();
+    stext(ctx,(d>0?'+':'')+d, mL-8, y, 10.5, cssv('--ink3'),'right',false); }
+  for(let d=0;d<=180;d+=30){ const x=xp(d);
+    ctx.strokeStyle=cssv('--edge2'); ctx.beginPath(); ctx.moveTo(x,mT); ctx.lineTo(x,mT+ph); ctx.stroke();
+    stext(ctx,d+'°', x, mT+ph+13, 10.5, cssv('--ink3'),'center',false); }
+  ctx.strokeStyle=cssv('--edge'); ctx.strokeRect(mL,mT,pw,ph);
+
+  // isotropic reference line
+  ctx.strokeStyle='rgba(176,30,36,0.75)'; ctx.lineWidth=1.4; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(mL,yp(0)); ctx.lineTo(mL+pw,yp(0)); ctx.stroke(); ctx.setLineDash([]);
+  stext(ctx,'isotropic', mL+6, yp(0)-9, 10.5, cssv('--red'),'left',true);
+
+  // half-power band
+  if(SW.lo!==null&&SW.hi!==null){
+    const xa=xp(SW.lo*180/Math.PI), xb=xp(SW.hi*180/Math.PI);
+    ctx.fillStyle='rgba(63,125,52,0.12)'; ctx.fillRect(xa,mT,xb-xa,ph);
+    ctx.strokeStyle='rgba(63,125,52,0.65)'; ctx.lineWidth=1.3; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(mL,yp(10*Math.log10(SW.D)-3)); ctx.lineTo(mL+pw,yp(10*Math.log10(SW.D)-3)); ctx.stroke();
+    ctx.setLineDash([]);
+    stext(ctx,'HPBW', (xa+xb)/2, mT+ph-12, 11, cssv('--grn'),'center',true);
+  }
+
+  ctx.save(); ctx.beginPath(); ctx.rect(mL,mT,pw,ph); ctx.clip();
+  ctx.strokeStyle=cssv('--mid'); ctx.lineWidth=2.3; ctx.beginPath();
+  for(let i=0;i<SW.M;i++){
+    const x=xp(SW.th[i]*180/Math.PI), y=yp(Math.max(SW.dbi[i],DBFLOOR-1));
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+  }
+  ctx.stroke(); ctx.restore();
+
+  MJ.draw(ctx,'\\theta', mL+pw/2, mT+ph+28, 12, cssv('--ink3'),'center');
+  ctx.save(); ctx.translate(x0+14, mT+ph/2); ctx.rotate(-Math.PI/2);
+  stext(ctx,'dBi', 0, 0, 11, cssv('--ink3'),'center',false); ctx.restore();
+}
+
+/* ================================ readouts ================================ */
+function readouts(){
+  const z=impedance(state.L,state.a);
+  const res=resonantLength(state.a);
+  document.getElementById('p-hp').textContent = SW.hp===null?'—':SW.hp.toFixed(1)+'°';
+  document.getElementById('p-d' ).textContent = (10*Math.log10(SW.D)).toFixed(2)+' dBi';
+  document.getElementById('p-r' ).textContent = z.R.toFixed(1)+' Ω';
+  document.getElementById('p-x' ).textContent = (z.X>=0?'+':'−')+Math.abs(z.X).toFixed(1)+' Ω';
+  document.getElementById('p-res').textContent = res===null?'—':res.toFixed(3)+' λ';
+}
+
+function drawAll(){ sweep(); drawWire(); drawPolarPanel(); drawRectPanel(); readouts(); }
+
+/* clientWidth, not getBoundingClientRect(): the rect includes the 1px border on
+   each side, so a bitmap sized from it is 2px wider than the box it is painted
+   into and the drawing comes out stretched horizontally -- circles turn into
+   ellipses. And with box-sizing:border-box, style.height sets the OUTER height,
+   so hand the border back or the bitmap is 2px taller than its box. */
+/* Floor lowered from the usual 240: three columns now share the row, so a
+   single column can be narrower than 240 at the widths the site serves (down
+   to ~210px at 688px total). A too-high floor here mismatches the bitmap
+   against the CSS box and stretches the drawing into an ellipse. */
+function cvWidth(cv){ return Math.max(100, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+function setSize(cv,wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr);
+  cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight;
+  if(bh) cv.style.height=(hCss+bh)+'px';
+}
+/* Narrower than the width this drawing was composed for, scale the whole thing
+   down instead of clamping the bitmap: same composition, just smaller, so the
+   labels shrink together and nothing collides. At or above DESIGN_W, SCL is 1
+   and every number below is exactly what it was. */
+const DESIGN_W=380;
+let SCL=1;
+/* Below .cv3's breakpoint the three canvases stop being a row and become a
+   column, so their heights ADD instead of taking the tallest. Left alone that
+   is 631px of canvas at 430 -- the widget then scrolls inside its own frame,
+   which is the one thing a frame may never do. Every canvas keeps its curves
+   and every control stays; they just get a shorter design box. Note the worst
+   case is 430, not 320: the column is widest there, and a height that tracks
+   width is tallest there too. */
+const STACK_MQ = window.matchMedia ? window.matchMedia('(max-width:600px)') : null;
+function stackQ(){ return (STACK_MQ && STACK_MQ.matches) ? 0.55 : 1; }
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  const wCss=cvWidth(cvW);
+  SCL=Math.min(1, wCss/DESIGN_W);
+  const w=wCss/SCL, q=stackQ();
+  const h1=q*Math.max(170, Math.min(w*0.26, 220));      // wire
+  const h2=q*Math.max(190, Math.min(w*0.62, 250));      // polar (wants to stay square-ish)
+  const h3=q*Math.max(170, Math.min(w*0.52, 220));      // rect
+  setSize(cvW,wCss,h1*SCL,dpr);
+  setSize(cvPolar,wCss,h2*SCL,dpr);
+  setSize(cvRect,wCss,h3*SCL,dpr);
+  ctxW.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  ctxPolar.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  ctxRect.setTransform(dpr*SCL,0,0,dpr*SCL,0,0);
+  drawAll();
+}
+window.addEventListener('resize', fit);
+
+const lenEl=document.getElementById('len'), radEl=document.getElementById('rad');
+lenEl.addEventListener('input',()=>{
+  state.L=+lenEl.value;
+  document.getElementById('len-val').textContent=state.L.toFixed(2);
+  drawAll();
+});
+radEl.addEventListener('change',()=>{ state.a=+radEl.value; drawAll(); });
+
+fit();
+MJ.setRedraw(()=>drawAll());
+MJ.onReady(()=>{ MJ.typeset(document.body).then(()=>drawAll()); drawAll(); });
+</script>
+</body>
+</html>

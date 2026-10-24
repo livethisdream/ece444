@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plane wave in 3-D — E, H, and the direction of power flow</title>
+<script src="mjlabel.js"></script>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573;
+          --efield:#0067b9; --hfield:#b3213a; --sfield:#1d7a4d; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:grid; grid-template-columns: 1fr 250px; gap:14px; padding:14px; align-items:start; }
+  @media (max-width:640px) { .app { grid-template-columns: 1fr; } }
+  .side { display:flex; flex-direction:column; gap:9px; min-width:0; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:9px 18px; align-items:center;
+              padding:9px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .ctl { display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:38px; text-align:right; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:80px; accent-color:var(--mid); }
+  .tgl { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; min-width:0; }
+  .tgl input { position:absolute; opacity:0; pointer-events:none; }
+  .tgl .sw { position:relative; flex:none; width:34px; height:19px; border-radius:999px;
+             background:#dfe8f1; border:1px solid var(--edge2); transition:background .15s, border-color .15s; }
+  .tgl .sw::after { content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; border-radius:50%;
+                    background:#fff; box-shadow:0 1px 2px rgba(0,0,0,0.22); transition:transform .15s; }
+  .tgl input:checked + .sw { background:var(--mid); border-color:var(--mid); }
+  .tgl input:checked + .sw::after { transform:translateX(15px); }
+  .tgl input:focus-visible + .sw { outline:2px solid var(--navy); outline-offset:2px; }
+  .tgl .t { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .tgl input:checked ~ .t { color:var(--navy); }
+  /* Readouts as a row of instruments: equal-width cells on one grid, labels and
+     values on shared baselines, edges flush with the canvas beside them. */
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(2, 1fr); }
+  .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+        gap:4px; padding:7px 8px 8px; min-width:0;
+        border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
+  /* block, not flex: a flex container drops the whitespace between an inline
+     MathJax symbol and the words that follow it, welding them together. */
+  .ro .k { display:block; text-align:center;
+           height:15px; line-height:15px; font-size:10.5px; font-weight:700;
+           text-transform:uppercase; letter-spacing:0.045em; color:var(--ink3);
+           white-space:nowrap; overflow:hidden; }
+  .ro .k mjx-container { font-size:inherit !important; }
+  .ro .v { height:19px; line-height:19px; font-size:14.5px; font-weight:700; white-space:nowrap;
+           font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+           text-align:center; min-width:8ch; color:var(--navy); }
+  .ro.e { background:rgba(0,103,185,0.10); border-color:rgba(0,103,185,0.30); }
+  .ro.e .v { color:var(--efield); }
+  .ro.h { background:rgba(179,33,58,0.09); border-color:rgba(179,33,58,0.28); }
+  .ro.h .v { color:var(--hfield); }
+  .ro.s { background:rgba(29,122,77,0.10); border-color:rgba(29,122,77,0.30); }
+  .ro.s .v { color:var(--sfield); }
+  .hint { margin:0; text-align:center; font-size:11.5px; color:var(--ink3); line-height:1.45; }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="c" aria-label="Linearly polarized plane wave traveling along z: E vertical, H perpendicular to it, power flow along the axis"></canvas>
+
+  <div class="side" id="panel">
+    <div class="controls">
+      <div class="ctl">
+        <label>Rotate view</label>
+        <input id="tilt" type="range" min="30" max="60" step="1" value="40">
+        <span class="val" id="tilt-v">40&#176;</span>
+      </div>
+      <div class="ctl">
+        <label>Phase</label>
+        <input id="phase" type="range" min="0" max="359" step="1" value="0">
+        <span class="val" id="phase-v">0&#176;</span>
+      </div>
+      <label class="tgl"><input id="run" type="checkbox" checked><span class="sw"></span><span class="t">Animate</span></label>
+      <label class="tgl"><input id="showS" type="checkbox" checked><span class="sw"></span><span class="t">Power flow</span></label>
+    </div>
+
+    <div class="readouts">
+      <div class="ro e"><span class="k">\(E\) at marker</span><span class="v" id="p-e">&#8212;</span></div>
+      <div class="ro h"><span class="k">\(H\) at marker</span><span class="v" id="p-h">&#8212;</span></div>
+      <div class="ro s"><span class="k">\(S = EH\)</span><span class="v" id="p-s">&#8212;</span></div>
+      <div class="ro"><span class="k">\(\eta = E/H\)</span><span class="v">377 &#8486;</span></div>
+    </div>
+
+    <p class="hint">Right hand: fingers along \(\mathbf{E}\), curl into \(\mathbf{H}\), thumb along \(\mathbf{S}\).</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  const cvs = document.getElementById('c');
+  const ctx = cvs.getContext('2d');
+
+  const DW = 640, DH = 300;          // design canvas, scaled to the container width
+  const ETA = 376.73;                // intrinsic impedance of free space, ohms
+  const E0  = 1.0;                   // V/m, so H0 = 2.654 mA/m and S_pk = 2.654 mW/m^2
+  const ZMAX = 10, ZMARK = 5;        // two wavelengths across the scene; triad at the middle
+  const KZ = 2 * Math.PI / 5;        // wavenumber in scene units
+
+  const tiltEl  = document.getElementById('tilt');
+  const phaseEl = document.getElementById('phase');
+  const runEl   = document.getElementById('run');
+  const showSEl = document.getElementById('showS');
+  const tiltV   = document.getElementById('tilt-v');
+  const phaseV  = document.getElementById('phase-v');
+
+  let phase = 0;                     // omega*t, radians
+  let lastT = performance.now();
+  let lastRead = 0;
+
+  tiltEl.addEventListener('input', () => { tiltV.textContent = tiltEl.value + '°'; });
+  phaseEl.addEventListener('input', () => {
+    phase = (+phaseEl.value) * Math.PI / 180;
+    phaseV.textContent = phaseEl.value + '°';
+  });
+
+  /* clientWidth, not getBoundingClientRect(): the rect includes the 1px border
+     on each side, so a bitmap sized from it is 2px wider than the box it is
+     painted into and the drawing comes out stretched horizontally. And with
+     box-sizing:border-box, style.height sets the OUTER height, so hand the
+     border back or the bitmap is 2px taller than its box. */
+  function cvWidth(cv){ return Math.max(240, cv.clientWidth || Math.floor(cv.getBoundingClientRect().width)); }
+  function fit() {
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = cvWidth(cvs);
+    const sc = Math.min(cssW / DW, 0.95);
+    const cssH = DH * sc;
+    cvs.width  = Math.round(cssW * dpr);
+    cvs.height = Math.round(cssH * dpr);
+    cvs.style.height = cssH + 'px';
+    const bh = cvs.offsetHeight - cvs.clientHeight;
+    if (bh) cvs.style.height = (cssH + bh) + 'px';
+    const tx = (cssW - DW * sc) / 2;
+    ctx.setTransform(dpr * sc, 0, 0, dpr * sc, dpr * tx, 0);
+  }
+  window.addEventListener('resize', fit);
+
+  /* The textbook plane-wave figure, and the only arrangement of it that is a
+     right-handed triad on screen: z runs straight across to the right, E is
+     screen-vertical, and H is the oblique axis coming down-left out of the
+     page toward the reader. E (up) x H (out) = +z (right). Draw E oblique and
+     H vertical instead and the picture silently shows E x H = -z. */
+  function project(e, h, z, p) {
+    return [p.cx + z * p.sz - h * p.sh * p.obCos,
+            p.cy - e * p.se + h * p.sh * p.obSin];
+  }
+
+  const SANS = 'Inter, system-ui, -apple-system, sans-serif';
+  function stext(str, x, y, px, color, align) {
+    ctx.fillStyle = color; ctx.font = px + 'px ' + SANS;
+    ctx.textAlign = align || 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(str, x, y);
+  }
+  function arrowHead(x0, y0, x1, y1, color, size) {
+    const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy);
+    if (L < 1.5) return;
+    const ux = dx / L, uy = dy / L, px = -uy, py = ux;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x1 - size * ux + size * 0.46 * px, y1 - size * uy + size * 0.46 * py);
+    ctx.lineTo(x1 - size * ux - size * 0.46 * px, y1 - size * uy - size * 0.46 * py);
+    ctx.closePath(); ctx.fill();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, DW, DH);
+
+    const ob = (+tiltEl.value) * Math.PI / 180;
+    /* sh is deliberately smaller than se: a cabinet projection, the oblique
+       axis at roughly half scale. Draw H at full scale and its horizontal
+       swing outruns the z advance -- the red sinusoid folds back on itself
+       into loops. The slider stops at 30 degrees for the same reason. */
+    const p = { cx: 96, cy: DH / 2 + 4, sz: 41, se: 80, sh: 36,
+                obCos: Math.cos(ob), obSin: Math.sin(ob) };
+
+    // --- the propagation axis ---
+    const [ax0, ay0] = project(0, 0, 0, p);
+    const [ax1, ay1] = project(0, 0, ZMAX, p);
+    ctx.strokeStyle = '#c5cdd7'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(ax0, ay0); ctx.lineTo(ax1, ay1); ctx.stroke();
+    ctx.setLineDash([]);
+    arrowHead(ax0, ay0, ax1, ay1, '#8a93a0', 10);
+    MJ.draw(ctx, '+z', ax1 + 14, ay1 - 6, 13, '#5b6573', 'left');
+    stext('propagation', ax1 + 14, ay1 + 10, 10.5, '#8a93a0', 'left');
+
+    // --- advance the clock ---
+    const now = performance.now();
+    const dt = Math.min(0.05, (now - lastT) / 1000);
+    lastT = now;
+    if (runEl.checked) {
+      phase = (phase + dt * 1.7) % (2 * Math.PI);
+      const deg = Math.round(phase * 180 / Math.PI) % 360;
+      phaseEl.value = deg; phaseV.textContent = deg + '°';
+    }
+
+    /* E and H are IN PHASE in a plane wave: they cross zero together and peak
+       together. Drawn to a common scale, not a common magnitude -- H is 377x
+       smaller in SI units, which is what the eta readout is there to say. */
+    const amp = z => Math.cos(KZ * z - phase);
+
+    function ribbon(isE, color, width) {
+      const N = 220;
+      ctx.strokeStyle = color; ctx.lineWidth = width;
+      ctx.beginPath();
+      for (let i = 0; i <= N; i++) {
+        const z = (i / N) * ZMAX, a = amp(z);
+        const [px, py] = project(isE ? a : 0, isE ? 0 : a, z, p);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    }
+    function stems(isE, color) {
+      const M = 26;
+      ctx.strokeStyle = color; ctx.lineWidth = 1;
+      for (let k = 0; k <= M; k++) {
+        const z = (k / M) * ZMAX, a = amp(z);
+        const [bx, by] = project(0, 0, z, p);
+        const [tx, ty] = project(isE ? a : 0, isE ? 0 : a, z, p);
+        ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(tx, ty); ctx.stroke();
+      }
+    }
+
+    // H first: it lies below and behind the axis, so E draws over it.
+    ctx.globalAlpha = 0.28; stems(false, '#b3213a'); ctx.globalAlpha = 1;
+    ribbon(false, 'rgba(179,33,58,0.80)', 2.1);
+    ctx.globalAlpha = 0.28; stems(true, '#0067b9'); ctx.globalAlpha = 1;
+    ribbon(true, 'rgba(0,103,185,0.80)', 2.1);
+
+    // --- the triad at the marker ---
+    const aM = amp(ZMARK);
+    const [mx, my] = project(0, 0, ZMARK, p);
+    const [ex, ey] = project(aM, 0, ZMARK, p);
+    const [hx, hy] = project(0, aM, ZMARK, p);
+
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#b3213a';
+    ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(hx, hy); ctx.stroke();
+    arrowHead(mx, my, hx, hy, '#b3213a', 9);
+    ctx.strokeStyle = '#0067b9';
+    ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(ex, ey); ctx.stroke();
+    arrowHead(mx, my, ex, ey, '#0067b9', 9);
+
+    /* S goes as E*H = cos^2: it pulses, but it never turns round. When E and H
+       both swing negative the product does not. */
+    if (showSEl.checked) {
+      const [sx1, sy1] = project(0, 0, ZMARK + 2.4 * aM * aM, p);
+      ctx.strokeStyle = '#1d7a4d'; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(sx1, sy1); ctx.stroke();
+      arrowHead(mx, my, sx1, sy1, '#1d7a4d', 11);
+      // Keep the label off whichever side H swung to: H drops below the axis
+      // on a positive half-cycle and rises above it on a negative one.
+      if (Math.abs(sx1 - mx) > 26) {
+        MJ.draw(ctx, '\\mathbf{S}', (mx + sx1) / 2, my + (aM >= 0 ? -15 : 18), 14, '#1d7a4d', 'center');
+      }
+    }
+    ctx.fillStyle = '#15202b';
+    ctx.beginPath(); ctx.arc(mx, my, 3, 0, 2 * Math.PI); ctx.fill();
+
+    // --- legend, top-left, clear of the first crest ---
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#0067b9';
+    ctx.beginPath(); ctx.moveTo(14, 20); ctx.lineTo(34, 20); ctx.stroke();
+    MJ.draw(ctx, '\\mathbf{E}', 44, 20, 14, '#0067b9', 'left');
+    ctx.strokeStyle = '#b3213a';
+    ctx.beginPath(); ctx.moveTo(14, 40); ctx.lineTo(34, 40); ctx.stroke();
+    MJ.draw(ctx, '\\mathbf{H}', 44, 40, 14, '#b3213a', 'left');
+
+    // --- live readouts, refreshed about ten times a second ---
+    if (now - lastRead > 100) {
+      lastRead = now;
+      const e = E0 * aM, h = e / ETA, s = e * h;
+      // Sign the value only once it rounds to something nonzero: a bare
+      // "-0.00" at the zero crossing reads as a defect, not as physics.
+      const signed = v => (Math.abs(v) < 0.005 ? '' : v < 0 ? '−' : '+') + Math.abs(v).toFixed(2);
+      document.getElementById('p-e').textContent = signed(e) + ' V/m';
+      document.getElementById('p-h').textContent = signed(h * 1e3) + ' mA/m';
+      document.getElementById('p-s').textContent = (s * 1e3).toFixed(2) + ' mW/m²';
+    }
+  }
+
+  function tick() { draw(); requestAnimationFrame(tick); }
+  MJ.setRedraw(draw);
+  MJ.onReady(() => { MJ.typeset(document.getElementById('panel')); draw(); });
+  fit();
+  tick();
+})();
+</script>
+</body>
+</html>

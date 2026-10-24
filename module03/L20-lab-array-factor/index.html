@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L20 Lab — Array Factor &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=0defe11dd0">
+<link rel="stylesheet" href="../../_static/shell.css?v=9432ef1809">
+<link rel="stylesheet" href="../../_static/frames.css?v=1dea9286a4">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-lab-fmcw-range/index.html">L28 Lab — FMCW Range</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-lab-range-doppler-mti/index.html">L29 Lab — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-lab-cfar/index.html">L30 Lab — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-lab-spectrogram/index.html">L31 Lab — Micro-Doppler Spectrogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l20-lab-array-factor">
+<h1>L20 Lab — Array Factor<a class="headerlink" href="#l20-lab-array-factor" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Array Factor</h1>
+<div class="title-rule"></div>
+<p>Halve the active aperture and watch the beam double.</p>
+<p>L20 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 1">
+  <li>I can derive the array factor for an arbitrary linear array and apply pattern multiplication.</li>
+</ol>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-halve-the-aperture-double-the-beam">
+<div class="wrap docutils container">
+<p class="rubric">Halve the Aperture, Double the Beam</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Sweep the beam past a fixed source at 8, 4, and 2 active elements.</p></li>
+<li><p>You predict every number at your own Signal Freq before you measure it.</p></li>
+<li><p>One kit, four sweeps, one L20 Lab packet.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lesson 20 derived the beamwidth and sidelobe results this lab tests. Today
+they go to the bench. You sweep the array three times, shrinking the active
+aperture by half between sweeps, and read the half-power beamwidth, the
+first-null beamwidth, and the first sidelobe level off each trace. A fourth
+sweep leaves only the two end elements on, which tests the array factor on a
+configuration that is not a contiguous block. You compute
+the predictions before the period, at your own kit’s frequency, so the work at
+the bench is the third step: reconciling what the plot shows with what the
+array factor says. Most of the differences have a known
+cause. One of them, the size of the peak step between apertures, does not yet,
+and the lab records it as an open measurement.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-beamwidth-follows-the-aperture">
+<div class="wrap docutils container">
+<p class="rubric">Beamwidth Follows the Aperture</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\theta_{\text{HP}} &amp;\approx \frac{0.886\ \lambda}{Nd} \\
+\text{FNBW} &amp;= 2\arcsin\!\left(\frac{\lambda}{Nd}\right)
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Halve the active aperture <span class="math notranslate nohighlight">\(Nd\)</span>, and both beamwidths double.</p></li>
+<li><p>Compute both at your own Signal Freq in Part 1.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Active</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(Nd\)</span></p></th>
+<th class="head text-left"><p>First SLL</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>8</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(112\ \text{mm}\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-12.8\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>4</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(56\ \text{mm}\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-11.3\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>2</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(28\ \text{mm}\)</span></p></td>
+<td class="text-left"><p>yours to find</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The PHASER is an 8-element linear array with element spacing <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span>.
+This page works its numbers at <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span> as one example. There the
+wavelength is <span class="math notranslate nohighlight">\(\lambda = 29.1\ \text{mm}\)</span>, so <span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span> and the full
+aperture is <span class="math notranslate nohighlight">\(Nd = 112\ \text{mm}\)</span>, just under four wavelengths. Your HB100 runs
+at its own frequency, somewhere between <span class="math notranslate nohighlight">\(10.1\)</span> and <span class="math notranslate nohighlight">\(10.7\ \text{GHz}\)</span>, so your
+numbers will differ: you will press <strong>Find HB100</strong> at the bench, record the
+Signal Freq it reports, and compute <span class="math notranslate nohighlight">\(\lambda\)</span>, <span class="math notranslate nohighlight">\(d/\lambda\)</span>, <span class="math notranslate nohighlight">\(kd\)</span>, and every
+prediction at that frequency. The kit in the dry run read <span class="math notranslate nohighlight">\(10.408\ \text{GHz}\)</span>,
+where <span class="math notranslate nohighlight">\(\lambda = 28.82\ \text{mm}\)</span>.</p>
+<p>Two results from Lesson 20 set every number you are about to measure: the
+half-power beamwidth and the first-null beamwidth above. Both depend on the
+array only through <span class="math notranslate nohighlight">\(Nd\)</span>, the <strong>active aperture</strong>. Turning off elements at the
+ends of the row shortens <span class="math notranslate nohighlight">\(Nd\)</span> without changing <span class="math notranslate nohighlight">\(d\)</span>, and that is the whole
+experiment: halve the aperture, watch the beam double. The <span class="math notranslate nohighlight">\(0.886\)</span> rule
+carries a small-angle approximation, so check at each aperture whether the beam
+is narrow enough for it, and solve the array factor’s half-power point directly
+where it is not.</p>
+<p>The table lists the three apertures you will sweep: 8 is E1 to E8, 4 is E3
+to E6, and 2 is E4 and E5. The beamwidth columns on
+Part 1 of the packet are yours to compute at your own frequency. Note that the
+sidelobe entries are not the same number. The familiar <span class="math notranslate nohighlight">\(-13\ \text{dB}\)</span> figure
+is the large-<span class="math notranslate nohighlight">\(N\)</span> limit of the uniform array factor. An 8-element array lands at
+<span class="math notranslate nohighlight">\(-12.8\ \text{dB}\)</span>, close enough to call <span class="math notranslate nohighlight">\(-13\ \text{dB}\)</span>, but a 4-element
+array reaches only <span class="math notranslate nohighlight">\(-11.3\ \text{dB}\)</span>. The two-element entry is yours to work
+out from its array factor.</p>
+<div class="callout docutils container">
+<p>Beamwidth is set by the active aperture <span class="math notranslate nohighlight">\(Nd\)</span>, not by the element count on its
+own. Halving the number of active elements halves <span class="math notranslate nohighlight">\(Nd\)</span> and doubles both
+beamwidths. The sidelobe level is set by the shape of the amplitude
+distribution, which stays uniform throughout this lab, so the sidelobe moves
+only through the small-<span class="math notranslate nohighlight">\(N\)</span> correction.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-two-entries-that-need-care">
+<div class="wrap docutils container">
+<p class="rubric">Two Entries That Need Care</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[AF_2 = \cos\frac{\psi}{2}, \qquad \psi = kd\sin\theta\]</div>
+<ul class="simple">
+<li><p>At <span class="math notranslate nohighlight">\(N = 2\)</span>, check the <span class="math notranslate nohighlight">\(0.886\)</span> rule’s small-angle step before using it.</p></li>
+<li><p>Find the first null, <span class="math notranslate nohighlight">\(\psi = \pi\)</span>, and check whether it lands at a real angle.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Two entries in the table need care before you go to the bench, and both are in
+the two-element row. The <span class="math notranslate nohighlight">\(0.886\ \lambda/(Nd)\)</span> rule carries a small-angle step
+inside it, and the wider the beam, the worse that step gets. Decide whether a
+two-element beam is narrow enough for it. For two elements the array factor is
+just <span class="math notranslate nohighlight">\(\cos(\psi/2)\)</span> with <span class="math notranslate nohighlight">\(\psi = kd\sin\theta\)</span>, so you can also solve its
+half-power point directly at your own Signal Freq.</p>
+<p>The first-null beamwidth and the first sidelobe come from the same function.
+The first null of <span class="math notranslate nohighlight">\(\cos(\psi/2)\)</span> needs <span class="math notranslate nohighlight">\(\psi = \pi\)</span>, which is
+<span class="math notranslate nohighlight">\(\sin\theta = \lambda/2d\)</span>. Evaluate that at your own Signal Freq and decide
+whether a real angle satisfies it. Part 1 of the packet asks you to explain
+what you entered for the two-element FNBW and first sidelobe, and why.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-two-elements-far-apart">
+<div class="wrap docutils container">
+<p class="rubric">Two Elements, Far Apart</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+AF &amp;= \cos\frac{\psi}{2} \\
+\psi &amp;= kD\sin\theta \\
+D &amp;= 7d = 98\ \text{mm}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>E1 and E8: the same two-element array factor, seven times the spacing.</p></li>
+<li><p>In Part 1, predict every full-height lobe and the main-lobe width.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The fourth sweep leaves only E1 and E8 on. It is still a two-element array, so
+its array factor is the same <span class="math notranslate nohighlight">\(\cos(\psi/2)\)</span> as the E4 and E5 pair, with the
+spacing <span class="math notranslate nohighlight">\(D = 98\ \text{mm}\)</span> in place of <span class="math notranslate nohighlight">\(d\)</span>. That one change tests the
+derivation on an array that is not a contiguous block, which is what “an
+arbitrary linear array” in the objective asks for. Work out where
+<span class="math notranslate nohighlight">\(\psi = 2\pi m\)</span> lands in visible space, and how wide the lobe at <span class="math notranslate nohighlight">\(0^\circ\)</span> is,
+before you sweep. Compare both with the E4 and E5 row: the two pairs add the
+same two voltages, so their peaks should agree, and their beams should not.
+Lesson 23 names what you will see.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-reading-a-sweep-for-what-it-is">
+<div class="wrap docutils container">
+<p class="rubric">Reading a Sweep for What It Is</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Sampled: 162 points, one <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> phase step apart, about <span class="math notranslate nohighlight">\(0.9^\circ\)</span> of angle near broadside.</p></li>
+<li><p>A floor about <span class="math notranslate nohighlight">\(23\ \text{dB}\)</span> below the 8-element peak.</p></li>
+<li><p>Nulls read the floor, about <span class="math notranslate nohighlight">\(-23\)</span> dBc of their trace’s peak, not <span class="math notranslate nohighlight">\(-\infty\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L20-read-the-trace.svg"
+     alt="One measured eight-element sweep annotated with the half-power beamwidth, the first-null beamwidth, the first sidelobe level, and the noise floor"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The Rectangular tab does not plot the array factor. It plots received
+power against <strong>commanded steer angle</strong>: the software steps the beam past a
+stationary source and records the power at each step. By reciprocity that
+traces the array pattern, but three properties of the measurement are baked
+into every trace you will read.</p>
+<p>The sweep is sampled, not continuous. With Use Bits on, as in every lab
+preset, the software steps the element-to-element phase one ADAR1000 LSB,
+<span class="math notranslate nohighlight">\(2.8125^\circ\)</span>, per point. One step moves <span class="math notranslate nohighlight">\(\sin\theta\)</span> by
+<span class="math notranslate nohighlight">\(2.8125^\circ/173.2^\circ = 0.0162\)</span> at <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span>, which is
+<span class="math notranslate nohighlight">\(0.93^\circ\)</span> of angle at broadside and <span class="math notranslate nohighlight">\(1.32^\circ\)</span> at <span class="math notranslate nohighlight">\(45^\circ\)</span>, widening as
+<span class="math notranslate nohighlight">\(1/\cos\theta\)</span>. A sweep is 162 points: 123 of them span <span class="math notranslate nohighlight">\(\pm 82^\circ\)</span>, and
+the other 39 ask for more phase than any real angle needs and plot at
+<span class="math notranslate nohighlight">\(\pm 90^\circ\)</span>. A feature narrower than one step can fall between samples
+entirely. The trace has a floor. With all eight elements on, the trace stops
+following the array factor about <span class="math notranslate nohighlight">\(23\ \text{dB}\)</span> below the peak of the uniform
+beam, and anything the array factor puts below that line reads as the floor
+instead. The floor is not one fixed level for every trace. In the dry run the
+four-element nulls filled to about <span class="math notranslate nohighlight">\(-23\)</span> dBc of their own, lower peak, while
+the two-element trace fell about <span class="math notranslate nohighlight">\(27\ \text{dB}\)</span> from its
+peak toward the edges of the scan. And the nulls are the first casualties of
+both effects together: a true null is infinitely deep and infinitely narrow,
+so the grid usually misses its bottom, and even a sample that lands on it
+reads the floor.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-ideal-versus-measured">
+<div class="wrap docutils container">
+<p class="rubric">Ideal Versus Measured</p>
+<div class="depth docutils container">
+<p>The widget below draws the array factor for each of the three apertures, then
+adds those three measurement effects on a toggle. Set the aperture, read HPBW,
+FNBW, and first sidelobe level off the ideal curve, then switch measurement
+effects on and read the same three numbers again from the sampled trace. The
+eight-element FNBW pill holds when the grid appears, because the null sits
+exactly 16 phase steps out and a sample lands on it. The HPBW pill is the one
+that moves, and it moves more as the aperture shrinks. The widget holds its floor <span class="math notranslate nohighlight">\(23\ \text{dB}\)</span> below the eight-element
+peak at every aperture, which leaves its two-element peak only about
+<span class="math notranslate nohighlight">\(11\ \text{dB}\)</span> above the floor. The dry-run kit’s two-element trace sat about
+<span class="math notranslate nohighlight">\(27\ \text{dB}\)</span> above its floor, so read the widget’s smaller apertures for how
+the grid and a floor act on a pattern, not as a forecast of your bench
+readings.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/af-measurement-compare.html"
+        width="100%" height="463"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Ideal array factor and measured sweep at 8, 4, and 2 active elements">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-equipment-and-setup">
+<div class="wrap docutils container">
+<p class="rubric">Equipment and Setup</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The kit on its stand, calibrated; the HB100 at boresight, <span class="math notranslate nohighlight">\(1\ \text{m}\)</span> out, at patch-row height.</p></li>
+<li><p>Signal Freq from <strong>Find HB100</strong>; Rx Gain set for a <span class="math notranslate nohighlight">\(-10\)</span> dBFS FFT peak.</p></li>
+<li><p><strong>2 Array Factor</strong> under <strong>Lab Presets</strong>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Per bench:</p>
+<ul class="simple">
+<li><p>ADALM-PHASER (CN0566) with its ADALM-Pluto, on its stand, with its 5 V supply
+and network connection.</p></li>
+<li><p>HB100 Doppler module with a fresh battery, on a tripod.</p></li>
+<li><p>A laptop with a browser pointed at <code class="docutils literal notranslate"><span class="pre">http://phaser.local:8080</span></code>.</p></li>
+</ul>
+<p>Place the HB100 at boresight, about <span class="math notranslate nohighlight">\(1\ \text{m}\)</span> from the face of the array, at
+the same height as the patch row and with its face square to the array.
+Boresight placement matters more than distance in this lab: every prediction
+is a broadside number, and a source offset by a few degrees shifts the
+whole trace along the angle axis.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-bring-up-the-kit">
+<div class="wrap docutils container">
+<p class="rubric">Bring Up the Kit</p>
+<ol class="arabic simple">
+<li><p>Browse to your kit’s address from Lesson 17 and wait for the pill to read
+<strong>Connected</strong>.</p></li>
+<li><p>With the HB100 at boresight, press <strong>Find HB100</strong> and record the Signal Freq
+it reports in Part 2 of the packet.</p></li>
+<li><p>Press <strong>Calibrate</strong> and wait for it to finish, with the HB100 still at
+boresight.</p></li>
+<li><p>Press <strong>2 Array Factor</strong> under <strong>Lab Presets</strong>. Expand the section first;
+its buttons respond only while it is open.</p></li>
+<li><p>Set <strong>Rx Gain (dB)</strong> for an FFT peak of <span class="math notranslate nohighlight">\(-10 \pm 3\)</span> dBFS; record it.</p></li>
+<li><p>Press <strong>Start</strong>. On the <strong>Rectangular</strong> tab, confirm a broadside sweep peaks
+near <span class="math notranslate nohighlight">\(0^\circ\)</span> with a clean pair of first sidelobes.</p></li>
+</ol>
+<p>Calibrate reads the frequency that <strong>Find HB100</strong> stores, which is why Find
+HB100 comes before it. Your calculated columns use the same frequency: if you filled them in
+before the period at a frequency more than <span class="math notranslate nohighlight">\(50\ \text{MHz}\)</span> from the one Find
+HB100 reports now, recompute them before you sweep. A change smaller than that
+moves no prediction in the table by more than about <span class="math notranslate nohighlight">\(0.3^\circ\)</span>.</p>
+<p>Step 5 is the L17 Lab’s level reference, not a fixed gain. The preset does not
+set <strong>Rx Gain (dB)</strong>, and the gain that reaches <span class="math notranslate nohighlight">\(-10\)</span> dBFS depends on your
+source, its battery, and its distance. In the dry run, <span class="math notranslate nohighlight">\(10\ \text{dB}\)</span> drove
+the peak over full scale at <span class="math notranslate nohighlight">\(1\ \text{m}\)</span>, and the L20 sweeps ran at
+<span class="math notranslate nohighlight">\(1\ \text{dB}\)</span> with the source about <span class="math notranslate nohighlight">\(1.2\ \text{m}\)</span> out. A main lobe with a flat top on the Rectangular tab means the
+receiver has clipped: turn the gain down. Leave the gain where Step 5 set it
+for all four sweeps, so the peaks compare against each other.</p>
+<p>Calibrate starts the per-element gains and phases from a matched state. An
+uncalibrated array has amplitude and phase errors spread across the row, which
+fills the nulls and raises the sidelobes on its own, and you would then be
+measuring the calibration rather than the array factor. If the broadside sweep
+does not look right, fix that before going further, because everything below
+assumes a calibrated array.</p>
+<p>The preset sets a uniform taper across all eight elements, zero steering phase,
+and Use Bits on, so the sweep steps one <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> phase LSB per point, and it opens the
+<strong>Rectangular</strong> tab in the beam-sweep plot. From here the procedure names only
+the controls you change.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The HB100 is a free-running DRO and drifts across <span class="math notranslate nohighlight">\(10.1\)</span> to <span class="math notranslate nohighlight">\(10.7\ \text{GHz}\)</span>
+with temperature. The GUI hunts for the tone, so a drift of tens of megahertz
+between sweeps does not affect this lab. Moving the source does,
+because all four traces are compared against each other at the end.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-procedure-steps-a1-to-a4">
+<div class="wrap docutils container">
+<p class="rubric">Procedure: Steps A1 to A4</p>
+<p>Each step names the control you touch and the observation you should get. Fill
+Tables A and B in Part 2 of the packet as you go, and predict before you measure at
+every aperture change.</p>
+<p><strong>Step A1 - Sweep the full array.</strong> With all eight Element Gains at 100, press
+<strong>Start</strong>. The sweep runs across <span class="math notranslate nohighlight">\(\pm 90^\circ\)</span> and settles into a trace with a
+single main lobe at <span class="math notranslate nohighlight">\(0^\circ\)</span> and three or four sidelobe pairs on each side.
+Press <strong>Freeze</strong> to hold it as a reference trace. Read the Peak Gain
+readout and record it. Hover along the trace to read the angles where it falls
+<span class="math notranslate nohighlight">\(3\ \text{dB}\)</span> below the peak, and record the difference as the measured HPBW.
+Expect it within a degree of your calculated value. Then
+find the two minima that bracket the main lobe and record the difference as
+FNBW, and compare it with your calculated value. Finally read the height of the tallest sidelobe
+relative to the peak, near <span class="math notranslate nohighlight">\(\pm 22^\circ\)</span>, and record it as the first SLL.
+Expect <span class="math notranslate nohighlight">\(-11\)</span> to <span class="math notranslate nohighlight">\(-14\ \text{dBc}\)</span>.</p>
+<p><strong>Step A2 - Halve the aperture.</strong> In <strong>Element Gains</strong>, set E1, E2, E7, and
+E8 to 0, leaving E3 through E6 at 100. Before pressing anything, check your
+calculated row for four active elements over <span class="math notranslate nohighlight">\(56\ \text{mm}\)</span> of aperture. The voltage sum
+puts the peak <span class="math notranslate nohighlight">\(6.0\ \text{dB}\)</span> below the eight-element peak; expect the bench
+to read about <span class="math notranslate nohighlight">\(5 \pm 1\ \text{dB}\)</span>. Press <strong>Start</strong>, then <strong>Freeze</strong>. Read
+the same four numbers. The main lobe is now roughly twice as wide and the
+sidelobe structure has thinned out to one pair near <span class="math notranslate nohighlight">\(\pm 50^\circ\)</span>. A null
+that fills to the floor reads wide: in the dry run one of the four-element
+nulls filled to about <span class="math notranslate nohighlight">\(-23\)</span> dBc and the FNBW read about <span class="math notranslate nohighlight">\(5^\circ\)</span> wider than
+the array factor gives.</p>
+<p><strong>Step A3 - Halve it again.</strong> Set every element to 0 except E4 and E5.
+Check your calculated two-element row first. The voltage sum puts the peak
+<span class="math notranslate nohighlight">\(12.0\ \text{dB}\)</span> below the eight-element peak; expect the bench to read
+about <span class="math notranslate nohighlight">\(10 \pm 2\ \text{dB}\)</span>. Press <strong>Start</strong>, then <strong>Freeze</strong>, and read the
+same four numbers. The trace falls about <span class="math notranslate nohighlight">\(27\ \text{dB}\)</span> toward <span class="math notranslate nohighlight">\(\pm 80^\circ\)</span>,
+which is the two-element array factor’s own roll-off toward endfire, not a
+fault.</p>
+<p><strong>Step A4 - Spread the pair.</strong> Set E4 and E5 to 0 and E1 and E8 to 100, so
+only the end elements are on. Check your Part 1 Question 3 first. Press
+<strong>Start</strong>, then <strong>Freeze</strong>. Read the peak, the half-power width and the
+first-null width of the lobe at <span class="math notranslate nohighlight">\(0^\circ\)</span>, and the angle and level of every
+full-height lobe, into Table B.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-procedure-steps-a5-and-a6">
+<div class="wrap docutils container">
+<p class="rubric">Procedure: Steps A5 and A6</p>
+<p><strong>Step A5 - Compare the frozen traces.</strong> The three uniform apertures are on the plot
+together now. Two trends should be visible without measuring anything. The
+beamwidth doubles at each halving, because <span class="math notranslate nohighlight">\(Nd\)</span> halves and both beamwidth
+formulas scale as <span class="math notranslate nohighlight">\(1/Nd\)</span>. This is the measurement to trust, and it is the one
+the packet grades. The peak steps down at each halving, because the elements
+add in voltage at boresight: eight equal signals in phase give eight times the
+voltage of one, four give four times, and the ideal steps are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\Delta P &amp;= 20\log_{10}\!\left(\frac{N_{\text{active}}}{8}\right) \\
+&amp;= -6.0\ \text{dB} \quad (N = 4) \\
+&amp;= -12.0\ \text{dB} \quad (N = 2)
+\end{aligned}\end{split}\]</div>
+<p>The bench reads less than that. Expect about <span class="math notranslate nohighlight">\(5 \pm 1\ \text{dB}\)</span> per
+halving: the dry-run kit read <span class="math notranslate nohighlight">\(5.1\)</span> and <span class="math notranslate nohighlight">\(4.8\ \text{dB}\)</span>. Record both of your
+steps from the Peak Gain readings; Part 3 of the packet asks about the
+difference.</p>
+<p><strong>Step A6 - Restore the array.</strong> Set all eight Element Gains back to 100,
+so the next lab starts from a full uniform aperture.</p>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-the-three-traces-show">
+<div class="wrap docutils container">
+<p class="rubric">What the Three Traces Show</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Each halving doubles the beam because <span class="math notranslate nohighlight">\(Nd\)</span> halves. The lab grades this.</p></li>
+<li><p>The voltage sum predicts a <span class="math notranslate nohighlight">\(6.0\ \text{dB}\)</span> peak step per halving.</p></li>
+<li><p>The dry-run kit read <span class="math notranslate nohighlight">\(5.1\)</span> and <span class="math notranslate nohighlight">\(4.8\ \text{dB}\)</span>. The cause is still open.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L20-aperture-halving.svg"
+     alt="Ideal array factors for 8, 4, and 2 active elements at 10.408 GHz, with the dry run's measured peaks: the beam doubles in width at each halving, and the peak steps 6.0 dB ideally against 5.1 and 4.8 dB measured"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The figure draws the ideal array factor for each aperture at
+<span class="math notranslate nohighlight">\(10.408\ \text{GHz}\)</span>, the Signal Freq of the kit in the October 2026 dry run,
+and marks the three peaks that kit measured. The beam doubles at each halving
+as Lesson 20 predicts, and the eight- and four-element beamwidths the kit
+measured land within half a degree of the curves. The peaks do not. The voltage
+sum predicts steps of <span class="math notranslate nohighlight">\(6.0\)</span> and <span class="math notranslate nohighlight">\(6.0\ \text{dB}\)</span>; the kit read <span class="math notranslate nohighlight">\(5.1\)</span> and
+<span class="math notranslate nohighlight">\(4.8\ \text{dB}\)</span>, <span class="math notranslate nohighlight">\(9.9\ \text{dB}\)</span> in all against <span class="math notranslate nohighlight">\(12.0\)</span>. Expect about
+<span class="math notranslate nohighlight">\(5 \pm 1\ \text{dB}\)</span> per halving on your own kit.</p>
+<p>The cause of that shortfall is not yet known. Two explanations were tested on
+the dry-run kit and ruled out. Signal leaking through the elements set to 0
+accounts for at most <span class="math notranslate nohighlight">\(0.5\ \text{dB}\)</span>: with all eight gains at 0 the peak fell
+<span class="math notranslate nohighlight">\(33.5\ \text{dB}\)</span> below the full array. Receiver compression is ruled out
+too: lowering every element gain from 100 to 50 lowered the signal, and the
+shortfall grew, where compression would have made it shrink. The remaining candidates are
+still being measured, and Part 3 of the packet asks you to
+propose one with a test that would check it.</p>
+<p>None of this touches the shape measurements. HPBW, FNBW, and sidelobe level are
+all read relative to each trace’s own peak, so an error in the peak level does
+not move them. The dry-run kit’s eight- and four-element beamwidths landed
+within half a degree of the array factor at its own <span class="math notranslate nohighlight">\(10.408\ \text{GHz}\)</span>; its
+sidelobes and peak steps:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Active</p></th>
+<th class="head text-left"><p>First SLL meas / pred</p></th>
+<th class="head text-left"><p>Peak step meas / ideal</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>8 (E1 to E8)</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-12.5\)</span> to <span class="math notranslate nohighlight">\(-14.0\)</span> / <span class="math notranslate nohighlight">\(-12.8\)</span> dB</p></td>
+<td class="text-left"><p>reference</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>4 (E3 to E6)</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-12\)</span> to <span class="math notranslate nohighlight">\(-14\)</span> / <span class="math notranslate nohighlight">\(-11.3\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-5.1\)</span> / <span class="math notranslate nohighlight">\(-6.0\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>2 (E4, E5)</p></td>
+<td class="text-left"><p>Part 1</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-9.9\)</span> / <span class="math notranslate nohighlight">\(-12.0\)</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The two-element HPBW is the one shape entry that does not agree. The dry-run
+kit read it about <span class="math notranslate nohighlight">\(6^\circ\)</span> narrower than the array factor, with a spread of
+about <span class="math notranslate nohighlight">\(\pm 3^\circ\)</span>, so record it with its spread rather than as a match.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-where-the-sweep-leaves-the-array-factor">
+<div class="wrap docutils container">
+<p class="rubric">Where the Sweep Leaves the Array Factor</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Feature</p></th>
+<th class="head text-left"><p>Array factor</p></th>
+<th class="head text-left"><p>Sweep reads</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Floor</p></td>
+<td class="text-left"><p>none</p></td>
+<td class="text-left"><p>about <span class="math notranslate nohighlight">\(-23\)</span> dBc</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Nulls</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-\infty\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx -23\)</span> dBc, the floor</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>FNBW</p></td>
+<td class="text-left"><p>from the nulls</p></td>
+<td class="text-left"><p>up to one step (<span class="math notranslate nohighlight">\(\approx 1^\circ\)</span>) wider</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>First SLL</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-12.8\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-11\)</span> to <span class="math notranslate nohighlight">\(-14\)</span> dBc</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Three differences between your trace and the array factor are expected, and
+each one has a number attached to it.</p>
+<p><strong>The floor sits at about <span class="math notranslate nohighlight">\(-23\)</span> dBc.</strong> The trace stops following the array
+factor about <span class="math notranslate nohighlight">\(23\ \text{dB}\)</span> below its own peak. Every feature of the array
+factor below that line — the deep parts of the nulls, and every sidelobe of a tapered
+array — reads as noise instead of as pattern. This is the usable dynamic range
+of the measurement, and it is why the lab asks for the first sidelobe rather
+than the second or third.</p>
+<p><strong>Nulls read about <span class="math notranslate nohighlight">\(-23\)</span> dBc instead of <span class="math notranslate nohighlight">\(-\infty\)</span>.</strong> Two effects fill them, and
+it is worth keeping them separate. Grid straddle is the smaller one. The
+8-element null sits at a phase step of <span class="math notranslate nohighlight">\(360^\circ/8 = 45^\circ\)</span>, exactly 16
+LSBs, so with the source on boresight a sample lands on it. A
+source half a step off boresight, <span class="math notranslate nohighlight">\(0.47^\circ\)</span>, leaves the nearest sample at
+<span class="math notranslate nohighlight">\(-30\ \text{dB}\)</span>, still below the floor. The floor is what fills the null: it
+adds its own power to every sample near it. Reading each null at its lowest
+sample puts the measured FNBW up to one step, about <span class="math notranslate nohighlight">\(1^\circ\)</span>, wider than the
+array factor’s value. The dry-run kit’s eight-element FNBW matched the array
+factor to within <span class="math notranslate nohighlight">\(0.1^\circ\)</span>.</p>
+<p><strong>The first sidelobe reads <span class="math notranslate nohighlight">\(-11\)</span> to <span class="math notranslate nohighlight">\(-14\)</span> dBc.</strong> The array factor puts it at
+<span class="math notranslate nohighlight">\(-12.8\ \text{dB}\)</span> and <span class="math notranslate nohighlight">\(21.9^\circ\)</span>, a phase step of <span class="math notranslate nohighlight">\(64.7^\circ\)</span>. The sample
+at 23 LSBs, <span class="math notranslate nohighlight">\(64.69^\circ\)</span>, catches it within a hundredth of a decibel, so grid
+straddle costs nothing here, but the floor adds power to a sidelobe that is
+only <span class="math notranslate nohighlight">\(10\ \text{dB}\)</span> above it and noise
+moves the reading a few tenths either way from sweep to sweep. The two first
+sidelobes need not match each other either: the dry-run kit read
+<span class="math notranslate nohighlight">\(-12.5\)</span> dBc on one side and <span class="math notranslate nohighlight">\(-14.0\)</span> dBc on the other. A single number is not
+meaningful at this dynamic range; a range is.</p>
+<p>The half-power readings get less certain as the aperture shrinks. At eight
+and four elements the dry-run kit’s HPBW landed within half a degree of the
+array factor. At two elements it read about <span class="math notranslate nohighlight">\(6^\circ\)</span> narrower, with a spread
+of about <span class="math notranslate nohighlight">\(\pm 3^\circ\)</span>. The two-element pattern is flat near its
+half-power points: at <span class="math notranslate nohighlight">\(10.408\ \text{GHz}\)</span> it falls only about
+<span class="math notranslate nohighlight">\(0.2\ \text{dB}\)</span> per degree there, against about <span class="math notranslate nohighlight">\(1\ \text{dB}\)</span> per degree
+for eight elements. An error of <span class="math notranslate nohighlight">\(0.6\ \text{dB}\)</span> in the level you read the
+<span class="math notranslate nohighlight">\(-3\ \text{dB}\)</span> crossings against moves each crossing about <span class="math notranslate nohighlight">\(3^\circ\)</span>, and
+the HPBW twice that. Report the two-element HPBW with its spread, and expect
+agreement within several degrees, not within one.</p>
+<p><img src="../../viz/img/L20-ideal-vs-measured.svg"
+     alt="The ideal eight-element array factor under the same sweep as the measurement: the sampled trace, its noise floor, and the filled nulls"
+     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;"></p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-worked-example-a-six-element-aperture">
+<div class="wrap docutils container">
+<p class="rubric">Worked Example: A Six-Element Aperture</p>
+<div class="tip admonition">
+<p class="admonition-title">Worked example — predicting a six-element aperture</p>
+<p>Suppose you turn off only E1 and E8, leaving six elements over
+<span class="math notranslate nohighlight">\(Nd = 6 \times 14 = 84\ \text{mm}\)</span>. Work it at <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span>, where
+<span class="math notranslate nohighlight">\(\lambda = 29.1\ \text{mm}\)</span>; at the bench you would use your own Signal Freq.
+The <span class="math notranslate nohighlight">\(0.886\)</span> rule gives</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\theta_{\text{HP}} &amp;\approx \frac{0.886\ \lambda}{Nd} \\
+&amp;= \frac{0.886\ (29.1)}{84}\ \text{rad} \\
+&amp;= 17.6^\circ
+\end{aligned}\end{split}\]</div>
+<p>and the first-null beamwidth is
+<span class="math notranslate nohighlight">\(2\arcsin(29.1/84) = 2 \times 20.27^\circ = 40.5^\circ\)</span>. Solving the
+six-element array factor directly gives <span class="math notranslate nohighlight">\(17.9^\circ\)</span> for the HPBW. The
+voltage sum puts the peak <span class="math notranslate nohighlight">\(20\log_{10}(6/8) = -2.5\ \text{dB}\)</span> below the
+eight-element peak, and the bench will most likely read a smaller drop, as in
+Step A4. The predicted HPBW spans about 19 sweep steps, so the measurement has
+enough resolution to confirm it, and you should expect a reading within a
+degree or two of <span class="math notranslate nohighlight">\(17.9^\circ\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-no-hardware">
+<div class="wrap docutils container">
+<p class="rubric">No Hardware?</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">phaser_headless.py</span> <span class="pre">--sim</span></code> and open the same URL. The lab reproduces
+step for step in simulation, because the simulated source already sits at
+boresight and nothing in the procedure requires moving it. Its Signal Freq is
+<span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>, so compute the calculated columns there. It adds the element signals exactly in voltage, so its peak steps
+come out at the ideal <span class="math notranslate nohighlight">\(6.0\ \text{dB}\)</span> rather than the bench’s <span class="math notranslate nohighlight">\(5\ \text{dB}\)</span>,
+and it does not model <strong>Rx Gain (dB)</strong>. Record those as your measured column
+and reconcile them against the calculated column exactly as you would on the
+bench.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-lab-packet">
+<div class="wrap docutils container">
+<p class="rubric">Lab Packet</p>
+<p>The L20 Lab packet is one submission for the whole lab, turned in complete before Lesson 21. It replaces the old lab sheet and the L20 Lab problem set. It has three parts:</p>
+<ol class="arabic simple">
+<li><p><strong>Part 1, Pre-Lab</strong> (individual, before the lab period, because you need it at the bench): your kit’s frequency, the prediction table for the three uniform apertures, the array factor and lobe angles for E1 and E8, and a rehearsal of the E1 and E8 sweep on the hosted simulator.</p></li>
+<li><p><strong>Part 2, Measurements</strong> (your own kit’s data, recorded in class): Table A, one row per sweep, and Table B, the E1 and E8 lobes.</p></li>
+<li><p><strong>Part 3, Writeup</strong> (individual, after the lab): reconcile the measurements with the predictions, and three analysis problems.</p></li>
+</ol>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../labs/ECE444_Lab_L20_ArrayFactor_blank.pdf" target="_blank" rel="noopener">L20 Lab packet (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-the-array-factor-on-the-bench">
+<div class="wrap docutils container">
+<p class="rubric">Summary: The Array Factor on the Bench</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(Nd\)</span></p></td>
+<td class="text-left"><p>active aperture; sets both beamwidths</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(112\ \text{mm}\)</span> at <span class="math notranslate nohighlight">\(N = 8\)</span>, <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_{\text{HP}} \approx 0.886\ \lambda/Nd\)</span></p></td>
+<td class="text-left"><p>half-power beamwidth, broadside</p></td>
+<td class="text-left"><p>compute at your Signal Freq; check the small-angle step at each aperture</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\text{FNBW} = 2\arcsin(\lambda/Nd)\)</span></p></td>
+<td class="text-left"><p>first-null beamwidth</p></td>
+<td class="text-left"><p>compute at your Signal Freq; a null needs a real angle</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>First SLL, uniform</p></td>
+<td class="text-left"><p>set by distribution shape, not size</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-12.8\)</span> dB at <span class="math notranslate nohighlight">\(N = 8\)</span>, <span class="math notranslate nohighlight">\(-11.3\)</span> dB at <span class="math notranslate nohighlight">\(N = 4\)</span>; measured <span class="math notranslate nohighlight">\(-11\)</span> to <span class="math notranslate nohighlight">\(-14\)</span> dBc</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Two elements <span class="math notranslate nohighlight">\(D\)</span> apart</p></td>
+<td class="text-left"><p>span sets the lobe width; <span class="math notranslate nohighlight">\(D &gt; \lambda\)</span> repeats the lobe</p></td>
+<td class="text-left"><p>compute for E1 and E8 in Part 1</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(20\log_{10}(N_{\text{active}}/8)\)</span></p></td>
+<td class="text-left"><p>ideal peak drop from the coherent voltage sum</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-6.0\)</span> dB per halving; the bench reads about <span class="math notranslate nohighlight">\(5 \pm 1\)</span> dB, cause open</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Sweep grid</p></td>
+<td class="text-left"><p>one ADAR1000 phase LSB per point</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2.8125^\circ\)</span> of phase, <span class="math notranslate nohighlight">\(0.93^\circ\)</span> of angle at broadside at <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span>; 162 points</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Dynamic range</p></td>
+<td class="text-left"><p>a trace’s peak above its floor</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx 23\)</span> dB; nulls read the floor, <span class="math notranslate nohighlight">\(\approx -23\)</span> dBc</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Today’s traces are the array factor, read against a commanded angle.</p></li>
+<li><p>Lesson 21 adds the element pattern: what the patches do to the beam.</p></li>
+<li><p>The L21 Lab holds the beam still and walks the source around it.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Every trace you took today plots received power against the angle you asked
+the beamformer for, with the source fixed, so the element pattern contributed
+the same constant to every point and dropped out of the shape. Lesson 21 puts
+it back: the patches have their own pattern, and the array radiates the element
+pattern times the array factor. Keep your three frozen traces. The L21 Lab
+measures the full pattern by moving the source instead of the beam, and the
+far edges of today’s eight-element trace are where the two part company.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L20-lab-array-factor"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=e355370f43"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script>
+</body>
+</html>

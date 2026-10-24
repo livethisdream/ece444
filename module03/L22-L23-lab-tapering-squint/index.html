@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L22–L23 Lab — Tapering, Squint, and Quantization &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=0defe11dd0">
+<link rel="stylesheet" href="../../_static/shell.css?v=9432ef1809">
+<link rel="stylesheet" href="../../_static/frames.css?v=1dea9286a4">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-lab-fmcw-range/index.html">L28 Lab — FMCW Range</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-lab-range-doppler-mti/index.html">L29 Lab — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-lab-cfar/index.html">L30 Lab — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-lab-spectrogram/index.html">L31 Lab — Micro-Doppler Spectrogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l22l23-lab-tapering-squint-and-quantization">
+<h1>L22–L23 Lab — Tapering, Squint, and Quantization<a class="headerlink" href="#l22l23-lab-tapering-squint-and-quantization" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Tapering, Squint, and Quantization</h1>
+<div class="title-rule"></div>
+<p>Lesson 22’s taper table and Lesson 23’s three departures go to the bench.</p>
+<p>L22–L23 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 6">
+  <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
+  <li>I can identify beam squint and quantization effects in a phased array and describe their impact on system performance.</li>
+</ol>
+<div class="depth docutils container">
+<p>Lesson 22 ended with a table of what each taper family does: sidelobes come
+down, the beam broadens, and the aperture gives up some efficiency. Today that
+table goes to the bench. You will load each preset on the PHASER, sweep the
+beam past the HB100, and check the measured beamwidth and peak level against
+the numbers you predicted. The measurement also forces a distinction that is
+easy to lose on paper — the <strong>peak drop</strong> you watch happen on the plot is not
+the <strong>directivity loss</strong> the array suffers, and the gap between them
+is several decibels.</p>
+<p>Part 2 keeps the kit on the bench for the three departures Lesson 23 derived
+and no taper can fix: grating lobes, beam squint, and phase quantization. You
+measure each one against the number that lesson gave you for it.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-what-lesson-22-predicts">
+<div class="wrap docutils container">
+<p class="rubric">What Lesson 22 Predicts</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Preset</p></th>
+<th class="head text-left"><p>HPBW</p></th>
+<th class="head text-left"><p>Peak drop</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(\eta_t\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Uniform</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.1^\circ\)</span></p></td>
+<td class="text-left"><p>0 dB</p></td>
+<td class="text-left"><p>0 dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Hann</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(18.9^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-4.7\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-1.2\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Blackman</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(21.4^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-6.1\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-1.8\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Chebyshev</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(22.6^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-6.5\)</span> dB</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-2.1\)</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The expectation table is the prediction column for every Part 1 measurement.
+The GUI writes these amplitudes to the eight Element Gains sliders when you
+press a preset button; everything else is what the sweep reads relative to a
+uniform-taper reference. The beamwidths are the array factor’s at
+<span class="math notranslate nohighlight">\(10.443\ \text{GHz}\)</span>, the frequency of the phaser-00 test run; repeat them at
+your own kit’s Find HB100 frequency in the packet’s Part 1.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Preset</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(a_n\)</span> (%)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Uniform</p></td>
+<td class="text-left"><p>100 × 8</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Hann</p></td>
+<td class="text-left"><p>12, 43, 77, 100, 100, 77, 43, 12</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Blackman</p></td>
+<td class="text-left"><p>6, 27, 66, 100, 100, 66, 27, 6</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Chebyshev</p></td>
+<td class="text-left"><p>4, 23, 62, 100, 100, 62, 23, 4</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The predictions assume each slider is linear in voltage, which the Phaser
+software provides once the kit has the gain-slider fix. On an older install the
+slider follows the ADAR1000’s register curve, about <span class="math notranslate nohighlight">\((\%/100)^{0.68}\)</span> in
+voltage, and every taper comes out milder: the phaser-00 test run read Hann at
+<span class="math notranslate nohighlight">\(17.2^\circ\)</span> and <span class="math notranslate nohighlight">\(-3.7\)</span> dB against <span class="math notranslate nohighlight">\(18.9^\circ\)</span> and <span class="math notranslate nohighlight">\(-4.7\)</span> dB predicted.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-two-numbers-peak-drop-and-taper-efficiency">
+<div class="wrap docutils container">
+<p class="rubric">Two Numbers: Peak Drop and Taper Efficiency</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\text{peak drop} &amp;= 20\log_{10}\frac{\sum a_n}{N} \\
+\eta_t &amp;= \frac{\left(\sum a_n\right)^2}{N \sum a_n^2}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>Hann: the plot falls <span class="math notranslate nohighlight">\(4.7\)</span> dB; directivity falls <span class="math notranslate nohighlight">\(1.2\)</span> dB.</p></li>
+<li><p>Record both, in separate columns.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The peak drop is the <strong>coherent receive-voltage loss</strong>: at broadside the eight
+element signals add in phase, so the summed voltage is proportional to
+<span class="math notranslate nohighlight">\(\sum a_n\)</span> instead of <span class="math notranslate nohighlight">\(N\)</span>, and the plotted peak falls by
+<span class="math notranslate nohighlight">\(20\log_{10}(\sum a_n / N)\)</span>. That is the number the Rectangular plot shows you.
+The directivity loss is the <strong>taper efficiency</strong>, which for the Hann preset is
+<span class="math notranslate nohighlight">\(-1.2\)</span> dB, not <span class="math notranslate nohighlight">\(-4.7\)</span> dB. Both numbers are real and both belong in your table,
+so record them in separate columns and never let one stand in for the other.
+The worked Hann numbers after the bench steps show where the difference comes
+from.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-floor-sets-what-you-can-report">
+<div class="wrap docutils container">
+<p class="rubric">The Floor Sets What You Can Report</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Tapered sidelobes sit below the sweep’s floor: write <strong>“below the floor”</strong> and its level.</p></li>
+<li><p>We first estimated the floor at <span class="math notranslate nohighlight">\(-23\)</span> dBc.</p></li>
+<li><p>Phaser-00 read floors from <span class="math notranslate nohighlight">\(-17\)</span> to <span class="math notranslate nohighlight">\(-31\)</span> dBc, setup to setup.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>One measurement will refuse to give you a number. Every tapered preset pushes
+its first sidelobe below the floor of the sweep, so the correct table entry in
+those rows is <strong>“below the floor”</strong>, with the floor’s level beside it, not a
+value read off the grass. Quoting <span class="math notranslate nohighlight">\(-27\)</span> dBc from a trace whose floor is at
+<span class="math notranslate nohighlight">\(-23\)</span> dBc reports the noise, not the antenna.</p>
+<p>The floor itself is not one fixed number. We first estimated it at about
+<span class="math notranslate nohighlight">\(23\)</span> dB under the uniform-taper peak. The phaser-00 test run read floors from
+<span class="math notranslate nohighlight">\(-17\)</span> to <span class="math notranslate nohighlight">\(-31\)</span> dBc on the same kit, depending on the setup, and a wall beside
+the kit raised a false lobe to <span class="math notranslate nohighlight">\(-9\)</span> dBc. Read your own floor before you
+record anything, and write it at the top of Part 2.</p>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-the-measured-sweep-for-each-preset">
+<div class="wrap docutils container">
+<p class="rubric">The Measured Sweep for Each Preset</p>
+<div class="depth docutils container">
+<p>The widget below runs the same sweep in the browser. Start on Uniform and note
+the first sidelobe near <span class="math notranslate nohighlight">\(-13\)</span> dBc, then step through the presets and watch two
+things happen at once: the main lobe widens and its peak drops, while the
+sidelobes sink into the grass. The <span class="math notranslate nohighlight">\(\eta_t\)</span> pill is the directivity loss, so
+compare it against the peak drop pill each time — the two never agree.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/taper-measurement.html"
+        width="100%" height="500"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Measured beam sweep for the PHASER taper presets, with element gains, HPBW, peak drop and taper efficiency">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-grating-lobes-on-the-bench">
+<div class="wrap docutils container">
+<p class="rubric">Grating Lobes on the Bench</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Every third element on, <span class="math notranslate nohighlight">\(42\)</span> mm: lobes at <span class="math notranslate nohighlight">\(\pm 43.2^\circ\)</span>, peak <span class="math notranslate nohighlight">\(-8.5\)</span> dB.</p></li>
+<li><p>Every fourth, <span class="math notranslate nohighlight">\(56\)</span> mm: lobes at <span class="math notranslate nohighlight">\(\pm 30.9^\circ\)</span>, peak <span class="math notranslate nohighlight">\(-12.0\)</span> dB.</p></li>
+<li><p>Phaser-00: <span class="math notranslate nohighlight">\(-43.6^\circ\)</span> and <span class="math notranslate nohighlight">\(+42.3^\circ\)</span>; <span class="math notranslate nohighlight">\(-33.0^\circ\)</span> and <span class="math notranslate nohighlight">\(+29.8^\circ\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Part 1 measured the defect a taper can fix. Lesson 23 derived the three that it
+cannot: <strong>grating lobes</strong>, <strong>beam squint</strong>, and <strong>phase quantization</strong>. Part 2
+measures all three on the same kit, each the same way as Part 1: predict, sweep,
+record. The predictions above are at <span class="math notranslate nohighlight">\(10.443\ \text{GHz}\)</span>; work yours at your
+kit’s own frequency.</p>
+<p>The peak drops on hardware run about <span class="math notranslate nohighlight">\(1\)</span> dB short of the element count
+(<span class="math notranslate nohighlight">\(-7.8\)</span> and <span class="math notranslate nohighlight">\(-10.9\)</span> dB on phaser-00), even with elements fully on or off. That
+shortfall also shows up when the whole array is compared with its single
+elements, and its cause is still open, so this step is graded on the lobe
+angles.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-squint-on-the-bench">
+<div class="wrap docutils container">
+<p class="rubric">Squint on the Bench</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Signal BW <span class="math notranslate nohighlight">\(500\)</span> MHz: the GUI sets the phases <span class="math notranslate nohighlight">\(500\)</span> MHz below the signal.</p></li>
+<li><p>Source at <span class="math notranslate nohighlight">\(45^\circ\)</span>: the sweep finds it at <span class="math notranslate nohighlight">\(48.0^\circ\)</span>, a <span class="math notranslate nohighlight">\(+3.0^\circ\)</span> shift.</p></li>
+<li><p>Phaser-00, source at <span class="math notranslate nohighlight">\(41.1^\circ\)</span>: <span class="math notranslate nohighlight">\(+2.5^\circ\)</span> measured, <span class="math notranslate nohighlight">\(+2.6^\circ\)</span> predicted.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lab preset 5 sets <strong>Signal BW</strong> to <span class="math notranslate nohighlight">\(500\ \text{MHz}\)</span>, which tells the GUI to
+compute the steering phases for a frequency <span class="math notranslate nohighlight">\(500\ \text{MHz}\)</span> <em>below</em> the
+Signal Freq and receive at the Signal Freq. That is what a signal at the edge
+of a <span class="math notranslate nohighlight">\(500\ \text{MHz}\)</span> band sees. The same phases are a slightly different
+steer at the real frequency, so the whole beam moves and the sweep has to
+command a larger angle to land on the source. <strong>Signal BW resets to 0</strong> after
+Calibrate, Find HB100, and the Rect preset, so check it before every squint
+sweep.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-quantization-hold-the-beam-walk-the-source">
+<div class="wrap docutils container">
+<p class="rubric">Quantization: Hold the Beam, Walk the Source</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Preset 6: beam held at <span class="math notranslate nohighlight">\(15^\circ\)</span>, Blackman taper, Signal vs Time.</p></li>
+<li><p>A <span class="math notranslate nohighlight">\(15^\circ\)</span> ramp steps <span class="math notranslate nohighlight">\(45.4^\circ\)</span>: almost on the 3- and 4-bit grids.</p></li>
+<li><p>So 7, 4, and 3 bits should match; 2 bits puts a lobe near <span class="math notranslate nohighlight">\(-51^\circ\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lab preset 6 holds the beam at <span class="math notranslate nohighlight">\(15^\circ\)</span> with the Blackman taper, so every true
+sidelobe is below the floor and anything that appears is the phase shifter’s
+doing. You walk the HB100 across the arc and read the level against time, at
+7, 4, 3, and 2 bits. Lesson 23’s widget shows why the answer depends on the
+angle: a <span class="math notranslate nohighlight">\(15^\circ\)</span> ramp steps <span class="math notranslate nohighlight">\(45.4^\circ\)</span> per element, which rounds to the
+<span class="math notranslate nohighlight">\(22.5^\circ\)</span> and <span class="math notranslate nohighlight">\(45^\circ\)</span> grids with errors of <span class="math notranslate nohighlight">\(3^\circ\)</span> or less, while at
+2 bits every other element is off by about <span class="math notranslate nohighlight">\(44^\circ\)</span> and the array factor puts
+a lobe near <span class="math notranslate nohighlight">\(-51^\circ\)</span> at about <span class="math notranslate nohighlight">\(-8\)</span> dBc. The walk with the beam held is new
+with this preset and has not yet been run on hardware. If lobes appear at 3 or
+4 bits anyway, the kit is rounding more than the steering ramp; record what you
+see.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-bench-rules">
+<div class="wrap docutils container">
+<p class="rubric">Bench Rules</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Open <strong>Lab Presets</strong> before you press one; <strong>Calibrate</strong>, then <strong>Find HB100</strong>.</p></li>
+<li><p>Set <strong>Rx Gain</strong> for an FFT peak of <span class="math notranslate nohighlight">\(-10 \pm 3\)</span> dBFS.</p></li>
+<li><p>Source <span class="math notranslate nohighlight">\(1.2\)</span> m out, at patch height; facing the patches, E1 is on the right.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The rules come from the Module 3 dry runs. A peak near <span class="math notranslate nohighlight">\(-10\)</span> dBFS keeps the
+receiver linear with room above the floor. Every prediction uses the frequency
+<strong>Find HB100</strong> reports for your kit, not the nominal <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>.
+Level comparisons need the source at <span class="math notranslate nohighlight">\(1.2\)</span> m or more: closer in, the residual
+curvature across the aperture and the reflections from the bench put errors of
+a few tenths of a decibel on every peak drop, which is the size of the effects
+you are measuring.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-keep-the-bench-clear">
+<div class="wrap docutils container">
+<p class="rubric">Keep the Bench Clear</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<ul class="simple">
+<li><p>Keep <span class="math notranslate nohighlight">\(\pm 40^\circ\)</span> of the bench clear: a wall made a false lobe at <span class="math notranslate nohighlight">\(-9\)</span> dBc.</p></li>
+<li><p>If the uniform sidelobes are lopsided, recalibrate before going on.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>In the phaser-00 test run, a wall beside the kit produced a lobe at <span class="math notranslate nohighlight">\(-37^\circ\)</span>
+to <span class="math notranslate nohighlight">\(-41^\circ\)</span>, only <span class="math notranslate nohighlight">\(9\)</span> dB below the peak; in open space the same direction fell
+to the floor near <span class="math notranslate nohighlight">\(-17\)</span> dBc. A person seated beside the kit left a <span class="math notranslate nohighlight">\(-17\)</span> dBc
+shelf on that side. A stale calibration made the uniform trace’s two first
+sidelobes read unequal, and recalibrating fixed it.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-equipment-and-setup">
+<div class="wrap docutils container">
+<p class="rubric">Equipment and Setup</p>
+<p>You need the ADALM-PHASER kit with its Raspberry Pi and Pluto attached, the
+HB100 source and its battery, a laptop on the same network, and a <span class="math notranslate nohighlight">\(1.2\)</span> m arc
+taped on the bench with marks every <span class="math notranslate nohighlight">\(15^\circ\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Place the HB100 at boresight, <span class="math notranslate nohighlight">\(1.2\)</span> m from the array face, at patch-row
+height and aimed at the center of the patch row. Leave it there for all of
+Part 1: every number there is a comparison between tapers, so the source
+must not move. Keep <span class="math notranslate nohighlight">\(\pm 40^\circ\)</span> of the bench clear of walls and people.</p></li>
+<li><p>Power the PHASER, wait for the Pi to boot, and open
+<code class="docutils literal notranslate"><span class="pre">http://phaser.local:8080</span></code> in a browser.</p></li>
+<li><p>In the sidebar, press <strong>Calibrate</strong> under Configuration and let it finish.
+An uncalibrated array carries element-to-element gain and phase errors that
+look exactly like a taper you did not ask for. Then press <strong>Find HB100</strong> and
+record the Signal Freq it reports.</p></li>
+<li><p>Set <strong>Rx Gain</strong> so the FFT peak, beam at <span class="math notranslate nohighlight">\(0^\circ\)</span> and source at
+boresight, reads <span class="math notranslate nohighlight">\(-10 \pm 3\)</span> dBFS. Leave it there for the whole lab.</p></li>
+<li><p>Open the <strong>Lab Presets</strong> section, then press <strong>3 Tapering</strong>. This loads the
+Configuration values for the HB100 and selects the <strong>Rectangular</strong> plot tab.</p></li>
+<li><p>Under Element Gains, confirm <strong>Enforce Symmetric Taper</strong> is on. With it on,
+moving one slider moves its mirror-image partner, which is what you want for
+every taper in this lab.</p></li>
+</ol>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-no-hardware">
+<div class="wrap docutils container">
+<p class="rubric">No Hardware?</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Run the backend in simulation mode with
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">phaser_headless.py</span> <span class="pre">--sim</span></code> and open the same URL. The simulator places
+a target at boresight, which is where Part 1 needs it, so every Part 1 step
+and step (f) work unchanged. Steps (g) and (h) need a source that moves, so
+they have no simulator equivalent; use the expectation tables.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-step-a-the-uniform-reference">
+<div class="wrap docutils container">
+<p class="rubric">Step (a): The Uniform Reference</p>
+<p>Press the <strong>Uniform</strong> taper preset, confirm all eight sliders read 100%, and
+press <strong>Start</strong>. Read <strong>Peak Gain</strong> and <strong>Angle</strong> (set to <strong>Peak</strong>), then press
+<strong>Freeze</strong> to hold this trace. It stays on the plot as your reference for the
+rest of the lab, and every peak drop you record is measured against it.</p>
+<p>Record the uniform HPBW by reading the angles where the trace falls 3 dB below
+its own peak. Expect about <span class="math notranslate nohighlight">\(13^\circ\)</span>, within a degree of the <span class="math notranslate nohighlight">\(13.1^\circ\)</span>
+prediction — the sweep steps in <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> increments, so the 3 dB crossings
+land between samples. Read the floor, too, and write it at the top of Part 2.
+If the two first sidelobes, near <span class="math notranslate nohighlight">\(\pm 22^\circ\)</span>, differ by more than about
+2 dB, recalibrate and repeat this step.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-step-b-hann">
+<div class="wrap docutils container">
+<p class="rubric">Step (b): Hann</p>
+<p>Press the <strong>Hann</strong> preset. Before sweeping, do three things:</p>
+<ol class="arabic simple">
+<li><p>Read the eight slider values and copy them into your table. They should read
+12, 43, 77, 100, 100, 77, 43, 12.</p></li>
+<li><p>Compute <span class="math notranslate nohighlight">\(\sum a_n\)</span> and predict the peak drop from
+<span class="math notranslate nohighlight">\(20\log_{10}(\sum a_n/N)\)</span>.</p></li>
+<li><p>Write down the predicted HPBW, <span class="math notranslate nohighlight">\(18.9^\circ\)</span> at <span class="math notranslate nohighlight">\(10.443\ \text{GHz}\)</span>, or your
+own from Part 1.</p></li>
+</ol>
+<p>Now press <strong>Start</strong>. The main lobe should widen from about <span class="math notranslate nohighlight">\(13^\circ\)</span> to about
+<span class="math notranslate nohighlight">\(19^\circ\)</span>, the peak should sit about 4.7 dB below the frozen uniform trace,
+and the first sidelobes that were plainly visible at <span class="math notranslate nohighlight">\(\pm 22^\circ\)</span> should be
+gone into the floor. On an older install expect a milder result, near
+<span class="math notranslate nohighlight">\(17^\circ\)</span> and <span class="math notranslate nohighlight">\(-3.7\)</span> dB. Record the peak drop, the HPBW, and “below the floor”
+for the sidelobe level.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-step-c-blackman-and-chebyshev">
+<div class="wrap docutils container">
+<p class="rubric">Step (c): Blackman and Chebyshev</p>
+<p>Repeat step (b) for the <strong>Blackman</strong> and <strong>Chebyshev</strong> presets, predicting
+before each sweep. These two tapers pull the end elements down to 6% and 4%,
+so most of the array’s outer aperture is barely contributing: the beam widens
+past <span class="math notranslate nohighlight">\(21^\circ\)</span> and the peak drops past 6 dB, for sidelobes that were already
+invisible after Hann. This is the point of diminishing returns that Lesson 22
+described: a further <span class="math notranslate nohighlight">\(2.5^\circ\)</span> to <span class="math notranslate nohighlight">\(3.7^\circ\)</span> of beamwidth, with no sidelobe
+improvement this measurement can see.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-step-d-design-your-own-taper">
+<div class="wrap docutils container">
+<p class="rubric">Step (d): Design Your Own Taper</p>
+<p>With Enforce Symmetric Taper still on, design a taper of your own against this
+specification:</p>
+<blockquote>
+<div><p><strong>HPBW no wider than <span class="math notranslate nohighlight">\(17^\circ\)</span>, with the first sidelobe below <span class="math notranslate nohighlight">\(-20\)</span> dBc.</strong></p>
+</div></blockquote>
+<p>Start from Uniform and pull the two end elements down together, leaving the
+middle elements high. Put the end elements near 25% to 30% and step the
+elements between them smoothly up to 100%: 30, 55, 90, 100 is a good start.
+Work by iteration — set the sliders, press <strong>Start</strong>, read the HPBW and the
+sidelobe level, and adjust. Two or three passes will get you there.</p>
+<p>With a linear slider, 30, 55, 90, 100 predicts <span class="math notranslate nohighlight">\(16.5^\circ\)</span> of beamwidth, a
+peak drop of <span class="math notranslate nohighlight">\(-3.3\)</span> dB, and a first sidelobe at <span class="math notranslate nohighlight">\(-25\)</span> dBc. On an older install
+the phaser-00 test run’s 25, 50, 90, 100 read <span class="math notranslate nohighlight">\(16.2^\circ\)</span>, <span class="math notranslate nohighlight">\(-2.8\)</span> dB, and
+<span class="math notranslate nohighlight">\(-23\)</span> dBc, while end elements at 45% gave <span class="math notranslate nohighlight">\(-18\)</span> dBc and missed the
+specification. Record your final eight gain values and the measured result in
+the packet.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-step-e-restore">
+<div class="wrap docutils container">
+<p class="rubric">Step (e): Restore</p>
+<p>Press the <strong>Uniform</strong> preset before you move on, so Part 2 starts from a known
+state.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-step-f-grating-lobes">
+<div class="wrap docutils container">
+<p class="rubric">Step (f): Grating Lobes</p>
+<p>Leave the source at boresight. With the <strong>Uniform</strong> preset loaded, check that
+the frozen uniform trace from step (a) is still on the plot; if it is not,
+press <strong>Start</strong> and <strong>Freeze</strong> again, because it is the reference every peak
+drop below is read against.</p>
+<p>Turn <strong>Enforce Symmetric Taper</strong> off (the gain lists below are not symmetric)
+and press Lab preset <strong>4 Grating Lobes</strong>. It leaves Rx1, Rx4, and Rx7 at 100%
+and the other five at 0%, so the three active elements sit
+<span class="math notranslate nohighlight">\(3d = 42\ \text{mm}\)</span> apart. Press <strong>Start</strong>. Expect three lobes of the same
+height: the main lobe at <span class="math notranslate nohighlight">\(0^\circ\)</span> and two copies near <span class="math notranslate nohighlight">\(\pm 43^\circ\)</span>. Read their
+angles, their heights against the <span class="math notranslate nohighlight">\(0^\circ\)</span> lobe, and the peak drop against the
+frozen uniform trace.</p>
+<p>Now set Rx4 and Rx7 to 0% and Rx5 to 100%, so only Rx1 and Rx5 are on and
+<span class="math notranslate nohighlight">\(d_\text{eff} = 4d = 56\ \text{mm}\)</span>. Sweep again. Expect lobes near
+<span class="math notranslate nohighlight">\(\pm 31^\circ\)</span>, and the trace climbing to full height at both ends of the plot:
+the <span class="math notranslate nohighlight">\(m = 2\)</span> solution needs <span class="math notranslate nohighlight">\(\sin\theta\)</span> just past 1, so you see its shoulder
+rather than its peak.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Elements on</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(d_\text{eff}\)</span></p></th>
+<th class="head text-left"><p>Lobes at 10.443 GHz</p></th>
+<th class="head text-left"><p>Phaser-00</p></th>
+<th class="head text-left"><p>Peak drop</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Rx1, Rx4, Rx7</p></td>
+<td class="text-left"><p>42 mm</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\pm 43.2^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-43.6^\circ\)</span>, <span class="math notranslate nohighlight">\(+42.3^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-8.5\)</span> dB predicted, <span class="math notranslate nohighlight">\(-7.8\)</span> measured</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Rx1, Rx5</p></td>
+<td class="text-left"><p>56 mm</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\pm 30.9^\circ\)</span>, both ends</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-33.0^\circ\)</span>, <span class="math notranslate nohighlight">\(+29.8^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-12.0\)</span> dB predicted, <span class="math notranslate nohighlight">\(-10.9\)</span> measured</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-step-g-beam-squint">
+<div class="wrap docutils container">
+<p class="rubric">Step (g): Beam Squint</p>
+<p>Move the HB100 to <span class="math notranslate nohighlight">\(45^\circ\)</span> on the <span class="math notranslate nohighlight">\(1.2\)</span> m arc and press <strong>Uniform</strong>. Set
+<strong>Signal BW</strong> to 10 MHz, press <strong>Start</strong>, read <strong>Angle</strong> (set to <strong>Peak</strong>; it
+should report the source, about <span class="math notranslate nohighlight">\(45^\circ\)</span>), and press <strong>Freeze</strong>. Then press
+Lab preset <strong>5 Beam Squint</strong>, <strong>check that Signal BW reads 500 MHz</strong> (Calibrate,
+Find HB100, and the Rect preset all reset it to 0), and sweep again. The peak
+moves even though the source did not.</p>
+<p>A beam commanded to <span class="math notranslate nohighlight">\(\theta_c\)</span> with its phases set at <span class="math notranslate nohighlight">\(f_0\)</span> points at
+<span class="math notranslate nohighlight">\(\sin^{-1}[(f_0/f)\sin\theta_c]\)</span> when the signal is at <span class="math notranslate nohighlight">\(f\)</span>. With
+<span class="math notranslate nohighlight">\(f = 10.443\)</span> GHz and <span class="math notranslate nohighlight">\(f_0 = 9.943\)</span> GHz, the sweep lands on a source at <span class="math notranslate nohighlight">\(45^\circ\)</span>
+only when it commands <span class="math notranslate nohighlight">\(48.0^\circ\)</span>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Signal BW</p></th>
+<th class="head text-left"><p>Angle (Peak)</p></th>
+<th class="head text-left"><p>Shift, calculated</p></th>
+<th class="head text-left"><p>Shift, measured</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>10 MHz</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx 45^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.05^\circ\)</span></p></td>
+<td class="text-left"><p>reference</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>500 MHz</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\approx 48^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(+3.0^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(+2.5\)</span> to <span class="math notranslate nohighlight">\(+3.5^\circ\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-step-h-phase-quantization">
+<div class="wrap docutils container">
+<p class="rubric">Step (h): Phase Quantization</p>
+<p>Put the HB100 back at the arc’s <span class="math notranslate nohighlight">\(-90^\circ\)</span> end and press Lab preset
+<strong>6 Quantization</strong>. It holds the beam at <span class="math notranslate nohighlight">\(15^\circ\)</span> with the Blackman taper and
+opens <strong>Signal vs Time</strong> on the Tracking tab. At <strong>Phase Shift Bits</strong> 7, walk
+the HB100 from <span class="math notranslate nohighlight">\(-90^\circ\)</span> to <span class="math notranslate nohighlight">\(+90^\circ\)</span> along the <span class="math notranslate nohighlight">\(1.2\)</span> m arc, aimed at the
+array, in about 10 s, and read the main-lobe peak and the strongest lobe
+outside the main lobe on the trace. Repeat at 4, 3, and 2 bits.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Bits</p></th>
+<th class="head text-left"><p>LSB</p></th>
+<th class="head text-left"><p>Rule of thumb, <span class="math notranslate nohighlight">\(-6B\)</span> dB</p></th>
+<th class="head text-left"><p>Expected strongest lobe outside the main lobe</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>7</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(2.8^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-42\)</span></p></td>
+<td class="text-left"><p>the floor</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>4</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(22.5^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-24\)</span></p></td>
+<td class="text-left"><p>the floor, as at 7 bits</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>3</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(45^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-18\)</span></p></td>
+<td class="text-left"><p>the floor, as at 7 bits</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>2</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(90^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-12\)</span></p></td>
+<td class="text-left"><p>about <span class="math notranslate nohighlight">\(-8\)</span> dBc, near <span class="math notranslate nohighlight">\(-50^\circ\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The expectations come from rounding a <span class="math notranslate nohighlight">\(15^\circ\)</span> ramp onto each grid; the walk
+has not yet been run on hardware. The earlier version of this step swept the
+beam with the bits reduced and read <span class="math notranslate nohighlight">\(-15.5\)</span>, <span class="math notranslate nohighlight">\(-12.0\)</span>, and <span class="math notranslate nohighlight">\(-8.5\)</span> dBc at 4, 3,
+and 2 bits, above both the rule and Lesson 23’s worst-case simulation. Lobes at
+3 or 4 bits in the walk would point to the kit rounding more than the steering
+ramp.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-step-i-restore">
+<div class="wrap docutils container">
+<p class="rubric">Step (i): Restore</p>
+<p>Before you leave: <strong>Use Bits</strong> on, Phase Shift Bits 7, Signal BW 10 MHz, and
+the <strong>Uniform</strong> preset.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-working-the-hann-numbers">
+<div class="wrap docutils container">
+<p class="rubric">Working the Hann Numbers</p>
+<p>Work the Hann preset all the way through. The eight amplitudes are
+<span class="math notranslate nohighlight">\(a_n = 0.12,\ 0.43,\ 0.77,\ 1.00,\ 1.00,\ 0.77,\ 0.43,\ 0.12\)</span>, giving</p>
+<div class="math notranslate nohighlight">
+\[\sum a_n = 4.64, \qquad \sum a_n^2 = 3.584 .\]</div>
+<p>The plotted peak drop follows from the first sum alone:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+20\log_{10}\!\left(\frac{4.64}{8}\right) &amp;= 20\log_{10}(0.580) \\
+&amp;= -4.7\ \text{dB}.
+\end{aligned}
+\end{split}\]</div>
+<p>The directivity loss follows from both sums:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\eta_t &amp;= \frac{\left(\sum a_n\right)^2}{N \sum a_n^2} = \frac{21.53}{8 \times 3.584} \\
+&amp;= 0.751 \quad \rightarrow \quad -1.2\ \text{dB}.
+\end{aligned}
+\end{split}\]</div>
+<p><img src="../../viz/img/L22-two-numbers.svg"
+     alt="Bar comparison: the plotted peak falls 4.7 dB while directivity falls 1.2 dB, a 3.5 dB difference"
+     style="max-width: 620px; width: 100%; display: block; margin: 1em auto;"></p>
+<p>So the trace drops 4.7 dB and the antenna loses 1.2 dB of directivity. The
+remaining 3.5 dB did not go anywhere, because it was never a loss. The sweep
+plots received power normalized to full scale, and the tapered array collects
+less signal voltage from the source — that part is real and it is the 4.7 dB.
+But the tapered array also responds to less of everything else arriving from
+off-boresight, and the noise-equivalent aperture shrinks along with the signal
+sum. Directivity is the ratio of on-axis intensity to the average over all
+angles, and that ratio only falls by <span class="math notranslate nohighlight">\(\eta_t\)</span>. If you re-normalized each trace
+to its own peak instead of to the uniform peak, the 4.7 dB would vanish from
+the plot entirely and the beam shape would be unchanged.</p>
+<p>The practical statement is short. <strong>The peak drop is a plot artifact of a
+common reference; the taper efficiency is the antenna’s actual loss.</strong> A system
+budget that debits 4.7 dB for the taper overstates the loss by a factor of two
+in power.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-lab-packet">
+<div class="wrap docutils container">
+<p class="rubric">Lab Packet</p>
+<p>The packet is the turn-in document for the whole lab: Part 1 before the period,
+Part 2 at the bench, Part 3 after. <a href="../../labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">L22–L23 Lab packet (PDF)</a>.</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-tapering">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Tapering</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\sum a_n / N\)</span></p></td>
+<td class="text-left"><p>coherent receive-voltage fraction at broadside</p></td>
+<td class="text-left"><p>Hann: <span class="math notranslate nohighlight">\(4.64/8 \rightarrow -4.7\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\eta_t = (\sum a_n)^2/(N\sum a_n^2)\)</span></p></td>
+<td class="text-left"><p>taper efficiency — the directivity the array loses</p></td>
+<td class="text-left"><p>Hann: 0.75, or <span class="math notranslate nohighlight">\(-1.2\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>HPBW with taper</p></td>
+<td class="text-left"><p>broadens as the aperture is de-weighted</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.1^\circ\)</span> uniform, <span class="math notranslate nohighlight">\(18.9^\circ\)</span> Hann, <span class="math notranslate nohighlight">\(22.6^\circ\)</span> Chebyshev</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Floor</p></td>
+<td class="text-left"><p>the limit on any sidelobe reading</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-17\)</span> to <span class="math notranslate nohighlight">\(-31\)</span> dBc on phaser-00; tapered sidelobes sit below it</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Mild taper</p></td>
+<td class="text-left"><p>most of the sidelobe benefit, little directivity lost</p></td>
+<td class="text-left"><p>ends at 30%: <span class="math notranslate nohighlight">\(16.5^\circ\)</span>, <span class="math notranslate nohighlight">\(-0.7\)</span> dB of <span class="math notranslate nohighlight">\(\eta_t\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-the-three-departures">
+<div class="wrap docutils container">
+<p class="rubric">Summary: The Three Departures</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Grating lobe</p></td>
+<td class="text-left"><p>a full-height copy of the beam where <span class="math notranslate nohighlight">\(\sin\theta = m\lambda/d_\text{eff}\)</span> is real</p></td>
+<td class="text-left"><p>every third element on: <span class="math notranslate nohighlight">\(\pm 43^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Beam squint</p></td>
+<td class="text-left"><p>the beam moves when the signal is off the phase-set frequency</p></td>
+<td class="text-left"><p>500 MHz at <span class="math notranslate nohighlight">\(45^\circ\)</span>: <span class="math notranslate nohighlight">\(3^\circ\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Phase quantization</p></td>
+<td class="text-left"><p>lobes that appear when the ramp falls between grid points</p></td>
+<td class="text-left"><p>2 bits at <span class="math notranslate nohighlight">\(15^\circ\)</span>: a lobe near <span class="math notranslate nohighlight">\(-8\)</span> dBc</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Turn in the packet, all three parts, before Lesson 24.</p></li>
+<li><p>L24 places a null on purpose; phaser-00 measured nulls <span class="math notranslate nohighlight">\(-40\)</span> to <span class="math notranslate nohighlight">\(-50\)</span> dB deep.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Part 1 measured the defect a taper can fix: the sidelobes came down, and the
+beam widened, with a peak drop that is not the directivity you lost. Part 2
+measured the three it cannot. Grating lobes are the array factor doing exactly
+what the geometry tells it to, squint is what setting the phases at one
+frequency and receiving at another does to the beam, and quantization lobes
+appear when the steering ramp falls between the shifter’s grid points.
+Lesson 24 turns from pattern defects to pattern control: placing a null at a
+chosen angle on purpose, with weights that change both amplitude and phase.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L22-L23-lab-tapering-squint"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=e355370f43"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script>
+</body>
+</html>

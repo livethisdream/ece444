@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L23 - Beam Squint and Quantization &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=0defe11dd0">
+<link rel="stylesheet" href="../../_static/shell.css?v=9432ef1809">
+<link rel="stylesheet" href="../../_static/frames.css?v=1dea9286a4">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-lab-fmcw-range/index.html">L28 Lab — FMCW Range</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-lab-range-doppler-mti/index.html">L29 Lab — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-lab-cfar/index.html">L30 Lab — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-lab-spectrogram/index.html">L31 Lab — Micro-Doppler Spectrogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l23-beam-squint-and-quantization">
+<h1>L23 - Beam Squint and Quantization<a class="headerlink" href="#l23-beam-squint-and-quantization" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Beam Squint and Quantization</h1>
+<div class="title-rule"></div>
+<p>Grating lobes, beam squint, and phase quantization, each with a number to design against.</p>
+<p>Lesson 23 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame here-23 docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 7">
+  <li>I can identify beam squint and quantization effects in a phased array and describe their impact on system performance.</li>
+</ol>
+<!-- The Module 3 "you are here" strip. Included into a lesson's Learning
+     Objectives frame, which carries `:class: here-NN` to light up its own
+     chip (frames.css). The full lane map lives on the Module 3 overview. -->
+<div class="lane-strip" role="navigation" aria-label="Module 3 lessons, by whether they work amplitude, phase, or both">
+  <span class="ls-label">Module 3</span>
+  <a class="ls-chip ls-amp" data-n="15" href="../L15-aperture-distributions/index.html" title="L15 Apertures: amplitude">15</a>
+  <a class="ls-chip ls-amp" data-n="16" href="../L16-array-factor/index.html" title="L16 Array Factor: amplitude">16</a>
+  <a class="ls-chip ls-both" data-n="17" href="../L17-phased-array-hardware/index.html" title="L17 Hardware and Calibration: amplitude and phase">17</a>
+  <a class="ls-chip ls-phase" data-n="18" href="../L18-beam-steering/index.html" title="L18 Beam Steering: phase">18</a>
+  <a class="ls-chip ls-phase" data-n="19" href="../L19-direction-finding/index.html" title="L19 Direction Finding: phase">19</a>
+  <a class="ls-chip ls-amp" data-n="20" href="../L20-array-factor-beamwidth/index.html" title="L20 Beamwidth: amplitude">20</a>
+  <a class="ls-chip ls-both" data-n="21" href="../L21-antenna-pattern/index.html" title="L21 Antenna Pattern: amplitude and phase">21</a>
+  <a class="ls-chip ls-amp" data-n="22" href="../L22-sidelobes-tapering/index.html" title="L22 Tapering: amplitude">22</a>
+  <a class="ls-chip ls-phase" data-n="23" href="../L23-beam-squint-quantization/index.html" title="L23 Squint and Quantization: phase">23</a>
+  <a class="ls-chip ls-both" data-n="24" href="../L24-null-steering/index.html" title="L24 Nulling: amplitude and phase">24</a>
+  <span class="ls-key"><i class="ls-amp"></i>amplitude <i class="ls-phase"></i>phase <i class="ls-both"></i>both</span>
+</div>
+<div class="depth docutils container">
+<p>In Lesson 22 we controlled the sidelobes with amplitude weights. Three things can still put energy where we did not ask for it, and a taper fixes none of them: the <strong>element spacing</strong>, the <strong>signal bandwidth</strong>, and the <strong>finite resolution of the phase shifters</strong>. Each one produces a specific, predictable defect — a second full-height beam, a beam that moves with frequency, and a floor of sidelobes you cannot get below. This lesson gives you the number for each.
+The L22–L23 Lab then measures all three on your own kit, against the numbers this
+lesson derives, after its Part 1 has measured Lesson 22’s tapers.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-array-factor-repeats-every-2">
+<div class="wrap docutils container">
+<p class="rubric">The Array Factor Repeats Every 2π</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\psi &amp;= kd\ (\sin\theta - \sin\theta_0) \\
+AF_N(\psi) &amp;= \frac{\sin(N\psi/2)}{N \sin(\psi/2)}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>Shift <span class="math notranslate nohighlight">\(\psi\)</span> by <span class="math notranslate nohighlight">\(2\pi\)</span> and <span class="math notranslate nohighlight">\(\vert AF_N \vert\)</span> is unchanged.</p></li>
+<li><p>Real angles reach a <span class="math notranslate nohighlight">\(2kd\)</span>-wide window, <strong>visible space</strong>; a repeat inside it is a <strong>grating lobe</strong>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L23-visible-window.svg"
+     alt="The array factor against its argument psi over two periods each side, with the window real angles reach shaded. Top: 14 mm and 8 elements, window plus or minus 173 degrees, the repeats at plus or minus 360 degrees outside it. Bottom: 42 mm and 3 elements, window plus or minus 519 degrees, both repeats inside it as full-height lobes"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><a href="../L16-array-factor/index.html#frame-grating-lobes">Lesson 16</a> showed that the array factor repeats, and that a repeat reaching visible space is a grating lobe as tall as the main beam. This lesson turns that result into a design rule. Every array pattern in this module has been a function of one variable, Lesson 16’s inter-element phase with Lesson 18’s steering ramp subtracted,</p>
+<div class="math notranslate nohighlight">
+\[\psi = kd\ (\sin\theta - \sin\theta_0),\]</div>
+<p>and the uniform array factor built on it,</p>
+<div class="math notranslate nohighlight">
+\[AF_N(\psi) = \frac{\sin(N\psi/2)}{N \sin(\psi/2)}.\]</div>
+<p>Replace <span class="math notranslate nohighlight">\(\psi\)</span> by <span class="math notranslate nohighlight">\(\psi + 2\pi\)</span> and both sines flip sign together, so <span class="math notranslate nohighlight">\(\vert AF_N \vert\)</span> is unchanged. The array factor is <strong>periodic in <span class="math notranslate nohighlight">\(\psi\)</span> with period <span class="math notranslate nohighlight">\(2\pi\)</span></strong>. The main lobe is the peak at <span class="math notranslate nohighlight">\(\psi = 0\)</span>, and the same peak reappears at <span class="math notranslate nohighlight">\(\psi = \pm 2\pi, \pm 4\pi, \ldots\)</span> — every one of them a full-height beam.</p>
+<p>Whether we ever see those repeats depends on how much of the <span class="math notranslate nohighlight">\(\psi\)</span> axis the real angles <span class="math notranslate nohighlight">\(-90^\circ \le \theta \le +90^\circ\)</span> reach. We call that span <strong>visible space</strong>, and the spacing sets its width: as <span class="math notranslate nohighlight">\(\sin\theta\)</span> runs from <span class="math notranslate nohighlight">\(-1\)</span> to <span class="math notranslate nohighlight">\(+1\)</span>, <span class="math notranslate nohighlight">\(\psi\)</span> runs over a window of total width <span class="math notranslate nohighlight">\(2kd = 4\pi d/\lambda\)</span>. Widening <span class="math notranslate nohighlight">\(d\)</span> brings more periods of the array factor into visible space. A repeat that lands inside visible space is a <strong>grating lobe</strong>. The figure draws both cases on the same axis: at <span class="math notranslate nohighlight">\(14\ \text{mm}\)</span> the window stops at <span class="math notranslate nohighlight">\(\pm 173^\circ\)</span>, short of the repeats at <span class="math notranslate nohighlight">\(\pm 360^\circ\)</span>, and at <span class="math notranslate nohighlight">\(42\ \text{mm}\)</span> it reaches <span class="math notranslate nohighlight">\(\pm 519^\circ\)</span> and takes in both.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-grating-condition">
+<div class="wrap docutils container">
+<p class="rubric">The Grating Condition</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\sin\theta_g = \sin\theta_0 \pm m\ \frac{\lambda}{d}
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(m\)</span> is any positive integer.</p></li>
+<li><p>Any solution with <span class="math notranslate nohighlight">\(\vert\sin\theta_g\vert \le 1\)</span> is a real beam.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p>At <span class="math notranslate nohighlight">\(\theta_g\)</span> every element is back in phase. A grating lobe is a second main beam, <strong>full height</strong>, and no taper lowers it.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Set <span class="math notranslate nohighlight">\(\psi = 2\pi m\)</span> and solve:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+kd\ (\sin\theta_g - \sin\theta_0) &amp;= 2\pi m \\
+\sin\theta_g &amp;= \sin\theta_0 \pm m\ \frac{\lambda}{d}
+\end{aligned}
+\end{split}\]</div>
+<p>for integer <span class="math notranslate nohighlight">\(m = 1, 2, \ldots\)</span> Any solution with <span class="math notranslate nohighlight">\(\vert \sin\theta_g \vert \le 1\)</span> is a real angle, and the array radiates a second beam there. The thinning example’s figure shows why from the elements’ side: at <span class="math notranslate nohighlight">\(43.9^\circ\)</span> the fed elements of the <span class="math notranslate nohighlight">\(42\ \text{mm}\)</span> row sit exactly one wavelength of path apart, so their phases read <span class="math notranslate nohighlight">\(0^\circ\)</span>, <span class="math notranslate nohighlight">\(360^\circ\)</span> and <span class="math notranslate nohighlight">\(720^\circ\)</span> and add exactly as they do at broadside.</p>
+<div class="callout docutils container">
+<p>A grating lobe is not a sidelobe. At <span class="math notranslate nohighlight">\(\theta_g\)</span> every element is back in phase — one full wavelength of path difference per element instead of zero — so the grating lobe is <strong>exactly as tall as the main lobe</strong>. Tapering does not reduce it, because the taper controls the sidelobe skirts of one beam and this is a second beam. Full height is an array-factor statement: <a href="../L21-antenna-pattern/index.html#frame-the-ideal-element">Lesson 21</a>’s element factor scales the lobe by <span class="math notranslate nohighlight">\(EF(\theta_g)\)</span>, which the <span class="math notranslate nohighlight">\(\cos\theta\)</span> model puts <span class="math notranslate nohighlight">\(1.4\)</span> dB down at <span class="math notranslate nohighlight">\(\pm 43^\circ\)</span>. The phaser-00 test run still read the lobes at full height.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-worked-example-thinning-the-phaser-row">
+<div class="wrap docutils container">
+<p class="rubric">Worked Example: Thinning the PHASER Row</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Feed every third patch: <span class="math notranslate nohighlight">\(d = 42\)</span> mm, <span class="math notranslate nohighlight">\(\lambda/d = 0.693\)</span> at <span class="math notranslate nohighlight">\(10.3\)</span> GHz.</p></li>
+<li><p>Grating lobes at <span class="math notranslate nohighlight">\(\pm 43.9^\circ\)</span>: three full-height beams.</p></li>
+<li><p>Every fourth patch: <span class="math notranslate nohighlight">\(d = 56\)</span> mm, lobes at <span class="math notranslate nohighlight">\(\pm 31.3^\circ\)</span>.</p></li>
+<li><p>A wide aperture with few elements gives a narrow but ambiguous beam.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L23-grating-whole-turn.svg"
+     alt="Phase dials for a wave arriving from 43.9 degrees. Top: every third element, 42 mm apart, sees exactly one wavelength of extra path per element, so the dials read 0, 360 and 720 degrees and all point the same way. Bottom: all eight elements, 14 mm apart, see a third of a wavelength per element, so the dials step by 120 degrees and spread around the circle"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — thinning the PHASER row</p>
+<p>The PHASER array is 8 patches on a <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span> pitch. Feed only every third element and the fed elements sit <span class="math notranslate nohighlight">\(42\ \text{mm}\)</span> apart. At the array’s design center of <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span>, <span class="math notranslate nohighlight">\(\lambda = 29.1\ \text{mm}\)</span>, so <span class="math notranslate nohighlight">\(\lambda/d = 29.1/42 = 0.693\)</span>.</p>
+<p>At broadside (<span class="math notranslate nohighlight">\(\theta_0 = 0\)</span>), the <span class="math notranslate nohighlight">\(m = 1\)</span> solutions are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\sin\theta_g &amp;= \pm 0.693 \\
+\theta_g &amp;= \pm 43.9^\circ.
+\end{aligned}
+\end{split}\]</div>
+<p>The <span class="math notranslate nohighlight">\(m = 2\)</span> solutions need <span class="math notranslate nohighlight">\(\vert \sin\theta_g \vert = 1.386\)</span>, which is not a real angle, so there are exactly three full-height beams: <span class="math notranslate nohighlight">\(0^\circ\)</span> and <span class="math notranslate nohighlight">\(\pm 44^\circ\)</span>. In the L22–L23 Lab, repeat the arithmetic at your own kit’s Find HB100 frequency. On phaser-00, one of the course kits, a test run of the lab at <span class="math notranslate nohighlight">\(10.443\ \text{GHz}\)</span> predicts <span class="math notranslate nohighlight">\(\pm 43.1^\circ\)</span> and measured <span class="math notranslate nohighlight">\(-43.6^\circ\)</span> and <span class="math notranslate nohighlight">\(+42.3^\circ\)</span>.</p>
+<p>Feed every fourth element instead (<span class="math notranslate nohighlight">\(56\ \text{mm}\)</span>, <span class="math notranslate nohighlight">\(\lambda/d = 0.520\)</span>) and the pair moves in to <span class="math notranslate nohighlight">\(\pm 31.3^\circ\)</span> (<span class="math notranslate nohighlight">\(\pm 30.8^\circ\)</span> at <span class="math notranslate nohighlight">\(10.443\ \text{GHz}\)</span>, where phaser-00 measured <span class="math notranslate nohighlight">\(-33.0^\circ\)</span> and <span class="math notranslate nohighlight">\(+29.8^\circ\)</span>), with the <span class="math notranslate nohighlight">\(m = 2\)</span> repeat just past the horizon, at <span class="math notranslate nohighlight">\(\sin\theta = \pm 1.04\)</span> — the pattern comes back to within a fraction of a dB of full height at <span class="math notranslate nohighlight">\(\pm 90^\circ\)</span>.</p>
+</div>
+<p>Thinning has two effects. The three fed elements still span an <span class="math notranslate nohighlight">\(84\ \text{mm}\)</span> aperture, so the main beam stays narrow, but with three elements instead of eight the array collects less signal and the pattern between the beams is poorly controlled. Each fed element adds the same voltage at the peak, so the peak falls by the fraction of elements fed, every third element and then every fourth:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+20\log_{10}(3/8) &amp;= -8.5\ \text{dB} \\
+20\log_{10}(2/8) &amp;= -12.0\ \text{dB}
+\end{aligned}
+\end{split}\]</div>
+<p>The phaser-00 test run measured <span class="math notranslate nohighlight">\(-7.8\)</span> and <span class="math notranslate nohighlight">\(-10.9\)</span> dB, about <span class="math notranslate nohighlight">\(1\)</span> dB short of both. The same shortfall appears when the full array is compared with its single elements, and its cause is still open. The narrow beam of a large aperture with the ambiguity of a sparse one is the classic thinned-array trade.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-keeping-grating-lobes-out">
+<div class="wrap docutils container">
+<p class="rubric">Keeping Grating Lobes Out</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+d &lt; \frac{\lambda}{1 + \vert \sin\theta_0 \vert}
+\]</div>
+<ul class="simple">
+<li><p>Scan to <span class="math notranslate nohighlight">\(\pm 45^\circ\)</span>: <span class="math notranslate nohighlight">\(d &lt; 0.586\lambda\)</span>. To <span class="math notranslate nohighlight">\(\pm 60^\circ\)</span>: <span class="math notranslate nohighlight">\(d &lt; 0.536\lambda\)</span>.</p></li>
+<li><p>Any angle: <span class="math notranslate nohighlight">\(d &lt; \lambda/2\)</span>, the default in every scanning array.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L16-grating-limit.svg"
+     alt="Largest grating-lobe-free scan angle against element spacing in wavelengths: the boundary runs from 1.0 wavelength at broadside down to 0.5 wavelength at 90 degrees, with the PHASER at 0.481 inside the safe region and the 45 degree scan limit at 0.586 marked"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>We want no grating lobe anywhere in visible space, for every angle we intend to scan to. The dangerous solution is the one closest to the horizon on the far side of the beam. For a beam steered to positive <span class="math notranslate nohighlight">\(\theta_0\)</span>, that is <span class="math notranslate nohighlight">\(m = 1\)</span> with the minus sign, and pushing it past the horizon requires</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\sin\theta_0 - \frac{\lambda}{d} &amp;&lt; -1 \\
+d &amp;&lt; \frac{\lambda}{1 + \vert \sin\theta_0 \vert}
+\end{aligned}
+\end{split}\]</div>
+<p>The wider we intend to scan, the closer together the elements must be. Broadside operation tolerates <span class="math notranslate nohighlight">\(d &lt; \lambda\)</span>. Scanning to <span class="math notranslate nohighlight">\(\pm 45^\circ\)</span> demands <span class="math notranslate nohighlight">\(d &lt; 0.586\lambda\)</span>, and <span class="math notranslate nohighlight">\(\pm 60^\circ\)</span> demands <span class="math notranslate nohighlight">\(d &lt; 0.536\lambda\)</span>. Take the criterion to its limit, <span class="math notranslate nohighlight">\(\theta_0 \to 90^\circ\)</span>, and you get <span class="math notranslate nohighlight">\(d &lt; \lambda/2\)</span> — which is why <strong>half-wavelength spacing is the default in every scanning array</strong>. It is grating-lobe-free at any scan angle we can command. The figure, from Lesson 16, draws the criterion as a boundary: any spacing and scan angle below the curve is free of grating lobes, and the PHASER’s <span class="math notranslate nohighlight">\(0.481\lambda\)</span> sits below it everywhere.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Grating lobes are not always a defect. Interferometers and sparse radio-astronomy arrays use them on purpose, resolving fine detail with a small number of widely spaced elements and removing the ambiguity by other means. A designer can choose grating lobes; they should never be found after the array is built.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-phaser-has-no-grating-lobe">
+<div class="wrap docutils container">
+<p class="rubric">The PHASER Has No Grating Lobe</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Worst case is the shortest <span class="math notranslate nohighlight">\(\lambda\)</span>: <span class="math notranslate nohighlight">\(10.5\)</span> GHz, <span class="math notranslate nohighlight">\(\lambda/d = 28.6/14 = 2.04\)</span>.</p></li>
+<li><p>Needs <span class="math notranslate nohighlight">\(\vert\sin\theta_0\vert &lt; 1.04\)</span>: every real angle passes.</p></li>
+<li><p>The <span class="math notranslate nohighlight">\(14\)</span> mm pitch is <span class="math notranslate nohighlight">\(0.49\lambda\)</span>, just inside the half-wavelength rule.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — is the PHASER safe?</p>
+<p>Use the highest frequency the array is specified for, <span class="math notranslate nohighlight">\(10.5\ \text{GHz}\)</span>, because <span class="math notranslate nohighlight">\(\lambda\)</span> is shortest there and the criterion is tightest: <span class="math notranslate nohighlight">\(\lambda = 28.6\ \text{mm}\)</span>, so <span class="math notranslate nohighlight">\(\lambda/d = 28.6/14 = 2.04\)</span>.</p>
+<p>The criterion requires <span class="math notranslate nohighlight">\(1 + \vert\sin\theta_0\vert &lt; \lambda/d = 2.04\)</span>, or <span class="math notranslate nohighlight">\(\vert\sin\theta_0\vert &lt; 1.04\)</span>. Every real angle satisfies that, so the array has <strong>no grating lobe at any scan angle in its band</strong>. The <span class="math notranslate nohighlight">\(14\ \text{mm}\)</span> pitch is <span class="math notranslate nohighlight">\(0.49\lambda\)</span> at the band edge, chosen to sit just inside the half-wavelength rule.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-phase-is-set-at-one-frequency">
+<div class="wrap docutils container">
+<p class="rubric">Phase Is Set at One Frequency</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+kd \sin\theta &amp;= k_0 d \sin\theta_0 \\
+\sin\theta &amp;= \frac{f_0}{f}\sin\theta_0
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>The phase ramp is computed once, at <span class="math notranslate nohighlight">\(f_0\)</span>.</p></li>
+<li><p>A signal at another frequency adds in phase at another angle.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L23-squint-ramp.svg"
+     alt="Left: the phase lag the shifters apply across the eight elements, set for 45 degrees at 10.525 GHz, against the lag a 10.025 GHz signal needs at 45 degrees. Right: their difference grows by 5.9 degrees per element, a straight ramp"
+     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The beam-steering computer sets each phase shifter once, in degrees. The angle that setting steers to is not fixed, because the phase a given path length produces depends on frequency. The figure shows the result across the aperture for the worked example below: the shifters apply <span class="math notranslate nohighlight">\(125.1^\circ\)</span> per element, set for <span class="math notranslate nohighlight">\(45^\circ\)</span> at <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>, and a <span class="math notranslate nohighlight">\(10.025\ \text{GHz}\)</span> signal needs <span class="math notranslate nohighlight">\(119.2^\circ\)</span> per element to add in phase at <span class="math notranslate nohighlight">\(45^\circ\)</span>. The difference, <span class="math notranslate nohighlight">\(5.9^\circ\)</span> per element, is itself a straight ramp, and a straight ramp is a steer: the beam moves to a new angle and stays intact. <a href="../L18-beam-steering/index.html#frame-time-delay-versus-phase-delay">Lesson 18</a> named the result, beam squint, and the <a href="../L18-lab-beam-steering/index.html#frame-part-3-the-peak-angle-error-budget">L18 Lab</a> showed it once on the kit; here we compute it.</p>
+<p>Suppose the beam-steering computer sets element <span class="math notranslate nohighlight">\(n\)</span> to a lag of <span class="math notranslate nohighlight">\(n\ k_0 d \sin\theta_0\)</span>, computed at the design frequency <span class="math notranslate nohighlight">\(f_0\)</span> where <span class="math notranslate nohighlight">\(k_0 = 2\pi/\lambda_0\)</span>. Now a signal arrives at some other frequency <span class="math notranslate nohighlight">\(f\)</span> in the band. The elements add in phase toward whatever angle <span class="math notranslate nohighlight">\(\theta\)</span> makes the arrival phase cancel the applied lag:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+kd \sin\theta &amp;= k_0 d \sin\theta_0 \\
+\sin\theta &amp;= \frac{\lambda}{\lambda_0}\sin\theta_0 \\
+&amp;= \frac{f_0}{f}\sin\theta_0,
+\end{aligned}
+\end{split}\]</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-squint-formula">
+<div class="wrap docutils container">
+<p class="rubric">The Squint Formula</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\Delta\theta &amp;= \arcsin\!\left(\frac{f_0}{f}\sin\theta_0\right) - \theta_0 \\
+&amp;\approx -\delta\ \tan\theta_0, \qquad \delta = \frac{f - f_0}{f_0}
+\end{aligned}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>No <span class="math notranslate nohighlight">\(N\)</span>, no <span class="math notranslate nohighlight">\(d\)</span>: only <span class="math notranslate nohighlight">\(f_0/f\)</span> survives.</p></li>
+<li><p>Zero at broadside, fastest at wide scan.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>so the beam points at</p>
+<div class="math notranslate nohighlight">
+\[\boxed{\ \Delta\theta = \arcsin\!\left(\frac{f_0}{f}\sin\theta_0\right) - \theta_0\ }\]</div>
+<p>away from the commanded angle.</p>
+<p>This is <strong>beam squint</strong>. It does not depend on <span class="math notranslate nohighlight">\(N\)</span> or on <span class="math notranslate nohighlight">\(d\)</span> — the phase ramp and the path lengths scale together, and only the ratio <span class="math notranslate nohighlight">\(f_0/f\)</span> survives. It vanishes at broadside, where the ramp is zero and there is nothing to scale. For small fractional offsets <span class="math notranslate nohighlight">\(\delta = (f - f_0)/f_0\)</span>, expanding the arcsine gives the small-offset form:</p>
+<div class="math notranslate nohighlight">
+\[\Delta\theta \approx -\delta\ \tan\theta_0 \quad \text{(radians).}\]</div>
+<p>The beam moves toward the horizon as the frequency drops, and it moves fastest when the beam is already far off broadside.</p>
+<p><img src="../../viz/img/L23-squint-vs-scan.svg"
+     alt="Squint in degrees against commanded angle from 0 to 70 degrees for signals 500 MHz and 1000 MHz below 10.525 GHz, exact as solid lines and the small-offset form as dashed lines; at 45 degrees the exact squint is 2.9 and 6.4 degrees, and the two forms separate as the angle grows"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;"></p>
+<p>The figure plots both forms for signals <span class="math notranslate nohighlight">\(500\)</span> and <span class="math notranslate nohighlight">\(1000\ \text{MHz}\)</span> below <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>. Squint is under a degree near broadside, <span class="math notranslate nohighlight">\(2.9^\circ\)</span> and <span class="math notranslate nohighlight">\(6.4^\circ\)</span> at <span class="math notranslate nohighlight">\(45^\circ\)</span>, and <span class="math notranslate nohighlight">\(5.4^\circ\)</span> and <span class="math notranslate nohighlight">\(13.1^\circ\)</span> at <span class="math notranslate nohighlight">\(60^\circ\)</span>. The small-offset form tracks the exact one at small angles and falls short at wide scan, by <span class="math notranslate nohighlight">\(3.7^\circ\)</span> at <span class="math notranslate nohighlight">\(60^\circ\)</span> for the <span class="math notranslate nohighlight">\(1000\ \text{MHz}\)</span> offset, so a budget at wide scan should use the exact form.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-worked-example-squint-on-the-phaser">
+<div class="wrap docutils container">
+<p class="rubric">Worked Example: Squint on the PHASER</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Phases set for <span class="math notranslate nohighlight">\(45^\circ\)</span> at <span class="math notranslate nohighlight">\(10.525\)</span> GHz; the signal arrives <span class="math notranslate nohighlight">\(500\)</span> MHz lower.</p></li>
+<li><p>The beam lands at <span class="math notranslate nohighlight">\(47.9^\circ\)</span>: <span class="math notranslate nohighlight">\(+2.9^\circ\)</span> of squint, <span class="math notranslate nohighlight">\(0.25\)</span> dB lost at the aimpoint.</p></li>
+<li><p><span class="math notranslate nohighlight">\(1\)</span> GHz off: <span class="math notranslate nohighlight">\(6.4^\circ\)</span>, a third of a beam, <span class="math notranslate nohighlight">\(1.0\)</span> dB.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — squint on the PHASER</p>
+<p>Phases are set for <span class="math notranslate nohighlight">\(\theta_0 = 45^\circ\)</span> at the HB100’s <span class="math notranslate nohighlight">\(f_0 = 10.525\ \text{GHz}\)</span>. A signal arrives <span class="math notranslate nohighlight">\(500\ \text{MHz}\)</span> lower, at <span class="math notranslate nohighlight">\(10.025\ \text{GHz}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\sin\theta &amp;= \frac{10.525}{10.025}\ \sin 45^\circ \\
+&amp;= 1.0499 \times 0.7071 = 0.7424 \\
+\theta &amp;= 47.9^\circ.
+\end{aligned}
+\end{split}\]</div>
+<p>The beam has squinted <span class="math notranslate nohighlight">\(\Delta\theta = +2.9^\circ\)</span>. The small-offset form, with <span class="math notranslate nohighlight">\(\delta = -0.0475\)</span> and <span class="math notranslate nohighlight">\(\tan 45^\circ = 1\)</span>, gives</p>
+<div class="math notranslate nohighlight">
+\[\Delta\theta \approx 0.0475\ \text{rad} = 2.7^\circ,\]</div>
+<p>close enough for a budget. This is the <span class="math notranslate nohighlight">\(+3^\circ\)</span> your <strong>Angle</strong> readout will move in the L22–L23 Lab when the Signal BW goes from 10 to 500 MHz: the GUI sets the phases 500 MHz below the signal, so the sweep has to command <span class="math notranslate nohighlight">\(47.9^\circ\)</span> to land on a source at <span class="math notranslate nohighlight">\(45^\circ\)</span>. The phaser-00 test run agreed: with the source at <span class="math notranslate nohighlight">\(41.1^\circ\)</span>, the prediction is <span class="math notranslate nohighlight">\(+2.6^\circ\)</span> and phaser-00 measured <span class="math notranslate nohighlight">\(+2.5^\circ\)</span>.</p>
+<p>At <span class="math notranslate nohighlight">\(45^\circ\)</span> the beam is <span class="math notranslate nohighlight">\(18.7^\circ\)</span> wide (Lesson 20’s <span class="math notranslate nohighlight">\(13.2^\circ/\cos 45^\circ\)</span>), so <span class="math notranslate nohighlight">\(2.9^\circ\)</span> of squint loses only <span class="math notranslate nohighlight">\(0.25\ \text{dB}\)</span> at the aimpoint. That loss is the array factor evaluated at the aimpoint, which now sits off the beam’s peak. At <span class="math notranslate nohighlight">\(10.025\ \text{GHz}\)</span>, <span class="math notranslate nohighlight">\(kd = 2.94\)</span> rad, and the aimpoint’s <span class="math notranslate nohighlight">\(\sin\theta\)</span> sits <span class="math notranslate nohighlight">\(\sin 45^\circ - \sin 47.9^\circ = -0.0353\)</span> from the peak’s:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\psi &amp;= 2.94 \times (-0.0353) \\
+&amp;= -0.104\ \text{rad} \\
+\vert AF_8(\psi) \vert &amp;= 0.972 \\
+&amp;= -0.25\ \text{dB}
+\end{aligned}
+\end{split}\]</div>
+<p>At a <span class="math notranslate nohighlight">\(1\ \text{GHz}\)</span> offset the squint reaches <span class="math notranslate nohighlight">\(6.4^\circ\)</span>, roughly a third of a beamwidth, and the loss grows to <span class="math notranslate nohighlight">\(1.0\ \text{dB}\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-why-squint-matters">
+<div class="wrap docutils container">
+<p class="rubric">Why Squint Matters</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p><strong>Wideband radar</strong>: each frequency in the pulse points somewhere else, so the beam smears and depoints.</p></li>
+<li><p><strong>Communications</strong>: gain falls at the band edges, a tilt across the channel.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Squint affects two kinds of system differently. A <strong>wideband radar</strong> transmits a pulse whose spectrum is the bandwidth; each frequency component in that pulse points somewhere slightly different, so the pulse’s energy is spread in angle and the effective beam is broadened and depointed. A <strong>communications link</strong> running a modulated carrier loses gain at the band edges relative to the center, which shows up as amplitude tilt across the channel rather than as an angle error.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-true-time-delay">
+<div class="wrap docutils container">
+<p class="rubric">True Time Delay</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\tau_n = \frac{n\ d \sin\theta_0}{c}
+\]</div>
+<ul class="simple">
+<li><p>A delay matches a path length at every frequency: no squint.</p></li>
+<li><p>Delay is costly, so large arrays delay per subarray and phase-shift inside each one.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L23-ttd-vs-phase.svg"
+     alt="Phase lag at the second element for a 45 degree steer against frequency: a true time delay of 33.0 ps gives a straight line through the origin, a phase shifter set at 10.525 GHz gives a flat line at 125.1 degrees, and the two cross only at 10.525 GHz; at 10.025 GHz they differ by 5.9 degrees"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The cure is to stop steering with phase. If instead of a phase lag you insert a <strong>true time delay</strong> of <span class="math notranslate nohighlight">\(\tau_n = n\ d \sin\theta_0 / c\)</span> in each element, the delay compensates the geometric path difference itself, which is a length and not a phase. Every frequency in the band then arrives in phase at the same angle, and the squint is gone at all offsets. True time delay is expensive in analog hardware, which is why large wideband arrays usually compromise: time delay at the level of the <strong>subarray</strong> (a group of elements combined before the rest, as on the PHASER’s two four-element halves in <a href="../L17-phased-array-hardware/index.html#frame-the-hybrid-beamformer">Lesson 17</a>) to control the squint across the aperture, phase shifters inside each subarray where the residual path differences are small. The figure shows why for one element of a <span class="math notranslate nohighlight">\(45^\circ\)</span> steer: a <span class="math notranslate nohighlight">\(33.0\ \text{ps}\)</span> delay produces a phase that grows in step with frequency, while a phase shifter holds its <span class="math notranslate nohighlight">\(125.1^\circ\)</span> at every frequency, so the two agree only at <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span> and differ by <span class="math notranslate nohighlight">\(5.9^\circ\)</span> at <span class="math notranslate nohighlight">\(10.025\ \text{GHz}\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-phase-quantization">
+<div class="wrap docutils container">
+<p class="rubric">Phase Quantization</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\text{LSB} = \frac{360^\circ}{2^B}
+\]</div>
+<ul class="simple">
+<li><p>ADAR1000: <span class="math notranslate nohighlight">\(B = 7\)</span>, 128 states, LSB <span class="math notranslate nohighlight">\(= 2.8125^\circ\)</span>.</p></li>
+<li><p>Rounding to that grid coarsens the pointing and adds sidelobes.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The ADAR1000 does not accept an arbitrary phase. It has a <span class="math notranslate nohighlight">\(B\)</span>-bit phase shifter, and <span class="math notranslate nohighlight">\(B\)</span> bits divide the circle into <span class="math notranslate nohighlight">\(2^B\)</span> steps. The smallest step, one <strong>least significant bit (LSB)</strong>, is the grid <a href="../L18-beam-steering/index.html#frame-phase-shifter-resolution">Lesson 18</a> rounded its <span class="math notranslate nohighlight">\(30^\circ\)</span> phase table onto:</p>
+<div class="math notranslate nohighlight">
+\[\text{LSB} = \frac{360^\circ}{2^B}.\]</div>
+<p>The ADAR1000 uses <span class="math notranslate nohighlight">\(B = 7\)</span>, giving 128 states and an LSB of <span class="math notranslate nohighlight">\(2.8125^\circ\)</span>.
+The ADAR1000 rounds every commanded phase to that grid, which has two
+consequences.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-pointing-granularity">
+<div class="wrap docutils container">
+<p class="rubric">Pointing Granularity</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\Delta\theta_0 \approx \frac{\text{LSB}}{360^\circ\ (d/\lambda)}\ \text{rad}
+\]</div>
+<ul class="simple">
+<li><p>PHASER: <span class="math notranslate nohighlight">\(0.91^\circ\)</span> at broadside, one-fourteenth of a beam.</p></li>
+<li><p>Grows as <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span>: <span class="math notranslate nohighlight">\(1.8^\circ\)</span> at <span class="math notranslate nohighlight">\(60^\circ\)</span>.</p></li>
+<li><p>2 bits: <span class="math notranslate nohighlight">\(29^\circ\)</span> steps, so broadside and about <span class="math notranslate nohighlight">\(\pm 31^\circ\)</span> only.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The inter-element phase for a beam at <span class="math notranslate nohighlight">\(\theta_0\)</span> is <span class="math notranslate nohighlight">\(\Delta\phi = 360^\circ (d/\lambda) \sin\theta_0\)</span>. If the controller can only command multiples of the LSB, only a discrete set of beam angles exists:</p>
+<div class="math notranslate nohighlight">
+\[\sin\theta_0 = \frac{m\ \text{LSB}}{360^\circ\ (d/\lambda)},\]</div>
+<p>so the step near broadside is</p>
+<div class="math notranslate nohighlight">
+\[\Delta\theta_0 \approx \frac{\text{LSB}}{360^\circ\ (d/\lambda)}\ \text{rad}.\]</div>
+<p>For the PHASER at <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>, <span class="math notranslate nohighlight">\(d/\lambda = 0.491\)</span>, so the step is <span class="math notranslate nohighlight">\(2.8125/(360 \times 0.491) = 0.0159\ \text{rad} = 0.91^\circ\)</span> at broadside. Compared with the <span class="math notranslate nohighlight">\(13.2^\circ\)</span> beamwidth that is about one-fourteenth of a beam, which is fine. Off broadside the same step in <span class="math notranslate nohighlight">\(\sin\theta_0\)</span> spans a wider angle, because <span class="math notranslate nohighlight">\(\Delta(\sin\theta_0) = \cos\theta_0\ \Delta\theta_0\)</span>. The step therefore grows as <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span>, reaching <span class="math notranslate nohighlight">\(1.8^\circ\)</span> at <span class="math notranslate nohighlight">\(60^\circ\)</span>. Drop to <span class="math notranslate nohighlight">\(B = 2\)</span> and the same calculation gives <span class="math notranslate nohighlight">\(29^\circ\)</span> per step: a 2-bit array can only point at broadside and at about <span class="math notranslate nohighlight">\(\pm 31^\circ\)</span>.</p>
+<p><img src="../../viz/img/L23-pointing-grid.svg"
+     alt="The beam angles a phase shifter can command on the course array, as ticks from 0 to 90 degrees: 2 bits gives 0 and 30.6 degrees; 3 bits adds 14.7 and 49.7; 4 bits gives eight angles out to 62.9 degrees; 7 bits gives a dense set whose gaps widen toward wide scan"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;"></p>
+<p>The figure shows the angles each bit count can reach on the course array. With 3 bits they are <span class="math notranslate nohighlight">\(0^\circ\)</span>, <span class="math notranslate nohighlight">\(14.7^\circ\)</span>, <span class="math notranslate nohighlight">\(30.6^\circ\)</span> and <span class="math notranslate nohighlight">\(49.7^\circ\)</span>, equally spaced in <span class="math notranslate nohighlight">\(\sin\theta_0\)</span> and so spreading apart in angle as the scan widens. A real controller rounds each element on its own, which fills in the angles between these and brings in the quantization lobes below.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-quantization-sidelobes">
+<div class="wrap docutils container">
+<p class="rubric">Quantization Sidelobes</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[
+\text{QSLL} \approx -6B\ \text{dB}
+\]</div>
+<ul class="simple">
+<li><p>Rounding leaves a periodic sawtooth phase error, and it radiates a lobe.</p></li>
+<li><p>Rule: 2 bits <span class="math notranslate nohighlight">\(-12\)</span> dB, 3 bits <span class="math notranslate nohighlight">\(-18\)</span>, 4 bits <span class="math notranslate nohighlight">\(-24\)</span>.</p></li>
+<li><p>Phaser-00 measured <span class="math notranslate nohighlight">\(-8.5\)</span>, <span class="math notranslate nohighlight">\(-12.0\)</span>, and <span class="math notranslate nohighlight">\(-15.5\)</span> dBc: above the rule.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L23-quant-staircase.svg"
+     alt="Top: the exact phase ramp for a beam at 28 degrees and the 3-bit staircase the shifters can set, in steps of 45 degrees. Bottom: the rounding error at each element, never more than 22.5 degrees either way, rising and falling across the aperture"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A real controller does better than a uniform quantized increment. It computes the exact ramp for every element, then rounds each element independently, which puts the beam much closer to the commanded angle. What is left behind is a staircase: the difference between the exact ramp and the rounded one is a sawtooth error, bounded by half an LSB, that repeats across the aperture. A periodic phase error radiates, and where it radiates is a <strong>quantization sidelobe</strong>. The figure shows the staircase for a beam at <span class="math notranslate nohighlight">\(28^\circ\)</span> with 3 bits: the exact ramp climbs <span class="math notranslate nohighlight">\(83.1^\circ\)</span> per element, the shifters can only set multiples of <span class="math notranslate nohighlight">\(45^\circ\)</span>, and the error left at each element rises and falls within <span class="math notranslate nohighlight">\(\pm 22.5^\circ\)</span>.</p>
+<p>Its level follows from the size of the error. Rounding leaves at most half an LSB at each element. For a small phase error <span class="math notranslate nohighlight">\(e^{j\phi} \approx 1 + j\phi\)</span>, so the error adds a small field to each element in proportion to <span class="math notranslate nohighlight">\(\phi\)</span>, and the lobe that field radiates scales with the sawtooth’s peak:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\phi_\text{max} &amp;= \frac{\text{LSB}}{2} = \frac{\pi}{2^B}\ \text{rad} \\
+\frac{E_\text{lobe}}{E_\text{beam}} &amp;\approx \frac{\phi_\text{max}}{\pi} = 2^{-B} \\
+\text{QSLL} &amp;= 20\log_{10} 2^{-B} = -6.02B\ \text{dB}
+\end{aligned}
+\end{split}\]</div>
+<p>Each extra bit halves the error, which halves the lobe’s field and lowers the <strong>quantization sidelobe level (QSLL)</strong> by <span class="math notranslate nohighlight">\(6\)</span> dB. That gives the rule of thumb, so 2 bits puts a lobe near <span class="math notranslate nohighlight">\(-12\)</span> dB, 3 bits near <span class="math notranslate nohighlight">\(-18\)</span> dB, and the ADAR1000’s 7 bits near <span class="math notranslate nohighlight">\(-42\)</span> dB. Treat this as an RMS estimate for a large array. On an aperture as short as eight elements there are only a couple of sawtooth periods, so individual lobes scatter several dB either side of the rule. Taken at face value, the rule says that from 3 bits up the quantization lobes drop below the array’s own <span class="math notranslate nohighlight">\(-13\)</span> dB sidelobes and no longer set the sidelobe level.</p>
+<p>The hardware disagrees. In the phaser-00 test run, with the source fixed, the kit read the strongest lobe beyond <span class="math notranslate nohighlight">\(\pm 35^\circ\)</span> at <span class="math notranslate nohighlight">\(-8.5\)</span> dBc with 2 bits, <span class="math notranslate nohighlight">\(-12.0\)</span> dBc with 3, <span class="math notranslate nohighlight">\(-15.5\)</span> dBc with 4, and <span class="math notranslate nohighlight">\(-17.4\)</span> dBc, the floor of that sweep, with 7. Every reading sits above the rule, by <span class="math notranslate nohighlight">\(3.5\)</span> dB at 2 bits and by <span class="math notranslate nohighlight">\(6\)</span> to <span class="math notranslate nohighlight">\(8.5\)</span> dB at 3 and 4 bits, so on this kit 3 bits is not enough to hide the quantization lobes under the <span class="math notranslate nohighlight">\(-13\)</span> dB sidelobes. The <strong>Angle</strong> readout moved too: it read <span class="math notranslate nohighlight">\(+8.4^\circ\)</span> at 4, 3, and 2 bits against <span class="math notranslate nohighlight">\(+1.8^\circ\)</span> at 7, several times the pointing step derived above. The cause of the extra error has not been confirmed. At low bit counts, read the lobe levels on the sweep rather than the Angle readout.</p>
+<p><img src="../../viz/img/L23-qsll-vs-bits.svg"
+     alt="Worst lobe in dB below the beam against phase-shifter bits from 2 to 7: the minus 6B rule; the simulated worst quantization lobe on the course array over steer angles 0 to 50 degrees, about 4 dB above the rule at every bit count; the uniform array's own sidelobes at minus 13.3 dB; and the phaser-00 readings, minus 8.5, minus 12.0 and minus 15.5 dBc at 2, 3 and 4 bits, with the sweep floor at 7 bits"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;"></p>
+<p>The figure adds a third curve: the worst quantization lobe the course array can produce at any steer angle up to <span class="math notranslate nohighlight">\(50^\circ\)</span>, computed from the field the rounding error radiates on its own. It sits about <span class="math notranslate nohighlight">\(4\)</span> dB above the rule at every bit count, because the rule is an average for a large array and eight elements leave room for a worst case. That accounts for the 2-bit reading, <span class="math notranslate nohighlight">\(-8.3\)</span> dB simulated against <span class="math notranslate nohighlight">\(-8.5\)</span> dBc measured. The 3- and 4-bit readings still sit <span class="math notranslate nohighlight">\(2.5\)</span> and <span class="math notranslate nohighlight">\(4.7\)</span> dB above even the worst case, so rounding the steering ramp does not explain them by itself.</p>
+<p>More bits improve two things: finer pointing, which scales as the LSB, and a lower sidelobe floor, which scales as <span class="math notranslate nohighlight">\(6\)</span> dB per bit. Seven bits is the standard choice because it puts the quantization floor far below every other error in the array.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-dither">
+<div class="wrap docutils container">
+<p class="rubric">Dither</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The same sawtooth on every beam position radiates coherently into one lobe.</p></li>
+<li><p>A small known offset per element before rounding breaks the period.</p></li>
+<li><p>The same error spreads over many angles: a lower peak lobe, no new hardware.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Dither lowers the peak quantization lobe without new hardware. If the rounding error is the same sawtooth on every beam position, it radiates coherently into one lobe. Adding a small known phase offset per element before rounding breaks the periodicity, which spreads the same total error energy over many angles instead of concentrating it in one.</p>
+<p><img src="../../viz/img/L23-dither-error.svg"
+     alt="Rounding error at each element of a 32-element, 3-bit array steered to 15.8 degrees. Top, plain rounding: the error drifts by about 4 degrees per element and repeats as a sawtooth, radiating an error lobe at minus 16.9 dB. Bottom, with a fixed phase offset per element: the error stays within plus or minus 22.5 degrees but no longer repeats, and the error lobe falls to minus 21.8 dB"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;"></p>
+<p>The effect needs a longer aperture than eight elements to see, so the figure uses 32. With plain rounding the error drifts about <span class="math notranslate nohighlight">\(4^\circ\)</span> per element and repeats as a sawtooth, and the field it radiates peaks at <span class="math notranslate nohighlight">\(-16.9\)</span> dB. With a fixed, known offset built into each element and the command rounded around it, the error stays within the same <span class="math notranslate nohighlight">\(\pm 22.5^\circ\)</span> but no longer repeats, and for a typical set of offsets its peak falls to <span class="math notranslate nohighlight">\(-21.8\)</span> dB.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-null-depth-predicted-and-measured">
+<div class="wrap docutils container">
+<p class="rubric">Null Depth: Predicted and Measured</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<ul class="simple">
+<li><p>Quantization alone still allows a <span class="math notranslate nohighlight">\(-48\)</span> dB null.</p></li>
+<li><p>Our sweep-floor estimate capped measured nulls near <span class="math notranslate nohighlight">\(21\)</span> dB.</p></li>
+<li><p>Phaser-00 measured <span class="math notranslate nohighlight">\(-40\)</span> to <span class="math notranslate nohighlight">\(-50\)</span> dB nulls in L24, but sweep floors from <span class="math notranslate nohighlight">\(-17\)</span> to <span class="math notranslate nohighlight">\(-31\)</span> dBc.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L23-null-depth-levels.svg"
+     alt="Null depths in dB below the uniform peak. Predicted: quantized weights alone, minus 48 dB; the first estimate from the sweep floor, minus 21 dB. Measured on phaser-00: the L24 notch at minus 46 to minus 50 dB, the difference null at minus 41.5 dB, the delta null at minus 39.7 dB, and the L22 to L23 sweep floors from minus 17 to minus 31 dB"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>One thing quantization does <em>not</em> set is how deep a null can go. It is tempting to assume that a cancellation is only as good as the phase resolution behind it, but the LSB does not limit the null weights: rounding them to a <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> grid with 1% gain steps still produces a notch near <span class="math notranslate nohighlight">\(-48\)</span> dB at the angle it was designed for. What rounding does instead is move the notch a fraction of a degree off its commanded angle, which is a pointing effect, not a depth effect.</p>
+<p>Our first estimate of the measured limit came from the receiver. Earlier sweeps on the PHASER showed a noise floor about <span class="math notranslate nohighlight">\(23\)</span> dB below the uniform-taper peak, and the weights that create a null reduce the main-lobe gain by about <span class="math notranslate nohighlight">\(2\)</span> dB, so we expected a sweep to show nothing deeper than about <span class="math notranslate nohighlight">\(21\)</span> dB below the new peak.</p>
+<p>The phaser-00 test run did not bear that out. In the L24 Lab the notch reached <span class="math notranslate nohighlight">\(-46\)</span> to <span class="math notranslate nohighlight">\(-50\)</span> dB below the uniform peak, the difference null <span class="math notranslate nohighlight">\(-41.5\)</span> dB, and the delta null <span class="math notranslate nohighlight">\(-39.7\)</span> dBc. The deepest of these sits close to the <span class="math notranslate nohighlight">\(-48\)</span> dB that quantization alone allows, so on that kit the sweep followed the pattern most of the way down. The same session’s L22–L23 Lab sweeps, however, read floors between <span class="math notranslate nohighlight">\(-17\)</span> and <span class="math notranslate nohighlight">\(-31\)</span> dBc, and a wall or a person beside the kit raised lobes as high as <span class="math notranslate nohighlight">\(-9\)</span> dBc. The floor a sweep shows is therefore not one fixed number: it changed from lab to lab on the same kit, and the bench around the kit changed it further.</p>
+<div class="callout docutils container">
+<p>Separate the two limits. <strong>Quantization</strong> sets a sidelobe floor at roughly <span class="math notranslate nohighlight">\(-6B\)</span> dB and a pointing granularity of about one LSB, and on the course array it still allows a <span class="math notranslate nohighlight">\(-48\)</span> dB null. The <strong>floor of the measurement</strong> sets what you can observe. We predicted that floor would cap a measured null near <span class="math notranslate nohighlight">\(21\)</span> dB; on phaser-00 the L24 nulls reached <span class="math notranslate nohighlight">\(-40\)</span> to <span class="math notranslate nohighlight">\(-50\)</span> dB, while the L22–L23 sweeps on the same kit read floors from <span class="math notranslate nohighlight">\(-17\)</span> to <span class="math notranslate nohighlight">\(-31\)</span> dBc. A shallow measured null points to the bench first, not to the phase shifter.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-three-departures-on-the-course-array">
+<div class="wrap docutils container">
+<p class="rubric">Three Departures on the Course Array</p>
+<div class="depth docutils container">
+<p>The widget’s left panel is the pattern; its right panel shows why the pattern looks that way. At the two angles marked 1 and 2 on the pattern, it adds the eight element contributions head to tail, the same sum Lesson 22 drew for the first sidelobe, and the chain’s length is the level at that angle. Start in <strong>Grating</strong> at <span class="math notranslate nohighlight">\(14\ \text{mm}\)</span>: the chain at the sidelobe curls almost shut. Step to <span class="math notranslate nohighlight">\(42\ \text{mm}\)</span> and the chain at <span class="math notranslate nohighlight">\(43.9^\circ\)</span> comes out straight, because each fed element is a whole turn behind its neighbor. Switch to <strong>Squint</strong> and drag the offset: the chain at the commanded <span class="math notranslate nohighlight">\(45^\circ\)</span> bends into an arc, while the chain at the new peak is straight, so the beam has moved rather than broken. Switch to <strong>Quantization</strong>, set 3 bits, and move the steer angle: at <span class="math notranslate nohighlight">\(15^\circ\)</span> the ramp lands almost exactly on the <span class="math notranslate nohighlight">\(45^\circ\)</span> grid and nothing changes, while at <span class="math notranslate nohighlight">\(28^\circ\)</span> the rounding error lines the chain up partway and a lobe rises to <span class="math notranslate nohighlight">\(-9\)</span> dB. Whether rounding matters depends on how the ramp falls on the grid, not only on the number of bits.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/squint-quantization.html"
+        width="100%" height="424"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Grating lobes, beam squint and phase quantization on the 8-element course array">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-three-departures-three-cures">
+<div class="wrap docutils container">
+<p class="rubric">Three Departures, Three Cures</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Departure</p></th>
+<th class="head text-left"><p>Set by</p></th>
+<th class="head text-left"><p>Cure</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Grating lobe</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\lambda/d\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(d \le \lambda/2\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Beam squint</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\delta\ \tan\theta_0\)</span></p></td>
+<td class="text-left"><p>True time delay</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Pointing step</p></td>
+<td class="text-left"><p>the LSB</p></td>
+<td class="text-left"><p>More bits</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Quantization lobe</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-6B\)</span> dB</p></td>
+<td class="text-left"><p>More bits, dither</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The three failures look different on a sweep and a designer fixes each one in a different place.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Phenomenon</p></th>
+<th class="head text-left"><p>Cause</p></th>
+<th class="head text-left"><p>Predict it with</p></th>
+<th class="head text-left"><p>Design cure</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Grating lobe</p></td>
+<td class="text-left"><p>Element spacing too wide for the scan range</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\sin\theta_g = \sin\theta_0 \pm m\lambda/d\)</span></p></td>
+<td class="text-left"><p>Keep <span class="math notranslate nohighlight">\(d &lt; \lambda/(1+\vert\sin\theta_0\vert)\)</span>; <span class="math notranslate nohighlight">\(d \le \lambda/2\)</span> is safe everywhere</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Thinned-array ambiguity</p></td>
+<td class="text-left"><p>Feeding a subset of a filled aperture</p></td>
+<td class="text-left"><p>Same criterion, using the effective spacing</p></td>
+<td class="text-left"><p>Fill the aperture, or accept and resolve the ambiguity</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Beam squint</p></td>
+<td class="text-left"><p>One phase setting used across a band</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta\theta = \arcsin((f_0/f)\sin\theta_0) - \theta_0\)</span></p></td>
+<td class="text-left"><p>True time delay, at the element or the subarray</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Pointing granularity</p></td>
+<td class="text-left"><p>Finite phase steps in the beam-steering command</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta\theta_0 \approx \text{LSB}/(360^\circ d/\lambda)\)</span></p></td>
+<td class="text-left"><p>More bits</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Quantization sidelobes</p></td>
+<td class="text-left"><p>Staircase error left after rounding the ramp</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\text{QSLL} \approx -6B\)</span> dB</p></td>
+<td class="text-left"><p>More bits, or dither the rounding across elements</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-grating-lobes">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Grating Lobes</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\sin\theta_g = \sin\theta_0 \pm m\lambda/d\)</span></p></td>
+<td class="text-left"><p>Grating-lobe angles, from the <span class="math notranslate nohighlight">\(2\pi\)</span> periodicity of the array factor</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(42\ \text{mm}\)</span> at <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span> gives <span class="math notranslate nohighlight">\(\pm 43.9^\circ\)</span>; <span class="math notranslate nohighlight">\(56\ \text{mm}\)</span> gives <span class="math notranslate nohighlight">\(\pm 31.3^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(d &lt; \lambda/(1+\vert\sin\theta_0\vert)\)</span></p></td>
+<td class="text-left"><p>Spacing that keeps grating lobes out of visible space</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(d \le \lambda/2\)</span> is safe at every scan angle</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Grating-lobe height</p></td>
+<td class="text-left"><p>It is a second main lobe, not a sidelobe</p></td>
+<td class="text-left"><p>Equal to the main beam; a taper does not reduce it</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-beam-squint">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Beam Squint</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta\theta = \arcsin((f_0/f)\sin\theta_0) - \theta_0\)</span></p></td>
+<td class="text-left"><p>Beam squint when the signal is off the phase-set frequency</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(500\ \text{MHz}\)</span> at <span class="math notranslate nohighlight">\(45^\circ\)</span> gives <span class="math notranslate nohighlight">\(+2.9^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta\theta \approx -(\Delta f/f_0)\tan\theta_0\)</span></p></td>
+<td class="text-left"><p>Small-offset squint, for a budget</p></td>
+<td class="text-left"><p>Zero at broadside, worst at wide scan</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>True time delay</p></td>
+<td class="text-left"><p>Delays the signal instead of rotating its phase</p></td>
+<td class="text-left"><p>Removes squint at all offsets</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-quantization">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Quantization</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\text{LSB} = 360^\circ/2^B\)</span></p></td>
+<td class="text-left"><p>Phase step of a <span class="math notranslate nohighlight">\(B\)</span>-bit shifter</p></td>
+<td class="text-left"><p>ADAR1000: <span class="math notranslate nohighlight">\(B = 7\)</span>, LSB <span class="math notranslate nohighlight">\(= 2.8125^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\Delta\theta_0 \approx \text{LSB}/(360^\circ d/\lambda)\)</span></p></td>
+<td class="text-left"><p>Pointing granularity near broadside</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.91^\circ\)</span> on the PHASER, one-fourteenth of a beam</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\text{QSLL} \approx -6B\)</span> dB</p></td>
+<td class="text-left"><p>Quantization sidelobe rule of thumb</p></td>
+<td class="text-left"><p>2 bits gives <span class="math notranslate nohighlight">\(-12\)</span> dB; 7 bits gives <span class="math notranslate nohighlight">\(-42\)</span> dB; phaser-00 read <span class="math notranslate nohighlight">\(-8.5\)</span> dBc at 2 bits and <span class="math notranslate nohighlight">\(-12.0\)</span> at 3</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../practice/ECE444_L23_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a class="doc-link doc-key" href="../../practice/ECE444_L23_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The L22–L23 Lab measures all three departures on your own kit.</p></li>
+<li><p>L24 places a null: quantization nudges it; phaser-00 measured <span class="math notranslate nohighlight">\(-40\)</span> to <span class="math notranslate nohighlight">\(-50\)</span> dB.</p></li>
+<li><p>Bring the LSB of a <span class="math notranslate nohighlight">\(B\)</span>-bit shifter, its pointing step, and the weights <span class="math notranslate nohighlight">\(w_n\)</span>.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Part 2 of the <a class="reference internal" href="../L22-L23-lab-tapering-squint/index.html"><span class="doc std std-doc">L22–L23 Lab</span></a> measures all three of today’s departures on your own kit. Lesson 24 then extends pattern control from the whole beam to one chosen angle. So far you have shaped the beam and the sidelobes as a whole; next you will place a null at a chosen angle on purpose, which is what an array does when a jammer or an interfering transmitter sits somewhere you know about. The weights come from subtracting one steering vector from another, and the arithmetic is short.</p>
+<p>Both of today’s floors appear again in L24. Quantization moves the notch slightly off its commanded angle without filling it, and the floor of the sweep decides how much of the notch you can see. We predicted a measured depth near <span class="math notranslate nohighlight">\(21\)</span> dB; phaser-00 reached <span class="math notranslate nohighlight">\(-40\)</span> to <span class="math notranslate nohighlight">\(-50\)</span> dB, so in the L24 Lab compare your own notch against both numbers. Before Lesson 24, be able to state the LSB of a <span class="math notranslate nohighlight">\(B\)</span>-bit shifter and the pointing step it implies on the course array, and review the complex element weights <span class="math notranslate nohighlight">\(w_n\)</span> from Lesson 22 — the null-steering result is written entirely in that notation.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L23-beam-squint-quantization"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=e355370f43"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4 — Radar Fundamentals and FMCW &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../_static/custom.css?v=0defe11dd0">
+<link rel="stylesheet" href="../_static/shell.css?v=9432ef1809">
+<link rel="stylesheet" href="../_static/frames.css?v=1dea9286a4">
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module03/index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module03/L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L28-lab-fmcw-range/index.html">L28 Lab — FMCW Range</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L29-lab-range-doppler-mti/index.html">L29 Lab — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L30-lab-cfar/index.html">L30 Lab — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="L31-lab-spectrogram/index.html">L31 Lab — Micro-Doppler Spectrogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="module-4-radar-fundamentals-and-fmcw">
+<h1>Module 4 — Radar Fundamentals and FMCW<a class="headerlink" href="#module-4-radar-fundamentals-and-fmcw" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Module 04</div>
+<h1 class="frame-title">Radar Fundamentals and FMCW</h1>
+<div class="title-rule"></div>
+<p>Send it, hear it come back, and work out what is out there.</p>
+<p>Lessons 25–31 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-where-this-module-goes">
+<div class="wrap docutils container">
+<p class="rubric">Where This Module Goes</p>
+<p>Radar is the antenna course with a clock attached. The radar equation says
+whether you will hear the echo at all; range, resolution and Doppler say what
+you can tell about the thing that sent it back.</p>
+<p>Then it gets real: <strong>FMCW on the PHASER</strong>, processed into range, a range
+waterfall, range-Doppler, MTI, and CFAR — the same chain a fielded radar runs.
+You build that chain one lab at a time, and then explain it in <strong>the final
+project, a report in your own words</strong>.</p>
+<div class="depth docutils container">
+<p>Detection is a decision under noise, not a measurement. Probability of
+detection and false-alarm rate move together, and CFAR exists because the
+noise floor will not hold still. The module then ends on what a radar does
+with a detection once it has one: classify it from its micro-Doppler
+signature, and track it in range and angle.</p>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives-4-1-4-3">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives 4.1-4.3</p>
+<ol class="lo-list" style="--module: '4'">
+  <li>I can apply the radar equation to calculate received power for a given geometry, and account for path loss and radar cross section (RCS).</li>
+  <li>I can calculate range resolution, unambiguous range, and Doppler shift for a given radar waveform.</li>
+  <li>I can apply radar detection theory (PD, FAR, dwell time) to determine detection performance under noise.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives-4-4-4-6">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives 4.4-4.6</p>
+<ol class="lo-list" start="4" style="--module: '4'">
+  <li>I can describe FMCW radar operation and configure an FMCW waveform on the ADALM-PHASER.</li>
+  <li>I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.</li>
+  <li>I can implement moving target indication (MTI) processing to distinguish moving targets from clutter.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives-4-7-4-9">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives 4.7-4.9</p>
+<ol class="lo-list" start="7" style="--module: '4'">
+  <li>I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance.</li>
+  <li>I can integrate FMCW radar processing with a phased-array front-end to track a moving target.</li>
+  <li>I can classify a detected target from its micro-Doppler signature and report the classifier's accuracy.</li>
+</ol>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-25-27-the-equation-and-what-it-takes-to-detect">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 25-27: The Equation, and What It Takes to Detect</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L25-radar-equation/index.html">
+    <span class="mt-kind">Lesson 25</span>
+    <h4>The Radar Equation, Path Loss, and RCS</h4>
+    <p>Radar equation, path loss, and radar cross section. Objective 4.1.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L26-range-resolution-doppler/index.html">
+    <span class="mt-kind">Lesson 26</span>
+    <h4>Range, Resolution, and Doppler</h4>
+    <p>Range resolution, unambiguous range, Doppler shift, and radar types. Objective 4.2.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L27-radar-detection/index.html">
+    <span class="mt-kind">Lesson 27</span>
+    <h4>Radar Detection</h4>
+    <p>Detection theory: probability of detection, false-alarm rate, and dwell time under noise. Objective 4.3.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-28-29-fmcw-range-and-doppler-on-the-bench">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 28-29: FMCW Range and Doppler on the Bench</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L28-fmcw/index.html">
+    <span class="mt-kind">Lesson 28</span>
+    <h4>FMCW on the Phaser</h4>
+    <p>FMCW operation and configuring an FMCW waveform on the PHASER. Objective 4.4.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L28-lab-fmcw-range/index.html">
+    <span class="mt-kind">L28 Lab</span>
+    <h4>FMCW Range</h4>
+    <p>Range and the range waterfall from one FMCW capture. Objectives 4.2, 4.5.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L29-range-doppler-mti/index.html">
+    <span class="mt-kind">Lesson 29</span>
+    <h4>Range-Doppler and MTI</h4>
+    <p>Range-Doppler processing of a burst of chirps, and MTI to separate movers from clutter. Objectives 4.5, 4.6.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L29-lab-range-doppler-mti/index.html">
+    <span class="mt-kind">L29 Lab</span>
+    <h4>Range-Doppler and MTI</h4>
+    <p>The range-Doppler map and MTI on your own kit.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-lessons-30-31-detect-classify-and-track">
+<div class="wrap docutils container">
+<p class="rubric">Lessons 30-31: Detect, Classify, and Track</p>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="L30-cfar/index.html">
+    <span class="mt-kind">Lesson 30</span>
+    <h4>CFAR Processing</h4>
+    <p>Constant false-alarm-rate processing. Objective 4.7.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L30-lab-cfar/index.html">
+    <span class="mt-kind">L30 Lab</span>
+    <h4>CFAR Processing</h4>
+    <p>Apply CFAR to radar data and evaluate detection performance.</p>
+  </a>
+  <a class="mt-card mt-lesson" href="L31-classification-tracking/index.html">
+    <span class="mt-kind">Lesson 31</span>
+    <h4>Classification and Tracking</h4>
+    <p>Micro-Doppler classification and range and angle tracking. Objectives 4.8, 4.9.</p>
+  </a>
+  <a class="mt-card mt-practice mt-lab" href="L31-lab-spectrogram/index.html">
+    <span class="mt-kind">L31 Lab</span>
+    <h4>Micro-Doppler Spectrogram</h4>
+    <p>Record a moving target's spectrogram and classify it. Objective 4.9.</p>
+  </a>
+</div>
+</div>
+</div>
+<div class="frame docutils container" id="frame-the-final-project">
+<div class="wrap docutils container">
+<p class="rubric">The Final Project</p>
+<ul class="simple">
+<li><p><strong>One report, in your own words</strong>, on the radar you built: 30% of the course grade.</p></li>
+<li><p>The L28-L31 Labs are the scaffolding: range, range-Doppler and MTI, CFAR, classification.</p></li>
+<li><p>The lab packets alone are not the project. Extra credit for an approved extension.</p></li>
+</ul>
+<div class="module-toc">
+  <a class="mt-card mt-lesson" href="final-project/index.html">
+    <span class="mt-kind">Final Project</span>
+    <h4>Radar Systems Report</h4>
+    <p>What the report covers, how the four labs feed it, how it is graded, and extra credit.</p>
+  </a>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module04"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../_static/shell.js?v=e355370f43"></script>
+<script src="../_static/frames.js?v=c768e3788c"></script><script src="../_static/viz-autosize.js?v=4fe0c4e159"></script>
+</body>
+</html>

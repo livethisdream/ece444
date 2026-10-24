@@ -1,0 +1,613 @@
+/* ECE 444 -- frame lessons only.
+ *
+ * Layers on top of shell.css, which carries the palette, type, HUD and
+ * overlay. Everything here is about a document that is a stack of
+ * full-viewport frames: the scroller, present/read mode, the laser and
+ * spotlight, and the Sphinx-rendered frame bodies.
+ */
+
+/* ---- the scroller --------------------------------------------------- */
+.deck {
+  height: 100dvh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.deck::-webkit-scrollbar { display: none; }
+@media (prefers-reduced-motion: reduce) { .deck { scroll-behavior: auto; } }
+
+.frame {
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: grid;
+  align-content: center;
+  padding: clamp(3rem, 7vh, 6rem) clamp(1.4rem, 6vw, 5rem) clamp(4.5rem, 9vh, 7rem);
+}
+.wrap {
+  width: 100%;
+  max-width: 62rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(.9rem, 2.2vh, 1.5rem);
+  /* A flex/grid item's automatic minimum is its min-content width, and a
+     display-math container or a table will not wrap. Without this the wrap
+     grows past the viewport on a phone and the frame pans sideways -- and
+     the overflow-x rules further down never fire, because their own box has
+     already been widened to fit. Measured at 390px: four L05a frames ran
+     354-482px wide. */
+  min-width: 0;
+}
+.wrap > * { min-width: 0; max-width: 100%; }
+.wrap.narrow { max-width: 46rem; }
+
+/* ---- laser + spotlight ---------------------------------------------- */
+.laser {
+  position: fixed; z-index: 60; pointer-events: none;
+  width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%;
+  background: radial-gradient(circle, #ff3b30 0 28%, rgba(255,59,48,.85) 45%, rgba(255,59,48,0) 72%);
+  box-shadow: 0 0 14px 5px rgba(255,59,48,.42);
+  opacity: 0; transition: opacity .12s linear;
+}
+.laser.on { opacity: 1; }
+.spot {
+  position: fixed; inset: 0; z-index: 55; pointer-events: none;
+  opacity: 0; transition: opacity .18s linear;
+}
+.spot.on { opacity: 1; }
+body.pointing, body.pointing * { cursor: none !important; }
+/* On a touch screen `pointermove` only fires while a finger is down, and the
+   browser claims that drag as a scroll -- so the deck slides away under the
+   pointer. Handing the gesture to the pointer handler is what makes the laser
+   and spotlight usable on a tablet or phone at all. */
+body.pointing .deck { touch-action: none; }
+@media (prefers-reduced-motion: reduce) {
+  .laser, .spot { transition: none; }
+}
+
+/* ---- title frame ---------------------------------------------------- */
+/* The landing page's calls to action. custom.css styles .cta only inside
+   .hero -- a dark navy card with `color: #fff !important` -- so reusing that
+   here would mean white text on the frame's light ground, or a navy block
+   dropped into the middle of a title frame. They get the shell's own pill
+   treatment instead, which is what the HUD's own controls already use. */
+.title-frame .hero-cta {
+  display: flex; flex-wrap: wrap; gap: .5rem;
+  margin-top: clamp(.6rem, 2vh, 1.2rem);
+}
+.title-frame .hero-cta .cta {
+  display: inline-flex; align-items: center;
+  padding: .45rem .9rem; border-radius: 999px;
+  font-size: var(--step--1); font-weight: 600; text-decoration: none;
+  color: var(--blue-dark); background: var(--panel);
+  border: 1px solid var(--rule);
+}
+.title-frame .hero-cta .cta:hover {
+  border-color: var(--rule-strong); background: var(--soft);
+}
+.title-frame .hero-cta .cta:active { background: var(--soft); border-color: var(--rule-strong); }
+.title-frame .hero-cta .cta-primary:active { background: var(--blue); border-color: var(--blue); }
+.title-frame .hero-cta .cta:focus-visible {
+  outline: 2px solid var(--blue); outline-offset: 2px;
+}
+.title-frame .hero-cta .cta-primary {
+  color: var(--panel); background: var(--blue-dark); border-color: var(--blue-dark);
+}
+.title-frame .hero-cta .cta-primary:hover {
+  background: var(--blue); border-color: var(--blue);
+}
+
+/* The landing page's pills as one grid of equal widths: a Modules menu, then
+   the links. The page sets --cols (and --cols-phone) for its own count, so
+   one row on a laptop wraps to an even second row on a phone. */
+.title-frame .hero-cta.hero-grid {
+  display: grid; grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  max-width: calc(var(--cols, 4) * 8.5rem);
+}
+.title-frame .hero-cta.hero-grid .cta { justify-content: center; white-space: nowrap; }
+.title-frame .hero-pills .hero-cta.hero-grid + .hero-cta.hero-grid { margin-top: .5rem; }
+@media (max-width: 430px) {
+  .title-frame .hero-cta.hero-grid { gap: .4rem; }
+  .title-frame .hero-cta.hero-grid .cta { padding: .45rem .25rem; }
+  .title-frame .hero-cta.hero-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .title-frame .hero-cta.hero-grid {
+    grid-template-columns: repeat(var(--cols-phone, var(--cols, 4)), minmax(0, 1fr));
+  }
+}
+
+/* The Modules menu: one pill that opens the module list, in place of a pill
+   per module. The panel floats over the frame rather than pushing it, so the
+   title frame keeps its one-screen height in present mode. shell.js opens,
+   places and dismisses it like the bar's panels, and flips it above the pill
+   when there is no room below. */
+.pop-anchor { position: relative; display: flex; }
+.title-frame .hero-cta .pop-anchor > .cta { flex: 1; font: inherit; font-size: var(--step--1); font-weight: 600; cursor: pointer; }
+/* Outlined like the link pills beside it; it fills only while its list is
+   open, which is also the cue that the panel belongs to it. */
+.title-frame .hero-cta .cta-menu[aria-expanded="true"] {
+  color: var(--panel); background: var(--blue-dark); border-color: var(--blue-dark);
+}
+.mod-pop {
+  position: absolute; top: calc(100% + .45rem); left: 0; z-index: 30;
+  display: flex; flex-direction: column; gap: .1rem;
+  width: max-content; max-width: min(24rem, calc(100vw - 16px));
+  padding: .35rem; border-radius: 18px;
+  background: var(--panel); border: 1px solid var(--rule); box-shadow: var(--shadow);
+}
+.mod-pop[hidden] { display: none; }
+.mod-pop.up { top: auto; bottom: calc(100% + .45rem); }
+.mod-pop a.mod-link {
+  display: flex; align-items: baseline; gap: .75rem;
+  padding: .5rem .8rem; border-radius: 12px;
+  font-size: var(--step--1); font-weight: 600; line-height: 1.3;
+  color: var(--ink); text-decoration: none;
+}
+.mod-pop a.mod-link:hover { color: var(--blue-dark); background: var(--soft); }
+.mod-pop a.mod-link:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
+.mod-n { flex: none; min-width: 1.7em; font-family: var(--mono); font-weight: 500; color: var(--muted); }
+
+/* ---- lane map: Module 3's roadmap ------------------------------------ */
+/* Lessons placed by what they teach -- amplitude, phase, or both -- in
+   teaching order. Each chip carries --lane (1-3) and --n (its order). On a
+   laptop the lanes are rows and the lessons run left to right; on a phone
+   the grid transposes, lessons down and lanes across, so no chip is
+   narrower than its title. The colors are the shell's own tokens: blue for
+   amplitude, the amber accent for phase, and both for both. */
+.lane-map {
+  --lm-amp: var(--blue); --lm-phase: var(--accent-ink);
+  display: grid; gap: .45rem .4rem;
+  grid-template-columns: 6.5rem repeat(10, minmax(0, 1fr));
+  align-items: stretch;
+}
+.lane-map .lm-lane {
+  grid-row: var(--lane); grid-column: 1;
+  display: flex; flex-direction: column; justify-content: center;
+  font-weight: 700; font-size: var(--step--1); line-height: 1.2;
+}
+.lane-map .lm-lane small { font-weight: 400; color: var(--muted); font-size: .85em; }
+.lane-map .lm-lane.lm-amp   { color: var(--lm-amp); }
+.lane-map .lm-lane.lm-phase { color: var(--lm-phase); }
+.lane-map .lm-lane.lm-both  { color: var(--ink); }
+.lane-map .lm-chip {
+  grid-row: var(--lane); grid-column: calc(var(--n) + 1);
+  display: flex; flex-direction: column; gap: .15rem;
+  padding: .55rem .5rem .45rem; border-radius: 8px;
+  background: var(--panel); border: 1px solid var(--rule);
+  border-top: 4px solid var(--lm-amp);
+  font-size: .8rem; line-height: 1.2; color: var(--ink); text-decoration: none;
+  hyphens: auto;
+}
+.lane-map .lm-chip b { font-family: var(--mono); font-weight: 600; color: var(--blue-dark); }
+.lane-map .lm-chip.lm-phase { border-top-color: var(--lm-phase); }
+.lane-map .lm-chip.lm-both {
+  border-top: 1px solid var(--rule); padding-top: calc(.55rem + 3px);
+  background: linear-gradient(90deg, var(--lm-amp) 50%, var(--lm-phase) 50%) top / 100% 4px no-repeat, var(--panel);
+}
+.lane-map .lm-chip:hover { background: var(--soft); border-color: var(--rule-strong); }
+.lane-map .lm-chip:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.lane-map .lm-lab {
+  margin-top: auto; font-size: .72rem; font-weight: 600; color: var(--muted);
+}
+@media (max-width: 620px) {
+  /* A phone groups by lane instead: each lane's header, then its lessons
+     two to a row, still in teaching order. Ten rows of one chip each would
+     not fit one screen. */
+  .lane-map { display: flex; flex-wrap: wrap; gap: .3rem .35rem; }
+  .lane-map .lm-lane {
+    order: calc(var(--lane) * 100); flex: 0 0 100%;
+    flex-direction: row; justify-content: flex-start; align-items: baseline; gap: .4rem; margin-top: .35rem;
+  }
+  .lane-map .lm-chip {
+    order: calc(var(--lane) * 100 + var(--n)); flex: 0 0 calc(50% - .2rem);
+    flex-direction: row; flex-wrap: wrap; align-items: baseline; column-gap: .35rem;
+    padding: .3rem .45rem;
+  }
+  .lane-map .lm-lab { margin-top: 0; }
+}
+
+/* ---- lane strip: Module 3's "you are here" ---------------------------- */
+/* One row of the ten Module 3 lessons, colored by lane like the overview's
+   lane map; the lesson whose objectives frame includes it lights up its own
+   chip through the frame's here-NN class. */
+.lane-strip {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .3rem;
+  margin-top: clamp(.8rem, 2.5vh, 1.6rem);
+  font-size: var(--step--1);
+}
+.lane-strip .ls-label {
+  font-family: var(--mono); font-size: .8em; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted); margin-right: .3rem;
+}
+.lane-strip .ls-chip {
+  min-width: 2.1rem; padding: .25rem .35rem; border-radius: 6px; text-align: center;
+  font-family: var(--mono); font-size: .85em; font-weight: 600; text-decoration: none;
+  color: var(--muted); background: var(--panel); border: 1px solid var(--rule);
+  border-top: 3px solid var(--blue);
+}
+.lane-strip .ls-chip.ls-phase { border-top-color: var(--accent-ink); }
+.lane-strip .ls-chip.ls-both {
+  border-top: 1px solid var(--rule); padding-top: calc(.25rem + 2px);
+  background: linear-gradient(90deg, var(--blue) 50%, var(--accent-ink) 50%) top / 100% 3px no-repeat, var(--panel);
+}
+.lane-strip .ls-chip:hover { color: var(--blue-dark); background: var(--soft); }
+.lane-strip .ls-key { margin-left: auto; font-size: .8em; color: var(--muted); }
+.lane-strip .ls-key i {
+  display: inline-block; width: .8em; height: .3em; margin: 0 .25em 0 .5em;
+  vertical-align: middle; background: var(--blue);
+}
+.lane-strip .ls-key i.ls-phase { background: var(--accent-ink); }
+.lane-strip .ls-key i.ls-both { background: linear-gradient(90deg, var(--blue) 50%, var(--accent-ink) 50%); }
+.here-15 .ls-chip[data-n="15"],
+.here-16 .ls-chip[data-n="16"],
+.here-17 .ls-chip[data-n="17"],
+.here-18 .ls-chip[data-n="18"],
+.here-19 .ls-chip[data-n="19"],
+.here-20 .ls-chip[data-n="20"],
+.here-21 .ls-chip[data-n="21"],
+.here-22 .ls-chip[data-n="22"],
+.here-23 .ls-chip[data-n="23"],
+.here-24 .ls-chip[data-n="24"] {
+  color: var(--panel); background: var(--blue-dark); border-color: var(--blue-dark);
+  transform: translateY(-1px); box-shadow: var(--shadow);
+}
+@media (max-width: 620px) {
+  .lane-strip .ls-label { flex: 0 0 100%; margin: 0 0 .1rem; }
+  .lane-strip .ls-chip { min-width: 0; flex: 1 1 0; padding: .2rem .1rem; }
+  .lane-strip .ls-key { margin-left: 0; flex: 0 0 100%; }
+}
+
+.title-frame .wrap { gap: clamp(1rem, 3vh, 2rem); }
+.course-mark {
+  font-family: var(--mono); font-size: var(--step--1);
+  letter-spacing: .22em; text-transform: uppercase; color: var(--blue);
+}
+.title-rule { height: 3px; background: var(--blue-dark); width: 5.5rem; border-radius: 2px; }
+.meta { color: var(--muted); font-size: var(--step--1); }
+
+/* ---- notes frame ---------------------------------------------------- */
+.grid2 {
+  display: grid; gap: clamp(.9rem, 2.4vw, 1.6rem);
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+.card {
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 6px;
+  padding: clamp(.9rem, 2.2vh, 1.25rem); box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: .45em;
+}
+.card h3 {
+  margin: 0; font-size: var(--step-0); color: var(--blue-dark); font-weight: 700;
+}
+.card p { font-size: var(--step--1); color: var(--muted); max-width: none; line-height: 1.5; }
+kbd {
+  font-family: var(--mono); font-size: .82em; background: var(--soft);
+  border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 4px;
+  padding: .08em .4em; color: var(--ink); white-space: nowrap;
+}
+
+/* ---- additions for the full lecture -------------------------------- */
+:root { --green: #1d7a4d; --fig-grid: rgba(0,74,133,.18); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --green: #5fc08c; --fig-grid: rgba(140,196,238,.20); }
+}
+:root[data-theme="dark"] { --green: #5fc08c; --fig-grid: rgba(140,196,238,.20); }
+
+
+[fill="#5a5a5a"]  { fill: var(--fig-line); }
+[stroke="#5a5a5a"]{ stroke: var(--fig-line); }
+[fill="#004a85"]  { fill: var(--blue-dark); }
+[stroke="#004a85"]{ stroke: var(--blue-dark); }
+[fill="#0067b9"]  { fill: var(--blue); }
+[stroke="#0067b9"]{ stroke: var(--blue); }
+[fill="#b01e24"]  { fill: var(--red); }
+[stroke="#b01e24"]{ stroke: var(--red); }
+[fill="#1d7a4d"]  { fill: var(--green); }
+[fill="#cddce9"]  { fill: var(--fig-far); }
+[stroke="#b9d2e5"]{ stroke: var(--fig-grid); }
+[fill="#ffffff"]  { fill: var(--panel); }
+
+
+/* ---- two modes, one document --------------------------------------- */
+/* The lesson-page depth is ALWAYS in the DOM. Present mode hides it; it is
+   never deleted, so nothing the lesson text carries can be lost by the
+   deck view. */
+.depth { display: flex; flex-direction: column; gap: .8em; max-width: 62ch; }
+
+/* In READ mode the depth is not an aside -- it is the lesson continuing.
+   No rule, no label, no size drop: the frame line is the topic sentence and
+   this is the paragraph after it. Anything that marks a boundary here just
+   rebuilds the seam between deck and page that merging them removed. */
+[data-mode="read"] .depth { gap: inherit; }
+
+/* In PRESENT mode it IS an aside -- you pulled it up mid-lecture, so a quiet
+   rule earns its place by showing what just appeared. */
+[data-mode="present"] .frame.open .depth {
+  border-left: 3px solid var(--rule);
+  padding-left: clamp(.9rem, 2vw, 1.4rem);
+}
+[data-mode="present"] .frame.open .depth .eq { padding: .3rem 0; }
+
+/* An ordinary link in a frame body. page.css has carried `.page a` since the
+   reading pages were split out; frames.css never had the matching rule, so
+   every inline link on a frame lesson -- the lab sheets, the materials
+   cross-references, the practice PDFs -- fell through to the user agent's
+   #0000EE underline. That is the wrong blue in light mode and all but
+   invisible on the dark ground. Mirror the reading page exactly: same token,
+   same offset, so a link reads the same on both shells.
+
+   The pills style themselves and are excluded by name: a bare `.frame a`
+   would outrank plain `.doc-link` on specificity (0,0,1,1 over 0,0,1,0) and
+   quietly repaint the chips (the lane map's and lane strip's included). */
+.frame a:not(.doc-link):not(.cta):not(.more):not(.mod-link):not(.lm-chip):not(.ls-chip) {
+  color: var(--blue-dark);
+  text-underline-offset: .18em;
+}
+.frame a:not(.doc-link):not(.cta):not(.more):not(.mod-link):not(.lm-chip):not(.ls-chip):hover { color: var(--blue); }
+.frame a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+.more {
+  align-self: flex-start; font: inherit; font-size: var(--step--1);
+  font-weight: 600; letter-spacing: .02em;
+  color: var(--blue); background: var(--soft);
+  border: 1px solid var(--rule); border-radius: 999px;
+  padding: .3em .9em; cursor: pointer;
+}
+.more:hover { background: var(--soft-red); color: var(--red); border-color: var(--red); }
+.more:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* present: a deck. depth collapsed behind an affordance. */
+[data-mode="present"] .deck  { scroll-snap-type: y mandatory; }
+[data-mode="present"] .frame { min-height: 100dvh; }
+[data-mode="present"] .depth { display: none; }
+[data-mode="present"] .frame.open .depth { display: flex; }
+/* The button stays while the depth is open: it now reads "Less detail" and
+   closes it again. */
+
+/* A frame is one screen, so anything with an intrinsic size has to be told
+   the ceiling. shell.css already caps `figure svg`; a bare <img> in a frame
+   needs the same or a wide figure pushes the frame past the viewport --
+   measured 735px of content in a 672px budget on a laptop. */
+[data-mode="present"] .frame img { max-height: 58vh; width: auto; }
+
+/* Widget frames do NOT scroll. A widget that needs a scrollbar to show its
+   own controls has been laid out wrong: the fix is a shorter canvas or a
+   more compact control bar in the widget itself, not a scroll container
+   here. Measured budget for a widget frame at 1280x800 is 720px, of which
+   the title takes 56-98px -- so a widget iframe belongs at 600px or less,
+   and any lead-in prose belongs in :::{depth} where present mode hides it.
+   check_frames.py enforces this; nothing is exempt. */
+
+/* read: a lesson page. no snapping, everything visible, frames sized to
+   their content so the document scrolls continuously. */
+[data-mode="read"] .deck  { scroll-snap-type: none; }
+[data-mode="read"] .frame {
+  min-height: 0;
+  padding-top: clamp(2rem, 5vh, 3.2rem);
+  padding-bottom: clamp(2rem, 5vh, 3.2rem);
+  border-bottom: 1px solid var(--rule);
+}
+[data-mode="read"] .frame:last-child { border-bottom: none; }
+
+/* ---- pinch-to-zoom --------------------------------------------------- */
+/* Mandatory snapping and a pinch fight each other: iOS re-snaps the deck on
+   every pan, so a zoomed frame springs straight back to the top and the zoom
+   reads as broken. The decks hit the same wall in August from the other
+   side -- reveal's swipe handler ate the pinch, fixed by handing the gesture
+   to the browser (`touch:false`) -- and the resolution here is the same one.
+   While the reader is pinched in, the deck stops snapping and they can pan
+   wherever they like; let go back to 1x and snapping returns. frames.js
+   stamps `.zoomed` from visualViewport.scale. Specificity note: `data-mode`
+   sits on <html>, so `body.zoomed .deck` (0,2,1) outranks the
+   `[data-mode="present"]` rule above (0,2,0) without needing !important. */
+body.zoomed .deck  { scroll-snap-type: none; }
+body.zoomed .frame { scroll-snap-align: none; scroll-snap-stop: normal; }
+[data-mode="read"] .more  { display: none; }
+[data-mode="read"] .depth { display: flex; }
+[data-mode="read"] iframe.viz { max-width: 54rem; }
+
+
+/* a claim that carries the frame, rather than a bullet among bullets */
+.pull {
+  font-size: var(--step-1); line-height: 1.28; font-weight: 600;
+  color: var(--blue-dark); max-width: 44ch;
+  border-left: 4px solid var(--red); padding-left: .7em;
+}
+ol.plan { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: .5em; max-width: 58ch; }
+ol.plan li::marker { color: var(--blue); font-weight: 700; }
+
+/* widgets sit in a light instrument panel in both themes -- the course
+   viz tools are not theme-aware, so framing them is honest */
+.viz-frame .wrap { gap: .8rem; }
+iframe.viz {
+  width: 100%; border: 1px solid var(--rule); border-radius: 6px;
+  background: #ffffff; display: block; box-shadow: var(--shadow);
+  color-scheme: light;
+}
+
+.index ol {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: .3rem 1.6rem;
+  /* min() is load-bearing: a bare minmax(19rem, 1fr) floor is wider than a
+     phone viewport, so the track cannot shrink and the whole overlay
+     overflows sideways (measured 963px of content in a 351px box). */
+  grid-template-columns: repeat(auto-fill, minmax(min(19rem, 100%), 1fr));
+  max-width: 72rem;
+}
+.index button {
+  font: inherit; text-align: left; width: 100%; cursor: pointer;
+  background: none; border: none; border-radius: 4px;
+  padding: .38rem .5rem; color: var(--ink);
+  display: flex; gap: .7rem; align-items: baseline;
+}
+.index button:hover { background: var(--soft); }
+.index button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.index button[aria-current="true"] { color: var(--blue-dark); font-weight: 700; }
+.index .n {
+  font-family: var(--mono); font-size: .78em; color: var(--muted);
+  min-width: 1.8em; font-variant-numeric: tabular-nums;
+}
+
+
+/* ---- the present layer ---------------------------------------------- */
+/* `:::{present}` inverts the default: a frame that carries one shows ONLY
+   its title and its present blocks on screen, and _ext/frames.py has already
+   wrapped everything else in `.depth`, so the rules above do the hiding.
+   All that is left to say here is how the present blocks sit.
+
+   In READ mode neither wrapper has a box. The present block is the frame's
+   topic sentence or its figure and the prose after it continues it; a rule
+   or a card here would rebuild the deck/page seam. */
+.stage, .present { display: contents; }
+/* `:::{present}` + `:class: callout` is the one present block with a box of
+   its own, in both modes: it IS the callout, so it keeps shell.css's card. */
+.present.callout { display: flex; }
+
+/* In PRESENT mode the stage is a row: two present blocks -- the key points
+   and the graphic they talk to -- sit side by side on a laptop and stack on a
+   phone. `min()` keeps the track able to shrink below a phone's width, the
+   same trap the jump overlay fell into. */
+[data-mode="present"] .frame.cut .stage {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(21rem, 100%), 1fr));
+  gap: clamp(1rem, 3vw, 2.6rem);
+  align-items: center;
+}
+[data-mode="present"] .frame.cut .present {
+  display: flex; flex-direction: column; min-width: 0; max-width: 100%;
+  gap: clamp(.7rem, 1.8vh, 1.1rem);
+}
+/* Forty words a screen earns slide-size type. Only the present block grows;
+   the depth behind "More detail +" keeps the page size, since it is the page. */
+[data-mode="present"] .frame.cut .present { font-size: var(--step-1); line-height: 1.32; }
+[data-mode="present"] .frame.cut .present p,
+[data-mode="present"] .frame.cut .present li { max-width: 46ch; }
+[data-mode="present"] .frame.cut .present ul,
+[data-mode="present"] .frame.cut .present ol { margin: 0; padding-left: 1.1em; }
+/* A card listing (a NEC input file) inside a present block is set in the
+   present-mode type size, and at 390px a 38-character card runs 496px into a
+   343px column, clipping the radius off the end of the GW line. Nothing else in
+   a present block is monospace, so scale only that. */
+@media (max-width: 430px) {
+  [data-mode="present"] .frame.cut .present pre { font-size: .72em; }
+  /* A four-column table (L08's solver comparison) is 380px of content at the
+     present type size and the last column, the one the slide is about, goes
+     off the phone's screen. `:class: tight` on the present block scales just
+     that table down to fit the 343px column; a two- or three-column table
+     never needs it. */
+  [data-mode="present"] .frame.cut .present.tight table { font-size: .76em; }
+  [data-mode="present"] .frame.cut .present.tight th,
+  [data-mode="present"] .frame.cut .present.tight td { padding-left: .3em; padding-right: .3em; }
+}
+[data-mode="present"] .frame.cut .present li + li { margin-top: .35em; }
+[data-mode="present"] .frame.cut .present table { font-size: var(--step-0); }
+[data-mode="present"] .frame.cut .present img { max-height: 58vh; width: auto; max-width: 100%; }
+
+/* A read-only frame is a beat that exists on the page and not in class: a
+   derivation, a link list, a preview of the practice set. Present mode skips
+   it, and frames.js leaves it out of the counter and the contents overlay in
+   both modes so the numbers agree with what the class sees. */
+[data-mode="present"] .frame.read-only { display: none; }
+
+/* ---- Sphinx-rendered frame bodies ----------------------------------- */
+/* :::{frame} Title emits a rubric, not a heading -- docutils will not allow
+   a title node outside a section. Style it as the frame heading. */
+.frame > .wrap > p.rubric, .frame p.rubric {
+  font-size: var(--step-2); line-height: 1.08; letter-spacing: -.015em;
+  font-weight: 700; color: var(--blue-dark); margin: 0 0 .2em;
+  text-wrap: balance; padding-bottom: .3em;
+  border-bottom: 2px solid var(--rule-strong);
+}
+/* Sphinx wraps display math in div.math; inline in span.math */
+.frame div.math { padding: clamp(.5rem,1.6vh,1rem) 0; overflow-x: auto; overflow-y: hidden; }
+/* The theme supplies this wrapper's scrolling; frame pages do not load the
+   theme CSS, so it has to be restated here or wide tables push the frame out. */
+.frame .pst-scrollable-table-container { overflow-x: auto; max-width: 100%; }
+.frame > .wrap > .docutils.container:not(.depth):not(.callout):not(.stage):not(.present) { display: contents; }
+.frame img { max-width: 100%; height: auto; }
+/* the page H1 is Sphinx's section title; the title frame carries the real one */
+.deck > section > h1, .deck > section > h1 + p { display: none; }
+.deck > section { display: contents; }
+
+
+/* A widget frame carries a live tool sized to its own content, so it has less
+   room to give than a prose frame. Buy it back from the padding. */
+[data-mode="present"] .frame.viz-frame {
+  padding-top: clamp(1.8rem, 4vh, 3rem);
+  padding-bottom: clamp(3rem, 6vh, 4.5rem);
+}
+/* `<p class="viz-note mathjax_process">` under a widget (the second class is
+   what lets MathJax into raw HTML on these pages): the one line that says how to read
+   it. A projector has room for it; a phone in present mode does not -- the
+   widget alone already takes the whole 660px a phone gives it -- so it is
+   dropped there and only there. Read mode always shows it. */
+[data-mode="present"] .frame.viz-frame .viz-note { font-size: var(--step-0); margin: 0; }
+@media (max-width: 430px) {
+  [data-mode="present"] .frame.viz-frame .viz-note { display: none; }
+}
+/* The landing page's four grade cards sit 2x2 on a projector and stack on a
+   phone, where at their reading-page spacing they run 823px into a 709px
+   frame. Take the room back from the card padding and the gaps around the
+   heading, not from the text. */
+@media (max-width: 430px) {
+  [data-mode="present"] .frame .deliverable-cards { margin: 6px 0; gap: 6px; }
+  [data-mode="present"] .frame .deliverable-card { padding: 9px 14px 8px; }
+  [data-mode="present"] .frame .deliverable-card h3 { margin: 1px 0 3px; font-size: 19px; }
+  [data-mode="present"] .frame .deliverable-card .d-weight { margin: 0 0 2px; }
+  [data-mode="present"] .frame .deliverable-card .d-due { margin: 0 0 4px; }
+}
+
+/* ---- print ------------------------------------------------------------ */
+/* `.deck` is a fixed-height scroll container so present mode can pin one
+   frame per viewport -- exactly what print cannot have. Left alone, print
+   sees the container's one clipped viewport and the whole lesson comes out
+   as a single sheet with the bottom bar stamped on it. Let the deck flow
+   like an ordinary document, and cut that flow back into one sheet per frame
+   -- `break-after` -- so a printed frame has room to write beside it, the
+   way a slide handout would.
+
+   Every rule here carries `!important`: the selectors it is overriding
+   (`[data-mode="present"] .frame`, `.deck`, `.depth`) are not, so cascade
+   order alone would not be enough to win against whichever mode the page
+   happened to be in when it was sent to the printer. */
+@media print {
+  .deck {
+    height: auto !important;
+    overflow: visible !important;
+    scroll-snap-type: none !important;
+  }
+  .frame {
+    min-height: 0 !important;
+    scroll-snap-align: none !important;
+    scroll-snap-stop: normal !important;
+    break-after: page;
+  }
+
+  /* Print follows the mode the screen is in. Read mode prints the whole
+     lesson: the depth is the rest of the lesson, not an aside collapsed
+     behind a button. Present mode prints the slide handout the reveal.js
+     decks used to give: each frame's title and present blocks, one frame a
+     sheet, with the depth and the read-only frames left off exactly as the
+     screen rules above leave them off. */
+  html:not([data-mode="present"]) .depth {
+    display: flex !important;
+    border-left: none !important;
+    padding-left: 0 !important;
+  }
+  /* "More detail +" is a screen affordance for revealing the depth above --
+     on paper the depth is already there, so the button would just be a
+     button that does nothing. In the present-mode handout the depth is
+     left off on purpose, so the button has nothing to open either. */
+  .more { display: none !important; }
+  [data-mode="present"] .frame.open .depth { display: none !important; }
+  /* A letter sheet is narrower than a laptop, so a table beside its bullets
+     loses its last column to the scroller. On paper there is nothing to
+     scroll: stack a stage that holds a table, and let the table show whole. */
+  [data-mode="present"] .frame.cut .stage:has(table) { grid-template-columns: 1fr !important; }
+  .frame .pst-scrollable-table-container { overflow: visible !important; }
+
+  /* Screen-only chrome: the bottom bar and its panels, the progress rail,
+     the jump overlay, and the presenter's laser and spotlight. None of it
+     means anything on a printed page. */
+  .hud, .rail, .index, .laser, .spot { display: none !important; }
+}

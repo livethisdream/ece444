@@ -1,0 +1,139 @@
+# Materials
+
+Everything you download or reference in this course lives on this page:
+textbooks, the equation sheet and charts, every practice set, every lab
+sheet, and the project packets. Each lesson page links its own materials in
+place; this is the one place they are all together.
+
+## Textbooks & References
+
+We draw from two primary references throughout the course, both provided here
+as PDFs and referenced by chapter/section in each lesson's "For next time"
+reading list. A third standard text is listed as an alternate.
+
+- **[Milligan — *Modern Antenna Design*](materials/milligan.md)** (Thomas A. Milligan, IEEE Press/Wiley)
+  Deep treatment of antenna theory and design. Primary textbook for Modules 1–3.
+- **[Rohde &amp; Schwarz — *Antenna Basics* (Whitepaper 8GE01)](materials/rohde-schwarz-antenna-basics.md)**
+  Compact, well-illustrated primer on antenna properties, measurement, and terminology. Excellent complement to Milligan for the foundations.
+- **Balanis — *Antenna Theory: Analysis and Design*** (Constantine A. Balanis, 4th ed., Wiley)
+  The standard graduate-level reference, and the one most antenna literature cites. Not provided here — the lesson reading lists offer it as an alternate to Milligan wherever the chapters cover the same ground.
+
+## Equation Sheet & Charts
+
+- <a href="handouts/ECE444_Equation_Sheet.pdf" target="_blank" rel="noopener">ECE 444 Equation Sheet (PDF)</a> — one landscape page, front and back, organized by module. Modules 4–5 are added as those lessons are authored.
+- <a href="handouts/SmithChart_blank.pdf" target="_blank" rel="noopener">Blank Smith chart (PDF, print)</a> — the chart bound into the L4 lab packet.
+- <a href="handouts/SmithChart_ZY_colour.pdf" target="_blank" rel="noopener">Impedance–admittance Smith chart (PDF, color)</a> — red impedance grid over blue admittance grid, for designs that cross from $Z$ to $Y$.
+- <a href="handouts/SmithChart_blank.svg" target="_blank" rel="noopener">Blank Smith chart (SVG)</a> — vector, for zooming on screen.
+- <a href="handouts/SmithChart_Lynch_tutorial.pdf" target="_blank" rel="noopener">Smith chart walkthrough (PDF, 30 pages)</a> — the chart from the ground up: the normalized $Z_n = R/Z_0 \pm jX/Z_0$, the constant-$R$ and constant-$X$ circles, constant-VSWR circles, and matching worked on the chart with stubs, quarter-wave sections and lumped L–C. Good company for Lesson 4 and the Lesson 10 measurement lab. By Frank A. Lynch (W4FAL), 24 April 2008; reproduced with attribution, original at <a href="http://smithchart.org" target="_blank" rel="noopener">smithchart.org</a>.
+
+## Practice Problem Sets
+
+Every lesson's practice set as a blank student copy and a worked-solutions
+copy. The same links appear on each lesson page.
+
+### Module 1: Foundations
+
+| Lesson | Problem set | Solutions |
+| :-- | :-- | :-- |
+| L1 — Course Introduction | <a class="doc-link" href="practice/ECE444_L01_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L01_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L2 — Basic Properties and Terminology | <a class="doc-link" href="practice/ECE444_L02_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L02_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L3 — Polarization and Bandwidth | <a class="doc-link" href="practice/ECE444_L03_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L03_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L4 — Impedance, Feeding, and Baluns | <a class="doc-link" href="practice/ECE444_L04_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L04_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L5 — Field Regions | <a class="doc-link" href="practice/ECE444_L05_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L05_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L6 — Radiation Integrals | <a class="doc-link" href="practice/ECE444_L06_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L06_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+
+### Module 2: Antenna Types, Simulation, and Measurement
+
+| Lesson | Problem set | Solutions |
+| :-- | :-- | :-- |
+| L7 — Simple Resonant Antennas | <a class="doc-link" href="practice/ECE444_L07_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L07_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L8 — Dipole Simulation Lab | <a class="doc-link" href="practice/ECE444_L08_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L08_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L9 — Measurement Theory | <a class="doc-link" href="practice/ECE444_L09_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L09_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L10 — Measurement Lab: Impedance and S-parameters | <a class="doc-link" href="practice/ECE444_L10_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L10_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L11 — Measurement Lab: Radiation Patterns | <a class="doc-link" href="practice/ECE444_L11_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L11_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L12 — Loop and Monopole Antennas | <a class="doc-link" href="practice/ECE444_L12_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L12_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L13 — Patch, Slot, and Horn Antennas | <a class="doc-link" href="practice/ECE444_L13_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L13_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L14 — High-Gain Antennas | <a class="doc-link" href="practice/ECE444_L14_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L14_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+
+### Module 3: Arrays and ADALM-PHASER Beamforming
+
+L17, L18, and L19 have no separate problem set: their problems are in their
+lab packets, linked here and under Lab Sheets below. A lab that still has an
+old-style sheet keeps its own practice set, listed under its lesson.
+
+| Lesson | Problem set | Solutions |
+| :-- | :-- | :-- |
+| L15 — Aperture Distributions and Efficiency | <a class="doc-link" href="practice/ECE444_L15_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L15_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L16 — The Array Factor and Pattern Multiplication | <a class="doc-link" href="practice/ECE444_L16_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L16_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L17 — Introduction to Phased Array Hardware | <a class="doc-link" href="labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">L17 Lab packet</a> | graded as the lab |
+| L18 — Beam Steering | <a class="doc-link" href="labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">L18 Lab packet</a> | graded as the lab |
+| L19 — Direction Finding | <a class="doc-link" href="labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">L19 Lab packet</a> | graded as the lab |
+| L20 — Array Factor and Beamwidth | <a class="doc-link" href="practice/ECE444_L20_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L20_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L20 Lab — Array Factor | <a class="doc-link" href="practice/ECE444_L20Lab_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L20Lab_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L21 — Antenna Pattern | <a class="doc-link" href="practice/ECE444_L21_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L21_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L22 — Sidelobes and Tapering | <a class="doc-link" href="practice/ECE444_L22_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L22_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L23 — Beam Squint and Quantization | <a class="doc-link" href="practice/ECE444_L23_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L23_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L22–L23 Lab — Tapering, Squint, and Quantization | <a class="doc-link" href="practice/ECE444_L22Lab_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L22Lab_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L24 — Null Steering | <a class="doc-link" href="practice/ECE444_L24_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L24_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+| L24 Lab — Null Steering | <a class="doc-link" href="practice/ECE444_L24Lab_Practice_blank.pdf" target="_blank" rel="noopener">blank</a> | <a class="doc-link doc-key" href="practice/ECE444_L24Lab_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">solutions</a> |
+
+Practice sets for Modules 4–5 are published here as those lessons are
+authored.
+
+## Lab Sheets
+
+The lab sheet is the turn-in document for each lab. Print it, or fill it as
+you go; each lab's page carries the same link plus the pre-lab
+reading.
+
+| Lab | Lesson | Sheet |
+| :-- | :-- | :-- |
+| Matching Procedures (VNA + L-network) | L4 Lab | <a href="labs/ECE444_Lab_L04_Matching_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
+| Phased Array Bring-Up | L17 Lab | <a href="labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">lab packet</a> |
+| Beam Steering | L18 Lab | <a href="labs/ECE444_Lab_L18_Steering_blank.pdf" target="_blank" rel="noopener">lab packet</a> |
+| Fox Hunt (teams of two) | L19 Lab | <a href="labs/ECE444_Lab_L19_FoxHunt_blank.pdf" target="_blank" rel="noopener">lab packet</a> |
+| Array Factor | L20 Lab | <a href="labs/ECE444_Lab_L20_ArrayFactor_blank.pdf" target="_blank" rel="noopener">lab packet</a> |
+| Antenna Pattern | L21 Lab | <a href="labs/ECE444_Lab_L21_Pattern_blank.pdf" target="_blank" rel="noopener">lab packet</a> |
+| Tapering, Squint, and Quantization | L22–L23 Lab | <a href="labs/ECE444_Lab_L22_L23_TaperSquint_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
+| Null Steering | L24 Lab | <a href="labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">lab sheet</a> |
+
+The simulation labs (L8) and measurement labs (L10, L11) run from their
+lesson pages directly and have no separate sheet.
+
+## Projects
+
+Two graded projects anchor the course. The midterm has its own packet; the
+final project is a report built on the four Module 4 lab packets. Either way, the packet is the
+authoritative statement of the requirements.
+
+| Project | Assigned | Due | Packet |
+| :-- | :-- | :-- | :-- |
+| Midterm — Antenna Pattern Measurement | L9 | 2 Oct, 2359 | <a href="projects/ECE444_Project_Midterm.pdf" target="_blank" rel="noopener">project description</a> · [hand-wound inductor guide](materials/hand-wound-inductors.md) |
+| Final — Radar Systems Report | L28 Lab | class period 41 (lab packets from period 32) | rubric with the L28 Lab packet · [final project page](module04/final-project/index.md) |
+
+## Hardware & Software
+
+- **ADALM-PHASER** (Analog Devices) — phased-array platform used in Modules 3–4 for beamforming and FMCW radar labs
+- **Antenna simulation software** — **nec_lab**, the course front end to NEC-2
+  (`scripts/nec_lab/` in the course repository). It runs in a browser, either
+  from a copy your instructor is serving or from your own machine, and needs no
+  installation beyond Python. 4nec2 runs the same input files if you prefer it.
+- **Vector network analyzer (VNA)** — the chamber's Copper Mountain analyzer, used
+  for both measurement labs: reflection at one port in L10, transmission between
+  the two horns in L11
+- **Anechoic chamber** — the USAFA chamber, with its browser **dashboard**. One page
+  runs the calibration wizard (one-port or two-port), captures a VNA sweep with a
+  Smith chart and impedance, VSWR and return-loss readouts, runs a pattern scan on
+  the turntable, and exports Touchstone files and run data. It also runs against a
+  simulator with no instruments attached, so the controls can be rehearsed on your
+  own machine before the period.
+
+## Additional Resources
+
+- **Makerspace 3D printers** — the LulzBot TAZ Workhorse+ printers in the ECE
+  Makerspace.
+  <a href="handouts/Makerspace_3D_Printing_Training.pdf" target="_blank" rel="noopener">3D printing training (PDF, 18 slides)</a>
+  covers cleaning the bed and tool head, setting up Cura LulzBot Edition,
+  slicing and naming your `.gcode`, loading filament, and sending a job to the
+  printer. By Vanessa Rosario, DFEC, 6 February 2025. The printer password is
+  given when you complete the training with Ms. Rosario.

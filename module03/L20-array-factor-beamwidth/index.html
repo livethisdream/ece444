@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L20 - Array Factor and Beamwidth &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=0defe11dd0">
+<link rel="stylesheet" href="../../_static/shell.css?v=9432ef1809">
+<link rel="stylesheet" href="../../_static/frames.css?v=1dea9286a4">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-lab-bring-up/index.html">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-lab-fmcw-range/index.html">L28 Lab — FMCW Range</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-lab-range-doppler-mti/index.html">L29 Lab — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-lab-cfar/index.html">L30 Lab — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-lab-spectrogram/index.html">L31 Lab — Micro-Doppler Spectrogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l20-array-factor-and-beamwidth">
+<h1>L20 - Array Factor and Beamwidth<a class="headerlink" href="#l20-array-factor-and-beamwidth" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Array Factor and Beamwidth</h1>
+<div class="title-rule"></div>
+<p>The aperture measured in wavelengths, <span class="math notranslate nohighlight">\(Nd/\lambda\)</span>, sets the beamwidth, and steering widens it by <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span>.</p>
+<p>Lesson 20 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-printing">
+<div class="wrap docutils container">
+<p class="rubric">Printing</p>
+<p>To print the slides, switch to present mode and print: one slide a sheet,
+with room for notes. Print from read mode for the whole lesson.</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 1">
+  <li>I can derive the array factor for an arbitrary linear array and apply pattern multiplication.</li>
+</ol>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-uniform-array-factor">
+<div class="wrap docutils container">
+<p class="rubric">The Uniform Array Factor</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+AF_N(\psi) &amp;= \frac{\sin(N\psi/2)}{N\ \sin(\psi/2)} \\
+\psi &amp;= kd(\sin\theta - \sin\theta_0)
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>The L18 Lab beam measured about <span class="math notranslate nohighlight">\(13^\circ\)</span> at boresight and wider at <span class="math notranslate nohighlight">\(45^\circ\)</span>; this function produces both.</p></li>
+<li><p>The peak sits at <span class="math notranslate nohighlight">\(\psi = 0\)</span>, which is <span class="math notranslate nohighlight">\(\theta = \theta_0\)</span>.</p></li>
+<li><p>The midterm project measured the same widths, nulls, and sidelobes from a pattern cut.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The <strong>Antenna Pattern Measurement</strong> midterm project, assigned in Lesson 9, measured all of this from the other direction. The quantities you extracted from a measured cut — the half-power width, the null positions, the sidelobe level referenced to the peak — are exactly the quantities this lesson computes from theory, so keep your project data at hand.</p>
+<p>In the L18 Lab you steered the array across the room and watched the beam widen as it went. The main lobe was about 13° across at boresight and noticeably wider at 45°, and the pattern sat on a floor of sidelobes that moved with the beam. Lesson 16 gave us the closed form that produces all of that. Today we extract numbers from it: the half-power beamwidth of a steered array, the angle of every null, the directivity, and the design step in reverse, which takes a beamwidth specification and finds the array size.</p>
+<p>Lesson 16 summed <span class="math notranslate nohighlight">\(N\)</span> equal-amplitude elements with a progressive phase and collapsed the geometric series into the <strong>normalized uniform array factor</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+AF_N(\psi) &amp;= \frac{\sin(N\psi/2)}{N\ \sin(\psi/2)}, \\
+\psi &amp;= kd(\sin\theta - \sin\theta_0).
+\end{aligned}\end{split}\]</div>
+<p>Everything about the shape of the pattern is in that one function of <span class="math notranslate nohighlight">\(\psi\)</span>. The array’s physical parameters enter only through the map from angle to <span class="math notranslate nohighlight">\(\psi\)</span>, and the beam peak is wherever <span class="math notranslate nohighlight">\(\psi = 0\)</span>, which is <span class="math notranslate nohighlight">\(\theta = \theta_0\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-sinc-near-the-peak">
+<div class="wrap docutils container">
+<p class="rubric">The Sinc Near the Peak</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+AF_N &amp;\approx \frac{\sin(N\psi/2)}{N\psi/2} \\
+&amp;= \frac{\sin u}{u}, \qquad u \equiv \frac{N\psi}{2}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Near the peak <span class="math notranslate nohighlight">\(\psi\)</span> is small, so <span class="math notranslate nohighlight">\(\sin(\psi/2) \approx \psi/2\)</span>.</p></li>
+<li><p>The array is a sampled aperture of length <span class="math notranslate nohighlight">\(L = Nd\)</span>, and this is L6’s uniform line-source pattern.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Near the peak, <span class="math notranslate nohighlight">\(\psi\)</span> is small, so <span class="math notranslate nohighlight">\(\sin(\psi/2) \approx \psi/2\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+AF_N &amp;\approx \frac{\sin(N\psi/2)}{N\psi/2} = \frac{\sin u}{u}, \\
+u &amp;\equiv \frac{N\psi}{2}.
+\end{aligned}\end{split}\]</div>
+<p>That is the same <span class="math notranslate nohighlight">\(\sin u / u\)</span> we found in Lesson 6 for a uniform line source, and the reason is physical: an <span class="math notranslate nohighlight">\(N\)</span>-element uniform array with spacing <span class="math notranslate nohighlight">\(d\)</span> is a <strong>sampled aperture</strong> of length <span class="math notranslate nohighlight">\(L = Nd\)</span>. Near the peak, where the sampling is too fine to matter, the array’s pattern matches the continuous aperture’s. The length is <span class="math notranslate nohighlight">\(Nd\)</span> rather than the <span class="math notranslate nohighlight">\((N-1)d\)</span> between the end elements because each element accounts for one spacing <span class="math notranslate nohighlight">\(d\)</span> of aperture, the sampled line source of Lesson 16.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-half-power-beamwidth">
+<div class="wrap docutils container">
+<p class="rubric">Half-Power Beamwidth</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\frac{N\psi}{2} &amp;= 1.392 \\
+\sin\theta - \sin\theta_0 &amp;= \frac{0.443\ \lambda}{Nd} \\
+\theta_\text{HP} &amp;\approx \frac{0.886\ \lambda}{Nd\ \cos\theta_0}
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\sin u/u\)</span> falls to half power at <span class="math notranslate nohighlight">\(u = 1.392\)</span>.</p></li>
+<li><p>Near the beam, <span class="math notranslate nohighlight">\(\sin\theta - \sin\theta_0 \approx (\theta - \theta_0)\cos\theta_0\)</span>.</p></li>
+</ul>
+</div>
+<div class="present callout docutils container">
+<p><span class="math notranslate nohighlight">\(Nd/\lambda\)</span> sets the beamwidth, with L6’s line-source constant. Steering foreshortens the aperture and widens the beam by <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span>.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Power is half the peak where <span class="math notranslate nohighlight">\(\lvert \sin u/u\rvert = 1/\sqrt{2}\)</span>, which happens at <span class="math notranslate nohighlight">\(u = 1.392\)</span>. Solving outward from there:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\frac{N\psi}{2} &amp;= 1.392 \\
+kd(\sin\theta - \sin\theta_0) &amp;= \frac{2.784}{N} \\
+\sin\theta - \sin\theta_0 &amp;= \frac{0.443\ \lambda}{Nd}.
+\end{aligned}\end{split}\]</div>
+<p>The last step is where the scan angle enters. For a beam that is narrow compared with its distance from broadside, <span class="math notranslate nohighlight">\(\sin\theta - \sin\theta_0 \approx (\theta - \theta_0)\cos\theta_0\)</span>, so the half-width is</p>
+<div class="math notranslate nohighlight">
+\[\theta - \theta_0 \approx \frac{0.443\ \lambda}{Nd\ \cos\theta_0}\]</div>
+<p>and the full width is twice that:</p>
+<div class="math notranslate nohighlight">
+\[\theta_\text{HP} \approx \frac{0.886\ \lambda}{Nd\ \cos\theta_0}.\]</div>
+<div class="callout docutils container">
+<p>The aperture measured in wavelengths, <span class="math notranslate nohighlight">\(Nd/\lambda\)</span>, sets the beamwidth. The constant <span class="math notranslate nohighlight">\(0.886\)</span> is the uniform line-source constant from Lesson 6 and Lesson 15, unchanged, because a uniform array of length <span class="math notranslate nohighlight">\(Nd\)</span> is that line source sampled at <span class="math notranslate nohighlight">\(N\)</span> points. Steering off broadside foreshortens the aperture as seen from the beam direction, and the beam widens by <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span>.</p>
+</div>
+<p><img src="../../viz/img/L18-broadening.svg"
+     alt="An array of length Nd seen from a direction theta0 off broadside: its projected length normal to that direction is shorter by cos theta0"
+     style="max-width: 420px; width: 100%; display: block; margin: 0 auto;"></p>
+<p>The figure is Lesson 18’s: seen from the beam direction, the array’s projected length is <span class="math notranslate nohighlight">\(Nd\cos\theta_0\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-scan-broadening-of-the-course-array">
+<div class="wrap docutils container">
+<p class="rubric">Scan Broadening of the Course Array</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L20-scan-broadening.svg"
+     alt="Array factor of the eight-element course array steered to 0, 30 and 60 degrees, showing the main lobe widening from 13 to 30 degrees"
+     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;"></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N = 8\)</span>, <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span>, worked at <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span>: <span class="math notranslate nohighlight">\(Nd = 3.85\ \lambda\)</span>.</p></li>
+<li><p>Broadside <span class="math notranslate nohighlight">\(13.2^\circ\)</span>; steered to <span class="math notranslate nohighlight">\(30^\circ\)</span>, <span class="math notranslate nohighlight">\(15.2^\circ\)</span>.</p></li>
+<li><p>At <span class="math notranslate nohighlight">\(60^\circ\)</span> the rule gives <span class="math notranslate nohighlight">\(26.4^\circ\)</span> and the pattern <span class="math notranslate nohighlight">\(30.5^\circ\)</span>: a wide-scanned beam is always wider than the rule.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — the PHASER array</p>
+<p>The course array has <span class="math notranslate nohighlight">\(N = 8\)</span> patches on <span class="math notranslate nohighlight">\(d = 14\ \text{mm}\)</span> centers. We work this example at <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span>; your kit’s <strong>Find HB100</strong> frequency will differ, and the L20 Lab has you recompute at it. At <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span>, <span class="math notranslate nohighlight">\(\lambda = 29.1\ \text{mm}\)</span>, so <span class="math notranslate nohighlight">\(d/\lambda = 0.481\)</span> and the aperture is <span class="math notranslate nohighlight">\(Nd = 112\ \text{mm} = 3.85\ \lambda\)</span>.</p>
+<p>Broadside: <span class="math notranslate nohighlight">\(\theta_\text{HP} = 0.886/3.85 = 0.230\ \text{rad} = 13.2^\circ\)</span>.</p>
+<p>Steered to <span class="math notranslate nohighlight">\(30^\circ\)</span>: <span class="math notranslate nohighlight">\(13.2^\circ/\cos 30^\circ = 15.2^\circ\)</span>, against <span class="math notranslate nohighlight">\(15.4^\circ\)</span> from the pattern.</p>
+<p>Steered to <span class="math notranslate nohighlight">\(45^\circ\)</span>: <span class="math notranslate nohighlight">\(13.2^\circ/\cos 45^\circ = 18.7^\circ\)</span>.</p>
+<p>Steered to <span class="math notranslate nohighlight">\(60^\circ\)</span>: the formula gives <span class="math notranslate nohighlight">\(26.4^\circ\)</span>, while the pattern itself is <span class="math notranslate nohighlight">\(30.5^\circ\)</span> wide. The small-angle step above is the approximation that fails, and it underestimates the width — a wide-scanned beam is always wider than <span class="math notranslate nohighlight">\(0.886\lambda/(Nd\cos\theta_0)\)</span> predicts.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-null-locations">
+<div class="wrap docutils container">
+<p class="rubric">Null Locations</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\frac{N\psi}{2} &amp;= m\pi, \quad m = 1, 2, \ldots \\
+\sin\theta &amp;= \sin\theta_0 \pm \frac{m\lambda}{Nd} \\
+\text{FNBW} &amp;= 2\arcsin\!\left(\frac{\lambda}{Nd}\right)
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>Nulls fall every <span class="math notranslate nohighlight">\(\lambda/Nd\)</span> in <span class="math notranslate nohighlight">\(\sin\theta\)</span>, and only where <span class="math notranslate nohighlight">\(\lvert\sin\theta\rvert \le 1\)</span>.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L20-null-comb.svg"
+     alt="The broadside eight-element pattern plotted twice. Against the sine of the angle, the nulls are evenly spaced every 0.260 and the fourth, at 1.04, falls in the shaded region with no real angle. Against angle, the same three nulls land at 15.1, 31.3 and 51.2 degrees, spreading apart toward the horizon"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>A null is a zero of the numerator that is not also a zero of the denominator. The numerator vanishes when</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\frac{N\psi}{2} &amp;= m\pi, \qquad m = 1, 2, 3, \ldots \\
+\psi &amp;= \frac{2\pi m}{N}
+\end{aligned}\end{split}\]</div>
+<p>except when <span class="math notranslate nohighlight">\(m\)</span> is a multiple of <span class="math notranslate nohighlight">\(N\)</span>, because then <span class="math notranslate nohighlight">\(\sin(\psi/2)\)</span> vanishes as well and the ratio returns to unity. Those are the main lobe and its repeats, the <strong>grating lobes</strong> of Lesson 23, not nulls. Converting through <span class="math notranslate nohighlight">\(\psi = kd(\sin\theta - \sin\theta_0)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\sin\theta = \sin\theta_0 \pm \frac{m\lambda}{Nd}.\]</div>
+<p>The nulls are equally spaced in <span class="math notranslate nohighlight">\(\sin\theta\)</span>, not in <span class="math notranslate nohighlight">\(\theta\)</span>. The pattern is a comb on the <span class="math notranslate nohighlight">\(\sin\theta\)</span> axis with teeth every <span class="math notranslate nohighlight">\(\lambda/Nd\)</span>, and the arcsine that brings it back to real angles crowds the teeth together near broadside and spreads them apart toward the horizon. A null exists only if the right-hand side lands inside the <strong>visible region</strong> <span class="math notranslate nohighlight">\(\lvert \sin\theta\rvert \le 1\)</span>; values outside it correspond to no real direction, and there is no null.</p>
+<p>Taking <span class="math notranslate nohighlight">\(m = 1\)</span> on both sides of a broadside beam gives the <strong>first-null beamwidth</strong></p>
+<div class="math notranslate nohighlight">
+\[\text{FNBW} = 2\arcsin\!\left(\frac{\lambda}{Nd}\right).\]</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-anatomy-of-a-uniform-array-pattern">
+<div class="wrap docutils container">
+<p class="rubric">Anatomy of a Uniform-Array Pattern</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><img src="../../viz/img/L20-beamwidth-anatomy.svg"
+     alt="Broadside pattern of the eight-element array in decibels, with the 13.2 degree half-power width, the 30.1 degree null-to-null width, the first null at 15.1 degrees and the minus 13 decibel first sidelobe marked"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;"></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\lambda/Nd = 0.260\)</span>: nulls at <span class="math notranslate nohighlight">\(15.1^\circ\)</span>, <span class="math notranslate nohighlight">\(31.3^\circ\)</span>, and <span class="math notranslate nohighlight">\(51.2^\circ\)</span>; the fourth falls outside the visible region.</p></li>
+<li><p>FNBW is <span class="math notranslate nohighlight">\(30.1^\circ\)</span>, about <span class="math notranslate nohighlight">\(2.3\)</span> times the half-power width.</p></li>
+<li><p>The nulls are sharp, so a coarse sweep can miss them.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — nulls of the course array</p>
+<p>With <span class="math notranslate nohighlight">\(Nd/\lambda = 3.85\)</span>, the tooth spacing is <span class="math notranslate nohighlight">\(\lambda/Nd = 0.260\)</span> in <span class="math notranslate nohighlight">\(\sin\theta\)</span>. Broadside, the nulls sit at</p>
+<p><span class="math notranslate nohighlight">\(\sin\theta = 0.260 \rightarrow 15.1^\circ\)</span>, <span class="math notranslate nohighlight">\(\quad 0.520 \rightarrow 31.3^\circ\)</span>, <span class="math notranslate nohighlight">\(\quad 0.780 \rightarrow 51.2^\circ\)</span>, <span class="math notranslate nohighlight">\(\quad 1.040 \rightarrow\)</span> outside the visible region.</p>
+<p>So the eight-element array shows three nulls per side, not seven, and <span class="math notranslate nohighlight">\(\text{FNBW} = 2(15.1^\circ) = 30.1^\circ\)</span>. Steer the same array to <span class="math notranslate nohighlight">\(30^\circ\)</span> and the first nulls land at <span class="math notranslate nohighlight">\(\sin\theta = 0.5 \pm 0.260\)</span>, which is <span class="math notranslate nohighlight">\(13.9^\circ\)</span> and <span class="math notranslate nohighlight">\(49.5^\circ\)</span>. The beam is no longer symmetric about its own peak: the lower null sits <span class="math notranslate nohighlight">\(16.1^\circ\)</span> below it and the upper null <span class="math notranslate nohighlight">\(19.5^\circ\)</span> above, for a first-null beamwidth of <span class="math notranslate nohighlight">\(35.6^\circ\)</span>.</p>
+</div>
+<p>The null-to-null width runs about <span class="math notranslate nohighlight">\(2.3\)</span> times the half-power width for a uniform array. That ratio is worth remembering when you read a measured sweep, because the nulls are sharp features that a coarse angle grid can miss entirely, while the half-power points are easy to interpolate.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-sidelobe-level">
+<div class="wrap docutils container">
+<p class="rubric">Sidelobe Level</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p>Beamwidth and null positions scale with <span class="math notranslate nohighlight">\(Nd/\lambda\)</span>; the sidelobe level does not. A uniform array holds its first sidelobe near <span class="math notranslate nohighlight">\(-13\)</span> dB at 8 elements or 800. L22’s taper lowers it and widens the beam.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Beamwidth and null positions both scale with <span class="math notranslate nohighlight">\(Nd/\lambda\)</span>; the sidelobe level does not. A uniform array holds its first sidelobe at about <span class="math notranslate nohighlight">\(-13\)</span> dB whether it has 8 elements or 800. Lesson 22 changes that number by changing the amplitude distribution, and it widens the beam to do it.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-directivity-of-a-uniform-array">
+<div class="wrap docutils container">
+<p class="rubric">Directivity of a Uniform Array</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+D &amp;= \frac{N^2}{\displaystyle\sum_{m}\sum_{n} \frac{\sin\!\left(kd(m-n)\right)}{kd(m-n)}} \\
+&amp;\approx \frac{2Nd}{\lambda} = \frac{2L}{\lambda}, \qquad d &lt; \lambda
+\end{aligned}\end{split}\]</div>
+<ul class="simple">
+<li><p>At <span class="math notranslate nohighlight">\(d = \lambda/2\)</span> every cross term vanishes, and <span class="math notranslate nohighlight">\(D = N\)</span> exactly.</p></li>
+<li><p>This is L15’s line-source directivity with <span class="math notranslate nohighlight">\(L = Nd\)</span>.</p></li>
+<li><p>Doubling <span class="math notranslate nohighlight">\(N\)</span> adds <span class="math notranslate nohighlight">\(3\)</span> dB by halving the beamwidth.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Directivity is the peak radiation intensity over its average, so for an array of isotropic elements it is <span class="math notranslate nohighlight">\(N^2\)</span> (the coherent peak) divided by the average of <span class="math notranslate nohighlight">\(\lvert AF_N\rvert^2\)</span> over the sphere. Doing that average term by term leaves a double sum whose cross terms are sinc functions of the element separations:</p>
+<div class="math notranslate nohighlight">
+\[D = \frac{N^2}{\displaystyle\sum_{m}\sum_{n} \frac{\sin\!\left(kd(m-n)\right)}{kd(m-n)}}.\]</div>
+<p>At <span class="math notranslate nohighlight">\(d = \lambda/2\)</span> every cross term contains <span class="math notranslate nohighlight">\(\sin(\pi(m-n))\)</span>, which is zero, and the double sum collapses to the <span class="math notranslate nohighlight">\(N\)</span> diagonal terms:</p>
+<div class="math notranslate nohighlight">
+\[D = \frac{N^2}{N} = N = \frac{2Nd}{\lambda} \quad \text{at } d = \lambda/2.\]</div>
+<p>Written in that last form, the result carries over to other spacings: for any uniform broadside array with <span class="math notranslate nohighlight">\(d\)</span> below a wavelength,</p>
+<div class="math notranslate nohighlight">
+\[D \approx \frac{2Nd}{\lambda} = \frac{2L}{\lambda},\]</div>
+<p>which is the long uniform line-source directivity from Lesson 6 with <span class="math notranslate nohighlight">\(L = Nd\)</span> — the same sampled-aperture argument that produced the <span class="math notranslate nohighlight">\(0.886\)</span>. Directivity grows linearly with aperture in wavelengths. Doubling the element count at fixed spacing doubles <span class="math notranslate nohighlight">\(D\)</span> and adds <span class="math notranslate nohighlight">\(3\)</span> dB, and it does so by halving the beamwidth, not by making any element radiate harder.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-directivity-of-the-course-array">
+<div class="wrap docutils container">
+<p class="rubric">Directivity of the Course Array</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="math notranslate nohighlight">
+\[D \approx 2(8)(0.481) = 7.7 = 8.9\ \text{dB}\]</div>
+<div class="math notranslate nohighlight">
+\[G_\text{total} = G_\text{element} + D_\text{array}\]</div>
+<ul class="simple">
+<li><p>The center four alone give <span class="math notranslate nohighlight">\(5.9\)</span> dB, <span class="math notranslate nohighlight">\(3\)</span> dB less, and twice the beamwidth.</p></li>
+<li><p>Pattern multiplication adds in dB while the element pattern is flat across the main lobe (L21).</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — directivity of the course array</p>
+<p><span class="math notranslate nohighlight">\(D \approx 2(8)(0.481) = 7.7\)</span>, or <span class="math notranslate nohighlight">\(10\log_{10}(7.7) = 8.9\)</span> dB. Turning off four elements to leave the center four gives <span class="math notranslate nohighlight">\(D \approx 3.85 = 5.9\)</span> dB, exactly <span class="math notranslate nohighlight">\(3\)</span> dB less, and doubles the beamwidth from <span class="math notranslate nohighlight">\(13.2^\circ\)</span> to <span class="math notranslate nohighlight">\(26.4^\circ\)</span> by the formula (<span class="math notranslate nohighlight">\(27.4^\circ\)</span> solved exactly).</p>
+<p>That <span class="math notranslate nohighlight">\(3\)</span> dB is the drop in directivity, and the L20 Lab measures a different quantity, the received peak. On receive, the array adds the element voltages in phase, so the peak voltage is proportional to <span class="math notranslate nohighlight">\(N\)</span> and the peak power to <span class="math notranslate nohighlight">\(N^2\)</span>. Halving the active elements therefore drops the ideal received peak by <span class="math notranslate nohighlight">\(6\)</span> dB: <span class="math notranslate nohighlight">\(3\)</span> dB because half the elements collect half the power, and <span class="math notranslate nohighlight">\(3\)</span> dB because the beam’s directivity halves. The dry-run kit read <span class="math notranslate nohighlight">\(5.1\)</span> and <span class="math notranslate nohighlight">\(4.8\)</span> dB per halving, so expect about <span class="math notranslate nohighlight">\(5 \pm 1\)</span> dB on your own kit. The cause of the shortfall is still open, and it does not touch the beamwidths, which the lab grades.</p>
+<p><img src="../../viz/img/L20-aperture-halving.svg"
+     alt="Ideal array factors for 8, 4, and 2 active elements at 10.408 GHz, with the dry run's measured peaks: the beam doubles in width at each halving, and the peak steps 6.0 dB ideally against 5.1 and 4.8 dB measured"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;"></p>
+<p>The figure is the L20 Lab’s, drawn at the dry-run kit’s <span class="math notranslate nohighlight">\(10.408\ \text{GHz}\)</span>.</p>
+<p>The eight elements are patches, not isotropic radiators, so the array’s gain is the element gain plus the array gain. Pattern multiplication becomes addition in dB:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+G_\text{total}\ [\text{dBi}] &amp;= G_\text{element}\ [\text{dBi}] \\
+&amp;\quad + D_\text{array}\ [\text{dB}].
+\end{aligned}\end{split}\]</div>
+<p>Eight half-wave dipoles, at <span class="math notranslate nohighlight">\(2.15\)</span> dBi each, would make an <span class="math notranslate nohighlight">\(11.0\)</span> dBi array. The sum holds while the element pattern is close to flat across the main lobe, and Lesson 21 takes up the case where it is not.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-directivity-under-steering">
+<div class="wrap docutils container">
+<p class="rubric">Directivity Under Steering</p>
+<div class="stage docutils container">
+<div class="present callout docutils container">
+<p>Steering barely changes the array factor’s directivity. The beam is a cone about the array axis: its wall thickens by <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span> and its circumference shrinks by <span class="math notranslate nohighlight">\(\cos\theta_0\)</span>. The scan loss measured on hardware comes from the element pattern (L21).</p>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L20-steering-cone.svg"
+     alt="The main lobe of a linear array drawn as a band of directions around the array axis. At broadside it is a full ring 13.3 degrees thick with directivity 8.86 dB; steered to 60 degrees it is a cone 30.5 degrees thick with half the circumference and directivity 9.12 dB"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The array-factor directivity of a linear array barely changes as you steer, even though the beam visibly widens. The main lobe of a linear array is a cone about the array axis; steering off broadside thickens the cone wall by <span class="math notranslate nohighlight">\(1/\cos\theta_0\)</span> and shrinks its circumference by <span class="math notranslate nohighlight">\(\cos\theta_0\)</span>, leaving the solid angle nearly unchanged. For the course array the array-factor directivity is <span class="math notranslate nohighlight">\(8.86\)</span> dB at broadside, <span class="math notranslate nohighlight">\(8.91\)</span> dB at <span class="math notranslate nohighlight">\(45^\circ\)</span>, and <span class="math notranslate nohighlight">\(9.12\)</span> dB at <span class="math notranslate nohighlight">\(60^\circ\)</span>. The scan loss you measure on real hardware comes from the element pattern, not from the array factor, which is why the PHASER loses gain toward the edges of its scan volume. That is Lesson 21’s subject.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-sizing-an-array">
+<div class="wrap docutils container">
+<p class="rubric">Sizing an Array</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic">
+<li><p>Beamwidth sets the aperture, at the widest scan:</p>
+<div class="math notranslate nohighlight">
+\[Nd = \frac{0.886\ \lambda}{\theta_\text{HP}\ \cos\theta_{0,\text{max}}}\]</div>
+</li>
+<li><p>Scan volume sets the spacing (L23):</p>
+<div class="math notranslate nohighlight">
+\[d &lt; \frac{\lambda}{1 + \lvert\sin\theta_0\rvert_\text{max}}\]</div>
+</li>
+<li><p>The element count is <span class="math notranslate nohighlight">\(N = Nd/d\)</span>, rounded up; each element is an antenna, a phase shifter, an amplifier, and a control line.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>We can run every result so far in reverse. A radar or communications requirement arrives as a beamwidth and a scan volume, and three steps give the array.</p>
+<ol class="arabic">
+<li><p><strong>Aperture.</strong> Invert the half-power formula, with <span class="math notranslate nohighlight">\(\theta_\text{HP}\)</span> in radians:</p>
+<div class="math notranslate nohighlight">
+\[Nd = \frac{0.886\ \lambda}{\theta_\text{HP}}.\]</div>
+<p>If the specification has to hold across a scan volume, divide by <span class="math notranslate nohighlight">\(\cos\theta_0\)</span> at the widest scan angle, because that is where the beam is widest.</p>
+</li>
+<li><p><strong>Spacing.</strong> Lesson 23 derives the condition that keeps grating lobes out of visible space:</p>
+<div class="math notranslate nohighlight">
+\[d &lt; \frac{\lambda}{1 + \lvert\sin\theta_0\rvert_\text{max}}.\]</div>
+<p>At <span class="math notranslate nohighlight">\(d = \lambda/2\)</span> the criterion holds for any scan angle, which is why half-wavelength spacing is the default.</p>
+</li>
+<li><p><strong>Element count.</strong> <span class="math notranslate nohighlight">\(N = Nd/d\)</span>, rounded up. Every element is an antenna, a phase shifter, an amplifier and a control line, so this is the number that sets the cost of the array.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="frame viz-frame cut docutils container" id="frame-limits-of-the-0-886-rule">
+<div class="wrap docutils container">
+<p class="rubric">Limits of the 0.886 Rule</p>
+<div class="depth docutils container">
+<p>The widget below runs the first two steps in reverse so you can see them. Set <span class="math notranslate nohighlight">\(N\)</span> and <span class="math notranslate nohighlight">\(d/\lambda\)</span> and watch the main lobe narrow as the aperture grows; the green bar is the half-power width read off the pattern and the dotted bar underneath is what <span class="math notranslate nohighlight">\(0.886\lambda/(Nd\cos\theta_0)\)</span> predicts. Steer toward <span class="math notranslate nohighlight">\(\pm 60^\circ\)</span> and two things happen at once: the beam widens, and the dotted bar falls short of the real one. Push <span class="math notranslate nohighlight">\(d/\lambda\)</span> toward <span class="math notranslate nohighlight">\(1.0\)</span> with the beam steered and a grating lobe enters from the edge of visible space.</p>
+</div>
+<div class="stage docutils container">
+<div class="present docutils container">
+<iframe src="../../viz/array-beamwidth.html"
+        width="100%" height="523"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="Uniform linear array pattern with half-power beamwidth, nulls, first-null beamwidth and directivity">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-a-5-pencil-beam">
+<div class="wrap docutils container">
+<p class="rubric">A 5° Pencil Beam</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>Goal: <span class="math notranslate nohighlight">\(\theta_\text{HP} \le 5^\circ\)</span> at <span class="math notranslate nohighlight">\(10\ \text{GHz}\)</span>, scan <span class="math notranslate nohighlight">\(\pm 45^\circ\)</span>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Step</p></th>
+<th class="head text-left"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Aperture for <span class="math notranslate nohighlight">\(5^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(Nd = 305\ \text{mm} = 10.2\ \lambda\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Spacing for <span class="math notranslate nohighlight">\(\pm 45^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(d = \lambda/2 = 15\ \text{mm}\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Count</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(N = 21\)</span>: <span class="math notranslate nohighlight">\(4.8^\circ\)</span> broadside, <span class="math notranslate nohighlight">\(6.8^\circ\)</span> at <span class="math notranslate nohighlight">\(45^\circ\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(5^\circ\)</span> held at <span class="math notranslate nohighlight">\(45^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(N = 29\)</span>: <span class="math notranslate nohighlight">\(43.5\ \text{cm}\)</span>, <span class="math notranslate nohighlight">\(14.6\)</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="present docutils container">
+<p><img src="../../viz/img/L20-aperture-vs-beamwidth.svg"
+     alt="Half-power beamwidth against aperture length in wavelengths on log axes, at broadside and steered to 45 degrees, with the eight-element PHASER at 3.9 wavelengths and 13.2 degrees and the 5 degree target reached at 10.2 wavelengths"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;"></p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">Worked example — a 5° pencil beam at X-band</p>
+<p>Specification: <span class="math notranslate nohighlight">\(\theta_\text{HP} \le 5^\circ\)</span> at <span class="math notranslate nohighlight">\(10\ \text{GHz}\)</span>, scanning to <span class="math notranslate nohighlight">\(\pm 45^\circ\)</span>. At <span class="math notranslate nohighlight">\(10\ \text{GHz}\)</span>, <span class="math notranslate nohighlight">\(\lambda = 30\ \text{mm}\)</span>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Step</p></th>
+<th class="head text-left"><p>Work</p></th>
+<th class="head text-left"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Aperture for <span class="math notranslate nohighlight">\(5^\circ\)</span> broadside</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(Nd = 0.886(30)/0.0873\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(305\ \text{mm} = 10.2\ \lambda\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Spacing for <span class="math notranslate nohighlight">\(\pm 45^\circ\)</span> scan</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(d &lt; \lambda/(1+\sin 45^\circ) = 0.586\ \lambda\)</span></p></td>
+<td class="text-left"><p>take <span class="math notranslate nohighlight">\(d = \lambda/2 = 15\ \text{mm}\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Element count</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(N = 305/15 = 20.3\)</span>, round up</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(N = 21\)</span>, aperture <span class="math notranslate nohighlight">\(315\ \text{mm}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Broadside beamwidth</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(0.886(30)/315\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(4.8^\circ\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Broadside directivity</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(D \approx 2(21)(0.5) = 21\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.2\)</span> dB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Now check the corner of the scan volume. At <span class="math notranslate nohighlight">\(45^\circ\)</span> the same array gives <span class="math notranslate nohighlight">\(4.8^\circ/\cos 45^\circ = 6.8^\circ\)</span>, which misses the specification by nearly <span class="math notranslate nohighlight">\(2^\circ\)</span>. Holding <span class="math notranslate nohighlight">\(5^\circ\)</span> at <span class="math notranslate nohighlight">\(45^\circ\)</span> requires <span class="math notranslate nohighlight">\(Nd = 305/\cos 45^\circ = 431\ \text{mm}\)</span>, so <span class="math notranslate nohighlight">\(N = 29\)</span> elements at half-wavelength spacing, a <span class="math notranslate nohighlight">\(43.5\ \text{cm}\)</span> aperture and <span class="math notranslate nohighlight">\(14.6\)</span> dB.</p>
+<p>The last <span class="math notranslate nohighlight">\(45^\circ\)</span> of scan volume is what added the eight extra channels. Whether that is the right trade depends on how much of the time the beam sits out at the edge of the volume, and it is a question worth asking before we fix the aperture.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-predictions-for-the-l20-lab">
+<div class="wrap docutils container">
+<p class="rubric">Predictions for the L20 Lab</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Elements</p></th>
+<th class="head text-left"><p><span class="math notranslate nohighlight">\(Nd/\lambda\)</span></p></th>
+<th class="head text-left"><p>HPBW</p></th>
+<th class="head text-left"><p>FNBW</p></th>
+<th class="head text-left"><p>Sidelobe</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>8</p></td>
+<td class="text-left"><p>3.85</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.3^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(30.1^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-13\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Center 4</p></td>
+<td class="text-left"><p>1.92</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(27.4^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(63^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-11\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Center 2</p></td>
+<td class="text-left"><p>0.96</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(63^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(180^\circ\)</span></p></td>
+<td class="text-left"><p>none</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Configuration</p></th>
+<th class="head text-left"><p>Aperture <span class="math notranslate nohighlight">\(Nd\)</span></p></th>
+<th class="head text-left"><p>HPBW</p></th>
+<th class="head text-left"><p>FNBW</p></th>
+<th class="head text-left"><p>First sidelobe</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>8 elements</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(112\ \text{mm} = 3.85\ \lambda\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.3^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(30.1^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-13\)</span> dB</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Center 4</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(56\ \text{mm} = 1.92\ \lambda\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(27.4^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(63^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(-11\)</span> dB</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Center 2</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(28\ \text{mm} = 0.96\ \lambda\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(63^\circ\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(180^\circ\)</span> by convention</p></td>
+<td class="text-left"><p>none</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The HPBW column is the half-power width of the array factor solved exactly, the same values the L20 Lab uses. The <span class="math notranslate nohighlight">\(0.886\)</span> rule gives <span class="math notranslate nohighlight">\(13.2^\circ\)</span>, <span class="math notranslate nohighlight">\(26.4^\circ\)</span>, and <span class="math notranslate nohighlight">\(52.8^\circ\)</span>, and it falls further short as the array gets smaller. All values are at <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span>; recompute them at your kit’s <strong>Find HB100</strong> frequency.</p>
+<p>The L20 Lab sweeps the PHASER with all eight elements on, then with the center four, then with the center pair, and measures the beamwidth each time. Predict first, measure second, reconcile third. Every number in the table comes from this lesson, and three details in it are worth stating before the lab rather than after.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-three-details-in-the-prediction-table">
+<div class="wrap docutils container">
+<p class="rubric">Three Details in the Prediction Table</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Two elements have no null or sidelobe (<span class="math notranslate nohighlight">\(\lambda/Nd &gt; 1\)</span>); HPBW is <span class="math notranslate nohighlight">\(63^\circ\)</span>, not the formula’s <span class="math notranslate nohighlight">\(53^\circ\)</span>.</p></li>
+<li><p>The first sidelobe is <span class="math notranslate nohighlight">\(-12.8\)</span> dB at 8 elements and <span class="math notranslate nohighlight">\(-11.3\)</span> dB at 4.</p></li>
+<li><p>Samples sit one <span class="math notranslate nohighlight">\(2.8125^\circ\)</span> phase step apart: about <span class="math notranslate nohighlight">\(0.9^\circ\)</span> near broadside.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The two-element row has no null and no sidelobe. With <span class="math notranslate nohighlight">\(Nd\)</span> under a wavelength, <span class="math notranslate nohighlight">\(\lambda/Nd\)</span> exceeds <span class="math notranslate nohighlight">\(1\)</span> and the first null falls outside the visible region, so the pattern is a single broad hump and we quote the first-null beamwidth as <span class="math notranslate nohighlight">\(180^\circ\)</span> by convention. Its half-power width is <span class="math notranslate nohighlight">\(62.6^\circ\)</span>, not the <span class="math notranslate nohighlight">\(52.8^\circ\)</span> the small-angle formula returns, because a beam that wide breaks the approximation used to derive it.</p>
+<p>The first sidelobe drifts with element count. The <span class="math notranslate nohighlight">\(-13\)</span> dB figure is the large-array limit; eight elements give <span class="math notranslate nohighlight">\(-12.8\)</span> dB and four give about <span class="math notranslate nohighlight">\(-11\)</span> dB. All three are far above the sweep’s noise floor, which sits roughly <span class="math notranslate nohighlight">\(23\)</span> dB below the uniform-taper peak.</p>
+<p>The sweep is a discrete grid. With Use Bits on, as in every lab preset, the GUI steps the element-to-element phase one phase-shifter LSB, <span class="math notranslate nohighlight">\(2.8125^\circ\)</span>, per point. One step moves <span class="math notranslate nohighlight">\(\sin\theta\)</span> by <span class="math notranslate nohighlight">\(2.8125^\circ/173.2^\circ = 0.0162\)</span>, which is <span class="math notranslate nohighlight">\(0.93^\circ\)</span> of angle at broadside and <span class="math notranslate nohighlight">\(1.07^\circ\)</span> at <span class="math notranslate nohighlight">\(30^\circ\)</span>, widening as <span class="math notranslate nohighlight">\(1/\cos\theta\)</span>. A half-power width read as the span between the outermost samples above <span class="math notranslate nohighlight">\(-3\)</span> dB comes out short by up to one step: <span class="math notranslate nohighlight">\(12.1^\circ\)</span> to <span class="math notranslate nohighlight">\(13.1^\circ\)</span> for the full array, against <span class="math notranslate nohighlight">\(13.3^\circ\)</span> from the pattern. Interpolating between the two samples that straddle each <span class="math notranslate nohighlight">\(-3\)</span> dB crossing recovers the width to within <span class="math notranslate nohighlight">\(0.1^\circ\)</span>. The nulls are read at their lowest sample, which puts the measured FNBW between <span class="math notranslate nohighlight">\(30.1^\circ\)</span> and <span class="math notranslate nohighlight">\(31.1^\circ\)</span>. That spread comes from the sampling grid, not from the array.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-beamwidth">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Beamwidth</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\psi = kd(\sin\theta - \sin\theta_0)\)</span></p></td>
+<td class="text-left"><p>array-factor argument</p></td>
+<td class="text-left"><p>beam peak is at <span class="math notranslate nohighlight">\(\psi = 0\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(N\psi/2 = 1.392\)</span></p></td>
+<td class="text-left"><p>half-power point of <span class="math notranslate nohighlight">\(\sin u/u\)</span></p></td>
+<td class="text-left"><p>the source of the <span class="math notranslate nohighlight">\(0.886\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\theta_\text{HP} \approx 0.886\lambda/(Nd\cos\theta_0)\)</span></p></td>
+<td class="text-left"><p>beamwidth from aperture and scan</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(13.2^\circ\)</span> for the course array</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-nulls-and-directivity">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Nulls and Directivity</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(\sin\theta = \sin\theta_0 \pm m\lambda/Nd\)</span></p></td>
+<td class="text-left"><p>null locations</p></td>
+<td class="text-left"><p>equally spaced in <span class="math notranslate nohighlight">\(\sin\theta\)</span>, not <span class="math notranslate nohighlight">\(\theta\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(\text{FNBW} = 2\arcsin(\lambda/Nd)\)</span></p></td>
+<td class="text-left"><p>null-to-null width, broadside</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(30.1^\circ\)</span> at <span class="math notranslate nohighlight">\(N=8\)</span>; about <span class="math notranslate nohighlight">\(2.3\ \theta_\text{HP}\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(D \approx 2Nd/\lambda\)</span></p></td>
+<td class="text-left"><p>broadside directivity, uniform array</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(7.7 = 8.9\)</span> dB at <span class="math notranslate nohighlight">\(N=8\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only docutils container" id="frame-summary-gain-and-array-sizing">
+<div class="wrap docutils container">
+<p class="rubric">Summary: Gain and Array Sizing</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Symbol / idea</p></th>
+<th class="head text-left"><p>What it is</p></th>
+<th class="head text-left"><p>Number to remember</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(G_\text{total} = G_\text{element} + D_\text{array}\)</span></p></td>
+<td class="text-left"><p>pattern multiplication in dB</p></td>
+<td class="text-left"><p>add the decibels</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(d &lt; \lambda/(1+\lvert\sin\theta_0\rvert)\)</span></p></td>
+<td class="text-left"><p>spacing for a scan volume</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\lambda/2\)</span> scans anywhere</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>first sidelobe <span class="math notranslate nohighlight">\(\approx -13\)</span> dB</p></td>
+<td class="text-left"><p>set by the taper, not the size</p></td>
+<td class="text-left"><p>unmoved by <span class="math notranslate nohighlight">\(N\)</span> or by steering</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-practice">
+<div class="wrap docutils container">
+<p class="rubric">Practice</p>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../practice/ECE444_L20_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a></p></li>
+<li><p><a class="doc-link doc-key" href="../../practice/ECE444_L20_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-looking-ahead">
+<div class="wrap docutils container">
+<p class="rubric">Looking Ahead</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>The L20 Lab: sweep 8, 4, and 2 elements against the prediction table; bring the calculated column filled in.</p></li>
+<li><p>L21: real patches have their own pattern, and the array pattern is element pattern times array factor.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Lesson 21 addresses what the array factor leaves out. Every result in this lesson treats the elements as isotropic points, which is why the directivity came out independent of scan angle and why the pattern in the widget is the same at <span class="math notranslate nohighlight">\(60^\circ\)</span> as at boresight. Real patches have their own pattern, it rolls off toward the edges of the scan volume, and the full array pattern is the product of the two. That product is where the array’s measured gain, its usable scan range, and its cross-polarization all come from.</p>
+<p>The L20 Lab puts the prediction table above in front of the hardware. You will load the Array Factor preset, sweep the full array, then drop to four elements and two, and compare measured beamwidths against the numbers you calculated today. Bring the calculated column filled in; a measurement you cannot predict within a couple of degrees is a measurement you cannot use to find a fault later. Read the prediction table and the L20 Lab procedure before you go to the bench.</p>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L20-array-factor-beamwidth"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=e355370f43"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script>
+</body>
+</html>

@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="en" data-mode="read">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L17 Lab — Phased Array Bring-Up &mdash; ECE 444 — Antennas and Wave Propagation</title>
+<meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+<link rel="icon" href="../../_static/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap"><link rel="stylesheet" href="../../_static/custom.css?v=0defe11dd0">
+<link rel="stylesheet" href="../../_static/shell.css?v=9432ef1809">
+<link rel="stylesheet" href="../../_static/frames.css?v=1dea9286a4">
+<script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processEscapes": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+
+<div class="rail"><span id="railfill"></span></div>
+
+<div class="laser" id="laser" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<div class="index" id="index" role="dialog" aria-label="Jump to a frame or another lesson">
+  <button class="index-close" id="btnIndexClose" type="button" aria-label="Close">&times;</button>
+  <div class="wrap">
+    <div class="index-cols">
+      <div class="index-here">
+        <h2>This lesson</h2>
+        <ol id="indexlist"></ol>
+      </div>
+      <div class="index-toc">
+        <h2>Course</h2>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Course Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../materials.html">Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../interactives.html">Interactives</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 1 — Foundations of Electromagnetics and Antennas</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/index.html">Module 1 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L01-course-intro/index.html">L1 — Course Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L02-antenna-properties/index.html">L2 — Basic Properties and Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L03-polarization-bandwidth/index.html">L3 — Polarization and Bandwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-impedance-feeding-baluns/index.html">L4 — Impedance, Feeding, and Baluns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L04-lab-matching/index.html">L4 Lab — Matching Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L05-field-regions/index.html">L5 — Field Regions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module01/L06-radiation-integrals/index.html">L6 — Radiation Integrals</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 2 — Antenna Types, Simulation, and Measurement</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/index.html">Module 2 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L07-simple-resonant-antennas/index.html">L7 — Simple Resonant Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L08-dipole-simulation-lab/index.html">L8 — Dipole Simulation Lab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L09-pattern-measurement-theory/index.html">L9 — Measurement Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L10-measurement-lab-sparams/index.html">L10 — Measurement Lab — Impedance and S-parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L11-measurement-lab-patterns/index.html">L11 — Measurement Lab — Radiation Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L12-loop-monopole-antennas/index.html">L12 — Loop and Monopole Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L13-patch-slot-horn/index.html">L13 — Patch, Slot, and Horn Antennas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module02/L14-high-gain-antennas/index.html">L14 — High-Gain Antennas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 3 — Arrays and ADALM-PHASER Beamforming</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Module 3 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L15-aperture-distributions/index.html">L15 — Aperture Distributions and Efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L16-array-factor/index.html">L16 — The Array Factor and Pattern Multiplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L17-phased-array-hardware/index.html">L17 — Introduction to Phased Array Hardware</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">L17 Lab — Phased Array Bring-Up</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-beam-steering/index.html">L18 — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L18-lab-beam-steering/index.html">L18 Lab — Beam Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-direction-finding/index.html">L19 — Direction Finding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-array-factor-beamwidth/index.html">L20 — Array Factor and Beamwidth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L20-lab-array-factor/index.html">L20 Lab — Array Factor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-antenna-pattern/index.html">L21 — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L21-lab-antenna-pattern/index.html">L21 Lab — Antenna Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-sidelobes-tapering/index.html">L22 — Sidelobes and Tapering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L23-beam-squint-quantization/index.html">L23 — Beam Squint and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L22-L23-lab-tapering-squint/index.html">L22–L23 Lab — Tapering, Squint, and Quantization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-null-steering/index.html">L24 — Null Steering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../L24-lab-null-steering/index.html">L24 Lab — Null Steering</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Module 4 — Radar Fundamentals and FMCW</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/index.html">Module 4 overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L25-radar-equation/index.html">L25 — The Radar Equation, Path Loss, and RCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L26-range-resolution-doppler/index.html">L26 — Range, Resolution, and Doppler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L27-radar-detection/index.html">L27 — Radar Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-fmcw/index.html">L28 — FMCW on the Phaser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L28-lab-fmcw-range/index.html">L28 Lab — FMCW Range</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-range-doppler-mti/index.html">L29 — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L29-lab-range-doppler-mti/index.html">L29 Lab — Range-Doppler and MTI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-cfar/index.html">L30 — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L30-lab-cfar/index.html">L30 Lab — CFAR Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-classification-tracking/index.html">L31 — Classification and Tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/L31-lab-spectrogram/index.html">L31 Lab — Micro-Doppler Spectrogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module04/final-project/index.html">Final Project — Radar Systems Report</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+</div><div class="hud">
+<div class="hud-group">
+  <button id="btnSite" class="site" type="button"
+          aria-expanded="false" aria-controls="sitepop"
+          title="Elsewhere on this site">ECE 444</button>
+</div>
+<div class="pop" id="sitepop" role="group" aria-label="Site" hidden>
+  <a href="https://livethisdream.github.io/">Home</a>
+  <a href="https://livethisdream.github.io/ece343/intro.html">ECE 343</a>
+  <a href="../../intro.html" aria-current="page">ECE 444</a>
+  <a href="https://livethisdream.github.io/ece448/intro.html">ECE 448</a>
+  <a href="https://livethisdream.github.io/projects">Projects</a>
+</div>
+
+  <div class="hud-group hud-mid"><button id="btnMode" type="button" aria-expanded="false" aria-controls="modepop"
+            title="How the lesson is laid out (P)">read</button>
+    <button id="btnTools" type="button" aria-expanded="false" aria-controls="toolspop"
+            title="Presenter tools">tools</button>
+  </div>
+
+  <div class="hud-group"><button id="btnIndex" class="counter" type="button" aria-pressed="false"
+            title="Contents (G) · double-tap for the top"><b id="cur">1</b>/<span id="tot">0</span></button>
+  </div><div class="pop" id="modepop" role="group" aria-label="View mode" hidden>
+    <button id="btnPresent" class="choice" type="button" aria-pressed="false">
+      present<span class="pop-note">one frame at a time</span></button>
+    <button id="btnRead" class="choice" type="button" aria-pressed="true">
+      read<span class="pop-note">the whole lesson, continuous</span></button>
+  </div><div class="pop" id="toolspop" role="group" aria-label="Presenter tools" hidden>
+    <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
+    <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
+    <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+  </div>
+</div><main class="deck bd-article" id="deck" tabindex="-1">
+<section class="tex2jax_ignore mathjax_ignore" id="l17-lab-phased-array-bring-up">
+<h1>L17 Lab — Phased Array Bring-Up<a class="headerlink" href="#l17-lab-phased-array-bring-up" title="Permalink to this heading">#</a></h1>
+<div class="frame title-frame docutils container" id="frame-1">
+<div class="wrap docutils container">
+<div class="course-mark">ECE 444 · Fall 2026</div>
+<h1 class="frame-title">Phased Array Bring-Up</h1>
+<div class="title-rule"></div>
+<p>Bring your own kit up from a blank card, then prove it works.</p>
+<p>L17 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers</p>
+</div>
+</div>
+<div class="frame docutils container" id="frame-learning-objectives">
+<div class="wrap docutils container">
+<p class="rubric">Learning Objectives</p>
+<ol class="lo-list" style="--module: '3'; counter-reset: lo 2">
+  <li>I can identify the hardware architecture of the ADALM-PHASER and control it via SDR software.</li>
+</ol>
+<div class="depth docutils container">
+<p>This lab is the bench half of Lesson 17. The lesson walked the receive chain
+block by block; here you bring up that hardware yourself, from a blank card to
+a beam sweep that follows the source. The lab packet records both: that the kit
+came up, and that it works.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-part-a-build-your-phaser">
+<div class="wrap docutils container">
+<p class="rubric">Part A: Build Your PHASER</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ul class="simple">
+<li><p>Each cadet builds their own kit from a stock Linux image: flash, connect, set the clock, join the Wi-Fi, provision, calibrate.</p></li>
+<li><p>The Ethernet cable carries ssh and the browser; the Wi-Fi only connects the Pi to the internet.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<img src="../../viz/img/L17-part-a-network.svg" alt="Part A network. The laptop and the Pi, named phaser-NN.local, each give themselves an address on the Ethernet cable, which carries ssh and the browser interface on port 8080. The Pi joins the AF_ACADEMY_GUEST Wi-Fi and reaches GitHub through it to run provision.sh. A path from the laptop through the Wi-Fi access point to the Pi is crossed out, because the guest network can isolate its clients from each other." style="max-width: 100%; display: block; margin: 0 auto;">
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Each cadet starts with their own PHASER kit and a microSD card and builds the
+kit up from the operating system: you flash ADI’s stock Kuiper Linux image onto
+the card, connect to the Pi over a cable, set its clock, put it on the Wi-Fi,
+run the Phaser provisioning script, and calibrate the array. These are the
+steps that bring up any embedded Linux device, and each one fails in a way
+that teaches you something about the device. Part B then makes the first
+measurements on the kit you built.</p>
+<p>The laptop and the kit use two connections for two different jobs. A direct
+Ethernet cable from the laptop to the Pi carries ssh and the browser interface.
+The classroom Wi-Fi is only the Pi’s route to the internet, which it needs to
+download the Phaser software.</p>
+</div>
+<div class="depth docutils container">
+<p>The cable is there because of how guest networks are run. A guest network can
+isolate its clients from one another, so a laptop and a Pi that have both
+joined the classroom Wi-Fi may be unable to reach each other even though each
+one reaches the internet. A cable between the two does not depend on the
+network’s settings, so every step that talks to the Pi from the laptop uses the
+cable.</p>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Each cadet has their own kit:</p>
+<ul class="simple">
+<li><p>the ADALM-PHASER board, with the Raspberry Pi and the ADALM-Pluto attached on the back</p></li>
+<li><p>an HB100 microwave source on its own small stand or battery holder</p></li>
+<li><p>one USB-C supply, for the PHASER board, which powers the Pi too</p></li>
+<li><p>a camera tripod, for the board and for aiming the source</p></li>
+<li><p>a 3D-printed rotating stand under the tripod: print the STL files in <code class="docutils literal notranslate"><span class="pre">common/</span></code> and <code class="docutils literal notranslate"><span class="pre">tripod/</span></code> from <a class="reference external" href="https://github.com/livethisdream/phaser/tree/main/hardware/stand-simple/stl">hardware/stand-simple/stl</a></p></li>
+<li><p>a 32 GB microSD card and an Ethernet cable</p></li>
+<li><p>a laptop with Raspberry Pi Imager and an ssh client</p></li>
+</ul>
+<p>Your instructor assigns your kit a unique two-digit number, NN, and your kit
+is named <code class="docutils literal notranslate"><span class="pre">phaser-NN</span></code>. Wherever a step shows <code class="docutils literal notranslate"><span class="pre">phaser-NN</span></code>, type your own number
+in place of NN: kit 7 is <code class="docutils literal notranslate"><span class="pre">phaser-07</span></code>.</p>
+</div>
+<div class="depth docutils container">
+<p>On Windows the ssh client is the OpenSSH Client, under Settings &gt; Apps &gt;
+Optional features; macOS and Linux include one.</p>
+<p>The stand’s <a class="reference external" href="https://github.com/livethisdream/phaser/tree/main/hardware/stand-simple">README</a>
+has the print settings: PETG if you can, no supports, and the platter printed
+upside down. It turns the tripod on the array’s own center, so the source can
+stay put while the board rotates, and its engraved scale reads the angle.</p>
+<p>The instructor also keeps fallback cards, copies of one finished kit. A
+fallback card gets a kit running when a build cannot be finished in the
+period; it is named for your kit before it goes in, and it still needs Steps
+21 to 24, because the calibration it carries belongs to the instructor’s kit.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-kit-care">
+<div class="wrap docutils container">
+<p class="rubric">Kit Care</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p><strong>Do</strong></p>
+<ul class="simple">
+<li><p>Power only through the PHASER’s USB-C.</p></li>
+<li><p>Shut down before you unplug.</p></li>
+<li><p>Hold the board by its edges.</p></li>
+<li><p>Tighten SMA connectors by hand.</p></li>
+</ul>
+</div>
+<div class="present docutils container">
+<p><strong>Don’t</strong></p>
+<ul class="simple">
+<li><p>Pull power or the card while Linux runs.</p></li>
+<li><p>Touch the patches.</p></li>
+<li><p>Remove a kit without permission.</p></li>
+</ul>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The kit is yours for the semester, and every lab after this one runs on it.
+These rules keep it working.</p>
+</div>
+<div class="depth docutils container">
+<p>Use the 5 V, 3 A supply in the kit, plugged into the PHASER’s USB-C input,
+labeled P16. The PHASER board powers the Pi and the Pluto through its own
+connectors, and a supply plugged into the Pi bypasses the board’s supply.</p>
+<p>Linux writes to the card while it runs, so pulling the power or the card
+mid-write can corrupt it, and a corrupted card means flashing it again. Shut
+down with the button on the back of the PHASER, or by holding the
+<strong>Connected</strong> pill for two seconds, and wait until the lights go out before
+you unplug (Step 25).</p>
+<p>The amplifiers behind the patches and the ADAR1000 beamformers are
+static-sensitive parts. Touch a grounded metal surface before you handle the
+board, and hold it by its edges. Keep fingers and objects off the patch face:
+anything on a patch changes its match, and pressure can damage it.</p>
+<p>An SMA connector needs only finger tightness. A wrench, or a connector started
+at an angle, can strip the threads or break the connector off the board.
+Support every cable so its weight does not hang on the board’s connectors.</p>
+<p>If the kit stops responding, run <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">reboot</span></code> first, then re-run the
+provisioning script (Step 16), which repairs the installation without
+erasing the card. Flash a new card only when the instructor tells you to.</p>
+<p>Kits stay in the classroom. Ask the instructor before you take one anywhere
+else.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-before-class-download">
+<div class="wrap docutils container">
+<p class="rubric">Before Class: Download</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple">
+<li><p>Install <a class="reference external" href="https://www.raspberrypi.com/software/">Raspberry Pi Imager</a> 2.0.</p></li>
+<li><p>Download <a class="reference external" href="https://swdownloads.analog.com/cse/kuiper/image_2023-04-02-ADI-Kuiper-full.zip">Kuiper 2021_R2</a>, ADI’s Linux image for the Pi, and unzip it.</p></li>
+</ol>
+</div>
+<div class="present callout docutils container">
+<p>Use exactly this release. Later Kuiper releases break the provisioning script.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Do Steps 1 to 5 at home before the period: they need only your laptop and the
+card. The download is <code class="docutils literal notranslate"><span class="pre">image_2023-04-02-ADI-Kuiper-full.zip</span></code>; right-click it
+and choose <strong>Extract All</strong>, which leaves a Kuiper folder holding the <code class="docutils literal notranslate"><span class="pre">.img</span></code>
+file that Imager writes.</p>
+</div>
+<div class="depth docutils container">
+<p>Kuiper 2021_R2 is the release the Phaser software is tested on, and it is based
+on Debian 11, bullseye. The later Kuiper releases move to a newer Debian that
+changes the parts of the system the provisioning script and the Wi-Fi steps
+rely on: where the boot files live and which program manages the network.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-before-class-flash-the-card">
+<div class="wrap docutils container">
+<p class="rubric">Before Class: Flash the Card</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="3">
+<li><p>In Imager, choose <strong>Raspberry Pi 4</strong>.</p></li>
+<li><p>OS: scroll to the bottom, <strong>Custom OS</strong>, the Kuiper <code class="docutils literal notranslate"><span class="pre">.img</span></code>.</p></li>
+<li><p>Choose the microSD card, agree to erase, and wait.</p></li>
+</ol>
+</div>
+<div class="present callout docutils container">
+<p>Imager erases the storage you pick: check it is the card.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The write and its verification take under 15 minutes. Leave the card in until
+Imager says the write is complete, and cancel any offer from Windows to format
+the card afterward.</p>
+</div>
+<div class="depth docutils container">
+<p>Imager offers no OS customization for a custom image, only for Raspberry Pi
+OS, so nothing on the card changes the user and password that every later step
+relies on; the provisioning script in Step 16 names the kit instead.</p>
+<p>After the write, the card holds two partitions: a small FAT one that holds the
+boot files, which Windows can read, and a Linux one, which it cannot. That is
+why Windows offers to format part of the card, and formatting it would erase
+the image.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-assemble-and-power-on">
+<div class="wrap docutils container">
+<p class="rubric">Assemble and Power On</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="6">
+<li><p>Mount the PHASER on the tripod.</p></li>
+<li><p>Card in the Pi.</p></li>
+<li><p>Pluto USB to the Pi.</p></li>
+<li><p>Ethernet to the laptop.</p></li>
+<li><p>USB-C into the PHASER, by the SMA.</p></li>
+</ol>
+</div>
+<div class="present callout docutils container">
+<p>Power only through the PHASER’s USB-C, never the Pi’s.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Mount the board with its patch face vertical
+and its row of patches horizontal: the array steers in the plane of that row,
+so a board mounted on its side steers in elevation, while every later lab
+sweeps the beam in azimuth. Looking at the front of the array, the patch face,
+E1 is the element at the right end of the row and E8 the one at the left end.
+Step 6 of Part B asks which of the two the source moved toward.</p>
+</div>
+<div class="depth docutils container">
+<p>The PHASER board supplies the Pi through its own connector, and powering the
+Pi directly bypasses the board’s supply. Unplugging the kit while Linux is
+running can also corrupt the card; see the last frame of Part A for the safe
+way to power down.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-first-contact">
+<div class="wrap docutils container">
+<p class="rubric">First Contact</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="11">
+<li><p>Open PowerShell, wait a couple of minutes, then:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh<span class="w"> </span>analog@analog.local
+</pre></div>
+</div>
+<p>Type <code class="docutils literal notranslate"><span class="pre">yes</span></code> to the fingerprint question; the password is <code class="docutils literal notranslate"><span class="pre">analog</span></code>.</p>
+</div>
+<div class="present callout docutils container">
+<p>“Host identification has changed”? Run <code class="docutils literal notranslate"><span class="pre">ssh-keygen</span> <span class="pre">-R</span> <span class="pre">analog.local</span></code>, then try again.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p><code class="docutils literal notranslate"><span class="pre">analog</span></code> is the name, the user, and the password that ADI’s Kuiper image ships
+with. The fingerprint question asks whether to trust the kit’s host key, which
+this laptop has never seen. If ssh says it cannot resolve <code class="docutils literal notranslate"><span class="pre">analog.local</span></code>, wait
+another minute and try again.</p>
+<p>Every freshly flashed card answers to <code class="docutils literal notranslate"><span class="pre">analog.local</span></code> with new host keys, so a
+laptop that has met an earlier card under that name refuses the new one until
+<code class="docutils literal notranslate"><span class="pre">ssh-keygen</span> <span class="pre">-R</span></code> removes the old key.</p>
+</div>
+<div class="depth docutils container">
+<p>Nothing on a bare cable hands out addresses. After about a minute of asking,
+the Pi and the laptop each give themselves a link-local address, one in
+<code class="docutils literal notranslate"><span class="pre">169.254.x.x</span></code> that only the cable can carry, and the laptop finds the Pi by
+name with multicast DNS, the <code class="docutils literal notranslate"><span class="pre">.local</span></code> lookup. That is why a direct cable works
+with no setup on either end, and why the first minute after power-on shows
+nothing. On the instructor’s kit, <code class="docutils literal notranslate"><span class="pre">hostname</span> <span class="pre">-I</span></code> showed exactly one address at
+this point, <code class="docutils literal notranslate"><span class="pre">169.254.210.227</span></code>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-join-the-wi-fi">
+<div class="wrap docutils container">
+<p class="rubric">Join the Wi-Fi</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="12">
+<li><p>Set the Wi-Fi country and add the classroom network:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>raspi-config<span class="w"> </span>nonint<span class="w"> </span>do_wifi_country<span class="w"> </span>US
+sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/wpa_supplicant/wpa_supplicant.conf<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
+
+<span class="s">network={</span>
+<span class="s">    ssid="AF_ACADEMY_GUEST"</span>
+<span class="s">    key_mgmt=NONE</span>
+<span class="s">}</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="13">
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">reboot</span></code>, wait a minute, and ssh in again as in Step 11.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">ping</span> <span class="pre">-c</span> <span class="pre">4</span> <span class="pre">github.com</span></code> and expect four replies.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The classroom Wi-Fi is the open guest network <code class="docutils literal notranslate"><span class="pre">AF_ACADEMY_GUEST</span></code>. The reboot in
+Step 13 is not optional: on the instructor’s kit, asking the Wi-Fi client to reread
+its settings without a reboot left it offline, and the ping failed until the
+Pi restarted. If the ping fails after the reboot, tell the instructor.</p>
+</div>
+<div class="depth docutils container">
+<p>Kuiper 2021_R2 is based on Raspberry Pi OS bullseye, where <code class="docutils literal notranslate"><span class="pre">wpa_supplicant</span></code>
+joins the Wi-Fi network and <code class="docutils literal notranslate"><span class="pre">dhcpcd</span></code> then requests an address on it. The Wi-Fi
+country is a regulatory setting: the channels a radio may use depend on where
+it is, so the operating system keeps the Wi-Fi radio blocked (rfkill) until a
+country is set. The network block names the network, and <code class="docutils literal notranslate"><span class="pre">key_mgmt=NONE</span></code> tells
+<code class="docutils literal notranslate"><span class="pre">wpa_supplicant</span></code> it has no password. <code class="docutils literal notranslate"><span class="pre">tee</span> <span class="pre">-a</span></code> appends the block with root
+privileges, which a plain <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> redirection would not have.</p>
+<p>Two things must hold on an open guest network for this step and for provisioning, and
+the instructor checks both before class. The network must not put a captive
+portal, a sign-in or terms page, in front of a new client, because the Pi has
+no browser to click through one. It must also allow outbound HTTPS, because the
+provisioning script downloads the Phaser software from GitHub.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-set-the-clock">
+<div class="wrap docutils container">
+<p class="rubric">Set the Clock</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="15">
+<li><p>Seed the clock from a web server, then check it:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>date<span class="w"> </span>-s<span class="w"> </span><span class="s2">"</span><span class="k">$(</span>curl<span class="w"> </span>-sI<span class="w"> </span>http://deb.debian.org/<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'s/^[Dd]ate: *//p'</span><span class="k">)</span><span class="s2">"</span>
+date
+</pre></div>
+</div>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The clock comes from a web server, so it waits until the Pi is on the Wi-Fi.
+<code class="docutils literal notranslate"><span class="pre">sudo</span></code> asks for the password, <code class="docutils literal notranslate"><span class="pre">analog</span></code>. The <code class="docutils literal notranslate"><span class="pre">date</span></code> that comes back should be
+today’s date and time; the server reports it in GMT, and the Pi shows it in its
+own time zone.</p>
+</div>
+<div class="depth docutils container">
+<p>A Raspberry Pi has no battery-backed clock, and Kuiper ships with no network
+time client, so a fresh card boots believing it is the day the image was made,
+in April 2023. Every secure download that follows checks the server’s
+certificate against today’s date, and a certificate is only valid between two
+dates, so a wrong clock makes the download fail with a certificate error
+before any software arrives. The provisioning script installs a time client
+and fixes the clock for good, but it has to be downloaded first.</p>
+<p>The command breaks that circle with a plain, unencrypted request, which no
+certificate guards: <code class="docutils literal notranslate"><span class="pre">curl</span> <span class="pre">-sI</span></code> fetches only the headers of a Debian web page,
+<code class="docutils literal notranslate"><span class="pre">sed</span></code> keeps the line that begins <code class="docutils literal notranslate"><span class="pre">Date:</span></code>, and <code class="docutils literal notranslate"><span class="pre">date</span> <span class="pre">-s</span></code> sets the clock to it.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-provision-the-kit">
+<div class="wrap docutils container">
+<p class="rubric">Provision the Kit</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="16">
+<li><p>Run the provisioning script, with your kit’s name:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/livethisdream/phaser/main/scripts/provision.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash<span class="w"> </span>-s<span class="w"> </span>--<span class="w"> </span>--hostname<span class="w"> </span>phaser-NN
+</pre></div>
+</div>
+<ol class="arabic simple" start="17">
+<li><p>Wait for <code class="docutils literal notranslate"><span class="pre">Provisioned.</span></code>, then run <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">reboot</span></code>.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">analog&#64;phaser-NN.local</span></code>, answer <code class="docutils literal notranslate"><span class="pre">yes</span></code>, and check that <code class="docutils literal notranslate"><span class="pre">hostname</span></code> prints <code class="docutils literal notranslate"><span class="pre">phaser-NN</span></code>.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The script prints its steps, <code class="docutils literal notranslate"><span class="pre">[1/8]</span></code> through <code class="docutils literal notranslate"><span class="pre">[8/8]</span></code>, and takes tens of
+minutes; step <code class="docutils literal notranslate"><span class="pre">[7/8]</span></code>, which builds the Python library that talks to the
+board, is the long one and can sit quiet for minutes. Leave it running.</p>
+<p>Near the end it prints two <code class="docutils literal notranslate"><span class="pre">WARN</span></code> lines saying the unit has not been
+characterized, and a box listing Find HB100, Characterize IF, and Calibrate.
+Both are expected on a new kit: Steps 22 to 24 do exactly that. On a first
+provisioning the board has not appeared yet, so the installer may say the
+interface is not answering yet; the reboot in Step 17 fixes it.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">-s</span> <span class="pre">--</span></code> in Step 16 matters. Without the <code class="docutils literal notranslate"><span class="pre">-s</span></code>, bash takes <code class="docutils literal notranslate"><span class="pre">--hostname</span></code> for
+the name of a script file and stops with <code class="docutils literal notranslate"><span class="pre">bash:</span> <span class="pre">--hostname:</span> <span class="pre">No</span> <span class="pre">such</span> <span class="pre">file</span> <span class="pre">or</span> <span class="pre">directory</span></code>.</p>
+</div>
+<div class="depth docutils container">
+<p><code class="docutils literal notranslate"><span class="pre">provision.sh</span></code> turns a stock Kuiper card into a PHASER kit. In order, it
+checks the machine, installs a time client and fixes the clock for good,
+installs the system packages, adds the PHASER board’s device-tree overlay to
+the boot configuration, sets the hostname, installs the plumbing that lets the
+Pi talk to the Pluto over USB, builds pyadi-iio, ADI’s Python library for the
+board, and finally runs <code class="docutils literal notranslate"><span class="pre">install.sh</span></code>, which installs the Phaser backend and the
+browser interface as a service that starts at every boot.</p>
+<p>The reboot in Step 17 is what makes the board appear. The device-tree overlay
+is read only at boot, and it is the file that tells Linux which chips sit on
+the board’s bus; until the Pi restarts with it, the operating system does not
+know the phase shifters exist. The new hostname also takes effect at boot.</p>
+<p>Every kit needs its own name because every kit also joins the same Wi-Fi.
+Twenty kits all calling themselves <code class="docutils literal notranslate"><span class="pre">phaser.local</span></code> collide on multicast DNS,
+and the losers rename themselves <code class="docutils literal notranslate"><span class="pre">phaser-2</span></code>, <code class="docutils literal notranslate"><span class="pre">phaser-3</span></code>, and so on, so a name
+you type can reach someone else’s kit or none at all.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">yes</span></code> in Step 18 appears again because the laptop has never seen a kit
+named <code class="docutils literal notranslate"><span class="pre">phaser-NN</span></code> before. Running the installer again later is how a kit is
+updated:
+<code class="docutils literal notranslate"><span class="pre">curl</span> <span class="pre">-fsSL</span> <span class="pre">https://raw.githubusercontent.com/livethisdream/phaser/main/install.sh</span> <span class="pre">|</span> <span class="pre">bash</span></code>.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-check-the-service">
+<div class="wrap docutils container">
+<p class="rubric">Check the Service</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="19">
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">journalctl</span> <span class="pre">-u</span> <span class="pre">phaser-headless</span> <span class="pre">-n</span> <span class="pre">30</span></code> and look for the banner <code class="docutils literal notranslate"><span class="pre">ADI</span> <span class="pre">Phaser</span> <span class="pre">Beamforming</span> <span class="pre">Backend</span></code> with no <code class="docutils literal notranslate"><span class="pre">No</span> <span class="pre">device</span> <span class="pre">found</span></code> after it.</p></li>
+<li><p>Browse to <code class="docutils literal notranslate"><span class="pre">http://phaser-NN.local:8080</span></code> and wait for the pill to read <strong>Connected</strong>.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The backend runs as a service named <code class="docutils literal notranslate"><span class="pre">phaser-headless</span></code>, and its log is the
+first place to look when anything is wrong. A healthy start prints the banner,
+then lines such as <code class="docutils literal notranslate"><span class="pre">Initializing</span> <span class="pre">SDR...</span></code> and <code class="docutils literal notranslate"><span class="pre">Connecting</span> <span class="pre">to</span> <span class="pre">SDR</span> <span class="pre">at</span> <span class="pre">ip:192.168.2.1...</span></code>, and keeps going.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Exception:</span> <span class="pre">No</span> <span class="pre">device</span> <span class="pre">found</span></code> after <code class="docutils literal notranslate"><span class="pre">Connecting</span> <span class="pre">to</span> <span class="pre">SDR</span></code> means the Pi cannot see
+the Pluto. Check its USB cable to the Pi; the service retries every few
+seconds and comes up on its own once the Pluto appears.</p>
+</div>
+<div class="depth docutils container">
+<p>The log is a better check than <code class="docutils literal notranslate"><span class="pre">systemctl</span> <span class="pre">is-active</span> <span class="pre">phaser-headless</span></code>. A service
+that fails at start-up is restarted by systemd every five seconds, and between
+failures it reads <code class="docutils literal notranslate"><span class="pre">active</span></code>; on the instructor’s kit it had restarted 83 times while
+the status still said <code class="docutils literal notranslate"><span class="pre">active</span></code>. The backend also starts the hardware before the
+web server, so a missing Pluto shows up in the browser only as a page that
+refuses to connect. <code class="docutils literal notranslate"><span class="pre">192.168.2.1</span></code> is the Pluto’s own address on the USB link
+between it and the Pi.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-phaser-gui">
+<div class="wrap docutils container">
+<p class="rubric">The Phaser GUI</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<p>Today you need five sidebar controls, <strong>Find HB100</strong>, <strong>Characterize IF</strong>, <strong>Calibrate Phaser</strong>, <strong>Signal Freq</strong>, and <strong>Rx Gain</strong>, and the <strong>FFT</strong> tab.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The pill sits at the bottom right and changes from <strong>Checking…</strong> to
+<strong>Connected</strong>. <strong>Start</strong> stays disabled until the backend is ready.</p>
+</div>
+<div class="depth docutils container">
+<p>If the pill never reads <strong>Connected</strong>, turn on <strong>Show Logs Tab</strong> under <strong>Plot
+Options</strong> and read the <strong>Logs</strong> tab: a message such as “Start blocked until
+backend is ready” says the backend is still starting, and the page will
+connect on its own once it is up.</p>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The interface has a <strong>sidebar</strong> of control sections on the left and a <strong>plot
+area</strong> with tabs on the right. You will use all of these over the next several
+lessons; today only a few matter.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Sidebar section</p></th>
+<th class="head text-left"><p>What lives there</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Configuration</p></td>
+<td class="text-left"><p><strong>Calibration</strong> group: Calibrate Phaser, Find HB100, Characterize IF, Reboot. Then Signal Freq (GHz), Signal BW (MHz), Rx Gain (dB), Tx Gain (dB), Tx Mode. <strong>Connection</strong> group: Simulator Mode, Backend URL (leave it empty)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Element Gains</p></td>
+<td class="text-left"><p>E1–E8 gain sliders (0–100%); Window Presets Rect, Cheb, Hann, Black; Aperture Presets 2-Elem, Sparse λ; Enforce Symmetric Taper</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Phase Control</p></td>
+<td class="text-left"><p>E1–E8 phase offsets and Reset</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Beam Steering</p></td>
+<td class="text-left"><p>Steer Angle (deg), Taper (Uniform, Chebyshev, Hann, Blackman), Apply</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Quantization</p></td>
+<td class="text-left"><p>Steer Resolution (deg), Phase Shift Bits, Use Bits (ignore Steer Res)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Digital Beam Forming</p></td>
+<td class="text-left"><p>Mode for the two digital channels: Manual (Reset, Beam 0/1 Gain and Phase) or MVDR (Snapshots (K), Diagonal Load)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Plot Options</p></td>
+<td class="text-left"><p>Show Peak Gain Marker, Show Peak Angle Marker, Show Beam Squint Info, Show Logs Tab, Show Monopulse Delta Beam, Show Monopulse Error Function; X Min, X Max, Y Min, Y Max</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Lab Presets</p></td>
+<td class="text-left"><p>buttons 1 Steering Angle through 8 Tracking, one per workshop lab</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Each sidebar section opens and closes when you click its header, and only
+<strong>Configuration</strong> starts open. A closed section hides its controls, so open
+<strong>Lab Presets</strong> before you look for a preset button.</p>
+<p>The plot tabs are <strong>Rectangular</strong>, <strong>Polar</strong>, <strong>FFT</strong>, and <strong>Tracking</strong>, plus
+<strong>Logs</strong> when <strong>Show Logs Tab</strong> is on. <strong>Start</strong> runs the beam sweep, and
+nothing plots until you press it. Today you work in the FFT tab, which plots
+Amplitude (dBFS) against Frequency (MHz) for the two subarray outputs summed,
+taken at the steering angle where the sweep saw the strongest signal.</p>
+</div>
+<div class="depth docutils container">
+<p>The FFT tab refreshes once per sweep. <strong>Freeze</strong> stores up to three reference
+traces on the Rectangular and Polar tabs, and pressing and holding it clears
+them; it is unavailable on the FFT tab.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-find-characterize-calibrate">
+<div class="wrap docutils container">
+<p class="rubric">Find, Characterize, Calibrate</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="21">
+<li><p>Place the powered HB100 <span class="math notranslate nohighlight">\(1\ \text{m}\)</span> out at boresight.</p></li>
+<li><p>Press <strong>Find HB100</strong> and record its frequency.</p></li>
+<li><p>Press <strong>Characterize IF</strong> and record the IF it chooses.</p></li>
+<li><p>Press <strong>Calibrate Phaser</strong>.</p></li>
+</ol>
+</div>
+<div class="present callout docutils container">
+<p>In order. Let each one finish before the next.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Set the HB100 about <span class="math notranslate nohighlight">\(1\ \text{m}\)</span> in front of the array, at the same height as
+the patch row, with its own patch face toward the board. Each button opens a
+<strong>Calibration</strong> window that reports progress; wait for it, and do not press
+another button while it runs. Leave <strong>Reboot</strong> alone.</p>
+</div>
+<div class="depth docutils container">
+<p>One meter is the shortest far-field distance for this array. Lesson 5’s
+far-field boundary, with the aperture <span class="math notranslate nohighlight">\(D = Nd = 8 \times 14\ \text{mm} = 112\ \text{mm}\)</span>
+and <span class="math notranslate nohighlight">\(\lambda = 28.5\ \text{mm}\)</span>, is</p>
+<div class="math notranslate nohighlight">
+\[\frac{2D^2}{\lambda} = \frac{2\ (0.112\ \text{m})^2}{0.0285\ \text{m}} = 0.88\ \text{m},\]</div>
+<p>so moving the source closer than about <span class="math notranslate nohighlight">\(0.9\ \text{m}\)</span> raises the signal but
+curves the arriving wavefront enough to distort the patterns of later labs.</p>
+<p>One meter clears that boundary, so the angles and beamwidths measured there
+are the far-field values. It clears it by only 12%, though, which is marginal
+for comparing peak levels between two source positions, a difference of under
+a dB. On the instructor’s kit, the drop with the source moved to <span class="math notranslate nohighlight">\(30^\circ\)</span>
+read only 0.2 to 0.4 dB at <span class="math notranslate nohighlight">\(1\ \text{m}\)</span> and 0.7 dB at <span class="math notranslate nohighlight">\(1.2\ \text{m}\)</span>,
+against a predicted 0.6 to 0.9 dB, so the L18 Lab takes its scan-loss levels
+at <span class="math notranslate nohighlight">\(1.2\ \text{m}\)</span> (4 ft) or more.</p>
+</div>
+<div class="depth depth-cut docutils container">
+<p><strong>Find HB100</strong> sweeps the band for the source and records its frequency; expect
+a value within a few hundred MHz of <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span>, since every HB100
+sits somewhere different. Before it saves anything it checks the answer: it
+retunes <span class="math notranslate nohighlight">\(4\ \text{MHz}\)</span> to each side and confirms the tone stays at the same
+frequency, which a real source does and a signal made inside the receiver does
+not.</p>
+<p><strong>Characterize IF</strong> finds the intermediate frequency this kit receives
+cleanly at, the frequency the board converts the <span class="math notranslate nohighlight">\(10\ \text{GHz}\)</span> signal down
+to before the Pluto digitizes it. It sweeps the IF against the source it just
+found and picks the middle of the range that works.</p>
+<p><strong>Calibrate Phaser</strong> measures the per-element gain and phase offsets of the
+array itself, the small differences between the eight channels caused by trace
+lengths and part tolerances, and stores them so that zero commanded phase
+across the array produces a broadside beam. Leave the source at boresight
+while it runs. It first checks that the array is hearing the source at all, by
+switching every element off and on; with no difference between the two, it
+stops and says so rather than calibrating against nothing.</p>
+</div>
+<div class="depth docutils container">
+<p>Each step needs the one before it. Characterizing the IF needs a tone at a
+known frequency, and calibrating needs the kit tuned to the source at an IF it
+can hear. On the instructor’s kit, calibration first ran at the IF that ships in
+the configuration file, <span class="math notranslate nohighlight">\(2.2\ \text{GHz}\)</span>, and heard nothing: on/off contrast
+<span class="math notranslate nohighlight">\(0.93\ \text{dB}\)</span>. That kit receives cleanly only from <span class="math notranslate nohighlight">\(1.2\)</span> to
+<span class="math notranslate nohighlight">\(2.175\ \text{GHz}\)</span>, while a second kit works at <span class="math notranslate nohighlight">\(2.2\ \text{GHz}\)</span>; the usable
+IF differs by about <span class="math notranslate nohighlight">\(200\ \text{MHz}\)</span> between two kits built alike, which is
+why every kit measures its own. At the IF it measured, <span class="math notranslate nohighlight">\(1.69\ \text{GHz}\)</span>,
+the same calibration ran to completion with <span class="math notranslate nohighlight">\(32.7\ \text{dB}\)</span> of contrast.
+On a kit that has never been characterized, <strong>Calibrate Phaser</strong> runs the
+characterization first, or stops and says so.</p>
+<p>The frequency matters downstream because the steering phase depends on it.
+Lesson 18 derives the progressive phase</p>
+<div class="math notranslate nohighlight">
+\[\Delta\phi = kd\sin\theta_0, \qquad k = \frac{2\pi f}{c},\]</div>
+<p>so the same steering angle needs a different phase at a different frequency.
+For a <span class="math notranslate nohighlight">\(30^\circ\)</span> steer the ramp is <span class="math notranslate nohighlight">\(84.9^\circ\)</span> per element at
+<span class="math notranslate nohighlight">\(10.1\ \text{GHz}\)</span> and <span class="math notranslate nohighlight">\(89.9^\circ\)</span> at <span class="math notranslate nohighlight">\(10.7\ \text{GHz}\)</span>, and a ramp computed
+for the wrong frequency points the beam at the wrong angle.</p>
+<p>All three results are stored in <code class="docutils literal notranslate"><span class="pre">calibration.json</span></code> on the Pi and survive a
+reboot, so a kit is calibrated once and stays calibrated until it is moved to
+a different source.</p>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">No hardware?</p>
+<p>Part A has no simulated version, because every step acts on the card, the Pi,
+or the network. If your kit will not come up, tell the instructor. The hosted
+simulator covers Part B.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-power-down-and-troubleshooting">
+<div class="wrap docutils container">
+<p class="rubric">Power Down and Troubleshooting</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="25">
+<li><p>To power down, press the button on the back of the PHASER, or hold the <strong>Connected</strong> pill for two seconds; wait until the lights go out, then unplug the USB-C.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>One or two red power lights may stay on after shutdown; those are fine.
+Pulling the plug while Linux is running can corrupt the card, and a corrupted
+card means flashing it again. A software reboot, <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">reboot</span></code>, shuts down
+cleanly and is always safe.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>What you see</p></th>
+<th class="head text-left"><p>What it means</p></th>
+<th class="head text-left"><p>What to do</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Imager reports a write or verify error</p></td>
+<td class="text-left"><p>the card or the card reader</p></td>
+<td class="text-left"><p>reinsert the card and write again, then try another card</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">curl</span></code> reports a certificate error</p></td>
+<td class="text-left"><p>the Pi’s clock is wrong</p></td>
+<td class="text-left"><p>Step 15, then try again</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ping</span></code> fails</p></td>
+<td class="text-left"><p>the Wi-Fi has not come up</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">reboot</span></code>, then ping again; then the instructor</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">bash:</span> <span class="pre">--hostname:</span> <span class="pre">No</span> <span class="pre">such</span> <span class="pre">file</span> <span class="pre">or</span> <span class="pre">directory</span></code></p></td>
+<td class="text-left"><p>the <code class="docutils literal notranslate"><span class="pre">-s</span></code> is missing</p></td>
+<td class="text-left"><p>Step 16 exactly as written</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">WARNING:</span> <span class="pre">REMOTE</span> <span class="pre">HOST</span> <span class="pre">IDENTIFICATION</span> <span class="pre">HAS</span> <span class="pre">CHANGED!</span></code></p></td>
+<td class="text-left"><p>this laptop has met another card under the same name</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ssh-keygen</span> <span class="pre">-R</span></code> and the name you used (<code class="docutils literal notranslate"><span class="pre">analog.local</span></code> or <code class="docutils literal notranslate"><span class="pre">phaser-NN.local</span></code>), then ssh again and answer <code class="docutils literal notranslate"><span class="pre">yes</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>the page shows <strong>Pluto not found</strong></p></td>
+<td class="text-left"><p>the Pluto’s USB cable to the Pi is unplugged, the most common miss in this lab</p></td>
+<td class="text-left"><p>plug it in (Step 8); the page reconnects on its own</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>the page refuses to connect</p></td>
+<td class="text-left"><p>the address is missing <code class="docutils literal notranslate"><span class="pre">:8080</span></code>, or the backend is not running</p></td>
+<td class="text-left"><p>Step 20’s address exactly; then Step 19, where <code class="docutils literal notranslate"><span class="pre">No</span> <span class="pre">device</span> <span class="pre">found</span></code> again means the Pluto’s USB cable</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Calibrate Phaser</strong> stops: no signal is reaching the array</p></td>
+<td class="text-left"><p>the source is off or misaimed, or a step was skipped</p></td>
+<td class="text-left"><p>check the HB100 is on and aimed, then Steps 22 to 24 in order</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="depth docutils container">
+<p>The host-key warning is ssh doing its job. A host key identifies the machine,
+not the name, so a re-flashed card, a fallback card, or a classmate’s kit that
+answers to a name this laptop has seen before presents a key the laptop does
+not recognize, and ssh refuses rather than risk talking to an impostor.
+<code class="docutils literal notranslate"><span class="pre">ssh-keygen</span> <span class="pre">-R</span></code> removes the old key from the laptop’s <code class="docutils literal notranslate"><span class="pre">known_hosts</span></code> file, and
+the next connection asks about the new one.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-part-b-first-measurements">
+<div class="wrap docutils container">
+<p class="rubric">Part B: First Measurements</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple">
+<li><p>Open the <strong>Lab Presets</strong> section, press <strong>1 Steering Angle</strong>, then <strong>Start</strong>.</p></li>
+<li><p>Set <strong>Rx Gain</strong> for a <span class="math notranslate nohighlight">\(-10 \pm 3\)</span> dBFS FFT peak; record it.</p></li>
+<li><p>Record the peak’s position, level, and floor.</p></li>
+</ol>
+<p>Expect 20 dB or more above the floor.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>Part B runs on the kit you brought up in Part A and records the observations
+any working kit produces, for Part 2 of the lab packet. Work through the steps
+in order.</p>
+<p>The preset loads the workshop’s initial state, with a uniform taper, Phase
+Control at zero, and the beam commanded to broadside, and opens the FFT tab;
+<strong>Start</strong> begins the sweep. dBFS is decibels relative to the ADC’s
+full-scale input. The presets do not set Rx Gain, whose start-up value, 30 dB,
+comes from the Pi’s configuration file and is far too much for a source a
+meter away.</p>
+<p>Step 2 sets a level, not a gain, and every later lab starts from the same
+<span class="math notranslate nohighlight">\(-10\)</span> dBFS. The gain that gets there depends on how far out the HB100 is, how
+well it is aimed, and its battery, and no two benches put it at exactly
+<span class="math notranslate nohighlight">\(1\ \text{m}\)</span>; a fixed gain that suits one kit clips the next. The two
+channels add in phase, so the Sum clips near <span class="math notranslate nohighlight">\(+6\)</span> dBFS, and <span class="math notranslate nohighlight">\(-10\)</span> dBFS leaves
+about 16 dB of headroom below that while staying far above the floor. A
+main lobe with a flat top on the Rectangular tab means the receiver has
+clipped: turn the gain down. If the peak still reads above <span class="math notranslate nohighlight">\(-7\)</span> dBFS at
+0 dB, move the HB100 back a little and note the distance in the packet.</p>
+<p>In the FFT tab, a single narrow peak should stand well above a flat noise
+floor, near <span class="math notranslate nohighlight">\(0\ \text{MHz}\)</span>, and its separation from the floor, in dB, should
+be unambiguous: at least 20 dB with the source at <span class="math notranslate nohighlight">\(1\ \text{m}\)</span>, the smallest
+separation seen on the bench at that distance. Less than that points to a
+misaimed or distant source, or a weak battery in the HB100.</p>
+</div>
+<div class="depth docutils container">
+<p>Lesson 2’s Friis equation sets the peak,</p>
+<div class="math notranslate nohighlight">
+\[P_r = P_t G_t G_r \left(\frac{\lambda}{4\pi R}\right)^2;\]</div>
+<p>doubling the distance lowers it by <span class="math notranslate nohighlight">\(20\log_{10}2 = 6.0\ \text{dB}\)</span>, and
+misaiming the HB100 lowers its <span class="math notranslate nohighlight">\(G_t\)</span>. On the receive side, Lesson 20’s
+broadside directivity of the uniform array is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+D &amp;\approx \frac{2Nd}{\lambda} \\
+  &amp;= \frac{2 \times 8 \times 14\ \text{mm}}{28.5\ \text{mm}} \\
+  &amp;= 7.86 \quad (8.96\ \text{dB})
+\end{aligned}\end{split}\]</div>
+<p>at <span class="math notranslate nohighlight">\(10.525\ \text{GHz}\)</span> (7.7 at the workshop’s <span class="math notranslate nohighlight">\(10.3\ \text{GHz}\)</span>), the <span class="math notranslate nohighlight">\(G_r\)</span>
+of the Friis equation.</p>
+<p>The floor in the FFT is the noise in one frequency bin, so the peak-to-floor
+separation also depends on the FFT length: a longer FFT narrows each bin,
+lowers the floor, and raises the separation with no change at the antenna.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-sweep-at-boresight">
+<div class="wrap docutils container">
+<p class="rubric">The Sweep at Boresight</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="4">
+<li><p>Open the <strong>Rectangular</strong> tab; turn on <strong>Show Peak Angle Marker</strong> under <strong>Plot Options</strong>.</p></li>
+<li><p>Record the <strong>Angle</strong> readout, set to <strong>Peak</strong>, and <strong>Peak Gain</strong> with the source at boresight.</p></li>
+</ol>
+<p>Expect Angle within <span class="math notranslate nohighlight">\(2^\circ\)</span> of <span class="math notranslate nohighlight">\(0^\circ\)</span>.</p>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The Rectangular tab plots the beam sweep: the backend steers the beam across
+the field of view one phase step at a time and records the received power at
+each step, so the trace peaks where the beam points at the source.</p>
+</div>
+</div>
+</div>
+<div class="frame cut docutils container" id="frame-the-sweep-follows-the-source">
+<div class="wrap docutils container">
+<p class="rubric">The Sweep Follows the Source</p>
+<div class="stage docutils container">
+<div class="present docutils container">
+<ol class="arabic simple" start="6">
+<li><p>Carry the HB100 <span class="math notranslate nohighlight">\(30^\circ\)</span> to one side, same distance, facing the array. Record both, and which end, E1 or E8, it moved toward. Facing the patches, E1 is on your right.</p></li>
+<li><p>Return it to boresight; record both again.</p></li>
+</ol>
+</div>
+</div>
+<div class="depth depth-cut docutils container">
+<p>The source sits at <span class="math notranslate nohighlight">\(30^\circ\)</span> when it is <span class="math notranslate nohighlight">\(0.5\ \text{m}\)</span> to one side of the
+array’s centerline and still <span class="math notranslate nohighlight">\(1\ \text{m}\)</span> from the array; keep the distance
+you used at boresight, whatever it is, so the level change is the pattern’s. The peak should
+move with it, to about <span class="math notranslate nohighlight">\(30^\circ\)</span>, and drop slightly, because each patch
+receives less from the side. At <span class="math notranslate nohighlight">\(1\ \text{m}\)</span> that drop reads only a few tenths
+of a dB, less than theory predicts; the L18 Lab measures it at <span class="math notranslate nohighlight">\(1.2\ \text{m}\)</span>.
+Returned to boresight, the trace comes back to where it started.</p>
+<p>The sign of the moved reading records which side the GUI calls positive, which
+the L18 Lab uses. Looking at the patch face, E1 is at the right end of the row
+and E8 at the left. The L18 Lab puts <span class="math notranslate nohighlight">\(+\theta\)</span> on the E8 end, to your left as
+you face the patches, so a source moved toward E1 should read near <span class="math notranslate nohighlight">\(-30^\circ\)</span>.</p>
+</div>
+<div class="depth docutils container">
+<p>On a working kit the sweep’s floor sits about 23 dB below the uniform-taper
+peak. A normal FFT peak with a sweep that stands well short of that, or that
+peaks far from <span class="math notranslate nohighlight">\(0^\circ\)</span> with the source at boresight, points to the
+calibration rather than the signal: check that Phase Control reads zero, then
+put the source back at boresight and run <strong>Calibrate Phaser</strong> again. Lesson 18
+derives why the sweep peaks at the source, and the L18 Lab measures it on a
+protractor arc.</p>
+</div>
+<div class="depth depth-cut docutils container">
+<div class="tip admonition">
+<p class="admonition-title">No hardware?</p>
+<p>Open <a class="reference external" href="https://livethisdream.github.io/phaser/">livethisdream.github.io/phaser</a>,
+the same dashboard with no install. At a station whose hardware has failed, add
+<code class="docutils literal notranslate"><span class="pre">?sim=1</span></code> to the station’s URL or turn on <strong>Simulator Mode</strong> under
+<strong>Configuration</strong>. An orange <strong>SIMULATION</strong> pill marks simulated data.</p>
+<p>Steps 1 to 5 of Part B behave as described, except that the tone appears at
+<span class="math notranslate nohighlight">\(-1\ \text{MHz}\)</span> and the simulator does not model Rx Gain. Steps 6 and 7
+cannot be done, because the simulated source is fixed at boresight. Find
+HB100 and Calibrate Phaser run scripted scans.</p>
+</div>
+</div>
+<div class="depth docutils container">
+<p>With a checkout of the Phaser repository and Python,
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">phaser_headless.py</span> <span class="pre">--sim</span></code> serves the same page at
+<code class="docutils literal notranslate"><span class="pre">http://localhost:8080</span></code>.</p>
+</div>
+</div>
+</div>
+<div class="frame read-only doc-links docutils container" id="frame-lab-packet">
+<div class="wrap docutils container">
+<p class="rubric">Lab Packet</p>
+<p>The L17 Lab packet is one submission for the whole lab, turned in complete before Lesson 18. It has three parts:</p>
+<ol class="arabic simple">
+<li><p><strong>Part 1, Pre-Lab</strong> (individual, before the lab period): the receive chain in order, the phase shifter’s step, the element and channel counts, and how a kit number sets the kit’s name.</p></li>
+<li><p><strong>Part 2, Measurements</strong> (your own kit’s data, recorded in class): the bring-up record from Part A, and the kit check from Part B, the FFT peak and the sweep with the source at boresight, moved, and back.</p></li>
+<li><p><strong>Part 3, Writeup</strong> (individual, after the lab): a labeled block diagram, two bench diagnoses, and two written answers.</p></li>
+</ol>
+<ul class="simple">
+<li><p><a class="doc-link" href="../../labs/ECE444_Lab_L17_Hardware_blank.pdf" target="_blank" rel="noopener">L17 Lab packet (PDF)</a></p></li>
+</ul>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./module03/L17-lab-bring-up"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+</main>
+
+<script src="../../_static/shell.js?v=e355370f43"></script>
+<script src="../../_static/frames.js?v=c768e3788c"></script><script src="../../_static/viz-autosize.js?v=4fe0c4e159"></script>
+</body>
+</html>
