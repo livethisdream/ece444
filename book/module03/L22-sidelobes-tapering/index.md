@@ -86,11 +86,15 @@ how fast to fall off.
 
 ::::{frame} Sidelobe Level and Illumination Shape
 :::{present}
-- Uniform first sidelobe: $-12.8$ dB at $N = 8$, $-13.3$ dB continuous.
-- More elements narrow the main lobe; the sidelobes stay as high.
+<img src="../../viz/img/L16-sidelobe-vs-n.svg"
+     alt="First sidelobe level of a uniform array against the number of elements: minus 11.3 dB at N equals 4, minus 12.8 dB at N equals 8, settling toward the continuous line source's minus 13.3 dB"
+     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
 :class: callout
+
+- Uniform first sidelobe: $-12.8$ dB at $N = 8$, $-13.3$ dB continuous.
+- More elements narrow the main lobe; the sidelobes stay as high.
 
 Amplitude shapes the beam (sidelobes, beamwidth). Phase steers it.
 :::
@@ -111,6 +115,10 @@ $$
 $$
 
 with the second line evaluated at $N\psi = 3\pi$.
+
+<img src="../../viz/img/L22-phasor-sidelobe.svg"
+     alt="Eight unit phasors tip to tail. Left: at the first null the chain turns once and closes into an octagon, sum zero. Right: at the first sidelobe it winds one and a half turns; the first full turn cancels and the leftover arc sums to 1.80 of 8, minus 13.0 dB"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 
 For $N = 8$ that is $0.225$, or $-13.0\ \text{dB}$; the exact peak, $-12.8\ \text{dB}$
 at $21.9^\circ$, sits slightly short of $3\pi$. As $N$ grows, $N\sin(3\pi/2N)$
@@ -182,9 +190,9 @@ renormalized, as the last row of the table in the next frame shows.
 | 0.00 (Hann) | $-31.8$ | $19.1^\circ$ | 0.750 |
 :::
 :::{present}
-:class: callout
-
-Hamming's small pedestal beats Hann on all three counts.
+<img src="../../viz/img/L22-pedestal-trade.svg"
+     alt="Highest sidelobe and half-power beamwidth of the eight-element cosine-on-pedestal taper against the pedestal P: the sidelobe level reaches its minimum, minus 33.2 dB, near P equals 0.06, with Hamming at 0.08 giving minus 33.0 dB and Hann at 0 giving minus 31.8 dB, while the beamwidth falls steadily toward uniform"
+     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 The element amplitudes behind each row, in percent:
@@ -204,7 +212,12 @@ Read the table downward and the trade is already visible: every step toward a
 smoother edge lowers the sidelobes and widens the beam. Note also that Hamming
 beats Hann on all three counts. Leaving a small pedestal at the edge cancels
 the first sidelobe of the cosine term against the first sidelobe of the pedestal,
-which is why $P = 0.08$ is a named taper and not an arbitrary choice.
+which is why $P = 0.08$ is a named taper and not an arbitrary choice. The
+figure shows the trade as a curve: the sidelobe level falls as the pedestal
+shrinks, reaches its minimum, $-33.2\ \text{dB}$, near $P = 0.06$ on eight
+elements, and climbs again to Hann's $-31.8\ \text{dB}$ at $P = 0$, while the
+beam widens the whole way. Hamming's 0.08 is the continuous-aperture optimum,
+and on eight elements it sits within 0.2 dB of the sampled one.
 
 ::::
 
@@ -282,6 +295,11 @@ use are in the next table.
 - Taylor holds the first $\bar{n} - 1$ sidelobe pairs at the design level; the rest decay.
 - It removes the edge spikes and barely widens the beam; $\bar{n} = 4$ to $6$.
 :::
+:::{present}
+<img src="../../viz/img/L22-taylor-vs-cheb.svg"
+     alt="Minus 30 dB Chebyshev and Taylor designs on a 64-element array. Top: amplitudes from edge to center; the Chebyshev edge element jumps to 0.78 against 0.22 for its neighbor, while Taylor rises smoothly. Bottom: patterns; every Chebyshev sidelobe sits on the minus 30 dB line, while Taylor's far sidelobes decay"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 **The Taylor taper** is the one large radars are built with. A true Chebyshev design
 on a big aperture puts sharp spikes of current at the array edges, which is hard
@@ -298,7 +316,11 @@ ripples do not fall off at all, and an illumination whose transform never decays
 needs something sharper than a step at each edge: an impulse. On a large array
 that impulse appears as edge elements driven harder than their neighbors.
 Letting the far sidelobes decay like a uniform aperture's, as Taylor does, puts a
-plain step back at the edge and removes the spike.
+plain step back at the edge and removes the spike. The figure shows both on a
+64-element array at $-30\ \text{dB}$: the Chebyshev edge element is 3.7 times
+its neighbor, and its sidelobes run flat on the design line out to endfire,
+while the Taylor amplitudes rise smoothly from the edge and its far sidelobes
+fall away.
 
 ::::
 
@@ -343,7 +365,7 @@ designed to.
 
 ::::
 
-::::{frame} Five Tapers on the Array
+::::{frame} Tapers on the Array
 :class: viz-frame
 
 :::{depth}
@@ -353,13 +375,21 @@ edges, the main lobe widens, and the sidelobes drop. On the three Chebyshev
 settings, check that every sidelobe touches the dashed design line — that equal
 ripple is the whole point of the family, and it is what separates a Chebyshev
 design from a window function that happens to reach a similar level.
+
+Then choose **Cosine on pedestal** and drag $P$ from 1 down to 0: the highest
+sidelobe falls to its minimum, $-33.2\ \text{dB}$, near $P = 0.06$ and rises
+again toward Hann while the beam keeps widening. Finally, turn on
+**Round to 1%** with the Chebyshev $-40\ \text{dB}$ taper selected and watch its
+sidelobes leave the design line: the rounded gains reach only
+$-39.2\ \text{dB}$, a first look at the setting-accuracy limit in Loading a
+Taper into the PHASER.
 :::
 
 <iframe src="../../viz/taper-explorer.html"
-        width="100%" height="439"
+        width="100%" height="470"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
-        title="Element amplitudes, pattern, sidelobe level, beamwidth, taper efficiency and peak drop for five tapers on the eight-element PHASER array">
+        title="Element amplitudes, pattern, sidelobe level, beamwidth, taper efficiency and peak drop for uniform, Hann, Chebyshev, and cosine-on-pedestal tapers on the eight-element PHASER array, with optional rounding to 1%">
 </iframe>
 ::::
 
@@ -427,6 +457,10 @@ integral of its square; the sums here replace those integrals at the eight
 element positions. Lesson 15's continuous cosine aperture gives 0.811, and the
 eight-element Hann taper gives 0.750.
 
+<img src="../../viz/img/L15-efficiency-ratio.svg"
+     alt="Lesson 15's figure. Left: the cosine illumination across the aperture with its mean, 0.637, which is the coherent sum. Right: its square with mean 0.500, the available power. The taper efficiency is 0.637 squared over 0.500, or 0.811"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+
 ::::
 
 ::::{frame} Peak Drop on the Trace
@@ -465,9 +499,9 @@ $$
 - Hann preset: $-4.7 = -1.2 - 3.5$ dB.
 :::
 :::{present}
-:class: callout
-
-Only 1.2 dB of Hann's 4.7 dB drop is lost antenna performance.
+<img src="../../viz/img/L22-two-numbers.svg"
+     alt="The Hann preset's two numbers as bars: the plotted peak falls 4.7 dB, the directivity only 1.2 dB, and the 3.5 dB between them is signal turned down"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 :::{callout}
@@ -584,6 +618,15 @@ for a stated sidelobe level, no other set of amplitudes gives a
 narrower main lobe.
 :::
 
+<img src="../../viz/img/L22-cheb-vs-hann.svg"
+     alt="The minus 30 dB Chebyshev and Hann patterns on the eight-element array overlaid: the Chebyshev sidelobes all touch the minus 30 dB line and its beam is 17.1 degrees wide; the Hann sidelobes start near minus 32 dB and decay, and its beam is 19.1 degrees wide"
+     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
+
+The overlay shows where the two designs differ. Hann reaches its sidelobe level
+with the first lobe and puts the rest of its suppression into far lobes the
+specification never asked for; the Chebyshev design holds every lobe at
+$-30\ \text{dB}$ and uses the margin to keep its main lobe narrower.
+
 ::::
 
 ::::{frame} The Design Space on One Curve
@@ -613,8 +656,12 @@ whole range, and the efficiency falls from 1.00 to 0.71 over the same span.
 $$\text{Rx}_n\ (\%) = 100 \times \frac{a_n}{\max a_n}$$
 
 - Normalize to the largest: sliders cap at 100%.
-- About 1% steps: fine for $-30$ dB, not for $-50$ dB.
 - You can only go down, so Peak Gain falls.
+:::
+:::{present}
+<img src="../../viz/img/L22-rounding.svg"
+     alt="Exact and 1 percent rounded patterns. Top: the minus 50 dB Chebyshev design; rounding lifts its highest sidelobe from minus 50.0 to minus 44.3 dB. Bottom: the GUI Chebyshev preset, a design of about minus 100 dB; rounded, its pattern has no null and no sidelobe and falls steadily to about minus 70 dB at endfire"
+     style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 The PHASER's ADAR1000s set a gain as well as a phase on every element, and the
@@ -645,6 +692,10 @@ sidelobes it was designed for will not survive that. The beam sweep's noise floo
 sits about 23 dB below the uniform peak, so this bench cannot confirm a design deeper than roughly
 $-20\ \text{dB}$ relative to its own peak. Specifying $-50\ \text{dB}$ when
 $-30\ \text{dB}$ would do gains nothing we can measure and gives up beamwidth, directivity, and setting accuracy.
+The figure shows both effects of the 1% step: rounding the $-50\ \text{dB}$
+design to whole percent lifts its highest sidelobe to $-44.3\ \text{dB}$, and
+rounding the GUI's Chebyshev preset, which starts as a design of about
+$-100\ \text{dB}$, fills in every one of its nulls.
 
 ::::
 
@@ -658,9 +709,9 @@ $-30\ \text{dB}$ would do gains nothing we can measure and gives up beamwidth, d
 | Chebyshev | $22.9^\circ$ | $-6.5$ |
 :::
 :::{present}
-:class: callout
-
-Tapered sidelobes sink below the sweep's noise floor, 23 dB down.
+<img src="../../viz/img/L22-preset-traces.svg"
+     alt="Theory patterns of the four GUI presets on the uniform peak's scale, floored at the sweep's minus 23 dB noise floor: uniform peaks at 0 dB with sidelobes near minus 13 dB, Hann at minus 4.7 dB, Blackman at minus 6.1 dB, and Chebyshev at minus 6.5 dB, each tapered trace wider and with no sidelobe above the floor"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 The GUI ships four presets. Their gain lists and what theory predicts for each
@@ -679,7 +730,9 @@ of angle near broadside (L20 Lab), so a measured beamwidth reads to about a
 degree. Second, the sidelobe column says "below the noise floor" rather than
 giving a number. The sweep's floor sits about 23 dB
 below the uniform peak, and every tapered preset here pushes its sidelobes under
-that. You will be able to state an upper bound on the sidelobes in the L22–L23 Lab,
+that. The figure draws the four predictions as the sweep would show them: theory
+patterns on the uniform peak's scale, so each taper's peak drop shows, floored at
+$-23\ \text{dB}$. You will be able to state an upper bound on the sidelobes in the L22–L23 Lab,
 not a value.
 
 ```{note}
