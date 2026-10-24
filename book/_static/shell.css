@@ -12,11 +12,11 @@
 /* ---- tokens: complete light palette on bare :root ------------------- */
 :root {
   --blue:        #0067b9;
-  --blue-dark:   #004a85;
+  --blue-dark:   #0067b9;
   --red:         #b01e24;
   --ink:         #1a1a1a;
   --muted:       #5a5a5a;
-  --ground:      #fafaf7;
+  --ground:      #ffffff;
   --panel:       #ffffff;
   --rule:        rgba(0, 74, 133, 0.16);
   --rule-strong: rgba(0, 74, 133, 0.42);
@@ -32,6 +32,11 @@
   --accent-soft: rgba(138, 90, 0, 0.09);
   --rail:        rgba(0, 74, 133, 0.13);
   --shadow:      0 1px 2px rgba(0, 30, 60, .06), 0 8px 24px rgba(0, 30, 60, .05);
+  /* Landing cards and pills (Neil, 2026-10-24): flat white with a blue
+     outline and gray titles in light mode; dark keeps the shell's look. */
+  --card-rule:   #0067b9;
+  --card-shadow: none;
+  --card-title:  #707070;
   --fig-far:     #cddce9;
   --fig-line:    #5a5a5a;
 
@@ -71,6 +76,9 @@
     --soft-red:    rgba(228, 115, 122, 0.10);
     --rail:        rgba(140, 196, 238, 0.16);
     --shadow:      0 1px 2px rgba(0, 0, 0, .35), 0 10px 30px rgba(0, 0, 0, .30);
+    --card-rule:   rgba(140, 196, 238, 0.18);
+    --card-shadow: var(--shadow);
+    --card-title:  #b4d4f0;
     --fig-far:     #1d3350;
     --fig-line:    #93a3b5;
     --tbl-head:     #17334f;
@@ -98,6 +106,9 @@
   --soft-red:    rgba(228, 115, 122, 0.10);
   --rail:        rgba(140, 196, 238, 0.16);
   --shadow:      0 1px 2px rgba(0, 0, 0, .35), 0 10px 30px rgba(0, 0, 0, .30);
+  --card-rule:   rgba(140, 196, 238, 0.18);
+  --card-shadow: var(--shadow);
+  --card-title:  #b4d4f0;
   --fig-far:     #1d3350;
   --fig-line:    #93a3b5;
   --tbl-head:     #17334f;
