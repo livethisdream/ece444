@@ -56,7 +56,7 @@ $$
 - A repeat of the main lobe inside it is a **grating lobe**.
 :::
 
-Every array pattern in this module has been a function of one variable,
+<a href="../L16-array-factor/index.html#frame-grating-lobes">Lesson 16</a> showed that the array factor repeats, and that a repeat reaching visible space is a grating lobe as tall as the main beam. This lesson turns that result into a design rule. Every array pattern in this module has been a function of one variable, Lesson 16's inter-element phase with Lesson 18's steering ramp subtracted,
 
 $$\psi = kd\ (\sin\theta - \sin\theta_0),$$
 
@@ -96,7 +96,7 @@ $$
 for integer $m = 1, 2, \ldots$ Any solution with $\vert \sin\theta_g \vert \le 1$ is a real angle, and the array radiates a second beam there.
 
 :::{callout}
-A grating lobe is not a sidelobe. At $\theta_g$ every element is back in phase — one full wavelength of path difference per element instead of zero — so the grating lobe is **exactly as tall as the main lobe**. Tapering does not reduce it, because the taper controls the sidelobe skirts of one beam and this is a second beam.
+A grating lobe is not a sidelobe. At $\theta_g$ every element is back in phase — one full wavelength of path difference per element instead of zero — so the grating lobe is **exactly as tall as the main lobe**. Tapering does not reduce it, because the taper controls the sidelobe skirts of one beam and this is a second beam. Full height is an array-factor statement: <a href="../L21-antenna-pattern/index.html#frame-the-ideal-element">Lesson 21</a>'s element factor scales the lobe by $EF(\theta_g)$, which the $\cos\theta$ model puts $1.4$ dB down at $\pm 43^\circ$. The phaser-00 test run still read the lobes at full height.
 :::
 ::::
 
@@ -126,7 +126,16 @@ The $m = 2$ solutions need $\vert \sin\theta_g \vert = 1.386$, which is not a re
 Feed every fourth element instead ($56\ \text{mm}$, $\lambda/d = 0.520$) and the pair moves in to $\pm 31.3^\circ$ ($\pm 30.8^\circ$ at $10.443\ \text{GHz}$, where phaser-00 measured $-33.0^\circ$ and $+29.8^\circ$), with the $m = 2$ repeat just past the horizon, at $\sin\theta = \pm 1.04$ — the pattern comes back to within a fraction of a dB of full height at $\pm 90^\circ$.
 :::
 
-Thinning has two effects. The three fed elements still span an $84\ \text{mm}$ aperture, so the main beam stays narrow, but with three elements instead of eight the array collects less signal and the pattern between the beams is poorly controlled. The narrow beam of a large aperture with the ambiguity of a sparse one is the classic thinned-array trade.
+Thinning has two effects. The three fed elements still span an $84\ \text{mm}$ aperture, so the main beam stays narrow, but with three elements instead of eight the array collects less signal and the pattern between the beams is poorly controlled. Each fed element adds the same voltage at the peak, so the peak falls by the fraction of elements fed, every third element and then every fourth:
+
+$$
+\begin{aligned}
+20\log_{10}(3/8) &= -8.5\ \text{dB} \\
+20\log_{10}(2/8) &= -12.0\ \text{dB}
+\end{aligned}
+$$
+
+The phaser-00 test run measured $-7.8$ and $-10.9$ dB, about $1$ dB short of both. The same shortfall appears when the full array is compared with its single elements, and its cause is still open. The narrow beam of a large aperture with the ambiguity of a sparse one is the classic thinned-array trade.
 ::::
 
 ::::{frame} Keeping Grating Lobes Out
@@ -183,7 +192,7 @@ $$
 - A signal at another frequency adds in phase at another angle.
 :::
 
-The beam-steering computer sets each phase shifter once, in degrees. The angle that setting steers to is not fixed, because the phase a given path length produces depends on frequency.
+The beam-steering computer sets each phase shifter once, in degrees. The angle that setting steers to is not fixed, because the phase a given path length produces depends on frequency. <a href="../L18-beam-steering/index.html#frame-time-delay-versus-phase-delay">Lesson 18</a> named the result, beam squint, and the <a href="../L18-lab-beam-steering/index.html#frame-part-3-the-peak-angle-error-budget">L18 Lab</a> showed it once on the kit; here we compute it.
 
 Suppose the beam-steering computer sets element $n$ to a lag of $n\ k_0 d \sin\theta_0$, computed at the design frequency $f_0$ where $k_0 = 2\pi/\lambda_0$. Now a signal arrives at some other frequency $f$ in the band. The elements add in phase toward whatever angle $\theta$ makes the arrival phase cancel the applied lag:
 
@@ -241,9 +250,23 @@ $$
 \end{aligned}
 $$
 
-The beam has squinted $\Delta\theta = +2.9^\circ$. The approximation gives $-(-0.0475)(1.000) = 0.0475\ \text{rad} = 2.7^\circ$, close enough for a budget. This is the $+3^\circ$ your **Angle** readout will move in the L22–L23 Lab when the Signal BW goes from 10 to 500 MHz: the GUI sets the phases 500 MHz below the signal, so the sweep has to command $47.9^\circ$ to land on a source at $45^\circ$. The phaser-00 test run agreed: with the source at $41.1^\circ$, the prediction is $+2.6^\circ$ and phaser-00 measured $+2.5^\circ$.
+The beam has squinted $\Delta\theta = +2.9^\circ$. The small-offset form, with $\delta = -0.0475$ and $\tan 45^\circ = 1$, gives
 
-At $45^\circ$ the beam is $18.7^\circ$ wide (Lesson 20's $13.2^\circ/\cos 45^\circ$), so $2.9^\circ$ of squint loses only $0.25\ \text{dB}$ at the aimpoint. At a $1\ \text{GHz}$ offset the squint reaches $6.4^\circ$, roughly a third of a beamwidth, and the loss grows to $1.0\ \text{dB}$.
+$$\Delta\theta \approx 0.0475\ \text{rad} = 2.7^\circ,$$
+
+close enough for a budget. This is the $+3^\circ$ your **Angle** readout will move in the L22–L23 Lab when the Signal BW goes from 10 to 500 MHz: the GUI sets the phases 500 MHz below the signal, so the sweep has to command $47.9^\circ$ to land on a source at $45^\circ$. The phaser-00 test run agreed: with the source at $41.1^\circ$, the prediction is $+2.6^\circ$ and phaser-00 measured $+2.5^\circ$.
+
+At $45^\circ$ the beam is $18.7^\circ$ wide (Lesson 20's $13.2^\circ/\cos 45^\circ$), so $2.9^\circ$ of squint loses only $0.25\ \text{dB}$ at the aimpoint. That loss is the array factor evaluated at the aimpoint, which now sits off the beam's peak. At $10.025\ \text{GHz}$, $kd = 2.94$ rad, and the aimpoint's $\sin\theta$ sits $\sin 45^\circ - \sin 47.9^\circ = -0.0353$ from the peak's:
+
+$$
+\begin{aligned}
+\psi &= 2.94 \times (-0.0353) \\
+&= -0.104\ \text{rad} \\
+\vert AF_8(\psi) \vert &= 0.972 \\
+&= -0.25\ \text{dB}
+\end{aligned}
+$$
+ At a $1\ \text{GHz}$ offset the squint reaches $6.4^\circ$, roughly a third of a beamwidth, and the loss grows to $1.0\ \text{dB}$.
 :::
 ::::
 
@@ -253,7 +276,7 @@ At $45^\circ$ the beam is $18.7^\circ$ wide (Lesson 20's $13.2^\circ/\cos 45^\ci
 - **Communications**: gain falls at the band edges, a tilt across the channel.
 :::
 
-Squint affects two kinds of system differently. A **wideband radar** transmits a pulse whose spectrum is the bandwidth; each frequency component in that pulse points somewhere slightly different, so the compressed pulse is spread in angle and the effective beam is broadened and depointed. A **communications link** running a modulated carrier loses gain at the band edges relative to the center, which shows up as amplitude tilt across the channel rather than as an angle error.
+Squint affects two kinds of system differently. A **wideband radar** transmits a pulse whose spectrum is the bandwidth; each frequency component in that pulse points somewhere slightly different, so the pulse's energy is spread in angle and the effective beam is broadened and depointed. A **communications link** running a modulated carrier loses gain at the band edges relative to the center, which shows up as amplitude tilt across the channel rather than as an angle error.
 ::::
 
 ::::{frame} True Time Delay
@@ -266,7 +289,7 @@ $$
 - Delay is costly, so large arrays delay per subarray and phase-shift inside each one.
 :::
 
-The cure is to stop steering with phase. If instead of a phase lag you insert a **true time delay** of $\tau_n = n\ d \sin\theta_0 / c$ in each element, the delay compensates the geometric path difference itself, which is a length and not a phase. Every frequency in the band then arrives in phase at the same angle, and the squint is gone at all offsets. True time delay is expensive in analog hardware, which is why large wideband arrays usually compromise: time delay at the subarray level to control the squint across the aperture, phase shifters inside each subarray where the residual path differences are small.
+The cure is to stop steering with phase. If instead of a phase lag you insert a **true time delay** of $\tau_n = n\ d \sin\theta_0 / c$ in each element, the delay compensates the geometric path difference itself, which is a length and not a phase. Every frequency in the band then arrives in phase at the same angle, and the squint is gone at all offsets. True time delay is expensive in analog hardware, which is why large wideband arrays usually compromise: time delay at the level of the **subarray** (a group of elements combined before the rest, as on the PHASER's two four-element halves in <a href="../L17-phased-array-hardware/index.html#frame-the-hybrid-beamformer">Lesson 17</a>) to control the squint across the aperture, phase shifters inside each subarray where the residual path differences are small.
 ::::
 
 ::::{frame} Phase Quantization
@@ -279,7 +302,7 @@ $$
 - Rounding to that grid coarsens the pointing and adds sidelobes.
 :::
 
-The ADAR1000 does not accept an arbitrary phase. It has a $B$-bit phase shifter, and $B$ bits divide the circle into $2^B$ steps of
+The ADAR1000 does not accept an arbitrary phase. It has a $B$-bit phase shifter, and $B$ bits divide the circle into $2^B$ steps. The smallest step, one **least significant bit (LSB)**, is the grid <a href="../L18-beam-steering/index.html#frame-phase-shifter-resolution">Lesson 18</a> rounded its $30^\circ$ phase table onto:
 
 $$\text{LSB} = \frac{360^\circ}{2^B}.$$
 
@@ -307,7 +330,7 @@ so the step near broadside is
 
 $$\Delta\theta_0 \approx \frac{\text{LSB}}{360^\circ\ (d/\lambda)}\ \text{rad}.$$
 
-For the PHASER at $10.525\ \text{GHz}$, $d/\lambda = 0.491$, so the step is $2.8125/(360 \times 0.491) = 0.0159\ \text{rad} = 0.91^\circ$ at broadside. Compared with the $13.2^\circ$ beamwidth that is about one-fourteenth of a beam, which is fine. The step grows as $1/\cos\theta_0$ off broadside, reaching $1.8^\circ$ at $60^\circ$. Drop to $B = 2$ and the same calculation gives $29^\circ$ per step: a 2-bit array can only point at broadside and at about $\pm 31^\circ$.
+For the PHASER at $10.525\ \text{GHz}$, $d/\lambda = 0.491$, so the step is $2.8125/(360 \times 0.491) = 0.0159\ \text{rad} = 0.91^\circ$ at broadside. Compared with the $13.2^\circ$ beamwidth that is about one-fourteenth of a beam, which is fine. Off broadside the same step in $\sin\theta_0$ spans a wider angle, because $\Delta(\sin\theta_0) = \cos\theta_0\ \Delta\theta_0$. The step therefore grows as $1/\cos\theta_0$, reaching $1.8^\circ$ at $60^\circ$. Drop to $B = 2$ and the same calculation gives $29^\circ$ per step: a 2-bit array can only point at broadside and at about $\pm 31^\circ$.
 ::::
 
 ::::{frame} Quantization Sidelobes
@@ -321,13 +344,21 @@ $$
 - Phaser-00 measured $-8.5$, $-12.0$, and $-15.5$ dBc: above the rule.
 :::
 
-A real controller does better than a uniform quantized increment. It computes the exact ramp for every element, then rounds each element independently, which puts the beam much closer to the commanded angle. What is left behind is a staircase: the difference between the exact ramp and the rounded one is a sawtooth error, bounded by half an LSB, that repeats across the aperture. A periodic phase error radiates, and where it radiates is a **quantization sidelobe**. The rule of thumb is
+A real controller does better than a uniform quantized increment. It computes the exact ramp for every element, then rounds each element independently, which puts the beam much closer to the commanded angle. What is left behind is a staircase: the difference between the exact ramp and the rounded one is a sawtooth error, bounded by half an LSB, that repeats across the aperture. A periodic phase error radiates, and where it radiates is a **quantization sidelobe**.
 
-$$\text{QSLL} \approx -6B\ \text{dB},$$
+Its level follows from the size of the error. Rounding leaves at most half an LSB at each element. For a small phase error $e^{j\phi} \approx 1 + j\phi$, so the error adds a small field to each element in proportion to $\phi$, and the lobe that field radiates scales with the sawtooth's peak:
 
-so 2 bits puts a lobe near $-12$ dB, 3 bits near $-18$ dB, and the ADAR1000's 7 bits near $-42$ dB. Treat this as an RMS estimate for a large array. On an aperture as short as eight elements there are only a couple of sawtooth periods, individual lobes scatter several dB either side of the rule. Taken at face value, the rule says that from 3 bits up the quantization lobes drop below the array's own $-13$ dB sidelobes and no longer set the sidelobe level.
+$$
+\begin{aligned}
+\phi_\text{max} &= \frac{\text{LSB}}{2} = \frac{\pi}{2^B}\ \text{rad} \\
+\frac{E_\text{lobe}}{E_\text{beam}} &\approx \frac{\phi_\text{max}}{\pi} = 2^{-B} \\
+\text{QSLL} &= 20\log_{10} 2^{-B} = -6.02B\ \text{dB}
+\end{aligned}
+$$
 
-The hardware disagrees. In the phaser-00 test run, with the source fixed, phaser-00 read the strongest lobe beyond $\pm 35^\circ$ at $-8.5$ dBc with 2 bits, $-12.0$ dBc with 3, $-15.5$ dBc with 4, and $-17.4$ dBc, the floor of that sweep, with 7. Every reading sits above the rule, by $3.5$ dB at 2 bits and by $6$ to $8.5$ dB at 3 and 4 bits, so on this kit 3 bits is not enough to hide the quantization lobes under the $-13$ dB sidelobes. The **Angle** readout moved too: it read $+8.4^\circ$ at 4, 3, and 2 bits against $+1.8^\circ$ at 7, several times the pointing step derived above. The cause of the extra error has not been confirmed. At low bit counts, read the lobe levels on the sweep rather than the Angle readout.
+Each extra bit halves the error, which halves the lobe's field and lowers the **quantization sidelobe level (QSLL)** by $6$ dB. That gives the rule of thumb, so 2 bits puts a lobe near $-12$ dB, 3 bits near $-18$ dB, and the ADAR1000's 7 bits near $-42$ dB. Treat this as an RMS estimate for a large array. On an aperture as short as eight elements there are only a couple of sawtooth periods, so individual lobes scatter several dB either side of the rule. Taken at face value, the rule says that from 3 bits up the quantization lobes drop below the array's own $-13$ dB sidelobes and no longer set the sidelobe level.
+
+The hardware disagrees. In the phaser-00 test run, with the source fixed, the kit read the strongest lobe beyond $\pm 35^\circ$ at $-8.5$ dBc with 2 bits, $-12.0$ dBc with 3, $-15.5$ dBc with 4, and $-17.4$ dBc, the floor of that sweep, with 7. Every reading sits above the rule, by $3.5$ dB at 2 bits and by $6$ to $8.5$ dB at 3 and 4 bits, so on this kit 3 bits is not enough to hide the quantization lobes under the $-13$ dB sidelobes. The **Angle** readout moved too: it read $+8.4^\circ$ at 4, 3, and 2 bits against $+1.8^\circ$ at 7, several times the pointing step derived above. The cause of the extra error has not been confirmed. At low bit counts, read the lobe levels on the sweep rather than the Angle readout.
 
 More bits improve two things: finer pointing, which scales as the LSB, and a lower sidelobe floor, which scales as $6$ dB per bit. Seven bits is the standard choice because it puts the quantization floor far below every other error in the array.
 ::::
