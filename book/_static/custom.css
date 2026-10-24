@@ -55,7 +55,7 @@ body, .bd-article {
    ============================================================ */
 
 .bd-article h1 {
-  color: #004a85;
+  color: var(--blue-dark, #004a85);
   font-weight: 800;
   letter-spacing: -0.01em;
   font-size: clamp(28px, 4vw, 40px);
@@ -63,7 +63,7 @@ body, .bd-article {
 }
 
 .bd-article h2 {
-  color: #004a85;
+  color: var(--blue-dark, #004a85);
   font-weight: 700;
   border-bottom: 1px solid #cddce9;
   padding-bottom: 0.2em;
@@ -529,15 +529,15 @@ nav .theme-switch-button {
   flex-direction: column;
   padding: 16px 26px 14px;
   background: var(--panel, #fff);
-  border: 1px solid var(--rule, #d8e2ec);
+  border: 1px solid var(--card-rule, #d8e2ec);
   border-radius: 28px;
-  box-shadow: var(--shadow, none);
+  box-shadow: var(--card-shadow, none);
   color: var(--ink, #15202b) !important;
   text-decoration: none !important;
   transition: border-color 0.12s ease, background 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
 }
 .bd-article .block-card:hover {
-  border-color: var(--rule-strong, #1f6098);
+  border-color: var(--card-rule, #1f6098);
   background: var(--soft, #f5f9fc);
   transform: translateY(-2px);
   box-shadow: 0 2px 4px rgba(0, 30, 60, .07), 0 14px 32px rgba(0, 30, 60, .09);
@@ -553,7 +553,7 @@ nav .theme-switch-button {
   margin: 4px 0 6px;
   font-size: 16px;
   font-weight: 700;
-  color: #00205B;
+  color: var(--card-title, #00205B);
   border-left: none;
   padding-left: 0;
 }
