@@ -152,8 +152,8 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
 | L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23 | **walk dry run** (needs `install.sh`) |
 | L22 | Sidelobes and Tapering | practice | cut 20/20, voice sweep done (#132) | why + illustration sweeps |
-| L23 | Beam Squint and Quantization | practice | cut 20/20 (#131, open) | sweeps |
-| L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** (old-style sheet) + practice | 46/20, uncut | cut + sweeps + packet |
+| L23 | Beam Squint and Quantization | practice | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
+| L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20 | **hardware run of the preset-6 quantization walk** |
 | L24 | Null Steering | practice | 46/20 | cut + sweeps |
 | L24 Lab | Null Steering | **L24 Lab** (old-style sheet) + practice | 51/20 | cut + sweeps + packet |
 
@@ -189,18 +189,13 @@ needs its rubric, published with the L28 Lab packet.
    frequency, open Lab Presets first, E1 on the right facing the patches,
    level comparisons at 1.2 m or more. Two Phaser changes ride along:
    the readouts are now **Angle** (Peak/Centroid) and **Peak Gain**, not
-   "Est. Angle" and "Peak Array Gain" (still stale in L22, L23, and the
-   L22–L23 Lab), and preset 6 Quantization now holds the beam at 15° with
+   "Est. Angle" and "Peak Array Gain" (still stale in L22 and L24), and preset 6 Quantization now holds the beam at 15° with
    Blackman for a Signal vs Time walk (phaser #48). The second dry run
    (`review/M3_LAB_DRYRUN_2026-10-23.md`, all of L17–L24) adds, for the
    remaining passes:
-   - **L22–L23 Lab** (sent to the L23 thread): taper predictions stay linear
-     in slider % (the gain-slider fix makes that true; say so in one line);
-     custom-taper hint at ends near 25%; recalibrate if the uniform
-     sidelobes look lopsided; check Signal BW before step (g); Angle shifts
-     several degrees at 4 bits and below; keep ±40° clear of walls.
    - **L24 Lab**: notches and nulls reach −40 to −50 dB, so the
-     "floor-limited at −21 dB" explanation goes; Procedure D sets a uniform
+     "floor-limited at −21 dB" explanation goes, in the text and in
+     `L24-quant-depth.svg`; Procedure D sets a uniform
      taper and resets Beam 1 Phase until preset 8 does; Procedure C runs at
      +20° only, against Neil's software interferer, with the expected
      suppression filled in from his first run, and its "No hardware?" note
@@ -218,7 +213,10 @@ needs its rubric, published with the L28 Lab packet.
    for L24 Procedure C (Neil's); preset 8 loads uniform and resets Beam 1
    Phase; Signal BW and Rx Gain survive Calibrate, Find HB100 and the Rect
    preset; restart the sweep after Find HB100; check the simulator's MVDR,
-   which also nulls the target at ±20°. Open from the dry run: why array
+   which also nulls the target at ±20°. The 3- and 4-bit lobes in the old
+   quantization sweep sit above even the worst-case simulation of rounding
+   the steering ramp, and Angle shifted +8.4° at 4 bits and below: does the
+   kit also round its calibration offsets? Open from the dry run: why array
    peaks read 1–3 dB under the in-phase sum of single elements even with
    elements fully on or off; whether each channel's phase moves with its
    gain setting; whether recalibrating with the source exactly at boresight
