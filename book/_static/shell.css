@@ -37,6 +37,7 @@
   --card-rule:   #0067b9;
   --card-shadow: none;
   --card-title:  #707070;
+  --card-foot:   #0067b9;
   --fig-far:     #cddce9;
   --fig-line:    #5a5a5a;
 
@@ -79,6 +80,7 @@
     --card-rule:   rgba(140, 196, 238, 0.18);
     --card-shadow: var(--shadow);
     --card-title:  #b4d4f0;
+    --card-foot:   #1d7a4d;
     --fig-far:     #1d3350;
     --fig-line:    #93a3b5;
     --tbl-head:     #17334f;
@@ -109,6 +111,7 @@
   --card-rule:   rgba(140, 196, 238, 0.18);
   --card-shadow: var(--shadow);
   --card-title:  #b4d4f0;
+  --card-foot:   #1d7a4d;
   --fig-far:     #1d3350;
   --fig-line:    #93a3b5;
   --tbl-head:     #17334f;
