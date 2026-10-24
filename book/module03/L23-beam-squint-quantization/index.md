@@ -52,8 +52,12 @@ AF_N(\psi) &= \frac{\sin(N\psi/2)}{N \sin(\psi/2)}
 $$
 
 - Shift $\psi$ by $2\pi$ and $\vert AF_N \vert$ is unchanged.
-- Real angles reach a window of $\psi$ that is $2kd$ wide: **visible space**.
-- A repeat of the main lobe inside it is a **grating lobe**.
+- Real angles reach a $2kd$-wide window, **visible space**; a repeat inside it is a **grating lobe**.
+:::
+:::{present}
+<img src="../../viz/img/L23-visible-window.svg"
+     alt="The array factor against its argument psi over two periods each side, with the window real angles reach shaded. Top: 14 mm and 8 elements, window plus or minus 173 degrees, the repeats at plus or minus 360 degrees outside it. Bottom: 42 mm and 3 elements, window plus or minus 519 degrees, both repeats inside it as full-height lobes"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 <a href="../L16-array-factor/index.html#frame-grating-lobes">Lesson 16</a> showed that the array factor repeats, and that a repeat reaching visible space is a grating lobe as tall as the main beam. This lesson turns that result into a design rule. Every array pattern in this module has been a function of one variable, Lesson 16's inter-element phase with Lesson 18's steering ramp subtracted,
@@ -66,7 +70,7 @@ $$AF_N(\psi) = \frac{\sin(N\psi/2)}{N \sin(\psi/2)}.$$
 
 Replace $\psi$ by $\psi + 2\pi$ and both sines flip sign together, so $\vert AF_N \vert$ is unchanged. The array factor is **periodic in $\psi$ with period $2\pi$**. The main lobe is the peak at $\psi = 0$, and the same peak reappears at $\psi = \pm 2\pi, \pm 4\pi, \ldots$ — every one of them a full-height beam.
 
-Whether we ever see those repeats depends on how much of the $\psi$ axis the real angles $-90^\circ \le \theta \le +90^\circ$ reach. We call that span **visible space**, and the spacing sets its width: as $\sin\theta$ runs from $-1$ to $+1$, $\psi$ runs over a window of total width $2kd = 4\pi d/\lambda$. Widening $d$ brings more periods of the array factor into visible space. A repeat that lands inside visible space is a **grating lobe**.
+Whether we ever see those repeats depends on how much of the $\psi$ axis the real angles $-90^\circ \le \theta \le +90^\circ$ reach. We call that span **visible space**, and the spacing sets its width: as $\sin\theta$ runs from $-1$ to $+1$, $\psi$ runs over a window of total width $2kd = 4\pi d/\lambda$. Widening $d$ brings more periods of the array factor into visible space. A repeat that lands inside visible space is a **grating lobe**. The figure draws both cases on the same axis: at $14\ \text{mm}$ the window stops at $\pm 173^\circ$, short of the repeats at $\pm 360^\circ$, and at $42\ \text{mm}$ it reaches $\pm 519^\circ$ and takes in both.
 ::::
 
 ::::{frame} The Grating Condition
@@ -93,7 +97,7 @@ kd\ (\sin\theta_g - \sin\theta_0) &= 2\pi m \\
 \end{aligned}
 $$
 
-for integer $m = 1, 2, \ldots$ Any solution with $\vert \sin\theta_g \vert \le 1$ is a real angle, and the array radiates a second beam there.
+for integer $m = 1, 2, \ldots$ Any solution with $\vert \sin\theta_g \vert \le 1$ is a real angle, and the array radiates a second beam there. The thinning example's figure shows why from the elements' side: at $43.9^\circ$ the fed elements of the $42\ \text{mm}$ row sit exactly one wavelength of path apart, so their phases read $0^\circ$, $360^\circ$ and $720^\circ$ and add exactly as they do at broadside.
 
 :::{callout}
 A grating lobe is not a sidelobe. At $\theta_g$ every element is back in phase — one full wavelength of path difference per element instead of zero — so the grating lobe is **exactly as tall as the main lobe**. Tapering does not reduce it, because the taper controls the sidelobe skirts of one beam and this is a second beam. Full height is an array-factor statement: <a href="../L21-antenna-pattern/index.html#frame-the-ideal-element">Lesson 21</a>'s element factor scales the lobe by $EF(\theta_g)$, which the $\cos\theta$ model puts $1.4$ dB down at $\pm 43^\circ$. The phaser-00 test run still read the lobes at full height.
@@ -106,6 +110,11 @@ A grating lobe is not a sidelobe. At $\theta_g$ every element is back in phase �
 - Grating lobes at $\pm 43.9^\circ$: three full-height beams.
 - Every fourth patch: $d = 56$ mm, lobes at $\pm 31.3^\circ$.
 - A wide aperture with few elements gives a narrow but ambiguous beam.
+:::
+:::{present}
+<img src="../../viz/img/L23-grating-whole-turn.svg"
+     alt="Phase dials for a wave arriving from 43.9 degrees. Top: every third element, 42 mm apart, sees exactly one wavelength of extra path per element, so the dials read 0, 360 and 720 degrees and all point the same way. Bottom: all eight elements, 14 mm apart, see a third of a wavelength per element, so the dials step by 120 degrees and spread around the circle"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 :::{admonition} Worked example — thinning the PHASER row
@@ -191,8 +200,13 @@ $$
 - The phase ramp is computed once, at $f_0$.
 - A signal at another frequency adds in phase at another angle.
 :::
+:::{present}
+<img src="../../viz/img/L23-squint-ramp.svg"
+     alt="Left: the phase lag the shifters apply across the eight elements, set for 45 degrees at 10.525 GHz, against the lag a 10.025 GHz signal needs at 45 degrees. Right: their difference grows by 5.9 degrees per element, a straight ramp"
+     style="max-width: 700px; width: 100%; display: block; margin: 0 auto;">
+:::
 
-The beam-steering computer sets each phase shifter once, in degrees. The angle that setting steers to is not fixed, because the phase a given path length produces depends on frequency. <a href="../L18-beam-steering/index.html#frame-time-delay-versus-phase-delay">Lesson 18</a> named the result, beam squint, and the <a href="../L18-lab-beam-steering/index.html#frame-part-3-the-peak-angle-error-budget">L18 Lab</a> showed it once on the kit; here we compute it.
+The beam-steering computer sets each phase shifter once, in degrees. The angle that setting steers to is not fixed, because the phase a given path length produces depends on frequency. The figure shows the result across the aperture for the worked example below: the shifters apply $125.1^\circ$ per element, set for $45^\circ$ at $10.525\ \text{GHz}$, and a $10.025\ \text{GHz}$ signal needs $119.2^\circ$ per element to add in phase at $45^\circ$. The difference, $5.9^\circ$ per element, is itself a straight ramp, and a straight ramp is a steer: the beam moves to a new angle and stays intact. <a href="../L18-beam-steering/index.html#frame-time-delay-versus-phase-delay">Lesson 18</a> named the result, beam squint, and the <a href="../L18-lab-beam-steering/index.html#frame-part-3-the-peak-angle-error-budget">L18 Lab</a> showed it once on the kit; here we compute it.
 
 Suppose the beam-steering computer sets element $n$ to a lag of $n\ k_0 d \sin\theta_0$, computed at the design frequency $f_0$ where $k_0 = 2\pi/\lambda_0$. Now a signal arrives at some other frequency $f$ in the band. The elements add in phase toward whatever angle $\theta$ makes the arrival phase cancel the applied lag:
 
@@ -343,8 +357,13 @@ $$
 - Rule: 2 bits $-12$ dB, 3 bits $-18$, 4 bits $-24$.
 - Phaser-00 measured $-8.5$, $-12.0$, and $-15.5$ dBc: above the rule.
 :::
+:::{present}
+<img src="../../viz/img/L23-quant-staircase.svg"
+     alt="Top: the exact phase ramp for a beam at 28 degrees and the 3-bit staircase the shifters can set, in steps of 45 degrees. Bottom: the rounding error at each element, never more than 22.5 degrees either way, rising and falling across the aperture"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+:::
 
-A real controller does better than a uniform quantized increment. It computes the exact ramp for every element, then rounds each element independently, which puts the beam much closer to the commanded angle. What is left behind is a staircase: the difference between the exact ramp and the rounded one is a sawtooth error, bounded by half an LSB, that repeats across the aperture. A periodic phase error radiates, and where it radiates is a **quantization sidelobe**.
+A real controller does better than a uniform quantized increment. It computes the exact ramp for every element, then rounds each element independently, which puts the beam much closer to the commanded angle. What is left behind is a staircase: the difference between the exact ramp and the rounded one is a sawtooth error, bounded by half an LSB, that repeats across the aperture. A periodic phase error radiates, and where it radiates is a **quantization sidelobe**. The figure shows the staircase for a beam at $28^\circ$ with 3 bits: the exact ramp climbs $83.1^\circ$ per element, the shifters can only set multiples of $45^\circ$, and the error left at each element rises and falls within $\pm 22.5^\circ$.
 
 Its level follows from the size of the error. Rounding leaves at most half an LSB at each element. For a small phase error $e^{j\phi} \approx 1 + j\phi$, so the error adds a small field to each element in proportion to $\phi$, and the lobe that field radiates scales with the sawtooth's peak:
 
@@ -359,6 +378,12 @@ $$
 Each extra bit halves the error, which halves the lobe's field and lowers the **quantization sidelobe level (QSLL)** by $6$ dB. That gives the rule of thumb, so 2 bits puts a lobe near $-12$ dB, 3 bits near $-18$ dB, and the ADAR1000's 7 bits near $-42$ dB. Treat this as an RMS estimate for a large array. On an aperture as short as eight elements there are only a couple of sawtooth periods, so individual lobes scatter several dB either side of the rule. Taken at face value, the rule says that from 3 bits up the quantization lobes drop below the array's own $-13$ dB sidelobes and no longer set the sidelobe level.
 
 The hardware disagrees. In the phaser-00 test run, with the source fixed, the kit read the strongest lobe beyond $\pm 35^\circ$ at $-8.5$ dBc with 2 bits, $-12.0$ dBc with 3, $-15.5$ dBc with 4, and $-17.4$ dBc, the floor of that sweep, with 7. Every reading sits above the rule, by $3.5$ dB at 2 bits and by $6$ to $8.5$ dB at 3 and 4 bits, so on this kit 3 bits is not enough to hide the quantization lobes under the $-13$ dB sidelobes. The **Angle** readout moved too: it read $+8.4^\circ$ at 4, 3, and 2 bits against $+1.8^\circ$ at 7, several times the pointing step derived above. The cause of the extra error has not been confirmed. At low bit counts, read the lobe levels on the sweep rather than the Angle readout.
+
+<img src="../../viz/img/L23-qsll-vs-bits.svg"
+     alt="Worst lobe in dB below the beam against phase-shifter bits from 2 to 7: the minus 6B rule; the simulated worst quantization lobe on the course array over steer angles 0 to 50 degrees, about 4 dB above the rule at every bit count; the uniform array's own sidelobes at minus 13.3 dB; and the phaser-00 readings, minus 8.5, minus 12.0 and minus 15.5 dBc at 2, 3 and 4 bits, with the sweep floor at 7 bits"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+
+The figure adds a third curve: the worst quantization lobe the course array can produce at any steer angle up to $50^\circ$, computed from the field the rounding error radiates on its own. It sits about $4$ dB above the rule at every bit count, because the rule is an average for a large array and eight elements leave room for a worst case. That accounts for the 2-bit reading, $-8.3$ dB simulated against $-8.5$ dBc measured. The 3- and 4-bit readings still sit $2.5$ and $4.7$ dB above even the worst case, so rounding the steering ramp does not explain them by itself.
 
 More bits improve two things: finer pointing, which scales as the LSB, and a lower sidelobe floor, which scales as $6$ dB per bit. Seven bits is the standard choice because it puts the quantization floor far below every other error in the array.
 ::::
@@ -397,7 +422,7 @@ Separate the two limits. **Quantization** sets a sidelobe floor at roughly $-6B$
 :class: viz-frame
 
 :::{depth}
-The widget below runs the same array-factor calculation for all three effects on the course array, so you can compare their signatures directly. Start in **Grating** and step the spacing from $14$ to $56\ \text{mm}$, watching the predicted and measured lobe angles agree and the horizon reading climb. Switch to **Squint** and drag the offset: the leftover phase error stays a straight ramp, which is why the beam moves rather than degrades. Switch to **Quantization** and pull the bits down to 2, where the leftover error becomes a staircase and the power that used to be in the beam appears as a lobe tens of degrees away.
+The widget's left panel is the pattern; its right panel shows why the pattern looks that way. At the two angles marked 1 and 2 on the pattern, it adds the eight element contributions head to tail, the same sum Lesson 22 drew for the first sidelobe, and the chain's length is the level at that angle. Start in **Grating** at $14\ \text{mm}$: the chain at the sidelobe curls almost shut. Step to $42\ \text{mm}$ and the chain at $43.9^\circ$ comes out straight, because each fed element is a whole turn behind its neighbor. Switch to **Squint** and drag the offset: the chain at the commanded $45^\circ$ bends into an arc, while the chain at the new peak is straight, so the beam has moved rather than broken. Switch to **Quantization**, set 3 bits, and move the steer angle: at $15^\circ$ the ramp lands almost exactly on the $45^\circ$ grid and nothing changes, while at $28^\circ$ the rounding error lines the chain up partway and a lobe rises to $-9$ dB. Whether rounding matters depends on how the ramp falls on the grid, not only on the number of bits.
 :::
 
 :::{present}
