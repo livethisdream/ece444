@@ -233,8 +233,6 @@ needs its rubric, published with the L28 Lab packet.
   L22–L23, and L24 Labs. Retire the L17 and L18 practice entries and the old L19
   (Beam Steering Lab) one. Neil sets this
   up; nothing in the repo tracks it.
-- **L23's practice set covers grating lobes**, which objective 3.8's wording
-  does not mention.
 - **Image-build homework:** does each kit get a second card, and do cadets have
   Python on their laptops? The L17 Lab rewrite (#96) has cadets build their own
   card in class, which may settle this.

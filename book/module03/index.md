@@ -96,7 +96,7 @@ factor, and a null is placed with complex weights.
 
 <ol class="lo-list" start="7" style="--module: '3'">
   <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
-  <li>I can identify beam squint and quantization effects in a phased array and describe their impact on system performance.</li>
+  <li>I can identify grating lobes, beam squint, and quantization effects in a phased array and describe their impact on system performance.</li>
   <li>I can calculate null-steering weights and implement pattern nulls on the ADALM-PHASER.</li>
 </ol>
 ::::
