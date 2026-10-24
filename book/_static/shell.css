@@ -38,6 +38,11 @@
   --card-shadow: none;
   --card-title:  #707070;
   --card-foot:   #0067b9;
+  /* The answer-key half of a practice-set pair (Neil, 2026-10-24): gray in
+     light mode, the old amber accent in dark. */
+  --key-ink:     #707070;
+  --key-rule:    rgba(112, 112, 112, 0.35);
+  --key-soft:    rgba(112, 112, 112, 0.09);
   --fig-far:     #cddce9;
   --fig-line:    #5a5a5a;
 
@@ -81,6 +86,9 @@
     --card-shadow: var(--shadow);
     --card-title:  #b4d4f0;
     --card-foot:   #1d7a4d;
+    --key-ink:     #d9a04a;
+    --key-rule:    rgba(217, 160, 74, 0.38);
+    --key-soft:    rgba(217, 160, 74, 0.13);
     --fig-far:     #1d3350;
     --fig-line:    #93a3b5;
     --tbl-head:     #17334f;
@@ -112,6 +120,9 @@
   --card-shadow: var(--shadow);
   --card-title:  #b4d4f0;
   --card-foot:   #1d7a4d;
+  --key-ink:     #d9a04a;
+  --key-rule:    rgba(217, 160, 74, 0.38);
+  --key-soft:    rgba(217, 160, 74, 0.13);
   --fig-far:     #1d3350;
   --fig-line:    #93a3b5;
   --tbl-head:     #17334f;
@@ -324,15 +335,15 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
 .doc-link:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
 /* The solutions half of the pair reads as the answer key, so it carries the
-   course's accent rather than its blue -- the same cue the sidebar and the
-   material cards already use for practice material. */
+   key color rather than its blue: gray in light mode, the course's amber
+   accent in dark. */
 .doc-link.doc-key {
-  color: var(--accent-ink); border-color: var(--accent-rule);
+  color: var(--key-ink); border-color: var(--key-rule);
   --doc-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 15'%3E%3Cpath d='M7 0H1.6A1.6 1.6 0 0 0 0 1.6v11.8A1.6 1.6 0 0 0 1.6 15h8.8a1.6 1.6 0 0 0 1.6-1.6V5H8a1 1 0 0 1-1-1V0zm1.2.35V3.8h3.45L8.2.35zM5.15 11.9 2.6 9.35l.88-.88 1.67 1.67 3.52-3.52.88.88-4.4 4.4z'/%3E%3C/svg%3E");
 }
 .doc-link.doc-key:hover {
-  color: var(--accent-ink); background: var(--accent-soft);
-  border-color: var(--accent-ink);
+  color: var(--key-ink); background: var(--key-soft);
+  border-color: var(--key-ink);
 }
 
 /* A row of them, not a bulleted list. `:class: doc-links` on the frame (or
@@ -363,7 +374,7 @@ td .doc-link:hover, th .doc-link:hover {
   background: var(--soft); border-color: var(--rule);
 }
 td .doc-link.doc-key:hover, th .doc-link.doc-key:hover {
-  background: var(--accent-soft); border-color: var(--accent-rule);
+  background: var(--key-soft); border-color: var(--key-rule);
 }
 
 /* ---- progress rail -------------------------------------------------- */
