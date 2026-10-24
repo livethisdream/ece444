@@ -267,9 +267,167 @@ def qsll_vs_bits():
     return dict(zip(B.tolist(), np.round(sim, 1).tolist()))
 
 
+# --------------------------------------------------- true time delay ------
+def ttd_vs_phase():
+    """Phase lag at element 2 for a 45 deg steer: a delay against a phase shift."""
+    tau = PITCH * np.sin(np.radians(45)) / C               # s, one element's delay
+    f = np.linspace(0, 12e9, 400)
+    ttd = 360 * f * tau
+    ps = np.full_like(f, 360 * 10.525e9 * tau)
+    gap = 360 * 10.525e9 * tau - 360 * 10.025e9 * tau
+    assert abs(360 * 10.525e9 * tau - 125.1) < 0.1 and abs(gap - 5.9) < 0.05
+    fig, ax = plt.subplots(figsize=(5.6, 3.2))
+    ax.axvspan(10.0, 11.0, color=SHADE, zorder=0)
+    ax.plot(f / 1e9, ttd, color=NAVY, lw=2.0)
+    ax.plot(f / 1e9, ps, color=AMBER, lw=2.0)
+    ax.plot([10.525], [360 * 10.525e9 * tau], "o", color=INK, ms=5, zorder=4)
+    ax.plot([10.025, 10.025], [360 * 10.025e9 * tau, ps[0]], color=RED, lw=2.2)
+    ax.text(5.6, 360 * 5.6e9 * tau + 9, "true time delay", color=NAVY, fontsize=10,
+            fontweight="bold", ha="right", va="bottom", rotation=0)
+    ax.text(0.4, ps[0] + 5, "phase shifter, set at 10.525 GHz", color=AMBER, fontsize=10,
+            fontweight="bold", ha="left", va="bottom")
+    ax.text(10.15, 360 * 10.025e9 * tau - 7, f"{gap:.1f}°", color=RED, fontsize=10,
+            fontweight="bold", ha="left", va="top")
+    ax.set_xlim(0, 12)
+    ax.set_ylim(0, 150)
+    ax.set_xlabel("frequency (GHz)")
+    ax.set_ylabel("phase lag, element 2 (degrees)")
+    ax.grid(axis="y", color=RULE, lw=0.8)
+    for sp in ("top", "right"):
+        ax.spines[sp].set_visible(False)
+    save(fig, "L23-ttd-vs-phase")
+
+
+# ------------------------------------------------------- squint vs scan ---
+def squint_vs_scan():
+    f0 = 10.525
+    th0 = np.linspace(0, 70, 701)
+    fig, ax = plt.subplots(figsize=(5.4, 3.2))
+    for off, col in ((-0.5, BLUE), (-1.0, NAVY)):
+        f = f0 + off
+        v = f0 / f * np.sin(np.radians(th0))
+        ok = v <= 1
+        exact = np.degrees(np.arcsin(v[ok])) - th0[ok]
+        approx = np.degrees(-(off / f0) * np.tan(np.radians(th0)))
+        ax.plot(th0[ok], exact, color=col, lw=2.0)
+        ax.plot(th0, approx, color=col, lw=1.2, ls=(0, (4, 3)))
+        i = np.searchsorted(th0, 45)
+        ax.plot([45], [exact[i]], "o", color=col, ms=5)
+        lx, ly, ha = ((46, 10.2, "right") if off < -0.75 else (69, 2.4, "right"))
+        ax.text(lx, ly, f"{abs(off)*1000:.0f} MHz low", color=col, fontsize=10,
+                fontweight="bold", ha=ha, va="bottom")
+    ax.text(3, 13.2, "solid: exact     dashed: −δ tan θ₀", color=GRAY, fontsize=9.5,
+            ha="left", va="top")
+    ax.set_xlim(0, 70)
+    ax.set_ylim(0, 15)
+    ax.set_xlabel("commanded angle (degrees)")
+    ax.set_ylabel("squint (degrees)")
+    ax.grid(axis="y", color=RULE, lw=0.8)
+    for sp in ("top", "right"):
+        ax.spines[sp].set_visible(False)
+    save(fig, "L23-squint-vs-scan")
+
+
+# --------------------------------------------------- pointing grid --------
+def pointing_grid():
+    dl = PITCH * 1e3 / LAM_0
+    fig, ax = plt.subplots(figsize=(5.8, 2.4))
+    rows = [(2, AMBER), (3, BLUE), (4, NAVY), (7, GRAY)]
+    for r, (b, col) in enumerate(rows):
+        step = (360 / 2 ** b) / (360 * dl)
+        m = np.arange(0, int(1 / step) + 1)
+        ang = np.degrees(np.arcsin(m * step))
+        y = len(rows) - 1 - r
+        ax.vlines(ang, y - 0.28, y + 0.28, color=col, lw=1.6 if b < 7 else 0.8)
+        ax.text(-3, y, f"{b} bits", ha="right", va="center", color=col, fontsize=10,
+                fontweight="bold")
+    ax.set_xlim(0, 90)
+    ax.set_ylim(-0.6, len(rows) - 0.4)
+    ax.set_yticks([])
+    ax.set_xticks([0, 15, 30, 45, 60, 75, 90])
+    ax.set_xlabel("beam angles the shifter can command (degrees)")
+    for sp in ("top", "right", "left"):
+        ax.spines[sp].set_visible(False)
+    save(fig, "L23-pointing-grid")
+
+
+# ------------------------------------------------------- dither -----------
+def dither_error(n_el=32, bits=3, th0=15.8, dl=0.5):
+    """Rounding error across a longer array, plain and with a fixed per-element offset."""
+    L = 360 / 2 ** bits
+    n = np.arange(n_el)
+    a = 360 * dl * np.sin(np.radians(th0)) * n
+    th = np.radians(np.linspace(-90, 90, 7201))
+    ph = np.outer(np.sin(th), 2 * np.pi * dl * n)
+    def err_pattern(err):
+        v = np.abs(np.exp(1j * (ph - np.radians(a))) @ (np.exp(1j * np.radians(err)) - 1)) / n_el
+        return 20 * np.log10(np.maximum(v, 1e-6))
+    plain = np.round(a / L) * L - a
+    draws = []
+    for seed in range(30):
+        u = np.random.default_rng(seed).uniform(-L / 2, L / 2, n_el)
+        e = np.round((a - u) / L) * L - (a - u)
+        draws.append((err_pattern(e).max(), seed, e))
+    draws.sort(key=lambda z: z[0])
+    lvl_d, seed, dith = draws[len(draws) // 2]                # a typical draw, not the best
+    lvl_p = err_pattern(plain).max()
+    fig, (a1, a2) = plt.subplots(2, 1, figsize=(6.0, 3.6), sharex=True)
+    for ax, err, col, lab in ((a1, plain, AMBER, f"plain rounding: error lobe {lvl_p:.1f} dB"),
+                              (a2, dith, BLUE, f"with a fixed offset per element: {lvl_d:.1f} dB")):
+        ax.axhspan(-L / 2, L / 2, color=SHADE, zorder=0)
+        ax.bar(n + 1, err, color=col, width=0.7, zorder=2)
+        ax.axhline(0, color=GRAY, lw=0.8)
+        ax.set_ylim(-L / 2 * 1.5, L / 2 * 1.9)
+        ax.set_yticks([-L / 2, 0, L / 2])
+        ax.set_yticklabels([f"−{L/2:.1f}°", "0", f"+{L/2:.1f}°"])
+        ax.text(0.5, L / 2 * 1.85, lab, color=col, fontsize=10, fontweight="bold", va="top")
+        for sp in ("top", "right"):
+            ax.spines[sp].set_visible(False)
+    a2.set_xlabel(f"element ({n_el}-element array, {bits} bits, steered to {th0}°)")
+    fig.subplots_adjust(hspace=0.15)
+    save(fig, "L23-dither-error")
+    return round(lvl_p, 1), round(lvl_d, 1)
+
+
+# ------------------------------------------------------- null depth -------
+def null_depth_levels():
+    fig, ax = plt.subplots(figsize=(5.4, 3.6))
+    pred = [(-48, "quantized weights\nalone: −48 dB", NAVY),
+            (-21, "first estimate from\nthe sweep floor: −21 dB", GRAY)]
+    for y, lab, col in pred:
+        ax.plot([0.15, 0.85], [y, y], color=col, lw=3)
+        ax.text(0.5, y + 1.2, lab, ha="center", va="bottom", color=col, fontsize=9.5,
+                fontweight="bold")
+    meas = [((-50, -46), "L24 notch"), ((-41.5, -41.5), "L24 difference null"),
+            ((-39.7, -39.7), "L24 delta null"), ((-31, -17), "L22–L23 sweep floors")]
+    xs = [1.25, 1.55, 1.85, 2.15]
+    for x, ((lo, hi), lab) in zip(xs, meas):
+        if lo == hi:
+            ax.plot([x], [lo], "s", color=RED, ms=7)
+        else:
+            ax.plot([x, x], [lo, hi], color=RED, lw=6, solid_capstyle="butt")
+        ax.text(x + 0.07, (lo + hi) / 2, lab, rotation=90, ha="left", va="center",
+                color=RED, fontsize=9.5)
+    ax.set_xlim(0, 2.45)
+    ax.set_ylim(-55, 0)
+    ax.set_xticks([0.5, 1.7])
+    ax.set_xticklabels(["predicted", "measured, phaser-00"])
+    ax.tick_params(axis="x", length=0)
+    ax.set_ylabel("dB below the uniform peak")
+    ax.grid(axis="y", color=RULE, lw=0.8)
+    for sp in ("top", "right"):
+        ax.spines[sp].set_visible(False)
+    save(fig, "L23-null-depth-levels")
+
+
 if __name__ == "__main__":
     grating_whole_turn()
     visible_window()
     print("squint error per element:", round(squint_ramp(), 2), "deg")
     quant_staircase()
     print("simulated worst lobe by bits:", qsll_vs_bits())
+    ttd_vs_phase()
+    squint_vs_scan()
+    pointing_grid()
+    print("dither, plain and typical draw:", dither_error())
+    null_depth_levels()

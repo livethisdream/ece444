@@ -156,6 +156,11 @@ $$
 - Scan to $\pm 45^\circ$: $d < 0.586\lambda$. To $\pm 60^\circ$: $d < 0.536\lambda$.
 - Any angle: $d < \lambda/2$, the default in every scanning array.
 :::
+:::{present}
+<img src="../../viz/img/L16-grating-limit.svg"
+     alt="Largest grating-lobe-free scan angle against element spacing in wavelengths: the boundary runs from 1.0 wavelength at broadside down to 0.5 wavelength at 90 degrees, with the PHASER at 0.481 inside the safe region and the 45 degree scan limit at 0.586 marked"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 We want no grating lobe anywhere in visible space, for every angle we intend to scan to. The dangerous solution is the one closest to the horizon on the far side of the beam. For a beam steered to positive $\theta_0$, that is $m = 1$ with the minus sign, and pushing it past the horizon requires
 
@@ -166,7 +171,7 @@ d &< \frac{\lambda}{1 + \vert \sin\theta_0 \vert}
 \end{aligned}
 $$
 
-The wider we intend to scan, the closer together the elements must be. Broadside operation tolerates $d < \lambda$. Scanning to $\pm 45^\circ$ demands $d < 0.586\lambda$, and $\pm 60^\circ$ demands $d < 0.536\lambda$. Take the criterion to its limit, $\theta_0 \to 90^\circ$, and you get $d < \lambda/2$ — which is why **half-wavelength spacing is the default in every scanning array**. It is grating-lobe-free at any scan angle we can command.
+The wider we intend to scan, the closer together the elements must be. Broadside operation tolerates $d < \lambda$. Scanning to $\pm 45^\circ$ demands $d < 0.586\lambda$, and $\pm 60^\circ$ demands $d < 0.536\lambda$. Take the criterion to its limit, $\theta_0 \to 90^\circ$, and you get $d < \lambda/2$ — which is why **half-wavelength spacing is the default in every scanning array**. It is grating-lobe-free at any scan angle we can command. The figure, from Lesson 16, draws the criterion as a boundary: any spacing and scan angle below the curve is free of grating lobes, and the PHASER's $0.481\lambda$ sits below it everywhere.
 
 ```{note}
 Grating lobes are not always a defect. Interferometers and sparse radio-astronomy arrays use them on purpose, resolving fine detail with a small number of widely spaced elements and removing the ambiguity by other means. A designer can choose grating lobes; they should never be found after the array is built.
@@ -243,6 +248,12 @@ This is **beam squint**. It does not depend on $N$ or on $d$ — the phase ramp 
 $$\Delta\theta \approx -\delta\ \tan\theta_0 \quad \text{(radians).}$$
 
 The beam moves toward the horizon as the frequency drops, and it moves fastest when the beam is already far off broadside.
+
+<img src="../../viz/img/L23-squint-vs-scan.svg"
+     alt="Squint in degrees against commanded angle from 0 to 70 degrees for signals 500 MHz and 1000 MHz below 10.525 GHz, exact as solid lines and the small-offset form as dashed lines; at 45 degrees the exact squint is 2.9 and 6.4 degrees, and the two forms separate as the angle grows"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+
+The figure plots both forms for signals $500$ and $1000\ \text{MHz}$ below $10.525\ \text{GHz}$. Squint is under a degree near broadside, $2.9^\circ$ and $6.4^\circ$ at $45^\circ$, and $5.4^\circ$ and $13.1^\circ$ at $60^\circ$. The small-offset form tracks the exact one at small angles and falls short at wide scan, by $3.7^\circ$ at $60^\circ$ for the $1000\ \text{MHz}$ offset, so a budget at wide scan should use the exact form.
 ::::
 
 ::::{frame} Worked Example: Squint on the PHASER
@@ -302,8 +313,13 @@ $$
 - A delay matches a path length at every frequency: no squint.
 - Delay is costly, so large arrays delay per subarray and phase-shift inside each one.
 :::
+:::{present}
+<img src="../../viz/img/L23-ttd-vs-phase.svg"
+     alt="Phase lag at the second element for a 45 degree steer against frequency: a true time delay of 33.0 ps gives a straight line through the origin, a phase shifter set at 10.525 GHz gives a flat line at 125.1 degrees, and the two cross only at 10.525 GHz; at 10.025 GHz they differ by 5.9 degrees"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+:::
 
-The cure is to stop steering with phase. If instead of a phase lag you insert a **true time delay** of $\tau_n = n\ d \sin\theta_0 / c$ in each element, the delay compensates the geometric path difference itself, which is a length and not a phase. Every frequency in the band then arrives in phase at the same angle, and the squint is gone at all offsets. True time delay is expensive in analog hardware, which is why large wideband arrays usually compromise: time delay at the level of the **subarray** (a group of elements combined before the rest, as on the PHASER's two four-element halves in <a href="../L17-phased-array-hardware/index.html#frame-the-hybrid-beamformer">Lesson 17</a>) to control the squint across the aperture, phase shifters inside each subarray where the residual path differences are small.
+The cure is to stop steering with phase. If instead of a phase lag you insert a **true time delay** of $\tau_n = n\ d \sin\theta_0 / c$ in each element, the delay compensates the geometric path difference itself, which is a length and not a phase. Every frequency in the band then arrives in phase at the same angle, and the squint is gone at all offsets. True time delay is expensive in analog hardware, which is why large wideband arrays usually compromise: time delay at the level of the **subarray** (a group of elements combined before the rest, as on the PHASER's two four-element halves in <a href="../L17-phased-array-hardware/index.html#frame-the-hybrid-beamformer">Lesson 17</a>) to control the squint across the aperture, phase shifters inside each subarray where the residual path differences are small. The figure shows why for one element of a $45^\circ$ steer: a $33.0\ \text{ps}$ delay produces a phase that grows in step with frequency, while a phase shifter holds its $125.1^\circ$ at every frequency, so the two agree only at $10.525\ \text{GHz}$ and differ by $5.9^\circ$ at $10.025\ \text{GHz}$.
 ::::
 
 ::::{frame} Phase Quantization
@@ -345,6 +361,12 @@ so the step near broadside is
 $$\Delta\theta_0 \approx \frac{\text{LSB}}{360^\circ\ (d/\lambda)}\ \text{rad}.$$
 
 For the PHASER at $10.525\ \text{GHz}$, $d/\lambda = 0.491$, so the step is $2.8125/(360 \times 0.491) = 0.0159\ \text{rad} = 0.91^\circ$ at broadside. Compared with the $13.2^\circ$ beamwidth that is about one-fourteenth of a beam, which is fine. Off broadside the same step in $\sin\theta_0$ spans a wider angle, because $\Delta(\sin\theta_0) = \cos\theta_0\ \Delta\theta_0$. The step therefore grows as $1/\cos\theta_0$, reaching $1.8^\circ$ at $60^\circ$. Drop to $B = 2$ and the same calculation gives $29^\circ$ per step: a 2-bit array can only point at broadside and at about $\pm 31^\circ$.
+
+<img src="../../viz/img/L23-pointing-grid.svg"
+     alt="The beam angles a phase shifter can command on the course array, as ticks from 0 to 90 degrees: 2 bits gives 0 and 30.6 degrees; 3 bits adds 14.7 and 49.7; 4 bits gives eight angles out to 62.9 degrees; 7 bits gives a dense set whose gaps widen toward wide scan"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+
+The figure shows the angles each bit count can reach on the course array. With 3 bits they are $0^\circ$, $14.7^\circ$, $30.6^\circ$ and $49.7^\circ$, equally spaced in $\sin\theta_0$ and so spreading apart in angle as the scan widens. A real controller rounds each element on its own, which fills in the angles between these and brings in the quantization lobes below.
 ::::
 
 ::::{frame} Quantization Sidelobes
@@ -396,6 +418,12 @@ More bits improve two things: finer pointing, which scales as the LSB, and a low
 :::
 
 Dither lowers the peak quantization lobe without new hardware. If the rounding error is the same sawtooth on every beam position, it radiates coherently into one lobe. Adding a small known phase offset per element before rounding breaks the periodicity, which spreads the same total error energy over many angles instead of concentrating it in one.
+
+<img src="../../viz/img/L23-dither-error.svg"
+     alt="Rounding error at each element of a 32-element, 3-bit array steered to 15.8 degrees. Top, plain rounding: the error drifts by about 4 degrees per element and repeats as a sawtooth, radiating an error lobe at minus 16.9 dB. Bottom, with a fixed phase offset per element: the error stays within plus or minus 22.5 degrees but no longer repeats, and the error lobe falls to minus 21.8 dB"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+
+The effect needs a longer aperture than eight elements to see, so the figure uses 32. With plain rounding the error drifts about $4^\circ$ per element and repeats as a sawtooth, and the field it radiates peaks at $-16.9$ dB. With a fixed, known offset built into each element and the command rounded around it, the error stays within the same $\pm 22.5^\circ$ but no longer repeats, and for a typical set of offsets its peak falls to $-21.8$ dB.
 ::::
 
 ::::{frame} Null Depth: Predicted and Measured
@@ -405,6 +433,11 @@ Dither lowers the peak quantization lobe without new hardware. If the rounding e
 - Quantization alone still allows a $-48$ dB null.
 - Our sweep-floor estimate capped measured nulls near $21$ dB.
 - Phaser-00 measured $-40$ to $-50$ dB nulls in L24, but sweep floors from $-17$ to $-31$ dBc.
+:::
+:::{present}
+<img src="../../viz/img/L23-null-depth-levels.svg"
+     alt="Null depths in dB below the uniform peak. Predicted: quantized weights alone, minus 48 dB; the first estimate from the sweep floor, minus 21 dB. Measured on phaser-00: the L24 notch at minus 46 to minus 50 dB, the difference null at minus 41.5 dB, the delta null at minus 39.7 dB, and the L22 to L23 sweep floors from minus 17 to minus 31 dB"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 One thing quantization does *not* set is how deep a null can go. It is tempting to assume that a cancellation is only as good as the phase resolution behind it, but the LSB does not limit the null weights: rounding them to a $2.8125^\circ$ grid with 1% gain steps still produces a notch near $-48$ dB at the angle it was designed for. What rounding does instead is move the notch a fraction of a degree off its commanded angle, which is a pointing effect, not a depth effect.
