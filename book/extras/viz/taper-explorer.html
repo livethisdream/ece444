@@ -21,9 +21,18 @@
   .ctl select { flex:1 1 auto; min-width:120px; font:inherit; font-size:13px; color:var(--navy);
                 padding:3px 6px; border:1px solid var(--edge2); border-radius:4px; background:#fff; }
   .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; font-size:13px; }
+  /* The pedestal slider shows only for the cosine-on-pedestal taper; the
+     rounding box is a fixed-width cell. Both sit in the one control bar. */
+  .ctl.ped { flex:1 1 170px; }
+  .ctl.ped[hidden] { display:none; }
+  .ctl.ped input[type=range] { flex:1 1 auto; min-width:60px; margin:0; accent-color:var(--mid); }
+  .ctl.ped .val { min-width:3.2ch; text-align:right; }
+  .ctl.rnd { flex:0 0 auto; gap:6px; }
+  .ctl.rnd input { margin:0; accent-color:var(--mid); }
+  .ctl.rnd label { cursor:pointer; }
   /* Readouts as a row of instruments: equal-width cells on one grid, labels and
      values on shared baselines, edges flush with the canvases above. */
-  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:4px; padding:7px 8px 8px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
@@ -61,7 +70,17 @@
         <option value="c20">Chebyshev &#8722;20 dB</option>
         <option value="c30" selected>Chebyshev &#8722;30 dB</option>
         <option value="c40">Chebyshev &#8722;40 dB</option>
+        <option value="ped">Cosine on pedestal</option>
       </select>
+    </div>
+    <div class="ctl ped" id="ped-ctl" hidden>
+      <label for="ped">Pedestal \(P\)</label>
+      <input type="range" id="ped" min="0" max="1" step="0.01" value="0.08">
+      <span class="val" id="ped-v">0.08</span>
+    </div>
+    <div class="ctl rnd">
+      <input type="checkbox" id="rnd">
+      <label for="rnd">Round to 1%</label>
     </div>
     <div class="ctl">
       <label>Array</label>
@@ -119,12 +138,21 @@ function hannTaper(){
   const mx=Math.max.apply(null,a);
   return a.map(v=>v/mx);
 }
+function pedestalTaper(P){
+  // P + (1-P) cos^2 on the same N+1 grid: P = 0 is the Hann preset above,
+  // P = 0.08 is Hamming, P = 1 is uniform
+  const a=[];
+  for(let n=0;n<N;n++){ const p=(n+1)/(N+1)-0.5; a.push(P+(1-P)*Math.cos(Math.PI*p)**2); }
+  const mx=Math.max.apply(null,a);
+  return a.map(v=>v/mx);
+}
 const TAPERS={
   uniform:{name:'Uniform',            a:new Array(N).fill(1)},
   hann:   {name:'Hann',               a:hannTaper()},
   c20:    {name:'Chebyshev −20 dB', a:dolph(20)},
   c30:    {name:'Chebyshev −30 dB', a:dolph(30)},
-  c40:    {name:'Chebyshev −40 dB', a:dolph(40)}
+  c40:    {name:'Chebyshev −40 dB', a:dolph(40)},
+  ped:    {name:'Pedestal',           a:pedestalTaper(0.08)}
 };
 const UNIFORM=TAPERS.uniform.a;
 
@@ -177,23 +205,40 @@ function metrics(a){
 /* -------------------------------- drawing --------------------------------- */
 const cvB=document.getElementById('bars'), cB=cvB.getContext('2d');
 const cvP=document.getElementById('pat'),  cP=cvP.getContext('2d');
-let key='c30', MET=metrics(TAPERS.c30.a), UNI=metrics(UNIFORM);
+let key='c30', PED=0.08, ROUND=false, AMP=null, MET=null, UNI=metrics(UNIFORM);
+/* The amplitudes actually applied: the selected taper, then (if asked) each
+   one rounded to the nearest whole percent of full scale -- the PHASER GUI's
+   roughly 1% gain step. Pattern, bars and readouts all use this one set.    */
+function update(){
+  if(key==='ped') TAPERS.ped.a=pedestalTaper(PED);
+  const a=TAPERS[key].a;
+  AMP=ROUND ? a.map(v=>Math.round(v*100)/100) : a.slice();
+  MET=metrics(AMP);
+}
+const isUniform=()=>AMP.every(v=>Math.abs(v-1)<1e-9);
+const tapName=()=>(key==='ped' ? 'Pedestal P = '+PED.toFixed(2) : TAPERS[key].name)+(ROUND?', rounded':'');
+update();
 
 function drawBars(){
   const dpr=window.devicePixelRatio||1, w=cvB.width/dpr, h=cvB.height/dpr;
   cB.clearRect(0,0,w,h);
-  const a=TAPERS[key].a;
+  const a=AMP;
   const mL=44, mR=14, mT=42, mB=26, pw=w-mL-mR, ph=h-mT-mB;
   const bw=Math.min(pw/N*0.56, 46);
   const xc=n=>mL+pw*(n+0.5)/N, yb=v=>mT+ph*(1-v);
 
-  stext(cB, TAPERS[key].name+' — element gains entered in the GUI', mL, 13, 12, cssv('--navy'),'left',true);
+  // the long title only where it fits; a phone gets the taper name alone
+  const t1=tapName(), t2=t1+' — element gains entered in the GUI';
+  cB.font='700 12px '+SANS;
+  stext(cB, cB.measureText(t2).width<=w-mL-6 ? t2 : t1, mL, 13, 12, cssv('--navy'),'left',true);
 
   cB.strokeStyle=cssv('--edge'); cB.lineWidth=1;
+  // a short (phone) box has no room for five 10.5px labels: label every other line
+  const lab=ph/4>=14 ? 0.25 : 0.5;
   for(const v of [0,0.25,0.5,0.75,1]){
     const y=yb(v);
     cB.beginPath(); cB.moveTo(mL,y); cB.lineTo(mL+pw,y); cB.stroke();
-    stext(cB,(v*100)+'%', mL-8, y, 10.5, cssv('--ink3'),'right',false);
+    if(Math.abs(v/lab-Math.round(v/lab))<1e-9) stext(cB,(v*100)+'%', mL-8, y, 10.5, cssv('--ink3'),'right',false);
   }
   for(let n=0;n<N;n++){
     const pct=a[n]*100, x=xc(n), y=yb(a[n]);
@@ -221,9 +266,10 @@ function drawPattern(){
   }
 
   cP.strokeStyle=cssv('--edge'); cP.lineWidth=1;
+  const labStep=(ph/6>=14) ? 10 : 20;
   for(let d=0;d>=FLOOR;d-=10){ const y=yp(d);
     cP.beginPath(); cP.moveTo(mL,y); cP.lineTo(mL+pw,y); cP.stroke();
-    stext(cP,d.toString(), mL-8, y, 10.5, cssv('--ink3'),'right',false); }
+    if(d%labStep===0) stext(cP,(d<0?'−':'')+Math.abs(d), mL-8, y, 10.5, cssv('--ink3'),'right',false); }
   cP.strokeStyle=cssv('--edge2');
   for(let d=-90;d<=90;d+=30){ const x=xp(d);
     cP.beginPath(); cP.moveTo(x,mT); cP.lineTo(x,mT+ph); cP.stroke();
@@ -231,12 +277,22 @@ function drawPattern(){
   cP.strokeStyle=cssv('--edge'); cP.strokeRect(mL,mT,pw,ph);
 
   // the uniform pattern, always in view as the thing every taper is traded against
-  if(key!=='uniform'){
+  const uni=isUniform();
+  if(!uni){
     cP.strokeStyle='rgba(91,101,115,0.55)'; cP.lineWidth=1.4; cP.setLineDash([4,3]);
     cP.beginPath();
     for(let i=0;i<M;i++){ const x=xp(degOf(i)), y=yp(Math.max(UNI.db[i],FLOOR)); i?cP.lineTo(x,y):cP.moveTo(x,y); }
     cP.stroke(); cP.setLineDash([]);
-    stext(cP,'uniform, for reference', mL+pw-4, mT+12, 11, cssv('--ink3'),'right',false);
+    // a backing card so the label stays legible where the dashed lobes cross
+    // it; on a narrow plot the long form would run into the main lobe, so the
+    // longest form that clears 15 degrees (the main lobe at that height) is used
+    cP.font='11px '+SANS;
+    const ul=['uniform, for reference','uniform (dashed)','uniform'].find(t=>mL+pw-4-cP.measureText(t).width>=xp(15));
+    if(ul){
+      const lw=cP.measureText(ul).width;
+      cP.fillStyle='rgba(255,255,255,0.88)'; cP.fillRect(mL+pw-lw-7, mT+5, lw+6, 14);
+      stext(cP,ul, mL+pw-4, mT+12, 11, cssv('--ink3'),'right',false);
+    }
   }
 
   // the sidelobe level this taper actually delivers
@@ -263,8 +319,11 @@ function drawPattern(){
 
   stext(cP, (m.hp===null?'wider than the visible region':m.hp.toFixed(1)+'° wide at half power'),
         mL, mT-26, 12, cssv('--grn'),'left',true);
-  if(key!=='uniform') stext(cP, 'uniform is 13.3° wide with a −12.8 dB first sidelobe',
-        mL, mT-11, 11, cssv('--ink3'),'left',false);
+  if(!uni){
+    const u1='uniform is 13.3° wide with a −12.8 dB first sidelobe', u2='uniform: 13.3° wide, −12.8 dB sidelobe';
+    cP.font='11px '+SANS;
+    stext(cP, cP.measureText(u1).width<=w-mL-6 ? u1 : u2, mL, mT-11, 11, cssv('--ink3'),'left',false);
+  }
 
   stext(cP,'angle from broadside (deg)', mL+pw/2, mT+ph+28, 11.5, cssv('--ink3'),'center',false);
   cP.save(); cP.translate(14, mT+ph/2); cP.rotate(-Math.PI/2);
@@ -305,7 +364,11 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; 
 window.addEventListener('resize', fit);
 
 const sel=document.getElementById('tap');
-sel.addEventListener('change',()=>{ key=sel.value; MET=metrics(TAPERS[key].a); drawAll(); });
+const pedCtl=document.getElementById('ped-ctl'), ped=document.getElementById('ped'),
+      pedV=document.getElementById('ped-v'), rnd=document.getElementById('rnd');
+sel.addEventListener('change',()=>{ key=sel.value; pedCtl.hidden=(key!=='ped'); update(); drawAll(); });
+ped.addEventListener('input',()=>{ PED=Number(ped.value); pedV.textContent=PED.toFixed(2); update(); drawAll(); });
+rnd.addEventListener('change',()=>{ ROUND=rnd.checked; update(); drawAll(); });
 
 fit();
 MJ.setRedraw(()=>drawAll());
