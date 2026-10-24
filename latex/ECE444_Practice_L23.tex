@@ -175,12 +175,12 @@ $c = 3\times10^8\ \m/\text{s}$.
 		\eq{ \sin\theta &= \frac{10.25}{10.50}(0.7071) = 0.9762(0.7071) = 0.6903 }
 		\eq{ \theta = \arcsin(0.6903) = 43.6\mydeg }
 		The total walk from one band edge to the other is
-		\eq{ 46.5\mydeg - 43.6\mydeg = 2.9\mydeg }
+		\eq{ 46.45\mydeg - 43.65\mydeg = 2.80\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		walk = \ansbox[1.4in]{$2.9\mydeg$}
+		walk = \ansbox[1.4in]{$2.8\mydeg$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -192,7 +192,7 @@ $c = 3\times10^8\ \m/\text{s}$.
 		At $10.25\ \ghz$, $\lambda = 29.3\ \text{mm}$ and $Nd = 112\ \text{mm}$:
 		\eq{ \theta_\text{HP} &= \frac{0.886(29.3)}{112\cosp{45\mydeg}}
 		     = \frac{25.9}{79.2} = 0.327\ \text{rad} = 18.8\mydeg }
-		\eq{ \frac{2.9\mydeg}{18.8\mydeg} = 0.15 }
+		\eq{ \frac{2.8\mydeg}{18.8\mydeg} = 0.15 }
 		The beam walks about 15\% of a beamwidth, which loses a few tenths of a decibel at
 		the aimpoint and is usually acceptable for a narrowband link. Holding it under 2\%
 		is a factor of seven, and no phase setting achieves it because the fractional bandwidth
@@ -265,7 +265,8 @@ $10.525\ \ghz$, where $\lambda = 28.5\ \text{mm}$ and $d/\lambda = 0.491$.
 		below it, so in both cases the ordinary sidelobe structure of the uniform
 		illumination dominates. Quantization only takes over below about two bits, where the
 		rule predicts $-12\ \db$ and the array's own sidelobes are no longer the largest
-		feature.
+		feature. The hardware disagrees at three bits: phaser-00 measured a $-12$ dBc
+		quantization lobe there, level with the $-13\ \db$ sidelobes.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -275,9 +276,9 @@ $10.525\ \ghz$, where $\lambda = 28.5\ \text{mm}$ and $d/\lambda = 0.491$.
 	\end{minipage}
 
 	\part A classmate argues that because the phase shifter resolves only $2.8125\mydeg$, a
-	pattern null on the PHASER can never go deeper than the $21\ \text{dB}$ a sweep
-	shows. Explain in two or three sentences why that reasoning is wrong, and state what
-	does set the measured depth.
+	pattern null on the PHASER can never go much deeper than $20\ \text{dB}$. Explain in two
+	or three sentences why that reasoning is wrong, and state what does set the measured
+	depth.
 		\begin{solution}[1.5in]
 		Rounding the null weights onto the $2.8125\mydeg$ phase grid, with gain steps of about
 		1\%, still produces a notch near $-48\ \text{dB}$ at the angle the weights were
@@ -285,10 +286,10 @@ $10.525\ \ghz$, where $\lambda = 28.5\ \text{mm}$ and $d/\lambda = 0.491$.
 		commanded angle rather than filling it in, so it is a pointing error and not a depth
 		limit.
 
-		What caps the measurement is the receiver. The beam sweep's noise floor sits about
-		$23\ \db$ below the uniform-taper peak, and the null weights reduce the main-lobe
-		gain by about $2\ \db$, leaving about $21\ \db$ of usable dynamic range. The
-		pattern goes deeper than that; the sweep cannot follow it down.
+		What sets the measured depth is the floor of the sweep and the bench around the kit.
+		On phaser-00 the L24 notch measured $-46$ to $-50$ dB, close to the prediction,
+		while the same kit's L22--L23 sweeps read floors from $-17$ to $-31$ dBc, so
+		the depth you see depends on the room as much as on the weights.
 		\end{solution}
 
 \end{parts}
@@ -360,7 +361,7 @@ on a $14\ \text{mm}$ pitch unless stated otherwise.
 		\eq{ -6B < -25 \quad \Rightarrow \quad B > 4.2 \quad \Rightarrow \quad B = 5 }
 		The ADAR1000's seven bits clear this with margin. The bandwidth requirement drives
 		beam squint: the band is 4.9\% wide, so at $50\mydeg$ the beam walks roughly
-		$(0.024)\tanp{50\mydeg} = 0.029\ \text{rad} = 1.6\mydeg$ either side of center. That
+		$(0.024)\tanp{50\mydeg} = 0.029\ \text{rad} = 1.7\mydeg$ either side of center. That
 		is a small fraction of the beamwidth here, so phase steering is adequate; a wider
 		band or a wider scan would force true time delay.
 		\end{solution}
