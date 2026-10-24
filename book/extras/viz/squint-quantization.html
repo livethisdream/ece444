@@ -25,6 +25,9 @@
   /* Readouts as a row of instruments: equal-width cells on one grid, labels and
      values on shared baselines, edges flush with the canvases above. */
   .readouts { display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); }
+  /* Below 330px two 148px cells no longer fit, the grid falls to one column,
+     and four stacked readouts push the widget past the phone budget. */
+  @media (max-width:329px) { .readouts { grid-template-columns:1fr 1fr; gap:6px; } .ro { padding:6px 4px 7px; } }
   .ro { display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
         gap:4px; padding:7px 8px 8px; min-width:0;
         border:1px solid var(--edge2); border-radius:6px; background:#eef4fa; }
@@ -50,7 +53,7 @@
 <div class="app">
   <div class="canvases">
     <canvas id="pat" aria-label="Array factor in decibels against angle from broadside for the eight-element course array, showing grating lobes, beam squint or phase-quantization sidelobes depending on the selected mode"></canvas>
-    <canvas id="aux" aria-label="Companion panel showing the element layout or the commanded element phases that produce the pattern above"></canvas>
+    <canvas id="aux" aria-label="The eight element contributions added head to tail at two angles marked on the pattern: the length of each chain is the level at that angle, which shows why a grating lobe is full height, why squint moves the beam, and why rounding makes a lobe"></canvas>
   </div>
 
   <div class="controls">
@@ -84,6 +87,12 @@
       <input type="range" id="bits" min="2" max="7" step="1" value="2">
       <span class="val" id="bits-val">2</span>
     </div>
+
+    <div class="ctl" id="c-steer" style="display:none">
+      <label>Steer to</label>
+      <input type="range" id="steer" min="0" max="60" step="1" value="15">
+      <span class="val" id="steer-val">15°</span>
+    </div>
   </div>
 
   <div class="readouts" id="readouts"></div>
@@ -111,9 +120,9 @@ const sgn=x=>(x>=0?'+':'−')+Math.abs(x).toFixed(1);
 const PITCH=14e-3, NEL=8;
 const F_DESIGN=10.3e9;                 // array design center, lambda = 29.1 mm
 const F0=10.525e9;                     // HB100 source, phases are set here
-const TH0_SQ=45, TH0_Q=15;
+const TH0_SQ=45;
 
-const state={ mode:'grating', dmm:14, foff:-500, bits:2 };
+const state={ mode:'grating', dmm:14, foff:-500, bits:2, th0q:15 };
 
 function model(){
   if(state.mode==='grating'){
@@ -130,12 +139,12 @@ function model(){
       el.push({x:x, a:-k0*x*s0}); ref.push({x:x, a:-k0*x*s0}); }
     return { lam:lam, el:el, ref:{lam:lam0, el:ref}, th0:TH0_SQ, f:f };
   }
-  const lam=C/F0, k=2*Math.PI/lam, s0=Math.sin(TH0_Q/DEG);
+  const lam=C/F0, k=2*Math.PI/lam, s0=Math.sin(state.th0q/DEG);
   const lsb=2*Math.PI/Math.pow(2,state.bits);
   const el=[], ref=[];
   for(let i=0;i<NEL;i++){ const x=i*PITCH, a=-k*x*s0;
     el.push({x:x, a:Math.round(a/lsb)*lsb}); ref.push({x:x, a:a}); }
-  return { lam:lam, el:el, ref:{lam:lam, el:ref}, th0:TH0_Q, f:F0 };
+  return { lam:lam, el:el, ref:{lam:lam, el:ref}, th0:state.th0q, f:F0 };
 }
 
 const M=3601;                                   // 0.05 deg steps over +-90
@@ -210,8 +219,8 @@ function metrics(m){
     const lsbDeg=360/Math.pow(2,state.bits);
     out.lsb=lsbDeg;
     out.rule=-6*state.bits;
-    out.step=lsbDeg/(360*(PITCH/m.lam))*DEG;    // pointing grid at broadside
-    out.perr=out.pk.x-TH0_Q;
+    out.step=lsbDeg/(360*(PITCH/m.lam))*DEG/Math.cos(state.th0q/DEG); // pointing grid at the steer angle
+    out.perr=out.pk.x-state.th0q;
     let worst=null;
     for(const p of localMax(norm))
       if(Math.abs(p.x-out.pk.x)>15 && (worst===null||p.y>worst.y)) worst=p;
@@ -224,13 +233,38 @@ function metrics(m){
 const cvP=document.getElementById('pat'), cP=cvP.getContext('2d');
 const cvA=document.getElementById('aux'), cA=cvA.getContext('2d');
 
+/* Each header comes longest first; the first that fits the frame is drawn.
+   The quantization header used to run off the right edge of a 340px canvas. */
 function header(m,x){
   if(state.mode==='grating')
-    return state.dmm+' mm spacing, '+m.el.length+' elements on, '+
-           (m.f/1e9).toFixed(1)+' GHz';
+    return [state.dmm+' mm spacing, '+m.el.length+' elements on, '+(m.f/1e9).toFixed(1)+' GHz',
+            state.dmm+' mm, '+m.el.length+' elements, '+(m.f/1e9).toFixed(1)+' GHz'];
   if(state.mode==='squint')
-    return 'phases set for 45° at 10.525 GHz, signal at '+(m.f/1e9).toFixed(3)+' GHz';
-  return state.bits+'-bit phase shifter, 8 elements steered to 15°, 10.525 GHz';
+    return ['phases set for 45° at 10.525 GHz, signal at '+(m.f/1e9).toFixed(3)+' GHz',
+            'set for 45° at 10.525 GHz, signal '+(m.f/1e9).toFixed(3)+' GHz',
+            'signal at '+(m.f/1e9).toFixed(3)+' GHz'];
+  return [state.bits+'-bit phase shifter, 8 elements steered to '+state.th0q+'°, 10.525 GHz',
+          state.bits+'-bit phase shifter, steered to '+state.th0q+'°',
+          state.bits+' bits, steered to '+state.th0q+'°'];
+}
+function fitText(ctx, cands, maxW, px, bold){
+  ctx.font=(bold?'700 ':'')+px+'px '+SANS;
+  for(const c of cands) if(ctx.measureText(c).width<=maxW) return c;
+  return cands[cands.length-1];
+}
+
+/* The two angles the phasor panel examines, shared with the pattern markers. */
+function lookAngles(m,x){
+  if(state.mode==='grating'){
+    const g=x.pred.filter(v=>v>0);
+    if(g.length) return [{th:0, role:'main beam'}, {th:g[0], role:'grating lobe'}];
+    let best=null;
+    for(const p of localMax(x.norm)) if(p.x>3 && (best===null||p.y>best.y)) best=p;
+    return [{th:0, role:'main beam'}, {th:best?best.x:30, role:'sidelobe'}];
+  }
+  if(state.mode==='squint')
+    return [{th:TH0_SQ, role:'commanded'}, {th:x.pk.x, role:'beam peak'}];
+  return [{th:x.pk.x, role:'main beam'}, {th:x.worst?x.worst.x:-50, role:'worst lobe'}];
 }
 
 function drawPattern(m,x){
@@ -239,7 +273,7 @@ function drawPattern(m,x){
   const mL=46, mR=12, mT=42, mB=34, pw=w-mL-mR, ph=h-mT-mB;
   const xp=d=>mL+(d+90)/180*pw, yp=v=>mT+(v/FLOOR)*ph;
 
-  stext(cP, header(m,x), mL, 14, 12, cssv('--navy'), 'left', true);
+  stext(cP, fitText(cP, header(m,x), pw, 12, true), mL, 14, 12, cssv('--navy'), 'left', true);
 
   cP.strokeStyle=cssv('--edge'); cP.lineWidth=1;
   for(let d=0;d>=FLOOR;d-=10){ const y=yp(d);
@@ -295,152 +329,101 @@ function drawPattern(m,x){
     col=(x.worst && x.worst.y>-11)? cssv('--red') : cssv('--amber');
   }
   stext(cP, note, mL, mT-13, 12, col, 'left', true);
-  if(x.refNorm)
-    stext(cP,'dashed = the ideal pattern', mL+pw, mT-13, 11, cssv('--ink3'),'right',false);
+  /* The legend shares the note's line; draw it only where the two cannot touch. */
+  if(x.refNorm){
+    cP.font='700 12px '+SANS; const nw=cP.measureText(note).width;
+    cP.font='11px '+SANS; const lg='dashed = the ideal pattern', lw=cP.measureText(lg).width;
+    if(nw+lw+16<=pw) stext(cP,lg, mL+pw, mT-13, 11, cssv('--ink3'),'right',false);
+  }
+
+  // the two angles the phasor panel adds up, marked on the trace
+  lookAngles(m,x).forEach((L,j)=>{
+    const i=Math.round((L.th+90)*(M-1)/180);
+    if(i<0||i>=M) return;
+    const px=xp(L.th), py=yp(Math.max(x.norm[i],FLOOR));
+    cP.beginPath(); cP.arc(px,py,5,0,2*Math.PI);
+    cP.fillStyle=j?cssv('--amber'):cssv('--navy'); cP.fill();
+    cP.strokeStyle='#fff'; cP.lineWidth=1.5; cP.stroke();
+    /* A grating lobe already carries its predicted angle in amber at the top;
+       the number would sit on that label, so it is left off there. */
+    const labeled=state.mode==='grating' && x.pred.some(g=>Math.abs(g-L.th)<3);
+    if(!labeled)
+      stext(cP,String(j+1), px+(j?10:-10), py+(py<mT+14?8:-8), 11, j?cssv('--amber'):cssv('--navy'), j?'left':'right', true);
+  });
 
   stext(cP,'angle from broadside (deg)', mL+pw/2, mT+ph+27, 11.5, cssv('--ink3'),'center',false);
   cP.save(); cP.translate(13, mT+ph/2); cP.rotate(-Math.PI/2);
   stext(cP,'relative power (dB)', 0, 0, 11.5, cssv('--ink3'),'center',false); cP.restore();
 }
 
-/* -------------------------------------------------------------- aux panel */
+/* ------------------------------------------------------ phasor (why) panel */
+/* The pattern says how much; this panel says why.  At each of two angles it
+   adds the eight element contributions head to tail, exactly the sum the
+   pattern evaluates.  Every arrow is one element, and the chain's length is
+   the level at that angle.  A grating lobe is a chain lined up again because
+   every element is a whole number of turns behind its neighbor; squint is a
+   chain curled by a straight phase ramp at the commanded angle and straight
+   again a few degrees away; a quantization lobe is a chain the repeating
+   rounding error has partly lined up. */
 function drawAux(m,x){
   const dpr=window.devicePixelRatio||1, w=cvA.width/dpr, h=cvA.height/dpr;
   cA.clearRect(0,0,w,h);
-  if(state.mode==='grating') drawRow(m,x,w,h);
-  else if(state.mode==='squint') drawErr(m,x,w,h);
-  else drawPhases(m,x,w,h);
+  stext(cA, fitText(cA, ['element phasors, added head to tail', 'element phasors, summed'], w-24, 12, true),
+        12, 14, 12, cssv('--navy'), 'left', true);
+  const L=lookAngles(m,x), gap=10, top=28, subW=(w-24-gap)/2;
+  L.forEach((look,j)=>drawChain(m, look, j, 12+j*(subW+gap), top, subW, h-top-8));
 }
 
-function drawRow(m,x,w,h){
-  const mL=46, mR=16, pw=w-mL-mR, y=h*0.56;
-  stext(cA,'which elements are fed', mL, 16, 12, cssv('--navy'),'left',true);
-  const span=7*PITCH;                                  // full 98 mm aperture
-  const xp=xm=>mL+(xm/span)*pw;
-  cA.strokeStyle=cssv('--edge2'); cA.lineWidth=1.4;
-  cA.beginPath(); cA.moveTo(xp(0),y); cA.lineTo(xp(span),y); cA.stroke();
-  const on=new Set(m.el.map(e=>Math.round(e.x/PITCH)));
-  for(let i=0;i<NEL;i++){
-    const px=xp(i*PITCH), live=on.has(i);
-    cA.beginPath(); cA.rect(px-7,y-9,14,18);
-    cA.fillStyle=live?cssv('--navy'):'#fff';
-    cA.strokeStyle=live?cssv('--navy'):cssv('--edge2'); cA.lineWidth=1.4;
-    cA.fill(); cA.stroke();
-    stext(cA,String(i+1), px, y+24, 10.5, live?cssv('--navy'):cssv('--ink3'),'center',live);
-  }
-  // spacing dimension between the first two fed elements
-  const a=xp(0), b=xp(state.dmm*1e-3), dy=y-30;
-  cA.strokeStyle=cssv('--amber'); cA.lineWidth=1.5;
-  cA.beginPath(); cA.moveTo(a,dy); cA.lineTo(b,dy); cA.stroke();
-  for(const [px,s] of [[a,1],[b,-1]]){
-    cA.beginPath(); cA.moveTo(px,dy); cA.lineTo(px+s*6,dy-4); cA.lineTo(px+s*6,dy+4);
-    cA.closePath(); cA.fillStyle=cssv('--amber'); cA.fill();
-  }
-  /* This sits 12px above the spacing bracket, which rides up into the panel
-     title once the canvas is short. The element-spacing control below the
-     canvas carries the same number, so drop it rather than overprint. */
-  if (dy - 12 > 32)
-    stext(cA, state.dmm+' mm = '+x.dlam.toFixed(3)+' wavelengths', (a+b)/2, dy-12, 11.5, cssv('--amber'),'center',true);
-  stext(cA,'aperture '+(state.dmm*(m.el.length-1))+' mm', w-16, 16, 11.5, cssv('--ink3'),'right',false);
-}
+function drawChain(m, look, j, X, Y, W, H){
+  const col=j?cssv('--amber'):cssv('--navy');
+  cA.strokeStyle=cssv('--edge'); cA.lineWidth=1; cA.strokeRect(X,Y,W,H);
 
-function drawErr(m,x,w,h){
-  /* Leftover phase error: what the elements are set to, minus what this
-     frequency now needs.  It stays a straight ramp, so the beam just moves. */
-  const mL=52, mR=118, mT=26, mB=26, pw=w-mL-mR, ph=h-mT-mB;
-  const k=2*Math.PI/m.lam, k0=2*Math.PI/(C/F0), s0=Math.sin(TH0_SQ/DEG);
-  const LIM=90;
-  const xp=i=>mL+(i/(NEL-1))*pw, yp=v=>mT+ph/2-(v/LIM)*(ph/2);
+  // the chain, in units of one element's contribution
+  const k=2*Math.PI/m.lam, sn=Math.sin(look.th/DEG), N=m.el.length;
+  let re=0, im=0; const pts=[[0,0]];
+  for(const e of m.el){ const ph=k*e.x*sn+e.a; re+=Math.cos(ph); im+=Math.sin(ph); pts.push([re,im]); }
+  const mag=Math.hypot(re,im), rot=mag>1e-6? -Math.atan2(im,re) : -Math.atan2(pts[1][1],pts[1][0]);
+  const cr=Math.cos(rot), sr=Math.sin(rot);
+  const P=pts.map(([u,v])=>[u*cr-v*sr, u*sr+v*cr]);
 
-  stext(cA,'phase error left over: a straight ramp, so the beam moves',
-        mL, 13, 12, cssv('--navy'),'left',true);
-  cA.strokeStyle=cssv('--edge'); cA.lineWidth=1; cA.strokeRect(mL,mT,pw,ph);
-  cA.strokeStyle=cssv('--edge2'); cA.setLineDash([4,3]);
-  cA.beginPath(); cA.moveTo(mL,yp(0)); cA.lineTo(mL+pw,yp(0)); cA.stroke();
-  cA.setLineDash([]);
+  // fit the chain and the full-length reference (0..N on the axis) in the box
+  let x0=0, x1=N, y0=0, y1=0;
+  for(const [u,v] of P){ x0=Math.min(x0,u); x1=Math.max(x1,u); y0=Math.min(y0,v); y1=Math.max(y1,v); }
+  const head=36, foot=6, aw=W-16, ah=H-head-foot;
+  const sc=Math.min(aw/Math.max(x1-x0,1), ah/Math.max(y1-y0,1.2));
+  const ox=X+8+(aw-(x1-x0)*sc)/2-x0*sc, oy=Y+head+(ah-(y1-y0)*sc)/2+y1*sc;
+  const tx=u=>ox+u*sc, ty=v=>oy-v*sc;
 
-  const err=[];
-  for(let i=0;i<NEL;i++) err.push((k0-k)*i*PITCH*s0*DEG);
-  const col=cssv('--red');
-  cA.strokeStyle=col; cA.lineWidth=1.8; cA.beginPath();
-  for(let i=0;i<NEL;i++){ const px=xp(i), py=yp(Math.max(-LIM,Math.min(LIM,err[i])));
-    i?cA.lineTo(px,py):cA.moveTo(px,py); }
-  cA.stroke();
-  for(let i=0;i<NEL;i++){
-    const px=xp(i), py=yp(Math.max(-LIM,Math.min(LIM,err[i])));
-    cA.strokeStyle='rgba(176,30,36,0.45)'; cA.lineWidth=1.2;
-    cA.beginPath(); cA.moveTo(px,yp(0)); cA.lineTo(px,py); cA.stroke();
-    cA.beginPath(); cA.arc(px,py,3,0,2*Math.PI); cA.fillStyle=col; cA.fill();
-    stext(cA,String(i+1), px, mT+ph+13, 10.5, cssv('--ink3'),'center',false);
-  }
-  stext(cA,'element', mL+pw/2, mT+ph+13, 11, cssv('--ink3'),'center',false);
-  cA.save(); cA.translate(14, mT+ph/2); cA.rotate(-Math.PI/2);
-  stext(cA,'phase error (deg)', 0, 0, 11, cssv('--ink3'),'center',false); cA.restore();
-  for(const v of [LIM,0,-LIM]) stext(cA, (v>0?'+':'')+v+'°', mL-6, yp(v), 10.5, cssv('--ink3'),'right',false);
-  stext(cA,'element 8 is off by', mL+pw+10, mT+12, 11, cssv('--ink3'),'left',false);
-  stext(cA, sgn(err[NEL-1])+'°', mL+pw+10, mT+30, 13, col,'left',true);
-}
+  // the two-line label: which angle, and what the sum comes to
+  const lvl=20*Math.log10(Math.max(mag/N,1e-6));
+  stext(cA, fitText(cA, [String(j+1)+'  '+sgn(look.th)+'°, '+look.role, String(j+1)+'  '+sgn(look.th)+'°'], W-12, 11.5, true),
+        X+6, Y+11, 11.5, col, 'left', true);
+  stext(cA, fitText(cA, [Math.round(100*mag/N)+'% of full length, '+neg(lvl)+' dB', neg(lvl)+' dB'], W-12, 11, false),
+        X+6, Y+26, 11, cssv('--ink3'), 'left', false);
 
-function drawPhases(m,x,w,h){
-  const mL=52, mR=118, mT=26, mB=26, pw=w-mL-mR, ph=h-mT-mB;
-  const lag=e=>-e.a*DEG;
-  const vals=m.el.map(lag).concat(m.ref.el.map(lag));
-  let hi=Math.max(...vals), lo=Math.min(...vals);
-  const pad=Math.max(30,(hi-lo)*0.15); hi+=pad; lo-=pad;
-  const xp=i=>mL+(i/(NEL-1))*pw, yp=v=>mT+ph-((v-lo)/(hi-lo))*ph;
+  // full length: what eight elements in step would give
+  cA.strokeStyle=cssv('--edge2'); cA.lineWidth=1.2; cA.setLineDash([4,3]);
+  cA.beginPath(); cA.moveTo(tx(0),ty(0)); cA.lineTo(tx(N),ty(0)); cA.stroke(); cA.setLineDash([]);
 
-  stext(cA,'commanded phase per element', mL, 13, 12, cssv('--navy'),'left',true);
-  cA.strokeStyle=cssv('--edge'); cA.lineWidth=1; cA.strokeRect(mL,mT,pw,ph);
-  for(let i=0;i<NEL;i++)
-    stext(cA,String(i+1), xp(i), mT+ph+13, 10.5, cssv('--ink3'),'center',false);
+  // one arrow per element
+  const hs=Math.max(3, Math.min(6, sc*0.35));
+  const arrow=(a,b,c,lw)=>{
+    const [ax,ay]=[tx(a[0]),ty(a[1])], [bx,by]=[tx(b[0]),ty(b[1])];
+    const t=Math.atan2(by-ay,bx-ax);
+    cA.strokeStyle=c; cA.fillStyle=c; cA.lineWidth=lw;
+    cA.beginPath(); cA.moveTo(ax,ay); cA.lineTo(bx,by); cA.stroke();
+    cA.beginPath(); cA.moveTo(bx,by);
+    cA.lineTo(bx-hs*Math.cos(t-0.45), by-hs*Math.sin(t-0.45));
+    cA.lineTo(bx-hs*Math.cos(t+0.45), by-hs*Math.sin(t+0.45)); cA.closePath(); cA.fill();
+  };
+  for(let i=0;i<N;i++) arrow(P[i],P[i+1], j?'rgba(138,90,0,0.85)':cssv('--mid'), 1.6);
 
-  // the phase levels the shifter can actually reach, while they are countable
-  if(Math.pow(2,state.bits)<=16){
-    const lsb=360/Math.pow(2,state.bits);
-    cA.strokeStyle='rgba(138,90,0,0.35)'; cA.lineWidth=1; cA.setLineDash([2,3]);
-    for(let v=Math.ceil(lo/lsb)*lsb; v<=hi; v+=lsb){
-      cA.beginPath(); cA.moveTo(mL,yp(v)); cA.lineTo(mL+pw,yp(v)); cA.stroke();
-    }
+  // the resultant, start to end
+  if(mag/N>0.04){
+    cA.strokeStyle='rgba(21,32,43,0.55)'; cA.lineWidth=1.2; cA.setLineDash([2,2]);
+    cA.beginPath(); cA.moveTo(tx(0),ty(0)); cA.lineTo(tx(P[N][0]),ty(P[N][1])); cA.stroke();
     cA.setLineDash([]);
-    stext(cA,'dotted = the phases the shifter has', mL+pw, 13, 11, cssv('--amber'),'right',false);
   }
-
-  cA.strokeStyle=cssv('--navy'); cA.lineWidth=2.2; cA.beginPath();
-  for(let i=0;i<NEL;i++){
-    const x0=(i===0)?xp(0):(xp(i-1)+xp(i))/2, x1=(i===NEL-1)?xp(NEL-1):(xp(i)+xp(i+1))/2;
-    const y=yp(lag(m.el[i]));
-    if(i===0) cA.moveTo(x0,y); else cA.lineTo(x0,y);
-    cA.lineTo(x1,y);
-  }
-  cA.stroke();
-
-  const need=m.ref.el.map(lag);
-  cA.strokeStyle='rgba(91,101,115,0.85)'; cA.lineWidth=1.6; cA.setLineDash([5,4]);
-  cA.beginPath();
-  for(let i=0;i<NEL;i++){ const px=xp(i), py=yp(need[i]);
-    i?cA.lineTo(px,py):cA.moveTo(px,py); }
-  cA.stroke(); cA.setLineDash([]);
-  for(let i=0;i<NEL;i++){
-    cA.beginPath(); cA.arc(xp(i), yp(need[i]), 2.6, 0, 2*Math.PI);
-    cA.fillStyle=cssv('--ink3'); cA.fill();
-  }
-
-  stext(cA,'element', mL+pw/2, mT+ph+13, 11, cssv('--ink3'),'center',false);
-  cA.save(); cA.translate(14, mT+ph/2); cA.rotate(-Math.PI/2);
-  stext(cA,'phase lag (deg)', 0, 0, 11, cssv('--ink3'),'center',false); cA.restore();
-  for(const v of [lo+pad, hi-pad])
-    stext(cA, Math.round(v)+'°', mL-6, yp(v), 10.5, cssv('--ink3'),'right',false);
-
-  const lx=mL+pw+10;
-  stext(cA,'quantized', lx, mT+12, 11, cssv('--navy'),'left',true);
-  stext(cA,'ideal ramp', lx, mT+30, 11, cssv('--ink3'),'left',true);
-  let worst=0;
-  for(let i=0;i<NEL;i++){
-    let e=(lag(m.el[i])-need[i])%360; if(e>180) e-=360; if(e<-180) e+=360;
-    if(Math.abs(e)>Math.abs(worst)) worst=e;
-  }
-  stext(cA,'largest step error', lx, mT+52, 11, cssv('--ink3'),'left',false);
-  stext(cA, sgn(worst)+'°', lx, mT+70, 13, cssv('--amber'),'left',true);
 }
 
 /* --------------------------------------------------------------- readouts */
@@ -453,18 +436,16 @@ function readouts(m,x){
     rows.push([x.pred.length?'warn':'good', 'predicted lobes', x.pred.length
       ? x.pred.map(v=>sgn(v)+'°').join(', ')
       : 'none predicted']);
-    rows.push([x.meas.length?'warn':'good', 'measured lobes', x.meas.length
-      ? x.meas.map(v=>sgn(v)+'°').join(', ')
-      : 'none found']);
+    rows.push(['', 'lobes appear past', (m.lam*1e3).toFixed(1)+' mm']);
     rows.push([x.edge>-6?'bad':'', 'level at horizon', neg(x.edge)+' dB']);
   } else if(state.mode==='squint'){
     rows.push(['','signal', (m.f/1e9).toFixed(3)+' GHz']);
     rows.push([Math.abs(x.pred)>1?'bad':'good', 'predicted squint', sgn(x.pred)+'°']);
-    rows.push(['','measured peak', x.pk.x.toFixed(1)+'°']);
+    rows.push(['', '1° of squint at', '±'+Math.round(F0/1e6*(1/DEG)/Math.tan(TH0_SQ/DEG))+' MHz']);
     rows.push([x.lossAim<-0.5?'warn':'', 'gain lost at 45°', neg(x.lossAim)+' dB']);
   } else {
     rows.push(['','LSB', x.lsb.toFixed(4).replace(/0+$/,'').replace(/\.$/,'')+'°']);
-    rows.push(['','step at broadside', x.step.toFixed(2)+'°']);
+    rows.push(['','pointing step', x.step.toFixed(2)+'°']);
     rows.push(['warn','rule of thumb −6B', '−'+(6*state.bits)+' dB']);
     rows.push([x.worst&&x.worst.y>-11?'bad':'', 'worst sidelobe',
       neg(x.worst?x.worst.y:FLOOR)+' dB']);
@@ -490,9 +471,9 @@ function fit(){
    canvas just gets a shorter design box. Shrinking the design height rather
    than the bitmap keeps text full size and the composition undistorted. */
 var __SQ_MQ = window.matchMedia ? window.matchMedia('(max-width:659px)') : null;
-function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.70) : h; }
+function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.64) : h; }
   const hP=SQ(Math.round(Math.min(Math.max(wP*(wP<460?0.70:0.48),230), 360)));
-  const hA=SQ(Math.round(Math.min(Math.max(wA*(wA<460?0.36:0.22),120), 170)));
+  const hA=SQ(Math.round(Math.min(Math.max(wA*(wA<460?0.70:0.48),230), 360)));
   for(const [cv,ctx,ww,hh] of [[cvP,cP,wP,hP],[cvA,cA,wA,hA]]){
     cv.width=ww*dpr; cv.height=hh*dpr; cv.style.height=hh+'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -507,12 +488,16 @@ function showCtl(){
   document.getElementById('c-grating').style.display = state.mode==='grating'?'':'none';
   document.getElementById('c-squint').style.display  = state.mode==='squint' ?'':'none';
   document.getElementById('c-quant').style.display   = state.mode==='quant'  ?'':'none';
+  document.getElementById('c-steer').style.display   = state.mode==='quant'  ?'':'none';
 }
 modeEl.addEventListener('change',()=>{ state.mode=modeEl.value; showCtl(); drawAll(); });
 dEl.addEventListener('change',()=>{ state.dmm=+dEl.value; drawAll(); });
 fEl.addEventListener('input',()=>{ state.foff=+fEl.value;
   document.getElementById('foff-val').textContent=
     (state.foff<0?'−':'+')+Math.abs(state.foff)+' MHz'; drawAll(); });
+const sEl=document.getElementById('steer');
+sEl.addEventListener('input',()=>{ state.th0q=+sEl.value;
+  document.getElementById('steer-val').textContent=state.th0q+'°'; drawAll(); });
 bEl.addEventListener('input',()=>{ state.bits=+bEl.value;
   document.getElementById('bits-val').textContent=state.bits; drawAll(); });
 

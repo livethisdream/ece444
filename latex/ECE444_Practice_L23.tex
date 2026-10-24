@@ -13,8 +13,8 @@ is required (write \textbf{None} if you did not collaborate).}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \question \textbf{Where the array factor repeats.} The ADALM-PHASER carries 8 patch
-elements on a $14\ \text{mm}$ pitch. In a thinning demonstration only every third element
-is fed, so the fed elements sit $42\ \text{mm}$ apart. Work at the array design center,
+elements on a $14\ \text{mm}$ pitch. A thinning demonstration feeds only every third
+element, so the fed elements sit $42\ \text{mm}$ apart. Work at the array design center,
 $10.3\ \ghz$, where $\lambda = 29.1\ \text{mm}$.
 
 \begin{parts}
@@ -76,7 +76,7 @@ $10.3\ \ghz$, where $\lambda = 29.1\ \text{mm}$.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{Choosing the element spacing.} An X-band linear array is being laid out.
+\question \textbf{Choosing the element spacing.} You are laying out an X-band linear array.
 Use $c = 3\times10^8\ \m/\text{s}$ throughout.
 
 \begin{parts}
@@ -88,8 +88,8 @@ Use $c = 3\times10^8\ \m/\text{s}$ throughout.
 		\eq{ d < \frac{\lambda}{1 + \left|\sin\theta_0\right|} }
 		Taking the scan range to its limit, $\theta_0 \rightarrow 90\mydeg$, gives
 		$d < \lambda/2$. A half-wavelength lattice therefore has no grating lobe at any
-		commandable scan angle, so it is the spacing that removes the question entirely
-		rather than tying the array to one scan sector.
+		commandable scan angle, so it is the spacing that keeps grating lobes out at every
+		scan angle rather than tying the array to one scan sector.
 		\end{solution}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -131,7 +131,7 @@ Use $c = 3\times10^8\ \m/\text{s}$ throughout.
 		What it gives up is aperture. With the element count fixed at 8, tighter spacing
 		means a shorter array, $L = Nd = 112\ \text{mm}$ instead of $160\ \text{mm}$ at
 		$20\ \text{mm}$ pitch, so the beam is wider and the directivity lower. For a fixed
-		element count, wide scan coverage and a narrow beam pull in opposite directions.
+		element count, wide scan coverage and a narrow beam are competing goals.
 		\end{solution}
 
 \end{parts}
@@ -148,8 +148,8 @@ $c = 3\times10^8\ \m/\text{s}$.
 	\part Explain in one or two sentences why a broadside beam does not squint at all.
 		\begin{solution}[1.1in]
 		At broadside the commanded phase ramp is zero, because every element is equidistant
-		from a source on boresight. Squint arises when a fixed phase ramp is interpreted at a
-		different wavenumber, and scaling a ramp of zero still gives zero. The condition
+		from a source on boresight. Squint arises when a signal at a different wavenumber meets
+		a ramp set for $f_0$, and scaling a ramp of zero still gives zero. The condition
 		$\sin\theta = (f_0/f)\sin\theta_0$ returns $\theta = 0$ for any frequency.
 		\end{solution}
 
@@ -175,12 +175,12 @@ $c = 3\times10^8\ \m/\text{s}$.
 		\eq{ \sin\theta &= \frac{10.25}{10.50}(0.7071) = 0.9762(0.7071) = 0.6903 }
 		\eq{ \theta = \arcsin(0.6903) = 43.6\mydeg }
 		The total walk from one band edge to the other is
-		\eq{ 46.5\mydeg - 43.6\mydeg = 2.9\mydeg }
+		\eq{ 46.45\mydeg - 43.65\mydeg = 2.80\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		walk = \ansbox[1.4in]{$2.9\mydeg$}
+		walk = \ansbox[1.4in]{$2.8\mydeg$}
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
@@ -192,11 +192,11 @@ $c = 3\times10^8\ \m/\text{s}$.
 		At $10.25\ \ghz$, $\lambda = 29.3\ \text{mm}$ and $Nd = 112\ \text{mm}$:
 		\eq{ \theta_\text{HP} &= \frac{0.886(29.3)}{112\cosp{45\mydeg}}
 		     = \frac{25.9}{79.2} = 0.327\ \text{rad} = 18.8\mydeg }
-		\eq{ \frac{2.9\mydeg}{18.8\mydeg} = 0.15 }
-		The beam walks about 15\% of a beamwidth, which costs a few tenths of a decibel at
+		\eq{ \frac{2.8\mydeg}{18.8\mydeg} = 0.15 }
+		The beam walks about 15\% of a beamwidth, which loses a few tenths of a decibel at
 		the aimpoint and is usually acceptable for a narrowband link. Holding it under 2\%
-		is a factor of seven, and no phase setting achieves it because the walk is fixed by
-		the fractional bandwidth and $\tanp{\theta_0}$. The fix is to steer with true time
+		is a factor of seven, and no phase setting achieves it because the fractional bandwidth
+		and $\tanp{\theta_0}$ set the walk. The fix is to steer with true time
 		delay instead of phase, at the element or at the subarray level, so that the delay
 		compensates the path difference itself and every frequency in the band points the
 		same way.
@@ -211,7 +211,7 @@ $c = 3\times10^8\ \m/\text{s}$.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\question \textbf{What the phase shifter can actually do.} The ADAR1000 beamformer on the
+\question \textbf{Phase-Shifter Resolution.} The ADAR1000 beamformer on the
 PHASER uses a $B$-bit phase shifter. Work at the HB100 source frequency,
 $10.525\ \ghz$, where $\lambda = 28.5\ \text{mm}$ and $d/\lambda = 0.491$.
 
@@ -265,7 +265,8 @@ $10.525\ \ghz$, where $\lambda = 28.5\ \text{mm}$ and $d/\lambda = 0.491$.
 		below it, so in both cases the ordinary sidelobe structure of the uniform
 		illumination dominates. Quantization only takes over below about two bits, where the
 		rule predicts $-12\ \db$ and the array's own sidelobes are no longer the largest
-		feature.
+		feature. The hardware disagrees at three bits: phaser-00 measured a $-12$ dBc
+		quantization lobe there, level with the $-13\ \db$ sidelobes.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -275,9 +276,9 @@ $10.525\ \ghz$, where $\lambda = 28.5\ \text{mm}$ and $d/\lambda = 0.491$.
 	\end{minipage}
 
 	\part A classmate argues that because the phase shifter resolves only $2.8125\mydeg$, a
-	pattern null on the PHASER can never be driven deeper than the $21\ \text{dB}$ a sweep
-	shows. Explain in two or three sentences why that reasoning is wrong, and state what
-	does set the measured depth.
+	pattern null on the PHASER can never go much deeper than $20\ \text{dB}$. Explain in two
+	or three sentences why that reasoning is wrong, and state what does set the measured
+	depth.
 		\begin{solution}[1.5in]
 		Rounding the null weights onto the $2.8125\mydeg$ phase grid, with gain steps of about
 		1\%, still produces a notch near $-48\ \text{dB}$ at the angle the weights were
@@ -285,10 +286,10 @@ $10.525\ \ghz$, where $\lambda = 28.5\ \text{mm}$ and $d/\lambda = 0.491$.
 		commanded angle rather than filling it in, so it is a pointing error and not a depth
 		limit.
 
-		What caps the measurement is the receiver. The beam sweep's noise floor sits about
-		$23\ \db$ below the uniform-taper peak, and the null weights give up roughly
-		$2\ \db$ of main-lobe gain, leaving about $21\ \db$ of usable dynamic range. The
-		pattern goes deeper than that; the sweep cannot follow it down.
+		What sets the measured depth is the floor of the sweep and the bench around the kit.
+		On phaser-00 the L24 notch measured $-46$ to $-50$ dB, close to the prediction,
+		while the same kit's L22--L23 sweeps read floors from $-17$ to $-31$ dBc, so
+		the depth you see depends on the room as much as on the weights.
 		\end{solution}
 
 \end{parts}
@@ -309,8 +310,8 @@ on a $14\ \text{mm}$ pitch unless stated otherwise.
 		\begin{solution}[1.4in]
 		\eq{ \sin\theta_g = \frac{\lambda}{d} \quad \Rightarrow \quad
 		     d = \frac{\lambda}{\sinp{42\mydeg}} = \frac{28.5}{0.669} = 42.6\ \text{mm} }
-		That is three times the $14\ \text{mm}$ pitch, so every third element was fed and the
-		other five were switched off. Equal peak heights confirm grating lobes rather than
+		That is three times the $14\ \text{mm}$ pitch, so the student fed every third element
+		and switched off the other five. Equal peak heights confirm grating lobes rather than
 		sidelobes.
 		\end{solution}
 	\end{minipage}\hfill%
@@ -320,12 +321,12 @@ on a $14\ \text{mm}$ pitch unless stated otherwise.
 	\end{minipage}
 
 	\begin{minipage}[t]{0.58\linewidth}
-		\part The array is commanded to $+45\mydeg$ with phases set at $10.525\ \ghz$, but
+		\part The student commands the array to $+45\mydeg$ with phases set at $10.525\ \ghz$, but
 		the sweep peaks at $+47.9\mydeg$ with the source running at $10.025\ \ghz$. Name the
 		effect and confirm the measurement.
 		\begin{solution}[1.3in]
-		This is beam squint: the phase ramp was computed at one frequency and the signal
-		arrived at another.
+		This is beam squint: the software computed the phase ramp at one frequency, and
+		the signal arrived at another.
 		\eq{ \sin\theta &= \frac{10.525}{10.025}\sinp{45\mydeg}
 		     = 1.0499(0.7071) = 0.7424 }
 		\eq{ \theta = \arcsin(0.7424) = 47.9\mydeg }
@@ -360,7 +361,7 @@ on a $14\ \text{mm}$ pitch unless stated otherwise.
 		\eq{ -6B < -25 \quad \Rightarrow \quad B > 4.2 \quad \Rightarrow \quad B = 5 }
 		The ADAR1000's seven bits clear this with margin. The bandwidth requirement drives
 		beam squint: the band is 4.9\% wide, so at $50\mydeg$ the beam walks roughly
-		$(0.024)\tanp{50\mydeg} = 0.029\ \text{rad} = 1.6\mydeg$ either side of center. That
+		$(0.024)\tanp{50\mydeg} = 0.029\ \text{rad} = 1.7\mydeg$ either side of center. That
 		is a small fraction of the beamwidth here, so phase steering is adequate; a wider
 		band or a wider scan would force true time delay.
 		\end{solution}
