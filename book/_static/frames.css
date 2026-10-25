@@ -82,12 +82,12 @@ body.pointing .deck { touch-action: none; }
   padding: .45rem .9rem; border-radius: 999px;
   font-size: var(--step--1); font-weight: 600; text-decoration: none;
   color: var(--blue-dark); background: var(--panel);
-  border: 1px solid var(--rule);
+  border: 1px solid var(--card-rule);
 }
 .title-frame .hero-cta .cta:hover {
-  border-color: var(--rule-strong); background: var(--soft);
+  border-color: var(--card-rule); background: var(--soft);
 }
-.title-frame .hero-cta .cta:active { background: var(--soft); border-color: var(--rule-strong); }
+.title-frame .hero-cta .cta:active { background: var(--soft); border-color: var(--card-rule); }
 .title-frame .hero-cta .cta-primary:active { background: var(--blue); border-color: var(--blue); }
 .title-frame .hero-cta .cta:focus-visible {
   outline: 2px solid var(--blue); outline-offset: 2px;
