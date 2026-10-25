@@ -423,8 +423,9 @@ Put the HB100 back at the arc's $-90^\circ$ end and press Lab preset
 **6 Quantization**. It holds the beam at $15^\circ$ with the Blackman taper and
 opens **Signal vs Time** on the Tracking tab. With **Use Bits** checked, set
 **Phase Shift Bits** to 7, then walk the HB100 from $-90^\circ$ to $+90^\circ$
-along the $1.2$ m arc, aimed at the array, in about 20 s: the trace holds about
-23 s, and a slower walk runs off its end. Read the main-lobe peak and the
+along the $1.2$ m arc, aimed at the array, in about 20 s. The trace keeps the
+last 30 s, counted from when the mode starts, so begin walking promptly; a
+slower walk runs off its end. Read the main-lobe peak and the
 strongest lobe outside the main lobe. Repeat at 4, 3, and 2 bits, checking the
 bit count and the box before each walk.
 

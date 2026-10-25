@@ -150,7 +150,7 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L20 | Array Factor and Beamwidth | practice | 18/20, sweeps done (#128) | ready |
 | L20 Lab | Array Factor | **L20 Lab** packet (`68f9454`, 2026-10-22); L20Lab practice set retired | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | ready |
 | L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
-| L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23 | **walk dry run** (needs `install.sh`) |
+| L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23; walk validated 2026-10-25 (sidelobes 11.5 / 14.8 dBc, floor 25–30 dBc) | ready |
 | L22 | Sidelobes and Tapering | practice | cut 20/20; voice, why and illustration sweeps done (#132, #137, #142) | ready |
 | L23 | Beam Squint and Quantization | practice | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20; preset-6 walk validated on phaser-00 2026-10-25 | ready |
@@ -200,12 +200,7 @@ needs its rubric, published with the L28 Lab packet.
      +20° only, against Neil's software interferer, with the expected
      suppression filled in from his first run, and its "No hardware?" note
      updated.
-2. **L21 Lab walk** on a kit updated to phaser #48. The rotation ran on
-   2026-10-23 and confirmed scan loss (−0.9 dB at 33°), the sidelobe
-   asymmetry (3.4 dB) and the first null (14.9°); it is now one pass read
-   from the beam sweep. Still owed: the Signal vs Time walk, its Tracking
-   update rate on a 10 s walk, and the floor with the beam held.
-3. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
+2. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
    with a measured lookup table (amplitude goes as (%/100)^0.68 today, the
    ADAR1000 register response; Neil, 2026-10-23: fix it in software, not in
    the labs); preset 8 loads uniform and resets Beam 1
@@ -224,9 +219,9 @@ needs its rubric, published with the L28 Lab packet.
    elements fully on or off; whether each channel's phase moves with its
    gain setting; whether recalibrating with the source exactly at boresight
    removes the +1–2° offset.
-4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
+3. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
-5. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
+4. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
    taught in class, then the L28–L31 Labs as the final project's scaffolding,
    each packet built to start from the lab before it, plus the report rubric.
 
