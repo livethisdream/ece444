@@ -155,7 +155,7 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L23 | Beam Squint and Quantization | practice | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20 | **hardware run of the preset-6 quantization walk** |
 | L24 | Null Steering | practice | cut 20/20 (#148), voice, why and illustration sweeps (#149) | ready |
-| L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | Procedure C and Table C numbers from Neil's first interferer run; hardware run |
+| L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | Procedure C and Table C from the 2026-10-25 bench run (needs phaser #55 on every kit); hardware run of the packet |
 
 **Module 4: radar (L25–L31) and the final project.** Placeholder pages. They
 need the FMCW mode in the Phaser app (Neil is building it, with the lab
@@ -208,11 +208,12 @@ needs its rubric, published with the L28 Lab packet.
 3. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
    with a measured lookup table (amplitude goes as (%/100)^0.68 today, the
    ADAR1000 register response; Neil, 2026-10-23: fix it in software, not in
-   the labs); inject a simulated interferer into the real receive samples
-   for L24 Procedure C (Neil's); preset 8 loads uniform and resets Beam 1
+   the labs); preset 8 loads uniform and resets Beam 1
    Phase; Signal BW and Rx Gain survive Calibrate, Find HB100 and the Rect
-   preset; restart the sweep after Find HB100; check the simulator's MVDR,
-   which also nulls the target at ±20°. The 3- and 4-bit lobes in the old
+   preset; restart the sweep after Find HB100. Phaser #55 (2026-10-25 bench
+   run): MVDR output on Manual's scale (the "lost target" was 6 dB of
+   scaling), interferer and MVDR settings survive Calibrate, interferer
+   readout follows HB100 drift. The 3- and 4-bit lobes in the old
    quantization sweep sit above even the worst-case simulation of rounding
    the steering ramp, and Angle shifted +8.4° at 4 bits and below: does the
    kit also round its calibration offsets? Open from the dry run: why array
