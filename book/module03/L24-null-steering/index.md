@@ -119,7 +119,11 @@ $$
 \end{aligned}
 $$
 
-whose $n$-th entry is $v_n(\theta) = e^{jnkd\sin\theta}$. The steering vector is not a property of the array's settings. It is a property of the direction, and it says how a wave from that direction is spread in phase across the aperture.
+<img src="../../viz/img/L18-path-difference.svg"
+     alt="A plane wave arriving at angle theta from broadside on a row of elements spaced d apart: the wavefront reaches each element an extra path d sin theta later than its neighbor"
+     style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
+
+The figure is the one <a href="../L18-beam-steering/index.html#frame-path-time-and-phase">Lesson 18</a> used for the same extra path. Each element's entry in the steering vector is that path converted to phase, so the $n$-th entry is $v_n(\theta) = e^{jnkd\sin\theta}$. The steering vector is not a property of the array's settings. It is a property of the direction, and it says how a wave from that direction is spread in phase across the aperture.
 
 The beamformer forms one number from the eight element signals by weighting and summing them, so the array's response to a wave from $\theta$ is the dot product
 
@@ -170,6 +174,11 @@ $$
 \end{aligned}
 $$
 :::
+:::{present}
+<img src="../../viz/img/L24-projection.svg"
+     alt="Schematic of the weight vectors. Left, interferer on a sidelobe with a projection of 0.22: w_d is nearly perpendicular to w_n, the removed part r_n w_n is short, and w stays close to w_d, keeping 0.95 of the look-direction response. Right, interferer near the main lobe with a projection of 0.82: w_d leans toward w_n, most of it is removed, and the look direction keeps 0.33"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 Here is the problem stated exactly. We have the beam-steering weights $\mathbf{w}_\text{d} = \mathbf{v}^{*}(\theta_0)$, and we want a new weight vector $\mathbf{w}$ that satisfies two conditions at once:
 
@@ -177,6 +186,8 @@ Here is the problem stated exactly. We have the beam-steering weights $\mathbf{w
 2. $\mathbf{w}$ stays as close to $\mathbf{w}_\text{d}$ as possible, so the main beam does not move and does not lose more gain than it must.
 
 The first condition is one complex equation in eight complex unknowns, so there are many solutions. The second condition picks one, and it picks a change along $\mathbf{w}_\text{n}$, the beam aimed at the interferer. Split any change $\Delta\mathbf{w} = \mathbf{w} - \mathbf{w}_\text{d}$ into a part along $\mathbf{w}_\text{n}$ and a part $\mathbf{u}$ orthogonal to it, $\mathbf{w}_\text{n}^{H}\mathbf{u} = 0$. Since $\mathbf{v}(\theta_1) = \mathbf{w}_\text{n}^{*}$, the orthogonal part contributes $\mathbf{u}^{T}\mathbf{v}(\theta_1) = \mathbf{w}_\text{n}^{H}\mathbf{u} = 0$ at the interferer. It does nothing toward the null and only lengthens the change, so the smallest change that places the null is a multiple of $\mathbf{w}_\text{n}$ alone.
+
+The figure draws that geometry as if the eight complex weights were two-dimensional arrows; it is a schematic, not to scale. Removing the part of $\mathbf{w}_\text{d}$ that lies along $\mathbf{w}_\text{n}$ leaves $\mathbf{w}$ at right angles to $\mathbf{w}_\text{n}$, which is the null. When the interferer sits on a sidelobe, $\mathbf{w}_\text{d}$ and $\mathbf{w}_\text{n}$ are nearly perpendicular and little is removed. When it sits near the main lobe, they nearly line up, and removing the shared part removes most of the beam with it. The cosine of the angle between them is $\vert r_\text{n}\vert$, and the look direction keeps $1 - \vert r_\text{n}\vert^2$ of its response.
 
 **Build the beam that points at the interferer.** Define the second steering weight vector exactly as we defined the first, but aimed at $\theta_1$:
 
@@ -207,6 +218,11 @@ $$
 
 - One division gives an exact null, with no iteration.
 :::
+:::{present}
+<img src="../../viz/img/L24-cancel-phasors.svg"
+     alt="Phasors at the interferer angle of 22.5 degrees. The desired beam's eight unit phasors turn 67.6 degrees per element and wind around to end at 1.80 at 56.8 degrees. The subtracted beam's eight phasors, each 0.225 long, lie in a straight line and end at the same point, so the difference is zero"
+     style="max-width: 420px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 We substitute the trial weights into the response at the interferer. The superscript $H$ is the **conjugate transpose**: $\mathbf{a}^{H}\mathbf{b} = \sum_n a_n^{*} b_n$. Because $\mathbf{w}_\text{n} = \mathbf{v}^{*}(\theta_1)$, the steering vector at the interferer is $\mathbf{v}(\theta_1) = \mathbf{w}_\text{n}^{*}$, and every product with it becomes a conjugate-transpose product:
 
@@ -228,7 +244,9 @@ r_\text{n} &= \frac{\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d}}{\mathbf{w}_\text
 \end{aligned}
 $$
 
-Substituting this $r_\text{n}$ into the second line makes its two terms equal, so the response at $\theta_1$ is zero. The null is exact, not approximate, and it takes one division, with no iteration and no optimizer.
+Substituting this $r_\text{n}$ into the second line makes its two terms equal, so the response at $\theta_1$ is zero.
+
+The figure shows the two terms as phasor chains at $\theta_1 = 22.5^\circ$. The desired beam's eight unit phasors each turn $\psi_1 = 67.6^\circ$ from the last, so they wind around and end at $N r_\text{n}$, a point $1.80$ from the origin. The subtracted beam was built to cancel that turning, so all eight of its phasors point the same way; scaled by $r_\text{n}$, each is $0.225$ long and they reach the same point in a straight line. The null is the difference between two chains that end at the same place. The null is exact, not approximate, and it takes one division, with no iteration and no optimizer.
 ::::
 
 ::::{frame} The Projection Coefficient
@@ -270,8 +288,13 @@ $$
 - Amplitudes stay within $1 \pm \vert r_\text{n}\vert$; phases move a few degrees.
 - A null is a small change to the original beam.
 :::
+:::{present}
+<img src="../../viz/img/L24-weight-circle.svg"
+     alt="The eight weights for a null at 22.5 degrees plotted in the complex plane on a circle of radius 0.225 about 1. Elements 1 and 8, 2 and 7, 3 and 6, 4 and 5 are mirror images across the real axis. A line from the origin to element 3 shows its phase of plus 13.0 degrees"
+     style="max-width: 520px; width: 100%; display: block; margin: 0 auto;">
+:::
 
-Geometrically, each element weight is the number 1 minus a phasor of length $\vert r_\text{n}\vert$ that rotates by $kd\sin\theta_1$ from element to element. The eight weight tips lie on a circle of radius $\vert r_\text{n}\vert$ centered on the original weight, so the amplitudes spread between $1 - \vert r_\text{n}\vert$ and $1 + \vert r_\text{n}\vert$ and the phases vary a few degrees either side of the ramp. A null is a small, structured perturbation of the original beam.
+Geometrically, each element weight is the number 1 minus a phasor of length $\vert r_\text{n}\vert$ that rotates by $kd\sin\theta_1$ from element to element. The eight weight tips lie on a circle of radius $\vert r_\text{n}\vert$ centered on the original weight, so the amplitudes spread between $1 - \vert r_\text{n}\vert$ and $1 + \vert r_\text{n}\vert$ and the phases vary a few degrees either side of the ramp. A null is a small, structured perturbation of the original beam. The figure plots the eight weights of the $22.5^\circ$ example. Each one's gain is its distance from the origin and its phase is the angle of the line from the origin, which is why the phases stay within $13^\circ$. Elements mirrored about the array center land at mirror points across the real axis, the conjugate pairs that make the gains symmetric and the phases antisymmetric.
 ::::
 
 ::::{frame} Worked Example: Null at +22.5°
@@ -281,7 +304,7 @@ $$
 \psi_1 &= kd\sin\theta_1 = 3.085\ \sin 22.5^\circ \\
 &= 67.6^\circ \\
 r_\text{n} &= \frac{1}{8}\sum_{n=0}^{7} e^{jn(67.6^\circ)} \\
-&= 0.225\ \angle\ 56.7^\circ
+&= 0.225\ \angle\ 56.8^\circ
 \end{aligned}
 $$
 
@@ -307,7 +330,7 @@ $$
 $$
 \begin{aligned}
 r_\text{n} &= \frac{1}{8}\sum_{n=0}^{7} e^{jn(67.6^\circ)} \\
-&= 0.225\ \angle\ 56.7^\circ \\
+&= 0.225\ \angle\ 56.8^\circ \\
 20\log_{10}(0.225) &= -13.0\ \text{dB} .
 \end{aligned}
 $$
@@ -386,7 +409,7 @@ The widget below applies the weight-subtraction rule to the course array and dra
 
 ::::{frame} Main-Lobe Loss Versus Null Angle
 :::{present}
-<img src="../../viz/img/L24-cost-vs-angle.svg" alt="Main-lobe loss versus null angle for the 8-element array" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L24-cost-vs-angle.svg" alt="Main-lobe loss versus null angle for the 8-element array, split into the subtraction term, which climbs steeply toward the main lobe, the rescaling term, which turns negative inside about 6 degrees, and their total, 2.0 dB at plus 22.5 degrees" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
 - The loss grows from 2.0 dB at $22.5^\circ$ to 2.9 dB at $10^\circ$ and 8.2 dB at $5^\circ$.
@@ -424,8 +447,13 @@ $$
 \end{aligned}
 $$
 
-- The ADAR1000's steps allow a null about 48 dB below the uniform peak.
-- A 3-bit phase shifter allows only about 22 dB.
+- One-step errors allow a null about 48 dB down.
+- Three bits allow only about 22 dB.
+:::
+:::{present}
+<img src="../../viz/img/L24-error-phasors.svg"
+     alt="The eight weight errors as phasors at the null angle, referred to the array center. Left, rounding this table: the errors come in mirror pairs whose sums lie on the real axis, so the total stays real. Right, independent channel errors of one step: the eight phasors point in random directions and walk to a point near a dashed circle of radius root N times epsilon"
+     style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 The weights above are exact real numbers, and the ADAR1000 accepts neither. Each element's phase lands on a $2.8125^\circ$ grid and each gain on a 1 % grid, so each weight carries a small error $\delta w_n$. If those errors are independent, at the null angle they add in RMS rather than coherently, and the residual response relative to the beam peak is
@@ -438,11 +466,11 @@ $$
 \end{aligned}
 $$
 
-Each piece of that estimate has a mechanism. Rounding to the nearest step leaves an error spread evenly between $-\text{LSB}/2$ and $+\text{LSB}/2$, and a uniform spread of width LSB has an RMS value of $\text{LSB}/\sqrt{12}$. A small phase error $\delta\phi$ moves a weight of magnitude near 1 by about $\delta\phi$, so the phase and gain errors both count as fractions of a unit weight and add in quadrature to $\epsilon_\text{rms}$. At the null the exact weights sum to zero, so the response is the sum of the eight errors alone, each turned by its own steering-vector phase. Independent errors add in power, not in voltage, so their sum has an RMS size of $\sqrt{N}\ \epsilon_\text{rms}$, and dividing by the beam peak $N$ gives $\epsilon_\text{rms}/\sqrt{N}$.
+The figure draws the eight errors at the null, each turned by its own steering-vector phase. Each piece of that estimate has a mechanism. Rounding to the nearest step leaves an error spread evenly between $-\text{LSB}/2$ and $+\text{LSB}/2$, and a uniform spread of width LSB has an RMS value of $\text{LSB}/\sqrt{12}$. A small phase error $\delta\phi$ moves a weight of magnitude near 1 by about $\delta\phi$, so the phase and gain errors both count as fractions of a unit weight and add in quadrature to $\epsilon_\text{rms}$. At the null the exact weights sum to zero, so the response is the sum of the eight errors alone, each turned by its own steering-vector phase. Independent errors add in power, not in voltage, so their sum has an RMS size of $\sqrt{N}\ \epsilon_\text{rms}$, and dividing by the beam peak $N$ gives $\epsilon_\text{rms}/\sqrt{N}$.
 
 With $\text{LSB} = 2.8125^\circ = 0.0491$ rad and 1 % gain steps, $\epsilon_\text{rms} = 0.0145$, and the residual sits 46 dB below the nulled beam's peak, which is 48 dB below the uniform peak. That is the same $-6B$ scale as the quantization sidelobes of <a href="../L23-beam-squint-quantization/index.html#frame-quantization-sidelobes">Lesson 23</a>, a few decibels deeper because the error is spread over eight elements. Halve the bits and the floor rises fast: a 3-bit phase shifter cannot hold a null deeper than about 22 dB.
 
-Rounding this particular table does less damage than the estimate. Rounding keeps the gains symmetric and the phases antisymmetric (the mirror pairs of <a href="#frame-the-phaser-settings">The PHASER Settings</a>), so each pair sums to a real number, the pattern referred to the array center stays real and still passes through zero, and the null only moves a quarter of a degree, to $+22.3^\circ$. What fills a null on the bench is error that does not share that symmetry: each channel's own calibration residue in gain and phase. The estimate is the depth those errors allow when they are about one step in size, and $-48$ dB below the uniform peak is the number to quote.
+Rounding this particular table does less damage than the estimate, as the left half of the figure shows. Rounding keeps the gains symmetric and the phases antisymmetric (the mirror pairs of <a href="#frame-the-phaser-settings">The PHASER Settings</a>), so each pair sums to a real number, the pattern referred to the array center stays real and still passes through zero, and the null only moves a quarter of a degree, to $+22.3^\circ$. What fills a null on the bench is error that does not share that symmetry: each channel's own calibration residue in gain and phase. The estimate is the depth those errors allow when they are about one step in size, and $-48$ dB below the uniform peak is the number to quote.
 ::::
 
 ::::{frame} Measured Null Depth

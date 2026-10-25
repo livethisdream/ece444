@@ -4,9 +4,19 @@
   - L24-jammer-sidelobe   : uniform N=8 pattern, target at broadside, jammer
                             arriving through the first sidelobe at +22.5 deg
   - L24-pattern-null      : uniform (thin) vs null-steered (bold), notch marked
-  - L24-cost-vs-angle     : |r| and main-lobe loss vs null angle
+  - L24-cost-vs-angle     : main-lobe loss vs null angle, split into the
+                            subtraction and rescaling terms
   - L24-quant-depth       : exact vs ADAR1000-rounded weights, the RMS fill
                             estimate, and the depth phaser-00 measured
+  - L24-cancel-phasors    : why the null is exact: the desired beam's phasors
+                            at theta_1 end at N r_n, and r_n w_n reaches the
+                            same point in a straight line
+  - L24-projection        : why the rule is the smallest change, and why a
+                            null near the beam removes most of it (schematic)
+  - L24-weight-circle     : the eight weights on a circle about 1, mirror
+                            pairs conjugate
+  - L24-error-phasors     : why rounding moves the null but independent
+                            channel errors fill it to sqrt(N) eps
 
 Array is the PHASER's: N = 8, d = 14 mm, 10.525 GHz -> d/lambda = 0.491.
 The figures carry no equations (house rule); numbers and short words only.
@@ -144,31 +154,42 @@ def pattern_null() -> None:
 
 
 # ------------------------------------------------------------------ figure 3
-def cost_vs_angle() -> None:
-    """Loss in the look direction (broadside) as the null is walked in."""
-    def look_loss(a: float) -> float:
-        w, _ = null_weights(a)
-        ws = w / np.abs(w).max()
-        return -20 * np.log10(resp_at(ws, 0.0) / PK)
+def loss_terms(a: float):
+    """Subtraction loss, rescaling loss, and total at the look direction (dB)."""
+    w, r = null_weights(a)
+    sub = -20 * np.log10(1 - abs(r) ** 2)
+    resc = 20 * np.log10(np.abs(w).max())
+    return sub, resc, sub + resc
 
-    ang = np.concatenate([np.linspace(-60, -5, 400), np.linspace(5, 60, 400)])
-    loss = [look_loss(a) for a in ang]
-    fig, ax = plt.subplots(figsize=(8.4, 4.0))
-    ax.plot(ang[:400], loss[:400], color=NAVY, lw=2.3)
-    ax.plot(ang[400:], loss[400:], color=NAVY, lw=2.3)
+
+def cost_vs_angle() -> None:
+    """Loss in the look direction (broadside) as the null is walked in, by term."""
+    halves = (np.linspace(-60, -5, 400), np.linspace(5, 60, 400))
+    fig, ax = plt.subplots(figsize=(5.2, 3.2))
+    ax.axvspan(-6.6, 6.6, color=RED, alpha=0.10, lw=0)
+    ax.axhline(0, color="#8a929c", lw=0.9)
+    for k, (col, lw, lab) in enumerate(((ORANGE, 1.8, "subtraction"),
+                                         (GRAY, 1.8, "rescaling"),
+                                         (NAVY, 2.6, "total"))):
+        for h, half in enumerate(halves):
+            ax.plot(half, [loss_terms(a)[k] for a in half], color=col, lw=lw,
+                    ls=(0, (5, 3)) if k == 1 else "-", label=lab if h else None)
     ax.set_xlim(-60, 60)
-    ax.set_ylim(0, 9)
-    ax.set_xticks(range(-60, 61, 15))
+    ax.set_ylim(-3, 11)
+    ax.set_xticks(range(-60, 61, 30))
     ax.set_xlabel("null angle (deg from broadside)")
-    ax.set_ylabel("loss at the look direction (dB)")
+    ax.set_ylabel("look-direction loss (dB)")
     ax.grid(color=RULE, linewidth=0.8)
-    ax.axvspan(-6.6, 6.6, color=RED, alpha=0.10)
-    ax.text(0, 8.1, "half-power beam", ha="center", color=RED, fontsize=12)
-    for a, dx, txt in ((22.5, 2, "+22.5 deg\n2.0 dB"), (14.7, -14, "first null\nfree"),
-                       (45, 2, "45 deg\n0.8 dB")):
-        y = look_loss(a)
-        ax.plot([a], [y], "o", color=ORANGE, ms=7)
-        ax.annotate(txt, xy=(a, y), xytext=(a + dx, y + 0.8), color=ORANGE, fontsize=11.5)
+    ax.text(0, -2.7, "half-power beam", ha="center", va="bottom", rotation=90,
+            color=RED, fontsize=11.5)
+    tot = loss_terms(22.5)[2]
+    ax.annotate(f"{tot:.1f} dB at\n+22.5 deg", xy=(22.5, tot), xytext=(30, tot + 3.0),
+                arrowprops=dict(arrowstyle="->", color=NAVY, lw=1.3), color=NAVY, fontsize=12)
+    resc5 = loss_terms(5.0)[1]
+    ax.annotate("rescaling\nraises the beam", xy=(5.2, resc5), xytext=(16, -2.7),
+                arrowprops=dict(arrowstyle="->", color=GRAY, lw=1.3), color=GRAY, fontsize=11.5,
+                va="bottom")
+    ax.legend(loc="upper left", fontsize=11.5, bbox_to_anchor=(0.0, 1.0))
     finalize(fig, "L24-cost-vs-angle")
 
 
@@ -201,12 +222,178 @@ def quant_depth() -> None:
     finalize(fig, "L24-quant-depth")
 
 
+# ------------------------------------------------------------------ figure 5
+def _plane(ax, lim):
+    ax.set_aspect("equal")
+    ax.axhline(0, color="#8a929c", lw=0.8)
+    ax.axvline(0, color="#8a929c", lw=0.8)
+    ax.set_xticks([]); ax.set_yticks([])
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    ax.set_xlim(*lim[0]); ax.set_ylim(*lim[1])
+
+
+def _chain(ax, steps, color, lw=2.0, start=0j):
+    z = start
+    for st in steps:
+        ax.annotate("", xy=(z.real + st.real, z.imag + st.imag), xytext=(z.real, z.imag),
+                    arrowprops=dict(arrowstyle="-|>", color=color, lw=lw, mutation_scale=11,
+                                    shrinkA=0, shrinkB=0))
+        z += st
+    return z
+
+
+def cancel_phasors() -> None:
+    """At theta_1: w_d's unit phasors fan out and end at N r_n; r_n w_n's are aligned."""
+    psi = KD * np.sin(np.deg2rad(22.5))
+    _, r = null_weights(22.5)
+    unit = np.exp(1j * NIDX * psi)                  # w_d,n v_n(theta_1), w_d = 1
+    aligned = np.full(N, r)                          # r_n w_n,n v_n(theta_1) = r_n
+    end = unit.sum()
+    assert abs(end - N * r) < 1e-9 and abs(aligned.sum() - N * r) < 1e-9
+    pts = np.concatenate([[0], np.cumsum(unit)])
+    x0, x1 = pts.real.min() - 0.2, pts.real.max() + 0.2
+    y0, y1 = pts.imag.min() - 0.2, pts.imag.max() + 0.2
+    fig, ax = plt.subplots(figsize=(6.0, 3.6))
+    _plane(ax, ((x0, x1 + 2.5), (y0, y1)))           # label column to the right of the chains
+    _chain(ax, unit, NAVY, 2.0)
+    _chain(ax, aligned, ORANGE, 2.6)
+    ax.plot([end.real], [end.imag], "o", color=RED, ms=8, zorder=5)
+    tx = x1 + 0.15
+    ax.text(tx, y1 - 0.05, "beam: eight unit phasors,\n" f"each turned {np.degrees(psi):.1f} deg",
+            color=NAVY, fontsize=12, va="top")
+    ax.text(tx, (y0 + y1) / 2 + 0.1, "subtracted: eight phasors\n" f"of {abs(r):.3f}, all in line",
+            color=ORANGE, fontsize=12, va="center")
+    ax.text(tx, y0 + 0.1, "both end at " f"{abs(end):.2f}\n"
+            f"at {np.degrees(np.angle(end)):.1f} deg", color=RED, fontsize=12, va="bottom")
+    finalize(fig, "L24-cancel-phasors")
+
+
+# ------------------------------------------------------------------ figure 6
+def projection() -> None:
+    """Schematic: w_d, the w_n direction, the removed part r_n w_n, and w."""
+    fig, axes = plt.subplots(1, 2, figsize=(5.3, 2.75))
+    for ax, ang, title in ((axes[0], 22.5, "on a sidelobe"),
+                           (axes[1], 5.0, "near the main lobe")):
+        _, r = null_weights(ang)
+        c = abs(r)                                    # cos of the angle between w_d and w_n
+        phi = np.arccos(c)
+        wd = np.exp(1j * phi)                         # unit w_d, w_n along the real axis
+        proj = c + 0j                                 # r_n w_n, normalized
+        w = wd - proj                                 # perpendicular to w_n
+        _plane(ax, ((-0.25, 1.35), (-0.25, 1.2)))
+        ax.axhline(0, color="white", lw=2)            # hide the axis under w_n
+        ax.annotate("", xy=(1.25, 0), xytext=(0, 0),
+                    arrowprops=dict(arrowstyle="-|>", color=GRAY, lw=1.4, ls="--"))
+        for vec, col, lw in ((wd, NAVY, 2.6), (proj, ORANGE, 2.8)):
+            ax.annotate("", xy=(vec.real, vec.imag), xytext=(0, 0),
+                        arrowprops=dict(arrowstyle="-|>", color=col, lw=lw, mutation_scale=14))
+        ax.annotate("", xy=(wd.real, wd.imag), xytext=(proj.real, proj.imag),
+                    arrowprops=dict(arrowstyle="-|>", color=GREEN, lw=2.6, mutation_scale=14))
+        s = 0.06                                      # right-angle mark at proj
+        ax.plot([c - s, c - s, c], [0, s, s], color=GREEN, lw=1.0)
+        ax.text(1.27, -0.09, r"$\mathbf{w}_\mathrm{n}$", color=GRAY, fontsize=20, ha="right", va="top")
+        ax.text(wd.real * 0.5 - 0.06, wd.imag * 0.5 + 0.03, r"$\mathbf{w}_\mathrm{d}$",
+                color=NAVY, fontsize=20, ha="right")
+        ax.text(proj.real * 0.5, -0.06, r"$r_\mathrm{n}\mathbf{w}_\mathrm{n}$", color=ORANGE,
+                fontsize=20, ha="center", va="top")
+        ax.text(c + 0.05, wd.imag * 0.5, r"$\mathbf{w}$", color=GREEN, fontsize=20, va="center")
+        ax.set_title(f"{title}\nprojection {c:.2f}, keeps {1 - c**2:.2f}",
+                     fontsize=11.5, color=INK)
+    finalize(fig, "L24-projection")
+
+
+# ------------------------------------------------------------------ figure 7
+def weight_circle() -> None:
+    """The eight weights w_n = 1 - r_n e^{-jn psi_1} on a circle about 1."""
+    w, r = null_weights(22.5)
+    fig, ax = plt.subplots(figsize=(5.0, 3.7))
+    th = np.linspace(0, 2 * np.pi, 400)
+    R = abs(r)
+    ax.plot(1 + R * np.cos(th), R * np.sin(th), color=RULE, lw=1.6)
+    ax.plot([1], [0], "+", color=GRAY, ms=10)
+    ax.text(1.0, -0.035, "center 1", color=GRAY, fontsize=11.5, ha="center", va="top")
+    for n in range(N // 2):                          # mirror pairs n, N-1-n
+        a, b = w[n], w[N - 1 - n]
+        assert abs(a - np.conj(b)) < 1e-12
+        ax.plot([a.real, b.real], [a.imag, b.imag], color=ORANGE, lw=1.0, ls=(0, (3, 3)))
+    k = 2                                             # element 3, the largest phase
+    ax.plot([0, w[k].real * 1.08], [0, w[k].imag * 1.08], color=GRAY, lw=0.9)
+    ax.plot(w.real, w.imag, "o", color=NAVY, ms=9, zorder=5)
+    for n in range(N):
+        d = w[n] - 1
+        off = d / abs(d) * 0.055
+        ax.text(w[n].real + off.real, w[n].imag + off.imag, str(n + 1), color=NAVY,
+                fontsize=12.5, ha="center", va="center", fontweight="bold")
+    ax.text(0.03, -0.03, "phase of element 3:\n" f"{np.degrees(np.angle(w[k])):+.1f} deg",
+            color=GRAY, fontsize=11.5, va="top")
+    ax.set_aspect("equal")
+    ax.set_xlim(0, 1.32)
+    ax.set_ylim(-0.32, 0.32)
+    ax.axhline(0, color="#8a929c", lw=0.8)
+    ax.set_xlabel("real part")
+    ax.set_ylabel("imaginary part")
+    ax.grid(color=RULE, linewidth=0.6)
+    ax.text(1.31, -0.30, "mirror pairs:\nconjugates", color=ORANGE, fontsize=11.5,
+            ha="right", va="bottom")
+    finalize(fig, "L24-weight-circle")
+
+
+# ------------------------------------------------------------------ figure 8
+def error_phasors() -> None:
+    """Left: rounding errors come in conjugate pairs. Right: independent errors random-walk."""
+    w, _ = null_weights(22.5)
+    ws = w / np.abs(w).max()
+    wq = quantize(w)
+    psi = KD * np.sin(np.deg2rad(22.5))
+    centre = np.exp(1j * (NIDX - (N - 1) / 2) * psi)  # phase referred to the array center
+    err_round = (wq - ws) * centre
+    lsb = np.deg2rad(2.8125)
+    eps = np.hypot(lsb / np.sqrt(12), 0.01 / np.sqrt(12))
+    rr = np.sqrt(N) * eps
+    for seed in range(200):                          # a walk that ends near its RMS distance
+        rng = np.random.default_rng(seed)
+        ph = rng.uniform(-lsb / 2, lsb / 2, N)
+        am = rng.uniform(-0.005, 0.005, N)
+        wr = (np.abs(ws) + am) * np.exp(1j * (np.angle(ws) + ph))
+        err_rand = (wr - ws) * centre
+        if abs(abs(err_rand.sum()) - rr) < 0.1 * rr:
+            break
+    fig, axes = plt.subplots(1, 2, figsize=(5.4, 2.55))
+    for ax, err, title, lim in ((axes[0], err_round, "rounding this table (2x zoom):\npairs sum onto the real axis", 0.035),
+                                (axes[1], err_rand, "independent channel errors:\na random walk", 0.07)):
+        reach = max(np.abs(np.cumsum(err).imag).max(), rr if ax is axes[1] else 0) + 0.15 * lim
+        ylim = max(0.68 * lim, reach)                 # fit the walk and the circle, not a guess
+        _plane(ax, ((-lim, lim), (-ylim, ylim)))
+        z = 0j
+        for n, e in enumerate(err):
+            col = (NAVY, BLUE, GREEN, ORANGE)[min(n, N - 1 - n)]
+            ax.annotate("", xy=(z.real + e.real, z.imag + e.imag), xytext=(z.real, z.imag),
+                        arrowprops=dict(arrowstyle="-|>", color=col, lw=1.8, mutation_scale=10,
+                                        shrinkA=0, shrinkB=0))
+            z += e
+        ax.plot([z.real], [z.imag], "o", color=RED, ms=7, zorder=5)
+        ax.set_title(title, fontsize=11.5, color=INK)
+        if ax is axes[1]:
+            t = np.linspace(0, 2 * np.pi, 300)
+            ax.plot(rr * np.cos(t), rr * np.sin(t), color=RED, lw=1.0, ls=(0, (4, 3)))
+            ax.text(lim - 0.002, ylim - 0.002, "circle: √N × ε", color=RED,
+                    fontsize=11, ha="right", va="top")      # top-right corner, outside the circle
+        else:
+            assert abs(z.imag) < 1e-12
+    finalize(fig, "L24-error-phasors")
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     jammer_sidelobe()
     pattern_null()
     cost_vs_angle()
     quant_depth()
+    cancel_phasors()
+    projection()
+    weight_circle()
+    error_phasors()
 
 
 if __name__ == "__main__":
