@@ -511,7 +511,7 @@ that depends on the angle between them.
         width="100%" height="464"
         style="border: 1px solid #cddce9; border-radius: 6px;"
         loading="lazy"
-        title="A direction-finding fix: drag two to four kits around a keep-out circle with a hidden source, and watch the least-squares fix, its error ellipse, and each bearing's residual">
+        title="A direction-finding fix: drag two to four kits around a keep-out circle, or along a firing line, with a hidden source, and watch the least-squares fix, its error ellipse, and each bearing's residual">
 </iframe>
 
 - A shallow crossing stretches the error region as $1/\sin\gamma$: $0.20\ \text{m}$ at $90^\circ$, $0.76\ \text{m}$ at $15^\circ$.
@@ -584,6 +584,14 @@ $R_i\tan\sigma_\beta$ and turn red: the residuals show that a bearing is bad,
 but with three lines they rise and fall together and cannot say which. A
 fourth kit separates them, and only A's residual stands out. That is the check
 in "Residuals and Outliers" below.
+
+Set **Layout** to **firing line** to see the L19 Lab's range: a $3\ \text{m}$
+tape with five station marks $0.75\ \text{m}$ apart, every kit facing straight
+downrange, and the source hidden in the box field $1$ to $2\ \text{m}$ out.
+Kits snap to the marks. The fix-error readout now splits into depth and
+cross-range. Put two kits on the inner marks, then move them to the ends: the
+ellipse shortens downrange and the depth error falls as $1/B$, the result
+derived in "Choosing Where to Measure" below.
 ::::
 
 ::::{frame} Choosing Where to Measure
