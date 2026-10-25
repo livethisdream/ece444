@@ -155,7 +155,7 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L23 | Beam Squint and Quantization | practice | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20; preset-6 walk validated on phaser-00 2026-10-25 | ready |
 | L24 | Null Steering | practice | cut 20/20 (#148), voice, why and illustration sweeps (#149) | ready |
-| L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | Procedure C and Table C from the 2026-10-25 bench run (needs phaser #55 on every kit); hardware run of the packet |
+| L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | all four procedures run on phaser-00 2026-10-25 (A, B, D angles and loss validated; nulls room-limited to about −22 dB in a cramped space) | ready |
 
 **Module 4: radar (L25–L31) and the final project.** Placeholder pages. They
 need the FMCW mode in the Phaser app (Neil is building it, with the lab
@@ -208,7 +208,11 @@ needs its rubric, published with the L28 Lab packet.
    preset; restart the sweep after Find HB100. Phaser #55 (2026-10-25 bench
    run): MVDR output on Manual's scale (the "lost target" was 6 dB of
    scaling), interferer and MVDR settings survive Calibrate, interferer
-   readout follows HB100 drift. The 3- and 4-bit lobes in the old
+   readout follows HB100 drift. From the 2026-10-25 L24 run: preset 8
+   resets Beam 1 Phase but not the taper; the error function jumps around
+   boresight; and every null (notch, difference, delta) bottomed at −34 to
+   −36 dBFS with the HB100 tone still in it, most likely room reflections
+   in a cramped space, but worth ruling out leakage on an open bench. The 3- and 4-bit lobes in the old
    quantization sweep sit above even the worst-case simulation of rounding
    the steering ramp, and Angle shifted +8.4° at 4 bits and below: does the
    kit also round its calibration offsets? Evidence (2026-10-25, phaser-00):
