@@ -299,7 +299,7 @@ and the reference for the other two runs.
 :::{present}
 10. Open **Lab Presets**, press **7 Antenna Pattern**, and set **Steer Angle (deg)** to $0$.
 11. Lift the HB100 off its tripod and stand on the $-90^\circ$ mark, aimed at the array.
-12. Walk the arc to $+90^\circ$ in about $10\ \text{s}$, keeping the radius and the aim.
+12. Walk the arc to $+90^\circ$ in about $20\ \text{s}$, keeping the radius and the aim.
 13. Read the main-lobe peak and both first sidelobes off the trace and record them in Table C.
 14. Repeat twice more, then return the HB100 to its tripod at boresight.
 :::
@@ -308,8 +308,10 @@ Preset 7 sets **Mode**, in the Beam Steering section, to **Signal vs Time**: the
 beam holds at the Steer Angle, which takes effect as you change it, with no
 Apply, and the Tracking tab plots the peak level in dBFS against time over the
 last $30\ \text{s}$. The plot's title shows the held angle and the update rate;
-check that it reads "Beam held at 0.0°" before you walk. Practice the walk once before you record: too fast and the pattern crowds
-into one part of the plot, too slow and it runs off the edge. Read each lobe's
+check that it reads "Beam held at 0.0°" before you walk. The 30 s counts from
+when the mode starts, so begin walking promptly. Practice the walk once before
+you record: too fast and each lobe gets only a few updates, too slow and the
+pattern runs off the edge. Read each lobe's
 peak by hovering over the trace. The three walks will not agree exactly, and
 that disagreement is a measurement in its own right: Part 3 compares it with the
 rotation's.

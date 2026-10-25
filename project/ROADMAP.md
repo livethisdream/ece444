@@ -203,8 +203,11 @@ needs its rubric, published with the L28 Lab packet.
 2. **L21 Lab walk** on a kit updated to phaser #48. The rotation ran on
    2026-10-23 and confirmed scan loss (−0.9 dB at 33°), the sidelobe
    asymmetry (3.4 dB) and the first null (14.9°); it is now one pass read
-   from the beam sweep. Still owed: the Signal vs Time walk, its Tracking
-   update rate on a 10 s walk, and the floor with the beam held.
+   from the beam sweep. The 2026-10-25 preset-6 walk (L22–L23 step h)
+   validated Signal vs Time with the beam held, a 20 s walk, and the floor
+   (−17 to −19 dBc); the L21 walk is now 20 s too. Still owed: one preset-7
+   walk, uniform taper at 0°, showing both first sidelobes near ±21° at
+   about −13 dBc above that floor.
 3. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
    with a measured lookup table (amplitude goes as (%/100)^0.68 today, the
    ADAR1000 register response; Neil, 2026-10-23: fix it in software, not in
