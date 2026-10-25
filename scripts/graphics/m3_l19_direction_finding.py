@@ -3,7 +3,7 @@
 
   - L19-sweep        : the beam sweep's output against steer angle, source at +30 deg
   - L19-sweep-grid   : the same sweep near its peak, on the 7-bit steering grid
-  - L19-two-bearings : the worked example, two kits, two bearing lines, the fix
+  - L19-two-bearings : the worked example, two stations on the firing line, the fix
   - L19-crossing     : the error region of a 90 deg and a 30 deg crossing
 
 The lesson page shows all four from book/extras/viz/img/. None carries an
@@ -134,7 +134,15 @@ def numbers() -> dict:
     out["el"] = el
     out["cone_30"] = np.degrees(np.arcsin(np.sin(np.radians(30)) * np.cos(np.radians(el))))
     out["cone_45"] = np.degrees(np.arcsin(np.sin(np.radians(45)) * np.cos(np.radians(el))))
-    out["noise_30dB"] = out["hpbw"] / (1.6 * np.sqrt(2 * 10 ** 3.0))
+    # The lobe's own slope at its half-power points, in units of 1/theta_HP.
+    th = np.radians(np.linspace(-20, 20, 40001))
+    psi = np.radians(KD_DEG) * np.sin(th)
+    v = np.abs(np.exp(1j * np.multiply.outer(psi, np.arange(N))).sum(-1)) / N
+    i = np.argmin(np.abs(v - 1 / np.sqrt(2)))
+    out["slope_k"] = abs(np.gradient(v, th)[i]) * np.radians(out["hpbw"])
+    out["noise_30dB"] = out["hpbw"] / (out["slope_k"] * np.sqrt(2 * 10 ** 3.0))
+    out["noise_16"] = out["hpbw"] / (1.6 * np.sqrt(2 * 10 ** 3.0))
+    out["grid_sd"] = out["step_30"] / np.sqrt(12)
     out["rss"] = np.sqrt((out["step_30"] / 2) ** 2 + 1.0 ** 2 + 1.0 ** 2 + out["noise_30dB"] ** 2)
     out["rss_eye"] = np.sqrt((out["step_30"] / 2) ** 2 + 3.0 ** 2 + 1.0 ** 2 + out["noise_30dB"] ** 2)
     return out
@@ -151,7 +159,9 @@ def check_numbers(v: dict) -> None:
     assert f"{v['null_sin']:.3f}" == "0.254" and f"{v['null_deg']:.1f}" == "14.7"
     assert f"{v['el']:.1f}" == "14.0"
     assert f"{v['cone_30']:.1f}" == "29.0" and f"{v['cone_45']:.1f}" == "43.3"
-    assert f"{v['noise_30dB']:.1f}" == "0.2"
+    assert f"{v['slope_k']:.2f}" == "1.05"
+    assert f"{v['noise_30dB']:.1f}" == "0.3" and f"{v['noise_16']:.1f}" == "0.2"
+    assert f"{v['grid_sd']:.2f}" == "0.30"
     assert f"{v['rss']:.1f}" == "1.5" and f"{v['rss_eye']:.1f}" == "3.2"
 
 
@@ -210,64 +220,63 @@ def fig_sweep_grid() -> None:
 
 
 def worked_example() -> dict:
-    """Kits A and B 4 m apart, box at (2, 3); each Est. Angle reads about 1 deg high."""
-    pA, pB = np.array([0.0, 0.0]), np.array([4.0, 0.0])
-    box = np.array([2.0, 3.0])
-    hA, hB = 60.0, 120.0
-    thA, thB = -2.6, 4.8
-    bA, bB = hA + thA, hB + thB
-    gamma = bB - bA
-    b = np.linalg.norm(pB - pA)
-    rA = b * np.sin(np.radians(180.0 - bB)) / np.sin(np.radians(gamma))
-    fix = pA + rA * np.array([np.cos(np.radians(bA)), np.sin(np.radians(bA))])
-    true = [np.degrees(np.arctan2(*(box - p)[::-1])) for p in (pA, pB)]
-    out = dict(pA=pA, pB=pB, box=box, hA=hA, hB=hB, bA=bA, bB=bB, gamma=gamma, rA=rA,
-               fix=fix, miss=np.linalg.norm(fix - box), true=true)
+    """Two stations on the firing line, 2 m apart, every kit facing +y.
+
+    Angle is positive toward +x, so a reading theta_i at station x_i puts the
+    source on the line x = x_i + y tan(theta_i). Each reading is about 1 deg
+    toward +x of the true angle."""
+    xA, xB = -1.0, 1.0
+    box = np.array([0.25, 1.75])
+    thA, thB = 36.6, -22.4
+    tA, tB = np.tan(np.radians(thA)), np.tan(np.radians(thB))
+    y = (xB - xA) / (tA - tB)
+    x = xA + y * tA
+    fix = np.array([x, y])
+    true = [np.degrees(np.arctan((box[0] - xi) / box[1])) for xi in (xA, xB)]
+    out = dict(xA=xA, xB=xB, box=box, thA=thA, thB=thB, fix=fix,
+               miss=np.linalg.norm(fix - box), true=true, gamma=thA - thB)
     # the page's numbers
-    assert (f"{bA:.1f}", f"{bB:.1f}", f"{gamma:.1f}") == ("57.4", "124.8", "67.4")
-    assert f"{rA:.2f}" == "3.56"
-    assert (f"{fix[0]:.2f}", f"{fix[1]:.2f}") == ("1.92", "3.00")
-    assert f"{out['miss']:.2f}" == "0.08"
-    assert (f"{true[0]:.1f}", f"{true[1]:.1f}") == ("56.3", "123.7")
-    # the least-squares form gives the same point
-    n = np.array([[-np.sin(np.radians(x)), np.cos(np.radians(x))] for x in (bA, bB)])
-    P = np.array([pA, pB])
-    x = np.linalg.solve(n.T @ n, n.T @ np.sum(n * P, axis=1))
-    assert np.allclose(x, fix)
+    assert (f"{tA:.3f}", f"{-tB:.3f}") == ("0.743", "0.412")
+    assert (f"{x:.2f}", f"{y:.2f}") == ("0.29", "1.73")
+    assert f"{out['miss']:.2f}" == "0.04"
+    assert (f"{true[0]:.1f}", f"{true[1]:.1f}") == ("35.5", "-23.2")
+    assert (f"{thA - true[0]:.1f}", f"{thB - true[1]:.1f}") == ("1.1", "0.8")
+    assert f"{out['gamma']:.1f}" == "59.0"
+    # the least-squares form gives the same point (room bearing beta = 90 - theta)
+    n = np.array([[-np.sin(np.radians(90 - a)), np.cos(np.radians(90 - a))] for a in (thA, thB)])
+    P = np.array([[xA, 0.0], [xB, 0.0]])
+    xs = np.linalg.solve(n.T @ n, n.T @ np.sum(n * P, axis=1))
+    assert np.allclose(xs, fix)
     return out
 
 
-def draw_kit(ax, p, heading, label, ha):
-    """An array bar across the heading, and a short heading arrow."""
-    h = np.radians(heading)
-    u = np.array([np.cos(h), np.sin(h)])
-    t = np.array([-u[1], u[0]]) * 0.28
-    ax.plot([p[0] - t[0], p[0] + t[0]], [p[1] - t[1], p[1] + t[1]], color=NAVY, lw=4, solid_capstyle="butt")
-    ax.annotate("", xy=p + 1.1 * u, xytext=p,
-                arrowprops=dict(arrowstyle="-|>", color=GRAY, lw=1.0, ls="--", mutation_scale=10))
-    ax.text(p[0], p[1] - 0.32, label, ha="center", va="top", fontsize=13, color=NAVY)
-
-
 def fig_two_bearings(w: dict) -> None:
-    fig, ax = plt.subplots(figsize=(4.4, 3.6))
-    for p, b in ((w["pA"], w["bA"]), (w["pB"], w["bB"])):
-        u = np.array([np.cos(np.radians(b)), np.sin(np.radians(b))])
-        q = p + 4.3 * u
-        ax.plot([p[0], q[0]], [p[1], q[1]], color=BLUE, lw=1.4)
-    draw_kit(ax, w["pA"], w["hA"], "A", "center")
-    draw_kit(ax, w["pB"], w["hB"], "B", "center")
+    fig, ax = plt.subplots(figsize=(4.4, 3.5))
+    ax.plot([-1.5, 1.5], [0, 0], color=LIGHT, lw=2.0, solid_capstyle="butt")
+    for xs in np.arange(-1.5, 1.51, 0.5):
+        ax.plot([xs, xs], [-0.06, 0.06], color=LIGHT, lw=1.2)
+    top = 2.05
+    for xi, th, lab, side in ((w["xA"], w["thA"], "A", -1), (w["xB"], w["thB"], "B", 1)):
+        t = np.tan(np.radians(th))
+        ax.plot([xi, xi + top * t], [0, top], color=BLUE, lw=1.4)
+        ax.plot([xi - 0.22, xi + 0.22], [0, 0], color=NAVY, lw=4, solid_capstyle="butt")
+        ax.annotate("", xy=(xi, 0.55), xytext=(xi, 0.0),
+                    arrowprops=dict(arrowstyle="-|>", color=GRAY, lw=1.0, ls="--", mutation_scale=10))
+        ax.text(xi, -0.12, lab, ha="center", va="top", fontsize=13, color=NAVY)
+        # the reading, outside its line at 42% of the way up
+        yl = 0.42 * top
+        ax.text(xi + yl * t + side * 0.07, yl, f"{th:+.1f}°".replace("-", "−"),
+                color=BLUE, fontsize=13, ha="left" if side > 0 else "right", va="center")
     bx = w["box"]
-    ax.add_patch(Rectangle((bx[0] - 0.15, bx[1] - 0.15), 0.3, 0.3, fill=False, ec=GRAY, lw=1.2))
-    ax.plot(*w["fix"], "o", ms=6, color=RED)
-    ax.text(w["fix"][0] - 0.25, w["fix"][1] + 0.12, "fix", color=RED, fontsize=13, ha="right")
-    ax.text(bx[0] + 0.25, bx[1] - 0.2, "box", color=GRAY, fontsize=13, ha="left", va="top")
-    ax.text(0.55, 0.32, f"{w['bA']:.1f}°", color=BLUE, fontsize=13)
-    ax.text(3.45, 0.32, f"{w['bB']:.1f}°", color=BLUE, fontsize=13, ha="right")
-    ax.annotate("", xy=(4.0, -0.75), xytext=(0.0, -0.75),
+    ax.add_patch(Rectangle((bx[0] - 0.11, bx[1] - 0.11), 0.22, 0.22, fill=False, ec=GRAY, lw=1.2))
+    ax.plot(*w["fix"], "o", ms=5, color=RED)
+    ax.text(bx[0] - 0.2, bx[1], "fix", color=RED, fontsize=13, ha="right", va="center")
+    ax.text(bx[0] + 0.2, bx[1], "box", color=GRAY, fontsize=13, ha="left", va="center")
+    ax.annotate("", xy=(w["xB"], -0.55), xytext=(w["xA"], -0.55),
                 arrowprops=dict(arrowstyle="<->", color=GRAY, lw=1.0, shrinkA=0, shrinkB=0))
-    ax.text(2.0, -0.68, "4 m", color=GRAY, fontsize=13, ha="center", va="bottom")
-    ax.set_xlim(-0.8, 4.8)
-    ax.set_ylim(-0.95, 4.0)
+    ax.text(0.0, -0.5, "2 m", color=GRAY, fontsize=13, ha="center", va="bottom")
+    ax.set_xlim(-1.65, 1.65)
+    ax.set_ylim(-0.7, 2.1)
     ax.set_aspect("equal")
     ax.axis("off")
     finalize(fig, "L19-two-bearings")

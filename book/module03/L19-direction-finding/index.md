@@ -141,7 +141,8 @@ sidelobes.
 The **beam sweep** steps $\theta_0$ across the field of view and records the
 sum at each step. The figure shows what it records for a source at $30^\circ$:
 the curve is the array pattern, centered on the source. This is the same
-function the L18 Lab measured, read the other way. There the source sat still
+function the L18 Lab measured, read the other way, and the curve L16 drew with
+the grid and the noise floor in "The Measured Sweep". There the source sat still
 and the curve showed where the beam pointed; here the beam moves and the peak
 shows where the source is.
 ::::
@@ -158,7 +159,7 @@ bearing: the GUI's **Angle** readout, set to **Peak**.
 ::::{frame} Accuracy and Resolution
 :::{present}
 - The main lobe is $12.9^\circ$ wide, but the sweep locates its peak far more finely.
-- Noise moves the peak about $0.2^\circ$ at $30\ \text{dB}$ SNR.
+- Noise moves the peak about $0.3^\circ$ at $30\ \text{dB}$ SNR.
 - Two sources closer than about $15^\circ$ merge into one lobe.
 :::
 
@@ -173,17 +174,27 @@ $$\begin{aligned}
 It is tempting to conclude that a bearing is only good to about $13^\circ$, but
 the beamwidth limits something else. Finding the peak of one smooth lobe is a
 location estimate, and how much noise jitters the curve sets its precision, not
-how wide the curve is. The standard estimate for a beam that scans across a
-source is
+how wide the curve is. The standard estimate for a beam that scans across a source is
 
-$$\sigma_\text{noise} \approx \frac{\theta_\text{HP}}{1.6\sqrt{2\ \text{SNR}}},$$
+$$\sigma_\text{noise} \approx \frac{\theta_\text{HP}}{k\sqrt{2\ \text{SNR}}}.$$
 
-which at an SNR of $30\ \text{dB}$ (a factor of 1000) gives
+The lobe's slope sets it. Noise adds a random voltage to every sample of the
+sweep, about $1/\sqrt{2\ \text{SNR}}$ of the peak voltage, and the slope of the
+lobe turns that voltage error into an angle error:
 
-$$\sigma_\text{noise} \approx \frac{12.9^\circ}{1.6\sqrt{2000}} = 0.2^\circ.$$
+$$\delta\theta = \frac{\delta v}{dv/d\theta}.$$
 
-An HB100 a few meters away is
-tens of decibels above the noise, so noise is not what limits the bearing.
+The constant $k$ is that slope in units of $1/\theta_\text{HP}$. Textbook
+trackers quote $k \approx 1.6$; the course array's lobe, normalized to 1 at its
+peak, has a slope of $1.05/\theta_\text{HP}$ at its half-power points. With the
+array's own slope, an SNR of $30\ \text{dB}$ (a factor of 1000) gives
+
+$$\sigma_\text{noise} \approx \frac{12.9^\circ}{1.05\sqrt{2000}} = 0.3^\circ,$$
+
+and the textbook constant gives $0.2^\circ$. Either way the noise term is a
+fraction of the $1.05^\circ$ grid step at $30^\circ$ (next frame). An HB100
+two meters away is tens of decibels above the noise, so noise is not what
+limits the bearing.
 
 The beamwidth sets **resolution**: the ability to tell two sources apart. Two
 sources closer than about one beamwidth produce lobes that overlap into a
@@ -221,9 +232,10 @@ second line, the same stretching that broadens the steered beam in L18.
 The Angle readout is the steer angle of the largest sample, so it can only land on
 the grid. Unless the source happens to sit on a grid point, the reported angle
 is the nearest one, off by up to half a step. In the figure the source is at
-$30.0^\circ$ and Angle reads $29.5^\circ$. This is one reason to keep the
-source within about $\pm 30^\circ$ of broadside: the grid step, the beamwidth,
-and the scan loss all grow with $1/\cos\theta$ beyond that.
+$30.0^\circ$ and Angle reads $29.5^\circ$. This is one reason to prefer a source within about $\pm 30^\circ$ of
+broadside: the grid step and the beamwidth grow as $1/\cos\theta$, and the gain
+falls as $\cos\theta$ (L18, "Scan Loss"). At $45^\circ$ the step is
+$1.29^\circ$ and the beam is about $18^\circ$ wide, which is still usable.
 ::::
 
 ::::{frame} The Cone Angle
@@ -257,7 +269,7 @@ nothing from behind, so a bearing is always in front of the array.
 ::::{frame} Reflections
 :::{present}
 - A reflection adds a second, weaker lobe to the sweep.
-- Within $15^\circ$ of the source it pulls the peak: $0.6^\circ$ at $-20\ \text{dB}$, $1.8^\circ$ at $-10\ \text{dB}$, $3.1^\circ$ at $-6\ \text{dB}$.
+- Within $15^\circ$ of the source it pulls the peak: $0.6^\circ$ at $-20\ \text{dB}$, $2.0^\circ$ at $-10\ \text{dB}$, $3.2^\circ$ at $-6\ \text{dB}$.
 - Block the direct path and the reflection becomes the peak.
 :::
 
@@ -269,7 +281,7 @@ the extra path the reflection travels. When the two directions are within
 about a beamwidth of each other, the lobes merge and the peak moves toward the
 reflection. The worst case over every phase, for a reflection $5^\circ$ to
 $15^\circ$ from the direct path, is a shift of $0.6^\circ$ for a reflection
-$20\ \text{dB}$ down, $1.8^\circ$ at $10\ \text{dB}$ down, and $3.1^\circ$ at
+$20\ \text{dB}$ down, $2.0^\circ$ at $10\ \text{dB}$ down, and $3.2^\circ$ at
 $6\ \text{dB}$ down.
 
 A reflection more than about $20^\circ$ away forms its own lobe and moves the
@@ -289,7 +301,7 @@ $$\beta = h + \theta_\text{est}$$
 | grid | half a step at $30^\circ$ | $0.53^\circ$ |
 | heading | array edge on a taped line | $1.0^\circ$ |
 | multipath | a weak reflection | $1.0^\circ$ |
-| noise | $30\ \text{dB}$ SNR | $0.2^\circ$ |
+| noise | $30\ \text{dB}$ SNR | $0.3^\circ$ |
 | **total** | root sum of squares | $1.5^\circ$ |
 :::
 
@@ -308,10 +320,13 @@ check it with one shot at a known position before trusting any bearing.
 
 The heading error adds directly to the bearing error, and in the room it is the
 largest term. Laying the array's edge along a taped line holds $h$ to about
-$1^\circ$. The independent terms add as a root sum of squares:
+$1^\circ$. The grid term is the worst case, half a step, rather than the
+$0.30^\circ$ standard deviation of an error spread evenly over a $1.05^\circ$
+step, which keeps the budget conservative. The independent terms add as a root
+sum of squares:
 
 $$\begin{aligned}
-\sigma_\beta &= \sqrt{0.53^2 + 1.0^2 + 1.0^2 + 0.2^2} \\
+\sigma_\beta &= \sqrt{0.53^2 + 1.0^2 + 1.0^2 + 0.3^2} \\
 &= 1.5^\circ.
 \end{aligned}$$
 
@@ -349,50 +364,54 @@ independent linear equations in two unknowns have one solution: the crossing.
 ::::{frame} A Two-Bearing Fix
 :::{present}
 $$\begin{aligned}
-\gamma &= \beta_B - \beta_A = 67.4^\circ \\
-r_A &= 4\ \frac{\sin 55.2^\circ}{\sin 67.4^\circ} = 3.56\ \text{m} \\
-\mathbf x &= (1.92,\ 3.00)\ \text{m}
+y &= \frac{x_B - x_A}{\tan\theta_A - \tan\theta_B} \\
+&= \frac{2.0}{0.743 + 0.412} = 1.73\ \text{m} \\
+x &= x_A + y\tan\theta_A = 0.29\ \text{m}
 \end{aligned}$$
 
-- The law of sines gives $r_A$; the box is at $(2.00,\ 3.00)\ \text{m}$.
+- The stations are $2\ \text{m}$ apart; the box is at $(0.25,\ 1.75)\ \text{m}$.
 :::
 :::{present}
 <img src="../../viz/img/L19-two-bearings.svg"
-     alt="Kits A and B 4 meters apart, bearing lines at 57.4 and 124.8 degrees crossing at the fix, just left of the box"
+     alt="A firing line with station marks every half meter; stations A at x = -1 m and B at x = +1 m face straight downrange, and their bearing lines at +36.6 and -22.4 degrees cross at the fix, inside the box at (0.25, 1.75) m"
      style="max-width: 300px; width: 100%; display: block; margin: 0 auto;">
 :::
 
+On the L19 Lab's firing range every station faces straight downrange, so all
+the stations share one heading and the bearing line takes a simpler form. Put
+$x$ along the tape and $y$ downrange, and take Angle $\theta$ positive toward
+the $+x$ end of the tape. A reading $\theta_i$ at station $x_i$ puts the source
+on the line
+
+$$x = x_i + y\tan\theta_i.$$
+
+This is the bearing line of the previous frame with $h = 90^\circ$ and
+$\beta = 90^\circ - \theta_i$; the sign flips because positive Angle turns
+clockwise, toward $+x$, seen from above.
+
 :::{admonition} Worked example — the crossing of two bearings
 :class: tip
-Kit A sits at the room origin with its broadside at $h_A = 60^\circ$; kit B
-sits $b = 4\ \text{m}$ along the room's $x$ axis with $h_B = 120^\circ$. A
-reads Angle $-2.6^\circ$ and B reads $+4.8^\circ$, so the room bearings are
+Station A at $x_A = -1.0\ \text{m}$ reads Angle $36.6^\circ$, and station B at
+$x_B = +1.0\ \text{m}$ reads $-22.4^\circ$. Both lines pass through the
+source, so setting their $x$ equal and solving for $y$ gives
 
 $$\begin{aligned}
-\beta_A &= 60^\circ - 2.6^\circ = 57.4^\circ, \\
-\beta_B &= 120^\circ + 4.8^\circ = 124.8^\circ.
+y &= \frac{x_B - x_A}{\tan\theta_A - \tan\theta_B} \\
+&= \frac{2.0}{0.743 + 0.412} = 1.73\ \text{m},
 \end{aligned}$$
 
-The two bearing lines and the baseline form a triangle. Its angle at A is
-$\beta_A = 57.4^\circ$, its angle at B is $180^\circ - \beta_B = 55.2^\circ$, and
-its angle at the source is the **crossing angle**,
-$\gamma = \beta_B - \beta_A = 67.4^\circ$. The law of sines gives the range from A,
+and either line gives $x$:
 
 $$\begin{aligned}
-r_A &= b\ \frac{\sin(180^\circ - \beta_B)}{\sin\gamma} \\
-&= 4\ \frac{\sin 55.2^\circ}{\sin 67.4^\circ} = 3.56\ \text{m},
+x &= x_A + y\tan\theta_A \\
+&= -1.0 + 1.73 \times 0.743 \\
+&= 0.29\ \text{m}.
 \end{aligned}$$
 
-and the fix is $3.56\ \text{m}$ out along A's bearing:
-
-$$\begin{aligned}
-\mathbf x &= r_A(\cos\beta_A,\ \sin\beta_A) \\
-&= (1.92,\ 3.00)\ \text{m}.
-\end{aligned}$$
-
-The box was at $(2.00,\ 3.00)\ \text{m}$, where the true bearings are
-$56.3^\circ$ and $123.7^\circ$. Each Angle reading was about $1.1^\circ$ high,
-inside the $1.5^\circ$ budget, and the fix lands $0.08\ \text{m}$ from the box.
+The box was at $(0.25,\ 1.75)\ \text{m}$, where the true angles are
+$35.5^\circ$ and $-23.2^\circ$. The readings were $1.1^\circ$ and $0.8^\circ$
+toward $+x$, inside the $1.5^\circ$ budget, and the fix lands $0.04\ \text{m}$
+from the box. The two lines cross at $\gamma = \theta_A - \theta_B = 59.0^\circ$.
 :::
 ::::
 
@@ -413,18 +432,30 @@ is
 
 $$e_i = \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i),$$
 
-and minimizing $\sum_i e_i^2$ by setting its gradient to zero gives the
+and minimizing $\sum_i e_i^2$ means setting its gradient with respect to
+$\mathbf x$ to zero. Each $e_i$ grows at unit rate along $\hat{\mathbf n}_i$, so
+
+$$\begin{aligned}
+\nabla_{\mathbf x}\sum_i e_i^2 &= 2\sum_i \hat{\mathbf n}_i e_i \\
+&= 2\sum_i \hat{\mathbf n}_i\left(\hat{\mathbf n}_i\cdot\mathbf x - \hat{\mathbf n}_i\cdot\mathbf p_i\right) \\
+&= 0.
+\end{aligned}$$
+
+Because $\hat{\mathbf n}_i(\hat{\mathbf n}_i\cdot\mathbf x)$ is
+$\hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}\mathbf x$, this rearranges to the
 **normal equations** on the slide: a $2\times 2$ matrix built from the normals,
 times $\mathbf x$, equals a 2-vector built from the normals and the kit
 positions. One call to `numpy.linalg.solve` returns the fix. For two bearings it
-reproduces the law-of-sines answer exactly; for more, it is the least-squares
+reproduces the crossing of the worked example exactly; for more, it is the least-squares
 compromise. The L19 Lab's pre-lab has you write this as a short Python
 function and test it on a supplied set of bearings.
 
 Unweighted least squares treats every line as equally reliable. A bearing from
 a kit far from the source is less reliable in meters, as the next frame shows,
 so if the ranges differ a lot, weighting each term by $1/r_i^2$ gives the
-better fix. In the fox hunt the kits are all a few meters out, and the
+better fix. In the fox hunt every bearing that counts is within about
+$\pm 45^\circ$ of broadside, so the ranges from the stations to one box differ
+by at most a factor of $\sqrt{2}$, the weights by a factor of 2, and the
 unweighted form is close enough.
 ::::
 
@@ -432,7 +463,7 @@ unweighted form is close enough.
 :::{present}
 $$\delta_\perp = R\tan\sigma_\beta$$
 
-- At $\sigma_\beta = 2^\circ$ the line moves $0.10\ \text{m}$ at $3\ \text{m}$, $0.14\ \text{m}$ at $4\ \text{m}$, $0.17\ \text{m}$ at $5\ \text{m}$.
+- At $\sigma_\beta = 2^\circ$ the line moves $0.03\ \text{m}$ at $1\ \text{m}$, $0.07\ \text{m}$ at $2\ \text{m}$, $0.14\ \text{m}$ at $4\ \text{m}$.
 - A bearing constrains the source across its line, not along it.
 :::
 
@@ -443,9 +474,9 @@ $\sigma_\beta$ about the kit moves sideways, at range $R$, by
 $$\delta_\perp = R\tan\sigma_\beta.$$
 
 At $\sigma_\beta = 2^\circ$, a little worse than the taped-heading budget,
-that is $0.10\ \text{m}$ at $3\ \text{m}$, $0.14\ \text{m}$ at $4\ \text{m}$,
-and $0.17\ \text{m}$ at $5\ \text{m}$. The error grows in proportion to range,
-which is why a closer kit gives a tighter line.
+that is $0.03\ \text{m}$ at $1\ \text{m}$, $0.07\ \text{m}$ at $2\ \text{m}$,
+and $0.14\ \text{m}$ at $4\ \text{m}$. The error grows in proportion to range,
+which is why a closer station gives a tighter line.
 
 The error is all in one direction. A bearing says nothing about how far along
 the line the source is, so its uncertainty is a narrow strip, $2\delta_\perp$
@@ -474,10 +505,25 @@ at $90^\circ$, each strip limits the other's long direction, and the overlap is
 a small square; its error ellipse is a circle of radius $\delta_\perp$ in both
 directions. When they cross at a shallow angle $\gamma$, the strips run almost
 parallel, and the overlap stretches into a long diamond along the bisector of
-the two lines. For two bearings with the same $\delta_\perp$, the RMS error of
-the fix works out to
+the two lines.
 
-$$\sigma_\text{fix} = \frac{\sqrt{2}\ \delta_\perp}{\sin\gamma},$$
+The least-squares fix puts a number on this. Weight each bearing's term in the
+normal equations by $1/\delta_\perp^2$, and the matrix
+
+$$\mathbf M = \sum_i \frac{\hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}}{\delta_{\perp,i}^2}$$
+
+describes the error region. The eigenvectors of $\mathbf M^{-1}$ point along
+the axes of the one-sigma error ellipse, its eigenvalues are the squared
+semi-axes, and the RMS error of the fix is the square root of their sum. Two
+unit normals at an angle $\gamma$ give
+$\sum\hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}$ a trace of 2 and a
+determinant of $\sin^2\gamma$, so its eigenvalues are $1 + \cos\gamma$ and
+$1 - \cos\gamma$. For two bearings with the same $\delta_\perp$,
+
+$$\begin{aligned}
+\sigma_\text{fix} &= \delta_\perp\sqrt{\frac{1}{1 + \cos\gamma} + \frac{1}{1 - \cos\gamma}} \\
+&= \frac{\sqrt{2}\ \delta_\perp}{\sin\gamma},
+\end{aligned}$$
 
 so a $15^\circ$ crossing is almost four times worse than a $90^\circ$ one with
 the same bearings.
@@ -489,10 +535,8 @@ the same bearings.
 | 2 kits, $15^\circ$ | $0.76\ \text{m}$ |
 | 3 kits over $120^\circ$ | $0.16\ \text{m}$ |
 
-The numbers in the table come from the least-squares fix. Each bearing
-contributes $\hat{\mathbf n}\hat{\mathbf n}^{\mathsf T}/\delta_\perp^2$ to the
-information matrix, the inverse of that sum is the covariance of the fix, and
-the RMS error is the square root of its trace. A third kit helps less by adding
+The table's rows come from the same $\mathbf M$, summed over two or three
+kits. A third kit helps less by adding
 a measurement than by guaranteeing that at least two of the three lines cross
 steeply: three kits spread over $120^\circ$ do better than the best pair.
 
@@ -522,20 +566,49 @@ in "Residuals and Outliers" below.
 
 ::::{frame} Choosing Where to Measure
 :::{present}
-- Spread the kits so the bearings cross near $90^\circ$.
-- Stay close, but keep every box within $\pm 30^\circ$ of broadside.
-- Keep arrays and boxes at one height, with clear lines of sight.
+- Use the end stations that hear the fox: depth error falls as $1/B$.
+- Boxes within $\pm 30^\circ$ of broadside are best; $\pm 45^\circ$ still works.
+- Keep arrays and boxes at one height, in clear sight.
 - Take a third bearing as a check.
 :::
 
 Choosing where to stand is part of the measurement, because the geometry sets
-the error as much as the instrument does. The crossing angle matters most:
-two kits side by side see the source along nearly the same line and fix it
-poorly along that line, while two kits at right angles about the search area
-fix it well in both directions. Range matters next, since the cross-range
-error grows in proportion to it; but a kit too close to a wide search area
-cannot keep every box within $\pm 30^\circ$ of its broadside, where the grid
-step and the beamwidth are smallest.
+the error as much as the instrument does. On a firing line every bearing looks
+downrange, so the lines cross steeply only when the stations are far apart
+compared with the depth, and depth is the direction the fix measures worst.
+
+Take two stations a baseline $B$ apart and a box midway between them at depth
+$y$, a range $R$ from each. Each line moves sideways by
+$\delta_\perp = R\sigma_\beta$, with $\sigma_\beta$ in radians, and the two
+lines cross at $\gamma$, with
+
+$$\sin\frac{\gamma}{2} = \frac{B/2}{R}.$$
+
+The two lines sit symmetrically about the downrange direction, so the axes of
+the error ellipse point across and down range. The eigenvalues of $\mathbf M$
+are $2\cos^2(\gamma/2)/\delta_\perp^2$ across range and
+$2\sin^2(\gamma/2)/\delta_\perp^2$ in depth, and the depth error is the inverse
+square root of the second:
+
+$$\begin{aligned}
+\sigma_y &= \frac{\delta_\perp}{\sqrt{2}\ \sin(\gamma/2)} \\
+&= \frac{\sqrt{2}\ R^2\sigma_\beta}{B}.
+\end{aligned}$$
+
+With the taped-heading budget, $\sigma_\beta = 1.5^\circ$, stations
+$2\ \text{m}$ apart fix a box $2\ \text{m}$ downrange to $0.09\ \text{m}$ in
+depth, stations $1\ \text{m}$ apart to $0.16\ \text{m}$, and stations
+$0.5\ \text{m}$ apart to $0.30\ \text{m}$. Across range the same
+pairs fix it to about $0.04\ \text{m}$. The depth error grows as $R^2$ and
+falls as $1/B$, so the stations farthest apart that still hear the fox give the
+best fix.
+
+Spreading the stations has a limit: a station far to one side sees the box well
+off broadside. Within $\pm 30^\circ$ the grid step and the beamwidth stay near
+their broadside values. At $\pm 45^\circ$ the step is $1.29^\circ$, the beam is
+about $18^\circ$ wide, and the gain is $1.5\ \text{dB}$ down (L18, "Scan
+Loss"), which is still usable. Farther out, the HB100's own beam, aimed only
+roughly at the line, may leave the station too weak a tone to read.
 
 Height and line of sight remove the two systematic errors from earlier in the
 lesson: the cone-angle error pulls every bearing toward broadside when the
@@ -546,9 +619,10 @@ consistent.
 
 The geometry also sets how close two boxes can be and still be told apart. A
 simulation of a row of boxes, with the fix assigned to the nearest box, names
-the right one 99% of the time at $0.75\ \text{m}$ spacing with two kits crossing
-at $90^\circ$ and $\sigma_\beta = 2^\circ$, and 93% of the time at
-$0.5\ \text{m}$.
+the right one 99% of the time at $0.75\ \text{m}$ spacing with two kits
+$4\ \text{m}$ out crossing at $90^\circ$ and $\sigma_\beta = 2^\circ$, and 93%
+of the time at $0.5\ \text{m}$. The L19 Lab's boxes sit at least
+$0.75\ \text{m}$ apart for the same reason.
 ::::
 
 ::::{frame} Residuals and Outliers
@@ -563,7 +637,8 @@ $$e_i = \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i)$$
 Once the least-squares fix is in hand, the distance from the fix to each line
 is that line's **residual**. If all the bearings are good, each residual should
 be about the size of that bearing's own cross-range error,
-$R_i\tan\sigma_\beta$, roughly $0.1\ \text{m}$ for a kit a few meters out. A
+$R_i\tan\sigma_\beta$, about $0.05\ \text{m}$ for a station $1.5\ \text{m}$
+from the fox at $\sigma_\beta = 2^\circ$. A
 residual several times that size says one bearing disagrees with the rest.
 
 The usual causes are the two errors that the budget does not cover because they
@@ -572,6 +647,18 @@ heading or sign mistake that put the line on the wrong side of broadside.
 Check that kit's setup, retake the bearing, or drop it and solve again with the
 others. With only two bearings the residuals are always zero, because two lines
 always meet exactly, so two bearings cannot check each other.
+
+The L19 Lab adds one more check, the **Peak Gain** readout. Received power
+cannot give range on its own, because the transmitter's power is unknown, but
+every station hears the same transmitter, so comparing levels between stations
+removes that unknown. Free-space spreading then sets the difference: a station
+at range $R_2$ reads $20\log_{10}(R_2/R_1)$ dB below one at $R_1$, which is
+$2.5\ \text{dB}$ for $2.0\ \text{m}$ against $1.5\ \text{m}$, and a source off
+broadside reads lower by the scan loss of L18. The HB100's own pattern does not
+cancel: the fox points only roughly at the line, and two stations at the same
+range can differ by several decibels. Levels therefore rank the two or three
+boxes the bearings already put near the fix; they do not locate the fox by
+themselves.
 ::::
 
 ::::{frame} Summary: Measuring a Bearing
@@ -595,6 +682,7 @@ always meet exactly, so two bearings cannot check each other.
 | $\left(\sum \hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}\right)\mathbf x = \sum \hat{\mathbf n}_i(\hat{\mathbf n}_i\cdot\mathbf p_i)$ | least-squares fix | a $2\times 2$ solve |
 | $\delta_\perp = R\tan\sigma_\beta$ | cross-range error of one line | $0.14\ \text{m}$ at $4\ \text{m}$, $2^\circ$ |
 | $\sigma_\text{fix} = \sqrt{2}\ \delta_\perp/\sin\gamma$ | RMS error of a two-bearing fix crossing at $\gamma$ | $0.20\ \text{m}$ at $90^\circ$, $0.76\ \text{m}$ at $15^\circ$ |
+| $\sigma_y = \sqrt{2}\ R^2\sigma_\beta/B$ | depth error from two stations $B$ apart on a firing line | $0.09\ \text{m}$ at $2\ \text{m}$ deep, $B = 2\ \text{m}$ |
 | residual $e_i$ | a bearing's miss distance at the fix | flags an outlier at several times $R_i\tan\sigma_\beta$ |
 ::::
 
