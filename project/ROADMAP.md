@@ -154,8 +154,8 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L22 | Sidelobes and Tapering | practice | cut 20/20; voice, why and illustration sweeps done (#132, #137, #142) | ready |
 | L23 | Beam Squint and Quantization | practice | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20 | **hardware run of the preset-6 quantization walk** |
-| L24 | Null Steering | practice | cut 20/20 (#148), voice, why and illustration sweeps (#149, in review) | merge #149 |
-| L24 Lab | Null Steering | **L24 Lab** packet (faculty #38) | 14/20, dry-run findings applied (#149, in review) | Procedure C numbers from Neil's first interferer run; after merge, retire the L24Lab practice set and its materials row |
+| L24 | Null Steering | practice | cut 20/20 (#148), voice, why and illustration sweeps (#149) | ready |
+| L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | Procedure C and Table C numbers from Neil's first interferer run; hardware run |
 
 **Module 4: radar (L25–L31) and the final project.** Placeholder pages. They
 need the FMCW mode in the Phaser app (Neil is building it, with the lab
