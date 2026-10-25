@@ -59,6 +59,8 @@
       <div class="row">
         <div class="sel"><label for="nk">Kits</label>
           <select id="nk"><option>2</option><option>3</option><option>4</option></select></div>
+        <div class="sel"><label for="lay">Layout</label>
+          <select id="lay"><option value="ring">ring</option><option value="line">firing line</option></select></div>
         <label class="chk"><input type="checkbox" id="rev"> reveal</label>
         <label class="chk"><input type="checkbox" id="refl"> reflection</label>
       </div>
@@ -101,14 +103,25 @@ const KC=['#004a85','#3f7d34','#8a5a00','#6b3f8f'];
 const HOME=[[0,-4],[-4,0],[1.69,-3.63],[1.04,3.86]];
 // the reflection bends kit A's bearing by this much
 const REFL=10;
-const state={ nk:2, sigma:2, reveal:false, refl:false,
-              kits:HOME.map(p=>p.slice()), z:[0,0,0,0], src:[0,0] };
+/* ---- the firing line (the L19 Lab): a 3.0 m tape along x at y = 0 with a
+   station mark every 0.75 m, and a box field downrange, x within FX of the
+   tape's middle and y from FY0 to FY1. Kits sit only on marks, one to a mark,
+   and every kit faces straight downrange (+y). A and B start a mark either
+   side of the middle; C and D take the end marks. */
+const MARKS=[-1.5,-0.75,0,0.75,1.5], FX=1.0, FY0=1.0, FY1=2.0;
+const LHOME=[[-0.75,0],[0.75,0],[1.5,0],[-1.5,0]];
+const state={ nk:2, sigma:2, reveal:false, refl:false, layout:'ring',
+              rkits:HOME.map(p=>p.slice()), lkits:LHOME.map(p=>p.slice()),
+              kits:null, z:[0,0,0,0], src:[0,0] };
+state.kits=state.rkits;
+const LINE=()=>state.layout==='line';
 
 function gauss(){ let u=0; while(u===0) u=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*Math.random()); }
 function newBearings(){ state.z=state.z.map(()=>gauss()); }
 function newSource(){
-  const r=RS*Math.sqrt(Math.random()), a=2*Math.PI*Math.random();
-  state.src=[r*Math.cos(a), r*Math.sin(a)];
+  if(LINE()) state.src=[FX*(2*Math.random()-1), FY0+(FY1-FY0)*Math.random()];
+  else { const r=RS*Math.sqrt(Math.random()), a=2*Math.PI*Math.random();
+         state.src=[r*Math.cos(a), r*Math.sin(a)]; }
   newBearings();
 }
 
@@ -175,8 +188,12 @@ function crossing(b1,b2){ let g=Math.abs(b1-b2)/D2R % 180; if(g>90) g=180-g; ret
 /* ---- drawing */
 const map=document.getElementById('map'), ctx=map.getContext('2d');
 let W=0, H=0, S=1;            // CSS size, px per meter
-const X=x=>W/2+x*S, Y=y=>H/2-y*S;
-const ext=()=>[W/2/S, H/2/S]; // half-extents of the room shown, in meters
+let OX=0, OY=0;               // where the world origin sits, px
+const X=x=>OX+x*S, Y=y=>OY-y*S;
+// the room shown, in meters: [xmin, xmax, ymin, ymax]
+const view=()=>[-OX/S, (W-OX)/S, (OY-H)/S, OY/S];
+// rectangle overlap, for placing a tag clear of the kits
+const hits=(a,b)=>a[0]<b[2]&&b[0]<a[2]&&a[1]<b[3]&&b[1]<a[3];
 
 function rgba(hex,a){ const v=parseInt(hex.slice(1),16); return `rgba(${v>>16},${(v>>8)&255},${v&255},${a})`; }
 function tag(s,x,y,align,color,px){
@@ -188,23 +205,49 @@ function tag(s,x,y,align,color,px){
   stext(ctx,s,x0+3,y,px,color||cssv('--ink3'),'left',false);
 }
 
+// a tag's box, as tag() would draw it: [x0, y0, x1, y1]
+function tagBox(s,x,y,align,px){
+  px=px||10.5; ctx.font=px+'px '+SANS; const tw=ctx.measureText(s).width;
+  let x0=align==='right'?x-tw-6:(align==='center'?x-tw/2-3:x);
+  x0=Math.max(2,Math.min(W-tw-8,x0)); y=Math.max(9,Math.min(H-9,y));
+  return [x0,y-8,x0+tw+6,y+8];
+}
+
 function draw(){
-  const r=solve(), [ex,ey]=ext();
+  const r=solve(), [x0w,x1w,y0w,y1w]=view();
   ctx.clearRect(0,0,W,H);
   // 1 m grid
   ctx.strokeStyle='#eef3f8'; ctx.lineWidth=1; ctx.beginPath();
-  for(let x=-Math.floor(ex);x<=ex;x++){ ctx.moveTo(Math.round(X(x))+0.5,0); ctx.lineTo(Math.round(X(x))+0.5,H); }
-  for(let y=-Math.floor(ey);y<=ey;y++){ ctx.moveTo(0,Math.round(Y(y))+0.5); ctx.lineTo(W,Math.round(Y(y))+0.5); }
+  for(let x=Math.ceil(x0w);x<=x1w;x++){ ctx.moveTo(Math.round(X(x))+0.5,0); ctx.lineTo(Math.round(X(x))+0.5,H); }
+  for(let y=Math.ceil(y0w);y<=y1w;y++){ ctx.moveTo(0,Math.round(Y(y))+0.5); ctx.lineTo(W,Math.round(Y(y))+0.5); }
   ctx.stroke();
+  if(LINE()){
+    // the box field, dashed, labeled just above its far edge
+    ctx.fillStyle='rgba(138,90,0,0.05)'; ctx.strokeStyle='rgba(138,90,0,0.7)'; ctx.lineWidth=1.3; ctx.setLineDash([5,4]);
+    ctx.beginPath(); ctx.rect(X(-FX),Y(FY1),2*FX*S,(FY1-FY0)*S); ctx.fill(); ctx.stroke(); ctx.setLineDash([]);
+    tag('box field',X(0),Y(FY1)-11,'center',cssv('--amber'));
+    // the tape and its station marks, each mark's x below it
+    const ty=Y(0);
+    ctx.strokeStyle='#b9a37a'; ctx.lineWidth=3; ctx.lineCap='butt';
+    ctx.beginPath(); ctx.moveTo(X(MARKS[0]),ty); ctx.lineTo(X(MARKS[MARKS.length-1]),ty); ctx.stroke();
+    ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1.5; ctx.beginPath();
+    MARKS.forEach(m=>{ ctx.moveTo(Math.round(X(m))+0.5,ty-6); ctx.lineTo(Math.round(X(m))+0.5,ty+6); });
+    ctx.stroke();
+    MARKS.forEach((m,k)=>{
+      const s=(m<0?'\u2212':'')+Math.abs(m)+(k===MARKS.length-1?' m':'');
+      stext(ctx,s,X(m),ty+21,10.5,cssv('--ink3'),'center');
+    });
+  } else {
   // keep-out circle
   ctx.fillStyle='rgba(138,90,0,0.05)'; ctx.strokeStyle='rgba(138,90,0,0.7)'; ctx.lineWidth=1.3; ctx.setLineDash([5,4]);
   ctx.beginPath(); ctx.arc(X(0),Y(0),RK*S,0,7); ctx.fill(); ctx.stroke(); ctx.setLineDash([]);
   // labeled just outside its bottom edge, clear of the lines that converge
   // on the middle
   tag('keep-out',X(0),Y(-RK)+11,'center',cssv('--amber'));
+  }
 
   // when revealed: the source and the 3 m and 4 m range rings around it
-  if(state.reveal){
+  if(state.reveal && !LINE()){
     ctx.strokeStyle='rgba(176,30,36,0.35)'; ctx.lineWidth=1; ctx.setLineDash([2,4]);
     for(const rr of [3,4]){ ctx.beginPath(); ctx.arc(X(state.src[0]),Y(state.src[1]),rr*S,0,7); ctx.stroke(); }
     ctx.setLineDash([]);
@@ -218,7 +261,7 @@ function draw(){
   }
 
   // wedges, then lines, so every line sits on top of every wedge
-  const L=4*Math.hypot(ex,ey), sg=state.sigma*D2R;
+  const L=4*Math.hypot(x1w-x0w,y1w-y0w), sg=state.sigma*D2R;
   r.bs.forEach((b,i)=>{
     const p=state.kits[i];
     ctx.fillStyle=rgba(KC[i],0.13);
@@ -264,13 +307,35 @@ function draw(){
     ctx.strokeStyle='#fff'; ctx.lineWidth=1.5; ctx.stroke();
   }
 
-  // kits on top, each a lettered dot
+  // kits on top, each a lettered dot. On the firing line each also gets its
+  // array face, a bar along the tape, and its heading, a tick straight
+  // downrange.
+  const KB=16, KT=22;
+  if(LINE()) for(let i=0;i<state.nk;i++){
+    const x=X(state.kits[i][0]), y=Y(state.kits[i][1]);
+    ctx.fillStyle=KC[i]; ctx.fillRect(x-KB,y-2,2*KB,4);
+    ctx.strokeStyle=KC[i]; ctx.lineWidth=1.6; ctx.beginPath();
+    ctx.moveTo(x,y-9); ctx.lineTo(x,y-KT); ctx.moveTo(x-3.5,y-KT+5); ctx.lineTo(x,y-KT); ctx.lineTo(x+3.5,y-KT+5); ctx.stroke();
+  }
   for(let i=0;i<state.nk;i++){
     const p=state.kits[i], x=X(p[0]), y=Y(p[1]);
     ctx.fillStyle=KC[i]; ctx.beginPath(); ctx.arc(x,y,9,0,7); ctx.fill();
     ctx.strokeStyle='#fff'; ctx.lineWidth=1.5; ctx.stroke();
     stext(ctx,'ABCD'[i],x,y+0.5,11,'#fff','center',true);
-    if(state.refl&&i===0){
+    if(state.refl&&i===0&&LINE()){
+      // the tape has its station labels just below it, so the tag goes
+      // above, beside the heading tick on the side away from A's line, or
+      // over the tick; it is left off if every spot hits another kit
+      const b=r.bs[0], away=Math.cos(b)>0?'left':'right';
+      const blocks=[];
+      for(let j=1;j<state.nk;j++){ const xj=X(state.kits[j][0]), yj=Y(state.kits[j][1]); blocks.push([xj-KB-2,yj-KT-2,xj+KB+2,yj+11]); }
+      // tag() aligns 'right' to end at x and 'left' to start at x
+      const cand=[[away==='left'?x-8:x+8, y-19, away==='left'?'right':'left'],
+                  [away==='left'?x+8:x-8, y-19, away==='left'?'left':'right'],
+                  [x, y-KT-12, 'center']];
+      const pick=cand.find(c=>{ const bx=tagBox('reflection',c[0],c[1],c[2]); return bx[1]>=0 && !blocks.some(k=>hits(bx,k)); });
+      if(pick) tag('reflection',pick[0],pick[1],pick[2],cssv('--red'));
+    } else if(state.refl&&i===0){
       // the tag goes on the side of the kit away from its line
       const b=r.bs[0], side=Math.cos(b)>0?'right':'left';
       tag('reflection', side==='right'?x-13:x+13, y+(Math.sin(b)>0?14:-14), side, cssv('--red'));
@@ -281,7 +346,10 @@ function draw(){
   ctx.strokeStyle=cssv('--ink3'); ctx.lineWidth=1.5; ctx.beginPath();
   ctx.moveTo(sx0,sy0-4); ctx.lineTo(sx0,sy0); ctx.lineTo(sx0+S,sy0); ctx.lineTo(sx0+S,sy0-4); ctx.stroke();
   stext(ctx,'1 m',sx0+S+5,sy0-2,10.5,cssv('--ink3'),'left');
-  if(r.fix && !on) tag('fix off the map',W-6,H-12,'right',cssv('--red'));
+  // on the firing line nearly parallel bearings put the fix far downrange,
+  // so say so whenever it is outside the canvas, not only far outside it
+  const offmap = r.fix && (!on || (LINE() && (X(r.fix[0])<0||X(r.fix[0])>W||Y(r.fix[1])<0||Y(r.fix[1])>H)));
+  if(offmap) tag('fix off the map',W-6,H-12,'right',cssv('--red'));
   if(!r.fix) tag('no fix: the lines are parallel',W-6,H-12,'right',cssv('--red'));
   readouts(r);
 }
@@ -301,7 +369,11 @@ function readouts(r){
   const err=document.getElementById('r-err');
   if(!r.fix){ err.innerHTML='&#8212;'; }
   else {
-    const rms=`<span class="dim">RMS ${r.P ? fmt(r.rms) : '&#8212;'}</span>`;
+    // on the firing line, the region's 1-sigma extent downrange and along
+    // the tape, the two numbers the lesson's baseline rule is about
+    const rms = LINE()
+      ? (r.P ? `<span class="dim">depth ${fmt(Math.sqrt(r.P[2]))}</span> · <span class="dim">cross ${fmt(Math.sqrt(r.P[0]))}</span>` : `<span class="dim">&#8212;</span>`)
+      : `<span class="dim">RMS ${r.P ? fmt(r.rms) : '&#8212;'}</span>`;
     err.innerHTML = (state.reveal
       ? `<span>${fmt(Math.hypot(r.fix[0]-state.src[0], r.fix[1]-state.src[1]))}</span>`
       : `<span class="dim">hidden</span>`)+' · '+rms;
@@ -319,11 +391,23 @@ function readouts(r){
    source revealed it snaps onto the 3 m and 4 m rings, at 5 deg steps around
    the source, so a table row can be set up exactly. */
 let drag=-1;
-function toWorld(ev){ const b=map.getBoundingClientRect(); return [(ev.clientX-b.left-W/2)/S, (H/2-(ev.clientY-b.top))/S]; }
+function toWorld(ev){ const b=map.getBoundingClientRect(); return [(ev.clientX-b.left-OX)/S, (OY-(ev.clientY-b.top))/S]; }
+// the mark a firing-line kit sits on, as an index into MARKS
+const markOf=p=>Math.round((p[0]-MARKS[0])/(MARKS[1]-MARKS[0]));
+// on the firing line a kit goes to the nearest mark no other kit in use holds
+function placeOnLine(i,x,upto){
+  const held=new Set(); for(let j=0;j<upto;j++) if(j!==i) held.add(markOf(state.kits[j]));
+  let best=-1, bd=1e9;
+  MARKS.forEach((m,k)=>{ if(!held.has(k) && Math.abs(m-x)<bd){ bd=Math.abs(m-x); best=k; } });
+  state.kits[i]=[MARKS[best],0];
+}
+// one kit to a mark: a later kit that shares a mark moves to the nearest free one
+function seatLine(){ for(let i=0;i<4;i++) placeOnLine(i,state.kits[i][0],i); }
 function place(i,w){
-  const [ex,ey]=ext(), m=0.25;
+  if(LINE()){ placeOnLine(i,w[0],state.nk); return; }
+  const [x0w,x1w,y0w,y1w]=view(), m=0.25;
   let [x,y]=w;
-  x=Math.max(-ex+m,Math.min(ex-m,x)); y=Math.max(-ey+m,Math.min(ey-m,y));
+  x=Math.max(x0w+m,Math.min(x1w-m,x)); y=Math.max(y0w+m,Math.min(y1w-m,y));
   if(state.reveal){
     const dx=x-state.src[0], dy=y-state.src[1], rr=Math.hypot(dx,dy);
     for(const ring of [3,4]){
@@ -361,24 +445,48 @@ function fit(){
   map.width=Math.round(w*dpr); map.height=Math.round(h*dpr); map.style.height=h+'px';
   const bh=map.offsetHeight-map.clientHeight; if(bh) map.style.height=(h+bh)+'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
-  W=w; H=h; S=Math.min(W,H)/(2*HALF);
-  // a narrower map may have left a kit off the edge
-  for(let i=0;i<4;i++) place(i,state.kits[i]);
+  W=w; H=h;
+  if(LINE()){
+    // the tape (3 m) and the field (to 2 m deep) with a margin each side;
+    // below the tape, BELOW px for the kits, the station labels and the
+    // scale bar, and above the field, TOP px for its label. Spare height is
+    // split above and below.
+    const BELOW=52, TOP=24;
+    S=Math.min(W/3.7, (H-BELOW-TOP)/FY1);
+    const spare=Math.max(0,H-BELOW-TOP-FY1*S);
+    OX=W/2; OY=H-BELOW-spare/2;
+    seatLine();
+  } else {
+    S=Math.min(W,H)/(2*HALF); OX=W/2; OY=H/2;
+    // a narrower map may have left a kit off the edge
+    for(let i=0;i<4;i++) place(i,state.kits[i]);
+  }
   draw();
 }
 window.addEventListener('resize', fit);
 
 const nkEl=document.getElementById('nk'), sgEl=document.getElementById('sg');
-nkEl.addEventListener('change',()=>{ state.nk=+nkEl.value; draw(); });
+nkEl.addEventListener('change',()=>{ state.nk=+nkEl.value; if(LINE()) seatLine(); draw(); });
+const layEl=document.getElementById('lay');
+const ARIA={ ring: map.getAttribute('aria-label'),
+  line: 'Top-down map of the firing range: a taped line with five station marks, and a dashed box field downrange with a hidden source inside it. Two to four kits sit on the marks, each facing straight downrange, and each draws its measured bearing toward the source with a shaded wedge of plus and minus one sigma. The least-squares fix is a cross, and its one-sigma error ellipse is drawn around it. Drag a kit to move it to another mark.' };
+function setLayout(l){
+  state.layout=l; layEl.value=l;
+  state.kits = l==='line' ? state.lkits : state.rkits;
+  map.setAttribute('aria-label', ARIA[l]);
+  newSource(); fit();
+}
+layEl.addEventListener('change',()=>setLayout(layEl.value));
 sgEl.addEventListener('input',()=>{ state.sigma=+sgEl.value; document.getElementById('sg-val').textContent=state.sigma.toFixed(1)+'°'; draw(); });
 document.getElementById('rev').addEventListener('change',e=>{ state.reveal=e.target.checked; draw(); });
 document.getElementById('refl').addEventListener('change',e=>{ state.refl=e.target.checked; draw(); });
 document.getElementById('newsrc').addEventListener('click',()=>{ newSource(); draw(); });
 document.getElementById('remeas').addEventListener('click',()=>{ newBearings(); draw(); });
-// a preset by query string: ?kits=3
+// presets by query string: ?kits=3, ?layout=line
 (function(){
   const q=new URLSearchParams(location.search), k=+q.get('kits');
   if(k>=2&&k<=4){ state.nk=k; nkEl.value=String(k); }
+  if(q.get('layout')==='line'){ state.layout='line'; state.kits=state.lkits; layEl.value='line'; map.setAttribute('aria-label', ARIA.line); }
 })();
 newSource();
 fit();

@@ -145,17 +145,17 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L17 Lab | Phased Array Bring-Up | **L17 Lab** packet | 18/20; hardware dry run 2026-10-19 on phaser-00, fixes merged (#118, #121) | ready |
 | L18 | Beam Steering | none (pre-lab of the L18 Lab) | 20/20, sweeps done | ready |
 | L18 Lab | Beam Steering | **L18 Lab** packet | 14/21; dry run 2026-10-19, fixes merged (#110, #121): E1 side, 45° marker, scan loss at 1.2 m | ready |
-| L19 | Direction Finding | none (L19 Lab packet) | rewritten (#103), 19/20, fix widget (#123) | sweeps |
-| L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | firing range: 3.0 m line, 7 stations, 2.0 m × 1.0–2.0 m box field; starter script; 8/20 | hardware-day checks |
+| L19 | Direction Finding | none (L19 Lab packet) | rewritten (#103), 19/20, fix widget (#123); voice, why and illustration sweeps (#151) | ready |
+| L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | firing range: 3.0 m line, 5 stations 0.75 m apart (Neil, 10-25), 2.0 m × 1.0–2.0 m box field; starter script; 8/20 | hardware-day checks |
 | L20 | Array Factor and Beamwidth | practice | 18/20, sweeps done (#128) | ready |
-| L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | convert to packet |
+| L20 Lab | Array Factor | **L20 Lab** packet (`68f9454`, 2026-10-22); L20Lab practice set retired | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | ready |
 | L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
-| L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23 | **walk dry run** (needs `install.sh`) |
-| L22 | Sidelobes and Tapering | practice | cut 20/20, voice sweep done (#132) | why + illustration sweeps |
-| L23 | Beam Squint and Quantization | practice | cut 20/20 (#131, open) | sweeps |
-| L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** (old-style sheet) + practice | 46/20, uncut | cut + sweeps + packet |
-| L24 | Null Steering | practice | 46/20 | cut + sweeps |
-| L24 Lab | Null Steering | **L24 Lab** (old-style sheet) + practice | 51/20 | cut + sweeps + packet |
+| L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23; walk validated 2026-10-25 (sidelobes 11.5 / 14.8 dBc, floor 25–30 dBc) | ready |
+| L22 | Sidelobes and Tapering | practice | cut 20/20; voice, why and illustration sweeps done (#132, #137, #142) | ready |
+| L23 | Beam Squint and Quantization | practice | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
+| L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20; preset-6 walk validated on phaser-00 2026-10-25 | ready |
+| L24 | Null Steering | practice | cut 20/20 (#148), voice, why and illustration sweeps (#149) | ready |
+| L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | all four procedures run on phaser-00 2026-10-25 (A, B, D angles and loss validated; nulls room-limited to about −22 dB in a cramped space) | ready |
 
 **Module 4: radar (L25–L31) and the final project.** Placeholder pages. They
 need the FMCW mode in the Phaser app (Neil is building it, with the lab
@@ -189,43 +189,43 @@ needs its rubric, published with the L28 Lab packet.
    frequency, open Lab Presets first, E1 on the right facing the patches,
    level comparisons at 1.2 m or more. Two Phaser changes ride along:
    the readouts are now **Angle** (Peak/Centroid) and **Peak Gain**, not
-   "Est. Angle" and "Peak Array Gain" (still stale in L22, L23, and the
-   L22–L23 Lab), and preset 6 Quantization now holds the beam at 15° with
+   "Est. Angle" and "Peak Array Gain" (still stale in L24), and preset 6 Quantization now holds the beam at 15° with
    Blackman for a Signal vs Time walk (phaser #48). The second dry run
    (`review/M3_LAB_DRYRUN_2026-10-23.md`, all of L17–L24) adds, for the
    remaining passes:
-   - **L22–L23 Lab** (sent to the L23 thread): taper predictions stay linear
-     in slider % (the gain-slider fix makes that true; say so in one line);
-     custom-taper hint at ends near 25%; recalibrate if the uniform
-     sidelobes look lopsided; check Signal BW before step (g); Angle shifts
-     several degrees at 4 bits and below; keep ±40° clear of walls.
-   - **L24 Lab**: notches and nulls reach −40 to −50 dB, so the
-     "floor-limited at −21 dB" explanation goes; Procedure D sets a uniform
+   - **L24 Lab** (done in #149 but Procedure C): notches and nulls reach −40 to −50 dB, so the
+     "floor-limited at −21 dB" explanation goes, in the text and in
+     `L24-quant-depth.svg`; Procedure D sets a uniform
      taper and resets Beam 1 Phase until preset 8 does; Procedure C runs at
      +20° only, against Neil's software interferer, with the expected
      suppression filled in from his first run, and its "No hardware?" note
      updated.
-2. **L21 Lab walk** on a kit updated to phaser #48. The rotation ran on
-   2026-10-23 and confirmed scan loss (−0.9 dB at 33°), the sidelobe
-   asymmetry (3.4 dB) and the first null (14.9°); it is now one pass read
-   from the beam sweep. Still owed: the Signal vs Time walk, its Tracking
-   update rate on a 10 s walk, and the floor with the beam held.
-3. **L19 sweeps** (voice, why, illustration) on the rewritten lesson.
-4. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
+2. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
    with a measured lookup table (amplitude goes as (%/100)^0.68 today, the
    ADAR1000 register response; Neil, 2026-10-23: fix it in software, not in
-   the labs); inject a simulated interferer into the real receive samples
-   for L24 Procedure C (Neil's); preset 8 loads uniform and resets Beam 1
+   the labs); preset 8 loads uniform and resets Beam 1
    Phase; Signal BW and Rx Gain survive Calibrate, Find HB100 and the Rect
-   preset; restart the sweep after Find HB100; check the simulator's MVDR,
-   which also nulls the target at ±20°. Open from the dry run: why array
+   preset; restart the sweep after Find HB100. Phaser #55 (2026-10-25 bench
+   run): MVDR output on Manual's scale (the "lost target" was 6 dB of
+   scaling), interferer and MVDR settings survive Calibrate, interferer
+   readout follows HB100 drift. From the 2026-10-25 L24 run: preset 8
+   resets Beam 1 Phase but not the taper; the error function jumps around
+   boresight; and every null (notch, difference, delta) bottomed at −34 to
+   −36 dBFS with the HB100 tone still in it, most likely room reflections
+   in a cramped space, but worth ruling out leakage on an open bench. The 3- and 4-bit lobes in the old
+   quantization sweep sit above even the worst-case simulation of rounding
+   the steering ramp, and Angle shifted +8.4° at 4 bits and below: does the
+   kit also round its calibration offsets? Evidence (2026-10-25, phaser-00):
+   the preset-6 walk, beam held at 15°, read the floor (−17 to −19 dBc) at
+   4 and 3 bits where the 10-23 sweep read −15.5 and −12.0 dBc, and its
+   2-bit lobe was −10.1 dBc near −53° against the sweep's −8.5. Open from the dry run: why array
    peaks read 1–3 dB under the in-phase sum of single elements even with
    elements fully on or off; whether each channel's phase moves with its
    gain setting; whether recalibrating with the source exactly at boresight
    removes the +1–2° offset.
-5. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
+3. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
-6. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
+4. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
    taught in class, then the L28–L31 Labs as the final project's scaffolding,
    each packet built to start from the lab before it, plus the report rubric.
 
@@ -235,8 +235,6 @@ needs its rubric, published with the L28 Lab packet.
   L22–L23, and L24 Labs. Retire the L17 and L18 practice entries and the old L19
   (Beam Steering Lab) one. Neil sets this
   up; nothing in the repo tracks it.
-- **L23's practice set covers grating lobes**, which objective 3.8's wording
-  does not mention.
 - **Image-build homework:** does each kit get a second card, and do cadets have
   Python on their laptops? The L17 Lab rewrite (#96) has cadets build their own
   card in class, which may settle this.

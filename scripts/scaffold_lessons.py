@@ -54,7 +54,7 @@ LO_TEXT = {
     "3.5": "I can implement beam steering on the ADALM-PHASER and verify the steered pattern against theory.",
     "3.6": "I can distinguish between array factor and true antenna pattern and account for element pattern effects.",
     "3.7": "I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.",
-    "3.8": "I can identify beam squint and quantization effects in a phased array and describe their impact on system performance.",
+    "3.8": "I can identify grating lobes, beam squint, and quantization effects in a phased array and describe their impact on system performance.",
     "3.9": "I can calculate null-steering weights and implement pattern nulls on the ADALM-PHASER.",
     "4.1": "I can apply the radar equation to calculate received power for a given geometry, and account for path loss and radar cross section (RCS).",
     "4.2": "I can calculate range resolution, unambiguous range, and Doppler shift for a given radar waveform.",

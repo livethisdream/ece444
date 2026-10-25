@@ -37,6 +37,12 @@
   --card-rule:   #0067b9;
   --card-shadow: none;
   --card-title:  #707070;
+  --card-foot:   #0067b9;
+  /* The answer-key half of a practice-set pair (Neil, 2026-10-24): gray,
+     in both modes. */
+  --key-ink:     #707070;
+  --key-rule:    rgba(112, 112, 112, 0.35);
+  --key-soft:    rgba(112, 112, 112, 0.09);
   --fig-far:     #cddce9;
   --fig-line:    #5a5a5a;
 
@@ -79,6 +85,10 @@
     --card-rule:   rgba(140, 196, 238, 0.18);
     --card-shadow: var(--shadow);
     --card-title:  #b4d4f0;
+    --card-foot:   #1d7a4d;
+    --key-ink:     #a9b4c0;
+    --key-rule:    rgba(169, 180, 192, 0.35);
+    --key-soft:    rgba(169, 180, 192, 0.10);
     --fig-far:     #1d3350;
     --fig-line:    #93a3b5;
     --tbl-head:     #17334f;
@@ -109,6 +119,10 @@
   --card-rule:   rgba(140, 196, 238, 0.18);
   --card-shadow: var(--shadow);
   --card-title:  #b4d4f0;
+  --card-foot:   #1d7a4d;
+  --key-ink:     #a9b4c0;
+  --key-rule:    rgba(169, 180, 192, 0.35);
+  --key-soft:    rgba(169, 180, 192, 0.10);
   --fig-far:     #1d3350;
   --fig-line:    #93a3b5;
   --tbl-head:     #17334f;
@@ -321,15 +335,14 @@ figcaption { color: var(--muted); font-size: var(--step--1); max-width: 62ch; }
 .doc-link:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
 /* The solutions half of the pair reads as the answer key, so it carries the
-   course's accent rather than its blue -- the same cue the sidebar and the
-   material cards already use for practice material. */
+   key color rather than its blue: a quieter gray in both modes. */
 .doc-link.doc-key {
-  color: var(--accent-ink); border-color: var(--accent-rule);
+  color: var(--key-ink); border-color: var(--key-rule);
   --doc-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 15'%3E%3Cpath d='M7 0H1.6A1.6 1.6 0 0 0 0 1.6v11.8A1.6 1.6 0 0 0 1.6 15h8.8a1.6 1.6 0 0 0 1.6-1.6V5H8a1 1 0 0 1-1-1V0zm1.2.35V3.8h3.45L8.2.35zM5.15 11.9 2.6 9.35l.88-.88 1.67 1.67 3.52-3.52.88.88-4.4 4.4z'/%3E%3C/svg%3E");
 }
 .doc-link.doc-key:hover {
-  color: var(--accent-ink); background: var(--accent-soft);
-  border-color: var(--accent-ink);
+  color: var(--key-ink); background: var(--key-soft);
+  border-color: var(--key-ink);
 }
 
 /* A row of them, not a bulleted list. `:class: doc-links` on the frame (or
@@ -360,7 +373,7 @@ td .doc-link:hover, th .doc-link:hover {
   background: var(--soft); border-color: var(--rule);
 }
 td .doc-link.doc-key:hover, th .doc-link.doc-key:hover {
-  background: var(--accent-soft); border-color: var(--accent-rule);
+  background: var(--key-soft); border-color: var(--key-rule);
 }
 
 /* ---- progress rail -------------------------------------------------- */
@@ -555,6 +568,90 @@ td .doc-link.doc-key:hover, th .doc-link.doc-key:hover {
   .frame .block-card p, .frame .deliverable-card p { font-size: .84rem; line-height: 1.4; }
   .frame .block-grid, .frame .deliverable-cards { gap: .45rem; }
 }
+
+/* ---- help card and first-visit hint ---------------------------------- */
+/* One screen naming each control in the bar, in the bar's own order. Opened
+   by `?`, by Help in the site menu or tools, and by the hint. */
+.help {
+  position: fixed; inset: 0; z-index: 80;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem max(1rem, env(safe-area-inset-right, 0px)) 1rem max(1rem, env(safe-area-inset-left, 0px));
+  background: color-mix(in srgb, var(--ground) 80%, transparent);
+  backdrop-filter: blur(6px); overflow-y: auto;
+}
+.help[hidden] { display: none; }
+.help-card {
+  position: relative; width: min(34rem, 100%); max-height: calc(100vh - 2rem); overflow-y: auto;
+  background: var(--panel); color: var(--ink);
+  border: 1px solid var(--card-rule); border-radius: 22px; box-shadow: var(--shadow);
+  padding: 1.4rem 1.6rem 1.2rem;
+  font-family: var(--sans); font-size: 1rem; line-height: 1.45;
+}
+.help-card h2 { margin: 0 2.2rem .2rem 0; padding: 0; border: 0; font-size: 1.35rem; color: var(--blue-dark); }
+.help-card h3 { margin: 1rem 0 .2rem; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.help-card p { margin: 0; }
+.help-lead { color: var(--muted); margin-bottom: .8rem !important; }
+.help-list {
+  display: grid; grid-template-columns: max-content minmax(0, 1fr);
+  gap: .65rem .9rem; margin: 0; align-items: baseline;
+}
+.help-list dt { margin: 0; }
+.help-list dd { margin: 0; }
+.help-chip {
+  display: inline-block; font: .74rem var(--mono); color: var(--blue-dark);
+  border: 1px solid var(--rule); border-radius: 999px; padding: .15rem .6rem;
+  background: var(--panel); white-space: nowrap;
+}
+.help-card kbd, .help-hint kbd {
+  font: .78em var(--mono); color: var(--muted);
+  border: 1px solid var(--rule); border-radius: 4px; padding: 0 .3em;
+}
+.help-foot { margin-top: 1rem !important; font-size: .85rem; color: var(--muted); }
+.help-close {
+  position: absolute; top: .8rem; right: .8rem;
+  width: 2.1rem; height: 2.1rem; padding: 0; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font: 400 1.4rem/1 var(--sans); cursor: pointer;
+  background: var(--soft); border: 1px solid var(--rule); color: var(--muted);
+}
+.help-close:hover { color: var(--ink); }
+.help-close:focus-visible, .help-hint button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+@media (max-width: 30rem) {
+  .help-card { padding: 1.1rem 1.1rem 1rem; }
+  .help-list { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
+  .help-list dd { margin-bottom: .55rem; }
+}
+
+/* A phone has no keyboard: drop the keys, and say where the menu item is. */
+.help-touch { display: none; }
+@media (hover: none) and (pointer: coarse) {
+  .help-keys { display: none; }
+  .help-touch { display: inline; }
+}
+
+/* The hint sits just above the bar and leaves with it. */
+.help-hint {
+  position: fixed; z-index: 44; left: 50%; transform: translateX(-50%);
+  bottom: calc(clamp(.7rem, 2vh, 1.4rem) + 2.6rem);
+  display: flex; align-items: center; gap: .2rem; max-width: calc(100vw - 2rem);
+  background: var(--panel); border: 1px solid var(--card-rule); border-radius: 999px;
+  box-shadow: var(--shadow); padding: .2rem .25rem .2rem .9rem; white-space: nowrap;
+  font: .85rem var(--sans); color: var(--ink);
+}
+.help-hint[hidden], html[data-mode="present"] .help-hint, body.chrome-away .help-hint { display: none; }
+.help-hint button {
+  font: inherit; color: var(--blue-dark); background: none; border: 0; cursor: pointer;
+  padding: .25rem .2rem; text-align: left;
+}
+.help-hint button:hover { text-decoration: underline; }
+.help-hint button.help-hint-close {
+  color: var(--muted); font-size: 1.15rem; line-height: 1; width: 1.9rem; height: 1.9rem;
+  border-radius: 50%; text-align: center; padding: 0;
+}
+.help-hint button.help-hint-close:hover { background: var(--soft); text-decoration: none; }
+
+/* The site menu's Help item reads as a button among links; a rule sets it off. */
+.hud .pop button.pop-help { border-top: 1px solid var(--rule); border-radius: 0 0 7px 7px; margin-top: .2rem; padding-top: .5rem; }
 
 /* ---- jump overlay: the shell's one navigational surface -------------- */
 /* The panel chrome is shared. The frame-numbered list inside it lives in

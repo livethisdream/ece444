@@ -392,7 +392,7 @@ def dither_error(n_el=32, bits=3, th0=15.8, dl=0.5):
 # ------------------------------------------------------- null depth -------
 def null_depth_levels():
     fig, ax = plt.subplots(figsize=(5.4, 3.6))
-    pred = [(-48, "quantized weights\nalone: −48 dB", NAVY),
+    pred = [(-48, "one-step channel\nerrors: −48 dB", NAVY),
             (-21, "first estimate from\nthe sweep floor: −21 dB", GRAY)]
     for y, lab, col in pred:
         ax.plot([0.15, 0.85], [y, y], color=col, lw=3)

@@ -30,7 +30,7 @@ with room for notes. Print from read mode for the whole lesson.
 
 <ol class="lo-list" style="--module: '3'; counter-reset: lo 6">
   <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
-  <li>I can identify beam squint and quantization effects in a phased array and describe their impact on system performance.</li>
+  <li>I can identify grating lobes, beam squint, and quantization effects in a phased array and describe their impact on system performance.</li>
 </ol>
 
 :::{depth}
@@ -203,10 +203,10 @@ doing. You walk the HB100 across the arc and read the level against time, at
 angle: a $15^\circ$ ramp steps $45.4^\circ$ per element, which rounds to the
 $22.5^\circ$ and $45^\circ$ grids with errors of $3^\circ$ or less, while at
 2 bits every other element is off by about $44^\circ$ and the array factor puts
-a lobe near $-51^\circ$ at about $-8$ dBc. The walk with the beam held is new
-with this preset and has not yet been run on hardware. If lobes appear at 3 or
-4 bits anyway, the kit is rounding more than the steering ramp; record what you
-see.
+a lobe near $-51^\circ$ at about $-8$ dBc. On phaser-00 the 7-, 4-, and 3-bit
+walks all read the floor, 17 to 19 dB below the peak, and the 2-bit walk put a
+lobe about 10 dB down near $-53^\circ$. If lobes appear at 3 or 4 bits on your
+kit, it is rounding more than the steering ramp; record what you see.
 ::::
 
 
@@ -421,20 +421,27 @@ only when it commands $48.0^\circ$.
 
 Put the HB100 back at the arc's $-90^\circ$ end and press Lab preset
 **6 Quantization**. It holds the beam at $15^\circ$ with the Blackman taper and
-opens **Signal vs Time** on the Tracking tab. At **Phase Shift Bits** 7, walk
-the HB100 from $-90^\circ$ to $+90^\circ$ along the $1.2$ m arc, aimed at the
-array, in about 10 s, and read the main-lobe peak and the strongest lobe
-outside the main lobe on the trace. Repeat at 4, 3, and 2 bits.
+opens **Signal vs Time** on the Tracking tab. With **Use Bits** checked, set
+**Phase Shift Bits** to 7, then walk the HB100 from $-90^\circ$ to $+90^\circ$
+along the $1.2$ m arc, aimed at the array, in about 20 s. The trace keeps the
+last 30 s, counted from when the mode starts, so begin walking promptly; a
+slower walk runs off its end. Read the main-lobe peak and the
+strongest lobe outside the main lobe. Repeat at 4, 3, and 2 bits, checking the
+bit count and the box before each walk.
 
 | Bits | LSB | Rule of thumb, $-6B$ dB | Expected strongest lobe outside the main lobe |
 | :-- | :-- | :-- | :-- |
-| 7 | $2.8^\circ$ | $-42$ | the floor |
+| 7 | $2.8^\circ$ | $-42$ | the floor, $-17$ to $-19$ dBc |
 | 4 | $22.5^\circ$ | $-24$ | the floor, as at 7 bits |
 | 3 | $45^\circ$ | $-18$ | the floor, as at 7 bits |
-| 2 | $90^\circ$ | $-12$ | about $-8$ dBc, near $-50^\circ$ |
+| 2 | $90^\circ$ | $-12$ | about $-10$ dBc, near $-50^\circ$ |
 
-The expectations come from rounding a $15^\circ$ ramp onto each grid; the walk
-has not yet been run on hardware. The earlier version of this step swept the
+The expectations come from rounding a $15^\circ$ ramp onto each grid, and the
+phaser-00 walks of 2026-10-25 matched them: the floor at 7, 4, and 3 bits, and
+at 2 bits a lobe $10$ dB down near $-53^\circ$, about 2 dB under the $-8$ dBc
+prediction, which a hand walk can easily miss by. The 2-bit trace also stays
+raised, about $-11$ dBc, over the first stretch of the walk, $-90^\circ$ to
+$-75^\circ$. The earlier version of this step swept the
 beam with the bits reduced and read $-15.5$, $-12.0$, and $-8.5$ dBc at 4, 3,
 and 2 bits, above both the rule and Lesson 23's worst-case simulation. Lobes at
 3 or 4 bits in the walk would point to the kit rounding more than the steering
@@ -526,7 +533,7 @@ Part 2 at the bench, Part 3 after. <a href="../../labs/ECE444_Lab_L22_L23_TaperS
 | :-- | :-- | :-- |
 | Grating lobe | a full-height copy of the beam where $\sin\theta = m\lambda/d_\text{eff}$ is real | every third element on: $\pm 43^\circ$ |
 | Beam squint | the beam moves when the signal is off the phase-set frequency | 500 MHz at $45^\circ$: $3^\circ$ |
-| Phase quantization | lobes that appear when the ramp falls between grid points | 2 bits at $15^\circ$: a lobe near $-8$ dBc |
+| Phase quantization | lobes that appear when the ramp falls between grid points | 2 bits at $15^\circ$: a lobe near $-10$ dBc; 3 and 4 bits at the floor |
 ::::
 
 
