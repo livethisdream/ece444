@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-How an array measures the direction a signal comes from, and how bearings from known places locate the transmitter.
+An array measures the direction a signal comes from, and bearings from known places locate the transmitter.
 
 Lesson 19 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -48,7 +48,7 @@ HB100 among several boxes.
 :::{present}
 - **Direction finding** locates a transmitter from its own signal.
 - One array measures a **bearing**: the direction the wave arrives from.
-- A passive receiver has no echo delay, so no range.
+- A passive receiver has no echo delay to give range.
 - Bearings from two known positions cross at the transmitter.
 :::
 
@@ -56,8 +56,8 @@ Direction finding is the problem of locating a transmitter from the signal it
 emits: a radio beacon, a jammer, a lost aircraft's emergency locator, or, in
 the L19 Lab, an HB100 hidden in a box. We do not control the transmitter, and
 we do not know its power or its antenna pattern. The one thing we can measure
-reliably is the direction its wave comes from, because that direction is
-written into the times at which the wave reaches each element of an array.
+reliably is the direction its wave comes from, because that direction sets the
+times at which the wave reaches each element of an array.
 
 A direction measured from one place is a **bearing**. A bearing alone says
 which way to look but not how far. A radar gets range from the delay of its own
@@ -107,7 +107,7 @@ reach the computer. What reaches it is a sum, and the sum depends on the phase
 we command.
 ::::
 
-::::{frame} Steer and Sum
+::::{frame} The Steered Sum
 :::{present}
 $$\begin{aligned}
 \psi &= kd\sin\theta_s - kd\sin\theta_0 \\
@@ -155,7 +155,7 @@ bearing: the GUI's **Angle** readout, set to **Peak**.
 :::
 ::::
 
-::::{frame} Accuracy Is Not Resolution
+::::{frame} Accuracy and Resolution
 :::{present}
 - The main lobe is $12.9^\circ$ wide, but the sweep locates its peak far more finely.
 - Noise moves the peak about $0.2^\circ$ at $30\ \text{dB}$ SNR.
@@ -165,18 +165,24 @@ bearing: the GUI's **Angle** readout, set to **Peak**.
 At $10.525\ \text{GHz}$, $\lambda = 28.5\ \text{mm}$ and the array's half-power
 beamwidth at broadside is
 
-$$\theta_\text{HP} = 0.886\ \frac{\lambda}{Nd} = 0.886\ \frac{28.5}{112} = 0.225\ \text{rad} = 12.9^\circ.$$
+$$\begin{aligned}
+\theta_\text{HP} &= 0.886\ \frac{\lambda}{Nd} = 0.886\ \frac{28.5}{112} \\
+&= 0.225\ \text{rad} = 12.9^\circ.
+\end{aligned}$$
 
 It is tempting to conclude that a bearing is only good to about $13^\circ$, but
 the beamwidth limits something else. Finding the peak of one smooth lobe is a
-location estimate, and its precision is set by how much noise jitters the
-curve, not by how wide the curve is. The standard estimate for a beam that
-scans across a source is
+location estimate, and how much noise jitters the curve sets its precision, not
+how wide the curve is. The standard estimate for a beam that scans across a
+source is
 
 $$\sigma_\text{noise} \approx \frac{\theta_\text{HP}}{1.6\sqrt{2\ \text{SNR}}},$$
 
 which at an SNR of $30\ \text{dB}$ (a factor of 1000) gives
-$12.9^\circ/(1.6\sqrt{2000}) = 0.2^\circ$. An HB100 a few meters away is
+
+$$\sigma_\text{noise} \approx \frac{12.9^\circ}{1.6\sqrt{2000}} = 0.2^\circ.$$
+
+An HB100 a few meters away is
 tens of decibels above the noise, so noise is not what limits the bearing.
 
 The beamwidth sets **resolution**: the ability to tell two sources apart. Two
@@ -184,8 +190,8 @@ sources closer than about one beamwidth produce lobes that overlap into a
 single peak somewhere between them, and the sweep reports one wrong bearing
 instead of two right ones. For the course array the first null sits
 $\lambda/Nd = 0.254$ away in $\sin\theta$, $14.7^\circ$ at broadside, which is
-the usual measure of the separation two sources need. Every HB100 but one is
-switched off during the fox hunt so that the sweep only ever sees one source.
+the usual measure of the separation two sources need. Only one HB100 is on
+during the fox hunt, so the sweep sees one source.
 ::::
 
 ::::{frame} The Sweep Grid
@@ -195,7 +201,7 @@ $$\begin{aligned}
 \delta\theta &= \frac{0.0159}{\cos\theta}
 \end{aligned}$$
 
-- $0.91^\circ$ at broadside, $1.05^\circ$ at $30^\circ$, $1.29^\circ$ at $45^\circ$.
+- One step is $0.91^\circ$ at broadside, $1.05^\circ$ at $30^\circ$, $1.29^\circ$ at $45^\circ$.
 - The Angle readout is off by up to half a step: $0.53^\circ$ at $30^\circ$.
 :::
 :::{present}
@@ -209,8 +215,8 @@ have 7 bits, so the progressive phase moves in whole steps of
 $360^\circ/128 = 2.8125^\circ$ (L18, "Phase-Shifter Resolution"). At the HB100's
 frequency, $kd = 176.8^\circ$, so one step of progressive phase moves the beam
 by a fixed $0.0159$ in $\sin\theta$. The same step in $\sin\theta$ is a larger step
-in angle away from broadside, because $\delta\theta = \delta(\sin\theta)/\cos\theta$,
-the same stretching that broadens the steered beam in L18.
+in angle away from broadside, by the factor $1/\cos\theta$ in the slide's
+second line, the same stretching that broadens the steered beam in L18.
 
 The Angle readout is the steer angle of the largest sample, so it can only land on
 the grid. Unless the source happens to sit on a grid point, the reported angle
@@ -224,7 +230,7 @@ and the scan loss all grow with $1/\cos\theta$ beyond that.
 :::{present}
 $$\sin\theta_\text{meas} = \sin(\text{az})\cos(\text{el})$$
 
-- A line array measures the angle from its own axis, a cone, not a flat azimuth.
+- A line array measures a cone angle from broadside, not a floor-plan azimuth.
 - A source $0.75\ \text{m}$ low at $3\ \text{m}$ ($14.0^\circ$ down) at $30^\circ$ reads $29.0^\circ$.
 - Keep every array and every box at the same height.
 :::
@@ -267,10 +273,11 @@ $20\ \text{dB}$ down, $1.8^\circ$ at $10\ \text{dB}$ down, and $3.1^\circ$ at
 $6\ \text{dB}$ down.
 
 A reflection more than about $20^\circ$ away forms its own lobe and moves the
-main peak much less. It becomes dangerous if someone stands between the kit
+main peak much less. It takes over the bearing if someone stands between the kit
 and the source: the direct lobe drops, the reflection's lobe is now the
-largest, and Angle reports the direction of the whiteboard. A bearing
-that disagrees with the others by several degrees is most often this.
+largest, and Angle reports the direction of the whiteboard. A bearing several
+degrees off from the others most often comes from a reflection that has taken
+over the peak.
 ::::
 
 ::::{frame} From Array Angle to Room Bearing
@@ -296,19 +303,22 @@ $$\beta = h + \theta_\text{est}.$$
 
 Which physical side of the kit is positive depends on which way the kit faces; the
 L18 Lab found it by moving the source toward element E8. Get it wrong and a
-source at $30^\circ$ is drawn at $-30^\circ$, a $60^\circ$ error, so check it
-with one shot at a known position before trusting any bearing.
+source at $30^\circ$ lands on the plan at $-30^\circ$, a $60^\circ$ error, so
+check it with one shot at a known position before trusting any bearing.
 
 The heading error adds directly to the bearing error, and in the room it is the
 largest term. Laying the array's edge along a taped line holds $h$ to about
 $1^\circ$. The independent terms add as a root sum of squares:
 
-$$\sigma_\beta = \sqrt{0.53^2 + 1.0^2 + 1.0^2 + 0.2^2} = 1.5^\circ.$$
+$$\begin{aligned}
+\sigma_\beta &= \sqrt{0.53^2 + 1.0^2 + 1.0^2 + 0.2^2} \\
+&= 1.5^\circ.
+\end{aligned}$$
 
 Setting the heading by eye, about $3^\circ$, raises the total to $3.2^\circ$.
 ::::
 
-::::{frame} One Bearing Is a Line
+::::{frame} The Bearing Line
 :::{present}
 $$\begin{aligned}
 \hat{\mathbf u} &= (\cos\beta,\ \sin\beta) \\
@@ -344,7 +354,7 @@ r_A &= 4\ \frac{\sin 55.2^\circ}{\sin 67.4^\circ} = 3.56\ \text{m} \\
 \mathbf x &= (1.92,\ 3.00)\ \text{m}
 \end{aligned}$$
 
-- Law of sines on the triangle; the box is at $(2.00,\ 3.00)$.
+- The law of sines gives $r_A$; the box is at $(2.00,\ 3.00)\ \text{m}$.
 :::
 :::{present}
 <img src="../../viz/img/L19-two-bearings.svg"
@@ -358,18 +368,27 @@ Kit A sits at the room origin with its broadside at $h_A = 60^\circ$; kit B
 sits $b = 4\ \text{m}$ along the room's $x$ axis with $h_B = 120^\circ$. A
 reads Angle $-2.6^\circ$ and B reads $+4.8^\circ$, so the room bearings are
 
-$$\beta_A = 60^\circ - 2.6^\circ = 57.4^\circ, \qquad \beta_B = 120^\circ + 4.8^\circ = 124.8^\circ.$$
+$$\begin{aligned}
+\beta_A &= 60^\circ - 2.6^\circ = 57.4^\circ, \\
+\beta_B &= 120^\circ + 4.8^\circ = 124.8^\circ.
+\end{aligned}$$
 
 The two bearing lines and the baseline form a triangle. Its angle at A is
 $\beta_A = 57.4^\circ$, its angle at B is $180^\circ - \beta_B = 55.2^\circ$, and
 its angle at the source is the **crossing angle**,
 $\gamma = \beta_B - \beta_A = 67.4^\circ$. The law of sines gives the range from A,
 
-$$r_A = b\ \frac{\sin(180^\circ - \beta_B)}{\sin\gamma} = 4\ \frac{\sin 55.2^\circ}{\sin 67.4^\circ} = 3.56\ \text{m},$$
+$$\begin{aligned}
+r_A &= b\ \frac{\sin(180^\circ - \beta_B)}{\sin\gamma} \\
+&= 4\ \frac{\sin 55.2^\circ}{\sin 67.4^\circ} = 3.56\ \text{m},
+\end{aligned}$$
 
 and the fix is $3.56\ \text{m}$ out along A's bearing:
 
-$$\mathbf x = r_A(\cos\beta_A,\ \sin\beta_A) = (1.92,\ 3.00)\ \text{m}.$$
+$$\begin{aligned}
+\mathbf x &= r_A(\cos\beta_A,\ \sin\beta_A) \\
+&= (1.92,\ 3.00)\ \text{m}.
+\end{aligned}$$
 
 The box was at $(2.00,\ 3.00)\ \text{m}$, where the true bearings are
 $56.3^\circ$ and $123.7^\circ$. Each Angle reading was about $1.1^\circ$ high,
@@ -383,12 +402,12 @@ $$\left(\sum_i \hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}\right)\mathbf x = 
 
 - With three or more bearings the lines do not meet at one point.
 - The fix is the point with the smallest sum of squared distances to the lines.
-- A $2\times 2$ solve in numpy, the same for two kits or ten.
+- numpy solves one $2\times 2$ system for two kits or ten.
 :::
 
 With two bearings the crossing is exact. A third bearing adds a third line,
 and because every bearing carries some error, the three lines form a small
-triangle rather than meeting at a point. The sensible fix is the point closest
+triangle rather than meeting at a point. The usual fix is the point closest
 to all of them. The perpendicular distance from a point $\mathbf x$ to line $i$
 is
 
@@ -413,7 +432,7 @@ unweighted form is close enough.
 :::{present}
 $$\delta_\perp = R\tan\sigma_\beta$$
 
-- At $\sigma_\beta = 2^\circ$: $0.10\ \text{m}$ at $3\ \text{m}$, $0.14\ \text{m}$ at $4\ \text{m}$, $0.17\ \text{m}$ at $5\ \text{m}$.
+- At $\sigma_\beta = 2^\circ$ the line moves $0.10\ \text{m}$ at $3\ \text{m}$, $0.14\ \text{m}$ at $4\ \text{m}$, $0.17\ \text{m}$ at $5\ \text{m}$.
 - A bearing constrains the source across its line, not along it.
 :::
 
@@ -435,7 +454,7 @@ bearing's strip is what limits the fix along the first one, and how well it does
 that depends on the angle between them.
 ::::
 
-::::{frame} How the Crossing Angle Sets the Error
+::::{frame} The Crossing Angle
 :class: viz-frame
 
 :::{present}
@@ -447,7 +466,7 @@ that depends on the angle between them.
 </iframe>
 
 - A shallow crossing stretches the error region as $1/\sin\gamma$: $0.20\ \text{m}$ at $90^\circ$, $0.76\ \text{m}$ at $15^\circ$.
-- A reflection drags the fix, and only a third bearing shows it.
+- A reflection moves the fix, and only a third bearing shows it.
 :::
 
 Where the two strips overlap is where the source can be. When the lines cross
@@ -536,7 +555,7 @@ $0.5\ \text{m}$.
 :::{present}
 $$e_i = \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i)$$
 
-- Each bearing's miss distance at the fix, in meters.
+- $e_i$ is each bearing's miss distance at the fix, in meters.
 - Compare it with that bearing's own $R_i\tan\sigma_\beta$.
 - A residual several times larger marks a bad bearing: a reflection or a sign error.
 :::
@@ -552,8 +571,7 @@ are blunders rather than noise: a reflection that took over the peak, and a
 heading or sign mistake that put the line on the wrong side of broadside.
 Check that kit's setup, retake the bearing, or drop it and solve again with the
 others. With only two bearings the residuals are always zero, because two lines
-always meet exactly, which is another way of saying that two bearings cannot
-check themselves.
+always meet exactly, so two bearings cannot check each other.
 ::::
 
 ::::{frame} Summary: Measuring a Bearing
@@ -584,23 +602,24 @@ check themselves.
 :class: read-only doc-links
 
 The bench half of this lesson is the L19 Lab, the fox hunt: find the one live
-HB100 among numbered boxes from bearings you and a partner take on your two kits.
+HB100 among numbered boxes from bearings your team takes at stations along a
+firing line.
 
 - <a class="doc-link" href="../L19-lab-fox-hunt/index.html">L19 Lab — Fox Hunt</a>
 ::::
 
 ::::{frame} Looking Ahead
 :::{present}
-- The L19 Lab: one kit on a taped firing line, a bearing from each station, one fix.
+- In the L19 Lab, one kit takes a bearing from each station on a taped firing line.
 - Bring the error budget, a station plan, and your script.
 - L20-L24 return to the pattern itself: beamwidth, tapering, squint, and nulls.
 :::
 
-In the L19 Lab you and a partner find the one live HB100 among several
-numbered boxes. You choose where to put your kits, record each kit's position
-and heading, read Angle off the beam sweep, convert it to a room bearing,
-and solve for the fix. Come with this lesson's error budget and a plan for
-where to stand that gives a steep crossing for any box in the zone.
+In the L19 Lab you and a partner find the one live HB100 among five numbered
+boxes. You move one kit along a taped firing line, square to the tape at every
+station, read Angle off the beam sweep at each station mark, convert it to a
+room bearing, and solve for the fix. Come with this lesson's error budget and a
+plan for which stations give a steep crossing for any box in the field.
 
 :::{depth}
 The rest of Module 3 returns to the pattern the sweep traces. L20 measures
