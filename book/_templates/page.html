@@ -104,26 +104,6 @@
 {{ body }}
 </main>
 
-{#- Sequential reading still needs a next step. It belongs at the END of the
-    page, where the reader actually is when they want it -- not as a permanent
-    control in the bar. -#}
-{%- if prev or next %}
-<nav class="page-next" aria-label="Nearby lessons">
-  {%- if prev %}
-  <a class="pn-prev" href="{{ prev.link|e }}">
-    <span class="pn-kind">Previous</span>
-    <span class="pn-title">{{ prev.title|striptags|e }}</span>
-  </a>
-  {%- endif %}
-  {%- if next %}
-  <a class="pn-next" href="{{ next.link|e }}">
-    <span class="pn-kind">Next</span>
-    <span class="pn-title">{{ next.title|striptags|e }}</span>
-  </a>
-  {%- endif %}
-</nav>
-{%- endif %}
-
 <script src="{{ asset('_static/shell.js') }}"></script>
 <script src="{{ asset('_static/page.js') }}"></script>
 </body>
