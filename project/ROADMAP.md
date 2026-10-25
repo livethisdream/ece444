@@ -164,10 +164,17 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 L25–L27 are taught in class; L28–L31 are the final project, each one page
 with its lesson and then its lab. The FMCW mode in the Phaser app is in
 progress (Neil); build the lessons and labs now **assuming it works**, and
-reconcile with the GUI when it lands. Source: Jon Kraft's ADI FMCW material
-(the Python workshop's FMCW labs, `docs/2025_Phaser_labs_Python.pdf` pp.
-29–38 in the Phaser repo, and his FMCW deck when Neil attaches it): read
-in-session, never copied into this repo. The L28–L31 Labs scaffold the final project report, so each needs a packet
+reconcile with the GUI when it lands. Source: ADI's Phaser radar labs
+(Neil, 2026-10-25: newer than the slide deck), public at
+`analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/`,
+source in `analogdevicesinc/system-level` under
+`docs/solutions/platforms/phaser/labs/`: `radar-setup`, `radar-cw`,
+`radar-fmcw`, `chirp-sync`, `radar-doppler`, `radar-mti`, `radar-cfar`,
+with Python scripts in `resources/python/` (the docs host is blocked in
+these containers; clone the repo sparse). Cite and link them; translate
+any MATLAB to Python. They have no micro-Doppler, classification, or
+tracking lab (L31 is ours), and the recorded drone data their MTI lab
+plays is not in the repo, so the recorded-data fallback is ours too. The L28–L31 Labs scaffold the final project report, so each needs a packet
 and a recorded-data fallback in case a bench FMCW capture fails; the report
 needs its rubric, published with the L28 Lab packet.
 
