@@ -193,10 +193,6 @@ needs its rubric, published with the L28 Lab packet.
    Blackman for a Signal vs Time walk (phaser #48). The second dry run
    (`review/M3_LAB_DRYRUN_2026-10-23.md`, all of L17–L24) adds, for the
    remaining passes:
-   - **L23**: "Null Depth: Predicted and Measured" says rounding the null
-     weights leaves a notch near −48 dB; computed, it leaves −56 dB at
-     22.5° (exact zeros at +19.8° and +22.3°), and −48 dB is the
-     independent-error estimate (from the L24 thread, #149).
    - **L24 Lab** (done in #149 but Procedure C): notches and nulls reach −40 to −50 dB, so the
      "floor-limited at −21 dB" explanation goes, in the text and in
      `L24-quant-depth.svg`; Procedure D sets a uniform

@@ -430,24 +430,24 @@ The effect needs a longer aperture than eight elements to see, so the figure use
 :::{present}
 :class: callout
 
-- Quantization alone still allows a $-48$ dB null.
+- One-step channel errors still allow a $-48$ dB null.
 - Our sweep-floor estimate capped measured nulls near $21$ dB.
 - Phaser-00 measured $-40$ to $-50$ dB nulls in L24, but sweep floors from $-17$ to $-31$ dBc.
 :::
 :::{present}
 <img src="../../viz/img/L23-null-depth-levels.svg"
-     alt="Null depths in dB below the uniform peak. Predicted: quantized weights alone, minus 48 dB; the first estimate from the sweep floor, minus 21 dB. Measured on phaser-00: the L24 notch at minus 46 to minus 50 dB, the difference null at minus 41.5 dB, the delta null at minus 39.7 dB, and the L22 to L23 sweep floors from minus 17 to minus 31 dB"
+     alt="Null depths in dB below the uniform peak. Predicted: one-step channel errors, minus 48 dB; the first estimate from the sweep floor, minus 21 dB. Measured on phaser-00: the L24 notch at minus 46 to minus 50 dB, the difference null at minus 41.5 dB, the delta null at minus 39.7 dB, and the L22 to L23 sweep floors from minus 17 to minus 31 dB"
      style="max-width: 600px; width: 100%; display: block; margin: 0 auto;">
 :::
 
-One thing quantization does *not* set is how deep a null can go. It is tempting to assume that a cancellation is only as good as the phase resolution behind it, but the LSB does not limit the null weights: rounding them to a $2.8125^\circ$ grid with 1% gain steps still produces a notch near $-48$ dB at the angle it was designed for. What rounding does instead is move the notch a fraction of a degree off its commanded angle, which is a pointing effect, not a depth effect.
+One thing quantization does *not* set is how deep a null can go. It is tempting to assume that a cancellation is only as good as the phase resolution behind it, but the LSB does not limit the null weights: rounding them to a $2.8125^\circ$ grid with 1% gain steps leaves the pattern $56$ dB down at the angle it was designed for, and the pattern still passes through zero a quarter of a degree away, at $+22.3^\circ$. Rounding moves the notch; it does not fill it. Even independent errors of one step in every channel, which <a href="../L24-null-steering/index.html#frame-quantization-and-null-depth">Lesson 24</a> works through, still allow a null about $48$ dB down.
 
 Our first estimate of the measured limit came from the receiver. Earlier sweeps on the PHASER showed a noise floor about $23$ dB below the uniform-taper peak, and the weights that create a null reduce the main-lobe gain by about $2$ dB, so we expected a sweep to show nothing deeper than about $21$ dB below the new peak.
 
-The phaser-00 test run did not bear that out. In the L24 Lab the notch reached $-46$ to $-50$ dB below the uniform peak, the difference null $-41.5$ dB, and the delta null $-39.7$ dBc. The deepest of these sits close to the $-48$ dB that quantization alone allows, so on that kit the sweep followed the pattern most of the way down. The same session's L22–L23 Lab sweeps, however, read floors between $-17$ and $-31$ dBc, and a wall or a person beside the kit raised lobes as high as $-9$ dBc. The floor a sweep shows is therefore not one fixed number: it changed from lab to lab on the same kit, and the bench around the kit changed it further.
+The phaser-00 test run did not bear that out. In the L24 Lab the notch reached $-46$ to $-50$ dB below the uniform peak, the difference null $-41.5$ dB, and the delta null $-39.7$ dBc. The deepest of these sits close to the $-48$ dB that one-step channel errors allow, so on that kit the sweep followed the pattern most of the way down. The same session's L22–L23 Lab sweeps, however, read floors between $-17$ and $-31$ dBc, and a wall or a person beside the kit raised lobes as high as $-9$ dBc. The floor a sweep shows is therefore not one fixed number: it changed from lab to lab on the same kit, and the bench around the kit changed it further.
 
 :::{callout}
-Separate the two limits. **Quantization** sets a sidelobe floor at roughly $-6B$ dB and a pointing granularity of about one LSB, and on the course array it still allows a $-48$ dB null. The **floor of the measurement** sets what you can observe. We predicted that floor would cap a measured null near $21$ dB; on phaser-00 the L24 nulls reached $-40$ to $-50$ dB, while the L22–L23 sweeps on the same kit read floors from $-17$ to $-31$ dBc. A shallow measured null points to the bench first, not to the phase shifter.
+Separate the two limits. **Quantization** sets a sidelobe floor at roughly $-6B$ dB and a pointing granularity of about one LSB, and on the course array one-step channel errors still allow a $-48$ dB null. The **floor of the measurement** sets what you can observe. We predicted that floor would cap a measured null near $21$ dB; on phaser-00 the L24 nulls reached $-40$ to $-50$ dB, while the L22–L23 sweeps on the same kit read floors from $-17$ to $-31$ dBc. A shallow measured null points to the bench first, not to the phase shifter.
 :::
 ::::
 
