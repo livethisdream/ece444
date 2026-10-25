@@ -4,16 +4,15 @@
   - L24-element-settings : the eight gain percentages and phase offsets that
                            the course example asks students to type into the
                            GUI's Element Gains and Phase Control panels
-  - L24-sweep-notch      : frozen uniform reference vs the null-steered sweep,
-                           on the GUI's 2.8125 deg steering grid, with the
-                           measurement noise floor that sets the notch reading
-  - L24-delta-beam       : two-channel sum vs difference (Beam 1 Phase = 180),
-                           boresight null and the twin peaks near +/-11 deg
   - L24-monopulse        : sum and delta together, and the signed error function
                            their ratio produces across boresight
 
-Array is the PHASER's: N = 8, d = 14 mm, 10.525 GHz -> d/lambda = 0.491, with
-the two ADAR1000 subarrays (elements 1-4 and 5-8) forming the digital pair.
+Array is the PHASER's: N = 8, d = 14 mm, worked at 10.443 GHz, the Find HB100
+frequency of phaser-00 in the 2026-10-23 dry run (d/lambda = 0.487), with the
+two ADAR1000 subarrays (elements 1-4 and 5-8) forming the digital pair. The
+expected-sweep figures (L24-sweep-notch, L24-delta-beam) were retired with the
+L24 Lab pass: they drew a -21 dB floor the hardware does not have, and the lab
+explains the nulls rather than redrawing the bench traces.
 The figures carry no equations (house rule); numbers and short words only.
 
     python3 scripts/graphics/m3_l24_lab.py
@@ -39,11 +38,9 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "book/extras/viz/img"
 
 N = 8
-DL = 0.491                       # d / lambda at 10.525 GHz
+DL = 0.014 * 10.443e9 / 3.00e8   # d / lambda at phaser-00's 10.443 GHz
 KD = 2 * np.pi * DL
 NIDX = np.arange(N)
-STEP = 2.8125                    # GUI sweep step = phase LSB as a steer step
-FLOOR_DBC = -21.6                # measured sweep floor that caps the notch read
 NULL_ANG = 22.5                  # the course example's null direction
 
 plt.rcParams.update({
@@ -85,32 +82,6 @@ def response(w: np.ndarray, theta_deg) -> np.ndarray:
     return np.abs(A @ w)
 
 
-def quantize(w: np.ndarray, phase_lsb: float = 2.8125, gain_step: float = 0.01) -> np.ndarray:
-    a = np.abs(w) / np.abs(w).max()
-    aq = np.round(a / gain_step) * gain_step
-    pq = np.deg2rad(np.round(np.rad2deg(np.angle(w)) / phase_lsb) * phase_lsb)
-    return aq * np.exp(1j * pq)
-
-
-def with_floor(db: np.ndarray, floor_dbc: float = FLOOR_DBC) -> np.ndarray:
-    """Add the receiver noise floor in power, the way the sweep measures it."""
-    return 10 * np.log10(10 ** (db / 10) + 10 ** (floor_dbc / 10))
-
-
-GRID = np.arange(-90, 90.001, STEP)          # the GUI's steering grid
-UNIF = steer(0.0)
-PK = response(UNIF, GRID).max()
-
-
-def _axes(ax, ymin=-30, ymax=4):
-    ax.set_xlim(-60, 60)
-    ax.set_ylim(ymin, ymax)
-    ax.set_xticks(range(-60, 61, 15))
-    ax.set_xlabel("steering angle (deg)")
-    ax.set_ylabel("relative response (dB)")
-    ax.grid(color=RULE, linewidth=0.8)
-
-
 # ------------------------------------------------------------------ figure 1
 def element_settings() -> None:
     """What the student types into Element Gains and Phase Control."""
@@ -119,7 +90,7 @@ def element_settings() -> None:
     p = np.rad2deg(np.angle(w))
     el = np.arange(1, N + 1)
 
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(9.4, 3.5))
+    fig, (a1, a2) = plt.subplots(2, 1, figsize=(4.8, 5.4))
     a1.bar(el, g, width=0.62, color=NAVY)
     for x, y in zip(el, g):
         a1.text(x, y + 3, f"{y:.0f}", ha="center", va="bottom", fontsize=11, color=INK)
@@ -148,67 +119,6 @@ def element_settings() -> None:
     finalize(fig, "L24-element-settings")
 
 
-# ------------------------------------------------------------------ figure 2
-def sweep_notch() -> None:
-    """Frozen uniform reference vs the null-steered sweep on the GUI grid."""
-    w, _ = null_weights(NULL_ANG)
-    wq = quantize(w)
-    u = with_floor(20 * np.log10(response(UNIF, GRID) / PK))
-    q = with_floor(20 * np.log10(response(wq, GRID) / PK))
-
-    fig, ax = plt.subplots(figsize=(8.6, 4.2))
-    _axes(ax, ymin=-31)
-    ax.plot(GRID, u, color=GRAY, linewidth=1.3, label="uniform (frozen reference)")
-    ax.plot(GRID, q, color=NAVY, linewidth=2.6, label="null steered")
-    ax.axhline(FLOOR_DBC, color=RULE, linewidth=1.4, linestyle=(0, (5, 4)),
-               label="sweep noise floor")
-
-    i = int(np.argmin(np.abs(GRID - NULL_ANG)))
-    ax.plot([GRID[i]], [q[i]], "o", color=RED, markersize=7)
-    ax.annotate("notch  -21.6 dBc", xy=(GRID[i], q[i] - 0.3), xytext=(29, -26.2),
-                fontsize=12, color=RED,
-                arrowprops=dict(arrowstyle="->", color=RED, linewidth=1.3))
-    ax.annotate("main lobe  -1.8 dB", xy=(0, q.max()), xytext=(-57, -5.0),
-                fontsize=12, color=NAVY,
-                arrowprops=dict(arrowstyle="->", color=NAVY, linewidth=1.3))
-    ax.plot([NULL_ANG], [u[i]], "o", color=GRAY, markersize=6)
-    ax.annotate("reference sidelobe  -12.8 dBc", xy=(NULL_ANG + 0.6, u[i]),
-                xytext=(30, -9.5), fontsize=12, color=GRAY,
-                arrowprops=dict(arrowstyle="->", color=GRAY, linewidth=1.2))
-    ax.legend(loc="lower left", fontsize=11.5, ncol=1)
-    fig.tight_layout()
-    finalize(fig, "L24-sweep-notch")
-
-
-# ------------------------------------------------------------------ figure 3
-def delta_beam() -> None:
-    """Sum vs difference of the two digital channels."""
-    s = np.ones(N)
-    d = np.r_[np.ones(4), -np.ones(4)]
-    th = np.linspace(-60, 60, 4001)
-    ps = with_floor(20 * np.log10(np.maximum(response(s, th), 1e-9) / N), -22.0)
-    pd = with_floor(20 * np.log10(np.maximum(response(d, th), 1e-9) / N), -22.0)
-
-    fig, ax = plt.subplots(figsize=(8.6, 4.2))
-    _axes(ax, ymin=-31)
-    ax.set_xlabel("angle from broadside (deg)")
-    ax.plot(th, ps, color=GRAY, linewidth=1.4, label="sum  (Beam 1 Phase 0)")
-    ax.plot(th, pd, color=NAVY, linewidth=2.6,
-            label="difference  (Beam 1 Phase 180)")
-    for sgn in (-1, 1):
-        pk = sgn * 11.0
-        ax.plot([pk], [pd[np.argmin(np.abs(th - pk))]], "o", color=GREEN, markersize=6)
-    ax.annotate("peaks near +/-11 deg", xy=(11, pd[np.argmin(np.abs(th - 11))]),
-                xytext=(19, -7.5), fontsize=12, color=GREEN,
-                arrowprops=dict(arrowstyle="->", color=GREEN, linewidth=1.3))
-    ax.annotate("boresight null  -22 dBc", xy=(0.4, -21.6),
-                xytext=(3.5, -28.6), fontsize=12, color=RED,
-                arrowprops=dict(arrowstyle="->", color=RED, linewidth=1.3))
-    ax.legend(loc="lower left", fontsize=11.5)
-    fig.tight_layout()
-    finalize(fig, "L24-delta-beam")
-
-
 # ------------------------------------------------------------------ figure 4
 def monopulse() -> None:
     """Sum and delta together, and the error function their ratio produces."""
@@ -216,31 +126,30 @@ def monopulse() -> None:
     A = np.exp(1j * np.outer(np.sin(np.deg2rad(th)), NIDX) * KD)
     sig = A @ np.ones(N)
     dlt = A @ np.r_[np.ones(4), -np.ones(4)]
-    ps = with_floor(20 * np.log10(np.maximum(np.abs(sig), 1e-9) / N), -21.8)
-    pd = with_floor(20 * np.log10(np.maximum(np.abs(dlt), 1e-9) / N), -21.8)
+    ps = 20 * np.log10(np.maximum(np.abs(sig), 1e-9) / N)
+    pd = 20 * np.log10(np.maximum(np.abs(dlt), 1e-9) / N)
 
     # the two subarrays are displaced, so delta sits in quadrature with sum:
     # the error signal is Im(delta * conj(sum)) / |sum|^2
     err = -np.imag(dlt * np.conj(sig)) / np.abs(sig) ** 2
 
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10.2, 3.9))
+    fig, (a1, a2) = plt.subplots(2, 1, figsize=(4.8, 5.6))
 
     a1.set_xlim(-20, 20)
-    a1.set_ylim(-26, 3)
+    a1.set_ylim(-40, 3)
     a1.set_xticks(range(-20, 21, 10))
     a1.set_xlabel("angle from broadside (deg)")
     a1.set_ylabel("channel level (dB)")
     a1.grid(color=RULE, linewidth=0.8)
     a1.plot(th, ps, color=GRAY, linewidth=1.6, label="sum")
     a1.plot(th, pd, color=NAVY, linewidth=2.6, label="delta")
-    a1.plot([0], [-21.8], "o", color=RED, markersize=6)
-    a1.annotate("delta null  -21.8 dBc", xy=(0.4, -21.6), xytext=(2.6, -24.8),
-                fontsize=11.5, color=RED,
+    a1.annotate("delta: exact zero\non boresight", xy=(0.3, -38), xytext=(4.0, -36),
+                fontsize=11.5, color=RED, va="bottom",
                 arrowprops=dict(arrowstyle="->", color=RED, linewidth=1.2))
-    a1.annotate("sum is flat here", xy=(0.5, 0.15), xytext=(5.0, 1.6),
+    a1.annotate("sum is flat here", xy=(0.5, -0.2), xytext=(2.0, -23.0),
                 fontsize=11.5, color=GRAY,
                 arrowprops=dict(arrowstyle="->", color=GRAY, linewidth=1.2))
-    a1.legend(loc="upper left", fontsize=11.5)
+    a1.legend(loc="lower left", fontsize=11.5, bbox_to_anchor=(0.2, 0.0))   # between the sum null and the delta zero
 
     win = np.abs(th) <= 12
     a2.set_xlim(-12, 12)
@@ -271,8 +180,6 @@ def monopulse() -> None:
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     element_settings()
-    sweep_notch()
-    delta_beam()
     monopulse()
 
 
