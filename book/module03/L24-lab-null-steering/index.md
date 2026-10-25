@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-Today you type those numbers into the array and find out what the hardware gives back.
+A computed notch, a structural null, an adaptive null, and the monopulse pair, measured on your own kit.
 
 L24 Lab · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -32,341 +32,169 @@ with room for notes. Print from read mode for the whole lesson.
 </ol>
 
 :::{depth}
-Lesson 24 ended with a weight vector on paper: eight complex numbers that hold the
-beam on the target and put a pattern null on the jammer. Today you type those
-numbers into the array and find out what the hardware gives back. You will run
-three procedures, in increasing order of how much the array does for itself — a
-static notch you compute yourself, a boresight null you get for free by
-subtracting the two digital channels, and an adaptive beamformer that finds its
-own null from the received data. The three together are the whole null-steering
-toolbox. The lesson closes
-on that same difference beam put to a different use, measuring a target's angle
-from a single look, which is where Module 4 begins.
+Lesson 24 ended with a weight vector on paper: eight complex numbers that hold
+the beam on the target and put a pattern null on the interferer. Today we load
+those numbers into the array and measure what the hardware gives back. The lab
+runs four procedures, in increasing order of how much the array does for
+itself: a static notch you compute yourself (A), a boresight null that comes
+from subtracting the two digital channels (B), an adaptive beamformer that
+finds its own null from the received data (C), and the same difference beam put
+to a different use, measuring a target's angle from a single look (D). That last
+one is where Module 4 begins.
+:::
+::::
+
+::::{frame} What Lesson 24 Predicts
+:::{present}
+| Element | Gain (%) | Phase (deg) |
+| :-- | --: | --: |
+| 1 | 74 | $-12.0$ |
+| 2 | 65 | $+3.5$ |
+| 3 | 82 | $+13.0$ |
+| 4 | 100 | $+6.0$ |
+| 5 | 100 | $-6.0$ |
+| 6 | 82 | $-13.0$ |
+| 7 | 65 | $-3.5$ |
+| 8 | 74 | $+12.0$ |
+:::
+:::{present}
+- The main lobe drops about $2$ dB.
 :::
 
-::::
+The weight-subtraction rule of
+<a href="../L24-null-steering/index.html#frame-the-weight-subtraction-rule">Lesson 24</a>
+holds the beam at broadside and nulls an interferer at $\theta_1 = +22.5^\circ$:
 
-::::{frame} Part 1: What Lesson 24 computed
+$$
+\mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\ \mathbf{w}_\text{n}, \qquad
+r_\text{n} = \frac{\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d}}{\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}} .
+$$
 
-The **weight-subtraction** result from Lesson 24 is one line. Start from the
-weights that steer the beam where you want it, $w_d$, and the weights that would
-steer it at the interferer, $w_n$, and remove the part of the first that points
-along the second:
+The table converts the weights to what the GUI accepts: element gain as a
+percentage of the largest, $100\vert w_n\vert/\max\vert w\vert$, and phase
+offset as $\angle w_n$, entered with its sign. It is worked at $10.443$ GHz,
+the frequency **Find HB100** reported for phaser-00, one of the course kits.
+Part 1 of the packet has you compute the same table at your own kit's
+frequency; at the nominal $10.525$ GHz the outer gains read 75 % and the
+phases of elements 2 and 7 read $\pm 3.1^\circ$, so the table moves only
+slightly from kit to kit.
 
-$$w = w_d - r_n w_n, \qquad r_n = \frac{w_n^H w_d}{w_n^H w_n}$$
-
-The subtraction guarantees $w^H w_n = 0$, which is exactly the statement that the
-array has no response in the direction of $w_n$. Everything else about the
-pattern — where the main lobe sits, what the sidelobes do — is whatever falls out.
-
-::::
-
-::::{frame} Converting weights to GUI settings
-
-The course example holds the beam at broadside and nulls a jammer at
-$\theta_1 = +22.5^\circ$, one first-sidelobe width off the beam. Converting the
-resulting complex weights to what the GUI accepts — element gain as a percentage
-of the largest, $100\vert w_n\vert/\max\vert w\vert$, and phase offset as
-$\angle w_n$ — gives the eight settings you will enter.
-
-| Element | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
-| :-- | --: | --: | --: | --: | --: | --: | --: | --: |
-| Gain (%) | 75 | 65 | 82 | 100 | 100 | 82 | 65 | 75 |
-| Phase (deg) | $-12.1$ | $+3.1$ | $+13.0$ | $+6.0$ | $-6.0$ | $-13.0$ | $-3.1$ | $+12.1$ |
-
-::::
-
-::::{frame} The eight settings
+The predictions assume the Element Gains slider is linear in voltage. On
+current kits it is not yet; a software update is making it linear, and until
+it lands the 65–82 % settings come out a little lower than the table asks.
 
 <img src="../../viz/img/L24-element-settings.svg"
-     alt="The eight element gains and phase offsets for a null at +22.5 degrees"
-     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
+     alt="The eight element gains and phase offsets for a null at +22.5 degrees: gains symmetric about the array center, phases antisymmetric"
+     style="max-width: 640px; width: 100%; display: block; margin: 1em auto;">
 
+The gains are symmetric about the array center and the phases are
+antisymmetric, the conjugate mirror pairs of
+<a href="../L24-null-steering/index.html#frame-weights-on-a-circle">Lesson 24's weight circle</a>.
+Neither column nulls anything on its own; only the eight weights together do.
 ::::
 
-::::{frame} Read the amplitudes first
-
-Read the amplitudes first. They are symmetric about the array center but not
-monotonic — element 2 is quieter than element 1 — so this is no taper you would
-have reached for. The phases are antisymmetric, equal and opposite across the
-center. Neither column means much on its own. The eight numbers together are one
-vector, and only the vector nulls anything.
-
-::::
-
-::::{frame} Three predictions
-
-Three predictions come with the settings, and you will check all three:
-
-- the notch at $+22.5^\circ$ reaches about $-21.6$ dBc, against a uniform
-  reference sidelobe of $-12.8$ dBc at the same angle;
-- the main lobe loses about $1.8$ dB of gain;
-- the notch bottoms out at roughly $-21$ dB rather than going to zero, because
-  the sweep's noise floor sits about $23$ dB below the uniform-taper peak and the
-  nulled pattern's main lobe is about $2$ dB below that reference.
-
-::::
-
-::::{frame} The monopulse difference beam
-
-There is a second null available on this board that costs no computation at all.
-Each ADAR1000 sums its four elements into one RF channel, so the PHASER hands the
-Pluto two **digital subarray channels**, one for elements 1-4 and one for
-elements 5-8. Adding them is the ordinary sum beam. Subtracting them — setting
-Beam 1 Phase to $180^\circ$ — puts a null on boresight with twin peaks near
-$\pm 11^\circ$, about $-22$ dBc deep. That is the **monopulse difference beam**,
-and Module 4 uses it for angle tracking.
-
-::::
-
-::::{frame} Key point
-
-:::{callout}
-A computed null and a structural null are different animals. The
-$+22.5^\circ$ notch exists because you solved for eight weights, and it moves
-only when you solve again. The boresight null exists because two identical
-subarrays are being subtracted, and it sits at boresight no matter what the
-signal does.
+::::{frame} Why the Notch Goes Deep
+:::{present}
+- One-step channel errors allow a notch about $48$ dB below the uniform peak.
+- phaser-00 measured $46$ to $50$ dB, at $+25.7^\circ$.
+- A shallow notch points to the bench first: reflections, calibration, or a sign.
 :::
 
+<a href="../L24-null-steering/index.html#frame-quantization-and-null-depth">Lesson 24</a>
+estimated the depth that small, independent channel errors allow, about
+$48$ dB below the uniform peak, and the 2026-10-23 dry run on phaser-00 reached
+$46$ to $50$ dB. Rounding the weights to the ADAR1000's $2.8125^\circ$ and 1 %
+steps does not set that limit: the rounded table keeps its mirror symmetry, so
+its null survives and moves only a quarter of a degree. The notch landed at
+$+25.7^\circ$ rather than $+22.5^\circ$, which is within what aligning the kit by
+eye allows.
+
+When a notch reads much shallower than $40$ dB, look at the bench before the
+arithmetic. A wall or a person beside the kit fills it, a stale calibration
+fills it, and a sign error on the phase column moves it to $-22.5^\circ$, where
+it is easy to miss.
 ::::
 
-::::{frame} Part 2: Equipment and setup
+::::{frame} The Difference Beam
+:::{present}
+- **Beam 1 Phase** $= 180^\circ$ subtracts the two subarray channels.
+- Boresight becomes a null, with peaks near $\pm 11^\circ$.
+:::
+:::{present}
+:class: callout
 
-| Item | Note |
-| :-- | :-- |
-| ADALM-PHASER (CN0566) + Raspberry Pi + ADALM-Pluto | powered, on the lab network |
-| HB100 Doppler module | the target source, on boresight, at least $2\ \text{m}$ out |
-| Second HB100 | the interferer for procedure C; one per kit |
-| Course Phaser GUI | `http://phaser.local:8080` in a browser |
+A computed null sits where we solved for it; a structural null sits where the two subarrays cancel.
+:::
 
+There is a second null on this board that needs no computation at all. Each
+ADAR1000 sums its four elements into one RF channel, so the PHASER hands the
+Pluto two **digital subarray channels**, one for elements 1–4 and one for
+elements 5–8. Adding them is the ordinary sum beam. Subtracting them, by
+setting Beam 1 Phase to $180^\circ$, cancels the two halves wherever they
+arrive in phase, which is boresight. The result is a null there with twin
+peaks near $\pm 11^\circ$: the **monopulse difference beam**, which Procedure D
+and Module 4 use for angle measurement. On phaser-00 it measured $-41.5$ dB, at
+$+0.9^\circ$.
+
+The $+22.5^\circ$ notch exists because we solved for eight weights, and it moves
+only when we solve again. The boresight null exists because the two subarrays
+are identical, and it stays at boresight no matter what the signal does.
 ::::
 
-::::{frame} Bring the array up
+::::{frame} MVDR
+:::{present}
+$$
+\mathbf{w}_\text{mvdr} = \frac{\mathbf{R}^{-1}\mathbf{s}}{\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s}}
+$$
 
-Bring the array up the way every Module 3 lab starts. Set Signal Freq to the
-HB100's measured frequency near $10.525\ \text{GHz}$, run **Calibrate**, and
-confirm on the **Rectangular** tab that a uniform sweep gives a single peak
-within a degree or two of $0^\circ$ with a first sidelobe near $-13$ dBc. If the
-peak is off boresight or the sidelobes are lopsided, the calibration did not take
-and nothing measured afterwards is worth recording.
+- Minimum output power, with unit gain in the look direction $\mathbf{s}$.
+- $\mathbf{R}$ is estimated from the data, so nobody supplies the interferer's angle.
+:::
 
+Procedures A and B both needed something known in advance: the interferer's
+angle in A, the array's symmetry in B. The **MVDR** (minimum-variance
+distortionless-response) beamformer needs neither. It estimates the covariance
+of what the two channels receive over $K$ snapshots,
+
+$$
+\hat{\mathbf{R}} = \frac{1}{K}\ \mathbf{X}\mathbf{X}^{H},
+$$
+
+and solves for the weights that minimize total output power while holding unit
+gain in the look direction $\mathbf{s}$. Whatever is loud and is not in the look
+direction is suppressed, and the beamformer never has to be told where it is.
 ::::
 
-::::{frame} Two controls carry this lab
+::::{frame} Two Limits of Two Channels
+:::{present}
+- Near $\pm 30^\circ$ the interferer falls in the four-element subarray's null.
+- There the two channels' phase difference also wraps back to its boresight value.
+- So Procedure C runs at $+20^\circ$.
+:::
 
-Two controls carry this lab. **Start** runs the beam sweep, stepping the
-commanded steer angle across the field of view and recording received power at
-each step; the $x$ axis is the commanded angle, not a measured arrival angle.
-**Freeze** holds the current trace as a reference so a later sweep is drawn on
-top of it. Every measurement below is a comparison against a frozen trace.
-
+Both limits belong to the architecture rather than to the algorithm. A
+four-element subarray at $d = 14$ mm has its first null where
+$\sin\theta = \lambda/4d$, about $31^\circ$, so an interferer there barely reaches
+either channel and there is little left for the digital layer to remove. The
+two channels sit four elements apart, so their phase difference,
+$4kd\sin\theta$, runs through a full cycle across the subarray beam: a source
+near $+30^\circ$ presents very nearly the same channel phase difference as one on
+boresight, and the two channels cannot tell them apart. The digital layer can
+only work on what the analog layer passes it, and only on directions the two
+channels can distinguish.
 ::::
 
-::::{frame} Part 3: Procedure A — the static notch
-
-1. With the array uniform (Element Gains at $100\%$, Phase Control reset), press
-   **Start**, then **Freeze**. This is your reference. Record the peak level and
-   the level of the sidelobe nearest $+22.5^\circ$; it should be about
-   $-12.8$ dBc.
-2. Enter the eight percentages from Part 1 into **Element Gains** (Rx1 through
-   Rx8). This set is symmetric about the array center, so **Enforce Symmetric
-   Taper** makes no difference to it; leave the switch off so that a later edit to
-   one slider is not mirrored onto its partner.
-3. Enter the eight phase offsets from Part 1 into **Phase Control**. Keep the
-   signs; a sign error moves the notch to $-22.5^\circ$.
-4. Press **Start** and read the new trace against the frozen one.
-
-::::
-
-::::{frame} Procedure A — what comes back
-
-<img src="../../viz/img/L24-sweep-notch.svg"
-     alt="Uniform reference sweep and null-steered sweep, with the notch at +22.5 degrees"
-     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
-
-::::
-
-::::{frame} Three numbers come off this plot
-
-Three numbers come off this plot. The sidelobe at $+22.5^\circ$ has dropped from
-$-12.8$ dBc to about $-21.6$ dBc, a change of roughly $9$ dB at that angle. The
-main lobe has lost about $1.8$ dB to the subtraction, which matches Lesson 24's
-cost curve for a null this close to the beam. And the rest of
-the pattern has moved: the sidelobes on the far side are one to two decibels
-different from the reference, because the subtraction reshaped the whole aperture
-distribution, not just one angle.
-
-::::
-
-::::{frame} Why the notch stops
-
-Now ask why the notch stopped at $-21.6$ dBc when the arithmetic in Lesson 24
-predicted a true zero. The obvious suspect is the hardware resolution named in
-Lesson 23:
-
-- The phase shifter has a $2.8125^\circ$ LSB, so a commanded $+13.0^\circ$ is
-  applied as $+14.06^\circ$.
-- The gain control moves in steps of about $1\%$, which perturbs the amplitudes
-  the same way.
-
-::::
-
-::::{frame} A rounded weight vector is still a weight vector
-
-But a rounded weight vector is still a weight vector — it just nulls a slightly
-different direction, a fraction of a degree off where you asked. Push those
-quantized weights through the array factor and the residual at the designed angle
-is still about $-48$ dB, far below anything this sweep can display. What you are
-reading instead is the measurement floor: the sweep's noise floor sits about
-$23$ dB below the uniform-taper peak, and the null weights cost about $2$ dB of
-main lobe, so the deepest notch the plot can report is roughly $21$ dB below the
-null-steered peak.
-
-::::
-
-::::{frame} That is the general rule for a real array
-
-That is the general rule for a real array: **the notch you
-measure is limited by the dynamic range of the measurement, not by the
-null-steering algorithm and not by the phase shifter's resolution**. The
-$20\text{-}22$ dB you record is the sweep's floor, not what $2.8^\circ$ phase
-resolution buys you. Before moving on, press **Reset** in Phase Control and return Element Gains to
-Uniform.
-
-::::
-
-::::{frame} Part 4: Procedure B — the digital difference null
-
-1. Open **Digital Beam Forming** and set Mode to **Manual**.
-2. Leave Beam 0 Gain and Phase alone. Set **Beam 1 Phase** to $180^\circ$.
-3. Press **Start**.
-
-::::
-
-::::{frame} Procedure B — what comes back
-
-<img src="../../viz/img/L24-delta-beam.svg"
-     alt="Sum and difference beams from the two digital channels"
-     style="max-width: 700px; width: 100%; display: block; margin: 1em auto;">
-
-::::
-
-::::{frame} The peak that was at boresight
-
-The peak that was at boresight is now a null about $-22$ dBc deep, with two lobes
-of nearly equal height near $\pm 11^\circ$. Nothing in the analog beamformers
-changed — all eight elements still carry the same phases they had a moment ago.
-The only change is a sign on one of the two digital channels, applied after the
-signal was digitized, and it is enough to cancel the two subarray outputs against
-each other on boresight.
-
-::::
-
-::::{frame} Record the null depth
-
-Record the null depth and the two peak angles. This is the monopulse difference
-beam: the sum beam tells you a target is there, the difference beam tells you
-which side of boresight it is on, and Module 4 turns the ratio of the two into an
-angle estimate accurate to a small fraction of a beamwidth. Set Beam 1 Phase back
-to $0^\circ$ before continuing.
-
-::::
-
-::::{frame} Part 5: Procedure C — adaptive nulling with MVDR
-
-Procedures A and B both required you to know something in advance: the jammer's
-angle in A, the array's symmetry in B. The **MVDR** beamformer requires neither.
-It estimates the covariance of what the two channels are receiving,
-$\hat R = \frac{1}{K} X X^H$ over $K$ snapshots, and solves
-
-$$w_{\text{mvdr}} = \frac{R^{-1}s}{s^H R^{-1} s}$$
-
-for the weights that minimize total output power subject to holding unit gain in
-the look direction $s$. Whatever is loud and is not in the look direction gets a
-null, and the beamformer never has to be told where it is.
-
-::::
-
-::::{frame} Procedure C — adaptive against an interferer
-
-1. Set **Digital Beam Forming** Mode to **MVDR**. Set Snapshots to $128$ and
-   Diagonal Load to $0.001$. The look direction is the current **Steer Angle**,
-   so leave it at $0^\circ$.
-2. Press **Start** with only the boresight HB100 running. The pattern keeps its
-   main lobe on boresight and looks much like the manual sum beam. With nothing
-   to reject, MVDR has nothing to do.
-3. Have your partner hold the kit's second HB100 off to one side, at roughly
-   $+30^\circ$, and bring it close enough to run about $10$ dB stronger than the
-   boresight source. Sweep again with Mode set to Manual, then with Mode set to
-   MVDR, and compare the two traces.
-
-::::
-
-::::{frame} The manual beamformer is captured
-
-The manual beamformer is captured by the interferer: with $10$ dB in its favor,
-the second source dominates the received power and the trace peaks toward it.
-MVDR holds the look direction and pushes its response toward the interferer down
-by $17$ to $19$ dB. That difference between the two traces, read at the
-interferer's angle, is the measurement.
-
-::::
-
-::::{frame} Both HB100s are nominally on the same frequency
-
-```{note}
-Both HB100s are nominally on the same frequency, so the **FFT** tab cannot show
-you two separate tones. The sources are not resolvable in frequency, and a
-free-running DRO drifts. The evidence for what MVDR did is the shape of the
-sweep trace and the fact that the look-direction peak survives, not a spectrum
-plot.
-```
-
-::::
-
-::::{frame} No hardware?
-
-```{note}
-**No hardware?** Simulation mode (`python phaser_headless.py --sim`) runs
-procedures A and B exactly as written — the weights, the notch, and the
-difference null are all in the physics model. It carries a single source fixed at
-boresight, so procedure C and the tracking run in Part 7 need the bench.
-```
-
-::::
-
-::::{frame} The two-channel digital layer on its own
-
-The widget below is the two-channel digital layer on its own, with the analog
-subarrays parked at boresight rather than sweeping. Move the interferer to about
-$+20^\circ$ and watch MVDR put a null on it while the boresight response stays
-within about a decibel of where the manual weights left it. Then move the
-interferer out toward $\pm 30^\circ$ and watch the suppression fall away.
-
-::::
-
-::::{frame} Two limits are doing that
-
-Two limits are doing that, and both belong to the architecture rather than to the
-algorithm. An interferer near $\pm 30^\circ$ sits in the null of the four-element
-analog subarray, so almost none of its power reaches either channel and there is
-nothing left for the digital layer to remove. Beyond that, the two channels sit
-four elements apart, and their phase difference wraps through a full cycle across
-the width of the subarray beam, so a source near $+30^\circ$ presents very nearly
-the same channel phase difference as one on boresight. The digital layer can only
-work on what the analog layer passes it, and only on directions the two channels
-can tell apart.
-
-::::
-
-::::{frame} What MVDR chooses
+::::{frame} What MVDR Chooses
 :class: viz-frame
 
 :::{depth}
-On the bench the analog beam is sweeping rather than parked, so the number you
-record there is the gap between the manual and MVDR sweep traces at the
-interferer's angle.
+The widget is the two-channel digital layer on its own, with the analog
+subarrays parked at boresight. Move the interferer to about $+20^\circ$ and
+watch MVDR place a null on it. Then move it out toward $\pm 30^\circ$ and watch
+the suppression fall away, for the two reasons on the previous frame. On the
+bench the analog beam sweeps rather than staying parked, so the number you
+record there is the gap between the Manual and MVDR traces at the interferer's
+angle.
 :::
 
 <iframe src="../../viz/mvdr-interferer.html"
@@ -375,231 +203,260 @@ interferer's angle.
         loading="lazy"
         title="Two-channel MVDR beamformer against an interferer">
 </iframe>
-
 ::::
 
-::::{frame} Part 6: Manual against adaptive
-
-| Question | Manual null steering | MVDR |
+::::{frame} Manual Versus Adaptive
+:::{present}
+| | Manual null | MVDR |
 | :-- | :-- | :-- |
-| What must you know first? | the interferer's angle | nothing |
-| Interferer moves | recompute and re-enter eight weights | tracks it, sweep by sweep |
-| Digital channels needed | none — all eight analog elements | both, and the data behind them |
+| Needs first | the interferer's angle | nothing |
+| Interferer moves | recompute eight weights | follows it |
+| Nulls on this board | up to seven | one |
+:::
 
+Manual null steering has eight degrees of freedom and can place several nulls
+at once, but every one of them is our arithmetic, computed for a geometry we
+assumed. MVDR has two degrees of freedom on this board, one constraint and one
+null, and it finds that null itself, from data, several times a second. On an
+array with a digitizer behind every element, adaptive beamforming has both
+advantages at once. On the PHASER we can see what the hybrid architecture
+costs: the analog sums discard the per-element information before the
+algorithm sees it.
 ::::
 
-::::{frame} Part 6: Manual against adaptive, continued
-
-| Question | Manual null steering | MVDR |
-| :-- | :-- | :-- |
-| Null depth | noise-floor-limited here, about $20\text{-}22$ dB | covariance-limited, $17\text{-}19$ dB here |
-| Where it wins | a known, fixed direction; full aperture control | unknown or moving interference |
-
-::::
-
-::::{frame} That is the trade
-
-That is the trade. Manual null steering has eight degrees
-of freedom and can place several nulls at once, but every one of them is your
-arithmetic, computed for a geometry you assumed. MVDR has two degrees of freedom
-on this board — one constraint and one null — and it finds that null itself, from
-data, several times a second. On a larger array with per-element digitization,
-adaptive beamforming has both advantages at once; on the PHASER you can see
-precisely what the hybrid architecture costs, because the analog sums destroyed
-the per-element information before the algorithm ever saw it.
-
-The sum and difference beams come back in Lesson 31, where monopulse
-tracks the angle of a moving target.
-
-::::
-
-::::{frame} Part 7: Monopulse — measuring angle with two beams
-
-Every measurement so far has come from a sweep. The array steps its commanded
-angle across the field of view, records power at each step, and you read the
-pattern off the trace. A sweep takes time, and a tracking radar does not have it:
-by the time the beam has stepped across and come back, a maneuvering target has
-moved. **Monopulse** is the answer, and you have already built half of it.
-
-::::
-
-::::{frame} The difference beam from Part 4
-
-The difference beam from Part 4 is the delta channel of a monopulse pair. Form
-both beams at once — add the two subarray channels for $\Sigma$, subtract them
-for $\Delta$ — and the pair carries angle information that neither beam carries
-alone. The sum beam is flat at its peak, so its level barely changes as the
-target drifts a degree off axis. The delta beam is zero on boresight and climbs
-steeply out of that null, so its level changes a great deal over the same degree.
-Divide one by the other and the small change becomes a large, readable number.
-
-::::
-
-::::{frame} Sum and delta together
-
+::::{frame} Sum and Delta
+:::{present}
 <img src="../../viz/img/L24-monopulse.svg"
-     alt="Sum and delta channel levels, and the signed error function their ratio produces"
-     style="max-width: 760px; width: 100%; display: block; margin: 1em auto;">
+     alt="Left: sum and delta channel levels from minus 20 to plus 20 degrees; the sum is flat at its peak while the delta passes through an exact zero on boresight. Right: the error function, zero on boresight and straight within about plus or minus 5 degrees with a slope of 0.11 per degree"
+     style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+:::
+:::{present}
+- The sum is flat at boresight; the delta climbs out of a zero.
+- Their ratio turns one look into a signed angle.
+:::
 
+Every measurement so far has come from a sweep: the array steps its commanded
+angle across the field of view and records power at each step. A sweep takes
+time, and a tracking radar does not have it. **Monopulse** forms both beams at
+once from the two subarray channels, adding them for $\Sigma$ and subtracting
+them for $\Delta$. The sum beam is flat at its peak, so its level barely changes
+as the target drifts a degree off axis. The delta beam is zero on boresight and
+climbs steeply out of that zero, so its level changes a great deal over the same
+degree. Dividing one by the other turns that small angle into a large, readable
+number.
 ::::
 
-::::{frame} The error function
+::::{frame} The Error Function
+:::{present}
+$$
+\varepsilon(\theta) = -\ \frac{\text{Im}\lbrace \Delta\ \Sigma^{*} \rbrace}{\vert \Sigma \vert^{2}}
+$$
 
-The two subarrays sit four elements apart, so $\Delta$ arrives in quadrature with
-$\Sigma$ and the useful quantity is the signed ratio
+- Zero on boresight, with opposite signs on the two sides.
+- Slope $0.11$ per degree, straight within about $\pm 5^\circ$.
+:::
 
-$$\varepsilon(\theta) = -\ \frac{\text{Im}\lbrace \Delta\ \Sigma^{*} \rbrace}{\vert \Sigma \vert^{2}}$$
+The two subarrays sit four elements apart, so $\Delta$ arrives in quadrature
+with $\Sigma$, and the useful quantity is the imaginary part of their product.
+The error function is zero on boresight, positive on one side and negative on
+the other, and straight within about $\pm 5^\circ$, well inside the array's
+$13^\circ$ beamwidth. A target one degree off axis reads about $0.11$, and a
+tracker that drives that reading back to zero holds the beam on the target far
+more finely than the beamwidth alone would allow, from one look and with no
+sweep.
 
-which is zero on boresight, positive on one side and negative on the other, and
-straight within about $\pm 5^\circ$ — well inside the array's $13.1^\circ$
-beamwidth. Its slope near boresight is about $0.11$ per degree, so a target a
-single degree off axis produces an error reading of about $0.11$, and a tracker
-that drives that reading back to zero holds the beam on the target far more
-finely than the beamwidth alone would allow. All of it comes from one look, with
-no sweep at all.
+The GUI plots a normalized form of the same comparison, taking its sign from
+the phase difference between the two channels and its magnitude from the two
+channel levels in dB,
 
+$$
+\text{sign}(\Delta\phi)\ \frac{\Sigma_{\text{dB}} - \Delta_{\text{dB}}}{\Sigma_{\text{dB}} + \Delta_{\text{dB}}},
+$$
+
+so the trace stays bounded and on screen however strong the target is.
 ::::
 
-::::{frame} The GUI plots a normalized form
+::::{frame} Bench Rules
+:::{present}
+- Open **Lab Presets** before you press one; **Calibrate**, then **Find HB100**.
+- Set **Rx Gain** for an FFT peak of $-10 \pm 3$ dBFS.
+- Source $1.2$ m out, at patch height; facing the patches, E1 is on the right.
+:::
 
-The GUI plots a normalized form of the same comparison, taking its sign from the phase difference between the two channels and its magnitude from the two dB channel readings as
-
-$$\text{sign}(\Delta\phi)\ \frac{\Sigma_{\text{dB}} - \Delta_{\text{dB}}}{\Sigma_{\text{dB}} + \Delta_{\text{dB}}}$$
-
-so the trace stays bounded and on screen no matter how strong the target is.
-
+The rules come from the Module 3 dry runs. A peak near $-10$ dBFS keeps the
+receiver linear with room above the floor; at Rx Gain 10 dB the FFT peak read
+$+2$ to $+3$ dBFS at these distances and the receiver clipped. Every prediction
+uses the frequency **Find HB100** reports for your kit, not the nominal
+$10.525$ GHz; the kits sit anywhere from $10.41$ to $10.46$ GHz. Level
+comparisons need the source at $1.2$ m or more, because closer in the residual
+curvature across the aperture puts errors of a few tenths of a decibel on every
+peak.
 ::::
 
-::::{frame} Procedure D — watch it track
+::::{frame} Before Every Sweep
+:::{present}
+:class: callout
 
-Run it on the bench.
+- Keep $\pm 40^\circ$ of the bench clear of walls and people.
+- Recalibrate if the uniform trace is lopsided.
+- **Signal BW** resets after Calibrate, Find HB100, or a preset: check it.
+:::
 
-1. Load **Lab preset 8 (Tracking)**. This restores a uniform taper and sets the
-   digital layer up to form both beams at once.
-2. In **Plot Options**, turn on **Show Monopulse Delta Beam** and **Show
+In the phaser-00 dry run, a wall beside the kit produced a lobe at $-37^\circ$
+to $-41^\circ$ only $9$ dB below the peak, and a person seated beside the kit
+left a $-17$ dBc shelf on that side. Either one fills a notch. A stale
+calibration made the uniform trace's two first sidelobes read unequal, and
+recalibrating fixed it. Signal BW returned to zero after each of Calibrate,
+Find HB100, and the Rectangular preset, so check it before every sweep you
+record.
+::::
+
+::::{frame} Equipment and Setup
+:class: read-only
+
+You need the ADALM-PHASER kit with its Raspberry Pi and Pluto attached, the
+HB100 source and its battery, a laptop on the same network, and a $1.2$ m arc
+taped on the bench with marks every $15^\circ$.
+
+1. Place the HB100 at boresight, $1.2$ m from the array face, at patch-row
+   height and aimed at the center of the patch row. Keep $\pm 40^\circ$ of the
+   bench clear of walls and people.
+2. Power the PHASER, wait for the Pi to boot, and open
+   `http://phaser.local:8080` in a browser.
+3. Press **Calibrate** under Configuration and let it finish. Then press
+   **Find HB100** and record the Signal Freq it reports; Part 1 of the packet
+   uses it.
+4. Set **Rx Gain** so the FFT peak, beam at $0^\circ$ and source at boresight,
+   reads $-10 \pm 3$ dBFS. Leave it there for the whole lab.
+5. Check **Signal BW**, which Calibrate and Find HB100 reset.
+6. Open the **Lab Presets** section before pressing any preset in it.
+7. Procedure D's Tracking mode needs a kit updated with `install.sh`. If the
+   Mode menu has no **Tracking** entry, tell the instructor before class.
+::::
+
+::::{frame} No Hardware?
+:class: read-only
+
+```{note}
+Run the backend in simulation mode with `python phaser_headless.py --sim`, or
+use the hosted simulator, and open the same URL. The simulator places a target
+at boresight, so procedures A, B, and D run as written: the weights, the notch,
+the difference null, and the error function are all in its physics model. It
+also carries a simulated interferer, so procedure C runs there too. One caveat:
+the simulator's MVDR currently suppresses the target along with an interferer
+at $\pm 20^\circ$, a fault in the simulator that is being fixed, so read the
+look-direction level from the bench rather than the simulator.
+```
+::::
+
+::::{frame} Procedure A: The Static Notch
+:class: read-only
+
+1. With the array uniform (Element Gains at 100 %, Phase Control reset), press
+   **Start**. Read **Peak Gain** and **Angle** (set to **Peak**), then press
+   **Freeze** to hold the trace as your reference. Record the level of the
+   sidelobe nearest $+22.5^\circ$; expect about $-13$ dBc. If the two first
+   sidelobes differ by more than about 2 dB, recalibrate and repeat this step.
+2. Enter your Part 1 gains into **Element Gains** (Rx1 through Rx8). The set is
+   symmetric, so **Enforce Symmetric Taper** makes no difference to it; leave the
+   switch off so that a later edit to one slider is not mirrored onto its
+   partner.
+3. Enter your Part 1 phases into **Phase Control**, each with its sign.
+4. Press **Start** and read the new trace against the frozen one: the new
+   **Peak Gain**, the notch's depth below the frozen peak, and the notch's angle.
+   Fill in Table A of the packet.
+5. Press **Reset** in Phase Control and return Element Gains to Uniform.
+::::
+
+::::{frame} Procedure B: The Difference Null
+:class: read-only
+
+1. Open **Digital Beam Forming** and set Mode to **Manual**.
+2. Leave Beam 0 Gain and Phase alone. Set **Beam 1 Phase** to $180^\circ$.
+3. Press **Start**. Nothing in the analog beamformers changed; only one digital
+   channel's sign did.
+4. Record the null's depth and angle, and the angles of the two peaks that
+   replace the main lobe, in Table B. The peaks fall on the sweep's
+   $2.8125^\circ$ grid, so one grid step is the reading tolerance.
+5. Set **Beam 1 Phase** back to $0^\circ$.
+::::
+
+::::{frame} Procedure C: MVDR Against an Interferer
+:class: read-only
+
+The interferer in this procedure is simulated: the Phaser software adds a second
+source, at an angle and level you choose, to the real samples the kit receives,
+before the digital beamformer sees them. The target stays your HB100 at
+boresight.
+
+1. In **Digital Beam Forming**, turn on the simulated interferer. Set its angle
+   to $+20^\circ$ and its level $10$ dB above the target.
+2. Set Mode to **Manual** and press **Start**. The trace leans toward the
+   interferer, which dominates the received power. Read the level at
+   $+20^\circ$ and at boresight.
+3. Set Mode to **MVDR**, Snapshots to $128$, and Diagonal Load to $0.001$. The
+   look direction is the current **Steer Angle**, so leave it at $0^\circ$.
+   Press **Start** and read the same two levels.
+4. Record both pairs in Table C. The measurement is the gap between the two
+   traces at $+20^\circ$, and the change in the boresight level between them.
+5. Turn the simulated interferer off and set Mode back to **Manual**.
+
+**Expected suppression: to be supplied from the first bench run with the
+simulated interferer.** Run only at $+20^\circ$; at $+30^\circ$ the suppression
+falls away for the reasons in Two Limits of Two Channels.
+::::
+
+::::{frame} Procedure D: Watch It Track
+:class: read-only
+
+1. Open **Lab Presets** and load **8 Tracking**. It sets the digital layer up
+   to form both beams at once.
+2. Set the taper to **Uniform** under Element Gains, and set **Beam 1 Phase**
+   to $0^\circ$ in Digital Beam Forming. The preset does not yet do either
+   reliably, and a leftover taper or phase changes every reading below.
+3. In **Plot Options**, turn on **Show Monopulse Delta Beam** and **Show
    Monopulse Error Function**.
-
+4. On the **Rectangular** tab, press **Start**. The sum trace peaks on
+   boresight and the delta trace nulls there. Record the delta null's depth and
+   angle, and the angle where the error trace crosses zero, in Table D.
+5. Set Mode to **Tracking** and move the HB100 slowly across the front of the
+   array along the $1.2$ m arc. The tracker reads the error function, drives it
+   back toward zero, and follows the source without sweeping. Note in Table D
+   how far it follows and how it fails when it loses the source.
 ::::
 
-::::{frame} Procedure D — watch it track, continued
+::::{frame} Lab Packet
+:class: read-only
 
-3. On the **Rectangular** tab, press **Start**. The sum trace peaks on boresight
-   and the delta trace nulls there, about $-21.8$ dBc deep with its twin peaks
-   near $\pm 11^\circ$ — the same null you measured in Part 4. The error trace
-   crosses zero at the same angle and changes sign across it.
-4. Set Mode to **Tracking** and move the HB100 slowly across the front of the
-   array. The tracker reads the error function, drives it back toward zero, and
-   follows the source without sweeping.
-
+The packet is the turn-in document for the whole lab: Part 1 before the period,
+Part 2 at the bench, Part 3 after. <a href="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">L24 Lab packet (PDF)</a>.
 ::::
 
-::::{frame} Key point
-
-:::{callout}
-A sweep finds targets; a monopulse pair measures them. Two beams formed at the
-same time turn a single look into a signed angle error, which is the measurement
-a tracking radar runs on.
-:::
-
-::::
-
-::::{frame} That is the end of Module 3
-
-That is the end of Module 3, and the door into Module 4. A radar has to know
-where its target is right now, not where it was at the end of the last sweep, and
-the sum and delta beams you just formed are how it finds out.
-
-::::
-
-::::{frame} Part 8: Deliverables
-
-Record and submit the following.
-
-1. **The static notch.** A table with the frozen reference level and the
-   null-steered level at $+22.5^\circ$, the depth change between them, and the
-   main-lobe peak level before and after. Compare each against the predicted
-   $-12.8$ dBc, $-21.6$ dBc, and $1.8$ dB.
-2. **The difference null.** Null depth in dBc and the two peak angles, against
-   the predicted $-22$ dBc and $\pm 11^\circ$.
-
-::::
-
-::::{frame} Part 8: Deliverables, continued
-
-3. **MVDR against manual.** From your own procedure C sweeps, the response at
-   the interferer angle under both modes and the difference between them, plus
-   the look-direction level under both.
-4. **Two written answers.** (a) Why the measured notch depth is limited by the
-   sweep's noise floor rather than by quantization, with the numbers that set the
-   floor and with the depth the quantized weights alone would allow. (b) One
-   situation where a computed static null is the
-   better choice than MVDR, and one where it is not, with a reason for each.
-
-::::
-
-::::{frame} Lab sheet
-
-The lab sheet is the turn-in document for all of it: <a href="../../labs/ECE444_Lab_L24_NullSteering_blank.pdf" target="_blank" rel="noopener">Lab sheet (PDF)</a>.
-
-::::
-
-::::{frame} Summary — the static notch
+::::{frame} Summary
+:class: read-only
 
 | Idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| Weight subtraction | $w = w_d - r_n w_n$, then convert to gain % and phase | main-lobe cost $1.8$ dB for a null at $+22.5^\circ$ |
-| Measured notch | what the sweep can actually show at that angle | $-21.6$ dBc, against a $-12.8$ dBc reference sidelobe |
-| Depth limit | the sweep's noise floor, not the phase LSB or the algorithm | floor $23$ dB below the uniform peak gives a $20\text{-}22$ dB notch |
-
-::::
-
-::::{frame} Summary — adaptive and hybrid nulls
-
-| Idea | What it is | Number to remember |
-| :-- | :-- | :-- |
-| Difference beam | Beam 1 Phase $= 180^\circ$ subtracts the two channels | null on boresight, $-22$ dBc, peaks at $\pm 11^\circ$ |
-| MVDR | $w = R^{-1}s / (s^H R^{-1} s)$ from $K$ snapshots | $17\text{-}19$ dB suppression, look direction held |
-| Degrees of freedom | one constraint plus one null per digital channel pair | 2 channels null 1 interferer |
-| Hybrid cost | analog sums discard per-element data | 8 elements, 2 adaptive degrees of freedom |
-
-::::
-
-::::{frame} Summary — monopulse
-
-| Idea | What it is | Number to remember |
-| :-- | :-- | :-- |
+| Weight subtraction | $\mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\mathbf{w}_\text{n}$, as gain % and phase | main lobe drops about $2$ dB for a null at $+22.5^\circ$ |
+| Notch depth | set by one-step channel errors, not by rounding | about $-48$ dB; phaser-00 $-46$ to $-50$ dB |
+| Difference beam | Beam 1 Phase $= 180^\circ$ subtracts the two channels | boresight null, peaks near $\pm 11^\circ$; phaser-00 $-41.5$ dB |
+| MVDR | $\mathbf{w} = \mathbf{R}^{-1}\mathbf{s} / (\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s})$ from $K$ snapshots | one null from two channels; run at $+20^\circ$ |
 | Monopulse error | signed ratio of delta to sum, from one look | zero on boresight, slope $0.11$ per degree |
-
 ::::
 
-::::{frame} Practice
-:class: doc-links
-
-- <a class="doc-link" href="../../practice/ECE444_L24Lab_Practice_blank.pdf" target="_blank" rel="noopener">Problem set (PDF)</a>
-- <a class="doc-link doc-key" href="../../practice/ECE444_L24Lab_Practice_SOLUTIONS.pdf" target="_blank" rel="noopener">Solutions (PDF)</a>
-
-::::
-
-::::{frame} Where this is going
-
-Module 4 begins radar. Lesson 25 derives the radar range equation and asks the
-question this module never had to: how much power comes back from a target that
-does not transmit anything of its own. Everything Module 3 built — beamwidth,
-sidelobes, scan loss, steering — becomes the antenna terms in that equation, and
-the array you have been sweeping becomes the front end of a radar.
-
-:::{depth}
-You have already been through the door. The monopulse pair in Part 7 measures a
-target's angle from a single look, which is what a radar needs in order to track
-something that moves, and Lesson 25 puts a power budget behind that measurement:
-how much energy has to leave the antenna for the echo to be detectable at all.
-The error function you watched cross zero is the angle channel of the tracking
-loop; the range equation supplies the signal that feeds it.
-
-Read the radar range equation section of the text before Lesson 25, and bring
-your Part 7 numbers. The slope of the error curve near boresight is the quantity
-that sets how finely a tracking radar can measure angle, and Module 4 returns to
-it as soon as the power budget is in place.
+::::{frame} Looking Ahead
+:::{present}
+- Turn in the packet, all three parts, before Lesson 25.
+- Module 4 begins radar: the range equation puts a power budget behind this angle measurement.
 :::
 
+Lesson 25 derives the radar range equation and asks the question this module
+never had to: how much power comes back from a target that transmits nothing of
+its own. Everything Module 3 built, beamwidth, sidelobes, scan loss, and
+steering, becomes the antenna terms in that equation, and the array you have
+been sweeping becomes the front end of a radar. The monopulse pair of Part D
+measures a target's angle from a single look, which is what a radar needs to
+track something that moves; the range equation supplies the signal that feeds
+it. Keep your Table D numbers: the slope of the error function near boresight
+sets how finely a tracking radar can measure angle, and Module 4 returns to it.
 ::::
