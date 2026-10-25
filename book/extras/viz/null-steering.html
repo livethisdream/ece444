@@ -45,6 +45,9 @@
   .ro.dgr { background:rgba(176,30,36,0.10); border-color:rgba(176,30,36,0.28); }
   .ro.dgr .v { color:var(--red); }
   .note { font-size:12.5px; color:var(--ink3); margin:9px 2px 0; line-height:1.45; }
+  /* A phone stacks the canvases; a tighter note keeps the widget under the 660px cap at 320. */
+  @media (max-width:430px) { .note { font-size:12px; line-height:1.35; margin-top:7px; }
+                             .controls { padding:7px 10px; gap:8px 14px; } }
 </style>
 </head>
 <body>
@@ -65,7 +68,7 @@
       <label for="mode">Weights</label>
       <select id="mode">
         <option value="ideal" selected>Ideal (exact)</option>
-        <option value="phaser">PHASER (quantized + sweep floor)</option>
+        <option value="phaser">PHASER (quantized + bench floor)</option>
       </select>
     </div>
   </div>
@@ -86,8 +89,8 @@
   // ---- the course array: PHASER, 8 elements, d = 14 mm at 10.525 GHz ----
   const N = 8, DL = 0.491, KD = 2 * Math.PI * DL;
   const LSB = 2.8125, GSTEP = 0.01;      // ADAR1000 phase LSB, 1% gain steps
-  const SWEEP_FLOOR_DB = -23;            // measured sweep floor below the uniform peak
-  const FLOOR = -50;                     // plot floor
+  const SWEEP_FLOOR_DB = -48;            // notch bottom measured on phaser-00 (2026-10-23), below the uniform peak
+  const FLOOR = -60;                     // plot floor
   const DEG = Math.PI / 180;
 
   // allowed null angles: -60..-5 and +5..+60 in 0.5 deg steps
@@ -186,8 +189,8 @@
     pR.textContent = cabs(S.r).toFixed(3) + ' (' + (20 * Math.log10(cabs(S.r))).toFixed(1) + ' dB)';
     note.textContent = phaser
       ? 'PHASER mode rounds every phase to the ADAR1000’s 2.8125° step and every '
-        + 'gain to 1 %, then adds the beam sweep’s noise floor 23 dB below the uniform peak. '
-        + 'The notch stops at that floor near 21 dB, which is what the hardware sweep reads.'
+        + 'gain to 1 %, then adds a floor 48 dB below the uniform peak, where the notch '
+        + 'bottomed out on a course kit. Rounding alone barely moves the null.'
       : 'Ideal mode applies the exact complex weights: the response at the null angle is zero, '
         + 'so the notch runs off the bottom of the plot. The main lobe still pays for it.';
   }
@@ -215,7 +218,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; 
   function drawPattern() {
     const H = Math.max(210, Math.min(300, Math.round(pat.parentNode.clientWidth * 0.42)));
     const g = fit(pat, px, H);
-    const L = 44, R = 10, T = 12, B = 30;
+    const L = 44, R = 10, T = 24, B = 30;           // T: a legend strip above the plot
     const x = d => L + (d + 90) / 180 * (g.w - L - R);
     const y = db => T + (0 - db) / (0 - FLOOR) * (g.h - T - B);
 
@@ -238,7 +241,7 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; 
       px.beginPath(); px.moveTo(L, y(S.noiseDb)); px.lineTo(g.w - R, y(S.noiseDb)); px.stroke();
       px.restore();
       px.fillStyle = '#b01e24'; px.font = F(11); px.textAlign = 'right';
-      px.fillText('sweep floor', g.w - R - 6, y(S.noiseDb) - 5);
+      px.fillText('bench floor', g.w - R - 6, y(S.noiseDb) + 12);   // below the line, clear of the sidelobes
     }
 
     const grid = [];                                 // fine sampling through the null
@@ -264,14 +267,15 @@ function SQ(h){ return (__SQ_MQ && __SQ_MQ.matches) ? Math.round(h * 0.62) : h; 
     px.fillStyle = '#b01e24'; px.font = F(12, '600');
     px.textAlign = side < 0 ? 'right' : 'left';
     px.fillText((S.th1 > 0 ? '+' : '−') + Math.abs(S.th1).toFixed(1) + '°',
-                x(S.th1) + side * 6, T + 26);
+                x(S.th1) + side * 6, T + 10);           // top row: above every sidelobe
     if (window.MJ && MJ.ready)
-      MJ.draw(px, '\\theta_1', x(S.th1) + side * 14, T + 9, 13, '#b01e24', 'center');
+      MJ.draw(px, '\\theta_1', x(S.th1) - side * 11, T + 9, 13, '#b01e24', 'center');
 
     px.fillStyle = '#5b6573'; px.font = F(12); px.textAlign = 'left';
-    px.fillText('uniform', L + 6, g.h - B - 22);
+    px.fillText('uniform', L + 6, 14);              // legend strip, clear of every curve
+    const uw = px.measureText('uniform').width;
     px.fillStyle = '#004a85'; px.font = F(12, '600');
-    px.fillText('null steered', L + 6, g.h - B - 7);
+    px.fillText('null steered', L + 6 + uw + 14, 14);
   }
 
   function drawBars() {

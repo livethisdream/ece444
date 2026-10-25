@@ -5,7 +5,8 @@
                             arriving through the first sidelobe at +22.5 deg
   - L24-pattern-null      : uniform (thin) vs null-steered (bold), notch marked
   - L24-cost-vs-angle     : |r| and main-lobe loss vs null angle
-  - L24-quant-depth       : ideal vs quantized weights against the sweep floor
+  - L24-quant-depth       : exact vs ADAR1000-rounded weights, the RMS fill
+                            estimate, and the depth phaser-00 measured
 
 Array is the PHASER's: N = 8, d = 14 mm, 10.525 GHz -> d/lambda = 0.491.
 The figures carry no equations (house rule); numbers and short words only.
@@ -35,7 +36,7 @@ N = 8
 DL = 0.491                      # d / lambda at 10.525 GHz
 KD = 2 * np.pi * DL
 FLOOR = -50.0                   # plot floor, dB
-SWEEP_FLOOR = -23.0             # measured sweep noise floor, dB below uniform peak
+MEASURED = (-50.0, -46.0)       # phaser-00 notch bottom, dB below uniform peak (2026-10-23)
 NIDX = np.arange(N)
 
 plt.rcParams.update({
@@ -173,28 +174,30 @@ def cost_vs_angle() -> None:
 
 # ------------------------------------------------------------------ figure 4
 def quant_depth() -> None:
+    """Depth against the uniform peak: exact, rounded, RMS estimate, measured."""
     w, r = null_weights(22.5)
     ws = w / np.abs(w).max()
     wq = quantize(w)
     th = np.linspace(0, 45, 4001)
     pk = response(ws, TH).max()
-    ideal = 20 * np.log10(np.clip(response(ws, th) / pk, 1e-9, None))
-    noise = 10 ** (SWEEP_FLOOR / 10) * PK ** 2 / pk ** 2
-    meas = 10 * np.log10(np.clip(response(wq, th) ** 2 / pk ** 2 + noise, 1e-12, None))
+    exact = db_pattern(ws, th, PK)
+    rounded = db_pattern(wq, th, PK)
+    lsb = np.deg2rad(2.8125)
+    eps = np.hypot(lsb / np.sqrt(12), 0.01 / np.sqrt(12))
+    rms = 20 * np.log10(eps / np.sqrt(N) * pk / PK)
     fig, ax = plt.subplots(figsize=(8.4, 4.0))
-    ax.plot(th, ideal, color=GRAY, lw=1.4, label="exact weights")
-    ax.plot(th, meas, color=NAVY, lw=2.4, label="quantized weights, measured sweep")
-    ax.axhline(10 * np.log10(noise), color=RED, lw=1.2, ls=(0, (5, 4)))
-    ax.text(1.5, 10 * np.log10(noise) + 1.2, "sweep noise floor", color=RED, fontsize=12)
+    ax.axhspan(*MEASURED, color=ORANGE, alpha=0.22, lw=0)
+    ax.text(0.8, MEASURED[1] + 1.3, "measured on phaser-00", color=ORANGE, fontsize=12)
+    ax.axhline(rms, color=RED, lw=1.2, ls=(0, (5, 4)))
+    ax.text(44.2, rms + 1.3, f"RMS estimate {rms:.0f} dB", color=RED, fontsize=12, ha="right")
+    ax.plot(th, rounded, color=NAVY, lw=3.2, label="rounded to the ADAR1000 steps")
+    ax.plot(th, exact, color="#9aa3ad", lw=1.3, ls=(0, (4, 2)), label="exact weights")
     ax.set_xlim(0, 45)
-    ax.set_ylim(-50, 4)
+    ax.set_ylim(-70, 4)
     ax.set_xlabel("angle from broadside (deg)")
-    ax.set_ylabel("relative response (dB)")
+    ax.set_ylabel("dB below the uniform peak")
     ax.grid(color=RULE, linewidth=0.8)
-    depth = meas[np.argmin(np.abs(th - 22.5))]
-    ax.annotate(f"{-depth:.0f} dB notch", xy=(22.5, depth), xytext=(27, -12),
-                arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.5), color=ORANGE, fontsize=12.5)
-    ax.legend(loc="lower left", fontsize=12)
+    ax.legend(loc="upper right", fontsize=12)
     finalize(fig, "L24-quant-depth")
 
 
