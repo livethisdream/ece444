@@ -55,7 +55,7 @@ So far we have judged every array by its main lobe. Peak gain, beamwidth, and sc
 Consider the PHASER looking at a target on boresight, and a second transmitter at $+22.5^\circ$ that is 10 dB stronger at the aperture. The array does not reject the interferer because it is off-axis; it rejects it by the pattern level in that direction, and the first sidelobe of a uniform 8-element array is only $-13$ dB. The interferer therefore arrives at the beamformer output $10 - 13 = 3$ dB below the target. A 3 dB margin leaves no room for a fade or a fluctuation in the target, and the receiver can lock onto the wrong signal.
 
 :::{note}
-The military case is the familiar one: a **jammer** placed in a sidelobe is the reason sidelobe-level specifications exist at all, and null steering is the countermeasure. The physics is the same for a co-channel base station, a radar altimeter on the next aircraft, or a strong multipath reflection off a hangar. Null steering handles anything loud that is not where you are looking the same way.
+The military case is the familiar one: a **jammer** placed in a sidelobe is the reason sidelobe-level specifications exist at all, and null steering is the countermeasure. The physics is the same for a base station on the same frequency, a radar altimeter on the next aircraft, or a strong multipath reflection off a hangar. Null steering handles anything loud that is not where you are looking the same way.
 :::
 ::::
 
@@ -87,7 +87,7 @@ $$
 - Lesson 18 used phase only, Lesson 22 amplitude only; a null needs both.
 :::
 
-To place a null we need control the previous lessons did not use. Lesson 18 steered the beam with **phase only**, holding every element at full gain. Lesson 22 tapered the sidelobes with **amplitude only**, holding every element in phase. Null steering uses both at once, so from here on each element carries a **complex weight**
+To place a null we need control the previous lessons did not use. <a href="../L18-beam-steering/index.html#frame-sign-of-the-compensating-ramp">Lesson 18</a> steered the beam with **phase only**, holding every element at full gain. <a href="../L22-sidelobes-tapering/index.html#frame-tapers-on-the-array">Lesson 22</a> tapered the sidelobes with **amplitude only**, holding every element in phase. Null steering uses both at once, so from here on each element carries a **complex weight**
 
 $$
 w_n = a_n e^{j\phi_n},
@@ -127,7 +127,7 @@ $$
 y(\theta) = \mathbf{w}^{T}\mathbf{v}(\theta) = \sum_{n=0}^{N-1} w_n\ e^{jnkd\sin\theta}.
 $$
 
-This is the array factor of Lesson 16 with the weights left general. Every pattern in Module 3 is one evaluation of this sum.
+This is the array factor of <a href="../L16-array-factor/index.html#frame-the-array-factor-from-the-radiation-vector">Lesson 16</a> with the weights left general. Every pattern in Module 3 is one evaluation of this sum.
 ::::
 
 ::::{frame} The Conjugate Steering Vector
@@ -141,7 +141,7 @@ $$
 - Flip the sign and the null lands at $-\theta_1$.
 :::
 
-Now read the beam-steering result of Lesson 18 in this language. To point the beam at $\theta_0$ we want all $N$ terms of the sum to add in phase when $\theta = \theta_0$, which happens when each weight cancels its own steering-vector phase:
+Now read the beam-steering result of <a href="../L18-beam-steering/index.html#frame-sign-of-the-compensating-ramp">Lesson 18</a> in this language. To point the beam at $\theta_0$ we want all $N$ terms of the sum to add in phase when $\theta = \theta_0$, which happens when each weight cancels its own steering-vector phase:
 
 $$
 \begin{aligned}
@@ -176,7 +176,7 @@ Here is the problem stated exactly. We have the beam-steering weights $\mathbf{w
 1. the response at the interferer angle is zero, $\mathbf{w}^{T}\mathbf{v}(\theta_1) = 0$;
 2. $\mathbf{w}$ stays as close to $\mathbf{w}_\text{d}$ as possible, so the main beam does not move and does not lose more gain than it must.
 
-The first condition is one complex equation in eight complex unknowns, so there are many solutions. The second condition picks one.
+The first condition is one complex equation in eight complex unknowns, so there are many solutions. The second condition picks one, and it picks a change along $\mathbf{w}_\text{n}$, the beam aimed at the interferer. Split any change $\Delta\mathbf{w} = \mathbf{w} - \mathbf{w}_\text{d}$ into a part along $\mathbf{w}_\text{n}$ and a part $\mathbf{u}$ orthogonal to it, $\mathbf{w}_\text{n}^{H}\mathbf{u} = 0$. Since $\mathbf{v}(\theta_1) = \mathbf{w}_\text{n}^{*}$, the orthogonal part contributes $\mathbf{u}^{T}\mathbf{v}(\theta_1) = \mathbf{w}_\text{n}^{H}\mathbf{u} = 0$ at the interferer. It does nothing toward the null and only lengthens the change, so the smallest change that places the null is a multiple of $\mathbf{w}_\text{n}$ alone.
 
 **Build the beam that points at the interferer.** Define the second steering weight vector exactly as we defined the first, but aimed at $\theta_1$:
 
@@ -208,7 +208,16 @@ $$
 - One division gives an exact null, with no iteration.
 :::
 
-We substitute the trial weights into the response at the interferer. The second term is straightforward: we built $\mathbf{w}_\text{n}$ to cancel the steering-vector phase at $\theta_1$, so $\mathbf{w}_\text{n}^{T}\mathbf{v}(\theta_1) = N$, which with the conjugate transpose is $\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n}$, since every entry of $\mathbf{w}_\text{n}$ has unit magnitude. The first term is the desired beam's own response toward the interferer, and the same conjugate bookkeeping turns it into $\mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d}$. Setting the response to zero then fixes $r_\text{n}$:
+We substitute the trial weights into the response at the interferer. The superscript $H$ is the **conjugate transpose**: $\mathbf{a}^{H}\mathbf{b} = \sum_n a_n^{*} b_n$. Because $\mathbf{w}_\text{n} = \mathbf{v}^{*}(\theta_1)$, the steering vector at the interferer is $\mathbf{v}(\theta_1) = \mathbf{w}_\text{n}^{*}$, and every product with it becomes a conjugate-transpose product:
+
+$$
+\begin{aligned}
+\mathbf{w}_\text{d}^{T}\mathbf{v}(\theta_1) &= \sum_n w_{\text{d},n}\ w_{\text{n},n}^{*} = \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{d} \\
+\mathbf{w}_\text{n}^{T}\mathbf{v}(\theta_1) &= \sum_n \vert w_{\text{n},n}\vert^2 = \mathbf{w}_\text{n}^{H}\mathbf{w}_\text{n} = N .
+\end{aligned}
+$$
+
+The first is the desired beam's own response toward the interferer; the second is $N$ because every entry of $\mathbf{w}_\text{n}$ has unit magnitude. Setting the response to zero then fixes $r_\text{n}$:
 
 $$
 \begin{aligned}
@@ -258,7 +267,7 @@ w_n = 1 - r_\text{n}\ e^{-jn kd\sin\theta_1}
 $$
 
 - Each weight tip sits on a circle of radius $\vert r_\text{n}\vert$ around 1.
-- Amplitudes span $1 \pm \vert r_\text{n}\vert$; phases move a few degrees.
+- Amplitudes stay within $1 \pm \vert r_\text{n}\vert$; phases move a few degrees.
 - A null is a small change to the original beam.
 :::
 
@@ -311,7 +320,7 @@ $$
 w_n = 1 - r_\text{n}\ e^{-jn\psi_1},
 $$
 
-and the magnitudes run from $1 - 0.225$ to $1 + 0.225$.
+and the eight magnitudes lie between 0.78 and 1.19, inside the circle's bounds $1 \pm 0.225$.
 :::
 ::::
 
@@ -337,7 +346,15 @@ $$
 \text{gain}_n = \frac{100\ \vert w_n\vert}{\max_m \vert w_m\vert}\ \%, \qquad \phi_n = \angle w_n .
 $$
 
-The gains are symmetric and the phases are antisymmetric, which is what a null placed to one side of a broadside beam always produces. Note how small the phase offsets are: the largest is 13 degrees. Null steering is not a large change to the array's settings, and that is precisely why it is so easy to get wrong by a sign.
+Enter each phase with its sign. A Phase Control offset is the weight's own phase, the same convention **Apply** uses when it writes $-n\Delta\phi$ to steer to $+\theta_0$ (<a href="../L18-lab-beam-steering/index.html#frame-the-sign-in-phase-control">L18 Lab</a>). <a href="../L18-beam-steering/index.html#frame-sign-of-the-compensating-ramp">Lesson 18</a>'s $+n\Delta\phi$ is the backend's delay setting, which carries the opposite sign, so these offsets are entered as computed and not converted to it.
+
+The gains are symmetric and the phases are antisymmetric, and every null placed to one side of a broadside beam produces that pattern. The reason is in $r_\text{n}$. Summing the geometric series gives
+
+$$
+r_\text{n} = e^{j(N-1)\psi_1/2}\ \frac{\sin(N\psi_1/2)}{N\sin(\psi_1/2)},
+$$
+
+a real number times the phase $(N-1)\psi_1/2$, so $w_n = 1 - r_\text{n}e^{-jn\psi_1}$ carries the phase $(N-1-2n)\psi_1/2$ in its second term. Replacing $n$ with $N-1-n$ flips the sign of that phase, so $w_{N-1-n} = w_n^{*}$: elements mirrored about the center have equal gains and opposite phases. Note how small the phase offsets are: the largest is 13 degrees. Null steering is not a large change to the array's settings, and that is precisely why it is so easy to get wrong by a sign.
 ::::
 
 ::::{frame} The Notch on the Pattern
@@ -376,15 +393,25 @@ The widget below applies the weight-subtraction rule to the course array and dra
 - A null inside the half-power beam is a resolution problem.
 :::
 
-**The main-lobe loss is set by $\vert r_\text{n}\vert$.** Before rescaling, the response in the look direction falls from $N$ to $N(1 - \vert r_\text{n}\vert^2)$, a loss of
+**The main-lobe loss is set by $\vert r_\text{n}\vert$.** The subtracted beam's response in the look direction is the conjugate of the projection: since $\mathbf{v}(\theta_0) = \mathbf{w}_\text{d}^{*}$, the product $\mathbf{w}_\text{n}^{T}\mathbf{v}(\theta_0) = \mathbf{w}_\text{d}^{H}\mathbf{w}_\text{n} = N r_\text{n}^{*}$. So the response at $\theta_0$ is
 
 $$
-L = 20\log_{10}\left(1 - \vert r_\text{n}\vert^2\right),
+\begin{aligned}
+y(\theta_0) &= \mathbf{w}_\text{d}^{T}\mathbf{v}(\theta_0) - r_\text{n}\ \mathbf{w}_\text{n}^{T}\mathbf{v}(\theta_0) \\
+&= N - r_\text{n}\ N r_\text{n}^{*} = N\left(1 - \vert r_\text{n}\vert^2\right),
+\end{aligned}
 $$
 
-which is 0.4 dB for the $22.5^\circ$ example. Add the rescaling that keeps the largest gain at 100 % and the total loss at $\theta_0$ comes to 2.0 dB.
+a loss of $0.45$ dB for the $22.5^\circ$ example. The Element Gains sliders then divide every weight by the largest magnitude, $\max\vert w_n\vert = 1.19$, which loses another $20\log_{10}(1.19) = 1.53$ dB, so the total loss is
 
-Walk the null in toward the beam and both terms grow: 2.9 dB at $\theta_1 = 10^\circ$, 5.6 dB at $7^\circ$, 8.2 dB at $5^\circ$. As $\theta_1$ enters the main lobe $\vert r_\text{n}\vert \to 1$, the eight weights cancel one another, and what is left after rescaling is a split beam with a hole where the target used to be. A null inside the half-power beamwidth is not a null-steering problem, it is a resolution problem, and the answer is to move the beam or wait for the geometry to change.
+$$
+\begin{aligned}
+L &= -20\log_{10}\frac{1 - \vert r_\text{n}\vert^2}{\max_n \vert w_n\vert} \\
+&= 0.45 + 1.53 = 2.0\ \text{dB}.
+\end{aligned}
+$$
+
+Walk the null in toward the beam and the subtraction term grows fast: 1.5 dB at $\theta_1 = 10^\circ$, 5.1 dB at $7^\circ$, and 9.7 dB at $5^\circ$. The rescaling term does the opposite. It is 1.4 dB at $10^\circ$ and 0.5 dB at $7^\circ$, and at $5^\circ$ every weight magnitude is below 1, so scaling the largest up to 100 % raises the beam 1.5 dB. The totals are 2.9, 5.6, and 8.2 dB. As $\theta_1$ enters the main lobe $\vert r_\text{n}\vert \to 1$, the eight weights cancel one another, and what is left after rescaling is a split beam with a hole where the target used to be. A null inside the half-power beamwidth is not a null-steering problem, it is a resolution problem, and the answer is to move the beam or wait for the geometry to change.
 ::::
 
 ::::{frame} Quantization and Null Depth
@@ -411,9 +438,11 @@ $$
 \end{aligned}
 $$
 
-With $\text{LSB} = 2.8125^\circ = 0.0491$ rad and 1 % gain steps, $\epsilon_\text{rms} = 0.0145$, and the residual sits 46 dB below the nulled beam's peak, which is 48 dB below the uniform peak. That is the same $-6B$ scale as the quantization sidelobes of Lesson 23, a few decibels deeper because the error is spread over eight elements. Halve the bits and the floor rises fast: a 3-bit phase shifter cannot hold a null deeper than about 22 dB.
+Each piece of that estimate has a mechanism. Rounding to the nearest step leaves an error spread evenly between $-\text{LSB}/2$ and $+\text{LSB}/2$, and a uniform spread of width LSB has an RMS value of $\text{LSB}/\sqrt{12}$. A small phase error $\delta\phi$ moves a weight of magnitude near 1 by about $\delta\phi$, so the phase and gain errors both count as fractions of a unit weight and add in quadrature to $\epsilon_\text{rms}$. At the null the exact weights sum to zero, so the response is the sum of the eight errors alone, each turned by its own steering-vector phase. Independent errors add in power, not in voltage, so their sum has an RMS size of $\sqrt{N}\ \epsilon_\text{rms}$, and dividing by the beam peak $N$ gives $\epsilon_\text{rms}/\sqrt{N}$.
 
-Rounding this particular table does less damage than the estimate. Rounding keeps the gains symmetric and the phases antisymmetric, so the pattern stays real, still passes through zero, and the null only moves a quarter of a degree, to $+22.3^\circ$. What fills a null on the bench is error that does not share that symmetry: each channel's own calibration residue in gain and phase. The estimate is the depth those errors allow when they are about one step in size, and $-48$ dB below the uniform peak is the number to quote.
+With $\text{LSB} = 2.8125^\circ = 0.0491$ rad and 1 % gain steps, $\epsilon_\text{rms} = 0.0145$, and the residual sits 46 dB below the nulled beam's peak, which is 48 dB below the uniform peak. That is the same $-6B$ scale as the quantization sidelobes of <a href="../L23-beam-squint-quantization/index.html#frame-quantization-sidelobes">Lesson 23</a>, a few decibels deeper because the error is spread over eight elements. Halve the bits and the floor rises fast: a 3-bit phase shifter cannot hold a null deeper than about 22 dB.
+
+Rounding this particular table does less damage than the estimate. Rounding keeps the gains symmetric and the phases antisymmetric (the mirror pairs of <a href="#frame-the-phaser-settings">The PHASER Settings</a>), so each pair sums to a real number, the pattern referred to the array center stays real and still passes through zero, and the null only moves a quarter of a degree, to $+22.3^\circ$. What fills a null on the bench is error that does not share that symmetry: each channel's own calibration residue in gain and phase. The estimate is the depth those errors allow when they are about one step in size, and $-48$ dB below the uniform peak is the number to quote.
 ::::
 
 ::::{frame} Measured Null Depth
@@ -433,11 +462,11 @@ The notch landed at $+25.7^\circ$, about $3^\circ$ from the design angle, which 
 ::::{frame} Up to N−1 Nulls, All Static
 :::{present}
 - One of the eight weights holds the beam, which leaves at most seven nulls.
-- Two interferers is the practical limit on eight elements.
+- Nulls at both $\pm 22.5^\circ$ lower the main lobe 3.7 dB.
 - Every weight assumed a known $\theta_1$. If the interferer moves, recompute.
 :::
 
-An $N$-element array has $N$ complex weights. One holds the main beam, which leaves at most $N-1$ independent nulls. The PHASER can therefore null up to seven directions at once, though long before that the pattern has been so heavily reshaped that the main lobe is barely recognizable. The procedure generalizes by subtracting one term per interferer and solving the resulting small system; the two-interferer case is the practical limit for an eight-element array.
+An $N$-element array has $N$ complex weights. One holds the main beam, which leaves at most $N-1$ independent nulls. The PHASER can therefore null up to seven directions at once, though long before that the pattern has been so heavily reshaped that the main lobe is barely recognizable. The procedure generalizes by subtracting one term per interferer and solving the resulting small system. Each null lowers the main lobe further: nulls at both $\pm 22.5^\circ$ lower it 3.7 dB, against 2.0 dB for the one at $+22.5^\circ$.
 
 We computed every number in this lesson from an angle we had to know in advance. If the interferer moves, the null stays where it was and someone has to recompute and reload eight gains and eight phases. That is the limitation the L24 Lab confronts.
 ::::
@@ -473,5 +502,5 @@ We computed every number in this lesson from an angle we had to know in advance.
 - It runs on the two digital channels, the hybrid architecture of Lesson 17.
 :::
 
-The L24 Lab takes these weights to the bench. You will compute the gain and phase table for an interferer angle, type it into the Element Gains and Phase Control sections of the Phaser GUI, sweep the beam, and measure the notch you predicted. Then the lab does the thing this lesson cannot: instead of telling the array where the interferer is, it lets the array estimate the interference from the received data itself and compute its own weights. That is **MVDR**, the minimum-variance distortionless-response beamformer, and it needs the two digital channels rather than the analog element sums — the first lab to use the hybrid architecture of L17. Read the Digital Beam Forming section of the GUI inventory before class so the Mode, Snapshots, and Diagonal Load controls are not new to you.
+The L24 Lab takes these weights to the bench. You will compute the gain and phase table for an interferer angle, type it into the Element Gains and Phase Control sections of the Phaser GUI, sweep the beam, and measure the notch you predicted. Then the lab does the thing this lesson cannot: instead of telling the array where the interferer is, it lets the array estimate the interference from the received data itself and compute its own weights. That is **MVDR**, the minimum-variance distortionless-response beamformer, and it needs the two digital channels rather than the analog element sums — the first lab to use the <a href="../L17-phased-array-hardware/index.html#frame-the-hybrid-beamformer">hybrid architecture of L17</a>. Read the Digital Beam Forming section of the GUI inventory before class so the Mode, Snapshots, and Diagonal Load controls are not new to you.
 ::::
