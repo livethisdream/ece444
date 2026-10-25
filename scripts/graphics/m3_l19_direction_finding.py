@@ -5,7 +5,7 @@
   - L19-sweep-grid   : the same sweep near its peak, on the 7-bit steering grid
   - L19-two-bearings : the worked example, two stations on the firing line, the fix
   - L19-crossing     : the error region of a 90 deg and a 30 deg crossing
-  - L19-depth        : a firing-line pair 0.5 m and 2 m apart, the same box, the depth ellipse
+  - L19-depth        : a firing-line pair 0.75 m and 3 m apart, the same box, the depth ellipse
   - L19-reflection   : a direct lobe, a -10 dB reflection lobe, and their sum
   - L19-cone         : the cone of directions a line array cannot tell apart
   - L19-resolution   : two sources 20 deg apart and 8 deg apart
@@ -366,12 +366,14 @@ def depth_case(B, y=2.0, sigma_deg=1.5):
 def fig_depth() -> None:
     """Choosing Where to Measure: the depth error for two baselines."""
     fig, axes = plt.subplots(1, 2, figsize=(4.6, 3.3))
-    for ax, B, want in zip(axes, (0.5, 2.0), ("0.30", "0.09")):
+    for ax, B, want in zip(axes, (0.75, 3.0), ("0.20", "0.08")):
         P, box, th, d, C = depth_case(B)
         sy = np.sqrt(C[1, 1])
         assert f"{sy:.2f}" == want, (B, sy)
         assert np.isclose(sy, np.sqrt(2) * (B ** 2 / 4 + box[1] ** 2) * np.radians(1.5) / B, rtol=1e-6)
-        ax.plot([-1.2, 1.2], [0, 0], color=LIGHT, lw=2.0, solid_capstyle="butt")
+        ax.plot([-1.6, 1.6], [0, 0], color=LIGHT, lw=2.0, solid_capstyle="butt")
+        for xm in (-1.5, -0.75, 0.0, 0.75, 1.5):
+            ax.plot([xm, xm], [-0.05, 0.05], color=LIGHT, lw=1.2)
         for p, a in zip(P, th):
             u = np.array([np.sin(np.radians(a)), np.cos(np.radians(a))])
             nn = np.array([-u[1], u[0]])
@@ -390,11 +392,11 @@ def fig_depth() -> None:
         # depth label outside the triangle, left of the left-hand line
         yl = 0.8 * box[1]
         xl = P[0][0] + (box[0] - P[0][0]) * yl / box[1]
-        ax.text(xl - 0.1, yl, f"±{sy:.2f} m", color=RED, fontsize=13, ha="right", va="center")
+        ax.text(xl - 0.22, yl, f"±{sy:.2f} m", color=RED, fontsize=13, ha="right", va="center")
         ax.annotate("", xy=(B / 2, -0.28), xytext=(-B / 2, -0.28),
                     arrowprops=dict(arrowstyle="<->", color=GRAY, lw=1.0, shrinkA=0, shrinkB=0))
         ax.text(0.0, -0.38, f"B = {B:g} m", color=GRAY, fontsize=13, ha="center", va="top")
-        ax.set_xlim(-1.2, 1.2)
+        ax.set_xlim(-1.65, 1.65)
         ax.set_ylim(-0.75, 2.75)
         ax.set_aspect("equal")
         ax.axis("off")

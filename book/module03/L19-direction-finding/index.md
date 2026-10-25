@@ -603,7 +603,7 @@ derived in "Choosing Where to Measure" below.
 :::
 :::{present}
 <img src="../../viz/img/L19-depth.svg"
-     alt="Two pairs of stations on a firing line and a box 2 meters downrange: stations 0.5 meters apart give an error ellipse plus or minus 0.30 meters long in depth; stations 2 meters apart, plus or minus 0.09 meters"
+     alt="Two pairs of stations on a firing line and a box 2 meters downrange: neighboring stations 0.75 meters apart give an error ellipse plus or minus 0.20 meters long in depth; the end stations, 3 meters apart, plus or minus 0.08 meters"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -630,11 +630,12 @@ $$\begin{aligned}
 &= \frac{\sqrt{2}\ R^2\sigma_\beta}{B}.
 \end{aligned}$$
 
-With the taped-heading budget, $\sigma_\beta = 1.5^\circ$, stations
-$2\ \text{m}$ apart fix a box $2\ \text{m}$ downrange to $0.09\ \text{m}$ in
-depth, stations $1\ \text{m}$ apart to $0.16\ \text{m}$, and stations
-$0.5\ \text{m}$ apart to $0.30\ \text{m}$. Across range the same
-pairs fix it to about $0.04\ \text{m}$. The depth error grows as $R^2$ and
+With the taped-heading budget, $\sigma_\beta = 1.5^\circ$, and the L19 Lab's
+station marks $0.75\ \text{m}$ apart, the end stations, $3\ \text{m}$ apart,
+fix a box $2\ \text{m}$ downrange to $0.08\ \text{m}$ in depth, stations
+$1.5\ \text{m}$ apart to $0.11\ \text{m}$, and neighboring stations,
+$0.75\ \text{m}$ apart, to $0.20\ \text{m}$. Across range the same pairs fix
+it to $0.04$ to $0.06\ \text{m}$. The depth error grows as $R^2$ and
 falls as $1/B$, so the stations farthest apart that still hear the fox give the
 best fix.
 
@@ -725,7 +726,7 @@ themselves.
 | $\left(\sum \hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}\right)\mathbf x = \sum \hat{\mathbf n}_i(\hat{\mathbf n}_i\cdot\mathbf p_i)$ | least-squares fix | a $2\times 2$ solve |
 | $\delta_\perp = R\tan\sigma_\beta$ | cross-range error of one line | $0.14\ \text{m}$ at $4\ \text{m}$, $2^\circ$ |
 | $\sigma_\text{fix} = \sqrt{2}\ \delta_\perp/\sin\gamma$ | RMS error of a two-bearing fix crossing at $\gamma$ | $0.20\ \text{m}$ at $90^\circ$, $0.76\ \text{m}$ at $15^\circ$ |
-| $\sigma_y = \sqrt{2}\ R^2\sigma_\beta/B$ | depth error from two stations $B$ apart on a firing line | $0.09\ \text{m}$ at $2\ \text{m}$ deep, $B = 2\ \text{m}$ |
+| $\sigma_y = \sqrt{2}\ R^2\sigma_\beta/B$ | depth error from two stations $B$ apart on a firing line | $0.08\ \text{m}$ at $2\ \text{m}$ deep, $B = 3\ \text{m}$ |
 | residual $e_i$ | a bearing's miss distance at the fix | flags an outlier at several times $R_i\tan\sigma_\beta$ |
 ::::
 
