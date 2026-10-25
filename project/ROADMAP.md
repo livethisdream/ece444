@@ -153,7 +153,7 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23 | **walk dry run** (needs `install.sh`) |
 | L22 | Sidelobes and Tapering | practice | cut 20/20; voice, why and illustration sweeps done (#132, #137, #142) | ready |
 | L23 | Beam Squint and Quantization | practice | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
-| L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20 | **hardware run of the preset-6 quantization walk** |
+| L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20; preset-6 walk validated on phaser-00 2026-10-25 | ready |
 | L24 | Null Steering | practice | cut 20/20 (#148), voice, why and illustration sweeps (#149) | ready |
 | L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | Procedure C and Table C from the 2026-10-25 bench run (needs phaser #55 on every kit); hardware run of the packet |
 
@@ -216,7 +216,10 @@ needs its rubric, published with the L28 Lab packet.
    readout follows HB100 drift. The 3- and 4-bit lobes in the old
    quantization sweep sit above even the worst-case simulation of rounding
    the steering ramp, and Angle shifted +8.4° at 4 bits and below: does the
-   kit also round its calibration offsets? Open from the dry run: why array
+   kit also round its calibration offsets? Evidence (2026-10-25, phaser-00):
+   the preset-6 walk, beam held at 15°, read the floor (−17 to −19 dBc) at
+   4 and 3 bits where the 10-23 sweep read −15.5 and −12.0 dBc, and its
+   2-bit lobe was −10.1 dBc near −53° against the sweep's −8.5. Open from the dry run: why array
    peaks read 1–3 dB under the in-phase sum of single elements even with
    elements fully on or off; whether each channel's phase moves with its
    gain setting; whether recalibrating with the source exactly at boresight
