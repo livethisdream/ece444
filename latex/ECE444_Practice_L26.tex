@@ -1,0 +1,385 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L26 practice set (Range, Resolution, and Doppler) -- range from delay,
+% unambiguous range, range resolution, the Doppler shift and its sign,
+% Doppler resolution and ambiguity, the CW fan demo, and micro-Doppler.
+% Every number is computed in scripts/graphics/m4_l26_range_doppler.py.
+% Throughout, c = 3.00e8 m/s.
+
+\fullwidth{\textbf{Learning Objective 4.2: } I can calculate range resolution, unambiguous range,
+and Doppler shift for a given radar waveform.
+\\[4pt]\normalfont\small Show your work. Use $c = 3.00\times 10^8\ \text{m/s}$. A
+\textbf{Documentation} line at the end is required (write \textbf{None} if you did not
+collaborate).}
+
+\begin{questions}
+
+\question \textbf{Range and unambiguous range.} A pulsed surveillance radar transmits a pulse
+every $0.5\ \text{ms}$, a pulse repetition frequency of $2\ \khz$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part An echo arrives $40\ \mu\text{s}$ after its pulse. Find the target's range.
+		\begin{solution}[1.0in]
+		The wave covers the range twice:
+		\eq{ R &= \frac{c\tau}{2} = \frac{\lp 3.00\times 10^8 \rp\lp 40\times 10^{-6} \rp}{2} \\
+		&= 6.00\ \km }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$R$ = \ansbox[1.3in]{$6.00\ \km$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the unambiguous range.
+		\begin{solution}[1.0in]
+		Every echo must return before the next pulse leaves:
+		\eq{ R_\text{ua} &= \frac{c}{2\ \text{PRF}} = \frac{3.00\times 10^8}{2\lp 2000 \rp} \\
+		&= 75\ \km }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$R_\text{ua}$ = \ansbox[1.3in]{$75\ \km$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A large aircraft is $90\ \km$ away. At what range does the radar report it?
+		\begin{solution}[1.2in]
+		Its echo arrives $2(90\times 10^3)/c = 600\ \mu\text{s}$ after its pulse, which is
+		$100\ \mu\text{s}$ after the next pulse. The receiver times it from that pulse:
+		\eq{ R_\text{apparent} = 90 - 75 = 15\ \km }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$R_\text{apparent}$ = \ansbox[1.3in]{$15\ \km$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The radar must report every target out to $120\ \km$ without ambiguity. Find
+		the highest PRF it can use.
+		\begin{solution}[1.0in]
+		\eq{ \text{PRF}_\text{max} &= \frac{c}{2R_\text{ua}} = \frac{3.00\times 10^8}{2\lp 120\times 10^3 \rp} \\
+		&= 1.25\ \khz }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		PRF = \ansbox[1.3in]{$1.25\ \khz$}
+	\end{minipage}
+
+	\part The operator switches the PRF from $2\ \khz$ to $1.25\ \khz$ and the aircraft of
+	part (c) jumps from $15\ \km$ to $90\ \km$. In one or two sentences, explain how this
+	change shows which reading is true.
+		\begin{solution}[1.0in]
+		A target inside the unambiguous range of both PRFs reports the same range at both. The
+		$15\ \km$ reading moved when the PRF changed, so it was folded; at $1.25\ \khz$ the
+		unambiguous range is $120\ \km$, and the $90\ \km$ reading is the true one.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Range resolution.} Two targets are resolved when their echoes do not
+overlap in time.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A radar transmits a $0.5\ \mu\text{s}$ pulse. Find its range resolution.
+		\begin{solution}[1.0in]
+		\eq{ \Delta R &= \frac{c\ \tau_p}{2} = \frac{\lp 3.00\times 10^8 \rp\lp 0.5\times 10^{-6} \rp}{2} \\
+		&= 75\ \m }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta R$ = \ansbox[1.3in]{$75\ \m$}
+	\end{minipage}
+
+	\part Two aircraft fly in formation, $50\ \m$ apart in range. Describe what the radar of
+	part (a) reports, and why.
+		\begin{solution}[1.0in]
+		Their echoes start $2(50)/c = 0.33\ \mu\text{s}$ apart, less than the $0.5\ \mu\text{s}$
+		pulse, so they overlap. The radar reports one target, with an echo a little longer and
+		stronger than a single aircraft's.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the bandwidth a waveform needs to resolve targets $0.30\ \m$ apart.
+		\begin{solution}[1.0in]
+		\eq{ B &= \frac{c}{2\Delta R} = \frac{3.00\times 10^8}{2\lp 0.30 \rp} \\
+		&= 500\ \mhz }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$B$ = \ansbox[1.3in]{$500\ \mhz$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part ADI's FMCW lab halves the PHASER's chirp bandwidth to $250\ \mhz$. Find the new
+		range resolution.
+		\begin{solution}[1.0in]
+		\eq{ \Delta R = \frac{c}{2B} = \frac{3.00\times 10^8}{2\lp 250\times 10^6 \rp} = 0.60\ \m }
+		Halving the bandwidth doubles the resolution cell.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta R$ = \ansbox[1.3in]{$0.60\ \m$}
+	\end{minipage}
+
+	\part Two corner reflectors sit at $1.50\ \m$ and $1.70\ \m$ from the kit. State whether
+	the $500\ \mhz$ chirp separates them, and say what you would change to separate them.
+		\begin{solution}[1.1in]
+		They are $0.20\ \m$ apart, inside the $0.30\ \m$ resolution of a $500\ \mhz$ chirp, so
+		they appear as one target. More bandwidth would separate them ($750\ \mhz$ gives
+		$0.20\ \m$, just at the limit), or you can move one reflector so that they are more than
+		$0.30\ \m$ apart in range.
+		\end{solution}
+
+	\part A classmate proposes doubling the transmit power to improve the range resolution.
+	Explain in one or two sentences why that does not work.
+		\begin{solution}[1.0in]
+		Resolution depends only on the waveform's bandwidth, $\Delta R = c/2B$. More power makes
+		both echoes stronger but does not shorten them, so they still overlap.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{The Doppler shift.} The Doppler shift of an echo is $f_D = 2v_r/\lambda$,
+positive for a target closing on the radar.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part ADI's CW radar lab quotes $716\ \hz$ at $2.4\ \ghz$ and $2982\ \hz$ at
+		$10\ \ghz$ for a car at $100\ \text{mph}$ ($1\ \text{mph} = 0.44704\ \text{m/s}$).
+		Recompute both.
+		\begin{solution}[1.5in]
+		$v = 44.7\ \text{m/s}$; $\lambda = 0.125\ \m$ at $2.4\ \ghz$ and $0.030\ \m$ at
+		$10\ \ghz$:
+		\eq{ f_D &= \frac{2\lp 44.7 \rp}{0.125} = 715\ \hz \\
+		f_D &= \frac{2\lp 44.7 \rp}{0.030} = 2980\ \hz }
+		ADI's slightly larger values come from $c = 2.998\times 10^8\ \text{m/s}$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$f_D$ = \ansbox[1.3in]{$715\ \hz$}\\[6pt]
+		$f_D$ = \ansbox[1.3in]{$2980\ \hz$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A target moves directly away from a $10\ \ghz$ radar at $15\ \text{m/s}$. Find
+		its Doppler shift, with its sign.
+		\begin{solution}[1.0in]
+		The range is opening, so $v_r = -15\ \text{m/s}$:
+		\eq{ f_D = \frac{2\lp -15 \rp}{0.030} = -1000\ \hz }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$f_D$ = \ansbox[1.3in]{$-1000\ \hz$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part An aircraft flies at $200\ \text{m/s}$ on a heading $60\mydeg$ off the line of
+		sight, toward the radar. Find the Doppler shift at $10\ \ghz$.
+		\begin{solution}[1.1in]
+		Only the radial component counts:
+		\eq{ v_r &= 200\cos 60\mydeg = 100\ \text{m/s} \\
+		f_D &= \frac{2\lp 100 \rp}{0.030} = 6.67\ \khz }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$f_D$ = \ansbox[1.3in]{$6.67\ \khz$}
+	\end{minipage}
+
+	\part The same aircraft turns to fly across the line of sight. State its Doppler shift and
+	what that means for a radar that separates targets by Doppler.
+		\begin{solution}[1.0in]
+		At $\alpha = 90\mydeg$, $v_r = 0$ and $f_D = 0$. The aircraft has the same Doppler as the
+		ground, so a radar that rejects zero-Doppler returns loses it until it turns again.
+		\end{solution}
+
+	\part Explain in two or three sentences why an approaching target raises the echo's
+	frequency.
+		\begin{solution}[1.1in]
+		Each wave crest reflects from the target when it is a little closer than it was for the
+		crest before, so each crest has a shorter round trip. The crests arrive closer together
+		in time than they were sent, which is a higher frequency. Equivalently, the echo phase
+		$-4\pi R/\lambda$ increases as $R$ shrinks, and a steadily increasing phase is a positive
+		frequency offset.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Doppler resolution and ambiguity.} ADI's range-Doppler lab sends a burst of
+256 chirps, $0.5\ \text{ms}$ apart, at about $10\ \ghz$ ($\lambda = 3.0\ \text{cm}$). Each chirp
+gives one sample of the target's Doppler phase.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the burst length, its frequency resolution, and its velocity resolution.
+		\begin{solution}[1.4in]
+		\eq{ T &= 256\lp 0.5\ \text{ms} \rp = 128\ \text{ms} \\
+		\Delta f &= \frac{1}{T} = 7.8\ \hz \\
+		\Delta v &= \frac{\lambda}{2T} = \frac{0.030}{2\lp 0.128 \rp} = 0.12\ \text{m/s} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$T$ = \ansbox[1.3in]{$128\ \text{ms}$}\\[6pt]
+		$\Delta v$ = \ansbox[1.3in]{$0.12\ \text{m/s}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the unambiguous velocity.
+		\begin{solution}[1.1in]
+		The chirps sample the Doppler at the PRF, $2\ \khz$, so shifts within $\pm 1\ \khz$
+		are unambiguous:
+		\eq{ v_\text{ua} = \pm\frac{\lambda}{4\ T_\text{PRI}} = \pm\frac{0.030}{4\lp 0.5\times 10^{-3} \rp} = \pm 15\ \text{m/s} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$v_\text{ua}$ = \ansbox[1.3in]{$\pm 15\ \text{m/s}$}
+	\end{minipage}
+
+	\part ADI suggests changing the number of chirps to 128. State what happens to the
+	velocity resolution and to the unambiguous velocity.
+		\begin{solution}[1.0in]
+		The burst halves to $64\ \text{ms}$, so $\Delta v$ doubles to $0.23\ \text{m/s}$. The
+		chirps are still $0.5\ \text{ms}$ apart, so $v_\text{ua}$ stays at $\pm 15\ \text{m/s}$.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A car closes on this radar at $25\ \text{m/s}$. Find its true Doppler shift and
+		the velocity the radar reports.
+		\begin{solution}[1.4in]
+		\eq{ f_D = \frac{2\lp 25 \rp}{0.030} = 1667\ \hz }
+		That is outside $\pm 1000\ \hz$, so it aliases by one PRF:
+		\eq{ f_\text{rep} &= 1667 - 2000 = -333\ \hz \\
+		v_\text{rep} &= \frac{\lambda f_\text{rep}}{2} = -5\ \text{m/s} }
+		The radar reports a target moving away at $5\ \text{m/s}$.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$f_D$ = \ansbox[1.3in]{$1667\ \hz$}\\[6pt]
+		$v_\text{rep}$ = \ansbox[1.3in]{$-5\ \text{m/s}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the unambiguous range of this pulse spacing, and show that the product
+		$R_\text{ua}v_\text{ua}$ equals $c\lambda/8$.
+		\begin{solution}[1.3in]
+		\eq{ R_\text{ua} &= \frac{c\ T_\text{PRI}}{2} = 75\ \km \\
+		R_\text{ua}v_\text{ua} &= \lp 75\times 10^3 \rp\lp 15 \rp = 1.125\times 10^6\ \text{m}^2/\text{s} \\
+		\frac{c\lambda}{8} &= \frac{\lp 3.00\times 10^8 \rp\lp 0.030 \rp}{8} = 1.125\times 10^6\ \text{m}^2/\text{s} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$R_\text{ua}$ = \ansbox[1.3in]{$75\ \km$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{CW radar, the fan, and micro-Doppler.} ADI's CW lab points an unmodulated
+$10\ \ghz$ radar at a fan. Its script forms each spectrum from 65,536 samples taken at
+$0.6\ \mhz$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the time each spectrum spans, its bin width, and the velocity one bin
+		represents.
+		\begin{solution}[1.4in]
+		\eq{ T &= \frac{65{,}536}{0.6\times 10^6} = 109\ \text{ms} \\
+		\Delta f &= \frac{1}{T} = 9.2\ \hz \\
+		\Delta v &= \frac{\lambda\ \Delta f}{2} = \frac{\lp 0.030 \rp\lp 9.2 \rp}{2} = 0.14\ \text{m/s} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta f$ = \ansbox[1.3in]{$9.2\ \hz$}\\[6pt]
+		$\Delta v$ = \ansbox[1.3in]{$0.14\ \text{m/s}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The fan is $0.30\ \m$ across and turns at $1200\ \text{rpm}$, seen edge-on. Find
+		the blade-tip speed and the edges of the band its blades fill.
+		\begin{solution}[1.3in]
+		\eq{ v_\text{tip} &= \pi D\ \frac{\text{rpm}}{60} = \pi\lp 0.30 \rp\lp 20 \rp = 18.8\ \text{m/s} \\
+		f_\text{edge} &= \pm\frac{2\lp 18.8 \rp}{0.030} = \pm 1257\ \hz }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$v_\text{tip}$ = \ansbox[1.3in]{$18.8\ \text{m/s}$}\\[6pt]
+		$f_\text{edge}$ = \ansbox[1.3in]{$\pm 1257\ \hz$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A different fan, $0.25\ \m$ across, shows a band with edges at $\pm 800\ \hz$.
+		Find its speed in rpm.
+		\begin{solution}[1.3in]
+		\eq{ v_\text{tip} &= \frac{\lambda f_\text{edge}}{2} = \frac{\lp 0.030 \rp\lp 800 \rp}{2} = 12.0\ \text{m/s} \\
+		\text{rpm} &= \frac{60\ v_\text{tip}}{\pi D} = \frac{60\lp 12.0 \rp}{\pi\lp 0.25 \rp} = 917 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		rpm = \ansbox[1.3in]{$917$}
+	\end{minipage}
+
+	\part Explain in one or two sentences why this CW radar measures the fan's blade speed but
+	not its range.
+		\begin{solution}[1.0in]
+		An unmodulated tone has no feature to time: every cycle of the echo looks like every
+		other, so there is no delay to measure. The frequency shift is still measurable,
+		so the CW radar gives speed only.
+		\end{solution}
+
+	\part The fan of part (b) is placed in front of the range-Doppler radar of Question 4.
+	Explain what happens to its blade returns there, and why the CW radar avoids it.
+		\begin{solution}[1.2in]
+		The tips reach $\pm 18.8\ \text{m/s}$, beyond that radar's $\pm 15\ \text{m/s}$, so the
+		outer parts of the blades alias and wrap to the opposite side of the Doppler axis. The CW
+		radar samples continuously at $0.6\ \mhz$, so its unambiguous window is hundreds of
+		kilohertz wide and the whole $\pm 1.26\ \khz$ band fits.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part A person walks toward the radar at $1.3\ \text{m/s}$, and the swinging limbs reach
+		$4.0\ \text{m/s}$. Find the Doppler of the torso and the peak Doppler of the limbs.
+		\begin{solution}[1.2in]
+		\eq{ f_\text{torso} &= \frac{2\lp 1.3 \rp}{0.030} = 87\ \hz \\
+		f_\text{limb} &= \frac{2\lp 4.0 \rp}{0.030} = 267\ \hz }
+		The limbs' micro-Doppler swings about the torso line once per stride.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$f_\text{torso}$ = \ansbox[1.3in]{$87\ \hz$}\\[6pt]
+		$f_\text{limb}$ = \ansbox[1.3in]{$267\ \hz$}
+	\end{minipage}
+
+\end{parts}
+
+\end{questions}
