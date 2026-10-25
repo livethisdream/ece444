@@ -163,13 +163,18 @@ $$
 and solves for the weights that minimize total output power while holding unit
 gain in the look direction $\mathbf{s}$. Whatever is loud and is not in the look
 direction is suppressed, and the beamformer never has to be told where it is.
+
+Unit gain means the two MVDR weights sum to 1 in the look direction, where
+Manual's two weights of 1 sum to 2. The Phaser multiplies the MVDR output by 2,
+the number of channels, so a target in the look direction reads the same level
+under either mode and the two are compared on one scale.
 ::::
 
 ::::{frame} Two Limits of Two Channels
 :::{present}
-- Near $\pm 30^\circ$ the interferer falls in the four-element subarray's null.
-- There the two channels' phase difference also wraps back to its boresight value.
-- So Procedure C runs at $+20^\circ$.
+- Near $\pm 30^\circ$ the subarray pattern already puts the interferer 20 dB down.
+- There the two channels cannot tell it from boresight, so MVDR's one null hits the target.
+- Diagonal loading limits that loss; Procedure C runs at $+20^\circ$.
 :::
 
 Both limits belong to the architecture rather than to the algorithm. A
@@ -182,6 +187,26 @@ near $+30^\circ$ presents very nearly the same channel phase difference as one o
 boresight, and the two channels cannot tell them apart. The digital layer can
 only work on what the analog layer passes it, and only on directions the two
 channels can distinguish.
+
+At $+30^\circ$ both limits act at once, and the bench shows what follows. MVDR
+still spends its one null on the interferer, but to the two channels the
+interferer looks like the look direction, and the HB100 sits a fraction of a
+degree off it, so the null lands on the target too. On phaser-00 the target
+dropped about 10 dB, and MVDR did worse against the interferer than Manual.
+**Diagonal loading** is the guard: the Phaser adds
+$\delta\ \text{tr}(\hat{\mathbf{R}})/2$ to the diagonal of $\hat{\mathbf{R}}$
+before inverting it, which caps how far the weights can move from Manual's. At
+$\delta = 0.1$ the target loss at $+30^\circ$ fell to about 2 dB, and at
+$+20^\circ$ MVDR still suppressed the interferer by about 17 dB, so Procedure C
+uses $\delta = 0.1$. At $\delta = 1$ the weights stay so close to Manual's that
+the suppression falls to about 5 dB.
+
+Procedure C also uses $K = 1024$ snapshots rather than 128. At the kit's
+3 MSPS, 128 samples span only four cycles of the 100 kHz offset between target
+and interferer, so the two are partly correlated in each estimate of
+$\hat{\mathbf{R}}$ and the null wanders from one update to the next. 1024
+samples span 34 cycles; on phaser-00 the spread of ten suppression readings
+fell from about 25 dB to under 10.
 ::::
 
 ::::{frame} What MVDR Chooses
@@ -192,9 +217,10 @@ The widget is the two-channel digital layer on its own, with the analog
 subarrays parked at boresight. Move the interferer to about $+20^\circ$ and
 watch MVDR place a null on it. Then move it out toward $\pm 30^\circ$ and watch
 the suppression fall away, for the two reasons on the previous frame. On the
-bench the analog beam sweeps rather than staying parked, so the number you
-record there is the gap between the Manual and MVDR traces at the interferer's
-angle.
+bench you hold the beam on the target in Signal vs Time and read the
+suppression from the two readout tiles under the plot. A beam-sweep trace is
+the total power at each angle, interferer and target together, so it shows the
+null but does not measure it.
 :::
 
 <iframe src="../../viz/mvdr-interferer.html"
@@ -342,10 +368,7 @@ Run the backend in simulation mode with `python phaser_headless.py --sim`, or
 use the hosted simulator, and open the same URL. The simulator places a target
 at boresight, so procedures A, B, and D run as written: the weights, the notch,
 the difference null, and the error function are all in its physics model. It
-also carries a simulated interferer, so procedure C runs there too. One caveat:
-the simulator's MVDR currently suppresses the target along with an interferer
-at $\pm 20^\circ$, a fault in the simulator that is being fixed, so read the
-look-direction level from the bench rather than the simulator.
+also carries a simulated interferer, so procedure C runs there too.
 ```
 ::::
 
@@ -387,23 +410,45 @@ look-direction level from the bench rather than the simulator.
 The interferer in this procedure is simulated: the Phaser software adds a second
 source, at an angle and level you choose, to the real samples the kit receives,
 before the digital beamformer sees them. The target stays your HB100 at
-boresight.
+boresight. Every number in this procedure comes from the two readout tiles
+under the plot, **Interferer vs Target** and **MVDR Suppression**, and from
+**Peak Gain**, with the beam held on the target.
 
-1. In **Digital Beam Forming**, turn on the simulated interferer. Set its angle
-   to $+20^\circ$ and its level $10$ dB above the target.
-2. Set Mode to **Manual** and press **Start**. The trace leans toward the
-   interferer, which dominates the received power. Read the level at
-   $+20^\circ$ and at boresight.
-3. Set Mode to **MVDR**, Snapshots to $128$, and Diagonal Load to $0.001$. The
-   look direction is the current **Steer Angle**, so leave it at $0^\circ$.
-   Press **Start** and read the same two levels.
-4. Record both pairs in Table C. The measurement is the gap between the two
-   traces at $+20^\circ$, and the change in the boresight level between them.
-5. Turn the simulated interferer off and set Mode back to **Manual**.
+1. Set **Mode** to **Signal vs Time** with **Steer Angle** at $0^\circ$. This
+   holds the beam on the target, and the readout tiles fill in only while it is
+   held.
+2. Open the **Interferer** pane, below Digital Beam Forming, and press
+   **Inject Interferer**; it changes to *Interferer ON · click to stop*. Set
+   **Angle (deg)** to $+20$ and **Power (dBFS)** to $0$, its maximum, which puts
+   it about 10 dB above a target read at $-10$ dBFS. Leave **Offset from
+   target (kHz)** at $100$ and **Coherent with target** off.
+3. In **Digital Beam Forming**, set Mode to **Manual**. Watch ten updates of
+   **Interferer vs Target** and **Peak Gain** and record the median of each,
+   the middle value once sorted. The readings jump between updates, and the
+   median ignores the odd wild one where an average would not.
+4. Set Mode to **MVDR**, Snapshots to $1024$, and Diagonal Load to $0.1$. Leave
+   Steer Angle at $0^\circ$: it is MVDR's look direction. Record the medians of
+   **Interferer vs Target**, **Peak Gain**, and **MVDR Suppression**. The
+   suppression tile needs a Manual and an MVDR reading at the same Steer Angle;
+   if it shows "--", repeat step 3, then this step.
+5. Open the **Adaptive** tab, which appears with MVDR in Signal vs Time. Record
+   the angle and depth of the null near $+20^\circ$, and the conventional
+   pattern's level at the same angle.
+6. Move the interferer to $+30^\circ$. Record Peak Gain in Manual, then in MVDR
+   at Diagonal Load $0.001$ and at $0.1$.
+7. Press the interferer button to turn it off, and set Mode back to
+   **Manual** and **Beam Sweep**.
 
-**Expected suppression: to be supplied from the first bench run with the
-simulated interferer.** Run only at $+20^\circ$; at $+30^\circ$ the suppression
-falls away for the reasons in Two Limits of Two Channels.
+On phaser-00, with the interferer at $+20^\circ$: Interferer vs Target read
+about $-2$ dB in Manual and $-18$ dB under MVDR, a suppression near 17 dB
+(single readings from 11 to 20 dB), and the Adaptive tab put the null at
+$19^\circ$ to $20^\circ$, well below the conventional pattern's $-13$ dB.
+Peak Gain under MVDR reads about 2 dB below Manual, because with the
+interferer on Peak Gain is the in-band level, and in Manual it includes an
+interferer only 2 dB below the target. At $+30^\circ$, loading $0.001$ let
+MVDR cut the target by about 10 dB and $0.1$ held the loss near 2 dB; MVDR
+Suppression read negative at every loading there, MVDR doing worse than
+Manual.
 ::::
 
 ::::{frame} Procedure D: Watch It Track
@@ -440,7 +485,7 @@ Part 2 at the bench, Part 3 after. <a href="../../labs/ECE444_Lab_L24_NullSteeri
 | Weight subtraction | $\mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\mathbf{w}_\text{n}$, as gain % and phase | main lobe drops about $2$ dB for a null at $+22.5^\circ$ |
 | Notch depth | set by one-step channel errors, not by rounding | about $-48$ dB; phaser-00 $-46$ to $-50$ dB |
 | Difference beam | Beam 1 Phase $= 180^\circ$ subtracts the two channels | boresight null, peaks near $\pm 11^\circ$; phaser-00 $-41.5$ dB |
-| MVDR | $\mathbf{w} = \mathbf{R}^{-1}\mathbf{s} / (\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s})$ from $K$ snapshots | one null from two channels; run at $+20^\circ$ |
+| MVDR | $\mathbf{w} = \mathbf{R}^{-1}\mathbf{s} / (\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s})$ from $K$ snapshots | one null from two channels; phaser-00 about $17$ dB at $+20^\circ$, $K = 1024$, loading $0.1$ |
 | Monopulse error | signed ratio of delta to sum, from one look | zero on boresight, slope $0.11$ per degree |
 ::::
 
