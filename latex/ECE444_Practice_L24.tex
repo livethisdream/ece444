@@ -10,7 +10,7 @@ is required (write \textbf{None} if you did not collaborate).}
 
 \begin{questions}
 
-\question \textbf{Why a null beats gain.} The PHASER views a target on boresight while an
+\question \textbf{A null versus more power.} The PHASER views a target on boresight while an
 interferer sits at $+22.5\mydeg$. At the aperture the interferer is $10\db$ stronger than the
 target. The array is uniformly weighted and steered broadside, so its pattern level at
 $+22.5\mydeg$ is the first sidelobe level, $-13\db$ relative to the peak.
@@ -20,8 +20,8 @@ $+22.5\mydeg$ is the first sidelobe level, $-13\db$ relative to the peak.
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Compute the signal-to-interference ratio at the beamformer output.
 		\begin{solution}[1.1in]
-		The target sits at the pattern peak and the interferer is attenuated by the
-		sidelobe level, so both are referred to the same peak:
+		The target sits at the pattern peak and the sidelobe level attenuates the
+		interferer, so both are referred to the same peak:
 		\eq{ \text{SIR} &= 0\db - \lp 10\db - 13\db \rp \\ &= 3\db }
 		\end{solution}
 	\end{minipage}\hfill%
@@ -32,27 +32,27 @@ $+22.5\mydeg$ is the first sidelobe level, $-13\db$ relative to the peak.
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Null steering replaces the sidelobe at $+22.5\mydeg$ with a notch measured at
-		$-21.6\db$ relative to the new main-lobe peak. Recompute the SIR.
+		$-46\db$ relative to the new main-lobe peak. Recompute the SIR.
 		\begin{solution}[1.1in]
 		Both quantities are again referred to the pattern peak, so the $1.8\db$ the main lobe
 		loses cancels in the ratio:
-		\eq{ \text{SIR} &= 0\db - \lp 10\db - 21.6\db \rp \\ &= 11.6\db }
-		The null buys $8.6\db$ of margin.
+		\eq{ \text{SIR} &= 0\db - \lp 10\db - 46\db \rp \\ &= 36\db }
+		The null adds $33\db$ of margin.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
 		\raggedleft \vspace{12pt}
-		SIR = \ansbox[1.3in]{$11.6\db$}
+		SIR = \ansbox[1.3in]{$36\db$}
 	\end{minipage}
 
-	\part The same $8.6\db$ of margin could be bought by raising the transmit power. State
-	what that costs on a radar, in one or two sentences, and say which fix you would specify.
+	\part The same $33\db$ of margin could also come from raising the transmit power. State
+	what that requires on a radar, in one or two sentences, and say which fix you would specify.
 		\begin{solution}[1.3in]
-		A radar echo scales with transmit power, so $8.6\db$ more margin requires about
-		$7.2$ times the transmit power, with the amplifier, prime power, cooling, and
-		transmitted signature that go with it. The interferer is unaffected by any of that.
-		Null steering buys the same margin by recomputing sixteen numbers and costs about
-		$2\db$ of main-lobe gain, so the null is the fix to specify whenever the interferer
+		A radar echo scales with transmit power, so $33\db$ more margin requires about
+		$2000$ times the transmit power, with the amplifier, prime power, cooling, and
+		transmitted signature that go with it. None of that changes the interferer.
+		Null steering provides the same margin by recomputing sixteen numbers and lowers the
+		main lobe by about $2\db$, so the null is the fix to specify whenever the interferer
 		angle is known.
 		\end{solution}
 
@@ -104,7 +104,7 @@ $y(\theta) = \sum_n w_n v_n(\theta)$.
 		$30\mydeg$, as a magnitude and an angle.
 		\begin{solution}[1.1in]
 		Beam steering uses the conjugate steering vector, $w_n = e^{-jnkd\sinp{\theta_0}}$,
-		so every element runs at full gain and element $n$ is retarded by $n\Delta\phi$:
+		so every element runs at full gain and element $n$ lags by $n\Delta\phi$:
 		\eq{ w_3 = e^{-j3(88.4\mydeg)} = 1\ \angle -265.2\mydeg = 1\ \angle +94.8\mydeg }
 		\end{solution}
 	\end{minipage}\hfill%
@@ -135,8 +135,8 @@ $y(\theta) = \sum_n w_n v_n(\theta)$.
 \question \textbf{Weight subtraction by hand.} A four-element array with $d = \lambda/2$
 (so $kd = 180\mydeg$) is steered broadside, giving $\vec{w}_\text{d} = [1, 1, 1, 1]$. An
 interferer appears at $\theta_1 = 45\mydeg$. Use the weight-subtraction rule
-$\vec{w} = \vec{w}_\text{d} - r_\text{n}\vec{w}_\text{n}$ with
-$r_\text{n} = \vec{w}_\text{n}^{H}\vec{w}_\text{d} / \vec{w}_\text{n}^{H}\vec{w}_\text{n}$.
+\eq{ \vec{w} = \vec{w}_\text{d} - r_\text{n}\vec{w}_\text{n}, \qquad
+r_\text{n} = \frac{\vec{w}_\text{n}^{H}\vec{w}_\text{d}}{\vec{w}_\text{n}^{H}\vec{w}_\text{n}}. }
 
 \begin{parts}
 
@@ -155,7 +155,8 @@ $r_\text{n} = \vec{w}_\text{n}^{H}\vec{w}_\text{d} / \vec{w}_\text{n}^{H}\vec{w}
 
 	\begin{minipage}[t]{0.58\linewidth}
 		\part Evaluate $r_\text{n}$. For a broadside beam it reduces to the normalized
-		uniform array factor at $\theta_1$, $r_\text{n} = e^{j(N-1)\psi_1/2}\ \sinp{N\psi_1/2}/\lp N\sinp{\psi_1/2} \rp$.
+		uniform array factor at $\theta_1$,
+		\eq{ r_\text{n} = e^{j(N-1)\psi_1/2}\ \frac{\sinp{N\psi_1/2}}{N\sinp{\psi_1/2}}. }
 		\begin{solution}[1.2in]
 		With $N = 4$ and $\psi_1 = 127.3\mydeg$:
 		\eq{ \frac{\sinp{2\psi_1}}{4\sinp{\psi_1/2}} &= \frac{\sinp{254.6\mydeg}}
@@ -204,7 +205,7 @@ $r_\text{n} = \vec{w}_\text{n}^{H}\vec{w}_\text{d} / \vec{w}_\text{n}^{H}\vec{w}
 
 \newpage
 
-\question \textbf{What the null costs.} Return to the eight-element PHASER array
+\question \textbf{Main-lobe loss.} Return to the eight-element PHASER array
 ($kd = 3.085$ rad, broadside beam). Before the weights are rescaled, the response in the
 look direction falls from $N$ to $N\lp 1 - \vert r_\text{n} \vert^2 \rp$.
 
@@ -230,7 +231,7 @@ look direction falls from $N$ to $N\lp 1 - \vert r_\text{n} \vert^2 \rp$.
 		Here $\vert r_\text{n} \vert = 10^{-33.9/20} = 0.020$:
 		\eq{ \text{loss} = 20\mylog{1 - (0.020)^2} = -0.004\db }
 		The interferer is already sitting in one of the array's natural pattern nulls, so
-		the rule subtracts almost nothing and the null is free.
+		the rule subtracts almost nothing and leaves the weights nearly unchanged.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -245,17 +246,18 @@ look direction falls from $N$ to $N\lp 1 - \vert r_\text{n} \vert^2 \rp$.
 		With $\vert r_\text{n} \vert = 0.93$ the rule subtracts almost the entire beam. The
 		eight weights very nearly cancel, and after rescaling what remains is a split pattern
 		with a hole where the target used to be; the look-direction gain falls by more than
-		$12\db$ relative to the uniform array. An interferer inside the half-power beamwidth cannot be separated from the
-		target by weighting, so the student should steer the beam to a different angle or
-		wait for the geometry to change.
+		$12\db$ relative to the uniform array. Weighting cannot separate an interferer inside
+		the half-power beamwidth from the target, so the student should steer the beam to a
+		different angle or wait for the geometry to change.
 		\end{solution}
 
 	\part Explain, in one or two sentences, why $\vert r_\text{n} \vert$ is worth computing
-	before any weights are calculated.
+	before calculating any weights.
 		\begin{solution}[1.0in]
 		$\vert r_\text{n} \vert$ is the level of the pattern you already have at the null
 		angle, and it sets the main-lobe loss. Reading it off the existing pattern tells you
-		whether the null is cheap or ruinous before any weight arithmetic is done.
+		whether the null will lower the main lobe by a fraction of a decibel or by many
+		decibels, before any weight arithmetic.
 		\end{solution}
 
 \end{parts}
@@ -265,9 +267,10 @@ look direction falls from $N$ to $N\lp 1 - \vert r_\text{n} \vert^2 \rp$.
 \question \textbf{How deep can the null be?} Each ADAR1000 phase setting lands on a
 $2.8125\mydeg$ grid and each gain on a 1\% grid, so each weight carries an independent error.
 The errors add in RMS at the null angle, giving a residual response
-$\vert y(\theta_1)\vert / N \approx \epsilon_\text{rms}/\sqrt{N}$ with
-$\epsilon_\text{rms} = \sqrt{\sigma_\phi^2 + \sigma_a^2}$ and
-$\sigma_\phi = \text{LSB}/\sqrt{12}$ in radians.
+\eq{ \frac{\vert y(\theta_1)\vert}{N} \approx \frac{\epsilon_\text{rms}}{\sqrt{N}}, \qquad
+\epsilon_\text{rms} = \sqrt{\sigma_\phi^2 + \sigma_a^2}, \qquad
+\sigma_\phi = \frac{\text{LSB}}{\sqrt{12}}, }
+with $\sigma_\phi$ in radians.
 
 \begin{parts}
 
@@ -279,8 +282,8 @@ $\sigma_\phi = \text{LSB}/\sqrt{12}$ in radians.
 		\\ \sigma_a &= \frac{0.01}{\sqrt{12}} = 0.0029 \\
 		\epsilon_\text{rms} &= \sqrt{0.0142^2 + 0.0029^2} = 0.0145 \\
 		\text{depth} &= 20\mylog{\frac{0.0145}{\sqrt{8}}} = -45.8\db }
-		This RMS estimate is consistent with the course number: evaluating the rounded
-		weights numerically leaves a residual of about $-48$\db at the designed angle.
+		The estimate is relative to the null-steered main lobe, which sits $2\db$ below the
+		uniform peak, so it is about $-48\db$ relative to the uniform peak.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -296,7 +299,7 @@ $\sigma_\phi = \text{LSB}/\sqrt{12}$ in radians.
 		\eq{ \sigma_\phi &= \frac{45\mydeg}{\sqrt{12}} = 13.0\mydeg = 0.227\ \text{rad} \\
 		\text{depth} &= 20\mylog{\frac{0.227}{\sqrt{8}}} = -21.9\db }
 		The $-6B$ rule predicts $-18\db$ for three bits, so the null floor lands a few
-		decibels deeper because the error is averaged over eight elements.
+		decibels deeper because the eight elements average the error.
 		\end{solution}
 	\end{minipage}\hfill%
 	\begin{minipage}[t]{0.37\linewidth}
@@ -304,24 +307,23 @@ $\sigma_\phi = \text{LSB}/\sqrt{12}$ in radians.
 		depth = \ansbox[1.3in]{$-21.9\db$}
 	\end{minipage}
 
-	\part The PHASER carries 7-bit phase shifters, yet the lab sweep measures a notch of only
-	$-21.6\db$ relative to the peak. Explain the discrepancy, given that the sweep's noise
-	floor sits $23\db$ below the uniform-taper peak and the null-steered main lobe sits
-	$2\db$ below that same reference.
+	\part On a course kit, the lab sweep measured the notch $46$ to $50\db$ below the
+	uniform-taper peak, with the null-steered main lobe $2\db$ below that same reference.
+	Compare the measurement with your answer to (a) and state what limits the depth.
 		\begin{solution}[1.3in]
-		The weights are good to about $-48\db$ (the RMS estimate above reads $-46\db$),
-		so quantization is not what the plot is
-		showing. The sweep cannot display anything below its own noise floor, which is
-		$23\db$ below the uniform peak. Measured against the null-steered main lobe, which is
-		$2\db$ lower, that floor is about $21\db$ down, and $-21.6\db$ is the floor rather
-		than the null. Deeper nulls exist in the weights but cannot be seen without lowering
-		the noise floor.
+		Referred to the uniform peak, the estimate in (a) is $-45.8\db - 2\db \approx -48\db$,
+		inside the measured band of $-46$ to $-50\db$. The bench null is as deep as
+		independent errors of about one step per channel allow. Rounding the weights alone
+		does less: it keeps the gains symmetric and the phases antisymmetric, so the pattern
+		still passes through zero near the design angle. The errors that fill the null are
+		each channel's own calibration errors in gain and phase, which are about one step
+		in size.
 		\end{solution}
 
 	\part State the maximum number of independent nulls an eight-element array can place and
 	explain the counting in one sentence.
 		\begin{solution}[1.0in]
-		Seven. The array has eight complex weights, one of which is spent holding the main
+		Seven. The array has eight complex weights, one of which holds the main
 		beam in the look direction, leaving $N - 1 = 7$ degrees of freedom for nulls.
 		\end{solution}
 
