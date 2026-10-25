@@ -148,7 +148,7 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L19 | Direction Finding | none (L19 Lab packet) | rewritten (#103), 19/20, fix widget (#123); voice, why and illustration sweeps (#151) | ready |
 | L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | firing range: 3.0 m line, 5 stations 0.75 m apart (Neil, 10-25), 2.0 m × 1.0–2.0 m box field; starter script; 8/20 | hardware-day checks |
 | L20 | Array Factor and Beamwidth | practice | 18/20, sweeps done (#128) | ready |
-| L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | convert to packet |
+| L20 Lab | Array Factor | **L20 Lab** packet (`68f9454`, 2026-10-22); L20Lab practice set retired | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | ready |
 | L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
 | L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23 | **walk dry run** (needs `install.sh`) |
 | L22 | Sidelobes and Tapering | practice | cut 20/20; voice, why and illustration sweeps done (#132, #137, #142) | ready |
