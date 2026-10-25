@@ -95,7 +95,7 @@ source never changes.
 | Peak | $0^\circ$, reference | $29.6^\circ$, $-0.6$ dB |
 | First nulls | $\pm 14.7^\circ$ | $14.2^\circ$, $49.0^\circ$ |
 | First sidelobes | $\pm 21.4^\circ$, $-13.1$ dBc | $-12.2$, $-15.1$ dBc |
-| Behind the board | floor | floor |
+| Behind the board | floor, $-25$ to $-30$ dBc | floor |
 :::
 
 Part 1 of the packet works these out at your own kit's frequency; the dBc values
@@ -297,33 +297,43 @@ and the reference for the other two runs.
 :class: read-only
 
 :::{present}
-10. Open **Lab Presets**, press **7 Antenna Pattern**, and set **Steer Angle (deg)** to $0$.
-11. Lift the HB100 off its tripod and stand on the $-90^\circ$ mark, aimed at the array.
-12. Walk the arc to $+90^\circ$ in about $10\ \text{s}$, keeping the radius and the aim.
-13. Read the main-lobe peak and both first sidelobes off the trace and record them in Table C.
-14. Repeat twice more, then return the HB100 to its tripod at boresight.
+10. Open **Lab Presets** and press **7 Antenna Pattern**.
+11. Set **Steer Angle (deg)** to $0$, and check that the plot title reads "Beam held at 0.0°".
+12. Lift the HB100 off its tripod and stand on the $-90^\circ$ mark, aimed at the array.
+13. Walk the arc to $+90^\circ$ in about 20 to $25\ \text{s}$, keeping the radius and the aim.
+14. Read the main-lobe peak and both first sidelobes off the trace and record them in Table C.
+15. Repeat twice more, then return the HB100 to its tripod at boresight.
 :::
 
 Preset 7 sets **Mode**, in the Beam Steering section, to **Signal vs Time**: the
 beam holds at the Steer Angle, which takes effect as you change it, with no
 Apply, and the Tracking tab plots the peak level in dBFS against time over the
-last $30\ \text{s}$. The plot's title shows the held angle and the update rate;
-check that it reads "Beam held at 0.0°" before you walk. Practice the walk once before you record: too fast and the pattern crowds
-into one part of the plot, too slow and it runs off the edge. Read each lobe's
+last $30\ \text{s}$. The plot's title shows the held angle and the update rate.
+The 30 s counts from when the mode starts, so begin walking promptly: a 20 to
+25 s walk then fits the whole arc. Practice the walk once before
+you record: too fast and each lobe gets only a few updates, too slow and the
+pattern runs off the edge. Read each lobe's
 peak by hovering over the trace. The three walks will not agree exactly, and
 that disagreement is a measurement in its own right: Part 3 compares it with the
 rotation's.
+
+Expect the room to make the two first sidelobes unequal. On phaser-00, two walks
+read the left one about 11.5 dB below the peak and the right one about 15 dB
+below, within half a decibel from walk to walk; their average, 13.2 dB, sat on
+the predicted 13.3. With the source behind the board the trace read about 25 to
+30 dB below the peak, so with the uniform taper both sidelobes stand at least
+10 dB clear of the floor.
 ::::
 
 ::::{frame} Run 3: Turn the Kit, Both Beams in One Pass
 :class: read-only
 
 :::{present}
-15. Press **1 Steering Angle** so the beam sweeps again, kit at $0^\circ$. Hover over the trace at $0^\circ$ steer and record that level as the reference.
-16. Turn the kit to each $10^\circ$ mark from $-90^\circ$ to $+90^\circ$. At each, record the **Angle** readout, the trace at $0^\circ$ (Table D), and the trace at the sample nearest $30^\circ$ (Table E), both relative to Step 15.
-17. Turn slowly through each lobe and null of both beams and record the angle and level of each extreme.
-18. Turn the kit to $180^\circ$, source behind the board, and record the trace nearest $30^\circ$ in Table E.
-19. Turn the kit back to $0^\circ$ before you leave.
+16. Press **1 Steering Angle** so the beam sweeps again, kit at $0^\circ$. Hover over the trace at $0^\circ$ steer and record that level as the reference.
+17. Turn the kit to each $10^\circ$ mark from $-90^\circ$ to $+90^\circ$. At each, record the **Angle** readout, the trace at $0^\circ$ (Table D), and the trace at the sample nearest $30^\circ$ (Table E), both relative to Step 16.
+18. Turn slowly through each lobe and null of both beams and record the angle and level of each extreme.
+19. Turn the kit to $180^\circ$, source behind the board, and record the trace nearest $30^\circ$ in Table E.
+20. Turn the kit back to $0^\circ$ before you leave.
 :::
 
 Each point of a beam sweep is the beam held at that steer angle for an

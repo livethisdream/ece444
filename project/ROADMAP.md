@@ -151,14 +151,14 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L19 | Direction Finding | none (L19 Lab packet) | rewritten (#103), 19/20, fix widget (#123); voice, why and illustration sweeps (#151) | ready |
 | L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | firing range: 3.0 m line, 5 stations 0.75 m apart (Neil, 10-25), 2.0 m × 1.0–2.0 m box field; starter script; 8/20 | hardware-day checks |
 | L20 | Array Factor and Beamwidth | practice | 18/20, sweeps done (#128) | ready |
-| L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | convert to packet |
+| L20 Lab | Array Factor | **L20 Lab** packet (`68f9454`, 2026-10-22); L20Lab practice set retired | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | ready |
 | L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
-| L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23 | **walk dry run** (needs `install.sh`) |
+| L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23; walk validated 2026-10-25 (sidelobes 11.5 / 14.8 dBc, floor 25–30 dBc) | ready |
 | L22 | Sidelobes and Tapering | practice | cut 20/20; voice, why and illustration sweeps done (#132, #137, #142) | ready |
 | L23 | Beam Squint and Quantization | practice | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
-| L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20 | **hardware run of the preset-6 quantization walk** |
+| L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20; preset-6 walk validated on phaser-00 2026-10-25 | ready |
 | L24 | Null Steering | practice | cut 20/20 (#148), voice, why and illustration sweeps (#149) | ready |
-| L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | Procedure C and Table C numbers from Neil's first interferer run; hardware run |
+| L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | all four procedures run on phaser-00 2026-10-25 (A, B, D angles and loss validated; nulls room-limited to about −22 dB in a cramped space) | ready |
 
 **Module 4: radar (L25–L31) and the final project.** Placeholder pages.
 L25–L27 are taught in class; L28–L31 are the final project, each one page
@@ -189,6 +189,56 @@ needs its rubric, published with the L28 Lab packet.
 | L31 | Classification and Tracking, with the L31 Lab: Micro-Doppler Spectrogram |
 | Final Project | Radar Systems Report: one report on the L28–L31 Labs, in the cadet's words (`module04/final-project`) |
 
+**Module 4 outlines** (Neil approved, 2026-10-25). Each lesson thread writes
+to its outline; ADI pages are named by their slug under `labs/`. Across
+all of them: Python only, the GUI's own FMCW settings (ADI's scripts
+disagree: 12.145 GHz in FMCW, 9.9 GHz in range-Doppler), ADI cited and
+linked, never copied, and no receiver vocabulary (the beat frequency is
+"the echo compared with the chirp still going out").
+
+- **L25 Radar Equation, Path Loss, and RCS** (4.1, taught). Friis twice
+  (from L02), so 1/R⁴; RCS of a sphere, a plate and a corner reflector, and
+  its aspect dependence; kTB and SNR; the Phaser link budget for a corner
+  reflector at a few meters. Practice set; radar-equation widget.
+- **L26 Range, Resolution, and Doppler** (4.2, taught). Range from delay,
+  unambiguous range, resolution c/2B, Doppler 2v/λ and its sign; pulsed vs
+  CW (`radar-setup`); the CW fan demo (`radar-cw`: speed but no range);
+  micro-Doppler introduced. Practice set.
+- **L27 Radar Detection** (4.3, taught). A threshold against noise; PD vs
+  PFA; the SNR a detection needs (Albersheim); dwell and pulse integration;
+  why a fixed threshold fails, which sets up CFAR. Practice set; a threshold
+  widget on the noise and target densities.
+- **L28 FMCW on the Phaser + L28 Lab** (4.2, 4.4, 4.5; `radar-fmcw`).
+  Lesson: the chirp, f_b = 2RB/(cT_s), resolution and the range the sample
+  rate allows, the range FFT and windowing, the 0 m calibration. Lab: OUT2
+  transmit antenna and calibration; corner reflector at 1, 2, 3 m and the
+  kHz per meter; predict, then measure, B = 250 MHz and T_s = 1 ms; the
+  waterfall; the cadet's own Python range FFT from a saved capture, kept
+  for L29. The report rubric and the recorded-data fallback ship with it.
+- **L29 Range-Doppler and MTI + L29 Lab** (4.5, 4.6; `chirp-sync`,
+  `radar-doppler`, `radar-mti`). Lesson: chirp sync as "every chirp starts
+  at a known time", fast and slow time, the data matrix and 2D FFT,
+  velocity resolution λ/(2M·PRI) and maximum λ/(4·PRI), the 2- and 3-pulse
+  cancellers, their response and blind speeds. Lab: range-Doppler from the
+  cadet's L28 code; a hand and a fidget spinner; vary the chirp count and
+  bandwidth; MTI none, 2-pulse, 3-pulse; one range bin's spectrogram,
+  kept for L31. Recorded-data fallback is ours (ADI's drone file is not
+  in their repo).
+- **L30 CFAR Processing + L30 Lab** (4.7; `radar-cfar`). Lesson: cell
+  averaging with guard and reference cells, the bias from PFA, greatest-
+  and smallest-of, edges, 2D CFAR on the range-Doppler map. Lab: CFAR on
+  the cadet's L29 maps; tune; measure the false-alarm rate and PD against
+  L27; detection lists kept for L31. CFAR widget.
+- **L31 Classification and Tracking + L31 Lab** (4.8, 4.9; ours, no ADI
+  page). Lesson: micro-Doppler physics (blades, limbs), spectrogram
+  trade-offs, features (Doppler spread, periodicity, centroid), a simple
+  classifier, the confusion matrix; alpha-beta range tracking and monopulse
+  angle (from L24). Lab: fan, spinner, walker, hand; classify the L30
+  detections and report the accuracy. **Open, Neil:** a Part B tracking a
+  walker in range and angle, the only place 4.8 would be measured.
+- **Final project.** Each lab ends with what it carries into the report.
+  **Open, Neil:** the rubric, the packet dates, the extra-credit cap.
+
 ## 6. Work queue, in order
 
 1. **Lesson passes in teaching order:** L22–L24 with the L22–L23 and L24
@@ -211,29 +261,32 @@ needs its rubric, published with the L28 Lab packet.
      +20° only, against Neil's software interferer, with the expected
      suppression filled in from his first run, and its "No hardware?" note
      updated.
-2. **L21 Lab walk** on a kit updated to phaser #48. The rotation ran on
-   2026-10-23 and confirmed scan loss (−0.9 dB at 33°), the sidelobe
-   asymmetry (3.4 dB) and the first null (14.9°); it is now one pass read
-   from the beam sweep. Still owed: the Signal vs Time walk, its Tracking
-   update rate on a 10 s walk, and the floor with the beam held.
-3. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
+2. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
    with a measured lookup table (amplitude goes as (%/100)^0.68 today, the
    ADAR1000 register response; Neil, 2026-10-23: fix it in software, not in
-   the labs); inject a simulated interferer into the real receive samples
-   for L24 Procedure C (Neil's); preset 8 loads uniform and resets Beam 1
+   the labs); preset 8 loads uniform and resets Beam 1
    Phase; Signal BW and Rx Gain survive Calibrate, Find HB100 and the Rect
-   preset; restart the sweep after Find HB100; check the simulator's MVDR,
-   which also nulls the target at ±20°. The 3- and 4-bit lobes in the old
+   preset; restart the sweep after Find HB100. Phaser #55 (2026-10-25 bench
+   run): MVDR output on Manual's scale (the "lost target" was 6 dB of
+   scaling), interferer and MVDR settings survive Calibrate, interferer
+   readout follows HB100 drift. From the 2026-10-25 L24 run: preset 8
+   resets Beam 1 Phase but not the taper; the error function jumps around
+   boresight; and every null (notch, difference, delta) bottomed at −34 to
+   −36 dBFS with the HB100 tone still in it, most likely room reflections
+   in a cramped space, but worth ruling out leakage on an open bench. The 3- and 4-bit lobes in the old
    quantization sweep sit above even the worst-case simulation of rounding
    the steering ramp, and Angle shifted +8.4° at 4 bits and below: does the
-   kit also round its calibration offsets? Open from the dry run: why array
+   kit also round its calibration offsets? Evidence (2026-10-25, phaser-00):
+   the preset-6 walk, beam held at 15°, read the floor (−17 to −19 dBc) at
+   4 and 3 bits where the 10-23 sweep read −15.5 and −12.0 dBc, and its
+   2-bit lobe was −10.1 dBc near −53° against the sweep's −8.5. Open from the dry run: why array
    peaks read 1–3 dB under the in-phase sum of single elements even with
    elements fully on or off; whether each channel's phase moves with its
    gain setting; whether recalibrating with the source exactly at boresight
    removes the +1–2° offset.
-4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
+3. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
-5. **Module 4 build-out**, now, assuming the radar mode works (Neil,
+4. **Module 4 build-out**, now, assuming the radar mode works (Neil,
    2026-10-25); hardware numbers are reconciled when it runs: L25–L27
    taught in class, then the L28–L31 Labs as the final project's scaffolding,
    each packet built to start from the lab before it, plus the report rubric.
