@@ -151,7 +151,7 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | convert to packet |
 | L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
 | L21 Lab | Antenna Pattern | **L21 Lab** packet: walk the HB100, then rotate the kit at 1.2 m, both held beams read from one sweep pass | 13/20 (#127); rotation dry-run 2026-10-23 | **walk dry run** (needs `install.sh`) |
-| L22 | Sidelobes and Tapering | practice | cut 20/20, voice sweep done (#132) | why + illustration sweeps |
+| L22 | Sidelobes and Tapering | practice | cut 20/20; voice, why and illustration sweeps done (#132, #137, #142) | ready |
 | L23 | Beam Squint and Quantization | practice | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20 | **hardware run of the preset-6 quantization walk** |
 | L24 | Null Steering | practice | 46/20 | cut + sweeps |
@@ -189,7 +189,7 @@ needs its rubric, published with the L28 Lab packet.
    frequency, open Lab Presets first, E1 on the right facing the patches,
    level comparisons at 1.2 m or more. Two Phaser changes ride along:
    the readouts are now **Angle** (Peak/Centroid) and **Peak Gain**, not
-   "Est. Angle" and "Peak Array Gain" (still stale in L22 and L24), and preset 6 Quantization now holds the beam at 15° with
+   "Est. Angle" and "Peak Array Gain" (still stale in L24), and preset 6 Quantization now holds the beam at 15° with
    Blackman for a Signal vs Time walk (phaser #48). The second dry run
    (`review/M3_LAB_DRYRUN_2026-10-23.md`, all of L17–L24) adds, for the
    remaining passes:
