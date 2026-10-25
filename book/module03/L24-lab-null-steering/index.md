@@ -192,13 +192,21 @@ At $+30^\circ$ both limits act at once, and the bench shows what follows. MVDR
 still spends its one null on the interferer, but to the two channels the
 interferer looks like the look direction, and the HB100 sits a fraction of a
 degree off it, so the null lands on the target too. On phaser-00 the target
-dropped about 17 dB. **Diagonal loading** is the guard: the Phaser adds
+dropped about 10 dB, and MVDR did worse against the interferer than Manual.
+**Diagonal loading** is the guard: the Phaser adds
 $\delta\ \text{tr}(\hat{\mathbf{R}})/2$ to the diagonal of $\hat{\mathbf{R}}$
 before inverting it, which caps how far the weights can move from Manual's. At
 $\delta = 0.1$ the target loss at $+30^\circ$ fell to about 2 dB, and at
-$+20^\circ$ MVDR still suppressed the interferer by 28 dB, so Procedure C uses
-$\delta = 0.1$. At $\delta = 1$ the weights stay so close to Manual's that the
-suppression falls to about 6 dB.
+$+20^\circ$ MVDR still suppressed the interferer by about 17 dB, so Procedure C
+uses $\delta = 0.1$. At $\delta = 1$ the weights stay so close to Manual's that
+the suppression falls to about 5 dB.
+
+Procedure C also uses $K = 1024$ snapshots rather than 128. At the kit's
+3 MSPS, 128 samples span only four cycles of the 100 kHz offset between target
+and interferer, so the two are partly correlated in each estimate of
+$\hat{\mathbf{R}}$ and the null wanders from one update to the next. 1024
+samples span 34 cycles; on phaser-00 the spread of ten suppression readings
+fell from about 25 dB to under 10.
 ::::
 
 ::::{frame} What MVDR Chooses
@@ -418,7 +426,7 @@ under the plot, **Interferer vs Target** and **MVDR Suppression**, and from
    **Interferer vs Target** and **Peak Gain** and record the median of each,
    the middle value once sorted. The readings jump between updates, and the
    median ignores the odd wild one where an average would not.
-4. Set Mode to **MVDR**, Snapshots to $128$, and Diagonal Load to $0.1$. Leave
+4. Set Mode to **MVDR**, Snapshots to $1024$, and Diagonal Load to $0.1$. Leave
    Steer Angle at $0^\circ$: it is MVDR's look direction. Record the medians of
    **Interferer vs Target**, **Peak Gain**, and **MVDR Suppression**. The
    suppression tile needs a Manual and an MVDR reading at the same Steer Angle;
@@ -432,13 +440,15 @@ under the plot, **Interferer vs Target** and **MVDR Suppression**, and from
    **Manual** and **Beam Sweep**.
 
 On phaser-00, with the interferer at $+20^\circ$: Interferer vs Target read
-about $-2$ dB in Manual and $-29$ dB under MVDR, a suppression near 28 dB, and
-the Adaptive tab put the null at $19^\circ$ to $20^\circ$, 26 to 45 dB down
-against the conventional pattern's $-13$ dB. Peak Gain under MVDR reads 1 to
-2 dB below Manual, because with the interferer on Peak Gain is the in-band
-level, and in Manual it includes an interferer only 2 dB below the target. At
-$+30^\circ$, loading $0.001$ let MVDR cut the target by about 17 dB, and $0.1$
-held the loss near 2 dB.
+about $-2$ dB in Manual and $-18$ dB under MVDR, a suppression near 17 dB
+(single readings from 11 to 20 dB), and the Adaptive tab put the null at
+$19^\circ$ to $20^\circ$, well below the conventional pattern's $-13$ dB.
+Peak Gain under MVDR reads about 2 dB below Manual, because with the
+interferer on Peak Gain is the in-band level, and in Manual it includes an
+interferer only 2 dB below the target. At $+30^\circ$, loading $0.001$ let
+MVDR cut the target by about 10 dB and $0.1$ held the loss near 2 dB; MVDR
+Suppression read negative at every loading there, MVDR doing worse than
+Manual.
 ::::
 
 ::::{frame} Procedure D: Watch It Track
@@ -475,7 +485,7 @@ Part 2 at the bench, Part 3 after. <a href="../../labs/ECE444_Lab_L24_NullSteeri
 | Weight subtraction | $\mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\mathbf{w}_\text{n}$, as gain % and phase | main lobe drops about $2$ dB for a null at $+22.5^\circ$ |
 | Notch depth | set by one-step channel errors, not by rounding | about $-48$ dB; phaser-00 $-46$ to $-50$ dB |
 | Difference beam | Beam 1 Phase $= 180^\circ$ subtracts the two channels | boresight null, peaks near $\pm 11^\circ$; phaser-00 $-41.5$ dB |
-| MVDR | $\mathbf{w} = \mathbf{R}^{-1}\mathbf{s} / (\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s})$ from $K$ snapshots | one null from two channels; phaser-00 $28$ dB at $+20^\circ$, loading $0.1$ |
+| MVDR | $\mathbf{w} = \mathbf{R}^{-1}\mathbf{s} / (\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s})$ from $K$ snapshots | one null from two channels; phaser-00 about $17$ dB at $+20^\circ$, $K = 1024$, loading $0.1$ |
 | Monopulse error | signed ratio of delta to sum, from one look | zero on boresight, slope $0.11$ per degree |
 ::::
 
