@@ -92,22 +92,12 @@ signature, and track it in range and angle.
   <a class="mt-card mt-lesson" href="L28-fmcw/index.html">
     <span class="mt-kind">Lesson 28</span>
     <h4>FMCW on the Phaser</h4>
-    <p>FMCW operation and configuring an FMCW waveform on the PHASER. Objective 4.4.</p>
-  </a>
-  <a class="mt-card mt-practice mt-lab" href="L28-lab-fmcw-range/index.html">
-    <span class="mt-kind">L28 Lab</span>
-    <h4>FMCW Range</h4>
-    <p>Range and the range waterfall from one FMCW capture. Objectives 4.2, 4.5.</p>
+    <p>FMCW operation and configuring an FMCW waveform on the PHASER, then the L28 Lab: range and the range waterfall from one capture. Objectives 4.2, 4.4, 4.5.</p>
   </a>
   <a class="mt-card mt-lesson" href="L29-range-doppler-mti/index.html">
     <span class="mt-kind">Lesson 29</span>
     <h4>Range-Doppler and MTI</h4>
-    <p>Range-Doppler processing of a burst of chirps, and MTI to separate movers from clutter. Objectives 4.5, 4.6.</p>
-  </a>
-  <a class="mt-card mt-practice mt-lab" href="L29-lab-range-doppler-mti/index.html">
-    <span class="mt-kind">L29 Lab</span>
-    <h4>Range-Doppler and MTI</h4>
-    <p>The range-Doppler map and MTI on your own kit.</p>
+    <p>Range-Doppler processing of a burst of chirps, and MTI to separate movers from clutter, then the L29 Lab on your own kit. Objectives 4.5, 4.6.</p>
   </a>
 </div>
 ::::
@@ -118,22 +108,12 @@ signature, and track it in range and angle.
   <a class="mt-card mt-lesson" href="L30-cfar/index.html">
     <span class="mt-kind">Lesson 30</span>
     <h4>CFAR Processing</h4>
-    <p>Constant false-alarm-rate processing. Objective 4.7.</p>
-  </a>
-  <a class="mt-card mt-practice mt-lab" href="L30-lab-cfar/index.html">
-    <span class="mt-kind">L30 Lab</span>
-    <h4>CFAR Processing</h4>
-    <p>Apply CFAR to radar data and evaluate detection performance.</p>
+    <p>Constant false-alarm-rate processing, then the L30 Lab: CFAR on your own range-Doppler maps. Objective 4.7.</p>
   </a>
   <a class="mt-card mt-lesson" href="L31-classification-tracking/index.html">
     <span class="mt-kind">Lesson 31</span>
     <h4>Classification and Tracking</h4>
-    <p>Micro-Doppler classification and range and angle tracking. Objectives 4.8, 4.9.</p>
-  </a>
-  <a class="mt-card mt-practice mt-lab" href="L31-lab-spectrogram/index.html">
-    <span class="mt-kind">L31 Lab</span>
-    <h4>Micro-Doppler Spectrogram</h4>
-    <p>Record a moving target's spectrogram and classify it. Objective 4.9.</p>
+    <p>Micro-Doppler classification and range and angle tracking, then the L31 Lab: classify a target from its spectrogram. Objectives 4.8, 4.9.</p>
   </a>
 </div>
 ::::

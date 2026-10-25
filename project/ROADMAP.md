@@ -4,7 +4,7 @@ The plan for Modules 3–4 and the rules every working thread follows. **Read
 this before starting any work.** The Integrator thread maintains this file. If
 something you need is not here, ask Neil or the Integrator rather than guessing.
 
-Last updated 2026-10-21.
+Last updated 2026-10-25.
 
 ## 1. Who does what
 
@@ -27,7 +27,7 @@ A lesson thread for lesson NN may edit **only**:
 
 | What | Path |
 | :-- | :-- |
-| the lesson page and its lab page | `book/moduleMM/LNN-*/index.md` (the lab is `LNN-lab-*`) |
+| the lesson page and its lab page | `book/moduleMM/LNN-*/index.md` (the lab is `LNN-lab-*`; in Module 4 the lab is on the lesson page) |
 | its practice set, and its lab's | `latex/ECE444_Practice_LNN.tex` (`_LNNLab.tex`) and `book/extras/practice/ECE444_LNN_Practice_*.pdf` (`LNNLab`) |
 | its lab packet | source `ECE444_Lab_LNN_*.tex` in `ECE444-faculty` (it holds the answers; Neil, 2026-10-23), and the blank `book/extras/labs/ECE444_Lab_LNN_*_blank.pdf` here |
 | its figures | `book/extras/viz/img/LNN-*.svg` and its generator `scripts/graphics/*lNN*` |
@@ -76,6 +76,9 @@ That is the one shared file it may change.
   time it takes, then do the lab"). A lab is a child page of its lesson,
   `LNN-lab-<slug>`, titled "LNN Lab — <Topic>", never a lesson of its own.
   Project days and open-lab time are calendar. Modules 1-2 keep their numbers.
+  **Module 4 is the exception** (Neil, 2026-10-25): the L28–L31 Labs sit on
+  their lesson's own page, lesson first, then the lab, with no `LNN-lab-*`
+  page. The lab keeps its name ("L28 Lab") and its packet.
 - **A lesson page is at most 20 slides** in present mode, 40 words a slide
   (`scripts/verify/budgets.py`); a lab page's pre-bench frames count against
   the same budget.
@@ -157,9 +160,14 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L24 | Null Steering | practice | cut 20/20 (#148), voice, why and illustration sweeps (#149) | ready |
 | L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | Procedure C and Table C numbers from Neil's first interferer run; hardware run |
 
-**Module 4: radar (L25–L31) and the final project.** Placeholder pages. They
-need the FMCW mode in the Phaser app (Neil is building it, with the lab
-packets). The L28–L31 Labs scaffold the final project report, so each needs a packet
+**Module 4: radar (L25–L31) and the final project.** Placeholder pages.
+L25–L27 are taught in class; L28–L31 are the final project, each one page
+with its lesson and then its lab. The FMCW mode in the Phaser app is in
+progress (Neil); build the lessons and labs now **assuming it works**, and
+reconcile with the GUI when it lands. Source: Jon Kraft's ADI FMCW material
+(the Python workshop's FMCW labs, `docs/2025_Phaser_labs_Python.pdf` pp.
+29–38 in the Phaser repo, and his FMCW deck when Neil attaches it): read
+in-session, never copied into this repo. The L28–L31 Labs scaffold the final project report, so each needs a packet
 and a recorded-data fallback in case a bench FMCW capture fails; the report
 needs its rubric, published with the L28 Lab packet.
 
@@ -168,14 +176,10 @@ needs its rubric, published with the L28 Lab packet.
 | L25 | The Radar Equation, Path Loss, and RCS |
 | L26 | Range, Resolution, and Doppler (adds micro-Doppler) |
 | L27 | Radar Detection |
-| L28 | FMCW on the Phaser |
-| L28 Lab | FMCW Range (range and waterfall) |
-| L29 | Range-Doppler and MTI |
-| L29 Lab | Range-Doppler and MTI (adds the spectrogram) |
-| L30 | CFAR Processing |
-| L30 Lab | CFAR Processing |
-| L31 | Classification and Tracking |
-| L31 Lab | Micro-Doppler Spectrogram |
+| L28 | FMCW on the Phaser, with the L28 Lab: FMCW Range (range and waterfall) |
+| L29 | Range-Doppler and MTI, with the L29 Lab (adds the spectrogram) |
+| L30 | CFAR Processing, with the L30 Lab |
+| L31 | Classification and Tracking, with the L31 Lab: Micro-Doppler Spectrogram |
 | Final Project | Radar Systems Report: one report on the L28–L31 Labs, in the cadet's words (`module04/final-project`) |
 
 ## 6. Work queue, in order
@@ -222,7 +226,8 @@ needs its rubric, published with the L28 Lab packet.
    removes the +1–2° offset.
 4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
-5. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
+5. **Module 4 build-out**, now, assuming the radar mode works (Neil,
+   2026-10-25); hardware numbers are reconciled when it runs: L25–L27
    taught in class, then the L28–L31 Labs as the final project's scaffolding,
    each packet built to start from the lab before it, plus the report rubric.
 

@@ -8,16 +8,17 @@ of it on a real kit.
 
 ## The labs are the scaffolding
 
-The L28–L31 Labs are the steps toward the report. Each one is a stage of a
+The L28–L31 Labs are the steps toward the report. Each one sits on its
+lesson's own page, after the lesson. Each one is a stage of a
 single radar processing chain on your own kit, and each one hands you the
 results, plots, and code that a section of the report is built on.
 
 | Lab | Stage of the chain | What it gives your report | Objectives |
 | :-- | :-- | :-- | :-: |
-| [L28 Lab — FMCW Range](../L28-lab-fmcw-range/index.md) | range, and the range waterfall, from one FMCW capture | how a chirp becomes a range measurement, and the resolution you actually got | 4.2, 4.5 |
-| [L29 Lab — Range-Doppler and MTI](../L29-lab-range-doppler-mti/index.md) | the range-Doppler map, then MTI | how velocity is measured, and what MTI removes and why | 4.5, 4.6 |
-| [L30 Lab — CFAR Processing](../L30-lab-cfar/index.md) | CFAR detections on your range-Doppler maps | how a detection is declared, and what set your false alarms | 4.7 |
-| [L31 Lab — Micro-Doppler Spectrogram](../L31-lab-spectrogram/index.md) | classifying a detected target from its spectrogram | what told your targets apart, and how often it was right | 4.9 |
+| [L28 Lab — FMCW Range](../L28-fmcw/index.md) | range, and the range waterfall, from one FMCW capture | how a chirp becomes a range measurement, and the resolution you actually got | 4.2, 4.5 |
+| [L29 Lab — Range-Doppler and MTI](../L29-range-doppler-mti/index.md) | the range-Doppler map, then MTI | how velocity is measured, and what MTI removes and why | 4.5, 4.6 |
+| [L30 Lab — CFAR Processing](../L30-cfar/index.md) | CFAR detections on your range-Doppler maps | how a detection is declared, and what set your false alarms | 4.7 |
+| [L31 Lab — Micro-Doppler Spectrogram](../L31-classification-tracking/index.md) | classifying a detected target from its spectrogram | what told your targets apart, and how often it was right | 4.9 |
 
 Each lab starts from the one before it: your L29 processing begins with your
 own L28 range code, the L30 Lab runs CFAR on your L29 maps, and the L31 Lab
