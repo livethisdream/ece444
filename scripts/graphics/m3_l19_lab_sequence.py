@@ -8,7 +8,7 @@
 5 Reveal        the instructor names the live box; Part 3 reconciles
 
 Every panel is drawn to one scale from the range in the lab: a 3.0 m firing
-line with seven station marks 0.5 m apart, and five boxes in a 2.0 m wide
+line with five station marks 0.75 m apart, and five boxes in a 2.0 m wide
 field 1.0 to 2.0 m downrange, at least 0.75 m apart. The bearings in panels 3
 and 4 are computed from the station and box positions, not drawn by eye.
 
@@ -33,7 +33,7 @@ NAVY, RED, GRAY, INK, FIELD, LIGHT = "#004a85", "#b01e24", "#5a5a5a", "#1f2a36",
 PW, PH = 200, 292            # one panel
 SCALE = 56.0                 # px per meter
 LINE_Y = 200                 # firing line, panel coordinates
-STATIONS = [-1.5 + 0.5 * i for i in range(7)]
+STATIONS = [-1.5 + 0.75 * i for i in range(5)]
 BOXES = [(-0.85, 1.15), (0.0, 1.0), (0.85, 1.25), (-0.4, 1.85), (0.45, 1.95)]
 LIVE = 3                     # index into BOXES: box 4
 REF = (0.5, 1.0)             # reference-shot source, 26.6 deg toward +x
@@ -89,7 +89,7 @@ def panel(s, ox, oy, k):
         s.append(f'<text x="{px:.1f}" y="{py + 4.5:.1f}" text-anchor="middle" font-size="11" font-weight="700" '
                  f'fill="{"#ffffff" if live else GRAY}">{i + 1}</text>')
 
-    # firing line with its seven station marks
+    # firing line with its five station marks
     lx0, ly = xy(ox, oy, -1.5, 0)
     lx1, _ = xy(ox, oy, 1.5, 0)
     s.append(f'<line x1="{lx0:.1f}" y1="{ly:.1f}" x2="{lx1:.1f}" y2="{ly:.1f}" stroke="{GRAY}" stroke-width="2"/>')
@@ -116,7 +116,7 @@ def panel(s, ox, oy, k):
                  f'fill="{INK}">+x</text>')
     elif k in (2, 3):
         fox = BOXES[LIVE]
-        used = [STATIONS[i] for i in ((2,) if k == 2 else (0, 2, 4, 6))]
+        used = [STATIONS[i] for i in ((2,) if k == 2 else (0, 1, 2, 3))]
         for x in STATIONS:
             kit(s, ox, oy, x, faded=x not in used)
         for x in used:
@@ -151,7 +151,7 @@ def legend(s, ox, oy):
     s.append(f'<text x="{ox + 52}" y="{y + 4}" font-size="13" fill="{INK}">your kit, on the line</text>')
     y += 32
     s.append(f'<line x1="{ox + 18}" y1="{y}" x2="{ox + 48}" y2="{y}" stroke="{GRAY}" stroke-width="2"/>')
-    s.append(f'<text x="{ox + 52}" y="{y + 4}" font-size="13" fill="{INK}">firing line, 7 marks</text>')
+    s.append(f'<text x="{ox + 52}" y="{y + 4}" font-size="13" fill="{INK}">firing line, 5 marks</text>')
     y += 32
     s.append(f'<rect x="{ox + 26}" y="{y - 7}" width="14" height="14" rx="2" fill="#ffffff" stroke="{GRAY}" stroke-width="1.3"/>')
     s.append(f'<text x="{ox + 52}" y="{y + 4}" font-size="13" fill="{INK}">numbered box</text>')

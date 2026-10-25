@@ -29,7 +29,7 @@ with room for notes. Print from read mode for the whole lesson.
 :class: here-23
 
 <ol class="lo-list" style="--module: '3'; counter-reset: lo 7">
-  <li>I can identify beam squint and quantization effects in a phased array and describe their impact on system performance.</li>
+  <li>I can identify grating lobes, beam squint, and quantization effects in a phased array and describe their impact on system performance.</li>
 </ol>
 
 ```{include} ../../_snippets/m3-strip.md
