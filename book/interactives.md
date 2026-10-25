@@ -84,3 +84,7 @@ means; the chamber view shows how a turntable and a source horn take it. Lesson
 - **Three Departures on the Course Array** (L23). Grating lobes, beam squint and phase quantization on the 8-element course array. <a href="viz/squint-quantization.html" target="_blank" rel="noopener">Open</a> · <a href="module03/L23-beam-squint-quantization/index.html">Lesson</a>
 - **What MVDR Chooses** (L24). Two-channel MVDR beamformer against an interferer. <a href="viz/mvdr-interferer.html" target="_blank" rel="noopener">Open</a> · <a href="module03/L24-lab-null-steering/index.html">Lesson</a>
 - **Null Steering on the PHASER** (L24). Null steering on the 8-element PHASER array: pattern, element weights, and null depth. <a href="viz/null-steering.html" target="_blank" rel="noopener">Open</a> · <a href="module03/L24-null-steering/index.html">Lesson</a>
+
+## Module 4: Radar Fundamentals and FMCW
+
+- **Threshold Explorer** (L27). Detection threshold against the noise and target probability densities, with the operating point on the Pd versus Pfa curve. <a href="viz/detection-threshold.html" target="_blank" rel="noopener">Open</a> · <a href="module04/L27-radar-detection/index.html">Lesson</a>
