@@ -30,7 +30,7 @@ with room for notes. Print from read mode for the whole lesson.
 
 <ol class="lo-list" style="--module: '3'; counter-reset: lo 6">
   <li>I can apply amplitude tapering (uniform, cosine, Chebyshev, Taylor) to control sidelobe level and predict the pattern trade-off.</li>
-  <li>I can identify beam squint and quantization effects in a phased array and describe their impact on system performance.</li>
+  <li>I can identify grating lobes, beam squint, and quantization effects in a phased array and describe their impact on system performance.</li>
 </ol>
 
 :::{depth}
