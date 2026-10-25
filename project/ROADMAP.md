@@ -145,7 +145,7 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L17 Lab | Phased Array Bring-Up | **L17 Lab** packet | 18/20; hardware dry run 2026-10-19 on phaser-00, fixes merged (#118, #121) | ready |
 | L18 | Beam Steering | none (pre-lab of the L18 Lab) | 20/20, sweeps done | ready |
 | L18 Lab | Beam Steering | **L18 Lab** packet | 14/21; dry run 2026-10-19, fixes merged (#110, #121): E1 side, 45° marker, scan loss at 1.2 m | ready |
-| L19 | Direction Finding | none (L19 Lab packet) | rewritten (#103), 19/20, fix widget (#123) | sweeps |
+| L19 | Direction Finding | none (L19 Lab packet) | rewritten (#103), 19/20, fix widget (#123); voice, why and illustration sweeps (#151) | ready |
 | L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | firing range: 3.0 m line, 5 stations 0.75 m apart (Neil, 10-25), 2.0 m × 1.0–2.0 m box field; starter script; 8/20 | hardware-day checks |
 | L20 | Array Factor and Beamwidth | practice | 18/20, sweeps done (#128) | ready |
 | L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | convert to packet |
@@ -193,10 +193,6 @@ needs its rubric, published with the L28 Lab packet.
    Blackman for a Signal vs Time walk (phaser #48). The second dry run
    (`review/M3_LAB_DRYRUN_2026-10-23.md`, all of L17–L24) adds, for the
    remaining passes:
-   - **L23**: "Null Depth: Predicted and Measured" says rounding the null
-     weights leaves a notch near −48 dB; computed, it leaves −56 dB at
-     22.5° (exact zeros at +19.8° and +22.3°), and −48 dB is the
-     independent-error estimate (from the L24 thread, #149).
    - **L24 Lab** (done in #149 but Procedure C): notches and nulls reach −40 to −50 dB, so the
      "floor-limited at −21 dB" explanation goes, in the text and in
      `L24-quant-depth.svg`; Procedure D sets a uniform
@@ -209,8 +205,7 @@ needs its rubric, published with the L28 Lab packet.
    asymmetry (3.4 dB) and the first null (14.9°); it is now one pass read
    from the beam sweep. Still owed: the Signal vs Time walk, its Tracking
    update rate on a 10 s walk, and the floor with the beam held.
-3. **L19 sweeps** (voice, why, illustration) on the rewritten lesson.
-4. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
+3. **Phaser (Neil's Phaser thread):** linearize the Element Gains slider
    with a measured lookup table (amplitude goes as (%/100)^0.68 today, the
    ADAR1000 register response; Neil, 2026-10-23: fix it in software, not in
    the labs); inject a simulated interferer into the real receive samples
@@ -225,9 +220,9 @@ needs its rubric, published with the L28 Lab packet.
    elements fully on or off; whether each channel's phase moves with its
    gain setting; whether recalibrating with the source exactly at boresight
    removes the +1–2° offset.
-5. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
+4. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
-6. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
+5. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
    taught in class, then the L28–L31 Labs as the final project's scaffolding,
    each packet built to start from the lab before it, plus the report rubric.
 
