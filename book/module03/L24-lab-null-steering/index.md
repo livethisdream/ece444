@@ -79,9 +79,9 @@ frequency; at the nominal $10.525$ GHz the outer gains read 75 % and the
 phases of elements 2 and 7 read $\pm 3.1^\circ$, so the table moves only
 slightly from kit to kit.
 
-The predictions assume the Element Gains slider is linear in voltage. On
-current kits it is not yet; a software update is making it linear, and until
-it lands the 65–82 % settings come out a little lower than the table asks.
+The predictions assume the Element Gains slider is linear in voltage, which it
+is on current Phaser software. On phaser-00 the main lobe dropped 2.5 dB
+against the predicted 2.0.
 
 <img src="../../viz/img/L24-element-settings.svg"
      alt="The eight element gains and phase offsets for a null at +22.5 degrees: gains symmetric about the array center, phases antisymmetric"
@@ -96,7 +96,7 @@ Neither column nulls anything on its own; only the eight weights together do.
 ::::{frame} Why the Notch Goes Deep
 :::{present}
 - One-step channel errors allow a notch about $48$ dB below the uniform peak.
-- phaser-00 measured $46$ to $50$ dB, at $+25.7^\circ$.
+- phaser-00: $46$ to $50$ dB open, $22$ to $24$ dB cramped.
 - A shallow notch points to the bench first: reflections, calibration, or a sign.
 :::
 
@@ -105,9 +105,12 @@ estimated the depth that small, independent channel errors allow, about
 $48$ dB below the uniform peak, and the 2026-10-23 dry run on phaser-00 reached
 $46$ to $50$ dB. Rounding the weights to the ADAR1000's $2.8125^\circ$ and 1 %
 steps does not set that limit: the rounded table keeps its mirror symmetry, so
-its null survives and moves only a quarter of a degree. The notch landed at
-$+25.7^\circ$ rather than $+22.5^\circ$, which is within what aligning the kit by
-eye allows.
+its null survives and moves only a fraction of a degree. On a freshly
+calibrated kit the notch landed at $+21.7^\circ$. In a cramped space on
+2026-10-25 the same table bottomed out $22$ to $24$ dB down, and so did the
+difference null of the next frame: the HB100's own tone was still there in the
+null, so a reflection arriving from another direction, about 22 dB below the
+direct path, was filling both.
 
 When a notch reads much shallower than $40$ dB, look at the bench before the
 arithmetic. A wall or a person beside the kit fills it, a stale calibration
@@ -133,8 +136,10 @@ elements 5–8. Adding them is the ordinary sum beam. Subtracting them, by
 setting Beam 1 Phase to $180^\circ$, cancels the two halves wherever they
 arrive in phase, which is boresight. The result is a null there with twin
 peaks near $\pm 11^\circ$: the **monopulse difference beam**, which Procedure D
-and Module 4 use for angle measurement. On phaser-00 it measured $-41.5$ dB, at
-$+0.9^\circ$.
+and Module 4 use for angle measurement. On phaser-00 it measured $-41.5$ dB on
+an open bench and $-22$ dB in a cramped one, centered on boresight, with the
+peaks at $\pm 12.0^\circ$. It needs no arithmetic, so its depth is a direct
+reading of what the room lets through.
 
 The $+22.5^\circ$ notch exists because we solved for eight weights, and it moves
 only when we solve again. The boresight null exists because the two subarrays
@@ -356,8 +361,6 @@ taped on the bench with marks every $15^\circ$.
    reads $-10 \pm 3$ dBFS. Leave it there for the whole lab.
 5. Check **Signal BW**, which Calibrate and Find HB100 reset.
 6. Open the **Lab Presets** section before pressing any preset in it.
-7. Procedure D's Tracking mode needs a kit updated with `install.sh`. If the
-   Mode menu has no **Tracking** entry, tell the instructor before class.
 ::::
 
 ::::{frame} No Hardware?
@@ -456,18 +459,24 @@ Manual.
 
 1. Open **Lab Presets** and load **8 Tracking**. It sets the digital layer up
    to form both beams at once.
-2. Set the taper to **Uniform** under Element Gains, and set **Beam 1 Phase**
-   to $0^\circ$ in Digital Beam Forming. The preset does not yet do either
-   reliably, and a leftover taper or phase changes every reading below.
+2. Set the taper to **Uniform** under Element Gains, and check that **Beam 1
+   Phase** reads $0^\circ$ in Digital Beam Forming. The preset resets the phase
+   but not yet the taper, and a leftover taper changes every reading below.
 3. In **Plot Options**, turn on **Show Monopulse Delta Beam** and **Show
    Monopulse Error Function**.
 4. On the **Rectangular** tab, press **Start**. The sum trace peaks on
    boresight and the delta trace nulls there. Record the delta null's depth and
    angle, and the angle where the error trace crosses zero, in Table D.
-5. Set Mode to **Tracking** and move the HB100 slowly across the front of the
-   array along the $1.2$ m arc. The tracker reads the error function, drives it
-   back toward zero, and follows the source without sweeping. Note in Table D
-   how far it follows and how it fails when it loses the source.
+5. Open the **Tracking** tab and press **Start**. Its y-axis is the steering
+   angle, plotted against sweep count. Move the HB100 slowly across the front
+   of the array along the $1.2$ m arc. The tracker reads the error function,
+   drives it back toward zero, and follows the source without sweeping. Note in
+   Table D how far it follows and how it fails when it loses the source.
+
+On phaser-00 the tracker followed smoothly to about $\pm 45^\circ$. Near
+$\pm 48^\circ$ it lost the source and snapped to the $\pm 90^\circ$ limits, or to
+a sidelobe near $+60^\circ$ to $+70^\circ$, rather than drifting; once the source
+came back inside about $\pm 45^\circ$ it locked on again within one sweep.
 ::::
 
 ::::{frame} Lab Packet
@@ -483,8 +492,8 @@ Part 2 at the bench, Part 3 after. <a href="../../labs/ECE444_Lab_L24_NullSteeri
 | Idea | What it is | Number to remember |
 | :-- | :-- | :-- |
 | Weight subtraction | $\mathbf{w} = \mathbf{w}_\text{d} - r_\text{n}\mathbf{w}_\text{n}$, as gain % and phase | main lobe drops about $2$ dB for a null at $+22.5^\circ$ |
-| Notch depth | set by one-step channel errors, not by rounding | about $-48$ dB; phaser-00 $-46$ to $-50$ dB |
-| Difference beam | Beam 1 Phase $= 180^\circ$ subtracts the two channels | boresight null, peaks near $\pm 11^\circ$; phaser-00 $-41.5$ dB |
+| Notch depth | set by one-step channel errors, not by rounding, until the room limits it | about $-48$ dB; phaser-00 $-46$ to $-50$ dB open, $-22$ to $-24$ dB cramped |
+| Difference beam | Beam 1 Phase $= 180^\circ$ subtracts the two channels | boresight null, peaks near $\pm 11^\circ$; phaser-00 $-41.5$ dB open, $-22$ dB cramped |
 | MVDR | $\mathbf{w} = \mathbf{R}^{-1}\mathbf{s} / (\mathbf{s}^{H}\mathbf{R}^{-1}\mathbf{s})$ from $K$ snapshots | one null from two channels; phaser-00 about $17$ dB at $+20^\circ$, $K = 1024$, loading $0.1$ |
 | Monopulse error | signed ratio of delta to sum, from one look | zero on boresight, slope $0.11$ per degree |
 ::::
