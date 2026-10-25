@@ -162,6 +162,11 @@ bearing: the GUI's **Angle** readout, set to **Peak**.
 - Noise moves the peak about $0.3^\circ$ at $30\ \text{dB}$ SNR.
 - Two sources closer than about $15^\circ$ merge into one lobe.
 :::
+:::{present}
+<img src="../../viz/img/L19-resolution.svg"
+     alt="The sweep for two equal sources: 20 degrees apart it shows two peaks with a dip between them; 8 degrees apart the two lobes merge into one peak midway between the sources"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 At $10.525\ \text{GHz}$, $\lambda = 28.5\ \text{mm}$ and the array's half-power
 beamwidth at broadside is
@@ -199,7 +204,9 @@ limits the bearing.
 The beamwidth sets **resolution**: the ability to tell two sources apart. Two
 sources closer than about one beamwidth produce lobes that overlap into a
 single peak somewhere between them, and the sweep reports one wrong bearing
-instead of two right ones. For the course array the first null sits
+instead of two right ones. The figure shows both cases for two equal sources:
+$20^\circ$ apart the sweep has two peaks with a dip between them, and
+$8^\circ$ apart it has one peak midway between the sources. For the course array the first null sits
 $\lambda/Nd = 0.254$ away in $\sin\theta$, $14.7^\circ$ at broadside, which is
 the usual measure of the separation two sources need. Only one HB100 is on
 during the fox hunt, so the sweep sees one source.
@@ -246,6 +253,11 @@ $$\sin\theta_\text{meas} = \sin(\text{az})\cos(\text{el})$$
 - A source $0.75\ \text{m}$ low at $3\ \text{m}$ ($14.0^\circ$ down) at $30^\circ$ reads $29.0^\circ$.
 - Keep every array and every box at the same height.
 :::
+:::{present}
+<img src="../../viz/img/L19-cone.svg"
+     alt="The cone of directions around the array's axis that all read 29.0 degrees; the floor-plan direction at 30 degrees lies off the cone, and the source 14 degrees below it lies on it"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 The phase ramp depends only on the extra path $d\sin\theta$ along the line of
 elements, and every direction on a cone around the array's axis gives the same
@@ -272,6 +284,11 @@ nothing from behind, so a bearing is always in front of the array.
 - Within $15^\circ$ of the source it pulls the peak: $0.6^\circ$ at $-20\ \text{dB}$, $2.0^\circ$ at $-10\ \text{dB}$, $3.2^\circ$ at $-6\ \text{dB}$.
 - Block the direct path and the reflection becomes the peak.
 :::
+:::{present}
+<img src="../../viz/img/L19-reflection.svg"
+     alt="The direct lobe at broadside, a reflection lobe 10 dB down near 12 degrees, and their sum, whose peak has moved 2.0 degrees toward the reflection"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 A whiteboard, a metal cabinet, or a person near the line of sight sends a
 second copy of the signal toward the array from a different direction. The
@@ -282,7 +299,8 @@ about a beamwidth of each other, the lobes merge and the peak moves toward the
 reflection. The worst case over every phase, for a reflection $5^\circ$ to
 $15^\circ$ from the direct path, is a shift of $0.6^\circ$ for a reflection
 $20\ \text{dB}$ down, $2.0^\circ$ at $10\ \text{dB}$ down, and $3.2^\circ$ at
-$6\ \text{dB}$ down.
+$6\ \text{dB}$ down. The figure shows the $-10\ \text{dB}$ case at its worst,
+a reflection about $12^\circ$ from the direct path.
 
 A reflection more than about $20^\circ$ away forms its own lobe and moves the
 main peak much less. It takes over the bearing if someone stands between the kit
@@ -528,6 +546,10 @@ $$\begin{aligned}
 so a $15^\circ$ crossing is almost four times worse than a $90^\circ$ one with
 the same bearings.
 
+<img src="../../viz/img/L19-crossing.svg"
+     alt="Two bearing lines with their plus and minus one sigma strips and the one-sigma error ellipse: crossing at 90 degrees the ellipse is a circle, RMS 0.20 meters; crossing at 30 degrees it stretches along the bisector, RMS 0.40 meters"
+     style="max-width: 480px; width: 100%; display: block; margin: 0 auto;">
+
 | Kits $4\ \text{m}$ out, $\sigma_\beta = 2^\circ$ | RMS fix error |
 | :-- | :-- |
 | 2 kits, $90^\circ$ crossing | $0.20\ \text{m}$ |
@@ -570,6 +592,11 @@ in "Residuals and Outliers" below.
 - Boxes within $\pm 30^\circ$ of broadside are best; $\pm 45^\circ$ still works.
 - Keep arrays and boxes at one height, in clear sight.
 - Take a third bearing as a check.
+:::
+:::{present}
+<img src="../../viz/img/L19-depth.svg"
+     alt="Two pairs of stations on a firing line and a box 2 meters downrange: stations 0.5 meters apart give an error ellipse plus or minus 0.30 meters long in depth; stations 2 meters apart, plus or minus 0.09 meters"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
 Choosing where to stand is part of the measurement, because the geometry sets
@@ -633,6 +660,11 @@ $$e_i = \hat{\mathbf n}_i\cdot(\mathbf x - \mathbf p_i)$$
 - Compare it with that bearing's own $R_i\tan\sigma_\beta$.
 - A residual several times larger marks a bad bearing: a reflection or a sign error.
 :::
+:::{present}
+<img src="../../viz/img/L19-residuals.svg"
+     alt="Five stations on the firing line; the middle bearing, bent 10 degrees, misses the least-squares fix by 19 centimeters, the others by 4 to 7 centimeters"
+     style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
+:::
 
 Once the least-squares fix is in hand, the distance from the fix to each line
 is that line's **residual**. If all the bearings are good, each residual should
@@ -645,7 +677,10 @@ The usual causes are the two errors that the budget does not cover because they
 are blunders rather than noise: a reflection that took over the peak, and a
 heading or sign mistake that put the line on the wrong side of broadside.
 Check that kit's setup, retake the bearing, or drop it and solve again with the
-others. With only two bearings the residuals are always zero, because two lines
+others. In the figure the middle station's bearing is $10^\circ$ off: its
+residual is $19\ \text{cm}$ against its own $R_i\tan\sigma_\beta$ of
+$5\ \text{cm}$, and the bad line pulls the other residuals up to 4 to
+$7\ \text{cm}$. With only two bearings the residuals are always zero, because two lines
 always meet exactly, so two bearings cannot check each other.
 
 The L19 Lab adds one more check, the **Peak Gain** readout. Received power

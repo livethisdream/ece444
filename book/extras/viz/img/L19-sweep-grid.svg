@@ -263,7 +263,7 @@ L 292.553086 156.78
     <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: end; fill: #b01e24" x="164.678086" y="93.564878" transform="rotate(-0 164.678086 93.564878)">source</text>
    </g>
    <g id="text_13">
-    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #004a85" x="166.593766" y="30.188843" transform="rotate(-0 166.593766 30.188843)">Est. Angle 29.5°</text>
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #004a85" x="166.593766" y="30.188843" transform="rotate(-0 166.593766 30.188843)">Angle 29.5°</text>
    </g>
    <g id="patch_5">
     <path d="M 180.884018 125.172439 
@@ -279,7 +279,7 @@ L 166.7738 122.572439
 " style="fill: none; stroke: #5a5a5a; stroke-linecap: round"/>
    </g>
    <g id="text_14">
-    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #5a5a5a" x="171.228909" y="118.31816" transform="rotate(-0 171.228909 118.31816)">1.05°</text>
+    <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: start; fill: #5a5a5a" x="187.117052" y="129.901443" transform="rotate(-0 187.117052 129.901443)">1.05°</text>
    </g>
   </g>
  </g>
