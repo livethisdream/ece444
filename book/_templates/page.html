@@ -94,6 +94,9 @@
   </div>
 </div>
 
+{%- set help_kind = 'page' %}
+{% include "_help.html" %}
+
 {#- `bd-article` is a compatibility class, not a theme leftover. 149 of
     custom.css's 256 rules are scoped `.bd-article ...` -- the theme's article
     wrapper -- and that is where every content component lives: the callout

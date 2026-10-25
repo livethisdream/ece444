@@ -117,8 +117,12 @@
     <button id="btnLaser" type="button" aria-pressed="false">laser<kbd>L</kbd></button>
     <button id="btnSpot" type="button" aria-pressed="false">spotlight<kbd>S</kbd></button>
     <button id="btnFull" type="button">fullscreen<kbd>F</kbd></button>
+    <button id="btnHelp" type="button" data-help>help<kbd>?</kbd></button>
   </div>
 </div>
+
+{%- set help_kind = 'frame' %}
+{% include "_help.html" %}
 
 {#- `bd-article` is a compatibility class, not a theme leftover. 149 of
     custom.css's 256 rules are scoped `.bd-article ...` -- the theme's article
