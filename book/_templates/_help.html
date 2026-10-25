@@ -1,0 +1,48 @@
+{#- The help card, and the one-time hint that points at it.
+
+    Included by both frame.html and page.html, which set `help_kind` to
+    "frame" or "page" first: a reading page has no mode or tools, so its card
+    leaves those rows out rather than describing controls the bar does not
+    show. shell.js opens it from the `?` key, from any `[data-help]` button
+    (one in the site menu, one in tools), and from the hint.
+
+    One screen, no steps. A guided tour breaks every time the bar changes and
+    is skipped on the first tap; a card that names each control in the bar,
+    in the bar's own order, stays true and is there when someone wants it.
+-#}
+<div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+  <div class="help-card">
+    <button class="help-close" id="btnHelpClose" type="button" aria-label="Close help">&times;</button>
+    <h2 id="helpTitle">Getting around</h2>
+    <p class="help-lead">Everything is in the bar at the bottom of the screen.</p>
+    <dl class="help-list">
+      {%- if site_nav %}
+      <dt><span class="help-chip">{{ ((site_nav | selectattr('current') | list | first) or {'label': 'Site'}).label|e }}</span></dt>
+      <dd>The other course sites, the home page, and this help.</dd>
+      {%- endif %}
+      {%- if help_kind == 'frame' %}
+      <dt><span class="help-chip">read</span></dt>
+      <dd><b>Read</b> shows the whole lesson as one page. <b>Present</b> shows one frame at a time, for class.<span class="help-keys"> <kbd>P</kbd> switches.</span></dd>
+      <dt><span class="help-chip">tools</span></dt>
+      <dd>Laser pointer<span class="help-keys"> <kbd>L</kbd></span>, spotlight<span class="help-keys"> <kbd>S</kbd></span>, and fullscreen<span class="help-keys"> <kbd>F</kbd></span>.</dd>
+      <dt><span class="help-chip">3/9</span></dt>
+      <dd>Where you are in the lesson. Tap it for every frame here and every lesson in the course<span class="help-keys"> <kbd>G</kbd></span>. Double-tap to go back to the top.</dd>
+      {%- else %}
+      <dt><span class="help-chip">42%</span></dt>
+      <dd>How far down the page you are. Tap it for this page&rsquo;s sections, the whole course, and search<span class="help-keys"> <kbd>G</kbd> <kbd>/</kbd></span>.</dd>
+      {%- endif %}
+    </dl>
+    {%- if help_kind == 'frame' %}
+    <h3 class="help-keys">Presenting</h3>
+    <p class="help-keys"><kbd>&rarr;</kbd> or <kbd>Space</kbd> next frame, <kbd>&larr;</kbd> back, <kbd>D</kbd> this frame&rsquo;s detail, <kbd>Esc</kbd> close a panel.</p>
+    <h3>Printing</h3>
+    <p>Print from present mode for the slides, one frame a page. Print from read mode for the whole lesson.</p>
+    {%- endif %}
+    <p class="help-foot"><span class="help-keys">Press <kbd>?</kbd> to open this again.</span><span class="help-touch">Open this again from the {{ ((site_nav | selectattr('current') | list | first) or {'label': 'site'}).label|e }} menu.</span></p>
+  </div>
+</div>
+
+<div class="help-hint" id="helpHint" hidden>
+  <button id="btnHintOpen" type="button" data-help>New here? How the bar works</button>
+  <button id="btnHintClose" class="help-hint-close" type="button" aria-label="Dismiss">&times;</button>
+</div>

@@ -7,24 +7,17 @@ place; this is the one place they are all together.
 
 ## Textbooks & References
 
-We draw from two primary references throughout the course, both provided here
-as PDFs and referenced by chapter/section in each lesson's "For next time"
-reading list. A third standard text is listed as an alternate.
-
-- **[Milligan — *Modern Antenna Design*](materials/milligan.md)** (Thomas A. Milligan, IEEE Press/Wiley)
-  Deep treatment of antenna theory and design. Primary textbook for Modules 1–3.
-- **[Rohde &amp; Schwarz — *Antenna Basics* (Whitepaper 8GE01)](materials/rohde-schwarz-antenna-basics.md)**
-  Compact, well-illustrated primer on antenna properties, measurement, and terminology. Excellent complement to Milligan for the foundations.
-- **Balanis — *Antenna Theory: Analysis and Design*** (Constantine A. Balanis, 4th ed., Wiley)
-  The standard graduate-level reference, and the one most antenna literature cites. Not provided here — the lesson reading lists offer it as an alternate to Milligan wherever the chapters cover the same ground.
+- [Milligan — *Modern Antenna Design*](materials/milligan.md)
+- [Rohde &amp; Schwarz — *Antenna Basics*](materials/rohde-schwarz-antenna-basics.md)
+- Balanis — *Antenna Theory: Analysis and Design* (alternate, not provided)
 
 ## Equation Sheet & Charts
 
-- <a href="handouts/ECE444_Equation_Sheet.pdf" target="_blank" rel="noopener">ECE 444 Equation Sheet (PDF)</a> — one landscape page, front and back, organized by module. Modules 4–5 are added as those lessons are authored.
-- <a href="handouts/SmithChart_blank.pdf" target="_blank" rel="noopener">Blank Smith chart (PDF, print)</a> — the chart bound into the L4 lab packet.
-- <a href="handouts/SmithChart_ZY_colour.pdf" target="_blank" rel="noopener">Impedance–admittance Smith chart (PDF, color)</a> — red impedance grid over blue admittance grid, for designs that cross from $Z$ to $Y$.
-- <a href="handouts/SmithChart_blank.svg" target="_blank" rel="noopener">Blank Smith chart (SVG)</a> — vector, for zooming on screen.
-- <a href="handouts/SmithChart_Lynch_tutorial.pdf" target="_blank" rel="noopener">Smith chart walkthrough (PDF, 30 pages)</a> — the chart from the ground up: the normalized $Z_n = R/Z_0 \pm jX/Z_0$, the constant-$R$ and constant-$X$ circles, constant-VSWR circles, and matching worked on the chart with stubs, quarter-wave sections and lumped L–C. Good company for Lesson 4 and the Lesson 10 measurement lab. By Frank A. Lynch (W4FAL), 24 April 2008; reproduced with attribution, original at <a href="http://smithchart.org" target="_blank" rel="noopener">smithchart.org</a>.
+- <a href="handouts/ECE444_Equation_Sheet.pdf" target="_blank" rel="noopener">Equation sheet</a>
+- <a href="handouts/SmithChart_blank.pdf" target="_blank" rel="noopener">Blank Smith chart</a>
+- <a href="handouts/SmithChart_ZY_colour.pdf" target="_blank" rel="noopener">Impedance–admittance Smith chart</a>
+- <a href="handouts/SmithChart_blank.svg" target="_blank" rel="noopener">Blank Smith chart (SVG)</a>
+- <a href="handouts/SmithChart_Lynch_tutorial.pdf" target="_blank" rel="noopener">Smith chart walkthrough</a> (Frank A. Lynch, <a href="http://smithchart.org" target="_blank" rel="noopener">smithchart.org</a>)
 
 ## Practice Problem Sets
 
@@ -112,27 +105,11 @@ authoritative statement of the requirements.
 
 ## Hardware & Software
 
-- **ADALM-PHASER** (Analog Devices) — phased-array platform used in Modules 3–4 for beamforming and FMCW radar labs
-- **Antenna simulation software** — **nec_lab**, the course front end to NEC-2
-  (`scripts/nec_lab/` in the course repository). It runs in a browser, either
-  from a copy your instructor is serving or from your own machine, and needs no
-  installation beyond Python. 4nec2 runs the same input files if you prefer it.
-- **Vector network analyzer (VNA)** — the chamber's Copper Mountain analyzer, used
-  for both measurement labs: reflection at one port in L10, transmission between
-  the two horns in L11
-- **Anechoic chamber** — the USAFA chamber, with its browser **dashboard**. One page
-  runs the calibration wizard (one-port or two-port), captures a VNA sweep with a
-  Smith chart and impedance, VSWR and return-loss readouts, runs a pattern scan on
-  the turntable, and exports Touchstone files and run data. It also runs against a
-  simulator with no instruments attached, so the controls can be rehearsed on your
-  own machine before the period.
+- ADALM-PHASER
+- nec_lab (NEC-2)
+- Vector network analyzer
+- Anechoic chamber and dashboard
 
 ## Additional Resources
 
-- **Makerspace 3D printers** — the LulzBot TAZ Workhorse+ printers in the ECE
-  Makerspace.
-  <a href="handouts/Makerspace_3D_Printing_Training.pdf" target="_blank" rel="noopener">3D printing training (PDF, 18 slides)</a>
-  covers cleaning the bed and tool head, setting up Cura LulzBot Edition,
-  slicing and naming your `.gcode`, loading filament, and sending a job to the
-  printer. By Vanessa Rosario, DFEC, 6 February 2025. The printer password is
-  given when you complete the training with Ms. Rosario.
+- <a href="handouts/Makerspace_3D_Printing_Training.pdf" target="_blank" rel="noopener">3D printer training</a>
