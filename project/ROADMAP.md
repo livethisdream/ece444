@@ -154,8 +154,8 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L22 | Sidelobes and Tapering | practice | cut 20/20; voice, why and illustration sweeps done (#132, #137, #142) | ready |
 | L23 | Beam Squint and Quantization | practice | cut 20/20, all three sweeps, ten figures and a reworked squint widget (#131) | ready |
 | L22–L23 Lab | Tapering, Squint, and Quantization (one lab for both lessons, after L23) | **L22–L23 Lab** packet (#131, faculty #34); dry-run lessons folded in | 12/20 | **hardware run of the preset-6 quantization walk** |
-| L24 | Null Steering | practice | 46/20 | cut + sweeps |
-| L24 Lab | Null Steering | **L24 Lab** (old-style sheet) + practice | 51/20 | cut + sweeps + packet |
+| L24 | Null Steering | practice | cut 20/20 (#148), voice, why and illustration sweeps (#149, in review) | merge #149 |
+| L24 Lab | Null Steering | **L24 Lab** packet (faculty #38) | 14/20, dry-run findings applied (#149, in review) | Procedure C numbers from Neil's first interferer run; after merge, retire the L24Lab practice set and its materials row |
 
 **Module 4: radar (L25–L31) and the final project.** Placeholder pages. They
 need the FMCW mode in the Phaser app (Neil is building it, with the lab
@@ -193,7 +193,11 @@ needs its rubric, published with the L28 Lab packet.
    Blackman for a Signal vs Time walk (phaser #48). The second dry run
    (`review/M3_LAB_DRYRUN_2026-10-23.md`, all of L17–L24) adds, for the
    remaining passes:
-   - **L24 Lab**: notches and nulls reach −40 to −50 dB, so the
+   - **L23**: "Null Depth: Predicted and Measured" says rounding the null
+     weights leaves a notch near −48 dB; computed, it leaves −56 dB at
+     22.5° (exact zeros at +19.8° and +22.3°), and −48 dB is the
+     independent-error estimate (from the L24 thread, #149).
+   - **L24 Lab** (done in #149 but Procedure C): notches and nulls reach −40 to −50 dB, so the
      "floor-limited at −21 dB" explanation goes, in the text and in
      `L24-quant-depth.svg`; Procedure D sets a uniform
      taper and resets Beam 1 Phase until preset 8 does; Procedure C runs at
