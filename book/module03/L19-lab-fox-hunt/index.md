@@ -45,7 +45,7 @@ the instructor measured and posted. Every box holds an HB100, powered or not, so
 weight gives nothing away; one of them is live.
 
 Your team moves its kit along the firing line, stopping at the station marks
-taped every $0.5\ \text{m}$. At each station the kit faces straight downrange,
+taped every $0.75\ \text{m}$. At each station the kit faces straight downrange,
 square to the tape, so every station shares one heading and the only thing that
 changes is where along the line you stand. At each station you read the beam
 sweep's **Angle** readout (set to Peak) and **Peak Gain**. Each angle is a line from that
@@ -73,7 +73,7 @@ from it.
 :::{present}
 | Element | Size |
 | :-- | :-- |
-| Firing line | $3.0\ \text{m}$ of tape, stations every $0.5\ \text{m}$ (7) |
+| Firing line | $3.0\ \text{m}$ of tape, stations every $0.75\ \text{m}$ (5) |
 | Box field | $2.0\ \text{m}$ wide, $1.0$ to $2.0\ \text{m}$ downrange |
 | Box spacing | at least $0.75\ \text{m}$ center to center |
 | Footprint | about $3\ \text{m} \times 2.5\ \text{m}$ |
@@ -86,9 +86,9 @@ past the $0.88\ \text{m}$ far-field distance of Lesson 17, and the farthest are
 $2.0\ \text{m}$ out, where the tone is still well above the floor.
 
 These sizes come from a simulation of the hunt with a bearing error of
-$2.5^\circ$, one bearing in seven off by $10^\circ$, and an HB100 aimed only
-roughly at the line: the call names the right box about $93\%$ of the time, and
-the median fix lands $0.16\ \text{m}$ from the fox. A wider room helps less than
+$2.5^\circ$, a bearing off by $10^\circ$ one time in seven, and an HB100 aimed
+only roughly at the line: the call names the right box about $86\%$ of the
+time, and the median fix lands $0.15\ \text{m}$ from the fox. A wider room helps less than
 you might expect; a deeper field hurts more, because depth is the direction a
 single firing line measures worst.
 ::::
@@ -113,9 +113,9 @@ downrange, so they cross steeply only when the stations are far apart compared
 with the depth. Two stations a baseline $B$ apart fix a box at range $R$ across
 range to about $R\tan\sigma_\beta$, $0.05\ \text{m}$ at $2\ \text{m}$, but in
 depth only to about $\sqrt{2}\,R^2\sigma_\beta/B$ (Lesson 19 derives it): for a
-box $2\ \text{m}$ out between the two stations, $0.09\ \text{m}$ with
-$B = 2\ \text{m}$, $0.16\ \text{m}$ with $B = 1\ \text{m}$, and $0.30\ \text{m}$
-with $B = 0.5\ \text{m}$. Plan to use the
+box $2\ \text{m}$ out between the two stations, $0.08\ \text{m}$ with the
+ends of the line, $B = 3\ \text{m}$; $0.11\ \text{m}$ with $B = 1.5\ \text{m}$;
+and $0.20\ \text{m}$ with neighbors, $B = 0.75\ \text{m}$. Plan to use the
 stations farthest apart that still hear the fox.
 
 The script is yours. Start from the
@@ -133,7 +133,7 @@ and bring it on your laptop.
 :::
 
 The instructor tapes the firing line and marks station 0 at its middle, with
-stations at $x = -1.5, -1.0, \ldots, +1.5\ \text{m}$, and posts the measured
+stations at $x = -1.5, -0.75, 0, +0.75, +1.5\ \text{m}$, and posts the measured
 center of every box in the same frame. Place the middle of the array, between E4
 and E5, on the station mark, and square the board's patch face to the tape with
 a straightedge or a square, so broadside points straight downrange.
@@ -153,7 +153,7 @@ those ten, largest minus smallest, should be a degree or two.
 :::{present}
 | Quantity | Expect |
 | :-- | :-- |
-| Stations hearing the fox | 3 to 5 of 7 |
+| Stations hearing the fox | 2 to 4 of 5 |
 | Angle at a useful station | within $\pm 45^\circ$ |
 | Spread of ten readings | $1^\circ$ to $2^\circ$ |
 | Good-bearing residual | under $0.15\ \text{m}$ |

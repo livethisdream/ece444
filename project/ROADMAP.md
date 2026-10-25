@@ -146,7 +146,7 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L18 | Beam Steering | none (pre-lab of the L18 Lab) | 20/20, sweeps done | ready |
 | L18 Lab | Beam Steering | **L18 Lab** packet | 14/21; dry run 2026-10-19, fixes merged (#110, #121): E1 side, 45° marker, scan loss at 1.2 m | ready |
 | L19 | Direction Finding | none (L19 Lab packet) | rewritten (#103), 19/20, fix widget (#123) | sweeps |
-| L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | firing range: 3.0 m line, 7 stations, 2.0 m × 1.0–2.0 m box field; starter script; 8/20 | hardware-day checks |
+| L19 Lab | Fox Hunt | **L19 Lab** packet, one per team | firing range: 3.0 m line, 5 stations 0.75 m apart (Neil, 10-25), 2.0 m × 1.0–2.0 m box field; starter script; 8/20 | hardware-day checks |
 | L20 | Array Factor and Beamwidth | practice | 18/20, sweeps done (#128) | ready |
 | L20 Lab | Array Factor | **L20 Lab** (old-style sheet) + practice | 11/20; dry-run fixes merged (#122): set the level, own frequency, ~5 dB steps | convert to packet |
 | L21 | Antenna Pattern | practice | cut 20/20, sweeps done (#127) | ready |
