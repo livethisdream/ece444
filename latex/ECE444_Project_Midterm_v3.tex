@@ -1,0 +1,154 @@
+\documentclass{exam}
+
+\newif\ifprintselected   % required by exam_config's \ansbox
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% v3 of the midterm packet, for Fall 2027. v2's open-ended brief, plus what
+% the Fall 2026 class needed: graded checkpoints, a reference antenna to check
+% their setup against, a coax-stub match in place of the discrete L-network
+% (which worked for nobody), and ESD protection on the dipole itself.
+% Instructor-side notes, including the VNA port protector, are in
+% MIDTERM_INSTRUCTOR_NOTES.md in ECE444-faculty and deliberately not in this packet.
+\ifdefined\thisTermIn
+	\def\thisterm{\thisTermIn}
+\else
+	\def\thisterm{Fall 2027}
+\fi
+\def\thisclass{ECE 444}
+
+\def\fOne{915}
+
+% Due date and weights. Both are quoted from the syllabus -- change there first.
+\def\duedate{Lesson 20, 2359}
+% Checkpoint lessons. Each is due at the start of class.
+\def\cpOne{11}
+\def\cpTwo{14}
+\def\cpThree{16}
+\def\cpFour{18}
+\def\projweight{30\%}
+\def\midweight{40\%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% END SET THESE IF VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{myPackages_gr}
+\usepackage[hidelinks, linkcolor=red]{hyperref}
+\input{myShortcuts}
+\input{ece444_fonts}
+\geometry{margin=0.75in}   % holds the packet to one page
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\input{exam_config}
+\noprintanswers
+\printselectedfalse
+
+% Compact run-in headings: \section's spacing alone pushed v2 onto a second page.
+\newcommand{\head}[1]{\par\vspace{6pt}{\large\bfseries #1}\par\vspace{-2pt}}
+
+\firstpageheader{}{}{}
+\runningheader{\thisclass \hspace{1pt} -- \thisterm }{Midterm Project}{\thepage\hspace{1pt} of\hspace{1pt} \numpages}
+\firstpagefooter{}{}{}
+\runningfooter{}{}{}
+\runningheadrule
+
+\begin{document}
+\pagestyle{headandfoot}
+
+\begin{center}
+USAF ACADEMY \\
+DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING \\
+MIDTERM PROJECT (assigned Lesson 9) - Dipole Design, Matching, and Measurement \\
+\thisterm \\[2mm]
+\end{center}
+
+\textbf{Due \duedate.} Individual. Worth \projweight\ of the course grade and
+\midweight\ of your midterm grade. There is no resubmission.
+
+\head{The Assignment}
+
+Build a dipole, make it work at the frequency it was built for, then make the
+same antenna work at a frequency it was not built for. Measure what each
+approach does to the impedance and to the pattern, and write it up.
+
+\begin{enumerate}[nosep]
+	\item Design and build a dipole for \fOne\ MHz.
+	\item Tune it by trimming.
+	\item Characterize it with S-parameters and input impedance.
+	\item Measure its pattern in the chamber, co-polarized and cross-polarized.
+	\item Pick a different frequency and measure the antenna's impedance there.
+	      Leave the antenna as it is.
+	\item Design and build a coax stub that matches it at that frequency.
+	\item Measure the matched antenna's S-parameters and its pattern, co-polarized
+	      and cross-polarized.
+	\item Model the antenna you built in 4NEC at both frequencies and compare the
+	      model against your measurements.
+	\item Write a report detailing your design, your process, and your analysis.
+\end{enumerate}
+
+\textbf{Two build requirements.} The chamber foam builds up static, and a
+dipole arm with no DC path to ground discharges straight into the analyzer
+port. Cover both arms in heat-shrink, and give the feed a DC path from the
+center pin to the shield with a 100 k$\Omega$ to 1 M$\Omega$ bleed resistor. Trim
+with both in place.
+
+\head{What Is Up to You}
+
+This description is short on purpose: real projects arrive with a goal and a
+deadline, not a procedure. What counts as ``tuned''? Which second frequency, and why that
+one? Open stub or shorted, and how do you account for the velocity factor? Which
+cuts, over what span, and how do you know your setup is not part of the
+measurement? Make those calls, write down why you made them, and defend them in
+the report.
+
+A reference dipole with a published S$_{11}$ and pattern lives at the bench.
+Measure it before you measure yours. If you cannot reproduce its numbers, the
+problem is your setup, not your antenna.
+
+\head{The Report}
+
+One typed technical report, submitted as a PDF, with your measured data files
+attached. There is no template and no page limit. Write it for an engineer who
+was not in the lab with you: what you designed and why, how you built and
+measured it, what you found, and what you make of it. Compare what you measured
+against your 4NEC model. You are not required to make the numbers agree, but
+you are required to know why they do not.
+
+\head{Grading}
+
+Show me each checkpoint at the start of the lesson listed.
+
+\begin{center}
+\begin{tabular}{|p{5.3in}|c|}
+\hline
+\textbf{What is assessed} & \textbf{Points} \\
+\hline
+\textbf{Checkpoints,} 5 points each. \textbf{L\cpOne:} the reference dipole
+measured, and your trimmed dipole's S$_{11}$ and impedance at \fOne\ MHz.
+\textbf{L\cpTwo:} co- and cross-polarized patterns at \fOne\ MHz, plus your
+second frequency and the antenna's impedance there. \textbf{L\cpThree:} the
+stub built, with its measured S$_{11}$. \textbf{L\cpFour:} co- and
+cross-polarized patterns of the matched antenna. & 20 \\
+\hline
+\textbf{Analysis.} Measured against the 4NEC model at both frequencies, with every
+disagreement explained or owned as unexplained. & 30 \\
+\hline
+\textbf{Measurements.} Impedance, S-parameters, and co- and cross-polarized
+patterns, before and after the match, taken so that a reader can trust them. & 20 \\
+\hline
+\textbf{Design decisions.} The dipole, the trim, the second frequency, and the
+stub, each with its reasoning stated. & 15 \\
+\hline
+\textbf{Report quality.} Organized, typed, every figure captioned with labeled
+axes and units, data files included. & 15 \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Collaboration.} You may share chamber sessions and help each other take
+data. The design, the data reduction, the analysis, and the report are
+individual. Generative AI use is Level 3; document it as the syllabus requires.
+
+\end{document}

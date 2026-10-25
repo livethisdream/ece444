@@ -97,4 +97,66 @@
     if (document.body.classList.contains('chrome-away')) closePops();
   });
   mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+  /* ---- help card and first-visit hint ---------------------------------- */
+  /* The card is a modal over the page; the hint is one line above the bar,
+     shown once per browser. Opening the card by any route counts as having
+     seen the hint. Storage can be missing or throw (private windows), and
+     then the hint simply shows again next visit. */
+  var help = document.getElementById('help'), hint = document.getElementById('helpHint');
+  var SEEN = 'ece-shell-help-seen', lastFocus = null;
+
+  function seen() {
+    if (hint) hint.hidden = true;
+    try { localStorage.setItem(SEEN, '1'); } catch (e) {}
+  }
+  function helpOpen() { return help && !help.hidden; }
+  function toggleHelp(want) {
+    if (!help) return;
+    var on = (want === undefined) ? help.hidden : want;
+    if (on === helpOpen()) return;
+    if (on) {
+      closePops(); seen();
+      lastFocus = document.activeElement;
+      help.hidden = false;
+      document.getElementById('btnHelpClose').focus({ preventScroll: true });
+    } else {
+      help.hidden = true;
+      if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+    }
+  }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    if (t && t.closest && t.closest('[data-help]')) { e.preventDefault(); toggleHelp(true); }
+  });
+  if (help) {
+    document.getElementById('btnHelpClose').addEventListener('click', function () { toggleHelp(false); });
+    help.addEventListener('click', function (e) { if (e.target === help) toggleHelp(false); });
+  }
+  if (hint) document.getElementById('btnHintClose').addEventListener('click', seen);
+
+  /* Capture phase, so with the card open the page's own keys (arrows that
+     turn frames, G for the index) do not act on the page behind it. */
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (e.key === '?') { e.preventDefault(); e.stopImmediatePropagation(); toggleHelp(); return; }
+    if (!helpOpen()) return;
+    if (e.key === 'Escape') { e.preventDefault(); toggleHelp(false); }
+    if (e.key !== 'Tab') e.stopImmediatePropagation();
+  }, true);
+
+  /* The hint waits for the page to settle, and stays away from a lesson
+     opened straight into present mode -- that is a class in progress. */
+  if (hint) {
+    var already = false;
+    try { already = !!localStorage.getItem(SEEN); } catch (e) {}
+    if (!already) setTimeout(function () {
+      if (document.documentElement.getAttribute('data-mode') !== 'present' && !helpOpen()) hint.hidden = false;
+    }, 800);
+  }
+
+  window.ECE444.toggleHelp = toggleHelp;
 })();

@@ -24,6 +24,7 @@
   {%- for s in site_nav %}
   <a href="{{ s.url|e }}"{% if s.current %} aria-current="page"{% endif %}>{{ s.label|e }}</a>
   {%- endfor %}
+  <button class="pop-help" type="button" data-help>Help<kbd>?</kbd></button>
 </div>
 {%- else %}
 <div class="hud-group"></div>
