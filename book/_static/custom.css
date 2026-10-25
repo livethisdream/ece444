@@ -566,7 +566,7 @@ nav .theme-switch-button {
 }
 .bd-article .block-card footer {
   font-size: 11px;
-  color: #1d7a4d;
+  color: var(--card-foot, #1d7a4d);
   font-weight: 600;
   letter-spacing: 0.04em;
 }
