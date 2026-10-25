@@ -96,7 +96,7 @@ single firing line measures worst.
 ::::{frame} Part 1: The Plan You Bring
 :::{present}
 - Bearing budget with a fixed heading: about $1.5^\circ$.
-- At depth $y$: across range $y\tan\sigma_\beta$, in depth $y^2\sigma_\beta / B$.
+- At range $R$: across range $R\tan\sigma_\beta$, in depth $\sqrt{2}\,R^2\sigma_\beta / B$.
 - Use the ends of the line: the baseline $B$ sets the depth error.
 - A tested script: fix, residuals, outlier, box ranking.
 :::
@@ -106,14 +106,15 @@ to the tape replaces the aimed heading of a free-standing kit: the grid,
 multipath, and noise terms are the lesson's, and squaring by eye adds about
 $1^\circ$, so
 
-$$\sigma_\beta = \sqrt{0.53^2 + 1.0^2 + 1.0^2 + 0.2^2} \approx 1.5^\circ.$$
+$$\sigma_\beta = \sqrt{0.53^2 + 1.0^2 + 1.0^2 + 0.3^2} \approx 1.5^\circ.$$
 
 The geometry has a weak direction. Bearings from a firing line all look
 downrange, so they cross steeply only when the stations are far apart compared
-with the depth. Two stations a baseline $B$ apart fix a box at depth $y$ across
-range to about $y\tan\sigma_\beta$, $0.05\ \text{m}$ at $2\ \text{m}$, but in
-depth only to about $y^2\sigma_\beta/B$: $0.05\ \text{m}$ with
-$B = 2\ \text{m}$, $0.10\ \text{m}$ with $B = 1\ \text{m}$, and $0.21\ \text{m}$
+with the depth. Two stations a baseline $B$ apart fix a box at range $R$ across
+range to about $R\tan\sigma_\beta$, $0.05\ \text{m}$ at $2\ \text{m}$, but in
+depth only to about $\sqrt{2}\,R^2\sigma_\beta/B$ (Lesson 19 derives it): for a
+box $2\ \text{m}$ out between the two stations, $0.09\ \text{m}$ with
+$B = 2\ \text{m}$, $0.16\ \text{m}$ with $B = 1\ \text{m}$, and $0.30\ \text{m}$
 with $B = 0.5\ \text{m}$. Plan to use the
 stations farthest apart that still hear the fox.
 
