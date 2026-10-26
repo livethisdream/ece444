@@ -52,7 +52,7 @@
     </div>
     <div class="ctl">
       <label for="np">Pulses, coherent</label>
-      <input id="np" type="range" min="0" max="6" step="1" value="0">
+      <input id="np" type="range" min="0" max="8" step="1" value="0">
       <span class="val" id="npv"></span>
     </div>
     <div class="ctl">
@@ -162,7 +162,7 @@
   }
   const F = (s, w) => (w || '') + ' ' + s + 'px Inter, system-ui, sans-serif';
 
-  const X0 = -20, X1 = 40;                   // dB relative to nominal noise
+  const X0 = -20, X1 = 50;                   // dB relative to nominal noise
 
   function drawPdf() {
     const g = fit(pdfEl, px, 250);
@@ -184,7 +184,7 @@
 
     px.strokeStyle = '#e6eef6'; px.lineWidth = 1;
     px.fillStyle = '#8792a2'; px.font = F(11); px.textAlign = 'center';
-    for (let d = -20; d <= 40; d += 10) {
+    for (let d = -20; d <= 50; d += 10) {
       px.beginPath(); px.moveTo(x(d), T); px.lineTo(x(d), g.h - B); px.stroke();
       px.fillText(d, x(d), g.h - B + 15);
     }

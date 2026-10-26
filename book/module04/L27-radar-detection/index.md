@@ -165,8 +165,8 @@ $$
 \text{FAR} = P_{fa} \times \frac{\text{cells tested}}{\text{second}}
 $$
 
-- $512 \times 64$ cells every 64 ms is $5.1 \times 10^{5}$ decisions a second.
-- At $P_{fa} = 10^{-6}$, $\text{FAR} = 0.5$ a second: one false target every 2 s.
+- $512 \times 256$ cells every 128 ms is $1.0 \times 10^{6}$ decisions a second.
+- At $P_{fa} = 10^{-6}$, $\text{FAR} = 1.0$ a second: one false target every second.
 :::
 
 $P_{fa}$ is a probability per decision. What an operator sees, and what a tracker downstream must cope with, is the **false-alarm rate**: false reports per second. Every cell tested is one decision, so
@@ -175,18 +175,18 @@ $$
 \text{FAR} = P_{fa} \times \frac{\text{cells tested}}{\text{second}} .
 $$
 
-Consider a range-Doppler map of 512 range cells by 64 Doppler cells, refreshed every 64 ms. That is 32 768 decisions per map and $32\,768/0.064\ \text{s} = 5.1 \times 10^{5}$ decisions per second. At $P_{fa} = 10^{-6}$ the radar reports 0.51 false targets per second, about one every 2 s, which is too many for a display and far too many for a tracker.
+Consider the range-Doppler burst the L29–L31 Labs use: 256 chirps at a pulse repetition interval (PRI) of 0.5 ms, so a new map every 128 ms, and say 512 range cells in each map. That is $512 \times 256 = 131\,072$ decisions per map and $131\,072/0.128\ \text{s} = 1.0 \times 10^{6}$ decisions per second. At $P_{fa} = 10^{-6}$ the radar reports about one false target every second, which is too many for a display and far too many for a tracker.
 
 Working backward is the usual design step. A specification of one false alarm per minute requires
 
 $$
 \begin{aligned}
-P_{fa} &= \frac{1/60\ \text{s}^{-1}}{5.1 \times 10^{5}\ \text{s}^{-1}} \\
-&= 3.3 \times 10^{-8},
+P_{fa} &= \frac{1/60\ \text{s}^{-1}}{1.0 \times 10^{6}\ \text{s}^{-1}} \\
+&= 1.6 \times 10^{-8},
 \end{aligned}
 $$
 
-which puts the threshold at $\ln(3.0 \times 10^{7}) = 17.2$, or 12.4 dB above the mean noise. The faster a radar tests cells, the smaller $P_{fa}$ must be for the same false-alarm rate. We specify a rate and set the threshold from the probability.
+which puts the threshold at $\ln(6.1 \times 10^{7}) = 17.9$, or 12.5 dB above the mean noise. The faster a radar tests cells, the smaller $P_{fa}$ must be for the same false-alarm rate. We specify a rate and set the threshold from the probability.
 ::::
 
 ::::{frame} Albersheim's Equation
@@ -261,7 +261,7 @@ T_\text{d} &= N\ T_c
 \end{aligned}
 $$
 
-- $N = 64$ chirps give 18.1 dB, so each chirp needs only $13.1 - 18.1 = -5.0$ dB.
+- $N = 256$ chirps give 24.1 dB, so each chirp needs only $13.1 - 24.1 = -11.0$ dB.
 - The cost is the **dwell time** $T_\text{d}$.
 :::
 
@@ -271,7 +271,7 @@ $$
 \text{SNR}_N = N\ \text{SNR}_1 .
 $$
 
-That is **coherent integration**. With $N = 64$ the gain is $10\log_{10}64 = 18.1$ dB, so a single chirp at $-5.0$ dB SNR, invisible on its own, integrates to the 13.1 dB a 90% detection needs. By the fourth-root rule of the last frame, the same gain extends the detection range by $64^{1/4} = 2.8$ times.
+That is **coherent integration**. With the $N = 256$ chirps of the L29–L31 burst the gain is $10\log_{10}256 = 24.1$ dB, so a single chirp at $-11.0$ dB SNR, invisible on its own, integrates to the 13.1 dB a 90% detection needs. By the fourth-root rule of the last frame, the same gain extends the detection range by $256^{1/4} = 4.0$ times.
 
 The price is time. The radar must stay on the cell for the **dwell time**
 
@@ -279,7 +279,7 @@ $$
 T_\text{d} = N\ T_c,
 $$
 
-where $T_c$ is the time between chirps. With a chirp every 1 ms, 64 chirps take 64 ms. The FFT is already doing this work: the range FFT adds the samples within one chirp coherently, and the Doppler FFT of <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> adds the chirps coherently, each Doppler bin compensating the phase that a target of that velocity advances from chirp to chirp.
+where $T_c$ is the time between chirps, the PRI. With a chirp every 0.5 ms, 256 chirps take 128 ms. The FFT is already doing this work: the range FFT adds the samples within one chirp coherently, and the Doppler FFT of <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> adds the chirps coherently, each Doppler bin compensating the phase that a target of that velocity advances from chirp to chirp.
 ::::
 
 ::::{frame} Coherent Versus Noncoherent
@@ -320,11 +320,11 @@ $$
 \frac{\Delta R}{v} = \frac{0.30\ \text{m}}{1.5\ \text{m/s}} = 0.2\ \text{s},
 $$
 
-so with a chirp every 1 ms the useful dwell is at most about 200 chirps. A longer dwell smears the target across cells, and the energy that should add in one cell spreads among several.
+so at a PRI of 0.5 ms the useful dwell is at most about 400 chirps. The burst's 128 ms dwell fits: the person moves 0.19 m during it. A longer dwell smears the target across cells, and the energy that should add in one cell spreads among several.
 
 The second is the update rate. A radar that dwells 0.2 s on each of 20 beam positions revisits each one every 4 s. A tracker needs fresh detections often enough to follow a maneuver, and the scan has to finish.
 
-The third works in our favor. The dwell also sets the Doppler resolution, $\Delta f_D = 1/T_\text{d}$, as <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> showed: 64 ms gives 15.6 Hz, about 0.23 m/s at a 3 cm wavelength. Choosing $N$ is therefore one decision with three consequences: the SNR gain, the velocity resolution, and how stale the picture is.
+The third works in our favor. The dwell also sets the Doppler resolution, $\Delta f_D = 1/T_\text{d}$, as <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> showed: 128 ms gives 7.8 Hz, which is 0.12 m/s at the 3.0 cm wavelength of a 10 GHz carrier. Choosing $N$ is therefore one decision with three consequences: the SNR gain, the velocity resolution, and how stale the picture is.
 ::::
 
 ::::{frame} Detection on the PHASER
@@ -334,7 +334,7 @@ The third works in our favor. The dwell also sets the Doppler resolution, $\Delt
 - The threshold then tests each cell of the range-Doppler map.
 :::
 
-The PHASER's FMCW mode follows the chain of this lesson in order. Each chirp, 0.5 ms long in ADI's example, sweeps 500 MHz, and the board returns the beat signal for that chirp as a block of samples. The **range FFT** of those samples is coherent integration over one chirp: a target at a fixed range is a fixed beat frequency, and the FFT adds its samples in phase. Stacking the range profiles of $N$ chirps and taking a second FFT across them, the **Doppler FFT**, is coherent integration over the dwell. The result is the range-Doppler map, and the detector tests every cell of it against a threshold.
+The PHASER's FMCW mode follows the chain of this lesson in order. Each chirp sweeps 500 MHz at a 10 GHz carrier, 0.5 ms long for the range work of the L28 Lab and 300 µs, repeated every 0.5 ms, in the 256-chirp burst of the L29–L31 Labs; the board returns the beat signal for each chirp as a block of samples. The **range FFT** of those samples is coherent integration over one chirp: a target at a fixed range is a fixed beat frequency, and the FFT adds its samples in phase. Stacking the range profiles of $N$ chirps and taking a second FFT across them, the **Doppler FFT**, is coherent integration over the dwell. The result is the range-Doppler map, and the detector tests every cell of it against a threshold.
 
 The L28 Lab builds the first stage and the L29 Lab the second. The numbers this lesson uses, $P_{fa}$, the threshold above the noise, the integration gain, and the dwell, are the quantities to report when you explain what your own maps can detect. The <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-fmcw/" target="_blank" rel="noopener">ADI FMCW lab</a> describes the waveform and the example settings.
 ::::
@@ -357,7 +357,7 @@ P_{fa}' &= e^{-T/(gP_n)} \\
 \end{aligned}
 $$
 
-A 3 dB rise, $g = 2$, turns $10^{-6}$ into $10^{-3}$. At the $5.1 \times 10^{5}$ decisions per second of the false-alarm frame, the display goes from one false target every 2 s to 510 a second. The figure shows the effect with a 6 dB rise, $P_{fa}' = 0.03$: noise never crosses the fixed threshold in the first 330 cells and crosses it eight times beyond them.
+A 3 dB rise, $g = 2$, turns $10^{-6}$ into $10^{-3}$. At the $1.0 \times 10^{6}$ decisions per second of the false-alarm frame, the display goes from one false target a second to about 1000 a second. The figure shows the effect with a 6 dB rise, $P_{fa}' = 0.03$: noise never crosses the fixed threshold in the first 330 cells and crosses it eight times beyond them.
 
 Setting the threshold for the worst noise does not help either. A threshold 3 dB higher keeps the false alarms in check when the noise is high, but when the noise is at its normal level that threshold corresponds to $P_{fa} = 10^{-12}$, and a target at 13.1 dB SNR, which the original threshold detected with $P_d = 0.89$, now has $P_d = 0.17$. A fixed threshold trades false alarms in noisy cells against missed targets in quiet ones, and the widget's noise control shows both.
 ::::
@@ -390,13 +390,13 @@ Where the noise is 6 dB higher, $\hat{P}_n$ is 6 dB higher and so is the thresho
 | $p(z) = e^{-z/P_n}/P_n$ | noise power in one cell, exponential | mean $P_n = kT_\text{sys}B$ |
 | $P_{fa} = e^{-T/P_n}$ | probability of false alarm | $10^{-6}$ at $T = 13.8P_n$, 11.4 dB |
 | $P_d$ | target-plus-noise area above $T$ (Marcum Q) | 0.87 at 13 dB, $P_{fa} = 10^{-6}$ |
-| FAR | $P_{fa} \times$ decisions per second | $10^{-6}$ at $5.1 \times 10^{5}$/s is 0.5/s |
+| FAR | $P_{fa} \times$ decisions per second | $10^{-6}$ at $1.0 \times 10^{6}$/s is 1.0/s |
 | Albersheim | required SNR from $P_d$, $P_{fa}$, $N$ | 13.1 dB for 0.9 and $10^{-6}$ |
 | Fluctuating target | Swerling 1, $P_d = P_{fa}^{1/(1+\text{SNR})}$ | 21.1 dB for 0.9 and $10^{-6}$ |
 | Range from SNR | $R_\text{max} \propto \text{SNR}^{1/4}$ | 12 dB doubles the range |
-| Coherent integration | $\text{SNR}_N = N\ \text{SNR}_1$ | 64 chirps, 18.1 dB |
+| Coherent integration | $\text{SNR}_N = N\ \text{SNR}_1$ | 256 chirps, 24.1 dB |
 | Noncoherent integration | adds powers, loses to coherent | 4.8 dB short at $N = 64$ |
-| Dwell time | $T_\text{d} = NT_c$, capped by $\Delta R/v$ | 0.2 s at 0.30 m and 1.5 m/s |
+| Dwell time | $T_\text{d} = NT_c$, capped by $\Delta R/v$ | 128 ms for the L29 burst; 0.2 s cap at 0.30 m and 1.5 m/s |
 | Fixed threshold, noise up by $g$ | $P_{fa}' = P_{fa}^{1/g}$ | 3 dB: $10^{-6} \to 10^{-3}$ |
 | CFAR | $T = \alpha\hat{P}_n$ from the neighbors | Lesson 30 |
 ::::
