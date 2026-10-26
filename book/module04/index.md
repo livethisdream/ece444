@@ -30,9 +30,10 @@ You build that chain one lab at a time, and then explain it in **the final
 project, a report in your own words**.
 
 :::{depth}
-Detection is a decision under noise, not a measurement. Probability of
-detection and false-alarm rate move together, and CFAR exists because the
-noise floor will not hold still. The module then ends on what a radar does
+Detection is a decision under noise, not a measurement. At a fixed SNR,
+the probability of detection and the probability of false alarm move
+together along one curve, and CFAR exists because the noise floor will not
+hold still. The module then ends on what a radar does
 with a detection once it has one: classify it from its micro-Doppler
 signature, and track it in range and angle.
 :::
