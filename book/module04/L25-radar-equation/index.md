@@ -13,7 +13,7 @@ frame_view: true
 
 <div class="title-rule"></div>
 
-A 15 cm corner reflector 3 m from the PHASER returns an echo 38 dB above the noise.
+A 10 cm corner reflector 3 m from the PHASER returns an echo 31 dB above the noise.
 
 Lesson 25 · Antennas, Phased Arrays, and Radar Systems · Dr. Neil Rogers
 ::::
@@ -46,7 +46,7 @@ L_\text{fs} &= \left(\frac{4\pi R}{\lambda}\right)^2
 $$
 
 - Received power falls as $1/R^2$ on a one-way link.
-- At 10.3 GHz and 3 m, the free-space path loss is 62.2 dB.
+- At 10 GHz and 3 m, the free-space path loss is 62.0 dB.
 :::
 
 <a href="../../module01/L02-antenna-properties/index.html#frame-the-friis-transmission-equation">Lesson 2</a> built the one-way link from two pieces. The transmitter's power spreads over a sphere, so at range $R$ the power density in the direction of the main beam is $P_tG_t/4\pi R^2$. The receive antenna collects that density over its effective aperture $A_e = G_r\lambda^2/4\pi$. The product is the **Friis transmission equation**,
@@ -55,10 +55,10 @@ $$
 P_r = P_t G_t G_r \left(\frac{\lambda}{4\pi R}\right)^2 ,
 $$
 
-and the factor $(4\pi R/\lambda)^2$ is the **free-space path loss**. It is not a loss in the sense of power turned to heat. It measures how thinly the transmitted power has spread by the time it reaches an aperture of size $\lambda^2/4\pi$. At the radar's 10.3 GHz carrier, $\lambda = 29.1\ \text{mm}$, so at $R = 3\ \text{m}$
+and the factor $(4\pi R/\lambda)^2$ is the **free-space path loss**. It is not a loss in the sense of power turned to heat. It measures how thinly the transmitted power has spread by the time it reaches an aperture of size $\lambda^2/4\pi$. The course runs the radar at a 10 GHz carrier, the value in ADI's radar scripts, so $\lambda = 3.0\ \text{cm}$ and at $R = 3\ \text{m}$
 
 $$
-L_\text{fs} = 20\log_{10}\frac{4\pi (3)}{0.0291} = 62.2\ \text{dB}.
+L_\text{fs} = 20\log_{10}\frac{4\pi (3)}{0.030} = 62.0\ \text{dB}.
 $$
 
 The power falls as $1/R^2$: double the distance and the received power drops 6 dB.
@@ -139,14 +139,14 @@ Because $\sigma$ includes the target's own re-radiation pattern, it can be much 
 <img src="../../viz/img/L25-rcs-shapes.svg" alt="Three scatterers with parallel incident rays. The sphere reflects each ray off its curved surface in a different direction. The flat plate at normal incidence reflects the rays straight back. The corner reflector bounces each ray off two faces and sends it back parallel to the way it came, even though the rays arrive at an angle" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-| Shape, 15 cm | Peak $\sigma$ | dBsm |
+| Shape, 10 cm | Peak $\sigma$ | dBsm |
 | :-- | :-- | --: |
-| sphere | $\pi a^2$ | $-17.5$ |
-| flat plate | $4\pi A^2/\lambda^2$ | $+8.8$ |
-| corner | $4\pi a^4/3\lambda^2$ | $+4.0$ |
+| sphere | $\pi a^2$ | $-21.0$ |
+| flat plate | $4\pi A^2/\lambda^2$ | $+1.4$ |
+| corner | $4\pi a^4/3\lambda^2$ | $-3.3$ |
 :::
 
-Three simple shapes show the range of behavior, all at 10.3 GHz and all 15 cm across: a sphere 15 cm in diameter, a square plate 15 cm on a side, and a triangular **trihedral corner reflector** with 15 cm edges. The sphere spreads its echo in every direction, the plate returns a narrow beam only when it faces the radar, and the corner returns its echo toward the radar over a wide range of angles. The next three frames take each in turn.
+Three simple shapes show the range of behavior, all at 10 GHz and all 10 cm across: a sphere 10 cm in diameter, a square plate 10 cm on a side, and a triangular **trihedral corner reflector** with 10 cm edges. The sphere spreads its echo in every direction, the plate returns a narrow beam only when it faces the radar, and the corner returns its echo toward the radar over a wide range of angles. The next three frames take each in turn.
 ::::
 
 ::::{frame} The Sphere
@@ -156,13 +156,13 @@ $$
 $$
 
 - A large sphere returns its own shadow area, from any direction.
-- 15 cm across: $\sigma = 0.0177$ m², or $-17.5$ dBsm.
+- 10 cm across: $\sigma = 0.0079$ m², or $-21.0$ dBsm.
 :::
 
-A sphere much larger than a wavelength scatters the power it intercepts nearly equally in every direction, so it is the one shape whose radar cross section equals its physical shadow, $\pi a^2$. It is also the only shape whose $\sigma$ does not depend on the viewing angle, which is why calibration spheres hang from balloons over radar test ranges. For the 15 cm sphere, $a = 0.075\ \text{m}$ and the circumference is $16\lambda$, well inside this **optical region**:
+A sphere much larger than a wavelength scatters the power it intercepts nearly equally in every direction, so it is the one shape whose radar cross section equals its physical shadow, $\pi a^2$. It is also the only shape whose $\sigma$ does not depend on the viewing angle, which is why calibration spheres hang from balloons over radar test ranges. For the 10 cm sphere, $a = 0.05\ \text{m}$ and the circumference is $10.5\lambda$, just inside this **optical region**:
 
 $$
-\sigma = \pi (0.075)^2 = 0.0177\ \text{m}^2 = -17.5\ \text{dBsm}.
+\sigma = \pi (0.05)^2 = 0.0079\ \text{m}^2 = -21.0\ \text{dBsm}.
 $$
 
 A sphere much smaller than a wavelength is in the **Rayleigh region**, where $\sigma$ grows as $a^6/\lambda^4$. That steep dependence on frequency is why a weather radar sees raindrops at X-band and not at L-band. Between the two regions, near $2\pi a \approx \lambda$, the **resonance region** oscillates as surface waves around the sphere add and cancel.
@@ -173,33 +173,33 @@ A sphere much smaller than a wavelength is in the **Rayleigh region**, where $\s
 $$
 \begin{aligned}
 \sigma_\text{plate} &= A\ \cdot\ \frac{4\pi A}{\lambda^2} = \frac{4\pi A^2}{\lambda^2} \\
-&= 7.50\ \text{m}^2 = +8.8\ \text{dBsm}
+&= 1.40\ \text{m}^2 = +1.4\ \text{dBsm}
 \end{aligned}
 $$
 
 - The plate intercepts power over $A$ and re-radiates it as a uniform aperture.
-- Its echo is 26 dB above the sphere's, but only within $\pm 2.5^\circ$.
+- Its echo is 22.5 dB above the sphere's, but only within $\pm 3.8^\circ$.
 :::
 
 A flat plate facing the radar intercepts the incident density over its area $A$, and the induced currents on its surface are uniform in amplitude and phase. That is the uniform aperture of <a href="../../module03/L15-aperture-distributions/index.html#frame-key-point-gain-from-area">Lesson 15</a>, and it re-radiates with that aperture's gain, $4\pi A/\lambda^2$, aimed straight back at the radar. The radar cross section is the product of the area that collects and the gain that returns:
 
 $$
-\sigma = A\ \frac{4\pi A}{\lambda^2} = \frac{4\pi (0.15)^4}{(0.0291)^2} = 7.50\ \text{m}^2 = +8.8\ \text{dBsm}.
+\sigma = A\ \frac{4\pi A}{\lambda^2} = \frac{4\pi (0.10)^4}{(0.030)^2} = 1.40\ \text{m}^2 = +1.4\ \text{dBsm}.
 $$
 
-That is 26 dB above the sphere of the same size, because the plate concentrates its echo into one narrow beam where the sphere spreads it over all directions. The gain that makes the plate bright also makes it narrow, and the next frame shows how narrow.
+That is 22.5 dB above the sphere of the same size, because the plate concentrates its echo into one narrow beam where the sphere spreads it over all directions. The gain that makes the plate bright also makes it narrow, and the next frame shows how narrow.
 ::::
 
 ::::{frame} RCS Versus Aspect
 :::{present}
-<img src="../../viz/img/L25-rcs-aspect.svg" alt="RCS in dBsm versus aspect angle from minus 45 to plus 45 degrees at 10.3 GHz. The 15 cm flat plate peaks at plus 8.8 dBsm with a narrow main lobe and a train of sidelobes. The corner reflector with 15 cm edges peaks at plus 4.0 dBsm and stays within 3 dB out to about plus and minus 19 degrees. The 15 cm sphere is flat at minus 17.5 dBsm" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
+<img src="../../viz/img/L25-rcs-aspect.svg" alt="RCS in dBsm versus aspect angle from minus 45 to plus 45 degrees at 10 GHz. The 10 cm flat plate peaks at plus 1.4 dBsm with a narrow main lobe and a train of sidelobes. The corner reflector with 10 cm edges peaks at minus 3.3 dBsm and stays within 3 dB out to about plus and minus 19 degrees. The 10 cm sphere is flat at minus 21.0 dBsm" style="max-width: 640px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- The plate falls 3 dB by $\pm 2.5^\circ$.
+- The plate falls 3 dB by $\pm 3.8^\circ$.
 - The corner holds within 3 dB out to $\pm 19^\circ$.
 :::
 
-Turn the plate away from the radar by an angle $\theta$ and its re-radiated beam turns by $2\theta$, because a mirror reflects at the angle of incidence. The echo falls off along the plate's own aperture pattern, a $\text{sinc}^2$ with sidelobes, and the first null arrives at $\sin\theta = \lambda/2a$, or $5.6^\circ$ for the 15 cm plate. The argument carries a factor of two over the one-way pattern of Lesson 15 because the wave crosses the path difference across the plate twice. A plate is a strong target only when we know exactly where it faces.
+Turn the plate away from the radar by an angle $\theta$ and its re-radiated beam turns by $2\theta$, because a mirror reflects at the angle of incidence. The echo falls off along the plate's own aperture pattern, a $\text{sinc}^2$ with sidelobes, and the first null arrives at $\sin\theta = \lambda/2a$, or $8.6^\circ$ for the 10 cm plate. The argument carries a factor of two over the one-way pattern of Lesson 15 because the wave crosses the path difference across the plate twice. A plate is a strong target only when we know exactly where it faces.
 
 The corner reflector trades 4.8 dB of peak RCS for a wide angular response: it stays within 3 dB of its peak out to $\pm 19^\circ$, and within 6 dB out to $\pm 26^\circ$. The sphere is flat at every angle. The plate curve is the physical-optics result, and the corner curve is a geometric-optics estimate computed from the area that returns a triple bounce, which is why it drops abruptly near $\pm 38^\circ$ where a real corner rolls off more gradually.
 ::::
@@ -214,7 +214,7 @@ A_\text{eff} &= \frac{a^2}{\sqrt{3}} \\
 $$
 
 - Three perpendicular faces send every ray back the way it came.
-- With 15 cm edges: $2.50$ m², or $+4.0$ dBsm.
+- With 10 cm edges: $0.47$ m², or $-3.3$ dBsm.
 :::
 
 A trihedral corner reflector is three flat plates joined at right angles, like the inside corner of a box. Each bounce off one face reverses one component of the ray's direction, so a ray that strikes all three faces leaves with all three components reversed and travels back exactly antiparallel to the way it came. That holds for any arrival direction inside the corner's opening, which is why the corner reflector is the standard radar target, the lab target here, and the reason bicycle reflectors work.
@@ -223,12 +223,12 @@ The corner behaves like a flat plate that always faces the radar. The plate's ar
 
 $$
 \begin{aligned}
-\sigma &= \frac{4\pi a^4}{3\lambda^2} = \frac{4\pi (0.15)^4}{3\ (0.0291)^2} \\
-&= 2.50\ \text{m}^2 = +4.0\ \text{dBsm}.
+\sigma &= \frac{4\pi a^4}{3\lambda^2} = \frac{4\pi (0.10)^4}{3\ (0.030)^2} \\
+&= 0.47\ \text{m}^2 = -3.3\ \text{dBsm}.
 \end{aligned}
 $$
 
-Off the axis the hexagon shrinks, and that shrinking produced the corner curve on the previous frame. The $a^4$ dependence is steep: a corner with 30 cm edges is 12 dB brighter.
+Off the axis the hexagon shrinks, and that shrinking produced the corner curve on the previous frame. The $a^4$ dependence is steep: a corner with 20 cm edges is 12 dB brighter.
 ::::
 
 ::::{frame} Typical Targets at X-Band
@@ -236,14 +236,14 @@ Off the axis the hexagon shrinks, and that shrinking produced the corner curve o
 | Target | $\sigma$ (m²) | dBsm |
 | :-- | --: | --: |
 | car | 100 | $+20$ |
-| 15 cm corner | 2.5 | $+4$ |
 | person | 1 | $0$ |
+| 10 cm corner | 0.47 | $-3$ |
 | small drone | 0.01 | $-20$ |
 
 - Real targets swing $\pm 10$ dB as they turn.
 :::
 
-The table lists typical X-band values for targets the final project might see, alongside the lab corner. Treat the three real targets as order-of-magnitude numbers: a car is a collection of flat panels and corners, so its $\sigma$ swings by tens of decibels as it turns, and a walking person's echo fluctuates as the arms and legs move. That fluctuation is a nuisance for detection, which Lesson 27 takes up, and a signature for classification, which Lesson 31 uses. The corner reflector's echo is steady over a wide range of angles, which is why we calibrate a radar against it. A person at 3 m returns only 4 dB less than the lab corner, so the corner is the steadier target, not a dramatically stronger one.
+The table lists typical X-band values for targets the final project might see, alongside the lab corner. Treat the three real targets as order-of-magnitude numbers: a car is a collection of flat panels and corners, so its $\sigma$ swings by tens of decibels as it turns, and a walking person's echo fluctuates as the arms and legs move. That fluctuation is a nuisance for detection, which Lesson 27 takes up, and a signature for classification, which Lesson 31 uses. The corner reflector's echo is steady over a wide range of angles, which is why we calibrate a radar against it. A person at 3 m returns 3.3 dB more than the 10 cm lab corner, so the corner is the steadier target, not the stronger one.
 ::::
 
 ::::{frame} Thermal Noise
@@ -318,32 +318,32 @@ Two things move the SNR that do not appear in the received power. A lower noise 
 | :-- | :-- | --: |
 | $P_t$ | 25 µW | $-16.0$ dBm |
 | $G_t + G_r$ | 6 + 15 dBi | $+21.0$ |
-| $\lambda^2$ | 29.1 mm | $-30.7$ |
-| $\sigma$ | 15 cm corner | $+4.0$ |
+| $\lambda^2$ | 3.0 cm | $-30.5$ |
+| $\sigma$ | 10 cm corner | $-3.3$ |
 | $(4\pi)^3$ | | $-33.0$ |
 | $R^4$ | 3 m | $-19.1$ |
-| $P_r$ | | $-73.8$ dBm |
+| $P_r$ | | $-80.8$ dBm |
 | $N$, 1 MHz | | $-112.0$ dBm |
-| SNR | | $38.2$ dB |
+| SNR | | $31.1$ dB |
 :::
 
-Here is the whole budget for the lab setup: a corner reflector with 15 cm edges at 3 m, in front of the PHASER at 10.3 GHz. Each line has a source.
+Here is the whole budget for the lab setup: a corner reflector with 10 cm edges at 3 m, in front of the PHASER at 10 GHz. The transmit power, the transmit antenna's gain, and the target size are provisional until the course confirms them on a kit, so treat this budget as the method with representative numbers. Each line has a source.
 
 - **$P_t = -16$ dBm**, or 25 µW, is the transmit tone ADI measured at the transmit output on its <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/hardware/" target="_blank" rel="noopener">hardware page</a>.
-- **$G_t = 6$ dBi** is a small printed transmit antenna. Substitute the gain of the antenna on your bench.
+- **$G_t = 6$ dBi** is an assumed small printed transmit antenna. Substitute the gain of the antenna on your bench.
 - **$G_r = 15.0$ dBi** is the course array at broadside from <a href="../../module03/L21-antenna-pattern/index.html#frame-gain-bookkeeping">Lesson 21</a>: 6.0 dBi per element plus $10\log_{10}8 = 9.0$ dB. Each element on the board is a column of patches with more gain than the course model's ideal element, so this term errs low.
-- **$\sigma = +4.0$ dBsm** is the corner of the previous frames, facing the radar within $\pm 19^\circ$.
+- **$\sigma = -3.3$ dBsm** is the corner of the previous frames, facing the radar within $\pm 19^\circ$. The 10 cm edge is a provisional size; the lab has one or two commercial corner reflectors, and a larger one scales as $a^4$.
 
 Summing,
 
 $$
 \begin{aligned}
-P_r &= -16.0 + 21.0 - 30.7 + 4.0 - 33.0 - 19.1 \\
-&= -73.8\ \text{dBm}.
+P_r &= -16.00 + 21.00 - 30.46 - 3.32 - 32.98 - 19.08 \\
+&= -80.8\ \text{dBm}.
 \end{aligned}
 $$
 
-Against the $-112.0$ dBm noise in 1 MHz, the echo stands 38.2 dB above the noise. A transmitter of 25 µW is enough because the target is close: at 3 m the two-way path loss is only 19.1 dB beyond the 1 m reference, where a radar at 30 km would lose another 160 dB.
+The chain carries two decimals so the rounding of the table does not accumulate. Against the $-112.0$ dBm noise in 1 MHz, the echo stands 31.1 dB above the noise. A transmitter of 25 µW is enough because the target is close: at 3 m the two-way path loss is only 19.1 dB beyond the 1 m reference, where a radar at 30 km would lose another 160 dB.
 ::::
 
 ::::{frame} Radar Equation Explorer
@@ -367,14 +367,14 @@ $$
 R_\text{max} = \left[\frac{P_t G_t G_r \lambda^2 \sigma}{(4\pi)^3\ kT_\text{sys}B\ \text{SNR}_\text{min}}\right]^{1/4}
 $$
 
-- PHASER, 15 cm corner, 13 dB threshold: $R_\text{max} = 12.8$ m.
+- PHASER, 10 cm corner, 13 dB threshold: $R_\text{max} = 8.5$ m.
 - Doubling the range takes 16 times the transmit power.
 :::
 
-Set the SNR equal to the smallest value the detector accepts, $\text{SNR}_\text{min}$, and solve for range. The result is the **maximum detection range**. Lesson 27 derives $\text{SNR}_\text{min}$ from the probabilities of detection and false alarm; for now we use 13 dB, a typical value. For the PHASER budget, the echo is 38.2 dB above the noise at 3 m and has 25.2 dB to spare above the threshold, so
+Set the SNR equal to the smallest value the detector accepts, $\text{SNR}_\text{min}$, and solve for range. The result is the **maximum detection range**. Lesson 27 derives $\text{SNR}_\text{min}$ from the probabilities of detection and false alarm; for now we use 13 dB, a typical value. For the PHASER budget, the echo is 31.1 dB above the noise at 3 m and has 18.1 dB to spare above the threshold, so
 
 $$
-R_\text{max} = 3\ \text{m} \times 10^{25.2/40} = 12.8\ \text{m}
+R_\text{max} = 3\ \text{m} \times 10^{18.1/40} = 8.5\ \text{m}
 $$
 
 in a 1 MHz bandwidth. The fourth root is the most important feature of the formula. Every term inside the brackets enters at one quarter of its decibel value, so 16 times the transmit power, or 12 dB, only doubles the range. Raising the antenna gains, lowering the noise, and narrowing the bandwidth are all worth the same quarter-power, and a radar designer usually finds the gain and the bandwidth easier to change than the transmitter.
@@ -385,16 +385,16 @@ in a 1 MHz bandwidth. The fourth root is the most important feature of the formu
 
 | Symbol / idea | What it is | Number to remember |
 | :-- | :-- | :-- |
-| $L_\text{fs} = (4\pi R/\lambda)^2$ | one-way free-space path loss | 62.2 dB at 3 m, 10.3 GHz |
+| $L_\text{fs} = (4\pi R/\lambda)^2$ | one-way free-space path loss | 62.0 dB at 3 m, 10 GHz |
 | $P_r = P_tG_tG_r\lambda^2\sigma/(4\pi)^3R^4$ | radar equation, Friis applied twice | $-12$ dB per doubling of range |
 | $10\log_{10}(4\pi)^3$ | the constant in the dB form | 33.0 dB |
 | $\sigma$ | radar cross section, in dBsm | area of the equivalent isotropic scatterer |
-| $\pi a^2$, $4\pi A^2/\lambda^2$, $4\pi a^4/3\lambda^2$ | sphere, plate, corner | 15 cm: $-17.5$, $+8.8$, $+4.0$ dBsm |
-| Corner beamwidth | within 3 dB of peak | $\pm 19^\circ$ (plate $\pm 2.5^\circ$) |
+| $\pi a^2$, $4\pi A^2/\lambda^2$, $4\pi a^4/3\lambda^2$ | sphere, plate, corner | 10 cm: $-21.0$, $+1.4$, $-3.3$ dBsm |
+| Corner beamwidth | within 3 dB of peak | $\pm 19^\circ$ (plate $\pm 3.8^\circ$) |
 | $kT_0$ | thermal noise density | $-174$ dBm/Hz |
 | $G/T$ | receive figure of merit | PHASER $-11.6$ dB/K |
-| PHASER link budget | 15 cm corner at 3 m | $-73.8$ dBm, SNR 38.2 dB in 1 MHz |
-| $R_\text{max}$ | range at the SNR threshold | 12.8 m at 13 dB; 16× power for 2× range |
+| PHASER link budget | 10 cm corner at 3 m (provisional) | $-80.8$ dBm, SNR 31.1 dB in 1 MHz |
+| $R_\text{max}$ | range at the SNR threshold | 8.5 m at 13 dB; 16× power for 2× range |
 ::::
 
 ::::{frame} Practice
@@ -413,5 +413,5 @@ in a 1 MHz bandwidth. The fourth root is the most important feature of the formu
 
 This lesson answered whether the PHASER can hear a target at all. The next two lessons ask what the echo tells us. <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> reads the target's range from the echo's delay and its velocity from the Doppler shift, and <a href="../L27-radar-detection/index.html">Lesson 27</a> replaces our 13 dB threshold with one derived from the probabilities of detection and false alarm.
 
-In the <a href="../L28-lab-fmcw-range/index.html">L28 Lab</a> you will place a corner reflector in front of the kit and find its echo in the range profile. Keep this lesson's budget: the echo level and the noise floor you measure there are the two numbers it predicts, and comparing them is part of the radar report you write at the end of the module. The range-Doppler, CFAR, and spectrogram labs that follow all start from an echo that stands well above the noise, and this budget is the reason it does. <a href="../L31-classification-tracking/index.html">Lesson 31</a> brings back the <a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">monopulse tracking</a> of the L24 Lab and points it at a radar echo instead of the HB100.
+In the <a href="../L28-lab-fmcw-range/index.html">L28 Lab</a> you will put one of the lab's corner reflectors in front of your kit and find its echo in the range profile. Keep this lesson's budget: the echo level and the noise floor you measure there are the two numbers it predicts, and comparing them is part of the radar report you write at the end of the module. The range-Doppler, CFAR, and spectrogram labs that follow all start from an echo that stands well above the noise, and this budget is the reason it does. <a href="../L31-classification-tracking/index.html">Lesson 31</a> brings back the <a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">monopulse tracking</a> of the L24 Lab and points it at a radar echo instead of the HB100.
 ::::

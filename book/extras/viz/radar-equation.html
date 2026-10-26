@@ -39,13 +39,13 @@
     <div class="ctl wide">
       <label for="tgt">Target</label>
       <select id="tgt">
-        <option value="corner" selected>Corner, 15 cm</option>
-        <option value="plate">Plate, 15 cm</option>
-        <option value="sphere">Sphere, 15 cm</option>
+        <option value="corner" selected>Corner, 10 cm</option>
+        <option value="plate">Plate, 10 cm</option>
+        <option value="sphere">Sphere, 10 cm</option>
         <option value="person">Person</option>
         <option value="drone">Small drone</option>
       </select>
-      <span class="val" id="tgt-v">+4.0 dBsm</span>
+      <span class="val" id="tgt-v">&minus;3.3 dBsm</span>
     </div>
     <div class="ctl">
       <label for="rng"><i>R</i></label>
@@ -87,16 +87,16 @@
 /* The radar equation in decibels, for the course setup of Lesson 25:
      Pr = Pt + Gt + Gr + 10 log(lambda^2) + sigma - 10 log((4 pi)^3) - 40 log R
      N  = 10 log(k T0) + 10 log B + F           (antenna sees 290 K)
-   10.3 GHz, the 6 dBi transmit antenna fixed. The detection threshold is
+   10 GHz (COURSE_SPEC M8), the 6 dBi transmit antenna fixed. The detection threshold is
    SNR = 13 dB, and max range is where Pr crosses N + 13 dB. Query string
    presets: ?target=person&R=10 */
 const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const el = id => document.getElementById(id);
 const db = x => 10*Math.log10(x);
-const C = 3e8, F0 = 10.3e9, LAM = C/F0, GT = 6.0, KT0 = db(1.380649e-23*290*1e3), THR = 13;
+const C = 3e8, F0 = 10.0e9, LAM = C/F0, GT = 6.0, KT0 = db(1.380649e-23*290*1e3), THR = 13;
 const FOURPI3 = db(Math.pow(4*Math.PI,3));
 const RMIN = 0.3, RMAX = 100;                  // m, log axis
-const SIGMA = { corner:4.0, plate:8.8, sphere:-17.5, person:0.0, drone:-20.0 };
+const SIGMA = { corner:-3.32, plate:1.45, sphere:-21.049, person:0.0, drone:-20.0 };   // 10 cm shapes at 10 GHz, unrounded
 const BWS = [1e3, 1e4, 1e5, 1e6, 1e7];
 const BWL = ['1 kHz','10 kHz','100 kHz','1 MHz','10 MHz'];
 const state = { tgt:'corner', R:3.0, Pt:-16, Gr:15, F:2, bw:3 };

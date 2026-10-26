@@ -8,9 +8,9 @@
   - L25-rcs-shapes     : sphere, flat plate, and trihedral corner reflector,
                          each with an incident ray bundle and where the
                          scattered rays go
-  - L25-rcs-aspect     : RCS versus aspect angle for a 15 cm square plate and
-                         a trihedral with 15 cm edges at 10.3 GHz, with the
-                         15 cm sphere as a flat line
+  - L25-rcs-aspect     : RCS versus aspect angle for a 10 cm square plate and
+                         a trihedral with 10 cm edges at 10 GHz, with the
+                         10 cm sphere as a flat line
 
 The plate is physical optics: sigma = 4 pi (A/lambda)^2 cos^2(t) sinc^2(k a
 sin t). The trihedral is geometric optics: sigma = 4 pi A_eff^2 / lambda^2,
@@ -41,9 +41,9 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "book/extras/viz/img"
 
 C = 3e8
-F = 10.3e9                      # the workshop frequency, COURSE_SPEC M3
+F = 10.0e9                      # the Module 4 carrier, COURSE_SPEC M8
 LAM = C / F
-A = 0.15                        # plate side, corner edge, sphere diameter (m)
+A = 0.10                        # plate side, corner edge (M8, provisional), sphere diameter (m)
 
 plt.rcParams.update({
     "svg.fonttype": "none",
@@ -148,7 +148,7 @@ def rcs_aspect() -> None:
     ax.plot(t, dbsm(corner_rcs(t)), color=RED, lw=2.4, label="corner reflector")
     ax.axhline(dbsm(SPHERE), color=GREEN, lw=2.0, ls="--", label="sphere")
     ax.set_xlim(-45, 45)
-    ax.set_ylim(-30, 12)
+    ax.set_ylim(-35, 6)
     ax.set_xticks(np.arange(-45, 46, 15))
     ax.set_xlabel("aspect angle (deg)")
     ax.set_ylabel("RCS (dBsm)")
