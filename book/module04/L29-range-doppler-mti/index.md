@@ -11,8 +11,9 @@
 
 The range-Doppler map from a burst of chirps, a range FFT on each chirp and a
 Doppler FFT across them, then moving target indication on the same data to
-separate movers from clutter. The L29 Lab runs both on your own kit.
+separate movers from clutter. The L29 Lab, on this page, runs both on your own
+kit, starting from your L28 range code.
 
 ```{note}
-Lesson material is under construction. This shell maps to objectives 4.5, 4.6.
+Lesson and lab material are under construction. This shell maps to objectives 4.5, 4.6.
 ```

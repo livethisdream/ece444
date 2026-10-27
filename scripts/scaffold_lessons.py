@@ -102,7 +102,7 @@ MODULES = {
 }
 
 # ---- Lab manifest: labs that hang off a lesson without taking a lesson number.
-# Every lab in Modules 3-4 is one of these (2026-10-13): a lab is the bench
+# Every lab in Module 3 (and the L4 Lab) is one of these (2026-10-13): a lab is the bench
 # half of its lesson, named "LNN Lab", and has no period number of its own.
 # (module, anchor_lesson_slug, lab_slug, toc_title). The TOC lists each one
 # directly after its anchor lesson. Lab pages are hand-written -- the scaffolder
@@ -118,10 +118,8 @@ LABS = [
     # hangs off L23. Part 1 is tapering (3.7), Part 2 the three departures (3.8).
     (3, "L23-beam-squint-quantization", "L22-L23-lab-tapering-squint", "L22–L23 Lab — Tapering, Squint, and Quantization"),
     (3, "L24-null-steering", "L24-lab-null-steering", "L24 Lab — Null Steering"),
-    (4, "L28-fmcw", "L28-lab-fmcw-range", "L28 Lab — FMCW Range"),
-    (4, "L29-range-doppler-mti", "L29-lab-range-doppler-mti", "L29 Lab — Range-Doppler and MTI"),
-    (4, "L30-cfar", "L30-lab-cfar", "L30 Lab — CFAR Processing"),
-    (4, "L31-classification-tracking", "L31-lab-spectrogram", "L31 Lab — Micro-Doppler Spectrogram"),
+    # Module 4 has no lab pages (Neil, 2026-10-25): the L28-L31 Labs sit on
+    # their lesson's own page, lesson first, then the lab.
 ]
 
 # Extra pages that sit after a lesson in the TOC but are NOT scaffolded --
@@ -171,7 +169,7 @@ LESSONS = [
     (4, 25, "L25-radar-equation", "The Radar Equation, Path Loss, and RCS", ["4.1"], "Radar equation, path loss, and radar cross section.", False),
     (4, 26, "L26-range-resolution-doppler", "Range, Resolution, and Doppler", ["4.2"], "Range resolution, unambiguous range, Doppler shift, and radar types.", False),
     (4, 27, "L27-radar-detection", "Radar Detection", ["4.3"], "Detection theory: probability of detection, false-alarm rate, and dwell time under noise.", False),
-    (4, 28, "L28-fmcw", "FMCW on the Phaser", ["4.4"], "FMCW operation and configuring an FMCW waveform on the PHASER.", False),
+    (4, 28, "L28-fmcw", "FMCW on the Phaser", ["4.2", "4.4", "4.5"], "FMCW operation and configuring an FMCW waveform on the PHASER, then the L28 Lab: range and the range waterfall from one capture.", False),
     (4, 29, "L29-range-doppler-mti", "Range-Doppler and MTI", ["4.5", "4.6"], "Range-Doppler processing of a burst of chirps, and MTI to separate movers from clutter.", False),
     (4, 30, "L30-cfar", "CFAR Processing", ["4.7"], "Constant false-alarm-rate processing.", False),
     (4, 31, "L31-classification-tracking", "Classification and Tracking", ["4.8", "4.9"], "Micro-Doppler classification and range and angle tracking.", False),

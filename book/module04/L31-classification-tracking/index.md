@@ -14,6 +14,12 @@ target from its micro-Doppler signature (the spectrogram and a few features
 of it), and tracking it in range with an alpha-beta filter on the detections
 and in angle with monopulse, recalled from the L24 Lab.
 
+The L31 Lab, on this page, is the micro-Doppler spectrogram: record a moving
+target's spectrogram on your own kit, extract the features this lesson
+defines, and classify the target from them. It is the last stage of the chain
+your [final project](../final-project/index.md) report explains: the targets
+you classify are the ones your L30 Lab detector found.
+
 ```{note}
-Lesson material is under construction. This shell maps to objectives 4.8, 4.9.
+Lesson and lab material are under construction. This shell maps to objectives 4.8, 4.9.
 ```

@@ -23,7 +23,7 @@ edits it; a lesson thread reports its status in its PR body instead.
 | Path | What |
 | :-- | :-- |
 | `book/moduleNN/<slug>/index.md` | the lesson page (MyST markdown) |
-| `book/moduleNN/LNN-lab-<slug>/index.md` | a lesson's lab, a child page listed after it in the TOC |
+| `book/moduleNN/LNN-lab-<slug>/index.md` | a lesson's lab, a child page listed after it in the TOC (Module 3; in Module 4 the lab is on the lesson page) |
 | `book/extras/viz/*.html` | interactive widgets, iframed from lesson pages |
 | `book/extras/viz/img/*.svg` | lesson-page figures |
 | `book/extras/practice/*.pdf` | **committed** practice PDFs — what the site actually serves |
