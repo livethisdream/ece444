@@ -307,7 +307,7 @@ You need:
 - the ADALM-PHASER kit with its Raspberry Pi and Pluto attached, and its transmit antenna;
 - a flat metal plate about 20 cm on a side, or foil glued to cardboard;
 - a tape measure and about 4 m of clear floor in front of the kit;
-- a laptop on the kit's network, and for Procedure E a way to run a Jupyter notebook: Python 3 with numpy, scipy, and matplotlib on your own laptop, or the notebook environment the course provides.
+- your laptop, on the kit's network for the Phaser app, and set up for the notebook as the Notebook Setup frame describes.
 
 The course's Phaser app runs the radar in its FMCW mode. That mode is still being finished, so its control names and layout are not yet known; this page names each setting by the quantity it sets, and where the app's label differs, use the app's. ADI's <a href="https://github.com/analogdevicesinc/system-level/blob/main/docs/solutions/platforms/phaser/labs/resources/python/FMCW_RADAR_Waterfall.py" target="_blank" rel="noopener">`FMCW_RADAR_Waterfall.py`</a> makes the same measurements from a script, with a bandwidth slider, a range toggle, and a chirp length set in its `ramp_time` variable; its 12.145 GHz carrier does not change the beat per meter.
 
@@ -377,12 +377,30 @@ In ADI's script the bandwidth takes effect when you press **Set RF Bandwidth**, 
 4. Save a capture of the walk covering at least 5 s. Record in Table D the nearest and farthest ranges your trace reached and the time of one leg.
 ::::
 
+::::{frame} Notebook Setup
+:class: read-only
+
+The notebooks run on your own laptop, with Python 3 and four packages: numpy, scipy, matplotlib, and Jupyter. Nothing else is needed, and once they are installed the notebook runs without a network connection.
+
+1. Install Python 3.10 or newer from <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org</a> if your laptop does not have it. Then, in a terminal, install the four packages in one line:
+
+   ```sh
+   python -m pip install numpy scipy matplotlib jupyterlab
+   ```
+
+2. Make a folder for the Module 4 labs, such as `ece444-radar`, and save these into it from the site: <a href="../../notebooks/radar_lab.py" download>`radar_lab.py`</a>, <a href="../../notebooks/L28_range.ipynb" download>`L28_range.ipynb`</a>, and the recorded captures task (b) and the waterfall cell use, <a href="../../radar-data/L28_two_corners.npz" download>`L28_two_corners.npz`</a> and <a href="../../radar-data/L28_walker.npz" download>`L28_walker.npz`</a>, with any others from the No Hardware? frame you need.
+3. Save your own captures into the same folder. The Phaser app's FMCW mode is expected to offer each capture as a download from the browser; that is not confirmed until the mode lands. If your capture cannot reach the laptop, use the recorded data and say so in the packet.
+4. In a terminal, change to the folder and start Jupyter with `jupyter lab`. Open `L28_range.ipynb` and run its first cell: it prints the capture's chirps, samples, bandwidth, chirp length, and $f_0$. If it reports that `radar_lab` is missing, the module is not in the same folder as the notebook.
+
+Keep this folder for the whole module. Each later lab adds its notebook and captures to it, and they all use the same `radar_lab.py`.
+::::
+
 ::::{frame} Procedure E: Run the Notebook
 :class: read-only
 
 Do this part after the bench, from your saved captures, in about 30 to 45 minutes.
 
-1. Download <a href="../../notebooks/L28_range.ipynb">`L28_range.ipynb`</a> and <a href="../../notebooks/radar_lab.py">`radar_lab.py`</a> into one folder with your captures. Open the notebook on your own laptop or in the course's notebook environment, set `CAPTURE` in the first cell to your 2 m capture, and run the cells from the top.
+1. With the folder set up as the Notebook Setup frame describes, open `L28_range.ipynb`, set `CAPTURE` in the first cell to your 2 m capture, and run the cells from the top.
 2. **Task (a):** run the range-profile cell with `WINDOW = "hann"`, then change that one line to `WINDOW = None` and run it again. Record the peak, the strongest sidelobe, and the floor near 10 m for each window in Table E.
 3. **Task (b):** run the two-corner cell with `N_FFT = None`, then change it to `N_FFT = 4096`. Record how many peaks it finds and the width 3 dB down.
 4. **Task (c):** set `F0` to your Table A value and replace `R = None` with the range of the peak, from `f_peak`, `F0`, and the capture's `B` and `T_ramp`. Record `R` in Table E and compare it with the tape.
