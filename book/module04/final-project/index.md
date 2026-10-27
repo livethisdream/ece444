@@ -38,10 +38,8 @@ one account of the system.
 ## When things are due
 
 Everything is submitted on **Gradescope**. The lab packets come due one
-at a time, starting at class period 32, in the order you run the labs; each
-packet gives its own date. **The report is
-due at class period 41**, the last class of the term. Period numbers are the
-course calendar's class meetings, not the lesson numbers on this site.
+at a time in November, in the order you run the labs; each packet and its
+Gradescope assignment give its date. **The report is due 11 December.**
 
 ## What is graded
 

@@ -252,11 +252,10 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
 - **Final project.** Each lab ends with what it carries into the report.
   Everything is submitted on Gradescope. **Rubric** (Neil, 2026-10-27):
   Labs Completed, Engineering Analysis, Report Quality, Extra Effort, each
-  0–5, 5 outstanding (on `final-project`). **Open, Neil:** the packet and
-  report dates (given as packets 9, 16, 23 Nov and the report 11 Nov: four
-  packets, three dates, and the report before two of them), whether Extra
-  Effort is the approved-extension extra credit, and the cap (5%
-  proposed). The corner reflector's size is still open: no lab step may
+  0–5, 5 outstanding (on `final-project`). **Report due 11 Dec**
+  (Neil, 2026-10-27). **Open, Neil:** the packet dates (given as 9, 16 and
+  23 Nov, three dates for four packets), whether Extra Effort is the
+  approved-extension extra credit, and the cap (5% proposed). The corner reflector's size is still open: no lab step may
   need one per kit, and the cadet stands clear of the beam.
 
 ## 6. Work queue, in order
