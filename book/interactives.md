@@ -87,4 +87,5 @@ means; the chamber view shows how a turntable and a source horn take it. Lesson
 
 ## Module 4: Radar Fundamentals and FMCW
 
+- **Radar Equation Explorer** (L25). Radar equation explorer: received power, noise floor, SNR, and maximum range versus range for the PHASER. <a href="viz/radar-equation.html" target="_blank" rel="noopener">Open</a> · <a href="module04/L25-radar-equation/index.html">Lesson</a>
 - **Threshold Explorer** (L27). Detection threshold against the noise and target probability densities, with the operating point on the Pd versus Pfa curve. <a href="viz/detection-threshold.html" target="_blank" rel="noopener">Open</a> · <a href="module04/L27-radar-detection/index.html">Lesson</a>
