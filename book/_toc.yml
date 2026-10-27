@@ -103,19 +103,11 @@ parts:
         title: "L27 — Radar Detection"
       - file: module04/L28-fmcw/index
         title: "L28 — FMCW on the Phaser"
-      - file: module04/L28-lab-fmcw-range/index
-        title: "L28 Lab — FMCW Range"
       - file: module04/L29-range-doppler-mti/index
         title: "L29 — Range-Doppler and MTI"
-      - file: module04/L29-lab-range-doppler-mti/index
-        title: "L29 Lab — Range-Doppler and MTI"
       - file: module04/L30-cfar/index
         title: "L30 — CFAR Processing"
-      - file: module04/L30-lab-cfar/index
-        title: "L30 Lab — CFAR Processing"
       - file: module04/L31-classification-tracking/index
         title: "L31 — Classification and Tracking"
-      - file: module04/L31-lab-spectrogram/index
-        title: "L31 Lab — Micro-Doppler Spectrogram"
       - file: module04/final-project/index
         title: "Final Project — Radar Systems Report"

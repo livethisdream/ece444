@@ -8,6 +8,9 @@
 
 ---
 
+Constant false-alarm-rate processing, then the L30 Lab on this page: CFAR on
+your own L29 range-Doppler maps, and what set your false alarms.
+
 ```{note}
-Lesson material is under construction. This shell maps to objective 4.7.
+Lesson and lab material are under construction. This shell maps to objective 4.7.
 ```
