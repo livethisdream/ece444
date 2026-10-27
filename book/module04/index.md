@@ -114,7 +114,7 @@ signature, and track it in range and angle.
   <a class="mt-card mt-lesson" href="L31-classification-tracking/index.html">
     <span class="mt-kind">Lesson 31</span>
     <h4>Classification and Tracking</h4>
-    <p>Micro-Doppler classification and range and angle tracking, then the L31 Lab: classify a target from its spectrogram. Objectives 4.8, 4.9.</p>
+    <p>Micro-Doppler classification and range and angle tracking, then the L31 Lab: classify a target from its spectrogram and track a walker in range and angle. Objectives 4.8, 4.9.</p>
   </a>
 </div>
 ::::

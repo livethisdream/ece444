@@ -234,10 +234,17 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
   trade-offs, features (Doppler spread, periodicity, centroid), a simple
   classifier, the confusion matrix; alpha-beta range tracking and monopulse
   angle (from L24). Lab: fan, spinner, walker, hand; classify the L30
-  detections and report the accuracy. **Open, Neil:** a Part B tracking a
-  walker in range and angle, the only place 4.8 would be measured.
+  detections and report the accuracy; **Part B tracks a walker (dismount)
+  in range and angle** (Neil, 2026-10-27), which is where 4.8 is measured.
 - **Final project.** Each lab ends with what it carries into the report.
-  **Open, Neil:** the rubric, the packet dates, the extra-credit cap.
+  Everything is submitted on Gradescope. **Rubric** (Neil, 2026-10-27):
+  Labs Completed, Engineering Analysis, Report Quality, Extra Effort, each
+  0–5, 5 outstanding (on `final-project`). **Open, Neil:** the packet and
+  report dates (given as packets 9, 16, 23 Nov and the report 11 Nov: four
+  packets, three dates, and the report before two of them), whether Extra
+  Effort is the approved-extension extra credit, and the cap (5%
+  proposed). The corner reflector's size is still open: no lab step may
+  need one per kit, and the cadet stands clear of the beam.
 
 ## 6. Work queue, in order
 

@@ -18,11 +18,11 @@ results, plots, and code that a section of the report is built on.
 | [L28 Lab — FMCW Range](../L28-fmcw/index.md) | range, and the range waterfall, from one FMCW capture | how a chirp becomes a range measurement, and the resolution you actually got | 4.2, 4.5 |
 | [L29 Lab — Range-Doppler and MTI](../L29-range-doppler-mti/index.md) | the range-Doppler map, then MTI | how velocity is measured, and what MTI removes and why | 4.5, 4.6 |
 | [L30 Lab — CFAR Processing](../L30-cfar/index.md) | CFAR detections on your range-Doppler maps | how a detection is declared, and what set your false alarms | 4.7 |
-| [L31 Lab — Micro-Doppler Spectrogram](../L31-classification-tracking/index.md) | classifying a detected target from its spectrogram | what told your targets apart, and how often it was right | 4.9 |
+| [L31 Lab — Micro-Doppler Spectrogram](../L31-classification-tracking/index.md) | classifying a detected target from its spectrogram, then tracking a walker in range and angle | what told your targets apart, how often it was right, and how well the radar held a moving person | 4.8, 4.9 |
 
 Each lab starts from the one before it: your L29 processing begins with your
 own L28 range code, the L30 Lab runs CFAR on your L29 maps, and the L31 Lab
-classifies what your L30 detector found. Keep your code, data, and plots from
+classifies and tracks what your L30 detector found. Keep your code, data, and plots from
 every lab.
 
 ## The lab packets are not the report
@@ -37,18 +37,26 @@ one account of the system.
 
 ## When things are due
 
-The lab packets come due one at a time, starting at class period 32, in
-the order you run the labs; each packet gives its own date. **The report is
+Everything is submitted on **Gradescope**. The lab packets come due one
+at a time, starting at class period 32, in the order you run the labs; each
+packet gives its own date. **The report is
 due at class period 41**, the last class of the term. Period numbers are the
 course calendar's class meetings, not the lesson numbers on this site.
 
 ## What is graded
 
 The report is **30% of your course grade**, graded on a **rubric with a
-sliding scale**. The rubric is published with the L28 Lab packet, so read
-it before you start, not after you finish. It rewards understanding over
-results: a range resolution you can explain earns more than one you merely
-report.
+sliding scale**: each of four areas is scored from 0 to 5, where 5 is
+outstanding. Read it before you start, not after you finish. It rewards
+understanding over results: a range resolution you can explain earns more
+than one you merely report.
+
+| Area | Score |
+| :-- | :-: |
+| Labs Completed | 0–5 |
+| Engineering Analysis | 0–5 |
+| Report Quality | 0–5 |
+| Extra Effort | 0–5 |
 
 ## Extra credit
 
