@@ -35,7 +35,7 @@ with room for notes. Print from read mode for the whole lesson.
 ::::{frame} From Prediction to Measurement
 :::{present}
 - Part 1, before today: the expected patterns and two error budgets.
-- Part 2, today: walk the source by hand, then turn the kit over a protractor.
+- Part 2, today: walk the source by hand, then turn the kit on its stand.
 - Part 3, after: which model the data support, and which method resolves it.
 :::
 
@@ -55,7 +55,7 @@ reconciles the numbers with the predictions and compares the two methods.
 :::{present}
 | | Sweep the beam | Walk the source | Turn the kit |
 | :-- | :-- | :-- | :-- |
-| x-axis | steer angle | elapsed time | protractor angle |
+| x-axis | steer angle | elapsed time | stand angle |
 | Measures | array factor | element $\times$ array | element $\times$ array |
 | Distance | fixed | your arm | fixed |
 :::
@@ -100,7 +100,7 @@ source never changes.
 
 Part 1 of the packet works these out at your own kit's frequency; the dBc values
 barely move with frequency, and the angles move by about $0.15^\circ$ per
-$100\ \text{MHz}$, less than you can read off a protractor. With the beam at
+$100\ \text{MHz}$, less than you can read off the stand's scale. With the beam at
 $0^\circ$ the element pattern lowers the $\pm 21.4^\circ$ sidelobes by only
 $0.3\ \text{dB}$, too little to see in a room. With the beam at $30^\circ$ it
 lowers the peak by $0.6\ \text{dB}$ and the outer sidelobe, near $59^\circ$, by
@@ -153,14 +153,15 @@ reading by $0.7$ to $0.8\ \text{dB}$, more than the scan loss you want to see.
 Three walks, compared in the packet, show how large that scatter is in practice.
 ::::
 
-::::{frame} The Paper Turntable
+::::{frame} Turning the Kit on Its Stand
 :::{present}
-- The HB100 stays on its tripod, $1.2\ \text{m}$ out; you turn the kit about the array's center.
+- The HB100 stays on its tripod, $1.2\ \text{m}$ out; the stand turns the kit about the array's center.
 - Facing the patches, E1 is on the right. Turning the face toward E1 puts the source at $+\theta$.
+- The stand's scale reads $-\theta$.
 :::
 :::{present}
 <img src="../../viz/img/L21-rotation-setup.svg"
-     alt="Top view of the rotation setup: the HB100 fixed 1.2 m from the array, and the kit turned 30 degrees about the array center over a protractor, its face toward E1, which puts the source at plus 30 degrees on the E8 side"
+     alt="Top view of the rotation setup: the HB100 fixed 1.2 m from the array, and the kit turned 30 degrees about the array center on its rotating stand, its face toward E1, which puts the source at plus 30 degrees on the E8 side while the pointer on the stand scale reads minus 30"
      style="max-width: 560px; width: 100%; display: block; margin: 0 auto;">
 :::
 
@@ -169,20 +170,24 @@ the source around a fixed kit, because only the angle between the array normal
 and the source matters. What changes is everything else. The distance never
 changes, so the levels can be compared from one reading to the next; the HB100
 stays aimed at the array without effort; and each reading is taken at an angle
-you can read off the protractor.
+you can read off the stand's scale, with a click every $5^\circ$.
 
 Lesson 18 put $+\theta$ on the E8 end of the array. Looking at the patches, E1
 is at the right end of the row and E8 at the left. Turn the kit so that its face
 swings toward the E1 end, as seen from the source, and the source ends up on the
-E8 side of the normal, at $+\theta$; the kit's pointer reads the same angle on
-the protractor. Part 2 starts by confirming that sign with a beam sweep, whose
-**Angle** readout, set to **Peak**, reads the source's angle.
+E8 side of the normal, at $+\theta$. The stand counts the other way: its scale
+is engraved on the fixed base and counts clockwise as seen from above, and
+turning the face toward E1 is a counterclockwise turn, so the pointer reads
+$-\theta$. A source at $+30^\circ$ sits under a pointer reading $-30$. Part 2
+starts by confirming that sign with a beam sweep, whose **Angle** readout, set
+to **Peak**, reads the source's angle.
 
 Two things set how good the rotation is. The kit must turn about the center of
 the array, between E4 and E5: an axis $20\ \text{mm}$ off center moves the
 source's apparent angle by up to $1^\circ$ and its distance by up to
-$20\ \text{mm}$, about $0.14\ \text{dB}$. And the protractor reads to about a
-degree, which is fine for a lobe $15^\circ$ wide.
+$20\ \text{mm}$, about $0.14\ \text{dB}$. The stand puts the array's center on
+its axis by design. And its scale, ticked every $5^\circ$, reads to a degree or
+two, which is fine for a lobe $15^\circ$ wide.
 ::::
 
 ::::{frame} The Steered Pattern
@@ -226,7 +231,7 @@ converting time to angle at a constant pace you did not have: a hand $30\%$
 fast or slow through the main lobe makes a $13.0^\circ$ beam read anywhere from
 $10.0^\circ$ to $18.6^\circ$. Its level error comes from the radius. The
 rotation removes both, and replaces them with the axis offset and the
-protractor, which are small and can be measured. Neither method removes the
+stand's scale, which are small and can be measured. Neither method removes the
 room: a single reflection $18\ \text{dB}$ below the direct path moves a reading
 by a decibel. The rotation's advantage there is repeatability. The reflections
 sit in fixed places in the room, so a reading repeated at the same angle comes
@@ -236,16 +241,20 @@ trustworthy than either reading alone.
 
 ::::{frame} Equipment and Setup
 :::{present}
-- The kit, cabled to your laptop as in Lesson 17, on a protractor centered between E4 and E5.
+- The kit, cabled to your laptop as in Lesson 17, on its rotating stand, $0^\circ$ toward the source.
 - The HB100 on its tripod, $1.2\ \text{m}$ out at patch-row height, and a taped $1.2\ \text{m}$ arc.
 :::
 
-You need the ADALM-PHASER kit on its stand, connected to your laptop by the
-Ethernet cable as in Lesson 17; the HB100 with a fresh battery, on its tripod;
-a protractor, printed or on a turntable, centered under the middle of the array
-between E4 and E5 and fixed to the bench with $0^\circ$ pointing at the source;
-a mark on the kit's stand along the array normal, to read the protractor
-against; and masking tape.
+You need the ADALM-PHASER kit on its rotating stand from
+<a href="../L17-lab-bring-up/index.html#frame-the-rotating-stand">the L17 Lab</a>,
+connected to your laptop by the Ethernet cable as in Lesson 17; the HB100 with a
+fresh battery, on its tripod; and masking tape. Tape the stand's base to the
+bench with its $0^\circ$ mark toward the source, and seat the kit's tripod in
+the platter's grooves with the patches facing the pointer. A kit without a stand
+can use a printed protractor instead, centered under the middle of the array
+between E4 and E5 with $0^\circ$ toward the source, but then mark it so that a
+turn toward E1 reads positive, and turn the tripod carefully about that
+center.
 
 Set the HB100 $1.2\ \text{m}$ from the array face at the height of the patch
 row, facing the array. Lesson 21 put the far-field distance of this aperture at
@@ -280,16 +289,16 @@ the receiver has clipped; turn the gain down and start again.
 :class: read-only
 
 :::{present}
-7. With the beam sweeping, turn the kit to $+30^\circ$ on the protractor and record the **Angle** readout, set to **Peak**, in Table A.
-8. Repeat at $-30^\circ$ and at $0^\circ$.
+7. With the beam sweeping, turn the kit until the stand reads $-30$, which puts the source at $+30^\circ$, and record the **Angle** readout, set to **Peak**, in Table A.
+8. Repeat with the stand at $+30$ (source at $-30^\circ$) and at $0$.
 9. At $0^\circ$, record the peak, the half-power beamwidth, and both first sidelobes in Table B.
 :::
 
-If the Angle readout reads near $-30^\circ$ when the protractor reads $+30^\circ$, the
-kit is turning the wrong way, or the protractor is labeled backward; fix the
-labels before going on, because every angle in Tables D and E depends on them. A
-reading within $\pm 2^\circ$ of the protractor confirms the sign and the
-centering. Table B is the array factor, the trace you measured in the L20 Lab,
+If the Angle readout reads near $-30^\circ$ when the source should be at
+$+30^\circ$, the kit is turning the wrong way or the patches face away from the
+pointer; fix that before going on, because every angle in Tables D and E depends
+on it. A reading within $\pm 2^\circ$ of the source angle confirms the sign and
+the centering. Table B is the array factor, the trace you measured in the L20 Lab,
 and the reference for the other two runs.
 ::::
 
@@ -330,7 +339,7 @@ the predicted 13.3. With the source behind the board the trace read about 25 to
 
 :::{present}
 16. Press **1 Steering Angle** so the beam sweeps again, kit at $0^\circ$. Hover over the trace at $0^\circ$ steer and record that level as the reference.
-17. Turn the kit to each $10^\circ$ mark from $-90^\circ$ to $+90^\circ$. At each, record the **Angle** readout, the trace at $0^\circ$ (Table D), and the trace at the sample nearest $30^\circ$ (Table E), both relative to Step 16.
+17. Turn the kit to each $10^\circ$ mark from $-90^\circ$ to $+90^\circ$, every second click of the stand. At each, record the **Angle** readout, the trace at $0^\circ$ (Table D), and the trace at the sample nearest $30^\circ$ (Table E), both relative to Step 16.
 18. Turn slowly through each lobe and null of both beams and record the angle and level of each extreme.
 19. Turn the kit to $180^\circ$, source behind the board, and record the trace nearest $30^\circ$ in Table E.
 20. Turn the kit back to $0^\circ$ before you leave.
@@ -343,13 +352,15 @@ sample at $0^\circ$ is the beam at broadside, and the sample nearest $30^\circ$
 beam at $30^\circ$. One rotation pass therefore fills both tables.
 
 The sweep also says where the source really is. Record the Angle readout at
-every stop and plot both tables against it, not against the protractor mark:
-in the dry run the kit slid about $5^\circ$ on its protractor during the pass,
-and the readout caught it. Beyond about $\pm 70^\circ$, or near a null of the
+every stop and plot both tables against it, not against the stand's scale: in
+the dry run, on a paper protractor, the kit slid about $5^\circ$ during the
+pass, and the readout caught it. The stand's detents make a slip much less
+likely, and the readout still catches one. Beyond about $\pm 70^\circ$, or near a null of the
 element pattern, the readout can wander; there, use the mark.
 
-Turn the kit by its base, not by the board, so the array stays centered over
-the protractor, and keep the cables slack enough to follow it. The $10^\circ$
+Turn the kit by the platter, not by the board, so the tripod stays seated in
+its grooves and the array on the axis, and keep the cables slack enough to
+follow it. The $10^\circ$
 marks sketch the patterns; they cannot give the sidelobe levels, because a
 sidelobe peaks between marks. Turning slowly through a lobe while you watch the
 level and recording its highest reading is how an antenna range finds a lobe
