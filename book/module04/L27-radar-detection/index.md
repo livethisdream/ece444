@@ -26,10 +26,14 @@ with room for notes. Print from read mode for the whole lesson.
 ::::
 
 ::::{frame} Learning Objectives
+:class: here-27
 
 <ol class="lo-list" style="--module: '4'; counter-reset: lo 2">
   <li>I can apply radar detection theory (PD, FAR, dwell time) to determine detection performance under noise.</li>
 </ol>
+
+```{include} ../../_snippets/m4-strip.md
+```
 
 :::{depth}
 <a href="../L25-radar-equation/index.html">Lesson 25</a> gave us the received power from a target and the noise power it competes with, and <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> divided the return into range and Doppler cells. Neither one tells us whether the radar reports a target. That is a decision the processor makes in every cell, many thousands of times a second, and every one of those decisions is made against noise. Today we work out how often it decides correctly, how often it reports a target that is not there, and how much signal-to-noise ratio (SNR) a given performance requires.
