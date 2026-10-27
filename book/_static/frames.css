@@ -207,7 +207,7 @@ body.pointing .deck { touch-action: none; }
   .lane-map .lm-lab { margin-top: 0; }
 }
 
-/* ---- lane strip: Module 3's "you are here" ---------------------------- */
+/* ---- lane strip: Modules 3 and 4 "you are here" ---------------------- */
 /* One row of the ten Module 3 lessons, colored by lane like the overview's
    lane map; the lesson whose objectives frame includes it lights up its own
    chip through the frame's here-NN class. */
@@ -239,6 +239,10 @@ body.pointing .deck { touch-action: none; }
 }
 .lane-strip .ls-key i.ls-phase { background: var(--accent-ink); }
 .lane-strip .ls-key i.ls-both { background: linear-gradient(90deg, var(--blue) 50%, var(--accent-ink) 50%); }
+/* Module 4: in class (default blue) vs final project (accent). */
+.lane-strip .ls-chip.ls-proj { border-top-color: var(--accent-ink); }
+.lane-strip .ls-chip.ls-report { padding-left: .5rem; padding-right: .5rem; }
+.lane-strip .ls-key i.ls-proj { background: var(--accent-ink); }
 .here-15 .ls-chip[data-n="15"],
 .here-16 .ls-chip[data-n="16"],
 .here-17 .ls-chip[data-n="17"],
@@ -248,7 +252,14 @@ body.pointing .deck { touch-action: none; }
 .here-21 .ls-chip[data-n="21"],
 .here-22 .ls-chip[data-n="22"],
 .here-23 .ls-chip[data-n="23"],
-.here-24 .ls-chip[data-n="24"] {
+.here-24 .ls-chip[data-n="24"],
+.here-25 .ls-chip[data-n="25"],
+.here-26 .ls-chip[data-n="26"],
+.here-27 .ls-chip[data-n="27"],
+.here-28 .ls-chip[data-n="28"],
+.here-29 .ls-chip[data-n="29"],
+.here-30 .ls-chip[data-n="30"],
+.here-31 .ls-chip[data-n="31"] {
   color: var(--panel); background: var(--blue-dark); border-color: var(--blue-dark);
   transform: translateY(-1px); box-shadow: var(--shadow);
 }

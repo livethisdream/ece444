@@ -4,7 +4,7 @@ The plan for Modules 3–4 and the rules every working thread follows. **Read
 this before starting any work.** The Integrator thread maintains this file. If
 something you need is not here, ask Neil or the Integrator rather than guessing.
 
-Last updated 2026-10-21.
+Last updated 2026-10-25.
 
 ## 1. Who does what
 
@@ -27,7 +27,7 @@ A lesson thread for lesson NN may edit **only**:
 
 | What | Path |
 | :-- | :-- |
-| the lesson page and its lab page | `book/moduleMM/LNN-*/index.md` (the lab is `LNN-lab-*`) |
+| the lesson page and its lab page | `book/moduleMM/LNN-*/index.md` (the lab is `LNN-lab-*`; in Module 4 the lab is on the lesson page) |
 | its practice set, and its lab's | `latex/ECE444_Practice_LNN.tex` (`_LNNLab.tex`) and `book/extras/practice/ECE444_LNN_Practice_*.pdf` (`LNNLab`) |
 | its lab packet | source `ECE444_Lab_LNN_*.tex` in `ECE444-faculty` (it holds the answers; Neil, 2026-10-23), and the blank `book/extras/labs/ECE444_Lab_LNN_*_blank.pdf` here |
 | its figures | `book/extras/viz/img/LNN-*.svg` and its generator `scripts/graphics/*lNN*` |
@@ -76,6 +76,9 @@ That is the one shared file it may change.
   time it takes, then do the lab"). A lab is a child page of its lesson,
   `LNN-lab-<slug>`, titled "LNN Lab — <Topic>", never a lesson of its own.
   Project days and open-lab time are calendar. Modules 1-2 keep their numbers.
+  **Module 4 is the exception** (Neil, 2026-10-25): the L28–L31 Labs sit on
+  their lesson's own page, lesson first, then the lab, with no `LNN-lab-*`
+  page. The lab keeps its name ("L28 Lab") and its packet.
 - **A lesson page is at most 20 slides** in present mode, 40 words a slide
   (`scripts/verify/budgets.py`); a lab page's pre-bench frames count against
   the same budget.
@@ -157,9 +160,21 @@ not periods; each lab follows its lesson on the bench and is listed under it.
 | L24 | Null Steering | practice | cut 20/20 (#148), voice, why and illustration sweeps (#149) | ready |
 | L24 Lab | Null Steering | **L24 Lab** packet (faculty #38); L24Lab practice set retired | 14/20, dry-run findings applied (#149) | all four procedures run on phaser-00 2026-10-25 (A, B, D angles and loss validated; nulls room-limited to about −22 dB in a cramped space) | ready |
 
-**Module 4: radar (L25–L31) and the final project.** Placeholder pages. They
-need the FMCW mode in the Phaser app (Neil is building it, with the lab
-packets). The L28–L31 Labs scaffold the final project report, so each needs a packet
+**Module 4: radar (L25–L31) and the final project.** Placeholder pages.
+L25–L27 are taught in class; L28–L31 are the final project, each one page
+with its lesson and then its lab. The FMCW mode in the Phaser app is in
+progress (Neil); build the lessons and labs now **assuming it works**, and
+reconcile with the GUI when it lands. Source: ADI's Phaser radar labs
+(Neil, 2026-10-25: newer than the slide deck), public at
+`analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/`,
+source in `analogdevicesinc/system-level` under
+`docs/solutions/platforms/phaser/labs/`: `radar-setup`, `radar-cw`,
+`radar-fmcw`, `chirp-sync`, `radar-doppler`, `radar-mti`, `radar-cfar`,
+with Python scripts in `resources/python/` (the docs host is blocked in
+these containers; clone the repo sparse). Cite and link them; translate
+any MATLAB to Python. They have no micro-Doppler, classification, or
+tracking lab (L31 is ours), and the recorded drone data their MTI lab
+plays is not in the repo, so the recorded-data fallback is ours too. The L28–L31 Labs scaffold the final project report, so each needs a packet
 and a recorded-data fallback in case a bench FMCW capture fails; the report
 needs its rubric, published with the L28 Lab packet.
 
@@ -168,15 +183,61 @@ needs its rubric, published with the L28 Lab packet.
 | L25 | The Radar Equation, Path Loss, and RCS |
 | L26 | Range, Resolution, and Doppler (adds micro-Doppler) |
 | L27 | Radar Detection |
-| L28 | FMCW on the Phaser |
-| L28 Lab | FMCW Range (range and waterfall) |
-| L29 | Range-Doppler and MTI |
-| L29 Lab | Range-Doppler and MTI (adds the spectrogram) |
-| L30 | CFAR Processing |
-| L30 Lab | CFAR Processing |
-| L31 | Classification and Tracking |
-| L31 Lab | Micro-Doppler Spectrogram |
+| L28 | FMCW on the Phaser, with the L28 Lab: FMCW Range (range and waterfall) |
+| L29 | Range-Doppler and MTI, with the L29 Lab (adds the spectrogram) |
+| L30 | CFAR Processing, with the L30 Lab |
+| L31 | Classification and Tracking, with the L31 Lab: Micro-Doppler Spectrogram |
 | Final Project | Radar Systems Report: one report on the L28–L31 Labs, in the cadet's words (`module04/final-project`) |
+
+**Module 4 outlines** (Neil approved, 2026-10-25). Each lesson thread writes
+to its outline; ADI pages are named by their slug under `labs/`. Across
+all of them: Python only, the GUI's own FMCW settings (ADI's scripts
+disagree: 12.145 GHz in FMCW, 9.9 GHz in range-Doppler), ADI cited and
+linked, never copied, and no receiver vocabulary (the beat frequency is
+"the echo compared with the chirp still going out").
+
+- **L25 Radar Equation, Path Loss, and RCS** (4.1, taught). Friis twice
+  (from L02), so 1/R⁴; RCS of a sphere, a plate and a corner reflector, and
+  its aspect dependence; kTB and SNR; the Phaser link budget for a corner
+  reflector at a few meters. Practice set; radar-equation widget.
+- **L26 Range, Resolution, and Doppler** (4.2, taught). Range from delay,
+  unambiguous range, resolution c/2B, Doppler 2v/λ and its sign; pulsed vs
+  CW (`radar-setup`); the CW fan demo (`radar-cw`: speed but no range);
+  micro-Doppler introduced. Practice set.
+- **L27 Radar Detection** (4.3, taught). A threshold against noise; PD vs
+  PFA; the SNR a detection needs (Albersheim); dwell and pulse integration;
+  why a fixed threshold fails, which sets up CFAR. Practice set; a threshold
+  widget on the noise and target densities.
+- **L28 FMCW on the Phaser + L28 Lab** (4.2, 4.4, 4.5; `radar-fmcw`).
+  Lesson: the chirp, f_b = 2RB/(cT_s), resolution and the range the sample
+  rate allows, the range FFT and windowing, the 0 m calibration. Lab: OUT2
+  transmit antenna and calibration; corner reflector at 1, 2, 3 m and the
+  kHz per meter; predict, then measure, B = 250 MHz and T_s = 1 ms; the
+  waterfall; the cadet's own Python range FFT from a saved capture, kept
+  for L29. The report rubric and the recorded-data fallback ship with it.
+- **L29 Range-Doppler and MTI + L29 Lab** (4.5, 4.6; `chirp-sync`,
+  `radar-doppler`, `radar-mti`). Lesson: chirp sync as "every chirp starts
+  at a known time", fast and slow time, the data matrix and 2D FFT,
+  velocity resolution λ/(2M·PRI) and maximum λ/(4·PRI), the 2- and 3-pulse
+  cancellers, their response and blind speeds. Lab: range-Doppler from the
+  cadet's L28 code; a hand and a fidget spinner; vary the chirp count and
+  bandwidth; MTI none, 2-pulse, 3-pulse; one range bin's spectrogram,
+  kept for L31. Recorded-data fallback is ours (ADI's drone file is not
+  in their repo).
+- **L30 CFAR Processing + L30 Lab** (4.7; `radar-cfar`). Lesson: cell
+  averaging with guard and reference cells, the bias from PFA, greatest-
+  and smallest-of, edges, 2D CFAR on the range-Doppler map. Lab: CFAR on
+  the cadet's L29 maps; tune; measure the false-alarm rate and PD against
+  L27; detection lists kept for L31. CFAR widget.
+- **L31 Classification and Tracking + L31 Lab** (4.8, 4.9; ours, no ADI
+  page). Lesson: micro-Doppler physics (blades, limbs), spectrogram
+  trade-offs, features (Doppler spread, periodicity, centroid), a simple
+  classifier, the confusion matrix; alpha-beta range tracking and monopulse
+  angle (from L24). Lab: fan, spinner, walker, hand; classify the L30
+  detections and report the accuracy. **Open, Neil:** a Part B tracking a
+  walker in range and angle, the only place 4.8 would be measured.
+- **Final project.** Each lab ends with what it carries into the report.
+  **Open, Neil:** the rubric, the packet dates, the extra-credit cap.
 
 ## 6. Work queue, in order
 
@@ -225,7 +286,8 @@ needs its rubric, published with the L28 Lab packet.
    removes the +1–2° offset.
 3. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
-4. **Module 4 build-out**, once the radar mode runs on hardware: L25–L27
+4. **Module 4 build-out**, now, assuming the radar mode works (Neil,
+   2026-10-25); hardware numbers are reconciled when it runs: L25–L27
    taught in class, then the L28–L31 Labs as the final project's scaffolding,
    each packet built to start from the lab before it, plus the report rubric.
 

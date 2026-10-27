@@ -1218,3 +1218,32 @@ folded in.
   periods; the lab packets come due in sequence from period 32 (Neil corrected 30 to 32 the same day: "32 actually"). "Lesson"
   there is the calendar's class meeting, not a site lesson number (the site
   stops at L31), so pages say "class period".
+
+# MODULE 4 — Radar and FMCW (L25–L31)
+
+## M8. Canonical Module 4 radar numbers (Neil, 2026-10-26)
+
+ADI's Phaser radar scripts are the reference (`analogdevicesinc/system-level`,
+`docs/solutions/platforms/phaser/labs/resources/python/`), with the carrier
+set to 10 GHz: cadets read ADI's code beside ours, so the course matches it.
+ADI's scripts disagree among themselves on the carrier (12.145 GHz in
+`FMCW_RADAR_Waterfall.py`, 9.9 GHz in `Range_Doppler_Plot.py`, 10 GHz in
+`CFAR_RADAR_Waterfall_ChirpSync.py`); the course uses 10 GHz everywhere. The
+kit's real carrier is unverified until hardware day (the radar branch's
+12.2 GHz default looks out of range; `MODULE45_BUILDOUT_PLAN.md` §3.1), so
+these are the course's numbers until then, and a lesson that quotes one
+says so in the GUI's terms once it is known. c = 3.00e8 m/s on pages; state
+it when a rounded number differs from ADI's (L26: 715 Hz vs ADI's 716).
+
+| Quantity | Value | Derived |
+| :-- | :-- | :-- |
+| carrier $f_c$ | 10.0 GHz | $\lambda$ = 3.0 cm |
+| chirp bandwidth $B$ | 500 MHz | $\Delta R = c/2B$ = 0.30 m |
+| range chirp (L28 Lab), $T_s$ | 0.5 ms | 6.67 kHz of beat per meter; 250 MHz halves it, 1 ms halves it |
+| range-Doppler burst (L29–L31) | 256 chirps of 300 µs, PRI 0.5 ms, 4 MSPS | 11.1 kHz per meter; CPI 128 ms; $\Delta v = \lambda/(2M\,T_\text{PRI})$ = 0.12 m/s; $v_\text{max} = \pm\lambda/(4T_\text{PRI})$ = ±15 m/s |
+| 0 m frequency | about 100 kHz, set per kit by the L28 calibration | ADI's `signal_freq`; never called an IF on a page |
+| corner reflector | edge $a$ = 10 cm (provisional) | $\sigma = 4\pi a^4/3\lambda^2$ = 0.47 m² |
+
+The lab has one or two commercial corner reflectors, so no lab step may need
+one per kit. **Open, Neil:** the L25 link-budget inputs (transmit power, the
+transmit antenna's gain, the target size).
