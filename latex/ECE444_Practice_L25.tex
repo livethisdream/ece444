@@ -1,0 +1,309 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L25 practice set (The Radar Equation, Path Loss, and RCS) -- Friis twice,
+% the RCS of a sphere, a plate, and a corner, kTB and G/T, and the PHASER link budget.
+
+\fullwidth{\textbf{Learning Objective 4.1: } I can apply the radar equation to calculate received
+power for a given geometry, and account for path loss and radar cross section (RCS).
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+\question \textbf{Friis applied twice.} A radar operates at $10\ \ghz$, so
+$\lambda = 3.0\ \text{cm}$. Its target sits at $R = 3\ \m$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Compute the one-way free-space path loss $(4\pi R/\lambda)^2$ in dB.
+		\begin{solution}[1.1in]
+		\eq{ L_\text{fs} &= 20\mylog{\frac{4\pi R}{\lambda}} = 20\mylog{\frac{4\pi (3)}{0.030}} \\
+		&= 20\mylog{1257} = 62.0\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$L_\text{fs}$ = \ansbox[1.3in]{$62.0\db$}
+	\end{minipage}
+
+	\part A one-way link loses power as $1/R^2$, but a radar echo falls as $1/R^4$. Explain
+	where the extra $1/R^2$ comes from, in one or two sentences.
+		\begin{solution}[1.1in]
+		The transmitted power spreads over a sphere of area $4\pi R^2$ on the way to the
+		target. The target re-radiates what it intercepts, and that echo spreads over a
+		second sphere of area $4\pi R^2$ on the way back, so the two trips each contribute a
+		$1/R^2$.
+		\end{solution}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The target moves from $3\ \m$ to $6\ \m$. By how many dB does the echo power
+		change? By how many dB would the received power on a one-way link change?
+		\begin{solution}[1.1in]
+		\eq{ \Delta P_\text{radar} &= -40\mylog{\frac{6}{3}} = -12.0\db \\
+		\Delta P_\text{link} &= -20\mylog{\frac{6}{3}} = -6.0\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		radar: \ansbox[1.1in]{$-12.0\db$}\\[6pt]
+		link: \ansbox[1.1in]{$-6.0\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The radar equation in dB carries the constant $10\mylog{(4\pi)^3}$. Evaluate it.
+		\begin{solution}[0.8in]
+		\eq{ 10\mylog{(4\pi)^3} = 30\mylog{12.57} = 33.0\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		constant = \ansbox[1.3in]{$33.0\db$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Three shapes.} At $10\ \ghz$ ($\lambda = 3.0\ \text{cm}$), compare three
+targets of the same size: a sphere $20\ \text{cm}$ in diameter, a square flat plate
+$20\ \text{cm}$ on a side facing the radar, and a trihedral corner reflector with
+$20\ \text{cm}$ edges, viewed along its symmetry axis. Give each peak RCS in
+m\textsuperscript{2} and in dBsm.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The sphere.
+		\begin{solution}[1.0in]
+		The circumference is $2\pi(0.1)/0.030 = 21$ wavelengths, so the sphere is in the
+		optical region and returns its shadow area:
+		\eq{ \sigma = \pi a^2 = \pi (0.1)^2 = 0.0314\ \text{m}^2 = -15.0\ \dbsm }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\sigma$ = \ansbox[1.3in]{$-15.0\ \dbsm$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The flat plate.
+		\begin{solution}[1.1in]
+		The plate intercepts over $A$ and re-radiates with the uniform-aperture gain
+		$4\pi A/\lambda^2$:
+		\eq{ \sigma &= \frac{4\pi A^2}{\lambda^2} = \frac{4\pi (0.04)^2}{(0.030)^2} \\
+		&= 22.3\ \text{m}^2 = +13.5\ \dbsm }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\sigma$ = \ansbox[1.3in]{$+13.5\ \dbsm$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The corner reflector.
+		\begin{solution}[1.1in]
+		\eq{ \sigma &= \frac{4\pi a^4}{3\lambda^2} = \frac{4\pi (0.2)^4}{3\ (0.030)^2} \\
+		&= 7.45\ \text{m}^2 = +8.7\ \dbsm }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\sigma$ = \ansbox[1.3in]{$+8.7\ \dbsm$}
+	\end{minipage}
+
+	\part The plate has the largest peak RCS, yet radar ranges calibrate against corner
+	reflectors. Explain why, and state what the corner gives up in exchange.
+		\begin{solution}[1.3in]
+		The plate returns its echo in a beam as narrow as its own aperture pattern, so its RCS
+		falls $3\db$ within a few degrees of normal and a small misalignment changes the
+		calibration by many dB. The corner's three perpendicular faces send every ray back the
+		way it came, so its RCS stays within $3\db$ of the peak over about $\pm 19\mydeg$. It
+		gives up about $4.8\db$ of peak RCS against the plate of the same size, because only
+		the hexagonal part of its opening returns a triple bounce.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Noise and G/T.} A receiver at room temperature has an antenna that sees
+$T_A = 290\ \text{K}$. At
+$T_0 = 290\ \text{K}$ the noise density is $kT_0 = -174$ dBm/Hz.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the thermal noise power $kT_0B$ in a $2\ \khz$ bandwidth.
+		\begin{solution}[1.0in]
+		\eq{ N &= -174 + 10\mylog{2000} \\ &= -174 + 33.0 = -141.0\ \dbm }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$N$ = \ansbox[1.3in]{$-141.0\ \dbm$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The receiver has a $3\db$ noise figure. Find its equivalent noise temperature
+		and the system noise temperature.
+		\begin{solution}[1.2in]
+		\eq{ T_e &= T_0\lp F - 1 \rp = 290\lp 10^{0.3} - 1 \rp = 289\ \text{K} \\
+		T_\text{sys} &= T_A + T_e = 290 + 289 = 579\ \text{K} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$T_e$ = \ansbox[1.1in]{$289\ \text{K}$}\\[6pt]
+		$T_\text{sys}$ = \ansbox[1.1in]{$579\ \text{K}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The receive antenna has $20\ \dbi$ of gain. Find $G/T$ in dB/K.
+		\begin{solution}[1.0in]
+		\eq{ G/T &= 20 - 10\mylog{579} \\ &= 20 - 27.6 = -7.6\ \text{dB/K} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$G/T$ = \ansbox[1.3in]{$-7.6\ \text{dB/K}$}
+	\end{minipage}
+
+	\part Every PHASER element feeds a low-noise amplifier with $24\db$ of gain before
+	anything else. Explain why the first amplifier sets the noise figure of the whole
+	receiver.
+		\begin{solution}[1.2in]
+		The first amplifier adds its own noise and then multiplies both the signal and that
+		noise by its gain. Noise added by later stages is small next to the amplified noise
+		from the first stage, so their contribution, referred to the input, is divided by the
+		first stage's gain of $24\db$. The receiver's noise figure is therefore close to the
+		first amplifier's $1.3\db$.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{The PHASER link budget.} The PHASER transmits $P_t = -16\ \dbm$ at
+$10\ \ghz$ through a $6\ \dbi$ antenna and receives on its array with $G_r = 15\ \dbi$.
+The target is a trihedral corner reflector with $10\ \text{cm}$ edges
+($\sigma = -3.3\ \dbsm$). The receiver noise figure is $2\db$, the antenna sees
+$290\ \text{K}$, and the bandwidth is $1\ \mhz$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the echo power at $R = 5\ \m$.
+		\begin{solution}[1.3in]
+		\eq{ P_r &= P_t + G_t + G_r + 10\mylog{\lambda^2} \\
+		&\quad + \sigma - 33.0 - 40\mylog{R} \\
+		&= -16 + 6 + 15 - 30.5 - 3.3 - 33.0 - 28.0 \\
+		&= -89.8\ \dbm }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$P_r$ = \ansbox[1.3in]{$-89.8\ \dbm$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the SNR at $5\ \m$.
+		\begin{solution}[1.1in]
+		With $T_A = T_0$ the noise is $kT_0BF$:
+		\eq{ N &= -174 + 60 + 2 = -112.0\ \dbm \\
+		\text{SNR} &= -89.8 - (-112.0) = 22.2\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		SNR = \ansbox[1.3in]{$22.2\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The detector needs an SNR of at least $13\db$. Find the maximum range.
+		\begin{solution}[1.2in]
+		The echo has $22.2 - 13 = 9.2\db$ to spare at $5\ \m$, and range enters at
+		$40\db$ per decade:
+		\eq{ R_\text{max} = 5\ \m \times 10^{9.2/40} = 8.5\ \m }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$R_\text{max}$ = \ansbox[1.3in]{$8.5\ \m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part What transmit power would extend the maximum range to $25\ \m$, with everything
+		else unchanged?
+		\begin{solution}[1.1in]
+		\eq{ \Delta P_t &= 40\mylog{\frac{25}{8.5}} = 18.7\db \\
+		P_t &= -16 + 18.7 = +2.7\ \dbm }
+		Twice the range takes about 16 times the power.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$P_t$ = \ansbox[1.3in]{$+2.7\ \dbm$}
+	\end{minipage}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Seeing a drone.} The same PHASER setup now looks for a small drone with
+$\sigma = -20\ \dbsm$, still in a $1\ \mhz$ bandwidth and with a $13\db$ threshold.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the maximum range against the drone.
+		\begin{solution}[1.2in]
+		RCS enters at one quarter of its dB value. The drone is $16.7\db$ below the corner, so
+		\eq{ R_\text{max} = 8.5\ \m \times 10^{-16.7/40} = 3.3\ \m }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$R_\text{max}$ = \ansbox[1.3in]{$3.3\ \m$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part How many dB must the budget improve to detect the drone at $10\ \m$?
+		\begin{solution}[0.9in]
+		\eq{ \Delta = 40\mylog{\frac{10}{3.3}} = 19.3\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$\Delta$ = \ansbox[1.3in]{$19.3\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the receiver bandwidth that provides the whole improvement on its own.
+		\begin{solution}[1.0in]
+		Noise power is proportional to bandwidth, so
+		\eq{ B = \frac{1\ \mhz}{10^{19.3/10}} = 11.7\ \khz }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$B$ = \ansbox[1.3in]{$11.7\ \khz$}
+	\end{minipage}
+
+	\part The same $19.3\db$ could come from about 85 times the transmit power instead. State
+	which change you would make on the PHASER and why, in two or three sentences.
+		\begin{solution}[1.4in]
+		Narrow the bandwidth. A narrower filter, or a longer FFT on the processed signal,
+		removes noise without any new hardware, while 85 times the power needs a larger
+		amplifier, more prime power, and more heat removal.
+		The narrower bandwidth requires a longer observation of the target, which a radar
+		obtains by integrating over more time, and Lesson 28 shows how the FMCW processing
+		does exactly that.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}

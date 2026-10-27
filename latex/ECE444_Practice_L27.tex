@@ -1,0 +1,287 @@
+% !TEX root =./ECE444_Practice_main.tex
+%
+% L27 practice set (Radar Detection) -- threshold and Pfa, false-alarm rate,
+% Albersheim's equation, coherent and noncoherent integration, dwell time, and
+% why a fixed threshold fails when the noise moves.
+
+\fullwidth{\textbf{Learning Objective 4.3: } I can apply radar detection theory (PD, FAR, dwell
+time) to determine detection performance under noise.
+\\[4pt]\normalfont\small Show your work. A \textbf{Documentation} line at the end
+is required (write \textbf{None} if you did not collaborate).}
+
+\begin{questions}
+
+\question \textbf{Threshold and false alarms.} A square-law detector tests one range cell that
+holds only receiver noise of mean power $P_n$. The power $z$ in the cell is exponentially
+distributed, $p(z) = e^{-z/P_n}/P_n$.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The threshold is set at $T = 10P_n$. Find the probability of false alarm.
+		\begin{solution}[1.1in]
+		$P_{fa}$ is the area of the noise density above the threshold:
+		\eq{ P_{fa} &= \int_T^{\infty} \frac{1}{P_n} e^{-z/P_n}\ dz = e^{-T/P_n} \\
+		&= e^{-10} = 4.5 \times 10^{-5} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$P_{fa}$ = \ansbox[1.3in]{$4.5 \times 10^{-5}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the threshold, in dB above the mean noise, that gives $P_{fa} = 10^{-5}$.
+		\begin{solution}[1.1in]
+		\eq{ \frac{T}{P_n} &= \ln\frac{1}{P_{fa}} = \ln 10^{5} = 11.5 \\
+		10\mylog{11.5} &= 10.6\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$T$ = \ansbox[1.3in]{$10.6\db$}
+	\end{minipage}
+
+	\part A classmate looks at a range profile of 200 noise-only cells, sees one cell $7\db$
+	above the mean noise, and concludes that a target must be there. Find the probability that
+	one noise-only cell reaches $7\db$, and explain whether the conclusion is justified.
+		\begin{solution}[1.3in]
+		$7\db$ is $10^{0.7} = 5.0$ times $P_n$, so
+		\eq{ P\lp z > 5P_n \rp = e^{-5.0} = 6.7 \times 10^{-3} . }
+		In 200 cells we expect $200 \times 0.0067 = 1.3$ such cells from noise alone. One cell
+		at $7\db$ is ordinary noise, not evidence of a target.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{False-alarm rate.} A radar forms a range-Doppler map of 256 range cells by
+32 Doppler cells and refreshes it every $32\ \text{ms}$. Every cell of every map is tested
+against the threshold.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the number of threshold decisions per second.
+		\begin{solution}[1.0in]
+		\eq{ \frac{256 \times 32}{0.032\ \text{s}} = 2.56 \times 10^{5}\ \text{s}^{-1} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		\ansbox[1.3in]{$2.56 \times 10^{5}$/s}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part With $P_{fa} = 10^{-6}$, find the false-alarm rate and the mean time between false
+		alarms.
+		\begin{solution}[1.1in]
+		\eq{ \text{FAR} &= P_{fa} \times 2.56 \times 10^{5}\ \text{s}^{-1} = 0.256\ \text{s}^{-1} \\
+		1/\text{FAR} &= 3.9\ \text{s} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		\ansbox[1.3in]{$0.26$/s, every $3.9\ \text{s}$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The specification allows one false alarm every 10 minutes. Find the required
+		$P_{fa}$ and the threshold in dB above the mean noise.
+		\begin{solution}[1.3in]
+		\eq{ P_{fa} &= \frac{1/600\ \text{s}^{-1}}{2.56 \times 10^{5}\ \text{s}^{-1}}
+		= 6.5 \times 10^{-9} \\
+		\frac{T}{P_n} &= \ln\frac{1}{6.5 \times 10^{-9}} = 18.8 \\
+		10\mylog{18.8} &= 12.8\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$P_{fa}$ = \ansbox[1.3in]{$6.5 \times 10^{-9}$}\\[6pt]
+		$T$ = \ansbox[1.3in]{$12.8\db$}
+	\end{minipage}
+
+	\part The false-alarm rate fell by a factor of 150 between parts (b) and (c). Explain why
+	the threshold moved by only $1.4\db$.
+		\begin{solution}[1.1in]
+		The threshold depends on the logarithm of $1/P_{fa}$: $T/P_n$ went from
+		$\ln 10^{6} = 13.8$ to 18.8, a ratio of 1.36, or $1.4\db$. The exponential noise
+		tail falls so fast that a small move in the threshold removes most of the crossings.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Required SNR and integration.} A detector must reach $P_d = 0.8$ at
+$P_{fa} = 10^{-5}$ on a steady target. Albersheim's equation gives the required single-pulse
+SNR as
+\eq{ A = \ln\frac{0.62}{P_{fa}}, \quad B = \ln\frac{P_d}{1 - P_d}, \quad
+\text{SNR}_\text{dB} = 10\mylog{A + 0.12AB + 1.7B} . }
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the required SNR in dB.
+		\begin{solution}[1.3in]
+		\eq{ A &= \ln\lp 6.2 \times 10^{4} \rp = 11.03, \qquad B = \ln 4 = 1.386 \\
+		\text{SNR}_\text{dB} &= 10\mylog{11.03 + 1.84 + 2.36} \\
+		&= 10\mylog{15.2} = 11.8\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		SNR = \ansbox[1.3in]{$11.8\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part One chirp gives the target an SNR of $2.0\db$. Find the smallest number of chirps
+		that, integrated coherently, meets the requirement.
+		\begin{solution}[1.2in]
+		Coherent integration multiplies the SNR by $N$, so it must supply
+		$11.8 - 2.0 = 9.8\db$:
+		\eq{ N \ge 10^{9.8/10} = 9.6 \quad\Rightarrow\quad N = 10 }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$N$ = \ansbox[1.3in]{$10$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part The Doppler FFT needs a power of two, so the radar uses $N = 16$ chirps, one every
+		$1.0\ \text{ms}$. Find the dwell time and the Doppler resolution.
+		\begin{solution}[1.1in]
+		\eq{ T_\text{d} &= N T_c = 16 \times 1.0\ \text{ms} = 16\ \text{ms} \\
+		\Delta f_D &= \frac{1}{T_\text{d}} = 62.5\ \text{Hz} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$T_\text{d}$ = \ansbox[1.3in]{$16\ \text{ms}$}\\[6pt]
+		$\Delta f_D$ = \ansbox[1.3in]{$62.5\ \text{Hz}$}
+	\end{minipage}
+
+	\part The target is a cart moving at $3.0\ \text{m/s}$ and the range resolution is
+	$0.30\ \text{m}$. Show whether the target stays in one range cell during the dwell, and
+	find the longest dwell that keeps it there.
+		\begin{solution}[1.1in]
+		During the dwell the cart moves $3.0\ \text{m/s} \times 0.016\ \text{s} = 0.048\ \text{m}$,
+		well under one $0.30\ \text{m}$ cell. The longest dwell is
+		\eq{ \frac{\Delta R}{v} = \frac{0.30\ \text{m}}{3.0\ \text{m/s}} = 0.10\ \text{s}, }
+		about 100 chirps.
+		\end{solution}
+
+\newpage
+
+		\part The radar instead adds the powers of 16 chirps (noncoherent integration).
+		Albersheim's equation for $N$ pulses is
+		\eq{ \text{SNR}_\text{dB} = &-5\mylog{N} \\
+		&+ \lp 6.2 + \frac{4.54}{\sqrt{N + 0.44}} \rp \mylog{A + 0.12AB + 1.7B} . }
+		Find the required SNR per chirp, and how much more it is than with coherent integration
+		of the same 16 chirps.
+		\begin{solution}[1.6in]
+		\eq{ \text{SNR}_\text{dB} &= -5\mylog{16} \\
+		&\quad + \lp 6.2 + \frac{4.54}{4.05} \rp \mylog{15.2} \\
+		&= -6.02 + 7.32 \times 1.182 = 2.6\db }
+		Coherent integration of 16 chirps needs $11.8 - 12.0 = -0.2\db$ per chirp, so the
+		noncoherent detector needs $2.8\db$ more.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{Detection range.} A target gives $18\db$ SNR on a single chirp at $50\ \text{m}$.
+The radar integrates 32 chirps coherently and needs $13.1\db$ for $P_d = 0.9$ at
+$P_{fa} = 10^{-6}$. The received power falls as $1/R^4$ and the noise does not depend on range.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the integrated SNR at $50\ \text{m}$ and the margin over the requirement.
+		\begin{solution}[1.1in]
+		\eq{ \text{SNR}_{32} &= 18\db + 10\mylog{32} = 18 + 15.05 = 33.1\db \\
+		\text{margin} &= 33.1 - 13.1 = 20.0\db }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		margin = \ansbox[1.3in]{$20.0\db$}
+	\end{minipage}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the largest range at which the target is still detected with $P_d = 0.9$.
+		\begin{solution}[1.1in]
+		The SNR falls $40\db$ per decade of range, so the margin sets the range ratio:
+		\eq{ R_\text{max} &= 50\ \text{m} \times 10^{20.0/40} \\ &= 50\ \text{m} \times 3.16
+		= 158\ \text{m} }
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$R_\text{max}$ = \ansbox[1.3in]{$158\ \text{m}$}
+	\end{minipage}
+
+	\part The target is a person whose echo fluctuates from look to look (Swerling case 1), for
+	which the same $P_d$ and $P_{fa}$ need $21.1\db$. Find the new maximum range and state in
+	one sentence why a fluctuating target needs more SNR.
+		\begin{solution}[1.3in]
+		The margin drops to $33.1 - 21.1 = 12.0\db$, so
+		\eq{ R_\text{max} = 50\ \text{m} \times 10^{12.0/40} = 100\ \text{m}. }
+		A fluctuating echo sometimes fades well below its average, and on those looks it misses
+		the threshold, so the average SNR must be higher to keep $P_d$ at 0.9.
+		\end{solution}
+
+\end{parts}
+
+\newpage
+
+\question \textbf{A fixed threshold.} A detector's threshold was set for $P_{fa} = 10^{-6}$
+when the mean noise power was $P_n$. Later, interference raises the noise by $2\db$ and the
+threshold is not changed.
+
+\begin{parts}
+
+	\begin{minipage}[t]{0.58\linewidth}
+		\part Find the new probability of false alarm, and the factor by which the false-alarm
+		rate grows.
+		\begin{solution}[1.3in]
+		The noise rises by $g = 10^{0.2} = 1.585$, so
+		\eq{ P_{fa}^{\prime} &= e^{-T/\lp gP_n \rp} = P_{fa}^{1/g} \\
+		&= \lp 10^{-6} \rp^{0.631} = 1.6 \times 10^{-4} }
+		The false-alarm rate grows by a factor of 160.
+		\end{solution}
+	\end{minipage}\hfill%
+	\begin{minipage}[t]{0.37\linewidth}
+		\raggedleft \vspace{12pt}
+		$P_{fa}^{\prime}$ = \ansbox[1.3in]{$1.6 \times 10^{-4}$}\\[6pt]
+		factor = \ansbox[1.3in]{$160$}
+	\end{minipage}
+
+	\part An operator proposes raising the threshold permanently by $2\db$ to cover the
+	interference. Explain what that does to $P_d$ when the interference is absent.
+		\begin{solution}[1.2in]
+		With normal noise the raised threshold sits $11.4 + 2 = 13.4\db$ above the mean noise,
+		which is $P_{fa} = e^{-21.9} \approx 3 \times 10^{-10}$. False alarms are rare, but a
+		target that just met $P_d = 0.9$ at the old threshold now falls short of the new one much
+		more often, so $P_d$ drops. A fixed threshold can protect against false alarms or missed
+		targets, not both.
+		\end{solution}
+
+	\part Describe how the processor can set the threshold so that $P_{fa}$ stays at
+	$10^{-6}$ whether or not the interference is present.
+		\begin{solution}[1.2in]
+		Estimate the noise power from the cells around the cell under test, skipping a few guard
+		cells next to it, and set the threshold as a fixed multiple of that local average. The
+		threshold then rises and falls with the noise, which keeps $P_{fa}$ constant. That is
+		CFAR detection, the subject of Lesson 30.
+		\end{solution}
+
+\end{parts}
+
+\vspace{1.5em}
+\noindent\textbf{Documentation:} \rule[-2pt]{0.6\linewidth}{0.4pt}
+
+\end{questions}
