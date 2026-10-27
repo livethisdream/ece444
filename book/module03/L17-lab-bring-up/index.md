@@ -34,8 +34,9 @@ came up, and that it works.
 
 ::::{frame} Part A: Build Your PHASER
 :::{present}
-- Each cadet builds their own kit from a stock Linux image: flash, connect, set the clock, join the Wi-Fi, provision, calibrate.
-- The Ethernet cable carries ssh and the browser; the Wi-Fi only connects the Pi to the internet.
+- Build your own kit: flash, connect, set the clock, join the Wi-Fi, provision, calibrate.
+- Ethernet carries ssh and the browser; Wi-Fi only reaches the internet.
+- The kit sits on a [3D-printed rotating stand](https://github.com/livethisdream/phaser/tree/main/hardware/stand-simple) centered on the array.
 :::
 :::{present}
 <img src="../../viz/img/L17-part-a-network.svg" alt="Part A network. The laptop and the Pi, named phaser-NN.local, each give themselves an address on the Ethernet cable, which carries ssh and the browser interface on port 8080. The Pi joins the AF_ACADEMY_GUEST Wi-Fi and reaches GitHub through it to run provision.sh. A path from the laptop through the Wi-Fi access point to the Pi is crossed out, because the guest network can isolate its clients from each other." style="max-width: 100%; display: block; margin: 0 auto;">
