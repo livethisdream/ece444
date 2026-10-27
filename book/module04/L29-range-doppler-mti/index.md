@@ -136,20 +136,21 @@ The provided `radar_lab.py` does this, and the L29 notebook runs it on your capt
 
 ```python
 def range_doppler(cap, window="hann"):
-    iq = cap["iq"]                                   # n_chirps x n_samples
-    M, N = iq.shape
-    wr = np.hanning(N) if window == "hann" else np.ones(N)
-    wd = np.hanning(M) if window == "hann" else np.ones(M)
-    rp = np.fft.fft(iq * wr, axis=1)                 # range FFT on every chirp (L28)
-    rd = np.fft.fft(rp * wd[:, None], axis=0)        # Doppler FFT down every column
-    rd = np.fft.fftshift(rd, axes=0)                 # 0 m/s in the middle
-    lam = 3.00e8 / cap["fc"]
-    vel = np.fft.fftshift(np.fft.fftfreq(M, cap["PRI"])) * lam / 2
-    rd_db = 20 * np.log10(np.abs(rd) + 1e-12)
-    return rd_db, range_axis(cap), vel               # range_axis from L28
+    """Range-Doppler map: (rd_db, range_m, vel_mps), rd_db indexed [range, velocity]."""
+    rp = range_fft(cap, window)                 # n_chirps x n_bins, from L28
+    r = range_axis(cap)
+    keep = r >= 0
+    rp = rp[:, keep]
+    m = rp.shape[0]
+    wd = _window(window, m)
+    rd = np.fft.fftshift(np.fft.fft(rp * wd[:, None], axis=0), axes=0) / wd.sum()
+    lam = C / cap["fc"]
+    vel = np.fft.fftshift(np.fft.fftfreq(m, cap["PRI"])) * lam / 2
+    rd_db = 20 * np.log10(np.abs(rd.T) + 1e-12)
+    return rd_db, r[keep], vel
 ```
 
-The velocity axis converts each Doppler bin to velocity with $v = f_D\lambda/2$. If a hand moving toward the kit appears at negative velocity on your map, your capture's phase runs the other way from this page's convention; flip the velocity axis and say so in your report.
+The velocity axis converts each Doppler bin to velocity with $v = f_D\lambda/2$. The module follows the conventions of this page: positive velocity is closing, toward the kit, as in <a href="../L26-range-resolution-doppler/index.html#frame-which-direction-is-positive">Lesson 26</a>; the map is indexed `[range, velocity]`, which is the order <a href="../L30-cfar/index.html">Lesson 30</a>'s `cfar_2d` expects; only ranges at or beyond 0 m are kept; and each FFT is divided by the sum of its window, so a tone of amplitude 1 reads 0 dBFS whatever the window. A hand moving toward the kit therefore lands at positive velocity, and checking that on your own map is the first test of the velocity axis.
 ::::
 
 ::::{frame} The Velocity Axis
@@ -253,14 +254,19 @@ Both filters work across chirps, so they can be applied to the raw beat samples 
 
 ```python
 def mti(cap, kind="2pulse"):
-    iq = cap["iq"]
-    if kind == "2pulse":
-        out = iq[1:] - iq[:-1]
-    elif kind == "3pulse":
-        out = iq[2:] - 2 * iq[1:-1] + iq[:-2]
-    else:                                            # "none"
-        out = iq
-    return {**cap, "iq": out}
+    """A pulse canceller across chirps; returns a capture, one or two chirps shorter."""
+    def cancel(x):                              # chirps on the second-to-last axis
+        if kind == "2pulse":
+            return x[..., 1:, :] - x[..., :-1, :]
+        if kind == "3pulse":
+            return x[..., 2:, :] - 2 * x[..., 1:-1, :] + x[..., :-2, :]
+        if kind == "none":
+            return x
+        raise ValueError(f"kind must be '2pulse', '3pulse', or 'none', not {kind!r}")
+    out = {**cap, "iq": cancel(cap["iq"])}
+    if "iq_ch" in cap:
+        out["iq_ch"] = cancel(cap["iq_ch"])
+    return out
 ```
 ::::
 
