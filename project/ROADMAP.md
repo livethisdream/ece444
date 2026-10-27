@@ -288,9 +288,11 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
   Tested against `fmcw_sim.py` by `scripts/radar/test_radar_lab.py`. Every
   page excerpt must match it: `range_doppler` returns the map indexed
   `[range, velocity]`, ranges ≥ 0 only, velocity positive closing (as L26),
-  normalized so a unit tone reads 0 dBFS; the spectrogram sums range bins
-  from the rectangular-window range FFT (a Hann-windowed sum cancels a tone
-  on a bin center). A lesson that changes an excerpt checks it against the
+  normalized so a unit tone reads 0 dBFS; a spectrogram over a slice of
+  range bins sums the Hann-windowed range FFT with alternating signs,
+  `(-1)**k` (a plain sum cancels a tone on a bin center under Hann, and
+  under a rectangular window makes a steady mover fade 34 dB at v/ΔR as it
+  crosses bins; found by the L31 thread, 2026-10-27). A lesson that changes an excerpt checks it against the
   module, and a change to the module goes through its tests.
 - **Recorded data.** `fmcw_sim.py` (from #168) writes the contract `.npz`
   with one function per target (`add_point`, `add_hand`, `add_walker`, …)
