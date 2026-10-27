@@ -155,7 +155,9 @@ $0\ \text{Hz}$. And a target that moves in range leaves its bin: at
 $1.3\ \text{m/s}$ a walker crosses a $0.30\ \text{m}$ bin in $0.23\ \text{s}$,
 so the spectrogram of one bin shows the walker in pieces. For a walker,
 `spectrogram` takes a slice of bins around the track's range and sums them.
-The range bin comes from your L30 detection list.
+The range bin comes from the L30 detection list. The course provides
+`radar_lab.py` complete, with a notebook for each lab; its `spectrogram` is
+the one below, and the lab asks you to run it and tune it, not to write it.
 
 ```python
 def spectrogram(cap, range_bin, n_win=64, hop=16):
@@ -277,7 +279,7 @@ rotor's blade flashes average out, and correlate the spectrogram with a copy
 of itself shifted in time, normalized so a zero shift gives 1. A stride or a
 wave repeats every $0.25$ to $2\ \text{s}$; the largest correlation at those
 shifts is the periodicity. A steady rotor scores near zero, and a walker or a
-waving hand scores near 0.8.
+waving hand scores near 0.8. The provided `features` computes all three:
 
 ```python
 def features(t, f, S, lam, floor_db=-15):
@@ -332,10 +334,11 @@ periodicity, so only their spread separates them, a mean of $4.9$ against
 $3.7\ \text{m/s}$, and the two clouds overlap: a fast spinner looks like a
 slow fan.
 
-Thresholds work too, and you may use them in the lab instead: centroid above
+Thresholds work too: centroid above
 $0.3\ \text{m/s}$ is a walker; otherwise, periodicity above 0.5 is a hand;
 otherwise, spread above about $4.3\ \text{m/s}$ is a fan. A nearest-centroid
-rule picks those boundaries from the data rather than by eye.
+rule picks those boundaries from the data rather than by eye. The provided
+classifier is the nearest-centroid one:
 
 ```python
 def train(X, y):
@@ -421,7 +424,8 @@ velocity. A frame with no detection near the prediction keeps the prediction
 and corrects nothing, which is how a track coasts through a miss. The
 detection a track accepts is the one nearest its prediction, inside a gate of
 a few bins, which is also how two targets keep separate tracks. With 256
-chirps of $0.5\ \text{ms}$ back to back, one frame is $128\ \text{ms}$.
+chirps of $0.5\ \text{ms}$ back to back, one frame is $128\ \text{ms}$. The
+provided `alpha_beta` is the filter as written above:
 
 ```python
 def alpha_beta(track_meas, alpha, beta, dt):
@@ -571,21 +575,23 @@ the range and the angle both change and the Doppler never vanishes.
 
 ::::{frame} L31 Lab
 :::{present}
-- **Part A**: record a fan, a spinner, a walker, and a hand; classify your L30 detections and report the accuracy.
-- **Part B**: track a walker in range and angle.
+- **Part A**: run the notebook's spectrogram and classifier on GUI captures of four targets; tune the window, add a feature.
+- **Part B**: tune $\alpha$ on a walker's track.
 :::
 
 The L31 Lab is the last stage of the chain your
-[final project](../final-project/index.md) report explains, and it starts
-from your own L30 detection lists. In Part A you record the four targets on
-your own kit, compute the spectrogram and the three features of each
-detection, train a classifier on some recordings and test it on others, and
-report the confusion matrix and the accuracy. In Part B a walker crosses the
-field on a diagonal; you track the range with an alpha-beta filter on your
-detections, measure the angle by monopulse in each detection's cell, and
-compare the track with the walk's tape marks. Keep the matrix, the track, and
-the gains you chose: they are the classification and tracking sections of the
-report.
+[final project](../final-project/index.md) report explains. It runs in the
+GUI first, then in the lab's notebook, which calls the provided
+`radar_lab.py`. In Part A you save captures of the four targets from the GUI
+on your own kit, and the notebook computes the spectrogram and the three
+features of each L30 detection, trains the classifier on some recordings,
+tests it on others, and reports the confusion matrix and the accuracy. Your
+tasks are small changes to it: tune the spectrogram window, and add one
+feature of your own and see whether the matrix improves. In Part B a walker
+crosses the field on a diagonal, the notebook tracks the range with the
+alpha-beta filter and the angle by monopulse, and you tune $\alpha$ against
+the walk's tape marks. Keep the matrix, the track, and the gain you chose:
+they are the classification and tracking sections of the report.
 
 ```{note}
 The L31 Lab procedure and packet are under construction.
