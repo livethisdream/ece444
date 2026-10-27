@@ -412,10 +412,10 @@ in a 1 MHz bandwidth. The fourth root is the most important feature of the formu
 :::{present}
 - **Lesson 26** reads range and velocity from the echo's delay and Doppler shift.
 - **Lesson 27** sets the SNR threshold from the detection and false-alarm probabilities.
-- The **L28 Lab** measures the corner's echo and checks this budget.
+- The **L28 Lab** measures a target's echo and checks this budget.
 :::
 
 This lesson answered whether the PHASER can hear a target at all. The next two lessons ask what the echo tells us. <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> reads the target's range from the echo's delay and its velocity from the Doppler shift, and <a href="../L27-radar-detection/index.html">Lesson 27</a> replaces our 13 dB threshold with one derived from the probabilities of detection and false alarm.
 
-In the <a href="../L28-fmcw/index.html">L28 Lab</a> you will put one of the lab's corner reflectors in front of your kit and find its echo in the range profile. Keep this lesson's budget: the echo level and the noise floor you measure there are the two numbers it predicts, and comparing them is part of the radar report you write at the end of the module. The range-Doppler, CFAR, and spectrogram labs that follow all start from an echo that stands well above the noise, and this budget is the reason it does. <a href="../L31-classification-tracking/index.html">Lesson 31</a> brings back the <a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">monopulse tracking</a> of the L24 Lab and points it at a radar echo instead of the HB100.
+In the <a href="../L28-fmcw/index.html">L28 Lab</a> you will put a flat metal plate (or, if one is free, one of the lab's corner reflectors) in front of your kit and find its echo in the range profile. Keep this lesson's budget: the echo level and the noise floor you measure there are the two numbers it predicts, and comparing them is part of the radar report you write at the end of the module. The range-Doppler, CFAR, and spectrogram labs that follow all start from an echo that stands well above the noise, and this budget is the reason it does. <a href="../L31-classification-tracking/index.html">Lesson 31</a> brings back the <a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">monopulse tracking</a> of the L24 Lab and points it at a radar echo instead of the HB100.
 ::::

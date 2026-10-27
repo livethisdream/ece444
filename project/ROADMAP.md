@@ -256,6 +256,12 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
   classifier, `alpha_beta`. The recorded-data fallback is
   `scripts/radar/fmcw_sim.py` and `book/extras/radar-data/`, created by the
   L28 thread; later labs ask the Integrator to extend them.
+- **Recorded data.** `fmcw_sim.py` (from #168) writes the contract `.npz`
+  with one function per target (`add_point`, `add_hand`, `add_walker`, …)
+  and waveform `PRESETS`. Sizes bound what can be committed: an L29 burst
+  with `iq_ch` is about 7 MB, a 6000-chirp record about 43 MB, so the L29
+  and L31 lab passes commit fewer chirps, `iq` only, or shorter records;
+  they add the fan and spinner targets.
 - **Passes.** L28 is written whole (lesson, lab, packet, fallback); L29–L31
   get their lesson halves first, and their labs in a second pass once the
   lab before them has merged.
@@ -315,6 +321,12 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
    removes the +1–2° offset.
 3. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
+3b. **Phaser (Neil's Phaser thread), for Module 4:** the FMCW mode saves a
+   capture in the course `.npz` contract (`iq`, optionally `iq_ch`, `fs`,
+   `fc`, `B`, `T_ramp`, `PRI`, `f0` from the 0 m calibration), has a 0 m
+   calibration entry and a frequency/range axis toggle, and can record
+   several seconds of continuous chirps for L31. L28 assumes these and says
+   so where the app's behavior is unknown.
 4. **Module 4 build-out**, now, assuming the radar mode works (Neil,
    2026-10-25); hardware numbers are reconciled when it runs: L25–L27
    taught in class, then the L28–L31 Labs as the final project's scaffolding,

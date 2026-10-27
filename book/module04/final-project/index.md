@@ -15,7 +15,7 @@ results, plots, and code that a section of the report is built on.
 
 | Lab | Stage of the chain | What it gives your report | Objectives |
 | :-- | :-- | :-- | :-: |
-| [L28 Lab — FMCW Range](../L28-fmcw/index.md) | range, and the range waterfall, from one FMCW capture | how a chirp becomes a range measurement, and the resolution you actually got | 4.2, 4.5 |
+| [L28 Lab — FMCW Range](../L28-fmcw/index.md) | range, and the range waterfall, from one FMCW capture | how a chirp becomes a range measurement, and the resolution you actually got | 4.2, 4.4, 4.5 |
 | [L29 Lab — Range-Doppler and MTI](../L29-range-doppler-mti/index.md) | the range-Doppler map, then MTI | how velocity is measured, and what MTI removes and why | 4.5, 4.6 |
 | [L30 Lab — CFAR Processing](../L30-cfar/index.md) | CFAR detections on your range-Doppler maps | how a detection is declared, and what set your false alarms | 4.7 |
 | [L31 Lab — Micro-Doppler Spectrogram](../L31-classification-tracking/index.md) | classifying a detected target from its spectrogram, then tracking a walker in range and angle | what told your targets apart, how often it was right, and how well the radar held a moving person | 4.8, 4.9 |
