@@ -160,7 +160,7 @@ The range bin comes from your L30 detection list.
 ```python
 def spectrogram(cap, range_bin, n_win=64, hop=16):
     """Slow-time spectrogram of one range bin: (t, f_D, S_dB), peak at 0 dB."""
-    x = range_profile(cap)[:, range_bin]        # one sample per chirp
+    x = range_fft(cap)[:, range_bin]        # one sample per chirp
     if x.ndim == 2:                             # a slice of bins: sum them
         x = x.sum(axis=1)
     x = x - x.mean()                            # stationary returns out

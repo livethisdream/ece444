@@ -179,7 +179,7 @@ def spectrogram(x, pri=PRI, n_win=64, hop=16):
     """Slow-time spectrogram of one range bin: (t, f_D, S_dB), peak at 0 dB.
 
     On the page this takes (cap, range_bin) and pulls x from the cadet's
-    range_profile; here x is the bin's samples directly."""
+    range_fft; here x is the bin's samples directly."""
     x = x - x.mean()                           # stationary returns out
     w = np.hanning(n_win)
     cols = [np.fft.fftshift(np.fft.fft(x[i:i + n_win] * w))
