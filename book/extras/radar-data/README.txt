@@ -12,4 +12,5 @@ L28 (500 MHz, 0.5 ms, 0.6 MSPS, PRI 50 ms, f0 101.4 kHz):
   L28_corner_{1,2,3}m.npz   10 cm corner reflector at 1, 2, 3 m
   L28_corner_2m_B250.npz    the 2 m corner at B = 250 MHz
   L28_corner_2m_T1ms.npz    the 2 m corner at T_ramp = 1 ms
+  L28_two_corners.npz       corners at 2.0 and 2.2 m, closer than one resolution cell
   L28_walker.npz            a person walking 1 m -> 4 m -> 1 m at 1 m/s, 10 s

@@ -222,11 +222,27 @@ One range profile is a snapshot. Stacking the profiles of successive chirps, one
 The waterfall records range against time and nothing else. Its rows here are 50 ms apart, one profile each time the display updates, and over 50 ms a walker's carrier phase changes by many cycles, so successive rows say nothing about the walker's velocity except through the range they show. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> takes chirps a fixed 0.5 ms apart and reads the velocity from that phase.
 ::::
 
-::::{frame} Your Range Code
+::::{frame} The Provided Range FFT
 :::{present}
 ```python
-C = 3.00e8
+def range_fft(cap, window="hann",
+              n_fft=None):
+    iq = cap["iq"]
+    w = _window(window, iq.shape[1])
+    X = np.fft.fft(iq * w, n_fft or
+                   iq.shape[1], axis=1)
+    return X / w.sum()
+```
 
+- The course provides `radar_lab.py`, complete.
+- Each lab's notebook changes a line or two of it.
+:::
+
+The four labs that follow share one Python module, <a href="../../notebooks/radar_lab.py">`radar_lab.py`</a>, and one capture format. The course provides the module complete: you run it from a notebook, one for each lab, and each lab's tasks change a parameter or a line or two, never a whole function. The excerpt is the function this lesson describes: it windows every chirp, takes the FFT along each one, and divides by the sum of the window, so that a tone of amplitude 1 reads 0 dBFS whatever the window. `n_fft` larger than the samples in a chirp zero-pads it. The result has one row per chirp and one column per range bin.
+
+A capture is an `.npz` file holding `iq`, the complex beat samples of the summed array with one chirp a row, shape `n_chirps × n_samples`; optionally `iq_ch`, the same samples from the array's two halves, shape `2 × n_chirps × n_samples`, which <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses to measure angle; the sample rate `fs`; the carrier `fc`; the bandwidth `B`; the chirp length `T_ramp`, the lesson's $T_s$; the time `PRI` from one chirp to the next; and `f0`, the 0 m frequency from your calibration. The number of chirps is not fixed: 32 in an L28 range capture, 256 in the L29 burst, and thousands in a record of several seconds. The range of each bin comes from `range_axis`, the range equation of the range FFT frame with `k` the meters per hertz of beat:
+
+```python
 def range_axis(cap, n_fft=None):
     n = n_fft or cap["iq"].shape[1]
     f = np.fft.fftfreq(n, 1 / cap["fs"])
@@ -234,34 +250,17 @@ def range_axis(cap, n_fft=None):
     return (f - cap["f0"]) * k
 ```
 
-- You write `range_fft`, `range_profile`, and `waterfall`.
-- `radar_lab.py` grows through L29, L30, and L31.
-:::
-
-The four labs that follow chain together through one Python module, `radar_lab.py`, which you write and keep, and one capture format. A capture is an `.npz` file holding `iq`, the complex beat samples of the summed array with one chirp a row, shape `n_chirps × n_samples`; optionally `iq_ch`, the same samples from the array's two halves, shape `2 × n_chirps × n_samples`, which <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses to measure angle; the sample rate `fs`; the carrier `fc`; the bandwidth `B`; the chirp length `T_ramp`, the lesson's $T_s$; the time `PRI` from one chirp to the next; and `f0`, the 0 m frequency from your calibration. The number of chirps is not fixed: 32 in an L28 range capture, 256 in the L29 burst, and thousands in a record of several seconds. The excerpt is the start of the module. `range_axis` gives the range of each bin of the FFT `np.fft.fft` returns, in its own order and of length `n_samples` unless `n_fft` pads it, by the range equation of the range FFT frame, with `k` the meters per hertz of beat. Bins below $f_0$ come out as negative ranges. The module starts with a loader that turns a capture into a dictionary of numbers:
-
-```python
-def load_capture(path):
-    with np.load(path) as z:
-        cap = {k: z[k] for k in z.files}
-    for k in ("fs", "fc", "B", "T_ramp",
-              "PRI", "f0"):
-        cap[k] = float(cap[k])
-    return cap
-```
-
-
-The L28 Lab adds three functions. `range_fft(cap, window="hann")` windows every chirp and returns the complex FFT along each row, `n_chirps × n_bins`, in the order `range_axis` describes; normalize it by the sum of the window, so that a tone of amplitude 1 reads 0 dBFS whatever the window. `range_profile(cap, chirp=0, window="hann")` returns one chirp's ranges at or beyond 0 m and its power in dB, `(r, p_db)`. `waterfall(cap)` does the same for every chirp and returns `(r, t, w_db)`, with one row of `w_db` per chirp and `t` the chirp times. An optional `n_fft` argument on all three, passed on to `range_axis`, zero-pads the FFT for reading peaks. Use numpy, scipy, and matplotlib only. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> adds `range_doppler` and `mti`, <a href="../L30-cfar/index.html">Lesson 30</a> adds `cfar_2d`, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> adds the spectrogram, a classifier, and a tracker, each calling the functions before it.
+The bins come out in the order `np.fft.fft` returns them, and the bins below $f_0$ as negative ranges. Two more L28 functions build on `range_fft`: `range_profile(cap, chirp=0, window="hann")` returns one chirp's ranges at or beyond 0 m and its power in dB, `(r, p_db)`, and `waterfall(cap)` returns `(r, t, w_db)`, one row per chirp. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> uses `range_doppler` and `mti`, <a href="../L30-cfar/index.html">Lesson 30</a> uses `cfar_2d`, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses the spectrogram, a classifier, and a tracker, all in the same module. The L28 notebook is <a href="../../notebooks/L28_range.ipynb">`L28_range.ipynb`</a>.
 ::::
 
 ::::{frame} L28 Lab: FMCW Range
 :::{present}
 - Calibrate $f_0$, then place a plate at 1, 2, and 3 m: measure the kHz per meter.
 - Predict, then measure, 250 MHz and 1 ms.
-- Read the waterfall; write your own range FFT.
+- Read the waterfall; run the notebook's three tasks.
 :::
 
-The L28 Lab measures everything this lesson derived, on your own kit: the 0 m frequency, the beat per meter, how the bandwidth and the chirp length change it, and the range waterfall. It ends with your own Python range FFT run on a capture you saved, which is the code the L29 Lab starts from. You work the lab on your own, outside class, and turn in one packet in three parts: **Part 1, Pre-Lab**, the predictions, before you go to the bench; **Part 2, Measurements**, from your own kit; and **Part 3, Writeup**, after it. The packet is checked and returned with feedback. It is the first piece of scaffolding for your final report, and it is not the report.
+The L28 Lab measures everything this lesson derived, on your own kit: the 0 m frequency, the beat per meter, how the bandwidth and the chirp length change it, and the range waterfall. The Phaser app does all of the live work: the calibration, the range spectrum, the waterfall, and saving captures. The lab ends in the course's notebook, where you run the provided range FFT on the captures you saved and change one line for each of three tasks. You work the lab on your own, outside class, and turn in one packet in three parts: **Part 1, Pre-Lab**, the predictions, before you go to the bench; **Part 2, Measurements**, from your own kit; and **Part 3, Writeup**, after it. The packet is checked and returned with feedback. It is the first piece of scaffolding for your final report, and it is not the report.
 
 The procedure is <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-fmcw/" target="_blank" rel="noopener">ADI's FMCW lab</a> with the course's numbers: a 10 GHz carrier, 500 MHz in 0.5 ms, and $c = 3.00\times 10^8$ m/s. The <a href="https://analogdevicesinc.github.io/system-level/solutions/platforms/phaser/labs/radar-setup/" target="_blank" rel="noopener">radar setup page</a> describes the transmit path.
 ::::
@@ -275,7 +274,7 @@ The procedure is <a href="https://analogdevicesinc.github.io/system-level/soluti
 | 500 MHz | 1 ms | 3.33 | 0.30 m | 60 m |
 :::
 
-The table is the core of Part 1. Every number in it follows from the beat-frequency and resolution frames, with $f_s = 0.6$ MSPS and $f_0 = 100$ kHz, and the bench checks each column. The beat per meter is the slope of the line through your 1, 2, and 3 m readings. The resolution shows as the width of the peak: at 250 MHz the peak from the same plate is twice as wide in range. The reach is not something the lab can walk out to, but your own range axis shows where it ends. Doubling the chirp length also doubles the samples in each chirp, so the noise floor of the range profile should drop by 3 dB while the target stays where it was.
+The table is the core of Part 1. Every number in it follows from the beat-frequency and resolution frames, with $f_s = 0.6$ MSPS and $f_0 = 100$ kHz, and the bench checks each column. The beat per meter is the slope of the line through your 1, 2, and 3 m readings. The resolution shows as the width of the peak: at 250 MHz the peak from the same plate is twice as wide in range. The reach is not something the lab can walk out to, but the range axis shows where it ends. Doubling the chirp length also doubles the samples in each chirp, so the noise floor of the range profile should drop by 3 dB while the target stays where it was.
 ::::
 
 ::::{frame} Bench Rules
@@ -292,12 +291,12 @@ Any flat metal plate about 20 cm on a side works, and so does aluminum foil glue
 
 ::::{frame} What You Keep
 :::{present}
-- `radar_lab.py`, with your five L28 functions.
 - Your captures: the 2 m plate and the walk.
 - Your $f_0$ and your measured kHz per meter.
+- Your notebook, with its edits and plots.
 :::
 
-The L29 Lab starts from your own L28 code and data, so keep the module and the captures you saved, with their file names written in your packet. For the final report, keep three results from this lab: the beat per meter you measured against the 6.67 kHz the lesson predicts, the resolution you saw at 500 and 250 MHz, and a waterfall you can explain line by line. The report asks you to explain how a chirp becomes a range measurement and what resolution you actually reached, in your own words; the packet's tables are the evidence for it, not the explanation.
+The L29 Lab starts from your own L28 captures and notebook, so keep them together with `radar_lab.py`, with the capture file names written in your packet. For the final report, keep three results from this lab: the beat per meter you measured against the 6.67 kHz the lesson predicts, the resolution you saw at 500 and 250 MHz, and a waterfall you can explain line by line. The report asks you to explain how a chirp becomes a range measurement and what resolution you actually reached, in your own words; the packet's tables are the evidence for it, not the explanation.
 ::::
 
 ::::{frame} Equipment and Setup
@@ -308,7 +307,7 @@ You need:
 - the ADALM-PHASER kit with its Raspberry Pi and Pluto attached, and its transmit antenna;
 - a flat metal plate about 20 cm on a side, or foil glued to cardboard;
 - a tape measure and about 4 m of clear floor in front of the kit;
-- a laptop on the kit's network with Python 3, numpy, scipy, and matplotlib.
+- a laptop on the kit's network, and for Procedure E a way to run a Jupyter notebook: Python 3 with numpy, scipy, and matplotlib on your own laptop, or the notebook environment the course provides.
 
 The course's Phaser app runs the radar in its FMCW mode. That mode is still being finished, so its control names and layout are not yet known; this page names each setting by the quantity it sets, and where the app's label differs, use the app's. ADI's <a href="https://github.com/analogdevicesinc/system-level/blob/main/docs/solutions/platforms/phaser/labs/resources/python/FMCW_RADAR_Waterfall.py" target="_blank" rel="noopener">`FMCW_RADAR_Waterfall.py`</a> makes the same measurements from a script, with a bandwidth slider, a range toggle, and a chirp length set in its `ramp_time` variable; its 12.145 GHz carrier does not change the beat per meter.
 
@@ -323,7 +322,8 @@ The course's Phaser app runs the radar in its FMCW mode. That mode is still bein
 
 ```{note}
 If your kit will not produce a clean capture, use the course's recorded data
-instead and run every procedure on it with your own code. The files are in the
+instead: read each procedure's numbers from it with the notebook's range-profile
+cell, and run Procedure E on it as written. The files are in the
 lab's capture format, from a simulation of the PHASER at the course's settings
 with a kit whose 0 m frequency is 101.4 kHz; a 10 cm corner reflector stands in
 for the plate. Say in your packet which captures are recorded rather than your own.
@@ -332,6 +332,7 @@ for the plate. Say in your packet which captures are recorded rather than your o
 - <a href="../../radar-data/L28_corner_1m.npz">L28_corner_1m.npz</a>, <a href="../../radar-data/L28_corner_2m.npz">L28_corner_2m.npz</a>, <a href="../../radar-data/L28_corner_3m.npz">L28_corner_3m.npz</a>: Procedure B
 - <a href="../../radar-data/L28_corner_2m_B250.npz">L28_corner_2m_B250.npz</a>, <a href="../../radar-data/L28_corner_2m_T1ms.npz">L28_corner_2m_T1ms.npz</a>: Procedure C
 - <a href="../../radar-data/L28_walker.npz">L28_walker.npz</a>: a person walking from 1 m to 4 m and back, Procedure D
+- <a href="../../radar-data/L28_two_corners.npz">L28_two_corners.npz</a>: two corners 0.20 m apart, for the notebook's task (b)
 ```
 ::::
 
@@ -340,7 +341,7 @@ for the plate. Say in your packet which captures are recorded rather than your o
 
 1. Clear the bench in front of the kit and start the radar. One peak stands near 100 kHz: the leakage from the transmit antenna into the array. Record its frequency in Table A.
 2. Hold the plate flat against the array face, covering the patches. Read the frequency of the strongest peak and record it as $f_0$ in Table A. ADI's lab expects a value near 100 kHz, such as 99 or 103 kHz.
-3. If the app has a 0 m calibration setting, enter $f_0$ there, so that its range axis reads 0 m at your kit's 0 m frequency. If it does not, keep your $f_0$ for your own range axis; the capture's `f0` field should carry it.
+3. If the app has a 0 m calibration setting, enter $f_0$ there, so that its range axis reads 0 m at your kit's 0 m frequency; the captures you save should then carry it in their `f0` field. Either way, keep your $f_0$: the notebook's task (c) uses it.
 4. Save a capture with the plate against the array.
 ::::
 
@@ -376,17 +377,19 @@ In ADI's script the bandwidth takes effect when you press **Set RF Bandwidth**, 
 4. Save a capture of the walk covering at least 5 s. Record in Table D the nearest and farthest ranges your trace reached and the time of one leg.
 ::::
 
-::::{frame} Procedure E: Your Own Range FFT
+::::{frame} Procedure E: Run the Notebook
 :class: read-only
 
-Do this part on your laptop after the bench, from your saved captures.
+Do this part after the bench, from your saved captures, in about 30 to 45 minutes.
 
-1. Start `radar_lab.py` with `import numpy as np`, then `load_capture` and `range_axis` from the Your Range Code frame, and add `range_fft`, `range_profile`, and `waterfall` as that frame describes.
-2. Run `range_profile` on your 2 m capture with `n_fft=4096`. Find the peak beyond 0.5 m and record its range, level, and width 3 dB down, and the floor near 10 m, in Table E. Plot it from 0 to 8 m.
-3. Run it again with `window=None` (rectangular) on the same chirp, and plot the two together. Record the level of the strongest sidelobe of the plate's peak for each window.
-4. Run `range_profile` on your 250 MHz and 1 ms captures and compare their peaks with the 500 MHz, 0.5 ms one: the width in range, and the floor.
-5. Run `waterfall` on your walk capture and plot it with time up and range across, from 0 to 6 m. Mark the leakage, the wall, and your trace.
-6. Keep `radar_lab.py`, the captures, and the plots. The L29 Lab starts from them.
+1. Download <a href="../../notebooks/L28_range.ipynb">`L28_range.ipynb`</a> and <a href="../../notebooks/radar_lab.py">`radar_lab.py`</a> into one folder with your captures. Open the notebook on your own laptop or in the course's notebook environment, set `CAPTURE` in the first cell to your 2 m capture, and run the cells from the top.
+2. **Task (a):** run the range-profile cell with `WINDOW = "hann"`, then change that one line to `WINDOW = None` and run it again. Record the peak, the strongest sidelobe, and the floor near 10 m for each window in Table E.
+3. **Task (b):** run the two-corner cell with `N_FFT = None`, then change it to `N_FFT = 4096`. Record how many peaks it finds and the width 3 dB down.
+4. **Task (c):** set `F0` to your Table A value and replace `R = None` with the range of the peak, from `f_peak`, `F0`, and the capture's `B` and `T_ramp`. Record `R` in Table E and compare it with the tape.
+5. Run the last cell on your walk capture for the waterfall plot.
+6. Save the notebook with its edits and plots and turn it in with the packet. Keep it, `radar_lab.py`, and your captures together; the L29 Lab starts from them.
+
+Each task's markdown cell states the result to check against. Anything you do beyond the three tasks belongs in your report's Extra Effort.
 ::::
 
 ::::{frame} Lab Packet
@@ -414,8 +417,8 @@ Do this part on your laptop after the bench, from your saved captures.
 ::::{frame} Looking Ahead
 :::{present}
 - **L29** stacks 256 chirps, 0.5 ms apart, and reads velocity from their phase.
-- Your `range_profile` is the first FFT of its range-Doppler map.
+- The `range_fft` you ran here is the first FFT of its range-Doppler map.
 :::
 
-This lesson used one chirp at a time and threw away its phase. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> keeps it. A burst of 256 chirps, each 300 µs long and repeated every 0.5 ms, gives each target a phase that advances from chirp to chirp at its Doppler frequency, and a second FFT across the chirps reads that frequency as a velocity, with the resolution $\lambda/(2MT_\text{PRI}) = 0.12$ m/s of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>. The first FFT of that map is the range FFT you wrote here, applied to every chirp of the burst. Moving target indication, in the same lesson, removes the fixed lines of the waterfall, the leakage and the wall, so that only what moves remains.
+This lesson used one chirp at a time and threw away its phase. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> keeps it. A burst of 256 chirps, each 300 µs long and repeated every 0.5 ms, gives each target a phase that advances from chirp to chirp at its Doppler frequency, and a second FFT across the chirps reads that frequency as a velocity, with the resolution $\lambda/(2MT_\text{PRI}) = 0.12$ m/s of <a href="../L26-range-resolution-doppler/index.html#frame-doppler-resolution-and-ambiguity">Lesson 26</a>. The first FFT of that map is the range FFT you ran here, applied to every chirp of the burst. Moving target indication, in the same lesson, removes the fixed lines of the waterfall, the leakage and the wall, so that only what moves remains.
 ::::

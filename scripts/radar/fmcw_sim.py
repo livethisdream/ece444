@@ -31,7 +31,7 @@ One function per target type, each adding its echo to a capture in place:
 
     add_noise(cap)                  receiver noise
     add_leakage(cap)                transmit-to-receive leakage, the 0 m spike
-    add_point(cap, r0, v, rcs, az)  a point target: plate, corner, wall
+    add_point(cap, r0, v, rcs, az)  a point target: plate, corner, wall (v > 0 closing)
     add_hand(cap, r0, ...)          a hand moving back and forth
     add_walker(cap, r_start, ...)   a person walking out and back, with limbs
 
@@ -145,14 +145,17 @@ def add_leakage(cap: dict, level_dbfs: float = -20.0) -> None:
 def add_point(cap: dict, r0: float, v: float = 0.0, rcs: float = 0.47,
               level_dbfs: float | None = None, phase0: float = 0.0,
               az: float = 0.0) -> None:
-    """A point target at r0 m, receding at v m/s, of radar cross section rcs m^2, at az deg.
+    """A point target starting at r0 m, of radar cross section rcs m^2, at az deg.
+
+    v is the radial velocity in m/s, positive closing (toward the radar), the
+    course convention of L26: a closing target has a positive Doppler shift.
 
     rcs 0.47 m^2 is the course's 10 cm corner reflector at 10 GHz (M8). Pass
     level_dbfs to set the echo level directly, as for a plate held against
     the array, where the far-field radar equation does not apply.
     """
     _, t = _times(cap)
-    r_t = r0 + v * t
+    r_t = r0 - v * t
     lvl = echo_dbfs(cap, r_t, rcs) if level_dbfs is None else level_dbfs
     _add_scatterer(cap, r_t, lvl, phase0, az)
 
@@ -210,7 +213,7 @@ def room(cap: dict) -> None:
 
 
 def l28_sets(out: Path = OUT) -> list[Path]:
-    """The L28 Lab's recorded data: calibration, three static ranges, a walker."""
+    """The L28 Lab's recorded data: calibration, three static ranges, two waveforms, two close corners, a walker."""
     written = []
 
     cap = new_capture("l28_range")
@@ -233,6 +236,13 @@ def l28_sets(out: Path = OUT) -> list[Path]:
         written.append(save(cap, out / f"L28_corner_2m_{tag}.npz",
                             f"L28 Lab recorded data: the corner at 2.0 m, B {cap['B']/1e6:.0f} MHz, "
                             f"T_ramp {cap['T_ramp']*1e3:.1f} ms"))
+
+    cap = new_capture("l28_range")
+    room(cap)
+    add_point(cap, 2.0, rcs=0.47)
+    add_point(cap, 2.2, rcs=0.47, phase0=1.9)
+    written.append(save(cap, out / "L28_two_corners.npz",
+                        "L28 Lab recorded data: two corners at 2.0 and 2.2 m, inside one 0.30 m resolution cell"))
 
     cap = new_capture("l28_range", n_chirps=200)    # 10 s at 50 ms a line
     room(cap)
