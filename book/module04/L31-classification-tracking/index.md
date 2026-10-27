@@ -154,7 +154,12 @@ mean of the slow-time samples removes them, which is what MTI does at
 $0\ \text{Hz}$. And a target that moves in range leaves its bin: at
 $1.3\ \text{m/s}$ a walker crosses a $0.30\ \text{m}$ bin in $0.23\ \text{s}$,
 so the spectrogram of one bin shows the walker in pieces. For a walker,
-`spectrogram` takes a slice of bins around the track's range and sums them.
+`spectrogram` takes a slice of bins around the track's range and sums them,
+flipping the sign of every other bin first: a Hann-windowed tone puts
+$-\tfrac{1}{4}$, $\tfrac{1}{2}$, $-\tfrac{1}{4}$ of itself in neighboring
+bins, so a plain sum cancels whenever the target sits on a bin center, while
+the alternating sum makes the three add and reads the middle of each chirp,
+where the window is 1.
 The range bin comes from the L30 detection list. The course provides
 `radar_lab.py` complete, with a notebook for each lab; its `spectrogram` is
 the one below, and the lab asks you to run it and tune it, not to write it.
@@ -162,13 +167,14 @@ the one below, and the lab asks you to run it and tune it, not to write it.
 ```python
 def spectrogram(cap, range_bin, n_win=64, hop=16):
     """Slow-time spectrogram of one range bin: (t, f_D, S_dB), peak at 0 dB."""
-    x = range_fft(cap)[:, range_bin]        # one sample per chirp
-    if x.ndim == 2:                             # a slice of bins: sum them
-        x = x.sum(axis=1)
+    X = range_fft(cap)[:, range_bin]            # one sample per chirp
+    if X.ndim == 2:                             # a slice: alternate signs, sum
+        X = (X * (-1.0) ** np.arange(X.shape[1])).sum(axis=1)
+    x = X
     x = x - x.mean()                            # stationary returns out
     w = np.hanning(n_win)
     cols = [np.fft.fftshift(np.fft.fft(x[i:i + n_win] * w))
-            for i in range(0, len(x) - n_win, hop)]
+            for i in range(0, len(x) - n_win + 1, hop)]
     S = 20 * np.log10(np.abs(np.array(cols).T) + 1e-12)
     f = np.fft.fftshift(np.fft.fftfreq(n_win, cap["PRI"]))
     t = (np.arange(S.shape[1]) * hop + n_win / 2) * cap["PRI"]

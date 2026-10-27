@@ -183,7 +183,7 @@ def spectrogram(x, pri=PRI, n_win=64, hop=16):
     x = x - x.mean()                           # stationary returns out
     w = np.hanning(n_win)
     cols = [np.fft.fftshift(np.fft.fft(x[i:i + n_win] * w))
-            for i in range(0, len(x) - n_win, hop)]
+            for i in range(0, len(x) - n_win + 1, hop)]
     S = 20 * np.log10(np.abs(np.array(cols).T) + 1e-12)
     f = np.fft.fftshift(np.fft.fftfreq(n_win, pri))
     t = (np.arange(S.shape[1]) * hop + n_win / 2) * pri
