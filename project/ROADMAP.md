@@ -236,8 +236,31 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
   angle (from L24). Lab: fan, spinner, walker, hand; classify the L30
   detections and report the accuracy; **Part B tracks a walker (dismount)
   in range and angle** (Neil, 2026-10-27), which is where 4.8 is measured.
+- **GUI first, with a provided notebook** (Neil, 2026-10-27: "I'd much
+  rather go GUI only ... a starter notebook seems reasonable as well").
+  The Phaser app does all live work: setup, calibration, the waterfall,
+  range-Doppler, MTI on/off, the CFAR overlay, and saving captures; each
+  lab's Measurements are GUI steps (predict, change a setting, read,
+  explain). The course **provides** `radar_lab.py`, complete, and one
+  notebook per lab (`book/extras/notebooks/`) that runs the chain on saved
+  or recorded captures; cadets do not write the chain. **Each lab requires
+  notebook work, scoped tight** (Neil: "tune, tweak, small modifications
+  ... so it doesn't become tediously difficult, but also so they have to
+  do something in the notebook"):
+  - two or three tasks a lab, about 30–45 minutes of notebook time;
+  - each task names the cell, what to change, and a result the cadet can
+    check (a number, a plot that should look a stated way);
+  - at most about 10 changed lines a lab, and no function written from a
+    blank: tune a parameter, swap an option, or a one- to three-line change
+    (examples: L28 Hann vs rectangular and zero-padding, then the peak's
+    range from the cadet's own f0; L29 the chirp count, then 2-pulse to
+    3-pulse as one line; L30 guard/reference/bias to a target false-alarm
+    rate, then cell-averaging to greatest-of; L31 the spectrogram window
+    and alpha, then one added feature);
+  - anything beyond that is the rubric's Extra Effort.
+  Objective 4.6 now reads "apply" MTI, not "implement" (2026-10-27).
 - **Shared code contract** (2026-10-27, so the labs chain though written in
-  parallel). One cadet module, `radar_lab.py`, grows lab by lab; one capture
+  parallel). The provided module, `radar_lab.py`, holds the chain; one capture
   format, an `.npz` with `iq` (complex, `n_chirps × n_samples`, the summed
   array), `fs`, `fc`, `B`, `T_ramp`, `PRI`, `f0` (the 0 m frequency), and,
   for the L31 Lab's monopulse, an optional `iq_ch` (`2 × n_chirps ×
@@ -321,7 +344,11 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
    removes the +1–2° offset.
 3. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
-3b. **Phaser (Neil's Phaser thread), for Module 4:** the FMCW mode saves a
+3b. **Phaser (Neil's Phaser thread), for Module 4:** the labs are GUI
+   first, so the FMCW mode needs a range spectrum with a frequency/range
+   toggle, the range waterfall, the range-Doppler map, MTI off/2-pulse/
+   3-pulse, a CFAR threshold overlay with guard, reference and bias, and
+   save. It saves a
    capture in the course `.npz` contract (`iq`, optionally `iq_ch`, `fs`,
    `fc`, `B`, `T_ramp`, `PRI`, `f0` from the 0 m calibration), has a 0 m
    calibration entry and a frequency/range axis toggle, and can record

@@ -53,7 +53,7 @@ signature, and track it in range and angle.
 <ol class="lo-list" start="4" style="--module: '4'">
   <li>I can describe FMCW radar operation and configure an FMCW waveform on the ADALM-PHASER.</li>
   <li>I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.</li>
-  <li>I can implement moving target indication (MTI) processing to distinguish moving targets from clutter.</li>
+  <li>I can apply moving target indication (MTI) processing to distinguish moving targets from clutter.</li>
 </ol>
 ::::
 
