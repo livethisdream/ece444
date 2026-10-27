@@ -240,9 +240,12 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
   parallel). One cadet module, `radar_lab.py`, grows lab by lab; one capture
   format, an `.npz` with `iq` (complex, `n_chirps × n_samples`), `fs`, `fc`,
   `B`, `T_ramp`, `PRI`, `f0` (the 0 m frequency). L28: `load_capture`,
-  `range_axis`, `range_profile`, `waterfall`. L29: `range_doppler`, `mti`.
-  L30: `cfar_2d(rd_map, guard, ref, bias_db)` → detection map and
-  `[(range_m, vel_mps, snr_db), ...]`. L31: `spectrogram`, features, a
+  `range_axis`, `range_profile`, `waterfall`. L29: `range_doppler(cap,
+  window=...)` → `(rd_db, range_m, vel_mps)`, the map as **power in dB**
+  (2026-10-27), and `mti`. L30: `cfar_2d(rd_db, guard, ref, bias_db,
+  axes=None)` takes that dB map (converting to power inside) → detection map
+  and, when `axes=(range_m, vel_mps)` is passed, `[(range_m, vel_mps,
+  snr_db), ...]`. L31: `spectrogram`, features, a
   classifier, `alpha_beta`. The recorded-data fallback is
   `scripts/radar/fmcw_sim.py` and `book/extras/radar-data/`, created by the
   L28 thread; later labs ask the Integrator to extend them.
