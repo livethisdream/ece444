@@ -238,9 +238,16 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
   in range and angle** (Neil, 2026-10-27), which is where 4.8 is measured.
 - **Shared code contract** (2026-10-27, so the labs chain though written in
   parallel). One cadet module, `radar_lab.py`, grows lab by lab; one capture
-  format, an `.npz` with `iq` (complex, `n_chirps × n_samples`), `fs`, `fc`,
-  `B`, `T_ramp`, `PRI`, `f0` (the 0 m frequency). L28: `load_capture`,
-  `range_axis`, `range_profile`, `waterfall`. L29: `range_doppler(cap,
+  format, an `.npz` with `iq` (complex, `n_chirps × n_samples`, the summed
+  array), `fs`, `fc`, `B`, `T_ramp`, `PRI`, `f0` (the 0 m frequency), and,
+  for the L31 Lab's monopulse, an optional `iq_ch` (`2 × n_chirps ×
+  n_samples`, the two subarray channels). `n_chirps` is not fixed: a
+  range-Doppler burst is 256, a classification record is several seconds
+  of continuous chirps (e.g. 6000 at 0.5 ms). L28: `load_capture`,
+  `range_axis(cap, n_fft=None)` (meters, one per bin of the full complex FFT
+  the other functions take, `f0` removed), `range_fft(cap,
+  window="hann")` (complex, `n_chirps × n_bins`; what L29 and L31 build on),
+  `range_profile` (dB, one chirp), `waterfall`. L29: `range_doppler(cap,
   window=...)` → `(rd_db, range_m, vel_mps)`, the map as **power in dB**
   (2026-10-27), and `mti`. L30: `cfar_2d(rd_db, guard, ref, bias_db,
   axes=None)` takes that dB map (converting to power inside) → detection map
