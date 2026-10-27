@@ -264,6 +264,9 @@ body.pointing .deck { touch-action: none; }
   transform: translateY(-1px); box-shadow: var(--shadow);
 }
 @media (max-width: 620px) {
+  /* The chips stretch to the strip's edge; keep the last one's border off
+     the frame's edge. */
+  .lane-strip { padding-right: .25rem; }
   .lane-strip .ls-label { flex: 0 0 100%; margin: 0 0 .1rem; }
   .lane-strip .ls-chip { min-width: 0; flex: 1 1 0; padding: .2rem .1rem; }
   .lane-strip .ls-key { margin-left: 0; flex: 0 0 100%; }
