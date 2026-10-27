@@ -26,10 +26,14 @@ with room for notes. Print from read mode for the whole lesson.
 ::::
 
 ::::{frame} Learning Objectives
+:class: here-26
 
 <ol class="lo-list" style="--module: '4'; counter-reset: lo 1">
   <li>I can calculate range resolution, unambiguous range, and Doppler shift for a given radar waveform.</li>
 </ol>
+
+```{include} ../../_snippets/m4-strip.md
+```
 
 :::{depth}
 L25 answered how much power comes back from a target: the radar equation is
