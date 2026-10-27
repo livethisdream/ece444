@@ -30,7 +30,7 @@ with room for notes. Print from read mode for the whole lesson.
 
 <ol class="lo-list" style="--module: '4'; counter-reset: lo 4">
   <li>I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.</li>
-  <li>I can implement moving target indication (MTI) processing to distinguish moving targets from clutter.</li>
+  <li>I can apply moving target indication (MTI) processing to distinguish moving targets from clutter.</li>
 </ol>
 
 ```{include} ../../_snippets/m4-strip.md
@@ -39,7 +39,7 @@ with room for notes. Print from read mode for the whole lesson.
 :::{depth}
 <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> defined the Doppler shift and the velocity resolution of a burst of pulses, <a href="../L27-radar-detection/index.html">Lesson 27</a> showed that adding the chirps of a burst coherently is what makes a weak target detectable, and <a href="../L28-fmcw/index.html">Lesson 28</a> turned one chirp into a range profile. This lesson puts the three together. We send a burst of chirps, arrange the samples as a matrix, and take a second FFT across the chirps, which gives the range-Doppler map: every target at its range and its radial velocity at once. Then we remove the returns that do not move, the walls, the bench, and the kit's own leakage, with moving target indication (MTI).
 
-You will run all of this on your own kit in the L29 Lab, outside class, so the lesson carries the whole argument in read mode. The processing is written in terms of the two functions the lab adds to your `radar_lab.py`, `range_doppler` and `mti`, and it starts from your L28 range code.
+You will run all of this on your own kit in the L29 Lab, outside class, so the lesson carries the whole argument in read mode. The processing is written in terms of the two functions the course's `radar_lab.py` provides for it, `range_doppler` and `mti`, which build on the L28 range code.
 :::
 ::::
 
@@ -132,7 +132,7 @@ The figure is a map computed with the course's burst numbers for a scene like th
 
 Both FFTs use a Hann window, as the range FFT did in L28. The window matters more in Doppler than in range: the wall is 18 dB stronger than the hand here, and the first sidelobe of an unwindowed FFT is only 13 dB down, so without the window the wall's sidelobes would spread across every velocity at its range. The Hann window puts the first sidelobe 31 dB down.
 
-The L29 Lab adds this function to your `radar_lab.py`. The range FFT on each row is the one you wrote for L28.
+The provided `radar_lab.py` does this, and the L29 notebook runs it on your captures. The range FFT on each row is the one from L28.
 
 ```python
 def range_doppler(cap, window="hann"):
@@ -249,7 +249,7 @@ $$
 
 the **three-pulse canceller**. Its notch at 0 m/s is deeper and wider, as the next frame shows.
 
-Both filters work across chirps, so they can be applied to the raw beat samples before the range FFT, as ADI's script does, or to the range-transformed rows after it; the FFT is linear, so the two give the same map. Each output has one or two fewer chirps than the input. The L29 Lab adds this function to your `radar_lab.py`, and it returns a capture so that `range_doppler(mti(cap, "2pulse"))` works without any other change:
+Both filters work across chirps, so they can be applied to the raw beat samples before the range FFT, as ADI's script does, or to the range-transformed rows after it; the FFT is linear, so the two give the same map. Each output has one or two fewer chirps than the input. The provided `radar_lab.py` does this too, and the L29 notebook runs it on your captures. It returns a capture, so `range_doppler(mti(cap, "2pulse"))` works without any other change:
 
 ```python
 def mti(cap, kind="2pulse"):
@@ -356,13 +356,12 @@ The choice of canceller is therefore a choice about the scene. With strong clutt
 
 ::::{frame} L29 Lab
 :::{present}
-- Add `range_doppler` and `mti` to your L28 `radar_lab.py`.
-- Map a hand, then a fidget spinner; vary the chirp count and bandwidth.
-- Compare no MTI, 2-pulse, and 3-pulse on the same captures.
+- GUI first: the Phaser app's range-Doppler and MTI views, a hand, then a fidget spinner.
+- Notebook: change the chirp count and bandwidth; switch 2-pulse to 3-pulse.
 - Keep one range cell's spectrogram for L31.
 :::
 
-The L29 Lab runs this lesson on your own kit, outside class, and starts from the range code you wrote in the L28 Lab. You will capture bursts with the range-Doppler settings of this page, build the map with `range_doppler`, and check its velocity axis with your hand moving toward and away from the kit. A fidget spinner then shows micro-Doppler at a single range. Changing the chirp count and the bandwidth tests the resolution formulas on your own maps, and running the same captures through `mti` with each kind of canceller shows what MTI removes and how much it weakens a slow target. Last, you will keep the slow-time signal of the range cell holding the spinner, which the L31 Lab turns into a spectrogram. Your maps, with and without MTI, are what the L30 Lab runs CFAR on, so keep the captures and the code.
+The L29 Lab runs this lesson on your own kit, outside class, GUI first. In the Phaser app's range-Doppler view you will check the velocity axis with your hand moving toward and away from the kit, then watch a fidget spinner spread into micro-Doppler at a single range, and the MTI view shows the clutter disappearing. You will then save captures with the range-Doppler settings of this page and run them through the course's L29 notebook, which calls `range_doppler` and `mti` from the provided `radar_lab.py`. Your tasks there are small changes: the chirp count and the bandwidth, which test the resolution formulas on your own maps, and the canceller, switched from 2-pulse to 3-pulse on the same captures, which shows what MTI removes and how much it weakens a slow target. Last, you will keep the slow-time signal of the range cell holding the spinner, which the L31 Lab turns into a spectrogram. Your maps, with and without MTI, are what the L30 Lab runs CFAR on, so keep the captures and the notebook.
 
 :::{note}
 The L29 Lab is under construction. Its procedure and packet will appear here after the L28 Lab is published, so that they can start from its code and its recorded data.
