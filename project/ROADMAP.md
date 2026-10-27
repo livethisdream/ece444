@@ -236,6 +236,19 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
   angle (from L24). Lab: fan, spinner, walker, hand; classify the L30
   detections and report the accuracy; **Part B tracks a walker (dismount)
   in range and angle** (Neil, 2026-10-27), which is where 4.8 is measured.
+- **Shared code contract** (2026-10-27, so the labs chain though written in
+  parallel). One cadet module, `radar_lab.py`, grows lab by lab; one capture
+  format, an `.npz` with `iq` (complex, `n_chirps × n_samples`), `fs`, `fc`,
+  `B`, `T_ramp`, `PRI`, `f0` (the 0 m frequency). L28: `load_capture`,
+  `range_axis`, `range_profile`, `waterfall`. L29: `range_doppler`, `mti`.
+  L30: `cfar_2d(rd_map, guard, ref, bias_db)` → detection map and
+  `[(range_m, vel_mps, snr_db), ...]`. L31: `spectrogram`, features, a
+  classifier, `alpha_beta`. The recorded-data fallback is
+  `scripts/radar/fmcw_sim.py` and `book/extras/radar-data/`, created by the
+  L28 thread; later labs ask the Integrator to extend them.
+- **Passes.** L28 is written whole (lesson, lab, packet, fallback); L29–L31
+  get their lesson halves first, and their labs in a second pass once the
+  lab before them has merged.
 - **Final project.** Each lab ends with what it carries into the report.
   Everything is submitted on Gradescope. **Rubric** (Neil, 2026-10-27):
   Labs Completed, Engineering Analysis, Report Quality, Extra Effort, each
