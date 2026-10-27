@@ -26,10 +26,14 @@ with room for notes. Print from read mode for the whole lesson.
 ::::
 
 ::::{frame} Learning Objectives
+:class: here-25
 
 <ol class="lo-list" style="--module: '4'; counter-reset: lo 0">
   <li>I can apply the radar equation to calculate received power for a given geometry, and account for path loss and radar cross section (RCS).</li>
 </ol>
+
+```{include} ../../_snippets/m4-strip.md
+```
 
 :::{depth}
 Module 3 pointed the PHASER's beam at a source that transmitted on its own, the HB100. From here on the PHASER supplies its own signal: a separate transmit antenna illuminates the scene, and the eight-element array listens for what comes back. Before we can process an echo for range (Lesson 26) or decide whether it is there at all (Lesson 27), we need to know how strong it is. That is the job of the radar equation, and it is the Friis equation of <a href="../../module01/L02-antenna-properties/index.html#frame-the-friis-transmission-equation">Lesson 2</a> applied twice.
@@ -413,5 +417,5 @@ in a 1 MHz bandwidth. The fourth root is the most important feature of the formu
 
 This lesson answered whether the PHASER can hear a target at all. The next two lessons ask what the echo tells us. <a href="../L26-range-resolution-doppler/index.html">Lesson 26</a> reads the target's range from the echo's delay and its velocity from the Doppler shift, and <a href="../L27-radar-detection/index.html">Lesson 27</a> replaces our 13 dB threshold with one derived from the probabilities of detection and false alarm.
 
-In the <a href="../L28-lab-fmcw-range/index.html">L28 Lab</a> you will put one of the lab's corner reflectors in front of your kit and find its echo in the range profile. Keep this lesson's budget: the echo level and the noise floor you measure there are the two numbers it predicts, and comparing them is part of the radar report you write at the end of the module. The range-Doppler, CFAR, and spectrogram labs that follow all start from an echo that stands well above the noise, and this budget is the reason it does. <a href="../L31-classification-tracking/index.html">Lesson 31</a> brings back the <a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">monopulse tracking</a> of the L24 Lab and points it at a radar echo instead of the HB100.
+In the <a href="../L28-fmcw/index.html">L28 Lab</a> you will put one of the lab's corner reflectors in front of your kit and find its echo in the range profile. Keep this lesson's budget: the echo level and the noise floor you measure there are the two numbers it predicts, and comparing them is part of the radar report you write at the end of the module. The range-Doppler, CFAR, and spectrogram labs that follow all start from an echo that stands well above the noise, and this budget is the reason it does. <a href="../L31-classification-tracking/index.html">Lesson 31</a> brings back the <a href="../../module03/L24-lab-null-steering/index.html#frame-procedure-d-watch-it-track">monopulse tracking</a> of the L24 Lab and points it at a radar echo instead of the HB100.
 ::::
