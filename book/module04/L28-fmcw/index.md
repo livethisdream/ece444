@@ -227,19 +227,18 @@ The waterfall records range against time and nothing else. Its rows here are 50 
 ```python
 C = 3.00e8
 
-def range_axis(cap, n_fft):
-    fs, B = cap["fs"], cap["B"]
-    f = np.fft.fftshift(
-        np.fft.fftfreq(n_fft, 1 / fs))
-    k = C * cap["T_ramp"] / (2 * B)
+def range_axis(cap, n_fft=None):
+    n = n_fft or cap["iq"].shape[1]
+    f = np.fft.fftfreq(n, 1 / cap["fs"])
+    k = C * cap["T_ramp"] / (2 * cap["B"])
     return (f - cap["f0"]) * k
 ```
 
-- You write `range_profile` and `waterfall` in the lab.
+- You write `range_fft`, `range_profile`, and `waterfall`.
 - `radar_lab.py` grows through L29, L30, and L31.
 :::
 
-The four labs that follow chain together through one Python module, `radar_lab.py`, which you write and keep, and one capture format. A capture is an `.npz` file holding `iq`, the complex beat samples with one chirp a row, shape `n_chirps × n_samples`; the sample rate `fs`; the carrier `fc`; the bandwidth `B`; the chirp length `T_ramp`, the lesson's $T_s$; the time `PRI` from one chirp to the next; and `f0`, the 0 m frequency from your calibration. The excerpt is the start of the module. `range_axis` gives the range of each bin of an `fftshift`-ed FFT of length `n_fft`, by the range equation of the range FFT frame, with `k` the meters per hertz of beat. The module starts with a loader that turns a capture into a dictionary of numbers:
+The four labs that follow chain together through one Python module, `radar_lab.py`, which you write and keep, and one capture format. A capture is an `.npz` file holding `iq`, the complex beat samples of the summed array with one chirp a row, shape `n_chirps × n_samples`; optionally `iq_ch`, the same samples from the array's two halves, shape `2 × n_chirps × n_samples`, which <a href="../L31-classification-tracking/index.html">Lesson 31</a> uses to measure angle; the sample rate `fs`; the carrier `fc`; the bandwidth `B`; the chirp length `T_ramp`, the lesson's $T_s$; the time `PRI` from one chirp to the next; and `f0`, the 0 m frequency from your calibration. The number of chirps is not fixed: 32 in an L28 range capture, 256 in the L29 burst, and thousands in a record of several seconds. The excerpt is the start of the module. `range_axis` gives the range of each bin of the FFT `np.fft.fft` returns, in its own order and of length `n_samples` unless `n_fft` pads it, by the range equation of the range FFT frame, with `k` the meters per hertz of beat. Bins below $f_0$ come out as negative ranges. The module starts with a loader that turns a capture into a dictionary of numbers:
 
 ```python
 def load_capture(path):
@@ -252,7 +251,7 @@ def load_capture(path):
 ```
 
 
-The L28 Lab adds two functions. `range_profile(cap, chirp=0, window="hann")` windows one chirp, takes its FFT, and returns the ranges at or beyond 0 m with the power in dB, `(r, p_db)`. `waterfall(cap)` does the same for every chirp and returns `(r, t, w_db)`, with one row of `w_db` per chirp and `t` the chirp times. Normalize the FFT by the sum of the window, so that a tone of amplitude 1 reads 0 dBFS whatever the window. Use numpy, scipy, and matplotlib only. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> adds `range_doppler` and `mti`, <a href="../L30-cfar/index.html">Lesson 30</a> adds `cfar_2d`, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> adds the spectrogram, a classifier, and a tracker, each calling the functions before it.
+The L28 Lab adds three functions. `range_fft(cap, window="hann")` windows every chirp and returns the complex FFT along each row, `n_chirps × n_bins`, in the order `range_axis` describes; normalize it by the sum of the window, so that a tone of amplitude 1 reads 0 dBFS whatever the window. `range_profile(cap, chirp=0, window="hann")` returns one chirp's ranges at or beyond 0 m and its power in dB, `(r, p_db)`. `waterfall(cap)` does the same for every chirp and returns `(r, t, w_db)`, with one row of `w_db` per chirp and `t` the chirp times. An optional `n_fft` argument on all three, passed on to `range_axis`, zero-pads the FFT for reading peaks. Use numpy, scipy, and matplotlib only. <a href="../L29-range-doppler-mti/index.html">Lesson 29</a> adds `range_doppler` and `mti`, <a href="../L30-cfar/index.html">Lesson 30</a> adds `cfar_2d`, and <a href="../L31-classification-tracking/index.html">Lesson 31</a> adds the spectrogram, a classifier, and a tracker, each calling the functions before it.
 ::::
 
 ::::{frame} L28 Lab: FMCW Range
@@ -293,7 +292,7 @@ Any flat metal plate about 20 cm on a side works, and so does aluminum foil glue
 
 ::::{frame} What You Keep
 :::{present}
-- `radar_lab.py`, with your four L28 functions.
+- `radar_lab.py`, with your five L28 functions.
 - Your captures: the 2 m plate and the walk.
 - Your $f_0$ and your measured kHz per meter.
 :::
@@ -382,8 +381,8 @@ In ADI's script the bandwidth takes effect when you press **Set RF Bandwidth**, 
 
 Do this part on your laptop after the bench, from your saved captures.
 
-1. Start `radar_lab.py` with `import numpy as np`, then `load_capture` and `range_axis` from the Your Range Code frame, and add `range_profile(cap, chirp=0, window="hann")` and `waterfall(cap)` as that frame describes.
-2. Run `range_profile` on your 2 m capture. Find the peak beyond 0.5 m and record its range and level, and the floor near 10 m, in Table E. Plot it from 0 to 8 m.
+1. Start `radar_lab.py` with `import numpy as np`, then `load_capture` and `range_axis` from the Your Range Code frame, and add `range_fft`, `range_profile`, and `waterfall` as that frame describes.
+2. Run `range_profile` on your 2 m capture with `n_fft=4096`. Find the peak beyond 0.5 m and record its range, level, and width 3 dB down, and the floor near 10 m, in Table E. Plot it from 0 to 8 m.
 3. Run it again with `window=None` (rectangular) on the same chirp, and plot the two together. Record the level of the strongest sidelobe of the plate's peak for each window.
 4. Run `range_profile` on your 250 MHz and 1 ms captures and compare their peaks with the 500 MHz, 0.5 ms one: the width in range, and the floor.
 5. Run `waterfall` on your walk capture and plot it with time up and range across, from 0 to 6 m. Mark the leakage, the wall, and your trace.

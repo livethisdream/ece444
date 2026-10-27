@@ -2,7 +2,8 @@ ECE 444 recorded radar data: the fallback for the L28-L31 Labs.
 
 Simulated ADALM-PHASER FMCW captures in the course capture format, written by
 scripts/radar/fmcw_sim.py (re-run it to regenerate). Each .npz holds:
-  iq      complex64, n_chirps x n_samples, one chirp a row, 0 dBFS = |iq| 1
+  iq      complex64, n_chirps x n_samples, summed array, one chirp a row, 0 dBFS = |iq| 1
+  iq_ch   complex64, 2 x n_chirps x n_samples, the two subarray halves (sum = iq)
   fs, fc, B, T_ramp, PRI, f0   (Hz, Hz, Hz, s, s, Hz)
   note    what the capture holds
 

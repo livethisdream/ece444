@@ -5,8 +5,12 @@ The recorded-data fallback for the L28-L31 Labs: when a bench capture fails, a
 cadet loads one of these instead and runs the same code on it. Every capture is
 a dict with the keys of the course contract (ROADMAP section 5, the L28 brief):
 
-    iq      complex64, shape (n_chirps, n_samples): the beat signal, one chirp
-            a row, in full-scale units (|iq| = 1 is 0 dBFS)
+    iq      complex64, shape (n_chirps, n_samples): the beat signal of the
+            summed array, one chirp a row, in full-scale units (|iq| = 1 is
+            0 dBFS). n_chirps is not fixed: 32 for an L28 range capture, 256
+            for a range-Doppler burst, thousands for a classification record
+    iq_ch   (optional) complex64, shape (2, n_chirps, n_samples): the two
+            subarray channels, whose sum is iq; the L31 monopulse needs them
     fs      sample rate, Hz
     fc      carrier, Hz (10 GHz, COURSE_SPEC section M8)
     B       chirp bandwidth, Hz
@@ -27,13 +31,17 @@ One function per target type, each adding its echo to a capture in place:
 
     add_noise(cap)                  receiver noise
     add_leakage(cap)                transmit-to-receive leakage, the 0 m spike
-    add_point(cap, r0, v, rcs)      a point target: plate, corner, wall
+    add_point(cap, r0, v, rcs, az)  a point target: plate, corner, wall
     add_hand(cap, r0, ...)          a hand moving back and forth
     add_walker(cap, r_start, ...)   a person walking out and back, with limbs
 
 A new target type is one more function that builds its scatterers' ranges as a
 function of time and calls _add_scatterer for each. A new waveform is one more
-entry in PRESETS.
+entry in PRESETS. Every target takes an azimuth az (degrees, positive on the E8
+side), which sets the phase between the two subarray channels: their centers
+sit D_SUB = 4 x 14 mm apart, so a target at az puts k D_SUB sin(az) between
+them. Each channel carries half the summed echo, so iq at broadside matches the
+L25 budget, and half the noise power, so iq's noise is NOISE_DBFS.
 
     python3 scripts/radar/fmcw_sim.py               # the L28 sets
     python3 scripts/radar/fmcw_sim.py --out DIR     # somewhere else
@@ -70,7 +78,8 @@ PRESETS = {
 PT_DBM = -16.0                  # transmit power, ADI's hardware page
 GTGR_DB = 6.0 + 15.0            # transmit antenna + the 8-element array
 NF_DB = 2.0                     # receiver noise figure
-NOISE_DBFS = -60.0              # receiver noise per complex sample
+NOISE_DBFS = -60.0              # receiver noise per complex sample, summed array
+D_SUB = 4 * 14e-3               # m: between the two 4-element subarray centers
 R_MIN = 0.3                     # m: the echo level stops growing inside this
 
 
@@ -79,17 +88,22 @@ def new_capture(preset: str = "l28_range", **overrides) -> dict:
     cap = dict(PRESETS[preset])
     cap.update(overrides)
     n_samp = int(round(cap["fs"] * cap["T_ramp"]))
-    cap["iq"] = np.zeros((cap["n_chirps"], n_samp), dtype=np.complex128)
+    cap["iq_ch"] = np.zeros((2, cap["n_chirps"], n_samp), dtype=np.complex128)
     cap["note"] = ""
     return cap
 
 
+def iq(cap: dict) -> np.ndarray:
+    """The summed array, n_chirps x n_samples: the contract's iq."""
+    return cap["iq_ch"].sum(axis=0)
+
+
 def _times(cap: dict) -> tuple[np.ndarray, np.ndarray]:
     """Fast time within each chirp and absolute time, both (n_chirps, n_samples)."""
-    n_chirp, n_samp = cap["iq"].shape
+    _, n_chirp, n_samp = cap["iq_ch"].shape
     t_fast = np.arange(n_samp) / cap["fs"]
     t_slow = np.arange(n_chirp) * cap["PRI"]
-    return np.broadcast_to(t_fast, cap["iq"].shape), t_slow[:, None] + t_fast
+    return np.broadcast_to(t_fast, (n_chirp, n_samp)), t_slow[:, None] + t_fast
 
 
 def echo_dbfs(cap: dict, r: np.ndarray | float, rcs: float) -> np.ndarray:
@@ -102,31 +116,36 @@ def echo_dbfs(cap: dict, r: np.ndarray | float, rcs: float) -> np.ndarray:
     return NOISE_DBFS + pr_dbm - noise_dbm
 
 
-def _add_scatterer(cap: dict, r_t: np.ndarray, level_dbfs, phase0: float = 0.0) -> None:
-    """Add the beat tone of one scatterer whose range is r_t(fast, slow)."""
+def _add_scatterer(cap: dict, r_t: np.ndarray, level_dbfs, phase0: float = 0.0,
+                   az: float = 0.0) -> None:
+    """Add the beat tone of one scatterer whose range is r_t(fast, slow), at az deg."""
     t_fast, _ = _times(cap)
     slope = cap["B"] / cap["T_ramp"]
     f_beat = cap["f0"] + 2 * r_t * slope / C
     phase = 2 * np.pi * f_beat * t_fast - 4 * np.pi * r_t * cap["fc"] / C + phase0
-    cap["iq"] += 10 ** (np.asarray(level_dbfs) / 20) * np.exp(1j * phase)
+    x = 0.5 * 10 ** (np.asarray(level_dbfs) / 20) * np.exp(1j * phase)
+    dpsi = 2 * np.pi * cap["fc"] / C * D_SUB * np.sin(np.radians(az))
+    cap["iq_ch"][0] += x * np.exp(-0.5j * dpsi)
+    cap["iq_ch"][1] += x * np.exp(+0.5j * dpsi)
 
 
 def add_noise(cap: dict, level_dbfs: float = NOISE_DBFS, seed: int = 0) -> None:
     """Complex Gaussian receiver noise, level_dbfs per sample."""
     rng = np.random.default_rng(seed)
-    sigma = 10 ** (level_dbfs / 20) / np.sqrt(2)
-    cap["iq"] += sigma * (rng.standard_normal(cap["iq"].shape)
-                          + 1j * rng.standard_normal(cap["iq"].shape))
+    sigma = 10 ** (level_dbfs / 20) / 2          # per channel, per part: half the power each
+    shape = cap["iq_ch"].shape
+    cap["iq_ch"] += sigma * (rng.standard_normal(shape) + 1j * rng.standard_normal(shape))
 
 
 def add_leakage(cap: dict, level_dbfs: float = -20.0) -> None:
     """The transmit antenna's direct path into the array: a fixed tone at f0."""
-    _add_scatterer(cap, np.zeros(cap["iq"].shape), level_dbfs, phase0=0.7)
+    _add_scatterer(cap, np.zeros(cap["iq_ch"].shape[1:]), level_dbfs, phase0=0.7)
 
 
 def add_point(cap: dict, r0: float, v: float = 0.0, rcs: float = 0.47,
-              level_dbfs: float | None = None, phase0: float = 0.0) -> None:
-    """A point target at r0 m, receding at v m/s, of radar cross section rcs m^2.
+              level_dbfs: float | None = None, phase0: float = 0.0,
+              az: float = 0.0) -> None:
+    """A point target at r0 m, receding at v m/s, of radar cross section rcs m^2, at az deg.
 
     rcs 0.47 m^2 is the course's 10 cm corner reflector at 10 GHz (M8). Pass
     level_dbfs to set the echo level directly, as for a plate held against
@@ -135,23 +154,23 @@ def add_point(cap: dict, r0: float, v: float = 0.0, rcs: float = 0.47,
     _, t = _times(cap)
     r_t = r0 + v * t
     lvl = echo_dbfs(cap, r_t, rcs) if level_dbfs is None else level_dbfs
-    _add_scatterer(cap, r_t, lvl, phase0)
+    _add_scatterer(cap, r_t, lvl, phase0, az)
 
 
 def add_hand(cap: dict, r0: float = 0.6, swing: float = 0.15,
-             rate_hz: float = 1.0, rcs: float = 0.02) -> None:
+             rate_hz: float = 1.0, rcs: float = 0.02, az: float = 0.0) -> None:
     """A hand moving toward and away from the array, sinusoidally.
 
     r0: mean range, m; swing: peak excursion, m; rate_hz: back-and-forth rate.
     """
     _, t = _times(cap)
     r_t = r0 + swing * np.sin(2 * np.pi * rate_hz * t)
-    _add_scatterer(cap, r_t, echo_dbfs(cap, r_t, rcs), phase0=1.3)
+    _add_scatterer(cap, r_t, echo_dbfs(cap, r_t, rcs), phase0=1.3, az=az)
 
 
 def add_walker(cap: dict, r_start: float = 1.0, r_turn: float = 4.0,
                speed: float = 1.0, stride_hz: float = 0.9,
-               rcs_body: float = 0.5, seed: int = 1) -> None:
+               rcs_body: float = 0.5, az: float = 0.0, seed: int = 1) -> None:
     """A person walking straight out from r_start to r_turn and back, at speed m/s.
 
     The torso carries most of the echo. Two legs and two arms swing about it at
@@ -166,17 +185,18 @@ def add_walker(cap: dict, r_start: float = 1.0, r_turn: float = 4.0,
     limbs = [(0.25, 0.0, 0.08), (0.25, np.pi, 0.08),      # legs
              (0.15, np.pi, 0.04), (0.15, 0.0, 0.04)]      # arms, opposite legs
     rng = np.random.default_rng(seed)
-    _add_scatterer(cap, r_torso, echo_dbfs(cap, r_torso, rcs_body), rng.uniform(0, 6.28))
+    _add_scatterer(cap, r_torso, echo_dbfs(cap, r_torso, rcs_body), rng.uniform(0, 6.28), az)
     for swing, ph, share in limbs:
         r_t = r_torso + swing * np.sin(2 * np.pi * stride_hz * t + ph)
         _add_scatterer(cap, r_t, echo_dbfs(cap, r_t, share * rcs_body),
-                       rng.uniform(0, 6.28))
+                       rng.uniform(0, 6.28), az)
 
 
 def save(cap: dict, path: Path, note: str) -> Path:
-    """Write a capture in the contract's .npz format, iq as complex64."""
+    """Write a capture in the contract's .npz format: iq and iq_ch as complex64."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    np.savez(path, iq=cap["iq"].astype(np.complex64),
+    np.savez(path, iq=iq(cap).astype(np.complex64),
+             iq_ch=cap["iq_ch"].astype(np.complex64),
              fs=cap["fs"], fc=cap["fc"], B=cap["B"], T_ramp=cap["T_ramp"],
              PRI=cap["PRI"], f0=cap["f0"], note=np.str_(note))
     return path

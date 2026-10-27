@@ -144,7 +144,7 @@ def windows() -> None:
     sim.add_noise(cap, level_dbfs=-75.0, seed=3)
     fig, ax = plt.subplots(figsize=(6.6, 3.0))
     for win, color, lab, ls in ((None, ORANGE, "rectangular", "-"), ("hann", NAVY, "Hann", "-")):
-        r, p = profile_db(cap["iq"][0], cap, win)
+        r, p = profile_db(sim.iq(cap)[0], cap, win)
         keep = (r >= 0.5) & (r <= 4.0)
         ax.plot(r[keep], p[keep], color=color, lw=1.4, ls=ls, label=lab)
     ax.annotate("weak target, 2.9 m", (2.9, -51), xytext=(3.05, -32), fontsize=12, color=INK,
