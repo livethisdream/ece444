@@ -126,7 +126,7 @@ For $P_{fa} = 10^{-6}$ and $N = 32$, $\alpha = 32(10^{6/32} - 1) = 17.3$, or 12.
 The bias is larger with fewer cells because the estimate scatters. Sometimes it comes out low, the threshold drops with it, and noise crosses more often than it would with the true $P_n$. Raising $\alpha$ pays for those low estimates. In the code later in this lesson, `bias_db` is $10\log_{10}\alpha$.
 
 :::{note}
-ADI's `target_detection_dbfs.py` averages the reference cells **in dB** and adds the bias in dB. That is a different estimator: the average of $10\log_{10}z$ over exponential noise sits 2.5 dB below $10\log_{10}P_n$, so a bias in ADI's code is not the $\alpha$ of this lesson. Its threshold still follows the noise, so it is still a CFAR, but this lesson's numbers do not apply to it. Read ADI's code beside yours; the lesson's version averages power.
+ADI's `target_detection_dbfs.py` averages the reference cells **in dB** and adds the bias in dB. That is a different estimator: the average of $10\log_{10}z$ over exponential noise sits 2.5 dB below $10\log_{10}P_n$, so a bias in ADI's code is not the $\alpha$ of this lesson. Its threshold still follows the noise, so it is still a CFAR, but this lesson's numbers do not apply to it. Read ADI's code beside the provided `cfar_2d`, which averages power.
 :::
 ::::
 
@@ -248,14 +248,14 @@ A map of $512 \times 256$ cells with 144 reference cells each is 19 million addi
 <img src="../../viz/img/L30-rd-detections.svg" alt="A range-Doppler map from 0 to 9 m and minus 3 to plus 3 meters per second after MTI. Red squares mark the CFAR detections: a cluster of nine cells on a walker at 6 m and plus 1.2 meters per second, a cluster of five on a hand at 2.1 m and minus 0.6 meters per second, and one cell of leftover clutter at 0 m and zero velocity" style="max-width: 620px; width: 100%; display: block; margin: 0 auto;">
 :::
 :::{present}
-- `cfar_2d` returns a detection map and a list of (range, velocity, SNR).
+- The provided `cfar_2d` returns a detection map and a list of (range, velocity, SNR).
 - One target lights a cluster of cells.
 - Clutter left after MTI is detected too.
 :::
 
 The map is synthetic, built with the L29 burst's cells: a walker at 6.0 m and $+1.2$ m/s, a hand at 2.1 m and $-0.6$ m/s, and the clutter a 2-pulse canceller leaves at zero velocity near the radar. CFAR with 2 guard and 4 reference cells each way and an 11.6 dB bias declares both targets and the strongest clutter cell. Each target lights a cluster of cells, because its peak spreads into its neighbors and those neighbors are well above the noise too. A detection list that feeds a classifier or a tracker needs one entry per object, so a cluster is reduced to its strongest cell.
 
-This is the function your `radar_lab.py` gains in the L30 Lab. It takes the map in dB, as Lesson 29 plots it, and converts it back to power, because the CFAR statistics of this lesson are for power. `guard` and `ref` are (range, Doppler) pairs of half-widths. The two convolutions sum each cell's reference window and count how many cells it held, so an end cell in range averages only the cells that exist; the Doppler axis is padded by wrapping. Pass the map's axes, and the detection list comes back in meters and meters per second.
+The excerpt is the cell-averaging path of the provided `cfar_2d` in `radar_lab.py`, which the L30 Lab notebook calls; the provided version also takes `method="ca"`, `"go"`, or `"so"` for the variants above. It takes the map in dB, as Lesson 29 plots it, and converts it back to power, because the CFAR statistics of this lesson are for power. `guard` and `ref` are (range, Doppler) pairs of half-widths. The two convolutions sum each cell's reference window and count how many cells it held, so an end cell in range averages only the cells that exist; the Doppler axis is padded by wrapping. Pass the map's axes, and the detection list comes back in meters and meters per second.
 
 ```python
 import numpy as np
@@ -317,13 +317,13 @@ The probability of detection is measured the same way, against a target you plac
 
 ::::{frame} L30 Lab
 :::{present}
-- Run `cfar_2d` on your own L29 range-Doppler maps.
-- Tune the guard cells, reference cells, and bias.
-- Measure the false-alarm rate and $P_d$, and compare them with Lesson 27.
+- Turn on the GUI's CFAR overlay first.
+- In the notebook, tune guard, reference, and bias to a target false-alarm rate.
+- Switch cell averaging to greatest-of and compare.
 - Keep the detection lists for the L31 Lab.
 :::
 
-The L30 Lab adds `cfar_2d` to your `radar_lab.py` and runs it on the range-Doppler maps you saved in the L29 Lab. You will choose the guard and reference cells for your own targets, set the bias from a design $P_{fa}$, and measure the false-alarm rate and the probability of detection against the predictions of Lesson 27 and this lesson. The detection lists it produces, one entry per target with its range, velocity, and SNR, are what the L31 Lab classifies. For the final report, keep the settings you chose, the false-alarm rate you measured, and why the two differ if they do.
+The L30 Lab starts in the GUI: turn on its CFAR overlay over the live range-Doppler map and watch the threshold rise and fall with the noise around your targets. The rest runs in the lab's notebook, which calls the provided `cfar_2d` from `radar_lab.py` on the range-Doppler maps you saved in the L29 Lab. You tune the guard and reference cells for your own targets and set the bias to reach a target false-alarm rate, switch from cell averaging to greatest-of at the clutter near zero velocity, and measure the false-alarm rate and the probability of detection against the predictions of Lesson 27 and this lesson. Changes of your own to the provided code, beyond the required tasks, count as Extra Effort. The detection lists it produces, one entry per target with its range, velocity, and SNR, are what the L31 Lab classifies. For the final report, keep the settings you chose, the false-alarm rate you measured, and why the two differ if they do.
 
 :::{note}
 The L30 Lab is under construction. Its procedure and packet follow the L29 Lab.
