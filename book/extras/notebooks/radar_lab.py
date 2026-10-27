@@ -183,21 +183,31 @@ def cfar_2d(rd_db, guard, ref, bias_db, axes=None, method="ca"):
 
 
 # ----------------------------------------------------------------------- L31
+def _sum_bins(X, range_bin):
+    """Sum a slice of range bins (last axis) so a target crossing them keeps its level.
+
+    Summing bins k is the same as weighting the chirp's samples by a kernel
+    that peaks at both ends of the chirp, where the Hann window is zero, so a
+    moving target would fade as it crossed bins. Alternating the sign of the
+    bins, (-1)^k with k the bin's index in the full FFT, moves the kernel's
+    peak to the middle of the chirp, where Hann is 1: a Hann-windowed tone's
+    neighbors then add as +1/4, +1/2, +1/4 wherever the target sits.
+    """
+    k = np.arange(X.shape[-1])[range_bin]
+    return (X[..., range_bin] * (-1.0) ** k).sum(axis=-1)
+
+
 def spectrogram(cap, range_bin, n_win=64, hop=16):
     """Slow-time spectrogram of one range bin, or a slice of bins summed: (t, f, S_db).
 
     f is the Doppler frequency in Hz (velocity = f * lambda / 2), t the center
     time of each column, and S_db is indexed [f, t] with its peak at 0 dB.
     range_bin indexes range_fft's columns, the range_axis order. A slice of
-    bins follows a target that moves in range; it is summed from the
-    rectangular-window FFT, because a Hann-windowed tone puts -1/4, +1/2,
-    -1/4 in neighboring bins, and those cancel in a sum whenever the target
-    sits on a bin center.
+    bins follows a target that moves in range; _sum_bins adds them with
+    alternating signs, so the target keeps its level as it crosses bins.
     """
-    many = not np.isscalar(range_bin)
-    x = range_fft(cap, None if many else "hann")[:, range_bin]
-    if many:                                    # a slice of bins: sum them
-        x = x.sum(axis=1)
+    X = range_fft(cap, "hann")
+    x = X[:, range_bin] if np.isscalar(range_bin) else _sum_bins(X, range_bin)
     x = x - x.mean()                            # stationary returns out
     w = np.hanning(n_win)
     cols = [np.fft.fftshift(np.fft.fft(x[i:i + n_win] * w))
@@ -284,11 +294,9 @@ def monopulse_angle(cap, range_bin, window="hann"):
     against a target placed to one side.
     """
     lam = C / cap["fc"]
-    many = not np.isscalar(range_bin)           # a slice: rectangular, as in spectrogram()
-    w = _window(None if many else window, cap["iq_ch"].shape[-1])
-    X = np.fft.fft(cap["iq_ch"] * w, axis=-1)[..., range_bin]
-    if many:
-        X = X.sum(axis=-1)
+    w = _window(window, cap["iq_ch"].shape[-1])
+    X = np.fft.fft(cap["iq_ch"] * w, axis=-1)
+    X = X[..., range_bin] if np.isscalar(range_bin) else _sum_bins(X, range_bin)
     dphi = np.angle(X[1] * np.conj(X[0]))
     s = np.clip(dphi * lam / (2 * np.pi * D_SUB), -1, 1)
     return np.degrees(np.arcsin(s))

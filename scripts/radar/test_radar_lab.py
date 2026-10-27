@@ -170,6 +170,17 @@ def l31():
     est = rl.alpha_beta(meas, 0.5, 0.2, dt)
     ok &= check("alpha_beta settles on the walker's speed", abs(est[-10:, 1].mean() - v0) < 0.15,
                 f"{est[-10:, 1].mean():.2f} m/s for {v0}")
+    # A steady mover crossing range bins keeps its slow-time level in a slice sum.
+    cap = sim.new_capture("l29_burst", fs=1.0e6, n_chirps=4000)
+    sim.add_noise(cap)
+    sim.add_point(cap, 3.0, v=0.4, level_dbfs=-30.0)        # fixed level: only the sum moves it
+    cap = as_capture(cap)
+    r = rl.range_axis(cap)
+    b = np.nonzero((r > 1.0) & (r < 4.0))[0]
+    x = rl._sum_bins(rl.range_fft(cap), slice(b[0], b[-1] + 1))
+    a_db = 20 * np.log10(np.abs(x))
+    ok &= check("slice sum holds a mover's level across bins", a_db.max() - a_db.min() < 3,
+                f"{a_db.max() - a_db.min():.2f} dB swing over {0.4 * 2:.1f} m")
     for az in (+8.0, -5.0):
         cap = burst(n_chirps=16)
         sim.add_noise(cap)
