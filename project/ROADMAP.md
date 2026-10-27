@@ -259,6 +259,11 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
     and alpha, then one added feature);
   - anything beyond that is the rubric's Extra Effort.
   Objective 4.6 now reads "apply" MTI, not "implement" (2026-10-27).
+  **The notebooks run on the cadet's own laptop** (Neil, 2026-10-27: they
+  will have Python; a hosted option will not do, because the work touches
+  the hardware). So each lab page carries a short setup (Python with numpy,
+  scipy, matplotlib and Jupyter) and how a capture saved in the Phaser app
+  reaches the laptop.
 - **Shared code contract** (2026-10-27, so the labs chain though written in
   parallel). The provided module, `radar_lab.py`, holds the chain; one capture
   format, an `.npz` with `iq` (complex, `n_chirps × n_samples`, the summed
@@ -348,7 +353,7 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
    first, so the FMCW mode needs a range spectrum with a frequency/range
    toggle, the range waterfall, the range-Doppler map, MTI off/2-pulse/
    3-pulse, a CFAR threshold overlay with guard, reference and bias, and
-   save. It saves a
+   save, as a download to the laptop running the browser. It saves a
    capture in the course `.npz` contract (`iq`, optionally `iq_ch`, `fs`,
    `fc`, `B`, `T_ramp`, `PRI`, `f0` from the 0 m calibration), has a 0 m
    calibration entry and a frequency/range axis toggle, and can record
@@ -365,9 +370,9 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
   L22–L23, and L24 Labs. Retire the L17 and L18 practice entries and the old L19
   (Beam Steering Lab) one. Neil sets this
   up; nothing in the repo tracks it.
-- **Image-build homework:** does each kit get a second card, and do cadets have
-  Python on their laptops? The L17 Lab rewrite (#96) has cadets build their own
-  card in class, which may settle this.
+- **Image-build homework:** does each kit get a second card? The L17 Lab
+  rewrite (#96) has cadets build their own card in class, which may settle
+  this. (Python on laptops is settled: yes, Neil 2026-10-27; see §5.)
 
 ## 8. Hardware-day checklist
 
