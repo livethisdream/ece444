@@ -234,10 +234,83 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
   trade-offs, features (Doppler spread, periodicity, centroid), a simple
   classifier, the confusion matrix; alpha-beta range tracking and monopulse
   angle (from L24). Lab: fan, spinner, walker, hand; classify the L30
-  detections and report the accuracy. **Open, Neil:** a Part B tracking a
-  walker in range and angle, the only place 4.8 would be measured.
+  detections and report the accuracy; **Part B tracks a walker (dismount)
+  in range and angle** (Neil, 2026-10-27), which is where 4.8 is measured.
+- **GUI first, with a provided notebook** (Neil, 2026-10-27: "I'd much
+  rather go GUI only ... a starter notebook seems reasonable as well").
+  The Phaser app does all live work: setup, calibration, the waterfall,
+  range-Doppler, MTI on/off, the CFAR overlay, and saving captures; each
+  lab's Measurements are GUI steps (predict, change a setting, read,
+  explain). The course **provides** `radar_lab.py`, complete, and one
+  notebook per lab (`book/extras/notebooks/`) that runs the chain on saved
+  or recorded captures; cadets do not write the chain. **Each lab requires
+  notebook work, scoped tight** (Neil: "tune, tweak, small modifications
+  ... so it doesn't become tediously difficult, but also so they have to
+  do something in the notebook"):
+  - two or three tasks a lab, about 30–45 minutes of notebook time;
+  - each task names the cell, what to change, and a result the cadet can
+    check (a number, a plot that should look a stated way);
+  - at most about 10 changed lines a lab, and no function written from a
+    blank: tune a parameter, swap an option, or a one- to three-line change
+    (examples: L28 Hann vs rectangular and zero-padding, then the peak's
+    range from the cadet's own f0; L29 the chirp count, then 2-pulse to
+    3-pulse as one line; L30 guard/reference/bias to a target false-alarm
+    rate, then cell-averaging to greatest-of; L31 the spectrogram window
+    and alpha, then one added feature);
+  - anything beyond that is the rubric's Extra Effort.
+  Objective 4.6 now reads "apply" MTI, not "implement" (2026-10-27).
+  **The notebooks run on the cadet's own laptop** (Neil, 2026-10-27: they
+  will have Python; a hosted option will not do, because the work touches
+  the hardware). So each lab page carries a short setup (Python with numpy,
+  scipy, matplotlib and Jupyter) and how a capture saved in the Phaser app
+  reaches the laptop.
+- **Shared code contract** (2026-10-27, so the labs chain though written in
+  parallel). The provided module, `radar_lab.py`, holds the chain; one capture
+  format, an `.npz` with `iq` (complex, `n_chirps × n_samples`, the summed
+  array), `fs`, `fc`, `B`, `T_ramp`, `PRI`, `f0` (the 0 m frequency), and,
+  for the L31 Lab's monopulse, an optional `iq_ch` (`2 × n_chirps ×
+  n_samples`, the two subarray channels). `n_chirps` is not fixed: a
+  range-Doppler burst is 256, a classification record is several seconds
+  of continuous chirps (e.g. 6000 at 0.5 ms). L28: `load_capture`,
+  `range_axis(cap, n_fft=None)` (meters, one per bin of the full complex FFT
+  the other functions take, `f0` removed), `range_fft(cap,
+  window="hann")` (complex, `n_chirps × n_bins`; what L29 and L31 build on),
+  `range_profile` (dB, one chirp), `waterfall`. L29: `range_doppler(cap,
+  window=...)` → `(rd_db, range_m, vel_mps)`, the map as **power in dB**
+  (2026-10-27), and `mti`. L30: `cfar_2d(rd_db, guard, ref, bias_db,
+  axes=None)` takes that dB map (converting to power inside) → detection map
+  and, when `axes=(range_m, vel_mps)` is passed, `[(range_m, vel_mps,
+  snr_db), ...]`. L31: `spectrogram`, features, a
+  classifier, `alpha_beta`. The recorded-data fallback is
+  `scripts/radar/fmcw_sim.py` and `book/extras/radar-data/`, created by the
+  L28 thread; later labs ask the Integrator to extend them.
+- **`book/extras/notebooks/radar_lab.py` (from #168) is the reference.**
+  Tested against `fmcw_sim.py` by `scripts/radar/test_radar_lab.py`. Every
+  page excerpt must match it: `range_doppler` returns the map indexed
+  `[range, velocity]`, ranges ≥ 0 only, velocity positive closing (as L26),
+  normalized so a unit tone reads 0 dBFS; a spectrogram over a slice of
+  range bins sums the Hann-windowed range FFT with alternating signs,
+  `(-1)**k` (a plain sum cancels a tone on a bin center under Hann, and
+  under a rectangular window makes a steady mover fade 34 dB at v/ΔR as it
+  crosses bins; found by the L31 thread, 2026-10-27). A lesson that changes an excerpt checks it against the
+  module, and a change to the module goes through its tests.
+- **Recorded data.** `fmcw_sim.py` (from #168) writes the contract `.npz`
+  with one function per target (`add_point`, `add_hand`, `add_walker`, …)
+  and waveform `PRESETS`. Sizes bound what can be committed: an L29 burst
+  with `iq_ch` is about 7 MB, a 6000-chirp record about 43 MB, so the L29
+  and L31 lab passes commit fewer chirps, `iq` only, or shorter records;
+  they add the fan and spinner targets.
+- **Passes.** L28 is written whole (lesson, lab, packet, fallback); L29–L31
+  get their lesson halves first, and their labs in a second pass once the
+  lab before them has merged.
 - **Final project.** Each lab ends with what it carries into the report.
-  **Open, Neil:** the rubric, the packet dates, the extra-credit cap.
+  Everything is submitted on Gradescope. **Rubric** (Neil, 2026-10-27):
+  Labs Completed, Engineering Analysis, Report Quality, Extra Effort, each
+  0–5, 5 outstanding (on `final-project`). **Report due 11 Dec**
+  (Neil, 2026-10-27). **Open, Neil:** the packet dates (given as 9, 16 and
+  23 Nov, three dates for four packets), whether Extra Effort is the
+  approved-extension extra credit, and the cap (5% proposed). The corner reflector's size is still open: no lab step may
+  need one per kit, and the cadet stands clear of the beam.
 
 ## 6. Work queue, in order
 
@@ -286,6 +359,16 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
    removes the +1–2° offset.
 3. **Phaser:** the FMCW radar mode, plus the carrier-frequency fix for the
    continuous-wave mode that is still on an unmerged branch.
+3b. **Phaser (Neil's Phaser thread), for Module 4:** the labs are GUI
+   first, so the FMCW mode needs a range spectrum with a frequency/range
+   toggle, the range waterfall, the range-Doppler map, MTI off/2-pulse/
+   3-pulse, a CFAR threshold overlay with guard, reference and bias, and
+   save, as a download to the laptop running the browser. It saves a
+   capture in the course `.npz` contract (`iq`, optionally `iq_ch`, `fs`,
+   `fc`, `B`, `T_ramp`, `PRI`, `f0` from the 0 m calibration), has a 0 m
+   calibration entry and a frequency/range axis toggle, and can record
+   several seconds of continuous chirps for L31. L28 assumes these and says
+   so where the app's behavior is unknown.
 4. **Module 4 build-out**, now, assuming the radar mode works (Neil,
    2026-10-25); hardware numbers are reconciled when it runs: L25–L27
    taught in class, then the L28–L31 Labs as the final project's scaffolding,
@@ -297,9 +380,9 @@ linked, never copied, and no receiver vocabulary (the beat frequency is
   L22–L23, and L24 Labs. Retire the L17 and L18 practice entries and the old L19
   (Beam Steering Lab) one. Neil sets this
   up; nothing in the repo tracks it.
-- **Image-build homework:** does each kit get a second card, and do cadets have
-  Python on their laptops? The L17 Lab rewrite (#96) has cadets build their own
-  card in class, which may settle this.
+- **Image-build homework:** does each kit get a second card? The L17 Lab
+  rewrite (#96) has cadets build their own card in class, which may settle
+  this. (Python on laptops is settled: yes, Neil 2026-10-27; see §5.)
 
 ## 8. Hardware-day checklist
 
