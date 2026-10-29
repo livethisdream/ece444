@@ -53,7 +53,7 @@ signature, and track it in range and angle.
 <ol class="lo-list" start="4" style="--module: '4'">
   <li>I can describe FMCW radar operation and configure an FMCW waveform on the ADALM-PHASER.</li>
   <li>I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.</li>
-  <li>I can implement moving target indication (MTI) processing to distinguish moving targets from clutter.</li>
+  <li>I can apply moving target indication (MTI) processing to distinguish moving targets from clutter.</li>
 </ol>
 ::::
 
@@ -114,7 +114,7 @@ signature, and track it in range and angle.
   <a class="mt-card mt-lesson" href="L31-classification-tracking/index.html">
     <span class="mt-kind">Lesson 31</span>
     <h4>Classification and Tracking</h4>
-    <p>Micro-Doppler classification and range and angle tracking, then the L31 Lab: classify a target from its spectrogram. Objectives 4.8, 4.9.</p>
+    <p>Micro-Doppler classification and range and angle tracking, then the L31 Lab: classify a target from its spectrogram and track a walker in range and angle. Objectives 4.8, 4.9.</p>
   </a>
 </div>
 ::::
