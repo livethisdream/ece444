@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spectrogram window length</title>
+<style>
+  :root { --navy:#004a85; --mid:#0067b9; --edge:#cddce9; --edge2:#b9d2e5; --bg:#f5f9fc;
+          --ink:#15202b; --ink3:#5b6573; --red:#b01e24; }
+  html,body { margin:0; padding:0; font-family:'Inter',system-ui,-apple-system,sans-serif; color:var(--ink); background:#fff; }
+  .app { display:flex; flex-direction:column; gap:10px; padding:12px; }
+  canvas { display:block; box-sizing:border-box; width:100%; height:auto; background:#fff; border:1px solid var(--edge); border-radius:6px; }
+  .controls { display:flex; align-items:center; gap:8px 16px; flex-wrap:wrap;
+              padding:8px 12px; background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
+  .seg { display:flex; flex:0 0 auto; border:1px solid var(--edge2); border-radius:6px; overflow:hidden; }
+  .seg button { font:inherit; font-size:13px; padding:5px 10px; border:0; background:#fff; color:var(--ink); cursor:pointer; }
+  .seg button + button { border-left:1px solid var(--edge2); }
+  .seg button.on { background:var(--navy); color:#fff; font-weight:700; }
+  .ctl { display:flex; align-items:center; gap:8px; flex:1 1 260px; }
+  .ctl label { font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink3); font-weight:700; white-space:nowrap; }
+  .ctl .val { color:var(--navy); font-variant-numeric:tabular-nums; white-space:nowrap; min-width:17ch; text-align:right; font-size:13.5px; }
+  .ctl input[type=range]{ flex:1 1 auto; min-width:90px; }
+  @media (max-width:430px) {
+    .seg { flex:1 1 100%; }
+    .seg button { flex:1 1 0; padding:5px 4px; }
+    .ctl { flex:1 1 100%; min-width:0; flex-wrap:wrap; row-gap:2px; }
+    .ctl label { order:1; }
+    .ctl .val { order:2; min-width:0; margin-left:auto; }
+    .ctl input[type=range] { order:3; flex:1 1 100%; min-width:0; width:auto; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <canvas id="plot" aria-label="Slow-time spectrogram of the chosen target over three seconds, Doppler against time, for the chosen window length"></canvas>
+  <div class="controls">
+    <div class="seg" id="kind">
+      <button data-k="walker" class="on">Walker</button><button data-k="fan">Fan</button><button data-k="spinner">Spinner</button><button data-k="hand">Hand</button>
+    </div>
+    <div class="ctl">
+      <label>Window</label>
+      <input type="range" id="win" min="3" max="9" step="1" value="6">
+      <span class="val" id="win-val">64 chirps, 32 ms</span>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* One range bin's slow-time samples, one per chirp at the L29-L31 PRI of
+   0.5 ms, for the four L31 Lab targets (the same point-scatterer models as
+   scripts/graphics/m4_l31_classification_tracking.py), and their
+   spectrogram for a Hann window of 2^k chirps. A short window follows fast
+   changes and blurs in frequency (1/T); a long one resolves frequency and
+   smears the moving limbs across the time it spans. */
+const C=3e8, LAM=C/10e9, PRI=0.5e-3, T=3.0, N=Math.round(T/PRI), FMAX=600;
+const SANS='Inter, system-ui, -apple-system, sans-serif';
+const el=id=>document.getElementById(id);
+const cv=el('plot'), ctx=cv.getContext('2d');
+const state={ kind:'walker', nwin:64 };
+
+(function(){
+  const q=new URLSearchParams(location.search);
+  if(q.has('target')&&['walker','fan','spinner','hand'].includes(q.get('target'))) state.kind=q.get('target');
+  if(q.has('win')){ const k=Math.round(Math.log2(+q.get('win'))); if(k>=3&&k<=9) el('win').value=k; }
+})();
+
+/* seeded Gaussian noise, so every redraw shows the same trial */
+function rng(seed){ let s=seed>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+function gauss(u){ return Math.sqrt(-2*Math.log(u()+1e-12))*Math.cos(2*Math.PI*u()); }
+
+function signal(kind){
+  const re=new Float64Array(N), im=new Float64Array(N);
+  const add=(i,x,a)=>{ const p=4*Math.PI*x/LAM; re[i]+=a*Math.cos(p); im[i]+=a*Math.sin(p); };
+  for(let i=0;i<N;i++){
+    const t=i*PRI;
+    if(kind==='walker'){            // torso 1.3 m/s, limbs to 4.0 m/s, 1 stride/s
+      const x0=1.3*t, sw=2.7/(2*Math.PI)*Math.cos(2*Math.PI*t);
+      add(i,x0,1); add(i,x0-sw,0.35); add(i,x0+sw,0.35);
+    } else if(kind==='fan'||kind==='spinner'){
+      const fan=kind==='fan', R=fan?0.075:0.035, om=2*Math.PI*(fan?1000:1200)/60;
+      const rho=fan?Array.from({length:25},(_,j)=>0.015+j*(R-0.015)/24):[0.8*R,R], a=fan?0.05:0.25;
+      for(let b=0;b<3;b++){ const c=Math.cos(om*t+2*Math.PI*b/3); for(const r of rho) add(i,r*c,a); }
+    } else {                        // hand: 0.2 m at 1.5 Hz
+      add(i,0.2*Math.sin(2*Math.PI*1.5*t),0.6);
+    }
+  }
+  let mr=0, mi=0; for(let i=0;i<N;i++){ mr+=re[i]; mi+=im[i]; } mr/=N; mi/=N;
+  let p=0; for(let i=0;i<N;i++){ re[i]-=mr; im[i]-=mi; p+=re[i]*re[i]+im[i]*im[i]; } p/=N;
+  const u=rng(31), n=Math.sqrt(p/Math.pow(10,1.5)/2);   // 15 dB per chirp
+  for(let i=0;i<N;i++){ re[i]+=n*gauss(u); im[i]+=n*gauss(u); }
+  return {re,im};
+}
+
+function fft(re,im){
+  const n=re.length;
+  for(let i=1,j=0;i<n;i++){ let b=n>>1; for(;j&b;b>>=1) j^=b; j^=b;
+    if(i<j){ [re[i],re[j]]=[re[j],re[i]]; [im[i],im[j]]=[im[j],im[i]]; } }
+  for(let len=2;len<=n;len<<=1){
+    const a=-2*Math.PI/len, wr=Math.cos(a), wi=Math.sin(a);
+    for(let i=0;i<n;i+=len){ let cr=1, ci=0;
+      for(let k=0;k<len/2;k++){
+        const xr=re[i+k+len/2]*cr-im[i+k+len/2]*ci, xi=re[i+k+len/2]*ci+im[i+k+len/2]*cr;
+        re[i+k+len/2]=re[i+k]-xr; im[i+k+len/2]=im[i+k]-xi; re[i+k]+=xr; im[i+k]+=xi;
+        const t=cr*wr-ci*wi; ci=cr*wi+ci*wr; cr=t; } } }
+}
+
+/* Spectrogram, zero-padded to at least 256 bins so a short window shows its
+   blur rather than a coarse staircase. Rows run from -FMAX to +FMAX. */
+let cache={};
+function spec(kind,nwin){
+  const key=kind+nwin; if(cache[key]) return cache[key];
+  const sig=cache[kind]||(cache[kind]=signal(kind));
+  const nfft=Math.max(256,nwin), hop=8, cols=Math.floor((N-nwin)/hop);
+  const df=1/(nfft*PRI), k0=Math.ceil(FMAX/df), rows=2*k0+1;
+  const out=new Float32Array(cols*rows); let mx=-1e9;
+  const w=new Float64Array(nwin); for(let i=0;i<nwin;i++) w[i]=0.5-0.5*Math.cos(2*Math.PI*i/(nwin-1));
+  const re=new Float64Array(nfft), im=new Float64Array(nfft);
+  for(let c=0;c<cols;c++){
+    re.fill(0); im.fill(0);
+    for(let i=0;i<nwin;i++){ re[i]=sig.re[c*hop+i]*w[i]; im[i]=sig.im[c*hop+i]*w[i]; }
+    fft(re,im);
+    for(let r=0;r<rows;r++){ const k=((r-k0)%nfft+nfft)%nfft;
+      const v=10*Math.log10(re[k]*re[k]+im[k]*im[k]+1e-20); out[c*rows+r]=v; if(v>mx) mx=v; }
+  }
+  for(let i=0;i<out.length;i++) out[i]-=mx;
+  return (cache[key]={out,cols,rows,hop,nwin,fmax:k0*df});
+}
+
+/* white to navy, -40 to 0 dB */
+function shade(db){ const x=Math.max(0,Math.min(1,(db+40)/40));
+  return [Math.round(255-(255-0)*x), Math.round(255-(255-74)*x), Math.round(255-(255-133)*x)]; }
+
+function stext(s,x,y,px,color,align,base){ ctx.fillStyle=color; ctx.font=px+'px '+SANS;
+  ctx.textAlign=align||'left'; ctx.textBaseline=base||'middle'; ctx.fillText(s,x,y); }
+
+function setSize(wCss,hCss,dpr){
+  cv.width=Math.round(wCss*dpr); cv.height=Math.round(hCss*dpr); cv.style.height=hCss+'px';
+  const bh=cv.offsetHeight-cv.clientHeight; if(bh) cv.style.height=(hCss+bh)+'px';
+}
+let W=0, H=0;
+function fit(){
+  const dpr=window.devicePixelRatio||1;
+  W=Math.max(240, cv.clientWidth||Math.floor(cv.getBoundingClientRect().width));
+  H=Math.round(Math.max(220, Math.min(W*0.46, 330)));
+  setSize(W,H,dpr); ctx.setTransform(dpr,0,0,dpr,0,0); draw();
+}
+window.addEventListener('resize', fit);
+
+const off=document.createElement('canvas'), octx=off.getContext('2d');
+function draw(){
+  const s=spec(state.kind,state.nwin);
+  const L=56, Rm=12, Tm=10, B=40, pw=W-L-Rm, ph=H-Tm-B;
+  ctx.clearRect(0,0,W,H);
+  off.width=s.cols; off.height=s.rows;
+  const img=octx.createImageData(s.cols,s.rows);
+  for(let c=0;c<s.cols;c++) for(let r=0;r<s.rows;r++){
+    const [R,G,Bl]=shade(s.out[c*s.rows+r]), j=((s.rows-1-r)*s.cols+c)*4;
+    img.data[j]=R; img.data[j+1]=G; img.data[j+2]=Bl; img.data[j+3]=255; }
+  octx.putImageData(img,0,0);
+  // the columns span the window centers, nwin/2 to T - nwin/2
+  const t0=s.nwin/2*PRI, t1=t0+(s.cols-1)*s.hop*PRI;
+  const xp=t=>L+t/T*pw, yp=f=>Tm+(1-(f+FMAX)/(2*FMAX))*ph;
+  ctx.imageSmoothingEnabled=true;
+  ctx.drawImage(off,0,0,s.cols,s.rows,xp(t0),yp(s.fmax),xp(t1)-xp(t0),yp(-s.fmax)-yp(s.fmax));
+  ctx.strokeStyle='#8a929c'; ctx.lineWidth=1; ctx.strokeRect(L+0.5,Tm+0.5,pw-1,ph-1);
+  const ink3='#5b6573';
+  [-500,-250,0,250,500].forEach(f=>{ const y=yp(f); ctx.beginPath(); ctx.moveTo(L-4,y); ctx.lineTo(L,y); ctx.stroke();
+    stext(String(f),L-7,y,11.5,ink3,'right'); });
+  [0,1,2,3].forEach(t=>{ const x=xp(t); ctx.beginPath(); ctx.moveTo(x,Tm+ph); ctx.lineTo(x,Tm+ph+4); ctx.stroke();
+    stext(String(t),x,Tm+ph+14,11.5,ink3,'center'); });
+  stext('time (s)',L+pw/2,H-9,12,ink3,'center');
+  ctx.save(); ctx.translate(13,Tm+ph/2); ctx.rotate(-Math.PI/2); stext('Doppler (Hz)',0,0,12,ink3,'center'); ctx.restore();
+  // the window's length, drawn to scale on the time axis
+  const wx=xp(T)-6, wl=xp(s.nwin*PRI)-xp(0);
+  ctx.fillStyle='rgba(176,30,36,0.85)'; ctx.fillRect(wx-wl,Tm+6,Math.max(wl,2),5);
+  const ms=s.nwin*PRI*1e3, df=1/(s.nwin*PRI);
+  el('win-val').textContent=s.nwin+' chirps, '+(ms<10?ms.toFixed(1):ms.toFixed(0))+' ms, '+(df<10?df.toFixed(1):df.toFixed(0))+' Hz';
+}
+
+document.querySelectorAll('#kind button').forEach(b=>{
+  b.classList.toggle('on', b.dataset.k===state.kind);
+  b.addEventListener('click',()=>{ state.kind=b.dataset.k;
+    document.querySelectorAll('#kind button').forEach(x=>x.classList.toggle('on',x===b)); draw(); });
+});
+function readWin(){ state.nwin=1<<(+el('win').value); }
+el('win').addEventListener('input',()=>{ readWin(); draw(); });
+readWin();
+fit();
+</script>
+</body>
+</html>
