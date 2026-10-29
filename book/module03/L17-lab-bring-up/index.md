@@ -295,6 +295,11 @@ EOF
 14. Run `ping -c 4 github.com` and expect four replies.
 :::
 
+<div class="rec" data-lab="L17">
+<label>Step 14: result of <code>ping -c 4 github.com</code> <input data-field="b.ping"></label>
+</div>
+
+
 The classroom Wi-Fi is the open guest network `AF_ACADEMY_GUEST`. The reboot in
 Step 13 is not optional: on the instructor's kit, asking the Wi-Fi client to reread
 its settings without a reboot left it offline, and the ping failed until the
@@ -328,6 +333,11 @@ date
 ```
 :::
 
+<div class="rec" data-lab="L17">
+<label>Step 15: the date the Pi printed <input data-field="b.date"></label>
+</div>
+
+
 The clock comes from a web server, so it waits until the Pi is on the Wi-Fi.
 `sudo` asks for the password, `analog`. The `date` that comes back should be
 today's date and time; the server reports it in GMT, and the Pi shows it in its
@@ -360,6 +370,13 @@ curl -fsSL https://raw.githubusercontent.com/livethisdream/phaser/main/scripts/p
 17. Wait for `Provisioned.`, then run `sudo reboot`.
 18. Run `ssh analog@phaser-NN.local`, answer `yes`, and check that `hostname` prints `phaser-NN`.
 :::
+
+<div class="rec" data-lab="L17">
+<label>Kit number NN <input data-field="b.kit"></label>
+<label>Step 17: the last line <code>provision.sh</code> printed <input data-field="b.provision"></label>
+<label>Step 18: what <code>hostname</code> prints <input data-field="b.hostname"></label>
+</div>
+
 
 The script prints its steps, `[1/8]` through `[8/8]`, and takes tens of
 minutes; step `[7/8]`, which builds the Python library that talks to the
@@ -407,6 +424,11 @@ updated:
 19. Run `journalctl -u phaser-headless -n 30` and look for the banner `ADI Phaser Beamforming Backend` with no `No device found` after it.
 20. Browse to `http://phaser-NN.local:8080` and wait for the pill to read **Connected**.
 :::
+
+<div class="rec" data-lab="L17">
+<label>Step 20: what the connection pill reads <input data-field="b.pill"></label>
+</div>
+
 
 The backend runs as a service named `phaser-headless`, and its log is the
 first place to look when anything is wrong. A healthy start prints the banner,
@@ -489,6 +511,13 @@ them; it is unavailable on the FFT tab.
 
 In order. Let each one finish before the next.
 :::
+
+<div class="rec" data-lab="L17">
+<label>Step 22: the frequency Find HB100 reported <input data-field="b.freq"></label>
+<label>Step 23: the IF Characterize IF chose <input data-field="b.if"></label>
+<label>Step 24: Calibrate Phaser ran to completion (yes or no) <input data-field="b.cal"></label>
+</div>
+
 
 Set the HB100 about $1\ \text{m}$ in front of the array, at the same height as
 the patch row, with its own patch face toward the board. Each button opens a
@@ -612,6 +641,16 @@ the next connection asks about the new one.
 Expect 20 dB or more above the floor.
 :::
 
+<div class="rec" data-lab="L17">
+<label>Part B, step 2: Rx Gain used (dB) <input data-field="c.rxgain"></label>
+<label>Source distance (m) <input data-field="c.distance"></label>
+<label>Part B, step 3: peak position (MHz) <input data-field="c.fft.pos"></label>
+<label>Part B, step 3: peak (dBFS) <input data-field="c.fft.peak"></label>
+<label>Part B, step 3: floor (dBFS) <input data-field="c.fft.floor"></label>
+<label>Part B, step 3: separation, peak minus floor (dB) <input data-field="c.fft.sep"></label>
+</div>
+
+
 Part B runs on the kit you brought up in Part A and records the observations
 any working kit produces, for Part 2 of the lab packet. Work through the steps
 in order.
@@ -671,6 +710,12 @@ lowers the floor, and raises the separation with no change at the antenna.
 Expect Angle within $2^\circ$ of $0^\circ$.
 :::
 
+<div class="rec" data-lab="L17">
+<label>Part B, step 5: Angle at boresight <input data-field="c.rect.bore.angle"></label>
+<label>Part B, step 5: Peak Gain at boresight (dB) <input data-field="c.rect.bore.gain"></label>
+</div>
+
+
 The Rectangular tab plots the beam sweep: the backend steers the beam across
 the field of view one phase step at a time and records the received power at
 each step, so the trace peaks where the beam points at the source.
@@ -681,6 +726,15 @@ each step, so the trace peaks where the beam points at the source.
 6. Carry the HB100 $30^\circ$ to one side, same distance, facing the array. Record both, and which end, E1 or E8, it moved toward. Facing the patches, E1 is on your right.
 7. Return it to boresight; record both again.
 :::
+
+<div class="rec" data-lab="L17">
+<label>Part B, step 6: the end it moved toward, E1 or E8 <input data-field="c.rect.side"></label>
+<label>Part B, step 6: Angle, moved <input data-field="c.rect.side.angle"></label>
+<label>Part B, step 6: Peak Gain, moved (dB) <input data-field="c.rect.side.gain"></label>
+<label>Part B, step 7: Angle, back at boresight <input data-field="c.rect.back.angle"></label>
+<label>Part B, step 7: Peak Gain, back at boresight (dB) <input data-field="c.rect.back.gain"></label>
+</div>
+
 
 The source sits at $30^\circ$ when it is $0.5\ \text{m}$ to one side of the
 array's centerline and still $1\ \text{m}$ from the array; keep the distance
@@ -724,6 +778,21 @@ With a checkout of the Phaser repository and Python,
 `python phaser_headless.py --sim` serves the same page at
 `http://localhost:8080`.
 :::
+::::
+
+::::{frame} Your Part 2 Entries
+:class: read-only
+
+Every box you filled in on this page, in one place. Your entries stay in this
+browser only, saved as you type. **Download my packet** writes them into Part 2
+of the blank packet and saves the PDF; do Parts 1 and 3 on paper or in the PDF
+viewer, and upload one PDF to Gradescope. If you have already typed Part 1 into
+the packet PDF, use **Fill my own copy** and choose that file instead: your Part 1
+is kept, and Part 2 is added to it. Either way the result is locked, so finish
+any typing in the PDF first. **Export entries** saves a small backup file you
+can **Import** on another laptop or after clearing your browser.
+
+<div class="rec-summary" data-lab="L17" data-pdf="../../labs/ECE444_Lab_L17_Hardware_blank.pdf" data-file="ECE444_L17_Lab"></div>
 ::::
 
 ::::{frame} Lab Packet

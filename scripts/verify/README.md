@@ -98,6 +98,7 @@ TEXINPUTS=/workspace/latex-tools/tex/latex//: \
 | `check_page.py` | math typeset; no raw `$$`/`$` leaking into the article; iframe targets resolve |
 | `check_tables.py` | markdown table rows where a `|` inside `$...$` splits a cell |
 | `check_print.py` | `.deck`'s scroller does not clip `@media print` to one sheet; read mode prints the depth; present mode prints the slide handout (no depth, no read-only frames, a sheet per slide); the bar/rail/overlay/laser/spotlight are gone on paper |
+| `check_records.py` | every field a lab page's Part 2 boxes ask for (`data-field`) exists in the packet PDF its summary frame fills (`data-pdf`); a renamed `\kv[name]` in the faculty LaTeX or a typo on the page would otherwise save, download, and silently leave the value out |
 | `mech_check.sh` | all of the above for one lesson, plus files present, LaTeX compiles without errors or overfull boxes >10pt, every `\part` has a `\begin{solution}`, LO markup matches the module, no thin spaces, no `\|` inside table math, no self-vouching wording |
 
 ## Two measurement rules worth keeping
