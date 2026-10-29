@@ -1239,7 +1239,7 @@ it when a rounded number differs from ADI's (L26: 715 Hz vs ADI's 716).
 | :-- | :-- | :-- |
 | carrier $f_c$ | 10.0 GHz | $\lambda$ = 3.0 cm |
 | chirp bandwidth $B$ | 500 MHz | $\Delta R = c/2B$ = 0.30 m |
-| range chirp (L28 Lab), $T_s$ | 0.5 ms | 6.67 kHz of beat per meter; 250 MHz halves it, 1 ms halves it |
+| range chirp (L28 Lab), $T_s$ | 0.5 ms at 0.6 MSPS (ADI's `FMCW_RADAR_Waterfall.py` rate) | 6.67 kHz of beat per meter; 300 samples a chirp, 2 kHz bins, 30 m reach; 250 MHz or 1 ms halves the beat and doubles the reach. An L28 capture's `PRI` is the waterfall line time (50 ms in the recorded data), not the chirp length |
 | range-Doppler burst (L29–L31) | 256 chirps of 300 µs, PRI 0.5 ms, 4 MSPS | 11.1 kHz per meter; CPI 128 ms; $\Delta v = \lambda/(2M\,T_\text{PRI})$ = 0.12 m/s; $v_\text{max} = \pm\lambda/(4T_\text{PRI})$ = ±15 m/s |
 | 0 m frequency | about 100 kHz, set per kit by the L28 calibration | ADI's `signal_freq`; never called an IF on a page |
 | corner reflector | edge $a$ = 10 cm (provisional) | $\sigma = 4\pi a^4/3\lambda^2$ = 0.47 m² |

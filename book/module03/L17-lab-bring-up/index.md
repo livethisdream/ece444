@@ -93,6 +93,22 @@ period; it is named for your kit before it goes in, and it still needs Steps
 :::
 ::::
 
+::::{frame} The Rotating Stand
+:::{present}
+- Print `common/` and `tripod/` from the [stand's files](https://github.com/livethisdream/phaser/tree/main/hardware/stand-simple): PETG, no supports.
+- The tripod's feet sit in three grooves, with the array's center on the axis.
+- The base carries a $\pm 180^\circ$ scale; the platter clicks every $5^\circ$.
+:::
+:::{present}
+<img src="../../viz/img/L17-stand-tripod.png" alt="Render of the 3D-printed rotating stand: a blue base engraved with a plus or minus 180 degree scale every 5 degrees, and a gray platter on top with three grooves for the kit's tripod feet and a pointer at its edge" style="max-width: 100%; display: block; margin: 0 auto;">
+:::
+
+Every kit stands on this turntable. The kit's own tabletop tripod sits in the
+platter's three grooves, and the platter turns on the base about the middle of
+the array, so in the L21 Lab you can rotate the board in front of a fixed
+source and read the angle off the base's engraved scale.
+::::
+
 ::::{frame} Kit Care
 :::{present}
 **Do**

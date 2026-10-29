@@ -50,6 +50,14 @@ bad(){ echo "  FAIL  $1"; fails=$((fails+1)); }
 
 echo "== ${LNN} =="
 
+# Module 4's L28-L31 carry their lab on the lesson page and have no practice
+# set: the lab packet replaces it (ROADMAP 4, Neil 2026-10-25). Skip the
+# practice gates for them. The stub gate and the packet-link gate (7) still
+# apply, so a lesson-half pass reports two expected failures until its lab
+# pass adds the procedure and links the packet.
+PRACTICE=1
+case "$NN" in 28|29|30|31) PRACTICE=0 ;; esac
+
 # Locate the lesson page, and take the module number from where it actually
 # lives rather than assuming a lesson-to-module mapping.
 page="$(ls -d "$REPO"/book/module*/"$LNN"/index.md 2>/dev/null | head -1)"
@@ -64,10 +72,14 @@ MOD="$(basename "$(dirname "$(dirname "$page")")" | sed 's/^module0*//')"
 [ -s "$page" ] && ! grep -q "under construction" "$page" \
   && ok "lesson page non-stub (module $MOD)" || bad "lesson page missing/stub"
 tex="$REPO/latex/ECE444_Practice_L$NN.tex"
-[ -s "$tex" ] && ok "practice tex" || bad "practice tex missing"
 b="$REPO/book/extras/practice/ECE444_L${NN}_Practice_blank.pdf"
 s="$REPO/book/extras/practice/ECE444_L${NN}_Practice_SOLUTIONS.pdf"
-[ -s "$b" ] && [ -s "$s" ] && ok "practice PDFs present" || bad "practice PDFs missing"
+if [ "$PRACTICE" = 1 ]; then
+  [ -s "$tex" ] && ok "practice tex" || bad "practice tex missing"
+  [ -s "$b" ] && [ -s "$s" ] && ok "practice PDFs present" || bad "practice PDFs missing"
+else
+  ok "no practice set: the L$NN Lab packet replaces it (Module 4)"
+fi
 
 widgets="$(grep -oE 'viz/[a-z0-9-]+\.html' "$page" 2>/dev/null | sed 's|viz/||' | sort -u)"
 for w in $widgets; do
@@ -77,6 +89,7 @@ done
 [ -n "$widgets" ] && ok "page references $(echo "$widgets" | wc -w) widget(s)" \
   || bad "page references no interactive graphic"
 
+if [ "$PRACTICE" = 1 ]; then
 # 2. practice compiles clean
 if ( cd "$REPO" && bash latex/build_practice.sh "$NN" >"/tmp/mc_build_$NN.log" 2>&1 ); then
   ok "pdflatex builds"
@@ -106,6 +119,7 @@ pb=$(pdfinfo "$b" 2>/dev/null | awk '/^Pages/{print $2}')
 ps=$(pdfinfo "$s" 2>/dev/null | awk '/^Pages/{print $2}')
 [ -n "$ps" ] && [ "$ps" -ge "$pb" ] && ok "pages: blank=$pb solutions=$ps" \
   || bad "pagecount odd: blank=$pb sol=$ps"
+fi
 
 # 3a. frame budget -- only for a lesson that has opted into the frame view.
 # A frame taller than the viewport is the old decks' "slide too tall" defect in a
@@ -146,7 +160,7 @@ for w in $widgets; do
 done
 
 # 5. greps for the gotchas that ship silently
-files="$page $tex"
+files="$page"; [ "$PRACTICE" = 1 ] && files="$page $tex"
 grep -lP '\x{2009}' $files 2>/dev/null | grep -q . \
   && bad "U+2009 thin space found" || ok "no thin spaces"
 if python3 "$HERE/check_tables.py" "$page"; then
@@ -156,8 +170,10 @@ else
 fi
 grep -q 'class="lo-list"' "$page" && grep -q -- "--module: '$MOD'" "$page" \
   && ok "LO markup, course objective, module $MOD" || bad "LO markup wrong for module $MOD"
-grep -q "Learning Objective $MOD\." "$tex" && ok "practice LO banner" \
-  || bad "practice LO banner missing (expected 'Learning Objective $MOD.x')"
+if [ "$PRACTICE" = 1 ]; then
+  grep -q "Learning Objective $MOD\." "$tex" && ok "practice LO banner" \
+    || bad "practice LO banner missing (expected 'Learning Objective $MOD.x')"
+fi
 
 # 6. voice self-check (VOICE.md) -- self-praise words, never in course prose
 if grep -nEi '\b(honest|genuinely|rigorous|no hand-waving|is the price)\b' \
@@ -180,6 +196,8 @@ if grep -q "Practice_blank.pdf" "$page"; then
 elif [ -n "$packet" ]; then
   [ -s "$REPO/book/extras/labs/$packet" ] && ok "lab packet linked in place of practice ($packet)" \
     || bad "lab packet $packet linked but not built"
+elif [ "$PRACTICE" = 0 ]; then
+  bad "L$NN Lab packet not linked yet (the lab pass adds it)"
 else
   bad "lesson page missing Practice links"
 fi

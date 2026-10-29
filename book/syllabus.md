@@ -89,7 +89,7 @@ Each LO is assessed at least once. LOs are assessed as **Mastered** or
 | 4.3 | I can apply radar detection theory (PD, FAR, dwell time) to determine detection performance under noise. |
 | 4.4 | I can describe FMCW radar operation and configure an FMCW waveform on the ADALM-PHASER. |
 | 4.5 | I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results. |
-| 4.6 | I can implement moving target indication (MTI) processing to distinguish moving targets from clutter. |
+| 4.6 | I can apply moving target indication (MTI) processing to distinguish moving targets from clutter. |
 | 4.7 | I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance. |
 | 4.8 | I can integrate FMCW radar processing with a phased-array front-end to track a moving target. |
 | 4.9 | I can classify a detected target from its micro-Doppler signature and report the classifier's accuracy. |
