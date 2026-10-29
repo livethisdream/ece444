@@ -61,7 +61,7 @@ LO_TEXT = {
     "4.3": "I can apply radar detection theory (PD, FAR, dwell time) to determine detection performance under noise.",
     "4.4": "I can describe FMCW radar operation and configure an FMCW waveform on the ADALM-PHASER.",
     "4.5": "I can process FMCW radar data to produce range, range-waterfall, and range-Doppler results.",
-    "4.6": "I can implement moving target indication (MTI) processing to distinguish moving targets from clutter.",
+    "4.6": "I can apply moving target indication (MTI) processing to distinguish moving targets from clutter.",
     "4.7": "I can apply constant false-alarm rate (CFAR) processing to radar data and evaluate detection performance.",
     # 4.8 and 4.9 were 5.2 and 5.3 until Module 5 folded into Module 4
     # (Neil, 2026-10-15); 5.1 and 5.4 went with the capstone.

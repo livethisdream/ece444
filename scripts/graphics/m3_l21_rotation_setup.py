@@ -2,10 +2,12 @@
 """L21 Lab: the rotation setup, seen from above.
 
 The HB100 stays on its tripod 1.2 m out; the kit turns about the center of
-the array over a protractor fixed to the bench. The figure pins down the sign
-convention: turning the kit's face toward E1 puts the source on the E8 side
-of the array normal, at +theta, and the kit's pointer reads +theta on the
-protractor.
+the array on its rotating stand (phaser repo, hardware/stand-simple). The
+figure pins down the sign convention: turning the kit's face toward E1 puts
+the source on the E8 side of the array normal, at +theta. The stand's scale
+is engraved on the fixed base and counts clockwise seen from above
+(phaser_stand_simple.scad), while that turn is counterclockwise, so the
+pointer reads -theta.
 
     python3 scripts/graphics/m3_l21_rotation_setup.py
     -> writes book/extras/viz/img/L21-rotation-setup.svg
@@ -24,7 +26,7 @@ W, H = 640, 445
 CX, CY = 320, 330          # rotation axis = array center
 SY = 62                    # source y (straight up from the axis)
 THETA = 30.0               # drawn rotation, degrees
-R_PRO = 120                # protractor radius
+R_PRO = 120                # radius of the stand's scale
 
 
 def pt(r, ang_deg):
@@ -36,14 +38,16 @@ def pt(r, ang_deg):
 def main() -> None:
     s = [f'<svg viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="img" '
          f'aria-label="Top view of the rotation setup: the HB100 fixed 1.2 m from the array, '
-         f'and the kit turned 30 degrees about the array center over a protractor, its face '
-         f'toward E1, which puts the source at plus 30 degrees on the E8 side">']
+         f'and the kit turned 30 degrees about the array center on its rotating stand, its face '
+         f'toward E1, which puts the source at plus 30 degrees on the E8 side while the '
+         f'pointer on the stand scale reads minus 30">']
     s.append('<defs><marker id="l21rArr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" '
              f'markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="{GRAY}"/></marker>'
              '<marker id="l21rNav" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" '
              f'markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="{NAVY}"/></marker></defs>')
 
-    # protractor, fixed to the bench: + on screen-left (the E1 side the face turns toward)
+    # the stand's scale, on the fixed base: + clockwise seen from above (screen-right),
+    # so the E1 side the face turns toward is the minus side
     x0, y0 = pt(R_PRO, 90)
     x1, y1 = pt(R_PRO, -90)
     s.append(f'<path d="M{x0:.1f} {y0:.1f} A{R_PRO} {R_PRO} 0 0 1 {x1:.1f} {y1:.1f}" fill="#eef4fa" '
@@ -55,7 +59,7 @@ def main() -> None:
         s.append(f'<line x1="{xa:.1f}" y1="{ya:.1f}" x2="{xb:.1f}" y2="{yb:.1f}" stroke="{GRAY}" stroke-width="1"/>')
         if a % 30 == 0:
             xl, yl = pt(R_PRO + 16, a)
-            lab = "0°" if a == 0 else f"{a:+d}°"
+            lab = "0°" if a == 0 else f"{-a:+d}°".replace("-", "−")
             if a == 0:          # clear of the dashed line of sight
                 xl += 14
             s.append(f'<text x="{xl:.1f}" y="{yl + 4:.1f}" text-anchor="middle" font-size="12" fill="{GRAY}">{lab}</text>')
@@ -83,12 +87,12 @@ def main() -> None:
     s.append(f'<text x="{e1x - 22:.1f}" y="{e1y + 6:.1f}" text-anchor="middle" font-size="13" font-weight="700" fill="{NAVY}">E1</text>')
     s.append(f'<text x="{e8x + 12:.1f}" y="{e8y + 20:.1f}" text-anchor="middle" font-size="13" font-weight="700" fill="{NAVY}">E8</text>')
 
-    # the kit's normal, which is also its pointer on the protractor
+    # the kit's normal, which is also the platter's pointer on the scale
     nx, ny = pt(R_PRO - 2, THETA)
     s.append(f'<line x1="{CX}" y1="{CY}" x2="{nx:.1f}" y2="{ny:.1f}" stroke="{NAVY}" stroke-width="2" marker-end="url(#l21rNav)"/>')
     tx, ty = pt(R_PRO + 34, THETA + 8)
     s.append(f'<text x="{tx - 6:.1f}" y="{ty:.1f}" text-anchor="end" font-size="12" fill="{NAVY}">array normal</text>')
-    s.append(f'<text x="{tx - 6:.1f}" y="{ty + 15:.1f}" text-anchor="end" font-size="12" fill="{NAVY}">(pointer)</text>')
+    s.append(f'<text x="{tx - 6:.1f}" y="{ty + 15:.1f}" text-anchor="end" font-size="12" fill="{NAVY}">(pointer reads −30°)</text>')
 
     # theta between the normal and the line to the source
     ra = 62
@@ -100,7 +104,7 @@ def main() -> None:
 
     # rotation axis
     s.append(f'<circle cx="{CX}" cy="{CY}" r="3" fill="#fff" stroke="{INK}" stroke-width="1.2"/>')
-    s.append(f'<text x="{CX}" y="{CY + 92}" text-anchor="middle" font-size="12" fill="{INK}">face toward E1: the source sits at +θ, on the E8 side</text>')
+    s.append(f'<text x="{CX}" y="{CY + 92}" text-anchor="middle" font-size="12" fill="{INK}">face toward E1: the source sits at +θ, on the E8 side; the stand reads −θ</text>')
     s.append('</svg>')
     OUT.write_text(apply_font_stack("\n".join(s)) + "\n")
     print(f"wrote {OUT}")
