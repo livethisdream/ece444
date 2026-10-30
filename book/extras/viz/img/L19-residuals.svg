@@ -102,6 +102,16 @@ L 0 -5.5
      <use xlink:href="#mca7bb03c4e" x="144.473604" y="27.37943" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 2"/>
     </g>
    </g>
+   <g id="line2d_13">
+    <path d="M 131.353437 138.24 
+L 144.473604 27.37943 
+" clip-path="url(#pe747ddee2d)" style="fill: none; stroke-dasharray: 3.7,1.6; stroke-dashoffset: 0; stroke: #5a5a5a"/>
+   </g>
+   <g id="line2d_14">
+    <path d="M 144.473604 27.37943 
+L 130.314311 27.512308 
+" clip-path="url(#pe747ddee2d)" style="fill: none; stroke: #b01e24; stroke-width: 2; stroke-linecap: square"/>
+   </g>
    <g id="text_1">
     <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="19.753437" y="158.27375" transform="rotate(-0 19.753437 158.27375)">4 cm</text>
    </g>
@@ -116,6 +126,22 @@ L 0 -5.5
    </g>
    <g id="text_5">
     <text style="font-size: 13px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-anchor: middle; fill: #1a1a1a" x="242.953438" y="158.27375" transform="rotate(-0 242.953438 158.27375)">6 cm</text>
+   </g>
+   <g id="text_6">
+    <!-- $R$ -->
+    <g style="fill: #5a5a5a" transform="translate(142.377521 88.266258)">
+     <text>
+      <tspan x="0" y="-0.0625" style="font-style: oblique; font-size: 15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #5a5a5a">R</tspan>
+     </text>
+    </g>
+   </g>
+   <g id="text_7">
+    <!-- $e$ -->
+    <g style="fill: #b01e24" transform="translate(116.550311 31.480851)">
+     <text>
+      <tspan x="0" y="-0.59375" style="font-style: oblique; font-size: 15px; font-family:'Source Sans Pro', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; fill: #b01e24">e</tspan>
+     </text>
+    </g>
    </g>
   </g>
  </g>
