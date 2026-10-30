@@ -258,6 +258,34 @@ def worked_example() -> dict:
     return out
 
 
+def three_bearing_example() -> None:
+    """The page's least-squares worked example: three stations, every number
+    it prints, asserted. Nothing is drawn."""
+    xs = np.array([-0.75, 0.0, 0.75])
+    th = np.array([34.6, 8.8, -17.7])
+    c, s = np.cos(np.radians(th)), np.sin(np.radians(th))
+    n = np.stack([-c, s], axis=1)
+    P = np.stack([xs, np.zeros_like(xs)], axis=1)
+    d = np.sum(n * P, axis=1)
+    M, b = n.T @ n, n.T @ d
+    fix = np.linalg.solve(M, b)
+    f3 = lambda a: [f"{v:.3f}" for v in np.ravel(a)]
+    assert f3(c) == ["0.823", "0.988", "0.953"] and f3(s) == ["0.568", "0.153", "-0.304"]
+    assert f3(d) == ["0.617", "0.000", "-0.714"]
+    assert f3(M) == ["2.562", "-0.329", "-0.329", "0.438"] and f3(b) == ["0.173", "0.568"]
+    # the page works the inverse from the rounded entries it prints
+    assert f"{2.562 * 0.438 - 0.329 ** 2:.3f}" == "1.014"
+    assert f"{(0.438 * 0.173 + 0.329 * 0.568) / 1.014:.2f}" == "0.26"
+    assert f"{(2.562 * 0.568 + 0.329 * 0.173) / 1.014:.2f}" == "1.49"
+    assert [f"{v:.2f}" for v in fix] == ["0.26", "1.49"]
+    assert f"{np.linalg.norm(fix - np.array([0.25, 1.5])):.2f}" == "0.01"
+    e = n @ fix - d
+    assert f3(e) == ["0.016", "-0.028", "0.015"], e
+    own = np.linalg.norm(fix - P, axis=1) * np.tan(np.radians(1.5))
+    assert np.all(np.abs(e) < own) and np.allclose(own, 0.04, atol=0.008), own
+    print(f"   three-bearing example: fix {fix.round(3)}, residuals {e.round(3)}")
+
+
 def fig_two_bearings(w: dict) -> None:
     fig, ax = plt.subplots(figsize=(4.4, 3.5))
     ax.plot([-1.5, 1.5], [0, 0], color=LIGHT, lw=2.0, solid_capstyle="butt")
@@ -697,6 +725,7 @@ def main() -> None:
     fig_sweep()
     fig_sweep_grid()
     fig_two_bearings(worked_example())
+    three_bearing_example()
     fig_crossing()
     fig_depth()
     fig_reflection()
