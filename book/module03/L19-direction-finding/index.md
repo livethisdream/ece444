@@ -527,20 +527,43 @@ $\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)$, and with
 $\mathbf p_i = (x_i,\ 0)$ the right-hand side's scalar is
 $\hat{\mathbf n}_i\cdot\mathbf p_i = -x_i\cos\theta_i$.
 
-:::{admonition} Worked example — three bearings
-:class: tip
-Stations at $x_i = -0.75$, $0$, and $+0.75\ \text{m}$ read Angle $34.6^\circ$,
-$8.8^\circ$, and $-17.7^\circ$. Each row gives that station's normal and the
-scalar $\hat{\mathbf n}_i\cdot\mathbf p_i$:
+Unweighted least squares treats every line as equally reliable. A bearing from
+a kit far from the source is less reliable in meters, as the next frame shows,
+so if the ranges differ a lot, weighting each term by $1/r_i^2$ gives the
+better fix. In the fox hunt every bearing that counts is within about
+$\pm 45^\circ$ of broadside, so the ranges from the stations to one box differ
+by at most a factor of $\sqrt{2}$, the weights by a factor of 2, and the
+unweighted form is close enough.
+::::
 
-| Station | $x_i$ (m) | $\theta_i$ | $\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)$ | $\hat{\mathbf n}_i\cdot\mathbf p_i$ (m) |
-| :-- | :-- | :-- | :-- | :-- |
-| 1 | $-0.75$ | $34.6^\circ$ | $(-0.823,\ 0.568)$ | $0.617$ |
-| 2 | $0$ | $8.8^\circ$ | $(-0.988,\ 0.153)$ | $0$ |
-| 3 | $+0.75$ | $-17.7^\circ$ | $(-0.953,\ -0.304)$ | $-0.714$ |
+::::{frame} A Three-Bearing Fix
+:::{present}
+| $i$ | 1 | 2 | 3 |
+| :-- | :-- | :-- | :-- |
+| $x_i$ (m) | $-0.75$ | $0$ | $+0.75$ |
+| $\theta_i$ | $34.6^\circ$ | $8.8^\circ$ | $-17.7^\circ$ |
+| $\hat n_{i,x}$ | $-0.823$ | $-0.988$ | $-0.953$ |
+| $\hat n_{i,y}$ | $0.568$ | $0.153$ | $-0.304$ |
+| $\hat{\mathbf n}_i\cdot\mathbf p_i$ | $0.617$ | $0$ | $-0.714$ |
+:::
+:::{present}
+$$\begin{aligned}
+\mathbf M &= \begin{bmatrix} 2.562 & -0.329 \\ -0.329 & 0.438 \end{bmatrix} \\
+\mathbf b &= \begin{bmatrix} 0.173 \\ 0.568 \end{bmatrix} \\
+\mathbf x &= \mathbf M^{-1}\mathbf b = (0.26,\ 1.49)\ \text{m}
+\end{aligned}$$
+
+- The box is at $(0.25,\ 1.50)\ \text{m}$: $0.01\ \text{m}$ away.
+:::
+
+Stations at $x_i = -0.75$, $0$, and $+0.75\ \text{m}$ read Angle $34.6^\circ$,
+$8.8^\circ$, and $-17.7^\circ$. Each column of the table is one station: its
+normal $\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)$, as its $x$
+and $y$ components, and the scalar
+$\hat{\mathbf n}_i\cdot\mathbf p_i = -x_i\cos\theta_i$.
 
 Summing $\hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}$ over the rows, and
-$\hat{\mathbf n}_i$ times its scalar, gives the normal equations
+$\hat{\mathbf n}_i$ times its scalar, gives the normal equations $\mathbf M\mathbf x = \mathbf b$,
 
 $$\begin{bmatrix} 2.562 & -0.329 \\ -0.329 & 0.438 \end{bmatrix}
 \begin{bmatrix} x \\ y \end{bmatrix} =
@@ -558,17 +581,8 @@ The box was at $(0.25,\ 1.50)\ \text{m}$, so the fix lands $0.01\ \text{m}$
 from it. The residuals, $\hat{\mathbf n}_i\cdot\mathbf x - \hat{\mathbf n}_i\cdot\mathbf p_i$,
 are $0.016$, $-0.028$, and $0.015\ \text{m}$, all under each station's own
 $R_i\tan\sigma_\beta$ of about $0.04\ \text{m}$ at $1.5^\circ$: three good
-bearings ("Residuals and Outliers" below). `numpy.linalg.solve` does the same
+bearings (the check in "Residuals and Outliers" below). `numpy.linalg.solve` does the same
 arithmetic in one line.
-:::
-
-Unweighted least squares treats every line as equally reliable. A bearing from
-a kit far from the source is less reliable in meters, as the next frame shows,
-so if the ranges differ a lot, weighting each term by $1/r_i^2$ gives the
-better fix. In the fox hunt every bearing that counts is within about
-$\pm 45^\circ$ of broadside, so the ranges from the stations to one box differ
-by at most a factor of $\sqrt{2}$, the weights by a factor of 2, and the
-unweighted form is close enough.
 ::::
 
 ::::{frame} Cross-Range Error
@@ -759,6 +773,8 @@ $0.75\ \text{m}$ apart for the same reason.
 ::::
 
 ::::{frame} Residuals and Outliers
+:class: read-only
+
 :::{present}
 $$\begin{aligned}
 R_i &= \lvert\mathbf x - \mathbf p_i\rvert \\
