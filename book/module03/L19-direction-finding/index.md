@@ -489,9 +489,9 @@ from the box. The two lines cross at $\gamma = \theta_A - \theta_B = 59.0^\circ$
 :::{present}
 $$\left(\sum_i \hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}\right)\mathbf x = \sum_i \hat{\mathbf n}_i\left(\hat{\mathbf n}_i\cdot\mathbf p_i\right)$$
 
-- With three or more bearings the lines do not meet at one point.
-- The fix is the point with the smallest sum of squared distances to the lines.
-- numpy solves one $2\times 2$ system for two kits or ten.
+- $\mathbf p_i$: station $i$'s position. $\hat{\mathbf n}_i = (-\sin\beta_i,\ \cos\beta_i)$: the unit normal to its bearing line.
+- On the firing line, $\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)$.
+- The fix $\mathbf x$ is closest to every line: one $2\times 2$ solve.
 :::
 
 With two bearings the crossing is exact. A third bearing adds a third line,
@@ -519,6 +519,48 @@ positions. One call to `numpy.linalg.solve` returns the fix. For two bearings it
 reproduces the crossing of the worked example exactly; for more, it is the least-squares
 compromise. The L19 Lab's pre-lab has you write this as a short Python
 function and test it on a supplied set of bearings.
+
+Each $\hat{\mathbf n}_i$ is the normal of "The Bearing Line", one per station:
+$\hat{\mathbf n}_i = (-\sin\beta_i,\ \cos\beta_i)$ for room bearing $\beta_i$.
+On the firing line every kit faces $+y$ and $\beta_i = 90^\circ - \theta_i$, so
+$\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)$, and with
+$\mathbf p_i = (x_i,\ 0)$ the right-hand side's scalar is
+$\hat{\mathbf n}_i\cdot\mathbf p_i = -x_i\cos\theta_i$.
+
+:::{admonition} Worked example — three bearings
+:class: tip
+Stations at $x_i = -0.75$, $0$, and $+0.75\ \text{m}$ read Angle $34.6^\circ$,
+$8.8^\circ$, and $-17.7^\circ$. Each row gives that station's normal and the
+scalar $\hat{\mathbf n}_i\cdot\mathbf p_i$:
+
+| Station | $x_i$ (m) | $\theta_i$ | $\hat{\mathbf n}_i = (-\cos\theta_i,\ \sin\theta_i)$ | $\hat{\mathbf n}_i\cdot\mathbf p_i$ (m) |
+| :-- | :-- | :-- | :-- | :-- |
+| 1 | $-0.75$ | $34.6^\circ$ | $(-0.823,\ 0.568)$ | $0.617$ |
+| 2 | $0$ | $8.8^\circ$ | $(-0.988,\ 0.153)$ | $0$ |
+| 3 | $+0.75$ | $-17.7^\circ$ | $(-0.953,\ -0.304)$ | $-0.714$ |
+
+Summing $\hat{\mathbf n}_i\hat{\mathbf n}_i^{\mathsf T}$ over the rows, and
+$\hat{\mathbf n}_i$ times its scalar, gives the normal equations
+
+$$\begin{bmatrix} 2.562 & -0.329 \\ -0.329 & 0.438 \end{bmatrix}
+\begin{bmatrix} x \\ y \end{bmatrix} =
+\begin{bmatrix} 0.173 \\ 0.568 \end{bmatrix}.$$
+
+The determinant is $2.562 \times 0.438 - 0.329^2 = 1.014$, and the
+$2\times 2$ inverse gives
+
+$$\begin{aligned}
+x &= \frac{0.438 \times 0.173 + 0.329 \times 0.568}{1.014} = 0.26\ \text{m} \\
+y &= \frac{2.562 \times 0.568 + 0.329 \times 0.173}{1.014} = 1.49\ \text{m}.
+\end{aligned}$$
+
+The box was at $(0.25,\ 1.50)\ \text{m}$, so the fix lands $0.01\ \text{m}$
+from it. The residuals, $\hat{\mathbf n}_i\cdot\mathbf x - \hat{\mathbf n}_i\cdot\mathbf p_i$,
+are $0.016$, $-0.028$, and $0.015\ \text{m}$, all under each station's own
+$R_i\tan\sigma_\beta$ of about $0.04\ \text{m}$ at $1.5^\circ$: three good
+bearings ("Residuals and Outliers" below). `numpy.linalg.solve` does the same
+arithmetic in one line.
+:::
 
 Unweighted least squares treats every line as equally reliable. A bearing from
 a kit far from the source is less reliable in meters, as the next frame shows,
