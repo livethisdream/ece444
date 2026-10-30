@@ -81,7 +81,7 @@ from it.
 
 The range fits a classroom. The firing line runs $0.5\ \text{m}$ past the box
 field at each end, so a box near the edge still sits within about
-$\pm 45^\circ$ of several stations. The nearest boxes are $1.0\ \text{m}$ out,
+$\pm 45^\circ$ of several stations, the edge of what the PHASER can track. The nearest boxes are $1.0\ \text{m}$ out,
 past the $0.88\ \text{m}$ far-field distance of Lesson 17, and the farthest are
 $2.0\ \text{m}$ out, where the tone is still well above the floor.
 
@@ -188,10 +188,10 @@ the level by several dB.
 
 This is the L18 Lab's bring-up. Calibrate needs your own HB100 at boresight
 while it runs; it is the only time today a source sits there on purpose. The
-kit goes on a stand or a table at the height of the boxes for every reading:
-a kit below the boxes reads every bearing too close to broadside (Lesson 19,
-"The Cone Angle"), and a kit held by hand reads it wrong by far more than the
-budget.
+kit stays on its stand for every reading, pointed at the boxes with its element
+row level: raising one end of the row tilts the cone of directions and pulls
+every bearing toward broadside (Lesson 19, "The Cone Angle"), and a kit held by
+hand reads it wrong by far more than the budget.
 ::::
 
 ::::{frame} Reference Shot
