@@ -46,6 +46,7 @@ html:
 sphinx:
   local_extensions:
     frames: _ext
+    quantities: _ext
   config:
     # Widgets, practice PDFs, and lab packets live under book/extras/ and must
     # survive the Sphinx build with their URL prefixes intact. html_extra_path

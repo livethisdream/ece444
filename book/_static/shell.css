@@ -159,6 +159,9 @@ a, button, summary, [role="button"] { -webkit-tap-highlight-color: transparent; 
    specificity -- Inter is not shipped any more, so leaving it in place means a
    generic fallback. Goes when custom.css is rewritten. */
 .bd-article { font-family: var(--sans); }
+/* A plain quantity ($30^\circ$, $1.2\ \text{m}$) is body text, not math
+   (_ext/quantities.py); keep its number and unit on one line. */
+.bd-article .qty { white-space: nowrap; }
 
 /* ---- type ----------------------------------------------------------- */
 .eyebrow {
