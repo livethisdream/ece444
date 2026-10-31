@@ -14,10 +14,11 @@
   .app { display:flex; flex-direction:column; gap:10px; padding:10px; }
   canvas { display:block; box-sizing:border-box; width:100%; background:#fff;
            border:1px solid var(--edge); border-radius:6px; }
-  /* Source and steer share one line above 650px; the taper and step row spans both. */
+  /* Above 650px two controls share each line: source and delays, then taper
+     and step beside the second source. */
   .controls { display:grid; grid-template-columns:1fr; gap:6px 20px; padding:7px 12px;
               background:var(--bg); border:1px solid var(--edge); border-radius:6px; }
-  @media (min-width:650px) { .controls { grid-template-columns:1fr 1fr; } .controls .wide { grid-column:1 / -1; } }
+  @media (min-width:650px) { .controls { grid-template-columns:1fr 1fr; } }
   /* Below 650px the stage text takes its own line, always, so stepping never
      changes the widget's height. */
   @media (max-width:649px) { .ctl.wide { flex-wrap:wrap; row-gap:4px; } .ctl.wide .stage { flex:1 1 100%; } }
@@ -59,11 +60,13 @@
   @media (max-width:559px) { .ro .k { height:auto; min-height:15px; white-space:normal; } }
   .ro.al { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
   .ro.al .v { color:var(--grn); }
+  .ro.off .v { color:var(--ink3); font-weight:600; }
+  .ro .v.r2 { color:var(--red); }
 </style>
 </head>
 <body>
 <div class="app">
-  <canvas id="cv" aria-label="The receive chain of the eight-element array: a plane wave reaches each element, each element's signal passes through a phase shifter and a gain stage in its ADAR1000, the four signals of each chip are summed, and the two chip sums add to the total"></canvas>
+  <canvas id="cv" aria-label="The receive chain of the eight-element array: a plane wave from the source reaches each element, each element's signal passes through a phase shifter and a gain stage in its ADAR1000, the four signals of each chip are summed, and the two chip sums add to the total. An optional second source arrives from another angle on the same elements"></canvas>
 
   <div class="controls" id="panel">
     <div class="ctl">
@@ -73,27 +76,33 @@
       <button type="button" class="play" id="play" aria-label="Run the signals through the receive chain">play</button>
     </div>
     <div class="ctl">
-      <label class="k" for="t0">Steer \(\theta_0\)</label>
+      <label class="k" for="t0">Delays for \(\theta_0\)</label>
       <input type="range" id="t0" min="-60" max="60" step="1" value="30">
       <span class="val" id="t0-val">+30°</span>
-      <label class="lock" title="Tie the steer angle to the source angle"><input type="checkbox" id="lock">lock</label>
+      <label class="lock" title="Set the delays for the source's angle"><input type="checkbox" id="lock">lock</label>
     </div>
     <div class="ctl wide">
       <label class="k" for="taper">Taper</label>
       <select id="taper">
         <option value="uniform">uniform</option>
         <option value="hann">Hann</option>
-        <option value="cheb30">Chebyshev −30</option>
+        <option value="cheb30" title="−30 dB Chebyshev">Chebyshev</option>
       </select>
       <button type="button" class="play" id="step" aria-label="Show the next stage of the receive chain">step</button>
       <span class="stage" id="stage" aria-live="polite"></span>
+    </div>
+    <div class="ctl">
+      <label class="lock" title="Add a second source at another angle"><input type="checkbox" id="two">2nd</label>
+      <label class="k" for="t2">source \(\theta_2\)</label>
+      <input type="range" id="t2" min="-60" max="60" step="1" value="-20">
+      <span class="val" id="t2-val">−20°</span>
     </div>
   </div>
 
   <div class="readouts" id="readouts">
     <div class="ro"><span class="k">\(\Delta\phi\) per element</span><span class="v" id="r-dphi">&#8212;</span></div>
-    <div class="ro" id="ro-sum"><span class="k">total sum</span><span class="v" id="r-sum">&#8212;</span></div>
-    <div class="ro" id="ro-db"><span class="k">relative to 8</span><span class="v" id="r-db">&#8212;</span></div>
+    <div class="ro" id="ro-db"><span class="k">\(\theta_s\) relative to 8</span><span class="v" id="r-db">&#8212;</span></div>
+    <div class="ro" id="ro-db2"><span class="k">\(\theta_2\) relative to 8</span><span class="v" id="r-db2">&#8212;</span></div>
   </div>
 </div>
 
@@ -129,7 +138,10 @@
   // The ADAR1000 phase shifter DELAYS it by n*dphi, dphi = kd*sin(theta_0),
   // which cancels the lead when theta_0 = theta_s. The gain stage scales it by
   // w_n; each chip sums its four (#1: elements 0-3, #2: 4-7), and the two chip
-  // sums add to the total.
+  // sums add to the total. Nothing here points anywhere: theta_0 exists only
+  // as the shifter settings, and a second source from theta_2 runs through the
+  // same settings to a sum of its own (the lines are linear, so the two are
+  // drawn apart and add).
   const leadDeg = (n, ts) => n * KD_DEG * Math.sin(rad(ts));
   const dphiDeg = t0 => KD_DEG * Math.sin(rad(t0));
   const shiftDeg = (n, t0) => wrap360(n * dphiDeg(t0));        // what the shifter is set to
@@ -174,6 +186,8 @@
     eq('Hann aligned dB', fx(s.db, 1), '−4.7');
     s = sums(30, 30, TAPERS.cheb30);
     eq('Chebyshev aligned total', fx(s.total, 2), '5.18');
+    s = sums(-20, 30, U);
+    eq('second source at -20, delays for 30', fx(s.total, 2) + ', ' + fx(s.db, 1), '0.72, −21.0');
     eq('shifter settings at 30 (deg)', [0, 1, 2, 7].map(n => fx(shiftDeg(n, 30), 1)).join(', '),
        '0.0, 86.6, 173.2, 246.1');
     // The sign: the delay cancels the lead on every element when steered on.
@@ -185,13 +199,15 @@
   // ---- state and controls ----------------------------------------------------
   const STAGES = ['arrival', 'phase shift', 'gain', 'sum'];
   const clampT = v => Math.max(-T_MAX, Math.min(T_MAX, Math.round(v)));
-  const state = { ts: 30, t0: 30, lock: false, taper: 'uniform', stage: 4 };
+  const state = { ts: 30, t0: 30, lock: false, taper: 'uniform', stage: 4, two: false, t2: -20 };
   const qs = new URLSearchParams(location.search);
   if (qs.has('ts') && isFinite(+qs.get('ts'))) state.ts = clampT(+qs.get('ts'));
   if (qs.has('t0') && isFinite(+qs.get('t0'))) state.t0 = clampT(+qs.get('t0'));
   if (qs.get('lock') === '1') { state.lock = true; state.t0 = state.ts; }
   if (TAPERS[qs.get('taper')]) state.taper = qs.get('taper');
   if (/^[1-4]$/.test(qs.get('stage') || '')) state.stage = +qs.get('stage');
+  if (qs.has('t2') && isFinite(+qs.get('t2'))) { state.t2 = clampT(+qs.get('t2')); state.two = true; }
+  if (qs.get('two') === '1') state.two = true;
 
   const sgn = (v, n) => {
     const r = Math.abs(v) < 0.5 / Math.pow(10, n) ? 0 : v;
@@ -204,6 +220,8 @@
     el('lock').checked = state.lock;
     el('t0').disabled = state.lock;
     el('taper').value = state.taper;
+    el('two').checked = state.two; el('t2').value = state.t2; el('t2').disabled = !state.two;
+    el('t2-val').textContent = sgn(state.t2, 0) + '°';
     el('stage').textContent = state.stage + ' of 4: ' + STAGES[state.stage - 1];
   }
   el('ts').addEventListener('input', e => {
@@ -218,6 +236,8 @@
     syncControls(); drawAll();
   });
   el('taper').addEventListener('change', e => { state.taper = e.target.value; syncControls(); drawAll(); });
+  el('two').addEventListener('change', e => { state.two = e.target.checked; syncControls(); drawAll(); });
+  el('t2').addEventListener('input', e => { state.t2 = clampT(+e.target.value); syncControls(); drawAll(); });
   el('step').addEventListener('click', () => { state.stage = state.stage % 4 + 1; syncControls(); drawAll(); });
 
   // ---- animation ---------------------------------------------------------------
@@ -295,7 +315,7 @@
   // belongs to drives the step dimming.
   const COLS = {
     field: { stage: 1, head: 'wavefront' }, rx:  { stage: 1, head: 'received' },
-    phi:   { stage: 2, head: 'phase' },     sh:  { stage: 2, head: 'shifted' },
+    phi:   { stage: 2, head: '' },          sh:  { stage: 2, head: '' },
     amp:   { stage: 3, head: 'gain' },      wt:  { stage: 3, head: 'weighted' },
     sig1:  { stage: 4, head: '' },          chip:{ stage: 4, head: 'per chip' },
     sig2:  { stage: 4, head: '' },          tot: { stage: 4, head: 'total' },
@@ -307,7 +327,7 @@
   const HEAD = 18, PAD = 6, BAND_GAP = 12;
   function layout(w) {
     const phone = w < 600;
-    const rowH = phone ? clamp(Math.round(w * 0.064), 19, 23) : clamp(Math.round(w * 0.05), 30, 38);
+    const rowH = phone ? clamp(Math.round(w * 0.058), 18, 21) : clamp(Math.round(w * 0.05), 30, 38);
     const bandH = HEAD + N * rowH + PAD;
     const mx = 8, W = w - 2 * mx;
     const bands = (phone ? [BAND1, BAND2] : [WIDE]).map((spec, b) => {
@@ -328,8 +348,8 @@
     if (Math.abs(w - w0) > 1) { L = layout(w); return draw(); }
     const rowH = g.rowH;
     const wts = TAPERS[state.taper], ts = state.ts, t0 = state.t0;
-    const S = sums(ts, t0, wts);
-    const AMBER = css('--amber'), NAVY = css('--navy'), INK3 = css('--ink3'), INK = css('--ink');
+    const S = sums(ts, t0, wts), S2 = state.two ? sums(state.t2, t0, wts) : null;
+    const AMBER = css('--amber'), NAVY = css('--navy'), INK3 = css('--ink3'), RED = css('--red');
     const col = n => n < 4 ? css('--c1') : css('--c2');
     const colL = n => n < 4 ? css('--c1l') : css('--c2l');
     const stage = state.stage;
@@ -398,7 +418,26 @@
           ctx.fillRect(xa, yChip(band, c) - 2 * rowH + 1, xb - xa, 4 * rowH - 2);
         }
       }
-      // column heads; the current stage's in navy
+      // column heads; the current stage's in navy. The phase and shifted
+      // columns share one: the delays are where theta_0 lives, the only place.
+      if (C.phi && C.sh) {
+        const cur = stage === 2, fut = stage < 2, color = cur ? NAVY : INK3;
+        const xm = (C.phi.x0 + C.sh.x1) / 2, y = band.top + HEAD / 2;
+        const a = 'delays set for ', b = ' = ' + sgn(t0, 0) + '°';
+        ctx.font = (cur ? '700 ' : '') + '10.5px ' + SANS;
+        const wa = ctx.measureText(a).width, wb = ctx.measureText(b).width;
+        const mj = window.MJ && MJ.ready, wt0 = mj ? (MJ.width('\\theta_0', color, 13) || 12) : 0;
+        if (mj) {
+          let x = xm - (wa + wt0 + wb) / 2;
+          txt(a, x, y, 10.5, color, 'left', cur ? 700 : 400); x += wa;
+          MJ.draw(ctx, '\\theta_0', x + wt0 / 2, y, 13, color, 'center'); x += wt0;
+          txt(b, x, y, 10.5, color, 'left', cur ? 700 : 400);
+        } else txt('delays set for' + b.slice(2), xm, y, 10.5, color, 'center', cur ? 700 : 400);
+        if (fut) {
+          ctx.save(); ctx.globalAlpha = 1 - DIM; ctx.fillStyle = '#fff';
+          ctx.fillRect(C.phi.x0, band.top, C.sh.x1 - C.phi.x0, HEAD); ctx.restore();
+        }
+      }
       for (const k of Object.keys(C)) {
         const hd = COLS[k].head; if (!hd) continue;
         const cur = COLS[k].stage === stage, fut = !on(k);
@@ -415,26 +454,33 @@
         const xE = C.field.x1 - 2;                                   // element faces
         const y0 = yRow(band, 0);
         const fx0 = C.field.x0, fx1 = xE - 6, fy0 = band.yTop, fy1 = band.yTop + N * rowH;
-        const sS = Math.sin(rad(ts)), cS = Math.cos(rad(ts));
+        // The field holds only what physically arrives: crests from each source,
+        // moving in. No steer direction is drawn here, because on receive
+        // there is none in space; theta_0 is a set of delays inside the chips.
         // r.s_hat in mm at a screen point: along the array (up) a, out of the
-        // face (left) b; s_hat = (sin ts, cos ts) in (a, b).
-        const rs = (px, py) => ((y0 - py) * sS + (xE - px) * cS) / kpx;
-        let lo = 1e9, hi = -1e9;
-        for (const [px, py] of [[fx0, fy0], [fx0, fy1], [fx1, fy0], [fx1, fy1]]) {
-          const v = rs(px, py); lo = Math.min(lo, v); hi = Math.max(hi, v);
-        }
+        // face (left) b; s_hat = (sin th, cos th) in (a, b).
         const K = 2 * Math.PI / LAMBDA_MM;
-        ctx.save(); ctx.globalAlpha = on('field') ? 0.55 : DIM;
-        ctx.strokeStyle = AMBER; ctx.lineWidth = 1.6;
-        for (let m = Math.ceil((phase0 + K * lo) / (2 * Math.PI)); m <= Math.floor((phase0 + K * hi) / (2 * Math.PI)); m++) {
-          const rho = (2 * Math.PI * m - phase0) / K;                 // mm
-          const px = xE - kpx * rho * cS, py = y0 - kpx * rho * sS;
-          const seg = clipLine(px, py, sS, -cS, fx0, fy0, fx1, fy1);
-          if (seg) { ctx.beginPath(); ctx.moveTo(seg[0], seg[1]); ctx.lineTo(seg[2], seg[3]); ctx.stroke(); }
-        }
-        ctx.restore();
-        // broadside, the arrival (amber) and steer (navy, dashed) directions,
-        // from the array center
+        const crests = (th, color, alpha) => {
+          const sS = Math.sin(rad(th)), cS = Math.cos(rad(th));
+          const rs = (px, py) => ((y0 - py) * sS + (xE - px) * cS) / kpx;
+          let lo = 1e9, hi = -1e9;
+          for (const [px, py] of [[fx0, fy0], [fx0, fy1], [fx1, fy0], [fx1, fy1]]) {
+            const v = rs(px, py); lo = Math.min(lo, v); hi = Math.max(hi, v);
+          }
+          ctx.save(); ctx.globalAlpha = on('field') ? alpha : DIM;
+          ctx.strokeStyle = color; ctx.lineWidth = 1.6;
+          for (let m = Math.ceil((phase0 + K * lo) / (2 * Math.PI)); m <= Math.floor((phase0 + K * hi) / (2 * Math.PI)); m++) {
+            const rho = (2 * Math.PI * m - phase0) / K;               // mm
+            const px = xE - kpx * rho * cS, py = y0 - kpx * rho * sS;
+            const seg = clipLine(px, py, sS, -cS, fx0, fy0, fx1, fy1);
+            if (seg) { ctx.beginPath(); ctx.moveTo(seg[0], seg[1]); ctx.lineTo(seg[2], seg[3]); ctx.stroke(); }
+          }
+          ctx.restore();
+        };
+        crests(ts, AMBER, 0.55);
+        if (state.two) crests(state.t2, RED, 0.45);
+        // broadside, and each source: a dot at the edge of the field with an
+        // arrow toward the array center
         const xc = xE - 4, yc = yTot(band);
         const reach = (th) => {                                      // longest ray inside the field
           const dx = -Math.cos(rad(th)), dy = -Math.sin(rad(th));
@@ -445,27 +491,31 @@
         };
         ctx.strokeStyle = '#c4ccd6'; ctx.lineWidth = 1; ctx.setLineDash([2, 3]);
         ctx.beginPath(); ctx.moveTo(xc, yc); ctx.lineTo(fx0 + 2, yc); ctx.stroke();
-        const r0 = reach(t0);
-        ctx.strokeStyle = NAVY; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
-        const ex0 = xc - r0 * Math.cos(rad(t0)), ey0 = yc - r0 * Math.sin(rad(t0));
-        ctx.beginPath(); ctx.moveTo(xc, yc); ctx.lineTo(ex0, ey0); ctx.stroke();
         ctx.setLineDash([]);
-        const rS = reach(ts);
-        const exs = xc - rS * cS, eys = yc - rS * sS;
-        arrow(exs, eys, xc - 12 * cS, yc - 12 * sS, AMBER, 1.8, 8);
+        const src = th => {
+          const r = reach(th), c = Math.cos(rad(th)), s = Math.sin(rad(th));
+          return [xc - r * c, yc - r * s, c, s];
+        };
+        const S1 = src(ts), S2 = state.two ? src(state.t2) : null;
+        const shoot = ([ex, ey, c, s], color) => {
+          arrow(ex, ey, xc - 12 * c, yc - 12 * s, color, 1.8, 8);
+          ctx.fillStyle = color; ctx.beginPath(); ctx.arc(ex, ey, 4, 0, 2 * Math.PI); ctx.fill();
+        };
+        shoot(S1, AMBER);
+        if (S2) shoot(S2, RED);
         if (window.MJ && MJ.ready) {
-          // the ray further up labels above its end, the other below its own
+          // the source further up labels above its dot, the other below its own
           const lab = (tex, ex, ey, below, color) => {
             const lw = MJ.width(tex, color, 14) || 12;
-            const x = clamp(ex + lw / 2 + 2, fx0 + lw / 2 + 2, fx1 - lw / 2);
-            const y = clamp(ey + (below ? 11 : -11), fy0 + 8, fy1 - 8);
+            const x = clamp(ex + lw / 2 + 4, fx0 + lw / 2 + 2, fx1 - lw / 2);
+            const y = clamp(ey + (below ? 12 : -12), fy0 + 8, fy1 - 8);
             ctx.fillStyle = 'rgba(255,255,255,0.88)';
             ctx.fillRect(x - lw / 2 - 2, y - 8, lw + 4, 16);
             MJ.draw(ctx, tex, x, y, 14, color, 'center');
           };
-          const sUp = ts >= t0;
-          lab('\\theta_s', exs, eys, !sUp, AMBER);
-          lab('\\theta_0', ex0, ey0, sUp, NAVY);
+          const up1 = !S2 || ts >= state.t2;
+          lab('\\theta_s', S1[0], S1[1], !up1, AMBER);
+          if (S2) lab('\\theta_2', S2[0], S2[1], up1, RED);
         }
         // the elements
         const ph = Math.min(16, rowH * 0.62), pw = 12;
@@ -482,6 +532,12 @@
       for (let n = 0; n < N; n++) {
         const y = yRow(band, n), c = col(n), cl = colL(n);
         const lead = rad(leadDeg(n, ts)), shifted = lead - rad(n * dphiDeg(t0));
+        const lead2 = rad(leadDeg(n, state.t2)), shifted2 = lead2 - rad(n * dphiDeg(t0));
+        if (state.two) {                                             // the second source's share of each line
+          if (C.rx && on('rx')) wave(C.rx.x0, C.rx.x1, y, A1, lead2, U0.rx, RED, 1.2, 0.75);
+          if (C.sh && on('sh')) wave(C.sh.x0, C.sh.x1, y, A1, shifted2, U0.sh, RED, 1.2, 0.75);
+          if (C.wt && on('wt')) wave(C.wt.x0, C.wt.x1, y, A1 * wts[n], shifted2, U0.wt, RED, 1.2, 0.75);
+        }
         if (C.rx) {
           if (on('rx')) wave(C.rx.x0, C.rx.x1, y, A1, lead, U0.rx, c, 1.5, 1);
           else flat(C.rx.x0, C.rx.x1, y, cl, 1);
@@ -532,6 +588,7 @@
           const full = (ch === 1 ? wts.slice(0, 4) : wts.slice(4)).reduce((a, b) => a + b, 0);
           ghost(C.chip.x0, C.chip.x1, yj, full * A1, '#9aa6b2', on('chip') ? 0.9 : DIM);
           if (on('chip')) {
+            if (S2) wave(C.chip.x0, C.chip.x1, yj, A1 * S2.chip[ch - 1], S2.chipArg[ch - 1], U0.chip, RED, 1.5, 0.85);
             wave(C.chip.x0, C.chip.x1, yj, A1 * S.chip[ch - 1], S.chipArg[ch - 1], U0.chip, cc, 2, 1);
             txt('#' + ch + '  ' + S.chip[ch - 1].toFixed(2), C.chip.x0 + 2, yj - 2 * rowH + 8,
                 10.5, cc, 'left', 700);
@@ -554,8 +611,10 @@
         const full = wts.reduce((a, b) => a + b, 0);
         ghost(C.tot.x0, C.tot.x1, yj, full * A1, '#9aa6b2', on('tot') ? 0.9 : DIM);
         if (on('tot')) {
+          if (S2) wave(C.tot.x0, C.tot.x1, yj, A1 * S2.total, S2.totArg, U0.tot, RED, 1.8, 0.9);
           wave(C.tot.x0, C.tot.x1, yj, A1 * S.total, S.totArg, U0.tot, NAVY, 2.4, 1);
           txt(S.total.toFixed(2) + ' of 8', C.tot.x0 + 4, band.yTop + 8, 10.5, NAVY, 'left', 700);
+          if (S2) txt(S2.total.toFixed(2) + ' of 8', C.tot.x0 + 4, band.yTop + 20, 10.5, RED, 'left', 700);
         } else flat(C.tot.x0, C.tot.x1, yj, NAVY, DIM);
       }
     }
@@ -563,13 +622,15 @@
 
   // ---- readouts and redraw -----------------------------------------------------
   function readouts() {
-    const s = sums(state.ts, state.t0, TAPERS[state.taper]);
+    const w = TAPERS[state.taper], s = sums(state.ts, state.t0, w), s2 = sums(state.t2, state.t0, w);
     const on = state.stage === 4;
+    const dB = v => v < -40 ? '< −40 dB' : sgn(v, 1) + ' dB';
     el('r-dphi').textContent = sgn(dphiDeg(state.t0), 1) + '°';
-    el('r-sum').textContent = on ? s.total.toFixed(2) : '—';
-    el('r-db').textContent = !on ? '—' : s.db < -40 ? '< −40 dB' : sgn(s.db, 1) + ' dB';
-    const al = on && s.total > N - 0.005;
-    el('ro-sum').classList.toggle('al', al); el('ro-db').classList.toggle('al', al);
+    el('r-db').textContent = on ? dB(s.db) : '—';
+    el('r-db2').textContent = !state.two ? 'off' : on ? dB(s2.db) : '—';
+    el('r-db2').classList.toggle('r2', state.two && on);
+    el('ro-db2').classList.toggle('off', !state.two);
+    el('ro-db').classList.toggle('al', on && s.total > N - 0.005);
   }
   function drawAll() { draw(); readouts(); }
 
