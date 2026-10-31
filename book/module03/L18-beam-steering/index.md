@@ -132,7 +132,9 @@ $$\Delta\phi = 2\pi\frac{d}{\lambda}\sin\theta_0$$
 :::
 
 This is the **progressive phase**, and it is the equation the rest of Module 3
-runs on. Read what it says. At broadside, $\sin\theta_0 = 0$ and no phase is
+runs on. It converts a geometric path difference into an electrical one, and
+the phase table, the steered pattern, and the inverse problem all follow from
+it. Read what it says. At broadside, $\sin\theta_0 = 0$ and no phase is
 needed, which is why the array points to $0^\circ$ with every phase set to zero.
 The phase grows with the *sine* of the steer angle rather than with the angle,
 so the same $10^\circ$ of extra scan needs much less added phase near endfire
@@ -141,15 +143,6 @@ $10^\circ$ takes $30.1^\circ$ of added phase per element, and steering from
 $80^\circ$ to $90^\circ$ takes $2.6^\circ$. And the phase scales with the electrical spacing
 $d/\lambda$: the same array asked to steer the same angle needs more phase per
 element as the frequency goes up.
-::::
-
-::::{frame} Key Point
-:::{present}
-:class: callout
-$\Delta\phi = kd\sin\theta_0$ converts a geometric path difference into an
-electrical one. The phase table, the steered pattern, and the inverse problem
-all follow from this one relation.
-:::
 ::::
 
 ::::{frame} Time Delay Versus Phase Delay
@@ -200,6 +193,45 @@ with $\beta = \Delta\phi$. A delay of $n\ \Delta\phi$ multiplies element $n$'s
 signal by $e^{-jn\Delta\phi}$, so the weight carries a minus sign that the
 setting does not. That weight phase is the one place $-n\ \Delta\phi$ survives;
 every phase setting in this lesson and in the lab is $+n\ \Delta\phi$.
+::::
+
+::::{frame} Receive Signal Path
+:class: viz-frame
+
+:::{depth}
+This is the same array on receive, followed down its signal lines. Nothing in
+front of the array points anywhere: the wave from $\theta_s$ simply arrives,
+and it reaches element $n$ with a lead of $n\ kd\sin\theta_s$ over element 0,
+so the eight received signals come in staggered. Each element turns whatever
+reaches it into a signal on its line, from any direction. The steering happens
+behind the elements. Inside each ADAR1000, every line passes through a phase
+shifter set to $n\ \Delta\phi$ (the box shows the setting, wrapped to $0^\circ$
+to $360^\circ$ as the chip holds it) and then a gain stage, and the chip sums its
+four lines. The two chip sums reach the Pluto as separate channels, and the
+software adds them. $\theta_0$ is nothing but those delays: moving it changes
+the boxes and everything after them, and nothing in the field.
+
+Lock the delays to the source and they cancel the leads: the shifted waves line
+up crest to crest, each chip sum is four times one element, and the total
+reaches 8. Clear the lock and move $\theta_0$: the shifted waves fan out and the
+sums shrink. Turn on the **2nd** source and a second wave, from $\theta_2$,
+reaches the same elements; each line carries both, drawn apart in two colors.
+The same delays that line up the first scramble the second, so the total keeps
+one and loses the other: at the default settings, 8 against 0.72, or
+$-21.0\ \text{dB}$. That is the receive pattern, built by the delays, not by
+anything in space. **Step** walks the chain one stage at a time. The gain stage
+is where L22 applies a taper; leave it at uniform for now, or pick Hann to see
+the aligned total fall from 8 to 4.64.
+:::
+
+:::{present}
+<iframe src="../../viz/rx-signal-path.html?lock=1"
+        width="100%" height="510"
+        style="border: 1px solid #cddce9; border-radius: 6px;"
+        loading="lazy"
+        title="The receive chain: each element's signal through its phase shifter and gain stage, the two ADAR1000 sums, and the total, with an optional second source the same delays reject">
+</iframe>
+:::
 ::::
 
 ::::{frame} Phase Swings the Fringes
