@@ -61,7 +61,7 @@
   .ro.al { background:rgba(63,125,52,0.10); border-color:rgba(63,125,52,0.30); }
   .ro.al .v { color:var(--grn); }
   .ro.off .v { color:var(--ink3); font-weight:600; }
-  .ro .v.r2 { color:var(--red); }
+  .ro .v.r2 { color:var(--amber); }
 </style>
 </head>
 <body>
@@ -349,7 +349,12 @@
     const rowH = g.rowH;
     const wts = TAPERS[state.taper], ts = state.ts, t0 = state.t0;
     const S = sums(ts, t0, wts), S2 = state.two ? sums(state.t2, t0, wts) : null;
-    const AMBER = css('--amber'), NAVY = css('--navy'), INK3 = css('--ink3'), RED = css('--red');
+    const AMBER = css('--amber'), NAVY = css('--navy'), INK3 = css('--ink3');
+    // Every wave keeps its source's color from the field to the total: navy
+    // for the source, amber for the second (blue against orange, which color-
+    // blind readers still tell apart). Chip blue and green mark hardware only:
+    // the elements, the chip tint, the boxes and the junctions.
+    const SRC1 = NAVY, SRC2 = AMBER;
     const col = n => n < 4 ? css('--c1') : css('--c2');
     const colL = n => n < 4 ? css('--c1l') : css('--c2l');
     const stage = state.stage;
@@ -477,8 +482,8 @@
           }
           ctx.restore();
         };
-        crests(ts, AMBER, 0.55);
-        if (state.two) crests(state.t2, RED, 0.45);
+        crests(ts, SRC1, 0.45);
+        if (state.two) crests(state.t2, SRC2, 0.5);
         // broadside, and each source: a dot at the edge of the field with an
         // arrow toward the array center
         const xc = xE - 4, yc = yTot(band);
@@ -501,8 +506,8 @@
           arrow(ex, ey, xc - 12 * c, yc - 12 * s, color, 1.8, 8);
           ctx.fillStyle = color; ctx.beginPath(); ctx.arc(ex, ey, 4, 0, 2 * Math.PI); ctx.fill();
         };
-        shoot(S1, AMBER);
-        if (S2) shoot(S2, RED);
+        shoot(S1, SRC1);
+        if (S2) shoot(S2, SRC2);
         if (window.MJ && MJ.ready) {
           // the source further up labels above its dot, the other below its own
           const lab = (tex, ex, ey, below, color) => {
@@ -514,8 +519,8 @@
             MJ.draw(ctx, tex, x, y, 14, color, 'center');
           };
           const up1 = !S2 || ts >= state.t2;
-          lab('\\theta_s', S1[0], S1[1], !up1, AMBER);
-          if (S2) lab('\\theta_2', S2[0], S2[1], up1, RED);
+          lab('\\theta_s', S1[0], S1[1], !up1, SRC1);
+          if (S2) lab('\\theta_2', S2[0], S2[1], up1, SRC2);
         }
         // the elements
         const ph = Math.min(16, rowH * 0.62), pw = 12;
@@ -534,12 +539,12 @@
         const lead = rad(leadDeg(n, ts)), shifted = lead - rad(n * dphiDeg(t0));
         const lead2 = rad(leadDeg(n, state.t2)), shifted2 = lead2 - rad(n * dphiDeg(t0));
         if (state.two) {                                             // the second source's share of each line
-          if (C.rx && on('rx')) wave(C.rx.x0, C.rx.x1, y, A1, lead2, U0.rx, RED, 1.2, 0.75);
-          if (C.sh && on('sh')) wave(C.sh.x0, C.sh.x1, y, A1, shifted2, U0.sh, RED, 1.2, 0.75);
-          if (C.wt && on('wt')) wave(C.wt.x0, C.wt.x1, y, A1 * wts[n], shifted2, U0.wt, RED, 1.2, 0.75);
+          if (C.rx && on('rx')) wave(C.rx.x0, C.rx.x1, y, A1, lead2, U0.rx, SRC2, 1.3, 0.9);
+          if (C.sh && on('sh')) wave(C.sh.x0, C.sh.x1, y, A1, shifted2, U0.sh, SRC2, 1.3, 0.9);
+          if (C.wt && on('wt')) wave(C.wt.x0, C.wt.x1, y, A1 * wts[n], shifted2, U0.wt, SRC2, 1.3, 0.9);
         }
         if (C.rx) {
-          if (on('rx')) wave(C.rx.x0, C.rx.x1, y, A1, lead, U0.rx, c, 1.5, 1);
+          if (on('rx')) wave(C.rx.x0, C.rx.x1, y, A1, lead, U0.rx, SRC1, 1.5, 1);
           else flat(C.rx.x0, C.rx.x1, y, cl, 1);
         }
         if (C.phi) {
@@ -548,7 +553,7 @@
           box(xm, y, C.phi.w - 6, bh, shiftDeg(n, t0).toFixed(0) + '°', c, on('phi') ? 1 : DIM + 0.1);
         }
         if (C.sh) {
-          if (on('sh')) wave(C.sh.x0, C.sh.x1, y, A1, shifted, U0.sh, c, 1.5, 1);
+          if (on('sh')) wave(C.sh.x0, C.sh.x1, y, A1, shifted, U0.sh, SRC1, 1.5, 1);
           else flat(C.sh.x0, C.sh.x1, y, cl, DIM * 2);
         }
         if (C.amp) {
@@ -560,7 +565,7 @@
           box((x0 + C.amp.x1) / 2, y, C.amp.x1 - x0 - 6, bh, wts[n].toFixed(2), c, on('amp') ? 1 : DIM + 0.1);
         }
         if (C.wt) {
-          if (on('wt')) wave(C.wt.x0, C.wt.x1, y, A1 * wts[n], shifted, U0.wt, c, 1.5, 1);
+          if (on('wt')) wave(C.wt.x0, C.wt.x1, y, A1 * wts[n], shifted, U0.wt, SRC1, 1.5, 1);
           else flat(C.wt.x0, C.wt.x1, y, cl, DIM * 2);
         }
       }
@@ -588,10 +593,12 @@
           const full = (ch === 1 ? wts.slice(0, 4) : wts.slice(4)).reduce((a, b) => a + b, 0);
           ghost(C.chip.x0, C.chip.x1, yj, full * A1, '#9aa6b2', on('chip') ? 0.9 : DIM);
           if (on('chip')) {
-            if (S2) wave(C.chip.x0, C.chip.x1, yj, A1 * S2.chip[ch - 1], S2.chipArg[ch - 1], U0.chip, RED, 1.5, 0.85);
-            wave(C.chip.x0, C.chip.x1, yj, A1 * S.chip[ch - 1], S.chipArg[ch - 1], U0.chip, cc, 2, 1);
-            txt('#' + ch + '  ' + S.chip[ch - 1].toFixed(2), C.chip.x0 + 2, yj - 2 * rowH + 8,
-                10.5, cc, 'left', 700);
+            if (S2) wave(C.chip.x0, C.chip.x1, yj, A1 * S2.chip[ch - 1], S2.chipArg[ch - 1], U0.chip, SRC2, 1.6, 0.9);
+            wave(C.chip.x0, C.chip.x1, yj, A1 * S.chip[ch - 1], S.chipArg[ch - 1], U0.chip, SRC1, 2, 1);
+            txt('#' + ch, C.chip.x0 + 2, yj - 2 * rowH + 8, 10.5, cc, 'left', 700);
+            ctx.font = '700 10.5px ' + SANS;
+            txt(S.chip[ch - 1].toFixed(2), C.chip.x0 + 2 + ctx.measureText('#' + ch + '  ').width,
+                yj - 2 * rowH + 8, 10.5, SRC1, 'left', 700);
           } else flat(C.chip.x0, C.chip.x1, yj, cc, DIM);
         }
       }
@@ -611,10 +618,10 @@
         const full = wts.reduce((a, b) => a + b, 0);
         ghost(C.tot.x0, C.tot.x1, yj, full * A1, '#9aa6b2', on('tot') ? 0.9 : DIM);
         if (on('tot')) {
-          if (S2) wave(C.tot.x0, C.tot.x1, yj, A1 * S2.total, S2.totArg, U0.tot, RED, 1.8, 0.9);
-          wave(C.tot.x0, C.tot.x1, yj, A1 * S.total, S.totArg, U0.tot, NAVY, 2.4, 1);
-          txt(S.total.toFixed(2) + ' of 8', C.tot.x0 + 4, band.yTop + 8, 10.5, NAVY, 'left', 700);
-          if (S2) txt(S2.total.toFixed(2) + ' of 8', C.tot.x0 + 4, band.yTop + 20, 10.5, RED, 'left', 700);
+          if (S2) wave(C.tot.x0, C.tot.x1, yj, A1 * S2.total, S2.totArg, U0.tot, SRC2, 1.9, 0.95);
+          wave(C.tot.x0, C.tot.x1, yj, A1 * S.total, S.totArg, U0.tot, SRC1, 2.4, 1);
+          txt(S.total.toFixed(2) + ' of 8', C.tot.x0 + 4, band.yTop + 8, 10.5, SRC1, 'left', 700);
+          if (S2) txt(S2.total.toFixed(2) + ' of 8', C.tot.x0 + 4, band.yTop + 20, 10.5, SRC2, 'left', 700);
         } else flat(C.tot.x0, C.tot.x1, yj, NAVY, DIM);
       }
     }
